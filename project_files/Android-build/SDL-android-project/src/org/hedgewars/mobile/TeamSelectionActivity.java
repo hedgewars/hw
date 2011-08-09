@@ -19,8 +19,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
+import android.widget.SimpleAdapter.ViewBinder;
 
 public class TeamSelectionActivity extends Activity{
 
@@ -36,7 +39,7 @@ public class TeamSelectionActivity extends Activity{
 
 		addTeam = (ImageButton) findViewById(R.id.btnAdd);
 		back = (ImageButton) findViewById(R.id.btnBack);
-		
+
 		addTeam.setOnClickListener(addTeamClicker);
 		back.setOnClickListener(backClicker);
 
@@ -46,7 +49,7 @@ public class TeamSelectionActivity extends Activity{
 		availableTeams.setAdapter(adapter);
 		registerForContextMenu(availableTeams);
 		availableTeams.setOnItemClickListener(availableClicker);
-		
+
 		selectedTeams = (ListView) findViewById(R.id.selectedTeams);
 		selectedTeamsList = new ArrayList<HashMap<String, ?>>();
 		ArrayList<HashMap<String, ?>> toBeRemoved = new ArrayList<HashMap<String, ?>>();
@@ -60,28 +63,90 @@ public class TeamSelectionActivity extends Activity{
 			}
 		}
 		for(HashMap<String, ?> hashmap : toBeRemoved) availableTeamsList.remove(hashmap);
-		
-		adapter = new SimpleAdapter(this, selectedTeamsList, R.layout.team_selection_entry, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
+
+		adapter = new SimpleAdapter(this, selectedTeamsList, R.layout.team_selection_entry, new String[]{"txt", "img", "color", "count"}, new int[]{R.id.txtName, R.id.imgDifficulty, R.id.teamColor, R.id.teamCount});
+		adapter.setViewBinder(viewBinder);
 		selectedTeams.setAdapter(adapter);
 		selectedTeams.setOnItemClickListener(selectedClicker);
-		
-		
-		
-		
+
 	}
-	
+
+	private ViewBinder viewBinder = new ViewBinder(){
+		public boolean setViewValue(View view, Object data,	String textRepresentation) {
+			switch(view.getId()){
+			case R.id.teamColor:
+				setTeamColor(view, (Integer)data);
+				return true;
+			case R.id.teamCount:
+				setTeamHogCount((ImageView)view, (Integer)data);
+				return true;
+			default:
+				return false;
+			}
+		}
+	};
+
+	private void setTeamColor(int position, int color){
+		View iv = ((RelativeLayout)selectedTeams.getChildAt(position)).findViewById(R.id.teamCount);
+		setTeamColor(iv, color);
+	}
+	private void setTeamColor(View iv, int color){
+		iv.setBackgroundColor(color);
+	}
+
+	private void setTeamHogCount(int position, int count){
+		ImageView iv = (ImageView)((RelativeLayout)selectedTeams.getChildAt(position)).findViewById(R.id.teamCount);
+		setTeamHogCount(iv, count);
+	}
+
+	private void setTeamHogCount(ImageView iv, int count){
+
+		switch(count){
+		case 0:
+			iv.setImageResource(R.drawable.teamcount0);
+			break;
+		case 1:
+			iv.setImageResource(R.drawable.teamcount1);
+			break;
+		case 2:
+			iv.setImageResource(R.drawable.teamcount2);
+			break;
+		case 3:
+			iv.setImageResource(R.drawable.teamcount3);
+			break;
+		case 4:
+			iv.setImageResource(R.drawable.teamcount4);
+			break;
+		case 5:
+			iv.setImageResource(R.drawable.teamcount5);
+			break;
+		case 6:
+			iv.setImageResource(R.drawable.teamcount6);
+			break;
+		case 7:
+			iv.setImageResource(R.drawable.teamcount7);
+			break;
+		case 8:
+			iv.setImageResource(R.drawable.teamcount8);
+			break;
+		case 9:
+			iv.setImageResource(R.drawable.teamcount9);
+			break;
+		}
+	}
+
 	public void onBackPressed(){
 		returnTeams();
 		super.onBackPressed();
 	}
-	
+
 	private OnClickListener addTeamClicker = new OnClickListener(){
 		public void onClick(View v) {
 			startActivity(new Intent(TeamSelectionActivity.this, TeamCreatorActivity.class));
-			
+
 		}
 	};
-	
+
 	private OnClickListener backClicker = new OnClickListener(){
 		public void onClick(View v){
 			returnTeams();
@@ -108,7 +173,7 @@ public class TeamSelectionActivity extends Activity{
 		menu.add(ContextMenu.NONE, 0, ContextMenu.NONE, R.string.select);
 		menu.add(ContextMenu.NONE, 2, ContextMenu.NONE, R.string.edit);
 		menu.add(ContextMenu.NONE, 1, ContextMenu.NONE, R.string.delete);
-		
+
 	}
 	public boolean onContextItemSelected(MenuItem item){
 		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
@@ -134,7 +199,17 @@ public class TeamSelectionActivity extends Activity{
 	}
 
 	private void selectAvailableTeamsItem(int position){
-		selectedTeamsList.add((HashMap<String, ?>) availableTeamsList.get(position));
+		HashMap<String, Object> hash = (HashMap<String, Object>) availableTeamsList.get(position);
+		Team t = (Team)hash.get("team");
+		int[] illegalcolors = new int[selectedTeamsList.size()];
+		for(int i = 0; i < selectedTeamsList.size(); i++){
+			illegalcolors[i] = ((Team)selectedTeamsList.get(i).get("team")).color;
+		}
+		t.setRandomColor(illegalcolors);
+		hash.put("color", t.color);
+		hash.put("count", t.hogCount);
+		
+		selectedTeamsList.add(hash);
 		availableTeamsList.remove(position);
 		((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 		((SimpleAdapter)selectedTeams.getAdapter()).notifyDataSetChanged();

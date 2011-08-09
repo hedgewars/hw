@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -18,6 +19,28 @@ import android.util.Xml;
 public class Team implements Parcelable{
 
 	public static final String DIRECTORY_TEAMS = "teams";
+//	private static final Integer[] TEAM_COLORS = {
+//		0xffd12b42, /* red    */ 
+//		0xff4980c1, /* blue   */ 
+//		0xff6ab530, /* green  */ 
+//		0xffbc64c4, /* purple */ 
+//		0xffe76d14, /* orange */ 
+//		0xff3fb6e6, /* cyan   */ 
+//		0xffe3e90c, /* yellow */ 
+//		0xff61d4ac, /* mint   */ 
+//		0xfff1c3e1, /* pink   */ 
+//		/* add new colors here */
+//	};
+
+	private static final Integer[] TEAM_COLORS = {
+		0xff0000, /* red    */ 
+		0x00ff00, /* blue   */ 
+		0x0000ff, /* green  */ 
+	};
+
+	private static final int STATE_START = 0;
+	private static final int STATE_ROOT = 1;
+	private static final int STATE_HOG_ROOT = 2;
 
 	public String name, grave, flag, voice, fort, hash;
 
@@ -31,10 +54,13 @@ public class Team implements Parcelable{
 	public String[] hats = new String[maxNumberOfHogs];
 	public String[] hogNames = new String[maxNumberOfHogs];
 	public int[] levels = new int[maxNumberOfHogs];
-	
+
+	public int hogCount = 4;
+	public int color = TEAM_COLORS[0];
+
 	public Team(){
 	}
-	
+
 	public Team(Parcel in){
 		readFromParcel(in);
 	}
@@ -54,28 +80,41 @@ public class Team implements Parcelable{
 			return false;
 		}
 	}
-	
-	
-	public void sendToEngine(OutputStream os, int hogCount, int health, int color) throws IOException{
-		os.write(String.format("eaddteam %s %d %s", hash, color, name).getBytes());
-		os.write(String.format("egrave %s", grave).getBytes());
-		os.write(String.format("efort %s", fort).getBytes());
-		os.write(String.format("evoicepack %s", voice).getBytes());
-		os.write(String.format("eflag %s", flag).getBytes());
-		
-		for(int i = 0; i < hogCount; i++){
-			os.write(String.format("eaddhh %d %d %s", levels[i], health, hogNames[i]).getBytes());
-			os.write(String.format("ehat %s", hats[i]).getBytes());
+
+	public void setRandomColor(int[] illegalcolors){
+		Integer[] colorsToPickFrom = TEAM_COLORS;
+		if(illegalcolors != null){
+			ArrayList<Integer> colors = new ArrayList<Integer>();
+			for(int color : TEAM_COLORS){
+				boolean validColor = true;
+				for(int illegal : illegalcolors){
+					if(color == illegal) validColor = false;
+				}
+				if(validColor) colors.add(color);
+			}
+			if(colors.size() != 0) colorsToPickFrom = colors.toArray(new Integer[1]);
 		}
-		os.flush();
+		int index = (int)Math.round(Math.random()*(colorsToPickFrom.length-1));
+		color = colorsToPickFrom[index];
 	}
-	
-	public static final int STATE_START = 0;
-	public static final int STATE_ROOT = 1;
-	public static final int STATE_HOG_ROOT = 2;
-	public static final int STATE_HOG_HAT = 3;
-	public static final int STATE_HOG_NAME = 4;
-	public static final int STATE_HOG_LEVEL = 5;
+
+
+	public void sendToEngine(EngineProtocolNetwork epn, int hogCount, int health) throws IOException{
+		epn.sendToEngine(String.format("eaddteam %s %d %s", hash, color, name));
+		epn.sendToEngine(String.format("egrave %s", grave));
+		epn.sendToEngine(String.format("efort %s", fort));
+		epn.sendToEngine(String.format("evoicepack %s", voice));
+		epn.sendToEngine(String.format("eflag %s", flag));
+
+		for(int i = 0; i < hogCount; i++){
+			epn.sendToEngine(String.format("eaddhh %d %d %s", levels[i], health, hogNames[i]));
+			epn.sendToEngine(String.format("ehat %s", hats[i]));
+		}
+	}
+
+	/*
+	 * XML METHODS
+	 */
 
 	/**
 	 * Read the xml file path and convert it to a Team object
@@ -181,45 +220,45 @@ public class Team implements Parcelable{
 			serializer.setOutput(os, "UTF-8");	
 			serializer.startDocument("UTF-8", true);
 			serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
-			
+
 			serializer.startTag(null, "team");
+			serializer.startTag(null, "name");
+			serializer.text(name);
+			serializer.endTag(null, "name");
+			serializer.startTag(null, "flag");
+			serializer.text(flag);
+			serializer.endTag(null, "flag");
+			serializer.startTag(null, "fort");
+			serializer.text(fort);
+			serializer.endTag(null, "fort");
+			serializer.startTag(null, "grave");
+			serializer.text(grave);
+			serializer.endTag(null, "grave");
+			serializer.startTag(null, "voice");
+			serializer.text(voice);
+			serializer.endTag(null, "voice");
+			serializer.startTag(null, "hash");
+			serializer.text(hash);
+			serializer.endTag(null, "hash");
+
+			for(int i = 0; i < maxNumberOfHogs; i++){
+				serializer.startTag(null, "hog");
 				serializer.startTag(null, "name");
-				serializer.text(name);
+				serializer.text(hogNames[i]);
 				serializer.endTag(null, "name");
-				serializer.startTag(null, "flag");
-				serializer.text(flag);
-				serializer.endTag(null, "flag");
-				serializer.startTag(null, "fort");
-				serializer.text(fort);
-				serializer.endTag(null, "fort");
-				serializer.startTag(null, "grave");
-				serializer.text(grave);
-				serializer.endTag(null, "grave");
-				serializer.startTag(null, "voice");
-				serializer.text(voice);
-				serializer.endTag(null, "voice");
-				serializer.startTag(null, "hash");
-				serializer.text(hash);
-				serializer.endTag(null, "hash");
-				
-				for(int i = 0; i < maxNumberOfHogs; i++){
-					serializer.startTag(null, "hog");
-					serializer.startTag(null, "name");
-					serializer.text(hogNames[i]);
-					serializer.endTag(null, "name");
-					serializer.startTag(null, "hat");
-					serializer.text(hats[i]);
-					serializer.endTag(null, "hat");
-					serializer.startTag(null, "level");
-					serializer.text(String.valueOf(levels[i]));
-					serializer.endTag(null, "level");
-					
-					serializer.endTag(null, "hog");
-				}
+				serializer.startTag(null, "hat");
+				serializer.text(hats[i]);
+				serializer.endTag(null, "hat");
+				serializer.startTag(null, "level");
+				serializer.text(String.valueOf(levels[i]));
+				serializer.endTag(null, "level");
+
+				serializer.endTag(null, "hog");
+			}
 			serializer.endTag(null, "team");
 			serializer.endDocument();
 			serializer.flush();
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}finally{
@@ -228,6 +267,15 @@ public class Team implements Parcelable{
 			} catch (IOException e) {}
 		}
 	}
+	/*
+	 * END XML METHODS
+	 */
+
+
+
+	/*
+	 * PARCABLE METHODS
+	 */
 
 	public int describeContents() {
 		return 0;
@@ -243,9 +291,11 @@ public class Team implements Parcelable{
 		dest.writeStringArray(hats);
 		dest.writeStringArray(hogNames);
 		dest.writeIntArray(levels);
+		dest.writeInt(color);
+		dest.writeInt(hogCount);
 	}
-		
-	
+
+
 	public void readFromParcel(Parcel src){
 		name = src.readString();
 		grave = src.readString();
@@ -256,6 +306,8 @@ public class Team implements Parcelable{
 		src.readStringArray(hats);
 		src.readStringArray(hogNames);
 		src.readIntArray(levels);
+		color = src.readInt();
+		hogCount = src.readInt();
 	}
 
 	public static final Parcelable.Creator<Team> CREATOR = new Parcelable.Creator<Team>() {
@@ -265,7 +317,11 @@ public class Team implements Parcelable{
 		public Team[] newArray(int size) {
 			return new Team[size];
 		}
-		
+
 	};
-	
+
+	/*
+	 * END PARCABLE METHODS
+	 */
+
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="horizontal"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="#8FFF">
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#8FFF"
+  android:padding="3dip">
   
   <ImageView
   	android:id="@+id/imgDifficulty"
@@ -12,9 +12,34 @@
   	android:layout_width="wrap_content"
   	android:adjustViewBounds="true"
   	android:scaleType="centerInside"/>
+  <ImageView
+  	android:id="@+id/teamColor"
+  	android:layout_height="wrap_content"
+  	android:layout_width="wrap_content"
+  	android:layout_alignParentRight="true"
+  	android:layout_centerVertical="true"
+  	android:adjustViewBounds="true"
+  	android:scaleType="centerInside"
+  	android:src="@drawable/box"
+  	android:background="#FDA"/>
+  <ImageView
+  	android:id="@+id/teamCount"
+  	android:layout_height="fill_parent"
+  	android:layout_width="wrap_content"
+  	android:layout_toLeftOf="@id/teamColor"
+  	android:layout_alignTop="@id/imgDifficulty"
+  	android:layout_alignBottom="@id/imgDifficulty"
+  	android:adjustViewBounds="true"
+  	android:scaleType="centerInside"
+  	android:src="@drawable/teamcount7"/>
   <TextView
   	android:id="@+id/txtName"
   	android:layout_height="fill_parent"
-  	android:layout_width="fill_parent"
+  	android:layout_width="wrap_content"
+  	android:layout_toRightOf="@id/imgDifficulty"
+  	android:layout_toLeftOf="@id/teamCount"
+  	android:layout_alignTop="@id/imgDifficulty"
+  	android:layout_alignBottom="@id/imgDifficulty"
+  	android:gravity="center"
   	android:textColor="#FFF"/>
-</LinearLayout>
+</RelativeLayout>
