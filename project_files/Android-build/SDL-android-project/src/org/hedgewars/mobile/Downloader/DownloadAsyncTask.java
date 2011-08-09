@@ -36,7 +36,7 @@ public class DownloadAsyncTask extends AsyncTask<String, Object, Long> {
 		try {
 			String rootZipDest = params[0];
 
-			File rootDest = new File(rootZipDest);
+			File rootDest = new File(rootZipDest);//TODO check for nullpointer, it hints to the absence of an sdcard
 			rootDest.mkdir();
 			
 			URL url = new URL(params[1]);
