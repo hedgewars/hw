@@ -91,7 +91,7 @@ public class TeamSelectionActivity extends Activity{
 		setTeamColor(iv, color);
 	}
 	private void setTeamColor(View iv, int color){
-		iv.setBackgroundColor(color);
+		iv.setBackgroundColor(0xFF000000 + color);
 	}
 
 	private void setTeamHogCount(int position, int count){
@@ -183,10 +183,10 @@ public class TeamSelectionActivity extends Activity{
 			selectAvailableTeamsItem(position);
 			return true;
 		case 1://delete
-			availableTeamsList.remove(position);
-			((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 			File f = new File(String.format("%s/%s/%s.xml", TeamSelectionActivity.this.getFilesDir(), Team.DIRECTORY_TEAMS, availableTeamsList.get(position).get("txt")));
 			f.delete();
+			availableTeamsList.remove(position);
+			((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 			return true;
 		case 2://edit
 			Intent i = new Intent(TeamSelectionActivity.this, TeamCreatorActivity.class);

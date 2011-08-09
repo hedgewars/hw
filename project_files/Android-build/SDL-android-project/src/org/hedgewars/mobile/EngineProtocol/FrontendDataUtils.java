@@ -118,23 +118,23 @@ public class FrontendDataUtils {
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(6);
 		String[] levels = {c.getString(R.string.human), c.getString(R.string.bot5), c.getString(R.string.bot4), c.getString(R.string.bot3), c.getString(R.string.bot2), c.getString(R.string.bot1)};
 		int[] images = {R.drawable.human, R.drawable.bot5, R.drawable.bot4, R.drawable.bot3, R.drawable.bot2, R.drawable.bot1};
-		
+
 		for(int i = 0; i < levels.length; i++){
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("txt", levels[i]);
 			map.put("img", images[i]);
 			data.add(map);
 		}
-		
+
 		return data;
 	}
-	
+
 	public static ArrayList<HashMap<String, ?>> getHats(Context c){
 		ArrayList<String> files = Utils.getFilesFromDirWithSuffix(c, "Graphics/Hats", ".png", true);
 		String pathPrefix = Utils.getDownloadPath(c) + "Graphics/Hats/";
 		int size = files.size();
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(size);
-		
+
 		HashMap<String, Object> hashmap; 
 		for(String s : files){
 			hashmap = new HashMap<String, Object>();
@@ -144,25 +144,26 @@ public class FrontendDataUtils {
 			hashmap.put("img", b);
 			data.add(hashmap);
 		}
-		
+
 		return data;
 	}
-	
+
 	public static ArrayList<HashMap<String, ?>> getTeams(Context c){
 		ArrayList<HashMap<String, ?>> ret = new ArrayList<HashMap<String, ?>>();
-		
+
 		File teamsDir = new File(c.getFilesDir().getAbsolutePath() + '/' + Team.DIRECTORY_TEAMS);
 		File[] teamFileNames = teamsDir.listFiles();
-		
-		for(File s : teamFileNames){
-			Team t = Team.getTeamFromXml(s.getAbsolutePath());
-			if(t != null){
-				ret.add(teamToHashMap(t));
+		if(teamsDir != null){
+			for(File s : teamFileNames){
+				Team t = Team.getTeamFromXml(s.getAbsolutePath());
+				if(t != null){
+					ret.add(teamToHashMap(t));
+				}
 			}
 		}
 		return ret;
 	}
-	
+
 	public static HashMap<String, Object> teamToHashMap(Team t){
 		HashMap<String, Object> hashmap = new HashMap<String, Object>();
 		hashmap.put("team", t);

@@ -19,24 +19,24 @@ import android.util.Xml;
 public class Team implements Parcelable{
 
 	public static final String DIRECTORY_TEAMS = "teams";
-//	private static final Integer[] TEAM_COLORS = {
-//		0xffd12b42, /* red    */ 
-//		0xff4980c1, /* blue   */ 
-//		0xff6ab530, /* green  */ 
-//		0xffbc64c4, /* purple */ 
-//		0xffe76d14, /* orange */ 
-//		0xff3fb6e6, /* cyan   */ 
-//		0xffe3e90c, /* yellow */ 
-//		0xff61d4ac, /* mint   */ 
-//		0xfff1c3e1, /* pink   */ 
-//		/* add new colors here */
-//	};
-
 	private static final Integer[] TEAM_COLORS = {
-		0xff0000, /* red    */ 
-		0x00ff00, /* blue   */ 
-		0x0000ff, /* green  */ 
+		0xd12b42, /* red    */ 
+		0x4980c1, /* blue   */ 
+		0x6ab530, /* green  */ 
+		0xbc64c4, /* purple */ 
+		0xe76d14, /* orange */ 
+		0x3fb6e6, /* cyan   */ 
+		0xe3e90c, /* yellow */ 
+		0x61d4ac, /* mint   */ 
+		0xf1c3e1, /* pink   */ 
+		/* add new colors here */
 	};
+
+//	private static final Integer[] TEAM_COLORS = {
+//		0xff0000, /* red    */ 
+//		0x00ff00, /* blue   */ 
+//		0x0000ff, /* green  */ 
+//	};
 
 	private static final int STATE_START = 0;
 	private static final int STATE_ROOT = 1;
