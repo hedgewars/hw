@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -40,8 +39,8 @@ public class Scheme implements Parcelable{
 		readFromParcel(in);
 	}
 
-	public void sendToEngine(OutputStream os)throws IOException{ 
-		os.write(String.format("e$gmflags %d", gamemod).getBytes());
+	public void sendToEngine(EngineProtocolNetwork epn)throws IOException{ 
+		epn.sendToEngine(String.format("e$gmflags %d", gamemod));
 
 		for(int pos = 0; pos < basic.size(); pos++){
 			LinkedHashMap<String, ?> basicflag = basicflags.get(pos);
@@ -55,9 +54,8 @@ public class Scheme implements Parcelable{
 			if(checkOverMax && value >= max) value = max;
 			if(times1000) value *= 1000;
 			
-			os.write(String.format("%s %d", command, value).getBytes());
+			epn.sendToEngine(String.format("%s %d", command, value));
 		}
-		os.flush();
 	}
 	public String toString(){
 		return name;

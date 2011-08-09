@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -55,17 +54,15 @@ public class Weapon implements Parcelable{
 		return name;
 	}
 	
-	public void sendToEngine(OutputStream os, int teamsCount) throws IOException{
-		os.write(QT.getBytes());//command prefix is already in string 
-		os.write(prob.getBytes());
-		os.write(delay.getBytes());
-		os.write(crate.getBytes());
+	public void sendToEngine(EngineProtocolNetwork epn, int teamsCount) throws IOException{
+		epn.sendToEngine(QT);//command prefix is already in string 
+		epn.sendToEngine(prob);
+		epn.sendToEngine(delay);
+		epn.sendToEngine(crate);
 		
-		byte[] ammstore = "eammstore".getBytes();
 		for(int i = 0; i < teamsCount; i++){
-			os.write(ammstore);
+			epn.sendToEngine("eammstore");
 		}
-		os.flush();
 	}
 	
 	public static final int STATE_START = 0;

@@ -7,8 +7,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import android.util.Log;
-
 public class EngineProtocolNetwork implements Runnable{
 
 	public static final String GAMEMODE_LOCAL = "TL";
@@ -44,10 +42,6 @@ public class EngineProtocolNetwork implements Runnable{
 	public void run(){
 		//if(mode == MODE_GENLANDPREVIEW) genLandPreviewIPC();
 		/*else if (mode == MODE_GAME)*/ gameIPC();
-	}
-	
-	private void genLandPreviewIPC(){
-		
 	}
 	
 	private void gameIPC(){

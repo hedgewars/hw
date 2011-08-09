@@ -1,7 +1,6 @@
 package org.hedgewars.mobile.EngineProtocol;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -20,7 +19,7 @@ public class GameConfig implements Parcelable{
 	public String mission = null;
 	public String seed = null;
 	
-	public ArrayList<Team> teams = new ArrayList<Team>(8);
+	public ArrayList<Team> teams = new ArrayList<Team>();
 	
 	public GameConfig(){
 		
@@ -34,7 +33,7 @@ public class GameConfig implements Parcelable{
 	
 	public void sendToEngine(EngineProtocolNetwork epn) throws IOException{
 		Log.d("HW_Frontend", "Sending Gameconfig...");
-		int teamCount = 8;
+		int teamCount = 4;
 		epn.sendToEngine("TL"); //Write game mode
 		if(mission != null) epn.sendToEngine(mission);
 		
@@ -47,17 +46,15 @@ public class GameConfig implements Parcelable{
 		//mapgen_command
 		//mazesize_command
 		
-		//epn.sendToEngine(String.format("etheme %s", theme));
+		epn.sendToEngine(String.format("etheme %s", theme));
 		
-		//scheme.sendToEngine(epn);
+		scheme.sendToEngine(epn);
 		
-		//weapon.sendToEngine(os, teamCount);
+		weapon.sendToEngine(epn, teamCount);
 		
 		for(Team t : teams){
-			//t.sendToEngine(os, teamCount, 50, 0);
+			if(t != null)t.sendToEngine(epn, teamCount, 50);
 		}
-		
-		
 	}
 	
 	public int describeContents() {

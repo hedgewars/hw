@@ -273,6 +273,7 @@ class SDLMain implements Runnable {
 		EngineProtocolNetwork ipc = new EngineProtocolNetwork(config);
 
 		String path = Utils.getDownloadPath(SDLActivity.mSingleton);
+		//path = path.substring(0, path.length()-1);//remove the trailing '/'
 
 		SDLActivity.nativeInit(new String[] { String.valueOf(ipc.port),
 				String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
