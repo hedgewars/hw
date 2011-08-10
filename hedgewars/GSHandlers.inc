@@ -1366,7 +1366,7 @@ begin
     DeleteGear(Gear)
 end;
 
-(*procedure WaitCollision;
+procedure WaitCollision;
 begin
     with HHGear^ do
     begin
@@ -1376,7 +1376,7 @@ begin
     RopePoints.Count := 0;
     Gear^.Elasticity := _0;
     Gear^.doStep := @doStepRopeAfterAttack
-end;*)
+end;
 
 begin
     HHGear := Gear^.Hedgehog^.Gear;
@@ -1582,9 +1582,9 @@ begin
             with Gear^.Hedgehog^ do
                 begin
                 PlaySound(sndRopeRelease);
-                //if CurAmmoType <> amParachute then
-                //    WaitCollision
-                //else
+                if CurAmmoType <> amParachute then
+                    WaitCollision
+                else
                     DeleteMe
                 end
         end
