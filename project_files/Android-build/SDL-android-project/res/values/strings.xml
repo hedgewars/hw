@@ -21,7 +21,7 @@
     
     <!-- start game -->
     
-    <string name="start_gameplay">Gameplay</string>
+    <string name="start_gameplay">Style</string>
     <string name="start_gamescheme">Game scheme</string>
     <string name="start_weapons">Weapons</string>
     <string name="start_map">Map</string>
