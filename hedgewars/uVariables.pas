@@ -2409,7 +2409,7 @@ begin
     SDWaterColorArray[1]:= SDWaterColorArray[0];
     SDWaterColorArray[3]:= SDWaterColorArray[2];
 
-    SDMusic:= 'main_theme.ogg';
+    SDMusic:= 'hell.ogg';
     SDTint:= $80;
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
