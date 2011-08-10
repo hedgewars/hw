@@ -861,11 +861,13 @@ begin
                vgear^.Hedgehog:= gear^.Hedgehog;
                vgear^.FrameTicks:= lua_tointeger(L, 3);
                if (vgear^.FrameTicks < 1) or (vgear^.FrameTicks > 3) then vgear^.FrameTicks:= 1;
-               end;
+               lua_pushinteger(L, vgear^.Uid)
+               end
             end
+            else lua_pushnil(L)
         end
     else LuaError('Lua: Wrong number of parameters passed to HogSay!');
-    lc_hogsay:= 0
+    lc_hogsay:= 1
 end;
 
 function lc_switchhog(L : Plua_State) : LongInt; Cdecl;
