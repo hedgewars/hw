@@ -83,6 +83,11 @@ public class SDLActivity extends Activity {
 		// Log.v("SDL", "onResume()");
 		super.onResume();
 	}
+	
+	public void onBackPressed(){
+		nativeQuit();
+		super.onBackPressed();
+	}
 
 	// Messages from the SDLMain thread
 	static int COMMAND_CHANGE_TITLE = 1;
@@ -497,6 +502,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 			for (StackTraceElement s : e.getStackTrace()) {
 				Log.v("SDL", s.toString());
 			}
+			
 		}
 	}
 
@@ -504,11 +510,17 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 	public boolean onKey(View v, int keyCode, KeyEvent event) {
 
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
-			// Log.v("SDL", "key down: " + keyCode);
-			SDLActivity.onNativeKeyDown(keyCode);
+			Log.v("SDL", "key down: " + keyCode);
+			if(keyCode == KeyEvent.KEYCODE_BACK){//TODO ask user to quit or not
+				SDLActivity.nativeQuit();
+				SDLActivity.mSingleton.finish();
+			}else{
+				SDLActivity.onNativeKeyDown(keyCode);	
+			}
+			
 			return true;
 		} else if (event.getAction() == KeyEvent.ACTION_UP) {
-			// Log.v("SDL", "key up: " + keyCode);
+			Log.v("SDL", "key up: " + keyCode);
 			SDLActivity.onNativeKeyUp(keyCode);
 			return true;
 		}
