@@ -124,9 +124,9 @@ extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeKeyUp(
 // Touch
 extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeTouch(
                                     JNIEnv* env, jclass jcls,
-                                    jint action, jfloat x, jfloat y, jfloat p)
+                                    jint action, jint pointerId, jfloat x, jfloat y, jfloat p)
 {
-    Android_OnTouch(action, x, y, p);
+    Android_OnTouch(action, pointerId, x, y, p);
 }
 
 // Accelerometer

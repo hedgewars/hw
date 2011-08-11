@@ -8,6 +8,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import org.hedgewars.mobile.EngineProtocol.EngineProtocolNetwork;
 import org.hedgewars.mobile.EngineProtocol.GameConfig;
+import org.hedgewars.mobile.TouchInterface.TouchInterface;
 
 import android.app.Activity;
 import android.content.Context;
@@ -120,7 +121,7 @@ public class SDLActivity extends Activity {
 
 	public static native void onNativeKeyUp(int keycode);
 
-	public static native void onNativeTouch(int action, float x, float y,
+	public static native void onNativeTouch(int action, int pointer, float x, float y,
 			float p);
 
 	public static native void onNativeAccel(float x, float y, float z);
@@ -295,7 +296,7 @@ class SDLMain implements Runnable {
  * Because of this, that's where we set up the SDL thread
  */
 class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
-		View.OnKeyListener, View.OnTouchListener, SensorEventListener {
+		View.OnKeyListener, SensorEventListener {
 
 	// This is what SDL runs in. It invokes SDL_main(), eventually
 	private Thread mSDLThread;
@@ -319,7 +320,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 		setFocusableInTouchMode(true);
 		requestFocus();
 		setOnKeyListener(this);
-		setOnTouchListener(this);
+		setOnTouchListener(TouchInterface.getTouchInterface());
 
 		mSensorManager = (SensorManager) context.getSystemService("sensor");
 
@@ -526,18 +527,6 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 		}
 
 		return false;
-	}
-
-	// Touch events
-	public boolean onTouch(View v, MotionEvent event) {
-
-		int action = event.getAction();
-		float x = event.getX();
-		float y = event.getY();
-		float p = event.getPressure();
-		// TODO: Anything else we need to pass?
-		SDLActivity.onNativeTouch(action, x, y, p);
-		return true;
 	}
 
 	// Sensor events

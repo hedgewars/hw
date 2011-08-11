@@ -169,6 +169,9 @@ begin
                         cHasFocus:= true;
                         onFocusStateChanged()
                         end;
+                SDL_FINGERDOWN: WriteToConsole('finger down');
+                SDL_FINGERMOTION: WriteToConsole('finger is moving');
+                SDL_FINGERUP: WriteToConsole('finger up');
 {$ELSE}
                     KeyPressChat(event.key.keysym.unicode);
                 SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then wheelDown:= true;
