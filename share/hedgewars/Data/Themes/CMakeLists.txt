@@ -16,6 +16,7 @@ foreach(dir
 	EarthRise
 	Eyes
 	Freeway
+	Golf
 	Halloween
 	Hell
 	Island

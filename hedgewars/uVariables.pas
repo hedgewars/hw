@@ -727,7 +727,7 @@ const
             (FileName:                   '8C.ogg'; Path: ptSounds),// sndPiano7
             (FileName:                   '9D.ogg'; Path: ptSounds),// sndPiano8
             (FileName:                 'skip.ogg'; Path: ptSounds),// sndSkip
-            (FileName:          'shotgunfire.ogg'; Path: ptSounds),// sndSineGun
+            (FileName:              'sinegun.ogg'; Path: ptSounds),// sndSineGun
             (FileName:                'Ooff1.ogg'; Path: ptVoices),// sndOoff1
             (FileName:                'Ooff2.ogg'; Path: ptVoices),// sndOoff2
             (FileName:                'Ooff3.ogg'; Path: ptVoices),// sndOoff3
@@ -2409,7 +2409,7 @@ begin
     SDWaterColorArray[1]:= SDWaterColorArray[0];
     SDWaterColorArray[3]:= SDWaterColorArray[2];
 
-    SDMusic:= 'main_theme.ogg';
+    SDMusic:= 'hell.ogg';
     SDTint:= $80;
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06

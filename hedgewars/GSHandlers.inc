@@ -1366,7 +1366,7 @@ begin
     DeleteGear(Gear)
 end;
 
-(*procedure WaitCollision;
+procedure WaitCollision;
 begin
     with HHGear^ do
     begin
@@ -1376,7 +1376,7 @@ begin
     RopePoints.Count := 0;
     Gear^.Elasticity := _0;
     Gear^.doStep := @doStepRopeAfterAttack
-end;*)
+end;
 
 begin
     HHGear := Gear^.Hedgehog^.Gear;
@@ -1582,9 +1582,9 @@ begin
             with Gear^.Hedgehog^ do
                 begin
                 PlaySound(sndRopeRelease);
-                //if CurAmmoType <> amParachute then
-                //    WaitCollision
-                //else
+                if CurAmmoType <> amParachute then
+                    WaitCollision
+                else
                     DeleteMe
                 end
         end
@@ -2952,11 +2952,14 @@ begin
         begin
         for i:= 0 to High(hogs) do
             begin
-            //d:= Distance(Gear^.X - hogs[i]^.X, Gear^.Y - hogs[i]^.Y);
-            hogs[i]^.dX:= _0_25 * (Gear^.X - hogs[i]^.X) / _250;
-            //if Gear^.X < hogs[i]^.X then hogs[i]^.dX.isNegative:= true;
-            hogs[i]^.dY:= -_0_25;
-            hogs[i]^.Active:= true;
+            if hogs[i] <> CurrentHedgehog^.Gear then
+                begin
+                //d:= Distance(Gear^.X - hogs[i]^.X, Gear^.Y - hogs[i]^.Y);
+                hogs[i]^.dX:= _0_25 * (Gear^.X - hogs[i]^.X) / _250;
+                //if Gear^.X < hogs[i]^.X then hogs[i]^.dX.isNegative:= true;
+                hogs[i]^.dY:= -_0_25;
+                hogs[i]^.Active:= true;
+                end
             end;
         end ;
         AfterAttack;
