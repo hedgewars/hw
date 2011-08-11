@@ -27,6 +27,8 @@ import android.widget.SimpleAdapter.ViewBinder;
 
 public class TeamSelectionActivity extends Activity{
 
+	private static final int ACTIVITY_TEAMCREATION = 0;
+	
 	private ImageButton addTeam, back;
 	private ListView availableTeams, selectedTeams;
 	private ArrayList<HashMap<String, ?>> availableTeamsList, selectedTeamsList;
@@ -86,6 +88,35 @@ public class TeamSelectionActivity extends Activity{
 		}
 	};
 
+	public void onActivityResult(int requestCode, int resultCode, Intent data){
+		if(requestCode == ACTIVITY_TEAMCREATION){
+			if(resultCode == Activity.RESULT_OK){
+				updateListViews();
+			}
+		}else{
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+	}
+	
+	private void updateListViews(){
+		unregisterForContextMenu(availableTeams);
+		availableTeamsList = FrontendDataUtils.getTeams(this);
+		for(HashMap<String, ?> hashmap : selectedTeamsList){
+			String name = (String)hashmap.get("txt");
+			for(HashMap<String, ?> hash : availableTeamsList){
+				if(name.equals((String)hash.get("txt"))){
+					availableTeamsList.remove(hash);
+				}
+			}
+		}
+		SimpleAdapter adapter = new SimpleAdapter(this, availableTeamsList, R.layout.team_selection_entry, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
+		availableTeams.setAdapter(adapter);
+		registerForContextMenu(availableTeams);
+		availableTeams.setOnItemClickListener(availableClicker);
+		
+		
+	}
+	
 	private void setTeamColor(int position, int color){
 		View iv = ((RelativeLayout)selectedTeams.getChildAt(position)).findViewById(R.id.teamCount);
 		setTeamColor(iv, color);
@@ -142,8 +173,7 @@ public class TeamSelectionActivity extends Activity{
 
 	private OnClickListener addTeamClicker = new OnClickListener(){
 		public void onClick(View v) {
-			startActivity(new Intent(TeamSelectionActivity.this, TeamCreatorActivity.class));
-
+			startActivityForResult(new Intent(TeamSelectionActivity.this, TeamCreatorActivity.class), ACTIVITY_TEAMCREATION);
 		}
 	};
 
@@ -192,7 +222,7 @@ public class TeamSelectionActivity extends Activity{
 			Intent i = new Intent(TeamSelectionActivity.this, TeamCreatorActivity.class);
 			Team t = (Team)availableTeamsList.get(position).get("team");
 			i.putExtra("team", t);
-			startActivity(i);
+			startActivityForResult(i, ACTIVITY_TEAMCREATION);
 			return true;
 		}
 		return false;
