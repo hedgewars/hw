@@ -146,6 +146,9 @@ const
     SDL_JOYHATMOTION      = $602;
     SDL_JOYBUTTONDOWN     = $603;
     SDL_JOYBUTTONUP       = $604;
+    SDL_FINGERDOWN        = $700;
+    SDL_FINGERUP          = $701;
+    SDL_FINGERMOTION      = $702;
     //TODO: implement otheer event types
     SDL_USEREVENT         = $8000;
     SDL_LASTEVENT         = $FFFF;
