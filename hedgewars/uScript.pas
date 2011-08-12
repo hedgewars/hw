@@ -153,7 +153,7 @@ function lc_writelntoconsole(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 1 then
         begin
-        WriteLnToConsole('Lua: ' + lua_tostring(L ,1));
+        WriteLnToConsole('Lua: ' + StrPas(lua_tostring(L ,1)));
         end
     else
         LuaError('Lua: Wrong number of parameters passed to WriteLnToConsole!');
@@ -164,7 +164,7 @@ function lc_parsecommand(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 1 then
         begin
-        ParseCommand(lua_tostring(L ,1), true);
+        ParseCommand(StrPas(lua_tostring(L ,1)), true);
         end
     else
         LuaError('Lua: Wrong number of parameters passed to ParseCommand!');
@@ -175,7 +175,7 @@ function lc_showmission(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 5 then
         begin
-        ShowMission(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
+        ShowMission(StrPas(lua_tostring(L, 1)), StrPas(lua_tostring(L, 2)), StrPas(lua_tostring(L, 3)), lua_tointeger(L, 4), lua_tointeger(L, 5));
         end
     else
         LuaError('Lua: Wrong number of parameters passed to ShowMission!');
@@ -192,10 +192,10 @@ end;
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 1 then
-        AddCaption(lua_tostring(L, 1), cWhiteColor, capgrpMessage)
+        AddCaption(StrPas(lua_tostring(L, 1)), cWhiteColor, capgrpMessage)
     else if lua_gettop(L) = 3 then
         begin
-        AddCaption(lua_tostring(L, 1), lua_tointeger(L, 2) shr 8, TCapGroup(lua_tointeger(L, 3)));
+        AddCaption(StrPas(lua_tostring(L, 1)), lua_tointeger(L, 2) shr 8, TCapGroup(lua_tointeger(L, 3)));
         end
     else
         LuaError('Lua: Wrong number of parameters passed to AddCaption!');
@@ -720,7 +720,7 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
 
-	    hogName:= lua_tostring(L, 2);
+	    hogName:= StrPas(lua_tostring(L, 2));
             gear^.Hedgehog^.Name:= hogName;
 
 	    FreeTexture(gear^.Hedgehog^.NameTagTex);
@@ -857,7 +857,7 @@ begin
             vgear:= AddVisualGear(0, 0, vgtSpeechBubble, s, true);
             if vgear <> nil then
                begin
-               vgear^.Text:= lua_tostring(L, 2);
+               vgear^.Text:= StrPas(lua_tostring(L, 2));
                vgear^.Hedgehog:= gear^.Hedgehog;
                vgear^.FrameTicks:= lua_tointeger(L, 3);
                if (vgear^.FrameTicks < 1) or (vgear^.FrameTicks > 3) then vgear^.FrameTicks:= 1;
@@ -1115,6 +1115,7 @@ end;
 
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
+    voice: shortstring;
 begin
     np:= lua_gettop(L);
     if (np < 5) or (np > 6) then
@@ -1124,11 +1125,17 @@ begin
         end
     else
         begin
-        ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
-        ParseCommand('grave ' + lua_tostring(L, 3), true);
-        ParseCommand('fort ' + lua_tostring(L, 4), true);
-        ParseCommand('voicepack ' + lua_tostring(L, 5), true);
-        if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true);
+(*
+ FIXME FIXME FIXME FIXME
+ Something is very wrong here.
+ For some reason, if I assign voice after fort (or don't use the variable) it is empty.
+*)
+        voice:= StrPas(lua_tostring(L, 5));
+        ParseCommand('addteam x ' + StrPas(lua_tostring(L, 2)) + ' ' + StrPas(lua_tostring(L, 1)), true);
+        ParseCommand('grave ' + StrPas(lua_tostring(L, 3)), true);
+        ParseCommand('fort ' + StrPas(lua_tostring(L, 4)), true);
+        ParseCommand('voicepack ' + voice, true);
+        if (np = 6) then ParseCommand('flag ' + StrPas(lua_tostring(L, 6)), true);
         CurrentTeam^.Binds:= DefaultBinds
         // fails on x64
         //lua_pushinteger(L, LongInt(CurrentTeam));
@@ -1146,8 +1153,8 @@ begin
         end
     else
         begin
-        temp:= lua_tostring(L, 4);
-        ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true);
+        temp:= StrPas(lua_tostring(L, 4));
+        ParseCommand('addhh ' + StrPas(lua_tostring(L, 2)) + ' ' + StrPas(lua_tostring(L, 3)) + ' ' + StrPas(lua_tostring(L, 1)), true);
         ParseCommand('hat ' + temp, true);
         lua_pushinteger(L, CurrentHedgehog^.Gear^.uid);
         end;
@@ -1451,7 +1458,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-            hat:= lua_tostring(L, 2);
+            hat:= StrPas(lua_tostring(L, 2));
             gear^.Hedgehog^.Hat:= hat;
             LoadHedgehogHat(gear, hat);
         end;
@@ -1487,7 +1494,7 @@ begin
     WriteLnToConsole('Lua: Stack (' + inttostr(n) + ' elements):');
     for i:= 1 to n do
         if not lua_isboolean(luaState, i) then
-            WriteLnToConsole('Lua:  ' + inttostr(i) + ': ' + lua_tostring(luaState, i))
+            WriteLnToConsole('Lua:  ' + inttostr(i) + ': ' + StrPas(lua_tostring(luaState, i)))
         else if lua_toboolean(luaState, i) then
             WriteLnToConsole('Lua:  ' + inttostr(i) + ': true')
         else
@@ -1527,7 +1534,7 @@ end;
 function ScriptGetString(name : shortstring) : shortstring;
 begin
 lua_getglobal(luaState, Str2PChar(name));
-ScriptGetString:= lua_tostring(luaState, -1);
+ScriptGetString:= StrPas(lua_tostring(luaState, -1));
 lua_pop(luaState, 1);
 end;
 
@@ -1604,7 +1611,7 @@ ret:= luaL_loadfile(luaState, Str2PChar(s));
 if ret <> 0 then
     begin
     LuaError('Lua: Failed to load ' + name + '(error ' + IntToStr(ret) + ')');
-    LuaError('Lua: ' + lua_tostring(luaState, -1));
+    LuaError('Lua: ' + StrPas(lua_tostring(luaState, -1)));
     end
 else
     begin
@@ -1640,7 +1647,7 @@ SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
 if lua_pcall(luaState, 0, 0, 0) <> 0 then
     begin
-    LuaError('Lua: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+    LuaError('Lua: Error while calling ' + fname + ': ' + StrPas(lua_tostring(luaState, -1)));
     lua_pop(luaState, 1)
     end;
 GetGlobals;
@@ -1655,12 +1662,12 @@ lua_pushstring(luaState, Str2PChar(key));
 lua_pushstring(luaState, Str2PChar(value));
 if lua_pcall(luaState, 2, 1, 0) <> 0 then
     begin
-    LuaError('Lua: Error while calling ParseCommandOverride: ' + lua_tostring(luaState, -1));
+    LuaError('Lua: Error while calling ParseCommandOverride: ' + StrPas(lua_tostring(luaState, -1)));
     lua_pop(luaState, 1)
     end
 else
     begin
-    ParseCommandOverride:= lua_tostring(luaState, -1);
+    ParseCommandOverride:= StrPas(lua_tostring(luaState, -1));
     lua_pop(luaState, 1)
     end;
 end;
@@ -1693,7 +1700,7 @@ lua_pushinteger(luaState, par4);
 ScriptCall:= 0;
 if lua_pcall(luaState, 4, 1, 0) <> 0 then
     begin
-    LuaError('Lua: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+    LuaError('Lua: Error while calling ' + fname + ': ' + StrPas(lua_tostring(luaState, -1)));
     lua_pop(luaState, 1)
     end
 else
