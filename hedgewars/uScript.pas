@@ -1128,10 +1128,10 @@ begin
 (*
  FIXME FIXME FIXME FIXME
  Something is very wrong here.
- For some reason, if I assign voice after fort (or don't use the variable) it is empty.
+ For some reason, if I assign voice after the first ParseCommand, it is empty
 *)
-        ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
         voice:= lua_tostring(L, 5);
+        ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
         ParseCommand('grave ' + lua_tostring(L, 3), true);
         ParseCommand('fort ' + lua_tostring(L, 4), true);
         ParseCommand('voicepack ' + voice, true);
