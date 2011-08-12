@@ -43,7 +43,6 @@ function ScriptCall(fname : shortstring; par1, par2: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 function ScriptExists(fname : shortstring) : boolean;
-function ParseCommandOverride(key, value : shortstring) : shortstring;
 
 procedure initModule;
 procedure freeModule;
@@ -1115,7 +1114,6 @@ end;
 
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
-    color, name, grave, fort, voice, flag: shortstring;
 begin
     np:= lua_gettop(L);
     if (np < 5) or (np > 6) then
@@ -1125,22 +1123,11 @@ begin
         end
     else
         begin
-(*
- FIXME FIXME FIXME FIXME
- Something is very wrong here.
- For some reason, the lua_tostring after the first ParseCommand, are empty.  Is ParseCommand scribbling on stuff?
-*)
-        color:= lua_tostring(L, 1);
-        name := lua_tostring(L, 2);
-        grave:= lua_tostring(L, 3);
-        fort := lua_tostring(L, 4);
-        voice:= lua_tostring(L, 5);
-        if (np = 6) flag:= lua_tostring(L, 6);
-        ParseCommand('addteam x ' + name + ' ' + color, true);
-        ParseCommand('grave ' + grave, true);
-        ParseCommand('fort ' + fort, true);
-        ParseCommand('voicepack ' + voice, true);
-        if (np = 6) then ParseCommand('flag ' + flag, true);
+        ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
+        ParseCommand('grave ' + lua_tostring(L, 3), true);
+        ParseCommand('fort ' + lua_tostring(L, 4), true);
+        ParseCommand('voicepack ' + lua_tostring(L, 5), true);
+        if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true);
         CurrentTeam^.Binds:= DefaultBinds
         // fails on x64
         //lua_pushinteger(L, LongInt(CurrentTeam));
@@ -1656,25 +1643,6 @@ if lua_pcall(luaState, 0, 0, 0) <> 0 then
     lua_pop(luaState, 1)
     end;
 GetGlobals;
-end;
-
-function ParseCommandOverride(key, value : shortstring) : shortstring;
-begin
-ParseCommandOverride:= value;
-if not ScriptExists('ParseCommandOverride') then exit;
-lua_getglobal(luaState, Str2PChar('ParseCommandOverride'));
-lua_pushstring(luaState, Str2PChar(key));
-lua_pushstring(luaState, Str2PChar(value));
-if lua_pcall(luaState, 2, 1, 0) <> 0 then
-    begin
-    LuaError('Lua: Error while calling ParseCommandOverride: ' + lua_tostring(luaState, -1));
-    lua_pop(luaState, 1)
-    end
-else
-    begin
-    ParseCommandOverride:= lua_tostring(luaState, -1);
-    lua_pop(luaState, 1)
-    end;
 end;
 
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
