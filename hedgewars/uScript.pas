@@ -1115,7 +1115,7 @@ end;
 
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
-    voice: shortstring;
+    color, name, grave, fort, voice, flag: shortstring;
 begin
     np:= lua_gettop(L);
     if (np < 5) or (np > 6) then
@@ -1128,14 +1128,19 @@ begin
 (*
  FIXME FIXME FIXME FIXME
  Something is very wrong here.
- For some reason, if I assign voice after the first ParseCommand, it is empty
+ For some reason, the lua_tostring after the first ParseCommand, are empty.  Is ParseCommand scribbling on stuff?
 *)
+        color:= lua_tostring(L, 1);
+        name := lua_tostring(L, 2);
+        grave:= lua_tostring(L, 3);
+        fort := lua_tostring(L, 4);
         voice:= lua_tostring(L, 5);
-        ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
-        ParseCommand('grave ' + lua_tostring(L, 3), true);
-        ParseCommand('fort ' + lua_tostring(L, 4), true);
+        if (np = 6) flag:= lua_tostring(L, 6);
+        ParseCommand('addteam x ' + name + ' ' + color, true);
+        ParseCommand('grave ' + grave, true);
+        ParseCommand('fort ' + fort, true);
         ParseCommand('voicepack ' + voice, true);
-        if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true);
+        if (np = 6) then ParseCommand('flag ' + flag, true);
         CurrentTeam^.Binds:= DefaultBinds
         // fails on x64
         //lua_pushinteger(L, LongInt(CurrentTeam));
