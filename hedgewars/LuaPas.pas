@@ -416,7 +416,7 @@ procedure lua_pushliteral(L : Plua_State; s : PChar);
 procedure lua_setglobal(L : Plua_State; s : PChar);
 procedure lua_getglobal(L : Plua_State; s : PChar);
 
-function lua_tostring(L : Plua_State; idx : LongInt) : PChar;
+function lua_tostring(L : Plua_State; idx : LongInt) : shortstring;
 
 
 (*
@@ -757,7 +757,7 @@ procedure lua_getref(L : Plua_State; ref : LongInt);
 implementation
 
 uses
-  SysUtils;
+  SysUtils, Strings;
 
 (*****************************************************************************)
 (*                            luaconfig.h                                    *)
@@ -872,9 +872,9 @@ begin
   lua_getfield(L, LUA_GLOBALSINDEX, s);
 end;
 
-function lua_tostring(L : Plua_State; idx : LongInt) : PChar;
+function lua_tostring(L : Plua_State; idx : LongInt) : shortstring;
 begin
-  lua_tostring := lua_tolstring(L, idx, nil);
+  lua_tostring := Strings.StrPas(lua_tolstring(L, idx, nil));
 end;
 
 function lua_open : Plua_State;

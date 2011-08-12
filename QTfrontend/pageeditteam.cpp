@@ -358,14 +358,16 @@ void PageEditTeam::testSound()
     mySdli->SDLMusicInit();
     
     tmpdir.cd(cfgdir->absolutePath());
-    if (!tmpdir.cd("Data/Sounds/voices") && !tmpdir.cd(CBVoicepack->currentText())) {
+    tmpdir.cd("Data/Sounds/voices");
+    tmpdir.cd(CBVoicepack->currentText());
+    
+    if (!tmpdir.exists()) {
         tmpdir.cd(datadir->absolutePath());
         tmpdir.cd("Sounds/voices");
         tmpdir.cd(CBVoicepack->currentText());
     }
 
     QStringList list = tmpdir.entryList(QStringList() << "Illgetyou.ogg" << "Incoming.ogg" << "Stupid.ogg" << "Coward.ogg" << "Firstblood.ogg", QDir::Files);
-
     if (list.size()) {
         sound = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
         Mix_PlayChannel(-1, sound, 0);
