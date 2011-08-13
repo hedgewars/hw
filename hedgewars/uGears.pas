@@ -1511,19 +1511,20 @@ end;
 function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray;
 var
     t: PGear;
+    l: Longword;
 begin
     r:= r*r;
     GearsNear := nil;
     t := GearsList;
-    while t <> nil do begin
-        if (t^.Kind = Kind) then begin
-            if (X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) <
-                int2hwFloat(r) then
+    while t <> nil do 
+        begin
+        if (t^.Kind = Kind) 
+            and ((X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) < int2hwFloat(r)) then
             begin
-                SetLength(GearsNear, Length(GearsNear)+1);
-                GearsNear[High(GearsNear)] := t;
+            l:= Length(GearsNear);
+            SetLength(GearsNear, l + 1);
+            GearsNear[l] := t;
             end;
-        end;
         t := t^.NextGear;
     end;
 end;
