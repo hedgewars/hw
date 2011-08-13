@@ -853,6 +853,12 @@ case step of
                     if cHealthDecrease <> 0 then
                         begin
                         SuddenDeathDmg:= true;
+                        
+                        // flash
+                        ScreenFade:= sfFromWhite;
+                        ScreenFadeValue:= sfMax;
+                        ScreenFadeSpeed:= 1;
+                        
                         ChangeToSDClouds;
                         ChangeToSDFlakes;
                         glClearColor(SDSkyColor.r / 255, SDSkyColor.g / 255, SDSkyColor.b / 255, 0.99);

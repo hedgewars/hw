@@ -2505,11 +2505,11 @@ begin
     else
         cMaxCaptions:= 4;
 
-    vobSDFrameTicks:= 0;
-    vobSDFramesCount:= 0;
+    vobSDFrameTicks:= 99999;
+    vobSDFramesCount:= 4;
     vobSDCount:= 30 * cScreenSpace div LAND_WIDTH;
-    vobSDVelocity:= 0;
-    vobSDFallSpeed:= 0;
+    vobSDVelocity:= 15;
+    vobSDFallSpeed:= 250;
 
     LuaGoals:= '';
 end;
