@@ -43,16 +43,17 @@ procedure chQuit(var s: shortstring);
 const prevGState: TGameState = gsConfirm;
 begin
     s:= s; // avoid compiler hint
-    if GameState <> gsConfirm then
-    begin
+    if (GameState = gsGame) or (GameState = gsChat) then
+        begin
         prevGState:= GameState;
         GameState:= gsConfirm;
         SDL_ShowCursor(1)
-    end else
-    begin
-        GameState:= prevGState;
-        SDL_ShowCursor(ord(isPaused))
-    end
+        end else
+        if GameState = gsConfirm then
+            begin
+            GameState:= prevGState;
+            SDL_ShowCursor(ord(isPaused))
+            end
 end;
 
 procedure chForceQuit(var s: shortstring);
