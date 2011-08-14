@@ -106,7 +106,7 @@ type
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
             vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail, vgtBulletHit, vgtCircle,
-            vgtSmoothWindBar);
+            vgtSmoothWindBar, vgtStraightShot);
 
     TGearsType = set of TGearType;
 
@@ -276,6 +276,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         Kind: TVisualGearType;
         doStep: TVGearStepProcedure;
         Tex: PTexture;
+        Sprite: TSprite;
         alpha, scale: GLfloat;
         Hedgehog: PHedgehog;
         Tag: LongInt;

@@ -1389,7 +1389,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_NoCrosshair;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;

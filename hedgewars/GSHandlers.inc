@@ -2955,9 +2955,9 @@ begin
             if hogs[i] <> CurrentHedgehog^.Gear then
                 begin
                 //d:= Distance(Gear^.X - hogs[i]^.X, Gear^.Y - hogs[i]^.Y);
-                hogs[i]^.dX:= _0_25 * (Gear^.X - hogs[i]^.X) / _250;
+                hogs[i]^.dX:= _50 * cGravity * (Gear^.X - hogs[i]^.X) / _25;
                 //if Gear^.X < hogs[i]^.X then hogs[i]^.dX.isNegative:= true;
-                hogs[i]^.dY:= -_0_25;
+                hogs[i]^.dY:= -_450 * cGravity;
                 hogs[i]^.Active:= true;
                 end
             end;
@@ -2990,18 +2990,25 @@ begin
 end;
 
 procedure doStepSeductionWear(Gear: PGear);
+var heart: PVisualGear;
 begin
     AllInactive := false;
     inc(Gear^.Timer);
     if Gear^.Timer > 250 then
-    begin
+        begin
         Gear^.Timer := 0;
         inc(Gear^.Pos);
         if Gear^.Pos = 5 then
             PlaySound(sndYoohoo, Gear^.Hedgehog^.Team^.voicepack)
-    end;
+        end;
 
-    if Gear^.Pos = 14 then
+    if (Gear^.Pos = 14) and (RealTicks and $3 = 0) then 
+        begin
+        heart:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
+        if heart <> nil then heart^.Sprite:= sprSeduction;
+        end;
+
+    if Gear^.Pos = 15 then
         Gear^.doStep := @doStepSeductionWork
 end;
 

@@ -124,6 +124,7 @@ procedure OnDestroy;
 begin
     WriteLnToConsole('Freeing resources...');
     FreeActionsList();
+    uVisualGears.freeModule;
     StoreRelease();
     ControllerClose();
     CloseIPC();

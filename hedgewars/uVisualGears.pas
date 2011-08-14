@@ -109,7 +109,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepLineTrail,
             @doStepBulletHit,
             @doStepCircle,
-            @doStepSmoothWindBar
+            @doStepSmoothWindBar,
+            @doStepStraightShot
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0; Critical: Boolean = false): PVisualGear;
@@ -118,12 +119,9 @@ var gear: PVisualGear;
     t: Longword;
     sp: real;
 begin
-if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we are scrolling now
-    if (Kind <> vgtCloud) and not Critical then
-        begin
-        AddVisualGear:= nil;
-        exit
-        end;
+AddVisualGear:= nil;
+if ((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet))) and // we are scrolling now
+   ((Kind <> vgtCloud) and not Critical) then exit;
 
 if ((cReducedQuality and rqAntiBoom) <> 0) and
    not Critical and
@@ -136,11 +134,7 @@ if ((cReducedQuality and rqAntiBoom) <> 0) and
     vgtSmokeTrace,
     vgtEvilTrace,
     vgtNote,
-    vgtSmoothWindBar]) then
-    begin
-      AddVisualGear:= nil;
-      exit
-    end;
+    vgtSmoothWindBar]) then exit;
 
 inc(VGCounter);
 New(gear);
@@ -331,6 +325,15 @@ vgtBigExplosion: begin
                 Angle := 0;
                 end;
 vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+ vgtStraightShot: begin
+                dx:= 0.001 * (random(200));
+                dy:= 0.001 * (random(200));
+                if random(2) = 0 then dx := -dx;
+                if random(2) = 0 then dy := -dy;
+                Frame:= 0;
+                FrameTicks:= random(750) + 1000;
+                Sprite:= sprSnowDust;
+                end;
         end;
 
 if State <> 0 then gear^.State:= State;
@@ -485,6 +488,7 @@ case Layer of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtHealth: DrawSprite(sprHealth, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, 0);
+            vgtStraightShot: DrawRotatedF(Gear^.Sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
         end;
         if (cReducedQuality and rqAntiBoom) = 0 then
             case Gear^.Kind of
