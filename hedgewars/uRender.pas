@@ -380,18 +380,18 @@ end;
 procedure DrawCircle(X, Y, Radius, Width: LongInt); 
 var
     i: LongInt;
-    CircleVertex: array [0..359] of TVertex2f;
+    CircleVertex: array [0..59] of TVertex2f;
 begin
-    for i := 0 to 359 do begin
-        CircleVertex[i].X := X + Radius*cos(i*pi/180);
-        CircleVertex[i].Y := Y + Radius*sin(i*pi/180);
+    for i := 0 to 59 do begin
+        CircleVertex[i].X := X + Radius*cos(i*pi/30);
+        CircleVertex[i].Y := Y + Radius*sin(i*pi/30);
     end;
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LINE_SMOOTH);
     glPushMatrix;
     glLineWidth(Width);
     glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);
-    glDrawArrays(GL_LINE_LOOP, 0, 360);
+    glDrawArrays(GL_LINE_LOOP, 0, 60);
     glPopMatrix;
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_LINE_SMOOTH);
