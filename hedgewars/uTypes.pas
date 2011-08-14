@@ -102,7 +102,7 @@ type
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
-            vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
+            vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
             vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail, vgtBulletHit, vgtCircle,
@@ -276,7 +276,6 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         Kind: TVisualGearType;
         doStep: TVGearStepProcedure;
         Tex: PTexture;
-        Sprite: TSprite;
         alpha, scale: GLfloat;
         Hedgehog: PHedgehog;
         Tag: LongInt;

@@ -582,7 +582,18 @@ case Gear^.Pos of
                     i:= 0;
                     while i < Gear^.Health do
                         begin
-                        AddVisualGear(hwRound(HH^.X), hwRound(HH^.Y), vgtHealth);
+                        vga:= AddVisualGear(hwRound(HH^.X), hwRound(HH^.Y), vgtStraightShot);
+                        if vga <> nil then
+                            with vga^ do
+                                begin
+                                dx:= 0.001 * random(45);
+                                dy:= 0.001 * (random(20) + 25);
+                                Tint:= $00FF00FF;
+                                State:= ord(sprHealth);
+                                if random(2) = 0 then dx := -dx;
+                                Frame:= 0;
+                                FrameTicks:= random(750) + 1250;
+                                end;
                         inc(i, 5);
                         end;
                     end;

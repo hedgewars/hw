@@ -1089,8 +1089,18 @@ begin
                 i:= 0;
                 while i < vampDmg do
                     begin
-                    vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtHealth);
-                    if vg <> nil then vg^.Tint:= $FF0000FF;
+                    vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtStraightShot);
+                    if vg <> nil then
+                        with vg^ do
+                            begin
+                            dx:= 0.001 * random(45);
+                            dy:= 0.001 * (random(20) + 25);
+                            Tint:= $FF0000FF;
+                            State:= ord(sprHealth);
+                            if random(2) = 0 then dx := -dx;
+                            Frame:= 0;
+                            FrameTicks:= random(750) + 1250;
+                            end;
                     inc(i, 5);
                     end;
                 end

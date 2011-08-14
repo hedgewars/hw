@@ -90,7 +90,6 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepAmmo,
             @doStepSmoke,
             @doStepSmoke,
-            @doStepHealth,
             @doStepShell,
             @doStepDust,
             @doStepSplash,
@@ -236,14 +235,6 @@ with gear^ do
                 Frame:= 7 - random(2);
                 FrameTicks:= cExplFrameTicks * 2;
                 end;
-    vgtHealth: begin
-                dx:= 0.001 * random(45);
-                dy:= 0.001 * (random(20) + 25);
-                Tint:= $00FF00FF; // default to green
-                if random(2) = 0 then dx := -dx;
-                Frame:= 0;
-                FrameTicks:= random(750) + 1250;
-                end;
   vgtDust: begin
                 dx:= 0.005 * (random(15) + 10);
                 dy:= 0.001 * (random(40) + 20);
@@ -332,7 +323,7 @@ vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
                 if random(2) = 0 then dy := -dy;
                 Frame:= 0;
                 FrameTicks:= random(750) + 1000;
-                Sprite:= sprSnowDust;
+                State:= ord(sprSnowDust);
                 end;
         end;
 
@@ -487,8 +478,7 @@ case Layer of
                              end;
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtHealth: DrawSprite(sprHealth, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, 0);
-            vgtStraightShot: DrawRotatedF(Gear^.Sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+            vgtStraightShot: DrawRotatedF(TSprite(Gear^.State), round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
         end;
         if (cReducedQuality and rqAntiBoom) = 0 then
             case Gear^.Kind of
