@@ -317,12 +317,12 @@ vgtBigExplosion: begin
                 end;
 vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
  vgtStraightShot: begin
-                dx:= 0.001 * (random(200));
-                dy:= 0.001 * (random(200));
+                dx:= 0.001 * random(45);
+                dy:= 0.001 * (random(20) + 25);
+                State:= ord(sprHealth);
                 if random(2) = 0 then dx := -dx;
-                if random(2) = 0 then dy := -dy;
                 Frame:= 0;
-                FrameTicks:= random(750) + 1000;
+                FrameTicks:= random(750) + 1250;
                 State:= ord(sprSnowDust);
                 end;
         end;

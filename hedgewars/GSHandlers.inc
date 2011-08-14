@@ -3005,7 +3005,16 @@ begin
     if (Gear^.Pos = 14) and (RealTicks and $3 = 0) then 
         begin
         heart:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
-        if heart <> nil then heart^.State:= ord(sprSeduction);
+        if heart <> nil then 
+            with heart^ do
+                begin
+                dx:= 0.001 * (random(200));
+                dy:= 0.001 * (random(200));
+                if random(2) = 0 then dx := -dx;
+                if random(2) = 0 then dy := -dy;
+                FrameTicks:= random(750) + 1000;
+                heart^.State:= ord(sprSeduction)
+                end;
         end;
 
     if Gear^.Pos = 15 then
