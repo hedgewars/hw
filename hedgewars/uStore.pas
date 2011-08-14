@@ -941,7 +941,7 @@ begin
         SDL_FreeSurface(ico)
     end;
 
-    // set window caption
+    // set window title
     SDL_WM_SetCaption('Hedgewars', nil);
 
     if SDLPrimSurface <> nil then
@@ -970,8 +970,13 @@ begin
 {$ELSE}
     if not cOnlyStats then
         begin
+{$IFDEF WIN32}
+        s:= SDL_getenv('SDL_VIDEO_CENTERED');
+        SDL_putenv('SDL_VIDEO_CENTERED=1');
+{$ENDIF}
         SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
         SDLTry(SDLPrimSurface <> nil, true);
+{$IFDEF WIN32}SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));{$ENDIF}
         end;
 {$ENDIF}
 

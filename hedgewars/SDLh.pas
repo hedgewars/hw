@@ -833,8 +833,10 @@ function  SDL_JoystickGetHat(joy: PSDL_Joystick; hat: LongInt): Byte; cdecl; ext
 function  SDL_JoystickGetButton(joy: PSDL_Joystick; button: LongInt): Byte; cdecl; external SDLLibName;
 procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 
+{$IFDEF WIN32}
 function SDL_putenv(const text: PChar): LongInt; cdecl; external SDLLibName;
 function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
+{$ENDIF}
 
 {* Compatibility between SDL-1.2 and SDL-1.3 *}
 procedure SDL_WarpMouse(x, y: Word); {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
