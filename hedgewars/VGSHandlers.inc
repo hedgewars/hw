@@ -498,6 +498,7 @@ else
     begin
     dec(Gear^.Timer, Steps);
     Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+    Gear^.X:= Gear^.X + Gear^.dX * Steps
     end;
 end;
 
