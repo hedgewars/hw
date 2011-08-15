@@ -521,7 +521,7 @@ if Gear^.Hedgehog <> nil then
 else
     Gear^.Tex:= RenderStringTex(s, cWhiteColor, fnt16);
 
-Gear^.doStep:= @doStepHealthTagWork
+Gear^.doStep:= @doStepHealthTagWork;
 
 if (round(Gear^.Y) < cWaterLine) and (Frame = 0)  then
     Gear^.doStep:= @doStepHealthTagWorkUnderWater;
