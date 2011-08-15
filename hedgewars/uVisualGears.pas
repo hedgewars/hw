@@ -47,7 +47,7 @@ procedure ChangeToSDFlakes;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
 implementation
-uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils;
+uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils, uStore;
 
 const cExplFrameTicks = 110;
 
@@ -481,7 +481,12 @@ case Layer of
                             begin
                             if Gear^.State = 0 then 
                                 DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
-                            else DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex); 
+                            else
+                                begin 
+                                SetScale(cDefaultZoomLevel); 
+                                DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex); 
+                                SetScale(zoom)
+                                end
                             end;
 //if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtStraightShot: DrawRotatedF(TSprite(Gear^.State), round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
