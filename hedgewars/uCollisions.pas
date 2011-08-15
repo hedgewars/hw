@@ -84,8 +84,9 @@ inc(Count);
 if (Count > (MAXRECTSINDEX-20)) then
     begin
     t:= GearsList;
-    while (t <> nil) and (t^.Kind <> gtMine) do t:= t^.NextGear;
-    if (t <> nil) and (t^.Kind = gtMine) then DeleteGear(t)
+    while (t <> nil) and (t^.Kind <> gtMine) do 
+        t:= t^.NextGear;
+    if (t <> nil) then DeleteGear(t)
     end;
 end;
 

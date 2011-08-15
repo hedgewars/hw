@@ -132,9 +132,10 @@ handleCmd_lobby ["JOIN_ROOM", roomName] =
 handleCmd_lobby ["FOLLOW", asknick] = do
     (_, rnc) <- ask
     ci <- clientByNick asknick
+    cl <- thisClient
     let ri = clientRoom rnc $ fromJust ci
     let clRoom = room rnc ri
-    if isNothing ci || ri == lobbyId then
+    if isNothing ci || ri == lobbyId || clientProto cl /= roomProto clRoom then
         return []
         else
         handleCmd_lobby ["JOIN_ROOM", name clRoom]

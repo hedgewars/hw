@@ -280,7 +280,8 @@ with gear^ do
                 Frame:= 1
                 end;
   vgtHealthTag: begin
-                gear^.Timer:= 1500;
+                Frame:= 0;
+                Timer:= 1500;
                 //gear^.Z:= 2002;
                 end;
   vgtSmokeTrace,
@@ -479,7 +480,7 @@ case Layer of
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtHealthTag: if Gear^.Tex <> nil then 
                             begin
-                            if Gear^.State = 0 then 
+                            if Gear^.Frame = 0 then 
                                 DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
                             else
                                 begin 
