@@ -523,7 +523,7 @@ else
 
 Gear^.doStep:= @doStepHealthTagWork;
 
-if (round(Gear^.Y) < cWaterLine) and (Frame = 0)  then
+if (round(Gear^.Y) < cWaterLine) and (Gear^.Frame = 0)  then
     Gear^.doStep:= @doStepHealthTagWorkUnderWater;
 
 Gear^.Y:= Gear^.Y - Gear^.Tex^.h;
