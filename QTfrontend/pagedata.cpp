@@ -18,6 +18,10 @@
 
 #include <QGridLayout>
 #include <QPushButton>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QFileInfo>
+#include <QFileDialog>
 
 #include "pagedata.h"
 
@@ -31,6 +35,22 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 
     web = new QWebView(this);
-    web->load(QUrl("http://m8y.org/hw/"));
+    connect(this, SIGNAL(linkClicked(const QUrl&)), this, SLOT(install(const QUrl&)));
+    web->load(QUrl("http://m8y.org/hw/downloads/"));
+    web->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     pageLayout->addWidget(web, 0, 0, 1, 3);
+}
+
+void PageDataDownload::install(const QUrl &url)
+{
+qWarning("Download Request");
+QString fileName = QFileInfo(url.toString()).fileName();
+
+QNetworkRequest newRequest(url);
+newRequest.setAttribute(QNetworkRequest::User, fileName);
+
+QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+QNetworkReply *reply = manager->get(newRequest);
+//connect( reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)) );
+//connect( reply, SIGNAL(finished()), this, SLOT(downloadIssueFinished()));
 }

@@ -53,19 +53,20 @@ function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: L
 function  calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
-uses uConsts, uLandGraphics, uVariables, uDebug;
+uses uConsts, uLandGraphics, uVariables, uDebug, uGears;
 
 type TCollisionEntry = record
             X, Y, Radius: LongInt;
             cGear: PGear;
             end;
 
-const MAXRECTSINDEX = 511;
+const MAXRECTSINDEX = 1023;
 var Count: Longword;
     cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
     ga: TGearArray;
 
 procedure AddGearCI(Gear: PGear);
+var t: PGear;
 begin
 if Gear^.CollisionIndex >= 0 then exit;
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
@@ -78,7 +79,15 @@ with cinfos[Count] do
     cGear:= Gear
     end;
 Gear^.CollisionIndex:= Count;
-inc(Count)
+inc(Count);
+// mines are the easiest way to overflow collision
+if (Count > (MAXRECTSINDEX-20)) then
+    begin
+    t:= GearsList;
+    while (t <> nil) and (t^.Kind <> gtMine) do 
+        t:= t^.NextGear;
+    if (t <> nil) then DeleteGear(t)
+    end;
 end;
 
 procedure DeleteCI(Gear: PGear);

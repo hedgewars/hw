@@ -853,6 +853,12 @@ case step of
                     if cHealthDecrease <> 0 then
                         begin
                         SuddenDeathDmg:= true;
+                        
+                        // flash
+                        ScreenFade:= sfFromWhite;
+                        ScreenFadeValue:= sfMax;
+                        ScreenFadeSpeed:= 1;
+                        
                         ChangeToSDClouds;
                         ChangeToSDFlakes;
                         glClearColor(SDSkyColor.r / 255, SDSkyColor.g / 255, SDSkyColor.b / 255, 0.99);
@@ -1083,8 +1089,13 @@ begin
                 i:= 0;
                 while i < vampDmg do
                     begin
-                    vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtHealth);
-                    if vg <> nil then vg^.Tint:= $FF0000FF;
+                    vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtStraightShot);
+                    if vg <> nil then
+                        with vg^ do
+                            begin
+                            Tint:= $FF0000FF;
+                            State:= ord(sprHealth)
+                            end;
                     inc(i, 5);
                     end;
                 end
@@ -1511,19 +1522,20 @@ end;
 function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray;
 var
     t: PGear;
+    l: Longword;
 begin
     r:= r*r;
     GearsNear := nil;
     t := GearsList;
-    while t <> nil do begin
-        if (t^.Kind = Kind) then begin
-            if (X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) <
-                int2hwFloat(r) then
+    while t <> nil do 
+        begin
+        if (t^.Kind = Kind) 
+            and ((X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) < int2hwFloat(r)) then
             begin
-                SetLength(GearsNear, Length(GearsNear)+1);
-                GearsNear[High(GearsNear)] := t;
+            l:= Length(GearsNear);
+            SetLength(GearsNear, l + 1);
+            GearsNear[l] := t;
             end;
-        end;
         t := t^.NextGear;
     end;
 end;

@@ -207,14 +207,6 @@ begin
     end;
 end;
 
-/////////////////////////
-procedure ShowMainWindow;
-begin
-    if cFullScreen then ParseCommand('fullscr 1', true)
-    else ParseCommand('fullscr 0', true);
-    SDL_ShowCursor(0)
-end;
-
 ///////////////
 {$IFDEF HWLIBRARY}
 procedure Game(gameArgs: PPChar); cdecl; export;
@@ -251,7 +243,6 @@ begin
     cStereoMode:= smNone;
 {$ENDIF}
 
-    cLogfileBase:= 'game';
     initEverything(true);
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
@@ -272,19 +263,15 @@ begin
     WriteLnToConsole(msgOK);
 
     SDL_EnableUNICODE(1);
+    SDL_ShowCursor(0);
 
     WriteToConsole('Init SDL_ttf... ');
     SDLTry(TTF_Init() <> -1, true);
     WriteLnToConsole(msgOK);
 
-{$IFDEF WIN32}
-    s:= SDL_getenv('SDL_VIDEO_CENTERED');
-    SDL_putenv('SDL_VIDEO_CENTERED=1');
-    ShowMainWindow();
-    SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));
-{$ELSE}
-    ShowMainWindow();
-{$ENDIF}
+    // show main window
+    if cFullScreen then ParseCommand('fullscr 1', true)
+    else ParseCommand('fullscr 0', true);
 
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
@@ -345,6 +332,9 @@ end;
 procedure initEverything (complete:boolean);
 begin
     Randomize();
+
+    if complete then cLogfileBase:= 'game'
+    else cLogfileBase:= 'preview';
 
     // uConsts does not need initialization as they are all consts
     uUtils.initModule;
@@ -440,7 +430,6 @@ end;
 procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
 var Preview: TPreview;
 begin
-    cLogfileBase:= 'preview';
     initEverything(false);
 {$IFDEF HWLIBRARY}
     WriteLnToConsole('Preview connecting on port ' + inttostr(port));
@@ -511,9 +500,7 @@ begin
     else if GameType = gmtSyntax then DisplayUsage()
     else Game();
 
-    if GameType = gmtSyntax then
-        ExitCode:= 1
-    else
-        ExitCode:= 0;
+    // return 1 when engine is not called correctly
+    ExitCode:= LongInt(GameType = gmtSyntax);
 {$ENDIF}
 end.

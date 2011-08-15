@@ -582,7 +582,13 @@ case Gear^.Pos of
                     i:= 0;
                     while i < Gear^.Health do
                         begin
-                        AddVisualGear(hwRound(HH^.X), hwRound(HH^.Y), vgtHealth);
+                        vga:= AddVisualGear(hwRound(HH^.X), hwRound(HH^.Y), vgtStraightShot);
+                        if vga <> nil then
+                            with vga^ do
+                                begin
+                                Tint:= $00FF00FF;
+                                State:= ord(sprHealth)
+                                end;
                         inc(i, 5);
                         end;
                     end;

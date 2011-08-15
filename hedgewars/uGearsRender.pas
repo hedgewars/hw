@@ -603,6 +603,9 @@ begin
                 amSeduction: begin
                              DrawRotated(sprHandSeduction, hx, hy, sign, aangle);
                              DrawCircle(ox, oy, 248, 4, $FF, $00, $00, $AA); 
+                             //Tint($FF, $0, $0, $AA);
+                             //DrawTexture(ox - 240, oy - 240, SpritesData[sprVampiric].Texture, 10);
+                             //Tint($FF, $FF, $FF, $FF);
                              end;
                 amVampiric: DrawRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amRCPlane: begin

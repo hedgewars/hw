@@ -33,7 +33,7 @@ procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 procedure StopMessages(Message: Longword);
 
 implementation
-uses Types, uConsts, uVariables, uConsole, uUtils, uDebug, uScript;
+uses Types, uConsts, uVariables, uConsole, uUtils, uDebug;
 
 type  PVariable = ^TVariable;
       TVariable = record
@@ -68,7 +68,7 @@ end;
 
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 var ii: LongInt;
-    s, i, o: shortstring;
+    s: shortstring;
     t: PVariable;
     c: char;
 begin
@@ -85,8 +85,6 @@ while t <> nil do
       if t^.Name = CmdStr then
          begin
          if TrustedSource or t^.Trusted then
-            begin
-            if (c <> '$') or (s[0] <> #0) then s:= ParseCommandOverride(CmdStr, s);
             case t^.VType of
               vtCommand: if c='/' then
                          begin
@@ -96,12 +94,8 @@ while t <> nil do
                          if s[0]=#0 then
                             begin
                             str(PLongInt(t^.Handler)^, s);
-                            i:= inttostr(PLongInt(t^.Handler)^);
-                            o:= ParseCommandOverride(CmdStr, i);
-                            if i <> o then val(o, PLongInt(t^.Handler)^) 
-                            else WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end 
-                         else val(s, PLongInt(t^.Handler)^);
+                            WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
+                            end else val(s, PLongInt(t^.Handler)^);
               vthwFloat: if c='$' then
                          if s[0]=#0 then
                             begin
@@ -112,22 +106,12 @@ while t <> nil do
                          if s[0]=#0 then
                             begin
                             str(ord(boolean(t^.Handler^)), s);
-                            if boolean(t^.Handler^) then i:= '1'
-                            else i:= '0';
-                            o:= ParseCommandOverride(CmdStr, i);
-                            if i <> o then 
-                                begin
-                                val(o, ii);
-                                boolean(t^.Handler^):= not (ii = 0)
-                                end
-                            else WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end 
-                         else
+                            WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
+                            end else
                             begin
                             val(s, ii);
                             boolean(t^.Handler^):= not (ii = 0)
                             end;
-              end;
               end;
          exit
          end else t:= t^.Next

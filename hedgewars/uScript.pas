@@ -30,6 +30,7 @@ unit uScript;
  *       unnoticed and render the parameter useless!)
  *)
 interface
+
 procedure ScriptPrintStack;
 procedure ScriptClearStack;
 
@@ -45,6 +46,7 @@ function ScriptExists(fname : shortstring) : boolean;
 
 
 function ParseCommandOverride(key, value : shortstring) : shortstring;
+
 procedure initModule;
 procedure freeModule;
 

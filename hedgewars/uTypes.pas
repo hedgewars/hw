@@ -102,11 +102,11 @@ type
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
-            vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
+            vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtShell,
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
             vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail, vgtBulletHit, vgtCircle,
-            vgtSmoothWindBar);
+            vgtSmoothWindBar, vgtStraightShot);
 
     TGearsType = set of TGearType;
 

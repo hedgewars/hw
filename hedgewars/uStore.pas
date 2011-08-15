@@ -390,13 +390,13 @@ var ii: TSprite;
     i, t: LongInt;
 begin
     for ii:= Low(TSprite) to High(TSprite) do
-    begin
+        begin
         FreeTexture(SpritesData[ii].Texture);
         SpritesData[ii].Texture:= nil;
         if SpritesData[ii].Surface <> nil then
             SDL_FreeSurface(SpritesData[ii].Surface);
         SpritesData[ii].Surface:= nil;
-    end;
+        end;
     SDL_FreeSurface(MissionIcons);
     FreeTexture(ropeIconTex);
     FreeTexture(HHTexture);
@@ -405,14 +405,12 @@ begin
     FreeTexture(SyncTexture);
     // free all ammo name textures
     for ai:= Low(TAmmoType) to High(TAmmoType) do
-    begin
         FreeTexture(Ammoz[ai].NameTex);
-    end;
+
     // free all count textures
     for i:= Low(CountTexz) to High(CountTexz) do
-    begin
         FreeTexture(CountTexz[i]);
-    end;
+
     // free all team and hedgehog textures
     for t:= 0 to Pred(TeamsCount) do
     begin
@@ -465,10 +463,10 @@ begin
     tmpsurf:= IMG_Load(Str2PChar(s));
 
     if tmpsurf = nil then
-    begin
+        begin
         OutError(msgFailed, (imageFlags and ifCritical) <> 0);
         exit(nil)
-    end;
+        end;
 
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
     begin
@@ -943,7 +941,7 @@ begin
         SDL_FreeSurface(ico)
     end;
 
-    // set window caption
+    // set window title
     SDL_WM_SetCaption('Hedgewars', nil);
 
     if SDLPrimSurface <> nil then
@@ -972,8 +970,13 @@ begin
 {$ELSE}
     if not cOnlyStats then
         begin
+{$IFDEF WIN32}
+        s:= SDL_getenv('SDL_VIDEO_CENTERED');
+        SDL_putenv('SDL_VIDEO_CENTERED=1');
+{$ENDIF}
         SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
         SDLTry(SDLPrimSurface <> nil, true);
+{$IFDEF WIN32}SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));{$ENDIF}
         end;
 {$ENDIF}
 
@@ -1006,9 +1009,7 @@ begin
     end;
     // init all count texture pointers
     for i:= Low(CountTexz) to High(CountTexz) do
-    begin
         CountTexz[i] := nil;
-    end;
 end;
 
 procedure freeModule;

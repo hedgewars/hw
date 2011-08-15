@@ -50,8 +50,6 @@ var
 
 implementation
 uses uVariables;
-var
-    lastTint: Longword;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
 begin
@@ -72,7 +70,7 @@ var rr: TSDL_Rect;
 begin
 if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
 
-// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+// do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
     exit;
 if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
@@ -141,7 +139,7 @@ var ft, fb, fl, fr: GLfloat;
     hw, nx, ny: LongInt;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
-// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+// do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
     exit;
 if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
@@ -228,7 +226,7 @@ end;
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
-// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+// do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(X) > 2 * hw) and ((abs(X) - hw) > cScreenWidth / cScaleFactor) then
     exit;
 if (abs(Y) > 2 * hh) and ((abs(Y - 0.5 * cScreenHeight) - hh) > cScreenHeight / cScaleFactor) then
@@ -346,7 +344,7 @@ end;
 procedure DrawFillRect(r: TSDL_Rect);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
-// don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+// do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) * cScaleFactor > cScreenWidth) then
     exit;
 if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) * cScaleFactor > cScreenHeight) then
@@ -382,18 +380,18 @@ end;
 procedure DrawCircle(X, Y, Radius, Width: LongInt); 
 var
     i: LongInt;
-    CircleVertex: array [0..359] of TVertex2f;
+    CircleVertex: array [0..59] of TVertex2f;
 begin
-    for i := 0 to 359 do begin
-        CircleVertex[i].X := X + Radius*cos(i*pi/180);
-        CircleVertex[i].Y := Y + Radius*sin(i*pi/180);
+    for i := 0 to 59 do begin
+        CircleVertex[i].X := X + Radius*cos(i*pi/30);
+        CircleVertex[i].Y := Y + Radius*sin(i*pi/30);
     end;
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LINE_SMOOTH);
     glPushMatrix;
     glLineWidth(Width);
     glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);
-    glDrawArrays(GL_LINE_LOOP, 0, 360);
+    glDrawArrays(GL_LINE_LOOP, 0, 60);
     glPopMatrix;
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_LINE_SMOOTH);
@@ -409,7 +407,7 @@ const VertexBuffer: array [0..3] of TVertex2f = (
 var l, r, t, b: real;
     TextureBuffer: array [0..3] of TVertex2f;
 begin
-    // don't draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+    // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
     if (abs(X) > 32) and ((abs(X) - 16) * cScaleFactor > cScreenWidth) then
         exit;
     if (abs(Y) > 32) and ((abs(Y - 0.5 * cScreenHeight) - 16) * cScaleFactor > cScreenHeight) then
@@ -453,11 +451,16 @@ end;
 
 
 procedure Tint(r, g, b, a: Byte); inline;
-var nc, tw: Longword;
+const 
+    lastTint: Longword = 0;
+var 
+    nc, tw: Longword;
 begin
 nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
+
 if nc = lastTint then
     exit;
+
 if cGrayScale then
     begin
     tw:= round(r * RGB_LUMINANCE_RED + g * RGB_LUMINANCE_GREEN + b * RGB_LUMINANCE_BLUE);

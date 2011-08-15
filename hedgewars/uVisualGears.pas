@@ -47,7 +47,7 @@ procedure ChangeToSDFlakes;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
 implementation
-uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils;
+uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils, uStore;
 
 const cExplFrameTicks = 110;
 
@@ -90,7 +90,6 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepAmmo,
             @doStepSmoke,
             @doStepSmoke,
-            @doStepHealth,
             @doStepShell,
             @doStepDust,
             @doStepSplash,
@@ -109,7 +108,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepLineTrail,
             @doStepBulletHit,
             @doStepCircle,
-            @doStepSmoothWindBar
+            @doStepSmoothWindBar,
+            @doStepStraightShot
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0; Critical: Boolean = false): PVisualGear;
@@ -118,12 +118,9 @@ var gear: PVisualGear;
     t: Longword;
     sp: real;
 begin
-if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we are scrolling now
-    if (Kind <> vgtCloud) and not Critical then
-        begin
-        AddVisualGear:= nil;
-        exit
-        end;
+AddVisualGear:= nil;
+if ((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet))) and // we are scrolling now
+   ((Kind <> vgtCloud) and not Critical) then exit;
 
 if ((cReducedQuality and rqAntiBoom) <> 0) and
    not Critical and
@@ -136,11 +133,7 @@ if ((cReducedQuality and rqAntiBoom) <> 0) and
     vgtSmokeTrace,
     vgtEvilTrace,
     vgtNote,
-    vgtSmoothWindBar]) then
-    begin
-      AddVisualGear:= nil;
-      exit
-    end;
+    vgtSmoothWindBar]) then exit;
 
 inc(VGCounter);
 New(gear);
@@ -242,14 +235,6 @@ with gear^ do
                 Frame:= 7 - random(2);
                 FrameTicks:= cExplFrameTicks * 2;
                 end;
-    vgtHealth: begin
-                dx:= 0.001 * random(45);
-                dy:= 0.001 * (random(20) + 25);
-                Tint:= $00FF00FF; // default to green
-                if random(2) = 0 then dx := -dx;
-                Frame:= 0;
-                FrameTicks:= random(750) + 1250;
-                end;
   vgtDust: begin
                 dx:= 0.005 * (random(15) + 10);
                 dy:= 0.001 * (random(40) + 20);
@@ -295,7 +280,8 @@ with gear^ do
                 Frame:= 1
                 end;
   vgtHealthTag: begin
-                gear^.Timer:= 1500;
+                Frame:= 0;
+                Timer:= 1500;
                 //gear^.Z:= 2002;
                 end;
   vgtSmokeTrace,
@@ -331,6 +317,15 @@ vgtBigExplosion: begin
                 Angle := 0;
                 end;
 vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+ vgtStraightShot: begin
+                dx:= 0.001 * random(45);
+                dy:= 0.001 * (random(20) + 25);
+                State:= ord(sprHealth);
+                if random(2) = 0 then dx := -dx;
+                Frame:= 0;
+                FrameTicks:= random(750) + 1250;
+                State:= ord(sprSnowDust);
+                end;
         end;
 
 if State <> 0 then gear^.State:= State;
@@ -483,8 +478,19 @@ case Layer of
                                  DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
                              end;
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtHealth: DrawSprite(sprHealth, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, 0);
+            vgtHealthTag: if Gear^.Tex <> nil then 
+                            begin
+                            if Gear^.Frame = 0 then 
+                                DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
+                            else
+                                begin 
+                                SetScale(cDefaultZoomLevel); 
+                                DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex); 
+                                SetScale(zoom)
+                                end
+                            end;
+//if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+            vgtStraightShot: DrawRotatedF(TSprite(Gear^.State), round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
         end;
         if (cReducedQuality and rqAntiBoom) = 0 then
             case Gear^.Kind of
