@@ -147,7 +147,8 @@ private:
         ID_PAGE_ADMIN           = 17,
         ID_PAGE_NETTYPE         = 18,
         ID_PAGE_CAMPAIGN        = 19,
-        ID_PAGE_DRAWMAP         = 20
+        ID_PAGE_DRAWMAP         = 20,
+        ID_PAGE_DATADOWNLOAD    = 21
         };
     HWGame * game;
     HWNetServer* pnetserver;

@@ -64,13 +64,14 @@
 #include "pagedrawmap.h"
 #include "pagenettype.h"
 #include "pagegamestats.h"
+#include "pageplayrecord.h"
+#include "pagedata.h"
 #include "hwconsts.h"
 #include "newnetclient.h"
 #include "gamecfgwidget.h"
 #include "netserverslist.h"
 #include "netudpserver.h"
 #include "chatwidget.h"
-#include "pageplayrecord.h"
 #include "input_ip.h"
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
@@ -150,10 +151,12 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageMain->BtnNet, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnNet, ID_PAGE_NETTYPE);
     connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
-    pageSwitchMapper->setMapping(ui.pageMain->BtnInfo, ID_PAGE_INFO);
+    pageSwitchMapper->setMapping(ui.pageMain->BtnInfo, ID_PAGE_DATADOWNLOAD);
 
     connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
+
+    connect(ui.pageDataDownload->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageEditTeam->BtnTeamSave, SIGNAL(clicked()), this, SLOT(TeamSave()));
     connect(ui.pageEditTeam->BtnTeamDiscard, SIGNAL(clicked()), this, SLOT(TeamDiscard()));

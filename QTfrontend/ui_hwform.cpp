@@ -44,6 +44,7 @@
 #include "pagemain.h"
 #include "pagegamestats.h"
 #include "pageplayrecord.h"
+#include "pagedata.h"
 #include "hwconsts.h"
 
 void Ui_HWForm::setupUi(HWForm *HWForm)
@@ -137,4 +138,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 
     pageDrawMap = new PageDrawMap();
     Pages->addWidget(pageDrawMap);
+
+    pageDataDownload = new PageDataDownload();
+    Pages->addWidget(pageDataDownload);
 }
