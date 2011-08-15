@@ -282,6 +282,7 @@ with gear^ do
   vgtHealthTag: begin
                 Frame:= 0;
                 Timer:= 1500;
+                dY:= -0.08;
                 //gear^.Z:= 2002;
                 end;
   vgtSmokeTrace,

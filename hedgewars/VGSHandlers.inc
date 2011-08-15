@@ -515,17 +515,15 @@ var s: shortstring;
 begin
 s:= '';
 
-Gear^.dY:= -0.08;
-
 str(Gear^.State, s);
 if Gear^.Hedgehog <> nil then
     Gear^.Tex:= RenderStringTex(s, Gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
 else
     Gear^.Tex:= RenderStringTex(s, cWhiteColor, fnt16);
 
-if round(Gear^.Y) < cWaterLine then
-    Gear^.doStep:= @doStepHealthTagWork
-else
+Gear^.doStep:= @doStepHealthTagWork
+
+if (round(Gear^.Y) < cWaterLine) and (Frame = 0)  then
     Gear^.doStep:= @doStepHealthTagWorkUnderWater;
 
 Gear^.Y:= Gear^.Y - Gear^.Tex^.h;
