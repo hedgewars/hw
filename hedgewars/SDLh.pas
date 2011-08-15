@@ -567,6 +567,19 @@ type
 {$ENDIF}
         end;
 
+    SDL_TouchID = Int32;
+    SDL_FingerID = Int32;
+
+    TSDL_TouchFingerEvent = record
+        type_: UInt32;
+        windowId: UInt32;
+        touchId: SDL_TouchID;
+        fingerId: SDL_FingerID;
+        state, padding1, padding2, padding3: UInt8;
+        x,y: UInt16;
+        dx,dy: Int16;
+        pressure: UInt16;
+    end;
 //TODO: implement SDL_TouchButtonEvent, SDL_MultiGestureEvent, SDL_DollarGestureEvent
 
     TSDL_QuitEvent = record
@@ -603,6 +616,9 @@ type
             SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
             SDL_JOYBUTTONDOWN,
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
+            SDL_FINGERMOTION,
+            SDL_FINGERUP,
+            SDL_FINGERDOWN:(tfinger: TSDL_TouchFingerEvent);
             SDL_QUITEV: (quit: TSDL_QuitEvent);
             SDL_USEREVENT: (user: TSDL_UserEvent);
             //TODO: implement other events

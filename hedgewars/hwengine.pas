@@ -31,7 +31,7 @@ program hwengine;
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
-     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted {$IFDEF ANDROID}, GLUnit {$ENDIF};
+     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted,uTouch {$IFDEF ANDROID}, GLUnit {$ENDIF};
 
 {$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
@@ -169,9 +169,9 @@ begin
                         cHasFocus:= true;
                         onFocusStateChanged()
                         end;
-                SDL_FINGERDOWN: WriteToConsole('finger down');
-                SDL_FINGERMOTION: WriteToConsole('finger is moving');
-                SDL_FINGERUP: WriteToConsole('finger up');
+                SDL_FINGERMOTION: onTouchMotion(event.tfinger.x, event.tfinger.y,event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
+                SDL_FINGERDOWN: onTouchDown(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
+                SDL_FINGERUP: onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
 {$ELSE}
                     KeyPressChat(event.key.keysym.unicode);
                 SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then wheelDown:= true;
@@ -253,7 +253,6 @@ begin
 
     cLogfileBase:= 'game';
     initEverything(true);
-
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
     AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
@@ -365,6 +364,7 @@ begin
 {$IFDEF ANDROID}
 	GLUnit.init;
 {$ENDIF}
+        uTouch.initModule;
 	uAI.initModule;
         //uAIActions does not need initialization
         //uAIAmmoTests does not need initialization
