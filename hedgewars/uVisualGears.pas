@@ -477,7 +477,13 @@ case Layer of
                                  DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
                              end;
             vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtHealthTag: if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+            vgtHealthTag: if Gear^.Tex <> nil then 
+                            begin
+                            if Gear^.State = 0 then 
+                                DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
+                            else DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex); 
+                            end;
+//if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtStraightShot: DrawRotatedF(TSprite(Gear^.State), round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
         end;
         if (cReducedQuality and rqAntiBoom) = 0 then
