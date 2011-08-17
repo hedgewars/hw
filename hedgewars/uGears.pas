@@ -1356,7 +1356,7 @@ while t <> nil do
                     dx.isNegative:= false;
                     dy:= Gear^.Y-t^.Y;
                     dy.isNegative:= false;
-                    if r - hwRound(dx+dy) < 25 then
+                    if hwRound(dx+dy) < 25+r then
                         begin
                         dist:= hwRound(Distance(dx, dy));
                         dmg:= ModifyDamage(min(r - dist, 25), t);
@@ -1382,7 +1382,7 @@ while t <> nil do
                     dx.isNegative:= false;
                     dy:= Gear^.Y-t^.Y;
                     dy.isNegative:= false;
-                    if r - hwRound(dx+dy) < 25 then
+                    if hwRound(dx+dy) < 25+r then
                         begin
                         dist:= hwRound(Distance(dx, dy));
                         dmg:= ModifyDamage(min(r - dist, 25), t);
