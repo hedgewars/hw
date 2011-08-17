@@ -331,12 +331,77 @@ vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 
 if State <> 0 then gear^.State:= State;
 
-if VisualGearsList <> nil then
-    begin
-    VisualGearsList^.PrevGear:= gear;
-    gear^.NextGear:= VisualGearsList
-    end;
-VisualGearsList:= gear;
+case Gear^.Kind of
+    // 0: this layer is very distant in the background when stereo
+    vgtTeamHealthSorter,
+    vgtSmoothWindBar,
+    vgtFlake, 
+    vgtCloud: begin
+              if VisualGearsLayer0 <> nil then
+                  begin
+                  VisualGearsLayer0^.PrevGear:= gear;
+                  gear^.NextGear:= VisualGearsLayer0
+                  end;
+              gear^.Layer:= 0;
+              VisualGearsLayer0:= gear
+              end; 
+    // 1: this layer is on the land level (which is close but behind the screen plane) when stereo
+    vgtSmokeTrace,
+    vgtEvilTrace,
+    vgtLineTrail,
+    vgtSmoke,
+    vgtSmokeWhite,
+    vgtDust,
+    vgtFire,
+    vgtSplash,
+    vgtDroplet,
+    vgtBubble: begin
+              if VisualGearsLayer1 <> nil then
+                  begin
+                  VisualGearsLayer1^.PrevGear:= gear;
+                  gear^.NextGear:= VisualGearsLayer1
+                  end;
+              gear^.Layer:= 1;
+              VisualGearsLayer1:= gear
+              end; 
+    // 3: this layer is on the screen plane (depth = 0) when stereo
+    vgtSpeechBubble,
+    vgtSmallDamageTag,
+    vgtHealthTag,
+    vgtStraightShot,
+    vgtChunk: begin
+              if VisualGearsLayer3 <> nil then
+                  begin
+                  VisualGearsLayer3^.PrevGear:= gear;
+                  gear^.NextGear:= VisualGearsLayer3
+                  end;
+              gear^.Layer:= 3;
+              VisualGearsLayer3:= gear
+              end; 
+    // 2: this layer is outside the screen when stereo
+    vgtExplosion,
+    vgtBigExplosion,
+    vgtExplPart,
+    vgtExplPart2,
+    vgtSteam,
+    vgtAmmo,
+    vgtShell,
+    vgtFeather,
+    vgtEgg,
+    vgtBeeTrace,
+    vgtSmokeRing,
+    vgtNote,
+    vgtBulletHit,
+    vgtCircle: begin
+              if VisualGearsLayer2 <> nil then
+                  begin
+                  VisualGearsLayer2^.PrevGear:= gear;
+                  gear^.NextGear:= VisualGearsLayer2
+                  end;
+              gear^.Layer:= 2;
+              VisualGearsLayer2:= gear
+              end; 
+end;
 
 AddVisualGear:= gear;
 end;
@@ -349,7 +414,13 @@ begin
 
     if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
     if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
-    else VisualGearsList:= Gear^.NextGear;
+    else
+        case Gear^.Layer of
+            0: VisualGearsLayer0:= Gear^.NextGear;
+            1: VisualGearsLayer1:= Gear^.NextGear;
+            2: VisualGearsLayer2:= Gear^.NextGear;
+            3: VisualGearsLayer3:= Gear^.NextGear;
+        end;
 
     if lastVisualGearByUID = Gear then lastVisualGearByUID:= nil;
 
@@ -361,7 +432,28 @@ var Gear, t: PVisualGear;
 begin
 if Steps = 0 then exit;
 
-t:= VisualGearsList;
+t:= VisualGearsLayer0;
+while t <> nil do
+      begin
+      Gear:= t;
+      t:= Gear^.NextGear;
+      Gear^.doStep(Gear, Steps)
+      end;
+t:= VisualGearsLayer1;
+while t <> nil do
+      begin
+      Gear:= t;
+      t:= Gear^.NextGear;
+      Gear^.doStep(Gear, Steps)
+      end;
+t:= VisualGearsLayer2;
+while t <> nil do
+      begin
+      Gear:= t;
+      t:= Gear^.NextGear;
+      Gear^.doStep(Gear, Steps)
+      end;
+t:= VisualGearsLayer3;
 while t <> nil do
       begin
       Gear:= t;
@@ -375,7 +467,7 @@ var Gear, t: PVisualGear;
     dmg: LongInt;
 begin
 if (vobCount = 0) or (vobCount > 200) then exit;
-t:= VisualGearsList;
+t:= VisualGearsLayer0;
 while t <> nil do
       begin
       Gear:= t;
@@ -401,180 +493,191 @@ var Gear: PVisualGear;
     tinted: boolean;
     tmp: real;
 begin
-Gear:= VisualGearsList;
 case Layer of
     // this layer is very distant in the background when stereo
-    0: while Gear <> nil do
-        begin
-        if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
-        case Gear^.Kind of
-            vgtFlake: if SuddenDeathDmg then
-                          if vobSDVelocity = 0 then
-                              DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                          else
-                              DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
-                      else
-                          if vobVelocity = 0 then
-                              DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                          else
-                              DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
-            vgtCloud: if SuddenDeathDmg then
-                          DrawSprite(sprSDCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                      else
-                          DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
-            end;
-        if Gear^.Tint <> $FFFFFFFF then Tint($FF,$FF,$FF,$FF);
-        Gear:= Gear^.NextGear
+    0: begin
+       Gear:= VisualGearsLayer0;
+       while Gear <> nil do
+           begin
+           if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
+           case Gear^.Kind of
+               vgtFlake: if SuddenDeathDmg then
+                             if vobSDVelocity = 0 then
+                                 DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                         else
+                             if vobVelocity = 0 then
+                                 DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+               vgtCloud: if SuddenDeathDmg then
+                             DrawSprite(sprSDCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                         else
+                             DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
+               end;
+           if Gear^.Tint <> $FFFFFFFF then Tint($FF,$FF,$FF,$FF);
+           Gear:= Gear^.NextGear
+           end
        end;
     // this layer is on the land level (which is close but behind the screen plane) when stereo
-    1: while Gear <> nil do
-        begin
-        //tinted:= false;
-        if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
-        case Gear^.Kind of
-            vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
-            vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
-            vgtLineTrail: DrawLine(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 1.0, $FF, min(Gear^.Timer, $C0), min(Gear^.Timer, $80), min(Gear^.Timer, $FF));
-        end;
-        if (cReducedQuality and rqAntiBoom) = 0 then
-            case Gear^.Kind of
-                vgtSmoke: DrawSprite(sprSmoke, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
-                vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
-                vgtDust: if Gear^.State = 1 then
-                             DrawSprite(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame)
-                         else
-                             DrawSprite(sprDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
-                vgtFire: if (Gear^.State and gstTmpFlag) = 0 then
-                             DrawSprite(sprFlame, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy, (RealTicks shr 6 + Gear^.Frame) mod 8)
-                         else
-                             DrawTextureF(SpritesData[sprFlame].Texture, Gear^.FrameTicks / 900, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, (RealTicks shr 7 + Gear^.Frame) mod 8, 1, 16, 16);
-                vgtSplash: if SuddenDeathDmg then
-                               DrawSprite(sprSDSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37))
+    1: begin
+       Gear:= VisualGearsLayer1;
+       while Gear <> nil do
+          begin
+          //tinted:= false;
+          if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
+          case Gear^.Kind of
+              vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
+              vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
+              vgtLineTrail: DrawLine(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 1.0, $FF, min(Gear^.Timer, $C0), min(Gear^.Timer, $80), min(Gear^.Timer, $FF));
+          end;
+          if (cReducedQuality and rqAntiBoom) = 0 then
+              case Gear^.Kind of
+                  vgtSmoke: DrawSprite(sprSmoke, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                  vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                  vgtDust: if Gear^.State = 1 then
+                               DrawSprite(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame)
                            else
-                               DrawSprite(sprSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
-                vgtDroplet: if SuddenDeathDmg then
-                                DrawSprite(sprSDDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame)
-                            else
-                                DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
-                vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
-            end;
-        //if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
-        if (Gear^.Tint <> $FFFFFFFF) then Tint($FF,$FF,$FF,$FF);
-        Gear:= Gear^.NextGear
+                               DrawSprite(sprDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                  vgtFire: if (Gear^.State and gstTmpFlag) = 0 then
+                               DrawSprite(sprFlame, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy, (RealTicks shr 6 + Gear^.Frame) mod 8)
+                           else
+                               DrawTextureF(SpritesData[sprFlame].Texture, Gear^.FrameTicks / 900, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, (RealTicks shr 7 + Gear^.Frame) mod 8, 1, 16, 16);
+                  vgtSplash: if SuddenDeathDmg then
+                                 DrawSprite(sprSDSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37))
+                             else
+                                 DrawSprite(sprSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
+                  vgtDroplet: if SuddenDeathDmg then
+                                  DrawSprite(sprSDDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame)
+                              else
+                                  DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
+                  vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
+              end;
+          //if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
+          if (Gear^.Tint <> $FFFFFFFF) then Tint($FF,$FF,$FF,$FF);
+          Gear:= Gear^.NextGear
+          end
        end;
     // this layer is on the screen plane (depth = 0) when stereo
-    3: while Gear <> nil do
-        begin
-        tinted:= false;
-        if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
-        case Gear^.Kind of
-            vgtSpeechBubble: begin
-                             if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then
-                                 begin
-                                 tinted:= true;
-                                 Tint($FF, $FF, $FF,  $66);
-                                 DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
-                                 end
-                             else if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team = CurrentTeam)) or (Gear^.State = 2)) then
-                                 DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-                             end;
-            vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtHealthTag: if Gear^.Tex <> nil then 
-                            begin
-                            if Gear^.Frame = 0 then 
-                                DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
-                            else
-                                begin
-                                if Gear^.Angle <> 0 then SetScale(Gear^.Angle)
-                                else SetScale(cDefaultZoomLevel); 
-                                DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex); 
-                                SetScale(zoom)
-                                end
-                            end;
-//if Gear^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-            vgtStraightShot: DrawRotatedF(TSprite(Gear^.State), round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-        end;
-        if (cReducedQuality and rqAntiBoom) = 0 then
-            case Gear^.Kind of
-                vgtChunk: DrawRotatedF(sprChunk, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-            end;
-        if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
-        Gear:= Gear^.NextGear
+    3: begin
+       Gear:= VisualGearsLayer3;
+       while Gear <> nil do
+           begin
+           tinted:= false;
+           if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
+           case Gear^.Kind of
+               vgtSpeechBubble: begin
+                                if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then
+                                    begin
+                                    tinted:= true;
+                                    Tint($FF, $FF, $FF,  $66);
+                                    DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
+                                    end
+                                else if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team = CurrentTeam)) or (Gear^.State = 2)) then
+                                    DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+                                end;
+               vgtSmallDamageTag: DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+               vgtHealthTag: if Gear^.Tex <> nil then 
+                               begin
+                               if Gear^.Frame = 0 then 
+                                   DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
+                               else
+                                   begin
+                                   SetScale(cDefaultZoomLevel);
+                                   if Gear^.Angle = 0 then DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex)
+                                   else DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex, Gear^.Angle); 
+                                   SetScale(zoom)
+                                   end
+                               end;
+    //if Ger^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+               vgtStraightShot: DrawRotatedF(TSprite(Gear^.State), round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+           end;
+           if (cReducedQuality and rqAntiBoom) = 0 then
+               case Gear^.Kind of
+                   vgtChunk: DrawRotatedF(sprChunk, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+               end;
+           if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
+           Gear:= Gear^.NextGear
+           end
        end;
     // this layer is outside the screen when stereo
-    2: while Gear <> nil do
-        begin
-        tinted:= false;
-        if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
-        case Gear^.Kind of
-            vgtExplosion: DrawSprite(sprExplosion50, round(Gear^.X) - 32 + WorldDx, round(Gear^.Y) - 32 + WorldDy, Gear^.State);
-            vgtBigExplosion: begin
-                             tinted:= true;
-                             Tint($FF, $FF, $FF, round($FF * (1 - power(Gear^.Timer / 250, 4))));
-                             DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
-                             end;
-        end;
-        if (cReducedQuality and rqAntiBoom) = 0 then
-            case Gear^.Kind of
-                vgtExplPart: DrawSprite(sprExplPart, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
-                vgtExplPart2: DrawSprite(sprExplPart2, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
-                vgtSteam: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
-                vgtAmmo: begin
-                         tinted:= true;
-                         Tint($FF, $FF, $FF, round(Gear^.alpha * $FF));
-                         DrawTextureF(ropeIconTex, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 32, 32);
-                         DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
-                         end;
-                vgtShell: begin
-                          if Gear^.FrameTicks < $FF then
-                              begin
-                              Tint($FF, $FF, $FF, Gear^.FrameTicks);
-                              tinted:= true
-                              end;
-                          DrawRotatedF(sprShell, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                          end;
-                vgtFeather: begin
-                            if Gear^.FrameTicks < 255 then
-                                begin
-                                Tint($FF, $FF, $FF, Gear^.FrameTicks);
-                                tinted:= true
+    2: begin
+       Gear:= VisualGearsLayer2;
+       while Gear <> nil do
+           begin
+           tinted:= false;
+           if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
+           case Gear^.Kind of
+               vgtExplosion: DrawSprite(sprExplosion50, round(Gear^.X) - 32 + WorldDx, round(Gear^.Y) - 32 + WorldDy, Gear^.State);
+               vgtBigExplosion: begin
+                                tinted:= true;
+                                Tint($FF, $FF, $FF, round($FF * (1 - power(Gear^.Timer / 250, 4))));
+                                DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -10 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
                                 end;
-                            DrawRotatedF(sprFeather, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                          end;
-                vgtEgg: begin
-                        if Gear^.FrameTicks < $FF then
-                            begin
-                                Tint($FF, $FF, $FF, Gear^.FrameTicks);
-                                tinted:= true
+           end;
+           if (cReducedQuality and rqAntiBoom) = 0 then
+               case Gear^.Kind of
+                   vgtExplPart: DrawSprite(sprExplPart, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+                   vgtExplPart2: DrawSprite(sprExplPart2, round(Gear^.X) + WorldDx - 16, round(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+                   vgtSteam: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                   vgtAmmo: begin
+                            tinted:= true;
+                            Tint($FF, $FF, $FF, round(Gear^.alpha * $FF));
+                            DrawTextureF(ropeIconTex, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 32, 32);
+                            DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
                             end;
-                        DrawRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                        end;
-                vgtBeeTrace: begin
+                   vgtShell: begin
                              if Gear^.FrameTicks < $FF then
-                                 Tint($FF, $FF, $FF, Gear^.FrameTicks div 2)
-                             else
-                                 Tint($FF, $FF, $FF, $80);
-                             tinted:= true;
-                             DrawRotatedF(sprBeeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, (RealTicks shr 4) mod cMaxAngle);
+                                 begin
+                                 Tint($FF, $FF, $FF, Gear^.FrameTicks);
+                                 tinted:= true
+                                 end;
+                             DrawRotatedF(sprShell, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                              end;
-                vgtSmokeRing: begin
-                              tinted:= true;
-                              Tint($FF, $FF, $FF, round(Gear^.alpha * $FF));
-                              DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
-                              end;
-                vgtNote: DrawRotatedF(sprNote, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                vgtBulletHit: DrawRotatedF(sprBulletHit, round(Gear^.X) + WorldDx - 0, round(Gear^.Y) + WorldDy - 0, 7 - (Gear^.FrameTicks div 50), 1, Gear^.Angle);
-            end;
-        case Gear^.Kind of
-            vgtCircle: if gear^.Angle = 1 then
-                           begin
-                           tmp:= Gear^.State / 100;
-                           DrawTexture(round(Gear^.X-24*tmp) + WorldDx, round(Gear^.Y-24*tmp) + WorldDy, SpritesData[sprVampiric].Texture, tmp)
-                           end
-                       else DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer);
-        end;
-        if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
-        Gear:= Gear^.NextGear
+                   vgtFeather: begin
+                               if Gear^.FrameTicks < 255 then
+                                   begin
+                                   Tint($FF, $FF, $FF, Gear^.FrameTicks);
+                                   tinted:= true
+                                   end;
+                               DrawRotatedF(sprFeather, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                             end;
+                   vgtEgg: begin
+                           if Gear^.FrameTicks < $FF then
+                               begin
+                                   Tint($FF, $FF, $FF, Gear^.FrameTicks);
+                                   tinted:= true
+                               end;
+                           DrawRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                           end;
+                   vgtBeeTrace: begin
+                                if Gear^.FrameTicks < $FF then
+                                    Tint($FF, $FF, $FF, Gear^.FrameTicks div 2)
+                                else
+                                    Tint($FF, $FF, $FF, $80);
+                                tinted:= true;
+                                DrawRotatedF(sprBeeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, (RealTicks shr 4) mod cMaxAngle);
+                                end;
+                   vgtSmokeRing: begin
+                                 tinted:= true;
+                                 Tint($FF, $FF, $FF, round(Gear^.alpha * $FF));
+                                 DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
+                                 end;
+                   vgtNote: DrawRotatedF(sprNote, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                   vgtBulletHit: DrawRotatedF(sprBulletHit, round(Gear^.X) + WorldDx - 0, round(Gear^.Y) + WorldDy - 0, 7 - (Gear^.FrameTicks div 50), 1, Gear^.Angle);
+               end;
+           case Gear^.Kind of
+               vgtCircle: if gear^.Angle = 1 then
+                              begin
+                              tmp:= Gear^.State / 100;
+                              DrawTexture(round(Gear^.X-24*tmp) + WorldDx, round(Gear^.Y-24*tmp) + WorldDy, SpritesData[sprVampiric].Texture, tmp)
+                              end
+                          else DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer);
+           end;
+           if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
+           Gear:= Gear^.NextGear
+           end
        end
     end;
 end;
@@ -589,7 +692,40 @@ if (lastVisualGearByUID <> nil) and (lastVisualGearByUID^.uid = uid) then
     VisualGearByUID:= lastVisualGearByUID;
     exit
     end;
-vg:= VisualGearsList;
+vg:= VisualGearsLayer0;
+while vg <> nil do
+    begin
+    if vg^.uid = uid then
+        begin
+        lastVisualGearByUID:= vg;
+        VisualGearByUID:= vg;
+        exit
+        end;
+    vg:= vg^.NextGear
+    end;
+vg:= VisualGearsLayer1;
+while vg <> nil do
+    begin
+    if vg^.uid = uid then
+        begin
+        lastVisualGearByUID:= vg;
+        VisualGearByUID:= vg;
+        exit
+        end;
+    vg:= vg^.NextGear
+    end;
+vg:= VisualGearsLayer2;
+while vg <> nil do
+    begin
+    if vg^.uid = uid then
+        begin
+        lastVisualGearByUID:= vg;
+        VisualGearByUID:= vg;
+        exit
+        end;
+    vg:= vg^.NextGear
+    end;
+vg:= VisualGearsLayer3;
 while vg <> nil do
     begin
     if vg^.uid = uid then
@@ -614,7 +750,7 @@ var       i: LongInt;
     vg, tmp: PVisualGear;
 begin
 if cCloudsNumber = cSDCloudsNumber then exit;
-vg:= VisualGearsList;
+vg:= VisualGearsLayer0;
 while vg <> nil do
     if vg^.Kind = vgtCloud then
         begin
@@ -646,7 +782,7 @@ var       i: LongInt;
 begin
 if (cReducedQuality and rqKillFlakes) <> 0 then exit;
 if vobCount = vobSDCount then exit;
-vg:= VisualGearsList;
+vg:= VisualGearsLayer0;
 while vg <> nil do
     if vg^.Kind = vgtFlake then
         begin
@@ -665,12 +801,18 @@ end;
 
 procedure initModule;
 begin
-    VisualGearsList:= nil;
+    VisualGearsLayer0:= nil;
+    VisualGearsLayer1:= nil;
+    VisualGearsLayer2:= nil;
+    VisualGearsLayer3:= nil;
 end;
 
 procedure freeModule;
 begin
-    while VisualGearsList <> nil do DeleteVisualGear(VisualGearsList);
+    while VisualGearsLayer0 <> nil do DeleteVisualGear(VisualGearsLayer0);
+    while VisualGearsLayer1 <> nil do DeleteVisualGear(VisualGearsLayer1);
+    while VisualGearsLayer2 <> nil do DeleteVisualGear(VisualGearsLayer2);
+    while VisualGearsLayer3 <> nil do DeleteVisualGear(VisualGearsLayer3);
 end;
 
 end.

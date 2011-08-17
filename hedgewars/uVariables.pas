@@ -2313,7 +2313,10 @@ var
     texl, texr: GLuint;
 
 
-    VisualGearsList: PVisualGear;
+    VisualGearsLayer0: PVisualGear;
+    VisualGearsLayer1: PVisualGear;
+    VisualGearsLayer2: PVisualGear;
+    VisualGearsLayer3: PVisualGear;
     lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
     vobVelocity, vobFallSpeed: LongInt;
