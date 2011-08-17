@@ -4,7 +4,7 @@ unit uTouch;
 
 interface
 
-uses sysutils, math, uConsole, uVariables, SDLh, uTypes, uFloat, uConsts, GLUnit;
+uses sysutils, math, uConsole, uVariables, SDLh, uTypes, uFloat, uConsts, uIO, GLUnit;
 
 procedure initModule;
 
@@ -12,10 +12,11 @@ procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 procedure onTouchMotion(x,y: Longword; dx,dy: LongInt; pointerId: SDL_FingerId);
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
 function convertToCursor(scale: LongInt; xy: LongInt): LongInt;
-procedure addFinger(id: SDL_FingerId);
+procedure addFinger(x,y: Longword; id: SDL_FingerId);
 procedure deleteFinger(id: SDL_FingerId);
 procedure onTouchClick(x,y: Longword; pointerId: SDL_FingerId);
 
+function fingerHasMoved(id: SDL_FingerId): boolean;
 function calculateDelta(id1, id2: SDL_FingerId): hwFloat;
 function getSecondPointer(id: SDL_FingerId): SDL_FingerId;
 implementation
@@ -28,15 +29,17 @@ var
     xyCoord : array of LongInt;
     pointerIds : array of SDL_FingerId;
     timeSinceDown: array of Longword;
-     
+    historicalXY : array of LongInt;
     //Pinch to zoom 
     pinchSize : hwFloat;
     baseZoomValue: GLFloat;
 
+    invertCursor : boolean;
+
 procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 begin
     WriteToConsole('down'); 
-    addFinger(pointerId);
+    addFinger(x,y,pointerId);
     xyCoord[pointerId*2] := convertToCursor(cScreenWidth,x);
     xyCoord[pointerId*2+1] := convertToCursor(cScreenHeight,y);
    
@@ -60,8 +63,16 @@ begin
     case pointerCount of
        1:
            begin
-               CursorPoint.X := CursorPoint.X - convertToCursor(cScreenWidth,dx);
-               CursorPoint.Y := CursorPoint.Y + convertToCursor(cScreenWidth,dy);
+               if invertCursor then
+               begin
+                   CursorPoint.X := CursorPoint.X - convertToCursor(cScreenWidth,dx);
+                   CursorPoint.Y := CursorPoint.Y + convertToCursor(cScreenWidth,dy);
+               end
+               else
+               begin
+                   CursorPoint.X := CursorPoint.X + convertToCursor(cScreenWidth,dx);
+                   CursorPoint.Y := CursorPoint.Y - convertToCursor(cScreenWidth,dy);
+               end;
            end;
        2:
            begin
@@ -84,8 +95,17 @@ end;
 
 procedure onTouchClick(x,y: Longword; pointerId: SDL_FingerId);
 begin
-    WriteToConsole(Format('clicker %d', [SDL_GetTicks]));
-    bShowAmmoMenu := not(bShowAmmoMenu);
+    if bShowAmmoMenu then 
+    begin
+        doPut(CursorPoint.X, CursorPoint.Y, false); 
+        invertCursor := true;
+        exit
+    end;
+
+
+    bShowAmmoMenu := true;
+    invertCursor := false;
+    //WriteToConsole(Format('%s, %s : %d, %d', [cstr(CurrentHedgehog^.Gear^.X), cstr(CurrentHedgehog^.Gear^.Y), x-WorldDX, y-WorldDY]));
 end;
 
 function convertToCursor(scale: LongInt; xy: LongInt): LongInt;
@@ -93,7 +113,7 @@ begin
     convertToCursor := round(xy/32768*scale)
 end;
 
-procedure addFinger(id: SDL_FingerId);
+procedure addFinger(x,y: Longword; id: SDL_FingerId);
 var 
     index, tmp: Longword;
 begin
@@ -101,9 +121,12 @@ begin
 
     //Check array sizes
     if length(pointerIds) < pointerCount then setLength(pointerIds, length(pointerIds)*2);
-    if length(xyCoord) < pointerCount*2+1 then setLength(xyCoord, length(xyCoord)*2);
+    if length(xyCoord) < id*2+1 then 
+    begin 
+        setLength(xyCoord, id*2+1);
+        setLength(historicalXY, id*2+1);
+    end;
     if length(timeSinceDown) < id then setLength(timeSinceDown, id); 
-
     for index := 0 to pointerCount do //place the pointer ids as far back to the left as possible
     begin
         if pointerIds[index] = -1 then 
@@ -113,7 +136,9 @@ begin
            end;
     end;
     //set timestamp
-    timeSinceDown[id] := SDL_GetTicks
+    timeSinceDown[id] := SDL_GetTicks;
+    historicalXY[id*2] := convertToCursor(cScreenWidth,x);
+    historicalXY[id*2+1] := convertToCursor(cScreenHeight,y);
 end;
 
 procedure deleteFinger(id: SDL_FingerId);
@@ -138,7 +163,14 @@ begin
             break;
         end;
     end;
-    if (SDL_GetTicks - timeSinceDown[id]) < clickTime then onTouchClick(xyCoord[id*2], xyCoord[id*2+1], id);
+    if ((SDL_GetTicks - timeSinceDown[id]) < clickTime) AND  not(fingerHasMoved(id)) then onTouchClick(xyCoord[id*2], xyCoord[id*2+1], id);
+end;
+
+//Method to calculate the distance this finger has moved since the downEvent
+function fingerHasMoved(id: SDL_FingerId): boolean;
+begin
+//    fingerHasMoved := hwAbs(DistanceI(xyCoord[id*2]-historicalXY[id*2], xyCoord[id*2+1]-historicalXY[id*2+1])) > int2hwFloat(2000); // is 1% movement
+    fingerHasMoved := trunc(sqrt(Power(xyCoord[id*2]-historicalXY[id*2],2) + Power(xyCoord[id*2+1]-historicalXY[id*2+1], 2))) > 330;
 end;
 
 function calculateDelta(id1, id2: SDL_FingerId): hwFloat;
@@ -161,7 +193,8 @@ var
 begin
     setLength(xyCoord, 10);
     setLength(pointerIds, 5);
-    setLength(timeSinceDown, 5);    
+    setLength(timeSinceDown, 5);
+    setLength(historicalXY, 10);    
     for index := Low(xyCoord) to High(xyCoord) do xyCoord[index] := -1;
     for index := Low(pointerIds) to High(pointerIds) do pointerIds[index] := -1;
 
