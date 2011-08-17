@@ -509,7 +509,7 @@ case Kind of
                 gear^.ImpactSound:= sndMelonImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.AdvBounce:= 0;
-                gear^.Radius:= 16;
+                gear^.Radius:= 17;
                 // set color
                 gear^.Tag:= 2 * gear^.Timer;
                 gear^.Timer:= 15000;
