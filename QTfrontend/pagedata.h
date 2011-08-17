@@ -32,7 +32,7 @@ public:
     QPushButton *BtnBack;
     QWebView *web;
 
-private:
+private slots:
     void install(const QUrl &url);
 };
 

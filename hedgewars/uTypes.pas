@@ -282,6 +282,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         Text: shortstring;
         Tint: Longword;
         uid: Longword;
+        Layer: byte;
         end;
 
     TStatistics = record

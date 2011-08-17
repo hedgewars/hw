@@ -551,7 +551,13 @@ else
 case Gear^.Pos of
        posCaseUtility,
        posCaseAmmo: begin
-                    a:= Gear^.AmmoType;
+                    if Gear^.AmmoType <> amNothing then a:= Gear^.AmmoType 
+                    else
+                        begin
+                        for i:= 0 to GameTicks and $7F do GetRandom(2); // Burn some random numbers
+                        if Gear^.Pos = posCaseUtility then a:= GetUtility
+                        else a:= GetAmmo
+                        end;
                     AddAmmo(HH^.Hedgehog^, a);
 // Possibly needs to check shared clan ammo game flag once added.
 // On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up

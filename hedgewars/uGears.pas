@@ -40,6 +40,8 @@ procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
 function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean ): PGear;
+function  GetAmmo: TAmmoType;
+function  GetUtility: TAmmoType;
 procedure ResurrectHedgehog(gear: PGear);
 procedure ProcessGears;
 procedure EndTurnCleanup;
@@ -1693,6 +1695,59 @@ begin
     SpawnFakeCrateAt := FollowGear;
 end;
 
+function GetAmmo: TAmmoType;
+var t, aTot: LongInt;
+    i: TAmmoType;
+begin
+
+aTot:= 0;
+for i:= Low(TAmmoType) to High(TAmmoType) do
+    if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+        inc(aTot, Ammoz[i].Probability);
+
+t:= aTot;
+i:= Low(TAmmoType);
+if (t > 0) then
+    begin
+    t:= GetRandom(t);
+    AddFileLog(inttostr(t)+' --------------');
+    while t >= 0 do
+      begin
+      inc(i);
+      if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+          dec(t, Ammoz[i].Probability)
+      end
+    end;
+GetAmmo:= i
+end;
+
+function GetUtility: TAmmoType;
+var t, uTot: LongInt;
+    i: TAmmoType;
+begin
+
+uTot:= 0;
+for i:= Low(TAmmoType) to High(TAmmoType) do
+    if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+        inc(uTot, Ammoz[i].Probability);
+
+t:= uTot;
+i:= Low(TAmmoType);
+if (t > 0) then
+    begin
+    t:= GetRandom(t);
+    while t >= 0 do
+      begin
+      inc(i);
+      if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+          dec(t, Ammoz[i].Probability)
+      end
+    end;
+GetUtility:= i
+end;
+
+
+
 procedure SpawnBoxOfSmth;
 var t, aTot, uTot, a, h: LongInt;
     i: TAmmoType;
@@ -1744,12 +1799,6 @@ else if (t<a+h) then
         FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
         t:= GetRandom(t);
         i:= Low(TAmmoType);
-        while t >= 0 do
-          begin
-          inc(i);
-          if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
-              dec(t, Ammoz[i].Probability)
-          end;
         FollowGear^.Pos:= posCaseAmmo;
         FollowGear^.AmmoType:= i;
         AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
@@ -1763,12 +1812,6 @@ else
         FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
         t:= GetRandom(t);
         i:= Low(TAmmoType);
-        while t >= 0 do
-          begin
-          inc(i);
-          if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
-              dec(t, Ammoz[i].Probability)
-          end;
         FollowGear^.Pos:= posCaseUtility;
         FollowGear^.AmmoType:= i;
         AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);

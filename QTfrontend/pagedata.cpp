@@ -35,7 +35,7 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 
     web = new QWebView(this);
-    connect(this, SIGNAL(linkClicked(const QUrl&)), this, SLOT(install(const QUrl&)));
+    connect(web, SIGNAL(linkClicked(const QUrl&)), this, SLOT(install(const QUrl&)));
     web->load(QUrl("http://m8y.org/hw/downloads/"));
     web->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     pageLayout->addWidget(web, 0, 0, 1, 3);
