@@ -1539,6 +1539,8 @@ if not ScriptLoaded then
 // push game variables so they may be modified by the script
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
+ScriptSetInteger('ScreenHeight', cScreenHeight);
+ScriptSetInteger('ScreenWidth', cScreenWidth);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
 ScriptSetInteger('CaseFreq', cCaseFactor);
 ScriptSetInteger('HealthCaseProb', cHealthCaseProb);

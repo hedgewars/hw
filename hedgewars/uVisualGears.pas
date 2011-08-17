@@ -484,8 +484,9 @@ case Layer of
                             if Gear^.Frame = 0 then 
                                 DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
                             else
-                                begin 
-                                SetScale(cDefaultZoomLevel); 
+                                begin
+                                if Gear^.Angle <> 0 then SetScale(Gear^.Angle)
+                                else SetScale(cDefaultZoomLevel); 
                                 DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex); 
                                 SetScale(zoom)
                                 end
