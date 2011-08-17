@@ -16,6 +16,7 @@ procedure addFinger(x,y: Longword; id: SDL_FingerId);
 procedure deleteFinger(id: SDL_FingerId);
 procedure onTouchClick(x,y: Longword; pointerId: SDL_FingerId);
 
+function isOnCurrentHog(id: SDL_FingerId): boolean;
 function fingerHasMoved(id: SDL_FingerId): boolean;
 function calculateDelta(id1, id2: SDL_FingerId): hwFloat;
 function getSecondPointer(id: SDL_FingerId): SDL_FingerId;
@@ -102,9 +103,11 @@ begin
         exit
     end;
 
-
+    if isOnCurrentHog(pointerId) then
+    begin
     bShowAmmoMenu := true;
     invertCursor := false;
+    end;
     //WriteToConsole(Format('%s, %s : %d, %d', [cstr(CurrentHedgehog^.Gear^.X), cstr(CurrentHedgehog^.Gear^.Y), x-WorldDX, y-WorldDY]));
 end;
 
@@ -164,6 +167,15 @@ begin
         end;
     end;
     if ((SDL_GetTicks - timeSinceDown[id]) < clickTime) AND  not(fingerHasMoved(id)) then onTouchClick(xyCoord[id*2], xyCoord[id*2+1], id);
+end;
+
+function isOnCurrentHog(id: SDL_FingerId): boolean;
+var
+     x,y : hwFloat;
+begin
+    x := CurrentHedgehog^.Gear^.X;
+    y := CurrentHedgehog^.Gear^.Y;
+    isOnCurrentHog := Distance(int2hwFloat((xyCoord[id*2] -  WorldDX) - (cScreenWidth div 2))-x, int2hwFloat(xyCoord[id*2+1] - WorldDy)-y) < int2hwFloat(20);
 end;
 
 //Method to calculate the distance this finger has moved since the downEvent
