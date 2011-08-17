@@ -1335,15 +1335,13 @@ end;
 
 procedure ShotgunShot(Gear: PGear);
 var t: PGear;
-    dmg, dist: LongInt;
+    dmg, r, dist: LongInt;
+    dx, dy: hwFloat;
 begin
 Gear^.Radius:= cShotgunRadius;
 t:= GearsList;
 while t <> nil do
     begin
-    dist:= hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y));
-    dmg:= ModifyDamage(min(Gear^.Radius + t^.Radius - dist, 25), t);
-    if dmg > 0 then
     case t^.Kind of
         gtHedgehog,
             gtMine,
@@ -1352,22 +1350,48 @@ while t <> nil do
             gtTarget,
             gtExplosives,
             gtStructure: begin
-addFileLog('ShotgunShot radius: ' + inttostr(Gear^.Radius) + ', t^.Radius = ' + inttostr(t^.Radius) + ', distance = ' + inttostr(dist) + ', dmg = ' + inttostr(dmg));
-                    if (not t^.Invulnerable) then
-                        ApplyDamage(t, Gear^.Hedgehog, dmg, dsBullet)
-                    else
-                        Gear^.State:= Gear^.State or gstWinner;
+//addFileLog('ShotgunShot radius: ' + inttostr(Gear^.Radius) + ', t^.Radius = ' + inttostr(t^.Radius) + ', distance = ' + inttostr(dist) + ', dmg = ' + inttostr(dmg));
+                    r:= Gear^.Radius + t^.Radius;
+                    dx:= Gear^.X-t^.X;
+                    dx.isNegative:= false;
+                    dy:= Gear^.Y-t^.Y;
+                    dy.isNegative:= false;
+                    if r - hwRound(dx+dy) < 25 then
+                        begin
+                        dist:= hwRound(Distance(dx, dy));
+                        dmg:= ModifyDamage(min(r - dist, 25), t);
+                        end;
+                    if dmg > 0 then
+                        begin
+                        if (not t^.Invulnerable) then
+                            ApplyDamage(t, Gear^.Hedgehog, dmg, dsBullet)
+                        else
+                            Gear^.State:= Gear^.State or gstWinner;
 
-                    DeleteCI(t);
-                    t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
-                    t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
-                    t^.State:= t^.State or gstMoving;
-                    t^.Active:= true;
-                    FollowGear:= t
+                        DeleteCI(t);
+                        t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
+                        t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
+                        t^.State:= t^.State or gstMoving;
+                        t^.Active:= true;
+                        FollowGear:= t
+                        end
                     end;
             gtGrave: begin
-                    t^.dY:= - _0_1;
-                    t^.Active:= true
+                    r:= Gear^.Radius + t^.Radius;
+                    dx:= Gear^.X-t^.X;
+                    dx.isNegative:= false;
+                    dy:= Gear^.Y-t^.Y;
+                    dy.isNegative:= false;
+                    if r - hwRound(dx+dy) < 25 then
+                        begin
+                        dist:= hwRound(Distance(dx, dy));
+                        dmg:= ModifyDamage(min(r - dist, 25), t);
+                        end;
+                    if dmg > 0 then
+                        begin
+                        t^.dY:= - _0_1;
+                        t^.Active:= true
+                        end
                     end;
         end;
     t:= t^.NextGear
