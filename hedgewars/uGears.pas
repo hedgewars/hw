@@ -1351,12 +1351,13 @@ while t <> nil do
             gtExplosives,
             gtStructure: begin
 //addFileLog('ShotgunShot radius: ' + inttostr(Gear^.Radius) + ', t^.Radius = ' + inttostr(t^.Radius) + ', distance = ' + inttostr(dist) + ', dmg = ' + inttostr(dmg));
+                    dmg:= 0;
                     r:= Gear^.Radius + t^.Radius;
                     dx:= Gear^.X-t^.X;
                     dx.isNegative:= false;
                     dy:= Gear^.Y-t^.Y;
                     dy.isNegative:= false;
-                    if hwRound(dx+dy) < 25+r then
+                    if r-hwRound(dx+dy) > 0 then
                         begin
                         dist:= hwRound(Distance(dx, dy));
                         dmg:= ModifyDamage(min(r - dist, 25), t);
@@ -1377,12 +1378,13 @@ while t <> nil do
                         end
                     end;
             gtGrave: begin
+                    dmg:= 0;
                     r:= Gear^.Radius + t^.Radius;
                     dx:= Gear^.X-t^.X;
                     dx.isNegative:= false;
                     dy:= Gear^.Y-t^.Y;
                     dy.isNegative:= false;
-                    if hwRound(dx+dy) < 25+r then
+                    if r-hwRound(dx+dy) > 0 then
                         begin
                         dist:= hwRound(Distance(dx, dy));
                         dmg:= ModifyDamage(min(r - dist, 25), t);
