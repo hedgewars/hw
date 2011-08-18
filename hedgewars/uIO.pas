@@ -433,6 +433,7 @@ end;
 
 procedure freeModule;
 begin
+while headcmd <> nil do RemoveCmd
 end;
 
 end.

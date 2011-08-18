@@ -3731,9 +3731,10 @@ end;
 procedure doStepPortal(Gear: PGear);
 var 
     iterator, conPortal: PGear;
-    s, r, nx, ny, ox, oy, poffs, noffs, pspeed, nspeed: hwFloat;
-    o_x,o_y,r_x,r_y,rr_x,rr_y: LongInt;
-    hasdxy, isbullet, iscake: Boolean;
+    s, r, nx, ny, ox, oy, poffs, noffs, pspeed, nspeed,
+    resetx, resety, resetdx, resetdy: hwFloat;
+    sx, sy, rh, resetr: LongInt;
+    hasdxy, isbullet, iscake, isCollision: Boolean;
 begin
     doPortalColorSwitch();
 
@@ -3803,67 +3804,6 @@ begin
            or (iterator^.Y < Gear^.Y - r)
            or (iterator^.Y > Gear^.Y + r) then
             continue;
-(*
-Square check causes fail on many innocent cases. the 3/4s and 1.5 fudge factors... help.
-Might still need to remove this section
-*)
-        //Will if fit through?
-        //set r to be portal distance
-        r := Int2hwFloat(Gear^.Radius * 3 div 4);
-        o_x := hwRound(conPortal^.X + (conPortal^.dX*_1_5));
-        o_y := hwRound(conPortal^.Y + (conPortal^.dY*_1_5));
-        //r := Int2hwFloat(Gear^.Radius +1);
-
-        //o_x := hwRound(conPortal^.X + conPortal^.dX);
-        //o_y := hwRound(conPortal^.Y + conPortal^.dY);
-        r_x := hwRound(conPortal^.X+r*conPortal^.dX);
-        r_y := hwRound(conPortal^.Y+r*conPortal^.dY);
-        rr_x := hwRound(conPortal^.X+r*conPortal^.dX*2);
-        rr_y := hwRound(conPortal^.Y+r*conPortal^.dY*2);
-
-        //check outer edge
-        if (((rr_y and LAND_HEIGHT_MASK) <> 0) or ((rr_x and LAND_WIDTH_MASK) <> 0)) then
-            begin
-            if hasBorder then continue;
-            end
-        else
-            if ((Land[rr_y,rr_x] and $FF00) <> 0) then
-                continue;
-        //check middle bound
-        if (((r_y and LAND_HEIGHT_MASK) <> 0) or ((r_x and LAND_WIDTH_MASK) <> 0)) then
-            begin
-            if hasBorder then continue;
-            end
-        else
-        if ((Land[r_y, r_x] and $FF00) <> 0) then
-                continue;
-        //check inner bound
-        if (((o_y and LAND_HEIGHT_MASK) <> 0) or ((o_x and LAND_WIDTH_MASK) <> 0)) then
-            begin
-            if hasBorder then continue;
-            end
-        else
-        if ((Land[o_y, o_x] and $FF00) <> 0) then
-                continue;
-        //check left bound
-        if (((rr_y and LAND_HEIGHT_MASK) <> 0) or ((o_x and LAND_WIDTH_MASK) <> 0)) then
-            begin
-            if hasBorder then continue;
-            end
-        else
-        if ((Land[rr_y, o_x] and $FF00) <> 0) then
-                continue;
-        //Check Right Bound
-        if (((o_y and LAND_HEIGHT_MASK) <> 0) or ((rr_x and LAND_WIDTH_MASK) <> 0)) then
-            begin
-            if hasBorder then continue;
-            end
-        else
-        if ((Land[o_y, rr_x] and $FF00) <> 0) then
-                continue;
-
-        //Okay reset r in case something uses it
-        r := Int2hwFloat(iterator^.Radius+Gear^.Radius);
 
         hasdxy := (((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0))
                     or ((iterator^.State or gstMoving) = 0));
@@ -3929,6 +3869,15 @@ Might still need to remove this section
         //
         // gears that make it till here will definately be ported
         //
+        // (but old position/movement vector might be restored in case there's
+        // not enough space on the other side)
+        //
+
+        resetr  := iterator^.Radius;
+        resetx  := iterator^.X;
+        resety  := iterator^.Y;
+        resetdx := iterator^.dX;
+        resetdy := iterator^.dY;
 
         // create a normal of the portal vector, but ...
         nx := Gear^.dY;
@@ -3947,9 +3896,6 @@ Might still need to remove this section
             and ((iterator^.dX.QWordValue + iterator^.dY.QWordValue) < _0_08.QWordValue)
             and (iterator^.PortalCounter > 0) then
              continue;
-
-        // Until loops are reliably broken
-        inc(iterator^.PortalCounter);
 
         // calc gear speed along to the vector and the normal vector of the portal
         if hasdxy then
@@ -3988,7 +3934,7 @@ Might still need to remove this section
          if iscake then
              ox:= (r - _0_7)
          else
-             ox:= (r + _1_9);
+             ox:= (r * _1_5);
          s:= ox / poffs;
          poffs:= ox;
          if (nspeed.QWordValue <> 0) and (pspeed > _0) then
@@ -4010,15 +3956,57 @@ Might still need to remove this section
             iterator^.dY:= iterator^.dY + hwAbs(cGravity * (iterator^.Y - conPortal^.Y))
         end;
 
+        // see if the space on the exit side actually is enough
+
+        if not (isBullet or isCake) then
+        begin
+            // TestCollisionXwithXYShift requires a hwFloat for xShift
+            ox.QWordValue := _1.QWordValue;
+            ox.isNegative := not iterator^.dX.isNegative;
+
+            sx := hwSign(iterator^.dX);
+            sy := hwSign(iterator^.dY);
+
+            if iterator^.Radius > 1 then
+                iterator^.Radius := iterator^.Radius - 1;
+
+            // check front
+            isCollision := TestCollisionYwithGear(iterator, sy)
+                        or TestCollisionXwithGear(iterator, sx);
+
+            if not isCollision then
+            begin
+                // check center area (with half the radius so that the
+                // the square check won't check more pixels than we want to)
+                iterator^.Radius := 1 + resetr div 2;
+                rh := resetr div 4;
+                isCollision := TestCollisionYwithXYShift(iterator,       0, -sy * rh, sy)
+                            or TestCollisionXwithXYShift(iterator, ox * rh,        0, sx);
+            end;
+
+            iterator^.Radius := resetr;
+
+            if isCollision then
+            begin
+                // collision! oh crap! go back!
+                iterator^.X  := resetx;
+                iterator^.Y  := resety;
+                iterator^.dX := resetdx;
+                iterator^.dY := resetdy;
+                continue;
+            end;
+        end;
+
+        //
+        // You're now officially portaled!
+        //
+
+        // Until loops are reliably broken
+        inc(iterator^.PortalCounter);
+
         if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
-//AddFileLog('portal''d');
 
-{
-        s := _0_2 + _0_008 * Gear^.Health;
-        iterator^.dX := s * iterator^.dX;
-        iterator^.dY := s * iterator^.dY;
-}
         // This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
         iterator:= GearsList;
         while iterator <> nil do
@@ -4035,17 +4023,6 @@ Might still need to remove this section
             end;
 
         if Gear^.Health > 1 then dec(Gear^.Health);
-
-{        // breaks (some) loops
-        if Distance(iterator^.dX, iterator^.dY) > _0_96 then
-            begin
-            iterator^.dX := iterator^.dX + signAs(cGravity * getRandom(1000),iterator^.dX);
-            iterator^.dY := iterator^.dY + signAs(cGravity * getRandom(1000),iterator^.dY);
-            s := _0_96 / Distance(iterator^.dX, iterator^.dY);
-            iterator^.dX := s * iterator^.dX;
-            iterator^.dY := s * iterator^.dX;
-            end;
-}
     end;
 end;
 
