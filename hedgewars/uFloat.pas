@@ -62,6 +62,7 @@ function hwFloat2Float (const i: hwFloat) : extended; inline;
 
 // The implemented operators
 
+operator = (const z1, z2: hwFloat) z:boolean; inline;
 operator + (const z1, z2: hwFloat) z : hwFloat; inline;
 operator - (const z1, z2: hwFloat) z : hwFloat; inline;
 operator - (const z1: hwFloat) z : hwFloat; inline;
@@ -88,7 +89,7 @@ function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
 function SignAs(const num, signum: hwFloat): hwFloat; inline; // Returns an hwFloat with the value of parameter num and the sign of signum.
 function hwSign(r: hwFloat): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
-
+function isZero(const z: hwFloat): boolean; inline;
 {$IFDEF FPC}
 {$J-}
 {$ENDIF}
@@ -158,10 +159,13 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
              _40: hwFloat = (isNegative: false; QWordValue:  4294967296 * 40);
              _50: hwFloat = (isNegative: false; QWordValue:  4294967296 * 50);
              _70: hwFloat = (isNegative: false; QWordValue:  4294967296 * 70);
+             _90: hwFloat = (isNegative: false; QWordValue:  4294967296 * 90);
             _128: hwFloat = (isNegative: false; QWordValue:  4294967296 * 128);
+            _180: hwFloat = (isNegative: false; QWordValue:  4294967296 * 180);
             _250: hwFloat = (isNegative: false; QWordValue:  4294967296 * 250);
             _256: hwFloat = (isNegative: false; QWordValue:  4294967296 * 256);
             _300: hwFloat = (isNegative: false; QWordValue:  4294967296 * 300);
+            _360: hwFloat = (isNegative: false; QWordValue:  4294967296 * 360);
             _450: hwFloat = (isNegative: false; QWordValue:  4294967296 * 450);
            _1000: hwFloat = (isNegative: false; QWordValue:  4294967296 * 1000);
            _1024: hwFloat = (isNegative: false; QWordValue:  4294967296 * 1024);
@@ -196,6 +200,14 @@ begin
 hwFloat2Float:= i.QWordValue / $100000000;
 if i.isNegative then hwFloat2Float:= -hwFloat2Float;
 end;
+
+operator = (const z1, z2: hwFloat) z:boolean; inline;
+begin
+    z:= true;
+    z:= z and (z1.isNegative = z2.isNegative);
+    z:= z and (z1.QWordValue = z2.QWordValue);
+end;
+
 
 operator + (const z1, z2: hwFloat) z : hwFloat;
 begin
@@ -403,6 +415,10 @@ if Angle < 1024 then AngleCos.QWordValue:= SinTable[1024 - Angle]
                 else AngleCos.QWordValue:= SinTable[Angle - 1024]
 end;
 
+function isZero(const z: hwFloat): boolean; inline; 
+begin
+    isZero := z.QWordValue = 0;
+end;
 {$ENDIF}
 
 end.

@@ -4,10 +4,12 @@ unit uTouch;
 
 interface
 
-uses sysutils, math, uConsole, uVariables, SDLh, uTypes, uFloat, uConsts, uIO, GLUnit;
+uses sysutils, math, uConsole, uVariables, SDLh, uTypes, uFloat, uConsts, uIO, uCommands, GLUnit, uCommandHandlers;
 
 procedure initModule;
 
+
+procedure ProcessTouch;
 procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 procedure onTouchMotion(x,y: Longword; dx,dy: LongInt; pointerId: SDL_FingerId);
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
@@ -16,7 +18,9 @@ procedure addFinger(x,y: Longword; id: SDL_FingerId);
 procedure deleteFinger(id: SDL_FingerId);
 procedure onTouchClick(x,y: Longword; pointerId: SDL_FingerId);
 
+procedure aim(id: SDL_FingerId);
 function isOnCurrentHog(id: SDL_FingerId): boolean;
+procedure convertToWorldCoord(var x,y: hwFloat; id: SDL_FingerId);
 function fingerHasMoved(id: SDL_FingerId): boolean;
 function calculateDelta(id1, id2: SDL_FingerId): hwFloat;
 function getSecondPointer(id: SDL_FingerId): SDL_FingerId;
@@ -37,16 +41,26 @@ var
 
     invertCursor : boolean;
 
+    //aiming
+    aiming, movingCrosshair: boolean; 
+    crosshairCommand: ShortString;
+    aimingPointerId: SDL_FingerId;
+    targetAngle: LongInt;    
+
 procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 begin
-    WriteToConsole('down'); 
     addFinger(x,y,pointerId);
     xyCoord[pointerId*2] := convertToCursor(cScreenWidth,x);
     xyCoord[pointerId*2+1] := convertToCursor(cScreenHeight,y);
+    
    
     case pointerCount of
+        1:
+            if isOnCurrentHog(pointerId) then aiming:= true;
         2:
         begin
+            aiming:= false;
+            
             pinchSize := calculateDelta(pointerId, getSecondPointer(pointerId));
             baseZoomValue := ZoomValue
         end;
@@ -64,6 +78,11 @@ begin
     case pointerCount of
        1:
            begin
+               if aiming then 
+               begin
+                   aim(pointerId);
+                   exit
+               end;
                if invertCursor then
                begin
                    CursorPoint.X := CursorPoint.X - convertToCursor(cScreenWidth,dx);
@@ -81,8 +100,8 @@ begin
                currentPinchDelta := calculateDelta(pointerId, secondId) - pinchSize;
                zoom := currentPinchDelta/cScreenWidth;
                ZoomValue := baseZoomValue - ((hwFloat2Float(zoom) * cMinMaxZoomLevelDelta));
-               //WriteToConsole(Format('Zoom in/out. ZoomValue = %f', [ZoomValue]));
-//              if ZoomValue > cMaxZoomLevel then ZoomValue := cMaxZoomLevel;
+               WriteToConsole(Format('Zoom in/out. ZoomValue = %f, %f', [ZoomValue, cMaxZoomLevel]));
+               if ZoomValue > cMaxZoomLevel then ZoomValue := cMaxZoomLevel;
 //               if ZoomValue < cMinZoomLevel then ZoomValue := cMinZoomLevel;
             end;
     end; //end case pointerCount of
@@ -90,6 +109,7 @@ end;
 
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
 begin
+    aiming:= false;
     pointerCount := pointerCount-1;
     deleteFinger(pointerId);
 end;
@@ -99,21 +119,14 @@ begin
     if bShowAmmoMenu then 
     begin
         doPut(CursorPoint.X, CursorPoint.Y, false); 
-        invertCursor := true;
         exit
     end;
 
     if isOnCurrentHog(pointerId) then
     begin
     bShowAmmoMenu := true;
-    invertCursor := false;
     end;
     //WriteToConsole(Format('%s, %s : %d, %d', [cstr(CurrentHedgehog^.Gear^.X), cstr(CurrentHedgehog^.Gear^.Y), x-WorldDX, y-WorldDY]));
-end;
-
-function convertToCursor(scale: LongInt; xy: LongInt): LongInt;
-begin
-    convertToCursor := round(xy/32768*scale)
 end;
 
 procedure addFinger(x,y: Longword; id: SDL_FingerId);
@@ -169,13 +182,87 @@ begin
     if ((SDL_GetTicks - timeSinceDown[id]) < clickTime) AND  not(fingerHasMoved(id)) then onTouchClick(xyCoord[id*2], xyCoord[id*2+1], id);
 end;
 
+procedure ProcessTouch;
+var
+    deltaAngle: LongInt;
+begin
+    invertCursor := not(bShowAmmoMenu);
+    if aiming then
+    begin
+        if CurrentHedgehog^.Gear <> nil then
+        begin
+            deltaAngle:= CurrentHedgehog^.Gear^.Angle - targetAngle;
+            if (deltaAngle <> 0) and not(movingCrosshair) then 
+            begin
+                ParseCommand('+' + crosshairCommand, true);
+                movingCrosshair := true;
+            end
+            else 
+                if movingCrosshair then 
+                begin
+                    ParseCommand('-' + crosshairCommand, true);
+                    movingCrosshair:= false;
+                end;
+        end;
+    end
+    else if movingCrosshair then 
+    begin
+        ParseCommand('-' + crosshairCommand, true);
+        movingCrosshair := false;
+    end;
+end;
+
+procedure aim(id: SDL_FingerId);
+var 
+    hogX, hogY, touchX, touchY, deltaX, deltaY, tmpAngle: hwFloat;
+    tmp: ShortString;
+begin
+    if CurrentHedgehog^.Gear <> nil then
+    begin
+        hogX := CurrentHedgehog^.Gear^.X;
+        hogY := CurrentHedgehog^.Gear^.Y;
+
+        convertToWorldCoord(touchX, touchY, id);
+        deltaX := hwAbs(TouchX-HogX);
+        deltaY := (TouchY-HogY);
+        
+        tmpAngle:= DeltaY / Distance(deltaX, deltaY) *_2048;
+        targetAngle:= (hwRound(tmpAngle) + 2048) div 2;
+
+        tmp := crosshairCommand;
+        if CurrentHedgehog^.Gear^.Angle - targetAngle < 0 then crosshairCommand := 'down'
+        else crosshairCommand:= 'up';
+        if movingCrosshair and (tmp <> crosshairCommand) then 
+        begin
+            ParseCommand('-' + tmp, true);
+            movingCrosshair := false;
+        end;
+
+    end; //if CurrentHedgehog^.Gear <> nil
+end;
+
+function convertToCursor(scale: LongInt; xy: LongInt): LongInt;
+begin
+    convertToCursor := round(xy/32768*scale)
+end;
+
 function isOnCurrentHog(id: SDL_FingerId): boolean;
 var
-     x,y : hwFloat;
+    x,y, fingerX, fingerY : hwFloat;
 begin
     x := CurrentHedgehog^.Gear^.X;
     y := CurrentHedgehog^.Gear^.Y;
-    isOnCurrentHog := Distance(int2hwFloat((xyCoord[id*2] -  WorldDX) - (cScreenWidth div 2))-x, int2hwFloat(xyCoord[id*2+1] - WorldDy)-y) < int2hwFloat(20);
+
+    convertToWorldCoord(fingerX, fingerY, id);
+    isOnCurrentHog := Distance(fingerX-x, fingerY-y) < _20;
+end;
+
+procedure convertToWorldCoord(var x,y: hwFloat; id: SDL_FingerId);
+begin
+//if x <> nil then 
+    x := int2hwFloat((xyCoord[id*2]-WorldDx) - (cScreenWidth div 2));
+//if y <> nil then 
+    y := int2hwFloat(xyCoord[id*2+1]-WorldDy);
 end;
 
 //Method to calculate the distance this finger has moved since the downEvent
@@ -209,7 +296,7 @@ begin
     setLength(historicalXY, 10);    
     for index := Low(xyCoord) to High(xyCoord) do xyCoord[index] := -1;
     for index := Low(pointerIds) to High(pointerIds) do pointerIds[index] := -1;
-
+    movingCrosshair := false;
 end;
 
 begin

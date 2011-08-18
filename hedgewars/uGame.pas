@@ -26,7 +26,7 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
    implementation
 ////////////////////
-uses uKeys, uTeams, uIO, uAI, uGears, uSound, uMobile, uVisualGears, uTypes, uVariables;
+uses uKeys, uTeams, uIO, uAI, uGears, uSound, uMobile, uVisualGears, uTypes, uVariables, uTouch;
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;
@@ -52,6 +52,7 @@ while (GameState <> gsExit) and (i <= Lag) do
     if not CurrentTeam^.ExtDriven then
        begin
        if CurrentHedgehog^.BotLevel <> 0 then ProcessBot;
+       ProcessTouch;
        ProcessGears
        end else
        begin
