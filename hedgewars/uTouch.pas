@@ -28,6 +28,7 @@ procedure onTouchClick(finger: Touch_Finger);
 
 function findFinger(id: SDL_FingerId): Touch_Finger;
 procedure aim(finger: Touch_Finger);
+function isOnCrosshair(finger: Touch_Finger): boolean;
 function isOnCurrentHog(finger: Touch_Finger): boolean;
 function isOnFireButton(finger: Touch_Finger): boolean;
 procedure convertToWorldCoord(var x,y: hwFloat; finger: Touch_Finger);
@@ -87,7 +88,7 @@ begin
                 exit;
             end;
 
-            if isOnCurrentHog(finger) then
+            if isOnCrosshair(finger) then
             begin
                 aiming:= true;
                 exit;
@@ -356,6 +357,17 @@ end;
 function isOnFireButton(finger: Touch_Finger): boolean;
 begin
     isOnFireButton:= (finger.x < 150) and (finger.y > 390);
+end;
+
+function isOnCrosshair(finger: Touch_Finger): boolean;
+var
+    x,y,fingerX, fingerY : hwFloat;
+begin
+    x := int2hwFloat(CrosshairX);
+    y := int2hwFloat(CrosshairY);
+
+    convertToWorldCoord(fingerX, fingerY, finger);
+    isOnCrosshair:= Distance(fingerX-x, fingerY-y) < _20;
 end;
 
 function isOnCurrentHog(finger: Touch_Finger): boolean;

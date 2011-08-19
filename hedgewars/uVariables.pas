@@ -128,6 +128,8 @@ var
     bWaterRising    : boolean;
 
     //ShowCrosshair   : boolean;  This variable is inconvenient to set.  Easier to decide when rendering
+    CrosshairX      : LongInt;
+    CrosshairY      : LongInt;
     CursorMovementX : LongInt;
     CursorMovementY : LongInt;
     cDrownSpeed     : hwFloat;
