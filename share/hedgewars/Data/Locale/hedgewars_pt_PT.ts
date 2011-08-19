@@ -13,6 +13,21 @@
     </message>
 </context>
 <context>
+    <name>DrawMapWidget</name>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot read file &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -272,6 +287,17 @@ registado em Hedgewars.org
 Por favor digite a sua palavra passe ou escolha
 outro nome de utilizador no menu de configuração:</translation>
     </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Nome de utilizador</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
@@ -324,6 +350,10 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>Connecting...</source>
         <translation>A ligar...</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
     </message>
 </context>
 <context>
@@ -695,12 +725,17 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation>A Abelha Teleguiada pode-se demonstrar complicada de utilizar. O grau a que consegue virar depende da sua velocidade, por isso experimenta larga-la com diferentes níveis de força.</translation>
+        <translation type="obsolete">A Abelha Teleguiada pode-se demonstrar complicada de utilizar. O grau a que consegue virar depende da sua velocidade, por isso experimenta larga-la com diferentes níveis de força.</translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation>Utiliza um Molotov ou o Lança-chamas para temporariamente impedir outros ouriços de passar por áreas no terreno como túneis ou plataformas.</translation>
+    </message>
+    <message>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -726,6 +761,18 @@ outro nome de utilizador no menu de configuração:</translation>
     <message>
         <source>Control</source>
         <translation>Controlo</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Erro</translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">Insira o nome da sala</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
     </message>
 </context>
 <context>
@@ -943,6 +990,13 @@ Do you still want to join the room?</source>
         <translation>O jogo a que te estas a tentar juntar já começou.
 Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
+    <message numerus="yes">
+        <source>%1 players online</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -1062,6 +1116,10 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
+    <message>
+        <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1154,6 +1212,10 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>Remove friend</source>
         <translation>Remover amigo</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Actualizar</translation>
     </message>
 </context>
 <context>
@@ -1299,6 +1361,30 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Wiggle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red grayscale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1529,10 +1615,30 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Gameplay</source>
-        <translation>Jogabilidade</translation>
+        <translation type="obsolete">Jogabilidade</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Password</translation>
+    </message>
+    <message>
+        <source>% Get Away Time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1893,6 +1999,10 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>More Wind</source>
         <translation>Mais Vento</translation>
+    </message>
+    <message>
+        <source>Tag Team</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

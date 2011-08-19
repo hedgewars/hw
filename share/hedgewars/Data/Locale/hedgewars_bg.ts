@@ -13,6 +13,21 @@
     </message>
 </context>
 <context>
+    <name>DrawMapWidget</name>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot read file &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -262,6 +277,17 @@ or pick another nickname in game config:</source>
 Моля въдете паролата си по-долу
 или изберете друг прякор в настройките на играта:</translation>
     </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Прякор</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
@@ -306,6 +332,10 @@ or pick another nickname in game config:</source>
     <message>
         <source>Connecting...</source>
         <translation>Свързване...</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Отказ</translation>
     </message>
 </context>
 <context>
@@ -383,6 +413,7 @@ or pick another nickname in game config:</source>
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -396,17 +427,20 @@ or pick another nickname in game config:</source>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation>
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -657,12 +691,12 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
+        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -690,6 +724,18 @@ or pick another nickname in game config:</source>
     <message>
         <source>Control</source>
         <translation>Контрол</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Грешка</translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">Моля въведете име на стая</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -850,6 +896,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>There are %1 teams participating in this room.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -893,6 +940,13 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
 Do you still want to join the room?</source>
         <translation>Играта, към която се опитвате да се присъедините вече е започнала.
 Все още ли желаете да се присъедините към стаята?</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 players online</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -947,7 +1001,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ново</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -1007,6 +1061,10 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Copy</source>
+        <translation type="unfinished">Копиране</translation>
+    </message>
+    <message>
+        <source>Teams in each clan take successive turns sharing their turn time.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1101,6 +1159,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Remove friend</source>
         <translation>Премахване на приятел</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Актуализиране</translation>
     </message>
 </context>
 <context>
@@ -1242,6 +1304,30 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Wiggle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red grayscale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1472,11 +1558,31 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Gameplay</source>
-        <translation>Геймплей</translation>
+        <translation type="obsolete">Геймплей</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
         <translation>Стерео режим</translation>
+    </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Парола</translation>
+    </message>
+    <message>
+        <source>% Get Away Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1833,6 +1939,10 @@ Please check your installation</source>
         <source>More Wind</source>
         <translation>Още вятър</translation>
     </message>
+    <message>
+        <source>Tag Team</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds</name>
@@ -2153,7 +2263,7 @@ info</source>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изчистване</translation>
     </message>
     <message>
         <source>Return</source>
