@@ -20,7 +20,8 @@
        	android:layout_width="wrap_content"    
        	android:layout_below="@id/mapPreview"
        	android:layout_alignRight="@id/mapPreview"
-       	android:layout_toRightOf="@+id/txtMap"/>
+       	android:layout_toRightOf="@+id/txtMap"
+       	android:background="@drawable/dropdown"/>
     <TextView
 		android:id="@id/txtMap"
 		android:layout_width="wrap_content"
@@ -54,6 +55,7 @@
 	        	android:id="@+id/spinGameplay"
 	        	android:layout_height="wrap_content"
 		        android:layout_width="wrap_content"
+		        android:background="@drawable/dropdown"
 		        />
 		</TableRow>  
 		<TableRow>
@@ -65,7 +67,8 @@
 		    <Spinner
 		       	android:id="@+id/spinGamescheme"
 		       	android:layout_height="wrap_content"
-		        android:layout_width="wrap_content"/>
+		        android:layout_width="wrap_content"
+		        android:background="@drawable/dropdown"/>
 		    <ImageButton
 		    	android:id="@+id/btnGamescheme"
 		    	android:layout_height="wrap_content"
@@ -88,7 +91,8 @@
 	        <Spinner
 	        	android:id="@+id/spinweapons"
 	        	android:layout_height="wrap_content"
-		        android:layout_width="wrap_content"/>
+		        android:layout_width="wrap_content"
+		        android:background="@drawable/dropdown"/>
 		    
 		    <ImageButton
 		    	android:id="@+id/btnweapons"
@@ -117,21 +121,24 @@
         android:layout_width="wrap_content" 
         android:layout_toRightOf="@+id/imgTheme"
         android:layout_alignParentRight="true"
-       	android:layout_below="@id/gameOptions"/>
+       	android:layout_below="@id/gameOptions"
+       	android:background="@drawable/dropdown"/>
         
 	<include layout="@layout/backbutton"/>
     <ImageButton
     	android:id="@+id/btnTeams"
-    	android:layout_width="wrap_content"
-    	android:layout_height="50dip"
+    	android:layout_width="120dip"
+    	android:layout_height="40dip"
     	android:layout_alignParentBottom="true"
     	android:layout_centerHorizontal="true"
     	android:adjustViewBounds="true"
-    	android:scaleType="centerInside"/>
+    	android:scaleType="centerInside"
+    	android:background="@android:color/transparent"
+    	android:src="@drawable/teams"/>
     <ImageButton
     	android:id="@+id/btnStart"
-    	android:layout_width="wrap_content"
-    	android:layout_height="50dip"
+    	android:layout_width="120dip"
+    	android:layout_height="40dip"
     	android:layout_alignParentBottom="true"
     	android:layout_alignParentRight="true"
     	android:adjustViewBounds="true"

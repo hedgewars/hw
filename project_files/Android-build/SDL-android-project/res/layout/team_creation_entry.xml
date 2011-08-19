@@ -10,7 +10,8 @@
   			android:layout_width="wrap_content"
   			android:layout_height="wrap_content"
   			android:layout_alignParentRight="true"
-  			android:layout_toRightOf="@+id/btnTeam1"/>
+  			android:layout_toRightOf="@+id/btnTeam1"
+  			android:background="@drawable/dropdown"/>
   		<EditText
   			android:id="@+id/txtTeam1"
   			android:layout_width="fill_parent"

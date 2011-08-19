@@ -64,7 +64,7 @@ public class StartGameActivity extends Activity {
 		back.setOnClickListener(backClicker);
 		team.setOnClickListener(teamClicker);
 		
-		ArrayAdapter<?> adapter = new ArrayAdapter<Map>(this, android.R.layout.simple_spinner_item, FrontendDataUtils.getMaps(this));
+		ArrayAdapter<?> adapter = new ArrayAdapter<Map>(this, R.layout.listview_item, FrontendDataUtils.getMaps(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		maps.setAdapter(adapter);
 		maps.setOnItemSelectedListener(mapsClicker);

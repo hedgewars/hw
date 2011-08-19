@@ -79,6 +79,7 @@ public class TeamCreatorActivity extends Activity {
 		}
 		ArrayList<HashMap<String, ?>> gravesData = FrontendDataUtils.getGraves(this);
 		SimpleAdapter sa = new SimpleAdapter(this, gravesData, R.layout.spinner_textimg_entry, new String[]{"txt", "img"}, new int[]{R.id.spinner_txt, R.id.spinner_img});
+		
 		sa.setViewBinder(viewBinder);
 		grave.setAdapter(sa);
 		grave.setOnFocusChangeListener(focusser);
@@ -93,7 +94,7 @@ public class TeamCreatorActivity extends Activity {
 		sa = new SimpleAdapter(this, typesData, R.layout.spinner_textimg_entry, new String[]{"txt", "img"}, new int[]{R.id.spinner_txt, R.id.spinner_img});
 		difficulty.setAdapter(sa);
 		difficulty.setOnFocusChangeListener(focusser);
-
+		
 		ArrayList<HashMap<String, ?>> hatsData = FrontendDataUtils.getHats(this);
 		sa = new SimpleAdapter(this, hatsData, R.layout.spinner_textimg_entry, new String[]{"txt", "img"}, new int[]{R.id.spinner_txt, R.id.spinner_img});
 		sa.setViewBinder(viewBinder);
@@ -101,12 +102,12 @@ public class TeamCreatorActivity extends Activity {
 			spin.setAdapter(sa);
 		}
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, FrontendDataUtils.getVoices(this));
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_item, FrontendDataUtils.getVoices(this));
 		voice.setAdapter(adapter);
 		voice.setOnFocusChangeListener(focusser);
 		voiceButton.setOnClickListener(voiceClicker);
 
-		adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, FrontendDataUtils.getForts(this));
+		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, FrontendDataUtils.getForts(this));
 		fort.setAdapter(adapter);
 		fort.setOnItemSelectedListener(fortSelector);
 		fort.setOnFocusChangeListener(focusser);

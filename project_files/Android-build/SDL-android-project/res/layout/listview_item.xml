@@ -3,5 +3,5 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:textSize="10dip"
-	android:textColor="#000"
+	android:textColor="#FFF"
 	android:gravity="center"/>

@@ -56,7 +56,8 @@
 			  			android:id="@id/spinType"
 			  			android:layout_width="fill_parent"
 			  			android:layout_height="wrap_content"
-			  			android:layout_marginLeft="3dip"/>
+			  			android:layout_marginLeft="3dip"
+			  			android:background="@drawable/dropdown"/>
 		  		</TableRow>
 		  		<TableRow android:padding="2dip">
 		  			<TextView
@@ -71,7 +72,8 @@
 			  			android:id="@id/spinGrave"
 			  			android:layout_width="fill_parent"
 			  			android:layout_height="wrap_content"
-			  			android:layout_marginLeft="3dip"/>
+			  			android:layout_marginLeft="3dip"
+			  			android:background="@drawable/dropdown"/>
 		  		</TableRow>
 		  		<TableRow android:padding="2dip">
 		   			<TextView
@@ -86,7 +88,8 @@
 			  			android:id="@id/spinFlag"
 			  			android:layout_width="fill_parent"
 			  			android:layout_height="wrap_content"
-			  			android:layout_marginLeft="3dip"/>
+			  			android:layout_marginLeft="3dip"
+			  			android:background="@drawable/dropdown"/>
 		  		</TableRow>
 		  		<TableRow android:padding="2dip">
 		  		  	<TextView
@@ -116,7 +119,8 @@
 			  				android:layout_height="fill_parent"
 			  				android:layout_centerVertical="true"
 			  				android:layout_alignParentLeft="true"
-			  				android:layout_toLeftOf="@id/btnPlay"/>
+			  				android:layout_toLeftOf="@id/btnPlay"
+			  				android:background="@drawable/dropdown"/>
 			  		</RelativeLayout>
 		  		</TableRow>
 		  		<TableRow android:padding="2dip">
@@ -135,7 +139,8 @@
 			  				android:id="@+id/spinFort"
 			  				android:layout_width="fill_parent"
 			  				android:layout_height="wrap_content"
-			  				android:layout_centerHorizontal="true"/>
+			  				android:layout_centerHorizontal="true"
+			  				android:background="@drawable/dropdown"/>
 			  			<ImageView
 			  				android:id="@+id/imgFort"
 			  				android:layout_width="128dip"
