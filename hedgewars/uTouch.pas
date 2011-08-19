@@ -20,6 +20,7 @@ procedure onTouchClick(x,y: Longword; pointerId: SDL_FingerId);
 
 procedure aim(id: SDL_FingerId);
 function isOnCurrentHog(id: SDL_FingerId): boolean;
+function isOnFireButton(id: SDL_FingerId): boolean;
 procedure convertToWorldCoord(var x,y: hwFloat; id: SDL_FingerId);
 function fingerHasMoved(id: SDL_FingerId): boolean;
 function calculateDelta(id1, id2: SDL_FingerId): hwFloat;
@@ -28,13 +29,19 @@ implementation
 
 const
     clicktime = 200;
-
 var
+    leftButtonBoundary  : LongInt;
+    rightButtonBoundary : LongInt;
+    topButtonBoundary   : LongInt;
+    
     pointerCount : Longword;
     xyCoord : array of LongInt;
     pointerIds : array of SDL_FingerId;
     timeSinceDown: array of Longword;
     historicalXY : array of LongInt;
+
+    moveCursor : boolean;
+
     //Pinch to zoom 
     pinchSize : hwFloat;
     baseZoomValue: GLFloat;
@@ -45,7 +52,12 @@ var
     aiming, movingCrosshair: boolean; 
     crosshairCommand: ShortString;
     aimingPointerId: SDL_FingerId;
-    targetAngle: LongInt;    
+    targetAngle: LongInt;
+
+    stopFiring: boolean;
+
+    //moving
+    stopLeft, stopRight, walkingLeft, walkingRight :  boolean;
 
 procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 begin
@@ -56,10 +68,50 @@ begin
    
     case pointerCount of
         1:
-            if isOnCurrentHog(pointerId) then aiming:= true;
+        begin
+            moveCursor:= false;
+            if bShowAmmoMenu then
+            begin
+                moveCursor := true;
+                exit;
+            end;
+
+            if isOnCurrentHog(pointerId) then
+            begin
+                aiming:= true;
+                exit;
+            end;
+
+            if isOnFireButton(pointerId) then
+            begin
+                stopFiring:= false;
+                ParseCommand('+attack', true);
+                exit;
+            end;
+            if xyCoord[pointerId*2] < leftButtonBoundary then
+            begin
+                ParseCommand('+left', true);
+                walkingLeft := true;
+                exit;
+            end;
+            if xyCoord[pointerId*2] > rightButtonBoundary then
+            begin
+                ParseCommand('+right', true);
+                walkingRight:= true;
+                exit;
+            end;
+            WriteToConsole(Format('%d, %d', [xyCoord[pointerId*2+1], topButtonBoundary]));    
+            if xyCoord[pointerId*2+1] < topButtonBoundary then
+            begin
+                ParseCommand('hjump', true);
+                exit;
+            end;
+            moveCursor:= true; 
+        end;
         2:
         begin
             aiming:= false;
+            stopFiring:= true;
             
             pinchSize := calculateDelta(pointerId, getSecondPointer(pointerId));
             baseZoomValue := ZoomValue
@@ -83,16 +135,17 @@ begin
                    aim(pointerId);
                    exit
                end;
-               if invertCursor then
-               begin
-                   CursorPoint.X := CursorPoint.X - convertToCursor(cScreenWidth,dx);
-                   CursorPoint.Y := CursorPoint.Y + convertToCursor(cScreenWidth,dy);
-               end
-               else
-               begin
-                   CursorPoint.X := CursorPoint.X + convertToCursor(cScreenWidth,dx);
-                   CursorPoint.Y := CursorPoint.Y - convertToCursor(cScreenWidth,dy);
-               end;
+               if moveCursor then
+                   if invertCursor then
+                   begin
+                       CursorPoint.X := CursorPoint.X - convertToCursor(cScreenWidth,dx);
+                       CursorPoint.Y := CursorPoint.Y + convertToCursor(cScreenWidth,dy);
+                   end
+                   else
+                   begin
+                       CursorPoint.X := CursorPoint.X + convertToCursor(cScreenWidth,dx);
+                       CursorPoint.Y := CursorPoint.Y - convertToCursor(cScreenWidth,dy);
+                   end;
            end;
        2:
            begin
@@ -100,9 +153,8 @@ begin
                currentPinchDelta := calculateDelta(pointerId, secondId) - pinchSize;
                zoom := currentPinchDelta/cScreenWidth;
                ZoomValue := baseZoomValue - ((hwFloat2Float(zoom) * cMinMaxZoomLevelDelta));
-               WriteToConsole(Format('Zoom in/out. ZoomValue = %f, %f', [ZoomValue, cMaxZoomLevel]));
-               if ZoomValue > cMaxZoomLevel then ZoomValue := cMaxZoomLevel;
-//               if ZoomValue < cMinZoomLevel then ZoomValue := cMinZoomLevel;
+               if ZoomValue < cMaxZoomLevel then ZoomValue := cMaxZoomLevel;
+               if ZoomValue > cMinZoomLevel then ZoomValue := cMinZoomLevel;
             end;
     end; //end case pointerCount of
 end;
@@ -111,7 +163,20 @@ procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
 begin
     aiming:= false;
     pointerCount := pointerCount-1;
+    stopFiring:= true;
     deleteFinger(pointerId);
+
+    if walkingLeft then
+    begin
+        ParseCommand('-left', true);
+        walkingLeft := false;
+    end;
+
+    if walkingRight then
+    begin
+        ParseCommand('-right', true);
+        walkingRight := false;
+    end;
 end;
 
 procedure onTouchClick(x,y: Longword; pointerId: SDL_FingerId);
@@ -124,9 +189,15 @@ begin
 
     if isOnCurrentHog(pointerId) then
     begin
-    bShowAmmoMenu := true;
+        bShowAmmoMenu := true;
+        exit;
     end;
-    //WriteToConsole(Format('%s, %s : %d, %d', [cstr(CurrentHedgehog^.Gear^.X), cstr(CurrentHedgehog^.Gear^.Y), x-WorldDX, y-WorldDY]));
+
+    if xyCoord[pointerId*2+1] < topButtonBoundary then
+    begin
+        ParseCommand('hjump', true);
+        exit;
+    end;
 end;
 
 procedure addFinger(x,y: Longword; id: SDL_FingerId);
@@ -210,6 +281,25 @@ begin
         ParseCommand('-' + crosshairCommand, true);
         movingCrosshair := false;
     end;
+
+    if stopFiring then 
+    begin
+        ParseCommand('-attack', true);
+        stopFiring:= false;
+    end;
+    
+    if stopRight then
+    begin
+        stopRight := false;
+        ParseCommand('-right', true);
+    end;
+ 
+    if stopLeft then
+    begin
+        stopLeft := false;
+        ParseCommand('-left', true);
+    end;
+    
 end;
 
 procedure aim(id: SDL_FingerId);
@@ -244,6 +334,11 @@ end;
 function convertToCursor(scale: LongInt; xy: LongInt): LongInt;
 begin
     convertToCursor := round(xy/32768*scale)
+end;
+
+function isOnFireButton(id: SDL_FingerId): boolean;
+begin
+    isOnFireButton:= (xyCoord[id*2] < 150) and (xyCoord[id*2+1] > 390);
 end;
 
 function isOnCurrentHog(id: SDL_FingerId): boolean;
@@ -297,6 +392,14 @@ begin
     for index := Low(xyCoord) to High(xyCoord) do xyCoord[index] := -1;
     for index := Low(pointerIds) to High(pointerIds) do pointerIds[index] := -1;
     movingCrosshair := false;
+    stopFiring:= false;
+    walkingLeft := false;
+    walkingRight := false;
+
+    leftButtonBoundary := cScreenWidth div 4;
+    rightButtonBoundary := cScreenWidth div 4*3;
+    topButtonBoundary := cScreenHeight div 6;
+   
 end;
 
 begin

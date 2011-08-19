@@ -52,8 +52,8 @@ while (GameState <> gsExit) and (i <= Lag) do
     if not CurrentTeam^.ExtDriven then
        begin
        if CurrentHedgehog^.BotLevel <> 0 then ProcessBot;
+       ProcessGears;
        ProcessTouch;
-       ProcessGears
        end else
        begin
        NetGetNextCmd;
