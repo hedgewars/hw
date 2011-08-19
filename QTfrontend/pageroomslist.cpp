@@ -391,6 +391,6 @@ void PageRoomsList::onJoinConfirmation(const QString & room)
 
 void PageRoomsList::updateNickCounter(int cnt)
 {
-    lblCount->setText(tr("%1 players online").arg(cnt));
+    lblCount->setText(tr("%1 players online", 0, cnt).arg(cnt));
 }
 

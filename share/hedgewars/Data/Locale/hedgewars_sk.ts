@@ -13,6 +13,21 @@
     </message>
 </context>
 <context>
+    <name>DrawMapWidget</name>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot read file &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -279,6 +294,17 @@ Prosím, napíšte heslo do poľa
 nižšie alebo si zvoľte inú prezývku
 v nastaveniach hry:</translation>
     </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Prezývka</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
@@ -331,6 +357,10 @@ v nastaveniach hry:</translation>
     <message>
         <source>Connecting...</source>
         <translation>Pripájam sa...</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Zrušiť</translation>
     </message>
 </context>
 <context>
@@ -744,12 +774,17 @@ v nastaveniach hry:</translation>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation>Navádzaná včela je trošku zložitejšia na použitie. Jej polomer otočenia závisí na jej rýchlosti, takže ju radšej nepoužívajte pri plnej sile.</translation>
+        <translation type="obsolete">Navádzaná včela je trošku zložitejšia na použitie. Jej polomer otočenia závisí na jej rýchlosti, takže ju radšej nepoužívajte pri plnej sile.</translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation>Použite Molotovov koktejl alebo plameňomet na dočasné zabránenie ježkom prejsť terénom ako sú tunely alebo plošiny.</translation>
+    </message>
+    <message>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -775,6 +810,18 @@ v nastaveniach hry:</translation>
     <message>
         <source>Control</source>
         <translation>Ovládanie</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Chyba</translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">Prosím zadajte názov miestnosti</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
     </message>
 </context>
 <context>
@@ -994,6 +1041,14 @@ Do you still want to join the room?</source>
         <translation>Hra, ku ktorej sa snažíte pripojiť, už začala.
 Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
+    <message numerus="yes">
+        <source>%1 players online</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -1113,6 +1168,10 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
         <source>Copy</source>
         <translation>Kopírovať</translation>
     </message>
+    <message>
+        <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1205,6 +1264,10 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Remove friend</source>
         <translation>Odstrániť priateľa</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Obnoviť</translation>
     </message>
 </context>
 <context>
@@ -1383,6 +1446,30 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Wiggle</source>
         <translation>Triasť</translation>
+    </message>
+    <message>
+        <source>Red/Cyan grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red grayscale</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1623,11 +1710,31 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Gameplay</source>
-        <translation>Hra</translation>
+        <translation type="obsolete">Hra</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
         <translation>Zobrazenie stereo</translation>
+    </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Heslo</translation>
+    </message>
+    <message>
+        <source>% Get Away Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1991,6 +2098,10 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>More Wind</source>
         <translation>Viac vetra</translation>
+    </message>
+    <message>
+        <source>Tag Team</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

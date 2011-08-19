@@ -16,15 +16,15 @@
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation type="obsolete">Błąd pliku</translation>
+        <translation type="unfinished">Błąd pliku</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="obsolete">Nie można otworzyć &apos;%1&apos; do zapisu</translation>
+        <translation type="unfinished">Nie można otworzyć &apos;%1&apos; do zapisu</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="obsolete">Nie można odczytać pliku &apos;%1&apos;</translation>
+        <translation type="unfinished">Nie można odczytać pliku &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -296,6 +296,17 @@ na Hedgewars.org
 Proszę podać hasło bądź zmienić nick
 w ustawieniach gry:</translation>
     </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Nick</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
@@ -348,6 +359,10 @@ w ustawieniach gry:</translation>
     <message>
         <source>Connecting...</source>
         <translation>Łączenie...</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Anuluj</translation>
     </message>
 </context>
 <context>
@@ -769,12 +784,12 @@ w ustawieniach gry:</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
+        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
@@ -802,6 +817,18 @@ w ustawieniach gry:</translation>
     <message>
         <source>Control</source>
         <translation>Kontrola</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Błąd</translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">Wprowadź nazwę pokoju</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
     </message>
 </context>
 <context>
@@ -1021,6 +1048,14 @@ Do you still want to join the room?</source>
         <translation>Gra do której chcesz dołączyć już się rozpoczęła.
 Czy chcesz dołączyć do pokoju?</translation>
     </message>
+    <message numerus="yes">
+        <source>%1 players online</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -1140,6 +1175,10 @@ Czy chcesz dołączyć do pokoju?</translation>
         <source>Copy</source>
         <translation>Kopiuj</translation>
     </message>
+    <message>
+        <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1232,6 +1271,10 @@ Czy chcesz dołączyć do pokoju?</translation>
     <message>
         <source>Remove friend</source>
         <translation>Usuń przyjaciela</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Odśwież</translation>
     </message>
 </context>
 <context>
@@ -1409,6 +1452,30 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Wiggle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red grayscale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1655,10 +1722,30 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     </message>
     <message>
         <source>Gameplay</source>
-        <translation>Rozgrywka</translation>
+        <translation type="obsolete">Rozgrywka</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Hasło</translation>
+    </message>
+    <message>
+        <source>% Get Away Time</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2023,6 +2110,10 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <source>More Wind</source>
         <translation>Więcej wiatru</translation>
+    </message>
+    <message>
+        <source>Tag Team</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

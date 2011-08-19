@@ -13,6 +13,21 @@
     </message>
 </context>
 <context>
+    <name>DrawMapWidget</name>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot read file &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -272,6 +287,17 @@ enregistré sur Hedgewars.org
 Veuillez fournir votre mot de passe
 ou choisir un nouveau pseudo :</translation>
     </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Pseudo</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
@@ -324,6 +350,10 @@ ou choisir un nouveau pseudo :</translation>
     <message>
         <source>Connecting...</source>
         <translation>En connexion...</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
@@ -540,7 +570,7 @@ ou choisir un nouveau pseudo :</translation>
     <message>
         <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
         <comment>Tips</comment>
-        <translation>Particulièrement quand vous jouez en ligne soyez polis et n'oubliez pas que certains joueurs peuvent être mineurs.</translation>
+        <translation>Particulièrement quand vous jouez en ligne soyez polis et n&apos;oubliez pas que certains joueurs peuvent être mineurs.</translation>
     </message>
     <message>
         <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
@@ -710,12 +740,17 @@ ou choisir un nouveau pseudo :</translation>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">L'Abeille Missile peut être délicate à utiliser. Sa courbe de lancer dépend de sa vitesse, pour plus de précision ne l'envoyez pas à pleine puissance. </translation>
+        <translation type="obsolete">L&apos;Abeille Missile peut être délicate à utiliser. Sa courbe de lancer dépend de sa vitesse, pour plus de précision ne l&apos;envoyez pas à pleine puissance. </translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation type="unfinished"> Utilisez le Lance-Flammes ou le Cocktail Molotov pour empêcher temporairement les hérissons de circuler dans les tunnels ou sur les plateformes.</translation>
+    </message>
+    <message>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -741,6 +776,18 @@ ou choisir un nouveau pseudo :</translation>
     <message>
         <source>Control</source>
         <translation>Contrôles</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Erreur</translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">Veuillez saisir le nom du salon</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
     </message>
 </context>
 <context>
@@ -945,6 +992,13 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
 Do you still want to join the room?</source>
         <translation>Vous voulez rejoindre une partie qui a déjà commencée. Voulez-vous tout de même rejoindre la salle ?</translation>
     </message>
+    <message numerus="yes">
+        <source>%1 players online</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -1064,6 +1118,10 @@ Do you still want to join the room?</source>
         <source>Copy</source>
         <translation>Copier</translation>
     </message>
+    <message>
+        <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1156,6 +1214,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Remove friend</source>
         <translation>Retirer un ami</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Mise à jour</translation>
     </message>
 </context>
 <context>
@@ -1301,6 +1363,30 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Wiggle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red grayscale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1531,11 +1617,31 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Gameplay</source>
-        <translation type="unfinished">Mode de jeu</translation>
+        <translation type="obsolete">Mode de jeu</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
         <translation type="unfinished">Rendu stéréo</translation>
+    </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Mot de passe</translation>
+    </message>
+    <message>
+        <source>% Get Away Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1895,6 +2001,10 @@ Veuillez vérifier votre installation</translation>
     <message>
         <source>More Wind</source>
         <translation>Davantage de vent</translation>
+    </message>
+    <message>
+        <source>Tag Team</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

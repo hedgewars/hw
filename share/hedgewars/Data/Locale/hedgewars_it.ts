@@ -13,6 +13,21 @@
     </message>
 </context>
 <context>
+    <name>DrawMapWidget</name>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open file &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot read file &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -276,6 +291,17 @@ registrato su Hedgewars.org
 Per favore inserisci la tua password
 o scegli un altro nickname:</translation>
     </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Nickname</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
@@ -328,6 +354,10 @@ o scegli un altro nickname:</translation>
     <message>
         <source>Connecting...</source>
         <translation>Connessione in corso...</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annulla</translation>
     </message>
 </context>
 <context>
@@ -474,7 +504,7 @@ o scegli un altro nickname:</translation>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
         <comment>Tips</comment>
-        <translation>Se non sai cosa fare e non vuoi sprecare munizioni, salta il turno. Ma non troppe volte perché c'è il Sudden Death!</translation>
+        <translation>Se non sai cosa fare e non vuoi sprecare munizioni, salta il turno. Ma non troppe volte perché c&apos;è il Sudden Death!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
@@ -489,7 +519,7 @@ o scegli un altro nickname:</translation>
     <message>
         <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
         <comment>Tips</comment>
-        <translation>Il gioco salverà sempre l'ultima partita giocata come demo. Selezione &apos;Local Game&apos; e clicca il bottone &apos;Demos&apos; nell'angolo in basso a destra per gestire le demo.</translation>
+        <translation>Il gioco salverà sempre l&apos;ultima partita giocata come demo. Selezione &apos;Local Game&apos; e clicca il bottone &apos;Demos&apos; nell&apos;angolo in basso a destra per gestire le demo.</translation>
     </message>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
@@ -589,7 +619,7 @@ o scegli un altro nickname:</translation>
     <message>
         <source>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</source>
         <comment>Tips</comment>
-        <translation>Ci sono tre salti disponibili. Premi [salto in alto] due volte per eseguire un salto in alto all'indietro.</translation>
+        <translation>Ci sono tre salti disponibili. Premi [salto in alto] due volte per eseguire un salto in alto all&apos;indietro.</translation>
     </message>
     <message>
         <source>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</source>
@@ -604,7 +634,7 @@ o scegli un altro nickname:</translation>
     <message>
         <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
         <comment>Tips</comment>
-        <translation>Molte armi non funzionano quando toccano l'acqua. L'Ape a Ricerca così come la Torta sono delle eccezioni.</translation>
+        <translation>Molte armi non funzionano quando toccano l&apos;acqua. L&apos;Ape a Ricerca così come la Torta sono delle eccezioni.</translation>
     </message>
     <message>
         <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
@@ -614,7 +644,7 @@ o scegli un altro nickname:</translation>
     <message>
         <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
-        <translation>Ultima Sonata è l'attacco aereo più dannoso. Perderai il tuo riccio, eseguendolo, quindi ci sono anche delle grosse controindicazioni.</translation>
+        <translation>Ultima Sonata è l&apos;attacco aereo più dannoso. Perderai il tuo riccio, eseguendolo, quindi ci sono anche delle grosse controindicazioni.</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
@@ -629,7 +659,7 @@ o scegli un altro nickname:</translation>
     <message>
         <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
         <comment>Tips</comment>
-        <translation>Se se ibloccato dietro un riccio nemico, usa il Martello per liberarti senza essere danneggiato da un'esplosione.</translation>
+        <translation>Se se ibloccato dietro un riccio nemico, usa il Martello per liberarti senza essere danneggiato da un&apos;esplosione.</translation>
     </message>
     <message>
         <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
@@ -644,7 +674,7 @@ o scegli un altro nickname:</translation>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
         <comment>Tips</comment>
-        <translation>Vuoi sapere chi c'è dietro il gioco? Clicca sul logo Hedgewars nel menu principale per vedere gli autori.</translation>
+        <translation>Vuoi sapere chi c&apos;è dietro il gioco? Clicca sul logo Hedgewars nel menu principale per vedere gli autori.</translation>
     </message>
     <message>
         <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
@@ -699,12 +729,17 @@ o scegli un altro nickname:</translation>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation>l&apos;Ape a Ricerca può essere complessa da usare. Il suo raggio di curvatura dipende dalla velocità, quindi prova a non usare a piena potenza.</translation>
+        <translation type="obsolete">l&apos;Ape a Ricerca può essere complessa da usare. Il suo raggio di curvatura dipende dalla velocità, quindi prova a non usare a piena potenza.</translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation>Usa la Bomba Molotov o il Lanciafiamme per impedire temporaneamente ai ricci di attraversari terreni come tunnel o piattaforme.</translation>
+    </message>
+    <message>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -730,6 +765,18 @@ o scegli un altro nickname:</translation>
     <message>
         <source>Control</source>
         <translation>Controllo</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation type="unfinished">Errore</translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">Inserisci il nome della stanza</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished">OK</translation>
     </message>
 </context>
 <context>
@@ -947,6 +994,13 @@ Do you still want to join the room?</source>
         <translation>La partita a cui stai cercando di unirti è già iniziata.
 Voui comunque entrare nella stanza?</translation>
     </message>
+    <message numerus="yes">
+        <source>%1 players online</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -1066,6 +1120,10 @@ Voui comunque entrare nella stanza?</translation>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
+    <message>
+        <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1158,6 +1216,10 @@ Voui comunque entrare nella stanza?</translation>
     <message>
         <source>Remove friend</source>
         <translation>Rimuovi amico</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Aggiorna</translation>
     </message>
 </context>
 <context>
@@ -1303,6 +1365,30 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Wiggle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red grayscale</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1498,7 +1584,7 @@ Voui comunque entrare nella stanza?</translation>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
 Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="obsolete">Questa versione SVN è in corso d'opera e può non essere compatibile con le altre versioni del gioco.
+        <translation type="obsolete">Questa versione SVN è in corso d&apos;opera e può non essere compatibile con le altre versioni del gioco.
 Alcune opzioni potrebbero essere incomplete o non funzionanti. Usatela a vostro rischio!</translation>
     </message>
     <message>
@@ -1511,7 +1597,7 @@ Alcune opzioni potrebbero essere incomplete o non funzionanti. Usatela a vostro 
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation>Questa versione di sviluppo è in corso d'opera e può non essere compatibile con le altre versioni del gioco. Alcune feature potrebbero essere incomplete o non funzionanti. Usatela a vostro rischio!</translation>
+        <translation>Questa versione di sviluppo è in corso d&apos;opera e può non essere compatibile con le altre versioni del gioco. Alcune feature potrebbero essere incomplete o non funzionanti. Usatela a vostro rischio!</translation>
     </message>
     <message>
         <source>Quality</source>
@@ -1539,11 +1625,31 @@ Alcune opzioni potrebbero essere incomplete o non funzionanti. Usatela a vostro 
     </message>
     <message>
         <source>Gameplay</source>
-        <translation>Tipo di gioco</translation>
+        <translation type="obsolete">Tipo di gioco</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
         <translation>Resa stereo</translation>
+    </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Password</translation>
+    </message>
+    <message>
+        <source>% Get Away Time</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1903,6 +2009,10 @@ Controllare la propria installazione</translation>
     <message>
         <source>More Wind</source>
         <translation>Più Vento</translation>
+    </message>
+    <message>
+        <source>Tag Team</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

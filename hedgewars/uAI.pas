@@ -171,21 +171,6 @@ var Stack: record
          end
     end;
 
-    function PosInThinkStack(Me: PGear): boolean;
-    var i: Longword;
-    begin
-    i:= 0;
-    while (i < Stack.Count) do
-          begin
-          if(not(hwAbs(Stack.States[i].Hedgehog.X - Me^.X) +
-                 hwAbs(Stack.States[i].Hedgehog.Y - Me^.Y) > _2)) and
-              (Stack.States[i].Hedgehog.Message = Me^.Message) then exit(true);
-          inc(i)
-          end;
-    PosInThinkStack:= false
-    end;
-
-
 var Actions: TActions;
     ticks, maxticks, steps, tmp: Longword;
     BaseRate, BestRate, Rate: integer;
@@ -224,7 +209,7 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
                                       else AddAction(Actions, aia_WaitXR, hwRound(Me^.X), 0, 0, 0);
     steps:= 0;
 
-    while (not StopThinking) and (not PosInThinkStack(Me)) do
+    while (not StopThinking) do
        begin
 {$HINTS OFF}
        CanGo:= HHGo(Me, @AltMe, GoInfo);
