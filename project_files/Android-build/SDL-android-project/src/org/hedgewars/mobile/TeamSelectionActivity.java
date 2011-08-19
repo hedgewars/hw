@@ -31,7 +31,7 @@ public class TeamSelectionActivity extends Activity{
 	
 	private ImageButton addTeam, back;
 	private ListView availableTeams, selectedTeams;
-	private ArrayList<HashMap<String, ?>> availableTeamsList, selectedTeamsList;
+	private ArrayList<HashMap<String, Object>> availableTeamsList, selectedTeamsList;
 	private int minTeams = 2;
 
 	public void onCreate(Bundle savedInstanceState){
@@ -53,14 +53,14 @@ public class TeamSelectionActivity extends Activity{
 		availableTeams.setOnItemClickListener(availableClicker);
 
 		selectedTeams = (ListView) findViewById(R.id.selectedTeams);
-		selectedTeamsList = new ArrayList<HashMap<String, ?>>();
+		selectedTeamsList = new ArrayList<HashMap<String, Object>>();
 		ArrayList<HashMap<String, ?>> toBeRemoved = new ArrayList<HashMap<String, ?>>();
 		ArrayList<Team> teamsStartGame = getIntent().getParcelableArrayListExtra("teams");
-		for(HashMap<String, ?> hashmap : availableTeamsList){
+		for(HashMap<String, Object> hashmap : availableTeamsList){
 			for(Team t : teamsStartGame){
 				if(((Team)hashmap.get("team")).equals(t)){
 					toBeRemoved.add(hashmap);
-					selectedTeamsList.add(hashmap);
+					selectedTeamsList.add(FrontendDataUtils.teamToHashMap(t));//create a new hashmap to ensure all variables are entered into the map
 				}
 			}
 		}
@@ -101,14 +101,18 @@ public class TeamSelectionActivity extends Activity{
 	private void updateListViews(){
 		unregisterForContextMenu(availableTeams);
 		availableTeamsList = FrontendDataUtils.getTeams(this);
-		for(HashMap<String, ?> hashmap : selectedTeamsList){
+		ArrayList<HashMap<String, Object>> toBeRemoved = new ArrayList<HashMap<String, Object>>();
+		for(HashMap<String, Object> hashmap : selectedTeamsList){
 			String name = (String)hashmap.get("txt");
-			for(HashMap<String, ?> hash : availableTeamsList){
+			
+			for(HashMap<String, Object> hash : availableTeamsList){
 				if(name.equals((String)hash.get("txt"))){
-					availableTeamsList.remove(hash);
+					toBeRemoved.add(hash);
 				}
 			}
 		}
+		for(HashMap<String, Object> hash: toBeRemoved) availableTeamsList.remove(hash);
+		
 		SimpleAdapter adapter = new SimpleAdapter(this, availableTeamsList, R.layout.team_selection_entry, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
 		availableTeams.setAdapter(adapter);
 		registerForContextMenu(availableTeams);
@@ -191,7 +195,7 @@ public class TeamSelectionActivity extends Activity{
 	};
 	private OnItemClickListener selectedClicker = new OnItemClickListener(){
 		public void onItemClick(AdapterView<?> arg0, View arg1, int position,long arg3) {
-			availableTeamsList.add((HashMap<String, ?>) selectedTeamsList.get(position));
+			availableTeamsList.add((HashMap<String, Object>) selectedTeamsList.get(position));
 			selectedTeamsList.remove(position);
 			((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 			((SimpleAdapter)selectedTeams.getAdapter()).notifyDataSetChanged();

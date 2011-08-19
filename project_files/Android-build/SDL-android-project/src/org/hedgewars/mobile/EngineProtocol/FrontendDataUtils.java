@@ -148,8 +148,8 @@ public class FrontendDataUtils {
 		return data;
 	}
 
-	public static ArrayList<HashMap<String, ?>> getTeams(Context c){
-		ArrayList<HashMap<String, ?>> ret = new ArrayList<HashMap<String, ?>>();
+	public static ArrayList<HashMap<String, Object>> getTeams(Context c){
+		ArrayList<HashMap<String, Object>> ret = new ArrayList<HashMap<String, Object>>();
 
 		File teamsDir = new File(c.getFilesDir().getAbsolutePath() + '/' + Team.DIRECTORY_TEAMS);
 		File[] teamFileNames = teamsDir.listFiles();
@@ -168,6 +168,8 @@ public class FrontendDataUtils {
 		HashMap<String, Object> hashmap = new HashMap<String, Object>();
 		hashmap.put("team", t);
 		hashmap.put("txt", t.name);
+		hashmap.put("color", t.color);
+		hashmap.put("count", t.hogCount);
 		switch(t.levels[0]){
 		case 0:
 			hashmap.put("img", R.drawable.human);
