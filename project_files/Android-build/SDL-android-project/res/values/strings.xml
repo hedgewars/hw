@@ -5,6 +5,7 @@
     <string name="select">Select</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="saved">Saved succesfully</string>
     
     <!-- SDCARD -->
     <string name="sdcard_not_mounted">There\'s been an error when accessing the sdcard, is it connected to another computer?</string>
