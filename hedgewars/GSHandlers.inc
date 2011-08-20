@@ -795,8 +795,8 @@ begin
     begin
         if (GameTicks and $30) = 0 then
             AddVisualGear(gX, gY, vgtBeeTrace);
-        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.TargetX - gX));
-        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.TargetY - gY));
+        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
+        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
         // make sure new speed isn't higher than original one (which we stored in Friction variable)
         t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
         Gear^.dX := Gear^.dX * t;
@@ -2373,7 +2373,7 @@ begin
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
 
     if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirPlaneSpeed) then
-    begin
+        begin
         dec(Gear^.Health);
         case Gear^.State of 
             0: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed *
@@ -2386,10 +2386,10 @@ begin
                              Gear^.Tag, _0, Gear^.Timer + 1);
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
             //                 Gear^.Tag, _0, 5000);
-        end;
+            end;
         Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag);
         StopSound(Gear^.SoundChannel, 4000);
-    end;
+        end;
 
     if (GameTicks and $3F) = 0 then
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
@@ -2418,14 +2418,14 @@ begin
     end;
 
     Gear^.Y := int2hwFloat(topY-300);
-    Gear^.dX := int2hwFloat(Gear^.TargetX - 5 * Gear^.Tag * 15);
+    Gear^.dX := int2hwFloat(Gear^.Target.X - 5 * Gear^.Tag * 15);
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
         Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 900 
     // calcs for regular falling gears
-    else if (int2hwFloat(Gear^.TargetY) - Gear^.Y > _0) then
-            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(Gear^.TargetY) - Gear^.Y) * 2 /
+    else if (int2hwFloat(Gear^.Target.Y) - Gear^.Y > _0) then
+            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(Gear^.Target.Y) - Gear^.Y) * 2 /
                 cGravity) * Gear^.Tag;
 
     Gear^.Health := 6;
@@ -2461,14 +2461,14 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    tx := int2hwFloat(Gear^.TargetX);
-    ty := int2hwFloat(Gear^.TargetY);
+    tx := int2hwFloat(Gear^.Target.X);
+    ty := int2hwFloat(Gear^.Target.Y);
     x := HHGear^.X;
     y := HHGear^.Y;
 
     if (Distance(tx - x, ty - y) > _256) or
-       not TryPlaceOnLand(Gear^.TargetX - SpritesData[sprAmGirder].Width div 2,
-       Gear^.TargetY - SpritesData[sprAmGirder].Height div 2,
+       not TryPlaceOnLand(Gear^.Target.X - SpritesData[sprAmGirder].Width div 2,
+       Gear^.Target.Y - SpritesData[sprAmGirder].Height div 2,
        sprAmGirder, Gear^.State, true, false) then
     begin
         PlaySound(sndDenied);
@@ -2527,8 +2527,8 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    if not TryPlaceOnLand(Gear^.TargetX - SpritesData[sprHHTelepMask].Width div 2,
-       Gear^.TargetY - SpritesData[sprHHTelepMask].Height div 2,
+    if not TryPlaceOnLand(Gear^.Target.X - SpritesData[sprHHTelepMask].Width div 2,
+       Gear^.Target.Y - SpritesData[sprHHTelepMask].Height div 2,
        sprHHTelepMask, 0, false, false) then
     begin
         HHGear^.Message := HHGear^.Message and not gmAttack;
@@ -2550,12 +2550,12 @@ begin
         HHGear^.dX.isNegative := (Gear^.X.QWordValue <> 0);
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y;
-        HHGear^.X := int2hwFloat(Gear^.TargetX);
-        HHGear^.Y := int2hwFloat(Gear^.TargetY);
+        HHGear^.X := int2hwFloat(Gear^.Target.X);
+        HHGear^.Y := int2hwFloat(Gear^.Target.Y);
         HHGear^.State := HHGear^.State or gstMoving;
         playSound(sndWarp)
     end;
-    Gear^.TargetX:= NoPointX
+    Gear^.Target.X:= NoPointX
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

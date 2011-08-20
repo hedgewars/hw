@@ -1229,8 +1229,13 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
-            lua_pushinteger(L, gear^.TargetX);
-            lua_pushinteger(L, gear^.TargetY)
+            lua_pushinteger(L, gear^.Target.X);
+            lua_pushinteger(L, gear^.Target.Y)
+            end
+        else
+            begin
+            lua_pushnil(L);
+            lua_pushnil(L)
             end
         end;
     lc_getgeartarget:= 2;
@@ -1246,8 +1251,8 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
-            gear^.TargetX:= lua_tointeger(L, 2);
-            gear^.TargetY:= lua_tointeger(L, 3)
+            gear^.Target.X:= lua_tointeger(L, 2);
+            gear^.Target.Y:= lua_tointeger(L, 3)
             end
         end;
     lc_setgeartarget:= 0

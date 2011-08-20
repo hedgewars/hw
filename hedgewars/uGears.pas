@@ -209,7 +209,7 @@ New(gear);
 FillChar(gear^, sizeof(TGear), 0);
 gear^.X:= int2hwFloat(X);
 gear^.Y:= int2hwFloat(Y);
-gear^.TargetX:= NoPointX;
+gear^.Target.X:= NoPointX;
 gear^.Kind := Kind;
 gear^.State:= State;
 gear^.Active:= true;
