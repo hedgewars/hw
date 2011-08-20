@@ -16,7 +16,6 @@ type
 
 procedure initModule;
 
-
 procedure ProcessTouch;
 procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 procedure onTouchMotion(x,y: Longword; dx,dy: LongInt; pointerId: SDL_FingerId);
@@ -25,6 +24,7 @@ function convertToCursor(scale: LongInt; xy: LongInt): LongInt;
 function addFinger(x,y: Longword; id: SDL_FingerId): Touch_Finger;
 procedure deleteFinger(id: SDL_FingerId);
 procedure onTouchClick(finger: Touch_Finger);
+procedure onTouchDoubleClick(finger: Touch_Finger);
 
 function findFinger(id: SDL_FingerId): Touch_Finger;
 procedure aim(finger: Touch_Finger);
@@ -47,18 +47,20 @@ var
     pointerCount : Longword;
     fingers: array of Touch_Finger;
     moveCursor : boolean;
+    invertCursor : boolean;
+
+    xTouchClick,yTouchClick : LongInt;
+    timeSinceClick : Longword;
 
     //Pinch to zoom 
     pinchSize : hwFloat;
     baseZoomValue: GLFloat;
 
-    invertCursor : boolean;
 
     //aiming
     aiming, movingCrosshair: boolean; 
     crosshairCommand: ShortString;
     targetAngle: LongInt;
-
     stopFiring: boolean;
 
     //moving
@@ -190,8 +192,25 @@ begin
     end;
 end;
 
+procedure onTouchDoubleClick(finger: Touch_Finger);
+begin
+    ParseCommand('ljump', true);
+end;
+
 procedure onTouchClick(finger: Touch_Finger);
 begin
+    if (SDL_GetTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, finger.Y-yTouchClick) < _30) then
+    begin
+    onTouchDoubleClick(finger);
+    exit; 
+    end
+    else
+    begin
+        xTouchClick := finger.x;
+        yTouchClick := finger.y;
+        timeSinceClick := SDL_GetTicks;
+    end;
+
     if bShowAmmoMenu then 
     begin
         doPut(CursorPoint.X, CursorPoint.Y, false); 
