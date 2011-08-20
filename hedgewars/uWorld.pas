@@ -908,6 +908,11 @@ if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) th
 // Captions
 DrawCaptions;
 
+// Draw buttons
+SetScale(0.8);
+DrawSprite(sprFireButton, round((-cScreenWidth+20)/0.8),round((cScreenHeight+55)/0.8),0);
+SetScale(cDefaultZoomLevel);
+
 // Teams Healths
 if TeamsCount * 20 > cScreenHeight div 7 then  // take up less screen on small displays
     begin

@@ -102,7 +102,7 @@ begin
                 ParseCommand('+attack', true);
                 exit;
             end;
-            if finger.x < leftButtonBoundary then
+            if (finger.x < leftButtonBoundary) and (finger.y < 390) then
             begin
                 ParseCommand('+left', true);
                 walkingLeft := true;
@@ -375,7 +375,10 @@ end;
 
 function isOnFireButton(finger: Touch_Finger): boolean;
 begin
-    isOnFireButton:= (finger.x < 150) and (finger.y > 390);
+    printFinger(finger);
+    WriteToConsole(Format('%d %d ',[round((-cScreenWidth+20)/0.8), round((cScreenHeight+55)/0.8)]));
+    WriteToConsole(Format('%d, %d',[cScreenWidth, cScreenHeight]));
+    isOnFireButton:= (finger.x < 205) and (finger.y > 420);
 end;
 
 function isOnCrosshair(finger: Touch_Finger): boolean;
