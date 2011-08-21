@@ -125,16 +125,32 @@
        	android:background="@drawable/dropdown"/>
         
 	<include layout="@layout/backbutton"/>
+    
+    <LinearLayout
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:layout_alignParentBottom="true"
+    	android:layout_centerHorizontal="true"
+    	android:orientation="horizontal">
     <ImageButton
     	android:id="@+id/btnTeams"
     	android:layout_width="120dip"
     	android:layout_height="40dip"
-    	android:layout_alignParentBottom="true"
-    	android:layout_centerHorizontal="true"
     	android:adjustViewBounds="true"
     	android:scaleType="centerInside"
     	android:background="@android:color/transparent"
     	android:src="@drawable/teams"/>
+    <ImageView
+    	android:id="@+id/imgTeamsCount"
+    	android:layout_width="40dip"
+    	android:layout_height="40dip"
+    	android:adjustViewBounds="true"
+    	android:scaleType="centerInside"
+    	android:background="@android:color/transparent"
+    	android:src="@drawable/teamcount"/>
+        
+    </LinearLayout>
+
     <ImageButton
     	android:id="@+id/btnStart"
     	android:layout_width="120dip"

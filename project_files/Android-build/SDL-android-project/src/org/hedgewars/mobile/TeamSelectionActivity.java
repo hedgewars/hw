@@ -48,12 +48,11 @@ import android.widget.TextView;
 public class TeamSelectionActivity extends Activity{
 
 	private static final int ACTIVITY_TEAMCREATION = 0;
-	
+
 	private ImageButton addTeam, back;
 	private ListView availableTeams, selectedTeams;
 	private ArrayList<HashMap<String, Object>> availableTeamsList, selectedTeamsList;
 	private TextView txtInfo;
-	private int minTeams = 2;
 
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -62,8 +61,8 @@ public class TeamSelectionActivity extends Activity{
 
 		addTeam = (ImageButton) findViewById(R.id.btnAdd);
 		back = (ImageButton) findViewById(R.id.btnBack);
-        txtInfo = (TextView) findViewById(R.id.txtInfo);
-        
+		txtInfo = (TextView) findViewById(R.id.txtInfo);
+
 		addTeam.setOnClickListener(addTeamClicker);
 		back.setOnClickListener(backClicker);
 
@@ -120,14 +119,14 @@ public class TeamSelectionActivity extends Activity{
 			super.onActivityResult(requestCode, resultCode, data);
 		}
 	}
-	
+
 	private void updateListViews(){
 		unregisterForContextMenu(availableTeams);
 		availableTeamsList = FrontendDataUtils.getTeams(this);
 		ArrayList<HashMap<String, Object>> toBeRemoved = new ArrayList<HashMap<String, Object>>();
 		for(HashMap<String, Object> hashmap : selectedTeamsList){
 			String name = (String)hashmap.get("txt");
-			
+
 			for(HashMap<String, Object> hash : availableTeamsList){
 				if(name.equals((String)hash.get("txt"))){
 					toBeRemoved.add(hash);
@@ -135,15 +134,15 @@ public class TeamSelectionActivity extends Activity{
 			}
 		}
 		for(HashMap<String, Object> hash: toBeRemoved) availableTeamsList.remove(hash);
-		
+
 		SimpleAdapter adapter = new SimpleAdapter(this, availableTeamsList, R.layout.team_selection_entry, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
 		availableTeams.setAdapter(adapter);
 		registerForContextMenu(availableTeams);
 		availableTeams.setOnItemClickListener(availableClicker);
-		
-		
+
+
 	}
-	
+
 	private void setTeamColor(int position, int color){
 		View iv = ((RelativeLayout)selectedTeams.getChildAt(position)).findViewById(R.id.teamCount);
 		setTeamColor(iv, color);
@@ -222,7 +221,7 @@ public class TeamSelectionActivity extends Activity{
 			selectedTeamsList.remove(position);
 			((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 			((SimpleAdapter)selectedTeams.getAdapter()).notifyDataSetChanged();
-			
+
 			txtInfo.setText(String.format(getResources().getString(R.string.teams_info_template), selectedTeamsList.size()));
 		}
 
@@ -267,27 +266,24 @@ public class TeamSelectionActivity extends Activity{
 		t.setRandomColor(illegalcolors);
 		hash.put("color", t.color);
 		hash.put("count", t.hogCount);
-		
+
 		selectedTeamsList.add(hash);
 		availableTeamsList.remove(position);
 		((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 		((SimpleAdapter)selectedTeams.getAdapter()).notifyDataSetChanged();
-		
+
 		txtInfo.setText(String.format(getResources().getString(R.string.teams_info_template), selectedTeamsList.size()));
 	}
 
 	private void returnTeams(){
 		int teamsCount = selectedTeamsList.size();
-		if(teamsCount >= minTeams){
-			Intent i = new Intent();
-			Parcelable[] teams = new Parcelable[teamsCount];
-			for(int x = 0 ; x < teamsCount; x++){
-				teams[x] = (Team)selectedTeamsList.get(x).get("team");
-			}
-			i.putExtra("teams", teams);
-			setResult(Activity.RESULT_OK, i);
-		}else{
-			setResult(Activity.RESULT_CANCELED);
+		Intent i = new Intent();
+		Parcelable[] teams = new Parcelable[teamsCount];
+		for(int x = 0 ; x < teamsCount; x++){
+			teams[x] = (Team)selectedTeamsList.get(x).get("team");
 		}
+		i.putExtra("teams", teams);
+		setResult(Activity.RESULT_OK, i);
+
 	}
 }

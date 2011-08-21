@@ -48,7 +48,7 @@ public class StartGameActivity extends Activity {
 	private GameConfig config = null;
 	private ImageButton start, back, team;
 	private Spinner maps, gameplay, gamescheme, weapons, themes;
-	private ImageView themeIcon, mapPreview;
+	private ImageView themeIcon, mapPreview, teamCount;
 
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
@@ -75,7 +75,8 @@ public class StartGameActivity extends Activity {
 
 		themeIcon = (ImageView) findViewById(R.id.imgTheme);
 		mapPreview = (ImageView) findViewById(R.id.mapPreview);
-
+		teamCount = (ImageView) findViewById(R.id.imgTeamsCount);
+		
 		start.setOnClickListener(startClicker);
 		back.setOnClickListener(backClicker);
 		team.setOnClickListener(teamClicker);
@@ -122,7 +123,7 @@ public class StartGameActivity extends Activity {
 				for(Parcelable t : parcelables){
 					config.teams.add((Team)t);
 				}
-
+                teamCount.getDrawable().setLevel(config.teams.size());
 			}
 			break;
 		}

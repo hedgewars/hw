@@ -62,7 +62,6 @@ public class TeamCreatorActivity extends Activity {
 	private ImageButton back, save, voiceButton;
 	private ScrollView scroller;
 	private MediaPlayer mp = null;
-	private ArrayList<RelativeLayout> hogs;
 	private boolean settingsChanged = false;
 	private boolean saved = false;
 
@@ -89,7 +88,6 @@ public class TeamCreatorActivity extends Activity {
 		back.setOnClickListener(backClicker);
 
 		LinearLayout ll = (LinearLayout) findViewById(R.id.HogsContainer);
-		hogs = new ArrayList<RelativeLayout>(ll.getChildCount());
 		for (int i = 0; i < ll.getChildCount(); i++) {
 			RelativeLayout team_creation_entry = (RelativeLayout) ll
 					.getChildAt(i);
@@ -236,7 +234,7 @@ public class TeamCreatorActivity extends Activity {
 
 	private OnClickListener saveClicker = new OnClickListener() {
 		public void onClick(View v) {
-			Toast.makeText(TeamCreatorActivity.this, R.string.saved, Toast.LENGTH_SHORT);
+			Toast.makeText(TeamCreatorActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
 			saved = true;
 			Team team = new Team();
 			team.name = name.getText().toString();
