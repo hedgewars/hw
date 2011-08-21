@@ -4603,54 +4603,56 @@ end;
 
 procedure doStepHammerHitWork(Gear: PGear);
 var 
-    i, ei: LongInt;
+    i, j, ei: LongInt;
     HitGear: PGear;
 begin
     AllInactive := false;
     HitGear := Gear^.IntersectGear;
     dec(Gear^.Timer);
     if (HitGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gmDestroy) <> 0) then
-    begin
+        begin
         DeleteGear(Gear);
         exit
-    end;
+        end;
 
     if (Gear^.Timer mod 5) = 0 then
-    begin
+        begin
         AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
 
-        i := hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
-        ei := hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
+        i := hwRound(Gear^.X) - HitGear^.Radius + 2;
+        ei := hwRound(Gear^.X) + HitGear^.Radius - 2;
+        for j := 1 to 4 do DrawExplosion(i - GetRandom(5), hwRound(Gear^.Y) + 6*j, 3);
+        for j := 1 to 4 do DrawExplosion(ei + GetRandom(5), hwRound(Gear^.Y) + 6*j, 3);
         while i <= ei do
-        begin
-            DrawExplosion(i, hwRound(Gear^.Y) + 3, 3);
+            begin
+            for j := 1 to 11 do DrawExplosion(i, hwRound(Gear^.Y) + 3*j, 3);
             inc(i, 1)
-        end;
+            end;
 
         if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
            , lfIndestructible) then
-        begin
+            begin
             Gear^.X := Gear^.X + Gear^.dX;
             Gear^.Y := Gear^.Y + _1_9;
+            end;
         end;
-        SetAllHHToActive;
-    end;
     if TestCollisionYwithGear(Gear, 1) then
-    begin
+        begin
         Gear^.dY := _0;
         SetLittle(HitGear^.dX);
         HitGear^.dY := _0;
-    end
+        end
     else
-    begin
+        begin
         Gear^.dY := Gear^.dY + cGravity;
         Gear^.Y := Gear^.Y + Gear^.dY;
         if hwRound(Gear^.Y) > cWaterLine then Gear^.Timer := 1
-    end;
+        end;
 
     Gear^.X := Gear^.X + HitGear^.dX;
     HitGear^.X := Gear^.X;
-    HitGear^.Y := Gear^.Y - int2hwFloat(cHHRadius);
+    SetLittle(HitGear^.dY);
+    HitGear^.Active:= true;
 end;
 
 procedure doStepHammerHit(Gear: PGear);
