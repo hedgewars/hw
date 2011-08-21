@@ -5,7 +5,7 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 ---------------------------------------------------
 ---------------------------------------------------
 ---------------------------------------------------
---- Space Invasion Code Follows (0.7)
+--- Space Invasion Code Follows (0.8)
 ---------------------------------------------------
 ---------------------------------------------------
 -- VERSION HISTORY
@@ -99,6 +99,12 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 
 --(during the length of the game) aka non-repeatable
 -- 10/25/50 kills (+25/+50/+100 points)
+
+-----------------
+--0.8
+-----------------
+-- added a HUD for turntimeleft, ammo, shield
+-- shieldhealth hits 0 properly
 
 --------------------------
 --notes for later
@@ -242,6 +248,7 @@ local shieldHealth
 
 local Timer100 = 0
 
+local vTag = {}
 
 -----------------------------------------------
 -- CIRCLY GOODIES
@@ -289,6 +296,58 @@ local vCircCol = {}
 -------------------------------------------
 -- some lazy copypasta/modified methods
 -------------------------------------------
+
+
+
+function HideTags()
+
+	for i = 0, 3 do 	
+		SetVisualGearValues(vTag[i],0,0,0,0,0,1,0, 0, 240000, 0xffffff00)
+	end
+
+end
+
+function DrawTag(i)
+	
+	zoomL = 1.3
+
+	xOffset = 40
+
+	if i == 0 then
+		yOffset = 40	
+		tCol = 0xffba00ff
+		tValue = TimeLeft
+	elseif i == 1 then
+		zoomL = 1.1		
+		yOffset = 70	
+		tCol = 0x00ff00ff
+		tValue = primShotsLeft
+	elseif i == 2 then
+		zoomL = 1.1		
+		xOffset = 40 + 35
+		yOffset = 70		
+		tCol = 0xa800ffff
+		tValue = shieldHealth - 80
+	end
+
+	DeleteVisualGear(vTag[i])
+	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
+	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vTag[i])
+	SetVisualGearValues	(	
+				vTag[i], 		--id
+				-(ScreenWidth/2) + xOffset,	--xoffset
+				ScreenHeight - yOffset, --yoffset
+				0, 			--dx
+				0, 			--dy
+				zoomL, 			--zoom
+				1, 			--~= 0 means align to screen
+				g7, 			--frameticks
+				tValue, 		--value
+				240000, 		--timer
+				tCol		--GetClanColor( GetHogClan(CurrentHedgehog) )
+				)
+
+end
 
 function RebuildTeamInfo()
 
@@ -597,6 +656,7 @@ function onPrecise()
 		else
 			AddCaption(loc("Ammo") .. ": " .. primShotsLeft)
 		end
+		DrawTag(1)
 
 		CopyPV(CurrentHedgehog, morte) -- new addition
 		x,y = GetGearVelocity(morte)
@@ -689,6 +749,13 @@ function onGameInit()
 	HealthCaseProb = 0
 	MinesNum = 0
 	Explosives = 0
+
+	for i = 0, 3 do 	
+		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)	
+	end
+
+	HideTags()
+
 end
 
 function onGameStart()
@@ -768,6 +835,9 @@ function onNewTurn()
 		tumbleStarted = false
 		SetMyCircles(false)
 	end
+	
+	HideTags()
+
 	---------------
 	---------------
 	--AddCaption("num g: " .. numGears() )
@@ -804,7 +874,7 @@ function onGameTick()
 
 		if beam == true then
 			shieldHealth = shieldHealth - 1
-			if shieldHealth <= 80 then
+			if shieldHealth < 80 then -- <= 80
 				shieldHealth = 80
 				beam = false
 				AddCaption(loc("Shield Depleted"),0xff0000ff,capgrpMessage)
@@ -850,6 +920,9 @@ function onGameTick()
 			TimeLeft = (TurnTime/1000)	--45
 			FadeAlpha = 0
 			AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
+			DrawTag(0)
+			DrawTag(1)
+			DrawTag(2)
 			SetMyCircles(true)
 		end
 	end
@@ -868,6 +941,7 @@ function onGameTick()
 
 			if TimeLeft >= 0 then
 				--AddCaption(LOC_NOT("Time Left: ") .. TimeLeft)
+				DrawTag(0)
 			end
 
 		end
@@ -893,6 +967,7 @@ function onGameTick()
 				leftOn = false
 				rightOn = false
 				SetMyCircles(false)
+				HideTags()
 				--nw WriteLnToConsole("Player is out of luck")
 
 				if shieldMiser == true then
@@ -1206,6 +1281,7 @@ function CircleDamaged(i)
 			PlaySound(sndHellishImpact4)
 			TimeLeft = TimeLeft + 4
 			AddCaption(loc("Time Extended!") .. "+" .. 4 .. loc("sec"), 0xff0000ff,capgrpMessage )
+			DrawTag(0)
 
 			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
 			SetHealth(morte, 0)
@@ -1223,6 +1299,7 @@ function CircleDamaged(i)
 			PlaySound(sndShotgunReload)
 			primShotsLeft = primShotsLeft + 3
 			AddCaption("+" .. 3 .. " " .. loc("Ammo"), 0x00ff00ff,capgrpMessage)
+			DrawTag(1)
 
 			GK = GK + 1
 			if GK == 3 then
@@ -1252,6 +1329,7 @@ function CircleDamaged(i)
 				shieldHealth = 250
 				AddCaption(loc("Shield is fully recharged!"),0xa800ffff,capgrpMessage)
 			end
+			DrawTag(2)
 
 			OK = OK + 1
 			if OK == 3 then
@@ -1815,6 +1893,7 @@ function HandleCircles()
 		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(pShield)
 		--SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), g3, g4, g5, g6, g7, 200, g9, g10 )
 		SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), g3, g4, g5, g6, g7, 200, g9, 0xa800ffff-0x000000ff - -shieldHealth )
+		DrawTag(2)
 	else
 		SetVisualGearValues(pShield, GetX(CurrentHedgehog), GetY(CurrentHedgehog), g3, g4, g5, g6, g7, 0, g9, g10 )
 	end
