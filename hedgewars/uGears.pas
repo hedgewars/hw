@@ -1409,7 +1409,7 @@ var t: PGearArray;
 begin
 t:= CheckGearsCollision(Ammo);
 // Just to avoid hogs on rope dodging fire.
-if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtRope) and
+if (CurAmmoGear <> nil) and ((CurAmmoGear^.Kind = gtRope) or (CurAmmoGear^.Kind = gtJetpack) or (CurAmmoGear^.Kind = gtBirdy)) and
    (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.CollisionIndex = -1) and
    (sqr(hwRound(Ammo^.X) - hwRound(CurrentHedgehog^.Gear^.X)) + sqr(hwRound(Ammo^.Y) - hwRound(CurrentHedgehog^.Gear^.Y)) <= sqr(cHHRadius + Ammo^.Radius)) then
     begin
