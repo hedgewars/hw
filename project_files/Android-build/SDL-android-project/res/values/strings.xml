@@ -29,6 +29,11 @@
     <string name="start_filter">Filter</string>
     <string name="start_themes">Themes</string>
     
+    
+    
+    <!-- Teams -->
+    <string name="not_enough_teams">Not enough teams</string>
+    <string name="teams_info_template">Selected teams = %d</string>
     <!-- Settings -->
     <string name="name">Name</string>
     <string name="name_default">Unnamed</string>

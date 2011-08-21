@@ -43,6 +43,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
+import android.widget.TextView;
 
 public class TeamSelectionActivity extends Activity{
 
@@ -51,6 +52,7 @@ public class TeamSelectionActivity extends Activity{
 	private ImageButton addTeam, back;
 	private ListView availableTeams, selectedTeams;
 	private ArrayList<HashMap<String, Object>> availableTeamsList, selectedTeamsList;
+	private TextView txtInfo;
 	private int minTeams = 2;
 
 	public void onCreate(Bundle savedInstanceState){
@@ -60,7 +62,8 @@ public class TeamSelectionActivity extends Activity{
 
 		addTeam = (ImageButton) findViewById(R.id.btnAdd);
 		back = (ImageButton) findViewById(R.id.btnBack);
-
+        txtInfo = (TextView) findViewById(R.id.txtInfo);
+        
 		addTeam.setOnClickListener(addTeamClicker);
 		back.setOnClickListener(backClicker);
 
@@ -90,6 +93,7 @@ public class TeamSelectionActivity extends Activity{
 		selectedTeams.setAdapter(adapter);
 		selectedTeams.setOnItemClickListener(selectedClicker);
 
+		txtInfo.setText(String.format(getResources().getString(R.string.teams_info_template), selectedTeams.getChildCount()));
 	}
 
 	private ViewBinder viewBinder = new ViewBinder(){
@@ -218,6 +222,8 @@ public class TeamSelectionActivity extends Activity{
 			selectedTeamsList.remove(position);
 			((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 			((SimpleAdapter)selectedTeams.getAdapter()).notifyDataSetChanged();
+			
+			txtInfo.setText(String.format(getResources().getString(R.string.teams_info_template), selectedTeamsList.size()));
 		}
 
 	};
@@ -266,6 +272,8 @@ public class TeamSelectionActivity extends Activity{
 		availableTeamsList.remove(position);
 		((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 		((SimpleAdapter)selectedTeams.getAdapter()).notifyDataSetChanged();
+		
+		txtInfo.setText(String.format(getResources().getString(R.string.teams_info_template), selectedTeamsList.size()));
 	}
 
 	private void returnTeams(){

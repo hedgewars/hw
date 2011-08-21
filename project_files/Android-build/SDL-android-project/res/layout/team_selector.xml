@@ -28,8 +28,7 @@
   	android:layout_alignTop="@id/btnBack"
   	android:layout_margin="3dp"
   	android:gravity="center"
-  	android:background="@drawable/box"
-  	android:text="bla"/>
+  	android:background="@drawable/box"/>
   	
   
 

@@ -19,8 +19,6 @@
 
 package org.hedgewars.mobile;
 
-import java.util.ArrayList;
-
 import org.hedgewars.mobile.EngineProtocol.FrontendDataUtils;
 import org.hedgewars.mobile.EngineProtocol.GameConfig;
 import org.hedgewars.mobile.EngineProtocol.Map;
@@ -30,12 +28,9 @@ import org.hedgewars.mobile.EngineProtocol.Weapon;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -44,6 +39,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class StartGameActivity extends Activity {
 
@@ -57,19 +53,20 @@ public class StartGameActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
+		//SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		//Copy all the xml files to the device TODO only do first time launch of the app...
 		Utils.resRawToFilesDir(this,R.array.schemes, Scheme.DIRECTORY_SCHEME);
 		Utils.resRawToFilesDir(this, R.array.weapons, Weapon.DIRECTORY_WEAPON);
 		Scheme.parseBasicFlags(this);
+
 		config = new GameConfig();
 
 		setContentView(R.layout.starting_game);
-		
+
 		back = (ImageButton) findViewById(R.id.btnBack);
 		team = (ImageButton) findViewById(R.id.btnTeams);
 		start = (ImageButton) findViewById(R.id.btnStart);
-		
+
 		maps = (Spinner) findViewById(R.id.spinMaps);
 		gameplay = (Spinner) findViewById(R.id.spinGameplay);
 		gamescheme = (Spinner) findViewById(R.id.spinGamescheme);
@@ -82,7 +79,7 @@ public class StartGameActivity extends Activity {
 		start.setOnClickListener(startClicker);
 		back.setOnClickListener(backClicker);
 		team.setOnClickListener(teamClicker);
-		
+
 		ArrayAdapter<?> adapter = new ArrayAdapter<Map>(this, R.layout.listview_item, FrontendDataUtils.getMaps(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		maps.setAdapter(adapter);
@@ -110,6 +107,12 @@ public class StartGameActivity extends Activity {
 
 	}
 
+	private void startTeamsActivity(){
+		Intent i = new Intent(StartGameActivity.this, TeamSelectionActivity.class);
+		i.putParcelableArrayListExtra("teams", config.teams);
+		startActivityForResult(i, ACTIVITY_TEAM_SELECTOR);
+	}
+	
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 		switch(requestCode){
 		case ACTIVITY_TEAM_SELECTOR:
@@ -119,13 +122,13 @@ public class StartGameActivity extends Activity {
 				for(Parcelable t : parcelables){
 					config.teams.add((Team)t);
 				}
-				
+
 			}
 			break;
 		}
 	}
-	
-	
+
+
 	private OnItemSelectedListener themesClicker = new OnItemSelectedListener(){
 
 		public void onItemSelected(AdapterView<?> arg0, View view, int position, long rowId) {
@@ -152,13 +155,13 @@ public class StartGameActivity extends Activity {
 		}
 
 	};
-	
+
 	private OnItemSelectedListener weaponClicker = new OnItemSelectedListener(){
 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 			config.weapon = (Weapon)arg0.getAdapter().getItem(arg2);
 		}
 		public void onNothingSelected(AdapterView<?> arg0) {
-			
+
 		}
 	};
 	private OnItemSelectedListener schemeClicker = new OnItemSelectedListener(){
@@ -166,7 +169,7 @@ public class StartGameActivity extends Activity {
 			config.scheme = (Scheme)arg0.getAdapter().getItem(arg2);
 		}
 		public void onNothingSelected(AdapterView<?> arg0) {
-			
+
 		}
 	};
 	private OnItemSelectedListener gameplayClicker = new OnItemSelectedListener(){
@@ -174,29 +177,32 @@ public class StartGameActivity extends Activity {
 			//config = ()arg0.getAdapter().getItem(arg2);
 		}
 		public void onNothingSelected(AdapterView<?> arg0) {
-			
+
 		}
 	};
-	
+
 	private OnClickListener startClicker = new OnClickListener(){
 		public void onClick(View v) {
-			Intent i = new Intent(StartGameActivity.this, SDLActivity.class);
-			i.putExtra("config", config);
-			startActivity(i);
+			if(config.teams.size() < 2){
+				Toast.makeText(StartGameActivity.this, R.string.not_enough_teams, Toast.LENGTH_LONG).show();
+				startTeamsActivity();
+			}
+			else{
+				Intent i = new Intent(StartGameActivity.this, SDLActivity.class);
+				i.putExtra("config", config);
+				startActivity(i);}
 		}
 	};
-	
+
 	private OnClickListener backClicker = new OnClickListener(){
 		public void onClick(View v) {
 			finish();
 		}
 	};
-	
+
 	private OnClickListener teamClicker = new OnClickListener(){
 		public void onClick(View v) {
-			Intent i = new Intent(StartGameActivity.this, TeamSelectionActivity.class);
-			i.putParcelableArrayListExtra("teams", config.teams);
-			startActivityForResult(i, ACTIVITY_TEAM_SELECTOR);
+			startTeamsActivity();
 		}
 	};
 
