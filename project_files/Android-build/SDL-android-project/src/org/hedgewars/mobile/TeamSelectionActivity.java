@@ -68,7 +68,7 @@ public class TeamSelectionActivity extends Activity{
 
 		availableTeams = (ListView) findViewById(R.id.availableTeams);
 		availableTeamsList = FrontendDataUtils.getTeams(this);
-		SimpleAdapter adapter = new SimpleAdapter(this, availableTeamsList, R.layout.team_selection_entry, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
+		SimpleAdapter adapter = new SimpleAdapter(this, availableTeamsList, R.layout.team_selection_entry_simple, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
 		availableTeams.setAdapter(adapter);
 		registerForContextMenu(availableTeams);
 		availableTeams.setOnItemClickListener(availableClicker);
