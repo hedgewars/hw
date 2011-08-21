@@ -1,0 +1,12 @@
+ <level-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:maxLevel="0" android:drawable="@drawable/teams_number0" />
+  <item android:maxLevel="1" android:drawable="@drawable/teams_number1" />
+  <item android:maxLevel="2" android:drawable="@drawable/teams_number2" />
+  <item android:maxLevel="3" android:drawable="@drawable/teams_number3" />
+  <item android:maxLevel="4" android:drawable="@drawable/teams_number4" />
+  <item android:maxLevel="5" android:drawable="@drawable/teams_number5" />
+  <item android:maxLevel="6" android:drawable="@drawable/teams_number6" />
+  <item android:maxLevel="7" android:drawable="@drawable/teams_number7" />
+  <item android:maxLevel="8" android:drawable="@drawable/teams_number8" />
+  <item android:maxLevel="9" android:drawable="@drawable/teams_number9" />
+ </level-list>
