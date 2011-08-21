@@ -95,6 +95,8 @@ About::About(QWidget * parent) :
             "<br>"
             "Nils Lück &lt;<a href=\"mailto:nils.luck.design@gmail.com\">nils.luck.design@gmail.com</a>&gt;"
             "<br>"
+            "Guillaume Englert &lt;<a href=\"mailto:genglert@hybird.org\">genglert@hybird.org</a>&gt;"
+            "<br>"
             "Hats: Trey Perry &lt;<a href=\"mailto:tx.perry.j@gmail.com\">tx.perry.j@gmail.com</a>&gt;"
             "</p><h2>") +
             QLabel::tr("Sounds:") + "</h2>"
