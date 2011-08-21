@@ -329,14 +329,14 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 
 	// Called when we have a valid drawing surface
 	public void surfaceCreated(SurfaceHolder holder) {
-		// Log.v("SDL", "surfaceCreated()");
+		Log.v("SDL", "surfaceCreated()");
 
-		enableSensor(Sensor.TYPE_ACCELEROMETER, true);
+		//enableSensor(Sensor.TYPE_ACCELEROMETER, true);
 	}
 
 	// Called when we lose the surface
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		// Log.v("SDL", "surfaceDestroyed()");
+		Log.v("SDL", "surfaceDestroyed()");
 
 		// Send a quit message to the application
 		SDLActivity.nativeQuit();
@@ -353,7 +353,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 			// Log.v("SDL", "Finished waiting for SDL thread");
 		}
 
-		enableSensor(Sensor.TYPE_ACCELEROMETER, false);
+		//enableSensor(Sensor.TYPE_ACCELEROMETER, false);
 	}
 
 	// Called when the surface is resized
