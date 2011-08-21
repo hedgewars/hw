@@ -26,7 +26,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -274,13 +273,14 @@ class SDLMain implements Runnable {
 	}
 
 	public void run() {
-		// Runs SDL_main()
-
+		//Set up the IPC socket server to communicate with the engine
 		EngineProtocolNetwork ipc = new EngineProtocolNetwork(config);
 
-		String path = Utils.getDownloadPath(SDLActivity.mSingleton);
-		//path = path.substring(0, path.length()-1);//remove the trailing '/'
+		String path = Utils.getDownloadPath(SDLActivity.mSingleton);//This represents the data directory
+		path = path.substring(0, path.length()-1);//remove the trailing '/'
 
+		
+		// Runs SDL_main() with added parameters
 		SDLActivity.nativeInit(new String[] { String.valueOf(ipc.port),
 				String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
 				"0", "null", "xeli", "1", "1", "1", "0", "", path });
