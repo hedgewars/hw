@@ -45,7 +45,7 @@ if (GameType = gmtDemo) then
     if isSpeed then Lag:= Lag * 10
     else
         if cOnlyStats then Lag:= High(LongInt);
-
+PlayNextVoice;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do
     begin

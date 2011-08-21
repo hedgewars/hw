@@ -99,11 +99,11 @@ if FinishedTurnsTotal <> 0 then
     inc(CurrentHedgehog^.stats.FinishedTurns);
 
     if (CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (DamageTotal > 0) then
-        PlaySound(sndFirstBlood, CurrentTeam^.voicepack)
+        AddVoice(sndFirstBlood, CurrentTeam^.voicepack)
 
     else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
         begin
-        PlaySound(sndStupid, PreviousTeam^.voicepack);
+        AddVoice(sndStupid, PreviousTeam^.voicepack);
         if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then 
             AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
         end
@@ -111,32 +111,32 @@ if FinishedTurnsTotal <> 0 then
     else if DamageClan <> 0 then
         if DamageTotal > DamageClan then
             if random(2) = 0 then
-                PlaySound(sndNutter, CurrentTeam^.voicepack)
+                AddVoice(sndNutter, CurrentTeam^.voicepack)
             else
-                PlaySound(sndWatchIt, vpHurtSameClan)
+                AddVoice(sndWatchIt, vpHurtSameClan)
         else
             if random(2) = 0 then
-                PlaySound(sndSameTeam, vpHurtSameClan)
+                AddVoice(sndSameTeam, vpHurtSameClan)
             else
-                PlaySound(sndTraitor, vpHurtSameClan)
+                AddVoice(sndTraitor, vpHurtSameClan)
 
     else if CurrentHedgehog^.stats.StepDamageGiven <> 0 then
         if Kills > 0 then
-            PlaySound(sndEnemyDown, CurrentTeam^.voicepack)
+            AddVoice(sndEnemyDown, CurrentTeam^.voicepack)
         else
-            PlaySound(sndRegret, vpHurtEnemy)
+            AddVoice(sndRegret, vpHurtEnemy)
 
     else if AmmoDamagingUsed then
-        PlaySound(sndMissed, PreviousTeam^.voicepack)
+        AddVoice(sndMissed, PreviousTeam^.voicepack)
     else if (AmmoUsedCount > 0) and not isTurnSkipped then
         // nothing ?
     else if isTurnSkipped then
         begin
-        PlaySound(sndBoring, PreviousTeam^.voicepack);
+        AddVoice(sndBoring, PreviousTeam^.voicepack);
         AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
         end
     else if not PlacingHogs then
-        PlaySound(sndCoward, PreviousTeam^.voicepack);
+        AddVoice(sndCoward, PreviousTeam^.voicepack);
     end;
 
 

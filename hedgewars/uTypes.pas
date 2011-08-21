@@ -314,6 +314,11 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         chunks: array [TSound] of PMixChunk;
         end;
 
+    TVoice = record
+        snd: TSound;
+        voicepack: PVoicePack;
+        end;
+
     PHHAmmo = ^THHAmmo;
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
 

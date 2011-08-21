@@ -210,6 +210,17 @@ const
     cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
     cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
 
+    VoiceList : array[0..7] of TVoice =  (
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil));
+    LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
+
     Fontz: array[THWFont] of THHFont = (
             (Handle: nil;
             Height: 12;

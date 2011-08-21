@@ -77,6 +77,9 @@ procedure StopSound(snd: TSound);
 procedure StopSound(chn: LongInt);
 procedure StopSound(chn, fadems: LongInt);
 
+procedure AddVoice(snd: TSound; voicepack: PVoicepack);
+procedure PlayNextVoice;
+
 
 // MISC
 
@@ -255,9 +258,9 @@ begin
         exit;
 
     if (voicepack <> nil) then
-    begin
-        if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
         begin
+        if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
+            begin
             s:= UserPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
@@ -266,22 +269,49 @@ begin
                 WriteLnToConsole(msgFailed)
             else
                 WriteLnToConsole(msgOK)
-        end;
+            end;
         lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], 0, -1)
-    end
+        end
     else
-    begin
-        if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
         begin
+        if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
+            begin
             s:= UserPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
             TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
             WriteLnToConsole(msgOK);
-        end;
+            end;
         lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
-    end;
+        end;
+end;
+
+procedure AddVoice(snd: TSound; voicepack: PVoicepack);
+var i : LongInt;
+begin
+    i:= 0;
+    while (i<8) and (VoiceList[i].snd <> sndNone) do inc(i);
+
+    VoiceList[i].snd:= snd;
+    VoiceList[i].voicepack:= voicepack;
+end;
+
+procedure PlayNextVoice;
+var i : LongInt;
+begin
+    if (LastVoice.snd <> sndNone) and (lastChan[LastVoice.snd] <> -1) and (Mix_Playing(lastChan[LastVoice.snd]) <> 0) then exit;
+    i:= 0;
+    while (i<8) and (VoiceList[i].snd = sndNone) do inc(i);
+    
+    if (VoiceList[i].snd <> sndNone) then
+        begin
+        LastVoice.snd:= VoiceList[i].snd;
+        LastVoice.voicepack:= VoiceList[i].voicepack;
+        VoiceList[i].snd:= sndNone;
+        PlaySound(LastVoice.snd, LastVoice.voicepack)
+        end
+    else LastVoice.snd:= sndNone;
 end;
 
 function LoopSound(snd: TSound): LongInt;

@@ -81,9 +81,9 @@ if not GameOver then
                             if (Gear <> nil) then
                                 Gear^.State:= gstWinner;
             if Flawless then
-                PlaySound(sndFlawless, Teams[0]^.voicepack) 
+                AddVoice(sndFlawless, Teams[0]^.voicepack) 
             else
-                PlaySound(sndVictory, Teams[0]^.voicepack);
+                AddVoice(sndVictory, Teams[0]^.voicepack);
 
             AddCaption(s, cWhiteColor, capgrpGameState);
             SendStat(siGameResult, s);
@@ -257,16 +257,16 @@ else
 if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
     begin
     if CurrentTeam^.ExtDriven then
-        PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
+        AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
     else
-        PlaySound(sndYesSir, CurrentTeam^.voicepack);
+        AddVoice(sndYesSir, CurrentTeam^.voicepack);
     if PlacingHogs or (cHedgehogTurnTime < 1000000) then ReadyTimeLeft:= cReadyDelay;
     AddCaption(Format(shortstring(trmsg[sidReady]), CurrentTeam^.TeamName), cWhiteColor, capgrpGameState)
     end
 else
     begin
     if TurnTimeLeft > 0 then
-        PlaySound(sndIllGetYou, CurrentTeam^.voicepack);
+        AddVoice(sndIllGetYou, CurrentTeam^.voicepack);
     ReadyTimeLeft:= 0
     end;
 

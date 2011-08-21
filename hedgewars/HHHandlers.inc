@@ -215,7 +215,7 @@ with Gear^,
 
         if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then xx:= - xx;
         if Ammoz[CurAmmoType].Ammo.AttackVoice <> sndNone then
-           PlaySound(Ammoz[CurAmmoType].Ammo.AttackVoice, CurrentTeam^.voicepack);
+           AddVoice(Ammoz[CurAmmoType].Ammo.AttackVoice, CurrentTeam^.voicepack);
 
 // Initiating alt attack
         if  (CurAmmoGear <> nil) and
