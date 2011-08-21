@@ -2001,7 +2001,7 @@ const
                 AttackVoice: sndNone;
                 Bounciness: 1000);
             Slot: 3;
-            TimeAfterTurn: 1000;
+            TimeAfterTurn: 3000;
             MinAngle: 0;
             maxAngle: 0;
             isDamaging: true;

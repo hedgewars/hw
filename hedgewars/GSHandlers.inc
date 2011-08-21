@@ -4582,13 +4582,13 @@ while i > 0 do
     dec(i);
     tmp:= t^.ar[i];
     if (tmp^.State and gstNoDamage) = 0 then
-        if (tmp^.Kind = gtHedgehog) then
+        if (tmp^.Kind = gtHedgehog) or (tmp^.Kind = gtMine) or (tmp^.Kind = gtExplosives) then
             begin
             //tmp^.State:= tmp^.State or gstFlatened;
             ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
             //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
             tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
-            tmp2^.Hedgehog:= tmp^.Hedgehog;
+            tmp2^.IntersectGear:= tmp;
             SetAllToActive
             end
         else
@@ -4604,12 +4604,12 @@ end;
 procedure doStepHammerHitWork(Gear: PGear);
 var 
     i, ei: LongInt;
-    HHGear: PGear;
+    HitGear: PGear;
 begin
     AllInactive := false;
-    HHGear := Gear^.Hedgehog^.Gear;
+    HitGear := Gear^.IntersectGear;
     dec(Gear^.Timer);
-    if (HHGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gmDestroy) <> 0) then
+    if (HitGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gmDestroy) <> 0) then
     begin
         DeleteGear(Gear);
         exit
@@ -4638,8 +4638,8 @@ begin
     if TestCollisionYwithGear(Gear, 1) then
     begin
         Gear^.dY := _0;
-        SetLittle(HHGear^.dX);
-        HHGear^.dY := _0;
+        SetLittle(HitGear^.dX);
+        HitGear^.dY := _0;
     end
     else
     begin
@@ -4648,9 +4648,9 @@ begin
         if hwRound(Gear^.Y) > cWaterLine then Gear^.Timer := 1
     end;
 
-    Gear^.X := Gear^.X + HHGear^.dX;
-    HHGear^.X := Gear^.X;
-    HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius);
+    Gear^.X := Gear^.X + HitGear^.dX;
+    HitGear^.X := Gear^.X;
+    HitGear^.Y := Gear^.Y - int2hwFloat(cHHRadius);
 end;
 
 procedure doStepHammerHit(Gear: PGear);
