@@ -40,7 +40,7 @@ import android.widget.RemoteViews;
 
 public class DownloadService extends Service {
 
-	private final static String URL = "http://31.3.98.83/tmp/data.zip";
+	private final static String URL = "http://hedgewars.googlecode.com/files/data_5631.zip";
 	public static final int MSG_CANCEL = 0;
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
