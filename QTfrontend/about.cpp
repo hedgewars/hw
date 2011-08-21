@@ -79,6 +79,8 @@ About::About(QWidget * parent) :
             "Few engine and frontend improvements: Richard Karolyi &lt;<a href=\"mailto:sheepluva@ercatec.net\">sheepluva@ercatec.net</a>&gt;<br>"
             "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;<br>"
             "Engine and frontend improvements: Henrik Rostedt &lt;<a href=\"mailto:henrik.rostedt@gmail.com\">henrik.rostedt@gmail.com</a>&gt;<br>"
+            "Lua game modes and missions: John Lambert &lt;<a href=\"mailto:redgrinner@gmail.com\">redgrinner@gmail.com</a>&gt;<br>"
+            "Android port: Richard Deurwaarder &lt;<a href=\"mailto:xeli@xelification.com\">xeli@xelification.com</a>&gt;<br>"
             "</p><h2>" +
 
             QLabel::tr("Art:") + "</h2>"
@@ -94,6 +96,8 @@ About::About(QWidget * parent) :
             "Joshua O'Sullivan &lt;<a href=\"mailto:coheedftw@hotmail.co.uk\">coheedftw@hotmail.co.uk</a>&gt;"
             "<br>"
             "Nils Lück &lt;<a href=\"mailto:nils.luck.design@gmail.com\">nils.luck.design@gmail.com</a>&gt;"
+            "<br>"
+            "Guillaume Englert &lt;<a href=\"mailto:genglert@hybird.org\">genglert@hybird.org</a>&gt;"
             "<br>"
             "Hats: Trey Perry &lt;<a href=\"mailto:tx.perry.j@gmail.com\">tx.perry.j@gmail.com</a>&gt;"
             "</p><h2>") +
@@ -121,6 +125,7 @@ About::About(QWidget * parent) :
             "Italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;<br>"
             "Japanese: ADAM Etienne &lt;<a href=\"mailto:etienne.adam@gmail.com\">etienne.adam@gmail.com</a>&gt;<br>"
             "Korean: Anthony Bellew &lt;<a href=\"mailto:webmaster@anthonybellew.com\">webmaster@anthonybellew.com</a>&gt;<br>"
+            "Lithuanian: Lukas Urbonas &lt;<a href=\"mailto:lukasu08@gmail.com\">lukasu08@gmail.com</a>&gt;<br>"
             "Polish: Maciej Mroziński &lt;<a href=\"mailto:mynick2@o2.pl\">mynick2@o2.pl</a>&gt;, Wojciech Latkowski &lt;<a href=\"mailto:magik17l@gmail.com\">magik17l@gmail.com</a>&gt;, Piotr Mitana, Maciej Górny<br>"
             "Portuguese: Fábio Canário &lt;<a href=\"mailto:inufabie@gmail.com\">inufabie@gmail.com</a>&gt;<br>"
             "Russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"

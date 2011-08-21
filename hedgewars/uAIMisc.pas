@@ -146,6 +146,7 @@ while Gear <> nil do
                           AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
                       else if (Gear^.State and gstAttacking) <> 0 then
                           AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
+          gtSMine:    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -30);
           gtDynamite: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -75);
           gtHedgehog: begin
                       if Gear^.Damage >= Gear^.Health then

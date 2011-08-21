@@ -21,13 +21,13 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, SDLh, GLunit, uTypes;
+uses sysutils, uConsts, SDLh, GLunit, uTypes, uLandTexture;
 
 procedure initModule;
 procedure freeModule;
 
-procedure StoreLoad;
-procedure StoreRelease;
+procedure StoreLoad(reload: boolean = false);
+procedure StoreRelease(reload: boolean = false);
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
@@ -118,7 +118,7 @@ for t:= 0 to Pred(TeamsCount) do
 SDL_FreeSurface(tmpsurf)
 end;
 
-procedure StoreLoad;
+procedure StoreLoad(reload: boolean);
 var s: shortstring;
 
     procedure WriteNames(Font: THWFont);
@@ -290,48 +290,67 @@ for ii:= Low(TSprite) to High(TSprite) do
             if AltPath = ptNone then
                 if ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk] then // FIXME: hack
                     begin
-                    tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
+                    if not reload then
+                        begin
+                        tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                        if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
+                        end
+                    else tmpsurf:= Surface
                     end
                 else
                     begin
-                    tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
+                    if not reload then
+                        begin
+                        tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                        if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
+                        end
+                    else tmpsurf:= Surface
                     end
             else begin
-                tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                if tmpsurf = nil then tmpsurf:= LoadImage(UserPathz[AltPath] + '/' + FileName, ifAlpha or ifTransparent);
-                if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
+                if not reload then
+                    begin
+                    tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                    if tmpsurf = nil then tmpsurf:= LoadImage(UserPathz[AltPath] + '/' + FileName, ifAlpha or ifTransparent);
+                    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent)
+                    end
+                else tmpsurf:= Surface
                 end;
 
             if tmpsurf <> nil then
-            begin
+                begin
                 if getImageDimensions then
-		begin
+                    begin
                     imageWidth:= tmpsurf^.w;
                     imageHeight:= tmpsurf^.h
-                end;
+                    end;
                 if getDimensions then
-                begin
+                    begin
                     Width:= tmpsurf^.w;
                     Height:= tmpsurf^.h
-                end;
+                    end;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
-                begin
+                    begin
                     Texture:= Surface2Tex(tmpsurf, true);
                     Texture^.Scale:= 2
-                end
+                    end
                 else
-                begin
+                    begin
                     Texture:= Surface2Tex(tmpsurf, false);
                     // HACK: We should include some sprite attribute to define the texture wrap directions
                     if ((ii = sprWater) or (ii = sprSDWater)) and ((cReducedQuality and (rq2DWater or rqClampLess)) = 0) then
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                end;
+                    end;
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, priority);
-                if saveSurf then
-                    Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
+// This should maybe be flagged. It wastes quite a bit of memory.
+                if not reload then
+                    begin
+{$IFNDEF DARWIN & WIN32}
+                    if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
+{$ELSE}
+                    Surface:= tmpsurf 
+{$ENDIF}
+                    end
                 end
             else
                 Surface:= nil
@@ -384,7 +403,7 @@ IMG_Quit();
 {$ENDIF}
 end;
 
-procedure StoreRelease;
+procedure StoreRelease(reload: boolean);
 var ii: TSprite;
     ai: TAmmoType;
     i, t: LongInt;
@@ -393,23 +412,36 @@ begin
         begin
         FreeTexture(SpritesData[ii].Texture);
         SpritesData[ii].Texture:= nil;
-        if SpritesData[ii].Surface <> nil then
+        if (SpritesData[ii].Surface <> nil) and not reload then
+            begin
             SDL_FreeSurface(SpritesData[ii].Surface);
-        SpritesData[ii].Surface:= nil;
+            SpritesData[ii].Surface:= nil
+            end
         end;
     SDL_FreeSurface(MissionIcons);
     FreeTexture(ropeIconTex);
+    ropeIconTex:= nil;
     FreeTexture(HHTexture);
+    HHTexture:= nil;
     FreeTexture(PauseTexture);
+    PauseTexture:= nil;
     FreeTexture(ConfirmTexture);
+    ConfirmTexture:= nil;
     FreeTexture(SyncTexture);
+    SyncTexture:= nil;
     // free all ammo name textures
     for ai:= Low(TAmmoType) to High(TAmmoType) do
+        begin
         FreeTexture(Ammoz[ai].NameTex);
+        Ammoz[ai].NameTex:= nil
+        end;
 
     // free all count textures
     for i:= Low(CountTexz) to High(CountTexz) do
+        begin
         FreeTexture(CountTexz[i]);
+        CountTexz[i]:= nil
+        end;
 
     // free all team and hedgehog textures
     for t:= 0 to Pred(TeamsCount) do
@@ -417,16 +449,25 @@ begin
         if TeamsArray[t] <> nil then
         begin
             FreeTexture(TeamsArray[t]^.NameTagTex);
+            TeamsArray[t]^.NameTagTex:= nil;
             FreeTexture(TeamsArray[t]^.CrosshairTex);
+            TeamsArray[t]^.CrosshairTex:= nil;
             FreeTexture(TeamsArray[t]^.GraveTex);
+            TeamsArray[t]^.GraveTex:= nil;
             FreeTexture(TeamsArray[t]^.HealthTex);
+            TeamsArray[t]^.HealthTex:= nil;
             FreeTexture(TeamsArray[t]^.AIKillsTex);
+            TeamsArray[t]^.AIKillsTex:= nil;
             FreeTexture(TeamsArray[t]^.FlagTex);
+            TeamsArray[t]^.FlagTex:= nil;
             for i:= 0 to cMaxHHIndex do
             begin
                 FreeTexture(TeamsArray[t]^.Hedgehogs[i].NameTagTex);
+                TeamsArray[t]^.Hedgehogs[i].NameTagTex:= nil;
                 FreeTexture(TeamsArray[t]^.Hedgehogs[i].HealthTagTex);
+                TeamsArray[t]^.Hedgehogs[i].HealthTagTex:= nil;
                 FreeTexture(TeamsArray[t]^.Hedgehogs[i].HatTex);
+                TeamsArray[t]^.Hedgehogs[i].HatTex:= nil;
             end;
         end;
     end;
@@ -908,6 +949,7 @@ procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     ico: PSDL_Surface;
     buf: array[byte] of char;
+    reinit: boolean;
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
     s:= s; // avoid compiler hint
@@ -943,9 +985,12 @@ begin
 
     // set window title
     SDL_WM_SetCaption('Hedgewars', nil);
-
+    reinit:= false;
     if SDLPrimSurface <> nil then
     begin
+{$IFDEF DARWIN | WIN32}
+        reinit:= true;
+{$ENDIF}
         AddFileLog('Freeing old primary surface...');
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
@@ -982,6 +1027,12 @@ begin
 
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
     SetupOpenGL();
+    if reinit then
+        begin
+        StoreRelease(true);
+        StoreLoad(true);
+        UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT)
+        end;
 end;
 
 procedure initModule;

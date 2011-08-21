@@ -358,8 +358,9 @@ begin
     if (Gear^.nImpactSounds > 0) and 
        ((Gear^.Damage <> 0) or 
           ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) and
-       ((Gear^.dX.QWordValue > _0_1.QWordValue) or 
-          (Gear^.dY.QWordValue > _0_1.QWordValue)) then
+       (((Gear^.Radius < 3) and (Gear^.dY < -_0_1)) or
+        ((Gear^.Radius >= 3) and ((Gear^.dX.QWordValue > _0_1.QWordValue) or 
+          (Gear^.dY.QWordValue > _0_1.QWordValue)))) then
         PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), true);
 end;
 
@@ -794,8 +795,8 @@ begin
     begin
         if (GameTicks and $30) = 0 then
             AddVisualGear(gX, gY, vgtBeeTrace);
-        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.TargetX - gX));
-        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.TargetY - gY));
+        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
+        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
         // make sure new speed isn't higher than original one (which we stored in Friction variable)
         t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
         Gear^.dX := Gear^.dX * t;
@@ -2372,7 +2373,7 @@ begin
     Gear^.X := Gear^.X + cAirPlaneSpeed * Gear^.Tag;
 
     if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirPlaneSpeed) then
-    begin
+        begin
         dec(Gear^.Health);
         case Gear^.State of 
             0: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed *
@@ -2385,10 +2386,10 @@ begin
                              Gear^.Tag, _0, Gear^.Timer + 1);
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
             //                 Gear^.Tag, _0, 5000);
-        end;
+            end;
         Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag);
         StopSound(Gear^.SoundChannel, 4000);
-    end;
+        end;
 
     if (GameTicks and $3F) = 0 then
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
@@ -2417,14 +2418,14 @@ begin
     end;
 
     Gear^.Y := int2hwFloat(topY-300);
-    Gear^.dX := int2hwFloat(Gear^.TargetX - 5 * Gear^.Tag * 15);
+    Gear^.dX := int2hwFloat(Gear^.Target.X - 5 * Gear^.Tag * 15);
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
         Gear^.dX := Gear^.dX - cBombsSpeed * Gear^.Tag * 900 
     // calcs for regular falling gears
-    else if (int2hwFloat(Gear^.TargetY) - Gear^.Y > _0) then
-            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(Gear^.TargetY) - Gear^.Y) * 2 /
+    else if (int2hwFloat(Gear^.Target.Y) - Gear^.Y > _0) then
+            Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(Gear^.Target.Y) - Gear^.Y) * 2 /
                 cGravity) * Gear^.Tag;
 
     Gear^.Health := 6;
@@ -2460,14 +2461,14 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    tx := int2hwFloat(Gear^.TargetX);
-    ty := int2hwFloat(Gear^.TargetY);
+    tx := int2hwFloat(Gear^.Target.X);
+    ty := int2hwFloat(Gear^.Target.Y);
     x := HHGear^.X;
     y := HHGear^.Y;
 
     if (Distance(tx - x, ty - y) > _256) or
-       not TryPlaceOnLand(Gear^.TargetX - SpritesData[sprAmGirder].Width div 2,
-       Gear^.TargetY - SpritesData[sprAmGirder].Height div 2,
+       not TryPlaceOnLand(Gear^.Target.X - SpritesData[sprAmGirder].Width div 2,
+       Gear^.Target.Y - SpritesData[sprAmGirder].Height div 2,
        sprAmGirder, Gear^.State, true, false) then
     begin
         PlaySound(sndDenied);
@@ -2526,8 +2527,8 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    if not TryPlaceOnLand(Gear^.TargetX - SpritesData[sprHHTelepMask].Width div 2,
-       Gear^.TargetY - SpritesData[sprHHTelepMask].Height div 2,
+    if not TryPlaceOnLand(Gear^.Target.X - SpritesData[sprHHTelepMask].Width div 2,
+       Gear^.Target.Y - SpritesData[sprHHTelepMask].Height div 2,
        sprHHTelepMask, 0, false, false) then
     begin
         HHGear^.Message := HHGear^.Message and not gmAttack;
@@ -2549,12 +2550,12 @@ begin
         HHGear^.dX.isNegative := (Gear^.X.QWordValue <> 0);
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y;
-        HHGear^.X := int2hwFloat(Gear^.TargetX);
-        HHGear^.Y := int2hwFloat(Gear^.TargetY);
+        HHGear^.X := int2hwFloat(Gear^.Target.X);
+        HHGear^.Y := int2hwFloat(Gear^.Target.Y);
         HHGear^.State := HHGear^.State or gstMoving;
         playSound(sndWarp)
     end;
-    Gear^.TargetX:= NoPointX
+    Gear^.Target.X:= NoPointX
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4581,13 +4582,13 @@ while i > 0 do
     dec(i);
     tmp:= t^.ar[i];
     if (tmp^.State and gstNoDamage) = 0 then
-        if (tmp^.Kind = gtHedgehog) then
+        if (tmp^.Kind = gtHedgehog) or (tmp^.Kind = gtMine) or (tmp^.Kind = gtExplosives) then
             begin
             //tmp^.State:= tmp^.State or gstFlatened;
             ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
             //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
             tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
-            tmp2^.Hedgehog:= tmp^.Hedgehog;
+            tmp2^.IntersectGear:= tmp;
             SetAllToActive
             end
         else
@@ -4602,54 +4603,56 @@ end;
 
 procedure doStepHammerHitWork(Gear: PGear);
 var 
-    i, ei: LongInt;
-    HHGear: PGear;
+    i, j, ei: LongInt;
+    HitGear: PGear;
 begin
     AllInactive := false;
-    HHGear := Gear^.Hedgehog^.Gear;
+    HitGear := Gear^.IntersectGear;
     dec(Gear^.Timer);
-    if (HHGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gmDestroy) <> 0) then
-    begin
+    if (HitGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gmDestroy) <> 0) then
+        begin
         DeleteGear(Gear);
         exit
-    end;
+        end;
 
     if (Gear^.Timer mod 5) = 0 then
-    begin
+        begin
         AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
 
-        i := hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
-        ei := hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
+        i := hwRound(Gear^.X) - HitGear^.Radius + 2;
+        ei := hwRound(Gear^.X) + HitGear^.Radius - 2;
+        for j := 1 to 4 do DrawExplosion(i - GetRandom(5), hwRound(Gear^.Y) + 6*j, 3);
+        for j := 1 to 4 do DrawExplosion(ei + GetRandom(5), hwRound(Gear^.Y) + 6*j, 3);
         while i <= ei do
-        begin
-            DrawExplosion(i, hwRound(Gear^.Y) + 3, 3);
+            begin
+            for j := 1 to 11 do DrawExplosion(i, hwRound(Gear^.Y) + 3*j, 3);
             inc(i, 1)
-        end;
+            end;
 
         if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
            , lfIndestructible) then
-        begin
+            begin
             Gear^.X := Gear^.X + Gear^.dX;
             Gear^.Y := Gear^.Y + _1_9;
+            end;
         end;
-        SetAllHHToActive;
-    end;
     if TestCollisionYwithGear(Gear, 1) then
-    begin
+        begin
         Gear^.dY := _0;
-        SetLittle(HHGear^.dX);
-        HHGear^.dY := _0;
-    end
+        SetLittle(HitGear^.dX);
+        HitGear^.dY := _0;
+        end
     else
-    begin
+        begin
         Gear^.dY := Gear^.dY + cGravity;
         Gear^.Y := Gear^.Y + Gear^.dY;
         if hwRound(Gear^.Y) > cWaterLine then Gear^.Timer := 1
-    end;
+        end;
 
-    Gear^.X := Gear^.X + HHGear^.dX;
-    HHGear^.X := Gear^.X;
-    HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius);
+    Gear^.X := Gear^.X + HitGear^.dX;
+    HitGear^.X := Gear^.X;
+    SetLittle(HitGear^.dY);
+    HitGear^.Active:= true;
 end;
 
 procedure doStepHammerHit(Gear: PGear);
