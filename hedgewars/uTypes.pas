@@ -152,7 +152,7 @@ type
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
 
-    THWFont = (fnt16, fntBig, fntSmall {$IFNDEF IPHONEOS}, CJKfnt16, CJKfntBig, CJKfntSmall{$ENDIF});
+    THWFont = (fnt16, fntBig, fntSmall {$IFNDEF MOBILE}, CJKfnt16, CJKfntBig, CJKfntSmall{$ENDIF});
 
     TCapGroup = (capgrpGameState, capgrpAmmoinfo, capgrpVolume,
             capgrpMessage, capgrpMessage2, capgrpAmmostate);

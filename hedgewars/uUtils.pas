@@ -278,7 +278,7 @@ var l, i : LongInt;
     tmpstr: array[0..256] of WideChar;
 begin
 
-{$IFNDEF IPHONEOS}
+{$IFNDEF MOBILE}
 // remove chinese fonts for now
 if (font >= CJKfnt16) or (length(s) = 0) then
 {$ENDIF}

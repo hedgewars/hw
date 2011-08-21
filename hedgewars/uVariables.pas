@@ -226,7 +226,7 @@ const
             Height: 10;
             style: TTF_STYLE_NORMAL;
             Name: 'DejaVuSans-Bold.ttf')
-            {$IFNDEF IPHONEOS}, // remove chinese fonts for now
+            {$IFNDEF MOBILE}, // remove chinese fonts for now
             (Handle: nil;
             Height: 12;
             style: TTF_STYLE_NORMAL;
