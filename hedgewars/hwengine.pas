@@ -221,6 +221,8 @@ begin
     val(gameArgs[2], cScreenHeight);
     val(gameArgs[3], cReducedQuality);
     cLocaleFName:= gameArgs[4];
+    if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
+    else cLocale := Copy(cLocaleFName,1,2);
     UserNick:= gameArgs[5];
     isSoundEnabled:= gameArgs[6] = '1';
     isMusicEnabled:= gameArgs[7] = '1';
@@ -267,8 +269,6 @@ begin
 
     LoadLocale(UserPathz[ptLocale] + '/en.txt');  // Do an initial load with english
     LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
-    if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
-    else cLocale := Copy(cLocaleFName,1,2);
     if cLocaleFName <> 'en.txt' then
         begin
         // Try two letter locale first before trying specific locale overrides
@@ -479,6 +479,8 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 begin
     GetParams();
+    if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
+    else cLocale := Copy(cLocaleFName,1,2);
 
     if GameType = gmtLandPreview then GenLandPreview()
     else if GameType = gmtSyntax then DisplayUsage()
