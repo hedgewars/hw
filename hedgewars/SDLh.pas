@@ -844,12 +844,6 @@ function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLib
 function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat; {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 
-{* OpenGL *}
-{$IFDEF DARWIN}
-function CGLGetCurrentContext(): Pointer; cdecl; external 'OpenGL';
-procedure CGLSetParameter(context: Pointer; option: LongInt; value: Pointer); cdecl; external 'OpenGL';
-{$ENDIF}
-
 (*  SDL_ttf  *)
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;

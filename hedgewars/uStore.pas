@@ -44,10 +44,10 @@ procedure MakeCrossHairs;
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands, uDebug;
 
-type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
+//type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var MaxTextureSize: LongInt;
-    cGPUVendor: TGPUVendor;
+//    cGPUVendor: TGPUVendor;
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;
@@ -563,36 +563,15 @@ begin
 {$ENDIF}
 end;
 
-procedure SetupOpenGL;
-var vendor: shortstring = '';
-{$IFDEF DARWIN}
-const one : LongInt = 1;
-{$ENDIF}
+procedure SetupOpenGLAttributes;
 begin
-{$IFDEF SDL13}
-    // this function creates an opengles1.1 context by default on mobile devices
-    // use SDL_GL_SetAttribute to change this behaviour
-    SDLGLcontext:=SDL_GL_CreateContext(SDLwindow);
-    SDLTry(SDLGLcontext <> nil, true);
-    SDL_GL_SetSwapInterval(1);
-{$ENDIF}
-
 {$IFDEF IPHONEOS}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
-    vendor:= vendor; // avoid hint
-    one:= one; // avoid hint
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
-{$IFNDEF SDL13}
-// this attribute is default in 1.3 and must be enabled in MacOSX
+{$IFNDEF SDL13} // vsync is default in 1.3
     SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, LongInt((cReducedQuality and rqDesyncVBlank) = 0));
-
-{$IFDEF DARWIN}
-// fixes vsync in Snow Leopard
-    CGLSetParameter(CGLGetCurrentContext(), 222, @one);
-{$ENDIF}
 {$ENDIF}
 {$ENDIF}
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0); // no depth buffer
@@ -602,14 +581,21 @@ begin
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0); // no alpha channel required
     SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 16); // buffer has to be 16 bit only
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // try to prefer hardware rendering
+end;
 
+procedure SetupOpenGL;
+//var vendor: shortstring = '';
+begin
+{$IFDEF SDL13}
+    // this function creates an opengles1.1 context by default on mobile devices
+    // use SDL_GL_SetAttribute to change this behaviour
+    SDLGLcontext:=SDL_GL_CreateContext(SDLwindow);
+    SDLTry(SDLGLcontext <> nil, true);
+    SDL_GL_SetSwapInterval(1);
+{$ENDIF}
+
+    // get the max (horizontal and vertical) size for textures that the gpu can support
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
-
-    AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
-    AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
-    AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
-    AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
-
     if MaxTextureSize <= 0 then
         begin
         MaxTextureSize:= 1024;
@@ -621,17 +607,30 @@ begin
         AddFileLog('Texture size too small for backgrounds, disabling.');
         end;
 
+(*  // find out which gpu we are using (for extension compatibility maybe?)
 {$IFDEF IPHONEOS}
+    vendor:= vendor; // avoid hint
     cGPUVendor:= gvApple;
 {$ELSE}
+    vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
     if StrPos(Str2PChar(vendor), Str2PChar('nvidia')) <> nil then
         cGPUVendor:= gvNVIDIA
     else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
         cGPUVendor:= gvATI
     else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
-        cGPUVendor:= gvIntel;
+        cGPUVendor:= gvIntel
+    else
+        AddFileLog('OpenGL Warning - unknown hardware vendor; please report');
 {$ENDIF}
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
+*)
+
+    // everyone love debugging
+    AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
+    AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
+    AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
+    AddFileLog('  \----- Texture Size: ' + inttostr(MaxTextureSize));
+
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin
@@ -673,9 +672,6 @@ begin
             cStereoMode:= smNone;
     end;
 {$ENDIF}
-
-    if cGPUVendor = gvUnknown then
-        AddFileLog('OpenGL Warning - unknown hardware vendor; please report');
 
     // set view port to whole window
     if (rotationQt = 0) or (rotationQt = 180) then
@@ -957,45 +953,44 @@ begin
     else cFullScreen:= s = '1';
 
     buf[0]:= char(0); // avoid compiler hint
-    AddFileLog('Prepare to change video parameters...');
+    AddFileLog('Preparing to change video parameters...');
 
-    flags:= SDL_OPENGL;// or SDL_RESIZABLE;
-
-    if cFullScreen then
-        flags:= flags or SDL_FULLSCREEN;
-
-{$IFDEF SDL_IMAGE_NEWER}
-    WriteToConsole('Init SDL_image... ');
-    SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
-    WriteLnToConsole(msgOK);
-{$ENDIF}
-    // load engine icon
-{$IFDEF DARWIN}
-    ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
-    if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
-{$ELSE}
-    ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
-    if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
-{$ENDIF}
-    if ico <> nil then
-    begin
-        SDL_WM_SetIcon(ico, 0);
-        SDL_FreeSurface(ico)
-    end;
-
-    // set window title
-    SDL_WM_SetCaption('Hedgewars', nil);
     reinit:= false;
-    if SDLPrimSurface <> nil then
-    begin
+    if SDLPrimSurface = nil then
+        begin
+        // set window title
+        SDL_WM_SetCaption('Hedgewars', nil);
+{$IFDEF SDL_IMAGE_NEWER}
+        WriteToConsole('Init SDL_image... ');
+        SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
+        WriteLnToConsole(msgOK);
+{$ENDIF}
+        // load engine icon
+{$IFDEF DARWIN}
+        ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
+        if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
+{$ELSE}
+        ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+        if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+{$ENDIF}
+        if ico <> nil then
+            begin
+            SDL_WM_SetIcon(ico, 0);
+            SDL_FreeSurface(ico)
+            end;
+        end
+    else
+        begin
 {$IFDEF DARWIN | WIN32}
         reinit:= true;
 {$ENDIF}
         AddFileLog('Freeing old primary surface...');
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
-    end;
+        end;
 
+    // these attributes must be set up before creating the sdl window
+    SetupOpenGLAttributes();
 {$IFDEF SDL13}
     // these values in x and y make the window appear in the center
     x:= SDL_WINDOWPOS_CENTERED_MASK;
@@ -1013,6 +1008,10 @@ begin
     SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
+    flags:= SDL_OPENGL;// or SDL_RESIZABLE;
+    if cFullScreen then
+        flags:= flags or SDL_FULLSCREEN;
+
     if not cOnlyStats then
         begin
 {$IFDEF WIN32}
@@ -1047,15 +1046,12 @@ begin
 
     SDLPrimSurface:= nil;
 
-{$IFNDEF IPHONEOS}
     rotationQt:= 0;
-    cGPUVendor:= gvUnknown;
-{$ENDIF}
-
     cScaleFactor:= 2.0;
-    SupportNPOTT:= false;
     Step:= 0;
     ProgrTex:= nil;
+    SupportNPOTT:= false;
+//    cGPUVendor:= gvUnknown;
 
     // init all ammo name texture pointers
     for ai:= Low(TAmmoType) to High(TAmmoType) do
