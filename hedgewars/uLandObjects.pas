@@ -409,24 +409,24 @@ while not eof(f) do
     if key = 'sky' then
         begin
         i:= Pos(',', s);
-        c1.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        SkyColor.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
-        c1.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        SkyColor.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
-        c1.b:= StrToInt(Trim(s));
+        SkyColor.b:= StrToInt(Trim(s));
         if cGrayScale then
             begin
-            t:= round(c1.r * RGB_LUMINANCE_RED + c1.g * RGB_LUMINANCE_GREEN + c1.b * RGB_LUMINANCE_BLUE);
+            t:= round(SkyColor.r * RGB_LUMINANCE_RED + SkyColor.g * RGB_LUMINANCE_GREEN + SkyColor.b * RGB_LUMINANCE_BLUE);
             if t > 255 then t:= 255;
-            c1.r:= t;
-            c1.g:= t;
-            c1.b:= t
+            SkyColor.r:= t;
+            SkyColor.g:= t;
+            SkyColor.b:= t
             end;
-        glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99);
-        SDSkyColor.r:= byte(c1.r * SDTint div 255);
-        SDSkyColor.g:= byte(c1.g * SDTint div 255);
-        SDSkyColor.b:= byte(c1.b * SDTint div 255);
+        glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99);
+        SDSkyColor.r:= byte(SkyColor.r * SDTint div 255);
+        SDSkyColor.g:= byte(SkyColor.g * SDTint div 255);
+        SDSkyColor.b:= byte(SkyColor.b * SDTint div 255);
         end
     else if key = 'border' then
         begin
@@ -646,24 +646,24 @@ while not eof(f) do
         if ((cReducedQuality and rqNoBackground) <> 0) then
             begin
             i:= Pos(',', s);
-            c1.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            RQSkyColor.r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             i:= Pos(',', s);
-            c1.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+            RQSkyColor.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
-            c1.b:= StrToInt(Trim(s));
+            RQSkyColor.b:= StrToInt(Trim(s));
             if cGrayScale then
                 begin
-                t:= round(c1.r * RGB_LUMINANCE_RED + c1.g * RGB_LUMINANCE_GREEN + c1.b * RGB_LUMINANCE_BLUE);
+                t:= round(RQSkyColor.r * RGB_LUMINANCE_RED + RQSkyColor.g * RGB_LUMINANCE_GREEN + RQSkyColor.b * RGB_LUMINANCE_BLUE);
                 if t > 255 then t:= 255;
-                c1.r:= t;
-                c1.g:= t;
-                c1.b:= t
+                RQSkyColor.r:= t;
+                RQSkyColor.g:= t;
+                RQSkyColor.b:= t
                 end;
-            glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99);
-            SDSkyColor.r:= byte(c1.r * SDTint div 255);
-            SDSkyColor.g:= byte(c1.g * SDTint div 255);
-            SDSkyColor.b:= byte(c1.b * SDTint div 255);
+            glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
+            SDSkyColor.r:= byte(RQSkyColor.r * SDTint div 255);
+            SDSkyColor.g:= byte(RQSkyColor.g * SDTint div 255);
+            SDSkyColor.b:= byte(RQSkyColor.b * SDTint div 255);
             end
         end
     end;

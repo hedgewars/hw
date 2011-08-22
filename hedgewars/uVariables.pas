@@ -2294,7 +2294,7 @@ var
     bShowFinger: boolean;
     Frames: Longword;
     WaterColor, DeepWaterColor: TSDL_Color;
-    SDSkyColor: TSDL_Color;
+    SkyColor, RQSkyColor, SDSkyColor: TSDL_Color;
     SkyOffset: LongInt;
     HorizontOffset: LongInt;
 {$IFDEF COUNTTICKS}

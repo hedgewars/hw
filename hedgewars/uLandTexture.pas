@@ -26,6 +26,7 @@ procedure initModule;
 procedure freeModule;
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
 procedure DrawLand(dX, dY: LongInt);
+procedure ResetLand;
 
 implementation
 uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender;
@@ -122,29 +123,34 @@ end;
 procedure initModule;
 begin
     if (cReducedQuality and rqBlurryLand) = 0 then
-    begin
+        begin
         LANDTEXARW:= LAND_WIDTH div TEXSIZE;
         LANDTEXARH:= LAND_HEIGHT div TEXSIZE;
-    end
+        end
     else
-    begin
+        begin
         LANDTEXARW:= (LAND_WIDTH div TEXSIZE) div 2;
         LANDTEXARH:= (LAND_HEIGHT div TEXSIZE) div 2;
-    end;
+        end;
 
     SetLength(LandTextures, LANDTEXARW, LANDTEXARH);
 end;
 
-procedure freeModule;
+procedure ResetLand;
 var x, y: LongInt;
 begin
     for x:= 0 to LANDTEXARW -1 do
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
-            begin
-                FreeTexture(tex);
+                begin
+                if tex <> nil then FreeTexture(tex);
                 tex:= nil;
-            end;
+                end;
+end;
+
+procedure freeModule;
+begin
+    ResetLand;
     if LandBackSurface <> nil then
         SDL_FreeSurface(LandBackSurface);
     LandBackSurface:= nil;
