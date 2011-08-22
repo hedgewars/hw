@@ -56,6 +56,7 @@ function TestColl(x, y, r: LongInt): boolean;
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
 function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
 function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
+function RateHammer(Me: PGear): LongInt;
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 function AIrndSign(num: LongInt): LongInt;
 
@@ -295,6 +296,29 @@ for i:= 0 to Targets.Count do
             end;
          end;        
 RateShotgun:= rate * 1024;
+end;
+
+function RateHammer(Me: PGear): LongInt;
+var x, y, i, r, rate: LongInt;
+begin
+// hammer hit shift against attecker hog is 10
+x:= hwRound(Me^.X) + hwSign(Me^.dX) * 10;
+y:= hwRound(Me^.Y);
+rate:= 0;
+
+for i:= 0 to Pred(Targets.Count) do
+    with Targets.ar[i] do
+         begin
+         // hammer hit radius is 8, shift is 10
+         r:= hwRound(DistanceI(Point.x - x, Point.y - y));
+
+         if r <= 18 then
+            if Score > 0 then 
+                inc(rate, Score div 3)
+                else 
+                inc(rate, Score div 3 * friendlyfactor div 100)
+         end;
+RateHammer:= rate * 1024;
 end;
 
 function HHJump(Gear: PGear; JumpType: TJumpType; var GoInfo: TGoInfo): boolean;
