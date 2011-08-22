@@ -72,6 +72,7 @@ private slots:
     void GoToNewScheme();
     void GoToPage(int id);
     void GoBack();
+    void OpenSnapshotFolder();
     QString getDemoArguments();
     void AssociateFiles();
     void btnExitPressed();

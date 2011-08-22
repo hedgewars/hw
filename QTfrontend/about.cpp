@@ -39,7 +39,6 @@ About::About(QWidget * parent) :
     mainLayout->addWidget(imageLabel, 0, 0, 2, 1);
 
     QLabel *lbl1 = new QLabel(this);
-
     lbl1->setOpenExternalLinks(true);
     lbl1->setText(
             "<style type=\"text/css\">"
