@@ -34,7 +34,7 @@ set(ANDROID_NDK /home/richard/SoftDev/android/android-ndk-r5b)
 set(ANDROID_SDK /home/richard/SoftDev/android/android-sdk-linux_86)
 set(FPC_DIR /home/richard/SoftDev/fpc-2.4.4)
 set(SDL_DIR /home/richard/Downloads/android-project)
-set(LUA_DIR /home/richard/Downloads/lua.5.1.4)
+set(LUA_DIR /home/richard/Downloads/lua-5.1.4)
 
 if(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
 
@@ -65,12 +65,13 @@ if(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
             freetype
            ) 
          foreach(DIR ${DirsToCopy})
-             EXECUTE_PROCESS( 
-	        COMMAND ${CMAKE_COMMAND} 
-                -E copy_directory 
+             exec_program( 
+	        ${CMAKE_COMMAND} 
+                ARGS -E copy_directory 
 	        ${SDL_DIR}/jni/${DIR}
 	        ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/${DIR}
         	)
+             MESSAGE("Moved ${DIR}")
          endforeach(DIR)
         exec_program(${HGCOMMAND}
 	            ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
@@ -78,30 +79,43 @@ if(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
         exec_program(${HGCOMMAND}
 		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
 		    )
+        exec_program(${HGCOMMAND}
+		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.c
+		    )
+
+        exec_program(${HGCOMMAND}
+		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.h
+		    )
+
+
     else(SDL_DIR)
         MESSAGE("Android port of SDL not moved..")
     endif(SDL_DIR)
 
+ 
     if(LUA_DIR)
-        EXECUTE_PROCESS(
-                        ${CMAKE_COMMAND}
-                        -E copy_directory
-                        ${LUA_DIR}/src
-                        ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4
-                       )
+        MESSAGE("Moving Lua dir..") 
+
+        exec_program(
+                ${CMAKE_COMMAND}
+                ARGS -E copy_directory
+                ${LUA_DIR}/src
+                ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4
+                )
+        MESSAGE("Lua has been moved.")
+
         exec_program(${HGCOMMAND}
 		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4/Android.mk
 		    )
         exec_program(${HGCOMMAND}
 		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4/llex.c
 		    )
-        MESSAGE("Lua has been moved.")
     else(LUA_DIR)
         MESSAGE("Lua hasn't been moved..")
     endif(LUA_DIR)
 
 else(ANDROID_AND AND ANDROID_SDK AND FPC_DIR)
-    MESSAGE("Android port files not created, edit top of ${CMAKE_CURRENT_SOURCE_DIR}/CMakeList.txt to created android specific files")
+    MESSAGE("Android port files not created, edit top of ${CMAKE_CURRENT_SOURCE_DIR}/CMakeList.txt to create android specific files")
 endif(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
 
 
