@@ -300,7 +300,7 @@ end;
 procedure PlayNextVoice;
 var i : LongInt;
 begin
-    if (LastVoice.snd <> sndNone) and (lastChan[LastVoice.snd] <> -1) and (Mix_Playing(lastChan[LastVoice.snd]) <> 0) then exit;
+    if (not isSoundEnabled) or fastUntilLag or (LastVoice.snd = sndNone) or (lastChan[LastVoice.snd] = -1) or (Mix_Playing(lastChan[LastVoice.snd]) = 0) then exit;
     i:= 0;
     while (i<8) and (VoiceList[i].snd = sndNone) do inc(i);
     
