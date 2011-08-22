@@ -80,6 +80,7 @@ About::About(QWidget * parent) :
             "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;<br>"
             "Engine and frontend improvements: Henrik Rostedt &lt;<a href=\"mailto:henrik.rostedt@gmail.com\">henrik.rostedt@gmail.com</a>&gt;<br>"
             "Lua game modes and missions: John Lambert &lt;<a href=\"mailto:redgrinner@gmail.com\">redgrinner@gmail.com</a>&gt;<br>"
+            "Frontend improvements: Mayur Pawashe &lt;<a href=\"mailto:zorgiepoo@gmail.com\">zorgiepoo@gmail.com</a>&gt;<br>"
             "Android port: Richard Deurwaarder &lt;<a href=\"mailto:xeli@xelification.com\">xeli@xelification.com</a>&gt;<br>"
             "</p><h2>" +
 
