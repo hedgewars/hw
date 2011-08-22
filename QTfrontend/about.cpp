@@ -26,17 +26,17 @@ About::About(QWidget * parent) :
   QWidget(parent)
 {
     QGridLayout *mainLayout = new QGridLayout(this);
-        QLabel *imageLabel = new QLabel;
-        QImage image(":/res/Hedgehog.png");
 
-        imageLabel->setPixmap(QPixmap::fromImage(image));
-        imageLabel->setScaledContents(true);
+    QLabel *imageLabel = new QLabel;
+    QImage image(":/res/Hedgehog.png");
+    imageLabel->setPixmap(QPixmap::fromImage(image));
+    imageLabel->setScaledContents(true);
+    imageLabel->setMinimumWidth(2.8);
+    imageLabel->setMaximumWidth(280);
+    imageLabel->setMinimumHeight(30);
+    imageLabel->setMaximumHeight(300);
 
-        imageLabel->setMinimumWidth(2.8);
-        imageLabel->setMaximumWidth(280);
-        imageLabel->setMinimumHeight(30);
-        imageLabel->setMaximumHeight(300);
-        mainLayout->addWidget(imageLabel, 0, 0, 2, 1);
+    mainLayout->addWidget(imageLabel, 0, 0, 2, 1);
 
     QLabel *lbl1 = new QLabel(this);
 
