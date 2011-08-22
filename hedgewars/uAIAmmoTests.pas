@@ -558,10 +558,13 @@ repeat
      begin
      x:= x + vX * 8;
      y:= y + vY * 8;
-     valueResult:= RateShotgun(Me, rx, ry) * 2;
-     if valueResult = 0 then valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
-                   else dec(valueResult, Level * 4000);
-     exit(valueResult)
+     valueResult:= RateShotgun(Me, rx, ry);
+     
+     if valueResult = 0 then 
+        valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
+        else 
+        dec(valueResult, Level * 4000);
+     exit(valueResult * 27 div 20) // 27/20 is reuse bonus
      end
 until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4)
     or (x.isNegative)

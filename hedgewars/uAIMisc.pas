@@ -231,10 +231,11 @@ with Targets.ar[Targets.Count] do
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
          begin
-         dmg:= r + cHHRadius div 2 - hwRound(DistanceI(Point.x - x, Point.y - y));
+         dmg:= hwRound(_0_01 * cDamageModifier
+            * min((r + cHHRadius div 2 - DistanceI(Point.x - x, Point.y - y).Round) div 2, r) * cDamagePercent);
+
          if dmg > 0 then
             begin
-            dmg:= min(dmg div 2, r);
             if dmg >= abs(Score) then
                if Score > 0 then inc(rate, KillScore)
                             else dec(rate, KillScore * friendlyfactor div 100)
@@ -255,6 +256,7 @@ for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
          begin
          dmg:= r - hwRound(DistanceI(Point.x - x, Point.y - y));
+         dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
          if dmg > 0 then
             begin
             if power >= abs(Score) then
@@ -269,8 +271,6 @@ RateShove:= rate * 1024
 end;
 
 function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
-const
-  REUSE_BONUS = 1.35;
 var i, dmg, rate: LongInt;
 begin
 rate:= 0;
@@ -285,15 +285,15 @@ with Targets.ar[Targets.Count] do
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
          begin
-         dmg:= min(cHHRadius + cShotgunRadius - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
-         dmg := round(dmg * REUSE_BONUS);
+         dmg:= min(cHHRadius + cShotgunRadius + 4 - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
+         dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
          if dmg > 0 then
             begin
                 if dmg >= abs(Score) then dmg := KillScore;
                 if Score > 0 then inc(rate, dmg)
                 else dec(rate, dmg * friendlyfactor div 100);
             end;
-         end;
+         end;        
 RateShotgun:= rate * 1024;
 end;
 
