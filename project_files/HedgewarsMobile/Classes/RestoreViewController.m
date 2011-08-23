@@ -37,7 +37,7 @@
 
     if (theButton.tag != 0) {
         if (self.interfaceBridge == nil) {
-            GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+            GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self.parentViewController];
             self.interfaceBridge = bridge;
             [bridge release];
         }
