@@ -35,56 +35,14 @@
 
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, initialScreenCount, initialOrientation,
-            lowerIndicator, savesIndicator, confirmButton, grenadeTimeSegment;
+@synthesize popoverController, popupMenu, helpPage, amvc, initialScreenCount, lowerIndicator, savesIndicator,
+            confirmButton, grenadeTimeSegment;
 
 #pragma mark -
 #pragma mark rotation
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
-}
-
-// while in dual head the above rotation functions are not called
--(void) handleRotationEvent:(NSNotification *)notification {
-    if (isGameRunning() == NO)
-        return;
-
-    UIView *sdlView = nil;
-    for (UIView *oneView in [[[UIApplication sharedApplication] keyWindow] subviews])
-        if ([oneView isMemberOfClass:[SDL_uikitopenglview class]]) {
-            sdlView = (UIView *)oneView;
-            break;
-        }
-
-    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-    NSInteger angle_left = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 180 : 0;
-    NSInteger angle_right = (self.initialOrientation == UIInterfaceOrientationLandscapeLeft) ? 0 : 180;
-
-    NSString *model = getModelType();
-    if (IS_VERY_POWERFUL(model)) {
-        [UIView beginAnimations:@"overlay rotation" context:NULL];
-        [UIView setAnimationDuration:0.7];
-    }
-    switch (orientation) {
-        case UIDeviceOrientationLandscapeLeft:
-            self.view.frame = [[UIScreen mainScreen] bounds];
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-            if (IS_DUALHEAD() == NO)
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(angle_left));
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            self.view.frame = [[UIScreen mainScreen] bounds];
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            if (IS_DUALHEAD() == NO)
-                sdlView.transform = CGAffineTransformMakeRotation(degreesToRadians(angle_right));
-            break;
-        default:
-            // a debug log would spam too much
-            break;
-    }
-    if (IS_VERY_POWERFUL(model))
-        [UIView commitAnimations];
 }
 
 #pragma mark -
@@ -94,7 +52,6 @@
         isAttacking = NO;
         isPopoverVisible = NO;
         initialScreenCount = (IS_DUALHEAD() ? 2 : 1);
-        initialOrientation = 0;
         lowerIndicator = nil;
         savesIndicator = nil;
     }
@@ -102,27 +59,10 @@
 }
 
 -(void) viewDidLoad {
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    self.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width);
-    self.view.center = CGPointMake(self.view.frame.size.height/2, self.view.frame.size.width/2);
+    // fill all the screen available as sdlview disables autoresizing
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    self.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
 
-    // set initial orientation of the controller orientation
-    switch (self.interfaceOrientation) {
-        case UIDeviceOrientationLandscapeLeft:
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(90));
-            break;
-        case UIDeviceOrientationLandscapeRight:
-            self.view.transform = CGAffineTransformMakeRotation(degreesToRadians(-90));
-            break;
-        default:
-            break;
-    }
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(handleRotationEvent:)
-                                                 name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
-    
     // the timer used to dim the overlay
     dimTimer = [[NSTimer alloc] initWithFireDate:(IS_DUALHEAD()) ? HIDING_TIME_NEVER : [NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
@@ -139,8 +79,7 @@
                                                  name:@"show help ingame"
                                                object:nil];
 
-    // for iOS >= 3.2
-    if ([UIScreen respondsToSelector:@selector(screens)]) {
+    if (IS_IPAD()) {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(numberOfScreensIncreased)
                                                      name:UIScreenDidConnectNotification
@@ -161,7 +100,6 @@
 }
 
 -(void) viewDidUnload {
-    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     [NSObject cancelPreviousPerformRequestsWithTarget:self
@@ -407,14 +345,6 @@
     self.helpPage.view.alpha = 1;
     [UIView commitAnimations];
     doNotDim();
-}
-
-// present a further check before closing game
--(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
-    if ([actionSheet cancelButtonIndex] != buttonIndex)
-        HW_terminate(NO);
-    else
-        HW_pause();
 }
 
 // show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize

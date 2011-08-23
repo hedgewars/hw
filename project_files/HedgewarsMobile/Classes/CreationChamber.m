@@ -28,7 +28,6 @@ void createSettings () {
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"music"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sound"];
     [settings setObject:[NSNumber numberWithBool:NO] forKey:@"classic_menu"];
-    [settings setObject:[NSNumber numberWithBool:YES] forKey:@"multitasking"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sync_ws"];
 
     // limit graphic usage on older devices

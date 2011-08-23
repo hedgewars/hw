@@ -69,14 +69,7 @@
 
     if (placingPoint.x == -1 || placingPoint.y == -1)
         placingPoint = container.center;
-    if (IS_DUALHEAD() == YES) {
-        UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
-        if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight)
-            self.view.center = CGPointMake(placingPoint.y, placingPoint.x);
-        else
-            self.view.center = CGPointMake(placingPoint.x, placingPoint.y);
-    } else
-        self.view.center = CGPointMake(placingPoint.y, placingPoint.x);
+    self.view.center = placingPoint;
 
     self.isVisible = YES;
     if (IS_IPAD() == NO)
@@ -87,8 +80,7 @@
     if (self.isVisible)
         [self.view removeFromSuperview];
     self.isVisible = NO;
-    placingPoint.x = self.view.center.y;
-    placingPoint.y = self.view.center.x;
+    placingPoint = self.view.center;
     if (IS_IPAD() == NO)
         HW_pauseToggle();
 }

@@ -1002,7 +1002,8 @@ begin
     x:= x or (SDL_GetNumVideoDisplays() - 1);
     y:= y or (SDL_GetNumVideoDisplays() - 1);
 
-    flags:= flags or SDL_WINDOW_BORDERLESS; // do not use SDL_WINDOW_RESIZABLE on ios (yet)
+    SDL_SetHint('SDL_IOS_ORIENTATIONS','LandscapeLeft LandscapeRight');
+    flags:= flags or SDL_WINDOW_BORDERLESS or SDL_WINDOW_RESIZABLE;
 {$ENDIF}
 
     SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);

@@ -100,7 +100,6 @@ begin
         gsExit: begin
                 isTerminated:= true;
                 end;
-        gsSuspend: exit;
         end;
 
 {$IFDEF SDL13}

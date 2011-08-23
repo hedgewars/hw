@@ -55,16 +55,16 @@
 #pragma mark -
 // overlay with controls, become visible later, with a transparency effect since the sdlwindow is not yet created
 -(void) displayOverlayLater:(id) object {
-    [self.overlayController setInitialOrientation:self.parentController.interfaceOrientation];
-
-    UIWindow *gameWindow = (IS_DUALHEAD() ? [HedgewarsAppDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow]);
-    [gameWindow addSubview:self.overlayController.view];
+    // in order to get rotation events we have to insert the view inside the first view of the second window
+    // when multihead we have to make sure that overlay is displayed in the touch-enabled window
+    UIView *injected = (IS_DUALHEAD() ? self.parentController.view : UIVIEW_HW_SDLVIEW);
+    [injected addSubview:self.overlayController.view];
 }
 
 // main routine for calling the actual game engine
 -(void) startGameEngine {
     const char *gameArgs[11];
-    NSInteger width, height, orientation;
+    NSInteger width, height;
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
@@ -73,17 +73,15 @@
         CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
         width = (int) screenBounds.size.width;
         height = (int) screenBounds.size.height;
-        orientation = 0;
     } else {
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
         width = (int) screenBounds.size.height;
         height = (int) screenBounds.size.width;
-        orientation = (self.parentController.interfaceOrientation == UIDeviceOrientationLandscapeLeft) ? -90 : 90;
     }
 
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width];
     NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height];
-    NSString *rotation = [[NSString alloc] initWithFormat:@"%d", orientation];
+    NSString *rotation = [[NSString alloc] initWithString:@"0"];
     BOOL enhanced = [[settings objectForKey:@"enhanced"] boolValue];
 
     NSString *modelId = getModelType();
