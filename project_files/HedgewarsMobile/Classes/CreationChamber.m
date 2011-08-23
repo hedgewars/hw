@@ -30,9 +30,6 @@ void createSettings () {
     [settings setObject:[NSNumber numberWithBool:NO] forKey:@"classic_menu"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sync_ws"];
 
-    // limit graphic usage on older devices
-    [settings setObject:[NSNumber numberWithBool:IS_VERY_POWERFUL(getModelType())] forKey:@"enhanced"];
-
     // don't overwrite these two strings when present
     if ([settings objectForKey:@"username"] == nil)
         [settings setObject:@"" forKey:@"username"];
