@@ -1009,7 +1009,7 @@ begin
     SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
-    flags:= SDL_OPENGL;// or SDL_RESIZABLE;
+    flags:= SDL_OPENGL or SDL_RESIZABLE;
     if cFullScreen then
         flags:= flags or SDL_FULLSCREEN;
 

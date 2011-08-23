@@ -211,7 +211,7 @@ const
     SDL_JOYBUTTONDOWN   = 10;
     SDL_JOYBUTTONUP     = 11;
     SDL_QUITEV          = 12;
-    SDL_VIDEORESIZE     = 16; // TODO: outdated? no longer in SDL 1.3?
+    SDL_VIDEORESIZE     = 16;
 
     // SDL_Surface flags
     SDL_SWSURFACE   = $00000000;
@@ -608,7 +608,7 @@ type
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
             SDL_QUITEV: (quit: TSDL_QuitEvent);
             //SDL_SYSWMEVENT,SDL_EVENT_RESERVEDA,SDL_EVENT_RESERVEDB
-            //SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
+            SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
 {$ENDIF}
         end;
 

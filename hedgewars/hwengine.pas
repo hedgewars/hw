@@ -175,6 +175,15 @@ begin
                         if prevFocusState xor cHasFocus then
                             onFocusStateChanged()
                         end;
+                SDL_VIDEORESIZE: begin
+                    // using lower values causes widget overlap and video issues
+                    if event.resize.w > 768 then cScreenWidth:= event.resize.w
+                    else cScreenWidth:= 768;
+                    if event.resize.h > 576 then cScreenHeight:= event.resize.h
+                    else cScreenHeight:= 576;
+                    ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+                    WriteLnToConsole('window resize');
+                    end;
 {$ENDIF}
                 SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
                 SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
