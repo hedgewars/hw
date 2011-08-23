@@ -241,8 +241,8 @@ begin
 {$ENDIF}
     cMinScreenWidth:= cScreenWidth;
     cMinScreenHeight:= cScreenHeight;
-    if 768 < cMinScreenWidth then cMinScreenWidth:= 768;
-    if 576 < cMinScreenHeight then cMinScreenHeight:= 576;
+    if 480 < cMinScreenWidth then cMinScreenWidth:= 480;
+    if 320 < cMinScreenHeight then cMinScreenHeight:= 320;
 
     initEverything(true);
 
