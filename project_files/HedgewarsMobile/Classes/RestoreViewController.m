@@ -23,7 +23,7 @@
 #import "GameInterfaceBridge.h"
 
 @implementation RestoreViewController
-
+@synthesize interfaceBridge;
 
 // Override to allow orientations other than the default portrait orientation.
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -36,19 +36,18 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if (theButton.tag != 0) {
-        GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self.parentViewController];
+        if (self.interfaceBridge == nil) {
+            GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+            self.interfaceBridge = bridge;
+            [bridge release];
+        }
         [self.parentViewController dismissModalViewControllerAnimated:NO];
-        [bridge startSaveGame:[defaults objectForKey:@"savedGamePath"]];
-        [bridge release];
+        [self.interfaceBridge startSaveGame:[defaults objectForKey:@"savedGamePath"]];
     } else {
         [defaults setObject:@"" forKey:@"savedGamePath"];
         [defaults synchronize];
         [self.parentViewController dismissModalViewControllerAnimated:YES];
     }
-}
-
--(void) didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidLoad {
@@ -63,11 +62,18 @@
     [super viewDidLoad];
 }
 
+-(void) didReceiveMemoryWarning {
+    self.interfaceBridge = nil;
+    [super didReceiveMemoryWarning];
+}
+
 -(void) viewDidUnload {
+    self.interfaceBridge = nil;
     [super viewDidUnload];
 }
 
 -(void) dealloc {
+    releaseAndNil(interfaceBridge);
     [super dealloc];
 }
 

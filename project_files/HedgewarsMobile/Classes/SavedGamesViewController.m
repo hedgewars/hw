@@ -24,7 +24,7 @@
 #import "CommodityFunctions.h"
 
 @implementation SavedGamesViewController
-@synthesize tableView, listOfSavegames;
+@synthesize tableView, listOfSavegames, interfaceBridge;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -209,13 +209,15 @@
 
     [(EditableCellView *)[self.tableView cellForRowAtIndexPath:indexPath] save:nil];
 
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+    if (self.interfaceBridge == nil) {
+        GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+        self.interfaceBridge = bridge;
+        [bridge release];
+    }
 
     NSString *filePath = [[NSString alloc] initWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:[indexPath row]]];
-    [bridge startSaveGame:filePath];
+    [self.interfaceBridge startSaveGame:filePath];
     [filePath release];
-
-    [bridge release];
 }
 
 #pragma mark -
@@ -238,6 +240,7 @@
 #pragma mark Memory Management
 -(void) didReceiveMemoryWarning {
     self.listOfSavegames = nil;
+    self.interfaceBridge = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
@@ -245,6 +248,7 @@
 -(void) viewDidUnload {
     self.tableView = nil;
     self.listOfSavegames = nil;
+    self.interfaceBridge = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -252,6 +256,7 @@
 -(void) dealloc {
     releaseAndNil(tableView);
     releaseAndNil(listOfSavegames);
+    releaseAndNil(interfaceBridge);
     [super dealloc];
 }
 

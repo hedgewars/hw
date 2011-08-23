@@ -22,14 +22,18 @@
 #import <UIKit/UIKit.h>
 #import "EditableCellView.h"
 
+@class GameInterfaceBridge;
+
 @interface SavedGamesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource,
                                                         EditableCellViewDelegate, UIActionSheetDelegate>  {
     UITableView *tableView;
     NSMutableArray *listOfSavegames;
+    GameInterfaceBridge *interfaceBridge;
 }
 
 @property (nonatomic,retain) IBOutlet UITableView *tableView;
 @property (nonatomic,retain) NSMutableArray *listOfSavegames;
+@property (nonatomic,retain) GameInterfaceBridge *interfaceBridge;
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) toggleEdit:(id) sender;

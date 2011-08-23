@@ -25,6 +25,7 @@
 @class MapConfigViewController;
 @class TeamConfigViewController;
 @class SchemeWeaponConfigViewController;
+@class GameInterfaceBridge;
 
 @interface GameConfigViewController : UIViewController {
     UIView *imgContainer;
@@ -33,6 +34,7 @@
     MapConfigViewController *mapConfigViewController;
     TeamConfigViewController *teamConfigViewController;
     SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
+    GameInterfaceBridge *interfaceBridge;
 }
 
 @property (retain) UIView *imgContainer;
@@ -40,6 +42,7 @@
 @property (nonatomic,retain) MapConfigViewController *mapConfigViewController;
 @property (nonatomic,retain) TeamConfigViewController *teamConfigViewController;
 @property (nonatomic,retain) SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
+@property (nonatomic,retain) GameInterfaceBridge *interfaceBridge;
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) segmentPressed:(id) sender;
