@@ -1159,7 +1159,7 @@ if isCursorVisible then
      with CurrentHedgehog^ do
        if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
          begin
-         if CurAmmoType = amNapalm then
+         if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) then
            DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
          i:= GetAmmoEntry(CurrentHedgehog^)^.Pos;
          with Ammoz[CurAmmoType] do
