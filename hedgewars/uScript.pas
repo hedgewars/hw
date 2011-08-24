@@ -1590,7 +1590,7 @@ ScriptCall('onGameInit');
 // pop game variables
 ParseCommand('seed ' + ScriptGetString('Seed'), true);
 ParseCommand('template_filter ' + IntToStr(ScriptGetInteger('TemplateFilter')), true);
-ParseCommand('mapgen' + IntToStr(ScriptGetInteger('MapGen')), true);
+ParseCommand('mapgen ' + IntToStr(ScriptGetInteger('MapGen')), true);
 ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
 ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
 ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
