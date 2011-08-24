@@ -37,6 +37,7 @@
 #include <QCryptographicHash>
 #include <QSignalMapper>
 #include <QShortcut>
+#include <QDesktopServices>
 
 #include "hwform.h"
 #include "game.h"
@@ -218,6 +219,7 @@ HWForm::HWForm(QWidget *parent)
     connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageRoomsList->BtnAdmin, ID_PAGE_ADMIN);
 
+    connect(ui.pageInfo->BtnSnapshots, SIGNAL(clicked()), this, SLOT(OpenSnapshotFolder()));
     connect(ui.pageInfo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageGameStats->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -574,6 +576,12 @@ void HWForm::GoBack()
 
     if (curid == ID_PAGE_SCHEME)
         ammoSchemeModel->Save();
+}
+
+void HWForm::OpenSnapshotFolder()
+{
+    QString path = QDir::toNativeSeparators(cfgdir->absolutePath() + "/Screenshots");
+    QDesktopServices::openUrl(QUrl("file:///" + path));
 }
 
 void HWForm::btnExitPressed()

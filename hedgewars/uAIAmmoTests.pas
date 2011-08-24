@@ -43,6 +43,7 @@ function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttac
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
     TAmmoTest = record
@@ -101,7 +102,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestShotgun;     flags: 0), // amSineGun
             (proc: nil;              flags: 0), // amFlamethrower
             (proc: @TestGrenade;     flags: 0), // amSMine
-            (proc: @TestFirePunch;   flags: 0), // amHammer
+            (proc: @TestHammer;      flags: 0), // amHammer
             (proc: nil;              flags: 0), // amResurrector
             (proc: nil;              flags: 0), // amDrillStrike
             (proc: @TestSnowball;    flags: 0), // amSnowball
@@ -558,10 +559,13 @@ repeat
      begin
      x:= x + vX * 8;
      y:= y + vY * 8;
-     valueResult:= RateShotgun(Me, rx, ry) * 2;
-     if valueResult = 0 then valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
-                   else dec(valueResult, Level * 4000);
-     exit(valueResult)
+     valueResult:= RateShotgun(Me, rx, ry);
+     
+     if valueResult = 0 then 
+        valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
+        else 
+        dec(valueResult, Level * 4000);
+     exit(valueResult * 27 div 20) // 27/20 is reuse bonus
      end
 until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4)
     or (x.isNegative)
@@ -660,6 +664,23 @@ else
     inc(valueResult);
 
 TestFirePunch:= valueResult;
+end;
+
+function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+var rate: LongInt;
+begin
+Level:= Level; // avoid compiler hint
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.Power:= 1;
+ap.Angle:= 0;
+         
+if (Abs(hwRound(Me^.X) + hwSign(Me^.dX) * 10 - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) > 20) then
+    rate:= 0
+    else
+    rate:= RateHammer(Me);
+if rate = 0 then rate:= BadTurn;
+TestHammer:= rate;
 end;
 
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;

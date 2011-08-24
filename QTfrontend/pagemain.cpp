@@ -104,14 +104,12 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!", "Tips");
         // The following tip will require links to app store entries first.
         //Tips << tr("Want to play Hedgewars any time? Grab the Mobile version for %1 and %2.", "Tips").arg("").arg("");
+        // the ios version is located here: http://itunes.apple.com/us/app/hedgewars/id391234866
         Tips << tr("Keep your video card drivers up to date to avoid issues playing the game.", "Tips");
-        //Tips << tr("", "Tips");
-#ifndef __APPLE__
         Tips << tr("You're able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.", "Tips");
-#endif
 #ifdef _WIN32
         Tips << tr("You can find your Hedgewars configuration files under \"My Documents\\Hedgewars\". Create backups or take the files with you, but don't edit them by hand.", "Tips");
-#elif defined __APPLE__                                                                                                                     
+#elif defined __APPLE__
         Tips << tr("You can find your Hedgewars configuration files under \"Library/Application Support/Hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
 #else  
         Tips << tr("You can find your Hedgewars configuration files under \".hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");

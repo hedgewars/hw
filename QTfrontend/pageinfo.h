@@ -30,6 +30,7 @@ class PageInfo : public AbstractPage
 public:
     PageInfo(QWidget* parent = 0);
 
+    QPushButton *BtnSnapshots;
     QPushButton *BtnBack;
     About *about;
 };

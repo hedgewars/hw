@@ -2300,8 +2300,7 @@ begin
     Gear^.doStep := @doStepFirePunchWork;
     DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y + _1, _0_5, _0, cHHRadius * 4, 5);
 
-    PlaySound(TSound(ord(sndFirePunch1) + GetRandom(6)), HHGear^.Hedgehog^.Team^.
-    voicepack)
+    AddVoice(TSound(ord(sndFirePunch1) + GetRandom(6)), HHGear^.Hedgehog^.Team^.voicepack)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
