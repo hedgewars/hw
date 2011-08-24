@@ -26,20 +26,19 @@ About::About(QWidget * parent) :
   QWidget(parent)
 {
     QGridLayout *mainLayout = new QGridLayout(this);
-        QLabel *imageLabel = new QLabel;
-        QImage image(":/res/Hedgehog.png");
 
-        imageLabel->setPixmap(QPixmap::fromImage(image));
-        imageLabel->setScaledContents(true);
+    QLabel *imageLabel = new QLabel;
+    QImage image(":/res/Hedgehog.png");
+    imageLabel->setPixmap(QPixmap::fromImage(image));
+    imageLabel->setScaledContents(true);
+    imageLabel->setMinimumWidth(2.8);
+    imageLabel->setMaximumWidth(280);
+    imageLabel->setMinimumHeight(30);
+    imageLabel->setMaximumHeight(300);
 
-        imageLabel->setMinimumWidth(2.8);
-        imageLabel->setMaximumWidth(280);
-        imageLabel->setMinimumHeight(30);
-        imageLabel->setMaximumHeight(300);
-        mainLayout->addWidget(imageLabel, 0, 0, 2, 1);
+    mainLayout->addWidget(imageLabel, 0, 0, 2, 1);
 
     QLabel *lbl1 = new QLabel(this);
-
     lbl1->setOpenExternalLinks(true);
     lbl1->setText(
             "<style type=\"text/css\">"
@@ -80,6 +79,7 @@ About::About(QWidget * parent) :
             "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;<br>"
             "Engine and frontend improvements: Henrik Rostedt &lt;<a href=\"mailto:henrik.rostedt@gmail.com\">henrik.rostedt@gmail.com</a>&gt;<br>"
             "Lua game modes and missions: John Lambert &lt;<a href=\"mailto:redgrinner@gmail.com\">redgrinner@gmail.com</a>&gt;<br>"
+            "Frontend improvements: Mayur Pawashe &lt;<a href=\"mailto:zorgiepoo@gmail.com\">zorgiepoo@gmail.com</a>&gt;<br>"
             "Android port: Richard Deurwaarder &lt;<a href=\"mailto:xeli@xelification.com\">xeli@xelification.com</a>&gt;<br>"
             "</p><h2>" +
 

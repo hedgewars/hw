@@ -56,6 +56,7 @@ function TestColl(x, y, r: LongInt): boolean;
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
 function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
 function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
+function RateHammer(Me: PGear): LongInt;
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 function AIrndSign(num: LongInt): LongInt;
 
@@ -231,10 +232,11 @@ with Targets.ar[Targets.Count] do
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
          begin
-         dmg:= r + cHHRadius div 2 - hwRound(DistanceI(Point.x - x, Point.y - y));
+         dmg:= hwRound(_0_01 * cDamageModifier
+            * min((r + cHHRadius div 2 - DistanceI(Point.x - x, Point.y - y).Round) div 2, r) * cDamagePercent);
+
          if dmg > 0 then
             begin
-            dmg:= min(dmg div 2, r);
             if dmg >= abs(Score) then
                if Score > 0 then inc(rate, KillScore)
                             else dec(rate, KillScore * friendlyfactor div 100)
@@ -255,6 +257,7 @@ for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
          begin
          dmg:= r - hwRound(DistanceI(Point.x - x, Point.y - y));
+         dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
          if dmg > 0 then
             begin
             if power >= abs(Score) then
@@ -269,8 +272,6 @@ RateShove:= rate * 1024
 end;
 
 function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
-const
-  REUSE_BONUS = 1.35;
 var i, dmg, rate: LongInt;
 begin
 rate:= 0;
@@ -285,16 +286,39 @@ with Targets.ar[Targets.Count] do
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
          begin
-         dmg:= min(cHHRadius + cShotgunRadius - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
-         dmg := round(dmg * REUSE_BONUS);
+         dmg:= min(cHHRadius + cShotgunRadius + 4 - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
+         dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
          if dmg > 0 then
             begin
                 if dmg >= abs(Score) then dmg := KillScore;
                 if Score > 0 then inc(rate, dmg)
                 else dec(rate, dmg * friendlyfactor div 100);
             end;
-         end;
+         end;        
 RateShotgun:= rate * 1024;
+end;
+
+function RateHammer(Me: PGear): LongInt;
+var x, y, i, r, rate: LongInt;
+begin
+// hammer hit shift against attecker hog is 10
+x:= hwRound(Me^.X) + hwSign(Me^.dX) * 10;
+y:= hwRound(Me^.Y);
+rate:= 0;
+
+for i:= 0 to Pred(Targets.Count) do
+    with Targets.ar[i] do
+         begin
+         // hammer hit radius is 8, shift is 10
+         r:= hwRound(DistanceI(Point.x - x, Point.y - y));
+
+         if r <= 18 then
+            if Score > 0 then 
+                inc(rate, Score div 3)
+                else 
+                inc(rate, Score div 3 * friendlyfactor div 100)
+         end;
+RateHammer:= rate * 1024;
 end;
 
 function HHJump(Gear: PGear; JumpType: TJumpType; var GoInfo: TGoInfo): boolean;

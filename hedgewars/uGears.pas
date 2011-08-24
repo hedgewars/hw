@@ -962,11 +962,11 @@ if TurnTimeLeft > 0 then
                     and (not PlacingHogs)
                     and (CurrentHedgehog^.Gear <> nil)
                     and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
-                        PlaySound(sndHurry, CurrentTeam^.voicepack);
+                        AddVoice(sndHurry, CurrentTeam^.voicepack);
                 if ReadyTimeLeft > 0 then
                     begin
                     if ReadyTimeLeft = 2000 then
-                        PlaySound(sndComeonthen, CurrentTeam^.voicepack);
+                        AddVoice(sndComeonthen, CurrentTeam^.voicepack);
                     dec(ReadyTimeLeft)
                     end
                 else
@@ -1850,7 +1850,7 @@ if (FollowGear <> nil) then
     FindPlace(FollowGear, true, 0, LAND_WIDTH);
 
     if (FollowGear <> nil) then
-        PlaySound(sndReinforce, CurrentTeam^.voicepack)
+        AddVoice(sndReinforce, CurrentTeam^.voicepack)
     end
 end;
 

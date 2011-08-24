@@ -215,7 +215,7 @@ with Gear^,
 
         if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then xx:= - xx;
         if Ammoz[CurAmmoType].Ammo.AttackVoice <> sndNone then
-           PlaySound(Ammoz[CurAmmoType].Ammo.AttackVoice, CurrentTeam^.voicepack);
+           AddVoice(Ammoz[CurAmmoType].Ammo.AttackVoice, CurrentTeam^.voicepack);
 
 // Initiating alt attack
         if  (CurAmmoGear <> nil) and
@@ -741,8 +741,11 @@ procedure HedgehogChAngle(HHGear: PGear);
 var da: LongWord;
 begin
 with HHGear^.Hedgehog^ do
-    if (CurAmmoType = amRope)
-    and ((HHGear^.State and (gstMoving or gstHHJumping)) = gstMoving) then da:= 2 else da:= 1;
+    if ((CurAmmoType = amRope) and 
+        ((HHGear^.State and (gstMoving or gstHHJumping)) = gstMoving)) or
+       ((CurAmmoType = amPortalGun) and 
+        ((HHGear^.State and gstMoving) <> 0)) then da:= 2
+    else da:= 1;
 
 if (((HHGear^.Message and gmPrecise) = 0) or ((GameTicks mod 5) = 1)) then
     if ((HHGear^.Message and gmUp) <> 0) and (HHGear^.Angle >= CurMinAngle + da) then dec(HHGear^.Angle, da)
