@@ -940,6 +940,25 @@ begin
     lc_addammo:= 0
 end;
 
+function lc_getammocount(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+    ammo : PAmmo;
+begin
+    if (lua_gettop(L) = 2) then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then 
+            begin
+            ammo:= GetAmmoEntry(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)));
+            if ammo^.AmmoType = amNothing then lua_pushinteger(L, 0)
+            else lua_pushinteger(L, ammo^.Count)
+            end
+        else lua_pushinteger(L, 0)
+        end
+    else LuaError('Lua: Wrong number of parameters passed to GetAmmoCount!');
+    lc_getammocount:= 0
+end;
+
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1544,6 +1563,8 @@ if not ScriptLoaded then
 // push game variables so they may be modified by the script
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
+ScriptSetInteger('TemplateFilter', cTemplateFilter);
+ScriptSetInteger('MapGen', cMapGen);
 ScriptSetInteger('ScreenHeight', cScreenHeight);
 ScriptSetInteger('ScreenWidth', cScreenWidth);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
@@ -1568,6 +1589,8 @@ ScriptCall('onGameInit');
 
 // pop game variables
 ParseCommand('seed ' + ScriptGetString('Seed'), true);
+ParseCommand('template_filter ' + IntToStr(ScriptGetInteger('TemplateFilter')), true);
+ParseCommand('mapgen' + IntToStr(ScriptGetInteger('MapGen')), true);
 ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
 ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
 ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
@@ -1627,6 +1650,7 @@ ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('GameTime', GameTicks);
 ScriptSetInteger('RealTime', RealTicks);
 ScriptSetInteger('TotalRounds', TotalRounds);
+ScriptSetInteger('WaterLine', cWaterLine);
 if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
     ScriptSetInteger('CurrentHedgehog', CurrentHedgehog^.Gear^.UID)
 else
@@ -1904,6 +1928,7 @@ lua_register(luaState, 'PlaySound', @lc_playsound);
 lua_register(luaState, 'AddTeam', @lc_addteam);
 lua_register(luaState, 'AddHog', @lc_addhog);
 lua_register(luaState, 'AddAmmo', @lc_addammo);
+lua_register(luaState, 'GetAmmoCount', @lc_getammocount);
 lua_register(luaState, 'SetHealth', @lc_sethealth);
 lua_register(luaState, 'GetHealth', @lc_gethealth);
 lua_register(luaState, 'SetEffect', @lc_seteffect);
