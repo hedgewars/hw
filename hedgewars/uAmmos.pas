@@ -184,7 +184,8 @@ var cnt: LongWord;
     a: PAmmo;
 begin
 a:= GetAmmoEntry(Hedgehog, ammo);
-if (a^.AmmoType = amNothing) or (a^.Count <> AMMO_INFINITE) then
+cnt:= a^.Count;
+if (a^.AmmoType = amNothing) or (cnt <> AMMO_INFINITE) then
     begin
     inc(cnt, Ammoz[ammo].NumberInCase);
     AddAmmo(Hedgehog, ammo, cnt)
