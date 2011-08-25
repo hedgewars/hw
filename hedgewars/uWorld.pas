@@ -32,6 +32,7 @@ procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
 procedure ShakeCamera(amount: LongWord);
+procedure InitCameraBorders;
 procedure MoveCamera;
 procedure onFocusStateChanged;
 
@@ -175,7 +176,7 @@ cWaveWidth:= SpritesData[sprWater].Width;
 //cWaveHeight:= SpritesData[sprWater].Height;
 cWaveHeight:= 32;
 
-cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
+InitCameraBorders();
 uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
@@ -196,6 +197,10 @@ SkyOffset:= 0;
 HorizontOffset:= 0;
 end;
 
+procedure InitCameraBorders;
+begin
+cGearScrEdgesDist:= min(2 * cScreenHeight div 5, 2 * cScreenWidth div 5);
+end;
 
 procedure ShowAmmoMenu;
 const MENUSPEED = 15;
@@ -1190,8 +1195,8 @@ if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not 
     end
     else
     begin
-        CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
-        CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
+        CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * (FollowGear^.dX.QWordValue div _0_01.QWordValue) * 3 + WorldDx) div 8;
+        CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + hwSign(FollowGear^.dY) * (FollowGear^.dY.QWordValue div _0_01.QWordValue) * 3 + WorldDy)) div 8;
     end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;

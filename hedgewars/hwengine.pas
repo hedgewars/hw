@@ -183,6 +183,7 @@ begin
                     else cScreenHeight:= cMinScreenHeight;
                     ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
                     WriteLnToConsole('window resize');
+                    InitCameraBorders();
                     end;
 {$ENDIF}
                 SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
