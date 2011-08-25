@@ -1556,7 +1556,7 @@ begin
             end;
 
         CheckCollision(Gear);
-        // if we haven't found any collision yet then check the otheer side too
+        // if we haven't found any collision yet then check the other side too
         if (Gear^.State and gstCollision) = 0 then
             begin
             Gear^.dX.isNegative:= not Gear^.dX.isNegative;
