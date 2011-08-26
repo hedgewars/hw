@@ -94,7 +94,6 @@ public class Map implements Comparable<Map>, Parcelable{
 		}
 	}
 
-	@Override
 	public int compareTo(Map another) {
 		switch(type){
 		case TYPE_GENERATED:

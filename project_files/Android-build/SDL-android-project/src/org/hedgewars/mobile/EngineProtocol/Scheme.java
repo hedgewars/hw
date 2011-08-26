@@ -328,7 +328,6 @@ public class Scheme implements Parcelable{
 		throw new IllegalArgumentException(String.format("Xml file: %s malformed with error: %d.", file, eventType));
 	}
 
-	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
 		return 0;
