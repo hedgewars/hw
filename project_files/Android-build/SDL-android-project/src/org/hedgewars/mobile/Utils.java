@@ -28,6 +28,8 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
+import android.os.Environment;
 import android.widget.Toast;
 
 public class Utils {
@@ -39,11 +41,32 @@ public class Utils {
 	 * @return absolute path
 	 */
 	public static String getDownloadPath(Context c){
-		File f =  c.getExternalCacheDir();
-		if(f != null){
-			return f.getAbsolutePath() + "/Data/";
+		if(Build.VERSION.SDK_INT < 8){//8 == Build.VERSION_CODES.FROYO
+			return PreFroyoSDCardDir.getDownloadPath(c);
 		}else{
-			Toast.makeText(c, R.string.sdcard_not_mounted, Toast.LENGTH_LONG);
+			return FroyoSDCardDir.getDownloadPath(c);
+		}
+	}
+	
+	static class FroyoSDCardDir{
+		public static String getDownloadPath(Context c){
+			File f =  c.getExternalCacheDir();
+			if(f != null){
+				return f.getAbsolutePath() + "/Data/";
+			}else{
+				Toast.makeText(c, R.string.sdcard_not_mounted, Toast.LENGTH_LONG).show();
+				return null;
+			}	
+		}
+	}
+	
+	static class PreFroyoSDCardDir{
+		public static String getDownloadPath(Context c){
+			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+				if(Environment.getExternalStorageDirectory() != null)
+					return Environment.getExternalStorageDirectory().getAbsolutePath() + "/Hedgewars/";				
+			}
+			Toast.makeText(c, R.string.sdcard_not_mounted, Toast.LENGTH_LONG).show();
 			return null;
 		}
 	}
