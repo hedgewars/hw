@@ -53,7 +53,6 @@ public class DownloadActivity extends Activity{
 	public static final int MSG_DONE = 2;
 	private Handler.Callback messageCallback = new Handler.Callback() {
 		
-		@Override
 		public boolean handleMessage(Message msg) {
 			switch(msg.what){
 			case MSG_START:
@@ -124,7 +123,6 @@ public class DownloadActivity extends Activity{
 	
 	private ServiceConnection connection = new ServiceConnection(){
 
-		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			messageService = new Messenger(service);
 			
@@ -136,7 +134,6 @@ public class DownloadActivity extends Activity{
 			}catch (RemoteException e){}
 		}
 
-		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			messageService = null;
 		}
