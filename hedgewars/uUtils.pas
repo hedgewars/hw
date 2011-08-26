@@ -21,7 +21,7 @@
 unit uUtils;
 
 interface
-uses uTypes, uFloat, GLunit, uConsole;
+uses uTypes, uFloat, GLunit;
 
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: ansistring; c: char);
@@ -262,12 +262,8 @@ procedure AddFileLog(s: shortstring);
 begin
 s:= s;
 {$IFDEF DEBUGFILE}
-{$IFDEF ANDROID}
- WriteToConsole(s);
-{$ELSE}
 writeln(f, GameTicks: 6, ': ', s);
 flush(f)
-{$ENDIF}
 {$ENDIF}
 end;
 
@@ -337,12 +333,13 @@ CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 end;
 
 procedure initModule;
-{$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}
+{$IFDEF DEBUGFILE}{$IFNDEF MOBILE}var i: LongInt;{$ENDIF}{$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
 {$I-}
-{$IFDEF IPHONEOS}
-    Assign(f,'../Documents/hw-' + cLogfileBase + '.log');
+{$IFDEF MOBILE}
+    {$IFDEF IPHONEOS} Assign(f,'../Documents/hw-' + cLogfileBase + '.log'); {$ENDIF}
+    {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + cLogfileBase + '.log'); {$ENDIF}
     Rewrite(f);
 {$ELSE}
     if (ParamStr(1) <> '') and (ParamStr(2) <> '') then

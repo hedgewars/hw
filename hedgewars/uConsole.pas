@@ -53,10 +53,10 @@ var Len: LongInt;
     done: boolean;
 begin
 {$IFNDEF NOCONSOLE}
- {$IFDEF ANDROID}
+AddFileLog('[Con] ' + s);
+{$IFDEF ANDROID}
   Log.__android_log_write(Log.Android_LOG_DEBUG, 'HW_Engine', ShortStringAsPChar('[Con]' + s));
 {$ELSE}
-AddFileLog('[Con] ' + s);
 Write(stderr, s);
 done:= false;
 
