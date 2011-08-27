@@ -1713,6 +1713,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMine(Gear: PGear);
+var vg: PVisualGear;
 begin
     if (Gear^.State and gstMoving) <> 0 then
     begin
@@ -1742,7 +1743,10 @@ begin
                  inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
         
         if (Gear^.Damage > random(30)) and ((GameTicks and $FF) = 0) then
-            AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
+            begin
+            vg:= AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
+            if vg <> nil then vg^.Scale:= 0.5
+            end;
 
         if (Gear^.Damage > 35) then
             begin
@@ -1774,8 +1778,8 @@ begin
                     end
                 else
                     begin
-                    AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4),
-                    vgtSmoke);
+                    vg:= AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
+                    if vg <> nil then vg^.Scale:= 0.5;
                     PlaySound(sndVaporize);
                     Gear^.Health := 0;
                     Gear^.Damage := 0;
