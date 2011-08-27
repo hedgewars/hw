@@ -1227,7 +1227,7 @@ if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
     begin
     for i:= 0 to Pred(vobCount*2) do
         AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(LAND_HEIGHT div 2), gtFlake, 0, _0, _0, 0);
-    disableLandBack:= true
+    //disableLandBack:= true
     end
 end;
 
