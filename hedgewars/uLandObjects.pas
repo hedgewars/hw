@@ -424,9 +424,9 @@ while not eof(f) do
             SkyColor.b:= t
             end;
         glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99);
-        SDSkyColor.r:= byte(SkyColor.r * SDTint div 255);
-        SDSkyColor.g:= byte(SkyColor.g * SDTint div 255);
-        SDSkyColor.b:= byte(SkyColor.b * SDTint div 255);
+        SDSkyColor.r:= SkyColor.r;
+        SDSkyColor.g:= SkyColor.g;
+        SDSkyColor.b:= SkyColor.b;
         end
     else if key = 'border' then
         begin
@@ -661,9 +661,9 @@ while not eof(f) do
                 RQSkyColor.b:= t
                 end;
             glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
-            SDSkyColor.r:= byte(RQSkyColor.r * SDTint div 255);
-            SDSkyColor.g:= byte(RQSkyColor.g * SDTint div 255);
-            SDSkyColor.b:= byte(RQSkyColor.b * SDTint div 255);
+            SDSkyColor.r:= RQSkyColor.r;
+            SDSkyColor.g:= RQSkyColor.g;
+            SDSkyColor.b:= RQSkyColor.b;
             end
         end
     end;

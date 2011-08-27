@@ -863,7 +863,7 @@ case step of
                         
                         ChangeToSDClouds;
                         ChangeToSDFlakes;
-                        glClearColor(SDSkyColor.r / 255, SDSkyColor.g / 255, SDSkyColor.b / 255, 0.99);
+                        glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99);
                         end;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                     playSound(sndSuddenDeath);
