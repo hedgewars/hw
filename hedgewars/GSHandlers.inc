@@ -586,6 +586,7 @@ var xx, yy, px, py: LongInt;
     p: PLongwordArray;
     lf: LongWord;
 begin
+inc(Gear^.Pos);
 gun:= (Gear^.State and gstTmpFlag) <> 0;
 move:= false;
 draw:= false;
@@ -666,7 +667,7 @@ if draw then
         begin
         // we've collided with land. draw some stuff and get back into the clouds
         move:= true;
-        if (GameTicks > 20) and ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope)) then
+        if (Pos > 20) and ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope)) then
             begin
 ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
             if not gun then
@@ -730,6 +731,7 @@ if move then
         DeleteGear(Gear);
         exit
         end;
+    Gear^.Pos:= 0;
     Gear^.X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
     Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25));
     Gear^.State:= Gear^.State or gstInvisible;

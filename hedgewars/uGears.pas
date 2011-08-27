@@ -289,6 +289,7 @@ case Kind of
      gtFlake: begin
                 with Gear^ do
                     begin
+                    Pos:= 0;
                     Radius:= 1;
                     DirAngle:= random * 360;
                     dx.isNegative:= GetRandom(2) = 0;
