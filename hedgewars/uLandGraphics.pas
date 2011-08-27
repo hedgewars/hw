@@ -782,14 +782,16 @@ if (Land[Y, X] = 0) and (Y > topY+1) and
         begin
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
-            if (LandPixels[y,x] = 0) then LandPixels[y,x]:= (cExplosionBorderColor and not AMask) or (128 shl AShift)
+            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then LandPixels[y,x]:= (cExplosionBorderColor and not AMask) or (128 shl AShift)
             else
                 LandPixels[y,x]:=
                                 (((((LandPixels[y,x] and RMask shr RShift) div 2)+((cExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
                                 (((((LandPixels[y,x] and GMask shr GShift) div 2)+((cExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
                                 (((((LandPixels[y,x] and BMask shr BShift) div 2)+((cExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
             end;
-        Land[y,x]:= lfBasic
+        if (Land[y, x-1] = lfObject) then Land[y,x]:= lfObject
+        else if (Land[y, x+1] = lfObject) then Land[y,x]:= lfObject
+        else Land[y,x]:= lfBasic;
         end
     else if ((((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0)) or
             (((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0)) or
@@ -802,14 +804,18 @@ if (Land[Y, X] = 0) and (Y > topY+1) and
         begin
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
-            if (LandPixels[y,x] = 0) then LandPixels[y,x]:= (cExplosionBorderColor and not AMask) or (64 shl AShift)
+            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then LandPixels[y,x]:= (cExplosionBorderColor and not AMask) or (64 shl AShift)
             else
                 LandPixels[y,x]:=
                                 (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((cExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
                                 (((((LandPixels[y,x] and GMask shr GShift) * 3 div 4)+((cExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
                                 (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((cExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift)
             end;
-        Land[y,x]:= lfBasic
+        if (Land[y, x-1] = lfObject) then Land[y, x]:= lfObject
+        else if (Land[y, x+1] = lfObject) then Land[y, x]:= lfObject
+        else if (Land[y+1, x] = lfObject) then Land[y, x]:= lfObject
+        else if (Land[y-1, x] = lfObject) then Land[y, x]:= lfObject
+        else Land[y,x]:= lfBasic
         end
     end
 end;

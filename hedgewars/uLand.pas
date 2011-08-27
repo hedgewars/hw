@@ -1070,9 +1070,11 @@ begin
             begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
-                    if Land[y, x-1] = lfBasic then LandPixels[y, x]:= LandPixels[y, x-1]
-                    else if Land[y, x+1] = lfBasic then LandPixels[y, x]:= LandPixels[y, x+1];
-                    LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (128 shl AShift)
+                    if (Land[y, x-1] = lfBasic) and (Land[y, x-1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x-1]
+                    else if (Land[y, x+1] = lfBasic) and (Land[y, x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
+                    else if (Land[y-1, x] = lfBasic) and (Land[y-1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x]
+                    else if (Land[y+1, x] = lfBasic) and (Land[y+1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x];
+                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (128 shl AShift)
                     end;
                 Land[y,x]:= lfObject
             end
@@ -1088,11 +1090,11 @@ begin
             begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
-                    if Land[y, x-1] = lfBasic then LandPixels[y, x]:= LandPixels[y, x-1]
-                    else if Land[y, x+1] = lfBasic then LandPixels[y, x]:= LandPixels[y, x+1]
-                    else if Land[y+1, x] = lfBasic then LandPixels[y, x]:= LandPixels[y+1, x]
-                    else if Land[y-1, x] = lfBasic then LandPixels[y, x]:= LandPixels[y-1, x];
-                    LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (64 shl AShift)
+                    if (Land[y, x-1] = lfBasic) and (Land[y,x-1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x-1]
+                    else if (Land[y, x+1] = lfBasic) and (Land[y,x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
+                    else if (Land[y+1, x] = lfBasic) and (Land[y+1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x]
+                    else if (Land[y-1, x] = lfBasic) and (Land[y-1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x];
+                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (64 shl AShift)
                     end;
                 Land[y,x]:= lfObject
             end;
