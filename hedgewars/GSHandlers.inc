@@ -584,6 +584,7 @@ var xx, yy, px, py: LongInt;
     move, draw, allpx, gun: Boolean;
     s: PSDL_Surface;
     p: PLongwordArray;
+    lf: LongWord;
 begin
 gun:= (Gear^.State and gstTmpFlag) <> 0;
 move:= false;
@@ -626,6 +627,7 @@ else if GameTicks and $7 = 0 then
         // Solid pixel encountered
         else if ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
             begin
+            lf:= Land[yy, xx] and (lfObject or lfBasic);
             // If there's room below keep falling
             if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
                 begin
@@ -684,9 +686,9 @@ if draw then
                             begin
                             // try to avoid speckles. might need disabling
                             LandDirty[yy div 32, xx div 32]:= 1;
-                            Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfDamaged;
-                            end;
-                        Land[yy + py, xx + px]:= Land[yy + py, xx + px] or lfObject;
+                            Land[yy + py, xx + px]:= (Land[yy + py, xx + px] or lfDamaged or lfObject) and not lfBasic;
+                            end
+                        else if Land[yy + py, xx + px] and $FF00 = 0 then Land[yy + py, xx + px]:= lf;
                         if (cReducedQuality and rqBlurryLand) = 0 then
                             begin
                             if gun then
