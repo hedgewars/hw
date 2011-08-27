@@ -47,24 +47,30 @@ uses SDLh, uLandTexture, uVariables, uUtils, uDebug;
 function addBgColor(OldColor, NewColor: LongWord): LongWord;
 // Factor ranges from 0 to 100% NewColor
 var
-    oRed, oBlue, oGreen, oAlpha, nRed, nBlue, nGreen, nAlpha: Byte;
+    oRed, oBlue, oGreen, oAlpha, nRed, nBlue, nGreen, nAlpha: LongWord;
 begin
-    // Get colors
     oAlpha := (OldColor shr AShift) and $FF;
+    nAlpha := (NewColor shr AShift) and $FF;
+    // shortcircuit
+    if (oAlpha = 0) or (nAlpha = $FF) then
+        begin
+        addBgColor:= NewColor;
+        exit
+        end; 
+    // Get colors
     oRed   := (OldColor shr RShift) and $FF;
     oGreen := (OldColor shr GShift) and $FF;
     oBlue  := (OldColor shr BShift) and $FF;
 
-    nAlpha := (NewColor shr AShift) and $FF;
     nRed   := (NewColor shr RShift) and $FF;
     nGreen := (NewColor shr GShift) and $FF;
     nBlue  := (NewColor shr BShift) and $FF;
 
     // Mix colors
+    nRed   := min(255,((nRed*nAlpha) div 255) + ((oRed*oAlpha*(255-nAlpha)) div 65025));
+    nGreen := min(255,((nGreen*nAlpha) div 255) + ((oGreen*oAlpha*(255-nAlpha)) div 65025));
+    nBlue  := min(255,((nBlue*nAlpha) div 255) + ((oBlue*oAlpha*(255-nAlpha)) div 65025)); 
     nAlpha := min(255, oAlpha + nAlpha);
-    nRed   := ((oRed * oAlpha) + (nRed * Byte(255-oAlpha))) div 255;
-    nGreen := ((oGreen * oAlpha) + (nGreen * Byte(255-oAlpha))) div 255;
-    nBlue  := ((oBlue * oAlpha) + (nBlue * Byte(255-oAlpha))) div 255;
 
     addBgColor := (nAlpha shl AShift) or (nRed shl RShift) or (nGreen shl GShift) or (nBlue shl BShift);
 end;

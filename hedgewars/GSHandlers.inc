@@ -664,7 +664,7 @@ if draw then
         begin
         // we've collided with land. draw some stuff and get back into the clouds
         move:= true;
-        if (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope) then
+        if (GameTicks > 20) and ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtRope)) then
             begin
 ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
             if not gun then
