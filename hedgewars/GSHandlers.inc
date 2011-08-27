@@ -356,7 +356,7 @@ begin
         Gear^.State := Gear^.State or      gstMoving;
 
     if (Gear^.nImpactSounds > 0) and 
-       ((Gear^.Damage <> 0) or 
+       (((Gear^.Kind <> gtMine) and (Gear^.Damage <> 0)) or 
           ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) and
        (((Gear^.Radius < 3) and (Gear^.dY < -_0_1)) or
         ((Gear^.Radius >= 3) and ((Gear^.dX.QWordValue > _0_1.QWordValue) or 
