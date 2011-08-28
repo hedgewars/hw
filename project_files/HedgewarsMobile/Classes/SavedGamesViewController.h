@@ -28,15 +28,15 @@
                                                         EditableCellViewDelegate, UIActionSheetDelegate>  {
     UITableView *tableView;
     NSMutableArray *listOfSavegames;
+    NSInteger numberOfItems;
     GameInterfaceBridge *interfaceBridge;
 }
 
 @property (nonatomic,retain) IBOutlet UITableView *tableView;
 @property (nonatomic,retain) NSMutableArray *listOfSavegames;
 @property (nonatomic,retain) GameInterfaceBridge *interfaceBridge;
+@property (assign) NSInteger numberOfItems;
 
 -(IBAction) buttonPressed:(id) sender;
--(IBAction) toggleEdit:(id) sender;
--(IBAction) clearAll:(id) sender;
 
 @end

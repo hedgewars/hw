@@ -36,6 +36,7 @@
         textField.clearsOnBeginEditing = NO;
         textField.returnKeyType = UIReturnKeyDone;
         textField.adjustsFontSizeToFitWidth = YES;
+        textField.minimumFontSize = 9;
         textField.userInteractionEnabled = YES;
         textField.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
         [textField addTarget:self action:@selector(save:) forControlEvents:UIControlEventEditingDidEndOnExit];

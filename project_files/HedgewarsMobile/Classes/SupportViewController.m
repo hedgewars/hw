@@ -37,9 +37,9 @@
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Leave a positive review on iTunes!",@""),
                       NSLocalizedString(@"Join us on Facebook",@""),
-                      NSLocalizedString(@"Follow on Twitter",@""),
-                      NSLocalizedString(@"Visit website",@""),
-                      NSLocalizedString(@"Chat with us in IRC",@""),
+                      NSLocalizedString(@"Follow us on Twitter",@""),
+                      NSLocalizedString(@"Visit our website",@""),
+                      NSLocalizedString(@"Chat with the devs in IRC",@""),
                       nil];
     self.waysToSupport = array;
     [array release];
@@ -71,13 +71,14 @@
 
     NSString *rowString = [self.waysToSupport objectAtIndex:(row + section)];
     cell.textLabel.text = rowString;
+    NSString *imgString = nil;
 
     if (section == 0) {
+        imgString = [BTN_DIRECTORY() stringByAppendingString:@"/StatsStar.png"];
         cell.textLabel.textAlignment = UITextAlignmentCenter;
         cell.imageView.image = nil;
     } else {
         cell.textLabel.textAlignment = UITextAlignmentLeft;
-        NSString *imgString = nil;
         switch (row) {
             case 0:
                 imgString = @"fb.png";
@@ -95,11 +96,15 @@
                 DLog(@"No way");
                 break;
         }
-        
-        UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgString];
-        cell.imageView.image = img;
-        [img release];
     }
+    UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgString];
+    cell.imageView.image = img;
+    if (section == 0) {
+        UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
+        cell.accessoryView = imgView;
+        [imgView release];
+    }
+    [img release];
     
     return cell;
 }
