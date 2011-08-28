@@ -203,9 +203,7 @@ end;
 
 operator = (const z1, z2: hwFloat) z:boolean; inline;
 begin
-    z:= true;
-    z:= z and (z1.isNegative = z2.isNegative);
-    z:= z and (z1.QWordValue = z2.QWordValue);
+    z:= (z1.isNegative = z2.isNegative) and (z1.QWordValue = z2.QWordValue);
 end;
 
 
