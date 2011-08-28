@@ -45,7 +45,6 @@
 }
 
 -(void) dealloc {
-    releaseAndNil(parentController);
     releaseAndNil(engineProtocol);
     releaseAndNil(savePath);
     releaseAndNil(overlayController);
@@ -178,10 +177,6 @@
     // warn our host that it's going to be visible again
     [self.parentController viewWillAppear:YES];
 
-    // release the network manager and the savepath as they are not needed anymore
-    releaseAndNil(self.engineProtocol);
-    releaseAndNil(self.savePath);
-
     if ([[userDefaults objectForKey:@"music"] boolValue])
         [HedgewarsAppDelegate playBackgroundMusic];
 }
@@ -192,8 +187,10 @@
 
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
-    self.savePath = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
+    NSString *path = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
     [outputFormatter release];
+    self.savePath = path;
+    [path release];
 
     // in the rare case in which a savefile with the same name exists the older one must be removed (or it gets corrupted)
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.savePath])
@@ -206,7 +203,7 @@
 // set up variables for a save game
 -(void) startSaveGame:(NSString *)atPath {
     self.gameType = gtSave;
-    self.savePath = [atPath retain];
+    self.savePath = atPath;
 
     [self.engineProtocol spawnThread:self.savePath];
     [self prepareEngineLaunch];

@@ -1006,7 +1006,7 @@ begin
     flags:= flags or SDL_WINDOW_BORDERLESS or SDL_WINDOW_RESIZABLE;
 {$ENDIF}
 
-    if cFullScreen then SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags);
+    if cFullScreen then SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
     else SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
