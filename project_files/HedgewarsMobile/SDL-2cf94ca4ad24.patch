@@ -1,0 +1,127 @@
+diff -r 2cf94ca4ad24 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
+--- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Tue Jul 26 14:20:22 2011 -0700
++++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sun Aug 28 11:45:10 2011 +0200
+@@ -1588,9 +1588,12 @@
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+ 				GCC_C_LANGUAGE_STANDARD = c99;
+ 				GCC_DEBUGGING_SYMBOLS = full;
++				GCC_OPTIMIZATION_LEVEL = 0;
++				GCC_THUMB_SUPPORT = NO;
++				GCC_VERSION = com.apple.compilers.llvmgcc42;
+ 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = NO;
+-				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
++				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+ 				ONLY_ACTIVE_ARCH = NO;
+ 				PREBINDING = NO;
+ 				SDKROOT = iphoneos;
+@@ -1605,9 +1608,12 @@
+ 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+ 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+ 				GCC_C_LANGUAGE_STANDARD = c99;
++				GCC_FAST_MATH = YES;
++				GCC_THUMB_SUPPORT = NO;
++				GCC_VERSION = com.apple.compilers.llvmgcc42;
+ 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = NO;
+-				IPHONEOS_DEPLOYMENT_TARGET = 3.1.3;
++				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+ 				PREBINDING = NO;
+ 				SDKROOT = iphoneos;
+ 				TARGETED_DEVICE_FAMILY = "1,2";
+diff -r 2cf94ca4ad24 include/SDL_config_iphoneos.h
+--- a/include/SDL_config_iphoneos.h	Tue Jul 26 14:20:22 2011 -0700
++++ b/include/SDL_config_iphoneos.h	Sun Aug 28 11:45:10 2011 +0200
+@@ -106,7 +106,7 @@
+ /* enable iPhone version of Core Audio driver */
+ #define SDL_AUDIO_DRIVER_COREAUDIOIPHONE 1
+ /* Enable the dummy audio driver (src/audio/dummy/\*.c) */
+-#define SDL_AUDIO_DRIVER_DUMMY	1
++#define SDL_AUDIO_DRIVER_DUMMY	0
+ 
+ /* Enable the stub haptic driver (src/haptic/dummy/\*.c) */
+ #define SDL_HAPTIC_DISABLED	1
+@@ -132,14 +132,17 @@
+ /* enable OpenGL ES */
+ #define SDL_VIDEO_OPENGL_ES	1
+ #define SDL_VIDEO_RENDER_OGL_ES	1
+-#define SDL_VIDEO_RENDER_OGL_ES2	1
++#define SDL_VIDEO_RENDER_OGL_ES2	0
+ 
+ /* Enable system power support */
+-#define SDL_POWER_UIKIT 1
++#define SDL_POWER_UIKIT 0
+ 
+ /* enable iPhone keyboard support */
+ #define SDL_IPHONE_KEYBOARD 1
+ 
++/* enable joystick subsystem */
++#define SDL_JOYSTICK_DISABLED 1
++
+ /* Set max recognized G-force from accelerometer
+    See src/joystick/uikit/SDLUIAccelerationDelegate.m for notes on why this is needed
+  */
+diff -r 2cf94ca4ad24 src/video/uikit/SDL_uikitopenglview.m
+--- a/src/video/uikit/SDL_uikitopenglview.m	Tue Jul 26 14:20:22 2011 -0700
++++ b/src/video/uikit/SDL_uikitopenglview.m	Sun Aug 28 11:45:10 2011 +0200
+@@ -123,8 +123,8 @@
+ 
+         // !!! FIXME: use the screen this is on!
+         /* Use the main screen scale (for retina display support) */
+-        if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+-            self.contentScaleFactor = [UIScreen mainScreen].scale;
++        if ([self respondsToSelector:@selector(contentScaleFactor)])
++            self.contentScaleFactor = [[UIScreen mainScreen] scale];
+ 
+         self.autoresizingMask = 0;  // don't allow autoresize, since we need to do some magic in -(void)updateFrame.
+     }
+@@ -152,8 +152,8 @@
+     
+     // !!! FIXME: use the screen this is on!
+     /* Use the main screen scale (for retina display support) */
+-    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
+-        self.contentScaleFactor = [UIScreen mainScreen].scale;
++    if ([self respondsToSelector:@selector(contentScaleFactor)])
++        self.contentScaleFactor = [[UIScreen mainScreen] scale];
+ }
+ 
+ - (void)setCurrentContext {
+diff -r 2cf94ca4ad24 src/video/uikit/SDL_uikitvideo.m
+--- a/src/video/uikit/SDL_uikitvideo.m	Tue Jul 26 14:20:22 2011 -0700
++++ b/src/video/uikit/SDL_uikitvideo.m	Sun Aug 28 11:45:10 2011 +0200
+@@ -245,12 +245,8 @@
+         const CGRect rect = [uiscreen bounds];
+         UIKit_AddDisplay(uiscreen, uiscreenmode, (int)rect.size.width, (int)rect.size.height);
+     } else {
+-        const NSArray *screens = [UIScreen screens];
+-        const NSUInteger screen_count = [screens count];
+-        NSUInteger i;
+-        for (i = 0; i < screen_count; i++) {
++        for (UIScreen *uiscreen in [UIScreen screens]) {
+             // the main screen is the first element in the array.
+-            UIScreen *uiscreen = (UIScreen *) [screens objectAtIndex:i];
+             UIScreenMode *uiscreenmode = [uiscreen currentMode];
+             const CGSize size = [[uiscreen currentMode] size];
+             UIKit_AddDisplay(uiscreen, uiscreenmode, (int)size.width, (int)size.height);
+@@ -286,6 +282,9 @@
+         UIScreen *uiscreen = (UIScreen *) display->driverdata;
+         [uiscreen release];
+         display->driverdata = NULL;
++        UIScreenMode *desktopmode = (UIScreenMode *) display->desktop_mode.driverdata;
++        [desktopmode release];
++        display->desktop_mode.driverdata = NULL;
+         for (j = 0; j < display->num_display_modes; j++) {
+             SDL_DisplayMode *mode = &display->display_modes[j];
+             UIScreenMode *uimode = (UIScreenMode *) mode->driverdata;
+diff -r 2cf94ca4ad24 src/video/uikit/SDL_uikitwindow.m
+--- a/src/video/uikit/SDL_uikitwindow.m	Tue Jul 26 14:20:22 2011 -0700
++++ b/src/video/uikit/SDL_uikitwindow.m	Sun Aug 28 11:45:10 2011 +0200
+@@ -145,7 +145,7 @@
+     frame.origin.x = 0;
+     frame.origin.y = 0;
+ 
+-    [uiwindow setFrame:frame];
++    [uiwindow setFrame:[[UIScreen mainScreen] bounds]];
+     [data->view updateFrame];
+     SDL_SendWindowEvent(self->window, SDL_WINDOWEVENT_RESIZED, w, h);
+ }
