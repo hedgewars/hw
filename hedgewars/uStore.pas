@@ -577,7 +577,7 @@ begin
     SDL_GL_SetSwapInterval(1);
 {$ENDIF}
 
-{$IFDEF IHPONE}
+{$IFDEF IPHONEOS}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
     vendor:= vendor; // avoid hint
