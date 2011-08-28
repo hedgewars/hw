@@ -240,7 +240,8 @@
 #pragma mark Memory Management
 -(void) didReceiveMemoryWarning {
     self.listOfSavegames = nil;
-    self.interfaceBridge = nil;
+    // don't nil this one or it won't be able to send messages
+    //self.interfaceBridge = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }

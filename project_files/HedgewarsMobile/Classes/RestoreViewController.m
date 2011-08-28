@@ -36,6 +36,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if (theButton.tag != 0) {
+        playSound(@"clickSound");
         if (self.interfaceBridge == nil) {
             GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self.parentViewController];
             self.interfaceBridge = bridge;
@@ -44,6 +45,7 @@
         [self.parentViewController dismissModalViewControllerAnimated:NO];
         [self.interfaceBridge startSaveGame:[defaults objectForKey:@"savedGamePath"]];
     } else {
+        playSound(@"backSound");
         [defaults setObject:@"" forKey:@"savedGamePath"];
         [defaults synchronize];
         [self.parentViewController dismissModalViewControllerAnimated:YES];
@@ -63,7 +65,8 @@
 }
 
 -(void) didReceiveMemoryWarning {
-    self.interfaceBridge = nil;
+    // don't nil this one or it won't be able to send messages
+    //self.interfaceBridge = nil;
     [super didReceiveMemoryWarning];
 }
 

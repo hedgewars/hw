@@ -65,7 +65,7 @@
     AVAudioPlayer *background = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:musicString] error:nil];
 
     background.delegate = nil;
-    background.volume = 0.5f;
+    background.volume = 0.4f;
     background.numberOfLoops = -1;
     [background prepareToPlay];
     [HedgewarsAppDelegate sharedAppDelegate].backgroundMusic = background;
@@ -126,7 +126,7 @@
     // don't stop music when it is playing
     if (self.isInGame) {
         [self.backgroundMusic stop];
-        releaseAndNil(self.backgroundMusic);
+        self.backgroundMusic = nil;
         MSG_MEMCLEAN();
     }
     print_free_memory();

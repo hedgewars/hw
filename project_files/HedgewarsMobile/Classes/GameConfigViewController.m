@@ -378,7 +378,7 @@
         self.mapConfigViewController = nil;
 
     self.imgContainer = nil;
-    self.interfaceBridge = nil;
+    //self.interfaceBridge = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
