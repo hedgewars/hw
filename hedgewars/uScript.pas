@@ -279,9 +279,9 @@ begin
     else begin
         if lua_gettop(L) = 3 then health:= lua_tointeger(L, 3)
         else health:= cHealthCaseAmount;
-        gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-            HealthCrate, health);
-        lua_pushinteger(L, gear^.uid);
+        gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), HealthCrate, health);
+        if gear <> nil then lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
     end;
     lc_spawnhealthcrate := 1;        
 end;
@@ -294,9 +294,9 @@ begin
         lua_pushnil(L);
     end
     else begin
-        gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-            AmmoCrate, lua_tointeger(L, 3));
-        lua_pushinteger(L, gear^.uid);
+        gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3));
+        if gear <> nil then lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
     end;
     lc_spawnammocrate := 1;
 end;
@@ -311,7 +311,8 @@ begin
     else begin  
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
             UtilityCrate, lua_tointeger(L, 3));
-        lua_pushinteger(L, gear^.uid);
+        if gear <> nil then lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
     end;
     lc_spawnutilitycrate := 1;
 end;
