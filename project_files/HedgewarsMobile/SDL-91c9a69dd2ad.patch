@@ -1,7 +1,7 @@
-diff -r 2cf94ca4ad24 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
---- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Tue Jul 26 14:20:22 2011 -0700
-+++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sun Aug 28 11:45:10 2011 +0200
-@@ -1588,9 +1588,12 @@
+diff -r 91c9a69dd2ad Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
+--- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Mon Aug 29 00:27:43 2011 -0400
++++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Mon Aug 29 23:56:04 2011 +0200
+@@ -1596,9 +1596,12 @@
  				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
  				GCC_C_LANGUAGE_STANDARD = c99;
  				GCC_DEBUGGING_SYMBOLS = full;
@@ -15,7 +15,7 @@ diff -r 2cf94ca4ad24 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
  				ONLY_ACTIVE_ARCH = NO;
  				PREBINDING = NO;
  				SDKROOT = iphoneos;
-@@ -1605,9 +1608,12 @@
+@@ -1613,9 +1616,12 @@
  				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
  				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
  				GCC_C_LANGUAGE_STANDARD = c99;
@@ -29,12 +29,12 @@ diff -r 2cf94ca4ad24 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
  				PREBINDING = NO;
  				SDKROOT = iphoneos;
  				TARGETED_DEVICE_FAMILY = "1,2";
-diff -r 2cf94ca4ad24 include/SDL_config_iphoneos.h
---- a/include/SDL_config_iphoneos.h	Tue Jul 26 14:20:22 2011 -0700
-+++ b/include/SDL_config_iphoneos.h	Sun Aug 28 11:45:10 2011 +0200
+diff -r 91c9a69dd2ad include/SDL_config_iphoneos.h
+--- a/include/SDL_config_iphoneos.h	Mon Aug 29 00:27:43 2011 -0400
++++ b/include/SDL_config_iphoneos.h	Mon Aug 29 23:56:04 2011 +0200
 @@ -106,7 +106,7 @@
  /* enable iPhone version of Core Audio driver */
- #define SDL_AUDIO_DRIVER_COREAUDIOIPHONE 1
+ #define SDL_AUDIO_DRIVER_COREAUDIO 1
  /* Enable the dummy audio driver (src/audio/dummy/\*.c) */
 -#define SDL_AUDIO_DRIVER_DUMMY	1
 +#define SDL_AUDIO_DRIVER_DUMMY	0
@@ -61,9 +61,9 @@ diff -r 2cf94ca4ad24 include/SDL_config_iphoneos.h
  /* Set max recognized G-force from accelerometer
     See src/joystick/uikit/SDLUIAccelerationDelegate.m for notes on why this is needed
   */
-diff -r 2cf94ca4ad24 src/video/uikit/SDL_uikitopenglview.m
---- a/src/video/uikit/SDL_uikitopenglview.m	Tue Jul 26 14:20:22 2011 -0700
-+++ b/src/video/uikit/SDL_uikitopenglview.m	Sun Aug 28 11:45:10 2011 +0200
+diff -r 91c9a69dd2ad src/video/uikit/SDL_uikitopenglview.m
+--- a/src/video/uikit/SDL_uikitopenglview.m	Mon Aug 29 00:27:43 2011 -0400
++++ b/src/video/uikit/SDL_uikitopenglview.m	Mon Aug 29 23:56:04 2011 +0200
 @@ -123,8 +123,8 @@
  
          // !!! FIXME: use the screen this is on!
@@ -86,9 +86,9 @@ diff -r 2cf94ca4ad24 src/video/uikit/SDL_uikitopenglview.m
  }
  
  - (void)setCurrentContext {
-diff -r 2cf94ca4ad24 src/video/uikit/SDL_uikitvideo.m
---- a/src/video/uikit/SDL_uikitvideo.m	Tue Jul 26 14:20:22 2011 -0700
-+++ b/src/video/uikit/SDL_uikitvideo.m	Sun Aug 28 11:45:10 2011 +0200
+diff -r 91c9a69dd2ad src/video/uikit/SDL_uikitvideo.m
+--- a/src/video/uikit/SDL_uikitvideo.m	Mon Aug 29 00:27:43 2011 -0400
++++ b/src/video/uikit/SDL_uikitvideo.m	Mon Aug 29 23:56:04 2011 +0200
 @@ -245,12 +245,8 @@
          const CGRect rect = [uiscreen bounds];
          UIKit_AddDisplay(uiscreen, uiscreenmode, (int)rect.size.width, (int)rect.size.height);
@@ -113,13 +113,13 @@ diff -r 2cf94ca4ad24 src/video/uikit/SDL_uikitvideo.m
          for (j = 0; j < display->num_display_modes; j++) {
              SDL_DisplayMode *mode = &display->display_modes[j];
              UIScreenMode *uimode = (UIScreenMode *) mode->driverdata;
-diff -r 2cf94ca4ad24 src/video/uikit/SDL_uikitwindow.m
---- a/src/video/uikit/SDL_uikitwindow.m	Tue Jul 26 14:20:22 2011 -0700
-+++ b/src/video/uikit/SDL_uikitwindow.m	Sun Aug 28 11:45:10 2011 +0200
-@@ -145,7 +145,7 @@
+diff -r 91c9a69dd2ad src/video/uikit/SDL_uikitviewcontroller.m
+--- a/src/video/uikit/SDL_uikitviewcontroller.m	Mon Aug 29 00:27:43 2011 -0400
++++ b/src/video/uikit/SDL_uikitviewcontroller.m	Mon Aug 29 23:56:04 2011 +0200
+@@ -138,7 +138,7 @@
      frame.origin.x = 0;
      frame.origin.y = 0;
- 
+     
 -    [uiwindow setFrame:frame];
 +    [uiwindow setFrame:[[UIScreen mainScreen] bounds]];
      [data->view updateFrame];
