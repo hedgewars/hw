@@ -1030,9 +1030,12 @@ begin
     SetupOpenGL();
     if reinit then
         begin
-        if ((cReducedQuality and rqNoBackground) = 0) then 
+        if SuddenDeathDmg then
+             glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99)
+        else if ((cReducedQuality and rqNoBackground) = 0) then 
              glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99)
         else glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
+
         StoreRelease(true);
         StoreLoad(true);
         ResetLand;
