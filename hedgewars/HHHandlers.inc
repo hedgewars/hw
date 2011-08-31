@@ -423,7 +423,8 @@ with Gear^,
            end
         end else Message:= Message and not gmAttack;
      end;
-     TargetPoint.X := NoPointX
+     TargetPoint.X := NoPointX;
+     ScriptCall('onHogAttack');	
 end;
 
 procedure AfterAttack;
