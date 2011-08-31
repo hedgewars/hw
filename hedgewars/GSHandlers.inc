@@ -4928,9 +4928,13 @@ if Gear^.Pos = 2 then
             if Gear = CurAmmoGear then CurAmmoGear := nil;
             DeleteCI(HH^.Gear);
             RemoveGearFromList(HH^.Gear);
-            HH^.Gear^.Z := cHHZ;
-            HH^.Gear^.Active := false;
-            HH^.Gear^.State:= HH^.Gear^.State and not (gstHHDriven or gstAttacking);
+            with HH^.Gear^ do
+                begin
+                Z := cHHZ;
+                Active := false;
+                State:= State and not (gstHHDriven or gstAttacking or gstAttacked);
+                Message := Message and not gmAttack;
+                end;
             HH^.GearHidden:= HH^.Gear;
             HH^.Gear:= nil
             end
@@ -4939,7 +4943,7 @@ if Gear^.Pos = 2 then
             HH^.Gear:= HH^.GearHidden;
             HH^.GearHidden:= nil;
             InsertGearToList(HH^.Gear);
-            HH^.Gear^.State:= (HH^.Gear^.State or gstAttacked) and not gstHHDriven;
+            HH^.Gear^.State:= HH^.Gear^.State and not gstHHDriven;
             AddGearCI(HH^.Gear);
             HH^.Gear^.Active:= true
             end;
@@ -4957,6 +4961,11 @@ if (Gear^.Pos = 3) and (GameTicks and $1F = 0) and (Gear^.Power > 0) then dec(Ge
 if (Gear^.Pos = 1) and (Gear^.Power = 255) and ((GameTicks mod 2000) = 1000) then Gear^.Pos:= 2;
 if (Gear^.Pos = 3) and (Gear^.Power = 0) then
     begin
+    if HH^.GearHidden = nil then
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
     Gear^.Pos:= 4;
     // This condition might need tweaking
     Gear^.Timer:= GetRandom(cHedgehogTurnTime*TeamsCount)+cHedgehogTurnTime
@@ -4976,7 +4985,7 @@ if (Gear^.Pos = 4) then
         Gear^.Pos:= 1;
         Gear^.Power:= 0;
         Gear^.Timer:= 0;
-        FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH,true);
+        if HH^.GearHidden <> nil then FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH,true);
         if HH^.GearHidden <> nil then 
             begin
             Gear^.X:= HH^.GearHidden^.X;
@@ -4998,6 +5007,7 @@ begin
     2. Sudden Death is in play
     3. Hog is a king
 *)
+    AfterAttack;
     HH:= Gear^.Hedgehog;
     if (HH^.Gear = nil) or (HH^.King) or (SuddenDeathDmg) then
         begin
