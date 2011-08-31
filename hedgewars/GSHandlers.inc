@@ -4925,6 +4925,7 @@ if Gear^.Pos = 2 then
         begin
         if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible = 0) then
             begin
+	    AfterAttack;
             if Gear = CurAmmoGear then CurAmmoGear := nil;
             DeleteCI(HH^.Gear);
             RemoveGearFromList(HH^.Gear);
@@ -5009,13 +5010,13 @@ begin
     3. Hog is a king
 *)
     HH:= Gear^.Hedgehog;
-    if HH^.Gear <> nil then 
-        begin
-        HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
-        HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
-        end;
     if (HH^.Gear = nil) or (HH^.King) or (SuddenDeathDmg) then
         begin
+	if HH^.Gear <> nil then 
+	    begin
+	    HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
+	    HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
+	    end;
         PlaySound(sndDenied);
         DeleteGear(gear);
         exit
@@ -5029,11 +5030,15 @@ begin
                 HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then inc(cnt);
     if cnt < 2 then
         begin
+	if HH^.Gear <> nil then 
+	    begin
+	    HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
+	    HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
+	    end;
         PlaySound(sndDenied);
         DeleteGear(gear);
         exit
         end;
-    AfterAttack;
     Gear^.doStep:= @doStepTardisWarp
 end;
 
