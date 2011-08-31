@@ -1226,7 +1226,7 @@ end;
 procedure DrawBottomBorder; // broken out from other borders for doing a floor-only map, or possibly updating bottom during SD
 var x, y, w, c: Longword;
 begin
-for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
+for w:= 0 to 23 do
     for x:= leftX to rightX do
         begin
         Land[cWaterLine-1 - w, x]:= lfIndestructible;
@@ -1239,7 +1239,7 @@ for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
             LandPixels[cWaterLine-1 - w, x]:= c
         else
             LandPixels[(cWaterLine-1 - w) div 2, x div 2]:= c
-        end;
+        end
 end;
 
 procedure GenMap;
