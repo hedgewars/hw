@@ -260,17 +260,19 @@ var ii: TSprite;
     i: LongInt;
 begin
 AddFileLog('StoreLoad()');
-for fi:= Low(THWFont) to High(THWFont) do
-    with Fontz[fi] do
-        begin
-        s:= UserPathz[ptFonts] + '/' + Name;
-        if not FileExists(s) then s:= Pathz[ptFonts] + '/' + Name;
-        WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
-        Handle:= TTF_OpenFont(Str2PChar(s), Height);
-        SDLTry(Handle <> nil, true);
-        TTF_SetFontStyle(Handle, style);
-        WriteLnToConsole(msgOK)
-        end;
+
+if not reload then
+    for fi:= Low(THWFont) to High(THWFont) do
+        with Fontz[fi] do
+            begin
+            s:= UserPathz[ptFonts] + '/' + Name;
+            if not FileExists(s) then s:= Pathz[ptFonts] + '/' + Name;
+            WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
+            Handle:= TTF_OpenFont(Str2PChar(s), Height);
+            SDLTry(Handle <> nil, true);
+            TTF_SetFontStyle(Handle, style);
+            WriteLnToConsole(msgOK)
+            end;
 
 WriteNames(fnt16);
 MakeCrossHairs;
@@ -345,10 +347,10 @@ for ii:= Low(TSprite) to High(TSprite) do
 // This should maybe be flagged. It wastes quite a bit of memory.
                 if not reload then
                     begin
-{$IFNDEF DARWIN & WIN32}
-                    if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
-{$ELSE}
+{$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
                     Surface:= tmpsurf 
+{$ELSE}
+                    if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
 {$ENDIF}
                     end
                 end
@@ -756,7 +758,6 @@ begin
     SDL_GL_SwapBuffers();
 {$ENDIF}
     inc(Step);
-
 end;
 
 procedure FinishProgress;
@@ -764,6 +765,7 @@ begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
     uMobile.GameLoaded();
+    Step:= 0
 end;
 
 function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
@@ -1037,7 +1039,9 @@ begin
 
         StoreRelease(true);
         StoreLoad(true);
+
         ResetLand;
+
         UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT)
         end;
 end;
