@@ -259,7 +259,7 @@ var ii: TSprite;
     tmpsurf: PSDL_Surface;
     i: LongInt;
 begin
-
+AddFileLog('StoreLoad()');
 for fi:= Low(THWFont) to High(THWFont) do
     with Fontz[fi] do
         begin
@@ -948,7 +948,6 @@ var flags: Longword = 0;
     reinit: boolean;
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
-    s:= s; // avoid compiler hint
     if Length(s) = 0 then cFullScreen:= not cFullScreen
     else cFullScreen:= s = '1';
 
@@ -981,7 +980,7 @@ begin
         end
     else
         begin
-{$IFDEF DARWIN | WIN32}
+{$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
         reinit:= true;
 {$ENDIF}
         AddFileLog('Freeing old primary surface...');
