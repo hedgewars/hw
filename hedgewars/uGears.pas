@@ -217,7 +217,6 @@ gear^.dY:= dY;
 gear^.doStep:= doStepHandlers[Kind];
 gear^.CollisionIndex:= -1;
 gear^.Timer:= Timer;
-gear^.Z:= cUsualZ;
 gear^.FlightTime:= 0;
 gear^.uid:= Counter;
 gear^.SoundChannel:= -1;
@@ -225,6 +224,8 @@ gear^.ImpactSound:= sndNone;
 gear^.nImpactSounds:= 0;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
+if Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then gear^.Z:= cHHZ+1
+else gear^.Z:= cUsualZ;
 
 if CurrentHedgehog <> nil then
     begin
@@ -371,7 +372,8 @@ case Kind of
                 gear^.Elasticity:= _0_4;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _6;
-                gear^.Health:= cBarrelHealth
+                gear^.Health:= cBarrelHealth;
+                gear^.Z:= cHHZ-1
                 end;
   gtDEagleShot: begin
                 gear^.Radius:= 1;
