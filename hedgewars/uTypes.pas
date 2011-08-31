@@ -82,7 +82,7 @@ type
             sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
-            sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet
+            sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis
             );
 
     // Gears that interact with other Gears and/or Land

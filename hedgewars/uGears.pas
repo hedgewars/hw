@@ -75,7 +75,6 @@ procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
 procedure HedgehogStep(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear); forward;
-procedure doStepHedgehogReturn(Gear: PGear); forward;
 procedure HedgehogChAngle(HHGear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure PickUp(HH, Gear: PGear); forward;
@@ -427,6 +426,11 @@ case Kind of
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_3;
                 gear^.Timer:= 0
+                end;
+      gtTardis: begin
+                gear^.Timer:= 0;
+                gear^.Pos:= 1;
+                gear^.Z:= cCurrHHZ+1;
                 end;
       gtMortar: begin
                 gear^.Radius:= 4;
@@ -1450,7 +1454,11 @@ while i > 0 do
                         ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg, dsShove)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
-                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
+                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then 
+                        begin
+                        if (Ammo^.Hedgehog^.Gear <> nil) then Ammo^.Hedgehog^.Gear^.State:= Ammo^.Hedgehog^.Gear^.State and not gstNotKickable;
+                        ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
+                        end;
 
                     DeleteCI(Gear);
                     if (Gear^.Kind = gtHedgehog) and Gear^.Hedgehog^.King then

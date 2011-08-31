@@ -1226,21 +1226,21 @@ begin
     b := false;
 
     if abs(LongInt(HHGear^.Angle) - BTPrevAngle) > 7  then
-    begin
+        begin
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle) * _0_5, HHGear^.dX);
         Gear^.dY := AngleCos(HHGear^.Angle) * ( - _0_5);
         BTPrevAngle := HHGear^.Angle;
         b := true
-    end;
+        end;
 
     if ((HHGear^.State and gstMoving) <> 0) then
-    begin
+        begin
         doStepHedgehogMoving(HHGear);
         if (HHGear^.State and gstHHDriven) = 0 then Gear^.Timer := 0
-    end;
+        end;
 
     if Gear^.Timer mod cHHStepTicks = 0 then
-    begin
+        begin
         b := true;
         if Gear^.dX.isNegative then
             HHGear^.Message := (HHGear^.Message and (gmAttack or gmUp or gmDown)) or gmLeft
@@ -1248,7 +1248,7 @@ begin
             HHGear^.Message := (HHGear^.Message and (gmAttack or gmUp or gmDown)) or gmRight;
 
         if ((HHGear^.State and gstMoving) = 0) then
-        begin
+            begin
             HHGear^.State := HHGear^.State and not gstAttacking;
             prevX := hwRound(HHGear^.X);
 
@@ -1261,24 +1261,24 @@ begin
                CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y),
                lfIndestructible) then HHGear^.X := HHGear^.X + SignAs(_1, HHGear^.dX);
             HHGear^.State := HHGear^.State or gstAttacking
-        end;
+            end;
 
         inc(BTSteps);
         if BTSteps = 7 then
-        begin
+            begin
             BTSteps := 0;
             if CheckLandValue(hwRound(HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC) + SignAs(_6,
                Gear^.dX)), hwRound(HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC)),
                lfIndestructible) then
-            begin
+                begin
                 Gear^.X := HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
                 Gear^.Y := HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
-            end;
+                end;
             HHGear^.State := HHGear^.State or gstNoDamage;
             AmmoShove(Gear, 2, 15);
             HHGear^.State := HHGear^.State and not gstNoDamage
+            end;
         end;
-    end;
 
     if b then
         DrawTunnel(HHGear^.X - Gear^.dX * cHHRadius, HHGear^.Y - _4 - Gear^.dY * cHHRadius + hwAbs(
@@ -1287,12 +1287,12 @@ begin
         cHHRadius * 5, cHHRadius * 2 + 7);
 
     if (Gear^.Timer = 0) or ((HHGear^.Message and gmAttack) <> 0) then
-    begin
+        begin
         HHGear^.Message := 0;
         HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
         AfterAttack
-    end
+        end
 end;
 
 procedure doStepBlowTorch(Gear: PGear);
@@ -2949,10 +2949,8 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSeductionWork(Gear: PGear);
-var 
-    x, y, i: LongInt;
+var i: LongInt;
     hogs: TPGearArray;
-    d: hwFloat;
 begin
     AllInactive := false;
     hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
@@ -3678,10 +3676,10 @@ begin
     AllInactive := false;
     FollowGear := HHGear;
     with HHGear^ do
-    begin
+        begin
         State := State and not gstAttacking;
         Message := Message and not (gmAttack or gmUp or gmPrecise or gmLeft or gmRight)
-    end
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -4902,47 +4900,127 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepTardis(Gear: PGear);
-(*var 
-    i, x, y: LongInt;
-    dX, dY: hwFloat;
-    Fire: PGear;
-    vg: PVisualGear;*)
+(*
+ TARDIS needs 
+ Warp in.  Pos = 1
+ Pause.    Pos = 2
+ Hide gear  (TARDIS hedgehog was nil)
+ Warp out. Pos = 3
+ ... idle active for some time period ...  Pos = 4
+ Warp in.  Pos = 1
+ Pause.    Pos = 2
+ Restore gear  (TARDIS hedgehog was not nil)
+ Warp out. Pos = 3
+*)
+
+procedure doStepTardisWarp(Gear: PGear);
+var HH: PHedgehog;
+    i,j,cnt: LongWord;
 begin
-    if (Gear^.State and gstTmpFlag) = 0 then dec(Gear^.Timer);
-    if (Gear^.Timer = 0) and (CurAmmoGear = Gear) then
+
+HH:= Gear^.Hedgehog;
+if Gear^.Pos = 2 then
+    begin
+    if (Gear^.Timer = 0) then
         begin
-        if (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then 
+        if HH^.Gear <> nil then
             begin
-            DeleteGear(Gear);
-            exit
+            if Gear = CurAmmoGear then CurAmmoGear := nil;
+            DeleteCI(HH^.Gear);
+            RemoveGearFromList(HH^.Gear);
+            HH^.Gear^.Z := cHHZ;
+            HH^.Gear^.Active := false;
+            HH^.Gear^.State:= HH^.Gear^.State and not (gstHHDriven or gstAttacking);
+            HH^.GearHidden:= HH^.Gear;
+            HH^.Gear:= nil
+            end
+        else if HH^.GearHidden <> nil then
+            begin
+            HH^.Gear:= HH^.GearHidden;
+            HH^.GearHidden:= nil;
+            InsertGearToList(HH^.Gear);
+            HH^.Gear^.State:= (HH^.Gear^.State or gstAttacked) and not gstHHDriven;
+            AddGearCI(HH^.Gear);
+            HH^.Gear^.Active:= true
             end;
-        if Gear = CurAmmoGear then CurAmmoGear := nil;
-        Gear^.Hedgehog:= CurrentHedgehog;
-        RemoveGearFromList(CurrentHedgehog^.Gear);
-        CurrentHedgehog^.Gear^.Z := cHHZ;
-        CurrentHedgehog^.Gear^.Active := false;
-        CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstHHDriven;
-        CurrentHedgehog^.GearHidden:= CurrentHedgehog^.Gear;
-        CurrentHedgehog^.Gear:= nil;
-        Gear^.State:= Gear^.State or gstTmpFlag;
-        Gear^.Timer:= GameTicks + GetRandom(cHedgehogTurnTime*TeamsCount)+cHedgehogTurnTime;
-        end
-    else if (((Gear^.State and gstTmpFlag) <> 0) and (Gear^.Timer = GameTicks)) or SuddenDeath then
+        end;
+
+    inc(Gear^.Timer);
+    if (Gear^.Timer > 2000) and ((GameTicks mod 2000) = 1000) then
         begin
-        if Gear^.Hedgehog <> nil then
+        Gear^.Pos:= 3;
+        end;
+    end;
+
+if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then inc(Gear^.Power);
+if (Gear^.Pos = 3) and (GameTicks and $1F = 0) and (Gear^.Power > 0) then dec(Gear^.Power);
+if (Gear^.Pos = 1) and (Gear^.Power = 255) and ((GameTicks mod 2000) = 1000) then Gear^.Pos:= 2;
+if (Gear^.Pos = 3) and (Gear^.Power = 0) then
+    begin
+    Gear^.Pos:= 4;
+    // This condition might need tweaking
+    Gear^.Timer:= GetRandom(cHedgehogTurnTime*TeamsCount)+cHedgehogTurnTime
+    end;
+
+if (Gear^.Pos = 4) then
+    begin
+    cnt:= 0;
+    for j:= 0 to Pred(HH^.Team^.Clan^.TeamsNumber) do
+        for i:= 0 to Pred(HH^.Team^.Clan^.Teams[j]^.HedgehogsNumber) do
+            if (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear <> nil) and
+               ((HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.State and gstDrowning) = 0) and
+               (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Health >
+                HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then inc(cnt);
+    if (cnt = 0) or SuddenDeathDmg or (Gear^.Timer = 0) then
+        begin
+        Gear^.Pos:= 1;
+        Gear^.Power:= 0;
+        Gear^.Timer:= 0;
+        FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH,true);
+        if HH^.GearHidden <> nil then 
             begin
-            Gear^.Hedgehog^.Gear:= Gear^.Hedgehog^.GearHidden;
-            Gear^.Hedgehog^.GearHidden:= nil;
-            FindPlace(Gear^.Hedgehog^.Gear, false, 0, LAND_WIDTH,true);
-            InsertGearToList(Gear^.Hedgehog^.Gear);
-            Gear^.Hedgehog^.Gear^.State:= (Gear^.Hedgehog^.Gear^.State or gstTmpFlag or gstAttacked) and not gstHHDriven;
-            Gear^.Hedgehog^.Gear^.Timer:= $FF;
-            Gear^.Hedgehog^.Gear^.doStep:= @doStepHedgehogReturn;
-            SetAllHHToActive;
-            end;
-            DeleteGear(Gear)
+            Gear^.X:= HH^.GearHidden^.X;
+            Gear^.Y:= HH^.GearHidden^.Y;
+            end
         end
+    else dec(Gear^.Timer);
+    end;
+
+end;
+
+procedure doStepTardis(Gear: PGear);
+var i,j,cnt: LongWord;
+    HH: PHedgehog;
+begin
+(*
+    Conditions for not activating.
+    1. Hog is last of his clan
+    2. Sudden Death is in play
+    3. Hog is a king
+*)
+    HH:= Gear^.Hedgehog;
+    if (HH^.Gear = nil) or (HH^.King) or (SuddenDeathDmg) then
+        begin
+        DeleteGear(gear);
+        exit
+        end;
+    cnt:= 0;
+    for j:= 0 to Pred(HH^.Team^.Clan^.TeamsNumber) do
+        for i:= 0 to Pred(HH^.Team^.Clan^.Teams[j]^.HedgehogsNumber) do
+            if (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear <> nil) and
+               ((HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.State and gstDrowning) = 0) and
+               (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Health >
+                HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then inc(cnt);
+    if cnt < 2 then
+        begin
+        DeleteGear(gear);
+        exit
+        end;
+    with HH^.Gear^ do
+        begin
+        Message := Message and not gmAttack
+        end;
+    Gear^.doStep:= @doStepTardisWarp
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
