@@ -161,7 +161,7 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_tagteam->setToolTip("<b>" + ToggleButtonWidget::tr("Tag Team") + "</b>:<br />" + tr("Teams in each clan take successive turns sharing their turn time."));
     glGMLayout->addWidget(TBW_tagteam,4,3,1,1);
 
-    TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder.png");
+    TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBottomBorder.png");
     TBW_bottomborder->setToolTip("<b>" + ToggleButtonWidget::tr("Add Bottom Border") + "</b>:<br />" + tr("Add an indestructible border along the bottom"));
     glGMLayout->addWidget(TBW_bottomborder,4,4,1,1);
 
