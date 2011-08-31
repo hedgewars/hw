@@ -4923,7 +4923,7 @@ if Gear^.Pos = 2 then
     begin
     if (Gear^.Timer = 0) then
         begin
-        if HH^.Gear <> nil then
+        if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible = 0) then
             begin
             if Gear = CurAmmoGear then CurAmmoGear := nil;
             DeleteCI(HH^.Gear);
@@ -4938,12 +4938,10 @@ if Gear^.Pos = 2 then
             HH^.GearHidden:= HH^.Gear;
             HH^.Gear:= nil
             end
-        else if HH^.GearHidden <> nil then
+        else if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible <> 0) then
             begin
-            HH^.Gear:= HH^.GearHidden;
-            HH^.GearHidden:= nil;
             InsertGearToList(HH^.Gear);
-            HH^.Gear^.State:= HH^.Gear^.State and not gstHHDriven;
+            HH^.Gear^.State:= HH^.Gear^.State and not (gstHHDriven or gstInvisible);
             AddGearCI(HH^.Gear);
             HH^.Gear^.Active:= true
             end;
@@ -4988,8 +4986,11 @@ if (Gear^.Pos = 4) then
         if HH^.GearHidden <> nil then FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH,true);
         if HH^.GearHidden <> nil then 
             begin
-            Gear^.X:= HH^.GearHidden^.X;
-            Gear^.Y:= HH^.GearHidden^.Y;
+            HH^.Gear:=HH^.GearHidden;
+            HH^.GearHidden:= nil;
+            HH^.Gear^.State:= HH^.Gear^.State or gstInvisible;
+            Gear^.X:= HH^.Gear^.X;
+            Gear^.Y:= HH^.Gear^.Y;
             end
         end
     else dec(Gear^.Timer);
@@ -5007,10 +5008,15 @@ begin
     2. Sudden Death is in play
     3. Hog is a king
 *)
-    AfterAttack;
     HH:= Gear^.Hedgehog;
+    if HH^.Gear <> nil then 
+        begin
+        HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
+        HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
+        end;
     if (HH^.Gear = nil) or (HH^.King) or (SuddenDeathDmg) then
         begin
+        PlaySound(sndDenied);
         DeleteGear(gear);
         exit
         end;
@@ -5023,13 +5029,11 @@ begin
                 HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then inc(cnt);
     if cnt < 2 then
         begin
+        PlaySound(sndDenied);
         DeleteGear(gear);
         exit
         end;
-    with HH^.Gear^ do
-        begin
-        Message := Message and not gmAttack
-        end;
+    AfterAttack;
     Gear^.doStep:= @doStepTardisWarp
 end;
 
