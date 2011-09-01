@@ -423,7 +423,8 @@ with Gear^,
            end
         end else Message:= Message and not gmAttack;
      end;
-     TargetPoint.X := NoPointX
+     TargetPoint.X := NoPointX;
+     ScriptCall('onHogAttack');	
 end;
 
 procedure AfterAttack;
@@ -1092,14 +1093,4 @@ else
         if Team^.hasGone then TeamGoneEffect(Team^);
     doStepHedgehogDriven(Gear)
     end;
-end;
-
-procedure doStepHedgehogReturn(Gear: PGear);
-begin
-if (Gear^.Timer > 0) and ((GameTicks mod 20) = 0) then dec(Gear^.Timer)
-else if (Gear^.Timer = 0) then
-    begin
-    Gear^.doStep:= @doStepHedgehog;
-    Gear^.State:= Gear^.State and not gstTmpFlag;
-    end
 end;

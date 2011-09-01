@@ -67,8 +67,7 @@ void startSpinningProgress() {
     overlay_instance.lowerIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 
     CGPoint center = overlay_instance.view.center;
-    overlay_instance.lowerIndicator.center = (IS_DUALHEAD() ? CGPointMake(center.y, center.x)
-                                              : CGPointMake(center.y, center.x * 5/3));
+    overlay_instance.lowerIndicator.center = (IS_DUALHEAD() ? center : CGPointMake(center.x, center.y * 5/3));
 
     [overlay_instance.lowerIndicator startAnimating];
     [overlay_instance.view addSubview:overlay_instance.lowerIndicator];
@@ -110,8 +109,7 @@ void saveBeganSynching() {
 
     overlay_instance.savesIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
 
-    CGPoint center = overlay_instance.view.center;
-    overlay_instance.savesIndicator.center = CGPointMake(center.y, center.x);
+    overlay_instance.savesIndicator.center = overlay_instance.view.center;
     overlay_instance.savesIndicator.hidesWhenStopped = YES;
 
     [overlay_instance.savesIndicator startAnimating];

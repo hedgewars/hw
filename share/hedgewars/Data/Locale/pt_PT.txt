@@ -55,6 +55,7 @@
 00:52=Nenhuma arma selecionada
 00:53=TARDIS
 00:54=Estrutura
+00:55=Terreno-instantâneo
 
 01:00=Vamos lutar!
 01:01=Ronda empatada
@@ -71,6 +72,12 @@
 01:12=Último turno até Morte Súbita!
 01:13=%1 turnos até Morte Súbita!
 01:14=Prepara-te!
+01:15=Ligeiro
+01:16=Pouco
+01:17=Normal
+01:18=Muito
+01:19=Excessivo
+01:20=Ressalto: %1
 
 ; Event messages
 ; Hog (%1) died
@@ -516,3 +523,4 @@
 05:18=Ataques ilimitados
 05:19=O armamento é restaurado no final do turno
 05:20=O armamento não é partilhado entre ouriços
+05:21=Tag Team: Todas as equipas do mesmo clã jogam de forma sucessiva|Tempo Partilhado: O tempo de turno é partilhado entre todas as equipas do mesmo clã

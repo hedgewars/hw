@@ -224,7 +224,7 @@ const
     SDL_JOYBUTTONDOWN   = 10;
     SDL_JOYBUTTONUP     = 11;
     SDL_QUITEV          = 12;
-    SDL_VIDEORESIZE     = 16; // TODO: outdated? no longer in SDL 1.3?
+    SDL_VIDEORESIZE     = 16;
 
     // SDL_Surface flags
     SDL_SWSURFACE   = $00000000;
@@ -638,7 +638,7 @@ type
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
             SDL_QUITEV: (quit: TSDL_QuitEvent);
             //SDL_SYSWMEVENT,SDL_EVENT_RESERVEDA,SDL_EVENT_RESERVEDB
-            //SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
+            SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
 {$ENDIF}
         end;
 
@@ -880,12 +880,6 @@ procedure SDL_WarpMouse(x, y: Word); {$IFNDEF SDL13}cdecl; external SDLLibName;{
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
 function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat; {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
-
-{* OpenGL *}
-{$IFDEF DARWIN}
-function CGLGetCurrentContext(): Pointer; cdecl; external 'OpenGL';
-procedure CGLSetParameter(context: Pointer; option: LongInt; value: Pointer); cdecl; external 'OpenGL';
-{$ENDIF}
 
 (*  SDL_ttf  *)
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;

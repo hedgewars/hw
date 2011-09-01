@@ -71,6 +71,7 @@ private:
     ToggleButtonWidget * TBW_nowind;
     ToggleButtonWidget * TBW_morewind;
     ToggleButtonWidget * TBW_tagteam;
+    ToggleButtonWidget * TBW_bottomborder;
 
     QSpinBox * SB_DamageModifier;
     QSpinBox * SB_TurnTime;

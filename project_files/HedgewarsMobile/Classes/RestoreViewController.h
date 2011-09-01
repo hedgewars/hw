@@ -21,10 +21,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class GameInterfaceBridge;
 
 @interface RestoreViewController : UIViewController {
-
+    GameInterfaceBridge *interfaceBridge;
 }
+
+@property (nonatomic,retain) GameInterfaceBridge *interfaceBridge;
 
 -(IBAction) buttonReleased:(id) sender;
 

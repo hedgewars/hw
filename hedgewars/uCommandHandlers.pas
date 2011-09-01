@@ -450,7 +450,7 @@ end;
 
 procedure chSetMap(var s: shortstring);
 begin
-if isDeveloperMode and (s <> '') then
+if isDeveloperMode then
 begin
 UserPathz[ptMapCurrent]:= UserPathz[ptMaps] + '/' + s;
 Pathz[ptMapCurrent]:= Pathz[ptMaps] + '/' + s;

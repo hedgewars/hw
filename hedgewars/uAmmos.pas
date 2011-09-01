@@ -156,7 +156,8 @@ with Hedgehog do
     ammoidx:= 0;
     while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> am) do inc(ammoidx);
     GetAmmoEntry:= @Ammo^[slot, ammoidx];
-    end
+    if (Ammo^[slot, ammoidx].AmmoType <> am) then GetAmmoEntry:= GetAmmoEntry(Hedgehog, amNothing)
+    end;
 end;
 
 procedure AssignStores;
@@ -180,9 +181,12 @@ end;
 
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
 var cnt: LongWord;
+    a: PAmmo;
 begin
-cnt:= GetAmmoEntry(Hedgehog, ammo)^.Count;
-if cnt <> AMMO_INFINITE then
+a:= GetAmmoEntry(Hedgehog, ammo);
+if (a^.AmmoType <> amNothing) then cnt:= a^.Count
+else cnt:= 0;
+if (cnt <> AMMO_INFINITE) then
     begin
     inc(cnt, Ammoz[ammo].NumberInCase);
     AddAmmo(Hedgehog, ammo, cnt)

@@ -32,6 +32,7 @@ procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
 procedure ShakeCamera(amount: LongWord);
+procedure InitCameraBorders;
 procedure MoveCamera;
 procedure onFocusStateChanged;
 
@@ -175,7 +176,7 @@ cWaveWidth:= SpritesData[sprWater].Width;
 //cWaveHeight:= SpritesData[sprWater].Height;
 cWaveHeight:= 32;
 
-cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
+InitCameraBorders();
 uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
@@ -196,6 +197,10 @@ SkyOffset:= 0;
 HorizontOffset:= 0;
 end;
 
+procedure InitCameraBorders;
+begin
+cGearScrEdgesDist:= min(2 * cScreenHeight div 5, 2 * cScreenWidth div 5);
+end;
 
 procedure ShowAmmoMenu;
 const MENUSPEED = 15;
@@ -1164,7 +1169,7 @@ if isCursorVisible then
      with CurrentHedgehog^ do
        if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
          begin
-         if CurAmmoType = amNapalm then
+         if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) then
            DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
          i:= GetAmmoEntry(CurrentHedgehog^)^.Pos;
          with Ammoz[CurAmmoType] do
