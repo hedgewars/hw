@@ -19,13 +19,16 @@
 package org.hedgewars.mobile;
 
 import org.hedgewars.mobile.Downloader.DownloadActivity;
+import org.hedgewars.mobile.Downloader.DownloadService;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -52,7 +55,12 @@ public class MainActivity extends Activity {
 
 	private OnClickListener startGameClicker = new OnClickListener(){
 		public void onClick(View v){
-			startActivity(new Intent(getApplicationContext(), StartGameActivity.class));
+			if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(DownloadService.PREF_DOWNLOADED, false))
+				startActivity(new Intent(getApplicationContext(), StartGameActivity.class));
+			else {
+				Toast.makeText(MainActivity.this, R.string.download_userexplain, Toast.LENGTH_LONG).show();
+				startActivityForResult(new Intent(getApplicationContext(), DownloadActivity.class), 0);
+			}
 		}
 	};
 	
