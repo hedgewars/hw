@@ -30,7 +30,7 @@
 #import "PascalImports.h"
 
 @implementation GameConfigViewController
-@synthesize imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
+@synthesize imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController, interfaceBridge;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -230,11 +230,12 @@
                                     script,@"mission_command",
                                     nil];
 
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
-
-    [bridge startLocalGame:gameDictionary];
-
-    [bridge release];
+    if (self.interfaceBridge == nil) {
+        GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+        self.interfaceBridge = bridge;
+        [bridge release];
+    }
+    [self.interfaceBridge startLocalGame:gameDictionary];
 }
 
 -(void) loadNiceHogs {
@@ -377,12 +378,15 @@
         self.mapConfigViewController = nil;
 
     self.imgContainer = nil;
+    // don't nil this one or it won't be able to send messages
+    //self.interfaceBridge = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
     self.imgContainer = nil;
+    self.interfaceBridge = nil;
     self.mapConfigViewController = nil;
     self.teamConfigViewController = nil;
     self.schemeWeaponConfigViewController = nil;
@@ -393,6 +397,7 @@
 
 -(void) dealloc {
     releaseAndNil(imgContainer);
+    releaseAndNil(interfaceBridge);
     releaseAndNil(mapConfigViewController);
     releaseAndNil(teamConfigViewController);
     releaseAndNil(schemeWeaponConfigViewController);

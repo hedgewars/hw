@@ -78,7 +78,7 @@ PageScheme::PageScheme(QWidget* parent) :
     glGMLayout->addWidget(TBW_solid,0,2,1,1);
 
     TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder.png");
-    TBW_border->setToolTip("<b>" + ToggleButtonWidget::tr("Add Border") + "</b>:<br />" + tr("Add an indestructable border around the terrain"));
+    TBW_border->setToolTip("<b>" + ToggleButtonWidget::tr("Add Border") + "</b>:<br />" + tr("Add an indestructible border around the terrain"));
     glGMLayout->addWidget(TBW_border,0,3,1,1);
 
     TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity.png");
@@ -160,6 +160,11 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_tagteam = new ToggleButtonWidget(gbGameModes, ":/res/btnTagTeam.png");
     TBW_tagteam->setToolTip("<b>" + ToggleButtonWidget::tr("Tag Team") + "</b>:<br />" + tr("Teams in each clan take successive turns sharing their turn time."));
     glGMLayout->addWidget(TBW_tagteam,4,3,1,1);
+
+    TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBottomBorder.png");
+    TBW_bottomborder->setToolTip("<b>" + ToggleButtonWidget::tr("Add Bottom Border") + "</b>:<br />" + tr("Add an indestructible border along the bottom"));
+    glGMLayout->addWidget(TBW_bottomborder,4,4,1,1);
+
 
     // Right
     QLabel * l;
@@ -430,21 +435,22 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(TBW_nowind, 22);
     mapper->addMapping(TBW_morewind, 23);
     mapper->addMapping(TBW_tagteam, 24);
-    mapper->addMapping(SB_DamageModifier, 25);
-    mapper->addMapping(SB_TurnTime, 26);
-    mapper->addMapping(SB_InitHealth, 27);
-    mapper->addMapping(SB_SuddenDeath, 28);
-    mapper->addMapping(SB_CaseProb, 29);
-    mapper->addMapping(SB_MinesTime, 30);
-    mapper->addMapping(SB_Mines, 31);
-    mapper->addMapping(SB_MineDuds, 32);
-    mapper->addMapping(SB_Explosives, 33);
-    mapper->addMapping(SB_HealthCrates, 34);
-    mapper->addMapping(SB_CrateHealth, 35);
-    mapper->addMapping(SB_WaterRise, 36);
-    mapper->addMapping(SB_HealthDecrease, 37);
-    mapper->addMapping(SB_RopeModifier, 38);
-		mapper->addMapping(SB_GetAwayTime, 39);
+    mapper->addMapping(TBW_bottomborder, 25);
+    mapper->addMapping(SB_DamageModifier, 26);
+    mapper->addMapping(SB_TurnTime, 27);
+    mapper->addMapping(SB_InitHealth, 28);
+    mapper->addMapping(SB_SuddenDeath, 29);
+    mapper->addMapping(SB_CaseProb, 30);
+    mapper->addMapping(SB_MinesTime, 31);
+    mapper->addMapping(SB_Mines, 32);
+    mapper->addMapping(SB_MineDuds, 33);
+    mapper->addMapping(SB_Explosives, 34);
+    mapper->addMapping(SB_HealthCrates, 35);
+    mapper->addMapping(SB_CrateHealth, 36);
+    mapper->addMapping(SB_WaterRise, 37);
+    mapper->addMapping(SB_HealthDecrease, 38);
+    mapper->addMapping(SB_RopeModifier, 39);
+	mapper->addMapping(SB_GetAwayTime, 40);
 
     mapper->toFirst();
 }

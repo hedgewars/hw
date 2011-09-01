@@ -101,7 +101,6 @@ begin
         gsExit: begin
                 isTerminated:= true;
                 end;
-        gsSuspend: exit;
         end;
 
 {$IFDEF SDL13}
@@ -184,6 +183,16 @@ begin
                         if prevFocusState xor cHasFocus then
                             onFocusStateChanged()
                         end;
+                SDL_VIDEORESIZE: begin
+                    // using lower values causes widget overlap and video issues
+                    if event.resize.w > cMinScreenWidth then cScreenWidth:= event.resize.w
+                    else cScreenWidth:= cMinScreenWidth;
+                    if event.resize.h > cMinScreenHeight then cScreenHeight:= event.resize.h
+                    else cScreenHeight:= cMinScreenHeight;
+                    ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+                    WriteLnToConsole('window resize');
+                    InitCameraBorders();
+                    end;
 {$ENDIF}
                 SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
                 SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
@@ -244,6 +253,12 @@ begin
     recordFileName:= gameArgs[10];
     cStereoMode:= smNone;
 {$ENDIF}
+    cMinScreenWidth:= cScreenWidth;
+    cMinScreenHeight:= cScreenHeight;
+    cOrigScreenWidth:= cScreenWidth;
+    cOrigScreenHeight:= cScreenHeight;
+    if 480 < cMinScreenWidth then cMinScreenWidth:= 480;
+    if 320 < cMinScreenHeight then cMinScreenHeight:= 320;
 
     initEverything(true);
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');

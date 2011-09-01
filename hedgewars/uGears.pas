@@ -75,7 +75,6 @@ procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
 procedure HedgehogStep(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear); forward;
-procedure doStepHedgehogReturn(Gear: PGear); forward;
 procedure HedgehogChAngle(HHGear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure PickUp(HH, Gear: PGear); forward;
@@ -218,7 +217,6 @@ gear^.dY:= dY;
 gear^.doStep:= doStepHandlers[Kind];
 gear^.CollisionIndex:= -1;
 gear^.Timer:= Timer;
-gear^.Z:= cUsualZ;
 gear^.FlightTime:= 0;
 gear^.uid:= Counter;
 gear^.SoundChannel:= -1;
@@ -226,6 +224,8 @@ gear^.ImpactSound:= sndNone;
 gear^.nImpactSounds:= 0;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
+if Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then gear^.Z:= cHHZ+1
+else gear^.Z:= cUsualZ;
 
 if CurrentHedgehog <> nil then
     begin
@@ -289,6 +289,7 @@ case Kind of
      gtFlake: begin
                 with Gear^ do
                     begin
+                    Pos:= 0;
                     Radius:= 1;
                     DirAngle:= random * 360;
                     dx.isNegative:= GetRandom(2) = 0;
@@ -371,7 +372,8 @@ case Kind of
                 gear^.Elasticity:= _0_4;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _6;
-                gear^.Health:= cBarrelHealth
+                gear^.Health:= cBarrelHealth;
+                gear^.Z:= cHHZ-1
                 end;
   gtDEagleShot: begin
                 gear^.Radius:= 1;
@@ -426,6 +428,11 @@ case Kind of
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_3;
                 gear^.Timer:= 0
+                end;
+      gtTardis: begin
+                gear^.Timer:= 0;
+                gear^.Pos:= 1;
+                gear^.Z:= cCurrHHZ+1;
                 end;
       gtMortar: begin
                 gear^.Radius:= 4;
@@ -863,7 +870,7 @@ case step of
                         
                         ChangeToSDClouds;
                         ChangeToSDFlakes;
-                        glClearColor(SDSkyColor.r / 255, SDSkyColor.g / 255, SDSkyColor.b / 255, 0.99);
+                        glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99);
                         end;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                     playSound(sndSuddenDeath);
@@ -1227,7 +1234,7 @@ if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
     begin
     for i:= 0 to Pred(vobCount*2) do
         AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(LAND_HEIGHT div 2), gtFlake, 0, _0, _0, 0);
-    disableLandBack:= true
+    //disableLandBack:= true
     end
 end;
 
@@ -1300,7 +1307,7 @@ while Gear <> nil do
                                 Gear^.Active:= true;
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear
                                 end;
-                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) then
+                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and not Gear^.Invulnerable then
                                 Gear^.Hedgehog^.Effects[hePoisoned] := true;
                             end;
 
@@ -1449,7 +1456,11 @@ while i > 0 do
                         ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg, dsShove)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
-                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
+                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then 
+                        begin
+                        if (Ammo^.Hedgehog^.Gear <> nil) then Ammo^.Hedgehog^.Gear^.State:= Ammo^.Hedgehog^.Gear^.State and not gstNotKickable;
+                        ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
+                        end;
 
                     DeleteCI(Gear);
                     if (Gear^.Kind = gtHedgehog) and Gear^.Hedgehog^.King then

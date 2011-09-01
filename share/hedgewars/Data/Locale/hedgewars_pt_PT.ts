@@ -16,15 +16,15 @@
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro no ficheiro</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossivel abrir o ficheiro &apos;%1&apos; para escrita</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossivel let o ficheiro &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -44,8 +44,8 @@
 <context>
     <name>GameCFGWidget</name>
     <message>
-        <source>Edit schemes</source>
-        <translation>Editar esquemas</translation>
+        <source>Edit weapons</source>
+        <translation>Editar armas</translation>
     </message>
     <message>
         <source>Error</source>
@@ -56,8 +56,8 @@
         <translation>Esquema de armas inválido</translation>
     </message>
     <message>
-        <source>Edit weapons</source>
-        <translation>Editar armas</translation>
+        <source>Edit schemes</source>
+        <translation>Editar esquemas</translation>
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
@@ -289,14 +289,16 @@ outro nome de utilizador no menu de configuração:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Nome de utilizador</translation>
+        <translation>Nome de utilizador</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome de utilizador %1
+já está a ser utilizado no servidor.
+Por favor escolha outro nome de utilizador.</translation>
     </message>
 </context>
 <context>
@@ -334,11 +336,11 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Latest version protocol number:</source>
-        <translation>Número do protocolo da versão mais recente:</translation>
+        <translation>Número do protocolo da mais recente versão:</translation>
     </message>
     <message>
         <source>MOTD preview:</source>
-        <translation>Pré-visualizar o MOTD</translation>
+        <translation>Pré-visualização do MOTD:</translation>
     </message>
     <message>
         <source>Set data</source>
@@ -353,7 +355,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -723,11 +725,6 @@ Please pick another nickname:</source>
         <translation>A versão do Hedgewars para Windows suporta Xfire. Não te esqueças de adicionar o Hedgewars à tua lista de jogos para que os teus amigos te possam ver a jogar.</translation>
     </message>
     <message>
-        <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">A Abelha Teleguiada pode-se demonstrar complicada de utilizar. O grau a que consegue virar depende da sua velocidade, por isso experimenta larga-la com diferentes níveis de força.</translation>
-    </message>
-    <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation>Utiliza um Molotov ou o Lança-chamas para temporariamente impedir outros ouriços de passar por áreas no terreno como túneis ou plataformas.</translation>
@@ -735,7 +732,7 @@ Please pick another nickname:</source>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>A Abelha Teleguiada pode-se demonstrar complicada de utilizar. O grau a que consegue virar depende da sua velocidade, por isso experimenta lança-la com diferentes níveis de força.</translation>
     </message>
 </context>
 <context>
@@ -764,15 +761,15 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Erro</translation>
+        <translation>Erro</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">Insira o nome da sala</translation>
+        <translation>Por favor insira o nome da sala</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -992,9 +989,9 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 jogadores online</numerusform>
+            <numerusform>%1 jogador online</numerusform>
         </translation>
     </message>
 </context>
@@ -1118,7 +1115,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished"></translation>
+        <translation>As equipas do mesmo clã jogam de forma sucessiva partilhando o seu tempo para jogar.</translation>
     </message>
 </context>
 <context>
@@ -1215,7 +1212,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">Actualizar</translation>
+        <translation>Actualizar</translation>
     </message>
 </context>
 <context>
@@ -1325,67 +1322,67 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Desactivado</translation>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Vermelho/Ciano</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano/Vermelho</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Vermelho/Azul</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul/Vermelho</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Vermelho/Verde</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Verde/Vermelho</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished"></translation>
+        <translation>Lado-a-lado</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Cima-baixo</translation>
     </message>
     <message>
         <source>Wiggle</source>
-        <translation type="unfinished"></translation>
+        <translation>"Wiggle"</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Vermelho/Ciano (tons de cinza)</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano/Vermelho (tons de cinza)</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Vermelho/Azul (tons de cinza)</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul/Vermelho (tons de cinza)</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Vermelho/Verde (tons de cinza)</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Verde/Vermelho (tons de cinza)</translation>
     </message>
 </context>
 <context>
@@ -1614,32 +1611,28 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
         <translation>% Comprimento da Corda</translation>
     </message>
     <message>
-        <source>Gameplay</source>
-        <translation type="obsolete">Jogabilidade</translation>
-    </message>
-    <message>
         <source>Stereo rendering</source>
-        <translation type="unfinished"></translation>
+        <translation>Renderização estereoscópica</translation>
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opções de Jogo</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Esquema</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Password</translation>
+        <translation>Password</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation type="unfinished"></translation>
+        <translation>% Tempo Para Retirar</translation>
     </message>
 </context>
 <context>
@@ -2002,7 +1995,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Tag Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Tag Team</translation>
     </message>
 </context>
 <context>

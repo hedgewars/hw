@@ -16,15 +16,15 @@
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation type="unfinished"></translation>
+        <translation>Chyba v súbore</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodarilo sa otvoriť súbor &apos;%1&apos; pre zápis</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodarilo sa prečítať súbor &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -296,14 +296,17 @@ v nastaveniach hry:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Prezývka</translation>
+        <translation>Prezývka</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Niekto už používa
+vašu prezývku %1
+na serveri.
+Prosím vyberte si inú prezývku:</translation>
     </message>
 </context>
 <context>
@@ -360,7 +363,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Zrušiť</translation>
+        <translation>Zrušiť</translation>
     </message>
 </context>
 <context>
@@ -446,9 +449,9 @@ Please pick another nickname:</source>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
         <translation>
-            <numerusform>Najlepším zabijákom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;jedným&lt;/b&gt; zabitím počas ťahu.</numerusform>
-            <numerusform>Najlepším zabijákom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;%2&lt;/b&gt; zabitiami počas ťahu.</numerusform>
-            <numerusform>Najlepším zabijákom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;%2&lt;/b&gt; zabitiami počas ťahu.</numerusform>
+            <numerusform>Najlepším zabijakom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;jedným&lt;/b&gt; zabitím počas ťahu.</numerusform>
+            <numerusform>Najlepším zabijakom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;%2&lt;/b&gt; zabitiami počas ťahu.</numerusform>
+            <numerusform>Najlepším zabijakom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;%2&lt;/b&gt; zabitiami počas ťahu.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -784,7 +787,7 @@ Please pick another nickname:</source>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Navádzaná včela je trošku zložitejšia na použitie. Jej polomer otočenia závisí na jej rýchlosti, takže ju radšej nepoužívajte pri plnej sile.</translation>
     </message>
 </context>
 <context>
@@ -813,15 +816,15 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Chyba</translation>
+        <translation>Chyba</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">Prosím zadajte názov miestnosti</translation>
+        <translation>Prosím zadajte názov miestnosti</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -1043,10 +1046,10 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 hráč online</numerusform>
+            <numerusform>%1 hráči online</numerusform>
+            <numerusform>%1 hráčov online</numerusform>
         </translation>
     </message>
 </context>
@@ -1170,7 +1173,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tímy každého klanu sa striedajú v ťahaní a zdieľajú svoj čas na ťah.</translation>
     </message>
 </context>
 <context>
@@ -1267,7 +1270,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">Obnoviť</translation>
+        <translation>Obnoviť</translation>
     </message>
 </context>
 <context>
@@ -1449,27 +1452,27 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Červené/Azúrové (odtiene šedej)</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Azúrové/Červené (odtiene šedej)</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Červené/Modré (odtiene šedej)</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Modré/Červené (odtiene šedej)</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Červené/Zelené (odtiene šedej)</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Zelené/červené (odtiene šedej)</translation>
     </message>
 </context>
 <context>
@@ -1718,23 +1721,23 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Voľby hry</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Štýl</translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Schéma</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Heslo</translation>
+        <translation>Heslo</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation type="unfinished"></translation>
+        <translation>% času na útek</translation>
     </message>
 </context>
 <context>
@@ -2101,7 +2104,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Tag Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Označit tím</translation>
     </message>
 </context>
 <context>

@@ -36,7 +36,7 @@ type
         end;
 
     // Possible states of the game
-    TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit, gsSuspend);
+    TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit);
 
     // Game types that help determining what the engine is actually supposed to do
     TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax);
@@ -82,7 +82,7 @@ type
             sprSMineOff, sprSMineOn, sprHandSMine, sprHammer,
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
-            sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprFireButton
+            sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis, sprFireButton
             );
 
     // Gears that interact with other Gears and/or Land

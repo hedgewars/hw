@@ -87,12 +87,6 @@
         case 90:    //synched weapons/scheme
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"sync_ws"];
             break;
-        case 70:    //enhanced graphics
-            [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"enhanced"];
-            break;
-        case 80:    //nomultitasking
-            [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"multitasking"];
-            break;
         case 60:    //classic menu
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"classic_menu"];
             break;
@@ -126,7 +120,7 @@
             return 2;
             break;
         case 2:     // other options
-            return 5;
+            return 3;
             break;
         default:
             DLog(@"Nope");
@@ -240,21 +234,6 @@
                     switchContent.tag = 90;
                     break;
                 case 2:
-                    cell.textLabel.text = NSLocalizedString(@"Multitasking", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"Disable it in case of issues when returing in game", @"");
-                    switchContent.on = [[settings objectForKey:@"multitasking"] boolValue];
-                    switchContent.tag = 80;
-                    break;
-                case 3:
-                    cell.textLabel.text = NSLocalizedString(@"Enanched Graphics", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"Beware that the game will consume more memory", @"");
-                    switchContent.on = [[settings objectForKey:@"enhanced"] boolValue];
-                    switchContent.tag = 70;
-                    // prevent the oldest devices to even think about enabling it
-                    if (IS_NOT_POWERFUL(getModelType()))
-                        switchContent.enabled = NO;
-                    break;
-                case 4:
                     cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
                     cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
                     switchContent.on = [[settings objectForKey:@"classic_menu"] boolValue];
@@ -282,6 +261,7 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (0 == [indexPath section]) {
         EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
         [cell replyKeyboard];

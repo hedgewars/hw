@@ -227,13 +227,6 @@ begin
         Tint($FF, $FF, $FF, $FF)
         end;
 
-    if  (CurAmmoGear <> nil) and 
-        (CurrentHedgehog^.Gear <> nil) and
-        (CurrentHedgehog^.Gear = Gear) and 
-        (CurAmmoGear^.Kind = gtTardis) then Tint($FF, $FF, $FF, CurAmmoGear^.Timer div 20)
-    // probably will need a new flag for this
-    else if (Gear^.State and gstTmpFlag <> 0) then Tint($FF, $FF, $FF, $FF-Gear^.Timer);
-
     if ((Gear^.State and gstWinner) <> 0) and
     ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
         begin
@@ -1090,6 +1083,15 @@ begin
 //DrawRotatedF(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer, 1, Gear^.DirAngle);
                         end;
        gtStructure: DrawSprite(sprTarget, x - 16, y - 16, 0);
+          gtTardis: if Gear^.Pos <> 4 then
+                        begin
+                        if (Gear^.Pos = 1) or (Gear^.Pos = 3) then
+                            Tint($FF, $FF, $FF, max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
+                        DrawSprite(sprTardis, x-24, y-63,0);
+                        if (Gear^.Pos = 1) or (Gear^.Pos = 3) then
+                            Tint($FF, $FF, $FF, $FF)
+                        end;
+
 
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(x + 8, y + 8, Gear^.Tex);

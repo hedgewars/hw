@@ -45,7 +45,6 @@
 }
 
 -(void) dealloc {
-    releaseAndNil(parentController);
     releaseAndNil(engineProtocol);
     releaseAndNil(savePath);
     releaseAndNil(overlayController);
@@ -55,16 +54,16 @@
 #pragma mark -
 // overlay with controls, become visible later, with a transparency effect since the sdlwindow is not yet created
 -(void) displayOverlayLater:(id) object {
-    [self.overlayController setInitialOrientation:self.parentController.interfaceOrientation];
-
-    UIWindow *gameWindow = (IS_DUALHEAD() ? [HedgewarsAppDelegate sharedAppDelegate].uiwindow : [[UIApplication sharedApplication] keyWindow]);
-    [gameWindow addSubview:self.overlayController.view];
+    // in order to get rotation events we have to insert the view inside the first view of the second window
+    // when multihead we have to make sure that overlay is displayed in the touch-enabled window
+    UIView *injected = (IS_DUALHEAD() ? self.parentController.view : UIVIEW_HW_SDLVIEW);
+    [injected addSubview:self.overlayController.view];
 }
 
 // main routine for calling the actual game engine
 -(void) startGameEngine {
     const char *gameArgs[11];
-    NSInteger width, height, orientation;
+    NSInteger width, height;
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
@@ -73,18 +72,15 @@
         CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
         width = (int) screenBounds.size.width;
         height = (int) screenBounds.size.height;
-        orientation = 0;
     } else {
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
         width = (int) screenBounds.size.height;
         height = (int) screenBounds.size.width;
-        orientation = (self.parentController.interfaceOrientation == UIDeviceOrientationLandscapeLeft) ? -90 : 90;
     }
 
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width];
     NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height];
-    NSString *rotation = [[NSString alloc] initWithFormat:@"%d", orientation];
-    BOOL enhanced = [[settings objectForKey:@"enhanced"] boolValue];
+    NSString *rotation = [[NSString alloc] initWithString:@"0"];
 
     NSString *modelId = getModelType();
     NSInteger tmpQuality;
@@ -92,7 +88,7 @@
         tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;                 // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
     else if ([modelId hasPrefix:@"iPhone2"] || [modelId hasPrefix:@"iPod3"])                                    // = iPhone 3GS or iPod Touch 3G
         tmpQuality = 0x00000002 | 0x00000040;                                           // rqBlurryLand | rqKillFlakes
-    else if ([modelId hasPrefix:@"iPad1"] || [modelId hasPrefix:@"iPod4"] || enhanced == NO)                    // = iPad 1G or iPod Touch 4G or not enhanced mode
+    else if ([modelId hasPrefix:@"iPad1"] || [modelId hasPrefix:@"iPod4"])                    // = iPad 1G or iPod Touch 4G
         tmpQuality = 0x00000002;                                                        // rqBlurryLand
     else                                                                                                        // = everything else
         tmpQuality = 0;                                                                 // full quality
@@ -181,10 +177,6 @@
     // warn our host that it's going to be visible again
     [self.parentController viewWillAppear:YES];
 
-    // release the network manager and the savepath as they are not needed anymore
-    releaseAndNil(self.engineProtocol);
-    releaseAndNil(self.savePath);
-
     if ([[userDefaults objectForKey:@"music"] boolValue])
         [HedgewarsAppDelegate playBackgroundMusic];
 }
@@ -195,8 +187,10 @@
 
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
-    self.savePath = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
+    NSString *path = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
     [outputFormatter release];
+    self.savePath = path;
+    [path release];
 
     // in the rare case in which a savefile with the same name exists the older one must be removed (or it gets corrupted)
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.savePath])
@@ -209,7 +203,7 @@
 // set up variables for a save game
 -(void) startSaveGame:(NSString *)atPath {
     self.gameType = gtSave;
-    self.savePath = [atPath retain];
+    self.savePath = atPath;
 
     [self.engineProtocol spawnThread:self.savePath];
     [self prepareEngineLaunch];

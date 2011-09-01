@@ -229,6 +229,7 @@ with gear^ do
                 end;
   vgtSmokeWhite,
   vgtSmoke: begin
+                Scale:= 1.0;
                 dx:= 0.0002 * (random(45) + 10);
                 dy:= 0.0002 * (random(45) + 10);
                 if random(2) = 0 then dx := -dx;
@@ -535,7 +536,7 @@ case Layer of
           end;
           if (cReducedQuality and rqAntiBoom) = 0 then
               case Gear^.Kind of
-                  vgtSmoke: DrawSprite(sprSmoke, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                  vgtSmoke: DrawTextureF(SpritesData[sprSmoke].Texture, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 7 - Gear^.Frame, 0, SpritesData[sprSmoke].Width, SpritesData[sprSmoke].Height);
                   vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                   vgtDust: if Gear^.State = 1 then
                                DrawSprite(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame)

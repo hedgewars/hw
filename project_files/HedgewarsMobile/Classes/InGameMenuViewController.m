@@ -162,21 +162,12 @@
 
             break;
         case 3:
-            // expand the view (and table) so that the actionsheet can be selected on the iPhone
-            if (IS_IPAD() == NO) {
-                CGRect screen = [[UIScreen mainScreen] bounds];
-                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-                [UIView beginAnimations:@"table width more" context:NULL];
-                [UIView setAnimationDuration:0.2];
-                self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
-                [UIView commitAnimations];
-            }
             actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
                                                       delegate:self
                                              cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
                                         destructiveButtonTitle:NSLocalizedString(@"Of course!", @"")
                                              otherButtonTitles:nil];
-            [actionSheet showInView:self.view];
+            [actionSheet showInView:(IS_IPAD() ? self.view : UIVIEW_HW_SDLVIEW)];
             [actionSheet release];
 
             break;
@@ -191,20 +182,13 @@
 #pragma mark -
 #pragma mark actionSheet methods
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
-    if (IS_IPAD() == NO) {
-        CGRect screen = [[UIScreen mainScreen] bounds];
-        [UIView beginAnimations:@"table width less" context:NULL];
-        [UIView setAnimationDuration:0.2];
-        self.view.frame = CGRectMake(screen.size.height-200, 0, 200, VIEW_HEIGHT);
-        [UIView commitAnimations];
-    }
-
     if ([actionSheet cancelButtonIndex] != buttonIndex) {
         SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
         HW_terminate(NO);
     }
 }
 
+//TODO: check this is still needed since we switched to SDL_GL_CreateContext()
 #pragma mark -
 #pragma mark save screenshot
 //by http://www.bit-101.com/blog/?p=1861

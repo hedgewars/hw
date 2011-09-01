@@ -241,7 +241,7 @@
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Quit reason:</translation>
+        <translation>Quit reason: </translation>
     </message>
     <message>
         <source>You got kicked</source>

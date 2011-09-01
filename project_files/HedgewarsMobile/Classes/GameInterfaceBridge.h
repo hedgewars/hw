@@ -38,7 +38,7 @@ typedef enum {gsNone, gsInGame, gsEnded, gsInterrupted} TGameStatus;
     TGameType gameType;
 }
 
-@property (nonatomic,retain) UIViewController *parentController;
+@property (assign) UIViewController *parentController;
 @property (nonatomic,retain) NSString *savePath;
 
 @property (nonatomic,retain) OverlayViewController *overlayController;

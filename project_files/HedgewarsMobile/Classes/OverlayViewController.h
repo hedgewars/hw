@@ -45,9 +45,6 @@
     CGPoint startingPoint;
     BOOL isAttacking;
     
-    // stuff initialized externally
-    NSInteger initialOrientation;
-    
     // dual head support
     NSInteger initialScreenCount;
 
@@ -67,7 +64,6 @@
 @property (nonatomic,retain) UIButton *confirmButton;
 @property (nonatomic,retain) UISegmentedControl *grenadeTimeSegment;
 
-@property (assign) NSInteger initialOrientation;
 @property (assign) NSInteger initialScreenCount;
 
 

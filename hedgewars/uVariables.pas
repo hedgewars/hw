@@ -25,8 +25,12 @@ uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
 
 var
 /////// init flags ///////
-    cScreenWidth    : LongInt     = 1024;
-    cScreenHeight   : LongInt     = 768;
+    cMinScreenWidth   : LongInt     = 480;
+    cMinScreenHeight  : LongInt     = 320;
+    cScreenWidth      : LongInt     = 1024;
+    cScreenHeight     : LongInt     = 768;
+    cOrigScreenWidth  : LongInt     = 1024;
+    cOrigScreenHeight : LongInt     = 768;
     cBits           : LongInt     = 32;
     ipcPort         : Word        = 0;
     cFullScreen     : boolean     = false;
@@ -614,6 +618,8 @@ const
             Width:  80; Height: 50; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSDSplash
             (FileName:  'SDDroplet'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprSDDroplet
+            (FileName:  'Egg'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;//TODO change back 'Egg' to 'Tardis'
+            Width:  0; Height: 0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprTardis
             (FileName: 'firebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 450; Height: 150; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true) // sprFireButton
             );
@@ -2299,7 +2305,7 @@ var
     bShowFinger: boolean;
     Frames: Longword;
     WaterColor, DeepWaterColor: TSDL_Color;
-    SDSkyColor: TSDL_Color;
+    SkyColor, RQSkyColor, SDSkyColor: TSDL_Color;
     SkyOffset: LongInt;
     HorizontOffset: LongInt;
 {$IFDEF COUNTTICKS}

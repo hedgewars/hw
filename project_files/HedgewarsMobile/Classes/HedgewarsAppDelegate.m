@@ -65,7 +65,7 @@
     AVAudioPlayer *background = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:musicString] error:nil];
 
     background.delegate = nil;
-    background.volume = 0.5f;
+    background.volume = 0.4f;
     background.numberOfLoops = -1;
     [background prepareToPlay];
     [HedgewarsAppDelegate sharedAppDelegate].backgroundMusic = background;
@@ -122,54 +122,23 @@
     }
 }
 
--(void) applicationWillTerminate:(UIApplication *)application {
-    if (self.isInGame)
-        HW_terminate(YES);
-
-    [super applicationWillTerminate:application];
-}
-
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
-    // don't clean mainMenuViewController here!!!
-    [self.backgroundMusic stop];
-    self.backgroundMusic = nil;
-    MSG_MEMCLEAN();
+    // don't stop music when it is playing
+    if (self.isInGame) {
+        [self.backgroundMusic stop];
+        self.backgroundMusic = nil;
+        MSG_MEMCLEAN();
+    }
     print_free_memory();
+    // don't clean mainMenuViewController here!!!
 }
-
-//TODO: when the SDLUIKitDelegate methods applicationWillResignActive and applicationDidBecomeActive do work
-// you'll be able to remove the methods below and just handle the SDL_WINDOWEVENT_MINIMIZED/SDL_WINDOWEVENT_RESTORED
-// events in the MainLoop
 
 -(void) applicationWillResignActive:(UIApplication *)application {
-    //[super applicationWillResignActive:application];
-
-    UIDevice *device = [UIDevice currentDevice];
-    if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
-         [device isMultitaskingSupported] && self.isInGame) {
-        // let's try to be permissive with multitasking here...
-        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"multitasking"] boolValue])
-            HW_suspend();
-        else {
-            // so the game returns to the configuration view
-            if (isGameRunning())
-                HW_terminate(NO);
-            else {
-                // while screen is loading you can't call HW_terminate() so we close the app
-                [self applicationWillTerminate:application];
-            }
-        }
-    }
+    // true multitasking with sdl works only on 4.2 and above; we close the game to avoid a black screen at return
+    if (self.isInGame && ([[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f))
+        HW_terminate(NO);
+    [super applicationWillResignActive:application];
 }
 
--(void) applicationDidBecomeActive:(UIApplication *)application {
-    //[super applicationDidBecomeActive:application];
-
-    UIDevice *device = [UIDevice currentDevice];
-    if ([device respondsToSelector:@selector(isMultitaskingSupported)] &&
-         [device isMultitaskingSupported] && self.isInGame) {
-        HW_resume();
-    }
-}
 
 @end
