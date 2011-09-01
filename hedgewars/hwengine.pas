@@ -149,8 +149,12 @@ begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
-
-        while SDL_PollEvent(@event) <> 0 do
+        SDL_PumpEvents();
+        {$IFDEF SDL13}
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
+        {$ELSE}
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_ALLEVENTS) > 0 do
+        {$ENDIF}
         begin
             case event.type_ of
                 SDL_KEYDOWN: if GameState = gsChat then

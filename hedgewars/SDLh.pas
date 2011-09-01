@@ -278,6 +278,11 @@ const
     IMG_INIT_PNG = $00000002;
     IMG_INIT_TIF = $00000004;
 
+    {* SDL_EventMask type definition *}
+{$IFNDEF SDL13}
+    SDL_ALLEVENTS = $FFFFFFFF;
+{$ENDIF}
+
 /////////////////////////////////////////////////////////////////
 ///////////////////////  TYPE DEFINITIONS ///////////////////////
 /////////////////////////////////////////////////////////////////
@@ -347,6 +352,7 @@ type
 {$ENDIF}
         end;
 
+    SDL_eventaction = (SDL_ADDEVENT = 0, SDL_PEEPEVENT, SDL_GETEVENT);
 
     PSDL_Surface = ^TSDL_Surface;
     TSDL_Surface = record
@@ -793,6 +799,10 @@ function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt;
 
 procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;
 function  SDL_SetHint(name, value: PChar): boolean; cdecl; external SDLLibName;
+
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongInt): LongInt; cdecl; external SDLLibName;
+{$ELSE}
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: LongInt): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
