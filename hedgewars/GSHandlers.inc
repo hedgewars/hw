@@ -1227,7 +1227,7 @@ begin
 
     if abs(LongInt(HHGear^.Angle) - BTPrevAngle) > 7  then
         begin
-        Gear^.dX := SignAs(AngleSin(HHGear^.Angle) * _0_5, HHGear^.dX);
+        Gear^.dX := SignAs(AngleSin(HHGear^.Angle) * _0_5, Gear^.dX);
         Gear^.dY := AngleCos(HHGear^.Angle) * ( - _0_5);
         BTPrevAngle := HHGear^.Angle;
         b := true
