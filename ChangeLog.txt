@@ -7,6 +7,7 @@
  + Sudden Death art
  + New Weapon/Utility: Land Spray Gun
  + New Game mode: Tag team
+ + Get away time modifier (in %)
  + Allow up to 8 teams in a game
  + Shoppa scheme by default resets ammo
  + Shots are on a tenth of a second delay instead of a 1 and a quarter second delay (fast deagle/portal fire)
