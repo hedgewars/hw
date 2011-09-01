@@ -19,12 +19,15 @@
 
 package org.hedgewars.mobile.Downloader;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -39,96 +42,171 @@ import android.util.Log;
  */
 public class DownloadAsyncTask extends AsyncTask<String, Object, Long> {
 
+	private final static String URL_WITHOUT_SUFFIX = "http://hedgewars.googlecode.com/files/data_5631.";
+	//private final static String URL_WITHOUT_SUFFIX = "http://www.xelification.com/tmp/firebutton.";
+	private final static String URL_ZIP_SUFFIX = "zip";
+	private final static String URL_HASH_SUFFIX = "hash";
+
 	private DownloadService service;
 	private long lastUpdateMillis = 0;
-	
+
 	public DownloadAsyncTask(DownloadService _service){
 		service = _service;
 	}
-	
+
 	/**
 	 * 
 	 * @param params - 2 Strings, first is the path where the unzipped files will be stored, second is the URL to download from
 	 */
 	protected Long doInBackground(String... params) {
 		HttpURLConnection conn = null;
+		MessageDigest digester = null;
+		String rootZipDest = params[0];
+
+		File rootDest = new File(rootZipDest);//TODO check for nullpointer, it hints to the absence of an sdcard
+		rootDest.mkdir();
+
 		try {
-			String rootZipDest = params[0];
-
-			File rootDest = new File(rootZipDest);//TODO check for nullpointer, it hints to the absence of an sdcard
-			rootDest.mkdir();
-			
-			URL url = new URL(params[1]);
+			URL url = new URL(URL_WITHOUT_SUFFIX + URL_ZIP_SUFFIX);
 			conn = (HttpURLConnection)url.openConnection();
-			String contentType = conn.getContentType();
-
-			if(contentType == null || contentType.contains("zip")){ //Seeing as we provide the url if the contentType is unknown lets assume zips
-				ZipInputStream input = new ZipInputStream(conn.getInputStream());
-				int bytesDecompressed = 0;
-				final int kbytesToProcess = conn.getContentLength()/1024;
-				
-				service.start(kbytesToProcess);
-				
-				ZipEntry entry = null;
-				while((entry = input.getNextEntry()) != null){
-					String fileName = entry.getName();
-					
-					if(isCancelled()) break;
-					else if(System.currentTimeMillis() - lastUpdateMillis > 1000){
-						lastUpdateMillis = System.currentTimeMillis();
-						publishProgress(bytesDecompressed, kbytesToProcess, fileName);
-					}
-					
-					Log.e("bla", fileName);
-					bytesDecompressed += entry.getCompressedSize();
-					
-					File f = new File(rootZipDest + fileName);
-
-					if(entry.isDirectory()){
-						f.mkdir();
-					}else{
-						if(f.exists()){
-							f.delete();
-						}
-
-						try {
-							f.createNewFile();
-							FileOutputStream out = new FileOutputStream(f);
-
-							byte[] buffer = new byte[1024];
-							int count = 0;
-							while((count = input.read(buffer)) != -1){
-								out.write(buffer, 0, count);
-							}
-							out.flush();
-							out.close();
-							input.closeEntry();
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-				input.close();
-			}else{
-				Log.e("bla", "contenttype = " + contentType);
-			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}finally{
-			if(conn != null) conn.disconnect();
+			return -1l;
 		}
-		return null;
+
+		String contentType = conn.getContentType();
+
+		if(contentType == null || contentType.contains("zip")){ //Seeing as we provide the url if the contentType is unknown lets assume zips
+			int bytesDecompressed = 0;
+			ZipEntry entry = null;
+			ZipInputStream input = null;
+			int kbytesToProcess = conn.getContentLength()/1024;
+
+			byte[] buffer = new byte[1024];
+			service.start(kbytesToProcess);
+
+			try {
+				digester = MessageDigest.getInstance("MD5");
+
+			} catch (NoSuchAlgorithmException e1) {
+				e1.printStackTrace();
+			}
+
+			try{
+				input = new ZipInputStream(conn.getInputStream());
+				entry = input.getNextEntry();	
+			}catch(IOException e){
+				e.printStackTrace();
+				if(conn != null) conn.disconnect();
+				return -1l;
+			}
+
+			while(entry != null){
+				if(isCancelled()) break;
+
+				String fileName = entry.getName();
+				File f = new File(rootZipDest + fileName);
+				bytesDecompressed += entry.getCompressedSize();
+
+				if(entry.isDirectory()){
+					f.mkdir();
+				}else{
+					if(f.exists()){
+						f.delete();
+					}
+
+					FileOutputStream output = null;
+					try {
+						f.createNewFile();
+						output = new FileOutputStream(f);
+
+						int count = 0;
+						while((count = input.read(buffer)) != -1){
+							output.write(buffer, 0, count);
+							digester.update(buffer, 0, count);
+							if(System.currentTimeMillis() - lastUpdateMillis > 1000){
+								lastUpdateMillis = System.currentTimeMillis();
+								publishProgress(bytesDecompressed, kbytesToProcess, fileName);
+							}
+						}
+						output.flush();
+						input.closeEntry();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+						if(conn != null) conn.disconnect();
+						return -1l;
+					} catch (IOException e) {
+						e.printStackTrace();
+						if(conn != null) conn.disconnect();
+						return -1l;
+					}finally{
+						try {
+							if( output != null) output.close();
+						} catch (IOException e) {}
+					}
+				}
+				try{
+					entry = input.getNextEntry();
+				}catch(IOException e){
+					e.printStackTrace();
+					if(conn != null) conn.disconnect();
+					return -1l;
+				}
+			}//end while(entry != null)
+
+			try {
+				input.close();
+			} catch (IOException e) {}
+		}//end if contentType == "zip"
+
+		if(conn != null) conn.disconnect();
+
+		if(checkMD5(digester))return 0l;
+		else return -1l;
 	}
-	
-	//TODO propper result handling
+
+	//TODO proper result handling
 	protected void onPostExecute(Long result){
-		service.done(true);
+		service.done(result > -1l);
 	}
-	
+
 	protected void onProgressUpdate(Object...objects){
 		service.update((Integer)objects[0], (Integer)objects[1], (String)objects[2]);
+	}
+
+	private boolean checkMD5(MessageDigest digester){
+		if(digester != null) {
+			byte[] messageDigest = digester.digest();
+
+			try {
+				URL url = new URL(URL_WITHOUT_SUFFIX + URL_HASH_SUFFIX);
+				HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+
+				byte[] buffer = new byte[1024];//size is large enough to hold the entire hash
+				BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
+				int bytesRead = bis.read(buffer);
+				if(bytesRead > -1){
+					String hash = new String(buffer, 0, bytesRead);
+					StringBuffer sb = new StringBuffer();
+					Integer tmp = 0;
+					for(int i = 0; i < messageDigest.length; i++){
+						tmp = 0xFF & messageDigest[i];
+						if(tmp < 0xF) sb.append('0');
+						sb.append(Integer.toHexString(tmp));
+					}
+					sb.append('\n');//add newline to become identical with the hash file
+					
+					return hash.equals(sb.toString());
+				}
+				return false;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return false;
+			}
+		}else{
+			return false;	
+		}
+
 	}
 
 }

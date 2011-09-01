@@ -35,12 +35,13 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 public class DownloadService extends Service {
 
-	private final static String URL = "http://hedgewars.googlecode.com/files/data_5631.zip";
+	public static final String PREF_DOWNLOADED = "downloaded";
 	public static final int MSG_CANCEL = 0;
 	public static final int MSG_REGISTER_CLIENT = 1;
 	public static final int MSG_UNREGISTER_CLIENT = 2;
@@ -84,9 +85,15 @@ public class DownloadService extends Service {
 
 	public final static int TASKID_START = 0;
 	public final static int TASKID_CANCEL = 1;
+	public final static int TASKID_RETRY = 2;
 	
 	public int onStartCommand(Intent intent, int flags, int startId){
 		switch(intent.getIntExtra("taskID", TASKID_START)){
+		case TASKID_RETRY:
+			if(downloadTask != null){
+				downloadTask.cancel(false);
+				downloadTask = null;
+			}
 		case TASKID_START:
 			nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -106,7 +113,7 @@ public class DownloadService extends Service {
 
 			if(downloadTask == null){
 				downloadTask = new DownloadAsyncTask(this);
-				downloadTask.execute(Utils.getDownloadPath(this), URL);
+				downloadTask.execute(Utils.getDownloadPath(this));
 			}	
 			break;
 		case TASKID_CANCEL:
@@ -128,21 +135,30 @@ public class DownloadService extends Service {
 
 	/*
 	 * Thread safe method to let clients know the processing is starting and will process int max kbytes
-	 * 
 	 */
 	public void start(int max){
 		onRegisterMessage = Message.obtain(null, DownloadActivity.MSG_START, max, -1);
 		sendMessageToClients(onRegisterMessage);
 	}
 
+	/*
+	 * periodically gets called by the ASyncTask, we can't tell for sure when it's called
+	 */
 	public void update(int progress, int max, String fileName){
 		progress = (progress/1024);
 		updateNotification(progress, max, fileName);
 
 		sendMessageToClients(Message.obtain(null, DownloadActivity.MSG_UPDATE, progress, max, fileName));
 	}
+	
+	/*
+	 * Call back from the ASync task when the task has either run into an error or finished otherwise
+	 */
 	public void done(boolean succesful){
-		sendMessageToClients(Message.obtain(null, DownloadActivity.MSG_DONE));
+		if(succesful){
+			PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(DownloadService.PREF_DOWNLOADED, true).commit();
+			sendMessageToClients(Message.obtain(null, DownloadActivity.MSG_DONE));
+		}else sendMessageToClients(Message.obtain(null, DownloadActivity.MSG_FAILED));
 		stopService();//stopService clears all notifications and thus must be called before we show the ready notification
 		showDoneNotification();
 	}

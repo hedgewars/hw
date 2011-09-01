@@ -33,14 +33,15 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DownloadActivity extends Activity{
-
 	private Messenger messageService;
 	private boolean boundToService = false;
 	
@@ -51,6 +52,7 @@ public class DownloadActivity extends Activity{
 	public static final int MSG_START = 0;
 	public static final int MSG_UPDATE = 1;
 	public static final int MSG_DONE = 2;
+	public static final int MSG_FAILED = 3;
 	private Handler.Callback messageCallback = new Handler.Callback() {
 		
 		public boolean handleMessage(Message msg) {
@@ -58,6 +60,10 @@ public class DownloadActivity extends Activity{
 			case MSG_START:
 				progress.setMax(msg.arg1);
 				progress_sub.setText(String.format("%dkb/%dkb\n%s", 0, msg.arg1, ""));
+				positive.setText(R.string.download_background);
+				positive.setOnClickListener(backgroundClicker);
+				negative.setText(R.string.download_cancel);
+				negative.setOnClickListener(cancelClicker);
 				break;
 			case MSG_UPDATE:
 				progress_sub.setText(String.format("%d%% - %dkb/%dkb\n%s",(msg.arg1*100)/msg.arg2, msg.arg1, msg.arg2, msg.obj));
@@ -69,6 +75,17 @@ public class DownloadActivity extends Activity{
 				
 				positive.setText(R.string.download_back);
 				positive.setOnClickListener(doneClicker);
+				
+				negative.setVisibility(View.INVISIBLE);
+				break;
+			case MSG_FAILED:
+				progress.setProgress(progress.getMax());
+				progress_sub.setText(R.string.download_failed);
+				positive.setText(R.string.download_back);
+				positive.setOnClickListener(doneClicker);
+				
+				negative.setText(R.string.download_tryagain);
+				negative.setOnClickListener(tryAgainClicker);
 				break;
 			}
 			return false;
@@ -111,9 +128,15 @@ public class DownloadActivity extends Activity{
 		}
 	};
 	
+	private OnClickListener tryAgainClicker = new OnClickListener(){
+		public void onClick(View v){
+			bindToService(DownloadService.TASKID_RETRY);
+		}
+	};
+	
 	public void onStart(){
 		super.onStart();
-		bindToService();
+		bindToService(DownloadService.TASKID_START);
 	}
 	
 	public void onStop(){
@@ -140,9 +163,9 @@ public class DownloadActivity extends Activity{
 		
 	};
 	
-	private void bindToService(){
+	private void bindToService(int taskId){
 		Intent i = new Intent(getApplicationContext(), DownloadService.class);
-		i.putExtra("taskID", DownloadService.TASKID_START);
+		i.putExtra("taskID", taskId);
 		startService(i);
 		bindService(new Intent(getApplicationContext(), DownloadService.class), connection, Context.BIND_AUTO_CREATE);
 		boundToService = true;
