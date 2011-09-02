@@ -233,7 +233,7 @@ void HWChatWidget::setShowFollow(bool enabled)
 void HWChatWidget::loadList(QStringList & list, const QString & file)
 {
     list.clear();
-    QFile txt((cfgdir->absolutePath() + "/" + file).toLocal8Bit().constData());
+    QFile txt(cfgdir->absolutePath() + "/" + file);
     if(!txt.open(QIODevice::ReadOnly))
         return;
     QTextStream stream(&txt);
@@ -253,7 +253,7 @@ void HWChatWidget::loadList(QStringList & list, const QString & file)
 
 void HWChatWidget::saveList(QStringList & list, const QString & file)
 {
-    QFile txt((cfgdir->absolutePath() + "/" + file).toLocal8Bit().constData());
+    QFile txt(cfgdir->absolutePath() + "/" + file);
     if(!txt.open(QIODevice::WriteOnly | QIODevice::Truncate))
         return;
     QTextStream stream(&txt);
