@@ -944,7 +944,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             end;
         if delay2 = 0 then
             begin
-            if (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.State and gstAttacked = 0) then SweepDirty;
+            if (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.State and gstAttacked = 0) and (CurAmmoGear = nil) then SweepDirty;
             CheckNoDamage;
             AliveCount:= 0; // shorter version of check for win to allow typical step activity to proceed
             for i:= 0 to Pred(ClansCount) do
