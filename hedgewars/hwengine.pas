@@ -181,10 +181,9 @@ begin
                         end;
                 SDL_VIDEORESIZE: begin
                     // using lower values causes widget overlap and video issues
-                    if event.resize.w > cMinScreenWidth then cScreenWidth:= event.resize.w
-                    else cScreenWidth:= cMinScreenWidth;
-                    if event.resize.h > cMinScreenHeight then cScreenHeight:= event.resize.h
-                    else cScreenHeight:= cMinScreenHeight;
+                    cScreenWidth:= max(event.resize.w, cMinScreenWidth);
+                    cScreenHeight:= max(event.resize.h, cMinScreenHeight);
+
                     ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
                     WriteLnToConsole('window resize');
                     InitCameraBorders();
@@ -244,12 +243,10 @@ begin
     recordFileName:= gameArgs[10];
     cStereoMode:= smNone;
 {$ENDIF}
-    cMinScreenWidth:= cScreenWidth;
-    cMinScreenHeight:= cScreenHeight;
+    cMinScreenWidth:= min(cScreenWidth, 480);
+    cMinScreenHeight:= min(cScreenHeight, 320);
     cOrigScreenWidth:= cScreenWidth;
     cOrigScreenHeight:= cScreenHeight;
-    if 480 < cMinScreenWidth then cMinScreenWidth:= 480;
-    if 320 < cMinScreenHeight then cMinScreenHeight:= 320;
 
     initEverything(true);
 
