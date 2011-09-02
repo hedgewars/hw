@@ -4940,10 +4940,13 @@ if Gear^.Pos = 2 then
             HH^.GearHidden:= HH^.Gear;
             HH^.Gear:= nil
             end
-        else if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible <> 0) then
+        //else if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible <> 0) then
+        else if (HH^.GearHidden <> nil) then// and (HH^.Gear^.State and gstInvisible <> 0) then
             begin
+            HH^.Gear:=HH^.GearHidden;
+            HH^.GearHidden:= nil;
             InsertGearToList(HH^.Gear);
-            HH^.Gear^.State:= HH^.Gear^.State and not (gstHHDriven or gstInvisible);
+            HH^.Gear^.State:= (HH^.Gear^.State and not (gstHHDriven or gstInvisible or gstAttacking)) or gstAttacked;
             AddGearCI(HH^.Gear);
             HH^.Gear^.Active:= true
             end;
@@ -4991,11 +4994,11 @@ if (Gear^.Pos = 4) then
         if HH^.GearHidden <> nil then FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH,true);
         if HH^.GearHidden <> nil then 
             begin
-            HH^.Gear:=HH^.GearHidden;
-            HH^.GearHidden:= nil;
-            HH^.Gear^.State:= HH^.Gear^.State or gstInvisible;
-            Gear^.X:= HH^.Gear^.X;
-            Gear^.Y:= HH^.Gear^.Y;
+            Gear^.X:= HH^.GearHidden^.X;
+            Gear^.Y:= HH^.GearHidden^.Y;
+            //HH^.Gear:=HH^.GearHidden;
+            //HH^.GearHidden:= nil;
+            //HH^.Gear^.State:= HH^.Gear^.State or gstInvisible;
             end
         end
     else dec(Gear^.Timer);
