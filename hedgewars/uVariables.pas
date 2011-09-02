@@ -753,7 +753,8 @@ const
             (FileName:            'parachute.ogg'; Path: ptSounds),// sndParachute
             (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
             (FileName:            'hogchant3.ogg'; Path: ptSounds),// sndResurrector
-            (FileName:                'plane.ogg'; Path: ptSounds) // sndPlane
+            (FileName:                'plane.ogg'; Path: ptSounds), // sndPlane
+            (FileName:                'TARDIS.ogg'; Path: ptSounds) // sndTardis
             );
 
     Ammoz: array [TAmmoType] of record

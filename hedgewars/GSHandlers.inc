@@ -4921,6 +4921,7 @@ begin
 HH:= Gear^.Hedgehog;
 if Gear^.Pos = 2 then
     begin
+    StopSound(Gear^.SoundChannel);
     if (Gear^.Timer = 0) then
         begin
         if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible = 0) then
@@ -4951,8 +4952,9 @@ if Gear^.Pos = 2 then
     inc(Gear^.Timer);
     if (Gear^.Timer > 2000) and ((GameTicks mod 2000) = 1000) then
         begin
-        Gear^.Pos:= 3;
-        end;
+        Gear^.SoundChannel := LoopSound(sndTardis);
+        Gear^.Pos:= 3
+        end
     end;
 
 if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then inc(Gear^.Power);
@@ -4960,6 +4962,7 @@ if (Gear^.Pos = 3) and (GameTicks and $1F = 0) and (Gear^.Power > 0) then dec(Ge
 if (Gear^.Pos = 1) and (Gear^.Power = 255) and ((GameTicks mod 2000) = 1000) then Gear^.Pos:= 2;
 if (Gear^.Pos = 3) and (Gear^.Power = 0) then
     begin
+    StopSound(Gear^.SoundChannel);
     if HH^.GearHidden = nil then
         begin
         DeleteGear(Gear);
@@ -4981,6 +4984,7 @@ if (Gear^.Pos = 4) then
                 HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then inc(cnt);
     if (cnt = 0) or SuddenDeathDmg or (Gear^.Timer = 0) then
         begin
+        Gear^.SoundChannel := LoopSound(sndTardis);
         Gear^.Pos:= 1;
         Gear^.Power:= 0;
         Gear^.Timer:= 0;
@@ -5039,6 +5043,7 @@ begin
         DeleteGear(gear);
         exit
         end;
+    Gear^.SoundChannel := LoopSound(sndTardis);
     Gear^.doStep:= @doStepTardisWarp
 end;
 
