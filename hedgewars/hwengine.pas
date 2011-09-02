@@ -181,12 +181,9 @@ begin
                         end;
                 SDL_VIDEORESIZE: begin
                     // using lower values causes widget overlap and video issues
-                    cScreenWidth:= max(event.resize.w, cMinScreenWidth);
-                    cScreenHeight:= max(event.resize.h, cMinScreenHeight);
-
-                    ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
-                    WriteLnToConsole('window resize');
-                    InitCameraBorders();
+                    cNewScreenWidth:= max(event.resize.w, cMinScreenWidth);
+                    cNewScreenHeight:= max(event.resize.h, cMinScreenHeight);
+                    cScreenResizeDelay:= RealTicks+500;
                     end;
 {$ENDIF}
                 SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
@@ -196,6 +193,16 @@ begin
                 SDL_QUITEV: isTerminated:= true
             end; //end case event.type_ of
         end; //end while SDL_PollEvent(@event) <> 0 do
+        if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
+            begin
+            cScreenResizeDelay:= 0;
+            cScreenWidth:= cNewScreenWidth;
+            cScreenHeight:= cNewScreenHeight;
+
+            ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+            WriteLnToConsole('window resize');
+            InitCameraBorders()
+            end;
 
         if isTerminated = false then
         begin

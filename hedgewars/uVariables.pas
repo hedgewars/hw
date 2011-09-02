@@ -25,12 +25,15 @@ uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
 
 var
 /////// init flags ///////
-    cMinScreenWidth   : LongInt     = 480;
-    cMinScreenHeight  : LongInt     = 320;
-    cScreenWidth      : LongInt     = 1024;
-    cScreenHeight     : LongInt     = 768;
-    cOrigScreenWidth  : LongInt     = 1024;
-    cOrigScreenHeight : LongInt     = 768;
+    cMinScreenWidth    : LongInt     = 480;
+    cMinScreenHeight   : LongInt     = 320;
+    cScreenWidth       : LongInt     = 1024;
+    cScreenHeight      : LongInt     = 768;
+    cOrigScreenWidth   : LongInt     = 1024;
+    cOrigScreenHeight  : LongInt     = 768;
+    cNewScreenWidth    : LongInt     = 1024;
+    cNewScreenHeight   : LongInt     = 768;
+    cScreenResizeDelay : LongWord    = 0;
     cBits           : LongInt     = 32;
     ipcPort         : Word        = 0;
     cFullScreen     : boolean     = false;
