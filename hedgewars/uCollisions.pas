@@ -47,8 +47,8 @@ function  TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionX(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 
-function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
-function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
+function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
+function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
 
 function  calcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
@@ -291,11 +291,13 @@ if flag then
    end
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
 begin
 Gear^.X:= Gear^.X + ShiftX;
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
-TestCollisionXwithXYShift:= TestCollisionXwithGear(Gear, Dir);
+if withGear then 
+    TestCollisionXwithXYShift:= TestCollisionXwithGear(Gear, Dir)
+else TestCollisionXwithXYShift:= TestCollisionX(Gear, Dir);
 Gear^.X:= Gear^.X - ShiftX;
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
@@ -337,11 +339,12 @@ if (y and LAND_HEIGHT_MASK) = 0 then
 TestCollisionY:= false
 end;
 
-function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
+function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
 begin
 Gear^.X:= Gear^.X + int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
-TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir);
+if withGear then TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir)
+else TestCollisionYwithXYShift:= TestCollisionY(Gear, Dir);
 Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;

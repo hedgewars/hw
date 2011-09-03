@@ -2900,7 +2900,7 @@ begin
 
     dec(Gear^.Health);
     Gear^.Timer := Gear^.Health*10;
-    Gear^.PortalCounter:= 0;
+    if Gear^.Health mod 100 = 0 then Gear^.PortalCounter:= 0;
     // This is not seconds, but at least it is *some* feedback
     if (Gear^.Health = 0) or ((Gear^.Message and gmAttack) <> 0) then
     begin
@@ -3941,8 +3941,7 @@ begin
 
         // inverse cake's normal movement direction,
         // as if it just walked through a hole
-        if iscake then
-            nspeed.isNegative:= not nspeed.isNegative;
+        //if iscake then nspeed.isNegative:= not nspeed.isNegative;
 
 //AddFileLog('poffs:'+cstr(poffs)+' noffs:'+cstr(noffs)+' pspeed:'+cstr(pspeed)+' nspeed:'+cstr(nspeed));
         iterator^.dX := -pspeed * conPortal^.dX + nspeed * nx;
@@ -3993,8 +3992,8 @@ begin
                 iterator^.Radius := iterator^.Radius - 1;
 
             // check front
-            isCollision := TestCollisionYwithGear(iterator, sy)
-                        or TestCollisionXwithGear(iterator, sx);
+            isCollision := TestCollisionY(iterator, sy)
+                        or TestCollisionX(iterator, sx);
 
             if not isCollision then
             begin
@@ -4002,8 +4001,8 @@ begin
                 // the square check won't check more pixels than we want to)
                 iterator^.Radius := 1 + resetr div 2;
                 rh := resetr div 4;
-                isCollision := TestCollisionYwithXYShift(iterator,       0, -sy * rh, sy)
-                            or TestCollisionXwithXYShift(iterator, ox * rh,        0, sx);
+                isCollision := TestCollisionYwithXYShift(iterator,       0, -sy * rh, sy, false)
+                            or TestCollisionXwithXYShift(iterator, ox * rh,        0, sx, false);
             end;
 
             iterator^.Radius := resetr;
@@ -4024,7 +4023,8 @@ begin
         //
 
         // Until loops are reliably broken
-        inc(iterator^.PortalCounter);
+        if iscake then iterator^.PortalCounter:= 33
+        else inc(iterator^.PortalCounter);
 
         if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
