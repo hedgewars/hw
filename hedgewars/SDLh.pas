@@ -618,6 +618,8 @@ type
 {$ENDIF}
         end;
 
+    TSDL_EventFilter = function( event : PSDL_Event ): Integer; cdecl;
+
     PByteArray = ^TByteArray;
     TByteArray = array[0..65535] of Byte;
     PLongWordArray = ^TLongWordArray;
@@ -811,6 +813,7 @@ function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_PumpEvents; cdecl; external SDLLibName;
 function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 function  SDL_WaitEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
+procedure SDL_SetEventFilter( filter : TSDL_EventFilter ); cdecl; external SDLLibName;
 
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 
