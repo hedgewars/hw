@@ -18,9 +18,11 @@
 
 #ifndef PAGE_DATA_H
 #define PAGE_DATA_H
-#include <QWebView>
+
 #include <QUrl>
 #include "AbstractPage.h"
+
+class QTextBrowser;
 
 class PageDataDownload : public AbstractPage
 {
@@ -30,10 +32,12 @@ public:
     PageDataDownload(QWidget* parent = 0);
 
     QPushButton *BtnBack;
-    QWebView *web;
+    QTextBrowser *web;
 
 private slots:
     void install(const QUrl &url);
+
+    void downloadIssueFinished();
 };
 
 #endif

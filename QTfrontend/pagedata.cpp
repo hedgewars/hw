@@ -20,8 +20,11 @@
 #include <QPushButton>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QFileInfo>
 #include <QFileDialog>
+#include <QTextBrowser>
+
 
 #include "pagedata.h"
 
@@ -34,11 +37,21 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 
-    web = new QWebView(this);
-    connect(web, SIGNAL(linkClicked(const QUrl&)), this, SLOT(install(const QUrl&)));
-    web->load(QUrl("http://m8y.org/hw/downloads/"));
-    web->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+    web = new QTextBrowser(this);
+    connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(install(const QUrl&)));
+    web->setOpenLinks(false);
+    //web->setSource();
+    //web->load(QUrl("http://m8y.org/hw/downloads/"));
+    //web->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     pageLayout->addWidget(web, 0, 0, 1, 3);
+
+
+    QNetworkRequest newRequest(QUrl("http://m8y.org/hw/downloads/index.xhtml"));
+    //newRequest.setAttribute(QNetworkRequest::User, fileName);
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    QNetworkReply *reply = manager->get(newRequest);
+    connect(reply, SIGNAL(finished()), this, SLOT(downloadIssueFinished()));
 }
 
 void PageDataDownload::install(const QUrl &url)
@@ -52,5 +65,19 @@ newRequest.setAttribute(QNetworkRequest::User, fileName);
 QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 QNetworkReply *reply = manager->get(newRequest);
 //connect( reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)) );
-//connect( reply, SIGNAL(finished()), this, SLOT(downloadIssueFinished()));
 }
+
+
+void PageDataDownload::downloadIssueFinished()
+{
+    QNetworkReply * reply = qobject_cast<QNetworkReply *>(sender());
+
+    if(reply)
+    {
+        web->setHtml(QString::fromUtf8(reply->readAll()));
+    }
+}
+
+
+
+
