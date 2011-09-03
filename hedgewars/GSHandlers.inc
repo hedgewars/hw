@@ -766,8 +766,9 @@ end;
 procedure doStepBeeWork(Gear: PGear);
 var 
     t: hwFloat;
-    gX,gY: LongInt;
+    gX,gY,i: LongInt;
     nuw: boolean;
+    flower: PVisualGear;
 
 const uw: boolean =   false;
 begin
@@ -816,6 +817,21 @@ begin
     begin
         StopSound(Gear^.SoundChannel);
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+        for i:= 0 to 31 do
+            begin
+            flower:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
+            if flower <> nil then 
+                with flower^ do
+                    begin
+                    Scale:= 0.75;
+                    dx:= 0.001 * (random(200));
+                    dy:= 0.001 * (random(200));
+                    if random(2) = 0 then dx := -dx;
+                    if random(2) = 0 then dy := -dy;
+                    FrameTicks:= random(250) + 250;
+                    State:= ord(sprTargetBee);
+                    end;
+            end;
         DeleteGear(Gear);
     end;
 end;
@@ -3019,7 +3035,7 @@ begin
                 if random(2) = 0 then dx := -dx;
                 if random(2) = 0 then dy := -dy;
                 FrameTicks:= random(750) + 1000;
-                heart^.State:= ord(sprSeduction)
+                State:= ord(sprSeduction)
                 end;
         end;
 
