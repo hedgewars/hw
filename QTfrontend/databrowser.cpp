@@ -18,6 +18,7 @@ DataBrowser::DataBrowser(QWidget *parent) :
 QVariant DataBrowser::loadResource(int type, const QUrl & name)
 {
     if(type == QTextDocument::ImageResource || type == QTextDocument::StyleSheetResource)
+    {
         if(resources.contains(name))
         {
             return resources.take(name);
@@ -34,6 +35,7 @@ QVariant DataBrowser::loadResource(int type, const QUrl & name)
                 QNetworkReply *reply = manager->get(newRequest);
                 connect(reply, SIGNAL(finished()), this, SLOT(resourceDownloaded()));
             }
+    }
 
     return QVariant();
 }
