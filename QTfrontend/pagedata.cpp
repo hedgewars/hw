@@ -44,7 +44,7 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
 
     web = new DataBrowser(this);
-    connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(install(const QUrl&)));
+    connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
     web->setOpenLinks(false);
     pageLayout->addWidget(web, 0, 0, 1, 3);
 
@@ -54,22 +54,34 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     fetchList();
 }
 
-void PageDataDownload::install(const QUrl &url)
+void PageDataDownload::request(const QUrl &url)
 {
-    qWarning() << "Download Request" << url.toString();
-    QString fileName = QFileInfo(url.toString()).fileName();
+    if(url.path().endsWith(".zip"))
+    {
+        qWarning() << "Download Request" << url.toString();
+        QString fileName = QFileInfo(url.toString()).fileName();
 
-    QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + url.toString()));
-    newRequest.setAttribute(QNetworkRequest::User, fileName);
+        QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + url.path()));
+        newRequest.setAttribute(QNetworkRequest::User, fileName);
 
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QNetworkReply *reply = manager->get(newRequest);
-    connect(reply, SIGNAL(finished()), this, SLOT(fileDownloaded()));
-    connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QNetworkReply *reply = manager->get(newRequest);
+        connect(reply, SIGNAL(finished()), this, SLOT(fileDownloaded()));
+        connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
 
-    QProgressBar *progressBar = new QProgressBar(this);
-    progressBarsLayout->addWidget(progressBar);
-    progressBars.insert(reply, progressBar);
+        QProgressBar *progressBar = new QProgressBar(this);
+        progressBarsLayout->addWidget(progressBar);
+        progressBars.insert(reply, progressBar);
+    } else
+    {
+        qWarning() << "Page Request" << url.toString();
+
+        QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + url.path()));
+
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QNetworkReply *reply = manager->get(newRequest);
+        connect(reply, SIGNAL(finished()), this, SLOT(pageDownloaded()));
+    }
 }
 
 
@@ -123,12 +135,7 @@ void PageDataDownload::downloadProgress(qint64 bytesRecieved, qint64 bytesTotal)
 
 void PageDataDownload::fetchList()
 {
-    //QNetworkRequest newRequest(QUrl("http://hedgewars.org/node/2833"));
-    QNetworkRequest newRequest(QUrl("http://hedgewars.org/content.html"));
-
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QNetworkReply *reply = manager->get(newRequest);
-    connect(reply, SIGNAL(finished()), this, SLOT(pageDownloaded()));
+    request(QUrl("http://hedgewars.org/content.html"));
 }
 
 bool PageDataDownload::extractDataPack(QByteArray * buf)

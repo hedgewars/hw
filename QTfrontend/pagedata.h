@@ -47,7 +47,7 @@ private:
     bool extractDataPack(QByteArray * buf);
 
 private slots:
-    void install(const QUrl &url);
+    void request(const QUrl &url);
 
     void pageDownloaded();
     void fileDownloaded();
