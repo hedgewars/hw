@@ -194,6 +194,7 @@ add_subdirectory(hedgewars)
 
 if(NOT BUILD_ENGINE_LIBRARY)
 	add_subdirectory(bin)
+	add_subdirectory(misc/quazip)
 	add_subdirectory(QTfrontend)
 	add_subdirectory(share)
 	add_subdirectory(tools)
