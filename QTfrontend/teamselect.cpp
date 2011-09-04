@@ -255,8 +255,8 @@ void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
   frameDontPlaying->resetTeams();
   curDontPlayingTeams.clear();
 
-  QListIterator<HWTeam> it(teamslist);
-  while(it.hasNext()) addTeam(it.next());
+  foreach(HWTeam team, teamslist)
+    addTeam(team);
 }
 
 bool TeamSelWidget::isPlaying(HWTeam team) const

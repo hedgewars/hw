@@ -626,8 +626,9 @@ void HWForm::IntermediateSetup()
     }
 
     QStringList tmnames;
-    QListIterator<HWTeam> it(curTeamSelWidget->getDontPlayingTeams());
-    while(it.hasNext()) tmnames += it.next().TeamName;
+
+    foreach(HWTeam team, curTeamSelWidget->getDontPlayingTeams())
+        tmnames += team.TeamName;
 
     //UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
     UpdateTeamsLists();

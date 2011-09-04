@@ -26,6 +26,7 @@ QVariant DataBrowser::loadResource(int type, const QUrl & name)
         else
             if(!requestedResources.contains(name))
             {
+                qDebug() << "Requesting resource" << name.toString();
                 requestedResources.insert(name);
 
                 QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + name.toString()));
