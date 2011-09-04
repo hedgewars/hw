@@ -25,11 +25,13 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QProgressBar>
+#include <QBuffer>
 
 #include "pagedata.h"
 #include "databrowser.h"
 
 #include "quazip.h"
+#include "quazipfile.h"
 
 PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
 {
@@ -56,7 +58,7 @@ void PageDataDownload::install(const QUrl &url)
     qWarning() << "Download Request" << url.toString();
     QString fileName = QFileInfo(url.toString()).fileName();
 
-    QNetworkRequest newRequest(url);
+    QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + url.toString()));
     newRequest.setAttribute(QNetworkRequest::User, fileName);
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
@@ -94,6 +96,8 @@ void PageDataDownload::fileDownloaded()
             progressBars.remove(reply);
             progressBar->deleteLater();
         }
+
+        extractDataPack(&fileContents);
     }
 }
 
@@ -120,4 +124,72 @@ void PageDataDownload::fetchList()
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkReply *reply = manager->get(newRequest);
     connect(reply, SIGNAL(finished()), this, SLOT(pageDownloaded()));
+}
+
+bool PageDataDownload::extractDataPack(QByteArray * buf)
+{
+    QBuffer buffer;
+    buffer.setBuffer(buf);
+
+    QuaZip zip;
+    zip.setIoDevice(&buffer);
+    if(!zip.open(QuaZip::mdUnzip))
+    {
+      qWarning("testRead(): zip.open(): %d", zip.getZipError());
+      return false;
+    }
+
+    QuaZipFile file(&zip);
+
+    for(bool more = zip.goToFirstFile(); more; more = zip.goToNextFile())
+    {
+        if(!file.open(QIODevice::ReadOnly))
+        {
+            qWarning("file.open(): %d", file.getZipError());
+            return false;
+        }
+
+
+        QString fileName = file.getActualFileName();
+        QString filePath = QDir::tempPath() + "/" + fileName;
+        if (fileName.endsWith("/"))
+        {
+            QFileInfo fi(filePath);
+            QDir().mkpath(fi.filePath());
+        } else
+        {
+            qDebug() << filePath;
+            QFile out(filePath);
+            if(!out.open(QFile::WriteOnly))
+            {
+                qWarning() << "out.open():" << out.errorString();
+                return false;
+            }
+
+            out.write(file.readAll());
+
+            out.close();
+
+            if(file.getZipError() != UNZ_OK) {
+                qWarning("file.getFileName(): %d", file.getZipError());
+                return false;
+            }
+
+            if(!file.atEnd()) {
+                qWarning("read all but not EOF");
+                return false;
+            }
+        }
+
+        file.close();
+
+        if(file.getZipError()!=UNZ_OK) {
+            qWarning("file.close(): %d", file.getZipError());
+            return false;
+        }
+    }
+
+    zip.close();
+
+    return true;
 }

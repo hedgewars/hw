@@ -44,6 +44,8 @@ private:
     QHash<QNetworkReply*, QProgressBar *> progressBars;
     QVBoxLayout *progressBarsLayout;
 
+    bool extractDataPack(QByteArray * buf);
+
 private slots:
     void install(const QUrl &url);
 
