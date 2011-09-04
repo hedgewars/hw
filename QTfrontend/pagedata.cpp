@@ -76,10 +76,13 @@ void PageDataDownload::install(const QUrl &url)
 void PageDataDownload::pageDownloaded()
 {
     QNetworkReply * reply = qobject_cast<QNetworkReply *>(sender());
+    QString html = QString::fromUtf8(reply->readAll());
+    html.remove(0,html.indexOf("<!-- BEGIN -->"));
+    html.truncate(html.indexOf("<!-- END -->"));
 
     if(reply)
     {
-        web->setHtml(QString::fromUtf8(reply->readAll()));
+        web->setHtml(html);
     }
 }
 
@@ -120,7 +123,8 @@ void PageDataDownload::downloadProgress(qint64 bytesRecieved, qint64 bytesTotal)
 
 void PageDataDownload::fetchList()
 {
-    QNetworkRequest newRequest(QUrl("http://hedgewars.org/node/2833"));
+    //QNetworkRequest newRequest(QUrl("http://hedgewars.org/node/2833"));
+    QNetworkRequest newRequest(QUrl("http://hedgewars.org/content.html"));
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkReply *reply = manager->get(newRequest);
