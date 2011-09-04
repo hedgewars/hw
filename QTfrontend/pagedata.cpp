@@ -88,12 +88,12 @@ void PageDataDownload::request(const QUrl &url)
 void PageDataDownload::pageDownloaded()
 {
     QNetworkReply * reply = qobject_cast<QNetworkReply *>(sender());
-    QString html = QString::fromUtf8(reply->readAll());
-    html.remove(0,html.indexOf("<!-- BEGIN -->"));
-    html.truncate(html.indexOf("<!-- END -->"));
 
     if(reply)
     {
+        QString html = QString::fromUtf8(reply->readAll());
+        html.remove(0,html.indexOf("<!-- BEGIN -->"));
+        html.truncate(html.indexOf("<!-- END -->"));
         web->setHtml(html);
     }
 }
