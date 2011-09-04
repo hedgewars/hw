@@ -50,5 +50,6 @@ void DataBrowser::resourceDownloaded()
         QUrl url = reply->request().attribute(urlAttribute).toUrl();
         resources.insert(url, reply->readAll());
         document()->addResource(type, reply->request().url(), QVariant());
+        update();
     }
 }
