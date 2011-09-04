@@ -4,6 +4,7 @@ DEPENDPATH += ../QTfrontend/
 INCLUDEPATH += ../QTfrontend/
 INCLUDEPATH += /usr/local/include/SDL
 INCLUDEPATH += /usr/include/SDL
+INCLUDEPATH += ../misc/quazip/
 
 DESTDIR = .
 
@@ -147,6 +148,8 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_CN.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
+
+LIBS += -L../misc/quazip -lquazip
 
 !macx {
         LIBS += -lSDL -lSDL_mixer

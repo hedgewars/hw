@@ -23,6 +23,9 @@
 #include "AbstractPage.h"
 
 class QTextBrowser;
+class QProgressBar;
+class QNetworkReply;
+class QVBoxLayout;
 
 class PageDataDownload : public AbstractPage
 {
@@ -32,12 +35,21 @@ public:
     PageDataDownload(QWidget* parent = 0);
 
     QPushButton *BtnBack;
+
+public slots:
+    void fetchList();
+
+private:
     QTextBrowser *web;
+    QHash<QNetworkReply*, QProgressBar *> progressBars;
+    QVBoxLayout *progressBarsLayout;
 
 private slots:
     void install(const QUrl &url);
 
-    void downloadIssueFinished();
+    void pageDownloaded();
+    void fileDownloaded();
+    void downloadProgress(qint64, qint64);
 };
 
 #endif
