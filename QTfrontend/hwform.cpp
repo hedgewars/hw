@@ -627,7 +627,7 @@ void HWForm::IntermediateSetup()
 
     QStringList tmnames;
 
-    foreach(HWTeam team, curTeamSelWidget->getDontPlayingTeams())
+    foreach(HWTeam team, curTeamSelWidget->getNotPlayingTeams())
         tmnames += team.TeamName;
 
     //UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
