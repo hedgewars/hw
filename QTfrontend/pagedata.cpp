@@ -48,7 +48,7 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     web->setOpenLinks(false);
     pageLayout->addWidget(web, 0, 0, 1, 3);
 
-    progressBarsLayout = new QVBoxLayout(this);
+    progressBarsLayout = new QVBoxLayout();
     pageLayout->addLayout(progressBarsLayout, 1, 0, 1, 3);
 
     fetchList();
