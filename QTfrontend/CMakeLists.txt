@@ -115,6 +115,7 @@ set(hwfr_src
     drawmapwidget.cpp
     drawmapscene.cpp
     themesmodel.cpp
+    databrowser.cpp
     )
 
 #xfire integration
@@ -196,6 +197,7 @@ set(hwfr_moc_hdrs
     drawmapwidget.h
     drawmapscene.h
     themesmodel.h
+    databrowser.h
     )
 
 set(hwfr_hdrs

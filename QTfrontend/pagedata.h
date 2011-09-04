@@ -22,7 +22,7 @@
 #include <QUrl>
 #include "AbstractPage.h"
 
-class QTextBrowser;
+class DataBrowser;
 class QProgressBar;
 class QNetworkReply;
 class QVBoxLayout;
@@ -40,7 +40,7 @@ public slots:
     void fetchList();
 
 private:
-    QTextBrowser *web;
+    DataBrowser *web;
     QHash<QNetworkReply*, QProgressBar *> progressBars;
     QVBoxLayout *progressBarsLayout;
 

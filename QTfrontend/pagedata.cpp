@@ -23,11 +23,11 @@
 #include <QNetworkReply>
 #include <QFileInfo>
 #include <QFileDialog>
-#include <QTextBrowser>
 #include <QDebug>
 #include <QProgressBar>
 
 #include "pagedata.h"
+#include "databrowser.h"
 
 #include "quazip.h"
 
@@ -40,7 +40,7 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
 
     BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
 
-    web = new QTextBrowser(this);
+    web = new DataBrowser(this);
     connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(install(const QUrl&)));
     web->setOpenLinks(false);
     pageLayout->addWidget(web, 0, 0, 1, 3);
@@ -115,7 +115,7 @@ void PageDataDownload::downloadProgress(qint64 bytesRecieved, qint64 bytesTotal)
 
 void PageDataDownload::fetchList()
 {
-    QNetworkRequest newRequest(QUrl("http://hedgewars.org/download.html"));
+    QNetworkRequest newRequest(QUrl("http://hedgewars.org/node/2833"));
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QNetworkReply *reply = manager->get(newRequest);
