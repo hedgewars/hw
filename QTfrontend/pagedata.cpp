@@ -29,6 +29,7 @@
 
 #include "pagedata.h"
 #include "databrowser.h"
+#include "hwconsts.h"
 
 #include "quazip.h"
 #include "quazipfile.h"
@@ -141,6 +142,9 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
 
     QuaZipFile file(&zip);
 
+    QDir extractDir(*cfgdir);
+    extractDir.cd("Data");
+
     for(bool more = zip.goToFirstFile(); more; more = zip.goToNextFile())
     {
         if(!file.open(QIODevice::ReadOnly))
@@ -151,14 +155,14 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
 
 
         QString fileName = file.getActualFileName();
-        QString filePath = QDir::tempPath() + "/" + fileName;
+        QString filePath = extractDir.filePath(fileName);
         if (fileName.endsWith("/"))
         {
             QFileInfo fi(filePath);
             QDir().mkpath(fi.filePath());
         } else
         {
-            qDebug() << filePath;
+            qDebug() << "Extracting" << filePath;
             QFile out(filePath);
             if(!out.open(QFile::WriteOnly))
             {
