@@ -56,12 +56,18 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
 
 void PageDataDownload::request(const QUrl &url)
 {
+    QUrl finalUrl;
+    if(url.host().isEmpty())
+        finalUrl = QUrl("http://www.hedgewars.org" + url.path());
+    else
+        finalUrl = url;
+
     if(url.path().endsWith(".zip"))
     {
         qWarning() << "Download Request" << url.toString();
         QString fileName = QFileInfo(url.toString()).fileName();
 
-        QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + url.path()));
+        QNetworkRequest newRequest(finalUrl);
         newRequest.setAttribute(QNetworkRequest::User, fileName);
 
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
@@ -76,7 +82,7 @@ void PageDataDownload::request(const QUrl &url)
     {
         qWarning() << "Page Request" << url.toString();
 
-        QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + url.path()));
+        QNetworkRequest newRequest(finalUrl);
 
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
         QNetworkReply *reply = manager->get(newRequest);
@@ -92,8 +98,13 @@ void PageDataDownload::pageDownloaded()
     if(reply)
     {
         QString html = QString::fromUtf8(reply->readAll());
-        html.remove(0,html.indexOf("<!-- BEGIN -->"));
-        html.truncate(html.indexOf("<!-- END -->"));
+        int begin = html.indexOf("<!-- BEGIN -->");
+        int end = html.indexOf("<!-- END -->");
+        if(begin != -1 && begin < end)
+        {
+            html.truncate(end);
+            html.remove(0, begin);
+        }
         web->setHtml(html);
     }
 }
