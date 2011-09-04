@@ -91,7 +91,9 @@ window.onload = function()
     var resp = xml.responseText;
     var r = />([^<]*).png</g;
     var x;
-    while(x = r.exec(resp)) masks.push(x[1]);
+    while(x = r.exec(resp)) 
+        if (!/^Team|NoHat/.test(x[1])) // Exclude team coloured ones as repetitive, NoHat one as uninteresting
+            masks.push(x[1]);
 
     var opt = document.createElement("option");
     opt.appendChild(document.createTextNode(""));
