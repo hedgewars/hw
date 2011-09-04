@@ -1126,6 +1126,7 @@ begin
     AllInactive := false;
     HHGear := Gear^.Hedgehog^.Gear;
     dec(Gear^.Timer);
+    if ((GameFlags and gfInfAttack) <> 0) and (TurnTimeLeft > 0) then dec(TurnTimeLeft);
     if (Gear^.Timer = 0)or((Gear^.Message and gmDestroy) <> 0)or((HHGear^.State and gstHHDriven) =
        0) then
         begin
@@ -1235,6 +1236,8 @@ var
 begin
     AllInactive := false;
     dec(Gear^.Timer);
+    if ((GameFlags and gfInfAttack) <> 0) and (TurnTimeLeft > 0) then dec(TurnTimeLeft);
+    
     HHGear := Gear^.Hedgehog^.Gear;
 
     HedgehogChAngle(HHGear);
