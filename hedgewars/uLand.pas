@@ -1139,7 +1139,7 @@ if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(Pathz[ptMapCurrent]);
     tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
     end;
 
     if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
