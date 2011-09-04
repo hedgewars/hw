@@ -242,6 +242,7 @@ set(HW_LINK_LIBS
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
     ${HW_LINK_LIBS}
+    quazip
     )
 
 if(WIN32 AND NOT UNIX)
@@ -249,7 +250,7 @@ if(WIN32 AND NOT UNIX)
         set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
     endif()
 
-    set(	HW_LINK_LIBS
+    set(HW_LINK_LIBS
         ${HW_LINK_LIBS}
         ole32
         oleaut32
