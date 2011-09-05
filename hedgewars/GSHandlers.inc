@@ -1127,7 +1127,7 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     dec(Gear^.Timer);
     if ((GameFlags and gfInfAttack) <> 0) and (TurnTimeLeft > 0) then dec(TurnTimeLeft);
-    if (Gear^.Timer = 0)or((Gear^.Message and gmDestroy) <> 0)or((HHGear^.State and gstHHDriven) =
+    if (TurnTimeLeft = 0) or (Gear^.Timer = 0)or((Gear^.Message and gmDestroy) <> 0)or((HHGear^.State and gstHHDriven) =
        0) then
         begin
         StopSound(Gear^.SoundChannel);
@@ -1305,7 +1305,7 @@ begin
         Gear^.dX, Gear^.dY,
         cHHRadius * 5, cHHRadius * 2 + 7);
 
-    if (Gear^.Timer = 0) or ((HHGear^.Message and gmAttack) <> 0) then
+    if (TurnTimeLeft = 0) or (Gear^.Timer = 0) or ((HHGear^.Message and gmAttack) <> 0) then
         begin
         HHGear^.Message := 0;
         HHGear^.State := HHGear^.State and (not gstNotKickable);
