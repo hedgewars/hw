@@ -662,7 +662,7 @@ void HWMapContainer::updatePreview()
 void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int mazesize, const QString &seed, int tmpl)
 {
     intSetMap(map);
-    intSetMapgen(m);
+    if (map[0]=='+') intSetMapgen(m);
     intSetMazeSize(mazesize);
     intSetSeed(seed);
     intSetTemplateFilter(tmpl);
