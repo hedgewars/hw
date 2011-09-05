@@ -18,8 +18,11 @@ public slots:
 
 private:
     QNetworkAccessManager *manager;
-    QHash<QUrl, QByteArray> resources;
-    QSet<QUrl> requestedResources;
+    
+    // hash and set of QString instead of QUrl to support Qt versions 
+    // older than 4.7 (those have no support for qHash(const QUrl &))
+    QHash<QString, QByteArray> resources;
+    QSet<QString> requestedResources;
 
     QVariant loadResource(int type, const QUrl & name);
 
