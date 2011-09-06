@@ -576,7 +576,10 @@ void HWMapContainer::setMazeSize(int size)
 void HWMapContainer::intSetMapgen(MapGenerator m)
 {
     mapgen = m;
-    chooseMap->setCurrentIndex(m);
+
+    if(m != MAPGEN_MAP)
+        chooseMap->setCurrentIndex(m);
+
     emit mapgenChanged(m);
 }
 
@@ -662,7 +665,7 @@ void HWMapContainer::updatePreview()
 void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int mazesize, const QString &seed, int tmpl)
 {
     intSetMap(map);
-    if (map[0]=='+') intSetMapgen(m);
+    intSetMapgen(m);
     intSetMazeSize(mazesize);
     intSetSeed(seed);
     intSetTemplateFilter(tmpl);
