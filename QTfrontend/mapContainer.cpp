@@ -293,7 +293,6 @@ void HWMapContainer::mapChanged(int index)
         maze_size_label->hide();
         cbMazeSize->hide();
         emit mapChanged("+rnd+");
-        emit mapgenChanged(mapgen);
         emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
         break;
     case MAPGEN_MAZE:
@@ -305,7 +304,6 @@ void HWMapContainer::mapChanged(int index)
         maze_size_label->show();
         cbMazeSize->show();
         emit mapChanged("+maze+");
-        emit mapgenChanged(mapgen);
         emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
         break;
     case MAPGEN_DRAWN:
@@ -317,10 +315,10 @@ void HWMapContainer::mapChanged(int index)
         maze_size_label->hide();
         cbMazeSize->hide();
         emit mapChanged("+drawn+");
-        emit mapgenChanged(mapgen);
         emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
         break;
     default:
+        mapgen = MAPGEN_MAP;
         updatePreview();
         gbThemes->hide();
         lblFilter->hide();
@@ -329,6 +327,8 @@ void HWMapContainer::mapChanged(int index)
         cbMazeSize->hide();
         emit mapChanged(chooseMap->itemData(index).toList()[0].toString());
     }
+
+    emit mapgenChanged(mapgen);
 }
 
 // Should this add text to identify map size?
@@ -447,7 +447,7 @@ void HWMapContainer::intSetSeed(const QString & seed)
 void HWMapContainer::setSeed(const QString & seed)
 {
     intSetSeed(seed);
-    if (chooseMap->currentIndex() < MAPGEN_MAP)
+    if (chooseMap->currentIndex() < MAPGEN_DRAWN)
         updatePreview();
 }
 
@@ -518,7 +518,6 @@ void HWMapContainer::setRandomStatic()
 void HWMapContainer::setRandomMission()
 {
     int i = MAPGEN_MAP + 2 + rand() % numMissions;
-    qDebug() << i << MAPGEN_MAP << numMissions;
     chooseMap->setCurrentIndex(i);
     setRandomSeed();
 }
@@ -648,9 +647,8 @@ void HWMapContainer::updatePreview()
         break;
     default:
         QPixmap mapImage;
-        qDebug() << "Map data" << curIndex << chooseMap->currentText() << chooseMap->itemData(curIndex);
         QFile tmpfile;
-        tmpfile.setFileName(cfgdir->absolutePath() + "/Data//Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
+        tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
         if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
         if(!mapImage.load(QFileInfo(tmpfile).absoluteFilePath())) {
             imageButt->setIcon(QIcon());
