@@ -79,7 +79,7 @@ function CreateTeam()
                 if z == 1 then
 
                         SetHogName(hhs[i],"Soldier")
-                        SetHogHat(hhs[i], "Vega")
+                        SetHogHat(hhs[i], "sf_vega")
                         SetHealth(hhs[i],200)
 
                 elseif z == 2 then
