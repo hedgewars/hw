@@ -238,11 +238,11 @@ add_executable(hedgewars WIN32
 
 
 set(HW_LINK_LIBS
+    quazip
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
     ${HW_LINK_LIBS}
-    quazip
     )
 
 if(WIN32 AND NOT UNIX)
