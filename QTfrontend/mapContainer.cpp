@@ -64,8 +64,6 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     imageButt->setFlat(true);
     imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
     mapLayout->addWidget(imageButt, 0, 0, 1, 2);
-    //connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomSeed()));
-    //connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomTheme()));
     connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomMap()));
 
     chooseMap = new QComboBox(mapWidget);
@@ -512,14 +510,13 @@ void HWMapContainer::setRandomStatic()
     int i = MAPGEN_MAP + 3 + numMissions + rand() % (chooseMap->count() - MAPGEN_MAP - 3 - numMissions);
     chooseMap->setCurrentIndex(i);
     updatePreview();
-    setRandomSeed();
 }
 
 void HWMapContainer::setRandomMission()
 {
     int i = MAPGEN_MAP + 2 + rand() % numMissions;
     chooseMap->setCurrentIndex(i);
-    setRandomSeed();
+    updatePreview();
 }
 
 void HWMapContainer::setRandomSeed()
