@@ -260,7 +260,7 @@ if(WIN32 AND NOT UNIX)
 endif()
 
 
-target_link_libraries(hedgewars	${HW_LINK_LIBS})
+target_link_libraries(hedgewars ${HW_LINK_LIBS})
 
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
