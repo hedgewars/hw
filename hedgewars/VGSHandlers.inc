@@ -604,6 +604,7 @@ if (Gear^.Timer and 5) = 0 then
     ShakeCamera(maxMovement);
     end;
 *)
+
 if Gear^.Timer > 250 then DeleteVisualGear(Gear);
 end;
 
@@ -612,6 +613,9 @@ var i: LongWord;
     gX,gY: LongInt;
     vg: PVisualGear;
 begin
+ScreenFade:= sfFromWhite;
+ScreenFadeValue:= 250;
+ScreenFadeSpeed:= 5;
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
 AddVisualGear(gX, gY, vgtSmokeRing);
