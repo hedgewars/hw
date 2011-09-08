@@ -250,8 +250,8 @@ begin
     recordFileName:= gameArgs[10];
     cStereoMode:= smNone;
 {$ENDIF}
-    cMinScreenWidth:= min(cScreenWidth, 480);
-    cMinScreenHeight:= min(cScreenHeight, 320);
+    cMinScreenWidth:= min(cScreenWidth, cMinScreenWidth);
+    cMinScreenHeight:= min(cScreenHeight, cMinScreenHeight);
     cOrigScreenWidth:= cScreenWidth;
     cOrigScreenHeight:= cScreenHeight;
 

@@ -25,8 +25,8 @@ uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
 
 var
 /////// init flags ///////
-    cMinScreenWidth    : LongInt     = 480;
-    cMinScreenHeight   : LongInt     = 320;
+    cMinScreenWidth    : LongInt     = 640;
+    cMinScreenHeight   : LongInt     = 480;
     cScreenWidth       : LongInt     = 1024;
     cScreenHeight      : LongInt     = 768;
     cOrigScreenWidth   : LongInt     = 1024;
