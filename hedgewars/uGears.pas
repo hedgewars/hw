@@ -1747,7 +1747,6 @@ i:= Low(TAmmoType);
 if (t > 0) then
     begin
     t:= GetRandom(t);
-    AddFileLog(inttostr(t)+' --------------');
     while t >= 0 do
       begin
       inc(i);

@@ -4948,6 +4948,8 @@ if Gear^.Pos = 2 then
 	    AfterAttack;
             if Gear = CurAmmoGear then CurAmmoGear := nil;
             DeleteCI(HH^.Gear);
+            if FollowGear = HH^.Gear then FollowGear:= nil;
+            if lastGearByUID = HH^.Gear then lastGearByUID := nil;
             RemoveGearFromList(HH^.Gear);
             with HH^.Gear^ do
                 begin

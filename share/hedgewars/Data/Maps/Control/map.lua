@@ -159,26 +159,27 @@ function CheckZones()
 		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)
 		cOwnerClan[i] = nil
 		for k = 0, (numhhs-1) do
-			if (hhs[k] ~= nil) then
-			if (GearIsInZone(hhs[k],i)) == true then
+			if (hhs[k] ~= nil) and (GetGearType(hhs[k]) ~= nil) then
+                if (GearIsInZone(hhs[k],i)) == true then
 
-				if cOwnerClan[i] ~= nil then
-					if cOwnerClan[i] ~= GetHogClan(hhs[k]) then 
-						--if the hog now being compared is different to one that is also here and was previously compared
-						
-						SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)						
-						--SetVisualGearValues(vCirc[i], 2739, 1378, 20, 255, 1, 10, 0, 300, 5, 0xffffffff)
-	
-						cOwnerClan[i] = 10 -- this means conflicted
-					end
-				elseif cOwnerClan[i] == nil then
-					cOwnerClan[i] = GetHogClan(hhs[k])
-					--SetVisualGearValues(vCirc[i], 2739, 1378, 20, 255, 1, 10, 0, 300, 5, GetClanColor( GetHogClan(hhs[k])) )
-					SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], GetClanColor( GetHogClan(hhs[k])))
-	
-				end
+                    if cOwnerClan[i] ~= nil then
+                        if cOwnerClan[i] ~= GetHogClan(hhs[k]) then 
+                            --if the hog now being compared is different to one that is also here and was previously compared
+                            
+                            SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)						
+                            --SetVisualGearValues(vCirc[i], 2739, 1378, 20, 255, 1, 10, 0, 300, 5, 0xffffffff)
+        
+                            cOwnerClan[i] = 10 -- this means conflicted
+                        end
+                    elseif cOwnerClan[i] == nil then
+                        cOwnerClan[i] = GetHogClan(hhs[k])
+                        --SetVisualGearValues(vCirc[i], 2739, 1378, 20, 255, 1, 10, 0, 300, 5, GetClanColor( GetHogClan(hhs[k])) )
+                        SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], GetClanColor( GetHogClan(hhs[k])))
+        
+                    end
 
-			end
+                end
+            else hhs[k] = nil
 			end
 		end
 
