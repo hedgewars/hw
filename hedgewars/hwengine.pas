@@ -200,7 +200,7 @@ begin
             cScreenHeight:= cNewScreenHeight;
 
             ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
-            WriteLnToConsole('window resize');
+            WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
             InitCameraBorders()
             end;
 

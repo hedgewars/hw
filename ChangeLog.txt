@@ -23,6 +23,7 @@
  + Indicator for height of plane when using napalm
  + Land smoothing (looks less pixelated on generation and damage)
  + Improved lua script support (e.g. possibility to change hats)
+ + The names of the ShoppaKingTournament winners are now written on the Trophies in the ShoppaKing and TrophyRace maps!
  * Prevent portaling to impossible locations better
  * Snow accumulates more smoothly
  * Rope should be less sticky now
