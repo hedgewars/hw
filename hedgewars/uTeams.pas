@@ -518,7 +518,7 @@ if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 end;
 
 procedure chTeamGone(var s:shortstring);
-var t: LongInt;
+var t, i: LongInt;
 begin
 t:= 0;
 while (t < cMaxTeams)
@@ -529,6 +529,9 @@ if (t = cMaxTeams) or (TeamsArray[t] = nil) then exit;
 with TeamsArray[t]^ do
     begin
     AddChatString('** '+ TeamName + ' is gone');
+    for i:= 0 to cMaxHHIndex do
+        if Hedgehogs[i].GearHidden <> nil then
+            RestoreHog(@Hedgehogs[i]);
     hasGone:= true
     end;
 

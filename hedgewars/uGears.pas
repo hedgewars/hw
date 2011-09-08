@@ -43,6 +43,8 @@ function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; p
 function  GetAmmo: TAmmoType;
 function  GetUtility: TAmmoType;
 procedure ResurrectHedgehog(gear: PGear);
+procedure HideHog(HH: PHedgehog);
+procedure RestoreHog(HH: PHedgehog);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
