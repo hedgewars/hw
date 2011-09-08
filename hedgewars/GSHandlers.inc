@@ -103,6 +103,35 @@ begin
         end;
 end;
 
+procedure HideHog(HH: PHedgehog);
+begin
+ScriptCall('onHogHide', HH^.Gear^.Uid);
+DeleteCI(HH^.Gear);
+if FollowGear = HH^.Gear then FollowGear:= nil;
+if lastGearByUID = HH^.Gear then lastGearByUID := nil;
+RemoveGearFromList(HH^.Gear);
+with HH^.Gear^ do
+    begin
+    Z := cHHZ;
+    Active := false;
+    State:= State and not (gstHHDriven or gstAttacking or gstAttacked);
+    Message := Message and not gmAttack;
+    end;
+HH^.GearHidden:= HH^.Gear;
+HH^.Gear:= nil;
+end;
+
+procedure RestoreHog(HH: PHedgehog);
+begin
+HH^.Gear:=HH^.GearHidden;
+HH^.GearHidden:= nil;
+InsertGearToList(HH^.Gear);
+HH^.Gear^.State:= (HH^.Gear^.State and not (gstHHDriven or gstInvisible or gstAttacking)) or gstAttacked;
+AddGearCI(HH^.Gear);
+HH^.Gear^.Active:= true;
+ScriptCall('onHogRestore', HH^.Gear^.Uid)
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear);
 forward;
@@ -4945,32 +4974,13 @@ if Gear^.Pos = 2 then
         begin
         if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible = 0) then
             begin
-	    AfterAttack;
+	        AfterAttack;
             if Gear = CurAmmoGear then CurAmmoGear := nil;
-            DeleteCI(HH^.Gear);
-            if FollowGear = HH^.Gear then FollowGear:= nil;
-            if lastGearByUID = HH^.Gear then lastGearByUID := nil;
-            RemoveGearFromList(HH^.Gear);
-            with HH^.Gear^ do
-                begin
-                Z := cHHZ;
-                Active := false;
-                State:= State and not (gstHHDriven or gstAttacking or gstAttacked);
-                Message := Message and not gmAttack;
-                end;
-            HH^.GearHidden:= HH^.Gear;
-            HH^.Gear:= nil
+            HideHog(HH)
             end
         //else if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible <> 0) then
         else if (HH^.GearHidden <> nil) then// and (HH^.Gear^.State and gstInvisible <> 0) then
-            begin
-            HH^.Gear:=HH^.GearHidden;
-            HH^.GearHidden:= nil;
-            InsertGearToList(HH^.Gear);
-            HH^.Gear^.State:= (HH^.Gear^.State and not (gstHHDriven or gstInvisible or gstAttacking)) or gstAttacked;
-            AddGearCI(HH^.Gear);
-            HH^.Gear^.Active:= true
-            end;
+            RestoreHog(HH)
         end;
 
     inc(Gear^.Timer);
