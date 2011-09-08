@@ -59,7 +59,7 @@ var
     grp: TCapGroup;
     offset: LongInt;
 begin
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
     offset:= 48;
 {$ELSE}
     offset:= 8;
