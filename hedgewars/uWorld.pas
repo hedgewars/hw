@@ -1314,9 +1314,12 @@ end;
 
 procedure ShakeCamera(amount: LongWord);
 begin
+    if isCursorVisible then exit;
     amount:= Max(1, amount);
-    WorldDx:= WorldDx - amount + LongInt(getRandom(1 + amount * 2));
-    WorldDy:= WorldDy - amount + LongInt(getRandom(1 + amount * 2));
+    //WorldDx:= WorldDx - amount + LongInt(getRandom(1 + amount * 2));
+    //WorldDy:= WorldDy - amount + LongInt(getRandom(1 + amount * 2));
+    CursorPoint.X:= CursorPoint.X - amount + LongInt(getRandom(1 + amount * 2));
+    CursorPoint.Y:= CursorPoint.Y - amount + LongInt(getRandom(1 + amount * 2))
 end;
 
 
