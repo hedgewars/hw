@@ -991,7 +991,10 @@ if skipFlag then
 if ((GameTicks and $FFFF) = $FFFF) then
     begin
     if (not CurrentTeam^.ExtDriven) then
-        SendIPCTimeInc;
+        begin
+        SendIPC('#');
+        AddFileLog('hiTicks increment message sent')
+        end;
 
     if (not CurrentTeam^.ExtDriven) or CurrentTeam^.hasGone then
         inc(hiTicks) // we do not recieve a message for this

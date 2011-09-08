@@ -29,7 +29,6 @@ procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
-procedure SendIPCTimeInc;
 procedure SendKeepAliveMessage(Lag: Longword);
 procedure LoadRecordFromFile(fileName: shortstring);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
@@ -246,13 +245,6 @@ SDLNet_Write16(Y, @s[4]);
 SendIPC(s)
 end;
 
-procedure SendIPCTimeInc;
-const timeinc: shortstring = '#';
-begin
-AddFileLog('[IPC out] <time increment>');
-SendIPCRaw(@timeinc, 2)
-end;
-
 procedure IPCWaitPongEvent;
 begin
 isPonged:= false;
@@ -288,13 +280,16 @@ while (headcmd <> nil)
     and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)
         or (headcmd^.cmd = 's') // for these commands time is not specified
         or (headcmd^.cmd = 'h') // seems the hedgewars protocol does not allow remote synced commands
-        or (headcmd^.cmd = '#')
+        or (headcmd^.cmd = '#') // must be synced for saves to work
         or (headcmd^.cmd = 'b')
         or (headcmd^.cmd = 'F')) do
     begin
     case headcmd^.cmd of
         '+': ; // do nothing - it is just an empty packet
-        '#': inc(hiTicks);
+        '#': begin
+            AddFileLog('hiTicks increment by remote message');
+            inc(hiTicks);
+            end;
         'L': ParseCommand('+left', true);
         'l': ParseCommand('-left', true);
         'R': ParseCommand('+right', true);
