@@ -429,7 +429,6 @@ void PageOptions::setFullscreen(void)
     else
         this->CBResolution->setCurrentIndex(previousResolutionIndex);
     previousResolutionIndex = tmp;
-    this->CBResolution->setEnabled(!this->CBFullscreen->isChecked());
 }
 
 void PageOptions::trimNetNick()

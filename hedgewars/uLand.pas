@@ -1133,9 +1133,14 @@ var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
     x, y, cpX, cpY: Longword;
 begin
-    tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-    if (tmpsurf = nil) and (mapName <> '') then
-        tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName +'/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then
+    begin
+    mapName:= ExtractFileName(Pathz[ptMapCurrent]);
+    tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    end;
 
     if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
     begin
@@ -1179,11 +1184,11 @@ AddProgress;
 tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
-begin
+    begin
     mapName:= ExtractFileName(Pathz[ptMapCurrent]);
     tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
     if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
-end;
+    end;
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 
 // unC0Rr - should this be passed from the GUI? I am not sure which layer does what

@@ -18,9 +18,14 @@
 
 #ifndef PAGE_DATA_H
 #define PAGE_DATA_H
-#include <QWebView>
+
 #include <QUrl>
 #include "AbstractPage.h"
+
+class DataBrowser;
+class QProgressBar;
+class QNetworkReply;
+class QVBoxLayout;
 
 class PageDataDownload : public AbstractPage
 {
@@ -30,10 +35,23 @@ public:
     PageDataDownload(QWidget* parent = 0);
 
     QPushButton *BtnBack;
-    QWebView *web;
+
+public slots:
+    void fetchList();
+
+private:
+    DataBrowser *web;
+    QHash<QNetworkReply*, QProgressBar *> progressBars;
+    QVBoxLayout *progressBarsLayout;
+
+    bool extractDataPack(QByteArray * buf);
 
 private slots:
-    void install(const QUrl &url);
+    void request(const QUrl &url);
+
+    void pageDownloaded();
+    void fileDownloaded();
+    void downloadProgress(qint64, qint64);
 };
 
 #endif

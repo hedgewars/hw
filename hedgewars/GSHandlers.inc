@@ -103,6 +103,35 @@ begin
         end;
 end;
 
+procedure HideHog(HH: PHedgehog);
+begin
+ScriptCall('onHogHide', HH^.Gear^.Uid);
+DeleteCI(HH^.Gear);
+if FollowGear = HH^.Gear then FollowGear:= nil;
+if lastGearByUID = HH^.Gear then lastGearByUID := nil;
+RemoveGearFromList(HH^.Gear);
+with HH^.Gear^ do
+    begin
+    Z := cHHZ;
+    Active := false;
+    State:= State and not (gstHHDriven or gstAttacking or gstAttacked);
+    Message := Message and not gmAttack;
+    end;
+HH^.GearHidden:= HH^.Gear;
+HH^.Gear:= nil;
+end;
+
+procedure RestoreHog(HH: PHedgehog);
+begin
+HH^.Gear:=HH^.GearHidden;
+HH^.GearHidden:= nil;
+InsertGearToList(HH^.Gear);
+HH^.Gear^.State:= (HH^.Gear^.State and not (gstHHDriven or gstInvisible or gstAttacking)) or gstAttacked;
+AddGearCI(HH^.Gear);
+HH^.Gear^.Active:= true;
+ScriptCall('onHogRestore', HH^.Gear^.Uid)
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear);
 forward;
@@ -766,8 +795,9 @@ end;
 procedure doStepBeeWork(Gear: PGear);
 var 
     t: hwFloat;
-    gX,gY: LongInt;
+    gX,gY,i: LongInt;
     nuw: boolean;
+    flower: PVisualGear;
 
 const uw: boolean =   false;
 begin
@@ -816,6 +846,21 @@ begin
     begin
         StopSound(Gear^.SoundChannel);
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
+        for i:= 0 to 31 do
+            begin
+            flower:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
+            if flower <> nil then 
+                with flower^ do
+                    begin
+                    Scale:= 0.75;
+                    dx:= 0.001 * (random(200));
+                    dy:= 0.001 * (random(200));
+                    if random(2) = 0 then dx := -dx;
+                    if random(2) = 0 then dy := -dy;
+                    FrameTicks:= random(250) + 250;
+                    State:= ord(sprTargetBee);
+                    end;
+            end;
         DeleteGear(Gear);
     end;
 end;
@@ -1110,7 +1155,8 @@ begin
     AllInactive := false;
     HHGear := Gear^.Hedgehog^.Gear;
     dec(Gear^.Timer);
-    if (Gear^.Timer = 0)or((Gear^.Message and gmDestroy) <> 0)or((HHGear^.State and gstHHDriven) =
+    if ((GameFlags and gfInfAttack) <> 0) and (TurnTimeLeft > 0) then dec(TurnTimeLeft);
+    if (TurnTimeLeft = 0) or (Gear^.Timer = 0)or((Gear^.Message and gmDestroy) <> 0)or((HHGear^.State and gstHHDriven) =
        0) then
         begin
         StopSound(Gear^.SoundChannel);
@@ -1219,6 +1265,8 @@ var
 begin
     AllInactive := false;
     dec(Gear^.Timer);
+    if ((GameFlags and gfInfAttack) <> 0) and (TurnTimeLeft > 0) then dec(TurnTimeLeft);
+    
     HHGear := Gear^.Hedgehog^.Gear;
 
     HedgehogChAngle(HHGear);
@@ -1286,7 +1334,7 @@ begin
         Gear^.dX, Gear^.dY,
         cHHRadius * 5, cHHRadius * 2 + 7);
 
-    if (Gear^.Timer = 0) or ((HHGear^.Message and gmAttack) <> 0) then
+    if (TurnTimeLeft = 0) or (Gear^.Timer = 0) or ((HHGear^.Message and gmAttack) <> 0) then
         begin
         HHGear^.Message := 0;
         HHGear^.State := HHGear^.State and (not gstNotKickable);
@@ -2884,7 +2932,7 @@ begin
 
     dec(Gear^.Health);
     Gear^.Timer := Gear^.Health*10;
-    Gear^.PortalCounter:= 0;
+    if Gear^.Health mod 100 = 0 then Gear^.PortalCounter:= 0;
     // This is not seconds, but at least it is *some* feedback
     if (Gear^.Health = 0) or ((Gear^.Message and gmAttack) <> 0) then
     begin
@@ -3019,7 +3067,7 @@ begin
                 if random(2) = 0 then dx := -dx;
                 if random(2) = 0 then dy := -dy;
                 FrameTicks:= random(750) + 1000;
-                heart^.State:= ord(sprSeduction)
+                State:= ord(sprSeduction)
                 end;
         end;
 
@@ -3925,8 +3973,7 @@ begin
 
         // inverse cake's normal movement direction,
         // as if it just walked through a hole
-        if iscake then
-            nspeed.isNegative:= not nspeed.isNegative;
+        //if iscake then nspeed.isNegative:= not nspeed.isNegative;
 
 //AddFileLog('poffs:'+cstr(poffs)+' noffs:'+cstr(noffs)+' pspeed:'+cstr(pspeed)+' nspeed:'+cstr(nspeed));
         iterator^.dX := -pspeed * conPortal^.dX + nspeed * nx;
@@ -3977,8 +4024,8 @@ begin
                 iterator^.Radius := iterator^.Radius - 1;
 
             // check front
-            isCollision := TestCollisionYwithGear(iterator, sy)
-                        or TestCollisionXwithGear(iterator, sx);
+            isCollision := TestCollisionY(iterator, sy)
+                        or TestCollisionX(iterator, sx);
 
             if not isCollision then
             begin
@@ -3986,8 +4033,8 @@ begin
                 // the square check won't check more pixels than we want to)
                 iterator^.Radius := 1 + resetr div 2;
                 rh := resetr div 4;
-                isCollision := TestCollisionYwithXYShift(iterator,       0, -sy * rh, sy)
-                            or TestCollisionXwithXYShift(iterator, ox * rh,        0, sx);
+                isCollision := TestCollisionYwithXYShift(iterator,       0, -sy * rh, sy, false)
+                            or TestCollisionXwithXYShift(iterator, ox * rh,        0, sx, false);
             end;
 
             iterator^.Radius := resetr;
@@ -4008,7 +4055,8 @@ begin
         //
 
         // Until loops are reliably broken
-        inc(iterator^.PortalCounter);
+        if iscake then iterator^.PortalCounter:= 33
+        else inc(iterator^.PortalCounter);
 
         if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
@@ -4921,38 +4969,26 @@ begin
 HH:= Gear^.Hedgehog;
 if Gear^.Pos = 2 then
     begin
+    StopSound(Gear^.SoundChannel);
     if (Gear^.Timer = 0) then
         begin
         if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible = 0) then
             begin
-	    AfterAttack;
+	        AfterAttack;
             if Gear = CurAmmoGear then CurAmmoGear := nil;
-            DeleteCI(HH^.Gear);
-            RemoveGearFromList(HH^.Gear);
-            with HH^.Gear^ do
-                begin
-                Z := cHHZ;
-                Active := false;
-                State:= State and not (gstHHDriven or gstAttacking or gstAttacked);
-                Message := Message and not gmAttack;
-                end;
-            HH^.GearHidden:= HH^.Gear;
-            HH^.Gear:= nil
+            HideHog(HH)
             end
-        else if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible <> 0) then
-            begin
-            InsertGearToList(HH^.Gear);
-            HH^.Gear^.State:= HH^.Gear^.State and not (gstHHDriven or gstInvisible);
-            AddGearCI(HH^.Gear);
-            HH^.Gear^.Active:= true
-            end;
+        //else if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible <> 0) then
+        else if (HH^.GearHidden <> nil) then// and (HH^.Gear^.State and gstInvisible <> 0) then
+            RestoreHog(HH)
         end;
 
     inc(Gear^.Timer);
     if (Gear^.Timer > 2000) and ((GameTicks mod 2000) = 1000) then
         begin
-        Gear^.Pos:= 3;
-        end;
+        Gear^.SoundChannel := LoopSound(sndTardis);
+        Gear^.Pos:= 3
+        end
     end;
 
 if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then inc(Gear^.Power);
@@ -4960,6 +4996,7 @@ if (Gear^.Pos = 3) and (GameTicks and $1F = 0) and (Gear^.Power > 0) then dec(Ge
 if (Gear^.Pos = 1) and (Gear^.Power = 255) and ((GameTicks mod 2000) = 1000) then Gear^.Pos:= 2;
 if (Gear^.Pos = 3) and (Gear^.Power = 0) then
     begin
+    StopSound(Gear^.SoundChannel);
     if HH^.GearHidden = nil then
         begin
         DeleteGear(Gear);
@@ -4981,17 +5018,18 @@ if (Gear^.Pos = 4) then
                 HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then inc(cnt);
     if (cnt = 0) or SuddenDeathDmg or (Gear^.Timer = 0) then
         begin
+        Gear^.SoundChannel := LoopSound(sndTardis);
         Gear^.Pos:= 1;
         Gear^.Power:= 0;
         Gear^.Timer:= 0;
         if HH^.GearHidden <> nil then FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH,true);
         if HH^.GearHidden <> nil then 
             begin
-            HH^.Gear:=HH^.GearHidden;
-            HH^.GearHidden:= nil;
-            HH^.Gear^.State:= HH^.Gear^.State or gstInvisible;
-            Gear^.X:= HH^.Gear^.X;
-            Gear^.Y:= HH^.Gear^.Y;
+            Gear^.X:= HH^.GearHidden^.X;
+            Gear^.Y:= HH^.GearHidden^.Y;
+            //HH^.Gear:=HH^.GearHidden;
+            //HH^.GearHidden:= nil;
+            //HH^.Gear^.State:= HH^.Gear^.State or gstInvisible;
             end
         end
     else dec(Gear^.Timer);
@@ -5039,6 +5077,7 @@ begin
         DeleteGear(gear);
         exit
         end;
+    Gear^.SoundChannel := LoopSound(sndTardis);
     Gear^.doStep:= @doStepTardisWarp
 end;
 

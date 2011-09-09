@@ -33,6 +33,7 @@ public:
     QPushButton *BtnSetup;
     QPushButton *BtnInfo;
     QPushButton *BtnExit;
+    QPushButton *BtnDataDownload;
     QLabel *mainNote;
 };
 

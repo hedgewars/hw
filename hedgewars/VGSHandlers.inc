@@ -596,6 +596,7 @@ FIXME - This block desyncs due to the way WorldDx is important for various thing
 One possible solution is, instead of using WorldDx, to use straight gl/SDL calls to jitter the screen a bit.
 
 // a comment by unC0Rr: instead of changing WorldDx shake cursor coordinates, that should be safe
+// ... seems to still desync, and I tried banning when targetting too
 
 if (Gear^.Timer and 5) = 0 then
     begin
@@ -603,6 +604,7 @@ if (Gear^.Timer and 5) = 0 then
     ShakeCamera(maxMovement);
     end;
 *)
+
 if Gear^.Timer > 250 then DeleteVisualGear(Gear);
 end;
 
@@ -611,6 +613,9 @@ var i: LongWord;
     gX,gY: LongInt;
     vg: PVisualGear;
 begin
+ScreenFade:= sfFromWhite;
+ScreenFadeValue:= 250;
+ScreenFadeSpeed:= 5;
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
 AddVisualGear(gX, gY, vgtSmokeRing);

@@ -52,10 +52,10 @@
 00:49=Wskrzeszacz
 00:50=Wiertniczy nalot
 00:51=Kula błotna
-00:52=Nie wybrano broń
+00:52=Nie wybrano broni
 00:53=TARDIS
-00:54=Struktura
-00:55=Land Spray
+00:54=Budynek
+00:55=Miotacz błota
 
 01:00=Walczmy!
 01:01=Remis
@@ -72,6 +72,12 @@
 01:12=To już ostatnia runda przed Nagłą Śmiercią!
 01:13=Zostało %1 rund do Nagłej Śmierci!
 01:14=Bądź gotów, %1!
+01:15=Delikatne
+01:16=Słabe
+01:17=Normalne
+01:18=Duże
+01:19=Ekstremalne
+01:20=%1 odbicie
 
 ; Event messages
 ; Hog (%1) died
@@ -469,12 +475,11 @@
 02:10=To było odlotowe!
 
 ; Hog (%1) has to leave (team is gone)
-02:11=%1 musi iść do łóżka!
-02:11=%1 wydaje się zbyt zajęty, by grać
-02:11=Zostałeś zajęty zamrozić dla jeża, %1
-02:11=Źłe gry przestała, albo nie działa.
-02:11=%1 awaria z gracza
-02:11=Belka go, Szkot!
+02:11=%1 musi iść spać!
+02:11=%1 ma ważniejsze sprawy na głowie
+02:11=Żegnamy Cię, %1
+02:11=KSZSZ, KSZZ. Jest tam ktoś po drugiej stronie?
+02:11=%1 nie ma zamiaru dłużej grać
 02:11=%1 musi odejść
 
 ; Weapon Categories
@@ -532,7 +537,8 @@
 03:51=Znalezione na ziemi
 03:52=UNUSED
 03:53=Typ 40
-03:54=Zbudować coś
+03:54=Zbuduj coś przydatnego
+03:55=Narzędzie
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -582,9 +588,15 @@
 04:44=To nie jest zwykły ser. To broń biologiczna!|Wybuch z pewnością nie będzie potężny, ale gdy|licznik dojdzie do zera, chmura gazu zatruje|każdego nieszczęśnika który będzie w pobliżu|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
 04:45=Wszystkie lekcje fizyki w końcu się opłaciły!|Wystrzel niszczącą sinusoidalną falę|która przechodzi przez teren i uderza|w twoich przeciwników|Uważaj! Ta broń ma kopa!|Atak: Strzelaj
 04:46=Pokrywa twoich wrogów ognistą powłoką.|Czy ktoś zamawiał pieczonego jeża?|Atak: Aktywuj|Góra/Dół: Celowanie|Lewo/Prawo: Ustaw prędkość wystrzeliwania
-04:47=Podwójna zabawa z podwójną ilością lepkich min.|Spróbuj wywołać reakcję łańcuchową lub chroń|samego siebie (albo zrób obydwie rzeczy na raz!)|Atak: Przytrzymaj by rzucić z większą siłą (dwa razy)
+04:47=Podwój zabawę z pomocą 2 lepkich min.|Spróbuj wywołać reakcję łańcuchową lub chroń|samego siebie (albo zrób obydwie rzeczy na raz!)|Atak: Przytrzymaj by rzucić z większą siłą (dwa razy)
 04:48=Czyż walenie jeży po głowach nie|jest zabawne? Dobre uderzenie|z młotka zabierze 1/3 życia|przeciwnika i wkopie go w podłoże|Atak: Uderz
 04:49=Wskrześ swoich przyjaciół!|Jednakże uważaj byś nie pomógł swojemu wrogowi.|Atak: Przytrzymaj by powoli przywracać życie|Góra: Przyspiesz wskrzeszanie
+04:50=Wezwij szwadron śmiercionośnych wierteł|by wykurzyć kogoś z kryjówki. Po użyciu|zostanie zrzuconych 6 wiertniczych bomb|wkręcających się w podłoże|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz miejsce zrzutu
+04:51=Obrzuć kogoś błotem! Broń ta nie zadaje dużych|obrażeń ale może gogoś zepchnąć z krawędzi!|Atak: Przytrzymaj by strzelić z większą siłą
+04:52=UNUSED
+04:53=Wybierz się na podróż w czasie i przestrzeni|zostawiając innne jeże na polu walki.|Bądź przygotowany na powrót w dowolnym momencie.|Gdy rozpocznie się|Nagła Śmierć lub większość jeży zostanie wybita.|Uwaga. Nie zadziała podczas Nagłej Śmierci,|gdy jesteś sam, lub jeśli jesteś Królem.
+04:54=INCOMPLETE                                                                                                                                     
+04:55=Wystrzel strumień kleistej mazi.|Buduj mosty, zasypuj wrogów, ztykaj tunele.|Uważaj by nie zasypać samego siebie!
 
 ; Game goal strings
 05:00=Ustawienia gry
@@ -608,4 +620,4 @@
 05:18=Tura nie kończy się po wykonaniu ataku
 05:19=Uzbrojenie zostaje przywrócone przy kolejnej turze
 05:20=Każdy z jeży ma oddzielne uzbrojenie
-05:21=Zespół Tag: Zespoły w klanie na kolejnych kolejkach|Wspólna Godzina: Drużyny w akcji raz z kolei klanu
+05:21=Zespół: Zespoły w klanie wykonują tury po kolei|Wspólny czas: Czas jest wspólny dla każdej drużyny w zespole

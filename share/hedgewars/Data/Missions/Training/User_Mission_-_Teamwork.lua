@@ -12,7 +12,6 @@ function onGameInit()
 	-- Things we don't modify here will use their default values.
 	Seed = 0 -- The base number for the random number generator
 	GameFlags = gfDisableWind-- Game settings and rules
-	SuddenDeathTurns = 9999
 	TurnTime = 30000 -- The time the player has to move each round (in ms)
 	CaseFreq = 0 -- The frequency of crate drops
 	MinesNum = 0 -- The number of mines being placed
@@ -21,6 +20,7 @@ function onGameInit()
 	Delay = 10 -- The delay between each round
 	Map = "Mushrooms" -- The map to be played
 	Theme = "Nature" -- The theme to be used
+	SuddenDeathTurns = 99999
 
 	AddTeam(loc("Feeble Resistance"), 14483456, "Simple", "Island", "Default")
 	player = AddHog(string.format(loc("Pathetic Hog #%d"), 1), 0, 50, "NoHat")
@@ -28,7 +28,7 @@ function onGameInit()
 
 	--AddTeam("Toxic Team", 	1175851, "Simple", "Island", "Robot","cm_binary")
 	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Robot", "cm_binary")
-	enemy = AddHog(loc("Unit 3378"), 5, 30, "cyborg")
+	enemy = AddHog(loc("Unit 3378"), 5, 30, "cyborg1")
 
 	SetGearPosition(player, 2427, 1259)
 	SetGearPosition(p2, 2293, 1263)

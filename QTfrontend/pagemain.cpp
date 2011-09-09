@@ -41,6 +41,7 @@ PageMain::PageMain(QWidget* parent) :
     pageLayout->setRowStretch(2, 0);
     pageLayout->setRowStretch(3, 1);
     pageLayout->setRowStretch(4, 1);
+    pageLayout->setRowStretch(5, 1);
 
     BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, true);
     BtnSinglePlayer->setToolTip(tr("Local Game (Play a game on a single computer)"));
@@ -49,6 +50,9 @@ PageMain::PageMain(QWidget* parent) :
     BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
     BtnNet->setToolTip(tr("Network Game (Play a game across a network)"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
+
+    BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 4, 0, 1, 4, false);
+    pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
 
     mainNote = new QLabel(this);
     mainNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -119,9 +123,9 @@ PageMain::PageMain(QWidget* parent) :
     else
         mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
 
-    pageLayout->addWidget(mainNote, 4, 1, 1, 2);
+    pageLayout->addWidget(mainNote, 5, 1, 1, 2);
 
-    BtnSetup = addButton(":/res/Settings.png", pageLayout, 4, 3, true);
+    BtnSetup = addButton(":/res/Settings.png", pageLayout, 5, 3, true);
 
     //BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, true);
     BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
@@ -129,7 +133,7 @@ PageMain::PageMain(QWidget* parent) :
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
     //pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
-    BtnExit = addButton(":/res/Exit.png", pageLayout, 4, 0, 1, 1, true);
+    BtnExit = addButton(":/res/Exit.png", pageLayout, 5, 0, 1, 1, true);
     BtnExit->setFixedHeight(BtnSetup->height());
     BtnExit->setStyleSheet("QPushButton{margin-top: 2px;}");
 }

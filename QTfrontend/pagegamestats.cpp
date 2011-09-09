@@ -47,6 +47,11 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
     BtnBack->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
+    BtnSave = addButton(":/res/Save.png", pageLayout, 3, 2, true);
+    BtnSave->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    BtnSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
+    connect(BtnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
+
     QGroupBox * gb = new QGroupBox(this);
     QVBoxLayout * gbl = new QVBoxLayout;
 
@@ -62,7 +67,7 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     gbl->addWidget(l);
     gbl->addWidget(labelGameStats);
     gb->setLayout(gbl);
-    pageLayout->addWidget(gb, 1, 1);
+    pageLayout->addWidget(gb, 1, 1, 1, 2);
     
     // graph
     graphic = new FitGraphicsView(gb);
