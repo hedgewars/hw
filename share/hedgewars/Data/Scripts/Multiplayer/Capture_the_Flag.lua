@@ -84,7 +84,7 @@ loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 ------------------ "Oh well, they probably have the memory"
 
 local gameStarted = false
-local gameTurns = 0	
+local gameTurns = 0
 
 --------------------------
 -- hog and team tracking variales
@@ -142,14 +142,14 @@ function CheckScore(teamID)
 
 	if fCaptures[teamID] == 3 then
 		for i = 0, (numhhs-1) do
-			if hhs[i] ~= nil then			
+			if hhs[i] ~= nil then
 				if GetHogClan(hhs[i]) == alt then
 					SetEffect(hhs[i], heResurrectable, false)
 					SetHealth(hhs[i],0)
 				end
 			end
 		end
-		if CurrentHedgehog ~= nil then		
+		if CurrentHedgehog ~= nil then
 			ShowMission(loc("GAME OVER!"), loc("Victory for the ") .. GetHogTeamName(CurrentHedgehog), loc("Hooray!"), 0, 0)
 		end
 	end
@@ -165,18 +165,18 @@ function DoFlagStuff(gear)
 		wtf = 1
 		bbq = 0
 	end
-	
+
 	-- player has successfully captured the enemy flag
 	if (GetHogClan(CurrentHedgehog) == wtf) and (CurrentHedgehog == fThief[bbq]) and (fIsMissing[wtf] == false) then
-		
+
 		DeleteVisualGear(fGear[wtf])
-		fGear[wtf] = nil -- the flag has now disappeared				
-				
+		fGear[wtf] = nil -- the flag has now disappeared
+
 		fIsMissing[wtf] = false
 		fNeedsRespawn[wtf] = true
 		fIsMissing[bbq] = false
 		fNeedsRespawn[bbq] = true
-		fCaptures[wtf] = fCaptures[wtf] +1				
+		fCaptures[wtf] = fCaptures[wtf] +1
 		ShowMission(loc("You have SCORED!!"), GetHogTeamName(CurrentHedgehog) .. ": " .. fCaptures[wtf], loc("Opposing Team: ") .. fCaptures[bbq], 0, 0)
 		PlaySound(sndVictory)
 		fThief[bbq] = nil -- player no longer has the enemy flag
@@ -184,23 +184,23 @@ function DoFlagStuff(gear)
 
 	--if the player is returning the flag
 	elseif (GetHogClan(CurrentHedgehog) == wtf) and (fIsMissing[wtf] == true) then
-			
+
 		DeleteVisualGear(fGear[wtf])
 		fGear[wtf] = nil -- the flag has now disappeared
-					
-		fNeedsRespawn[wtf] = true					
+
+		fNeedsRespawn[wtf] = true
 		HandleRespawns() -- this will set fIsMissing[wtf] to false :)
 		AddCaption(loc("Flag returned!"))
-	
+
 	--if the player is taking the enemy flag
 	elseif GetHogClan(CurrentHedgehog) == bbq then
-				
+
 		DeleteVisualGear(fGear[wtf])
-		fGear[wtf] = nil -- the flag has now disappeared				
-				
+		fGear[wtf] = nil -- the flag has now disappeared
+
 		fIsMissing[wtf] = true
 		for i = 0,numhhs-1 do
-			if CurrentHedgehog ~= nil then			
+			if CurrentHedgehog ~= nil then
 				if CurrentHedgehog == hhs[i] then
 					fThief[wtf] = hhs[i]
 				end
@@ -209,23 +209,23 @@ function DoFlagStuff(gear)
 		AddCaption(loc("Flag captured!"))
 
 	end
-	
+
 end
 
-function CheckFlagProximity() 
+function CheckFlagProximity()
 
 	for i = 0, 1 do
 		if fGear[i] ~= nil then
-			
+
 			g1X = fGearX[i]
-			g1Y = fGearY[i]			
-	
+			g1Y = fGearY[i]
+
 			g2X, g2Y = GetGearPosition(CurrentHedgehog)
 
 			q = g1X - g2X
 			w = g1Y - g2Y
 			dist = (q*q) + (w*w)
-			
+
 			if dist < 500 then --1600
 				DoFlagStuff(fGear[i])
 			end
@@ -242,7 +242,7 @@ function HandleRespawns()
 		if fNeedsRespawn[i] == true then
 			fGear[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
 			fGearX[i] = fSpawnX[i]
-			fGearY[i] = fSpawnY[i]			
+			fGearY[i] = fSpawnY[i]
 
 			fNeedsRespawn[i] = false
 			fIsMissing[i] = false -- new, this should solve problems of a respawned flag being "returned" when a player tries to score
@@ -265,16 +265,16 @@ function FlagThiefDead(gear)
 	end
 
 	if fThief[wtf] ~= nil then
-		-- falls into water		
-		--ShowMission(LAND_HEIGHT,  fThiefY[wtf], (LAND_HEIGHT - fThiefY[wtf]), 0, 0)	
+		-- falls into water
+		--ShowMission(LAND_HEIGHT,  fThiefY[wtf], (LAND_HEIGHT - fThiefY[wtf]), 0, 0)
 		if (LAND_HEIGHT - fThiefY[wtf]) < 15 then
 			fIsMissing[wtf] = true
 			fNeedsRespawn[wtf] = true
 			HandleRespawns()
-		else	--normally	
+		else	--normally
 			fGearX[wtf]  =  fThiefX[wtf]
-			fGearY[wtf]  =  fThiefY[wtf]	
-			fGear[wtf] = AddVisualGear(fGearX[wtf],fGearY[wtf],vgtCircle,0,true)		
+			fGearY[wtf]  =  fThiefY[wtf]
+			fGear[wtf] = AddVisualGear(fGearX[wtf],fGearY[wtf],vgtCircle,0,true)
 		end
 
 		AddVisualGear(fThiefX[wtf], fThiefY[wtf], vgtBigExplosion, 0, false)
@@ -290,14 +290,14 @@ function HandleCircles()
 		fGearTimer = 0
 		fGearRad = fGearRad + 1
 		if fGearRad > fGearRadMax then
-			fGearRad = fGearRadMin	
+			fGearRad = fGearRadMin
 		end
 	end
 
 	for i = 0, 1 do
-		
+
 		--SetVisualGearValues(fSpawnC[i], fSpawnX[i],fSpawnY[i], 20, 200, 0, 0, 100, 50, 3, fCol[i]) -- draw a circ for spawning area
-		
+
 		if fIsMissing[i] == false then -- draw a flag marker at the flag's spawning place
 			SetVisualGearValues(fCirc[i], fSpawnX[i],fSpawnY[i], 20, 20, 0, 10, 0, 33, 3, fCol[i])
 			if fGear[i] ~= nil then -- draw the flag gear itself
@@ -308,12 +308,12 @@ function HandleCircles()
 				SetVisualGearValues(fCirc[i], fThiefX[i], fThiefY[i], 20, 200, 0, 0, 100, 50, 3, fCol[i])
 				--AddCaption("circle marking carrier")
 			elseif fThief[i] == nil then -- draw cirle round dropped flag
-				--g1X,g1Y,g4,g5,g6,g7,g8,g9,g10,g11 =  GetVisualGearValues(fGear[i])				
+				--g1X,g1Y,g4,g5,g6,g7,g8,g9,g10,g11 =  GetVisualGearValues(fGear[i])
 				--SetVisualGearValues(fCirc[i], g1X, g1Y, 20, 200, 0, 0, 100, 33, 2, fCol[i])
 				SetVisualGearValues(fCirc[i], fGearX[i], fGearY[i], 20, 200, 0, 0, 100, 33, 3, fCol[i])
-				--AddCaption('dropped circle marker')				
+				--AddCaption('dropped circle marker')
 				if fGear[i] ~= nil then -- flag gear itself
-					--SetVisualGearValues(fGear[i], g1X, g1Y, 20, 200, 0, 0, 100, 10, 4, fCol[i])					
+					--SetVisualGearValues(fGear[i], g1X, g1Y, 20, 200, 0, 0, 100, 10, 4, fCol[i])
 					SetVisualGearValues(fGear[i], fGearX[i], fGearY[i], 20, 200, 0, 0, 100, fGearRad, 2, fCol[i])
 					--AddCaption('dropped flag itself')
 				end
@@ -410,13 +410,13 @@ function StartTheGame()
 
 	for i = 0, 1 do
 
-		-- if someone uses kamikaze downwards, this can happen as the hog won't respawn		
+		-- if someone uses kamikaze downwards, this can happen as the hog won't respawn
 		if (LAND_HEIGHT - fSpawnY[i]) < 0 then
 			tempG = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
-     			FindPlace(tempG, true, 0, LAND_WIDTH, true)			
+     			FindPlace(tempG, true, 0, LAND_WIDTH, true)
 			fSpawnX[i], fSpawnY[i] = GetGearPosition(tempG)
 			DeleteGear(tempG)
-		end  		
+		end
 
 		fGear[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
 		fCirc[i] = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
@@ -429,11 +429,11 @@ function StartTheGame()
 		fIsMissing[i] = false
 		fNeedsRespawn[i] = false
 		fCaptures[i] = 0
-		
-		--SetVisualGearValues(zxc, 1000,1000, 20, 100, 0,    10,                     1,         100,        5,      GetClanColor(0))		
-		
+
+		--SetVisualGearValues(zxc, 1000,1000, 20, 100, 0,    10,                     1,         100,        5,      GetClanColor(0))
+
 		SetVisualGearValues(fSpawnC[i], fSpawnX[i],fSpawnY[i], 20, 100, 0, 10, 0, 75, 5, fCol[i])
-				
+
 	end
 
 end
@@ -446,8 +446,8 @@ function onGameInit()
 
 	GameFlags = band(bor(GameFlags, gfDivideTeams), bnot(gfKing + gfForts))
 	--SuddenDeathTurns = 999 -- suddendeath is off, effectively
-	WaterRise = 0	
-	Delay = 10 
+	WaterRise = 0
+	Delay = 10
 
 end
 
@@ -458,8 +458,8 @@ function onGameStart()
 	ShowMission(loc("CAPTURE THE FLAG"), loc("Flags, and their home base will be placed where each team ends their first turn."), "", 0, 0)
 
 	RebuildTeamInfo()
-	
-	-- should gfDivideTeams do this automatically?	
+
+	-- should gfDivideTeams do this automatically?
 	--[[for i = 0, (TeamsCount-1) do
 		for g = teamIndex[i], (teamIndex[i]+teamSize[i]-1) do
 			if GetHogClan(hhs[g]) == 0 then
@@ -475,7 +475,7 @@ function onGameStart()
 
 	--zxc = AddVisualGear(fSpawnX[i],fSpawnY[i],vgtCircle,0,true)
 
-	
+
 	--SetVisualGearValues(zxc, 1000,1000, 20, 255, 1,    10,                     0,         200,        1,      GetClanColor(0))
 					--minO,max0 -glowyornot	--pulsate timer	 -- fuckall      -- radius -- width  -- colour
 end
@@ -484,7 +484,7 @@ end
 function onNewTurn()
 
 	gameTurns = gameTurns + 1
-	
+
 	if lastTeam ~= GetHogTeamName(CurrentHedgehog) then
 		lastTeam = GetHogTeamName(CurrentHedgehog)
 	end
@@ -492,14 +492,14 @@ function onNewTurn()
 	--AddCaption("Handling respawns")
 	if gameStarted == true then
 		HandleRespawns()
-	--new method of placing starting flags	
+	--new method of placing starting flags
 	elseif gameTurns == 1 then
 		ShowMission(loc("CAPTURE THE FLAG"), loc("Flags, and their home base will be placed where each team ends their first turn."), "", 0, 0)
 	elseif gameTurns == 2 then
 		fPlaced[0] = true
 		ShowMission(loc("CAPTURE THE FLAG"), loc("RULES OF THE GAME [Press ESC to view]"), loc(" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"), 0, 0)
 	elseif gameTurns == 3 then
-		fPlaced[1] = true	
+		fPlaced[1] = true
 		StartTheGame()
 	end
 
@@ -535,16 +535,16 @@ function onGameTick()
 			CheckFlagProximity()
 		end
 	elseif CurrentHedgehog ~= nil then -- if the game hasn't started yet, keep track of where we are gonna put the flags on turn end
-				
+
 		if GetHogClan(CurrentHedgehog) == 0 then
-			i = 0			
+			i = 0
 		elseif GetHogClan(CurrentHedgehog) == 1 then
-			i = 1			
-		end			
-		
+			i = 1
+		end
+
 		fSpawnX[i] = GetX(CurrentHedgehog)
 		fSpawnY[i] = GetY(CurrentHedgehog)
-			
+
 	end
 
 end
@@ -575,14 +575,14 @@ end
 function InABetterPlaceNow(gear)
 	for i = 0, (numhhs-1) do
 		if gear == hhs[i] then
-				
+
 			for i = 0,1 do
 				if gear == fThief[i] then
 					FlagThiefDead(gear)
 				end
-			end				
-			hhs[i] = nil	
-		end		
+			end
+			hhs[i] = nil
+		end
 	end
 end
 
@@ -591,11 +591,11 @@ function onHogHide(gear)
 end
 
 function onHogRestore(gear)
-	match = false	
+	match = false
 	for i = 0, (numhhs-1) do
 		if (hhs[i] == nil) and (match == false) then
 			hhs[i] = gear
-			--AddCaption(GetHogName(gear) .. " has reappeared it seems!")	
+			--AddCaption(GetHogName(gear) .. " has reappeared it seems!")
 			match = true
 		end
 	end
@@ -608,12 +608,12 @@ function onGearAdd(gear)
 		hhs[numhhs] = gear
 		numhhs = numhhs + 1
 		SetEffect(gear, heResurrectable, true)
-	
+
 	elseif GetGearType(gear) == gtPiano then
 
 		for i = 0, 1 do
 			if CurrentHedgehog == fThief[i] then
-				FlagThiefDead(gear)			
+				FlagThiefDead(gear)
 			end
 		end
 
@@ -624,7 +624,7 @@ end
 function onGearDelete(gear)
 
 	if GetGearType(gear) == gtHedgehog then
-		InABetterPlaceNow(gear)		
+		InABetterPlaceNow(gear)
 	end
 
 end

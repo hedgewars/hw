@@ -73,7 +73,7 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 -- delete explosives in DeleteFarFlungBarrel rather than explode them on map boundaries to save on performance
 -- utilized the improved AddCaption to tint / prevent overrides
 -- temporarily disabled bugged sort that displays teams according to their score
--- reluctantly changed the colour of the bonus circ to purple 
+-- reluctantly changed the colour of the bonus circ to purple
 -- standarized point notation
 -- added some missing locs
 -- commented out remaining WriteLnToConsoles for the meanwhile with the prefix "nw"
@@ -128,7 +128,7 @@ capgrpGameState
 capgrpAmmostate
 -----------------
 AddCaption( chainLength .. LOC_NOT("-chain! +") .. chainLength*2 .. LOC_NOT(" points!"),0xffba00ff,capgrpAmmostate)
-AddCaption(LOC_NOT("Multi-shot! +5 points!"),0xffba00ff,capgrpAmmostate) 
+AddCaption(LOC_NOT("Multi-shot! +5 points!"),0xffba00ff,capgrpAmmostate)
 
 -----------------
 capgrpAmmoinfo
@@ -145,7 +145,7 @@ AddCaption(LOC_NOT("BOOM! BOOM! BOOM! +100 points!"),0xffba00ff,capgrpVolume)
 AddCaption(LOC_NOT("Accuracy Bonus! +15 points!"),0xffba00ff,capgrpVolume)
 
 -----------------
-capgrpMessage 
+capgrpMessage
 -----------------
 AddCaption(LOC_NOT("Ammo Depleted!"),0xff0000ff,capgrpMessage)
 AddCaption(LOC_NOT("Ammo: ") .. primShotsLeft)
@@ -165,7 +165,7 @@ AddCaption(LOC_NOT("Depleted Kamikaze! +5 points!"),0xffba00ff,capgrpMessage)
 AddCaption(LOC_NOT("Timed Kamikaze! +10 points!"),0xffba00ff,capgrpMessage)
 
 -----------------
-capgrpMessage2 
+capgrpMessage2
 -----------------
 AddCaption(LOC_NOT("Drone Hunter! +10 points!"),0xffba00ff,capgrpMessage2)
 AddCaption(LOC_NOT("Ammo Maniac! +5 points!"),0xffba00ff,capgrpMessage2)
@@ -227,7 +227,7 @@ local OK = 0
 local SK = 0
 local shieldMiser = true
 local chainCounter = 0
-local chainLength = 0 
+local chainLength = 0
 local shotsFired = 0
 local shotsHit = 0
 
@@ -315,24 +315,24 @@ function HideTags()
 end
 
 function DrawTag(i)
-	
+
 	zoomL = 1.3
 
 	xOffset = 40
 
 	if i == 0 then
-		yOffset = 40	
+		yOffset = 40
 		tCol = 0xffba00ff
 		tValue = TimeLeft
 	elseif i == 1 then
-		zoomL = 1.1		
-		yOffset = 70	
+		zoomL = 1.1
+		yOffset = 70
 		tCol = 0x00ff00ff
 		tValue = primShotsLeft
 	elseif i == 2 then
-		zoomL = 1.1		
+		zoomL = 1.1
 		xOffset = 40 + 35
-		yOffset = 70		
+		yOffset = 70
 		tCol = 0xa800ffff
 		tValue = shieldHealth - 80
 	end
@@ -340,7 +340,7 @@ function DrawTag(i)
 	DeleteVisualGear(vTag[i])
 	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vTag[i])
-	SetVisualGearValues	(	
+	SetVisualGearValues	(
 				vTag[i], 		--id
 				-(ScreenWidth/2) + xOffset,	--xoffset
 				ScreenHeight - yOffset, --yoffset
@@ -628,8 +628,8 @@ function DeleteFarFlungBarrel(gear)
 			(GetX(gear) > 6200) or
 			(GetY(gear) < -3400)
 		then
-			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)			
-			DeleteGear(gear)			
+			AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+			DeleteGear(gear)
 			--SetHealth(gear, 0)
 			--WriteLnToConsole("I'm setting barrel ID " .. getGearValue(gear,"ID") .. " to 0 health because it's been flung too close to the map edges. at Game Time: " .. GameTime .. "; luaTicks: " .. luaGameTicks)
 		end
@@ -651,8 +651,8 @@ function onPrecise()
 	-- Fire Barrel
 	if (primShotsLeft > 0) and (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) then
 
-		shotsFired = shotsFired +1		
-		
+		shotsFired = shotsFired +1
+
 		morte = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtExplosives, 0, 0, 0, 1)
 
 		primShotsLeft = primShotsLeft - 1
@@ -757,8 +757,8 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 
-	for i = 0, 3 do 	
-		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)	
+	for i = 0, 3 do
+		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	end
 
 	HideTags()
@@ -852,7 +852,7 @@ function onNewTurn()
 		tumbleStarted = false
 		SetMyCircles(false)
 	end
-	
+
 	HideTags()
 
 	---------------
@@ -879,8 +879,8 @@ end
 
 function onGameTick()
 
-	
-	--WriteLnToConsole("Start of GameTick")	
+
+	--WriteLnToConsole("Start of GameTick")
 	luaGameTicks = luaGameTicks + 1 -- GameTime
 
 	HandleCircles()
@@ -972,9 +972,9 @@ function onGameTick()
 		if PlayerIsFine() == false then
 			TimeLeft = 0
 		end
-		
+
 		--WriteLnToConsole("successfully checked playerIsFine")
-		
+
 		if (TimeLeft == 0) then
 			if (stopMovement == false) then	--time to stop the player
 				stopMovement = true
@@ -1002,16 +1002,16 @@ function onGameTick()
 		-------------------------------
 		-- Player is still in luck
 		-------------------------------
-			
+
 
 			--WriteLnToConsole("about to do chainCounter checks")
 			if chainCounter > 0 then
-				chainCounter = chainCounter -1 
+				chainCounter = chainCounter -1
 				if chainCounter == 0 then
 					chainLength = 0
 				end
 			end
-				
+
 			-- handle movement based on IO
 			moveTimer = moveTimer + 1
 			if moveTimer == 100 then -- 100
@@ -1582,7 +1582,7 @@ function CheckVarious(gear)
 
 					circsHit = circsHit + 1
 					if circsHit > 1 then
-						AddCaption(loc("Multi-shot!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate) 
+						AddCaption(loc("Multi-shot!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
 					end
 
 					shotsHit = shotsHit + 1
@@ -1879,12 +1879,12 @@ function HandleCircles()
 				FadeAlpha = 255
 			end
 
-			--new			
+			--new
 			--if FadeAlpha == 1 then
-			--	AddCaption("GOT IT")				
+			--	AddCaption("GOT IT")
 			--	for i = 0,(vCCount-1) do
 			--		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])
-			--		vCircCol[i] = g10	
+			--		vCircCol[i] = g10
 			--	end
 			--end
 
