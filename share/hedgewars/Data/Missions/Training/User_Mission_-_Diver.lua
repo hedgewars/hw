@@ -20,6 +20,7 @@ function onGameInit()
 	Delay = 10 -- The delay between each round
 	Map = "Hydrant" -- The map to be played
 	Theme = "City" -- The theme to be used
+	SuddenDeathTurns = 99999
 
 	AddTeam(loc("Bloody Rookies"), 14483456, "Simple", "Island", "Default")
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
