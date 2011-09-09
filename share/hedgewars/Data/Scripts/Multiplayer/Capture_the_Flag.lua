@@ -1,5 +1,5 @@
 ---------------------------------------
--- CAPTURE_THE_FLAG GAMEPLAY MODE 0.4
+-- CAPTURE_THE_FLAG GAMEPLAY MODE 0.5
 -- by mikade
 ---------------------------------------
 
@@ -60,6 +60,14 @@
 -- changed delay to allow for better portals
 -- changed starting feedback a little
 -- increased the radius around the circle indicating the flag thief so that it doesn't obscure his health
+
+--------
+-- 0.5
+--------
+
+-- add support for more players
+-- stop TimeBox ruining my life
+-- profit???
 
 -----------------
 --SCRIPT BEGINS
@@ -342,7 +350,7 @@ function RebuildTeamInfo()
 
 
 	-- make a list of individual team names
-	for i = 0, 5 do
+	for i = 0, (TeamsCount-1) do
 		teamNameArr[i] = i
 		teamSize[i] = 0
 		teamIndex[i] = 0
@@ -562,6 +570,36 @@ function onGearResurrect(gear)
 
 end
 
+function InABetterPlaceNow(gear)
+	for i = 0, (numhhs-1) do
+		if gear == hhs[i] then
+				
+			for i = 0,1 do
+				if gear == fThief[i] then
+					FlagThiefDead(gear)
+				end
+			end				
+			hhs[i] = nil	
+		end		
+	end
+end
+
+function onHogHide(gear)
+	 InABetterPlaceNow(gear)
+end
+
+function onHogRestore(gear)
+	match = false	
+	for i = 0, (numhhs-1) do
+		if (hhs[i] == nil) and (match == false) then
+			hhs[i] = gear
+			--AddCaption(GetHogName(gear) .. " has reappeared it seems!")	
+			match = true
+		end
+	end
+end
+
+
 function onGearAdd(gear)
 
 	if GetGearType(gear) == gtHedgehog then
@@ -584,17 +622,7 @@ end
 function onGearDelete(gear)
 
 	if GetGearType(gear) == gtHedgehog then
-		for i = 0, (numhhs-1) do
-			if gear == hhs[i] then
-				
-				for i = 0,1 do
-					if gear == fThief[i] then
-						FlagThiefDead(gear)
-					end
-				end				
-				hhs[i] = nil	
-			end		
-		end
+		InABetterPlaceNow(gear)		
 	end
 
 end
