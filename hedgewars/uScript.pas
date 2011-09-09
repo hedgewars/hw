@@ -36,6 +36,7 @@ procedure ScriptClearStack;
 
 procedure ScriptLoad(name : shortstring);
 procedure ScriptOnGameInit;
+procedure ScriptOnScreenResize();
 
 procedure ScriptCall(fname : shortstring);
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -1623,6 +1624,16 @@ if ScriptExists('onAmmoStoreInit') then
 ScriptSetInteger('ClansCount', ClansCount);
 ScriptSetInteger('TeamsCount', TeamsCount)
 end;
+
+
+// Update values of screen dimensions and allow script to react to resolution change
+procedure ScriptOnScreenResize();
+begin
+ScriptSetInteger('ScreenHeight', cScreenHeight);
+ScriptSetInteger('ScreenWidth', cScreenWidth);
+ScriptCall('onScreenResize');
+end;
+
 
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;

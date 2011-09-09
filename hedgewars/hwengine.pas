@@ -204,6 +204,7 @@ begin
 
             ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
             WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
+            ScriptOnScreenResize();
             InitCameraBorders()
             end;
 

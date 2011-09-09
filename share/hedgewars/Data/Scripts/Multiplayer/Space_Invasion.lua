@@ -5,7 +5,7 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 ---------------------------------------------------
 ---------------------------------------------------
 ---------------------------------------------------
---- Space Invasion Code Follows (0.8)
+--- Space Invasion Code Follows (0.8.1)
 ---------------------------------------------------
 ---------------------------------------------------
 -- VERSION HISTORY
@@ -105,6 +105,13 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 -----------------
 -- added a HUD for turntimeleft, ammo, shield
 -- shieldhealth hits 0 properly
+
+------------------------
+-- version 0.8.1
+------------------------
+
+-- stop hiding non-existant 4th Tag
+-- redraw HUD on screen resolution change
 
 --------------------------
 --notes for later
@@ -301,7 +308,7 @@ local vCircCol = {}
 
 function HideTags()
 
-	for i = 0, 3 do 	
+	for i = 0, 2 do
 		SetVisualGearValues(vTag[i],0,0,0,0,0,1,0, 0, 240000, 0xffffff00)
 	end
 
@@ -797,6 +804,16 @@ function onGameStart()
 
 end
 
+function onScreenResize()
+
+	-- redraw Tags so that their screen locations are updated
+	if (CurrentHedgehog ~= nil) and (tumbleStarted == true) then
+			DrawTag(0)
+			DrawTag(1)
+			DrawTag(2)
+	end
+
+end
 
 function onNewTurn()
 

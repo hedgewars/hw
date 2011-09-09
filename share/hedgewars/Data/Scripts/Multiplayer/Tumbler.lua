@@ -1,6 +1,6 @@
 ------------------------------------
 -- TUMBLER
--- v.0.7
+-- v.0.7.1
 ------------------------------------
 
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
@@ -109,6 +109,12 @@ local vTag = {}
 -- Bugfix for new gear spawns
 -- Performance tweaks
 -- Variety of small gameplay changes
+
+------------------------
+-- version 0.7.1
+------------------------
+
+-- redraw HUD on screen resolution change
 
 ---------------------------
 -- some other ideas/things
@@ -493,6 +499,16 @@ function onGameStart()
 
 end
 
+function onScreenResize()
+
+	-- redraw Tags so that their screen locations are updated
+	if (CurrentHedgehog ~= nil) and (tumbleStarted == true) then
+		for i = 0, 3 do
+			DrawTag(i)
+		end
+	end
+
+end
 
 function onNewTurn()
 
