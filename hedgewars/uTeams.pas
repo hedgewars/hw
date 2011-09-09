@@ -529,9 +529,6 @@ if (t = cMaxTeams) or (TeamsArray[t] = nil) then exit;
 with TeamsArray[t]^ do
     begin
     AddChatString('** '+ TeamName + ' is gone');
-    for i:= 0 to cMaxHHIndex do
-        if Hedgehogs[i].GearHidden <> nil then
-            RestoreHog(@Hedgehogs[i]);
     hasGone:= true
     end;
 

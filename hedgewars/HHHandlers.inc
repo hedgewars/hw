@@ -1012,7 +1012,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogFree(Gear: PGear);
-var prevState: Longword;
+var prevState,i: Longword;
 begin
 prevState:= Gear^.State;
 
@@ -1050,6 +1050,19 @@ if (Gear^.Health = 0) then
             begin
             Gear^.State:= Gear^.State or gstHHGone;
             Gear^.doStep:= @doStepHedgehogGone;
+
+            with Gear^.Hedgehog^.Team^ do
+                for i:= 0 to cMaxHHIndex do
+                    if Hedgehogs[i].GearHidden <> nil then
+                        begin
+                        RestoreHog(@Hedgehogs[i]);
+                        if Hedgehogs[i].Gear <> nil then 
+                            begin
+                            Gear^.State:= Gear^.State or gstHHGone;
+                            Gear^.doStep:= @doStepHedgehogGone
+                            end
+                        end;
+
             // Gone message
             AddCaption(Format(GetEventString(eidGone), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
             end
