@@ -832,6 +832,7 @@ var x, y, xx, yy, ty, tx, d: LongInt;
 begin
 bRes:= false;
 reCheck:= true;
+d:= 0;
 
 while recheck do
     begin

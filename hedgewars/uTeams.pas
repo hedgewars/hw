@@ -524,7 +524,7 @@ if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 end;
 
 procedure chTeamGone(var s:shortstring);
-var t, i: LongInt;
+var t: LongInt;
 begin
 t:= 0;
 while (t < cMaxTeams)
