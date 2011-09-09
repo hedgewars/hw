@@ -25,6 +25,7 @@ interface
 uses sysutils, math, uConsole, uVariables, SDLh, uTypes, uFloat, uConsts, uIO, uCommands, GLUnit, uCommandHandlers;
 
 type
+    PTouch_Finger = ^Touch_Finger;
     Touch_Finger = record
         id                       : SDL_FingerId;
         x,y                      : LongInt;
@@ -39,12 +40,12 @@ procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 procedure onTouchMotion(x,y: Longword; dx,dy: LongInt; pointerId: SDL_FingerId);
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
 function convertToCursor(scale: LongInt; xy: LongInt): LongInt;
-function addFinger(x,y: Longword; id: SDL_FingerId): Touch_Finger;
+function addFinger(x,y: Longword; id: SDL_FingerId): PTouch_Finger;
 procedure deleteFinger(id: SDL_FingerId);
 procedure onTouchClick(finger: Touch_Finger);
 procedure onTouchDoubleClick(finger: Touch_Finger);
 
-function findFinger(id: SDL_FingerId): Touch_Finger;
+function findFinger(id: SDL_FingerId): PTouch_Finger;
 procedure aim(finger: Touch_Finger);
 function isOnCrosshair(finger: Touch_Finger): boolean;
 function isOnCurrentHog(finger: Touch_Finger): boolean;
@@ -52,11 +53,13 @@ function isOnFireButton(finger: Touch_Finger): boolean;
 procedure convertToWorldCoord(var x,y: hwFloat; finger: Touch_Finger);
 function fingerHasMoved(finger: Touch_Finger): boolean;
 function calculateDelta(finger1, finger2: Touch_Finger): hwFloat;
-function getSecondFinger(finger: Touch_Finger): Touch_Finger;
+function getSecondFinger(finger: Touch_Finger): PTouch_Finger;
+procedure printFinger(finger: Touch_Finger);
 implementation
 
 const
     clicktime = 200;
+    nilFingerId = High(SDL_FingerId);
 var
     leftButtonBoundary  : LongInt;
     rightButtonBoundary : LongInt;
@@ -83,21 +86,13 @@ var
 
     //moving
     stopLeft, stopRight, walkingLeft, walkingRight :  boolean;
-procedure printFinger(finger: Touch_Finger);
-begin
-    WriteToConsole(Format('id:%d, (%d,%d), (%d,%d), time: %d', [finger.id, finger.x, finger.y, finger.historicalX, finger.historicalY, finger.timeSinceDown]));
-end;
 
 
 procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 var 
-    finger: Touch_Finger;
+    finger: PTouch_Finger;
 begin
-    finger:= addFinger(x,y,pointerId);
-    finger.x := convertToCursor(cScreenWidth,x);
-    finger.y := convertToCursor(cScreenHeight,y);
-    
-    printFinger(finger); 
+    finger := addFinger(x,y,pointerId);
     case pointerCount of
         1:
         begin
@@ -108,31 +103,31 @@ begin
                 exit;
             end;
 
-            if isOnCrosshair(finger) then
+            if isOnCrosshair(finger^) then
             begin
                 aiming:= true;
                 exit;
             end;
 
-            if isOnFireButton(finger) then
+            if isOnFireButton(finger^) then
             begin
                 stopFiring:= false;
                 ParseCommand('+attack', true);
                 exit;
             end;
-            if (finger.x < leftButtonBoundary) and (finger.y < 390) then
+            if (finger^.x < leftButtonBoundary) and (finger^.y < 390) then
             begin
                 ParseCommand('+left', true);
                 walkingLeft := true;
                 exit;
             end;
-            if finger.x > rightButtonBoundary then
+            if finger^.x > rightButtonBoundary then
             begin
                 ParseCommand('+right', true);
                 walkingRight:= true;
                 exit;
             end;
-            if finger.y < topButtonBoundary then
+            if finger^.y < topButtonBoundary then
             begin
                 ParseCommand('hjump', true);
                 exit;
@@ -143,8 +138,7 @@ begin
         begin
             aiming:= false;
             stopFiring:= true;
-            
-            pinchSize := calculateDelta(finger, getSecondFinger(finger));
+            pinchSize := calculateDelta(finger^, getSecondFinger(finger^)^);
             baseZoomValue := ZoomValue
         end;
     end;//end case pointerCount of
@@ -152,19 +146,20 @@ end;
 
 procedure onTouchMotion(x,y: Longword;dx,dy: LongInt; pointerId: SDL_FingerId);
 var
-    finger, secondFinger: Touch_Finger;
+    finger, secondFinger: PTouch_Finger;
     currentPinchDelta, zoom : hwFloat;
 begin
     finger:= findFinger(pointerId);
-    finger.x := convertToCursor(cScreenWidth, x);
-    finger.y := convertToCursor(cScreenHeight, y);
-    
+
+    finger^.x := convertToCursor(cScreenWidth, x);
+    finger^.y := convertToCursor(cScreenHeight, y);
+
     case pointerCount of
        1:
            begin
                if aiming then 
                begin
-                   aim(finger);
+                   aim(finger^);
                    exit
                end;
                if moveCursor then
@@ -181,8 +176,8 @@ begin
            end;
        2:
            begin
-               secondFinger := getSecondFinger(finger);
-               currentPinchDelta := calculateDelta(finger, secondFinger)- pinchSize;
+               secondFinger := getSecondFinger(finger^);
+               currentPinchDelta := calculateDelta(finger^, secondFinger^) - pinchSize;
                zoom := currentPinchDelta/cScreenWidth;
                ZoomValue := baseZoomValue - ((hwFloat2Float(zoom) * cMinMaxZoomLevelDelta));
                if ZoomValue < cMaxZoomLevel then ZoomValue := cMaxZoomLevel;
@@ -248,7 +243,7 @@ begin
     end;
 end;
 
-function addFinger(x,y: Longword; id: SDL_FingerId): Touch_Finger;
+function addFinger(x,y: Longword; id: SDL_FingerId): PTouch_Finger;
 var 
     xCursor, yCursor, index : LongInt;
 begin
@@ -256,15 +251,15 @@ begin
     if length(fingers) < pointerCount then 
     begin
         setLength(fingers, length(fingers)*2);
-        for index := length(fingers) div 2 to length(fingers) do fingers[index].id := -1;
+        for index := length(fingers) div 2 to length(fingers) do fingers[index].id := nilFingerId;
     end;
     
     
     xCursor := convertToCursor(cScreenWidth, x);
     yCursor := convertToCursor(cScreenHeight, y);
     
-    //on removing fingers all fingers are moved to the left, thus new fingers will be to the far right
-    //with dynamic arrays being zero based, 'far right' is the old pointerCount    
+    //on removing fingers, all fingers are moved to the left
+    //with dynamic arrays being zero based, the new position of the finger is the old pointerCount
     fingers[pointerCount].id := id;
     fingers[pointerCount].historicalX := xCursor;
     fingers[pointerCount].historicalY := yCursor;
@@ -272,8 +267,8 @@ begin
     fingers[pointerCount].y := yCursor;
     fingers[pointerCount].timeSinceDown:= SDL_GetTicks;
  
+    addFinger:= @fingers[pointerCount];
     inc(pointerCount);
-    addFinger:= fingers[pointerCount];
 end;
 
 procedure deleteFinger(id: SDL_FingerId);
@@ -286,18 +281,26 @@ begin
     begin
          if fingers[index].id = id then
          begin
-             //Check for onTouchevent
-             if ((SDL_GetTicks - fingers[index].timeSinceDown) < clickTime) AND  not(fingerHasMoved(fingers[index])) then 
-                 onTouchClick(fingers[index]);
-             fingers[index].id := -1;
+             //Check for onTouchClick event
+             if ((SDL_GetTicks - fingers[index].timeSinceDown) < clickTime) AND  
+                 not(fingerHasMoved(fingers[index])) then onTouchClick(fingers[index]);
+
+             //put the last finger into the spot of the finger to be removed, 
+             //so that all fingers are packed to the far left
+             if  pointerCount <> index then
+             begin
+                fingers[index].id := fingers[pointerCount].id;    
+                fingers[index].x := fingers[pointerCount].x;    
+                fingers[index].y := fingers[pointerCount].y;    
+                fingers[index].historicalX := fingers[pointerCount].historicalX;    
+                fingers[index].historicalY := fingers[pointerCount].historicalY;    
+                fingers[index].timeSinceDown := fingers[pointerCount].timeSinceDown;
+
+                fingers[pointerCount].id := nilFingerId;
+             end
+             else fingers[index].id := nilFingerId;
              break;
          end;
-    end;
-    //put the last finger into the spot of the finger to be removed, so that all fingers are packed to the far left
-    if fingers[pointerCount].id = -1 then
-    begin
-        fingers[index] := fingers[pointerCount];    
-        fingers[pointerCount].id := -1;
     end;
 
 end;
@@ -351,10 +354,16 @@ begin
     
 end;
 
-function findFinger(id: SDL_FingerId): Touch_Finger;
+function findFinger(id: SDL_FingerId): PTouch_Finger;
+var
+    index: LongWord;
 begin
-   for findFinger in fingers do
-       if (findFinger.id = -1) and (findFinger.id = id) then break;
+   for index := 0 to High(fingers) do
+       if fingers[index].id = id then 
+       begin
+           findFinger := @fingers[index];
+           break;
+       end;
 end;
 
 procedure aim(finger: Touch_Finger);
@@ -435,23 +444,27 @@ begin
     fingerHasMoved := trunc(sqrt(Power(finger.X-finger.historicalX,2) + Power(finger.y-finger.historicalY, 2))) > 330;
 end;
 
-function calculateDelta(finger1, finger2: Touch_Finger): hwFloat;
+function calculateDelta(finger1, finger2: Touch_Finger): hwFloat; inline;
 begin
-//    calculateDelta := Distance(xyCoord[id2*2] - xyCoord[id1*2], xyCoord[id2*2+1] - xyCoord[id1*2+1]);
-    calculateDelta := int2hwFloat(trunc(sqrt(Power(finger2.x-finger1.x, 2) + Power(finger2.y-finger1.y, 2))));
+    calculateDelta := DistanceI(finger2.x-finger1.x, finger2.y-finger1.y);
 end;
 
-// Under the premise that all pointer ids in pointerIds:SDL_FingerId are pack to the far left.
+// Under the premise that all pointer ids in pointerIds:SDL_FingerId are packed to the far left.
 // If the pointer to be ignored is not pointerIds[0] the second must be there
-function getSecondFinger(finger: Touch_Finger): Touch_Finger;
+function getSecondFinger(finger: Touch_Finger): PTouch_Finger;
 begin
-    if fingers[0].id = finger.id then getSecondFinger := fingers[0]
-    else getSecondFinger := fingers[1];
+    if fingers[0].id = finger.id then getSecondFinger := @fingers[1]
+    else getSecondFinger := @fingers[0];
+end;
+
+procedure printFinger(finger: Touch_Finger);
+begin
+    WriteToConsole(Format('id:%d, (%d,%d), (%d,%d), time: %d', [finger.id, finger.x, finger.y, finger.historicalX, finger.historicalY, finger.timeSinceDown]));
 end;
 
 procedure initModule;
 var
-    finger: Touch_Finger;
+    index: Longword;
 begin
     movingCrosshair := false;
     stopFiring:= false;
@@ -462,8 +475,9 @@ begin
     rightButtonBoundary := cScreenWidth div 4*3;
     topButtonBoundary := cScreenHeight div 6;
     
-    setLength(fingers, 5);
-    for finger in fingers do finger.id := -1;
+    setLength(fingers, 4);
+    for index := 0 to High(fingers) do 
+        fingers[index].id := nilFingerId;
 end;
 
 begin
