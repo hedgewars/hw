@@ -1058,8 +1058,8 @@ if (Gear^.Health = 0) then
                         RestoreHog(@Hedgehogs[i]);
                         if Hedgehogs[i].Gear <> nil then 
                             begin
-                            Gear^.State:= Gear^.State or gstHHGone;
-                            Gear^.doStep:= @doStepHedgehogGone
+                            Hedgehogs[i].Gear^.State:= Gear^.State or gstHHGone;
+                            Hedgehogs[i].Gear^.doStep:= @doStepHedgehogGone
                             end
                         end;
 
