@@ -180,9 +180,12 @@ begin
                             onFocusStateChanged()
                         end;
                 SDL_VIDEORESIZE: begin
-                    // using lower values causes widget overlap and video issues
-                    cNewScreenWidth:= max(event.resize.w, cMinScreenWidth);
-                    cNewScreenHeight:= max(event.resize.h, cMinScreenHeight);
+                    // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
+                    // Change by sheepluva:
+                    // Let's only use even numbers for custom width/height since I ran into scaling issues with odd width values.
+                    // Maybe just fixes the symptom not the actual cause(?), I'm too tired to find out :P
+                    cNewScreenWidth:= max(2 * (event.resize.w div 2), cMinScreenWidth);
+                    cNewScreenHeight:= max(2 * (event.resize.h div 2), cMinScreenHeight);
                     cScreenResizeDelay:= RealTicks+500;
                     end;
 {$ENDIF}
