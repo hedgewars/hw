@@ -1,5 +1,5 @@
 ----------------------------------
--- THE SPECIALISTS MODE 0.5
+-- THE SPECIALISTS MODE 0.6
 -- by mikade
 ----------------------------------
 
@@ -34,6 +34,11 @@
 ----------------
 -- provision for variable minetimer / demo mines set to 5000ms
 -- don't autoswitch if player only has 1 hog on his team
+
+----------------
+-- version 0.6
+----------------
+-- for the meanwhile, don't drop any crates except health crates
 
 --------------------
 --TO DO
@@ -214,6 +219,7 @@ end
 function onGameInit()
         GameFlags = gfRandomOrder + gfResetWeps + gfInfAttack + gfPlaceHog
         Delay = 10
+	HealthCaseProb = 100
 end
 
 function onGameStart()
