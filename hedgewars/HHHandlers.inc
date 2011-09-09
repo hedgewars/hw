@@ -770,6 +770,30 @@ if Gear^.Hedgehog^.Unplaced then
    Gear^.State:= Gear^.State and not gstMoving;
    exit
    end;
+
+// move hedgehogs out of walls
+if hwAbs(Gear^.dX) < _0_03 then
+    begin
+    if CountCollisionsX(Gear, -1) > Gear^.Radius then
+        repeat
+        Gear^.X:= Gear^.X + _1;
+        if CountCollisionsX(Gear, 1) > Gear^.Radius then
+            begin
+            Gear^.X:= Gear^.X - _1;
+            break;
+            end
+        until CountCollisionsX(Gear, -1) <= Gear^.Radius
+    else if CountCollisionsX(Gear, 1) > Gear^.Radius then
+        repeat
+        Gear^.X:= Gear^. X - _1;
+        if CountCollisionsX(Gear, -1) > Gear^.Radius then
+            begin
+            Gear^.X:= Gear^.X + _1;
+            break;
+            end
+        until CountCollisionsX(Gear, 1) <= Gear^.Radius;
+    end;
+
 isFalling:= (Gear^.dY.isNegative) or not TestCollisionYKick(Gear, 1);
 if isFalling then
    begin
