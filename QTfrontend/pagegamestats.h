@@ -44,6 +44,7 @@ public:
     PageGameStats(QWidget* parent = 0);
 
     QPushButton *BtnBack;
+    QPushButton *BtnSave;
     QLabel *labelGameStats;
     QLabel *labelGameWin;
     QLabel *labelGameRank;
@@ -53,6 +54,9 @@ public slots:
     void GameStats(char type, const QString & info);
     void clear();
     void renderStats();
+    
+signals:
+    void saveDemoRequested();
 
 private:
     void AddStatText(const QString & msg);

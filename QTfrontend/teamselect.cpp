@@ -44,7 +44,7 @@ void TeamSelWidget::addTeam(HWTeam team)
                 this, SLOT(proxyTeamColorChanged(const HWTeam&)));
   } else {
     frameDontPlaying->addTeam(team, false);
-    curDontPlayingTeams.push_back(team);
+    m_curNotPlayingTeams.push_back(team);
     if(m_acceptOuter) {
       connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
           this, SLOT(pre_changeTeamStatus(HWTeam)));
@@ -144,14 +144,14 @@ void TeamSelWidget::netTeamStatusChanged(const HWTeam& team)
 
 void TeamSelWidget::changeTeamStatus(HWTeam team)
 {
-  QList<HWTeam>::iterator itDontPlay=std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team);
+  QList<HWTeam>::iterator itDontPlay=std::find(m_curNotPlayingTeams.begin(), m_curNotPlayingTeams.end(), team);
   QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
 
-  bool willBePlaying=itDontPlay!=curDontPlayingTeams.end();
+  bool willBePlaying=itDontPlay!=m_curNotPlayingTeams.end();
 
   if(!willBePlaying) {
     // playing team => dont playing
-    curDontPlayingTeams.push_back(*itPlay);
+    m_curNotPlayingTeams.push_back(*itPlay);
     emit teamNotPlaying(*itPlay);
     curPlayingTeams.erase(itPlay);
   } else {
@@ -162,7 +162,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     itDontPlay->teamColor=framePlaying->getNextColor();
     curPlayingTeams.push_back(*itDontPlay);
     if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
-    curDontPlayingTeams.erase(itDontPlay);
+    m_curNotPlayingTeams.erase(itDontPlay);
   }
 
   FrameTeams* pRemoveTeams;
@@ -253,10 +253,10 @@ void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
   //frameDontPlaying->removeTeam(*it);
   //}
   frameDontPlaying->resetTeams();
-  curDontPlayingTeams.clear();
+  m_curNotPlayingTeams.clear();
 
-  QListIterator<HWTeam> it(teamslist);
-  while(it.hasNext()) addTeam(it.next());
+  foreach(HWTeam team, teamslist)
+    addTeam(team);
 }
 
 bool TeamSelWidget::isPlaying(HWTeam team) const
@@ -269,9 +269,9 @@ QList<HWTeam> TeamSelWidget::getPlayingTeams() const
   return curPlayingTeams;
 }
 
-QList<HWTeam> TeamSelWidget::getDontPlayingTeams() const
+QList<HWTeam> TeamSelWidget::getNotPlayingTeams() const
 {
-  return curDontPlayingTeams;
+  return m_curNotPlayingTeams;
 }
 
 void TeamSelWidget::pre_changeTeamStatus(HWTeam team)

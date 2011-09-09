@@ -43,6 +43,8 @@ function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; p
 function  GetAmmo: TAmmoType;
 function  GetUtility: TAmmoType;
 procedure ResurrectHedgehog(gear: PGear);
+procedure HideHog(HH: PHedgehog);
+procedure RestoreHog(HH: PHedgehog);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
@@ -944,7 +946,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             end;
         if delay2 = 0 then
             begin
-            if (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.State and gstAttacked = 0) then SweepDirty;
+            if (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.State and gstAttacked = 0) and (CurAmmoGear = nil) then SweepDirty;
             CheckNoDamage;
             AliveCount:= 0; // shorter version of check for win to allow typical step activity to proceed
             for i:= 0 to Pred(ClansCount) do
@@ -991,7 +993,10 @@ if skipFlag then
 if ((GameTicks and $FFFF) = $FFFF) then
     begin
     if (not CurrentTeam^.ExtDriven) then
-        SendIPCTimeInc;
+        begin
+        SendIPC('#');
+        AddFileLog('hiTicks increment message sent')
+        end;
 
     if (not CurrentTeam^.ExtDriven) or CurrentTeam^.hasGone then
         inc(hiTicks) // we do not recieve a message for this
@@ -1747,7 +1752,6 @@ i:= Low(TAmmoType);
 if (t > 0) then
     begin
     t:= GetRandom(t);
-    AddFileLog(inttostr(t)+' --------------');
     while t >= 0 do
       begin
       inc(i);

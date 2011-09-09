@@ -25,12 +25,15 @@ uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
 
 var
 /////// init flags ///////
-    cMinScreenWidth   : LongInt     = 480;
-    cMinScreenHeight  : LongInt     = 320;
-    cScreenWidth      : LongInt     = 1024;
-    cScreenHeight     : LongInt     = 768;
-    cOrigScreenWidth  : LongInt     = 1024;
-    cOrigScreenHeight : LongInt     = 768;
+    cMinScreenWidth    : LongInt     = 640;
+    cMinScreenHeight   : LongInt     = 480;
+    cScreenWidth       : LongInt     = 1024;
+    cScreenHeight      : LongInt     = 768;
+    cOrigScreenWidth   : LongInt     = 1024;
+    cOrigScreenHeight  : LongInt     = 768;
+    cNewScreenWidth    : LongInt     = 1024;
+    cNewScreenHeight   : LongInt     = 768;
+    cScreenResizeDelay : LongWord    = 0;
     cBits           : LongInt     = 32;
     ipcPort         : Word        = 0;
     cFullScreen     : boolean     = false;
@@ -758,7 +761,8 @@ const
             (FileName:            'parachute.ogg'; Path: ptSounds),// sndParachute
             (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
             (FileName:            'hogchant3.ogg'; Path: ptSounds),// sndResurrector
-            (FileName:                'plane.ogg'; Path: ptSounds) // sndPlane
+            (FileName:                'plane.ogg'; Path: ptSounds), // sndPlane
+            (FileName:                'plane.ogg'; Path: ptSounds) // sndTardis TODO change when using a new data set
             );
 
     Ammoz: array [TAmmoType] of record

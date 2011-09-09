@@ -4,6 +4,7 @@ DEPENDPATH += ../QTfrontend/
 INCLUDEPATH += ../QTfrontend/
 INCLUDEPATH += /usr/local/include/SDL
 INCLUDEPATH += /usr/include/SDL
+INCLUDEPATH += ../misc/quazip/
 
 DESTDIR = .
 
@@ -64,7 +65,8 @@ HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
     ../QTfrontend/pagegamestats.h \
     ../QTfrontend/HWApplication.h \
     ../QTfrontend/AbstractPage.h \
-    ../QTfrontend/themesmodel.h
+    ../QTfrontend/themesmodel.h \
+    ../QTfrontend/databrowser.h
 
 SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/about.cpp ../QTfrontend/ammoSchemeModel.cpp \
@@ -115,7 +117,8 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
     ../QTfrontend/pagegamestats.cpp \
     ../QTfrontend/pageplayrecord.cpp \
     ../QTfrontend/HWApplication.cpp \
-    ../QTfrontend/themesmodel.cpp
+    ../QTfrontend/themesmodel.cpp \
+    ../QTfrontend/databrowser.cpp
 
 win32 {
 	SOURCES += ../QTfrontend/xfire.cpp
@@ -147,6 +150,8 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_CN.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
+
+LIBS += -L../misc/quazip -lquazip
 
 !macx {
         LIBS += -lSDL -lSDL_mixer

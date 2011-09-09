@@ -35,7 +35,7 @@ interface
 {$ENDIF}
 
 {$IFDEF UNIX}
-  {$IFNDEF DARWIN}    
+  {$IFNDEF DARWIN}
     {$linklib c}
   {$ENDIF}
   {$IFDEF HAIKU}
@@ -291,6 +291,11 @@ const
     IMG_INIT_PNG = $00000002;
     IMG_INIT_TIF = $00000004;
 
+    {* SDL_EventMask type definition *}
+{$IFNDEF SDL13}
+    SDL_ALLEVENTS = $FFFFFFFF;
+{$ENDIF}
+
 /////////////////////////////////////////////////////////////////
 ///////////////////////  TYPE DEFINITIONS ///////////////////////
 /////////////////////////////////////////////////////////////////
@@ -359,7 +364,7 @@ type
         alpha: Byte;
 {$ENDIF}
         end;
-   
+
     SDL_eventaction = (SDL_ADDEVENT = 0, SDL_PEEPEVENT, SDL_GETEVENT);
 
     PSDL_Surface = ^TSDL_Surface;
@@ -488,7 +493,7 @@ type
         type_: LongInt;
         windowID: LongInt;
         padding1, padding2: byte;
-        x, y, z,xrel, yrel : LongInt;
+        x, y, z, xrel, yrel : LongInt;
         pressure, pressure_max, pressure_min,
         rotation, tilt, cursor: LongInt;
 {$ELSE}
@@ -642,6 +647,10 @@ type
 {$ENDIF}
         end;
 
+
+    TSDL_EventFilter = function( event : PSDL_Event ): Integer; cdecl;
+
+    
     PByteArray = ^TByteArray;
     TByteArray = array[0..65535] of Byte;
     PLongWordArray = ^TLongWordArray;
@@ -822,12 +831,12 @@ function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
 
 
-procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName ;
-
-function  SDL_SetHint(name, value: PChar): boolean; cdecl; external SDLLibName; 
+procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;
+function  SDL_SetHint(name, value: PChar): boolean; cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongInt): LongInt; cdecl; external SDLLibName;
-
+{$ELSE}
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: LongInt): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
@@ -836,6 +845,7 @@ function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_PumpEvents; cdecl; external SDLLibName;
 function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 function  SDL_WaitEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
+procedure SDL_SetEventFilter( filter : TSDL_EventFilter ); cdecl; external SDLLibName;
 
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 
@@ -890,6 +900,7 @@ function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; out w, h: LongInt): L
 function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
+
 function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
@@ -1020,4 +1031,6 @@ begin
                   (PByteArray(buf)^[1] shl 16) or
                   (PByteArray(buf)^[0] shl 24)
 end;
+
 end.
+

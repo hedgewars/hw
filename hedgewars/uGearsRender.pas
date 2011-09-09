@@ -1073,23 +1073,34 @@ begin
                         //DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
                         Tint($FF, $FF, $FF, $FF);
                         end
-                    else if not isInLag then
+                    else //if not isInLag then
                         begin
+                        if isInLag and (Gear^.FlightTime < 256) then inc(Gear^.FlightTime, 8)
+                        else if not isInLag and (Gear^.FlightTime > 0) then dec(Gear^.FlightTime, 8);
+                        if Gear^.FlightTime > 0 then Tint($FF, $FF, $FF, $FF-min(255,Gear^.FlightTime));
                         if vobVelocity = 0 then
                             DrawSprite(sprFlake, x, y, Gear^.Timer)
                         else
-                            DrawRotatedF(sprFlake, x, y, Gear^.Timer, 1, Gear^.DirAngle)
+                            DrawRotatedF(sprFlake, x, y, Gear^.Timer, 1, Gear^.DirAngle);
 //DrawSprite(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer)
 //DrawRotatedF(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer, 1, Gear^.DirAngle);
+                        if Gear^.FlightTime > 0 then Tint($FF, $FF, $FF, $FF);
                         end;
        gtStructure: DrawSprite(sprTarget, x - 16, y - 16, 0);
           gtTardis: if Gear^.Pos <> 4 then
                         begin
-                        if (Gear^.Pos = 1) or (Gear^.Pos = 3) then
-                            Tint($FF, $FF, $FF, max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
+                        if Gear^.Pos = 2 then Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF)
+                        else Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
                         DrawSprite(sprTardis, x-24, y-63,0);
-                        if (Gear^.Pos = 1) or (Gear^.Pos = 3) then
-                            Tint($FF, $FF, $FF, $FF)
+                        if Gear^.Pos = 2 then Tint($FF, $FF, $FF, $FF)
+			else Tint($FF,$FF,$FF,max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
+                        DrawSprite(sprTardis, x-24, y-63,1);
+                        if Gear^.Pos <> 2 then Tint($FF, $FF, $FF, $FF)
+(*
+                        Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or max($00, round(Gear^.Power * abs(1 - (RealTicks mod 500) / 250))));
+                        DrawTexture(x-6, y-70, SpritesData[sprVampiric].Texture, 0.25);
+                        Tint($FF, $FF, $FF, $FF)
+*)
                         end;
 
 
