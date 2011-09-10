@@ -614,7 +614,7 @@ var i: LongWord;
     vg: PVisualGear;
 begin
 ScreenFade:= sfFromWhite;
-ScreenFadeValue:= 250;
+ScreenFadeValue:= round(60 * zoom * zoom);
 ScreenFadeSpeed:= 5;
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
