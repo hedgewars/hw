@@ -959,6 +959,44 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure spawnBulletTrail(Bullet: PGear);
+var oX, oY: hwFloat;
+    VGear: PVisualGear;
+begin
+    if Bullet^.PortalCounter = 0 then
+        begin
+        ox:= CurrentHedgehog^.Gear^.X + Int2hwFloat(GetLaunchX(CurrentHedgehog^.CurAmmoType, hwSign(CurrentHedgehog^.Gear^.dX), CurrentHedgehog^.Gear^.Angle));
+        oy:= CurrentHedgehog^.Gear^.Y + Int2hwFloat(GetLaunchY(CurrentHedgehog^.CurAmmoType, CurrentHedgehog^.Gear^.Angle));
+        end
+    else
+        begin
+        ox:= Bullet^.Elasticity;
+        oy:= Bullet^.Friction;
+        end;
+
+        // Bullet trail
+        VGear := AddVisualGear(hwRound(ox), hwRound(oy), vgtLineTrail);
+        if VGear <> nil then
+            begin
+            VGear^.X:= hwFloat2Float(ox);
+            VGear^.Y:= hwFloat2Float(oy);
+            VGear^.dX:= hwFloat2Float(Bullet^.X);
+            VGear^.dY:= hwFloat2Float(Bullet^.Y);
+
+            // reached edge of land. assume infinite beam. Extend it way out past camera
+            if (hwRound(Bullet^.X) and LAND_WIDTH_MASK <> 0)
+                or (hwRound(Bullet^.Y) and LAND_HEIGHT_MASK <> 0) then
+                    // only extend if not under water
+                    if hwRound(Bullet^.Y) < cWaterLine then
+                        begin
+                        VGear^.dX := VGear^.dX + LAND_WIDTH * (VGear^.dX - VGear^.X);
+                        VGear^.dY := VGear^.dY + LAND_WIDTH * (VGear^.dY - VGear^.Y);
+                        end;
+
+            VGear^.Timer := 200;
+            end;
+end;
+
 procedure doStepBulletWork(Gear: PGear);
 var 
     i, x, y: LongWord;
@@ -977,6 +1015,19 @@ begin
         y := hwRound(Gear^.Y);
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
            and (Land[y, x] <> 0) then inc(Gear^.Damage);
+        // let's interrupt before a collision to give portals a chance to catch the bullet
+        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and (Land[y, x] > 255) then
+        begin
+            Gear^.Tag := 1;
+            Gear^.Damage := 0;
+            Gear^.X := Gear^.X - Gear^.dX;
+            Gear^.Y := Gear^.Y - Gear^.dY;
+            CheckGearDrowning(Gear);
+            break;
+        end
+        else
+            Gear^.Tag := 0;
+
         if Gear^.Damage > 5 then
             if Gear^.AmmoType = amDEagle then
                 AmmoShove(Gear, 7, 20)
@@ -1022,36 +1073,7 @@ begin
             end;
         end;
        
-        if Gear^.PortalCounter = 0 then
-            begin 
-            // Bullet trail
-            VGear := AddVisualGear(
-                hwround(CurrentHedgehog^.Gear^.X) + GetLaunchX(CurrentHedgehog^.CurAmmoType, hwSign(CurrentHedgehog^.Gear^.dX), CurrentHedgehog^.Gear^.Angle), 
-                hwround(CurrentHedgehog^.Gear^.Y) + GetLaunchY(CurrentHedgehog^.CurAmmoType, CurrentHedgehog^.Gear^.Angle),
-                vgtLineTrail
-            );
-            if VGear <> nil then
-                begin
-                // http://mantis.freepascal.org/view.php?id=17714 hits again
-                VGear^.dX := Gear^.X.QWordValue / SignAs(_1,_1).QWordValue;
-                VGear^.dY := Gear^.Y.QWordValue / SignAs(_1,_1).QWordValue;
-
-                if (Gear^.X.isNegative) then VGear^.dX:= -VGear^.dX;
-                if (Gear^.Y.isNegative) then VGear^.dY:= -VGear^.dY;
-                
-                // reached edge of land. assume infinite beam. Extend it way out past camera
-                if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) 
-                    or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
-                        // only extend if not under water
-                        if hwRound(Gear^.Y) < cWaterLine then
-                            begin
-                            VGear^.dX := VGear^.dX + LAND_WIDTH * (VGear^.dX - VGear^.X);
-                            VGear^.dY := VGear^.dY + LAND_WIDTH * (VGear^.dY - VGear^.Y);
-                            end;
-                
-                VGear^.Timer := 200;
-                end
-            end;
+        spawnBulletTrail(Gear);
         Gear^.doStep := @doStepShotIdle
     end;
 end;
@@ -3931,12 +3953,20 @@ begin
                 continue;
         end;
 
+        // draw bullet trail
+        if isbullet then
+            spawnBulletTrail(iterator);
+
         // calc gear offset in portal vector direction
         ox := (iterator^.X - Gear^.X);
         oy := (iterator^.Y - Gear^.Y);
         poffs:= (Gear^.dX * ox + Gear^.dY * oy);
 
-        if poffs < _0 then
+        if not isBullet and poffs.isNegative then
+            continue;
+
+        // only port bullets close to the portal
+        if isBullet and not (hwAbs(poffs) < _3) then
             continue;
 
         //
@@ -3964,8 +3994,11 @@ begin
         // calc gear offset in portal normal vector direction
         noffs:= (nx * ox + ny * oy);
 
+        if isBullet and (hwRound(hwAbs(noffs)) >= Gear^.Radius) then
+            continue;
+
         // avoid gravity related loops of not really moving gear
-        if not iscake and (Gear^.dY.isNegative) and (conPortal^.dY.isNegative)
+        if not (iscake or isbullet) and (Gear^.dY.isNegative) and (conPortal^.dY.isNegative)
             and ((iterator^.dX.QWordValue + iterator^.dY.QWordValue) < _0_08.QWordValue)
             and (iterator^.PortalCounter > 0) then
              continue;
@@ -4079,6 +4112,13 @@ begin
 
         if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
+
+        // store X/Y values of exit for net bullet trail
+        if isbullet then
+        begin
+            iterator^.Elasticity:= iterator^.X;
+            iterator^.Friction  := iterator^.Y;
+        end;
 
         // This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
         iterator:= GearsList;
