@@ -44,8 +44,6 @@ function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionXKick(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
 
-function  CountCollisionsX(Gear: PGear; Dir: LongInt): LongInt;
-
 function  TestCollisionX(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 
@@ -303,27 +301,6 @@ else TestCollisionXwithXYShift:= TestCollisionX(Gear, Dir);
 Gear^.X:= Gear^.X - ShiftX;
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
-
-function CountCollisionsX(Gear: PGear; Dir: LongInt): LongInt;
-var x, y, i, cnt: LongInt;
-begin
-cnt:= 0;
-x:= hwRound(Gear^.X);
-if Dir < 0 then x:= x - Gear^.Radius
-           else x:= x + Gear^.Radius;
-if (x and LAND_WIDTH_MASK) = 0 then
-   begin
-   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
-   i:= y + Gear^.Radius * 2 - 2;
-   repeat
-     if (y and LAND_HEIGHT_MASK) = 0 then
-        if Land[y, x] > 255 then inc(cnt);
-     inc(y)
-   until (y > i);
-   end;
-CountCollisionsX:= cnt
-end;
-
 function TestCollisionX(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
 begin
