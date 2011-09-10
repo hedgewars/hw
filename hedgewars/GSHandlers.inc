@@ -1405,7 +1405,7 @@ procedure doStepRopeWork(Gear: PGear);
 var 
     HHGear: PGear;
     len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
-    lx, ly: LongInt;
+    lx, ly, cd: LongInt;
     haveCollision,
     haveDivided: boolean;
 
@@ -1446,15 +1446,29 @@ begin
     else
         if (Gear^.Message and gmRight <> 0) then HHGear^.dX := HHGear^.dX + _0_0002;
 
-    if not TestCollisionYwithGear(HHGear, 1) then
-        begin
-        HHGear^.dY := HHGear^.dY + cGravity;
-        if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
-        end;
-
     // vector between hedgehog and rope attaching point
     ropeDx := HHGear^.X - Gear^.X;
     ropeDy := HHGear^.Y - Gear^.Y;
+
+    if not TestCollisionYwithGear(HHGear, 1) then
+        begin
+
+        // depending on the rope vector we know which X-side to check for collision
+        // in order to find out if the hog can still be moved by gravity
+        if ropeDx.isNegative = RopeDy.IsNegative then
+            cd:= -1
+        else
+            cd:= 1;
+
+        // apply gravity if there is no obstacle
+        if not TestCollisionXwithGear(HHGear, cd) then
+            HHGear^.dY := HHGear^.dY + cGravity;
+
+        if (GameFlags and gfMoreWind) <> 0 then
+            // apply wind if there's no obstacle
+            if not TestCollisionXwithGear(HHGear, hwSign(cWindSpeed)) then
+                HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
+        end;
 
     mdX := ropeDx + HHGear^.dX;
     mdY := ropeDy + HHGear^.dY;
