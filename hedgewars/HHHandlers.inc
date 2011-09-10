@@ -53,7 +53,6 @@ with HHGear^.Hedgehog^ do
     HHGear^.Message:= HHGear^.Message and not gmSlot;
     ammoidx:= 0;
     if ((HHGear^.State and (gstAttacking or gstAttacked)) <> 0) or
-       (TargetPoint.X <> NoPointX) or
        ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
        ((HHGear^.State and gstHHDriven) = 0) then exit;
     ChangeAmmo:= true;
