@@ -2763,6 +2763,7 @@ const upd: Longword =   0;
 var 
     i: LongWord;
     HHGear: PGear;
+    sparkles: PVisualGear;
 begin
     AllInactive := false;
 
@@ -2772,9 +2773,15 @@ begin
 
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y;
+    if Gear^.Message and gmPrecise <> 0 then
+        begin
+        sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
+        if sparkles <> nil then sparkles^.Tint:= (random(255) shl 24) or (random(255) shl 16) or (random(255) shl 8) or $FF;
+        end;
 
     i := 2;
     repeat
+        
         Gear^.X := Gear^.X + HHGear^.dX;
         Gear^.Y := Gear^.Y + HHGear^.dY;
         HHGear^.X := Gear^.X;
