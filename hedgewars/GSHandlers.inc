@@ -2773,10 +2773,10 @@ begin
 
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y;
-    if Gear^.Message and gmPrecise <> 0 then
+    if (GameTicks mod 2 = 0) and ((Gear^.Message and (gmPrecise or gmSwitch)) = (gmPrecise or gmSwitch)) then
         begin
         sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
-        if sparkles <> nil then sparkles^.Tint:= (random(255) shl 24) or (random(255) shl 16) or (random(255) shl 8) or $FF;
+        if sparkles <> nil then sparkles^.Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
         end;
 
     i := 2;
