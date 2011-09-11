@@ -1657,6 +1657,7 @@ end;
 procedure ResurrectHedgehog(gear: PGear);
 var tempTeam : PTeam;
 begin
+    AttackBar:= 0;
     gear^.dX := _0;
     gear^.dY := _0;
     gear^.Damage := 0;
