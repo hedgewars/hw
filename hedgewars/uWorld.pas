@@ -802,7 +802,7 @@ begin
     DrawWater(255, 0);
 
 // Attack bar
-    if (CurrentTeam <> nil) and (CurrentHedgehog^.Gear <> nil) then
+    if CurrentTeam <> nil then
         case AttackBar of
 (*        1: begin
         r:= StuffPoz[sPowerBar];

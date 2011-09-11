@@ -603,6 +603,7 @@ if (Gear^.Kind = gtPortal) then
 else if Gear^.Kind = gtHedgehog then
     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
         begin
+        AttackBar:= 0;
         Gear^.Message:= gmDestroy;
         CurAmmoGear^.Message:= gmDestroy;
         exit
@@ -620,6 +621,7 @@ else if Gear^.Kind = gtHedgehog then
         team:= Gear^.Hedgehog^.Team;
         if CurrentHedgehog^.Gear = Gear then
             begin
+            AttackBar:= 0;
             FreeActionsList; // to avoid ThinkThread on drawned gear
             if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (CurrentHedgehog^.MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
             end;
@@ -1012,7 +1014,6 @@ procedure EndTurnCleanup;
 var  i: LongInt;
      t: PGear;
 begin
-    AttackBar:= 0;  // rare case where they drowned while attacking
     SpeechText:= ''; // in case it has not been consumed
 
     if (GameFlags and gfLowGravity) = 0 then
