@@ -982,6 +982,7 @@ begin
         end
     else
         begin
+        SetScale(cDefaultZoomLevel);
 {$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
         reinit:= true;
 {$ENDIF}
