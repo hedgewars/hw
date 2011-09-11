@@ -9,6 +9,7 @@
  + New Utility: Time Box
  + New Game mode: Tag team
  + New Game option for map bottom border
+ + New Theme: Golf
  + Many new hats
  + Get away time modifier (in %)
  + Allow up to 8 teams in a game
