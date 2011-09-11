@@ -518,6 +518,11 @@ begin
     doStepFallingGear(Gear);
     CalcRotationDirAngle(Gear);
 
+    // let's add some smoke depending on speed
+    i:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120));
+    if (GameTicks mod i) = 0 then
+        AddVisualGear(hwRound(Gear^.X)-round(cos((Gear^.DirAngle+50) * pi / 180)*20), hwRound(Gear^.Y)-round(sin((Gear^.DirAngle+50) * pi / 180)*20), vgtSmoke);
+
     if (Gear^.State and gstCollision) <> 0 then
     begin
         PlaySound(sndMolotov);
