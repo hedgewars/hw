@@ -731,7 +731,7 @@ void HWForm::PlayDemo()
         return;
     }
     CreateGame(0, 0, 0);
-    game->PlayDemo(curritem->data(Qt::UserRole).toString());
+    game->PlayDemo(curritem->data(Qt::UserRole).toString(), ui.pagePlayDemo->isSave());
 }
 
 void HWForm::PlayDemoQuick(const QString & demofilename)
@@ -740,7 +740,7 @@ void HWForm::PlayDemoQuick(const QString & demofilename)
     GoBack(); //needed to cleanly disconnect from netgame
     GoToPage(ID_PAGE_MAIN);
     CreateGame(0, 0, 0);
-    game->PlayDemo(demofilename);
+    game->PlayDemo(demofilename, false);
 }
 
 void HWForm::NetConnectServer(const QString & host, quint16 port)

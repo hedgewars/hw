@@ -53,8 +53,13 @@ HWGame::~HWGame()
 void HWGame::onClientDisconnect()
 {
     switch (gameType) {
-        case gtDemo: 
-            if (gameState == gsInterrupted || gameState == gsHalted) emit HaveRecord(false, demo);
+        case gtSave:
+            if (gameState == gsInterrupted || gameState == gsHalted)
+                emit HaveRecord(false, demo);
+            else if (gameState == gsFinished)
+                 emit HaveRecord(true, demo);
+            break;
+        case gtDemo:
             break;
         case gtNet:
             emit HaveRecord(true, demo);
@@ -188,6 +193,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
                     SendQuickConfig();
                     break;
                 }
+                case gtSave:
                 case gtDemo: break;
                 case gtNet: {
                     SendNetConfig();
@@ -321,9 +327,9 @@ void HWGame::AddTeam(const QString & teamname)
     TeamCount++;
 }
 
-void HWGame::PlayDemo(const QString & demofilename)
+void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 {
-    gameType = gtDemo;
+    gameType = isSave ? gtSave : gtDemo;
     QFile demofile(demofilename);
     if (!demofile.open(QIODevice::ReadOnly))
     {
