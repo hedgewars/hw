@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit uFloat;
 (*
  * This unit provides a custom data type, hwFloat.
@@ -79,7 +81,7 @@ function cstr(const z: hwFloat): shortstring; // Returns a shortstring represent
 function hwRound(const t: hwFloat): LongInt; inline; // Does NOT really round but returns the integer representation of the hwFloat without fractional digits. (-_0_9 -> -0, _1_5 -> _1)
 function hwAbs(const t: hwFloat): hwFloat; inline; // Returns the value of t with positive sign.
 function hwSqr(const t: hwFloat): hwFloat; inline; // Returns the square value of parameter t.
-function hwSqrt(const t: hwFloat): hwFloat; // Returns the the positive square root of parameter t.
+function hwSqrt(const t: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
 function Distance(const dx, dy: hwFloat): hwFloat; // Returns the distance between two points in 2-dimensional space, of which the parameters are the horizontal and vertical distance.
 function DistanceI(const dx, dy: LongInt): hwFloat; // Same as above for integer parameters.
 function AngleSin(const Angle: Longword): hwFloat;
