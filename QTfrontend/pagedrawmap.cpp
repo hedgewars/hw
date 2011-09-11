@@ -45,7 +45,7 @@ PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
 
 void PageDrawMap::load()
 {
-    QString fileName = QFileDialog::getOpenFileName(NULL, tr("Load drawn map"), ".", tr("Drawn Maps (*.hwmap);;All files (*.*)"));
+    QString fileName = QFileDialog::getOpenFileName(NULL, tr("Load drawn map"), ".", tr("Drawn Maps (*.hwmap);;All files (*)"));
 
     if(!fileName.isEmpty())
         drawMapWidget->load(fileName);
@@ -53,7 +53,7 @@ void PageDrawMap::load()
 
 void PageDrawMap::save()
 {
-    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save drawn map"), ".", tr("Drawn Maps (*.hwmap);;All files (*.*)"));
+    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save drawn map"), ".", tr("Drawn Maps (*.hwmap)"));
 
     if(!fileName.isEmpty())
         drawMapWidget->save(fileName);
