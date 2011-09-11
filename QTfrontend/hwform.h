@@ -52,7 +52,7 @@ class HWForm : public QMainWindow
     Q_OBJECT
 
 public:
-    HWForm(QWidget *parent = 0);
+    HWForm(QWidget *parent = 0, QString styleSheet = "");
     Ui_HWForm ui;
     SDLInteraction sdli;
     GameUIConfig * config;

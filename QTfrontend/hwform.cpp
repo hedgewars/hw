@@ -93,7 +93,7 @@
 bool frontendEffects = true;
 QString playerHash;
 
-HWForm::HWForm(QWidget *parent)
+HWForm::HWForm(QWidget *parent, QString styleSheet)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
 {
 #ifdef USE_XFIRE
@@ -104,6 +104,7 @@ HWForm::HWForm(QWidget *parent)
     frontendEffects = gameSettings->value("frontend/effects", true).toBool();
     playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toLatin1(), QCryptographicHash::Md5).toHex());
 
+    this->setStyleSheet(styleSheet);
     ui.setupUi(this);
     setMinimumSize(760, 580);
     //setFocusPolicy(Qt::StrongFocus);
