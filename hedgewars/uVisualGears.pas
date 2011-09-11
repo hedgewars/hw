@@ -29,7 +29,7 @@ unit uVisualGears;
  * E.g.: background flakes, visual effects: explosion, smoke trails, etc.
  *)
 interface
-uses uConsts, uFloat, GLunit, uTypes;
+uses uConsts, uFloat, GLunit, uTypes, uWorld;
 
 procedure initModule;
 procedure freeModule;
