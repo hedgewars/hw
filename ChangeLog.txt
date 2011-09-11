@@ -2,11 +2,14 @@
 * bugfixes
 
 0.9.15 -> ???:
- + New modes: The Specialists, Space Invasion
+ + New gameplay modes/styles: Racer, The Specialists, Tumbler, Space Invasion
  + Installing content (anything under Data/ - maps, sounds, and any such stuff) to user profile allows custom adding/overriding of any Data/ content
  + Sudden Death art
  + New Weapon/Utility: Land Spray Gun
+ + New Utility: Time Box
  + New Game mode: Tag team
+ + New Game option for map bottom border
+ + Many new hats
  + Get away time modifier (in %)
  + Allow up to 8 teams in a game
  + Shoppa scheme by default resets ammo
@@ -24,9 +27,11 @@
  + Land smoothing (looks less pixelated on generation and damage)
  + Improved lua script support (e.g. possibility to change hats)
  + The names of the ShoppaKingTournament winners are now written on the Trophies in the ShoppaKing and TrophyRace maps!
+ + Allow window resizes during game.
  * Prevent portaling to impossible locations better
  * Snow accumulates more smoothly
  * Rope should be less sticky now
+ * Rope shouldn't be able to get Hogs stuck on walls anymore
  * Fix for last portal shot always being yellow
  * More accurate napalm strike drop location
  * AI fixes
