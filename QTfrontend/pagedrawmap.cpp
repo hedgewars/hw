@@ -53,7 +53,7 @@ void PageDrawMap::load()
 
 void PageDrawMap::save()
 {
-    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save drawn map"), ".", tr("Drawn Maps (*.hwmap)"));
+    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save drawn map"), ".", tr("Drawn Maps (*.hwmap);;All files (*)"));
 
     if(!fileName.isEmpty())
         drawMapWidget->save(fileName);
