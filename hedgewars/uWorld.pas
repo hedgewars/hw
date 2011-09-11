@@ -1196,7 +1196,7 @@ if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not 
     else
     begin
         CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
-        CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
+        CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y)+ hwSign(FollowGear^.dX) * 100 + WorldDy)) div 8;
     end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
