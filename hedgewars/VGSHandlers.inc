@@ -174,7 +174,10 @@ Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
 if Gear^.FrameTicks <= Steps then
     DeleteVisualGear(Gear)
 else
-    dec(Gear^.FrameTicks, Steps)
+    dec(Gear^.FrameTicks, Steps);
+
+if Gear^.FrameTicks < $FF then
+   Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or Gear^.FrameTicks
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

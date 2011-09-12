@@ -512,7 +512,7 @@ var
     i, gX, gY: LongInt;
     dX, dY: hwFloat;
     Fire: PGear;
-    smoke: PVisualGear;
+    smoke, glass: PVisualGear;
 begin
     AllInactive := false;
 
@@ -534,7 +534,17 @@ begin
         PlaySound(sndMolotov);
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y);
-        //doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
+        for i:= 0 to 2 do
+            begin
+            glass:= AddVisualGear(gx+random(7)-3, gy+random(5)-2, vgtEgg);
+            if glass <> nil then
+                begin
+                glass^.Frame:= 2;
+                glass^.Tint:= $41B83ED0 - i * $10081000;
+                glass^.dX:= 1/(10*(random(11)-5));
+                glass^.dY:= -1/(random(4)+5);
+                end;
+            end;
         for i:= 0 to 24 do
         begin
             dX := AngleCos(i * 2) * ((_0_15*(i div 5))) * (GetRandom + _1);

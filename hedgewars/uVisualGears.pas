@@ -649,14 +649,7 @@ case Layer of
                                    end;
                                DrawRotatedF(sprFeather, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                              end;
-                   vgtEgg: begin
-                           if Gear^.FrameTicks < $FF then
-                               begin
-                                   Tint($FF, $FF, $FF, Gear^.FrameTicks);
-                                   tinted:= true
-                               end;
-                           DrawRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                           end;
+                   vgtEgg: DrawRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                    vgtBeeTrace: begin
                                 if Gear^.FrameTicks < $FF then
                                     Tint($FF, $FF, $FF, Gear^.FrameTicks div 2)
