@@ -886,7 +886,10 @@ begin
           gtGrenade: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
       gtSnowball: DrawRotated(sprSnowball, x, y, 0, Gear^.DirAngle);
        gtGasBomb: DrawRotated(sprCheese, x, y, 0, Gear^.DirAngle);
-       gtMolotov: DrawRotated(sprMolotov, x, y, 0, Gear^.DirAngle);
+                  
+       gtMolotov: if (Gear^.State and gstDrowning) = 0 then
+                       DrawRotatedF(sprMolotov, x, y, (RealTicks div 125) mod 8, hwSign(Gear^.dX), Gear^.DirAngle)
+                  else DrawSprite(sprMolotov, x, y, 8);
 
        gtRCPlane: begin
                   if (Gear^.Tag = -1) then

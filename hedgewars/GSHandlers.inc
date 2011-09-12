@@ -512,6 +512,7 @@ var
     i, gX, gY: LongInt;
     dX, dY: hwFloat;
     Fire: PGear;
+    smoke: PVisualGear;
 begin
     AllInactive := false;
 
@@ -519,9 +520,12 @@ begin
     CalcRotationDirAngle(Gear);
 
     // let's add some smoke depending on speed
-    i:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120));
+    i:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120))+random(10);
     if (GameTicks mod i) = 0 then
-        AddVisualGear(hwRound(Gear^.X)-round(cos((Gear^.DirAngle+50) * pi / 180)*20), hwRound(Gear^.Y)-round(sin((Gear^.DirAngle+50) * pi / 180)*20), vgtSmoke);
+        begin
+        smoke:= AddVisualGear(hwRound(Gear^.X)-round(cos((Gear^.DirAngle+50) * pi / 180)*20), hwRound(Gear^.Y)-round(sin((Gear^.DirAngle+50) * pi / 180)*20), vgtSmoke);
+        if smoke <> nil then smoke^.Scale:= 0.75;
+        end;
 
     if (Gear^.State and gstCollision) <> 0 then
     begin

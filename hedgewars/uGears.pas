@@ -1018,7 +1018,7 @@ begin
 
     if (GameFlags and gfLowGravity) = 0 then
         begin
-        cGravity:= cMaxWindSpeed * 2;
+        cGravity:= cMaxWindSpeed / 100;
         cGravityf:= 0.00025 * 2
         end;
 
