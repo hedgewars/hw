@@ -84,7 +84,6 @@ private:
 
 private slots:
     void forceFullscreen(int index);
-    void setFullscreen(void);
     void trimNetNick();
 };
 

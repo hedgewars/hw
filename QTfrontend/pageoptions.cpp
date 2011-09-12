@@ -299,7 +299,6 @@ PageOptions::PageOptions(QWidget* parent) :
             CBFullscreen = new QCheckBox(AGGroupBox);
             CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
             GBAlayout->addWidget(CBFullscreen);
-            connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(void)));
 
             QLabel * quality = new QLabel(AGGroupBox);
             quality->setText(QLabel::tr("Quality"));
@@ -413,22 +412,17 @@ void PageOptions::forceFullscreen(int index)
         previousQuality = this->SLQuality->value();
         this->SLQuality->setValue(this->SLQuality->maximum());
         this->SLQuality->setEnabled(false);
+        previousResolutionIndex = this->CBResolution->currentIndex();
+        this->CBResolution->setCurrentIndex(0);
+        this->CBResolution->setEnabled(false);
     } else {
         this->CBFullscreen->setChecked(previousFullscreenValue);
         this->CBFullscreen->setEnabled(true);
         this->SLQuality->setValue(previousQuality);
         this->SLQuality->setEnabled(true);
-    }
-}
-
-void PageOptions::setFullscreen(void)
-{
-    int tmp = this->CBResolution->currentIndex();
-    if (this->CBFullscreen->isChecked())
-        this->CBResolution->setCurrentIndex(0);
-    else
         this->CBResolution->setCurrentIndex(previousResolutionIndex);
-    previousResolutionIndex = tmp;
+        this->CBResolution->setEnabled(true);
+    }
 }
 
 void PageOptions::trimNetNick()
