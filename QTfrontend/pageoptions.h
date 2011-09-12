@@ -84,6 +84,9 @@ private:
 
 private slots:
     void forceFullscreen(int index);
+    void setFullscreen(int state);
+    void setResolution(int state);
+    void setQuality(int value);
     void trimNetNick();
 };
 
