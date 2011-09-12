@@ -523,7 +523,9 @@ begin
     i:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120))+random(10);
     if (GameTicks mod i) = 0 then
         begin
-        smoke:= AddVisualGear(hwRound(Gear^.X)-round(cos((Gear^.DirAngle+50) * pi / 180)*20), hwRound(Gear^.Y)-round(sin((Gear^.DirAngle+50) * pi / 180)*20), vgtSmoke);
+        // adjust angle to match the texture
+        if Gear^.dX.isNegative then i:= 130 else i:= 50;
+        smoke:= AddVisualGear(hwRound(Gear^.X)-round(cos((Gear^.DirAngle+i) * pi / 180)*20), hwRound(Gear^.Y)-round(sin((Gear^.DirAngle+i) * pi / 180)*20), vgtSmoke);
         if smoke <> nil then smoke^.Scale:= 0.75;
         end;
 
