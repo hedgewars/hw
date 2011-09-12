@@ -234,7 +234,7 @@ if (GameFlags and gfDisableWind) = 0 then
 
 ApplyAmmoChanges(CurrentHedgehog^);
 
-if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
+if (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then SetBinds(CurrentTeam^.Binds);
 
 bShowFinger:= true;
 
