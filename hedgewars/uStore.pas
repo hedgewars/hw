@@ -992,7 +992,13 @@ begin
         end;
 
     // these attributes must be set up before creating the sdl window
+{$IFNDEF WIN32}
+(* On a large number of testers machines, SDL default to software rendering when opengl attributes were set.
+   These attributes were "set" after CreateWindow in .15, which probably did nothing.
+   IMO we should rely on the gl_config defaults from SDL, and use SDL_GL_GetAttribute to possibly post warnings if any
+   bad values are set.  *)
     SetupOpenGLAttributes();
+{$ENDIF}
 {$IFDEF SDL13}
     // these values in x and y make the window appear in the center
     x:= SDL_WINDOWPOS_CENTERED_MASK;
