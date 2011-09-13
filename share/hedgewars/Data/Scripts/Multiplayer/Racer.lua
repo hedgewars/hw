@@ -29,6 +29,15 @@
 
 -- update feedback
 
+-------
+-- 0.2
+-------
+
+-- allow gameflags
+-- extend time to 90s
+-- remove other air-attack based weps
+-- turn off water rise for sd
+
 -----------------------------
 -- SCRIPT BEGINS
 -----------------------------
@@ -369,9 +378,10 @@ end
 ----------------------------------
 
 function onGameInit()
-	GameFlags = gfInfAttack + gfSolidLand + gfInvulnerable
+	GameFlags = GameFlags + gfInfAttack + gfInvulnerable
 	CaseFreq = 0
-	Delay = 1000 -- doh
+	TurnTime = 90000
+	WaterRise = 0
 end
 
 
@@ -458,6 +468,10 @@ function onNewTurn()
 	end
 
 	AddAmmo(CurrentHedgehog, amTardis, 0)
+	AddAmmo(CurrentHedgehog, amDrillStrike, 0)
+	AddAmmo(CurrentHedgehog, amMineStrike, 0)
+	AddAmmo(CurrentHedgehog, amNapalm, 0)
+	AddAmmo(CurrentHedgehog, amPiano, 0)
 
 end
 
@@ -552,12 +566,12 @@ function onGearResurrect(gear)
 	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 
 	-- if the player stops and "dies" or flies into water, stop him racing
-	if gear == CurrentHedgehog then
+	--[[if gear == CurrentHedgehog then
 		DisableTumbler()
 		ShowMission(loc("RACER"), 
 		loc("TRACK FAILED!"), 
 		loc("WINNING TIME: ") .. bestTimeComment, -amSkip, 4000)
-	end
+	end]]
 
 end
 
@@ -587,10 +601,10 @@ function onGearDelete(gear)
 
 end
 
-function onAmmoStoreInit()
+--[[function onAmmoStoreInit()
 	SetAmmo(amRope, 9, 0, 0, 0)	
 	SetAmmo(amJetpack, 9, 0, 0, 0)	
 	SetAmmo(amSkip, 9, 0, 0, 0)
-end
+end]]
 
 

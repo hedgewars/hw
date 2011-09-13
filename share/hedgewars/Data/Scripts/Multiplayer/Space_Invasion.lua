@@ -5,7 +5,7 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 ---------------------------------------------------
 ---------------------------------------------------
 ---------------------------------------------------
---- Space Invasion Code Follows (0.8.1)
+--- Space Invasion Code Follows (0.9)
 ---------------------------------------------------
 ---------------------------------------------------
 -- VERSION HISTORY
@@ -86,13 +86,13 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 -- Boss Slayer (Destroy 2 blue circles for +25 points)
 
 -- Shield Master (disolve 5 shells for +10 points)
--- Shield Miser (don't use your shield at all +20 points)
+-- Shield Miser (don't use your shield at all (2.5*roundkills)+2 points)
 
 -- Depleted Kamikaze! (kamikaze into a blue/red circ when you are out of ammo) 5pts
 -- Timed Kamikaze! (kamikaze into a blue/red circ when you only have 5s left) 10pts
 -- Kamikaze Expert (combination of the above two) 15pts
 
--- Multi-shot (destroy more than 1 invader with a single bullet) 5pts
+-- Multi-shot (destroy more than 1 invader with a single bullet) 15pts
 -- X-Hit Combo (destroy another invader in less than 3 seconds) chainLength*2 points
 
 -- Accuracy Bonus (80% accuracy at the end of your turn with more than 5 shots fired) 15pts
@@ -113,6 +113,15 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 -- stop hiding non-existant 4th Tag
 -- redraw HUD on screen resolution change
 
+------------------------
+-- version 0.9
+------------------------
+-- time for more 'EXPERIMENTS' mwahahahahahaha D:
+-- (hopefully) balanced Shield Miser
+-- bosses are no longer a redunkulous 50 points, but toned down to 30
+-- experimental radar (it's INTERACTIVE and math-heavy :D) (visual gears are safe... right? D:)
+-- bugfix and balance for multishot
+
 --------------------------
 --notes for later
 --------------------------
@@ -128,7 +137,7 @@ capgrpGameState
 capgrpAmmostate
 -----------------
 AddCaption( chainLength .. LOC_NOT("-chain! +") .. chainLength*2 .. LOC_NOT(" points!"),0xffba00ff,capgrpAmmostate)
-AddCaption(LOC_NOT("Multi-shot! +5 points!"),0xffba00ff,capgrpAmmostate)
+AddCaption(LOC_NOT("Multi-shot! +15 points!"),0xffba00ff,capgrpAmmostate)
 
 -----------------
 capgrpAmmoinfo
@@ -220,6 +229,7 @@ local teamCircsKilled = {}
 --local teamBlue = {}
 --local teamOrange = {}
 --local teamGreen = {}
+local roundKills = 0
 local RK = 0
 local GK = 0
 local BK = 0
@@ -273,6 +283,13 @@ local m2Count = 0		-- handle speed of circs
 
 local vCirc = {}
 local vCCount = 0
+
+local rCirc = {}
+local rCircX = {}
+local rCircY = {}
+local rAlpha = 255
+local rPingTimer = 0
+local radShotsLeft = 0
 
 local vCircActive = {}
 local vCircHealth = {}
@@ -427,6 +444,8 @@ end
 
 function AwardKills(t)
 
+	roundKills = roundKills + 1
+	
 	for i = 0,(TeamsCount-1) do
 		if teamClan[i] == GetHogClan(CurrentHedgehog) then
 			teamCircsKilled[i] = teamCircsKilled[i] + 1
@@ -709,6 +728,18 @@ function onLJump()
 	end
 end
 
+function onHJump()
+
+	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) and 
+	(rAlpha == 255) and (radShotsLeft > 0) then
+		rPingTimer = 0
+		rAlpha = 0
+		radShotsLeft = radShotsLeft -1
+		AddCaption(loc("Pings left:") .. " " .. radShotsLeft,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage)
+	end
+
+end
+
 -----------------
 -- movement keys
 -----------------
@@ -787,6 +818,7 @@ function onGameStart()
 				loc("Movement: [Up], [Down], [Left], [Right]") .. "|" ..
 				loc("Fire") .. ": " .. loc("[Left Shift]") .. "|" ..
 				loc("Toggle Shield") .. ": " .. loc("[Enter]") .. "|" ..
+				loc("Radar Ping") .. ": " .. loc("[Backspace]") .. "|" ..
 
 				--" " .. "|" ..
 				--LOC_NOT("Invaders List: ") .. "|" ..
@@ -818,6 +850,7 @@ end
 function onNewTurn()
 
 	primShotsLeft = primShotsMax
+	radShotsLeft = 2
 	stopMovement = false
 	tumbleStarted = false
 	beam = false
@@ -828,6 +861,7 @@ function onNewTurn()
 	BK = 0
 	OK = 0
 	SK = 0
+	roundKills = 0
 	shieldMiser = true
 	shotsFired = 0
 	shotsHit = 0
@@ -936,6 +970,7 @@ function onGameTick()
 			tumbleStarted = true
 			TimeLeft = (TurnTime/1000)	--45
 			FadeAlpha = 0
+			rAlpha = 255
 			AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
 			DrawTag(0)
 			DrawTag(1)
@@ -985,11 +1020,19 @@ function onGameTick()
 				rightOn = false
 				SetMyCircles(false)
 				HideTags()
+				rAlpha = 255
 				--nw WriteLnToConsole("Player is out of luck")
 
 				if shieldMiser == true then
-					AddCaption(loc("Shield Miser!") .. " +20 " .. loc("points") .. "!",0xffba00ff,capgrpAmmoinfo)
-					AwardPoints(20)
+					
+					p = (roundKills*2.5) - ((roundKills*2.5)%1) + 2
+					--p = (roundKills*2.5) + 2
+					--if (p%2 ~= 0) then
+					--	p = p -0.5					
+					--end
+
+					AddCaption(loc("Shield Miser!") .." +" .. p .." ".. loc("points") .. "!",0xffba00ff,capgrpAmmoinfo)
+					AwardPoints(p)
 				end
 
 				if ((shotsHit / shotsFired * 100) >= 80) and (shotsFired > 4) then
@@ -1080,7 +1123,7 @@ function onGameTick()
 	end
 
 	--WriteLnToConsole("End of GameTick")
-
+	
 end
 
 function onGearResurrect(gear)
@@ -1166,8 +1209,47 @@ end
 ------------------------------------------------------------
 ------------------------------------------------------------
 
+function DoHorribleThings(cUID)
 
+	-- maybe	
+	-- add a check to draw it inside the circ and not past it if
+	-- it is closer than 150 or w/e
 
+	-- work out the distance to the target	
+	g1X, g1Y = GetGearPosition(CurrentHedgehog)
+	g2X, g2Y = vCircX[cUID], vCircY[cUID]
+	q = g1X - g2X				
+	w = g1Y - g2Y				
+	r = math.sqrt( (q*q) + (w*w) )	--alternate
+	
+
+	opp = w	
+	if opp < 0 then
+		opp = opp*-1
+	end
+
+	-- work out the angle (theta) to the target
+	t = math.deg ( math.asin(opp / r) )
+		
+	-- based on the radius of the radar, calculate what x/y displacement should be	
+	NR = 150 -- radius at which to draw circs
+	NX = math.cos( math.rad(t) ) * NR
+	NY = math.sin( math.rad(t) ) * NR	
+		
+	-- displace xy based on where this thing actually is
+	if q > 0 then
+		rCircX[cUID] = g1X - NX
+	else
+		rCircX[cUID] = g1X + NX
+	end
+
+	if w > 0 then
+		rCircY[cUID] = g1Y - NY
+	else
+		rCircY[cUID] = g1Y + NY
+	end
+	
+end
 
 function PlayerIsFine()
 	return (playerIsFine)
@@ -1230,6 +1312,10 @@ function CreateMeSomeCircles()
 		vCCount = vCCount +1
 		vCirc[i] = AddVisualGear(0,0,vgtCircle,0,true)
 
+		rCirc[i] = AddVisualGear(0,0,vgtCircle,0,true)
+		rCircX[i] = 0
+		rCircY[i] = 0
+
 		vCircDX[i] = 0
 		vCircDY[i] = 0
 
@@ -1257,6 +1343,9 @@ function CreateMeSomeCircles()
 		vCircCol[i] = 0xff00ffff
 
 		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], vCircCol[i])
+
+		SetVisualGearValues(rCirc[i], 0, 0, 100, 255, 1, 10, 0, 40, 3, vCircCol[i])
+
 	end
 
 	pShield = AddVisualGear(0,0,vgtCircle,0,true)
@@ -1357,7 +1446,7 @@ function CircleDamaged(i)
 
 		elseif (vType[i] == "blueboss") then
 			PlaySound(sndHellishImpact3)
-			AddCaption(loc("Boss defeated!") .. " +50 " .. loc("points") .. "!", 0x0050ffff,capgrpMessage)
+			AddCaption(loc("Boss defeated!") .. " +30 " .. loc("points") .. "!", 0x0050ffff,capgrpMessage)
 
 			morte = AddGear(vCircX[i], vCircY[i], gtExplosives, 0, 0, 0, 1)
 			SetHealth(morte, 0)
@@ -1448,7 +1537,7 @@ function SetUpCircle(i)
 			vCircRadMax[i] = 180*5
 			vCircWidth[i] = 1
 			vCounterLim[i] = 2000
-			vCircScore[i] = 50
+			vCircScore[i] = 30
 			vCircHealth[i] = 3
 		else
 		--elseif r == 1 then
@@ -1481,6 +1570,11 @@ function SetUpCircle(i)
 	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])
 	SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], g3, g4, g5, g6, g7, vCircRadius[i], vCircWidth[i], vCircCol[i]-0x000000ff)
 	-- - -0x000000ff
+
+	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(rCirc[i])
+	SetVisualGearValues(rCirc[i], 0, 0, g3, g4, g5, g6, g7, g8, g9, vCircCol[i]-0x000000ff)
+	
+
 	vCircActive[i] = true -- new
 
 	--nw WriteLnToConsole("CIRC " .. i .. ": X: " .. vCircX[i] .. "; Y: " .. vCircY[i])
@@ -1582,7 +1676,9 @@ function CheckVarious(gear)
 
 					circsHit = circsHit + 1
 					if circsHit > 1 then
-						AddCaption(loc("Multi-shot!") .. " +5 " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
+						AddCaption(loc("Multi-shot!") .. " +15 " .. loc("points") .. "!",0xffba00ff,capgrpAmmostate)
+						AwardPoints(15)
+						circsHit = 0
 					end
 
 					shotsHit = shotsHit + 1
@@ -1655,6 +1751,8 @@ function CheckDistances()
 		g1Y = g1Y - g2Y
 		dist = (g1X*g1X) + (g1Y*g1Y)
 
+		--DoHorribleThings(i, g1X, g1Y, g2X, g2Y, dist)
+
 		--nw WriteLnToConsole("Calcs done. Dist to CurrentHedgehog is " .. dist)
 
 		-- calculate my real radius if I am an aura
@@ -1705,7 +1803,6 @@ end
 
 function HandleCircles()
 
-
 	--[[if CirclesAreGo == true then
 
 		--CheckDistances()
@@ -1719,7 +1816,26 @@ function HandleCircles()
 
 	end]]
 
+	
+	if rAlpha ~= 255 then
+		
+		rPingTimer = rPingTimer + 1
+		if rPingTimer == 100 then
+			rPingTimer = 0	
+			
+			rAlpha = rAlpha + 5
+			if rAlpha >= 255 then
+				rAlpha = 255
+			end	
+		end
+	
+	end
+
 	for i = 0,(vCCount-1) do
+
+		--if (vCircActive[i] == true) then
+			SetVisualGearValues(rCirc[i], rCircX[i], rCircY[i], 100, 255, 1, 10, 0, 40, 3, vCircCol[i]-rAlpha)	
+		--end
 
 		vCounter[i] = vCounter[i] + 1
 		if vCounter[i] >= vCounterLim[i] then
@@ -1870,6 +1986,11 @@ function HandleCircles()
 		for i = 0,(vCCount-1) do
 			vCircX[i] = vCircX[i] + vCircDX[i]
 			vCircY[i] = vCircY[i] + vCircDY[i]
+
+			if (CurrentHedgehog ~= nil) and (rAlpha ~= 255) then			
+				DoHorribleThings(i)--(i, g1X, g1Y, g2X, g2Y, dist)				
+			end
+
 		end
 
 		if (TimeLeft == 0) and (tumbleStarted == true) then
