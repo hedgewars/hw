@@ -528,8 +528,11 @@ for i:= 0 to 7 do
        (((Land[ty, tx] and lfBasic) <> 0) or
        ((Land[ty, tx] and lfObject) <> 0)) then
         begin
-        Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-        if despeckle then LandDirty[ty div 32, tx div 32]:= 1;
+        if despeckle then 
+            begin
+            Land[ty, tx]:= Land[ty, tx] or lfDamaged;
+            LandDirty[ty div 32, tx div 32]:= 1
+            end;
         if (cReducedQuality and rqBlurryLand) = 0 then
             LandPixels[ty, tx]:= cExplosionBorderColor
         else LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
