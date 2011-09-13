@@ -358,10 +358,8 @@ void PageEditTeam::testSound()
     mySdli->SDLMusicInit();
     
     tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Sounds/voices");
-    tmpdir.cd(CBVoicepack->currentText());
-    
-    if (!tmpdir.exists()) {
+    if (!tmpdir.cd("Data/Sounds/voices/"+CBVoicepack->currentText()))
+    {
         tmpdir.cd(datadir->absolutePath());
         tmpdir.cd("Sounds/voices");
         tmpdir.cd(CBVoicepack->currentText());
