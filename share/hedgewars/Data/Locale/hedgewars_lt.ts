@@ -153,7 +153,7 @@
     <message>
         <location filename="../../../../QTfrontend/game.cpp" line="311"/>
         <source>en.txt</source>
-        <translation type="unfinished"></translation>
+        <translation>lt.txt</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/game.cpp" line="329"/>
