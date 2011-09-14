@@ -1156,7 +1156,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить неразрушимую границу вокруг карты</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

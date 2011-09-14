@@ -1162,7 +1162,7 @@ Haluatko silti liittyä huoneeseen?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisää tuhoutumattomat reunat kartan ympärille</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

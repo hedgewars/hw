@@ -1197,7 +1197,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Pridať nezničiteľný okraj okolo terénu</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

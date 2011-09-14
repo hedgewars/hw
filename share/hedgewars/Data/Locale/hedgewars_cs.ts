@@ -1104,7 +1104,7 @@ Ještě stále se chceš připojit do místosti?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Přidá nezničitelnou hranici okolo terénu</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

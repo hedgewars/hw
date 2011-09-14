@@ -1146,7 +1146,7 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi un bordo indistruttibile intorno al terreno</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

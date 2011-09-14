@@ -1168,7 +1168,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Einfügen eines unzerstörbaren Kartenrand</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

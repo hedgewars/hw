@@ -1225,7 +1225,7 @@ Você ainda quer entrar na sala?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicione uma borda indestrutível em volta do terreno</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

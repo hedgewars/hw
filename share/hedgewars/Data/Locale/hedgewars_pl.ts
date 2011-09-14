@@ -1204,7 +1204,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished">Dodaje niezniszczalną ramkę dookoła terenu</translation>
+        <translation>Dodaje niezniszczalną ramkę dookoła terenu</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

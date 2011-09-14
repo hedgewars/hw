@@ -1166,7 +1166,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Lägger till en oförstörbar kant runt terrängen</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

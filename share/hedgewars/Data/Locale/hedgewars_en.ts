@@ -1133,7 +1133,7 @@ Do you still want to join the room?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Add an indestructible border around the terrain</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>

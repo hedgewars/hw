@@ -1139,7 +1139,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Adiciona uma borda indestrutível à volta do terreno</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
