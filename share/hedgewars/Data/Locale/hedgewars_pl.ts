@@ -400,11 +400,19 @@ Przoszę wybrać nowy nick:</translation>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation>Narysowane mapy (*.hwmap);;Wszystkie pliki (*.*)</translation>
+        <translation type="obsolete">Narysowane mapy (*.hwmap);;Wszystkie pliki (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
         <translation>Zapisz mapę</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1777,6 +1785,10 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     <message>
         <source>unnamed</source>
         <translation>nienazwany</translation>
+    </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

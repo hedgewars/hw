@@ -128,6 +128,14 @@
         <comment>File Types</comment>
         <translation>Súbor s uloženou hrou Hedgewars</translation>
     </message>
+    <message>
+        <source>Demo name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -390,11 +398,19 @@ Prosím vyberte si inú prezývku:</translation>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation>Nakreslené mapy (*.hwmap);;Všetky súbory (*.*)</translation>
+        <translation type="obsolete">Nakreslené mapy (*.hwmap);;Všetky súbory (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
         <translation>Uložiť nakreslenú mapu</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -789,6 +805,10 @@ Prosím vyberte si inú prezývku:</translation>
         <comment>Tips</comment>
         <translation>Navádzaná včela je trošku zložitejšia na použitie. Jej polomer otočenia závisí na jej rýchlosti, takže ju radšej nepoužívajte pri plnej sile.</translation>
     </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1101,7 +1121,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Pridať nezničiteľný okraj okolo terénu</translation>
+        <translation type="obsolete">Pridať nezničiteľný okraj okolo terénu</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1174,6 +1194,14 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
         <translation>Tímy každého klanu sa striedajú v ťahaní a zdieľajú svoj čas na ťah.</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1746,6 +1774,10 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
         <source>unnamed</source>
         <translation>beznázvu</translation>
     </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QMainWindow</name>
@@ -2105,6 +2137,10 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>Tag Team</source>
         <translation>Označit tím</translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

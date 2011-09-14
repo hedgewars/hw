@@ -123,6 +123,14 @@
         <comment>File Types</comment>
         <translation>Hedgewars gespeichertes Spiel</translation>
     </message>
+    <message>
+        <source>Demo name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -385,12 +393,16 @@ Please pick another nickname:</source>
         <translation>Gezeichnete Karte laden</translation>
     </message>
     <message>
-        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <source>Save drawn map</source>
+        <translation>Gezeichnete Karte sichern</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Save drawn map</source>
-        <translation>Gezeichnete Karte sichern</translation>
+        <source>All files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -767,6 +779,10 @@ Please pick another nickname:</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1076,7 +1092,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Einfügen eines unzerstörbaren Kartenrand</translation>
+        <translation type="obsolete">Einfügen eines unzerstörbaren Kartenrand</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1148,6 +1164,14 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1680,6 +1704,10 @@ Einige Dinge könnten nicht funktionieren oder unvollständig sein. Benutzung au
         <source>unnamed</source>
         <translation>unbenannt</translation>
     </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation>Igel %1</translation>
+    </message>
 </context>
 <context>
     <name>QMainWindow</name>
@@ -2034,6 +2062,10 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Tag Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

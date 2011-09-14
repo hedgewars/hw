@@ -169,7 +169,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageEditTeam->BtnTeamSave, SIGNAL(clicked()), this, SLOT(TeamSave()));
     connect(ui.pageEditTeam->BtnTeamDiscard, SIGNAL(clicked()), this, SLOT(TeamDiscard()));
 
-    connect(ui.pageEditTeam->signalMapper, SIGNAL(mapped(const int &)), this, SLOT(RandomName(const int &)));
+    connect(ui.pageEditTeam->signalMapper2, SIGNAL(mapped(const int &)), this, SLOT(RandomName(const int &)));
     connect(ui.pageEditTeam->randTeamButton, SIGNAL(clicked()), this, SLOT(RandomNames()));
 
     connect(ui.pageMultiplayer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
@@ -639,7 +639,7 @@ void HWForm::IntermediateSetup()
 
 void HWForm::NewTeam()
 {
-    editedTeam = new HWTeam("unnamed");
+    editedTeam = new HWTeam(QLineEdit::tr("unnamed"));
     editedTeam->SetToPage(this);
     GoToPage(ID_PAGE_SETUP_TEAM);
 }

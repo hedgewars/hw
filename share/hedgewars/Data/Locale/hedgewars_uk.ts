@@ -124,6 +124,14 @@
         <comment>File Types</comment>
         <translation>Файл Збереження Hedgewars</translation>
     </message>
+    <message>
+        <source>Demo name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -384,11 +392,19 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation>Намальовані мапи (*.hwmap);;Всі файли (*.*)</translation>
+        <translation type="obsolete">Намальовані мапи (*.hwmap);;Всі файли (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
         <translation>Зберегти намальовану мапу</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -744,6 +760,10 @@ Please pick another nickname:</source>
         <comment>Tips</comment>
         <translation>Навідна Бджілка може бути складною у керуванні. Радіус повороту залежить від її швидкості, тому постарайтеся не стріляти на повну силу.</translation>
     </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1024,7 +1044,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Додати невразливу рамку навколо місцевості</translation>
+        <translation type="obsolete">Додати невразливу рамку навколо місцевості</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1129,6 +1149,14 @@ Do you still want to join the room?</source>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
         <translation>Команди в кожному клані здійснюють послідовні ходи, поділяючи час ходу.</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1654,6 +1682,10 @@ Do you still want to join the room?</source>
         <source>unnamed</source>
         <translation>без_назви</translation>
     </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QMainWindow</name>
@@ -2009,6 +2041,10 @@ Please check your installation</source>
     <message>
         <source>Tag Team</source>
         <translation>Збірна Команда</translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

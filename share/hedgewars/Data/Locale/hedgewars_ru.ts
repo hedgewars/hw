@@ -128,6 +128,14 @@
         <comment>File Types</comment>
         <translation>Файл сохранения игры hedgewars</translation>
     </message>
+    <message>
+        <source>Demo name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -388,11 +396,19 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation>Рисованные карты (*.hwmap);;Все файлы (*.*)</translation>
+        <translation type="obsolete">Рисованные карты (*.hwmap);;Все файлы (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
         <translation>Сохранить рисованную карту</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -748,6 +764,10 @@ Please pick another nickname:</source>
         <comment>Tips</comment>
         <translation>Пчёлку можеть быть сложно использовать. Её радиус поворота зависит от скорости, поэтому попробуйте не использовать полную силу броска.</translation>
     </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1060,7 +1080,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Добавить неразрушимую границу вокруг карты</translation>
+        <translation type="obsolete">Добавить неразрушимую границу вокруг карты</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1133,6 +1153,14 @@ Do you still want to join the room?</source>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
         <translation>Команды в каждом клане будут последовательно получать право хода, имея общее время на ход.</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1668,6 +1696,10 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
         <source>unnamed</source>
         <translation>безымянный</translation>
     </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QMainWindow</name>
@@ -2023,6 +2055,10 @@ Please check your installation</source>
     <message>
         <source>Tag Team</source>
         <translation>Эстафета команд</translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

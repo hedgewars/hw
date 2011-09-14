@@ -64,7 +64,10 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
 
-    signalMapper = new QSignalMapper(this);
+    signalMapper1 = new QSignalMapper(this);
+    signalMapper2 = new QSignalMapper(this);
+
+    connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(fixHHname(int)));
 
     HatsModel * hatsModel = new HatsModel(GBoxHedgehogs);
     for(int i = 0; i < 8; i++)
@@ -82,11 +85,13 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
         HHNameEdit[i]->setMinimumWidth(120);
         GBHLayout->addWidget(HHNameEdit[i], i, 1);
 
+        connect(HHNameEdit[i], SIGNAL(editingFinished()), signalMapper1, SLOT(map()));
+            signalMapper1->setMapping(HHNameEdit[i], i);
+
         randButton[i] = addButton(":/res/dice.png", GBHLayout, i, 3, true);
 
-        connect(randButton[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
-            signalMapper->setMapping(randButton[i], i);
-
+        connect(randButton[i], SIGNAL(clicked()), signalMapper2, SLOT(map()));
+            signalMapper2->setMapping(randButton[i], i);
     }
 
     randTeamButton = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, false);
@@ -340,6 +345,14 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
             CBBind[i]->addItem(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), sdlkeys[j][0]);
         pagelayout->addWidget(CBBind[i++], num++, 1);
     }
+}
+
+void PageEditTeam::fixHHname(int idx)
+{
+    HHNameEdit[idx]->setText(HHNameEdit[idx]->text().trimmed());
+
+    if (HHNameEdit[idx]->text().isEmpty())
+        HHNameEdit[idx]->setText(QLineEdit::tr("hedgehog %1").arg(idx+1));
 }
 
 void PageEditTeam::CBFort_activated(const QString & fortname)
