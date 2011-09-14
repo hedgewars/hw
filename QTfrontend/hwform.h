@@ -52,7 +52,7 @@ class HWForm : public QMainWindow
     Q_OBJECT
 
 public:
-    HWForm(QWidget *parent = 0);
+    HWForm(QWidget *parent = 0, QString styleSheet = "");
     Ui_HWForm ui;
     SDLInteraction sdli;
     GameUIConfig * config;
@@ -117,6 +117,8 @@ private slots:
     void AsyncNetServerStart();
     void NetLeftRoom();
     void selectFirstNetScheme();
+    
+    void saveDemoWithCustomName();
 
 private:
     void _NetConnect(const QString & hostName, quint16 port, const QString & nick);
@@ -162,6 +164,7 @@ private:
     QTime eggTimer;
     BGWidget * wBackground;
     QSignalMapper * pageSwitchMapper;
+    QByteArray m_lastDemo;
 
 #ifdef __APPLE__
     InstallController * panel;

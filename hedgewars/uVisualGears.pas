@@ -29,7 +29,7 @@ unit uVisualGears;
  * E.g.: background flakes, visual effects: explosion, smoke trails, etc.
  *)
 interface
-uses uConsts, uFloat, GLunit, uTypes;
+uses uConsts, uFloat, GLunit, uTypes, uWorld;
 
 procedure initModule;
 procedure freeModule;
@@ -317,10 +317,11 @@ vgtBigExplosion: begin
                 dy:= 0;
                 FrameTicks:= 350;
                 Frame:= 7;
-                Angle := 0;
+                Angle:= 0;
                 end;
 vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
  vgtStraightShot: begin
+                Scale:= 1.0;
                 dx:= 0.001 * random(45);
                 dy:= 0.001 * (random(20) + 25);
                 State:= ord(sprHealth);
@@ -494,6 +495,7 @@ procedure DrawVisualGears(Layer: LongWord);
 var Gear: PVisualGear;
     tinted: boolean;
     tmp: real;
+    i: LongInt;
 begin
 case Layer of
     // this layer is very distant in the background when stereo
@@ -592,8 +594,10 @@ case Layer of
                                    SetScale(zoom)
                                    end
                                end;
-    //if Ger^.Tex <> nil then DrawCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-               vgtStraightShot: DrawRotatedF(TSprite(Gear^.State), round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+               vgtStraightShot: begin 
+                                if Gear^.dX < 0 then i:= -1 else i:= 1;
+                                DrawTextureF(SpritesData[TSprite(Gear^.State)].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, i, SpritesData[TSprite(Gear^.State)].Width, SpritesData[TSprite(Gear^.State)].Height);
+                                end;
            end;
            if (cReducedQuality and rqAntiBoom) = 0 then
                case Gear^.Kind of
@@ -645,14 +649,7 @@ case Layer of
                                    end;
                                DrawRotatedF(sprFeather, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                              end;
-                   vgtEgg: begin
-                           if Gear^.FrameTicks < $FF then
-                               begin
-                                   Tint($FF, $FF, $FF, Gear^.FrameTicks);
-                                   tinted:= true
-                               end;
-                           DrawRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                           end;
+                   vgtEgg: DrawRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                    vgtBeeTrace: begin
                                 if Gear^.FrameTicks < $FF then
                                     Tint($FF, $FF, $FF, Gear^.FrameTicks div 2)

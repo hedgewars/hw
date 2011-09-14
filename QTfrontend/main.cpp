@@ -96,8 +96,8 @@ int main(int argc, char *argv[]) {
 
     Q_INIT_RESOURCE(hedgewars);
 
-    qApp->setStyleSheet
-        (QString(
+    QString styleSheetFromHell =
+        QString(
             "HWForm,QDialog{"
                 "background-image: url(\":/res/Background.png\");"
                 "background-position: bottom center;"
@@ -315,8 +315,7 @@ int main(int argc, char *argv[]) {
                 "background-color: #ffcc00;"
                 "width: 8px;"
             "}"
-            )
-        );
+            );
 
     bindir->cd("bin"); // workaround over NSIS installer
 
@@ -470,8 +469,8 @@ int main(int argc, char *argv[]) {
         app.installTranslator(&Translator);
     }
 
-    // Win32 registry setup (used for xfire detection etc. - don't set it if we're running in "portable" mode with a custom config dir)
 #ifdef _WIN32
+    // Win32 registry setup (used for xfire detection etc. - don't set it if we're running in "portable" mode with a custom config dir)
     if(!custom_config)
     {
         QSettings registry_hklm("HKEY_LOCAL_MACHINE", QSettings::NativeFormat);
@@ -484,7 +483,7 @@ int main(int argc, char *argv[]) {
     CocoaInitializer initializer;
 #endif
 
-    app.form = new HWForm();
+    app.form = new HWForm(NULL,styleSheetFromHell);
 
     app.form->show();
     return app.exec();

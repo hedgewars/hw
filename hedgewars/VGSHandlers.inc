@@ -174,7 +174,10 @@ Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
 if Gear^.FrameTicks <= Steps then
     DeleteVisualGear(Gear)
 else
-    dec(Gear^.FrameTicks, Steps)
+    dec(Gear^.FrameTicks, Steps);
+
+if Gear^.FrameTicks < $FF then
+   Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or Gear^.FrameTicks
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -587,22 +590,16 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBigExplosionWork(Gear: PVisualGear; Steps: Longword);
-//var maxMovement: LongInt;
+var maxMovement: LongInt;
 begin
 
 inc(Gear^.Timer, Steps);
-(*
-FIXME - This block desyncs due to the way WorldDx is important for various things network related.
-One possible solution is, instead of using WorldDx, to use straight gl/SDL calls to jitter the screen a bit.
-
-// a comment by unC0Rr: instead of changing WorldDx shake cursor coordinates, that should be safe
-
 if (Gear^.Timer and 5) = 0 then
     begin
     maxMovement := max(1, 13 - ((Gear^.Timer * 15) div 250));
     ShakeCamera(maxMovement);
     end;
-*)
+
 if Gear^.Timer > 250 then DeleteVisualGear(Gear);
 end;
 
@@ -611,6 +608,9 @@ var i: LongWord;
     gX,gY: LongInt;
     vg: PVisualGear;
 begin
+//ScreenFade:= sfFromWhite;
+//ScreenFadeValue:= round(60 * zoom * zoom);
+//ScreenFadeSpeed:= 5;
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
 AddVisualGear(gX, gY, vgtSmokeRing);

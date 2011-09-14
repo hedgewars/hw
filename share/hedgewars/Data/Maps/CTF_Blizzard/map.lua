@@ -1,5 +1,5 @@
 --------------------------------
--- CTF_BLIZZARD 0.8
+-- CTF_BLIZZARD 0.9
 --------------------------------
 
 ---------
@@ -68,14 +68,14 @@
 -- removed teleport from starting weapons
 -- increased captures to 3
 
------------
+------------
 -- 0.7
 ------------
 
 -- hopefully fixed a bug with the teleporters
 -- added a fix for crate possibly getting imbedded in land when it was near the water line
 
------------
+------------
 -- 0.8
 ------------
 
@@ -83,6 +83,13 @@
 
 -- changed hog placements code so that they start in the same place for both teams
 -- and hogs move in the same order, not backwards to each other.
+
+-----------
+-- 0.9
+------------
+
+-- add support for more players
+-- re-enable sudden death, but set water rise to 0
 
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 
@@ -469,7 +476,7 @@ function RebuildTeamInfo()
 
 
 	-- make a list of individual team names
-	for i = 0, 5 do
+	for i = 0, (TeamsCount-1) do
 		teamNameArr[i] = i
 		teamSize[i] = 0
 		teamIndex[i] = 0
@@ -566,7 +573,8 @@ function onGameInit()
 	MinesTime  = 2000
 	Explosives = 0 -- The number of explosives being placed
 	Delay = 10 -- The delay between each round
-	SuddenDeathTurns = 99 -- suddendeath is off, effectively
+	WaterRise = 0 -- I sure hope this works	
+	--SuddenDeathTurns = 99 -- suddendeath is off, effectively
 	Map = "Blizzard" -- The map to be played
 	Theme = "Snow" -- The theme to be used "Nature"
 

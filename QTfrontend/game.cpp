@@ -53,7 +53,14 @@ HWGame::~HWGame()
 void HWGame::onClientDisconnect()
 {
     switch (gameType) {
-        case gtDemo: break;
+        case gtSave:
+            if (gameState == gsInterrupted || gameState == gsHalted)
+                emit HaveRecord(false, demo);
+            else if (gameState == gsFinished)
+                 emit HaveRecord(true, demo);
+            break;
+        case gtDemo:
+            break;
         case gtNet:
             emit HaveRecord(true, demo);
             break;
@@ -84,8 +91,7 @@ void HWGame::commonConfig()
 
     if (m_pTeamSelWidget)
     {
-        QListIterator<HWTeam> it(m_pTeamSelWidget->getPlayingTeams());
-        while(it.hasNext())
+        foreach(HWTeam team, m_pTeamSelWidget->getPlayingTeams())
         {
             HWProto::addStringToBuffer(buf, QString("eammloadt %1").arg(ammostr.mid(0, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammprob %1").arg(ammostr.mid(cAmmoNumber, cAmmoNumber)));
@@ -93,7 +99,7 @@ void HWGame::commonConfig()
             HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
             if(!gamecfg->schemeData(21).toBool()) HWProto::addStringToBuffer(buf, QString("eammstore"));
             HWProto::addStringListToBuffer(buf,
-                it.next().TeamGameConfig(gamecfg->getInitHealth()));
+                team.TeamGameConfig(gamecfg->getInitHealth()));
             ;
         }
     }
@@ -187,6 +193,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
                     SendQuickConfig();
                     break;
                 }
+                case gtSave:
                 case gtDemo: break;
                 case gtNet: {
                     SendNetConfig();
@@ -320,9 +327,9 @@ void HWGame::AddTeam(const QString & teamname)
     TeamCount++;
 }
 
-void HWGame::PlayDemo(const QString & demofilename)
+void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 {
-    gameType = gtDemo;
+    gameType = isSave ? gtSave : gtDemo;
     QFile demofile(demofilename);
     if (!demofile.open(QIODevice::ReadOnly))
     {
@@ -392,9 +399,8 @@ void HWGame::KillAllTeams()
     if (m_pTeamSelWidget)
     {
         QByteArray buf;
-        QListIterator<HWTeam> it(m_pTeamSelWidget->getPlayingTeams());
-        while(it.hasNext())
-            HWProto::addStringToBuffer(buf, QString("eteamgone %1").arg(it.next().TeamName));
+        foreach(HWTeam team, m_pTeamSelWidget->getPlayingTeams())
+            HWProto::addStringToBuffer(buf, QString("eteamgone %1").arg(team.TeamName));
         RawSendIPC(buf);
     }
 }

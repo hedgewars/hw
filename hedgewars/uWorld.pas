@@ -1178,16 +1178,16 @@ isFirstFrame:= false
 end;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs: LongInt;
+var EdgesDist, wdy, shs,z: LongInt;
     PrevSentPointTime: LongWord = 0;
 begin
 {$IFNDEF IPHONEOS}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus and (GameState <> gsConfirm) then
     uCursor.updatePosition();
 {$ENDIF}
-
+z:= round(200/zoom);
 if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
-    if (not autoCameraOn) or (abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4) then
+    if (not autoCameraOn) or ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
     begin
         FollowGear:= nil;
         prevPoint:= CursorPoint;
@@ -1195,8 +1195,8 @@ if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not 
     end
     else
     begin
-        CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
-        CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
+        CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * z + WorldDx) div 8;
+        CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y)+ hwSign(FollowGear^.dY) * z + WorldDy)) div 8;
     end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
@@ -1314,9 +1314,12 @@ end;
 
 procedure ShakeCamera(amount: LongWord);
 begin
-    amount:= Max(1, amount);
-    WorldDx:= WorldDx - amount + LongInt(getRandom(1 + amount * 2));
-    WorldDy:= WorldDy - amount + LongInt(getRandom(1 + amount * 2));
+    if isCursorVisible then exit;
+    amount:= Max(1, round(amount*zoom/2));
+    WorldDx:= WorldDx - amount + LongInt(random(1 + amount * 2));
+    WorldDy:= WorldDy - amount + LongInt(random(1 + amount * 2));
+    //CursorPoint.X:= CursorPoint.X - amount + LongInt(random(1 + amount * 2));
+    //CursorPoint.Y:= CursorPoint.Y - amount + LongInt(random(1 + amount * 2))
 end;
 
 

@@ -53,7 +53,6 @@ with HHGear^.Hedgehog^ do
     HHGear^.Message:= HHGear^.Message and not gmSlot;
     ammoidx:= 0;
     if ((HHGear^.State and (gstAttacking or gstAttacked)) <> 0) or
-       (TargetPoint.X <> NoPointX) or
        ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
        ((HHGear^.State and gstHHDriven) = 0) then exit;
     ChangeAmmo:= true;
@@ -423,7 +422,8 @@ with Gear^,
            end
         end else Message:= Message and not gmAttack;
      end;
-     TargetPoint.X := NoPointX
+     TargetPoint.X := NoPointX;
+     ScriptCall('onHogAttack');	
 end;
 
 procedure AfterAttack;
@@ -774,6 +774,11 @@ if isFalling then
    begin
    if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then Gear^.dY:= _0;
    Gear^.State:= Gear^.State or gstMoving;
+   if (CurrentHedgehog^.Gear = Gear)
+        and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then 
+        begin
+        FollowGear:= Gear;
+        end;
    if isUnderwater then Gear^.dY:= Gear^.dY + cGravity / _2
    else
        begin
@@ -1033,7 +1038,7 @@ if (Gear^.Health = 0) then
         PrvInactive:= false;
         AllInactive:= false;
 
-        if not Gear^.Hedgehog^.Team^.hasGone then
+        if (Gear^.State and gstHHGone) = 0 then
             begin
             Gear^.Hedgehog^.Effects[hePoisoned] := false;
             if Gear^.Hedgehog^.Effects[heResurrectable] then begin
@@ -1047,8 +1052,8 @@ if (Gear^.Health = 0) then
             end
         else
             begin
-            Gear^.State:= Gear^.State or gstHHGone;
             Gear^.doStep:= @doStepHedgehogGone;
+
             // Gone message
             AddCaption(Format(GetEventString(eidGone), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
             end
@@ -1089,17 +1094,9 @@ if (Gear^.State and gstHHDriven) = 0 then
 else
     begin
     with Gear^.Hedgehog^ do
-        if Team^.hasGone then TeamGoneEffect(Team^);
-    doStepHedgehogDriven(Gear)
+        if Team^.hasGone then 
+            TeamGoneEffect(Team^)
+        else
+            doStepHedgehogDriven(Gear)
     end;
-end;
-
-procedure doStepHedgehogReturn(Gear: PGear);
-begin
-if (Gear^.Timer > 0) and ((GameTicks mod 20) = 0) then dec(Gear^.Timer)
-else if (Gear^.Timer = 0) then
-    begin
-    Gear^.doStep:= @doStepHedgehog;
-    Gear^.State:= Gear^.State and not gstTmpFlag;
-    end
 end;

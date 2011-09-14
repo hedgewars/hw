@@ -104,11 +104,11 @@ void SDLInteraction::addGameControllerKeys() const
 
             // Entry for "Axis Up"
             sprintf(sdlkeys[i][0], "j%da%du", jid, aid);
-            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2])) : axis + HWApplication::translate("binds (keys)", "(Up)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2])) : axis + HWApplication::translate("binds (keys)", "(Up)")).toUtf8().constData());
 
             // Entry for "Axis Down"
             sprintf(sdlkeys[i][0], "j%da%dd", jid, aid);
-            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2 + 1])) : axis + HWApplication::translate("binds (keys)", "(Down)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", ((isxb && aid < 5) ? (prefix + HWApplication::translate("binds (keys)", xbox360axes[aid * 2 + 1])) : axis + HWApplication::translate("binds (keys)", "(Down)")).toUtf8().constData());
         }
 
         // Register entries for all coolie hats of this joystick/gamepad
@@ -119,19 +119,19 @@ void SDLInteraction::addGameControllerKeys() const
 
             // Entry for "Hat Up"
             sprintf(sdlkeys[i][0], "j%dh%du", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Up)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Up)")).toUtf8().constData());
 
             // Entry for "Hat Down"
             sprintf(sdlkeys[i][0], "j%dh%dd", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Down)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Down)")).toUtf8().constData());
 
             // Entry for "Hat Left"
             sprintf(sdlkeys[i][0], "j%dh%dl", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Left)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Left)")).toUtf8().constData());
 
             // Entry for "Hat Right"
             sprintf(sdlkeys[i][0], "j%dh%dr", jid, hid);
-            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Right)")).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (hat + HWApplication::translate("binds (keys)", "(Right)")).toUtf8().constData());
         }
 
         // Register entries for all buttons of this joystick/gamepad
@@ -139,7 +139,7 @@ void SDLInteraction::addGameControllerKeys() const
         {
             // Buttons
             sprintf(sdlkeys[i][0], "j%db%d", jid, bid);
-            sprintf(sdlkeys[i++][1], "%s", (prefix + ((isxb && bid < 10) ? (HWApplication::translate("binds (keys)", xb360buttons[bid]) + QString(" ")) : HWApplication::translate("binds (keys)", "Button") + QString(" %1").arg(bid + 1))).toStdString().c_str());
+            sprintf(sdlkeys[i++][1], "%s", (prefix + ((isxb && bid < 10) ? (HWApplication::translate("binds (keys)", xb360buttons[bid]) + QString(" ")) : HWApplication::translate("binds (keys)", "Button") + QString(" %1").arg(bid + 1))).toUtf8().constData());
         }
         // Close the game controller as we no longer need it
         SDL_JoystickClose(joy);

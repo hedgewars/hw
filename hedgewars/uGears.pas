@@ -43,6 +43,8 @@ function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; p
 function  GetAmmo: TAmmoType;
 function  GetUtility: TAmmoType;
 procedure ResurrectHedgehog(gear: PGear);
+procedure HideHog(HH: PHedgehog);
+procedure RestoreHog(HH: PHedgehog);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
@@ -75,7 +77,6 @@ procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
 procedure HedgehogStep(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear); forward;
-procedure doStepHedgehogReturn(Gear: PGear); forward;
 procedure HedgehogChAngle(HHGear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure PickUp(HH, Gear: PGear); forward;
@@ -218,7 +219,6 @@ gear^.dY:= dY;
 gear^.doStep:= doStepHandlers[Kind];
 gear^.CollisionIndex:= -1;
 gear^.Timer:= Timer;
-gear^.Z:= cUsualZ;
 gear^.FlightTime:= 0;
 gear^.uid:= Counter;
 gear^.SoundChannel:= -1;
@@ -226,6 +226,8 @@ gear^.ImpactSound:= sndNone;
 gear^.nImpactSounds:= 0;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
+if Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then gear^.Z:= cHHZ+1
+else gear^.Z:= cUsualZ;
 
 if CurrentHedgehog <> nil then
     begin
@@ -372,7 +374,8 @@ case Kind of
                 gear^.Elasticity:= _0_4;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _6;
-                gear^.Health:= cBarrelHealth
+                gear^.Health:= cBarrelHealth;
+                gear^.Z:= cHHZ-1
                 end;
   gtDEagleShot: begin
                 gear^.Radius:= 1;
@@ -427,6 +430,11 @@ case Kind of
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_3;
                 gear^.Timer:= 0
+                end;
+      gtTardis: begin
+                gear^.Timer:= 0;
+                gear^.Pos:= 1;
+                gear^.Z:= cCurrHHZ+1;
                 end;
       gtMortar: begin
                 gear^.Radius:= 4;
@@ -595,6 +603,7 @@ if (Gear^.Kind = gtPortal) then
 else if Gear^.Kind = gtHedgehog then
     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
         begin
+        AttackBar:= 0;
         Gear^.Message:= gmDestroy;
         CurAmmoGear^.Message:= gmDestroy;
         exit
@@ -612,6 +621,7 @@ else if Gear^.Kind = gtHedgehog then
         team:= Gear^.Hedgehog^.Team;
         if CurrentHedgehog^.Gear = Gear then
             begin
+            AttackBar:= 0;
             FreeActionsList; // to avoid ThinkThread on drawned gear
             if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (CurrentHedgehog^.MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
             end;
@@ -938,7 +948,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             end;
         if delay2 = 0 then
             begin
-            if (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.State and gstAttacked = 0) then SweepDirty;
+            if (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.State and gstAttacked = 0) and (CurAmmoGear = nil) then SweepDirty;
             CheckNoDamage;
             AliveCount:= 0; // shorter version of check for win to allow typical step activity to proceed
             for i:= 0 to Pred(ClansCount) do
@@ -985,7 +995,10 @@ if skipFlag then
 if ((GameTicks and $FFFF) = $FFFF) then
     begin
     if (not CurrentTeam^.ExtDriven) then
-        SendIPCTimeInc;
+        begin
+        SendIPC('#');
+        AddFileLog('hiTicks increment message sent')
+        end;
 
     if (not CurrentTeam^.ExtDriven) or CurrentTeam^.hasGone then
         inc(hiTicks) // we do not recieve a message for this
@@ -1450,7 +1463,11 @@ while i > 0 do
                         ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg, dsShove)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
-                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
+                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then 
+                        begin
+                        if (Ammo^.Hedgehog^.Gear <> nil) then Ammo^.Hedgehog^.Gear^.State:= Ammo^.Hedgehog^.Gear^.State and not gstNotKickable;
+                        ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
+                        end;
 
                     DeleteCI(Gear);
                     if (Gear^.Kind = gtHedgehog) and Gear^.Hedgehog^.King then
@@ -1640,6 +1657,7 @@ end;
 procedure ResurrectHedgehog(gear: PGear);
 var tempTeam : PTeam;
 begin
+    AttackBar:= 0;
     gear^.dX := _0;
     gear^.dY := _0;
     gear^.Damage := 0;
@@ -1737,7 +1755,6 @@ i:= Low(TAmmoType);
 if (t > 0) then
     begin
     t:= GetRandom(t);
-    AddFileLog(inttostr(t)+' --------------');
     while t >= 0 do
       begin
       inc(i);

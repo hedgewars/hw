@@ -30,6 +30,7 @@ const DIR_N: direction = (x: 0; y: -1);
 
 procedure initModule;
 procedure freeModule;
+procedure DrawBottomBorder;
 procedure GenMap;
 function  GenPreview: TPreview;
 
@@ -1070,10 +1071,10 @@ begin
             begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
-                    if (Land[y, x-1] = lfBasic) and (Land[y, x-1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x-1]
-                    else if (Land[y, x+1] = lfBasic) and (Land[y, x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
-                    else if (Land[y-1, x] = lfBasic) and (Land[y-1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x]
-                    else if (Land[y+1, x] = lfBasic) and (Land[y+1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x];
+                    if (Land[y, x-1] = lfBasic) and (LandPixels[y, x-1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x-1]
+                    else if (Land[y, x+1] = lfBasic) and (LandPixels[y, x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
+                    else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x]
+                    else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x];
                     if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (128 shl AShift)
                     end;
                 Land[y,x]:= lfObject
@@ -1090,10 +1091,10 @@ begin
             begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
-                    if (Land[y, x-1] = lfBasic) and (Land[y,x-1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x-1]
-                    else if (Land[y, x+1] = lfBasic) and (Land[y,x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
-                    else if (Land[y+1, x] = lfBasic) and (Land[y+1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x]
-                    else if (Land[y-1, x] = lfBasic) and (Land[y-1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x];
+                    if (Land[y, x-1] = lfBasic) and (LandPixels[y,x-1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x-1]
+                    else if (Land[y, x+1] = lfBasic) and (LandPixels[y,x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
+                    else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x]
+                    else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x];
                     if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (64 shl AShift)
                     end;
                 Land[y,x]:= lfObject
@@ -1132,9 +1133,14 @@ var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
     x, y, cpX, cpY: Longword;
 begin
-    tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-    if (tmpsurf = nil) and (mapName <> '') then
-        tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName +'/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then
+    begin
+    mapName:= ExtractFileName(Pathz[ptMapCurrent]);
+    tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    end;
 
     if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
     begin
@@ -1178,11 +1184,11 @@ AddProgress;
 tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
-begin
+    begin
     mapName:= ExtractFileName(Pathz[ptMapCurrent]);
     tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
     if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
-end;
+    end;
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 
 // unC0Rr - should this be passed from the GUI? I am not sure which layer does what
@@ -1220,6 +1226,25 @@ BlitImageAndGenerateCollisionInfo(
 SDL_FreeSurface(tmpsurf);
 
 LoadMask(mapname);
+end;
+
+procedure DrawBottomBorder; // broken out from other borders for doing a floor-only map, or possibly updating bottom during SD
+var x, w, c: Longword;
+begin
+for w:= 0 to 23 do
+    for x:= leftX to rightX do
+        begin
+        Land[cWaterLine-1 - w, x]:= lfIndestructible;
+        if (x + w) mod 32 < 16 then
+            c:= AMask
+        else
+            c:= AMask or RMask or GMask; // FF00FFFF
+
+        if (cReducedQuality and rqBlurryLand) = 0 then
+            LandPixels[cWaterLine-1 - w, x]:= c
+        else
+            LandPixels[(cWaterLine-1 - w) div 2, x div 2]:= c
+        end
 end;
 
 procedure GenMap;
@@ -1272,7 +1297,7 @@ if hasBorder then
     for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
         begin
         for y:= topY to LAND_HEIGHT - 1 do
-            begin
+                begin
                 Land[y, leftX + w]:= lfIndestructible;
                 Land[y, rightX - w]:= lfIndestructible;
                 if (y + w) mod 32 < 16 then
@@ -1281,32 +1306,34 @@ if hasBorder then
                     c:= AMask or RMask or GMask; // FF00FFFF
 
                 if (cReducedQuality and rqBlurryLand) = 0 then
-                begin
+                    begin
                     LandPixels[y, leftX + w]:= c;
                     LandPixels[y, rightX - w]:= c;
-                end
+                    end
                 else
-                begin
+                    begin
                     LandPixels[y div 2, (leftX + w) div 2]:= c;
                     LandPixels[y div 2, (rightX - w) div 2]:= c;
+                    end;
                 end;
-            end;
 
         for x:= leftX to rightX do
             begin
-                Land[topY + w, x]:= lfIndestructible;
-                if (x + w) mod 32 < 16 then
-                    c:= AMask
-                else
-                    c:= AMask or RMask or GMask; // FF00FFFF
+            Land[topY + w, x]:= lfIndestructible;
+            if (x + w) mod 32 < 16 then
+                c:= AMask
+            else
+                c:= AMask or RMask or GMask; // FF00FFFF
 
-                if (cReducedQuality and rqBlurryLand) = 0 then
-                    LandPixels[topY + w, x]:= c
-                else
-                    LandPixels[(topY + w) div 2, x div 2]:= c;
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[topY + w, x]:= c
+            else
+                LandPixels[(topY + w) div 2, x div 2]:= c;
             end;
         end;
     end;
+
+if (GameFlags and gfBottomBorder) <> 0 then DrawBottomBorder;
 
 if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false;
 

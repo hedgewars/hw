@@ -215,7 +215,7 @@ if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE;
 FillAmmoStore(hhammo, ammos);
 CurWeapon:= GetAmmoEntry(Hedgehog);
 with Hedgehog, CurWeapon^ do
-        if Count = 0 then
+        if (Count = 0) or (AmmoType = amNothing) then
             begin
             PackAmmo(Ammo, Ammoz[AmmoType].Slot);
             CurAmmoType:= amNothing

@@ -295,11 +295,12 @@ PageOptions::PageOptions(QWidget* parent) :
             CBResolution = new QComboBox(AGGroupBox);
             GBAreslayout->addWidget(CBResolution);
             GBAlayout->addLayout(GBAreslayout);
+            connect(CBResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(setResolution(int)));
 
             CBFullscreen = new QCheckBox(AGGroupBox);
             CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
             GBAlayout->addWidget(CBFullscreen);
-            connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(void)));
+            connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(int)));
 
             QLabel * quality = new QLabel(AGGroupBox);
             quality->setText(QLabel::tr("Quality"));
@@ -313,6 +314,8 @@ PageOptions::PageOptions(QWidget* parent) :
             SLQuality->setFixedWidth(150);
             GBAqualayout->addWidget(SLQuality);
             GBAlayout->addLayout(GBAqualayout);
+            connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
+
             QLabel * stereo = new QLabel(AGGroupBox);
             stereo->setText(QLabel::tr("Stereo rendering"));
             GBAstereolayout->addWidget(stereo);
@@ -402,34 +405,50 @@ PageOptions::PageOptions(QWidget* parent) :
     BtnBack->setFixedHeight(BtnSaveOptions->height());
     BtnBack->setFixedWidth(BtnBack->width()+2);
     BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
+
+    previousQuality = this->SLQuality->value();
+    previousResolutionIndex = this->CBResolution->currentIndex();
+    previousFullscreenValue = this->CBFullscreen->isChecked();
 }
 
 void PageOptions::forceFullscreen(int index)
 {
+    bool forced = (index == 7 || index == 8 || index == 9);
+
     if (index != 0) {
-        previousFullscreenValue = this->CBFullscreen->isChecked();
-        this->CBFullscreen->setChecked(true);
-        this->CBFullscreen->setEnabled(false);
-        previousQuality = this->SLQuality->value();
         this->SLQuality->setValue(this->SLQuality->maximum());
         this->SLQuality->setEnabled(false);
+        this->CBFullscreen->setEnabled(!forced);
+        this->CBFullscreen->setChecked(forced ? true : previousFullscreenValue);
+        this->CBResolution->setCurrentIndex(forced ? 0 : previousResolutionIndex);
     } else {
-        this->CBFullscreen->setChecked(previousFullscreenValue);
+        this->SLQuality->setEnabled(true);
         this->CBFullscreen->setEnabled(true);
         this->SLQuality->setValue(previousQuality);
-        this->SLQuality->setEnabled(true);
+        this->CBFullscreen->setChecked(previousFullscreenValue);
+        this->CBResolution->setCurrentIndex(previousResolutionIndex);
     }
 }
 
-void PageOptions::setFullscreen(void)
+void PageOptions::setQuality(int value)
 {
-    int tmp = this->CBResolution->currentIndex();
-    if (this->CBFullscreen->isChecked())
-        this->CBResolution->setCurrentIndex(0);
-    else
-        this->CBResolution->setCurrentIndex(previousResolutionIndex);
-    previousResolutionIndex = tmp;
-    this->CBResolution->setEnabled(!this->CBFullscreen->isChecked());
+    int index = this->CBStereoMode->currentIndex();
+    if (index == 0)
+        previousQuality = this->SLQuality->value();
+}
+
+void PageOptions::setFullscreen(int state)
+{
+    int index = this->CBStereoMode->currentIndex();
+    if (index != 7 && index != 8 && index != 9)
+        previousFullscreenValue = this->CBFullscreen->isChecked();
+}
+
+void PageOptions::setResolution(int state)
+{
+    int index = this->CBStereoMode->currentIndex();
+    if (index != 7 && index != 8 && index != 9)
+        previousResolutionIndex = this->CBResolution->currentIndex();
 }
 
 void PageOptions::trimNetNick()

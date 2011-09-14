@@ -25,12 +25,15 @@ uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
 
 var
 /////// init flags ///////
-    cMinScreenWidth   : LongInt     = 480;
-    cMinScreenHeight  : LongInt     = 320;
-    cScreenWidth      : LongInt     = 1024;
-    cScreenHeight     : LongInt     = 768;
-    cOrigScreenWidth  : LongInt     = 1024;
-    cOrigScreenHeight : LongInt     = 768;
+    cMinScreenWidth    : LongInt     = 640;
+    cMinScreenHeight   : LongInt     = 480;
+    cScreenWidth       : LongInt     = 1024;
+    cScreenHeight      : LongInt     = 768;
+    cOrigScreenWidth   : LongInt     = 1024;
+    cOrigScreenHeight  : LongInt     = 768;
+    cNewScreenWidth    : LongInt     = 1024;
+    cNewScreenHeight   : LongInt     = 768;
+    cScreenResizeDelay : LongWord    = 0;
     cBits           : LongInt     = 32;
     ipcPort         : Word        = 0;
     cFullScreen     : boolean     = false;
@@ -487,7 +490,7 @@ const
             (FileName:  'amMolotov'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),//sprHandMolotov
             (FileName:  'Molotov'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMolotov
+            Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMolotov
             (FileName: 'Smoke'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  22; Height: 22; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprSmoke
             (FileName: 'SmokeWhite'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -614,7 +617,9 @@ const
             (FileName:   'SDSplash'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
             Width:  80; Height: 50; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSDSplash
             (FileName:  'SDDroplet'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
-            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true)// sprSDDroplet
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprSDDroplet
+            (FileName:  'TARDIS'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  48; Height: 79; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true)// sprTardis
             );
 
 
@@ -751,7 +756,8 @@ const
             (FileName:            'parachute.ogg'; Path: ptSounds),// sndParachute
             (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
             (FileName:            'hogchant3.ogg'; Path: ptSounds),// sndResurrector
-            (FileName:                'plane.ogg'; Path: ptSounds) // sndPlane
+            (FileName:                'plane.ogg'; Path: ptSounds), // sndPlane
+            (FileName:                'TARDIS.ogg'; Path: ptSounds) // sndTardis
             );
 
     Ammoz: array [TAmmoType] of record

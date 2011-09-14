@@ -72,7 +72,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         SetBinds(CurrentTeam^.Binds);
                         //CurrentHedgehog^.Gear^.Message:= 0; <- produces bugs with further save restoring and demos
                         isSoundEnabled:= isSEBackup;
-                        if isSoundEnabled then playMusic;
+                        PlayMusic;
                         GameType:= gmtLocal;
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         AddVisualGear(0, 0, vgtSmoothWindBar);

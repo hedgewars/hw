@@ -278,6 +278,11 @@ const
     IMG_INIT_PNG = $00000002;
     IMG_INIT_TIF = $00000004;
 
+    {* SDL_EventMask type definition *}
+{$IFNDEF SDL13}
+    SDL_ALLEVENTS = $FFFFFFFF;
+{$ENDIF}
+
 /////////////////////////////////////////////////////////////////
 ///////////////////////  TYPE DEFINITIONS ///////////////////////
 /////////////////////////////////////////////////////////////////
@@ -347,6 +352,7 @@ type
 {$ENDIF}
         end;
 
+    SDL_eventaction = (SDL_ADDEVENT = 0, SDL_PEEPEVENT, SDL_GETEVENT);
 
     PSDL_Surface = ^TSDL_Surface;
     TSDL_Surface = record
@@ -612,6 +618,8 @@ type
 {$ENDIF}
         end;
 
+    TSDL_EventFilter = function( event : PSDL_Event ): Integer; cdecl;
+
     PByteArray = ^TByteArray;
     TByteArray = array[0..65535] of Byte;
     PLongWordArray = ^TLongWordArray;
@@ -793,6 +801,10 @@ function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt;
 
 procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;
 function  SDL_SetHint(name, value: PChar): boolean; cdecl; external SDLLibName;
+
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongInt): LongInt; cdecl; external SDLLibName;
+{$ELSE}
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: LongInt): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
@@ -801,6 +813,7 @@ function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_PumpEvents; cdecl; external SDLLibName;
 function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 function  SDL_WaitEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
+procedure SDL_SetEventFilter( filter : TSDL_EventFilter ); cdecl; external SDLLibName;
 
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 

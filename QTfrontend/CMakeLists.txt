@@ -4,7 +4,6 @@ set(QT_MIN_VERSION "4.5.0")
 set(QT_USE_QTCORE TRUE)
 set(QT_USE_QTGUI TRUE)
 set(QT_USE_QTNETWORK TRUE)
-set(QT_USE_QTWEBKIT TRUE)
 set(QT_USE_QTSVG FALSE)
 set(QT_USE_QTXML FALSE)
 set(QT_USE_QTOPENGL FALSE)
@@ -13,6 +12,16 @@ set(QT_USE_QTMAIN TRUE)
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
+# Check if we need zlib
+check_library_exists(${QT_QTCORE_LIBRARY} inflateInit2_ ${QT_LIBRARY_DIR} QT_PROVIDES_ZLIB_FUNCTIONS)
+
+if(NOT QT_PROVIDES_ZLIB_FUNCTIONS)
+    find_package(ZLIB REQUIRED)
+
+    set(HW_LINK_LIBS ${ZLIB_LIBRARIES} ${HW_LINK_LIBS})
+endif()
+
+
 # Configure for SDL
 find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
@@ -20,6 +29,7 @@ find_package(SDL_mixer REQUIRED)
 include_directories(.)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
     include_directories("/usr/local/include")
@@ -115,6 +125,7 @@ set(hwfr_src
     drawmapwidget.cpp
     drawmapscene.cpp
     themesmodel.cpp
+    databrowser.cpp
     )
 
 #xfire integration
@@ -196,6 +207,7 @@ set(hwfr_moc_hdrs
     drawmapwidget.h
     drawmapscene.h
     themesmodel.h
+    databrowser.h
     )
 
 set(hwfr_hdrs
@@ -214,7 +226,7 @@ qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 if(APPLE)
     set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
-    set(HW_LINK_LIBS IOKit)
+    set(HW_LINK_LIBS IOKit ${HW_LINK_LIBS})
 
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle)
@@ -236,6 +248,7 @@ add_executable(hedgewars WIN32
 
 
 set(HW_LINK_LIBS
+    quazip
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
@@ -247,7 +260,7 @@ if(WIN32 AND NOT UNIX)
         set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
     endif()
 
-    set(	HW_LINK_LIBS
+    set(HW_LINK_LIBS
         ${HW_LINK_LIBS}
         ole32
         oleaut32
@@ -257,7 +270,7 @@ if(WIN32 AND NOT UNIX)
 endif()
 
 
-target_link_libraries(hedgewars	${HW_LINK_LIBS})
+target_link_libraries(hedgewars ${HW_LINK_LIBS})
 
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})

@@ -259,18 +259,20 @@ var ii: TSprite;
     tmpsurf: PSDL_Surface;
     i: LongInt;
 begin
+AddFileLog('StoreLoad()');
 
-for fi:= Low(THWFont) to High(THWFont) do
-    with Fontz[fi] do
-        begin
-        s:= UserPathz[ptFonts] + '/' + Name;
-        if not FileExists(s) then s:= Pathz[ptFonts] + '/' + Name;
-        WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
-        Handle:= TTF_OpenFont(Str2PChar(s), Height);
-        SDLTry(Handle <> nil, true);
-        TTF_SetFontStyle(Handle, style);
-        WriteLnToConsole(msgOK)
-        end;
+if not reload then
+    for fi:= Low(THWFont) to High(THWFont) do
+        with Fontz[fi] do
+            begin
+            s:= UserPathz[ptFonts] + '/' + Name;
+            if not FileExists(s) then s:= Pathz[ptFonts] + '/' + Name;
+            WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
+            Handle:= TTF_OpenFont(Str2PChar(s), Height);
+            SDLTry(Handle <> nil, true);
+            TTF_SetFontStyle(Handle, style);
+            WriteLnToConsole(msgOK)
+            end;
 
 WriteNames(fnt16);
 MakeCrossHairs;
@@ -345,10 +347,10 @@ for ii:= Low(TSprite) to High(TSprite) do
 // This should maybe be flagged. It wastes quite a bit of memory.
                 if not reload then
                     begin
-{$IFNDEF DARWIN & WIN32}
-                    if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
-{$ELSE}
+{$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
                     Surface:= tmpsurf 
+{$ELSE}
+                    if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
 {$ENDIF}
                     end
                 end
@@ -756,7 +758,6 @@ begin
     SDL_GL_SwapBuffers();
 {$ENDIF}
     inc(Step);
-
 end;
 
 procedure FinishProgress;
@@ -764,6 +765,7 @@ begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
     uMobile.GameLoaded();
+    Step:= 0
 end;
 
 function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
@@ -948,7 +950,6 @@ var flags: Longword = 0;
     reinit: boolean;
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
-    s:= s; // avoid compiler hint
     if Length(s) = 0 then cFullScreen:= not cFullScreen
     else cFullScreen:= s = '1';
 
@@ -981,7 +982,8 @@ begin
         end
     else
         begin
-{$IFDEF DARWIN | WIN32}
+        SetScale(cDefaultZoomLevel);
+{$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
         reinit:= true;
 {$ENDIF}
         AddFileLog('Freeing old primary surface...');
@@ -990,7 +992,13 @@ begin
         end;
 
     // these attributes must be set up before creating the sdl window
+{$IFNDEF WIN32}
+(* On a large number of testers machines, SDL default to software rendering when opengl attributes were set.
+   These attributes were "set" after CreateWindow in .15, which probably did nothing.
+   IMO we should rely on the gl_config defaults from SDL, and use SDL_GL_GetAttribute to possibly post warnings if any
+   bad values are set.  *)
     SetupOpenGLAttributes();
+{$ENDIF}
 {$IFDEF SDL13}
     // these values in x and y make the window appear in the center
     x:= SDL_WINDOWPOS_CENTERED_MASK;
@@ -1038,7 +1046,9 @@ begin
 
         StoreRelease(true);
         StoreLoad(true);
+
         ResetLand;
+
         UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT)
         end;
 end;

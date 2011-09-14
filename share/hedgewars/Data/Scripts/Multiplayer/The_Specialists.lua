@@ -1,5 +1,5 @@
 ----------------------------------
--- THE SPECIALISTS MODE 0.5
+-- THE SPECIALISTS MODE 0.6
 -- by mikade
 ----------------------------------
 
@@ -34,6 +34,11 @@
 ----------------
 -- provision for variable minetimer / demo mines set to 5000ms
 -- don't autoswitch if player only has 1 hog on his team
+
+----------------
+-- version 0.6
+----------------
+-- for the meanwhile, don't drop any crates except health crates
 
 --------------------
 --TO DO
@@ -79,7 +84,7 @@ function CreateTeam()
                 if z == 1 then
 
                         SetHogName(hhs[i],"Soldier")
-                        SetHogHat(hhs[i], "Vega")
+                        SetHogHat(hhs[i], "sf_vega")
                         SetHealth(hhs[i],200)
 
                 elseif z == 2 then
@@ -214,6 +219,7 @@ end
 function onGameInit()
         GameFlags = gfRandomOrder + gfResetWeps + gfInfAttack + gfPlaceHog
         Delay = 10
+	HealthCaseProb = 100
 end
 
 function onGameStart()
@@ -253,42 +259,42 @@ function onGameTick()
 	if (CurrentHedgehog ~= nil) then
 
 		currName = GetHogName(CurrentHedgehog)
-		
+
 		if (currName ~= lastName) and (switchStage > 100) then
 			AddCaption(loc("Switched to ") .. currName .. "!")
-			AssignAmmo()		
+			AssignAmmo()
 		end
 
-		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and (switchStage < 100) then			
-			
-			AddCaption(loc("Prepare yourself") .. ", " .. currName .. "!") 
+		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and (switchStage < 100) then
+
+			AddCaption(loc("Prepare yourself") .. ", " .. currName .. "!")
 
 			hogCounter = 0
 			runOnHogsInTeam(CountHog, GetHogTeamName(CurrentHedgehog) )
 
 			if hogCounter > 1 then
 
-				switchStage = switchStage + 1	
-			
+				switchStage = switchStage + 1
+
 				if switchStage == 1 then
 					AddAmmo(CurrentHedgehog, amSwitch, 1)
-				
+
 				elseif switchStage == 2 then
 					ParseCommand("setweap " .. string.char(amSwitch))
 				elseif switchStage == 3 then
-					SetGearMessage(CurrentHedgehog,gmAttack) 
+					SetGearMessage(CurrentHedgehog,gmAttack)
 				elseif switchStage == 4 then
 					switchStage = 110
 					AddAmmo(CurrentHedgehog, amSwitch, 0)
 				end
-			
+
 			else
 				switchStage = 110
 			end
 
 
-		end		
-		
+		end
+
 		lastName = currName
 
 	end
@@ -301,12 +307,12 @@ function onGearAdd(gear)
                 hhs[numhhs] = gear
                 numhhs = numhhs + 1
         elseif (GetGearType(gear) == gtMine) and (started == true) then
-		SetTimer(gear,5000)	
+		SetTimer(gear,5000)
 	end
-	
+
 	if (GetGearType(gear) == gtHedgehog) or (GetGearType(gear) == gtResurrector) then
 		trackGear(gear)
-	end 
+	end
 
 
 end
@@ -314,7 +320,7 @@ end
 function onGearDelete(gear)
 	if (GetGearType(gear) == gtHedgehog) or (GetGearType(gear) == gtResurrector) then
 		trackDeletion(gear)
-	end 
+	end
 end
 
 function onAmmoStoreInit()

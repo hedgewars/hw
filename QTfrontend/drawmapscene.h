@@ -48,6 +48,8 @@ private:
     QBrush m_brush;
     QGraphicsPathItem  * m_currPath;
     Paths paths;
+    Paths oldPaths;
+    QList<QGraphicsItem *> oldItems;
 
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
     virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);

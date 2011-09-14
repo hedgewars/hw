@@ -359,30 +359,30 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Rückgängig</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Laden</translation>
+        <translation>Laden</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichern</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Gezeichnete Karte laden</translation>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
@@ -390,7 +390,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Save drawn map</source>
-        <translation type="unfinished"></translation>
+        <translation>Gezeichnete Karte sichern</translation>
     </message>
 </context>
 <context>
@@ -1351,7 +1351,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
-        <translation type="unfinished"></translation>
+        <translation>Handgezeichnete Karte</translation>
     </message>
     <message>
         <source>Disabled</source>

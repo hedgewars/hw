@@ -149,8 +149,12 @@ begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
-
-        while SDL_PollEvent(@event) <> 0 do
+        SDL_PumpEvents();
+        {$IFDEF SDL13}
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
+        {$ELSE}
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_ALLEVENTS) > 0 do
+        {$ENDIF}
         begin
             case event.type_ of
                 SDL_KEYDOWN: if GameState = gsChat then
@@ -176,14 +180,13 @@ begin
                             onFocusStateChanged()
                         end;
                 SDL_VIDEORESIZE: begin
-                    // using lower values causes widget overlap and video issues
-                    if event.resize.w > cMinScreenWidth then cScreenWidth:= event.resize.w
-                    else cScreenWidth:= cMinScreenWidth;
-                    if event.resize.h > cMinScreenHeight then cScreenHeight:= event.resize.h
-                    else cScreenHeight:= cMinScreenHeight;
-                    ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
-                    WriteLnToConsole('window resize');
-                    InitCameraBorders();
+                    // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
+                    // Change by sheepluva:
+                    // Let's only use even numbers for custom width/height since I ran into scaling issues with odd width values.
+                    // Maybe just fixes the symptom not the actual cause(?), I'm too tired to find out :P
+                    cNewScreenWidth:= max(2 * (event.resize.w div 2), cMinScreenWidth);
+                    cNewScreenHeight:= max(2 * (event.resize.h div 2), cMinScreenHeight);
+                    cScreenResizeDelay:= RealTicks+500;
                     end;
 {$ENDIF}
                 SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
@@ -193,6 +196,17 @@ begin
                 SDL_QUITEV: isTerminated:= true
             end; //end case event.type_ of
         end; //end while SDL_PollEvent(@event) <> 0 do
+        if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
+            begin
+            cScreenResizeDelay:= 0;
+            cScreenWidth:= cNewScreenWidth;
+            cScreenHeight:= cNewScreenHeight;
+
+            ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+            WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
+            ScriptOnScreenResize();
+            InitCameraBorders()
+            end;
 
         if isTerminated = false then
         begin
@@ -240,12 +254,10 @@ begin
     recordFileName:= gameArgs[10];
     cStereoMode:= smNone;
 {$ENDIF}
-    cMinScreenWidth:= cScreenWidth;
-    cMinScreenHeight:= cScreenHeight;
+    cMinScreenWidth:= min(cScreenWidth, cMinScreenWidth);
+    cMinScreenHeight:= min(cScreenHeight, cMinScreenHeight);
     cOrigScreenWidth:= cScreenWidth;
     cOrigScreenHeight:= cScreenHeight;
-    if 480 < cMinScreenWidth then cMinScreenWidth:= 480;
-    if 320 < cMinScreenHeight then cMinScreenHeight:= 320;
 
     initEverything(true);
 
