@@ -1832,7 +1832,6 @@ luaopen_table(luaState);
 // import some variables
 ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
 ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
-
 ScriptSetString('L', cLocale);
 
 // import game flags
