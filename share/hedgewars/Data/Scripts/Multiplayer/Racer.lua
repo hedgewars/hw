@@ -607,10 +607,6 @@ end
 
 function onGearDelete(gear)
 
-	if CurrentHedgehog ~= nil then
-		FollowGear(CurrentHedgehog)
-	end
-
 	if GetGearType(gear) == gtAirAttack then
 		cGear = nil
 	end
