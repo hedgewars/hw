@@ -1,6 +1,6 @@
 
 ------------------------------------------
--- RACER 0.1
+-- RACER 0.4
 -- map-independant racing script
 -- by mikade
 -----------------------------------------
@@ -44,6 +44,13 @@
 
 -- prevent WP being placed in land
 -- prevent waypoints being placed outside border
+
+-------
+-- 0.4
+-------
+
+-- update user feedback
+-- add more sounds
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -267,6 +274,7 @@ function AdjustScores()
 			loc("TRACK COMPLETED"),
 			loc("NEW RACE RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" ..
 			loc("WINNING TIME: ") .. bestTimeComment, 0, 4000)
+			PlaySound(sndHomerun)
 		else	-- best time for the clan
 			ShowMission(loc("RACER"),
 			loc("TRACK COMPLETED"),
@@ -278,6 +286,7 @@ function AdjustScores()
 		loc("TRACK COMPLETED"),
 		loc("TIME: ") .. (trackTime/1000) ..loc("s") .. "|" ..
 		loc("WINNING TIME: ") .. bestTimeComment, -amSkip, 4000)
+		PlaySound(sndHellish)
 	end
 
 
@@ -485,7 +494,8 @@ function onGameTick()
 		DeleteGear(cGear)
 
 		if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-			AddCaption(loc("Please place the way-point in the open."))
+			AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
+			PlaySound(sndDenied)
 		else
 			PlaceWayPoint(x, y)
 			if wpCount == wpLimit then
