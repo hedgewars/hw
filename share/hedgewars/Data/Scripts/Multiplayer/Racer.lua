@@ -38,6 +38,13 @@
 -- remove other air-attack based weps
 -- turn off water rise for sd
 
+-------
+-- 0.3
+-------
+
+-- prevent WP being placed in land
+-- prevent waypoints being placed outside border
+
 -----------------------------
 -- SCRIPT BEGINS
 -----------------------------
@@ -100,7 +107,7 @@ local wpX = {}
 local wpY = {}
 local wpCol = {}
 local wpActive = {}
-local wpRad = 450 --75 
+local wpRad = 450 --75
 local wpCount = 0
 local wpLimit = 5
 
@@ -173,7 +180,7 @@ end
 function CheckWaypoints()
 
 	trackFinished = true
-	
+
 	for i = 0, (wpCount-1) do
 
 		g1X, g1Y = GetGearPosition(CurrentHedgehog)
@@ -187,9 +194,9 @@ function CheckWaypoints()
 		--	AddCaption(dist .. "/" .. (wpRad*wpRad) )
 		--end
 
-		NR = (48/100*wpRad)/2		
+		NR = (48/100*wpRad)/2
 
-		if dist < (NR*NR) then		
+		if dist < (NR*NR) then
 		--if dist < (wpRad*wpRad) then
 			--AddCaption("howdy")
 			wpActive[i] = true
@@ -199,7 +206,7 @@ function CheckWaypoints()
 			wpRem = 0
 			for k = 0, (wpCount-1) do
 				if wpActive[k] == false then
-					wpRem = wpRem + 1				
+					wpRem = wpRem + 1
 				end
 			end
 
@@ -256,20 +263,20 @@ function AdjustScores()
 
 	if newScore == true then
 		if trackTime == bestTime then -- best time of the race
-			ShowMission(loc("RACER"), 
-			loc("TRACK COMPLETED"), 
-			loc("NEW RACE RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" .. 
+			ShowMission(loc("RACER"),
+			loc("TRACK COMPLETED"),
+			loc("NEW RACE RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" ..
 			loc("WINNING TIME: ") .. bestTimeComment, 0, 4000)
 		else	-- best time for the clan
-			ShowMission(loc("RACER"), 
-			loc("TRACK COMPLETED"), 
-			loc("NEW CLAN RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" .. 
+			ShowMission(loc("RACER"),
+			loc("TRACK COMPLETED"),
+			loc("NEW CLAN RECORD: ") .. (trackTime/1000) ..loc("s") .. "|" ..
 			loc("WINNING TIME: ") .. bestTimeComment, 4, 4000)
 		end
 	else -- not any kind of new score
-		ShowMission(loc("RACER"), 
-		loc("TRACK COMPLETED"), 
-		loc("TIME: ") .. (trackTime/1000) ..loc("s") .. "|" .. 
+		ShowMission(loc("RACER"),
+		loc("TRACK COMPLETED"),
+		loc("TIME: ") .. (trackTime/1000) ..loc("s") .. "|" ..
 		loc("WINNING TIME: ") .. bestTimeComment, -amSkip, 4000)
 	end
 
@@ -307,7 +314,7 @@ function CheckForNewRound()
 
 		roundNumber = roundNumber + 1
 
-		totalComment = ""		
+		totalComment = ""
 		for i = 0, (TeamsCount-1) do
 				if teamNameArr[i] ~= " " then				-- teamScore[teamClan[i]]
 					teamComment[i] = teamNameArr[i] .. ": " .. (teamScore[i]/1000) .. loc("s|")
@@ -317,9 +324,9 @@ function CheckForNewRound()
 				end
 		end
 
-		ShowMission(	loc("RACER"), 
-				loc("STATUS UPDATE"), 
-				loc("Rounds Complete: ") .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" .. 
+		ShowMission(	loc("RACER"),
+				loc("STATUS UPDATE"),
+				loc("Rounds Complete: ") .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" ..
 				loc("Best Team Times: ") .. "|" .. totalComment, 0, 4000)
 
 		-- end game if its at round limit
@@ -391,10 +398,10 @@ function onGameStart()
 	ShowMission	(
 				loc("RACER"),
 				loc("a Hedgewars mini-game"),
-				
+
 				loc("Build a track and race.") .. "|" ..
 				loc("Round Limit:") .. " " .. roundLimit .. "|" ..
-								
+
 				"", 4, 4000
 				)
 
@@ -409,18 +416,12 @@ function PlaceWayPoint(x,y)
 		wpY[wpCount] = y
 		wpCol[wpCount] = 0xffffffff
 		wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
-																		--100	  
+																		--100
 		SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
 
 		wpCount = wpCount + 1
 
 		AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
-
-		-- for some reason the code doesnt function if placed here		
-		--[[if wpCount == wpLimit then
-			AddCaption(loc("Race complexity limit reached."))
-			--DisableTumbler()
-		end]]
 
 	end
 
@@ -431,7 +432,7 @@ function onNewTurn()
 	CheckForNewRound()
 
 	racerActive = false
-	
+
 	trackTime = 0
 
 	currCount = 0 -- hopefully this solves problem
@@ -449,14 +450,14 @@ function onNewTurn()
 	if (gameOver == false) and (gameBegun == false) then
 		if wpCount >= 3 then
 			gameBegun = true
-			roundNumber = 0 
+			roundNumber = 0
 			firstClan = GetHogClan(CurrentHedgehog)
-			ShowMission(loc("RACER"), 
-			loc("GAME BEGUN!!!"), 
+			ShowMission(loc("RACER"),
+			loc("GAME BEGUN!!!"),
 			loc("Complete the track as fast as you can!"), 2, 4000)
 		else
-			ShowMission(loc("RACER"), 
-			loc("NOT ENOUGH WAYPOINTS"), 
+			ShowMission(loc("RACER"),
+			loc("NOT ENOUGH WAYPOINTS"),
 			loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
 			AddAmmo(CurrentHedgehog, amAirAttack, 4000)
 		end
@@ -477,38 +478,43 @@ end
 
 function onGameTick()
 
-	-- convert airstrikes into waypoints
+	-- airstrike detected, convert this into a potential waypoint spot
 	if cGear ~= nil then
 		x,y = GetGearTarget(cGear)
-		PlaceWayPoint(x, y)
+		
 		DeleteGear(cGear)
-		if wpCount == wpLimit then
-			AddCaption(loc("Race complexity limit reached."))
-			DisableTumbler()
-		end
-	end
 
+		if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
+			AddCaption(loc("Please place the way-point in the open."))
+		else
+			PlaceWayPoint(x, y)
+			if wpCount == wpLimit then
+				AddCaption(loc("Race complexity limit reached."))
+				DisableTumbler()
+			end
+		end
+
+	end
 
 
 	-- start the player tumbling with a boom once their turn has actually begun
 	if racerActive == false then
 
 		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) then
-			
+
 			-- if the gamehas started put the player in the middle of the first
 			--waypoint that was placed
 			if gameBegun == true then
-
 				AddCaption(loc("Good to go!"))
 				racerActive = true
 				trackTime = 0
-				
+
 				SetGearPosition(CurrentHedgehog, wpX[0], wpY[0])
 				AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
 				FollowGear(CurrentHedgehog)
 				ShowMission("...", "...", "...", 2, 1)
-				
-			else 
+
+			else
 				-- still in placement mode
 			end
 
@@ -523,9 +529,9 @@ function onGameTick()
 		--airstrike conversion used to be here
 
 		-- if the RACE has started, show tracktimes and keep tabs on waypoints
-		if (racerActive == true) and (gameBegun == true) then 
+		if (racerActive == true) and (gameBegun == true) then
 
-			--ghost			
+			--ghost
 			gTimer = gTimer + 1
 			if gTimer == 15 then
 				gTimer = 0
@@ -533,24 +539,24 @@ function onGameTick()
 			end
 
 			trackTime = trackTime + 1
-			
+
 			wpCheckCounter = wpCheckCounter + 1
 			if (wpCheckCounter == 100) then
-			
+
 				wpCheckCounter = 0
 				AddCaption(trackTime/1000,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
-				
+
 				if (CheckWaypoints() == true) then
 					AdjustScores()
 					racerActive = false
 					DisableTumbler()
 				end
-				
+
 			end
 
 		end
 
-		
+
 
 		-- if the player has expended his tunbling time, stop him tumbling
 		if TurnTimeLeft <= 1 then
@@ -568,8 +574,8 @@ function onGearResurrect(gear)
 	-- if the player stops and "dies" or flies into water, stop him racing
 	--[[if gear == CurrentHedgehog then
 		DisableTumbler()
-		ShowMission(loc("RACER"), 
-		loc("TRACK FAILED!"), 
+		ShowMission(loc("RACER"),
+		loc("TRACK FAILED!"),
 		loc("WINNING TIME: ") .. bestTimeComment, -amSkip, 4000)
 	end]]
 
@@ -584,7 +590,7 @@ function onGearAdd(gear)
 	end
 
 	if GetGearType(gear) == gtAirAttack then
-		cGear = gear		
+		cGear = gear
 	end
 
 end
@@ -596,14 +602,14 @@ function onGearDelete(gear)
 	end
 
 	if GetGearType(gear) == gtAirAttack then
-		cGear = nil		
+		cGear = nil
 	end
 
 end
 
 --[[function onAmmoStoreInit()
-	SetAmmo(amRope, 9, 0, 0, 0)	
-	SetAmmo(amJetpack, 9, 0, 0, 0)	
+	SetAmmo(amRope, 9, 0, 0, 0)
+	SetAmmo(amJetpack, 9, 0, 0, 0)
 	SetAmmo(amSkip, 9, 0, 0, 0)
 end]]
 
