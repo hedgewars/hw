@@ -832,16 +832,6 @@ var x, y, xx, yy, ty, tx: LongInt;
 begin
 bRes:= false;
 reCheck:= true;
-for y:= 0 to LAND_HEIGHT div 32 - 1 do
-    for x:= 0 to LAND_WIDTH div 32 - 1 do
-        if LandDirty[y, x] <> 0 then
-            begin
-            ty:= y * 32;
-            tx:= x * 32;
-            for yy:= ty to ty + 31 do
-                for xx:= tx to tx + 31 do
-                    Smooth(xx,yy)
-            end;
 
 while recheck do
     begin
@@ -850,7 +840,7 @@ while recheck do
         begin
         for x:= 0 to LAND_WIDTH div 32 - 1 do
             begin
-            if LandDirty[y, x] <> 0 then
+            if LandDirty[y, x] = 1 then
                 begin
                 updateBlock:= false;
                 resweep:= true;
@@ -889,11 +879,23 @@ while recheck do
                                 end;
                     end;
                 if updateBlock then UpdateLandTexture(tx, 32, ty, 32);
-                LandDirty[y, x]:= 0;
+                LandDirty[y, x]:= 2;
                 end;
             end;
         end;
      end;
+
+for y:= 0 to LAND_HEIGHT div 32 - 1 do
+    for x:= 0 to LAND_WIDTH div 32 - 1 do
+        if LandDirty[y, x] <> 0 then
+            begin
+            LandDirty[y, x]:= 0;
+            ty:= y * 32;
+            tx:= x * 32;
+            for yy:= ty to ty + 31 do
+                for xx:= tx to tx + 31 do
+                    Smooth(xx,yy)
+            end;
 
 SweepDirty:= bRes;
 end;
