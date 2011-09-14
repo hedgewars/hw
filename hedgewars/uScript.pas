@@ -1503,6 +1503,29 @@ begin
         lua_pushinteger(L, ord(CurrentHedgehog^.CurAmmoType));
     lc_getcurammotype := 1;
 end;
+
+// boolean TestRectForObstacle(x1, y1, x2, y2, landOnly)
+function lc_testrectforobstacle(L : Plua_State) : LongInt; Cdecl;
+var rtn: Boolean;
+begin
+    if lua_gettop(L) <> 5 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to TestRectForObstacle!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        rtn:= TestRectancleForObstacle(
+                    lua_tointeger(L, 1),
+                    lua_tointeger(L, 2),
+                    lua_tointeger(L, 3),
+                    lua_tointeger(L, 4),
+                    lua_toboolean(L, 5)
+                    );
+        lua_pushboolean(L, rtn);
+        end;
+    lc_testrectforobstacle:= 1
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1983,6 +2006,7 @@ lua_register(luaState, 'GetHogHat', @lc_gethoghat);
 lua_register(luaState, 'SetHogHat', @lc_sethoghat);
 lua_register(luaState, 'PlaceGirder', @lc_placegirder);
 lua_register(luaState, 'GetCurAmmoType', @lc_getcurammotype);
+lua_register(luaState, 'TestRectForObstacle', @lc_testrectforobstacle);
 
 
 ScriptClearStack; // just to be sure stack is empty
