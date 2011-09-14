@@ -572,18 +572,18 @@ type
 {$ENDIF}
         end;
 
-    SDL_TouchID = Int32;
-    SDL_FingerID = Int32;
+    SDL_TouchID = LongInt;
+    SDL_FingerID = LongInt;
 
     TSDL_TouchFingerEvent = record
-        type_: UInt32;
-        windowId: UInt32;
+        type_: LongWord;
+        windowId: LongWord;
         touchId: SDL_TouchID;
         fingerId: SDL_FingerID;
-        state, padding1, padding2, padding3: UInt8;
-        x,y: UInt16;
-        dx,dy: Int16;
-        pressure: UInt16;
+        state, padding1, padding2, padding3: Byte;
+        x,y: Word;
+        dx,dy: ShortInt;
+        pressure: Word;
     end;
 //TODO: implement SDL_TouchButtonEvent, SDL_MultiGestureEvent, SDL_DollarGestureEvent
 
