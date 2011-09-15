@@ -2,23 +2,27 @@
 * bugfixes
 
 0.9.15 -> ???:
- + New gameplay modes/styles: Racer, The Specialists, Tumbler, Space Invasion
+ + Stereoscopic rendering
  + Installing content (anything under Data/ - maps, sounds, and any such stuff) to user profile allows custom adding/overriding of any Data/ content
- + Sudden Death art
+ + Screen for downloadable content
+ + Allow up to 8 teams in a game
+ + New gameplay modes/styles: Racer, The Specialists, Tumbler, Space Invasion
  + New Weapon/Utility: Land Spray Gun
  + New Utility: Time Box
  + New Game mode: Tag team
  + New Game option for map bottom border
  + New Theme: Golf
  + Many new hats
+ + Sudden Death art
  + Get away time modifier (in %)
- + Allow up to 8 teams in a game
  + Shoppa scheme by default resets ammo
  + Shots are on a tenth of a second delay instead of a 1 and a quarter second delay (fast deagle/portal fire)
  + Defective mines explode if they take enough damage
  + Rope head can attach to hogs/crates/barrels again (rope still passes through them)
  + Control of grenade bounce
  + Drill Strike bombs don't explode when leaving ground, but after a (customizable!) timer
+ + Hammer impacts mines/barrels
+ + Seduction is an Area-of-Effect attack now
  + Ukranian localization of Default voice. support for localized voices
  + Theme cleanup, including the new theme config file change
  + Improvements in scoring and tracking damage
@@ -26,16 +30,20 @@
  + Mudball does not end turn
  + Indicator for height of plane when using napalm
  + Land smoothing (looks less pixelated on generation and damage)
- + Improved lua script support (e.g. possibility to change hats)
+ + Improved lua script support (e.g. set per-hog ammo, place girders, spawn fake crates, switch hogs, change hats)
  + The names of the ShoppaKingTournament winners are now written on the Trophies in the ShoppaKing and TrophyRace maps!
- + Allow window resizes during game.
+ + Allow window resizes during game
+ + Improved fullscreen capabilities
+ + Additional/new sounds (mine impact, sine gun, etc)
+ + Victory/flawless victory sounds
+ * Voices don't overlap (was needed more due to faster game actions due to shortened delays)
  * Prevent portaling to impossible locations better
  * Snow accumulates more smoothly
  * Rope should be less sticky now
  * Rope shouldn't be able to get Hogs stuck on walls anymore
  * Fix for last portal shot always being yellow
  * More accurate napalm strike drop location
- * AI fixes
+ * AI fixes (heh, yeah right)
  * Fixed locales, such as korean
  * Code refactoring
  * Various bug/leak fixes
@@ -46,6 +54,7 @@ Frontend/Menu and Netgame:
  + Improved nick sorting in lobby and rooms. (not case-sensitive, letters first, friend @ top, ignored @ bottom)
  + Display player count in lobby
  + Lobby: Player names of online players can be clicked in chat directly so that you don't have to find them in the player list
+ + Room names can be changed by the room admin without recreating the room
  * Fix invisible icons in popup menus
  * Various fixes and adjustments
 
