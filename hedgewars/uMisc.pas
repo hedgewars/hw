@@ -48,7 +48,7 @@ end;
 
 procedure MakeScreenshot(filename: shortstring);
 var p: Pointer;
-    size: Longword;
+    size: QWord;
     f: file;
     // Windows Bitmap Header
     head: array[0..53] of Byte = (
@@ -77,6 +77,10 @@ ScreenFadeSpeed:= 5;
 size:= cScreenWidth * cScreenHeight * 3;
 p:= GetMem(size);
 
+// memory could not be allocated
+if p = nil then
+    exit;
+
 // update header information and file name
 
 filename:= UserPathPrefix + '/Screenshots/' + filename + '.bmp';
@@ -102,7 +106,7 @@ head[$25]:= (size shr 24) and $ff;
 //glReadBuffer(GL_FRONT);
 glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGR, GL_UNSIGNED_BYTE, p);
 
-{$I-}
+{$IOCHECKS OFF}
 Assign(f, filename);
 Rewrite(f, 1);
 if IOResult = 0 then
@@ -111,9 +115,9 @@ if IOResult = 0 then
     BlockWrite(f, p^, size);
     Close(f);
     end;
-{$I+}
+{$IOCHECKS ON}
 
-FreeMem(p)
+FreeMem(p, size)
 end;
 
 // http://www.idevgames.com/forums/thread-5602-post-21860.html#pid21860
