@@ -290,7 +290,7 @@ end;
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 var i : LongInt;
 begin
-    if (not isSoundEnabled) or fastUntilLag or ((LastSound.snd = snd) and  (LastSound.voicepack = voicepack)) then exit;
+    if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd = snd) and  (LastVoice.voicepack = voicepack)) then exit;
     i:= 0;
     while (i<8) and (VoiceList[i].snd <> sndNone) do inc(i);
 
