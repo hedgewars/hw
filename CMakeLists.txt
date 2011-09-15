@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
 
 #detect Mercurial revision (if present)
-set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
+set(version_suffix "-RC3") #UNSET THIS VARIABLE AT RELEASE TIME
 set(HGCHANGED "")
 IF(version_suffix MATCHES "-dev")
 	set(HW_DEV true)
