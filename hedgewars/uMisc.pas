@@ -32,7 +32,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses typinfo, sysutils, uVariables;
+uses typinfo, sysutils, uVariables, uUtils;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -74,7 +74,7 @@ ScreenFade:= sfFromWhite;
 ScreenFadeValue:= sfMax;
 ScreenFadeSpeed:= 5;
 
-size:= cScreenWidth * cScreenHeight * 3;
+size:= toPowerOf2(cScreenWidth) * toPowerOf2(cScreenHeight) * 3;
 p:= GetMem(size);
 
 // memory could not be allocated
