@@ -2785,8 +2785,11 @@ var
     i: LongWord;
     HHGear: PGear;
     sparkles: PVisualGear;
+    hasWishes: boolean;
 begin
     AllInactive := false;
+    hasWishes:= ((Gear^.Message and (gmPrecise or gmSwitch)) = (gmPrecise or gmSwitch));
+    if hasWishes then Gear^.AdvBounce:= 1;
 
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.State := HHGear^.State or gstNoDamage;
@@ -2794,7 +2797,7 @@ begin
 
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y;
-    if (GameTicks mod 2 = 0) and ((Gear^.Message and (gmPrecise or gmSwitch)) = (gmPrecise or gmSwitch)) then
+    if (GameTicks mod 2 = 0) and hasWishes then
         begin
         sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
         if sparkles <> nil then sparkles^.Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
@@ -2819,7 +2822,13 @@ begin
     inc(upd);
     if upd > 3 then
     begin
-        if Gear^.Health < 1500 then Gear^.Pos := 2;
+        if Gear^.Health < 1500 then
+        begin
+            if Gear^.AdvBounce <> 0 then
+                Gear^.Pos := 3
+            else
+                Gear^.Pos := 2;
+        end;
 
         AmmoShove(Gear, 30, 40);
 
