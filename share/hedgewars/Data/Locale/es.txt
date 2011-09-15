@@ -52,23 +52,33 @@
 00:48=Mazo
 00:49=Resurrección
 00:50=Bombardeo perforador aéreo
-00:51=Bola de tierra
+00:51=Bola de barro
+00:52=No hay arma seleccionada
+00:53=Cabina del tiempo
+00:54=Estructura
+00:55=Pistola de barro
 
 01:00=¡Luchad!
 01:01=Empate
 01:02=¡%1 venció!
 01:03=Volumen %1%
 01:04=Pausa
-01:05=¿Realmente deseas salir (Y / Esc)?
+01:05=¿Seguro que quieres salir (Y / Esc)?
 01:06=¡Muerte súbita!
 01:07=%1 restante
 01:08=Combustible
 01:09=Sincronizando...
-01:10=Activar esta herramienta no hará que tu turno acabe.
+01:10=Usar esta herramienta no hará que acabe tu turno.
 01:11=Esta herramienta o arma todavía no está disponible.
 01:12=¡Última ronda antes de la muerte súbita!
 01:13=¡%1 rondas hasta la muerte súbita!
 01:14=¡Prepárate, %1!
+01:15=mínimo
+01:16=bajo
+01:17=normal
+01:18=alto
+01:19=extremo
+01:20=Nivel de elasticidad: %1
 
 ; Eventos
 ; El erizo (%1) ha muerto
@@ -433,6 +443,11 @@
 03:48=Pablo clavó un clavito
 03:49=Hace exactamente lo que dice
 03:50=Para los amantes de los topos
+03:51=Me la encontré por el suelo
+03:52=SIN USAR
+03:53=Tipo 40
+03:54=Construye algo
+03:55=Herramienta
 
 ; Descripciones de armamento ( líneas delimitadas con | )
 04:00=Ataca a tus enemigos usando una sencilla granada.|Explotará una vez el temporizador llegue a cero.|1-5: ajustar temporizador.|Atacar: mantener presionado para lanzar más lejos.
@@ -485,6 +500,12 @@
 04:47=¡Dos bombas lapa, doble diversión!|Útiles para planear reacciones en cadena, atrincherarte...|¡o las dos cosas!.|Atacar: mantener presionado para lanzar más lejos (dos disparos).
 04:48=¿Por qué la gente siempre la toma con los topos?|¡Golpear erizos es aún más divertido!|Un buen mazazo puede reducir en un tercio la|vida de cualquier erizo y enterrarlo completamente.|Atacar: activar.
 04:49=¡Resucita a tus aliados!|Pero ten cuidado, también resucitarás a tus enemigos.|Atacar: mantener presionado para resucitar lentamente.|Arriba: acelerar resurrección.
+04:50=¿Alguien está oculto bajo tierra?|¡Desentiérralos con un bombardeo perforador!|El temporizador controla la profundidad a alcanzar.
+04:51=¿Qué hay más barato que el barro?|Un tiro gratis gracias a la bola de barro.|Hará que el enemigo salga volando|y escuece un poco si te entra en los ojos.
+04:52=SIN USAR
+04:53=Vive una trepidante aventura a través del|espacio y el tiempo mientras tus compañeros|siguen luchando en tu lugar.|Estate preparado para volver en cualquier momento,|o al llegar la Muerte súbita si te has quedado solo.|Aviso: no funciona durante la Muerte súbita,|si estás solo o si eres el rey.
+04:54=INCOMPLETO                                                                                                                                     
+04:55=Esparce un chorro de pegajoso barro.|Construye puentes, entierra enemigos o cierra túneles.|¡Ten especial cuidado de no mancharte!
 
 ; Game goal strings
 05:00=Modos de juego
@@ -508,3 +529,4 @@
 05:18=Sin límite de ataques por turno
 05:19=El arsenal se restaura al final de cada turno
 05:20=Los erizos no comparten arsenal
+05:21=Tag Team: los equipos del mismo clan se van turnando entre ellos.|Turno compartido: los equipos del mismo clan comparten la duración del turno.
