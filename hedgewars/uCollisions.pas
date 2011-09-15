@@ -373,6 +373,9 @@ begin
     y2 := y;
 end;
 
+if (hasBorder and ((y1 < 0) or (x1 < 0) or (x2 > LAND_WIDTH))) then
+    exit(true);
+
 for y := y1 to y2 do
     for x := x1 to x2 do
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
