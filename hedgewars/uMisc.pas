@@ -25,7 +25,7 @@ uses SDLh, uConsts, GLunit, uTypes;
 
 procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
-procedure MakeScreenshot(filename: shortstring);
+function  MakeScreenshot(filename: shortstring): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
 
 procedure initModule;
@@ -45,9 +45,10 @@ Inc(y, dy);
 SDL_WarpMouse(x, y);
 end;
 
-
-procedure MakeScreenshot(filename: shortstring);
-var p: Pointer;
+// captures and saves the screen. returns true on success.
+function MakeScreenshot(filename: shortstring): Boolean;
+var success: boolean;
+    p: Pointer;
     size: QWord;
     f: file;
     // Windows Bitmap Header
@@ -79,7 +80,10 @@ p:= GetMem(size);
 
 // memory could not be allocated
 if p = nil then
-    exit;
+begin
+    AddFileLog('Error: Could not allocate memory for screenshot.');
+    exit(false);
+end;
 
 // update header information and file name
 
@@ -114,10 +118,18 @@ if IOResult = 0 then
     BlockWrite(f, head, sizeof(head));
     BlockWrite(f, p^, size);
     Close(f);
+    success:= true;
+    end
+else
+    begin
+    AddFileLog('Error: Could not write to ' + filename);
+    success:= false;
     end;
 {$IOCHECKS ON}
 
-FreeMem(p, size)
+FreeMem(p, size);
+
+MakeScreenshot:= success;
 end;
 
 // http://www.idevgames.com/forums/thread-5602-post-21860.html#pid21860

@@ -111,10 +111,18 @@ begin
     if flagMakeCapture then
     begin
         flagMakeCapture:= false;
+        {$IFNDEF IPHONEOS}
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
-        WriteLnToConsole('Saving ' + s + '...');
+
         playSound(sndShutter);
-        {$IFNDEF IPHONEOS}MakeScreenshot(s);{$ENDIF}
+        if not MakeScreenshot(s) then
+        begin
+            WriteLnToConsole('Screenshot failed.');
+            AddChatString(#5 + 'screen capture failed (lack of memory or write permissions)');
+        end
+        else
+            WriteLnToConsole('Screenshot saved: ' + s);
+        {$ENDIF}
     end;
 end;
 
