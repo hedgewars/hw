@@ -51,6 +51,7 @@ function isOnCrosshair(finger: Touch_Finger): boolean;
 function isOnCurrentHog(finger: Touch_Finger): boolean;
 function isOnFireButton(finger: Touch_Finger): boolean;
 procedure convertToWorldCoord(var x,y: hwFloat; finger: Touch_Finger);
+procedure convertToFingerCoord(var x,y: hwFloat; oldX, oldY: hwFloat);
 function fingerHasMoved(finger: Touch_Finger): boolean;
 function calculateDelta(finger1, finger2: Touch_Finger): hwFloat;
 function getSecondFinger(finger: Touch_Finger): PTouch_Finger;
@@ -417,24 +418,24 @@ end;
 
 function isOnCrosshair(finger: Touch_Finger): boolean;
 var
-    x,y,fingerX, fingerY : hwFloat;
+    x,y : hwFloat;
 begin
-    x := int2hwFloat(CrosshairX);
-    y := int2hwFloat(CrosshairY);
-
-    convertToWorldCoord(fingerX, fingerY, finger);
-    isOnCrosshair:= Distance(fingerX-x, fingerY-y) < _20;
+    convertToFingerCoord(x, y, int2hwFloat(CrosshairX), int2hwFloat(CrosshairY));
+    isOnCrosshair:= Distance(int2hwFloat(finger.x)-x, int2hwFloat(finger.y)-y) < _50;
 end;
 
 function isOnCurrentHog(finger: Touch_Finger): boolean;
 var
-    x,y, fingerX, fingerY : hwFloat;
+    x,y : hwFloat;
 begin
-    x := CurrentHedgehog^.Gear^.X;
-    y := CurrentHedgehog^.Gear^.Y;
+    convertToFingerCoord(x, y, CurrentHedgehog^.Gear^.X, CurrentHedgehog^.Gear^.Y);
+    isOnCurrentHog := Distance(int2hwFloat(finger.X)-x, int2hwFloat(finger.Y)-y) < _50;
+end;
 
-    convertToWorldCoord(fingerX, fingerY, finger);
-    isOnCurrentHog := Distance(fingerX-x, fingerY-y) < _20;
+procedure convertToFingerCoord(var x,y : hwFloat; oldX, oldY: hwFloat);
+begin
+    x := oldX + int2hwFloat(WorldDx + (cScreenWidth div 2));
+    y := oldY + int2hwFloat(WorldDy);
 end;
 
 procedure convertToWorldCoord(var x,y: hwFloat; finger: Touch_Finger);
