@@ -52,7 +52,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         clChan <- thisClientChans
         othChans <- roomOthersChans
         return $
-            if not . null . drop 5 $ teams rm then
+            if not . null . drop (maxTeams rm - 1) $ teams rm then
                 [Warning "too many teams"]
             else if canAddNumber rm <= 0 then
                 [Warning "too many hedgehogs"]
@@ -78,6 +78,10 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         hhsList [_] = error "Hedgehogs list with odd elements number"
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
         newTeamHHNum r = min 4 (canAddNumber r)
+        maxTeams r 
+            | roomProto r < 38 = 6
+            | otherwise = 8
+                
 
 handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         (ci, _) <- ask
