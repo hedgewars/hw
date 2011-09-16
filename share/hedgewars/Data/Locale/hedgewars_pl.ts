@@ -130,11 +130,11 @@
     </message>
     <message>
         <source>Demo name</source>
-        <translation type="unfinished">Nazwa demo</translation>
+        <translation>Podaj nazwę</translation>
     </message>
     <message>
         <source>Demo name:</source>
-        <translation type="unfinished">Nazwa demo:</translation>
+        <translation>Nazwa demo:</translation>
     </message>
 </context>
 <context>
@@ -408,11 +408,11 @@ Przoszę wybrać nowy nick:</translation>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Narysowane mapy</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Wszystkie pliki</translation>
     </message>
 </context>
 <context>
@@ -535,7 +535,7 @@ Przoszę wybrać nowy nick:</translation>
     <message>
         <source>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Niektóre z broni zadają mało punktów obrażeń jednak użyte w odpowiednim momencie mogą pokazać pazur. Na przykład spróbuj użyć pistoletu by strącić swoich przeciwników do wody.</translation>
+        <translation>Niektóre z broni zadają mało punktów obrażeń jednak użyte w odpowiednim momencie mogą pokazać pazur. Na przykład spróbuj użyć pistoletu by strącić swoich przeciwników do wody.</translation>
     </message>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
@@ -580,17 +580,17 @@ Przoszę wybrać nowy nick:</translation>
     <message>
         <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Od czasu do czasu będą organizowane mistrzostwa. Będą one ogłaszane z wyprzedzeniem na http://www.hedgewars.org/ .</translation>
+        <translation>Od czasu do czasu będą organizowane mistrzostwa. Będą one ogłaszane z wyprzedzeniem na http://www.hedgewars.org/ .</translation>
     </message>
     <message>
         <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Hedgewars jest dostępne w wielu językach. Jeśli brakuje tłumaczenia w twoim języku bądź jest ono niekompletne, nie bój się z nami skontaktować!</translation>
+        <translation>Hedgewars jest dostępne w wielu językach. Jeśli brakuje tłumaczenia w twoim języku bądź jest ono niekompletne, nie bój się z nami skontaktować!</translation>
     </message>
     <message>
         <source>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Hedgewars może być uruchomione na różnych systemach operacyjnych takich jak Microsoft Windows, MacOS X, FreeBSD oraz Linux.</translation>
+        <translation>Hedgewars może być uruchomione na różnych systemach operacyjnych takich jak Microsoft Windows, MacOS X, FreeBSD oraz Linux.</translation>
     </message>
     <message>
         <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
@@ -625,7 +625,7 @@ Przoszę wybrać nowy nick:</translation>
     <message>
         <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Bądź kulturalny grając przez internet. Pamiętaj o tym, że w Hedgewars mogą grać także młodsze osoby!</translation>
+        <translation>Bądź kulturalny grając przez internet. Pamiętaj o tym, że w Hedgewars mogą grać także młodsze osoby!</translation>
     </message>
     <message>
         <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
@@ -665,7 +665,7 @@ Przoszę wybrać nowy nick:</translation>
     <message>
         <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Jeśli podłączysz jeden lub więcej gamepadów przed włączeniem gry będziesz miał możliwość przypisania klawiszy by sterować swoimi jeżami.</translation>
+        <translation>Jeśli podłączysz jeden lub więcej gamepadów przed włączeniem gry będziesz miał możliwość przypisania klawiszy by sterować swoimi jeżami.</translation>
     </message>
     <message>
         <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
@@ -780,12 +780,12 @@ Przoszę wybrać nowy nick:</translation>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Możesz powiązać typy plików związane z Hedgewars (zapisy gier i dema) by móc je uruchamiać bezpośrednio z ulubionego menedżera plików bądź przeglądarki internetowej.</translation>
+        <translation>Możesz powiązać typy plików związane z Hedgewars (zapisy gier i dema) by móc je uruchamiać bezpośrednio z ulubionego menedżera plików bądź przeglądarki internetowej.</translation>
     </message>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Chcesz zaoszczędzić liny? Odłącz ją będąc w powietrzu, a potem wypuść ją ponownie. Dopóki nie dotkniesz ziemi, będziesz używał pojedynczego naboju!</translation>
+        <translation>Chcesz zaoszczędzić liny? Odłącz ją będąc w powietrzu, a potem wypuść ją ponownie. Dopóki nie dotkniesz ziemi, będziesz używał pojedynczego naboju!</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
@@ -800,21 +800,21 @@ Przoszę wybrać nowy nick:</translation>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Wersja Hedgewars dla systemu Windows wspiera XFire. Upewnij się, że dodałeś Hedgewars do listy gier by Twoi znajomi mogli zobaczyć Ciebie w czasie gry.</translation>
+        <translation>Wersja Hedgewars dla systemu Windows wspiera XFire. Upewnij się, że dodałeś Hedgewars do listy gier by Twoi znajomi mogli zobaczyć Ciebie w czasie gry.</translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Użyj koktajlu Mołotowa lub Miotacza ognia by powstrzymać przeciwnika przed przedostaniem się przez tunele lub platformy.</translation>
+        <translation>Użyj koktajlu Mołotowa lub Miotacza ognia by powstrzymać przeciwnika przed przedostaniem się przez tunele lub platformy.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Pszczoła potrafi być ciężka w użyciu. Jej promień skrętu zależy od prędkości lotu, więc nie staraj się nie używać pełnej mocy podczas strzału.</translation>
+        <translation>Pszczoła potrafi być ciężka w użyciu. Jej promień skrętu zależy od prędkości lotu, więc nie staraj się nie używać pełnej mocy podczas strzału.</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation type="unfinished">Dodatki do pobrania</translation>
+        <translation>Dodatki do pobrania</translation>
     </message>
 </context>
 <context>
@@ -1208,7 +1208,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation type="unfinished">Dodaje na dole niezniszczalną ramkę</translation>
+        <translation>Dodaje na dole niezniszczalną ramkę</translation>
     </message>
 </context>
 <context>
@@ -1447,67 +1447,67 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished">Wyłączone</translation>
+        <translation>Wyłączone</translation>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished">Czerwone/Błękitne</translation>
+        <translation>Czerwone/Błękitne</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished">Błękitne/Czerwone</translation>
+        <translation>Błękitne/Czerwone</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished">Czerwone/Niebieskie</translation>
+        <translation>Czerwone/Niebieskie</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished">Niebieskie/Czerwone</translation>
+        <translation>Niebieskie/Czerwone</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished">Czerwone/Zielone</translation>
+        <translation>Czerwone/Zielone</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished">Zielone/Czerwone</translation>
+        <translation>Zielone/Czerwone</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished">Obok siebie</translation>
+        <translation>Obok siebie</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished">Góra-dół</translation>
+        <translation>Góra-dół</translation>
     </message>
     <message>
         <source>Wiggle</source>
-        <translation type="unfinished">Trzęsący się obraz</translation>
+        <translation>Trzęsący się obraz</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished">Czer/Błęk w odc. szar</translation>
+        <translation>Czer/Błęk w odc. szar</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished">Błęk/Czer w odc. szar</translation>
+        <translation>Błęk/Czer w odc. szar</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished">Czer/Nieb w odc. szar</translation>
+        <translation>Czer/Nieb w odc. szar</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished">Nieb/Czer w odc. szar</translation>
+        <translation>Nieb/Czer w odc. szar</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished">Czer/Ziel w odc. szar</translation>
+        <translation>Czer/Ziel w odc. szar</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished">Ziel/Czer w odc. szar</translation>
+        <translation>Ziel/Czer w odc. szar</translation>
     </message>
 </context>
 <context>
@@ -1757,27 +1757,27 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation type="unfinished">Wyświetlanie w 3D</translation>
+        <translation>Wyświetlanie w 3D</translation>
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished">Opcje</translation>
+        <translation>Opcje</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Tryb gry</translation>
+        <translation>Tryb gry</translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished">Schemat</translation>
+        <translation>Schemat</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Hasło</translation>
+        <translation>Hasło</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation type="unfinished">Czas na ucieczkę w %</translation>
+        <translation>Czas na ucieczkę w %</translation>
     </message>
 </context>
 <context>
@@ -1788,7 +1788,7 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     </message>
     <message>
         <source>hedgehog %1</source>
-        <translation type="unfinished"></translation>
+        <translation>jeż %1</translation>
     </message>
 </context>
 <context>
@@ -2148,11 +2148,11 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Tag Team</source>
-        <translation type="unfinished">Zespół</translation>
+        <translation>Zespół</translation>
     </message>
     <message>
         <source>Add Bottom Border</source>
-        <translation type="unfinished">Ddoaj ramkę na dole</translation>
+        <translation>Dodaj ramkę na dole</translation>
     </message>
 </context>
 <context>
