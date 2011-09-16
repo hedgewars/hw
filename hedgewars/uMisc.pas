@@ -25,14 +25,14 @@ uses SDLh, uConsts, GLunit, uTypes;
 
 procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
-procedure MakeScreenshot(filename: shortstring);
+function  MakeScreenshot(filename: shortstring): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
 
 procedure initModule;
 procedure freeModule;
 
 implementation
-uses typinfo, sysutils, uVariables;
+uses typinfo, sysutils, uVariables, uUtils;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -45,10 +45,11 @@ Inc(y, dy);
 SDL_WarpMouse(x, y);
 end;
 
-
-procedure MakeScreenshot(filename: shortstring);
-var p: Pointer;
-    size: Longword;
+// captures and saves the screen. returns true on success.
+function MakeScreenshot(filename: shortstring): Boolean;
+var success: boolean;
+    p: Pointer;
+    size: QWord;
     f: file;
     // Windows Bitmap Header
     head: array[0..53] of Byte = (
@@ -74,8 +75,15 @@ ScreenFade:= sfFromWhite;
 ScreenFadeValue:= sfMax;
 ScreenFadeSpeed:= 5;
 
-size:= cScreenWidth * cScreenHeight * 3;
+size:= toPowerOf2(cScreenWidth) * toPowerOf2(cScreenHeight) * 3;
 p:= GetMem(size);
+
+// memory could not be allocated
+if p = nil then
+begin
+    AddFileLog('Error: Could not allocate memory for screenshot.');
+    exit(false);
+end;
 
 // update header information and file name
 
@@ -102,7 +110,7 @@ head[$25]:= (size shr 24) and $ff;
 //glReadBuffer(GL_FRONT);
 glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGR, GL_UNSIGNED_BYTE, p);
 
-{$I-}
+{$IOCHECKS OFF}
 Assign(f, filename);
 Rewrite(f, 1);
 if IOResult = 0 then
@@ -110,10 +118,18 @@ if IOResult = 0 then
     BlockWrite(f, head, sizeof(head));
     BlockWrite(f, p^, size);
     Close(f);
+    success:= true;
+    end
+else
+    begin
+    AddFileLog('Error: Could not write to ' + filename);
+    success:= false;
     end;
-{$I+}
+{$IOCHECKS ON}
 
-FreeMem(p)
+FreeMem(p, size);
+
+MakeScreenshot:= success;
 end;
 
 // http://www.idevgames.com/forums/thread-5602-post-21860.html#pid21860

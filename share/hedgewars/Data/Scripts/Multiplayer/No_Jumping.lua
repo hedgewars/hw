@@ -15,7 +15,7 @@ function onNewTurn()
 end
 
 function onGearAdd(gear)
-	
+
 	if (GetGearType(gear) == gtJetpack) or (GetGearType(gear) == gtRope) or (GetGearType(gear) == gtParachute) then
 		specialGear = gear
 		SetInputMask(band(0xFFFFFFFF, bnot(gmHJump)))

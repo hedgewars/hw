@@ -123,6 +123,14 @@
         <comment>File Types</comment>
         <translation>Hedgewars gespeichertes Spiel</translation>
     </message>
+    <message>
+        <source>Demo name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -359,37 +367,41 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Abbrechen</translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 <context>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Rückgängig</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Laden</translation>
+        <translation>Laden</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Sichern</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gezeichnete Karte laden</translation>
     </message>
     <message>
         <source>Save drawn map</source>
+        <translation>Gezeichnete Karte sichern</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -767,6 +779,10 @@ Please pick another nickname:</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1076,7 +1092,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Einfügen eines unzerstörbaren Kartenrand</translation>
+        <translation type="obsolete">Einfügen eines unzerstörbaren Kartenrand</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1148,6 +1164,14 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation>Einfügen eines unzerstörbaren Kartenrand</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1351,7 +1375,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
-        <translation type="unfinished"></translation>
+        <translation>Handgezeichnete Karte</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -1679,6 +1703,10 @@ Einige Dinge könnten nicht funktionieren oder unvollständig sein. Benutzung au
     <message>
         <source>unnamed</source>
         <translation>unbenannt</translation>
+    </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation>Igel %1</translation>
     </message>
 </context>
 <context>
@@ -2034,6 +2062,10 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Tag Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

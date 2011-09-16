@@ -50,6 +50,12 @@
 00:47=Fästande mina
 00:48=Hammare
 00:49=Återuppliva
+00:50=Borrangrepp
+00:51=Jordboll
+00:52=Inget vapen valt
+00:53=Tidslåda
+00:54=Struktur
+00:55=Markspruta
 
 01:00=Nu kör vi!
 01:01=Oavgjort
@@ -66,6 +72,12 @@
 01:12=Sista rundan till sudden death!
 01:13=%1 rundor till sudden death!
 01:14=Gör dig redo, %1!
+01:15=Märkbar
+01:16=Låg
+01:17=Normal
+01:18=Hög
+01:19=Extrem
+01:20=%1 studs
 
 ; Event messages
 ; Hog (%1) died
@@ -461,6 +473,12 @@
 03:47=Fäst de här på ett användbart ställe!
 03:48=Dags att banka järnet!
 03:49=Gör det du tror
+03:50=Siktar mot stjärnorna
+03:51=Upphittad på marken
+03:52=UNUSED
+03:53=Typ 40
+03:54=Bygg något
+03:55=Verktyg
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attackera fienden med en enkel granat.|Exploderar när tiden når noll.|1-5: Ställ in granatens tid|Attack: Håll ner för att kasta med mer kraft
@@ -513,6 +531,12 @@
 04:47=Det är dubbelt så roligt med två farliga, fantastiska,|fästande minor. Skapa en kedjereaktion eller försvara|dig själv (eller både och!)|Attack: Håll ner för att skjuta med mer kraft (två gånger)
 04:48=Varför ska mullvadarna få all misshandel? Att|drämma till en igelkott kan vara minst lika roligt!|Ett rejält slag med den här hammaren kan skala|av en tredjedel av en igelkotts hälsa och slå ner|dem i marken.|Attack: Aktivera
 04:49=Återuppliva dina vänner!|Men tänk på att du också återupplivar dina fiender.|Attack: Håll inne för att återuppliva långsamt|Upp: Accelerera återupplivning
+04:50=Gömmer sig någon under marken?|Gräv fram dem med ett borrangrepp!|1-5: Ställ in hur långt raketerna borrar.
+04:51=Få till en gratisträff genom att kasta en boll med|jord. Känns lite gran, och knuffar tillbaka|igelkottar.
+04:52=UNUSED
+04:53=Åk på ett äventyr genom tid och rymd, medan dina|kamrater blir kvar själva att slåss. Var beredd|att komma tillbaka när som helst, eller till|Sudden Death eller om de andra blir besegrade.|Varning. Fungerar inte under Sudden Death, om du|är ensam, eller om du är en kung.
+04:54=INCOMPLETE                                                                                                                                     
+04:55=Spruta en ström av fästande jord.|Bygg broar, gräv ner fienden, stäng igen tunnlar.|Var försiktig så att du inte får något på dig!
 
 ; Game goal strings
 05:00=Spellägen
@@ -536,3 +560,4 @@
 05:18=Obegränsade attacker
 05:19=Vapen nollställs när turen är över
 05:20=Igelkottar delar inte på vapnen
+05:21=Maraton: Lag i en klan tar på vart andra följande turer|Delad tid: Lag inom en klan delar på turtiden

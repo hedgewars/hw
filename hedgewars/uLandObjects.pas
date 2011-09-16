@@ -373,7 +373,7 @@ var s, key: shortstring;
     f: textfile;
     i: LongInt;
     ii, t: Longword;
-    c1, c2: TSDL_Color;
+    c2: TSDL_Color;
 
     procedure CheckRect(Width, Height, x, y, w, h: LongWord);
     begin

@@ -112,7 +112,7 @@ for t:= 0 to Pred(TeamsCount) do
             end;
 
 if e > f then friendlyfactor:= 300 + (e - f) * 30
-else friendlyfactor:= max(30, 300 - f * 80 div e)
+else friendlyfactor:= max(30, 300 - f * 80 div max(1,e))
 end;
 
 procedure FillBonuses(isAfterAttack: boolean; filter: TGearsType);

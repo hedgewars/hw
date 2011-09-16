@@ -1229,7 +1229,7 @@ LoadMask(mapname);
 end;
 
 procedure DrawBottomBorder; // broken out from other borders for doing a floor-only map, or possibly updating bottom during SD
-var x, y, w, c: Longword;
+var x, w, c: Longword;
 begin
 for w:= 0 to 23 do
     for x:= leftX to rightX do

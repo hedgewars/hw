@@ -16,15 +16,15 @@
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore file</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile aprire il file &apos;%1&apos; in scrittura</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile leggere il file &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -122,6 +122,14 @@
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
         <translation>Salvataggio di Hedgewars</translation>
+    </message>
+    <message>
+        <source>Demo name</source>
+        <translation>Nome della demo</translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation>Nome della demo:</translation>
     </message>
 </context>
 <context>
@@ -293,14 +301,17 @@ o scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Nickname</translation>
+        <translation>Nickname</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualcun altro sta usando
+ il tuo nickname %1
+sul server.
+Per favore scelto un altro nickname:</translation>
     </message>
 </context>
 <context>
@@ -357,7 +368,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
 </context>
 <context>
@@ -384,11 +395,19 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation>Mappe Disegnate (*.hwmap);;Tutti i file (*.*)</translation>
+        <translation type="obsolete">Mappe Disegnate (*.hwmap);;Tutti i file (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
         <translation>Salva mappa disegnata</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation>Mappe disegnate</translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation>Tutti i file</translation>
     </message>
 </context>
 <context>
@@ -604,7 +623,7 @@ Please pick another nickname:</source>
     <message>
         <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Collega uno o più gamepad prima di iniziare il gioco per poterli assegnare alle tue squadra.</translation>
     </message>
     <message>
         <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
@@ -699,7 +718,7 @@ Please pick another nickname:</source>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Puoi trovare i tuoi file di configurazione Hedgewars in &quot;Documenti\Hedgewars&quot;. Crea delle copie di sicurezza o prendi i file con te, ma non modificarli a mano.</translation>
     </message>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
@@ -739,7 +758,11 @@ Please pick another nickname:</source>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;Ape a Ricerca può essere difficile da usare. Il suo raggio di curvatura dipende dalla sua velocità, quindi cerca di non usarla a piena potenza.</translation>
+    </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation>Contenuto scaricabile</translation>
     </message>
 </context>
 <context>
@@ -768,15 +791,15 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Errore</translation>
+        <translation>Errore</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">Inserisci il nome della stanza</translation>
+        <translation>Inserisci il nome della stanza</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -996,9 +1019,9 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>1 giocatore online</numerusform>
+            <numerusform>%1 giocatori online</numerusform>
         </translation>
     </message>
 </context>
@@ -1050,7 +1073,7 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Aggiungi un bordo indistruttibile intorno al terreno</translation>
+        <translation type="obsolete">Aggiungi un bordo indistruttibile intorno al terreno</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1122,7 +1145,15 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le squadre di ogni clan possono avere turni consecutivi condividendo il tempo del loro turno.</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation>Aggiungi un bordo indistruttibile intorno al terreno</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
+        <translation>Aggiungi un bordo indistruttibile lungo la parte inferiore</translation>
     </message>
 </context>
 <context>
@@ -1219,7 +1250,7 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">Aggiorna</translation>
+        <translation>Aggiorna</translation>
     </message>
 </context>
 <context>
@@ -1357,39 +1388,39 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished"></translation>
+        <translation>Lato-a-lato</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Dall'alto in basso</translation>
     </message>
     <message>
         <source>Wiggle</source>
-        <translation type="unfinished"></translation>
+        <translation>Movimento continuo</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Scala di grigio rosso/azzurro</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Scala di grigio azzurro/rosso</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Scala di grigio rosso/blu</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Scala di grigio blu/rosso</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Scala di grigio rosso/verde</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Scala di grigio verde/rosso</translation>
     </message>
 </context>
 <context>
@@ -1633,23 +1664,23 @@ Alcune opzioni potrebbero essere incomplete o non funzionanti. Usatela a vostro 
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opzioni di gioco</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Style</translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Password</translation>
+        <translation>Password</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation type="unfinished"></translation>
+        <translation>% tempo regalo</translation>
     </message>
 </context>
 <context>
@@ -1657,6 +1688,10 @@ Alcune opzioni potrebbero essere incomplete o non funzionanti. Usatela a vostro 
     <message>
         <source>unnamed</source>
         <translation>senza nome</translation>
+    </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation>riccio %1</translation>
     </message>
 </context>
 <context>
@@ -2012,7 +2047,11 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Tag Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Squadre etichettate</translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
+        <translation>Aggiungi bordo inferiore</translation>
     </message>
 </context>
 <context>

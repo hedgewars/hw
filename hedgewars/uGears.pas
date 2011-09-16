@@ -603,6 +603,7 @@ if (Gear^.Kind = gtPortal) then
 else if Gear^.Kind = gtHedgehog then
     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
         begin
+        AttackBar:= 0;
         Gear^.Message:= gmDestroy;
         CurAmmoGear^.Message:= gmDestroy;
         exit
@@ -620,6 +621,7 @@ else if Gear^.Kind = gtHedgehog then
         team:= Gear^.Hedgehog^.Team;
         if CurrentHedgehog^.Gear = Gear then
             begin
+            AttackBar:= 0;
             FreeActionsList; // to avoid ThinkThread on drawned gear
             if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (CurrentHedgehog^.MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
             end;
@@ -1655,6 +1657,7 @@ end;
 procedure ResurrectHedgehog(gear: PGear);
 var tempTeam : PTeam;
 begin
+    AttackBar:= 0;
     gear^.dX := _0;
     gear^.dY := _0;
     gear^.Damage := 0;

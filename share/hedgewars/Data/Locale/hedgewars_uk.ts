@@ -16,15 +16,15 @@
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation type="unfinished"></translation>
+        <translation>Помилка файлу</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Не можу відкрити файл &apos;%1&apos; для запису</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Не можу прочитати файл &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -123,6 +123,14 @@
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
         <translation>Файл Збереження Hedgewars</translation>
+    </message>
+    <message>
+        <source>Demo name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -290,14 +298,17 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Ім&apos;я</translation>
+        <translation>Нікнейм</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Хтось вже використовує
+ нікнейм %1
+на сервері.
+Виберіть інший нікнейм:</translation>
     </message>
 </context>
 <context>
@@ -354,7 +365,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Скасувати</translation>
+        <translation>Скасувати</translation>
     </message>
 </context>
 <context>
@@ -381,11 +392,19 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation>Намальовані мапи (*.hwmap);;Всі файли (*.*)</translation>
+        <translation type="obsolete">Намальовані мапи (*.hwmap);;Всі файли (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
         <translation>Зберегти намальовану мапу</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -732,11 +751,6 @@ Please pick another nickname:</source>
         <translation>Windows-версія Hedgewars підтримує Xfire. Переконайтеся в тому, що ви додали Hedgewars до списку ігор, щоб ваші друзі могли бачити вас в грі.</translation>
     </message>
     <message>
-        <source>The Homing Bee can be tricky to use. Its turn radius depends on it&apos;s velocity, so try to not use full power.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Навідна Бджілка може бути складною у керуванні. Радіус повороту залежить від її швидкості, тому постарайтеся не стріляти на повну силу.</translation>
-    </message>
-    <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
         <translation>Використайте Коктейль Молотова або Вогнемет щоб тимчасово утримати їжаків від проходження такої місцевості як тунелі або платформи.</translation>
@@ -744,6 +758,10 @@ Please pick another nickname:</source>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
+        <translation>Навідна Бджілка може бути складною у керуванні. Радіус повороту залежить від її швидкості, тому постарайтеся не стріляти на повну силу.</translation>
+    </message>
+    <message>
+        <source>Downloadable Content</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -773,15 +791,15 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Помилка</translation>
+        <translation>Помилка</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">Введіть назву кімнати</translation>
+        <translation>Введіть назву кімнати</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">Так</translation>
+        <translation>Так</translation>
     </message>
 </context>
 <context>
@@ -1003,10 +1021,10 @@ Do you still want to join the room?</source>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 гравець в мережі</numerusform>
+            <numerusform>%1 гравця в мережі</numerusform>
+            <numerusform>%1 гравців в мережі</numerusform>
         </translation>
     </message>
 </context>
@@ -1026,7 +1044,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Додати невразливу рамку навколо місцевості</translation>
+        <translation type="obsolete">Додати невразливу рамку навколо місцевості</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1130,6 +1148,14 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation>Команди в кожному клані здійснюють послідовні ходи, поділяючи час ходу.</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation>Додати невразливу рамку навколо місцевості</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1227,7 +1253,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">Оновити</translation>
+        <translation>Оновити</translation>
     </message>
 </context>
 <context>
@@ -1377,27 +1403,27 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Черв./Блак. відтінки сірого</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Блак./Черв. відтінки сірого</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Черв./Синій відтінки сірого</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Синій/Черв. відтінки сірого</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Черв./Зел. відтінки сірого</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Зел./Черв. відтінки сірого</translation>
     </message>
 </context>
 <context>
@@ -1626,32 +1652,28 @@ Do you still want to join the room?</source>
         <translation>% Довжина Мотузки</translation>
     </message>
     <message>
-        <source>Gameplay</source>
-        <translation type="obsolete">Геймплей</translation>
-    </message>
-    <message>
         <source>Stereo rendering</source>
         <translation>Стерео рендеринг</translation>
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметри гри</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль</translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Схема</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation>Пароль</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation type="unfinished"></translation>
+        <translation>% Час Тікати</translation>
     </message>
 </context>
 <context>
@@ -1659,6 +1681,10 @@ Do you still want to join the room?</source>
     <message>
         <source>unnamed</source>
         <translation>без_назви</translation>
+    </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2014,6 +2040,10 @@ Please check your installation</source>
     </message>
     <message>
         <source>Tag Team</source>
+        <translation>Збірна Команда</translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

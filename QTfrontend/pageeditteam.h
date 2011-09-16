@@ -31,7 +31,8 @@ class PageEditTeam : public AbstractPage
 
 public:
     PageEditTeam(QWidget* parent, SDLInteraction * sdli);
-    QSignalMapper* signalMapper;
+    QSignalMapper* signalMapper1;
+    QSignalMapper* signalMapper2;
     QGroupBox *GBoxHedgehogs;
     QGroupBox *GBoxTeam;
     QGroupBox *GBoxFort;
@@ -61,6 +62,7 @@ public slots:
 
 private slots:
     void testSound();
+    void fixHHname(int idx);
 };
 
 #endif

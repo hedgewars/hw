@@ -18,16 +18,16 @@ local utilities_values = {1,2,2,1,2,2,1,2,2,2}
 
 function randomAmmo()
     local n = 3   --"points" to be allocated on weapons
-    
+
     --pick random weapon and subtract cost
     local r = GetRandom(table.maxn(weapons_values)) + 1
     local picked_items = {}
     table.insert(picked_items, weapons[r])
     n = n - weapons_values[r]
-    
-    
+
+
     --choose any weapons or utilities to use up remaining n
-    
+
     while n > 0 do
         local items = {}
         local items_values = {}
@@ -63,12 +63,12 @@ function randomAmmo()
                 end
             end
         end
-        
+
         local r = GetRandom(table.maxn(items_values)) + 1
         table.insert(picked_items, items[r])
         n = n - items_values[r]
     end
-    
+
     return picked_items
 end
 
@@ -111,7 +111,7 @@ end
 
 function onAmmoStoreInit()
     SetAmmo(amSkip, 9, 0, 0, 0)
-    
+
     SetAmmo(amExtraDamage, 0, 1, 0, 1)
     SetAmmo(amInvulnerable, 0, 1, 0, 1)
     SetAmmo(amExtraTime, 0, 1, 0, 1)
