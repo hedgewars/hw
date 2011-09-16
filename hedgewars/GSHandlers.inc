@@ -534,16 +534,29 @@ begin
         PlaySound(sndMolotov);
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y);
-        for i:= 0 to 2 do
+        for i:= 0 to 4 do
             begin
-            glass:= AddVisualGear(gx+random(7)-3, gy+random(5)-2, vgtEgg);
+            (*glass:= AddVisualGear(gx+random(7)-3, gy+random(5)-2, vgtEgg);
             if glass <> nil then
                 begin
                 glass^.Frame:= 2;
                 glass^.Tint:= $41B83ED0 - i * $10081000;
                 glass^.dX:= 1/(10*(random(11)-5));
                 glass^.dY:= -1/(random(4)+5);
-                end;
+                end;*)
+            glass:= AddVisualGear(gx+random(7)-3, gy+random(7)-3, vgtStraightShot);
+            if glass <> nil then 
+                with glass^ do
+                    begin
+                    Frame:= 2;
+                    Tint:= $41B83ED0 - i * $10081000;
+                    Angle:= random * 360;
+                    dx:= 0.0000001;
+                    dy:= 0;
+                    if random(2) = 0 then dx := -dx;
+                    FrameTicks:= 750;
+                    State:= ord(sprEgg)
+                    end;
             end;
         for i:= 0 to 24 do
         begin
@@ -2800,7 +2813,11 @@ begin
     if (GameTicks mod 2 = 0) and hasWishes then
         begin
         sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
-        if sparkles <> nil then sparkles^.Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
+        if sparkles <> nil then 
+            begin
+            sparkles^.Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
+            sparkles^.Angle:= random * 360;
+            end
         end;
 
     i := 2;
@@ -2851,13 +2868,13 @@ begin
             if sparkles <> nil then
                 with sparkles^ do
                     begin
-                    sparkles^.Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
+                    Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
+                    Angle:= random * 360;
                     dx:= 0.001 * (random(200));
                     dy:= 0.001 * (random(200));
                     if random(2) = 0 then dx := -dx;
                     if random(2) = 0 then dy := -dy;
-                    FrameTicks:= random(250) + 250;
-                    State:= ord(sprSnowDust);
+                    FrameTicks:= random(400) + 250
                     end;
             end;
         AfterAttack;
