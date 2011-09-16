@@ -4177,7 +4177,11 @@ begin
 
         // Until loops are reliably broken
         if iscake then iterator^.PortalCounter:= 33
-        else inc(iterator^.PortalCounter);
+        else
+            begin
+            inc(iterator^.PortalCounter);
+            iterator^.State:= iterator^.State and not gstHHHJump
+            end;
 
         if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
