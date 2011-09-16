@@ -1208,7 +1208,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation>Dodaje na dole niezniszczalną ramkę</translation>
+        <translation>>Dodaje niezniszczalną ramkę u dołu mapy</translation>
     </message>
 </context>
 <context>
