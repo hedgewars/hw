@@ -1115,9 +1115,9 @@ end;
 procedure doStepDEagleShot(Gear: PGear);
 begin
     PlaySound(sndGun);
-    // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths
-    Gear^.X := Gear^.X + Gear^.dX * 2;
-    Gear^.Y := Gear^.Y + Gear^.dY * 2;
+    // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
+    Gear^.X := Gear^.X + Gear^.dX * 3;
+    Gear^.Y := Gear^.Y + Gear^.dY * 3;
     Gear^.doStep := @doStepBulletWork
 end;
 
@@ -1151,9 +1151,9 @@ begin
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
         Gear^.dY := -AngleCos(HHGear^.Angle) * _0_5;
         PlaySound(sndGun);
-        // add an initial step to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths
-        Gear^.X := Gear^.X + Gear^.dX;  
-        Gear^.Y := Gear^.Y + Gear^.dY;
+        // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just weird angles
+        Gear^.X := Gear^.X + Gear^.dX * 3;  
+        Gear^.Y := Gear^.Y + Gear^.dY * 3;
         Gear^.doStep := @doStepBulletWork;
     end
     else
