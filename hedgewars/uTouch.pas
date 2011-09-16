@@ -60,7 +60,12 @@ implementation
 const
     clicktime = 200;
     nilFingerId = High(SDL_FingerId);
+
 var
+    fireButtonLeft, fireButtonRight, fireButtonTop, fireButtonBottom : LongInt;
+        
+
+
     leftButtonBoundary  : LongInt;
     rightButtonBoundary : LongInt;
     topButtonBoundary   : LongInt;
@@ -138,6 +143,7 @@ begin
         begin
             aiming:= false;
             stopFiring:= true;
+            moveCursor:= false;
             pinchSize := calculateDelta(finger^, getSecondFinger(finger^)^);
             baseZoomValue := ZoomValue
         end;
@@ -148,42 +154,46 @@ procedure onTouchMotion(x,y: Longword;dx,dy: LongInt; pointerId: SDL_FingerId);
 var
     finger, secondFinger: PTouch_Finger;
     currentPinchDelta, zoom : hwFloat;
+    tmpX, tmpY: LongInt;
 begin
     finger:= findFinger(pointerId);
+    tmpX := convertToCursor(cScreenWidth, x);
+    tmpY := convertToCursor(cScreenHeight, y);
 
-    finger^.x := convertToCursor(cScreenWidth, x);
-    finger^.y := convertToCursor(cScreenHeight, y);
-
-    case pointerCount of
-       1:
-           begin
-               if aiming then 
-               begin
-                   aim(finger^);
-                   exit
-               end;
-               if moveCursor then
-                   if invertCursor then
-                   begin
-                       CursorPoint.X := CursorPoint.X - convertToCursor(cScreenWidth,dx);
-                       CursorPoint.Y := CursorPoint.Y + convertToCursor(cScreenWidth,dy);
-                   end
-                   else
-                   begin
-                       CursorPoint.X := CursorPoint.X + convertToCursor(cScreenWidth,dx);
-                       CursorPoint.Y := CursorPoint.Y - convertToCursor(cScreenWidth,dy);
-                   end;
-           end;
-       2:
-           begin
-               secondFinger := getSecondFinger(finger^);
-               currentPinchDelta := calculateDelta(finger^, secondFinger^) - pinchSize;
-               zoom := currentPinchDelta/cScreenWidth;
-               ZoomValue := baseZoomValue - ((hwFloat2Float(zoom) * cMinMaxZoomLevelDelta));
-               if ZoomValue < cMaxZoomLevel then ZoomValue := cMaxZoomLevel;
-               if ZoomValue > cMinZoomLevel then ZoomValue := cMinZoomLevel;
-            end;
-    end; //end case pointerCount of
+    if moveCursor then
+    begin
+        if invertCursor then
+        begin
+            CursorPoint.X := CursorPoint.X + (finger^.x - tmpX);
+            CursorPoint.Y := CursorPoint.Y - (finger^.y - tmpY);
+        end
+        else
+        begin
+            CursorPoint.X := CursorPoint.X - (finger^.x - tmpX);
+            CursorPoint.Y := CursorPoint.Y + (finger^.y - tmpY);
+        end;
+        finger^.x := tmpX;
+        finger^.y := tmpY;
+        exit //todo change into switch rather than ugly ifs
+    end;
+    
+    finger^.x := tmpX;
+    finger^.y := tmpY;
+    
+    if aiming then 
+    begin
+        aim(finger^);
+        exit
+    end;
+    if pointerCount = 2 then
+    begin
+       secondFinger := getSecondFinger(finger^);
+       currentPinchDelta := calculateDelta(finger^, secondFinger^) - pinchSize;
+       zoom := currentPinchDelta/cScreenWidth;
+       ZoomValue := baseZoomValue - ((hwFloat2Float(zoom) * cMinMaxZoomLevelDelta));
+       if ZoomValue < cMaxZoomLevel then ZoomValue := cMaxZoomLevel;
+       if ZoomValue > cMinZoomLevel then ZoomValue := cMinZoomLevel;
+    end;
 end;
 
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
@@ -402,10 +412,7 @@ end;
 
 function isOnFireButton(finger: Touch_Finger): boolean;
 begin
-    printFinger(finger);
-    WriteToConsole(Format('%d %d ',[round((-cScreenWidth+20)/0.8), round((cScreenHeight+55)/0.8)]));
-    WriteToConsole(Format('%d, %d',[cScreenWidth, cScreenHeight]));
-    isOnFireButton:= (finger.x < 205) and (finger.y > 420);
+    isOnFireButton:= (finger.x <= fireButtonRight) and (finger.x >= fireButtonLeft) and (finger.y <= fireButtonBottom) and (finger.y >= fireButtonTop);
 end;
 
 function isOnCrosshair(finger: Touch_Finger): boolean;
@@ -464,7 +471,7 @@ end;
 
 procedure initModule;
 var
-    index: Longword;
+    index, uRenderCoordScaleX, uRenderCoordScaleY: Longword;
 begin
     movingCrosshair := false;
     stopFiring:= false;
@@ -478,6 +485,13 @@ begin
     setLength(fingers, 4);
     for index := 0 to High(fingers) do 
         fingers[index].id := nilFingerId;
+
+
+    uRenderCoordScaleX := Round(cScreenWidth/0.8 * 2);
+    fireButtonLeft := Round(cScreenWidth*0.01);
+    fireButtonRight := Round(fireButtonLeft + (spritesData[sprFireButton].Width*0.4));
+    fireButtonBottom := Round(cScreenHeight*0.99);
+    fireButtonTop := fireButtonBottom - Round(spritesData[sprFireButton].Height*0.4);
 end;
 
 begin

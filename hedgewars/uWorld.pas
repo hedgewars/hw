@@ -913,9 +913,10 @@ if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) th
 // Captions
 DrawCaptions;
 
-// Draw buttons
-SetScale(0.8);
-DrawSprite(sprFireButton, round((-cScreenWidth+20)/0.8),round((cScreenHeight+55)/0.8),0);
+// Draw buttons Related to the Touch interface
+//SetScale(0.8);
+//DrawSprite(sprFireButton, round(-cScreenWidth/0.8),round(cScreenHeight/0.8), 0);
+DrawTexture(Round(-cScreenWidth*0.5 + cScreenHeight*0.02),Round((cScreenHeight*0.98)-(spritesData[sprFireButton].Height*0.4) ),spritesData[sprFireButton].Texture, 0.4);
 SetScale(cDefaultZoomLevel);
 
 // Teams Healths
