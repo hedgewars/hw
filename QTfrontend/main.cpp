@@ -251,6 +251,8 @@ int main(int argc, char *argv[]) {
                 "subcontrol-origin: margin;"
                 "subcontrol-position: top left;"
                 "text-align: left;"
+                "left: 15px;"
+                "top: -4px;"
                 "}"
 
             "QCheckBox::indicator:checked{"
