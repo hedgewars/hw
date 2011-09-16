@@ -48,7 +48,7 @@ public:
     HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget = 0);
     virtual ~HWGame();
     void AddTeam(const QString & team);
-    void PlayDemo(const QString & demofilename);
+    void PlayDemo(const QString & demofilename, bool isSave);
     void StartLocal();
     void StartQuick();
     void StartNet();
@@ -84,6 +84,7 @@ private:
         gtNet      = 4,
         gtTraining = 5,
         gtCampaign = 6,
+        gtSave     = 7,
     };
     char msgbuf[MAXMSGCHARS];
     QString teams[5];

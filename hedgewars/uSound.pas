@@ -290,10 +290,12 @@ end;
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 var i : LongInt;
 begin
-    if (not isSoundEnabled) or fastUntilLag then exit;
+    if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd = snd) and  (LastVoice.voicepack = voicepack)) then exit;
     i:= 0;
     while (i<8) and (VoiceList[i].snd <> sndNone) do inc(i);
 
+    // skip playing same sound for same hog twice
+    if (i>0) and (VoiceList[i-1].snd = snd) and (VoiceList[i-1].voicepack = voicepack) then exit;
     VoiceList[i].snd:= snd;
     VoiceList[i].voicepack:= voicepack;
 end;

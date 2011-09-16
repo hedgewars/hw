@@ -123,6 +123,14 @@
         <comment>File Types</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Demo name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -379,11 +387,15 @@ Please pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
+        <source>Save drawn map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Save drawn map</source>
+        <source>Drawn Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -761,6 +773,10 @@ Please pick another nickname:</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1038,7 +1054,7 @@ Haluatko silti liittyä huoneeseen?</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Lisää tuhoutumattomat reunat kartan ympärille</translation>
+        <translation type="obsolete">Lisää tuhoutumattomat reunat kartan ympärille</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1142,6 +1158,14 @@ Haluatko silti liittyä huoneeseen?</translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation>Lisää tuhoutumattomat reunat kartan ympärille</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1696,6 +1720,10 @@ Haluatko silti liittyä huoneeseen?</translation>
         <source>unnamed</source>
         <translation>nimetön</translation>
     </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QMainWindow</name>
@@ -2050,6 +2078,10 @@ Ole hyvä ja tarkista asennuksesi</translation>
     </message>
     <message>
         <source>Tag Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

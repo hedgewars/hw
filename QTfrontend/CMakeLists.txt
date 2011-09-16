@@ -12,6 +12,16 @@ set(QT_USE_QTMAIN TRUE)
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
+# Check if we need zlib
+check_library_exists(${QT_QTCORE_LIBRARY} inflateInit2_ ${QT_LIBRARY_DIR} QT_PROVIDES_ZLIB_FUNCTIONS)
+
+if(NOT QT_PROVIDES_ZLIB_FUNCTIONS)
+    find_package(ZLIB REQUIRED)
+
+    set(HW_LINK_LIBS ${ZLIB_LIBRARIES} ${HW_LINK_LIBS})
+endif()
+
+
 # Configure for SDL
 find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
@@ -216,7 +226,7 @@ qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 if(APPLE)
     set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
-    set(HW_LINK_LIBS IOKit)
+    set(HW_LINK_LIBS IOKit ${HW_LINK_LIBS})
 
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle)

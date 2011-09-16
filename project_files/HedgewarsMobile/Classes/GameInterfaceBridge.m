@@ -78,8 +78,8 @@
         height = (int) screenBounds.size.width;
     }
 
-    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width];
-    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height];
+    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width * (int)getScreenScale()];
+    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height * (int)getScreenScale()];
     NSString *rotation = [[NSString alloc] initWithString:@"0"];
 
     NSString *modelId = getModelType();
@@ -88,7 +88,7 @@
         tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;                 // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
     else if ([modelId hasPrefix:@"iPhone2"] || [modelId hasPrefix:@"iPod3"])                                    // = iPhone 3GS or iPod Touch 3G
         tmpQuality = 0x00000002 | 0x00000040;                                           // rqBlurryLand | rqKillFlakes
-    else if ([modelId hasPrefix:@"iPad1"] || [modelId hasPrefix:@"iPod4"])                    // = iPad 1G or iPod Touch 4G
+    else if ([modelId hasPrefix:@"iPad1"] || [modelId hasPrefix:@"iPod4"])                                      // = iPad 1G or iPod Touch 4G
         tmpQuality = 0x00000002;                                                        // rqBlurryLand
     else                                                                                                        // = everything else
         tmpQuality = 0;                                                                 // full quality

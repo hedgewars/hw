@@ -512,18 +512,52 @@ var
     i, gX, gY: LongInt;
     dX, dY: hwFloat;
     Fire: PGear;
+    smoke, glass: PVisualGear;
 begin
     AllInactive := false;
 
     doStepFallingGear(Gear);
     CalcRotationDirAngle(Gear);
 
+    // let's add some smoke depending on speed
+    i:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120))+random(10);
+    if (GameTicks mod i) = 0 then
+        begin
+        // adjust angle to match the texture
+        if Gear^.dX.isNegative then i:= 130 else i:= 50;
+        smoke:= AddVisualGear(hwRound(Gear^.X)-round(cos((Gear^.DirAngle+i) * pi / 180)*20), hwRound(Gear^.Y)-round(sin((Gear^.DirAngle+i) * pi / 180)*20), vgtSmoke);
+        if smoke <> nil then smoke^.Scale:= 0.75;
+        end;
+
     if (Gear^.State and gstCollision) <> 0 then
     begin
         PlaySound(sndMolotov);
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y);
-        //doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
+        for i:= 0 to 4 do
+            begin
+            (*glass:= AddVisualGear(gx+random(7)-3, gy+random(5)-2, vgtEgg);
+            if glass <> nil then
+                begin
+                glass^.Frame:= 2;
+                glass^.Tint:= $41B83ED0 - i * $10081000;
+                glass^.dX:= 1/(10*(random(11)-5));
+                glass^.dY:= -1/(random(4)+5);
+                end;*)
+            glass:= AddVisualGear(gx+random(7)-3, gy+random(7)-3, vgtStraightShot);
+            if glass <> nil then 
+                with glass^ do
+                    begin
+                    Frame:= 2;
+                    Tint:= $41B83ED0 - i * $10081000;
+                    Angle:= random * 360;
+                    dx:= 0.0000001;
+                    dy:= 0;
+                    if random(2) = 0 then dx := -dx;
+                    FrameTicks:= 750;
+                    State:= ord(sprEgg)
+                    end;
+            end;
         for i:= 0 to 24 do
         begin
             dX := AngleCos(i * 2) * ((_0_15*(i div 5))) * (GetRandom + _1);
@@ -959,6 +993,44 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure spawnBulletTrail(Bullet: PGear);
+var oX, oY: hwFloat;
+    VGear: PVisualGear;
+begin
+    if Bullet^.PortalCounter = 0 then
+        begin
+        ox:= CurrentHedgehog^.Gear^.X + Int2hwFloat(GetLaunchX(CurrentHedgehog^.CurAmmoType, hwSign(CurrentHedgehog^.Gear^.dX), CurrentHedgehog^.Gear^.Angle));
+        oy:= CurrentHedgehog^.Gear^.Y + Int2hwFloat(GetLaunchY(CurrentHedgehog^.CurAmmoType, CurrentHedgehog^.Gear^.Angle));
+        end
+    else
+        begin
+        ox:= Bullet^.Elasticity;
+        oy:= Bullet^.Friction;
+        end;
+
+        // Bullet trail
+        VGear := AddVisualGear(hwRound(ox), hwRound(oy), vgtLineTrail);
+        if VGear <> nil then
+            begin
+            VGear^.X:= hwFloat2Float(ox);
+            VGear^.Y:= hwFloat2Float(oy);
+            VGear^.dX:= hwFloat2Float(Bullet^.X);
+            VGear^.dY:= hwFloat2Float(Bullet^.Y);
+
+            // reached edge of land. assume infinite beam. Extend it way out past camera
+            if (hwRound(Bullet^.X) and LAND_WIDTH_MASK <> 0)
+                or (hwRound(Bullet^.Y) and LAND_HEIGHT_MASK <> 0) then
+                    // only extend if not under water
+                    if hwRound(Bullet^.Y) < cWaterLine then
+                        begin
+                        VGear^.dX := VGear^.dX + LAND_WIDTH * (VGear^.dX - VGear^.X);
+                        VGear^.dY := VGear^.dY + LAND_WIDTH * (VGear^.dY - VGear^.Y);
+                        end;
+
+            VGear^.Timer := 200;
+            end;
+end;
+
 procedure doStepBulletWork(Gear: PGear);
 var 
     i, x, y: LongWord;
@@ -977,6 +1049,19 @@ begin
         y := hwRound(Gear^.Y);
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
            and (Land[y, x] <> 0) then inc(Gear^.Damage);
+        // let's interrupt before a collision to give portals a chance to catch the bullet
+        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and (Land[y, x] > 255) then
+        begin
+            Gear^.Tag := 1;
+            Gear^.Damage := 0;
+            Gear^.X := Gear^.X - Gear^.dX;
+            Gear^.Y := Gear^.Y - Gear^.dY;
+            CheckGearDrowning(Gear);
+            break;
+        end
+        else
+            Gear^.Tag := 0;
+
         if Gear^.Damage > 5 then
             if Gear^.AmmoType = amDEagle then
                 AmmoShove(Gear, 7, 20)
@@ -1022,31 +1107,7 @@ begin
             end;
         end;
        
-        if Gear^.PortalCounter = 0 then
-            begin 
-            // Bullet trail
-            VGear := AddVisualGear(
-                hwround(CurrentHedgehog^.Gear^.X) + GetLaunchX(CurrentHedgehog^.CurAmmoType, hwSign(CurrentHedgehog^.Gear^.dX), CurrentHedgehog^.Gear^.Angle), 
-                hwround(CurrentHedgehog^.Gear^.Y) + GetLaunchY(CurrentHedgehog^.CurAmmoType, CurrentHedgehog^.Gear^.Angle),
-                vgtLineTrail
-            );
-            if VGear <> nil then
-                begin
-                // http://mantis.freepascal.org/view.php?id=17714 hits again
-                VGear^.dX := Gear^.X.QWordValue / SignAs(_1,_1).QWordValue;
-                VGear^.dY := Gear^.Y.QWordValue / SignAs(_1,_1).QWordValue;
-                
-                // reached edge of land. assume infinite beam. Extend it way out past camera
-                if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) 
-                    or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
-                    begin
-                    VGear^.dX := VGear^.dX + (CurrentHedgehog^.Gear^.dX * LAND_WIDTH).QWordValue / SignAs(_1,_1).QWordValue;
-                    VGear^.dY := VGear^.dY + (CurrentHedgehog^.Gear^.dY * LAND_WIDTH).QWordValue / SignAs(_1,_1).QWordValue;
-                    end;
-                
-                VGear^.Timer := 200;
-                end
-            end;
+        spawnBulletTrail(Gear);
         Gear^.doStep := @doStepShotIdle
     end;
 end;
@@ -1054,9 +1115,9 @@ end;
 procedure doStepDEagleShot(Gear: PGear);
 begin
     PlaySound(sndGun);
-    // add 2 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths
-    Gear^.X := Gear^.X + Gear^.dX * 2;
-    Gear^.Y := Gear^.Y + Gear^.dY * 2;
+    // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just plain old weird angles
+    Gear^.X := Gear^.X + Gear^.dX * 3;
+    Gear^.Y := Gear^.Y + Gear^.dY * 3;
     Gear^.doStep := @doStepBulletWork
 end;
 
@@ -1090,9 +1151,9 @@ begin
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
         Gear^.dY := -AngleCos(HHGear^.Angle) * _0_5;
         PlaySound(sndGun);
-        // add an initial step to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths
-        Gear^.X := Gear^.X + Gear^.dX;  
-        Gear^.Y := Gear^.Y + Gear^.dY;
+        // add 3 initial steps to avoid problem with ammoshove related to calculation of radius + 1 radius as gear widths, and also just weird angles
+        Gear^.X := Gear^.X + Gear^.dX * 3;  
+        Gear^.Y := Gear^.Y + Gear^.dY * 3;
         Gear^.doStep := @doStepBulletWork;
     end
     else
@@ -1405,7 +1466,7 @@ procedure doStepRopeWork(Gear: PGear);
 var 
     HHGear: PGear;
     len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
-    lx, ly: LongInt;
+    lx, ly, cd: LongInt;
     haveCollision,
     haveDivided: boolean;
 
@@ -1446,15 +1507,29 @@ begin
     else
         if (Gear^.Message and gmRight <> 0) then HHGear^.dX := HHGear^.dX + _0_0002;
 
-    if not TestCollisionYwithGear(HHGear, 1) then
-        begin
-        HHGear^.dY := HHGear^.dY + cGravity;
-        if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
-        end;
-
     // vector between hedgehog and rope attaching point
     ropeDx := HHGear^.X - Gear^.X;
     ropeDy := HHGear^.Y - Gear^.Y;
+
+    if not TestCollisionYwithGear(HHGear, 1) then
+        begin
+
+        // depending on the rope vector we know which X-side to check for collision
+        // in order to find out if the hog can still be moved by gravity
+        if ropeDx.isNegative = RopeDy.IsNegative then
+            cd:= -1
+        else
+            cd:= 1;
+
+        // apply gravity if there is no obstacle
+        if not TestCollisionXwithGear(HHGear, cd) then
+            HHGear^.dY := HHGear^.dY + cGravity;
+
+        if (GameFlags and gfMoreWind) <> 0 then
+            // apply wind if there's no obstacle
+            if not TestCollisionXwithGear(HHGear, hwSign(cWindSpeed)) then
+                HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
+        end;
 
     mdX := ropeDx + HHGear^.dX;
     mdY := ropeDy + HHGear^.dY;
@@ -2651,7 +2726,7 @@ begin
         repeat
             CurrentTeam^.CurrHedgehog := Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.
                                          HedgehogsNumber);
-        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
+        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0);
 
         CurrentHedgehog := @CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog];
 
@@ -2722,8 +2797,12 @@ const upd: Longword =   0;
 var 
     i: LongWord;
     HHGear: PGear;
+    sparkles: PVisualGear;
+    hasWishes: boolean;
 begin
     AllInactive := false;
+    hasWishes:= ((Gear^.Message and (gmPrecise or gmSwitch)) = (gmPrecise or gmSwitch));
+    if hasWishes then Gear^.AdvBounce:= 1;
 
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.State := HHGear^.State or gstNoDamage;
@@ -2731,9 +2810,19 @@ begin
 
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y;
+    if (GameTicks mod 2 = 0) and hasWishes then
+        begin
+        sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
+        if sparkles <> nil then 
+            begin
+            sparkles^.Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
+            sparkles^.Angle:= random * 360;
+            end
+        end;
 
     i := 2;
     repeat
+        
         Gear^.X := Gear^.X + HHGear^.dX;
         Gear^.Y := Gear^.Y + HHGear^.dY;
         HHGear^.X := Gear^.X;
@@ -2750,7 +2839,13 @@ begin
     inc(upd);
     if upd > 3 then
     begin
-        if Gear^.Health < 1500 then Gear^.Pos := 2;
+        if Gear^.Health < 1500 then
+        begin
+            if Gear^.AdvBounce <> 0 then
+                Gear^.Pos := 3
+            else
+                Gear^.Pos := 2;
+        end;
 
         AmmoShove(Gear, 30, 40);
 
@@ -2767,6 +2862,21 @@ begin
     if Gear^.Health < Gear^.Damage then
     begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
+        for i:= 0 to 31 do
+            begin
+            sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
+            if sparkles <> nil then
+                with sparkles^ do
+                    begin
+                    Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
+                    Angle:= random * 360;
+                    dx:= 0.001 * (random(200));
+                    dy:= 0.001 * (random(200));
+                    if random(2) = 0 then dx := -dx;
+                    if random(2) = 0 then dy := -dy;
+                    FrameTicks:= random(400) + 250
+                    end;
+            end;
         AfterAttack;
         DeleteGear(Gear);
         DeleteGear(HHGear);
@@ -2783,11 +2893,11 @@ begin
     AllInactive := false;
     dec(Gear^.Timer);
     if Gear^.Timer = 0 then
-    begin
+        begin
         Gear^.Pos := 1;
         PlaySound(sndKamikaze, Gear^.Hedgehog^.Team^.voicepack);
         Gear^.doStep := @doStepKamikazeWork
-    end
+        end
 end;
 
 procedure doStepKamikaze(Gear: PGear);
@@ -3912,12 +4022,20 @@ begin
                 continue;
         end;
 
+        // draw bullet trail
+        if isbullet then
+            spawnBulletTrail(iterator);
+
         // calc gear offset in portal vector direction
         ox := (iterator^.X - Gear^.X);
         oy := (iterator^.Y - Gear^.Y);
         poffs:= (Gear^.dX * ox + Gear^.dY * oy);
 
-        if poffs < _0 then
+        if not isBullet and poffs.isNegative then
+            continue;
+
+        // only port bullets close to the portal
+        if isBullet and not (hwAbs(poffs) < _3) then
             continue;
 
         //
@@ -3945,8 +4063,11 @@ begin
         // calc gear offset in portal normal vector direction
         noffs:= (nx * ox + ny * oy);
 
+        if isBullet and (hwRound(hwAbs(noffs)) >= Gear^.Radius) then
+            continue;
+
         // avoid gravity related loops of not really moving gear
-        if not iscake and (Gear^.dY.isNegative) and (conPortal^.dY.isNegative)
+        if not (iscake or isbullet) and (Gear^.dY.isNegative) and (conPortal^.dY.isNegative)
             and ((iterator^.dX.QWordValue + iterator^.dY.QWordValue) < _0_08.QWordValue)
             and (iterator^.PortalCounter > 0) then
              continue;
@@ -4061,6 +4182,13 @@ begin
         if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
 
+        // store X/Y values of exit for net bullet trail
+        if isbullet then
+        begin
+            iterator^.Elasticity:= iterator^.X;
+            iterator^.Friction  := iterator^.Y;
+        end;
+
         // This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
         iterator:= GearsList;
         while iterator <> nil do
@@ -4122,7 +4250,7 @@ begin
     begin
         Gear^.State := Gear^.State or gstCollision;
         Gear^.State := Gear^.State and not gstMoving;
-        if not calcSlopeTangent(Gear, x, y, tx, ty, 255)
+        if not CalcSlopeTangent(Gear, x, y, tx, ty, 255)
            or (DistanceI(tx,ty) < _12) then // reject shots at too irregular terrain
         begin
             loadNewPortalBall(Gear, true);

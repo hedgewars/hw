@@ -39,6 +39,7 @@ public:
     PagePlayDemo(QWidget* parent = 0);
 
     void FillFromDir(RecordType rectype);
+    bool isSave();
 
     QPushButton *BtnBack;
     QPushButton *BtnPlayDemo;

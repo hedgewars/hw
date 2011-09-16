@@ -150,3 +150,8 @@ void PagePlayDemo::removeRecord()
     else
         FillFromDir(recType);
 }
+
+bool PagePlayDemo::isSave()
+{
+    return recType == RT_Save;
+}

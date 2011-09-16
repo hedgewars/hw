@@ -16,15 +16,15 @@
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation type="unfinished"></translation>
+        <translation>Error de fichero</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede abrir el fichero &apos;%1&apos; en modo lectura</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>No se puede leer &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -127,6 +127,14 @@
         <comment>File Types</comment>
         <translation>Partida guardada de Hedgewars</translation>
     </message>
+    <message>
+        <source>Demo name</source>
+        <translation>Nombre de la demo</translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation>Nombre de la demo:</translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -215,7 +223,7 @@
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished">Establecer</translation>
+        <translation>Cambiar</translation>
     </message>
 </context>
 <context>
@@ -297,14 +305,17 @@ o elige otro nick en las preferencias del juego:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Nick</translation>
+        <translation>Nick</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ya hay alguien conectado
+como %1 en estos momentos
+en el servidor.
+Por favor, introduce otro nick:</translation>
     </message>
 </context>
 <context>
@@ -357,11 +368,11 @@ Please pick another nickname:</source>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
-        <translation>Conectando...</translation>
+        <translation>Estableciendo conexión...</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <translation>Cancelar</translation>
     </message>
 </context>
 <context>
@@ -388,11 +399,19 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation>Mapas dibujados a mano (*.hwmap);;Todos los ficheros (*.*)</translation>
+        <translation type="obsolete">Mapas dibujados a mano (*.hwmap);;Todos los ficheros (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
         <translation>Guardar mapa</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation>Mapas dibujados a mano</translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation>Todos los ficheros</translation>
     </message>
 </context>
 <context>
@@ -757,17 +776,21 @@ Please pick another nickname:</source>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>La versión de Hedgewars para Windows soporta Xfire. Recuerda agregar Hedgewars a tu lista de juegos para que tus amigos puedan saber cuándo estás jugando.</translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Puedes usar el cóctel molotov o el lanzallamas para evitar que erizos enemigos crucen túneles angostos o puentes.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>El abejorro puede ser complicado de usar. Su maniobrabilidad depende de su velocidad, así que intenta no lanzarlo a máxima potencia.</translation>
+    </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation>Contenido adicional</translation>
     </message>
 </context>
 <context>
@@ -796,15 +819,15 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Error</translation>
+        <translation>Error</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">Por favor, introduce un nombre para la sala</translation>
+        <translation>Por favor, introduce un nombre para la sala</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -1024,8 +1047,8 @@ Do you still want to join the room?</source>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 jugadores conectados</numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -1078,7 +1101,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Añade un borde indestructible alrededor del campo de juego</translation>
+        <translation type="obsolete">Añade un borde indestructible alrededor del campo de juego</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1150,7 +1173,15 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Los equipos del mismo clan alternan entre ellos compartiendo la duración de su turno.</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation>Añade un borde indestructible alrededor del campo de juego</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
+        <translation>Añade un borde indestructible en la parta inferior</translation>
     </message>
 </context>
 <context>
@@ -1247,7 +1278,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">Actualizar</translation>
+        <translation>Actualizar</translation>
     </message>
 </context>
 <context>
@@ -1389,67 +1420,67 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Deshabilitado</translation>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Rojo/Cian</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Cian/Rojo</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Rojo/Azul</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul/Rojo</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Rojo/Verde</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Verde/Rojo</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished"></translation>
+        <translation>Izquierda-Derecha</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Arriba-Abajo</translation>
     </message>
     <message>
         <source>Wiggle</source>
-        <translation type="unfinished"></translation>
+        <translation>Temblor</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Rojo/Cian en escala de grises</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Cian/Rojo en escala de grises</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Rojo/Azul en escala de grises</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul/Rojo en escala de grises</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Rojo/Verde en escala de grises</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Verde/Rojo en escala de grises</translation>
     </message>
 </context>
 <context>
@@ -1696,27 +1727,27 @@ así como carecer de algunas funcionalidades o simplemente funcionar mal.
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation type="unfinished"></translation>
+        <translation>Estereoscopía</translation>
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opciones de juego</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Estilo</translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo de juego</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Contraseña</translation>
+        <translation>Contraseña</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation type="unfinished"></translation>
+        <translation>% duración de retirada</translation>
     </message>
 </context>
 <context>
@@ -1724,6 +1755,10 @@ así como carecer de algunas funcionalidades o simplemente funcionar mal.
     <message>
         <source>unnamed</source>
         <translation>sin nombre</translation>
+    </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation>erizo %1</translation>
     </message>
 </context>
 <context>
@@ -1907,7 +1942,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>more</source>
-        <translation type="unfinished"></translation>
+        <translation>más</translation>
     </message>
 </context>
 <context>
@@ -2083,7 +2118,11 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Tag Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Tag team</translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
+        <translation>Añadir borde inferior</translation>
     </message>
 </context>
 <context>
@@ -2126,39 +2165,39 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>slot 1</source>
-        <translation>posición 1</translation>
+        <translation>fila 1</translation>
     </message>
     <message>
         <source>slot 2</source>
-        <translation>posición 2</translation>
+        <translation>fila 2</translation>
     </message>
     <message>
         <source>slot 3</source>
-        <translation>posición 3</translation>
+        <translation>fila 3</translation>
     </message>
     <message>
         <source>slot 4</source>
-        <translation>posición 4</translation>
+        <translation>fila 4</translation>
     </message>
     <message>
         <source>slot 5</source>
-        <translation>posición 5</translation>
+        <translation>fila 5</translation>
     </message>
     <message>
         <source>slot 6</source>
-        <translation>posición 6</translation>
+        <translation>fila 6</translation>
     </message>
     <message>
         <source>slot 7</source>
-        <translation>posición 7</translation>
+        <translation>fila 7</translation>
     </message>
     <message>
         <source>slot 8</source>
-        <translation>posición 8</translation>
+        <translation>fila 8</translation>
     </message>
     <message>
         <source>slot 9</source>
-        <translation>posición 9</translation>
+        <translation>fila 9</translation>
     </message>
     <message>
         <source>timer 1 sec</source>

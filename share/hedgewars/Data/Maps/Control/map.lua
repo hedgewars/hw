@@ -1,5 +1,5 @@
 --------------------------------
--- CONTROL 0.5
+-- CONTROL 0.6
 --------------------------------
 
 ---------
@@ -34,6 +34,16 @@
 
 -- removed user branding
 -- fixed infinite attack time exploit
+
+--------
+-- 0.6
+--------
+
+-- timebox fix
+-- support for more players
+-- remove version numbers
+-- enable limited sudden death
+-- using skip go generates as many points as you would have gotten had you sat and waited
 
 -----------------
 --script begins
@@ -87,10 +97,6 @@ local teamScore = {}
 --------------------------------
 --zone and teleporter variables
 --------------------------------
-
---local redTel
---local orangeTel
---local areaArr = {} -- no longer used
 
 local cPoint = {}
 local cOwnerClan = {}
@@ -159,7 +165,7 @@ function CheckZones()
 		SetVisualGearValues(vCirc[i], vCircX[i], vCircY[i], vCircMinA[i], vCircMaxA[i], vCircType[i], vCircPulse[i], vCircFuckAll[i], vCircRadius[i], vCircWidth[i], 0xffffffff)
 		cOwnerClan[i] = nil
 		for k = 0, (numhhs-1) do
-			if (hhs[k] ~= nil) and (GetGearType(hhs[k]) ~= nil) then
+			if (hhs[k] ~= nil) then --and (GetGearType(hhs[k]) ~= nil) then
                 if (GearIsInZone(hhs[k],i)) == true then
 
                     if cOwnerClan[i] ~= nil then
@@ -179,7 +185,7 @@ function CheckZones()
                     end
 
                 end
-            else hhs[k] = nil
+           -- else hhs[k] = nil
 			end
 		end
 
@@ -207,9 +213,9 @@ function AwardPoints()
 	for i = 0,(zCount-1) do			
 		if CurrentHedgehog ~= nil then		
 			if cOwnerClan[i] == GetHogClan(CurrentHedgehog) then
-				g = AddVisualGear(vCircX[i], vCircY[i], vgtHealthTag, 100, False)
+				g = AddVisualGear(vCircX[i], vCircY[i]-100, vgtHealthTag, 100, False)
                 if g ~= 0 then
-				    SetVisualGearValues(g, vCircX[i], vCircY[i], 0, 0, 0, 0, 0, teamScore[cOwnerClan[i]], 1500, GetClanColor(cOwnerClan[i]))
+				    SetVisualGearValues(g, vCircX[i], vCircY[i]-100, 0, 0, 0, 0, 0, teamScore[cOwnerClan[i]], 1500, GetClanColor(cOwnerClan[i]))
                 end
 			end
 		end
@@ -225,7 +231,7 @@ function RebuildTeamInfo()
 
 
 	-- make a list of individual team names
-	for i = 0, 5 do
+	for i = 0, (TeamsCount-1) do
 		teamNameArr[i] = " " -- = i
 		teamSize[i] = 0
 		teamIndex[i] = 0
@@ -282,14 +288,27 @@ end
 -- game methods
 ------------------------
 
+function onAttack()
+
+	if CurrentHedgehog ~= nil then
+		if GetCurAmmoType() == amSkip then
+			z = (TurnTimeLeft / 2000) - (TurnTimeLeft / 2000)%2 
+			--AddCaption("scored: " .. z,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
+			for i = 0, z do
+				AwardPoints()
+			end
+		end
+	end
+
+end
+
 function onGameInit()
 
 	-- Things we don't modify here will use their default values.
 	--GameFlags = gfInfAttack + gfSolidLand -- Game settings and rules
 	
 	GameFlags = band(bor(GameFlags, gfInfAttack + gfSolidLand), bnot(gfKing + gfForts))
-		
-	SuddenDeathTurns = 99 -- suddendeath is off, effectively
+	WaterRise = 0
 
 end
 
@@ -335,10 +354,7 @@ function onGameStart()
 	for i = 0, (numTeams-1) do
 		pointLimit = pointLimit - 25
 	end
-	--SetGearPosition(hhs[0], 631, 82)
-	--SetGearPosition(hhs[1], 1088, 684)
-	--SetGearPosition(hhs[2], 381, 1569)
-
+	
 	-- reposition hogs if they are on control points until they are not or sanity limit kicks in
 	reN = 0
 	--zz = 0
@@ -353,7 +369,10 @@ function onGameStart()
 		--AddCaption(zz) -- number of times it took to work
 	end
 
-	ShowMission("CONTROL v0.3", "", loc("Control pillars to score points.") .. "|" .. loc("Goal") .. ": " .. pointLimit .. " " .. loc("points"), 0, 0)
+	ShowMission("CONTROL", 
+	"", 
+	loc("Control pillars to score points.") .. "|" .. 
+	loc("Goal") .. ": " .. pointLimit .. " " .. loc("points"), 0, 0)
 
 
 end
@@ -389,14 +408,19 @@ function onNewTurn()
 			TurnTimeLeft = 1
 		end
 
-		for i = 0,5 do
+		totalComment = ""		
+		for i = 0,(TeamsCount-1) do
 				if teamNameArr[i] ~= " " then				-- i
 					teamComment[i] = teamNameArr[i] .. ": " .. teamScore[teamClan[i]] .. " " .. loc("points") .. "|"
+					totalComment = totalComment .. teamComment[i]			
 				elseif teamNameArr[i] == " " then
 					teamComment[i] = "|"
 				end
 			end
-			ShowMission("CONTROL", loc("Team Scores") .. ":", teamComment[0] .. teamComment[1] .. teamComment[2] .. teamComment[3] .. teamComment[4] .. teamComment[5], 0, 1600)
+			
+			ShowMission("CONTROL", 
+			loc("Team Scores") .. ":", 
+			totalComment, 0, 1600)
 	
 	end
 
@@ -408,20 +432,6 @@ function onGameTick()
 	if (vCircCount >= 500) and (gameWon == false) then
 		vCircCount = 0
 		CheckZones()
-		--AwardPoints()
-
-
-		--[[for i = 0,5 do
-
-			if teamNameArr[i] ~= " " then				-- i
-				teamComment[i] = teamNameArr[i] .. ": " .. teamScore[teamClan[i] ] .. " points|"
-			elseif teamNameArr[i] == " " then
-				teamComment[i] = "|"
-			end
-		end
-		
-		ShowMission("CONTROL", "Team Scores:", teamComment[0] .. teamComment[1] .. teamComment[2] .. teamComment[3] .. teamComment[4] .. teamComment[5], 0, 1600)]]
-
 	end	
 
 	-- things we wanna check often
@@ -461,15 +471,37 @@ function onGearResurrect(gear)
 	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
 end
 
+function InABetterPlaceNow(gear)
+	for i = 0, (numhhs-1) do
+		if gear == hhs[i] then
+			hhs[i] = nil
+		end
+	end
+end
+
+function onHogHide(gear)
+	 InABetterPlaceNow(gear)
+end
+
+function onHogRestore(gear)
+	match = false
+	for i = 0, (numhhs-1) do
+		if (hhs[i] == nil) and (match == false) then
+			hhs[i] = gear
+			--AddCaption(GetHogName(gear) .. " has reappeared it seems!")
+			--FollowGear(gear)
+			match = true
+		end
+	end
+end
+
 
 function onGearAdd(gear)
 
 	if GetGearType(gear) == gtHedgehog then
-
 		hhs[numhhs] = gear
 		numhhs = numhhs + 1
 		SetEffect(gear, heResurrectable, true)
-
 	end
 
 end
@@ -477,13 +509,7 @@ end
 function onGearDelete(gear)
 
 	if GetGearType(gear) == gtHedgehog then
-	--AddCaption("gear deleted!")
-		for i = 0, (numhhs-1) do
-			if gear == hhs[i] then
-				hhs[i] = nil
-				--AddCaption("for real")	
-			end		
-		end
+		InABetterPlaceNow(gear)
 	end
 
 end

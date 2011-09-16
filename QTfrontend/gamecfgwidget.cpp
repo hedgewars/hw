@@ -49,9 +49,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
 
     QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
 
-    QLabel *titleLabel = new QLabel(QLabel::tr("Game Options"), GBoxOptions);
-    titleLabel->setMargin(7);    // TODO: make the text larger/richer!!!!
-    GBoxOptionsLayout->addWidget(titleLabel, 0, 0, 1, 0, Qt::AlignHCenter);
+    GBoxOptions->setTitle(tr("Game Options"));
     GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Style"), GBoxOptions), 1, 0);
 
     Scripts = new QComboBox(GBoxOptions);

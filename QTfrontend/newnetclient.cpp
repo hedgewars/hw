@@ -496,17 +496,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         emit AskForRunGame();
         return;
     }
-    
-    if (lst[0] == "BYE") {
-        if (lst[1] == "Authentication failed")
-        {
-            // Set the password blank if case the user tries to join and enter his password again
-            config->setValue("net/passwordlength", 0);
-            config->setNetPasswordLength(0);
-        }
-        // return early so the user won't get an unknown error message dialog (the user already gets a server connection is lost one)
-        return;
-    }
 
     if (lst[0] == "ASKPASSWORD") {
         bool ok = false;
@@ -624,6 +613,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             qWarning("Net: Bad BYE message");
             return;
+        }
+        if (lst[1] == "Authentication failed")
+        {
+            // Set the password blank if case the user tries to join and enter his password again
+            config->setValue("net/passwordlength", 0);
+            config->setNetPasswordLength(0);
         }
         emit showMessage(HWNewNet::tr("Quit reason: ") + lst[1]);
         return;

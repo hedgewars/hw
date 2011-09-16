@@ -1,6 +1,6 @@
 ------------------------------------
 -- TUMBLER
--- v.0.7
+-- v.0.7.1
 ------------------------------------
 
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
@@ -110,6 +110,12 @@ local vTag = {}
 -- Performance tweaks
 -- Variety of small gameplay changes
 
+------------------------
+-- version 0.7.1
+------------------------
+
+-- redraw HUD on screen resolution change
+
 ---------------------------
 -- some other ideas/things
 ---------------------------
@@ -194,37 +200,37 @@ end
 
 function HideTags()
 
-	for i = 0, 3 do 	
+	for i = 0, 3 do
 		SetVisualGearValues(vTag[i],0,0,0,0,0,1,0, 0, 240000, 0xffffff00)
 	end
 
 end
 
 function DrawTag(i)
-	
+
 	zoomL = 1.3
 
 	xOffset = 40
 
 	if i == 0 then
-		yOffset = 40	
+		yOffset = 40
 		tCol = 0xffba00ff --0xffed09ff --0xffba00ff
 		tValue = TimeLeft
 	elseif i == 1 then
-		zoomL = 1.1		
-		yOffset = 70	
+		zoomL = 1.1
+		yOffset = 70
 		tCol = wepCol[0]
 		tValue = wepAmmo[0]
 	elseif i == 2 then
-		zoomL = 1.1		
+		zoomL = 1.1
 		xOffset = 40 + 35
-		yOffset = 70		
+		yOffset = 70
 		tCol = wepCol[1]
 		tValue = wepAmmo[1]
 	elseif i == 3 then
-		zoomL = 1.1		
+		zoomL = 1.1
 		xOffset = 40 + 70
-		yOffset = 70		
+		yOffset = 70
 		tCol = wepCol[2]
 		tValue = wepAmmo[2]
 	end
@@ -232,7 +238,7 @@ function DrawTag(i)
 	DeleteVisualGear(vTag[i])
 	vTag[i] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vTag[i])
-	SetVisualGearValues	(	
+	SetVisualGearValues	(
 				vTag[i], 		--id
 				-(ScreenWidth/2) + xOffset,	--xoffset
 				ScreenHeight - yOffset, --yoffset
@@ -272,19 +278,19 @@ function CheckProximityToExplosives(gear)
 			DeleteGear(gear)
 			AddCaption(wep[0] .. " " .. loc("ammo extended!"), wepCol[0], capgrpAmmoinfo )
 			DrawTag(1)
-			
+
 			barrelsEaten = barrelsEaten + 1
 			if barrelsEaten == 5 then
 				AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Barrel Eater!"),0xffba00ff,capgrpMessage2)
 			end
-		
+
 		elseif (GetGearType(gear) == gtMine) then
 			wepAmmo[1] = wepAmmo[1] + 1
 			PlaySound(sndShotgunReload)
 			DeleteGear(gear)
 			AddCaption(wep[1] .. " " .. loc("ammo extended!"), wepCol[1], capgrpAmmoinfo )
 			DrawTag(2)
-			
+
 			minesEaten = minesEaten + 1
 			if minesEaten == 5 then
 				AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Mine Eater!"),0xffba00ff,capgrpMessage2)
@@ -308,7 +314,7 @@ function CheckProximity(gear)
 		if GetHealth(gear) > 0 then
 
 			AddCaption(loc("Tumbling Time Extended!"), 0xffba00ff, capgrpMessage2 )
-			
+
 			TimeLeft = TimeLeft + HealthCaseAmount  --5 --5s
 			DrawTag(0)
 			--PlaySound(sndShotgunReload)
@@ -436,31 +442,31 @@ function onGameInit()
 
 	mineSpawn = MinesNum
 	if mineSpawn > 4 then
-		mineSpawn = 4	
+		mineSpawn = 4
 	end
 
 	barrelSpawn = Explosives
 	if barrelSpawn > 4 then
-		barrelSpawn = 4	
+		barrelSpawn = 4
 	end
 
 	--MinesNum = 0
 	--Explosives = 0
 
-	for i = 0, 3 do 	
-		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)	
+	for i = 0, 3 do
+		vTag[0] = AddVisualGear(0, 0, vgtHealthTag, 0, false)
 	end
 
 	HideTags()
 
 	wep[0] = loc("Barrel Launcher")
-	wep[1] = loc("Mine Deployer")	
+	wep[1] = loc("Mine Deployer")
 	wep[2] = loc("Flamer")
 
 	wepCol[0] = 0x78818eff
 	wepCol[1] = 0xa12a77ff
 	wepCol[2] = 0xf49318ff
-	
+
 	wepCount = 3
 
 end
@@ -493,6 +499,16 @@ function onGameStart()
 
 end
 
+function onScreenResize()
+
+	-- redraw Tags so that their screen locations are updated
+	if (CurrentHedgehog ~= nil) and (tumbleStarted == true) then
+		for i = 0, 3 do
+			DrawTag(i)
+		end
+	end
+
+end
 
 function onNewTurn()
 
@@ -528,7 +544,7 @@ function onNewTurn()
 
 	--reset ammo counts
 	wepAmmo[0] = 2
-	wepAmmo[1] = 1 
+	wepAmmo[1] = 1
 	wepAmmo[2] = 50 -- 50000 -- 50
 	wepIndex = 2
 	ChangeWeapon()
@@ -563,7 +579,7 @@ function onGameTick()
 			SetHealth(CurrentHedgehog, GetHealth(CurrentHedgehog) + 47) -- new
 			for i = 0, 3 do
 				DrawTag(i)
-			end			
+			end
 		end
 	end
 

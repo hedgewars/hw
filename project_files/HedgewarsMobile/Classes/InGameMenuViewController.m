@@ -45,7 +45,7 @@
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Show Help", @""),
                       NSLocalizedString(@"Tag", @""),
-                      NSLocalizedString(@"Snapshot",@""),
+//                      NSLocalizedString(@"Snapshot",@""),
                       NSLocalizedString(@"End Game", @""),
                       nil];
     self.menuList = array;
@@ -117,7 +117,8 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 4;
+    return 3;
+//    return 4;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -151,6 +152,7 @@
 
             break;
         case 2:
+/*
             alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Going to take a screenshot",@"")
                                                message:NSLocalizedString(@"The game snapshot will be placed in your Photo Album and it will be taken as soon as the pause menu is dismissed",@"")
                                               delegate:nil
@@ -162,6 +164,7 @@
 
             break;
         case 3:
+*/
             actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
                                                       delegate:self
                                              cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
