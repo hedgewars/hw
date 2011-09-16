@@ -328,7 +328,7 @@ begin
         hx:= ox + 8 * sign;
         hy:= oy - 2;
         aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
-        if CurAmmoGear <> nil then
+        if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind <> gtTardis) then
         begin
             case CurAmmoGear^.Kind of
                 gtShotgunShot: begin
