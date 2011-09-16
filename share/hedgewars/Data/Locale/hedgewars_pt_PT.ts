@@ -125,11 +125,11 @@
     </message>
     <message>
         <source>Demo name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome do demo</translation>
     </message>
     <message>
         <source>Demo name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome do demo:</translation>
     </message>
 </context>
 <context>
@@ -398,11 +398,11 @@ Por favor escolha outro nome de utilizador.</translation>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapas Desenhados</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Todos os ficheiros</translation>
     </message>
 </context>
 <context>
@@ -752,7 +752,8 @@ Por favor escolha outro nome de utilizador.</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation type="unfinished"></translation>
+        <translation>Conteúdo Transferível
+Downloadable Content</translation>
     </message>
 </context>
 <context>
@@ -1010,8 +1011,8 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message numerus="yes">
         <source>%1 players online</source>
         <translation>
-            <numerusform>%1 jogadores online</numerusform>
             <numerusform>%1 jogador online</numerusform>
+            <numerusform>%1 jogadores online</numerusform>
         </translation>
     </message>
 </context>
@@ -1028,10 +1029,6 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>Land can not be destroyed!</source>
         <translation>O terreno não pode ser destruído!</translation>
-    </message>
-    <message>
-        <source>Add an indestructable border around the terrain</source>
-        <translation type="obsolete">Adiciona uma borda indestrutível à volta do terreno</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1139,11 +1136,11 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation>Adiciona uma borda indestrutível à volta do terreno</translation>
+        <translation>Adiciona uma barreira indestrutível à volta do terreno</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Adiciona uma barreira indestrutível ao longo do fundo do terreno</translation>
     </message>
 </context>
 <context>
@@ -1671,7 +1668,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>hedgehog %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ouriço %1</translation>
     </message>
 </context>
 <context>
@@ -2031,7 +2028,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Add Bottom Border</source>
-        <translation type="unfinished"></translation>
+        <translation>Adicionar borda inferior</translation>
     </message>
 </context>
 <context>
