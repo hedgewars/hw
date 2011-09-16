@@ -43,7 +43,7 @@ extern "C" void Java_org_hedgewars_mobile_SDLActivity_nativeInit(JNIEnv* env, jc
     }
 
     /* We exit here for consistency with other platforms. */
-    exit(status);
+    //exit(status); Xeli: Or lets not crash the entire app.....
 }
 
 /* vi: set ts=4 sw=4 expandtab: */

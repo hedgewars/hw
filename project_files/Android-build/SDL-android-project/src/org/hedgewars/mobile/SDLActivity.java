@@ -285,7 +285,8 @@ class SDLMain implements Runnable {
 				String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
 				"0", "null", "xeli", "1", "1", "1", "0", "", path });
 
-		// Log.v("SDL", "SDL thread terminated");
+		//Log.v("SDL", "SDL thread terminated");
+		SDLActivity.mSingleton.finish();
 	}
 }
 
@@ -514,7 +515,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 			Log.v("SDL", "key down: " + keyCode);
 			if(keyCode == KeyEvent.KEYCODE_BACK){//TODO ask user to quit or not
 				SDLActivity.nativeQuit();
-				SDLActivity.mSingleton.finish();
+				//SDLActivity.mSingleton.finish();
 			}else{
 				SDLActivity.onNativeKeyDown(keyCode);	
 			}
