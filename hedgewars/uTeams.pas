@@ -427,17 +427,11 @@ begin
 with Team do
     for i:= 0 to cMaxHHIndex do
         with Hedgehogs[i] do
-            begin
-            if Hedgehogs[i].GearHidden <> nil then
-                RestoreHog(@Hedgehogs[i]);
-
             if Gear <> nil then
                 begin
                 Gear^.Invulnerable:= false;
-                Gear^.Damage:= Gear^.Health;
-                Gear^.State:= Gear^.State or gstHHGone
+                Gear^.Damage:= Gear^.Health
                 end
-            end
 end;
 
 procedure chAddHH(var id: shortstring);
