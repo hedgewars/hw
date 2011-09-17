@@ -7,7 +7,7 @@
  + Screen for downloadable content
  + Allow up to 8 teams in a game
  + New gameplay modes/styles: Racer, The Specialists, Tumbler, Space Invasion, Balanced Random Weapon
- + New single player missions: Bamboo Thicket, That Sinking Feeling, Newton and the Tree 
+ + New single player missions: Bamboo Thicket, That Sinking Feeling, Newton and the Tree
  + New Weapon/Utility: Land Spray Gun
  + New Utility: Time Box
  + New Game mode: Tag team
