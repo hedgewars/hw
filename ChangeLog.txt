@@ -1,12 +1,13 @@
 + features
 * bugfixes
 
-0.9.15 -> ???:
+0.9.15 -> 0.9.16:
  + Stereoscopic rendering
  + Installing content (anything under Data/ - maps, sounds, and any such stuff) to user profile allows custom adding/overriding of any Data/ content
  + Screen for downloadable content
  + Allow up to 8 teams in a game
- + New gameplay modes/styles: Racer, The Specialists, Tumbler, Space Invasion
+ + New gameplay modes/styles: Racer, The Specialists, Tumbler, Space Invasion, Balanced Random Weapon
+ + New single player missions: Bamboo Thicket, That Sinking Feeling, Newton and the Tree 
  + New Weapon/Utility: Land Spray Gun
  + New Utility: Time Box
  + New Game mode: Tag team
@@ -23,6 +24,8 @@
  + Drill Strike bombs don't explode when leaving ground, but after a (customizable!) timer
  + Hammer impacts mines/barrels
  + Seduction is an Area-of-Effect attack now
+ + Significantly altered flame behavior and damage.
+ + 'Throwing' weapons into hogs (e.g. grenade) no longer does max damage.
  + Ukranian localization of Default voice. support for localized voices
  + Theme cleanup, including the new theme config file change
  + Improvements in scoring and tracking damage
