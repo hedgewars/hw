@@ -203,7 +203,7 @@ void HWChatWidget::linkClicked(const QUrl & link)
         QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
         if (items.size() < 1)
             return;
-        QMenu * popup = new QMenu();
+        QMenu * popup = new QMenu(this);
         // selecting an item will automatically scroll there, so let's save old position
         QScrollBar * scrollBar = chatNicks->verticalScrollBar();
         int oldScrollPos = scrollBar->sliderPosition();
