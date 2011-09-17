@@ -21,7 +21,6 @@
  + Defective mines explode if they take enough damage
  + Rope head can attach to hogs/crates/barrels again (rope still passes through them)
  + Control of grenade bounce
- + Drawing straight lines in drawn map mode (hold down the control key when clicking, then move mouse to end point and release).
  + Drill Strike bombs don't explode when leaving ground, but after a (customizable!) timer
  + Hammer impacts mines/barrels
  + Seduction is an Area-of-Effect attack now
@@ -53,7 +52,8 @@
  * Various bug/leak fixes
 
 Frontend/Menu and Netgame:
- + Drawing straight lines in drawn map mode
+ + Drawing straight lines in drawn map mode (hold down the control key when clicking, then move mouse to end point and release).
+ + Undo clear in drawn map mode
  + Autokick ignored players joining your room
  + Improved nick sorting in lobby and rooms. (not case-sensitive, letters first, friend @ top, ignored @ bottom)
  + Display player count in lobby
