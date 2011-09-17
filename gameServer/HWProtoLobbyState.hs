@@ -75,11 +75,12 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let maybeRI = find (\ri -> roomName == name (irnc `room` ri)) ris
     let jRI = fromJust maybeRI
     let jRoom = irnc `room` jRI
+    let sameProto = clientProto cl == roomProto jRoom
     let jRoomClients = map (client irnc) $ roomClients irnc jRI
     let nicks = map nick jRoomClients
     let chans = map sendChan (cl : jRoomClients)
     return $
-        if isNothing maybeRI then 
+        if isNothing maybeRI || not sameProto then 
             [Warning "No such rooms"]
             else if isRestrictedJoins jRoom then
             [Warning "Joining restricted"]
@@ -135,7 +136,7 @@ handleCmd_lobby ["FOLLOW", asknick] = do
     cl <- thisClient
     let ri = clientRoom rnc $ fromJust ci
     let clRoom = room rnc ri
-    if isNothing ci || ri == lobbyId || clientProto cl /= roomProto clRoom then
+    if isNothing ci || ri == lobbyId then
         return []
         else
         handleCmd_lobby ["JOIN_ROOM", name clRoom]

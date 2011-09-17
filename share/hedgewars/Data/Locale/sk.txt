@@ -258,7 +258,7 @@
 03:43=Zahrať Beathovenovu smrteľnú sonátu
 03:44=Spotrebujte do: 1923
 03:45=Sila vedy
-03:46=Hot Hot Hot!
+03:46=Páli, páli, páli!
 03:47=Prilepte ich niekam šikovne!
 03:48=A je tu Hammer-time!
 03:49=Je dobrý na to, na čo si myslíte
@@ -267,6 +267,7 @@
 03:52=NEPOUŽÍVANÉ
 03:53=Typ 40
 03:54=Postavte niečo
+03:55=Pomôcka
 
 ; Popis zbraní (ako oddeľovač riadkov použite |)
 04:00=Zaútočte na vašich nepriateľov obyčajným granátom.|Vybuchne vtedy, keď vyprší časomiera.|1‐5: Nastavenie časovača granátu|Útok: Držanie tlačidla zvyšuje silu hodu|
@@ -319,6 +320,12 @@
 04:47=Dvojnásobná radosť s dvoma ostnatými,|prikrádajúcimi sa, lepkavými mínami. Pripravte|reťazovú reakciu alebo sa ochráňte (alebo oboje|naraz!)|Útok: Podržte dlhšie pre vyššiu silu výstrelu|(dvakrát)|
 04:48=Prečo si vylievať svoj hnev len na krtkoch?|Búchanie po ježkoch vie byť rovnako zábavné! Dobrá|rana týmto kladivom vezme ježkovi tretinu jeho|zdravia a zarazí ho do zeme.|Útok: Aktivovanie|
 04:49=Oživte vašich priateľov!|Ale pozor, že táto zbraň oživí aj vašich nepriateľov.|Útok: Pre pomalé oživovanie držte útok stlačený|Hore: Urýchlenie oživovania
+04:50=Skrýva sa pred vami nepriateľ pod zemou? Vykopte|ho pomocou raketovej vŕtačky!|Časovač nastavuje počet sekúnd|do detonácie.
+04:51=Nemíňajte muníciu - hod blatom je zdarma.|Trošku štípe a dokáže ježka zhodiť.
+04:52=NEPOUŽITÉ
+04:53=Vyberte sa na cestu časom a priestorom|a nechajte vašich priateľov bojovať bez vás.|Buďte pripravený vrátiť sa kedykoľvek,|buď pri Náhlej smrti alebo keď sú všetci porazení.|Poznámka: Nefunguje počas Náhlej smrti,|ak ste sám alebo ak ste kráľom.
+04:54=NEKOMPLETNÉ
+04:55=Rozprášte prúd lepkavej hliny.|Postavte mosty, pochovajte nepriateľov,|zapečaťte tunely. Buďte|však opatrný a nezašpinte sa|od nej aj vy.
 
 
 ; Reťazce pre ciele hry

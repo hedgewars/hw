@@ -53,7 +53,7 @@
 00:50=Ataque Perfurador
 00:51=Bola de Lama
 00:52=Nenhuma arma selecionada
-00:53=TARDIS
+00:53=Caixote do Tempo
 00:54=Estrutura
 00:55=Terreno-instantâneo
 
@@ -235,12 +235,12 @@
 02:02=Luta com honra
 02:02=Não desistas
 02:02=Nunca te rendas
-02:02=Rebenta-os e empilha-os
+02:02=Rebenta e empilha!
 02:02=Que comece a festa explosiva!
 02:02=Espero que estejas pronto para a rixa!
 02:02=Vai vai vai!
 02:02=Os ouriços avançam!
-02:02=Vai haver tiros e bombas e socos nas trombas!
+02:02=Vai haver tiros, bombas e socos nas trombas!
 02:02=Não temas!
 02:02=Sê corajoso e conquista
 
@@ -253,12 +253,12 @@
 ; New health crate
 02:05=Auxílio iminente!
 02:05=Médico!
-02:05=Primeiros-socorros atirados dos céus!
+02:05=Kit de primeiros-socorros, largado do céu!
 02:05=Um pacote de vida para ti
 02:05=Energia... em forma de caixa!
 02:05=O doutor chama
 02:05=Ligaduras frescas!
-02:05=Isto irá fazer-te sentir melhor
+02:05=Isto vai-te fazer sentir melhor
 02:05=Um Hi-Potion! Ups, jogo errado
 02:05=Um "agarra-me já"!
 02:05=Agarra-o
@@ -448,6 +448,7 @@
 03:52=UNUSED
 03:53=Modelo 40
 03:54=Constroi qualquer coisa
+03:55=Utilitário
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataca os teus inimigos usando uma simples granada.|Explodirá quando o tempo chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
@@ -500,6 +501,12 @@
 04:47=Duplica a diversão com estas duas minas autocolantes!|Utiliza-as para atacar ou defender. É contigo!|Ataque: Deixa pressionado para disparar mais longe
 04:48=Porque é que têm as toupeiras de ser sempre as vitimas?|Dar marteladas em ouriços pode ser igualmente divertido!|Uma boa martelada rapidamente remove um terço da vida|de um ouriço e ainda o enterra no solo!|Ataque: Activar
 04:49=Ressuscita os teus amigos!|Mas cuidado, esta tecnica ressuscita também os teus enimigos.|Ataque: Deixa pressionado para ressuscitar lentamente|Up: Acelerar a ressureição
+04:50=Está alguém escondido num túnel subterrâneo?|Escava-os de lá para fora com um Ataque Perfurador!|O temporizador controla quão longe os misseis irão escavar.
+04:51=Empurra um ouriço sem perder o turno|criando uma bola de lama tu mesmo!
+04:52=UNUSED
+04:53=Parte numa aventura pelo tempo e espaço,|deixando os teus colegas para se defenderem sozinhos.|Está preparado para regressar a qualquer altura,|para Morte Súbita ou se todos forem derrotados.|Atenção: Não funciona em Morte Súbita,|se estiveres sozinho, ou se fores o Rei.
+04:54=INCOMPLETO
+04:55=Aplica estas particulas de terreno em spray onde quiseres.|Constroi pontes, enterra inimigos ou fecha túneis.|Tem apenas cuidado, não o uses em ti proprio!
 
 ; Game goal strings
 05:00=Modos de Jogo

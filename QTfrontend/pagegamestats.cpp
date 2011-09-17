@@ -43,14 +43,16 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     pageLayout->setSpacing(20);
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 1);
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
-    BtnBack->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    pageLayout->setContentsMargins(7, 7, 7, 0);
 
     BtnSave = addButton(":/res/Save.png", pageLayout, 3, 2, true);
-    BtnSave->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     BtnSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
     connect(BtnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
+    BtnBack->setFixedHeight(BtnSave->height());
+    BtnBack->setFixedWidth(BtnBack->width()+2);
+    BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
 
     QGroupBox * gb = new QGroupBox(this);
     QVBoxLayout * gbl = new QVBoxLayout;

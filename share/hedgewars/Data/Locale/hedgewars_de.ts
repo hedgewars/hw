@@ -5,26 +5,26 @@
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
-        <translation>Neu</translation>
+        <translation>neu</translation>
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopie von</translation>
     </message>
 </context>
 <context>
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateifehler</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei &apos;%1&apos; konnte nicht für Schreibzugriff geöffnet werden.</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei &apos;%1&apos; konnte nicht gelese werden.</translation>
     </message>
 </context>
 <context>
@@ -61,7 +61,7 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn diese Option aktiviert ist, wird durch Auswählen eines Spielprofils auch automatisch Waffen ausgewählt</translation>
     </message>
 </context>
 <context>
@@ -125,11 +125,11 @@
     </message>
     <message>
         <source>Demo name</source>
-        <translation type="unfinished"></translation>
+        <translation>Demo-Name</translation>
     </message>
     <message>
         <source>Demo name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Demo-Name:</translation>
     </message>
 </context>
 <context>
@@ -215,11 +215,11 @@
     </message>
     <message>
         <source>Seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Seed</translation>
     </message>
     <message>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Setzen</translation>
     </message>
 </context>
 <context>
@@ -303,14 +303,17 @@ wähle einen anderen Spitznamen:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Spitzname</translation>
+        <translation>Spitzname</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jemand verwendet
+deinen Spiznamen %1 
+bereits auf dem Server.
+Bitte wähle einen anderen Spitznamen:</translation>
     </message>
 </context>
 <context>
@@ -398,11 +401,11 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Gezeichnete Karten</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Dateien</translation>
     </message>
 </context>
 <context>
@@ -757,31 +760,31 @@ Please pick another nickname:</source>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du findest die Hedgewars Konfigurationsdateien unter &quot;Library/Application Support/Hedgewars&quot; in deinem Home-Verzeichnis. Erstelle Backups oder kopiere deine Dateien, aber editiere sie besser nicht selbst.</translation>
     </message>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Du findest die Hedgewars Konfigurationsdateien unter &quot;.hedgewars&quot; in deinem Home-Verzeichnis. Erstelle Backups oder kopiere deine Dateien, aber editiere sie besser nicht selbst.</translation>
     </message>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Die Windows version von Hedgewars unterstützt Xfire. Füge Hedgewars zu deiner Spieleliste hinzu damit deine Freunde dich spielen sehen können.</translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Benutze den Molotov-Cocktail oder den Flammenwerfer um Igel vorübergehend am passieren von Gelände wie z.B. Tunnels oder Platformen zu hindern.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Die Verwendung der Zielsuchende Biene ist ein bisschen knifflig. Ihr Wenderadius hängt von der Geschwindigkeit ab, versuche sie also nicht mit voller Stärke wegzuschießen.</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation type="unfinished"></translation>
+        <translation>Herunterladbare Inhalte</translation>
     </message>
 </context>
 <context>
@@ -810,15 +813,15 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Fehler</translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">Bitte einen Raumnamen eingeben</translation>
+        <translation>Bitte einen Raumnamen eingeben</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -864,27 +867,27 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>New scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Spielprofil</translation>
     </message>
     <message>
         <source>Edit scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielprofil bearbeiten</translation>
     </message>
     <message>
         <source>Delete scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielprofil löschen</translation>
     </message>
     <message>
         <source>New weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Neues Waffenprofil</translation>
     </message>
     <message>
         <source>Edit weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Waffenprofil bearbeiten</translation>
     </message>
     <message>
         <source>Delete weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Waffenprofil löschen</translation>
     </message>
 </context>
 <context>
@@ -1038,9 +1041,9 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 Spieler online</numerusform>
+            <numerusform>%1 Spieler online</numerusform>
         </translation>
     </message>
 </context>
@@ -1089,10 +1092,6 @@ Willst du trotzdem den Raum betreten?</translation>
     <message>
         <source>Land can not be destroyed!</source>
         <translation>Die Landschaft ist nicht zerstörbar!</translation>
-    </message>
-    <message>
-        <source>Add an indestructable border around the terrain</source>
-        <translation type="obsolete">Einfügen eines unzerstörbaren Kartenrand</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1152,27 +1151,27 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
-        <translation type="unfinished"></translation>
+        <translation>Du wirst dich nicht mehr um Wind kümmern müssen.</translation>
     </message>
     <message>
         <source>Wind will affect almost everything.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wind beeinflusst fast alles.</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Teams gleicher Farbe kommen nacheinander dran und teilen sich ihre Zugzeit.</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation>Einfügen eines unzerstörbaren Kartenrand</translation>
+        <translation>Fügt eine unzerstörbare Randbegrenzung um das Spielfeld herum hinzu.</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Fügt eine unzerstörbare Randbegrenzung am unteren Kartenrand hinzu.</translation>
     </message>
 </context>
 <context>
@@ -1187,11 +1186,11 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieren</translation>
     </message>
 </context>
 <context>
@@ -1269,7 +1268,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">Aktualisieren</translation>
+        <translation>Aktualisieren</translation>
     </message>
 </context>
 <context>
@@ -1379,67 +1378,67 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Deaktiviert</translation>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Rot/Türkis</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Türkis/Rot</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>Rot/Blau</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Blau/Rot</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished"></translation>
+        <translation>Rot/Grün</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Grün/Rot</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished"></translation>
+        <translation>Nebeneinander</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Übereinander</translation>
     </message>
     <message>
         <source>Wiggle</source>
-        <translation type="unfinished"></translation>
+        <translation>Wackeln</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Rot/Türkis Graustufen</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Türkis/Rot Graustufen</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Rot/Blau Graustufen</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Blau/Rot Graustufen</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Rot/Grün Graustufen</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation>Grün/Rot Graustufen</translation>
     </message>
 </context>
 <context>
@@ -1494,7 +1493,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Schemes and Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielprofile und Waffen</translation>
     </message>
 </context>
 <context>
@@ -1671,31 +1670,31 @@ Einige Dinge könnten nicht funktionieren oder unvollständig sein. Benutzung au
     </message>
     <message>
         <source>% Rope Length</source>
-        <translation type="unfinished"></translation>
+        <translation>% Seillänge</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation type="unfinished"></translation>
+        <translation>Stereo-Rendering</translation>
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Spieloptionen</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation>Stil</translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielprofil</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Passwort</translation>
+        <translation>Passwort</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation type="unfinished"></translation>
+        <translation>% Rückzugszeit</translation>
     </message>
 </context>
 <context>
@@ -1768,27 +1767,27 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Teams</source>
-        <translation type="unfinished">Teams</translation>
+        <translation>Teams</translation>
     </message>
     <message>
         <source>Really delete this team?</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieses Team wirklich löschen?</translation>
     </message>
     <message>
         <source>Schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielprofil</translation>
     </message>
     <message>
         <source>Can not delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardspielprofil &apos;%1&apos; kann nicht gelöscht werden!</translation>
     </message>
     <message>
         <source>Really delete this game scheme?</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieses Spielprofil wirklich löschen?</translation>
     </message>
     <message>
         <source>Can not delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardwaffenprofil &apos;%1&apos; kann nicht gelöscht werden!</translation>
     </message>
 </context>
 <context>
@@ -1886,7 +1885,7 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>more</source>
-        <translation type="unfinished"></translation>
+        <translation>mehr</translation>
     </message>
 </context>
 <context>
@@ -1940,11 +1939,11 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>new</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>neu</translation>
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopie von</translation>
     </message>
 </context>
 <context>
@@ -2054,19 +2053,19 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Disable Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Wind</translation>
     </message>
     <message>
         <source>More Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Mehr Wind</translation>
     </message>
     <message>
         <source>Tag Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Tag Team</translation>
     </message>
     <message>
         <source>Add Bottom Border</source>
-        <translation type="unfinished"></translation>
+        <translation>Untere Randbegrenzung hinzufügen</translation>
     </message>
 </context>
 <context>

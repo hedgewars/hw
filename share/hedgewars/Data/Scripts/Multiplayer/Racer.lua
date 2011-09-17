@@ -496,6 +496,9 @@ function onGameTick()
 		if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
 			AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
 			PlaySound(sndDenied)
+		elseif (y > WaterLine-50) then
+			AddCaption(loc("Please place the way-point further from the waterline."))
+			PlaySound(sndDenied)
 		else
 			PlaceWayPoint(x, y)
 			if wpCount == wpLimit then
