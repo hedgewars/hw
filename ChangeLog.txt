@@ -21,6 +21,7 @@
  + Defective mines explode if they take enough damage
  + Rope head can attach to hogs/crates/barrels again (rope still passes through them)
  + Control of grenade bounce
+ + Drawing straight lines in drawn map mode (hold down the control key when clicking, then move mouse to end point and release).
  + Drill Strike bombs don't explode when leaving ground, but after a (customizable!) timer
  + Hammer impacts mines/barrels
  + Seduction is an Area-of-Effect attack now
