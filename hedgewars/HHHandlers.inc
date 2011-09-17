@@ -1016,7 +1016,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogFree(Gear: PGear);
-var prevState: Longword;
+var prevState, i: Longword;
 begin
 prevState:= Gear^.State;
 
@@ -1038,7 +1038,7 @@ if (Gear^.Health = 0) then
         PrvInactive:= false;
         AllInactive:= false;
 
-        if (Gear^.State and gstHHGone) = 0 then
+        if not Gear^.Hedgehog^.Team^.hasGone then
             begin
             Gear^.Hedgehog^.Effects[hePoisoned] := false;
             if Gear^.Hedgehog^.Effects[heResurrectable] then begin
@@ -1052,7 +1052,20 @@ if (Gear^.Health = 0) then
             end
         else
             begin
+            Gear^.State:= Gear^.State or gstHHGone;
             Gear^.doStep:= @doStepHedgehogGone;
+
+            with Gear^.Hedgehog^.Team^ do
+                for i:= 0 to cMaxHHIndex do
+                    if Hedgehogs[i].GearHidden <> nil then
+                        begin
+                        RestoreHog(@Hedgehogs[i]);
+                        if Hedgehogs[i].Gear <> nil then 
+                            begin
+                            Hedgehogs[i].Gear^.State:= Gear^.State or gstHHGone;
+                            Hedgehogs[i].Gear^.doStep:= @doStepHedgehogGone
+                            end
+                        end;
 
             // Gone message
             AddCaption(Format(GetEventString(eidGone), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
@@ -1094,9 +1107,7 @@ if (Gear^.State and gstHHDriven) = 0 then
 else
     begin
     with Gear^.Hedgehog^ do
-        if Team^.hasGone then 
-            TeamGoneEffect(Team^)
-        else
-            doStepHedgehogDriven(Gear)
+        if Team^.hasGone then TeamGoneEffect(Team^);
+    doStepHedgehogDriven(Gear)
     end;
 end;
