@@ -826,7 +826,7 @@ void HWNewNet::handleNotice(int n)
         case 0:
         {
             bool ok = false;
-            QString newNick = QInputDialog::getText(0, tr("Nickname"), tr("Some one already uses\n your nickname %1\non the server.\nPlease pick another nickname:").arg(mynick), QLineEdit::Normal, mynick, &ok);
+            QString newNick = QInputDialog::getText(m_pGameCFGWidget, tr("Nickname"), tr("Some one already uses\n your nickname %1\non the server.\nPlease pick another nickname:").arg(mynick), QLineEdit::Normal, mynick, &ok);
 
             if (!ok || newNick.isEmpty()) {
                 Disconnect();
