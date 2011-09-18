@@ -41,6 +41,7 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
     pChatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
     pageLayout->setRowStretch(1, 100);
+    pageLayout->setRowStretch(2, 100);
 
     pGameCFG = new GameCFGWidget(this);
     pageLayout->addWidget(pGameCFG, 0, 0);
