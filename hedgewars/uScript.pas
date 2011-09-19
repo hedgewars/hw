@@ -1207,6 +1207,11 @@ begin
             lua_pushinteger(L, hwRound(gear^.X));
             lua_pushinteger(L, hwRound(gear^.Y))
             end
+        else
+            begin
+            lua_pushnil(L);
+            lua_pushnil(L)
+            end;
         end;
     lc_getgearposition:= 2;
 end;
