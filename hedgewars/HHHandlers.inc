@@ -1064,13 +1064,13 @@ if (Gear^.Health = 0) then
 if ((Gear^.State and gstWait) = 0) and
     (prevState <> Gear^.State) then
     begin
-    Gear^.State:= gstWait;
+    Gear^.State:= Gear^.State or gstWait;
     Gear^.Timer:= 150
     end else
     begin
     if Gear^.Timer = 0 then
         begin
-        Gear^.State:= 0;
+        Gear^.State:= Gear^.State and not gstWait;
         Gear^.Active:= false;
         AddGearCI(Gear);
         exit
@@ -1094,7 +1094,7 @@ if (Gear^.State and gstHHDriven) = 0 then
 else
     begin
     with Gear^.Hedgehog^ do
-        if Team^.hasGone then 
+        if Team^.hasGone then
             TeamGoneEffect(Team^)
         else
             doStepHedgehogDriven(Gear)
