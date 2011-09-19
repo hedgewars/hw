@@ -430,7 +430,8 @@ with Team do
             if Gear <> nil then
                 begin
                 Gear^.Invulnerable:= false;
-                Gear^.Damage:= Gear^.Health
+                Gear^.Damage:= Gear^.Health;
+                Gear^.State:= (Gear^.State or gstHHGone) and not gstHHDriven
                 end
 end;
 
