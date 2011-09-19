@@ -100,6 +100,7 @@ begin
         gsExit: begin
                 isTerminated:= true;
                 end;
+        gsSuspend: exit;
         end;
 
 {$IFDEF SDL13}
@@ -158,11 +159,11 @@ begin
     while isTerminated = false do
     begin
         SDL_PumpEvents();
-        {$IFDEF SDL13}
+{$IFDEF SDL13}
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
-        {$ELSE}
+{$ELSE}
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_ALLEVENTS) > 0 do
-        {$ENDIF}
+{$ENDIF}
         begin
             case event.type_ of
                 SDL_KEYDOWN: if GameState = gsChat then
