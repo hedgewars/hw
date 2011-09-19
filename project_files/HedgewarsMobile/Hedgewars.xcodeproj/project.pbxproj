@@ -1547,10 +1547,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
-				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2 -dNOCONSOLE";
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs  -Cfvfpv3 -dNOCONSOLE";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
@@ -1630,10 +1630,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
-				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -g -gl -gw2 -gt -ghttt -Xs- -Cfvfpv2";
+				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -g -gl -gw2 -gt -ghttt -Xs- -Cfvfpv3";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = full;
@@ -1755,7 +1755,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
-				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
 				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -g -gl -gw2 -gt -ghttt -Xs-";
@@ -1802,10 +1802,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
-				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2 -dDEBUGFILE";
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs  -Cfvfpv3 -dDEBUGFILE";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
