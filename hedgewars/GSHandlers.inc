@@ -5126,7 +5126,7 @@ if Gear^.Pos = 2 then
 if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then 
     begin
     inc(Gear^.Power);
-    if (Gear^.Power = 172) and (Gear^.Hedgehog^.Gear <> nil) then
+    if (Gear^.Power = 172) and (Gear^.Hedgehog^.Gear <> nil) and ((Gear^.Hedgehog^.Gear^.State and gstHHDeath) = 0) then
         begin
         with Gear^.Hedgehog^.Gear^ do
             begin
