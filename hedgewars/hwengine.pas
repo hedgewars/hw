@@ -154,6 +154,7 @@ const event: TSDL_Event = ();
 {$WARNINGS ON}
 var PrevTime, CurrTime: Longword;
     prevFocusState: boolean;
+    previousGameState: TGameState;
 begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
@@ -175,6 +176,15 @@ begin
                         begin
                         cHasFocus:= true;
                         onFocusStateChanged()
+                        end
+                    else if event.window.event = SDL_WINDOWEVENT_MINIMIZED then
+                        begin
+                        previousGameState:= GameState;
+                        GameState:= gsSuspend;
+                        end
+                    else if event.window.event = SDL_WINDOWEVENT_RESTORED then
+                        begin
+                        GameState:= previousGameState;
                         end;
 {$ELSE}
                     KeyPressChat(event.key.keysym.unicode);

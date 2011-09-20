@@ -36,7 +36,6 @@ procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
 implementation
 {$IFDEF HWLIBRARY}
 var cZoomVal: GLfloat;
-    previousGameState: TGameState;
 
 // retrieve protocol information
 procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
@@ -183,17 +182,6 @@ end;
 function HW_isPaused: boolean; cdecl; export;
 begin
     exit( isPaused );
-end;
-
-procedure HW_suspend; cdecl; export;
-begin
-    previousGameState:= GameState;
-    GameState:= gsSuspend;
-end;
-
-procedure HW_resume; cdecl; export;
-begin
-    GameState:= previousGameState;
 end;
 
 // equivalent to esc+y; when closeFrontend = true the game exits after memory cleanup

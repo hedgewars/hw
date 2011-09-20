@@ -135,17 +135,10 @@
 
 // true multitasking with sdl works only on 4.2 and above; we close the game to avoid a black screen at return
 -(void) applicationWillResignActive:(UIApplication *)application {
-    if (self.isInGame)
-        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f)
+    if (self.isInGame && [[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f)
             HW_terminate(NO);
-        else
-            HW_suspend();
-    [super applicationWillResignActive:application];
-}
 
--(void) applicationDidBecomeActive:(UIApplication *)application {
-    HW_resume();
-    [super applicationDidBecomeActive:application];
+    [super applicationWillResignActive:application];
 }
 
 @end
