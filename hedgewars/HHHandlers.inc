@@ -482,15 +482,16 @@ if Gear^.Timer > 1 then
     AllInactive:= false;
     dec(Gear^.Timer);
     if (Gear^.Timer mod frametime) = 0 then inc(Gear^.Pos)
-    end else
-if Gear^.Timer = 1 then
+    end 
+else if Gear^.Timer = 1 then
     begin
     Gear^.State:= Gear^.State or gstNoDamage;
     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, CurrentHedgehog, EXPLAutoSound);
     AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
     DeleteGear(Gear);
     SetAllToActive
-    end else // Gear^.Timer = 0
+    end 
+else // Gear^.Timer = 0
     begin
     AllInactive:= false;
     Gear^.Z:= cCurrHHZ;
@@ -1043,12 +1044,14 @@ if (Gear^.Health = 0) then
             Gear^.Hedgehog^.Effects[hePoisoned] := false;
             if Gear^.Hedgehog^.Effects[heResurrectable] then begin
                 ResurrectHedgehog(Gear);
-            end else begin
-                Gear^.State:= Gear^.State or gstHHDeath;
+            end else 
+                begin
+                Gear^.State:= (Gear^.State or gstHHDeath) and not gstAnimation;
+                Gear^.Timer:= 0;
                 Gear^.doStep:= @doStepHedgehogDead;
                 // Death message
                 AddCaption(Format(GetEventString(eidDied), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
-            end;
+                end;
             end
         else
             begin

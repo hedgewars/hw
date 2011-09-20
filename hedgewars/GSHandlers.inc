@@ -5126,16 +5126,14 @@ if Gear^.Pos = 2 then
 if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then 
     begin
     inc(Gear^.Power);
-    if (Gear^.Power = 172) and (Gear^.Hedgehog^.Gear <> nil) and ((Gear^.Hedgehog^.Gear^.State and gstHHDeath) = 0) then
-        begin
+    if (Gear^.Power = 172) and (Gear^.Hedgehog^.Gear <> nil) then
         with Gear^.Hedgehog^.Gear^ do
             begin
-	    State:= State or gstAnimation;
-	    Tag:= 2;
-	    Timer:= 0;
-	    Pos:= 0
+	        State:= State or gstAnimation;
+	        Tag:= 2;
+	        Timer:= 0;
+	        Pos:= 0
             end
-        end
     end;
 if (Gear^.Pos = 3) and (GameTicks and $1F = 0) and (Gear^.Power > 0) then dec(Gear^.Power);
 if (Gear^.Pos = 1) and (Gear^.Power = 255) and ((GameTicks mod 2000) = 1000) then Gear^.Pos:= 2;
