@@ -5115,7 +5115,7 @@ if Gear^.Pos = 2 then
             RestoreHog(HH)
         end;
 
-    if (Gear^.Hedgehog^.Gear^.State and gstHHDeath) = 0 then inc(Gear^.Timer);
+    inc(Gear^.Timer);
     if (Gear^.Timer > 2000) and ((GameTicks mod 2000) = 1000) then
         begin
         Gear^.SoundChannel := LoopSound(sndTardis);
