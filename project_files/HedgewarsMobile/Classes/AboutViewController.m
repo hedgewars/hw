@@ -79,6 +79,8 @@
 
     // first all the names, then the title (which is offset 5)
     cell.textLabel.text = [[self.people objectAtIndex:self.segmentedControl.selectedSegmentIndex] objectAtIndex:[indexPath row]];
+    cell.textLabel.adjustsFontSizeToFitWidth = YES;
+    cell.textLabel.minimumFontSize = 8;
     cell.detailTextLabel.text = [[self.people objectAtIndex:(self.segmentedControl.selectedSegmentIndex + 5)] objectAtIndex:[indexPath row]];
 
     return cell;
