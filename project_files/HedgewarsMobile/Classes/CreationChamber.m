@@ -150,7 +150,7 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
     [theWeapon release];
 }
 
-void createSchemeNamed (NSString *nameWithoutExt) {
+void createSchemeNamed (NSString *nameWithoutExt, int type) {
     NSString *schemesDirectory = SCHEMES_DIRECTORY();
 
     if (![[NSFileManager defaultManager] fileExistsAtPath: schemesDirectory]) {
@@ -173,8 +173,106 @@ void createSchemeNamed (NSString *nameWithoutExt) {
         [gamemodArray addObject:[NSNumber numberWithBool:NO]];
     [mods release];
 
-    // workaround for randomorder that has to be set to YES
-    [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+    switch (type) {
+        case 0: // default
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 1: // pro mode
+            [basicArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:15]];
+            [basicArray replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 2: // shoppa
+            [basicArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:30]];
+            [basicArray replaceObjectAtIndex:3 withObject:[NSNumber numberWithInt:50]];
+            [basicArray replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:1]];
+            [basicArray replaceObjectAtIndex:8 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithInt:25]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
+            [gamemodArray replaceObjectAtIndex:1 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:19 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 3: // clean slate
+            [gamemodArray replaceObjectAtIndex:6 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:18 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:19 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 4: // minefield
+            [basicArray replaceObjectAtIndex:0 withObject:[NSNumber numberWithInt:50]];
+            [basicArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:30]];
+            [basicArray replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:80]];
+            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 5: // barrel mayhem
+            [basicArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:30]];
+            [basicArray replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:40]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 6: // tunnel hogs
+            [basicArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:30]];
+            [basicArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithInt:3]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:10]];
+            [basicArray replaceObjectAtIndex:12 withObject:[NSNumber numberWithInt:10]];
+            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:10]];
+            [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:16 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 7: // fort mode
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
+            [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:3 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 8: // timeless
+            [basicArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithInt:100]];
+            [basicArray replaceObjectAtIndex:4 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:5 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithInt:30]];
+            [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:5]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:3]];
+            [basicArray replaceObjectAtIndex:12 withObject:[NSNumber numberWithInt:10]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:20 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 9: // thinking with portals
+            [basicArray replaceObjectAtIndex:7 withObject:[NSNumber numberWithInt:2]];
+            [basicArray replaceObjectAtIndex:8 withObject:[NSNumber numberWithInt:25]];
+            [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:4]];
+            [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:5]];
+            [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:5]];
+            [gamemodArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        case 10:// king mode
+            [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
+            [gamemodArray replaceObjectAtIndex:12 withObject:[NSNumber numberWithBool:YES]];
+            break;
+        default:
+            DLog(@"Impossible");
+            break;
+    }
 
     NSMutableDictionary *theScheme = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                       basicArray,@"basic",
@@ -182,7 +280,7 @@ void createSchemeNamed (NSString *nameWithoutExt) {
                                       nil];
     [gamemodArray release];
     [basicArray release];
-    
+
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", schemesDirectory, nameWithoutExt];
     
     [theScheme writeToFile:schemeFile atomically:YES];

@@ -24,4 +24,4 @@
 void createSettings (void);
 void createTeamNamed (NSString *nameWithoutExt);
 void createWeaponNamed (NSString *nameWithoutExt, int type);
-void createSchemeNamed (NSString *nameWithoutExt);
+void createSchemeNamed (NSString *nameWithoutExt, int type);
