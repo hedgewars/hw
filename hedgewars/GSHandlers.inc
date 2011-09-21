@@ -118,7 +118,7 @@ with HH^.Gear^ do
     Message := Message and not gmAttack;
     end;
 HH^.GearHidden:= HH^.Gear;
-HH^.Gear:= nil;
+HH^.Gear:= nil
 end;
 
 procedure RestoreHog(HH: PHedgehog);
@@ -5097,7 +5097,6 @@ procedure doStepTardisWarp(Gear: PGear);
 var HH: PHedgehog;
     i,j,cnt: LongWord;
 begin
-
 HH:= Gear^.Hedgehog;
 if Gear^.Pos = 2 then
     begin
@@ -5108,7 +5107,9 @@ if Gear^.Pos = 2 then
             begin
             AfterAttack;
             if Gear = CurAmmoGear then CurAmmoGear := nil;
-            HideHog(HH)
+            if (HH^.Gear^.Damage = 0) and  (HH^.Gear^.Health > 0) and 
+            ((Gear^.State and (gstMoving or gstHHDeath or gstHHGone)) = 0) then
+                HideHog(HH)
             end
         //else if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible <> 0) then
         else if (HH^.GearHidden <> nil) then// and (HH^.Gear^.State and gstInvisible <> 0) then
@@ -5126,8 +5127,10 @@ if Gear^.Pos = 2 then
 if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then 
     begin
     inc(Gear^.Power);
-    if (Gear^.Power = 172) and (Gear^.Hedgehog^.Gear <> nil) then
-        with Gear^.Hedgehog^.Gear^ do
+    if (Gear^.Power = 172) and (HH^.Gear <> nil) and 
+       (HH^.Gear^.Damage = 0) and (HH^.Gear^.Health > 0) and
+       ((HH^.Gear^.State and (gstMoving or gstHHDeath or gstHHGone)) = 0) then
+        with HH^.Gear^ do
             begin
 	        State:= State or gstAnimation;
 	        Tag:= 2;
@@ -5191,13 +5194,14 @@ begin
     3. Hog is a king
 *)
     HH:= Gear^.Hedgehog;
+    if HH^.Gear <> nil then 
     if (HH^.Gear = nil) or (HH^.King) or (SuddenDeathDmg) then
         begin
-	if HH^.Gear <> nil then 
-	    begin
-	    HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
-	    HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
-	    end;
+        if HH^.Gear <> nil then 
+            begin
+            HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
+            HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
+            end;
         PlaySound(sndDenied);
         DeleteGear(gear);
         exit
@@ -5211,14 +5215,14 @@ begin
                 HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then inc(cnt);
     if cnt < 2 then
         begin
-	if HH^.Gear <> nil then 
-	    begin
-	    HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
-	    HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
-	    end;
-        PlaySound(sndDenied);
-        DeleteGear(gear);
-        exit
+        if HH^.Gear <> nil then 
+            begin
+            HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
+            HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
+            end;
+            PlaySound(sndDenied);
+            DeleteGear(gear);
+            exit
         end;
     Gear^.SoundChannel := LoopSound(sndTardis);
     Gear^.doStep:= @doStepTardisWarp

@@ -1047,7 +1047,6 @@ if (Gear^.Health = 0) then
             end else 
                 begin
                 Gear^.State:= (Gear^.State or gstHHDeath) and not gstAnimation;
-                Gear^.Timer:= 0;
                 Gear^.doStep:= @doStepHedgehogDead;
                 // Death message
                 AddCaption(Format(GetEventString(eidDied), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
@@ -1055,7 +1054,7 @@ if (Gear^.Health = 0) then
             end
         else
             begin
-            Gear^.State:= Gear^.State or gstHHGone;
+            Gear^.State:= (Gear^.State or gstHHGone) and not gstAnimation;
             Gear^.doStep:= @doStepHedgehogGone;
 
             with Gear^.Hedgehog^.Team^ do
@@ -1086,7 +1085,7 @@ if ((Gear^.State and gstWait) = 0) and
     begin
     if Gear^.Timer = 0 then
         begin
-        Gear^.State:= Gear^.State and not gstWait;
+        Gear^.State:= Gear^.State and not (gstWait or gstLoser or gstWinner);
         Gear^.Active:= false;
         AddGearCI(Gear);
         exit

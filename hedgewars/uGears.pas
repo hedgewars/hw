@@ -602,14 +602,16 @@ if (Gear^.Kind = gtPortal) then
             Gear^.IntersectGear^.IntersectGear:= nil;
     end
 else if Gear^.Kind = gtHedgehog then
-    if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
+    (*
+    This behaviour dates back to revision 4, and I accidentally encountered it with TARDIS.  I don't think it must apply to any modern weapon, since if it was actually hit, the best the gear could do would be to destroy itself immediately, and you'd still end up with two graves.  I believe it should be removed
+     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
         begin
         AttackBar:= 0;
         Gear^.Message:= gmDestroy;
         CurAmmoGear^.Message:= gmDestroy;
         exit
         end
-    else
+    else*)
         begin
         if (hwRound(Gear^.Y) >= cWaterLine) then
             begin
