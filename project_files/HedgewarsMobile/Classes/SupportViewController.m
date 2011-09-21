@@ -64,6 +64,7 @@
     static NSString *CellIdentifier = @"Cell";
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
+    NSString *imgName = @"";
 
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
@@ -71,33 +72,35 @@
 
     NSString *rowString = [self.waysToSupport objectAtIndex:(row + section)];
     cell.textLabel.text = rowString;
-    NSString *imgString = nil;
 
     if (section == 0) {
-        imgString = [BTN_DIRECTORY() stringByAppendingString:@"/StatsStar.png"];
+        imgName = @"star";
         cell.textLabel.textAlignment = UITextAlignmentCenter;
         cell.imageView.image = nil;
     } else {
         cell.textLabel.textAlignment = UITextAlignmentLeft;
         switch (row) {
             case 0:
-                imgString = @"fb.png";
+                imgName = @"fb";
                 break;
             case 1:
-                imgString = @"tw.png";
+                imgName = @"tw";
                 break;
             case 2:
-                imgString = @"Icon-Small.png";
+                imgName = @"hedgehog";
                 break;
             case 3:
-                imgString = @"irc.png";
+                imgName = @"irc";
                 break;
             default:
                 DLog(@"No way");
                 break;
         }
     }
+
+    NSString *imgString = [[NSString alloc] initWithFormat:@"%@/%@.png",[[NSBundle mainBundle] resourcePath],imgName];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgString];
+    [imgString release];
     cell.imageView.image = img;
     if (section == 0) {
         UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
