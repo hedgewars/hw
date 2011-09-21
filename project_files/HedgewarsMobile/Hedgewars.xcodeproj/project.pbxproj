@@ -133,6 +133,8 @@
 		6167CA40142A6ED7003DD50F /* bot4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA34142A6ED7003DD50F /* bot4@2x.png */; };
 		6167CA41142A6ED7003DD50F /* bot5.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA35142A6ED7003DD50F /* bot5.png */; };
 		6167CA42142A6ED7003DD50F /* bot5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA36142A6ED7003DD50F /* bot5@2x.png */; };
+		6167CB48142A8769003DD50F /* basehat-hedgehog.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CB46142A8769003DD50F /* basehat-hedgehog.png */; };
+		6167CB49142A8769003DD50F /* basehat-hedgehog@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CB47142A8769003DD50F /* basehat-hedgehog@2x.png */; };
 		6172FED91298CF9800D73365 /* background~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FED71298CF9800D73365 /* background~iphone.png */; };
 		6172FEEF1298D25D00D73365 /* mediumBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEEB1298D25D00D73365 /* mediumBackground~ipad.png */; };
 		6172FEF11298D25D00D73365 /* smallerBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEED1298D25D00D73365 /* smallerBackground~ipad.png */; };
@@ -474,6 +476,8 @@
 		6167CA34142A6ED7003DD50F /* bot4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot4@2x.png"; path = "Resources/Icons/bot4@2x.png"; sourceTree = "<group>"; };
 		6167CA35142A6ED7003DD50F /* bot5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bot5.png; path = Resources/Icons/bot5.png; sourceTree = "<group>"; };
 		6167CA36142A6ED7003DD50F /* bot5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot5@2x.png"; path = "Resources/Icons/bot5@2x.png"; sourceTree = "<group>"; };
+		6167CB46142A8769003DD50F /* basehat-hedgehog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "basehat-hedgehog.png"; path = "Resources/Icons/basehat-hedgehog.png"; sourceTree = "<group>"; };
+		6167CB47142A8769003DD50F /* basehat-hedgehog@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "basehat-hedgehog@2x.png"; path = "Resources/Icons/basehat-hedgehog@2x.png"; sourceTree = "<group>"; };
 		6172FEA21298C7F900D73365 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Icons/Default@2x.png"; sourceTree = "<group>"; };
 		6172FEC81298CE4800D73365 /* savesButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "savesButton@2x.png"; path = "Resources/Frontend/savesButton@2x.png"; sourceTree = "<group>"; };
 		6172FECA1298CE4E00D73365 /* settingsButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settingsButton@2x.png"; path = "Resources/Frontend/settingsButton@2x.png"; sourceTree = "<group>"; };
@@ -1032,6 +1036,8 @@
 				6167C8F21429502C003DD50F /* robotBadge@2x.png */,
 				6167C8F31429502C003DD50F /* star.png */,
 				6167C8F41429502C003DD50F /* star@2x.png */,
+				6167CB46142A8769003DD50F /* basehat-hedgehog.png */,
+				6167CB47142A8769003DD50F /* basehat-hedgehog@2x.png */,
 				6167CA2B142A6ED7003DD50F /* bot0.png */,
 				6167CA2C142A6ED7003DD50F /* bot0@2x.png */,
 				6167CA2D142A6ED7003DD50F /* bot1.png */,
@@ -1429,6 +1435,8 @@
 				6167CA40142A6ED7003DD50F /* bot4@2x.png in Resources */,
 				6167CA41142A6ED7003DD50F /* bot5.png in Resources */,
 				6167CA42142A6ED7003DD50F /* bot5@2x.png in Resources */,
+				6167CB48142A8769003DD50F /* basehat-hedgehog.png in Resources */,
+				6167CB49142A8769003DD50F /* basehat-hedgehog@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
