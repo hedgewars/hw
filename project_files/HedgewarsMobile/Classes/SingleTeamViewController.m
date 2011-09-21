@@ -255,24 +255,25 @@
                     [accessoryImage release];
                     break;
                 case 2: // fort
-                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@-preview.png",
+                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@-icon.png",
                                                                               FORTS_DIRECTORY(),[teamDictionary objectForKey:@"fort"]]];
-                    cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(32, 32)];
+                    cell.imageView.image = accessoryImage;
                     [accessoryImage release];
                     break;
                 case 3: // flags
                     accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",
                                                                               FLAGS_DIRECTORY(),[teamDictionary objectForKey:@"flag"]]];
-                    cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(27, 19)];
+                    cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(26, 18)];
                     cell.imageView.layer.borderWidth = 0.3;
                     [accessoryImage release];
                     break;
                 case 4: // level
-                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%d.png",
-                                                                              BOTLEVELS_DIRECTORY(),[[[[teamDictionary objectForKey:@"hedgehogs"]
-                                                                                                      objectAtIndex:0] objectForKey:@"level"]
-                                                                                                     intValue]]];
-                    cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(32, 32)];
+                    accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/bot%d.png",
+                                                                              [[NSBundle mainBundle] resourcePath],
+                                                                              [[[[teamDictionary objectForKey:@"hedgehogs"]
+                                                                                 objectAtIndex:0] objectForKey:@"level"]
+                                                                               intValue]]];
+                    cell.imageView.image = accessoryImage;
                     [accessoryImage release];
                     break;
                 default:

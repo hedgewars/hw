@@ -74,7 +74,7 @@
     NSInteger section = [indexPath section];
     NSInteger row = [indexPath row];
     NSString *imgName = @"";
-    NSString *imgPath = BTN_DIRECTORY();
+    NSString *imgPath = ICONS_DIRECTORY();
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
     if (cell == nil)

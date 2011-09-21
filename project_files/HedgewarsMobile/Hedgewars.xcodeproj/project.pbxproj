@@ -121,6 +121,18 @@
 		6167C8F81429502C003DD50F /* robotBadge@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167C8F21429502C003DD50F /* robotBadge@2x.png */; };
 		6167C8F91429502C003DD50F /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167C8F31429502C003DD50F /* star.png */; };
 		6167C8FA1429502C003DD50F /* star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167C8F41429502C003DD50F /* star@2x.png */; };
+		6167CA37142A6ED7003DD50F /* bot0.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA2B142A6ED7003DD50F /* bot0.png */; };
+		6167CA38142A6ED7003DD50F /* bot0@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA2C142A6ED7003DD50F /* bot0@2x.png */; };
+		6167CA39142A6ED7003DD50F /* bot1.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA2D142A6ED7003DD50F /* bot1.png */; };
+		6167CA3A142A6ED7003DD50F /* bot1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA2E142A6ED7003DD50F /* bot1@2x.png */; };
+		6167CA3B142A6ED7003DD50F /* bot2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA2F142A6ED7003DD50F /* bot2.png */; };
+		6167CA3C142A6ED7003DD50F /* bot2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA30142A6ED7003DD50F /* bot2@2x.png */; };
+		6167CA3D142A6ED7003DD50F /* bot3.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA31142A6ED7003DD50F /* bot3.png */; };
+		6167CA3E142A6ED7003DD50F /* bot3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA32142A6ED7003DD50F /* bot3@2x.png */; };
+		6167CA3F142A6ED7003DD50F /* bot4.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA33142A6ED7003DD50F /* bot4.png */; };
+		6167CA40142A6ED7003DD50F /* bot4@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA34142A6ED7003DD50F /* bot4@2x.png */; };
+		6167CA41142A6ED7003DD50F /* bot5.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA35142A6ED7003DD50F /* bot5.png */; };
+		6167CA42142A6ED7003DD50F /* bot5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6167CA36142A6ED7003DD50F /* bot5@2x.png */; };
 		6172FED91298CF9800D73365 /* background~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FED71298CF9800D73365 /* background~iphone.png */; };
 		6172FEEF1298D25D00D73365 /* mediumBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEEB1298D25D00D73365 /* mediumBackground~ipad.png */; };
 		6172FEF11298D25D00D73365 /* smallerBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FEED1298D25D00D73365 /* smallerBackground~ipad.png */; };
@@ -450,6 +462,18 @@
 		6167C8F21429502C003DD50F /* robotBadge@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "robotBadge@2x.png"; path = "Resources/Icons/robotBadge@2x.png"; sourceTree = "<group>"; };
 		6167C8F31429502C003DD50F /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = Resources/Icons/star.png; sourceTree = "<group>"; };
 		6167C8F41429502C003DD50F /* star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "star@2x.png"; path = "Resources/Icons/star@2x.png"; sourceTree = "<group>"; };
+		6167CA2B142A6ED7003DD50F /* bot0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bot0.png; path = Resources/Icons/bot0.png; sourceTree = "<group>"; };
+		6167CA2C142A6ED7003DD50F /* bot0@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot0@2x.png"; path = "Resources/Icons/bot0@2x.png"; sourceTree = "<group>"; };
+		6167CA2D142A6ED7003DD50F /* bot1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bot1.png; path = Resources/Icons/bot1.png; sourceTree = "<group>"; };
+		6167CA2E142A6ED7003DD50F /* bot1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot1@2x.png"; path = "Resources/Icons/bot1@2x.png"; sourceTree = "<group>"; };
+		6167CA2F142A6ED7003DD50F /* bot2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bot2.png; path = Resources/Icons/bot2.png; sourceTree = "<group>"; };
+		6167CA30142A6ED7003DD50F /* bot2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot2@2x.png"; path = "Resources/Icons/bot2@2x.png"; sourceTree = "<group>"; };
+		6167CA31142A6ED7003DD50F /* bot3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bot3.png; path = Resources/Icons/bot3.png; sourceTree = "<group>"; };
+		6167CA32142A6ED7003DD50F /* bot3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot3@2x.png"; path = "Resources/Icons/bot3@2x.png"; sourceTree = "<group>"; };
+		6167CA33142A6ED7003DD50F /* bot4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bot4.png; path = Resources/Icons/bot4.png; sourceTree = "<group>"; };
+		6167CA34142A6ED7003DD50F /* bot4@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot4@2x.png"; path = "Resources/Icons/bot4@2x.png"; sourceTree = "<group>"; };
+		6167CA35142A6ED7003DD50F /* bot5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bot5.png; path = Resources/Icons/bot5.png; sourceTree = "<group>"; };
+		6167CA36142A6ED7003DD50F /* bot5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bot5@2x.png"; path = "Resources/Icons/bot5@2x.png"; sourceTree = "<group>"; };
 		6172FEA21298C7F900D73365 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/Icons/Default@2x.png"; sourceTree = "<group>"; };
 		6172FEC81298CE4800D73365 /* savesButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "savesButton@2x.png"; path = "Resources/Frontend/savesButton@2x.png"; sourceTree = "<group>"; };
 		6172FECA1298CE4E00D73365 /* settingsButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "settingsButton@2x.png"; path = "Resources/Frontend/settingsButton@2x.png"; sourceTree = "<group>"; };
@@ -1008,6 +1032,18 @@
 				6167C8F21429502C003DD50F /* robotBadge@2x.png */,
 				6167C8F31429502C003DD50F /* star.png */,
 				6167C8F41429502C003DD50F /* star@2x.png */,
+				6167CA2B142A6ED7003DD50F /* bot0.png */,
+				6167CA2C142A6ED7003DD50F /* bot0@2x.png */,
+				6167CA2D142A6ED7003DD50F /* bot1.png */,
+				6167CA2E142A6ED7003DD50F /* bot1@2x.png */,
+				6167CA2F142A6ED7003DD50F /* bot2.png */,
+				6167CA30142A6ED7003DD50F /* bot2@2x.png */,
+				6167CA31142A6ED7003DD50F /* bot3.png */,
+				6167CA32142A6ED7003DD50F /* bot3@2x.png */,
+				6167CA33142A6ED7003DD50F /* bot4.png */,
+				6167CA34142A6ED7003DD50F /* bot4@2x.png */,
+				6167CA35142A6ED7003DD50F /* bot5.png */,
+				6167CA36142A6ED7003DD50F /* bot5@2x.png */,
 				6183D83C11E2BCE200A88903 /* Default-ipad-Landscape.png */,
 				6183D83D11E2BCE200A88903 /* Default.png */,
 				6172FEA21298C7F900D73365 /* Default@2x.png */,
@@ -1381,6 +1417,18 @@
 				6167C8F81429502C003DD50F /* robotBadge@2x.png in Resources */,
 				6167C8F91429502C003DD50F /* star.png in Resources */,
 				6167C8FA1429502C003DD50F /* star@2x.png in Resources */,
+				6167CA37142A6ED7003DD50F /* bot0.png in Resources */,
+				6167CA38142A6ED7003DD50F /* bot0@2x.png in Resources */,
+				6167CA39142A6ED7003DD50F /* bot1.png in Resources */,
+				6167CA3A142A6ED7003DD50F /* bot1@2x.png in Resources */,
+				6167CA3B142A6ED7003DD50F /* bot2.png in Resources */,
+				6167CA3C142A6ED7003DD50F /* bot2@2x.png in Resources */,
+				6167CA3D142A6ED7003DD50F /* bot3.png in Resources */,
+				6167CA3E142A6ED7003DD50F /* bot3@2x.png in Resources */,
+				6167CA3F142A6ED7003DD50F /* bot4.png in Resources */,
+				6167CA40142A6ED7003DD50F /* bot4@2x.png in Resources */,
+				6167CA41142A6ED7003DD50F /* bot5.png in Resources */,
+				6167CA42142A6ED7003DD50F /* bot5@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1398,7 +1446,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\n\n#create config.inc\necho \"Updating config file...\"\nPROTO=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep HEDGEWARS_PROTO_VER | cut -d ' ' -f 2 | cut -d ')' -f 1`\nMAJN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MAJOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nMINN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MINOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nPATN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_PATCH | xargs | cut -d ' ' -f 2 | cut -d '$' -f 1`\nREVN=-`/usr/local/bin/hg id -n ${PROJECT_DIR}/../../`\necho \"const cNetProtoVersion = $PROTO; const cVersionString = '${MAJN}.${MINN}.${PATN}${REVN}'; const cLuaLibrary = '';\" > ${PROJECT_DIR}/../../hedgewars/config.inc\n\necho \"Copying Data...\"\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\necho \"Fetching additional graphics from QTfrontend/res...\"\nmkdir ${PROJECT_DIR}/Data/Graphics/Btn\ncp    ${PROJECT_DIR}/../../QTfrontend/res/btn*.png        ${PROJECT_DIR}/Data/Graphics/Btn/\ncp    ${PROJECT_DIR}/../../QTfrontend/res/icon*.png       ${PROJECT_DIR}/Data/Graphics/Btn/\ncp    ${PROJECT_DIR}/../../QTfrontend/res/StatsMedal*.png ${PROJECT_DIR}/Data/Graphics/Btn/\ncp    ${PROJECT_DIR}/../../QTfrontend/res/ammopic.png     ${PROJECT_DIR}/Data/Graphics/Btn/iconAmmo.png\ncp -R ${PROJECT_DIR}/../../QTfrontend/res/botlevels       ${PROJECT_DIR}/Data/Graphics/Hedgehog/botlevels/\n\necho \"Removing text and dummy files...\"\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg -delete\nfind ${PROJECT_DIR}/Data -name *.psd -delete\nfind ${PROJECT_DIR}/Data -name *.svgz -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#delete dummy maps and hats, misc stuff\nrm -rf ${PROJECT_DIR}/Data/Maps/{test*,Ruler}\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/{TeamCap,TeamHeadband,TeamHair}\nrm -rf ${PROJECT_DIR}/Data/misc/\n\n#delete forbidden maps and WIP themes (remember to check that no Map uses them)\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\nrm -rf ${PROJECT_DIR}/Data/Themes/{Beach,Digital}\n\n#delete unused fonts\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\n#delete all names, reserved hats\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\n\necho \"Handling audio files...\"\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n#delete the main theme file\nrm -rf ${PROJECT_DIR}/Data/Music/main_theme.ogg\n#copy mono audio\ncp -R ${PROJECT_DIR}/Audio/* ${PROJECT_DIR}/Data/\n#remove unused voices\nfor i in {Amazing,Brilliant,Bugger,Bungee,Cutitout,Drat,Excellent,Fire,FlawlessPossibility,Gonnagetyou,Grenade,Hmm,Justyouwait,Leavemealone,Ohdear,Ouch,Perfect,Revenge,Runaway,Solong,Thisoneismine,VictoryPossibility,Watchthis,Whatthe,Whoopsee}; do find Data/Sounds/voices/ -name $i.ogg -delete; done\n\necho \"Tweaking Data contents...\"\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nmv ${PROJECT_DIR}/Data/Maps/{Basketball,Knockball,TrophyRace,CTF_Blizzard,Control} ${PROJECT_DIR}/Data/Missions/Maps/\n#workaround for missing map in CTF_Blizzard\nln -s ../../../Maps/Blizzard/map.png ${PROJECT_DIR}/Data/Missions/Maps/CTF_Blizzard/map.png\n#remove cfg files since we have plists\nfind ${PROJECT_DIR}/Data/Scripts -name *.cfg -delete\n\n#reduce the number of flakes for City\nawk '{if ($1 == 1500) $1=40; print $0}' < ${PROJECT_DIR}/Data/Themes/City/theme.cfg > /tmp/tempfile\nmv /tmp/tempfile ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\necho \"Done\"";
+			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\n\n#create config.inc\necho \"Updating config file...\"\nPROTO=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep HEDGEWARS_PROTO_VER | cut -d ' ' -f 2 | cut -d ')' -f 1`\nMAJN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MAJOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nMINN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MINOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nPATN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_PATCH | xargs | cut -d ' ' -f 2 |cut -d '$' -f 1`\nREVN=-`/usr/local/bin/hg id -n ${PROJECT_DIR}/../../`\necho \"const cNetProtoVersion = $PROTO; const cVersionString = '${MAJN}.${MINN}.${PATN}${REVN}'; const cLuaLibrary = '';\" > ${PROJECT_DIR}/../../hedgewars/config.inc\n\necho \"Copying Data...\"\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\necho \"Fetching additional graphics from QTfrontend...\"\nmkdir ${PROJECT_DIR}/Data/Graphics/Icons\ncp    ${PROJECT_DIR}/../../QTfrontend/res/{btn*,icon*,StatsMedal*,ammopic*}.png  ${PROJECT_DIR}/Data/Graphics/Icons/\n\necho \"Removing text and dummy files...\"\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg* -delete\nfind ${PROJECT_DIR}/Data -name *.psd -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\nfind ${PROJECT_DIR}/Data -name *.ts -delete\n\n#delete dummy maps and hats, misc stuff\nrm -rf ${PROJECT_DIR}/Data/Maps/test*\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/{TeamCap,TeamHeadband,TeamHair}\nrm -rf ${PROJECT_DIR}/Data/misc/\n\n#delete forbidden maps and WIP themes (remember to check that no Map uses them)\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\nrm -rf ${PROJECT_DIR}/Data/Themes/{Beach,Digital}\n\n#delete all names, reserved hats and unused fonts\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\necho \"Handling audio files...\"\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n#delete the main theme file\nrm -rf ${PROJECT_DIR}/Data/Music/main_theme.ogg\n#copy mono audio\ncp -R ${PROJECT_DIR}/Audio/* ${PROJECT_DIR}/Data/\n#remove unused voices\nfor i in {Amazing,Brilliant,Bugger,Bungee,Cutitout,Drat,Excellent,Fire,FlawlessPossibility,Gonnagetyou,Grenade,Hmm,Justyouwait,Leavemealone,Ohdear,Ouch,Perfect,Revenge,Runaway,Solong,Thisoneismine,VictoryPossibility,Watchthis,Whatthe,Whoopsee}; do find Data/Sounds/voices/ -name $i.ogg -delete; done\n\necho \"Tweaking Data contents...\"\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nfor i in `ls ${PROJECT_DIR}/Data/Maps/`; do if [[ `ls -f ${PROJECT_DIR}/Data/Maps/$i/map.lua 2> /dev/null` != '' ]]; then mv ${PROJECT_DIR}/Data/Maps/$i ${PROJECT_DIR}/Data/Missions/Maps/; fi; done;\n#workaround for missing map in CTF_Blizzard\nln -s ../../../Maps/Blizzard/map.png ${PROJECT_DIR}/Data/Missions/Maps/CTF_Blizzard/map.png\n#remove cfg files since we have plists\nfind ${PROJECT_DIR}/Data/Scripts -name *.cfg -delete\nif ((`ls ${PROJECT_DIR}/Data/Scripts/Multiplayer/*.lua|wc -l` >= `ls ${PROJECT_DIR}/Data/Scripts/plist/*.plist|wc -l` ))\nthen\necho \"${PROJECT_DIR}/Data/Scripts/Multiplayer/Normal.plist:0: warning, missing plist implementation of a Multiplayer script file\"\nfi\n\n#reduce the number of flakes for City\nsed -ie 's/1500/50/' ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\necho \"Done\"";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
