@@ -102,6 +102,7 @@ void clearView() {
 void saveBeganSynching() {
     savedGame = YES;
     stopSpinningProgress();
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 
     overlay_instance.view.backgroundColor = [UIColor blackColor];
     overlay_instance.view.alpha = 0.75;
@@ -128,6 +129,7 @@ void saveFinishedSynching() {
     [overlay_instance.savesIndicator stopAnimating];
     [overlay_instance.savesIndicator performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     gameRunning = YES;
 }
 
