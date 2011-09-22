@@ -1039,7 +1039,7 @@ if (Gear^.Health = 0) then
         PrvInactive:= false;
         AllInactive:= false;
 
-        if not Gear^.Hedgehog^.Team^.hasGone then
+        if (Gear^.State and gstHHGone) = 0 then
             begin
             Gear^.Hedgehog^.Effects[hePoisoned] := false;
             if Gear^.Hedgehog^.Effects[heResurrectable] then begin
@@ -1054,20 +1054,8 @@ if (Gear^.Health = 0) then
             end
         else
             begin
-            Gear^.State:= (Gear^.State or gstHHGone) and not gstAnimation;
+            Gear^.State:= Gear^.State and not gstAnimation;
             Gear^.doStep:= @doStepHedgehogGone;
-
-            with Gear^.Hedgehog^.Team^ do
-                for i:= 0 to cMaxHHIndex do
-                    if Hedgehogs[i].GearHidden <> nil then
-                        begin
-                        RestoreHog(@Hedgehogs[i]);
-                        if Hedgehogs[i].Gear <> nil then 
-                            begin
-                            Hedgehogs[i].Gear^.State:= Gear^.State or gstHHGone;
-                            Hedgehogs[i].Gear^.doStep:= @doStepHedgehogGone
-                            end
-                        end;
 
             // Gone message
             AddCaption(Format(GetEventString(eidGone), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
