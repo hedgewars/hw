@@ -30,6 +30,7 @@
 #include <QCursor>
 #include <QScrollBar>
 #include <QItemSelectionModel>
+#include <QStringList>
 
 #include "hwconsts.h"
 #include "SDLs.h"
@@ -313,8 +314,10 @@ void HWChatWidget::saveLists(const QString & nick)
 
 void HWChatWidget::returnPressed()
 {
-    emit chatLine(chatEditLine->text());
+    QStringList lines = chatEditLine->text().split('\n');
     chatEditLine->clear();
+    foreach (const QString &line, lines)
+        emit chatLine(line);
 }
 
 
