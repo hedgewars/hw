@@ -297,7 +297,7 @@
 
     if (theButton.currentTitle == nil) {
         HW_setWeapon(theButton.tag);
-        playSound(@"clickSound");
+        [AudioManagerController playClickSound];
         if (IS_DUALHEAD() == NO)
             [self disappear];
     }

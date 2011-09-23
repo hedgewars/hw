@@ -64,7 +64,6 @@
 #define UIVIEW_HW_SDLVIEW       [[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0]
 
 void print_free_memory (void);
-void playSound (NSString *snd);
 NSInteger randomPort (void);
 
 NSString *getModelType (void);

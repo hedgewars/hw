@@ -51,17 +51,17 @@
                 [alert show];
                 [alert release];
             } else {
-                playSound(@"backSound");
+                [AudioManagerController playBackSound];
                 [[self parentViewController] dismissModalViewControllerAnimated:YES];
             }
             break;
         case 1:
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
             theButton.enabled = NO;
             [self startGame:theButton];
             break;
         case 2:
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
             if (self.helpPage == nil)
                 self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
@@ -79,7 +79,7 @@
 -(IBAction) segmentPressed:(id) sender {
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
 
-    playSound(@"selSound");
+    [AudioManagerController playSelectSound];
     switch (theSegment.selectedSegmentIndex) {
         case 0:
             // this init here is just aestetic as this controller was already set up in viewDidLoad

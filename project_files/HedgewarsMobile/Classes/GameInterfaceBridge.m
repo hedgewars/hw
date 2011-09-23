@@ -24,6 +24,7 @@
 #import "EngineProtocolNetwork.h"
 #import "OverlayViewController.h"
 #import "StatsPageViewController.h"
+#import "AudioManagerController.h"
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
@@ -154,7 +155,7 @@
     [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
     [userDefaults synchronize];
 
-    [HedgewarsAppDelegate pauseBackgroundMusic];
+    [AudioManagerController pauseBackgroundMusic];
 
     // SYSTEMS ARE GO!!
     [self startGameEngine];
@@ -177,8 +178,7 @@
     // warn our host that it's going to be visible again
     [self.parentController viewWillAppear:YES];
 
-    if ([[userDefaults objectForKey:@"music"] boolValue])
-        [HedgewarsAppDelegate playBackgroundMusic];
+    [AudioManagerController playBackgroundMusic];
 }
 
 // set up variables for a local game

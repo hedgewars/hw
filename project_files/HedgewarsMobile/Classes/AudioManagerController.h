@@ -19,24 +19,21 @@
  */
 
 
-#import <UIKit/UIKit.h>
-#import "SDL_uikitappdelegate.h"
+#import <Foundation/Foundation.h>
 
-@class MainMenuViewController;
 
-@interface HedgewarsAppDelegate : SDLUIKitDelegate {
-    MainMenuViewController *mainViewController;
-    UIWindow *uiwindow;
-    UIWindow *secondWindow;
-    BOOL isInGame;
+@interface AudioManagerController : NSObject {
+
 }
 
-@property (nonatomic,retain) MainMenuViewController *mainViewController;
-@property (nonatomic,retain) UIWindow *uiwindow;
-@property (nonatomic,retain) UIWindow *secondWindow;
-@property (assign) BOOL isInGame;
++(void) playBackgroundMusic;
++(void) pauseBackgroundMusic;
++(void) stopBackgroundMusic;
 
-+(HedgewarsAppDelegate *)sharedAppDelegate;
++(void) playClickSound;
++(void) playBackSound;
++(void) playSelectSound;
+
++(void) didReceiveMemoryWarning;
 
 @end
-

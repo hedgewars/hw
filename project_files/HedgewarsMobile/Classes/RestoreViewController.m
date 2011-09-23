@@ -36,7 +36,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if (theButton.tag != 0) {
-        playSound(@"clickSound");
+        [AudioManagerController playClickSound];
         if (self.interfaceBridge == nil) {
             GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self.parentViewController];
             self.interfaceBridge = bridge;
@@ -45,7 +45,7 @@
         [self.parentViewController dismissModalViewControllerAnimated:NO];
         [self.interfaceBridge startSaveGame:[defaults objectForKey:@"savedGamePath"]];
     } else {
-        playSound(@"backSound");
+        [AudioManagerController playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
         [defaults synchronize];
         [self.parentViewController dismissModalViewControllerAnimated:YES];

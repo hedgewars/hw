@@ -166,7 +166,7 @@
             nextController.navigationItem.hidesBackButton = NO;
             [self.navigationController pushViewController:nextController animated:YES];
         } else {
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
             nextController.navigationItem.hidesBackButton = YES;
             [targetController.navigationController pushViewController:nextController animated:NO];
         }

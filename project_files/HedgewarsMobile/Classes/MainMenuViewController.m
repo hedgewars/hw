@@ -30,6 +30,7 @@
 #import "Appirater.h"
 #import "ServerSetup.h"
 
+
 @implementation MainMenuViewController
 @synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController, restoreViewController;
 
@@ -106,7 +107,7 @@
     NSString *trackingVersion = [userDefaults stringForKey:@"HedgeVersion"];
 
     if ([[userDefaults objectForKey:@"music"] boolValue])
-        [HedgewarsAppDelegate playBackgroundMusic];
+        [AudioManagerController playBackgroundMusic];
 
     if (trackingVersion == nil || [trackingVersion isEqualToString:version] == NO) {
         // remove any reminder of previous games as saves are going to be wiped out
@@ -156,7 +157,7 @@
     NSString *xib = nil;
     NSString *debugStr = nil;
 
-    playSound(@"clickSound");
+    [AudioManagerController playClickSound];
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {

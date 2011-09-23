@@ -24,7 +24,6 @@
 #import "ObjcExports.h"
 #import "CommodityFunctions.h"
 #import "MainMenuViewController.h"
-#import "AVFoundation/AVAudioPlayer.h"
 #include <unistd.h>
 
 
@@ -37,39 +36,11 @@
 @end
 
 @implementation HedgewarsAppDelegate
-@synthesize mainViewController, uiwindow, secondWindow, isInGame, backgroundMusic;
+@synthesize mainViewController, uiwindow, secondWindow, isInGame;
 
 // convenience method
 +(HedgewarsAppDelegate *)sharedAppDelegate {
     return (HedgewarsAppDelegate *)[[UIApplication sharedApplication] delegate];
-}
-
-#pragma mark -
-#pragma mark Music control
-+(void) playBackgroundMusic {
-    if ([HedgewarsAppDelegate sharedAppDelegate].backgroundMusic == nil)
-        [HedgewarsAppDelegate loadBackgroundMusic];
-    [[HedgewarsAppDelegate sharedAppDelegate].backgroundMusic play];
-}
-
-+(void) pauseBackgroundMusic {
-    [[HedgewarsAppDelegate sharedAppDelegate].backgroundMusic pause];
-}
-
-+(void) stopBackgroundMusic {
-    [[HedgewarsAppDelegate sharedAppDelegate].backgroundMusic stop];
-}
-
-+(void) loadBackgroundMusic {
-    NSString *musicString = [[NSBundle mainBundle] pathForResource:@"hwclassic" ofType:@"mp3"];
-    AVAudioPlayer *background = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:musicString] error:nil];
-
-    background.delegate = nil;
-    background.volume = 0.4f;
-    background.numberOfLoops = -1;
-    [background prepareToPlay];
-    [HedgewarsAppDelegate sharedAppDelegate].backgroundMusic = background;
-    [background release];
 }
 
 #pragma mark -
@@ -80,7 +51,6 @@
         uiwindow = nil;
         secondWindow = nil;
         isInGame = NO;
-        backgroundMusic = nil;
     }
     return self;
 }
@@ -89,7 +59,6 @@
     [mainViewController release];
     [uiwindow release];
     [secondWindow release];
-    [backgroundMusic release];
     [super dealloc];
 }
 
@@ -125,8 +94,7 @@
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
     // don't stop music when it is playing
     if (self.isInGame) {
-        [self.backgroundMusic stop];
-        self.backgroundMusic = nil;
+        [AudioManagerController didReceiveMemoryWarning];
         MSG_MEMCLEAN();
     }
     print_free_memory();
@@ -136,7 +104,7 @@
 // true multitasking with sdl works only on 4.2 and above; we close the game to avoid a black screen at return
 -(void) applicationWillResignActive:(UIApplication *)application {
     if (self.isInGame && [[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f)
-            HW_terminate(NO);
+         HW_terminate(NO);
 
     [super applicationWillResignActive:application];
 }

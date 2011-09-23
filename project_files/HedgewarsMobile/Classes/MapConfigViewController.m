@@ -40,7 +40,7 @@
 }
 
 -(IBAction) mapButtonPressed {
-    playSound(@"clickSound");
+    [AudioManagerController playClickSound];
     [self updatePreview];
 }
 
@@ -307,7 +307,7 @@
         [self updatePreview];
         oldValue = num;
     }
-    playSound(@"clickSound");
+    [AudioManagerController playClickSound];
 }
 
 // perform actions based on the activated section, then call updatePreview to visually update the selection
@@ -316,7 +316,7 @@
     NSString *mapgen, *staticmap, *mission;
     NSInteger newPage = self.segmentedControl.selectedSegmentIndex;
 
-    playSound(@"selSound");
+    [AudioManagerController playSelectSound];
     switch (newPage) {
         case 0: // Random
             mapgen = @"e$mapgen 0";

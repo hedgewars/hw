@@ -278,7 +278,7 @@
             HW_backjump();
             break;
         case 10:
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
             clearView();
             HW_pause();
             if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
@@ -289,7 +289,7 @@
             [self showPopover];
             break;
         case 11:
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
             clearView();
             
             if (IS_DUALHEAD() || [[[NSUserDefaults standardUserDefaults] objectForKey:@"classic_menu"] boolValue] == NO) {

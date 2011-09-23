@@ -77,7 +77,7 @@
 }
 
 -(void) dismissModalViewControllerAnimated:(BOOL)animated {
-    playSound(@"backSound");
+    [AudioManagerController playBackSound];
     [self.parentViewController dismissModalViewControllerAnimated:YES];
 }
 

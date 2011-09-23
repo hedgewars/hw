@@ -146,7 +146,7 @@
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([indexPath section] == 3) {
-        playSound(@"backSound");
+        [AudioManagerController playBackSound];
         [self dismissModalViewControllerAnimated:YES];
     }
 }

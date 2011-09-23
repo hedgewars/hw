@@ -214,6 +214,7 @@
 		61B7A61812FA13B00051E14E /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A56812FA12D00051E14E /* libSDL_net.a */; };
 		61B7A61912FA13B00051E14E /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A59012FA13330051E14E /* libSDL_ttf.a */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
+		61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C28D3E142D380400DA16C2 /* AudioManagerController.m */; };
 		61CADE331402EE290030C3EB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61CADE321402EE290030C3EB /* ImageIO.framework */; };
 		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61D3D2A51290E03A003CE7C3 /* irc.png in Resources */ = {isa = PBXBuildFile; fileRef = 61D3D2A41290E03A003CE7C3 /* irc.png */; };
@@ -572,6 +573,8 @@
 		61B7A33712CC21080086B604 /* StatsPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatsPageViewController.m; sourceTree = "<group>"; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditableCellView.h; path = Classes/EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditableCellView.m; path = Classes/EditableCellView.m; sourceTree = "<group>"; };
+		61C28D3D142D380400DA16C2 /* AudioManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioManagerController.h; sourceTree = "<group>"; };
+		61C28D3E142D380400DA16C2 /* AudioManagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioManagerController.m; sourceTree = "<group>"; };
 		61CADE321402EE290030C3EB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		61D2059F127CDD1100ABD83E /* ObjcExports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjcExports.h; path = Classes/ObjcExports.h; sourceTree = "<group>"; };
 		61D205A0127CDD1100ABD83E /* ObjcExports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjcExports.m; path = Classes/ObjcExports.m; sourceTree = "<group>"; };
@@ -666,6 +669,8 @@
 				616591E711CA9BA200D6E256 /* EngineProtocolNetwork.m */,
 				61E2E12C12BAAEE30051B659 /* ServerSetup.h */,
 				61E2E12D12BAAEE30051B659 /* ServerSetup.m */,
+				61C28D3D142D380400DA16C2 /* AudioManagerController.h */,
+				61C28D3E142D380400DA16C2 /* AudioManagerController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -1589,6 +1594,7 @@
 				61EDB5B0135B3F97009B29A6 /* GameInterfaceBridge.m in Sources */,
 				61A976B3136F668500DD9878 /* uCursor.pas in Sources */,
 				6167A6761391514600AA6D07 /* RestoreViewController.m in Sources */,
+				61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
