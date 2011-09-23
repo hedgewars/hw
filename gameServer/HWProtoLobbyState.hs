@@ -34,7 +34,7 @@ handleCmd_lobby ["LIST"] = do
     return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
     where
         roomInfo irnc r = [
-                showB $ gameinprogress r,
+                showB $ isJust $ gameInfo r,
                 name r,
                 showB $ playersIn r,
                 showB $ length $ teams r,
@@ -117,13 +117,13 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                  : ("SCHEME", pr Map.! "SCHEME")
                  : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr)
 
-        answerTeams cl jRoom = let f = if gameinprogress jRoom then teamsAtStart else teams in answerAllTeams cl $ f jRoom
+        answerTeams cl jRoom = let f = if isJust $ gameInfo jRoom then teamsAtStart . fromJust . gameInfo else teams in answerAllTeams cl $ f jRoom
 
-        watchRound cl jRoom = if not $ gameinprogress jRoom then
+        watchRound cl jRoom = if isNothing $ gameInfo jRoom then
                     []
                 else
                     [AnswerClients [sendChan cl]  ["RUN_GAME"],
-                    AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs jRoom)]
+                    AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs . fromJust . gameInfo $ jRoom)]
 
 
 handleCmd_lobby ["JOIN_ROOM", roomName] =

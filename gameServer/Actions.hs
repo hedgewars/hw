@@ -17,10 +17,10 @@ import Control.DeepSeq
 import Data.Unique
 import Control.Arrow
 import Control.Exception
-import OfficialServer.GameReplayStore
 import System.Process
 import Network.Socket
 -----------------------------
+import OfficialServer.GameReplayStore
 import CoreTypes
 import Utils
 import ClientIO
@@ -206,7 +206,7 @@ processAction (MoveToLobby msg) = do
     (Just ci) <- gets clientIndex
     ri <- clientRoomA
     rnc <- gets roomsClients
-    (gameProgress, playersNum) <- io $ room'sM rnc (gameinprogress &&& playersIn) ri
+    (gameProgress, playersNum) <- io $ room'sM rnc ((isJust . gameInfo) &&& playersIn) ri
     ready <- client's isReady
     master <- client's isMaster
 --    client <- client's id
@@ -298,7 +298,7 @@ processAction (UnreadyRoomClients) = do
 processAction (RemoveTeam teamName) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
-    inGame <- io $ room'sM rnc gameinprogress ri
+    inGame <- io $ room'sM rnc (isJust . gameInfo) ri
     chans <- othersChans
     if not $ inGame then
             mapM_ processAction [
@@ -310,8 +310,10 @@ processAction (RemoveTeam teamName) = do
                 AnswerClients chans ["EM", rmTeamMsg],
                 ModifyRoom (\r -> r{
                     teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r,
-                    leftTeams = teamName : leftTeams r,
-                    roundMsgs = roundMsgs r Seq.|> rmTeamMsg
+                        gameInfo = liftM (\g -> g{
+                        leftTeams = teamName : leftTeams g,
+                        roundMsgs = roundMsgs g Seq.|> rmTeamMsg
+                        }) $ gameInfo r
                     })
                 ]
     where

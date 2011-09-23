@@ -62,6 +62,22 @@ data TeamInfo =
         hedgehogs :: [HedgehogInfo]
     }
     deriving (Show, Read)
+    
+data GameInfo =
+    GameInfo
+    {
+        roundMsgs :: Seq B.ByteString,
+        leftTeams :: [B.ByteString],
+        teamsAtStart :: [TeamInfo],
+        allPlayersHaveRegisteredAccounts :: Bool
+    }
+    
+newGameInfo :: Bool -> GameInfo 
+newGameInfo = 
+    GameInfo
+        Data.Sequence.empty
+        []
+        []
 
 data RoomInfo =
     RoomInfo
@@ -71,14 +87,11 @@ data RoomInfo =
         password :: B.ByteString,
         roomProto :: Word16,
         teams :: [TeamInfo],
-        gameinprogress :: Bool,
+        gameInfo :: Maybe GameInfo,
         playersIn :: !Int,
         readyPlayers :: !Int,
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
-        roundMsgs :: Seq B.ByteString,
-        leftTeams :: [B.ByteString],
-        teamsAtStart :: [TeamInfo],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
     }
@@ -91,14 +104,11 @@ newRoom =
         ""
         0
         []
-        False
+        Nothing
         0
         0
         False
         False
-        Data.Sequence.empty
-        []
-        []
         (
             Map.fromList $ Prelude.zipWith (,)
                 ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
