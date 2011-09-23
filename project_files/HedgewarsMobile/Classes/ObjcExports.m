@@ -62,6 +62,10 @@ void inline setGrenadeTime(NSInteger value) {
 
 #pragma mark -
 #pragma mark functions called by pascal code
+BOOL inline isApplePhone() {
+    return (IS_IPAD() == NO);
+}
+
 void startSpinningProgress() {
     gameRunning = NO;
     overlay_instance.lowerIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];

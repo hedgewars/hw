@@ -65,7 +65,6 @@
 
 void print_free_memory (void);
 void playSound (NSString *snd);
-BOOL isApplePhone (void);
 NSInteger randomPort (void);
 
 NSString *getModelType (void);
