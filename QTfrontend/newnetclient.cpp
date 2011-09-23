@@ -24,10 +24,7 @@
 #include "hwconsts.h"
 #include "newnetclient.h"
 #include "proto.h"
-#include "gameuiconfig.h"
 #include "game.h"
-#include "gamecfgwidget.h"
-#include "teamselect.h"
 #include "misc.h"
 /* only to get the ignoreList from the chat widget */
 #include "hwform.h"
@@ -36,10 +33,7 @@
 
 char delimeter='\n';
 
-HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget) :
-  config(config),
-  m_pGameCFGWidget(pGameCFGWidget),
-  m_pTeamSelWidget(pTeamSelWidget),
+HWNewNet::HWNewNet() :
   isChief(false),
   m_game_connected(false),
   loginStep(0),
@@ -51,11 +45,6 @@ HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSel
     connect(&NetSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnect()));
     connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
             SLOT(displayError(QAbstractSocket::SocketError)));
-
-// config stuff
-    connect(this, SIGNAL(paramChanged(const QString &, const QStringList &)), pGameCFGWidget, SLOT(setParam(const QString &, const QStringList &)));
-    connect(pGameCFGWidget, SIGNAL(paramChanged(const QString &, const QStringList &)), this, SLOT(onParamChanged(const QString &, const QStringList &)));
-    connect(this, SIGNAL(configAsked()), pGameCFGWidget, SLOT(fullNetConfig()));
 }
 
 HWNewNet::~HWNewNet()
@@ -63,7 +52,7 @@ HWNewNet::~HWNewNet()
     if (m_game_connected)
     {
         RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("User quit"));
-        emit Disconnected();
+        emit Disconnected(tr("User quit"));
     }
     NetSocket.flush();
 }
@@ -71,15 +60,6 @@ HWNewNet::~HWNewNet()
 void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
     mynick = nick;
-    while (mynick.isEmpty()) {
-        mynick = QInputDialog::getText(m_pGameCFGWidget,
-                 QObject::tr("Nickname"),
-                 QObject::tr("Please enter your nickname"),
-                 QLineEdit::Normal,
-                 QDir::home().dirName());
-        config->setValue("net/nick",mynick);
-        config->updNetNick();
-    }
     myhost = hostName + QString(":%1").arg(port);
     NetSocket.connectToHost(hostName, port);
 }
@@ -147,6 +127,11 @@ void HWNewNet::RemoveTeam(const HWTeam & team)
     RawSendNet(QString("REMOVE_TEAM") + delimeter + team.TeamName);
 }
 
+void HWNewNet::NewNick(const QString & nick)
+{
+    RawSendNet(QString("NICK%1%2").arg(delimeter).arg(nick));
+}
+
 void HWNewNet::ToggleReady()
 {
   RawSendNet(QString("TOGGLE_READY"));
@@ -166,7 +151,7 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
-  qDebug() << "Client: " << QString(buf).split("\n");
+    qDebug() << "Client: " << QString(buf).split("\n");
     NetSocket.write(buf);
     NetSocket.write("\n\n", 2);
 }
@@ -191,27 +176,31 @@ void HWNewNet::OnConnect()
 
 void HWNewNet::OnDisconnect()
 {
-    if(m_game_connected) emit Disconnected();
+    if(m_game_connected) emit Disconnected("");
     m_game_connected = false;
 }
 
 void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 {
-    emit Disconnected();
     m_game_connected = false;
 
     switch (socketError) {
         case QAbstractSocket::RemoteHostClosedError:
             break;
         case QAbstractSocket::HostNotFoundError:
-            emit showMessage(tr("The host was not found. Please check the host name and port settings."));
+            emit Disconnected(tr("The host was not found. Please check the host name and port settings."));
             break;
         case QAbstractSocket::ConnectionRefusedError:
-            emit showMessage(tr("Connection refused"));
+            emit Disconnected(tr("Connection refused"));
             break;
         default:
-            emit showMessage(NetSocket.errorString());
+            emit Disconnected(NetSocket.errorString());
         }
+}
+
+void HWNewNet::SendPasswordHash(const QString & hash)
+{
+    RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(hash));
 }
 
 void HWNewNet::ParseCmd(const QStringList & lst)
@@ -235,17 +224,17 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ERROR") {
         if (lst.size() == 2)
-            emit showMessage("Error: " + lst[1]);
+            emit Error(lst[1]);
         else
-            emit showMessage("Unknown error");
+            emit Error("Unknown error");
         return;
     }
 
     if (lst[0] == "WARNING") {
         if (lst.size() == 2)
-            emit showMessage("Warning: " + lst[1]);
+            emit Warning(lst[1]);
         else
-            emit showMessage("Unknown warning");
+            emit Warning("Unknown warning");
         return;
     }
 
@@ -383,21 +372,19 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             qWarning("Net: Bad REMOVETEAM message");
             return;
         }
-        m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1]));
+        emit RemoveNetTeam(HWTeam(lst[1]));
         return;
     }
 
     if(lst[0] == "ROOMABANDONED") {
         netClientState = 2;
-        emit showMessage(HWNewNet::tr("Room destroyed"));
-        emit LeftRoom();
+        emit LeftRoom(tr("Room destroyed"));
         return;
     }
 
     if(lst[0] == "KICKED") {
         netClientState = 2;
-        emit showMessage(HWNewNet::tr("You got kicked"));
-        emit LeftRoom();
+        emit LeftRoom(tr("You got kicked"));
         return;
     }
 
@@ -418,11 +405,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 if (isChief)
                     emit configAsked();
             }
+            // TODO reactivate
+/*
             if (lst[i] != mynick && isChief && config->Form->ui.pageRoomsList->chatWidget->ignoreList.contains(lst[i], Qt::CaseInsensitive) && !config->Form->ui.pageRoomsList->chatWidget->friendsList.contains(lst[i], Qt::CaseInsensitive))
             {
                 kickPlayer(lst[i]);
             }
             else
+*/
             {
                 emit nickAdded(lst[i], isChief && (lst[i] != mynick));
                 emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
@@ -498,28 +488,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     }
 
     if (lst[0] == "ASKPASSWORD") {
-        bool ok = false;
-        int passLength = config->value("net/passwordlength", 0).toInt();
-        QString hash = config->value("net/passwordhash", "").toString();
-        
-        // If the password is blank, ask the user to enter one in
-        if (passLength == 0)
-        {
-            QString password = QInputDialog::getText(m_pGameCFGWidget, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(mynick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
-
-            if (!ok) {
-                Disconnect();
-                emit Disconnected();
-                return;
-            }
-            
-            hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
-            config->setValue("net/passwordhash", hash);
-            config->setValue("net/passwordlength", password.size());
-            config->setNetPasswordLength(password.size());
-        }
-
-        RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(hash));
+        emit AskForPassword(mynick);
         return;
     }
 
@@ -549,7 +518,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             qWarning("Net: Bad TEAM_ACCEPTED message");
             return;
         }
-        m_pTeamSelWidget->changeTeamStatus(lst[1]);
+        emit TeamAccepted(lst[1]);
         return;
     }
 
@@ -616,11 +585,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         }
         if (lst[1] == "Authentication failed")
         {
-            // Set the password blank if case the user tries to join and enter his password again
-            config->setValue("net/passwordlength", 0);
-            config->setNetPasswordLength(0);
+            emit AuthFailed();
         }
-        emit showMessage(HWNewNet::tr("Quit reason: ") + lst[1]);
+        m_game_connected = false;
+        Disconnect();
+        emit Disconnected(lst[1]);
         return;
     }
 
@@ -633,15 +602,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "ROOM_CONTROL_ACCESS") {
         if (lst.size() < 2)
         {
-            qWarning("Net: Bad BYE message");
+            qWarning("Net: Bad ROOM_CONTROL_ACCESS message");
             return;
         }
-        bool b = lst[1] != "0";
-        m_pGameCFGWidget->setEnabled(b);
-        m_pTeamSelWidget->setInteractivity(b);
-        isChief = b;
+        isChief = (lst[1] != "0");
         emit roomMaster(isChief);
-
         return;
     }
 
@@ -825,21 +790,7 @@ void HWNewNet::handleNotice(int n)
     {
         case 0:
         {
-            bool ok = false;
-            QString newNick = QInputDialog::getText(m_pGameCFGWidget, tr("Nickname"), tr("Some one already uses\n your nickname %1\non the server.\nPlease pick another nickname:").arg(mynick), QLineEdit::Normal, mynick, &ok);
-
-            if (!ok || newNick.isEmpty()) {
-                Disconnect();
-                emit Disconnected();
-                return;
-            }
-
-            config->setValue("net/nick", newNick);
-            config->updNetNick();
-            mynick = newNick;
-
-            RawSendNet(QString("NICK%1%2").arg(delimeter).arg(newNick));
-
+            emit NickTaken(mynick);
             break;
         }
     }

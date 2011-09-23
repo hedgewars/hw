@@ -39,10 +39,12 @@ class HWNewNet : public QObject
   Q_OBJECT
 
  public:
-  HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget);
+  HWNewNet();
   ~HWNewNet();
   void Connect(const QString & hostName, quint16 port, const QString & nick);
   void Disconnect();
+  void SendPasswordHash(const QString & hash);
+  void NewNick(const QString & nick);
   bool isRoomChief();
   bool isInRoom();
   int getClientState();
@@ -51,10 +53,6 @@ class HWNewNet : public QObject
   QString getHost();
 
  private:
-  GameUIConfig* config;
-  GameCFGWidget* m_pGameCFGWidget;
-  TeamSelWidget* m_pTeamSelWidget;
-
   bool isChief;
   QString mynick;
   QString myroom;
@@ -95,9 +93,14 @@ class HWNewNet : public QObject
  signals:
   void AskForRunGame();
   void Connected();
-  void Disconnected();
+  void Disconnected(const QString & reason);
+  void Error(const QString & errmsg);
+  void Warning(const QString & wrnmsg);
+  void AskForPassword(const QString & nick);
+  void NickTaken(const QString & nick);
+  void AuthFailed();
   void EnteredGame();
-  void LeftRoom();
+  void LeftRoom(const QString & reason);
   void nickAdded(const QString& nick, bool notifyNick);
   void nickRemoved(const QString& nick);
   void nickAddedLobby(const QString& nick, bool notifyNick);
@@ -110,7 +113,9 @@ class HWNewNet : public QObject
   void paramChanged(const QString & param, const QStringList & value);
   void configAsked();
 
+  void TeamAccepted(const QString&);
   void AddNetTeam(const HWTeam&);
+  void RemoveNetTeam(const HWTeam&);
   void hhnumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);
   void chatStringLobby(const QString&);
@@ -127,7 +132,6 @@ class HWNewNet : public QObject
 
   void setReadyStatus(const QString & nick, bool isReady);
   void setMyReadyStatus(bool isReady);
-  void showMessage(const QString &);
 
  public slots:
   void ToggleReady();

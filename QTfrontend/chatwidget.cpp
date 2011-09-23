@@ -111,6 +111,9 @@ a { color:#c8c8ff; }\
 .UserAction .nick { color: #ffa0ff; }\
 .FriendAction { color: #ff00ff; }\
 .FriendAction .nick { color: #ff30ff; }\
+.Error { color: #ff0000 }\
+.Warning { color: #ff8000 }\
+.Notice { color: #fefefe }\
 ";
 
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify) :
@@ -340,9 +343,6 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
         isFriend = friendsList.contains(nick, Qt::CaseInsensitive);
     }
 
-    if (chatStrings.size() > 250)
-        chatStrings.removeFirst();
-
     QString formattedStr = Qt::escape(str.mid(1));
     // make hedgewars.org urls actual links
     formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http://\\3\">\\3</a>");
@@ -367,9 +367,17 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
                 cssClass = "FriendChat";
     }
 
-    formattedStr = QString("<span class=\"%2\">%1</span>").arg(formattedStr).arg(cssClass);
+    addLine(cssClass,formattedStr);
+}
 
-    chatStrings.append(formattedStr);
+void HWChatWidget::addLine(const QString& cssClass, QString line)
+{
+    if (chatStrings.size() > 250)
+        chatStrings.removeFirst();
+
+    line = QString("<span class=\"%2\">%1</span>").arg(line).arg(cssClass);
+
+    chatStrings.append(line);
 
     chatText->setHtml(chatStrings.join("<br>"));
 

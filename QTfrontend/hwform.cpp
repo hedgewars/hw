@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <QDir>
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
@@ -753,7 +754,82 @@ void HWForm::NetConnectOfficialServer()
     NetConnectServer("netserver.hedgewars.org", 46631);
 }
 
-void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
+void HWForm::NetPassword(const QString & nick)
+{
+    bool ok = false;
+    int passLength = config->value("net/passwordlength", 0).toInt();
+    QString hash = config->value("net/passwordhash", "").toString();
+
+    // If the password is blank, ask the user to enter one in
+    if (passLength == 0)
+    {
+        QString password = QInputDialog::getText(this, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(nick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
+
+        if (!ok) {
+            ForcedDisconnect(tr("No password supplied."));
+            return;
+        }
+
+        hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
+        config->setValue("net/passwordhash", hash);
+        config->setValue("net/passwordlength", password.size());
+        config->setNetPasswordLength(password.size());
+    }
+
+    hwnet->SendPasswordHash(hash);
+}
+
+void HWForm::NetNickTaken(const QString & nick)
+{
+    bool ok = false;
+    QString newNick = QInputDialog::getText(this, tr("Nickname"), tr("Some one already uses\n your nickname %1\non the server.\nPlease pick another nickname:").arg(nick), QLineEdit::Normal, nick, &ok);
+
+    if (!ok || newNick.isEmpty()) {
+            ForcedDisconnect(tr("No nickname supplied."));
+        return;
+    }
+
+    hwnet->NewNick(newNick);
+    config->setValue("net/nick", newNick);
+    config->updNetNick();
+}
+
+void HWForm::NetAuthFailed()
+{
+    // Set the password blank if case the user tries to join and enter his password again
+    config->setValue("net/passwordlength", 0);
+    config->setNetPasswordLength(0);
+}
+
+void HWForm::NetTeamAccepted(const QString & team)
+{
+    ui.pageNetGame->pNetTeamsWidget->changeTeamStatus(team);
+}
+
+void HWForm::NetError(const QString & errmsg)
+{
+    switch (ui.Pages->currentIndex())
+    {
+        case ID_PAGE_INGAME:
+            ShowErrorMessage(errmsg);
+            // no break
+        case ID_PAGE_NETGAME:
+            ui.pageNetGame->pChatWidget->addLine("Error",errmsg);
+            break;
+        default:
+        ui.pageRoomsList->chatWidget->addLine("Error",errmsg);
+    }
+}
+
+void HWForm::NetWarning(const QString & wrnmsg)
+{
+    if (ui.Pages->currentIndex() == ID_PAGE_NETGAME || ui.Pages->currentIndex() == ID_PAGE_INGAME)
+        ui.pageNetGame->pChatWidget->addLine("Warning",wrnmsg);
+    else
+        ui.pageRoomsList->chatWidget->addLine("Warning",wrnmsg);
+}
+
+void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 {
     if(hwnet) {
         hwnet->Disconnect();
@@ -763,17 +839,22 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
     ui.pageRoomsList->chatWidget->clear();
 
-    hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
+    hwnet = new HWNewNet();
 
     GoToPage(ID_PAGE_CONNECTING);
 
-    connect(hwnet, SIGNAL(showMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
-
     connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
     connect(hwnet, SIGNAL(Connected()), this, SLOT(NetConnected()));
+    connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)));
+    connect(hwnet, SIGNAL(Warning(const QString&)), this, SLOT(NetWarning(const QString&)));
     connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
-    connect(hwnet, SIGNAL(LeftRoom()), this, SLOT(NetLeftRoom()));
+    connect(hwnet, SIGNAL(LeftRoom(const QString&)), this, SLOT(NetLeftRoom(const QString&)));
     connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
+    connect(hwnet, SIGNAL(RemoveNetTeam(const HWTeam&)), this, SLOT(RemoveNetTeam(const HWTeam&)));
+    connect(hwnet, SIGNAL(TeamAccepted(const QString&)), this, SLOT(NetTeamAccepted(const QString&)));
+    connect(hwnet, SIGNAL(AskForPassword(const QString&)), this, SLOT(NetPassword(const QString&)));
+    connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)));
+    connect(hwnet, SIGNAL(AuthFailed()), this, SLOT(NetAuthFailed()));
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
 // rooms list page stuff
@@ -879,8 +960,22 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
     connect(ui.pageAdmin->pbClearAccountsCache, SIGNAL(clicked()), hwnet, SLOT(clearAccountsCache()));
 
 // disconnect
-    connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(Disconnected(const QString&)), this, SLOT(ForcedDisconnect(const QString&)), Qt::QueuedConnection);
 
+// config stuff
+    connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));
+    connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
+    connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
+
+    while (nick.isEmpty()) {
+        nick = QInputDialog::getText(this,
+                 QObject::tr("Nickname"),
+                 QObject::tr("Please enter your nickname"),
+                 QLineEdit::Normal,
+                 QDir::home().dirName());
+        config->setValue("net/nick",nick);
+        config->updNetNick();
+    }
     hwnet->Connect(hostName, port, nick);
 }
 
@@ -928,11 +1023,6 @@ void HWForm::AsyncNetServerStart()
 
 void HWForm::NetDisconnect()
 {
-    if(hwnet) {
-        hwnet->Disconnect();
-        delete hwnet;
-        hwnet = 0;
-    }
     if(pnetserver) {
         if (pRegisterServer)
         {
@@ -946,15 +1036,12 @@ void HWForm::NetDisconnect()
     }
 }
 
-void HWForm::ForcedDisconnect()
+void HWForm::ForcedDisconnect(const QString & reason)
 {
     if(pnetserver) return; // we have server - let it care of all things
     if (hwnet) {
-        HWNewNet * tmp = hwnet;
-        hwnet = 0;
-        tmp->deleteLater();
         QMessageBox::warning(this, QMessageBox::tr("Network"),
-                QMessageBox::tr("Connection to server is lost"));
+                QMessageBox::tr("Connection to server is lost") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Quit reason: ") + '"' + reason +'"')));
 
     }
     if (ui.Pages->currentIndex() != ID_PAGE_NET) GoBack();
@@ -974,6 +1061,11 @@ void HWForm::NetGameEnter()
 void HWForm::AddNetTeam(const HWTeam& team)
 {
     ui.pageNetGame->pNetTeamsWidget->addTeam(team);
+}
+
+void HWForm::RemoveNetTeam(const HWTeam& team)
+{
+    ui.pageNetGame->pNetTeamsWidget->removeNetTeam(team);
 }
 
 void HWForm::StartMPGame()
@@ -1141,6 +1233,9 @@ void HWForm::Music(bool checked)
 
 void HWForm::NetGameChangeStatus(bool isMaster)
 {
+    ui.pageNetGame->pGameCFG->setEnabled(isMaster);
+    ui.pageNetGame->pNetTeamsWidget->setInteractivity(isMaster);
+
     if (isMaster)
         NetGameMaster();
     else
@@ -1201,10 +1296,14 @@ void HWForm::selectFirstNetScheme()
     ui.pageNetGame->pGameCFG->GameSchemes->setCurrentIndex(0);
 }
 
-void HWForm::NetLeftRoom()
+void HWForm::NetLeftRoom(const QString & reason)
 {
     if (ui.Pages->currentIndex() == ID_PAGE_NETGAME || ui.Pages->currentIndex() == ID_PAGE_INGAME)
+    {
         GoBack();
+        if (!reason.isEmpty())
+            ui.pageRoomsList->chatWidget->addLine("Notice",reason);
+    }
     else
         qWarning("Left room while not in room");
 }

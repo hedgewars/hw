@@ -97,11 +97,18 @@ private slots:
     void NetStartServer();
     void NetDisconnect();
     void NetConnected();
+    void NetError(const QString & errmsg);
+    void NetWarning(const QString & wrnmsg);
     void NetGameEnter();
+    void NetPassword(const QString & nick);
+    void NetNickTaken(const QString & nick);
+    void NetAuthFailed();
+    void NetTeamAccepted(const QString& team);
     void AddNetTeam(const HWTeam& team);
+    void RemoveNetTeam(const HWTeam& team);
     void StartMPGame();
     void GameStateChanged(GameState gameState);
-    void ForcedDisconnect();
+    void ForcedDisconnect(const QString & reason);
     void ShowErrorMessage(const QString &);
     void GetRecord(bool isDemo, const QByteArray & record);
     void CreateNetGame();
@@ -115,13 +122,13 @@ private slots:
     void NetGameSlave();
 
     void AsyncNetServerStart();
-    void NetLeftRoom();
+    void NetLeftRoom(const QString & reason);
     void selectFirstNetScheme();
     
     void saveDemoWithCustomName();
 
 private:
-    void _NetConnect(const QString & hostName, quint16 port, const QString & nick);
+    void _NetConnect(const QString & hostName, quint16 port, QString nick);
     void UpdateTeamsLists(const QStringList* editable_teams=0);
     void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);
     void closeEvent(QCloseEvent *event);
