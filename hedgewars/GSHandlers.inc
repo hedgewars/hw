@@ -1503,9 +1503,11 @@ begin
         exit
         end;
 
-    if (Gear^.Message and gmLeft  <> 0) then HHGear^.dX := HHGear^.dX - _0_0002
-    else
-        if (Gear^.Message and gmRight <> 0) then HHGear^.dX := HHGear^.dX + _0_0002;
+    if (Gear^.Message and gmLeft  <> 0) and not TestCollisionXwithGear(HHGear, -1) then
+        HHGear^.dX := HHGear^.dX - _0_0002;
+
+    if (Gear^.Message and gmRight <> 0) and not TestCollisionXwithGear(HHGear,  1) then
+        HHGear^.dX := HHGear^.dX + _0_0002;
 
     // vector between hedgehog and rope attaching point
     ropeDx := HHGear^.X - Gear^.X;
