@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE CPP, OverloadedStrings #-}
 module Actions where
 
 import Control.Concurrent
@@ -507,9 +507,13 @@ processAction RestartServer = do
             return ()
         processAction $ ModifyServerInfo (\s -> s{shutdownPending = True})
 
+#if defined(OFFICIAL_SERVER)
 processAction SaveReplay = do
     ri <- clientRoomA
     rnc <- gets roomsClients
     io $ do
         r <- room'sM rnc id ri
         saveReplay r
+#else
+processAction SaveReplay = return ()
+#endif

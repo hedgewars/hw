@@ -166,16 +166,19 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
         ]
 
 handleCmd_inRoom ["START_GAME"] = do
+    (ci, rnc) <- ask
     cl <- thisClient
     rm <- thisRoom
     chans <- roomClientsChans
+    
+    let allPlayersRegistered = all ((<) 0 . B.length . webPassword . client rnc . teamownerId) $ teams rm
 
     if isMaster cl && playersIn rm == readyPlayers rm && not (isJust $ gameInfo rm) then
         if enoughClans rm then
             return [
                 ModifyRoom
                     (\r -> r{
-                        gameInfo = Just $ newGameInfo False
+                        gameInfo = Just $ newGameInfo allPlayersRegistered
                         }
                     ),
                 AnswerClients chans ["RUN_GAME"]
@@ -207,8 +210,9 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
     chans <- roomClientsChans
 
     if isMaster cl && (isJust $ gameInfo rm) then
-        return $ 
-            ModifyRoom
+        return $
+            SaveReplay
+            : ModifyRoom
                 (\r -> r{
                     gameInfo = Nothing,
                     readyPlayers = 0
