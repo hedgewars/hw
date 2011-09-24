@@ -21,6 +21,7 @@
 
 #import "StatsPageViewController.h"
 #import "CommodityFunctions.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation StatsPageViewController
 @synthesize statsArray;
@@ -57,11 +58,11 @@
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return 3;
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0 || section == 3)
+    if (section == 0)
         return 1;
     else if (section == 1)
         return [[self.statsArray objectAtIndex:0] count];
@@ -99,11 +100,6 @@
         imgName = @"iconDamage";
         cell.textLabel.text = [self.statsArray objectAtIndex:row + 2];
         cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-    } else {                    // exit button
-        cell.textLabel.text = NSLocalizedString(@"Done",@"");
-        cell.textLabel.textColor = [UIColor whiteColor];
-        cell.accessoryView = nil;
-        cell.imageView.image = nil;
     }
 
     NSString *imgString = [[NSString alloc] initWithFormat:@"%@/%@.png",imgPath,imgName];
@@ -142,13 +138,42 @@
         return nil;
 }
 
+-(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return self.tableView.rowHeight + 30;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == 2) {
+
+        UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.tableView.rowHeight)];
+        footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 17, self.view.frame.size.width, self.tableView.rowHeight)];
+        button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        [button setTitle:NSLocalizedString(@"Done",@"") forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+
+        button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+        button.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
+        [button.layer setBorderWidth:1];
+        [button.layer setBorderColor:UICOLOR_HW_YELLOW_BODER.CGColor];
+        [button.layer setCornerRadius:9.0f];
+        [button.layer setMasksToBounds:YES];
+        [button addTarget:self action:@selector(dismissView) forControlEvents:UIControlEventTouchUpInside];
+        [footer addSubview:button];
+        [button release];
+
+        return [footer autorelease];
+    } else
+        return nil;
+}
+
 #pragma mark -
-#pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 3) {
-        [AudioManagerController playBackSound];
-        [self dismissModalViewControllerAnimated:YES];
-    }
+#pragma mark button delegate
+-(void) dismissView {
+    [AudioManagerController playClickSound];
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark -
