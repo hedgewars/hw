@@ -112,18 +112,18 @@ begin
     if flagMakeCapture then
     begin
         flagMakeCapture:= false;
-        {$IFNDEF IPHONEOS}
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
 
         playSound(sndShutter);
+{$IFNDEF IPHONEOS}
         if not MakeScreenshot(s) then
         begin
             WriteLnToConsole('Screenshot failed.');
             AddChatString(#5 + 'screen capture failed (lack of memory or write permissions)');
         end
         else
+{$ENDIF}
             WriteLnToConsole('Screenshot saved: ' + s);
-        {$ENDIF}
     end;
 end;
 
@@ -153,9 +153,10 @@ procedure MainLoop;
 const event: TSDL_Event = ();
 {$WARNINGS ON}
 var PrevTime, CurrTime: Longword;
-    prevFocusState: boolean;
 {$IFDEF SDL13}
     previousGameState: TGameState;
+{$ELSE}
+    prevFocusState: boolean;
 {$ENDIF}
 begin
     PrevTime:= SDL_GetTicks;

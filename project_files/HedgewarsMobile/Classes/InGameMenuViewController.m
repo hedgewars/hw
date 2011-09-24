@@ -139,7 +139,7 @@
 
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UIActionSheet *actionSheet;
-    UIAlertView *alert;
+//    UIAlertView *alert;
 
     switch ([indexPath row]) {
         case 0:
