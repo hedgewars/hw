@@ -42,8 +42,11 @@
             self.interfaceBridge = bridge;
             [bridge release];
         }
-        [self.parentViewController dismissModalViewControllerAnimated:NO];
+        // TODO: it is useless to keep the modalcontroller around when calling interfacebridge
+        // but as long as it is an instance we mustn't release it beforehand
+        // moreover in this way the stats don't show up :/
         [self.interfaceBridge startSaveGame:[defaults objectForKey:@"savedGamePath"]];
+        [self.parentViewController dismissModalViewControllerAnimated:NO];
     } else {
         [AudioManagerController playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];

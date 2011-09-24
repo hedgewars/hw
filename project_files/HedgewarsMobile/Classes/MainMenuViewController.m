@@ -106,9 +106,6 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *trackingVersion = [userDefaults stringForKey:@"HedgeVersion"];
 
-    if ([[userDefaults objectForKey:@"music"] boolValue])
-        [AudioManagerController playBackgroundMusic];
-
     if (trackingVersion == nil || [trackingVersion isEqualToString:version] == NO) {
         // remove any reminder of previous games as saves are going to be wiped out
         [userDefaults setObject:@"" forKey:@"savedGamePath"];
@@ -149,6 +146,10 @@
     */
 }
 
+-(void) viewWillAppear:(BOOL)animated {
+    [AudioManagerController playBackgroundMusic];
+    [super viewWillAppear:animated];
+}
 
 #pragma mark -
 -(IBAction) switchViews:(id) sender {
