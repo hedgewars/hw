@@ -573,8 +573,8 @@
 		61B7A33712CC21080086B604 /* StatsPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatsPageViewController.m; sourceTree = "<group>"; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditableCellView.h; path = Classes/EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditableCellView.m; path = Classes/EditableCellView.m; sourceTree = "<group>"; };
-		61C28D3D142D380400DA16C2 /* AudioManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioManagerController.h; sourceTree = "<group>"; };
-		61C28D3E142D380400DA16C2 /* AudioManagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioManagerController.m; sourceTree = "<group>"; };
+		61C28D3D142D380400DA16C2 /* AudioManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioManagerController.h; path = Classes/AudioManagerController.h; sourceTree = "<group>"; };
+		61C28D3E142D380400DA16C2 /* AudioManagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioManagerController.m; path = Classes/AudioManagerController.m; sourceTree = "<group>"; };
 		61CADE321402EE290030C3EB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		61D2059F127CDD1100ABD83E /* ObjcExports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjcExports.h; path = Classes/ObjcExports.h; sourceTree = "<group>"; };
 		61D205A0127CDD1100ABD83E /* ObjcExports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjcExports.m; path = Classes/ObjcExports.m; sourceTree = "<group>"; };
@@ -669,8 +669,6 @@
 				616591E711CA9BA200D6E256 /* EngineProtocolNetwork.m */,
 				61E2E12C12BAAEE30051B659 /* ServerSetup.h */,
 				61E2E12D12BAAEE30051B659 /* ServerSetup.m */,
-				61C28D3D142D380400DA16C2 /* AudioManagerController.h */,
-				61C28D3E142D380400DA16C2 /* AudioManagerController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -705,6 +703,8 @@
 				61DE91561258B76800B80214 /* Custom UIs */,
 				61AC067212B2E32D000B52A2 /* Appirater.h */,
 				61AC067312B2E32D000B52A2 /* Appirater.m */,
+				61C28D3D142D380400DA16C2 /* AudioManagerController.h */,
+				61C28D3E142D380400DA16C2 /* AudioManagerController.m */,
 				6165929C11CA9E2F00D6E256 /* HedgewarsAppDelegate.h */,
 				6165929D11CA9E2F00D6E256 /* HedgewarsAppDelegate.m */,
 				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
