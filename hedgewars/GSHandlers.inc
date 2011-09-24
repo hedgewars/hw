@@ -509,6 +509,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMolotov(Gear: PGear);
 var 
+	s: Longword;
     i, gX, gY: LongInt;
     dX, dY: hwFloat;
     Fire: PGear;
@@ -520,8 +521,8 @@ begin
     CalcRotationDirAngle(Gear);
 
     // let's add some smoke depending on speed
-    i:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120))+random(10);
-    if (GameTicks mod i) = 0 then
+    s:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120))+random(10);
+    if (GameTicks mod s) = 0 then
         begin
         // adjust angle to match the texture
         if Gear^.dX.isNegative then i:= 130 else i:= 50;
@@ -4809,7 +4810,7 @@ begin
         i := hwRound(Gear^.X) - HitGear^.Radius + 2;
         ei := hwRound(Gear^.X) + HitGear^.Radius - 2;
         for j := 1 to 4 do DrawExplosion(i - GetRandom(5), hwRound(Gear^.Y) + 6*j, 3);
-        for j := 1 to 4 do DrawExplosion(ei + GetRandom(5), hwRound(Gear^.Y) + 6*j, 3);
+        for j := 1 to 4 do DrawExplosion(ei + LongInt(GetRandom(5)), hwRound(Gear^.Y) + 6*j, 3);
         while i <= ei do
             begin
             for j := 1 to 11 do DrawExplosion(i, hwRound(Gear^.Y) + 3*j, 3);

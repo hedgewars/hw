@@ -80,7 +80,7 @@ var friendlyfactor: LongInt = 300;
 
 procedure FillTargets;
 var i, t: Longword;
-    f, e: Longword;
+    f, e: LongInt;
 begin
 Targets.Count:= 0;
 f:= 0;
@@ -233,7 +233,7 @@ for i:= 0 to Targets.Count do
     with Targets.ar[i] do
          begin
          dmg:= hwRound(_0_01 * cDamageModifier
-            * min((r + cHHRadius div 2 - DistanceI(Point.x - x, Point.y - y).Round) div 2, r) * cDamagePercent);
+            * min((r + cHHRadius div 2 - LongInt(DistanceI(Point.x - x, Point.y - y).Round)) div 2, r) * cDamagePercent);
 
          if dmg > 0 then
             begin

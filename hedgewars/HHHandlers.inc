@@ -1017,7 +1017,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogFree(Gear: PGear);
-var prevState, i: Longword;
+var prevState: Longword;
 begin
 prevState:= Gear^.State;
 

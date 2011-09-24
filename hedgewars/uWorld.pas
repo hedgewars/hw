@@ -31,7 +31,7 @@ procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
-procedure ShakeCamera(amount: LongWord);
+procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
 procedure MoveCamera;
 procedure onFocusStateChanged;
@@ -914,11 +914,11 @@ if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) th
 DrawCaptions;
 
 // Teams Healths
-if TeamsCount * 20 > cScreenHeight div 7 then  // take up less screen on small displays
+if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
     begin
     SetScale(1.5);
     smallScreenOffset:= cScreenHeight div 6;
-    if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$80);
+    if TeamsCount * 20 > Longword(cScreenHeight) div 5 then Tint($FF,$FF,$FF,$80);
     end
 else smallScreenOffset:= 0;
 for t:= 0 to Pred(TeamsCount) do
@@ -957,7 +957,7 @@ for t:= 0 to Pred(TeamsCount) do
       // this approach should be faster than drawing all borders one by one tinted or not
       if highlight then
          begin
-         if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$80)
+         if TeamsCount * 20 > Longword(cScreenHeight) div 5 then Tint($FF,$FF,$FF,$80)
          else Tint($FF, $FF, $FF, $FF);
 
          // draw name
@@ -979,7 +979,7 @@ for t:= 0 to Pred(TeamsCount) do
 if smallScreenOffset <> 0 then
     begin
     SetScale(cDefaultZoomLevel);
-    if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$FF);
+    if TeamsCount * 20 > Longword(cScreenHeight) div 5 then Tint($FF,$FF,$FF,$FF);
     end;
 
 // Lag alert
@@ -1312,7 +1312,7 @@ begin
     if missionTex <> nil then FreeTexture(missionTex);
 end;
 
-procedure ShakeCamera(amount: LongWord);
+procedure ShakeCamera(amount: LongInt);
 begin
     if isCursorVisible then exit;
     amount:= Max(1, round(amount*zoom/2));
