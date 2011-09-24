@@ -77,6 +77,7 @@ PageAdmin::PageAdmin(QWidget* parent) :
     
     // 6
     pbSetSM = addButton(tr("Set data"), pageLayout, 6, 0, 1, 3);
+    connect(pbSetSM, SIGNAL(clicked()), this, SLOT(smChanged()));
 
 
     // 7
