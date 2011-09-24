@@ -183,12 +183,12 @@ void PageGameStats::GameStats(char type, const QString & info)
             //AddStatText("<p>local team: " + info + "</p>");
             QStringList infol = info.split(":");
             HWTeam team(infol[0]);
-            if(team.FileExists()) // do some better test to avoid influence from scripted/predefined teams?
+            if(team.fileExists()) // do some better test to avoid influence from scripted/predefined teams?
             {
-                team.LoadFromFile();
-                team.Rounds++;
+                team.loadFromFile();
+                team.incRounds();
                 if(infol[1].toInt() > 0) // might require some better test for winning condition (or changed flag) ... WIP!
-                    team.Wins++; // should draws count as wins?
+                    team.incWins(); // should draws count as wins?
                 //team.SaveToFile(); // don't save yet
             }
             break;

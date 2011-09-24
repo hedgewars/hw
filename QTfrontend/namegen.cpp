@@ -27,10 +27,10 @@
 
 
 HWNamegen::HWNamegen() :
-    TypesAvliable(false)
+    typesAvailable(false)
 {
 
-    TypesLoad();
+    loadTypes();
 }
 
 HWNamegen::~HWNamegen()
@@ -39,34 +39,36 @@ HWNamegen::~HWNamegen()
 
 
 
-void HWNamegen::TeamRandomName(HWTeam*& team, const int HedgehogNumber)
+void HWNamegen::teamRandomName(HWTeam & team, const int HedgehogNumber)
 {
-    RandomNameByHat(team, HedgehogNumber);
+    randomNameByHat(team, HedgehogNumber);
 }
 
-void HWNamegen::TeamRandomNames(HWTeam*& team, const bool changeteamname)
+void HWNamegen::teamRandomNames(HWTeam & team, const bool changeteamname)
 {
-    if ((TypesHatnames.size() > 0) && TypesAvliable){
+    if ((TypesHatnames.size() > 0) && typesAvailable){
 
         int kind = (rand()%(TypesHatnames.size()));
 
         if (changeteamname){
             if (TypesTeamnames[kind].size() > 0){
-                team->TeamName = TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())];
+                team.setName(TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())]);
             }
-            team->Grave = GetRandomGrave();
-            team->Fort = GetRandomFort();
-            team->Voicepack = "Default";
+            team.setGrave(getRandomGrave());
+            team.setFort(getRandomFort());
+            team.setVoicepack("Default");
         }
 
         //give each hedgehog a random name:
         //TODO: load the dictionary only once! (right now it's loaded once for each hedgehog)
-        for(int i = 0; i < 8; i++)
+        for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
         {
             if ((TypesHatnames[kind].size()) > 0){
-                team->Hedgehogs[i].Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
+                HWHog hh = team.hedgehog(i);
+                hh.Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
+                team.setHedgehog(i,hh);
             }
-            RandomNameByHat(team,i);
+            randomNameByHat(team,i);
         }
 
     }
@@ -74,18 +76,20 @@ void HWNamegen::TeamRandomNames(HWTeam*& team, const bool changeteamname)
 }
 
 
-void HWNamegen::RandomNameByHat(HWTeam*& team, const int HedgehogNumber)
+void HWNamegen::randomNameByHat(HWTeam & team, const int HedgehogNumber)
 {
     QStringList Dictionaries;
-    HatCfgLoad(team->Hedgehogs[HedgehogNumber].Hat,Dictionaries);
+    hatCfgLoad(team.hedgehog(HedgehogNumber).Hat,Dictionaries);
 
     QStringList Dictionary;
-    DictLoad(Dictionaries[rand()%(Dictionaries.size())],Dictionary);
+    dictLoad(Dictionaries[rand()%(Dictionaries.size())],Dictionary);
 
-    team->Hedgehogs[HedgehogNumber].Name = Dictionary[rand()%(Dictionary.size())];
+    HWHog hh = team.hedgehog(HedgehogNumber);
+    hh.Name = Dictionary[rand()%(Dictionary.size())];
+    team.setHedgehog(HedgehogNumber, hh);
 }
 
-void HWNamegen::DictLoad(const QString filename, QStringList &list)
+void HWNamegen::dictLoad(const QString filename, QStringList &list)
 {
     list.clear();
 
@@ -109,7 +113,7 @@ void HWNamegen::DictLoad(const QString filename, QStringList &list)
 }
 
 
-void HWNamegen::HatCfgLoad(const QString hatname, QStringList &list)
+void HWNamegen::hatCfgLoad(const QString hatname, QStringList &list)
 {
     list.clear();
 
@@ -133,13 +137,13 @@ void HWNamegen::HatCfgLoad(const QString hatname, QStringList &list)
 }
 
 
-void HWNamegen::TypesLoad()
+void HWNamegen::loadTypes()
 {
     QFile file;
     file.setFileName(QString("%1/Data/Names/types.ini").arg(cfgdir->absolutePath()));
     if (!file.exists()) file.setFileName(QString("%1/Names/types.ini").arg(datadir->absolutePath()));
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {TypesAvliable = FALSE; return;}
+        {typesAvailable = false; return;}
 
     int counter = 0; //counter starts with 0 (teamnames mode)
     TypesTeamnames.append(QStringList());
@@ -155,7 +159,7 @@ void HWNamegen::TypesLoad()
                 TypesHatnames.append(QStringList());
             }
         } else if ((line == QString("*****")) || (line == QString("*END*"))){
-            TypesAvliable = TRUE; return; // bye bye
+            typesAvailable = true; return; // bye bye
         } else {
             if ((counter%2) == 0){ // even => teamnames mode
                 TypesTeamnames[(counter/2)].append(line);
@@ -165,13 +169,13 @@ void HWNamegen::TypesLoad()
         }
 //        Types.append(line);
     }
-        TypesAvliable = TRUE;
+        typesAvailable = true;
     return;
 }
 
 
 
-QString HWNamegen::GetRandomGrave()
+QString HWNamegen::getRandomGrave()
 {
     QStringList Graves;
 
@@ -199,7 +203,7 @@ QString HWNamegen::GetRandomGrave()
     return Graves[rand()%(Graves.size())];
 }
 
-QString HWNamegen::GetRandomFort()
+QString HWNamegen::getRandomFort()
 {
     QStringList Forts;
 

@@ -104,27 +104,27 @@ void HWNewNet::JoinRoom(const QString & room)
 void HWNewNet::AddTeam(const HWTeam & team)
 {
     QString cmd = QString("ADD_TEAM") + delimeter +
-         team.TeamName + delimeter +
-         team.teamColor.name() + delimeter +
-         team.Grave + delimeter +
-         team.Fort + delimeter +
-         team.Voicepack + delimeter +
-         team.Flag + delimeter +
-         QString::number(team.difficulty);
+         team.name() + delimeter +
+         team.color().name() + delimeter +
+         team.grave() + delimeter +
+         team.fort() + delimeter +
+         team.voicepack() + delimeter +
+         team.flag() + delimeter +
+         QString::number(team.difficulty());
 
-    for(int i = 0; i < 8; ++i)
+    for(unsigned int i = 0; i < HEDGEHOGS_PER_TEAM; ++i)
     {
         cmd.append(delimeter);
-        cmd.append(team.Hedgehogs[i].Name);
+        cmd.append(team.hedgehog(i).Name);
         cmd.append(delimeter);
-        cmd.append(team.Hedgehogs[i].Hat);
+        cmd.append(team.hedgehog(i).Hat);
     }
     RawSendNet(cmd);
 }
 
 void HWNewNet::RemoveTeam(const HWTeam & team)
 {
-    RawSendNet(QString("REMOVE_TEAM") + delimeter + team.TeamName);
+    RawSendNet(QString("REMOVE_TEAM") + delimeter + team.name());
 }
 
 void HWNewNet::NewNick(const QString & nick)
@@ -546,7 +546,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
         HWTeam tmptm(lst[1]);
-        tmptm.numHedgehogs = lst[2].toUInt();
+        tmptm.setNumHedgehogs(lst[2].toUInt());
         emit hhnumChanged(tmptm);
         return;
     }
@@ -558,7 +558,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
         HWTeam tmptm(lst[1]);
-        tmptm.teamColor = QColor(lst[2]);
+        tmptm.setColor(QColor(lst[2]));
         emit teamColorChanged(tmptm);
         return;
     }
@@ -618,8 +618,8 @@ void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
     if (isChief)
     RawSendNet(QString("HH_NUM%1%2%1%3")
             .arg(delimeter)
-            .arg(team.TeamName)
-            .arg(team.numHedgehogs));
+            .arg(team.name())
+            .arg(team.numHedgehogs()));
 }
 
 void HWNewNet::onTeamColorChanged(const HWTeam& team)
@@ -627,8 +627,8 @@ void HWNewNet::onTeamColorChanged(const HWTeam& team)
     if (isChief)
     RawSendNet(QString("TEAM_COLOR%1%2%1%3")
             .arg(delimeter)
-            .arg(team.TeamName)
-            .arg(team.teamColor.name()));
+            .arg(team.name())
+            .arg(team.color().name()));
 }
 
 void HWNewNet::onParamChanged(const QString & param, const QStringList & value)

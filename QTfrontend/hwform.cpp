@@ -384,7 +384,7 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
 
     if(teamslist.empty()) {
         HWTeam defaultTeam(tr("DefaultTeam"));
-        defaultTeam.SaveToFile();
+        defaultTeam.saveToFile();
         teamslist.push_back(tr("DefaultTeam"));
     }
 
@@ -491,7 +491,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         QList<HWTeam> teamsList;
         for (QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++) {
             HWTeam team(*it);
-            team.LoadFromFile();
+            team.loadFromFile();
             teamsList.push_back(team);
         }
 
@@ -614,7 +614,7 @@ void HWForm::IntermediateSetup()
     QStringList tmnames;
 
     foreach(HWTeam team, curTeamSelWidget->getNotPlayingTeams())
-        tmnames += team.TeamName;
+        tmnames += team.name();
 
     //UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
     UpdateTeamsLists();
@@ -632,7 +632,7 @@ void HWForm::NewTeam()
 void HWForm::EditTeam()
 {
     editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
-    editedTeam->LoadFromFile();
+    editedTeam->loadFromFile();
     editedTeam->SetToPage(this);
     GoToPage(ID_PAGE_SETUP_TEAM);
 }
@@ -643,7 +643,7 @@ void HWForm::DeleteTeam()
 
     if (reallyDelete.exec() == QMessageBox::Ok) {
         editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
-        editedTeam->DeleteFile();
+        editedTeam->deleteFile();
 
         // Remove from lists
         ui.pageOptions->CBTeamName->removeItem(ui.pageOptions->CBTeamName->currentIndex());
@@ -653,21 +653,21 @@ void HWForm::DeleteTeam()
 void HWForm::RandomNames()
 {
     editedTeam->GetFromPage(this);
-    namegen->TeamRandomNames(editedTeam, true);
+    namegen->teamRandomNames(*editedTeam, true);
     editedTeam->SetToPage(this);
 }
 
 void HWForm::RandomName(const int &i)
 {
     editedTeam->GetFromPage(this);
-    namegen->TeamRandomName(editedTeam,i);
+    namegen->teamRandomName(*editedTeam,i);
     editedTeam->SetToPage(this);
 }
 
 void HWForm::TeamSave()
 {
     editedTeam->GetFromPage(this);
-    editedTeam->SaveToFile();
+    editedTeam->saveToFile();
     delete editedTeam;
     editedTeam=0;
     UpdateTeamsLists();
@@ -1315,7 +1315,8 @@ void HWForm::UpdateCampaignPage(int index)
     tmpdir.setFilter(QDir::Files);
     QStringList userentries = tmpdir.entryList(QStringList("*#*.lua"));
     //entries.sort();
-    for(int i = 0; (i < userentries.count()) && (i <= team.CampaignProgress); i++)
+    unsigned int n = userentries.count();
+    for(unsigned int i = 0; (i < n) && (i <= team.campaignProgress()); i++)
         ui.pageCampaign->CBSelect->addItem(QString(userentries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(userentries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
 
     tmpdir.cd(datadir->absolutePath());
@@ -1323,7 +1324,8 @@ void HWForm::UpdateCampaignPage(int index)
     tmpdir.setFilter(QDir::Files);
     QStringList entries = tmpdir.entryList(QStringList("*#*.lua"));
     //entries.sort();
-    for(int i = 0; (i < entries.count()) && (i <= team.CampaignProgress); i++) {
+    n = entries.count();
+    for(unsigned int i = 0; (i < n) && (i <= team.campaignProgress()); i++) {
         if (userentries.contains(entries[i])) continue; 
         ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
     }

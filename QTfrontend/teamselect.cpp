@@ -66,10 +66,10 @@ void TeamSelWidget::hhNumChanged(const HWTeam& team)
     QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
     if(itPlay==curPlayingTeams.end())
     {
-        qWarning() << QString("hhNumChanged: team '%1' not found").arg(team.TeamName);
+        qWarning() << QString("hhNumChanged: team '%1' not found").arg(team.name());
         return;
     }
-    itPlay->numHedgehogs=team.numHedgehogs;
+    itPlay->setNumHedgehogs(team.numHedgehogs());
     emit hhogsNumChanged(team);
 }
 
@@ -78,10 +78,10 @@ void TeamSelWidget::proxyTeamColorChanged(const HWTeam& team)
     QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
     if(itPlay==curPlayingTeams.end())
     {
-        qWarning() << QString("proxyTeamColorChanged: team '%1' not found").arg(team.TeamName);
+        qWarning() << QString("proxyTeamColorChanged: team '%1' not found").arg(team.name());
         return;
     }
-    itPlay->teamColor=team.teamColor;
+    itPlay->setColor(team.color());
     emit teamColorChanged(team);
 }
 
@@ -90,10 +90,10 @@ void TeamSelWidget::changeHHNum(const HWTeam& team)
   QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
     if(itPlay==curPlayingTeams.end())
     {
-        qWarning() << QString("changeHHNum: team '%1' not found").arg(team.TeamName);
+        qWarning() << QString("changeHHNum: team '%1' not found").arg(team.name());
         return;
     }
-  itPlay->numHedgehogs=team.numHedgehogs;
+  itPlay->setNumHedgehogs(team.numHedgehogs());
 
   framePlaying->setHHNum(team);
 }
@@ -103,10 +103,10 @@ void TeamSelWidget::changeTeamColor(const HWTeam& team)
     QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
     if(itPlay==curPlayingTeams.end())
     {
-        qWarning() << QString("changeTeamColor: team '%1' not found").arg(team.TeamName);
+        qWarning() << QString("changeTeamColor: team '%1' not found").arg(team.name());
         return;
     }
-    itPlay->teamColor=team.teamColor;
+    itPlay->setColor(team.color());
 
     framePlaying->setTeamColor(team);
 }
@@ -118,7 +118,7 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
         QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
         if(itPlay==curPlayingTeams.end())
         {
-            qWarning() << QString("removeNetTeam: team '%1' not found").arg(team.TeamName);
+            qWarning() << QString("removeNetTeam: team '%1' not found").arg(team.name());
             break;
         }
         if(itPlay->isNetTeam()) {
@@ -159,7 +159,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     if(framePlaying->isFullTeams()) return;
     // dont playing team => playing
     team=*itDontPlay; // for net team info saving in framePlaying (we have only name with netID from network)
-    itDontPlay->teamColor=framePlaying->getNextColor();
+    itDontPlay->setColor(framePlaying->getNextColor());
     curPlayingTeams.push_back(*itDontPlay);
     if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
     m_curNotPlayingTeams.erase(itDontPlay);
@@ -276,6 +276,6 @@ QList<HWTeam> TeamSelWidget::getNotPlayingTeams() const
 
 void TeamSelWidget::pre_changeTeamStatus(HWTeam team)
 {
-  team.teamColor=framePlaying->getNextColor();
+  team.setColor(framePlaying->getNextColor());
   emit acceptRequested(team);
 }
