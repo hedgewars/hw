@@ -154,7 +154,9 @@ const event: TSDL_Event = ();
 {$WARNINGS ON}
 var PrevTime, CurrTime: Longword;
     prevFocusState: boolean;
+{$IFDEF SDL13}
     previousGameState: TGameState;
+{$ENDIF}
 begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do

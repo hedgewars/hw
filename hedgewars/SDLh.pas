@@ -804,7 +804,7 @@ function  SDL_SetHint(name, value: PChar): boolean; cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongInt): LongInt; cdecl; external SDLLibName;
 {$ELSE}
-function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: Longword): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
