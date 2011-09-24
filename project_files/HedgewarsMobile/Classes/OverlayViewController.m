@@ -34,6 +34,8 @@
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
 
+static OverlayViewController *mainOverlay;
+
 @implementation OverlayViewController
 @synthesize popoverController, popupMenu, helpPage, amvc, initialScreenCount, lowerIndicator, savesIndicator,
             confirmButton, grenadeTimeSegment;
@@ -47,15 +49,20 @@
 
 #pragma mark -
 #pragma mark View Management
--(id) initWithCoder:(NSCoder *)aDecoder {
-    if ((self = [super initWithCoder:aDecoder])) {
+-(id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         isAttacking = NO;
         isPopoverVisible = NO;
         initialScreenCount = (IS_DUALHEAD() ? 2 : 1);
         lowerIndicator = nil;
         savesIndicator = nil;
+        mainOverlay = self;
     }
     return self;
+}
+
++(OverlayViewController *)mainOverlay {
+    return mainOverlay;
 }
 
 -(void) viewDidLoad {
@@ -108,6 +115,7 @@
 
     // only objects initialized in viewDidLoad should be here
     dimTimer = nil;
+    mainOverlay = nil;
     self.helpPage = nil;
     [self dismissPopover];
     self.popoverController = nil;

@@ -121,7 +121,7 @@
     [localeString release];
     [ipcString release];
 
-    objcExportsInit(self.overlayController);
+    objcExportsInit();
 
     // this is the pascal fuction that starts the game, wrapped around isInGame
     [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;

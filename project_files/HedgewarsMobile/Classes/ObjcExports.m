@@ -37,8 +37,8 @@ OverlayViewController *overlay_instance;
 
 #pragma mark -
 #pragma mark functions called like oop
-void objcExportsInit(OverlayViewController* instance) {
-    overlay_instance = instance;
+void objcExportsInit() {
+    overlay_instance = [OverlayViewController mainOverlay];
     gameRunning = NO;
     savedGame = NO;
     grenadeTime = 2;

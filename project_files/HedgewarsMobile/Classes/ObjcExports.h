@@ -19,17 +19,15 @@
  */
 
 
-@class OverlayViewController;
-
-void objcExportsInit(OverlayViewController *instance);
-BOOL isGameRunning();
+void objcExportsInit(void);
+BOOL isGameRunning(void);
 void setGameRunning(BOOL value);
-NSInteger cachedGrenadeTime();
-void clearView();
+NSInteger cachedGrenadeTime(void);
+void clearView(void);
 void setGrenadeTime(NSInteger value);
 BOOL isApplePhone(void);
 
-void startSpinningProgress();
-void stopSpinningProgress();
-void saveBeganSynching();
-void saveFinishedSynching();
+void startSpinningProgress(void);
+void stopSpinningProgress(void);
+void saveBeganSynching(void);
+void saveFinishedSynching(void);
