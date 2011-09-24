@@ -873,7 +873,7 @@ if (Gear^.State and gstMoving) <> 0 then
 
 if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
     begin
-    inc(Gear^.FlightTime, 1);
+    inc(Gear^.FlightTime);
     if Gear^.FlightTime = 3000 then
         begin
         AddCaption(GetEventString(eidHomerun), cWhiteColor, capgrpMessage);
@@ -882,6 +882,7 @@ if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGr
     end
 else
     begin
+    uStats.hedgehogFlight(Gear, Gear^.FlightTime);
     Gear^.FlightTime:= 0;
     end;
 
