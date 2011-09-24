@@ -30,7 +30,6 @@ public:
 
     QPushButton* BtnUpdateSList;
     QTableView * tvServersList;
-    QPushButton * BtnBack;
     QPushButton * BtnNetConnect;
     QPushButton * BtnNetSvrStart;
     QPushButton * BtnSpecifyServer;
@@ -38,6 +37,7 @@ public:
 private:
     QGroupBox * ConnGroupBox;
     QGridLayout * GBClayout;
+    QPushButton * BtnBack;
 
 private slots:
     void slotConnect();

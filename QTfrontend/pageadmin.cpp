@@ -73,14 +73,15 @@ PageAdmin::PageAdmin(QWidget* parent) :
     
     // 5
     pbClearAccountsCache = addButton(tr("Clear Accounts Cache"), pageLayout, 5, 0);
+    connect(pbClearAccountsCache, SIGNAL(clicked()), this, SIGNAL(clearAccountsCache()));
     
     // 6
     pbSetSM = addButton(tr("Set data"), pageLayout, 6, 0, 1, 3);
 
+
     // 7
     BtnBack = addButton(":/res/Exit.png", pageLayout, 7, 0, true);
-
-    connect(pbSetSM, SIGNAL(clicked()), this, SLOT(smChanged()));
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 }
 
 void PageAdmin::smChanged()

@@ -49,10 +49,13 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     BtnSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
     connect(BtnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
     BtnBack->setFixedHeight(BtnSave->height());
     BtnBack->setFixedWidth(BtnBack->width()+2);
     BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
 
     QGroupBox * gb = new QGroupBox(this);
     QVBoxLayout * gbl = new QVBoxLayout;

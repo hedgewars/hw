@@ -30,9 +30,10 @@ class PageDrawMap : public AbstractPage
 public:
     PageDrawMap(QWidget* parent = 0);
 
-    QPushButton * BtnBack;
-
     DrawMapWidget * drawMapWidget;
+
+private:
+    QPushButton * BtnBack;
 
 private slots:
     void load();

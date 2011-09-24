@@ -35,7 +35,6 @@ public:
     QLineEdit * roomName;
     QLineEdit * searchText;
     QTableWidget * roomsList;
-    QPushButton * BtnBack;
     QPushButton * BtnCreate;
     QPushButton * BtnJoin;
     QPushButton * BtnRefresh;
@@ -52,6 +51,7 @@ private:
     QString gameInLobbyName;
     QStringList listFromServer;
     AmmoSchemeModel * ammoSchemeModel;
+    QPushButton * BtnBack;
 
 public slots:
     void setRoomsList(const QStringList & list);

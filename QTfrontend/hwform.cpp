@@ -140,6 +140,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     UpdateCampaignPage(0);
     UpdateWeapons();
 
+    // connect all goBack signals
+    int nPages = ui.Pages->count();
+
+    for (int i = 0; i < nPages; i++)
+        connect(ui.Pages->widget(i), SIGNAL(goBack()), this, SLOT(GoBack()));
+
     pageSwitchMapper = new QSignalMapper(this);
     connect(pageSwitchMapper, SIGNAL(mapped(int)), this, SLOT(GoToPage(int)));
 
@@ -164,16 +170,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
-    connect(ui.pageInfo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
-    connect(ui.pageDataDownload->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
-
     connect(ui.pageEditTeam->BtnTeamSave, SIGNAL(clicked()), this, SLOT(TeamSave()));
     connect(ui.pageEditTeam->BtnTeamDiscard, SIGNAL(clicked()), this, SLOT(TeamDiscard()));
 
     connect(ui.pageEditTeam->signalMapper2, SIGNAL(mapped(const int &)), this, SLOT(RandomName(const int &)));
     connect(ui.pageEditTeam->randTeamButton, SIGNAL(clicked()), this, SLOT(RandomNames()));
 
-    connect(ui.pageMultiplayer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageMultiplayer->BtnStartMPGame, SIGNAL(clicked()), this, SLOT(StartMPGame()));
     connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
         ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
@@ -182,13 +184,11 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToSelectWeaponSet(int)));
     connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMultiplayer->gameCFG, ID_PAGE_DRAWMAP);
-    
 
-    connect(ui.pagePlayDemo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+
     connect(ui.pagePlayDemo->BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
     connect(ui.pagePlayDemo->DemosList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(PlayDemo()));
 
-    connect(ui.pageOptions->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageOptions->BtnNewTeam, SIGNAL(clicked()), this, SLOT(NewTeam()));
     connect(ui.pageOptions->BtnEditTeam, SIGNAL(clicked()), this, SLOT(EditTeam()));
     connect(ui.pageOptions->BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(DeleteTeam()));
@@ -204,17 +204,14 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageOptions->SchemeDelete, SIGNAL(clicked()), this, SLOT(DeleteScheme()));
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
 
-    connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
     connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNet->BtnNetSvrStart, ID_PAGE_NETSERVER);
 
     connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16)), this, SLOT(NetConnectServer(const QString &, quint16)));
 
-    connect(ui.pageNetServer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNetServer->BtnStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
 
-    connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
         ui.pageNetGame->BtnStart, SLOT(setEnabled(bool)));
     connect(ui.pageNetGame, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
@@ -223,14 +220,11 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageNetGame->pGameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNetGame->pGameCFG, ID_PAGE_DRAWMAP);
 
-    connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageRoomsList->BtnAdmin, ID_PAGE_ADMIN);
 
     connect(ui.pageInfo->BtnSnapshots, SIGNAL(clicked()), this, SLOT(OpenSnapshotFolder()));
-    connect(ui.pageInfo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
-    connect(ui.pageGameStats->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageGameStats, SIGNAL(saveDemoRequested()), this, SLOT(saveDemoWithCustomName()));
 
     connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
@@ -245,16 +239,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
     connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
-    connect(ui.pageSinglePlayer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageTraining->BtnStartTrain, SIGNAL(clicked()), this, SLOT(StartTraining()));
-    connect(ui.pageTraining->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
-    connect(ui.pageCampaign->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
 
-    connect(ui.pageSelectWeapon->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageSelectWeapon->BtnDelete, SIGNAL(clicked()),
         ui.pageSelectWeapon->pWeapons, SLOT(deleteWeaponsName())); // executed first
@@ -263,15 +253,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     //connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
     //    this, SLOT(GoBack())); // executed third
 
-    connect(ui.pageScheme->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
-    connect(ui.pageAdmin->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
-
-    connect(ui.pageNetType->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNetType->BtnLAN, SIGNAL(clicked()), this, SLOT(GoToNet()));
     connect(ui.pageNetType->BtnOfficialServer, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
-
-    connect(ui.pageDrawMap->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageConnecting, SIGNAL(cancelConnection()), this, SLOT(GoBack()));
 
@@ -957,7 +941,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(ui.pageAdmin, SIGNAL(setServerMessageOld(const QString&)), hwnet, SLOT(setServerMessageOld(const QString &)));
     connect(ui.pageAdmin, SIGNAL(setProtocol(int)), hwnet, SLOT(setLatestProtocolVar(int)));
     connect(ui.pageAdmin, SIGNAL(askServerVars()), hwnet, SLOT(askServerVars()));
-    connect(ui.pageAdmin->pbClearAccountsCache, SIGNAL(clicked()), hwnet, SLOT(clearAccountsCache()));
+    connect(ui.pageAdmin, SIGNAL(clearAccountsCache()), hwnet, SLOT(clearAccountsCache()));
 
 // disconnect
     connect(hwnet, SIGNAL(Disconnected(const QString&)), this, SLOT(ForcedDisconnect(const QString&)), Qt::QueuedConnection);

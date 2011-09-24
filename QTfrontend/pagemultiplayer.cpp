@@ -28,8 +28,6 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
 {
     QGridLayout * pageLayout = new QGridLayout(this);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
-
     gameCFG = new GameCFGWidget(this);
     pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
 
@@ -44,4 +42,8 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
     pageLayout->addWidget(teamsSelect, 0, 2, 3, 2);
 
     BtnStartMPGame = addButton(tr("Start"), pageLayout, 3, 3);
+
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 }

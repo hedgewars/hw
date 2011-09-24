@@ -59,7 +59,10 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
     QHBoxLayout * bottomLayout = new QHBoxLayout;
     pageLayout->addLayout(bottomLayout, 4, 0, 1, 2);
 
+
     BtnBack = addButton(":/res/Exit.png", bottomLayout, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
 
     leRoomName = new QLineEdit(this);
     leRoomName->setMaxLength(60);

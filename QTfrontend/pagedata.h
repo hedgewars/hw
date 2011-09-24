@@ -34,12 +34,11 @@ class PageDataDownload : public AbstractPage
 public:
     PageDataDownload(QWidget* parent = 0);
 
-    QPushButton *BtnBack;
-
 public slots:
     void fetchList();
 
 private:
+    QPushButton *BtnBack;
     DataBrowser *web;
     QHash<QNetworkReply*, QProgressBar *> progressBars;
     QVBoxLayout *progressBarsLayout;

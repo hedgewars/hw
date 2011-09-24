@@ -43,7 +43,6 @@ public:
 
     QComboBox *CBLanguage;
 
-    QPushButton *BtnBack;
     IconedGroupBox *teamsBox;
     QPushButton *BtnNewTeam;
     QPushButton *BtnEditTeam;
@@ -81,6 +80,7 @@ private:
     bool previousFullscreenValue;
     int previousResolutionIndex;
     int previousQuality;
+    QPushButton *BtnBack;
 
 private slots:
     void forceFullscreen(int index);

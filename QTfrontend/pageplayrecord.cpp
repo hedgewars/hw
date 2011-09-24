@@ -37,8 +37,6 @@ PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
     pageLayout->setColumnStretch(2, 1);
     pageLayout->setRowStretch(2, 100);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
-
     BtnPlayDemo = new QPushButton(this);
     BtnPlayDemo->setFont(*font14);
     BtnPlayDemo->setText(QPushButton::tr("Play demo"));
@@ -58,6 +56,10 @@ PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
 
     connect(BtnRenameRecord, SIGNAL(clicked()), this, SLOT(renameRecord()));
     connect(BtnRemoveRecord, SIGNAL(clicked()), this, SLOT(removeRecord()));
+
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 }
 
 void PagePlayDemo::FillFromDir(RecordType rectype)

@@ -390,7 +390,11 @@ PageScheme::PageScheme(QWidget* parent) :
 
     mapper = new QDataWidgetMapper(this);
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 16, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
+
     BtnCopy = addButton(tr("Copy"), pageLayout, 16, 2);
     BtnNew = addButton(tr("New"), pageLayout, 16, 3);
     BtnDelete = addButton(tr("Delete"), pageLayout, 16, 4);

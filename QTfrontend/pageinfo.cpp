@@ -30,8 +30,11 @@ PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
     pageLayout->setColumnStretch(2, 1);
 
     BtnSnapshots = addButton(":/res/Star.png", pageLayout, 1, 2, true);
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 
     about = new About(this);
     pageLayout->addWidget(about, 0, 0, 1, 3);
+
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 }

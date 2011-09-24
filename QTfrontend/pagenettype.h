@@ -28,9 +28,11 @@ class PageNetType : public AbstractPage
 public:
     PageNetType(QWidget* parent = 0);
 
-    QPushButton * BtnBack;
     QPushButton * BtnLAN;
     QPushButton * BtnOfficialServer;
+
+private:
+    QPushButton * BtnBack;
 };
 
 #endif

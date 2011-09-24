@@ -28,13 +28,15 @@ class PageNetServer : public AbstractPage
 public:
     PageNetServer(QWidget* parent = 0);
 
-    QPushButton *BtnBack;
     QPushButton *BtnStart;
     QPushButton *BtnDefault;
     QLabel *labelSD;
     QLineEdit *leServerDescr;
     QLabel *labelPort;
     QSpinBox *sbPort;
+
+private:
+    QPushButton *BtnBack;
 
 private slots:
     void setDefaultPort();

@@ -36,7 +36,10 @@ PageNetServer::PageNetServer(QWidget* parent) : AbstractPage(parent)
     pageLayout->setRowStretch(0, 1);
     pageLayout->setRowStretch(1, 0);
 
+
     BtnBack =addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
 
     BtnStart = new QPushButton(this);
     BtnStart->setFont(*font14);

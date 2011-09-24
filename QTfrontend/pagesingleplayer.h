@@ -36,8 +36,10 @@ public:
     QPushButton *BtnMultiplayer;
     QPushButton *BtnLoad;
     QPushButton *BtnDemos;
-    QPushButton *BtnBack;
     GameCFGWidget *gameCFG;
+
+private:
+    QPushButton *BtnBack;
 };
 
 #endif

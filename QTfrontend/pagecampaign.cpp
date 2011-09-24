@@ -42,5 +42,7 @@ PageCampaign::PageCampaign(QWidget* parent) : AbstractPage(parent)
     BtnStartCampaign->setText(QPushButton::tr("Go!"));
     pageLayout->addWidget(BtnStartCampaign, 2, 2);
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 }
