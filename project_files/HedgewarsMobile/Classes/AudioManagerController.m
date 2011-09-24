@@ -108,19 +108,13 @@ static SystemSoundID selSound = -1;
 
 #pragma mark -
 #pragma mark memory management
-+(void) didReceiveMemoryWarning {
++(void) cleanupMemory {
     [backgroundMusic stop];
-    backgroundMusic = nil;
-    clickSound = -1;
-    backSound = -1;
-}
-
-+(void) dealloc {
-    releaseAndNil(backgroundMusic);
+    [backgroundMusic release], backgroundMusic = nil;
     AudioServicesDisposeSystemSoundID(clickSound), clickSound = -1;
     AudioServicesDisposeSystemSoundID(backSound), backSound = -1;
     AudioServicesDisposeSystemSoundID(selSound), selSound = -1;
-    [super dealloc];
+    MSG_MEMCLEAN();
 }
 
 @end

@@ -34,6 +34,6 @@
 +(void) playBackSound;
 +(void) playSelectSound;
 
-+(void) didReceiveMemoryWarning;
++(void) cleanupMemory;
 
 @end

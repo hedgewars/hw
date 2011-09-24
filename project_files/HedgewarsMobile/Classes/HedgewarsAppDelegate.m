@@ -94,7 +94,7 @@
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
     // don't stop music when it is playing
     if (self.isInGame) {
-        [AudioManagerController didReceiveMemoryWarning];
+        [AudioManagerController cleanupMemory];
         MSG_MEMCLEAN();
     }
     print_free_memory();

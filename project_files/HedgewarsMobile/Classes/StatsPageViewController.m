@@ -145,10 +145,10 @@
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if (section == 2) {
 
-        UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.tableView.rowHeight)];
+        UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height * 70 / 100, self.tableView.rowHeight)];
         footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 17, self.view.frame.size.width, self.tableView.rowHeight)];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 17, self.view.frame.size.height * 70 / 100, self.tableView.rowHeight)];
         button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [button setTitle:NSLocalizedString(@"Done",@"") forState:UIControlStateNormal];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
