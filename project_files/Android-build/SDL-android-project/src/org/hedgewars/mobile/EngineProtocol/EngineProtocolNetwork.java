@@ -26,7 +26,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class EngineProtocolNetwork implements Runnable{
+public class EngineProtocolNetwork extends Thread{
 
 	public static final String GAMEMODE_LOCAL = "TL";
 	public static final String GAMEMODE_DEMO = "TD";
@@ -43,6 +43,7 @@ public class EngineProtocolNetwork implements Runnable{
 	private OutputStream output;
 	public int port;
 	private final GameConfig config;
+	private boolean clientQuit = false;
 
 	public EngineProtocolNetwork(GameConfig _config){
 		config = _config;
@@ -64,12 +65,12 @@ public class EngineProtocolNetwork implements Runnable{
 	}
 	
 	private void gameIPC(){
+		Socket sock = null;
 		try{
-			Socket sock = serverSocket.accept();
+			sock = serverSocket.accept();
 			input = sock.getInputStream();
 			output = sock.getOutputStream();
 			
-			boolean clientQuit = false;
 			int msgSize = 0;
 			byte[] buffer = new byte[BUFFER_SIZE];
 
@@ -80,7 +81,7 @@ public class EngineProtocolNetwork implements Runnable{
 				msgSize = buffer[0];
 
 				input.read(buffer, 0, msgSize);
-
+				System.out.println("IPC" + (char)buffer[0] + " : " + new String(buffer, 1,msgSize-1, "US_ASCII"));
 				switch(buffer[0]){
 				case 'C'://game init
 					config.sendToEngine(this);
@@ -88,11 +89,8 @@ public class EngineProtocolNetwork implements Runnable{
 				case '?'://ping - pong
 					sendToEngine("!");
 					break;
-				case 'E'://error - quits game
-
-					break;
-				case 'e':
-
+				case 'e'://Send protocol version
+					System.out.println(new String(buffer));
 					break;
 				case 'i'://game statistics
 					switch(buffer[1]){
@@ -117,21 +115,29 @@ public class EngineProtocolNetwork implements Runnable{
 					case 'B'://turn skipped
 						break;
 					default:
-
 					}
 					break;
+				case 'E'://error - quits game
+					System.out.println(new String(buffer));
+					return;
 				case 'q'://game ended remove save file
 
-					break;
+				    return;
 				case 'Q'://game ended but not finished
 
-					break;
+					return;
 				}
 
 			}
-
 		}catch(IOException e){
 			e.printStackTrace();
+		}finally{
+			try {
+				if(sock != null) sock.close();
+			} catch (IOException e) {}
+			try{
+				if(serverSocket != null) serverSocket.close();
+			} catch (IOException e) {}
 		}
 	}
 
@@ -144,8 +150,10 @@ public class EngineProtocolNetwork implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+	}
+	
+	public void quitIPC(){
+		clientQuit = true;
 	}
 	
 }
