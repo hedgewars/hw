@@ -188,6 +188,12 @@ begin
                     else if event.window.event = SDL_WINDOWEVENT_RESTORED then
                         begin
                         GameState:= previousGameState;
+                        end
+                    else if event.window.event = SDL_WINDOWEVENT_RESIZED then
+                        begin
+                        cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
+                        cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
+                        cScreenResizeDelay:= RealTicks+500;
                         end;
 {$ELSE}
                     KeyPressChat(event.key.keysym.unicode);
