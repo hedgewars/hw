@@ -118,7 +118,7 @@ with HH^.Gear^ do
     Message := Message and not gmAttack;
     end;
 HH^.GearHidden:= HH^.Gear;
-HH^.Gear:= nil;
+HH^.Gear:= nil
 end;
 
 procedure RestoreHog(HH: PHedgehog);
@@ -509,6 +509,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMolotov(Gear: PGear);
 var 
+	s: Longword;
     i, gX, gY: LongInt;
     dX, dY: hwFloat;
     Fire: PGear;
@@ -520,8 +521,8 @@ begin
     CalcRotationDirAngle(Gear);
 
     // let's add some smoke depending on speed
-    i:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120))+random(10);
-    if (GameTicks mod i) = 0 then
+    s:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120))+random(10);
+    if (GameTicks mod s) = 0 then
         begin
         // adjust angle to match the texture
         if Gear^.dX.isNegative then i:= 130 else i:= 50;
@@ -1503,9 +1504,11 @@ begin
         exit
         end;
 
-    if (Gear^.Message and gmLeft  <> 0) then HHGear^.dX := HHGear^.dX - _0_0002
-    else
-        if (Gear^.Message and gmRight <> 0) then HHGear^.dX := HHGear^.dX + _0_0002;
+    if (Gear^.Message and gmLeft  <> 0) and not TestCollisionXwithGear(HHGear, -1) then
+        HHGear^.dX := HHGear^.dX - _0_0002;
+
+    if (Gear^.Message and gmRight <> 0) and not TestCollisionXwithGear(HHGear,  1) then
+        HHGear^.dX := HHGear^.dX + _0_0002;
 
     // vector between hedgehog and rope attaching point
     ropeDx := HHGear^.X - Gear^.X;
@@ -4177,7 +4180,11 @@ begin
 
         // Until loops are reliably broken
         if iscake then iterator^.PortalCounter:= 33
-        else inc(iterator^.PortalCounter);
+        else
+            begin
+            inc(iterator^.PortalCounter);
+            iterator^.State:= iterator^.State and not gstHHHJump
+            end;
 
         if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
@@ -4803,7 +4810,7 @@ begin
         i := hwRound(Gear^.X) - HitGear^.Radius + 2;
         ei := hwRound(Gear^.X) + HitGear^.Radius - 2;
         for j := 1 to 4 do DrawExplosion(i - GetRandom(5), hwRound(Gear^.Y) + 6*j, 3);
-        for j := 1 to 4 do DrawExplosion(ei + GetRandom(5), hwRound(Gear^.Y) + 6*j, 3);
+        for j := 1 to 4 do DrawExplosion(ei + LongInt(GetRandom(5)), hwRound(Gear^.Y) + 6*j, 3);
         while i <= ei do
             begin
             for j := 1 to 11 do DrawExplosion(i, hwRound(Gear^.Y) + 3*j, 3);
@@ -5093,7 +5100,6 @@ procedure doStepTardisWarp(Gear: PGear);
 var HH: PHedgehog;
     i,j,cnt: LongWord;
 begin
-
 HH:= Gear^.Hedgehog;
 if Gear^.Pos = 2 then
     begin
@@ -5102,9 +5108,11 @@ if Gear^.Pos = 2 then
         begin
         if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible = 0) then
             begin
-	        AfterAttack;
+            AfterAttack;
             if Gear = CurAmmoGear then CurAmmoGear := nil;
-            HideHog(HH)
+            if (HH^.Gear^.Damage = 0) and  (HH^.Gear^.Health > 0) and 
+            ((Gear^.State and (gstMoving or gstHHDeath or gstHHGone)) = 0) then
+                HideHog(HH)
             end
         //else if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible <> 0) then
         else if (HH^.GearHidden <> nil) then// and (HH^.Gear^.State and gstInvisible <> 0) then
@@ -5119,7 +5127,20 @@ if Gear^.Pos = 2 then
         end
     end;
 
-if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then inc(Gear^.Power);
+if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then 
+    begin
+    inc(Gear^.Power);
+    if (Gear^.Power = 172) and (HH^.Gear <> nil) and 
+       (HH^.Gear^.Damage = 0) and (HH^.Gear^.Health > 0) and
+       ((HH^.Gear^.State and (gstMoving or gstHHDeath or gstHHGone)) = 0) then
+        with HH^.Gear^ do
+            begin
+	        State:= State or gstAnimation;
+	        Tag:= 2;
+	        Timer:= 0;
+	        Pos:= 0
+            end
+    end;
 if (Gear^.Pos = 3) and (GameTicks and $1F = 0) and (Gear^.Power > 0) then dec(Gear^.Power);
 if (Gear^.Pos = 1) and (Gear^.Power = 255) and ((GameTicks mod 2000) = 1000) then Gear^.Pos:= 2;
 if (Gear^.Pos = 3) and (Gear^.Power = 0) then
@@ -5176,13 +5197,14 @@ begin
     3. Hog is a king
 *)
     HH:= Gear^.Hedgehog;
+    if HH^.Gear <> nil then 
     if (HH^.Gear = nil) or (HH^.King) or (SuddenDeathDmg) then
         begin
-	if HH^.Gear <> nil then 
-	    begin
-	    HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
-	    HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
-	    end;
+        if HH^.Gear <> nil then 
+            begin
+            HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
+            HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
+            end;
         PlaySound(sndDenied);
         DeleteGear(gear);
         exit
@@ -5196,14 +5218,14 @@ begin
                 HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then inc(cnt);
     if cnt < 2 then
         begin
-	if HH^.Gear <> nil then 
-	    begin
-	    HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
-	    HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
-	    end;
-        PlaySound(sndDenied);
-        DeleteGear(gear);
-        exit
+        if HH^.Gear <> nil then 
+            begin
+            HH^.Gear^.Message := HH^.Gear^.Message and not gmAttack;
+            HH^.Gear^.State:= HH^.Gear^.State and not gstAttacking;
+            end;
+            PlaySound(sndDenied);
+            DeleteGear(gear);
+            exit
         end;
     Gear^.SoundChannel := LoopSound(sndTardis);
     Gear^.doStep:= @doStepTardisWarp

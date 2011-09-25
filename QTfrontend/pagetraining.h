@@ -29,8 +29,10 @@ public:
     PageTraining(QWidget* parent = 0);
 
     QPushButton *BtnStartTrain;
-    QPushButton *BtnBack;
     QComboBox   *CBSelect;
+
+private:
+    QPushButton *BtnBack;
 };
 
 #endif

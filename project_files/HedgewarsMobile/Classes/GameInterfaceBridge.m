@@ -24,6 +24,7 @@
 #import "EngineProtocolNetwork.h"
 #import "OverlayViewController.h"
 #import "StatsPageViewController.h"
+#import "AudioManagerController.h"
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
@@ -120,7 +121,7 @@
     [localeString release];
     [ipcString release];
 
-    objcExportsInit(self.overlayController);
+    objcExportsInit();
 
     // this is the pascal fuction that starts the game, wrapped around isInGame
     [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;
@@ -154,7 +155,7 @@
     [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
     [userDefaults synchronize];
 
-    [HedgewarsAppDelegate pauseBackgroundMusic];
+    [AudioManagerController pauseBackgroundMusic];
 
     // SYSTEMS ARE GO!!
     [self startGameEngine];
@@ -164,6 +165,8 @@
     [userDefaults synchronize];
 
     // now we can remove the cover with a transition
+    blackView.frame = theFrame;
+    blackView.alpha = 1;
     [UIView beginAnimations:@"fade in" context:NULL];
     [UIView setAnimationDuration:1];
     blackView.alpha = 0;
@@ -177,8 +180,7 @@
     // warn our host that it's going to be visible again
     [self.parentController viewWillAppear:YES];
 
-    if ([[userDefaults objectForKey:@"music"] boolValue])
-        [HedgewarsAppDelegate playBackgroundMusic];
+    [AudioManagerController playBackgroundMusic];
 }
 
 // set up variables for a local game
@@ -210,7 +212,9 @@
 }
 
 -(void) gameHasEndedWithStats:(NSArray *)stats {
-    // display stats page
+    // wrap this around a retain/realse to prevent being deallocated too soon
+    [self retain];
+    // display stats page if there is something to display
     if (stats != nil) {
         StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
         statsPage.statsArray = stats;
@@ -225,6 +229,7 @@
     // can remove the savefile if the replay has ended
     if (self.gameType == gtSave)
         [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
+    [self release];
 }
 
 @end

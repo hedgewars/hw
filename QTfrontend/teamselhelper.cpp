@@ -46,12 +46,12 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
     this->setMaximumHeight(38);
     this->setMinimumHeight(38);
     QIcon difficultyIcon=team.isNetTeam() ?
-        QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty))
-        : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
+        QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty()))
+        : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty()));
 
-    butt = new QPushButton(difficultyIcon, team.TeamName.replace("&","&&"), this);
+    butt = new QPushButton(difficultyIcon, team.name().replace("&","&&"), this);
     butt->setFlat(true);
-    butt->setToolTip(team.Owner);
+    butt->setToolTip(team.owner());
     mainLayout.addWidget(butt);
     butt->setStyleSheet("QPushButton{"
             "icon-size: 48px;"
@@ -76,7 +76,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 
         phhoger = new CHedgehogerWidget(QImage(":/res/hh25x25.png"), QImage(":/res/hh25x25grey.png"), this);
         connect(phhoger, SIGNAL(hedgehogsNumChanged()), this, SLOT(hhNumChanged()));
-        phhoger->setHHNum(team.numHedgehogs);
+        phhoger->setHHNum(team.numHedgehogs());
         mainLayout.addWidget(phhoger);
     } else {
     }
@@ -102,7 +102,7 @@ void TeamShowWidget::setHHNum(unsigned int num)
 
 void TeamShowWidget::hhNumChanged()
 {
-  m_team.numHedgehogs=phhoger->getHedgehogsNum();
+  m_team.setNumHedgehogs(phhoger->getHedgehogsNum());
   emit hhNmChanged(m_team);
 }
 
@@ -144,7 +144,7 @@ void TeamShowWidget::changeTeamColor(QColor color)
             "border-radius: 2px;"
             "}").arg(pOurFrameTeams->currentColor->name()));
 
-    m_team.teamColor=color;
+    m_team.setColor(color);
     emit teamColorChanged(m_team);
 }
 

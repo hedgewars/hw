@@ -92,7 +92,7 @@
             iconStr = [NSString stringWithFormat:@"%@/Egg.png",GRAPHICS_DIRECTORY()];
             break;
         case 2:
-            iconStr = [NSString stringWithFormat:@"%@/Molotov.png",GRAPHICS_DIRECTORY()];
+            iconStr = [NSString stringWithFormat:@"%@/cheese.png",GRAPHICS_DIRECTORY()];
             break;
         case 3:
             iconStr = [NSString stringWithFormat:@"%@/Target.png",GRAPHICS_DIRECTORY()];
@@ -166,7 +166,7 @@
             nextController.navigationItem.hidesBackButton = NO;
             [self.navigationController pushViewController:nextController animated:YES];
         } else {
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
             nextController.navigationItem.hidesBackButton = YES;
             [targetController.navigationController pushViewController:nextController animated:NO];
         }

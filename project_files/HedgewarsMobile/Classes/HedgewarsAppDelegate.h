@@ -23,27 +23,20 @@
 #import "SDL_uikitappdelegate.h"
 
 @class MainMenuViewController;
-@class AVAudioPlayer;
 
 @interface HedgewarsAppDelegate : SDLUIKitDelegate {
     MainMenuViewController *mainViewController;
     UIWindow *uiwindow;
     UIWindow *secondWindow;
     BOOL isInGame;
-    AVAudioPlayer *backgroundMusic;
 }
 
 @property (nonatomic,retain) MainMenuViewController *mainViewController;
 @property (nonatomic,retain) UIWindow *uiwindow;
 @property (nonatomic,retain) UIWindow *secondWindow;
 @property (assign) BOOL isInGame;
-@property (nonatomic,retain) AVAudioPlayer *backgroundMusic;
 
 +(HedgewarsAppDelegate *)sharedAppDelegate;
-+(void) playBackgroundMusic;
-+(void) pauseBackgroundMusic;
-+(void) stopBackgroundMusic;
-+(void) loadBackgroundMusic;
 
 @end
 

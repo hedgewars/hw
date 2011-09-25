@@ -31,10 +31,12 @@ class PageMultiplayer : public AbstractPage
 public:
     PageMultiplayer(QWidget* parent = 0);
 
-    QPushButton *BtnBack;
     GameCFGWidget *gameCFG;
     TeamSelWidget *teamsSelect;
     QPushButton *BtnStartMPGame;
+
+private:
+    QPushButton *BtnBack;
 
 signals:
     void SetupClicked();

@@ -41,7 +41,6 @@ public:
     void FillFromDir(RecordType rectype);
     bool isSave();
 
-    QPushButton *BtnBack;
     QPushButton *BtnPlayDemo;
     QPushButton *BtnRenameRecord;
     QPushButton *BtnRemoveRecord;
@@ -49,6 +48,7 @@ public:
 
 private:
     RecordType recType;
+    QPushButton *BtnBack;
 
 private slots:
     void renameRecord();

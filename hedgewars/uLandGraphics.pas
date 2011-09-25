@@ -47,10 +47,10 @@ uses SDLh, uLandTexture, uVariables, uUtils, uDebug;
 function addBgColor(OldColor, NewColor: LongWord): LongWord;
 // Factor ranges from 0 to 100% NewColor
 var
-    oRed, oBlue, oGreen, oAlpha, nRed, nBlue, nGreen, nAlpha: LongWord;
+    oRed, oBlue, oGreen, oAlpha, nRed, nBlue, nGreen, nAlpha: byte;
 begin
-    oAlpha := (OldColor shr AShift) and $FF;
-    nAlpha := (NewColor shr AShift) and $FF;
+    oAlpha := (OldColor shr AShift);
+    nAlpha := (NewColor shr AShift);
     // shortcircuit
     if (oAlpha = 0) or (nAlpha = $FF) then
         begin
@@ -58,18 +58,18 @@ begin
         exit
         end; 
     // Get colors
-    oRed   := (OldColor shr RShift) and $FF;
-    oGreen := (OldColor shr GShift) and $FF;
-    oBlue  := (OldColor shr BShift) and $FF;
+    oRed   := (OldColor shr RShift);
+    oGreen := (OldColor shr GShift);
+    oBlue  := (OldColor shr BShift);
 
-    nRed   := (NewColor shr RShift) and $FF;
-    nGreen := (NewColor shr GShift) and $FF;
-    nBlue  := (NewColor shr BShift) and $FF;
+    nRed   := (NewColor shr RShift);
+    nGreen := (NewColor shr GShift);
+    nBlue  := (NewColor shr BShift);
 
     // Mix colors
-    nRed   := min(255,((nRed*nAlpha) div 255) + ((oRed*oAlpha*(255-nAlpha)) div 65025));
-    nGreen := min(255,((nGreen*nAlpha) div 255) + ((oGreen*oAlpha*(255-nAlpha)) div 65025));
-    nBlue  := min(255,((nBlue*nAlpha) div 255) + ((oBlue*oAlpha*(255-nAlpha)) div 65025)); 
+    nRed   := min(255,((nRed*nAlpha) div 255) + ((oRed*oAlpha*byte(255-nAlpha)) div 65025));
+    nGreen := min(255,((nGreen*nAlpha) div 255) + ((oGreen*oAlpha*byte(255-nAlpha)) div 65025));
+    nBlue  := min(255,((nBlue*nAlpha) div 255) + ((oBlue*oAlpha*byte(255-nAlpha)) div 65025)); 
     nAlpha := min(255, oAlpha + nAlpha);
 
     addBgColor := (nAlpha shl AShift) or (nRed shl RShift) or (nGreen shl GShift) or (nBlue shl BShift);
@@ -780,8 +780,8 @@ end;
 procedure Smooth(X, Y: LongInt);
 begin
 // a bit of AA for explosions
-if (Land[Y, X] = 0) and (Y > topY+1) and 
-   (Y < LAND_HEIGHT-2) and (X>leftX+1) and (X<rightX-1) then
+if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and 
+   (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
     begin
     if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0)) or
        (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then

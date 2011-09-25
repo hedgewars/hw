@@ -61,6 +61,7 @@ class HWChatWidget : public QWidget
   void saveLists(const QString & nick);
   void setShowReady(bool s);
   void setShowFollow(bool enabled);
+  void addLine(const QString & cssClass, QString line);
   static const char* STYLE;
   QStringList ignoreList, friendsList;
 

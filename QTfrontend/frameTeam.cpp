@@ -99,14 +99,14 @@ void FrameTeams::setHHNum(const HWTeam& team)
 {
   TeamShowWidget* pTeamShowWidget = dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
   if(!pTeamShowWidget) return;
-  pTeamShowWidget->setHHNum(team.numHedgehogs);
+  pTeamShowWidget->setHHNum(team.numHedgehogs());
 }
 
 void FrameTeams::setTeamColor(const HWTeam& team)
 {
   TeamShowWidget* pTeamShowWidget = dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
   if(!pTeamShowWidget) return;
-  pTeamShowWidget->changeTeamColor(team.teamColor);
+  pTeamShowWidget->changeTeamColor(team.color());
 }
 
 QWidget* FrameTeams::getTeamWidget(HWTeam team)

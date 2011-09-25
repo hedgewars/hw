@@ -30,6 +30,7 @@
 #include <QCursor>
 #include <QScrollBar>
 #include <QItemSelectionModel>
+#include <QStringList>
 
 #include "hwconsts.h"
 #include "SDLs.h"
@@ -110,6 +111,9 @@ a { color:#c8c8ff; }\
 .UserAction .nick { color: #ffa0ff; }\
 .FriendAction { color: #ff00ff; }\
 .FriendAction .nick { color: #ff30ff; }\
+.Error { color: #ff0000 }\
+.Warning { color: #ff8000 }\
+.Notice { color: #fefefe }\
 ";
 
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify) :
@@ -203,7 +207,7 @@ void HWChatWidget::linkClicked(const QUrl & link)
         QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
         if (items.size() < 1)
             return;
-        QMenu * popup = new QMenu();
+        QMenu * popup = new QMenu(this);
         // selecting an item will automatically scroll there, so let's save old position
         QScrollBar * scrollBar = chatNicks->verticalScrollBar();
         int oldScrollPos = scrollBar->sliderPosition();
@@ -313,8 +317,10 @@ void HWChatWidget::saveLists(const QString & nick)
 
 void HWChatWidget::returnPressed()
 {
-    emit chatLine(chatEditLine->text());
+    QStringList lines = chatEditLine->text().split('\n');
     chatEditLine->clear();
+    foreach (const QString &line, lines)
+        emit chatLine(line);
 }
 
 
@@ -336,9 +342,6 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
         // friends will get special treatment, of course
         isFriend = friendsList.contains(nick, Qt::CaseInsensitive);
     }
-
-    if (chatStrings.size() > 250)
-        chatStrings.removeFirst();
 
     QString formattedStr = Qt::escape(str.mid(1));
     // make hedgewars.org urls actual links
@@ -364,9 +367,17 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
                 cssClass = "FriendChat";
     }
 
-    formattedStr = QString("<span class=\"%2\">%1</span>").arg(formattedStr).arg(cssClass);
+    addLine(cssClass,formattedStr);
+}
 
-    chatStrings.append(formattedStr);
+void HWChatWidget::addLine(const QString& cssClass, QString line)
+{
+    if (chatStrings.size() > 250)
+        chatStrings.removeFirst();
+
+    line = QString("<span class=\"%2\">%1</span>").arg(line).arg(cssClass);
+
+    chatStrings.append(line);
 
     chatText->setHtml(chatStrings.join("<br>"));
 

@@ -23,7 +23,7 @@
 #import "CommodityFunctions.h"
 #import "UIImageExtra.h"
 
-#define IMGNUM_PER_FORT 4
+#define IMGNUM_PER_FORT 6
 
 @implementation FortsViewController
 @synthesize teamDictionary, fortArray, lastIndexPath;
@@ -40,10 +40,10 @@
     [super viewDidLoad];
 
     NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FORTS_DIRECTORY() error:NULL];
-    NSMutableArray *filteredContents = [[NSMutableArray alloc] initWithCapacity:([directoryContents count] / 3)];
+    NSMutableArray *filteredContents = [[NSMutableArray alloc] initWithCapacity:([directoryContents count] / IMGNUM_PER_FORT)];
     // we need to remove the double entries and the L.png suffix
     for (int i = 0; i < [directoryContents count]; i++) {
-        if (i % IMGNUM_PER_FORT == 3) {
+        if (i % IMGNUM_PER_FORT == IMGNUM_PER_FORT-1) {
             NSString *currentName = [directoryContents objectAtIndex:i];
             NSString *correctName = [currentName substringToIndex:([currentName length] - 5)];
             [filteredContents addObject:correctName];

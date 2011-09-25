@@ -69,7 +69,7 @@
     UIButton *button = (UIButton *)sender;
 
     if (button.tag == 0) {
-        playSound(@"backSound");
+        [AudioManagerController playBackSound];
         [self.tableView setEditing:NO animated:YES];
         [[self parentViewController] dismissModalViewControllerAnimated:YES];
     } else {

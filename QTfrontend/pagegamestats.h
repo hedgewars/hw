@@ -43,7 +43,6 @@ class PageGameStats : public AbstractPage
 public:
     PageGameStats(QWidget* parent = 0);
 
-    QPushButton *BtnBack;
     QPushButton *BtnSave;
     QLabel *labelGameStats;
     QLabel *labelGameWin;
@@ -64,6 +63,8 @@ private:
     QMap<quint32, QVector<quint32> > healthPoints;
     unsigned int playerPosition;
     quint32 lastColor;
+
+    QPushButton *BtnBack;
 };
 
 #endif // STATSPAGE_H

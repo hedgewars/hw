@@ -41,8 +41,8 @@ ENDIF()
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 16${version_suffix})
-set(HEDGEWARS_PROTO_VER 38)
+set(CPACK_PACKAGE_VERSION_PATCH 17${version_suffix})
+set(HEDGEWARS_PROTO_VER 40)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 
@@ -265,10 +265,10 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"config\\\\.inc$"
 	"hwengine\\\\.desktop$"
 	"CMakeCache\\\\.txt$"
-	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
-	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
-	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
-	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libtremor"
+#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
+#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
+#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
+#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libtremor"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/project_files/HedgewarsMobile/"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/bin/[a-z]"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/tools/templates"

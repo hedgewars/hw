@@ -35,9 +35,11 @@ public:
     QPushButton *BtnDelete;
     QPushButton *BtnNew;
     QPushButton *BtnCopy;
-    QPushButton *BtnBack;
     SelWeaponWidget* pWeapons;
     QComboBox* selectWeaponSet;
+
+private:
+    QPushButton *BtnBack;
 };
 
 #endif

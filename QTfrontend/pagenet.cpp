@@ -41,7 +41,10 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
     BtnNetSvrStart->setVisible(haveServer);
     pageLayout->addWidget(BtnNetSvrStart, 4, 2);
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
 
     ConnGroupBox = new QGroupBox(this);
     ConnGroupBox->setTitle(QGroupBox::tr("Net game"));

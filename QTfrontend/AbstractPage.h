@@ -50,7 +50,8 @@ class AbstractPage : public QWidget
 {
     Q_OBJECT
 
- public:
+ signals:
+    void goBack();
 
  protected:
   AbstractPage(QWidget* parent = 0) {

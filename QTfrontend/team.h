@@ -24,6 +24,7 @@
 #include <QString>
 #include "binds.h"
 #include "achievements.h"
+#include "hwconsts.h"
 
 class HWForm;
 class GameUIConfig;
@@ -32,6 +33,7 @@ class HWTeamConstructException
 {
 };
 
+// structure for customization and statistics of a single hedgehog
 struct HWHog
 {
     QString Name;
@@ -39,45 +41,90 @@ struct HWHog
     int Rounds, Kills, Deaths, Suicides;
 };
 
+// class representing a team
 class HWTeam
 {
     public:
+
+        // constructors
         HWTeam(const QString & teamname);
         HWTeam(const QStringList& strLst);
         HWTeam();
 
-        bool isNetTeam() const;
+        // file operations
+        bool loadFromFile();
+        bool deleteFile();
+        bool saveToFile();
+        bool fileExists();
 
-        QString TeamName;
-        QString Grave;
-        QString Fort;
-        QString Flag;
-        QString Voicepack;
-        QString Owner;
-        int Rounds;
-        int Wins;
-        int CampaignProgress;
-        HWHog Hedgehogs[8];
-        unsigned int AchievementProgress[MAX_ACHIEVEMENTS];
-        unsigned int difficulty;
-        BindAction binds[BINDS_NUMBER];
+        // attribute getters
+         unsigned int campaignProgress() const;
+               QColor color() const;
+         unsigned int difficulty() const;
+              QString flag() const;
+              QString fort() const;
+              QString grave() const;
+        const HWHog & hedgehog(unsigned int idx) const;
+                 bool isNetTeam() const;
+              QString name() const;
+        unsigned char numHedgehogs() const;
+              QString owner() const;
+              QString voicepack() const;
 
-        unsigned char numHedgehogs;
-        QColor teamColor;
+        // attribute setters
+        void setColor(const QColor & color);
+        void setDifficulty(unsigned int level);
+        void setFlag(const QString & flag);
+        void setFort(const QString & fort);
+        void setGrave(const QString & grave);
+        void setHedgehog(unsigned int idx, const HWHog & hh);
+        void setName(const QString & name);
+        void setNumHedgehogs(unsigned char num);
+        void setVoicepack(const QString & voicepack);
 
-        bool LoadFromFile();
-        bool DeleteFile();
-        bool SaveToFile();
-        bool FileExists();
+        // increments for statistical info
+        void incRounds();
+        void incWins();
+
+        // pages... wait... wth is THIS doing in this class? FIXME!!!!
         void SetToPage(HWForm * hwform);
         void GetFromPage(HWForm * hwform);
-        QStringList TeamGameConfig(quint32 InitHealth) const;
 
+        // convert team info into strings for further computation
+        QStringList teamGameConfig(quint32 InitHealth) const;
+
+        // comparison operators
         bool operator==(const HWTeam& t1) const;
         bool operator<(const HWTeam& t1) const;
+
+
+
     private:
-        bool m_isNetTeam;
+
         QString OldTeamName;
+
+        // class members that contain the general team info and settings
+        QString m_name;
+        QString m_grave;
+        QString m_fort;
+        QString m_flag;
+        QString m_voicepack;
+        HWHog m_hedgehogs[HEDGEHOGS_PER_TEAM];
+        unsigned int m_difficulty;
+        BindAction binds[BINDS_NUMBER];
+
+        // class members that contain info for the current game setup
+        unsigned char m_numHedgehogs;
+        QColor m_color;
+        bool m_isNetTeam;
+        QString m_owner;
+
+        // class members that contain statistics, etc.
+        unsigned int m_campaignProgress;
+        unsigned int m_rounds;
+        unsigned int m_wins;
+        unsigned int AchievementProgress[MAX_ACHIEVEMENTS];
+
 
 };
 

@@ -31,8 +31,10 @@ public:
     PageInfo(QWidget* parent = 0);
 
     QPushButton *BtnSnapshots;
-    QPushButton *BtnBack;
     About *about;
+
+private:
+    QPushButton *BtnBack;
 };
 
 #endif
