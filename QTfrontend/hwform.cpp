@@ -44,7 +44,6 @@
 #include "hwform.h"
 #include "game.h"
 #include "team.h"
-#include "namegen.h"
 #include "teamselect.h"
 #include "selectWeapon.h"
 #include "gameuiconfig.h"
@@ -115,7 +114,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 
-    namegen = new HWNamegen();
 
 #ifdef __APPLE__
     panel = new M3Panel;
@@ -170,11 +168,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
-    connect(ui.pageEditTeam->BtnTeamSave, SIGNAL(clicked()), this, SLOT(TeamSave()));
-    connect(ui.pageEditTeam->BtnTeamDiscard, SIGNAL(clicked()), this, SLOT(TeamDiscard()));
-
-    connect(ui.pageEditTeam->signalMapper2, SIGNAL(mapped(const int &)), this, SLOT(RandomName(const int &)));
-    connect(ui.pageEditTeam->randTeamButton, SIGNAL(clicked()), this, SLOT(RandomNames()));
+    connect(ui.pageEditTeam, SIGNAL(teamEdited()), this, SLOT(AfterTeamEdit()));
 
     connect(ui.pageMultiplayer->BtnStartMPGame, SIGNAL(clicked()), this, SLOT(StartMPGame()));
     connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
@@ -189,9 +183,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pagePlayDemo->BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
     connect(ui.pagePlayDemo->DemosList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(PlayDemo()));
 
-    connect(ui.pageOptions->BtnNewTeam, SIGNAL(clicked()), this, SLOT(NewTeam()));
-    connect(ui.pageOptions->BtnEditTeam, SIGNAL(clicked()), this, SLOT(EditTeam()));
-    connect(ui.pageOptions->BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(DeleteTeam()));
+    connect(ui.pageOptions, SIGNAL(newTeamRequested()), this, SLOT(NewTeam()));
+    connect(ui.pageOptions, SIGNAL(editTeamRequested(const QString&)), this, SLOT(EditTeam(const QString&)));
+    connect(ui.pageOptions, SIGNAL(deleteTeamRequested(const QString&)), this, SLOT(DeleteTeam(const QString&)));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), config, SLOT(SaveOptions()));
     connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
@@ -476,11 +470,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {
         QStringList tmNames = config->GetTeamsList();
         TeamSelWidget* curTeamSelWidget;
-        ui.pageOptions->BtnNewTeam->setVisible(false);
-        ui.pageOptions->BtnEditTeam->setVisible(false);
-        ui.pageOptions->BtnDeleteTeam->setVisible(false);
-        ui.pageOptions->CBTeamName->setVisible(false);
-        ui.pageOptions->LblNoEditTeam->setVisible(true);
+        ui.pageOptions->setTeamOptionsEnabled(false);
 
         if (id == ID_PAGE_MULTIPLAYER) {
             curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
@@ -511,11 +501,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         }
 
     if (id == ID_PAGE_MAIN) {
-        ui.pageOptions->BtnNewTeam->setVisible(true);
-        ui.pageOptions->BtnEditTeam->setVisible(true);
-        ui.pageOptions->BtnDeleteTeam->setVisible(true);
-        ui.pageOptions->CBTeamName->setVisible(true);
-        ui.pageOptions->LblNoEditTeam->setVisible(false);
+        ui.pageOptions->setTeamOptionsEnabled(true);
     }
 
     // load and save ignore/friends lists
@@ -624,61 +610,30 @@ void HWForm::IntermediateSetup()
 
 void HWForm::NewTeam()
 {
-    editedTeam = new HWTeam(QLineEdit::tr("unnamed"));
-    editedTeam->SetToPage(this);
+    ui.pageEditTeam->createTeam(QLineEdit::tr("unnamed"), playerHash);
+    UpdateTeamsLists();
     GoToPage(ID_PAGE_SETUP_TEAM);
 }
 
-void HWForm::EditTeam()
+void HWForm::EditTeam(const QString & teamName)
 {
-    editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
-    editedTeam->loadFromFile();
-    editedTeam->SetToPage(this);
+    ui.pageEditTeam->editTeam(teamName, playerHash);
     GoToPage(ID_PAGE_SETUP_TEAM);
 }
 
-void HWForm::DeleteTeam()
+void HWForm::AfterTeamEdit()
 {
-    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Teams"), QMessageBox::tr("Really delete this team?"), QMessageBox::Ok | QMessageBox::Cancel);
-
-    if (reallyDelete.exec() == QMessageBox::Ok) {
-        editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
-        editedTeam->deleteFile();
-
-        // Remove from lists
-        ui.pageOptions->CBTeamName->removeItem(ui.pageOptions->CBTeamName->currentIndex());
-    }
-}
-
-void HWForm::RandomNames()
-{
-    editedTeam->GetFromPage(this);
-    namegen->teamRandomNames(*editedTeam, true);
-    editedTeam->SetToPage(this);
-}
-
-void HWForm::RandomName(const int &i)
-{
-    editedTeam->GetFromPage(this);
-    namegen->teamRandomName(*editedTeam,i);
-    editedTeam->SetToPage(this);
-}
-
-void HWForm::TeamSave()
-{
-    editedTeam->GetFromPage(this);
-    editedTeam->saveToFile();
-    delete editedTeam;
-    editedTeam=0;
     UpdateTeamsLists();
     GoBack();
 }
 
-void HWForm::TeamDiscard()
+
+void HWForm::DeleteTeam(const QString & teamName)
 {
-    delete editedTeam;
-    editedTeam=0;
-    GoBack();
+    ui.pageEditTeam->deleteTeam(teamName);
+    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Teams"), QMessageBox::tr("Really delete this team?"), QMessageBox::Ok | QMessageBox::Cancel);
+
+    UpdateTeamsLists();
 }
 
 void HWForm::DeleteScheme()

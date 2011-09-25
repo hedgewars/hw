@@ -26,151 +26,211 @@
 #include "hwconsts.h"
 
 
-HWNamegen::HWNamegen() :
-    typesAvailable(false)
-{
+HWNamegen::HWNamegen() {}
 
-    loadTypes();
-}
+QList<QStringList> HWNamegen::TypesTeamnames;
+QList<QStringList> HWNamegen::TypesHatnames;
+bool HWNamegen::typesAvailable = false;
 
-HWNamegen::~HWNamegen()
-{
-}
-
-
-
-void HWNamegen::teamRandomName(HWTeam & team, const int HedgehogNumber)
-{
-    randomNameByHat(team, HedgehogNumber);
-}
 
 void HWNamegen::teamRandomNames(HWTeam & team, const bool changeteamname)
 {
-    if ((TypesHatnames.size() > 0) && typesAvailable){
+    // load types if not already loaded
+    if (!typesAvailable)
+        if (!loadTypes())
+            return; // abort if loading failed
 
-        int kind = (rand()%(TypesHatnames.size()));
+    // abort if there are no hat types
+    if (TypesHatnames.size() <= 0)
+        return;
 
-        if (changeteamname){
-            if (TypesTeamnames[kind].size() > 0){
-                team.setName(TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())]);
-            }
-            team.setGrave(getRandomGrave());
-            team.setFort(getRandomFort());
-            team.setVoicepack("Default");
-        }
+    // the hat will influence which names the hogs get
+    int kind = (rand()%(TypesHatnames.size()));
 
-        //give each hedgehog a random name:
-        //TODO: load the dictionary only once! (right now it's loaded once for each hedgehog)
-        for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
+    // pick team name based on hat
+    if (changeteamname)
+    {
+        if (TypesTeamnames[kind].size() > 0)
+            team.setName(TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())]);
+
+        team.setGrave(getRandomGrave());
+        team.setFort(getRandomFort());
+        team.setVoicepack("Default");
+    }
+
+    QStringList dicts;
+    QStringList dict;
+
+    if ((TypesHatnames[kind].size()) <= 0)
+    {
+        dicts = dictsForHat(team.hedgehog(0).Hat);
+        dict  = dictContents(dicts[rand()%(dicts.size())]);
+    }
+
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
+    {
+        if ((TypesHatnames[kind].size()) > 0)
         {
-            if ((TypesHatnames[kind].size()) > 0){
-                HWHog hh = team.hedgehog(i);
-                hh.Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
-                team.setHedgehog(i,hh);
-            }
-            randomNameByHat(team,i);
+            HWHog hh = team.hedgehog(i);
+            hh.Hat = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
+            team.setHedgehog(i,hh);
         }
 
+        // there is a chance that this hog has the same hat as the previous one
+        // let's reuse the hat-specific dict in this case
+        if ((i == 0) or (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
+        {
+            dicts = dictsForHat(team.hedgehog(i).Hat);
+            dict  = dictContents(dicts[rand()%(dicts.size())]);
+        }
+
+        // give each hedgehog a random name
+        HWNamegen::teamRandomName(team,i,dict);
     }
 
 }
 
-
-void HWNamegen::randomNameByHat(HWTeam & team, const int HedgehogNumber)
+void HWNamegen::teamRandomName(HWTeam & team, const int HedgehogNumber)
 {
-    QStringList Dictionaries;
-    hatCfgLoad(team.hedgehog(HedgehogNumber).Hat,Dictionaries);
+    QStringList dicts = dictsForHat(team.hedgehog(HedgehogNumber).Hat);
 
-    QStringList Dictionary;
-    dictLoad(Dictionaries[rand()%(Dictionaries.size())],Dictionary);
+    QStringList dict = dictContents(dicts[rand()%(dicts.size())]);
+
+    teamRandomName(team, HedgehogNumber, dict);
+}
+
+void HWNamegen::teamRandomName(HWTeam & team, const int HedgehogNumber, const QStringList & dict)
+{
+    QStringList namesDict = dict;
+
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
+    {
+        namesDict.removeOne(team.hedgehog(i).Name);
+    }
+
+    // if our dict doesn't have any new names we'll have to use duplicates
+    if (namesDict.size() < 1)
+        namesDict = dict;
 
     HWHog hh = team.hedgehog(HedgehogNumber);
-    hh.Name = Dictionary[rand()%(Dictionary.size())];
+
+    hh.Name = namesDict[rand()%(namesDict.size())];
+
     team.setHedgehog(HedgehogNumber, hh);
 }
 
-void HWNamegen::dictLoad(const QString filename, QStringList &list)
+QStringList HWNamegen::dictContents(const QString filename)
 {
-    list.clear();
+    QStringList list;
 
     QFile file;
+
+    // find .cfg to load the names from
     file.setFileName(QString("%1/Data/Names/%2.txt").arg(cfgdir->absolutePath()).arg(filename));
-    if (!file.exists()) file.setFileName(QString("%1/Names/%2.txt").arg(datadir->absolutePath()).arg(filename));
+    if (!file.exists())
+        file.setFileName(QString("%1/Names/%2.txt").arg(datadir->absolutePath()).arg(filename));
+
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
 
         QTextStream in(&file);
-        while (!in.atEnd()) {
+        while (!in.atEnd())
+        {
             QString line = in.readLine();
-            if(line != QString(""))
-                {list.append(line);}
+            if(!line.isEmpty())
+                list.append(line);
         }
     }
 
-    if (list.size()==0)
+    if (list.size() == 0)
          list.append(filename);
 
+    return list;
 }
 
 
-void HWNamegen::hatCfgLoad(const QString hatname, QStringList &list)
+QStringList HWNamegen::dictsForHat(const QString hatname)
 {
-    list.clear();
+    QStringList list;
 
     QFile file;
+
+    // find .cfg to load the names from
     file.setFileName(QString("%1/Data/Names/%2.cfg").arg(cfgdir->absolutePath()).arg(hatname));
-    if (!file.exists()) file.setFileName(QString("%1/Names/%2.cfg").arg(datadir->absolutePath()).arg(hatname));
+    if (!file.exists())
+        file.setFileName(QString("%1/Names/%2.cfg").arg(datadir->absolutePath()).arg(hatname));
+
+
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-
         QTextStream in(&file);
-        while (!in.atEnd()) {
+        while (!in.atEnd())
+        {
             QString line = in.readLine();
-            if(line != QString(""))
-                {list.append(line);}
+            if(!line.isEmpty())
+                list.append(line);
         }
     }
 
-    if (list.size()==0)
+    if (list.size() == 0)
          list.append(QString("generic"));
 
+    return list;
 }
 
-
-void HWNamegen::loadTypes()
+// loades types from ini files. returns true on success.
+bool HWNamegen::loadTypes()
 {
     QFile file;
+
+    // find .cfg to load the names from
     file.setFileName(QString("%1/Data/Names/types.ini").arg(cfgdir->absolutePath()));
-    if (!file.exists()) file.setFileName(QString("%1/Names/types.ini").arg(datadir->absolutePath()));
+    if (!file.exists())
+        file.setFileName(QString("%1/Names/types.ini").arg(datadir->absolutePath()));
+
+
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        {typesAvailable = false; return;}
+        return false;
 
     int counter = 0; //counter starts with 0 (teamnames mode)
     TypesTeamnames.append(QStringList());
     TypesHatnames.append(QStringList());
 
     QTextStream in(&file);
-    while (!in.atEnd()) {
+    while (!in.atEnd())
+    {
         QString line = in.readLine();
-        if (line == QString("#####")){
+        if (line == QString("#####"))
+        {
             counter++; //toggle mode (teamnames || hats)
-            if ((counter%2) == 0){
+            if ((counter%2) == 0)
+            {
                 TypesTeamnames.append(QStringList());
                 TypesHatnames.append(QStringList());
             }
-        } else if ((line == QString("*****")) || (line == QString("*END*"))){
-            typesAvailable = true; return; // bye bye
-        } else {
-            if ((counter%2) == 0){ // even => teamnames mode
+        }
+        else if ((line == QString("*****")) || (line == QString("*END*")))
+        {
+            typesAvailable = true;
+            return true; // bye bye
+        }
+        else
+        {
+            if ((counter%2) == 0)
+            {
+                // even => teamnames mode
                 TypesTeamnames[(counter/2)].append(line);
-            } else { // odd => hats mode
+            }
+            else
+            {
+                // odd => hats mode
                 TypesHatnames[((counter-1)/2)].append(line);
             }
         }
-//        Types.append(line);
     }
-        typesAvailable = true;
-    return;
+
+    typesAvailable = true;
+    return true;
 }
 
 

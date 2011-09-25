@@ -76,6 +76,7 @@ PageOptions::PageOptions(QWidget* parent) :
             BtnNewTeam->setIconSize(pmNew.size());
             BtnNewTeam->setIcon(pmNew);
             BtnNewTeam->setMaximumWidth(pmNew.width() + 6);
+            connect(BtnNewTeam, SIGNAL(clicked()), this, SIGNAL(newTeamRequested()));
             GBTlayout->addWidget(BtnNewTeam, 0, 1);
 
             BtnEditTeam = new QPushButton(teamsBox);
@@ -83,6 +84,7 @@ PageOptions::PageOptions(QWidget* parent) :
             BtnEditTeam->setIconSize(pmEdit.size());
             BtnEditTeam->setIcon(pmEdit);
             BtnEditTeam->setMaximumWidth(pmEdit.width() + 6);
+            connect(BtnEditTeam, SIGNAL(clicked()), this, SLOT(requestEditSelectedTeam()));
             GBTlayout->addWidget(BtnEditTeam, 0, 2);
 
             BtnDeleteTeam = new QPushButton(teamsBox);
@@ -90,6 +92,7 @@ PageOptions::PageOptions(QWidget* parent) :
             BtnDeleteTeam->setIconSize(pmDelete.size());
             BtnDeleteTeam->setIcon(pmDelete);
             BtnDeleteTeam->setMaximumWidth(pmDelete.width() + 6);
+            connect(BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(requestDeleteSelectedTeam()));
             GBTlayout->addWidget(BtnDeleteTeam, 0, 3);
 
             LblNoEditTeam = new QLabel(teamsBox);
@@ -457,3 +460,23 @@ void PageOptions::trimNetNick()
 {
     editNetNick->setText(editNetNick->text().trimmed());
 }
+
+void PageOptions::requestEditSelectedTeam()
+{
+    emit editTeamRequested(CBTeamName->currentText());
+}
+
+void PageOptions::requestDeleteSelectedTeam()
+{
+    emit deleteTeamRequested(CBTeamName->currentText());
+}
+
+void PageOptions::setTeamOptionsEnabled(bool enabled)
+{
+    BtnNewTeam->setVisible(enabled);
+    BtnEditTeam->setVisible(enabled);
+    BtnDeleteTeam->setVisible(enabled);
+    CBTeamName->setVisible(enabled);
+    LblNoEditTeam->setVisible(!enabled);
+}
+

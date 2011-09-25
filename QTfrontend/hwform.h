@@ -79,12 +79,9 @@ private slots:
     void btnExitClicked();
     void IntermediateSetup();
     void NewTeam();
-    void EditTeam();
-    void DeleteTeam();
-    void RandomNames();
-    void RandomName(const int &i);
-    void TeamSave();
-    void TeamDiscard();
+    void EditTeam(const QString & teamName);
+    void AfterTeamEdit();
+    void DeleteTeam(const QString & teamName);
     void DeleteScheme();
     void DeleteWeaponSet();
     void SimpleGame();

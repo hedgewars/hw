@@ -46,8 +46,8 @@ HWTeam::HWTeam(const QString & teamname) :
     m_flag = "hedgewars";
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
-        binds[i].action = cbinds[i].action;
-        binds[i].strbind = cbinds[i].strbind;
+        m_binds[i].action = cbinds[i].action;
+        m_binds[i].strbind = cbinds[i].strbind;
     }
     m_rounds = 0;
     m_wins = 0;
@@ -99,8 +99,8 @@ HWTeam::HWTeam() :
 
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
-        binds[i].action = cbinds[i].action;
-        binds[i].strbind = cbinds[i].strbind;
+        m_binds[i].action = cbinds[i].action;
+        m_binds[i].strbind = cbinds[i].strbind;
     }
     m_rounds = 0;
     m_wins = 0;
@@ -132,7 +132,7 @@ bool HWTeam::loadFromFile()
         m_hedgehogs[i].Suicides = teamfile.value(hh + "Suicides", 0).toInt();
     }
     for(int i = 0; i < BINDS_NUMBER; i++)
-        binds[i].strbind = teamfile.value(QString("Binds/%1").arg(binds[i].action), cbinds[i].strbind).toString();
+        m_binds[i].strbind = teamfile.value(QString("Binds/%1").arg(m_binds[i].action), cbinds[i].strbind).toString();
     for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
         if(achievements[i][0][0])
             AchievementProgress[i] = teamfile.value(QString("Achievements/%1").arg(achievements[i][0]), 0).toUInt();
@@ -186,61 +186,13 @@ bool HWTeam::saveToFile()
         teamfile.setValue(hh + "Suicides", m_hedgehogs[i].Suicides);
     }
     for(int i = 0; i < BINDS_NUMBER; i++)
-        teamfile.setValue(QString("Binds/%1").arg(binds[i].action), binds[i].strbind);
+        teamfile.setValue(QString("Binds/%1").arg(m_binds[i].action), m_binds[i].strbind);
     for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
         if(achievements[i][0][0])
             teamfile.setValue(QString("Achievements/%1").arg(achievements[i][0]), AchievementProgress[i]);
         else
             break;
     return true;
-}
-
-void HWTeam::SetToPage(HWForm * hwform)
-{
-    hwform->ui.pageEditTeam->TeamNameEdit->setText(m_name);
-    hwform->ui.pageEditTeam->CBTeamLvl->setCurrentIndex(m_difficulty);
-    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
-    {
-         hwform->ui.pageEditTeam->HHNameEdit[i]->setText(m_hedgehogs[i].Name);
-         if (m_hedgehogs[i].Hat.startsWith("Reserved"))
-            hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData("Reserved "+m_hedgehogs[i].Hat.remove(0,40), Qt::DisplayRole));
-         else
-            hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData(m_hedgehogs[i].Hat, Qt::DisplayRole));
-    }
-    hwform->ui.pageEditTeam->CBGrave->setCurrentIndex(hwform->ui.pageEditTeam->CBGrave->findText(m_grave));
-    hwform->ui.pageEditTeam->CBFlag->setCurrentIndex(hwform->ui.pageEditTeam->CBFlag->findData(m_flag));
-
-    hwform->ui.pageEditTeam->CBFort->setCurrentIndex(hwform->ui.pageEditTeam->CBFort->findText(m_fort));
-    hwform->ui.pageEditTeam->CBVoicepack->setCurrentIndex(hwform->ui.pageEditTeam->CBVoicepack->findText(m_voicepack));
-    //hwform->ui.pageEditTeam->CBFort_activated(Fort);
-
-    for(int i = 0; i < BINDS_NUMBER; i++)
-    {
-        hwform->ui.pageEditTeam->CBBind[i]->setCurrentIndex(hwform->ui.pageEditTeam->CBBind[i]->findData(binds[i].strbind));
-    }
-}
-
-void HWTeam::GetFromPage(HWForm * hwform)
-{
-    m_name  = hwform->ui.pageEditTeam->TeamNameEdit->text();
-    m_difficulty = hwform->ui.pageEditTeam->CBTeamLvl->currentIndex();
-    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
-    {
-        m_hedgehogs[i].Name = hwform->ui.pageEditTeam->HHNameEdit[i]->text();
-        if (hwform->ui.pageEditTeam->HHHats[i]->currentText().startsWith("Reserved"))
-            m_hedgehogs[i].Hat = "Reserved"+playerHash+hwform->ui.pageEditTeam->HHHats[i]->currentText().remove(0,9);
-        else
-            m_hedgehogs[i].Hat = hwform->ui.pageEditTeam->HHHats[i]->currentText();
-    }
-
-    m_grave = hwform->ui.pageEditTeam->CBGrave->currentText();
-    m_fort = hwform->ui.pageEditTeam->CBFort->currentText();
-    m_voicepack = hwform->ui.pageEditTeam->CBVoicepack->currentText();
-    m_flag = hwform->ui.pageEditTeam->CBFlag->itemData(hwform->ui.pageEditTeam->CBFlag->currentIndex()).toString();
-    for(int i = 0; i < BINDS_NUMBER; i++)
-    {
-        binds[i].strbind = hwform->ui.pageEditTeam->CBBind[i]->itemData(hwform->ui.pageEditTeam->CBBind[i]->currentIndex()).toString();
-    }
 }
 
 QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
@@ -260,8 +212,8 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
 
     if (!m_isNetTeam)
         for(int i = 0; i < BINDS_NUMBER; i++)
-            if(!binds[i].strbind.isEmpty())
-                sl.push_back(QString("ebind " + binds[i].strbind + " " + binds[i].action));
+            if(!m_binds[i].strbind.isEmpty())
+                sl.push_back(QString("ebind " + m_binds[i].strbind + " " + m_binds[i].action));
 
     for (int t = 0; t < m_numHedgehogs; t++)
     {
@@ -299,7 +251,7 @@ QString HWTeam::name() const { return m_name; }
 
 // single hedgehog
 const HWHog & HWTeam::hedgehog(unsigned int idx) const { return m_hedgehogs[idx]; }
-         void HWTeam::setHedgehog(unsigned int idx, const HWHog & hh) { m_hedgehogs[idx] = hh; }
+         void HWTeam::setHedgehog(unsigned int idx, HWHog hh) { m_hedgehogs[idx] = hh; }
 
 // owner
 QString HWTeam::owner() const { return m_owner; }
@@ -315,6 +267,9 @@ QColor HWTeam::color() const { return m_color; }
   void HWTeam::setColor(const QColor & color) { m_color = color; }
 
 
+// binds
+QString HWTeam::keyBind(unsigned int idx) const { return m_binds[idx].strbind; }
+   void HWTeam::bindKey(unsigned int idx, const QString & key) { m_binds[idx].strbind = key; }
 
 // flag
 void    HWTeam::setFlag(const QString & flag) { m_flag = flag; }

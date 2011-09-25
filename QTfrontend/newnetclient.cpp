@@ -112,7 +112,7 @@ void HWNewNet::AddTeam(const HWTeam & team)
          team.flag() + delimeter +
          QString::number(team.difficulty());
 
-    for(unsigned int i = 0; i < HEDGEHOGS_PER_TEAM; ++i)
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; ++i)
     {
         cmd.append(delimeter);
         cmd.append(team.hedgehog(i).Name);

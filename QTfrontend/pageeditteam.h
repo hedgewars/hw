@@ -21,7 +21,11 @@
 
 #include "AbstractPage.h"
 #include "binds.h"
+#include "hwconsts.h"
+#include "namegen.h"
 #include "SDLs.h"
+
+#include "team.h"
 
 class SquareLabel;
 
@@ -31,6 +35,19 @@ class PageEditTeam : public AbstractPage
 
 public:
     PageEditTeam(QWidget* parent, SDLInteraction * sdli);
+
+    void createTeam(const QString & name, const QString & playerHash);
+    void editTeam(const QString & name, const QString & playerHash);
+    void deleteTeam(const QString & name);
+
+signals:
+    void teamEdited();
+
+public slots:
+    void CBFort_activated(const QString & gravename);
+
+private:
+    QPushButton * randTeamButton;
     QSignalMapper* signalMapper1;
     QSignalMapper* signalMapper2;
     QGroupBox *GBoxHedgehogs;
@@ -48,19 +65,20 @@ public:
     QPushButton *BtnTeamSave;
     QPushButton * BtnTestSound;
     QLineEdit * TeamNameEdit;
-    QLineEdit * HHNameEdit[8];
-    QComboBox * HHHats[8];
-    QPushButton * randButton[8];
+    QLineEdit * HHNameEdit[HEDGEHOGS_PER_TEAM];
+    QComboBox * HHHats[HEDGEHOGS_PER_TEAM];
+    QPushButton * randButton[HEDGEHOGS_PER_TEAM];
     QComboBox * CBBind[BINDS_NUMBER];
-    QPushButton * randTeamButton;
-
-private:
     SDLInteraction * mySdli;
+    HWTeam data();
+    QString m_playerHash;
 
-public slots:
-    void CBFort_activated(const QString & gravename);
+    void loadTeam(const HWTeam & team);
 
 private slots:
+    void saveTeam();
+    void setRandomNames();
+    void setRandomName(int hh_index);
     void testSound();
     void fixHHname(int idx);
 };

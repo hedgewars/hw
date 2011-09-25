@@ -28,24 +28,24 @@ class HWTeam;
 class HWNamegen
 {
 public:
-    HWNamegen();
-    ~HWNamegen();
 
-    void teamRandomName(HWTeam & team, const int HedgehogNumber);
-    void teamRandomNames(HWTeam & team, const bool changeteamname);
-    void randomNameByHat(HWTeam & team, const int HedgehogNumber);
+    static void teamRandomName(HWTeam & team, const int HedgehogNumber);
+    static void teamRandomNames(HWTeam & team, const bool changeteamname);
 
 private:
+        HWNamegen();
 
-        QList<QStringList> TypesTeamnames;
-        QList<QStringList> TypesHatnames;
-        bool typesAvailable;
-        void loadTypes();
-        void dictLoad(const QString filename, QStringList &list);
-        void hatCfgLoad(const QString hatname, QStringList &list);
+        static QList<QStringList> TypesTeamnames;
+        static QList<QStringList> TypesHatnames;
+        static bool typesAvailable;
 
-        QString getRandomGrave();
-        QString getRandomFort();
+        static bool loadTypes();
+        static QStringList dictContents(const QString filename);
+        static QStringList dictsForHat(const QString hatname);
+
+        static QString getRandomGrave();
+        static QString getRandomFort();
+        static void teamRandomName(HWTeam & team, const int HedgehogNumber, const QStringList & dict);
 };
 
 

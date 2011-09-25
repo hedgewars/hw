@@ -24,10 +24,10 @@
 #include <QTabWidget>
 #include <QGroupBox>
 #include <QToolBox>
+#include <QMessageBox>
 
 #include "pageeditteam.h"
 #include "sdlkeys.h"
-#include "hwconsts.h"
 #include "SquareLabel.h"
 #include "hats.h"
 #include "HWApplication.h"
@@ -35,6 +35,7 @@
 PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
   AbstractPage(parent)
 {
+    m_playerHash = "0000000000000000000000000000000000000000";
     mySdli = sdli;
     QGridLayout * pageLayout = new QGridLayout(this);
     QTabWidget * tbw = new QTabWidget(this);
@@ -43,11 +44,15 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     tbw->addTab(page1, tr("General"));
     tbw->addTab(page2, tr("Advanced"));
     pageLayout->addWidget(tbw, 0, 0, 1, 3);
-    BtnTeamDiscard = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+
     BtnTeamSave = addButton(":/res/Save.png", pageLayout, 1, 2, true);;
     BtnTeamSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
+    connect(BtnTeamSave, SIGNAL(clicked()), this, SLOT(saveTeam()));
+
+    BtnTeamDiscard = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
     BtnTeamDiscard->setFixedHeight(BtnTeamSave->height());
     BtnTeamDiscard->setStyleSheet("QPushButton{margin-top: 31px;}");
+    connect(BtnTeamDiscard, SIGNAL(clicked()), this, SIGNAL(goBack()));
 
     QHBoxLayout * page1Layout = new QHBoxLayout(page1);
     page1Layout->setAlignment(Qt::AlignTop);
@@ -68,9 +73,10 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     signalMapper2 = new QSignalMapper(this);
 
     connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(fixHHname(int)));
+    connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(setRandomName(int)));
 
     HatsModel * hatsModel = new HatsModel(GBoxHedgehogs);
-    for(int i = 0; i < 8; i++)
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         HHHats[i] = new QComboBox(GBoxHedgehogs);
         HHHats[i]->setModel(hatsModel);
@@ -95,6 +101,7 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     }
 
     randTeamButton = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, false);
+    connect(randTeamButton, SIGNAL(clicked()), this, SLOT(setRandomNames()));
 
     vbox1->addWidget(GBoxHedgehogs);
 
@@ -345,6 +352,7 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
             CBBind[i]->addItem(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), sdlkeys[j][0]);
         pagelayout->addWidget(CBBind[i++], num++, 1);
     }
+
 }
 
 void PageEditTeam::fixHHname(int idx)
@@ -384,3 +392,106 @@ void PageEditTeam::testSound()
         Mix_PlayChannel(-1, sound, 0);
     }
 }
+
+void PageEditTeam::createTeam(const QString & name, const QString & playerHash)
+{
+    m_playerHash = playerHash;
+    HWTeam newTeam(name);
+    loadTeam(newTeam);
+}
+
+void PageEditTeam::editTeam(const QString & name, const QString & playerHash)
+{
+    m_playerHash = playerHash;
+    HWTeam team(name);
+    team.loadFromFile();
+    loadTeam(team);
+}
+
+void PageEditTeam::deleteTeam(const QString & name)
+{
+    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Teams"), QMessageBox::tr("Really delete this team?"), QMessageBox::Ok | QMessageBox::Cancel, this);
+
+    if (reallyDelete.exec() == QMessageBox::Ok)
+        HWTeam(name).deleteFile();
+}
+
+void PageEditTeam::setRandomNames()
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomNames(team, true);
+    loadTeam(team);
+}
+
+void PageEditTeam::setRandomName(int hh_index)
+{
+    HWTeam team = data();
+    HWNamegen::teamRandomName(team,hh_index);
+    loadTeam(team);
+}
+
+void PageEditTeam::loadTeam(const HWTeam & team)
+{
+    TeamNameEdit->setText(team.name());
+    CBTeamLvl->setCurrentIndex(team.difficulty());
+
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
+    {
+        HWHog hh = team.hedgehog(i);
+
+        HHNameEdit[i]->setText(hh.Name);
+
+        if (hh.Hat.startsWith("Reserved"))
+            hh.Hat = hh.Hat.remove(0,40);
+
+        HHHats[i]->setCurrentIndex(HHHats[i]->findData(hh.Hat, Qt::DisplayRole));
+    }
+
+    CBGrave->setCurrentIndex(CBGrave->findText(team.grave()));
+    CBFlag->setCurrentIndex(CBFlag->findData(team.flag()));
+
+    CBFort->setCurrentIndex(CBFort->findText(team.fort()));
+    CBVoicepack->setCurrentIndex(CBVoicepack->findText(team.voicepack()));
+
+    for(int i = 0; i < BINDS_NUMBER; i++)
+    {
+        CBBind[i]->setCurrentIndex(CBBind[i]->findData(team.keyBind(i)));
+    }
+}
+
+HWTeam PageEditTeam::data()
+{
+    HWTeam team(TeamNameEdit->text());
+    team.setDifficulty(CBTeamLvl->currentIndex());
+
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
+    {
+        HWHog hh;
+        hh.Name = HHNameEdit[i]->text();
+        hh.Hat = HHHats[i]->currentText();
+
+        if (hh.Hat.startsWith("Reserved"))
+            hh.Hat = "Reserved"+m_playerHash+hh.Hat.remove(0,9);
+
+        team.setHedgehog(i,hh);
+    }
+
+    team.setGrave(CBGrave->currentText());
+    team.setFort(CBFort->currentText());
+    team.setVoicepack(CBVoicepack->currentText());
+    team.setFlag(CBFlag->itemData(CBFlag->currentIndex()).toString());
+
+    for(int i = 0; i < BINDS_NUMBER; i++)
+    {
+        team.bindKey(i,CBBind[i]->itemData(CBBind[i]->currentIndex()).toString());
+    }
+
+    return team;
+}
+
+void PageEditTeam::saveTeam()
+{
+    data().saveToFile();
+    emit teamEdited();
+}
+

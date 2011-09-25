@@ -43,12 +43,8 @@ public:
 
     QComboBox *CBLanguage;
 
-    IconedGroupBox *teamsBox;
-    QPushButton *BtnNewTeam;
-    QPushButton *BtnEditTeam;
-    QPushButton *BtnDeleteTeam;
+    IconedGroupBox *teamsBox;;
     QPushButton *BtnAssociateFiles;
-    QLabel *LblNoEditTeam;
     QComboBox *CBTeamName;
     IconedGroupBox *AGGroupBox;
     QComboBox *CBResolution;
@@ -76,10 +72,22 @@ public:
     QSlider *SLQuality;
     QCheckBox *CBFrontendEffects;
 
+    void setTeamOptionsEnabled(bool enabled);
+
+signals:
+    void newTeamRequested();
+    void editTeamRequested(const QString & teamName);
+    void deleteTeamRequested(const QString & teamName);
+
+
 private:
     bool previousFullscreenValue;
     int previousResolutionIndex;
     int previousQuality;
+    QLabel *LblNoEditTeam;
+    QPushButton *BtnNewTeam;
+    QPushButton *BtnEditTeam;
+    QPushButton *BtnDeleteTeam;
     QPushButton *BtnBack;
 
 private slots:
@@ -88,6 +96,8 @@ private slots:
     void setResolution(int state);
     void setQuality(int value);
     void trimNetNick();
+    void requestEditSelectedTeam();
+    void requestDeleteSelectedTeam();
 };
 
 #endif
