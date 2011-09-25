@@ -1414,7 +1414,10 @@ begin
     if digest = '' then
         digest:= s
     else
-//        TryDo(s = digest, 'Different maps generated, sorry', true);
+{$IFNDEF ANDROID}
+{TODO: Xeli can you re-enable this? it is a very important check}
+        TryDo(s = digest, 'Different maps generated, sorry', true);
+{$ENDIF}
 end;
 
 procedure chSendLandDigest(var s: shortstring);

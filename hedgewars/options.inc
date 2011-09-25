@@ -28,12 +28,13 @@
 {$DEFINE GLunit:=GL}
 
 {$IFDEF ANDROID}
+  {$MODE delphi}
   {$DEFINE SDL13}
   {$DEFINE HWLIBRARY}
   {$DEFINE S3D_DISABLED}
   {$DEFINE GLunit:=gles11}
-  {$DEFINE DEBUGFILE}
   {$DEFINE MOBILE}
+  {$DEFINE Java_Prefix := 'Java_org_hedgewars_mobile_EngineProtocol_PascalExports_'}
 {$ENDIF}
 
 {$IFDEF IPHONEOS}
@@ -42,10 +43,10 @@
   {$DEFINE S3D_DISABLED}
   {$DEFINE GLunit:=gles11}
   {$DEFINE MOBILE}
+{$ELSE}
+  {$DEFINE DEBUGFILE}
+  //{$DEFINE TRACEAIACTIONS}
+  //{$DEFINE COUNTTICKS}
 {$ENDIF}
-
-{$DEFINE DEBUGFILE}
-//{$DEFINE TRACEAIACTIONS}
-//{$DEFINE COUNTTICKS}
 
 //also available LUA_DISABLED

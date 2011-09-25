@@ -31,7 +31,7 @@ procedure FreeActionsList;
 implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
      uAmmos, SysUtils{$IFDEF UNIX}{$IFNDEF ANDROID}, cthreads{$ENDIF}{$ENDIF}, uTypes,
-     uVariables, uCommands, uUtils, uDebug, uConsole;
+     uVariables, uCommands, uUtils, uDebug;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
@@ -353,6 +353,7 @@ end;
 procedure initModule;
 begin
     hasThread:= 0;
+    ThinkThread:= ThinkThread;
 end;
 
 procedure freeModule;
