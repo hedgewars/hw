@@ -2,6 +2,9 @@
 * bugfixes
 
 0.9.15 -> 0.9.16:
+ + In-game chat now supports backspace-repeat and Escape to close the text input area
+ + Team status bars shrunk/made translucent if they take up a significant portion of the screen
+ + Background music change on sudden death mode
  + Stereoscopic rendering
  + Installing content (anything under Data/ - maps, sounds, and any such stuff) to user profile allows custom adding/overriding of any Data/ content
  + Screen for downloadable content

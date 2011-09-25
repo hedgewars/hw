@@ -27,6 +27,7 @@ void setGameRunning(BOOL value);
 NSInteger cachedGrenadeTime();
 void clearView();
 void setGrenadeTime(NSInteger value);
+BOOL isApplePhone(void);
 
 void startSpinningProgress();
 void stopSpinningProgress();

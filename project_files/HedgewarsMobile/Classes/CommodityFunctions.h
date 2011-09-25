@@ -24,7 +24,6 @@
 #define DOCUMENTS_FOLDER()      [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
 #define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/hw-game.log"]
-#define HEDGEHOG_FILE()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/Images/hedgehog.png"]
 #define BASICFLAGS_FILE()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/basicFlags.plist"]
 #define GAMEMODS_FILE()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/gameMods.plist"]
 #define CREDITS_FILE()          [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/credits.plist"]
@@ -35,10 +34,9 @@
 #define SAVES_DIRECTORY()       [DOCUMENTS_FOLDER() stringByAppendingString:@"/Saves/"]
 
 #define GRAPHICS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/"]
+#define ICONS_DIRECTORY()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Icons/"]
 #define HATS_DIRECTORY()        [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Hats/"]
 #define GRAVES_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Graves/"]
-#define BOTLEVELS_DIRECTORY()   [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Hedgehog/botlevels/"]
-#define BTN_DIRECTORY()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Btn/"]
 #define FLAGS_DIRECTORY()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Flags/"]
 #define FORTS_DIRECTORY()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Forts/"]
 #define VOICES_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Sounds/voices/"]
@@ -67,7 +65,6 @@
 
 void print_free_memory (void);
 void playSound (NSString *snd);
-BOOL isApplePhone (void);
 NSInteger randomPort (void);
 
 NSString *getModelType (void);

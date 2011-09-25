@@ -67,15 +67,18 @@
         crateSli.minimumValue = 0;
         crateSli.tag = 400;
 
-        NSString *imgAmmoStr = [NSString stringWithFormat:@"%@/iconAmmo.png",BTN_DIRECTORY()];
-        NSString *imgDamageStr = [NSString stringWithFormat:@"%@/iconDamage.png",BTN_DIRECTORY()];
-        NSString *imgTimeStr = [NSString stringWithFormat:@"%@/iconTime.png",BTN_DIRECTORY()];
-        NSString *imgBoxStr = [NSString stringWithFormat:@"%@/iconBox.png",BTN_DIRECTORY()];
-
+        NSString *imgAmmoStr = [[NSString alloc] initWithFormat:@"%@/ammopic.png",ICONS_DIRECTORY()];
         initialImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imgAmmoStr]];
+        [imgAmmoStr release];
+        NSString *imgDamageStr = [[NSString alloc] initWithFormat:@"%@/iconDamage.png",ICONS_DIRECTORY()];
         probabilityImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imgDamageStr]];
+        [imgDamageStr release];
+        NSString *imgTimeStr = [[NSString alloc] initWithFormat:@"%@/iconTime.png",ICONS_DIRECTORY()];
         delayImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imgTimeStr]];
+        [imgTimeStr release];
+        NSString *imgBoxStr = [[NSString alloc] initWithFormat:@"%@/iconBox.png",ICONS_DIRECTORY()];
         crateImg = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imgBoxStr]];
+        [imgBoxStr release];
 
         initialLab = [[UILabel alloc] init];
         initialLab.backgroundColor = [UIColor clearColor];

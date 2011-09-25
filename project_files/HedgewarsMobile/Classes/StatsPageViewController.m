@@ -73,14 +73,16 @@
     static NSString *CellIdentifier0 = @"Cell0";
     NSInteger section = [indexPath section];
     NSInteger row = [indexPath row];
-    NSString *imgString = @"";
+    NSString *imgName = @"";
+    NSString *imgPath = ICONS_DIRECTORY();
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier0];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier0] autorelease];
 
     if (section == 0) {         // winning team
-        imgString = @"StatsStar";
+        imgName = @"star";
+        imgPath = [[NSBundle mainBundle] resourcePath];
         cell.textLabel.text = [self.statsArray objectAtIndex:1];
         cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     } else if (section == 1) {  // teams ranking
@@ -92,9 +94,9 @@
                                                     blue:(color & 0xFF)/255.0f
                                                    alpha:1.0f];
         cell.textLabel.text = [NSString stringWithFormat:@"%d. %@ (%@ kills)", row+1, [info objectAtIndex:2], [info objectAtIndex:1]];
-        imgString = [NSString stringWithFormat:@"StatsMedal%d",row+1];
+        imgName = [NSString stringWithFormat:@"StatsMedal%d",row+1];
     } else if (section == 2) {  // general info
-        imgString = @"iconDamage";
+        imgName = @"iconDamage";
         cell.textLabel.text = [self.statsArray objectAtIndex:row + 2];
         cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
     } else {                    // exit button
@@ -104,7 +106,9 @@
         cell.imageView.image = nil;
     }
 
-    UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",BTN_DIRECTORY(),imgString]];
+    NSString *imgString = [[NSString alloc] initWithFormat:@"%@/%@.png",imgPath,imgName];
+    UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgString];
+    [imgString release];
     UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
     cell.imageView.image = img;
     [img release];

@@ -169,9 +169,10 @@
         [self.view addSubview:button];
         [array addObject:button];
 
-        int x_src = ((i*32)/(int)ammoStoreImage.size.height)*32;
-        int y_src = (i*32)%(int)ammoStoreImage.size.height;
-        UIImage *img = [ammoStoreImage cutAt:CGRectMake(x_src, y_src, 32, 32)];
+        int size = 32*getScreenScale();
+        int x_src = ((i*size)/(int)(ammoStoreImage.size.height*getScreenScale()))*size;
+        int y_src = (i*size)%(int)(ammoStoreImage.size.height*getScreenScale());
+        UIImage *img = [ammoStoreImage cutAt:CGRectMake(x_src, y_src, size, size)];
         [imgs addObject:img];
     }
     [self performSelectorOnMainThread:@selector(setButtonsArray:) withObject:array waitUntilDone:NO];

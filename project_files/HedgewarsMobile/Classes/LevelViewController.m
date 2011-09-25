@@ -119,7 +119,7 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
         
-        NSString *botlevelPath = [[NSString alloc] initWithFormat:@"%@/%d.png",BOTLEVELS_DIRECTORY(),row+1];
+        NSString *botlevelPath = [[NSString alloc] initWithFormat:@"%@/bot%d.png",[[NSBundle mainBundle] resourcePath],row+1];
         UIImage *levelImage = [[UIImage alloc] initWithContentsOfFile:botlevelPath];
         [botlevelPath release];
         cell.imageView.image = levelImage;

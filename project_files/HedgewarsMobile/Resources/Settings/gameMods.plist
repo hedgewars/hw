@@ -194,5 +194,13 @@
 		<key>title</key>
 		<string>Tag Team</string>
 	</dict>
+	<dict>
+		<key>description</key>
+		<string>Add an indestructible border along the bottom</string>
+		<key>image</key>
+		<string>BottomBorder</string>
+		<key>title</key>
+		<string>Bottom Border</string>
+	</dict>
 </array>
 </plist>

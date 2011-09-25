@@ -71,16 +71,19 @@
     // SCHEMES - always overwrite and delete custom ones
     if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
         [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
-    NSString *baseSchemesDir = [[NSString alloc] initWithFormat:@"%@/Settings/Schemes/",resourcesDir];
-    [[NSFileManager defaultManager] copyItemAtPath:baseSchemesDir toPath:SCHEMES_DIRECTORY() error:NULL];
-    [baseSchemesDir release];
+    createSchemeNamed(@"Default", 0);
+    createSchemeNamed(@"Pro Mode", 1);
+    createSchemeNamed(@"Shoppa", 2);
+    createSchemeNamed(@"Clean Slate", 3);
+    createSchemeNamed(@"Minefield", 4);
+    createSchemeNamed(@"Barrel Mayhem", 5);
+    createSchemeNamed(@"Tunnel Hogs", 6);
+    createSchemeNamed(@"Fort Mode", 7);
+    createSchemeNamed(@"Timeless", 8);
+    createSchemeNamed(@"Thinking with Portals", 9);
+    createSchemeNamed(@"King Mode", 10);
 
     // WEAPONS - always overwrite
-    if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO)
-        [[NSFileManager defaultManager] createDirectoryAtPath:WEAPONS_DIRECTORY()
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:NULL];
     createWeaponNamed(@"Default", 0);
     createWeaponNamed(@"Crazy", 1);
     createWeaponNamed(@"Pro Mode", 2);

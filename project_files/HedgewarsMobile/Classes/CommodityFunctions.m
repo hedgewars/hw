@@ -63,10 +63,6 @@ void print_free_memory () {
 #endif
 }
 
-BOOL inline isApplePhone () {
-    return (IS_IPAD() == NO);
-}
-
 NSString *getModelType () {
     size_t size;
     // set 'oldp' parameter to NULL to get the size of the data returned so we can allocate appropriate amount of space

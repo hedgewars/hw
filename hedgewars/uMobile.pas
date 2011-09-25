@@ -38,7 +38,7 @@ procedure performRumble; inline;
 
 procedure GameLoading; inline;
 procedure GameLoaded; inline;
-procedure AmmoUpdate; // don't inline
+procedure AmmoUpdate; // do not inline
 procedure NewTurnBeginning; inline;
 procedure SaveBegan; inline;
 procedure SaveFinished; inline;
@@ -46,6 +46,7 @@ procedure SaveFinished; inline;
 implementation
 uses uVariables;
 
+// this function is just to determine whether we are running on a limited screen device
 function isPhone: Boolean; inline;
 begin
 {$IFDEF IPHONEOS}
@@ -54,12 +55,17 @@ begin
     exit(false);
 end;
 
+// this function should make the device vibrate in some way
 procedure performRumble; inline;
 const kSystemSoundID_Vibrate = $00000FFF;
 begin
+    // do not vibrate while synchronising a demo/save
+    if not fastUntilLag then
+        begin
 {$IFDEF IPHONEOS}
-    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 {$ENDIF}
+        end;
 end;
 
 procedure GameLoading; inline;
@@ -76,7 +82,7 @@ begin
 {$ENDIF}
 end;
 
-procedure AmmoUpdate; // don't inline
+procedure AmmoUpdate; // do not inline
 begin
 {$IFDEF IPHONEOS}
     if (CurrentTeam = nil) or
