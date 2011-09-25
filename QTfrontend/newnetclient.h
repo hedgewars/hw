@@ -39,6 +39,8 @@ class HWNewNet : public QObject
   Q_OBJECT
 
  public:
+  enum ClientState { Disconnected, Connecting, Connected, InLobby, InRoom, InGame };
+
   HWNewNet();
   ~HWNewNet();
   void Connect(const QString & hostName, quint16 port, const QString & nick);
@@ -47,7 +49,7 @@ class HWNewNet : public QObject
   void NewNick(const QString & nick);
   bool isRoomChief();
   bool isInRoom();
-  int getClientState();
+  ClientState clientState();
   QString getNick();
   QString getRoom();
   QString getHost();
@@ -88,12 +90,12 @@ class HWNewNet : public QObject
   void handleNotice(int n);
 
   int loginStep;
-  int netClientState;
+  ClientState netClientState;
 
  signals:
   void AskForRunGame();
-  void Connected();
-  void Disconnected(const QString & reason);
+  void connected();
+  void disconnected(const QString & reason);
   void Error(const QString & errmsg);
   void Warning(const QString & wrnmsg);
   void AskForPassword(const QString & nick);

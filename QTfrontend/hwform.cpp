@@ -275,26 +275,27 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #ifdef USE_XFIRE
 void HWForm::updateXfire(void)
 {
-    if(hwnet)
+    if(hwnet && (hwnet->clientState() != HWNewNet::Disconnected))
     {
         xfire_setvalue(XFIRE_SERVER, !hwnet->getHost().compare("netserver.hedgewars.org:46631") ? "Official server" : hwnet->getHost().toAscii());
-        switch(hwnet->getClientState())
+        switch(hwnet->clientState())
         {
-            case 1: // Connecting
+            case HWNewNet::Connecting: // Connecting
+            case HWNewNet::Connected:
             xfire_setvalue(XFIRE_STATUS, "Connecting");
             xfire_setvalue(XFIRE_NICKNAME, "-");
             xfire_setvalue(XFIRE_ROOM, "-");
-            case 2: // In lobby
+            case HWNewNet::InLobby: // In lobby
             xfire_setvalue(XFIRE_STATUS, "Online");
             xfire_setvalue(XFIRE_NICKNAME, hwnet->getNick().toAscii());
             xfire_setvalue(XFIRE_ROOM, "In game lobby");
             break;
-            case 3: // In room
+            case HWNewNet::InRoom: // In room
             xfire_setvalue(XFIRE_STATUS, "Online");
             xfire_setvalue(XFIRE_NICKNAME, hwnet->getNick().toAscii());
             xfire_setvalue(XFIRE_ROOM, (hwnet->getRoom() + " (waiting for players)").toAscii());
             break;
-            case 5: // In game
+            case HWNewNet::InGame: // In game
             xfire_setvalue(XFIRE_STATUS, "Online");
             xfire_setvalue(XFIRE_NICKNAME, hwnet->getNick().toAscii());
             xfire_setvalue(XFIRE_ROOM, (hwnet->getRoom() + " (playing or spectating)").toAscii());
@@ -783,7 +784,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     GoToPage(ID_PAGE_CONNECTING);
 
     connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
-    connect(hwnet, SIGNAL(Connected()), this, SLOT(NetConnected()));
+    connect(hwnet, SIGNAL(connected()), this, SLOT(NetConnected()));
     connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)));
     connect(hwnet, SIGNAL(Warning(const QString&)), this, SLOT(NetWarning(const QString&)));
     connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
@@ -899,7 +900,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(ui.pageAdmin, SIGNAL(clearAccountsCache()), hwnet, SLOT(clearAccountsCache()));
 
 // disconnect
-    connect(hwnet, SIGNAL(Disconnected(const QString&)), this, SLOT(ForcedDisconnect(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(disconnected(const QString&)), this, SLOT(ForcedDisconnect(const QString&)), Qt::QueuedConnection);
 
 // config stuff
     connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));

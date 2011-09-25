@@ -37,7 +37,7 @@ HWNewNet::HWNewNet() :
   isChief(false),
   m_game_connected(false),
   loginStep(0),
-  netClientState(0)
+  netClientState(Disconnected)
 {
 // socket stuff
     connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
@@ -52,13 +52,14 @@ HWNewNet::~HWNewNet()
     if (m_game_connected)
     {
         RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("User quit"));
-        emit Disconnected(tr("User quit"));
+        emit disconnected(tr("User quit"));
     }
     NetSocket.flush();
 }
 
 void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
+    netClientState = Connecting;
     mynick = nick;
     myhost = hostName + QString(":%1").arg(port);
     NetSocket.connectToHost(hostName, port);
@@ -75,7 +76,7 @@ void HWNewNet::Disconnect()
 
 void HWNewNet::CreateRoom(const QString & room)
 {
-    if(netClientState != 2)
+    if(netClientState != InLobby)
     {
         qWarning("Illegal try to create room!");
         return;
@@ -89,7 +90,7 @@ void HWNewNet::CreateRoom(const QString & room)
 
 void HWNewNet::JoinRoom(const QString & room)
 {
-    if(netClientState != 2)
+    if(netClientState != InLobby)
     {
         qWarning("Illegal try to join room!");
         return;
@@ -172,11 +173,13 @@ void HWNewNet::ClientRead()
 
 void HWNewNet::OnConnect()
 {
+    netClientState = Connected;
 }
 
 void HWNewNet::OnDisconnect()
 {
-    if(m_game_connected) emit Disconnected("");
+    netClientState = Disconnected;
+    if(m_game_connected) emit disconnected("");
     m_game_connected = false;
 }
 
@@ -188,13 +191,13 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
         case QAbstractSocket::RemoteHostClosedError:
             break;
         case QAbstractSocket::HostNotFoundError:
-            emit Disconnected(tr("The host was not found. Please check the host name and port settings."));
+            emit disconnected(tr("The host was not found. Please check the host name and port settings."));
             break;
         case QAbstractSocket::ConnectionRefusedError:
-            emit Disconnected(tr("Connection refused"));
+            emit disconnected(tr("Connection refused"));
             break;
         default:
-            emit Disconnected(NetSocket.errorString());
+            emit disconnected(NetSocket.errorString());
         }
 }
 
@@ -247,7 +250,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
         RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
-        netClientState = 1;
+        netClientState = Connected;
         m_game_connected = true;
         emit adminAccess(false);
         return;
@@ -284,7 +287,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             qWarning("Net: Empty CHAT message");
             return;
         }
-        if (netClientState == 2)
+        if (netClientState == InLobby)
             emit chatStringLobby(lst[1], HWProto::formatChatMsgForFrontend(lst[2]));
         else
             emit chatStringFromNet(HWProto::formatChatMsg(lst[1], lst[2]));
@@ -299,7 +302,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         }
         QStringList tmp = lst;
         tmp.removeFirst();
-        if (netClientState == 2)
+        if (netClientState == InLobby)
             emit chatStringLobby(tmp.join("\n").prepend('\x01'));
         else
             emit chatStringFromNet(tmp.join("\n").prepend('\x01'));
@@ -377,13 +380,13 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     }
 
     if(lst[0] == "ROOMABANDONED") {
-        netClientState = 2;
+        netClientState = InLobby;
         emit LeftRoom(tr("Room destroyed"));
         return;
     }
 
     if(lst[0] == "KICKED") {
-        netClientState = 2;
+        netClientState = InLobby;
         emit LeftRoom(tr("You got kicked"));
         return;
     }
@@ -399,24 +402,15 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             if (lst[i] == mynick)
             {
-                netClientState = 3;
+                netClientState = InRoom;
                 emit EnteredGame();
                 emit roomMaster(isChief);
                 if (isChief)
                     emit configAsked();
             }
-            // TODO reactivate
-/*
-            if (lst[i] != mynick && isChief && config->Form->ui.pageRoomsList->chatWidget->ignoreList.contains(lst[i], Qt::CaseInsensitive) && !config->Form->ui.pageRoomsList->chatWidget->friendsList.contains(lst[i], Qt::CaseInsensitive))
-            {
-                kickPlayer(lst[i]);
-            }
-            else
-*/
-            {
-                emit nickAdded(lst[i], isChief && (lst[i] != mynick));
-                emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
-            }
+
+            emit nickAdded(lst[i], isChief && (lst[i] != mynick));
+            emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
         }
         return;
     }
@@ -432,9 +426,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             if (lst[i] == mynick)
             {
-                netClientState = 2;
+                netClientState = InLobby;
                 RawSendNet(QString("LIST"));
-                emit Connected();
+                emit connected();
             }
 
             emit nickAddedLobby(lst[i], false);
@@ -482,7 +476,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     }
 
     if (lst[0] == "RUN_GAME") {
-        netClientState = 5;
+        netClientState = InGame;
         emit AskForRunGame();
         return;
     }
@@ -589,7 +583,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         }
         m_game_connected = false;
         Disconnect();
-        emit Disconnected(lst[1]);
+        emit disconnected(lst[1]);
         return;
     }
 
@@ -665,7 +659,7 @@ void HWNewNet::SendTeamMessage(const QString& str)
 
 void HWNewNet::askRoomsList()
 {
-    if(netClientState != 2)
+    if(netClientState != InLobby)
     {
         qWarning("Illegal try to get rooms list!");
         return;
@@ -673,7 +667,7 @@ void HWNewNet::askRoomsList()
     RawSendNet(QString("LIST"));
 }
 
-int HWNewNet::getClientState()
+HWNewNet::ClientState HWNewNet::clientState()
 {
     return netClientState;
 }
@@ -700,7 +694,7 @@ bool HWNewNet::isRoomChief()
 
 void HWNewNet::gameFinished(bool correctly)
 {
-    if (netClientState == 5) netClientState = 3;
+    if (netClientState == InGame) netClientState = InRoom;
     RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimeter).arg(correctly ? "1" : "0"));
 }
 
@@ -755,13 +749,13 @@ void HWNewNet::clearAccountsCache()
 
 void HWNewNet::partRoom()
 {
-    netClientState = 2;
+    netClientState = InLobby;
     RawSendNet(QString("PART"));
 }
 
 bool HWNewNet::isInRoom()
 {
-    return netClientState > 2;
+    return netClientState >= InRoom;
 }
 
 void HWNewNet::setServerMessageNew(const QString & msg)
