@@ -285,6 +285,12 @@ class SDLMain implements Runnable {
 				String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
 				"0", "null", "xeli", "1", "1", "1", "0", "", path });
 
+		try {
+			ipc.quitIPC();
+			ipc.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		//Log.v("SDL", "SDL thread terminated");
 		SDLActivity.mSingleton.finish();
 	}
@@ -351,7 +357,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 			}
 			mSDLThread = null;
 
-			// Log.v("SDL", "Finished waiting for SDL thread");
+			Log.v("SDL", "Finished waiting for SDL thread");
 		}
 
 		//enableSensor(Sensor.TYPE_ACCELEROMETER, false);
