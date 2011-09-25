@@ -91,6 +91,12 @@ PByte(@ConsoleLines[CurrLine].s)^:= 0
 {$ENDIF}
 end;
 
+function ShortStringAsPChar(s: ShortString) : PChar;
+begin
+    if Length(S) = High(s) then Dec(s[0]);
+    s[Ord(Length(s))+1] := #0;
+    Result := @S[1];
+end;
 
 function GetLastConsoleLine: shortstring;
 var valueStr: shortstring;
@@ -124,13 +130,5 @@ procedure freeModule;
 begin
 
 end;
-
-Function ShortStringAsPChar(S: ShortString) : PChar;
-Var NewString : String;
-Begin
-if Length(S) = High(S) then Dec(S[0]);
-s[Ord(Length(s))+1] := #0;
-Result := @S[1];
-End;
 
 end.

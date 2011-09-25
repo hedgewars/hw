@@ -28,6 +28,7 @@ Library hwLibrary;
 uses PascalExports, hwengine{$IFDEF ANDROID}, jni{$ENDIF};
 exports Game, HW_versionInfo;
 
+{$IFDEF ANDROID}
 function JNI_HW_versionInfoNet(env: PJNIEnv; obj: JObject):JInt;cdecl;
 begin
     JNI_HW_versionInfoNet := cNetProtoVersion;
@@ -38,8 +39,6 @@ begin
     JNI_HW_versionInfoVersion := env^.NewStringUTF(env, PChar(cVersionString));
 end;
 
-
-{$IFDEF ANDROID}
 exports
     JNI_HW_versionInfoNet name Java_Prefix+'HWversionInfoNetProto', 
     JNI_HW_versionInfoVersion name Java_Prefix+'HWversionInfoVersion', 

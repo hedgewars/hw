@@ -52,6 +52,7 @@
 		61188C0712A6FE960026C5DA /* settingsButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6172FECA1298CE4E00D73365 /* settingsButton@2x.png */; };
 		61188C0812A6FE9A0026C5DA /* title@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 618899811299516000D55FD6 /* title@2x~iphone.png */; };
 		61188C0912A6FE9C0026C5DA /* tw@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6103D385129B348200911D8D /* tw@2x.png */; };
+		611D7A50142FDCD3006E0798 /* uTouch.pas in Sources */ = {isa = PBXBuildFile; fileRef = 611D7A4F142FDCD3006E0798 /* uTouch.pas */; };
 		611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611D9BF912497E9800008271 /* SavedGamesViewController.m */; };
 		611D9BFC12497E9800008271 /* SavedGamesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611D9BFA12497E9800008271 /* SavedGamesViewController.xib */; };
 		611E0EE711FB20610077A41E /* ammoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE511FB20610077A41E /* ammoButton.png */; };
@@ -357,6 +358,7 @@
 		6103D39C129B350700911D8D /* arrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrowRight@2x.png"; path = "Resources/Overlay/arrowRight@2x.png"; sourceTree = "<group>"; };
 		6103D39D129B350700911D8D /* arrowUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrowUp@2x.png"; path = "Resources/Overlay/arrowUp@2x.png"; sourceTree = "<group>"; };
 		6103D39E129B350700911D8D /* cornerButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cornerButton@2x.png"; path = "Resources/Overlay/cornerButton@2x.png"; sourceTree = "<group>"; };
+		611D7A4F142FDCD3006E0798 /* uTouch.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTouch.pas; path = ../../hedgewars/uTouch.pas; sourceTree = SOURCE_ROOT; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
 		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SavedGamesViewController.xib; path = ../Resources/SavedGamesViewController.xib; sourceTree = "<group>"; };
@@ -1103,6 +1105,7 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				611D7A4F142FDCD3006E0798 /* uTouch.pas */,
 				61A976B2136F668500DD9878 /* uCursor.pas */,
 				61E5D68C12AB006F00566F29 /* uLandPainted.pas */,
 				61A4A3A112A5CD56004D81E6 /* uCaptions.pas */,
@@ -1595,6 +1598,7 @@
 				61A976B3136F668500DD9878 /* uCursor.pas in Sources */,
 				6167A6761391514600AA6D07 /* RestoreViewController.m in Sources */,
 				61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */,
+				611D7A50142FDCD3006E0798 /* uTouch.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
