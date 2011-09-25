@@ -267,14 +267,7 @@ begin
 {$IFDEF HWLIBRARY}
     cBits:= 32;
     cTimerInterval:= 8;
-{$IFDEF ANDROID}
-    PathPrefix:= gameArgs[11];
-    cFullScreen:= true;
-{$ELSE}
-    PathPrefix:= 'Data';
-    cFullScreen:= false;
-{$ENDIF}
-    UserPathPrefix:= '.';
+    cFullScreen:= {$IFDEF MOBILE}true{$ELSE}false{$ENDIF};
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     val(gameArgs[0], ipcPort);
     val(gameArgs[1], cScreenWidth);
@@ -287,7 +280,8 @@ begin
     isSoundEnabled:= gameArgs[6] = '1';
     isMusicEnabled:= gameArgs[7] = '1';
     cAltDamage:= gameArgs[8] = '1';
-    val(gameArgs[9], rotationQt);
+    PathPrefix:= gameArgs[9];
+    UserPathPrefix:= PathPrefix;
     recordFileName:= gameArgs[10];
     cStereoMode:= smNone;
 {$ENDIF}
