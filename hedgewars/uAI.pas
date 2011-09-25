@@ -74,8 +74,7 @@ for i:= 0 to Pred(Targets.Count) do
        with CurrentHedgehog^ do
             a:= CurAmmoType;
        aa:= a;
-SDL_delay(0);
-//       ThreadSwitch();
+       SDL_delay(0);    //ThreadSwitch was only a hint
        
        repeat
         if (CanUseAmmo[a]) and
@@ -320,8 +319,12 @@ FillBonuses((Me^.State and gstAttacked) <> 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(Me^.Hedgehog^, a);
 AddFileLog('Enter Think Thread');
-//BeginThread(@Think, Me, ThinkThread)
+{$IFDEF IPHONEOS}
+//TODO: sdl_thread works on device but crashes in simulator, most likely because of outdated toolchain
+BeginThread(@Think, Me, ThinkThread);
+{$ELSE}
 ThinkThread := SDL_CreateThread(@Think, Me);
+{$ENDIF}
 AddFileLog('Thread started');
 end;
 
