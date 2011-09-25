@@ -71,8 +71,6 @@ extern "C" {
 
     void *HW_getSDLWindow(void);
     void HW_terminate(BOOL andCloseFrontend);
-    void HW_suspend(void);
-    void HW_resume(void);
 
     void HW_setCursor(int x, int y);
     void HW_getCursor(int *x, int *y);

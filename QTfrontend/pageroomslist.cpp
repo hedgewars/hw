@@ -53,9 +53,9 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
     pageLayout->addWidget(roomsList, 1, 0, 3, 2);
     pageLayout->setRowStretch(2, 100);
-    
+
     QHBoxLayout * filterLayout = new QHBoxLayout();
-    
+
     QLabel * stateLabel = new QLabel(this);
     stateLabel->setText(tr("State:"));
     CBState = new QComboBox(this);
@@ -65,7 +65,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     filterLayout->addWidget(stateLabel);
     filterLayout->addWidget(CBState);
     filterLayout->addSpacing(30);
-    
+
     QLabel * ruleLabel = new QLabel(this);
     ruleLabel->setText(tr("Rules:"));
     CBRules = new QComboBox(this);
@@ -77,7 +77,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     filterLayout->addWidget(ruleLabel);
     filterLayout->addWidget(CBRules);
     filterLayout->addSpacing(30);
-    
+
     QLabel * weaponLabel = new QLabel(this);
     weaponLabel->setText(tr("Weapons:"));
     CBWeapons = new QComboBox(this);
@@ -108,7 +108,10 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 2);
     BtnClear = addButton(tr("Clear"), pageLayout, 4, 2);
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 6, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
 
     lblCount = new QLabel(this);
     pageLayout->addWidget(lblCount, 6, 1, Qt::AlignHCenter);
@@ -129,7 +132,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
     connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onRefreshClick()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
-    
+
     gameInLobby = false;
 }
 

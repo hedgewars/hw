@@ -58,6 +58,10 @@ clientRecvLoop s chan clChan ci restore =
 clientSendLoop :: Socket -> ThreadId -> Chan [B.ByteString] -> ClientIndex -> IO ()
 clientSendLoop s tId chan ci = do
     answer <- readChan chan
+
+    when (isQuit answer) $
+        killReciever . B.unpack $ quitMessage answer
+
     Exception.handle
         (\(e :: Exception.IOException) -> unless (isQuit answer) . killReciever $ show e) $
             sendAll s $ B.unlines answer `B.snoc` '\n'
@@ -65,7 +69,6 @@ clientSendLoop s tId chan ci = do
     if isQuit answer then
         do
         Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
-        killReciever . B.unpack $ quitMessage answer
         else
         clientSendLoop s tId chan ci
 

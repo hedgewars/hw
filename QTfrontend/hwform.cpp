@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <QDir>
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
@@ -139,6 +140,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     UpdateCampaignPage(0);
     UpdateWeapons();
 
+    // connect all goBack signals
+    int nPages = ui.Pages->count();
+
+    for (int i = 0; i < nPages; i++)
+        connect(ui.Pages->widget(i), SIGNAL(goBack()), this, SLOT(GoBack()));
+
     pageSwitchMapper = new QSignalMapper(this);
     connect(pageSwitchMapper, SIGNAL(mapped(int)), this, SLOT(GoToPage(int)));
 
@@ -163,16 +170,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
-    connect(ui.pageInfo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
-    connect(ui.pageDataDownload->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
-
     connect(ui.pageEditTeam->BtnTeamSave, SIGNAL(clicked()), this, SLOT(TeamSave()));
     connect(ui.pageEditTeam->BtnTeamDiscard, SIGNAL(clicked()), this, SLOT(TeamDiscard()));
 
     connect(ui.pageEditTeam->signalMapper2, SIGNAL(mapped(const int &)), this, SLOT(RandomName(const int &)));
     connect(ui.pageEditTeam->randTeamButton, SIGNAL(clicked()), this, SLOT(RandomNames()));
 
-    connect(ui.pageMultiplayer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageMultiplayer->BtnStartMPGame, SIGNAL(clicked()), this, SLOT(StartMPGame()));
     connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
         ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
@@ -181,13 +184,11 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(int)), this, SLOT(GoToSelectWeaponSet(int)));
     connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMultiplayer->gameCFG, ID_PAGE_DRAWMAP);
-    
 
-    connect(ui.pagePlayDemo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+
     connect(ui.pagePlayDemo->BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
     connect(ui.pagePlayDemo->DemosList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(PlayDemo()));
 
-    connect(ui.pageOptions->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageOptions->BtnNewTeam, SIGNAL(clicked()), this, SLOT(NewTeam()));
     connect(ui.pageOptions->BtnEditTeam, SIGNAL(clicked()), this, SLOT(EditTeam()));
     connect(ui.pageOptions->BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(DeleteTeam()));
@@ -203,17 +204,14 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageOptions->SchemeDelete, SIGNAL(clicked()), this, SLOT(DeleteScheme()));
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
 
-    connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
     connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNet->BtnNetSvrStart, ID_PAGE_NETSERVER);
 
     connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16)), this, SLOT(NetConnectServer(const QString &, quint16)));
 
-    connect(ui.pageNetServer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNetServer->BtnStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
 
-    connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
         ui.pageNetGame->BtnStart, SLOT(setEnabled(bool)));
     connect(ui.pageNetGame, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
@@ -222,14 +220,11 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageNetGame->pGameCFG, SIGNAL(goToDrawMap()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNetGame->pGameCFG, ID_PAGE_DRAWMAP);
 
-    connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageRoomsList->BtnAdmin, ID_PAGE_ADMIN);
 
     connect(ui.pageInfo->BtnSnapshots, SIGNAL(clicked()), this, SLOT(OpenSnapshotFolder()));
-    connect(ui.pageInfo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
-    connect(ui.pageGameStats->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageGameStats, SIGNAL(saveDemoRequested()), this, SLOT(saveDemoWithCustomName()));
 
     connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
@@ -244,16 +239,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
     connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
-    connect(ui.pageSinglePlayer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageTraining->BtnStartTrain, SIGNAL(clicked()), this, SLOT(StartTraining()));
-    connect(ui.pageTraining->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
-    connect(ui.pageCampaign->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
 
-    connect(ui.pageSelectWeapon->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageSelectWeapon->BtnDelete, SIGNAL(clicked()),
         ui.pageSelectWeapon->pWeapons, SLOT(deleteWeaponsName())); // executed first
@@ -262,15 +253,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     //connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
     //    this, SLOT(GoBack())); // executed third
 
-    connect(ui.pageScheme->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
-    connect(ui.pageAdmin->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
-
-    connect(ui.pageNetType->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageNetType->BtnLAN, SIGNAL(clicked()), this, SLOT(GoToNet()));
     connect(ui.pageNetType->BtnOfficialServer, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
-
-    connect(ui.pageDrawMap->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
     connect(ui.pageConnecting, SIGNAL(cancelConnection()), this, SLOT(GoBack()));
 
@@ -399,7 +384,7 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
 
     if(teamslist.empty()) {
         HWTeam defaultTeam(tr("DefaultTeam"));
-        defaultTeam.SaveToFile();
+        defaultTeam.saveToFile();
         teamslist.push_back(tr("DefaultTeam"));
     }
 
@@ -506,7 +491,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         QList<HWTeam> teamsList;
         for (QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++) {
             HWTeam team(*it);
-            team.LoadFromFile();
+            team.loadFromFile();
             teamsList.push_back(team);
         }
 
@@ -629,7 +614,7 @@ void HWForm::IntermediateSetup()
     QStringList tmnames;
 
     foreach(HWTeam team, curTeamSelWidget->getNotPlayingTeams())
-        tmnames += team.TeamName;
+        tmnames += team.name();
 
     //UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
     UpdateTeamsLists();
@@ -647,7 +632,7 @@ void HWForm::NewTeam()
 void HWForm::EditTeam()
 {
     editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
-    editedTeam->LoadFromFile();
+    editedTeam->loadFromFile();
     editedTeam->SetToPage(this);
     GoToPage(ID_PAGE_SETUP_TEAM);
 }
@@ -658,7 +643,7 @@ void HWForm::DeleteTeam()
 
     if (reallyDelete.exec() == QMessageBox::Ok) {
         editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
-        editedTeam->DeleteFile();
+        editedTeam->deleteFile();
 
         // Remove from lists
         ui.pageOptions->CBTeamName->removeItem(ui.pageOptions->CBTeamName->currentIndex());
@@ -668,21 +653,21 @@ void HWForm::DeleteTeam()
 void HWForm::RandomNames()
 {
     editedTeam->GetFromPage(this);
-    namegen->TeamRandomNames(editedTeam, true);
+    namegen->teamRandomNames(*editedTeam, true);
     editedTeam->SetToPage(this);
 }
 
 void HWForm::RandomName(const int &i)
 {
     editedTeam->GetFromPage(this);
-    namegen->TeamRandomName(editedTeam,i);
+    namegen->teamRandomName(*editedTeam,i);
     editedTeam->SetToPage(this);
 }
 
 void HWForm::TeamSave()
 {
     editedTeam->GetFromPage(this);
-    editedTeam->SaveToFile();
+    editedTeam->saveToFile();
     delete editedTeam;
     editedTeam=0;
     UpdateTeamsLists();
@@ -753,7 +738,82 @@ void HWForm::NetConnectOfficialServer()
     NetConnectServer("netserver.hedgewars.org", 46631);
 }
 
-void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
+void HWForm::NetPassword(const QString & nick)
+{
+    bool ok = false;
+    int passLength = config->value("net/passwordlength", 0).toInt();
+    QString hash = config->value("net/passwordhash", "").toString();
+
+    // If the password is blank, ask the user to enter one in
+    if (passLength == 0)
+    {
+        QString password = QInputDialog::getText(this, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(nick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
+
+        if (!ok) {
+            ForcedDisconnect(tr("No password supplied."));
+            return;
+        }
+
+        hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
+        config->setValue("net/passwordhash", hash);
+        config->setValue("net/passwordlength", password.size());
+        config->setNetPasswordLength(password.size());
+    }
+
+    hwnet->SendPasswordHash(hash);
+}
+
+void HWForm::NetNickTaken(const QString & nick)
+{
+    bool ok = false;
+    QString newNick = QInputDialog::getText(this, tr("Nickname"), tr("Some one already uses\n your nickname %1\non the server.\nPlease pick another nickname:").arg(nick), QLineEdit::Normal, nick, &ok);
+
+    if (!ok || newNick.isEmpty()) {
+            ForcedDisconnect(tr("No nickname supplied."));
+        return;
+    }
+
+    hwnet->NewNick(newNick);
+    config->setValue("net/nick", newNick);
+    config->updNetNick();
+}
+
+void HWForm::NetAuthFailed()
+{
+    // Set the password blank if case the user tries to join and enter his password again
+    config->setValue("net/passwordlength", 0);
+    config->setNetPasswordLength(0);
+}
+
+void HWForm::NetTeamAccepted(const QString & team)
+{
+    ui.pageNetGame->pNetTeamsWidget->changeTeamStatus(team);
+}
+
+void HWForm::NetError(const QString & errmsg)
+{
+    switch (ui.Pages->currentIndex())
+    {
+        case ID_PAGE_INGAME:
+            ShowErrorMessage(errmsg);
+            // no break
+        case ID_PAGE_NETGAME:
+            ui.pageNetGame->pChatWidget->addLine("Error",errmsg);
+            break;
+        default:
+        ui.pageRoomsList->chatWidget->addLine("Error",errmsg);
+    }
+}
+
+void HWForm::NetWarning(const QString & wrnmsg)
+{
+    if (ui.Pages->currentIndex() == ID_PAGE_NETGAME || ui.Pages->currentIndex() == ID_PAGE_INGAME)
+        ui.pageNetGame->pChatWidget->addLine("Warning",wrnmsg);
+    else
+        ui.pageRoomsList->chatWidget->addLine("Warning",wrnmsg);
+}
+
+void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 {
     if(hwnet) {
         hwnet->Disconnect();
@@ -763,17 +823,22 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
     ui.pageRoomsList->chatWidget->clear();
 
-    hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
+    hwnet = new HWNewNet();
 
     GoToPage(ID_PAGE_CONNECTING);
 
-    connect(hwnet, SIGNAL(showMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
-
     connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
     connect(hwnet, SIGNAL(Connected()), this, SLOT(NetConnected()));
+    connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)));
+    connect(hwnet, SIGNAL(Warning(const QString&)), this, SLOT(NetWarning(const QString&)));
     connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
-    connect(hwnet, SIGNAL(LeftRoom()), this, SLOT(NetLeftRoom()));
+    connect(hwnet, SIGNAL(LeftRoom(const QString&)), this, SLOT(NetLeftRoom(const QString&)));
     connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
+    connect(hwnet, SIGNAL(RemoveNetTeam(const HWTeam&)), this, SLOT(RemoveNetTeam(const HWTeam&)));
+    connect(hwnet, SIGNAL(TeamAccepted(const QString&)), this, SLOT(NetTeamAccepted(const QString&)));
+    connect(hwnet, SIGNAL(AskForPassword(const QString&)), this, SLOT(NetPassword(const QString&)));
+    connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)));
+    connect(hwnet, SIGNAL(AuthFailed()), this, SLOT(NetAuthFailed()));
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
 // rooms list page stuff
@@ -876,11 +941,25 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
     connect(ui.pageAdmin, SIGNAL(setServerMessageOld(const QString&)), hwnet, SLOT(setServerMessageOld(const QString &)));
     connect(ui.pageAdmin, SIGNAL(setProtocol(int)), hwnet, SLOT(setLatestProtocolVar(int)));
     connect(ui.pageAdmin, SIGNAL(askServerVars()), hwnet, SLOT(askServerVars()));
-    connect(ui.pageAdmin->pbClearAccountsCache, SIGNAL(clicked()), hwnet, SLOT(clearAccountsCache()));
+    connect(ui.pageAdmin, SIGNAL(clearAccountsCache()), hwnet, SLOT(clearAccountsCache()));
 
 // disconnect
-    connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(Disconnected(const QString&)), this, SLOT(ForcedDisconnect(const QString&)), Qt::QueuedConnection);
 
+// config stuff
+    connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));
+    connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
+    connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
+
+    while (nick.isEmpty()) {
+        nick = QInputDialog::getText(this,
+                 QObject::tr("Nickname"),
+                 QObject::tr("Please enter your nickname"),
+                 QLineEdit::Normal,
+                 QDir::home().dirName());
+        config->setValue("net/nick",nick);
+        config->updNetNick();
+    }
     hwnet->Connect(hostName, port, nick);
 }
 
@@ -928,11 +1007,6 @@ void HWForm::AsyncNetServerStart()
 
 void HWForm::NetDisconnect()
 {
-    if(hwnet) {
-        hwnet->Disconnect();
-        delete hwnet;
-        hwnet = 0;
-    }
     if(pnetserver) {
         if (pRegisterServer)
         {
@@ -946,15 +1020,12 @@ void HWForm::NetDisconnect()
     }
 }
 
-void HWForm::ForcedDisconnect()
+void HWForm::ForcedDisconnect(const QString & reason)
 {
     if(pnetserver) return; // we have server - let it care of all things
     if (hwnet) {
-        HWNewNet * tmp = hwnet;
-        hwnet = 0;
-        tmp->deleteLater();
         QMessageBox::warning(this, QMessageBox::tr("Network"),
-                QMessageBox::tr("Connection to server is lost"));
+                QMessageBox::tr("Connection to server is lost") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Quit reason: ") + '"' + reason +'"')));
 
     }
     if (ui.Pages->currentIndex() != ID_PAGE_NET) GoBack();
@@ -974,6 +1045,11 @@ void HWForm::NetGameEnter()
 void HWForm::AddNetTeam(const HWTeam& team)
 {
     ui.pageNetGame->pNetTeamsWidget->addTeam(team);
+}
+
+void HWForm::RemoveNetTeam(const HWTeam& team)
+{
+    ui.pageNetGame->pNetTeamsWidget->removeNetTeam(team);
 }
 
 void HWForm::StartMPGame()
@@ -1141,6 +1217,9 @@ void HWForm::Music(bool checked)
 
 void HWForm::NetGameChangeStatus(bool isMaster)
 {
+    ui.pageNetGame->pGameCFG->setEnabled(isMaster);
+    ui.pageNetGame->pNetTeamsWidget->setInteractivity(isMaster);
+
     if (isMaster)
         NetGameMaster();
     else
@@ -1201,10 +1280,14 @@ void HWForm::selectFirstNetScheme()
     ui.pageNetGame->pGameCFG->GameSchemes->setCurrentIndex(0);
 }
 
-void HWForm::NetLeftRoom()
+void HWForm::NetLeftRoom(const QString & reason)
 {
     if (ui.Pages->currentIndex() == ID_PAGE_NETGAME || ui.Pages->currentIndex() == ID_PAGE_INGAME)
+    {
         GoBack();
+        if (!reason.isEmpty())
+            ui.pageRoomsList->chatWidget->addLine("Notice",reason);
+    }
     else
         qWarning("Left room while not in room");
 }
@@ -1232,7 +1315,8 @@ void HWForm::UpdateCampaignPage(int index)
     tmpdir.setFilter(QDir::Files);
     QStringList userentries = tmpdir.entryList(QStringList("*#*.lua"));
     //entries.sort();
-    for(int i = 0; (i < userentries.count()) && (i <= team.CampaignProgress); i++)
+    unsigned int n = userentries.count();
+    for(unsigned int i = 0; (i < n) && (i <= team.campaignProgress()); i++)
         ui.pageCampaign->CBSelect->addItem(QString(userentries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(userentries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
 
     tmpdir.cd(datadir->absolutePath());
@@ -1240,7 +1324,8 @@ void HWForm::UpdateCampaignPage(int index)
     tmpdir.setFilter(QDir::Files);
     QStringList entries = tmpdir.entryList(QStringList("*#*.lua"));
     //entries.sort();
-    for(int i = 0; (i < entries.count()) && (i <= team.CampaignProgress); i++) {
+    n = entries.count();
+    for(unsigned int i = 0; (i < n) && (i <= team.campaignProgress()); i++) {
         if (userentries.contains(entries[i])) continue; 
         ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
     }

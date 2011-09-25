@@ -482,15 +482,16 @@ if Gear^.Timer > 1 then
     AllInactive:= false;
     dec(Gear^.Timer);
     if (Gear^.Timer mod frametime) = 0 then inc(Gear^.Pos)
-    end else
-if Gear^.Timer = 1 then
+    end 
+else if Gear^.Timer = 1 then
     begin
     Gear^.State:= Gear^.State or gstNoDamage;
     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, CurrentHedgehog, EXPLAutoSound);
     AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
     DeleteGear(Gear);
     SetAllToActive
-    end else // Gear^.Timer = 0
+    end 
+else // Gear^.Timer = 0
     begin
     AllInactive:= false;
     Gear^.Z:= cCurrHHZ;
@@ -872,7 +873,7 @@ if (Gear^.State and gstMoving) <> 0 then
 
 if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
     begin
-    inc(Gear^.FlightTime, 1);
+    inc(Gear^.FlightTime);
     if Gear^.FlightTime = 3000 then
         begin
         AddCaption(GetEventString(eidHomerun), cWhiteColor, capgrpMessage);
@@ -881,6 +882,7 @@ if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGr
     end
 else
     begin
+    uStats.hedgehogFlight(Gear, Gear^.FlightTime);
     Gear^.FlightTime:= 0;
     end;
 
@@ -1043,15 +1045,17 @@ if (Gear^.Health = 0) then
             Gear^.Hedgehog^.Effects[hePoisoned] := false;
             if Gear^.Hedgehog^.Effects[heResurrectable] then begin
                 ResurrectHedgehog(Gear);
-            end else begin
-                Gear^.State:= Gear^.State or gstHHDeath;
+            end else 
+                begin
+                Gear^.State:= (Gear^.State or gstHHDeath) and not gstAnimation;
                 Gear^.doStep:= @doStepHedgehogDead;
                 // Death message
                 AddCaption(Format(GetEventString(eidDied), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
-            end;
+                end;
             end
         else
             begin
+            Gear^.State:= Gear^.State and not gstAnimation;
             Gear^.doStep:= @doStepHedgehogGone;
 
             // Gone message
@@ -1064,13 +1068,13 @@ if (Gear^.Health = 0) then
 if ((Gear^.State and gstWait) = 0) and
     (prevState <> Gear^.State) then
     begin
-    Gear^.State:= gstWait;
+    Gear^.State:= Gear^.State or gstWait;
     Gear^.Timer:= 150
     end else
     begin
     if Gear^.Timer = 0 then
         begin
-        Gear^.State:= 0;
+        Gear^.State:= Gear^.State and not (gstWait or gstLoser or gstWinner);
         Gear^.Active:= false;
         AddGearCI(Gear);
         exit
@@ -1094,7 +1098,7 @@ if (Gear^.State and gstHHDriven) = 0 then
 else
     begin
     with Gear^.Hedgehog^ do
-        if Team^.hasGone then 
+        if Team^.hasGone then
             TeamGoneEffect(Team^)
         else
             doStepHedgehogDriven(Gear)

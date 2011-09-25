@@ -6,4 +6,4 @@ Tatsujin
 Arashi
 Bushi
 Itami
-sf_kenshi
+Kenshi

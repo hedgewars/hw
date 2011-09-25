@@ -51,7 +51,11 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
     BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
 
+
     BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
+
     bottomLine->addStretch();
 
     BtnDemos = addButton(":/res/Record.png", bottomLine, 1, true);

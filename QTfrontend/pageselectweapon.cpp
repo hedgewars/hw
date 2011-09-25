@@ -32,7 +32,11 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
     pWeapons = new SelWeaponWidget(cAmmoNumber, this);
     pageLayout->addWidget(pWeapons, 0, 0, 1, 5);
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, 2, 1, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
+
     BtnDefault = addButton(tr("Default"), pageLayout, 1, 3);
     BtnNew = addButton(tr("New"), pageLayout, 1, 2);
     BtnCopy = addButton(tr("Copy"), pageLayout, 2, 2);

@@ -32,7 +32,10 @@ PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
     QPushButton * pbLoad = addButton(tr("Load"), pageLayout, 2, 0);
     QPushButton * pbSave = addButton(tr("Save"), pageLayout, 3, 0);
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
 
     drawMapWidget = new DrawMapWidget(this);
     pageLayout->addWidget(drawMapWidget, 0, 1, 5, 1);

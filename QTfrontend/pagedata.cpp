@@ -41,7 +41,6 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     pageLayout->setColumnStretch(1, 1);
     pageLayout->setColumnStretch(2, 1);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
 
     web = new DataBrowser(this);
     connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
@@ -52,6 +51,10 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     pageLayout->addLayout(progressBarsLayout, 1, 0, 1, 3);
 
     fetchList();
+
+
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 }
 
 void PageDataDownload::request(const QUrl &url)

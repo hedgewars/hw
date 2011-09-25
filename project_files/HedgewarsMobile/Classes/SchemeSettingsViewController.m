@@ -78,7 +78,7 @@
 -(void) addScheme:(id) sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Scheme %u.plist", [self.listOfSchemes count]];
 
-    createSchemeNamed([fileName stringByDeletingPathExtension]);
+    createSchemeNamed([fileName stringByDeletingPathExtension], 0);
 
     [self.listOfSchemes addObject:fileName];
 

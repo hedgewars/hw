@@ -401,10 +401,12 @@ PageOptions::PageOptions(QWidget* parent) :
     BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 2, 2, true);
     BtnSaveOptions->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
     BtnBack->setFixedHeight(BtnSaveOptions->height());
     BtnBack->setFixedWidth(BtnBack->width()+2);
     BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 
     previousQuality = this->SLQuality->value();
     previousResolutionIndex = this->CBResolution->currentIndex();

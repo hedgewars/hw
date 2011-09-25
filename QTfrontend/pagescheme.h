@@ -31,7 +31,6 @@ class PageScheme : public AbstractPage
 public:
     PageScheme(QWidget* parent = 0);
 
-    QPushButton * BtnBack;
     QPushButton * BtnCopy;
     QPushButton * BtnNew;
     QPushButton * BtnDelete;
@@ -46,6 +45,8 @@ public slots:
     void deleteRow();
 
 private:
+    QPushButton * BtnBack;
+
     QDataWidgetMapper * mapper;
     ToggleButtonWidget * TBW_mode_Forts;
     ToggleButtonWidget * TBW_teamsDivide;

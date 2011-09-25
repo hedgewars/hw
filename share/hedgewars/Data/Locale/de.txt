@@ -53,6 +53,9 @@
 00:50=Bohr-Luftangriff
 00:51=Schlammball
 00:52=Keine Waffe ausgewählt
+00:53=ZeitBox
+00:54=Bauwerk
+00:55=Landkanone
 
 
 01:00=Auf in die Schlacht!
@@ -72,6 +75,12 @@
 01:12=Letzte Runde bis zum Sudden Death!
 01:13=%1 Runden bis zum Sudden Death!
 01:14=Mach dich bereit, %1!
+01:15=Minimale
+01:16=Niedrige
+01:17=Normale
+01:18=Hohe
+01:19=Extreme
+01:20=%1 Sprungkraft
 
 ; Event messages
 ; Hog (%1) died
@@ -233,6 +242,12 @@
 03:47=Mach es weg!
 03:48=Stop! Hammer time!
 03:49=Tut, was man vermutet
+03:50=Maulwurfsfreund
+03:51=Am Boden gefunden
+03:52=NICHT IN VERWENDUNG
+03:53=Typ 40
+03:54=Baue etwas
+03:55=Werkzeug
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
@@ -285,6 +300,13 @@
 04:47=Verdopple den Spaß mit zwei spitzigen, schicken, klebrigen Minen.|Löse eine Kettenreaktion aus oder beschütze dich (oder beides).|Angriff: Halten, um mit mehr Kraft zu feuern (zweimal)
 04:48=Warum sind Maulwürfe verhasst? Einen|Igel in den Boden zu stampfen kann sehr lustig sein!|Ein guter Treffer des Hammers wird ein Drittel|der Lebenspunkte eines Igels abziehen und ihn|im Boden versenken.|Angriff: Aktivieren
 04:49=Hol deine Freunde zurück!|Aber pass auf, dass du keine Feinde beschwörst.|Angriff: Gedrückt halten, um Igel langsam wiederauferstehen zu lassen.|Hoch: Beschleunige Totenbeschwörung
+04:50=Verstecken sich Feinde im Untergrund?|Grabe sie aus mit dem Bohr-Luftangriff!|Der Zeitzünder bestimmt wie tief dieser graben wird.
+04:51=Wirf mit Dreck um dich!|Schmerzt ein wenig und schubst Igel weg.
+04:52=NICHT IN VERWENDUNG
+04:53=Unternimm eine Reise durch Zeit und Raum,|während du deine Kameraden alleine am Schlachtfeld zurücklässt.|Sei darauf vorbereitet jederzeit wieder zurückzukommen,|oder auf Sudden Death wenn sie alle besiegt wurden.|Disclaimer: Nicht funktionstüchtig wenn in Sudden Death,|wenn du alleine bist - oder der König.
+04:54=IN ARBEIT
+
+04:55=Versprühe einen Strahl klebriger Flocken.|Baue Brücken, begrabe Gegner, versiegle Tunnel.|Pass auf, dass du selbst nichts abbekommst!
 
 ; Game goal strings
 05:00=Spielmodifikationen
@@ -303,3 +325,10 @@
 05:13=Minenzünder: Minen explodieren sofort
 05:14=Minenzünder: Minen explodieren nach 0 - 3 Sekunden
 05:15=Prozentualer Schaden: Alle Waffen verursachen %1 % Schaden
+05:16=Lebenspunkter aller Igel wird am Ende jeder Runde zurückgesetzt
+05:17=Computergesteuerte Igel erscheinen nach dem Tod wieder
+05:18=Unbegrenzte Attacken
+05:19=Waffen werden am Ende jedes Zuges zurückgesetzt
+05:20=Igel teilen Waffen nicht untereinander
+05:21=Tag Team: Teams gleicher Farbe kommen nacheinander dran und teilen sich ihre Zugzeit.
+

@@ -435,7 +435,7 @@ with Team do
                 begin
                 Gear^.Invulnerable:= false;
                 Gear^.Damage:= Gear^.Health;
-                Gear^.State:= Gear^.State or gstHHGone
+                Gear^.State:= (Gear^.State or gstHHGone) and not gstHHDriven
                 end
             end
 end;

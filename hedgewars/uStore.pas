@@ -587,7 +587,11 @@ end;
 
 procedure SetupOpenGL;
 //var vendor: shortstring = '';
+var buf: array[byte] of char;
 begin
+    buf[0]:= char(0); // avoid compiler hint
+    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
+
 {$IFDEF SDL13}
     // this function creates an opengles1.1 context by default on mobile devices
     // use SDL_GL_SetAttribute to change this behaviour
@@ -945,18 +949,16 @@ end;
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
-    ico: PSDL_Surface;
-    buf: array[byte] of char;
+    {$IFNDEF IPHONEOS}ico: PSDL_Surface;{$ENDIF}
     reinit: boolean;
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
     if Length(s) = 0 then cFullScreen:= not cFullScreen
     else cFullScreen:= s = '1';
 
-    buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Preparing to change video parameters...');
-
     reinit:= false;
+{$IFNDEF IPHONEOS}
     if SDLPrimSurface = nil then
         begin
         // set window title
@@ -990,6 +992,7 @@ begin
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
         end;
+{$ENDIF}
 
     // these attributes must be set up before creating the sdl window
 {$IFNDEF WIN32}
@@ -1014,8 +1017,9 @@ begin
     flags:= flags or SDL_WINDOW_BORDERLESS or SDL_WINDOW_RESIZABLE;
 {$ENDIF}
 
-    if cFullScreen then SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
-    else SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
+    if SDLwindow = nil then
+        if cFullScreen then SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
+        else SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
     flags:= SDL_OPENGL or SDL_RESIZABLE;
@@ -1034,7 +1038,6 @@ begin
         end;
 {$ENDIF}
 
-    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
     SetupOpenGL();
     if reinit then
         begin

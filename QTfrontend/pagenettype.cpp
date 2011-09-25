@@ -37,5 +37,7 @@ PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
     // hack: temporary deactivated - requires server modifications that aren't backward compatible (yet)
     //BtnOfficialServer->setEnabled(false);
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 }

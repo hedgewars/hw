@@ -25,7 +25,6 @@
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 #import <QuartzCore/QuartzCore.h>
-#import <AudioToolbox/AudioToolbox.h>
 #import <CommonCrypto/CommonDigest.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import <netinet/in.h>
@@ -63,10 +62,6 @@ void print_free_memory () {
 #endif
 }
 
-BOOL inline isApplePhone () {
-    return (IS_IPAD() == NO);
-}
-
 NSString *getModelType () {
     size_t size;
     // set 'oldp' parameter to NULL to get the size of the data returned so we can allocate appropriate amount of space
@@ -78,21 +73,6 @@ NSString *getModelType () {
     free(name);
 
     return modelId;
-}
-
-void playSound (NSString *snd) {
-    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"sound"] boolValue] == YES) {
-        // get the filename of the sound file:
-        NSString *path = [NSString stringWithFormat:@"%@/%@.wav",[[NSBundle mainBundle] resourcePath],snd];
-
-        // declare a system sound id and get a URL for the sound file
-        SystemSoundID soundID;
-        NSURL *filePath = [NSURL fileURLWithPath:path isDirectory:NO];
-
-        // use audio sevices to create and play the sound
-        AudioServicesCreateSystemSoundID((CFURLRef)filePath, &soundID);
-        AudioServicesPlaySystemSound(soundID);
-    }
 }
 
 NSArray *getAvailableColors (void) {

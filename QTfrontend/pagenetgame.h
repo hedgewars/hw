@@ -33,7 +33,6 @@ class PageNetGame : public AbstractPage
 public:
     PageNetGame(QWidget* parent, QSettings * config, SDLInteraction * sdli);
 
-    QPushButton *BtnBack;
     QPushButton *BtnGo;
     QPushButton *BtnMaster;
     QPushButton *BtnStart;
@@ -48,6 +47,9 @@ public:
 
     TeamSelWidget* pNetTeamsWidget;
     GameCFGWidget* pGameCFG;
+
+private:
+    QPushButton *BtnBack;
 
 public slots:
     void setReadyStatus(bool isReady);

@@ -28,10 +28,7 @@
 #import "UIImageExtra.h"
 #import "CommodityFunctions.h"
 #import "HedgewarsAppDelegate.h"
-#import "SDL.h"
-#import "SDL_video.h"
-#import "SDL_net.h"
-#import "SDL_mixer.h"
+#import "AudioManagerController.h"
 #endif
 
 

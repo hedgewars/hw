@@ -31,21 +31,21 @@ public:
     HWNamegen();
     ~HWNamegen();
 
-    void TeamRandomName(HWTeam*& team, const int HedgehogNumber);
-    void TeamRandomNames(HWTeam*& team, const bool changeteamname);
-    void RandomNameByHat(HWTeam*& team, const int HedgehogNumber);
+    void teamRandomName(HWTeam & team, const int HedgehogNumber);
+    void teamRandomNames(HWTeam & team, const bool changeteamname);
+    void randomNameByHat(HWTeam & team, const int HedgehogNumber);
 
 private:
 
         QList<QStringList> TypesTeamnames;
         QList<QStringList> TypesHatnames;
-        bool TypesAvliable;
-        void TypesLoad();
-        void DictLoad(const QString filename, QStringList &list);
-        void HatCfgLoad(const QString hatname, QStringList &list);
+        bool typesAvailable;
+        void loadTypes();
+        void dictLoad(const QString filename, QStringList &list);
+        void hatCfgLoad(const QString hatname, QStringList &list);
 
-		QString GetRandomGrave();
-		QString GetRandomFort();
+        QString getRandomGrave();
+        QString getRandomFort();
 };
 
 

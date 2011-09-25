@@ -27,8 +27,10 @@
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
+#import "GameInterfaceBridge.h"
 #import "Appirater.h"
 #import "ServerSetup.h"
+
 
 @implementation MainMenuViewController
 @synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController, restoreViewController;
@@ -71,16 +73,19 @@
     // SCHEMES - always overwrite and delete custom ones
     if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
         [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
-    NSString *baseSchemesDir = [[NSString alloc] initWithFormat:@"%@/Settings/Schemes/",resourcesDir];
-    [[NSFileManager defaultManager] copyItemAtPath:baseSchemesDir toPath:SCHEMES_DIRECTORY() error:NULL];
-    [baseSchemesDir release];
+    createSchemeNamed(@"Default", 0);
+    createSchemeNamed(@"Pro Mode", 1);
+    createSchemeNamed(@"Shoppa", 2);
+    createSchemeNamed(@"Clean Slate", 3);
+    createSchemeNamed(@"Minefield", 4);
+    createSchemeNamed(@"Barrel Mayhem", 5);
+    createSchemeNamed(@"Tunnel Hogs", 6);
+    createSchemeNamed(@"Fort Mode", 7);
+    createSchemeNamed(@"Timeless", 8);
+    createSchemeNamed(@"Thinking with Portals", 9);
+    createSchemeNamed(@"King Mode", 10);
 
     // WEAPONS - always overwrite
-    if ([[NSFileManager defaultManager] fileExistsAtPath:WEAPONS_DIRECTORY()] == NO)
-        [[NSFileManager defaultManager] createDirectoryAtPath:WEAPONS_DIRECTORY()
-                                  withIntermediateDirectories:YES
-                                                   attributes:nil
-                                                        error:NULL];
     createWeaponNamed(@"Default", 0);
     createWeaponNamed(@"Crazy", 1);
     createWeaponNamed(@"Pro Mode", 2);
@@ -102,9 +107,6 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *trackingVersion = [userDefaults stringForKey:@"HedgeVersion"];
 
-    if ([[userDefaults objectForKey:@"music"] boolValue])
-        [HedgewarsAppDelegate playBackgroundMusic];
-
     if (trackingVersion == nil || [trackingVersion isEqualToString:version] == NO) {
         // remove any reminder of previous games as saves are going to be wiped out
         [userDefaults setObject:@"" forKey:@"savedGamePath"];
@@ -118,6 +120,7 @@
     // prompt for restoring any previous game
     NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
     if (saveString != nil && [saveString isEqualToString:@""] == NO) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchRestoredGame) name:@"launchRestoredGame" object:nil];
         if (self.restoreViewController == nil) {
             NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
             RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
@@ -126,7 +129,7 @@
             self.restoreViewController = restored;
             [restored release];
         }
-        [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.3];
+        [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.25];
     } else {
         // let's not prompt for rating when app crashed >_>
         [Appirater appLaunched];
@@ -145,6 +148,10 @@
     */
 }
 
+-(void) viewWillAppear:(BOOL)animated {
+    [AudioManagerController playBackgroundMusic];
+    [super viewWillAppear:animated];
+}
 
 #pragma mark -
 -(IBAction) switchViews:(id) sender {
@@ -153,7 +160,7 @@
     NSString *xib = nil;
     NSString *debugStr = nil;
 
-    playSound(@"clickSound");
+    [AudioManagerController playClickSound];
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {
@@ -232,6 +239,15 @@
     }
 }
 
+#pragma mark -
+-(void) launchRestoredGame {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+    [bridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
+    [bridge release];
+}
+
+#pragma mark -
 -(void) viewDidUnload {
     self.gameConfigViewController = nil;
     self.settingsViewController = nil;

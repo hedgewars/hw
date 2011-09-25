@@ -49,10 +49,13 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     BtnSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
     connect(BtnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
     BtnBack->setFixedHeight(BtnSave->height());
     BtnBack->setFixedWidth(BtnBack->width()+2);
     BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
 
     QGroupBox * gb = new QGroupBox(this);
     QVBoxLayout * gbl = new QVBoxLayout;
@@ -180,12 +183,12 @@ void PageGameStats::GameStats(char type, const QString & info)
             //AddStatText("<p>local team: " + info + "</p>");
             QStringList infol = info.split(":");
             HWTeam team(infol[0]);
-            if(team.FileExists()) // do some better test to avoid influence from scripted/predefined teams?
+            if(team.fileExists()) // do some better test to avoid influence from scripted/predefined teams?
             {
-                team.LoadFromFile();
-                team.Rounds++;
+                team.loadFromFile();
+                team.incRounds();
                 if(infol[1].toInt() > 0) // might require some better test for winning condition (or changed flag) ... WIP!
-                    team.Wins++; // should draws count as wins?
+                    team.incWins(); // should draws count as wins?
                 //team.SaveToFile(); // don't save yet
             }
             break;

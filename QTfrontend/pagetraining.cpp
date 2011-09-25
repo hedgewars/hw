@@ -63,5 +63,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     BtnStartTrain->setText(QPushButton::tr("Go!"));
     pageLayout->addWidget(BtnStartTrain, 1, 2);
 
+
     BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 }

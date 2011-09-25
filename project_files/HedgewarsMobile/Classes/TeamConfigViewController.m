@@ -102,7 +102,9 @@
 }
 
 -(UIImage *)drawHogsRepeated:(NSInteger) manyTimes {
-    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:HEDGEHOG_FILE()];
+    NSString *imgString = [[NSString alloc] initWithFormat:@"%@/hedgehog.png",[[NSBundle mainBundle] resourcePath]];
+    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:imgString];
+    [imgString release];
     CGFloat screenScale = getScreenScale();
     int w = hogSprite.size.width * screenScale;
     int h = hogSprite.size.height * screenScale;
@@ -185,8 +187,9 @@
         NSString *teamPath = [NSString stringWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),cell.textLabel.text];
         NSDictionary *firstHog = [[[NSDictionary dictionaryWithContentsOfFile:teamPath] objectForKey:@"hedgehogs"] objectAtIndex:0];
         if ([[firstHog objectForKey:@"level"] intValue] != 0) {
-            NSString *filePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Settings/Images/robotBadge.png"];
-            UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath];
+            NSString *imgString = [[NSString alloc] initWithFormat:@"%@/robotBadge.png",[[NSBundle mainBundle] resourcePath]];
+            UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:imgString];
+            [imgString release];
             UIImageView *spriteView = [[UIImageView alloc] initWithImage:sprite];
             [sprite release];
             

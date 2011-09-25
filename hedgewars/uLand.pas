@@ -1234,16 +1234,16 @@ begin
 for w:= 0 to 23 do
     for x:= leftX to rightX do
         begin
-        Land[cWaterLine-1 - w, x]:= lfIndestructible;
+        Land[Longword(cWaterLine) - 1 - w, x]:= lfIndestructible;
         if (x + w) mod 32 < 16 then
             c:= AMask
         else
             c:= AMask or RMask or GMask; // FF00FFFF
 
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[cWaterLine-1 - w, x]:= c
+            LandPixels[Longword(cWaterLine) - 1 - w, x]:= c
         else
-            LandPixels[(cWaterLine-1 - w) div 2, x div 2]:= c
+            LandPixels[(Longword(cWaterLine) - 1 - w) div 2, x div 2]:= c
         end
 end;
 

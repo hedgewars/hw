@@ -41,6 +41,7 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
     pChatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
     pageLayout->setRowStretch(1, 100);
+    pageLayout->setRowStretch(2, 100);
 
     pGameCFG = new GameCFGWidget(this);
     pageLayout->addWidget(pGameCFG, 0, 0);
@@ -58,7 +59,10 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
     QHBoxLayout * bottomLayout = new QHBoxLayout;
     pageLayout->addLayout(bottomLayout, 4, 0, 1, 2);
 
+
     BtnBack = addButton(":/res/Exit.png", bottomLayout, 0, true);
+    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+
 
     leRoomName = new QLineEdit(this);
     leRoomName->setMaxLength(60);

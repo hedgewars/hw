@@ -101,6 +101,7 @@ begin
         gsExit: begin
                 isTerminated:= true;
                 end;
+        gsSuspend: exit;
         end;
 
 {$IFDEF SDL13}
@@ -112,18 +113,18 @@ begin
     if flagMakeCapture then
     begin
         flagMakeCapture:= false;
-        {$IFNDEF IPHONEOS}
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
 
         playSound(sndShutter);
+{$IFNDEF IPHONEOS}
         if not MakeScreenshot(s) then
         begin
             WriteLnToConsole('Screenshot failed.');
             AddChatString(#5 + 'screen capture failed (lack of memory or write permissions)');
         end
         else
+{$ENDIF}
             WriteLnToConsole('Screenshot saved: ' + s);
-        {$ENDIF}
     end;
 end;
 
@@ -153,17 +154,21 @@ procedure MainLoop;
 const event: TSDL_Event = ();
 {$WARNINGS ON}
 var PrevTime, CurrTime: Longword;
+{$IFDEF SDL13}
+    previousGameState: TGameState;
+{$ELSE}
     prevFocusState: boolean;
+{$ENDIF}
 begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
         SDL_PumpEvents();
-        {$IFDEF SDL13}
+{$IFDEF SDL13}
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
-        {$ELSE}
+{$ELSE}
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_ALLEVENTS) > 0 do
-        {$ENDIF}
+{$ENDIF}
         begin
             case event.type_ of
                 SDL_KEYDOWN: if GameState = gsChat then
@@ -175,6 +180,21 @@ begin
                         begin
                         cHasFocus:= true;
                         onFocusStateChanged()
+                        end
+                    else if event.window.event = SDL_WINDOWEVENT_MINIMIZED then
+                        begin
+                        previousGameState:= GameState;
+                        GameState:= gsSuspend;
+                        end
+                    else if event.window.event = SDL_WINDOWEVENT_RESTORED then
+                        begin
+                        GameState:= previousGameState;
+                        end
+                    else if event.window.event = SDL_WINDOWEVENT_RESIZED then
+                        begin
+                        cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
+                        cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
+                        cScreenResizeDelay:= RealTicks+500;
                         end;
                 SDL_FINGERMOTION: onTouchMotion(event.tfinger.x, event.tfinger.y,event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
                 SDL_FINGERDOWN: onTouchDown(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);

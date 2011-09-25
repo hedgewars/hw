@@ -28,9 +28,6 @@ class PageAdmin : public AbstractPage
 public:
     PageAdmin(QWidget* parent = 0);
 
-    QPushButton * BtnBack;
-    QPushButton * pbClearAccountsCache;
-
 private:
     QLineEdit * leServerMessageNew;
     QLineEdit * leServerMessageOld;
@@ -38,6 +35,8 @@ private:
     QPushButton * pbAsk;
     QSpinBox * sbProtocol;
     QTextBrowser * tb;
+    QPushButton * BtnBack;
+    QPushButton * pbClearAccountsCache;
 
 private slots:
     void smChanged();
@@ -52,6 +51,7 @@ signals:
     void setServerMessageOld(const QString & str);
     void setProtocol(int proto);
     void askServerVars();
+    void clearAccountsCache();
 };
 
 #endif

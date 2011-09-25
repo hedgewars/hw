@@ -29,9 +29,11 @@ public:
     PageCampaign(QWidget* parent = 0);
 
     QPushButton *BtnStartCampaign;
-    QPushButton *BtnBack;
     QComboBox   *CBSelect;
     QComboBox   *CBTeam;
+
+private:
+    QPushButton *BtnBack;
 };
 
 #endif
