@@ -290,7 +290,7 @@ for ii:= Low(TSprite) to High(TSprite) do
            ((vobCount > 0) or (ii <> sprFlake)) then
         begin
             if AltPath = ptNone then
-                if ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk] then // FIXME: hack
+                if ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk, sprFireButton] then // FIXME: hack
                     begin
                     if not reload then
                         begin

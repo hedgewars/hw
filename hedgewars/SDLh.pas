@@ -83,19 +83,11 @@ const
     SDL_ImageLibName = 'SDL_image';
     SDL_NetLibName = 'SDL_net';
   {$ELSE}
-    {$IFDEF ANDROID}
-        SDLLibName = 'SDL';
-	SDL_TTFLibName = 'libSDL_ttf.so';
-	SDL_MixerLibName = 'libSDL_mixer.so';
-	SDL_ImageLibName = 'libSDL_image.so';
-	SDL_NetLibName = 'libSDL_net.so';
-    {$ELSE}
-        SDLLibName = 'SDL';
-        SDL_TTFLibName = 'libSDL_ttf.so';
-        SDL_MixerLibName = 'libSDL_mixer.so';
-	SDL_ImageLibName = 'libSDL_image.so';
-	SDL_NetLibName = 'libSDL_net.so';
-    {$ENDIF}
+    SDLLibName = 'SDL';
+    SDL_TTFLibName = 'libSDL_ttf.so';
+    SDL_MixerLibName = 'libSDL_mixer.so';
+    SDL_ImageLibName = 'libSDL_image.so';
+    SDL_NetLibName = 'libSDL_net.so';
   {$ENDIF}
 {$ENDIF}
 

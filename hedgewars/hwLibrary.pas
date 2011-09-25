@@ -18,14 +18,6 @@
 
 Library hwLibrary;
 
-{$IFDEF fpc}
-{$MODE delphi}
-{$ENDIF}
-
-{$IFDEF ANDROID}
-    {$MACRO ON}
-    {$DEFINE Java_Prefix := 'Java_org_hedgewars_mobile_EngineProtocol_PascalExports_'}
-{$ENDIF}
 
 // Add all your Pascal units to the "uses" clause below to add them to the program.
 // Mark all Pascal procedures/functions that you wish to call from C/C++/Objective-C code using
@@ -33,8 +25,8 @@ Library hwLibrary;
 // these procedures/functions to the PascalImports.h file (also in the "Pascal Sources" group)
 // to make these functions available in the C/C++/Objective-C source files
 // (add "#include PascalImports.h" near the top of these files if it's not there yet)
-uses PascalExports, hwengine{$IFDEF ANDROID},jni{$ENDIF};
-exports Game{$IFNDEF ANDROID}, HW_versionInfo{$ENDIF};
+uses PascalExports, hwengine{$IFDEF ANDROID}, jni{$ENDIF};
+exports Game, HW_versionInfo;
 
 function JNI_HW_versionInfoNet(env: PJNIEnv; obj: JObject):JInt;cdecl;
 begin
@@ -48,7 +40,7 @@ end;
 
 
 {$IFDEF ANDROID}
-    exports
+exports
     JNI_HW_versionInfoNet name Java_Prefix+'HWversionInfoNetProto', 
     JNI_HW_versionInfoVersion name Java_Prefix+'HWversionInfoVersion', 
     GenLandPreview name Java_Prefix + 'GenLandPreview',
