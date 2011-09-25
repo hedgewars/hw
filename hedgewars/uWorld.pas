@@ -913,9 +913,10 @@ if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) th
 // Captions
 DrawCaptions;
 
+{$IFDEF ANDROID}
 // Draw buttons Related to the Touch interface
 DrawTexture(Round(-cScreenWidth*0.5 + cScreenHeight*0.02),Round((cScreenHeight*0.98)-(spritesData[sprFireButton].Height*0.4) ),spritesData[sprFireButton].Texture, 0.4);
-
+{$ENDIF}
 // Teams Healths
 if TeamsCount * 20 > cScreenHeight div 7 then  // take up less screen on small displays
     begin
