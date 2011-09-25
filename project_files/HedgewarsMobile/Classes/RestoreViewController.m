@@ -23,7 +23,6 @@
 #import "GameInterfaceBridge.h"
 
 @implementation RestoreViewController
-@synthesize interfaceBridge;
 
 // Override to allow orientations other than the default portrait orientation.
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -37,16 +36,8 @@
 
     if (theButton.tag != 0) {
         [AudioManagerController playClickSound];
-        if (self.interfaceBridge == nil) {
-            GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self.parentViewController];
-            self.interfaceBridge = bridge;
-            [bridge release];
-        }
-        // TODO: it is useless to keep the modalcontroller around when calling interfacebridge
-        // but as long as it is an instance we mustn't release it beforehand
-        // moreover in this way the stats don't show up :/
-        [self.interfaceBridge startSaveGame:[defaults objectForKey:@"savedGamePath"]];
         [self.parentViewController dismissModalViewControllerAnimated:NO];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"launchRestoredGame" object:nil];
     } else {
         [AudioManagerController playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
@@ -68,18 +59,14 @@
 }
 
 -(void) didReceiveMemoryWarning {
-    // don't nil this one or it won't be able to send messages
-    //self.interfaceBridge = nil;
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
-    self.interfaceBridge = nil;
     [super viewDidUnload];
 }
 
 -(void) dealloc {
-    releaseAndNil(interfaceBridge);
     [super dealloc];
 }
 

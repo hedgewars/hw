@@ -165,6 +165,8 @@
     [userDefaults synchronize];
 
     // now we can remove the cover with a transition
+    blackView.frame = theFrame;
+    blackView.alpha = 1;
     [UIView beginAnimations:@"fade in" context:NULL];
     [UIView setAnimationDuration:1];
     blackView.alpha = 0;
@@ -210,7 +212,9 @@
 }
 
 -(void) gameHasEndedWithStats:(NSArray *)stats {
-    // display stats page
+    // wrap this around a retain/realse to prevent being deallocated too soon
+    [self retain];
+    // display stats page if there is something to display
     if (stats != nil) {
         StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
         statsPage.statsArray = stats;
@@ -225,6 +229,7 @@
     // can remove the savefile if the replay has ended
     if (self.gameType == gtSave)
         [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
+    [self release];
 }
 
 @end

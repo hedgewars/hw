@@ -27,6 +27,7 @@
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
+#import "GameInterfaceBridge.h"
 #import "Appirater.h"
 #import "ServerSetup.h"
 
@@ -119,6 +120,7 @@
     // prompt for restoring any previous game
     NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
     if (saveString != nil && [saveString isEqualToString:@""] == NO) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchRestoredGame) name:@"launchRestoredGame" object:nil];
         if (self.restoreViewController == nil) {
             NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
             RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
@@ -127,7 +129,7 @@
             self.restoreViewController = restored;
             [restored release];
         }
-        [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.3];
+        [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.25];
     } else {
         // let's not prompt for rating when app crashed >_>
         [Appirater appLaunched];
@@ -237,6 +239,15 @@
     }
 }
 
+#pragma mark -
+-(void) launchRestoredGame {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+    [bridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
+    [bridge release];
+}
+
+#pragma mark -
 -(void) viewDidUnload {
     self.gameConfigViewController = nil;
     self.settingsViewController = nil;
