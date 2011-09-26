@@ -75,9 +75,6 @@ class AbstractPage : public QWidget
             // instead define a signal with a meaningful name and connect the widget
             // signals to your page signals
             virtual void connectSignals() {};
-/*
-virtual QLayout * bodyLayoutDefinition()\n{\n    return new QGridLayout(); //TODO\n}\n\nvirtual QLayout * footerLayoutDefinition()\n{\n    // return NULL;\n}\n\nvirtual void connectSignals()\n{\n    //TODO\n}\n\n
-*/
 
         virtual ~AbstractPage() {};
 
