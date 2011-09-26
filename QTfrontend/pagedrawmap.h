@@ -32,8 +32,15 @@ public:
 
     DrawMapWidget * drawMapWidget;
 
+protected:
+    QLayout * bodyLayoutDefinition();
+    void connectSignals();
+
 private:
-    QPushButton * BtnBack;
+    QPushButton * pbUndo;
+    QPushButton * pbClear;
+    QPushButton * pbLoad;
+    QPushButton * pbSave;
 
 private slots:
     void load();

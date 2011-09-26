@@ -22,9 +22,10 @@
 #include "pageinfo.h"
 #include "about.h"
 
-PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
+QLayout * PageInfo::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
+
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 1);
     pageLayout->setColumnStretch(2, 1);
@@ -34,7 +35,21 @@ PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
     about = new About(this);
     pageLayout->addWidget(about, 0, 0, 1, 3);
 
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+    return pageLayout;
 }
+
+QLayout * PageInfo::footerLayoutDefinition()
+{
+   return NULL; // TODO: move screenshot button here
+}
+
+void PageInfo::connectSignals()
+{
+    //TODO
+}
+
+PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
+}
+

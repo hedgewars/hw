@@ -17,6 +17,7 @@
  */
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QComboBox>
@@ -30,10 +31,10 @@
 #include "pagescheme.h"
 #include "misc.h"
 
-PageScheme::PageScheme(QWidget* parent) :
-    AbstractPage(parent)
+
+QLayout * PageScheme::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
     QGroupBox * gb = new QGroupBox(this);
 
     QGridLayout * gl = new QGridLayout();
@@ -47,6 +48,7 @@ PageScheme::PageScheme(QWidget* parent) :
     gbGameModes = new QGroupBox(QGroupBox::tr("Game Modifiers"), gb);
     gbBasicSettings = new QGroupBox(QGroupBox::tr("Basic Settings"), gb);
 
+    // TODO name stuff and put CSS into main style sheet
     gbGameModes->setStyleSheet(".QGroupBox {"
             "background-color: #130f2c; background-image:url();"
             "}");
@@ -388,25 +390,39 @@ PageScheme::PageScheme(QWidget* parent) :
     gl->addWidget(LE_name,15,1,1,5);
     gl->addWidget(l,15,0,1,1);
 
-    mapper = new QDataWidgetMapper(this);
+    return pageLayout;
+}
 
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 16, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
-
-
-    BtnCopy = addButton(tr("Copy"), pageLayout, 16, 2);
-    BtnNew = addButton(tr("New"), pageLayout, 16, 3);
-    BtnDelete = addButton(tr("Delete"), pageLayout, 16, 4);
-
+QLayout * PageScheme::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
     selectScheme = new QComboBox(this);
-    pageLayout->addWidget(selectScheme, 16, 1);
 
+    bottomLayout->addWidget(selectScheme, 0);
+    BtnCopy = addButton(tr("Copy"), bottomLayout, 1);
+    BtnNew = addButton(tr("New"), bottomLayout, 2);
+    BtnDelete = addButton(tr("Delete"), bottomLayout, 3);
+
+    bottomLayout->setStretch(1,1);
+    bottomLayout->setStretch(2,1);
+    bottomLayout->setStretch(3,1);
+
+    return bottomLayout;
+}
+
+void PageScheme::connectSignals()
+{
     connect(BtnCopy, SIGNAL(clicked()), this, SLOT(copyRow()));
     connect(BtnNew, SIGNAL(clicked()), this, SLOT(newRow()));
     connect(BtnDelete, SIGNAL(clicked()), this, SLOT(deleteRow()));
+    mapper = new QDataWidgetMapper(this);
     connect(selectScheme, SIGNAL(currentIndexChanged(int)), mapper, SLOT(setCurrentIndex(int)));
     connect(selectScheme, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeSelected(int)));
+}
+
+PageScheme::PageScheme(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }
 
 void PageScheme::setModel(QAbstractItemModel * model)
@@ -490,3 +506,5 @@ void PageScheme::schemeSelected(int n)
     gbBasicSettings->setEnabled(n >= c);
     LE_name->setEnabled(n >= c);
 }
+
+

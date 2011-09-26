@@ -59,6 +59,7 @@ public:
     QSettings * gameSettings; // Same file GameUIConfig points to but without the baggage.  Needs sync() calls if you want to get GameUIConfig changes though
     void updateXfire();
     void PlayDemoQuick(const QString & demofilename);
+    void exit();
 
 private slots:
     void GoToSaves();
@@ -76,7 +77,6 @@ private slots:
     QString getDemoArguments();
     void AssociateFiles();
     void btnExitPressed();
-    void btnExitClicked();
     void IntermediateSetup();
     void NewTeam();
     void EditTeam(const QString & teamName);

@@ -19,6 +19,8 @@
 #ifndef PAGE_TRAINING_H
 #define PAGE_TRAINING_H
 
+#include <QDir>
+
 #include "AbstractPage.h"
 
 class PageTraining : public AbstractPage
@@ -31,8 +33,12 @@ public:
     QPushButton *BtnStartTrain;
     QComboBox   *CBSelect;
 
+protected:
+    QLayout * bodyLayoutDefinition();
+    void connectSignals();
+
 private:
-    QPushButton *BtnBack;
+    QStringList scriptList(const QDir & scriptDir) const;
 };
 
 #endif

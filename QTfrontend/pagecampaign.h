@@ -32,8 +32,8 @@ public:
     QComboBox   *CBSelect;
     QComboBox   *CBTeam;
 
-private:
-    QPushButton *BtnBack;
+protected:
+    QLayout * bodyLayoutDefinition();
 };
 
 #endif

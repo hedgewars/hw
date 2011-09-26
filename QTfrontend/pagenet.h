@@ -34,19 +34,21 @@ public:
     QPushButton * BtnNetSvrStart;
     QPushButton * BtnSpecifyServer;
 
-private:
-    QGroupBox * ConnGroupBox;
-    QGridLayout * GBClayout;
-    QPushButton * BtnBack;
-
-private slots:
-    void slotConnect();
-
 public slots:
     void updateServersList();
 
 signals:
     void connectClicked(const QString & host, quint16 port);
+
+private:
+    QLayout * bodyLayoutDefinition();
+    void connectSignals();
+
+    QGroupBox * ConnGroupBox;
+    QGridLayout * GBClayout;
+
+private slots:
+    void slotConnect();
 };
 
 #endif

@@ -165,8 +165,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnDataDownload, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnDataDownload, ID_PAGE_DATADOWNLOAD);
 
-    connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
-    connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
+    //connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
+    //connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
     connect(ui.pageEditTeam, SIGNAL(teamEdited()), this, SLOT(AfterTeamEdit()));
 
@@ -186,8 +186,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageOptions, SIGNAL(newTeamRequested()), this, SLOT(NewTeam()));
     connect(ui.pageOptions, SIGNAL(editTeamRequested(const QString&)), this, SLOT(EditTeam(const QString&)));
     connect(ui.pageOptions, SIGNAL(deleteTeamRequested(const QString&)), this, SLOT(DeleteTeam(const QString&)));
-    connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), config, SLOT(SaveOptions()));
-    connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), this, SLOT(GoBack()));
+    connect(ui.pageOptions->btnSave, SIGNAL(clicked()), config, SLOT(SaveOptions()));
+    connect(ui.pageOptions->btnSave, SIGNAL(clicked()), this, SLOT(GoBack()));
     connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
@@ -533,8 +533,11 @@ void HWForm::GoToPage(int id)
 
 void HWForm::GoBack()
 {
-    int id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
     int curid = ui.Pages->currentIndex();
+    if (curid == ID_PAGE_MAIN)
+        exit();
+
+    int id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
     ui.Pages->setCurrentIndex(id);
     OnPageShown(id, curid);
 
@@ -569,14 +572,15 @@ void HWForm::btnExitPressed()
     eggTimer.start();
 }
 
-void HWForm::btnExitClicked()
+void HWForm::exit()
 {
-    if (eggTimer.elapsed() < 3000){
+//   if (eggTimer.elapsed() < 3000){
 #ifdef __APPLE__
         panel->showInstallController();
 #endif
         close();
-    }
+// TODO reactivate egg
+/*    }
     else
     {
         QPushButton * btn = findChild<QPushButton *>("imageButt");
@@ -584,7 +588,7 @@ void HWForm::btnExitClicked()
         {
             btn->setIcon(QIcon(":/res/bonus.png"));
         }
-    }
+    } */
 }
 
 void HWForm::IntermediateSetup()

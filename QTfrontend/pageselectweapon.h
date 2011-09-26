@@ -30,7 +30,7 @@ class PageSelectWeapon : public AbstractPage
 public:
     PageSelectWeapon(QWidget* parent = 0);
 
-    QPushButton *BtnSave;
+    QPushButton *btnSave;
     QPushButton *BtnDefault;
     QPushButton *BtnDelete;
     QPushButton *BtnNew;
@@ -38,8 +38,10 @@ public:
     SelWeaponWidget* pWeapons;
     QComboBox* selectWeaponSet;
 
-private:
-    QPushButton *BtnBack;
+protected:
+    QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
+    void connectSignals();
 };
 
 #endif

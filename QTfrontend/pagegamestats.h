@@ -43,7 +43,7 @@ class PageGameStats : public AbstractPage
 public:
     PageGameStats(QWidget* parent = 0);
 
-    QPushButton *BtnSave;
+    QPushButton *btnSave;
     QLabel *labelGameStats;
     QLabel *labelGameWin;
     QLabel *labelGameRank;
@@ -64,7 +64,10 @@ private:
     unsigned int playerPosition;
     quint32 lastColor;
 
-    QPushButton *BtnBack;
+protected:
+    QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
+    void connectSignals();
 };
 
 #endif // STATSPAGE_H

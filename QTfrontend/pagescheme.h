@@ -34,7 +34,7 @@ public:
     QPushButton * BtnCopy;
     QPushButton * BtnNew;
     QPushButton * BtnDelete;
-    QPushButton * BtnSave;
+    QPushButton * btnSave;
     QComboBox * selectScheme;
 
     void setModel(QAbstractItemModel * model);
@@ -44,9 +44,12 @@ public slots:
     void copyRow();
     void deleteRow();
 
-private:
-    QPushButton * BtnBack;
+protected:
+    QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
+    void connectSignals();
 
+private:
     QDataWidgetMapper * mapper;
     ToggleButtonWidget * TBW_mode_Forts;
     ToggleButtonWidget * TBW_teamsDivide;
@@ -96,7 +99,6 @@ private:
 
 private slots:
     void schemeSelected(int);
-
 };
 
 #endif

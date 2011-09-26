@@ -26,14 +26,12 @@
 #include "pageadmin.h"
 #include "chatwidget.h"
 
-PageAdmin::PageAdmin(QWidget* parent) :
-    AbstractPage(parent)
+QLayout * PageAdmin::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
 
     // 0
     pbAsk = addButton(tr("Fetch data"), pageLayout, 0, 0, 1, 3);
-    connect(pbAsk, SIGNAL(clicked()), this, SIGNAL(askServerVars()));
     
     // 1
     QLabel * lblSMN = new QLabel(this);
@@ -68,21 +66,28 @@ PageAdmin::PageAdmin(QWidget* parent) :
     tb->setOpenExternalLinks(true);
     tb->document()->setDefaultStyleSheet(HWChatWidget::STYLE);
     pageLayout->addWidget(tb, 4, 1, 1, 2);
-    connect(leServerMessageNew, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
-    connect(leServerMessageOld, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
     
     // 5
     pbClearAccountsCache = addButton(tr("Clear Accounts Cache"), pageLayout, 5, 0);
-    connect(pbClearAccountsCache, SIGNAL(clicked()), this, SIGNAL(clearAccountsCache()));
     
     // 6
     pbSetSM = addButton(tr("Set data"), pageLayout, 6, 0, 1, 3);
+
+    return pageLayout;
+}
+
+void PageAdmin::connectSignals()
+{
+    connect(pbAsk, SIGNAL(clicked()), this, SIGNAL(askServerVars()));
+    connect(leServerMessageNew, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
+    connect(leServerMessageOld, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
+    connect(pbClearAccountsCache, SIGNAL(clicked()), this, SIGNAL(clearAccountsCache()));
     connect(pbSetSM, SIGNAL(clicked()), this, SLOT(smChanged()));
+}
 
-
-    // 7
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 7, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+PageAdmin::PageAdmin(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }
 
 void PageAdmin::smChanged()

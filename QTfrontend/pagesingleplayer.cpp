@@ -22,18 +22,17 @@
 #include "pagesingleplayer.h"
 #include "gamecfgwidget.h"
 
-PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
+QLayout * PageSinglePlayer::bodyLayoutDefinition()
 {
-    QVBoxLayout * vLayout = new QVBoxLayout(this);
+    QVBoxLayout * vLayout = new QVBoxLayout();
+
     QHBoxLayout * topLine = new QHBoxLayout();
     QHBoxLayout * middleLine = new QHBoxLayout();
-    QHBoxLayout * bottomLine = new QHBoxLayout();
     vLayout->addStretch();
     vLayout->addLayout(topLine);
     vLayout->addSpacing(30);
     vLayout->addLayout(middleLine);
     vLayout->addStretch();
-    vLayout->addLayout(bottomLine);
 
     topLine->addStretch();
     BtnSimpleGamePage = addButton(":/res/SimpleGame.png", topLine, 0, true);
@@ -51,18 +50,34 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
     BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
 
+    return vLayout;
+}
 
-    BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
-
-
+QLayout * PageSinglePlayer::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLine = new QHBoxLayout();
     bottomLine->addStretch();
 
     BtnDemos = addButton(":/res/Record.png", bottomLine, 1, true);
     BtnDemos->setToolTip(tr("Demos (Watch recorded demos)"));
-    BtnLoad = addButton(":/res/Save.png", bottomLine, 2, true);
-    BtnLoad->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
+    BtnLoad = addButton(":/res/Load.png", bottomLine, 2, true);
+    BtnLoad->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
     BtnLoad->setToolTip(tr("Load (Load a previously saved game)"));
-    BtnBack->setFixedHeight(BtnLoad->height());
-    BtnBack->setStyleSheet("QPushButton{margin-top: 31px;}");
+
+    bottomLine->setStretch(1,0);
+    bottomLine->setStretch(2,0);
+    bottomLine->setAlignment(BtnDemos, Qt::AlignRight | Qt::AlignBottom);
+    bottomLine->setAlignment(BtnLoad, Qt::AlignRight | Qt::AlignBottom);
+
+    return bottomLine;
+}
+
+void PageSinglePlayer::connectSignals()
+{
+    //TODO
+}
+
+PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }

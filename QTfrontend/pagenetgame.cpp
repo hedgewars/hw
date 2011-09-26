@@ -27,16 +27,16 @@
 #include "teamselect.h"
 #include "chatwidget.h"
 
-PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) : AbstractPage(parent)
+QLayout * PageNetGame::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
     pageLayout->setSizeConstraint(QLayout::SetMinimumSize);
     //pageLayout->setSpacing(1);
     pageLayout->setColumnStretch(0, 50);
     pageLayout->setColumnStretch(1, 50);
 
     // chatwidget
-    pChatWidget = new HWChatWidget(this, gameSettings, sdli, true);
+    pChatWidget = new HWChatWidget(this, m_gameSettings, m_sdli, true);
     pChatWidget->setShowReady(true); // show status bulbs by default
     pChatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
@@ -46,30 +46,25 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
     pGameCFG = new GameCFGWidget(this);
     pageLayout->addWidget(pGameCFG, 0, 0);
 
-    QPushButton * btnSetup = new QPushButton(this);
+    btnSetup = new QPushButton(this);
     btnSetup->setText(QPushButton::tr("Setup"));
-    connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
     pageLayout->addWidget(btnSetup, 1, 0);
 
     pNetTeamsWidget = new TeamSelWidget(this);
     pNetTeamsWidget->setAcceptOuter(true);
     pageLayout->addWidget(pNetTeamsWidget, 0, 1, 2, 1);
 
+    return pageLayout;
+}
 
+QLayout * PageNetGame::footerLayoutDefinition()
+{
     QHBoxLayout * bottomLayout = new QHBoxLayout;
-    pageLayout->addLayout(bottomLayout, 4, 0, 1, 2);
-
-
-    BtnBack = addButton(":/res/Exit.png", bottomLayout, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
-
 
     leRoomName = new QLineEdit(this);
     leRoomName->setMaxLength(60);
     leRoomName->setMinimumWidth(200);
     leRoomName->setMaximumWidth(400);
-    bottomLayout->addWidget(leRoomName, 8,0);
-    BtnUpdate = addButton(QAction::tr("Update"), bottomLayout, 1, false);
 
     BtnGo = new QPushButton(this);
     BtnGo->setToolTip(QPushButton::tr("Ready"));
@@ -77,11 +72,36 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
     BtnGo->setIconSize(QSize(25, 34));
     BtnGo->setMinimumWidth(50);
     BtnGo->setMinimumHeight(50);
-    bottomLayout->addWidget(BtnGo, 4);
 
 
-    BtnMaster = addButton(tr("Control"), bottomLayout, 2);
+    bottomLayout->addWidget(leRoomName);
+    BtnUpdate = addButton(QAction::tr("Update"), bottomLayout, 1, false);
+    bottomLayout->addWidget(BtnGo);
+
+    BtnMaster = addButton(tr("Control"), bottomLayout, 3);
+    bottomLayout->insertStretch(3, 100);
+
+    BtnStart = addButton(QAction::tr("Start"), bottomLayout, 3);
+
+    return bottomLayout;
+}
+
+void PageNetGame::connectSignals()
+{
+    connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
+
+    connect(BtnUpdate, SIGNAL(clicked()), this, SLOT(onUpdateClick()));
+}
+
+PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) : AbstractPage(parent)
+{
+    m_gameSettings = gameSettings;
+    m_sdli = sdli;
+
+    initPage();
+
     QMenu * menu = new QMenu(BtnMaster);
+
     restrictJoins = new QAction(QAction::tr("Restrict Joins"), menu);
     restrictJoins->setCheckable(true);
     restrictTeamAdds = new QAction(QAction::tr("Restrict Team Additions"), menu);
@@ -92,11 +112,6 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
 
     BtnMaster->setMenu(menu);
 
-    BtnStart = addButton(QAction::tr("Start"), bottomLayout, 3);
-
-    bottomLayout->insertStretch(3, 100);
-
-    connect(BtnUpdate, SIGNAL(clicked()), this, SLOT(onUpdateClick()));
 }
 
 void PageNetGame::setReadyStatus(bool isReady)

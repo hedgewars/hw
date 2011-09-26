@@ -16,22 +16,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QGridLayout>
+#include <QVBoxLayout>
 #include <QLabel>
 
 #include "pageconnecting.h"
 
-PageConnecting::PageConnecting(QWidget* parent) :
-    AbstractPage(parent)
+QLayout * PageConnecting::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QVBoxLayout * pageLayout = new QVBoxLayout();
 
     QLabel * lblConnecting = new QLabel(this);
     lblConnecting->setText(tr("Connecting..."));
     pageLayout->addWidget(lblConnecting);
 
-    QPushButton * pbCancel = new QPushButton(this);
-    pbCancel->setText(tr("Cancel"));
-    pageLayout->addWidget(pbCancel);
-    connect(pbCancel, SIGNAL(clicked()), this, SIGNAL(cancelConnection()));
+    return pageLayout;
+}
+
+void PageConnecting::connectSignals()
+{
+    connect(this, SIGNAL(goBack()), this, SIGNAL(cancelConnection()));
+}
+
+PageConnecting::PageConnecting(QWidget* parent) :  AbstractPage(parent)
+{
+    initPage();
 }

@@ -37,8 +37,11 @@ public:
 public slots:
     void fetchList();
 
+protected:
+    QLayout * bodyLayoutDefinition();
+    void connectSignals();
+
 private:
-    QPushButton *BtnBack;
     DataBrowser *web;
     QHash<QNetworkReply*, QProgressBar *> progressBars;
     QVBoxLayout *progressBarsLayout;

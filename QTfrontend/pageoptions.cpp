@@ -17,6 +17,7 @@
  */
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QComboBox>
@@ -33,10 +34,10 @@
 #include "fpsedit.h"
 #include "igbox.h"
 
-PageOptions::PageOptions(QWidget* parent) :
-  AbstractPage(parent)
+// TODO cleanup
+QLayout * PageOptions::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
     pageLayout->setColumnStretch(0, 100);
     pageLayout->setColumnStretch(1, 100);
     pageLayout->setColumnStretch(2, 100);
@@ -298,12 +299,10 @@ PageOptions::PageOptions(QWidget* parent) :
             CBResolution = new QComboBox(AGGroupBox);
             GBAreslayout->addWidget(CBResolution);
             GBAlayout->addLayout(GBAreslayout);
-            connect(CBResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(setResolution(int)));
 
             CBFullscreen = new QCheckBox(AGGroupBox);
             CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
             GBAlayout->addWidget(CBFullscreen);
-            connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(int)));
 
             QLabel * quality = new QLabel(AGGroupBox);
             quality->setText(QLabel::tr("Quality"));
@@ -317,7 +316,6 @@ PageOptions::PageOptions(QWidget* parent) :
             SLQuality->setFixedWidth(150);
             GBAqualayout->addWidget(SLQuality);
             GBAlayout->addLayout(GBAqualayout);
-            connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
 
             QLabel * stereo = new QLabel(AGGroupBox);
             stereo->setText(QLabel::tr("Stereo rendering"));
@@ -401,19 +399,32 @@ PageOptions::PageOptions(QWidget* parent) :
             gbTBLayout->addWidget(AGGroupBox, 0, 1, 3, 1);
         }
 
-    BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 2, 2, true);
-    BtnSaveOptions->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
-
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
-    BtnBack->setFixedHeight(BtnSaveOptions->height());
-    BtnBack->setFixedWidth(BtnBack->width()+2);
-    BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
-
     previousQuality = this->SLQuality->value();
     previousResolutionIndex = this->CBResolution->currentIndex();
     previousFullscreenValue = this->CBFullscreen->isChecked();
+
+    return pageLayout;
+}
+
+QLayout * PageOptions::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+    btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);
+    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
+    return bottomLayout;
+}
+
+void PageOptions::connectSignals()
+{
+    connect(CBResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(setResolution(int)));
+    connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(int)));
+    connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
+}
+
+PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }
 
 void PageOptions::forceFullscreen(int index)
@@ -479,4 +490,3 @@ void PageOptions::setTeamOptionsEnabled(bool enabled)
     CBTeamName->setVisible(enabled);
     LblNoEditTeam->setVisible(!enabled);
 }
-

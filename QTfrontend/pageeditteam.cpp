@@ -17,6 +17,7 @@
  */
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QComboBox>
 #include <QLabel>
@@ -32,27 +33,15 @@
 #include "hats.h"
 #include "HWApplication.h"
 
-PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
-  AbstractPage(parent)
+QLayout * PageEditTeam::bodyLayoutDefinition()
 {
-    m_playerHash = "0000000000000000000000000000000000000000";
-    mySdli = sdli;
-    QGridLayout * pageLayout = new QGridLayout(this);
-    QTabWidget * tbw = new QTabWidget(this);
+    QGridLayout * pageLayout = new QGridLayout();
+    QTabWidget * tbw = new QTabWidget();
     QWidget * page1 = new QWidget(this);
     QWidget * page2 = new QWidget(this);
     tbw->addTab(page1, tr("General"));
     tbw->addTab(page2, tr("Advanced"));
     pageLayout->addWidget(tbw, 0, 0, 1, 3);
-
-    BtnTeamSave = addButton(":/res/Save.png", pageLayout, 1, 2, true);;
-    BtnTeamSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
-    connect(BtnTeamSave, SIGNAL(clicked()), this, SLOT(saveTeam()));
-
-    BtnTeamDiscard = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
-    BtnTeamDiscard->setFixedHeight(BtnTeamSave->height());
-    BtnTeamDiscard->setStyleSheet("QPushButton{margin-top: 31px;}");
-    connect(BtnTeamDiscard, SIGNAL(clicked()), this, SIGNAL(goBack()));
 
     QHBoxLayout * page1Layout = new QHBoxLayout(page1);
     page1Layout->setAlignment(Qt::AlignTop);
@@ -68,12 +57,6 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
     GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
-
-    signalMapper1 = new QSignalMapper(this);
-    signalMapper2 = new QSignalMapper(this);
-
-    connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(fixHHname(int)));
-    connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(setRandomName(int)));
 
     HatsModel * hatsModel = new HatsModel(GBoxHedgehogs);
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
@@ -91,20 +74,12 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
         HHNameEdit[i]->setMinimumWidth(120);
         GBHLayout->addWidget(HHNameEdit[i], i, 1);
 
-        connect(HHNameEdit[i], SIGNAL(editingFinished()), signalMapper1, SLOT(map()));
-            signalMapper1->setMapping(HHNameEdit[i], i);
-
-        randButton[i] = addButton(":/res/dice.png", GBHLayout, i, 3, true);
-
-        connect(randButton[i], SIGNAL(clicked()), signalMapper2, SLOT(map()));
-            signalMapper2->setMapping(randButton[i], i);
+        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i, 3, true);
     }
 
-    randTeamButton = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, false);
-    connect(randTeamButton, SIGNAL(clicked()), this, SLOT(setRandomNames()));
+    btnRandomTeam = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, false);
 
     vbox1->addWidget(GBoxHedgehogs);
-
 
     GBoxTeam = new QGroupBox(this);
     GBoxTeam->setTitle(QGroupBox::tr("Team Settings"));
@@ -125,7 +100,6 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     tmpLabel = new QLabel(GBoxTeam);
     tmpLabel->setText(QLabel::tr("Voice"));
     GBTLayout->addWidget(tmpLabel, 4, 0);
-
 
     TeamNameEdit = new QLineEdit(GBoxTeam);
     TeamNameEdit->setMaxLength(64);
@@ -152,34 +126,14 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     CBFlag->setIconSize(QSize(22, 15));
     GBTLayout->addWidget(CBFlag, 3, 1);
 
-    {
-        QHBoxLayout * hbox = new QHBoxLayout();
-        CBVoicepack = new QComboBox(GBoxTeam);
-        {
-            QDir tmpdir;
-            QStringList list;
-            tmpdir.cd(cfgdir->absolutePath());
-            if (tmpdir.cd("Data/Sounds/voices")) 
-            {
-                list = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
-                CBVoicepack->addItems(list);
-            }
+    QHBoxLayout * hbox = new QHBoxLayout();
+    CBVoicepack = new QComboBox(GBoxTeam);
 
-            tmpdir.cd(datadir->absolutePath());
-            tmpdir.cd("Sounds/voices");
-            QStringList tmplist = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
-            QStringList tmplist2;
-            for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
-                if (!list.contains(*it,Qt::CaseInsensitive)) tmplist2.append(*it);
+    hbox->addWidget(CBVoicepack, 100);
+    btnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
+    hbox->setStretchFactor(btnTestSound, 1);
 
-            CBVoicepack->addItems(tmplist2);
-        }
-        hbox->addWidget(CBVoicepack, 100);
-        BtnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
-        hbox->setStretchFactor(BtnTestSound, 1);
-        connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
-        GBTLayout->addLayout(hbox, 4, 1);
-    }
+    GBTLayout->addLayout(hbox, 4, 1);
 
     GBoxFort = new QGroupBox(this);
     GBoxFort->setTitle(QGroupBox::tr("Fort"));
@@ -196,7 +150,123 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     GBFLayout->addWidget(FortPreview, 1, 0);
     vbox2->addWidget(GBoxFort);
 
+    vbox1->addStretch();
+    vbox2->addStretch();
+
+// ====== Page 2 ======
+    GBoxBinds = new QGroupBox(this);
+    GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
+    QGridLayout * GBBLayout = new QGridLayout(GBoxBinds);
+    BindsBox = new QToolBox(GBoxBinds);
+    BindsBox->setLineWidth(0);
+    GBBLayout->addWidget(BindsBox);
+    page2Layout->addWidget(GBoxBinds, 0, 0);
+
+    quint16 i = 0;
+    quint16 num = 0;
+    QWidget * curW = NULL;
+    QGridLayout * pagelayout = NULL;
+    QLabel* l = NULL;
+    while (i < BINDS_NUMBER) {
+        if(cbinds[i].category != NULL)
+        {
+            if(curW != NULL)
+            {
+                l = new QLabel(curW);
+                l->setText("");
+                pagelayout->addWidget(l, num++, 0, 1, 2);
+            }
+            curW = new QWidget(this);
+            BindsBox->addItem(curW, HWApplication::translate("binds (categories)", cbinds[i].category));
+            pagelayout = new QGridLayout(curW);
+            num = 0;
+        }
+        if(cbinds[i].description != NULL)
+        {
+            l = new QLabel(curW);
+            l->setText((num > 0 ? QString("\n") : QString("")) + HWApplication::translate("binds (descriptions)", cbinds[i].description));
+            pagelayout->addWidget(l, num++, 0, 1, 2);
+        }
+
+        l = new QLabel(curW);
+        l->setText(HWApplication::translate("binds", cbinds[i].name));
+        l->setAlignment(Qt::AlignRight);
+        pagelayout->addWidget(l, num, 0);
+        CBBind[i] = new QComboBox(curW);
+        for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
+            CBBind[i]->addItem(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), sdlkeys[j][0]);
+        pagelayout->addWidget(CBBind[i++], num++, 1);
+    }
+
+    return pageLayout;
+}
+
+QLayout * PageEditTeam::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+
+    btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);;
+    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
+
+    return bottomLayout;
+}
+
+void PageEditTeam::connectSignals()
+{
+    connect(btnSave, SIGNAL(clicked()), this, SLOT(saveTeam()));
+
+    signalMapper1 = new QSignalMapper(this);
+    signalMapper2 = new QSignalMapper(this);
+
+    connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(fixHHname(int)));
+    connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(setRandomName(int)));
+
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
+    {
+        connect(HHNameEdit[i], SIGNAL(editingFinished()), signalMapper1, SLOT(map()));
+            signalMapper1->setMapping(HHNameEdit[i], i);
+
+        connect(btnRandomHogName[i], SIGNAL(clicked()), signalMapper2, SLOT(map()));
+            signalMapper2->setMapping(btnRandomHogName[i], i);
+    }
+
+    connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomNames()));
+    
+    connect(btnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
+
+    connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
+}
+
+PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
+  AbstractPage(parent)
+{
+    initPage();
+
+    m_playerHash = "0000000000000000000000000000000000000000";
+    mySdli = sdli;
+
     QDir tmpdir;
+    QStringList list;
+    tmpdir.cd(cfgdir->absolutePath());
+    if (tmpdir.cd("Data/Sounds/voices")) 
+    {
+        list = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
+        CBVoicepack->addItems(list);
+    }
+
+    tmpdir.cd(datadir->absolutePath());
+    tmpdir.cd("Sounds/voices");
+    QStringList tmplist = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
+    QStringList tmplist2;
+    foreach (const QString & line, tmplist)
+    {
+        if (!list.contains(line,Qt::CaseInsensitive))
+            tmplist2.append(line);
+    }
+
+    CBVoicepack->addItems(tmplist2);
+
     QStringList userforts;
     tmpdir.cd(cfgdir->absolutePath());
     if (tmpdir.cd("Data/Forts"))
@@ -219,22 +289,26 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     tmpdir.cd("Forts");
     tmpdir.setFilter(QDir::Files);
 
-    QStringList tmplist = tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1");
+    tmplist = tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1");
     QStringList dataforts;
-    for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
-        if (!userforts.contains(*it,Qt::CaseInsensitive)) dataforts.append(*it);
+    foreach (const QString & line, tmplist)
+    {
+        if (!userforts.contains(line,Qt::CaseInsensitive))
+            dataforts.append(line);
+    }
 
     CBFort->addItems(dataforts);
-    connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 
     tmpdir.cd("../Graphics/Graves");
     QStringList datalist = tmpdir.entryList(QStringList("*.png"));
-    for (QStringList::Iterator it = datalist.begin(); it != datalist.end(); ++it )
+    foreach (const QString & line, datalist)
     {
-        if (userlist.contains(*it,Qt::CaseInsensitive)) continue;
-        QPixmap pix(datadir->absolutePath() + "/Graphics/Graves/" + *it);
+        if (userlist.contains(line,Qt::CaseInsensitive)) continue;
+        QPixmap pix(datadir->absolutePath() + "/Graphics/Graves/" + line);
         QIcon icon(pix.copy(0, 0, 32, 32));
-        CBGrave->addItem(icon, (*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
+        QString grave = line;
+        grave = grave.replace(QRegExp("^(.*)\\.png"), "\\1");
+        CBGrave->addItem(icon, grave);
     }
 
     // add the default flag
@@ -246,14 +320,16 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
     userlist = tmpdir.entryList(QStringList("*.png"));
     
     // add all country flags
-    for (QStringList::Iterator it = userlist.begin(); it != userlist.end(); ++it )
+    foreach (const QString & line, userlist)
     {
-        QPixmap pix(cfgdir->absolutePath() + "/Data/Graphics/Flags/" + *it);
+        QPixmap pix(cfgdir->absolutePath() + "/Data/Graphics/Flags/" + line);
         QIcon icon(pix.copy(0, 0, 22, 15));
-        if(it->compare("cpu.png") && it->compare("hedgewars.png") && (it->indexOf("cm_") == -1)) // skip cpu and hedgewars flags as well as all community flags
+        // TODO improve readablility
+        if(line.compare("cpu.png") && line.compare("hedgewars.png") && (line.indexOf("cm_") == -1)) // skip cpu and hedgewars flags as well as all community flags
         {
-            QString flag = QString(*it).replace(QRegExp("^(.*)\\.png"), "\\1");
-            CBFlag->addItem(icon, QString(flag).replace("_", " "), flag);
+            QString flag = line;
+            flag = flag.replace(QRegExp("^(.*)\\.png"), "\\1");
+            CBFlag->addItem(icon, flag.replace("_", " "), flag);
         }
     }
 
@@ -304,55 +380,6 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
             CBFlag->addItem(icon, QString(flag).replace("cm_", QComboBox::tr("Community") + ": "), flag);
         }
     }
-
-    vbox1->addStretch();
-    vbox2->addStretch();
-
-// ====== Page 2 ======
-    GBoxBinds = new QGroupBox(this);
-    GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
-    QGridLayout * GBBLayout = new QGridLayout(GBoxBinds);
-    BindsBox = new QToolBox(GBoxBinds);
-    BindsBox->setLineWidth(0);
-    GBBLayout->addWidget(BindsBox);
-    page2Layout->addWidget(GBoxBinds, 0, 0);
-
-    quint16 i = 0;
-    quint16 num = 0;
-    QWidget * curW = NULL;
-    QGridLayout * pagelayout = NULL;
-    QLabel* l = NULL;
-    while (i < BINDS_NUMBER) {
-        if(cbinds[i].category != NULL)
-        {
-            if(curW != NULL)
-            {
-                l = new QLabel(curW);
-                l->setText("");
-                pagelayout->addWidget(l, num++, 0, 1, 2);
-            }
-            curW = new QWidget(this);
-            BindsBox->addItem(curW, HWApplication::translate("binds (categories)", cbinds[i].category));
-            pagelayout = new QGridLayout(curW);
-            num = 0;
-        }
-        if(cbinds[i].description != NULL)
-        {
-            l = new QLabel(curW);
-            l->setText((num > 0 ? QString("\n") : QString("")) + HWApplication::translate("binds (descriptions)", cbinds[i].description));
-            pagelayout->addWidget(l, num++, 0, 1, 2);
-        }
-
-        l = new QLabel(curW);
-        l->setText(HWApplication::translate("binds", cbinds[i].name));
-        l->setAlignment(Qt::AlignRight);
-        pagelayout->addWidget(l, num, 0);
-        CBBind[i] = new QComboBox(curW);
-        for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
-            CBBind[i]->addItem(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), sdlkeys[j][0]);
-        pagelayout->addWidget(CBBind[i++], num++, 1);
-    }
-
 }
 
 void PageEditTeam::fixHHname(int idx)
@@ -494,4 +521,3 @@ void PageEditTeam::saveTeam()
     data().saveToFile();
     emit teamEdited();
 }
-

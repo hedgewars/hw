@@ -56,17 +56,43 @@ class AbstractPage : public QWidget
 
     protected:
         // constructor and virtual destructor
-        AbstractPage(QWidget* parent = 0);
+        AbstractPage(QWidget * parent = 0);
+
+        // call this in the constructor of your subclass
+        void initPage();
+
+        // the following methods are used during page construction
+
+            // you MUST implement this method in your subclass
+            // only define layout, not behavior in here
+            virtual QLayout * bodyLayoutDefinition() = 0;
+
+            // you CAN implement this method in your subclass
+            virtual QLayout * footerLayoutDefinition() { return NULL; };
+
+            // you CAN but most likely want to implement this method in your subclass
+            // keep in mind not to expose twidgets as public!
+            // instead define a signal with a meaningful name and connect the widget
+            // signals to your page signals
+            virtual void connectSignals() {};
+/*
+virtual QLayout * bodyLayoutDefinition()\n{\n    return new QGridLayout(); //TODO\n}\n\nvirtual QLayout * footerLayoutDefinition()\n{\n    // return NULL;\n}\n\nvirtual void connectSignals()\n{\n    //TODO\n}\n\n
+*/
+
         virtual ~AbstractPage() {};
 
-        QPushButton * addButton(const QString & btname, QGridLayout* grid, int wy, int wx, bool hasIcon = false);
-        QPushButton * addButton(const QString & btname, QGridLayout* grid, int wy, int wx, int rowSpan, int columnSpan, bool hasIcon = false);
-        QPushButton * addButton(const QString & btname, QBoxLayout* box, int where, bool hasIcon = false);
+        QPushButton * addButton(const QString & btname, QGridLayout * grid, int wy, int wx, bool hasIcon = false);
+        QPushButton * addButton(const QString & btname, QGridLayout * grid, int wy, int wx, int rowSpan, int columnSpan, bool hasIcon = false);
+        QPushButton * addButton(const QString & btname, QBoxLayout * box, int where, bool hasIcon = false);
+
+        void setBackButtonVisible(bool visible = true);
 
         QFont * font14;
 
     private:
         QPushButton * formattedButton(const QString & btname, bool hasIcon);
+
+        QPushButton * btnBack;
 };
 
 #endif

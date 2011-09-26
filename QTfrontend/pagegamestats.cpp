@@ -18,6 +18,7 @@
 
 #include <QLabel>
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QGraphicsScene>
 #include <QGroupBox>
 #include <QSizePolicy>
@@ -37,25 +38,13 @@ void FitGraphicsView::resizeEvent(QResizeEvent * event)
     fitInView(sceneRect());
 }
 
-PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
+QLayout * PageGameStats::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
     pageLayout->setSpacing(20);
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 1);
     pageLayout->setContentsMargins(7, 7, 7, 0);
-
-    BtnSave = addButton(":/res/Save.png", pageLayout, 3, 2, true);
-    BtnSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
-    connect(BtnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
-
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
-    BtnBack->setFixedHeight(BtnSave->height());
-    BtnBack->setFixedWidth(BtnBack->width()+2);
-    BtnBack->setStyleSheet("QPushButton{margin: 22px 0 9px 2px;}");
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
-
 
     QGroupBox * gb = new QGroupBox(this);
     QVBoxLayout * gbl = new QVBoxLayout;
@@ -104,6 +93,29 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
     labelGameRank->setTextFormat(Qt::RichText);
     labelGameRank->setAlignment(Qt::AlignTop);
     pageLayout->addWidget(gb, 1, 0);
+
+    return pageLayout;
+}
+
+QLayout * PageGameStats::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+
+    btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);
+    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
+
+    return bottomLayout;
+}
+
+void PageGameStats::connectSignals()
+{
+    connect(btnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
+}
+
+PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }
 
 void PageGameStats::AddStatText(const QString & msg)

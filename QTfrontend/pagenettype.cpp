@@ -21,9 +21,10 @@
 
 #include "pagenettype.h"
 
-PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
+
+QLayout * PageNetType::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
     pageLayout->setRowStretch(0, 10);
     pageLayout->setRowStretch(3, 10);
 
@@ -37,7 +38,10 @@ PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
     // hack: temporary deactivated - requires server modifications that aren't backward compatible (yet)
     //BtnOfficialServer->setEnabled(false);
 
+    return pageLayout;
+}
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }

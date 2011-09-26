@@ -25,9 +25,36 @@ AbstractPage::AbstractPage(QWidget* parent)
     font14 = new QFont("MS Shell Dlg", 14);
 }
 
+void AbstractPage::initPage()
+{
+    QGridLayout * pageLayout = new QGridLayout(this);
+
+    // stretch grid space for body and footer
+    pageLayout->setColumnStretch(0,0);
+    pageLayout->setColumnStretch(1,1);
+    pageLayout->setRowStretch(0,1);
+    pageLayout->setRowStretch(1,0);
+
+    // add back/exit button
+    btnBack = formattedButton(":/res/Exit.png", true);
+    pageLayout->addWidget(btnBack, 1, 0, 1, 1, Qt::AlignLeft | Qt::AlignBottom);
+
+    // add body layout as defined by the subclass
+    pageLayout->addLayout(bodyLayoutDefinition(), 0, 0, 1, 2);
+
+    // add footer layout
+    QLayout * fld = footerLayoutDefinition();
+    if (fld != NULL)
+        pageLayout->addLayout(fld, 1, 1);
+
+    // connect signals
+    connect(btnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+    connectSignals();
+}
+
 QPushButton * AbstractPage::formattedButton(const QString & btname, bool hasIcon)
 {
-    QPushButton* btn = new QPushButton(this);
+    QPushButton * btn = new QPushButton(this);
 
     if (hasIcon)
     {
@@ -49,22 +76,26 @@ QPushButton * AbstractPage::formattedButton(const QString & btname, bool hasIcon
 
 QPushButton * AbstractPage::addButton(const QString & btname, QGridLayout* grid, int wy, int wx, bool hasIcon)
 {
-    QPushButton* btn = formattedButton(btname, hasIcon);
+    QPushButton * btn = formattedButton(btname, hasIcon);
     grid->addWidget(btn, wy, wx);
     return btn;
 }
 
 QPushButton * AbstractPage::addButton(const QString & btname, QGridLayout* grid, int wy, int wx, int rowSpan, int columnSpan, bool hasIcon)
 {
-    QPushButton* btn = formattedButton(btname, hasIcon);
+    QPushButton * btn = formattedButton(btname, hasIcon);
     grid->addWidget(btn, wy, wx, rowSpan, columnSpan);
     return btn;
 }
 
 QPushButton * AbstractPage::addButton(const QString & btname, QBoxLayout* box, int where, bool hasIcon)
 {
-    QPushButton* btn = formattedButton(btname, hasIcon);
+    QPushButton * btn = formattedButton(btname, hasIcon);
     box->addWidget(btn, where);
     return btn;
 }
 
+void AbstractPage::setBackButtonVisible(bool visible)
+{
+    btnBack->setVisible(visible);
+}

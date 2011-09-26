@@ -17,6 +17,8 @@
  */
 
 #include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QLabel>
@@ -25,29 +27,12 @@
 
 #include "pagenetserver.h"
 
-PageNetServer::PageNetServer(QWidget* parent) : AbstractPage(parent)
+QLayout * PageNetServer::bodyLayoutDefinition()
 {
-    QFont * font14 = new QFont("MS Shell Dlg", 14);
-    QGridLayout * pageLayout = new QGridLayout(this);
-    pageLayout->setColumnStretch(0, 1);
-    pageLayout->setColumnStretch(1, 1);
-    pageLayout->setColumnStretch(2, 1);
-
-    pageLayout->setRowStretch(0, 1);
-    pageLayout->setRowStretch(1, 0);
-
-
-    BtnBack =addButton(":/res/Exit.png", pageLayout, 1, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
-
-
-    BtnStart = new QPushButton(this);
-    BtnStart->setFont(*font14);
-    BtnStart->setText(QPushButton::tr("Start"));
-    pageLayout->addWidget(BtnStart, 1, 2);
+    QVBoxLayout * pageLayout = new QVBoxLayout();
 
     QWidget * wg = new QWidget(this);
-    pageLayout->addWidget(wg, 0, 0, 1, 3);
+    pageLayout->addWidget(wg);
 
     QGridLayout * wgLayout = new QGridLayout(wg);
     wgLayout->setColumnStretch(0, 1);
@@ -82,7 +67,31 @@ PageNetServer::PageNetServer(QWidget* parent) : AbstractPage(parent)
     BtnDefault->setText(QPushButton::tr("default"));
     gbLayout->addWidget(BtnDefault, 1, 2);
 
+    return pageLayout;
+}
+
+QLayout * PageNetServer::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+
+    BtnStart = new QPushButton(this);
+    BtnStart->setFont(*font14);
+    BtnStart->setText(QPushButton::tr("Start"));
+
+    bottomLayout->addStretch();
+    bottomLayout->addWidget(BtnStart);
+
+    return bottomLayout;
+}
+
+void PageNetServer::connectSignals()
+{
     connect(BtnDefault, SIGNAL(clicked()), this, SLOT(setDefaultPort()));
+}
+
+PageNetServer::PageNetServer(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }
 
 void PageNetServer::setDefaultPort()

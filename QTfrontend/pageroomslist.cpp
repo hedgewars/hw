@@ -30,10 +30,9 @@
 #include "hwconsts.h"
 #include "chatwidget.h"
 
-PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) :
-  AbstractPage(parent)
+QLayout * PageRoomsList::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
 
     QHBoxLayout * newRoomLayout = new QHBoxLayout();
     QLabel * roomNameLabel = new QLabel(this);
@@ -57,11 +56,8 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     QHBoxLayout * filterLayout = new QHBoxLayout();
 
     QLabel * stateLabel = new QLabel(this);
-    stateLabel->setText(tr("State:"));
     CBState = new QComboBox(this);
-    CBState->addItem(QComboBox::tr("Any"));
-    CBState->addItem(QComboBox::tr("In lobby"));
-    CBState->addItem(QComboBox::tr("In progress"));
+
     filterLayout->addWidget(stateLabel);
     filterLayout->addWidget(CBState);
     filterLayout->addSpacing(30);
@@ -69,11 +65,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     QLabel * ruleLabel = new QLabel(this);
     ruleLabel->setText(tr("Rules:"));
     CBRules = new QComboBox(this);
-    CBRules->addItem(QComboBox::tr("Any"));
-    // not the most elegant solution but it works
-    ammoSchemeModel = new AmmoSchemeModel(this, NULL);
-    for (int i = 0; i < ammoSchemeModel->predefSchemesNames.count(); i++)
-        CBRules->addItem(ammoSchemeModel->predefSchemesNames.at(i).toAscii().constData());
+
     filterLayout->addWidget(ruleLabel);
     filterLayout->addWidget(CBRules);
     filterLayout->addSpacing(30);
@@ -81,11 +73,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     QLabel * weaponLabel = new QLabel(this);
     weaponLabel->setText(tr("Weapons:"));
     CBWeapons = new QComboBox(this);
-    CBWeapons->addItem(QComboBox::tr("Any"));
-    for (int i = 0; i < cDefaultAmmos.count(); i++) {
-        QPair<QString,QString> ammo = cDefaultAmmos.at(i);
-        CBWeapons->addItem(ammo.first.toAscii().constData());
-    }
+
     filterLayout->addWidget(weaponLabel);
     filterLayout->addWidget(CBWeapons);
     filterLayout->addSpacing(30);
@@ -99,7 +87,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
 
     pageLayout->addLayout(filterLayout, 4, 0, 1, 2);
 
-    chatWidget = new HWChatWidget(this, gameSettings, sdli, false);
+    chatWidget = new HWChatWidget(this, m_gameSettings, m_sdli, false);
     pageLayout->addWidget(chatWidget, 5, 0, 1, 3);
     pageLayout->setRowStretch(5, 350);
 
@@ -108,19 +96,31 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 2);
     BtnClear = addButton(tr("Clear"), pageLayout, 4, 2);
 
+    CBRules->addItem(QComboBox::tr("Any"));
+    CBState->addItem(QComboBox::tr("Any"));
+    CBState->addItem(QComboBox::tr("In lobby"));
+    CBState->addItem(QComboBox::tr("In progress"));
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 6, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+    return pageLayout;
+}
 
+QLayout * PageRoomsList::footerLayoutDefinition()
+{
+    QGridLayout * bottomLayout = new QGridLayout();
 
     lblCount = new QLabel(this);
-    pageLayout->addWidget(lblCount, 6, 1, Qt::AlignHCenter);
+    bottomLayout->addWidget(lblCount, 0, 0, Qt::AlignHCenter);
     lblCount->setText("?");
     lblCount->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-    connect(chatWidget, SIGNAL(nickCountUpdate(const int)), this, SLOT(updateNickCounter(const int)));
+    BtnAdmin = addButton(tr("Admin features"), bottomLayout, 6, 2);
 
-    BtnAdmin = addButton(tr("Admin features"), pageLayout, 6, 2);
+    return bottomLayout;
+}
+
+void PageRoomsList::connectSignals()
+{
+    connect(chatWidget, SIGNAL(nickCountUpdate(const int)), this, SLOT(updateNickCounter(const int)));
 
     connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
     connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
@@ -132,6 +132,27 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
     connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
     connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onRefreshClick()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
+}
+
+
+PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) :
+  AbstractPage(parent)
+{
+    m_gameSettings = gameSettings;
+    m_sdli = sdli;
+
+    initPage();
+
+    // not the most elegant solution but it works
+    ammoSchemeModel = new AmmoSchemeModel(this, NULL);
+    for (int i = 0; i < ammoSchemeModel->predefSchemesNames.count(); i++)
+        CBRules->addItem(ammoSchemeModel->predefSchemesNames.at(i).toAscii().constData());
+
+    CBWeapons->addItem(QComboBox::tr("Any"));
+    for (int i = 0; i < cDefaultAmmos.count(); i++) {
+        QPair<QString,QString> ammo = cDefaultAmmos.at(i);
+        CBWeapons->addItem(ammo.first.toAscii().constData());
+    }
 
     gameInLobby = false;
 }
@@ -396,4 +417,3 @@ void PageRoomsList::updateNickCounter(int cnt)
 {
     lblCount->setText(tr("%1 players online", 0, cnt).arg(cnt));
 }
-

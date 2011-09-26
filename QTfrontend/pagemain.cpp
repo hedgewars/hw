@@ -17,6 +17,7 @@
  */
  
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QLabel>
 #include <QTime>
@@ -25,11 +26,9 @@
 #include "hwconsts.h"
 #include "hwform.h"
 
-PageMain::PageMain(QWidget* parent) :
-  AbstractPage(parent)
+QLayout * PageMain::bodyLayoutDefinition()
 {
-    if(frontendEffects) setAttribute(Qt::WA_NoSystemBackground, true);
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
     //pageLayout->setColumnStretch(0, 1);
     //pageLayout->setColumnStretch(1, 2);
     //pageLayout->setColumnStretch(2, 1);
@@ -41,7 +40,11 @@ PageMain::PageMain(QWidget* parent) :
     pageLayout->setRowStretch(2, 0);
     pageLayout->setRowStretch(3, 1);
     pageLayout->setRowStretch(4, 1);
-    pageLayout->setRowStretch(5, 1);
+
+    //BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, true);
+    BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
+    BtnInfo->setStyleSheet("border: transparent;background: transparent;");
+    pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
     BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, true);
     BtnSinglePlayer->setToolTip(tr("Local Game (Play a game on a single computer)"));
@@ -54,14 +57,50 @@ PageMain::PageMain(QWidget* parent) :
     BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 4, 0, 1, 4, false);
     pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
 
+    return pageLayout;
+}
+
+QLayout * PageMain::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+
     mainNote = new QLabel(this);
     mainNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     mainNote->setWordWrap(true);
+    
+    bottomLayout->addWidget(mainNote, 0);
+    bottomLayout->setStretch(0,1);
+
+    BtnSetup = addButton(":/res/Settings.png", bottomLayout, 1, true);
+    bottomLayout->setStretch(1,0);
+
+    return bottomLayout;
+}
+
+void PageMain::connectSignals()
+{
+    //TODO
+}
+
+PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
+
+    if(frontendEffects) setAttribute(Qt::WA_NoSystemBackground, true);
     mainNote->setOpenExternalLinks(true);
 
     if(!isDevBuild)
     {
-        QStringList Tips;
+        mainNote->setText(QLabel::tr("Tip: ") + randomTip());
+    }
+    else
+        mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
+
+}
+
+QString PageMain::randomTip() const
+{
+    QStringList Tips;
         Tips << tr("Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they'll win or lose together.", "Tips");
         Tips << tr("Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.", "Tips");
         Tips << tr("If you're unsure what to do and don't want to waste ammo, skip one round. But don't let too much time pass as there will be Sudden Death!", "Tips");
@@ -115,25 +154,9 @@ PageMain::PageMain(QWidget* parent) :
         Tips << tr("You can find your Hedgewars configuration files under \"My Documents\\Hedgewars\". Create backups or take the files with you, but don't edit them by hand.", "Tips");
 #elif defined __APPLE__
         Tips << tr("You can find your Hedgewars configuration files under \"Library/Application Support/Hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
-#else  
+#else
         Tips << tr("You can find your Hedgewars configuration files under \".hedgewars\" in your home directory. Create backups or take the files with you, but don't edit them by hand.", "Tips");
 #endif
-        mainNote->setText(QLabel::tr("Tip: ") + Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()]);
-    }
-    else
-        mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
 
-    pageLayout->addWidget(mainNote, 5, 1, 1, 2);
-
-    BtnSetup = addButton(":/res/Settings.png", pageLayout, 5, 3, true);
-
-    //BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, true);
-    BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
-    BtnInfo->setStyleSheet("border: transparent;background: transparent;");
-    pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
-    //pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
-
-    BtnExit = addButton(":/res/Exit.png", pageLayout, 5, 0, 1, 1, true);
-    BtnExit->setFixedHeight(BtnSetup->height());
-    BtnExit->setStyleSheet("QPushButton{margin-top: 2px;}");
+        return Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
 }

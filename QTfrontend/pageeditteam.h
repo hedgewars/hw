@@ -47,7 +47,6 @@ public slots:
     void CBFort_activated(const QString & gravename);
 
 private:
-    QPushButton * randTeamButton;
     QSignalMapper* signalMapper1;
     QSignalMapper* signalMapper2;
     QGroupBox *GBoxHedgehogs;
@@ -61,19 +60,27 @@ private:
     QComboBox *CBVoicepack;
     QGroupBox *GBoxBinds;
     QToolBox *BindsBox;
-    QPushButton *BtnTeamDiscard;
-    QPushButton *BtnTeamSave;
-    QPushButton * BtnTestSound;
     QLineEdit * TeamNameEdit;
     QLineEdit * HHNameEdit[HEDGEHOGS_PER_TEAM];
     QComboBox * HHHats[HEDGEHOGS_PER_TEAM];
-    QPushButton * randButton[HEDGEHOGS_PER_TEAM];
     QComboBox * CBBind[BINDS_NUMBER];
     SDLInteraction * mySdli;
     HWTeam data();
     QString m_playerHash;
 
+    QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
+    void connectSignals();
+
     void loadTeam(const HWTeam & team);
+
+    // page 1
+    QPushButton * btnRandomHogName[HEDGEHOGS_PER_TEAM];
+    QPushButton * btnRandomTeam;
+    QPushButton * btnTestSound;
+
+    // footer
+    QPushButton * btnSave;
 
 private slots:
     void saveTeam();

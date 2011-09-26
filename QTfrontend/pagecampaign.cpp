@@ -22,9 +22,9 @@
 
 #include "pagecampaign.h"
 
-PageCampaign::PageCampaign(QWidget* parent) : AbstractPage(parent)
+QLayout * PageCampaign::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 2);
     pageLayout->setColumnStretch(2, 1);
@@ -42,7 +42,12 @@ PageCampaign::PageCampaign(QWidget* parent) : AbstractPage(parent)
     BtnStartCampaign->setText(QPushButton::tr("Go!"));
     pageLayout->addWidget(BtnStartCampaign, 2, 2);
 
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+    return pageLayout;
 }
+
+PageCampaign::PageCampaign(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
+}
+
+

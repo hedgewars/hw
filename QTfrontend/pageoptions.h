@@ -63,7 +63,7 @@ public:
 #endif
 
     FPSEdit *fpsedit;
-    QPushButton *BtnSaveOptions;
+    QPushButton *btnSave;
     QLabel *labelNN;
     QLabel *labelNetPassword;
     QSpinBox * volumeBox;
@@ -81,6 +81,10 @@ signals:
 
 
 private:
+    QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
+    void connectSignals();
+
     bool previousFullscreenValue;
     int previousResolutionIndex;
     int previousQuality;
@@ -88,7 +92,6 @@ private:
     QPushButton *BtnNewTeam;
     QPushButton *BtnEditTeam;
     QPushButton *BtnDeleteTeam;
-    QPushButton *BtnBack;
 
 private slots:
     void forceFullscreen(int index);

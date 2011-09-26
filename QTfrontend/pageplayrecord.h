@@ -47,8 +47,10 @@ public:
     QListWidget *DemosList;
 
 private:
+    QLayout * bodyLayoutDefinition();
+    void connectSignals();
+
     RecordType recType;
-    QPushButton *BtnBack;
 
 private slots:
     void renameRecord();

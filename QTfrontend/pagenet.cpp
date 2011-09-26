@@ -27,10 +27,10 @@
 #include "hwconsts.h"
 #include "netudpwidget.h"
 
-PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
+QLayout * PageNet::bodyLayoutDefinition()
 {
-    QFont * font14 = new QFont("MS Shell Dlg", 14);
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
+
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 1);
     pageLayout->setColumnStretch(2, 1);
@@ -40,11 +40,6 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
     BtnNetSvrStart->setText(QPushButton::tr("Start server"));
     BtnNetSvrStart->setVisible(haveServer);
     pageLayout->addWidget(BtnNetSvrStart, 4, 2);
-
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
-
 
     ConnGroupBox = new QGroupBox(this);
     ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
@@ -73,7 +68,17 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
     BtnSpecifyServer->setText(QPushButton::tr("Specify"));
     GBClayout->addWidget(BtnSpecifyServer, 2, 1);
 
+    return pageLayout;
+}
+
+void PageNet::connectSignals()
+{
     connect(BtnNetConnect, SIGNAL(clicked()), this, SLOT(slotConnect()));
+}
+
+PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }
 
 void PageNet::updateServersList()

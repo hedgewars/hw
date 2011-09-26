@@ -31,8 +31,8 @@ public:
     QPushButton * BtnLAN;
     QPushButton * BtnOfficialServer;
 
-private:
-    QPushButton * BtnBack;
+protected:
+    QLayout * bodyLayoutDefinition();
 };
 
 #endif

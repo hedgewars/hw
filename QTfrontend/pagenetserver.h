@@ -35,8 +35,10 @@ public:
     QLabel *labelPort;
     QSpinBox *sbPort;
 
-private:
-    QPushButton *BtnBack;
+protected:
+    QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
+    void connectSignals();
 
 private slots:
     void setDefaultPort();

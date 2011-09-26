@@ -30,6 +30,10 @@ public:
 
 signals:
     void cancelConnection();
+
+protected:
+    QLayout * bodyLayoutDefinition();
+    void connectSignals();
 };
 
 #endif

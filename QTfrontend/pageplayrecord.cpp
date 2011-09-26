@@ -28,10 +28,10 @@
 #include "hwconsts.h"
 #include "pageplayrecord.h"
 
-PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
+QLayout * PagePlayDemo::bodyLayoutDefinition()
 {
-    QFont * font14 = new QFont("MS Shell Dlg", 14);
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
+    
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 2);
     pageLayout->setColumnStretch(2, 1);
@@ -54,12 +54,18 @@ PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
     DemosList->setGeometry(QRect(170, 10, 311, 311));
     pageLayout->addWidget(DemosList, 0, 1, 3, 1);
 
+    return pageLayout;
+}
+
+void PagePlayDemo::connectSignals()
+{
     connect(BtnRenameRecord, SIGNAL(clicked()), this, SLOT(renameRecord()));
     connect(BtnRemoveRecord, SIGNAL(clicked()), this, SLOT(removeRecord()));
+}
 
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }
 
 void PagePlayDemo::FillFromDir(RecordType rectype)

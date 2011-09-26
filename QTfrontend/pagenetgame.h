@@ -31,7 +31,7 @@ class PageNetGame : public AbstractPage
     Q_OBJECT
 
 public:
-    PageNetGame(QWidget* parent, QSettings * config, SDLInteraction * sdli);
+    PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli);
 
     QPushButton *BtnGo;
     QPushButton *BtnMaster;
@@ -48,9 +48,6 @@ public:
     TeamSelWidget* pNetTeamsWidget;
     GameCFGWidget* pGameCFG;
 
-private:
-    QPushButton *BtnBack;
-
 public slots:
     void setReadyStatus(bool isReady);
     void onUpdateClick();
@@ -59,6 +56,16 @@ public slots:
 signals:
     void SetupClicked();
     void askForUpdateRoomName(const QString &);
+
+private:
+    QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
+    void connectSignals();
+
+    QSettings * m_gameSettings;
+    SDLInteraction * m_sdli;
+
+    QPushButton * btnSetup;
 };
 
 #endif

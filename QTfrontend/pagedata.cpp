@@ -34,27 +34,32 @@
 #include "quazip.h"
 #include "quazipfile.h"
 
-PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
+QLayout * PageDataDownload::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 1);
     pageLayout->setColumnStretch(2, 1);
 
-
     web = new DataBrowser(this);
-    connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
-    web->setOpenLinks(false);
     pageLayout->addWidget(web, 0, 0, 1, 3);
 
     progressBarsLayout = new QVBoxLayout();
     pageLayout->addLayout(progressBarsLayout, 1, 0, 1, 3);
+    return pageLayout;
+}
 
+void PageDataDownload::connectSignals()
+{
+    connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
+}
+
+PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
+
+    web->setOpenLinks(false);
     fetchList();
-
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
 }
 
 void PageDataDownload::request(const QUrl &url)

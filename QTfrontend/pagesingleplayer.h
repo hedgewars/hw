@@ -39,7 +39,9 @@ public:
     GameCFGWidget *gameCFG;
 
 private:
-    QPushButton *BtnBack;
+    QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
+    void connectSignals();
 };
 
 #endif

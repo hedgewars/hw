@@ -23,27 +23,33 @@
 #include "pagedrawmap.h"
 #include "drawmapwidget.h"
 
-PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
+
+QLayout * PageDrawMap::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
 
-    QPushButton * pbUndo = addButton(tr("Undo"), pageLayout, 0, 0);
-    QPushButton * pbClear = addButton(tr("Clear"), pageLayout, 1, 0);
-    QPushButton * pbLoad = addButton(tr("Load"), pageLayout, 2, 0);
-    QPushButton * pbSave = addButton(tr("Save"), pageLayout, 3, 0);
-
-
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
-
+    pbUndo = addButton(tr("Undo"), pageLayout, 0, 0);
+    pbClear = addButton(tr("Clear"), pageLayout, 1, 0);
+    pbLoad = addButton(tr("Load"), pageLayout, 2, 0);
+    pbSave = addButton(tr("Save"), pageLayout, 3, 0);
 
     drawMapWidget = new DrawMapWidget(this);
     pageLayout->addWidget(drawMapWidget, 0, 1, 5, 1);
 
+    return pageLayout;
+}
+
+void PageDrawMap::connectSignals()
+{
     connect(pbUndo, SIGNAL(clicked()), drawMapWidget, SLOT(undo()));
     connect(pbClear, SIGNAL(clicked()), drawMapWidget, SLOT(clear()));
     connect(pbLoad, SIGNAL(clicked()), this, SLOT(load()));
     connect(pbSave, SIGNAL(clicked()), this, SLOT(save()));
+}
+
+PageDrawMap::PageDrawMap(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }
 
 void PageDrawMap::load()

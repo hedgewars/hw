@@ -46,17 +46,21 @@ public:
     HWChatWidget * chatWidget;
     QLabel * lblCount;
 
-private:
-    bool gameInLobby;
-    QString gameInLobbyName;
-    QStringList listFromServer;
-    AmmoSchemeModel * ammoSchemeModel;
-    QPushButton * BtnBack;
-
 public slots:
     void setRoomsList(const QStringList & list);
     void setAdmin(bool);
     void updateNickCounter(int cnt);
+
+signals:
+    void askForCreateRoom(const QString &);
+    void askForJoinRoom(const QString &);
+    void askForRoomList();
+    void askJoinConfirmation(const QString &);
+
+protected:
+    QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
+    void connectSignals();
 
 private slots:
     void onCreateClick();
@@ -65,11 +69,15 @@ private slots:
     void onClearClick();
     void onJoinConfirmation(const QString &);
 
-signals:
-    void askForCreateRoom(const QString &);
-    void askForJoinRoom(const QString &);
-    void askForRoomList();
-    void askJoinConfirmation(const QString &);
+private:
+    QSettings * m_gameSettings;
+    SDLInteraction * m_sdli;
+
+    bool gameInLobby;
+    QString gameInLobbyName;
+    QStringList listFromServer;
+    AmmoSchemeModel * ammoSchemeModel;
+
 };
 
 #endif

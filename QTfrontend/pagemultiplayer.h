@@ -35,11 +35,14 @@ public:
     TeamSelWidget *teamsSelect;
     QPushButton *BtnStartMPGame;
 
-private:
-    QPushButton *BtnBack;
-
 signals:
     void SetupClicked();
+
+private:
+    QLayout * bodyLayoutDefinition();
+    void connectSignals();
+
+    QPushButton * btnSetup;
 };
 
 #endif

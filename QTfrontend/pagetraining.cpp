@@ -23,9 +23,10 @@
 #include "pagetraining.h"
 #include "hwconsts.h"
 
-PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
+QLayout * PageTraining::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
+
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 2);
     pageLayout->setColumnStretch(2, 1);
@@ -34,28 +35,6 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 
     CBSelect = new QComboBox(this);
 
-    QDir tmpdir;
-    tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Missions/Training");
-    tmpdir.setFilter(QDir::Files);
-    QStringList userlist = tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1");
-    CBSelect->addItems(userlist);
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Missions/Training");
-    tmpdir.setFilter(QDir::Files);
-    QStringList tmplist = tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1");
-    QStringList datalist;
-    for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
-        if (!userlist.contains(*it,Qt::CaseInsensitive)) datalist.append(*it);
-    CBSelect->addItems(datalist);
-
-    for(int i = 0; i < CBSelect->count(); i++)
-    {
-        CBSelect->setItemData(i, CBSelect->itemText(i));
-        CBSelect->setItemText(i, CBSelect->itemText(i).replace("_", " "));
-    }
-
     pageLayout->addWidget(CBSelect, 1, 1);
     
     BtnStartTrain = new QPushButton(this);
@@ -63,7 +42,49 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     BtnStartTrain->setText(QPushButton::tr("Go!"));
     pageLayout->addWidget(BtnStartTrain, 1, 2);
 
+    return pageLayout;
+}
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+void PageTraining::connectSignals()
+{
+    //TODO
+}
+
+PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
+
+    QDir tmpdir;
+    tmpdir.cd(cfgdir->absolutePath());
+    tmpdir.cd("Data/Missions/Training");
+    QStringList userlist = scriptList(tmpdir);
+
+    tmpdir.cd(datadir->absolutePath());
+    tmpdir.cd("Missions/Training");
+    QStringList defaultlist = scriptList(tmpdir);
+
+    CBSelect->addItems(userlist);
+
+    // add only default scripts that have names different from detected user scripts
+    foreach (const QString & line, defaultlist)
+    {
+        if (!userlist.contains(line,Qt::CaseInsensitive)) CBSelect->addItem(line);
+    }
+
+    // replace underscores with spaces in the displayed that
+    for(int i = 0; i < CBSelect->count(); i++)
+    {
+        QString text = CBSelect->itemText(i);
+        CBSelect->setItemData(i, text);
+        CBSelect->setItemText(i, text.replace("_", " "));
+//        if (userlist.contains(text))
+//            CBSelect->setItemText(i, text + " (" + AbstractPage::tr("custom") + ")");
+    }
+}
+
+QStringList PageTraining::scriptList(const QDir & scriptDir) const
+{
+    QDir dir = scriptDir;
+    dir.setFilter(QDir::Files);
+    return dir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1");
 }

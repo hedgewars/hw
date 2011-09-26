@@ -17,6 +17,7 @@
  */
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QComboBox>
 
@@ -24,34 +25,51 @@
 #include "hwconsts.h"
 #include "selectWeapon.h"
 
-PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
-  AbstractPage(parent)
+QLayout * PageSelectWeapon::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
 
     pWeapons = new SelWeaponWidget(cAmmoNumber, this);
-    pageLayout->addWidget(pWeapons, 0, 0, 1, 5);
+    pageLayout->addWidget(pWeapons);
 
+    return pageLayout;
+}
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, 2, 1, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
-
-
-    BtnDefault = addButton(tr("Default"), pageLayout, 1, 3);
-    BtnNew = addButton(tr("New"), pageLayout, 1, 2);
-    BtnCopy = addButton(tr("Copy"), pageLayout, 2, 2);
-    BtnDelete = addButton(tr("Delete"), pageLayout, 2, 3);
-    BtnSave = addButton(":/res/Save.png", pageLayout, 1, 4, 2, 1, true);
-    BtnSave->setStyleSheet("QPushButton{margin: 24px 0px 0px 0px;}");
-    BtnBack->setFixedHeight(BtnSave->height());
-    BtnBack->setStyleSheet("QPushButton{margin-top: 31px;}");
+QLayout * PageSelectWeapon::footerLayoutDefinition()
+{
+    QGridLayout * bottomLayout = new QGridLayout();
 
     selectWeaponSet = new QComboBox(this);
-    pageLayout->addWidget(selectWeaponSet, 1, 1, 2, 1);
+    bottomLayout->addWidget(selectWeaponSet, 0, 0, 2, 1);
 
+    // first row
+    BtnNew = addButton(tr("New"), bottomLayout, 0, 1);
+    BtnDefault = addButton(tr("Default"), bottomLayout, 0, 2);
+
+    // second row
+    BtnCopy = addButton(tr("Copy"), bottomLayout, 1, 1);
+    BtnDelete = addButton(tr("Delete"), bottomLayout, 1, 2);
+
+    bottomLayout->setColumnStretch(1,1);
+    bottomLayout->setColumnStretch(2,1);
+
+    btnSave = addButton(":/res/Save.png", bottomLayout, 0, 3, 2, 1, true);
+    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
+    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
+
+    return bottomLayout;
+}
+
+void PageSelectWeapon::connectSignals()
+{
     connect(BtnDefault, SIGNAL(clicked()), pWeapons, SLOT(setDefault()));
-    connect(BtnSave, SIGNAL(clicked()), pWeapons, SLOT(save()));
+    connect(btnSave, SIGNAL(clicked()), pWeapons, SLOT(save()));
     connect(BtnNew, SIGNAL(clicked()), pWeapons, SLOT(newWeaponsName()));
     connect(BtnCopy, SIGNAL(clicked()), pWeapons, SLOT(copy()));
     connect(selectWeaponSet, SIGNAL(currentIndexChanged(const QString&)), pWeapons, SLOT(setWeaponsName(const QString&)));
+}
+
+PageSelectWeapon::PageSelectWeapon(QWidget* parent) :  AbstractPage(parent)
+{
+    initPage();
 }

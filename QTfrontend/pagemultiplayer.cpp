@@ -23,17 +23,15 @@
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 
-PageMultiplayer::PageMultiplayer(QWidget* parent) :
-  AbstractPage(parent)
+QLayout * PageMultiplayer::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout(this);
+    QGridLayout * pageLayout = new QGridLayout();
 
     gameCFG = new GameCFGWidget(this);
     pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
 
-    QPushButton * btnSetup = new QPushButton(this);
+    btnSetup = new QPushButton(this);
     btnSetup->setText(QPushButton::tr("Setup"));
-    connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
     pageLayout->addWidget(btnSetup, 1, 0, 1, 2);
 
     pageLayout->setRowStretch(2, 1);
@@ -43,7 +41,15 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
 
     BtnStartMPGame = addButton(tr("Start"), pageLayout, 3, 3);
 
+    return pageLayout;
+}
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
-    connect(BtnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
+void PageMultiplayer::connectSignals()
+{
+    PageMultiplayer::connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
+}
+
+PageMultiplayer::PageMultiplayer(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
 }
