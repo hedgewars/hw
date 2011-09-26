@@ -71,6 +71,7 @@ set(hwfr_src
     gameuiconfig.cpp
     ui_hwform.cpp
     gamecfgwidget.cpp
+    AbstractPage.cpp
     pagemain.cpp
     pageeditteam.cpp
     pagemultiplayer.cpp
