@@ -27,6 +27,7 @@ import ClientIO
 import ServerState
 import Consts
 import ConfigFile
+import EngineInteraction
 
 data Action =
     AnswerClients ![ClientChan] ![B.ByteString]

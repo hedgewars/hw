@@ -14,6 +14,7 @@ import Actions
 import Utils
 import HandlerUtils
 import RoomsAndClients
+import EngineInteraction
 
 handleCmd_inRoom :: CmdHandler
 
