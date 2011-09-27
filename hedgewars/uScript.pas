@@ -957,8 +957,12 @@ begin
             end
         else lua_pushinteger(L, 0)
         end
-    else LuaError('Lua: Wrong number of parameters passed to GetAmmoCount!');
-    lc_getammocount:= 0
+    else 
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetAmmoCount!');
+        lua_pushnil(L)
+        end;
+    lc_getammocount:= 1
 end;
 
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
