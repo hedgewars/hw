@@ -96,8 +96,9 @@ QLayout * PageTraining::footerLayoutDefinition()
 
 void PageTraining::connectSignals()
 {
-    connect(lstMissions, SIGNAL(itemSelectionChanged()), this, SLOT(updateInfo()));
-    connect(lstMissions, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(startSelected()));
+    connect(lstMissions, SIGNAL(currentItemChanged(QListWidgetItem*, QListWidgetItem*)), this, SLOT(updateInfo()));
+    connect(lstMissions, SIGNAL(clicked()), this, SLOT(updateInfo()));
+    connect(lstMissions, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(startSelected()));
     connect(btnPreview, SIGNAL(clicked()), this, SLOT(startSelected()));
     connect(btnStart, SIGNAL(clicked()), this, SLOT(startSelected()));
 }
