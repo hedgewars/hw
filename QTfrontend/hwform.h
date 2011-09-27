@@ -86,7 +86,7 @@ private slots:
     void DeleteWeaponSet();
     void SimpleGame();
     void PlayDemo();
-    void StartTraining();
+    void startTraining(const QString&);
     void StartCampaign();
     void NetConnect();
     void NetConnectServer(const QString & host, quint16 port);

@@ -30,15 +30,31 @@ class PageTraining : public AbstractPage
 public:
     PageTraining(QWidget* parent = 0);
 
-    QPushButton *BtnStartTrain;
-    QComboBox   *CBSelect;
+
+signals:
+    void startMission(const QString & scriptName);
+
 
 protected:
     QLayout * bodyLayoutDefinition();
+    // TODO: footer that says "* downloaded/custom content"
     void connectSignals();
 
+
 private:
+    QPushButton * btnStart; // is also preview
+    QLabel * lblCaption;
+    QLabel * lblDescription;
+    QListWidget * lstMissions;
+    // TODO reload/refresh button
+
     QStringList scriptList(const QDir & scriptDir) const;
+
+
+private slots:
+    void startSelected();
+    void updateInfo();
+
 };
 
 #endif

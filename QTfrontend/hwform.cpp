@@ -234,7 +234,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
     connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
 
-    connect(ui.pageTraining->BtnStartTrain, SIGNAL(clicked()), this, SLOT(StartTraining()));
+    connect(ui.pageTraining, SIGNAL(startMission(const QString&)), this, SLOT(startTraining(const QString&)));
 
     connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
     connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
@@ -1126,11 +1126,11 @@ void HWForm::GetRecord(bool isDemo, const QByteArray & record)
     demofile.close();
 }
 
-void HWForm::StartTraining()
+void HWForm::startTraining(const QString & scriptName)
 {
     CreateGame(0, 0, 0);
 
-    game->StartTraining(ui.pageTraining->CBSelect->itemData(ui.pageTraining->CBSelect->currentIndex()).toString());
+    game->StartTraining(scriptName);
 }
 
 void HWForm::StartCampaign()
