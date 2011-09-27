@@ -78,7 +78,7 @@ class AbstractPage : public QWidget
 
         virtual ~AbstractPage() {};
 
-        QPushButton * formattedButton(const QString & btname, bool hasIcon);
+        QPushButton * formattedButton(const QString & btname, bool hasIcon = false);
         QPushButton * addButton(const QString & btname, QGridLayout * grid, int wy, int wx, bool hasIcon = false);
         QPushButton * addButton(const QString & btname, QGridLayout * grid, int wy, int wx, int rowSpan, int columnSpan, bool hasIcon = false);
         QPushButton * addButton(const QString & btname, QBoxLayout * box, int where, bool hasIcon = false);

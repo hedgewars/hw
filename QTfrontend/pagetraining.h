@@ -37,16 +37,16 @@ signals:
 
 protected:
     QLayout * bodyLayoutDefinition();
-    // TODO: footer that says "* downloaded/custom content"
+    QLayout * footerLayoutDefinition();
     void connectSignals();
 
 
 private:
-    QPushButton * btnStart; // is also preview
+    QPushButton * btnPreview;
+    QPushButton * btnStart;
     QLabel * lblCaption;
     QLabel * lblDescription;
     QListWidget * lstMissions;
-    // TODO reload/refresh button
 
     QStringList scriptList(const QDir & scriptDir) const;
 
