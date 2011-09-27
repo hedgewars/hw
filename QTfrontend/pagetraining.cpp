@@ -83,7 +83,6 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     tmpdir.cd("Data/Missions/Training");
     QStringList missionList = scriptList(tmpdir);
     missionList.sort();
-    missionList.replaceInStrings(QRegExp("$")," *");
 
     tmpdir.cd(datadir->absolutePath());
     tmpdir.cd("Missions/Training");
@@ -119,7 +118,10 @@ QStringList PageTraining::scriptList(const QDir & scriptDir) const
 
 void PageTraining::startSelected()
 {
-    emit startMission(lstMissions->currentItem()->data(Qt::UserRole).toString());
+    QListWidgetItem * curItem = lstMissions->currentItem();
+
+    if (curItem != NULL)
+        emit startMission(curItem->data(Qt::UserRole).toString());
 }
 
 
@@ -127,6 +129,7 @@ void PageTraining::updateInfo()
 {
     if (lstMissions->currentItem())
     {
+        // TODO also use .pngs in userdata folder
         QString thumbFile = datadir->absolutePath() + "/Graphics/Missions/Training/" + lstMissions->currentItem()->data(Qt::UserRole).toString() + ".png";
         if (QFile::exists(thumbFile))
             btnStart->setIcon(QIcon(thumbFile));
