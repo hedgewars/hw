@@ -28,11 +28,11 @@ find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
 
 include_directories(.)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/net)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/dialog)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/page)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/model)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${SDL_INCLUDE_DIR})
@@ -64,11 +64,13 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
-file(GLOB NetCpp ${CMAKE_CURRENT_SOURCE_DIR} net/*.cpp)
-file(GLOB_RECURSE UIcpp ${CMAKE_CURRENT_SOURCE_DIR} ui/*.cpp)
-file(GLOB UtilCpp ${CMAKE_CURRENT_SOURCE_DIR} util/*.cpp)
+file(GLOB NetCpp net/*.cpp)
+file(GLOB ModelCpp model/*.cpp)
+file(GLOB_RECURSE UIcpp ui/*.cpp)
+file(GLOB UtilCpp util/*.cpp)
 
 set(hwfr_src
+    ${ModelCpp}
     ${NetCpp}
     ${UIcpp}
     ${UtilCpp}
@@ -104,12 +106,14 @@ else(MINGW)
     set(hwfr_src ${hwfr_src} hedgewars.rc)
 endif(MINGW)
 
-file(GLOB NetHdr ${CMAKE_CURRENT_SOURCE_DIR} net/*.h)
-file(GLOB_RECURSE UIhdr ${CMAKE_CURRENT_SOURCE_DIR} ui/*.h)
-file(GLOB UtilHdr ${CMAKE_CURRENT_SOURCE_DIR} util/*.h)
+file(GLOB ModelHdr model/*.h)
+file(GLOB NetHdr net/*.h)
+file(GLOB_RECURSE UIhdr ui/*.h)
+file(GLOB UtilHdr util/*.h)
 
 
 set(hwfr_moc_hdrs
+    ${ModelHdr}
     ${NetHdr}
     ${UIhdr}
     AbstractPage.h
