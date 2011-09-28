@@ -28,6 +28,13 @@ find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
 
 include_directories(.)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/net)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/dialog)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/page)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/model)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
@@ -57,77 +64,28 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
+file(GLOB NetCpp ${CMAKE_CURRENT_SOURCE_DIR} net/*.cpp)
+file(GLOB_RECURSE UIcpp ${CMAKE_CURRENT_SOURCE_DIR} ui/*.cpp)
+file(GLOB UtilCpp ${CMAKE_CURRENT_SOURCE_DIR} util/*.cpp)
+
 set(hwfr_src
-    HWApplication.cpp
-    game.cpp
-    main.cpp
-    hwform.cpp
-    team.cpp
-    namegen.cpp
-    teamselect.cpp
-    teamselhelper.cpp
-    frameTeam.cpp
-    vertScrollArea.cpp
-    gameuiconfig.cpp
-    ui_hwform.cpp
-    gamecfgwidget.cpp
+    ${NetCpp}
+    ${UIcpp}
+    ${UtilCpp}
     AbstractPage.cpp
-    pagemain.cpp
-    pageeditteam.cpp
-    pagemultiplayer.cpp
-    pageoptions.cpp
-    pagenet.cpp
-    pagenetserver.cpp
-    pagenetgame.cpp
-    pageinfo.cpp
-    pagedata.cpp
-    pagesingleplayer.cpp
-    pagetraining.cpp
-    pagecampaign.cpp
-    pageselectweapon.cpp
-    pageingame.cpp
-    pageroomslist.cpp
-    pageconnecting.cpp
-    pagescheme.cpp
-    pagegamestats.cpp
-    pageplayrecord.cpp
-    pageadmin.cpp
-    pagenettype.cpp
-    pagedrawmap.cpp
-    SquareLabel.cpp
-    hats.cpp
-    hedgehogerWidget.cpp
-    hwmap.cpp
-    mapContainer.cpp
-    tcpBase.cpp
-    about.cpp
-    proto.cpp
-    fpsedit.cpp
-    netserver.cpp
-    newnetclient.cpp
-    netudpserver.cpp
-    netudpwidget.cpp
-    netregister.cpp
-    netserverslist.cpp
-    chatwidget.cpp
-    binds.cpp
-    SDLs.cpp
-    ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
-    selectWeapon.cpp
-    itemNum.cpp
-    input_ip.cpp
-    igbox.cpp
-    weaponItem.cpp
-    misc.cpp
-    ammoSchemeModel.cpp
-    togglebutton.cpp
-    bgwidget.cpp
     achievements.cpp
-    qaspectratiolayout.cpp
-    drawmapwidget.cpp
+    binds.cpp
     drawmapscene.cpp
-    themesmodel.cpp
-    databrowser.cpp
+    game.cpp
+    gameuiconfig.cpp
+    HWApplication.cpp
+    hwform.cpp
+    main.cpp
+    mapContainer.cpp
+    SDLs.cpp
+    team.cpp
+    ui_hwform.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
     )
 
 #xfire integration
@@ -146,77 +104,33 @@ else(MINGW)
     set(hwfr_src ${hwfr_src} hedgewars.rc)
 endif(MINGW)
 
+file(GLOB NetHdr ${CMAKE_CURRENT_SOURCE_DIR} net/*.h)
+file(GLOB_RECURSE UIhdr ${CMAKE_CURRENT_SOURCE_DIR} ui/*.h)
+file(GLOB UtilHdr ${CMAKE_CURRENT_SOURCE_DIR} util/*.h)
+
+
 set(hwfr_moc_hdrs
-    HWApplication.h
-    game.h
-    hats.h
-    hwform.h
-    teamselect.h
-    teamselhelper.h
-    frameTeam.h
-    vertScrollArea.h
-    gameuiconfig.h
-    gamecfgwidget.h
+    ${NetHdr}
+    ${UIhdr}
     AbstractPage.h
-    pagenet.h
-    pagemultiplayer.h
-    pagenetserver.h
-    pageingame.h
-    pagetraining.h
-    pageeditteam.h
-    pageoptions.h
-    pagemain.h
-    pageinfo.h
-    pagedata.h
-    pagesingleplayer.h
-    pagenettype.h
-    pageconnecting.h
-    pagedrawmap.h
-    pagecampaign.h
-    pagenetgame.h
-    pageroomslist.h
-    pagegamestats.h
-    pageadmin.h
-    pagescheme.h
-    pageselectweapon.h
-    pageplayrecord.h
-    SquareLabel.h
-    hedgehogerWidget.h
-    hwmap.h
-    mapContainer.h
-    tcpBase.h
-    about.h
-    proto.h
-    fpsedit.h
-    netserver.h
-    newnetclient.h
-    netudpserver.h
-    netudpwidget.h
-    netregister.h
-    netserverslist.h
-    chatwidget.h
-    SDLs.h
-    selectWeapon.h
-    itemNum.h
-    input_ip.h
-    igbox.h
-    weaponItem.h
-    misc.h
-    ammoSchemeModel.h
-    togglebutton.h
-    bgwidget.h
-    qaspectratiolayout.h
-    drawmapwidget.h
     drawmapscene.h
-    themesmodel.h
-    databrowser.h
+    game.h
+    gameuiconfig.h
+    HWApplication.h
+    hwform.h
+    mapContainer.h
+    SDLs.h
     )
 
 set(hwfr_hdrs
+    ${UtilHdr}
+    team.h
+    achievements.h
     binds.h
     ui_hwform.h
     KB.h
     hwconsts.h
+    sdlkeys.h
     )
 
 set(hwfr_rez hedgewars.qrc)

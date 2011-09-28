@@ -28,7 +28,6 @@
 #include "misc.h"
 /* only to get the ignoreList from the chat widget */
 #include "hwform.h"
-#include "pageroomslist.h"
 #include "chatwidget.h"
 
 char delimeter='\n';

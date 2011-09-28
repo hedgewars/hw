@@ -25,7 +25,6 @@
 
 #include "team.h"
 #include "hwform.h"
-#include "pageeditteam.h"
 #include "hats.h"
 
 HWTeam::HWTeam(const QString & teamname) :
