@@ -47,6 +47,7 @@ private:
     QLabel * lblCaption;
     QLabel * lblDescription;
     QListWidget * lstMissions;
+    QSettings * m_info;
 
     QStringList scriptList(const QDir & scriptDir) const;
 

@@ -23,6 +23,8 @@
 #include <QListWidgetItem>
 #include <QPushButton>
 
+#include <QSettings>
+
 #include "pagetraining.h"
 #include "hwconsts.h"
 
@@ -108,6 +110,10 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 {
     initPage();
 
+    // preload localized descriptions/etc  TODO; this is just mockup code
+    m_info = new QSettings(datadir->absolutePath() + "/Locale/missions_en.txt",
+                           QSettings::IniFormat, this);
+
 //  TODO -> this should be done in a tool "DataDir" class
     QDir tmpdir;
     tmpdir.cd(cfgdir->absolutePath());
@@ -127,7 +133,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
             missionList.append(mission);
     }
 
-    // add only default scripts that have names different from detected user scripts
+    // add default scripts that have names different from detected user scripts
     foreach (const QString & mission, missionList)
     {
         QListWidgetItem * item = new QListWidgetItem(mission);
@@ -170,15 +176,27 @@ void PageTraining::updateInfo()
     if (lstMissions->currentItem())
     {
         // TODO also use .pngs in userdata folder
-        QString thumbFile = datadir->absolutePath() + "/Graphics/Missions/Training/" + lstMissions->currentItem()->data(Qt::UserRole).toString() + ".png";
+        QString thumbFile = datadir->absolutePath() +
+                    "/Graphics/Missions/Training/" +
+                    lstMissions->currentItem()->data(Qt::UserRole).toString() +
+                    ".png";
+
         if (QFile::exists(thumbFile))
             btnPreview->setIcon(QIcon(thumbFile));
         else
             btnPreview->setIcon(QIcon(":/res/Trainings.png"));
 
-        lblCaption->setText("<h2>" + lstMissions->currentItem()->text()+"</h2>");
-        // TODO load mission description from file
-        lblDescription->setText("< Imagine Mission Description here >\n\nThank you.");
+        QString realName = lstMissions->currentItem()->data(
+                           Qt::UserRole).toString();
+
+        QString caption = m_info->value(realName + ".name", 
+                          lstMissions->currentItem()->text()).toString();
+
+        QString description = m_info->value(realName + ".desc",
+                              tr("No description available")).toString();
+
+        lblCaption->setText("<h2>" + caption +"</h2>");
+        lblDescription->setText(description);
     }
     else
     {
