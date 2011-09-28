@@ -23,6 +23,8 @@
 #include <QListWidgetItem>
 #include <QPushButton>
 
+#include <QFile>
+#include <QLocale>
 #include <QSettings>
 
 #include "pagetraining.h"
@@ -110,9 +112,28 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 {
     initPage();
 
-    // preload localized descriptions/etc  TODO; this is just mockup code
-    m_info = new QSettings(datadir->absolutePath() + "/Locale/missions_en.txt",
-                           QSettings::IniFormat, this);
+    // get locale
+    QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini",
+                       QSettings::IniFormat);
+
+    QString loc = settings.value("misc/locale", "").toString();
+    if (loc.isEmpty())
+        loc = QLocale::system().name();
+
+    QString infoFile = 
+                datadir->absolutePath() + "/Locale/missions_" + loc + ".txt";
+
+    // if file is non-existant try with language only
+    if (!QFile::exists(infoFile))
+        infoFile = datadir->absolutePath() + "/Locale/missions_" + 
+                loc.replace(QRegExp("_.*$"),"") + ".txt";
+
+    // fallback if file for current locale is non-existant
+    if (!QFile::exists(infoFile))
+        infoFile = datadir->absolutePath() + "/Locale/missions_en.txt";
+
+    // preload mission info for current locale
+    m_info = new QSettings(infoFile, QSettings::IniFormat, this);
 
 //  TODO -> this should be done in a tool "DataDir" class
     QDir tmpdir;
@@ -138,8 +159,13 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     {
         QListWidgetItem * item = new QListWidgetItem(mission);
 
-        // replace underscores in mission name with spaces
-        item->setText(item->text().replace("_", " "));
+        // fallback name: replace underscores in mission name with spaces
+        QString name = item->text().replace("_", " ");
+
+        // see if we can get a prettier/translated name
+        name = m_info->value(mission + ".name", name).toString();
+
+        item->setText(name);
 
         // store original name in data
         item->setData(Qt::UserRole, mission);

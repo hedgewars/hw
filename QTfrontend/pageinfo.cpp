@@ -30,9 +30,7 @@ QLayout * PageInfo::bodyLayoutDefinition()
     pageLayout->setColumnStretch(1, 1);
     pageLayout->setColumnStretch(2, 1);
 
-    BtnSnapshots = addButton(":/res/Star.png", pageLayout, 1, 2, true);
-
-    about = new About(this);
+    about = new About();
     pageLayout->addWidget(about, 0, 0, 1, 3);
 
     return pageLayout;
@@ -40,7 +38,10 @@ QLayout * PageInfo::bodyLayoutDefinition()
 
 QLayout * PageInfo::footerLayoutDefinition()
 {
-   return NULL; // TODO: move screenshot button here
+    QGridLayout * bottomLayout = new QGridLayout();
+    BtnSnapshots = addButton(":/res/Star.png", bottomLayout, 1, 1, true);
+    bottomLayout->setAlignment(BtnSnapshots, Qt::AlignRight | Qt::AlignVCenter);
+    return bottomLayout;
 }
 
 void PageInfo::connectSignals()
