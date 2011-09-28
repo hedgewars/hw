@@ -29,7 +29,7 @@
 
 #include "ammoSchemeModel.h"
 #include "pagescheme.h"
-#include "misc.h"
+#include "FreqSpinBox.h"
 
 
 QLayout * PageScheme::bodyLayoutDefinition()

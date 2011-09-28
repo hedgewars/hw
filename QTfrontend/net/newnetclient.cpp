@@ -25,10 +25,6 @@
 #include "newnetclient.h"
 #include "proto.h"
 #include "game.h"
-#include "misc.h"
-/* only to get the ignoreList from the chat widget */
-#include "hwform.h"
-#include "chatwidget.h"
 
 char delimeter='\n';
 
