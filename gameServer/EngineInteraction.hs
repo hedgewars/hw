@@ -6,7 +6,8 @@ import Control.Monad
 import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BW
-
+-------------
+import CoreTypes
 
 
 toEngineMsg :: B.ByteString -> B.ByteString
@@ -30,3 +31,9 @@ checkNetCmd msg = check decoded
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 
+gameInfo2Replay :: GameInfo -> B.ByteString
+gameInfo2Replay GameInfo{roundMsgs = rm,
+        teamsAtStart = teams,
+        params1 = giMapParams,
+        params2 = giParams} = do
+            
