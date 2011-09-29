@@ -15,110 +15,148 @@ win32 {
 QT += network
 QT += webkit
 
-HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
-	../QTfrontend/SquareLabel.h ../QTfrontend/about.h \
-	../QTfrontend/ammoSchemeModel.h ../QTfrontend/bgwidget.h \
-	../QTfrontend/binds.h ../QTfrontend/chatwidget.h \
-	../QTfrontend/fpsedit.h ../QTfrontend/frameTeam.h \
-	../QTfrontend/game.h ../QTfrontend/gamecfgwidget.h \
-	../QTfrontend/gameuiconfig.h ../QTfrontend/hats.h \
-	../QTfrontend/hedgehogerWidget.h ../QTfrontend/hwconsts.h \
-	../QTfrontend/hwform.h ../QTfrontend/hwmap.h \
-	../QTfrontend/igbox.h ../QTfrontend/input_ip.h \
-	../QTfrontend/itemNum.h ../QTfrontend/mapContainer.h \
-	../QTfrontend/misc.h ../QTfrontend/namegen.h \
-    ../QTfrontend/netregister.h ../QTfrontend/netserver.h \
-	../QTfrontend/netserverslist.h ../QTfrontend/netudpserver.h \
-	../QTfrontend/netudpwidget.h ../QTfrontend/newnetclient.h \
-    ../QTfrontend/proto.h \
-	../QTfrontend/sdlkeys.h ../QTfrontend/selectWeapon.h \
-	../QTfrontend/tcpBase.h \
-	../QTfrontend/team.h ../QTfrontend/teamselect.h \
-	../QTfrontend/teamselhelper.h ../QTfrontend/togglebutton.h \
-	../QTfrontend/ui_hwform.h ../QTfrontend/vertScrollArea.h \
-	../QTfrontend/weaponItem.h ../QTfrontend/xfire.h \
-	../QTfrontend/achievements.h \
-    ../QTfrontend/drawmapwidget.h \
-    ../QTfrontend/drawmapscene.h \
-    ../QTfrontend/qaspectratiolayout.h \
-    ../QTfrontend/pagetraining.h \
-    ../QTfrontend/pagesingleplayer.h \
-    ../QTfrontend/pageselectweapon.h \
-    ../QTfrontend/pagescheme.h \
-    ../QTfrontend/pageroomslist.h \
-    ../QTfrontend/pageoptions.h \
-    ../QTfrontend/pagenettype.h \
-    ../QTfrontend/pagenetserver.h \
-    ../QTfrontend/pagenetgame.h \
-    ../QTfrontend/pagenet.h \
-    ../QTfrontend/pagemultiplayer.h \
-    ../QTfrontend/pagemain.h \
-    ../QTfrontend/pageingame.h \
-    ../QTfrontend/pageinfo.h \
-    ../QTfrontend/pagedata.h \
-    ../QTfrontend/pageeditteam.h \
-    ../QTfrontend/pagedrawmap.h \
-    ../QTfrontend/pageconnecting.h \
-    ../QTfrontend/pagecampaign.h \
-    ../QTfrontend/pageadmin.h \
-    ../QTfrontend/pageplayrecord.h \
-    ../QTfrontend/pagegamestats.h \
-    ../QTfrontend/HWApplication.h \
-    ../QTfrontend/AbstractPage.h \
-    ../QTfrontend/themesmodel.h \
-    ../QTfrontend/databrowser.h
+HEADERS += ../QTfrontend/model/themesmodel.h \
+    ../QTfrontend/model/ammoSchemeModel.h \
+    ../QTfrontend/model/netserverslist.h \
+    ../QTfrontend/model/hats.h \
+    ../QTfrontend/ui/page/pagedrawmap.h \
+    ../QTfrontend/ui/page/pagedata.h \
+    ../QTfrontend/ui/page/pagetraining.h \
+    ../QTfrontend/ui/page/pageselectweapon.h \
+    ../QTfrontend/ui/page/pagesingleplayer.h \
+    ../QTfrontend/ui/page/pagenettype.h \
+    ../QTfrontend/ui/page/pageingame.h \
+    ../QTfrontend/ui/page/pageadmin.h \
+    ../QTfrontend/ui/page/pagescheme.h \
+    ../QTfrontend/ui/page/pagemultiplayer.h \
+    ../QTfrontend/ui/page/pageplayrecord.h \
+    ../QTfrontend/ui/page/pagemain.h \
+    ../QTfrontend/ui/page/pageoptions.h \
+    ../QTfrontend/ui/page/pagenetgame.h \
+    ../QTfrontend/ui/page/pageeditteam.h \
+    ../QTfrontend/ui/page/pageconnecting.h \
+    ../QTfrontend/ui/page/pageroomslist.h \
+    ../QTfrontend/ui/page/pagenet.h \
+    ../QTfrontend/ui/page/pagecampaign.h \
+    ../QTfrontend/ui/page/pageinfo.h \
+    ../QTfrontend/ui/page/pagenetserver.h \
+    ../QTfrontend/ui/page/pagegamestats.h \
+    ../QTfrontend/ui/dialog/input_ip.h \
+    ../QTfrontend/ui/qaspectratiolayout.h \
+    ../QTfrontend/ui/widget/bgwidget.h \
+    ../QTfrontend/ui/widget/fpsedit.h \
+    ../QTfrontend/ui/widget/FreqSpinBox.h \
+    ../QTfrontend/ui/widget/igbox.h \
+    ../QTfrontend/ui/widget/chatwidget.h \
+    ../QTfrontend/ui/widget/togglebutton.h \
+    ../QTfrontend/ui/widget/SquareLabel.h \
+    ../QTfrontend/ui/widget/itemNum.h \
+    ../QTfrontend/ui/widget/frameTeam.h \
+    ../QTfrontend/ui/widget/teamselect.h \
+    ../QTfrontend/ui/widget/vertScrollArea.h \
+    ../QTfrontend/ui/widget/about.h \
+    ../QTfrontend/ui/widget/teamselhelper.h \
+    ../QTfrontend/ui/widget/drawmapwidget.h \
+    ../QTfrontend/ui/widget/databrowser.h \
+    ../QTfrontend/ui/widget/hedgehogerWidget.h \
+    ../QTfrontend/ui/widget/selectWeapon.h \
+    ../QTfrontend/ui/widget/weaponItem.h \
+    ../QTfrontend/ui/widget/gamecfgwidget.h \
+    ../QTfrontend/net/netregister.h \
+    ../QTfrontend/net/netserver.h \
+    ../QTfrontend/net/netudpwidget.h \
+    ../QTfrontend/net/tcpBase.h \
+    ../QTfrontend/net/proto.h \
+    ../QTfrontend/net/newnetclient.h \
+    ../QTfrontend/net/netudpserver.h \
+    ../QTfrontend/net/hwmap.h \
+    ../QTfrontend/util/namegen.h \
+    ../QTfrontendAbstractPage.h \
+    ../QTfrontenddrawmapscene.h \
+    ../QTfrontendgame.h \
+    ../QTfrontendgameuiconfig.h \
+    ../QTfrontendHWApplication.h \
+    ../QTfrontendhwform.h \
+    ../QTfrontendmapContainer.h \
+    ../QTfrontendSDLs.h \
+    ../QTfrontendteam.h \
+    ../QTfrontendachievements.h \
+    ../QTfrontendbinds.h \
+    ../QTfrontendui_hwform.h \
+    ../QTfrontendKB.h \
+    ../QTfrontendhwconsts.h \
+    ../QTfrontendsdlkeys.h
 
-SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
-	../QTfrontend/about.cpp ../QTfrontend/ammoSchemeModel.cpp \
-	../QTfrontend/bgwidget.cpp ../QTfrontend/binds.cpp \
-	../QTfrontend/chatwidget.cpp ../QTfrontend/fpsedit.cpp \
-	../QTfrontend/frameTeam.cpp ../QTfrontend/game.cpp \
-	../QTfrontend/gamecfgwidget.cpp ../QTfrontend/gameuiconfig.cpp \
-	../QTfrontend/hats.cpp ../QTfrontend/hedgehogerWidget.cpp \
-	../QTfrontend/hwform.cpp ../QTfrontend/hwmap.cpp \
-	../QTfrontend/igbox.cpp ../QTfrontend/input_ip.cpp \
-	../QTfrontend/itemNum.cpp ../QTfrontend/main.cpp \
-	../QTfrontend/mapContainer.cpp ../QTfrontend/misc.cpp \
-	../QTfrontend/namegen.cpp ../QTfrontend/netregister.cpp \
-	../QTfrontend/netserver.cpp ../QTfrontend/netserverslist.cpp \
-	../QTfrontend/netudpserver.cpp ../QTfrontend/netudpwidget.cpp \
-    ../QTfrontend/newnetclient.cpp \
-	../QTfrontend/proto.cpp \
-	../QTfrontend/selectWeapon.cpp \
-	../QTfrontend/tcpBase.cpp ../QTfrontend/team.cpp \
-	../QTfrontend/teamselect.cpp ../QTfrontend/teamselhelper.cpp \
-	../QTfrontend/togglebutton.cpp ../QTfrontend/ui_hwform.cpp \
-	../QTfrontend/vertScrollArea.cpp ../QTfrontend/weaponItem.cpp \
-	../QTfrontend/achievements.cpp \
-    ../QTfrontend/hwconsts.cpp \
-    ../QTfrontend/drawmapwidget.cpp \
+SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
+    ../QTfrontend/model/themesmodel.cpp \
+    ../QTfrontend/model/hats.cpp \
+    ../QTfrontend/model/netserverslist.cpp \
+    ../QTfrontend/ui/qaspectratiolayout.cpp \
+    ../QTfrontend/ui/page/pagemain.cpp \
+    ../QTfrontend/ui/page/pagetraining.cpp \
+    ../QTfrontend/ui/page/pageroomslist.cpp \
+    ../QTfrontend/ui/page/pagemultiplayer.cpp \
+    ../QTfrontend/ui/page/pagegamestats.cpp \
+    ../QTfrontend/ui/page/pagenettype.cpp \
+    ../QTfrontend/ui/page/pageeditteam.cpp \
+    ../QTfrontend/ui/page/pagenetgame.cpp \
+    ../QTfrontend/ui/page/pagedata.cpp \
+    ../QTfrontend/ui/page/pagedrawmap.cpp \
+    ../QTfrontend/ui/page/pageplayrecord.cpp \
+    ../QTfrontend/ui/page/pageselectweapon.cpp \
+    ../QTfrontend/ui/page/pageingame.cpp \
+    ../QTfrontend/ui/page/pagenetserver.cpp \
+    ../QTfrontend/ui/page/pagecampaign.cpp \
+    ../QTfrontend/ui/page/pageadmin.cpp \
+    ../QTfrontend/ui/page/pageinfo.cpp \
+    ../QTfrontend/ui/page/pageconnecting.cpp \
+    ../QTfrontend/ui/page/pagesingleplayer.cpp \
+    ../QTfrontend/ui/page/pagenet.cpp \
+    ../QTfrontend/ui/page/pagescheme.cpp \
+    ../QTfrontend/ui/page/pageoptions.cpp \
+    ../QTfrontend/ui/dialog/input_ip.cpp \
+    ../QTfrontend/ui/widget/igbox.cpp \
+    ../QTfrontend/ui/widget/selectWeapon.cpp \
+    ../QTfrontend/ui/widget/FreqSpinBox.cpp \
+    ../QTfrontend/ui/widget/SquareLabel.cpp \
+    ../QTfrontend/ui/widget/frameTeam.cpp \
+    ../QTfrontend/ui/widget/fpsedit.cpp \
+    ../QTfrontend/ui/widget/databrowser.cpp \
+    ../QTfrontend/ui/widget/teamselect.cpp \
+    ../QTfrontend/ui/widget/gamecfgwidget.cpp \
+    ../QTfrontend/ui/widget/chatwidget.cpp \
+    ../QTfrontend/ui/widget/itemNum.cpp \
+    ../QTfrontend/ui/widget/bgwidget.cpp \
+    ../QTfrontend/ui/widget/about.cpp \
+    ../QTfrontend/ui/widget/togglebutton.cpp \
+    ../QTfrontend/ui/widget/vertScrollArea.cpp \
+    ../QTfrontend/ui/widget/hedgehogerWidget.cpp \
+    ../QTfrontend/ui/widget/teamselhelper.cpp \
+    ../QTfrontend/ui/widget/drawmapwidget.cpp \
+    ../QTfrontend/ui/widget/weaponItem.cpp \
+    ../QTfrontend/net/tcpBase.cpp \
+    ../QTfrontend/net/netregister.cpp \
+    ../QTfrontend/net/proto.cpp \
+    ../QTfrontend/net/hwmap.cpp \
+    ../QTfrontend/net/netudpserver.cpp \
+    ../QTfrontend/net/newnetclient.cpp \
+    ../QTfrontend/net/netudpwidget.cpp \
+    ../QTfrontend/net/netserver.cpp \
+    ../QTfrontend/util/namegen.cpp \
+    ../QTfrontend/AbstractPage.cpp \
+    ../QTfrontend/achievements.cpp \
+    ../QTfrontend/binds.cpp \
     ../QTfrontend/drawmapscene.cpp \
-    ../QTfrontend/qaspectratiolayout.cpp \
-    ../QTfrontend/pagetraining.cpp \
-    ../QTfrontend/pagesingleplayer.cpp \
-    ../QTfrontend/pageselectweapon.cpp \
-    ../QTfrontend/pagescheme.cpp \
-    ../QTfrontend/pageroomslist.cpp \
-    ../QTfrontend/pageoptions.cpp \
-    ../QTfrontend/pagenettype.cpp \
-    ../QTfrontend/pagenetserver.cpp \
-    ../QTfrontend/pagenetgame.cpp \
-    ../QTfrontend/pagenet.cpp \
-    ../QTfrontend/pagemultiplayer.cpp \
-    ../QTfrontend/pagemain.cpp \
-    ../QTfrontend/pageingame.cpp \
-    ../QTfrontend/pageinfo.cpp \
-    ../QTfrontend/pagedata.cpp \
-    ../QTfrontend/pageeditteam.cpp \
-    ../QTfrontend/pagedrawmap.cpp \
-    ../QTfrontend/pageconnecting.cpp \
-    ../QTfrontend/pagecampaign.cpp \
-    ../QTfrontend/pageadmin.cpp \
-    ../QTfrontend/pagegamestats.cpp \
-    ../QTfrontend/pageplayrecord.cpp \
+    ../QTfrontend/game.cpp \
+    ../QTfrontend/gameuiconfig.cpp \
     ../QTfrontend/HWApplication.cpp \
-    ../QTfrontend/themesmodel.cpp \
-    ../QTfrontend/databrowser.cpp
+    ../QTfrontend/hwform.cpp \
+    ../QTfrontend/main.cpp \
+    ../QTfrontend/mapContainer.cpp \
+    ../QTfrontend/SDLs.cpp \
+    ../QTfrontend/team.cpp \
+    ../QTfrontend/ui_hwform.cpp \
+    ../QTfrontend/hwconsts.cpp
 
 win32 {
 	SOURCES += ../QTfrontend/xfire.cpp
