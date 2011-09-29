@@ -34,6 +34,5 @@ checkNetCmd msg = check decoded
 gameInfo2Replay :: GameInfo -> B.ByteString
 gameInfo2Replay GameInfo{roundMsgs = rm,
         teamsAtStart = teams,
-        params1 = giMapParams,
-        params2 = giParams} = do
-            
+        giMapParams = params1,
+        giParams = params2} = undefined
