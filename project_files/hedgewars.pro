@@ -71,21 +71,21 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/net/netudpserver.h \
     ../QTfrontend/net/hwmap.h \
     ../QTfrontend/util/namegen.h \
-    ../QTfrontendAbstractPage.h \
-    ../QTfrontenddrawmapscene.h \
-    ../QTfrontendgame.h \
-    ../QTfrontendgameuiconfig.h \
-    ../QTfrontendHWApplication.h \
-    ../QTfrontendhwform.h \
-    ../QTfrontendmapContainer.h \
-    ../QTfrontendSDLs.h \
-    ../QTfrontendteam.h \
-    ../QTfrontendachievements.h \
-    ../QTfrontendbinds.h \
-    ../QTfrontendui_hwform.h \
-    ../QTfrontendKB.h \
-    ../QTfrontendhwconsts.h \
-    ../QTfrontendsdlkeys.h
+    ../QTfrontend/AbstractPage.h \
+    ../QTfrontend/drawmapscene.h \
+    ../QTfrontend/game.h \
+    ../QTfrontend/gameuiconfig.h \
+    ../QTfrontend/HWApplication.h \
+    ../QTfrontend/hwform.h \
+    ../QTfrontend/mapContainer.h \
+    ../QTfrontend/SDLs.h \
+    ../QTfrontend/team.h \
+    ../QTfrontend/achievements.h \
+    ../QTfrontend/binds.h \
+    ../QTfrontend/ui_hwform.h \
+    ../QTfrontend/KB.h \
+    ../QTfrontend/hwconsts.h \
+    ../QTfrontend/sdlkeys.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/themesmodel.cpp \
