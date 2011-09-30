@@ -132,17 +132,17 @@ if(APPLE)
 endif(APPLE)
 
 
-#this snippet sets "Release" mode by default
+#build Debug only when explicitally set
 if (NOT CMAKE_BUILD_TYPE)
-	set (CMAKE_BUILD_TYPE RELEASE CACHE STRING "Choose the type of build, options are: None Debug Release." FORCE)
+	set (CMAKE_BUILD_TYPE RELEASE CACHE STRING "Choose the type of build, options are: Debug Release." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
-if(CMAKE_BUILD_TYPE MATCHES RELEASE OR CMAKE_BUILD_TYPE MATCHES "Release")
-	message(STATUS "Building Release")
-	set(Optz true)
-else()
+if(CMAKE_BUILD_TYPE MATCHES DEBUG OR CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "debug")
 	message(STATUS "Building Debug")
 	set(Optz false)
+else()
+	message(STATUS "Building Release")
+	set(Optz true)
 endif()
 
 
