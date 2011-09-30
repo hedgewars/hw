@@ -1,4 +1,4 @@
-file(GLOB MissionPics *.png)
+file(GLOB MissionPics *@2x.png)
 
 install(FILES
 	${MissionPics}

@@ -205,7 +205,7 @@ void PageTraining::updateInfo()
         QString thumbFile = datadir->absolutePath() +
                     "/Graphics/Missions/Training/" +
                     lstMissions->currentItem()->data(Qt::UserRole).toString() +
-                    ".png";
+                    "@2x.png";
 
         if (QFile::exists(thumbFile))
             btnPreview->setIcon(QIcon(thumbFile));
