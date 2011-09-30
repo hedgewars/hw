@@ -399,10 +399,7 @@ begin
 end;
 
 AddProgress;
-
-{$IFDEF SDL_IMAGE_NEWER}
 IMG_Quit();
-{$ENDIF}
 end;
 
 procedure StoreRelease(reload: boolean);
@@ -949,30 +946,24 @@ end;
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
-    {$IFNDEF IPHONEOS}ico: PSDL_Surface;{$ENDIF}
-    reinit: boolean;
+    reinit: boolean = false;
+    {$IFNDEF DARWIN}ico: PSDL_Surface;{$ENDIF}
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
     if Length(s) = 0 then cFullScreen:= not cFullScreen
     else cFullScreen:= s = '1';
 
     AddFileLog('Preparing to change video parameters...');
-    reinit:= false;
 {$IFNDEF IPHONEOS}
     if SDLPrimSurface = nil then
         begin
         // set window title
         SDL_WM_SetCaption('Hedgewars', nil);
-{$IFDEF SDL_IMAGE_NEWER}
         WriteToConsole('Init SDL_image... ');
         SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
         WriteLnToConsole(msgOK);
-{$ENDIF}
         // load engine icon
-{$IFDEF DARWIN}
-        ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
-        if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
-{$ELSE}
+{$IFNDEF DARWIN}
         ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
         if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
 {$ENDIF}
