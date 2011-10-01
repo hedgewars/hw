@@ -21,7 +21,7 @@
 
 #import "FlagsViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CommodityFunctions.h"
+
 
 @implementation FlagsViewController
 @synthesize teamDictionary, flagArray, communityArray, lastIndexPath;

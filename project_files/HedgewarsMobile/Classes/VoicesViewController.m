@@ -20,7 +20,7 @@
 
 
 #import "VoicesViewController.h"
-#import "CommodityFunctions.h"
+
 
 @implementation VoicesViewController
 @synthesize teamDictionary, voiceArray, lastIndexPath;

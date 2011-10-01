@@ -103,7 +103,7 @@
 		6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920911CA9BA200D6E256 /* VoicesViewController.m */; };
 		6165922211CA9BA200D6E256 /* WeaponSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920B11CA9BA200D6E256 /* WeaponSettingsViewController.m */; };
 		6165922E11CA9BD500D6E256 /* CGPointUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 6165922311CA9BD500D6E256 /* CGPointUtils.c */; };
-		6165922F11CA9BD500D6E256 /* CommodityFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922611CA9BD500D6E256 /* CommodityFunctions.m */; };
+		6165922F11CA9BD500D6E256 /* HWUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922611CA9BD500D6E256 /* HWUtils.m */; };
 		6165923111CA9BD500D6E256 /* SquareButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922B11CA9BD500D6E256 /* SquareButtonView.m */; };
 		6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165922D11CA9BD500D6E256 /* UIImageExtra.m */; };
 		6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */; };
@@ -392,6 +392,7 @@
 		615FEAE012A2A6640098EE92 /* localplayButton~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "localplayButton~iphone.png"; path = "Resources/Frontend/localplayButton~iphone.png"; sourceTree = "<group>"; };
 		6163EE7C11CC2600001C0453 /* SingleWeaponViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleWeaponViewController.h; sourceTree = "<group>"; };
 		6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleWeaponViewController.m; sourceTree = "<group>"; };
+		61641FE31437CDAA006E049C /* DefinesAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DefinesAndMacros.h; path = Classes/DefinesAndMacros.h; sourceTree = "<group>"; };
 		616591E011CA9BA200D6E256 /* FlagsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlagsViewController.h; sourceTree = "<group>"; };
 		616591E111CA9BA200D6E256 /* FlagsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlagsViewController.m; sourceTree = "<group>"; };
 		616591E211CA9BA200D6E256 /* FortsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FortsViewController.h; sourceTree = "<group>"; };
@@ -438,8 +439,8 @@
 		6165920B11CA9BA200D6E256 /* WeaponSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeaponSettingsViewController.m; sourceTree = "<group>"; };
 		6165922311CA9BD500D6E256 /* CGPointUtils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CGPointUtils.c; path = Classes/CGPointUtils.c; sourceTree = "<group>"; };
 		6165922411CA9BD500D6E256 /* CGPointUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGPointUtils.h; path = Classes/CGPointUtils.h; sourceTree = "<group>"; };
-		6165922511CA9BD500D6E256 /* CommodityFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommodityFunctions.h; path = Classes/CommodityFunctions.h; sourceTree = "<group>"; };
-		6165922611CA9BD500D6E256 /* CommodityFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CommodityFunctions.m; path = Classes/CommodityFunctions.m; sourceTree = "<group>"; };
+		6165922511CA9BD500D6E256 /* HWUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HWUtils.h; path = Classes/HWUtils.h; sourceTree = "<group>"; };
+		6165922611CA9BD500D6E256 /* HWUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HWUtils.m; path = Classes/HWUtils.m; sourceTree = "<group>"; };
 		6165922911CA9BD500D6E256 /* PascalImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PascalImports.h; path = Classes/PascalImports.h; sourceTree = "<group>"; };
 		6165922A11CA9BD500D6E256 /* SquareButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SquareButtonView.h; path = Classes/SquareButtonView.h; sourceTree = "<group>"; };
 		6165922B11CA9BD500D6E256 /* SquareButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SquareButtonView.m; path = Classes/SquareButtonView.m; sourceTree = "<group>"; };
@@ -700,6 +701,7 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61641FE21437CD8F006E049C /* Headers */,
 				61DE91561258B76800B80214 /* Custom UIs */,
 				61AC067212B2E32D000B52A2 /* Appirater.h */,
 				61AC067312B2E32D000B52A2 /* Appirater.m */,
@@ -707,13 +709,10 @@
 				61C28D3E142D380400DA16C2 /* AudioManagerController.m */,
 				6165929C11CA9E2F00D6E256 /* HedgewarsAppDelegate.h */,
 				6165929D11CA9E2F00D6E256 /* HedgewarsAppDelegate.m */,
-				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
-				61A97F0E136F675A00DD9878 /* hwconsts.h */,
-				6165922911CA9BD500D6E256 /* PascalImports.h */,
 				61D2059F127CDD1100ABD83E /* ObjcExports.h */,
 				61D205A0127CDD1100ABD83E /* ObjcExports.m */,
-				6165922511CA9BD500D6E256 /* CommodityFunctions.h */,
-				6165922611CA9BD500D6E256 /* CommodityFunctions.m */,
+				6165922511CA9BD500D6E256 /* HWUtils.h */,
+				6165922611CA9BD500D6E256 /* HWUtils.m */,
 				61006F93128DE31F00EBA7F7 /* CreationChamber.h */,
 				61006F94128DE31F00EBA7F7 /* CreationChamber.m */,
 				6165922411CA9BD500D6E256 /* CGPointUtils.h */,
@@ -903,6 +902,17 @@
 				611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */,
 			);
 			name = Overlay;
+			sourceTree = "<group>";
+		};
+		61641FE21437CD8F006E049C /* Headers */ = {
+			isa = PBXGroup;
+			children = (
+				61641FE31437CDAA006E049C /* DefinesAndMacros.h */,
+				32CA4F630368D1EE00C91783 /* Hedgewars_Prefix.pch */,
+				61A97F0E136F675A00DD9878 /* hwconsts.h */,
+				6165922911CA9BD500D6E256 /* PascalImports.h */,
+			);
+			name = Headers;
 			sourceTree = "<group>";
 		};
 		61798892114AA56300BA94A9 /* inc */ = {
@@ -1555,7 +1565,7 @@
 				6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */,
 				6165922211CA9BA200D6E256 /* WeaponSettingsViewController.m in Sources */,
 				6165922E11CA9BD500D6E256 /* CGPointUtils.c in Sources */,
-				6165922F11CA9BD500D6E256 /* CommodityFunctions.m in Sources */,
+				6165922F11CA9BD500D6E256 /* HWUtils.m in Sources */,
 				6165923111CA9BD500D6E256 /* SquareButtonView.m in Sources */,
 				6165923211CA9BD500D6E256 /* UIImageExtra.m in Sources */,
 				6165929E11CA9E2F00D6E256 /* HedgewarsAppDelegate.m in Sources */,

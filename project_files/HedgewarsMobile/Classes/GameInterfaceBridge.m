@@ -20,7 +20,7 @@
 
 
 #import "GameInterfaceBridge.h"
-#import "PascalImports.h"
+#import "ServerSetup.h"
 #import "EngineProtocolNetwork.h"
 #import "OverlayViewController.h"
 #import "StatsPageViewController.h"
@@ -32,7 +32,7 @@
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
-        self.ipcPort = randomPort();
+        self.ipcPort = [ServerSetup randomPort];
         self.gameType = gtNone;
         self.savePath = nil;
 
@@ -79,11 +79,11 @@
         height = (int) screenBounds.size.width;
     }
 
-    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width * (int)getScreenScale()];
-    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height * (int)getScreenScale()];
+    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width * (int)[[UIScreen mainScreen] scale]];
+    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height * (int)[[UIScreen mainScreen] scale]];
     NSString *rotation = [[NSString alloc] initWithString:@"0"];
 
-    NSString *modelId = getModelType();
+    NSString *modelId = [HWUtils modelType];
     NSInteger tmpQuality;
     if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])     // = iPhone and iPhone 3G or iPod Touch or iPod Touch 2G
         tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;                 // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
@@ -121,7 +121,7 @@
     [localeString release];
     [ipcString release];
 
-    objcExportsInit();
+    [ObjcExports initialize];
 
     // this is the pascal fuction that starts the game, wrapped around isInGame
     [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;

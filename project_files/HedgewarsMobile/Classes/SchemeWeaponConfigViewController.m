@@ -20,7 +20,7 @@
 
 
 #import "SchemeWeaponConfigViewController.h"
-#import "CommodityFunctions.h"
+
 
 #define LABEL_TAG 57423
 
@@ -59,7 +59,7 @@
         self.view.backgroundColor = [UIColor blackColor];
     }
 
-    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+    self.tableView.separatorColor = [UIColor darkYellowColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
@@ -154,8 +154,8 @@
         }
     }
 
-    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
-    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    cell.backgroundColor = [UIColor blackColorTransparent];
+    cell.textLabel.textColor = [UIColor lightYellowColor];
     cell.detailTextLabel.textColor = [UIColor whiteColor];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
@@ -294,7 +294,8 @@
     self.tableView.scrollEnabled = NO;
 
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 60);
-    UILabel *theLabel = createBlueLabel(NSLocalizedString(@"Missions don't need further configuration",@""), frame);
+    UILabel *theLabel = [[UILabel alloc] initWithFrame:frame
+                                              andTitle:NSLocalizedString(@"Missions don't need further configuration",@"")];
     theLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
     theLabel.numberOfLines = 2;
     theLabel.tag = LABEL_TAG;

@@ -20,8 +20,7 @@
 
 
 #import "HogHatViewController.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
+
 
 @implementation HogHatViewController
 @synthesize teamDictionary, hatArray, normalHogSprite, lastIndexPath, selectedHog;

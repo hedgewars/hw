@@ -21,8 +21,7 @@
 
 #import "SingleSchemeViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
+
 
 #define LABEL_TAG  12345
 #define SLIDER_TAG 54321

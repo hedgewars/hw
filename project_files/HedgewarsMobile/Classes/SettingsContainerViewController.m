@@ -21,7 +21,7 @@
 
 #import "SettingsContainerViewController.h"
 #import "SettingsBaseViewController.h"
-#import "CommodityFunctions.h"
+
 
 @implementation SettingsContainerViewController
 @synthesize baseController, activeController, splitViewRootController;

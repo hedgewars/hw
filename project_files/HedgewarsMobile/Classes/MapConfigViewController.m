@@ -20,11 +20,9 @@
 
 
 #import "MapConfigViewController.h"
-#import "PascalImports.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
 #import "SchemeWeaponConfigViewController.h"
 #import "GameConfigViewController.h"
+
 
 #define scIndex         self.segmentedControl.selectedSegmentIndex
 #define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)
@@ -74,7 +72,7 @@
 
     // perform as if user clicked on an entry
     [self tableView:self.tableView didSelectRowAtIndexPath:theIndex];
-    if (IS_NOT_POWERFUL(getModelType()) == NO)
+    if (IS_NOT_POWERFUL([HWUtils modelType]) == NO)
         [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
@@ -138,7 +136,7 @@
     cell.textLabel.text = labelString;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.minimumFontSize = 7;
-    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    cell.textLabel.textColor = [UIColor lightYellowColor];
     cell.textLabel.backgroundColor = [UIColor clearColor];
 
     if (isRandomness()) {
@@ -155,7 +153,7 @@
     } else
         cell.accessoryView = nil;
 
-    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
+    cell.backgroundColor = [UIColor blackColorTransparent];
     return cell;
 }
 
@@ -378,7 +376,7 @@
 #pragma mark -
 #pragma mark view management
 -(void) loadDataSourceArray {
-    NSString *model = getModelType();
+    NSString *model = [HWUtils modelType];
 
     // only folders containing icon.png are a valid theme
     NSArray *themeArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:THEMES_DIRECTORY() error:NULL];
@@ -394,7 +392,7 @@
     NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
     NSMutableArray *mapArray = [[NSMutableArray alloc] init];
     for (NSString *str in mapArrayFull) {
-        CGSize imgSize = PSPNGSizeFromMetaData([MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
+        CGSize imgSize = [UIImage imageSizeFromMetadataOf:[MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]];
         if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
             continue;
         if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
@@ -405,7 +403,7 @@
     NSArray *missionArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
     NSMutableArray *missionArray = [[NSMutableArray alloc] init];
     for (NSString *str in missionArrayFull) {
-        CGSize imgSize = PSPNGSizeFromMetaData([MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
+        CGSize imgSize = [UIImage imageSizeFromMetadataOf:[MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]];
         if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
             continue;
         if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
@@ -454,7 +452,7 @@
     if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
         [self.tableView setBackgroundView:nil];
     self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+    self.tableView.separatorColor = [UIColor darkYellowColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 

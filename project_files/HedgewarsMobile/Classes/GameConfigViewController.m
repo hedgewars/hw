@@ -25,9 +25,7 @@
 #import "SchemeWeaponConfigViewController.h"
 #import "HelpPageViewController.h"
 #import "GameInterfaceBridge.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
-#import "PascalImports.h"
+
 
 @implementation GameConfigViewController
 @synthesize imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController, interfaceBridge;
@@ -279,29 +277,39 @@
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
     if (IS_IPAD()) {
-        // load other controllers
+        // load other controllers and the background
         if (self.mapConfigViewController == nil)
             self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
 
-        UILabel *leftBackground = createLabelWithParams(nil, CGRectMake(0, 60, 320, 620), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:leftBackground];
-        [leftBackground release];
-        UILabel *middleBackground = createLabelWithParams(nil, CGRectMake(337, 187, 350, 505), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:middleBackground];
-        [middleBackground release];
-        UILabel *rightBackground = createLabelWithParams(nil, CGRectMake(704, 214, 320, 464), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:rightBackground];
-        [rightBackground release];
-        UILabel *topBackground = createLabelWithParams(nil, CGRectMake(714, 14, 300, 190), 2.3f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:topBackground];
-        [topBackground release];
-        UILabel *bottomLeftBackground = createLabelWithParams(nil, CGRectMake(106, 714, 320, 40), 2.0f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:bottomLeftBackground];
-        [bottomLeftBackground release];
-        UILabel *bottomRightBackground = createLabelWithParams(NSLocalizedString(@"Max Hogs:                 ",@""), CGRectMake(594, 714, 320, 40), 2.0f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        bottomRightBackground.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
-        [self.mapConfigViewController.view addSubview:bottomRightBackground];
-        [bottomRightBackground release];
+        UILabel *theLabel;
+        // left column
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 60, 320, 620) andTitle:nil withBorderWidth:2.7f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // center column
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(337, 187, 350, 505) andTitle:nil withBorderWidth:2.7f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // right column
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(704, 214, 320, 464) andTitle:nil withBorderWidth:2.7f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // top right column (map)
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(714, 14, 300, 190) andTitle:nil withBorderWidth:2.3f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // bottom left
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(106, 714, 320, 40) andTitle:nil withBorderWidth:2.0f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // bottom right
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(594, 714, 320, 40)
+                                         andTitle:NSLocalizedString(@"Max Hogs:                 ",@"")
+                                  withBorderWidth:2.0f];
+        theLabel.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+
         [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.maxLabel];
         [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.sizeLabel];
         [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.segmentedControl];

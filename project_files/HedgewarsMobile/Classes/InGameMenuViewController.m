@@ -20,11 +20,9 @@
 
 
 #import "InGameMenuViewController.h"
-#import "PascalImports.h"
-#import "CommodityFunctions.h"
 #import "SDL_sysvideo.h"
 #import "SDL_uikitkeyboard.h"
-#import "OpenGLES/ES1/gl.h"
+
 
 #define VIEW_HEIGHT 200
 

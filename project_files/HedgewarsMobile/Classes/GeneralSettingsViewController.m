@@ -20,7 +20,6 @@
 
 
 #import "GeneralSettingsViewController.h"
-#import "CommodityFunctions.h"
 
 
 @implementation GeneralSettingsViewController

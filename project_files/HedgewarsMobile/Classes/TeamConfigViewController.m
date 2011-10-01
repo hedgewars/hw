@@ -20,8 +20,8 @@
 
 
 #import "TeamConfigViewController.h"
-#import "CommodityFunctions.h"
 #import "SquareButtonView.h"
+
 
 @implementation TeamConfigViewController
 @synthesize listOfTeams, listOfSelectedTeams, cachedContentsOfDir;
@@ -47,7 +47,7 @@
     } else
         self.view.backgroundColor = [UIColor blackColor];
 
-    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+    self.tableView.separatorColor = [UIColor darkYellowColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
@@ -57,7 +57,7 @@
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
     // avoid overwriting selected teams when returning on this view
     if ([self.cachedContentsOfDir isEqualToArray:contentsOfDir] == NO) {
-        NSArray *colors = getAvailableColors();
+        NSArray *colors = [HWUtils teamColors];
         NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
         for (int i = 0; i < [contentsOfDir count]; i++) {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
@@ -105,7 +105,7 @@
     NSString *imgString = [[NSString alloc] initWithFormat:@"%@/hedgehog.png",[[NSBundle mainBundle] resourcePath]];
     UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:imgString];
     [imgString release];
-    CGFloat screenScale = getScreenScale();
+    CGFloat screenScale = [[UIScreen mainScreen] scale];
     int w = hogSprite.size.width * screenScale;
     int h = hogSprite.size.height * screenScale;
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
@@ -120,11 +120,7 @@
     CGImageRef imageRef = CGBitmapContextCreateImage(context);
     
     // Create a new UIImage object
-    UIImage *resultImage;
-    if ([self respondsToSelector:@selector(imageWithCGImage:scale:orientation:)])
-        resultImage = [UIImage imageWithCGImage:imageRef scale:screenScale orientation:UIImageOrientationUp];
-    else
-        resultImage = [UIImage imageWithCGImage:imageRef];
+    UIImage *resultImage = [UIImage imageWithCGImage:imageRef scale:screenScale orientation:UIImageOrientationUp];
     
     // Release colorspace, context and bitmap information
     CGColorSpaceRelease(colorSpace);
@@ -199,8 +195,8 @@
             cell.accessoryView = nil;
     }
 
-    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
-    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
+    cell.textLabel.textColor = [UIColor lightYellowColor];
+    cell.backgroundColor = [UIColor blackColorTransparent];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
     return cell;
@@ -212,12 +208,8 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
-    NSString *text;
-    if (section == 0)
-        text = NSLocalizedString(@"Playing Teams",@"");
-    else
-        text = NSLocalizedString(@"Available Teams",@"");
-    UILabel *theLabel = createBlueLabel(text, frame);
+    NSString *text = (section == 0) ? NSLocalizedString(@"Playing Teams",@"") : NSLocalizedString(@"Available Teams",@"");
+    UILabel *theLabel = [[UILabel alloc] initWithFrame:frame andTitle:text];
     theLabel.center = CGPointMake(self.view.frame.size.width/2, 20);
 
     UIView *theView = [[[UIView alloc] init] autorelease];

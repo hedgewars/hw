@@ -27,9 +27,7 @@
 #import "FortsViewController.h"
 #import "FlagsViewController.h"
 #import "LevelViewController.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
-#import "PascalImports.h"
+
 
 #define TEAMNAME_TAG 78789
 

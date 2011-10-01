@@ -20,7 +20,7 @@
 
 
 #import "SupportViewController.h"
-#import "CommodityFunctions.h"
+
 
 @implementation SupportViewController
 @synthesize waysToSupport;

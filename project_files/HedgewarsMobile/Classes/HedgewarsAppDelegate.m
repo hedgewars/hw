@@ -20,10 +20,8 @@
 
 
 #import "HedgewarsAppDelegate.h"
-#import "PascalImports.h"
-#import "ObjcExports.h"
-#import "CommodityFunctions.h"
 #import "MainMenuViewController.h"
+#import "ObjcExports.h"
 #include <unistd.h>
 
 
@@ -97,7 +95,6 @@
         [AudioManagerController cleanupMemory];
         MSG_MEMCLEAN();
     }
-    print_free_memory();
     // don't clean mainMenuViewController here!!!
 }
 

@@ -20,7 +20,7 @@
 
 
 #import "WeaponCellView.h"
-#import "CommodityFunctions.h"
+
 
 @implementation WeaponCellView
 @synthesize delegate, weaponName, weaponIcon, initialSli, probabilitySli, delaySli, crateSli, helpLabel,

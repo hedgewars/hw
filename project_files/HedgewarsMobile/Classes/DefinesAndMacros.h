@@ -15,11 +15,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
- * File created on 08/04/2010.
+ * File created on 01/10/2011.
  */
 
 
-#import <Foundation/Foundation.h>
+// some macros by http://www.cimgf.com/2010/05/02/my-current-prefix-pch-file/
+// and http://blog.coriolis.ch/2009/01/05/macros-for-xcode/
+
+
+#ifdef DEBUG
+  #define DLog(...) NSLog(@"%s %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:__VA_ARGS__])
+  #define ALog(...) [[NSAssertionHandler currentHandler] handleFailureInFunction:[NSString stringWithCString:__PRETTY_FUNCTION__ encoding:NSUTF8StringEncoding] file:[NSString stringWithCString:__FILE__ encoding:NSUTF8StringEncoding] lineNumber:__LINE__ description:__VA_ARGS__]
+  #define releaseAndNil(x) [x release]
+#else
+  #define DLog(...) do { } while (0)
+  #ifndef NS_BLOCK_ASSERTIONS
+    #define NS_BLOCK_ASSERTIONS
+  #endif
+  #define ALog(...) NSLog(@"%s %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:__VA_ARGS__])
+  #define releaseAndNil(x) [x release], x = nil
+#endif
+
+
+#define ZAssert(condition, ...) do { if (!(condition)) { ALog(__VA_ARGS__); }} while(0)
+#define rotationManager(x) (x == UIInterfaceOrientationLandscapeRight) || (x == UIInterfaceOrientationLandscapeLeft)
+
+#define START_TIMER NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
+#define END_TIMER(msg) 	NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; CMLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
+
 
 #define DOCUMENTS_FOLDER()      [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
@@ -49,12 +72,6 @@
 #define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
 #define MSG_DIDUNLOAD()         DLog(@"unloaded");
 
-#define UICOLOR_HW_YELLOW_BODER [UIColor colorWithRed:(CGFloat)0xFE/255 green:(CGFloat)0xC0/255 blue:0 alpha:1]
-#define UICOLOR_HW_YELLOW_TEXT  [UIColor colorWithRed:(CGFloat)0xF0/255 green:(CGFloat)0xD0/255 blue:0 alpha:1]
-#define UICOLOR_HW_DARKBLUE     [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:1]
-#define UICOLOR_HW_ALPHABLUE    [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:0.58f]
-#define UICOLOR_HW_ALMOSTBLACK  (IS_NOT_POWERFUL(getModelType())) ? [UIColor blackColor] : [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6]
-
 #define IS_DUALHEAD()           ([[UIScreen class] respondsToSelector:@selector(screens)] && [[UIScreen screens] count] > 1)
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 #define IS_NOT_POWERFUL(x)      ([x hasPrefix:@"iPhone1"] || [x hasPrefix:@"iPod1,1"] || [x hasPrefix:@"iPod2,1"])
@@ -62,22 +79,4 @@
 #define IS_VERY_POWERFUL(x)     (IS_NOT_POWERFUL(x) == NO && IS_NOT_VERY_POWERFUL(x) == NO)
 
 #define UIVIEW_HW_SDLVIEW       [[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0]
-
-void print_free_memory (void);
-NSInteger randomPort (void);
-
-NSString *getModelType (void);
-NSArray *getAvailableColors (void);
-
-UILabel *createBlueLabel (NSString *title, CGRect frame);
-UILabel *createLabelWithParams (NSString *title, CGRect frame, CGFloat borderWidth, UIColor *borderColor, UIColor *backgroundColor);
-
-CGSize PSPNGSizeFromMetaData (NSString *aFileName);
-BOOL isNetworkReachable (void);
-
-@interface NSString (extra)
-
--(NSString *) MD5hash;
-
-@end
 

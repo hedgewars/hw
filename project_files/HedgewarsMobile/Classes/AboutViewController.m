@@ -20,7 +20,7 @@
 
 
 #import "AboutViewController.h"
-#import "CommodityFunctions.h"
+
 
 @implementation AboutViewController
 @synthesize tableView, segmentedControl, people;

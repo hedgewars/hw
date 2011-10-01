@@ -22,6 +22,7 @@
 #import "MapPreviewButtonView.h"
 #import "MapConfigViewController.h"
 #import "UIImageExtra.h"
+#import "ServerSetup.h"
 #import <pthread.h>
 
 #define INDICATOR_TAG 7654
@@ -78,7 +79,7 @@
     IPaddress ip;
     BOOL serverQuit = NO;
     static uint8_t map[128*32];
-    int port = randomPort();
+    int port = [ServerSetup randomPort];
 
     if (SDLNet_Init() < 0) {
         DLog(@"SDLNet_Init: %s", SDLNet_GetError());
@@ -197,7 +198,7 @@
     [self setTitle:nil forState:UIControlStateNormal];
     
     // don't display preview on slower device, too slow and memory hog
-    if (IS_NOT_POWERFUL(getModelType())) {
+    if (IS_NOT_POWERFUL([HWUtils modelType])) {
         [self setTitle:NSLocalizedString(@"Preview not available",@"") forState:UIControlStateNormal];
         [self turnOnWidgets];
     } else {        
