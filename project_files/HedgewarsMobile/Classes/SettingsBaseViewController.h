@@ -28,7 +28,7 @@
 @class SchemeSettingsViewController;
 @class SupportViewController;
 
-@interface MasterViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate> {
+@interface SettingsBaseViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate> {
     UIViewController *targetController;
     NSArray *controllerNames;
     NSIndexPath *lastIndexPath;

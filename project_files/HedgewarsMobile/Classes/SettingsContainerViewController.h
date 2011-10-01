@@ -21,7 +21,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SplitViewRootController: UIViewController {
+@interface SettingsContainerViewController : UIViewController {
     UINavigationController *activeController;
     UISplitViewController *splitViewRootController;
 }

@@ -19,11 +19,11 @@
  */
 
 
-#import "SplitViewRootController.h"
-#import "MasterViewController.h"
+#import "SettingsContainerViewController.h"
+#import "SettingsBaseViewController.h"
 #import "CommodityFunctions.h"
 
-@implementation SplitViewRootController
+@implementation SettingsContainerViewController
 @synthesize activeController, splitViewRootController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -37,13 +37,13 @@
 
     if (IS_IPAD()) {
         // the contents on the right of the splitview, setting targetController to nil to avoid creating the table
-        MasterViewController *rightController = [[MasterViewController alloc] init];
+        SettingsBaseViewController *rightController = [[SettingsBaseViewController alloc] init];
         rightController.targetController = nil;
         UINavigationController *rightNavController = [[UINavigationController alloc] initWithRootViewController:rightController];
         [rightController release];
 
         // the contens on the left of the splitview, setting targetController that will receive push/pop actions
-        MasterViewController *leftController = [[MasterViewController alloc] init];
+        SettingsBaseViewController *leftController = [[SettingsBaseViewController alloc] init];
         leftController.targetController = rightNavController.topViewController;
         UINavigationController *leftNavController = [[UINavigationController alloc] initWithRootViewController:leftController];
         [leftController release];
@@ -59,10 +59,10 @@
         // add view to main controller
         [self.view addSubview:self.splitViewRootController.view];
     } else {
-        MasterViewController *mainController = [[MasterViewController alloc] init];
-        mainController.targetController = nil;
-        mainController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
-        [self.view addSubview:mainController.view];
+        SettingsBaseViewController *baseController = [[SettingsBaseViewController alloc] init];
+        baseController.targetController = nil;
+        baseController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+        [self.view addSubview:baseController.view];
         // here setting activeController is not needed as the event is kept active by the uitabbarcontroller
     }
 

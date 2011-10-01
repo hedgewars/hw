@@ -19,15 +19,14 @@
  */
 
 
-#import "MasterViewController.h"
-#import "CommodityFunctions.h"
+#import "SettingsBaseViewController.h"
 #import "GeneralSettingsViewController.h"
 #import "TeamSettingsViewController.h"
 #import "WeaponSettingsViewController.h"
 #import "SchemeSettingsViewController.h"
 #import "SupportViewController.h"
 
-@implementation MasterViewController
+@implementation SettingsBaseViewController
 @synthesize targetController, controllerNames, lastIndexPath;
 
 
@@ -176,11 +175,10 @@
             iconStr = [NSString stringWithFormat:@"%@/Seduction.png",GRAPHICS_DIRECTORY()];
             break;
         default:
-            //seduction.png for support page
             DLog(@"Nope");
             break;
     }
-    
+
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.textLabel.text = [controllerNames objectAtIndex:[indexPath row]];
     UIImage *icon = [[UIImage alloc] initWithContentsOfFile:iconStr];

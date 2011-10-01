@@ -90,14 +90,14 @@
 		6165921411CA9BA200D6E256 /* LevelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591EF11CA9BA200D6E256 /* LevelViewController.m */; };
 		6165921511CA9BA200D6E256 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F111CA9BA200D6E256 /* MainMenuViewController.m */; };
 		6165921611CA9BA200D6E256 /* MapConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F311CA9BA200D6E256 /* MapConfigViewController.m */; };
-		6165921711CA9BA200D6E256 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F511CA9BA200D6E256 /* MasterViewController.m */; };
+		6165921711CA9BA200D6E256 /* SettingsBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F511CA9BA200D6E256 /* SettingsBaseViewController.m */; };
 		6165921811CA9BA200D6E256 /* OverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F711CA9BA200D6E256 /* OverlayViewController.m */; };
 		6165921911CA9BA200D6E256 /* InGameMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591F911CA9BA200D6E256 /* InGameMenuViewController.m */; };
 		6165921A11CA9BA200D6E256 /* SchemeSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FB11CA9BA200D6E256 /* SchemeSettingsViewController.m */; };
 		6165921B11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FD11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m */; };
 		6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */; };
 		6165921D11CA9BA200D6E256 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920111CA9BA200D6E256 /* SingleTeamViewController.m */; };
-		6165921E11CA9BA200D6E256 /* SplitViewRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920311CA9BA200D6E256 /* SplitViewRootController.m */; };
+		6165921E11CA9BA200D6E256 /* SettingsContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920311CA9BA200D6E256 /* SettingsContainerViewController.m */; };
 		6165921F11CA9BA200D6E256 /* TeamConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920511CA9BA200D6E256 /* TeamConfigViewController.m */; };
 		6165922011CA9BA200D6E256 /* TeamSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920711CA9BA200D6E256 /* TeamSettingsViewController.m */; };
 		6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920911CA9BA200D6E256 /* VoicesViewController.m */; };
@@ -412,8 +412,8 @@
 		616591F111CA9BA200D6E256 /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuViewController.m; sourceTree = "<group>"; };
 		616591F211CA9BA200D6E256 /* MapConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapConfigViewController.h; sourceTree = "<group>"; };
 		616591F311CA9BA200D6E256 /* MapConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapConfigViewController.m; sourceTree = "<group>"; };
-		616591F411CA9BA200D6E256 /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		616591F511CA9BA200D6E256 /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
+		616591F411CA9BA200D6E256 /* SettingsBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsBaseViewController.h; sourceTree = "<group>"; };
+		616591F511CA9BA200D6E256 /* SettingsBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsBaseViewController.m; sourceTree = "<group>"; };
 		616591F611CA9BA200D6E256 /* OverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OverlayViewController.h; sourceTree = "<group>"; };
 		616591F711CA9BA200D6E256 /* OverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OverlayViewController.m; sourceTree = "<group>"; };
 		616591F811CA9BA200D6E256 /* InGameMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InGameMenuViewController.h; sourceTree = "<group>"; };
@@ -426,8 +426,8 @@
 		616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleSchemeViewController.m; sourceTree = "<group>"; };
 		6165920011CA9BA200D6E256 /* SingleTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamViewController.h; sourceTree = "<group>"; };
 		6165920111CA9BA200D6E256 /* SingleTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamViewController.m; sourceTree = "<group>"; };
-		6165920211CA9BA200D6E256 /* SplitViewRootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplitViewRootController.h; sourceTree = "<group>"; };
-		6165920311CA9BA200D6E256 /* SplitViewRootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplitViewRootController.m; sourceTree = "<group>"; };
+		6165920211CA9BA200D6E256 /* SettingsContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsContainerViewController.h; sourceTree = "<group>"; };
+		6165920311CA9BA200D6E256 /* SettingsContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsContainerViewController.m; sourceTree = "<group>"; };
 		6165920411CA9BA200D6E256 /* TeamConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamConfigViewController.h; sourceTree = "<group>"; };
 		6165920511CA9BA200D6E256 /* TeamConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamConfigViewController.m; sourceTree = "<group>"; };
 		6165920611CA9BA200D6E256 /* TeamSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamSettingsViewController.h; sourceTree = "<group>"; };
@@ -807,10 +807,10 @@
 		6163EE4C11CC2478001C0453 /* Settings Pages */ = {
 			isa = PBXGroup;
 			children = (
-				6165920211CA9BA200D6E256 /* SplitViewRootController.h */,
-				6165920311CA9BA200D6E256 /* SplitViewRootController.m */,
-				616591F411CA9BA200D6E256 /* MasterViewController.h */,
-				616591F511CA9BA200D6E256 /* MasterViewController.m */,
+				6165920211CA9BA200D6E256 /* SettingsContainerViewController.h */,
+				6165920311CA9BA200D6E256 /* SettingsContainerViewController.m */,
+				616591F411CA9BA200D6E256 /* SettingsBaseViewController.h */,
+				616591F511CA9BA200D6E256 /* SettingsBaseViewController.m */,
 				6163EE4E11CC248D001C0453 /* First Level */,
 				6163EE4F11CC2497001C0453 /* Second Level */,
 				6163EE5011CC24A1001C0453 /* Third Level */,
@@ -1542,14 +1542,14 @@
 				6165921411CA9BA200D6E256 /* LevelViewController.m in Sources */,
 				6165921511CA9BA200D6E256 /* MainMenuViewController.m in Sources */,
 				6165921611CA9BA200D6E256 /* MapConfigViewController.m in Sources */,
-				6165921711CA9BA200D6E256 /* MasterViewController.m in Sources */,
+				6165921711CA9BA200D6E256 /* SettingsBaseViewController.m in Sources */,
 				6165921811CA9BA200D6E256 /* OverlayViewController.m in Sources */,
 				6165921911CA9BA200D6E256 /* InGameMenuViewController.m in Sources */,
 				6165921A11CA9BA200D6E256 /* SchemeSettingsViewController.m in Sources */,
 				6165921B11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m in Sources */,
 				6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */,
 				6165921D11CA9BA200D6E256 /* SingleTeamViewController.m in Sources */,
-				6165921E11CA9BA200D6E256 /* SplitViewRootController.m in Sources */,
+				6165921E11CA9BA200D6E256 /* SettingsContainerViewController.m in Sources */,
 				6165921F11CA9BA200D6E256 /* TeamConfigViewController.m in Sources */,
 				6165922011CA9BA200D6E256 /* TeamSettingsViewController.m in Sources */,
 				6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */,

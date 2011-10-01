@@ -23,7 +23,7 @@
 #import "CreationChamber.h"
 #import "PascalImports.h"
 #import "GameConfigViewController.h"
-#import "SplitViewRootController.h"
+#import "SettingsContainerViewController.h"
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
@@ -176,7 +176,7 @@
             break;
         case 2:
             if (nil == self.settingsViewController) {
-                SplitViewRootController *svrc = [[SplitViewRootController alloc] initWithNibName:nil bundle:nil];
+                SettingsContainerViewController *svrc = [[SettingsContainerViewController alloc] initWithNibName:nil bundle:nil];
                 svrc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
                 self.settingsViewController = svrc;
                 [svrc release];
