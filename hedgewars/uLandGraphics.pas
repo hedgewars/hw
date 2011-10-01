@@ -647,7 +647,7 @@ UpdateLandTexture(tx, ddx, ty, ddy)
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
-var X, Y, bpp, h, w, row, col, numFramesFirstCol: LongInt;
+var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
 begin
@@ -702,14 +702,23 @@ case bpp of
             for x:= 0 to Pred(w) do
                 if PLongword(@(p^[x * 4]))^ <> 0 then
                    begin
+                   if (cReducedQuality and rqBlurryLand) = 0 then
+                       begin
+                       gX:= cpX + x;
+                       gY:= cpY + y;
+                       end
+                   else
+                       begin
+                       gX:= (cpX + x) div 2;
+                       gY:= (cpY + y) div 2;
+                       end;
                    if indestructible then
                        Land[cpY + y, cpX + x]:= lfIndestructible
+                   else if (LandPixels[gY, gX] and AMask) shr AShift = 255 then  // This test assumes lfBasic and lfObject differ only graphically
+                       Land[cpY + y, cpX + x]:= lfBasic
                    else
                        Land[cpY + y, cpX + x]:= lfObject;
-                   if (cReducedQuality and rqBlurryLand) = 0 then
-                       LandPixels[cpY + y, cpX + x]:= PLongword(@(p^[x * 4]))^
-                   else
-                       LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= PLongword(@(p^[x * 4]))^
+                   LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
                    end;
             p:= @(p^[Image^.pitch]);
             end;

@@ -91,7 +91,7 @@ const
 // TODO - set lfBasic for all solid land, ensure all uses of the flags can handle multiple flag bits
     lfBasic          = $8000;  // white
     lfIndestructible = $4000;  // red
-    lfObject         = $2000;  // no idea
+    lfObject         = $2000;  // no idea - lfObject and lfBasic are only to be different *graphically*  in all other ways they should be treated the same
     lfDamaged        = $1000;  // no idea
 
     cMaxPower     = 1500;
