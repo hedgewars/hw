@@ -33,6 +33,7 @@
 #pragma mark -
 #pragma mark View Lifecycle
 -(void) viewDidLoad {
+    self.navigationItem.title = @"Edit game options";
     [super viewDidLoad];
 }
 

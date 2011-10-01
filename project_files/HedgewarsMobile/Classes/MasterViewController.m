@@ -28,7 +28,7 @@
 #import "SupportViewController.h"
 
 @implementation MasterViewController
-@synthesize rootController, targetController, controllerNames, lastIndexPath;
+@synthesize targetController, controllerNames, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -39,9 +39,7 @@
 #pragma mark -
 #pragma mark View lifecycle
 -(void) viewDidLoad {
-    [super viewDidLoad];
-
-    // the list of selectable controllers
+    // the list of available controllers
     NSArray *array = [[NSArray alloc] initWithObjects:NSLocalizedString(@"General",@""),
                                                       NSLocalizedString(@"Teams",@""),
                                                       NSLocalizedString(@"Weapons",@""),
@@ -51,18 +49,95 @@
     self.controllerNames = array;
     [array release];
 
-    // targetControllers tells whether we're on the right or left side of the splitview -- on iphone we only use the right side
-    if (targetController == nil && IS_IPAD()) {
-        if (nil == generalSettingsViewController)
-            generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        generalSettingsViewController.navigationItem.hidesBackButton = YES;
-        [generalSettingsViewController viewWillAppear:YES];
-        [self.navigationController pushViewController:generalSettingsViewController animated:NO];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                target:self
+                                                                                action:@selector(dismissSplitView)];
+    if (IS_IPAD()) {
+        // this class gets loaded twice, we tell the difference by looking at targetController
+        if (self.targetController != nil) {
+            UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStylePlain];
+            tableView.delegate = self;
+            tableView.dataSource = self;
+            [tableView reloadData];
+            [self.view addSubview:tableView];
+            [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+            [tableView release];
+            self.navigationItem.leftBarButtonItem = doneButton;
+        }
     } else {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                              target:self
-                                                                                              action:@selector(dismissSplitView)];
+        // this class just loads all controllers and set up tabbar and navigation controllers
+        NSMutableArray *tabBarNavigationControllers = [[NSMutableArray alloc] initWithCapacity:5];
+        UINavigationController *navController = nil;
+
+        if (nil == generalSettingsViewController) {
+            generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            generalSettingsViewController.tabBarItem.title = [self.controllerNames objectAtIndex:0];
+            generalSettingsViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/TargetBee.png",GRAPHICS_DIRECTORY()]];
+            navController = [[UINavigationController alloc] initWithRootViewController:generalSettingsViewController];
+            generalSettingsViewController.navigationItem.backBarButtonItem = doneButton;
+            generalSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
+            [generalSettingsViewController release];
+            [tabBarNavigationControllers addObject:navController];
+            releaseAndNil(navController);
+        }
+        if (nil == teamSettingsViewController) {
+            teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            teamSettingsViewController.tabBarItem.title = [self.controllerNames objectAtIndex:1];
+            teamSettingsViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/Egg.png",GRAPHICS_DIRECTORY()]];
+            navController = [[UINavigationController alloc] initWithRootViewController:teamSettingsViewController];
+            teamSettingsViewController.navigationItem.backBarButtonItem = doneButton;
+            teamSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
+            [tabBarNavigationControllers addObject:navController];
+            releaseAndNil(navController);
+        }
+        if (nil == weaponSettingsViewController) {
+            weaponSettingsViewController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            weaponSettingsViewController.tabBarItem.title = [self.controllerNames objectAtIndex:2];
+            weaponSettingsViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/cheese.png",GRAPHICS_DIRECTORY()]];
+            navController = [[UINavigationController alloc] initWithRootViewController:weaponSettingsViewController];
+            weaponSettingsViewController.navigationItem.backBarButtonItem = doneButton;
+            weaponSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
+            [tabBarNavigationControllers addObject:navController];
+            releaseAndNil(navController);
+        }
+        if (nil == schemeSettingsViewController) {
+            schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            schemeSettingsViewController.tabBarItem.title = [self.controllerNames objectAtIndex:3];
+            schemeSettingsViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/Targetp.png",GRAPHICS_DIRECTORY()]];
+            navController = [[UINavigationController alloc] initWithRootViewController:schemeSettingsViewController];
+            schemeSettingsViewController.navigationItem.backBarButtonItem = doneButton;
+            schemeSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
+            [tabBarNavigationControllers addObject:navController];
+            releaseAndNil(navController);
+        }
+        if (nil == supportViewController) {
+            supportViewController = [[SupportViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            supportViewController.tabBarItem.title = [self.controllerNames objectAtIndex:4];
+            supportViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/Seduction.png",GRAPHICS_DIRECTORY()]];
+            navController = [[UINavigationController alloc] initWithRootViewController:supportViewController];
+            supportViewController.navigationItem.backBarButtonItem = doneButton;
+            supportViewController.navigationItem.leftBarButtonItem = doneButton;
+            [tabBarNavigationControllers addObject:navController];
+            releaseAndNil(navController);
+        }
+
+        UITabBarController *tabController = [[UITabBarController alloc] init];
+        tabController.viewControllers = tabBarNavigationControllers;
+        tabController.delegate = self;
+
+        [self.view addSubview:tabController.view];
     }
+    [doneButton release];
+    [super viewDidLoad];
+}
+
+-(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
+    [viewController viewWillAppear:NO];
+}
+
+-(void) dismissSplitView {
+    [AudioManagerController playBackSound];
+    [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark -
@@ -72,7 +147,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [controllerNames count];
+    return [self.controllerNames count];
 }
 
 // Customize the appearance of table view cells.
@@ -106,11 +181,7 @@
             break;
     }
     
-    if (nil == targetController)
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    else
-        cell.accessoryType = UITableViewCellAccessoryNone;
-
+    cell.accessoryType = UITableViewCellAccessoryNone;
     cell.textLabel.text = [controllerNames objectAtIndex:[indexPath row]];
     UIImage *icon = [[UIImage alloc] initWithContentsOfFile:iconStr];
     cell.imageView.image = icon;
@@ -127,7 +198,7 @@
     UIViewController *nextController = nil;
 
     if (newRow != oldRow) {
-        [self.tableView deselectRowAtIndexPath:lastIndexPath animated:YES];
+        [tableView deselectRowAtIndexPath:lastIndexPath animated:YES];
         [targetController.navigationController popToRootViewControllerAnimated:NO];
 
         switch (newRow) {
@@ -158,18 +229,13 @@
                 break;
         }
 
-        nextController.title = [controllerNames objectAtIndex:newRow];
         self.lastIndexPath = indexPath;
-        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        [tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
 
-        if (nil == targetController) {
-            nextController.navigationItem.hidesBackButton = NO;
-            [self.navigationController pushViewController:nextController animated:YES];
-        } else {
-            [AudioManagerController playClickSound];
-            nextController.navigationItem.hidesBackButton = YES;
-            [targetController.navigationController pushViewController:nextController animated:NO];
-        }
+        nextController.navigationItem.hidesBackButton = YES;
+        [nextController viewWillAppear:NO];
+        [targetController.navigationController pushViewController:nextController animated:NO];
+        [AudioManagerController playClickSound];
     }
 }
 
@@ -192,8 +258,6 @@
 }
 
 -(void) viewDidUnload {
-    //self.rootController = nil;
-    //self.targetController = nil;
     self.controllerNames = nil;
     self.lastIndexPath = nil;
     generalSettingsViewController = nil;
@@ -206,7 +270,6 @@
 }
 
 -(void) dealloc {
-    releaseAndNil(rootController);
     releaseAndNil(targetController);
     releaseAndNil(controllerNames);
     releaseAndNil(lastIndexPath);
@@ -216,10 +279,6 @@
     releaseAndNil(schemeSettingsViewController);
     releaseAndNil(supportViewController);
     [super dealloc];
-}
-
--(IBAction) dismissSplitView {
-    [self.rootController dismissModalViewControllerAnimated:YES];
 }
 
 @end

@@ -22,16 +22,14 @@
 #import <UIKit/UIKit.h>
 
 
-@class SplitViewRootController;
 @class GeneralSettingsViewController;
 @class TeamSettingsViewController;
 @class WeaponSettingsViewController;
 @class SchemeSettingsViewController;
 @class SupportViewController;
 
-@interface MasterViewController : UITableViewController {
-    SplitViewRootController *rootController;
-    MasterViewController *targetController;
+@interface MasterViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate> {
+    UIViewController *targetController;
     NSArray *controllerNames;
     NSIndexPath *lastIndexPath;
     GeneralSettingsViewController *generalSettingsViewController;
@@ -41,11 +39,10 @@
     SupportViewController *supportViewController;
 }
 
-@property (nonatomic, retain) MasterViewController *targetController;
-@property (nonatomic, retain) SplitViewRootController *rootController;
+@property (nonatomic, retain) UIViewController *targetController;
 @property (nonatomic, retain) NSArray *controllerNames;
 @property (nonatomic, retain) NSIndexPath *lastIndexPath;
 
--(IBAction) dismissSplitView;
+-(void) dismissSplitView;
 
 @end

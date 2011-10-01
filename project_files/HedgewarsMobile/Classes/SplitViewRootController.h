@@ -21,16 +21,12 @@
 
 #import <UIKit/UIKit.h>
 
-@class MasterViewController;
-
 @interface SplitViewRootController: UIViewController {
-    MasterViewController *activeController;
-    UINavigationController *rightNavController;
+    UINavigationController *activeController;
     UISplitViewController *splitViewRootController;
 }
 
-@property (nonatomic,retain) MasterViewController *activeController;
-@property (nonatomic,retain) UINavigationController *rightNavController;
+@property (nonatomic,retain) UINavigationController *activeController;
 @property (nonatomic,retain) UISplitViewController *splitViewRootController;
 
 @end

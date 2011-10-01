@@ -44,6 +44,7 @@
     self.waysToSupport = array;
     [array release];
 
+    self.navigationItem.title = @"♥";
     self.tableView.rowHeight = 50;
 }
 

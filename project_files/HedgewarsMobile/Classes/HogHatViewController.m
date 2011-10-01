@@ -48,7 +48,7 @@
     self.normalHogSprite = hogSprite;
     [hogSprite release];
 
-    self.title = NSLocalizedString(@"Change hedgehog's hat",@"");
+    self.title = NSLocalizedString(@"Change hedgehogs' hat",@"");
 }
 
 -(void) viewWillAppear:(BOOL)animated {
