@@ -21,11 +21,15 @@
 
 #import <UIKit/UIKit.h>
 
+@class SettingsBaseViewController;
+
 @interface SettingsContainerViewController : UIViewController {
+    SettingsBaseViewController *baseController;
     UINavigationController *activeController;
     UISplitViewController *splitViewRootController;
 }
 
+@property (nonatomic,retain) SettingsBaseViewController *baseController;
 @property (nonatomic,retain) UINavigationController *activeController;
 @property (nonatomic,retain) UISplitViewController *splitViewRootController;
 

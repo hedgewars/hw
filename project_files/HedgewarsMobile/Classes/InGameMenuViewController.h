@@ -31,6 +31,6 @@
 
 -(void) present;
 -(void) dismiss;
--(void) saveCurrentScreenToPhotoAlbum:(UIAlertView *)alert;
+//-(void) saveCurrentScreenToPhotoAlbum:(UIAlertView *)alert;
 
 @end

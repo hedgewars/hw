@@ -27,7 +27,7 @@
 #import "SupportViewController.h"
 
 @implementation SettingsBaseViewController
-@synthesize targetController, controllerNames, lastIndexPath;
+@synthesize tabController, targetController, controllerNames, lastIndexPath;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -120,11 +120,11 @@
             releaseAndNil(navController);
         }
 
-        UITabBarController *tabController = [[UITabBarController alloc] init];
-        tabController.viewControllers = tabBarNavigationControllers;
-        tabController.delegate = self;
+        self.tabController = [[UITabBarController alloc] init];
+        self.tabController.viewControllers = tabBarNavigationControllers;
+        self.tabController.delegate = self;
 
-        [self.view addSubview:tabController.view];
+        [self.view addSubview:self.tabController.view];
     }
     [doneButton release];
     [super viewDidLoad];
@@ -251,6 +251,8 @@
         schemeSettingsViewController = nil;
     if (supportViewController.view.superview == nil)
         supportViewController = nil;
+    if (tabController.view.superview == nil)
+        tabController = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
@@ -258,6 +260,8 @@
 -(void) viewDidUnload {
     self.controllerNames = nil;
     self.lastIndexPath = nil;
+    self.targetController = nil;
+    self.tabController = nil;
     generalSettingsViewController = nil;
     teamSettingsViewController = nil;
     weaponSettingsViewController = nil;
@@ -271,6 +275,7 @@
     releaseAndNil(targetController);
     releaseAndNil(controllerNames);
     releaseAndNil(lastIndexPath);
+    releaseAndNil(tabController);
     releaseAndNil(generalSettingsViewController);
     releaseAndNil(teamSettingsViewController);
     releaseAndNil(weaponSettingsViewController);

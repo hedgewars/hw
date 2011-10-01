@@ -32,6 +32,7 @@
     UIViewController *targetController;
     NSArray *controllerNames;
     NSIndexPath *lastIndexPath;
+    UITabBarController *tabController;
     GeneralSettingsViewController *generalSettingsViewController;
     TeamSettingsViewController *teamSettingsViewController;
     WeaponSettingsViewController *weaponSettingsViewController;
@@ -42,6 +43,7 @@
 @property (nonatomic, retain) UIViewController *targetController;
 @property (nonatomic, retain) NSArray *controllerNames;
 @property (nonatomic, retain) NSIndexPath *lastIndexPath;
+@property (nonatomic, retain) UITabBarController *tabController;
 
 -(void) dismissSplitView;
 

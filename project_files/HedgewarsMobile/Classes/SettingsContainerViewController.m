@@ -24,7 +24,7 @@
 #import "CommodityFunctions.h"
 
 @implementation SettingsContainerViewController
-@synthesize activeController, splitViewRootController;
+@synthesize baseController, activeController, splitViewRootController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -59,10 +59,15 @@
         // add view to main controller
         [self.view addSubview:self.splitViewRootController.view];
     } else {
-        SettingsBaseViewController *baseController = [[SettingsBaseViewController alloc] init];
-        baseController.targetController = nil;
-        baseController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
-        [self.view addSubview:baseController.view];
+        if (nil == self.baseController) {
+            SettingsBaseViewController *sbvc = [[SettingsBaseViewController alloc] init];
+            self.baseController = sbvc;
+            [sbvc release];
+        }
+        self.baseController.targetController = nil;
+        self.baseController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+
+        [self.view addSubview:self.baseController.view];
         // here setting activeController is not needed as the event is kept active by the uitabbarcontroller
     }
 
@@ -72,15 +77,18 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    if (self.splitViewRootController.view.superview == nil)
-        self.splitViewRootController = nil;
+    if (self.baseController.view.superview == nil)
+        self.baseController = nil;
     if (self.activeController.view.superview == nil)
         self.activeController = nil;
+    if (self.splitViewRootController.view.superview == nil)
+        self.splitViewRootController = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
+    self.baseController = nil;
     self.activeController = nil;
     self.splitViewRootController = nil;
     MSG_DIDUNLOAD();
@@ -88,6 +96,7 @@
 }
 
 -(void) dealloc {
+    releaseAndNil(baseController);
     releaseAndNil(activeController);
     releaseAndNil(splitViewRootController);
     [super dealloc];
