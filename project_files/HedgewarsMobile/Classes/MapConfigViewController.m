@@ -441,6 +441,7 @@
     if (self.segmentedControl.selectedSegmentIndex == 1) {
         self.slider.enabled = NO;
         self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
+        self.sizeLabel.textColor = [UIColor lightYellowColor];
     }
 
     self.templateFilterCommand = @"e$template_filter 0";

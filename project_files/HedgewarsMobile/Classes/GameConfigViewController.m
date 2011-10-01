@@ -299,14 +299,16 @@
         [self.mapConfigViewController.view addSubview:theLabel];
         releaseAndNil(theLabel);
         // bottom left
-        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(106, 714, 320, 40) andTitle:nil withBorderWidth:2.0f];
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 714, 320, 40) andTitle:nil withBorderWidth:2.0f];
         [self.mapConfigViewController.view addSubview:theLabel];
         releaseAndNil(theLabel);
         // bottom right
-        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(594, 714, 320, 40)
-                                         andTitle:NSLocalizedString(@"Max Hogs:                 ",@"")
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(596, 714, 320, 40)
+                                         andTitle:NSLocalizedString(@"          Max Hogs:",@"")
                                   withBorderWidth:2.0f];
         theLabel.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
+        theLabel.textColor = [UIColor lightYellowColor];
+        theLabel.textAlignment = UITextAlignmentLeft;
         [self.mapConfigViewController.view addSubview:theLabel];
         releaseAndNil(theLabel);
 

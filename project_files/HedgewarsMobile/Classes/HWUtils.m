@@ -78,10 +78,7 @@
 }
 
 +(UIColor *)blackColorTransparent {
-    if (IS_NOT_POWERFUL([HWUtils modelType]))
-        return [UIColor blackColor];
-    else
-        return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.6];
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5f];
 }
 
 @end
@@ -102,7 +99,7 @@
                       andTitle:title
                withBorderWidth:borderWidth
                withBorderColor:[UIColor darkYellowColor]
-           withBackgroundColor:[UIColor darkBlueColor]];
+           withBackgroundColor:[UIColor darkBlueColorTransparent]];
 }
 
 -(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth
