@@ -638,11 +638,11 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
       begin
       Gear^.Message:= Gear^.Message and not gmLJump;
       DeleteCI(Gear);
-      if not TestCollisionYwithGear(Gear, -1) then
+      if TestCollisionYwithGear(Gear, -1) = 0 then
          if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - _2 else
          if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
-         or   TestCollisionYwithGear(Gear, -1)) then
+         or   (TestCollisionYwithGear(Gear, -1) <> 0)) then
          begin
          Gear^.dY:= -_0_15;
          if not cArtillery then Gear^.dX:= SignAs(_0_15, Gear^.dX);
@@ -685,17 +685,17 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       begin
       if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -5, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -4, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       end;
 
    if (not cArtillery) and ((Gear^.Message and gmPrecise) = 0) and (not TestCollisionXwithGear(Gear, hwSign(Gear^.dX))) then
@@ -703,25 +703,25 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
 
    SetAllHHToActive;
 
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
       begin
       Gear^.Y:= Gear^.Y - _6;
       Gear^.dY:= _0;
@@ -758,7 +758,9 @@ procedure doStepHedgehog(Gear: PGear); forward;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling, isUnderwater: boolean;
+    land: Word;
 begin
+land:= 0;
 isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
 if Gear^.dX.QWordValue > 8160437862 then Gear^.dX.QWordValue:= 8160437862;
 if Gear^.dY.QWordValue > 8160437862 then Gear^.dY.QWordValue:= 8160437862;
@@ -796,7 +798,8 @@ if isFalling then
    end 
 else
    begin
-   if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue)
+   land:= TestCollisionYwithGear(Gear, 1);
+   if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0)
       and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
 
    if not Gear^.dY.isNegative then
@@ -810,7 +813,11 @@ else
       Gear^.dY:= _0;
       end else Gear^.dY:= Gear^.dY + cGravity;
 
-   if ((Gear^.State and gstMoving) <> 0) then Gear^.dX:= Gear^.dX * Gear^.Friction
+   if ((Gear^.State and gstMoving) <> 0) then
+       begin
+       if land and lfIce <> 0 then Gear^.dX:= Gear^.dX * (_1 - (_1 - Gear^.Friction) / _2)
+       else Gear^.dX:= Gear^.dX * Gear^.Friction;
+       end
    end;
 
 if (Gear^.State <> 0) then DeleteCI(Gear);

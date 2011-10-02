@@ -718,6 +718,8 @@ case bpp of
                        Land[cpY + y, cpX + x]:= lfBasic
                    else
                        Land[cpY + y, cpX + x]:= lfObject;
+                   // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
+                   if (Theme = 'Snow') or (Theme = 'Christmas') then Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or lfIce;
                    LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
                    end;
             p:= @(p^[Image^.pitch]);

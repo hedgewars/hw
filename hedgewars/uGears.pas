@@ -1490,11 +1490,11 @@ while i > 0 do
                     if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
                         begin
                         if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-                            or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+                            or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
                         if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-                            or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+                            or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
                         if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-                            or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+                            or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
                         end;
 
                     if (Ammo^.Kind <> gtFlame) or ((Ammo^.State and gsttmpFlag) = 0) then FollowGear:= Gear
