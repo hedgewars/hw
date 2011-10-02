@@ -55,8 +55,17 @@
             break;
         case 1:
             [AudioManagerController playClickSound];
+            if ([self isEverythingSet] == NO)
+                return;
             theButton.enabled = NO;
+            for (UIView *oneView in self.imgContainer.subviews) {
+                if ([oneView isMemberOfClass:[UIImageView class]]) {
+                    UIImageView *anImageView = (UIImageView *)oneView;
+                    [anImageView removeFromSuperview];
+                }
+            }
             [self startGame:theButton];
+            
             break;
         case 2:
             [AudioManagerController playClickSound];
@@ -206,9 +215,6 @@
 
 -(void) startGame:(UIButton *)button {
     button.enabled = YES;
-    
-    if ([self isEverythingSet] == NO)
-        return;
 
     NSString *script = self.mapConfigViewController.missionCommand;
     if ([script isEqualToString:@""])
@@ -238,35 +244,52 @@
 
 -(void) loadNiceHogs {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSString *filePath = [NSString stringWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
-    UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(96, 0, 32, 32)];
-    
+    srand(time(NULL));
+    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
+    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
+    [filePath release];
+
     NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
     int numberOfHats = [hatArray count];
+    int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 18 : 1;
 
     if (self.imgContainer != nil)
         [self.imgContainer removeFromSuperview];
-    
+
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
     for (int i = 0; i < 1 + random()%20; i++) {
         NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
-        
+
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
-        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
-        [hatFile release];
-        UIImage *hogWithHat = [sprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
+        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile];
+        NSMutableArray *animation = [[NSMutableArray alloc] initWithCapacity:animationFrames];
+        for (int j = 0; j < animationFrames; j++) {
+            int x = ((j*32)/(int)hatSprite.size.height)*32;
+            int y = (j*32)%(int)hatSprite.size.height;
+            UIImage *hatSpriteFrame = [hatSprite cutAt:CGRectMake(x, y, 32, 32)];
+            UIImage *hogSpriteFrame = [hogSprite cutAt:CGRectMake(x, y, 32, 32)];
+            UIImage *hogWithHat = [hogSpriteFrame mergeWith:hatSpriteFrame atPoint:CGPointMake(0, 5)];
+            [animation addObject:hogWithHat];
+        }
         [hatSprite release];
-        
-        UIImageView *hog = [[UIImageView alloc] initWithImage:hogWithHat];
-        int x = 15*(i+1)+random()%40;
-        if (x + 32 > 300)
-            x = i*10;
-        hog.frame = CGRectMake(x, 30, 32, 32);
+        [hatFile release];
+
+        UIImageView *hog = [[UIImageView alloc] initWithImage:[animation objectAtIndex:0]];
+        hog.animationImages = animation;
+        hog.animationDuration = 3;
+        [animation release];
+
+        int x = 20*i+random()%128;
+        if (x > 320 - 32)
+            x = i*random()%32;
+        hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
         [self.imgContainer addSubview:hog];
+        [hog startAnimating];
         [hog release];
     }
+
     [self.view addSubview:self.imgContainer];
-    [sprite release];
+    [hogSprite release];
     [pool drain];
 }
 
@@ -291,7 +314,7 @@
         [self.mapConfigViewController.view addSubview:theLabel];
         releaseAndNil(theLabel);
         // right column
-        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(704, 214, 320, 464) andTitle:nil withBorderWidth:2.7f];
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(704, 214, 320, 466) andTitle:nil withBorderWidth:2.7f];
         [self.mapConfigViewController.view addSubview:theLabel];
         releaseAndNil(theLabel);
         // top right column (map)

@@ -51,15 +51,16 @@
     CGFloat screenScale = [[UIScreen mainScreen] scale];
     int w = self.size.width * screenScale;
     int h = self.size.height * screenScale;
-    
+    int yOffset = self.size.height - secondImage.size.height + secondImagePoint.y;
+
     if (w == 0 || h == 0) {
-        DLog(@"Can have 0 dimesions");
+        DLog(@"Cannot have 0 dimesions");
         return self;
     }
     
     // Create a bitmap graphics context; this will also set it as the current context
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(NULL, w, h, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
+    CGContextRef context = CGBitmapContextCreate(NULL, w, h+yOffset, 8, 4 * w, colorSpace, kCGImageAlphaPremultipliedFirst);
     
     // draw the two images in the current context
     CGContextDrawImage(context, CGRectMake(0, 0, self.size.width*screenScale, self.size.height*screenScale), [self CGImage]);
