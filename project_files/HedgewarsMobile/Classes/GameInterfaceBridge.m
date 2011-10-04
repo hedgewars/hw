@@ -215,7 +215,9 @@
     self.gameType = gtMission;
     self.savePath = nil;
 
-    NSDictionary *config = [NSDictionary dictionaryWithObject:withScript forKey:@"mission_command"];
+    NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
+    NSDictionary *config = [NSDictionary dictionaryWithObject:missionPath forKey:@"mission_command"];
+    [missionPath release];
     [self.engineProtocol spawnThread:nil withOptions:config];
     [self prepareEngineLaunch];
 }

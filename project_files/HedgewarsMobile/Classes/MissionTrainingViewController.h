@@ -26,14 +26,14 @@
     UIImageView *previewImage;
     UITableView *tableView;
     UILabel *descriptionLabel;
-    NSString *missionFile;
+    NSString *missionName;
 }
 
 @property (nonatomic, retain) NSArray *listOfMissions;
 @property (nonatomic, retain) IBOutlet UIImageView *previewImage;
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, retain) IBOutlet UILabel *descriptionLabel;
-@property (nonatomic, retain) IBOutlet NSString *missionFile;
+@property (nonatomic, retain) IBOutlet NSString *missionName;
 
 -(IBAction) buttonPressed:(id) sender;
 

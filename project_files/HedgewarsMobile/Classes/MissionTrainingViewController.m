@@ -23,7 +23,7 @@
 #import "GameInterfaceBridge.h"
 
 @implementation MissionTrainingViewController
-@synthesize listOfMissions, previewImage, tableView, descriptionLabel, missionFile;
+@synthesize listOfMissions, previewImage, tableView, descriptionLabel, missionName;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -31,8 +31,6 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 -(void) viewDidLoad {
-    srand(time(NULL));
-
     NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
     self.view.backgroundColor = [UIColor colorWithPatternImage:img];
@@ -71,9 +69,9 @@
         [AudioManagerController playBackSound];
         [[self parentViewController] dismissModalViewControllerAnimated:YES];
     } else {
-/*        GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
-        [bridge startMissionGame:self.missionFile];
-        [bridge release];*/
+        GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+        [bridge startMissionGame:self.missionName];
+        [bridge release];
     }
 }
 
@@ -105,8 +103,8 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *missionName = [[self.listOfMissions objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
-    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Missions/Training/%@@2x.png",GRAPHICS_DIRECTORY(),missionName];
+    self.missionName = [[self.listOfMissions objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
+    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Missions/Training/%@@2x.png",GRAPHICS_DIRECTORY(),self.missionName];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:filePath];
     [filePath release];
     [self.previewImage setImage:img];
@@ -124,17 +122,13 @@
             self.descriptionLabel.text = [descriptionText objectAtIndex:1];
         }
     }
-
-    NSString *missionPath = [[NSString alloc] initWithFormat:@"%@/%@.lua",TRAININGS_DIRECTORY(),missionName];
-    self.missionFile = missionPath;
-    [missionPath release];
 }
 
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
     previewImage = nil;
-    missionFile = nil;
+    missionName = nil;
     [super didReceiveMemoryWarning];
 }
 
@@ -143,7 +137,7 @@
     self.previewImage = nil;
     self.tableView = nil;
     self.descriptionLabel = nil;
-    self.missionFile = nil;
+    self.missionName = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -154,7 +148,7 @@
     releaseAndNil(previewImage);
     releaseAndNil(tableView);
     releaseAndNil(descriptionLabel);
-    releaseAndNil(missionFile);
+    releaseAndNil(missionName);
     [super dealloc];
 }
 

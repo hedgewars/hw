@@ -288,6 +288,9 @@
                 NSString *script = [gameConfig objectForKey:@"mission_command"];
                 if ([script length] != 0)
                     [self sendToEngine:script];
+                // missions/tranings only need the script configuration set
+                if ([gameConfig count] == 1)
+                    break;
 
                 // seed info
                 [self sendToEngine:[gameConfig objectForKey:@"seed_command"]];
