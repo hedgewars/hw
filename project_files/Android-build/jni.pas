@@ -1,6 +1,5 @@
 unit jni;
 {$ifdef fpc}
- {$mode delphi}
  {$packrecords c}
 {$endif}
 
@@ -70,7 +69,7 @@ type va_list=pointer;
      jweak=jobject;
      jref=jobject;
 
-     PPointer=^pointer;
+     //PPointer=^pointer;
      Pjobject=^jobject;
      Pjclass=^jclass;
      Pjstring=^jstring;
@@ -523,12 +522,15 @@ implementation
 
 function JNI_OnLoad(vm:PJavaVM;reserved:pointer):jint;{$ifdef mswindows}stdcall;{$else}cdecl;{$endif}
 begin
+ reserved:=reserved;
  curVM:=vm;
- result:=JNI_VERSION_1_6;
+ exit(JNI_VERSION_1_6);
 end;
 
 procedure JNI_OnUnload(vm:PJavaVM;reserved:pointer);{$ifdef mswindows}stdcall;{$else}cdecl;{$endif}
 begin
+ vm:=vm;
+ reserved:=reserved;
 end;
 
 end.
