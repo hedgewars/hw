@@ -1159,7 +1159,7 @@ if tmpsurf = nil then
                     else if p^[x] = (AMask or RMask) then
                         Land[cpY + y, cpX + x]:= lfIndestructible
                     else if p^[x] = (AMask or BMask) then
-                        Land[cpY + y, cpX + x]:= lfIce
+                        Land[cpY + y, cpX + x]:= lfBasic or lfIce
                     else if p^[x] = $FFFFFFFF then
                         Land[cpY + y, cpX + x]:= lfBasic;
                 end;
