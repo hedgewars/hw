@@ -93,9 +93,9 @@ end;
 
 function ShortStringAsPChar(s: ShortString) : PChar;
 begin
-    if Length(S) = High(s) then Dec(s[0]);
+    if Length(s) = High(s) then Dec(s[0]);
     s[Ord(Length(s))+1] := #0;
-    Result := @S[1];
+    exit(@s[1]);
 end;
 
 function GetLastConsoleLine: shortstring;
