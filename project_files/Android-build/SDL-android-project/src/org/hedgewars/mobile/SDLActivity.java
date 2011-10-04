@@ -283,7 +283,7 @@ class SDLMain implements Runnable {
 		// Runs SDL_main() with added parameters
 		SDLActivity.nativeInit(new String[] { String.valueOf(ipc.port),
 				String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
-				"0", "null", "xeli", "1", "1", "1", "0", "", path });
+				"0", "null", "xeli", "1", "1", "1", path, ""  });
 
 		try {
 			ipc.quitIPC();

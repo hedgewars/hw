@@ -28,7 +28,6 @@
 {$DEFINE GLunit:=GL}
 
 {$IFDEF ANDROID}
-  {$MODE delphi}
   {$DEFINE SDL13}
   {$DEFINE HWLIBRARY}
   {$DEFINE S3D_DISABLED}
@@ -43,7 +42,10 @@
   {$DEFINE S3D_DISABLED}
   {$DEFINE GLunit:=gles11}
   {$DEFINE MOBILE}
-{$ELSE}
+{$ENDIF}
+
+{$IFNDEF IPHONEOS}
+  // not needed on ios because it is switched from the compiler command line arguments
   {$DEFINE DEBUGFILE}
   //{$DEFINE TRACEAIACTIONS}
   //{$DEFINE COUNTTICKS}
