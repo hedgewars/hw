@@ -179,6 +179,8 @@
 		61842B40122B66280096E335 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3F122B66280096E335 /* helpleft.png */; };
 		6187AEBD120781B900B31A27 /* Settings in Resources */ = {isa = PBXBuildFile; fileRef = 6187AEA5120781B900B31A27 /* Settings */; };
 		61889985129995B500D55FD6 /* title~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61889984129995B500D55FD6 /* title~ipad.png */; };
+		61915D5B143A4E2C00299991 /* MissionTrainingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61915D59143A4E2C00299991 /* MissionTrainingViewController.m */; };
+		61915D5C143A4E2C00299991 /* MissionTrainingViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61915D5A143A4E2C00299991 /* MissionTrainingViewController~iPad.xib */; };
 		6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6195981D1364BCD200B429B6 /* libTremor.a */; };
 		619599451364C83D00B429B6 /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599441364C82B00B429B6 /* libLua.a */; };
 		619599C01364E66B00B429B6 /* libFreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599BF1364E65900B429B6 /* libFreetype.a */; };
@@ -542,6 +544,9 @@
 		618899811299516000D55FD6 /* title@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "title@2x~iphone.png"; path = "Resources/Frontend/title@2x~iphone.png"; sourceTree = "<group>"; };
 		61889984129995B500D55FD6 /* title~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "title~ipad.png"; path = "Resources/Frontend/title~ipad.png"; sourceTree = "<group>"; };
 		618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_net.xcodeproj; path = "../../../Library/SDL_net/Xcode-iPhoneOS/SDL_net.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		61915D58143A4E2C00299991 /* MissionTrainingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissionTrainingViewController.h; sourceTree = "<group>"; };
+		61915D59143A4E2C00299991 /* MissionTrainingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissionTrainingViewController.m; sourceTree = "<group>"; };
+		61915D5A143A4E2C00299991 /* MissionTrainingViewController~iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController~iPad.xib"; sourceTree = "<group>"; };
 		619598181364BCD200B429B6 /* Tremor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tremor.xcodeproj; path = ../../misc/libtremor/Xcode/Tremor.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6195993F1364C82B00B429B6 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../misc/liblua/Xcode/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
 		619599BA1364E65900B429B6 /* Freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Freetype.xcodeproj; path = "../../misc/libfreetype/Xcode-iPhoneOS/Freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -788,6 +793,9 @@
 				611D9BFA12497E9800008271 /* SavedGamesViewController.xib */,
 				61B7A33612CC21080086B604 /* StatsPageViewController.h */,
 				61B7A33712CC21080086B604 /* StatsPageViewController.m */,
+				61915D58143A4E2C00299991 /* MissionTrainingViewController.h */,
+				61915D59143A4E2C00299991 /* MissionTrainingViewController.m */,
+				61915D5A143A4E2C00299991 /* MissionTrainingViewController~iPad.xib */,
 			);
 			name = "Other Controllers";
 			sourceTree = "<group>";
@@ -1452,6 +1460,7 @@
 				6167CA42142A6ED7003DD50F /* bot5@2x.png in Resources */,
 				6167CB48142A8769003DD50F /* basehat-hedgehog.png in Resources */,
 				6167CB49142A8769003DD50F /* basehat-hedgehog@2x.png in Resources */,
+				61915D5C143A4E2C00299991 /* MissionTrainingViewController~iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1605,6 +1614,7 @@
 				61A976B3136F668500DD9878 /* uCursor.pas in Sources */,
 				6167A6761391514600AA6D07 /* RestoreViewController.m in Sources */,
 				61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */,
+				61915D5B143A4E2C00299991 /* MissionTrainingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

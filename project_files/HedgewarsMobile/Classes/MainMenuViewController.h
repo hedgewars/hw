@@ -26,13 +26,15 @@
 @class AboutViewController;
 @class SavedGamesViewController;
 @class RestoreViewController;
+@class MissionTrainingViewController;
 
 @interface MainMenuViewController : UIViewController <UIAlertViewDelegate> {
     GameConfigViewController *gameConfigViewController;
     SettingsContainerViewController *settingsViewController;
     AboutViewController *aboutViewController;
     SavedGamesViewController *savedGamesViewController;
-    RestoreViewController *restoreViewCOntroller;
+    RestoreViewController *restoreViewController;
+    MissionTrainingViewController *missionsViewController;
 }
 
 @property (nonatomic,retain) GameConfigViewController *gameConfigViewController;
@@ -40,6 +42,7 @@
 @property (nonatomic,retain) AboutViewController *aboutViewController;
 @property (nonatomic,retain) SavedGamesViewController *savedGamesViewController;
 @property (nonatomic,retain) RestoreViewController *restoreViewController;
+@property (nonatomic,retain) MissionTrainingViewController *missionsViewController;
 
 -(IBAction) switchViews:(id)sender;
 

@@ -44,11 +44,7 @@
     if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
         self.tableView.backgroundView = nil;
 
-    NSString *imgName;
-    if (IS_IPAD())
-        imgName = @"mediumBackground~ipad.png";
-    else
-        imgName = @"smallerBackground~iphone.png";
+    NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
     self.view.backgroundColor = [UIColor colorWithPatternImage:img];
     [img release];

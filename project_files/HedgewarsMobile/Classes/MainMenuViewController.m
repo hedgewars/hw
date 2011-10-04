@@ -21,19 +21,20 @@
 
 #import "MainMenuViewController.h"
 #import "CreationChamber.h"
-#import "PascalImports.h"
 #import "GameConfigViewController.h"
 #import "SettingsContainerViewController.h"
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
+#import "MissionTrainingViewController.h"
 #import "GameInterfaceBridge.h"
 #import "Appirater.h"
 #import "ServerSetup.h"
 
 
 @implementation MainMenuViewController
-@synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController, restoreViewController;
+@synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController,
+            restoreViewController, missionsViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -171,7 +172,6 @@
                 self.gameConfigViewController = gcvc;
                 [gcvc release];
             }
-
             [self presentModalViewController:self.gameConfigViewController animated:YES];
             break;
         case 2:
@@ -181,7 +181,6 @@
                 self.settingsViewController = svrc;
                 [svrc release];
             }
-
             [self presentModalViewController:self.settingsViewController animated:YES];
             break;
         case 3:
@@ -224,8 +223,18 @@
                 self.savedGamesViewController = savedgames;
                 [savedgames release];
             }
-            
             [self presentModalViewController:self.savedGamesViewController animated:YES];
+            break;
+        case 5:
+            if (nil == self.missionsViewController) {
+                MissionTrainingViewController *missions = [[MissionTrainingViewController alloc] initWithNibName:@"MissionTrainingViewController~iPad" bundle:nil];
+                missions.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+                if ([missions respondsToSelector:@selector(setModalPresentationStyle:)])
+                    missions.modalPresentationStyle = UIModalPresentationPageSheet;
+                self.missionsViewController = missions;
+                [missions release];
+            }
+            [self presentModalViewController:self.missionsViewController animated:YES];
             break;
         default:
             alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"

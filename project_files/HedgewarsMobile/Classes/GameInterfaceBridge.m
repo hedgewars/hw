@@ -62,7 +62,7 @@
 }
 
 // main routine for calling the actual game engine
--(void) startGameEngine {
+-(void) engineLaunch {
     const char *gameArgs[11];
     NSInteger width, height;
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
@@ -158,7 +158,7 @@
     [AudioManagerController pauseBackgroundMusic];
 
     // SYSTEMS ARE GO!!
-    [self startGameEngine];
+    [self engineLaunch];
     
     // remove completed games notification
     [userDefaults setObject:@"" forKey:@"savedGamePath"];
@@ -184,7 +184,7 @@
 }
 
 // set up variables for a local game
--(void) startLocalGame:(NSDictionary *)withDictionary {
+-(void) startLocalGame:(NSDictionary *)withOptions {
     self.gameType = gtLocal;
 
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
@@ -198,7 +198,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.savePath])
         [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
 
-    [self.engineProtocol spawnThread:self.savePath withOptions:withDictionary];
+    [self.engineProtocol spawnThread:self.savePath withOptions:withOptions];
     [self prepareEngineLaunch];
 }
 
@@ -208,6 +208,15 @@
     self.savePath = atPath;
 
     [self.engineProtocol spawnThread:self.savePath];
+    [self prepareEngineLaunch];
+}
+
+-(void) startMissionGame:(NSString *)withScript {
+    self.gameType = gtMission;
+    self.savePath = nil;
+
+    NSDictionary *config = [NSDictionary dictionaryWithObject:withScript forKey:@"mission_command"];
+    [self.engineProtocol spawnThread:nil withOptions:config];
     [self prepareEngineLaunch];
 }
 
