@@ -263,6 +263,7 @@
     self.aboutViewController = nil;
     self.savedGamesViewController = nil;
     self.restoreViewController = nil;
+    self.missionsViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -278,6 +279,8 @@
         self.savedGamesViewController = nil;
     if (self.restoreViewController.view.superview == nil)
         self.restoreViewController = nil;
+    if (self.missionsViewController.view.superview == nil)
+        self.missionsViewController = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
@@ -288,6 +291,7 @@
     releaseAndNil(aboutViewController);
     releaseAndNil(savedGamesViewController);
     releaseAndNil(restoreViewController);
+    releaseAndNil(missionsViewController);
     [super dealloc];
 }
 
