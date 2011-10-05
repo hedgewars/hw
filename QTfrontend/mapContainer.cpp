@@ -114,6 +114,8 @@ QComboBox::tr("generated maze..."));
             QString scheme;
             QString weapons;
             QList<QVariant> mapInfo;
+            bool isMission = mapLuaFile.exists();
+
             QTextStream input(&mapCfgFile);
             input >> theme;
             input >> limit;
@@ -125,16 +127,22 @@ QComboBox::tr("generated maze..."));
                 mapInfo.push_back(limit);
             else
                 mapInfo.push_back(18);
-            mapInfo.push_back(mapLuaFile.exists());
+
+
+            mapInfo.push_back(isMission);
+
             if (scheme.isEmpty())
                 scheme = "locked";
             scheme.replace("_", " ");
+
             if (weapons.isEmpty())
                 weapons = "locked";
             weapons.replace("_", " ");
+
             mapInfo.push_back(scheme);
             mapInfo.push_back(weapons);
-            if(mapLuaFile.exists())
+
+            if(isMission)
             {
                 chooseMap->insertItem(missionindex++, 
 // FIXME - need real icons. Disabling until then
