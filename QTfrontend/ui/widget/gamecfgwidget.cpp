@@ -233,8 +233,10 @@ QByteArray GameCFGWidget::getFullConfig() const
     if (currentMap.size() > 0)
     {
         bcfg << QString("emap " + currentMap).toUtf8();
-        if(pMapContainer->getCurrentIsMission())
-            bcfg << QString("escript Maps/%1/map.lua").arg(currentMap).toUtf8();
+
+// engine should figure it out on its own
+//        if(pMapContainer->getCurrentIsMission())
+//            bcfg << QString("escript Maps/%1/map.lua").arg(currentMap).toUtf8();
     }
     bcfg << QString("etheme " + pMapContainer->getCurrentTheme()).toUtf8();
 

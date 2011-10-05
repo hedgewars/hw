@@ -1673,6 +1673,8 @@ var ret : LongInt;
 begin
 s:= UserPathz[ptData] + '/' + name;
 if not FileExists(s) then s:= Pathz[ptData] + '/' + name;
+if not FileExists(s) then exit;
+
 ret:= luaL_loadfile(luaState, Str2PChar(s));
 if ret <> 0 then
     begin
