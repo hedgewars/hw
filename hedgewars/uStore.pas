@@ -966,12 +966,12 @@ begin
 {$IFNDEF DARWIN}
         ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
         if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
-{$ENDIF}
         if ico <> nil then
             begin
             SDL_WM_SetIcon(ico, 0);
             SDL_FreeSurface(ico)
             end;
+{$ENDIF}
         end
     else
         begin

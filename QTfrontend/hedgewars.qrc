@@ -57,7 +57,7 @@
         <file>res/spin_down.png</file>
         <file>res/PlaySound.png</file>
         <file>res/hh_small.png</file>
-        <file>res/btnDisabled@2x.png</file>
+        <file>res/btnDisabled.png</file>
         <file>res/btnForts@2x.png</file>
         <file>res/btnBorder@2x.png</file>
         <file>res/btnInvulnerable@2x.png</file>
