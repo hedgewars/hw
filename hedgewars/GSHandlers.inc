@@ -4205,7 +4205,8 @@ begin
         iterator:= GearsList;
         while iterator <> nil do
             begin
-            if iterator^.Kind <> gtPortal then
+            if (iterator^.Kind <> gtPortal) and 
+               ((iterator^.Hedgehog <> CurrentHedgehog) or ((iterator^.Message and gmAllStoppable) = 0)) then
                 begin
                 iterator^.Active:= true;
                 if iterator^.dY.QWordValue = _0.QWordValue then iterator^.dY.isNegative:= false;
