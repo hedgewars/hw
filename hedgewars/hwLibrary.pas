@@ -50,7 +50,8 @@ exports
     GenLandPreview name Java_Prefix + 'GenLandPreview',
     HW_getNumberOfweapons name Java_Prefix + 'HWgetNumberOfWeapons',
     HW_getMaxNumberOfHogs name Java_Prefix + 'HWgetMaxNumberOfHogs',
-    HW_getMaxNumberOfTeams name Java_Prefix + 'HWgetMaxNumberOfTeams';
+    HW_getMaxNumberOfTeams name Java_Prefix + 'HWgetMaxNumberOfTeams',
+    HW_terminate name Java_Prefix + 'HWterminate';
 {$ENDIF}
 
 begin
