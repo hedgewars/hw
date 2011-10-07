@@ -180,7 +180,7 @@
 		6187AEBD120781B900B31A27 /* Settings in Resources */ = {isa = PBXBuildFile; fileRef = 6187AEA5120781B900B31A27 /* Settings */; };
 		61889985129995B500D55FD6 /* title~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61889984129995B500D55FD6 /* title~ipad.png */; };
 		61915D5B143A4E2C00299991 /* MissionTrainingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61915D59143A4E2C00299991 /* MissionTrainingViewController.m */; };
-		61915D5C143A4E2C00299991 /* MissionTrainingViewController~iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61915D5A143A4E2C00299991 /* MissionTrainingViewController~iPad.xib */; };
+		61915D5C143A4E2C00299991 /* MissionTrainingViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPad.xib */; };
 		6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6195981D1364BCD200B429B6 /* libTremor.a */; };
 		619599451364C83D00B429B6 /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599441364C82B00B429B6 /* libLua.a */; };
 		619599C01364E66B00B429B6 /* libFreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599BF1364E65900B429B6 /* libFreetype.a */; };
@@ -361,7 +361,7 @@
 		6103D39E129B350700911D8D /* cornerButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cornerButton@2x.png"; path = "Resources/Overlay/cornerButton@2x.png"; sourceTree = "<group>"; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
-		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SavedGamesViewController.xib; path = ../Resources/SavedGamesViewController.xib; sourceTree = "<group>"; };
+		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SavedGamesViewController.xib; sourceTree = "<group>"; };
 		611E0EE511FB20610077A41E /* ammoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ammoButton.png; path = Resources/Overlay/ammoButton.png; sourceTree = "<group>"; };
 		611E0EE611FB20610077A41E /* cornerButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cornerButton.png; path = Resources/Overlay/cornerButton.png; sourceTree = "<group>"; };
 		611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Development.plist"; sourceTree = "<group>"; };
@@ -370,7 +370,7 @@
 		611EE9D8122AA10A00DF6938 /* selSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = selSound.wav; path = Resources/selSound.wav; sourceTree = "<group>"; };
 		611EEAEB122B2A4D00DF6938 /* HelpPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageViewController.h; sourceTree = "<group>"; };
 		611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageViewController.m; sourceTree = "<group>"; };
-		611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageLobbyViewController-iPad.xib"; path = "../Resources/HelpPageLobbyViewController-iPad.xib"; sourceTree = "<group>"; };
+		611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageLobbyViewController-iPad.xib"; sourceTree = "<group>"; };
 		611EEBC0122B34A800DF6938 /* helpingame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpingame.png; path = Resources/Overlay/helpingame.png; sourceTree = "<group>"; };
 		611EEBC2122B355700DF6938 /* helpbottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpbottom.png; path = Resources/Overlay/helpbottom.png; sourceTree = "<group>"; };
 		611EEBC3122B355700DF6938 /* helpright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpright.png; path = Resources/Overlay/helpright.png; sourceTree = "<group>"; };
@@ -448,18 +448,18 @@
 		6165922B11CA9BD500D6E256 /* SquareButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SquareButtonView.m; path = Classes/SquareButtonView.m; sourceTree = "<group>"; };
 		6165922C11CA9BD500D6E256 /* UIImageExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImageExtra.h; path = Classes/UIImageExtra.h; sourceTree = "<group>"; };
 		6165922D11CA9BD500D6E256 /* UIImageExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageExtra.m; path = Classes/UIImageExtra.m; sourceTree = "<group>"; };
-		6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GameConfigViewController.xib; path = Resources/GameConfigViewController.xib; sourceTree = SOURCE_ROOT; };
-		6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPad.xib"; path = "Resources/MainMenuViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPhone.xib"; path = "Resources/MainMenuViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
-		6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPad.xib"; path = "Resources/MapConfigViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MapConfigViewController-iPhone.xib"; path = "Resources/MapConfigViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
-		6165925011CA9CB400D6E256 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = OverlayViewController.xib; path = Resources/OverlayViewController.xib; sourceTree = SOURCE_ROOT; };
+		6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GameConfigViewController.xib; sourceTree = "<group>"; };
+		6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainMenuViewController-iPad.xib"; sourceTree = "<group>"; };
+		6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainMenuViewController-iPhone.xib"; sourceTree = "<group>"; };
+		6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MapConfigViewController-iPad.xib"; sourceTree = "<group>"; };
+		6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MapConfigViewController-iPhone.xib"; sourceTree = "<group>"; };
+		6165925011CA9CB400D6E256 /* OverlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OverlayViewController.xib; sourceTree = "<group>"; };
 		6165929C11CA9E2F00D6E256 /* HedgewarsAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HedgewarsAppDelegate.h; path = Classes/HedgewarsAppDelegate.h; sourceTree = "<group>"; };
 		6165929D11CA9E2F00D6E256 /* HedgewarsAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HedgewarsAppDelegate.m; path = Classes/HedgewarsAppDelegate.m; sourceTree = "<group>"; };
 		6167A6731391514600AA6D07 /* RestoreViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestoreViewController.h; sourceTree = "<group>"; };
 		6167A6741391514600AA6D07 /* RestoreViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RestoreViewController.m; sourceTree = "<group>"; };
-		6167A6751391514600AA6D07 /* RestoreViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "RestoreViewController-iPhone.xib"; path = "../Resources/RestoreViewController-iPhone.xib"; sourceTree = "<group>"; };
-		6167A72C13919E6800AA6D07 /* RestoreViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "RestoreViewController-iPad.xib"; path = "../Resources/RestoreViewController-iPad.xib"; sourceTree = "<group>"; };
+		6167A6751391514600AA6D07 /* RestoreViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "RestoreViewController-iPhone.xib"; sourceTree = "<group>"; };
+		6167A72C13919E6800AA6D07 /* RestoreViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "RestoreViewController-iPad.xib"; sourceTree = "<group>"; };
 		6167C87314294727003DD50F /* surprise@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "surprise@2x.png"; path = "Resources/surprise@2x.png"; sourceTree = "<group>"; };
 		6167C88B14294738003DD50F /* denied@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "denied@2x.png"; path = "Resources/denied@2x.png"; sourceTree = "<group>"; };
 		6167C8EF1429502C003DD50F /* hedgehog.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hedgehog.png; path = Resources/Icons/hedgehog.png; sourceTree = "<group>"; };
@@ -537,7 +537,7 @@
 		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Data; path = ../../../trunk/project_files/HedgewarsMobile/Data; sourceTree = "<group>"; };
 		6183D83C11E2BCE200A88903 /* Default-ipad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-ipad-Landscape.png"; path = "Resources/Icons/Default-ipad-Landscape.png"; sourceTree = "<group>"; };
 		6183D83D11E2BCE200A88903 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Icons/Default.png; sourceTree = "<group>"; };
-		61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageInGameViewController-iPad.xib"; path = "../Resources/HelpPageInGameViewController-iPad.xib"; sourceTree = "<group>"; };
+		61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageInGameViewController-iPad.xib"; sourceTree = "<group>"; };
 		61842B3D122B65BD0096E335 /* helpabove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpabove.png; path = Resources/Overlay/helpabove.png; sourceTree = "<group>"; };
 		61842B3F122B66280096E335 /* helpleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpleft.png; path = Resources/Overlay/helpleft.png; sourceTree = "<group>"; };
 		6187AEA5120781B900B31A27 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Settings; path = Resources/Settings; sourceTree = "<group>"; };
@@ -546,7 +546,7 @@
 		618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_net.xcodeproj; path = "../../../Library/SDL_net/Xcode-iPhoneOS/SDL_net.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61915D58143A4E2C00299991 /* MissionTrainingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissionTrainingViewController.h; sourceTree = "<group>"; };
 		61915D59143A4E2C00299991 /* MissionTrainingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissionTrainingViewController.m; sourceTree = "<group>"; };
-		61915D5A143A4E2C00299991 /* MissionTrainingViewController~iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController~iPad.xib"; sourceTree = "<group>"; };
+		61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController-iPad.xib"; sourceTree = "<group>"; };
 		619598181364BCD200B429B6 /* Tremor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tremor.xcodeproj; path = ../../misc/libtremor/Xcode/Tremor.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6195993F1364C82B00B429B6 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../misc/liblua/Xcode/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
 		619599BA1364E65900B429B6 /* Freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Freetype.xcodeproj; path = "../../misc/libfreetype/Xcode-iPhoneOS/Freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -587,8 +587,8 @@
 		61D3D2A41290E03A003CE7C3 /* irc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = irc.png; path = Resources/Icons/irc.png; sourceTree = "<group>"; };
 		61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmmoMenuViewController.h; sourceTree = "<group>"; };
 		61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmmoMenuViewController.m; sourceTree = "<group>"; };
-		61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageLobbyViewController-iPhone.xib"; path = "../Resources/HelpPageLobbyViewController-iPhone.xib"; sourceTree = "<group>"; };
-		61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "HelpPageInGameViewController-iPhone.xib"; path = "Resources/HelpPageInGameViewController-iPhone.xib"; sourceTree = SOURCE_ROOT; };
+		61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageLobbyViewController-iPhone.xib"; sourceTree = "<group>"; };
+		61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageInGameViewController-iPhone.xib"; sourceTree = "<group>"; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
 		61E2E12C12BAAEE30051B659 /* ServerSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerSetup.h; sourceTree = "<group>"; };
 		61E2E12D12BAAEE30051B659 /* ServerSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerSetup.m; sourceTree = "<group>"; };
@@ -607,7 +607,7 @@
 		61EF920B11DF57AC003441C4 /* joyButtonForwardJump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyButtonForwardJump.png; path = Resources/Overlay/joyButtonForwardJump.png; sourceTree = "<group>"; };
 		61F2E7CB1205EDE0005734F7 /* AboutViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutViewController.h; sourceTree = "<group>"; };
 		61F2E7CC1205EDE0005734F7 /* AboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
-		61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = AboutViewController.xib; path = ../Resources/AboutViewController.xib; sourceTree = "<group>"; };
+		61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AboutViewController.xib; sourceTree = "<group>"; };
 		61F2E7EB12060E31005734F7 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkbox.png; path = Resources/Icons/checkbox.png; sourceTree = "<group>"; };
 		61F544C512AF1748007FD913 /* HoldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HoldTableViewCell.h; path = Classes/HoldTableViewCell.h; sourceTree = "<group>"; };
 		61F544C612AF1748007FD913 /* HoldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HoldTableViewCell.m; path = Classes/HoldTableViewCell.m; sourceTree = "<group>"; };
@@ -667,8 +667,8 @@
 				6163EE6C11CC253F001C0453 /* Overlay */,
 				616591F011CA9BA200D6E256 /* MainMenuViewController.h */,
 				616591F111CA9BA200D6E256 /* MainMenuViewController.m */,
-				6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */,
 				6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */,
+				6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */,
 				61EDB5AE135B3F97009B29A6 /* GameInterfaceBridge.h */,
 				61EDB5AF135B3F97009B29A6 /* GameInterfaceBridge.m */,
 				616591E611CA9BA200D6E256 /* EngineProtocolNetwork.h */,
@@ -795,7 +795,7 @@
 				61B7A33712CC21080086B604 /* StatsPageViewController.m */,
 				61915D58143A4E2C00299991 /* MissionTrainingViewController.h */,
 				61915D59143A4E2C00299991 /* MissionTrainingViewController.m */,
-				61915D5A143A4E2C00299991 /* MissionTrainingViewController~iPad.xib */,
+				61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPad.xib */,
 			);
 			name = "Other Controllers";
 			sourceTree = "<group>";
@@ -1460,7 +1460,7 @@
 				6167CA42142A6ED7003DD50F /* bot5@2x.png in Resources */,
 				6167CB48142A8769003DD50F /* basehat-hedgehog.png in Resources */,
 				6167CB49142A8769003DD50F /* basehat-hedgehog@2x.png in Resources */,
-				61915D5C143A4E2C00299991 /* MissionTrainingViewController~iPad.xib in Resources */,
+				61915D5C143A4E2C00299991 /* MissionTrainingViewController-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
