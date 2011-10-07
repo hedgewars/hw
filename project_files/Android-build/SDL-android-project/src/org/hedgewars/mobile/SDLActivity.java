@@ -8,6 +8,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import org.hedgewars.mobile.EngineProtocol.EngineProtocolNetwork;
 import org.hedgewars.mobile.EngineProtocol.GameConfig;
+import org.hedgewars.mobile.EngineProtocol.PascalExports;
 import org.hedgewars.mobile.TouchInterface.TouchInterface;
 
 import android.app.Activity;
@@ -346,7 +347,8 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 		Log.v("SDL", "surfaceDestroyed()");
 
 		// Send a quit message to the application
-		SDLActivity.nativeQuit();
+		//SDLActivity.nativeQuit();
+                PascalExports.HWterminate(true);
 
 		// Now wait for the SDL thread to quit
 		if (mSDLThread != null) {
@@ -520,7 +522,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
 			Log.v("SDL", "key down: " + keyCode);
 			if(keyCode == KeyEvent.KEYCODE_BACK){//TODO ask user to quit or not
-				SDLActivity.nativeQuit();
+				PascalExports.HWterminate(true);
 				//SDLActivity.mSingleton.finish();
 			}else{
 				SDLActivity.onNativeKeyDown(keyCode);	
