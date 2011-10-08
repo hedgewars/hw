@@ -31,6 +31,13 @@
 @end
 
 
+@interface UITableView (extra)
+
+-(void) setBackgroundColorForAnyTable:(UIColor *)color;
+
+@end
+
+
 @interface UIColor (extra)
 
 +(UIColor *)darkYellowColor;

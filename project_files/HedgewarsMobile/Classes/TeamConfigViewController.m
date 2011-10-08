@@ -20,6 +20,7 @@
 
 
 #import "TeamConfigViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "SquareButtonView.h"
 
 
@@ -34,20 +35,22 @@
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
 
-    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)]) {
-        if (IS_IPAD())
-            [self.tableView setBackgroundView:nil];
-        else {
-            UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
-            UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
-            [backgroundImage release];
-            [self.tableView setBackgroundView:background];
-            [background release];
-        }
-    } else
-        self.view.backgroundColor = [UIColor blackColor];
+    if (IS_IPAD()) {
+        [self.tableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
+        self.tableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
+        self.tableView.layer.borderWidth = 2.7f;
+        self.tableView.layer.cornerRadius = 8;
+        self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 10, 0);
+    } else {
+        UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
+        UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+        [backgroundImage release];
+        [self.tableView setBackgroundView:background];
+        [background release];
+    }
 
-    self.tableView.separatorColor = [UIColor darkYellowColor];
+    self.tableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+    self.tableView.separatorColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
@@ -200,7 +203,7 @@
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 40.0;
+    return 45.0;
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

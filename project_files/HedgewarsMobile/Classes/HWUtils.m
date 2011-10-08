@@ -59,6 +59,20 @@
 @end
 
 
+@implementation UITableView (extra)
+
+-(void) setBackgroundColorForAnyTable:(UIColor *) color {
+    UIView *backView = [[UIView alloc] initWithFrame:self.frame];
+    backView.backgroundColor = color;
+    self.backgroundView = backView;
+    [backView release];
+    self.backgroundColor = [UIColor clearColor];
+}
+
+@end
+
+
+
 @implementation UIColor (extra)
 
 +(UIColor *)darkYellowColor {

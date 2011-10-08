@@ -72,7 +72,7 @@
             if (self.helpPage == nil)
                 self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
-            [self.view addSubview:helpPage.view];
+            [self.view addSubview:self.helpPage.view];
             [UIView beginAnimations:@"helplobby" context:NULL];
             self.helpPage.view.alpha = 1;
             [UIView commitAnimations];
@@ -305,32 +305,20 @@
             self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
 
         UILabel *theLabel;
-        // left column
-        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 60, 320, 620) andTitle:nil withBorderWidth:2.7f];
-        [self.mapConfigViewController.view addSubview:theLabel];
-        releaseAndNil(theLabel);
-        // center column
-        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(337, 187, 350, 505) andTitle:nil withBorderWidth:2.7f];
-        [self.mapConfigViewController.view addSubview:theLabel];
-        releaseAndNil(theLabel);
-        // right column
-        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(704, 214, 320, 466) andTitle:nil withBorderWidth:2.7f];
-        [self.mapConfigViewController.view addSubview:theLabel];
-        releaseAndNil(theLabel);
         // top right column (map)
         theLabel = [[UILabel alloc] initWithFrame:CGRectMake(714, 14, 300, 190) andTitle:nil withBorderWidth:2.3f];
         [self.mapConfigViewController.view addSubview:theLabel];
         releaseAndNil(theLabel);
         // bottom left
-        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 714, 320, 40) andTitle:nil withBorderWidth:2.0f];
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(116, 714, 310, 40) andTitle:nil withBorderWidth:2.0f];
         [self.mapConfigViewController.view addSubview:theLabel];
         releaseAndNil(theLabel);
         // bottom right
-        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(596, 714, 320, 40)
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(598, 714, 310, 40)
                                          andTitle:NSLocalizedString(@"          Max Hogs:",@"")
                                   withBorderWidth:2.0f];
         theLabel.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
-        theLabel.textColor = [UIColor lightYellowColor];
+        theLabel.textColor = [UIColor whiteColor];
         theLabel.textAlignment = UITextAlignmentLeft;
         [self.mapConfigViewController.view addSubview:theLabel];
         releaseAndNil(theLabel);
@@ -348,9 +336,10 @@
         if (self.schemeWeaponConfigViewController == nil)
             self.schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
         [self.mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
+
         self.mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
-        self.teamConfigViewController.view.frame = CGRectMake(348, 200, 328, 480);
-        self.schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 600);
+        self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 60, 320, 620);
+        self.teamConfigViewController.view.frame = CGRectMake(337, 187, 350, 505);
 
         self.mapConfigViewController.parentController = self;
     } else {

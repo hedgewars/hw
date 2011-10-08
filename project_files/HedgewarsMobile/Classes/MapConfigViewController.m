@@ -20,6 +20,7 @@
 
 
 #import "MapConfigViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "SchemeWeaponConfigViewController.h"
 #import "GameConfigViewController.h"
 
@@ -433,7 +434,6 @@
     if (self.segmentedControl.selectedSegmentIndex == 1) {
         self.slider.enabled = NO;
         self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
-        self.sizeLabel.textColor = [UIColor lightYellowColor];
     }
 
     self.templateFilterCommand = @"e$template_filter 0";
@@ -442,10 +442,14 @@
     self.staticMapCommand = @"";
     self.missionCommand = @"";
 
-    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
-        [self.tableView setBackgroundView:nil];
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.separatorColor = [UIColor darkYellowColor];
+    if (IS_IPAD()) {
+        [self.tableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
+        self.tableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
+        self.tableView.layer.borderWidth = 2.7f;
+        self.tableView.layer.cornerRadius = 8;
+        self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 10, 0);
+    }
+    self.tableView.separatorColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
