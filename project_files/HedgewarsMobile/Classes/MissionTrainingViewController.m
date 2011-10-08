@@ -157,7 +157,8 @@
     NSInteger row = [indexPath row];
 
     self.missionName = [[self.listOfMissions objectAtIndex:row] stringByDeletingPathExtension];
-    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Missions/Training/%@@2x.png",GRAPHICS_DIRECTORY(),self.missionName];
+    NSString *size = IS_IPAD() ? @"@2x" : @"";
+    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Missions/Training/%@%@.png",GRAPHICS_DIRECTORY(),self.missionName,size];
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:filePath];
     [filePath release];
     [self.previewImage setImage:img];
