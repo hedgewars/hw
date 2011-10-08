@@ -591,7 +591,8 @@ for i:= -HalfWidth to HalfWidth do
             if ((Land[ty, tx] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and not disableLandBack then
                 LandPixels[by, bx]:= LandBackPixel(tx, ty)
             else if ((Land[ty, tx] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
-                LandPixels[by, bx]:= 0
+                LandPixels[by, bx]:= 0;
+            Land[ty, tx]:= 0;
             end
         end;
     for t:= 0 to 7 do
