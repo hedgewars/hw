@@ -28,6 +28,9 @@
 		61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */ = {isa = PBXBuildFile; fileRef = 61006F94128DE31F00EBA7F7 /* CreationChamber.m */; };
 		61077E87143FB09800645B29 /* MissionTrainingViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61077E86143FB09800645B29 /* MissionTrainingViewController-iPad.xib */; };
 		6107802A143FCCC800645B29 /* startGameButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61078029143FCCC800645B29 /* startGameButton@2x.png */; };
+		610782961440EE5C00645B29 /* basicFlags.plist in Resources */ = {isa = PBXBuildFile; fileRef = 610782931440EE5C00645B29 /* basicFlags.plist */; };
+		610782971440EE5C00645B29 /* credits.plist in Resources */ = {isa = PBXBuildFile; fileRef = 610782941440EE5C00645B29 /* credits.plist */; };
+		610782981440EE5C00645B29 /* gameMods.plist in Resources */ = {isa = PBXBuildFile; fileRef = 610782951440EE5C00645B29 /* gameMods.plist */; };
 		610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
 		610D5FB31270E26C0033333A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
 		61188BF212A6FE530026C5DA /* ammoButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6103D399129B350700911D8D /* ammoButton@2x.png */; };
@@ -179,7 +182,6 @@
 		61842B24122B619D0096E335 /* HelpPageInGameViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */; };
 		61842B3E122B65BD0096E335 /* helpabove.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3D122B65BD0096E335 /* helpabove.png */; };
 		61842B40122B66280096E335 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3F122B66280096E335 /* helpleft.png */; };
-		6187AEBD120781B900B31A27 /* Settings in Resources */ = {isa = PBXBuildFile; fileRef = 6187AEA5120781B900B31A27 /* Settings */; };
 		61889985129995B500D55FD6 /* title~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61889984129995B500D55FD6 /* title~ipad.png */; };
 		61915D5B143A4E2C00299991 /* MissionTrainingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61915D59143A4E2C00299991 /* MissionTrainingViewController.m */; };
 		61915D5C143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib */; };
@@ -363,6 +365,9 @@
 		6103D39E129B350700911D8D /* cornerButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cornerButton@2x.png"; path = "Resources/Overlay/cornerButton@2x.png"; sourceTree = "<group>"; };
 		61077E86143FB09800645B29 /* MissionTrainingViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController-iPad.xib"; sourceTree = "<group>"; };
 		61078029143FCCC800645B29 /* startGameButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "startGameButton@2x.png"; path = "Resources/Frontend/startGameButton@2x.png"; sourceTree = "<group>"; };
+		610782931440EE5C00645B29 /* basicFlags.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = basicFlags.plist; path = Resources/basicFlags.plist; sourceTree = "<group>"; };
+		610782941440EE5C00645B29 /* credits.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = credits.plist; path = Resources/credits.plist; sourceTree = "<group>"; };
+		610782951440EE5C00645B29 /* gameMods.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = gameMods.plist; path = Resources/gameMods.plist; sourceTree = "<group>"; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
 		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SavedGamesViewController.xib; sourceTree = "<group>"; };
@@ -544,7 +549,6 @@
 		61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageInGameViewController-iPad.xib"; sourceTree = "<group>"; };
 		61842B3D122B65BD0096E335 /* helpabove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpabove.png; path = Resources/Overlay/helpabove.png; sourceTree = "<group>"; };
 		61842B3F122B66280096E335 /* helpleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpleft.png; path = Resources/Overlay/helpleft.png; sourceTree = "<group>"; };
-		6187AEA5120781B900B31A27 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Settings; path = Resources/Settings; sourceTree = "<group>"; };
 		618899811299516000D55FD6 /* title@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "title@2x~iphone.png"; path = "Resources/Frontend/title@2x~iphone.png"; sourceTree = "<group>"; };
 		61889984129995B500D55FD6 /* title~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "title~ipad.png"; path = "Resources/Frontend/title~ipad.png"; sourceTree = "<group>"; };
 		618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_net.xcodeproj; path = "../../../Library/SDL_net/Xcode-iPhoneOS/SDL_net.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -750,8 +754,10 @@
 				61F903FA11DF58680068B24D /* Frontend */,
 				6179936611501D1E00BA94A9 /* Overlay */,
 				61798A5E114AE08600BA94A9 /* Data */,
-				6187AEA5120781B900B31A27 /* Settings */,
 				8D1107310486CEB800E47090 /* Info.plist */,
+				610782931440EE5C00645B29 /* basicFlags.plist */,
+				610782941440EE5C00645B29 /* credits.plist */,
+				610782951440EE5C00645B29 /* gameMods.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1383,7 +1389,6 @@
 				615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */,
 				615AD9E9120764CA00F2FF04 /* backButton.png in Resources */,
 				615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */,
-				6187AEBD120781B900B31A27 /* Settings in Resources */,
 				611EE974122A9C4100DF6938 /* clickSound.wav in Resources */,
 				611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */,
 				611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib in Resources */,
@@ -1469,6 +1474,9 @@
 				61915D5C143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib in Resources */,
 				61077E87143FB09800645B29 /* MissionTrainingViewController-iPad.xib in Resources */,
 				6107802A143FCCC800645B29 /* startGameButton@2x.png in Resources */,
+				610782961440EE5C00645B29 /* basicFlags.plist in Resources */,
+				610782971440EE5C00645B29 /* credits.plist in Resources */,
+				610782981440EE5C00645B29 /* gameMods.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
