@@ -97,7 +97,11 @@ for y:= 0 to Pred(Image^.h) do
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
         if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then
-            Land[cpY + y, cpX + x]:= lfObject
+            begin
+            Land[cpY + y, cpX + x]:= lfObject;
+            // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
+            if (Theme = 'Snow') or (Theme = 'Christmas') then Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or lfIce
+            end;
         end;
     p:= @(p^[Image^.pitch shr 2])
     end;
@@ -373,7 +377,7 @@ var s, key: shortstring;
     f: textfile;
     i: LongInt;
     ii, t: Longword;
-    c1, c2: TSDL_Color;
+    c2: TSDL_Color;
 
     procedure CheckRect(Width, Height, x, y, w, h: LongWord);
     begin

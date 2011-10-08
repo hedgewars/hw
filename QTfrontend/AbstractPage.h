@@ -45,78 +45,51 @@ class QDataWidgetMapper;
 class QAbstractItemModel;
 class QSettings;
 class QSlider;
+class QGridlayout;
 
 class AbstractPage : public QWidget
 {
     Q_OBJECT
 
- public:
+    signals:
+        void goBack();
 
- protected:
-  AbstractPage(QWidget* parent = 0) {
-    Q_UNUSED(parent);
+    protected:
+        // constructor and virtual destructor
+        AbstractPage(QWidget * parent = 0);
 
-    font14 = new QFont("MS Shell Dlg", 14);
-    //setFocusPolicy(Qt::StrongFocus);
-  }
-  virtual ~AbstractPage() {};
+        // call this in the constructor of your subclass
+        void initPage();
 
-  QPushButton* addButton(QString btname, QGridLayout* grid, int wy, int wx, bool iconed = false) {
-    QPushButton* butt = new QPushButton(this);
-    if (!iconed) {
-      butt->setFont(*font14);
-      butt->setText(btname);
-      //butt->setStyleSheet("background-color: #0d0544");
-    } else {
-      const QIcon& lp=QIcon(btname);
-      QSize sz = lp.actualSize(QSize(65535, 65535));
-      butt->setIcon(lp);
-      butt->setFixedSize(sz);
-      butt->setIconSize(sz);
-      butt->setFlat(true);
-      butt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    }
-    grid->addWidget(butt, wy, wx);
-    return butt;
-  };
+        // the following methods are used during page construction
 
-  QPushButton* addButton(QString btname, QGridLayout* grid, int wy, int wx, int rowSpan, int columnSpan, bool iconed = false) {
-    QPushButton* butt = new QPushButton(this);
-    if (!iconed) {
-      butt->setFont(*font14);
-      butt->setText(btname);
-    } else {
-      const QIcon& lp=QIcon(btname);
-      QSize sz = lp.actualSize(QSize(65535, 65535));
-      butt->setIcon(lp);
-      butt->setFixedSize(sz);
-      butt->setIconSize(sz);
-      butt->setFlat(true);
-      butt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    }
-    grid->addWidget(butt, wy, wx, rowSpan, columnSpan);
-    return butt;
-  };
+            // you MUST implement this method in your subclass
+            // only define layout, not behavior in here
+            virtual QLayout * bodyLayoutDefinition() = 0;
 
-  QPushButton* addButton(QString btname, QBoxLayout* box, int where, bool iconed = false) {
-    QPushButton* butt = new QPushButton(this);
-    if (!iconed) {
-      butt->setFont(*font14);
-      butt->setText(btname);
-    } else {
-      const QIcon& lp=QIcon(btname);
-      QSize sz = lp.actualSize(QSize(65535, 65535));
-      butt->setIcon(lp);
-      butt->setFixedSize(sz);
-      butt->setIconSize(sz);
-      butt->setFlat(true);
-      butt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    }
-    box->addWidget(butt, where);
-    return butt;
-  };
+            // you CAN implement this method in your subclass
+            virtual QLayout * footerLayoutDefinition() { return NULL; };
 
-  QFont * font14;
+            // you CAN but most likely want to implement this method in your subclass
+            // keep in mind not to expose twidgets as public!
+            // instead define a signal with a meaningful name and connect the widget
+            // signals to your page signals
+            virtual void connectSignals() {};
+
+        virtual ~AbstractPage() {};
+
+        QPushButton * formattedButton(const QString & btname, bool hasIcon = false);
+        QPushButton * addButton(const QString & btname, QGridLayout * grid, int wy, int wx, bool hasIcon = false);
+        QPushButton * addButton(const QString & btname, QGridLayout * grid, int wy, int wx, int rowSpan, int columnSpan, bool hasIcon = false);
+        QPushButton * addButton(const QString & btname, QBoxLayout * box, int where, bool hasIcon = false);
+
+        void setBackButtonVisible(bool visible = true);
+
+        QFont * font14;
+
+    private:
+
+        QPushButton * btnBack;
 };
 
 #endif

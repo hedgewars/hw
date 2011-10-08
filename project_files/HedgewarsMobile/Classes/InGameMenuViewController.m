@@ -20,11 +20,9 @@
 
 
 #import "InGameMenuViewController.h"
-#import "PascalImports.h"
-#import "CommodityFunctions.h"
 #import "SDL_sysvideo.h"
 #import "SDL_uikitkeyboard.h"
-#import "OpenGLES/ES1/gl.h"
+
 
 #define VIEW_HEIGHT 200
 
@@ -45,7 +43,7 @@
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Show Help", @""),
                       NSLocalizedString(@"Tag", @""),
-                      NSLocalizedString(@"Snapshot",@""),
+//                      NSLocalizedString(@"Snapshot",@""),
                       NSLocalizedString(@"End Game", @""),
                       nil];
     self.menuList = array;
@@ -90,6 +88,7 @@
 
     SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
 
+    /*
     if (shouldTakeScreenshot) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please wait"
                                                         message:nil
@@ -107,6 +106,7 @@
         // all these hacks because of the PAUSE caption on top of everything...
         [self performSelector:@selector(saveCurrentScreenToPhotoAlbum:) withObject:alert afterDelay:0.3];
     }
+    */
     shouldTakeScreenshot = NO;
 }
 
@@ -117,7 +117,8 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 4;
+    return 3;
+//    return 4;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -138,7 +139,7 @@
 
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UIActionSheet *actionSheet;
-    UIAlertView *alert;
+//    UIAlertView *alert;
 
     switch ([indexPath row]) {
         case 0:
@@ -151,6 +152,7 @@
 
             break;
         case 2:
+/*
             alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Going to take a screenshot",@"")
                                                message:NSLocalizedString(@"The game snapshot will be placed in your Photo Album and it will be taken as soon as the pause menu is dismissed",@"")
                                               delegate:nil
@@ -162,6 +164,7 @@
 
             break;
         case 3:
+*/
             actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
                                                       delegate:self
                                              cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
@@ -189,6 +192,7 @@
 }
 
 //TODO: check this is still needed since we switched to SDL_GL_CreateContext()
+/*
 #pragma mark -
 #pragma mark save screenshot
 //by http://www.bit-101.com/blog/?p=1861
@@ -244,6 +248,6 @@ void releaseData(void *info, const void *data, size_t dataSize) {
     // add callback for cleaning memory and removing alert
     UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), (void *)alert);
 }
-
+*/
 
 @end

@@ -43,6 +43,8 @@ function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; p
 function  GetAmmo: TAmmoType;
 function  GetUtility: TAmmoType;
 procedure ResurrectHedgehog(gear: PGear);
+procedure HideHog(HH: PHedgehog);
+procedure RestoreHog(HH: PHedgehog);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
@@ -222,6 +224,7 @@ gear^.uid:= Counter;
 gear^.SoundChannel:= -1;
 gear^.ImpactSound:= sndNone;
 gear^.nImpactSounds:= 0;
+gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 if Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then gear^.Z:= cHHZ+1
@@ -599,13 +602,16 @@ if (Gear^.Kind = gtPortal) then
             Gear^.IntersectGear^.IntersectGear:= nil;
     end
 else if Gear^.Kind = gtHedgehog then
-    if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
+    (*
+    This behaviour dates back to revision 4, and I accidentally encountered it with TARDIS.  I don't think it must apply to any modern weapon, since if it was actually hit, the best the gear could do would be to destroy itself immediately, and you'd still end up with two graves.  I believe it should be removed
+     if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
         begin
+        AttackBar:= 0;
         Gear^.Message:= gmDestroy;
         CurAmmoGear^.Message:= gmDestroy;
         exit
         end
-    else
+    else*)
         begin
         if (hwRound(Gear^.Y) >= cWaterLine) then
             begin
@@ -618,6 +624,7 @@ else if Gear^.Kind = gtHedgehog then
         team:= Gear^.Hedgehog^.Team;
         if CurrentHedgehog^.Gear = Gear then
             begin
+            AttackBar:= 0;
             FreeActionsList; // to avoid ThinkThread on drawned gear
             if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (CurrentHedgehog^.MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
             end;
@@ -991,7 +998,10 @@ if skipFlag then
 if ((GameTicks and $FFFF) = $FFFF) then
     begin
     if (not CurrentTeam^.ExtDriven) then
-        SendIPCTimeInc;
+        begin
+        SendIPC('#');
+        AddFileLog('hiTicks increment message sent')
+        end;
 
     if (not CurrentTeam^.ExtDriven) or CurrentTeam^.hasGone then
         inc(hiTicks) // we do not recieve a message for this
@@ -1231,11 +1241,8 @@ if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
 
 if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
-    begin
     for i:= 0 to Pred(vobCount*2) do
         AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(LAND_HEIGHT div 2), gtFlake, 0, _0, _0, 0);
-    //disableLandBack:= true
-    end
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
@@ -1480,11 +1487,11 @@ while i > 0 do
                     if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
                         begin
                         if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-                            or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+                            or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
                         if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-                            or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+                            or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
                         if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-                            or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+                            or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
                         end;
 
                     if (Ammo^.Kind <> gtFlame) or ((Ammo^.State and gsttmpFlag) = 0) then FollowGear:= Gear
@@ -1650,6 +1657,7 @@ end;
 procedure ResurrectHedgehog(gear: PGear);
 var tempTeam : PTeam;
 begin
+    AttackBar:= 0;
     gear^.dX := _0;
     gear^.dY := _0;
     gear^.Damage := 0;
@@ -1747,7 +1755,6 @@ i:= Low(TAmmoType);
 if (t > 0) then
     begin
     t:= GetRandom(t);
-    AddFileLog(inttostr(t)+' --------------');
     while t >= 0 do
       begin
       inc(i);

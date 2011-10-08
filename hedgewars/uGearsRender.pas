@@ -328,7 +328,7 @@ begin
         hx:= ox + 8 * sign;
         hy:= oy - 2;
         aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
-        if CurAmmoGear <> nil then
+        if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind <> gtTardis) then
         begin
             case CurAmmoGear^.Kind of
                 gtShotgunShot: begin
@@ -886,7 +886,10 @@ begin
           gtGrenade: DrawRotated(sprBomb, x, y, 0, Gear^.DirAngle);
       gtSnowball: DrawRotated(sprSnowball, x, y, 0, Gear^.DirAngle);
        gtGasBomb: DrawRotated(sprCheese, x, y, 0, Gear^.DirAngle);
-       gtMolotov: DrawRotated(sprMolotov, x, y, 0, Gear^.DirAngle);
+                  
+       gtMolotov: if (Gear^.State and gstDrowning) = 0 then
+                       DrawRotatedF(sprMolotov, x, y, (RealTicks div 125) mod 8, hwSign(Gear^.dX), Gear^.DirAngle * hwSign(Gear^.dX))
+                  else DrawSprite(sprMolotov, x, y, 8);
 
        gtRCPlane: begin
                   if (Gear^.Tag = -1) then

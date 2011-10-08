@@ -123,6 +123,14 @@
         <comment>File Types</comment>
         <translation>Fichier de sauvegarde d&apos;Hedgewars</translation>
     </message>
+    <message>
+        <source>Demo name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -380,11 +388,19 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation>Cartes dessinées (*.hwmap);;Tous les fichiers (*.*)</translation>
+        <translation type="obsolete">Cartes dessinées (*.hwmap);;Tous les fichiers (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
         <translation>Enregistrer une carte dessinée</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -752,6 +768,10 @@ Please pick another nickname:</source>
         <comment>Tips</comment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1048,7 +1068,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Ajouter une bordure indestructible autour du terrain</translation>
+        <translation type="obsolete">Ajouter une bordure indestructible autour du terrain</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1120,6 +1140,14 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation>Ajouter une bordure indestructible autour du terrain</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1650,6 +1678,10 @@ Do you still want to join the room?</source>
         <source>unnamed</source>
         <translation>sans nom</translation>
     </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QMainWindow</name>
@@ -2004,6 +2036,10 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>Tag Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

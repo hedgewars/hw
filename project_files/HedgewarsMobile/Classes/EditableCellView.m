@@ -20,7 +20,7 @@
 
 
 #import "EditableCellView.h"
-#import "CommodityFunctions.h"
+
 
 @implementation EditableCellView
 @synthesize delegate, textField, titleLabel, minimumCharacters, maximumCharacters, respectEditing, oldValue;

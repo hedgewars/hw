@@ -25,9 +25,7 @@
 #import "SchemeWeaponConfigViewController.h"
 #import "HelpPageViewController.h"
 #import "GameInterfaceBridge.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
-#import "PascalImports.h"
+
 
 @implementation GameConfigViewController
 @synthesize imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController, interfaceBridge;
@@ -51,17 +49,26 @@
                 [alert show];
                 [alert release];
             } else {
-                playSound(@"backSound");
+                [AudioManagerController playBackSound];
                 [[self parentViewController] dismissModalViewControllerAnimated:YES];
             }
             break;
         case 1:
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
+            if ([self isEverythingSet] == NO)
+                return;
             theButton.enabled = NO;
+            for (UIView *oneView in self.imgContainer.subviews) {
+                if ([oneView isMemberOfClass:[UIImageView class]]) {
+                    UIImageView *anImageView = (UIImageView *)oneView;
+                    [anImageView removeFromSuperview];
+                }
+            }
             [self startGame:theButton];
+            
             break;
         case 2:
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
             if (self.helpPage == nil)
                 self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
@@ -79,7 +86,7 @@
 -(IBAction) segmentPressed:(id) sender {
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
 
-    playSound(@"selSound");
+    [AudioManagerController playSelectSound];
     switch (theSegment.selectedSegmentIndex) {
         case 0:
             // this init here is just aestetic as this controller was already set up in viewDidLoad
@@ -208,9 +215,6 @@
 
 -(void) startGame:(UIButton *)button {
     button.enabled = YES;
-    
-    if ([self isEverythingSet] == NO)
-        return;
 
     NSString *script = self.mapConfigViewController.missionCommand;
     if ([script isEqualToString:@""])
@@ -240,35 +244,52 @@
 
 -(void) loadNiceHogs {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSString *filePath = [NSString stringWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
-    UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(96, 0, 32, 32)];
-    
+    srand(time(NULL));
+    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
+    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
+    [filePath release];
+
     NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
     int numberOfHats = [hatArray count];
+    int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 18 : 1;
 
     if (self.imgContainer != nil)
         [self.imgContainer removeFromSuperview];
-    
+
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
     for (int i = 0; i < 1 + random()%20; i++) {
         NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
-        
+
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
-        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
-        [hatFile release];
-        UIImage *hogWithHat = [sprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
+        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile];
+        NSMutableArray *animation = [[NSMutableArray alloc] initWithCapacity:animationFrames];
+        for (int j = 0; j < animationFrames; j++) {
+            int x = ((j*32)/(int)hatSprite.size.height)*32;
+            int y = (j*32)%(int)hatSprite.size.height;
+            UIImage *hatSpriteFrame = [hatSprite cutAt:CGRectMake(x, y, 32, 32)];
+            UIImage *hogSpriteFrame = [hogSprite cutAt:CGRectMake(x, y, 32, 32)];
+            UIImage *hogWithHat = [hogSpriteFrame mergeWith:hatSpriteFrame atPoint:CGPointMake(0, 5)];
+            [animation addObject:hogWithHat];
+        }
         [hatSprite release];
-        
-        UIImageView *hog = [[UIImageView alloc] initWithImage:hogWithHat];
-        int x = 15*(i+1)+random()%40;
-        if (x + 32 > 300)
-            x = i*10;
-        hog.frame = CGRectMake(x, 30, 32, 32);
+        [hatFile release];
+
+        UIImageView *hog = [[UIImageView alloc] initWithImage:[animation objectAtIndex:0]];
+        hog.animationImages = animation;
+        hog.animationDuration = 3;
+        [animation release];
+
+        int x = 20*i+random()%128;
+        if (x > 320 - 32)
+            x = i*random()%32;
+        hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
         [self.imgContainer addSubview:hog];
+        [hog startAnimating];
         [hog release];
     }
+
     [self.view addSubview:self.imgContainer];
-    [sprite release];
+    [hogSprite release];
     [pool drain];
 }
 
@@ -279,29 +300,41 @@
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
     if (IS_IPAD()) {
-        // load other controllers
+        // load other controllers and the background
         if (self.mapConfigViewController == nil)
             self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
 
-        UILabel *leftBackground = createLabelWithParams(nil, CGRectMake(0, 60, 320, 620), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:leftBackground];
-        [leftBackground release];
-        UILabel *middleBackground = createLabelWithParams(nil, CGRectMake(337, 187, 350, 505), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:middleBackground];
-        [middleBackground release];
-        UILabel *rightBackground = createLabelWithParams(nil, CGRectMake(704, 214, 320, 464), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:rightBackground];
-        [rightBackground release];
-        UILabel *topBackground = createLabelWithParams(nil, CGRectMake(714, 14, 300, 190), 2.3f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:topBackground];
-        [topBackground release];
-        UILabel *bottomLeftBackground = createLabelWithParams(nil, CGRectMake(106, 714, 320, 40), 2.0f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:bottomLeftBackground];
-        [bottomLeftBackground release];
-        UILabel *bottomRightBackground = createLabelWithParams(NSLocalizedString(@"Max Hogs:                 ",@""), CGRectMake(594, 714, 320, 40), 2.0f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        bottomRightBackground.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
-        [self.mapConfigViewController.view addSubview:bottomRightBackground];
-        [bottomRightBackground release];
+        UILabel *theLabel;
+        // left column
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 60, 320, 620) andTitle:nil withBorderWidth:2.7f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // center column
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(337, 187, 350, 505) andTitle:nil withBorderWidth:2.7f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // right column
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(704, 214, 320, 466) andTitle:nil withBorderWidth:2.7f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // top right column (map)
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(714, 14, 300, 190) andTitle:nil withBorderWidth:2.3f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // bottom left
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 714, 320, 40) andTitle:nil withBorderWidth:2.0f];
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+        // bottom right
+        theLabel = [[UILabel alloc] initWithFrame:CGRectMake(596, 714, 320, 40)
+                                         andTitle:NSLocalizedString(@"          Max Hogs:",@"")
+                                  withBorderWidth:2.0f];
+        theLabel.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
+        theLabel.textColor = [UIColor lightYellowColor];
+        theLabel.textAlignment = UITextAlignmentLeft;
+        [self.mapConfigViewController.view addSubview:theLabel];
+        releaseAndNil(theLabel);
+
         [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.maxLabel];
         [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.sizeLabel];
         [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.segmentedControl];

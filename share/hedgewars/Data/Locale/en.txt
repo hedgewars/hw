@@ -502,7 +502,7 @@
 04:48=Why should the moles get all the abuse?|Wacking a hog can be just as fun! A good|blow from this hammer will shave off one|third of a hog's health and plunge them|underground.|Attack: Activate
 04:49=Resurrect your friends!|But beware that this also resurrects your foes.|Attack: Keep attack pressed to resurrect slowly|Up: Accelerate resurrection
 04:50=Is someone hiding underground?|Dig them out with a drill strike!|Timer controls how far it will dig.
-04:51=Get in a free shot in by hurling a ball of mud.|Stings a bit, and knocks hogs back.
+04:51=Get in a free shot by hurling a ball of mud.|Stings a bit, and knocks hogs back.
 04:52=UNUSED
 04:53=Go on an adventure through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer. Does not function in Sudden Death,|if you are alone, or if you are a King.
 04:54=INCOMPLETE                                                                                                                                     

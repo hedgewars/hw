@@ -23,16 +23,17 @@
 #import "InGameMenuViewController.h"
 #import "HelpPageViewController.h"
 #import "AmmoMenuViewController.h"
-#import "PascalImports.h"
-#import "CommodityFunctions.h"
 #import "CGPointUtils.h"
 #import "ObjcExports.h"
+
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
 #define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
 #define doDim()             [dimTimer setFireDate: (IS_DUALHEAD()) ? HIDING_TIME_NEVER : HIDING_TIME_DEFAULT]
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
+
+static OverlayViewController *mainOverlay;
 
 @implementation OverlayViewController
 @synthesize popoverController, popupMenu, helpPage, amvc, initialScreenCount, lowerIndicator, savesIndicator,
@@ -47,15 +48,20 @@
 
 #pragma mark -
 #pragma mark View Management
--(id) initWithCoder:(NSCoder *)aDecoder {
-    if ((self = [super initWithCoder:aDecoder])) {
+-(id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         isAttacking = NO;
         isPopoverVisible = NO;
         initialScreenCount = (IS_DUALHEAD() ? 2 : 1);
         lowerIndicator = nil;
         savesIndicator = nil;
+        mainOverlay = self;
     }
     return self;
+}
+
++(OverlayViewController *)mainOverlay {
+    return mainOverlay;
 }
 
 -(void) viewDidLoad {
@@ -108,6 +114,7 @@
 
     // only objects initialized in viewDidLoad should be here
     dimTimer = nil;
+    mainOverlay = nil;
     self.helpPage = nil;
     [self dismissPopover];
     self.popoverController = nil;
@@ -278,7 +285,7 @@
             HW_backjump();
             break;
         case 10:
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
             clearView();
             HW_pause();
             if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
@@ -289,7 +296,7 @@
             [self showPopover];
             break;
         case 11:
-            playSound(@"clickSound");
+            [AudioManagerController playClickSound];
             clearView();
             
             if (IS_DUALHEAD() || [[[NSUserDefaults standardUserDefaults] objectForKey:@"classic_menu"] boolValue] == NO) {

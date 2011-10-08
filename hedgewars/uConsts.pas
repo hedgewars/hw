@@ -89,10 +89,12 @@ const
 
 // To allow these to layer, going to treat them as masks. The bottom byte is reserved for objects
 // TODO - set lfBasic for all solid land, ensure all uses of the flags can handle multiple flag bits
+// lfObject and lfBasic are only to be different *graphically*  in all other ways they should be treated the same
     lfBasic          = $8000;  // white
     lfIndestructible = $4000;  // red
-    lfObject         = $2000;  // no idea
-    lfDamaged        = $1000;  // no idea
+    lfObject         = $2000;  
+    lfDamaged        = $1000;  //
+    lfIce            = $0800;  // blue
 
     cMaxPower     = 1500;
     cMaxAngle     = 2048;

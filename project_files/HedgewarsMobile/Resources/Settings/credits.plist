@@ -16,6 +16,9 @@
 		<string>Richard &quot;Sheepluva&quot; Korlyi</string>
 		<string>Henning &quot;Prg&quot; Kühn</string>
 		<string>Henrik &quot;Henek&quot; Rostedt</string>
+		<string>John &quot;Mikade&quot; Lambert</string>
+		<string>Mayur &quot;Zorg&quot; Pawashe</string>
+		<string>Richard &quot;Xeli&quot; Deurwaarder</string>
 	</array>
 	<array>
 		<string>John &quot;Fizzy&quot; Dum</string>
@@ -40,16 +43,19 @@
 		<string>Andrey Korotaev</string>
 		<string>Nina Kuisma</string>
 		<string>Antoine Turmel</string>
-		<string>Peter Hüwe, Mario Liebisch</string>
-		<string>Luca Bonora</string>
+		<string>Peter Hüwe, Mario Liebisch, Richard Karolyi</string>
+		<string>Talos Kriti</string>
+		<string>Luca Bonora, Marco Bresciani</string>
 		<string>Adam Etienne</string>
-		<string>Maciej Mroziński, Wojciech Latkowski, Maciej Górny</string>
+		<string>Anthony Bellew</string>
+		<string>Lukas Urbonas</string>
+		<string>Maciej Mroziński, Wojciech Latkowski, Piotr Mitana, Maciej Górny</string>
 		<string>Fábio Canário</string>
 		<string>Andrey Korotaev</string>
 		<string>Jose Riha</string>
 		<string>Carlos Vives</string>
-		<string>Niklas Grahn</string>
-		<string>Eugene V. Lyubimkin</string>
+		<string>Niklas Grahn, Henrik Rostedt</string>
+		<string>Eugene V. Lyubimkin, Igor Paliychuk, Eugene Sakara</string>
 	</array>
 	<array>
 		<string>Aleksey Andreev</string>
@@ -58,19 +64,22 @@
 		<string>Adam Higerd</string>
 	</array>
 	<array>
-		<string>Engine, frontend, net server author</string>
-		<string>Desktop frontend improvements</string>
-		<string>Many engine and frontend improvements</string>
+		<string>Engine, frontend, net server</string>
+		<string>Many desktop frontend improvements</string>
+		<string>Many engine and desktop frontend improvements</string>
 		<string>Drillrocket, Ballgun, RC Plane weapons</string>
 		<string>Mine number and time game settings</string>
 		<string>Desktop frontend improvements</string>
 		<string>Desktop frontend improvements</string>
 		<string>Mac OS X and iPhone version</string>
-		<string>Gamepad support</string>
+		<string>Many engine and desktop frontend improvements</string>
+		<string>Gamepad and Lua integration</string>
 		<string>Many engine improvements and graphics</string>
-		<string>Many engine and server improvements</string>
 		<string>Maze maps</string>
-		<string>Engine and frontend improvements</string>
+		<string>Engine and desktop frontend improvements</string>
+		<string>Lua game modes and missions</string>
+		<string>Desktop frontend improvements</string>
+		<string>Android port</string>
 	</array>
 	<array>
 		<string>Main graphics</string>
@@ -96,8 +105,11 @@
 		<string>Finnish</string>
 		<string>French</string>
 		<string>German</string>
+		<string>Greek</string>
 		<string>Italian</string>
 		<string>Japanese</string>
+		<string>Korean</string>
+		<string>Lithuanian</string>
 		<string>Polish</string>
 		<string>Portuguese</string>
 		<string>Russian</string>

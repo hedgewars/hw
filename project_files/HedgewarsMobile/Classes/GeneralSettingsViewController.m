@@ -20,7 +20,7 @@
 
 
 #import "GeneralSettingsViewController.h"
-#import "CommodityFunctions.h"
+
 
 @implementation GeneralSettingsViewController
 
@@ -32,6 +32,7 @@
 #pragma mark -
 #pragma mark View Lifecycle
 -(void) viewDidLoad {
+    self.navigationItem.title = @"Edit game options";
     [super viewDidLoad];
 }
 
@@ -44,7 +45,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize];
     if ([[userDefaults objectForKey:@"music"] boolValue] == NO)
-        [HedgewarsAppDelegate stopBackgroundMusic];
+        [AudioManagerController stopBackgroundMusic];
 
     [super viewWillDisappear:animated];
 }
@@ -64,7 +65,7 @@
             [theOtherSwitch setOn:NO animated:YES];
 
             if (theOtherSwitch.on)
-                [HedgewarsAppDelegate pauseBackgroundMusic];
+                [AudioManagerController pauseBackgroundMusic];
             break;
         case 20:    //musicSwitch
             // if switch above (sound) is off, never turn on
@@ -76,9 +77,9 @@
                 [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"music"];
 
             if (theSwitch.on)
-                [HedgewarsAppDelegate playBackgroundMusic];
+                [AudioManagerController playBackgroundMusic];
             else
-                [HedgewarsAppDelegate pauseBackgroundMusic];
+                [AudioManagerController pauseBackgroundMusic];
 
             break;
         case 30:    //alternateSwitch

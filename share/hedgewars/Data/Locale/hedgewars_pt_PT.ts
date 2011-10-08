@@ -123,6 +123,14 @@
         <comment>File Types</comment>
         <translation>Ficheiro de jogo Hedgewars</translation>
     </message>
+    <message>
+        <source>Demo name</source>
+        <translation>Nome do demo</translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation>Nome do demo:</translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -382,11 +390,19 @@ Por favor escolha outro nome de utilizador.</translation>
     </message>
     <message>
         <source>Drawn Maps (*.hwmap);;All files (*.*)</source>
-        <translation>Mapas Desenhados (*.hwmap);;Todos os ficheiros (*.*)</translation>
+        <translation type="obsolete">Mapas Desenhados (*.hwmap);;Todos os ficheiros (*.*)</translation>
     </message>
     <message>
         <source>Save drawn map</source>
         <translation>Gravar mapa desenhado</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation>Mapas Desenhados</translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation>Todos os ficheiros</translation>
     </message>
 </context>
 <context>
@@ -734,6 +750,11 @@ Por favor escolha outro nome de utilizador.</translation>
         <comment>Tips</comment>
         <translation>A Abelha Teleguiada pode-se demonstrar complicada de utilizar. O grau a que consegue virar depende da sua velocidade, por isso experimenta lança-la com diferentes níveis de força.</translation>
     </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation>Conteúdo Transferível
+Downloadable Content</translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -990,8 +1011,8 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message numerus="yes">
         <source>%1 players online</source>
         <translation>
-            <numerusform>%1 jogadores online</numerusform>
             <numerusform>%1 jogador online</numerusform>
+            <numerusform>%1 jogadores online</numerusform>
         </translation>
     </message>
 </context>
@@ -1008,10 +1029,6 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>Land can not be destroyed!</source>
         <translation>O terreno não pode ser destruído!</translation>
-    </message>
-    <message>
-        <source>Add an indestructable border around the terrain</source>
-        <translation>Adiciona uma borda indestrutível à volta do terreno</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -1116,6 +1133,14 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
         <translation>As equipas do mesmo clã jogam de forma sucessiva partilhando o seu tempo para jogar.</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation>Adiciona uma barreira indestrutível à volta do terreno</translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
+        <translation>Adiciona uma barreira indestrutível ao longo do fundo do terreno</translation>
     </message>
 </context>
 <context>
@@ -1358,7 +1383,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Wiggle</source>
-        <translation>"Wiggle"</translation>
+        <translation>&quot;Wiggle&quot;</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
@@ -1640,6 +1665,10 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     <message>
         <source>unnamed</source>
         <translation>sem nome</translation>
+    </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation>ouriço %1</translation>
     </message>
 </context>
 <context>
@@ -1996,6 +2025,10 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Tag Team</source>
         <translation>Tag Team</translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
+        <translation>Adicionar borda inferior</translation>
     </message>
 </context>
 <context>

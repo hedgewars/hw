@@ -100,6 +100,7 @@ begin
         gsExit: begin
                 isTerminated:= true;
                 end;
+        gsSuspend: exit;
         end;
 
 {$IFDEF SDL13}
@@ -112,9 +113,17 @@ begin
     begin
         flagMakeCapture:= false;
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
-        WriteLnToConsole('Saving ' + s + '...');
+
         playSound(sndShutter);
-        {$IFNDEF IPHONEOS}MakeScreenshot(s);{$ENDIF}
+{$IFNDEF IPHONEOS}
+        if not MakeScreenshot(s) then
+        begin
+            WriteLnToConsole('Screenshot failed.');
+            AddChatString(#5 + 'screen capture failed (lack of memory or write permissions)');
+        end
+        else
+{$ENDIF}
+            WriteLnToConsole('Screenshot saved: ' + s);
     end;
 end;
 
@@ -144,21 +153,21 @@ procedure MainLoop;
 const event: TSDL_Event = ();
 {$WARNINGS ON}
 var PrevTime, CurrTime: Longword;
+{$IFDEF SDL13}
+    previousGameState: TGameState;
+{$ELSE}
     prevFocusState: boolean;
+{$ENDIF}
 begin
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
         SDL_PumpEvents();
-        {$IFDEF SDL13}
-        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0 do
-        {$ELSE}
-        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, SDL_ALLEVENTS) > 0 do
-        {$ENDIF}
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL13}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
         begin
             case event.type_ of
-                SDL_KEYDOWN: if GameState = gsChat then
 {$IFDEF SDL13}
+                SDL_KEYDOWN: if GameState = gsChat then
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                     KeyPressChat(event.key.keysym.sym);
                 SDL_WINDOWEVENT:
@@ -166,8 +175,24 @@ begin
                         begin
                         cHasFocus:= true;
                         onFocusStateChanged()
+                        end
+                    else if event.window.event = SDL_WINDOWEVENT_MINIMIZED then
+                        begin
+                        previousGameState:= GameState;
+                        GameState:= gsSuspend;
+                        end
+                    else if event.window.event = SDL_WINDOWEVENT_RESTORED then
+                        begin
+                        GameState:= previousGameState;
+                        end
+                    else if event.window.event = SDL_WINDOWEVENT_RESIZED then
+                        begin
+                        cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
+                        cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
+                        cScreenResizeDelay:= RealTicks+500;
                         end;
 {$ELSE}
+                SDL_KEYDOWN: if GameState = gsChat then
                     KeyPressChat(event.key.keysym.unicode);
                 SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then wheelDown:= true;
                 SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then wheelUp:= true;
@@ -180,9 +205,12 @@ begin
                             onFocusStateChanged()
                         end;
                 SDL_VIDEORESIZE: begin
-                    // using lower values causes widget overlap and video issues
-                    cNewScreenWidth:= max(event.resize.w, cMinScreenWidth);
-                    cNewScreenHeight:= max(event.resize.h, cMinScreenHeight);
+                    // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
+                    // Change by sheepluva:
+                    // Let's only use even numbers for custom width/height since I ran into scaling issues with odd width values.
+                    // Maybe just fixes the symptom not the actual cause(?), I'm too tired to find out :P
+                    cNewScreenWidth:= max(2 * (event.resize.w div 2), cMinScreenWidth);
+                    cNewScreenHeight:= max(2 * (event.resize.h div 2), cMinScreenHeight);
                     cScreenResizeDelay:= RealTicks+500;
                     end;
 {$ENDIF}
@@ -193,6 +221,7 @@ begin
                 SDL_QUITEV: isTerminated:= true
             end; //end case event.type_ of
         end; //end while SDL_PollEvent(@event) <> 0 do
+
         if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
             begin
             cScreenResizeDelay:= 0;
@@ -200,30 +229,27 @@ begin
             cScreenHeight:= cNewScreenHeight;
 
             ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
-            WriteLnToConsole('window resize');
+            WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
+            ScriptOnScreenResize();
             InitCameraBorders()
             end;
 
         if isTerminated = false then
-        begin
+            begin
             CurrTime:= SDL_GetTicks;
             if PrevTime + longword(cTimerInterval) <= CurrTime then
-            begin
+                begin
                 DoTimer(CurrTime - PrevTime);
                 PrevTime:= CurrTime
-            end
+                end
             else SDL_Delay(1);
             IPCCheckSock();
-        end;
+            end;
     end;
 end;
 
 ///////////////
-{$IFDEF HWLIBRARY}
-procedure Game(gameArgs: PPChar); cdecl; export;
-{$ELSE}
-procedure Game;
-{$ENDIF}
+procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
 var p: TPathType;
     s: shortstring;
     i: LongInt;
@@ -250,8 +276,8 @@ begin
     recordFileName:= gameArgs[10];
     cStereoMode:= smNone;
 {$ENDIF}
-    cMinScreenWidth:= min(cScreenWidth, 480);
-    cMinScreenHeight:= min(cScreenHeight, 320);
+    cMinScreenWidth:= min(cScreenWidth, cMinScreenWidth);
+    cMinScreenHeight:= min(cScreenHeight, cMinScreenHeight);
     cOrigScreenWidth:= cScreenWidth;
     cOrigScreenHeight:= cScreenHeight;
 

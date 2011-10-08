@@ -108,11 +108,32 @@ void DrawMapScene::undo()
 
         emit pathChanged();
     }
+    else if(oldItems.size())
+    {
+        while(oldItems.size())
+            addItem(oldItems.takeFirst());
+        paths = oldPaths;
+
+        emit pathChanged();
+    }
 }
 
 void DrawMapScene::clearMap()
 {
-    clear();
+    // don't clear if already cleared
+    if(!items().size())
+        return;
+
+    oldItems.clear();
+
+    // do this since clear() would _destroy_ all items
+    while(items().size()) {
+        oldItems.push_front(items().first());
+        removeItem(items().first());
+    }
+
+    oldPaths = paths;
+
     paths.clear();
 
     emit pathChanged();
@@ -146,6 +167,8 @@ QByteArray DrawMapScene::encode()
 
 void DrawMapScene::decode(QByteArray data)
 {
+    oldItems.clear();
+    oldPaths.clear();
     clear();
     paths.clear();
 

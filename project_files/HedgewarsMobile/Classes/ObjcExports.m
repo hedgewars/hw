@@ -23,27 +23,29 @@
 #import "OverlayViewController.h"
 #import "AmmoMenuViewController.h"
 
-#pragma mark -
-#pragma mark internal variables
+
 // actual game started (controls should be enabled)
-BOOL gameRunning;
+static BOOL gameRunning;
 // black screen present
-BOOL savedGame;
+static BOOL savedGame;
 // cache the grenade time
-NSInteger grenadeTime;
+static NSInteger grenadeTime;
 // the reference to the newMenu instance
-OverlayViewController *overlay_instance;
+static OverlayViewController *overlay_instance;
 
+@implementation ObjcExports
 
-#pragma mark -
-#pragma mark functions called like oop
-void objcExportsInit(OverlayViewController* instance) {
-    overlay_instance = instance;
++(void) initialize {
+    overlay_instance = [OverlayViewController mainOverlay];
     gameRunning = NO;
     savedGame = NO;
     grenadeTime = 2;
 }
 
+@end
+
+#pragma mark -
+#pragma mark functions called by objc code
 BOOL inline isGameRunning() {
     return gameRunning;
 }
@@ -62,6 +64,10 @@ void inline setGrenadeTime(NSInteger value) {
 
 #pragma mark -
 #pragma mark functions called by pascal code
+BOOL inline isApplePhone() {
+    return (IS_IPAD() == NO);
+}
+
 void startSpinningProgress() {
     gameRunning = NO;
     overlay_instance.lowerIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -102,6 +108,7 @@ void clearView() {
 void saveBeganSynching() {
     savedGame = YES;
     stopSpinningProgress();
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 
     overlay_instance.view.backgroundColor = [UIColor blackColor];
     overlay_instance.view.alpha = 0.75;
@@ -128,6 +135,7 @@ void saveFinishedSynching() {
     [overlay_instance.savesIndicator stopAnimating];
     [overlay_instance.savesIndicator performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     gameRunning = YES;
 }
 

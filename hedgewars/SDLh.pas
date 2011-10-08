@@ -228,6 +228,8 @@ const
     SDL_HWPALETTE   = $20000000;
     SDL_DOUBLEBUF   = $40000000;
     SDL_FULLSCREEN  = $80000000;
+
+    SDL_ALLEVENTS = $FFFFFFFF;
 {$ENDIF}
 
 {$IFDEF ENDIAN_LITTLE}
@@ -279,9 +281,6 @@ const
     IMG_INIT_TIF = $00000004;
 
     {* SDL_EventMask type definition *}
-{$IFNDEF SDL13}
-    SDL_ALLEVENTS = $FFFFFFFF;
-{$ENDIF}
 
 /////////////////////////////////////////////////////////////////
 ///////////////////////  TYPE DEFINITIONS ///////////////////////
@@ -776,6 +775,7 @@ function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): PSDL_Window; 
 function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): PSDL_Renderer; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
+procedure SDL_SetWindowSize(window: PSDL_Window; w, h: LongInt); cdecl; external SDLLibName;
 
 function  SDL_GL_CreateContext(window: PSDL_Window): PSDL_GLContext; cdecl; external SDLLibName;
 procedure SDL_GL_DeleteContext(context: PSDL_GLContext); cdecl; external SDLLibName;
@@ -804,7 +804,7 @@ function  SDL_SetHint(name, value: PChar): boolean; cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongInt): LongInt; cdecl; external SDLLibName;
 {$ELSE}
-function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: Longword): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
@@ -871,8 +871,8 @@ function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; 
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer  *)
-function  Mix_Init(flags: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-procedure Mix_Quit; cdecl; external SDL_MixerLibName;
+function  Mix_Init(flags: LongInt): LongInt; {$IFDEF SDL_MIXER_NEWER}cdecl; external SDL_MixerLibName;{$ENDIF}
+procedure Mix_Quit; {$IFDEF SDL_MIXER_NEWER}cdecl; external SDL_MixerLibName;{$ENDIF}
 
 function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
@@ -903,8 +903,8 @@ function  Mix_FadeInChannelTimed(channel: LongInt; chunk: PMixChunk; loops: Long
 function  Mix_FadeOutChannel(channel: LongInt; fadems: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
 (*  SDL_image  *)
-function  IMG_Init(flags: LongInt): LongInt; cdecl; external SDL_ImageLibName;
-procedure IMG_Quit; cdecl; external SDL_ImageLibName;
+function  IMG_Init(flags: LongInt): LongInt; {$IFDEF SDL_IMAGE_NEWER}cdecl; external SDL_ImageLibName;{$ENDIF}
+procedure IMG_Quit; {$IFDEF SDL_IMAGE_NEWER}cdecl; external SDL_ImageLibName;{$ENDIF}
 
 function  IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_Load_RW(rwop: PSDL_RWops; freesrc: LongInt): PSDL_Surface; cdecl; external SDL_ImageLibName;
@@ -963,12 +963,35 @@ end;
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;
 begin
+    SDL_MustLock:=
 {$IFDEF SDL13}
-    SDL_MustLock:= ((surface^.flags and SDL_RLEACCEL) <> 0)
+        ((surface^.flags and SDL_RLEACCEL) <> 0)
 {$ELSE}
-    SDL_MustLock:= ( surface^.offset <> 0 ) or (( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
+        ( surface^.offset <> 0 ) or (( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
 {$ENDIF}
 end;
+
+{$IFNDEF SDL_MIXER_NEWER}
+function  Mix_Init(flags: LongInt): LongInt;
+begin
+    exit(flags);
+end;
+
+procedure Mix_Quit;
+begin
+end;
+{$ENDIF}
+
+{$IFNDEF SDL_IMAGE_NEWER}
+function  IMG_Init(flags: LongInt): LongInt;
+begin
+    exit(flags);
+end;
+
+procedure IMG_Quit;
+begin
+end;
+{$ENDIF}
 
 procedure SDLNet_Write16(value: Word; buf: pointer);
 begin

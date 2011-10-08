@@ -157,11 +157,9 @@ begin
     if isSoundEnabled then
         isSoundEnabled:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
 
-{$IFDEF SDL_MIXER_NEWER}
     WriteToConsole('Init SDL_mixer... ');
     SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
     WriteLnToConsole(msgOK);
-{$ENDIF}
 
     if isSoundEnabled then
         WriteLnToConsole(msgOK)
@@ -191,11 +189,9 @@ begin
     if Mus <> nil then
         Mix_FreeMusic(Mus);
 
-{$IFDEF SDL_MIXER_NEWER}
     // make sure all instances of sdl_mixer are unloaded before continuing
     while Mix_Init(0) <> 0 do
         Mix_Quit();
-{$ENDIF}
 
     Mix_CloseAudio();
 end;
@@ -290,10 +286,12 @@ end;
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 var i : LongInt;
 begin
-    if (not isSoundEnabled) or fastUntilLag then exit;
+    if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd = snd) and  (LastVoice.voicepack = voicepack)) then exit;
     i:= 0;
     while (i<8) and (VoiceList[i].snd <> sndNone) do inc(i);
 
+    // skip playing same sound for same hog twice
+    if (i>0) and (VoiceList[i-1].snd = snd) and (VoiceList[i-1].voicepack = voicepack) then exit;
     VoiceList[i].snd:= snd;
     VoiceList[i].voicepack:= voicepack;
 end;

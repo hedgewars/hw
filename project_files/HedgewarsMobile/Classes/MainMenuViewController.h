@@ -22,24 +22,27 @@
 #import <UIKit/UIKit.h>
 
 @class GameConfigViewController;
-@class SplitViewRootController;
+@class SettingsContainerViewController;
 @class AboutViewController;
 @class SavedGamesViewController;
 @class RestoreViewController;
+@class MissionTrainingViewController;
 
 @interface MainMenuViewController : UIViewController <UIAlertViewDelegate> {
     GameConfigViewController *gameConfigViewController;
-    SplitViewRootController *settingsViewController;
+    SettingsContainerViewController *settingsViewController;
     AboutViewController *aboutViewController;
     SavedGamesViewController *savedGamesViewController;
-    RestoreViewController *restoreViewCOntroller;
+    RestoreViewController *restoreViewController;
+    MissionTrainingViewController *missionsViewController;
 }
 
 @property (nonatomic,retain) GameConfigViewController *gameConfigViewController;
-@property (nonatomic,retain) SplitViewRootController *settingsViewController;
+@property (nonatomic,retain) SettingsContainerViewController *settingsViewController;
 @property (nonatomic,retain) AboutViewController *aboutViewController;
 @property (nonatomic,retain) SavedGamesViewController *savedGamesViewController;
 @property (nonatomic,retain) RestoreViewController *restoreViewController;
+@property (nonatomic,retain) MissionTrainingViewController *missionsViewController;
 
 -(IBAction) switchViews:(id)sender;
 

@@ -21,8 +21,7 @@
 
 #import "SingleSchemeViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
+
 
 #define LABEL_TAG  12345
 #define SLIDER_TAG 54321
@@ -184,7 +183,8 @@
                 [label release];
             }
 
-            UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/icon%@.png",BTN_DIRECTORY(),[[self.basicSettingList objectAtIndex:row] objectForKey:@"image"]]];
+            UIImage *img = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/icon%@.png",ICONS_DIRECTORY(),
+                                                                    [[self.basicSettingList objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = img;
             [img release];
 
@@ -230,11 +230,12 @@
             switcher.tag = SWITCH_TAG + row;
             [switcher setOn:[[[self.schemeDictionary objectForKey:@"gamemod"] objectAtIndex:row] boolValue] animated:NO];
             
-            UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/btn%@.png",BTN_DIRECTORY(),[[self.gameModifierArray objectAtIndex:row] objectForKey:@"image"]]];
+            UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/btn%@.png",ICONS_DIRECTORY(),
+                                                                      [[self.gameModifierArray objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = image;
             [image release];
-            [cell.imageView.layer setCornerRadius:7.0f];
-            [cell.imageView.layer setMasksToBounds:YES];
+            cell.imageView.layer.cornerRadius = 6.0f;
+            cell.imageView.layer.masksToBounds = YES;
             cell.textLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
             cell.detailTextLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;

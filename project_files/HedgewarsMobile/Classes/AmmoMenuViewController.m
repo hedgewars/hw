@@ -21,9 +21,7 @@
 
 #import "AmmoMenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
-#import "PascalImports.h"
+
 
 #define BTNS_PER_ROW         9
 #define DEFAULT_DESCRIPTION  IS_IPAD() ? \
@@ -92,7 +90,7 @@
     int y = (HW_getNumberOfWeapons()/BTNS_PER_ROW)*44 + 18;
     UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(x, y, 200, 20)];
     name.backgroundColor = [UIColor clearColor];
-    name.textColor = UICOLOR_HW_YELLOW_BODER;
+    name.textColor = [UIColor darkYellowColor];
     name.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
     self.nameLabel = name;
     [self.view addSubview:self.nameLabel];
@@ -152,14 +150,14 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(x, y, 40, 40);
         button.tag = i;
-        button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
+        button.layer.borderColor = [[UIColor lightYellowColor] CGColor];
         button.layer.borderWidth = w;
         [button.layer setCornerRadius:radius];
         [button.layer setMasksToBounds:YES];
         [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchDown];
         [button addTarget:self action:@selector(buttonReleased:) forControlEvents:UIControlEventTouchUpInside];
         [button addTarget:self action:@selector(buttonCancelled:) forControlEvents:UIControlEventTouchUpOutside|UIControlEventTouchCancel];
-        [button setTitleColor:UICOLOR_HW_YELLOW_TEXT forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor lightYellowColor] forState:UIControlStateNormal];
         button.titleLabel.backgroundColor = [UIColor blackColor];
         button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
         [button.titleLabel.layer setCornerRadius:3];
@@ -169,9 +167,10 @@
         [self.view addSubview:button];
         [array addObject:button];
 
-        int x_src = ((i*32)/(int)ammoStoreImage.size.height)*32;
-        int y_src = (i*32)%(int)ammoStoreImage.size.height;
-        UIImage *img = [ammoStoreImage cutAt:CGRectMake(x_src, y_src, 32, 32)];
+        int size = 32 * [[UIScreen mainScreen] scale];
+        int x_src = ((i*size)/(int)(ammoStoreImage.size.height * [[UIScreen mainScreen] scale]))*size;
+        int y_src = (i*size)%(int)(ammoStoreImage.size.height * [[UIScreen mainScreen] scale]);
+        UIImage *img = [ammoStoreImage cutAt:CGRectMake(x_src, y_src, size, size)];
         [imgs addObject:img];
     }
     [self performSelectorOnMainThread:@selector(setButtonsArray:) withObject:array waitUntilDone:NO];
@@ -220,7 +219,7 @@
                         shouldUpdateImage[i] = YES;
                     }
                 } else {
-                    button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
+                    button.layer.borderColor = [[UIColor lightYellowColor] CGColor];
                     [button setTitle:nil forState:UIControlStateNormal];
                     if (button.currentBackgroundImage == nil || shouldUpdateImage[i] == YES) {
                         UIImage *img = [self.imagesArray objectAtIndex:i];
@@ -296,7 +295,7 @@
 
     if (theButton.currentTitle == nil) {
         HW_setWeapon(theButton.tag);
-        playSound(@"clickSound");
+        [AudioManagerController playClickSound];
         if (IS_DUALHEAD() == NO)
             [self disappear];
     }

@@ -1,0 +1,109 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ */
+
+#include <QGridLayout>
+#include <QPushButton>
+#include <QGroupBox>
+#include <QTableView>
+#include <QMessageBox>
+#include <QHeaderView>
+
+#include "pagenet.h"
+#include "hwconsts.h"
+#include "netudpwidget.h"
+
+QLayout * PageNet::bodyLayoutDefinition()
+{
+    QGridLayout * pageLayout = new QGridLayout();
+
+    pageLayout->setColumnStretch(0, 1);
+    pageLayout->setColumnStretch(1, 1);
+    pageLayout->setColumnStretch(2, 1);
+
+    BtnNetSvrStart = new QPushButton(this);
+    BtnNetSvrStart->setFont(*font14);
+    BtnNetSvrStart->setText(QPushButton::tr("Start server"));
+    BtnNetSvrStart->setVisible(haveServer);
+    pageLayout->addWidget(BtnNetSvrStart, 4, 2);
+
+    ConnGroupBox = new QGroupBox(this);
+    ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
+    pageLayout->addWidget(ConnGroupBox, 2, 0, 1, 3);
+    GBClayout = new QGridLayout(ConnGroupBox);
+    GBClayout->setColumnStretch(0, 1);
+    GBClayout->setColumnStretch(1, 1);
+    GBClayout->setColumnStretch(2, 1);
+
+    BtnNetConnect = new QPushButton(ConnGroupBox);
+    BtnNetConnect->setFont(*font14);
+    BtnNetConnect->setText(QPushButton::tr("Connect"));
+    GBClayout->addWidget(BtnNetConnect, 2, 2);
+
+    tvServersList = new QTableView(ConnGroupBox);
+    tvServersList->setSelectionBehavior(QAbstractItemView::SelectRows);
+    GBClayout->addWidget(tvServersList, 1, 0, 1, 3);
+
+    BtnUpdateSList = new QPushButton(ConnGroupBox);
+    BtnUpdateSList->setFont(*font14);
+    BtnUpdateSList->setText(QPushButton::tr("Update"));
+    GBClayout->addWidget(BtnUpdateSList, 2, 0);
+
+    BtnSpecifyServer = new QPushButton(ConnGroupBox);
+    BtnSpecifyServer->setFont(*font14);
+    BtnSpecifyServer->setText(QPushButton::tr("Specify"));
+    GBClayout->addWidget(BtnSpecifyServer, 2, 1);
+
+    return pageLayout;
+}
+
+void PageNet::connectSignals()
+{
+    connect(BtnNetConnect, SIGNAL(clicked()), this, SLOT(slotConnect()));
+}
+
+PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
+{
+    initPage();
+}
+
+void PageNet::updateServersList()
+{
+    tvServersList->setModel(new HWNetUdpModel(tvServersList));
+
+    tvServersList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+
+    static_cast<HWNetServersModel *>(tvServersList->model())->updateList();
+
+    connect(BtnUpdateSList, SIGNAL(clicked()), static_cast<HWNetServersModel *>(tvServersList->model()), SLOT(updateList()));
+    connect(tvServersList, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotConnect()));
+}
+
+void PageNet::slotConnect()
+{
+    HWNetServersModel * model = static_cast<HWNetServersModel *>(tvServersList->model());
+    QModelIndex mi = tvServersList->currentIndex();
+    if(!mi.isValid())
+    {
+        QMessageBox::information(this, tr("Error"), tr("Please select server from the list above"));
+        return;
+    }
+    QString host = model->index(mi.row(), 1).data().toString();
+    quint16 port = model->index(mi.row(), 2).data().toUInt();
+
+    emit connectClicked(host, port);
+}

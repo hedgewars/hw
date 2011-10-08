@@ -33,6 +33,7 @@ procedure HedgehogDamaged(Gear: PGear; Attacker: PHedgehog; Damage: Longword; ki
 procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
+procedure hedgehogFlight(Gear: PGear; time: Longword);
 
 implementation
 uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug, uMisc;
@@ -175,6 +176,17 @@ inc(AmmoUsedCount);
 AmmoDamagingUsed:= AmmoDamagingUsed or Ammoz[am].isDamaging
 end;
 
+procedure hedgehogFlight(Gear: PGear; time: Longword);
+begin
+if time > 4000 then
+    begin
+    writeln('FLIGHT');
+    writeln(Gear^.Hedgehog^.Team^.TeamName);
+    writeln(time);
+    writeln;
+    end
+end;
+
 procedure SendStats;
 var i, t: LongInt;
     msd, msk: Longword; msdhh, mskhh: PHedgehog;
@@ -270,9 +282,10 @@ if winnersClan <> nil then
     writeln('WINNERS');
     for t:= 0 to winnersClan^.TeamsNumber - 1 do
         writeln(winnersClan^.Teams[t]^.TeamName);
-    writeln;
     end else
     writeln('DRAW');
+
+writeln;
 end;
 
 procedure initModule;

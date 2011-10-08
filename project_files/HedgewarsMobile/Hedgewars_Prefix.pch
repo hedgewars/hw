@@ -14,11 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ * File created on 25/04/2010.
  */
 
-
-// some macros by http://www.cimgf.com/2010/05/02/my-current-prefix-pch-file/
-// and http://blog.coriolis.ch/2009/01/05/macros-for-xcode/
 
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
@@ -26,41 +25,9 @@
 #import <UIKit/UIKit.h>
 #import "PascalImports.h"
 #import "UIImageExtra.h"
-#import "CommodityFunctions.h"
+#import "DefinesAndMacros.h"
 #import "HedgewarsAppDelegate.h"
-#import "SDL.h"
-#import "SDL_video.h"
-#import "SDL_net.h"
-#import "SDL_mixer.h"
+#import "AudioManagerController.h"
+#import "HWUtils.h"
 #endif
 
-
-#ifdef DEBUG
-  #define DLog(...) NSLog(@"%s %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:__VA_ARGS__])
-  #define ALog(...) [[NSAssertionHandler currentHandler] handleFailureInFunction:[NSString stringWithCString:__PRETTY_FUNCTION__ encoding:NSUTF8StringEncoding] file:[NSString stringWithCString:__FILE__ encoding:NSUTF8StringEncoding] lineNumber:__LINE__ description:__VA_ARGS__]
-  #define releaseAndNil(x) [x release]
-#else
-  #define DLog(...) do { } while (0)
-  #ifndef NS_BLOCK_ASSERTIONS
-    #define NS_BLOCK_ASSERTIONS
-  #endif
-  #define ALog(...) NSLog(@"%s %@", __PRETTY_FUNCTION__, [NSString stringWithFormat:__VA_ARGS__])
-  #define releaseAndNil(x) [x release], x = nil
-#endif
-
-
-#define ZAssert(condition, ...) do { if (!(condition)) { ALog(__VA_ARGS__); }} while(0)
-#define rotationManager(x) (x == UIInterfaceOrientationLandscapeRight) || (x == UIInterfaceOrientationLandscapeLeft)
-
-#define START_TIMER NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
-#define END_TIMER(msg) 	NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; CMLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
-
-
-#if !__IPHONE_3_2
-typedef enum {
-    UIUserInterfaceIdiomPhone,           // iPhone and iPod touch style UI
-    UIUserInterfaceIdiomPad,             // iPad style UI
-} UIUserInterfaceIdiom;
-#define UI_USER_INTERFACE_IDIOM() UIUserInterfaceIdiomPhone
-#define UIPopoverController id
-#endif // ifndef __IPHONE_3_2

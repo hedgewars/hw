@@ -23,7 +23,6 @@
 #import "GameInterfaceBridge.h"
 
 @implementation RestoreViewController
-@synthesize interfaceBridge;
 
 // Override to allow orientations other than the default portrait orientation.
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -36,16 +35,11 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if (theButton.tag != 0) {
-        playSound(@"clickSound");
-        if (self.interfaceBridge == nil) {
-            GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self.parentViewController];
-            self.interfaceBridge = bridge;
-            [bridge release];
-        }
+        [AudioManagerController playClickSound];
         [self.parentViewController dismissModalViewControllerAnimated:NO];
-        [self.interfaceBridge startSaveGame:[defaults objectForKey:@"savedGamePath"]];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"launchRestoredGame" object:nil];
     } else {
-        playSound(@"backSound");
+        [AudioManagerController playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
         [defaults synchronize];
         [self.parentViewController dismissModalViewControllerAnimated:YES];
@@ -65,18 +59,14 @@
 }
 
 -(void) didReceiveMemoryWarning {
-    // don't nil this one or it won't be able to send messages
-    //self.interfaceBridge = nil;
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
-    self.interfaceBridge = nil;
     [super viewDidUnload];
 }
 
 -(void) dealloc {
-    releaseAndNil(interfaceBridge);
     [super dealloc];
 }
 

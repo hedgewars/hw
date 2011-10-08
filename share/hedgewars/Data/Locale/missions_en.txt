@@ -1,0 +1,32 @@
+Basic_Training_-_Bazooka.name=Basic Bazooka Training
+Basic_Training_-_Bazooka.desc="Using the wind to your advantage is key!"
+
+Basic_Training_-_Grenade.name=Basic Grenade Training
+Basic_Training_-_Grenade.desc="Remember, you pull the pin out AND throw!"
+
+Basic_Training_-_Shotgun.name=Basic Shotgun Training
+Basic_Training_-_Shotgun.desc="Shoot first, ask questions later!"
+
+Basic_Training_-_Sniper_Rifle.name=Basic Sniper Rifle Training
+Basic_Training_-_Sniper_Rifle.desc="Boom, headshot!"
+
+User_Mission_-_Dangerous_Ducklings.name=Mission: Dangerous Ducklings
+User_Mission_-_Dangerous_Ducklings.desc="Alright, rookie! Time to put what we learned in Basic Training into practice!"
+
+User_Mission_-_Diver.name=Mission: Diver
+User_Mission_-_Diver.desc="This 'amphibious assault' thing is harder than it looks..."
+
+User_Mission_-_Teamwork.name=Mission: Teamwork
+User_Mission_-_Teamwork.desc="Sometimes, love hurts."
+
+User_Mission_-_Spooky_Tree.name=Mission: Spooky Tree
+User_Mission_-_Spooky_Tree.desc="Lots of crates out here. I sure hope that bird ain't feeling hungry."
+
+User_Mission_-_Bamboo_Thicket.name=Mission: Bamboo Thicket
+User_Mission_-_Bamboo_Thicket.desc="Death comes from above."
+
+User_Mission_-_That_Sinking_Feeling.name=Mission: That Sinking Feeling
+User_Mission_-_That_Sinking_Feeling.desc="The water is rising rapidly and time is limited. Many have tried and failed. Can you save them all?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Mission: Newton and the Hammock
+User_Mission_-_Newton_and_the_Hammock.desc="Remember hoglets: The velocity of a body remains constant unless the body is acted upon by an external force!"

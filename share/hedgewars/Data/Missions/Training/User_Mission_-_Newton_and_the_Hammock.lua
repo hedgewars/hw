@@ -25,7 +25,7 @@ function onGameInit()
 	player = AddHog("Ikeda", 0, 48, "StrawHat")
 			
 	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Default")
-	enemy = AddHog(loc("Unit") .. " 811", 1, 100, "cyborg")
+	enemy = AddHog(loc("Unit") .. " 811", 1, 100, "cyborg1")
 
 	SetGearPosition(player, 1454, 1540)
 	SetGearPosition(enemy, 2488, 1960)

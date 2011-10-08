@@ -41,8 +41,8 @@ ENDIF()
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 16${version_suffix})
-set(HEDGEWARS_PROTO_VER 38)
+set(CPACK_PACKAGE_VERSION_PATCH 17${version_suffix})
+set(HEDGEWARS_PROTO_VER 40)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 
@@ -132,17 +132,17 @@ if(APPLE)
 endif(APPLE)
 
 
-#this snippet sets "Release" mode by default
+#build Debug only when explicitally set
 if (NOT CMAKE_BUILD_TYPE)
-	set (CMAKE_BUILD_TYPE RELEASE CACHE STRING "Choose the type of build, options are: None Debug Release." FORCE)
+	set (CMAKE_BUILD_TYPE RELEASE CACHE STRING "Choose the type of build, options are: Debug Release." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
-if(CMAKE_BUILD_TYPE MATCHES RELEASE OR CMAKE_BUILD_TYPE MATCHES "Release")
-	message(STATUS "Building Release")
-	set(Optz true)
-else()
+if(CMAKE_BUILD_TYPE MATCHES DEBUG OR CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "debug")
 	message(STATUS "Building Debug")
 	set(Optz false)
+else()
+	message(STATUS "Building Release")
+	set(Optz true)
 endif()
 
 
@@ -262,10 +262,10 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"config\\\\.inc$"
 	"hwengine\\\\.desktop$"
 	"CMakeCache\\\\.txt$"
-	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
-	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
-	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
-	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libtremor"
+#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
+#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
+#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
+#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libtremor"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/project_files/HedgewarsMobile/"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/bin/[a-z]"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/tools/templates"

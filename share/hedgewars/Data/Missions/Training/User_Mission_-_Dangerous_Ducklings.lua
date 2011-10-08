@@ -28,13 +28,14 @@ function onGameInit()
 	Delay = 0 -- The delay between each round
 	Map = "Bath" -- The map to be played
 	Theme = "Bath" -- The theme to be used
+	SuddenDeathTurns = 99999
 
 
 	AddTeam(loc("Bloody Rookies"), 14483456, "Simple", "Island", "Default")
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
 
 	--AddTeam("Instructors", 14483456, "Simple", "Island", "Default")
-	instructor = AddHog(loc("Instructor"), 1, 1, "Vega")
+	instructor = AddHog(loc("Instructor"), 1, 1, "sf_vega")
 
 	AddTeam("Blue Team", 29439, "Simple", "Island", "Default")
 	enemy = AddHog("Filthy Blue", 1, 100, "Skull")

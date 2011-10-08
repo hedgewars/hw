@@ -62,9 +62,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"confirm", "y",    QT_TRANSLATE_NOOP("binds", "confirmation"), NULL, NULL},
     {"+voldown",    "9",    QT_TRANSLATE_NOOP("binds", "volume down"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Modify the game's volume while playing:")},
     {"+volup",  "0",    QT_TRANSLATE_NOOP("binds", "volume up"),    NULL, NULL},
-#ifndef _WIN32
     {"fullscr", "f12",  QT_TRANSLATE_NOOP("binds", "change mode"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle fullscreen mode:")},
-#endif
     {"capture", "c",    QT_TRANSLATE_NOOP("binds", "capture"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Take a screenshot:")},
     {"rotmask", "delete",   QT_TRANSLATE_NOOP("binds", "hedgehogs\ninfo"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle labels above hedgehogs:")}
 };

@@ -96,8 +96,8 @@ int main(int argc, char *argv[]) {
 
     Q_INIT_RESOURCE(hedgewars);
 
-    qApp->setStyleSheet
-        (QString(
+    QString styleSheetFromHell =
+        QString(
             "HWForm,QDialog{"
                 "background-image: url(\":/res/Background.png\");"
                 "background-position: bottom center;"
@@ -251,6 +251,8 @@ int main(int argc, char *argv[]) {
                 "subcontrol-origin: margin;"
                 "subcontrol-position: top left;"
                 "text-align: left;"
+                "left: 15px;"
+                "top: -4px;"
                 "}"
 
             "QCheckBox::indicator:checked{"
@@ -315,8 +317,7 @@ int main(int argc, char *argv[]) {
                 "background-color: #ffcc00;"
                 "width: 8px;"
             "}"
-            )
-        );
+            );
 
     bindir->cd("bin"); // workaround over NSIS installer
 
@@ -484,7 +485,7 @@ int main(int argc, char *argv[]) {
     CocoaInitializer initializer;
 #endif
 
-    app.form = new HWForm();
+    app.form = new HWForm(NULL,styleSheetFromHell);
 
     app.form->show();
     return app.exec();

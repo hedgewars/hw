@@ -53,8 +53,13 @@ HWGame::~HWGame()
 void HWGame::onClientDisconnect()
 {
     switch (gameType) {
-        case gtDemo: 
-            if (gameState == gsInterrupted || gameState == gsHalted) emit HaveRecord(false, demo);
+        case gtSave:
+            if (gameState == gsInterrupted || gameState == gsHalted)
+                emit HaveRecord(false, demo);
+            else if (gameState == gsFinished)
+                 emit HaveRecord(true, demo);
+            break;
+        case gtDemo:
             break;
         case gtNet:
             emit HaveRecord(true, demo);
@@ -94,7 +99,7 @@ void HWGame::commonConfig()
             HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
             if(!gamecfg->schemeData(21).toBool()) HWProto::addStringToBuffer(buf, QString("eammstore"));
             HWProto::addStringListToBuffer(buf,
-                team.TeamGameConfig(gamecfg->getInitHealth()));
+                team.teamGameConfig(gamecfg->getInitHealth()));
             ;
         }
     }
@@ -115,27 +120,23 @@ void HWGame::SendQuickConfig()
             .arg((themesModel->rowCount() > 0) ? themesModel->index(rand() % themesModel->rowCount()).data().toString() : "steel"));
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
-    HWNamegen namegen;
-
-    HWTeam * team1;
-    team1 = new HWTeam;
-    team1->difficulty = 0;
-    team1->teamColor = QColor(colors[0]);
-    team1->numHedgehogs = 4;
-    namegen.TeamRandomNames(team1,TRUE);
+    HWTeam team1;
+    team1.setDifficulty(0);
+    team1.setColor(QColor(colors[0]));
+    team1.setNumHedgehogs(4);
+    HWNamegen::teamRandomNames(team1,true);
     HWProto::addStringListToBuffer(teamscfg,
-            team1->TeamGameConfig(100));
+            team1.teamGameConfig(100));
 
-    HWTeam * team2;
-    team2 = new HWTeam;
-    team2->difficulty = 4;
-    team2->teamColor = QColor(colors[1]);
-    team2->numHedgehogs = 4;
-	do
-        namegen.TeamRandomNames(team2,TRUE);
-	while(!team2->TeamName.compare(team1->TeamName) || !team2->Hedgehogs[0].Hat.compare(team1->Hedgehogs[0].Hat));
+    HWTeam team2;
+    team2.setDifficulty(4);
+    team2.setColor(QColor(colors[1]));
+    team2.setNumHedgehogs(4);
+    do
+        HWNamegen::teamRandomNames(team2,true);
+    while(!team2.name().compare(team1.name()) || !team2.hedgehog(0).Hat.compare(team1.hedgehog(0).Hat));
     HWProto::addStringListToBuffer(teamscfg,
-            team2->TeamGameConfig(100));
+            team2.teamGameConfig(100));
 
     HWProto::addStringToBuffer(teamscfg, QString("eammloadt %1").arg(cDefaultAmmoStore->mid(0, cAmmoNumber)));
     HWProto::addStringToBuffer(teamscfg, QString("eammprob %1").arg(cDefaultAmmoStore->mid(cAmmoNumber, cAmmoNumber)));
@@ -188,6 +189,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
                     SendQuickConfig();
                     break;
                 }
+                case gtSave:
                 case gtDemo: break;
                 case gtNet: {
                     SendNetConfig();
@@ -321,9 +323,9 @@ void HWGame::AddTeam(const QString & teamname)
     TeamCount++;
 }
 
-void HWGame::PlayDemo(const QString & demofilename)
+void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 {
-    gameType = gtDemo;
+    gameType = isSave ? gtSave : gtDemo;
     QFile demofile(demofilename);
     if (!demofile.open(QIODevice::ReadOnly))
     {
@@ -394,7 +396,7 @@ void HWGame::KillAllTeams()
     {
         QByteArray buf;
         foreach(HWTeam team, m_pTeamSelWidget->getPlayingTeams())
-            HWProto::addStringToBuffer(buf, QString("eteamgone %1").arg(team.TeamName));
+            HWProto::addStringToBuffer(buf, QString("eteamgone %1").arg(team.name()));
         RawSendIPC(buf);
     }
 }

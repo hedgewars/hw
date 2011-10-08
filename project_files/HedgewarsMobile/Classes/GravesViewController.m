@@ -20,8 +20,7 @@
 
 
 #import "GravesViewController.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
+
 
 @implementation GravesViewController
 @synthesize teamDictionary, graveArray, lastIndexPath;

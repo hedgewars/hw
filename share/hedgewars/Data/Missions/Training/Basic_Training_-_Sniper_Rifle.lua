@@ -189,6 +189,7 @@ function onGearDelete(gear)
 			elseif score == 3 then
 				spawnTarget(2080,780)
 			elseif score == 4 then
+				AddCaption(loc("Good so far!") .. " " .. loc("Keep it up!"));
 				blowUp(1730,1226)
 				blowUp(1440,1595)
 				blowUp(1527,1575)
@@ -213,8 +214,10 @@ function onGearDelete(gear)
 			elseif score == 10 then
 				spawnTarget(2930,1500)
 			elseif score == 11 then
+				AddCaption(loc("This one's tricky."));
 				spawnTarget(700,720)
 			elseif score == 12 then
+				AddCaption(loc("Well done."));
 				blowUp(914,1222)
 				blowUp(1050,1222)
 				blowUp(1160,1008)
@@ -239,6 +242,7 @@ function onGearDelete(gear)
 			elseif score == 17 then
 				spawnTarget(2080,820)
 			elseif score == 18 then
+				AddCaption(loc("Demolition is fun!"));
 				blowUp(2110,920)
 				blowUp(2210,920)
 				blowUp(2200,305)
@@ -260,6 +264,7 @@ function onGearDelete(gear)
 			elseif score == 21 then
 				spawnTarget(2590,-100)
 			elseif score == 22 then
+				AddCaption(loc("Will this ever end?"));
 				blowUp(2790,305)
 				blowUp(2930,305)
 				blowUp(3060,305)
@@ -271,7 +276,6 @@ function onGearDelete(gear)
 				blowUp(2805,630)
 				blowUp(2805,760)
 				blowUp(2805,890)
-				blowUp(2700,890)
 				blowUp(3258,370)
 				blowUp(3258,475)
 				blowUp(3264,575)
@@ -291,6 +295,7 @@ function onGearDelete(gear)
 			elseif score == 29 then
 				spawnTarget(3670,0)
 			elseif score == 30 then
+				AddCaption(loc("Last Target!"));
 				spawnTarget(3480,1200)
 			end
 		else

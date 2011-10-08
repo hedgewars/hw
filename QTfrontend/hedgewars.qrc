@@ -45,6 +45,7 @@
         <file>res/unchecked.png</file>
         <file>res/graphicsicon.png</file>
         <file>res/miscicon.png</file>
+        <file>res/Load.png</file>
         <file>res/Save.png</file>
         <file>res/Record.png</file>
         <file>res/weaponsicon.png</file>
@@ -57,31 +58,31 @@
         <file>res/PlaySound.png</file>
         <file>res/hh_small.png</file>
         <file>res/btnDisabled.png</file>
-        <file>res/btnForts.png</file>
-        <file>res/btnBorder.png</file>
-        <file>res/btnInvulnerable.png</file>
-        <file>res/btnLaserSight.png</file>
-        <file>res/btnLowGravity.png</file>
-        <file>res/btnResetHealth.png</file>
-        <file>res/btnTeamsDivide.png</file>
-        <file>res/btnSolid.png</file>
-        <file>res/btnVampiric.png</file>
-        <file>res/btnKarma.png</file>
-        <file>res/btnArtillery.png</file>
-        <file>res/btnRandomOrder.png</file>
-        <file>res/btnKing.png</file>
-        <file>res/btnPlaceHog.png</file>
-        <file>res/btnSharedAmmo.png</file>
-        <file>res/btnDisableGirders.png</file>
-        <file>res/btnDisableLandObjects.png</file>
-        <file>res/btnAISurvival.png</file>
-        <file>res/btnInfAttack.png</file>
-        <file>res/btnResetWeps.png</file>
-        <file>res/btnPerHogAmmo.png</file>
-        <file>res/btnNoWind.png</file>
-        <file>res/btnMoreWind.png</file>
-        <file>res/btnTagTeam.png</file>
-        <file>res/btnBottomBorder.png</file>
+        <file>res/btnForts@2x.png</file>
+        <file>res/btnBorder@2x.png</file>
+        <file>res/btnInvulnerable@2x.png</file>
+        <file>res/btnLaserSight@2x.png</file>
+        <file>res/btnLowGravity@2x.png</file>
+        <file>res/btnResetHealth@2x.png</file>
+        <file>res/btnTeamsDivide@2x.png</file>
+        <file>res/btnSolid@2x.png</file>
+        <file>res/btnVampiric@2x.png</file>
+        <file>res/btnKarma@2x.png</file>
+        <file>res/btnArtillery@2x.png</file>
+        <file>res/btnRandomOrder@2x.png</file>
+        <file>res/btnKing@2x.png</file>
+        <file>res/btnPlaceHog@2x.png</file>
+        <file>res/btnSharedAmmo@2x.png</file>
+        <file>res/btnDisableGirders@2x.png</file>
+        <file>res/btnDisableLandObjects@2x.png</file>
+        <file>res/btnAISurvival@2x.png</file>
+        <file>res/btnInfAttack@2x.png</file>
+        <file>res/btnResetWeps@2x.png</file>
+        <file>res/btnPerHogAmmo@2x.png</file>
+        <file>res/btnNoWind@2x.png</file>
+        <file>res/btnMoreWind@2x.png</file>
+        <file>res/btnTagTeam@2x.png</file>
+        <file>res/btnBottomBorder@2x.png</file>
         <file>res/iconBox.png</file>
         <file>res/iconHealth.png</file>
         <file>res/iconSuddenDeath.png</file>

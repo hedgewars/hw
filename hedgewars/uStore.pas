@@ -399,10 +399,7 @@ begin
 end;
 
 AddProgress;
-
-{$IFDEF SDL_IMAGE_NEWER}
 IMG_Quit();
-{$ENDIF}
 end;
 
 procedure StoreRelease(reload: boolean);
@@ -587,7 +584,11 @@ end;
 
 procedure SetupOpenGL;
 //var vendor: shortstring = '';
+var buf: array[byte] of char;
 begin
+    buf[0]:= char(0); // avoid compiler hint
+    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
+
 {$IFDEF SDL13}
     // this function creates an opengles1.1 context by default on mobile devices
     // use SDL_GL_SetAttribute to change this behaviour
@@ -945,43 +946,36 @@ end;
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
-    ico: PSDL_Surface;
-    buf: array[byte] of char;
-    reinit: boolean;
+    reinit: boolean = false;
+    {$IFNDEF DARWIN}ico: PSDL_Surface;{$ENDIF}
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
     if Length(s) = 0 then cFullScreen:= not cFullScreen
     else cFullScreen:= s = '1';
 
-    buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Preparing to change video parameters...');
-
-    reinit:= false;
+{$IFNDEF IPHONEOS}
     if SDLPrimSurface = nil then
         begin
         // set window title
         SDL_WM_SetCaption('Hedgewars', nil);
-{$IFDEF SDL_IMAGE_NEWER}
         WriteToConsole('Init SDL_image... ');
         SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
         WriteLnToConsole(msgOK);
-{$ENDIF}
         // load engine icon
-{$IFDEF DARWIN}
-        ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
-        if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
-{$ELSE}
+{$IFNDEF DARWIN}
         ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
         if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
-{$ENDIF}
         if ico <> nil then
             begin
             SDL_WM_SetIcon(ico, 0);
             SDL_FreeSurface(ico)
             end;
+{$ENDIF}
         end
     else
         begin
+        SetScale(cDefaultZoomLevel);
 {$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
         reinit:= true;
 {$ENDIF}
@@ -989,9 +983,16 @@ begin
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
         end;
+{$ENDIF}
 
     // these attributes must be set up before creating the sdl window
+{$IFNDEF WIN32}
+(* On a large number of testers machines, SDL default to software rendering when opengl attributes were set.
+   These attributes were "set" after CreateWindow in .15, which probably did nothing.
+   IMO we should rely on the gl_config defaults from SDL, and use SDL_GL_GetAttribute to possibly post warnings if any
+   bad values are set.  *)
     SetupOpenGLAttributes();
+{$ENDIF}
 {$IFDEF SDL13}
     // these values in x and y make the window appear in the center
     x:= SDL_WINDOWPOS_CENTERED_MASK;
@@ -1007,8 +1008,9 @@ begin
     flags:= flags or SDL_WINDOW_BORDERLESS or SDL_WINDOW_RESIZABLE;
 {$ENDIF}
 
-    if cFullScreen then SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
-    else SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
+    if SDLwindow = nil then
+        if cFullScreen then SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
+        else SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
     flags:= SDL_OPENGL or SDL_RESIZABLE;
@@ -1027,7 +1029,6 @@ begin
         end;
 {$ENDIF}
 
-    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
     SetupOpenGL();
     if reinit then
         begin

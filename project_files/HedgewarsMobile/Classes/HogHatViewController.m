@@ -20,8 +20,7 @@
 
 
 #import "HogHatViewController.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
+
 
 @implementation HogHatViewController
 @synthesize teamDictionary, hatArray, normalHogSprite, lastIndexPath, selectedHog;
@@ -42,13 +41,13 @@
     self.hatArray = array;
 
     // load the base hog image, drawing will occure in cellForRow...
-    NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
-    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile andCutAt:CGRectMake(96, 0, 32, 32)];
+    NSString *normalHogFile = [[NSString alloc] initWithFormat:@"%@/basehat-hedgehog.png",[[NSBundle mainBundle] resourcePath]];
+    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:normalHogFile];
     [normalHogFile release];
     self.normalHogSprite = hogSprite;
     [hogSprite release];
 
-    self.title = NSLocalizedString(@"Change hedgehog's hat",@"");
+    self.title = NSLocalizedString(@"Change hedgehogs' hat",@"");
 }
 
 -(void) viewWillAppear:(BOOL)animated {

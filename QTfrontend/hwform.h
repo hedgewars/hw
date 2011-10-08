@@ -52,13 +52,14 @@ class HWForm : public QMainWindow
     Q_OBJECT
 
 public:
-    HWForm(QWidget *parent = 0);
+    HWForm(QWidget *parent = 0, QString styleSheet = "");
     Ui_HWForm ui;
     SDLInteraction sdli;
     GameUIConfig * config;
     QSettings * gameSettings; // Same file GameUIConfig points to but without the baggage.  Needs sync() calls if you want to get GameUIConfig changes though
     void updateXfire();
     void PlayDemoQuick(const QString & demofilename);
+    void exit();
 
 private slots:
     void GoToSaves();
@@ -76,20 +77,16 @@ private slots:
     QString getDemoArguments();
     void AssociateFiles();
     void btnExitPressed();
-    void btnExitClicked();
     void IntermediateSetup();
     void NewTeam();
-    void EditTeam();
-    void DeleteTeam();
-    void RandomNames();
-    void RandomName(const int &i);
-    void TeamSave();
-    void TeamDiscard();
+    void EditTeam(const QString & teamName);
+    void AfterTeamEdit();
+    void DeleteTeam(const QString & teamName);
     void DeleteScheme();
     void DeleteWeaponSet();
     void SimpleGame();
     void PlayDemo();
-    void StartTraining();
+    void startTraining(const QString&);
     void StartCampaign();
     void NetConnect();
     void NetConnectServer(const QString & host, quint16 port);
@@ -97,11 +94,18 @@ private slots:
     void NetStartServer();
     void NetDisconnect();
     void NetConnected();
+    void NetError(const QString & errmsg);
+    void NetWarning(const QString & wrnmsg);
     void NetGameEnter();
+    void NetPassword(const QString & nick);
+    void NetNickTaken(const QString & nick);
+    void NetAuthFailed();
+    void NetTeamAccepted(const QString& team);
     void AddNetTeam(const HWTeam& team);
+    void RemoveNetTeam(const HWTeam& team);
     void StartMPGame();
     void GameStateChanged(GameState gameState);
-    void ForcedDisconnect();
+    void ForcedDisconnect(const QString & reason);
     void ShowErrorMessage(const QString &);
     void GetRecord(bool isDemo, const QByteArray & record);
     void CreateNetGame();
@@ -115,13 +119,13 @@ private slots:
     void NetGameSlave();
 
     void AsyncNetServerStart();
-    void NetLeftRoom();
+    void NetLeftRoom(const QString & reason);
     void selectFirstNetScheme();
     
     void saveDemoWithCustomName();
 
 private:
-    void _NetConnect(const QString & hostName, quint16 port, const QString & nick);
+    void _NetConnect(const QString & hostName, quint16 port, QString nick);
     void UpdateTeamsLists(const QStringList* editable_teams=0);
     void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);
     void closeEvent(QCloseEvent *event);

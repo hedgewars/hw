@@ -47,5 +47,6 @@
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) segmentPressed:(id) sender;
 -(void) startGame:(UIButton *)button;
+-(BOOL) isEverythingSet;
 
 @end

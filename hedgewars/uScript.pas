@@ -36,6 +36,7 @@ procedure ScriptClearStack;
 
 procedure ScriptLoad(name : shortstring);
 procedure ScriptOnGameInit;
+procedure ScriptOnScreenResize();
 
 procedure ScriptCall(fname : shortstring);
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -956,8 +957,12 @@ begin
             end
         else lua_pushinteger(L, 0)
         end
-    else LuaError('Lua: Wrong number of parameters passed to GetAmmoCount!');
-    lc_getammocount:= 0
+    else 
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetAmmoCount!');
+        lua_pushnil(L)
+        end;
+    lc_getammocount:= 1
 end;
 
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
@@ -1206,6 +1211,11 @@ begin
             lua_pushinteger(L, hwRound(gear^.X));
             lua_pushinteger(L, hwRound(gear^.Y))
             end
+        else
+            begin
+            lua_pushnil(L);
+            lua_pushnil(L)
+            end;
         end;
     lc_getgearposition:= 2;
 end;
@@ -1502,6 +1512,29 @@ begin
         lua_pushinteger(L, ord(CurrentHedgehog^.CurAmmoType));
     lc_getcurammotype := 1;
 end;
+
+// boolean TestRectForObstacle(x1, y1, x2, y2, landOnly)
+function lc_testrectforobstacle(L : Plua_State) : LongInt; Cdecl;
+var rtn: Boolean;
+begin
+    if lua_gettop(L) <> 5 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to TestRectForObstacle!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        rtn:= TestRectancleForObstacle(
+                    lua_tointeger(L, 1),
+                    lua_tointeger(L, 2),
+                    lua_tointeger(L, 3),
+                    lua_tointeger(L, 4),
+                    lua_toboolean(L, 5)
+                    );
+        lua_pushboolean(L, rtn);
+        end;
+    lc_testrectforobstacle:= 1
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1624,12 +1657,24 @@ ScriptSetInteger('ClansCount', ClansCount);
 ScriptSetInteger('TeamsCount', TeamsCount)
 end;
 
+
+// Update values of screen dimensions and allow script to react to resolution change
+procedure ScriptOnScreenResize();
+begin
+ScriptSetInteger('ScreenHeight', cScreenHeight);
+ScriptSetInteger('ScreenWidth', cScreenWidth);
+ScriptCall('onScreenResize');
+end;
+
+
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
       s : shortstring;
 begin
 s:= UserPathz[ptData] + '/' + name;
 if not FileExists(s) then s:= Pathz[ptData] + '/' + name;
+if not FileExists(s) then exit;
+
 ret:= luaL_loadfile(luaState, Str2PChar(s));
 if ret <> 0 then
     begin
@@ -1749,7 +1794,8 @@ end;
 
 procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay, reinforcement: Byte);
 begin
-if (ord(ammo) < 1) or (count > 9) or (count < 0) or (propability < 0) or (propability > 8) or (delay < 0) or (delay > 9) or (reinforcement < 0) or (reinforcement > 8) then
+//if (ord(ammo) < 1) or (count > 9) or (count < 0) or (propability < 0) or (propability > 8) or (delay < 0) or (delay > 9) or (reinforcement < 0) or (reinforcement > 8) then
+if (ord(ammo) < 1) or (count > 9) or (propability > 8) or (delay > 9) or (reinforcement > 8) then
     exit;
 ScriptAmmoLoadout[ord(ammo)]:= inttostr(count)[1];
 ScriptAmmoProbability[ord(ammo)]:= inttostr(propability)[1];
@@ -1798,7 +1844,6 @@ luaopen_table(luaState);
 // import some variables
 ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
 ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
-
 ScriptSetString('L', cLocale);
 
 // import game flags
@@ -1972,6 +2017,7 @@ lua_register(luaState, 'GetHogHat', @lc_gethoghat);
 lua_register(luaState, 'SetHogHat', @lc_sethoghat);
 lua_register(luaState, 'PlaceGirder', @lc_placegirder);
 lua_register(luaState, 'GetCurAmmoType', @lc_getcurammotype);
+lua_register(luaState, 'TestRectForObstacle', @lc_testrectforobstacle);
 
 
 ScriptClearStack; // just to be sure stack is empty

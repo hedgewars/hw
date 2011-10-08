@@ -31,7 +31,7 @@ procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
-procedure ShakeCamera(amount: LongWord);
+procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
 procedure MoveCamera;
 procedure onFocusStateChanged;
@@ -54,7 +54,8 @@ uses
     uRender,
     uCaptions,
     uCursor,
-    uCommands
+    uCommands,
+    uMobile
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
@@ -914,11 +915,11 @@ if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) th
 DrawCaptions;
 
 // Teams Healths
-if TeamsCount * 20 > cScreenHeight div 7 then  // take up less screen on small displays
+if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
     begin
     SetScale(1.5);
     smallScreenOffset:= cScreenHeight div 6;
-    if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$80);
+    if TeamsCount * 20 > Longword(cScreenHeight) div 5 then Tint($FF,$FF,$FF,$80);
     end
 else smallScreenOffset:= 0;
 for t:= 0 to Pred(TeamsCount) do
@@ -957,7 +958,7 @@ for t:= 0 to Pred(TeamsCount) do
       // this approach should be faster than drawing all borders one by one tinted or not
       if highlight then
          begin
-         if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$80)
+         if TeamsCount * 20 > Longword(cScreenHeight) div 5 then Tint($FF,$FF,$FF,$80)
          else Tint($FF, $FF, $FF, $FF);
 
          // draw name
@@ -979,7 +980,7 @@ for t:= 0 to Pred(TeamsCount) do
 if smallScreenOffset <> 0 then
     begin
     SetScale(cDefaultZoomLevel);
-    if TeamsCount * 20 > cScreenHeight div 5 then Tint($FF,$FF,$FF,$FF);
+    if TeamsCount * 20 > Longword(cScreenHeight) div 5 then Tint($FF,$FF,$FF,$FF);
     end;
 
 // Lag alert
@@ -1178,16 +1179,16 @@ isFirstFrame:= false
 end;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs: LongInt;
+var EdgesDist, wdy, shs,z: LongInt;
     PrevSentPointTime: LongWord = 0;
 begin
 {$IFNDEF IPHONEOS}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus and (GameState <> gsConfirm) then
     uCursor.updatePosition();
 {$ENDIF}
-
+z:= round(200/zoom);
 if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
-    if (not autoCameraOn) or (abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4) then
+    if (not autoCameraOn) or ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
     begin
         FollowGear:= nil;
         prevPoint:= CursorPoint;
@@ -1195,8 +1196,11 @@ if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not 
     end
     else
     begin
-        CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
-        CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
+        CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * z + WorldDx) div 8;
+        if isPhone() or (cScreenHeight < 600) or ((hwSign(FollowGear^.dY) * z) < 10)  then
+            CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8
+        else
+            CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + hwSign(FollowGear^.dY) * z + WorldDy)) div 8;
     end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
@@ -1312,11 +1316,14 @@ begin
     if missionTex <> nil then FreeTexture(missionTex);
 end;
 
-procedure ShakeCamera(amount: LongWord);
+procedure ShakeCamera(amount: LongInt);
 begin
-    amount:= Max(1, amount);
-    WorldDx:= WorldDx - amount + LongInt(getRandom(1 + amount * 2));
-    WorldDy:= WorldDy - amount + LongInt(getRandom(1 + amount * 2));
+    if isCursorVisible then exit;
+    amount:= Max(1, round(amount*zoom/2));
+    WorldDx:= WorldDx - amount + LongInt(random(1 + amount * 2));
+    WorldDy:= WorldDy - amount + LongInt(random(1 + amount * 2));
+    //CursorPoint.X:= CursorPoint.X - amount + LongInt(random(1 + amount * 2));
+    //CursorPoint.Y:= CursorPoint.Y - amount + LongInt(random(1 + amount * 2))
 end;
 
 
