@@ -84,7 +84,7 @@
 -(void) addTeam:(id) sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Default Team %u.plist", [self.listOfTeams count]];
 
-    createTeamNamed([fileName stringByDeletingPathExtension]);
+    [CreationChamber createTeamNamed:[fileName stringByDeletingPathExtension]];
 
     [self.listOfTeams addObject:fileName];
 

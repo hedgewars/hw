@@ -22,7 +22,11 @@
 #import "CreationChamber.h"
 #import "hwconsts.h"
 
-void createSettings () {
+
+@implementation CreationChamber
+
+#pragma mark Settings
++(void) createSettings {
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
     [settings setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"music"];
@@ -39,7 +43,16 @@ void createSettings () {
     [settings synchronize];
 }
 
-void createTeamNamed (NSString *nameWithoutExt) {
+#pragma mark Teams
++(void) createTeamNamed:(NSString *)nameWithoutExt {
+    [CreationChamber createTeamNamed:nameWithoutExt ofType:0 controlledByAI:NO];
+}
+
++(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type {
+    [CreationChamber createTeamNamed:nameWithoutExt ofType:type controlledByAI:NO];
+}
+
++(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type controlledByAI:(BOOL) flag {
     NSString *teamsDirectory = TEAMS_DIRECTORY();
 
     if (![[NSFileManager defaultManager] fileExistsAtPath: teamsDirectory]) {
@@ -80,7 +93,12 @@ void createTeamNamed (NSString *nameWithoutExt) {
     [theTeam release];
 }
 
-void createWeaponNamed (NSString *nameWithoutExt, int type) {
+#pragma mark Weapons
++(void) createWeaponNamed:(NSString *)nameWithoutExt {
+    [CreationChamber createWeaponNamed:nameWithoutExt ofType:0];
+}
+
++(void) createWeaponNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type {
     NSString *weaponsDirectory = WEAPONS_DIRECTORY();
 
     if (![[NSFileManager defaultManager] fileExistsAtPath: weaponsDirectory]) {
@@ -150,7 +168,12 @@ void createWeaponNamed (NSString *nameWithoutExt, int type) {
     [theWeapon release];
 }
 
-void createSchemeNamed (NSString *nameWithoutExt, int type) {
+#pragma mark Schemes
++(void) createSchemeNamed:(NSString *)nameWithoutExt {
+    [CreationChamber createSchemeNamed:nameWithoutExt ofType:0];
+}
+
++(void) createSchemeNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type {
     NSString *schemesDirectory = SCHEMES_DIRECTORY();
 
     if (![[NSFileManager defaultManager] fileExistsAtPath: schemesDirectory]) {
@@ -287,3 +310,5 @@ void createSchemeNamed (NSString *nameWithoutExt, int type) {
     [schemeFile release];
     [theScheme release];
 }
+
+@end

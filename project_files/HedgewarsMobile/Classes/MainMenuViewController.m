@@ -51,7 +51,7 @@
     [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY() withIntermediateDirectories:NO attributes:nil error:NULL];
     
     // SETTINGS - nsuserdefaults ftw
-    createSettings();
+    [CreationChamber createSettings];
 
     // TEAMS - update exisiting teams with new format
     if ([[NSFileManager defaultManager] fileExistsAtPath:TEAMS_DIRECTORY()] == NO) {
@@ -74,27 +74,20 @@
     // SCHEMES - always overwrite and delete custom ones
     if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
         [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
-    createSchemeNamed(@"Default", 0);
-    createSchemeNamed(@"Pro Mode", 1);
-    createSchemeNamed(@"Shoppa", 2);
-    createSchemeNamed(@"Clean Slate", 3);
-    createSchemeNamed(@"Minefield", 4);
-    createSchemeNamed(@"Barrel Mayhem", 5);
-    createSchemeNamed(@"Tunnel Hogs", 6);
-    createSchemeNamed(@"Fort Mode", 7);
-    createSchemeNamed(@"Timeless", 8);
-    createSchemeNamed(@"Thinking with Portals", 9);
-    createSchemeNamed(@"King Mode", 10);
+    NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",@"Minefield",
+                            @"Barrel Mayhem",@"Tunnel Hogs",@"Fort Mode",@"Timeless",@"Thinking with Portals",@"King Mode",nil];
+    NSInteger index = 0;
+    for (NSString *name in schemeNames)
+        [CreationChamber createSchemeNamed:name ofType:index++];
+    [schemeNames release];
 
-    // WEAPONS - always overwrite
-    createWeaponNamed(@"Default", 0);
-    createWeaponNamed(@"Crazy", 1);
-    createWeaponNamed(@"Pro Mode", 2);
-    createWeaponNamed(@"Shoppa", 3);
-    createWeaponNamed(@"Clean Slate", 4);
-    createWeaponNamed(@"Minefield", 5);
-    createWeaponNamed(@"Thinking with Portals", 6);
-    // merge not needed because weapons not present in the set are 0ed by GameSetup
+    // WEAPONS - always overwrite as merge is not needed (missing weaps the set are 0ed automatically)
+    NSArray *weaponNames = [[NSArray alloc] initWithObjects:@"Default",@"Crazy",@"Pro Mode",@"Shoppa",@"Clean Slate",
+                            @"Minefield",@"Thinking with Portals",nil];
+    index = 0;
+    for (NSString *name in weaponNames)
+        [CreationChamber createWeaponNamed:name ofType:index++];
+    [weaponNames release];
 }
 
 #pragma mark -
