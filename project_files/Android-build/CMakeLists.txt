@@ -34,7 +34,6 @@ set(ANDROID_NDK /home/richard/SoftDev/android/android-ndk-r5b)
 set(ANDROID_SDK /home/richard/SoftDev/android/android-sdk-linux_86)
 set(FPC_DIR /home/richard/SoftDev/fpc-2.4.4)
 set(SDL_DIR /home/richard/Downloads/android-project)
-set(LUA_DIR /home/richard/Downloads/lua-5.1.4)
 
 if(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
 
@@ -61,8 +60,6 @@ if(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
 	    jpeg
 	    png
             mikmod
-            tremor
-            freetype
            ) 
          foreach(DIR ${DirsToCopy})
              exec_program( 
@@ -93,27 +90,6 @@ if(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
     endif(SDL_DIR)
 
  
-    if(LUA_DIR)
-        MESSAGE("Moving Lua dir..") 
-
-        exec_program(
-                ${CMAKE_COMMAND}
-                ARGS -E copy_directory
-                ${LUA_DIR}/src
-                ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4
-                )
-        MESSAGE("Lua has been moved.")
-
-        exec_program(${HGCOMMAND}
-		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4/Android.mk
-		    )
-        exec_program(${HGCOMMAND}
-		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/lua-5.1.4/llex.c
-		    )
-    else(LUA_DIR)
-        MESSAGE("Lua hasn't been moved..")
-    endif(LUA_DIR)
-
 else(ANDROID_AND AND ANDROID_SDK AND FPC_DIR)
     MESSAGE("Android port files not created, edit top of ${CMAKE_CURRENT_SOURCE_DIR}/CMakeList.txt to create android specific files")
 endif(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
