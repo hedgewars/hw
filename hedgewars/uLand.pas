@@ -1142,36 +1142,50 @@ if tmpsurf = nil then
     if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
     end;
 
-    if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
-    begin
-        cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
-        cpY:= LAND_HEIGHT - tmpsurf^.h;
-        if SDL_MustLock(tmpsurf) then
-            SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
 
-            p:= tmpsurf^.pixels;
-            for y:= 0 to Pred(tmpsurf^.h) do
+if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
+begin
+    disableLandBack:= true;
+
+    cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
+    cpY:= LAND_HEIGHT - tmpsurf^.h;
+    if SDL_MustLock(tmpsurf) then
+        SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
+
+        p:= tmpsurf^.pixels;
+        for y:= 0 to Pred(tmpsurf^.h) do
+        begin
+            for x:= 0 to Pred(tmpsurf^.w) do
             begin
-                for x:= 0 to Pred(tmpsurf^.w) do
-                begin
-                    if ((AMask and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
-                        Land[cpY + y, cpX + x]:= 0
-                    else if p^[x] = (AMask or RMask) then
-                        Land[cpY + y, cpX + x]:= lfIndestructible
-                    else if p^[x] = (AMask or BMask) then
-                        Land[cpY + y, cpX + x]:= lfBasic or lfIce
-                    else if p^[x] = $FFFFFFFF then
-                        Land[cpY + y, cpX + x]:= lfBasic;
-                end;
-                p:= @(p^[tmpsurf^.pitch div 4]);
+                if ((AMask and p^[x]) = 0) then
+                    Land[cpY + y, cpX + x]:= 0
+                else if p^[x] = $FFFFFFFF then
+                    Land[cpY + y, cpX + x]:= lfObject
+                else if p^[x] = (AMask or RMask) then
+                    Land[cpY + y, cpX + x]:= lfIndestructible
+                else if p^[x] = AMask then
+                    begin
+                    Land[cpY + y, cpX + x]:= lfBasic;
+                    disableLandBack:= false
+                    end
+                else if p^[x] = (AMask or BMask) then
+                    Land[cpY + y, cpX + x]:= lfObject or lfIce
             end;
+            p:= @(p^[tmpsurf^.pitch div 4]);
+        end;
 
-        if SDL_MustLock(tmpsurf) then
-            SDL_UnlockSurface(tmpsurf);
-    end;
-    if (tmpsurf <> nil) then
-        SDL_FreeSurface(tmpsurf);
-    tmpsurf:= nil;
+    if SDL_MustLock(tmpsurf) then
+        SDL_UnlockSurface(tmpsurf);
+    if not disableLandBack then
+        begin
+        // freed in freeModule() below
+        LandBackSurface:= LoadImage(UserPathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+        if LandBackSurface = nil then LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent)
+        end;
+end;
+if (tmpsurf <> nil) then
+    SDL_FreeSurface(tmpsurf);
+tmpsurf:= nil;
 end;
 
 procedure LoadMap;
