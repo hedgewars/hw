@@ -2,7 +2,7 @@
 
 
 cd SDL-android-project
-${ANDROID_NDK}/ndk-build
+${ANDROID_NDK}/ndk-build -j 8
 if [ $? -ne 0 ] 
 then 
   echo "Failed to execute ${ANDROID_NDK}/ndk-build"
