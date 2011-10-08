@@ -26,6 +26,8 @@
 		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
 		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */ = {isa = PBXBuildFile; fileRef = 61006F94128DE31F00EBA7F7 /* CreationChamber.m */; };
+		61077E87143FB09800645B29 /* MissionTrainingViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61077E86143FB09800645B29 /* MissionTrainingViewController-iPad.xib */; };
+		6107802A143FCCC800645B29 /* startGameButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61078029143FCCC800645B29 /* startGameButton@2x.png */; };
 		610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
 		610D5FB31270E26C0033333A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
 		61188BF212A6FE530026C5DA /* ammoButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6103D399129B350700911D8D /* ammoButton@2x.png */; };
@@ -180,7 +182,7 @@
 		6187AEBD120781B900B31A27 /* Settings in Resources */ = {isa = PBXBuildFile; fileRef = 6187AEA5120781B900B31A27 /* Settings */; };
 		61889985129995B500D55FD6 /* title~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61889984129995B500D55FD6 /* title~ipad.png */; };
 		61915D5B143A4E2C00299991 /* MissionTrainingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61915D59143A4E2C00299991 /* MissionTrainingViewController.m */; };
-		61915D5C143A4E2C00299991 /* MissionTrainingViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPad.xib */; };
+		61915D5C143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib */; };
 		6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6195981D1364BCD200B429B6 /* libTremor.a */; };
 		619599451364C83D00B429B6 /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599441364C82B00B429B6 /* libLua.a */; };
 		619599C01364E66B00B429B6 /* libFreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599BF1364E65900B429B6 /* libFreetype.a */; };
@@ -359,6 +361,8 @@
 		6103D39C129B350700911D8D /* arrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrowRight@2x.png"; path = "Resources/Overlay/arrowRight@2x.png"; sourceTree = "<group>"; };
 		6103D39D129B350700911D8D /* arrowUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrowUp@2x.png"; path = "Resources/Overlay/arrowUp@2x.png"; sourceTree = "<group>"; };
 		6103D39E129B350700911D8D /* cornerButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cornerButton@2x.png"; path = "Resources/Overlay/cornerButton@2x.png"; sourceTree = "<group>"; };
+		61077E86143FB09800645B29 /* MissionTrainingViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController-iPad.xib"; sourceTree = "<group>"; };
+		61078029143FCCC800645B29 /* startGameButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "startGameButton@2x.png"; path = "Resources/Frontend/startGameButton@2x.png"; sourceTree = "<group>"; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
 		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SavedGamesViewController.xib; sourceTree = "<group>"; };
@@ -546,7 +550,7 @@
 		618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_net.xcodeproj; path = "../../../Library/SDL_net/Xcode-iPhoneOS/SDL_net.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61915D58143A4E2C00299991 /* MissionTrainingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissionTrainingViewController.h; sourceTree = "<group>"; };
 		61915D59143A4E2C00299991 /* MissionTrainingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissionTrainingViewController.m; sourceTree = "<group>"; };
-		61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController-iPad.xib"; sourceTree = "<group>"; };
+		61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController-iPhone.xib"; sourceTree = "<group>"; };
 		619598181364BCD200B429B6 /* Tremor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tremor.xcodeproj; path = ../../misc/libtremor/Xcode/Tremor.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6195993F1364C82B00B429B6 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../misc/liblua/Xcode/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
 		619599BA1364E65900B429B6 /* Freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Freetype.xcodeproj; path = "../../misc/libfreetype/Xcode-iPhoneOS/Freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -795,7 +799,8 @@
 				61B7A33712CC21080086B604 /* StatsPageViewController.m */,
 				61915D58143A4E2C00299991 /* MissionTrainingViewController.h */,
 				61915D59143A4E2C00299991 /* MissionTrainingViewController.m */,
-				61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPad.xib */,
+				61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib */,
+				61077E86143FB09800645B29 /* MissionTrainingViewController-iPad.xib */,
 			);
 			name = "Other Controllers";
 			sourceTree = "<group>";
@@ -1098,6 +1103,7 @@
 				615AD9E8120764CA00F2FF04 /* backButton.png */,
 				6172FED31298CE6600D73365 /* backButton@2x.png */,
 				615AD96112073B4D00F2FF04 /* startGameButton.png */,
+				61078029143FCCC800645B29 /* startGameButton@2x.png */,
 				615FEADE12A2A6640098EE92 /* localplayButton@2x~iphone.png */,
 				615FEAE012A2A6640098EE92 /* localplayButton~iphone.png */,
 				615FEADF12A2A6640098EE92 /* localplayButton~ipad.png */,
@@ -1460,7 +1466,9 @@
 				6167CA42142A6ED7003DD50F /* bot5@2x.png in Resources */,
 				6167CB48142A8769003DD50F /* basehat-hedgehog.png in Resources */,
 				6167CB49142A8769003DD50F /* basehat-hedgehog@2x.png in Resources */,
-				61915D5C143A4E2C00299991 /* MissionTrainingViewController-iPad.xib in Resources */,
+				61915D5C143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib in Resources */,
+				61077E87143FB09800645B29 /* MissionTrainingViewController-iPad.xib in Resources */,
+				6107802A143FCCC800645B29 /* startGameButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

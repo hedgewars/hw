@@ -227,8 +227,9 @@
             break;
         case 5:
             if (nil == self.missionsViewController) {
-                MissionTrainingViewController *missions = [[MissionTrainingViewController alloc] initWithNibName:@"MissionTrainingViewController-iPad" bundle:nil];
-                missions.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+                xib = IS_IPAD() ? @"MissionTrainingViewController-iPad" : @"MissionTrainingViewController-iPhone";
+                MissionTrainingViewController *missions = [[MissionTrainingViewController alloc] initWithNibName:xib bundle:nil];
+                missions.modalTransitionStyle = IS_IPAD() ? UIModalTransitionStyleCoverVertical : UIModalTransitionStyleCrossDissolve;
                 if ([missions respondsToSelector:@selector(setModalPresentationStyle:)])
                     missions.modalPresentationStyle = UIModalPresentationPageSheet;
                 self.missionsViewController = missions;

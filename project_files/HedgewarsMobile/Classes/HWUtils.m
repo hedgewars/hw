@@ -74,11 +74,11 @@
 }
 
 +(UIColor *)darkBlueColorTransparent {
-    return [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x42/255 alpha:0.58f];
+    return [UIColor colorWithRed:(CGFloat)0x0F/255 green:0 blue:(CGFloat)0x55/255 alpha:0.6f];
 }
 
 +(UIColor *)blackColorTransparent {
-    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7f];
+    return [UIColor colorWithRed:0 green:0 blue:0 alpha:0.65f];
 }
 
 @end
