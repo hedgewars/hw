@@ -100,8 +100,9 @@
     UIImage *flagSprite = [[UIImage alloc] initWithContentsOfFile:flagFile];
     [flagFile release];
     cell.imageView.image = flagSprite;
-    cell.imageView.layer.borderWidth = 0.3;
     [flagSprite release];
+    cell.imageView.layer.borderWidth = 1;
+    cell.imageView.layer.borderColor = [[UIColor blackColor] CGColor];
 
     cell.textLabel.text = [[source objectAtIndex:row] stringByDeletingPathExtension];
     if ([[flagName stringByDeletingPathExtension] isEqualToString:[self.teamDictionary objectForKey:@"flag"]]) {

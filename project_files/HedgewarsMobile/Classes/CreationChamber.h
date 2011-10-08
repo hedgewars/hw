@@ -29,7 +29,7 @@
 
 +(void) createTeamNamed:(NSString *)nameWithoutExt;
 +(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type;
-+(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type controlledByAI:(BOOL) flag;
++(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type controlledByAI:(BOOL) shouldAITakeOver;
 
 +(void) createWeaponNamed:(NSString *)nameWithoutExt;
 +(void) createWeaponNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type;
