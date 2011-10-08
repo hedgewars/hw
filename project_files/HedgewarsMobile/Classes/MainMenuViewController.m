@@ -170,7 +170,7 @@
             [self presentModalViewController:self.settingsViewController animated:YES];
             break;
         case 3:
-#if 0
+#ifdef DEBUG
             if ([[NSFileManager defaultManager] fileExistsAtPath:DEBUG_FILE()])
                 debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
             else
