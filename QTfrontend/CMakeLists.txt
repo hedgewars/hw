@@ -4,7 +4,6 @@ set(QT_MIN_VERSION "4.5.0")
 set(QT_USE_QTCORE TRUE)
 set(QT_USE_QTGUI TRUE)
 set(QT_USE_QTNETWORK TRUE)
-set(QT_USE_QTWEBKIT TRUE)
 set(QT_USE_QTSVG FALSE)
 set(QT_USE_QTXML FALSE)
 set(QT_USE_QTOPENGL FALSE)
@@ -20,6 +19,7 @@ find_package(SDL_mixer REQUIRED)
 include_directories(.)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
     include_directories("/usr/local/include")
@@ -115,6 +115,7 @@ set(hwfr_src
     drawmapwidget.cpp
     drawmapscene.cpp
     themesmodel.cpp
+    databrowser.cpp
     )
 
 #xfire integration
@@ -196,6 +197,7 @@ set(hwfr_moc_hdrs
     drawmapwidget.h
     drawmapscene.h
     themesmodel.h
+    databrowser.h
     )
 
 set(hwfr_hdrs
@@ -236,6 +238,7 @@ add_executable(hedgewars WIN32
 
 
 set(HW_LINK_LIBS
+    quazip
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
@@ -247,7 +250,7 @@ if(WIN32 AND NOT UNIX)
         set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
     endif()
 
-    set(	HW_LINK_LIBS
+    set(HW_LINK_LIBS
         ${HW_LINK_LIBS}
         ole32
         oleaut32

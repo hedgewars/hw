@@ -1,5 +1,5 @@
 Binky
-Bobo
+bb_bobo
 Bozo
 Buttons
 Chocko

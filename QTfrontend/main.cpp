@@ -470,8 +470,8 @@ int main(int argc, char *argv[]) {
         app.installTranslator(&Translator);
     }
 
-    // Win32 registry setup (used for xfire detection etc. - don't set it if we're running in "portable" mode with a custom config dir)
 #ifdef _WIN32
+    // Win32 registry setup (used for xfire detection etc. - don't set it if we're running in "portable" mode with a custom config dir)
     if(!custom_config)
     {
         QSettings registry_hklm("HKEY_LOCAL_MACHINE", QSettings::NativeFormat);

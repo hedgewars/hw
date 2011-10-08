@@ -45,7 +45,7 @@ class TeamSelWidget : public QGroupBox
   void resetPlayingTeams(const QList<HWTeam>& teamslist);
   bool isPlaying(HWTeam team) const;
   QList<HWTeam> getPlayingTeams() const;
-  QList<HWTeam> getDontPlayingTeams() const;
+  QList<HWTeam> getNotPlayingTeams() const;
   void setInteractivity(bool interactive);
 
  public slots:
@@ -77,7 +77,7 @@ class TeamSelWidget : public QGroupBox
   bool m_acceptOuter;
 
   QList<HWTeam> curPlayingTeams;
-  QList<HWTeam> curDontPlayingTeams;
+  QList<HWTeam> m_curNotPlayingTeams;
 };
 
 #endif // _TEAM_SELECT_INCLUDED

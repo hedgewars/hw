@@ -400,9 +400,8 @@ void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
 
 void HWChatWidget::nickRemoved(const QString& nick)
 {
-    QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
-    QListIterator<QListWidgetItem *> it(items);
-    while(it.hasNext()) chatNicks->takeItem(chatNicks->row(it.next()));
+    foreach(QListWidgetItem * item, chatNicks->findItems(nick, Qt::MatchExactly))
+        chatNicks->takeItem(chatNicks->row(item));
 
     emit nickCountUpdate(chatNicks->count());
 }

@@ -23,10 +23,16 @@
 #include <QNetworkReply>
 #include <QFileInfo>
 #include <QFileDialog>
-#include <QTextBrowser>
-
+#include <QDebug>
+#include <QProgressBar>
+#include <QBuffer>
 
 #include "pagedata.h"
+#include "databrowser.h"
+#include "hwconsts.h"
+
+#include "quazip.h"
+#include "quazipfile.h"
 
 PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
 {
@@ -35,49 +41,181 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     pageLayout->setColumnStretch(1, 1);
     pageLayout->setColumnStretch(2, 1);
 
-    BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+    BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
 
-    web = new QTextBrowser(this);
-    connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(install(const QUrl&)));
+    web = new DataBrowser(this);
+    connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
     web->setOpenLinks(false);
-    //web->setSource();
-    //web->load(QUrl("http://m8y.org/hw/downloads/"));
-    //web->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
     pageLayout->addWidget(web, 0, 0, 1, 3);
 
+    progressBarsLayout = new QVBoxLayout();
+    pageLayout->addLayout(progressBarsLayout, 1, 0, 1, 3);
 
-    QNetworkRequest newRequest(QUrl("http://m8y.org/hw/downloads/index.xhtml"));
-    //newRequest.setAttribute(QNetworkRequest::User, fileName);
-
-    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-    QNetworkReply *reply = manager->get(newRequest);
-    connect(reply, SIGNAL(finished()), this, SLOT(downloadIssueFinished()));
+    fetchList();
 }
 
-void PageDataDownload::install(const QUrl &url)
+void PageDataDownload::request(const QUrl &url)
 {
-qWarning("Download Request");
-QString fileName = QFileInfo(url.toString()).fileName();
+    QUrl finalUrl;
+    if(url.host().isEmpty())
+        finalUrl = QUrl("http://www.hedgewars.org" + url.path());
+    else
+        finalUrl = url;
 
-QNetworkRequest newRequest(url);
-newRequest.setAttribute(QNetworkRequest::User, fileName);
+    if(url.path().endsWith(".zip"))
+    {
+        qWarning() << "Download Request" << url.toString();
+        QString fileName = QFileInfo(url.toString()).fileName();
 
-QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-QNetworkReply *reply = manager->get(newRequest);
-//connect( reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)) );
+        QNetworkRequest newRequest(finalUrl);
+        newRequest.setAttribute(QNetworkRequest::User, fileName);
+
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QNetworkReply *reply = manager->get(newRequest);
+        connect(reply, SIGNAL(finished()), this, SLOT(fileDownloaded()));
+        connect(reply, SIGNAL(downloadProgress(qint64, qint64)), this, SLOT(downloadProgress(qint64, qint64)));
+
+        QProgressBar *progressBar = new QProgressBar(this);
+        progressBarsLayout->addWidget(progressBar);
+        progressBars.insert(reply, progressBar);
+    } else
+    {
+        qWarning() << "Page Request" << url.toString();
+
+        QNetworkRequest newRequest(finalUrl);
+
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QNetworkReply *reply = manager->get(newRequest);
+        connect(reply, SIGNAL(finished()), this, SLOT(pageDownloaded()));
+    }
 }
 
 
-void PageDataDownload::downloadIssueFinished()
+void PageDataDownload::pageDownloaded()
 {
     QNetworkReply * reply = qobject_cast<QNetworkReply *>(sender());
 
     if(reply)
     {
-        web->setHtml(QString::fromUtf8(reply->readAll()));
+        QString html = QString::fromUtf8(reply->readAll());
+        int begin = html.indexOf("<!-- BEGIN -->");
+        int end = html.indexOf("<!-- END -->");
+        if(begin != -1 && begin < end)
+        {
+            html.truncate(end);
+            html.remove(0, begin);
+        }
+        web->setHtml(html);
     }
 }
 
+void PageDataDownload::fileDownloaded()
+{
+    QNetworkReply * reply = qobject_cast<QNetworkReply *>(sender());
+
+    if(reply)
+    {
+        QByteArray fileContents = reply->readAll();
+        QProgressBar *progressBar = progressBars.value(reply, 0);
+
+        if(progressBar)
+        {
+            progressBars.remove(reply);
+            progressBar->deleteLater();
+        }
+
+        extractDataPack(&fileContents);
+    }
+}
+
+void PageDataDownload::downloadProgress(qint64 bytesRecieved, qint64 bytesTotal)
+{
+    QNetworkReply * reply = qobject_cast<QNetworkReply *>(sender());
+
+    if(reply)
+    {
+        QProgressBar *progressBar = progressBars.value(reply, 0);
+
+        if(progressBar)
+        {
+            progressBar->setValue(bytesRecieved);
+            progressBar->setMaximum(bytesTotal);
+        }
+    }
+}
+
+void PageDataDownload::fetchList()
+{
+    request(QUrl("http://hedgewars.org/content.html"));
+}
+
+bool PageDataDownload::extractDataPack(QByteArray * buf)
+{
+    QBuffer buffer;
+    buffer.setBuffer(buf);
+
+    QuaZip zip;
+    zip.setIoDevice(&buffer);
+    if(!zip.open(QuaZip::mdUnzip))
+    {
+      qWarning("testRead(): zip.open(): %d", zip.getZipError());
+      return false;
+    }
+
+    QuaZipFile file(&zip);
+
+    QDir extractDir(*cfgdir);
+    extractDir.cd("Data");
+
+    for(bool more = zip.goToFirstFile(); more; more = zip.goToNextFile())
+    {
+        if(!file.open(QIODevice::ReadOnly))
+        {
+            qWarning("file.open(): %d", file.getZipError());
+            return false;
+        }
 
 
+        QString fileName = file.getActualFileName();
+        QString filePath = extractDir.filePath(fileName);
+        if (fileName.endsWith("/"))
+        {
+            QFileInfo fi(filePath);
+            QDir().mkpath(fi.filePath());
+        } else
+        {
+            qDebug() << "Extracting" << filePath;
+            QFile out(filePath);
+            if(!out.open(QFile::WriteOnly))
+            {
+                qWarning() << "out.open():" << out.errorString();
+                return false;
+            }
 
+            out.write(file.readAll());
+
+            out.close();
+
+            if(file.getZipError() != UNZ_OK) {
+                qWarning("file.getFileName(): %d", file.getZipError());
+                return false;
+            }
+
+            if(!file.atEnd()) {
+                qWarning("read all but not EOF");
+                return false;
+            }
+        }
+
+        file.close();
+
+        if(file.getZipError()!=UNZ_OK) {
+            qWarning("file.close(): %d", file.getZipError());
+            return false;
+        }
+    }
+
+    zip.close();
+
+    return true;
+}
