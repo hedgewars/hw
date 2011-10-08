@@ -33,17 +33,79 @@
 }
 
 #pragma mark -
+#pragma mark custom setters/getters
+-(NSString *)selectedScheme {
+    if (selectedScheme == nil)
+        self.selectedScheme = @"Default.plist";
+    return selectedScheme;
+}
+
+-(NSString *)selectedWeapon {
+    if (selectedWeapon == nil)
+        self.selectedWeapon = @"Default.plist";
+    return selectedWeapon;
+}
+
+-(NSString *)selectedScript {
+    if (selectedScript == nil)
+        self.selectedScript = @"Normal.plist";
+    return selectedScript;
+}
+
+-(NSString *)scriptCommand {
+    if (scriptCommand == nil)
+        self.scriptCommand = @"";
+    return scriptCommand;
+}
+
+-(NSArray *)listOfSchemes {
+    if (listOfSchemes == nil)
+        self.listOfSchemes = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
+    return listOfSchemes;
+}
+
+-(NSArray *)listOfWeapons {
+    if (listOfWeapons == nil)
+        self.listOfWeapons = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
+    return listOfWeapons;
+}
+
+-(NSArray *)listOfScripts {
+    if (listOfScripts == nil)
+        self.listOfScripts = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL];
+    return listOfScripts;
+}
+
+-(UISegmentedControl *)topControl {
+    if (topControl == nil) {
+        NSArray *array = [[NSArray alloc] initWithObjects:
+                          NSLocalizedString(@"Scheme",@""),
+                          NSLocalizedString(@"Weapon",@""),
+                          NSLocalizedString(@"Style",@""),nil];
+        UISegmentedControl *controller = [[UISegmentedControl alloc] initWithItems:array];
+        [array release];
+        [controller addTarget:self.tableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
+        controller.segmentedControlStyle = UISegmentedControlStyleBar;
+        controller.tintColor = [UIColor lightGrayColor];
+        controller.selectedSegmentIndex = 0;
+        self.topControl = controller;
+        [controller release];
+    }
+    return topControl;
+}
+
+-(void) viewWillAppear:(BOOL) animated {
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
+}
+
+#pragma mark -
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
 
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-
-    self.selectedScheme = nil;
-    self.selectedWeapon = nil;
-    self.selectedScript = nil;
-    self.scriptCommand = nil;
 
     if ([self.tableView respondsToSelector:@selector(setBackgroundView:)]) {
         if (IS_IPAD())
@@ -63,37 +125,10 @@
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
--(void) viewWillAppear:(BOOL) animated {
-    [super viewWillAppear:animated];
-
-    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
-    self.listOfSchemes = contentsOfDir;
-
-    if (self.selectedScheme == nil && [listOfSchemes containsObject:@"Default.plist"])
-        self.selectedScheme = @"Default.plist";
-    
-    contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
-    self.listOfWeapons = contentsOfDir;
-    
-    if (self.selectedWeapon == nil && [listOfWeapons containsObject:@"Default.plist"])
-        self.selectedWeapon = @"Default.plist";
-
-    contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL];
-    self.listOfScripts = contentsOfDir;
-    self.selectedScript = @"Normal.plist";
-    self.scriptCommand = @"";
-
-    [self.tableView reloadData];
-}
-
-
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    if (hideSections)
-        return 0;
-    else
-        return 1;
+    return (self.hideSections ? 0 : 1);
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -167,20 +202,9 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (self.topControl == nil) {
-        NSArray *array = [[NSArray alloc] initWithObjects:NSLocalizedString(@"Scheme",@""),NSLocalizedString(@"Weapon",@""),
-                          NSLocalizedString(@"Style",@""),nil];
-        self.topControl = [[UISegmentedControl alloc] initWithItems:array];
-        [array release];
-        [self.topControl addTarget:self.tableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
-        self.topControl.segmentedControlStyle = UISegmentedControlStyleBar;
-        self.topControl.frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
-        self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
-        self.topControl.tintColor = [UIColor lightGrayColor];
-        self.topControl.selectedSegmentIndex = 0;
-    }
-
     UIView *theView = [[[UIView alloc] init] autorelease];
+    self.topControl.frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
+    self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
     [theView addSubview:self.topControl];
     return theView;
 }
@@ -213,6 +237,7 @@
             self.lastIndexPath_sc = indexPath;
             self.selectedScheme = [self.listOfSchemes objectAtIndex:newRow];
 
+            // also set weaponset when selecting scheme, if set
             NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
             if ([[settings objectForKey:@"sync_ws"] boolValue]) {
                 for (NSString *str in self.listOfWeapons) {
@@ -232,7 +257,8 @@
             self.lastIndexPath_lu = indexPath;
             self.selectedScript = [self.listOfScripts objectAtIndex:newRow];
 
-            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),selectedScript];
+            // some styles disable or force the choice of a particular scheme/weaponset
+            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),self.selectedScript];
             NSDictionary *scriptDict = [[NSDictionary alloc] initWithContentsOfFile:path];
             [path release];
             self.scriptCommand = [scriptDict objectForKey:@"command"];
@@ -262,18 +288,16 @@
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+#pragma mark -
+#pragma mark called externally to empty or fill the sections completely
 -(void) fillSections {
-    if (hideSections == YES) {
-        hideSections = NO;
+    if (self.hideSections == YES) {
+        self.hideSections = NO;
         NSRange range;
         range.location = 0;
         range.length = 1;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
         [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        self.selectedScheme = @"Default.plist";
-        self.selectedWeapon = @"Default.plist";
-        self.selectedScript = @"Normal.plist";
-
         self.tableView.scrollEnabled = YES;
 
         [[self.view viewWithTag:LABEL_TAG] removeFromSuperview];
@@ -287,10 +311,6 @@
     range.length = 1;
     NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
     [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
-    self.selectedScheme = @"Default.plist";
-    self.selectedWeapon = @"Default.plist";
-    self.selectedScript = @"Normal.plist";
-
     self.tableView.scrollEnabled = NO;
 
     CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 60);
@@ -311,12 +331,16 @@
         self.lastIndexPath_sc = nil;
         self.lastIndexPath_we = nil;
         self.lastIndexPath_lu = nil;
-        self.listOfSchemes = nil;
-        self.listOfWeapons = nil;
-        self.listOfScripts = nil;
+        self.selectedScheme = nil;
+        self.selectedWeapon = nil;
+        self.selectedScript = nil;
+        self.scriptCommand = nil;
         self.topControl = nil;
-        MSG_MEMCLEAN();
     }
+    self.listOfSchemes = nil;
+    self.listOfWeapons = nil;
+    self.listOfScripts = nil;
+    MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
@@ -335,7 +359,6 @@
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
-
 
 -(void) dealloc {
     releaseAndNil(listOfSchemes);

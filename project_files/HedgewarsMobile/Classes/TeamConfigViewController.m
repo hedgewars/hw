@@ -137,10 +137,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0)
-        return selectedTeamsCount;
-    else
-        return allTeamsCount;
+    return (section == 0 ? selectedTeamsCount : allTeamsCount);
 }
 
 // Customize the appearance of table view cells.
@@ -177,7 +174,7 @@
         if (cell == nil)
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
 
-        cell.textLabel.text = [[[listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
+        cell.textLabel.text = [[[self.listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
         cell.textLabel.backgroundColor = [UIColor clearColor];
         
         NSString *teamPath = [NSString stringWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),cell.textLabel.text];
@@ -299,7 +296,10 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    // Relinquish ownership any cached data, images, etc that aren't in use.
+    if ([[HedgewarsAppDelegate sharedAppDelegate] isInGame]) {
+        self.listOfSelectedTeams = nil;
+        self.listOfTeams = nil;
+    }
     self.cachedContentsOfDir = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];

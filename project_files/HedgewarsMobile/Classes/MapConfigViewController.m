@@ -55,8 +55,6 @@
     self.seedCommand = seedCmd;
     [seedCmd release];
 
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
     NSIndexPath *theIndex;
     if (isRandomness()) {
@@ -115,8 +113,6 @@
 }
 
 -(NSInteger) tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger) section {
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     return [[self.dataSourceArray objectAtIndex:scIndex] count];
 }
 
@@ -128,8 +124,6 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
 
     NSString *labelString = [source objectAtIndex:row];
@@ -159,8 +153,6 @@
 
 // this set details for a static map (called by didSelectRowAtIndexPath)
 -(void) setDetailsForStaticMap:(NSInteger) index {
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
     
     NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", 
@@ -196,8 +188,6 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
     if (newRow != oldRow) {
-        if (self.dataSourceArray == nil)
-            [self loadDataSourceArray];
         NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
         if (isRandomness()) {
             // just change the theme, don't update preview
@@ -375,48 +365,51 @@
 
 #pragma mark -
 #pragma mark view management
--(void) loadDataSourceArray {
-    NSString *model = [HWUtils modelType];
-
-    // only folders containing icon.png are a valid theme
-    NSArray *themeArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:THEMES_DIRECTORY() error:NULL];
-    NSMutableArray *themeArray = [[NSMutableArray alloc] init];
-    for (NSString *themeName in themeArrayFull) {
-        NSString *checkPath = [[NSString alloc] initWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:checkPath])
-            [themeArray addObject:themeName];
-        [checkPath release];
+-(NSArray *) dataSourceArray {
+    if (dataSourceArray == nil) {
+        NSString *model = [HWUtils modelType];
+        
+        // only folders containing icon.png are a valid theme
+        NSArray *themeArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:THEMES_DIRECTORY() error:NULL];
+        NSMutableArray *themeArray = [[NSMutableArray alloc] init];
+        for (NSString *themeName in themeArrayFull) {
+            NSString *checkPath = [[NSString alloc] initWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:checkPath])
+                [themeArray addObject:themeName];
+            [checkPath release];
+        }
+        
+        // remove images that are too big for certain devices without loading the whole image
+        NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
+        NSMutableArray *mapArray = [[NSMutableArray alloc] init];
+        for (NSString *str in mapArrayFull) {
+            CGSize imgSize = [UIImage imageSizeFromMetadataOf:[MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]];
+            if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
+                continue;
+            if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
+                continue;
+            [mapArray addObject:str];
+        }
+        
+        NSArray *missionArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
+        NSMutableArray *missionArray = [[NSMutableArray alloc] init];
+        for (NSString *str in missionArrayFull) {
+            CGSize imgSize = [UIImage imageSizeFromMetadataOf:[MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]];
+            if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
+                continue;
+            if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
+                continue;
+            [missionArray addObject:str];
+        }
+        NSArray *array = [[NSArray alloc] initWithObjects:themeArray,mapArray,themeArray,missionArray,nil];
+        [missionArray release];
+        [themeArray release];
+        [mapArray release];
+        
+        self.dataSourceArray = array;
+        [array release];
     }
-
-    // remove images that are too big for certain devices without loading the whole image
-    NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
-    NSMutableArray *mapArray = [[NSMutableArray alloc] init];
-    for (NSString *str in mapArrayFull) {
-        CGSize imgSize = [UIImage imageSizeFromMetadataOf:[MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]];
-        if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
-            continue;
-        if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
-            continue;
-        [mapArray addObject:str];
-    }
-    
-    NSArray *missionArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
-    NSMutableArray *missionArray = [[NSMutableArray alloc] init];
-    for (NSString *str in missionArrayFull) {
-        CGSize imgSize = [UIImage imageSizeFromMetadataOf:[MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]];
-        if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
-            continue;
-        if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
-            continue;
-        [missionArray addObject:str];
-    }
-    NSArray *array = [[NSArray alloc] initWithObjects:themeArray,mapArray,themeArray,missionArray,nil];
-    [missionArray release];
-    [themeArray release];
-    [mapArray release];
-
-    self.dataSourceArray = array;
-    [array release];
+    return dataSourceArray;
 }
 
 -(void) viewDidLoad {
@@ -433,7 +426,6 @@
     oldValue = 5;
     
     busy = NO;
-    [self loadDataSourceArray];
     self.lastIndexPath = [NSIndexPath indexPathForRow:-1 inSection:0];
     
     // select a map at first because it's faster - done in IB
@@ -458,8 +450,6 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     [super viewWillAppear:animated];
 }
 
