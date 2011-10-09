@@ -96,11 +96,11 @@ for y:= 0 to Pred(Image^.h) do
                 if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then 
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
-        Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or extraFlags;
 
         if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then
             begin
             Land[cpY + y, cpX + x]:= lfObject;
+            Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or extraFlags
             end;
         end;
     p:= @(p^[Image^.pitch shr 2])
