@@ -2874,21 +2874,22 @@ begin
     if Gear^.Health < Gear^.Damage then
     begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
-        for i:= 0 to 31 do
-            begin
-            sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
-            if sparkles <> nil then
-                with sparkles^ do
-                    begin
-                    Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
-                    Angle:= random * 360;
-                    dx:= 0.001 * (random(200));
-                    dy:= 0.001 * (random(200));
-                    if random(2) = 0 then dx := -dx;
-                    if random(2) = 0 then dy := -dy;
-                    FrameTicks:= random(400) + 250
-                    end;
-            end;
+        if hasWishes then
+            for i:= 0 to 31 do
+                begin
+                sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
+                if sparkles <> nil then
+                    with sparkles^ do
+                        begin
+                        Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
+                        Angle:= random * 360;
+                        dx:= 0.001 * (random(200));
+                        dy:= 0.001 * (random(200));
+                        if random(2) = 0 then dx := -dx;
+                        if random(2) = 0 then dy := -dy;
+                        FrameTicks:= random(400) + 250
+                        end
+                end;
         AfterAttack;
         DeleteGear(Gear);
         DeleteGear(HHGear);
