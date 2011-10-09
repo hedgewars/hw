@@ -24,6 +24,8 @@
 #import "UIImageExtra.h"
 #import "ServerSetup.h"
 #import <pthread.h>
+#import <QuartzCore/QuartzCore.h>
+
 
 #define INDICATOR_TAG 7654
 
@@ -33,15 +35,8 @@
 -(id) initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         delegate = nil;
-        [self setBackgroundImageRounded:[UIImage whiteImage:frame.size] forState:UIControlStateNormal];
-    }
-    return self;
-}
-
--(id) initWithCoder:(NSCoder *)aDecoder {
-    if ((self = [super initWithCoder:aDecoder])) {
-        delegate = nil;
-        [self setBackgroundImageRounded:[UIImage whiteImage:self.frame.size] forState:UIControlStateNormal];
+        self.backgroundColor = [UIColor whiteColor];
+        self.layer.cornerRadius = 12;
     }
     return self;
 }
@@ -53,16 +48,11 @@
 
 #pragma mark -
 #pragma mark image wrappers
--(void) setBackgroundImageRounded:(UIImage *)image forState:(UIControlState)state {
-    // TODO:http://stackoverflow.com/questions/4272476/setbackgroundimage-behaviour-changed-on-ipad-4-2
-    [self setBackgroundImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:state];
+-(void) setImageRounded:(UIImage *)image forState:(UIControlState)controlState {
+    [self setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:controlState];
 }
 
--(void) setImageRounded:(UIImage *)image forState:(UIControlState)state {
-    [self setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:state];
-}
-
--(void) setImageRoundedForNormalState:(UIImage *)image {
+-(void) setImageRounded:(UIImage *)image {
     [self setImageRounded:image forState:UIControlStateNormal];
 }
 
@@ -163,7 +153,7 @@
     previewCGImage = nil;
 
     // all these are performed on the main thread to prevent a leak
-    [self performSelectorOnMainThread:@selector(setImageRoundedForNormalState:)
+    [self performSelectorOnMainThread:@selector(setImageRounded:)
                            withObject:previewImage
                         waitUntilDone:NO];
     [previewImage release];

@@ -84,7 +84,7 @@
 
 -(IBAction) buttonPressed:(id) sender;
 
--(IBAction) mapButtonPressed;
+-(IBAction) mapButtonPressed:(id) sender;
 -(IBAction) sliderChanged:(id) sender;
 -(IBAction) sliderEndedChanging:(id) sender;
 -(IBAction) segmentedControlChanged:(id) sender;

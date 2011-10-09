@@ -38,7 +38,7 @@
     return rotationManager(interfaceOrientation);
 }
 
--(IBAction) mapButtonPressed {
+-(IBAction) mapButtonPressed:(id) sender {
     [AudioManagerController playClickSound];
     [self updatePreview];
 }
@@ -57,19 +57,16 @@
     [seedCmd release];
 
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
-    NSIndexPath *theIndex;
     if (isRandomness()) {
         // prevent other events and add an activity while the preview is beign generated
         [self turnOffWidgets];
         [self.previewButton updatePreviewWithSeed:seed];
-        theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
-    } else {
-        theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
         // the preview for static maps is loaded in didSelectRowAtIndexPath
     }
     [seed release];
 
     // perform as if user clicked on an entry
+    NSIndexPath *theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
     [self tableView:self.tableView didSelectRowAtIndexPath:theIndex];
     if (IS_NOT_POWERFUL([HWUtils modelType]) == NO)
         [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
@@ -413,6 +410,18 @@
     return dataSourceArray;
 }
 
+-(MapPreviewButtonView *)previewButton {
+    if (previewButton == nil) {
+        MapPreviewButtonView *preview = [[MapPreviewButtonView alloc] initWithFrame:CGRectMake(736, 26, 256, 128)];
+        preview.delegate = self;
+        [preview addTarget:self action:@selector(mapButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:preview];
+        self.previewButton = preview;
+        [preview release];
+    }
+    return previewButton;
+}
+
 -(void) viewDidLoad {
     [super viewDidLoad];
 
@@ -488,6 +497,7 @@
 
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
+    self.previewButton = nil;
     [super didReceiveMemoryWarning];
 
     if (self.view.superview == nil) {
