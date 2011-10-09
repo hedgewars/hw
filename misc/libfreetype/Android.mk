@@ -1,28 +1,45 @@
-LOCAL_PATH := $(call my-dir)
-
+LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := freetype
+# compile in ARM mode, since the glyph loader/renderer is a hotspot
+# when loading complex pages in the browser
+#
+LOCAL_ARM_MODE := arm
 
-APP_SUBDIRS := $(patsubst $(LOCAL_PATH)/%, %, $(shell find $(LOCAL_PATH)/src -type d))
+LOCAL_SRC_FILES:= \
+	src/base/ftbbox.c \
+	src/base/ftbitmap.c \
+	src/base/ftglyph.c \
+	src/base/ftstroke.c \
+	src/base/ftxf86.c \
+	src/base/ftbase.c \
+	src/base/ftsystem.c \
+	src/base/ftinit.c \
+	src/base/ftgasp.c \
+	src/raster/raster.c \
+	src/sfnt/sfnt.c \
+	src/smooth/smooth.c \
+	src/autofit/autofit.c \
+	src/truetype/truetype.c \
+	src/cff/cff.c \
+	src/psnames/psnames.c \
+	src/pshinter/pshinter.c
 
-# Add more subdirs here, like src/subdir1 src/subdir2
+LOCAL_C_INCLUDES += \
+	$(LOCAL_PATH)/builds \
+	$(LOCAL_PATH)/include
 
-LOCAL_CFLAGS := $(foreach D, $(APP_SUBDIRS), -I$(LOCAL_PATH)/$(D)) \
-				-I$(LOCAL_PATH)/include -DFT2_BUILD_LIBRARY
+LOCAL_CFLAGS += -W -Wall
+LOCAL_CFLAGS += -fPIC -DPIC
+LOCAL_CFLAGS += "-DDARWIN_NO_CARBON"
+LOCAL_CFLAGS += "-DFT2_BUILD_LIBRARY"
 
+# the following is for testing only, and should not be used in final builds
+# of the product
+#LOCAL_CFLAGS += "-DTT_CONFIG_OPTION_BYTECODE_INTERPRETER"
 
-#Change C++ file extension as appropriate
-LOCAL_CPP_EXTENSION := .cpp
+LOCAL_CFLAGS += -O2
 
-LOCAL_SRC_FILES := $(foreach F, $(APP_SUBDIRS), $(addprefix $(F)/,$(notdir $(wildcard $(LOCAL_PATH)/$(F)/*.cpp))))
-# Uncomment to also add C sources
-LOCAL_SRC_FILES += $(foreach F, $(APP_SUBDIRS), $(addprefix $(F)/,$(notdir $(wildcard $(LOCAL_PATH)/$(F)/*.c))))
-
-LOCAL_SHARED_LIBRARIES := 
-
-LOCAL_STATIC_LIBRARIES := 
-
-LOCAL_LDLIBS :=
+LOCAL_MODULE:= freetype
 
 include $(BUILD_STATIC_LIBRARY)
