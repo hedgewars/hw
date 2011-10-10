@@ -452,7 +452,7 @@ begin
                         begin
                         dX := rndSign(GetRandom * _0_1) + Gear^.dX / 5;
                         dY := (GetRandom - _3) * _0_08;
-                        AddGear(x, y, gtCluster, 0, dX, dY, 25);
+                        FollowGear := AddGear(x, y, gtCluster, 0, dX, dY, 25)
                         end
                 end;
             gtWatermelon: 
@@ -464,7 +464,8 @@ begin
                     begin
                     dX := rndSign(GetRandom * _0_1) + Gear^.dX / 5;
                     dY := (GetRandom - _1_5) * _0_3;
-                    AddGear(x, y, gtMelonPiece, 0, dX, dY, 75)^.DirAngle := i * 60;
+                    FollowGear:= AddGear(x, y, gtMelonPiece, 0, dX, dY, 75);
+                    FollowGear^.DirAngle := i * 60
                     end
                 end;
             gtHellishBomb: 
@@ -490,7 +491,7 @@ begin
                     begin
                     x:= GetRandom(60);
                     y:= GetRandom(40);
-                    AddGear(hwRound(Gear^.X) - 30 + x, hwRound(Gear^.Y) - 20 + y, gtPoisonCloud, 0, _0, _0, 0);
+                    FollowGear:= AddGear(hwRound(Gear^.X) - 30 + x, hwRound(Gear^.Y) - 20 + y, gtPoisonCloud, 0, _0, _0, 0);
                     end
                 end;
         end;
