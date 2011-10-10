@@ -1283,6 +1283,11 @@ while Gear <> nil do
         case Gear^.Kind of
             gtHedgehog,
                 gtMine,
+                gtBall,
+                gtMelonPiece,
+                gtGrenade,
+                gtClusterBomb,
+                gtCluster,
                 gtSMine,
                 gtCase,
                 gtTarget,
