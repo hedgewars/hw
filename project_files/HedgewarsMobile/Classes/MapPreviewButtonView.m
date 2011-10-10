@@ -223,15 +223,19 @@
 #pragma mark -
 #pragma mark delegate
 -(void) turnOnWidgets {
-    [self.delegate turnOnWidgets];
+    if ([self.delegate respondsToSelector:@selector(turnOnWidgets)])
+        [self.delegate turnOnWidgets];
 }
 
 -(void) setLabelText:(NSString *)string {
-    [self.delegate setLabelText:string];
+    if ([self.delegate respondsToSelector:@selector(setMaxLabelText:)])
+        [self.delegate setMaxLabelText:string];
 }
 
 -(NSDictionary *)getDataForEngine {
-    return [self.delegate getDataForEngine];
+    if ([self.delegate respondsToSelector:@selector(getDataForEngine)])
+        return [self.delegate getDataForEngine];
+    return nil;
 }
 
 @end

@@ -22,7 +22,9 @@
 #import <UIKit/UIKit.h>
 
 
-@interface SchemeWeaponConfigViewController : UITableViewController {
+@interface SchemeWeaponConfigViewController : UIViewController <UITableViewDelegate,UITableViewDataSource> {
+    UITableView *tableView;
+
     NSArray *listOfSchemes;
     NSArray *listOfWeapons;
     NSArray *listOfScripts;
@@ -37,9 +39,10 @@
     NSString *scriptCommand;
 
     UISegmentedControl *topControl;
-    BOOL hideSections;
+    BOOL sectionsHidden;
 }
 
+@property (nonatomic,retain) UITableView *tableView;
 @property (nonatomic,retain) NSArray *listOfSchemes;
 @property (nonatomic,retain) NSArray *listOfWeapons;
 @property (nonatomic,retain) NSArray *listOfScripts;
@@ -51,9 +54,9 @@
 @property (nonatomic,retain) NSString *selectedScript;
 @property (nonatomic,retain) NSString *scriptCommand;
 @property (nonatomic,retain) UISegmentedControl *topControl;
-@property (assign) BOOL hideSections;
+@property (nonatomic,assign) BOOL sectionsHidden;
 
--(void) fillSections;
--(void) emptySections;
++(void) fillInstanceSections;
++(void) emptyInstanceSections;
 
 @end

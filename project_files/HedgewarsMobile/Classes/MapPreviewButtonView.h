@@ -25,7 +25,7 @@
 @protocol MapPreviewViewDelegate <NSObject>
 
 -(void) turnOnWidgets;
--(void) setLabelText:(NSString *)string;
+-(void) setMaxLabelText:(NSString *)string;
 -(NSDictionary *)getDataForEngine;
 
 @end

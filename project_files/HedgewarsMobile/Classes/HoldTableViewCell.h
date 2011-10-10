@@ -23,7 +23,7 @@
 
 @protocol HoldTableViewCellDelegate <NSObject>
 
--(void) holdAction:(NSString *)content;
+-(void) holdAction:(NSString *)content onTable:(UITableView *)aTableView;
 
 @end
 

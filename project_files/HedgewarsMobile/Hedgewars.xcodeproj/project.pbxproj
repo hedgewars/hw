@@ -78,7 +78,7 @@
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
 		61399013125D19C0003C2DC0 /* uMobile.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61399012125D19C0003C2DC0 /* uMobile.pas */; };
 		6147DAD31253DCDE0010357E /* savesButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 6147DAD21253DCDE0010357E /* savesButton.png */; };
-		61536DF411CEAE7100D87A7E /* GameConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */; };
+		61536DF411CEAE7100D87A7E /* GameConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924A11CA9CB400D6E256 /* GameConfigViewController-iPhone.xib */; };
 		615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD96112073B4D00F2FF04 /* startGameButton.png */; };
 		615AD9E9120764CA00F2FF04 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9E8120764CA00F2FF04 /* backButton.png */; };
 		615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9EA1207654E00F2FF04 /* helpButton.png */; };
@@ -219,6 +219,7 @@
 		61B7A61712FA13B00051E14E /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A56012FA12BF0051E14E /* libSDL_mixer.a */; };
 		61B7A61812FA13B00051E14E /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A56812FA12D00051E14E /* libSDL_net.a */; };
 		61B7A61912FA13B00051E14E /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A59012FA13330051E14E /* libSDL_ttf.a */; };
+		61B9A86814423A9D001541C1 /* GameConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
 		61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C28D3E142D380400DA16C2 /* AudioManagerController.m */; };
 		61CADE331402EE290030C3EB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61CADE321402EE290030C3EB /* ImageIO.framework */; };
@@ -457,7 +458,7 @@
 		6165922B11CA9BD500D6E256 /* SquareButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SquareButtonView.m; path = Classes/SquareButtonView.m; sourceTree = "<group>"; };
 		6165922C11CA9BD500D6E256 /* UIImageExtra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImageExtra.h; path = Classes/UIImageExtra.h; sourceTree = "<group>"; };
 		6165922D11CA9BD500D6E256 /* UIImageExtra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageExtra.m; path = Classes/UIImageExtra.m; sourceTree = "<group>"; };
-		6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GameConfigViewController.xib; sourceTree = "<group>"; };
+		6165924A11CA9CB400D6E256 /* GameConfigViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "GameConfigViewController-iPhone.xib"; sourceTree = "<group>"; };
 		6165924B11CA9CB400D6E256 /* MainMenuViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainMenuViewController-iPad.xib"; sourceTree = "<group>"; };
 		6165924C11CA9CB400D6E256 /* MainMenuViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MainMenuViewController-iPhone.xib"; sourceTree = "<group>"; };
 		6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MapConfigViewController-iPad.xib"; sourceTree = "<group>"; };
@@ -585,6 +586,7 @@
 		61AC067312B2E32D000B52A2 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Appirater.m; path = Classes/Appirater.m; sourceTree = "<group>"; };
 		61B7A33612CC21080086B604 /* StatsPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatsPageViewController.h; sourceTree = "<group>"; };
 		61B7A33712CC21080086B604 /* StatsPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatsPageViewController.m; sourceTree = "<group>"; };
+		61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "GameConfigViewController-iPad.xib"; path = "Classes/GameConfigViewController-iPad.xib"; sourceTree = "<group>"; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditableCellView.h; path = Classes/EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditableCellView.m; path = Classes/EditableCellView.m; sourceTree = "<group>"; };
 		61C28D3D142D380400DA16C2 /* AudioManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioManagerController.h; path = Classes/AudioManagerController.h; sourceTree = "<group>"; };
@@ -707,6 +709,7 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				61370652117B1D50004EE44A /* Entitlements-Distribution.plist */,
 				611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */,
+				61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -841,7 +844,7 @@
 			children = (
 				616591E411CA9BA200D6E256 /* GameConfigViewController.h */,
 				616591E511CA9BA200D6E256 /* GameConfigViewController.m */,
-				6165924A11CA9CB400D6E256 /* GameConfigViewController.xib */,
+				6165924A11CA9CB400D6E256 /* GameConfigViewController-iPhone.xib */,
 				6165920411CA9BA200D6E256 /* TeamConfigViewController.h */,
 				6165920511CA9BA200D6E256 /* TeamConfigViewController.m */,
 				616591FC11CA9BA200D6E256 /* SchemeWeaponConfigViewController.h */,
@@ -1360,7 +1363,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61536DF411CEAE7100D87A7E /* GameConfigViewController.xib in Resources */,
+				61536DF411CEAE7100D87A7E /* GameConfigViewController-iPhone.xib in Resources */,
 				61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */,
 				611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */,
 				6165925311CA9CB400D6E256 /* MainMenuViewController-iPad.xib in Resources */,
@@ -1477,6 +1480,7 @@
 				610782961440EE5C00645B29 /* basicFlags.plist in Resources */,
 				610782971440EE5C00645B29 /* credits.plist in Resources */,
 				610782981440EE5C00645B29 /* gameMods.plist in Resources */,
+				61B9A86814423A9D001541C1 /* GameConfigViewController-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

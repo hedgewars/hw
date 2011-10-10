@@ -25,9 +25,11 @@
 
 #define LABEL_TAG 57423
 
+static SchemeWeaponConfigViewController *controllerInstance;
+
 @implementation SchemeWeaponConfigViewController
-@synthesize listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
-            selectedScheme, selectedWeapon, selectedScript, scriptCommand, topControl, hideSections;
+@synthesize tableView, listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
+            selectedScheme, selectedWeapon, selectedScript, scriptCommand, topControl, sectionsHidden;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -95,42 +97,44 @@
     return topControl;
 }
 
--(void) viewWillAppear:(BOOL) animated {
-    [super viewWillAppear:animated];
-    [self.tableView reloadData];
-}
-
 #pragma mark -
 #pragma mark View lifecycle
 -(void) viewDidLoad {
-    [super viewDidLoad];
+    self.sectionsHidden = NO;
 
-    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-    self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-
+    UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+                                                           style:UITableViewStyleGrouped];
+    aTableView.delegate = self;
+    aTableView.dataSource = self;
     if (IS_IPAD()) {
-        [self.tableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
-        self.tableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
-        self.tableView.layer.borderWidth = 2.7f;
-        self.tableView.layer.cornerRadius = 8;
-        self.tableView.contentInset = UIEdgeInsetsMake(5, 0, 5, 0);
+        [aTableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
+        aTableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
+        aTableView.layer.borderWidth = 2.7f;
+        aTableView.layer.cornerRadius = 8;
+        aTableView.contentInset = UIEdgeInsetsMake(5, 0, 5, 0);
     } else {
         UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
         [backgroundImage release];
-        [self.tableView setBackgroundView:background];
+        [aTableView setBackgroundView:background];
         [background release];
     }
 
-    self.tableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
-    self.tableView.separatorColor = [UIColor whiteColor];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    aTableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+    aTableView.separatorColor = [UIColor whiteColor];
+    aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView = aTableView;
+    [aTableView release];
+    [self.view addSubview:self.tableView];
+
+    [super viewDidLoad];
+    controllerInstance = self;
 }
 
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    return (self.hideSections ? 0 : 1);
+    return (self.sectionsHidden ? 0 : 1);
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -143,12 +147,12 @@
 }
 
 // Customize the appearance of table view cells.
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     NSInteger index = self.topControl.selectedSegmentIndex;
     NSInteger row = [indexPath row];
 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
 
@@ -247,7 +251,6 @@
                         int index = [self.listOfSchemes indexOfObject:str];
                         self.selectedWeapon = str;
                         self.lastIndexPath_we = [NSIndexPath indexPathForRow:index inSection:1];
-                        [self.tableView reloadData];
                         break;
                     }
                 }
@@ -292,44 +295,41 @@
 
 #pragma mark -
 #pragma mark called externally to empty or fill the sections completely
--(void) fillSections {
-    if (self.hideSections == YES) {
-        self.hideSections = NO;
-        NSRange range;
-        range.location = 0;
-        range.length = 1;
-        NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
-        [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        self.tableView.scrollEnabled = YES;
++(void) fillInstanceSections {
+    if (controllerInstance.sectionsHidden == YES) {
+        controllerInstance.sectionsHidden = NO;
+        NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
+        [controllerInstance.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        controllerInstance.tableView.scrollEnabled = YES;
 
-        [[self.view viewWithTag:LABEL_TAG] removeFromSuperview];
+        [[controllerInstance.view viewWithTag:LABEL_TAG] removeFromSuperview];
     }
 }
 
--(void) emptySections {
-    hideSections = YES;
-    NSRange range;
-    range.location = 0;
-    range.length = 1;
-    NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
-    [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
-    self.tableView.scrollEnabled = NO;
++(void) emptyInstanceSections {
+    if (controllerInstance.sectionsHidden == NO) {
+        controllerInstance.sectionsHidden = YES;
+        NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
+        [controllerInstance.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        controllerInstance.tableView.scrollEnabled = NO;
 
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 60);
-    UILabel *theLabel = [[UILabel alloc] initWithFrame:frame
-                                              andTitle:NSLocalizedString(@"Missions don't need further configuration",@"")];
-    theLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
-    theLabel.numberOfLines = 2;
-    theLabel.tag = LABEL_TAG;
+        CGRect frame = CGRectMake(0, 0, controllerInstance.view.frame.size.width * 80/100, 60);
+        UILabel *theLabel = [[UILabel alloc] initWithFrame:frame
+                                                  andTitle:NSLocalizedString(@"Missions don't need further configuration",@"")];
+        theLabel.center = CGPointMake(controllerInstance.view.frame.size.width/2, controllerInstance.view.frame.size.height/2);
+        theLabel.numberOfLines = 2;
+        theLabel.tag = LABEL_TAG;
 
-    [self.view addSubview:theLabel];
-    [theLabel release];
+        [controllerInstance.view addSubview:theLabel];
+        [theLabel release];
+    }
 }
 
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
     if ([[HedgewarsAppDelegate sharedAppDelegate] isInGame]) {
+        self.tableView = nil;
         self.lastIndexPath_sc = nil;
         self.lastIndexPath_we = nil;
         self.lastIndexPath_lu = nil;
@@ -347,6 +347,7 @@
 }
 
 -(void) viewDidUnload {
+    self.tableView = nil;
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
@@ -363,6 +364,7 @@
 }
 
 -(void) dealloc {
+    releaseAndNil(tableView);
     releaseAndNil(listOfSchemes);
     releaseAndNil(listOfWeapons);
     releaseAndNil(listOfScripts);

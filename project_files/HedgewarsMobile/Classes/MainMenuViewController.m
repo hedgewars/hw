@@ -151,7 +151,7 @@
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {
-                xib = IS_IPAD() ? nil : @"GameConfigViewController";
+                xib = IS_IPAD() ? @"GameConfigViewController-iPad" : @"GameConfigViewController-iPhone";
 
                 GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:xib bundle:nil];
                 gcvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;

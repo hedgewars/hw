@@ -25,41 +25,51 @@
 
 
 @implementation TeamConfigViewController
-@synthesize listOfTeams, listOfSelectedTeams, cachedContentsOfDir;
+@synthesize tableView, selectedTeamsCount, allTeamsCount, listOfAllTeams, listOfSelectedTeams, cachedContentsOfDir;
+
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return rotationManager(interfaceOrientation);
+}
 
 #pragma mark -
 #pragma mark View lifecycle
 -(void) viewDidLoad {
-    [super viewDidLoad];
-
+/*
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-
+*/
+    UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+                                                           style:UITableViewStyleGrouped];
+    aTableView.delegate = self;
+    aTableView.dataSource = self;
     if (IS_IPAD()) {
-        [self.tableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
-        self.tableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
-        self.tableView.layer.borderWidth = 2.7f;
-        self.tableView.layer.cornerRadius = 8;
-        self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 10, 0);
+        [aTableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
+        aTableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
+        aTableView.layer.borderWidth = 2.7f;
+        aTableView.layer.cornerRadius = 8;
+        aTableView.contentInset = UIEdgeInsetsMake(10, 0, 10, 0);
     } else {
         UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
         [backgroundImage release];
-        [self.tableView setBackgroundView:background];
+        [aTableView setBackgroundView:background];
         [background release];
     }
 
-    self.tableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
-    self.tableView.separatorColor = [UIColor whiteColor];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    aTableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+    aTableView.separatorColor = [UIColor whiteColor];
+    aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView = aTableView;
+    [aTableView release];
+
+    [self.view addSubview:self.tableView];
+    [super viewDidLoad];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
     NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:TEAMS_DIRECTORY() error:NULL];
-    // avoid overwriting selected teams when returning on this view
     if ([self.cachedContentsOfDir isEqualToArray:contentsOfDir] == NO) {
+        self.cachedContentsOfDir = contentsOfDir;
         NSArray *colors = [HWUtils teamColors];
         NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
         for (int i = 0; i < [contentsOfDir count]; i++) {
@@ -70,25 +80,19 @@
             [array addObject:dict];
             [dict release];
         }
-        self.listOfTeams = array;
+        self.listOfAllTeams = array;
         [array release];
 
         NSMutableArray *emptyArray = [[NSMutableArray alloc] initWithObjects:nil];
         self.listOfSelectedTeams = emptyArray;
         [emptyArray release];
 
-        selectedTeamsCount = [self.listOfSelectedTeams count];
-        allTeamsCount = [self.listOfTeams count];
-
-        NSArray *contents = [[NSArray alloc] initWithArray:contentsOfDir copyItems:YES];
-        self.cachedContentsOfDir = contents;
-        [contents release];
+        self.selectedTeamsCount = [self.listOfSelectedTeams count];
+        self.allTeamsCount = [self.listOfAllTeams count];
+        [self.tableView reloadData];
     }
-    [self.tableView reloadData];
-}
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return rotationManager(interfaceOrientation);
+    [super viewWillAppear:animated];
 }
 
 -(NSInteger) filterNumberOfHogs:(NSInteger) hogs {
@@ -140,7 +144,7 @@
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return (section == 0 ? selectedTeamsCount : allTeamsCount);
+    return (section == 0 ? self.selectedTeamsCount : self.allTeamsCount);
 }
 
 // Customize the appearance of table view cells.
@@ -177,7 +181,7 @@
         if (cell == nil)
             cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier1] autorelease];
 
-        cell.textLabel.text = [[[self.listOfTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
+        cell.textLabel.text = [[[self.listOfAllTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
         cell.textLabel.backgroundColor = [UIColor clearColor];
         
         NSString *teamPath = [NSString stringWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),cell.textLabel.text];
@@ -222,13 +226,13 @@
     return IS_IPAD() ? 40 : 20;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
+-(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger) section {
     NSInteger height = IS_IPAD() ? 40 : 20;
-    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, height)];
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, height)];
     footer.backgroundColor = [UIColor clearColor];
 
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width*80/100, height)];
-    label.center = CGPointMake(self.tableView.frame.size.width/2, height/2);
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*80/100, height)];
+    label.center = CGPointMake(aTableView.frame.size.width/2, height/2);
     label.textAlignment = UITextAlignmentCenter;
     label.font = [UIFont italicSystemFontOfSize:12];
     label.textColor = [UIColor whiteColor];
@@ -251,9 +255,9 @@
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
 
-    if (section == 1 && [self.listOfTeams count] > row) {
-        [self.listOfSelectedTeams addObject:[self.listOfTeams objectAtIndex:row]];
-        [self.listOfTeams removeObjectAtIndex:row];
+    if (section == 1 && [self.listOfAllTeams count] > row) {
+        [self.listOfSelectedTeams addObject:[self.listOfAllTeams objectAtIndex:row]];
+        [self.listOfAllTeams removeObjectAtIndex:row];
 
         NSIndexPath *newIndexPath = [NSIndexPath indexPathForRow:selectedTeamsCount inSection:0];
         allTeamsCount--;
@@ -277,7 +281,7 @@
     }
 }
 
--(void) holdAction:(NSString *)content {
+-(void) holdAction:(NSString *)content onTable:(UITableView *)aTableView {
     NSInteger row;
     for (row = 0; row < [self.listOfSelectedTeams count]; row++) {
         NSDictionary *dict = [self.listOfSelectedTeams objectAtIndex:row];
@@ -285,15 +289,15 @@
             break;
     }
 
-    [self.listOfTeams addObject:[self.listOfSelectedTeams objectAtIndex:row]];
+    [self.listOfAllTeams addObject:[self.listOfSelectedTeams objectAtIndex:row]];
     [self.listOfSelectedTeams removeObjectAtIndex:row];
 
-    [self.tableView beginUpdates];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
-    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:allTeamsCount inSection:1]] withRowAnimation:UITableViewRowAnimationLeft];
-    allTeamsCount++;
-    selectedTeamsCount--;
-    [self.tableView endUpdates];
+    [aTableView beginUpdates];
+    [aTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:row inSection:0]] withRowAnimation:UITableViewRowAnimationLeft];
+    [aTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:allTeamsCount inSection:1]] withRowAnimation:UITableViewRowAnimationLeft];
+    self.allTeamsCount++;
+    self.selectedTeamsCount--;
+    [aTableView endUpdates];
 }
 
 #pragma mark -
@@ -301,7 +305,8 @@
 -(void) didReceiveMemoryWarning {
     if ([[HedgewarsAppDelegate sharedAppDelegate] isInGame]) {
         self.listOfSelectedTeams = nil;
-        self.listOfTeams = nil;
+        self.listOfAllTeams = nil;
+        self.tableView = nil;
     }
     self.cachedContentsOfDir = nil;
     MSG_MEMCLEAN();
@@ -309,7 +314,8 @@
 }
 
 -(void) viewDidUnload {
-    self.listOfTeams = nil;
+    self.tableView = nil;
+    self.listOfAllTeams = nil;
     self.listOfSelectedTeams = nil;
     self.cachedContentsOfDir = nil;
     MSG_DIDUNLOAD();
@@ -318,7 +324,8 @@
 
 
 -(void) dealloc {
-    releaseAndNil(listOfTeams);
+    releaseAndNil(tableView);
+    releaseAndNil(listOfAllTeams);
     releaseAndNil(listOfSelectedTeams);
     releaseAndNil(cachedContentsOfDir);
     [super dealloc];

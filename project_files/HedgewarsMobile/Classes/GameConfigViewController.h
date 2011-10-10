@@ -21,28 +21,25 @@
 
 #import <UIKit/UIKit.h>
 
-@class HelpPageViewController;
-@class MapConfigViewController;
-@class TeamConfigViewController;
 @class SchemeWeaponConfigViewController;
-@class GameInterfaceBridge;
+@class TeamConfigViewController;
+@class MapConfigViewController;
+@class HelpPageViewController;
 
 @interface GameConfigViewController : UIViewController {
     UIView *imgContainer;
-    HelpPageViewController *helpPage;
-    
-    MapConfigViewController *mapConfigViewController;
-    TeamConfigViewController *teamConfigViewController;
+
     SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
-    GameInterfaceBridge *interfaceBridge;
+    TeamConfigViewController *teamConfigViewController;
+    MapConfigViewController *mapConfigViewController;
+    HelpPageViewController *helpPage;
 }
 
 @property (retain) UIView *imgContainer;
+@property (nonatomic,retain) IBOutlet SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
+@property (nonatomic,retain) IBOutlet TeamConfigViewController *teamConfigViewController;
+@property (nonatomic,retain) IBOutlet MapConfigViewController *mapConfigViewController;
 @property (nonatomic,retain) HelpPageViewController *helpPage;
-@property (nonatomic,retain) MapConfigViewController *mapConfigViewController;
-@property (nonatomic,retain) TeamConfigViewController *teamConfigViewController;
-@property (nonatomic,retain) SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
-@property (nonatomic,retain) GameInterfaceBridge *interfaceBridge;
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) segmentPressed:(id) sender;

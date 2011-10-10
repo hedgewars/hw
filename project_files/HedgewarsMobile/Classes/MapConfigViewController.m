@@ -31,7 +31,7 @@
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
             missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy,
-            externalController, parentController;
+            oldPage, oldValue;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -45,7 +45,7 @@
 
 -(void) updatePreview {
     // don't generate a new preview while it's already generating one
-    if (busy)
+    if (self.busy)
         return;
 
     // generate a seed
@@ -76,22 +76,24 @@
     busy = YES;
     self.previewButton.alpha = 0.5f;
     self.previewButton.enabled = NO;
-    self.maxLabel.text = @"...";
+    self.maxLabel.text = NSLocalizedString(@"Loading...",@"");;
     self.segmentedControl.enabled = NO;
     self.slider.enabled = NO;
 }
 
+#pragma mark -
+#pragma mark MapPreviewButtonView delegate methods
 -(void) turnOnWidgets {
     self.previewButton.alpha = 1.0f;
     self.previewButton.enabled = YES;
     self.segmentedControl.enabled = YES;
     self.slider.enabled = YES;
-    busy = NO;
+    self.busy = NO;
 }
 
--(void) setLabelText:(NSString *)str {
+-(void) setMaxLabelText:(NSString *)str {
     self.maxHogs = [str intValue];
-    self.maxLabel.text = str;
+    self.maxLabel.text = [NSString stringWithFormat:@"%@ %@",NSLocalizedString(@"Max Hogs:",@""),str];
 }
 
 -(NSDictionary *)getDataForEngine {
@@ -162,13 +164,12 @@
 
     // if the number is not set we keep 18 standard;
     // sometimes it's not set but there are trailing characters, we get around them with the second equation
+    NSString *max;
     if ([split count] > 1 && [[split objectAtIndex:1] intValue] > 0)
-        maxHogs = [[split objectAtIndex:1] intValue];
+        max = [split objectAtIndex:1];
     else
-        maxHogs = 18;
-    NSString *max = [[NSString alloc] initWithFormat:@"%d",maxHogs];
-    self.maxLabel.text = max;
-    [max release];
+        max = @"18";
+    [self setMaxLabelText:max];
     
     self.themeCommand = [NSString stringWithFormat:@"etheme %@", [split objectAtIndex:0]];
     self.staticMapCommand = [NSString stringWithFormat:@"emap %@", [source objectAtIndex:index]];
@@ -310,7 +311,7 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
-            [externalController fillSections];
+            [SchemeWeaponConfigViewController fillInstanceSections];
             break;
 
         case 1: // Map
@@ -320,7 +321,7 @@
             mission = @"";
             self.slider.enabled = NO;
             self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
-            [externalController fillSections];
+            [SchemeWeaponConfigViewController fillInstanceSections];
             break;
 
         case 2: // Maze
@@ -329,7 +330,7 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
-            [externalController fillSections];
+            [SchemeWeaponConfigViewController fillInstanceSections];
             break;
 
         case 3: // Mission
@@ -339,7 +340,7 @@
             mission = @"";
             self.slider.enabled = NO;
             self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
-            [externalController emptySections];
+            [SchemeWeaponConfigViewController emptyInstanceSections];
             break;
 
         default:
@@ -355,10 +356,6 @@
     [self.tableView reloadData];
     [self updatePreview];
     oldPage = newPage;
-}
-
--(IBAction) buttonPressed:(id) sender {
-    [self.parentController buttonPressed:sender];
 }
 
 #pragma mark -
@@ -412,7 +409,7 @@
 
 -(MapPreviewButtonView *)previewButton {
     if (previewButton == nil) {
-        MapPreviewButtonView *preview = [[MapPreviewButtonView alloc] initWithFrame:CGRectMake(736, 26, 256, 128)];
+        MapPreviewButtonView *preview = [[MapPreviewButtonView alloc] initWithFrame:CGRectMake(32, 26, 256, 128)];
         preview.delegate = self;
         [preview addTarget:self action:@selector(mapButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:preview];
@@ -427,23 +424,18 @@
 
     srandom(time(NULL));
 
+    /*
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
+    */
     
     // initialize some "default" values
-    self.sizeLabel.text = NSLocalizedString(@"All",@"");
     self.slider.value = 0.05f;
-    oldValue = 5;
-    
-    busy = NO;
-    self.lastIndexPath = [NSIndexPath indexPathForRow:-1 inSection:0];
-    
-    // select a map at first because it's faster - done in IB
-    oldPage = 1;
-    if (self.segmentedControl.selectedSegmentIndex == 1) {
-        self.slider.enabled = NO;
-        self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
-    }
+    self.slider.enabled = NO;
+    self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
+    self.oldValue = 5;
+    self.busy = NO;
+    self.oldPage = self.segmentedControl.selectedSegmentIndex;
 
     self.templateFilterCommand = @"e$template_filter 0";
     self.mazeSizeCommand = @"e$maze_size 0";
@@ -457,6 +449,10 @@
         self.tableView.layer.borderWidth = 2.7f;
         self.tableView.layer.cornerRadius = 8;
         self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 10, 0);
+
+        UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 14, 300, 190) andTitle:nil withBorderWidth:2.3f];
+        [self.view insertSubview:backLabel belowSubview:self.segmentedControl];
+        [backLabel release];
     }
     self.tableView.separatorColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

@@ -22,8 +22,6 @@
 #import <UIKit/UIKit.h>
 #import "MapPreviewButtonView.h"
 
-@class SchemeWeaponConfigViewController;
-@class GameConfigViewController;
 
 @interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, MapPreviewViewDelegate> {
     NSInteger oldValue;     // for the slider
@@ -51,15 +49,13 @@
     // internal objects
     NSIndexPath *lastIndexPath;
     NSArray *dataSourceArray;
-
-    // controller for mission state
-    SchemeWeaponConfigViewController *externalController;
-    GameConfigViewController *parentController;
 }
 
 
-@property (nonatomic,assign) NSInteger maxHogs;
+@property (nonatomic,assign) NSInteger oldValue;
+@property (nonatomic,assign) NSInteger oldPage;
 @property (nonatomic,assign) BOOL busy;
+@property (nonatomic,assign) NSInteger maxHogs;
 @property (nonatomic,retain) NSString *seedCommand;
 @property (nonatomic,retain) NSString *templateFilterCommand;
 @property (nonatomic,retain) NSString *mapGenCommand;
@@ -78,11 +74,6 @@
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 @property (nonatomic,retain) NSArray *dataSourceArray;
 
-@property (nonatomic,assign) SchemeWeaponConfigViewController *externalController;
-@property (nonatomic,assign) GameConfigViewController *parentController;
-
-
--(IBAction) buttonPressed:(id) sender;
 
 -(IBAction) mapButtonPressed:(id) sender;
 -(IBAction) sliderChanged:(id) sender;
@@ -91,7 +82,7 @@
 
 -(void) turnOnWidgets;
 -(void) turnOffWidgets;
--(void) setLabelText:(NSString *)str;
+-(void) setMaxLabelText:(NSString *)str;
 -(void) updatePreview;
 
 @end
