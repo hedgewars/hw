@@ -387,10 +387,11 @@ end;
 
 function CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
 var ldx, ldy, rdx, rdy: LongInt;
-    i, j, mx, my, li, ri, jfr, jto, tmpo : ShortInt;
+    i, j, k, mx, my, li, ri, jfr, jto, tmpo : ShortInt;
     tmpx, tmpy: LongWord;
     dx, dy, s: hwFloat;
     offset: Array[0..7,0..1] of ShortInt;
+    isColl: Boolean;
 
 begin
     dx:= Gear^.dX;
@@ -418,21 +419,25 @@ begin
         offset[i,0]:= mx;
         offset[i,1]:= my;
 
-        tmpx:= collisionX + mx;
-        tmpy:= collisionY + my;
+        // multiplicator k tries to skip small pixels/gaps when possible
+        for k:= 4 downto 1 do
+            begin
+            tmpx:= collisionX + k * mx;
+            tmpy:= collisionY + k * my;
 
-        if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK) = 0) then
-            if (Land[tmpy,tmpx] > TestWord) then
-                begin
-                // remember the index belonging to the first and last collision (if in 1st half)
-                if (i <> 0) then
+            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK) = 0) then
+                if (Land[tmpy,tmpx] > TestWord) then
                     begin
-                    if (ri = -1) then
-                        ri:= i
-                    else
-                        li:= i;
+                    // remember the index belonging to the first and last collision (if in 1st half)
+                    if (i <> 0) then
+                        begin
+                        if (ri = -1) then
+                            ri:= i
+                        else
+                            li:= i;
+                        end;
                     end;
-                end;
+            end;
 
         if i = 7 then break;
 
@@ -457,35 +462,48 @@ begin
         jfr:= 8+li+1;
         jto:= 8+li-1;
 
+        isColl:= false;
         for j:= jfr downto jto do
             begin
             tmpo:= j mod 8;
-            tmpx:= ldx + offset[tmpo,0];
-            tmpy:= ldy + offset[tmpo,1];
-            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                and (Land[tmpy,tmpx] > TestWord) then
-                    begin
-                    ldx:= tmpx;
-                    ldy:= tmpy;
-                    break;
-                    end;
+            // multiplicator k tries to skip small pixels/gaps when possible
+            for k:= 3 downto 1 do
+                begin
+                tmpx:= ldx + k * offset[tmpo,0];
+                tmpy:= ldy + k * offset[tmpo,1];
+                if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
+                    and (Land[tmpy,tmpx] > TestWord) then
+                        begin
+                        ldx:= tmpx;
+                        ldy:= tmpy;
+                        isColl:= true;
+                        break;
+                        end;
+                end;
+            if isColl then break;
             end;
 
         jfr:= 8+ri-1;
         jto:= 8+ri+1;
 
+        isColl:= false;
         for j:= jfr to jto do
             begin
             tmpo:= j mod 8;
-            tmpx:= rdx + offset[tmpo,0];
-            tmpy:= rdy + offset[tmpo,1];
-            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                and (Land[tmpy,tmpx] > TestWord) then
-                    begin
-                    rdx:= tmpx;
-                    rdy:= tmpy;
-                    break;
-                    end;
+            for k:= 3 downto 1 do
+                begin
+                tmpx:= rdx + k * offset[tmpo,0];
+                tmpy:= rdy + k * offset[tmpo,1];
+                if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
+                    and (Land[tmpy,tmpx] > TestWord) then
+                        begin
+                        rdx:= tmpx;
+                        rdy:= tmpy;
+                        isColl:= true;
+                        break;
+                        end;
+                end;
+            if isColl then break;
             end;
         end;
 
