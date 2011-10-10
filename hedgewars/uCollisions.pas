@@ -51,6 +51,8 @@ function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongIn
 function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
 
 function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
+
+function  CalcSlopeTangentBelowGear(Gear: PGear; var outDeltaX, outDeltaY: LongInt): boolean;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
@@ -515,6 +517,51 @@ begin
 outDeltaX:= ldx;
 outDeltaY:= ldy;
 exit(true);
+end;
+
+function CalcSlopeTangentBelowGear(Gear: PGear; var outDeltaX, outDeltaY: LongInt): boolean;
+var dx, dy: hwFloat;
+    collX, i, y, x, gx: LongInt;
+    isColl, succ: Boolean;
+begin
+// save original dx/dy
+dx:= Gear^.dX;
+dy:= Gear^.dY;
+
+Gear^.dX.QWordValue:= 0;
+Gear^.dY:= _1;
+
+y:= hwRound(Gear^.Y) + Gear^.Radius;
+gx:= hwRound(Gear^.X);
+collX := gx;
+isColl:= false;
+
+if (y and LAND_HEIGHT_MASK) = 0 then
+   begin
+   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+   i:= x + Gear^.Radius * 2 - 2;
+   repeat
+     if (x and LAND_WIDTH_MASK) = 0 then
+        if Land[y, x] > 255 then
+            if not isColl or (abs(x-gx) < abs(collX-gx)) then
+                begin
+                isColl:= true;
+                collX := x;
+                end;
+     inc(x)
+   until (x > i);
+   end;
+
+if isColl then
+    succ := CalcSlopeTangent(Gear, collX, y, outDeltaX, outDeltaY, 255)
+else
+    succ := false;
+
+// restore original dx/dy
+Gear^.dX:= dx;
+Gear^.dY:= dy;
+
+CalcSlopeTangentBelowGear := succ;
 end;
 
 procedure initModule;
