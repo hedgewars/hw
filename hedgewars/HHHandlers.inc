@@ -1116,12 +1116,12 @@ else
             doStepHedgehogDriven(Gear)
     end;
 
-if ((GameTicks mod 100) = 0) and (Gear^.State and (gstMoving or gstHHJumping or gstHHHJump) = 0) and ((Gear^.Message and gmAllStoppable) = 0) and 
+if ((GameTicks mod 50) = 0) and (Gear^.State and (gstMoving or gstHHJumping or gstHHHJump) = 0) and ((Gear^.Message and gmAllStoppable) = 0) and 
     (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
     begin
     if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)+cHHRadius, lfIce) then
         begin
-        Gear^.dX.QWordValue:= Gear^.dX.QWordValue + cGravity.QWordValue * 150;
+        Gear^.dX.QWordValue:= Gear^.dX.QWordValue + cGravity.QWordValue * 75;
         Gear^.State:= Gear^.State or gstMoving;
         end
 (*
