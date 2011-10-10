@@ -768,7 +768,7 @@ var i: LongInt;
 begin
 if (cReducedQuality and rqKillFlakes) <> 0 then exit;
 
-if ((GameFlags and gfBorder) <> 0) or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
+if hasBorder or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
     for i:= 0 to Pred(vobCount * cScreenSpace div LAND_WIDTH) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
 else

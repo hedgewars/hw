@@ -1095,6 +1095,9 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehog(Gear: PGear);
+(*
+var x,y,tx,ty: LongInt;
+    tdX, tdY, slope: hwFloat; *)
 begin
 if (Gear^.Message and gmDestroy) <> 0 then
     begin
@@ -1111,5 +1114,33 @@ else
             TeamGoneEffect(Team^)
         else
             doStepHedgehogDriven(Gear)
+    end;
+
+if ((GameTicks mod 100) = 0) and (Gear^.State and (gstMoving or gstHHJumping or gstHHHJump) = 0) and ((Gear^.Message and gmAllStoppable) = 0) and 
+    (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
+    begin
+    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)+cHHRadius, lfIce) then
+        begin
+        Gear^.dX.QWordValue:= Gear^.dX.QWordValue + cGravity.QWordValue * 150;
+        Gear^.State:= Gear^.State or gstMoving;
+        end
+(*
+    // check land slope, and impart a dX based on it
+    tdX:= Gear^.dX;
+    tdY:= Gear^.dY;
+    Gear^.dX:= _0;
+    Gear^.dY:= _1;
+    x := hwRound(Gear^.X);
+    y := hwRound(Gear^.Y);
+    tx := 0;
+    ty := 0;
+    if not CalcSlopeTangent(Gear, x, y+cHHRadius, tx, ty, 255) then
+        begin
+        slope:= _1/DistanceI(tx,ty);
+        AddFileLog(FloatToStr(tdX)+ ' == '+FloatToStr(slope));
+        tdX:= tdX + (cGravity * slope / _10)  // this will need tuning 
+        end;
+    Gear^.dX:= tdX;
+    Gear^.dY:= tdY  *)
     end;
 end;
