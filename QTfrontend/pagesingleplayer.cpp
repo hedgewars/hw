@@ -45,11 +45,11 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 
 
     BtnCampaignPage = addButton(":/res/Campaign.png", middleLine, 0, true);
-    BtnCampaignPage->setToolTip(tr("Campaign Mode (...). IN DEVELOPMENT"));
+    BtnCampaignPage->setToolTip(tr("Campaign Mode (...)"));
     BtnCampaignPage->setVisible(false);
 
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
-    BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
+    BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions)"));
 
     BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
     bottomLine->addStretch();
