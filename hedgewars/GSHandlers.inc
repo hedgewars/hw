@@ -407,7 +407,6 @@ procedure doStepBomb(Gear: PGear);
 var 
     i, x, y: LongInt;
     dX, dY: hwFloat;
-    Fire: PGear;
     vg: PVisualGear;
 begin
     AllInactive := false;
@@ -478,10 +477,16 @@ begin
                     begin
                     dX := AngleCos(i * 16) * _0_5 * (GetRandom + _1);
                     dY := AngleSin(i * 16) * _0_5 * (GetRandom + _1);
-                    Fire := AddGear(x, y, gtFlame, 0, dX, dY, 0);
-                    if i mod 2 = 0 then Fire^.State := Fire^.State or gsttmpFlag;
-                    Fire := AddGear(x, y, gtFlame, 0, dX, -dY, 0);
-                    if i mod 2 <> 0 then Fire^.State := Fire^.State or gsttmpFlag;
+                    if i mod 2 = 0 then 
+                        begin
+                        AddGear(x, y, gtFlame, gstTmpFlag, dX, dY, 0);
+                        AddGear(x, y, gtFlame, 0, dX, -dY, 0)
+                        end
+                    else
+                        begin 
+                        AddGear(x, y, gtFlame, 0, dX, dY, 0);
+                        AddGear(x, y, gtFlame, gstTmpFlag, dX, -dY, 0)
+                        end;
                     end
                 end;
             gtGasBomb:
@@ -522,7 +527,6 @@ var
 	s: Longword;
     i, gX, gY: LongInt;
     dX, dY: hwFloat;
-    Fire: PGear;
     smoke, glass: PVisualGear;
 begin
     AllInactive := false;
@@ -570,18 +574,14 @@ begin
                     end;
             end;
         for i:= 0 to 24 do
-        begin
+            begin
             dX := AngleCos(i * 2) * ((_0_15*(i div 5))) * (GetRandom + _1);
             dY := AngleSin(i * 8) * _0_5 * (GetRandom + _1);
-            Fire := AddGear(gX, gY, gtFlame, 0, dX, dY, 0);
-            Fire^.State := Fire^.State or gsttmpFlag;
-            Fire := AddGear(gX, gY, gtFlame, 0, dX, -dY, 0);
-            Fire^.State := Fire^.State or gsttmpFlag;
-            Fire := AddGear(gX, gY, gtFlame, 0, -dX, dY, 0);
-            Fire^.State := Fire^.State or gsttmpFlag;
-            Fire := AddGear(gX, gY, gtFlame, 0, -dX, -dY, 0);
-            Fire^.State := Fire^.State or gsttmpFlag;
-        end;
+            AddGear(gX, gY, gtFlame, gstTmpFlag, dX, dY, 0);
+            AddGear(gX, gY, gtFlame, gstTmpFlag, dX,-dY, 0);
+            AddGear(gX, gY, gtFlame, gstTmpFlag,-dX, dY, 0);
+            AddGear(gX, gY, gtFlame, gstTmpFlag,-dX,-dY, 0);
+            end;
         DeleteGear(Gear);
         exit
     end;
@@ -2140,7 +2140,7 @@ begin
                     dX := AngleCos(i * 64) * _0_5 * (getrandom + _1);
                     dY := AngleSin(i * 64) * _0_5 * (getrandom + _1);
                     AddGear(x, y, gtFlame, 0, dX, dY, 0);
-                    AddGear(x, y, gtFlame, 0, -dX, -dY, 0)^.State := gsttmpFlag;
+                    AddGear(x, y, gtFlame, gstTmpFlag, -dX, -dY, 0);
                 end
             end;
         exit
@@ -4592,7 +4592,6 @@ var
     HHGear: PGear;
     rx, ry, speed: hwFloat;
     i, gX, gY: LongInt;
-    Fire: PGear;
 begin
     AllInactive := false;
     HHGear := Gear^.Hedgehog^.Gear;
@@ -4624,15 +4623,14 @@ begin
             ry := rndSign(getRandom * _0_1);
             speed := _0_5 * (_10 / Gear^.Tag);
     
-            Fire := AddGear(gx, gy, gtFlame, 0,
-                        SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
-                AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-            Fire^.State := Fire^.State or gsttmpFlag;
+            AddGear(gx, gy, gtFlame, gstTmpFlag,
+                    SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
+                    AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
             
             if (Gear^.Health mod 30) = 0 then 
-                Fire := AddGear(gx, gy, gtFlame, 0,
-                            SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
-                    AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
+                AddGear(gx, gy, gtFlame, 0,
+                        SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
+                        AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
             end;
         Gear^.Timer:= Gear^.Tag
         end;
@@ -4671,7 +4669,6 @@ var
     HHGear: PGear;
     rx, ry, speed: hwFloat;
     i, gX, gY: LongInt;
-    Flake: PGear;
 begin
     AllInactive := false;
     HHGear := Gear^.Hedgehog^.Gear;
@@ -4702,10 +4699,9 @@ begin
         ry := rndSign(getRandom * _0_1);
         speed := (_3 / Gear^.Tag);
 
-        Flake := AddGear(gx, gy, gtFlake, 0, _0, _0, 0);
-        Flake^.dX:= SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx;
-        Flake^.dY:= AngleCos(HHGear^.Angle) * ( - speed) + ry;
-        Flake^.State := Flake^.State or gsttmpFlag;
+        AddGear(gx, gy, gtFlake, gstTmpFlag, 
+                SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx, 
+                AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
             
         Gear^.Timer:= Gear^.Tag
         end;
