@@ -172,7 +172,10 @@ Gear^.dY:= Gear^.dY + cGravityf * Steps;
 Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
 
 if Gear^.FrameTicks <= Steps then
-    DeleteVisualGear(Gear)
+    begin
+    DeleteVisualGear(Gear);
+    exit
+    end
 else
     dec(Gear^.FrameTicks, Steps);
 
