@@ -51,7 +51,7 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     progressBarsLayout = new QVBoxLayout();
     pageLayout->addLayout(progressBarsLayout, 1, 0, 1, 3);
 
-    fetchList();
+    web->setHtml("<center><h2>Hedgewars Downloadable Content</h2><br><br><i>Loading, please wait</i></center>");
 }
 
 void PageDataDownload::request(const QUrl &url)
@@ -95,7 +95,7 @@ void PageDataDownload::pageDownloaded()
 {
     QNetworkReply * reply = qobject_cast<QNetworkReply *>(sender());
 
-    if(reply)
+    if(reply && (reply->error() == QNetworkReply::NoError))
     {
         QString html = QString::fromUtf8(reply->readAll());
         int begin = html.indexOf("<!-- BEGIN -->");
@@ -106,6 +106,10 @@ void PageDataDownload::pageDownloaded()
             html.remove(0, begin);
         }
         web->setHtml(html);
+    }
+    else
+    {
+        web->setHtml("<center><h2>Hedgewars Downloadable Content</h2><br><br><p><i><h4>This page requires an internet connection.</i></h4></center>");
     }
 }
 
@@ -146,7 +150,7 @@ void PageDataDownload::downloadProgress(qint64 bytesRecieved, qint64 bytesTotal)
 
 void PageDataDownload::fetchList()
 {
-    request(QUrl("http://hedgewars.org/content.html"));
+    request(QUrl("http://www.hedgewars.org/content.html"));
 }
 
 bool PageDataDownload::extractDataPack(QByteArray * buf)

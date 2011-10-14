@@ -471,6 +471,10 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 #ifdef USE_XFIRE
     updateXfire();
 #endif
+    if (id == ID_PAGE_DATADOWNLOAD)
+    {
+        ui.pageDataDownload->fetchList();
+    }
     if (id == ID_PAGE_DRAWMAP) {
         DrawMapScene * scene;
         if(lastid == ID_PAGE_MULTIPLAYER)
