@@ -180,6 +180,11 @@ int main(int argc, char *argv[]) {
                 "border-color: white;"
             "}"
 
+            "QPushButton:focus {"
+                "outline: none;"
+            "}"
+
+
             "QHeaderView {"
                 "border-radius: 0;"
                 "border-width: 0;"
