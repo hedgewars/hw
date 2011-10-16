@@ -2867,7 +2867,7 @@ begin
         HHGear^.dX,
         HHGear^.dY,
         20 + cHHRadius * 2,
-        cHHRadius * 2 + 6);
+        cHHRadius * 2 + 7);
 
         upd := 0
     end;
