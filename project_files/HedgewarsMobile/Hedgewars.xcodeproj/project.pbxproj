@@ -1680,7 +1680,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -1763,7 +1763,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -1888,7 +1888,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -1935,7 +1935,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Development.plist";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
