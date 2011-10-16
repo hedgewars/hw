@@ -840,7 +840,7 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
         else Land[y,x]:= lfBasic
         end
     end
-else if ((cReducedQuality and rqBlurryLand) = 0) and 
+else if ((cReducedQuality and rqBlurryLand) = 0) and (LandPixels[Y, X] and AMask = 255) and
     ((Land[Y, X] and (lfDamaged or lfBasic) = lfBasic) or (Land[Y, X] and (lfDamaged or lfBasic) = lfBasic)) and 
     (Y > LongInt(topY) + 1) and (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
     begin
