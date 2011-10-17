@@ -895,15 +895,15 @@ begin
                   Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
                   if Gear^.Tag = -1 then
                      begin
-                     DrawRotatedF(sprPlane, x, y, 0, -1, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
+                     DrawRotatedTextureF(SpritesData[sprPlane].Texture, 0.5, 0, 0, x, y, 0, -1, SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
                      Tint($FF, $FF, $FF, $FF);
-                     DrawRotatedF(sprPlane, x, y, 1, -1, DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
+                     DrawRotatedTextureF(SpritesData[sprPlane].Texture, 0.5, 0, 0, x, y, 1, -1, SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
                      end
                   else
                      begin
-                     DrawRotatedF(sprPlane, x, y, 0, 0,  DxDy2Angle(Gear^.dY, Gear^.dX));
+                     DrawRotatedTextureF(SpritesData[sprPlane].Texture, 0.5, 0, 0, x, y, 0, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
                      Tint($FF, $FF, $FF, $FF);
-                     DrawRotatedF(sprPlane, x, y, 1, 0,  DxDy2Angle(Gear^.dY, Gear^.dX))
+                     DrawRotatedTextureF(SpritesData[sprPlane].Texture, 0.5, 0, 0, x, y, 1, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
                      end
                   end;
        gtBall: DrawRotatedf(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
