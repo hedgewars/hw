@@ -96,6 +96,11 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 2);
     BtnClear = addButton(tr("Clear"), pageLayout, 4, 2);
 
+    // strech all but the buttons column
+    pageLayout->setColumnStretch(0, 1);
+    pageLayout->setColumnStretch(1, 1);
+    pageLayout->setColumnStretch(2, 0);
+
     CBRules->addItem(QComboBox::tr("Any"));
     CBState->addItem(QComboBox::tr("Any"));
     CBState->addItem(QComboBox::tr("In lobby"));
