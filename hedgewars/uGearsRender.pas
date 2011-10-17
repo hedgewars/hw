@@ -892,10 +892,19 @@ begin
                   else DrawSprite(sprMolotov, x, y, 8);
 
        gtRCPlane: begin
-                  if (Gear^.Tag = -1) then
-                     DrawRotated(sprPlane, x, y, -1,  DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
+                  Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
+                  if Gear^.Tag = -1 then
+                     begin
+                     DrawRotatedF(sprPlane, x, y, 0, -1, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
+                     Tint($FF, $FF, $FF, $FF);
+                     DrawRotatedF(sprPlane, x, y, 1, -1, DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
+                     end
                   else
-                     DrawRotated(sprPlane, x, y,0,DxDy2Angle(Gear^.dY, Gear^.dX));
+                     begin
+                     DrawRotatedF(sprPlane, x, y, 0, 0,  DxDy2Angle(Gear^.dY, Gear^.dX));
+                     Tint($FF, $FF, $FF, $FF);
+                     DrawRotatedF(sprPlane, x, y, 1, 0,  DxDy2Angle(Gear^.dY, Gear^.dX))
+                     end
                   end;
        gtBall: DrawRotatedf(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
 
