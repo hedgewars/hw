@@ -901,9 +901,9 @@ begin
                       end
                   else
                       begin
-                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 0, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY));
+                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 0, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dY, Gear^.dX));
                       Tint($FF, $FF, $FF, $FF);
-                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 1, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY))
+                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 1, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dY, Gear^.dX))
                       end
                   end;
        gtBall: DrawRotatedf(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
