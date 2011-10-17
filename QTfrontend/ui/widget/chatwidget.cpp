@@ -258,6 +258,21 @@ void HWChatWidget::loadList(QStringList & list, const QString & file)
 void HWChatWidget::saveList(QStringList & list, const QString & file)
 {
     QFile txt(cfgdir->absolutePath() + "/" + file);
+
+    // list empty? => rather have no file for the list than an empty one
+    if (list.isEmpty())
+    {
+        if (txt.exists())
+        {
+            // try to remove file, if successful we're done here.
+            if (txt.remove())
+                return;
+        }
+        else
+            // there is no file
+            return;
+    }
+
     if(!txt.open(QIODevice::WriteOnly | QIODevice::Truncate))
         return;
     QTextStream stream(&txt);
