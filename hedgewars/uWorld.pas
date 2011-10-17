@@ -536,7 +536,7 @@ procedure DrawRepeated(spr, sprL, sprR: TSprite; Shift, OffsetY: LongInt);
 var i, w, h, lw, lh, rw, rh, sw: LongInt;
 begin
     sw:= round(cScreenWidth / cScaleFactor);
-    if ((SpritesData[sprL].Texture = nil) or (SpritesData[sprR].Texture = nil)) and (SpritesData[spr].Texture <> nil) then
+    if (SpritesData[sprL].Texture = nil) and (SpritesData[spr].Texture <> nil) then
         begin
         w:= SpritesData[spr].Width * SpritesData[spr].Texture^.Scale;
         h:= SpritesData[spr].Height * SpritesData[spr].Texture^.Scale;
@@ -554,8 +554,11 @@ begin
         h:= SpritesData[spr].Height * SpritesData[spr].Texture^.Scale;
         lw:= SpritesData[sprL].Width * SpritesData[spr].Texture^.Scale;
         lh:= SpritesData[sprL].Height * SpritesData[spr].Texture^.Scale;
-        rw:= SpritesData[sprR].Width * SpritesData[spr].Texture^.Scale;
-        rh:= SpritesData[sprR].Height * SpritesData[spr].Texture^.Scale;
+        if SpritesData[sprR].Texture <> nil then
+            begin
+            rw:= SpritesData[sprR].Width * SpritesData[spr].Texture^.Scale;
+            rh:= SpritesData[sprR].Height * SpritesData[spr].Texture^.Scale
+            end;
         dec(Shift, w div 2);
         DrawTexture(Shift, WorldDy + LAND_HEIGHT + OffsetY - h, SpritesData[spr].Texture, SpritesData[spr].Texture^.Scale);
 
@@ -567,11 +570,18 @@ begin
             end;
 
         i:= Shift + w;
-        while i <= sw do
-            begin
-            DrawTexture(i, WorldDy + LAND_HEIGHT + OffsetY - rh, SpritesData[sprR].Texture, SpritesData[sprR].Texture^.Scale);
-            inc(i, rw)
-            end
+        if SpritesData[sprR].Texture <> nil then
+            while i <= sw do
+                begin
+                DrawTexture(i, WorldDy + LAND_HEIGHT + OffsetY - rh, SpritesData[sprR].Texture, SpritesData[sprR].Texture^.Scale);
+                inc(i, rw)
+                end
+        else
+            while i <= sw do
+                begin
+                DrawTexture(i, WorldDy + LAND_HEIGHT + OffsetY - lh, SpritesData[sprL].Texture, SpritesData[sprL].Texture^.Scale);
+                inc(i, lw)
+                end
         end
 end;
 
