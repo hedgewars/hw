@@ -75,6 +75,11 @@ public:
      */
     void removeNickname(const QString & nickname);
 
+    /**
+     * Forget all keywords and input history.
+     */
+    void forgetEverything();
+
 
 protected:
     /**
@@ -114,14 +119,16 @@ private:
     QMutex m_mutex; // make all the QStringList action thread-safe
 
     /**
-     * Autocompletes the contents based on the known commands and/or names
+     * Autocompletes the contents based on the known commands and/or names.
      */
     void autoComplete();
 
 
 private slots:
-    // resets the information about the last match and text replacement
-    void reset();
+    /**
+     * Resets the information about the last match and text replacement.
+     */
+    void resetAutoCompletionStatus();
 };
 
 

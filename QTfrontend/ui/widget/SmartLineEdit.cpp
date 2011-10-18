@@ -29,11 +29,13 @@ SmartLineEdit::SmartLineEdit(QWidget * parent)
     m_cmds  = new QStringList();
     m_nicks = new QStringList();
 
-    reset();
+    resetAutoCompletionStatus();
 
-    // reset when cursor is moved or content is changed
-    connect(this, SIGNAL(cursorPositionChanged(int, int)), this, SLOT(reset()));
-    connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(reset()));
+    // reset autocompletion status when cursor is moved or content is changed
+    connect(this, SIGNAL(cursorPositionChanged(int, int)),
+            this, SLOT(resetAutoCompletionStatus()));
+    connect(this, SIGNAL(textChanged(const QString&)),
+            this, SLOT(resetAutoCompletionStatus()));
 }
 
 
@@ -77,6 +79,18 @@ void SmartLineEdit::removeNickname(const QString & name)
     m_nicks->removeAll(name);
 
     m_mutex.unlock();
+}
+
+void SmartLineEdit::forgetEverything()
+{
+    m_mutex.lock();
+
+    m_cmds->clear();
+    m_nicks->clear();
+
+    m_mutex.unlock();
+
+    resetAutoCompletionStatus();
 }
 
 bool SmartLineEdit::event(QEvent * event)
@@ -237,7 +251,7 @@ void SmartLineEdit::autoComplete()
     }
 }
 
-void SmartLineEdit::reset()
+void SmartLineEdit::resetAutoCompletionStatus()
 {
     m_beforeMatch = "";
     m_hasJustMatched = false;

@@ -414,11 +414,13 @@ void HWChatWidget::onServerMessage(const QString& str)
 
 void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
 {
-    chatEditLine->addNickname(nick);
-
-    QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), ignoreList.contains(nick, Qt::CaseInsensitive));
+    bool isIgnored = ignoreList.contains(nick, Qt::CaseInsensitive);
+    QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), isIgnored);
     updateNickItem(item);
     chatNicks->addItem(item);
+
+    if (!isIgnored)
+        chatEditLine->addNickname(nick);
 
     emit nickCountUpdate(chatNicks->count());
 
@@ -439,6 +441,7 @@ void HWChatWidget::nickRemoved(const QString& nick)
 
 void HWChatWidget::clear()
 {
+    chatEditLine->forgetEverything();
     chatText->clear();
     chatStrings.clear();
     chatNicks->clear();
@@ -481,6 +484,7 @@ void HWChatWidget::onIgnore()
     if(ignoreList.contains(curritem->text(), Qt::CaseInsensitive)) // already on list - remove him
     {
         ignoreList.removeAll(curritem->text().toLower());
+        chatEditLine->addNickname(curritem->text());
         onChatString(HWChatWidget::tr("%1 *** %2 has been removed from your ignore list").arg('\x03').arg(curritem->text()));
     }
     else // not on list - add
@@ -494,6 +498,7 @@ void HWChatWidget::onIgnore()
             chatNicks->scrollToBottom();
 
         ignoreList << curritem->text().toLower();
+        chatEditLine->removeNickname(curritem->text());
         onChatString(HWChatWidget::tr("%1 *** %2 has been added to your ignore list").arg('\x03').arg(curritem->text()));
     }
     updateNickItem(curritem); // update icon/sort order/etc
