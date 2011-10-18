@@ -140,7 +140,8 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     mainLayout.setColumnStretch(0, 76);
     mainLayout.setColumnStretch(1, 24);
 
-    chatEditLine = new QLineEdit(this);
+    chatEditLine = new SmartLineEdit(this);
+    chatEditLine->addCommands(QStringList("/me"));
     chatEditLine->setMaxLength(300);
     connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 
@@ -413,6 +414,8 @@ void HWChatWidget::onServerMessage(const QString& str)
 
 void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
 {
+    chatEditLine->addNickname(nick);
+
     QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), ignoreList.contains(nick, Qt::CaseInsensitive));
     updateNickItem(item);
     chatNicks->addItem(item);
@@ -426,6 +429,8 @@ void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
 
 void HWChatWidget::nickRemoved(const QString& nick)
 {
+    chatEditLine->removeNickname(nick);
+
     foreach(QListWidgetItem * item, chatNicks->findItems(nick, Qt::MatchExactly))
         chatNicks->takeItem(chatNicks->row(item));
 

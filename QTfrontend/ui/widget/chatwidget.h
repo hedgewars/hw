@@ -28,6 +28,8 @@
 
 #include "SDLs.h"
 
+#include "SmartLineEdit.h"
+
 class ListWidgetNickItem;
 class QTextBrowser;
 class QLineEdit;
@@ -95,7 +97,7 @@ private:
   QTextBrowser* chatText;
   QStringList chatStrings;
   QListWidget* chatNicks;
-  QLineEdit* chatEditLine;
+  SmartLineEdit* chatEditLine;
   QAction * acInfo;
   QAction * acKick;
   QAction * acBan;
