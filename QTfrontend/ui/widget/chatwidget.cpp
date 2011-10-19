@@ -442,7 +442,7 @@ void HWChatWidget::nickRemoved(const QString& nick)
 
 void HWChatWidget::clear()
 {
-    chatEditLine->forgetEverything();
+    chatEditLine->reset();
     chatText->clear();
     chatStrings.clear();
     chatNicks->clear();

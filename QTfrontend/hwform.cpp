@@ -1204,7 +1204,7 @@ void HWForm::NetGameMaster()
         // disconnect connections first to ensure their inexistance and not to connect twice
         ui.pageNetGame->BtnStart->disconnect(hwnet);
         ui.pageNetGame->BtnUpdate->disconnect(hwnet);
-        ui.pageNetGame->leRoomName->setText(hwnet->getRoom());
+        ui.pageNetGame->setRoomName(hwnet->getRoom());
         ui.pageNetGame->restrictJoins->disconnect(hwnet);
         ui.pageNetGame->restrictTeamAdds->disconnect(hwnet);
         connect(ui.pageNetGame->BtnStart, SIGNAL(clicked()), hwnet, SLOT(startGame()));

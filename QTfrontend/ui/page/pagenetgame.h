@@ -19,6 +19,8 @@
 #ifndef PAGE_NETGAME_H
 #define PAGE_NETGAME_H
 
+#include "HistoryLineEdit.h"
+
 #include "AbstractPage.h"
 #include "SDLs.h"
 
@@ -33,12 +35,16 @@ class PageNetGame : public AbstractPage
 public:
     PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli);
 
+    /**
+     * Sets the room name to display.
+     * @roomName room name to be displayed.
+     */
+    void setRoomName(const QString & roomName);
+
     QPushButton *BtnGo;
     QPushButton *BtnMaster;
     QPushButton *BtnStart;
     QPushButton *BtnUpdate;
-
-    QLineEdit * leRoomName;
 
     QAction * restrictJoins;
     QAction * restrictTeamAdds;
@@ -65,6 +71,7 @@ private:
     QSettings * m_gameSettings;
     SDLInteraction * m_sdli;
 
+    HistoryLineEdit * leRoomName;
     QPushButton * btnSetup;
 };
 

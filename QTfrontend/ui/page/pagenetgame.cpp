@@ -61,7 +61,7 @@ QLayout * PageNetGame::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout;
 
-    leRoomName = new QLineEdit(this);
+    leRoomName = new HistoryLineEdit(this,10);
     leRoomName->setMaxLength(60);
     leRoomName->setMinimumWidth(200);
     leRoomName->setMaximumWidth(400);
@@ -124,13 +124,26 @@ void PageNetGame::setReadyStatus(bool isReady)
 
 void PageNetGame::onUpdateClick()
 {
-    if (leRoomName->text().size())
+    if (!leRoomName->text().trimmed().isEmpty())
+    {
         emit askForUpdateRoomName(leRoomName->text());
+        leRoomName->rememberCurrentText();
+    }
     else
+    {
+        leRoomName->clear();
         QMessageBox::critical(this,
                 tr("Error"),
                 tr("Please enter room name"),
                 tr("OK"));
+    }
+}
+
+
+void PageNetGame::setRoomName(const QString & roomName)
+{
+    leRoomName->setText(roomName);
+    leRoomName->rememberCurrentText();
 }
 
 void PageNetGame::setMasterMode(bool isMaster)
@@ -140,3 +153,4 @@ void PageNetGame::setMasterMode(bool isMaster)
     BtnUpdate->setVisible(isMaster);
     leRoomName->setVisible(isMaster);
 }
+

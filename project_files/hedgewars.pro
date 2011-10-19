@@ -69,6 +69,7 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/ui/widget/selectWeapon.h \
     ../QTfrontend/ui/widget/weaponItem.h \
     ../QTfrontend/ui/widget/gamecfgwidget.h \
+    ../QTfrontend/ui/widget/HistoryLineEdit.h \
     ../QTfrontend/ui/widget/SmartLineEdit.h \
     ../QTfrontend/net/netregister.h \
     ../QTfrontend/net/netserver.h \
@@ -142,6 +143,7 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/widget/teamselhelper.cpp \
     ../QTfrontend/ui/widget/drawmapwidget.cpp \
     ../QTfrontend/ui/widget/weaponItem.cpp \
+    ../QTfrontend/ui/widget/HistoryLineEdit.cpp \
     ../QTfrontend/ui/widget/SmartLineEdit.cpp \
     ../QTfrontend/net/tcpBase.cpp \
     ../QTfrontend/net/netregister.cpp \

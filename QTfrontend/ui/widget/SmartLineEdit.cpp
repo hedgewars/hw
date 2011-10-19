@@ -17,22 +17,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QStringList>
-
 #include "SmartLineEdit.h"
 
 SmartLineEdit::SmartLineEdit(QWidget * parent, int maxHistorySize)
-: QLineEdit(parent)
+: HistoryLineEdit(parent, maxHistorySize)
 {
-    m_curHistEntryIdx = 0;
-    m_maxHistorySize = maxHistorySize;
-
     m_whitespace = QRegExp("\\s");
 
     m_cmds  = new QStringList();
     m_nicks = new QStringList();
-
-    m_history = new QStringList();
 
     resetAutoCompletionStatus();
 
@@ -86,99 +79,22 @@ void SmartLineEdit::removeNickname(const QString & name)
     m_keywordMutex.unlock();
 }
 
-void SmartLineEdit::rememberCurrentText()
-{
-    m_historyMutex.lock();
 
-    rememberCurrentTextUnsynced();
-
-    m_historyMutex.unlock();
-}
-
-void SmartLineEdit::rememberCurrentTextUnsynced()
-{
-    QString newEntry = text();
-
-    // don't store whitespace-only/empty text
-    if (newEntry.trimmed().isEmpty())
-        return;
-
-    m_history->removeOne(newEntry); // no duplicates please
-    m_history->append(newEntry);
-
-    // do not keep more entries than allowed
-    if (m_history->size() > m_maxHistorySize)
-        m_history->removeFirst();
-
-    // we're looking at the latest entry
-    m_curHistEntryIdx = m_history->size() - 1;
-}
-
-void SmartLineEdit::clear()
-{
-    m_historyMutex.lock();
-
-    QLineEdit::clear();
-    m_curHistEntryIdx = m_history->size();
-
-    m_historyMutex.unlock();
-}
-
-void SmartLineEdit::forgetEverything()
+void SmartLineEdit::reset()
 {
     // forget keywords
     m_keywordMutex.lock();
 
     m_cmds->clear();
     m_nicks->clear();
+    resetAutoCompletionStatus();
 
     m_keywordMutex.unlock();
 
     // forget history
-    m_historyMutex.lock();
-
-    m_history->clear();
-    m_curHistEntryIdx = 0;
-
-    m_historyMutex.unlock();
-
-    resetAutoCompletionStatus();
+    HistoryLineEdit::reset();
 }
 
-void SmartLineEdit::navigateHistory(bool isGoingUp)
-{
-    m_historyMutex.lock();
-
-    // save possible changes to new entry
-    if ((m_curHistEntryIdx >= m_history->size() ||
-        (text() != m_history->at(m_curHistEntryIdx))))
-        {
-            rememberCurrentTextUnsynced();
-        }
-
-    if (isGoingUp)
-        m_curHistEntryIdx--;
-    else
-        m_curHistEntryIdx++;
-
-    // if Idx higher than valid range
-    if (m_curHistEntryIdx >= m_history->size())
-    {
-        QLineEdit::clear();
-        m_curHistEntryIdx = m_history->size();
-    }
-    // if Idx in valid range
-    else if (m_curHistEntryIdx >= 0)
-    {
-        setText(m_history->at(m_curHistEntryIdx));
-    }
-    // if Idx below 0
-    else
-        m_curHistEntryIdx = 0;
-
-
-    m_historyMutex.unlock();
-}
 
 bool SmartLineEdit::event(QEvent * event)
 {
@@ -195,7 +111,7 @@ bool SmartLineEdit::event(QEvent * event)
                 return true;
         }
     }
-    return QLineEdit::event(event);
+    return HistoryLineEdit::event(event);
 }
 
 void SmartLineEdit::keyPressEvent(QKeyEvent * event)
@@ -208,32 +124,15 @@ void SmartLineEdit::keyPressEvent(QKeyEvent * event)
         autoComplete();
         event->accept();
     }
-    // clear contents on pressed ESC, navigate history with arrow keys
-    else if (event->modifiers() == Qt::NoModifier)
-        switch (key)
-        {
-            case Qt::Key_Escape:
-                clear();
-                event->accept();
-                break;
-
-            case Qt::Key_Up:
-                navigateHistory(true);
-                event->accept();
-                break;
-
-            case Qt::Key_Down:
-                navigateHistory(false);
-                event->accept();
-                break;
-
-            default:
-                QLineEdit::keyPressEvent(event);
-                break;
-        }
+    // clear contents on pressed ESC
+    else if ((event->modifiers() == Qt::NoModifier) && (key == Qt::Key_Escape))
+    {
+        clear();
+        event->accept();
+    }
     // otherwise forward keys to parent
     else
-        QLineEdit::keyPressEvent(event);
+        HistoryLineEdit::keyPressEvent(event);
 }
 
 
@@ -363,3 +262,4 @@ void SmartLineEdit::resetAutoCompletionStatus()
     m_prefix = "";
     m_postfix = "";
 }
+
