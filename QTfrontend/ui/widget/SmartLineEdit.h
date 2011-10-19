@@ -33,11 +33,15 @@
 class QLineEdit;
 
 /**
- * A modification of QLineEdit that will attempt to auto-complete the current
- * word with cursor when the TAB key is pressed.
- * Additionally it will delete its contents when ESC is pressed.
- * A Keyword can either be a command (if first word) or
- * a nickname (completed if any word)
+ * A modification of QLineEdit that features:
+ * + Auto-completion for word under cursor when the TAB key is pressed.
+ * + ESC key clears text.
+ * + History of previous contents, re-selectable using the arrow keys.
+ *
+ * Note:
+ *   * A Keyword can either be a command (if first word) or
+ *     a nickname (completed regardless of position in text).
+ *   * Public methods for accessing keywords and history are thread-safe.
  * @author sheepluva
  * @since 0.9.17
  */
@@ -48,8 +52,10 @@ class SmartLineEdit : public QLineEdit
 public:
     /**
     * Class constructor.
+    * @param parent parent QWidget.
+    * @param maxHistorySize maximum amount of history entries kept.
     */
-    SmartLineEdit(QWidget * parent = 0);
+    SmartLineEdit(QWidget * parent = 0, int maxHistorySize = 64);
 
     /**
      * Adds commands to the auto-completion feature.
@@ -62,6 +68,11 @@ public:
      * @param nickname name to be added.
      */
     void addNickname(const QString & nickname);
+
+    /**
+     * Appends current text to history.
+     */
+    void rememberCurrentText();
 
     /**
      * Removes commands from the auto-completion feature.
@@ -81,6 +92,13 @@ public:
     void forgetEverything();
 
 
+public slots:
+    /**
+     * Clears the contents.
+     */
+    void clear();
+
+
 protected:
     /**
      * Overrides method of parent class.
@@ -94,9 +112,10 @@ protected:
     /**
      * Overrides method of parent class.
      * Autocompletes if TAB is reported as pressed key in the key event,
-     * otherwise keys except for ESC (with no modifiers)
+     * otherwise keys except for ESC and Up/Down (with no modifiers)
      * are forwarded to parent method.
      * ESC leads to the contents being cleared.
+     * Arrow keys are used for navigating the history.
      * @param event the key event.
      */
     virtual void keyPressEvent(QKeyEvent * event);
@@ -105,8 +124,13 @@ protected:
 private:
     QRegExp m_whitespace; // regexp that matches a whitespace
 
+    int m_maxHistorySize; // the maximum allowed size for the history
+    int m_curHistEntryIdx; // the index of the currently used entry or -1
+
     QStringList * m_cmds;  // list of recognized commands
     QStringList * m_nicks; // list of recognized nicknames
+
+    QStringList * m_history; // history of previous inputs
 
     // these variables contain information about the last replacement
     // they get reset whenever cursor is moved or text is changed
@@ -116,12 +140,26 @@ private:
     QString m_prefix; // prefix of the text replacement this widget just did
     QString m_postfix; // postfix of the text replacement this widget just did
 
-    QMutex m_mutex; // make all the QStringList action thread-safe
+    QMutex m_keywordMutex; // make keyword QStringList action thread-safe
+    QMutex m_historyMutex; // make history QStringList action thread-safe
 
     /**
      * Autocompletes the contents based on the known commands and/or names.
      */
     void autoComplete();
+
+    /**
+     * Navigates content history in the desired direction.
+     * Note: no wrap-around on purpose (so that holding down/up will get the
+     * the user to the respective end rather than into an endless cycle :P)
+     * @param isGoingUp true: next older entry, false: next more recent entry.
+     */
+    void navigateHistory(bool isGoingUp);
+
+    /**
+     * Appends current text to history, without Mutex.
+     */
+    void rememberCurrentTextUnsynced();
 
 
 private slots:

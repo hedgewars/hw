@@ -21,13 +21,18 @@
 
 #include "SmartLineEdit.h"
 
-SmartLineEdit::SmartLineEdit(QWidget * parent)
+SmartLineEdit::SmartLineEdit(QWidget * parent, int maxHistorySize)
 : QLineEdit(parent)
 {
+    m_curHistEntryIdx = 0;
+    m_maxHistorySize = maxHistorySize;
+
     m_whitespace = QRegExp("\\s");
 
     m_cmds  = new QStringList();
     m_nicks = new QStringList();
+
+    m_history = new QStringList();
 
     resetAutoCompletionStatus();
 
@@ -41,56 +46,138 @@ SmartLineEdit::SmartLineEdit(QWidget * parent)
 
 void SmartLineEdit::addCommands(const QStringList & commands)
 {
-    m_mutex.lock();
+    m_keywordMutex.lock();
 
     m_cmds->append(commands);
 
-    m_mutex.unlock();
+    m_keywordMutex.unlock();
 }
 
 
 void SmartLineEdit::removeCommands(const QStringList & commands)
 {
-    m_mutex.lock();
+    m_keywordMutex.lock();
 
     foreach (const QString & cmd, commands)
     {
         m_cmds->removeAll(cmd);
     }
 
-    m_mutex.unlock();
+    m_keywordMutex.unlock();
 }
 
 
 void SmartLineEdit::addNickname(const QString & name)
 {
-    m_mutex.lock();
+    m_keywordMutex.lock();
 
     m_nicks->append(name);
 
-    m_mutex.unlock();
+    m_keywordMutex.unlock();
 }
 
 
 void SmartLineEdit::removeNickname(const QString & name)
 {
-    m_mutex.lock();
+    m_keywordMutex.lock();
 
     m_nicks->removeAll(name);
 
-    m_mutex.unlock();
+    m_keywordMutex.unlock();
+}
+
+void SmartLineEdit::rememberCurrentText()
+{
+    m_historyMutex.lock();
+
+    rememberCurrentTextUnsynced();
+
+    m_historyMutex.unlock();
+}
+
+void SmartLineEdit::rememberCurrentTextUnsynced()
+{
+    QString newEntry = text();
+
+    // don't store whitespace-only/empty text
+    if (newEntry.trimmed().isEmpty())
+        return;
+
+    m_history->removeOne(newEntry); // no duplicates please
+    m_history->append(newEntry);
+
+    // do not keep more entries than allowed
+    if (m_history->size() > m_maxHistorySize)
+        m_history->removeFirst();
+
+    // we're looking at the latest entry
+    m_curHistEntryIdx = m_history->size() - 1;
+}
+
+void SmartLineEdit::clear()
+{
+    m_historyMutex.lock();
+
+    QLineEdit::clear();
+    m_curHistEntryIdx = m_history->size();
+
+    m_historyMutex.unlock();
 }
 
 void SmartLineEdit::forgetEverything()
 {
-    m_mutex.lock();
+    // forget keywords
+    m_keywordMutex.lock();
 
     m_cmds->clear();
     m_nicks->clear();
 
-    m_mutex.unlock();
+    m_keywordMutex.unlock();
+
+    // forget history
+    m_historyMutex.lock();
+
+    m_history->clear();
+    m_curHistEntryIdx = 0;
+
+    m_historyMutex.unlock();
 
     resetAutoCompletionStatus();
+}
+
+void SmartLineEdit::navigateHistory(bool isGoingUp)
+{
+    m_historyMutex.lock();
+
+    // save possible changes to new entry
+    if ((m_curHistEntryIdx >= m_history->size() ||
+        (text() != m_history->at(m_curHistEntryIdx))))
+        {
+            rememberCurrentTextUnsynced();
+        }
+
+    if (isGoingUp)
+        m_curHistEntryIdx--;
+    else
+        m_curHistEntryIdx++;
+
+    // if Idx higher than valid range
+    if (m_curHistEntryIdx >= m_history->size())
+    {
+        QLineEdit::clear();
+        m_curHistEntryIdx = m_history->size();
+    }
+    // if Idx in valid range
+    else if (m_curHistEntryIdx >= 0)
+    {
+        setText(m_history->at(m_curHistEntryIdx));
+    }
+    // if Idx below 0
+    else
+        m_curHistEntryIdx = 0;
+
+
+    m_historyMutex.unlock();
 }
 
 bool SmartLineEdit::event(QEvent * event)
@@ -121,11 +208,29 @@ void SmartLineEdit::keyPressEvent(QKeyEvent * event)
         autoComplete();
         event->accept();
     }
-    // clear contents on pressed ESC
-    else if ((event->key() == Qt::Key_Escape) &&
-             (event->modifiers() == Qt::NoModifier)
-    )
-        clear();
+    // clear contents on pressed ESC, navigate history with arrow keys
+    else if (event->modifiers() == Qt::NoModifier)
+        switch (key)
+        {
+            case Qt::Key_Escape:
+                clear();
+                event->accept();
+                break;
+
+            case Qt::Key_Up:
+                navigateHistory(true);
+                event->accept();
+                break;
+
+            case Qt::Key_Down:
+                navigateHistory(false);
+                event->accept();
+                break;
+
+            default:
+                QLineEdit::keyPressEvent(event);
+                break;
+        }
     // otherwise forward keys to parent
     else
         QLineEdit::keyPressEvent(event);
@@ -152,10 +257,10 @@ void SmartLineEdit::autoComplete()
     }
     else
     {
-        m_mutex.lock();
+        m_keywordMutex.lock();
         m_cmds->sort();
         m_nicks->sort();
-        m_mutex.unlock();
+        m_keywordMutex.unlock();
 
         int cp = cursorPosition();
 
@@ -190,7 +295,7 @@ void SmartLineEdit::autoComplete()
     }
 
 
-    m_mutex.lock();
+    m_keywordMutex.lock();
 
     if (isFirstWord)
     {
@@ -229,7 +334,7 @@ void SmartLineEdit::autoComplete()
         }
     }
 
-    m_mutex.unlock();
+    m_keywordMutex.unlock();
 
     // we found a single match?
     if (!match.isEmpty())

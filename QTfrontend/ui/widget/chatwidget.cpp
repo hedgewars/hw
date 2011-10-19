@@ -334,6 +334,7 @@ void HWChatWidget::saveLists(const QString & nick)
 void HWChatWidget::returnPressed()
 {
     QStringList lines = chatEditLine->text().split('\n');
+    chatEditLine->rememberCurrentText();
     chatEditLine->clear();
     foreach (const QString &line, lines)
         emit chatLine(line);
