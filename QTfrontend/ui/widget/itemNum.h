@@ -50,6 +50,7 @@ class ItemNum : public QFrame
 
     // from QWidget
     virtual void mousePressEvent ( QMouseEvent * event );
+    virtual void wheelEvent ( QWheelEvent * event );
     virtual void paintEvent(QPaintEvent* event);
 
     // to be implemented in child

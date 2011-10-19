@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef HEDGEWARS_SMARTLINEEDIT
-#define HEDGEWARS_SMARTLINEEDIT
+#ifndef HEDGEWARS_SMARTLINEEDIT_H
+#define HEDGEWARS_SMARTLINEEDIT_H
 
 #include <QStringList>
 
@@ -132,4 +132,4 @@ private slots:
 
 
 
-#endif // HEDGEWARS_SMARTLINEEDIT
+#endif // HEDGEWARS_SMARTLINEEDIT_H

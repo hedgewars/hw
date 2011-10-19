@@ -60,6 +60,34 @@ void ItemNum::mousePressEvent ( QMouseEvent * event )
   }
   repaint();
 }
+void ItemNum::wheelEvent ( QWheelEvent * event )
+{
+    if (nonInteractive) return;
+    if (!enabled)
+    {
+        event->ignore();
+        return;
+    }
+    event->accept();
+
+    bool up = (event->delta() > 0); // positive delta is up, negative is down
+
+    // negative delta on horizontal wheel is not left, but right
+    if (event->orientation() == Qt::Horizontal)
+        up = !up;
+
+    if(up)
+    {
+        if((infinityState && numItems <= maxItems) || (!infinityState && numItems < maxItems))
+            incItems();
+    }
+    else
+    {
+        if(numItems > minItems)
+            decItems();
+    }
+  repaint();
+}
 
 QSize ItemNum::sizeHint () const
 {
