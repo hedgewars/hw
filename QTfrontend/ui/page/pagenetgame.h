@@ -37,7 +37,7 @@ public:
 
     /**
      * Sets the room name to display.
-     * @roomName room name to be displayed.
+     * @param roomName room name to be displayed.
      */
     void setRoomName(const QString & roomName);
 
