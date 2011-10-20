@@ -25,7 +25,6 @@ import java.util.HashMap;
 
 import org.hedgewars.hedgeroid.EngineProtocol.FrontendDataUtils;
 import org.hedgewars.hedgeroid.EngineProtocol.Team;
-import org.hedgewars.mobile.R;
 
 import android.app.Activity;
 import android.content.Intent;

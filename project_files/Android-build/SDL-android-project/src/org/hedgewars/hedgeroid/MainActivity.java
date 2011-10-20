@@ -20,7 +20,6 @@ package org.hedgewars.hedgeroid;
 
 import org.hedgewars.hedgeroid.Downloader.DownloadActivity;
 import org.hedgewars.hedgeroid.Downloader.DownloadService;
-import org.hedgewars.mobile.R;
 
 import android.app.Activity;
 import android.content.Intent;

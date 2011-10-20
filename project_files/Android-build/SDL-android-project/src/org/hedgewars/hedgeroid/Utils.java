@@ -26,8 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import org.hedgewars.mobile.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;

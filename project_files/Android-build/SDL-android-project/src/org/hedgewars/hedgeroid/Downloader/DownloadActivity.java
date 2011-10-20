@@ -20,7 +20,7 @@
 package org.hedgewars.hedgeroid.Downloader;
 
 import org.hedgewars.hedgeroid.MainActivity;
-import org.hedgewars.mobile.R;
+import org.hedgewars.hedgeroid.R;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -33,13 +33,11 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class DownloadActivity extends Activity{
 	private Messenger messageService;
