@@ -28,9 +28,11 @@ import org.hedgewars.hedgeroid.EngineProtocol.Weapon;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -53,11 +55,17 @@ public class StartGameActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
-		//SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean firstTime = sharedPref.getBoolean("firstTime", true);
 		//Copy all the xml files to the device TODO only do first time launch of the app...
-		Utils.resRawToFilesDir(this,R.array.schemes, Scheme.DIRECTORY_SCHEME);
-		Utils.resRawToFilesDir(this, R.array.weapons, Weapon.DIRECTORY_WEAPON);
-		Scheme.parseBasicFlags(this);
+		if(firstTime){
+			sharedPref.edit().putBoolean("firstTime", false).commit();
+			
+			Utils.resRawToFilesDir(this,R.array.schemes, Scheme.DIRECTORY_SCHEME);
+			Utils.resRawToFilesDir(this, R.array.weapons, Weapon.DIRECTORY_WEAPON);
+			Utils.resRawToFilesDir(this, R.array.teams, Team.DIRECTORY_TEAMS);
+			Scheme.parseBasicFlags(this);
+		}
 
 		config = new GameConfig();
 
@@ -76,7 +84,7 @@ public class StartGameActivity extends Activity {
 		themeIcon = (ImageView) findViewById(R.id.imgTheme);
 		mapPreview = (ImageView) findViewById(R.id.mapPreview);
 		teamCount = (ImageView) findViewById(R.id.imgTeamsCount);
-		
+
 		start.setOnClickListener(startClicker);
 		back.setOnClickListener(backClicker);
 		team.setOnClickListener(teamClicker);
@@ -113,7 +121,7 @@ public class StartGameActivity extends Activity {
 		i.putParcelableArrayListExtra("teams", config.teams);
 		startActivityForResult(i, ACTIVITY_TEAM_SELECTOR);
 	}
-	
+
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 		switch(requestCode){
 		case ACTIVITY_TEAM_SELECTOR:
@@ -123,7 +131,7 @@ public class StartGameActivity extends Activity {
 				for(Parcelable t : parcelables){
 					config.teams.add((Team)t);
 				}
-                teamCount.getDrawable().setLevel(config.teams.size());
+				teamCount.getDrawable().setLevel(config.teams.size());
 			}
 			break;
 		}

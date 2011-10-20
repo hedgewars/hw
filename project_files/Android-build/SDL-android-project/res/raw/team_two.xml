@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<team>
+  <name>Team 2</name>
+  <flag>cm_42</flag>
+  <fort>Plane</fort>
+  <grave>pyramid</grave>
+  <voice>Singer</voice>
+  <hash>0</hash>
+  <hog>
+    <name>Paris</name>
+    <hat>pinksunhat</hat>
+    <level>3</level>
+  </hog>
+  <hog>
+    <name>Knut</name>
+    <hat>sth_Knux</hat>
+    <level>3</level>
+  </hog>
+  <hog>
+    <name>Ash</name>
+    <hat>RedCap</hat>
+    <level>3</level>
+  </hog>
+  <hog>
+    <name>Woad</name>
+    <hat>Toad</hat>
+    <level>3</level>
+  </hog>
+  <hog>
+    <name>Bob</name>
+    <hat>rasta</hat>
+    <level>3</level>
+  </hog>
+  <hog>
+    <name>Corky</name>
+    <hat>porkey</hat>
+    <level>3</level>
+  </hog>
+  <hog>
+    <name>Bea</name>
+    <hat>crown</hat>
+    <level>3</level>
+  </hog>
+  <hog>
+    <name>Silvia</name>
+    <hat>Rambo</hat>
+    <level>3</level>
+  </hog>
+</team>
