@@ -1930,7 +1930,7 @@ begin
             dec(Gear^.Timer);
             end
     else // gsttmpFlag = 0
-        if (TurnTimeLeft = 0) or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime)) then Gear^.State := Gear^.State or gsttmpFlag;
+        if (TurnTimeLeft = 0) or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime)) or (Gear^.Hedgehog^.Gear = nil) then Gear^.State := Gear^.State or gsttmpFlag;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1977,8 +1977,7 @@ begin
         end
     end
     else // gsttmpFlag = 0
-        if (TurnTimeLeft = 0) or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime)) then
-            Gear^.State := Gear^.State or gsttmpFlag;
+        if (TurnTimeLeft = 0) or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime)) or (Gear^.Hedgehog^.Gear = nil) then Gear^.State := Gear^.State or gsttmpFlag;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
