@@ -30,11 +30,11 @@
 class QLineEdit;
 
 /**
- * A modification of QLineEdit that features:
- * + History of previous contents, re-selectable using the arrow keys.
+ * @brief A <code>QLineEdit</code> that features a history of previous contents,
+ *        re-selectable using the arrow keys.
  *
- * Note:
- *   * Public methods for accessing history are thread-safe.
+ * Note: Public methods for accessing history are <b>thread-safe</b>.
+ * 
  * @author sheepluva
  * @since 0.9.17
  */

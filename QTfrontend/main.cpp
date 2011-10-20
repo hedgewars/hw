@@ -30,6 +30,8 @@
 #include "hwform.h"
 #include "hwconsts.h"
 
+#include "HWDataManager.h"
+
 #ifdef _WIN32
 #include <Shlobj.h>
 #endif
@@ -392,34 +394,37 @@ int main(int argc, char *argv[]) {
     }
 
     {
-        QDir dir;
-        dir.setPath(cfgdir->absolutePath() + "/Data/Themes");
-
         QStringList themes;
-        themes.append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
-        dir.setPath(datadir->absolutePath() + "/Themes");
-        themes.append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
+        themes.append(HWDataManager::instance().entryList(
+                         "Themes",
+                         QDir::AllDirs | QDir::NoDotAndDotDot)
+                     );
 
         QList<QPair<QIcon, QIcon> > icons;
 
         themes.sort();
         for(int i = themes.size() - 1; i >= 0; --i)
         {
-            QFile tmpfile;
-            tmpfile.setFileName(QString("%1/Data/Themes/%2/icon.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
-            if (!tmpfile.exists())
-                tmpfile.setFileName(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+            QFile * tmpfile =
+            HWDataManager::instance().findFileForRead(
+                                QString("Themes/%1/icon.png").arg(themes.at(i))
+                            );
 
-            if(tmpfile.exists())
+            if(tmpfile->exists())
             { // load icon
                 QPair<QIcon, QIcon> ic;
-                ic.first = QIcon(QFileInfo(tmpfile).absoluteFilePath());
+                ic.first = QIcon(tmpfile->fileName());
 
-                QFile previewIconFile;
-                previewIconFile.setFileName(QString("%1/Data/Themes/%2/icon@2x.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
-                if (previewIconFile.exists()) ic.second = QIcon(QFileInfo(previewIconFile).absoluteFilePath());
-                else ic.second = QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+                QFile * previewIconFile =
+                    HWDataManager::instance().findFileForRead(
+                            QString("Themes/%1/icon@2x.png").arg(themes.at(i))
+                        );
+
+                ic.second = QIcon(previewIconFile->fileName());
+
+                // this QFile is not needed any further
+                delete previewIconFile;
 
                 icons.prepend(ic);
             }
@@ -427,6 +432,9 @@ int main(int argc, char *argv[]) {
             {
                 themes.removeAt(i);
             }
+
+            // this QFile is not needed any further
+            delete tmpfile;
         }
 
         themesModel = new ThemesModel(themes);
@@ -438,30 +446,18 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    QDir tmpdir;
-    tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Maps");
-    tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-    mapList = new QStringList(tmpdir.entryList(QStringList("*")));
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Maps");
-    tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-    QStringList tmplist = QStringList(tmpdir.entryList(QStringList("*")));
-    for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
-        if (!mapList->contains(*it,Qt::CaseInsensitive)) mapList->append(*it);
+    mapList = new QStringList(HWDataManager::instance().entryList(
+                                 QString("Maps"),
+                                 QDir::Dirs | QDir::NoDotAndDotDot
+                                 )
+                             );
  
-    tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Scripts/Multiplayer");
-    tmpdir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
-    scriptList = new QStringList(tmpdir.entryList(QStringList("*.lua")));
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Scripts/Multiplayer");
-    tmpdir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
-    tmplist = QStringList(tmpdir.entryList(QStringList("*.lua")));
-    for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
-        if (!scriptList->contains(*it,Qt::CaseInsensitive)) scriptList->append(*it);
+    scriptList = new QStringList(HWDataManager::instance().entryList(
+                                     QString("Scripts/Multiplayer"),
+                                     QDir::Dirs | QDir::NoDotAndDotDot,
+                                     QStringList("*.lua")
+                                     )
+                                 );
 
     QTranslator Translator;
     {
@@ -469,10 +465,9 @@ int main(int argc, char *argv[]) {
         QString cc = settings.value("misc/locale", QString()).toString();
         if(cc.isEmpty())
             cc = QLocale::system().name();
-        QFile tmpfile;
-        tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Locale/hedgewars_" + cc);
-        if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Locale/hedgewars_" + cc);
-        Translator.load(QFileInfo(tmpfile).absoluteFilePath());
+        QFile * tmpfile = HWDataManager::instance().findFileForRead(
+                                            QString("Locale/hedgewars_" + cc));
+        Translator.load(tmpfile->fileName());
         app.installTranslator(&Translator);
     }
 

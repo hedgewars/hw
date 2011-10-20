@@ -30,8 +30,10 @@ class QFile;
 class QStringList;
 
 /**
- * Offers access to the data files of hedgewars.
- * Note: singleton pattern
+ * @brief Offers access to the data files of hedgewars.
+ * 
+ * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+ * 
  * @author sheepluva
  * @since 0.9.17
  */
@@ -39,44 +41,59 @@ class HWDataManager
 {
 public:
     /**
-     * Returns a pointer to the singleton instance of this class.
+     * @brief Returns a pointer to the <i>singleton</i> instance of this class.
+     * 
+     * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+     * 
      * @return pointer to the instance.
      */
     static HWDataManager & instance();
 
     /**
-     * Returns a pointer to the singleton instance of this class.
+     * @brief Returns a pointer to the <i>singleton</i> instance of this class.
+     * 
      * @param subDirectory sub-directory to search.
      * @param filters filters for entry type.
-     * @param namefilters filters by name patterns.
-     * @return a list of matches in the subDirectory of data directory.
+     * @param nameFilters filters by name patterns.
+     * @return a sorted list of matches in the subDirectory of data directory.
      */
     QStringList entryList(const QString & subDirectory,
                           QDir::Filters filters = QDir::NoFilter,
-                          const QStringList & nameFilters = QStringList()
+                          const QStringList & nameFilters = QStringList("*")
                          ) const;
 
     /**
-     * Creates a QFile for the desired data path and returns a pointer to it.
-     * Use this method if you want to read an existing data file;
+     * @brief Creates a file object for the desired data path and
+     * returns a pointer to it.
+     * 
+     * Use this method if you want to read an existing data file.
+     * 
      * @param relativeDataFilePath path to the data file.
-     * @return respective QFile pointer, the actual file may actually not exist.
+     * @return respective <code>QFile</code> pointer, the file may not exist.
      */
     QFile * findFileForRead(const QString & relativeDataFilePath) const;
 
 
     /**
-     * Creates a QFile for the desired data path and returns a pointer to it.
+     * @brief Creates a file object for the desired data path and
+     * returns a pointer to it.
+     * 
      * Use this method if you want to create or write into a data file.
+     * 
      * @param relativeDataFilePath path to the data file.
-     * @return respective QFile pointer.
+     * @return respective <code>QFile</code> pointer.
      */
     QFile * findFileForWrite(const QString & relativeDataFilePath) const;
 
 
 private:
     /**
-     * Singleton class constructor.
+     * @brief Class constructor of the <i>singleton</i>.
+     * 
+     * Not to be used from outside the class,
+     * use the static {@link HWDataManager::instance()} instead.
+     * 
+     * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
      */
     HWDataManager();
 

@@ -123,23 +123,23 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     if (loc.isEmpty())
         loc = QLocale::system().name();
 
-    QFile * infoFile = HWDataManager::instance().findFileForRead(QString(
-                                            "Locale/missions_" + loc + ".txt"));
+    QFile * infoFile = HWDataManager::instance().findFileForRead(
+                                    QString("Locale/missions_" + loc + ".txt"));
 
     // if file is non-existant try with language only
     if (!infoFile->exists())
     {
         delete infoFile;
         infoFile = HWDataManager::instance().findFileForRead(QString(
-                "Locale/missions_" + loc.replace(QRegExp("_.*$"),"") + ".txt"));
+                "Locale/missions_" + loc.remove(QRegExp("_.*$")) + ".txt"));
     }
 
     // fallback if file for current locale is non-existant
     if (!infoFile->exists())
     {
         delete infoFile;
-        infoFile = HWDataManager::instance().findFileForRead(QString(
-                                                     "Locale/missions_en.txt"));
+        infoFile = HWDataManager::instance().findFileForRead(
+                                            QString("Locale/missions_en.txt"));
     }
 
 
@@ -147,14 +147,15 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     m_info =
         new QSettings(infoFile->fileName(), QSettings::IniFormat, this);
 
-    // we don't need infoFile anymore
+    // this QFile isn't needed any further
     delete infoFile;
 
     QStringList missionList =
-            HWDataManager::instance().entryList(QString("Missions/Training"),
-                QDir::Files,
-                QStringList("*.lua")
-                ).replaceInStrings(QRegExp("\\.lua$"), "");
+            HWDataManager::instance().entryList(
+                                                "Missions/Training",
+                                                QDir::Files,
+                                                QStringList("*.lua")
+                                    ).replaceInStrings(QRegExp("\\.lua$"), "");
 
     // scripts to lost - TODO: model?
     foreach (const QString & mission, missionList)
@@ -162,7 +163,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
         QListWidgetItem * item = new QListWidgetItem(mission);
 
         // fallback name: replace underscores in mission name with spaces
-        QString name = item->text().replace("_", " ");
+        QString name = item->text().remove("_");
 
         // see if we can get a prettier/translated name
         name = m_info->value(mission + ".name", name).toString();

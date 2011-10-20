@@ -28,14 +28,16 @@
 #include "HistoryLineEdit.h"
 
 /**
- * A {@link HistoryLineEdit} that additionally features:
- * + Auto-completion for word under cursor when the TAB key is pressed.
- * + ESC key clears text.
+ * @brief A {@link HistoryLineEdit} that features auto-completion with TAB key
+*         and clear with ESC key.
  *
- * Note:
- *   * A Keyword can either be a command (if first word) or
- *     a nickname (completed regardless of position in text).
- *   * Public methods for accessing keywords are thread-safe.
+ * Notes:
+ * <ul>
+ *   <li>A Keyword can either be a command (if first word) or
+ *       a nickname (completed regardless of position in text).</li>
+ *   <li>Public methods for accessing keywords are <b>thread-safe.</b></li>
+ * </ul>
+ * 
  * @author sheepluva
  * @since 0.9.17
  */

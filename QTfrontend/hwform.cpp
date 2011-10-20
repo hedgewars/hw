@@ -80,6 +80,8 @@
 #include "xfire.h"
 #include "drawmapwidget.h"
 
+#include "HWDataManager.h"
+
 #ifdef __APPLE__
 #include "M3Panel.h"
 #ifdef SPARKLE_ENABLED
@@ -1273,24 +1275,14 @@ void HWForm::UpdateCampaignPage(int index)
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBSelect->clear();
 
-    QDir tmpdir;
-    tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Missions/Campaign");
-    tmpdir.setFilter(QDir::Files);
-    QStringList userentries = tmpdir.entryList(QStringList("*#*.lua"));
-    //entries.sort();
-    unsigned int n = userentries.count();
-    for(unsigned int i = 0; (i < n) && (i <= team.campaignProgress()); i++)
-        ui.pageCampaign->CBSelect->addItem(QString(userentries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(userentries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Missions/Campaign");
-    tmpdir.setFilter(QDir::Files);
-    QStringList entries = tmpdir.entryList(QStringList("*#*.lua"));
-    //entries.sort();
-    n = entries.count();
+    QStringList entries = HWDataManager::instance().entryList(
+                                                        "Missions/Campaign",
+                                                        QDir::Files,
+                                                        QStringList("*#*.lua")
+                                                    );
+    
+    unsigned int n = entries.count();
     for(unsigned int i = 0; (i < n) && (i <= team.campaignProgress()); i++) {
-        if (userentries.contains(entries[i])) continue; 
         ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
     }
 }

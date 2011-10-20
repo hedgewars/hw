@@ -23,27 +23,57 @@
 #include "hwform.h"
 #include "hats.h"
 
+#include "HWDataManager.h"
+
 HatsModel::HatsModel(QObject* parent) :
   QAbstractListModel(parent)
 {
-    QFile hhfile;
-    hhfile.setFileName(cfgdir->absolutePath() + "/Data/Graphics/Hedgehog/Idle.png");
-    if (!hhfile.exists()) hhfile.setFileName(datadir->absolutePath() + "/Graphics/Hedgehog/Idle.png");
-    QPixmap hhpix = QPixmap(QFileInfo(hhfile).absoluteFilePath()).copy(0, 0, 32, 32);
+    QFile * hhfile =
+        HWDataManager::instance().findFileForRead("Graphics/Hedgehog/Idle.png");
+    QPixmap hhpix = QPixmap(hhfile->fileName()).copy(0, 0, 32, 32);
 
-    QDir tmpdir;
-    tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data");
-    tmpdir.cd("Graphics");
-    tmpdir.cd("Hats");
+    // this QFile is not needed any further
+    delete hhfile;
 
-    tmpdir.setFilter(QDir::Files);
+    // my reserved hats
+    QStringList hatsList = HWDataManager::instance().entryList(
+                                   "Graphics/Hats/Reserved",
+                                   QDir::Files,
+                                   QStringList(playerHash+"*.png")
+                               );
 
-    QStringList userhatsList = tmpdir.entryList(QStringList("*.png"));
-    for (QStringList::Iterator it = userhatsList.begin(); it != userhatsList.end(); ++it )
+    int nReserved = hatsList.size();
+
+    // regular hats
+    hatsList.append(HWDataManager::instance().entryList(
+                                   "Graphics/Hats",
+                                   QDir::Files,
+                                   QStringList("*.png")
+                               )
+                   );
+
+
+    int nHats = hatsList.size();
+
+    for (int i = 0; i < nHats; i++)
     {
-        QString str = QString(*it).replace(QRegExp("^(.*)\\.png"), "\\1");
-        QPixmap pix(cfgdir->absolutePath() + "/Data/Graphics/Hats/" + str + ".png");
+        bool isReserved = (i < nReserved);
+
+        QString str = hatsList.at(i);
+        str = str.remove(QRegExp("\\.png$"));
+        QFile * hatFile = HWDataManager::instance().findFileForRead(
+                                            "Graphics/Hats/" + 
+                                            QString(isReserved?"Reserved/":"") +
+                                            str + ".png"
+                                        );
+        QPixmap pix(hatFile->fileName());
+
+        // this QFile isn't needed any further
+        delete hatFile;
+
+        // rename properly
+        if (isReserved)
+            str = "Reserved "+str.remove(0,32);
 
         QPixmap tmppix(32, 37);
         tmppix.fill(QColor(Qt::transparent));
@@ -55,49 +85,10 @@ HatsModel::HatsModel(QObject* parent) :
             painter.drawPixmap(QPoint(0, 0), pix.copy(32, 0, 32, 32));
         painter.end();
 
-        hats.append(qMakePair(str, QIcon(tmppix)));
-    }
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Graphics");
-    tmpdir.cd("Hats");
-
-    QStringList hatsList = tmpdir.entryList(QStringList("*.png"));
-    for (QStringList::Iterator it = hatsList.begin(); it != hatsList.end(); ++it )
-    {
-        if (userhatsList.contains(*it,Qt::CaseInsensitive)) continue;
-        QString str = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
-        QPixmap pix(datadir->absolutePath() + "/Graphics/Hats/" + str + ".png");
-
-        QPixmap tmppix(32, 37);
-        tmppix.fill(QColor(Qt::transparent));
-
-        QPainter painter(&tmppix);
-        painter.drawPixmap(QPoint(0, 5), hhpix);
-        painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
-        if(pix.width() > 32)
-            painter.drawPixmap(QPoint(0, 0), pix.copy(32, 0, 32, 32));
-        painter.end();
-
-        hats.append(qMakePair(str, QIcon(tmppix)));
-    }
-    // Reserved hats
-    tmpdir.cd("Reserved");
-    hatsList = tmpdir.entryList(QStringList(playerHash+"*.png"));
-    for (QStringList::Iterator it = hatsList.begin(); it != hatsList.end(); ++it )
-    {
-        QString str = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
-        QPixmap pix(datadir->absolutePath() + "/Graphics/Hats/Reserved/" + str + ".png");
-
-        QPixmap tmppix(32, 37);
-        tmppix.fill(QColor(Qt::transparent));
-
-        QPainter painter(&tmppix);
-        painter.drawPixmap(QPoint(0, 5), hhpix);
-        painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
-        painter.end();
-
-        hats.append(qMakePair("Reserved "+str.remove(0,32), QIcon(tmppix)));
+        if (str == "NoHat")
+            hats.prepend(qMakePair(str, QIcon(tmppix)));
+        else
+            hats.append(qMakePair(str, QIcon(tmppix)));
     }
 }
 

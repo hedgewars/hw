@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <QMap>
 #include <QStringList>
 
 #include "hwconsts.h"
@@ -60,8 +61,15 @@ QStringList HWDataManager::entryList(
     if (tmpDir.cd(subDirectory))
         result.append(tmpDir.entryList(nameFilters, filters));
 
-    result.sort();
     result.removeDuplicates();
+
+    // sort case-insensitive
+    QMap<QString, QString> sortedFileNames;
+    foreach ( QString fn, result)
+    {
+        sortedFileNames.insert(fn.toLower(), fn);
+    }
+    result = sortedFileNames.values();
 
     return result;
 }
