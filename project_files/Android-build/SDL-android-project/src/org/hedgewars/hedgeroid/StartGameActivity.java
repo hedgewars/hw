@@ -17,14 +17,15 @@
  */
 
 
-package org.hedgewars.mobile;
+package org.hedgewars.hedgeroid;
 
-import org.hedgewars.mobile.EngineProtocol.FrontendDataUtils;
-import org.hedgewars.mobile.EngineProtocol.GameConfig;
-import org.hedgewars.mobile.EngineProtocol.Map;
-import org.hedgewars.mobile.EngineProtocol.Scheme;
-import org.hedgewars.mobile.EngineProtocol.Team;
-import org.hedgewars.mobile.EngineProtocol.Weapon;
+import org.hedgewars.hedgeroid.EngineProtocol.FrontendDataUtils;
+import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
+import org.hedgewars.hedgeroid.EngineProtocol.Map;
+import org.hedgewars.hedgeroid.EngineProtocol.Scheme;
+import org.hedgewars.hedgeroid.EngineProtocol.Team;
+import org.hedgewars.hedgeroid.EngineProtocol.Weapon;
+import org.hedgewars.mobile.R;
 
 import android.app.Activity;
 import android.content.Intent;

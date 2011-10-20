@@ -17,13 +17,13 @@
  */
 
 
-package org.hedgewars.mobile.Downloader;
+package org.hedgewars.hedgeroid.Downloader;
 
 import java.util.ArrayList;
 
-import org.hedgewars.mobile.MainActivity;
+import org.hedgewars.hedgeroid.MainActivity;
+import org.hedgewars.hedgeroid.Utils;
 import org.hedgewars.mobile.R;
-import org.hedgewars.mobile.Utils;
 
 import android.app.Notification;
 import android.app.NotificationManager;

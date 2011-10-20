@@ -33,7 +33,7 @@
   {$DEFINE S3D_DISABLED}
   {$DEFINE GLunit:=gles11}
   {$DEFINE MOBILE}
-  {$DEFINE Java_Prefix := 'Java_org_hedgewars_mobile_EngineProtocol_PascalExports_'}
+  {$DEFINE Java_Prefix := 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
 {$ENDIF}
 
 {$IFDEF IPHONEOS}

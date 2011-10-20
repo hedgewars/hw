@@ -16,10 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-package org.hedgewars.mobile;
+package org.hedgewars.hedgeroid;
 
-import org.hedgewars.mobile.Downloader.DownloadActivity;
-import org.hedgewars.mobile.Downloader.DownloadService;
+import org.hedgewars.hedgeroid.Downloader.DownloadActivity;
+import org.hedgewars.hedgeroid.Downloader.DownloadService;
+import org.hedgewars.mobile.R;
 
 import android.app.Activity;
 import android.content.Intent;

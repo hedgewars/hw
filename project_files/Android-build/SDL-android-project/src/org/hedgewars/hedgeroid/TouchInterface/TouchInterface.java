@@ -16,9 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-package org.hedgewars.mobile.TouchInterface;
+package org.hedgewars.hedgeroid.TouchInterface;
 
-import org.hedgewars.mobile.SDLActivity;
+import org.hedgewars.hedgeroid.SDLActivity;
 
 import android.os.Build;
 import android.util.Log;

@@ -17,7 +17,7 @@
  */
 
 
-package org.hedgewars.mobile.EngineProtocol;
+package org.hedgewars.hedgeroid.EngineProtocol;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -17,7 +17,7 @@
  */
 
 
-package org.hedgewars.mobile.EngineProtocol;
+package org.hedgewars.hedgeroid.EngineProtocol;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,9 +25,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
+import org.hedgewars.hedgeroid.Utils;
+import org.hedgewars.hedgeroid.EngineProtocol.Map.MapType;
 import org.hedgewars.mobile.R;
-import org.hedgewars.mobile.Utils;
-import org.hedgewars.mobile.EngineProtocol.Map.MapType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
