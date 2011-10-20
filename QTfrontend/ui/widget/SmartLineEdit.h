@@ -47,77 +47,80 @@ class SmartLineEdit : public HistoryLineEdit
 
 public:
     /**
-    * Class constructor.
+    * @brief Class constructor.
     * @param parent parent QWidget.
     * @param maxHistorySize maximum amount of history entries kept.
     */
     SmartLineEdit(QWidget * parent = 0, int maxHistorySize = 64);
 
     /**
-     * Adds commands to the auto-completion feature.
+     * @brief Adds commands to the auto-completion feature.
      * @param commands list of commands to be added.
      */
     void addCommands(const QStringList & commands);
 
     /**
-     * Adds a single nickname to the auto-completion feature.
+     * @brief Adds a single nickname to the auto-completion feature.
      * @param nickname name to be added.
      */
     void addNickname(const QString & nickname);
 
     /**
-     * Removes commands from the auto-completion feature.
+     * @brief Removes commands from the auto-completion feature.
      * @param commands list of commands to be removed.
      */
     void removeCommands(const QStringList & commands);
 
     /**
-     * Removes a single nickname from the auto-completion feature.
+     * @brief Removes a single nickname from the auto-completion feature.
      * @param nickname name to be removed.
      */
     void removeNickname(const QString & nickname);
 
     /**
-     * Forget all keywords and input history.
+     * @brief Forget all keywords and input history.
      */
     void reset();
 
 
 protected:
     /**
-     * Overrides method of parent class.
+     * @brief Overrides method of parent class.
      * Forward pressed TAB to parent class' method (for focus handling etc)
      * only if line is empty.
+     * 
      * @param event the key event.
      * @return returns true if the event was recognized.
      */
     virtual bool event(QEvent * event);
 
     /**
-     * Overrides method of parent class.
+     * @brief Overrides method of parent class.
      * Autocompletes if TAB is reported as pressed key in the key event,
      * ESC leads to the contents being cleared.
-     * otherwise keys are forwarded to parent method.
+     * 
+     * Other keys are forwarded to parent method.
+     *
      * @param event the key event.
      */
     virtual void keyPressEvent(QKeyEvent * event);
 
 
 private:
-    QRegExp m_whitespace; // regexp that matches a whitespace
+    QRegExp m_whitespace; /// regexp that matches a whitespace
 
-    QStringList * m_cmds;  // list of recognized commands
-    QStringList * m_nicks; // list of recognized nicknames
+    QStringList * m_cmds;  /// list of recognized commands
+    QStringList * m_nicks; /// list of recognized nicknames
 
     // these variables contain information about the last replacement
     // they get reset whenever cursor is moved or text is changed
 
-    QString m_beforeMatch; // the string that was just matched
-    bool m_hasJustMatched; // whether this widget just did an auto-completion
-    QString m_prefix; // prefix of the text replacement this widget just did
-    QString m_postfix; // postfix of the text replacement this widget just did
+    QString m_beforeMatch; /// the string that was just matched
+    bool m_hasJustMatched; /// whether this widget just did an auto-completion
+    QString m_prefix; /// prefix of the text replacement this widget just did
+    QString m_postfix; /// postfix of the text replacement this widget just did
 
-    QMutex m_keywordMutex; // make keyword QStringList action thread-safe
+    QMutex m_keywordMutex; /// make keyword QStringList action thread-safe
 
     /**
      * Autocompletes the contents based on the known commands and/or names.

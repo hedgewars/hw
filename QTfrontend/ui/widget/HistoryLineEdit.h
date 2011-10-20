@@ -44,58 +44,62 @@ class HistoryLineEdit : public QLineEdit
 
 public:
     /**
-    * Class constructor.
+    * @brief Class constructor.
     * @param parent parent QWidget.
     * @param maxHistorySize maximum amount of history entries kept.
     */
     HistoryLineEdit(QWidget * parent = 0, int maxHistorySize = 64);
 
     /**
-     * Appends current text to history (if not only whitespaces);
+     * @brief Appends current text to history (if not only whitespaces);
      */
     void rememberCurrentText();
 
     /**
-     * Forget all history.
+     * @brief Forget all history.
      */
     void reset();
 
 
 public slots:
     /**
-     * Clears the contents.
+     * @brief Clears the contents.
      */
     void clear();
 
 
 protected:
     /**
-     * Overrides method of parent class.
+     * @brief Overrides method of parent class.
      * Arrow keys are used for navigating the history.
+     *
      * All other keys are forwarded to the parent's method.
+     * 
      * @param event the key event.
      */
     virtual void keyPressEvent(QKeyEvent * event);
 
 
 private:
-    int m_maxHistorySize; // the maximum allowed size for the history
-    int m_curHistEntryIdx; // the index of the displayed used entry
+    int m_maxHistorySize; /// the maximum allowed size for the history
+    int m_curHistEntryIdx; /// the index of the displayed used entry
 
-    QStringList * m_history; // history of previous inputs
+    QStringList * m_history; /// history of previous inputs
 
-    QMutex m_historyMutex; // make history QStringList action thread-safe
+    QMutex m_historyMutex; /// make history QStringList action thread-safe
 
     /**
-     * Navigates content history in the desired direction.
+     * @brief Navigates content history in the desired direction.
+     *
      * Note: no wrap-around on purpose (so that holding down/up will get the
      * the user to the respective end rather than into an endless cycle :P)
+     * 
      * @param isGoingUp true: next older entry, false: next more recent entry.
      */
     void navigateHistory(bool isGoingUp);
 
     /**
-     * Appends current text to history, without Mutex.
+     * @brief Appends current text to history, without Mutex.
      */
     void rememberCurrentTextUnsynced();
 };
