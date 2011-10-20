@@ -17,7 +17,7 @@
  */
 
 
-package org.hedgewars.mobile.Downloader;
+package org.hedgewars.hedgeroid.Downloader;
 
 import java.io.BufferedInputStream;
 import java.io.File;

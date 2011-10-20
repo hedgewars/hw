@@ -17,7 +17,7 @@
  */
 
 
-package org.hedgewars.mobile;
+package org.hedgewars.hedgeroid;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,8 +26,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.hedgewars.mobile.EngineProtocol.FrontendDataUtils;
-import org.hedgewars.mobile.EngineProtocol.Team;
+import org.hedgewars.hedgeroid.EngineProtocol.FrontendDataUtils;
+import org.hedgewars.hedgeroid.EngineProtocol.Team;
+import org.hedgewars.mobile.R;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

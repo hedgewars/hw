@@ -19,6 +19,9 @@
     Sam Lantinga
     slouken@libsdl.org
 */
+
+#define org_hedgewars_hedgeroid org_hedgewars_hedgeroid
+
 #include "SDL_config.h"
 #include "SDL_stdinc.h"
 
@@ -100,7 +103,7 @@ extern "C" void SDL_Android_Init(JNIEnv* env, jclass cls)
 }
 
 // Resize
-extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeResize(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_onNativeResize(
                                     JNIEnv* env, jclass jcls,
                                     jint width, jint height, jint format)
 {
@@ -108,21 +111,21 @@ extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeResize(
 }
 
 // Keydown
-extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeKeyDown(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_onNativeKeyDown(
                                     JNIEnv* env, jclass jcls, jint keycode)
 {
     Android_OnKeyDown(keycode);
 }
 
 // Keyup
-extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeKeyUp(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_onNativeKeyUp(
                                     JNIEnv* env, jclass jcls, jint keycode)
 {
     Android_OnKeyUp(keycode);
 }
 
 // Touch
-extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeTouch(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_onNativeTouch(
                                     JNIEnv* env, jclass jcls,
                                     jint action, jint pointerId, jfloat x, jfloat y, jfloat p)
 {
@@ -130,7 +133,7 @@ extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeTouch(
 }
 
 // Accelerometer
-extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeAccel(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_onNativeAccel(
                                     JNIEnv* env, jclass jcls,
                                     jfloat x, jfloat y, jfloat z)
 {
@@ -140,14 +143,14 @@ extern "C" void Java_org_hedgewars_mobile_SDLActivity_onNativeAccel(
 }
 
 // Quit
-extern "C" void Java_org_hedgewars_mobile_SDLActivity_nativeQuit(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_nativeQuit(
                                     JNIEnv* env, jclass cls)
 {    
     // Inject a SDL_QUIT event
     SDL_SendQuit();
 }
 
-extern "C" void Java_org_hedgewars_mobile_SDLActivity_nativeRunAudioThread(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_nativeRunAudioThread(
                                     JNIEnv* env, jclass cls)
 {
     /* This is the audio thread, with a different environment */

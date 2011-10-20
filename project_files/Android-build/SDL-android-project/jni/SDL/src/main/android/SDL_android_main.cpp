@@ -17,7 +17,7 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 }
 
 // Start up the SDL app
-extern "C" void Java_org_hedgewars_mobile_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobjectArray strArray)
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_nativeInit(JNIEnv* env, jclass cls, jobjectArray strArray)
 {
     /* This interface could expand with ABI negotiation, calbacks, etc. */
     SDL_Android_Init(env, cls);

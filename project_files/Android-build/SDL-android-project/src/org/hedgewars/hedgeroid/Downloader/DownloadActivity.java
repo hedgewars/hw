@@ -17,9 +17,9 @@
  */
 
 
-package org.hedgewars.mobile.Downloader;
+package org.hedgewars.hedgeroid.Downloader;
 
-import org.hedgewars.mobile.MainActivity;
+import org.hedgewars.hedgeroid.MainActivity;
 import org.hedgewars.mobile.R;
 
 import android.app.Activity;

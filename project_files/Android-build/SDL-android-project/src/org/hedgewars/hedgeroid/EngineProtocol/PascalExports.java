@@ -16,21 +16,25 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+package org.hedgewars.hedgeroid.EngineProtocol;
 
-package org.hedgewars.mobile.EngineProtocol;
+public class PascalExports {
 
-public class Grave{
-
-	public final String name;
-	public final String path;
-	
-	public Grave(String _name, String _path) {
-		name = _name;
-		path = _path;
-	}
-
-	public String toString(){
-		return name;
+	static{
+		System.loadLibrary("SDL");
+		System.loadLibrary("SDL_image");
+		System.loadLibrary("mikmod");
+		System.loadLibrary("SDL_net");
+		System.loadLibrary("SDL_mixer");
+		System.loadLibrary("SDL_ttf");
+		System.loadLibrary("lua5.1");
+		System.loadLibrary("hwengine");
 	}
 	
+	public static native int HWversionInfoNetProto();
+	public static native String HWversionInfoVersion();
+	public static native int HWgetNumberOfWeapons();
+	public static native int HWgetMaxNumberOfTeams();
+	public static native int HWgetMaxNumberOfHogs();
+        public static native int HWterminate(boolean b);	
 }

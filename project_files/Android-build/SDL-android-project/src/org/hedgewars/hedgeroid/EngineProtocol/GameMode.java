@@ -17,7 +17,7 @@
  */
 
 
-package org.hedgewars.mobile.EngineProtocol;
+package org.hedgewars.hedgeroid.EngineProtocol;
 
 public enum GameMode {
 		MODE_LOCAL, MODE_DEMO, MODE_NET, MODE_SAVE

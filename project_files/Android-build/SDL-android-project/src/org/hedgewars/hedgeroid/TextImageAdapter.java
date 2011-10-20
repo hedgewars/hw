@@ -17,7 +17,7 @@
  */
 
 
-package org.hedgewars.mobile;
+package org.hedgewars.hedgeroid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

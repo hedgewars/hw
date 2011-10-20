@@ -17,7 +17,7 @@
  */
 
 
-package org.hedgewars.mobile;
+package org.hedgewars.hedgeroid;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+
+import org.hedgewars.mobile.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
