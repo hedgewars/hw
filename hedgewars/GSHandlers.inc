@@ -2433,7 +2433,7 @@ begin
     AllInactive := false;
     HHGear := Gear^.Hedgehog^.Gear;
     DeleteCI(HHGear);
-    HHGear^.X := int2hwFloat(hwRound(HHGear^.X)) - _0_5;
+    //HHGear^.X := int2hwFloat(hwRound(HHGear^.X)) - _0_5; WTF?
     HHGear^.dX := SignAs(cLittle, Gear^.dX);
 
     HHGear^.dY := - _0_3;
