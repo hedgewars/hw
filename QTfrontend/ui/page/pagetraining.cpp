@@ -27,8 +27,11 @@
 #include <QLocale>
 #include <QSettings>
 
-#include "pagetraining.h"
 #include "hwconsts.h"
+
+#include "HWDataManager.h"
+
+#include "pagetraining.h"
 
 QLayout * PageTraining::bodyLayoutDefinition()
 {
@@ -120,41 +123,40 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     if (loc.isEmpty())
         loc = QLocale::system().name();
 
-    QString infoFile = 
-                datadir->absolutePath() + "/Locale/missions_" + loc + ".txt";
+    QFile * infoFile = HWDataManager::instance().findFileForRead(QString(
+                                            "Locale/missions_" + loc + ".txt"));
 
     // if file is non-existant try with language only
-    if (!QFile::exists(infoFile))
-        infoFile = datadir->absolutePath() + "/Locale/missions_" + 
-                loc.replace(QRegExp("_.*$"),"") + ".txt";
-
-    // fallback if file for current locale is non-existant
-    if (!QFile::exists(infoFile))
-        infoFile = datadir->absolutePath() + "/Locale/missions_en.txt";
-
-    // preload mission info for current locale
-    m_info = new QSettings(infoFile, QSettings::IniFormat, this);
-
-//  TODO -> this should be done in a tool "DataDir" class
-    QDir tmpdir;
-    tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Missions/Training");
-    QStringList missionList = scriptList(tmpdir);
-    missionList.sort();
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Missions/Training");
-    QStringList defaultList = scriptList(tmpdir);
-    defaultList.sort();
-
-    // add non-duplicate default scripts to the list
-    foreach (const QString & mission, defaultList)
+    if (!infoFile->exists())
     {
-        if (!missionList.contains(mission))
-            missionList.append(mission);
+        delete infoFile;
+        infoFile = HWDataManager::instance().findFileForRead(QString(
+                "Locale/missions_" + loc.replace(QRegExp("_.*$"),"") + ".txt"));
     }
 
-    // add default scripts that have names different from detected user scripts
+    // fallback if file for current locale is non-existant
+    if (!infoFile->exists())
+    {
+        delete infoFile;
+        infoFile = HWDataManager::instance().findFileForRead(QString(
+                                                     "Locale/missions_en.txt"));
+    }
+
+
+    // preload mission info for current locale
+    m_info =
+        new QSettings(infoFile->fileName(), QSettings::IniFormat, this);
+
+    // we don't need infoFile anymore
+    delete infoFile;
+
+    QStringList missionList =
+            HWDataManager::instance().entryList(QString("Missions/Training"),
+                QDir::Files,
+                QStringList("*.lua")
+                ).replaceInStrings(QRegExp("\\.lua$"), "");
+
+    // scripts to lost - TODO: model?
     foreach (const QString & mission, missionList)
     {
         QListWidgetItem * item = new QListWidgetItem(mission);
@@ -178,13 +180,6 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     // pre-select first mission
     if (lstMissions->count() > 0)
         lstMissions->setCurrentRow(0);
-}
-
-QStringList PageTraining::scriptList(const QDir & scriptDir) const
-{
-    QDir dir = scriptDir;
-    dir.setFilter(QDir::Files);
-    return dir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1");
 }
 
 
