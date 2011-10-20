@@ -81,12 +81,12 @@ protected:
 
 
 private:
-    int m_maxHistorySize; /// the maximum allowed size for the history
-    int m_curHistEntryIdx; /// the index of the displayed used entry
+    int m_maxHistorySize; ///< the maximum allowed size for the history
+    int m_curHistEntryIdx; ///< the index of the displayed used entry
 
-    QStringList * m_history; /// history of previous inputs
+    QStringList * m_history; ///< history of previous inputs
 
-    QMutex m_historyMutex; /// make history QStringList action thread-safe
+    QMutex m_historyMutex; ///< make history QStringList action thread-safe
 
     /**
      * @brief Navigates content history in the desired direction.

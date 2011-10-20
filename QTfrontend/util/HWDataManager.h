@@ -97,8 +97,8 @@ private:
      */
     HWDataManager();
 
-    QDir * defaultData;
-    QDir * userData;
+    QDir * defaultData; ///< directory of the installed data
+    QDir * userData;    ///< directory of custom data in the user's directory
 };
 
 #endif // HEDGEWARS_HWDATAMANAGER_H

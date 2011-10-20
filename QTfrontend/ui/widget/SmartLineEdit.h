@@ -29,7 +29,7 @@
 
 /**
  * @brief A {@link HistoryLineEdit} that features auto-completion with TAB key
-*         and clear with ESC key.
+ *         and clear with ESC key.
  *
  * Notes:
  * <ul>
@@ -107,30 +107,30 @@ protected:
 
 
 private:
-    QRegExp m_whitespace; /// regexp that matches a whitespace
+    QRegExp m_whitespace; ///< regexp that matches a whitespace
 
-    QStringList * m_cmds;  /// list of recognized commands
-    QStringList * m_nicks; /// list of recognized nicknames
+    QStringList * m_cmds;  ///< list of recognized commands
+    QStringList * m_nicks; ///< list of recognized nicknames
 
     // these variables contain information about the last replacement
     // they get reset whenever cursor is moved or text is changed
 
-    QString m_beforeMatch; /// the string that was just matched
-    bool m_hasJustMatched; /// whether this widget just did an auto-completion
-    QString m_prefix; /// prefix of the text replacement this widget just did
-    QString m_postfix; /// postfix of the text replacement this widget just did
+    QString m_beforeMatch; ///< the string that was just matched
+    bool m_hasJustMatched; ///< whether this widget just did an auto-completion
+    QString m_prefix; ///< prefix of the text replacement this widget just did
+    QString m_postfix; ///< postfix of the text replacement this widget just did
 
-    QMutex m_keywordMutex; /// make keyword QStringList action thread-safe
+    QMutex m_keywordMutex; ///< make keyword QStringList action thread-safe
 
     /**
-     * Autocompletes the contents based on the known commands and/or names.
+     * @brief Autocompletes the contents based on the known commands and/or names.
      */
     void autoComplete();
 
 
 private slots:
     /**
-     * Resets the information about the last match and text replacement.
+     * @brief Resets the information about the last match and text replacement.
      */
     void resetAutoCompletionStatus();
 };
