@@ -25,4 +25,10 @@
     <item>@raw/weapon_promode</item>
     <item>@raw/weapon_shoppa</item>
 </array>
+
+<array name="teams">
+	<item>@raw/team_one</item>
+	<item>@raw/team_two</item>
+
+</array>
 </resources>

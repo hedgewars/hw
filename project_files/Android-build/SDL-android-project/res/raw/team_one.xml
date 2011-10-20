@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<team>
+  <name>Team 1</name>
+  <flag>cm_cog</flag>
+  <fort>Cake</fort>
+  <grave>coffin</grave>
+  <voice>Classic</voice>
+  <hash>0</hash>
+  <hog>
+    <name>Leonidas</name>
+    <hat>spartan</hat>
+    <level>0</level>
+  </hog>
+  <hog>
+    <name>Pipo</name>
+    <hat>clown-copper</hat>
+    <level>0</level>
+  </hog>
+  <hog>
+    <name>Sonic</name>
+    <hat>Sonic</hat>
+    <level>0</level>
+  </hog>
+  <hog>
+    <name>Xin</name>
+    <hat>StrawHat</hat>
+    <level>0</level>
+  </hog>
+  <hog>
+    <name>Arnold</name>
+    <hat>cyborg</hat>
+    <level>0</level>
+  </hog>
+  <hog>
+    <name>Jack</name>
+    <hat>Pumpkin_Hat</hat>
+    <level>0</level>
+  </hog>
+  <hog>
+    <name>Tom</name>
+    <hat>Samurai</hat>
+    <level>0</level>
+  </hog>
+  <hog>
+    <name>Goldie</name>
+    <hat>diglett</hat>
+    <level>0</level>
+  </hog>
+</team>
