@@ -89,7 +89,7 @@ protected:
      * Forward pressed TAB to parent class' method (for focus handling etc)
      * only if line is empty.
      * 
-     * @param event the key event.
+     * @param event the event.
      * @return returns true if the event was recognized.
      */
     virtual bool event(QEvent * event);
