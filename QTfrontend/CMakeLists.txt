@@ -83,7 +83,6 @@ set(hwfr_src
     HWApplication.cpp
     hwform.cpp
     main.cpp
-    mapContainer.cpp
     SDLs.cpp
     team.cpp
     ui_hwform.cpp
@@ -122,7 +121,6 @@ set(hwfr_moc_hdrs
     gameuiconfig.h
     HWApplication.h
     hwform.h
-    mapContainer.h
     SDLs.h
     )
 

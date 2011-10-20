@@ -69,6 +69,7 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/ui/widget/selectWeapon.h \
     ../QTfrontend/ui/widget/weaponItem.h \
     ../QTfrontend/ui/widget/gamecfgwidget.h \
+    ../QTfrontend/ui/widget/mapContainer.h \
     ../QTfrontend/ui/widget/HistoryLineEdit.h \
     ../QTfrontend/ui/widget/SmartLineEdit.h \
     ../QTfrontend/net/netregister.h \
@@ -86,7 +87,6 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/gameuiconfig.h \
     ../QTfrontend/HWApplication.h \
     ../QTfrontend/hwform.h \
-    ../QTfrontend/mapContainer.h \
     ../QTfrontend/SDLs.h \
     ../QTfrontend/team.h \
     ../QTfrontend/achievements.h \
@@ -143,6 +143,7 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/widget/teamselhelper.cpp \
     ../QTfrontend/ui/widget/drawmapwidget.cpp \
     ../QTfrontend/ui/widget/weaponItem.cpp \
+    ../QTfrontend/ui/widget/mapContainer.cpp \
     ../QTfrontend/ui/widget/HistoryLineEdit.cpp \
     ../QTfrontend/ui/widget/SmartLineEdit.cpp \
     ../QTfrontend/net/tcpBase.cpp \
@@ -163,7 +164,6 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/HWApplication.cpp \
     ../QTfrontend/hwform.cpp \
     ../QTfrontend/main.cpp \
-    ../QTfrontend/mapContainer.cpp \
     ../QTfrontend/SDLs.cpp \
     ../QTfrontend/team.cpp \
     ../QTfrontend/ui_hwform.cpp \
