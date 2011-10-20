@@ -22,8 +22,8 @@ package org.hedgewars.hedgeroid.Downloader;
 import java.util.ArrayList;
 
 import org.hedgewars.hedgeroid.MainActivity;
+import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Utils;
-import org.hedgewars.mobile.R;
 
 import android.app.Notification;
 import android.app.NotificationManager;

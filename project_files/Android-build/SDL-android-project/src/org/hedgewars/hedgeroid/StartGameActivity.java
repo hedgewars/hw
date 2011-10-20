@@ -25,7 +25,6 @@ import org.hedgewars.hedgeroid.EngineProtocol.Map;
 import org.hedgewars.hedgeroid.EngineProtocol.Scheme;
 import org.hedgewars.hedgeroid.EngineProtocol.Team;
 import org.hedgewars.hedgeroid.EngineProtocol.Weapon;
-import org.hedgewars.mobile.R;
 
 import android.app.Activity;
 import android.content.Intent;
