@@ -18,9 +18,13 @@
 
 #include <QGridLayout>
 #include <QLabel>
-#include <QTextBrowser>
-#include "about.h"
+#include <QList>
+#include <QUrl>
+#include <QRegExp>
 #include "hwconsts.h"
+#include "SDLInteraction.h"
+
+#include "about.h"
 
 About::About(QWidget * parent) :
   QWidget(parent)
@@ -54,7 +58,7 @@ About::About(QWidget * parent) :
     lbl1->setWordWrap(true);
     mainLayout->addWidget(lbl1, 0, 1);
 
-    QTextBrowser *lbl2 = new QTextBrowser(this);
+    lbl2 = new QTextBrowser(this);
 
     lbl2->setOpenExternalLinks(true);
     lbl2->setText(
@@ -143,4 +147,28 @@ About::About(QWidget * parent) :
             "</p>"
             );
     mainLayout->addWidget(lbl2, 1, 1);
+
+    setAcceptDrops(true);
+}
+
+void About::dragEnterEvent(QDragEnterEvent * event)
+{
+    if (event->mimeData()->hasUrls())
+    {
+        QList<QUrl> urls = event->mimeData()->urls();
+        QString url = urls[0].toString();
+        if (urls.count() == 1)
+            if (url.contains(QRegExp("^file://.*\\.ogg$")))
+                event->acceptProposedAction();
+    }
+}
+
+void About::dropEvent(QDropEvent * event)
+{
+    QString file =
+        event->mimeData()->urls()[0].toString().remove(QRegExp("^file://"));
+
+    SDLInteraction::instance().setMusicTrack(file);
+
+    event->acceptProposedAction();
 }

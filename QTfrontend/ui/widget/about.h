@@ -20,6 +20,8 @@
 #define _ABOUT_H
 
 #include <QWidget>
+#include <QDropEvent>
+#include <QTextBrowser>
 
 
 class About : public QWidget
@@ -28,6 +30,13 @@ class About : public QWidget
 
 public:
     About(QWidget * parent = 0);
+
+protected:
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dropEvent(QDropEvent * event);
+
+private:
+    QTextBrowser * lbl2;
 };
 
 #endif // _ABOUT_H

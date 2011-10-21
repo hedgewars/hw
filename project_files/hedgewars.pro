@@ -82,7 +82,7 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/net/netudpserver.h \
     ../QTfrontend/net/hwmap.h \
     ../QTfrontend/util/namegen.h \
-    ../QTfrontend/AbstractPage.h \
+    ../QTfrontend/ui/page/AbstractPage.h \
     ../QTfrontend/drawmapscene.h \
     ../QTfrontend/game.h \
     ../QTfrontend/gameuiconfig.h \
@@ -157,7 +157,7 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/net/netudpwidget.cpp \
     ../QTfrontend/net/netserver.cpp \
     ../QTfrontend/util/namegen.cpp \
-    ../QTfrontend/AbstractPage.cpp \
+    ../QTfrontend/ui/page/AbstractPage.cpp \
     ../QTfrontend/achievements.cpp \
     ../QTfrontend/binds.cpp \
     ../QTfrontend/drawmapscene.cpp \

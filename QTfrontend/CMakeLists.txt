@@ -74,7 +74,6 @@ set(hwfr_src
     ${NetCpp}
     ${UIcpp}
     ${UtilCpp}
-    AbstractPage.cpp
     achievements.cpp
     binds.cpp
     drawmapscene.cpp
@@ -114,7 +113,6 @@ set(hwfr_moc_hdrs
     ${ModelHdr}
     ${NetHdr}
     ${UIhdr}
-    AbstractPage.h
     drawmapscene.h
     game.h
     gameuiconfig.h
