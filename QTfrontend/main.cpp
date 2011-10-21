@@ -481,8 +481,24 @@ int main(int argc, char *argv[]) {
     // this creates the autoreleasepool that prevents leaking
     CocoaInitializer initializer;
 #endif
+    // load external stylesheet if there is any
+    QFile * file =
+        new QFile(HWDataManager::instance().findFileForRead("misc/qt_style.css"));
 
-    app.form = new HWForm(NULL,styleSheetFromHell);
+    if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QString style = "";
+        QTextStream in(file);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            if(!line.isEmpty())
+                style.append(line);
+        }
+        app.form = new HWForm(NULL, style);
+    }
+    else
+        app.form = new HWForm(NULL, styleSheetFromHell);
 
     app.form->show();
     return app.exec();
