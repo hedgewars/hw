@@ -447,7 +447,7 @@ int main(int argc, char *argv[]) {
  
     scriptList = new QStringList(HWDataManager::instance().entryList(
                                      QString("Scripts/Multiplayer"),
-                                     QDir::Dirs | QDir::NoDotAndDotDot,
+                                     QDir::Files,
                                      QStringList("*.lua")
                                      )
                                  );
