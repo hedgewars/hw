@@ -64,9 +64,9 @@ public class StartGameActivity extends Activity {
 			Utils.resRawToFilesDir(this,R.array.schemes, Scheme.DIRECTORY_SCHEME);
 			Utils.resRawToFilesDir(this, R.array.weapons, Weapon.DIRECTORY_WEAPON);
 			Utils.resRawToFilesDir(this, R.array.teams, Team.DIRECTORY_TEAMS);
-			Scheme.parseBasicFlags(this);
 		}
 
+		Scheme.parseBasicFlags(this);
 		config = new GameConfig();
 
 		setContentView(R.layout.starting_game);
