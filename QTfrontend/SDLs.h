@@ -23,7 +23,7 @@
 #include <QStringList>
 #include "SDL_mixer.h"
 
-
+/// Class for interacting with SDL (used for music and keys)
 class SDLInteraction : public QObject
 {
     Q_OBJECT
@@ -33,12 +33,29 @@ private:
     int musicInitialized;
 
 public:
+    /// Class Constructor.
     SDLInteraction();
+
+    /// Class Destructor.
     ~SDLInteraction();
+
+    /**
+     * @brief Returns available (screen) resolutions.
+     *
+     * @return list of resolutions in the format WIDTHxHEIGHT.
+     */
     QStringList getResolutions() const;
+
+    /// Adds all available joystick controlls to the list of SDL keys.
     void addGameControllerKeys() const;
+
+    /// Starts the background music.
     void StartMusic();
+
+    /// Fades out and stops the background music.
     void StopMusic();
+
+    /// Initializes SDL for playing music.
     void SDLMusicInit();
 };
 

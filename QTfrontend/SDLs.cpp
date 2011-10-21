@@ -20,7 +20,9 @@
 
 #include "SDL.h"
 #include "SDL_mixer.h"
-#include "hwconsts.h"
+
+#include "HWDataManager.h"
+
 #include "HWApplication.h"
 
 
@@ -28,7 +30,6 @@ extern char sdlkeys[1024][2][128];
 extern char xb360buttons[][128];
 extern char xb360dpad[128];
 extern char xbox360axes[][128];
-
 
 SDLInteraction::SDLInteraction()
 {
@@ -159,18 +160,17 @@ void SDLInteraction::SDLMusicInit()
     }
 }
 
-
 void SDLInteraction::StartMusic()
 {
     SDLMusicInit();
-    QFile tmpfile;
+    QFile * tmpFile = HWDataManager::instance().findFileForRead("Music/main_theme.ogg");
 
-    tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Music/main_theme.ogg");
-    if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Music/main_theme.ogg");
-    if (music == NULL) {
-        music = Mix_LoadMUS(QFileInfo(tmpfile).absoluteFilePath().toLocal8Bit().constData());
+    if (music == NULL)
+        music = Mix_LoadMUS(tmpFile->fileName().toLocal8Bit().constData());
 
-    }
+    // this QFile isn't needed any further
+    delete tmpFile;
+
     Mix_VolumeMusic(MIX_MAX_VOLUME - 28);
     Mix_FadeInMusic(music, -1, 1750);
 }
