@@ -17,6 +17,7 @@
  */
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QComboBox>
 #include <QLabel>
@@ -111,14 +112,20 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
 QLayout * PageRoomsList::footerLayoutDefinition()
 {
-    QGridLayout * bottomLayout = new QGridLayout();
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
 
     lblCount = new QLabel(this);
-    bottomLayout->addWidget(lblCount, 0, 0, Qt::AlignHCenter);
+    bottomLayout->addWidget(lblCount, 0, Qt::AlignHCenter);
+    bottomLayout->setStretchFactor(lblCount, 1);
     lblCount->setText("?");
     lblCount->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 
-    BtnAdmin = addButton(tr("Admin features"), bottomLayout, 6, 2);
+    BtnAdmin = addButton(tr("Admin features"), bottomLayout, 1);
+    BtnAdmin->setMinimumWidth(160);
+
+    // strech left part
+    bottomLayout->setStretch(0, 1);
+    bottomLayout->setStretch(1, 0);
 
     return bottomLayout;
 }
