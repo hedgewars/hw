@@ -238,13 +238,12 @@ void PageEditTeam::connectSignals()
     connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 }
 
-PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
+PageEditTeam::PageEditTeam(QWidget* parent) :
   AbstractPage(parent)
 {
     initPage();
 
     m_playerHash = "0000000000000000000000000000000000000000";
-    mySdli = sdli;
 
     QDir tmpdir;
     QStringList list;
@@ -401,22 +400,28 @@ void PageEditTeam::CBFort_activated(const QString & fortname)
 
 void PageEditTeam::testSound()
 {
-    Mix_Chunk *sound;
-    QDir tmpdir;
-    mySdli->SDLMusicInit();
-    
-    tmpdir.cd(cfgdir->absolutePath());
-    if (!tmpdir.cd("Data/Sounds/voices/"+CBVoicepack->currentText()))
-    {
-        tmpdir.cd(datadir->absolutePath());
-        tmpdir.cd("Sounds/voices");
-        tmpdir.cd(CBVoicepack->currentText());
-    }
+    QString voiceDir = QString("Sounds/voices/") + CBVoicepack->currentText();
 
-    QStringList list = tmpdir.entryList(QStringList() << "Illgetyou.ogg" << "Incoming.ogg" << "Stupid.ogg" << "Coward.ogg" << "Firstblood.ogg", QDir::Files);
-    if (list.size()) {
-        sound = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
-        Mix_PlayChannel(-1, sound, 0);
+    QStringList list = HWDataManager::instance().entryList(
+            voiceDir,
+            QDir::Files/*,
+            QStringList() <<
+                "Illgetyou.ogg" <<
+                "Incoming.ogg" <<
+                "Stupid.ogg" <<
+                "Coward.ogg" <<
+                "Firstblood.ogg"*/
+            );
+
+    if (list.size())
+    {
+        QFile * tmpFile = HWDataManager::instance().findFileForRead(
+                                voiceDir + "/" + list[rand() % list.size()]);
+
+        SDLInteraction::instance().playSoundFile(tmpFile->fileName());
+
+        // this QFile isn't needed any further
+        delete tmpFile;
     }
 }
 

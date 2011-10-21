@@ -87,7 +87,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
     pageLayout->addLayout(filterLayout, 4, 0, 1, 2);
 
-    chatWidget = new HWChatWidget(this, m_gameSettings, m_sdli, false);
+    chatWidget = new HWChatWidget(this, m_gameSettings, false);
     pageLayout->addWidget(chatWidget, 5, 0, 1, 3);
     pageLayout->setRowStretch(5, 350);
 
@@ -140,11 +140,10 @@ void PageRoomsList::connectSignals()
 }
 
 
-PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) :
+PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings) :
   AbstractPage(parent)
 {
     m_gameSettings = gameSettings;
-    m_sdli = sdli;
 
     initPage();
 

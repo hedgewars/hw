@@ -112,7 +112,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     //setFocusPolicy(Qt::StrongFocus);
     CustomizePalettes();
 
-    ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
+    ui.pageOptions->CBResolution->addItems(SDLInteraction::instance().getResolutions());
 
     config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 
@@ -1176,9 +1176,9 @@ void HWForm::closeEvent(QCloseEvent *event)
 void HWForm::Music(bool checked)
 {
     if (checked)
-        sdli.StartMusic();
+        SDLInteraction::instance().startMusic();
     else
-        sdli.StopMusic();
+        SDLInteraction::instance().stopMusic();
 }
 
 void HWForm::NetGameChangeStatus(bool isMaster)

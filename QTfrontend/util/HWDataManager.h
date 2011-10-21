@@ -41,11 +41,11 @@ class HWDataManager
 {
 public:
     /**
-     * @brief Returns a pointer to the <i>singleton</i> instance of this class.
+     * @brief Returns reference to the <i>singleton</i> instance of this class.
      * 
      * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
      * 
-     * @return pointer to the instance.
+     * @return reference to the instance.
      */
     static HWDataManager & instance();
 

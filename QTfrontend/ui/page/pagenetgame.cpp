@@ -36,7 +36,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     pageLayout->setColumnStretch(1, 50);
 
     // chatwidget
-    pChatWidget = new HWChatWidget(this, m_gameSettings, m_sdli, true);
+    pChatWidget = new HWChatWidget(this, m_gameSettings, true);
     pChatWidget->setShowReady(true); // show status bulbs by default
     pChatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
@@ -93,10 +93,9 @@ void PageNetGame::connectSignals()
     connect(BtnUpdate, SIGNAL(clicked()), this, SLOT(onUpdateClick()));
 }
 
-PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) : AbstractPage(parent)
+PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings) : AbstractPage(parent)
 {
     m_gameSettings = gameSettings;
-    m_sdli = sdli;
 
     initPage();
 

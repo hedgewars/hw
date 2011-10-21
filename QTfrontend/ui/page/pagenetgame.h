@@ -22,7 +22,6 @@
 #include "HistoryLineEdit.h"
 
 #include "AbstractPage.h"
-#include "SDLs.h"
 
 class HWChatWidget;
 class TeamSelWidget;
@@ -33,7 +32,7 @@ class PageNetGame : public AbstractPage
     Q_OBJECT
 
 public:
-    PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli);
+    PageNetGame(QWidget* parent, QSettings * gameSettings);
 
     /**
      * Sets the room name to display.
@@ -69,7 +68,6 @@ private:
     void connectSignals();
 
     QSettings * m_gameSettings;
-    SDLInteraction * m_sdli;
 
     HistoryLineEdit * leRoomName;
     QPushButton * btnSetup;

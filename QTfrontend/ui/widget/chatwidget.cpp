@@ -22,9 +22,8 @@
 #include <QLineEdit>
 #include <QAction>
 #include <QTextDocument>
-#include <QDir>
-#include <QSettings>
 #include <QFile>
+#include <QSettings>
 #include <QTextStream>
 #include <QMenu>
 #include <QCursor>
@@ -32,9 +31,10 @@
 #include <QItemSelectionModel>
 #include <QStringList>
 
+#include "HWDataManager.h"
 #include "hwconsts.h"
-#include "SDLs.h"
 #include "gameuiconfig.h"
+
 #include "chatwidget.h"
 
 ListWidgetNickItem::ListWidgetNickItem(const QString& nick, bool isFriend, bool isIgnored) : QListWidgetItem(nick)
@@ -116,22 +116,20 @@ a { color:#c8c8ff; }\
 .Notice { color: #fefefe }\
 ";
 
-HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify) :
+HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify) :
   QWidget(parent),
   mainLayout(this)
 {
     this->gameSettings = gameSettings;
-    this->sdli = sdli;
     this->notify = notify;
     if(notify && gameSettings->value("frontend/sound", true).toBool()) {
-        QFile tmpfile;
-        sdli->SDLMusicInit();
-        for(int i=0;i<4;i++) {
-            tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Sounds/voices/Classic/Hello.ogg");
-            if (tmpfile.exists()) sound[i] = Mix_LoadWAV(QFileInfo(tmpfile).absoluteFilePath().toLocal8Bit().constData());
-            else sound[i] = Mix_LoadWAV(QString(datadir->absolutePath() + 
-                "/Sounds/voices/Classic/Hello.ogg").toLocal8Bit().constData());
-        }
+        QFile * tmpFile = HWDataManager::instance().findFileForRead(
+                                            "Sounds/voices/Classic/Hello.ogg");
+
+        helloSound = tmpFile->fileName();
+
+        // this QFile isn't needed any further
+        delete tmpFile;
     }
 
     mainLayout.setSpacing(1);
@@ -426,7 +424,7 @@ void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
     emit nickCountUpdate(chatNicks->count());
 
     if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool()) {
-       Mix_PlayChannel(-1, sound[rand()%4], 0);
+       SDLInteraction::instance().playSoundFile(helloSound);
     }
 }
 

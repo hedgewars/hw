@@ -22,8 +22,9 @@
 #include "AbstractPage.h"
 #include "binds.h"
 #include "hwconsts.h"
+#include "HWDataManager.h"
 #include "namegen.h"
-#include "SDLs.h"
+#include "SDLInteraction.h"
 
 #include "team.h"
 
@@ -34,7 +35,7 @@ class PageEditTeam : public AbstractPage
     Q_OBJECT
 
 public:
-    PageEditTeam(QWidget* parent, SDLInteraction * sdli);
+    PageEditTeam(QWidget* parent);
 
     void createTeam(const QString & name, const QString & playerHash);
     void editTeam(const QString & name, const QString & playerHash);
@@ -64,7 +65,6 @@ private:
     QLineEdit * HHNameEdit[HEDGEHOGS_PER_TEAM];
     QComboBox * HHHats[HEDGEHOGS_PER_TEAM];
     QComboBox * CBBind[BINDS_NUMBER];
-    SDLInteraction * mySdli;
     HWTeam data();
     QString m_playerHash;
 
@@ -85,8 +85,12 @@ private:
 private slots:
     void saveTeam();
     void setRandomNames();
+
     void setRandomName(int hh_index);
+    
+    /// Plays a random voice sound of the currently edited team.
     void testSound();
+
     void fixHHname(int idx);
 };
 

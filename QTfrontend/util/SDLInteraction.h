@@ -16,25 +16,51 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef SDLS_H
-#define SDLS_H
+#ifndef HEDGEWARS_SDLINTERACTION_H
+#define HEDGEWARS_SDLINTERACTION_H
 
 
+#include <QMap>
 #include <QStringList>
+
 #include "SDL_mixer.h"
 
-/// Class for interacting with SDL (used for music and keys)
-class SDLInteraction : public QObject
+/**
+ * @brief Class for interacting with SDL (used for music and keys)
+ * 
+ * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+ */
+class SDLInteraction
 {
-    Q_OBJECT
 
 private:
+    /**
+     * @brief Class constructor of the <i>singleton</i>.
+     * 
+     * Not to be used from outside the class,
+     * use the static {@link HWDataManager::instance()} instead.
+     * 
+     * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+     */
+    SDLInteraction();
+
+    /// Initializes SDL for sound output if needed.
+    void SDLSoundInit();
+
     Mix_Music *music;
     int musicInitialized;
 
+    QMap<QString,Mix_Chunk*> * soundMap; ///< maps sound file paths to channel
+
 public:
-    /// Class Constructor.
-    SDLInteraction();
+    /**
+     * @brief Returns reference to the <i>singleton</i> instance of this class.
+     * 
+     * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+     * 
+     * @return reference to the instance.
+     */
+    static SDLInteraction & instance();
 
     /// Class Destructor.
     ~SDLInteraction();
@@ -49,16 +75,20 @@ public:
     /// Adds all available joystick controlls to the list of SDL keys.
     void addGameControllerKeys() const;
 
+    /**
+     * @brief Plays a sound file.
+     * 
+     * @param soundFile path of the sound file.
+     */
+    void playSoundFile(const QString & soundFile);
+
     /// Starts the background music.
-    void StartMusic();
+    void startMusic();
 
     /// Fades out and stops the background music.
-    void StopMusic();
-
-    /// Initializes SDL for playing music.
-    void SDLMusicInit();
+    void stopMusic();
 };
 
 
-#endif
+#endif //HEDGEWARS_SDLINTERACTION_H
 

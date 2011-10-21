@@ -83,7 +83,6 @@ set(hwfr_src
     HWApplication.cpp
     hwform.cpp
     main.cpp
-    SDLs.cpp
     team.cpp
     ui_hwform.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
@@ -121,7 +120,6 @@ set(hwfr_moc_hdrs
     gameuiconfig.h
     HWApplication.h
     hwform.h
-    SDLs.h
     )
 
 set(hwfr_hdrs

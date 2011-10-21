@@ -26,7 +26,7 @@
 #include <QGridLayout>
 #include <QRegExp>
 
-#include "SDLs.h"
+#include "SDLInteraction.h"
 
 #include "SmartLineEdit.h"
 
@@ -35,9 +35,8 @@ class QTextBrowser;
 class QLineEdit;
 class QListWidget;
 class QSettings;
-class SDLInteraction;
 
-// this class is for custom nick sorting
+/// This class is for custom nickname sorting
 class ListWidgetNickItem : public QListWidgetItem
 {
 public:
@@ -58,7 +57,7 @@ class HWChatWidget : public QWidget
   Q_OBJECT
 
  public:
-  HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify);
+  HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify);
   void loadLists(const QString & nick);
   void saveLists(const QString & nick);
   void setShowReady(bool s);
@@ -105,8 +104,7 @@ private:
   QAction * acIgnore;
   QAction * acFriend;
   QSettings * gameSettings;
-  SDLInteraction * sdli;
-  Mix_Chunk *sound[4];
+  QString helloSound;
   bool notify;
   bool showReady;
 

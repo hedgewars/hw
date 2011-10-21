@@ -20,7 +20,6 @@
 #define PAGE_ROOMLIST_H
 
 #include "AbstractPage.h"
-#include "SDLs.h"
 
 class HWChatWidget;
 class AmmoSchemeModel;
@@ -30,7 +29,7 @@ class PageRoomsList : public AbstractPage
     Q_OBJECT
 
 public:
-    PageRoomsList(QWidget* parent, QSettings * config, SDLInteraction * sdli);
+    PageRoomsList(QWidget* parent, QSettings * config);
 
     QLineEdit * roomName;
     QLineEdit * searchText;
@@ -71,7 +70,6 @@ private slots:
 
 private:
     QSettings * m_gameSettings;
-    SDLInteraction * m_sdli;
 
     bool gameInLobby;
     QString gameInLobbyName;

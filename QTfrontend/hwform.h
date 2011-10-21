@@ -26,7 +26,7 @@
 #include "netserver.h"
 #include "game.h"
 #include "ui_hwform.h"
-#include "SDLs.h"
+#include "SDLInteraction.h"
 #include "bgwidget.h"
 
 #ifdef __APPLE__
@@ -54,7 +54,6 @@ class HWForm : public QMainWindow
 public:
     HWForm(QWidget *parent = 0, QString styleSheet = "");
     Ui_HWForm ui;
-    SDLInteraction sdli;
     GameUIConfig * config;
     QSettings * gameSettings; // Same file GameUIConfig points to but without the baggage.  Needs sync() calls if you want to get GameUIConfig changes though
     void updateXfire();

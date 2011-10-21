@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "SDLs.h"
 
 #include "SDL.h"
 #include "SDL_mixer.h"
@@ -25,11 +24,20 @@
 
 #include "HWApplication.h"
 
+#include "SDLInteraction.h"
 
 extern char sdlkeys[1024][2][128];
 extern char xb360buttons[][128];
 extern char xb360dpad[128];
 extern char xbox360axes[][128];
+
+
+SDLInteraction & SDLInteraction::instance()
+{
+    static SDLInteraction instance;
+    return instance;
+}
+
 
 SDLInteraction::SDLInteraction()
 {
@@ -41,16 +49,21 @@ SDLInteraction::SDLInteraction()
     if(SDL_NumJoysticks())
         addGameControllerKeys();
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
+
+    soundMap = new QMap<QString,Mix_Chunk*>();
 }
 
 SDLInteraction::~SDLInteraction()
 {
+    stopMusic();
     if (musicInitialized == 1) {
         if (music != NULL)
             Mix_FreeMusic(music);
         Mix_CloseAudio();
     }
     SDL_Quit();
+
+    delete soundMap;
 }
 
 QStringList SDLInteraction::getResolutions() const
@@ -151,7 +164,7 @@ void SDLInteraction::addGameControllerKeys() const
     sdlkeys[i][1][0] = '\0';
 }
 
-void SDLInteraction::SDLMusicInit()
+void SDLInteraction::SDLSoundInit()
 {
     if (musicInitialized == 0) {
         SDL_Init(SDL_INIT_AUDIO);
@@ -160,9 +173,18 @@ void SDLInteraction::SDLMusicInit()
     }
 }
 
-void SDLInteraction::StartMusic()
+void SDLInteraction::playSoundFile(const QString & soundFile)
 {
-    SDLMusicInit();
+    SDLSoundInit();
+    if (!soundMap->contains(soundFile))
+        soundMap->insert(soundFile, Mix_LoadWAV(soundFile.toLocal8Bit().constData()));
+
+    Mix_PlayChannel(-1, soundMap->value(soundFile), 0);
+}
+
+void SDLInteraction::startMusic()
+{
+    SDLSoundInit();
     QFile * tmpFile = HWDataManager::instance().findFileForRead("Music/main_theme.ogg");
 
     if (music == NULL)
@@ -175,7 +197,7 @@ void SDLInteraction::StartMusic()
     Mix_FadeInMusic(music, -1, 1750);
 }
 
-void SDLInteraction::StopMusic()
+void SDLInteraction::stopMusic()
 {
     if (music != NULL) {
         // fade out music to finish 0,5 seconds from now

@@ -88,7 +88,7 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/gameuiconfig.h \
     ../QTfrontend/HWApplication.h \
     ../QTfrontend/hwform.h \
-    ../QTfrontend/SDLs.h \
+    ../QTfrontend/util/SDLInteraction.h \
     ../QTfrontend/team.h \
     ../QTfrontend/achievements.h \
     ../QTfrontend/binds.h \
@@ -166,7 +166,7 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/HWApplication.cpp \
     ../QTfrontend/hwform.cpp \
     ../QTfrontend/main.cpp \
-    ../QTfrontend/SDLs.cpp \
+    ../QTfrontend/util/SDLInteraction.h.cpp \
     ../QTfrontend/team.cpp \
     ../QTfrontend/ui_hwform.cpp \
     ../QTfrontend/hwconsts.cpp

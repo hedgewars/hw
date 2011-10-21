@@ -76,7 +76,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 {
     Pages = new QStackedLayout(Parent);
 
-    pageEditTeam = new PageEditTeam(Parent, &HWForm->sdli);
+    pageEditTeam = new PageEditTeam(Parent);
     Pages->addWidget(pageEditTeam);
 
     pageOptions = new PageOptions();
@@ -91,7 +91,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
     pageNet = new PageNet();
     Pages->addWidget(pageNet);
 
-    pageNetGame = new PageNetGame(Parent, HWForm->gameSettings, &HWForm->sdli);
+    pageNetGame = new PageNetGame(Parent, HWForm->gameSettings);
     Pages->addWidget(pageNetGame);
 
     pageInfo = new PageInfo();
@@ -118,7 +118,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
     pageInGame = new PageInGame();
     Pages->addWidget(pageInGame);
 
-    pageRoomsList = new PageRoomsList(Parent, HWForm->gameSettings, &HWForm->sdli);
+    pageRoomsList = new PageRoomsList(Parent, HWForm->gameSettings);
     Pages->addWidget(pageRoomsList);
 
     pageConnecting = new PageConnecting();
