@@ -17,6 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+/**
+ * @file  HWDataManager.h
+ * @brief HWDataManager class definition
+ */
+
 #ifndef HEDGEWARS_HWDATAMANAGER_H
 #define HEDGEWARS_HWDATAMANAGER_H
 

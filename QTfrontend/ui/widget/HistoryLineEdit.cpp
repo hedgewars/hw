@@ -17,9 +17,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+/**
+ * @file  HistoryLineEdit.cpp
+ * @brief HistoryLineEdit class implementation
+ */
+
 #include <QStringList>
 
-#include "SmartLineEdit.h"
+#include "HistoryLineEdit.h"
 
 HistoryLineEdit::HistoryLineEdit(QWidget * parent, int maxHistorySize)
 : QLineEdit(parent)

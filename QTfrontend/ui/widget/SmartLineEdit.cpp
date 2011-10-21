@@ -17,6 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+/**
+ * @file  SmartLineEdit.cpp
+ * @brief SmartLineEdit class implementation
+ */
+
 #include "SmartLineEdit.h"
 
 SmartLineEdit::SmartLineEdit(QWidget * parent, int maxHistorySize)

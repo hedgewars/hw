@@ -17,6 +17,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+/**
+ * @file  HistoryLineEdit.h
+ * @brief HistoryLineEdit class definition
+ */
+
 #ifndef HEDGEWARS_HISTORYLINEEDIT
 #define HEDGEWARS_HISTORYLINEEDIT
 

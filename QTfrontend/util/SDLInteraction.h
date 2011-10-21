@@ -16,6 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+/**
+ * @file  SDLInteraction.h
+ * @brief SDLInteraction class definition
+ */
+
 #ifndef HEDGEWARS_SDLINTERACTION_H
 #define HEDGEWARS_SDLINTERACTION_H
 
@@ -87,7 +92,7 @@ public:
     /**
      * @brief Sets the music track to be played (or not).
      *
-     * @param soundFile path of the music file.
+     * @param musicFile path of the music file.
      */
     void setMusicTrack(const QString & musicFile);
 
