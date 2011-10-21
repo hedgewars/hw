@@ -52,8 +52,7 @@ private:
     QString m_musicTrack; ///< path to the music track;
     bool m_isPlayingMusic; ///< true if music was started but not stopped again.
 
-
-    QMap<QString,Mix_Chunk*> * soundMap; ///< maps sound file paths to channels
+    QMap<QString,Mix_Chunk*> * m_soundMap; ///< maps sound file paths to channels
 
 public:
     /**

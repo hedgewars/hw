@@ -125,8 +125,8 @@ QStringList HWNamegen::dictContents(const QString filename)
     QStringList list;
 
     // find .txt to load the names from
-    QFile * file = HWDataManager::instance().findFileForRead(QString(
-                                                "Names/%1.txt").arg(filename));
+    QFile * file = new QFile(HWDataManager::instance().findFileForRead(QString(
+                                                "Names/%1.txt").arg(filename)));
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -154,8 +154,8 @@ QStringList HWNamegen::dictsForHat(const QString hatname)
     QStringList list;
 
     // find .cfg to load the dicts from
-    QFile * file = HWDataManager::instance().findFileForRead(QString(
-                                                "Names/%1.cfg").arg(hatname));
+    QFile * file = new QFile(HWDataManager::instance().findFileForRead(QString(
+                                                "Names/%1.cfg").arg(hatname)));
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -183,8 +183,8 @@ bool HWNamegen::loadTypes()
     typesAvailable = false;
 
     // find .ini to load the names from
-    QFile * file =
-          HWDataManager::instance().findFileForRead(QString("Names/types.ini"));
+    QFile * file = new QFile(
+        HWDataManager::instance().findFileForRead(QString("Names/types.ini")));
 
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))

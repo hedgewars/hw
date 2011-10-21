@@ -50,7 +50,7 @@ SDLInteraction::SDLInteraction()
         addGameControllerKeys();
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
 
-    soundMap = new QMap<QString,Mix_Chunk*>();
+    m_soundMap = new QMap<QString,Mix_Chunk*>();
 }
 
 
@@ -65,7 +65,7 @@ SDLInteraction::~SDLInteraction()
     }
     SDL_Quit();
 
-    delete soundMap;
+    delete m_soundMap;
 }
 
 
@@ -184,10 +184,10 @@ void SDLInteraction::SDLAudioInit()
 void SDLInteraction::playSoundFile(const QString & soundFile)
 {
     SDLAudioInit();
-    if (!soundMap->contains(soundFile))
-        soundMap->insert(soundFile, Mix_LoadWAV(soundFile.toLocal8Bit().constData()));
+    if (!m_soundMap->contains(soundFile))
+        m_soundMap->insert(soundFile, Mix_LoadWAV(soundFile.toLocal8Bit().constData()));
 
-    Mix_PlayChannel(-1, soundMap->value(soundFile), 0);
+    Mix_PlayChannel(-1, m_soundMap->value(soundFile), 0);
 }
 
 

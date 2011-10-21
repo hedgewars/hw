@@ -75,17 +75,15 @@ QStringList HWDataManager::entryList(
 }
 
 
-QFile * HWDataManager::findFileForRead(
+QString HWDataManager::findFileForRead(
                                 const QString & relativeDataFilePath) const
 {
-    QFile * file =
-            new QFile(userData->absolutePath()+"/"+relativeDataFilePath);
-    if (!file->exists())
-    {
-        delete file;
-        file = new QFile(defaultData->absolutePath()+"/"+relativeDataFilePath);
-    }
-    return file;
+    QString path = userData->absolutePath()+"/"+relativeDataFilePath;
+
+    if (!QFile::exists(path))
+        path = defaultData->absolutePath()+"/"+relativeDataFilePath;
+
+    return path;
 }
 
 

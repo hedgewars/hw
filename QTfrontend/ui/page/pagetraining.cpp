@@ -123,32 +123,25 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     if (loc.isEmpty())
         loc = QLocale::system().name();
 
-    QFile * infoFile = HWDataManager::instance().findFileForRead(
-                                    QString("Locale/missions_" + loc + ".txt"));
+    QString infoFile = HWDataManager::instance().findFileForRead(
+                            QString("Locale/missions_" + loc + ".txt"));
 
     // if file is non-existant try with language only
-    if (!infoFile->exists())
-    {
-        delete infoFile;
+    if (!QFile::exists(infoFile))
         infoFile = HWDataManager::instance().findFileForRead(QString(
                 "Locale/missions_" + loc.remove(QRegExp("_.*$")) + ".txt"));
-    }
 
     // fallback if file for current locale is non-existant
-    if (!infoFile->exists())
+    if (!QFile::exists(infoFile))
     {
-        delete infoFile;
         infoFile = HWDataManager::instance().findFileForRead(
                                             QString("Locale/missions_en.txt"));
     }
 
 
     // preload mission info for current locale
-    m_info =
-        new QSettings(infoFile->fileName(), QSettings::IniFormat, this);
+    m_info = new QSettings(infoFile, QSettings::IniFormat, this);
 
-    // this QFile isn't needed any further
-    delete infoFile;
 
     QStringList missionList =
             HWDataManager::instance().entryList(

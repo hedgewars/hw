@@ -406,25 +406,21 @@ int main(int argc, char *argv[]) {
         themes.sort();
         for(int i = themes.size() - 1; i >= 0; --i)
         {
-            QFile * tmpfile =
-            HWDataManager::instance().findFileForRead(
-                                QString("Themes/%1/icon.png").arg(themes.at(i))
-                            );
+            QString file = HWDataManager::instance().findFileForRead(
+                QString("Themes/%1/icon.png").arg(themes.at(i))
+            );
 
-            if(tmpfile->exists())
+            if(QFile::exists(file))
             { // load icon
                 QPair<QIcon, QIcon> ic;
-                ic.first = QIcon(tmpfile->fileName());
+                ic.first = QIcon(file);
 
-                QFile * previewIconFile =
+                // load preview icon
+                ic.second = QIcon(
                     HWDataManager::instance().findFileForRead(
-                            QString("Themes/%1/icon@2x.png").arg(themes.at(i))
-                        );
-
-                ic.second = QIcon(previewIconFile->fileName());
-
-                // this QFile is not needed any further
-                delete previewIconFile;
+                        QString("Themes/%1/icon@2x.png").arg(themes.at(i))
+                    )
+                );
 
                 icons.prepend(ic);
             }
@@ -432,9 +428,6 @@ int main(int argc, char *argv[]) {
             {
                 themes.removeAt(i);
             }
-
-            // this QFile is not needed any further
-            delete tmpfile;
         }
 
         themesModel = new ThemesModel(themes);
@@ -465,9 +458,13 @@ int main(int argc, char *argv[]) {
         QString cc = settings.value("misc/locale", QString()).toString();
         if(cc.isEmpty())
             cc = QLocale::system().name();
-        QFile * tmpfile = HWDataManager::instance().findFileForRead(
-                                            QString("Locale/hedgewars_" + cc));
-        Translator.load(tmpfile->fileName());
+
+        // load locale file into translator
+        Translator.load(
+            HWDataManager::instance().findFileForRead(
+                QString("Locale/hedgewars_" + cc)
+            )
+        );
         app.installTranslator(&Translator);
     }
 

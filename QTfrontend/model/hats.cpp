@@ -28,12 +28,9 @@
 HatsModel::HatsModel(QObject* parent) :
   QAbstractListModel(parent)
 {
-    QFile * hhfile =
-        HWDataManager::instance().findFileForRead("Graphics/Hedgehog/Idle.png");
-    QPixmap hhpix = QPixmap(hhfile->fileName()).copy(0, 0, 32, 32);
-
-    // this QFile is not needed any further
-    delete hhfile;
+    QPixmap hhpix = QPixmap(
+        HWDataManager::instance().findFileForRead("Graphics/Hedgehog/Idle.png")
+    ).copy(0, 0, 32, 32);
 
     // my reserved hats
     QStringList hatsList = HWDataManager::instance().entryList(
@@ -61,15 +58,12 @@ HatsModel::HatsModel(QObject* parent) :
 
         QString str = hatsList.at(i);
         str = str.remove(QRegExp("\\.png$"));
-        QFile * hatFile = HWDataManager::instance().findFileForRead(
-                                            "Graphics/Hats/" + 
-                                            QString(isReserved?"Reserved/":"") +
-                                            str + ".png"
-                                        );
-        QPixmap pix(hatFile->fileName());
-
-        // this QFile isn't needed any further
-        delete hatFile;
+        QPixmap pix(
+            HWDataManager::instance().findFileForRead(
+                "Graphics/Hats/" + QString(isReserved?"Reserved/":"") + str + 
+                ".png"
+            )
+        );
 
         // rename properly
         if (isReserved)

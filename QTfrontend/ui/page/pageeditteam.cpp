@@ -404,25 +404,20 @@ void PageEditTeam::testSound()
 
     QStringList list = HWDataManager::instance().entryList(
             voiceDir,
-            QDir::Files/*,
+            QDir::Files,
             QStringList() <<
                 "Illgetyou.ogg" <<
                 "Incoming.ogg" <<
                 "Stupid.ogg" <<
                 "Coward.ogg" <<
-                "Firstblood.ogg"*/
+                "Firstblood.ogg"
             );
 
-    if (list.size())
-    {
-        QFile * tmpFile = HWDataManager::instance().findFileForRead(
-                                voiceDir + "/" + list[rand() % list.size()]);
-
-        SDLInteraction::instance().playSoundFile(tmpFile->fileName());
-
-        // this QFile isn't needed any further
-        delete tmpFile;
-    }
+    if (!list.isEmpty())
+        SDLInteraction::instance().playSoundFile(
+            HWDataManager::instance().findFileForRead(voiceDir + "/" +
+                list[rand() % list.size()])
+        );
 }
 
 void PageEditTeam::createTeam(const QString & name, const QString & playerHash)

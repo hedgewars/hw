@@ -63,15 +63,14 @@ public:
                          ) const;
 
     /**
-     * @brief Creates a file object for the desired data path and
-     * returns a pointer to it.
+     * @brief Returns path for the desires data file.
      * 
      * Use this method if you want to read an existing data file.
      * 
-     * @param relativeDataFilePath path to the data file.
-     * @return respective <code>QFile</code> pointer, the file may not exist.
+     * @param relativeDataFilePath relative path of the data file.
+     * @return real path to the file.
      */
-    QFile * findFileForRead(const QString & relativeDataFilePath) const;
+    QString findFileForRead(const QString & relativeDataFilePath) const;
 
 
     /**

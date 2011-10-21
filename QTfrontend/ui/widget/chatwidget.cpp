@@ -122,15 +122,9 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 {
     this->gameSettings = gameSettings;
     this->notify = notify;
-    if(notify && gameSettings->value("frontend/sound", true).toBool()) {
-        QFile * tmpFile = HWDataManager::instance().findFileForRead(
-                                            "Sounds/voices/Classic/Hello.ogg");
-
-        helloSound = tmpFile->fileName();
-
-        // this QFile isn't needed any further
-        delete tmpFile;
-    }
+    if(notify && gameSettings->value("frontend/sound", true).toBool())
+        helloSound = HWDataManager::instance().findFileForRead(
+                        "Sounds/voices/Classic/Hello.ogg");
 
     mainLayout.setSpacing(1);
     mainLayout.setMargin(1);
