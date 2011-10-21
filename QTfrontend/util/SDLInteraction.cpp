@@ -20,8 +20,6 @@
 #include "SDL.h"
 #include "SDL_mixer.h"
 
-#include "HWDataManager.h"
-
 #include "HWApplication.h"
 
 #include "SDLInteraction.h"
@@ -44,8 +42,10 @@ SDLInteraction::SDLInteraction()
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
 
-    musicInitialized = 0;
-    music = NULL;
+    m_audioInitialized = false;
+    m_music = NULL;
+    m_musicTrack = "";
+    m_isPlayingMusic = false;
     if(SDL_NumJoysticks())
         addGameControllerKeys();
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
@@ -53,18 +53,21 @@ SDLInteraction::SDLInteraction()
     soundMap = new QMap<QString,Mix_Chunk*>();
 }
 
+
 SDLInteraction::~SDLInteraction()
 {
     stopMusic();
-    if (musicInitialized == 1) {
-        if (music != NULL)
-            Mix_FreeMusic(music);
+    if (m_audioInitialized)
+    {
+        if (m_music != NULL)
+            Mix_FreeMusic(m_music);
         Mix_CloseAudio();
     }
     SDL_Quit();
 
     delete soundMap;
 }
+
 
 QStringList SDLInteraction::getResolutions() const
 {
@@ -86,6 +89,7 @@ QStringList SDLInteraction::getResolutions() const
 
     return result;
 }
+
 
 void SDLInteraction::addGameControllerKeys() const
 {
@@ -164,46 +168,77 @@ void SDLInteraction::addGameControllerKeys() const
     sdlkeys[i][1][0] = '\0';
 }
 
-void SDLInteraction::SDLSoundInit()
+
+void SDLInteraction::SDLAudioInit()
 {
-    if (musicInitialized == 0) {
-        SDL_Init(SDL_INIT_AUDIO);
-        Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
-        musicInitialized = 1;
-    }
+    // don't init again
+    if (m_audioInitialized)
+        return;
+
+    SDL_Init(SDL_INIT_AUDIO);
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
+    m_audioInitialized = true;
 }
+
 
 void SDLInteraction::playSoundFile(const QString & soundFile)
 {
-    SDLSoundInit();
+    SDLAudioInit();
     if (!soundMap->contains(soundFile))
         soundMap->insert(soundFile, Mix_LoadWAV(soundFile.toLocal8Bit().constData()));
 
     Mix_PlayChannel(-1, soundMap->value(soundFile), 0);
 }
 
+
+void SDLInteraction::setMusicTrack(const QString & musicFile)
+{
+    bool wasPlayingMusic = m_isPlayingMusic;
+
+    stopMusic();
+
+    if (m_music != NULL)
+    {
+        Mix_FreeMusic(m_music);
+        m_music = NULL;
+    }
+
+    m_musicTrack = musicFile;
+
+    if (wasPlayingMusic)
+        startMusic();
+}
+
+
 void SDLInteraction::startMusic()
 {
-    SDLSoundInit();
-    QFile * tmpFile = HWDataManager::instance().findFileForRead("Music/main_theme.ogg");
+    if (m_isPlayingMusic)
+        return;
 
-    if (music == NULL)
-        music = Mix_LoadMUS(tmpFile->fileName().toLocal8Bit().constData());
+    m_isPlayingMusic = true;
 
-    // this QFile isn't needed any further
-    delete tmpFile;
+    if (m_musicTrack.isEmpty())
+        return;
+
+    SDLAudioInit();
+
+    if (m_music == NULL)
+        m_music = Mix_LoadMUS(m_musicTrack.toLocal8Bit().constData());
 
     Mix_VolumeMusic(MIX_MAX_VOLUME - 28);
-    Mix_FadeInMusic(music, -1, 1750);
+    Mix_FadeInMusic(m_music, -1, 1750);
 }
+
 
 void SDLInteraction::stopMusic()
 {
-    if (music != NULL) {
+    if (m_isPlayingMusic && (m_music != NULL)) {
         // fade out music to finish 0,5 seconds from now
         while(!Mix_FadeOutMusic(1000) && Mix_PlayingMusic()) {
             SDL_Delay(100);
         }
     }
+
+    m_isPlayingMusic = false;
 }
 

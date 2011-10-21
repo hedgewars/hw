@@ -98,6 +98,15 @@ QString playerHash;
 HWForm::HWForm(QWidget *parent, QString styleSheet)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
 {
+    // set music track
+    QFile * tmpFile =
+            HWDataManager::instance().findFileForRead("Music/main_theme.ogg");
+
+    SDLInteraction::instance().setMusicTrack(tmpFile->fileName());
+
+    // this QFile isn't needed any further
+    delete tmpFile;
+
 #ifdef USE_XFIRE
     xfire_init();
 #endif

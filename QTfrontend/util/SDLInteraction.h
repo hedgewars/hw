@@ -45,19 +45,22 @@ private:
     SDLInteraction();
 
     /// Initializes SDL for sound output if needed.
-    void SDLSoundInit();
+    void SDLAudioInit();
 
-    Mix_Music *music;
-    int musicInitialized;
+    bool m_audioInitialized; ///< true if audio is initialized already
+    Mix_Music * m_music; ///< pointer to the music channel of the mixer
+    QString m_musicTrack; ///< path to the music track;
+    bool m_isPlayingMusic; ///< true if music was started but not stopped again.
 
-    QMap<QString,Mix_Chunk*> * soundMap; ///< maps sound file paths to channel
+
+    QMap<QString,Mix_Chunk*> * soundMap; ///< maps sound file paths to channels
 
 public:
     /**
      * @brief Returns reference to the <i>singleton</i> instance of this class.
-     * 
+     *
      * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
-     * 
+     *
      * @return reference to the instance.
      */
     static SDLInteraction & instance();
@@ -77,15 +80,22 @@ public:
 
     /**
      * @brief Plays a sound file.
-     * 
+     *
      * @param soundFile path of the sound file.
      */
     void playSoundFile(const QString & soundFile);
 
-    /// Starts the background music.
+    /**
+     * @brief Sets the music track to be played (or not).
+     *
+     * @param soundFile path of the music file.
+     */
+    void setMusicTrack(const QString & musicFile);
+
+    /// Starts the background music if not already playing.
     void startMusic();
 
-    /// Fades out and stops the background music.
+    /// Fades out and stops the background music (if playing).
     void stopMusic();
 };
 
