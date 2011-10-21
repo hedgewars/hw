@@ -41,11 +41,6 @@ QLayout * PageMain::bodyLayoutDefinition()
     pageLayout->setRowStretch(3, 1);
     pageLayout->setRowStretch(4, 1);
 
-    //BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, true);
-    BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
-    BtnInfo->setStyleSheet("border: transparent;background: transparent;");
-    pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
-
     BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, true);
     BtnSinglePlayer->setToolTip(tr("Local Game (Play a game on a single computer)"));
     pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
@@ -53,6 +48,11 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
     BtnNet->setToolTip(tr("Network Game (Play a game across a network)"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
+
+    // button order matters for overlapping (what's on top and what isn't)
+    BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
+    BtnInfo->setStyleSheet("border: transparent;background: transparent;");
+    pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
     BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 4, 0, 1, 4, false);
     pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
