@@ -77,6 +77,8 @@ QLayout * PageNetGame::footerLayoutDefinition()
 
     bottomLayout->addWidget(leRoomName);
     BtnUpdate = addButton(QAction::tr("Update"), bottomLayout, 1, false);
+
+    bottomLayout->addStretch();
     bottomLayout->addWidget(BtnGo);
 
     BtnMaster = addButton(tr("Control"), bottomLayout, 3);
