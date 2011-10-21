@@ -140,7 +140,26 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     mainLayout.addWidget(chatEditLine, 2, 0);
 
     chatText = new QTextBrowser(this);
-    chatText->document()->setDefaultStyleSheet(STYLE);
+
+    // load external stylesheet if there is any
+    QFile * file =
+        new QFile(HWDataManager::instance().findFileForRead("css/chat.css"));
+
+    if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QString style = "";
+        QTextStream in(file);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            if(!line.isEmpty())
+                style.append(line);
+        }
+        chatText->document()->setDefaultStyleSheet(style);
+    }
+    else
+        chatText->document()->setDefaultStyleSheet(STYLE);
+
     chatText->setMinimumHeight(20);
     chatText->setMinimumWidth(10);
     chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

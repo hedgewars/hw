@@ -483,7 +483,7 @@ int main(int argc, char *argv[]) {
 #endif
     // load external stylesheet if there is any
     QFile * file =
-        new QFile(HWDataManager::instance().findFileForRead("misc/qt_style.css"));
+        new QFile(HWDataManager::instance().findFileForRead("css/qt.css"));
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
