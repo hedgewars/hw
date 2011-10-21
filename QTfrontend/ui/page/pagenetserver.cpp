@@ -74,9 +74,8 @@ QLayout * PageNetServer::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout();
 
-    BtnStart = new QPushButton(this);
-    BtnStart->setFont(*font14);
-    BtnStart->setText(QPushButton::tr("Start"));
+    BtnStart = formattedButton(QPushButton::tr("Start"));
+    BtnStart->setMinimumWidth(180);
 
     bottomLayout->addStretch();
     bottomLayout->addWidget(BtnStart);

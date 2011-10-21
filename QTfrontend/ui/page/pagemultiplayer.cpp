@@ -21,6 +21,7 @@
  * @brief PageMultiplayer class implementation
  */
 
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QPushButton>
 

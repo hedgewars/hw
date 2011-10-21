@@ -42,6 +42,7 @@ signals:
 
 private:
     QLayout * bodyLayoutDefinition();
+    QLayout * footerLayoutDefinition();
     void connectSignals();
 
     QGroupBox * ConnGroupBox;

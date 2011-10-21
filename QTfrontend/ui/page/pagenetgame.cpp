@@ -17,6 +17,7 @@
  */
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QAction>
 #include <QMenu>

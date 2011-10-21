@@ -17,6 +17,7 @@
  */
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QTableView>
@@ -34,12 +35,6 @@ QLayout * PageNet::bodyLayoutDefinition()
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 1);
     pageLayout->setColumnStretch(2, 1);
-
-    BtnNetSvrStart = new QPushButton(this);
-    BtnNetSvrStart->setFont(*font14);
-    BtnNetSvrStart->setText(QPushButton::tr("Start server"));
-    BtnNetSvrStart->setVisible(haveServer);
-    pageLayout->addWidget(BtnNetSvrStart, 4, 2);
 
     ConnGroupBox = new QGroupBox(this);
     ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
@@ -69,6 +64,20 @@ QLayout * PageNet::bodyLayoutDefinition()
     GBClayout->addWidget(BtnSpecifyServer, 2, 1);
 
     return pageLayout;
+}
+
+QLayout * PageNet::footerLayoutDefinition()
+{
+    QHBoxLayout * footerLayout = new QHBoxLayout();
+
+    BtnNetSvrStart = formattedButton(QPushButton::tr("Start server"));
+    BtnNetSvrStart->setMinimumWidth(180);
+    BtnNetSvrStart->setVisible(haveServer);
+
+    footerLayout->addStretch();
+    footerLayout->addWidget(BtnNetSvrStart);
+
+    return footerLayout;
 }
 
 void PageNet::connectSignals()
