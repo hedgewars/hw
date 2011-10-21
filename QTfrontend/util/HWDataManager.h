@@ -18,7 +18,7 @@
  */
 
 /**
- * @file  HWDataManager.h
+ * @file
  * @brief HWDataManager class definition
  */
 

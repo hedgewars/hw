@@ -15,8 +15,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
- 
-#include <QGridLayout>
+
+/**
+ * @file
+ * @brief PageMultiplayer class implementation
+ */
+
+#include <QHBoxLayout>
 #include <QPushButton>
 
 #include "pagemultiplayer.h"
@@ -39,9 +44,20 @@ QLayout * PageMultiplayer::bodyLayoutDefinition()
     teamsSelect = new TeamSelWidget(this);
     pageLayout->addWidget(teamsSelect, 0, 2, 3, 2);
 
-    BtnStartMPGame = addButton(tr("Start"), pageLayout, 3, 3);
-
     return pageLayout;
+}
+
+QLayout * PageMultiplayer::footerLayoutDefinition()
+{
+    QHBoxLayout * footerLayout = new QHBoxLayout();
+
+    BtnStartMPGame = formattedButton(tr("Start"));
+    BtnStartMPGame->setMinimumWidth(180);
+
+    footerLayout->addStretch();
+    footerLayout->addWidget(BtnStartMPGame);
+
+    return footerLayout;
 }
 
 void PageMultiplayer::connectSignals()

@@ -18,7 +18,7 @@
  */
 
 /**
- * @file  HistoryLineEdit.cpp
+ * @file
  * @brief HistoryLineEdit class implementation
  */
 

@@ -18,7 +18,7 @@
  */
 
 /**
- * @file  SmartLineEdit.h
+ * @file
  * @brief SmartLineEdit class definition
  */
 

@@ -17,7 +17,7 @@
  */
 
 /**
- * @file  SDLInteraction.cpp
+ * @file
  * @brief SDLInteraction class implementation
  */
 

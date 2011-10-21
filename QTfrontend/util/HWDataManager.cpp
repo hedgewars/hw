@@ -18,7 +18,7 @@
  */
 
 /**
- * @file  HWDataManager.cpp
+ * @file
  * @brief HWDataManager class implementation
  */
 

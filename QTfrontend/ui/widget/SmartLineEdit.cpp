@@ -18,7 +18,7 @@
  */
 
 /**
- * @file  SmartLineEdit.cpp
+ * @file
  * @brief SmartLineEdit class implementation
  */
 

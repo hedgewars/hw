@@ -18,7 +18,7 @@
  */
 
 /**
- * @file  HistoryLineEdit.h
+ * @file
  * @brief HistoryLineEdit class definition
  */
 

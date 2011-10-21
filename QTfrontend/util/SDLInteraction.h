@@ -17,7 +17,7 @@
  */
 
 /**
- * @file  SDLInteraction.h
+ * @file
  * @brief SDLInteraction class definition
  */
 
