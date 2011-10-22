@@ -25,9 +25,13 @@
 #ifndef HEDGEWARS_SMARTLINEEDIT_H
 #define HEDGEWARS_SMARTLINEEDIT_H
 
+#include <QMap>
+#include <QString>
 #include <QStringList>
 
 #include <QEvent>
+#include <QKeyEvent>
+
 #include <QRegExp>
 
 #include "HistoryLineEdit.h"
@@ -57,6 +61,11 @@ public:
     * @param maxHistorySize maximum amount of history entries kept.
     */
     SmartLineEdit(QWidget * parent = 0, int maxHistorySize = 64);
+
+    /**
+    * @brief Class destructor.
+    */
+    ~SmartLineEdit();
 
     /**
      * @brief Adds commands to the auto-completion feature.
@@ -116,6 +125,8 @@ private:
 
     QStringList * m_cmds;  ///< list of recognized commands
     QStringList * m_nicks; ///< list of recognized nicknames
+    /// list of recognized commands, sorted case-insensitive
+    QMap<QString, QString> * m_sorted_nicks;
 
     // these variables contain information about the last replacement
     // they get reset whenever cursor is moved or text is changed

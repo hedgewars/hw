@@ -35,6 +35,12 @@ HistoryLineEdit::HistoryLineEdit(QWidget * parent, int maxHistorySize)
 }
 
 
+HistoryLineEdit::~HistoryLineEdit()
+{
+    delete m_history;
+}
+
+
 void HistoryLineEdit::rememberCurrentText()
 {
     m_historyMutex.lock();

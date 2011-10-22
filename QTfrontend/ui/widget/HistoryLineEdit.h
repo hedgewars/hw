@@ -25,8 +25,10 @@
 #ifndef HEDGEWARS_HISTORYLINEEDIT
 #define HEDGEWARS_HISTORYLINEEDIT
 
-#include <QLineEdit>
+#include <QStringList>
 #include <QString>
+
+#include <QLineEdit>
 
 #include <QKeyEvent>
 
@@ -54,6 +56,11 @@ public:
     * @param maxHistorySize maximum amount of history entries kept.
     */
     HistoryLineEdit(QWidget * parent = 0, int maxHistorySize = 64);
+
+    /**
+    * @brief Class destructor.
+    */
+    ~HistoryLineEdit();
 
     /**
      * @brief Appends current text to history (if not only whitespaces);

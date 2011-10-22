@@ -31,6 +31,7 @@ SmartLineEdit::SmartLineEdit(QWidget * parent, int maxHistorySize)
 
     m_cmds  = new QStringList();
     m_nicks = new QStringList();
+    m_sorted_nicks = new QMap<QString, QString>();
 
     resetAutoCompletionStatus();
 
@@ -39,6 +40,14 @@ SmartLineEdit::SmartLineEdit(QWidget * parent, int maxHistorySize)
             this, SLOT(resetAutoCompletionStatus()));
     connect(this, SIGNAL(textChanged(const QString&)),
             this, SLOT(resetAutoCompletionStatus()));
+}
+
+
+SmartLineEdit::~SmartLineEdit()
+{
+    delete m_cmds;
+    delete m_nicks;
+    delete m_sorted_nicks;
 }
 
 
@@ -69,6 +78,7 @@ void SmartLineEdit::addNickname(const QString & name)
 {
     m_keywordMutex.lock();
 
+    m_sorted_nicks->insert(name.toLower(), name);
     m_nicks->append(name);
 
     m_keywordMutex.unlock();
@@ -79,6 +89,7 @@ void SmartLineEdit::removeNickname(const QString & name)
 {
     m_keywordMutex.lock();
 
+    m_sorted_nicks->remove(name.toLower());
     m_nicks->removeAll(name);
 
     m_keywordMutex.unlock();
@@ -91,6 +102,7 @@ void SmartLineEdit::reset()
     m_keywordMutex.lock();
 
     m_cmds->clear();
+    m_sorted_nicks->clear();
     m_nicks->clear();
     resetAutoCompletionStatus();
 
@@ -163,7 +175,7 @@ void SmartLineEdit::autoComplete()
     {
         m_keywordMutex.lock();
         m_cmds->sort();
-        m_nicks->sort();
+        m_nicks = new QStringList(m_sorted_nicks->values());
         m_keywordMutex.unlock();
 
         int cp = cursorPosition();
