@@ -19,7 +19,7 @@ a { color:#c8c8ff; }
 .msg_FriendChat .nick { color: #20ff20; }
 .msg_UserJoin { color: #c0c0c0; }
 .msg_UserJoin .nick { color: #d0d0d0; }
-.msg_FriendJoin { color: #c0f0c0; }
+.msg_FriendJoin { font-weight: bold; color: #c0f0c0; }
 .msg_FriendJoin .nick { color: #d8f0d8; }
 .msg_UserAction { color: #ff80ff; }
 .msg_UserAction .nick { color: #ffa0ff;}

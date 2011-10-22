@@ -173,7 +173,7 @@ QString & HWChatWidget::styleSheet()
 
 void HWChatWidget::displayError(const QString & message)
 {
-    addLine("msg_Error", message);
+    addLine("msg_Error", " !!! " + message);
     // scroll to the end
     chatText->moveCursor(QTextCursor::End);
 }
@@ -181,13 +181,13 @@ void HWChatWidget::displayError(const QString & message)
 
 void HWChatWidget::displayNotice(const QString & message)
 {
-    addLine("msg_Notice", message);
+    addLine("msg_Notice", " *** " + message);
 }
 
 
 void HWChatWidget::displayWarning(const QString & message)
 {
-    addLine("msg_Warning", message);
+    addLine("msg_Warning", " *!* " + message);
 }
 
 
@@ -559,7 +559,7 @@ void HWChatWidget::onIgnore()
     {
         ignoreList.removeAll(curritem->text().toLower());
         chatEditLine->addNickname(curritem->text());
-        onChatString(HWChatWidget::tr("%1 *** %2 has been removed from your ignore list").arg('\x03').arg(curritem->text()));
+        displayNotice(tr("%1 has been removed from your ignore list").arg(curritem->text()));
     }
     else // not on list - add
     {
@@ -573,7 +573,7 @@ void HWChatWidget::onIgnore()
 
         ignoreList << curritem->text().toLower();
         chatEditLine->removeNickname(curritem->text());
-        onChatString(HWChatWidget::tr("%1 *** %2 has been added to your ignore list").arg('\x03').arg(curritem->text()));
+        displayNotice(tr("%1 has been added to your ignore list").arg(curritem->text()));
     }
     updateNickItem(curritem); // update icon/sort order/etc
     chatNicks->sortItems();
@@ -589,7 +589,7 @@ void HWChatWidget::onFriend()
     if(friendsList.contains(curritem->text(), Qt::CaseInsensitive)) // already on list - remove him
     {
         friendsList.removeAll(curritem->text().toLower());
-        onChatString(HWChatWidget::tr("%1 *** %2 has been removed from your friends list").arg('\x03').arg(curritem->text()));
+        displayNotice(tr("%1 has been removed from your friends list").arg(curritem->text()));
     }
     else // not on list - add
     {
@@ -602,7 +602,7 @@ void HWChatWidget::onFriend()
             chatNicks->scrollToTop();
 
         friendsList << curritem->text().toLower();
-        onChatString(HWChatWidget::tr("%1 *** %2 has been added to your friends list").arg('\x03').arg(curritem->text()));
+        displayNotice(tr("%1 has been added to your friends list").arg(curritem->text()));
     }
     updateNickItem(curritem); // update icon/sort order/etc
     chatNicks->sortItems();
