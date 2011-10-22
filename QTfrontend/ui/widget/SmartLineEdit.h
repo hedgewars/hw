@@ -125,7 +125,8 @@ private:
 
     QStringList * m_cmds;  ///< list of recognized commands
     QStringList * m_nicks; ///< list of recognized nicknames
-    /// list of recognized commands, sorted case-insensitive
+
+    /// recognized nicknames, sorted case-insensitive
     QMap<QString, QString> * m_sorted_nicks;
 
     // these variables contain information about the last replacement
