@@ -52,6 +52,16 @@ private:
   bool isIgnored;
 };
 
+
+/**
+ * @brief A chat widget.
+ *
+ * By default uses :res/css/chat.css as style sheet for chat.
+ * See \repo{res/css/chat.css} for a more detailed description.
+ *
+ * @see http://doc.qt.nokia.com/4.5/richtext-html-subset.html#css-properties
+ */
+
 class HWChatWidget : public QWidget
 {
   Q_OBJECT

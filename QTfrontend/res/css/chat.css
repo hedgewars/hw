@@ -1,10 +1,25 @@
-/*
+/******************************************************************************
+ *
+ * CSS-like definition of chat appearance
+ *
+ ******************************************************************************
+ *
  * see http://doc.qt.nokia.com/4.5/richtext-html-subset.html#css-properties
  *
  * In the QTfrontend of hedgewars also display:none; will work for class names
  * that start with msg_   -   as long as they are referenced directly and not
  * within any hierachy.
- */
+ *
+ ******************************************************************************
+ *
+ * This file can be stored at different locations, but it will be read only
+ * once, based on first file found in this order:
+ *
+ *     <userdir>/Data/css/chat.css
+ *     <datadir>/css/chat.css
+ *     <internal default style-sheet>
+ *
+ *****************************************************************************/
 
 /* links */
 a { color:#c8c8ff; }

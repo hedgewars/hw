@@ -1,3 +1,22 @@
+/******************************************************************************
+ *
+ * CSS-like definition of Qt frontend appearance
+ *
+ ******************************************************************************
+ *
+ * see http://doc.qt.nokia.com/4.5/stylesheet.html
+ *
+ ******************************************************************************
+ *
+ * This file can be stored at different locations, but it will be read only
+ * once, based on first file found in this order:
+ *
+ *     <userdir>/Data/css/qt.css
+ *     <datadir>/css/qt.css
+ *     <internal default style-sheet> (:/res/css/qt.css)
+ *
+ *****************************************************************************/
+
 HWForm,QDialog {
 background-image: url(":/res/Background.png");
 background-position: bottom center;
@@ -224,3 +243,4 @@ border-radius: 3px;
 background-color: #ffcc00;
 width: 8px;
 }
+
