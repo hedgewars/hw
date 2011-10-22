@@ -64,7 +64,8 @@ QLayout * PageAdmin::bodyLayoutDefinition()
 
     tb = new QTextBrowser(this);
     tb->setOpenExternalLinks(true);
-    tb->document()->setDefaultStyleSheet(HWChatWidget::STYLE);
+    // TODO this work-around to apply chat css to preview won't work anymore
+    // tb->document()->setDefaultStyleSheet(HWChatWidget::STYLE);
     pageLayout->addWidget(tb, 4, 1, 1, 2);
     
     // 5

@@ -1,0 +1,21 @@
+/*
+ * see http://doc.qt.nokia.com/4.5/richtext-html-subset.html#css-properties
+ */
+
+a { color:#c8c8ff; }
+.nick { text-decoration: none; }
+.UserChat {  }
+.UserChat .nick { color:#ffec20; }
+.FriendChat { color: #08e008; }
+.FriendChat .nick { color: #20ff20; }
+.UserJoin { color: #c0c0c0; }
+.UserJoin .nick { color: #d0d0d0; }
+.FriendJoin { color: #c0e0c0; }
+.FriendJoin .nick { color: #d0f0d0; }
+.UserAction { color: #ff80ff; }
+.UserAction .nick { color: #ffa0ff; }
+.FriendAction { color: #ff00ff; }
+.FriendAction .nick { color: #ff30ff; }
+.Error { color: #ff0000 }
+.Warning { color: #ff8000 }
+.Notice { color: #fefefe }

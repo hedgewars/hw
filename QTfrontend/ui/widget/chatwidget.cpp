@@ -96,25 +96,6 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
     return firstIsShorter;
 }
 
-const char* HWChatWidget::STYLE = 
-"\
-a { color:#c8c8ff; }\
-.nick { text-decoration: none; }\
-.UserChat .nick { color:#ffec20; }\
-.FriendChat { color: #08e008; }\
-.FriendChat .nick { color: #20ff20; }\
-.UserJoin { color: #c0c0c0; }\
-.UserJoin .nick { color: #d0d0d0; }\
-.FriendJoin { color: #c0e0c0; }\
-.FriendJoin .nick { color: #d0f0d0; }\
-.UserAction { color: #ff80ff; }\
-.UserAction .nick { color: #ffa0ff; }\
-.FriendAction { color: #ff00ff; }\
-.FriendAction .nick { color: #ff30ff; }\
-.Error { color: #ff0000 }\
-.Warning { color: #ff8000 }\
-.Notice { color: #fefefe }\
-";
 
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify) :
   QWidget(parent),
@@ -141,24 +122,27 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 
     chatText = new QTextBrowser(this);
 
-    // load external stylesheet if there is any
-    QFile * file =
-        new QFile(HWDataManager::instance().findFileForRead("css/chat.css"));
+    QString style;
 
-    if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
+    // load external stylesheet if there is any
+    QFile extFile(HWDataManager::instance().findFileForRead("css/chat.css"));
+
+    QFile resFile(":/res/css/chat.css");
+
+    QFile & file = (extFile.exists()?extFile:resFile);
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QString style = "";
-        QTextStream in(file);
+        QTextStream in(&file);
         while (!in.atEnd())
         {
             QString line = in.readLine();
             if(!line.isEmpty())
                 style.append(line);
         }
-        chatText->document()->setDefaultStyleSheet(style);
     }
-    else
-        chatText->document()->setDefaultStyleSheet(STYLE);
+
+    chatText->document()->setDefaultStyleSheet(style);
 
     chatText->setMinimumHeight(20);
     chatText->setMinimumWidth(10);
@@ -207,6 +191,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     showReady = false;
     setShowFollow(true);
 }
+
 
 void HWChatWidget::linkClicked(const QUrl & link)
 {
