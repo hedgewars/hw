@@ -76,7 +76,7 @@ private:
   void saveList(QStringList & list, const QString & file);
   void updateNickItem(QListWidgetItem *item);
   void updateNickItems();
-  void addLine(const QString & cssClass, QString line);
+  void addLine(const QString & cssClass, QString line, bool isHighlight = false);
   static const QRegExp URLREGEXP;
 
  public slots:
@@ -110,7 +110,9 @@ private:
   QAction * acIgnore;
   QAction * acFriend;
   QSettings * gameSettings;
-  QString helloSound;
+  QString m_helloSound;
+  QString m_hilightSound;
+  QString m_userNick;
   bool notify;
   bool showReady;
 

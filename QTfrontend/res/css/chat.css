@@ -2,21 +2,22 @@
  * see http://doc.qt.nokia.com/4.5/richtext-html-subset.html#css-properties
  *
  * In the QTfrontend of hedgewars also display:none; will work for class names
- * that start with msg_ - as long as they are referenced directly and not
+ * that start with msg_   -   as long as they are referenced directly and not
  * within any hierachy.
  */
 
 /* links */
 a { color:#c8c8ff; }
 
+
 /* nick names (they are also sometimes linked) */
 .nick { text-decoration: none; }
 
 /* various chat messages */
-.msg_UserChat { }
+.msg_UserChat { color:#ffcc00; } /* chat of people who aren't your friends */
 .msg_UserChat .nick { color:#ffec20; }
-.msg_FriendChat { color: #08e008; }
-.msg_FriendChat .nick { color: #20ff20; }
+.msg_FriendChat { color: #b0ff08; }
+.msg_FriendChat .nick { color: #30ff30; }
 .msg_UserJoin { color: #c0c0c0; }
 .msg_UserJoin .nick { color: #d0d0d0; }
 .msg_FriendJoin { font-weight: bold; color: #c0f0c0; }
@@ -25,10 +26,16 @@ a { color:#c8c8ff; }
 .msg_UserAction .nick { color: #ffa0ff;}
 .msg_FriendAction { color: #ff00ff; }
 .msg_FriendAction .nick { color: #ff30ff; }
+
+/* messages that contain your nickname */
+.highlight {  }
+.highlight .nick { color: red; } /* nicknames in highlighted messages */
+
 /* uncomment next line to disable join and leave messages of non-friends */
 /* .msg_UserJoin { display:none; } */
 
-/* frontend messages */
+/* system messages */
 .msg_Error { color: #ff0000; }
 .msg_Warning { color: #ff8000; }
 .msg_Notice { color: #fefefe; }
+

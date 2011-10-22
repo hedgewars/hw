@@ -182,12 +182,16 @@ void HWChatWidget::displayError(const QString & message)
 void HWChatWidget::displayNotice(const QString & message)
 {
     addLine("msg_Notice", " *** " + message);
+    // scroll to the end
+    chatText->moveCursor(QTextCursor::End);
 }
 
 
 void HWChatWidget::displayWarning(const QString & message)
 {
     addLine("msg_Warning", " *!* " + message);
+    // scroll to the end
+    chatText->moveCursor(QTextCursor::End);
 }
 
 
@@ -197,9 +201,14 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 {
     this->gameSettings = gameSettings;
     this->notify = notify;
-    if(notify && gameSettings->value("frontend/sound", true).toBool())
-        helloSound = HWDataManager::instance().findFileForRead(
-                        "Sounds/voices/Classic/Hello.ogg");
+    if(gameSettings->value("frontend/sound", true).toBool())
+    {
+        if (notify)
+            m_helloSound = HWDataManager::instance().findFileForRead(
+                            "Sounds/voices/Classic/Hello.ogg");
+        m_hilightSound = HWDataManager::instance().findFileForRead(
+                        "Sounds/1C.ogg");
+    }
 
     mainLayout.setSpacing(1);
     mainLayout.setMargin(1);
@@ -264,6 +273,8 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 
     showReady = false;
     setShowFollow(true);
+
+    clear();
 }
 
 
@@ -442,7 +453,8 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
     QString cssClass("msg_UserChat");
 
     // check first character for color code and set color properly
-    switch (str[0].toAscii()) {
+    char c = str[0].toAscii();
+    switch (c) {
         case 3:
             cssClass = (isFriend ? "msg_FriendJoin" : "msg_UserJoin");
             break;
@@ -454,10 +466,10 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
                 cssClass = "msg_FriendChat";
     }
 
-    addLine(cssClass,formattedStr);
+    addLine(cssClass, formattedStr, (!nick.isEmpty()) && str.contains(m_userNick));
 }
 
-void HWChatWidget::addLine(const QString & cssClass, QString line)
+void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighlight)
 {
     if (s_displayNone->contains(cssClass))
         return; // the css forbids us to display this line
@@ -465,7 +477,13 @@ void HWChatWidget::addLine(const QString & cssClass, QString line)
     if (chatStrings.size() > 250)
         chatStrings.removeFirst();
 
-    line = QString("<span class=\"%2\">%1</span>").arg(line).arg(cssClass);
+    line = QString("<span class=\"%1\">%2</span>").arg(cssClass).arg(line);
+
+    if (isHighlight)
+    {
+        line = QString("<span class=\"highlight\">%1</span>").arg(line);
+        SDLInteraction::instance().playSoundFile(m_hilightSound);
+    }
 
     chatStrings.append(line);
 
@@ -486,20 +504,20 @@ void HWChatWidget::onServerMessage(const QString& str)
     chatText->moveCursor(QTextCursor::End);
 }
 
-void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
+void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 {
     bool isIgnored = ignoreList.contains(nick, Qt::CaseInsensitive);
     QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), isIgnored);
     updateNickItem(item);
     chatNicks->addItem(item);
 
-    if (!isIgnored)
+    if ((!isIgnored) && (nick != m_userNick)) // don't auto-complete own name
         chatEditLine->addNickname(nick);
 
     emit nickCountUpdate(chatNicks->count());
 
     if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool()) {
-       SDLInteraction::instance().playSoundFile(helloSound);
+       SDLInteraction::instance().playSoundFile(m_helloSound);
     }
 }
 
@@ -519,6 +537,7 @@ void HWChatWidget::clear()
     chatText->clear();
     chatStrings.clear();
     chatNicks->clear();
+    m_userNick = gameSettings->value("net/nick","").toString();
 }
 
 void HWChatWidget::onKick()

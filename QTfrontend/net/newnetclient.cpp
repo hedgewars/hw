@@ -643,7 +643,7 @@ void HWNewNet::chatLineToLobby(const QString& str)
 {
     if(str != "") {
         RawSendNet(QString("CHAT") + delimeter + str);
-        emit(chatStringFromMeLobby(HWProto::formatChatMsg(mynick, str)));
+        emit chatStringLobby(mynick, HWProto::formatChatMsgForFrontend(str));
     }
 }
 
