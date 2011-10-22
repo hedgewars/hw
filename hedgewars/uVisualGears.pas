@@ -337,8 +337,9 @@ vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 if State <> 0 then gear^.State:= State;
 
 case Gear^.Kind of
-    vgtFlake: if random(2) = 0 then gear^.Layer:= 0
-              else gear^.Layer:= random(3)+1;
+    vgtFlake: if random(2) = 0 then gear^.Layer:= 0   // 50%
+              else if random(2) = 0 then gear^.Layer:= 1  // 25%
+              else gear^.Layer:= random(2)+2;  // 12.5% each
 
     // 0: this layer is very distant in the background when stereo
     vgtTeamHealthSorter,
