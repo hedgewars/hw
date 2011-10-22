@@ -2333,11 +2333,7 @@ var
     framel, framer, depthl, depthr: GLuint;
     texl, texr: GLuint;
 
-
-    VisualGearsLayer0: PVisualGear;
-    VisualGearsLayer1: PVisualGear;
-    VisualGearsLayer2: PVisualGear;
-    VisualGearsLayer3: PVisualGear;
+    VisualGearLayers: array[0..3] of PVisualGear;
     lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
     vobVelocity, vobFallSpeed: LongInt;

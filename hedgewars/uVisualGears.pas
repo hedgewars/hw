@@ -145,6 +145,7 @@ gear^.doStep:= doStepHandlers[Kind];
 gear^.State:= 0;
 gear^.Tint:= $FFFFFFFF;
 gear^.uid:= VGCounter;
+gear^.Layer:= 0;
 
 with gear^ do
     case Kind of
@@ -336,19 +337,14 @@ vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 if State <> 0 then gear^.State:= State;
 
 case Gear^.Kind of
+    vgtFlake: if random(2) = 0 then gear^.Layer:= 0
+              else gear^.Layer:= random(3)+1;
+
     // 0: this layer is very distant in the background when stereo
     vgtTeamHealthSorter,
     vgtSmoothWindBar,
-    vgtFlake, 
-    vgtCloud: begin
-              if VisualGearsLayer0 <> nil then
-                  begin
-                  VisualGearsLayer0^.PrevGear:= gear;
-                  gear^.NextGear:= VisualGearsLayer0
-                  end;
-              gear^.Layer:= 0;
-              VisualGearsLayer0:= gear
-              end; 
+    vgtCloud: gear^.Layer:= 0;
+
     // 1: this layer is on the land level (which is close but behind the screen plane) when stereo
     vgtSmokeTrace,
     vgtEvilTrace,
@@ -359,29 +355,15 @@ case Gear^.Kind of
     vgtFire,
     vgtSplash,
     vgtDroplet,
-    vgtBubble: begin
-              if VisualGearsLayer1 <> nil then
-                  begin
-                  VisualGearsLayer1^.PrevGear:= gear;
-                  gear^.NextGear:= VisualGearsLayer1
-                  end;
-              gear^.Layer:= 1;
-              VisualGearsLayer1:= gear
-              end; 
+    vgtBubble: gear^.Layer:= 1;
+
     // 3: this layer is on the screen plane (depth = 0) when stereo
     vgtSpeechBubble,
     vgtSmallDamageTag,
     vgtHealthTag,
     vgtStraightShot,
-    vgtChunk: begin
-              if VisualGearsLayer3 <> nil then
-                  begin
-                  VisualGearsLayer3^.PrevGear:= gear;
-                  gear^.NextGear:= VisualGearsLayer3
-                  end;
-              gear^.Layer:= 3;
-              VisualGearsLayer3:= gear
-              end; 
+    vgtChunk: gear^.Layer:= 3;
+
     // 2: this layer is outside the screen when stereo
     vgtExplosion,
     vgtBigExplosion,
@@ -396,16 +378,15 @@ case Gear^.Kind of
     vgtSmokeRing,
     vgtNote,
     vgtBulletHit,
-    vgtCircle: begin
-              if VisualGearsLayer2 <> nil then
-                  begin
-                  VisualGearsLayer2^.PrevGear:= gear;
-                  gear^.NextGear:= VisualGearsLayer2
-                  end;
-              gear^.Layer:= 2;
-              VisualGearsLayer2:= gear
-              end; 
+    vgtCircle: gear^.Layer:= 2
 end;
+
+if VisualGearLayers[gear^.Layer] <> nil then
+    begin
+    VisualGearLayers[gear^.Layer]^.PrevGear:= gear;
+    gear^.NextGear:= VisualGearLayers[gear^.Layer]
+    end;
+VisualGearLayers[gear^.Layer]:= gear;
 
 AddVisualGear:= gear;
 end;
@@ -418,13 +399,7 @@ begin
 
     if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
     if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
-    else
-        case Gear^.Layer of
-            0: VisualGearsLayer0:= Gear^.NextGear;
-            1: VisualGearsLayer1:= Gear^.NextGear;
-            2: VisualGearsLayer2:= Gear^.NextGear;
-            3: VisualGearsLayer3:= Gear^.NextGear;
-        end;
+    else VisualGearLayers[Gear^.Layer]:= Gear^.NextGear;
 
     if lastVisualGearByUID = Gear then lastVisualGearByUID:= nil;
 
@@ -433,37 +408,20 @@ end;
 
 procedure ProcessVisualGears(Steps: Longword);
 var Gear, t: PVisualGear;
+    i: LongWord;
 begin
 if Steps = 0 then exit;
 
-t:= VisualGearsLayer0;
-while t <> nil do
-      begin
-      Gear:= t;
-      t:= Gear^.NextGear;
-      Gear^.doStep(Gear, Steps)
-      end;
-t:= VisualGearsLayer1;
-while t <> nil do
-      begin
-      Gear:= t;
-      t:= Gear^.NextGear;
-      Gear^.doStep(Gear, Steps)
-      end;
-t:= VisualGearsLayer2;
-while t <> nil do
-      begin
-      Gear:= t;
-      t:= Gear^.NextGear;
-      Gear^.doStep(Gear, Steps)
-      end;
-t:= VisualGearsLayer3;
-while t <> nil do
-      begin
-      Gear:= t;
-      t:= Gear^.NextGear;
-      Gear^.doStep(Gear, Steps)
-      end
+for i:= 0 to 3 do
+    begin
+    t:= VisualGearLayers[i];
+    while t <> nil do
+          begin
+          Gear:= t;
+          t:= Gear^.NextGear;
+          Gear^.doStep(Gear, Steps)
+          end;
+    end
 end;
 
 procedure KickFlakes(Radius, X, Y: LongInt);
@@ -471,7 +429,26 @@ var Gear, t: PVisualGear;
     dmg: LongInt;
 begin
 if (vobCount = 0) or (vobCount > 200) then exit;
-t:= VisualGearsLayer0;
+t:= VisualGearLayers[1];
+while t <> nil do
+      begin
+      Gear:= t;
+      if Gear^.Kind = vgtFlake then
+          begin
+          // Damage calc from doMakeExplosion
+          dmg:= Min(101, Radius + cHHRadius div 2 - LongInt(abs(round(Gear^.X) - X) + abs(round(Gear^.Y) - Y)) div 5);
+          if dmg > 1 then
+              begin
+              Gear^.tdX:= 0.02 * dmg + 0.01;
+              if Gear^.X - X < 0 then Gear^.tdX := -Gear^.tdX;
+              Gear^.tdY:= 0.02 * dmg + 0.01;
+              if Gear^.Y - Y < 0 then Gear^.tdY := -Gear^.tdY;
+              Gear^.Timer:= 200
+              end
+          end;
+      t:= Gear^.NextGear
+      end;
+t:= VisualGearLayers[3];
 while t <> nil do
       begin
       Gear:= t;
@@ -501,21 +478,21 @@ begin
 case Layer of
     // this layer is very distant in the background when stereo
     0: begin
-       Gear:= VisualGearsLayer0;
+       Gear:= VisualGearLayers[0];
        while Gear <> nil do
            begin
            if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
            case Gear^.Kind of
                vgtFlake: if SuddenDeathDmg then
                              if vobSDVelocity = 0 then
-                                 DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                                 DrawTextureF(SpritesData[sprSDFlake].Texture, 0.5, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
                              else
-                                 DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                                 DrawRotatedTextureF(SpritesData[sprSDFlake].Texture, 0.5, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
                          else
                              if vobVelocity = 0 then
-                                 DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                                 DrawTextureF(SpritesData[sprFlake].Texture, 0.5, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
                              else
-                                 DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                                 DrawRotatedTextureF(SpritesData[sprFlake].Texture, 0.5, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
                vgtCloud: if SuddenDeathDmg then
                              DrawSprite(sprSDCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                          else
@@ -527,12 +504,22 @@ case Layer of
        end;
     // this layer is on the land level (which is close but behind the screen plane) when stereo
     1: begin
-       Gear:= VisualGearsLayer1;
+       Gear:= VisualGearLayers[1];
        while Gear <> nil do
           begin
           //tinted:= false;
           if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
           case Gear^.Kind of
+              vgtFlake: if SuddenDeathDmg then
+                             if vobSDVelocity = 0 then
+                                 DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                         else
+                             if vobVelocity = 0 then
+                                 DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
               vgtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
               vgtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
               vgtLineTrail: DrawLine(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 1.0, $FF, min(Gear^.Timer, $C0), min(Gear^.Timer, $80), min(Gear^.Timer, $FF));
@@ -566,12 +553,22 @@ case Layer of
        end;
     // this layer is on the screen plane (depth = 0) when stereo
     3: begin
-       Gear:= VisualGearsLayer3;
+       Gear:= VisualGearLayers[3];
        while Gear <> nil do
            begin
            tinted:= false;
            if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
            case Gear^.Kind of
+              vgtFlake: if SuddenDeathDmg then
+                             if vobSDVelocity = 0 then
+                                 DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                         else
+                             if vobVelocity = 0 then
+                                 DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
                vgtSpeechBubble: begin
                                 if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then
                                     begin
@@ -610,7 +607,7 @@ case Layer of
        end;
     // this layer is outside the screen when stereo
     2: begin
-       Gear:= VisualGearsLayer2;
+       Gear:= VisualGearLayers[2];
        while Gear <> nil do
            begin
            tinted:= false;
@@ -668,6 +665,16 @@ case Layer of
                    vgtBulletHit: DrawRotatedF(sprBulletHit, round(Gear^.X) + WorldDx - 0, round(Gear^.Y) + WorldDy - 0, 7 - (Gear^.FrameTicks div 50), 1, Gear^.Angle);
                end;
            case Gear^.Kind of
+               vgtFlake: if SuddenDeathDmg then
+                             if vobSDVelocity = 0 then
+                                 DrawTextureF(SpritesData[sprSDFlake].Texture, 1.5, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
+                             else
+                                 DrawRotatedTextureF(SpritesData[sprSDFlake].Texture, 1.5, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
+                         else
+                             if vobVelocity = 0 then
+                                 DrawTextureF(SpritesData[sprFlake].Texture, 1.5, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
+                             else
+                                 DrawRotatedTextureF(SpritesData[sprFlake].Texture, 1.5, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
                vgtCircle: if gear^.Angle = 1 then
                               begin
                               tmp:= Gear^.State / 100;
@@ -684,6 +691,7 @@ end;
 
 function  VisualGearByUID(uid : Longword) : PVisualGear;
 var vg: PVisualGear;
+    i: LongWord;
 begin
 VisualGearByUID:= nil;
 if uid = 0 then exit;
@@ -692,49 +700,20 @@ if (lastVisualGearByUID <> nil) and (lastVisualGearByUID^.uid = uid) then
     VisualGearByUID:= lastVisualGearByUID;
     exit
     end;
-vg:= VisualGearsLayer0;
-while vg <> nil do
+// search in an order that is more likely to return layers they actually use.  Could perhaps track statistically AddVisualGear in uScript, since that is most likely the ones they want
+for i:= 2 to 5 do
     begin
-    if vg^.uid = uid then
+    vg:= VisualGearLayers[i mod 4];
+    while vg <> nil do
         begin
-        lastVisualGearByUID:= vg;
-        VisualGearByUID:= vg;
-        exit
-        end;
-    vg:= vg^.NextGear
-    end;
-vg:= VisualGearsLayer1;
-while vg <> nil do
-    begin
-    if vg^.uid = uid then
-        begin
-        lastVisualGearByUID:= vg;
-        VisualGearByUID:= vg;
-        exit
-        end;
-    vg:= vg^.NextGear
-    end;
-vg:= VisualGearsLayer2;
-while vg <> nil do
-    begin
-    if vg^.uid = uid then
-        begin
-        lastVisualGearByUID:= vg;
-        VisualGearByUID:= vg;
-        exit
-        end;
-    vg:= vg^.NextGear
-    end;
-vg:= VisualGearsLayer3;
-while vg <> nil do
-    begin
-    if vg^.uid = uid then
-        begin
-        lastVisualGearByUID:= vg;
-        VisualGearByUID:= vg;
-        exit
-        end;
-    vg:= vg^.NextGear
+        if vg^.uid = uid then
+    	    begin
+    	    lastVisualGearByUID:= vg;
+    	    VisualGearByUID:= vg;
+    	    exit
+    	    end;
+        vg:= vg^.NextGear
+        end
     end
 end;
 
@@ -750,7 +729,7 @@ var       i: LongInt;
     vg, tmp: PVisualGear;
 begin
 if cCloudsNumber = cSDCloudsNumber then exit;
-vg:= VisualGearsLayer0;
+vg:= VisualGearLayers[0];
 while vg <> nil do
     if vg^.Kind = vgtCloud then
         begin
@@ -782,15 +761,18 @@ var       i: LongInt;
 begin
 if (cReducedQuality and rqKillFlakes) <> 0 then exit;
 if vobCount = vobSDCount then exit;
-vg:= VisualGearsLayer0;
-while vg <> nil do
-    if vg^.Kind = vgtFlake then
+for i:= 0 to 3 do
+    begin
+    vg:= VisualGearLayers[i];
+    while vg <> nil do
+        if vg^.Kind = vgtFlake then
         begin
         tmp:= vg^.NextGear;
         DeleteVisualGear(vg);
         vg:= tmp
         end
-    else vg:= vg^.NextGear;
+        else vg:= vg^.NextGear;
+    end;
 if ((GameFlags and gfBorder) <> 0) or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
     for i:= 0 to Pred(vobSDCount * cScreenSpace div LAND_WIDTH) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
@@ -800,19 +782,17 @@ else
 end;
 
 procedure initModule;
+var i: LongWord;
 begin
-    VisualGearsLayer0:= nil;
-    VisualGearsLayer1:= nil;
-    VisualGearsLayer2:= nil;
-    VisualGearsLayer3:= nil;
+for i:= 0 to 3 do
+    VisualGearLayers[i]:= nil;
 end;
 
 procedure freeModule;
+var i: LongWord;
 begin
-    while VisualGearsLayer0 <> nil do DeleteVisualGear(VisualGearsLayer0);
-    while VisualGearsLayer1 <> nil do DeleteVisualGear(VisualGearsLayer1);
-    while VisualGearsLayer2 <> nil do DeleteVisualGear(VisualGearsLayer2);
-    while VisualGearsLayer3 <> nil do DeleteVisualGear(VisualGearsLayer3);
+for i:= 0 to 3 do
+    while VisualGearLayers[i] <> nil do DeleteVisualGear(VisualGearLayers[i]);
 end;
 
 end.
