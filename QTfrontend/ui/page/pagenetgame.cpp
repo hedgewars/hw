@@ -116,6 +116,24 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings) : AbstractPa
 
 }
 
+
+void PageNetGame::displayError(const QString & message)
+{
+    pChatWidget->displayError(message);
+}
+
+
+void PageNetGame::displayNotice(const QString & message)
+{
+    pChatWidget->displayNotice(message);
+}
+
+void PageNetGame::displayWarning(const QString & message)
+{
+    pChatWidget->displayWarning(message);
+}
+
+
 void PageNetGame::setReadyStatus(bool isReady)
 {
     if(isReady)

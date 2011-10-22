@@ -1,21 +1,34 @@
 /*
  * see http://doc.qt.nokia.com/4.5/richtext-html-subset.html#css-properties
+ *
+ * In the QTfrontend of hedgewars also display:none; will work for class names
+ * that start with msg_ - as long as they are referenced directly and not
+ * within any hierachy.
  */
 
+/* links */
 a { color:#c8c8ff; }
+
+/* nick names (they are also sometimes linked) */
 .nick { text-decoration: none; }
-.UserChat {  }
-.UserChat .nick { color:#ffec20; }
-.FriendChat { color: #08e008; }
-.FriendChat .nick { color: #20ff20; }
-.UserJoin { color: #c0c0c0; }
-.UserJoin .nick { color: #d0d0d0; }
-.FriendJoin { color: #c0e0c0; }
-.FriendJoin .nick { color: #d0f0d0; }
-.UserAction { color: #ff80ff; }
-.UserAction .nick { color: #ffa0ff; }
-.FriendAction { color: #ff00ff; }
-.FriendAction .nick { color: #ff30ff; }
-.Error { color: #ff0000 }
-.Warning { color: #ff8000 }
-.Notice { color: #fefefe }
+
+/* various chat messages */
+.msg_UserChat { }
+.msg_UserChat .nick { color:#ffec20; }
+.msg_FriendChat { color: #08e008; }
+.msg_FriendChat .nick { color: #20ff20; }
+.msg_UserJoin { color: #c0c0c0; }
+.msg_UserJoin .nick { color: #d0d0d0; }
+.msg_FriendJoin { color: #c0f0c0; }
+.msg_FriendJoin .nick { color: #d8f0d8; }
+.msg_UserAction { color: #ff80ff; }
+.msg_UserAction .nick { color: #ffa0ff;}
+.msg_FriendAction { color: #ff00ff; }
+.msg_FriendAction .nick { color: #ff30ff; }
+/* uncomment next line to disable join and leave messages of non-friends */
+/* .msg_UserJoin { display:none; } */
+
+/* frontend messages */
+.msg_Error { color: #ff0000; }
+.msg_Warning { color: #ff8000; }
+.msg_Notice { color: #fefefe; }

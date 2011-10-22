@@ -168,6 +168,24 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings) :
     gameInLobby = false;
 }
 
+
+void PageRoomsList::displayError(const QString & message)
+{
+    chatWidget->displayError(message);
+}
+
+
+void PageRoomsList::displayNotice(const QString & message)
+{
+    chatWidget->displayNotice(message);
+}
+
+void PageRoomsList::displayWarning(const QString & message)
+{
+    chatWidget->displayWarning(message);
+}
+
+
 void PageRoomsList::setAdmin(bool flag)
 {
     BtnAdmin->setVisible(flag);

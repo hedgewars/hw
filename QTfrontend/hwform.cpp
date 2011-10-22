@@ -769,19 +769,19 @@ void HWForm::NetError(const QString & errmsg)
             ShowErrorMessage(errmsg);
             // no break
         case ID_PAGE_NETGAME:
-            ui.pageNetGame->pChatWidget->addLine("Error",errmsg);
+            ui.pageNetGame->displayError(errmsg);
             break;
         default:
-        ui.pageRoomsList->chatWidget->addLine("Error",errmsg);
+        ui.pageRoomsList->displayError(errmsg);
     }
 }
 
 void HWForm::NetWarning(const QString & wrnmsg)
 {
     if (ui.Pages->currentIndex() == ID_PAGE_NETGAME || ui.Pages->currentIndex() == ID_PAGE_INGAME)
-        ui.pageNetGame->pChatWidget->addLine("Warning",wrnmsg);
+        ui.pageNetGame->displayWarning(wrnmsg);
     else
-        ui.pageRoomsList->chatWidget->addLine("Warning",wrnmsg);
+        ui.pageRoomsList->displayWarning(wrnmsg);
 }
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
@@ -1257,7 +1257,7 @@ void HWForm::NetLeftRoom(const QString & reason)
     {
         GoBack();
         if (!reason.isEmpty())
-            ui.pageRoomsList->chatWidget->addLine("Notice",reason);
+            ui.pageRoomsList->displayNotice(reason);
     }
     else
         qWarning("Left room while not in room");

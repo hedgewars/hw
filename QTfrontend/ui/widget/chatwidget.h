@@ -62,15 +62,21 @@ class HWChatWidget : public QWidget
   void saveLists(const QString & nick);
   void setShowReady(bool s);
   void setShowFollow(bool enabled);
-  void addLine(const QString & cssClass, QString line);
-  static const char* STYLE;
   QStringList ignoreList, friendsList;
+  static QString & styleSheet();
+  void displayError(const QString & message);
+  void displayNotice(const QString & message);
+  void displayWarning(const QString & message);
 
 private:
+  static QString * s_styleSheet;
+  static QStringList * s_displayNone;
+
   void loadList(QStringList & list, const QString & file);
   void saveList(QStringList & list, const QString & file);
   void updateNickItem(QListWidgetItem *item);
   void updateNickItems();
+  void addLine(const QString & cssClass, QString line);
   static const QRegExp URLREGEXP;
 
  public slots:

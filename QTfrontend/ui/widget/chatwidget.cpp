@@ -30,6 +30,8 @@
 #include <QScrollBar>
 #include <QItemSelectionModel>
 #include <QStringList>
+#include <QRegExp>
+
 
 #include "HWDataManager.h"
 #include "hwconsts.h"
@@ -96,6 +98,98 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
     return firstIsShorter;
 }
 
+QString * HWChatWidget::s_styleSheet = NULL;
+QStringList * HWChatWidget::s_displayNone = NULL;
+
+QString & HWChatWidget::styleSheet()
+{
+    if (s_styleSheet != NULL)
+        return *s_styleSheet;
+
+    // initialize
+    s_styleSheet = new QString();
+
+    // getting a reference
+    QString & style = *s_styleSheet;
+
+    // load external stylesheet if there is any
+    QFile extFile(HWDataManager::instance().findFileForRead("css/chat.css"));
+
+    QFile resFile(":/res/css/chat.css");
+
+    QFile & file = (extFile.exists()?extFile:resFile);
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            if(!line.isEmpty())
+                style.append(line);
+        }
+    }
+
+    // prepare for MAGIC :D
+
+    // matches (multi-)whitespaces (for replacement with simple space)
+    QRegExp ws("\\s+");
+
+    // matches comments (for removal)
+    QRegExp rem("/\\*([^*]|\\*(?!/))*\\*/");
+
+    // strip comments and multi-whitespaces to compress the style-sheet a bit
+    style = style.remove(rem).replace(ws," ");
+
+
+    // now let's see what messages the user does not want to be displayed
+    // by checking for display:none; (since QTextBrowser does not support it)
+
+    // MOAR MAGIC :DDD
+
+    // matches definitions lacking display:none; (for removal)
+    QRegExp displayed(
+        "([^{}]*\\{)(?!([^}]*;)* ?display ?: ?none ?(;[^}]*)?\\})[^}]*\\}");
+
+    // matches all {...} and , (used as seperator for splitting into names)
+    QRegExp split(" *(\\{[^}]*\\}|,) *");
+
+    // matches class names that are referenced without hierachy
+    QRegExp nohierarchy("^.[^ .]+$");
+
+    QStringList victims = QString(style).
+                                remove(displayed). // remove visible stuff
+                                split(split). // get a list of the names
+                                filter(nohierarchy). // only direct class names
+                                replaceInStrings(QRegExp("^."),""); // crop .
+
+    victims.removeDuplicates();
+
+    s_displayNone = new QStringList(victims);
+
+
+    return style;
+}
+
+void HWChatWidget::displayError(const QString & message)
+{
+    addLine("msg_Error", message);
+    // scroll to the end
+    chatText->moveCursor(QTextCursor::End);
+}
+
+
+void HWChatWidget::displayNotice(const QString & message)
+{
+    addLine("msg_Notice", message);
+}
+
+
+void HWChatWidget::displayWarning(const QString & message)
+{
+    addLine("msg_Warning", message);
+}
+
 
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify) :
   QWidget(parent),
@@ -122,27 +216,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 
     chatText = new QTextBrowser(this);
 
-    QString style;
-
-    // load external stylesheet if there is any
-    QFile extFile(HWDataManager::instance().findFileForRead("css/chat.css"));
-
-    QFile resFile(":/res/css/chat.css");
-
-    QFile & file = (extFile.exists()?extFile:resFile);
-
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QTextStream in(&file);
-        while (!in.atEnd())
-        {
-            QString line = in.readLine();
-            if(!line.isEmpty())
-                style.append(line);
-        }
-    }
-
-    chatText->document()->setDefaultStyleSheet(style);
+    chatText->document()->setDefaultStyleSheet(styleSheet());
 
     chatText->setMinimumHeight(20);
     chatText->setMinimumWidth(10);
@@ -365,26 +439,29 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
     if(!nick.isEmpty())
         formattedStr.replace("|nick|",QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(QString(nick.toUtf8().toBase64())).arg(nick));
 
-    QString cssClass("UserChat");
+    QString cssClass("msg_UserChat");
 
     // check first character for color code and set color properly
     switch (str[0].toAscii()) {
         case 3:
-            cssClass = (isFriend ? "FriendJoin" : "UserJoin");
+            cssClass = (isFriend ? "msg_FriendJoin" : "msg_UserJoin");
             break;
         case 2:
-            cssClass = (isFriend ? "FriendAction" : "UserAction");
+            cssClass = (isFriend ? "msg_FriendAction" : "msg_UserAction");
             break;
         default:
             if (isFriend)
-                cssClass = "FriendChat";
+                cssClass = "msg_FriendChat";
     }
 
     addLine(cssClass,formattedStr);
 }
 
-void HWChatWidget::addLine(const QString& cssClass, QString line)
+void HWChatWidget::addLine(const QString & cssClass, QString line)
 {
+    if (s_displayNone->contains(cssClass))
+        return; // the css forbids us to display this line
+
     if (chatStrings.size() > 250)
         chatStrings.removeFirst();
 

@@ -40,6 +40,10 @@ public:
      */
     void setRoomName(const QString & roomName);
 
+    void displayError(const QString & message);
+    void displayNotice(const QString & message);
+    void displayWarning(const QString & message);
+
     QPushButton *BtnGo;
     QPushButton *BtnMaster;
     QPushButton *BtnStart;

@@ -30,6 +30,9 @@ class PageRoomsList : public AbstractPage
 
 public:
     PageRoomsList(QWidget* parent, QSettings * config);
+    void displayError(const QString & message);
+    void displayNotice(const QString & message);
+    void displayWarning(const QString & message);
 
     QLineEdit * roomName;
     QLineEdit * searchText;
