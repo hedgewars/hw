@@ -466,7 +466,14 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
                 cssClass = "msg_FriendChat";
     }
 
-    addLine(cssClass, formattedStr, (!nick.isEmpty()) && str.contains(m_userNick));
+    bool isHL = (!nick.isEmpty() &&
+                (nick != m_userNick) &&
+                str.toLower().contains(
+                        QRegExp(QString("^(.* )?%1(( |: ).*)?$").
+                            arg(QRegExp::escape(m_userNick).toLower())))
+                );
+
+    addLine(cssClass, formattedStr, isHL);
 }
 
 void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighlight)
