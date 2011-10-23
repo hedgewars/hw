@@ -30,7 +30,6 @@
 #include <QScrollBar>
 #include <QItemSelectionModel>
 #include <QStringList>
-#include <QRegExp>
 
 
 #include "HWDataManager.h"
@@ -468,10 +467,7 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
 
     bool isHL = (!nick.isEmpty() &&
                 (nick != m_userNick) &&
-                str.toLower().contains(
-                        QRegExp(QString("^(.* )?%1(( |: ).*)?$").
-                            arg(QRegExp::escape(m_userNick).toLower())))
-                );
+                str.toLower().contains(m_hlRegExp));
 
     addLine(cssClass, formattedStr, isHL);
 }
@@ -545,6 +541,8 @@ void HWChatWidget::clear()
     chatStrings.clear();
     chatNicks->clear();
     m_userNick = gameSettings->value("net/nick","").toString();
+    m_hlRegExp = QRegExp(QString("^(.* )?%1(( |[^-a-z0-9_]( |$)).*)?$").
+                            arg(QRegExp::escape(m_userNick).toLower()));
 }
 
 void HWChatWidget::onKick()

@@ -123,6 +123,7 @@ private:
   QString m_helloSound;
   QString m_hilightSound;
   QString m_userNick;
+  QRegExp m_hlRegExp; ///< regular expression used for highlighting messages
   bool notify;
   bool showReady;
 
