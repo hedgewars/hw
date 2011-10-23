@@ -295,10 +295,13 @@ case Kind of
                     Pos:= 0;
                     Radius:= 1;
                     DirAngle:= random * 360;
-                    dx.isNegative:= GetRandom(2) = 0;
-                    dx.QWordValue:= GetRandom(100000000);
-                    dy.isNegative:= false;
-                    dy.QWordValue:= GetRandom(70000000);
+                    if State and gstTmpFlag = 0 then
+                        begin
+                        dx.isNegative:= GetRandom(2) = 0;
+                        dx.QWordValue:= GetRandom(100000000);
+                        dy.isNegative:= false;
+                        dy.QWordValue:= GetRandom(70000000)
+                        end;
                     State:= State or gstInvisible;
                     if GetRandom(2) = 0 then dx := -dx;
                     Health:= random(vobFrameTicks);
