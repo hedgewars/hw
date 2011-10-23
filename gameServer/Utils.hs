@@ -5,6 +5,7 @@ import Data.Char
 import Data.Word
 import qualified Data.Map as Map
 import qualified Data.Set as Set
+import qualified Data.Char as Char
 import Numeric
 import Network.Socket
 import System.IO
@@ -14,6 +15,7 @@ import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Lazy as BL
 import qualified Text.Show.ByteString as BS
 import qualified Data.ByteString.Char8 as B
+import qualified Data.ByteString.UTF8 as UTF8
 import qualified Data.ByteString as BW
 -------------------------------------------------
 import CoreTypes
@@ -112,3 +114,8 @@ readInt_ str =
 
 cutHost :: B.ByteString -> B.ByteString
 cutHost = B.intercalate "." .  flip (++) ["*","*"] . List.take 2 . B.split '.'
+
+caseInsensitiveCompare :: B.ByteString -> B.ByteString -> Bool
+caseInsensitiveCompare a b = f a == f b
+    where
+        f = map Char.toUpper . UTF8.toString

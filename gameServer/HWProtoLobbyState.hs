@@ -82,7 +82,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let chans = map sendChan (cl : jRoomClients)
     return $
         if isNothing maybeRI || not sameProto then 
-            [Warning "No such rooms"]
+            [Warning "No such room"]
             else if isRestrictedJoins jRoom then
             [Warning "Joining restricted"]
             else if roomPassword /= password jRoom then
