@@ -300,10 +300,10 @@ case Kind of
                         dx.isNegative:= GetRandom(2) = 0;
                         dx.QWordValue:= GetRandom(100000000);
                         dy.isNegative:= false;
-                        dy.QWordValue:= GetRandom(70000000)
+                        dy.QWordValue:= GetRandom(70000000);
+                        if GetRandom(2) = 0 then dx := -dx
                         end;
                     State:= State or gstInvisible;
-                    if GetRandom(2) = 0 then dx := -dx;
                     Health:= random(vobFrameTicks);
                     Timer:= random(vobFramesCount);
                     Angle:= (random(2) * 2 - 1) * (1 + random(10000)) * vobVelocity
