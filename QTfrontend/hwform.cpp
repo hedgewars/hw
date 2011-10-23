@@ -455,6 +455,10 @@ void HWForm::GoToEditScheme()
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
+    // with all those signals firing around make sure we don't switch a page
+    // at the same time in different threads
+    onPageShownMutex.lock();
+
 #ifdef USE_XFIRE
     updateXfire();
 #endif
@@ -477,6 +481,13 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
             ui.pageMultiplayer->gameCFG->pMapContainer->mapDrawingFinished();
         else
             ui.pageNetGame->pGameCFG->pMapContainer->mapDrawingFinished();
+    }
+
+    if (id == ID_PAGE_ROOMSLIST) {
+        if (hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
+            game->netSuspend = true;
+            game->KillAllTeams();
+        }
     }
 
     if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {
@@ -525,13 +536,11 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if (id == ID_PAGE_NETGAME) // joining a room
         ui.pageNetGame->pChatWidget->loadLists(ui.pageOptions->editNetNick->text());
 // joining the lobby 
-    else if (id == ID_PAGE_ROOMSLIST) {
-        if (hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
-            game->netSuspend = true;
-            game->KillAllTeams();
-        }
+    else if (id == ID_PAGE_ROOMSLIST)
         ui.pageRoomsList->chatWidget->loadLists(ui.pageOptions->editNetNick->text());
-    }
+
+
+    onPageShownMutex.unlock();
 }
 
 void HWForm::GoToPage(int id)

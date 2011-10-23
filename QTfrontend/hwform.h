@@ -20,6 +20,7 @@
 #define HWFORM_H
 
 #include <QMainWindow>
+#include <QMutex>
 #include <QStack>
 #include <QTime>
 
@@ -168,12 +169,13 @@ private:
     BGWidget * wBackground;
     QSignalMapper * pageSwitchMapper;
     QByteArray m_lastDemo;
+    QMutex onPageShownMutex;
 
 #ifdef __APPLE__
     InstallController * panel;
 #endif
 
-    void OnPageShown(quint8 id, quint8 lastid=0);
+    void OnPageShown(quint8 id, quint8 lastid=0); // thread-safe
 };
 
 #endif
