@@ -30,6 +30,8 @@
 #include <QScrollBar>
 #include <QItemSelectionModel>
 #include <QStringList>
+#include <QDateTime>
+#include <QTime>
 
 
 #include "HWDataManager.h"
@@ -99,35 +101,53 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
 
 QString * HWChatWidget::s_styleSheet = NULL;
 QStringList * HWChatWidget::s_displayNone = NULL;
+bool HWChatWidget::s_isTimeStamped = true;
+QMutex HWChatWidget::s_styleSheetMutex;
 
 QString & HWChatWidget::styleSheet()
 {
+    s_styleSheetMutex.lock();
+
     if (s_styleSheet != NULL)
-        return *s_styleSheet;
-
-    // initialize
-    s_styleSheet = new QString();
-
-    // getting a reference
-    QString & style = *s_styleSheet;
-
-    // load external stylesheet if there is any
-    QFile extFile(HWDataManager::instance().findFileForRead("css/chat.css"));
-
-    QFile resFile(":/res/css/chat.css");
-
-    QFile & file = (extFile.exists()?extFile:resFile);
-
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        QTextStream in(&file);
-        while (!in.atEnd())
+        s_styleSheetMutex.unlock();
+        return *s_styleSheet;
+    }
+
+    setStyleSheet();
+
+    s_styleSheetMutex.unlock();
+
+    return *s_styleSheet;
+}
+
+void HWChatWidget::setStyleSheet(const QString & styleSheet)
+{
+    QString style = styleSheet;
+
+    // no stylesheet supplied, search for one or use default
+    if (style.isEmpty())
+    {
+        // load external stylesheet if there is any
+        QFile extFile(HWDataManager::instance().findFileForRead("css/chat.css"));
+
+        QFile resFile(":/res/css/chat.css");
+
+        QFile & file = (extFile.exists()?extFile:resFile);
+
+        if (file.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            QString line = in.readLine();
-            if(!line.isEmpty())
-                style.append(line);
+            QTextStream in(&file);
+            while (!in.atEnd())
+            {
+                QString line = in.readLine();
+                if(!line.isEmpty())
+                    style.append(line);
+            }
         }
     }
+
+    // let's parse display:none; ...
 
     // prepare for MAGIC :D
 
@@ -162,12 +182,27 @@ QString & HWChatWidget::styleSheet()
                                 filter(nohierarchy). // only direct class names
                                 replaceInStrings(QRegExp("^."),""); // crop .
 
+
+    if (victims.contains("timestamp"))
+    {
+        s_isTimeStamped = false;
+        victims.removeAll("timestamp");
+    }
+
     victims.removeDuplicates();
 
+    QStringList * oldDisplayNone = s_displayNone;
+    QString * oldStyleSheet = s_styleSheet;
+
     s_displayNone = new QStringList(victims);
+    s_styleSheet = new QString(style);
 
+    if (oldDisplayNone != NULL)
+        delete oldDisplayNone;
 
-    return style;
+    if (oldStyleSheet != NULL)
+        delete oldStyleSheet;
+
 }
 
 void HWChatWidget::displayError(const QString & message)
@@ -216,7 +251,9 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     mainLayout.setColumnStretch(1, 24);
 
     chatEditLine = new SmartLineEdit(this);
-    chatEditLine->addCommands(QStringList("/me"));
+    QStringList cmds;
+    cmds << "/me" << "/discardStyleSheet" << "/saveStyleSheet";
+    chatEditLine->addCommands(cmds);
     chatEditLine->setMaxLength(300);
     connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 
@@ -273,6 +310,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     showReady = false;
     setShowFollow(true);
 
+    setAcceptDrops(true);
     clear();
 }
 
@@ -415,9 +453,12 @@ void HWChatWidget::returnPressed()
 {
     QStringList lines = chatEditLine->text().split('\n');
     chatEditLine->rememberCurrentText();
-    chatEditLine->clear();
     foreach (const QString &line, lines)
-        emit chatLine(line);
+    {
+        if (!parseCommand(line))
+            emit chatLine(line);
+    }
+    chatEditLine->clear();
 }
 
 
@@ -480,6 +521,13 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
     if (chatStrings.size() > 250)
         chatStrings.removeFirst();
 
+    if (s_isTimeStamped)
+    {
+        QString tsMarkUp = "<span class=\"timestamp\">[%1]</span> ";
+        QTime now = QDateTime::currentDateTime().time();
+        line = tsMarkUp.arg(now.toString(":mm:ss")) + line;
+    }
+
     line = QString("<span class=\"%1\">%2</span>").arg(cssClass).arg(line);
 
     if (isHighlight)
@@ -490,7 +538,7 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
 
     chatStrings.append(line);
 
-    chatText->setHtml(chatStrings.join("<br>"));
+    chatText->setHtml("<html><body>"+chatStrings.join("<br>")+"</body></html>");
 
     chatText->moveCursor(QTextCursor::End);
 }
@@ -502,7 +550,7 @@ void HWChatWidget::onServerMessage(const QString& str)
 
     chatStrings.append("<hr>" + str + "<hr>");
 
-    chatText->setHtml(chatStrings.join("<br>"));
+    chatText->setHtml("<html><body>"+chatStrings.join("<br>")+"</body></html>");
 
     chatText->moveCursor(QTextCursor::End);
 }
@@ -704,4 +752,92 @@ void HWChatWidget::adminAccess(bool b)
         chatNicks->insertAction(0, acKick);
 //      chatNicks->insertAction(0, acBan);
     }
+}
+
+void HWChatWidget::dragEnterEvent(QDragEnterEvent * event)
+{
+    if (event->mimeData()->hasUrls())
+    {
+        QList<QUrl> urls = event->mimeData()->urls();
+        QString url = urls[0].toString();
+        if (urls.count() == 1)
+            if (url.contains(QRegExp("^file://.*\\.css$")))
+                event->acceptProposedAction();
+    }
+}
+
+void HWChatWidget::dropEvent(QDropEvent * event)
+{
+    QFile file(
+        event->mimeData()->urls()[0].toString().remove(QRegExp("^file://")));
+
+    if (file.exists() && (file.open(QIODevice::ReadOnly | QIODevice::Text)))
+    {
+        QString style;
+        QTextStream in(&file);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            if(!line.isEmpty())
+                style.append(line);
+        }
+
+        setStyleSheet(style);
+        chatText->document()->setDefaultStyleSheet(*s_styleSheet);
+        displayNotice(tr("Stylesheet replaced! Enter %1 if you want to use it in future, enter %2 to reset!").arg("/saveStyleSheet").arg("/discaredStyleSheet"));
+
+        event->acceptProposedAction();
+    }
+}
+
+
+void HWChatWidget::discardStyleSheet()
+{
+    setStyleSheet();
+    chatText->document()->setDefaultStyleSheet(*s_styleSheet);
+    displayNotice(tr("StyleSheet discarded"));
+}
+
+
+void HWChatWidget::saveStyleSheet()
+{
+    QString dest =
+        HWDataManager::instance().findFileForWrite("css/chat.css");
+
+    QFile file(dest);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream out(&file);
+        out << *s_styleSheet;
+        file.close();
+        displayNotice(tr("StyleSheet saved to %1").arg(dest));
+    }
+    else
+        displayError(tr("StyleSheet could NOT be saved to %1 !").arg(dest));
+}
+
+
+bool HWChatWidget::parseCommand(const QString & line)
+{
+    if (line[0] == '/')
+    {
+        QString tline = line.trimmed();
+        if (tline.startsWith("/me"))
+            return false; // not a real command
+
+        else if (tline == "/discardStyleSheet")
+            discardStyleSheet();
+        else if (tline == "/saveStyleSheet")
+            saveStyleSheet();
+        else
+        {
+            static QRegExp post("\\s.*$");
+            tline.remove(post);
+            displayWarning(tr("%1 is not a valid command!").arg(tline));
+        }
+
+        return true;
+    }
+
+    return false;
 }

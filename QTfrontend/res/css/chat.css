@@ -7,8 +7,8 @@
  * see http://doc.qt.nokia.com/4.5/richtext-html-subset.html#css-properties
  *
  * In the QTfrontend of hedgewars also display:none; will work for class names
- * that start with msg_   -   as long as they are referenced directly and not
- * within any hierachy.
+ * that start with msg_ and .TimeStamp -  as long as they are referenced
+ * directly and not within any hierachy.
  *
  ******************************************************************************
  *
@@ -24,6 +24,11 @@
 /* links */
 a { color:#c8c8ff; }
 
+/* appearance of the whole chat */
+/* body { color: white; background-color: #000000; } */
+
+/* appearance of all elements in chat */
+/* * { color: white; background-color: #000000; } */
 
 /* nick names (they are also sometimes linked) */
 .nick { text-decoration: none; }
@@ -41,6 +46,19 @@ a { color:#c8c8ff; }
 .msg_UserAction .nick { color: #ffa0ff;}
 .msg_FriendAction { color: #ff00ff; }
 .msg_FriendAction .nick { color: #ff30ff; }
+
+/* timestamps */
+.timestamp {
+    color: #e0d8e0;
+    font-family: courier;
+    font-size: 11px;
+    vertical-align: center;
+    /* uncomment next line to hide timestamps */
+    /* display: none; */
+}
+
+/* you can also set timestamp style for different msg types */
+.msg_FriendChat .timestamp { color: #ffffff; }
 
 /* messages that contain your nickname */
 .highlight {  }

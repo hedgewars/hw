@@ -222,7 +222,7 @@ void SmartLineEdit::autoComplete()
             {
                 match = cmd;
 
-                // move match to end so next time new matches will be prefered
+                // move match to end so next time new matches will be preferred
                 if (m_cmds->removeAll(cmd) > 0);
                     m_cmds->append(cmd);
 

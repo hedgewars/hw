@@ -24,6 +24,7 @@
 #include <QListWidget>
 #include <QString>
 #include <QGridLayout>
+#include <QMutex>
 #include <QRegExp>
 
 #include "SDLInteraction.h"
@@ -78,16 +79,27 @@ class HWChatWidget : public QWidget
   void displayNotice(const QString & message);
   void displayWarning(const QString & message);
 
+protected:
+    virtual void dragEnterEvent(QDragEnterEvent * event);
+    virtual void dropEvent(QDropEvent * event);
+
 private:
   static QString * s_styleSheet;
   static QStringList * s_displayNone;
+  static bool s_isTimeStamped;
+  static QMutex s_styleSheetMutex;
+  static const QRegExp URLREGEXP;
+
+  static void setStyleSheet(const QString & styleSheet = "");
 
   void loadList(QStringList & list, const QString & file);
   void saveList(QStringList & list, const QString & file);
   void updateNickItem(QListWidgetItem *item);
   void updateNickItems();
   void addLine(const QString & cssClass, QString line, bool isHighlight = false);
-  static const QRegExp URLREGEXP;
+  bool parseCommand(const QString & line);
+  void discardStyleSheet();
+  void saveStyleSheet();
 
  public slots:
   void onChatString(const QString& str);

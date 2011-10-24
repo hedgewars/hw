@@ -165,27 +165,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // copy data/default css files to cfgdir as templates
-    QString userCssDir = cfgdir->absolutePath() + "/Data/css";
-    if (checkForDir(userCssDir))
-    {
-        QString defaultCssDir = ":res/css";
-        QStringList cssFiles = QDir(defaultCssDir).entryList(QDir::Files);
-        foreach (const QString & cssFile, cssFiles)
-        {
-            QString srcName = datadir->absolutePath()+"/css/"+cssFile;
-
-            if (!QFile::exists(srcName))
-                srcName = defaultCssDir+"/"+cssFile;
-
-            QString tmpName = userCssDir + "/template_" + cssFile;
-            if (QFile::exists(tmpName))
-                QFile::remove(tmpName);
-
-            QFile(srcName).copy(tmpName);
-        }
-    }
-
     HWDataManager & dataMgr = HWDataManager::instance();
 
     {
