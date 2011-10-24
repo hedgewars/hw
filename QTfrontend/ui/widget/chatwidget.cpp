@@ -251,9 +251,6 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     mainLayout.setColumnStretch(1, 24);
 
     chatEditLine = new SmartLineEdit(this);
-    QStringList cmds;
-    cmds << "/me" << "/discardStyleSheet" << "/saveStyleSheet";
-    chatEditLine->addCommands(cmds);
     chatEditLine->setMaxLength(300);
     connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 
@@ -585,6 +582,12 @@ void HWChatWidget::nickRemoved(const QString& nick)
 void HWChatWidget::clear()
 {
     chatEditLine->reset();
+
+    // add default commands
+    QStringList cmds;
+    cmds << "/me" << "/discardStyleSheet" << "/saveStyleSheet";
+    chatEditLine->addCommands(cmds);
+
     chatText->clear();
     chatStrings.clear();
     chatNicks->clear();
