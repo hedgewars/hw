@@ -17,6 +17,7 @@
  */
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QPushButton>
 
 #include "pageinfo.h"
@@ -38,8 +39,8 @@ QLayout * PageInfo::bodyLayoutDefinition()
 
 QLayout * PageInfo::footerLayoutDefinition()
 {
-    QGridLayout * bottomLayout = new QGridLayout();
-    BtnSnapshots = addButton(":/res/Star.png", bottomLayout, 1, 1, true);
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+    BtnSnapshots = addButton(":/res/Star.png", bottomLayout, 0, true);
     bottomLayout->setAlignment(BtnSnapshots, Qt::AlignRight | Qt::AlignVCenter);
     return bottomLayout;
 }

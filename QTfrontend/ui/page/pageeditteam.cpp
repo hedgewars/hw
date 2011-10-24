@@ -77,10 +77,10 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
         HHNameEdit[i]->setMinimumWidth(120);
         GBHLayout->addWidget(HHNameEdit[i], i, 1);
 
-        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i, 3, true);
+        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i, 3, 1, 1, true);
     }
 
-    btnRandomTeam = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, false);
+    btnRandomTeam = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, 1);
 
     vbox1->addWidget(GBoxHedgehogs);
 

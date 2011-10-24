@@ -16,6 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+/**
+ * @file
+ * @brief AbstractPage class definition
+ */
+
 #ifndef ABSTRACTPAGE_H
 #define ABSTRACTPAGE_H
 
@@ -52,44 +57,105 @@ class AbstractPage : public QWidget
     Q_OBJECT
 
     signals:
+        /**
+         * @brief This signal is emitted when going back to the previous is
+         * requested - e.g. when the back-button is clicked.
+         */
         void goBack();
 
     protected:
-        // constructor and virtual destructor
+        /**
+         * @brief Class constructor
+         *
+         * @param parent parent widget.
+         */
         AbstractPage(QWidget * parent = 0);
 
-        // call this in the constructor of your subclass
-        void initPage();
-
-        // the following methods are used during page construction
-
-            // you MUST implement this method in your subclass
-            // only define layout, not behavior in here
-            virtual QLayout * bodyLayoutDefinition() = 0;
-
-            // you CAN implement this method in your subclass
-            virtual QLayout * footerLayoutDefinition() { return NULL; };
-
-            // you CAN but most likely want to implement this method in your subclass
-            // keep in mind not to expose twidgets as public!
-            // instead define a signal with a meaningful name and connect the widget
-            // signals to your page signals
-            virtual void connectSignals() {};
-
+        /// Class Destructor
         virtual ~AbstractPage() {};
 
-        QPushButton * formattedButton(const QString & btname, bool hasIcon = false);
-        QPushButton * addButton(const QString & btname, QGridLayout * grid, int wy, int wx, bool hasIcon = false);
-        QPushButton * addButton(const QString & btname, QGridLayout * grid, int wy, int wx, int rowSpan, int columnSpan, bool hasIcon = false);
-        QPushButton * addButton(const QString & btname, QBoxLayout * box, int where, bool hasIcon = false);
+        /// Call this in the constructor of your subclass.
+        void initPage();
 
+        /**
+         * @brief Used during page construction.
+         * You MUST implement this method in your subclass.
+         *
+         * Use it to define the main layout (no behavior) of the page.
+         */
+        virtual QLayout * bodyLayoutDefinition() = 0;
+
+        /**
+         * @brief Used during page construction.
+         * You can implement this method in your subclass.
+         *
+         * Use it to define layout (not behavior) of the page's footer.
+         */
+        virtual QLayout * footerLayoutDefinition() { return NULL; };
+
+        /**
+         * @brief Used during page construction.
+         * You can implement this method in your subclass.
+         *
+         * This is a good place to connect signals within your page in order
+         * to get the desired page behavior.<br />
+         * Keep in mind not to expose twidgets as public!
+         * instead define a signal with a meaningful name and connect the widget
+         * signals to your page signals
+         */
+        virtual void connectSignals() {};
+
+        /**
+         * @brief Creates a default formatted button for this page.
+         *
+         * @param name name of the button - used as its text if not hasIcon.
+         * @param hasIcon set to true if this is a picture button.
+         *
+         * @return the button.
+         */
+        QPushButton * formattedButton(const QString & name, bool hasIcon = false);
+
+        /**
+         * @brief Creates a default formatted button and adds it to a
+         * grid layout at the location specified.
+         *
+         * @param name label or path to icon of the button (depends on hasIcon)
+         * @param grid pointer of the grid layout in which to insert the button.
+         * @param row layout row index in which to insert the button.
+         * @param column layout column index in which to insert the button.
+         * @param rowSpan how many layout rows the button will span.
+         * @param columnSpan how many layout columns the button will span.
+         * @param hasIcon set to true if this is a picture button.
+         *
+         * @return the button.
+         */
+        QPushButton * addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan = 1, int columnSpan = 1, bool hasIcon = false);
+
+        /**
+         * @brief Creates a default formatted button and adds it to a
+         * grid layout at the location specified.
+         *
+         * @param name label or path to icon of the button (depends on hasIcon)
+         * @param box pointer of the box layout in which to insert the button.
+         * @param where layout ndex in which to insert the button.
+         * @param hasIcon set to true if this is a picture button.
+         *
+         * @return the button.
+         */
+        QPushButton * addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
+
+        /**
+         * @brief Changes visibility of the back-button.
+         *
+         * @param visible set to true if the button should be visible.
+         */
         void setBackButtonVisible(bool visible = true);
 
-        QFont * font14;
+        QFont * font14; ///< used font
 
     private:
 
-        QPushButton * btnBack;
+        QPushButton * btnBack; ///< back button
 };
 
 #endif

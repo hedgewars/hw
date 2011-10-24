@@ -37,7 +37,7 @@
 #include "HistoryLineEdit.h"
 
 /**
- * @brief A {@link HistoryLineEdit} that features auto-completion with TAB key
+ * @brief {@link HistoryLineEdit} that features auto-completion with TAB key
  *         and clear with ESC key.
  *
  * Notes:

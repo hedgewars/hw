@@ -37,7 +37,7 @@
 class QLineEdit;
 
 /**
- * @brief A <code>QLineEdit</code> that features a history of previous contents,
+ * @brief <code>QLineEdit</code> that features a history of previous contents,
  *        re-selectable using the arrow keys.
  *
  * Note: Public methods for accessing history are <b>thread-safe</b>.

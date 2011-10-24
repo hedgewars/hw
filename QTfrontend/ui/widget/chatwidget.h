@@ -37,7 +37,7 @@ class QLineEdit;
 class QListWidget;
 class QSettings;
 
-/// This class is for custom nickname sorting
+/// Class for custom nickname sorting
 class ListWidgetNickItem : public QListWidgetItem
 {
 public:
@@ -55,7 +55,7 @@ private:
 
 
 /**
- * @brief A chat widget.
+ * @brief Chat widget.
  *
  * By default uses :res/css/chat.css as style sheet for chat.
  * See \repo{res/css/chat.css} for a more detailed description.

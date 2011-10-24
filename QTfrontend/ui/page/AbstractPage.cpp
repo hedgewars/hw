@@ -16,6 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+/**
+ * @file
+ * @brief AbstractPage class implementation
+ */
+
 #include "AbstractPage.h"
 
 AbstractPage::AbstractPage(QWidget* parent)
@@ -52,13 +57,13 @@ void AbstractPage::initPage()
     connectSignals();
 }
 
-QPushButton * AbstractPage::formattedButton(const QString & btname, bool hasIcon)
+QPushButton * AbstractPage::formattedButton(const QString & name, bool hasIcon)
 {
     QPushButton * btn = new QPushButton(this);
 
     if (hasIcon)
     {
-        const QIcon& lp=QIcon(btname);
+        const QIcon& lp=QIcon(name);
         QSize sz = lp.actualSize(QSize(65535, 65535));
         btn->setIcon(lp);
         btn->setFixedSize(sz);
@@ -69,28 +74,21 @@ QPushButton * AbstractPage::formattedButton(const QString & btname, bool hasIcon
     else
     {
         btn->setFont(*font14);
-        btn->setText(btname);
+        btn->setText(name);
     }
     return btn;
 }
 
-QPushButton * AbstractPage::addButton(const QString & btname, QGridLayout* grid, int wy, int wx, bool hasIcon)
+QPushButton * AbstractPage::addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan, int columnSpan, bool hasIcon)
 {
-    QPushButton * btn = formattedButton(btname, hasIcon);
-    grid->addWidget(btn, wy, wx);
+    QPushButton * btn = formattedButton(name, hasIcon);
+    grid->addWidget(btn, row, column, rowSpan, columnSpan);
     return btn;
 }
 
-QPushButton * AbstractPage::addButton(const QString & btname, QGridLayout* grid, int wy, int wx, int rowSpan, int columnSpan, bool hasIcon)
+QPushButton * AbstractPage::addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon)
 {
-    QPushButton * btn = formattedButton(btname, hasIcon);
-    grid->addWidget(btn, wy, wx, rowSpan, columnSpan);
-    return btn;
-}
-
-QPushButton * AbstractPage::addButton(const QString & btname, QBoxLayout* box, int where, bool hasIcon)
-{
-    QPushButton * btn = formattedButton(btname, hasIcon);
+    QPushButton * btn = formattedButton(name, hasIcon);
     box->addWidget(btn, where);
     return btn;
 }
