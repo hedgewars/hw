@@ -74,7 +74,7 @@ class HWChatWidget : public QWidget
   void setShowReady(bool s);
   void setShowFollow(bool enabled);
   QStringList ignoreList, friendsList;
-  static QString & styleSheet();
+  static const QString & styleSheet();
   void displayError(const QString & message);
   void displayNotice(const QString & message);
   void displayWarning(const QString & message);

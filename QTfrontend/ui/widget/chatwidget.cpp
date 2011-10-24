@@ -104,7 +104,7 @@ QStringList * HWChatWidget::s_displayNone = NULL;
 bool HWChatWidget::s_isTimeStamped = true;
 QMutex HWChatWidget::s_styleSheetMutex;
 
-QString & HWChatWidget::styleSheet()
+const QString & HWChatWidget::styleSheet()
 {
     s_styleSheetMutex.lock();
 
@@ -123,10 +123,11 @@ QString & HWChatWidget::styleSheet()
 
 void HWChatWidget::setStyleSheet(const QString & styleSheet)
 {
-    QString style = styleSheet;
+    QString orgStyleSheet = styleSheet;
+    QString style = QString(orgStyleSheet);
 
     // no stylesheet supplied, search for one or use default
-    if (style.isEmpty())
+    if (orgStyleSheet.isEmpty())
     {
         // load external stylesheet if there is any
         QFile extFile(HWDataManager::instance().findFileForRead("css/chat.css"));
@@ -140,10 +141,9 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
             QTextStream in(&file);
             while (!in.atEnd())
             {
-                QString line = in.readLine();
-                if(!line.isEmpty())
-                    style.append(line);
+                style.append(in.readLine()+"\n");
             }
+            orgStyleSheet = style;
         }
     }
 
@@ -195,7 +195,7 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     QString * oldStyleSheet = s_styleSheet;
 
     s_displayNone = new QStringList(victims);
-    s_styleSheet = new QString(style);
+    s_styleSheet = new QString(orgStyleSheet);
 
     if (oldDisplayNone != NULL)
         delete oldDisplayNone;
@@ -771,8 +771,8 @@ void HWChatWidget::dragEnterEvent(QDragEnterEvent * event)
 
 void HWChatWidget::dropEvent(QDropEvent * event)
 {
-    QFile file(
-        event->mimeData()->urls()[0].toString().remove(QRegExp("^file://")));
+    const QString path(event->mimeData()->urls()[0].toString());
+    QFile file(QString(path).remove(QRegExp("^file://")));
 
     if (file.exists() && (file.open(QIODevice::ReadOnly | QIODevice::Text)))
     {
@@ -787,10 +787,13 @@ void HWChatWidget::dropEvent(QDropEvent * event)
 
         setStyleSheet(style);
         chatText->document()->setDefaultStyleSheet(*s_styleSheet);
-        displayNotice(tr("Stylesheet replaced! Enter %1 if you want to use it in future, enter %2 to reset!").arg("/saveStyleSheet").arg("/discaredStyleSheet"));
+        displayNotice(tr("Stylesheet imported from %1").arg(path));
+        displayNotice(tr("Enter %1 if you want to use the current styleSheet in future, enter %2 to reset!").arg("/saveStyleSheet").arg("/discaredStyleSheet"));
 
         event->acceptProposedAction();
     }
+    else
+        displayError(tr("Couldn't read %1").arg(event->mimeData()->urls()[0].toString()));
 }
 
 
@@ -811,12 +814,22 @@ void HWChatWidget::saveStyleSheet()
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
         QTextStream out(&file);
-        out << *s_styleSheet;
+        QStringList lines = s_styleSheet->split("\n", QString::KeepEmptyParts);
+
+        // strip trailing empty lines
+        while (lines.last().isEmpty())
+            lines.takeLast();
+
+        foreach (const QString & line, lines)
+        {
+            out << line << endl;
+        }
+        out << endl;
         file.close();
         displayNotice(tr("StyleSheet saved to %1").arg(dest));
     }
     else
-        displayError(tr("StyleSheet could NOT be saved to %1 !").arg(dest));
+        displayError(tr("Failed to save StyleSheet to %1").arg(dest));
 }
 
 
