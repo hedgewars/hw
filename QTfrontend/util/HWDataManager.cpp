@@ -25,6 +25,8 @@
 #include <QMap>
 #include <QStringList>
 
+#include <QFileInfo>
+
 #include "hwconsts.h"
 
 #include "HWDataManager.h"
@@ -99,7 +101,15 @@ QString HWDataManager::findFileForWrite(
                                 const QString & relativeDataFilePath) const
 {
     if (userData != NULL)
-        return userData->absolutePath()+"/"+relativeDataFilePath;
+    {
+        QString path = userData->absolutePath()+"/"+relativeDataFilePath;
+
+        // create folders if needed
+        QDir tmp;
+        tmp.mkpath(QFileInfo(path).absolutePath());
+
+        return path;
+    }
 
 
     return "";
