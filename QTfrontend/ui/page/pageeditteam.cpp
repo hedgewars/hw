@@ -27,12 +27,14 @@
 #include <QToolBox>
 #include <QMessageBox>
 
-#include "pageeditteam.h"
 #include "sdlkeys.h"
 #include "SquareLabel.h"
 #include "hats.h"
 #include "HWApplication.h"
+
 #include "HWDataManager.h"
+
+#include "pageeditteam.h"
 
 QLayout * PageEditTeam::bodyLayoutDefinition()
 {
@@ -336,18 +338,18 @@ void PageEditTeam::fixHHname(int idx)
 
 void PageEditTeam::CBFort_activated(const QString & fortname)
 {
-    QFile tmp;
-    tmp.setFileName(cfgdir->absolutePath() + "/Data/Forts/" + fortname + "L.png");
-    if (!tmp.exists()) tmp.setFileName(datadir->absolutePath() + "/Forts/" + fortname + "L.png");
-    QPixmap pix(QFileInfo(tmp).absoluteFilePath());
+    HWDataManager & dataMgr = HWDataManager::instance();
+    QPixmap pix(dataMgr.findFileForRead("Forts/" + fortname + "L.png"));
     FortPreview->setPixmap(pix);
 }
 
 void PageEditTeam::testSound()
 {
+    HWDataManager & dataMgr = HWDataManager::instance();
+
     QString voiceDir = QString("Sounds/voices/") + CBVoicepack->currentText();
 
-    QStringList list = HWDataManager::instance().entryList(
+    QStringList list = dataMgr.entryList(
             voiceDir,
             QDir::Files,
             QStringList() <<
@@ -360,7 +362,7 @@ void PageEditTeam::testSound()
 
     if (!list.isEmpty())
         SDLInteraction::instance().playSoundFile(
-            HWDataManager::instance().findFileForRead(voiceDir + "/" +
+            dataMgr.findFileForRead(voiceDir + "/" +
                 list[rand() % list.size()])
         );
 }

@@ -28,12 +28,14 @@
 HatsModel::HatsModel(QObject* parent) :
   QAbstractListModel(parent)
 {
+    HWDataManager & dataMgr = HWDataManager::instance();
+
     QPixmap hhpix = QPixmap(
-        HWDataManager::instance().findFileForRead("Graphics/Hedgehog/Idle.png")
+        dataMgr.findFileForRead("Graphics/Hedgehog/Idle.png")
     ).copy(0, 0, 32, 32);
 
     // my reserved hats
-    QStringList hatsList = HWDataManager::instance().entryList(
+    QStringList hatsList = dataMgr.entryList(
                                    "Graphics/Hats/Reserved",
                                    QDir::Files,
                                    QStringList(playerHash+"*.png")
@@ -42,7 +44,7 @@ HatsModel::HatsModel(QObject* parent) :
     int nReserved = hatsList.size();
 
     // regular hats
-    hatsList.append(HWDataManager::instance().entryList(
+    hatsList.append(dataMgr.entryList(
                                    "Graphics/Hats",
                                    QDir::Files,
                                    QStringList("*.png")
@@ -59,7 +61,7 @@ HatsModel::HatsModel(QObject* parent) :
         QString str = hatsList.at(i);
         str = str.remove(QRegExp("\\.png$"));
         QPixmap pix(
-            HWDataManager::instance().findFileForRead(
+            dataMgr.findFileForRead(
                 "Graphics/Hats/" + QString(isReserved?"Reserved/":"") + str + 
                 ".png"
             )

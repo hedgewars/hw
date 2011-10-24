@@ -22,7 +22,6 @@
 #include "AbstractPage.h"
 #include "binds.h"
 #include "hwconsts.h"
-#include "HWDataManager.h"
 #include "namegen.h"
 #include "SDLInteraction.h"
 

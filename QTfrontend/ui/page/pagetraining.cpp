@@ -28,7 +28,6 @@
 #include <QSettings>
 
 #include "hwconsts.h"
-
 #include "HWDataManager.h"
 
 #include "pagetraining.h"
@@ -115,6 +114,8 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 {
     initPage();
 
+    HWDataManager & dataMgr = HWDataManager::instance();
+
     // get locale
     QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini",
                        QSettings::IniFormat);
@@ -123,32 +124,27 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     if (loc.isEmpty())
         loc = QLocale::system().name();
 
-    QString infoFile = HWDataManager::instance().findFileForRead(
+    QString infoFile = dataMgr.findFileForRead(
                             QString("Locale/missions_" + loc + ".txt"));
 
     // if file is non-existant try with language only
     if (!QFile::exists(infoFile))
-        infoFile = HWDataManager::instance().findFileForRead(QString(
+        infoFile = dataMgr.findFileForRead(QString(
                 "Locale/missions_" + loc.remove(QRegExp("_.*$")) + ".txt"));
 
     // fallback if file for current locale is non-existant
     if (!QFile::exists(infoFile))
-    {
-        infoFile = HWDataManager::instance().findFileForRead(
-                                            QString("Locale/missions_en.txt"));
-    }
+        infoFile = dataMgr.findFileForRead(QString("Locale/missions_en.txt"));
 
 
     // preload mission info for current locale
     m_info = new QSettings(infoFile, QSettings::IniFormat, this);
 
 
-    QStringList missionList =
-            HWDataManager::instance().entryList(
-                                                "Missions/Training",
-                                                QDir::Files,
-                                                QStringList("*.lua")
-                                    ).replaceInStrings(QRegExp("\\.lua$"), "");
+    QStringList missionList = dataMgr.entryList(
+                                  "Missions/Training",
+                                  QDir::Files, QStringList("*.lua")).
+                                  replaceInStrings(QRegExp("\\.lua$"), "");
 
     // scripts to lost - TODO: model?
     foreach (const QString & mission, missionList)
@@ -156,7 +152,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
         QListWidgetItem * item = new QListWidgetItem(mission);
 
         // fallback name: replace underscores in mission name with spaces
-        QString name = item->text().remove("_");
+        QString name = item->text().replace("_", " ");
 
         // see if we can get a prettier/translated name
         name = m_info->value(mission + ".name", name).toString();
@@ -188,13 +184,15 @@ void PageTraining::startSelected()
 
 void PageTraining::updateInfo()
 {
+    HWDataManager & dataMgr = HWDataManager::instance();
+
     if (lstMissions->currentItem())
     {
         // TODO also use .pngs in userdata folder
-        QString thumbFile = datadir->absolutePath() +
-                    "/Graphics/Missions/Training/" +
+        QString thumbFile = dataMgr.findFileForRead(
+                    "Graphics/Missions/Training/" +
                     lstMissions->currentItem()->data(Qt::UserRole).toString() +
-                    "@2x.png";
+                    "@2x.png");
 
         if (QFile::exists(thumbFile))
             btnPreview->setIcon(QIcon(thumbFile));

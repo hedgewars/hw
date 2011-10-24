@@ -19,8 +19,6 @@
 #ifndef PAGE_TRAINING_H
 #define PAGE_TRAINING_H
 
-#include <QDir>
-
 #include "AbstractPage.h"
 
 class PageTraining : public AbstractPage
@@ -48,8 +46,6 @@ private:
     QLabel * lblDescription;
     QListWidget * lstMissions;
     QSettings * m_info;
-
-    QStringList scriptList(const QDir & scriptDir) const;
 
 
 private slots:

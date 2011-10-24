@@ -68,7 +68,7 @@ public:
                          ) const;
 
     /**
-     * @brief Returns path for the desires data file.
+     * @brief Returns the path for the desires data file.
      * 
      * Use this method if you want to read an existing data file.
      * 
@@ -79,15 +79,14 @@ public:
 
 
     /**
-     * @brief Creates a file object for the desired data path and
-     * returns a pointer to it.
+     * @brief Returns the path for the data file that is to be written.
      * 
      * Use this method if you want to create or write into a data file.
      * 
-     * @param relativeDataFilePath path to the data file.
-     * @return respective <code>QFile</code> pointer.
+     * @param relativeDataFilePath relative path of data file write path.
+     * @return destination of path data file.
      */
-    QFile * findFileForWrite(const QString & relativeDataFilePath) const;
+    QString findFileForWrite(const QString & relativeDataFilePath) const;
 
 
 private:

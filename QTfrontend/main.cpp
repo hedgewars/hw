@@ -186,10 +186,12 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    HWDataManager & dataMgr = HWDataManager::instance();
+
     {
         QStringList themes;
 
-        themes.append(HWDataManager::instance().entryList(
+        themes.append(dataMgr.entryList(
                          "Themes",
                          QDir::AllDirs | QDir::NoDotAndDotDot)
                      );
@@ -199,7 +201,7 @@ int main(int argc, char *argv[]) {
         themes.sort();
         for(int i = themes.size() - 1; i >= 0; --i)
         {
-            QString file = HWDataManager::instance().findFileForRead(
+            QString file = dataMgr.findFileForRead(
                 QString("Themes/%1/icon.png").arg(themes.at(i))
             );
 
@@ -210,7 +212,7 @@ int main(int argc, char *argv[]) {
 
                 // load preview icon
                 ic.second = QIcon(
-                    HWDataManager::instance().findFileForRead(
+                    dataMgr.findFileForRead(
                         QString("Themes/%1/icon@2x.png").arg(themes.at(i))
                     )
                 );
@@ -232,13 +234,13 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    mapList = new QStringList(HWDataManager::instance().entryList(
+    mapList = new QStringList(dataMgr.entryList(
                                  QString("Maps"),
                                  QDir::Dirs | QDir::NoDotAndDotDot
                                  )
                              );
  
-    scriptList = new QStringList(HWDataManager::instance().entryList(
+    scriptList = new QStringList(dataMgr.entryList(
                                      QString("Scripts/Multiplayer"),
                                      QDir::Files,
                                      QStringList("*.lua")
@@ -254,7 +256,7 @@ int main(int argc, char *argv[]) {
 
         // load locale file into translator
         Translator.load(
-            HWDataManager::instance().findFileForRead(
+            dataMgr.findFileForRead(
                 QString("Locale/hedgewars_" + cc)
             )
         );
@@ -278,7 +280,7 @@ int main(int argc, char *argv[]) {
     QString style = "";
 
     // load external stylesheet if there is any
-    QFile extFile(HWDataManager::instance().findFileForRead("css/qt.css"));
+    QFile extFile(dataMgr.findFileForRead("css/qt.css"));
 
     QFile resFile(":/res/css/qt.css");
 
