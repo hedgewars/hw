@@ -32,6 +32,7 @@
 #include "SquareLabel.h"
 #include "hats.h"
 #include "HWApplication.h"
+#include "HWDataManager.h"
 
 QLayout * PageEditTeam::bodyLayoutDefinition()
 {
@@ -243,142 +244,86 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 {
     initPage();
 
+    QRegExp pngSuffix("\\.png$");
+
     m_playerHash = "0000000000000000000000000000000000000000";
 
-    QDir tmpdir;
+    HWDataManager & dataMgr = HWDataManager::instance();
+
     QStringList list;
-    tmpdir.cd(cfgdir->absolutePath());
-    if (tmpdir.cd("Data/Sounds/voices")) 
+
+
+    // voicepacks
+    list = dataMgr.entryList("Sounds/voices", 
+                             QDir::AllDirs | QDir::NoDotAndDotDot);
+
+    CBVoicepack->addItems(list);
+
+
+    // forts
+    list = dataMgr.entryList("Forts", QDir::Files, QStringList("*L.png"));
+    list.replaceInStrings(QRegExp("L\\.png$"), "");
+    CBFort->addItems(list);
+
+
+    // graves
+    list =
+        dataMgr.entryList("Graphics/Graves", QDir::Files, QStringList("*.png"));
+
+    foreach (QString file, list)
     {
-        list = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
-        CBVoicepack->addItems(list);
-    }
+        QPixmap pix(dataMgr.findFileForRead("Graphics/Graves/" + file));
+        if ((pix.height() > 32) || pix.width() > 32)
+            pix = pix.copy(0, 0, 32, 32);
+        QIcon icon(pix);
 
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Sounds/voices");
-    QStringList tmplist = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
-    QStringList tmplist2;
-    foreach (const QString & line, tmplist)
-    {
-        if (!list.contains(line,Qt::CaseInsensitive))
-            tmplist2.append(line);
-    }
+        QString grave = QString(file).remove(pngSuffix);
 
-    CBVoicepack->addItems(tmplist2);
-
-    QStringList userforts;
-    tmpdir.cd(cfgdir->absolutePath());
-    if (tmpdir.cd("Data/Forts"))
-    {
-        tmpdir.setFilter(QDir::Files);
-        userforts = tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1");
-        CBFort->addItems(userforts);
-    }
-
-    tmpdir.cd("../Graphics/Graves");
-    QStringList userlist = tmpdir.entryList(QStringList("*.png"));
-    for (QStringList::Iterator it = userlist.begin(); it != userlist.end(); ++it )
-    {
-        QPixmap pix(cfgdir->absolutePath() + "/Data/Graphics/Graves/" + *it);
-        QIcon icon(pix.copy(0, 0, 32, 32));
-        CBGrave->addItem(icon, QString(*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
-    }
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Forts");
-    tmpdir.setFilter(QDir::Files);
-
-    tmplist = tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1");
-    QStringList dataforts;
-    foreach (const QString & line, tmplist)
-    {
-        if (!userforts.contains(line,Qt::CaseInsensitive))
-            dataforts.append(line);
-    }
-
-    CBFort->addItems(dataforts);
-
-    tmpdir.cd("../Graphics/Graves");
-    QStringList datalist = tmpdir.entryList(QStringList("*.png"));
-    foreach (const QString & line, datalist)
-    {
-        if (userlist.contains(line,Qt::CaseInsensitive)) continue;
-        QPixmap pix(datadir->absolutePath() + "/Graphics/Graves/" + line);
-        QIcon icon(pix.copy(0, 0, 32, 32));
-        QString grave = line;
-        grave = grave.replace(QRegExp("^(.*)\\.png"), "\\1");
         CBGrave->addItem(icon, grave);
     }
 
+    // flags
+
+    list =
+        dataMgr.entryList("Graphics/Flags", QDir::Files, QStringList("*.png"));
+
+    // skip cpu and hedgewars flags
+    int idx = list.indexOf("cpu.png");
+    if (idx >= 0)
+        list.removeAt(idx);
+    idx = list.indexOf("hedgewars.png");
+    if (idx >= 0)
+        list.removeAt(idx);
+
     // add the default flag
-    CBFlag->addItem(QIcon(QPixmap(datadir->absolutePath() + "/Graphics/Flags/hedgewars.png").copy(0, 0, 22, 15)), "Hedgewars", "hedgewars");
-    CBFlag->insertSeparator(CBFlag->count());
+    QPixmap hwFlag(dataMgr.findFileForRead("Graphics/Flags/hedgewars.png"));
+    CBFlag->addItem(QIcon(hwFlag.copy(0, 0, 22, 15)), "Hedgewars", "hedgewars");
 
-    tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Graphics/Flags");
-    userlist = tmpdir.entryList(QStringList("*.png"));
-    
+    // add seperator after
+    CBFlag->insertSeparator(1);
+
+    int insertAt = 2; // insert country flags after Hedgewars flag and seperator
+
     // add all country flags
-    foreach (const QString & line, userlist)
+    foreach (const QString & file, list)
     {
-        QPixmap pix(cfgdir->absolutePath() + "/Data/Graphics/Flags/" + line);
-        QIcon icon(pix.copy(0, 0, 22, 15));
-        // TODO improve readablility
-        if(line.compare("cpu.png") && line.compare("hedgewars.png") && (line.indexOf("cm_") == -1)) // skip cpu and hedgewars flags as well as all community flags
+        QIcon icon(QPixmap(dataMgr.findFileForRead("Graphics/Flags/" + file)));
+
+        QString flag = QString(file).remove(pngSuffix);
+
+        bool isCountryFlag = !file.startsWith("cm_");
+
+        if (isCountryFlag)
         {
-            QString flag = line;
-            flag = flag.replace(QRegExp("^(.*)\\.png"), "\\1");
-            CBFlag->addItem(icon, flag.replace("_", " "), flag);
+            CBFlag->insertItem(insertAt, icon, flag.replace("_", " "), flag);
+            insertAt++;
         }
+        else // append community flags at end
+            CBFlag->addItem(icon, flag.replace("cm_", QComboBox::tr("Community") + ": "), flag);
     }
 
-    CBFlag->insertSeparator(CBFlag->count());
-
-    // add all community flags
-    for (QStringList::Iterator it = userlist.begin(); it != userlist.end(); ++it )
-    {
-        QPixmap pix(cfgdir->absolutePath() + "/Data/Graphics/Flags/" + *it);
-        QIcon icon(pix.copy(0, 0, 22, 15));
-        if(it->indexOf("cm_") > -1) // skip non community flags this time
-        {
-            QString flag = QString(*it).replace(QRegExp("^(.*)\\.png"), "\\1");
-            CBFlag->addItem(icon, QString(flag).replace("cm_", QComboBox::tr("Community") + ": "), flag);
-        }
-    }
-
-    CBFlag->insertSeparator(CBFlag->count());
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Graphics/Flags");
-    datalist = tmpdir.entryList(QStringList("*.png"));
-    
-    // add all country flags
-    for (QStringList::Iterator it = datalist.begin(); it != datalist.end(); ++it )
-    {
-        if (userlist.contains(*it,Qt::CaseInsensitive)) continue;
-        QPixmap pix(datadir->absolutePath() + "/Graphics/Flags/" + *it);
-        QIcon icon(pix.copy(0, 0, 22, 15));
-        if(it->compare("cpu.png") && it->compare("hedgewars.png") && (it->indexOf("cm_") == -1)) // skip cpu and hedgewars flags as well as all community flags
-        {
-            QString flag = QString(*it).replace(QRegExp("^(.*)\\.png"), "\\1");
-            CBFlag->addItem(icon, QString(flag).replace("_", " "), flag);
-        }
-    }
-
-    CBFlag->insertSeparator(CBFlag->count());
-
-    // add all community flags
-    for (QStringList::Iterator it = datalist.begin(); it != datalist.end(); ++it )
-    {
-        if (userlist.contains(*it,Qt::CaseInsensitive)) continue;
-        QPixmap pix(datadir->absolutePath() + "/Graphics/Flags/" + *it);
-        QIcon icon(pix.copy(0, 0, 22, 15));
-        if(it->indexOf("cm_") > -1) // skip non community flags this time
-        {
-            QString flag = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
-            CBFlag->addItem(icon, QString(flag).replace("cm_", QComboBox::tr("Community") + ": "), flag);
-        }
-    }
+    // add separator between country flags and community flags
+    CBFlag->insertSeparator(insertAt);
 }
 
 void PageEditTeam::fixHHname(int idx)
@@ -469,7 +414,7 @@ void PageEditTeam::loadTeam(const HWTeam & team)
         HHNameEdit[i]->setText(hh.Name);
 
         if (hh.Hat.startsWith("Reserved"))
-            hh.Hat = hh.Hat.remove(0,40);
+            hh.Hat = "Reserved "+hh.Hat.remove(0,40);
 
         HHHats[i]->setCurrentIndex(HHHats[i]->findData(hh.Hat, Qt::DisplayRole));
     }
