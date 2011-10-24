@@ -762,17 +762,24 @@ void HWChatWidget::dragEnterEvent(QDragEnterEvent * event)
     if (event->mimeData()->hasUrls())
     {
         QList<QUrl> urls = event->mimeData()->urls();
-        QString url = urls[0].toString();
         if (urls.count() == 1)
-            if (url.contains(QRegExp("^file://.*\\.css$")))
+        {
+            QUrl url = urls[0];
+
+            static QRegExp localFileRegExp("file://.*\\.css$");
+            localFileRegExp.setCaseSensitivity(Qt::CaseInsensitive);
+
+            if (url.toString().contains(localFileRegExp))
                 event->acceptProposedAction();
+        }
     }
 }
 
 void HWChatWidget::dropEvent(QDropEvent * event)
 {
     const QString path(event->mimeData()->urls()[0].toString());
-    QFile file(QString(path).remove(QRegExp("^file://")));
+
+    QFile file(event->mimeData()->urls()[0].toLocalFile());
 
     if (file.exists() && (file.open(QIODevice::ReadOnly | QIODevice::Text)))
     {
@@ -781,8 +788,7 @@ void HWChatWidget::dropEvent(QDropEvent * event)
         while (!in.atEnd())
         {
             QString line = in.readLine();
-            if(!line.isEmpty())
-                style.append(line);
+            style.append(line + "\n");
         }
 
         setStyleSheet(style);
