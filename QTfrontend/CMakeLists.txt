@@ -14,7 +14,7 @@ find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
 # Check if we need zlib
-check_library_exists(${QT_QTCORE_LIBRARY} inflateInit2_ ${QT_LIBRARY_DIR} QT_PROVIDES_ZLIB_FUNCTIONS)
+check_library_exists("${QT_QTCORE_LIBRARY}" inflateInit2_ ${QT_LIBRARY_DIR} QT_PROVIDES_ZLIB_FUNCTIONS)
 
 if(NOT QT_PROVIDES_ZLIB_FUNCTIONS)
     find_package(ZLIB REQUIRED)
