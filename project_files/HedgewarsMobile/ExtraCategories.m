@@ -44,8 +44,9 @@
         backView.backgroundColor = color;
         self.backgroundView = backView;
         [backView release];
-    }
-    self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = [UIColor clearColor];
+    } else
+        self.backgroundColor = color;
 }
 
 @end

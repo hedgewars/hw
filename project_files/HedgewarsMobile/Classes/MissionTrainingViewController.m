@@ -43,16 +43,18 @@
     self.previewImage.layer.borderWidth = 3.8f;
     self.previewImage.layer.cornerRadius = 14;
 
-    UIView *backView = [[UIView alloc] initWithFrame:self.tableView.frame];
-    backView.backgroundColor = IS_IPAD() ? [UIColor darkBlueColorTransparent] : [UIColor blackColorTransparent];
-    [self.tableView setBackgroundView:backView];
-    [backView release];
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.layer.borderColor = IS_IPAD() ? [[UIColor darkYellowColor] CGColor] : [[UIColor whiteColor] CGColor];
+    if (IS_IPAD()) {
+        [self.tableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
+        self.tableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    } else {
+        [self.tableView setBackgroundColorForAnyTable:[UIColor blackColorTransparent]];
+        self.tableView.layer.borderColor = [[UIColor whiteColor] CGColor];
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    }
     self.tableView.layer.borderWidth = 2.4f;
     self.tableView.layer.cornerRadius = 8;
     self.tableView.separatorColor = [UIColor whiteColor];
-    self.tableView.separatorStyle = IS_IPAD() ? UITableViewCellSeparatorStyleNone : UITableViewCellSeparatorStyleSingleLine;
 
     self.descriptionLabel.textColor = [UIColor lightYellowColor];
     [super viewDidLoad];
