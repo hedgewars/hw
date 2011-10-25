@@ -55,4 +55,4 @@ protected:
 };
 
 
-#endif // FREQSPINBOX_H
+#endif // HEDGEWARS_FREQSPINBOX_H

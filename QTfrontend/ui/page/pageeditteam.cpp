@@ -80,7 +80,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
         btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i, 3, 1, 1, true);
     }
 
-    btnRandomTeam = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, 1);
+    btnRandomTeam = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, 0);
 
     vbox1->addWidget(GBoxHedgehogs);
 

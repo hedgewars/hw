@@ -247,7 +247,7 @@ QString HWNamegen::getRandomGrave()
                          "Graphics/Graves",
                          QDir::Files,
                          QStringList("*.png")
-                     ).replaceInStrings(QRegExp("^(.*)\\.png"), "\\1")
+                     ).replaceInStrings(QRegExp("\\.png$"), "")
                  );
 
     if(Graves.size()==0)
@@ -269,7 +269,7 @@ QString HWNamegen::getRandomFort()
                         "Forts",
                         QDir::Files,
                         QStringList("*L.png")
-                    ).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1")
+                    ).replaceInStrings(QRegExp("L\\.png$"), "")
                 );
 
     if(Forts.size()==0)
