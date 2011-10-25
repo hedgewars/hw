@@ -223,6 +223,7 @@
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
 		61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C28D3E142D380400DA16C2 /* AudioManagerController.m */; };
 		61CADE331402EE290030C3EB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61CADE321402EE290030C3EB /* ImageIO.framework */; };
+		61D0BDF91457508C0011A899 /* ExtraCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D0BDF81457508C0011A899 /* ExtraCategories.m */; };
 		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61D3D2A51290E03A003CE7C3 /* irc.png in Resources */ = {isa = PBXBuildFile; fileRef = 61D3D2A41290E03A003CE7C3 /* irc.png */; };
 		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
@@ -592,6 +593,8 @@
 		61C28D3D142D380400DA16C2 /* AudioManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioManagerController.h; path = Classes/AudioManagerController.h; sourceTree = "<group>"; };
 		61C28D3E142D380400DA16C2 /* AudioManagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioManagerController.m; path = Classes/AudioManagerController.m; sourceTree = "<group>"; };
 		61CADE321402EE290030C3EB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		61D0BDF71457508C0011A899 /* ExtraCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtraCategories.h; sourceTree = "<group>"; };
+		61D0BDF81457508C0011A899 /* ExtraCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExtraCategories.m; sourceTree = "<group>"; };
 		61D2059F127CDD1100ABD83E /* ObjcExports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjcExports.h; path = Classes/ObjcExports.h; sourceTree = "<group>"; };
 		61D205A0127CDD1100ABD83E /* ObjcExports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjcExports.m; path = Classes/ObjcExports.m; sourceTree = "<group>"; };
 		61D3D2A41290E03A003CE7C3 /* irc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = irc.png; path = Resources/Icons/irc.png; sourceTree = "<group>"; };
@@ -735,6 +738,8 @@
 				6165922311CA9BD500D6E256 /* CGPointUtils.c */,
 				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
 				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
+				61D0BDF71457508C0011A899 /* ExtraCategories.h */,
+				61D0BDF81457508C0011A899 /* ExtraCategories.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -1635,6 +1640,7 @@
 				6167A6761391514600AA6D07 /* RestoreViewController.m in Sources */,
 				61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */,
 				61915D5B143A4E2C00299991 /* MissionTrainingViewController.m in Sources */,
+				61D0BDF91457508C0011A899 /* ExtraCategories.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

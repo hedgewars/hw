@@ -15,20 +15,43 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
- * File created on 25/04/2010.
+ * File created on 25/10/2011.
  */
 
 
-#ifdef __OBJC__
 #import <Foundation/Foundation.h>
-#import <CoreGraphics/CoreGraphics.h>
-#import <UIKit/UIKit.h>
-#import "PascalImports.h"
-#import "UIImageExtra.h"
-#import "DefinesAndMacros.h"
-#import "HedgewarsAppDelegate.h"
-#import "AudioManagerController.h"
-#import "HWUtils.h"
-#import "ExtraCategories.h"
-#endif
 
+
+@interface UITableView (backgroundColor)
+
+-(void) setBackgroundColorForAnyTable:(UIColor *)color;
+
+@end
+
+
+@interface UIColor (HWColors)
+
++(UIColor *)darkYellowColor;
++(UIColor *)lightYellowColor;
++(UIColor *)darkBlueColor;
++(UIColor *)darkBlueColorTransparent;
++(UIColor *)blackColorTransparent;
+
+@end
+
+
+@interface UILabel (quickStyle)
+
+-(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title;
+-(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth;
+-(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth
+          withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor;
+
+@end
+
+
+@interface NSString (MD5)
+
+-(NSString *)MD5hash;
+
+@end

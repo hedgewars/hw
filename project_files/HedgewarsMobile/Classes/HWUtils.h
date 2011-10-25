@@ -27,41 +27,7 @@
 
 +(NSString *)modelType;
 +(NSArray *)teamColors;
-
-@end
-
-
-@interface UITableView (extra)
-
--(void) setBackgroundColorForAnyTable:(UIColor *)color;
-
-@end
-
-
-@interface UIColor (extra)
-
-+(UIColor *)darkYellowColor;
-+(UIColor *)lightYellowColor;
-+(UIColor *)darkBlueColor;
-+(UIColor *)darkBlueColorTransparent;
-+(UIColor *)blackColorTransparent;
-
-@end
-
-
-@interface UILabel (extra)
-
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title;
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth;
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth
-          withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor;
-
-@end
-
-
-@interface NSString (extra)
-
--(NSString *)MD5hash;
++(void) releaseCache;
 
 @end
 

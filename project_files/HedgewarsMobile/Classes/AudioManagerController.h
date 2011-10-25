@@ -34,6 +34,6 @@
 +(void) playBackSound;
 +(void) playSelectSound;
 
-+(void) cleanupMemory;
++(void) releaseCache;
 
 @end
