@@ -54,7 +54,7 @@ public:
     void StartNet();
     void StartTraining(const QString & file);
     void StartCampaign(const QString & file);
-    void KillAllTeams();
+    void abort();
     GameState gameState;
     bool netSuspend;
 

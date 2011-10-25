@@ -542,6 +542,23 @@ RecountTeamHealth(TeamsArray[t])
 end;
 
 
+procedure chFinish(var s:shortstring);
+var t: LongInt;
+begin
+// avoid compiler hint
+s:= s;
+
+t:= 0;
+while (t < cMaxTeams) and (TeamsArray[t] <> nil) do
+    begin
+    TeamsArray[t]^.hasGone:= true;
+    inc(t);
+    end;
+
+AddChatString('** Good-bye!');
+RecountAllTeamsHealth();
+end;
+
 procedure initModule;
 begin
     RegisterVariable('addhh', vtCommand, @chAddHH, false);
@@ -549,6 +566,7 @@ begin
     RegisterVariable('hhcoords', vtCommand, @chSetHHCoords, false);
     RegisterVariable('bind', vtCommand, @chBind, true );
     RegisterVariable('teamgone', vtCommand, @chTeamGone, true );
+    RegisterVariable('finish', vtCommand, @chFinish, true ); // all teams gone
 
     CurrentTeam:= nil;
     PreviousTeam:= nil;

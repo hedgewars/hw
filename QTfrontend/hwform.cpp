@@ -482,7 +482,8 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if (id == ID_PAGE_ROOMSLIST) {
         if (hwnet && game && game->gameState == gsStarted) { // abnormal exit - kick or room destruction - send kills.
             game->netSuspend = true;
-            game->KillAllTeams();
+            ui.pageRoomsList->displayWarning(tr("Game aborted"));
+            game->abort();
         }
     }
 

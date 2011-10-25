@@ -390,13 +390,9 @@ void HWGame::SetGameState(GameState state)
     emit GameStateChanged(state);
 }
 
-void HWGame::KillAllTeams()
+void HWGame::abort()
 {
-    if (m_pTeamSelWidget)
-    {
-        QByteArray buf;
-        foreach(HWTeam team, m_pTeamSelWidget->getPlayingTeams())
-            HWProto::addStringToBuffer(buf, QString("eteamgone %1").arg(team.name()));
-        RawSendIPC(buf);
-    }
+    QByteArray buf;
+    HWProto::addStringToBuffer(buf, QString("efinish"));
+    RawSendIPC(buf);
 }
