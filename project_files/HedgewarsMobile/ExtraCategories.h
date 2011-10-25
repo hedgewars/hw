@@ -22,6 +22,13 @@
 #import <Foundation/Foundation.h>
 
 
+@interface UIScreen (safe)
+
+-(CGFloat) safeScale;
+
+@end
+
+
 @interface UITableView (backgroundColor)
 
 -(void) setBackgroundColorForAnyTable:(UIColor *)color;

@@ -40,7 +40,6 @@ static NSArray *cachedColors = nil;
 
         cachedModel = [[NSString stringWithUTF8String:name] retain];
         free(name);
-        DLog(@"Cache now contains: %@",cachedModel);
     }
     return cachedModel;
 }

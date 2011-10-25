@@ -163,10 +163,11 @@
             weaponCell.delegate = self;
         }
 
-        int size = 32 * [[UIScreen mainScreen] scale];
-        int corners = 8 * [[UIScreen mainScreen] scale];
-        int x = ((row*size)/(int)(self.ammoStoreImage.size.height * [[UIScreen mainScreen] scale]))*size;
-        int y = (row*size)%(int)(self.ammoStoreImage.size.height * [[UIScreen mainScreen] scale]);
+        CGFloat theScale = [[UIScreen mainScreen] safeScale];
+        int size = 32 * theScale;
+        int corners = 8 * theScale;
+        int x = ((row*size)/(int)(self.ammoStoreImage.size.height * theScale))*size;
+        int y = (row*size)%(int)(self.ammoStoreImage.size.height * theScale);
 
         UIImage *img = [[self.ammoStoreImage cutAt:CGRectMake(x, y, size, size)] makeRoundCornersOfSize:CGSizeMake(corners, corners)];
         weaponCell.weaponIcon.image = img;

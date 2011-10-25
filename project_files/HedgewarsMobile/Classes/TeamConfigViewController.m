@@ -108,35 +108,6 @@
     return numberOfHogs;
 }
 
--(UIImage *)drawHogsRepeated:(NSInteger) manyTimes {
-    NSString *imgString = [[NSString alloc] initWithFormat:@"%@/hedgehog.png",[[NSBundle mainBundle] resourcePath]];
-    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:imgString];
-    [imgString release];
-    CGFloat screenScale = [[UIScreen mainScreen] scale];
-    int w = hogSprite.size.width * screenScale;
-    int h = hogSprite.size.height * screenScale;
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(NULL, w * 3, h, 8, 4 * w * 3, colorSpace, kCGImageAlphaPremultipliedFirst);
-    
-    // draw the two images in the current context
-    for (int i = 0; i < manyTimes; i++)
-        CGContextDrawImage(context, CGRectMake(i*8*screenScale, 0, w, h), [hogSprite CGImage]);
-    [hogSprite release];
-    
-    // Create bitmap image info from pixel data in current context
-    CGImageRef imageRef = CGBitmapContextCreateImage(context);
-    
-    // Create a new UIImage object
-    UIImage *resultImage = [UIImage imageWithCGImage:imageRef scale:screenScale orientation:UIImageOrientationUp];
-    
-    // Release colorspace, context and bitmap information
-    CGColorSpaceRelease(colorSpace);
-    CGContextRelease(context);
-    CFRelease(imageRef);
-
-    return resultImage;
-}
-
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
@@ -174,7 +145,7 @@
         [squareButton setTitle:[hogNumber stringValue] forState:UIControlStateNormal];
         squareButton.ownerDictionary = selectedRow;
 
-        cell.imageView.image = [self drawHogsRepeated:[hogNumber intValue]];
+        cell.imageView.image = [UIImage drawHogsRepeated:[hogNumber intValue]];
         ((HoldTableViewCell *)cell).delegate = self;
     } else {
         cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier1];
@@ -277,7 +248,7 @@
         [squareButton setTitle:[newNumber stringValue] forState:UIControlStateNormal];
         [selectedRow setObject:newNumber forKey:@"number"];
 
-        cell.imageView.image = [self drawHogsRepeated:[newNumber intValue]];
+        cell.imageView.image = [UIImage drawHogsRepeated:[newNumber intValue]];
     }
 }
 

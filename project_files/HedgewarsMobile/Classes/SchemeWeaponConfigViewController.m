@@ -87,11 +87,11 @@ static SchemeWeaponConfigViewController *controllerInstance;
                           NSLocalizedString(@"Style",@""),nil];
         UISegmentedControl *controller = [[UISegmentedControl alloc] initWithItems:array];
         [array release];
-        [controller addTarget:self.tableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
         controller.segmentedControlStyle = UISegmentedControlStyleBar;
         controller.tintColor = [UIColor lightGrayColor];
         controller.selectedSegmentIndex = 0;
         self.topControl = controller;
+        [controller addTarget:self.tableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
         [controller release];
     }
     return topControl;

@@ -64,23 +64,24 @@
 // main routine for calling the actual game engine
 -(void) engineLaunch {
     const char *gameArgs[11];
-    NSInteger width, height;
+    CGFloat width, height;
+    CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
     if (IS_DUALHEAD()) {
         CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
-        width = (int) screenBounds.size.width;
-        height = (int) screenBounds.size.height;
+        width = screenBounds.size.width;
+        height = screenBounds.size.height;
     } else {
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
-        width = (int) screenBounds.size.height;
-        height = (int) screenBounds.size.width;
+        width = screenBounds.size.height;
+        height = screenBounds.size.width;
     }
 
-    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width * (int)[[UIScreen mainScreen] scale]];
-    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height * (int)[[UIScreen mainScreen] scale]];
+    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", (int)(width * screenScale)];
+    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", (int)(height * screenScale)];
     NSString *rotation = [[NSString alloc] initWithString:@"0"];
 
     NSString *modelId = [HWUtils modelType];

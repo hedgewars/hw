@@ -25,6 +25,7 @@
 @interface UIImage (extra)
 
 +(UIImage *)whiteImage:(CGSize) ofSize;
++(UIImage *)drawHogsRepeated:(NSInteger) manyTimes;
 +(CGSize) imageSizeFromMetadataOf:(NSString *)aFileName;
 
 -(UIImage *)scaleToSize:(CGSize) size;

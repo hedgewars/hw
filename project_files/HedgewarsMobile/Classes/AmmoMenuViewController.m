@@ -123,6 +123,7 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos.png",GRAPHICS_DIRECTORY()];
     UIImage *ammoStoreImage = [[UIImage alloc] initWithContentsOfFile:str];
+    CGFloat theScale = [[UIScreen mainScreen] safeScale];
 
     NSMutableArray *imgs = [[NSMutableArray alloc] initWithCapacity:HW_getNumberOfWeapons()];
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:HW_getNumberOfWeapons()];
@@ -167,9 +168,9 @@
         [self.view addSubview:button];
         [array addObject:button];
 
-        int size = 32 * [[UIScreen mainScreen] scale];
-        int x_src = ((i*size)/(int)(ammoStoreImage.size.height * [[UIScreen mainScreen] scale]))*size;
-        int y_src = (i*size)%(int)(ammoStoreImage.size.height * [[UIScreen mainScreen] scale]);
+        int size = 32 * theScale;
+        int x_src = ((i*size)/(int)(ammoStoreImage.size.height * theScale))*size;
+        int y_src = (i*size)%(int)(ammoStoreImage.size.height * theScale);
         UIImage *img = [ammoStoreImage cutAt:CGRectMake(x_src, y_src, size, size)];
         [imgs addObject:img];
     }

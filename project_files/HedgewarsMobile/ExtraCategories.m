@@ -23,6 +23,19 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CommonCrypto/CommonDigest.h>
 
+
+@implementation UIScreen (safe)
+
+-(CGFloat) safeScale {
+    CGFloat theScale = 1.0f;
+    if ([self respondsToSelector:@selector(scale)])
+         theScale = [self scale];
+    return theScale;
+}
+
+@end
+
+
 @implementation UITableView (backgroundColor)
 
 -(void) setBackgroundColorForAnyTable:(UIColor *) color {
