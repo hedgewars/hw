@@ -28,7 +28,7 @@ checkNetCmd msg = check decoded
         check Nothing = (False, False)
         check (Just ms) | B.length ms > 0 = let m = B.head ms in (m `Set.member` legalMessages, m == '+')
                         | otherwise        = (False, False)
-        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghbc12345" ++ slotMessages
+        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 
 gameInfo2Replay :: GameInfo -> B.ByteString
