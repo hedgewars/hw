@@ -43,16 +43,6 @@ HistoryLineEdit::~HistoryLineEdit()
 
 void HistoryLineEdit::rememberCurrentText()
 {
-    m_historyMutex.lock();
-
-    rememberCurrentTextUnsynced();
-
-    m_historyMutex.unlock();
-}
-
-
-void HistoryLineEdit::rememberCurrentTextUnsynced()
-{
     QString newEntry = text();
 
     // don't store whitespace-only/empty text
@@ -73,36 +63,26 @@ void HistoryLineEdit::rememberCurrentTextUnsynced()
 
 void HistoryLineEdit::clear()
 {
-    m_historyMutex.lock();
-
     QLineEdit::clear();
     m_curHistEntryIdx = m_history->size();
-
-    m_historyMutex.unlock();
 }
 
 
 void HistoryLineEdit::reset()
 {
     // forget history
-    m_historyMutex.lock();
-
     m_history->clear();
     m_curHistEntryIdx = 0;
-
-    m_historyMutex.unlock();
 }
 
 
 void HistoryLineEdit::navigateHistory(bool isGoingUp)
 {
-    m_historyMutex.lock();
-
     // save possible changes to new entry
     if ((m_curHistEntryIdx >= m_history->size() ||
         (text() != m_history->at(m_curHistEntryIdx))))
         {
-            rememberCurrentTextUnsynced();
+            rememberCurrentText();
         }
 
     if (isGoingUp)
@@ -125,8 +105,6 @@ void HistoryLineEdit::navigateHistory(bool isGoingUp)
     else
         m_curHistEntryIdx = 0;
 
-
-    m_historyMutex.unlock();
 }
 
 

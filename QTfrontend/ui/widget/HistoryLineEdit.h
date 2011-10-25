@@ -32,15 +32,12 @@
 
 #include <QKeyEvent>
 
-#include <QMutex>
 
 class QLineEdit;
 
 /**
  * @brief <code>QLineEdit</code> that features a history of previous contents,
  *        re-selectable using the arrow keys.
- *
- * Note: Public methods for accessing history are <b>thread-safe</b>.
  * 
  * @author sheepluva
  * @since 0.9.17
@@ -98,8 +95,6 @@ private:
 
     QStringList * m_history; ///< history of previous inputs
 
-    QMutex m_historyMutex; ///< make history QStringList action thread-safe
-
     /**
      * @brief Navigates content history in the desired direction.
      *
@@ -109,11 +104,6 @@ private:
      * @param isGoingUp true: next older entry, false: next more recent entry.
      */
     void navigateHistory(bool isGoingUp);
-
-    /**
-     * @brief Appends current text to history, without Mutex.
-     */
-    void rememberCurrentTextUnsynced();
 };
 
 

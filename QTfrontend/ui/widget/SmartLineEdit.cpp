@@ -53,60 +53,40 @@ SmartLineEdit::~SmartLineEdit()
 
 void SmartLineEdit::addCommands(const QStringList & commands)
 {
-    m_keywordMutex.lock();
-
     m_cmds->append(commands);
-
-    m_keywordMutex.unlock();
 }
 
 
 void SmartLineEdit::removeCommands(const QStringList & commands)
 {
-    m_keywordMutex.lock();
-
     foreach (const QString & cmd, commands)
     {
         m_cmds->removeAll(cmd);
     }
-
-    m_keywordMutex.unlock();
 }
 
 
 void SmartLineEdit::addNickname(const QString & name)
 {
-    m_keywordMutex.lock();
-
     m_sorted_nicks->insert(name.toLower(), name);
     m_nicks->append(name);
-
-    m_keywordMutex.unlock();
 }
 
 
 void SmartLineEdit::removeNickname(const QString & name)
 {
-    m_keywordMutex.lock();
-
     m_sorted_nicks->remove(name.toLower());
     m_nicks->removeAll(name);
-
-    m_keywordMutex.unlock();
 }
 
 
 void SmartLineEdit::reset()
 {
     // forget keywords
-    m_keywordMutex.lock();
-
     m_cmds->clear();
     m_sorted_nicks->clear();
     m_nicks->clear();
     resetAutoCompletionStatus();
-
-    m_keywordMutex.unlock();
 
     // forget history
     HistoryLineEdit::reset();
@@ -173,10 +153,8 @@ void SmartLineEdit::autoComplete()
     }
     else
     {
-        m_keywordMutex.lock();
         m_cmds->sort();
         m_nicks = new QStringList(m_sorted_nicks->values());
-        m_keywordMutex.unlock();
 
         int cp = cursorPosition();
 
@@ -210,8 +188,6 @@ void SmartLineEdit::autoComplete()
         isFirstWord = prefix.isEmpty(); // true if first word
     }
 
-
-    m_keywordMutex.lock();
 
     if (isFirstWord)
     {
@@ -249,8 +225,6 @@ void SmartLineEdit::autoComplete()
             }
         }
     }
-
-    m_keywordMutex.unlock();
 
     // we found a single match?
     if (!match.isEmpty())

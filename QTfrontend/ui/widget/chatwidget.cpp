@@ -102,21 +102,13 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
 QString * HWChatWidget::s_styleSheet = NULL;
 QStringList * HWChatWidget::s_displayNone = NULL;
 bool HWChatWidget::s_isTimeStamped = true;
-QMutex HWChatWidget::s_styleSheetMutex;
 
 const QString & HWChatWidget::styleSheet()
 {
-    s_styleSheetMutex.lock();
-
     if (s_styleSheet != NULL)
-    {
-        s_styleSheetMutex.unlock();
         return *s_styleSheet;
-    }
 
     setStyleSheet();
-
-    s_styleSheetMutex.unlock();
 
     return *s_styleSheet;
 }

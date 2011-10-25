@@ -16,14 +16,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+/**
+ * @file
+ * @brief FreqSpinBox class implementation
+ */
+
 #include "FreqSpinBox.h"
 
-/**
- * Returns it's value as localized frequency.
- * 'Never', 'Every Turn', 'Every 2 Turns', etc.
- * @param value integer value to be representing as string
- * @return the turn frequence-like string representation
- */
+
+FreqSpinBox::FreqSpinBox(QWidget* parent) : QSpinBox(parent)
+{
+    // do nothing
+};
+
+
 QString FreqSpinBox::textFromValue(int value) const
 {
     if (value == 0)

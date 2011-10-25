@@ -16,15 +16,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef FREQSPINBOX_H
-#define FREQSPINBOX_H
+/**
+ * @file
+ * @brief FreqSpinBox class definition
+ */
 
+#ifndef HEDGEWARS_FREQSPINBOX_H
+#define HEDGEWARS_FREQSPINBOX_H
 
 #include <QObject>
 #include <QSpinBox>
 
 /**
- * A SpinBox that returns it's value as localized turn frequency.
+ * <code>SpinBox</code> that returns its value as localized turn frequency.
  * 'Never', 'Every Turn', 'Every 2 Turns', etc.
  * @author unc0rr
  * @since  0.9.12
@@ -34,9 +38,19 @@ class FreqSpinBox : public QSpinBox
     Q_OBJECT
 
 public:
-    FreqSpinBox(QWidget* parent) : QSpinBox(parent) {};
+    /**
+     * @brief Class constructor.
+     * @param parent parent widget.
+     */
+    FreqSpinBox(QWidget * parent);
 
 protected:
+    /**
+     * Returns it's value as localized frequency.
+     * 'Never', 'Every Turn', 'Every 2 Turns', etc.
+     * @param value integer value to be representing as string.
+     * @return the turn frequence-like string representation.
+     */
     QString textFromValue(int value) const;
 };
 

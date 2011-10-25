@@ -455,10 +455,6 @@ void HWForm::GoToEditScheme()
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
-    // with all those signals firing around make sure we don't switch a page
-    // at the same time in different threads
-    onPageShownMutex.lock();
-
 #ifdef USE_XFIRE
     updateXfire();
 #endif
@@ -539,8 +535,6 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     else if (id == ID_PAGE_ROOMSLIST)
         ui.pageRoomsList->chatWidget->loadLists(ui.pageOptions->editNetNick->text());
 
-
-    onPageShownMutex.unlock();
 }
 
 void HWForm::GoToPage(int id)

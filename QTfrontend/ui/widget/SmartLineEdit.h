@@ -44,7 +44,6 @@
  * <ul>
  *   <li>A Keyword can either be a command (if first word) or
  *       a nickname (completed regardless of position in text).</li>
- *   <li>Public methods for accessing keywords are <b>thread-safe.</b></li>
  * </ul>
  * 
  * @author sheepluva
@@ -136,8 +135,6 @@ private:
     bool m_hasJustMatched; ///< whether this widget just did an auto-completion
     QString m_prefix; ///< prefix of the text replacement this widget just did
     QString m_postfix; ///< postfix of the text replacement this widget just did
-
-    QMutex m_keywordMutex; ///< make keyword QStringList action thread-safe
 
     /**
      * @brief Autocompletes the contents based on the known commands and/or names.
