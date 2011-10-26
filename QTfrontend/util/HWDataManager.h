@@ -55,7 +55,7 @@ public:
     static HWDataManager & instance();
 
     /**
-     * @brief Returns a pointer to the <i>singleton</i> instance of this class.
+     * @brief Returns a sorted list of data directory entries.
      * 
      * @param subDirectory sub-directory to search.
      * @param filters filters for entry type.

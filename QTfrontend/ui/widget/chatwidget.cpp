@@ -603,7 +603,7 @@ void HWChatWidget::clear()
     // clear and re compile regexp for highlighting
     m_highlights.clear();
 
-    QString hlRegExp("^(.* )?%1(( |[^-a-z0-9_]( |$)).*)?$");
+    QString hlRegExp("^(.* )?%1[^-a-z0-9_]*( .*)?$");
     QRegExp whitespace("\\s");
 
     m_highlights.append(QRegExp(hlRegExp.arg(m_userNick)));
