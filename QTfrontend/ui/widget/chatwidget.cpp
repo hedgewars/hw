@@ -136,6 +136,8 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
                 style.append(in.readLine()+"\n");
             }
             orgStyleSheet = style;
+
+            file.close();
         }
     }
 
@@ -483,7 +485,8 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
 
     // check first character for color code and set color properly
     char c = str[0].toAscii();
-    switch (c) {
+    switch (c)
+    {
         case 3:
             cssClass = (isFriend ? "msg_FriendJoin" : "msg_UserJoin");
             break;
@@ -495,9 +498,21 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
                 cssClass = "msg_FriendChat";
     }
 
-    bool isHL = (!nick.isEmpty() &&
-                (nick != m_userNick) &&
-                str.toLower().contains(m_hlRegExp));
+    bool isHL = false;
+
+    if ((!nick.isEmpty()) && (nick != m_userNick))
+    {
+        QString lcStr = str.toLower();
+
+        foreach (const QRegExp & hl, m_highlights)
+        {
+            if (lcStr.contains(hl))
+            {
+                isHL = true;
+                break;
+            }
+        }
+    }
 
     addLine(cssClass, formattedStr, isHL);
 }
@@ -584,8 +599,48 @@ void HWChatWidget::clear()
     chatStrings.clear();
     chatNicks->clear();
     m_userNick = gameSettings->value("net/nick","").toString();
-    m_hlRegExp = QRegExp(QString("^(.* )?%1(( |[^-a-z0-9_]( |$)).*)?$").
-                            arg(QRegExp::escape(m_userNick).toLower()));
+
+    // clear and re compile regexp for highlighting
+    m_highlights.clear();
+
+    QString hlRegExp("^(.* )?%1(( |[^-a-z0-9_]( |$)).*)?$");
+    QRegExp whitespace("\\s");
+
+    m_highlights.append(QRegExp(hlRegExp.arg(m_userNick)));
+
+    QFile file(cfgdir->absolutePath() + "/" + m_userNick + "_highlight.txt");
+
+    if (file.exists() && (file.open(QIODevice::ReadOnly | QIODevice::Text)))
+    {
+        QTextStream in(&file);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            QStringList list = line.split(whitespace);
+            foreach (QString word, list)
+            {
+                m_highlights.append(QRegExp(
+                                hlRegExp.arg(QRegExp::escape(word.toLower()))));
+            }
+        }
+
+        if (file.isOpen())
+            file.close();
+    }
+
+    QFile file2(cfgdir->absolutePath() + "/" + m_userNick + "_hlregexp.txt");
+
+    if (file2.exists() && (file2.open(QIODevice::ReadOnly | QIODevice::Text)))
+    {
+        QTextStream in(&file2);
+        while (!in.atEnd())
+        {
+            m_highlights.append(QRegExp(in.readLine().toLower()));
+        }
+
+        if (file2.isOpen())
+            file2.close();
+    }
 }
 
 void HWChatWidget::onKick()
@@ -787,6 +842,9 @@ void HWChatWidget::dropEvent(QDropEvent * event)
         chatText->document()->setDefaultStyleSheet(*s_styleSheet);
         displayNotice(tr("Stylesheet imported from %1").arg(path));
         displayNotice(tr("Enter %1 if you want to use the current styleSheet in future, enter %2 to reset!").arg("/saveStyleSheet").arg("/discaredStyleSheet"));
+
+        if (file.isOpen())
+            file.close();
 
         event->acceptProposedAction();
     }

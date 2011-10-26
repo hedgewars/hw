@@ -24,6 +24,7 @@
 #include <QListWidget>
 #include <QString>
 #include <QGridLayout>
+#include <QList>
 #include <QRegExp>
 
 #include "SDLInteraction.h"
@@ -133,7 +134,7 @@ private:
   QString m_helloSound;
   QString m_hilightSound;
   QString m_userNick;
-  QRegExp m_hlRegExp; ///< regular expression used for highlighting messages
+  QList<QRegExp> m_highlights; ///< regular expressions used for highlighting
   bool notify;
   bool showReady;
 
