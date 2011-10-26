@@ -222,7 +222,7 @@
 		61B9A86814423A9D001541C1 /* GameConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
 		61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C28D3E142D380400DA16C2 /* AudioManagerController.m */; };
-		61CADE331402EE290030C3EB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61CADE321402EE290030C3EB /* ImageIO.framework */; };
+		61CADE331402EE290030C3EB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61CADE321402EE290030C3EB /* ImageIO.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		61D0BDF91457508C0011A899 /* ExtraCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D0BDF81457508C0011A899 /* ExtraCategories.m */; };
 		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61D3D2A51290E03A003CE7C3 /* irc.png in Resources */ = {isa = PBXBuildFile; fileRef = 61D3D2A41290E03A003CE7C3 /* irc.png */; };
@@ -587,7 +587,7 @@
 		61AC067312B2E32D000B52A2 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Appirater.m; path = Classes/Appirater.m; sourceTree = "<group>"; };
 		61B7A33612CC21080086B604 /* StatsPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatsPageViewController.h; sourceTree = "<group>"; };
 		61B7A33712CC21080086B604 /* StatsPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatsPageViewController.m; sourceTree = "<group>"; };
-		61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "GameConfigViewController-iPad.xib"; path = "Classes/GameConfigViewController-iPad.xib"; sourceTree = "<group>"; };
+		61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "GameConfigViewController-iPad.xib"; sourceTree = "<group>"; };
 		61C079E211F35A300072BF46 /* EditableCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditableCellView.h; path = Classes/EditableCellView.h; sourceTree = "<group>"; };
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditableCellView.m; path = Classes/EditableCellView.m; sourceTree = "<group>"; };
 		61C28D3D142D380400DA16C2 /* AudioManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioManagerController.h; path = Classes/AudioManagerController.h; sourceTree = "<group>"; };
@@ -674,9 +674,9 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				6163EE4D11CC247D001C0453 /* Game Config */,
-				6163EE4C11CC2478001C0453 /* Settings Pages */,
-				611D9BF312497B7700008271 /* Other Controllers */,
+				6163EE4D11CC247D001C0453 /* Game Configuration */,
+				6163EE4C11CC2478001C0453 /* Settings Page */,
+				611D9BF312497B7700008271 /* Satellite Controllers */,
 				6163EE6C11CC253F001C0453 /* Overlay */,
 				616591F011CA9BA200D6E256 /* MainMenuViewController.h */,
 				616591F111CA9BA200D6E256 /* MainMenuViewController.m */,
@@ -712,7 +712,6 @@
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				61370652117B1D50004EE44A /* Entitlements-Distribution.plist */,
 				611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */,
-				61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -720,26 +719,19 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61F8535314578999002CA294 /* Helpers */,
 				61641FE21437CD8F006E049C /* Headers */,
 				61DE91561258B76800B80214 /* Custom UIs */,
 				61AC067212B2E32D000B52A2 /* Appirater.h */,
 				61AC067312B2E32D000B52A2 /* Appirater.m */,
-				61C28D3D142D380400DA16C2 /* AudioManagerController.h */,
-				61C28D3E142D380400DA16C2 /* AudioManagerController.m */,
 				6165929C11CA9E2F00D6E256 /* HedgewarsAppDelegate.h */,
 				6165929D11CA9E2F00D6E256 /* HedgewarsAppDelegate.m */,
 				61D2059F127CDD1100ABD83E /* ObjcExports.h */,
 				61D205A0127CDD1100ABD83E /* ObjcExports.m */,
-				6165922511CA9BD500D6E256 /* HWUtils.h */,
-				6165922611CA9BD500D6E256 /* HWUtils.m */,
 				61006F93128DE31F00EBA7F7 /* CreationChamber.h */,
 				61006F94128DE31F00EBA7F7 /* CreationChamber.m */,
 				6165922411CA9BD500D6E256 /* CGPointUtils.h */,
 				6165922311CA9BD500D6E256 /* CGPointUtils.c */,
-				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
-				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
-				61D0BDF71457508C0011A899 /* ExtraCategories.h */,
-				61D0BDF81457508C0011A899 /* ExtraCategories.m */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -796,7 +788,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		611D9BF312497B7700008271 /* Other Controllers */ = {
+		611D9BF312497B7700008271 /* Satellite Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				61F2E7CB1205EDE0005734F7 /* AboutViewController.h */,
@@ -816,7 +808,7 @@
 				61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib */,
 				61077E86143FB09800645B29 /* MissionTrainingViewController-iPad.xib */,
 			);
-			name = "Other Controllers";
+			name = "Satellite Controllers";
 			sourceTree = "<group>";
 		};
 		612CABCA1391D3D1005E9596 /* Sounds */ = {
@@ -830,7 +822,7 @@
 			name = Sounds;
 			sourceTree = "<group>";
 		};
-		6163EE4C11CC2478001C0453 /* Settings Pages */ = {
+		6163EE4C11CC2478001C0453 /* Settings Page */ = {
 			isa = PBXGroup;
 			children = (
 				6165920211CA9BA200D6E256 /* SettingsContainerViewController.h */,
@@ -841,14 +833,15 @@
 				6163EE4F11CC2497001C0453 /* Second Level */,
 				6163EE5011CC24A1001C0453 /* Third Level */,
 			);
-			name = "Settings Pages";
+			name = "Settings Page";
 			sourceTree = "<group>";
 		};
-		6163EE4D11CC247D001C0453 /* Game Config */ = {
+		6163EE4D11CC247D001C0453 /* Game Configuration */ = {
 			isa = PBXGroup;
 			children = (
 				616591E411CA9BA200D6E256 /* GameConfigViewController.h */,
 				616591E511CA9BA200D6E256 /* GameConfigViewController.m */,
+				61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */,
 				6165924A11CA9CB400D6E256 /* GameConfigViewController-iPhone.xib */,
 				6165920411CA9BA200D6E256 /* TeamConfigViewController.h */,
 				6165920511CA9BA200D6E256 /* TeamConfigViewController.m */,
@@ -859,7 +852,7 @@
 				6165924D11CA9CB400D6E256 /* MapConfigViewController-iPad.xib */,
 				6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */,
 			);
-			name = "Game Config";
+			name = "Game Configuration";
 			sourceTree = "<group>";
 		};
 		6163EE4E11CC248D001C0453 /* First Level */ = {
@@ -1104,6 +1097,21 @@
 				61F7A43711E290650040BA66 /* iTunesArtwork.png */,
 			);
 			name = Icons;
+			sourceTree = "<group>";
+		};
+		61F8535314578999002CA294 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				61C28D3D142D380400DA16C2 /* AudioManagerController.h */,
+				61C28D3E142D380400DA16C2 /* AudioManagerController.m */,
+				61D0BDF71457508C0011A899 /* ExtraCategories.h */,
+				61D0BDF81457508C0011A899 /* ExtraCategories.m */,
+				6165922511CA9BD500D6E256 /* HWUtils.h */,
+				6165922611CA9BD500D6E256 /* HWUtils.m */,
+				6165922C11CA9BD500D6E256 /* UIImageExtra.h */,
+				6165922D11CA9BD500D6E256 /* UIImageExtra.m */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 		61F903FA11DF58680068B24D /* Frontend */ = {
