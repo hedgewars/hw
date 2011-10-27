@@ -841,7 +841,7 @@ void HWChatWidget::dropEvent(QDropEvent * event)
         setStyleSheet(style);
         chatText->document()->setDefaultStyleSheet(*s_styleSheet);
         displayNotice(tr("Stylesheet imported from %1").arg(path));
-        displayNotice(tr("Enter %1 if you want to use the current styleSheet in future, enter %2 to reset!").arg("/saveStyleSheet").arg("/discaredStyleSheet"));
+        displayNotice(tr("Enter %1 if you want to use the current styleSheet in future, enter %2 to reset!").arg("/saveStyleSheet").arg("/discardStyleSheet"));
 
         if (file.isOpen())
             file.close();
