@@ -448,6 +448,8 @@ void PageOptions::forceFullscreen(int index)
 
 void PageOptions::setQuality(int value)
 {
+	Q_UNUSED(value);
+
     int index = this->CBStereoMode->currentIndex();
     if (index == 0)
         previousQuality = this->SLQuality->value();
@@ -455,6 +457,8 @@ void PageOptions::setQuality(int value)
 
 void PageOptions::setFullscreen(int state)
 {
+	Q_UNUSED(state);
+
     int index = this->CBStereoMode->currentIndex();
     if (index != 7 && index != 8 && index != 9)
         previousFullscreenValue = this->CBFullscreen->isChecked();
@@ -462,6 +466,8 @@ void PageOptions::setFullscreen(int state)
 
 void PageOptions::setResolution(int state)
 {
+	Q_UNUSED(state);
+
     int index = this->CBStereoMode->currentIndex();
     if (index != 7 && index != 8 && index != 9)
         previousResolutionIndex = this->CBResolution->currentIndex();

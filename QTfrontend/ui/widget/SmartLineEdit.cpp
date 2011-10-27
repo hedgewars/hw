@@ -199,7 +199,7 @@ void SmartLineEdit::autoComplete()
                 match = cmd;
 
                 // move match to end so next time new matches will be preferred
-                if (m_cmds->removeAll(cmd) > 0);
+				if (m_cmds->removeAll(cmd) > 0)
                     m_cmds->append(cmd);
 
                 break;
@@ -218,7 +218,7 @@ void SmartLineEdit::autoComplete()
                 isNick = true;
 
                 // move match to end so next time new matches will be prefered
-                if (m_nicks->removeAll(nick) > 0);
+				if (m_nicks->removeAll(nick) > 0)
                     m_nicks->append(nick);
 
                 break;

@@ -70,9 +70,9 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/ui/widget/weaponItem.h \
     ../QTfrontend/ui/widget/gamecfgwidget.h \
     ../QTfrontend/ui/widget/mapContainer.h \
-    ../QTfrontend/ui/widget/HistoryLineEdit.h \
+	../QTfrontend/ui/widget/HistoryLineEdit.h \
     ../QTfrontend/ui/widget/SmartLineEdit.h \
-    ../QTfrontend/ui/util/HWDataManager.h \
+	../QTfrontend/util/HWDataManager.h \
     ../QTfrontend/net/netregister.h \
     ../QTfrontend/net/netserver.h \
     ../QTfrontend/net/netudpwidget.h \
@@ -147,7 +147,7 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/widget/mapContainer.cpp \
     ../QTfrontend/ui/widget/HistoryLineEdit.cpp \
     ../QTfrontend/ui/widget/SmartLineEdit.cpp \
-    ../QTfrontend/ui/util/HWDataManager.cpp \
+	../QTfrontend/util/HWDataManager.cpp \
     ../QTfrontend/net/tcpBase.cpp \
     ../QTfrontend/net/netregister.cpp \
     ../QTfrontend/net/proto.cpp \
@@ -166,7 +166,7 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/HWApplication.cpp \
     ../QTfrontend/hwform.cpp \
     ../QTfrontend/main.cpp \
-    ../QTfrontend/util/SDLInteraction.h.cpp \
+	../QTfrontend/util/SDLInteraction.cpp \
     ../QTfrontend/team.cpp \
     ../QTfrontend/ui_hwform.cpp \
     ../QTfrontend/hwconsts.cpp

@@ -41,7 +41,6 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
 {
     this->config = config;
     this->gamecfg = gamecfg;
-    TeamCount = 0;
     netSuspend = false;
 }
 
@@ -314,13 +313,6 @@ QStringList HWGame::getArguments()
     arguments << tr("en.txt");
 
     return arguments;
-}
-
-void HWGame::AddTeam(const QString & teamname)
-{
-    if (TeamCount == 5) return;
-    teams[TeamCount] = teamname;
-    TeamCount++;
 }
 
 void HWGame::PlayDemo(const QString & demofilename, bool isSave)
