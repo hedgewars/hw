@@ -48,8 +48,9 @@
         UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
         [backgroundImage release];
-        [aTableView setBackgroundView:background];
+        [self.view addSubview:background];
         [background release];
+        [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
     }
 
     aTableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
