@@ -20,7 +20,7 @@
 
 
 #import "HelpPageViewController.h"
-#import "CommodityFunctions.h"
+
 
 @implementation HelpPageViewController
 @synthesize scrollView;

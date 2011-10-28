@@ -20,9 +20,8 @@
 
 
 #import "EngineProtocolNetwork.h"
-#import "PascalImports.h"
-#import "CommodityFunctions.h"
 #import "OverlayViewController.h"
+
 
 #define BUFFER_SIZE 255     // like in original frontend
 
@@ -62,7 +61,7 @@
 #pragma mark -
 #pragma mark Spawner functions
 -(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
-    self.stream = [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES];
+    self.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
     [self.stream open];
 
     [NSThread detachNewThreadSelector:@selector(engineProtocol:)
@@ -289,6 +288,9 @@
                 NSString *script = [gameConfig objectForKey:@"mission_command"];
                 if ([script length] != 0)
                     [self sendToEngine:script];
+                // missions/tranings only need the script configuration set
+                if ([gameConfig count] == 1)
+                    break;
 
                 // seed info
                 [self sendToEngine:[gameConfig objectForKey:@"seed_command"]];

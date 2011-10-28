@@ -22,7 +22,10 @@
 #import "MapPreviewButtonView.h"
 #import "MapConfigViewController.h"
 #import "UIImageExtra.h"
+#import "ServerSetup.h"
 #import <pthread.h>
+#import <QuartzCore/QuartzCore.h>
+
 
 #define INDICATOR_TAG 7654
 
@@ -32,15 +35,8 @@
 -(id) initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
         delegate = nil;
-        [self setBackgroundImageRounded:[UIImage whiteImage:frame.size] forState:UIControlStateNormal];
-    }
-    return self;
-}
-
--(id) initWithCoder:(NSCoder *)aDecoder {
-    if ((self = [super initWithCoder:aDecoder])) {
-        delegate = nil;
-        [self setBackgroundImageRounded:[UIImage whiteImage:self.frame.size] forState:UIControlStateNormal];
+        self.backgroundColor = [UIColor whiteColor];
+        self.layer.cornerRadius = 12;
     }
     return self;
 }
@@ -52,16 +48,11 @@
 
 #pragma mark -
 #pragma mark image wrappers
--(void) setBackgroundImageRounded:(UIImage *)image forState:(UIControlState)state {
-    // TODO:http://stackoverflow.com/questions/4272476/setbackgroundimage-behaviour-changed-on-ipad-4-2
-    [self setBackgroundImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:state];
+-(void) setImageRounded:(UIImage *)image forState:(UIControlState)controlState {
+    [self setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:controlState];
 }
 
--(void) setImageRounded:(UIImage *)image forState:(UIControlState)state {
-    [self setImage:[image makeRoundCornersOfSize:CGSizeMake(12, 12)] forState:state];
-}
-
--(void) setImageRoundedForNormalState:(UIImage *)image {
+-(void) setImageRounded:(UIImage *)image {
     [self setImageRounded:image forState:UIControlStateNormal];
 }
 
@@ -78,7 +69,7 @@
     IPaddress ip;
     BOOL serverQuit = NO;
     static uint8_t map[128*32];
-    int port = randomPort();
+    int port = [ServerSetup randomPort];
 
     if (SDLNet_Init() < 0) {
         DLog(@"SDLNet_Init: %s", SDLNet_GetError());
@@ -162,7 +153,7 @@
     previewCGImage = nil;
 
     // all these are performed on the main thread to prevent a leak
-    [self performSelectorOnMainThread:@selector(setImageRoundedForNormalState:)
+    [self performSelectorOnMainThread:@selector(setImageRounded:)
                            withObject:previewImage
                         waitUntilDone:NO];
     [previewImage release];
@@ -197,7 +188,7 @@
     [self setTitle:nil forState:UIControlStateNormal];
     
     // don't display preview on slower device, too slow and memory hog
-    if (IS_NOT_POWERFUL(getModelType())) {
+    if (IS_NOT_POWERFUL([HWUtils modelType])) {
         [self setTitle:NSLocalizedString(@"Preview not available",@"") forState:UIControlStateNormal];
         [self turnOnWidgets];
     } else {        
@@ -218,6 +209,8 @@
 -(void) updatePreviewWithFile:(NSString *)filePath {
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:filePath];
     [self setImageRounded:image forState:UIControlStateNormal];
+    self.backgroundColor = [UIColor whiteColor];
+    self.layer.cornerRadius = 12;
     [image release];
 }
 
@@ -232,15 +225,19 @@
 #pragma mark -
 #pragma mark delegate
 -(void) turnOnWidgets {
-    [self.delegate turnOnWidgets];
+    if ([self.delegate respondsToSelector:@selector(turnOnWidgets)])
+        [self.delegate turnOnWidgets];
 }
 
 -(void) setLabelText:(NSString *)string {
-    [self.delegate setLabelText:string];
+    if ([self.delegate respondsToSelector:@selector(setMaxLabelText:)])
+        [self.delegate setMaxLabelText:string];
 }
 
 -(NSDictionary *)getDataForEngine {
-    return [self.delegate getDataForEngine];
+    if ([self.delegate respondsToSelector:@selector(getDataForEngine)])
+        return [self.delegate getDataForEngine];
+    return nil;
 }
 
 @end

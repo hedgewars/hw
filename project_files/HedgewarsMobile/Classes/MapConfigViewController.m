@@ -20,11 +20,10 @@
 
 
 #import "MapConfigViewController.h"
-#import "PascalImports.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
+#import <QuartzCore/QuartzCore.h>
 #import "SchemeWeaponConfigViewController.h"
 #import "GameConfigViewController.h"
+
 
 #define scIndex         self.segmentedControl.selectedSegmentIndex
 #define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)
@@ -32,21 +31,21 @@
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
             missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy,
-            externalController, parentController;
+            oldPage, oldValue;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
--(IBAction) mapButtonPressed {
+-(IBAction) mapButtonPressed:(id) sender {
     [AudioManagerController playClickSound];
     [self updatePreview];
 }
 
 -(void) updatePreview {
     // don't generate a new preview while it's already generating one
-    if (busy)
+    if (self.busy)
         return;
 
     // generate a seed
@@ -57,24 +56,19 @@
     self.seedCommand = seedCmd;
     [seedCmd release];
 
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
-    NSIndexPath *theIndex;
     if (isRandomness()) {
         // prevent other events and add an activity while the preview is beign generated
         [self turnOffWidgets];
         [self.previewButton updatePreviewWithSeed:seed];
-        theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
-    } else {
-        theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
         // the preview for static maps is loaded in didSelectRowAtIndexPath
     }
     [seed release];
 
     // perform as if user clicked on an entry
+    NSIndexPath *theIndex = [NSIndexPath indexPathForRow:(random()%[source count]) inSection:0];
     [self tableView:self.tableView didSelectRowAtIndexPath:theIndex];
-    if (IS_NOT_POWERFUL(getModelType()) == NO)
+    if (IS_NOT_POWERFUL([HWUtils modelType]) == NO)
         [self.tableView scrollToRowAtIndexPath:theIndex atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
@@ -82,22 +76,24 @@
     busy = YES;
     self.previewButton.alpha = 0.5f;
     self.previewButton.enabled = NO;
-    self.maxLabel.text = @"...";
+    self.maxLabel.text = NSLocalizedString(@"Loading...",@"");;
     self.segmentedControl.enabled = NO;
     self.slider.enabled = NO;
 }
 
+#pragma mark -
+#pragma mark MapPreviewButtonView delegate methods
 -(void) turnOnWidgets {
     self.previewButton.alpha = 1.0f;
     self.previewButton.enabled = YES;
     self.segmentedControl.enabled = YES;
     self.slider.enabled = YES;
-    busy = NO;
+    self.busy = NO;
 }
 
--(void) setLabelText:(NSString *)str {
+-(void) setMaxLabelText:(NSString *)str {
     self.maxHogs = [str intValue];
-    self.maxLabel.text = str;
+    self.maxLabel.text = [NSString stringWithFormat:@"%@ %@",NSLocalizedString(@"Max Hogs:",@""),str];
 }
 
 -(NSDictionary *)getDataForEngine {
@@ -117,8 +113,6 @@
 }
 
 -(NSInteger) tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger) section {
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     return [[self.dataSourceArray objectAtIndex:scIndex] count];
 }
 
@@ -130,15 +124,13 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
 
     NSString *labelString = [source objectAtIndex:row];
     cell.textLabel.text = labelString;
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.minimumFontSize = 7;
-    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    cell.textLabel.textColor = [UIColor lightYellowColor];
     cell.textLabel.backgroundColor = [UIColor clearColor];
 
     if (isRandomness()) {
@@ -155,14 +147,12 @@
     } else
         cell.accessoryView = nil;
 
-    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
+    cell.backgroundColor = [UIColor blackColorTransparent];
     return cell;
 }
 
 // this set details for a static map (called by didSelectRowAtIndexPath)
 -(void) setDetailsForStaticMap:(NSInteger) index {
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
     
     NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", 
@@ -174,13 +164,12 @@
 
     // if the number is not set we keep 18 standard;
     // sometimes it's not set but there are trailing characters, we get around them with the second equation
+    NSString *max;
     if ([split count] > 1 && [[split objectAtIndex:1] intValue] > 0)
-        maxHogs = [[split objectAtIndex:1] intValue];
+        max = [split objectAtIndex:1];
     else
-        maxHogs = 18;
-    NSString *max = [[NSString alloc] initWithFormat:@"%d",maxHogs];
-    self.maxLabel.text = max;
-    [max release];
+        max = @"18";
+    [self setMaxLabelText:max];
     
     self.themeCommand = [NSString stringWithFormat:@"etheme %@", [split objectAtIndex:0]];
     self.staticMapCommand = [NSString stringWithFormat:@"emap %@", [source objectAtIndex:index]];
@@ -198,8 +187,6 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
     if (newRow != oldRow) {
-        if (self.dataSourceArray == nil)
-            [self loadDataSourceArray];
         NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
         if (isRandomness()) {
             // just change the theme, don't update preview
@@ -324,7 +311,7 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
-            [externalController fillSections];
+            [SchemeWeaponConfigViewController fillInstanceSections];
             break;
 
         case 1: // Map
@@ -334,7 +321,7 @@
             mission = @"";
             self.slider.enabled = NO;
             self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
-            [externalController fillSections];
+            [SchemeWeaponConfigViewController fillInstanceSections];
             break;
 
         case 2: // Maze
@@ -343,7 +330,7 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
-            [externalController fillSections];
+            [SchemeWeaponConfigViewController fillInstanceSections];
             break;
 
         case 3: // Mission
@@ -353,7 +340,7 @@
             mission = @"";
             self.slider.enabled = NO;
             self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
-            [externalController emptySections];
+            [SchemeWeaponConfigViewController emptyInstanceSections];
             break;
 
         default:
@@ -371,54 +358,65 @@
     oldPage = newPage;
 }
 
--(IBAction) buttonPressed:(id) sender {
-    [self.parentController buttonPressed:sender];
-}
-
 #pragma mark -
 #pragma mark view management
--(void) loadDataSourceArray {
-    NSString *model = getModelType();
-
-    // only folders containing icon.png are a valid theme
-    NSArray *themeArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:THEMES_DIRECTORY() error:NULL];
-    NSMutableArray *themeArray = [[NSMutableArray alloc] init];
-    for (NSString *themeName in themeArrayFull) {
-        NSString *checkPath = [[NSString alloc] initWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:checkPath])
-            [themeArray addObject:themeName];
-        [checkPath release];
+-(NSArray *) dataSourceArray {
+    if (dataSourceArray == nil) {
+        NSString *model = [HWUtils modelType];
+        
+        // only folders containing icon.png are a valid theme
+        NSArray *themeArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:THEMES_DIRECTORY() error:NULL];
+        NSMutableArray *themeArray = [[NSMutableArray alloc] init];
+        for (NSString *themeName in themeArrayFull) {
+            NSString *checkPath = [[NSString alloc] initWithFormat:@"%@/%@/icon.png",THEMES_DIRECTORY(),themeName];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:checkPath])
+                [themeArray addObject:themeName];
+            [checkPath release];
+        }
+        
+        // remove images that are too big for certain devices without loading the whole image
+        NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
+        NSMutableArray *mapArray = [[NSMutableArray alloc] init];
+        for (NSString *str in mapArrayFull) {
+            CGSize imgSize = [UIImage imageSizeFromMetadataOf:[MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]];
+            if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
+                continue;
+            if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
+                continue;
+            [mapArray addObject:str];
+        }
+        
+        NSArray *missionArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
+        NSMutableArray *missionArray = [[NSMutableArray alloc] init];
+        for (NSString *str in missionArrayFull) {
+            CGSize imgSize = [UIImage imageSizeFromMetadataOf:[MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]];
+            if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
+                continue;
+            if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
+                continue;
+            [missionArray addObject:str];
+        }
+        NSArray *array = [[NSArray alloc] initWithObjects:themeArray,mapArray,themeArray,missionArray,nil];
+        [missionArray release];
+        [themeArray release];
+        [mapArray release];
+        
+        self.dataSourceArray = array;
+        [array release];
     }
+    return dataSourceArray;
+}
 
-    // remove images that are too big for certain devices without loading the whole image
-    NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
-    NSMutableArray *mapArray = [[NSMutableArray alloc] init];
-    for (NSString *str in mapArrayFull) {
-        CGSize imgSize = PSPNGSizeFromMetaData([MAPS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
-            continue;
-        if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
-            continue;
-        [mapArray addObject:str];
+-(MapPreviewButtonView *)previewButton {
+    if (previewButton == nil) {
+        MapPreviewButtonView *preview = [[MapPreviewButtonView alloc] initWithFrame:CGRectMake(32, 26, 256, 128)];
+        preview.delegate = self;
+        [preview addTarget:self action:@selector(mapButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:preview];
+        self.previewButton = preview;
+        [preview release];
     }
-    
-    NSArray *missionArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
-    NSMutableArray *missionArray = [[NSMutableArray alloc] init];
-    for (NSString *str in missionArrayFull) {
-        CGSize imgSize = PSPNGSizeFromMetaData([MISSIONS_DIRECTORY() stringByAppendingFormat:@"%@/map.png",str]);
-        if (IS_NOT_POWERFUL(model) && imgSize.height > 1024.0f)
-            continue;
-        if (IS_NOT_VERY_POWERFUL(model) && imgSize.height > 1280.0f)
-            continue;
-        [missionArray addObject:str];
-    }
-    NSArray *array = [[NSArray alloc] initWithObjects:themeArray,mapArray,themeArray,missionArray,nil];
-    [missionArray release];
-    [themeArray release];
-    [mapArray release];
-
-    self.dataSourceArray = array;
-    [array release];
+    return previewButton;
 }
 
 -(void) viewDidLoad {
@@ -426,24 +424,18 @@
 
     srandom(time(NULL));
 
+    /*
     CGSize screenSize = [[UIScreen mainScreen] bounds].size;
     self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
+    */
     
     // initialize some "default" values
-    self.sizeLabel.text = NSLocalizedString(@"All",@"");
     self.slider.value = 0.05f;
-    oldValue = 5;
-    
-    busy = NO;
-    [self loadDataSourceArray];
-    self.lastIndexPath = [NSIndexPath indexPathForRow:-1 inSection:0];
-    
-    // select a map at first because it's faster - done in IB
-    oldPage = 1;
-    if (self.segmentedControl.selectedSegmentIndex == 1) {
-        self.slider.enabled = NO;
-        self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
-    }
+    self.slider.enabled = NO;
+    self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
+    self.oldValue = 5;
+    self.busy = NO;
+    self.oldPage = self.segmentedControl.selectedSegmentIndex;
 
     self.templateFilterCommand = @"e$template_filter 0";
     self.mazeSizeCommand = @"e$maze_size 0";
@@ -451,16 +443,22 @@
     self.staticMapCommand = @"";
     self.missionCommand = @"";
 
-    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
-        [self.tableView setBackgroundView:nil];
-    self.tableView.backgroundColor = [UIColor clearColor];
-    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+    if (IS_IPAD()) {
+        [self.tableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
+        self.tableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
+        self.tableView.layer.borderWidth = 2.7f;
+        self.tableView.layer.cornerRadius = 8;
+        self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 10, 0);
+
+        UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 14, 300, 190) andTitle:nil withBorderWidth:2.3f];
+        [self.view insertSubview:backLabel belowSubview:self.segmentedControl];
+        [backLabel release];
+    }
+    self.tableView.separatorColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    if (self.dataSourceArray == nil)
-        [self loadDataSourceArray];
     [super viewWillAppear:animated];
 }
 
@@ -495,6 +493,7 @@
 
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
+    self.previewButton = nil;
     [super didReceiveMemoryWarning];
 
     if (self.view.superview == nil) {

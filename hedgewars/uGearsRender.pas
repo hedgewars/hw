@@ -894,10 +894,19 @@ begin
                   else DrawSprite(sprMolotov, x, y, 8);
 
        gtRCPlane: begin
-                  if (Gear^.Tag = -1) then
-                     DrawRotated(sprPlane, x, y, -1,  DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
+                  Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
+                  if Gear^.Tag = -1 then
+                      begin
+                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 0, -1, SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
+                      Tint($FF, $FF, $FF, $FF);
+                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 1, -1, SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
+                      end
                   else
-                     DrawRotated(sprPlane, x, y,0,DxDy2Angle(Gear^.dY, Gear^.dX));
+                      begin
+                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 0, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dY, Gear^.dX));
+                      Tint($FF, $FF, $FF, $FF);
+                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 1, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dY, Gear^.dX))
+                      end
                   end;
        gtBall: DrawRotatedf(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
 

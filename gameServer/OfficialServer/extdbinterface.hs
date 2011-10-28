@@ -17,7 +17,7 @@ dbQueryAccount =
     "SELECT users.pass, users_roles.rid FROM users LEFT JOIN users_roles ON users.uid = users_roles.uid WHERE users.name = ?"
 
 dbQueryStats =
-    "UPDATE gameserver_stats SET players = ?, rooms = ?, last_update = UNIX_TIMESTAMP()"
+    "INSERT INTO gameserver_stats (players, rooms, last_update) VALUES (?, ?, UNIX_TIMESTAMP())"
 
 dbInteractionLoop dbConn = forever $ do
     q <- liftM read getLine

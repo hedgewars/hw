@@ -22,7 +22,7 @@
 #import <Foundation/Foundation.h>
 #import "EngineProtocolNetwork.h"
 
-typedef enum {gtNone, gtLocal, gtSave, gtNet} TGameType;
+typedef enum {gtNone, gtLocal, gtSave, gtMission, gtNet} TGameType;
 typedef enum {gsNone, gsInGame, gsEnded, gsInterrupted} TGameStatus;
 
 @class OverlayViewController;
@@ -49,10 +49,12 @@ typedef enum {gsNone, gsInGame, gsEnded, gsInterrupted} TGameStatus;
 
 
 -(id)   initWithController:(id) viewController;
--(void) startLocalGame:(NSDictionary *)withDictionary;
+-(void) startLocalGame:(NSDictionary *)withOptions;
 -(void) startSaveGame:(NSString *)atPath;
+-(void) startMissionGame:(NSString *)withScript;
+
 -(void) prepareEngineLaunch;
--(void) startGameEngine;
+-(void) engineLaunch;
 -(void) gameHasEndedWithStats:(NSArray *)stats;
 
 @end

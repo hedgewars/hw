@@ -5,6 +5,7 @@ foreach(dir
 	Blox
 	Brick
 	Cake
+	Cave
 	Castle
 	Cheese
 	Christmas

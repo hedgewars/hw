@@ -20,11 +20,9 @@
 
 
 #import "InGameMenuViewController.h"
-#import "PascalImports.h"
-#import "CommodityFunctions.h"
 #import "SDL_sysvideo.h"
 #import "SDL_uikitkeyboard.h"
-#import "OpenGLES/ES1/gl.h"
+
 
 #define VIEW_HEIGHT 200
 
@@ -90,6 +88,7 @@
 
     SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
 
+    /*
     if (shouldTakeScreenshot) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please wait"
                                                         message:nil
@@ -107,6 +106,7 @@
         // all these hacks because of the PAUSE caption on top of everything...
         [self performSelector:@selector(saveCurrentScreenToPhotoAlbum:) withObject:alert afterDelay:0.3];
     }
+    */
     shouldTakeScreenshot = NO;
 }
 
@@ -192,6 +192,7 @@
 }
 
 //TODO: check this is still needed since we switched to SDL_GL_CreateContext()
+/*
 #pragma mark -
 #pragma mark save screenshot
 //by http://www.bit-101.com/blog/?p=1861
@@ -247,6 +248,6 @@ void releaseData(void *info, const void *data, size_t dataSize) {
     // add callback for cleaning memory and removing alert
     UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), (void *)alert);
 }
-
+*/
 
 @end

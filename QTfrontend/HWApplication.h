@@ -25,6 +25,14 @@
 
 class HWForm;
 
+/**
+ * @brief Main class of the Qt application.
+ *
+ * By default uses :res/css/qt.css as style sheet for the main form.
+ * See \repo{res/css/qt.css} for a more detailed description.
+ *
+ * @see http://doc.qt.nokia.com/4.5/stylesheet.html
+ */
 class HWApplication : public QApplication
 {
     Q_OBJECT

@@ -8,7 +8,7 @@ glob:bin
 glob:*.hi
 glob:*.*~
 glob:*.core
-glob:hedgewars/config.inc
+glob:config.inc
 glob:cmake_install.cmake
 glob:QTfrontend/hwconsts.cpp
 glob:CPackConfig.cmake

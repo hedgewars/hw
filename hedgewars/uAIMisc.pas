@@ -332,18 +332,18 @@ bX:= hwRound(Gear^.X);
 bY:= hwRound(Gear^.Y);
 case JumpType of
      jmpNone: exit(bRes);
-    jmpHJump: if not TestCollisionYwithGear(Gear, -1) then
+    jmpHJump: if TestCollisionYwithGear(Gear, -1) = 0 then
                  begin
                  Gear^.dY:= -_0_2;
                  SetLittle(Gear^.dX);
                  Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
                  end else exit(bRes);
     jmpLJump: begin
-              if not TestCollisionYwithGear(Gear, -1) then
+              if TestCollisionYwithGear(Gear, -1) <> 0 then
                  if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - int2hwFloat(2) else
                  if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - _1;
               if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
-                 or   TestCollisionYwithGear(Gear, -1)) then
+                 or   (TestCollisionYwithGear(Gear, -1) <> 0)) then
                  begin
                  Gear^.dY:= -_0_15;
                  Gear^.dX:= SignAs(_0_15, Gear^.dX);
@@ -367,9 +367,9 @@ if (Gear^.State and gstMoving) <> 0 then
    inc(GoInfo.Ticks);
    Gear^.dY:= Gear^.dY + cGravity;
    if Gear^.dY > _0_4 then exit(bRes);
-   if (Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0;
+   if (Gear^.dY.isNegative)and (TestCollisionYwithGear(Gear, -1) <> 0) then Gear^.dY:= _0;
    Gear^.Y:= Gear^.Y + Gear^.dY;
-   if (not Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, 1) then
+   if (not Gear^.dY.isNegative)and (TestCollisionYwithGear(Gear, 1) <> 0) then
       begin
       Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
       Gear^.dY:= _0;
@@ -417,7 +417,7 @@ if (Gear^.State and gstMoving) <> 0 then
       end;
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if hwRound(Gear^.Y) > pY then inc(GoInfo.FallPix);
-   if TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) <> 0 then
       begin
       inc(GoInfo.Ticks, 410);
       Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
@@ -432,17 +432,17 @@ if (Gear^.State and gstMoving) <> 0 then
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       begin
       if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -5, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -4, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
       end;
 
    if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
@@ -450,25 +450,25 @@ if (Gear^.State and gstMoving) <> 0 then
       Gear^.X:= Gear^.X + int2hwFloat(hwSign(Gear^.dX));
       inc(GoInfo.Ticks, cHHStepTicks)
       end;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
    begin
    Gear^.Y:= Gear^.Y + _1;
-   if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) = 0 then
       begin
       Gear^.Y:= Gear^.Y - _6;
       Gear^.dY:= _0;

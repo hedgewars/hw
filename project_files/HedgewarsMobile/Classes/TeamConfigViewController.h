@@ -22,17 +22,23 @@
 #import <UIKit/UIKit.h>
 #import "HoldTableViewCell.h"
 
-@interface TeamConfigViewController : UITableViewController <HoldTableViewCellDelegate> {
+
+@interface TeamConfigViewController : UIViewController <UITableViewDelegate,UITableViewDataSource,HoldTableViewCellDelegate> {
+    UITableView *tableView;
+
     NSInteger selectedTeamsCount;
     NSInteger allTeamsCount;
 
     NSMutableArray *listOfSelectedTeams;
-    NSMutableArray *listOfTeams;
+    NSMutableArray *listOfAllTeams;
     NSArray *cachedContentsOfDir;
 }
 
-@property (nonatomic, retain) NSMutableArray *listOfTeams;
-@property (nonatomic, retain) NSMutableArray *listOfSelectedTeams;
-@property (nonatomic, retain) NSArray *cachedContentsOfDir;
+@property (nonatomic,retain) UITableView *tableView;
+@property (nonatomic,assign) NSInteger selectedTeamsCount;
+@property (nonatomic,assign) NSInteger allTeamsCount;
+@property (nonatomic,retain) NSMutableArray *listOfAllTeams;
+@property (nonatomic,retain) NSMutableArray *listOfSelectedTeams;
+@property (nonatomic,retain) NSArray *cachedContentsOfDir;
 
 @end

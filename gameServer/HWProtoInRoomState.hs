@@ -14,6 +14,7 @@ import Actions
 import Utils
 import HandlerUtils
 import RoomsAndClients
+import EngineInteraction
 
 handleCmd_inRoom :: CmdHandler
 
@@ -178,7 +179,7 @@ handleCmd_inRoom ["START_GAME"] = do
             return [
                 ModifyRoom
                     (\r -> r{
-                        gameInfo = Just $ newGameInfo allPlayersRegistered
+                        gameInfo = Just $ newGameInfo allPlayersRegistered (mapParams rm) (params rm)
                         }
                     ),
                 AnswerClients chans ["RUN_GAME"]

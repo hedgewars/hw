@@ -21,8 +21,7 @@
 
 #import "SingleSchemeViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
+
 
 #define LABEL_TAG  12345
 #define SLIDER_TAG 54321
@@ -235,8 +234,8 @@
                                                                       [[self.gameModifierArray objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = image;
             [image release];
-            [cell.imageView.layer setCornerRadius:7.0f];
-            [cell.imageView.layer setMasksToBounds:YES];
+            cell.imageView.layer.cornerRadius = 6.0f;
+            cell.imageView.layer.masksToBounds = YES;
             cell.textLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
             cell.detailTextLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;

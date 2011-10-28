@@ -27,9 +27,7 @@
 #import "FortsViewController.h"
 #import "FlagsViewController.h"
 #import "LevelViewController.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
-#import "PascalImports.h"
+
 
 #define TEAMNAME_TAG 78789
 
@@ -264,8 +262,9 @@
                     accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/%@.png",
                                                                               FLAGS_DIRECTORY(),[teamDictionary objectForKey:@"flag"]]];
                     cell.imageView.image = [accessoryImage scaleToSize:CGSizeMake(26, 18)];
-                    cell.imageView.layer.borderWidth = 0.3;
                     [accessoryImage release];
+                    cell.imageView.layer.borderWidth = 1;
+                    cell.imageView.layer.borderColor = [[UIColor blackColor] CGColor];
                     break;
                 case 4: // level
                     accessoryImage = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/bot%d.png",

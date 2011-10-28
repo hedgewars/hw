@@ -23,27 +23,29 @@
 #import "OverlayViewController.h"
 #import "AmmoMenuViewController.h"
 
-#pragma mark -
-#pragma mark internal variables
+
 // actual game started (controls should be enabled)
-BOOL gameRunning;
+static BOOL gameRunning;
 // black screen present
-BOOL savedGame;
+static BOOL savedGame;
 // cache the grenade time
-NSInteger grenadeTime;
+static NSInteger grenadeTime;
 // the reference to the newMenu instance
-OverlayViewController *overlay_instance;
+static OverlayViewController *overlay_instance;
 
+@implementation ObjcExports
 
-#pragma mark -
-#pragma mark functions called like oop
-void objcExportsInit() {
++(void) initialize {
     overlay_instance = [OverlayViewController mainOverlay];
     gameRunning = NO;
     savedGame = NO;
     grenadeTime = 2;
 }
 
+@end
+
+#pragma mark -
+#pragma mark functions called by objc code
 BOOL inline isGameRunning() {
     return gameRunning;
 }

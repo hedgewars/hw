@@ -129,7 +129,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
     end;
 {$ENDIF}
 
-// ctrl/cmd + w/q to close engine and/or frontend
+// ctrl/cmd + q to close engine and frontend
 {$IFDEF DARWIN}
     if ((tkbdn[KeyNameToCode('left_meta')] = 1) or (tkbdn[KeyNameToCode('right_meta')] = 1)) then
 {$ELSE}
@@ -137,7 +137,6 @@ for j:= 0 to Pred(ControllerNumControllers) do
 {$ENDIF}
     begin
         if tkbdn[KeyNameToCode('q')] = 1 then ParseCommand ('halt', true)
-        else if tkbdn[KeyNameToCode('w')] = 1 then ParseCommand ('forcequit', true);
     end;
 
 // now process strokes

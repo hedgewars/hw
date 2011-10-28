@@ -69,10 +69,12 @@ data GameInfo =
         roundMsgs :: Seq B.ByteString,
         leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
-        allPlayersHaveRegisteredAccounts :: Bool
-    }
+        allPlayersHaveRegisteredAccounts :: Bool,
+        giMapParams :: Map.Map B.ByteString B.ByteString,
+        giParams :: Map.Map B.ByteString [B.ByteString]
+    } deriving (Show, Read)
     
-newGameInfo :: Bool -> GameInfo 
+--newGameInfo ::  -> GameInfo 
 newGameInfo = 
     GameInfo
         Data.Sequence.empty

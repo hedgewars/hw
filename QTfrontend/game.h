@@ -54,7 +54,7 @@ public:
     void StartNet();
     void StartTraining(const QString & file);
     void StartCampaign(const QString & file);
-    void KillAllTeams();
+    void abort();
     GameState gameState;
     bool netSuspend;
 
@@ -87,9 +87,7 @@ private:
         gtSave     = 7,
     };
     char msgbuf[MAXMSGCHARS];
-    QString teams[5];
     QString ammostr;
-    int TeamCount;
     GameUIConfig * config;
     GameCFGWidget * gamecfg;
     TeamSelWidget* m_pTeamSelWidget;

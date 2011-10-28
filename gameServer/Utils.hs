@@ -5,6 +5,7 @@ import Data.Char
 import Data.Word
 import qualified Data.Map as Map
 import qualified Data.Set as Set
+import qualified Data.Char as Char
 import Numeric
 import Network.Socket
 import System.IO
@@ -14,6 +15,7 @@ import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Lazy as BL
 import qualified Text.Show.ByteString as BS
 import qualified Data.ByteString.Char8 as B
+import qualified Data.ByteString.UTF8 as UTF8
 import qualified Data.ByteString as BW
 -------------------------------------------------
 import CoreTypes
@@ -25,25 +27,6 @@ sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) =
     return $ B.pack $ (foldr1 (.)
         $ List.intersperse (':':)
         $ concatMap (\n -> (\(a0, a1) -> [showHex a0, showHex a1]) $ divMod n 65536) [a, b, c, d]) []
-
-toEngineMsg :: B.ByteString -> B.ByteString
-toEngineMsg msg = B.pack $ Base64.encode (fromIntegral (BW.length msg) : BW.unpack msg)
-
-fromEngineMsg :: B.ByteString -> Maybe B.ByteString
-fromEngineMsg msg = liftM BW.pack (Base64.decode (B.unpack msg) >>= removeLength)
-    where
-        removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
-        removeLength _ = Nothing
-
-checkNetCmd :: B.ByteString -> (Bool, Bool)
-checkNetCmd msg = check decoded
-    where
-        decoded = fromEngineMsg msg
-        check Nothing = (False, False)
-        check (Just ms) | B.length ms > 0 = let m = B.head ms in (m `Set.member` legalMessages, m == '+')
-                        | otherwise        = (False, False)
-        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghbc12345" ++ slotMessages
-        slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 
 maybeRead :: Read a => String -> Maybe a
 maybeRead s = case reads s of
@@ -131,3 +114,8 @@ readInt_ str =
 
 cutHost :: B.ByteString -> B.ByteString
 cutHost = B.intercalate "." .  flip (++) ["*","*"] . List.take 2 . B.split '.'
+
+caseInsensitiveCompare :: B.ByteString -> B.ByteString -> Bool
+caseInsensitiveCompare a b = f a == f b
+    where
+        f = map Char.toUpper . UTF8.toString

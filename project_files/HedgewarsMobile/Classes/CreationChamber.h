@@ -21,7 +21,21 @@
 
 #import <Foundation/Foundation.h>
 
-void createSettings (void);
-void createTeamNamed (NSString *nameWithoutExt);
-void createWeaponNamed (NSString *nameWithoutExt, int type);
-void createSchemeNamed (NSString *nameWithoutExt, int type);
+@interface CreationChamber : NSObject {
+
+}
+
++(void) createSettings;
+
++(void) createTeamNamed:(NSString *)nameWithoutExt;
++(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type;
++(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type controlledByAI:(BOOL) shouldAITakeOver;
+
++(void) createWeaponNamed:(NSString *)nameWithoutExt;
++(void) createWeaponNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type;
+
++(void) createSchemeNamed:(NSString *)nameWithoutExt;
++(void) createSchemeNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type;
+
+@end
+

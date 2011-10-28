@@ -20,7 +20,7 @@
 
 
 #import "SupportViewController.h"
-#import "CommodityFunctions.h"
+
 
 @implementation SupportViewController
 @synthesize waysToSupport;
@@ -44,6 +44,7 @@
     self.waysToSupport = array;
     [array release];
 
+    self.navigationItem.title = @"♥";
     self.tableView.rowHeight = 50;
 }
 

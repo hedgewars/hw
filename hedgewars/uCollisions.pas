@@ -39,7 +39,7 @@ procedure DeleteCI(Gear: PGear);
 function  CheckGearsCollision(Gear: PGear): PGearArray;
 
 function  TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
-function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
+function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 
 function  TestCollisionXKick(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
@@ -51,6 +51,8 @@ function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongIn
 function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
 
 function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
+
+function  CalcSlopeTangentBelowGear(Gear: PGear; var outDeltaX, outDeltaY: LongInt): boolean;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
@@ -157,7 +159,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
 TestCollisionXwithGear:= false
 end;
 
-function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
+function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 var x, y, i: LongInt;
     TestWord: LongWord;
 begin
@@ -181,11 +183,11 @@ if (y and LAND_HEIGHT_MASK) = 0 then
    i:= x + Gear^.Radius * 2 - 2;
    repeat
      if (x and LAND_WIDTH_MASK) = 0 then
-        if Land[y, x] > TestWord then exit(true);
+        if Land[y, x] > TestWord then exit(Land[y, x]);
      inc(x)
    until (x > i);
    end;
-TestCollisionYwithGear:= false
+TestCollisionYwithGear:= 0
 end;
 
 function TestCollisionXKick(Gear: PGear; Dir: LongInt): boolean;
@@ -344,7 +346,7 @@ function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: Lo
 begin
 Gear^.X:= Gear^.X + int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
-if withGear then TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir)
+if withGear then TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir) <> 0
 else TestCollisionYwithXYShift:= TestCollisionY(Gear, Dir);
 Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
@@ -387,10 +389,11 @@ end;
 
 function CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
 var ldx, ldy, rdx, rdy: LongInt;
-    i, j, mx, my, li, ri, jfr, jto, tmpo : ShortInt;
+    i, j, k, mx, my, li, ri, jfr, jto, tmpo : ShortInt;
     tmpx, tmpy: LongWord;
     dx, dy, s: hwFloat;
     offset: Array[0..7,0..1] of ShortInt;
+    isColl: Boolean;
 
 begin
     dx:= Gear^.dX;
@@ -418,21 +421,25 @@ begin
         offset[i,0]:= mx;
         offset[i,1]:= my;
 
-        tmpx:= collisionX + mx;
-        tmpy:= collisionY + my;
+        // multiplicator k tries to skip small pixels/gaps when possible
+        for k:= 4 downto 1 do
+            begin
+            tmpx:= collisionX + k * mx;
+            tmpy:= collisionY + k * my;
 
-        if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK) = 0) then
-            if (Land[tmpy,tmpx] > TestWord) then
-                begin
-                // remember the index belonging to the first and last collision (if in 1st half)
-                if (i <> 0) then
+            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK) = 0) then
+                if (Land[tmpy,tmpx] > TestWord) then
                     begin
-                    if (ri = -1) then
-                        ri:= i
-                    else
-                        li:= i;
+                    // remember the index belonging to the first and last collision (if in 1st half)
+                    if (i <> 0) then
+                        begin
+                        if (ri = -1) then
+                            ri:= i
+                        else
+                            li:= i;
+                        end;
                     end;
-                end;
+            end;
 
         if i = 7 then break;
 
@@ -457,35 +464,48 @@ begin
         jfr:= 8+li+1;
         jto:= 8+li-1;
 
+        isColl:= false;
         for j:= jfr downto jto do
             begin
             tmpo:= j mod 8;
-            tmpx:= ldx + offset[tmpo,0];
-            tmpy:= ldy + offset[tmpo,1];
-            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                and (Land[tmpy,tmpx] > TestWord) then
-                    begin
-                    ldx:= tmpx;
-                    ldy:= tmpy;
-                    break;
-                    end;
+            // multiplicator k tries to skip small pixels/gaps when possible
+            for k:= 3 downto 1 do
+                begin
+                tmpx:= ldx + k * offset[tmpo,0];
+                tmpy:= ldy + k * offset[tmpo,1];
+                if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
+                    and (Land[tmpy,tmpx] > TestWord) then
+                        begin
+                        ldx:= tmpx;
+                        ldy:= tmpy;
+                        isColl:= true;
+                        break;
+                        end;
+                end;
+            if isColl then break;
             end;
 
         jfr:= 8+ri-1;
         jto:= 8+ri+1;
 
+        isColl:= false;
         for j:= jfr to jto do
             begin
             tmpo:= j mod 8;
-            tmpx:= rdx + offset[tmpo,0];
-            tmpy:= rdy + offset[tmpo,1];
-            if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                and (Land[tmpy,tmpx] > TestWord) then
-                    begin
-                    rdx:= tmpx;
-                    rdy:= tmpy;
-                    break;
-                    end;
+            for k:= 3 downto 1 do
+                begin
+                tmpx:= rdx + k * offset[tmpo,0];
+                tmpy:= rdy + k * offset[tmpo,1];
+                if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
+                    and (Land[tmpy,tmpx] > TestWord) then
+                        begin
+                        rdx:= tmpx;
+                        rdy:= tmpy;
+                        isColl:= true;
+                        break;
+                        end;
+                end;
+            if isColl then break;
             end;
         end;
 
@@ -497,6 +517,51 @@ begin
 outDeltaX:= ldx;
 outDeltaY:= ldy;
 exit(true);
+end;
+
+function CalcSlopeTangentBelowGear(Gear: PGear; var outDeltaX, outDeltaY: LongInt): boolean;
+var dx, dy: hwFloat;
+    collX, i, y, x, gx: LongInt;
+    isColl, succ: Boolean;
+begin
+// save original dx/dy
+dx:= Gear^.dX;
+dy:= Gear^.dY;
+
+Gear^.dX.QWordValue:= 0;
+Gear^.dY:= _1;
+
+y:= hwRound(Gear^.Y) + Gear^.Radius;
+gx:= hwRound(Gear^.X);
+collX := gx;
+isColl:= false;
+
+if (y and LAND_HEIGHT_MASK) = 0 then
+   begin
+   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+   i:= x + Gear^.Radius * 2 - 2;
+   repeat
+     if (x and LAND_WIDTH_MASK) = 0 then
+        if Land[y, x] > 255 then
+            if not isColl or (abs(x-gx) < abs(collX-gx)) then
+                begin
+                isColl:= true;
+                collX := x;
+                end;
+     inc(x)
+   until (x > i);
+   end;
+
+if isColl then
+    succ := CalcSlopeTangent(Gear, collX, y, outDeltaX, outDeltaY, 255)
+else
+    succ := false;
+
+// restore original dx/dy
+Gear^.dX:= dx;
+Gear^.dY:= dy;
+
+CalcSlopeTangentBelowGear := succ;
 end;
 
 procedure initModule;

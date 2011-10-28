@@ -24,7 +24,9 @@
 
 @interface UIImage (extra)
 
-CGFloat getScreenScale(void);
++(UIImage *)whiteImage:(CGSize) ofSize;
++(UIImage *)drawHogsRepeated:(NSInteger) manyTimes;
++(CGSize) imageSizeFromMetadataOf:(NSString *)aFileName;
 
 -(UIImage *)scaleToSize:(CGSize) size;
 -(UIImage *)mergeWith:(UIImage *)secondImage atPoint:(CGPoint) secondImagePoint;
@@ -34,6 +36,5 @@ CGFloat getScreenScale(void);
 -(UIImage *)convertToNegative;
 -(UIImage *)maskImageWith:(UIImage *)maskImage;
 -(UIImage *)makeRoundCornersOfSize:(CGSize) sizewh;
-+(UIImage *)whiteImage:(CGSize) ofSize;
 
 @end

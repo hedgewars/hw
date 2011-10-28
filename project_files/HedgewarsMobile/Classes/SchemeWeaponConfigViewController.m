@@ -20,80 +20,122 @@
 
 
 #import "SchemeWeaponConfigViewController.h"
-#import "CommodityFunctions.h"
+#import <QuartzCore/QuartzCore.h>
+
 
 #define LABEL_TAG 57423
 
+static SchemeWeaponConfigViewController *controllerInstance;
+
 @implementation SchemeWeaponConfigViewController
-@synthesize listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
-            selectedScheme, selectedWeapon, selectedScript, scriptCommand, topControl, hideSections;
+@synthesize tableView, listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
+            selectedScheme, selectedWeapon, selectedScript, scriptCommand, topControl, sectionsHidden;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
 #pragma mark -
+#pragma mark custom setters/getters
+-(NSString *)selectedScheme {
+    if (selectedScheme == nil)
+        self.selectedScheme = @"Default.plist";
+    return selectedScheme;
+}
+
+-(NSString *)selectedWeapon {
+    if (selectedWeapon == nil)
+        self.selectedWeapon = @"Default.plist";
+    return selectedWeapon;
+}
+
+-(NSString *)selectedScript {
+    if (selectedScript == nil)
+        self.selectedScript = @"Normal.plist";
+    return selectedScript;
+}
+
+-(NSString *)scriptCommand {
+    if (scriptCommand == nil)
+        self.scriptCommand = @"";
+    return scriptCommand;
+}
+
+-(NSArray *)listOfSchemes {
+    if (listOfSchemes == nil)
+        self.listOfSchemes = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
+    return listOfSchemes;
+}
+
+-(NSArray *)listOfWeapons {
+    if (listOfWeapons == nil)
+        self.listOfWeapons = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
+    return listOfWeapons;
+}
+
+-(NSArray *)listOfScripts {
+    if (listOfScripts == nil)
+        self.listOfScripts = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL];
+    return listOfScripts;
+}
+
+-(UISegmentedControl *)topControl {
+    if (topControl == nil) {
+        NSArray *array = [[NSArray alloc] initWithObjects:
+                          NSLocalizedString(@"Scheme",@""),
+                          NSLocalizedString(@"Weapon",@""),
+                          NSLocalizedString(@"Style",@""),nil];
+        UISegmentedControl *controller = [[UISegmentedControl alloc] initWithItems:array];
+        [array release];
+        controller.segmentedControlStyle = UISegmentedControlStyleBar;
+        controller.tintColor = [UIColor lightGrayColor];
+        controller.selectedSegmentIndex = 0;
+        self.topControl = controller;
+        [controller addTarget:self.tableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
+        [controller release];
+    }
+    return topControl;
+}
+
+#pragma mark -
 #pragma mark View lifecycle
 -(void) viewDidLoad {
-    [super viewDidLoad];
+    self.sectionsHidden = NO;
 
-    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-    self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-
-    self.selectedScheme = nil;
-    self.selectedWeapon = nil;
-    self.selectedScript = nil;
-    self.scriptCommand = nil;
-
-    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)]) {
-        if (IS_IPAD())
-            [self.tableView setBackgroundView:nil];
-        else {
-            UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
-            UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
-            [backgroundImage release];
-            [self.tableView setBackgroundView:background];
-            [background release];
-        }
+    UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+                                                           style:UITableViewStyleGrouped];
+    aTableView.delegate = self;
+    aTableView.dataSource = self;
+    if (IS_IPAD()) {
+        [aTableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
+        aTableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
+        aTableView.layer.borderWidth = 2.7f;
+        aTableView.layer.cornerRadius = 8;
+        aTableView.contentInset = UIEdgeInsetsMake(5, 0, 5, 0);
     } else {
-        self.view.backgroundColor = [UIColor blackColor];
+        UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
+        UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+        [backgroundImage release];
+        [self.view addSubview:background];
+        [background release];
+        [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
     }
 
-    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    aTableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+    aTableView.separatorColor = [UIColor whiteColor];
+    aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView = aTableView;
+    [aTableView release];
+    [self.view addSubview:self.tableView];
+
+    [super viewDidLoad];
+    controllerInstance = self;
 }
-
--(void) viewWillAppear:(BOOL) animated {
-    [super viewWillAppear:animated];
-
-    NSArray *contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCHEMES_DIRECTORY() error:NULL];
-    self.listOfSchemes = contentsOfDir;
-
-    if (self.selectedScheme == nil && [listOfSchemes containsObject:@"Default.plist"])
-        self.selectedScheme = @"Default.plist";
-    
-    contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:WEAPONS_DIRECTORY() error:NULL];
-    self.listOfWeapons = contentsOfDir;
-    
-    if (self.selectedWeapon == nil && [listOfWeapons containsObject:@"Default.plist"])
-        self.selectedWeapon = @"Default.plist";
-
-    contentsOfDir = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL];
-    self.listOfScripts = contentsOfDir;
-    self.selectedScript = @"Normal.plist";
-    self.scriptCommand = @"";
-
-    [self.tableView reloadData];
-}
-
 
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
-    if (hideSections)
-        return 0;
-    else
-        return 1;
+    return (self.sectionsHidden ? 0 : 1);
 }
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -106,12 +148,12 @@
 }
 
 // Customize the appearance of table view cells.
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+-(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
     NSInteger index = self.topControl.selectedSegmentIndex;
     NSInteger row = [indexPath row];
 
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
 
@@ -154,8 +196,8 @@
         }
     }
 
-    cell.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
-    cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+    cell.backgroundColor = [UIColor blackColorTransparent];
+    cell.textLabel.textColor = [UIColor lightYellowColor];
     cell.detailTextLabel.textColor = [UIColor whiteColor];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
@@ -167,20 +209,9 @@
 }
 
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (self.topControl == nil) {
-        NSArray *array = [[NSArray alloc] initWithObjects:NSLocalizedString(@"Scheme",@""),NSLocalizedString(@"Weapon",@""),
-                          NSLocalizedString(@"Style",@""),nil];
-        self.topControl = [[UISegmentedControl alloc] initWithItems:array];
-        [array release];
-        [self.topControl addTarget:self.tableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
-        self.topControl.segmentedControlStyle = UISegmentedControlStyleBar;
-        self.topControl.frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
-        self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
-        self.topControl.tintColor = [UIColor lightGrayColor];
-        self.topControl.selectedSegmentIndex = 0;
-    }
-
     UIView *theView = [[[UIView alloc] init] autorelease];
+    self.topControl.frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
+    self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
     [theView addSubview:self.topControl];
     return theView;
 }
@@ -213,6 +244,7 @@
             self.lastIndexPath_sc = indexPath;
             self.selectedScheme = [self.listOfSchemes objectAtIndex:newRow];
 
+            // also set weaponset when selecting scheme, if set
             NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
             if ([[settings objectForKey:@"sync_ws"] boolValue]) {
                 for (NSString *str in self.listOfWeapons) {
@@ -220,7 +252,6 @@
                         int index = [self.listOfSchemes indexOfObject:str];
                         self.selectedWeapon = str;
                         self.lastIndexPath_we = [NSIndexPath indexPathForRow:index inSection:1];
-                        [self.tableView reloadData];
                         break;
                     }
                 }
@@ -232,7 +263,8 @@
             self.lastIndexPath_lu = indexPath;
             self.selectedScript = [self.listOfScripts objectAtIndex:newRow];
 
-            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),selectedScript];
+            // some styles disable or force the choice of a particular scheme/weaponset
+            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),self.selectedScript];
             NSDictionary *scriptDict = [[NSDictionary alloc] initWithContentsOfFile:path];
             [path release];
             self.scriptCommand = [scriptDict objectForKey:@"command"];
@@ -262,64 +294,61 @@
     [aTableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
--(void) fillSections {
-    if (hideSections == YES) {
-        hideSections = NO;
-        NSRange range;
-        range.location = 0;
-        range.length = 1;
-        NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
-        [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        self.selectedScheme = @"Default.plist";
-        self.selectedWeapon = @"Default.plist";
-        self.selectedScript = @"Normal.plist";
+#pragma mark -
+#pragma mark called externally to empty or fill the sections completely
++(void) fillInstanceSections {
+    if (controllerInstance.sectionsHidden == YES) {
+        controllerInstance.sectionsHidden = NO;
+        NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
+        [controllerInstance.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        controllerInstance.tableView.scrollEnabled = YES;
 
-        self.tableView.scrollEnabled = YES;
-
-        [[self.view viewWithTag:LABEL_TAG] removeFromSuperview];
+        [[controllerInstance.view viewWithTag:LABEL_TAG] removeFromSuperview];
     }
 }
 
--(void) emptySections {
-    hideSections = YES;
-    NSRange range;
-    range.location = 0;
-    range.length = 1;
-    NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:range];
-    [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
-    self.selectedScheme = @"Default.plist";
-    self.selectedWeapon = @"Default.plist";
-    self.selectedScript = @"Normal.plist";
++(void) emptyInstanceSections {
+    if (controllerInstance.sectionsHidden == NO) {
+        controllerInstance.sectionsHidden = YES;
+        NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
+        [controllerInstance.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        controllerInstance.tableView.scrollEnabled = NO;
 
-    self.tableView.scrollEnabled = NO;
+        CGRect frame = CGRectMake(0, 0, controllerInstance.view.frame.size.width * 80/100, 60);
+        UILabel *theLabel = [[UILabel alloc] initWithFrame:frame
+                                                  andTitle:NSLocalizedString(@"Missions don't need further configuration",@"")];
+        theLabel.center = CGPointMake(controllerInstance.view.frame.size.width/2, controllerInstance.view.frame.size.height/2);
+        theLabel.numberOfLines = 2;
+        theLabel.tag = LABEL_TAG;
 
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 60);
-    UILabel *theLabel = createBlueLabel(NSLocalizedString(@"Missions don't need further configuration",@""), frame);
-    theLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
-    theLabel.numberOfLines = 2;
-    theLabel.tag = LABEL_TAG;
-
-    [self.view addSubview:theLabel];
-    [theLabel release];
+        [controllerInstance.view addSubview:theLabel];
+        [theLabel release];
+    }
 }
 
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
     if ([[HedgewarsAppDelegate sharedAppDelegate] isInGame]) {
+        self.tableView = nil;
         self.lastIndexPath_sc = nil;
         self.lastIndexPath_we = nil;
         self.lastIndexPath_lu = nil;
-        self.listOfSchemes = nil;
-        self.listOfWeapons = nil;
-        self.listOfScripts = nil;
+        self.selectedScheme = nil;
+        self.selectedWeapon = nil;
+        self.selectedScript = nil;
+        self.scriptCommand = nil;
         self.topControl = nil;
-        MSG_MEMCLEAN();
     }
+    self.listOfSchemes = nil;
+    self.listOfWeapons = nil;
+    self.listOfScripts = nil;
+    MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
+    self.tableView = nil;
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
@@ -335,8 +364,8 @@
     [super viewDidUnload];
 }
 
-
 -(void) dealloc {
+    releaseAndNil(tableView);
     releaseAndNil(listOfSchemes);
     releaseAndNil(listOfWeapons);
     releaseAndNil(listOfScripts);

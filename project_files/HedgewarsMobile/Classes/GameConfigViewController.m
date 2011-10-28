@@ -25,12 +25,10 @@
 #import "SchemeWeaponConfigViewController.h"
 #import "HelpPageViewController.h"
 #import "GameInterfaceBridge.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
-#import "PascalImports.h"
+
 
 @implementation GameConfigViewController
-@synthesize imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController, interfaceBridge;
+@synthesize imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -57,15 +55,24 @@
             break;
         case 1:
             [AudioManagerController playClickSound];
+            if ([self isEverythingSet] == NO)
+                return;
             theButton.enabled = NO;
+            for (UIView *oneView in self.imgContainer.subviews) {
+                if ([oneView isMemberOfClass:[UIImageView class]]) {
+                    UIImageView *anImageView = (UIImageView *)oneView;
+                    [anImageView removeFromSuperview];
+                }
+            }
             [self startGame:theButton];
+            
             break;
         case 2:
             [AudioManagerController playClickSound];
             if (self.helpPage == nil)
                 self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
-            [self.view addSubview:helpPage.view];
+            [self.view addSubview:self.helpPage.view];
             [UIView beginAnimations:@"helplobby" context:NULL];
             self.helpPage.view.alpha = 1;
             [UIView commitAnimations];
@@ -77,34 +84,22 @@
 }
 
 -(IBAction) segmentPressed:(id) sender {
+
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
 
     [AudioManagerController playSelectSound];
     switch (theSegment.selectedSegmentIndex) {
         case 0:
-            // this init here is just aestetic as this controller was already set up in viewDidLoad
-            if (mapConfigViewController == nil) {
-                mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
-                [self.view addSubview:mapConfigViewController.view];
-            }
             // this message is compulsory otherwise the table won't be loaded at all
-            [mapConfigViewController viewWillAppear:NO];
-            [self.view bringSubviewToFront:mapConfigViewController.view];
+            [self.mapConfigViewController viewWillAppear:NO];
+            [self.view bringSubviewToFront:self.mapConfigViewController.view];
             break;
         case 1:
-            if (teamConfigViewController == nil) {
-                teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                [self.view addSubview:teamConfigViewController.view];
-            }
             // this message is compulsory otherwise the table won't be loaded at all
-            [teamConfigViewController viewWillAppear:NO];
-            [self.view bringSubviewToFront:teamConfigViewController.view];
+            [self.teamConfigViewController viewWillAppear:NO];
+            [self.view bringSubviewToFront:self.teamConfigViewController.view];
             break;
         case 2:
-            if (schemeWeaponConfigViewController == nil) {
-                schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                [self.view addSubview:schemeWeaponConfigViewController.view];
-            }
             // this message is compulsory otherwise the table won't be loaded at all
             [schemeWeaponConfigViewController viewWillAppear:NO];
             [self.view bringSubviewToFront:schemeWeaponConfigViewController.view];
@@ -122,6 +117,7 @@
             DLog(@"Nope");
             break;
     }
+
 }
 
 -(BOOL) isEverythingSet {
@@ -208,9 +204,6 @@
 
 -(void) startGame:(UIButton *)button {
     button.enabled = YES;
-    
-    if ([self isEverythingSet] == NO)
-        return;
 
     NSString *script = self.mapConfigViewController.missionCommand;
     if ([script isEqualToString:@""])
@@ -230,45 +223,59 @@
                                     script,@"mission_command",
                                     nil];
 
-    if (self.interfaceBridge == nil) {
-        GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
-        self.interfaceBridge = bridge;
-        [bridge release];
-    }
-    [self.interfaceBridge startLocalGame:gameDictionary];
+    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
+    [bridge startLocalGame:gameDictionary];
+    [bridge release];
 }
 
 -(void) loadNiceHogs {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSString *filePath = [NSString stringWithFormat:@"%@/Hedgehog.png",GRAPHICS_DIRECTORY()];
-    UIImage *sprite = [[UIImage alloc] initWithContentsOfFile:filePath andCutAt:CGRectMake(96, 0, 32, 32)];
-    
+    srand(time(NULL));
+    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
+    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
+    [filePath release];
+
     NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
     int numberOfHats = [hatArray count];
+    int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 18 : 1;
 
     if (self.imgContainer != nil)
         [self.imgContainer removeFromSuperview];
-    
+
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
     for (int i = 0; i < 1 + random()%20; i++) {
         NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
-        
+
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
-        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile: hatFile andCutAt:CGRectMake(0, 0, 32, 32)];
-        [hatFile release];
-        UIImage *hogWithHat = [sprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
+        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile];
+        NSMutableArray *animation = [[NSMutableArray alloc] initWithCapacity:animationFrames];
+        for (int j = 0; j < animationFrames; j++) {
+            int x = ((j*32)/(int)hatSprite.size.height)*32;
+            int y = (j*32)%(int)hatSprite.size.height;
+            UIImage *hatSpriteFrame = [hatSprite cutAt:CGRectMake(x, y, 32, 32)];
+            UIImage *hogSpriteFrame = [hogSprite cutAt:CGRectMake(x, y, 32, 32)];
+            UIImage *hogWithHat = [hogSpriteFrame mergeWith:hatSpriteFrame atPoint:CGPointMake(0, 5)];
+            [animation addObject:hogWithHat];
+        }
         [hatSprite release];
-        
-        UIImageView *hog = [[UIImageView alloc] initWithImage:hogWithHat];
-        int x = 15*(i+1)+random()%40;
-        if (x + 32 > 300)
-            x = i*10;
-        hog.frame = CGRectMake(x, 30, 32, 32);
+        [hatFile release];
+
+        UIImageView *hog = [[UIImageView alloc] initWithImage:[animation objectAtIndex:0]];
+        hog.animationImages = animation;
+        hog.animationDuration = 3;
+        [animation release];
+
+        int x = 20*i+random()%128;
+        if (x > 320 - 32)
+            x = i*random()%32;
+        hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
         [self.imgContainer addSubview:hog];
+        [hog startAnimating];
         [hog release];
     }
+
     [self.view addSubview:self.imgContainer];
-    [sprite release];
+    [hogSprite release];
     [pool drain];
 }
 
@@ -279,57 +286,30 @@
     self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
 
     if (IS_IPAD()) {
-        // load other controllers
-        if (self.mapConfigViewController == nil)
-            self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPad" bundle:nil];
+        // the label for the filter slider
+        UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(116, 714, 310, 40)
+                                                     andTitle:nil
+                                              withBorderWidth:2.0f];
+        [self.view insertSubview:filterLabel belowSubview:self.mapConfigViewController.slider];
+        [filterLabel release];
 
-        UILabel *leftBackground = createLabelWithParams(nil, CGRectMake(0, 60, 320, 620), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:leftBackground];
-        [leftBackground release];
-        UILabel *middleBackground = createLabelWithParams(nil, CGRectMake(337, 187, 350, 505), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:middleBackground];
-        [middleBackground release];
-        UILabel *rightBackground = createLabelWithParams(nil, CGRectMake(704, 214, 320, 464), 2.7f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:rightBackground];
-        [rightBackground release];
-        UILabel *topBackground = createLabelWithParams(nil, CGRectMake(714, 14, 300, 190), 2.3f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:topBackground];
-        [topBackground release];
-        UILabel *bottomLeftBackground = createLabelWithParams(nil, CGRectMake(106, 714, 320, 40), 2.0f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        [self.mapConfigViewController.view addSubview:bottomLeftBackground];
-        [bottomLeftBackground release];
-        UILabel *bottomRightBackground = createLabelWithParams(NSLocalizedString(@"Max Hogs:                 ",@""), CGRectMake(594, 714, 320, 40), 2.0f, UICOLOR_HW_YELLOW_BODER, UICOLOR_HW_ALPHABLUE);
-        bottomRightBackground.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
-        [self.mapConfigViewController.view addSubview:bottomRightBackground];
-        [bottomRightBackground release];
-        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.maxLabel];
-        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.sizeLabel];
-        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.segmentedControl];
-        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.previewButton];
-        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.slider];
-        [self.mapConfigViewController.view bringSubviewToFront:self.mapConfigViewController.tableView];
+        // the label for max hogs
+        UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(598, 714, 310, 40)
+                                                  andTitle:NSLocalizedString(@"Loading...",@"")
+                                           withBorderWidth:2.0f];
+        maxLabel.font = [UIFont italicSystemFontOfSize:[UIFont labelFontSize]];
+        maxLabel.textColor = [UIColor whiteColor];
+        maxLabel.textAlignment = UITextAlignmentCenter;
+        [self.view addSubview:maxLabel];
+        self.mapConfigViewController.maxLabel = maxLabel;
+        [maxLabel release];
 
-        if (self.teamConfigViewController == nil)
-            self.teamConfigViewController = [[TeamConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [self.mapConfigViewController.view addSubview:self.teamConfigViewController.view];
-        if (self.schemeWeaponConfigViewController == nil)
-            self.schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [self.mapConfigViewController.view addSubview:schemeWeaponConfigViewController.view];
-        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
-        self.teamConfigViewController.view.frame = CGRectMake(348, 200, 328, 480);
-        self.schemeWeaponConfigViewController.view.frame = CGRectMake(10, 70, 300, 600);
-
-        self.mapConfigViewController.parentController = self;
+        // as this is loaded from a NIB we need to set its size and position
+        self.mapConfigViewController.view.frame = CGRectMake(704, 0, 320, 680);
     } else {
-        // this is the visible controller
-        if (self.mapConfigViewController == nil)
-            self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
-        // this must be loaded & added in order to auto set default scheme and ammo
-        self.schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [self.view addSubview:self.schemeWeaponConfigViewController.view];
+        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width-44);
     }
     [self.view addSubview:self.mapConfigViewController.view];
-    self.mapConfigViewController.externalController = schemeWeaponConfigViewController;
 
     [super viewDidLoad];
 }
@@ -368,28 +348,25 @@
 }
 
 -(void) didReceiveMemoryWarning {
+    self.imgContainer = nil;
+
+    if (self.mapConfigViewController.view.superview == nil)
+        self.mapConfigViewController = nil;
     if (self.teamConfigViewController.view.superview == nil)
         self.teamConfigViewController = nil;
     if (self.schemeWeaponConfigViewController.view.superview == nil)
         self.schemeWeaponConfigViewController = nil;
     if (self.helpPage.view.superview == nil)
         self.helpPage = nil;
-    if (self.mapConfigViewController.view.superview == nil)
-        self.mapConfigViewController = nil;
-
-    self.imgContainer = nil;
-    // don't nil this one or it won't be able to send messages
-    //self.interfaceBridge = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
     self.imgContainer = nil;
-    self.interfaceBridge = nil;
-    self.mapConfigViewController = nil;
-    self.teamConfigViewController = nil;
     self.schemeWeaponConfigViewController = nil;
+    self.teamConfigViewController = nil;
+    self.mapConfigViewController = nil;
     self.helpPage = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
@@ -397,10 +374,9 @@
 
 -(void) dealloc {
     releaseAndNil(imgContainer);
-    releaseAndNil(interfaceBridge);
-    releaseAndNil(mapConfigViewController);
-    releaseAndNil(teamConfigViewController);
     releaseAndNil(schemeWeaponConfigViewController);
+    releaseAndNil(teamConfigViewController);
+    releaseAndNil(mapConfigViewController);
     releaseAndNil(helpPage);
     [super dealloc];
 }
