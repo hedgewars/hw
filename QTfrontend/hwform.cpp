@@ -96,7 +96,12 @@ bool frontendEffects = true;
 QString playerHash;
 
 HWForm::HWForm(QWidget *parent, QString styleSheet)
-  : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
+  : QMainWindow(parent)
+  , game(0)
+  , pnetserver(0)
+  , pRegisterServer(0)
+  , editedTeam(0)
+  , hwnet(0)
 {
     // set music track
     SDLInteraction::instance().setMusicTrack(
@@ -106,7 +111,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #ifdef USE_XFIRE
     xfire_init();
 #endif
-    game = NULL;
     gameSettings = new QSettings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
     frontendEffects = gameSettings->value("frontend/effects", true).toBool();
     playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toLatin1(), QCryptographicHash::Md5).toHex());
@@ -1162,7 +1166,7 @@ void HWForm::CreateNetGame()
             ui.pageNetGame->pGameCFG->WeaponsName->currentIndex()
             ).toString();
 
-    CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
+	CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
 
     connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));
     connect(game, SIGNAL(SendChat(const QString &)), hwnet, SLOT(chatLineToNet(const QString &)));

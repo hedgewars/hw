@@ -118,6 +118,7 @@ set(hwfr_moc_hdrs
     gameuiconfig.h
     HWApplication.h
     hwform.h
+    team.h
     )
 
 set(hwfr_hdrs

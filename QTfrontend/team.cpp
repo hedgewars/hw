@@ -28,9 +28,10 @@
 #include "hats.h"
 
 HWTeam::HWTeam(const QString & teamname) :
-    m_difficulty(0),
-    m_numHedgehogs(4),
-    m_isNetTeam(false)
+	QObject(0)
+	, m_difficulty(0)
+	, m_numHedgehogs(4)
+	, m_isNetTeam(false)
 {
     m_name = teamname;
     OldTeamName = m_name;
@@ -54,8 +55,9 @@ HWTeam::HWTeam(const QString & teamname) :
 }
 
 HWTeam::HWTeam(const QStringList& strLst) :
-  m_numHedgehogs(4),
-  m_isNetTeam(true)
+	QObject(0)
+	, m_numHedgehogs(4)
+	, m_isNetTeam(true)
 {
     // net teams are configured from QStringList
     if(strLst.size() != 23) throw HWTeamConstructException();
@@ -80,9 +82,10 @@ HWTeam::HWTeam(const QStringList& strLst) :
 }
 
 HWTeam::HWTeam() :
-  m_difficulty(0),
-  m_numHedgehogs(4),
-  m_isNetTeam(false)
+	QObject(0)
+  , m_difficulty(0)
+  , m_numHedgehogs(4)
+  , m_isNetTeam(false)
 {
     m_name = QString("Team");
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
@@ -106,6 +109,53 @@ HWTeam::HWTeam() :
     m_campaignProgress = 0;
 }
 
+HWTeam::HWTeam(const HWTeam & other) :
+		QObject(0)
+		, OldTeamName(other.OldTeamName)
+		, m_name(other.m_name)
+		, m_grave(other.m_grave)
+		, m_fort(other.m_fort)
+		, m_flag(other.m_flag)
+		, m_voicepack(other.m_voicepack)
+		, m_hedgehogs(other.m_hedgehogs)
+		, m_difficulty(other.m_difficulty)
+		, m_binds(other.m_binds)
+		, m_numHedgehogs(other.m_numHedgehogs)
+		, m_color(other.m_color)
+		, m_isNetTeam(other.m_isNetTeam)
+		, m_owner(other.m_owner)
+		, m_campaignProgress(other.m_campaignProgress)
+		, m_rounds(other.m_rounds)
+		, m_wins(other.m_wins)
+//	  , AchievementProgress(other.AchievementProgress)
+{
+
+}
+
+HWTeam & HWTeam::operator = (const HWTeam & other)
+{
+	if(this != &other)
+	{
+		OldTeamName = other.OldTeamName;
+		m_name = other.m_name;
+		m_grave = other.m_grave;
+		m_fort = other.m_fort;
+		m_flag = other.m_flag;
+		m_voicepack = other.m_voicepack;
+//		m_hedgehogs = other.m_hedgehogs;
+		m_difficulty = other.m_difficulty;
+//		m_binds = other.m_binds;
+		m_numHedgehogs = other.m_numHedgehogs;
+		m_color = other.m_color;
+		m_isNetTeam = other.m_isNetTeam;
+		m_owner = other.m_owner;
+		m_campaignProgress = other.m_campaignProgress;
+		m_rounds = other.m_rounds;
+		m_wins = other.m_wins;
+	}
+
+	return *this;
+}
 
 bool HWTeam::loadFromFile()
 {

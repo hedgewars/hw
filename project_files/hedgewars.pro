@@ -93,7 +93,7 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/achievements.h \
     ../QTfrontend/binds.h \
     ../QTfrontend/ui_hwform.h \
-    ../QTfrontend/KB.h \
+	../QTfrontend/KB.h \
     ../QTfrontend/hwconsts.h \
     ../QTfrontend/sdlkeys.h
 
