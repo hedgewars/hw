@@ -20,7 +20,6 @@
 
 
 #import "StatsPageViewController.h"
-#import "CommodityFunctions.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation StatsPageViewController
@@ -49,7 +48,7 @@
     } else
         self.view.backgroundColor = [UIColor blackColor];
 
-    self.tableView.separatorColor = UICOLOR_HW_YELLOW_BODER;
+    self.tableView.separatorColor = [UIColor darkYellowColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
 
     [super viewDidLoad];
@@ -85,7 +84,7 @@
         imgName = @"star";
         imgPath = [[NSBundle mainBundle] resourcePath];
         cell.textLabel.text = [self.statsArray objectAtIndex:1];
-        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+        cell.textLabel.textColor = [UIColor lightYellowColor];
     } else if (section == 1) {  // teams ranking
         // color, # kills, teamname
         NSArray *info = [[[self.statsArray objectAtIndex:0] objectAtIndex:row] componentsSeparatedByString:@" "];
@@ -99,7 +98,7 @@
     } else if (section == 2) {  // general info
         imgName = @"iconDamage";
         cell.textLabel.text = [self.statsArray objectAtIndex:row + 2];
-        cell.textLabel.textColor = UICOLOR_HW_YELLOW_TEXT;
+        cell.textLabel.textColor = [UIColor lightYellowColor];
     }
 
     NSString *imgString = [[NSString alloc] initWithFormat:@"%@/%@.png",imgPath,imgName];
@@ -155,9 +154,9 @@
         [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
 
         button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-        button.backgroundColor = UICOLOR_HW_ALMOSTBLACK;
+        button.backgroundColor = [UIColor blackColorTransparent];
         [button.layer setBorderWidth:1];
-        [button.layer setBorderColor:UICOLOR_HW_YELLOW_BODER.CGColor];
+        [button.layer setBorderColor:[[UIColor darkYellowColor] CGColor]];
         [button.layer setCornerRadius:9.0f];
         [button.layer setMasksToBounds:YES];
         [button addTarget:self action:@selector(dismissView) forControlEvents:UIControlEventTouchUpInside];

@@ -30,6 +30,8 @@
 #include "hwform.h"
 #include "hwconsts.h"
 
+#include "HWDataManager.h"
+
 #ifdef _WIN32
 #include <Shlobj.h>
 #endif
@@ -95,229 +97,6 @@ int main(int argc, char *argv[]) {
     rand();
 
     Q_INIT_RESOURCE(hedgewars);
-
-    QString styleSheetFromHell =
-        QString(
-            "HWForm,QDialog{"
-                "background-image: url(\":/res/Background.png\");"
-                "background-position: bottom center;"
-                "background-repeat: repeat-x;"
-                "background-color: #141250;"
-                "}"
-
-            "* {"
-                "color: #ffcc00;"
-                "selection-background-color: #ffcc00;"
-                "selection-color: #00351d;"
-            "}"
-
-            "QLineEdit, QListWidget, QTableView, QTextBrowser, QSpinBox, QComboBox, "
-            "QComboBox QAbstractItemView, QMenu::item {"
-                "background-color: rgba(13, 5, 68, 70%);"
-            "}"
-
-            "QComboBox::separator {"
-                "border: solid; border-width: 3px; border-color: #ffcc00;"
-            "}"
-
-            "QPushButton, QListWidget, QTableView, QLineEdit, QHeaderView, "
-            "QTextBrowser, QSpinBox, QToolBox, QComboBox, "
-            "QComboBox QAbstractItemView, IconedGroupBox, "
-            ".QGroupBox, GameCFGWidget, TeamSelWidget, SelWeaponWidget, "
-            "QTabWidget::pane, QTabBar::tab {"
-                "border: solid;"
-                "border-width: 3px;"
-                "border-color: #ffcc00;"
-            "}"
-
-            "QPushButton:hover, QLineEdit:hover, QListWidget:hover, "
-            "QSpinBox:hover, QToolBox:hover, QComboBox:hover {"
-                "border-color: yellow;"
-            "}"
-
-            "QLineEdit, QListWidget,QTableView, QTextBrowser, "
-            "QSpinBox, QToolBox { "
-                "border-radius: 10px;"
-            "}"
-
-            "QLineEdit, QLabel, QHeaderView, QListWidget, QTableView, "
-            "QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView, "
-            "IconedGroupBox, .QGroupBox, GameCFGWidget, TeamSelWidget, "
-            "SelWeaponWidget, QCheckBox, QRadioButton, QPushButton {"
-                "font: bold 13px;"
-            "}"
-            "SelWeaponWidget QTabWidget::pane, SelWeaponWidget QTabBar::tab:selected {"
-                "background-position: bottom center;"
-                "background-repeat: repeat-x;"
-                "background-color: #000000;"
-            "}"
-            ".QGroupBox,GameCFGWidget,TeamSelWidget,SelWeaponWidget {"
-                "background-position: bottom center;"
-                "background-repeat: repeat-x;"
-                "border-radius: 16px;"
-                "background-color: rgba(13, 5, 68, 70%);"
-                "padding: 6px;"
-            "}"
-/*  Experimenting with PaintOnScreen and border-radius on IconedGroupBox children didn't work out well
-            "IconedGroupBox QComboBox, IconedGroupBox QPushButton, IconedGroupBox QLineEdit, "
-            "IconedGroupBox QSpinBox {"
-                "border-radius: 0;"
-            "}"
-            "IconedGroupBox, IconedGroupBox *, QTabWidget::pane, QTabBar::tab:selected, QToolBox::tab QWidget{" */
-            "IconedGroupBox, QTabWidget::pane, QTabBar::tab:selected, QToolBox::tab QWidget{"
-                "background-color: #130f2c;"
-            "}"
-
-
-            "QPushButton {"
-                "border-radius: 8px;"
-                "background-origin: margin;"
-                "background-position: top left;"
-                "background-color: rgba(18, 42, 5, 70%);"
-            "}"
-
-            "QPushButton:pressed{"
-                "border-color: white;"
-            "}"
-
-            "QHeaderView {"
-                "border-radius: 0;"
-                "border-width: 0;"
-                "border-bottom-width: 3px;"
-                "background-color: #00351d;"
-            "}"
-            "QTableView {"
-                "alternate-background-color: #2f213a;"
-                "gridline-color: transparent;"
-            "}"
-
-            "QTabBar::tab {"
-                 "border-bottom-width: 0;"
-                 "border-radius: 0;"
-                 "border-top-left-radius: 6px;"
-                 "border-top-right-radius: 6px;"
-                 "padding: 3px;"
-            "}"
-            "QTabBar::tab:!selected {"
-                 "color: #0d0544;"
-                 "background-color: #ffcc00;"
-            "}"
-            "QSpinBox::up-button{"
-                "background: transparent;"
-                "width: 16px;"
-                "height: 10px;"
-            "}"
-
-            "QSpinBox::up-arrow {"
-                "image: url(\":/res/spin_up.png\");"
-            "}"
-
-            "QSpinBox::down-arrow {"
-                "image: url(\":/res/spin_down.png\");"
-            "}"
-
-            "QSpinBox::down-button {"
-                "background: transparent;"
-                "width: 16px;"
-                "height: 10px;"
-            "}"
-
-            "QComboBox {"
-                "border-radius: 10px;"
-                "padding: 3px;"
-            "}"
-            "QComboBox:pressed{"
-                "border-color: white;"
-            "}"
-            "QComboBox::drop-down{"
-                "border: transparent;"
-                "width: 25px;"
-            "}"
-            "QComboBox::down-arrow {"
-                "image: url(\":/res/dropdown.png\");"
-            "}"
-
-            "VertScrArea {"
-                "background-position: bottom center;"
-                "background-repeat: repeat-x;"
-            "}"
-
-            "IconedGroupBox {"
-                "border-radius: 16px;"
-                "padding: 2px;"
-            "}"
-
-            "QGroupBox::title{"
-                "subcontrol-origin: margin;"
-                "subcontrol-position: top left;"
-                "text-align: left;"
-                "left: 15px;"
-                "top: -4px;"
-                "}"
-
-            "QCheckBox::indicator:checked{"
-                "image: url(\":/res/checked.png\");"
-                "}"
-            "QCheckBox::indicator:unchecked{"
-                "image: url(\":/res/unchecked.png\");"
-                "}"
-
-            ".QWidget{"
-                "background: transparent;"
-                "}"
-
-            "QTabWidget::pane {"
-                "border-top-width: 2px;"
-            "}"
-
-            "QMenu{"
-                "background-color: #ffcc00;"
-                "margin: 3px;"
-            "}"
-            "QMenu::item {"
-                "background-color: #0d0544;"
-                "border: 1px solid transparent;"
-                "font: bold;"
-                "padding: 2px 25px 2px 20px;"
-            "}"
-            "QMenu::item:selected {"
-                "background-color: #2d2564;"
-            "}"
-            "QMenu::indicator {"
-                "width: 16px;"
-                "height: 16px;"
-            "}"
-            "QMenu::indicator:non-exclusive:checked{"
-                "image: url(\":/res/checked.png\");"
-            "}"
-            "QMenu::indicator:non-exclusive:unchecked{"
-                "image: url(\":/res/unchecked.png\");"
-            "}"
-
-            "QToolTip{"
-                "background-color: #0d0544;"
-                "border: 1px solid #ffcc00;"
-            "}"
-
-            ":disabled{"
-                "color: #a0a0a0;"
-            "}"
-            "SquareLabel, ItemNum {"
-                "background-color: #000000;"
-            "}"
-            "QSlider::groove::horizontal {"
-                "height: 2px;"
-                "margin: 2px 0px;"
-                "background-color: #ffcc00;"
-            "}"
-            "QSlider::handle::horizontal {"
-                "border: 0px;"
-                "margin: -2px 0px;"
-                "border-radius: 3px;"
-                "background-color: #ffcc00;"
-                "width: 8px;"
-            "}"
-            );
 
     bindir->cd("bin"); // workaround over NSIS installer
 
@@ -386,35 +165,36 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    HWDataManager & dataMgr = HWDataManager::instance();
+
     {
-        QDir dir;
-        dir.setPath(cfgdir->absolutePath() + "/Data/Themes");
-
         QStringList themes;
-        themes.append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
 
-        dir.setPath(datadir->absolutePath() + "/Themes");
-        themes.append(dir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot));
+        themes.append(dataMgr.entryList(
+                         "Themes",
+                         QDir::AllDirs | QDir::NoDotAndDotDot)
+                     );
 
         QList<QPair<QIcon, QIcon> > icons;
 
         themes.sort();
         for(int i = themes.size() - 1; i >= 0; --i)
         {
-            QFile tmpfile;
-            tmpfile.setFileName(QString("%1/Data/Themes/%2/icon.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
-            if (!tmpfile.exists())
-                tmpfile.setFileName(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+            QString file = dataMgr.findFileForRead(
+                QString("Themes/%1/icon.png").arg(themes.at(i))
+            );
 
-            if(tmpfile.exists())
+            if(QFile::exists(file))
             { // load icon
                 QPair<QIcon, QIcon> ic;
-                ic.first = QIcon(QFileInfo(tmpfile).absoluteFilePath());
+                ic.first = QIcon(file);
 
-                QFile previewIconFile;
-                previewIconFile.setFileName(QString("%1/Data/Themes/%2/icon@2x.png").arg(cfgdir->absolutePath()).arg(themes.at(i)));
-                if (previewIconFile.exists()) ic.second = QIcon(QFileInfo(previewIconFile).absoluteFilePath());
-                else ic.second = QIcon(QString("%1/Themes/%2/icon@2x.png").arg(datadir->absolutePath()).arg(themes.at(i)));
+                // load preview icon
+                ic.second = QIcon(
+                    dataMgr.findFileForRead(
+                        QString("Themes/%1/icon@2x.png").arg(themes.at(i))
+                    )
+                );
 
                 icons.prepend(ic);
             }
@@ -433,30 +213,18 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    QDir tmpdir;
-    tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Maps");
-    tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-    mapList = new QStringList(tmpdir.entryList(QStringList("*")));
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Maps");
-    tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-    QStringList tmplist = QStringList(tmpdir.entryList(QStringList("*")));
-    for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
-        if (!mapList->contains(*it,Qt::CaseInsensitive)) mapList->append(*it);
+    mapList = new QStringList(dataMgr.entryList(
+                                 QString("Maps"),
+                                 QDir::Dirs | QDir::NoDotAndDotDot
+                                 )
+                             );
  
-    tmpdir.cd(cfgdir->absolutePath());
-    tmpdir.cd("Data/Scripts/Multiplayer");
-    tmpdir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
-    scriptList = new QStringList(tmpdir.entryList(QStringList("*.lua")));
-
-    tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Scripts/Multiplayer");
-    tmpdir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
-    tmplist = QStringList(tmpdir.entryList(QStringList("*.lua")));
-    for (QStringList::Iterator it = tmplist.begin(); it != tmplist.end(); ++it)
-        if (!scriptList->contains(*it,Qt::CaseInsensitive)) scriptList->append(*it);
+    scriptList = new QStringList(dataMgr.entryList(
+                                     QString("Scripts/Multiplayer"),
+                                     QDir::Files,
+                                     QStringList("*.lua")
+                                     )
+                                 );
 
     QTranslator Translator;
     {
@@ -464,10 +232,13 @@ int main(int argc, char *argv[]) {
         QString cc = settings.value("misc/locale", QString()).toString();
         if(cc.isEmpty())
             cc = QLocale::system().name();
-        QFile tmpfile;
-        tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Locale/hedgewars_" + cc);
-        if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Locale/hedgewars_" + cc);
-        Translator.load(QFileInfo(tmpfile).absoluteFilePath());
+
+        // load locale file into translator
+        Translator.load(
+            dataMgr.findFileForRead(
+                QString("Locale/hedgewars_" + cc)
+            )
+        );
         app.installTranslator(&Translator);
     }
 
@@ -485,8 +256,27 @@ int main(int argc, char *argv[]) {
     CocoaInitializer initializer;
 #endif
 
-    app.form = new HWForm(NULL,styleSheetFromHell);
+    QString style = "";
 
+    // load external stylesheet if there is any
+    QFile extFile(dataMgr.findFileForRead("css/qt.css"));
+
+    QFile resFile(":/res/css/qt.css");
+
+    QFile & file = (extFile.exists()?extFile:resFile);
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream in(&file);
+        while (!in.atEnd())
+        {
+            QString line = in.readLine();
+            if(!line.isEmpty())
+                style.append(line);
+        }
+    }
+
+    app.form = new HWForm(NULL, style);
     app.form->show();
     return app.exec();
 }

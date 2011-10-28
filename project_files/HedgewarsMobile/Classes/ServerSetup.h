@@ -28,6 +28,9 @@
     TCPsocket sd;      // External socket descriptor
 }
 
++(NSInteger) randomPort;
++(BOOL) isNetworkReachable;
+
 @property (nonatomic, retain) NSDictionary *systemSettings;
 
 @end

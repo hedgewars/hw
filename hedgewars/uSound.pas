@@ -157,11 +157,9 @@ begin
     if isSoundEnabled then
         isSoundEnabled:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
 
-{$IFDEF SDL_MIXER_NEWER}
     WriteToConsole('Init SDL_mixer... ');
     SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
     WriteLnToConsole(msgOK);
-{$ENDIF}
 
     if isSoundEnabled then
         WriteLnToConsole(msgOK)
@@ -191,11 +189,9 @@ begin
     if Mus <> nil then
         Mix_FreeMusic(Mus);
 
-{$IFDEF SDL_MIXER_NEWER}
     // make sure all instances of sdl_mixer are unloaded before continuing
     while Mix_Init(0) <> 0 do
         Mix_Quit();
-{$ENDIF}
 
     Mix_CloseAudio();
 end;

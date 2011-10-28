@@ -1170,8 +1170,8 @@ Do you still want to join the room?</translation>
         <translation>Multiplayer (play a hotseat game against your friends, or AI teams)</translation>
     </message>
     <message>
-        <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</translation>
+        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <translation>Training Mode (Practice your skills in a range of training missions)</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>

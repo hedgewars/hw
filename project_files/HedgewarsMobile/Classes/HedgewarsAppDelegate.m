@@ -20,10 +20,8 @@
 
 
 #import "HedgewarsAppDelegate.h"
-#import "PascalImports.h"
-#import "ObjcExports.h"
-#import "CommodityFunctions.h"
 #import "MainMenuViewController.h"
+#import "ObjcExports.h"
 #include <unistd.h>
 
 
@@ -92,12 +90,12 @@
 }
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
-    // don't stop music when it is playing
+    [HWUtils releaseCache];
+    // don't stop music if it is playing
     if (self.isInGame) {
-        [AudioManagerController cleanupMemory];
-        MSG_MEMCLEAN();
+        [AudioManagerController releaseCache];
     }
-    print_free_memory();
+    MSG_MEMCLEAN();
     // don't clean mainMenuViewController here!!!
 }
 

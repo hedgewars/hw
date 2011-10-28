@@ -20,7 +20,6 @@
 
 
 #import "GeneralSettingsViewController.h"
-#import "CommodityFunctions.h"
 
 
 @implementation GeneralSettingsViewController
@@ -33,6 +32,7 @@
 #pragma mark -
 #pragma mark View Lifecycle
 -(void) viewDidLoad {
+    self.navigationItem.title = @"Edit game options";
     [super viewDidLoad];
 }
 
@@ -64,8 +64,9 @@
             theOtherSwitch = (UISwitch *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]].accessoryView;
             [theOtherSwitch setOn:NO animated:YES];
 
-            if (theOtherSwitch.on)
-                [AudioManagerController pauseBackgroundMusic];
+            // since switching sound on won't turn music on anyways, we can always turn off music
+            [AudioManagerController pauseBackgroundMusic];
+            [settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
             break;
         case 20:    //musicSwitch
             // if switch above (sound) is off, never turn on
@@ -80,7 +81,6 @@
                 [AudioManagerController playBackgroundMusic];
             else
                 [AudioManagerController pauseBackgroundMusic];
-
             break;
         case 30:    //alternateSwitch
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];

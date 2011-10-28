@@ -25,7 +25,7 @@ uses SDLh;
 procedure AddObjects();
 procedure FreeLandObjects();
 procedure LoadThemeConfig;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word = 0);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
@@ -66,7 +66,7 @@ var Rects: PRectArray;
     SprayObjects: TSprayObjects;
 
 
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word = 0);
 var p: PLongwordArray;
     x, y: Longword;
     bpp: LongInt;
@@ -96,8 +96,12 @@ for y:= 0 to Pred(Image^.h) do
                 if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then 
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
+
         if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then
-            Land[cpY + y, cpX + x]:= lfObject
+            begin
+            Land[cpY + y, cpX + x]:= lfObject;
+            Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or extraFlags
+            end;
         end;
     p:= @(p^[Image^.pitch shr 2])
     end;
@@ -204,7 +208,11 @@ begin
     rr.x:= x1;
     while rr.x < x2 do
         begin
-        BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
+        // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
+        if (Theme = 'Snow') or (Theme = 'Christmas') then 
+            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf, lfIce)
+        else
+            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
         inc(rr.x, tmpsurf^.w);
         end;
     SDL_FreeSurface(tmpsurf);

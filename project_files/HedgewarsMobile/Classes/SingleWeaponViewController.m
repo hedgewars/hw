@@ -20,9 +20,7 @@
 
 
 #import "SingleWeaponViewController.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
-#import "PascalImports.h"
+
 
 @implementation SingleWeaponViewController
 @synthesize weaponName, description, ammoStoreImage;
@@ -165,10 +163,11 @@
             weaponCell.delegate = self;
         }
 
-        int size = 32 * getScreenScale();
-        int corners = 8 * getScreenScale();
-        int x = ((row*size)/(int)(self.ammoStoreImage.size.height*getScreenScale()))*size;
-        int y = (row*size)%(int)(self.ammoStoreImage.size.height*getScreenScale());
+        CGFloat theScale = [[UIScreen mainScreen] safeScale];
+        int size = 32 * theScale;
+        int corners = 8 * theScale;
+        int x = ((row*size)/(int)(self.ammoStoreImage.size.height * theScale))*size;
+        int y = (row*size)%(int)(self.ammoStoreImage.size.height * theScale);
 
         UIImage *img = [[self.ammoStoreImage cutAt:CGRectMake(x, y, size, size)] makeRoundCornersOfSize:CGSizeMake(corners, corners)];
         weaponCell.weaponIcon.image = img;

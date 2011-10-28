@@ -85,13 +85,13 @@ end;
 procedure chCheckProto(var s: shortstring);
 var i, c: LongInt;
 begin
-if isDeveloperMode then
-begin
-val(s, i, c);
-if (c <> 0) or (i = 0) then exit;
-TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old', true);
-TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new', true)
-end
+    if isDeveloperMode then
+        begin
+        val(s, i, c);
+        if (c <> 0) or (i = 0) then exit;
+        TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
+        TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
+    end
 end;
 
 procedure chTeamLocal(var s: shortstring);
@@ -451,11 +451,13 @@ end;
 procedure chSetMap(var s: shortstring);
 begin
 if isDeveloperMode then
-begin
-UserPathz[ptMapCurrent]:= UserPathz[ptMaps] + '/' + s;
-Pathz[ptMapCurrent]:= Pathz[ptMaps] + '/' + s;
-InitStepsFlags:= InitStepsFlags or cifMap
-end
+    begin
+    UserPathz[ptMapCurrent]:= UserPathz[ptMaps] + '/' + s;
+    Pathz[ptMapCurrent]:= Pathz[ptMaps] + '/' + s;
+    InitStepsFlags:= InitStepsFlags or cifMap
+    end;
+
+ScriptLoad(s)
 end;
 
 procedure chSetTheme(var s: shortstring);

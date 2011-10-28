@@ -19,7 +19,15 @@
  */
 
 
-void objcExportsInit(void);
+@interface ObjcExports : NSObject {
+
+}
+
++(void) initialize;
+
+@end
+
+
 BOOL isGameRunning(void);
 void setGameRunning(BOOL value);
 NSInteger cachedGrenadeTime(void);

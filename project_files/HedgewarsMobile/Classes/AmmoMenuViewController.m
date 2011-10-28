@@ -21,9 +21,7 @@
 
 #import "AmmoMenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
-#import "PascalImports.h"
+
 
 #define BTNS_PER_ROW         9
 #define DEFAULT_DESCRIPTION  IS_IPAD() ? \
@@ -92,7 +90,7 @@
     int y = (HW_getNumberOfWeapons()/BTNS_PER_ROW)*44 + 18;
     UILabel *name = [[UILabel alloc] initWithFrame:CGRectMake(x, y, 200, 20)];
     name.backgroundColor = [UIColor clearColor];
-    name.textColor = UICOLOR_HW_YELLOW_BODER;
+    name.textColor = [UIColor darkYellowColor];
     name.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
     self.nameLabel = name;
     [self.view addSubview:self.nameLabel];
@@ -125,6 +123,7 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSString *str = [NSString stringWithFormat:@"%@/AmmoMenu/Ammos.png",GRAPHICS_DIRECTORY()];
     UIImage *ammoStoreImage = [[UIImage alloc] initWithContentsOfFile:str];
+    CGFloat theScale = [[UIScreen mainScreen] safeScale];
 
     NSMutableArray *imgs = [[NSMutableArray alloc] initWithCapacity:HW_getNumberOfWeapons()];
     NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:HW_getNumberOfWeapons()];
@@ -152,14 +151,14 @@
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.frame = CGRectMake(x, y, 40, 40);
         button.tag = i;
-        button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
+        button.layer.borderColor = [[UIColor lightYellowColor] CGColor];
         button.layer.borderWidth = w;
         [button.layer setCornerRadius:radius];
         [button.layer setMasksToBounds:YES];
         [button addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchDown];
         [button addTarget:self action:@selector(buttonReleased:) forControlEvents:UIControlEventTouchUpInside];
         [button addTarget:self action:@selector(buttonCancelled:) forControlEvents:UIControlEventTouchUpOutside|UIControlEventTouchCancel];
-        [button setTitleColor:UICOLOR_HW_YELLOW_TEXT forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor lightYellowColor] forState:UIControlStateNormal];
         button.titleLabel.backgroundColor = [UIColor blackColor];
         button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont smallSystemFontSize]];
         [button.titleLabel.layer setCornerRadius:3];
@@ -169,9 +168,9 @@
         [self.view addSubview:button];
         [array addObject:button];
 
-        int size = 32*getScreenScale();
-        int x_src = ((i*size)/(int)(ammoStoreImage.size.height*getScreenScale()))*size;
-        int y_src = (i*size)%(int)(ammoStoreImage.size.height*getScreenScale());
+        int size = 32 * theScale;
+        int x_src = ((i*size)/(int)(ammoStoreImage.size.height * theScale))*size;
+        int y_src = (i*size)%(int)(ammoStoreImage.size.height * theScale);
         UIImage *img = [ammoStoreImage cutAt:CGRectMake(x_src, y_src, size, size)];
         [imgs addObject:img];
     }
@@ -221,7 +220,7 @@
                         shouldUpdateImage[i] = YES;
                     }
                 } else {
-                    button.layer.borderColor = [UICOLOR_HW_YELLOW_TEXT CGColor];
+                    button.layer.borderColor = [[UIColor lightYellowColor] CGColor];
                     [button setTitle:nil forState:UIControlStateNormal];
                     if (button.currentBackgroundImage == nil || shouldUpdateImage[i] == YES) {
                         UIImage *img = [self.imagesArray objectAtIndex:i];

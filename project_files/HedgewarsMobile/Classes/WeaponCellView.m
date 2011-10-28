@@ -20,7 +20,7 @@
 
 
 #import "WeaponCellView.h"
-#import "CommodityFunctions.h"
+
 
 @implementation WeaponCellView
 @synthesize delegate, weaponName, weaponIcon, initialSli, probabilitySli, delaySli, crateSli, helpLabel,
@@ -102,9 +102,9 @@
 
         helpLabel = [[UILabel alloc] init];
         helpLabel.backgroundColor = [UIColor clearColor];
-        helpLabel.textColor = [UIColor grayColor];
+        helpLabel.textColor = [UIColor darkGrayColor];
         helpLabel.textAlignment = UITextAlignmentRight;
-        helpLabel.font = [UIFont italicSystemFontOfSize:[UIFont smallSystemFontSize]];
+        helpLabel.font = [UIFont italicSystemFontOfSize:[UIFont systemFontSize]];
 
         [self.contentView addSubview:weaponName];
         [self.contentView addSubview:weaponIcon];

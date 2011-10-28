@@ -2136,11 +2136,11 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Tag Team</source>
-        <translation>Označit tím</translation>
+        <translation>Tag Team</translation>
     </message>
     <message>
         <source>Add Bottom Border</source>
-        <translation type="unfinished"></translation>
+        <source>Pridať spodný okraj</source>
     </message>
 </context>
 <context>

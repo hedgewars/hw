@@ -58,8 +58,8 @@
 }
 
 -(void) holdAction {
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(holdAction:)])
-        [self.delegate holdAction:self.textLabel.text];
+    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(holdAction:onTable:)])
+        [self.delegate holdAction:self.textLabel.text onTable:(UITableView *)self.superview];
 }
 
 -(void) dealloc {

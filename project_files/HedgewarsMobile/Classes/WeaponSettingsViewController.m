@@ -42,6 +42,7 @@
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
 
+    self.navigationItem.title = @"List of weapons";
 }
 
 -(void) viewWillAppear:(BOOL) animated {
@@ -79,7 +80,7 @@
 -(void) addWeapon:(id) sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Weapon %u.plist", [self.listOfWeapons count]];
 
-    createWeaponNamed([fileName stringByDeletingPathExtension], 0);
+    [CreationChamber createWeaponNamed:[fileName stringByDeletingPathExtension]];
 
     [self.listOfWeapons addObject:fileName];
 
@@ -127,7 +128,7 @@
     [schemeFile release];
 
     [self.listOfWeapons removeObjectAtIndex:row];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark -
@@ -145,6 +146,7 @@
     [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
     [self.navigationController pushViewController:childController animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

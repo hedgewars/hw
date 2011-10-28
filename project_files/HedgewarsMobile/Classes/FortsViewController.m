@@ -20,8 +20,7 @@
 
 
 #import "FortsViewController.h"
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
+
 
 #define IMGNUM_PER_FORT 6
 

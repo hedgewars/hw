@@ -108,7 +108,7 @@ static SystemSoundID selSound = -1;
 
 #pragma mark -
 #pragma mark memory management
-+(void) cleanupMemory {
++(void) releaseCache {
     [backgroundMusic stop];
     [backgroundMusic release], backgroundMusic = nil;
     AudioServicesDisposeSystemSoundID(clickSound), clickSound = -1;

@@ -43,6 +43,8 @@
                                                                   action:@selector(toggleEdit:)];
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
+
+    self.navigationItem.title = @"List of teams";
 }
 
 // load the list of teams in the teams directory
@@ -82,7 +84,7 @@
 -(void) addTeam:(id) sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Default Team %u.plist", [self.listOfTeams count]];
 
-    createTeamNamed([fileName stringByDeletingPathExtension]);
+    [CreationChamber createTeamNamed:[fileName stringByDeletingPathExtension]];
 
     [self.listOfTeams addObject:fileName];
 
@@ -131,7 +133,7 @@
     [teamFile release];
 
     [self.listOfTeams removeObjectAtIndex:row];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 
@@ -150,6 +152,7 @@
     [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
     [self.navigationController pushViewController:childController animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

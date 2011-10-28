@@ -41,6 +41,8 @@
                                                                   action:@selector(toggleEdit:)];
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
+
+    self.navigationItem.title = @"List of schemes";
 }
 
 -(void) viewWillAppear:(BOOL) animated {
@@ -78,7 +80,7 @@
 -(void) addScheme:(id) sender {
     NSString *fileName = [[NSString alloc] initWithFormat:@"Scheme %u.plist", [self.listOfSchemes count]];
 
-    createSchemeNamed([fileName stringByDeletingPathExtension], 0);
+    [CreationChamber createSchemeNamed:[fileName stringByDeletingPathExtension]];
 
     [self.listOfSchemes addObject:fileName];
 
@@ -126,7 +128,7 @@
     [schemeFile release];
 
     [self.listOfSchemes removeObjectAtIndex:row];
-    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 #pragma mark -
@@ -144,6 +146,7 @@
     [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
     [self.navigationController pushViewController:childController animated:YES];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

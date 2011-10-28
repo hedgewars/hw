@@ -22,11 +22,12 @@
 #include <QMainWindow>
 #include <QStack>
 #include <QTime>
+#include <QPointer>
 
 #include "netserver.h"
 #include "game.h"
 #include "ui_hwform.h"
-#include "SDLs.h"
+#include "SDLInteraction.h"
 #include "bgwidget.h"
 
 #ifdef __APPLE__
@@ -54,11 +55,11 @@ class HWForm : public QMainWindow
 public:
     HWForm(QWidget *parent = 0, QString styleSheet = "");
     Ui_HWForm ui;
-    SDLInteraction sdli;
     GameUIConfig * config;
     QSettings * gameSettings; // Same file GameUIConfig points to but without the baggage.  Needs sync() calls if you want to get GameUIConfig changes though
     void updateXfire();
     void PlayDemoQuick(const QString & demofilename);
+    void exit();
 
 private slots:
     void GoToSaves();
@@ -76,20 +77,16 @@ private slots:
     QString getDemoArguments();
     void AssociateFiles();
     void btnExitPressed();
-    void btnExitClicked();
     void IntermediateSetup();
     void NewTeam();
-    void EditTeam();
-    void DeleteTeam();
-    void RandomNames();
-    void RandomName(const int &i);
-    void TeamSave();
-    void TeamDiscard();
+    void EditTeam(const QString & teamName);
+    void AfterTeamEdit();
+    void DeleteTeam(const QString & teamName);
     void DeleteScheme();
     void DeleteWeaponSet();
     void SimpleGame();
     void PlayDemo();
-    void StartTraining();
+    void startTraining(const QString&);
     void StartCampaign();
     void NetConnect();
     void NetConnectServer(const QString & host, quint16 port);
@@ -160,11 +157,11 @@ private:
         ID_PAGE_DRAWMAP         = 20,
         ID_PAGE_DATADOWNLOAD    = 21
         };
-    HWGame * game;
-    HWNetServer* pnetserver;
-    HWNetRegisterServer* pRegisterServer;
-    HWTeam * editedTeam;
-    HWNewNet * hwnet;
+	QPointer<HWGame> game;
+	QPointer<HWNetServer> pnetserver;
+	QPointer<HWNetRegisterServer> pRegisterServer;
+	QPointer<HWTeam> editedTeam;
+	QPointer<HWNewNet> hwnet;
     HWNamegen * namegen;
     AmmoSchemeModel * ammoSchemeModel;
     QStack<int> PagesStack;

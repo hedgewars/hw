@@ -295,12 +295,15 @@ case Kind of
                     Pos:= 0;
                     Radius:= 1;
                     DirAngle:= random * 360;
-                    dx.isNegative:= GetRandom(2) = 0;
-                    dx.QWordValue:= GetRandom(100000000);
-                    dy.isNegative:= false;
-                    dy.QWordValue:= GetRandom(70000000);
+                    if State and gstTmpFlag = 0 then
+                        begin
+                        dx.isNegative:= GetRandom(2) = 0;
+                        dx.QWordValue:= GetRandom(100000000);
+                        dy.isNegative:= false;
+                        dy.QWordValue:= GetRandom(70000000);
+                        if GetRandom(2) = 0 then dx := -dx
+                        end;
                     State:= State or gstInvisible;
-                    if GetRandom(2) = 0 then dx := -dx;
                     Health:= random(vobFrameTicks);
                     Timer:= random(vobFramesCount);
                     Angle:= (random(2) * 2 - 1) * (1 + random(10000)) * vobVelocity
@@ -1241,11 +1244,8 @@ if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
 
 if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
-    begin
     for i:= 0 to Pred(vobCount*2) do
         AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(LAND_HEIGHT div 2), gtFlake, 0, _0, _0, 0);
-    //disableLandBack:= true
-    end
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
@@ -1286,6 +1286,11 @@ while Gear <> nil do
         case Gear^.Kind of
             gtHedgehog,
                 gtMine,
+                gtBall,
+                gtMelonPiece,
+                gtGrenade,
+                gtClusterBomb,
+                gtCluster,
                 gtSMine,
                 gtCase,
                 gtTarget,
@@ -1490,11 +1495,11 @@ while i > 0 do
                     if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
                         begin
                         if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-                            or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+                            or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
                         if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-                            or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+                            or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
                         if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-                            or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+                            or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
                         end;
 
                     if (Ammo^.Kind <> gtFlame) or ((Ammo^.State and gsttmpFlag) = 0) then FollowGear:= Gear

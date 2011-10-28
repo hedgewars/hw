@@ -27,6 +27,7 @@ import ClientIO
 import ServerState
 import Consts
 import ConfigFile
+import EngineInteraction
 
 data Action =
     AnswerClients ![ClientChan] ![B.ByteString]
@@ -339,7 +340,7 @@ processAction CheckRegistered = do
     h <- client's host
     p <- client's clientProto
     uid <- client's clUID
-    haveSameNick <- liftM (not . null . tail . filter (\c -> nick c == n)) allClientsS
+    haveSameNick <- liftM (not . null . tail . filter (\c -> caseInsensitiveCompare (nick c) n)) allClientsS
     if haveSameNick then
         if p < 38 then
             mapM_ processAction [ByeClient "Nickname is already in use", removeNick]

@@ -42,16 +42,20 @@ struct HWHog
 };
 
 // class representing a team
-class HWTeam
+class HWTeam : public QObject
 {
+	Q_OBJECT
+
     public:
 
         // constructors
         HWTeam(const QString & teamname);
         HWTeam(const QStringList& strLst);
         HWTeam();
+		HWTeam(const HWTeam & other);
 
         // file operations
+        static HWTeam loadFromFile(const QString & teamName);
         bool loadFromFile();
         bool deleteFile();
         bool saveToFile();
@@ -66,18 +70,20 @@ class HWTeam
               QString grave() const;
         const HWHog & hedgehog(unsigned int idx) const;
                  bool isNetTeam() const;
+              QString keyBind(unsigned int idx) const;
               QString name() const;
         unsigned char numHedgehogs() const;
               QString owner() const;
               QString voicepack() const;
 
         // attribute setters
+        void bindKey(unsigned int idx, const QString & key);
         void setColor(const QColor & color);
         void setDifficulty(unsigned int level);
         void setFlag(const QString & flag);
         void setFort(const QString & fort);
         void setGrave(const QString & grave);
-        void setHedgehog(unsigned int idx, const HWHog & hh);
+        void setHedgehog(unsigned int idx, HWHog hh);
         void setName(const QString & name);
         void setNumHedgehogs(unsigned char num);
         void setVoicepack(const QString & voicepack);
@@ -86,17 +92,13 @@ class HWTeam
         void incRounds();
         void incWins();
 
-        // pages... wait... wth is THIS doing in this class? FIXME!!!!
-        void SetToPage(HWForm * hwform);
-        void GetFromPage(HWForm * hwform);
-
         // convert team info into strings for further computation
         QStringList teamGameConfig(quint32 InitHealth) const;
 
         // comparison operators
-        bool operator==(const HWTeam& t1) const;
-        bool operator<(const HWTeam& t1) const;
-
+		bool operator == (const HWTeam& t1) const;
+		bool operator < (const HWTeam& t1) const;
+		HWTeam & operator = (const HWTeam & other);
 
 
     private:
@@ -110,11 +112,11 @@ class HWTeam
         QString m_flag;
         QString m_voicepack;
         HWHog m_hedgehogs[HEDGEHOGS_PER_TEAM];
-        unsigned int m_difficulty;
-        BindAction binds[BINDS_NUMBER];
+		quint8 m_difficulty;
+        BindAction m_binds[BINDS_NUMBER];
 
         // class members that contain info for the current game setup
-        unsigned char m_numHedgehogs;
+		quint8 m_numHedgehogs;
         QColor m_color;
         bool m_isNetTeam;
         QString m_owner;
@@ -124,8 +126,6 @@ class HWTeam
         unsigned int m_rounds;
         unsigned int m_wins;
         unsigned int AchievementProgress[MAX_ACHIEVEMENTS];
-
-
 };
 
 #endif

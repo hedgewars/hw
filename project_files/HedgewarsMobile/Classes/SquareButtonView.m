@@ -21,8 +21,7 @@
 
 #import "SquareButtonView.h"
 #import <QuartzCore/QuartzCore.h>
-#import "CommodityFunctions.h"
-#import "UIImageExtra.h"
+
 
 @implementation SquareButtonView
 @synthesize colorArray, selectedColor, ownerDictionary;
@@ -32,7 +31,7 @@
         colorIndex = -1;
         selectedColor = 0;
 
-        self.colorArray = getAvailableColors();
+        self.colorArray = [HWUtils teamColors];
 
         // set the color to the first available one
         [self nextColor];
@@ -41,7 +40,7 @@
         [self.layer setCornerRadius:7.0f];
         [self.layer setMasksToBounds:YES];
         [self.layer setBorderWidth:2];
-        [self.layer setBorderColor:[UICOLOR_HW_YELLOW_BODER CGColor]];
+        [self.layer setBorderColor:[[UIColor darkYellowColor] CGColor]];
 
         // this changes the color at button press
         [self addTarget:self action:@selector(nextColor) forControlEvents:UIControlEventTouchUpInside];
@@ -67,7 +66,7 @@
 -(void) selectColor:(NSUInteger) color {
     if (color != selectedColor) {
         selectedColor = color;
-        colorIndex = [colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
+        colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
 
         self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f
                                                green:((color & 0x0000FF00) >> 8)/255.0f

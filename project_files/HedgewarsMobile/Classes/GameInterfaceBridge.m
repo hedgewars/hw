@@ -20,7 +20,7 @@
 
 
 #import "GameInterfaceBridge.h"
-#import "PascalImports.h"
+#import "ServerSetup.h"
 #import "EngineProtocolNetwork.h"
 #import "OverlayViewController.h"
 #import "StatsPageViewController.h"
@@ -32,7 +32,7 @@
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
-        self.ipcPort = randomPort();
+        self.ipcPort = [ServerSetup randomPort];
         self.gameType = gtNone;
         self.savePath = nil;
 
@@ -62,27 +62,28 @@
 }
 
 // main routine for calling the actual game engine
--(void) startGameEngine {
+-(void) engineLaunch {
     const char *gameArgs[11];
-    NSInteger width, height;
+    CGFloat width, height;
+    CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
     if (IS_DUALHEAD()) {
         CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
-        width = (int) screenBounds.size.width;
-        height = (int) screenBounds.size.height;
+        width = screenBounds.size.width;
+        height = screenBounds.size.height;
     } else {
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
-        width = (int) screenBounds.size.height;
-        height = (int) screenBounds.size.width;
+        width = screenBounds.size.height;
+        height = screenBounds.size.width;
     }
 
-    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", width * (int)getScreenScale()];
-    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", height * (int)getScreenScale()];
+    NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", (int)(width * screenScale)];
+    NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", (int)(height * screenScale)];
 
-    NSString *modelId = getModelType();
+    NSString *modelId = [HWUtils modelType];
     NSInteger tmpQuality;
     if ([modelId hasPrefix:@"iPhone1"] || [modelId hasPrefix:@"iPod1,1"] || [modelId hasPrefix:@"iPod2,1"])     // = iPhone and iPhone 3G or iPod Touch or iPod Touch 2G
         tmpQuality = 0x00000001 | 0x00000002 | 0x00000008 | 0x00000040;                 // rqLowRes | rqBlurryLand | rqSimpleRope | rqKillFlakes
@@ -119,7 +120,7 @@
     [localeString release];
     [ipcString release];
 
-    objcExportsInit();
+    [ObjcExports initialize];
 
     // this is the pascal fuction that starts the game, wrapped around isInGame
     [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;
@@ -156,7 +157,7 @@
     [AudioManagerController pauseBackgroundMusic];
 
     // SYSTEMS ARE GO!!
-    [self startGameEngine];
+    [self engineLaunch];
     
     // remove completed games notification
     [userDefaults setObject:@"" forKey:@"savedGamePath"];
@@ -182,7 +183,7 @@
 }
 
 // set up variables for a local game
--(void) startLocalGame:(NSDictionary *)withDictionary {
+-(void) startLocalGame:(NSDictionary *)withOptions {
     self.gameType = gtLocal;
 
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
@@ -196,7 +197,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.savePath])
         [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
 
-    [self.engineProtocol spawnThread:self.savePath withOptions:withDictionary];
+    [self.engineProtocol spawnThread:self.savePath withOptions:withOptions];
     [self prepareEngineLaunch];
 }
 
@@ -206,6 +207,17 @@
     self.savePath = atPath;
 
     [self.engineProtocol spawnThread:self.savePath];
+    [self prepareEngineLaunch];
+}
+
+-(void) startMissionGame:(NSString *)withScript {
+    self.gameType = gtMission;
+    self.savePath = nil;
+
+    NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
+    NSDictionary *config = [NSDictionary dictionaryWithObject:missionPath forKey:@"mission_command"];
+    [missionPath release];
+    [self.engineProtocol spawnThread:nil withOptions:config];
     [self prepareEngineLaunch];
 }
 

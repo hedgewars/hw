@@ -41,7 +41,6 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
 {
     this->config = config;
     this->gamecfg = gamecfg;
-    TeamCount = 0;
     netSuspend = false;
 }
 
@@ -120,13 +119,11 @@ void HWGame::SendQuickConfig()
             .arg((themesModel->rowCount() > 0) ? themesModel->index(rand() % themesModel->rowCount()).data().toString() : "steel"));
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
-    HWNamegen namegen;
-
     HWTeam team1;
     team1.setDifficulty(0);
     team1.setColor(QColor(colors[0]));
     team1.setNumHedgehogs(4);
-    namegen.teamRandomNames(team1,TRUE);
+    HWNamegen::teamRandomNames(team1,true);
     HWProto::addStringListToBuffer(teamscfg,
             team1.teamGameConfig(100));
 
@@ -135,7 +132,7 @@ void HWGame::SendQuickConfig()
     team2.setColor(QColor(colors[1]));
     team2.setNumHedgehogs(4);
     do
-        namegen.teamRandomNames(team2,TRUE);
+        HWNamegen::teamRandomNames(team2,true);
     while(!team2.name().compare(team1.name()) || !team2.hedgehog(0).Hat.compare(team1.hedgehog(0).Hat));
     HWProto::addStringListToBuffer(teamscfg,
             team2.teamGameConfig(100));
@@ -318,13 +315,6 @@ QStringList HWGame::getArguments()
     return arguments;
 }
 
-void HWGame::AddTeam(const QString & teamname)
-{
-    if (TeamCount == 5) return;
-    teams[TeamCount] = teamname;
-    TeamCount++;
-}
-
 void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 {
     gameType = isSave ? gtSave : gtDemo;
@@ -392,13 +382,9 @@ void HWGame::SetGameState(GameState state)
     emit GameStateChanged(state);
 }
 
-void HWGame::KillAllTeams()
+void HWGame::abort()
 {
-    if (m_pTeamSelWidget)
-    {
-        QByteArray buf;
-        foreach(HWTeam team, m_pTeamSelWidget->getPlayingTeams())
-            HWProto::addStringToBuffer(buf, QString("eteamgone %1").arg(team.name()));
-        RawSendIPC(buf);
-    }
+    QByteArray buf;
+    HWProto::addStringToBuffer(buf, QString("efinish"));
+    RawSendIPC(buf);
 }
