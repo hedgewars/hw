@@ -479,7 +479,12 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
     // "link" nick, but before that encode it in base64 to make sure it can't intefere with html/url syntax
     // the nick is put as querystring as putting it as host would convert it to it's lower case variant
     if(!nick.isEmpty())
-        formattedStr.replace("|nick|",QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(QString(nick.toUtf8().toBase64())).arg(nick));
+    {
+        if (nick != m_userNick)
+            formattedStr.replace("|nick|",QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(QString(nick.toUtf8().toBase64())).arg(nick));
+        else
+            formattedStr.replace("|nick|", QString("<span class=\"nick\">%1</span>").arg(nick));
+    }
 
     QString cssClass("msg_UserChat");
 
