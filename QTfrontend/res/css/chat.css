@@ -72,4 +72,5 @@ a { color:#c8c8ff; }
 .msg_Error { color: #ff0000; }
 .msg_Warning { color: #ff8000; }
 .msg_Notice { color: #fefefe; }
+.msg_Notice .nick { color: #ffffd0; }
 

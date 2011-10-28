@@ -23,6 +23,7 @@
 #include <QAction>
 #include <QTextDocument>
 #include <QFile>
+#include <QList>
 #include <QSettings>
 #include <QTextStream>
 #include <QMenu>
@@ -275,23 +276,31 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 
     mainLayout.addWidget(chatNicks, 0, 1, 3, 1);
 
+    // the userData is used to flag things that are even available when user
+    // is offline
     acInfo = new QAction(QAction::tr("Info"), chatNicks);
     acInfo->setIcon(QIcon(":/res/info.png"));
+    acInfo->setData(QVariant(false));
     connect(acInfo, SIGNAL(triggered(bool)), this, SLOT(onInfo()));
     acKick = new QAction(QAction::tr("Kick"), chatNicks);
     acKick->setIcon(QIcon(":/res/kick.png"));
+    acKick->setData(QVariant(false));
     connect(acKick, SIGNAL(triggered(bool)), this, SLOT(onKick()));
     acBan = new QAction(QAction::tr("Ban"), chatNicks);
     acBan->setIcon(QIcon(":/res/ban.png"));
+    acBan->setData(QVariant(true));
     connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onBan()));
     acFollow = new QAction(QAction::tr("Follow"), chatNicks);
     acFollow->setIcon(QIcon(":/res/follow.png"));
+    acFollow->setData(QVariant(false));
     connect(acFollow, SIGNAL(triggered(bool)), this, SLOT(onFollow()));
     acIgnore = new QAction(QAction::tr("Ignore"), chatNicks);
     acIgnore->setIcon(QIcon(":/res/ignore.png"));
+    acIgnore->setData(QVariant(true));
     connect(acIgnore, SIGNAL(triggered(bool)), this, SLOT(onIgnore()));
     acFriend = new QAction(QAction::tr("Add friend"), chatNicks);
     acFriend->setIcon(QIcon(":/res/addfriend.png"));
+    acFriend->setData(QVariant(true));
     connect(acFriend, SIGNAL(triggered(bool)), this, SLOT(onFriend()));
 
     chatNicks->insertAction(0, acFriend);
@@ -313,20 +322,39 @@ void HWChatWidget::linkClicked(const QUrl & link)
     if (link.scheme() == "hwnick")
     {
         // decode nick
-        const QString& nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
+        QString nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
         QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
-        if (items.size() < 1)
-            return;
+
+        bool isOffline = (items.size() < 1);
+
         QMenu * popup = new QMenu(this);
-        // selecting an item will automatically scroll there, so let's save old position
-        QScrollBar * scrollBar = chatNicks->verticalScrollBar();
-        int oldScrollPos = scrollBar->sliderPosition();
-        // select the nick which we want to see the actions for
-        chatNicks->setCurrentItem(items[0], QItemSelectionModel::Clear);
-        // selecting an item will automatically scroll there, so let's save old position
-        scrollBar->setSliderPosition(oldScrollPos);
+
+        if (isOffline)
+        {
+            m_clickedNick = nick;
+            chatNickSelected(0); // update friend and ignore entry
+            chatNicks->setCurrentItem(NULL, QItemSelectionModel::Clear);
+        }
+        else
+        {
+            // selecting an item will automatically scroll there, so let's save old position
+            QScrollBar * scrollBar = chatNicks->verticalScrollBar();
+            int oldScrollPos = scrollBar->sliderPosition();
+            // select the nick which we want to see the actions for
+            chatNicks->setCurrentItem(items[0], QItemSelectionModel::Clear);
+            // selecting an item will automatically scroll there, so let's save old position
+            scrollBar->setSliderPosition(oldScrollPos);
+        }
+
         // load actions
-        popup->addActions(chatNicks->actions());
+        QList<QAction *> actions = chatNicks->actions();
+
+        foreach(QAction * action, actions)
+        {
+            if ((!isOffline) || (action->data().toBool()))
+                popup->addAction(action);
+        }
+
         // display menu popup at mouse cursor position
         popup->popup(QCursor::pos());
     }
@@ -452,6 +480,18 @@ void HWChatWidget::returnPressed()
     chatEditLine->clear();
 }
 
+// "link" nick, but before that encode it in base64 to make sure it can't
+// intefere with html/url syntax the nick is put as querystring as putting
+// it as host would convert it to it's lower case variant
+QString HWChatWidget::linkedNick(const QString & nickName)
+{
+    if (nickName != m_userNick)
+        return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
+                    QString(nickName.toUtf8().toBase64())).arg(nickName);
+    else
+        return QString("<span class=\"nick\">%1</span>").arg(nickName);
+}
+
 
 void HWChatWidget::onChatString(const QString& str)
 {
@@ -476,15 +516,9 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
     // make hedgewars.org urls actual links
     formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http://\\3\">\\3</a>");
 
-    // "link" nick, but before that encode it in base64 to make sure it can't intefere with html/url syntax
-    // the nick is put as querystring as putting it as host would convert it to it's lower case variant
+    // link the nick
     if(!nick.isEmpty())
-    {
-        if (nick != m_userNick)
-            formattedStr.replace("|nick|",QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(QString(nick.toUtf8().toBase64())).arg(nick));
-        else
-            formattedStr.replace("|nick|", QString("<span class=\"nick\">%1</span>").arg(nick));
-    }
+        formattedStr.replace("|nick|", linkedNick(nick));
 
     QString cssClass("msg_UserChat");
 
@@ -679,67 +713,83 @@ void HWChatWidget::onFollow()
 void HWChatWidget::onIgnore()
 {
     QListWidgetItem * curritem = chatNicks->currentItem();
-    if(!curritem)
-        return;
+    QString nick = "";
+    if(curritem != NULL)
+        nick = curritem->text();
+    else
+        nick = m_clickedNick;
 
-    if(ignoreList.contains(curritem->text(), Qt::CaseInsensitive)) // already on list - remove him
+    if(ignoreList.contains(nick, Qt::CaseInsensitive)) // already on list - remove him
     {
-        ignoreList.removeAll(curritem->text().toLower());
-        chatEditLine->addNickname(curritem->text());
-        displayNotice(tr("%1 has been removed from your ignore list").arg(curritem->text()));
+        ignoreList.removeAll(nick.toLower());
+        chatEditLine->addNickname(nick);
+        displayNotice(tr("%1 has been removed from your ignore list").arg(linkedNick(nick)));
     }
     else // not on list - add
     {
         // don't consider ignored people friends
-        if(friendsList.contains(curritem->text(), Qt::CaseInsensitive))
+        if(friendsList.contains(nick, Qt::CaseInsensitive))
             emit onFriend();
 
         // scroll down on first ignore added so that people see where that nick went to
         if (ignoreList.isEmpty())
             chatNicks->scrollToBottom();
 
-        ignoreList << curritem->text().toLower();
-        chatEditLine->removeNickname(curritem->text());
-        displayNotice(tr("%1 has been added to your ignore list").arg(curritem->text()));
+        ignoreList << nick.toLower();
+        chatEditLine->removeNickname(nick);
+        displayNotice(tr("%1 has been added to your ignore list").arg(linkedNick(nick)));
     }
-    updateNickItem(curritem); // update icon/sort order/etc
-    chatNicks->sortItems();
-    chatNickSelected(0); // update context menu
+
+    if(curritem != NULL)
+    {
+        updateNickItem(curritem); // update icon/sort order/etc
+        chatNicks->sortItems();
+        chatNickSelected(0); // update context menu
+    }
 }
 
 void HWChatWidget::onFriend()
 {
     QListWidgetItem * curritem = chatNicks->currentItem();
-    if(!curritem)
-        return;
+    QString nick = "";
+    if(curritem != NULL)
+        nick = curritem->text();
+    else
+        nick = m_clickedNick;
 
-    if(friendsList.contains(curritem->text(), Qt::CaseInsensitive)) // already on list - remove him
+    if(friendsList.contains(nick, Qt::CaseInsensitive)) // already on list - remove him
     {
-        friendsList.removeAll(curritem->text().toLower());
-        displayNotice(tr("%1 has been removed from your friends list").arg(curritem->text()));
+        friendsList.removeAll(nick.toLower());
+        displayNotice(tr("%1 has been removed from your friends list").arg(linkedNick(nick)));
     }
     else // not on list - add
     {
         // don't ignore the new friend
-        if(ignoreList.contains(curritem->text(), Qt::CaseInsensitive))
+        if(ignoreList.contains(nick, Qt::CaseInsensitive))
             emit onIgnore();
 
         // scroll up on first friend added so that people see where that nick went to
         if (friendsList.isEmpty())
             chatNicks->scrollToTop();
 
-        friendsList << curritem->text().toLower();
-        displayNotice(tr("%1 has been added to your friends list").arg(curritem->text()));
+        friendsList << nick.toLower();
+        displayNotice(tr("%1 has been added to your friends list").arg(linkedNick(nick)));
     }
-    updateNickItem(curritem); // update icon/sort order/etc
-    chatNicks->sortItems();
-    chatNickSelected(0); // update context menu
+
+    if(curritem != NULL)
+    {
+        updateNickItem(curritem); // update icon/sort order/etc
+        chatNicks->sortItems();
+        chatNickSelected(0); // update context menu
+    }
 }
 
 void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
 {
-    Q_UNUSED(item);
-
+    if (item != NULL)
+        m_clickedNick = item->text();
+    else
+        m_clickedNick = "";
     QList<QAction *> actions = chatNicks->actions();
     actions.first()->activate(QAction::Trigger);
 }
@@ -749,11 +799,14 @@ void HWChatWidget::chatNickSelected(int index)
     Q_UNUSED(index);
 
     QListWidgetItem* item = chatNicks->currentItem();
-    if (!item)
-        return;
+    QString nick = "";
+    if (item != NULL)
+        nick = item->text();
+    else
+        nick = m_clickedNick;
 
     // update context menu labels according to possible action
-    if(ignoreList.contains(item->text(), Qt::CaseInsensitive))
+    if(ignoreList.contains(nick, Qt::CaseInsensitive))
     {
         acIgnore->setText(QAction::tr("Unignore"));
         acIgnore->setIcon(QIcon(":/res/unignore.png"));
@@ -764,7 +817,7 @@ void HWChatWidget::chatNickSelected(int index)
         acIgnore->setIcon(QIcon(":/res/ignore.png"));
     }
 
-    if(friendsList.contains(item->text(), Qt::CaseInsensitive))
+    if(friendsList.contains(nick, Qt::CaseInsensitive))
     {
         acFriend->setText(QAction::tr("Remove friend"));
         acFriend->setIcon(QIcon(":/res/remfriend.png"));

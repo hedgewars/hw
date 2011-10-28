@@ -99,6 +99,7 @@ private:
   bool parseCommand(const QString & line);
   void discardStyleSheet();
   void saveStyleSheet();
+  QString linkedNick(const QString & nickName);
 
  public slots:
   void onChatString(const QString& str);
@@ -134,6 +135,7 @@ private:
   QString m_helloSound;
   QString m_hilightSound;
   QString m_userNick;
+  QString m_clickedNick;
   QList<QRegExp> m_highlights; ///< regular expressions used for highlighting
   bool notify;
   bool showReady;

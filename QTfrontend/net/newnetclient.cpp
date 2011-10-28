@@ -466,7 +466,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         if (lst.size() < 3)
             emit chatStringLobby(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
         else
-            emit chatStringLobby(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
+            emit chatStringLobby(lst[1], tr("%1 *** %2 has left (%3)").arg('\x03').arg("|nick|", lst[2]));
         return;
     }
 
