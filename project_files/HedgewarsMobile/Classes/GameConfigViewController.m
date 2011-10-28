@@ -35,19 +35,6 @@
     return rotationManager(interfaceOrientation);
 }
 
-/*
--(MapConfigViewController *)mapConfigViewController {
-    if (mapConfigViewController == nil) {
-        NSString *xib = IS_IPAD() ? @"MapConfigViewController-iPad" : @"MapConfigViewController-iPhone";
-        MapConfigViewController *mcvc = [[MapConfigViewController alloc] initWithNibName:xib bundle:nil];
-        [self.view addSubview:mcvc.view];
-        self.mapConfigViewController = mcvc;
-        [mcvc release];
-    }
-    return mapConfigViewController;
-}
-*/
-
 -(IBAction) buttonPressed:(id) sender {
     UIButton *theButton = (UIButton *)sender;
 
@@ -97,7 +84,7 @@
 }
 
 -(IBAction) segmentPressed:(id) sender {
-/*
+
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
 
     [AudioManagerController playSelectSound];
@@ -113,10 +100,6 @@
             [self.view bringSubviewToFront:self.teamConfigViewController.view];
             break;
         case 2:
-            if (schemeWeaponConfigViewController == nil) {
-                schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                [self.view addSubview:schemeWeaponConfigViewController.view];
-            }
             // this message is compulsory otherwise the table won't be loaded at all
             [schemeWeaponConfigViewController viewWillAppear:NO];
             [self.view bringSubviewToFront:schemeWeaponConfigViewController.view];
@@ -134,7 +117,7 @@
             DLog(@"Nope");
             break;
     }
-*/
+
 }
 
 -(BOOL) isEverythingSet {
@@ -324,12 +307,7 @@
         // as this is loaded from a NIB we need to set its size and position
         self.mapConfigViewController.view.frame = CGRectMake(704, 0, 320, 680);
     } else {
-        // this is the visible controller
-        if (self.mapConfigViewController == nil)
-            self.mapConfigViewController = [[MapConfigViewController alloc] initWithNibName:@"MapConfigViewController-iPhone" bundle:nil];
-        // this must be loaded & added in order to auto set default scheme and ammo
-        self.schemeWeaponConfigViewController = [[SchemeWeaponConfigViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [self.view addSubview:self.schemeWeaponConfigViewController.view];
+        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width-44);
     }
     [self.view addSubview:self.mapConfigViewController.view];
 

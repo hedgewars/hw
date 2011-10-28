@@ -34,10 +34,6 @@
 #pragma mark -
 #pragma mark View lifecycle
 -(void) viewDidLoad {
-/*
-    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-    self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-*/
     UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
                                                            style:UITableViewStyleGrouped];
     aTableView.delegate = self;

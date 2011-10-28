@@ -209,6 +209,8 @@
 -(void) updatePreviewWithFile:(NSString *)filePath {
     UIImage *image = [[UIImage alloc] initWithContentsOfFile:filePath];
     [self setImageRounded:image forState:UIControlStateNormal];
+    self.backgroundColor = [UIColor whiteColor];
+    self.layer.cornerRadius = 12;
     [image release];
 }
 

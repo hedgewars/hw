@@ -187,9 +187,12 @@ begin
                         end
                     else if event.window.event = SDL_WINDOWEVENT_RESIZED then
                         begin
+                        // way too broken right now
+                        (*
                         cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
                         cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
                         cScreenResizeDelay:= RealTicks+500;
+                        *)
                         end;
 {$ELSE}
                 SDL_KEYDOWN: if GameState = gsChat then
