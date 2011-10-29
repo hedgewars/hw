@@ -17,14 +17,33 @@
  * This file can be stored at different locations, but it will be read only
  * once, based on first file found in this order:
  *
- *     <userdir>/Data/css/chat.css
- *     <datadir>/css/chat.css
- *     <internal default style-sheet>
+ *    <userdir>/Data/css/chat.css ( create/see full path with: /saveStyleSheet )
+ *    <datadir>/css/chat.css
+ *    <internal default style-sheet>
  *
  *****************************************************************************/
 
+/* valid color values
+ *
+ * transparent   (no color)
+ *
+ * colorname
+ *   (a word that is the name of a valid color)
+ *   available colors: http://www.w3.org/TR/SVG/types.html#ColorKeywords
+ *   examples: red, steelblue, mintcream
+ *
+ * #RRGGBB
+ *   (hexadecimal additive red-green-blue, max is ff, min 00, half is 80)
+ *   examples: #ffff00 (yellow), #808080 (gray)
+ *
+ * rgb(r, g, b)
+ *   (decimal additive red-green-blue, max is 255, min 0, half is 128)
+ *   examples: rgb(135, 206, 250) (lightskyblue)
+ */
+
+
 /* links */
-a { color:#c8c8ff; }
+a { color: #c8c8ff; }
 
 /* appearance of the whole chat */
 /* body { color: white; background-color: #000000; } */
@@ -70,7 +89,7 @@ a { color:#c8c8ff; }
 
 /* messages that contain your nickname */
 .highlight {  }
-.highlight .nick { color: red; } /* nicknames in highlighted messages */
+.highlight .nick { color: #ff0000; } /* nicknames in highlighted messages */
 
 /* system messages */
 .msg_Error { color: #ff0000; }
