@@ -30,6 +30,7 @@
 #include "hwform.h"
 #include "hwconsts.h"
 
+//#include "HWConfigManager.h"
 #include "HWDataManager.h"
 
 #ifdef _WIN32
@@ -153,6 +154,7 @@ int main(int argc, char *argv[]) {
         checkForDir(cfgdir->absolutePath() + "/Screenshots");
         checkForDir(cfgdir->absolutePath() + "/Teams");
         checkForDir(cfgdir->absolutePath() + "/Logs");
+        checkForDir(cfgdir->absolutePath() + "/Profiles");
     }
 
     datadir->cd(bindir->absolutePath());
@@ -165,6 +167,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+
+    /*HWConfigManager & cfgMgr = HWConfigManager::instance();
+    cfgMgr.setPath(cfgdir->absolutePath());*/
     HWDataManager & dataMgr = HWDataManager::instance();
 
     {

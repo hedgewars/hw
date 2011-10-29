@@ -483,12 +483,17 @@ void HWChatWidget::saveLists(const QString & nick)
     saveList(friendsList, nick.toLower() + "_friends.txt");
 }
 
+
 void HWChatWidget::returnPressed()
 {
     QStringList lines = chatEditLine->text().split('\n');
     chatEditLine->rememberCurrentText();
     foreach (const QString &line, lines)
     {
+        // skip empty/whitespace lines
+        if (line.trimmed().isEmpty())
+            continue;
+
         if (!parseCommand(line))
             emit chatLine(line);
     }
