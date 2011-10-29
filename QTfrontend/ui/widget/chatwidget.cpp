@@ -502,9 +502,10 @@ QString HWChatWidget::linkedNick(const QString & nickname)
 {
     if (nickname != m_userNick)
         return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
-                    QString(nickname.toUtf8().toBase64())).arg(nickname);
-    else
-        return QString("<span class=\"nick\">%1</span>").arg(nickname);
+               QString(nickname.toUtf8().toBase64())).arg(Qt::escape(nickname));
+
+    // unlinked nick (if own one)
+    return QString("<span class=\"nick\">%1</span>").arg(Qt::escape(nickname));
 }
 
 
