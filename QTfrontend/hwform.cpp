@@ -755,6 +755,9 @@ void HWForm::NetNickTaken(const QString & nick)
     hwnet->NewNick(newNick);
     config->setValue("net/nick", newNick);
     config->updNetNick();
+
+    ui.pageRoomsList->setUser(nick);
+    ui.pageNetGame->setUser(nick);
 }
 
 void HWForm::NetAuthFailed()
@@ -799,8 +802,6 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
         delete hwnet;
         hwnet=0;
     }
-
-    ui.pageRoomsList->chatWidget->clear();
 
     hwnet = new HWNewNet();
 
@@ -939,6 +940,10 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
         config->setValue("net/nick",nick);
         config->updNetNick();
     }
+
+    ui.pageRoomsList->setUser(nick);
+    ui.pageNetGame->setUser(nick);
+
     hwnet->Connect(hostName, port, nick);
 }
 

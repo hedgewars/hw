@@ -78,6 +78,7 @@ class HWChatWidget : public QWidget
   void displayError(const QString & message);
   void displayNotice(const QString & message);
   void displayWarning(const QString & message);
+  void setUser(const QString & nickname);
 
 protected:
     virtual void dragEnterEvent(QDragEnterEvent * event);
@@ -99,7 +100,7 @@ private:
   bool parseCommand(const QString & line);
   void discardStyleSheet();
   void saveStyleSheet();
-  QString linkedNick(const QString & nickName);
+  QString linkedNick(const QString & nickname);
 
  public slots:
   void onChatString(const QString& str);

@@ -483,13 +483,13 @@ void HWChatWidget::returnPressed()
 // "link" nick, but before that encode it in base64 to make sure it can't
 // intefere with html/url syntax the nick is put as querystring as putting
 // it as host would convert it to it's lower case variant
-QString HWChatWidget::linkedNick(const QString & nickName)
+QString HWChatWidget::linkedNick(const QString & nickname)
 {
-    if (nickName != m_userNick)
+    if (nickname != m_userNick)
         return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
-                    QString(nickName.toUtf8().toBase64())).arg(nickName);
+                    QString(nickname.toUtf8().toBase64())).arg(nickname);
     else
-        return QString("<span class=\"nick\">%1</span>").arg(nickName);
+        return QString("<span class=\"nick\">%1</span>").arg(nickname);
 }
 
 
@@ -539,7 +539,8 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
 
     bool isHL = false;
 
-    if ((!nick.isEmpty()) && (nick != m_userNick))
+    if ((c != 3) && (!nick.isEmpty()) &&
+        (nick != m_userNick) && (m_userNick.isEmpty()))
     {
         QString lcStr = str.toLower();
 
@@ -637,7 +638,6 @@ void HWChatWidget::clear()
     chatText->clear();
     chatStrings.clear();
     chatNicks->clear();
-    m_userNick = gameSettings->value("net/nick","").toString();
 
     // clear and re compile regexp for highlighting
     m_highlights.clear();
@@ -970,4 +970,12 @@ bool HWChatWidget::parseCommand(const QString & line)
     }
 
     return false;
+}
+
+
+void HWChatWidget::setUser(const QString & nickname)
+{
+    m_userNick = nickname;
+    nickRemoved(nickname);
+    clear();
 }
