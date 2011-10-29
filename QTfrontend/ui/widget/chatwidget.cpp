@@ -34,6 +34,8 @@
 #include <QDateTime>
 #include <QTime>
 
+#include <QMessageBox>
+
 
 #include "HWDataManager.h"
 #include "hwconsts.h"
@@ -103,6 +105,7 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
 QString * HWChatWidget::s_styleSheet = NULL;
 QStringList * HWChatWidget::s_displayNone = NULL;
 bool HWChatWidget::s_isTimeStamped = true;
+QString HWChatWidget::s_tsFormat = ":mm:ss";
 
 const QString & HWChatWidget::styleSheet()
 {
@@ -173,6 +176,7 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
 
     QStringList victims = QString(style).
                                 remove(displayed). // remove visible stuff
+                                trimmed().
                                 split(split). // get a list of the names
                                 filter(nohierarchy). // only direct class names
                                 replaceInStrings(QRegExp("^."),""); // crop .
@@ -183,6 +187,17 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
         s_isTimeStamped = false;
         victims.removeAll("timestamp");
     }
+    else
+    {
+        s_isTimeStamped = true;
+        s_tsFormat =
+            ((victims.contains("timestamp:hours"))?"":"hh") +
+            QString(":mm:") +
+            ((victims.contains("timestamp:seconds"))?"":"ss");
+    }
+
+    victims.removeAll("timestamp:hours");
+    victims.removeAll("timestamp:seconds");
 
     victims.removeDuplicates();
 
@@ -540,7 +555,7 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
     bool isHL = false;
 
     if ((c != 3) && (!nick.isEmpty()) &&
-        (nick != m_userNick) && (m_userNick.isEmpty()))
+        (nick != m_userNick) && (!m_userNick.isEmpty()))
     {
         QString lcStr = str.toLower();
 
@@ -569,7 +584,7 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
     {
         QString tsMarkUp = "<span class=\"timestamp\">[%1]</span> ";
         QTime now = QDateTime::currentDateTime().time();
-        line = tsMarkUp.arg(now.toString(":mm:ss")) + line;
+        line = tsMarkUp.arg(now.toString(s_tsFormat)) + line;
     }
 
     line = QString("<span class=\"%1\">%2</span>").arg(cssClass).arg(line);

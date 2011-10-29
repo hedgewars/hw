@@ -25,6 +25,7 @@
 #include <QString>
 #include <QGridLayout>
 #include <QList>
+#include <QPair>
 #include <QRegExp>
 
 #include "SDLInteraction.h"
@@ -88,6 +89,7 @@ private:
   static QString * s_styleSheet;
   static QStringList * s_displayNone;
   static bool s_isTimeStamped;
+  static QString s_tsFormat;
   static const QRegExp URLREGEXP;
 
   static void setStyleSheet(const QString & styleSheet = "");
