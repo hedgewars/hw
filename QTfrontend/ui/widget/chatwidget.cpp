@@ -191,9 +191,9 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     {
         s_isTimeStamped = true;
         s_tsFormat =
-            ((victims.contains("timestamp:hours"))?"":"hh") +
-            QString(":mm:") +
-            ((victims.contains("timestamp:seconds"))?"":"ss");
+            ((victims.contains("timestamp:hours"))?"":"hh:") +
+            QString("mm") +
+            ((victims.contains("timestamp:seconds"))?"":":ss");
     }
 
     victims.removeAll("timestamp:hours");

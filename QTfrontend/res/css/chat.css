@@ -62,8 +62,8 @@ a { color:#c8c8ff; }
     /* display: none; */
 }
 
-.timestamp:hours { display: none; }
-/* .timestamp:seconds { display: none; } */
+/* .timestamp:hours { display: none; } */
+.timestamp:seconds { display: none; }
 
 /* you can also set timestamp style for different msg types */
 .msg_FriendChat .timestamp { color: #ffffff; }
