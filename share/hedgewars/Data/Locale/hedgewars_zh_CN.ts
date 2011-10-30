@@ -129,6 +129,10 @@
         <source>%1 is not a valid command!</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Kicking %1 ...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWForm</name>

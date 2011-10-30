@@ -130,6 +130,10 @@
         <source>%1 is not a valid command!</source>
         <translation>%1 ist kein gültiger Befehl!</translation>
     </message>
+    <message>
+        <source>Kicking %1 ...</source>
+        <translation>%1 wird rausgeworfen ...</translation>
+    </message>
 </context>
 <context>
     <name>HWForm</name>

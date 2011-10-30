@@ -86,57 +86,62 @@
 <context>
     <name>HWChatWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="750"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="714"/>
+        <source>Kicking %1 ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="753"/>
         <source>%1 has been removed from your ignore list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="764"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="767"/>
         <source>%1 has been added to your ignore list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="787"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="790"/>
         <source>%1 has been removed from your friends list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="800"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="803"/>
         <source>%1 has been added to your friends list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="925"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="928"/>
         <source>Stylesheet imported from %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="926"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="929"/>
         <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="934"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="937"/>
         <source>Couldn&apos;t read %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="942"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="945"/>
         <source>StyleSheet discarded</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="967"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="970"/>
         <source>StyleSheet saved to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="970"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="973"/>
         <source>Failed to save StyleSheet to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="990"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="993"/>
         <source>%1 is not a valid command!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1477,23 +1482,23 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="315"/>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="840"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="843"/>
         <source>Ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="319"/>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="851"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="854"/>
         <source>Add friend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="835"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="838"/>
         <source>Unignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="846"/>
+        <location filename="../../../../QTfrontend/ui/widget/chatwidget.cpp" line="849"/>
         <source>Remove friend</source>
         <translation type="unfinished"></translation>
     </message>

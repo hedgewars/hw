@@ -710,7 +710,10 @@ void HWChatWidget::onKick()
 {
     QListWidgetItem * curritem = chatNicks->currentItem();
     if (curritem)
+    {
+        displayNotice(tr("Kicking %1 ...").arg(Qt::escape(curritem->text())));
         emit kick(curritem->text());
+    }
 }
 
 void HWChatWidget::onBan()
