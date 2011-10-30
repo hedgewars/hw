@@ -19,9 +19,10 @@
 
 #include "bgwidget.h"
 
-SpritePosition::SpritePosition(QWidget * parent, int sh)
+SpritePosition::SpritePosition(QWidget * parent, int sw, int sh)
 {
     wParent = parent;
+    iSpriteWidth = sw;
     iSpriteHeight = sh;
     reset();
 }
@@ -42,10 +43,26 @@ void SpritePosition::move()
 
 void SpritePosition::reset()
 {
-    fY = -1 * iSpriteHeight;
-    fX = (qrand() % ((int)(wParent->width() * 1.5))) - wParent->width()/2;
+    // random movement values
     fYMov = ((qrand() % 400)+300) / 100.0f;
-    fXMov = fYMov * 0.2f+((qrand()%100)/100.0f * 0.6f); //so between 0.2 and 0.6, or 0.5 +/- 0.3
+    fXMov = fYMov * 0.2f+((qrand()%100)/100.0f * 0.6f); //so between 0.2 and 0.8, or 0.5 +/- 0.3
+
+    // random respawn locations
+    int tmp = fXMov * (wParent->height() / fYMov);
+    fX = (qrand() % (wParent->width() + tmp)) - tmp;
+
+    // adjust respawn location to be next to (but outside) the parent's limits
+    if (fX > -iSpriteWidth)
+    {
+        fY = -1 * iSpriteHeight;
+    }
+    else
+    {
+        fY = (-iSpriteWidth - fX) * (fYMov / fXMov);
+        fX = -iSpriteWidth;
+    }
+
+    // random initial angle
     iAngle = qrand() % 360;
 }
 
@@ -72,7 +89,7 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
 
     setAutoFillBackground(false);
 
-    for (int i = 0; i < SPRITE_MAX; i++) spritePositions[i] = new SpritePosition(this, sprite.height());
+    for (int i = 0; i < SPRITE_MAX; i++) spritePositions[i] = new SpritePosition(this, sprite.width(), sprite.height());
 
     for (int i = 0; i < 90; i++)
     {

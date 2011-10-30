@@ -35,7 +35,7 @@
 class SpritePosition
 {
 public:
-    SpritePosition(QWidget * parent, int sh);
+    SpritePosition(QWidget * parent, int sw, int sh);
     ~SpritePosition();
 private:
     float fX;
@@ -45,6 +45,7 @@ private:
     int iAngle;
     QWidget * wParent;
     int iSpriteHeight;
+    int iSpriteWidth;
 public:
     void move();
     void reset();
