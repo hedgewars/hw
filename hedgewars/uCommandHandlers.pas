@@ -457,7 +457,7 @@ if isDeveloperMode then
     InitStepsFlags:= InitStepsFlags or cifMap
     end;
 
-ScriptLoad(s)
+ScriptLoad('Maps/' + s + '/map.lua')
 end;
 
 procedure chSetTheme(var s: shortstring);
