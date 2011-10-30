@@ -181,6 +181,7 @@ with Gear^,
      if ((State and gstHHDriven) <> 0)and
         ((State and (gstAttacked or gstHHChooseTarget)) = 0) and
         (((State and gstMoving) = 0) or
+            (Power > 0) or
             (CurAmmoType = amTeleport) or 
             // Allow attacks while moving on ammo with AltAttack
             ((CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0)) or
