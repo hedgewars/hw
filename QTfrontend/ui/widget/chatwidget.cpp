@@ -250,8 +250,11 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
         if (notify)
             m_helloSound = HWDataManager::instance().findFileForRead(
                             "Sounds/voices/Classic/Hello.ogg");
+
         m_hilightSound = HWDataManager::instance().findFileForRead(
-                        "Sounds/1C.ogg");
+                        "Sounds/beep.ogg");
+
+        //m_hilightSound = m_helloSound;//"Sounds/beep.ogg";
     }
 
     mainLayout.setSpacing(1);
