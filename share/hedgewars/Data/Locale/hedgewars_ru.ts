@@ -68,24 +68,72 @@
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation>При включении этой опции выбор настроек игры автоматически выберет схему оружия</translation>
     </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished">Настройки игры</translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation>%1 *** %2 был удалён из вашего списка игнорирования</translation>
+        <translation type="obsolete">%1 *** %2 был удалён из вашего списка игнорирования</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation>%1 *** %2 был добавлен в ваш список игнорирования</translation>
+        <translation type="obsolete">%1 *** %2 был добавлен в ваш список игнорирования</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation>%1 *** %2 был удалён из вашего списка друзей</translation>
+        <translation type="obsolete">%1 *** %2 был удалён из вашего списка друзей</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation>%1 *** %2 был добавлен в ваш список друзей</translation>
+        <translation type="obsolete">%1 *** %2 был добавлен в ваш список друзей</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not a valid command!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -134,6 +182,46 @@
     </message>
     <message>
         <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Пароль</translation>
+    </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation type="unfinished">Ваше имя пользователя %1 
+зарегистрировано на сайте hedgewars.org
+Пожалуйста, укажите ваш пароль в поле ввода внизу
+или выберите иное имя пользователя в настройках игры:</translation>
+    </message>
+    <message>
+        <source>No password supplied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Псевдоним</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished">Кто-то на этом сервере
+уже использует
+ваш псевдоним %1.
+Выберите другой псевдоним:</translation>
+    </message>
+    <message>
+        <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -262,7 +350,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation>Пароль</translation>
+        <translation type="obsolete">Пароль</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -295,24 +383,28 @@ or pick another nickname:</source>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation>Ваше имя пользователя %1 
+        <translation type="obsolete">Ваше имя пользователя %1 
 зарегистрировано на сайте hedgewars.org
 Пожалуйста, укажите ваш пароль в поле ввода внизу
 или выберите иное имя пользователя в настройках игры:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>Псевдоним</translation>
+        <translation type="obsolete">Псевдоним</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation>Кто-то на этом сервере
+        <translation type="obsolete">Кто-то на этом сервере
 уже использует
 ваш псевдоним %1.
 Выберите другой псевдоним:</translation>
+    </message>
+    <message>
+        <source>User quit</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -369,7 +461,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation type="obsolete">Отмена</translation>
     </message>
 </context>
 <context>
@@ -507,6 +599,13 @@ Please pick another nickname:</source>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; испугался и пропустил &lt;b&gt;%2&lt;/b&gt; хода.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; испугался и пропустил &lt;b&gt;%2&lt;/b&gt; ходов.</numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>PageInGame</name>
+    <message>
+        <source>In game...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -995,7 +1094,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>State:</source>
-        <translation>Состояние:</translation>
+        <translation type="obsolete">Состояние:</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1194,7 +1293,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation>Тренировка (тренируйте своё мастерство в тренировочных миссиях) В РАЗРАБОТКЕ</translation>
+        <translation type="obsolete">Тренировка (тренируйте своё мастерство в тренировочных миссиях) В РАЗРАБОТКЕ</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
@@ -1206,7 +1305,26 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation>Режим прохождения кампании. В РАЗРАБОТКЕ</translation>
+        <translation type="obsolete">Режим прохождения кампании. В РАЗРАБОТКЕ</translation>
+    </message>
+    <message>
+        <source>Campaign Mode (...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageTraining</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a mission!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1501,7 +1619,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>Эта программа распространяется на условиях лицензии GNU (the GNU General Public License)</translation>
+        <translation type="obsolete">Эта программа распространяется на условиях лицензии GNU (the GNU General Public License)</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1671,7 +1789,7 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>Game Options</source>
-        <translation>Настройки игры</translation>
+        <translation type="obsolete">Настройки игры</translation>
     </message>
     <message>
         <source>Style</source>
@@ -1688,6 +1806,10 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
     <message>
         <source>% Get Away Time</source>
         <translation>% времени ухода</translation>
+    </message>
+    <message>
+        <source>This program is distributed under the GNU General Public License v2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

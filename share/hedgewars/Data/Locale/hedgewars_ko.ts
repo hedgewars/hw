@@ -62,23 +62,55 @@
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
-        <source>%1 *** %2 has been removed from your ignore list</source>
+        <source>%1 has been removed from your ignore list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 *** %2 has been added to your ignore list</source>
+        <source>%1 has been added to your ignore list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 *** %2 has been removed from your friends list</source>
+        <source>%1 has been removed from your friends list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 *** %2 has been added to your friends list</source>
+        <source>%1 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not a valid command!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -124,6 +156,40 @@
     </message>
     <message>
         <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No password supplied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -251,10 +317,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>%1 *** %2 has joined the room</source>
         <translation type="unfinished"></translation>
     </message>
@@ -271,21 +333,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password below
-or pick another nickname in game config:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Some one already uses
- your nickname %1
-on the server.
-Please pick another nickname:</source>
+        <source>User quit</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -331,10 +379,6 @@ Please pick another nickname:</source>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -437,6 +481,13 @@ Please pick another nickname:</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>PageInGame</name>
+    <message>
+        <source>In game...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -906,10 +957,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>State:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Rules:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1094,10 +1141,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Demos (Watch recorded demos)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1106,7 +1149,22 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Campaign Mode (...). IN DEVELOPMENT</source>
+        <source>Campaign Mode (...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageTraining</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a mission!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1389,10 +1447,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This program is distributed under the GNU General Public License</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Developers:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1549,10 +1603,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Game Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Style</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1566,6 +1616,10 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>% Get Away Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This program is distributed under the GNU General Public License v2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
