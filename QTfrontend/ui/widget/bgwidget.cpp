@@ -58,7 +58,7 @@ void SpritePosition::reset()
     }
     else
     {
-        fY = (-iSpriteWidth - fX) * (fYMov / fXMov);
+        fY = qrand() % wParent->height();
         fX = -iSpriteWidth;
     }
 
