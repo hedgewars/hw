@@ -28,7 +28,7 @@
 #include <QTime>
 #include <QPoint>
 
-#define SPRITE_MAX 12
+#define SPRITE_MAX 10
 
 #define ANIMATION_INTERVAL 40
 
