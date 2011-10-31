@@ -130,6 +130,7 @@ procedure chScript(var s: shortstring);
 begin
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+cScriptName:= s;
 ScriptLoad(s)
 end;
 

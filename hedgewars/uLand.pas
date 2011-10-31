@@ -1439,7 +1439,7 @@ begin
     adler:= 1;
     for i:= 0 to LAND_HEIGHT-1 do
         Adler32Update(adler, @Land[i,0], LAND_WIDTH);
-    s:= 'M' + IntToStr(adler);
+    s:= 'M' + IntToStr(adler) + cScriptName;
 
     chLandCheck(s);
     SendIPCRaw(@s[0], Length(s) + 1)

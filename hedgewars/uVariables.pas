@@ -126,6 +126,7 @@ var
     cLandMines      : Longword;
     cExplosives     : Longword;
 
+    cScriptName     : shortstring;
     cSeed           : shortstring;
     cVolumeDelta    : LongInt;
     cHasFocus       : boolean;
@@ -2500,6 +2501,7 @@ begin
     isFirstFrame    := true;
     isSEBackup      := true;
     autoCameraOn    := true;
+    cScriptName     := '';
     cSeed           := '';
     cVolumeDelta    := 0;
     cHasFocus       := true;
