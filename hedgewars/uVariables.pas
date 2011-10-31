@@ -2556,6 +2556,7 @@ begin
     cReducedQuality := rqNone;
     UserNick        := '';
     recordFileName  := '';
+    cScriptName     := '';
     cReadyDelay     := 5000;
     cStereoMode     := smNone;
 end;
