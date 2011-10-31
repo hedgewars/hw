@@ -385,7 +385,8 @@ begin
 
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
-    CheckGearDrowning(Gear);
+    if Gear^.Kind <> gtBee then
+        CheckGearDrowning(Gear);
     //if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_0002) and
     if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_02.QWordValue) and
        (not isFalling) then
@@ -841,16 +842,18 @@ procedure doStepBeeWork(Gear: PGear);
 var 
     t: hwFloat;
     gX,gY,i: LongInt;
-    nuw: boolean;
+    uw, nuw: boolean;
     flower: PVisualGear;
 
-const uw: boolean =   false;
 begin
     AllInactive := false;
     gX := hwRound(Gear^.X);
     gY := hwRound(Gear^.Y);
-    nuw := (cWaterLine < gy + Gear^.Radius);
-    if nuw and not uw then
+    uw := (Gear^.Tag <> 0); // was bee underwater last tick?
+    nuw := (cWaterLine < gy + Gear^.Radius); // is bee underwater now?
+
+    // if water entered or left
+    if nuw <> uw then
     begin
         AddVisualGear(gX, cWaterLine, vgtSplash);
         AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
@@ -858,36 +861,43 @@ begin
         AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
         AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
         StopSound(Gear^.SoundChannel);
-        Gear^.SoundChannel := LoopSound(sndBeeWater);
-        uw := nuw
-    end
-    else if not nuw and uw then
+        if nuw then
         begin
-            AddVisualGear(gX, cWaterLine, vgtSplash);
-            StopSound(Gear^.SoundChannel);
+            Gear^.SoundChannel := LoopSound(sndBeeWater);
+            Gear^.Tag := 1;
+        end
+        else
+        begin
             Gear^.SoundChannel := LoopSound(sndBee);
-            uw := nuw
+            Gear^.Tag := 0;
         end;
-
-
-    if (GameTicks and $F) = 0 then
-    begin
-        if (GameTicks and $30) = 0 then
-            AddVisualGear(gX, gY, vgtBeeTrace);
-        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
-        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
-        // make sure new speed isn't higher than original one (which we stored in Friction variable)
-        t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
-        Gear^.dX := Gear^.dX * t;
-        Gear^.dY := Gear^.dY * t;
     end;
 
-    Gear^.X := Gear^.X + Gear^.dX;
-    Gear^.Y := Gear^.Y + Gear^.dY;
+
+    if Gear^.Timer = 0 then
+        Gear^.RenderTimer:= false
+    else
+    begin
+        if (GameTicks and $F) = 0 then
+        begin
+            if (GameTicks and $30) = 0 then
+                AddVisualGear(gX, gY, vgtBeeTrace);
+            Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
+            Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
+            // make sure new speed isn't higher than original one (which we stored in Friction variable)
+            t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
+            Gear^.dX := Gear^.dX * t;
+            Gear^.dY := Gear^.dY * t;
+        end;
+
+        Gear^.X := Gear^.X + Gear^.dX;
+        Gear^.Y := Gear^.Y + Gear^.dY;
+
+    end;
+
 
     CheckCollision(Gear);
-    dec(Gear^.Timer);
-    if ((Gear^.State and gstCollision) <> 0) or (Gear^.Timer = 0) then
+    if ((Gear^.State and gstCollision) <> 0) then
     begin
         StopSound(Gear^.SoundChannel);
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
@@ -907,6 +917,19 @@ begin
                     end;
             end;
         DeleteGear(Gear);
+    end;
+
+    if (Gear^.Timer > 0) then
+        dec(Gear^.Timer)
+    else
+    begin
+        if nuw then
+        begin
+            StopSound(Gear^.SoundChannel);
+            CheckGearDrowning(Gear);
+        end
+        else
+            doStepFallingGear(Gear);
     end;
 end;
 
