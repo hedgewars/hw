@@ -271,7 +271,7 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    if ([[HedgewarsAppDelegate sharedAppDelegate] isInGame]) {
+    if ([HWUtils isGameLaunched]) {
         self.listOfSelectedTeams = nil;
         self.listOfAllTeams = nil;
         self.tableView = nil;

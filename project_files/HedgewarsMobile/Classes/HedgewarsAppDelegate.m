@@ -34,7 +34,7 @@
 @end
 
 @implementation HedgewarsAppDelegate
-@synthesize mainViewController, uiwindow, secondWindow, isInGame;
+@synthesize mainViewController, uiwindow, secondWindow;
 
 // convenience method
 +(HedgewarsAppDelegate *)sharedAppDelegate {
@@ -48,7 +48,6 @@
         mainViewController = nil;
         uiwindow = nil;
         secondWindow = nil;
-        isInGame = NO;
     }
     return self;
 }
@@ -92,7 +91,7 @@
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
     [HWUtils releaseCache];
     // don't stop music if it is playing
-    if (self.isInGame) {
+    if ([HWUtils isGameLaunched]) {
         [AudioManagerController releaseCache];
     }
     MSG_MEMCLEAN();
@@ -101,7 +100,7 @@
 
 // true multitasking with sdl works only on 4.2 and above; we close the game to avoid a black screen at return
 -(void) applicationWillResignActive:(UIApplication *)application {
-    if (self.isInGame && [[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f)
+    if ([HWUtils isGameLaunched] && [[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f)
          HW_terminate(NO);
 
     [super applicationWillResignActive:application];

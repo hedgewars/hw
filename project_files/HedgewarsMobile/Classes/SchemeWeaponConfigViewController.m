@@ -329,7 +329,7 @@ static SchemeWeaponConfigViewController *controllerInstance;
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    if ([[HedgewarsAppDelegate sharedAppDelegate] isInGame]) {
+    if ([HWUtils isGameLaunched]) {
         self.tableView = nil;
         self.lastIndexPath_sc = nil;
         self.lastIndexPath_we = nil;

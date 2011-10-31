@@ -22,9 +22,6 @@
 #import <Foundation/Foundation.h>
 #import "EngineProtocolNetwork.h"
 
-typedef enum {gtNone, gtLocal, gtSave, gtMission, gtNet} TGameType;
-typedef enum {gsNone, gsInGame, gsEnded, gsInterrupted} TGameStatus;
-
 @class OverlayViewController;
 
 @interface GameInterfaceBridge : NSObject <EngineProtocolDelegate> {
@@ -35,7 +32,6 @@ typedef enum {gsNone, gsInGame, gsEnded, gsInterrupted} TGameStatus;
     EngineProtocolNetwork *engineProtocol;
 
     NSInteger ipcPort;  // Port on which engine will listen
-    TGameType gameType;
 }
 
 @property (assign) UIViewController *parentController;
@@ -45,7 +41,6 @@ typedef enum {gsNone, gsInGame, gsEnded, gsInterrupted} TGameStatus;
 @property (nonatomic,retain) EngineProtocolNetwork *engineProtocol;
 
 @property (assign) NSInteger ipcPort;
-@property (assign) TGameType gameType;
 
 
 -(id)   initWithController:(id) viewController;

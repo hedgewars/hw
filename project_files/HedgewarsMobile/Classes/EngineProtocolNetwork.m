@@ -393,7 +393,7 @@
                 }
                 break;
             case 'q':
-                // game ended, can remove the savefile and the trailing overlay (when dualhead)
+                // game ended, can remove the savefile and present the statistics of the match
                 [self gameHasEndedWithStats:statsArray];
                 break;
             case 'Q':

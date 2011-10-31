@@ -29,8 +29,39 @@
 static NSString *cachedModel = nil;
 static NSArray *cachedColors = nil;
 
+static TGameType gameType = gtNone;
+static TGameStatus gameStatus = gsNone;
+
 @implementation HWUtils
 
+#pragma mark -
+#pragma mark game status and type info
++(TGameType) gameType {
+    return gameType;
+}
+
++(void) setGameType:(TGameType) type {
+    gameType = type;
+}
+
++(TGameStatus) gameStatus {
+    return gameStatus;
+}
+
++(void) setGameStatus:(TGameStatus) status {
+    gameStatus = status;
+}
+
++(BOOL) isGameLaunched {
+    return ((gameStatus == gsLoading) || (gameStatus == gsInGame));
+}
+
++(BOOL) isGameRunning {
+    return (gameStatus == gsInGame);
+}
+
+#pragma mark -
+#pragma mark Helper Functions
 +(NSString *)modelType {
     if (cachedModel == nil) {
         size_t size;

@@ -21,9 +21,19 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {gtNone, gtLocal, gtSave, gtMission, gtNet} TGameType;
+typedef enum {gsNone, gsLoading, gsInGame, gsEnded} TGameStatus;
+
 @interface HWUtils : NSObject {
 
 }
+
++(TGameType) gameType;
++(void) setGameType:(TGameType) type;
++(TGameStatus) gameStatus;
++(void) setGameStatus:(TGameStatus) status;
++(BOOL) isGameLaunched;
++(BOOL) isGameRunning;
 
 +(NSString *)modelType;
 +(NSArray *)teamColors;

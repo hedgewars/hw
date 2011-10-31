@@ -27,17 +27,15 @@
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
-@synthesize parentController, savePath, overlayController, engineProtocol, ipcPort, gameType;
+@synthesize parentController, savePath, overlayController, engineProtocol, ipcPort;
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
         self.ipcPort = [HWUtils randomPort];
-        self.gameType = gtNone;
         self.savePath = nil;
 
         self.parentController = (UIViewController *)viewController;
         self.engineProtocol = [[EngineProtocolNetwork alloc] initOnPort:self.ipcPort];
-        self.engineProtocol.delegate = self;
 
         self.overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     }
@@ -113,7 +111,7 @@
     gameArgs[ 7] = [[[settings objectForKey:@"music"] stringValue] UTF8String];                 //isMusicEnabled
     gameArgs[ 8] = [[[settings objectForKey:@"alternate"] stringValue] UTF8String];             //cAltDamage
     gameArgs[ 9] = [rotation UTF8String];                                                       //rotateQt
-    gameArgs[10] = (self.gameType == gtSave) ? [self.savePath UTF8String] : NULL;               //recordFileName
+    gameArgs[10] = ([HWUtils gameType] == gtSave) ? [self.savePath UTF8String] : NULL;          //recordFileName
 
     [verticalSize release];
     [horizontalSize release];
@@ -121,12 +119,10 @@
     [localeString release];
     [ipcString release];
 
-    [ObjcExports initialize];
+    [HWUtils setGameStatus:gsLoading];
 
-    // this is the pascal fuction that starts the game, wrapped around isInGame
-    [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;
+    // this is the pascal fuction that starts the game
     Game(gameArgs);
-    [HedgewarsAppDelegate sharedAppDelegate].isInGame = NO;
 }
 
 // prepares the controllers for hosting a game
@@ -185,7 +181,7 @@
 
 // set up variables for a local game
 -(void) startLocalGame:(NSDictionary *)withOptions {
-    self.gameType = gtLocal;
+    [HWUtils setGameType:gtLocal];
 
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
@@ -204,16 +200,16 @@
 
 // set up variables for a save game
 -(void) startSaveGame:(NSString *)atPath {
-    self.gameType = gtSave;
     self.savePath = atPath;
+    [HWUtils setGameType:gtSave];
 
     [self.engineProtocol spawnThread:self.savePath];
     [self prepareEngineLaunch];
 }
 
 -(void) startMissionGame:(NSString *)withScript {
-    self.gameType = gtMission;
     self.savePath = nil;
+    [HWUtils setGameType:gtMission];
 
     NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
     NSDictionary *config = [NSDictionary dictionaryWithObject:missionPath forKey:@"mission_command"];
@@ -238,7 +234,7 @@
     }
 
     // can remove the savefile if the replay has ended
-    if (self.gameType == gtSave)
+    if ([HWUtils gameType] == gtSave)
         [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
     [self release];
 }

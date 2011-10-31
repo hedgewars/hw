@@ -49,8 +49,7 @@
     NSInteger initialScreenCount;
 
     // various other widgets
-    UIActivityIndicatorView *lowerIndicator;
-    UIActivityIndicatorView *savesIndicator;
+    UIActivityIndicatorView *loadingIndicator;
     UIButton *confirmButton;
     UISegmentedControl *grenadeTimeSegment;
 }
@@ -59,8 +58,7 @@
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
 @property (nonatomic,retain) HelpPageViewController *helpPage;
 @property (nonatomic,retain) AmmoMenuViewController *amvc;
-@property (nonatomic,retain) UIActivityIndicatorView *lowerIndicator;
-@property (nonatomic,retain) UIActivityIndicatorView *savesIndicator;
+@property (nonatomic,retain) UIActivityIndicatorView *loadingIndicator;
 @property (nonatomic,retain) UIButton *confirmButton;
 @property (nonatomic,retain) UISegmentedControl *grenadeTimeSegment;
 

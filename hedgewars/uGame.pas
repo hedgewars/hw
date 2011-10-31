@@ -77,7 +77,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         AddVisualGear(0, 0, vgtSmoothWindBar);
                         {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
-                        uMobile.SaveFinished();
+                        uMobile.SaveLoadingEnded();
                         end;
                end
           else ProcessGears
