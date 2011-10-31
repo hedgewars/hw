@@ -139,6 +139,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 
     // preload mission info for current locale
     m_info = new QSettings(infoFile, QSettings::IniFormat, this);
+    m_info->setIniCodec("UTF-8");
 
 
     QStringList missionList = dataMgr.entryList(
