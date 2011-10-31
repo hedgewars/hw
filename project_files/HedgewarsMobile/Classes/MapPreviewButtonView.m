@@ -22,7 +22,6 @@
 #import "MapPreviewButtonView.h"
 #import "MapConfigViewController.h"
 #import "UIImageExtra.h"
-#import "ServerSetup.h"
 #import <pthread.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -69,7 +68,7 @@
     IPaddress ip;
     BOOL serverQuit = NO;
     static uint8_t map[128*32];
-    int port = [ServerSetup randomPort];
+    int port = [HWUtils randomPort];
 
     if (SDLNet_Init() < 0) {
         DLog(@"SDLNet_Init: %s", SDLNet_GetError());

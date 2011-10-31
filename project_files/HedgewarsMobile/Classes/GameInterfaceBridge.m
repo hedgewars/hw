@@ -20,7 +20,6 @@
 
 
 #import "GameInterfaceBridge.h"
-#import "ServerSetup.h"
 #import "EngineProtocolNetwork.h"
 #import "OverlayViewController.h"
 #import "StatsPageViewController.h"
@@ -32,7 +31,7 @@
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
-        self.ipcPort = [ServerSetup randomPort];
+        self.ipcPort = [HWUtils randomPort];
         self.gameType = gtNone;
         self.savePath = nil;
 

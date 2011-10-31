@@ -29,7 +29,7 @@
 #import "MissionTrainingViewController.h"
 #import "GameInterfaceBridge.h"
 #import "Appirater.h"
-#import "ServerSetup.h"
+#import "ServerProtocolNetwork.h"
 
 
 @implementation MainMenuViewController
@@ -122,15 +122,11 @@
         [Appirater appLaunched];
     }
 
-
     /*
-    ServerSetup *setup = [[ServerSetup alloc] init];
-    if (isNetworkReachable()) {
-        DLog(@"network is reachable");
-        [NSThread detachNewThreadSelector:@selector(serverProtocol)
+    ServerProtocolNetwork *setup = [[ServerProtocolNetwork alloc] init];
+    [NSThread detachNewThreadSelector:@selector(serverProtocol)
                                  toTarget:setup
                                withObject:nil];
-    }
     [setup release];
     */
 }

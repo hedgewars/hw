@@ -27,6 +27,8 @@
 
 +(NSString *)modelType;
 +(NSArray *)teamColors;
++(NSInteger) randomPort;
++(BOOL) isNetworkReachable;
 +(void) releaseCache;
 
 @end

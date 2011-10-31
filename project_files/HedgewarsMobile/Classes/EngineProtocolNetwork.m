@@ -60,6 +60,10 @@
 
 #pragma mark -
 #pragma mark Spawner functions
+-(void) spawnThread:(NSString *)onSaveFile {
+    [self spawnThread:onSaveFile withOptions:nil];
+}
+
 -(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
     self.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
     [self.stream open];
@@ -67,10 +71,6 @@
     [NSThread detachNewThreadSelector:@selector(engineProtocol:)
                              toTarget:self
                            withObject:dictionary];
-}
-
--(void) spawnThread:(NSString *)onSaveFile {
-    [self spawnThread:onSaveFile withOptions:nil];
 }
 
 #pragma mark -

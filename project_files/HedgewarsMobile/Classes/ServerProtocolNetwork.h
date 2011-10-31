@@ -20,17 +20,14 @@
 
 
 #import <Foundation/Foundation.h>
-#import "SDL_net.h"
+#import "EngineProtocolNetwork.h"
 
-@interface ServerSetup : NSObject {
-    NSDictionary *systemSettings;
-
-    TCPsocket sd;      // External socket descriptor
+@interface ServerProtocolNetwork : NSObject {
+    NSInteger serverPort;
+    NSString *serverAddress;
 }
 
-+(NSInteger) randomPort;
-+(BOOL) isNetworkReachable;
-
-@property (nonatomic, retain) NSDictionary *systemSettings;
+@property (assign) NSInteger serverPort;
+@property (nonatomic,retain) NSString *serverAddress;
 
 @end

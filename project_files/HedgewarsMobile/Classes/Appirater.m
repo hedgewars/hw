@@ -37,7 +37,6 @@
 #import "Appirater.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import <netinet/in.h>
-#import "ServerSetup.h"
 
 NSString *const kAppiraterLaunchDate            = @"kAppiraterLaunchDate";
 NSString *const kAppiraterLaunchCount           = @"kAppiraterLaunchCount";
@@ -106,7 +105,7 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
              launchCount > LAUNCHES_UNTIL_PROMPT &&
              !declinedToRate &&
              !ratedApp) {
-            if ([ServerSetup isNetworkReachable]) {	// check if they can reach the app store
+            if ([HWUtils isNetworkReachable]) {	// check if they can reach the app store
                 willShowPrompt = YES;
                 [self performSelectorOnMainThread:@selector(showPrompt) withObject:nil waitUntilDone:NO];
             }
