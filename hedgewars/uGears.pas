@@ -320,7 +320,7 @@ case Kind of
                 gear^.Timer:= 500;
                 gear^.RenderTimer:= true;
                 gear^.Elasticity:= _0_9;
-                gear^.Tag:= getRandom(32);
+                gear^.Tag:= 0;
                 end;
    gtSeduction: begin
                 gear^.Radius:= 250;
