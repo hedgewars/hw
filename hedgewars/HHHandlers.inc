@@ -877,7 +877,10 @@ if (Gear^.State and gstMoving) <> 0 then
       Gear^.Y:= Gear^.Y + _1
       end;
    CheckGearDrowning(Gear);
-   if (Gear^.State and gstDrowning) <> 0 then isCursorVisible:= false
+   // hide target cursor if current hog is drowning
+   if (Gear^.State and gstDrowning) <> 0 then
+       if (CurrentHedgehog^.Gear = Gear) then
+          isCursorVisible:= false
    end;
 
 if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
