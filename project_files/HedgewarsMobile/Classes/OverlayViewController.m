@@ -205,6 +205,7 @@ static OverlayViewController *mainOverlay;
     [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
     [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
     [self performSelectorOnMainThread:@selector(release) withObject:nil waitUntilDone:YES];
+    mainOverlay = nil;
 }
 
 #pragma mark -

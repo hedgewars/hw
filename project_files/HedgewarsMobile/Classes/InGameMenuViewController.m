@@ -23,6 +23,8 @@
 #import "SDL_sysvideo.h"
 #import "SDL_uikitkeyboard.h"
 
+//FIXME: add a proper #import when this is exposed in SDL
+extern UIView *SDL_getUikitView(void *);
 
 #define VIEW_HEIGHT 200
 
@@ -170,7 +172,7 @@
                                              cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
                                         destructiveButtonTitle:NSLocalizedString(@"Of course!", @"")
                                              otherButtonTitles:nil];
-            [actionSheet showInView:(IS_IPAD() ? self.view : UIVIEW_HW_SDLVIEW)];
+            [actionSheet showInView:(IS_IPAD() ? self.view : SDL_getUikitView(HW_getSDLWindow()))];
             [actionSheet release];
 
             break;
