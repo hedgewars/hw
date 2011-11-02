@@ -271,11 +271,6 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    if ([HWUtils isGameLaunched]) {
-        self.listOfSelectedTeams = nil;
-        self.listOfAllTeams = nil;
-        self.tableView = nil;
-    }
     self.cachedContentsOfDir = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
