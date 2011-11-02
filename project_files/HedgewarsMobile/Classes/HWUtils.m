@@ -134,8 +134,8 @@ static TGameStatus gameStatus = gsNone;
 }
 
 +(void) releaseCache {
-    releaseAndNil(cachedModel);
-    releaseAndNil(cachedColors);
+    [cachedModel release], cachedModel = nil;
+    [cachedColors release], cachedColors = nil;
 }
 
 @end
