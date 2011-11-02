@@ -23,10 +23,8 @@
 
 
 @interface GameInterfaceBridge : NSObject {
-    NSInteger ipcPort;  // Port on which engine will listen
-}
 
-@property (assign) NSInteger ipcPort;
+}
 
 
 -(id)   initWithController:(id) viewController;

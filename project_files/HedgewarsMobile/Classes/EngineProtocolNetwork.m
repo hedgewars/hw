@@ -26,22 +26,15 @@
 #define BUFFER_SIZE 255     // like in original frontend
 
 @implementation EngineProtocolNetwork
-@synthesize delegate, stream, ipcPort, csd;
+@synthesize delegate, stream, csd;
 
 -(id) init {
     if (self = [super init]) {
         self.delegate = nil;
 
-        self.ipcPort = 0;
         self.csd = NULL;
         self.stream = nil;
     }
-    return self;
-}
-
--(id) initOnPort:(NSInteger) port {
-    if (self = [self init])
-        self.ipcPort = port;
     return self;
 }
 
@@ -60,17 +53,20 @@
 
 #pragma mark -
 #pragma mark Spawner functions
--(void) spawnThread:(NSString *)onSaveFile {
-    [self spawnThread:onSaveFile withOptions:nil];
-}
-
--(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
+-(NSInteger) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
     self.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
     [self.stream open];
 
+    NSInteger ipcPort = [HWUtils randomPort];
+    NSDictionary *config = [[NSDictionary alloc] initWithObjectsAndKeys:
+                            [NSNumber numberWithInt:ipcPort],@"port",
+                            dictionary,@"config", nil];
     [NSThread detachNewThreadSelector:@selector(engineProtocol:)
                              toTarget:self
-                           withObject:dictionary];
+                           withObject:config];
+    [config release];
+
+    return ipcPort;
 }
 
 #pragma mark -
@@ -231,7 +227,8 @@
 // this is launched as thread and handles all IPC with engine
 -(void) engineProtocol:(id) object {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSDictionary *gameConfig = (NSDictionary *)object;
+    NSDictionary *gameConfig = [(NSDictionary *)object objectForKey:@"config"];
+    NSInteger port = [[(NSDictionary *)object objectForKey:@"port"] intValue];
     NSMutableArray *statsArray = nil;
     TCPsocket sd;
     IPaddress ip;
@@ -249,18 +246,18 @@
     }
 
     // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0 && !clientQuit) {
+    if (SDLNet_ResolveHost(&ip, NULL, port) < 0 && !clientQuit) {
         DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         clientQuit = YES;
     }
 
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
+        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), port);
         clientQuit = YES;
     }
 
-    DLog(@"Waiting for a client on port %d", ipcPort);
+    DLog(@"Waiting for a client on port %d", port);
     while (csd == NULL)
         csd = SDLNet_TCP_Accept(sd);
     SDLNet_TCP_Close(sd);
@@ -394,6 +391,7 @@
                 break;
             case 'q':
                 // game ended, can remove the savefile and present the statistics of the match
+                [HWUtils setGameStatus:gsEnded];
                 [self gameHasEndedWithStats:statsArray];
                 break;
             case 'Q':

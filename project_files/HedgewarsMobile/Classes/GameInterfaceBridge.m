@@ -27,11 +27,9 @@
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
-@synthesize ipcPort;
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
-        self.ipcPort = [HWUtils randomPort];
     }
     return self;
 }
@@ -42,11 +40,11 @@
 
 #pragma mark -
 // main routine for calling the actual game engine
--(void) engineLaunch:(NSString *)path {
+-(void) engineLaunchOn:(NSInteger) ipcPort withArgument:(NSString *)path {
     const char *gameArgs[11];
     CGFloat width, height;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
-    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
+    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",ipcPort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
@@ -104,14 +102,14 @@
 
     [HWUtils setGameStatus:gsLoading];
 
-    // this is the pascal fuction that starts the game
+    // this is the pascal function that starts the game
     Game(gameArgs);
 }
 
 // prepares the controllers for hosting a game
 -(void) prepareEngineOn:(NSString *)pathOrNil withOptions:(NSDictionary *)optionsOrNil {
-    EngineProtocolNetwork *proto = [[EngineProtocolNetwork alloc] initOnPort:self.ipcPort];
-    [proto spawnThread:pathOrNil withOptions:optionsOrNil];
+    EngineProtocolNetwork *proto = [[EngineProtocolNetwork alloc] init];
+    NSInteger ipcPort = [proto spawnThread:pathOrNil withOptions:optionsOrNil];
 
     CGRect theFrame = [[UIScreen mainScreen] bounds];
     UIWindow *thisWindow = [[HedgewarsAppDelegate sharedAppDelegate] uiwindow];
@@ -139,7 +137,7 @@
     [AudioManagerController pauseBackgroundMusic];
 
     // SYSTEMS ARE GO!!
-    [self engineLaunch:pathOrNil];
+    [self engineLaunchOn:ipcPort withArgument:pathOrNil];
     
     // remove completed games notification
     [userDefaults setObject:@"" forKey:@"savedGamePath"];
