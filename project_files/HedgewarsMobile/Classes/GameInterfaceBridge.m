@@ -27,27 +27,22 @@
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
-@synthesize savePath, engineProtocol, ipcPort;
+@synthesize ipcPort;
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
         self.ipcPort = [HWUtils randomPort];
-        self.savePath = nil;
-
-        self.engineProtocol = [[EngineProtocolNetwork alloc] initOnPort:self.ipcPort];
     }
     return self;
 }
 
 -(void) dealloc {
-    releaseAndNil(engineProtocol);
-    releaseAndNil(savePath);
     [super dealloc];
 }
 
 #pragma mark -
 // main routine for calling the actual game engine
--(void) engineLaunch {
+-(void) engineLaunch:(NSString *)path {
     const char *gameArgs[11];
     CGFloat width, height;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
@@ -99,7 +94,7 @@
     gameArgs[ 7] = [[[settings objectForKey:@"music"] stringValue] UTF8String];                 //isMusicEnabled
     gameArgs[ 8] = [[[settings objectForKey:@"alternate"] stringValue] UTF8String];             //cAltDamage
     gameArgs[ 9] = [rotation UTF8String];                                                       //rotateQt
-    gameArgs[10] = ([HWUtils gameType] == gtSave) ? [self.savePath UTF8String] : NULL;          //recordFileName
+    gameArgs[10] = ([HWUtils gameType] == gtSave) ? [path UTF8String] : NULL;                   //recordFileName
 
     [verticalSize release];
     [horizontalSize release];
@@ -114,7 +109,10 @@
 }
 
 // prepares the controllers for hosting a game
--(void) prepareEngineLaunch {
+-(void) prepareEngineOn:(NSString *)pathOrNil withOptions:(NSDictionary *)optionsOrNil {
+    EngineProtocolNetwork *proto = [[EngineProtocolNetwork alloc] initOnPort:self.ipcPort];
+    [proto spawnThread:pathOrNil withOptions:optionsOrNil];
+
     CGRect theFrame = [[UIScreen mainScreen] bounds];
     UIWindow *thisWindow = [[HedgewarsAppDelegate sharedAppDelegate] uiwindow];
     // we add a black view hiding the background
@@ -135,13 +133,13 @@
 
     // keep track of uncompleted games
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
+    [userDefaults setObject:pathOrNil forKey:@"savedGamePath"];
     [userDefaults synchronize];
 
     [AudioManagerController pauseBackgroundMusic];
 
     // SYSTEMS ARE GO!!
-    [self engineLaunch];
+    [self engineLaunch:pathOrNil];
     
     // remove completed games notification
     [userDefaults setObject:@"" forKey:@"savedGamePath"];
@@ -169,37 +167,32 @@
 
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
-    NSString *path = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
+    NSString *savePath = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
     [outputFormatter release];
-    self.savePath = path;
-    [path release];
 
     // in the rare case in which a savefile with the same name exists the older one must be removed (or it gets corrupted)
-    if ([[NSFileManager defaultManager] fileExistsAtPath:self.savePath])
-        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:savePath])
+        [[NSFileManager defaultManager] removeItemAtPath:savePath error:nil];
 
-    [self.engineProtocol spawnThread:self.savePath withOptions:withOptions];
-    [self prepareEngineLaunch];
+    [self prepareEngineOn:savePath withOptions:withOptions];
+    [savePath release];
 }
 
 // set up variables for a save game
 -(void) startSaveGame:(NSString *)atPath {
-    self.savePath = atPath;
     [HWUtils setGameType:gtSave];
-
-    [self.engineProtocol spawnThread:self.savePath];
-    [self prepareEngineLaunch];
+    [self prepareEngineOn:atPath withOptions:nil];
 }
 
 -(void) startMissionGame:(NSString *)withScript {
-    self.savePath = nil;
     [HWUtils setGameType:gtMission];
 
     NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
-    NSDictionary *config = [NSDictionary dictionaryWithObject:missionPath forKey:@"mission_command"];
+    NSDictionary *missionLine = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath,@"mission_command",nil];
     [missionPath release];
-    [self.engineProtocol spawnThread:nil withOptions:config];
-    [self prepareEngineLaunch];
+
+    [self prepareEngineOn:nil withOptions:missionLine];
+    [missionLine release];
 }
 
 /*

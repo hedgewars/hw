@@ -414,6 +414,8 @@
     SDLNet_Quit();
 
     [pool release];
+
+    [self performSelectorOnMainThread:@selector(release) withObject:nil waitUntilDone:YES];
     // Invoking this method should be avoided as it does not give your thread a chance
     // to clean up any resources it allocated during its execution.
     //[NSThread exit];

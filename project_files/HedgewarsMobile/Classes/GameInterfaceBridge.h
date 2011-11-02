@@ -20,19 +20,11 @@
 
 
 #import <Foundation/Foundation.h>
-#import "EngineProtocolNetwork.h"
 
-@class OverlayViewController;
 
-@interface GameInterfaceBridge : NSObject <EngineProtocolDelegate> {
-    NSString *savePath;
-    EngineProtocolNetwork *engineProtocol;
-
+@interface GameInterfaceBridge : NSObject {
     NSInteger ipcPort;  // Port on which engine will listen
 }
-
-@property (nonatomic,retain) NSString *savePath;
-@property (nonatomic,retain) EngineProtocolNetwork *engineProtocol;
 
 @property (assign) NSInteger ipcPort;
 
@@ -41,7 +33,5 @@
 -(void) startLocalGame:(NSDictionary *)withOptions;
 -(void) startSaveGame:(NSString *)atPath;
 -(void) startMissionGame:(NSString *)withScript;
-
--(void) gameHasEndedWithStats:(NSArray *)stats;
 
 @end
