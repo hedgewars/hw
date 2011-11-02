@@ -25,17 +25,13 @@
 @class OverlayViewController;
 
 @interface GameInterfaceBridge : NSObject <EngineProtocolDelegate> {
-    UIViewController *parentController;
-
     NSString *savePath;
     EngineProtocolNetwork *engineProtocol;
 
     NSInteger ipcPort;  // Port on which engine will listen
 }
 
-@property (assign) UIViewController *parentController;
 @property (nonatomic,retain) NSString *savePath;
-
 @property (nonatomic,retain) EngineProtocolNetwork *engineProtocol;
 
 @property (assign) NSInteger ipcPort;
@@ -46,8 +42,6 @@
 -(void) startSaveGame:(NSString *)atPath;
 -(void) startMissionGame:(NSString *)withScript;
 
--(void) prepareEngineLaunch;
--(void) engineLaunch;
 -(void) gameHasEndedWithStats:(NSArray *)stats;
 
 @end

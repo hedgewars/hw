@@ -27,14 +27,13 @@
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
-@synthesize parentController, savePath, engineProtocol, ipcPort;
+@synthesize savePath, engineProtocol, ipcPort;
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
         self.ipcPort = [HWUtils randomPort];
         self.savePath = nil;
 
-        self.parentController = (UIViewController *)viewController;
         self.engineProtocol = [[EngineProtocolNetwork alloc] initOnPort:self.ipcPort];
     }
     return self;
@@ -116,13 +115,15 @@
 
 // prepares the controllers for hosting a game
 -(void) prepareEngineLaunch {
+    CGRect theFrame = [[UIScreen mainScreen] bounds];
+    UIWindow *thisWindow = [[HedgewarsAppDelegate sharedAppDelegate] uiwindow];
     // we add a black view hiding the background
-    CGRect theFrame = CGRectMake(0, 0, self.parentController.view.frame.size.height, self.parentController.view.frame.size.width);
     UIView *blackView = [[UIView alloc] initWithFrame:theFrame];
-    [self.parentController.view addSubview:blackView];
+    [thisWindow addSubview:blackView];
     blackView.opaque = YES;
     blackView.backgroundColor = [UIColor blackColor];
     blackView.alpha = 0;
+
     // when dual screen we apply a little transition
     if (IS_DUALHEAD()) {
         [UIView beginAnimations:@"fade out" context:NULL];
@@ -158,9 +159,6 @@
 
     // the overlay is not needed any more and can be removed
     [[OverlayViewController mainOverlay] removeOverlay];
-
-    // warn our host that it's going to be visible again
-    [self.parentController viewWillAppear:YES];
 
     [AudioManagerController playBackgroundMusic];
 }
@@ -204,6 +202,7 @@
     [self prepareEngineLaunch];
 }
 
+/*
 -(void) gameHasEndedWithStats:(NSArray *)stats {
     // wrap this around a retain/realse to prevent being deallocated too soon
     [self retain];
@@ -224,5 +223,6 @@
         [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
     [self release];
 }
+*/
 
 @end
