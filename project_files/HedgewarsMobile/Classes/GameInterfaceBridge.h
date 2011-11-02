@@ -26,7 +26,6 @@
 
 @interface GameInterfaceBridge : NSObject <EngineProtocolDelegate> {
     UIViewController *parentController;
-    OverlayViewController *overlayController;
 
     NSString *savePath;
     EngineProtocolNetwork *engineProtocol;
@@ -37,7 +36,6 @@
 @property (assign) UIViewController *parentController;
 @property (nonatomic,retain) NSString *savePath;
 
-@property (nonatomic,retain) OverlayViewController *overlayController;
 @property (nonatomic,retain) EngineProtocolNetwork *engineProtocol;
 
 @property (assign) NSInteger ipcPort;

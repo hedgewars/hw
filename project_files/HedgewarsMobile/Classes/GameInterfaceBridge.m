@@ -27,7 +27,7 @@
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
-@synthesize parentController, savePath, overlayController, engineProtocol, ipcPort;
+@synthesize parentController, savePath, engineProtocol, ipcPort;
 
 -(id) initWithController:(id) viewController {
     if (self = [super init]) {
@@ -36,8 +36,6 @@
 
         self.parentController = (UIViewController *)viewController;
         self.engineProtocol = [[EngineProtocolNetwork alloc] initOnPort:self.ipcPort];
-
-        self.overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     }
     return self;
 }
@@ -45,19 +43,10 @@
 -(void) dealloc {
     releaseAndNil(engineProtocol);
     releaseAndNil(savePath);
-    releaseAndNil(overlayController);
     [super dealloc];
 }
 
 #pragma mark -
-// overlay with controls, become visible later, with a transparency effect since the sdlwindow is not yet created
--(void) displayOverlayLater:(id) object {
-    // in order to get rotation events we have to insert the view inside the first view of the second window
-    // when multihead we have to make sure that overlay is displayed in the touch-enabled window
-    UIView *injected = (IS_DUALHEAD() ? self.parentController.view : UIVIEW_HW_SDLVIEW);
-    [injected addSubview:self.overlayController.view];
-}
-
 // main routine for calling the actual game engine
 -(void) engineLaunch {
     const char *gameArgs[11];
@@ -143,9 +132,6 @@
     } else
         blackView.alpha = 1;
 
-    // prepare options for overlay and add it to the future sdl uiwindow
-    [self performSelector:@selector(displayOverlayLater:) withObject:nil afterDelay:3];
-
     // keep track of uncompleted games
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
@@ -171,7 +157,7 @@
     [blackView release];
 
     // the overlay is not needed any more and can be removed
-    [self.overlayController removeOverlay];
+    [[OverlayViewController mainOverlay] removeOverlay];
 
     // warn our host that it's going to be visible again
     [self.parentController viewWillAppear:YES];
