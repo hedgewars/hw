@@ -1,9 +1,12 @@
 module PascalParser where
 
-import Text.ParserCombinators.Parsec
-import Text.ParserCombinators.Parsec.Expr
-import Text.ParserCombinators.Parsec.Token
-import Text.ParserCombinators.Parsec.Language
+import Text.Parsec.Expr
+import Text.Parsec.Char
+import Text.Parsec.Token
+import Text.Parsec.Language
+import Text.Parsec.Prim
+import Text.Parsec.Combinator
+import Text.Parsec.String
 import Control.Monad
 import Data.Char
 
@@ -80,8 +83,6 @@ comments = do
         comment
         spaces
 
-validIdChar = alphaNum <|> oneOf "_"    
-
 pascalUnit = do
     comments
     u <- choice [program, unit]
@@ -102,16 +103,16 @@ unit = do
     comments
     return $ Unit name int impl Nothing Nothing
     where
-        unitName = between (string "unit" >> comments) (char ';') (identifier pas)
+        unitName = between (string "unit" >> comments) (semi pas) (identifier pas)
 
-varsDecl = do
-    v <- aVarDecl `sepBy1` (char ';' >> comments)
-    char ';'
+varsDecl endsWithSemi = do
+    vs <- many (try (aVarDecl >> semi pas) >> comments)
+    when (not endsWithSemi) $ aVarDecl >> return ()
     comments
-    return $ VarDeclaration $ show v
+    return $ VarDeclaration $ show vs
     where
     aVarDecl = do
-        ids <- (try (identifier pas) >>= \i -> comments >> return (Identifier i)) `sepBy1` (char ',' >> comments)
+        ids <- (commaSep1 pas) $ ((identifier pas) <?> "variable declaration") >>= \i -> comments >> return (Identifier i)
         char ':'
         comments
         t <- typeDecl
@@ -149,7 +150,8 @@ typeVarDeclaration isImpl = choice [
     varSection = do
         try $ string "var"
         comments
-        v <- varsDecl
+        v <- varsDecl True
+        comments
         return v
             
     procDecl = do
@@ -158,7 +160,7 @@ typeVarDeclaration isImpl = choice [
         i <- liftM Identifier $ identifier pas
         optional $ do
             char '('
-            varsDecl
+            varsDecl False
             char ')'
         comments
         char ';'
@@ -176,9 +178,10 @@ typeVarDeclaration isImpl = choice [
     funcDecl = do
         string "function"
         comments
-        char '('
-        b <- manyTill anyChar (try $ char ')')
-        char ')'
+        optional $ do
+            char '('
+            varsDecl False
+            char ')'
         comments
         char ':'
         ret <- identifier pas
