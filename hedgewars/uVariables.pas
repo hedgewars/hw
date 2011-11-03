@@ -1205,8 +1205,7 @@ const
                             ammoprop_NeedTarget or
                             ammoprop_AttackingPut or
                             ammoprop_DontHold or
-                            ammoprop_NotBorder or
-                            ammoprop_SetBounce;
+                            ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
