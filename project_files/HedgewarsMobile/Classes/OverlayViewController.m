@@ -438,10 +438,14 @@ static OverlayViewController *mainOverlay;
                 HW_zoomReset();
             break;
         case 2:
-            // pinching
-            first = [[allTouches allObjects] objectAtIndex:0];
-            second = [[allTouches allObjects] objectAtIndex:1];
-            initialDistanceForPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
+            if (2 == [[[allTouches allObjects] objectAtIndex:0] tapCount])
+                HW_screenshot();
+            else {
+                // pinching
+                first = [[allTouches allObjects] objectAtIndex:0];
+                second = [[allTouches allObjects] objectAtIndex:1];
+                initialDistanceForPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
+            }
             break;
         default:
             break;

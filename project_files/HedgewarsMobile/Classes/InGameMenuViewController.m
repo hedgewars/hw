@@ -45,7 +45,6 @@ extern UIView *SDL_getUikitView(void *);
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Show Help", @""),
                       NSLocalizedString(@"Tag", @""),
-//                      NSLocalizedString(@"Snapshot",@""),
                       NSLocalizedString(@"End Game", @""),
                       nil];
     self.menuList = array;
@@ -89,27 +88,6 @@ extern UIView *SDL_getUikitView(void *);
     }
 
     SDL_iPhoneKeyboardHide((SDL_Window *)HW_getSDLWindow());
-
-    /*
-    if (shouldTakeScreenshot) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Please wait"
-                                                        message:nil
-                                                       delegate:nil
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:nil];
-        [alert show];
-        UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]
-                                              initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        indicator.center = CGPointMake(alert.bounds.size.width / 2, alert.bounds.size.height - 45);
-        [indicator startAnimating];
-        [alert addSubview:indicator];
-        [indicator release];
-
-        // all these hacks because of the PAUSE caption on top of everything...
-        [self performSelector:@selector(saveCurrentScreenToPhotoAlbum:) withObject:alert afterDelay:0.3];
-    }
-    */
-    shouldTakeScreenshot = NO;
 }
 
 #pragma mark -
@@ -120,7 +98,6 @@ extern UIView *SDL_getUikitView(void *);
 
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 3;
-//    return 4;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -141,7 +118,6 @@ extern UIView *SDL_getUikitView(void *);
 
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UIActionSheet *actionSheet;
-//    UIAlertView *alert;
 
     switch ([indexPath row]) {
         case 0:
@@ -154,19 +130,6 @@ extern UIView *SDL_getUikitView(void *);
 
             break;
         case 2:
-/*
-            alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Going to take a screenshot",@"")
-                                               message:NSLocalizedString(@"The game snapshot will be placed in your Photo Album and it will be taken as soon as the pause menu is dismissed",@"")
-                                              delegate:nil
-                                     cancelButtonTitle:NSLocalizedString(@"Ok, got it",@"")
-                                     otherButtonTitles:nil];
-            [alert show];
-            [alert release];
-            shouldTakeScreenshot = YES;
-
-            break;
-        case 3:
-*/
             actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
                                                       delegate:self
                                              cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
@@ -192,64 +155,5 @@ extern UIView *SDL_getUikitView(void *);
         HW_terminate(NO);
     }
 }
-
-//TODO: check this is still needed since we switched to SDL_GL_CreateContext()
-/*
-#pragma mark -
-#pragma mark save screenshot
-//by http://www.bit-101.com/blog/?p=1861
-// callback for CGDataProviderCreateWithData
-void releaseData(void *info, const void *data, size_t dataSize) {
-    DLog(@"freeing raw data\n");
-    free((void *)data);
-}
-
-// callback for UIImageWriteToSavedPhotosAlbum
--(void) image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
-    DLog(@"Save finished\n");
-    [image release];
-    UIAlertView *alert = (UIAlertView *)contextInfo;
-    [alert dismissWithClickedButtonIndex:0 animated:YES];
-    [alert release];
-}
-
-// the resolution of the buffer is always equal to the hardware device even if scaled
--(void) saveCurrentScreenToPhotoAlbum:(UIAlertView *)alert {
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    int width = screenRect.size.width;
-    int height = screenRect.size.height;
-
-    NSInteger size = width * height * 4;
-    GLubyte *buffer = (GLubyte *) malloc(size * sizeof(GLubyte));
-    GLubyte *buffer_flipped = (GLubyte *) malloc(size * sizeof(GLubyte));
-
-    glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-    HW_screenshot();
-    // flip the data as glReadPixels here reads upside down
-    for(int y = 0; y <height; y++)
-        for(int x = 0; x <width * 4; x++)
-            buffer_flipped[(int)((height - 1 - y) * width * 4 + x)] = buffer[(int)(y * 4 * width + x)];
-    free(buffer);
-
-    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer_flipped, size, releaseData);
-    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
-    CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-    CGImageRef imageRef = CGImageCreate(width, height, 8, 32, 4 * width, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
-
-    CGColorSpaceRelease(colorSpaceRef);
-    CGDataProviderRelease(provider);
-
-    UIImage *image;
-    if ([UIImage respondsToSelector:@selector(imageWithCGImage:scale:orientation:)])
-        image = [[UIImage alloc] initWithCGImage:imageRef scale:1 orientation:UIImageOrientationRight];
-    else
-        image = [[UIImage alloc] initWithCGImage:imageRef];
-    CGImageRelease(imageRef);
-
-    // add callback for cleaning memory and removing alert
-    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), (void *)alert);
-}
-*/
 
 @end

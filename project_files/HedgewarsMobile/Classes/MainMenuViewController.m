@@ -52,7 +52,14 @@
                               withIntermediateDirectories:NO
                                                attributes:nil
                                                     error:NULL];
-    
+
+    // SCREENSHOTS - just create it the first time
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SCREENSHOTS_DIRECTORY()] == NO)
+        [[NSFileManager defaultManager] createDirectoryAtPath:SCREENSHOTS_DIRECTORY()
+                                  withIntermediateDirectories:NO
+                                                   attributes:nil
+                                                        error:NULL];
+
     // SETTINGS - nsuserdefaults ftw
     [CreationChamber createSettings];
 

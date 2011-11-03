@@ -255,7 +255,7 @@ begin
     cFullScreen:= false;
     cTimerInterval:= 8;
     PathPrefix:= 'Data';
-    UserPathPrefix:= '.';
+    UserPathPrefix:= '../Documents';
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     val(gameArgs[0], ipcPort);
     val(gameArgs[1], cScreenWidth);
