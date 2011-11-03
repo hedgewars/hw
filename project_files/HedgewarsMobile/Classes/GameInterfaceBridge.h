@@ -26,10 +26,8 @@
 
 }
 
-
--(id)   initWithController:(id) viewController;
--(void) startLocalGame:(NSDictionary *)withOptions;
--(void) startSaveGame:(NSString *)atPath;
--(void) startMissionGame:(NSString *)withScript;
++(void) startLocalGame:(NSDictionary *)withOptions;
++(void) startSaveGame:(NSString *)atPath;
++(void) startMissionGame:(NSString *)withScript;
 
 @end

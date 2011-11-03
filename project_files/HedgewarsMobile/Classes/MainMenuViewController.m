@@ -234,9 +234,7 @@
 #pragma mark -
 -(void) launchRestoredGame {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
-    [bridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
-    [bridge release];
+    [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
 }
 
 #pragma mark -

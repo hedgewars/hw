@@ -28,19 +28,8 @@
 
 @implementation GameInterfaceBridge
 
--(id) initWithController:(id) viewController {
-    if (self = [super init]) {
-    }
-    return self;
-}
-
--(void) dealloc {
-    [super dealloc];
-}
-
-#pragma mark -
 // main routine for calling the actual game engine
--(void) engineLaunchOn:(NSInteger) ipcPort withArgument:(NSString *)path {
++(void) engineLaunchOn:(NSInteger) ipcPort withArgument:(NSString *)path {
     const char *gameArgs[11];
     CGFloat width, height;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
@@ -107,7 +96,7 @@
 }
 
 // prepares the controllers for hosting a game
--(void) prepareEngineOn:(NSString *)pathOrNil withOptions:(NSDictionary *)optionsOrNil {
++(void) prepareEngineOn:(NSString *)pathOrNil withOptions:(NSDictionary *)optionsOrNil {
     EngineProtocolNetwork *proto = [[EngineProtocolNetwork alloc] init];
     NSInteger ipcPort = [proto spawnThread:pathOrNil withOptions:optionsOrNil];
 
@@ -160,7 +149,7 @@
 }
 
 // set up variables for a local game
--(void) startLocalGame:(NSDictionary *)withOptions {
++(void) startLocalGame:(NSDictionary *)withOptions {
     [HWUtils setGameType:gtLocal];
 
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
@@ -172,24 +161,24 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:savePath])
         [[NSFileManager defaultManager] removeItemAtPath:savePath error:nil];
 
-    [self prepareEngineOn:savePath withOptions:withOptions];
+    [GameInterfaceBridge prepareEngineOn:savePath withOptions:withOptions];
     [savePath release];
 }
 
 // set up variables for a save game
--(void) startSaveGame:(NSString *)atPath {
++(void) startSaveGame:(NSString *)atPath {
     [HWUtils setGameType:gtSave];
-    [self prepareEngineOn:atPath withOptions:nil];
+    [GameInterfaceBridge prepareEngineOn:atPath withOptions:nil];
 }
 
--(void) startMissionGame:(NSString *)withScript {
++(void) startMissionGame:(NSString *)withScript {
     [HWUtils setGameType:gtMission];
 
     NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
     NSDictionary *missionLine = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath,@"mission_command",nil];
     [missionPath release];
 
-    [self prepareEngineOn:nil withOptions:missionLine];
+    [GameInterfaceBridge prepareEngineOn:nil withOptions:missionLine];
     [missionLine release];
 }
 
