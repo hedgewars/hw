@@ -115,15 +115,11 @@ begin
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
 
         playSound(sndShutter);
-{$IFNDEF IPHONEOS}
-        if not MakeScreenshot(s) then
-        begin
+        if MakeScreenshot(s) then WriteLnToConsole('Screenshot saved: ' + s)
+        else begin
             WriteLnToConsole('Screenshot failed.');
             AddChatString(#5 + 'screen capture failed (lack of memory or write permissions)');
-        end
-        else
-{$ENDIF}
-            WriteLnToConsole('Screenshot saved: ' + s);
+            end
     end;
 end;
 
@@ -148,11 +144,8 @@ end;
 
 ///////////////////
 procedure MainLoop;
-{$WARNINGS OFF}
-// disable "Some fields weren't initialized" warning
-const event: TSDL_Event = ();
-{$WARNINGS ON}
-var PrevTime, CurrTime: Longword;
+var event: TSDL_Event;
+    PrevTime, CurrTime: Longword;
 {$IFDEF SDL13}
     previousGameState: TGameState;
 {$ELSE}
