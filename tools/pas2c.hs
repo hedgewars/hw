@@ -32,7 +32,7 @@ tvar2C _ = empty
 phrase2C :: Phrase -> Doc
 phrase2C (Phrases p) = braces . nest 4 . vcat . map phrase2C $ p
 phrase2C (ProcCall (Identifier name) params) = text name <> parens (hsep . punctuate (char ',') . map expr2C $ params) <> semi
-phrase2C (IfThenElse (expr) phrase1 mphrase2) = text "if" <> parens (expr2C expr) $$ (braces . nest 4 . phrase2C) phrase1 <+> elsePart
+phrase2C (IfThenElse (expr) phrase1 mphrase2) = text "if" <> parens (expr2C expr) $$ (braces . nest 4 . phrase2C) phrase1 $+$ elsePart
     where
     elsePart | isNothing mphrase2 = empty
              | otherwise = text "else" $$ (braces . nest 4 . phrase2C) (fromJust mphrase2)
