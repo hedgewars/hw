@@ -29,39 +29,10 @@ extern UIView *SDL_getUikitView(void *);
 #define VIEW_HEIGHT 200
 
 @implementation InGameMenuViewController
-@synthesize menuList;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
-}
-
--(void) didReceiveMemoryWarning {
-    self.menuList = nil;
-    [super didReceiveMemoryWarning];
-}
-
--(void) viewDidLoad {
-    NSArray *array = [[NSArray alloc] initWithObjects:
-                      NSLocalizedString(@"Show Help", @""),
-                      NSLocalizedString(@"Tag", @""),
-                      NSLocalizedString(@"End Game", @""),
-                      nil];
-    self.menuList = array;
-    [array release];
-
-    [super viewDidLoad];
-}
-
--(void) viewDidUnload {
-    self.menuList = nil;
-    MSG_DIDUNLOAD();
-    [super viewDidUnload];
-}
-
--(void) dealloc {
-    releaseAndNil(menuList);
-    [super dealloc];
 }
 
 #pragma mark -
@@ -103,12 +74,21 @@ extern UIView *SDL_getUikitView(void *);
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIdentifier = @"CellIdentifier";
 
+    NSInteger row = [indexPath row];
+    NSString *cellTitle;
+    if (row == 0)
+        cellTitle = NSLocalizedString(@"Show Help", @"");
+    else if (row == 1)
+        cellTitle = NSLocalizedString(@"Tag", @"");
+    else
+        cellTitle = NSLocalizedString(@"End Game", @"");
+
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (nil == cell) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:cellIdentifier] autorelease];
     }
-    cell.textLabel.text = [self.menuList objectAtIndex:[indexPath row]];
+    cell.textLabel.text = cellTitle;
 
     if (IS_IPAD())
         cell.textLabel.textAlignment = UITextAlignmentCenter;

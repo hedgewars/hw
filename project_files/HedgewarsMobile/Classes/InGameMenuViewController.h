@@ -23,10 +23,9 @@
 
 
 @interface InGameMenuViewController : UITableViewController <UIActionSheetDelegate> {
-    NSArray *menuList;
+
 }
 
-@property (nonatomic,retain) NSArray *menuList;
 
 -(void) present;
 -(void) dismiss;
