@@ -239,9 +239,6 @@
                     cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
                     switchContent.on = [[settings objectForKey:@"classic_menu"] boolValue];
                     switchContent.tag = 60;
-                    // remove this when classic ammomenu works on iphone as well
-                    if (IS_IPAD() == NO)
-                        switchContent.enabled = NO;
                     break;
                 default:
                     DLog(@"Nope");

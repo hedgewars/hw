@@ -62,6 +62,8 @@
     else                                                                                                        // = everything else
         tmpQuality = 0;                                                                 // full quality
 
+    // disable ammomenu animation
+    tmpQuality = tmpQuality | 0x00000080;
     // disable tooltips on iPhone
     if (IS_IPAD() == NO)
         tmpQuality = tmpQuality | 0x00000400;
