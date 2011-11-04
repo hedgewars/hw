@@ -596,6 +596,7 @@ type
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
             SDL_QUITEV: (quit: TSDL_QuitEvent);
             SDL_USEREVENT: (user: TSDL_UserEvent);
+            SDL_ALLEVENTS: (foo: shortstring);
             //TODO: implement other events
 {$ELSE}
         case Byte of
@@ -614,6 +615,7 @@ type
             SDL_QUITEV: (quit: TSDL_QuitEvent);
             //SDL_SYSWMEVENT,SDL_EVENT_RESERVEDA,SDL_EVENT_RESERVEDB
             SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
+            SDL_ALLEVENTS: (foo: shortstring);
 {$ENDIF}
         end;
 
