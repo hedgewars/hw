@@ -61,7 +61,12 @@ expr2C (BinOp op expr1 expr2) = (expr2C expr1) <+> op2C op <+> (expr2C expr2)
     -}            
 expr2C _ = empty
 
-op2C = text
+op2C "or" = text "|"
+op2C "and" = text "&"
+op2C "div" = text "/"
+op2C "mod" = text "%"
+op2C "<>" = text "!="
+op2C a = text a
 
 maybeVoid "" = "void"
 maybeVoid a = a

@@ -25,7 +25,7 @@ data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration TypeDecl
     | ConstDeclaration String
-    | VarDeclaration String
+    | VarDeclaration Bool String
     | FunctionDeclaration Identifier Identifier (Maybe Phrase)
     deriving Show
 data TypeDecl = SimpleType Identifier
@@ -43,19 +43,28 @@ data Uses = Uses [Identifier]
 data Phrase = ProcCall Identifier [Expression]
         | IfThenElse Expression Phrase (Maybe Phrase)
         | WhileCycle Expression Phrase
-        | RepeatCycle Expression Phrase
-        | ForCycle
+        | RepeatCycle Expression [Phrase]
+        | ForCycle Identifier Expression Expression Phrase
+        | WithBlock Expression Phrase
         | Phrases [Phrase]
         | SwitchCase Expression [(Expression, Phrase)] (Maybe Phrase)
-        | Assignment Identifier Expression
+        | Assignment Reference Expression
     deriving Show
 data Expression = Expression String
     | FunCall Identifier [Expression]
     | PrefixOp String Expression
+    | PostfixOp String Expression
     | BinOp String Expression Expression
+    | StringLiteral String
+    | NumberLiteral String
+    | Reference Reference
+    deriving Show
+data Reference = ArrayElement Identifier Expression
+    | SimpleReference Identifier
+    | RecordField Reference Reference
+    | Dereference Reference
     deriving Show
     
-
 pascalLanguageDef
     = emptyDef
     { commentStart   = "(*"
@@ -69,13 +78,16 @@ pascalLanguageDef
             , "implementation", "and", "or", "xor", "shl"
             , "shr", "while", "do", "repeat", "until", "case", "of"
             , "type", "var", "const", "out", "array"
-            , "procedure", "function"
+            , "procedure", "function", "with", "for", "to"
+            , "downto", "div", "mod"
             ]
     , reservedOpNames= [] 
     , caseSensitive  = False   
     }
     
-pas = makeTokenParser pascalLanguageDef
+pas = patch $ makeTokenParser pascalLanguageDef
+    where
+    patch tp = tp {stringLiteral = between (char '\'') (char '\'') (many $ noneOf "'")}
     
 comments = do
     spaces
@@ -95,29 +107,76 @@ comment = choice [
         , (try $ string "//") >> manyTill anyChar (try newline)
         ]
 
+iD = do
+    i <- liftM Identifier (identifier pas)
+    comments
+    return i
+        
 unit = do
-    name <- liftM Identifier unitName
+    string "unit" >> comments
+    name <- iD
+    semi pas
     comments
     int <- interface
     impl <- implementation
     comments
     return $ Unit name int impl Nothing Nothing
-    where
-        unitName = between (string "unit" >> comments) (semi pas) (identifier pas)
 
+    
+reference = buildExpressionParser table term <?> "reference"
+    where
+    term = comments >> choice [
+        parens pas reference 
+        , try $ iD >>= \i -> (brackets pas) expression >>= return . ArrayElement i
+        , iD >>= return . SimpleReference
+        ] <?> "simple reference"
+
+    table = [ 
+        [Postfix (char '^' >> return Dereference)]
+        , [Infix (char '.' >> return RecordField) AssocLeft]
+        ]
+    
+    
 varsDecl endsWithSemi = do
     vs <- many (try (aVarDecl >> semi pas) >> comments)
     when (not endsWithSemi) $ aVarDecl >> return ()
     comments
-    return $ VarDeclaration $ show vs
+    return $ VarDeclaration False $ show vs
     where
     aVarDecl = do
-        ids <- (commaSep1 pas) $ ((identifier pas) <?> "variable declaration") >>= \i -> comments >> return (Identifier i)
+        when (not endsWithSemi) $
+            optional $ choice [
+                try $ string "var"
+                , try $ string "const"
+                , try $ string "out"
+                ]
+        comments
+        ids <- (commaSep1 pas) $ (iD <?> "variable declaration")
         char ':'
         comments
         t <- typeDecl
         comments
         return (ids, t)
+
+
+constsDecl = do
+    vs <- many (try (aConstDecl >> semi pas) >> comments)
+    comments
+    return $ VarDeclaration True $ show vs
+    where
+    aConstDecl = do
+        comments
+        ids <- iD <?> "const declaration"
+        optional $ do
+            char ':'
+            comments
+            t <- typeDecl
+            return ()
+        char '='
+        comments
+        e <- expression
+        comments
+        return (ids, e)
         
 typeDecl = choice [
     arrayDecl
@@ -137,12 +196,15 @@ typeDecl = choice [
         t <- typeDecl
         return $ ArrayDecl r t
 
+        
 rangeDecl = choice [
-    identifier pas >>= return . Range . Identifier
+    iD >>= return . Range
     ] <?> "range declaration"
 
+    
 typeVarDeclaration isImpl = choice [
     varSection,
+    constSection,
     funcDecl,
     procDecl
     ]
@@ -153,11 +215,18 @@ typeVarDeclaration isImpl = choice [
         v <- varsDecl True
         comments
         return v
-            
+
+    constSection = do
+        try $ string "const"
+        comments
+        c <- constsDecl
+        comments
+        return c
+        
     procDecl = do
         string "procedure"
         comments
-        i <- liftM Identifier $ identifier pas
+        i <- iD
         optional $ do
             char '('
             varsDecl False
@@ -167,7 +236,7 @@ typeVarDeclaration isImpl = choice [
         b <- if isImpl then
                 do
                 comments
-                typeVarDeclaration isImpl
+                optional $ typeVarDeclaration isImpl
                 comments
                 liftM Just functionBody
                 else
@@ -178,13 +247,14 @@ typeVarDeclaration isImpl = choice [
     funcDecl = do
         string "function"
         comments
+        i <- iD
         optional $ do
             char '('
             varsDecl False
             char ')'
         comments
         char ':'
-        ret <- identifier pas
+        ret <- iD
         comments
         char ';'
         b <- if isImpl then
@@ -195,16 +265,17 @@ typeVarDeclaration isImpl = choice [
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ FunctionDeclaration (Identifier "function") (Identifier ret) Nothing
+        return $ FunctionDeclaration i ret Nothing
 
 program = do
-    name <- liftM Identifier programName
+    string "program"
+    comments
+    name <- iD
+    (char ';')
     comments
     impl <- implementation
     comments
     return $ Program name impl
-    where
-        programName = between (string "program") (char ';') (identifier pas)
 
 interface = do
     string "interface"
@@ -229,30 +300,34 @@ expression = buildExpressionParser table term <?> "expression"
     where
     term = comments >> choice [
         parens pas $ expression 
-        , natural pas >>= return . Expression . show
-        , funCall
+        , integer pas >>= return . NumberLiteral . show
+        , stringLiteral pas >>= return . StringLiteral
+        , try $ funCall
+        , reference >>= return . Reference
         ] <?> "simple expression"
 
     table = [ 
-          [Infix (string "^." >> return (BinOp "^.")) AssocLeft]
-        , [Prefix (string "not" >> return (PrefixOp "not"))]
+          [Prefix (string "not" >> return (PrefixOp "not"))]
         , [  Infix (char '*' >> return (BinOp "*")) AssocLeft
            , Infix (char '/' >> return (BinOp "/")) AssocLeft
-           ]
+           , Infix (try (string "div") >> return (BinOp "div")) AssocLeft
+           , Infix (try (string "mod") >> return (BinOp "mod")) AssocLeft
+          ]
         , [  Infix (char '+' >> return (BinOp "+")) AssocLeft
            , Infix (char '-' >> return (BinOp "-")) AssocLeft
-           ]
-        , [  Infix (try (string "<>" )>> return (BinOp "<>")) AssocNone
+           , Prefix (char '-' >> return (PrefixOp "-"))
+          ]
+        , [  Infix (try (string "<>") >> return (BinOp "<>")) AssocNone
            , Infix (try (string "<=") >> return (BinOp "<=")) AssocNone
            , Infix (try (string ">=") >> return (BinOp ">=")) AssocNone
            , Infix (char '<' >> return (BinOp "<")) AssocNone
            , Infix (char '>' >> return (BinOp ">")) AssocNone
            , Infix (char '=' >> return (BinOp "=")) AssocNone
-           ]
-        , [  Infix (try $ string "and" >> return (BinOp "and")) AssocNone
-           , Infix (try $ string "or" >> return (BinOp "or")) AssocNone
-           , Infix (try $ string "xor" >> return (BinOp "xor")) AssocNone
-           ]
+          ]
+        , [  Infix (try $ string "and" >> return (BinOp "and")) AssocLeft
+           , Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
+           , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
+          ]
         ]
     
 phrasesBlock = do
@@ -267,8 +342,11 @@ phrase = do
         phrasesBlock
         , ifBlock
         , whileCycle
+        , repeatCycle
         , switchCase
-        , try $ identifier pas >>= \i -> string ":=" >> expression >>= return . Assignment (Identifier i)
+        , withBlock
+        , forCycle
+        , (try $ reference >>= \r -> string ":=" >> return r) >>= \r -> expression >>= return . Assignment r
         , procCall
         ]
     optional $ char ';'
@@ -290,7 +368,6 @@ ifBlock = do
         o <- phrase
         comments
         return o
-    optional $ char ';'
     return $ IfThenElse e o1 o2
 
 whileCycle = do
@@ -301,9 +378,47 @@ whileCycle = do
     string "do"
     comments
     o <- phrase
-    optional $ char ';'
     return $ WhileCycle e o
 
+withBlock = do
+    try $ string "with"
+    comments
+    e <- expression
+    comments
+    string "do"
+    comments
+    o <- phrase
+    return $ WithBlock e o
+    
+repeatCycle = do
+    try $ string "repeat"
+    comments
+    o <- many phrase
+    string "until"
+    comments
+    e <- expression
+    comments
+    return $ RepeatCycle e o
+
+forCycle = do
+    try $ string "for"
+    comments
+    i <- iD
+    comments
+    string ":="
+    comments
+    e1 <- expression
+    comments
+    choice [string "to", string "downto"]
+    comments
+    e2 <- expression
+    comments
+    string "do"
+    comments
+    p <- phrase
+    comments
+    return $ ForCycle i e1 e2 p
+    
 switchCase = do
     try $ string "case"
     comments
@@ -319,7 +434,6 @@ switchCase = do
         comments
         return o
     string "end"
-    optional $ char ';'
     return $ SwitchCase e cs o2
     where
     aCase = do
@@ -332,16 +446,16 @@ switchCase = do
         return (e, p)
     
 procCall = do
-    i <- liftM Identifier $ identifier pas
+    i <- iD
     p <- option [] $ (parens pas) parameters
     return $ ProcCall i p
 
 funCall = do
-    i <- liftM Identifier $ identifier pas
-    p <- option [] $ (parens pas) parameters
+    i <- iD
+    p <- (parens pas) $ option [] parameters
     return $ FunCall i p
 
-parameters = expression `sepBy` (char ',' >> comments)
+parameters = (commaSep pas) expression <?> "parameters"
         
 functionBody = do
     p <- phrasesBlock
@@ -354,7 +468,7 @@ uses = liftM Uses (option [] u)
         u = do
             string "uses"
             comments
-            u <- (identifier pas >>= \i -> comments >> return (Identifier i)) `sepBy1` (char ',' >> comments)
+            u <- (iD >>= \i -> comments >> return i) `sepBy1` (char ',' >> comments)
             char ';'
             comments
             return u
