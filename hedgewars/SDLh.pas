@@ -919,7 +919,7 @@ function  SDL_EnableKeyRepeat(delay_, interval: LongInt): LongInt; {$IFNDEF SDL1
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;
 
-function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; out w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
+function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; w, h: PLongInt): LongInt; cdecl; external SDL_TTFLibName;
 
 function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;

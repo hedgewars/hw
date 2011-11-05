@@ -56,7 +56,7 @@ var w, h: LongInt;
     finalRect: TSDL_Rect;
 begin
 w:= 0; h:= 0; // avoid compiler hints
-TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
+TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
 finalRect.x:= X + FontBorder + 2;
 finalRect.y:= Y + FontBorder;
 finalRect.w:= w + FontBorder * 2 + 4;
@@ -796,13 +796,13 @@ i:= 0; j:= 0; // avoid compiler hints
 // TODO: Recheck height/position calculation
 
 // get caption's dimensions
-TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(caption), i, j);
+TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(caption), @i, @j);
 // width adds 36 px (image + space)
 w:= i + 36 + wa;
 h:= j + ha;
 
 // get sub caption's dimensions
-TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(subcaption), i, j);
+TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(subcaption), @i, @j);
 // width adds 36 px (image + space)
 if w < (i + 36 + wa) then w:= i + 36 + wa;
 inc(h, j + ha);
@@ -815,7 +815,7 @@ while tmpdesc <> '' do
     SplitByChar(tmpline, tmpdesc, '|');
     if tmpline <> '' then
         begin
-        TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(tmpline), i, j);
+        TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(tmpline), @i, @j);
         if w < (i + wa) then w:= i + wa;
         inc(h, j + ha)
         end
@@ -824,7 +824,7 @@ while tmpdesc <> '' do
 if extra <> '' then
     begin
     // get extra label's dimensions
-    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(extra), i, j);
+    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(extra), @i, @j);
     if w < (i + wa) then w:= i + wa;
     inc(h, j + ha);
     end;
