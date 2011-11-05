@@ -295,6 +295,10 @@ const
 ///////////////////////  TYPE DEFINITIONS ///////////////////////
 /////////////////////////////////////////////////////////////////
 
+// two important reference points for the wanderers of this area
+// http://www.freepascal.org/docs-html/ref/refsu5.html
+// http://www.freepascal.org/docs-html/prog/progsu144.html
+
 type
 {$IFDEF SDL13}
     PSDL_Window   = Pointer;
@@ -320,15 +324,15 @@ type
     PSDL_PixelFormat = ^TSDL_PixelFormat;
     TSDL_PixelFormat = record
 {$IFDEF SDL13}
-        format: Longword;
-        palette: Pointer;   // actually it is a PSDL_Palette
+        format: LongWord;
+        palette: Pointer;
         BitsPerPixel : Byte;
         BytesPerPixel: Byte;
         padding: array[0..1] of Byte;
-        RMask : Longword;
-        GMask : Longword;
-        BMask : Longword;
-        AMask : Longword;
+        RMask : LongWord;
+        GMask : LongWord;
+        BMask : LongWord;
+        AMask : LongWord;
         Rloss : Byte;
         Gloss : Byte;
         Bloss : Byte;
@@ -351,11 +355,11 @@ type
         Gshift: Byte;
         Bshift: Byte;
         Ashift: Byte;
-        RMask : Longword;
-        GMask : Longword;
-        BMask : Longword;
-        AMask : Longword;
-        colorkey: Longword;
+        RMask : LongWord;
+        GMask : LongWord;
+        BMask : LongWord;
+        AMask : LongWord;
+        colorkey: LongWord;
         alpha: Byte;
 {$ENDIF}
         end;
@@ -363,11 +367,11 @@ type
     SDL_eventaction = (SDL_ADDEVENT = 0, SDL_PEEPEVENT, SDL_GETEVENT);
 
     PSDL_Surface = ^TSDL_Surface;
-    TSDL_Surface = record
-        flags : Longword;
+    T SDL_Surface = record
+        flags : LongWord;
         format: PSDL_PixelFormat;
         w, h  : LongInt;
-        pitch : Word;
+        pitch : {$IFDEF SDL13}LongInt{$ELSE}Word{$ENDIF};
         pixels: Pointer;
         offset: LongInt;
 {$IFDEF SDL13}
@@ -383,12 +387,12 @@ type
 
     PSDL_Color = ^TSDL_Color;
     TSDL_Color = record
-        case byte of
+        case Byte of
             0: ( r: Byte;
                  g: Byte;
                  b: Byte;
                  unused: Byte; );
-            1: ( value: Longword; );
+            1: ( value: LongWord; );
         end;
 
 
@@ -399,8 +403,8 @@ type
     TClose = function( context: PSDL_RWops ): LongInt; cdecl;
 
     TStdio = record
-        autoclose: {$IFDEF SDL13}boolean{$ELSE}LongInt{$ENDIF};
-        fp: pointer;
+        autoclose: {$IFDEF SDL13}Boolean{$ELSE}LongInt{$ENDIF};
+        fp: Pointer;
         end;
 
     TMem = record
@@ -418,7 +422,7 @@ type
         read: TRead;
         write: TWrite;
         close: TClose;
-        type_: Longword;
+        type_: LongWord;
         case Byte of
             0: (stdio: TStdio);
             1: (mem: TMem);
@@ -432,86 +436,84 @@ type
     TSDL_KeySym = record
         scancode: LongInt;
         sym: LongInt;
-        modifier: Smallint;
-        unicode: LongInt;
+        modifier: Word;
+        unicode: LongWord;
         end;
 
     TSDL_WindowEvent = record
-        type_: LongInt;
-        windowID: LongInt;
-        event: byte;
-        padding1, padding2, padding3: byte;
+        type_: LongWord;
+        windowID: LongWord;
+        event: Byte;
+        padding1, padding2, padding3: Byte;
         data1, data2: LongInt;
         end;
 
     // available in sdl12 but not exposed
     TSDL_TextEditingEvent = record
-        type_: LongInt;
-        windowID: LongInt;
+        type_: LongWord;
+        windowID: LongWord;
         text: array[0..31] of Byte;
         start, lenght: LongInt;
         end;
 
     // available in sdl12 but not exposed
     TSDL_TextInputEvent = record
-        type_: LongInt;
-        windowID: LongInt;
+        type_: LongWord;
+        windowID: LongWord;
         text: array[0..31] of Byte;
         end;
 
     TSDL_TouchFingerEvent = record
-        type_: Longword;
-        windowId: Longword;
+        type_: LongWord;
+        windowId: LongWord;
         touchId: Int64;
         fingerId: Int64;
         state, padding1, padding2, padding3: Byte;
-        x,y: Word;
-        dx,dy: Smallint;
+        x, y: Word;
+        dx, dy: SmallInt;
         pressure: Word;
         end;
 
     TSDL_TouchButtonEvent = record
-        type_: Longword;
-        windowId: Longword;
+        type_: LongWord;
+        windowId: LongWord;
         touchId: Int64;
         state, button, padding1, padding2: Byte;
         end;
 
     TSDL_MultiGestureEvent = record
-        type_: Longword;
-        windowId: Longword;
+        type_: LongWord;
+        windowId: LongWord;
         touchId: Int64;
-        dTheta,dDist,x,y: Single;
+        dTheta, dDist, x, y: Single;
         numFingers, padding: Word;
         end;
 
     TSDL_DollarGestureEvent = record
-        type_: Longword;
-        windowId: Longword;
+        type_: LongWord;
+        windowId: LongWord;
         touchId: Int64;
         gesturedId: Int64;
-        numFingers: Longword;
+        numFingers: LongWord;
         error: Single;
         end;
 
     TSDL_SysWMEvent = record
-        type_: LongInt;
-        msg: pointer;
+        type_: LongWord;
+        msg: Pointer;
         end;
 {$ELSE}
     TSDL_KeySym = record
         scancode: Byte;
-        sym: Longword;
-        modifier: Longword;
+        sym: LongWord;
+        modifier: LongWord;
         unicode: Word;
         end;
 
-    // these two are present in sdl1.3 but only for backward compatibility
-    // and in 1.3 type_ is LongInt, not byte
     TSDL_ActiveEvent = record
-        type_: byte;
-        gain: byte;
-        state: byte;
+        type_: Byte;
+        gain: Byte;
+        state: Byte;
         end;
 
     TSDL_ResizeEvent = record
@@ -522,50 +524,43 @@ type
 
     TSDL_KeyboardEvent = record
 {$IFDEF SDL13}
-        type_: LongInt;
-        windowID: LongInt;
-        state, repeat_, padding2, padding3: byte;
+        type_: LongWord;
+        windowID: LongWord;
+        state, repeat_, padding2, padding3: Byte;
 {$ELSE}
-        type_: byte;
-        which: byte;
-        state: byte;
+        type_, which, state: Byte;
 {$ENDIF}
         keysym: TSDL_KeySym;
         end;
 
     TSDL_MouseMotionEvent = record
 {$IFDEF SDL13}
-        type_: LongInt;
-        windowID: LongInt;
-        state, padding1, padding2, padding3: byte;
+        type_: LongWord;
+        windowID: LongWord;
+        state, padding1, padding2, padding3: Byte;
         x, y, z, xrel, yrel : LongInt;
 {$ELSE}
-        type_: byte;
-        which: byte;
-        state: byte;
-        x, y, xrel, yrel : word;
+        type_, which, state: Byte;
+        x, y, xrel, yrel : Word;
 {$ENDIF}
         end;
 
     TSDL_MouseButtonEvent = record
 {$IFDEF SDL13}
-        type_: LongInt;
-        windowID: LongInt;
+        type_: LongWord;
+        windowID: LongWord;
+        buttonm, state, padding1, padding2: Byte;
         x, y: LongInt;
-        padding1: byte;
 {$ELSE}
-        type_,
-        which,
-        button,
-        state: byte;
-        x, y: word;
+        type_, which, button, state: Byte;
+        x, y: Word;
 {$ENDIF}
         end;
 
     TSDL_MouseWheelEvent = record
-        type_: LongInt;
+        type_: LongWord;
 {$IFDEF SDL13}
-        windowID: LongInt;
+        windowID: LongWord;
 {$ELSE}
         which: Byte;
 {$ENDIF}
@@ -573,31 +568,31 @@ type
         end;
 
     TSDL_JoyAxisEvent = record
-        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
+        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
         which: Byte;
         axis: Byte;
 {$IFDEF SDL13}
         padding1, padding2: Byte;
         value: LongInt;
 {$ELSE}
-        value: Smallint;
+        value: SmallInt;
 {$ENDIF}
         end;
 
     TSDL_JoyBallEvent = record
-        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
+        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
         which: Byte;
         ball: Byte;
 {$IFDEF SDL13}
         padding1, padding2: Byte;
         xrel, yrel: LongInt;
 {$ELSE}
-        xrel, yrel: Smallint;
+        xrel, yrel: SmallInt;
 {$ENDIF}
         end;
 
     TSDL_JoyHatEvent = record
-        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
+        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
         which: Byte;
         hat: Byte;
         value: Byte;
@@ -607,7 +602,7 @@ type
         end;
 
     TSDL_JoyButtonEvent = record
-        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
+        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
         which: Byte;
         button: Byte;
         state: Byte;
@@ -617,13 +612,13 @@ type
         end;
 
     TSDL_QuitEvent = record
-        type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
+        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
         end;
 
     TSDL_UserEvent = record
 {$IFDEF SDL13}
-        type_: LongInt;
-        windowID: LongInt;
+        type_: LongWord;
+        windowID: LongWord;
 {$ELSE}
         type_: Byte;
 {$ENDIF}
@@ -663,7 +658,7 @@ type
             SDL_ALLEVENTS: (foo: shortstring);
 {$ELSE}
         case Byte of
-            SDL_NOEVENT: (type_: byte);
+            SDL_NOEVENT: (type_: Byte);
             SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
             SDL_KEYDOWN,
             SDL_KEYUP: (key: TSDL_KeyboardEvent);
@@ -719,7 +714,7 @@ type
         );
 
 {$IFDEF SDL13}
-    TSDL_ArrayByteOrder = (  // array component order, low byte -> high byte
+    TSDL_ArrayByteOrder = (  // array component order, low Byte -> high Byte
         SDL_ARRAYORDER_NONE,
         SDL_ARRAYORDER_RGB,
         SDL_ARRAYORDER_RGBA,
@@ -743,9 +738,9 @@ type
     {* SDL_mixer *}
     PMixChunk = ^TMixChunk;
     TMixChunk = record
-        allocated: Longword;
+        allocated: LongWord;
         abuf     : PByte;
-        alen     : Longword;
+        alen     : LongWord;
         volume   : PByte;
         end;
     TMusic = (MUS_CMD, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3);
@@ -753,13 +748,13 @@ type
 
     TMidiSong = record
                samples : LongInt;
-               events  : pointer;
+               events  : Pointer;
                end;
 
     TMusicUnion = record
         case Byte of
              0: ( midi : TMidiSong );
-             1: ( ogg  : pointer);
+             1: ( ogg  : Pointer);
              end;
 
     PMixMusic = ^TMixMusic;
@@ -768,7 +763,7 @@ type
 
     {* SDL_net *}
     TIPAddress = record
-                  host: Longword;
+                  host: LongWord;
                   port: Word;
                   end;
 
@@ -794,12 +789,12 @@ type
 
 
 {* SDL *}
-function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
+function  SDL_Init(flags: LongWord): LongInt; cdecl; external SDLLibName;
 function  SDL_InitSubSystem(flags: LongWord): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 
-procedure SDL_Delay(msec: Longword); cdecl; external SDLLibName;
-function  SDL_GetTicks: Longword; cdecl; external SDLLibName;
+procedure SDL_Delay(msec: LongWord); cdecl; external SDLLibName;
+function  SDL_GetTicks: LongWord; cdecl; external SDLLibName;
 
 function  SDL_MustLock(Surface: PSDL_Surface): Boolean;
 function  SDL_LockSurface(Surface: PSDL_Surface): LongInt; cdecl; external SDLLibName;
@@ -807,23 +802,23 @@ procedure SDL_UnlockSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 
 function  SDL_GetError: PChar; cdecl; external SDLLibName;
 
-function  SDL_SetVideoMode(width, height, bpp: LongInt; flags: Longword): PSDL_Surface; cdecl; external SDLLibName;
-function  SDL_CreateRGBSurface(flags: Longword; Width, Height, Depth: LongInt; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
-function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch: LongInt; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_SetVideoMode(width, height, bpp: LongInt; flags: LongWord): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_CreateRGBSurface(flags: LongWord; Width, Height, Depth: LongInt; RMask, GMask, BMask, AMask: LongWord): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch: LongInt; RMask, GMask, BMask, AMask: LongWord): PSDL_Surface; cdecl; external SDLLibName;
 procedure SDL_FreeSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
-function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: Longword): LongInt; cdecl; external SDLLibName;
-function  SDL_SetAlpha(surface: PSDL_Surface; flag, key: Longword): LongInt; cdecl; external SDLLibName;
+function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: LongWord): LongInt; cdecl; external SDLLibName;
+function  SDL_SetAlpha(surface: PSDL_Surface; flag, key: LongWord): LongInt; cdecl; external SDLLibName;
 function  SDL_ConvertSurface(src: PSDL_Surface; fmt: PSDL_PixelFormat; flags: LongInt): PSDL_Surface; cdecl; external SDLLibName;
 
 function  SDL_UpperBlit(src: PSDL_Surface; srcrect: PSDL_Rect; dst: PSDL_Surface; dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
-function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: Longword): LongInt; cdecl; external SDLLibName;
-procedure SDL_UpdateRect(Screen: PSDL_Surface; x, y: LongInt; w, h: Longword); cdecl; external SDLLibName;
+function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: LongWord): LongInt; cdecl; external SDLLibName;
+procedure SDL_UpdateRect(Screen: PSDL_Surface; x, y: LongInt; w, h: LongWord); cdecl; external SDLLibName;
 function  SDL_Flip(Screen: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 
-procedure SDL_GetRGB(pixel: Longword; fmt: PSDL_PixelFormat; r, g, b: PByte); cdecl; external SDLLibName;
-procedure SDL_GetRGBA(pixel: Longword; fmt: PSDL_PixelFormat; r, g, b, a: PByte); cdecl; external SDLLibName;
-function  SDL_MapRGB(format: PSDL_PixelFormat; r, g, b: Byte): Longword; cdecl; external SDLLibName;
-function  SDL_MapRGBA(format: PSDL_PixelFormat; r, g, b, a: Byte): Longword; cdecl; external SDLLibName;
+procedure SDL_GetRGB(pixel: LongWord; fmt: PSDL_PixelFormat; r, g, b: PByte); cdecl; external SDLLibName;
+procedure SDL_GetRGBA(pixel: LongWord; fmt: PSDL_PixelFormat; r, g, b, a: PByte); cdecl; external SDLLibName;
+function  SDL_MapRGB(format: PSDL_PixelFormat; r, g, b: Byte): LongWord; cdecl; external SDLLibName;
+function  SDL_MapRGBA(format: PSDL_PixelFormat; r, g, b, a: Byte): LongWord; cdecl; external SDLLibName;
 
 function  SDL_DisplayFormat(Surface: PSDL_Surface): PSDL_Surface; cdecl; external SDLLibName;
 function  SDL_DisplayFormatAlpha(Surface: PSDL_Surface): PSDL_Surface; cdecl; external SDLLibName;
@@ -832,8 +827,8 @@ function  SDL_RWFromFile(filename, mode: PChar): PSDL_RWops; cdecl; external SDL
 function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongInt): LongInt; cdecl; external SDLLibName;
 
 {$IFDEF SDL13}
-function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): PSDL_Window; cdecl; external SDLLibName;
-function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): PSDL_Renderer; cdecl; external SDLLibName;
+function  SDL_CreateWindow(title: PChar; x,y,w,h: LongInt; flags: LongWord): PSDL_Window; cdecl; external SDLLibName;
+function  SDL_CreateRenderer(window: PSDL_Window; index: LongInt; flags: LongWord): PSDL_Renderer; cdecl; external SDLLibName;
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
 procedure SDL_SetWindowSize(window: PSDL_Window; w, h: LongInt); cdecl; external SDLLibName;
@@ -848,39 +843,37 @@ procedure SDL_VideoQuit; cdecl; external SDLLibName;
 function  SDL_GetNumVideoDisplays: LongInt; cdecl; external SDLLibName;
 procedure SDL_ShowWindow(window: PSDL_Window); cdecl; external SDLLibName;
 
-function  SDL_SetRenderDrawColor(renderer: PSDL_Renderer; r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
+function  SDL_SetRenderDrawColor(renderer: PSDL_Renderer; r,g,b,a: Byte): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRenderer(window: PSDL_Window): PSDL_Renderer; cdecl; external SDLLibName;
 function  SDL_RenderFillRect(renderer: PSDL_Renderer; rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_RenderClear(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
 procedure SDL_RenderPresent(renderer: PSDL_Renderer); cdecl; external SDLLibName;
-function  SDL_RenderReadPixels(renderer: PSDL_Renderer; rect: PSDL_Rect; format: LongInt; pixels: pointer; pitch: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_RenderReadPixels(renderer: PSDL_Renderer; rect: PSDL_Rect; format: LongInt; pixels: Pointer; pitch: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_RenderSetViewport(window: PSDL_Window; rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 
-function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
-function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
-function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
+function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): Boolean; cdecl; external SDLLibName;
 
 procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;
-function  SDL_SetHint(name, value: PChar): boolean; cdecl; external SDLLibName;
+function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
 
-function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
 {$ELSE}
-function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: Longword): LongInt; cdecl; external SDLLibName;
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: LongWord): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
-function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
+function  SDL_GetKeyName(key: LongWord): PChar; cdecl; external SDLLibName;
 
 procedure SDL_PumpEvents; cdecl; external SDLLibName;
 function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 function  SDL_WaitEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
-procedure SDL_SetEventFilter( filter : TSDL_EventFilter ); cdecl; external SDLLibName;
+procedure SDL_SetEventFilter(filter: TSDL_EventFilter); cdecl; external SDLLibName;
 
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 
-procedure SDL_WM_SetIcon(icon: PSDL_Surface; mask : byte); cdecl; external SDLLibName;
+procedure SDL_WM_SetIcon(icon: PSDL_Surface; mask : Byte); cdecl; external SDLLibName;
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
 function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 
@@ -917,8 +910,8 @@ function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
 {* Compatibility between SDL-1.2 and SDL-1.3 *}
 procedure SDL_WarpMouse(x, y: Word); {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
-function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat; {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
-procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+function  SDL_AllocFormat(format: LongWord): PSDL_PixelFormat; {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+procedure Boolean(pixelformat: PSDL_PixelFormat); {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 function  SDL_VideoDriverName(namebuf: PChar; maxlen: LongInt): PChar; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 function  SDL_EnableUNICODE(enable: LongInt): LongInt; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 function  SDL_EnableKeyRepeat(delay_, interval: LongInt): LongInt; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
@@ -993,10 +986,10 @@ function  SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; 
 function  SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
 
 
-procedure SDLNet_Write16(value: Word; buf: pointer);
-procedure SDLNet_Write32(value: LongWord; buf: pointer);
-function  SDLNet_Read16(buf: pointer): Word;
-function  SDLNet_Read32(buf: pointer): LongWord;
+procedure SDLNet_Write16(value: Word; buf: Pointer);
+procedure SDLNet_Write32(value: LongWord; buf: Pointer);
+function  SDLNet_Read16(buf: Pointer): Word;
+function  SDLNet_Read32(buf: Pointer): LongWord;
 
 implementation
 uses strings, uVariables;
@@ -1032,7 +1025,7 @@ begin
     exit(0);
 end;
 {$ELSE}
-function SDL_AllocFormat(format: Longword): PSDL_PixelFormat;
+function SDL_AllocFormat(format: LongWord): PSDL_PixelFormat;
 const conversionFormat: TSDL_PixelFormat = (
         palette: nil; BitsPerPixel: 32; BytesPerPixel: 4;
         Rloss: 0; Gloss: 0; Bloss: 0; Aloss: 0;
@@ -1082,13 +1075,13 @@ begin
 end;
 {$ENDIF}
 
-procedure SDLNet_Write16(value: Word; buf: pointer);
+procedure SDLNet_Write16(value: Word; buf: Pointer);
 begin
     PByteArray(buf)^[1]:= value;
     PByteArray(buf)^[0]:= value shr 8
 end;
 
-procedure SDLNet_Write32(value: LongWord; buf: pointer);
+procedure SDLNet_Write32(value: LongWord; buf: Pointer);
 begin
     PByteArray(buf)^[3]:= value;
     PByteArray(buf)^[2]:= value shr  8;
@@ -1096,13 +1089,13 @@ begin
     PByteArray(buf)^[0]:= value shr 24
 end;
 
-function SDLNet_Read16(buf: pointer): Word;
+function SDLNet_Read16(buf: Pointer): Word;
 begin
     SDLNet_Read16:= PByteArray(buf)^[1] or
                  (PByteArray(buf)^[0] shl 8)
 end;
 
-function SDLNet_Read32(buf: pointer): LongWord;
+function SDLNet_Read32(buf: Pointer): LongWord;
 begin
     SDLNet_Read32:=  PByteArray(buf)^[3] or
                   (PByteArray(buf)^[2] shl  8) or
