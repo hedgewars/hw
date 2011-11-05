@@ -77,7 +77,7 @@ const cStereo_Sky           = 0.0500;
       cStereo_Water_distant = 0.0125;
       cStereo_Land          = 0.0075;
       cStereo_Water_near    = 0.0025;
-      cStereo_Outside       = 0.0400;
+      cStereo_Outside       = -0.0400;
 
 procedure InitWorld;
 var i, t: LongInt;
