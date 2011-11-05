@@ -20,6 +20,7 @@
 
 unit SDLh;
 interface
+{$IFDEF SDL13}uses math;{$ENDIF}
 
 {$IFDEF LINUX}
   {$DEFINE UNIX}
@@ -107,6 +108,7 @@ const
     SDL_INIT_NOPARACHUTE = $00100000;
     SDL_INIT_EVERYTHING  = $0000FFFF;
 
+    SDL_ALLEVENTS        = $FFFFFFFF;
     SDL_APPINPUTFOCUS    = $02;
     SDL_BUTTON_WHEELUP   = 4;
     SDL_BUTTON_WHEELDOWN = 5;
@@ -136,9 +138,18 @@ const
     SDL_JOYHATMOTION      = $602;
     SDL_JOYBUTTONDOWN     = $603;
     SDL_JOYBUTTONUP       = $604;
-    //TODO: implement otheer event types
+    SDL_FINGERDOWN        = $700;
+    SDL_FINGERUP          = $701;
+    SDL_FINGERMOTION      = $702;
+    SDL_TOUCHBUTTONDOWN   = $703;
+    SDL_TOUCHBUTTONUP     = $704;
+    SDL_DOLLARGESTURE     = $800;
+    SDL_DOLLARRECORD      = $801;
+    SDL_MULTIGESTURE      = $802;
+    SDL_CLIPBOARDUPDATE   = $900;
     SDL_USEREVENT         = $8000;
     SDL_LASTEVENT         = $FFFF;
+    // no compatibility events $7000
 
     // SDL_Surface flags
     SDL_SWSURFACE   = $00000000;  //*< Not used */
@@ -228,8 +239,6 @@ const
     SDL_HWPALETTE   = $20000000;
     SDL_DOUBLEBUF   = $40000000;
     SDL_FULLSCREEN  = $80000000;
-
-    SDL_ALLEVENTS = $FFFFFFFF;
 {$ENDIF}
 
 {$IFDEF ENDIAN_LITTLE}
@@ -427,12 +436,74 @@ type
         unicode: LongInt;
         end;
 
+    TSDL_MouseWheelEvent = record
+        type_: LongInt;
+        windowID: LongInt;
+        which: Byte;
+        x, y: LongInt;
+        end;
+
     TSDL_WindowEvent = record
         type_: LongInt;
         windowID: LongInt;
         event: byte;
         padding1, padding2, padding3: byte;
         data1, data2: LongInt;
+        end;
+
+    // available in sdl12 but not exposed
+    TSDL_TextEditingEvent = record
+        type_: LongInt;
+        windowID: LongInt;
+        text: array[0..31] of Byte;
+        start, lenght: LongInt;
+        end;
+
+    // available in sdl12 but not exposed
+    TSDL_TextInputEvent = record
+        type_: LongInt;
+        windowID: LongInt;
+        text: array[0..31] of Byte;
+        end;
+
+    TSDL_TouchFingerEvent = record
+        type_: LongInt;
+        windowId: LongInt;
+        touchId: LongWord;
+        fingerId: LongWord;
+        state, padding1, padding2, padding3: Byte;
+        x,y: Word;
+        dx,dy: ShortInt;
+        pressure: Word;
+        end;
+
+    TSDL_TouchButtonEvent = record
+        type_: LongInt;
+        windowId: LongInt;
+        touchId: LongWord;
+        state, button, padding1, padding2: Byte;
+        end;
+
+    TSDL_MultiGestureEvent = record
+        type_: LongInt;
+        windowId: LongInt;
+        touchId: LongWord;
+        dTheta,dDist,x,y: float;
+        numFingers, padding: ShortInt;
+        end;
+
+    TSDL_DollarGestureEvent = record
+        type_: LongInt;
+        windowId: LongInt;
+        touchId: LongWord;
+        gesturedId: LongWord;
+        numFingers: LongInt;
+        error: float;
+        end;
+
+    TSDL_SysWMEvent = record
+        type_: LongInt;
+        msg: pointer;
         end;
 {$ELSE}
     TSDL_KeySym = record
@@ -469,21 +540,16 @@ type
         keysym: TSDL_KeySym;
         end;
 
-//TODO: implement SDL_TextEditingEvent + SDL_TextInputEvent for sdl13
-
-    // this structure is wrong but the correct version makes the game hang
     TSDL_MouseMotionEvent = record
-        which: byte;
-        state: byte;
 {$IFDEF SDL13}
         type_: LongInt;
         windowID: LongInt;
-        padding1, padding2: byte;
+        state, padding1, padding2, padding3: byte;
         x, y, z, xrel, yrel : LongInt;
-        pressure, pressure_max, pressure_min,
-        rotation, tilt, cursor: LongInt;
 {$ELSE}
         type_: byte;
+        which: byte;
+        state: byte;
         x, y, xrel, yrel : word;
 {$ENDIF}
         end;
@@ -502,17 +568,6 @@ type
         x, y: word;
 {$ENDIF}
         end;
-
-{$IFDEF SDL13}
-    TSDL_MouseWheelEvent = record
-        type_: LongInt;
-        windowID: LongInt;
-        which: Byte;
-        x, y: LongInt;
-        end;
-
-//TODO: implement SDL_ProximityEvent
-{$ENDIF}
 
     TSDL_JoyAxisEvent = record
         type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
@@ -558,8 +613,6 @@ type
 {$ENDIF}
         end;
 
-//TODO: implement SDL_TouchButtonEvent, SDL_MultiGestureEvent, SDL_DollarGestureEvent
-
     TSDL_QuitEvent = record
         type_: {$IFDEF SDL13}LongInt{$ELSE}Byte{$ENDIF};
         end;
@@ -583,8 +636,8 @@ type
             SDL_WINDOWEVENT: (window: TSDL_WindowEvent);
             SDL_KEYDOWN,
             SDL_KEYUP: (key: TSDL_KeyboardEvent);
-            SDL_TEXTEDITING,
-            SDL_TEXTINPUT: (edit: byte);
+            SDL_TEXTEDITING: (edit: TSDL_TextEditingEvent);
+            SDL_TEXTINPUT: (tedit: TSDL_TextInputEvent);
             SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
             SDL_MOUSEBUTTONDOWN,
             SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
@@ -596,8 +649,15 @@ type
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
             SDL_QUITEV: (quit: TSDL_QuitEvent);
             SDL_USEREVENT: (user: TSDL_UserEvent);
+            SDL_SYSWMEVENT: (syswm: TSDL_SysWMEvent);
+            SDL_FINGERDOWN,
+            SDL_FINGERUP,
+            SDL_FINGERMOTION: (tfinger: TSDL_TouchFingerEvent);
+            SDL_TOUCHBUTTONUP,
+            SDL_TOUCHBUTTONDOWN: (tbutton: TSDL_TouchButtonEvent);
+            SDL_MULTIGESTURE: (mgesture: TSDL_MultiGestureEvent);
+            SDL_DOLLARGESTURE: (dgesture: TSDL_DollarGestureEvent);
             SDL_ALLEVENTS: (foo: shortstring);
-            //TODO: implement other events
 {$ELSE}
         case Byte of
             SDL_NOEVENT: (type_: byte);
