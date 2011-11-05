@@ -588,6 +588,7 @@ while not eof(f) do
             vobFallSpeed:= StrToInt(Trim(s));
             end;
         end
+    else if key = 'flatten-flakes' then cFlattenFlakes:= true
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);

@@ -46,6 +46,7 @@ var
     PathPrefix      : shortstring = './';
     UserPathPrefix  : shortstring = './';
     cShowFPS        : boolean     = false;
+    cFlattenFlakes  : boolean     = false;
     cAltDamage      : boolean     = true;
     cReducedQuality : LongWord    = rqNone;
     UserNick        : shortstring = '';
@@ -2551,6 +2552,7 @@ begin
     PathPrefix      := './';
     UserPathPrefix  := './';
     cShowFPS        := false;
+    cFlattenFlakes  := false;
     cAltDamage      := true;
     cReducedQuality := rqNone;
     UserNick        := '';
