@@ -338,7 +338,7 @@ if State <> 0 then gear^.State:= State;
 
 case Gear^.Kind of
     vgtFlake: if cFlattenFlakes then gear^.Layer:= 0
-              else if random(3) <> 0 then gear^.Layer:= 0   // 66%
+              else if random(3) <> 0 then gear^.Layer:= 0   // 67%
               else if random(3) <> 0 then gear^.Layer:= 1  // 22%
               else gear^.Layer:= random(2)+2;  // 6% each
 
