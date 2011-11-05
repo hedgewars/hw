@@ -735,10 +735,6 @@ function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
 function  SDL_InitSubSystem(flags: LongWord): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 
-function  SDL_VideoDriverName(var namebuf; maxlen: LongInt): PChar; cdecl; external SDLLibName;
-function  SDL_EnableUNICODE(enable: LongInt): LongInt; cdecl; external SDLLibName;
-function  SDL_EnableKeyRepeat(delay_, interval: LongInt): LongInt; cdecl; external SDLLibName;
-
 procedure SDL_Delay(msec: Longword); cdecl; external SDLLibName;
 function  SDL_GetTicks: Longword; cdecl; external SDLLibName;
 
@@ -778,6 +774,7 @@ function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): PSDL_R
 function  SDL_DestroyWindow(window: PSDL_Window): LongInt; cdecl; external SDLLibName;
 function  SDL_DestroyRenderer(renderer: PSDL_Renderer): LongInt; cdecl; external SDLLibName;
 procedure SDL_SetWindowSize(window: PSDL_Window; w, h: LongInt); cdecl; external SDLLibName;
+function  SDL_GetCurrentVideoDriver:Pchar; cdecl; external SDLLibName;
 
 function  SDL_GL_CreateContext(window: PSDL_Window): PSDL_GLContext; cdecl; external SDLLibName;
 procedure SDL_GL_DeleteContext(context: PSDL_GLContext); cdecl; external SDLLibName;
@@ -803,6 +800,7 @@ function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt;
 
 procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;
 function  SDL_SetHint(name, value: PChar): boolean; cdecl; external SDLLibName;
+procedure SDL_StartTextInput; cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongInt): LongInt; cdecl; external SDLLibName;
 {$ELSE}
@@ -858,6 +856,9 @@ procedure SDL_WarpMouse(x, y: Word); {$IFNDEF SDL13}cdecl; external SDLLibName;{
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
 function  SDL_AllocFormat(format: Longword): PSDL_PixelFormat; {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+function  SDL_VideoDriverName(namebuf: PChar; maxlen: LongInt): PChar; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+function  SDL_EnableUNICODE(enable: LongInt): LongInt; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+function  SDL_EnableKeyRepeat(delay_, interval: LongInt): LongInt; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 
 (*  SDL_ttf  *)
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
@@ -935,7 +936,7 @@ function  SDLNet_Read16(buf: pointer): Word;
 function  SDLNet_Read32(buf: pointer): LongWord;
 
 implementation
-uses uVariables;
+uses strings, uVariables;
 
 {$IFDEF SDL13}
 // this needs to be reimplemented because in SDL_compat.c the window is the one created in the SDL_SetVideoMode
@@ -943,6 +944,29 @@ uses uVariables;
 procedure SDL_WarpMouse(x, y: Word);
 begin
     SDL_WarpMouseInWindow(SDLwindow, x, y);
+end;
+
+function SDL_VideoDriverName(namebuf: PChar; maxlen: LongInt): PChar;
+var name : PChar = nil;
+begin
+    name:= SDL_GetCurrentVideoDriver();
+    if (name <> nil) and (namebuf <> nil) then
+        begin
+        strlcopy(namebuf, name, maxlen);
+        exit(namebuf)
+        end;
+    exit(name);
+end;
+
+function SDL_EnableUNICODE(enable: LongInt): LongInt;
+begin
+    SDL_StartTextInput();
+    exit(0);
+end;
+
+function SDL_EnableKeyRepeat(delay_, interval: LongInt): LongInt;
+begin
+    exit(0);
 end;
 {$ELSE}
 function SDL_AllocFormat(format: Longword): PSDL_PixelFormat;
