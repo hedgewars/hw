@@ -1131,7 +1131,7 @@ else
     end;
 
 if ((GameTicks mod 50) = 0) and (Gear^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0) and
-   (Gear^.State and (gstHHJumping or gstHHHJump) = 0) and
+   (Gear^.State and (gstHHJumping or gstHHHJump or gstAttacking) = 0) and
    not Gear^.dY.isNegative and
    (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
     begin
