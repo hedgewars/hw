@@ -436,13 +436,6 @@ type
         unicode: LongInt;
         end;
 
-    TSDL_MouseWheelEvent = record
-        type_: LongInt;
-        windowID: LongInt;
-        which: Byte;
-        x, y: LongInt;
-        end;
-
     TSDL_WindowEvent = record
         type_: LongInt;
         windowID: LongInt;
@@ -467,38 +460,38 @@ type
         end;
 
     TSDL_TouchFingerEvent = record
-        type_: LongInt;
-        windowId: LongInt;
-        touchId: LongWord;
-        fingerId: LongWord;
+        type_: Longword;
+        windowId: Longword;
+        touchId: Int64;
+        fingerId: Int64;
         state, padding1, padding2, padding3: Byte;
         x,y: Word;
-        dx,dy: ShortInt;
+        dx,dy: Smallint;
         pressure: Word;
         end;
 
     TSDL_TouchButtonEvent = record
-        type_: LongInt;
-        windowId: LongInt;
-        touchId: LongWord;
+        type_: Longword;
+        windowId: Longword;
+        touchId: Int64;
         state, button, padding1, padding2: Byte;
         end;
 
     TSDL_MultiGestureEvent = record
-        type_: LongInt;
-        windowId: LongInt;
-        touchId: LongWord;
-        dTheta,dDist,x,y: float;
-        numFingers, padding: ShortInt;
+        type_: Longword;
+        windowId: Longword;
+        touchId: Int64;
+        dTheta,dDist,x,y: Single;
+        numFingers, padding: Word;
         end;
 
     TSDL_DollarGestureEvent = record
-        type_: LongInt;
-        windowId: LongInt;
-        touchId: LongWord;
-        gesturedId: LongWord;
-        numFingers: LongInt;
-        error: float;
+        type_: Longword;
+        windowId: Longword;
+        touchId: Int64;
+        gesturedId: Int64;
+        numFingers: Longword;
+        error: Single;
         end;
 
     TSDL_SysWMEvent = record
@@ -567,6 +560,16 @@ type
         state: byte;
         x, y: word;
 {$ENDIF}
+        end;
+
+    TSDL_MouseWheelEvent = record
+        type_: LongInt;
+{$IFDEF SDL13}
+        windowID: LongInt;
+{$ELSE}
+        which: Byte;
+{$ENDIF}
+        x, y: LongInt;
         end;
 
     TSDL_JoyAxisEvent = record
