@@ -14,7 +14,6 @@ data PascalUnit =
     Program Identifier Implementation
     | Unit Identifier Interface Implementation (Maybe Initialize) (Maybe Finalize)
     deriving Show
-
 data Interface = Interface Uses TypesAndVars
     deriving Show
 data Implementation = Implementation Uses TypesAndVars
@@ -23,16 +22,19 @@ data Identifier = Identifier String
     deriving Show
 data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
-data TypeVarDeclaration = TypeDeclaration TypeDecl
-    | ConstDeclaration String
-    | VarDeclaration Bool String
+data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
+    | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe Expression)
     | FunctionDeclaration Identifier Identifier (Maybe Phrase)
     deriving Show
 data TypeDecl = SimpleType Identifier
     | RangeType Range
+    | Sequence [Identifier]
     | ArrayDecl Range TypeDecl
+    | RecordType [TypeVarDeclaration]
+    | UnknownType
     deriving Show
-data Range = Range Identifier    
+data Range = Range Identifier
+           | RangeFromTo Expression Expression
     deriving Show
 data Initialize = Initialize String
     deriving Show
@@ -51,12 +53,15 @@ data Phrase = ProcCall Identifier [Expression]
         | Assignment Reference Expression
     deriving Show
 data Expression = Expression String
-    | FunCall Identifier [Expression]
+    | FunCall Reference [Expression]
     | PrefixOp String Expression
     | PostfixOp String Expression
     | BinOp String Expression Expression
     | StringLiteral String
+    | CharCode String
     | NumberLiteral String
+    | HexNumber String
+    | Address Reference
     | Reference Reference
     deriving Show
 data Reference = ArrayElement Identifier Expression
@@ -79,7 +84,7 @@ pascalLanguageDef
             , "shr", "while", "do", "repeat", "until", "case", "of"
             , "type", "var", "const", "out", "array"
             , "procedure", "function", "with", "for", "to"
-            , "downto", "div", "mod"
+            , "downto", "div", "mod", "record", "set"
             ]
     , reservedOpNames= [] 
     , caseSensitive  = False   
@@ -87,7 +92,18 @@ pascalLanguageDef
     
 pas = patch $ makeTokenParser pascalLanguageDef
     where
-    patch tp = tp {stringLiteral = between (char '\'') (char '\'') (many $ noneOf "'")}
+    patch tp = tp {stringLiteral = sl}
+    sl = do
+        (char '\'')
+        s <- (many $ noneOf "'")
+        (char '\'')
+        ss <- many $ do
+            (char '\'')
+            s' <- (many $ noneOf "'")
+            (char '\'')
+            return $ '\'' : s'
+        comments    
+        return $ concat (s:ss)
     
 comments = do
     spaces
@@ -136,12 +152,13 @@ reference = buildExpressionParser table term <?> "reference"
         , [Infix (char '.' >> return RecordField) AssocLeft]
         ]
     
-    
-varsDecl endsWithSemi = do
-    vs <- many (try (aVarDecl >> semi pas) >> comments)
-    when (not endsWithSemi) $ aVarDecl >> return ()
+varsDecl1 = varsParser many1    
+varsDecl = varsParser many
+varsParser m endsWithSemi = do
+    vs <- m (aVarDecl >>= \i -> semi pas >> comments >> return i)
+    v <- if not endsWithSemi then liftM (\a -> [a]) aVarDecl else return []
     comments
-    return $ VarDeclaration False $ show vs
+    return $ vs ++ v
     where
     aVarDecl = do
         when (not endsWithSemi) $
@@ -151,22 +168,32 @@ varsDecl endsWithSemi = do
                 , try $ string "out"
                 ]
         comments
-        ids <- (commaSep1 pas) $ (iD <?> "variable declaration")
-        char ':'
+        ids <- try $ do
+            i <- (commaSep1 pas) $ (iD <?> "variable declaration")
+            char ':'
+            return i
         comments
-        t <- typeDecl
+        t <- typeDecl <?> "variable type declaration"
         comments
-        return (ids, t)
+        init <- option Nothing $ do
+            char '='
+            comments
+            e <- expression
+            comments
+            char ';'
+            comments
+            return (Just e)
+        return $ VarDeclaration False (ids, t) init
 
 
 constsDecl = do
-    vs <- many (try (aConstDecl >> semi pas) >> comments)
+    vs <- many (try (aConstDecl >>= \i -> semi pas >> return i) >>= \i -> comments >> return i)
     comments
-    return $ VarDeclaration True $ show vs
+    return vs
     where
     aConstDecl = do
         comments
-        ids <- iD <?> "const declaration"
+        i <- iD <?> "const declaration"
         optional $ do
             char ':'
             comments
@@ -176,11 +203,13 @@ constsDecl = do
         comments
         e <- expression
         comments
-        return (ids, e)
+        return $ VarDeclaration False ([i], UnknownType) (Just e)
         
 typeDecl = choice [
     arrayDecl
+    , recordDecl
     , rangeDecl >>= return . RangeType
+    , seqenceDecl >>= return . Sequence
     , identifier pas >>= return . SimpleType . Identifier
     ] <?> "type declaration"
     where
@@ -195,16 +224,44 @@ typeDecl = choice [
         comments
         t <- typeDecl
         return $ ArrayDecl r t
+    recordDecl = do
+        try $ string "record"
+        comments
+        vs <- varsDecl True
+        string "end"
+        return $ RecordType vs
+    seqenceDecl = (parens pas) $ (commaSep pas) iD
 
+typesDecl = many (aTypeDecl >>= \t -> comments >> return t)
+    where
+    aTypeDecl = do
+        i <- try $ do
+            i <- iD <?> "type declaration"
+            comments
+            char '='
+            return i
+        comments
+        t <- typeDecl
+        comments
+        semi pas
+        comments
+        return $ TypeDeclaration i t
         
 rangeDecl = choice [
-    iD >>= return . Range
+    try $ rangeft
+    , iD >>= return . Range
     ] <?> "range declaration"
-
+    where
+    rangeft = do
+    e1 <- expression
+    string ".."
+    e2 <- expression
+    return $ RangeFromTo e1 e2
     
-typeVarDeclaration isImpl = choice [
+typeVarDeclaration isImpl = (liftM concat . many . choice) [
     varSection,
     constSection,
+    typeSection,
     funcDecl,
     procDecl
     ]
@@ -212,7 +269,7 @@ typeVarDeclaration isImpl = choice [
     varSection = do
         try $ string "var"
         comments
-        v <- varsDecl True
+        v <- varsDecl1 True
         comments
         return v
 
@@ -222,6 +279,13 @@ typeVarDeclaration isImpl = choice [
         c <- constsDecl
         comments
         return c
+
+    typeSection = do
+        try $ string "type"
+        comments
+        t <- typesDecl
+        comments
+        return t
         
     procDecl = do
         string "procedure"
@@ -236,13 +300,13 @@ typeVarDeclaration isImpl = choice [
         b <- if isImpl then
                 do
                 comments
-                optional $ typeVarDeclaration isImpl
+                optional $ typeVarDeclaration True
                 comments
                 liftM Just functionBody
                 else
                 return Nothing
         comments
-        return $ FunctionDeclaration i (Identifier "") b
+        return $ [FunctionDeclaration i (Identifier "") b]
         
     funcDecl = do
         string "function"
@@ -260,12 +324,12 @@ typeVarDeclaration isImpl = choice [
         b <- if isImpl then
                 do
                 comments
-                typeVarDeclaration isImpl
+                optional $ typeVarDeclaration True
                 comments
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ FunctionDeclaration i ret Nothing
+        return $ [FunctionDeclaration i ret Nothing]
 
 program = do
     string "program"
@@ -282,7 +346,7 @@ interface = do
     comments
     u <- uses
     comments
-    tv <- many (typeVarDeclaration False)
+    tv <- typeVarDeclaration False
     comments
     return $ Interface u (TypesAndVars tv)
 
@@ -291,7 +355,7 @@ implementation = do
     comments
     u <- uses
     comments
-    tv <- many (typeVarDeclaration True)
+    tv <- typeVarDeclaration True
     string "end."
     comments
     return $ Implementation u (TypesAndVars tv)
@@ -302,6 +366,9 @@ expression = buildExpressionParser table term <?> "expression"
         parens pas $ expression 
         , integer pas >>= return . NumberLiteral . show
         , stringLiteral pas >>= return . StringLiteral
+        , char '#' >> many digit >>= return . CharCode
+        , char '$' >> many hexDigit >>= return . HexNumber
+        , char '@' >> reference >>= return . Address
         , try $ funCall
         , reference >>= return . Reference
         ] <?> "simple expression"
@@ -451,9 +518,9 @@ procCall = do
     return $ ProcCall i p
 
 funCall = do
-    i <- iD
+    r <- reference
     p <- (parens pas) $ option [] parameters
-    return $ FunCall i p
+    return $ FunCall r p
 
 parameters = (commaSep pas) expression <?> "parameters"
         

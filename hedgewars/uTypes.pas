@@ -32,7 +32,7 @@ uses SDLh, uFloat, GLunit, uConsts, Math;
 
 type
     HwColor4f = record
-        r, g, b, a: byte
+        r, g, b, a: byte;
         end;
 
     // Possible states of the game
