@@ -68,7 +68,7 @@ var w, h: LongInt;
     clr: TSDL_Color;
     finalRect: TSDL_Rect;
 begin
-    TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
+    TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
     finalRect.x:= X;
     finalRect.y:= Y;
     finalRect.w:= w + FontBorder * 2 + 4;
@@ -173,7 +173,7 @@ begin
     if length(s) = 0 then s:= ' ';
     font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
-    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
+    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);
 
     finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
             32, RMask, GMask, BMask, AMask);
@@ -229,7 +229,7 @@ begin
     if length(s) = 0 then s:= '...';
     font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
-    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
+    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);
     if w<8 then w:= 8;
     j:= 0;
     if (length(s) > 20) then
@@ -248,7 +248,7 @@ begin
                 while s[prevpos+1] = ' ' do inc(prevpos);
                 substr:= copy(s, prevpos+1, pos-prevpos-1);
                 i:= 0; j:= 0;
-                TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(substr), i, j);
+                TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(substr), @i, @j);
                 if i > w then w:= i;
                 prevpos:= pos;
                 end;

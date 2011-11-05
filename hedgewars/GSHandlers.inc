@@ -1424,10 +1424,13 @@ begin
         end;
 
     if b then
-        DrawTunnel(HHGear^.X - Gear^.dX * cHHRadius, HHGear^.Y - _4 - Gear^.dY * cHHRadius + hwAbs(
-                   Gear^.dY) * 7,
+    begin
+        DrawTunnel(HHGear^.X + Gear^.dX * cHHRadius,
+        HHGear^.Y + Gear^.dY * cHHRadius - _1 -
+        ((hwAbs(Gear^.dX) / (hwAbs(Gear^.dX) + hwAbs(Gear^.dY))) * _0_5 * 7),
         Gear^.dX, Gear^.dY,
-        cHHRadius * 5, cHHRadius * 2 + 7);
+        cHHStepTicks, cHHRadius * 2 + 7);
+    end;
 
     if (TurnTimeLeft = 0) or (Gear^.Timer = 0) or ((HHGear^.Message and gmAttack) <> 0) then
         begin
