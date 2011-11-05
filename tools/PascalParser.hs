@@ -31,6 +31,7 @@ data TypeDecl = SimpleType Identifier
     | Sequence [Identifier]
     | ArrayDecl Range TypeDecl
     | RecordType [TypeVarDeclaration]
+    | PointerTo TypeDecl
     | UnknownType
     deriving Show
 data Range = Range Identifier
@@ -63,6 +64,7 @@ data Expression = Expression String
     | HexNumber String
     | Address Reference
     | Reference Reference
+    | Null
     deriving Show
 data Reference = ArrayElement Identifier Expression
     | SimpleReference Identifier
@@ -82,9 +84,9 @@ pascalLanguageDef
             "begin", "end", "program", "unit", "interface"
             , "implementation", "and", "or", "xor", "shl"
             , "shr", "while", "do", "repeat", "until", "case", "of"
-            , "type", "var", "const", "out", "array"
+            , "type", "var", "const", "out", "array", "packed"
             , "procedure", "function", "with", "for", "to"
-            , "downto", "div", "mod", "record", "set"
+            , "downto", "div", "mod", "record", "set", "nil"
             ]
     , reservedOpNames= [] 
     , caseSensitive  = False   
@@ -152,38 +154,34 @@ reference = buildExpressionParser table term <?> "reference"
         , [Infix (char '.' >> return RecordField) AssocLeft]
         ]
     
-varsDecl1 = varsParser many1    
-varsDecl = varsParser many
+varsDecl1 = varsParser sepEndBy1    
+varsDecl = varsParser sepEndBy
 varsParser m endsWithSemi = do
-    vs <- m (aVarDecl >>= \i -> semi pas >> comments >> return i)
-    v <- if not endsWithSemi then liftM (\a -> [a]) aVarDecl else return []
+    vs <- m (aVarDecl endsWithSemi) (semi pas)
+    return vs
+
+aVarDecl endsWithSemi = do
+    when (not endsWithSemi) $
+        optional $ choice [
+            try $ string "var"
+            , try $ string "const"
+            , try $ string "out"
+            ]
     comments
-    return $ vs ++ v
-    where
-    aVarDecl = do
-        when (not endsWithSemi) $
-            optional $ choice [
-                try $ string "var"
-                , try $ string "const"
-                , try $ string "out"
-                ]
+    ids <- do
+        i <- (commaSep1 pas) $ (try iD <?> "variable declaration")
+        char ':'
+        return i
+    comments
+    t <- typeDecl <?> "variable type declaration"
+    comments
+    init <- option Nothing $ do
+        char '='
         comments
-        ids <- try $ do
-            i <- (commaSep1 pas) $ (iD <?> "variable declaration")
-            char ':'
-            return i
+        e <- expression
         comments
-        t <- typeDecl <?> "variable type declaration"
-        comments
-        init <- option Nothing $ do
-            char '='
-            comments
-            e <- expression
-            comments
-            char ';'
-            comments
-            return (Just e)
-        return $ VarDeclaration False (ids, t) init
+        return (Just e)
+    return $ VarDeclaration False (ids, t) init
 
 
 constsDecl = do
@@ -206,7 +204,8 @@ constsDecl = do
         return $ VarDeclaration False ([i], UnknownType) (Just e)
         
 typeDecl = choice [
-    arrayDecl
+    char '^' >> typeDecl >>= return . PointerTo
+    , arrayDecl
     , recordDecl
     , rangeDecl >>= return . RangeType
     , seqenceDecl >>= return . Sequence
@@ -225,6 +224,7 @@ typeDecl = choice [
         t <- typeDecl
         return $ ArrayDecl r t
     recordDecl = do
+        optional $ (try $ string "packed") >> comments
         try $ string "record"
         comments
         vs <- varsDecl True
@@ -318,6 +318,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
             char ')'
         comments
         char ':'
+        comments
         ret <- iD
         comments
         char ';'
@@ -369,13 +370,13 @@ expression = buildExpressionParser table term <?> "expression"
         , char '#' >> many digit >>= return . CharCode
         , char '$' >> many hexDigit >>= return . HexNumber
         , char '@' >> reference >>= return . Address
+        , try $ string "nil" >> return Null
         , try $ funCall
         , reference >>= return . Reference
         ] <?> "simple expression"
 
     table = [ 
-          [Prefix (string "not" >> return (PrefixOp "not"))]
-        , [  Infix (char '*' >> return (BinOp "*")) AssocLeft
+          [  Infix (char '*' >> return (BinOp "*")) AssocLeft
            , Infix (char '/' >> return (BinOp "/")) AssocLeft
            , Infix (try (string "div") >> return (BinOp "div")) AssocLeft
            , Infix (try (string "mod") >> return (BinOp "mod")) AssocLeft
@@ -395,6 +396,7 @@ expression = buildExpressionParser table term <?> "expression"
            , Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
           ]
+        , [Prefix (try (string "not") >> return (PrefixOp "not"))]
         ]
     
 phrasesBlock = do

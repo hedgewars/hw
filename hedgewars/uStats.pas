@@ -129,7 +129,7 @@ if FinishedTurnsTotal <> 0 then
 
     else if AmmoDamagingUsed then
         AddVoice(sndMissed, PreviousTeam^.voicepack)
-    else if (AmmoUsedCount > 0) and not isTurnSkipped then
+    else if (AmmoUsedCount > 0) and (not isTurnSkipped) then
         // nothing ?
     else if isTurnSkipped then
         begin
