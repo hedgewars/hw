@@ -340,8 +340,8 @@ case Gear^.Kind of
     vgtFlake: if cFlattenFlakes then gear^.Layer:= 0
               else if random(3) = 0 then gear^.Layer:= 0   // 33% - far back
               else if random(3) = 0 then gear^.Layer:= 4   // 22% - mid-distance
-              else if random(2) = 0 then gear^.Layer:= 5   // 22% - just behind land
-              else if random(4) = 0 then gear^.Layer:= 6   // 15% - just in front of land
+              else if random(3) <> 0 then gear^.Layer:= 5  // 30% - just behind land
+              else if random(2) = 0 then gear^.Layer:= 6   // 7% - just in front of land
               else gear^.Layer:= 2;  // 7% - close up
 
     vgtCloud: if cFlattenClouds then gear^.Layer:= 5
@@ -437,47 +437,29 @@ var Gear, t: PVisualGear;
     dmg, i: LongInt;
 begin
 if (vobCount = 0) or (vobCount > 200) then exit;
-t:= VisualGearLayers[1];
-while t <> nil do
-      begin
-      Gear:= t;
-      if Gear^.Kind = vgtFlake then
-          begin
-          // Damage calc from doMakeExplosion
-          dmg:= Min(101, Radius + cHHRadius div 2 - LongInt(abs(round(Gear^.X) - X) + abs(round(Gear^.Y) - Y)) div 5);
-          if dmg > 1 then
+for i:= 2 to 6 do
+    if i <> 3 then
+        begin
+        t:= VisualGearLayers[i];
+        while t <> nil do
               begin
-              Gear^.tdX:= 0.02 * dmg + 0.01;
-              if Gear^.X - X < 0 then Gear^.tdX := -Gear^.tdX;
-              Gear^.tdY:= 0.02 * dmg + 0.01;
-              if Gear^.Y - Y < 0 then Gear^.tdY := -Gear^.tdY;
-              Gear^.Timer:= 200
-              end
-          end;
-      t:= Gear^.NextGear
-      end;
-for i:= 3 to 6 do
-    begin
-    t:= VisualGearLayers[i];
-    while t <> nil do
-          begin
-          Gear:= t;
-          if Gear^.Kind = vgtFlake then
-              begin
-              // Damage calc from doMakeExplosion
-              dmg:= Min(101, Radius + cHHRadius div 2 - LongInt(abs(round(Gear^.X) - X) + abs(round(Gear^.Y) - Y)) div 5);
-              if dmg > 1 then
+              Gear:= t;
+              if Gear^.Kind = vgtFlake then
                   begin
-                  Gear^.tdX:= 0.02 * dmg + 0.01;
-                  if Gear^.X - X < 0 then Gear^.tdX := -Gear^.tdX;
-                  Gear^.tdY:= 0.02 * dmg + 0.01;
-                  if Gear^.Y - Y < 0 then Gear^.tdY := -Gear^.tdY;
-                  Gear^.Timer:= 200
-                  end
-              end;
-          t:= Gear^.NextGear
-          end
-     end
+                  // Damage calc from doMakeExplosion
+                  dmg:= Min(101, Radius + cHHRadius div 2 - LongInt(abs(round(Gear^.X) - X) + abs(round(Gear^.Y) - Y)) div 5);
+                  if dmg > 1 then
+                      begin
+                      Gear^.tdX:= 0.02 * dmg + 0.01;
+                      if Gear^.X - X < 0 then Gear^.tdX := -Gear^.tdX;
+                      Gear^.tdY:= 0.02 * dmg + 0.01;
+                      if Gear^.Y - Y < 0 then Gear^.tdY := -Gear^.tdY;
+                      Gear^.Timer:= 200
+                      end
+                  end;
+              t:= Gear^.NextGear
+              end
+         end
 end;
 
 procedure DrawVisualGears(Layer: LongWord);
