@@ -4423,15 +4423,15 @@ begin
         end;
 
     if (*((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or*) (Gear^.Pos = 5) then
-        // bounce up to 10 times (3 times on gameflagged solid land) before dropping past landscape
-    begin
+        begin
         Gear^.dY := Gear^.dY + cGravity * 2;
         Gear^.Y := Gear^.Y + Gear^.dY;
         CheckGearDrowning(Gear);
         if (Gear^.State and gstDrowning) <> 0 then
-        begin
-            if CurrentHedgehog^.Gear <> nil then
             begin
+            OnUsedAmmo(CurrentHedgehog^);
+            if CurrentHedgehog^.Gear <> nil then
+                begin
                 // Drown the hedgehog.  Could also just delete it, but hey, this gets a caption
                 CurrentHedgehog^.Gear^.Active := true;
                 CurrentHedgehog^.Gear^.X := Gear^.X;
@@ -4439,19 +4439,20 @@ begin
                 CurrentHedgehog^.Unplaced := false;
                 if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
                 TurnTimeLeft:= 0
-            end;
+                end;
             ResumeMusic
-        end;
+            end;
         exit
-    end;
+        end;
 
     odY:= Gear^.dY;
     doStepFallingGear(Gear);
 
     if (Gear^.State and gstDrowning) <> 0 then
-    begin
-        if CurrentHedgehog^.Gear <> nil then
         begin
+        OnUsedAmmo(CurrentHedgehog^);
+        if CurrentHedgehog^.Gear <> nil then
+            begin
             // Drown the hedgehog.  Could also just delete it, but hey, this gets a caption
             CurrentHedgehog^.Gear^.Active := true;
             CurrentHedgehog^.Gear^.X := Gear^.X;
@@ -4459,20 +4460,20 @@ begin
             CurrentHedgehog^.Unplaced := false;
             if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
             TurnTimeLeft:= 0
-        end;
+            end;
         ResumeMusic
-    end
+        end
     else if (Gear^.State and gstCollision) <> 0 then
         begin
-            r0 := GetRandom(21);
-            r1 := GetRandom(21);
-            doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, Gear^.Hedgehog, 0);
-            doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, Gear^.Hedgehog, 0);
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, Gear^.Hedgehog, EXPLAutoSound);
-            for r0:= 0 to 4 do
-                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
-            Gear^.dY := odY * -1 + cGravity * 2;
-            Gear^.Pos := Gear^.Pos + 1;
+        r0 := GetRandom(21);
+        r1 := GetRandom(21);
+        doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, Gear^.Hedgehog, 0);
+        doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, Gear^.Hedgehog, 0);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, Gear^.Hedgehog, EXPLAutoSound);
+        for r0:= 0 to 4 do
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
+        Gear^.dY := odY * -1 + cGravity * 2;
+        Gear^.Pos := Gear^.Pos + 1;
         end
     else
         Gear^.dY := Gear^.dY + cGravity * 2;

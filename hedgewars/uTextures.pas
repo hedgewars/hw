@@ -100,8 +100,7 @@ SetTextureParameters(true);
 end;
 
 procedure Surface2GrayScale(surf: PSDL_Surface);
-var tw, th, x, y: Longword;
-    tmpp: pointer;
+var tw, x, y: Longword;
     fromP4: PLongWordArray;
 begin
 fromP4:= Surf^.pixels;

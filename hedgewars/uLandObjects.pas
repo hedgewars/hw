@@ -392,6 +392,26 @@ var s, key: shortstring;
 begin
 
 AddProgress;
+// Set default water greyscale values
+if cGrayScale then
+    begin
+    for i:= 0 to 3 do
+        begin
+        t:= round(SDWaterColorArray[i].r * RGB_LUMINANCE_RED + SDWaterColorArray[i].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[i].b * RGB_LUMINANCE_BLUE);
+        if t > 255 then t:= 255;
+        SDWaterColorArray[i].r:= t;
+        SDWaterColorArray[i].g:= t;
+        SDWaterColorArray[i].b:= t
+        end;
+    for i:= 0 to 1 do
+        begin
+        t:= round(WaterColorArray[i].r * RGB_LUMINANCE_RED + WaterColorArray[i].g * RGB_LUMINANCE_GREEN + WaterColorArray[i].b * RGB_LUMINANCE_BLUE);
+        if t > 255 then t:= 255;
+        WaterColorArray[i].r:= t;
+        WaterColorArray[i].g:= t;
+        WaterColorArray[i].b:= t
+        end
+    end;
 
 s:= UserPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 if not FileExists(s) then s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
