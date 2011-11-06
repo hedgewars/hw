@@ -1129,14 +1129,14 @@ else
         else
             doStepHedgehogDriven(Gear)
     end;
-
-if ((GameTicks mod 50) = 0) and (Gear^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0) and
+if (Gear^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0) and
    (Gear^.State and (gstHHJumping or gstHHHJump or gstAttacking) = 0) and
    not Gear^.dY.isNegative and
+   (GameTicks mod (100*hwRound(cMaxWindSpeed/(cGravity/2))) = 0) and 
    (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
     begin
     slope:= CalcSlopeBelowGear(Gear);
-    Gear^.dX:=Gear^.dX+cGravity*_128*slope;
+    Gear^.dX:=Gear^.dX+slope*_0_07;
     if slope.QWordValue <> 0 then Gear^.State:= Gear^.State or gstMoving;
 (*
     x:= hwRound(Gear^.X);
