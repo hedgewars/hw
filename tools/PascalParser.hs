@@ -24,7 +24,7 @@ data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
     | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe Expression)
-    | FunctionDeclaration Identifier Identifier (Maybe Phrase)
+    | FunctionDeclaration Identifier TypeDecl (Maybe Phrase)
     deriving Show
 data TypeDecl = SimpleType Identifier
     | RangeType Range
@@ -32,6 +32,7 @@ data TypeDecl = SimpleType Identifier
     | ArrayDecl Range TypeDecl
     | RecordType [TypeVarDeclaration]
     | PointerTo TypeDecl
+    | String
     | UnknownType
     deriving Show
 data Range = Range Identifier
@@ -87,6 +88,7 @@ pascalLanguageDef
             , "type", "var", "const", "out", "array", "packed"
             , "procedure", "function", "with", "for", "to"
             , "downto", "div", "mod", "record", "set", "nil"
+            , "string", "shortstring"
             ]
     , reservedOpNames= [] 
     , caseSensitive  = False   
@@ -205,6 +207,7 @@ constsDecl = do
         
 typeDecl = choice [
     char '^' >> typeDecl >>= return . PointerTo
+    , try (string "shortstring") >> return String
     , arrayDecl
     , recordDecl
     , rangeDecl >>= return . RangeType
@@ -306,7 +309,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
                 else
                 return Nothing
         comments
-        return $ [FunctionDeclaration i (Identifier "") b]
+        return $ [FunctionDeclaration i UnknownType b]
         
     funcDecl = do
         string "function"
@@ -319,12 +322,12 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         comments
         char ':'
         comments
-        ret <- iD
+        ret <- typeDecl
         comments
         char ';'
+        comments
         b <- if isImpl then
                 do
-                comments
                 optional $ typeVarDeclaration True
                 comments
                 liftM Just functionBody
@@ -365,7 +368,7 @@ expression = buildExpressionParser table term <?> "expression"
     where
     term = comments >> choice [
         parens pas $ expression 
-        , integer pas >>= return . NumberLiteral . show
+        , try $ integer pas >>= return . NumberLiteral . show
         , stringLiteral pas >>= return . StringLiteral
         , char '#' >> many digit >>= return . CharCode
         , char '$' >> many hexDigit >>= return . HexNumber
@@ -395,6 +398,9 @@ expression = buildExpressionParser table term <?> "expression"
         , [  Infix (try $ string "and" >> return (BinOp "and")) AssocLeft
            , Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
+          ]
+        , [  Infix (try $ string "shl" >> return (BinOp "and")) AssocNone
+           , Infix (try $ string "shr" >> return (BinOp "or")) AssocNone
           ]
         , [Prefix (try (string "not") >> return (PrefixOp "not"))]
         ]
