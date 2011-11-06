@@ -589,6 +589,7 @@ while not eof(f) do
             end;
         end
     else if key = 'flatten-flakes' then cFlattenFlakes:= true
+    else if key = 'flatten-clouds' then cFlattenClouds:= true
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);

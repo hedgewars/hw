@@ -47,6 +47,7 @@ var
     UserPathPrefix  : shortstring = './';
     cShowFPS        : boolean     = false;
     cFlattenFlakes  : boolean     = false;
+    cFlattenClouds  : boolean     = false;
     cAltDamage      : boolean     = true;
     cReducedQuality : LongWord    = rqNone;
     UserNick        : shortstring = '';
@@ -2334,7 +2335,7 @@ var
     framel, framer, depthl, depthr: GLuint;
     texl, texr: GLuint;
 
-    VisualGearLayers: array[0..3] of PVisualGear;
+    VisualGearLayers: array[0..6] of PVisualGear;
     lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
     vobVelocity, vobFallSpeed: LongInt;
@@ -2553,6 +2554,7 @@ begin
     UserPathPrefix  := './';
     cShowFPS        := false;
     cFlattenFlakes  := false;
+    cFlattenClouds  := false;
     cAltDamage      := true;
     cReducedQuality := rqNone;
     UserNick        := '';

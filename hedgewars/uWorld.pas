@@ -74,6 +74,7 @@ var cWaveWidth, cWaveHeight: LongInt;
 
 const cStereo_Sky           = 0.0500;
       cStereo_Horizon       = 0.0250;
+      cStereo_MidDistance   = 0.0175;
       cStereo_Water_distant = 0.0125;
       cStereo_Land          = 0.0075;
       cStereo_Water_near    = 0.0025;
@@ -799,6 +800,8 @@ begin
     end;
 
     DrawVisualGears(0);
+    ChangeDepth(RM, -cStereo_MidDistance);
+    DrawVisualGears(4);
 
     if (cReducedQuality and rq2DWater) = 0 then
     begin
@@ -817,6 +820,7 @@ begin
         DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
 
     changeDepth(RM, cStereo_Land);
+    DrawVisualGears(5);
     DrawLand(WorldDx, WorldDy);
 
     DrawWater(255, 0);
@@ -845,6 +849,7 @@ begin
 
     DrawVisualGears(1);
     DrawGears;
+    DrawVisualGears(6);
 
     if SuddenDeathDmg then
         DrawWater(cSDWaterOpacity, 0)
