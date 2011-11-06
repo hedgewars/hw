@@ -1137,7 +1137,7 @@ if ((GameTicks mod 50) = 0) and (Gear^.Message and (gmAllStoppable or gmLJump or
     begin
     slope:= CalcSlopeBelowGear(Gear);
     Gear^.dX:=Gear^.dX+cGravity*_128*slope;
-    Gear^.State:= Gear^.State or gstMoving;
+    if slope.QWordValue <> 0 then Gear^.State:= Gear^.State or gstMoving;
 (*
     x:= hwRound(Gear^.X);
     y:= hwRound(Gear^.Y);
