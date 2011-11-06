@@ -1290,7 +1290,7 @@ while Gear <> nil do
                 gtMelonPiece,
                 gtGrenade,
                 gtClusterBomb,
-                gtCluster,
+            //    gtCluster, too game breaking I think
                 gtSMine,
                 gtCase,
                 gtTarget,
