@@ -1314,8 +1314,8 @@ while Gear <> nil do
                             if ((Mask and EXPLDoNotTouchAny) = 0) and (((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog)) then
                                 begin
                                 DeleteCI(Gear);
-                                Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - fX);
-                                Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - fY);
+                                Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - fX)/Gear^.Density;
+                                Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - fY)/Gear^.Density;
                                 Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
                                 if not Gear^.Invulnerable then
                                     Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
