@@ -1206,21 +1206,21 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and 
     uCursor.updatePosition();
 {$ENDIF}
 z:= round(200/zoom);
-if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
+if not PlacingHogs and (FollowGear <> nil) and not isCursorVisible and not bShowAmmoMenu and not fastUntilLag then
     if (not autoCameraOn) or ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
-    begin
+        begin
         FollowGear:= nil;
         prevPoint:= CursorPoint;
         exit
-    end
+        end
     else
-    begin
+        begin
         CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * z + WorldDx) div 8;
         if isPhone() or (cScreenHeight < 600) or ((hwSign(FollowGear^.dY) * z) < 10)  then
             CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8
         else
             CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + hwSign(FollowGear^.dY) * z + WorldDy)) div 8;
-    end;
+        end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
 if WorldDy < wdy then WorldDy:= wdy;
