@@ -356,8 +356,7 @@ with Gear^,
                       amBazooka, amSnowball, 
                           amBee, amSMine,
                        amMortar, amWatermelon,
-                  amHellishBomb, amDrill,
-                        amPiano: FollowGear:= newGear;
+                  amHellishBomb, amDrill: FollowGear:= newGear;
 
                       amShotgun, amPickHammer,
                          amRope, amDEagle,
@@ -372,7 +371,7 @@ with Gear^,
                       amJetpack, amBirdy,
                  amFlamethrower, amLandGun,
                   amResurrector, amStructure,
-                       amTardis: CurAmmoGear:= newGear;
+                       amTardis, amPiano: CurAmmoGear:= newGear;
                   end;
               if (CurAmmoType = amMine) or (CurAmmoType = amSMine) and (GameFlags and gfInfAttack <> 0) then newGear^.FlightTime:= GameTicks + 1000;
         if Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then

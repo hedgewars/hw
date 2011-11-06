@@ -527,7 +527,7 @@ if FollowGear <> nil then
     else begin
     AddCaption('Auto Camera On', $CCCCCC, capgrpVolume);
     bShowFinger:= true;
-    FollowGear:= CurrentHedgehog^.Gear;
+    if not CurrentHedgehog^.Unplaced then FollowGear:= CurrentHedgehog^.Gear;
     autoCameraOn:= true
     end
 end;

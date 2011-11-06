@@ -4403,9 +4403,9 @@ var
     odY: hwFloat;
 begin
     AllInactive := false;
-    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.
-       Message and gmSlot) <> 0) then
-    begin
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and 
+       ((CurrentHedgehog^.Gear^.Message and gmSlot) <> 0) then
+        begin
         case CurrentHedgehog^.Gear^.MsgParam of 
             0: PlaySound(sndPiano0);
             1: PlaySound(sndPiano1);
@@ -4420,7 +4420,7 @@ begin
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
         CurrentHedgehog^.Gear^.MsgParam := 0;
         CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gmSlot;
-    end;
+        end;
 
     if (*((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or*) (Gear^.Pos = 5) then
         // bounce up to 10 times (3 times on gameflagged solid land) before dropping past landscape
