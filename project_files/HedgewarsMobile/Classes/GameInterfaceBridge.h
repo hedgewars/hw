@@ -23,8 +23,12 @@
 
 
 @interface GameInterfaceBridge : NSObject {
-
+    NSInteger ipcPort;
+    UIView *blackView;
 }
+
+@property (assign) NSInteger ipcPort;
+@property (nonatomic,retain) UIView *blackView;
 
 +(void) startLocalGame:(NSDictionary *)withOptions;
 +(void) startSaveGame:(NSString *)atPath;

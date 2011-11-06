@@ -54,6 +54,7 @@
 #pragma mark -
 #pragma mark Spawner functions
 -(NSInteger) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
+    [self retain];
     self.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
     [self.stream open];
 
