@@ -65,12 +65,12 @@ data Expression = Expression String
     | HexNumber String
     | Address Reference
     | Reference Reference
+    | Dereference Expression
+    | RecordField Expression Expression
     | Null
     deriving Show
 data Reference = ArrayElement Identifier Expression
     | SimpleReference Identifier
-    | RecordField Reference Reference
-    | Dereference Reference
     deriving Show
     
 pascalLanguageDef
@@ -152,8 +152,6 @@ reference = buildExpressionParser table term <?> "reference"
         ] <?> "simple reference"
 
     table = [ 
-        [Postfix (char '^' >> return Dereference)]
-        , [Infix (char '.' >> return RecordField) AssocLeft]
         ]
     
 varsDecl1 = varsParser sepEndBy1    
@@ -211,7 +209,7 @@ typeDecl = choice [
     , arrayDecl
     , recordDecl
     , rangeDecl >>= return . RangeType
-    , seqenceDecl >>= return . Sequence
+    , sequenceDecl >>= return . Sequence
     , identifier pas >>= return . SimpleType . Identifier
     ] <?> "type declaration"
     where
@@ -233,7 +231,7 @@ typeDecl = choice [
         vs <- varsDecl True
         string "end"
         return $ RecordType vs
-    seqenceDecl = (parens pas) $ (commaSep pas) iD
+    sequenceDecl = (parens pas) $ (commaSep pas) iD
 
 typesDecl = many (aTypeDecl >>= \t -> comments >> return t)
     where
@@ -403,6 +401,8 @@ expression = buildExpressionParser table term <?> "expression"
            , Infix (try $ string "shr" >> return (BinOp "or")) AssocNone
           ]
         , [Prefix (try (string "not") >> return (PrefixOp "not"))]
+        , [Postfix (char '^' >> return Dereference)]
+        , [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
         ]
     
 phrasesBlock = do
