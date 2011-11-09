@@ -66,7 +66,7 @@ data Expression = Expression String
     | Null
     deriving Show
 data Reference = ArrayElement Identifier Expression
-    | FunCall Reference [Expression]
+    | FunCall [Expression] Reference
     | SimpleReference Identifier
     | Dereference Reference
     | RecordField Reference Reference
@@ -148,15 +148,16 @@ reference = buildExpressionParser table term <?> "reference"
     term = comments >> choice [
         parens pas reference 
         , try $ iD >>= \i -> (brackets pas) expression >>= return . ArrayElement i
-        , try $ funCall
-        , try $ reference >>= \r -> char '^' >> return (Dereference r)
         , char '@' >> reference >>= return . Address
         , iD >>= return . SimpleReference
         ] <?> "simple reference"
 
     table = [ 
-          [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
+            [Postfix $ (parens pas) (option [] parameters) >>= return . FunCall]
+          , [Postfix (char '^' >> return Dereference)]
+          , [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
         ]
+
     
 varsDecl1 = varsParser sepEndBy1    
 varsDecl = varsParser sepEndBy
@@ -524,11 +525,6 @@ procCall = do
     i <- iD
     p <- option [] $ (parens pas) parameters
     return $ ProcCall i p
-
-funCall = do
-    r <- reference
-    p <- (parens pas) $ option [] parameters
-    return $ FunCall r p
 
 parameters = (commaSep pas) expression <?> "parameters"
         
