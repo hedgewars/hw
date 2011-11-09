@@ -55,7 +55,6 @@ data Phrase = ProcCall Identifier [Expression]
         | Assignment Reference Expression
     deriving Show
 data Expression = Expression String
-    | FunCall Reference [Expression]
     | PrefixOp String Expression
     | PostfixOp String Expression
     | BinOp String Expression Expression
@@ -63,14 +62,15 @@ data Expression = Expression String
     | CharCode String
     | NumberLiteral String
     | HexNumber String
-    | Address Reference
     | Reference Reference
-    | Dereference Expression
-    | RecordField Expression Expression
     | Null
     deriving Show
 data Reference = ArrayElement Identifier Expression
+    | FunCall Reference [Expression]
     | SimpleReference Identifier
+    | Dereference Reference
+    | RecordField Reference Reference
+    | Address Reference
     deriving Show
     
 pascalLanguageDef
@@ -148,10 +148,14 @@ reference = buildExpressionParser table term <?> "reference"
     term = comments >> choice [
         parens pas reference 
         , try $ iD >>= \i -> (brackets pas) expression >>= return . ArrayElement i
+        , try $ funCall
+        , try $ reference >>= \r -> char '^' >> return (Dereference r)
+        , char '@' >> reference >>= return . Address
         , iD >>= return . SimpleReference
         ] <?> "simple reference"
 
     table = [ 
+          [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
         ]
     
 varsDecl1 = varsParser sepEndBy1    
@@ -370,9 +374,7 @@ expression = buildExpressionParser table term <?> "expression"
         , stringLiteral pas >>= return . StringLiteral
         , char '#' >> many digit >>= return . CharCode
         , char '$' >> many hexDigit >>= return . HexNumber
-        , char '@' >> reference >>= return . Address
         , try $ string "nil" >> return Null
-        , try $ funCall
         , reference >>= return . Reference
         ] <?> "simple expression"
 
@@ -401,8 +403,6 @@ expression = buildExpressionParser table term <?> "expression"
            , Infix (try $ string "shr" >> return (BinOp "or")) AssocNone
           ]
         , [Prefix (try (string "not") >> return (PrefixOp "not"))]
-        , [Postfix (char '^' >> return Dereference)]
-        , [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
         ]
     
 phrasesBlock = do
