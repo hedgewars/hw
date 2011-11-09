@@ -312,7 +312,7 @@ begin
 str(z.Round, cstr);
 if z.Frac <> 0 then
    begin
-   str(z.Frac / $100000000:1:15, tmpstr);
+   str(z.Frac / $100000000:1:10, tmpstr);
    delete(tmpstr, 1, 2);
    cstr:= cstr + '.' + tmpstr
    end;
