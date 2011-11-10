@@ -1285,8 +1285,7 @@ begin
             inc(i, 1)
             end;
 
-        if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
-           , lfIndestructible) then
+        if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9), lfIndestructible) then
             begin
             Gear^.X := Gear^.X + Gear^.dX;
             Gear^.Y := Gear^.Y + _1_9;
@@ -1301,14 +1300,20 @@ begin
         end
     else
         begin
-        Gear^.dY := Gear^.dY + cGravity;
-        Gear^.Y := Gear^.Y + Gear^.dY;
+        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), lfIndestructible) then
+            begin
+            Gear^.dY := Gear^.dY + cGravity;
+            Gear^.Y := Gear^.Y + Gear^.dY
+            end;
         if hwRound(Gear^.Y) > cWaterLine then Gear^.Timer := 1
         end;
 
     Gear^.X := Gear^.X + HHGear^.dX;
-    HHGear^.X := Gear^.X;
-    HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius);
+    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, lfIndestructible) then
+        begin
+        HHGear^.X := Gear^.X;
+        HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius)
+        end;
 
     if (Gear^.Message and gmAttack) <> 0 then
         if (Gear^.State and gsttmpFlag) <> 0 then Gear^.Timer := 1
