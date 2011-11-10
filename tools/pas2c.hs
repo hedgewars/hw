@@ -57,12 +57,10 @@ wrapPhrase p = Phrases [p]
 
 expr2C :: Expression -> Doc
 expr2C (Expression s) = text s
-expr2C (FunCall ref params) = ref2C ref <> parens (hsep . punctuate (char ',') . map expr2C $ params)
 expr2C (BinOp op expr1 expr2) = parens $ (expr2C expr1) <+> op2C op <+> (expr2C expr2)
 expr2C (NumberLiteral s) = text s
 expr2C (HexNumber s) = text "0x" <> (text . map toLower $ s)
 expr2C (StringLiteral s) = doubleQuotes $ text s 
-expr2C (Address ref) = text "&" <> ref2C ref
 expr2C (Reference ref) = ref2C ref
 expr2C (PrefixOp op expr) = op2C op <+> expr2C expr
     {-
@@ -73,11 +71,13 @@ expr2C _ = empty
 
 
 ref2C :: Reference -> Doc
-ref2C (ArrayElement (Identifier name) expr) = text name <> brackets (expr2C expr)
+ref2C (ArrayElement exprs ref) = ref2C ref <> (brackets . hcat) (punctuate comma $ map expr2C exprs)
 ref2C (SimpleReference (Identifier name)) = text name
 ref2C (RecordField (Dereference ref1) ref2) = ref2C ref1 <> text "->" <> ref2C ref2
 ref2C (RecordField ref1 ref2) = ref2C ref1 <> text "." <> ref2C ref2
 ref2C (Dereference ref) = parens $ text "*" <> ref2C ref
+ref2C (FunCall params ref) = ref2C ref <> parens (hsep . punctuate (char ',') . map expr2C $ params)
+ref2C (Address ref) = text "&" <> ref2C ref
 
 op2C "or" = text "|"
 op2C "and" = text "&"

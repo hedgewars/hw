@@ -65,7 +65,7 @@ data Expression = Expression String
     | Reference Reference
     | Null
     deriving Show
-data Reference = ArrayElement Identifier Expression
+data Reference = ArrayElement [Expression] Reference
     | FunCall [Expression] Reference
     | SimpleReference Identifier
     | Dereference Reference
@@ -147,7 +147,6 @@ reference = buildExpressionParser table term <?> "reference"
     where
     term = comments >> choice [
         parens pas reference 
-        , try $ iD >>= \i -> (brackets pas) expression >>= return . ArrayElement i
         , char '@' >> reference >>= return . Address
         , iD >>= return . SimpleReference
         ] <?> "simple reference"
@@ -155,6 +154,7 @@ reference = buildExpressionParser table term <?> "reference"
     table = [ 
             [Postfix $ (parens pas) (option [] parameters) >>= return . FunCall]
           , [Postfix (char '^' >> return Dereference)]
+          , [Postfix $ (brackets pas) (commaSep1 pas $ expression) >>= return . ArrayElement]
           , [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
         ]
 
@@ -190,7 +190,7 @@ aVarDecl endsWithSemi = do
 
 
 constsDecl = do
-    vs <- many (try (aConstDecl >>= \i -> semi pas >> return i) >>= \i -> comments >> return i)
+    vs <- many1 (try (aConstDecl >>= \i -> semi pas >> return i) >>= \i -> comments >> return i)
     comments
     return vs
     where
@@ -294,7 +294,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         return t
         
     procDecl = do
-        string "procedure"
+        try $ string "procedure"
         comments
         i <- iD
         optional $ do
@@ -315,7 +315,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         return $ [FunctionDeclaration i UnknownType b]
         
     funcDecl = do
-        string "function"
+        try $ string "function"
         comments
         i <- iD
         optional $ do
