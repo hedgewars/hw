@@ -159,10 +159,7 @@ glScalef(Scale, Scale, 1);
 // Any reason for this call? And why only in t direction, not s?
 //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-if Dir < 0 then
-    hw:= w div -2
-else
-    hw:= w div 2;
+hw:= w div Dir;
 
 nx:= round(Texture^.w / w); // number of horizontal frames
 ny:= round(Texture^.h / h); // number of vertical frames
