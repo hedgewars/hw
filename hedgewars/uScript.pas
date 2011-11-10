@@ -1624,23 +1624,24 @@ ScriptCall('onGameInit');
 
 // pop game variables
 ParseCommand('seed ' + ScriptGetString('Seed'), true);
-ParseCommand('template_filter ' + IntToStr(ScriptGetInteger('TemplateFilter')), true);
-ParseCommand('mapgen ' + IntToStr(ScriptGetInteger('MapGen')), true);
-ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
-ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
-ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
-ParseCommand('$healthprob ' + ScriptGetString('HealthCaseProb'), true);
-ParseCommand('$hcaseamount ' + ScriptGetString('HealthCaseAmount'), true);
-ParseCommand('$damagepct ' + ScriptGetString('DamagePercent'), true);
-ParseCommand('$minesnum ' + ScriptGetString('MinesNum'), true);
-ParseCommand('$minestime ' + ScriptGetString('MinesTime'), true);
-ParseCommand('$minedudpct ' + ScriptGetString('MineDudPercent'), true);
-ParseCommand('$explosives ' + ScriptGetString('Explosives'), true);
-ParseCommand('$delay ' + ScriptGetString('Delay'), true);
-ParseCommand('$ready ' + ScriptGetString('Ready'), true);
-ParseCommand('$sd_turns ' + ScriptGetString('SuddenDeathTurns'), true);
-ParseCommand('$waterrise ' + ScriptGetString('WaterRise'), true);
-ParseCommand('$healthdec ' + ScriptGetString('HealthDecrease'), true);
+cTemplateFilter  := ScriptGetInteger('TemplateFilter');
+cMapGen          := ScriptGetInteger('MapGen');
+GameFlags        := ScriptGetInteger('GameFlags');
+cHedgehogTurnTime:= ScriptGetInteger('TurnTime');
+cCaseFactor      := ScriptGetInteger('CaseFreq');
+cHealthCaseProb  := ScriptGetInteger('HealthCaseProb');
+cHealthCaseAmount:= ScriptGetInteger('HealthCaseAmount');
+cDamagePercent   := ScriptGetInteger('DamagePercent');
+cLandMines       := ScriptGetInteger('MinesNum');
+cMinesTime       := ScriptGetInteger('MinesTime');
+cMineDudPercent  := ScriptGetInteger('MineDudPercent');
+cExplosives      := ScriptGetInteger('Explosives');
+cInactDelay      := ScriptGetInteger('Delay');
+cReadyDelay      := ScriptGetInteger('Ready');
+cSuddenDTurns    := ScriptGetInteger('SuddenDeathTurns');
+cWaterRise       := ScriptGetInteger('WaterRise');
+cHealthDecrease  := ScriptGetInteger('HealthDecrease');
+
 if ScriptGetString('Map') <> '' then
     ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then
