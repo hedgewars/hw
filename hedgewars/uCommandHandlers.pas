@@ -615,7 +615,7 @@ begin
     RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
     RegisterVariable('template_filter', vtLongInt, @cTemplateFilter, false);
     RegisterVariable('mapgen'  , vtLongInt, @cMapGen        , false);
-    RegisterVariable('maze_size',vtLongInt, @cMazeSize      , false);
+    RegisterVariable('maze_size',vtLongInt, @cTemplateFilter, false);
     RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
     RegisterVariable('ready'   , vtLongInt, @cReadyDelay    , false);
     RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);

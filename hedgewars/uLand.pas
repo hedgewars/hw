@@ -856,7 +856,7 @@ end;
 end;
 
 begin
-case cMazeSize of
+case cTemplateFilter of
     0: begin
         cellsize := small_cell_size;
         maze_inverted := false;

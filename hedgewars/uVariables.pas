@@ -85,7 +85,6 @@ var
     cMineDudPercent : LongWord;
     cTemplateFilter : LongInt;
     cMapGen         : LongInt;
-    cMazeSize       : LongInt;
     cRopePercent    : LongWord;
     cGetAwayTime    : LongWord;
 
@@ -2462,7 +2461,6 @@ begin
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
     cMapGen             := 0;   // MAPGEN_REGULAR
-    cMazeSize           := 0;
     cHedgehogTurnTime   := 45000;
     cMinesTime          := 3000;
     cMaxAIThinkTime     := 9000;
