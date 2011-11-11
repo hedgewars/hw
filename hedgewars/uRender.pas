@@ -147,11 +147,9 @@ if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScale
 
 glPushMatrix;
 glTranslatef(X, Y, 0);
+if Dir = 0 then Dir:= 1;
 
-if Dir < 0 then
-   glRotatef(Angle, 0, 0, -1)
-else
-   glRotatef(Angle, 0, 0,  1);
+glRotatef(Angle, 0, 0, Dir);
 
 glTranslatef(Dir*OffsetX, OffsetY, 0);
 glScalef(Scale, Scale, 1);
