@@ -180,7 +180,7 @@ with Gear^.Hedgehog^ do
     if not (((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and ((Gear^.State and gstAttacked) = 0)) then
         exit;
     DrawTexture(sx + 16, sy + 16, ropeIconTex);
-    DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, sx + 30, sy + 30, ord(CurAmmoType) - 1, 2, 32, 32);
+    DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, sx + 30, sy + 30, ord(CurAmmoType) - 1, 1, 32, 32);
     end;
 end;
 
@@ -223,7 +223,7 @@ begin
     if HH^.Effects[hePoisoned] then
         begin
         Tint($00, $FF, $40, $40);
-        DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 2, 22, 22, (RealTicks shr 36) mod 360);
+        DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
         Tint($FF, $FF, $FF, $FF)
         end;
 
@@ -371,12 +371,12 @@ begin
                     with HH^ do
                         if (HatTex <> nil) then
                             begin
-                            DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, ox, oy, 0, i*2, 32, 32,
+                            DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, ox, oy, 0, i, 32, 32,
                                 i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
                             if HatTex^.w > 64 then
                                 begin
                                 Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
-                                DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, ox, oy, 32, i*2, 32, 32,
+                                DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, ox, oy, 32, i, 32, 32,
                                     i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
                                 Tint($FF, $FF, $FF, $FF)
                                 end
@@ -400,7 +400,7 @@ begin
                                 sx,
                                 sy - 5,
                                 0,
-                                sign*2,
+                                sign,
                                 32,
                                 32);
                             if HatTex^.w > 64 then
@@ -411,7 +411,7 @@ begin
                                     sx,
                                     sy - 5,
                                     32,
-                                    sign*2,
+                                    sign,
                                     32,
                                     32);
                                 Tint($FF, $FF, $FF, $FF)
@@ -664,7 +664,7 @@ begin
                             sx,
                             sy - 5,
                             0,
-                            sign*2,
+                            sign,
                             32,
                             32); *)
             end;
@@ -732,7 +732,7 @@ begin
                     sx,
                     sy - 5,
                     (RealTicks div 128 + Gear^.Pos) mod 19,
-                    sign*2,
+                    sign,
                     32,
                     32);
                 if HatTex^.w > 64 then
@@ -743,7 +743,7 @@ begin
                         sx,
                         sy - 5,
                         (RealTicks div 128 + Gear^.Pos) mod 19 + 32,
-                        sign*2,
+                        sign,
                         32,
                         32);
                     Tint($FF, $FF, $FF, $FF)
@@ -756,7 +756,7 @@ begin
                     sx,
                     sy - 5,
                     0,
-                    sign*m*2,
+                    sign*m,
                     32,
                     32);
                 if HatTex^.w > 64 then
@@ -767,7 +767,7 @@ begin
                         sx,
                         sy - 5,
                         32,
-                        sign*m*2,
+                        sign*m,
                         32,
                         32);
                     Tint($FF, $FF, $FF, $FF)
@@ -846,7 +846,7 @@ begin
     if HH^.Effects[hePoisoned] then
         begin
         Tint($00, $FF, $40, $80);
-        DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 2, 22, 22, 360 - (RealTicks shr 37) mod 360);
+        DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 37) mod 360);
         end;
     if HH^.Effects[heResurrected] then
         begin
@@ -924,7 +924,7 @@ begin
            gtShell: DrawRotated(sprBazookaShell, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
            gtGrave: begin
-                    DrawTextureF(Gear^.Hedgehog^.Team^.GraveTex, 1, x, y, (GameTicks shr 7+Gear^.uid) and 7, 2, 32, 32);
+                    DrawTextureF(Gear^.Hedgehog^.Team^.GraveTex, 1, x, y, (GameTicks shr 7+Gear^.uid) and 7, 1, 32, 32);
                     if Gear^.Health > 0 then
                         begin
                         //Tint($33, $33, $FF, max($40, round($FF * abs(1 - (GameTicks mod (6000 div Gear^.Health)) / 750))));
@@ -981,7 +981,7 @@ begin
         gtDynamite: DrawSprite2(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawRotated(sprClusterBomb, x, y, 0, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, x - 8, y - 8, 0);
-           gtFlame: DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), x, y, (GameTicks shr 7 + LongWord(Gear^.Tag)) mod 8, 2, 16, 16);
+           gtFlame: DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), x, y, (GameTicks shr 7 + LongWord(Gear^.Tag)) mod 8, 1, 16, 16);
        gtParachute: begin
                     DrawSprite(sprParachute, x - 24, y - 48, 0);
                     DrawAltWeapon(Gear, x + 1, y - 3)
@@ -1025,7 +1025,7 @@ begin
                             else
                                 startX:= max(-LAND_WIDTH - 1024, endX - 2048);
                             startY:= endY - 256;
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1))), startY + WorldDy + LongInt(round((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2)))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag*2, 75, 75);
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1))), startY + WorldDy + LongInt(round((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2)))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end
                         else // Disappearing
                             begin
@@ -1036,27 +1036,27 @@ begin
                             else
                                 endX:= max(-LAND_WIDTH - 1024, startX - 2048);
                             endY:= startY + 256;
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1)))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + LongInt(round((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY))) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag*2, 75, 75);
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1)))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + LongInt(round((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY))) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end;
                         end
                     else
                         begin
                         if Gear^.Health < 250 then
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, x, y, ((Gear^.Pos shr 6) or (RealTicks shr 7)) mod 2, Gear^.Tag*2, 75, 75)
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, x, y, ((Gear^.Pos shr 6) or (RealTicks shr 7)) mod 2, Gear^.Tag, 75, 75)
                         else
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, x, y, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag*2, 75, 75);
+                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, x, y, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                         end;
                     end;
-             gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, x, y, 0, 2, 16, 16, Gear^.DirAngle);
+             gtEgg: DrawRotatedTextureF(SpritesData[sprEgg].Texture, 1, 0, 0, x, y, 0, 1, 16, 16, Gear^.DirAngle);
            gtPiano: begin
                     if (Gear^.State and gstDrowning) = 0 then
                         begin
                         Tint($FF, $FF, $FF, $10);
                         for i:= 8 downto 1 do
-                            DrawTextureF(SpritesData[sprPiano].Texture, 1, x, y - hwRound(Gear^.dY * 4 * i), 0, 2, 128, 128);
+                            DrawTextureF(SpritesData[sprPiano].Texture, 1, x, y - hwRound(Gear^.dY * 4 * i), 0, 1, 128, 128);
                         Tint($FF, $FF, $FF, $FF)
                         end;
-                    DrawTextureF(SpritesData[sprPiano].Texture, 1, x, y, 0, 2, 128, 128);
+                    DrawTextureF(SpritesData[sprPiano].Texture, 1, x, y, 0, 1, 128, 128);
                     end;
      gtPoisonCloud: begin
                     if Gear^.Timer < 1020 then
@@ -1065,7 +1065,7 @@ begin
                         Tint($C0, $C0, $00, (5000 - Gear^.Timer) div 8)
                     else
                         Tint($C0, $C0, $00, $C0);
-                    DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, x, y, 0, 2, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
+                    DrawRotatedTextureF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, x, y, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
                     Tint($FF, $FF, $FF, $FF)
                     end;
      gtResurrector: begin
@@ -1082,7 +1082,7 @@ begin
                              (cExplosionBorderColor shr BShift) and $FF, 
                              $FF);
                         // Needs a nicer white texture to tint
-                        DrawRotatedTextureF(SpritesData[sprSnowDust].Texture, 1, 0, 0, x, y, 0, 2, 8, 8, Gear^.DirAngle);
+                        DrawRotatedTextureF(SpritesData[sprSnowDust].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle);
                         //DrawRotated(sprSnowDust, x, y, 0, Gear^.DirAngle);
                         //DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
                         Tint($FF, $FF, $FF, $FF);
