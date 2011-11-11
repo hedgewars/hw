@@ -20,41 +20,65 @@
 
 
 #import "ServerProtocolNetwork.h"
-#import "SDL_net.h"
 #import "hwconsts.h"
 
 #define BUFFER_SIZE 256
 
-static TCPsocket sd;
 static ServerProtocolNetwork *serverConnection;
 
 @implementation ServerProtocolNetwork
-@synthesize serverPort, serverAddress;
+@synthesize serverPort, serverAddress, ssd;
 
--(id) init {
+#pragma mark -
+#pragma mark init and class methods
+-(id) init:(NSInteger) onPort withAddress:(NSString *)address {
     if (self = [super init]) {
-        self.serverPort = NETGAME_DEFAULT_PORT;
-        self.serverAddress = @"netserver.hedgewars.org";
+        self.serverPort = onPort;
+        self.serverAddress = address;
     }
     serverConnection = self;
     return self;
 }
 
+-(id) init {
+    return [self init:NETGAME_DEFAULT_PORT withAddress:@"netserver.hedgewars.org"];
+}
+
+-(id) initOnPort:(NSInteger) port {
+    return [self init:port withAddress:@"netserver.hedgewars.org"];
+}
+
+-(id) initToAddress:(NSString *)address {
+    return [self init:NETGAME_DEFAULT_PORT withAddress:address];
+}
+
 -(void) dealloc {
     releaseAndNil(serverAddress);
+    serverConnection = nil;
     [super dealloc];
 }
 
++(ServerProtocolNetwork *)openServerConnection {
+    ServerProtocolNetwork *connection = [[ServerProtocolNetwork alloc] init];
+    [NSThread detachNewThreadSelector:@selector(serverProtocol)
+                             toTarget:connection
+                           withObject:nil];
+    [connection retain];    // retain count here is +2
+    return connection;
+}
+
+#pragma mark -
+#pragma mark Communication layer
 -(int) sendToServer:(NSString *)command {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n\n",command];
-    int result = SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
+    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message length]);
     [message release];
     return result;
 }
 
 -(int) sendToServer:(NSString *)command withArgument:(NSString *)argument {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n%@\n\n",command,argument];
-    int result = SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
+    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message length]);
     [message release];
     return result;
 }
@@ -80,7 +104,7 @@ static ServerProtocolNetwork *serverConnection;
     }
 
     // Open a connection with the IP provided (listen on the host's port)
-    if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
+    if (!(self.ssd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
         DLog(@"SDLNet_TCP_Open: %s %d", SDLNet_GetError(), self.serverPort);
         clientQuit = YES;
     }
@@ -92,7 +116,7 @@ static ServerProtocolNetwork *serverConnection;
         memset(buffer, '\0', dim);
 
         while (exitBufferLoop != YES) {
-            msgSize = SDLNet_TCP_Recv(sd, &buffer[index], 2);
+            msgSize = SDLNet_TCP_Recv(self.ssd, &buffer[index], 2);
 
             // exit in case of error
             if (msgSize <= 0) {
@@ -181,7 +205,7 @@ static ServerProtocolNetwork *serverConnection;
     DLog(@"Server closed connection, ending thread");
 
     free(buffer);
-    SDLNet_TCP_Close(sd);
+    SDLNet_TCP_Close(self.ssd);
     SDLNet_Quit();
 
     [pool release];

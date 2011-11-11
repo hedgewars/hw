@@ -130,11 +130,7 @@
     }
 
     /*
-    ServerProtocolNetwork *setup = [[ServerProtocolNetwork alloc] init];
-    [NSThread detachNewThreadSelector:@selector(serverProtocol)
-                                 toTarget:setup
-                               withObject:nil];
-    [setup release];
+    [ServerProtocolNetwork openServerConnection];
     */
 }
 

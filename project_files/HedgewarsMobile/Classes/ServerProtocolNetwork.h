@@ -20,14 +20,23 @@
 
 
 #import <Foundation/Foundation.h>
-#import "EngineProtocolNetwork.h"
+#import "SDL_net.h"
+//#import "EngineProtocolNetwork.h"
 
 @interface ServerProtocolNetwork : NSObject {
     NSInteger serverPort;
     NSString *serverAddress;
+    TCPsocket ssd;
 }
 
+@property (assign) TCPsocket ssd;
 @property (assign) NSInteger serverPort;
 @property (nonatomic,retain) NSString *serverAddress;
+
+-(id) init;
+-(id) init:(NSInteger) onPort withAddress:(NSString *)address;
+-(id) initOnPort:(NSInteger) port;
+-(id) initToAddress:(NSString *)address;
++(ServerProtocolNetwork *)openServerConnection;
 
 @end
