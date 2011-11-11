@@ -3654,7 +3654,8 @@ begin
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y;
     // For some reason I need to reapply followgear here, something else grabs it otherwise.
-    if not bShowAmmoMenu and not CurrentTeam^.ExtDriven then FollowGear := HHGear;
+    // This is probably not needed anymore
+    if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
 
     if not isUnderWater and hasBorder and ((HHGear^.X < _0) or (hwRound(HHGear^.X) > LAND_WIDTH)) then HHGear^.dY.isNegative:= false;
     if ((Gear^.State and gsttmpFlag) = 0) or (HHGear^.dY < _0) then doStepHedgehogMoving(HHGear);
@@ -3785,7 +3786,8 @@ begin
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y - int2hwFloat(32);
     // For some reason I need to reapply followgear here, something else grabs it otherwise.
-    if not bShowAmmoMenu then FollowGear := HHGear;
+    // this is probably not needed anymore
+    if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
 
     if ((Gear^.State and gsttmpFlag) = 0) or (HHGear^.dY < _0) then doStepHedgehogMoving(HHGear);
 
