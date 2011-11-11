@@ -36,14 +36,13 @@
 
     if (theButton.tag != 0) {
         [AudioManagerController playClickSound];
-        [self.parentViewController dismissModalViewControllerAnimated:NO];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"launchRestoredGame" object:nil];
     } else {
         [AudioManagerController playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
         [defaults synchronize];
-        [self.parentViewController dismissModalViewControllerAnimated:YES];
     }
+    [self.parentViewController dismissModalViewControllerAnimated:YES];
 }
 
 -(void) viewDidLoad {

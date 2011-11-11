@@ -25,6 +25,7 @@
 #import <netinet/in.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import "hwconsts.h"
+#import "EngineProtocolNetwork.h"
 
 static NSString *cachedModel = nil;
 static NSArray *cachedColors = nil;
@@ -96,7 +97,11 @@ static TGameStatus gameStatus = gsNone;
 +(NSInteger) randomPort {
     srandom(time(NULL));
     NSInteger res = (random() % 64511) + 1024;
-    return (res == NETGAME_DEFAULT_PORT) ? [HWUtils randomPort] : res;
+    // recall self until you get a free port
+    if (res == NETGAME_DEFAULT_PORT || res == [EngineProtocolNetwork activeEnginePort])
+        return [self randomPort];
+    else
+        return res;
 }
 
 +(BOOL) isNetworkReachable {

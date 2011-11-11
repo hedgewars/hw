@@ -25,8 +25,10 @@
 
 #define BUFFER_SIZE 255     // like in original frontend
 
+static NSInteger activeEnginePort;
+
 @implementation EngineProtocolNetwork
-@synthesize delegate, stream, csd;
+@synthesize delegate, stream, csd, enginePort;
 
 -(id) init {
     if (self = [super init]) {
@@ -34,7 +36,9 @@
 
         self.csd = NULL;
         self.stream = nil;
+        self.enginePort = [HWUtils randomPort];
     }
+    activeEnginePort = self.enginePort;
     return self;
 }
 
@@ -53,21 +57,20 @@
 
 #pragma mark -
 #pragma mark Spawner functions
--(NSInteger) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
-    [self retain];
-    self.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
-    [self.stream open];
++(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
+    EngineProtocolNetwork *proto = [[EngineProtocolNetwork alloc] init];
+    proto.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
+    [proto.stream open];
 
-    NSInteger ipcPort = [HWUtils randomPort];
-    NSDictionary *config = [[NSDictionary alloc] initWithObjectsAndKeys:
-                            [NSNumber numberWithInt:ipcPort],@"port",
-                            dictionary,@"config", nil];
+    // +detachNewThreadSelector retain/release self automatically
     [NSThread detachNewThreadSelector:@selector(engineProtocol:)
-                             toTarget:self
-                           withObject:config];
-    [config release];
+                             toTarget:proto
+                           withObject:dictionary];
+    [proto release];
+}
 
-    return ipcPort;
++(NSInteger) activeEnginePort {
+    return activeEnginePort;
 }
 
 #pragma mark -
@@ -228,8 +231,7 @@
 // this is launched as thread and handles all IPC with engine
 -(void) engineProtocol:(id) object {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSDictionary *gameConfig = [(NSDictionary *)object objectForKey:@"config"];
-    NSInteger port = [[(NSDictionary *)object objectForKey:@"port"] intValue];
+    NSDictionary *gameConfig = (NSDictionary *)object;
     NSMutableArray *statsArray = nil;
     TCPsocket sd;
     IPaddress ip;
@@ -247,18 +249,18 @@
     }
 
     // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, NULL, port) < 0 && !clientQuit) {
+    if (SDLNet_ResolveHost(&ip, NULL, self.enginePort) < 0 && !clientQuit) {
         DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         clientQuit = YES;
     }
 
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), port);
+        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), self.enginePort);
         clientQuit = YES;
     }
 
-    DLog(@"Waiting for a client on port %d", port);
+    DLog(@"Waiting for a client on port %d", self.enginePort);
     while (csd == NULL)
         csd = SDLNet_TCP_Accept(sd);
     SDLNet_TCP_Close(sd);
@@ -413,8 +415,6 @@
     SDLNet_Quit();
 
     [pool release];
-
-    [self performSelectorOnMainThread:@selector(release) withObject:nil waitUntilDone:YES];
     // Invoking this method should be avoided as it does not give your thread a chance
     // to clean up any resources it allocated during its execution.
     //[NSThread exit];

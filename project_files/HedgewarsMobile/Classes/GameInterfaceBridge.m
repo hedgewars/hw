@@ -27,7 +27,7 @@
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
-@synthesize ipcPort, blackView;
+@synthesize blackView;
 
 #pragma mark -
 #pragma mark Instance methods for engine interaction
@@ -35,10 +35,7 @@
 -(void) earlyEngineLaunch:(NSString *)pathOrNil withOptions:(NSDictionary *)optionsOrNil {
     [self retain];
     [AudioManagerController stopBackgroundMusic];
-
-    EngineProtocolNetwork *proto = [[EngineProtocolNetwork alloc] init];
-    self.ipcPort = [proto spawnThread:pathOrNil withOptions:optionsOrNil];
-    [proto release];
+    [EngineProtocolNetwork spawnThread:pathOrNil withOptions:optionsOrNil];
 
     // add a black view hiding the background
     CGRect theFrame = [[UIScreen mainScreen] bounds];
@@ -90,8 +87,9 @@
 -(void) engineLaunch:(NSString *)pathOrNil {
     const char *gameArgs[11];
     CGFloat width, height;
+    NSInteger enginePort = [EngineProtocolNetwork activeEnginePort];
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
-    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",self.ipcPort];
+    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",enginePort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
@@ -158,10 +156,14 @@
 
 #pragma mark -
 #pragma mark Class methods for setting up the engine from outsite
-// set up variables for a local game
-+(void) startLocalGame:(NSDictionary *)withOptions {
-    [HWUtils setGameType:gtLocal];
++(void) startGame:(TGameType) type atPath:(NSString *)path withOptions:(NSDictionary *)config {
+    [HWUtils setGameType:type];
+    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] init];
+    [bridge earlyEngineLaunch:path withOptions:config];
+    [bridge release];
+}
 
++(void) startLocalGame:(NSDictionary *)withOptions {
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
     NSString *savePath = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
@@ -171,30 +173,20 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:savePath])
         [[NSFileManager defaultManager] removeItemAtPath:savePath error:nil];
 
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] init];
-    [bridge earlyEngineLaunch:savePath withOptions:withOptions];
-    [bridge release];
+    [self startGame:gtLocal atPath:savePath withOptions:withOptions];
     [savePath release];
 }
 
-// set up variables for a save game
 +(void) startSaveGame:(NSString *)atPath {
-    [HWUtils setGameType:gtSave];
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] init];
-    [bridge earlyEngineLaunch:atPath withOptions:nil];
-    [bridge release];
+    [self startGame:gtSave atPath:atPath withOptions:nil];
 }
 
 +(void) startMissionGame:(NSString *)withScript {
-    [HWUtils setGameType:gtMission];
-
     NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
     NSDictionary *missionLine = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath,@"mission_command",nil];
     [missionPath release];
 
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] init];
-    [bridge earlyEngineLaunch:nil withOptions:missionLine];
-    [bridge release];
+    [self startGame:gtMission atPath:nil withOptions:missionLine];
     [missionLine release];
 }
 
