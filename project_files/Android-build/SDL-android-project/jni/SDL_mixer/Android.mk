@@ -12,7 +12,7 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_CFLAGS := -DWAV_MUSIC -DOGG_MUSIC -DOGG_USE_TREMOR -DMOD_MUSIC
 
-LOCAL_SRC_FILES := $(notdir $(filter-out %/playmus.c %/playwave.c, $(wildcard $(LOCAL_PATH)/*.c)))
+LOCAL_SRC_FILES := $(notdir $(filter-out %/playmus.c %/playwave.c %/fluidsynth.c, $(wildcard $(LOCAL_PATH)/*.c)))
 
 LOCAL_SHARED_LIBRARIES := SDL mikmod
 LOCAL_STATIC_LIBRARIES := tremor
