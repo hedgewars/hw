@@ -157,6 +157,10 @@ var
     currentPinchDelta, zoom : hwFloat;
     tmpX, tmpY: LongInt;
 begin
+    x := x;
+    y := y;
+    dx := dx;
+    dy := dy;
     finger:= findFinger(pointerId);
     tmpX := convertToCursor(cScreenWidth, x);
     tmpY := convertToCursor(cScreenHeight, y);
@@ -199,6 +203,8 @@ end;
 
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
 begin
+    x := x;
+    y := y;
     aiming:= false;
     stopFiring:= true;
     deleteFinger(pointerId);
@@ -218,6 +224,7 @@ end;
 
 procedure onTouchDoubleClick(finger: Touch_Finger);
 begin
+    finger := finger;//avoid compiler hint
     ParseCommand('ljump', true);
 end;
 
@@ -259,7 +266,7 @@ var
     xCursor, yCursor, index : LongInt;
 begin
     //Check array sizes
-    if length(fingers) < pointerCount then 
+    if length(fingers) < Integer(pointerCount) then 
     begin
         setLength(fingers, length(fingers)*2);
         for index := length(fingers) div 2 to length(fingers) do fingers[index].id := nilFingerId;
@@ -284,7 +291,7 @@ end;
 
 procedure deleteFinger(id: SDL_FingerId);
 var
-    index : Longint;
+    index : Longword;
 begin
     
     dec(pointerCount);
@@ -384,6 +391,8 @@ var
 begin
     if CurrentHedgehog^.Gear <> nil then
     begin
+        touchX := _0;//avoid compiler hint
+        touchY := _0;
         hogX := CurrentHedgehog^.Gear^.X;
         hogY := CurrentHedgehog^.Gear^.Y;
 
@@ -420,6 +429,8 @@ function isOnCrosshair(finger: Touch_Finger): boolean;
 var
     x,y : hwFloat;
 begin
+    x := _0;//avoid compiler hint
+    y := _0;
     convertToFingerCoord(x, y, int2hwFloat(CrosshairX), int2hwFloat(CrosshairY));
     isOnCrosshair:= Distance(int2hwFloat(finger.x)-x, int2hwFloat(finger.y)-y) < _50;
 end;
@@ -428,6 +439,8 @@ function isOnCurrentHog(finger: Touch_Finger): boolean;
 var
     x,y : hwFloat;
 begin
+    x := _0;
+    y := _0;
     convertToFingerCoord(x, y, CurrentHedgehog^.Gear^.X, CurrentHedgehog^.Gear^.Y);
     isOnCurrentHog := Distance(int2hwFloat(finger.X)-x, int2hwFloat(finger.Y)-y) < _50;
 end;
@@ -472,7 +485,8 @@ end;
 
 procedure initModule;
 var
-    index, uRenderCoordScaleX, uRenderCoordScaleY: Longword;
+    index: Longword;
+    //uRenderCoordScaleX, uRenderCoordScaleY: Longword;
 begin
     movingCrosshair := false;
     stopFiring:= false;
@@ -488,7 +502,7 @@ begin
         fingers[index].id := nilFingerId;
 
 
-    uRenderCoordScaleX := Round(cScreenWidth/0.8 * 2);
+    //uRenderCoordScaleX := Round(cScreenWidth/0.8 * 2);
     fireButtonLeft := Round(cScreenWidth*0.01);
     fireButtonRight := Round(fireButtonLeft + (spritesData[sprFireButton].Width*0.4));
     fireButtonBottom := Round(cScreenHeight*0.99);
