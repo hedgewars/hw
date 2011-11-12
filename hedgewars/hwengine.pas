@@ -156,7 +156,7 @@ begin
     while isTerminated = false do
     begin
         SDL_PumpEvents();
-        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL13}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL13}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}HW_EVENT_MASK{$ENDIF}) > 0 do
         begin
             case event.type_ of
 {$IFDEF SDL13}
