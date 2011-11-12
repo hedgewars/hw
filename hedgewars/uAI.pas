@@ -267,8 +267,7 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
 
       WalkMe:= BackMe;
       Walk(@WalkMe);
-      if (StartTicks > GameTicks - 1500) and not StopThinking then SDL_Delay(1000);
-
+      if (StartTicks > GameTicks - 1500) and (not StopThinking) then SDL_Delay(1000);
       if BestActions.Score < -1023 then
          begin
          BestActions.Count:= 0;
@@ -286,9 +285,7 @@ else begin
       end;
 PGear(Me)^.State:= PGear(Me)^.State and not gstHHThinking;
 Think:= 0;
-
-InterlockedDecrement(hasThread);
-
+InterlockedDecrement(hasThread)
 end;
 
 procedure StartThink(Me: PGear);

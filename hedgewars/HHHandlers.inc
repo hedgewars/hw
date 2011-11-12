@@ -181,6 +181,7 @@ with Gear^,
      if ((State and gstHHDriven) <> 0)and
         ((State and (gstAttacked or gstHHChooseTarget)) = 0) and
         (((State and gstMoving) = 0) or
+            (Power > 0) or
             (CurAmmoType = amTeleport) or 
             // Allow attacks while moving on ammo with AltAttack
             ((CurAmmoGear <> nil) and ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0)) or
@@ -355,8 +356,7 @@ with Gear^,
                       amBazooka, amSnowball, 
                           amBee, amSMine,
                        amMortar, amWatermelon,
-                  amHellishBomb, amDrill,
-                        amPiano: FollowGear:= newGear;
+                  amHellishBomb, amDrill: FollowGear:= newGear;
 
                       amShotgun, amPickHammer,
                          amRope, amDEagle,
@@ -371,7 +371,7 @@ with Gear^,
                       amJetpack, amBirdy,
                  amFlamethrower, amLandGun,
                   amResurrector, amStructure,
-                       amTardis: CurAmmoGear:= newGear;
+                       amTardis, amPiano: CurAmmoGear:= newGear;
                   end;
               if (CurAmmoType = amMine) or (CurAmmoType = amSMine) and (GameFlags and gfInfAttack <> 0) then newGear^.FlightTime:= GameTicks + 1000;
         if Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then
@@ -771,6 +771,7 @@ if Gear^.Hedgehog^.Unplaced then
    Gear^.dY:= _0;
    Gear^.dX:= _0;
    Gear^.State:= Gear^.State and not gstMoving;
+   while TestCollisionYWithGear(Gear,1) = 0 do Gear^.Y:= Gear^.Y+_1;
    exit
    end;
 isFalling:= (Gear^.dY.isNegative) or not TestCollisionYKick(Gear, 1);
@@ -816,7 +817,10 @@ else
 
    if ((Gear^.State and gstMoving) <> 0) then
        begin
-       if land and lfIce <> 0 then Gear^.dX:= Gear^.dX * (_1 - (_1 - Gear^.Friction) / _2)
+       if land and lfIce <> 0 then
+           begin
+           Gear^.dX:= Gear^.dX * (_1 - (_1 - Gear^.Friction) / _2)
+           end
        else Gear^.dX:= Gear^.dX * Gear^.Friction;
        end
    end;
@@ -841,10 +845,12 @@ if (Gear^.State and gstMoving) <> 0 then
             if hwAbs(Gear^.dX) > _0_02 then Gear^.dX:= -Gear^.Elasticity * Gear^.dX
                                    else begin
                                         Gear^.State:= Gear^.State and not gstMoving;
+                                        while TestCollisionYWithGear(Gear,1) = 0 do Gear^.Y:= Gear^.Y+_1;
                                         SetLittle(Gear^.dX)
                                         end
             else begin
                  Gear^.State:= Gear^.State and not gstMoving;
+                 while TestCollisionYWithGear(Gear,1) = 0 do Gear^.Y:= Gear^.Y+_1;
                  SetLittle(Gear^.dX)
                  end
          else if (hwAbs(Gear^.dX) > cLittle)
@@ -857,6 +863,7 @@ if (not isFalling) and
    begin
    Gear^.State:= Gear^.State and not gstWinner;
    Gear^.State:= Gear^.State and not gstMoving;
+   while TestCollisionYWithGear(Gear,1) = 0 do Gear^.Y:= Gear^.Y+_1;
    SetLittle(Gear^.dX);
    Gear^.dY:= _0
    end else Gear^.State:= Gear^.State or gstMoving;
@@ -876,7 +883,10 @@ if (Gear^.State and gstMoving) <> 0 then
       Gear^.Y:= Gear^.Y + _1
       end;
    CheckGearDrowning(Gear);
-   if (Gear^.State and gstDrowning) <> 0 then isCursorVisible:= false
+   // hide target cursor if current hog is drowning
+   if (Gear^.State and gstDrowning) <> 0 then
+       if (CurrentHedgehog^.Gear = Gear) then
+          isCursorVisible:= false
    end;
 
 if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
@@ -1098,7 +1108,9 @@ end;
 procedure doStepHedgehog(Gear: PGear);
 (*
 var x,y,tx,ty: LongInt;
-    tdX, tdY, slope: hwFloat; *)
+    tdX, tdY, slope: hwFloat; 
+    land: Word; *)
+var slope: hwFloat; 
 begin
 if (Gear^.Message and gmDestroy) <> 0 then
     begin
@@ -1116,32 +1128,28 @@ else
         else
             doStepHedgehogDriven(Gear)
     end;
-
-if ((GameTicks mod 50) = 0) and (Gear^.State and (gstMoving or gstHHJumping or gstHHHJump) = 0) and ((Gear^.Message and gmAllStoppable) = 0) and 
-    (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
+if (Gear^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0) and
+   (Gear^.State and (gstHHJumping or gstHHHJump or gstAttacking) = 0) and
+   not Gear^.dY.isNegative and
+   (GameTicks mod (100*hwRound(cMaxWindSpeed/(cGravity/2))) = 0) and 
+   (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
     begin
-    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)+cHHRadius, lfIce) then
-        begin
-        Gear^.dX.QWordValue:= Gear^.dX.QWordValue + cGravity.QWordValue * 75;
-        Gear^.State:= Gear^.State or gstMoving;
-        end
+    slope:= CalcSlopeBelowGear(Gear);
+    Gear^.dX:=Gear^.dX+slope*_0_07;
+    if slope.QWordValue <> 0 then Gear^.State:= Gear^.State or gstMoving;
 (*
-    // check land slope, and impart a dX based on it
-    tdX:= Gear^.dX;
-    tdY:= Gear^.dY;
-    Gear^.dX:= _0;
-    Gear^.dY:= _1;
-    x := hwRound(Gear^.X);
-    y := hwRound(Gear^.Y);
-    tx := 0;
-    ty := 0;
-    if not CalcSlopeTangent(Gear, x, y+cHHRadius, tx, ty, 255) then
-        begin
-        slope:= _1/DistanceI(tx,ty);
-        AddFileLog(FloatToStr(tdX)+ ' == '+FloatToStr(slope));
-        tdX:= tdX + (cGravity * slope / _10)  // this will need tuning 
-        end;
-    Gear^.dX:= tdX;
-    Gear^.dY:= tdY  *)
-    end;
+    x:= hwRound(Gear^.X);
+    y:= hwRound(Gear^.Y);
+    AddVisualGear(x, y, vgtSmokeTrace);
+    AddVisualGear(x - hwRound(_5*slope), y + hwRound(_5*slope), vgtSmokeTrace);
+    AddVisualGear(x + hwRound(_5*slope), y - hwRound(_5*slope), vgtSmokeTrace);
+    AddVisualGear(x - hwRound(_20 * slope), y + hwRound(_20 * slope), vgtSmokeTrace);
+    AddVisualGear(x + hwRound(_20 * slope), y - hwRound(_20 * slope), vgtSmokeTrace);
+    AddVisualGear(x - hwRound(_30 * slope), y + hwRound(_30 * slope), vgtSmokeTrace);
+    AddVisualGear(x + hwRound(_30 * slope), y - hwRound(_30 * slope), vgtSmokeTrace);
+    AddVisualGear(x - hwRound(_40 * slope), y + hwRound(_40 * slope), vgtSmokeTrace);
+    AddVisualGear(x + hwRound(_40 * slope), y - hwRound(_40 * slope), vgtSmokeTrace);
+    AddVisualGear(x - hwRound(_50 * slope), y + hwRound(_50 * slope), vgtSmokeTrace);
+    AddVisualGear(x + hwRound(_50 * slope), y - hwRound(_50 * slope), vgtSmokeTrace); *)
+    end
 end;

@@ -32,21 +32,21 @@
     id<EngineProtocolDelegate> delegate;
 
     NSOutputStream *stream;
-    NSInteger ipcPort;              // Port on which engine will listen
-    TCPsocket csd;                  // Client socket descriptor
+    TCPsocket csd;
+    NSInteger enginePort;
 }
 
 @property (nonatomic,assign) id<EngineProtocolDelegate> delegate;
 @property (nonatomic,retain) NSOutputStream *stream;
-@property (assign) NSInteger ipcPort;
 @property (assign) TCPsocket csd;
+@property (assign) NSInteger enginePort;
 
 
 -(id)   init;
--(id)   initOnPort:(NSInteger) port;
 
--(void) spawnThread:(NSString *)onSaveFile;
--(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary;
++(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary;
++(NSInteger) activeEnginePort;
+
 -(void) engineProtocol:(id) object;
 -(void) gameHasEndedWithStats:(NSArray *)stats;
 

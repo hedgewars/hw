@@ -8,22 +8,42 @@
  * see http://doc.qt.nokia.com/4.5/richtext-html-subset.html#css-properties
  *
  * In the QTfrontend of hedgewars also display:none; will work for class names
- * that start with msg_ and .TimeStamp -  as long as they are referenced
- * directly and not within any hierachy.
+ * that start with msg_ and .timestamp -  as long as they are referenced
+ * directly and not within any class hierachy.
+ * Note: Will only effect new lines!
  *
  ******************************************************************************
  *
  * This file can be stored at different locations, but it will be read only
  * once, based on first file found in this order:
  *
- *     <userdir>/Data/css/chat.css
- *     <datadir>/css/chat.css
- *     <internal default style-sheet>
+ *    <userdir>/Data/css/chat.css ( create/see full path with: /saveStyleSheet )
+ *    <datadir>/css/chat.css
+ *    <internal default style-sheet>
  *
  *****************************************************************************/
 
+/* valid color values
+ *
+ * transparent   (no color)
+ *
+ * colorname
+ *   (a word that is the name of a valid color)
+ *   available colors: http://www.w3.org/TR/SVG/types.html#ColorKeywords
+ *   examples: red, steelblue, mintcream
+ *
+ * #RRGGBB
+ *   (hexadecimal additive red-green-blue, max is ff, min 00, half is 80)
+ *   examples: #ffff00 (yellow), #808080 (gray)
+ *
+ * rgb(r, g, b)
+ *   (decimal additive red-green-blue, max is 255, min 0, half is 128)
+ *   examples: rgb(135, 206, 250) (lightskyblue)
+ */
+
+
 /* links */
-a { color:#c8c8ff; }
+a { color: #c8c8ff; }
 
 /* appearance of the whole chat */
 /* body { color: white; background-color: #000000; } */
@@ -48,6 +68,9 @@ a { color:#c8c8ff; }
 .msg_FriendAction { color: #ff00ff; }
 .msg_FriendAction .nick { color: #ff30ff; }
 
+/* uncomment next line to disable join and leave messages of non-friends */
+/* .msg_UserJoin { display:none; } */
+
 /* timestamps */
 .timestamp {
     color: #e0d8e0;
@@ -58,15 +81,15 @@ a { color:#c8c8ff; }
     /* display: none; */
 }
 
+/* .timestamp:hours { display: none; } */
+.timestamp:seconds { display: none; }
+
 /* you can also set timestamp style for different msg types */
 .msg_FriendChat .timestamp { color: #ffffff; }
 
 /* messages that contain your nickname */
 .highlight {  }
-.highlight .nick { color: red; } /* nicknames in highlighted messages */
-
-/* uncomment next line to disable join and leave messages of non-friends */
-/* .msg_UserJoin { display:none; } */
+.highlight .nick { color: #ff0000; } /* nicknames in highlighted messages */
 
 /* system messages */
 .msg_Error { color: #ff0000; }

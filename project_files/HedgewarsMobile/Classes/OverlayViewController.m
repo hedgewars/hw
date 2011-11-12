@@ -36,7 +36,7 @@
 static OverlayViewController *mainOverlay;
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, initialScreenCount, lowerIndicator, savesIndicator,
+@synthesize popoverController, popupMenu, helpPage, amvc, initialScreenCount, loadingIndicator,
             confirmButton, grenadeTimeSegment;
 
 #pragma mark -
@@ -53,8 +53,7 @@ static OverlayViewController *mainOverlay;
         isAttacking = NO;
         isPopoverVisible = NO;
         initialScreenCount = (IS_DUALHEAD() ? 2 : 1);
-        lowerIndicator = nil;
-        savesIndicator = nil;
+        loadingIndicator = nil;
         mainOverlay = self;
     }
     return self;
@@ -119,8 +118,7 @@ static OverlayViewController *mainOverlay;
     [self dismissPopover];
     self.popoverController = nil;
     self.amvc = nil;
-    self.lowerIndicator = nil;
-    self.savesIndicator = nil;
+    self.loadingIndicator = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -132,10 +130,8 @@ static OverlayViewController *mainOverlay;
         self.helpPage = nil;
     if (self.amvc.view.superview == nil)
         self.amvc = nil;
-    if (self.lowerIndicator.superview == nil)
-        self.lowerIndicator = nil;
-    if (self.savesIndicator.superview == nil)
-        self.savesIndicator = nil;
+    if (self.loadingIndicator.superview == nil)
+        self.loadingIndicator = nil;
     if (self.confirmButton.superview == nil)
         self.confirmButton = nil;
     if (self.grenadeTimeSegment.superview == nil)
@@ -153,8 +149,7 @@ static OverlayViewController *mainOverlay;
     releaseAndNil(helpPage);
     releaseAndNil(popoverController);
     releaseAndNil(amvc);
-    releaseAndNil(lowerIndicator);
-    releaseAndNil(savesIndicator);
+    releaseAndNil(loadingIndicator);
     releaseAndNil(confirmButton);
     releaseAndNil(grenadeTimeSegment);
     // dimTimer is autoreleased
@@ -191,7 +186,7 @@ static OverlayViewController *mainOverlay;
 #pragma mark overlay appearance
 // nice transition for dimming, should be called only by the timer himself
 -(void) dimOverlay {
-    if (isGameRunning()) {
+    if ([HWUtils isGameRunning]) {
         [UIView beginAnimations:@"overlay dim" context:NULL];
         [UIView setAnimationDuration:0.6];
         self.view.alpha = 0.2;
@@ -209,13 +204,15 @@ static OverlayViewController *mainOverlay;
     [self.popupMenu performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:YES];
     [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
     [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(release) withObject:nil waitUntilDone:YES];
+    mainOverlay = nil;
 }
 
 #pragma mark -
 #pragma mark overlay user interaction
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {
-    if (isGameRunning() == NO)
+    if ([HWUtils isGameRunning] == NO)
         return;
 
     UIButton *theButton = (UIButton *)sender;
@@ -248,7 +245,7 @@ static OverlayViewController *mainOverlay;
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
     
-    if (isGameRunning() == NO)
+    if ([HWUtils isGameRunning] == NO)
         return;
     
     if (isPopoverVisible)
@@ -333,9 +330,9 @@ static OverlayViewController *mainOverlay;
 
 -(void) setGrenadeTime:(id) sender {
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
-    if (cachedGrenadeTime() != theSegment.selectedSegmentIndex) {
+    if ([ObjcExports grenadeTime] != theSegment.selectedSegmentIndex) {
         HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
-        setGrenadeTime(theSegment.selectedSegmentIndex);
+        [ObjcExports setGrenadeTime:theSegment.selectedSegmentIndex];
     }
 }
 
@@ -401,7 +398,7 @@ static OverlayViewController *mainOverlay;
 #pragma mark -
 #pragma mark Custom touch event handling
 -(BOOL) shouldIgnoreTouch:(NSSet *)allTouches {
-    if (isGameRunning() == NO)
+    if ([HWUtils isGameRunning] == NO)
         return YES;
 
     // ignore activity near the dpad and buttons
@@ -441,10 +438,14 @@ static OverlayViewController *mainOverlay;
                 HW_zoomReset();
             break;
         case 2:
-            // pinching
-            first = [[allTouches allObjects] objectAtIndex:0];
-            second = [[allTouches allObjects] objectAtIndex:1];
-            initialDistanceForPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
+            if (2 == [[[allTouches allObjects] objectAtIndex:0] tapCount])
+                HW_screenshot();
+            else {
+                // pinching
+                first = [[allTouches allObjects] objectAtIndex:0];
+                second = [[allTouches allObjects] objectAtIndex:1];
+                initialDistanceForPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
+            }
             break;
         default:
             break;
@@ -512,7 +513,7 @@ static OverlayViewController *mainOverlay;
                                 [grenadeSegment release];
                             }
                             self.grenadeTimeSegment.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
-                            self.grenadeTimeSegment.selectedSegmentIndex = cachedGrenadeTime();
+                            self.grenadeTimeSegment.selectedSegmentIndex = [ObjcExports grenadeTime];
                             self.grenadeTimeSegment.alpha = 1;
                             [self.view addSubview:self.grenadeTimeSegment];
 

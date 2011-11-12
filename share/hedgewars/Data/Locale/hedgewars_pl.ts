@@ -68,24 +68,76 @@
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation>Kiedy ta opcja jest włączona, wybór ustawień gry zmienia uzbrojenie na odpowiednie</translation>
     </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished">Opcje</translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation>%1 *** %2 został usunięty z listy ignorowanych</translation>
+        <translation type="obsolete">%1 *** %2 został usunięty z listy ignorowanych</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation>%1 *** %2 został dodany do listy ignorowanych</translation>
+        <translation type="obsolete">%1 *** %2 został dodany do listy ignorowanych</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation>%1 *** %2 został usunięty z listy przyjaciół</translation>
+        <translation type="obsolete">%1 *** %2 został usunięty z listy przyjaciół</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation>%1 *** %2 został dodany do listy przyjaciół</translation>
+        <translation type="obsolete">%1 *** %2 został dodany do listy przyjaciół</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not a valid command!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kicking %1 ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -135,6 +187,46 @@
     <message>
         <source>Demo name:</source>
         <translation>Nazwa demo:</translation>
+    </message>
+    <message>
+        <source>Game aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Hasło</translation>
+    </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation type="unfinished">Twój nick %1 jest zarejestrowany
+na Hedgewars.org
+Proszę podać hasło bądź zmienić nick
+w ustawieniach gry:</translation>
+    </message>
+    <message>
+        <source>No password supplied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Nick</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished">Ktoś właśnie używa
+tego nicku %1
+na serwerze.
+Przoszę wybrać nowy nick:</translation>
+    </message>
+    <message>
+        <source>No nickname supplied.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -266,7 +358,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation>Hasło</translation>
+        <translation type="obsolete">Hasło</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -299,24 +391,28 @@ bądź wybierz inny nick:</translation>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation>Twój nick %1 jest zarejestrowany
+        <translation type="obsolete">Twój nick %1 jest zarejestrowany
 na Hedgewars.org
 Proszę podać hasło bądź zmienić nick
 w ustawieniach gry:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>Nick</translation>
+        <translation type="obsolete">Nick</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation>Ktoś właśnie używa
+        <translation type="obsolete">Ktoś właśnie używa
 tego nicku %1
 na serwerze.
 Przoszę wybrać nowy nick:</translation>
+    </message>
+    <message>
+        <source>User quit</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -373,7 +469,7 @@ Przoszę wybrać nowy nick:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Anuluj</translation>
+        <translation type="obsolete">Anuluj</translation>
     </message>
 </context>
 <context>
@@ -515,6 +611,13 @@ Przoszę wybrać nowy nick:</translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; trząsł portkami i opuścił turę &lt;b&gt;%2&lt;/b&gt; razy.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; trząsł portkami i opuścił turę &lt;b&gt;%2&lt;/b&gt; razy.</numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>PageInGame</name>
+    <message>
+        <source>In game...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1043,7 +1146,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>State:</source>
-        <translation>Stan:</translation>
+        <translation type="obsolete">Stan:</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1208,7 +1311,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation>>Dodaje niezniszczalną ramkę u dołu mapy</translation>
+        <translation>&gt;Dodaje niezniszczalną ramkę u dołu mapy</translation>
     </message>
 </context>
 <context>
@@ -1242,7 +1345,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation>Trening (sprawdź swoje umiejętności podczas misji treningowych). W PRODUKCJI</translation>
+        <translation type="obsolete">Trening (sprawdź swoje umiejętności podczas misji treningowych). W PRODUKCJI</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
@@ -1254,7 +1357,26 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation>Kampania (...). W PRODUKCJI</translation>
+        <translation type="obsolete">Kampania (...). W PRODUKCJI</translation>
+    </message>
+    <message>
+        <source>Campaign Mode (...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageTraining</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a mission!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1569,7 +1691,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     <name>QLabel</name>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>Ten program jest rozprowadzany na zasadach powszechnej licencji publicznej GNU</translation>
+        <translation type="obsolete">Ten program jest rozprowadzany na zasadach powszechnej licencji publicznej GNU</translation>
     </message>
     <message>
         <source>Developers:</source>
@@ -1761,7 +1883,7 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     </message>
     <message>
         <source>Game Options</source>
-        <translation>Opcje</translation>
+        <translation type="obsolete">Opcje</translation>
     </message>
     <message>
         <source>Style</source>
@@ -1778,6 +1900,10 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     <message>
         <source>% Get Away Time</source>
         <translation>Czas na ucieczkę w %</translation>
+    </message>
+    <message>
+        <source>This program is distributed under the GNU General Public License v2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

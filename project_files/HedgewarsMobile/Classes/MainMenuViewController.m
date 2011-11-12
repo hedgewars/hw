@@ -29,7 +29,7 @@
 #import "MissionTrainingViewController.h"
 #import "GameInterfaceBridge.h"
 #import "Appirater.h"
-#import "ServerSetup.h"
+#import "ServerProtocolNetwork.h"
 
 
 @implementation MainMenuViewController
@@ -52,7 +52,14 @@
                               withIntermediateDirectories:NO
                                                attributes:nil
                                                     error:NULL];
-    
+
+    // SCREENSHOTS - just create it the first time
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SCREENSHOTS_DIRECTORY()] == NO)
+        [[NSFileManager defaultManager] createDirectoryAtPath:SCREENSHOTS_DIRECTORY()
+                                  withIntermediateDirectories:NO
+                                                   attributes:nil
+                                                        error:NULL];
+
     // SETTINGS - nsuserdefaults ftw
     [CreationChamber createSettings];
 
@@ -122,16 +129,8 @@
         [Appirater appLaunched];
     }
 
-
     /*
-    ServerSetup *setup = [[ServerSetup alloc] init];
-    if (isNetworkReachable()) {
-        DLog(@"network is reachable");
-        [NSThread detachNewThreadSelector:@selector(serverProtocol)
-                                 toTarget:setup
-                               withObject:nil];
-    }
-    [setup release];
+    [ServerProtocolNetwork openServerConnection];
     */
 }
 
@@ -238,9 +237,7 @@
 #pragma mark -
 -(void) launchRestoredGame {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
-    [bridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
-    [bridge release];
+    [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
 }
 
 #pragma mark -

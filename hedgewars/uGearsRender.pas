@@ -897,15 +897,15 @@ begin
                   Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
                   if Gear^.Tag = -1 then
                       begin
-                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 0, -1, SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
+                      DrawRotatedF(sprPlane, x, y, 0, -1, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
                       Tint($FF, $FF, $FF, $FF);
-                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 1, -1, SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
+                      DrawRotatedF(sprPlane, x, y, 1, -1, DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
                       end
                   else
                       begin
-                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 0, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dY, Gear^.dX));
+                      DrawRotatedF(sprPlane, x, y, 0, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
                       Tint($FF, $FF, $FF, $FF);
-                      DrawRotatedTextureF(SpritesData[sprPlane].Texture, 1, 0, 0, x, y, 1, 0,  SpritesData[sprPlane].Width, SpritesData[sprPlane].Height, DxDy2Angle(Gear^.dY, Gear^.dX))
+                      DrawRotatedF(sprPlane, x, y, 1, 0, DxDy2Angle(Gear^.dY, Gear^.dX))
                       end
                   end;
        gtBall: DrawRotatedf(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
@@ -983,13 +983,19 @@ begin
         gtDynamite: DrawSprite2(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawRotated(sprClusterBomb, x, y, 0, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, x - 8, y - 8, 0);
-           gtFlame: DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), x, y, (GameTicks shr 7 + LongWord(Gear^.Tag)) mod 8, 1, 16, 16);
+           gtFlame: if Gear^.Tag and 1 = 0 then
+                         DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), x, y, (GameTicks shr 7 + LongWord(Gear^.Tag)) mod 8, 1, 16, 16)
+                    else DrawTextureF(SpritesData[sprFlame].Texture, 2 / (Gear^.Tag mod 3 + 2), x, y, (GameTicks shr 7 + LongWord(Gear^.Tag)) mod 8, -1, 16, 16);
        gtParachute: begin
                     DrawSprite(sprParachute, x - 24, y - 48, 0);
                     DrawAltWeapon(Gear, x + 1, y - 3)
                     end;
-       gtAirAttack: if Gear^.Tag > 0 then DrawSprite(sprAirplane, x - SpritesData[sprAirplane].Width div 2, y - SpritesData[sprAirplane].Height div 2, 0)
-                                     else DrawSprite(sprAirplane, x - SpritesData[sprAirplane].Width div 2, y - SpritesData[sprAirplane].Height div 2, 1);
+       gtAirAttack: begin
+                    Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
+                    DrawRotatedF(sprAirplane, x, y, 0, Gear^.Tag, 0);
+                    Tint($FF, $FF, $FF, $FF);
+                    DrawRotatedF(sprAirplane, x, y, 1, Gear^.Tag, 0);
+                    end;
          gtAirBomb: DrawRotated(sprAirBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtTeleport: begin
                     HHGear:= Gear^.Hedgehog^.Gear;
@@ -1051,10 +1057,10 @@ begin
                         begin
                         Tint($FF, $FF, $FF, $10);
                         for i:= 8 downto 1 do
-                            DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, x, y - hwRound(Gear^.dY * 4 * i), 0, 1, 128, 128, 0);
+                            DrawTextureF(SpritesData[sprPiano].Texture, 1, x, y - hwRound(Gear^.dY * 4 * i), 0, 1, 128, 128);
                         Tint($FF, $FF, $FF, $FF)
                         end;
-                    DrawRotatedTextureF(SpritesData[sprPiano].Texture, 1, 0, 0, x, y, 0, 1, 128, 128, 0);
+                    DrawTextureF(SpritesData[sprPiano].Texture, 1, x, y, 0, 1, 128, 128);
                     end;
      gtPoisonCloud: begin
                     if Gear^.Timer < 1020 then

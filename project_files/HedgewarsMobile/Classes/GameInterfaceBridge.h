@@ -20,41 +20,16 @@
 
 
 #import <Foundation/Foundation.h>
-#import "EngineProtocolNetwork.h"
 
-typedef enum {gtNone, gtLocal, gtSave, gtMission, gtNet} TGameType;
-typedef enum {gsNone, gsInGame, gsEnded, gsInterrupted} TGameStatus;
 
-@class OverlayViewController;
-
-@interface GameInterfaceBridge : NSObject <EngineProtocolDelegate> {
-    UIViewController *parentController;
-    OverlayViewController *overlayController;
-
-    NSString *savePath;
-    EngineProtocolNetwork *engineProtocol;
-
-    NSInteger ipcPort;  // Port on which engine will listen
-    TGameType gameType;
+@interface GameInterfaceBridge : NSObject {
+    UIView *blackView;
 }
 
-@property (assign) UIViewController *parentController;
-@property (nonatomic,retain) NSString *savePath;
+@property (nonatomic,retain) UIView *blackView;
 
-@property (nonatomic,retain) OverlayViewController *overlayController;
-@property (nonatomic,retain) EngineProtocolNetwork *engineProtocol;
-
-@property (assign) NSInteger ipcPort;
-@property (assign) TGameType gameType;
-
-
--(id)   initWithController:(id) viewController;
--(void) startLocalGame:(NSDictionary *)withOptions;
--(void) startSaveGame:(NSString *)atPath;
--(void) startMissionGame:(NSString *)withScript;
-
--(void) prepareEngineLaunch;
--(void) engineLaunch;
--(void) gameHasEndedWithStats:(NSArray *)stats;
++(void) startLocalGame:(NSDictionary *)withOptions;
++(void) startSaveGame:(NSString *)atPath;
++(void) startMissionGame:(NSString *)withScript;
 
 @end

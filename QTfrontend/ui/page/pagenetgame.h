@@ -59,6 +59,7 @@ public:
 
 public slots:
     void setReadyStatus(bool isReady);
+    void setUser(const QString & nickname);
     void onUpdateClick();
     void setMasterMode(bool isMaster);
 

@@ -23,14 +23,11 @@
 
 
 @interface InGameMenuViewController : UITableViewController <UIActionSheetDelegate> {
-    NSArray *menuList;
-    BOOL shouldTakeScreenshot;
+
 }
 
-@property (nonatomic,retain) NSArray *menuList;
 
 -(void) present;
 -(void) dismiss;
-//-(void) saveCurrentScreenToPhotoAlbum:(UIAlertView *)alert;
 
 @end

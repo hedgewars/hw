@@ -28,13 +28,11 @@
     MainMenuViewController *mainViewController;
     UIWindow *uiwindow;
     UIWindow *secondWindow;
-    BOOL isInGame;
 }
 
 @property (nonatomic,retain) MainMenuViewController *mainViewController;
 @property (nonatomic,retain) UIWindow *uiwindow;
 @property (nonatomic,retain) UIWindow *secondWindow;
-@property (assign) BOOL isInGame;
 
 +(HedgewarsAppDelegate *)sharedAppDelegate;
 

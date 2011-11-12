@@ -116,6 +116,7 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
            _0_01: hwFloat = (isNegative: false; QWordValue:    42949673);
            _0_02: hwFloat = (isNegative: false; QWordValue:    85899345);
            _0_03: hwFloat = (isNegative: false; QWordValue:   128849018);
+           _0_07: hwFloat = (isNegative: false; QWordValue:   300647710);
            _0_08: hwFloat = (isNegative: false; QWordValue:   343597383);
             _0_1: hwFloat = (isNegative: false; QWordValue:   429496730);
            _0_15: hwFloat = (isNegative: false; QWordValue:   644245094);
@@ -321,7 +322,7 @@ begin
 str(z.Round, cstr);
 if z.Frac <> 0 then
    begin
-   str(z.Frac / $100000000:1:15, tmpstr);
+   str(z.Frac / $100000000:1:10, tmpstr);
    delete(tmpstr, 1, 2);
    cstr:= cstr + '.' + tmpstr
    end;

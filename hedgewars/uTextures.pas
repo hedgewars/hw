@@ -23,6 +23,7 @@ interface
 uses SDLh, uTypes;
 
 function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
+procedure Surface2GrayScale(surf: PSDL_Surface);
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
 
@@ -98,6 +99,26 @@ glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_B
 SetTextureParameters(true);
 end;
 
+procedure Surface2GrayScale(surf: PSDL_Surface);
+var tw, x, y: Longword;
+    fromP4: PLongWordArray;
+begin
+fromP4:= Surf^.pixels;
+for y:= 0 to Pred(Surf^.h) do
+    begin
+    for x:= 0 to Pred(Surf^.w) do 
+        begin
+        tw:= fromP4^[x];
+        tw:= round((tw shr RShift and $FF) * RGB_LUMINANCE_RED +  
+              (tw shr GShift and $FF) * RGB_LUMINANCE_GREEN + 
+              (tw shr BShift and $FF) * RGB_LUMINANCE_BLUE);
+        if tw > 255 then tw:= 255;
+        tw:= (tw and $FF shl RShift) or (tw and $FF shl BShift) or (tw and $FF shl GShift) or (fromP4^[x] and AMask);
+        fromP4^[x]:= tw;
+        end;
+    fromP4:= @(fromP4^[Surf^.pitch div 4])
+    end;
+end;
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 var tw, th, x, y: Longword;
     tmpp: pointer;
@@ -133,22 +154,8 @@ if SDL_MustLock(surf) then
 
 fromP4:= Surf^.pixels;
 
-if cGrayScale then
-    for y:= 0 to Pred(Surf^.h) do
-        begin
-        for x:= 0 to Pred(Surf^.w) do 
-            begin
-            tw:= fromP4^[x];
-            tw:= round((tw shr RShift and $FF) * RGB_LUMINANCE_RED +  
-                  (tw shr GShift and $FF) * RGB_LUMINANCE_GREEN + 
-                  (tw shr BShift and $FF) * RGB_LUMINANCE_BLUE);
-            if tw > 255 then tw:= 255;
-            tw:= (tw and $FF shl RShift) or (tw and $FF shl BShift) or (tw and $FF shl GShift) or (fromP4^[x] and AMask);
-            fromP4^[x]:= tw;
-            end;
-        fromP4:= @(fromP4^[Surf^.pitch div 4])
-        end;
-        
+if cGrayScale then Surface2GrayScale(Surf);
+
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
     begin
     tw:= toPowerOf2(Surf^.w);

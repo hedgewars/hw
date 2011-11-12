@@ -446,3 +446,8 @@ void PageRoomsList::updateNickCounter(int cnt)
 {
     lblCount->setText(tr("%1 players online", 0, cnt).arg(cnt));
 }
+
+void PageRoomsList::setUser(const QString & nickname)
+{
+    chatWidget->setUser(nickname);
+}

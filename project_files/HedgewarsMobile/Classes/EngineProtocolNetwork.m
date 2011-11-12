@@ -25,23 +25,20 @@
 
 #define BUFFER_SIZE 255     // like in original frontend
 
+static NSInteger activeEnginePort;
+
 @implementation EngineProtocolNetwork
-@synthesize delegate, stream, ipcPort, csd;
+@synthesize delegate, stream, csd, enginePort;
 
 -(id) init {
     if (self = [super init]) {
         self.delegate = nil;
 
-        self.ipcPort = 0;
         self.csd = NULL;
         self.stream = nil;
+        self.enginePort = [HWUtils randomPort];
     }
-    return self;
-}
-
--(id) initOnPort:(NSInteger) port {
-    if (self = [self init])
-        self.ipcPort = port;
+    activeEnginePort = self.enginePort;
     return self;
 }
 
@@ -60,17 +57,20 @@
 
 #pragma mark -
 #pragma mark Spawner functions
--(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
-    self.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
-    [self.stream open];
++(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
+    EngineProtocolNetwork *proto = [[EngineProtocolNetwork alloc] init];
+    proto.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
+    [proto.stream open];
 
+    // +detachNewThreadSelector retain/release self automatically
     [NSThread detachNewThreadSelector:@selector(engineProtocol:)
-                             toTarget:self
+                             toTarget:proto
                            withObject:dictionary];
+    [proto release];
 }
 
--(void) spawnThread:(NSString *)onSaveFile {
-    [self spawnThread:onSaveFile withOptions:nil];
++(NSInteger) activeEnginePort {
+    return activeEnginePort;
 }
 
 #pragma mark -
@@ -249,18 +249,18 @@
     }
 
     // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0 && !clientQuit) {
+    if (SDLNet_ResolveHost(&ip, NULL, self.enginePort) < 0 && !clientQuit) {
         DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         clientQuit = YES;
     }
 
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
+        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), self.enginePort);
         clientQuit = YES;
     }
 
-    DLog(@"Waiting for a client on port %d", ipcPort);
+    DLog(@"Waiting for a client on port %d", self.enginePort);
     while (csd == NULL)
         csd = SDLNet_TCP_Accept(sd);
     SDLNet_TCP_Close(sd);
@@ -393,7 +393,8 @@
                 }
                 break;
             case 'q':
-                // game ended, can remove the savefile and the trailing overlay (when dualhead)
+                // game ended, can remove the savefile and present the statistics of the match
+                [HWUtils setGameStatus:gsEnded];
                 [self gameHasEndedWithStats:statsArray];
                 break;
             case 'Q':

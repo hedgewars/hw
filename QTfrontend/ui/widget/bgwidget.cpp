@@ -19,9 +19,10 @@
 
 #include "bgwidget.h"
 
-SpritePosition::SpritePosition(QWidget * parent, int sh)
+SpritePosition::SpritePosition(QWidget * parent, int sw, int sh)
 {
     wParent = parent;
+    iSpriteWidth = sw;
     iSpriteHeight = sh;
     reset();
 }
@@ -36,15 +37,32 @@ void SpritePosition::move()
     fY += fYMov;
     iAngle += 4;
     if (iAngle >= 360) iAngle = 0;
-    if (fY > wParent->height()) reset();
+    if ((fX - fXMov) > wParent->width()) reset();
+    else if ((fY - fYMov) > wParent->height()) reset();
 }
 
 void SpritePosition::reset()
 {
-    fY = -1 * iSpriteHeight;
-    fX = (qrand() % ((int)(wParent->width() * 1.5))) - wParent->width()/2;
+    // random movement values
     fYMov = ((qrand() % 400)+300) / 100.0f;
-    fXMov = fYMov * 0.2f+((qrand()%100)/100.0f * 0.6f); //so between 0.2 and 0.6, or 0.5 +/- 0.3
+    fXMov = fYMov * 0.2f+((qrand()%100)/100.0f * 0.6f); //so between 0.2 and 0.8, or 0.5 +/- 0.3
+
+    // random respawn locations
+    int tmp = fXMov * (wParent->height() / fYMov);
+    fX = (qrand() % (wParent->width() + tmp)) - tmp;
+
+    // adjust respawn location to be next to (but outside) the parent's limits
+    if (fX > -iSpriteWidth)
+    {
+        fY = -1 * iSpriteHeight;
+    }
+    else
+    {
+        fY = qrand() % wParent->height();
+        fX = -iSpriteWidth;
+    }
+
+    // random initial angle
     iAngle = qrand() % 360;
 }
 
@@ -71,9 +89,9 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
 
     setAutoFillBackground(false);
 
-    for (int i = 0; i < SPRITE_MAX; i++) spritePositions[i] = new SpritePosition(this, sprite.height());
+    for (int i = 0; i < SPRITE_MAX; i++) spritePositions[i] = new SpritePosition(this, sprite.width(), sprite.height());
 
-    for (int i = 0; i < 360; i++)
+    for (int i = 0; i < 90; i++)
     {
         rotatedSprites[i] = new QImage(sprite.width(), sprite.height(), QImage::Format_ARGB32);
         rotatedSprites[i]->fill(0);
@@ -85,7 +103,7 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
     //  p.setRenderHint(QPainter::Antialiasing);
         p.setRenderHint(QPainter::SmoothPixmapTransform);
         p.translate(translate.x(), translate.y());
-        p.rotate(i);
+        p.rotate(4 * i);
         p.translate(-1*translate.x(), -1*translate.y());
         p.drawImage(0, 0, sprite);
     }
@@ -98,7 +116,7 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
 BGWidget::~BGWidget()
 {
     for (int i = 0; i < SPRITE_MAX; i++) delete spritePositions[i];
-    for (int i = 0; i < 360; i++) delete rotatedSprites[i];
+    for (int i = 0; i < 90; i++) delete rotatedSprites[i];
     delete timerAnimation;
 }
 
@@ -107,13 +125,15 @@ void BGWidget::paintEvent(QPaintEvent *event)
     Q_UNUSED(event);
 
     QPainter p;
+
     p.begin(this);
-    //p.setRenderHint(QPainter::Antialiasing);
+
     for (int i = 0; i < SPRITE_MAX; i++)
     {
         QPoint point = spritePositions[i]->pos();
-        p.drawImage(point.x(), point.y(), *rotatedSprites[spritePositions[i]->getAngle()]);
+        p.drawImage(point.x(), point.y(), *rotatedSprites[spritePositions[i]->getAngle()/4]);
     }
+
     p.end();
 }
 
@@ -121,9 +141,13 @@ void BGWidget::animate()
 {
     for (int i = 0; i < SPRITE_MAX; i++)
     {
-        // bottom edge of star *seems* clipped, but in fact, if I switch to just plain old repaint()/update() it is still clipped - artifact of transform?  As for 5, is arbitrary number. 4 was noticeably clipping, 5 seemed same as update() - I assume extra room is due to rotation and value really should be calculated proportional to width/height
-        update(spritePositions[i]->pos().x(),spritePositions[i]->pos().y(), sprite.width()+5, sprite.height()+5);
+        QPoint oldPos = spritePositions[i]->pos();
         spritePositions[i]->move();
+        QPoint newPos = spritePositions[i]->pos();
+
+        int xdiff = newPos.x() - oldPos.x();
+        int ydiff = newPos.y() - oldPos.y();
+        update(oldPos.x(), oldPos.y(), xdiff+sprite.width(), ydiff+sprite.height());
     }
 }
 

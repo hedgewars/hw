@@ -24,6 +24,7 @@
 #import <CommonCrypto/CommonDigest.h>
 
 
+#pragma mark -
 @implementation UIScreen (safe)
 
 -(CGFloat) safeScale {
@@ -36,6 +37,7 @@
 @end
 
 
+#pragma mark -
 @implementation UITableView (backgroundColor)
 
 -(void) setBackgroundColorForAnyTable:(UIColor *) color {
@@ -52,6 +54,7 @@
 @end
 
 
+#pragma mark -
 @implementation UIColor (HWColors)
 
 +(UIColor *)darkYellowColor {
@@ -84,6 +87,7 @@
 @end
 
 
+#pragma mark -
 @implementation UILabel (quickStyle)
 
 -(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title {
@@ -125,6 +129,7 @@
 @end
 
 
+#pragma mark -
 @implementation NSString (MD5)
 
 -(NSString *)MD5hash {

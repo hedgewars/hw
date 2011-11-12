@@ -157,11 +157,11 @@ private:
         ID_PAGE_DRAWMAP         = 20,
         ID_PAGE_DATADOWNLOAD    = 21
         };
-	QPointer<HWGame> game;
-	QPointer<HWNetServer> pnetserver;
-	QPointer<HWNetRegisterServer> pRegisterServer;
-	QPointer<HWTeam> editedTeam;
-	QPointer<HWNewNet> hwnet;
+    QPointer<HWGame> game;
+    QPointer<HWNetServer> pnetserver;
+    QPointer<HWNetRegisterServer> pRegisterServer;
+    QPointer<HWTeam> editedTeam;
+    QPointer<HWNewNet> hwnet;
     HWNamegen * namegen;
     AmmoSchemeModel * ammoSchemeModel;
     QStack<int> PagesStack;

@@ -34,6 +34,8 @@
 #include <QDateTime>
 #include <QTime>
 
+#include <QMessageBox>
+
 
 #include "HWDataManager.h"
 #include "hwconsts.h"
@@ -103,6 +105,7 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
 QString * HWChatWidget::s_styleSheet = NULL;
 QStringList * HWChatWidget::s_displayNone = NULL;
 bool HWChatWidget::s_isTimeStamped = true;
+QString HWChatWidget::s_tsFormat = ":mm:ss";
 
 const QString & HWChatWidget::styleSheet()
 {
@@ -173,6 +176,7 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
 
     QStringList victims = QString(style).
                                 remove(displayed). // remove visible stuff
+                                trimmed().
                                 split(split). // get a list of the names
                                 filter(nohierarchy). // only direct class names
                                 replaceInStrings(QRegExp("^."),""); // crop .
@@ -183,6 +187,17 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
         s_isTimeStamped = false;
         victims.removeAll("timestamp");
     }
+    else
+    {
+        s_isTimeStamped = true;
+        s_tsFormat =
+            ((victims.contains("timestamp:hours"))?"":"hh:") +
+            QString("mm") +
+            ((victims.contains("timestamp:seconds"))?"":":ss");
+    }
+
+    victims.removeAll("timestamp:hours");
+    victims.removeAll("timestamp:seconds");
 
     victims.removeDuplicates();
 
@@ -235,8 +250,11 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
         if (notify)
             m_helloSound = HWDataManager::instance().findFileForRead(
                             "Sounds/voices/Classic/Hello.ogg");
+
         m_hilightSound = HWDataManager::instance().findFileForRead(
-                        "Sounds/1C.ogg");
+                        "Sounds/beep.ogg");
+
+        //m_hilightSound = m_helloSound;//"Sounds/beep.ogg";
     }
 
     mainLayout.setSpacing(1);
@@ -468,12 +486,17 @@ void HWChatWidget::saveLists(const QString & nick)
     saveList(friendsList, nick.toLower() + "_friends.txt");
 }
 
+
 void HWChatWidget::returnPressed()
 {
     QStringList lines = chatEditLine->text().split('\n');
     chatEditLine->rememberCurrentText();
     foreach (const QString &line, lines)
     {
+        // skip empty/whitespace lines
+        if (line.trimmed().isEmpty())
+            continue;
+
         if (!parseCommand(line))
             emit chatLine(line);
     }
@@ -483,13 +506,14 @@ void HWChatWidget::returnPressed()
 // "link" nick, but before that encode it in base64 to make sure it can't
 // intefere with html/url syntax the nick is put as querystring as putting
 // it as host would convert it to it's lower case variant
-QString HWChatWidget::linkedNick(const QString & nickName)
+QString HWChatWidget::linkedNick(const QString & nickname)
 {
-    if (nickName != m_userNick)
+    if (nickname != m_userNick)
         return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
-                    QString(nickName.toUtf8().toBase64())).arg(nickName);
-    else
-        return QString("<span class=\"nick\">%1</span>").arg(nickName);
+               QString(nickname.toUtf8().toBase64())).arg(Qt::escape(nickname));
+
+    // unlinked nick (if own one)
+    return QString("<span class=\"nick\">%1</span>").arg(Qt::escape(nickname));
 }
 
 
@@ -539,7 +563,8 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
 
     bool isHL = false;
 
-    if ((!nick.isEmpty()) && (nick != m_userNick))
+    if ((c != 3) && (!nick.isEmpty()) &&
+        (nick != m_userNick) && (!m_userNick.isEmpty()))
     {
         QString lcStr = str.toLower();
 
@@ -568,7 +593,7 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
     {
         QString tsMarkUp = "<span class=\"timestamp\">[%1]</span> ";
         QTime now = QDateTime::currentDateTime().time();
-        line = tsMarkUp.arg(now.toString(":mm:ss")) + line;
+        line = tsMarkUp.arg(now.toString(s_tsFormat)) + line;
     }
 
     line = QString("<span class=\"%1\">%2</span>").arg(cssClass).arg(line);
@@ -637,7 +662,6 @@ void HWChatWidget::clear()
     chatText->clear();
     chatStrings.clear();
     chatNicks->clear();
-    m_userNick = gameSettings->value("net/nick","").toString();
 
     // clear and re compile regexp for highlighting
     m_highlights.clear();
@@ -686,7 +710,10 @@ void HWChatWidget::onKick()
 {
     QListWidgetItem * curritem = chatNicks->currentItem();
     if (curritem)
+    {
+        displayNotice(tr("Kicking %1 ...").arg(Qt::escape(curritem->text())));
         emit kick(curritem->text());
+    }
 }
 
 void HWChatWidget::onBan()
@@ -899,7 +926,7 @@ void HWChatWidget::dropEvent(QDropEvent * event)
         setStyleSheet(style);
         chatText->document()->setDefaultStyleSheet(*s_styleSheet);
         displayNotice(tr("Stylesheet imported from %1").arg(path));
-        displayNotice(tr("Enter %1 if you want to use the current styleSheet in future, enter %2 to reset!").arg("/saveStyleSheet").arg("/discardStyleSheet"));
+        displayNotice(tr("Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!").arg("/saveStyleSheet").arg("/discardStyleSheet"));
 
         if (file.isOpen())
             file.close();
@@ -970,4 +997,12 @@ bool HWChatWidget::parseCommand(const QString & line)
     }
 
     return false;
+}
+
+
+void HWChatWidget::setUser(const QString & nickname)
+{
+    m_userNick = nickname;
+    nickRemoved(nickname);
+    clear();
 }

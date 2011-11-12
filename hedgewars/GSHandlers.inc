@@ -385,7 +385,8 @@ begin
 
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
-    CheckGearDrowning(Gear);
+    if Gear^.Kind <> gtBee then
+        CheckGearDrowning(Gear);
     //if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_0002) and
     if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_02.QWordValue) and
        (not isFalling) then
@@ -841,16 +842,18 @@ procedure doStepBeeWork(Gear: PGear);
 var 
     t: hwFloat;
     gX,gY,i: LongInt;
-    nuw: boolean;
+    uw, nuw: boolean;
     flower: PVisualGear;
 
-const uw: boolean =   false;
 begin
     AllInactive := false;
     gX := hwRound(Gear^.X);
     gY := hwRound(Gear^.Y);
-    nuw := (cWaterLine < gy + Gear^.Radius);
-    if nuw and not uw then
+    uw := (Gear^.Tag <> 0); // was bee underwater last tick?
+    nuw := (cWaterLine < gy + Gear^.Radius); // is bee underwater now?
+
+    // if water entered or left
+    if nuw <> uw then
     begin
         AddVisualGear(gX, cWaterLine, vgtSplash);
         AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
@@ -858,36 +861,43 @@ begin
         AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
         AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
         StopSound(Gear^.SoundChannel);
-        Gear^.SoundChannel := LoopSound(sndBeeWater);
-        uw := nuw
-    end
-    else if not nuw and uw then
+        if nuw then
         begin
-            AddVisualGear(gX, cWaterLine, vgtSplash);
-            StopSound(Gear^.SoundChannel);
+            Gear^.SoundChannel := LoopSound(sndBeeWater);
+            Gear^.Tag := 1;
+        end
+        else
+        begin
             Gear^.SoundChannel := LoopSound(sndBee);
-            uw := nuw
+            Gear^.Tag := 0;
         end;
-
-
-    if (GameTicks and $F) = 0 then
-    begin
-        if (GameTicks and $30) = 0 then
-            AddVisualGear(gX, gY, vgtBeeTrace);
-        Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
-        Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
-        // make sure new speed isn't higher than original one (which we stored in Friction variable)
-        t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
-        Gear^.dX := Gear^.dX * t;
-        Gear^.dY := Gear^.dY * t;
     end;
 
-    Gear^.X := Gear^.X + Gear^.dX;
-    Gear^.Y := Gear^.Y + Gear^.dY;
+
+    if Gear^.Timer = 0 then
+        Gear^.RenderTimer:= false
+    else
+    begin
+        if (GameTicks and $F) = 0 then
+        begin
+            if (GameTicks and $30) = 0 then
+                AddVisualGear(gX, gY, vgtBeeTrace);
+            Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
+            Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
+            // make sure new speed isn't higher than original one (which we stored in Friction variable)
+            t := Gear^.Friction / Distance(Gear^.dX, Gear^.dY);
+            Gear^.dX := Gear^.dX * t;
+            Gear^.dY := Gear^.dY * t;
+        end;
+
+        Gear^.X := Gear^.X + Gear^.dX;
+        Gear^.Y := Gear^.Y + Gear^.dY;
+
+    end;
+
 
     CheckCollision(Gear);
-    dec(Gear^.Timer);
-    if ((Gear^.State and gstCollision) <> 0) or (Gear^.Timer = 0) then
+    if ((Gear^.State and gstCollision) <> 0) then
     begin
         StopSound(Gear^.SoundChannel);
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
@@ -907,6 +917,19 @@ begin
                     end;
             end;
         DeleteGear(Gear);
+    end;
+
+    if (Gear^.Timer > 0) then
+        dec(Gear^.Timer)
+    else
+    begin
+        if nuw then
+        begin
+            StopSound(Gear^.SoundChannel);
+            CheckGearDrowning(Gear);
+        end
+        else
+            doStepFallingGear(Gear);
     end;
 end;
 
@@ -1262,8 +1285,7 @@ begin
             inc(i, 1)
             end;
 
-        if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
-           , lfIndestructible) then
+        if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9), lfIndestructible) then
             begin
             Gear^.X := Gear^.X + Gear^.dX;
             Gear^.Y := Gear^.Y + _1_9;
@@ -1278,14 +1300,20 @@ begin
         end
     else
         begin
-        Gear^.dY := Gear^.dY + cGravity;
-        Gear^.Y := Gear^.Y + Gear^.dY;
+        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), lfIndestructible) then
+            begin
+            Gear^.dY := Gear^.dY + cGravity;
+            Gear^.Y := Gear^.Y + Gear^.dY
+            end;
         if hwRound(Gear^.Y) > cWaterLine then Gear^.Timer := 1
         end;
 
     Gear^.X := Gear^.X + HHGear^.dX;
-    HHGear^.X := Gear^.X;
-    HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius);
+    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, lfIndestructible) then
+        begin
+        HHGear^.X := Gear^.X;
+        HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius)
+        end;
 
     if (Gear^.Message and gmAttack) <> 0 then
         if (Gear^.State and gsttmpFlag) <> 0 then Gear^.Timer := 1
@@ -1401,10 +1429,13 @@ begin
         end;
 
     if b then
-        DrawTunnel(HHGear^.X - Gear^.dX * cHHRadius, HHGear^.Y - _4 - Gear^.dY * cHHRadius + hwAbs(
-                   Gear^.dY) * 7,
+    begin
+        DrawTunnel(HHGear^.X + Gear^.dX * cHHRadius,
+        HHGear^.Y + Gear^.dY * cHHRadius - _1 -
+        ((hwAbs(Gear^.dX) / (hwAbs(Gear^.dX) + hwAbs(Gear^.dY))) * _0_5 * 7),
         Gear^.dX, Gear^.dY,
-        cHHRadius * 5, cHHRadius * 2 + 7);
+        cHHStepTicks, cHHRadius * 2 + 7);
+    end;
 
     if (TurnTimeLeft = 0) or (Gear^.Timer = 0) or ((HHGear^.Message and gmAttack) <> 0) then
         begin
@@ -3623,7 +3654,8 @@ begin
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y;
     // For some reason I need to reapply followgear here, something else grabs it otherwise.
-    if not bShowAmmoMenu and not CurrentTeam^.ExtDriven then FollowGear := HHGear;
+    // This is probably not needed anymore
+    if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
 
     if not isUnderWater and hasBorder and ((HHGear^.X < _0) or (hwRound(HHGear^.X) > LAND_WIDTH)) then HHGear^.dY.isNegative:= false;
     if ((Gear^.State and gsttmpFlag) = 0) or (HHGear^.dY < _0) then doStepHedgehogMoving(HHGear);
@@ -3754,7 +3786,8 @@ begin
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y - int2hwFloat(32);
     // For some reason I need to reapply followgear here, something else grabs it otherwise.
-    if not bShowAmmoMenu then FollowGear := HHGear;
+    // this is probably not needed anymore
+    if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
 
     if ((Gear^.State and gsttmpFlag) = 0) or (HHGear^.dY < _0) then doStepHedgehogMoving(HHGear);
 
@@ -4377,9 +4410,9 @@ var
     odY: hwFloat;
 begin
     AllInactive := false;
-    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and ((CurrentHedgehog^.Gear^.
-       Message and gmSlot) <> 0) then
-    begin
+    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and 
+       ((CurrentHedgehog^.Gear^.Message and gmSlot) <> 0) then
+        begin
         case CurrentHedgehog^.Gear^.MsgParam of 
             0: PlaySound(sndPiano0);
             1: PlaySound(sndPiano1);
@@ -4394,18 +4427,18 @@ begin
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
         CurrentHedgehog^.Gear^.MsgParam := 0;
         CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and not gmSlot;
-    end;
+        end;
 
     if (*((Gear^.Pos = 3) and ((GameFlags and gfSolidLand) <> 0)) or*) (Gear^.Pos = 5) then
-        // bounce up to 10 times (3 times on gameflagged solid land) before dropping past landscape
-    begin
+        begin
         Gear^.dY := Gear^.dY + cGravity * 2;
         Gear^.Y := Gear^.Y + Gear^.dY;
         CheckGearDrowning(Gear);
         if (Gear^.State and gstDrowning) <> 0 then
-        begin
-            if CurrentHedgehog^.Gear <> nil then
             begin
+            OnUsedAmmo(CurrentHedgehog^);
+            if CurrentHedgehog^.Gear <> nil then
+                begin
                 // Drown the hedgehog.  Could also just delete it, but hey, this gets a caption
                 CurrentHedgehog^.Gear^.Active := true;
                 CurrentHedgehog^.Gear^.X := Gear^.X;
@@ -4413,19 +4446,20 @@ begin
                 CurrentHedgehog^.Unplaced := false;
                 if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
                 TurnTimeLeft:= 0
-            end;
+                end;
             ResumeMusic
-        end;
+            end;
         exit
-    end;
+        end;
 
     odY:= Gear^.dY;
     doStepFallingGear(Gear);
 
     if (Gear^.State and gstDrowning) <> 0 then
-    begin
-        if CurrentHedgehog^.Gear <> nil then
         begin
+        OnUsedAmmo(CurrentHedgehog^);
+        if CurrentHedgehog^.Gear <> nil then
+            begin
             // Drown the hedgehog.  Could also just delete it, but hey, this gets a caption
             CurrentHedgehog^.Gear^.Active := true;
             CurrentHedgehog^.Gear^.X := Gear^.X;
@@ -4433,20 +4467,20 @@ begin
             CurrentHedgehog^.Unplaced := false;
             if TagTurnTimeLeft = 0 then TagTurnTimeLeft:= TurnTimeLeft;
             TurnTimeLeft:= 0
-        end;
+            end;
         ResumeMusic
-    end
+        end
     else if (Gear^.State and gstCollision) <> 0 then
         begin
-            r0 := GetRandom(21);
-            r1 := GetRandom(21);
-            doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, Gear^.Hedgehog, 0);
-            doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, Gear^.Hedgehog, 0);
-            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, Gear^.Hedgehog, EXPLAutoSound);
-            for r0:= 0 to 4 do
-                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
-            Gear^.dY := odY * -1 + cGravity * 2;
-            Gear^.Pos := Gear^.Pos + 1;
+        r0 := GetRandom(21);
+        r1 := GetRandom(21);
+        doMakeExplosion(hwRound(Gear^.X) - 30 - r0, hwRound(Gear^.Y) + 40, 40 + r1, Gear^.Hedgehog, 0);
+        doMakeExplosion(hwRound(Gear^.X) + 30 + r1, hwRound(Gear^.Y) + 40, 40 + r0, Gear^.Hedgehog, 0);
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, Gear^.Hedgehog, EXPLAutoSound);
+        for r0:= 0 to 4 do
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
+        Gear^.dY := odY * -1 + cGravity * 2;
+        Gear^.Pos := Gear^.Pos + 1;
         end
     else
         Gear^.dY := Gear^.dY + cGravity * 2;

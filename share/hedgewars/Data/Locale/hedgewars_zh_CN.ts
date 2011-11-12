@@ -62,24 +62,76 @@
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation>使用此项则游戏框架自动选择武器配备</translation>
     </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation>%1 *** %2 已经从您的忽略列表中移除</translation>
+        <translation type="obsolete">%1 *** %2 已经从您的忽略列表中移除</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation>%1 *** %2 已经添加到您的忽略列表中</translation>
+        <translation type="obsolete">%1 *** %2 已经添加到您的忽略列表中</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation>%1 *** %2 已经从您的朋友列表中移除</translation>
+        <translation type="obsolete">%1 *** %2 已经从您的朋友列表中移除</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation>%1 *** %2 已经添加到您的朋友列表中</translation>
+        <translation type="obsolete">%1 *** %2 已经添加到您的朋友列表中</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not a valid command!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kicking %1 ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -128,6 +180,43 @@
     </message>
     <message>
         <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">密码</translation>
+    </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation type="unfinished">您的昵称%1
+在Hedgewars.org已注册
+请输入您的密码
+或从游戏配置中选择另一个昵称:</translation>
+    </message>
+    <message>
+        <source>No password supplied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">昵称</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -256,7 +345,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation>密码</translation>
+        <translation type="obsolete">密码</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -289,20 +378,17 @@ or pick another nickname:</source>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation>您的昵称%1
+        <translation type="obsolete">您的昵称%1
 在Hedgewars.org已注册
 请输入您的密码
 或从游戏配置中选择另一个昵称:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">昵称</translation>
+        <translation type="obsolete">昵称</translation>
     </message>
     <message>
-        <source>Some one already uses
- your nickname %1
-on the server.
-Please pick another nickname:</source>
+        <source>User quit</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -360,7 +446,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <translation type="obsolete">取消</translation>
     </message>
 </context>
 <context>
@@ -486,6 +572,13 @@ Please pick another nickname:</source>
         <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; 受惊了，共计 &lt;b&gt;%2&lt;/b&gt; 次放弃。</numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>PageInGame</name>
+    <message>
+        <source>In game...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1015,7 +1108,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>State:</source>
-        <translation>游戏状态</translation>
+        <translation type="obsolete">游戏状态</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1212,7 +1305,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation>训练模式 (一系列训练任务)。开发中</translation>
+        <translation type="obsolete">训练模式 (一系列训练任务)。开发中</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
@@ -1224,7 +1317,26 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation>战役模式 ——开发中</translation>
+        <translation type="obsolete">战役模式 ——开发中</translation>
+    </message>
+    <message>
+        <source>Campaign Mode (...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageTraining</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a mission!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1539,7 +1651,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>This program is distributed under the GNU General Public License</translation>
+        <translation type="obsolete">This program is distributed under the GNU General Public License</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1710,10 +1822,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Game Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Style</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1727,6 +1835,10 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>% Get Away Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This program is distributed under the GNU General Public License v2</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

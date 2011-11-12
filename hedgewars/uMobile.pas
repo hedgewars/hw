@@ -24,11 +24,9 @@ interface
 {$IFDEF IPHONEOS}
 (*  iOS calls written in ObjcExports.m  *)
 procedure clearView; cdecl; external;
-procedure startSpinningProgress; cdecl; external;
-procedure stopSpinningProgress; cdecl; external;
-procedure saveBeganSynching; cdecl; external;
+procedure startLoadingIndicator; cdecl; external;
+procedure stopLoadingIndicator; cdecl; external;
 procedure saveFinishedSynching; cdecl; external;
-procedure setGameRunning(arg: boolean); cdecl; external;
 procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
 procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
@@ -40,8 +38,7 @@ procedure GameLoading; inline;
 procedure GameLoaded; inline;
 procedure AmmoUpdate; // do not inline
 procedure NewTurnBeginning; inline;
-procedure SaveBegan; inline;
-procedure SaveFinished; inline;
+procedure SaveLoadingEnded; inline;
 
 implementation
 uses uVariables;
@@ -71,14 +68,14 @@ end;
 procedure GameLoading; inline;
 begin
 {$IFDEF IPHONEOS}
-    startSpinningProgress();
+    startLoadingIndicator();
 {$ENDIF}
 end;
 
 procedure GameLoaded; inline;
 begin
 {$IFDEF IPHONEOS}
-    stopSpinningProgress();
+    stopLoadingIndicator();
 {$ENDIF}
 end;
 
@@ -101,14 +98,7 @@ begin
     AmmoUpdate();
 end;
 
-procedure SaveBegan; inline;
-begin
-{$IFDEF IPHONEOS}
-    saveBeganSynching();
-{$ENDIF}
-end;
-
-procedure SaveFinished; inline;
+procedure SaveLoadingEnded; inline;
 begin
 {$IFDEF IPHONEOS}
     saveFinishedSynching();

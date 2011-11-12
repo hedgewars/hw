@@ -392,6 +392,26 @@ var s, key: shortstring;
 begin
 
 AddProgress;
+// Set default water greyscale values
+if cGrayScale then
+    begin
+    for i:= 0 to 3 do
+        begin
+        t:= round(SDWaterColorArray[i].r * RGB_LUMINANCE_RED + SDWaterColorArray[i].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[i].b * RGB_LUMINANCE_BLUE);
+        if t > 255 then t:= 255;
+        SDWaterColorArray[i].r:= t;
+        SDWaterColorArray[i].g:= t;
+        SDWaterColorArray[i].b:= t
+        end;
+    for i:= 0 to 1 do
+        begin
+        t:= round(WaterColorArray[i].r * RGB_LUMINANCE_RED + WaterColorArray[i].g * RGB_LUMINANCE_GREEN + WaterColorArray[i].b * RGB_LUMINANCE_BLUE);
+        if t > 255 then t:= 255;
+        WaterColorArray[i].r:= t;
+        WaterColorArray[i].g:= t;
+        WaterColorArray[i].b:= t
+        end
+    end;
 
 s:= UserPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 if not FileExists(s) then s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
@@ -445,6 +465,14 @@ while not eof(f) do
         c2.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         c2.b:= StrToInt(Trim(s));
+        if cGrayScale then
+            begin
+            t:= round(SkyColor.r * RGB_LUMINANCE_RED + SkyColor.g * RGB_LUMINANCE_GREEN + SkyColor.b * RGB_LUMINANCE_BLUE);
+            if t > 255 then t:= 255;
+            c2.r:= t;
+            c2.g:= t;
+            c2.b:= t
+            end;
         cExplosionBorderColor:= c2.value or AMask;
         end
     else if key = 'water-top' then
@@ -588,6 +616,8 @@ while not eof(f) do
             vobFallSpeed:= StrToInt(Trim(s));
             end;
         end
+    else if key = 'flatten-flakes' then cFlattenFlakes:= true
+    else if key = 'flatten-clouds' then cFlattenClouds:= true
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);
