@@ -49,16 +49,11 @@ class TouchInterfaceMT implements OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		//dumpEvent(event);
 		
-		if(firstEvent){
-			firstEvent = false;
-			SDLActivity.onNativeTouch(-1, -1, v.getWidth(), v.getHeight(), 1);
-		}
-		
 		int action = event.getAction();
 		int actionCode = action & MotionEvent.ACTION_MASK;
 		
 		for (int i = 0; i < event.getPointerCount(); i++) {
-			SDLActivity.onNativeTouch(actionCode, event.getPointerId(i), (int)event.getX(i), (int)event.getY(i), event.getPressure(i));
+			SDLActivity.onNativeTouch(event.getDeviceId(),  event.getPointerId(i), actionCode, (int)event.getX(i), (int)event.getY(i), event.getPressure(i));
 //			Log.d("Android", String.format("x=%f, y=%f, pntr=%d", event.getX(i), event.getY(i), event.getPointerId(i)));
 		   }
 		return true;

@@ -121,7 +121,7 @@ public class SDLActivity extends Activity {
 
 	public static native void onNativeKeyUp(int keycode);
 
-	public static native void onNativeTouch(int action, int pointer, float x, float y,
+	public static native void onNativeTouch(int touchDevId, int pointerFingerId, int action, float x, float y,
 			float p);
 
 	public static native void onNativeAccel(float x, float y, float z);
