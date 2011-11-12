@@ -16,82 +16,87 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
 ###################################################################################
 
+find_program(ANT ant)
 
+if(NOT ANDROID_NDK)
+    find_path(ANDROID_NDK ndk-build)
+endif()
 
+if(IS_DIRECTORY ${ANDROID_NDK})
+    MESSAGE(STATUS "Detected the android NDK directory at: " ${ANDROID_NDK}) 
+else ()
+    MESSAGE(FATAL_ERROR "Couldn't detect the Android NDK directory")
+endif()
 
-###################################################################################
-# Uncomment (remove the leading '#') and change the paths accordingly to your own 
-# build environment, please do specify an absolute path (/home/richard/SoftDev    
-# rather than ~/SoftDev).
-# You only need to change the three lines below, after that you can run 'cmake .'
-# from the hedgewars root directory
-# 
-# optionally you can specify SDL_DIR this will move the required SDL libraries to
-# the correct place
-##################################################################################
+if(NOT ANDROID_SDK)#Check if its defined at the cmdline
+    find_path(ANDROID_SDK adb ) #assume they've added platform-tools to their path
+    get_filename_component(ANDROID_SDK ${ANDROID_SDK} PATH)
+    set(ANDROID_SDK ${ANDROID_SDK} CACHE PATH "Path to the android sdk" FORCE)
+endif()
 
-set(ANDROID_NDK /home/richard/SoftDev/android/android-ndk-r5b)
-set(ANDROID_SDK /home/richard/SoftDev/android/android-sdk-linux_86)
-set(FPC_DIR /home/richard/SoftDev/fpc-2.4.4)
+if( IS_DIRECTORY ${ANDROID_SDK})
+    MESSAGE(STATUS "Detected the android SDK directory at: " ${ANDROID_SDK}) 
+else ()
+    MESSAGE(FATAL_ERROR "Couldn't detect the Android SDK directory")
+endif()
+
+if( NOT FPC_DIR)
+    find_path(FPC_DIR ppcrossarm)
+    get_filename_component(FPC_DIR ${FPC_DIR} PATH)
+    set(FPC_DIR ${FPC_DIR} CACHE PATH "Path to fpc dir used in the android port" FORCE)
+endif()
+
+if( IS_DIRECTORY ${FPC_DIR})
+    MESSAGE(STATUS "Detected the FreePascal directory at: " ${FPC_DIR}) 
+else ()
+    MESSAGE(FATAL_ERROR "Couldn't detect the FreePascal directory")
+endif()
+
 set(SDL_DIR /home/richard/Downloads/android-project)
 
-if(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
 
-    set(ANDROID_SDK_API_LVL 8)
-    set(ANDROID_NDK_API_LVL 5)
+set(ANDROID_SDK_API_LVL 8)
+set(ANDROID_NDK_API_LVL 5)
 
-    MESSAGE("Creating android scripts and configuration files")
+MESSAGE(STATUS "Creating android scripts and configuration files")
 
-    configure_file(Templates/complete_build.sh .)
-    configure_file(Templates/default.properties SDL-android-project/)
-    configure_file(Templates/local.properties SDL-android-project/)
-    configure_file(Templates/Makefile.android .)
-    configure_file(Templates/pushToDevice.sh .)
+configure_file(Templates/complete_build.sh .)
+configure_file(Templates/default.properties SDL-android-project/)
+configure_file(Templates/local.properties SDL-android-project/)
+configure_file(Templates/Makefile.android .)
+configure_file(Templates/pushToDevice.sh .)
 
-    if(SDL_DIR)
+if(SDL_DIR_TEMP_DISABLE)
+    MESSAGE("Moving Android port of SDL to the proper directories")
+    set(DirsToCopy
+        SDL
+        SDL_image
+        SDL_mixer
+        SDL_ttf
+	jpeg
+	png
+         mikmod
+        ) 
+    foreach(DIR ${DirsToCopy})
+        exec_program( 
+            ${CMAKE_COMMAND} 
+            ARGS -E copy_directory 
+            ${SDL_DIR}/jni/${DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/${DIR}
+        )
+        MESSAGE(STATUS "Moved ${DIR}")
+    endforeach(DIR)
+    exec_program(${HGCOMMAND}
+        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
+	)
+    exec_program(${HGCOMMAND}
+        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
+	)
+    exec_program(${HGCOMMAND}
+        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.c
+        )
 
-        MESSAGE("Moving Android port of SDL to the proper directories")
-
-        set(DirsToCopy
-            SDL
-	    SDL_image
-            SDL_mixer
-            SDL_ttf
-	    jpeg
-	    png
-            mikmod
-           ) 
-         foreach(DIR ${DirsToCopy})
-             exec_program( 
-	        ${CMAKE_COMMAND} 
-                ARGS -E copy_directory 
-	        ${SDL_DIR}/jni/${DIR}
-	        ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/${DIR}
-        	)
-             MESSAGE("Moved ${DIR}")
-         endforeach(DIR)
-        exec_program(${HGCOMMAND}
-	            ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
-		    )
-        exec_program(${HGCOMMAND}
-		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
-		    )
-        exec_program(${HGCOMMAND}
-		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.c
-		    )
-
-        exec_program(${HGCOMMAND}
-		    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.h
-		    )
-
-
-    else(SDL_DIR)
-        MESSAGE("Android port of SDL not moved..")
-    endif(SDL_DIR)
-
- 
-else(ANDROID_AND AND ANDROID_SDK AND FPC_DIR)
-    MESSAGE("Android port files not created, edit top of ${CMAKE_CURRENT_SOURCE_DIR}/CMakeList.txt to create android specific files")
-endif(ANDROID_NDK AND ANDROID_SDK AND FPC_DIR)
-
-
+    exec_program(${HGCOMMAND}
+        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.h
+	)
+endif(SDL_DIR_TEMP_DISABLE)
