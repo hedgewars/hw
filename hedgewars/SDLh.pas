@@ -464,6 +464,9 @@ type
         text: array[0..31] of Byte;
         end;
 
+    SDL_TouchID = LongInt;
+    SDL_FingerID = LongInt;
+
     TSDL_TouchFingerEvent = record
         type_: LongWord;
         windowId: LongWord;
@@ -564,6 +567,7 @@ type
         windowID: LongWord;
 {$ELSE}
         which: Byte;
+{$ENDIF}
         x, y: LongInt;
         end;
 
@@ -611,19 +615,6 @@ type
 {$ENDIF}
         end;
 
-    SDL_TouchID = LongInt;
-    SDL_FingerID = LongInt;
-
-    TSDL_TouchFingerEvent = record
-        type_: LongWord;
-        windowId: LongWord;
-        touchId: SDL_TouchID;
-        fingerId: SDL_FingerID;
-        state, padding1, padding2, padding3: Byte;
-        x,y: Word;
-        dx,dy: ShortInt;
-        pressure: Word;
-    end;
 //TODO: implement SDL_TouchButtonEvent, SDL_MultiGestureEvent, SDL_DollarGestureEvent
 
     TSDL_QuitEvent = record
@@ -660,9 +651,6 @@ type
             SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
             SDL_JOYBUTTONDOWN,
             SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
-            SDL_FINGERMOTION,
-            SDL_FINGERUP,
-            SDL_FINGERDOWN:(tfinger: TSDL_TouchFingerEvent);
             SDL_QUITEV: (quit: TSDL_QuitEvent);
             SDL_USEREVENT: (user: TSDL_UserEvent);
             SDL_SYSWMEVENT: (syswm: TSDL_SysWMEvent);
@@ -895,6 +883,8 @@ procedure SDL_WM_SetIcon(icon: PSDL_Surface; mask : Byte); cdecl; external SDLLi
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
 function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 
+function  SDL_CreateThread(fn: pointer; data: pointer): PSDL_Thread; cdecl; external SDLLibName;
+procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
 function  SDL_CreateMutex: PSDL_mutex; cdecl; external SDLLibName;
 procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
 function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexP';
