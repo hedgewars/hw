@@ -36,7 +36,7 @@ function  GenPreview: TPreview;
 
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
-     uVariables, uUtils, uCommands, Adler32, uDebug, uLandPainted;
+     uVariables, uUtils, uCommands, Adler32, uDebug, uLandPainted, uTextures;
 
 operator=(const a, b: direction) c: Boolean;
 begin
@@ -302,6 +302,7 @@ begin
     // freed in freeModule() below
     LandBackSurface:= LoadImage(UserPathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
     if LandBackSurface = nil then LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+    if (LandBackSurface <> nil) and cGrayScale then Surface2GrayScale(LandBackSurface);
 
     tmpsurf:= LoadImage(UserPathz[ptCurrTheme] + '/Border', ifIgnoreCaps or ifTransparent);
     if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
@@ -855,7 +856,7 @@ end;
 end;
 
 begin
-case cMazeSize of
+case cTemplateFilter of
     0: begin
         cellsize := small_cell_size;
         maze_inverted := false;
@@ -1180,7 +1181,8 @@ begin
         begin
         // freed in freeModule() below
         LandBackSurface:= LoadImage(UserPathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
-        if LandBackSurface = nil then LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent)
+        if LandBackSurface = nil then LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+        if (LandBackSurface <> nil) and cGrayScale then Surface2GrayScale(LandBackSurface)
         end;
 end;
 if (tmpsurf <> nil) then
@@ -1439,7 +1441,7 @@ begin
     adler:= 1;
     for i:= 0 to LAND_HEIGHT-1 do
         Adler32Update(adler, @Land[i,0], LAND_WIDTH);
-    s:= 'M' + IntToStr(adler);
+    s:= 'M' + IntToStr(adler) + cScriptName;
 
     chLandCheck(s);
     SendIPCRaw(@s[0], Length(s) + 1)

@@ -174,3 +174,7 @@ void PageNetGame::setMasterMode(bool isMaster)
     leRoomName->setVisible(isMaster);
 }
 
+void PageNetGame::setUser(const QString & nickname)
+{
+    pChatWidget->setUser(nickname);
+}

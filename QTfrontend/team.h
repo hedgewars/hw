@@ -44,7 +44,7 @@ struct HWHog
 // class representing a team
 class HWTeam : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
     public:
 
@@ -52,7 +52,7 @@ class HWTeam : public QObject
         HWTeam(const QString & teamname);
         HWTeam(const QStringList& strLst);
         HWTeam();
-		HWTeam(const HWTeam & other);
+        HWTeam(const HWTeam & other);
 
         // file operations
         static HWTeam loadFromFile(const QString & teamName);
@@ -96,9 +96,9 @@ class HWTeam : public QObject
         QStringList teamGameConfig(quint32 InitHealth) const;
 
         // comparison operators
-		bool operator == (const HWTeam& t1) const;
-		bool operator < (const HWTeam& t1) const;
-		HWTeam & operator = (const HWTeam & other);
+        bool operator == (const HWTeam& t1) const;
+        bool operator < (const HWTeam& t1) const;
+        HWTeam & operator = (const HWTeam & other);
 
 
     private:
@@ -112,11 +112,11 @@ class HWTeam : public QObject
         QString m_flag;
         QString m_voicepack;
         HWHog m_hedgehogs[HEDGEHOGS_PER_TEAM];
-		quint8 m_difficulty;
+        quint8 m_difficulty;
         BindAction m_binds[BINDS_NUMBER];
 
         // class members that contain info for the current game setup
-		quint8 m_numHedgehogs;
+        quint8 m_numHedgehogs;
         QColor m_color;
         bool m_isNetTeam;
         QString m_owner;

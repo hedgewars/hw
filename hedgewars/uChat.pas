@@ -84,7 +84,7 @@ end;
 
 font:= CheckCJKFont(str, fnt16);
 w:= 0; h:= 0; // avoid compiler hints
-TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), w, h);
+TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @w, @h);
 
 resSurface:= SDL_CreateRGBSurface(0, toPowerOf2(w), toPowerOf2(h), 32, RMask, GMask, BMask, AMask);
 

@@ -755,6 +755,9 @@ void HWForm::NetNickTaken(const QString & nick)
     hwnet->NewNick(newNick);
     config->setValue("net/nick", newNick);
     config->updNetNick();
+
+    ui.pageRoomsList->setUser(nick);
+    ui.pageNetGame->setUser(nick);
 }
 
 void HWForm::NetAuthFailed()
@@ -799,8 +802,6 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
         delete hwnet;
         hwnet=0;
     }
-
-    ui.pageRoomsList->chatWidget->clear();
 
     hwnet = new HWNewNet();
 
@@ -939,6 +940,10 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
         config->setValue("net/nick",nick);
         config->updNetNick();
     }
+
+    ui.pageRoomsList->setUser(nick);
+    ui.pageNetGame->setUser(nick);
+
     hwnet->Connect(hostName, port, nick);
 }
 
@@ -997,6 +1002,9 @@ void HWForm::NetDisconnect()
         delete pnetserver;
         pnetserver = 0;
     }
+
+    if(hwnet)
+        hwnet->Disconnect();
 }
 
 void HWForm::ForcedDisconnect(const QString & reason)
@@ -1166,7 +1174,7 @@ void HWForm::CreateNetGame()
             ui.pageNetGame->pGameCFG->WeaponsName->currentIndex()
             ).toString();
 
-	CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
+    CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
 
     connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));
     connect(game, SIGNAL(SendChat(const QString &)), hwnet, SLOT(chatLineToNet(const QString &)));

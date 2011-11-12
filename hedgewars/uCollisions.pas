@@ -52,7 +52,8 @@ function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: L
 
 function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 
-function  CalcSlopeTangentBelowGear(Gear: PGear; var outDeltaX, outDeltaY: LongInt): boolean;
+// returns: negative sign if going downhill to left, value is steepness (noslope/error = _0, 45° = _0_5)
+function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
@@ -403,7 +404,7 @@ begin
     if (dx.QWordValue > _0_995.QWordValue )
     or (dy.QWordValue > _0_995.QWordValue ) then
         begin // scale
-        s := _1 / Distance(dx,dy);
+        s := _0_995 / Distance(dx,dy);
         dx := s * dx;
         dy := s * dy;
         end;
@@ -519,17 +520,12 @@ outDeltaY:= ldy;
 exit(true);
 end;
 
-function CalcSlopeTangentBelowGear(Gear: PGear; var outDeltaX, outDeltaY: LongInt): boolean;
+function CalcSlopeBelowGear(Gear: PGear): hwFloat;
 var dx, dy: hwFloat;
-    collX, i, y, x, gx: LongInt;
+    collX, i, y, x, gx, sdx, sdy: LongInt;
     isColl, succ: Boolean;
 begin
-// save original dx/dy
-dx:= Gear^.dX;
-dy:= Gear^.dY;
 
-Gear^.dX.QWordValue:= 0;
-Gear^.dY:= _1;
 
 y:= hwRound(Gear^.Y) + Gear^.Radius;
 gx:= hwRound(Gear^.X);
@@ -553,15 +549,32 @@ if (y and LAND_HEIGHT_MASK) = 0 then
    end;
 
 if isColl then
-    succ := CalcSlopeTangent(Gear, collX, y, outDeltaX, outDeltaY, 255)
-else
-    succ := false;
+    begin
+    // save original dx/dy
+    dx := Gear^.dX;
+    dy := Gear^.dY;
 
-// restore original dx/dy
-Gear^.dX:= dx;
-Gear^.dY:= dy;
+    Gear^.dX.QWordValue:= 0;
+    Gear^.dX.isNegative:= (collX >= gx);
+    Gear^.dY:= _1;
 
-CalcSlopeTangentBelowGear := succ;
+    sdx:= 0;
+    sdy:= 0;
+    succ := CalcSlopeTangent(Gear, collX, y, sdx, sdy, 255);
+
+    // restore original dx/dy
+    Gear^.dX := dx;
+    Gear^.dY := dy;
+
+    if succ and (sdx <> 0) and (sdy <> 0) then
+    begin
+        dx := int2hwFloat(sdy) / (abs(sdx) + abs(sdy));
+        dx.isNegative := (sdx * sdy) < 0;
+        exit (dx);
+    end;
+    end;
+
+CalcSlopeBelowGear := _0;
 end;
 
 procedure initModule;

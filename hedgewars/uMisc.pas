@@ -53,21 +53,21 @@ var success: boolean;
     f: file;
     // Windows Bitmap Header
     head: array[0..53] of Byte = (
-    $42, $4D, // identifier ("BM")
-    0, 0, 0, 0, // file size
-    0, 0, 0, 0, // reserved
-    54, 0, 0, 0, // starting offset
-    40, 0, 0, 0, // header size
-    0, 0, 0, 0, // width
-    0, 0, 0, 0, // height
-    1, 0, // color planes
-    24, 0, // bit depth
-    0, 0, 0, 0, // compression method (uncompressed)
-    0, 0, 0, 0, // image size
-    96, 0, 0, 0, // horizontal resolution
-    96, 0, 0, 0, // vertical resolution
-    0, 0, 0, 0, // number of colors (all)
-    0, 0, 0, 0 // number of important colors
+    $42, $4D,       // identifier ("BM")
+    0, 0, 0, 0,     // file size
+    0, 0, 0, 0,     // reserved
+    54, 0, 0, 0,    // starting offset
+    40, 0, 0, 0,    // header size
+    0, 0, 0, 0,     // width
+    0, 0, 0, 0,     // height
+    1, 0,           // color planes
+    32, 0,          // bit depth
+    0, 0, 0, 0,     // compression method (uncompressed)
+    0, 0, 0, 0,     // image size
+    96, 0, 0, 0,    // horizontal resolution
+    96, 0, 0, 0,    // vertical resolution
+    0, 0, 0, 0,     // number of colors (all)
+    0, 0, 0, 0      // number of important colors
     );
 begin
 // flash
@@ -75,7 +75,7 @@ ScreenFade:= sfFromWhite;
 ScreenFadeValue:= sfMax;
 ScreenFadeSpeed:= 5;
 
-size:= toPowerOf2(cScreenWidth) * toPowerOf2(cScreenHeight) * 3;
+size:= toPowerOf2(cScreenWidth) * toPowerOf2(cScreenHeight) * 4;
 p:= GetMem(size);
 
 // memory could not be allocated
@@ -86,7 +86,6 @@ begin
 end;
 
 // update header information and file name
-
 filename:= UserPathPrefix + '/Screenshots/' + filename + '.bmp';
 
 head[$02]:= (size + 54) and $ff;
@@ -106,9 +105,8 @@ head[$23]:= (size shr 8) and $ff;
 head[$24]:= (size shr 16) and $ff;
 head[$25]:= (size shr 24) and $ff;
 
-//remember that opengles operates on a single surface, so GL_FRONT *should* be implied
-//glReadBuffer(GL_FRONT);
-glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGR, GL_UNSIGNED_BYTE, p);
+// read pixel from the front buffer
+glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGRA, GL_UNSIGNED_BYTE, p);
 
 {$IOCHECKS OFF}
 Assign(f, filename);
@@ -128,7 +126,6 @@ else
 {$IOCHECKS ON}
 
 FreeMem(p, size);
-
 MakeScreenshot:= success;
 end;
 

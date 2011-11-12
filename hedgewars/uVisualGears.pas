@@ -337,14 +337,21 @@ vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 if State <> 0 then gear^.State:= State;
 
 case Gear^.Kind of
-    vgtFlake: if random(2) = 0 then gear^.Layer:= 0   // 50%
-              else if random(2) = 0 then gear^.Layer:= 1  // 25%
-              else gear^.Layer:= random(2)+2;  // 12.5% each
+    vgtFlake: if cFlattenFlakes then gear^.Layer:= 0
+              else if random(3) = 0 then gear^.Layer:= 0   // 33% - far back
+              else if random(3) = 0 then gear^.Layer:= 4   // 22% - mid-distance
+              else if random(3) <> 0 then gear^.Layer:= 5  // 30% - just behind land
+              else if random(2) = 0 then gear^.Layer:= 6   // 7% - just in front of land
+              else gear^.Layer:= 2;  // 7% - close up
 
-    // 0: this layer is very distant in the background when stereo
+    vgtCloud: if cFlattenClouds then gear^.Layer:= 5
+              else if random(3) = 0 then gear^.Layer:= 0
+              else gear^.Layer:= random(2) + 4;
+
+    // 0: this layer is very distant in the background when in stereo
     vgtTeamHealthSorter,
-    vgtSmoothWindBar,
-    vgtCloud: gear^.Layer:= 0;
+    vgtSmoothWindBar: gear^.Layer:= 0;
+
 
     // 1: this layer is on the land level (which is close but behind the screen plane) when stereo
     vgtSmokeTrace,
@@ -413,7 +420,7 @@ var Gear, t: PVisualGear;
 begin
 if Steps = 0 then exit;
 
-for i:= 0 to 3 do
+for i:= 0 to 6 do
     begin
     t:= VisualGearLayers[i];
     while t <> nil do
@@ -427,47 +434,32 @@ end;
 
 procedure KickFlakes(Radius, X, Y: LongInt);
 var Gear, t: PVisualGear;
-    dmg: LongInt;
+    dmg, i: LongInt;
 begin
 if (vobCount = 0) or (vobCount > 200) then exit;
-t:= VisualGearLayers[1];
-while t <> nil do
-      begin
-      Gear:= t;
-      if Gear^.Kind = vgtFlake then
-          begin
-          // Damage calc from doMakeExplosion
-          dmg:= Min(101, Radius + cHHRadius div 2 - LongInt(abs(round(Gear^.X) - X) + abs(round(Gear^.Y) - Y)) div 5);
-          if dmg > 1 then
+for i:= 2 to 6 do
+    if i <> 3 then
+        begin
+        t:= VisualGearLayers[i];
+        while t <> nil do
               begin
-              Gear^.tdX:= 0.02 * dmg + 0.01;
-              if Gear^.X - X < 0 then Gear^.tdX := -Gear^.tdX;
-              Gear^.tdY:= 0.02 * dmg + 0.01;
-              if Gear^.Y - Y < 0 then Gear^.tdY := -Gear^.tdY;
-              Gear^.Timer:= 200
+              Gear:= t;
+              if Gear^.Kind = vgtFlake then
+                  begin
+                  // Damage calc from doMakeExplosion
+                  dmg:= Min(101, Radius + cHHRadius div 2 - LongInt(abs(round(Gear^.X) - X) + abs(round(Gear^.Y) - Y)) div 5);
+                  if dmg > 1 then
+                      begin
+                      Gear^.tdX:= 0.02 * dmg + 0.01;
+                      if Gear^.X - X < 0 then Gear^.tdX := -Gear^.tdX;
+                      Gear^.tdY:= 0.02 * dmg + 0.01;
+                      if Gear^.Y - Y < 0 then Gear^.tdY := -Gear^.tdY;
+                      Gear^.Timer:= 200
+                      end
+                  end;
+              t:= Gear^.NextGear
               end
-          end;
-      t:= Gear^.NextGear
-      end;
-t:= VisualGearLayers[3];
-while t <> nil do
-      begin
-      Gear:= t;
-      if Gear^.Kind = vgtFlake then
-          begin
-          // Damage calc from doMakeExplosion
-          dmg:= Min(101, Radius + cHHRadius div 2 - LongInt(abs(round(Gear^.X) - X) + abs(round(Gear^.Y) - Y)) div 5);
-          if dmg > 1 then
-              begin
-              Gear^.tdX:= 0.02 * dmg + 0.01;
-              if Gear^.X - X < 0 then Gear^.tdX := -Gear^.tdX;
-              Gear^.tdY:= 0.02 * dmg + 0.01;
-              if Gear^.Y - Y < 0 then Gear^.tdY := -Gear^.tdY;
-              Gear^.Timer:= 200
-              end
-          end;
-      t:= Gear^.NextGear
-      end
+         end
 end;
 
 procedure DrawVisualGears(Layer: LongWord);
@@ -484,20 +476,36 @@ case Layer of
            begin
            if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
            case Gear^.Kind of
-               vgtFlake: if SuddenDeathDmg then
-                             if vobSDVelocity = 0 then
-                                 DrawTextureF(SpritesData[sprSDFlake].Texture, 0.5, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
-                             else
-                                 DrawRotatedTextureF(SpritesData[sprSDFlake].Texture, 0.5, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
+              vgtCloud: if SuddenDeathDmg then
+                             DrawTextureF(SpritesData[sprSDCloud].Texture, 0.25, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 2, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height)
                          else
-                             if vobVelocity = 0 then
-                                 DrawTextureF(SpritesData[sprFlake].Texture, 0.5, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
+                            DrawTextureF(SpritesData[sprCloud].Texture, 0.25, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 2, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height);
+               vgtFlake: if cFlattenFlakes then
+                             begin
+                             if SuddenDeathDmg then
+                                 if vobSDVelocity = 0 then
+                                     DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                                 else
+                                     DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
                              else
-                                 DrawRotatedTextureF(SpritesData[sprFlake].Texture, 0.5, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
-               vgtCloud: if SuddenDeathDmg then
-                             DrawSprite(sprSDCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                                 if vobVelocity = 0 then
+                                     DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                                 else
+                                     DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                             end
                          else
-                             DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
+                             begin
+                             if SuddenDeathDmg then
+                                 if vobSDVelocity = 0 then
+                                     DrawTextureF(SpritesData[sprSDFlake].Texture, 0.5, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
+                                 else
+                                     DrawRotatedTextureF(SpritesData[sprSDFlake].Texture, 0.5, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
+                             else
+                                 if vobVelocity = 0 then
+                                     DrawTextureF(SpritesData[sprFlake].Texture, 0.5, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
+                                 else
+                                     DrawRotatedTextureF(SpritesData[sprFlake].Texture, 0.5, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
+                             end;
                end;
            if Gear^.Tint <> $FFFFFFFF then Tint($FF,$FF,$FF,$FF);
            Gear:= Gear^.NextGear
@@ -527,7 +535,7 @@ case Layer of
           end;
           if (cReducedQuality and rqAntiBoom) = 0 then
               case Gear^.Kind of
-                  vgtSmoke: DrawTextureF(SpritesData[sprSmoke].Texture, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 7 - Gear^.Frame, 0, SpritesData[sprSmoke].Width, SpritesData[sprSmoke].Height);
+                  vgtSmoke: DrawTextureF(SpritesData[sprSmoke].Texture, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 7 - Gear^.Frame, 1, SpritesData[sprSmoke].Width, SpritesData[sprSmoke].Height);
                   vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                   vgtDust: if Gear^.State = 1 then
                                DrawSprite(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame)
@@ -560,6 +568,7 @@ case Layer of
            tinted:= false;
            if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
            case Gear^.Kind of
+(*
               vgtFlake: if SuddenDeathDmg then
                              if vobSDVelocity = 0 then
                                  DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
@@ -569,7 +578,7 @@ case Layer of
                              if vobVelocity = 0 then
                                  DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                              else
-                                 DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                                 DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);*)
                vgtSpeechBubble: begin
                                 if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then
                                     begin
@@ -686,7 +695,81 @@ case Layer of
            if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
            Gear:= Gear^.NextGear
            end
-       end
+       end;
+    // this layer is half-way between the screen plane (depth = 0) when in stereo, and the land
+    4: begin
+       Gear:= VisualGearLayers[4];
+       while Gear <> nil do
+           begin
+           if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
+           case Gear^.Kind of
+              vgtCloud: if SuddenDeathDmg then
+                             DrawTextureF(SpritesData[sprSDCloud].Texture, 0.4, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 2, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height)
+                         else
+                            DrawTextureF(SpritesData[sprCloud].Texture, 0.4, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 2, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height);
+              vgtFlake: if SuddenDeathDmg then
+                             if vobSDVelocity = 0 then
+                                 DrawTextureF(SpritesData[sprSDFlake].Texture, 0.8, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
+                             else
+                                 DrawRotatedTextureF(SpritesData[sprSDFlake].Texture, 0.8, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
+                         else
+                             if vobVelocity = 0 then
+                                 DrawTextureF(SpritesData[sprFlake].Texture, 0.8, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
+                             else
+                                 DrawRotatedTextureF(SpritesData[sprFlake].Texture, 0.8, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
+               end;
+           if (Gear^.Tint <> $FFFFFFFF) then Tint($FF,$FF,$FF,$FF);
+           Gear:= Gear^.NextGear
+           end
+       end;
+    // this layer is on the screen plane (depth = 0) when stereo, but just behind the land
+    5: begin
+       Gear:= VisualGearLayers[5];
+       while Gear <> nil do
+           begin
+           if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
+           case Gear^.Kind of
+               vgtCloud: if SuddenDeathDmg then
+                             DrawSprite(sprSDCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                         else
+                             DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
+              vgtFlake: if SuddenDeathDmg then
+                             if vobSDVelocity = 0 then
+                                 DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                         else
+                             if vobVelocity = 0 then
+                                 DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+               end;
+           if (Gear^.Tint <> $FFFFFFFF) then Tint($FF,$FF,$FF,$FF);
+           Gear:= Gear^.NextGear
+           end
+       end;
+    // this layer is on the screen plane (depth = 0) when stereo, but just in front of the land
+    6: begin
+       Gear:= VisualGearLayers[6];
+       while Gear <> nil do
+           begin
+           if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
+           case Gear^.Kind of
+              vgtFlake: if SuddenDeathDmg then
+                             if vobSDVelocity = 0 then
+                                 DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                         else
+                             if vobVelocity = 0 then
+                                 DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                             else
+                                 DrawRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+               end;
+           if (Gear^.Tint <> $FFFFFFFF) then Tint($FF,$FF,$FF,$FF);
+           Gear:= Gear^.NextGear
+           end
+       end;
     end;
 end;
 
@@ -762,7 +845,7 @@ var       i: LongInt;
 begin
 if (cReducedQuality and rqKillFlakes) <> 0 then exit;
 if vobCount = vobSDCount then exit;
-for i:= 0 to 3 do
+for i:= 0 to 6 do
     begin
     vg:= VisualGearLayers[i];
     while vg <> nil do
@@ -785,14 +868,14 @@ end;
 procedure initModule;
 var i: LongWord;
 begin
-for i:= 0 to 3 do
+for i:= 0 to 6 do
     VisualGearLayers[i]:= nil;
 end;
 
 procedure freeModule;
 var i: LongWord;
 begin
-for i:= 0 to 3 do
+for i:= 0 to 6 do
     while VisualGearLayers[i] <> nil do DeleteVisualGear(VisualGearLayers[i]);
 end;
 

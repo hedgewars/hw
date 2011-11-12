@@ -23,11 +23,9 @@
 #import "OverlayViewController.h"
 #import "AmmoMenuViewController.h"
 
+//FIXME: add a proper #import when this is exposed in SDL
+extern UIView *SDL_getUikitView(void *);
 
-// actual game started (controls should be enabled)
-static BOOL gameRunning;
-// black screen present
-static BOOL savedGame;
 // cache the grenade time
 static NSInteger grenadeTime;
 // the reference to the newMenu instance
@@ -35,32 +33,16 @@ static OverlayViewController *overlay_instance;
 
 @implementation ObjcExports
 
-+(void) initialize {
-    overlay_instance = [OverlayViewController mainOverlay];
-    gameRunning = NO;
-    savedGame = NO;
-    grenadeTime = 2;
++(void) setGrenadeTime:(NSInteger) value {
+    grenadeTime = value;
+}
+
++(NSInteger) grenadeTime {
+    return grenadeTime;
 }
 
 @end
 
-#pragma mark -
-#pragma mark functions called by objc code
-BOOL inline isGameRunning() {
-    return gameRunning;
-}
-
-void inline setGameRunning(BOOL value) {
-    gameRunning = value;
-}
-
-NSInteger cachedGrenadeTime() {
-    return grenadeTime;
-}
-
-void inline setGrenadeTime(NSInteger value) {
-    grenadeTime = value;
-}
 
 #pragma mark -
 #pragma mark functions called by pascal code
@@ -68,24 +50,54 @@ BOOL inline isApplePhone() {
     return (IS_IPAD() == NO);
 }
 
-void startSpinningProgress() {
-    gameRunning = NO;
-    overlay_instance.lowerIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+void startLoadingIndicator() {
+    // this is the first ojbc function called by engine, so we have to initialize some variables here
+    overlay_instance = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
+    // in order to get rotation events we have to insert the view inside the first view of the second window
+    //TODO: when multihead make sure that overlay is displayed in the touch-enabled window
+    [SDL_getUikitView(HW_getSDLWindow()) addSubview:overlay_instance.view];
+    grenadeTime = 2;
 
+    if ([HWUtils gameType] == gtSave) {
+        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+
+        overlay_instance.view.backgroundColor = [UIColor blackColor];
+        overlay_instance.view.alpha = 0.75;
+        overlay_instance.view.userInteractionEnabled = NO;
+    }
     CGPoint center = overlay_instance.view.center;
-    overlay_instance.lowerIndicator.center = (IS_DUALHEAD() ? center : CGPointMake(center.x, center.y * 5/3));
+    CGPoint loaderCenter = ((IS_DUALHEAD() || [HWUtils gameType] == gtSave) ? center : CGPointMake(center.x, center.y * 5/3));
 
-    [overlay_instance.lowerIndicator startAnimating];
-    [overlay_instance.view addSubview:overlay_instance.lowerIndicator];
-    [overlay_instance.lowerIndicator release];
+    overlay_instance.loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    overlay_instance.loadingIndicator.hidesWhenStopped = YES;
+    overlay_instance.loadingIndicator.center = loaderCenter;
+    [overlay_instance.loadingIndicator startAnimating];
+    [overlay_instance.view addSubview:overlay_instance.loadingIndicator];
+    [overlay_instance.loadingIndicator release];
 }
 
-void stopSpinningProgress() {
-    [overlay_instance.lowerIndicator stopAnimating];
-    [overlay_instance.lowerIndicator removeFromSuperview];
+void stopLoadingIndicator() {
     HW_zoomSet(1.7);
-    if (savedGame == NO)
-        gameRunning = YES;
+    if ([HWUtils gameType] != gtSave) {
+        [overlay_instance.loadingIndicator stopAnimating];
+        [overlay_instance.loadingIndicator removeFromSuperview];
+        [HWUtils setGameStatus:gsInGame];
+    }
+}
+
+void saveFinishedSynching() {
+    [UIView beginAnimations:@"fading from save synch" context:NULL];
+    [UIView setAnimationDuration:1];
+    overlay_instance.view.backgroundColor = [UIColor clearColor];
+    overlay_instance.view.alpha = 1;
+    overlay_instance.view.userInteractionEnabled = YES;
+    [UIView commitAnimations];
+
+    [overlay_instance.loadingIndicator stopAnimating];
+    [overlay_instance.loadingIndicator performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+    [HWUtils setGameStatus:gsInGame];
 }
 
 void clearView() {
@@ -103,40 +115,6 @@ void clearView() {
         overlay_instance.grenadeTimeSegment.tag = 0;
     }
     grenadeTime = 2;
-}
-
-void saveBeganSynching() {
-    savedGame = YES;
-    stopSpinningProgress();
-    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-
-    overlay_instance.view.backgroundColor = [UIColor blackColor];
-    overlay_instance.view.alpha = 0.75;
-    overlay_instance.view.userInteractionEnabled = NO;
-
-    overlay_instance.savesIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-
-    overlay_instance.savesIndicator.center = overlay_instance.view.center;
-    overlay_instance.savesIndicator.hidesWhenStopped = YES;
-
-    [overlay_instance.savesIndicator startAnimating];
-    [overlay_instance.view addSubview:overlay_instance.savesIndicator];
-    [overlay_instance.savesIndicator release];
-}
-
-void saveFinishedSynching() {
-    [UIView beginAnimations:@"fading from save synch" context:NULL];
-    [UIView setAnimationDuration:1];
-    overlay_instance.view.backgroundColor = [UIColor clearColor];
-    overlay_instance.view.alpha = 1;
-    overlay_instance.view.userInteractionEnabled = YES;
-    [UIView commitAnimations];
-
-    [overlay_instance.savesIndicator stopAnimating];
-    [overlay_instance.savesIndicator performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
-
-    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
-    gameRunning = YES;
 }
 
 void updateVisualsNewTurn(void) {

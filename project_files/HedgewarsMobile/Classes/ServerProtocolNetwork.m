@@ -19,80 +19,66 @@
  */
 
 
-#import "ServerSetup.h"
-#import <netinet/in.h>
-#import <SystemConfiguration/SCNetworkReachability.h>
-
+#import "ServerProtocolNetwork.h"
 #import "hwconsts.h"
 
 #define BUFFER_SIZE 256
 
-@implementation ServerSetup
-@synthesize systemSettings;
+static ServerProtocolNetwork *serverConnection;
 
+@implementation ServerProtocolNetwork
+@synthesize serverPort, serverAddress, ssd;
 
-+(NSInteger) randomPort {
-    srandom(time(NULL));
-    NSInteger res = (random() % 64511) + 1024;
-    return (res == NETGAME_DEFAULT_PORT) ? [ServerSetup randomPort] : res;
-}
-
-+(BOOL) isNetworkReachable {
-    // Create zero addy
-    struct sockaddr_in zeroAddress;
-    bzero(&zeroAddress, sizeof(zeroAddress));
-    zeroAddress.sin_len = sizeof(zeroAddress);
-    zeroAddress.sin_family = AF_INET;
-
-    // Recover reachability flags
-    SCNetworkReachabilityRef defaultRouteReachability = SCNetworkReachabilityCreateWithAddress(NULL, (struct sockaddr *)&zeroAddress);
-    SCNetworkReachabilityFlags flags;
-
-    BOOL didRetrieveFlags = SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags);
-    CFRelease(defaultRouteReachability);
-
-    if (!didRetrieveFlags) {
-        NSLog(@"Error. Could not recover network reachability flags");
-        return NO;
-    }
-
-    BOOL isReachable = flags & kSCNetworkFlagsReachable;
-    BOOL needsConnection = flags & kSCNetworkFlagsConnectionRequired;
-    BOOL nonWiFi = flags & kSCNetworkReachabilityFlagsTransientConnection;
-
-    NSURL *testURL = [NSURL URLWithString:@"http://www.apple.com/"];
-    NSURLRequest *testRequest = [NSURLRequest requestWithURL:testURL
-                                                 cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                             timeoutInterval:20.0];
-    NSURLConnection *testConnection = [[NSURLConnection alloc] initWithRequest:testRequest delegate:nil];
-    BOOL testResult = testConnection ? YES : NO;
-    [testConnection release];
-
-    return ((isReachable && !needsConnection) || nonWiFi) ? testResult : NO;
-}
-
--(id) init {
+#pragma mark -
+#pragma mark init and class methods
+-(id) init:(NSInteger) onPort withAddress:(NSString *)address {
     if (self = [super init]) {
-        self.systemSettings = nil; //nsuserdefault
+        self.serverPort = onPort;
+        self.serverAddress = address;
     }
+    serverConnection = self;
     return self;
 }
 
--(void) dealloc {
+-(id) init {
+    return [self init:NETGAME_DEFAULT_PORT withAddress:@"netserver.hedgewars.org"];
+}
 
+-(id) initOnPort:(NSInteger) port {
+    return [self init:port withAddress:@"netserver.hedgewars.org"];
+}
+
+-(id) initToAddress:(NSString *)address {
+    return [self init:NETGAME_DEFAULT_PORT withAddress:address];
+}
+
+-(void) dealloc {
+    releaseAndNil(serverAddress);
+    serverConnection = nil;
     [super dealloc];
 }
 
++(ServerProtocolNetwork *)openServerConnection {
+    ServerProtocolNetwork *connection = [[ServerProtocolNetwork alloc] init];
+    [NSThread detachNewThreadSelector:@selector(serverProtocol)
+                             toTarget:connection
+                           withObject:nil];
+    [connection retain];    // retain count here is +2
+    return connection;
+}
+
+#pragma mark -
+#pragma mark Communication layer
 -(int) sendToServer:(NSString *)command {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n\n",command];
-    int result = SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
+    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message length]);
     [message release];
     return result;
 }
 
 -(int) sendToServer:(NSString *)command withArgument:(NSString *)argument {
     NSString *message = [[NSString alloc] initWithFormat:@"%@\n%@\n\n",command,argument];
-    int result = SDLNet_TCP_Send(sd, [message UTF8String], [message length]);
+    int result = SDLNet_TCP_Send(self.ssd, [message UTF8String], [message length]);
     [message release];
     return result;
 }
@@ -104,6 +90,7 @@
     char *buffer = (char *)malloc(sizeof(char)*BUFFER_SIZE);
     int dim = BUFFER_SIZE;
     uint8_t msgSize;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if (SDLNet_Init() < 0) {
         DLog(@"SDLNet_Init: %s", SDLNet_GetError());
@@ -111,39 +98,39 @@
     }
 
     // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, "netserver.hedgewars.org", NETGAME_DEFAULT_PORT) < 0 && !clientQuit) {
-        DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
+    if (SDLNet_ResolveHost(&ip, [self.serverAddress UTF8String] , self.serverPort) < 0 && !clientQuit) {
+        DLog(@"SDLNet_ResolveHost: %s", SDLNet_GetError());
         clientQuit = YES;
     }
 
     // Open a connection with the IP provided (listen on the host's port)
-    if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), NETGAME_DEFAULT_PORT);
+    if (!(self.ssd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
+        DLog(@"SDLNet_TCP_Open: %s %d", SDLNet_GetError(), self.serverPort);
         clientQuit = YES;
     }
 
-    DLog(@"Found server on port %d", NETGAME_DEFAULT_PORT);
+    DLog(@"Found server on port %d", self.serverPort);
     while (!clientQuit) {
         int index = 0;
         BOOL exitBufferLoop = NO;
         memset(buffer, '\0', dim);
-        
+
         while (exitBufferLoop != YES) {
-            msgSize = SDLNet_TCP_Recv(sd, &buffer[index], 2);
-            
+            msgSize = SDLNet_TCP_Recv(self.ssd, &buffer[index], 2);
+
             // exit in case of error
             if (msgSize <= 0) {
                 DLog(@"SDLNet_TCP_Recv: %s", SDLNet_GetError());
                 clientQuit = YES;
                 break;
             }
-            
+
             // update index position and check for End-Of-Message
             index += msgSize;
             if (strncmp(&buffer[index-2], "\n\n", 2) == 0) {
                 exitBufferLoop = YES;
             }
-            
+
             // if message is too big allocate new space
             if (index >= dim) {
                 dim += BUFFER_SIZE;
@@ -183,14 +170,14 @@
             //TODO: stub
         }
         else if ([command isEqualToString:@"ASKPASSWORD"]) {
-            NSString *pwd = [self.systemSettings objectForKey:@"password"];
+            NSString *pwd = [defaults objectForKey:@"password"];
             [self sendToServer:@"PASSWORD" withArgument:pwd];
         }
         else if ([command isEqualToString:@"CONNECTED"]) {
             int netProto;
             char *versionStr;
             HW_versionInfo(&netProto, &versionStr);
-            NSString *nick = [self.systemSettings objectForKey:@"username"];
+            NSString *nick = [defaults objectForKey:@"username"];
             [self sendToServer:@"NICK" withArgument:nick];
             [self sendToServer:@"PROTO" withArgument:[NSString stringWithFormat:@"%d",netProto]];
         }
@@ -218,7 +205,7 @@
     DLog(@"Server closed connection, ending thread");
 
     free(buffer);
-    SDLNet_TCP_Close(sd);
+    SDLNet_TCP_Close(self.ssd);
     SDLNet_Quit();
 
     [pool release];

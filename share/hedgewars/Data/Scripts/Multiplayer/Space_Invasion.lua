@@ -5,7 +5,7 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 ---------------------------------------------------
 ---------------------------------------------------
 ---------------------------------------------------
---- Space Invasion Code Follows (0.9)
+--- Space Invasion Code Follows (1.0)
 ---------------------------------------------------
 ---------------------------------------------------
 -- VERSION HISTORY
@@ -86,7 +86,7 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 -- Boss Slayer (Destroy 2 blue circles for +25 points)
 
 -- Shield Master (disolve 5 shells for +10 points)
--- Shield Miser (don't use your shield at all (2.5*roundkills)+2 points)
+-- Shield Miser (don't use your shield at all (3.5*roundkills)+2 points)
 
 -- Depleted Kamikaze! (kamikaze into a blue/red circ when you are out of ammo) 5pts
 -- Timed Kamikaze! (kamikaze into a blue/red circ when you only have 5s left) 10pts
@@ -122,6 +122,16 @@ loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 -- experimental radar (it's INTERACTIVE and math-heavy :D) (visual gears are safe... right? D:)
 -- bugfix and balance for multishot
 
+------------------------
+-- version 1.0
+------------------------
+
+-- if only version numbers actually worked like this, wouldn't that be awful :D
+
+-- added surfer achievement
+-- increased value of shield miser by 1 point per kill (OP?)
+
+
 --------------------------
 --notes for later
 --------------------------
@@ -152,6 +162,7 @@ AddCaption(LOC_NOT("Boom! +25 points!"),0xffba00ff,capgrpVolume)
 AddCaption(LOC_NOT("BOOM! +50 points!"),0xffba00ff,capgrpVolume)
 AddCaption(LOC_NOT("BOOM! BOOM! BOOM! +100 points!"),0xffba00ff,capgrpVolume)
 AddCaption(LOC_NOT("Accuracy Bonus! +15 points!"),0xffba00ff,capgrpVolume)
+AddCaption(loc("Surfer! +15 points!"),0xffba00ff,capgrpVolume)
 
 -----------------
 capgrpMessage
@@ -207,6 +218,10 @@ local sdScore = {}
 local sdName = {}
 local sdKills = {}
 
+local roundN = 0
+local lastRound
+local RoundHasChanged = true
+
 --------------------------
 -- hog and team tracking variales
 --------------------------
@@ -223,6 +238,7 @@ local teamIndex = {}
 local teamComment = {}
 local teamScore = {}
 local teamCircsKilled = {}
+local teamSurfer = {}
 
 -- stats variables
 --local teamRed = {}
@@ -240,6 +256,7 @@ local chainCounter = 0
 local chainLength = 0
 local shotsFired = 0
 local shotsHit = 0
+local SurfTime = 0
 
 ---------------------
 -- tumbler goods
@@ -382,6 +399,7 @@ function RebuildTeamInfo()
 		teamIndex[i] = 0
 		teamScore[i] = 0
 		teamCircsKilled[i] = 0
+		teamSurfer[i] = false
 	end
 	numTeams = 0
 
@@ -445,7 +463,7 @@ end
 function AwardKills(t)
 
 	roundKills = roundKills + 1
-	
+
 	for i = 0,(TeamsCount-1) do
 		if teamClan[i] == GetHogClan(CurrentHedgehog) then
 			teamCircsKilled[i] = teamCircsKilled[i] + 1
@@ -533,36 +551,66 @@ function CommentOnScore()
 
 end
 
+function onNewRound()
+	roundNumber = roundNumber + 1
+
+	CommentOnScore()
+
+	-- end game if its at round limit
+	if roundNumber == roundLimit then
+
+		for i = 0, (TeamsCount-1) do
+			if teamScore[i] > bestScore then
+				bestScore = teamScore[i]
+				bestClan = teamClan[i]
+			end
+		end
+
+		for i = 0, (numhhs-1) do
+			if GetHogClan(hhs[i]) ~= bestClan then
+				SetEffect(hhs[i], heResurrectable, false)
+				SetHealth(hhs[i],0)
+			end
+		end
+		gameOver = true
+		TurnTimeLeft = 0	--1
+		TimeLeft = 0
+	end
+end
+
 -- gaudy racer
 function CheckForNewRound()
 
-	if GetHogClan(CurrentHedgehog) == firstClan then
+	----------
+	-- new
+	----------
 
-		roundNumber = roundNumber + 1
+	--[[if gameBegun == true then
 
-		CommentOnScore()
-
-		-- end game if its at round limit
-		if roundNumber == roundLimit then
-
-			for i = 0, (TeamsCount-1) do
-				if teamScore[i] > bestScore then
-					bestScore = teamScore[i]
-					bestClan = teamClan[i]
-				end
-			end
-
-			for i = 0, (numhhs-1) do
-				if GetHogClan(hhs[i]) ~= bestClan then
-					SetEffect(hhs[i], heResurrectable, false)
-					SetHealth(hhs[i],0)
-				end
-			end
-			gameOver = true
-			TurnTimeLeft = 0	--1
-			TimeLeft = 0
+		if RoundHasChanged == true then
+			roundN = roundN + 1
+			RoundHasChanged = false
+			onNewRound()
 		end
 
+		if lastRound ~= TotalRounds then -- new round, but not really
+
+			if RoundHasChanged == false then
+				RoundHasChanged = true
+			end
+
+		end
+
+		--AddCaption("RoundN:" .. roundN .. "; " .. "TR: " .. TotalRounds)
+		lastRound = TotalRounds
+
+	end]]
+
+	----------
+	-- old
+	----------
+	if GetHogClan(CurrentHedgehog) == firstClan then
+		onNewRound()
 	end
 
 end
@@ -730,7 +778,7 @@ end
 
 function onHJump()
 
-	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) and 
+	if (CurrentHedgehog ~= nil) and (stopMovement == false) and (tumbleStarted == true) and
 	(rAlpha == 255) and (radShotsLeft > 0) then
 		rPingTimer = 0
 		rAlpha = 0
@@ -833,6 +881,7 @@ function onGameStart()
 
 	CreateMeSomeCircles()
 	RebuildTeamInfo() -- control
+	lastRound = TotalRounds
 
 end
 
@@ -867,6 +916,7 @@ function onNewTurn()
 	shotsHit = 0
 	chainLength = 0
 	chainCounter = 0
+	SurfTime = 12
 
 	-------------------------
 	-- gaudy racer
@@ -1024,12 +1074,8 @@ function onGameTick()
 				--nw WriteLnToConsole("Player is out of luck")
 
 				if shieldMiser == true then
-					
-					p = (roundKills*2.5) - ((roundKills*2.5)%1) + 2
-					--p = (roundKills*2.5) + 2
-					--if (p%2 ~= 0) then
-					--	p = p -0.5					
-					--end
+
+					p = (roundKills*3.5) - ((roundKills*3.5)%1) + 2
 
 					AddCaption(loc("Shield Miser!") .." +" .. p .." ".. loc("points") .. "!",0xffba00ff,capgrpAmmoinfo)
 					AwardPoints(p)
@@ -1072,6 +1118,30 @@ function onGameTick()
 				end
 				--------------
 				--------------
+
+				------------------------
+				-- surfer achievement
+				------------------------
+
+				if (WaterLine - GetY(CurrentHedgehog)) < 15 then
+					SurfTime = SurfTime -1
+				end
+
+				if SurfTime ~= 12 then
+
+					SurfTime = SurfTime - 1
+					if SurfTime <= 0 then
+						for i = 0,(TeamsCount-1) do
+							if teamClan[i] == GetHogClan(CurrentHedgehog) and (teamSurfer[i] == false) then
+								teamSurfer[i] = true
+								SurfTime = 12
+								AddCaption(loc("Surfer! +15 points!"),0xffba00ff,capgrpVolume)
+								AwardPoints(15)
+							end
+						end
+					end
+				end
+
 
 				dx, dy = GetGearVelocity(CurrentHedgehog)
 
@@ -1123,7 +1193,7 @@ function onGameTick()
 	end
 
 	--WriteLnToConsole("End of GameTick")
-	
+
 end
 
 function onGearResurrect(gear)
@@ -1211,31 +1281,31 @@ end
 
 function DoHorribleThings(cUID)
 
-	-- maybe	
+	-- maybe
 	-- add a check to draw it inside the circ and not past it if
 	-- it is closer than 150 or w/e
 
-	-- work out the distance to the target	
+	-- work out the distance to the target
 	g1X, g1Y = GetGearPosition(CurrentHedgehog)
 	g2X, g2Y = vCircX[cUID], vCircY[cUID]
-	q = g1X - g2X				
-	w = g1Y - g2Y				
+	q = g1X - g2X
+	w = g1Y - g2Y
 	r = math.sqrt( (q*q) + (w*w) )	--alternate
-	
 
-	opp = w	
+
+	opp = w
 	if opp < 0 then
 		opp = opp*-1
 	end
 
 	-- work out the angle (theta) to the target
 	t = math.deg ( math.asin(opp / r) )
-		
-	-- based on the radius of the radar, calculate what x/y displacement should be	
+
+	-- based on the radius of the radar, calculate what x/y displacement should be
 	NR = 150 -- radius at which to draw circs
 	NX = math.cos( math.rad(t) ) * NR
-	NY = math.sin( math.rad(t) ) * NR	
-		
+	NY = math.sin( math.rad(t) ) * NR
+
 	-- displace xy based on where this thing actually is
 	if q > 0 then
 		rCircX[cUID] = g1X - NX
@@ -1248,7 +1318,7 @@ function DoHorribleThings(cUID)
 	else
 		rCircY[cUID] = g1Y + NY
 	end
-	
+
 end
 
 function PlayerIsFine()
@@ -1573,7 +1643,7 @@ function SetUpCircle(i)
 
 	g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(rCirc[i])
 	SetVisualGearValues(rCirc[i], 0, 0, g3, g4, g5, g6, g7, g8, g9, vCircCol[i]-0x000000ff)
-	
+
 
 	vCircActive[i] = true -- new
 
@@ -1816,25 +1886,25 @@ function HandleCircles()
 
 	end]]
 
-	
+
 	if rAlpha ~= 255 then
-		
+
 		rPingTimer = rPingTimer + 1
 		if rPingTimer == 100 then
-			rPingTimer = 0	
-			
+			rPingTimer = 0
+
 			rAlpha = rAlpha + 5
 			if rAlpha >= 255 then
 				rAlpha = 255
-			end	
+			end
 		end
-	
+
 	end
 
 	for i = 0,(vCCount-1) do
 
 		--if (vCircActive[i] == true) then
-			SetVisualGearValues(rCirc[i], rCircX[i], rCircY[i], 100, 255, 1, 10, 0, 40, 3, vCircCol[i]-rAlpha)	
+			SetVisualGearValues(rCirc[i], rCircX[i], rCircY[i], 100, 255, 1, 10, 0, 40, 3, vCircCol[i]-rAlpha)
 		--end
 
 		vCounter[i] = vCounter[i] + 1
@@ -1987,8 +2057,8 @@ function HandleCircles()
 			vCircX[i] = vCircX[i] + vCircDX[i]
 			vCircY[i] = vCircY[i] + vCircDY[i]
 
-			if (CurrentHedgehog ~= nil) and (rAlpha ~= 255) then			
-				DoHorribleThings(i)--(i, g1X, g1Y, g2X, g2Y, dist)				
+			if (CurrentHedgehog ~= nil) and (rAlpha ~= 255) then
+				DoHorribleThings(i)--(i, g1X, g1Y, g2X, g2Y, dist)
 			end
 
 		end

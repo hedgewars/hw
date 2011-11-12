@@ -63,24 +63,76 @@
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation>Wenn diese Option aktiviert ist, wird durch Auswählen eines Spielprofils auch automatisch Waffen ausgewählt</translation>
     </message>
+    <message>
+        <source>Game Options</source>
+        <translation>Spieloptionen</translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation>%1 *** %2 wurde aus deiner Ignorierliste entfernt</translation>
+        <translation type="obsolete">%1 *** %2 wurde aus deiner Ignorierliste entfernt</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation>%1 *** %2 wurde in deine Ignorierliste aufgenommen</translation>
+        <translation type="obsolete">%1 *** %2 wurde in deine Ignorierliste aufgenommen</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation>%1 *** %2 wurde aus deiner Freundesliste entfernt</translation>
+        <translation type="obsolete">%1 *** %2 wurde aus deiner Freundesliste entfernt</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation>%1 *** %2 wurde in deine Freundesliste aufgenommen</translation>
+        <translation type="obsolete">%1 *** %2 wurde in deine Freundesliste aufgenommen</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your ignore list</source>
+        <translation>%1 wurde aus deiner Ignorierliste entfernt</translation>
+    </message>
+    <message>
+        <source>%1 has been added to your ignore list</source>
+        <translation>%1 wurde in deine Ignorierliste aufgenommen</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your friends list</source>
+        <translation>%1 wurde aus deiner Freundesliste entfernt</translation>
+    </message>
+    <message>
+        <source>%1 has been added to your friends list</source>
+        <translation>%1 wurde in deine Freundesliste aufgenommen</translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation>Style-Sheet aus %1 importiert</translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation>Gib %1 ein wenn du das jetzige Style-Sheet in Zukunft weiterverwenden willst, gib %2 ein um es zurückzusetzen!</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation>Konnte %1 nicht lesen</translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation>Style-Sheet verworfen</translation>
+    </message>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation>Style-Sheet wurde nach %1 gesichert</translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
+        <translation>Style-Sheet konnte nich nach %1 gesichert werden</translation>
+    </message>
+    <message>
+        <source>%1 is not a valid command!</source>
+        <translation>%1 ist kein gültiger Befehl!</translation>
+    </message>
+    <message>
+        <source>Kicking %1 ...</source>
+        <translation>%1 wird rausgeworfen ...</translation>
     </message>
 </context>
 <context>
@@ -130,6 +182,48 @@
     <message>
         <source>Demo name:</source>
         <translation>Demo-Name:</translation>
+    </message>
+    <message>
+        <source>Game aborted</source>
+        <translation>Spiel abgebrochen</translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation>Passwort</translation>
+    </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation>Dein Spitzname &apos;%1&apos; wurde
+auf Hedgewars.org registriert.
+
+Bitte gib dein Passwort ein oder
+wähle einen anderen Spitznamen
+in den Spieloptionen:</translation>
+    </message>
+    <message>
+        <source>No password supplied.</source>
+        <translation>Kein Passwort</translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation>Spitzname</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation>Jemand verwendet
+deinen Spiznamen %1 
+bereits auf dem Server.
+Bitte wähle einen anderen Spitznamen:</translation>
+    </message>
+    <message>
+        <source>No nickname supplied.</source>
+        <translation>Kein Spitznahme angegeben.</translation>
     </message>
 </context>
 <context>
@@ -261,7 +355,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation>Passwort</translation>
+        <translation type="obsolete">Passwort</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -295,7 +389,7 @@ wähle einen anderen Spitznamen:</translation>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation>Dein Spitzname &apos;%1&apos; wurde
+        <translation type="obsolete">Dein Spitzname &apos;%1&apos; wurde
 auf Hedgewars.org registriert.
 
 Bitte gib dein Passwort ein oder
@@ -303,17 +397,21 @@ wähle einen anderen Spitznamen:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>Spitzname</translation>
+        <translation type="obsolete">Spitzname</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation>Jemand verwendet
+        <translation type="obsolete">Jemand verwendet
 deinen Spiznamen %1 
 bereits auf dem Server.
 Bitte wähle einen anderen Spitznamen:</translation>
+    </message>
+    <message>
+        <source>User quit</source>
+        <translation>Benutzer ist gegangen</translation>
     </message>
 </context>
 <context>
@@ -370,7 +468,7 @@ Bitte wähle einen anderen Spitznamen:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Abbrechen</translation>
+        <translation type="obsolete">Abbrechen</translation>
     </message>
 </context>
 <context>
@@ -500,6 +598,13 @@ Bitte wähle einen anderen Spitznamen:</translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Runde.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Runden.</numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>PageInGame</name>
+    <message>
+        <source>In game...</source>
+        <translation>Im Spiel...</translation>
     </message>
 </context>
 <context>
@@ -1011,7 +1116,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     </message>
     <message>
         <source>State:</source>
-        <translation>Status:</translation>
+        <translation type="obsolete">Status:</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1205,7 +1310,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation>Trainingsmodus (Verbessere dein Können in verschiedenen Trainingsmissionen). IN ENTWICKLUNG</translation>
+        <translation type="obsolete">Trainingsmodus (Verbessere dein Können in verschiedenen Trainingsmissionen). IN ENTWICKLUNG</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
@@ -1217,7 +1322,26 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation>Kampagnenmodus (...) IN ENTWICKLUNG</translation>
+        <translation type="obsolete">Kampagnenmodus (...) IN ENTWICKLUNG</translation>
+    </message>
+    <message>
+        <source>Campaign Mode (...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <translation>Trainingsmodus (Verbessere deine Fähigkeiten in verschiedenen Trainingsmissionen)</translation>
+    </message>
+</context>
+<context>
+    <name>PageTraining</name>
+    <message>
+        <source>No description available</source>
+        <translation>Keine Beschreibung verfügbar</translation>
+    </message>
+    <message>
+        <source>Select a mission!</source>
+        <translation>Wähle eine Mission!</translation>
     </message>
 </context>
 <context>
@@ -1500,7 +1624,7 @@ Willst du trotzdem den Raum betreten?</translation>
     <name>QLabel</name>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>Dieses Programm ist unter der GNU General Public License veröffentlicht</translation>
+        <translation type="obsolete">Dieses Programm ist unter der GNU General Public License veröffentlicht</translation>
     </message>
     <message>
         <source>Developers:</source>
@@ -1678,7 +1802,7 @@ Einige Dinge könnten nicht funktionieren oder unvollständig sein. Benutzung au
     </message>
     <message>
         <source>Game Options</source>
-        <translation>Spieloptionen</translation>
+        <translation type="obsolete">Spieloptionen</translation>
     </message>
     <message>
         <source>Style</source>
@@ -1695,6 +1819,10 @@ Einige Dinge könnten nicht funktionieren oder unvollständig sein. Benutzung au
     <message>
         <source>% Get Away Time</source>
         <translation>% Rückzugszeit</translation>
+    </message>
+    <message>
+        <source>This program is distributed under the GNU General Public License v2</source>
+        <translation>Dieses Spiel wird unter den Bedingungen der GNU General Public License v2 verbreitet</translation>
     </message>
 </context>
 <context>

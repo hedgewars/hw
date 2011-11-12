@@ -23,16 +23,13 @@
 
 }
 
-+(void) initialize;
++(void) setGrenadeTime:(NSInteger) value;
++(NSInteger) grenadeTime;
 
 @end
 
 
-BOOL isGameRunning(void);
-void setGameRunning(BOOL value);
-NSInteger cachedGrenadeTime(void);
 void clearView(void);
-void setGrenadeTime(NSInteger value);
 BOOL isApplePhone(void);
 
 void startSpinningProgress(void);

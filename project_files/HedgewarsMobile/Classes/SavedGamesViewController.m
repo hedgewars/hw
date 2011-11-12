@@ -24,7 +24,7 @@
 
 
 @implementation SavedGamesViewController
-@synthesize tableView, listOfSavegames, interfaceBridge, numberOfItems;
+@synthesize tableView, listOfSavegames, numberOfItems;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -189,13 +189,7 @@
     self.numberOfItems++;
     [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
-    if (self.interfaceBridge == nil) {
-        GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
-        self.interfaceBridge = bridge;
-        [bridge release];
-    }
-
-    [self.interfaceBridge startSaveGame:currentFilePath];
+    [GameInterfaceBridge startSaveGame:currentFilePath];
     [currentFilePath release];
 }
 
@@ -219,8 +213,6 @@
 #pragma mark Memory Management
 -(void) didReceiveMemoryWarning {
     self.listOfSavegames = nil;
-    // don't nil this one or it won't be able to send messages
-    //self.interfaceBridge = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
@@ -228,7 +220,6 @@
 -(void) viewDidUnload {
     self.tableView = nil;
     self.listOfSavegames = nil;
-    self.interfaceBridge = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -236,7 +227,6 @@
 -(void) dealloc {
     releaseAndNil(tableView);
     releaseAndNil(listOfSavegames);
-    releaseAndNil(interfaceBridge);
     [super dealloc];
 }
 

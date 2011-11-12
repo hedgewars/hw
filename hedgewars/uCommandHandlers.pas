@@ -130,6 +130,7 @@ procedure chScript(var s: shortstring);
 begin
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+cScriptName:= s;
 ScriptLoad(s)
 end;
 
@@ -457,7 +458,7 @@ if isDeveloperMode then
     InitStepsFlags:= InitStepsFlags or cifMap
     end;
 
-ScriptLoad(s)
+ScriptLoad('Maps/' + s + '/map.lua')
 end;
 
 procedure chSetTheme(var s: shortstring);
@@ -526,7 +527,7 @@ if FollowGear <> nil then
     else begin
     AddCaption('Auto Camera On', $CCCCCC, capgrpVolume);
     bShowFinger:= true;
-    FollowGear:= CurrentHedgehog^.Gear;
+    if not CurrentHedgehog^.Unplaced then FollowGear:= CurrentHedgehog^.Gear;
     autoCameraOn:= true
     end
 end;
@@ -614,7 +615,7 @@ begin
     RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
     RegisterVariable('template_filter', vtLongInt, @cTemplateFilter, false);
     RegisterVariable('mapgen'  , vtLongInt, @cMapGen        , false);
-    RegisterVariable('maze_size',vtLongInt, @cMazeSize      , false);
+    RegisterVariable('maze_size',vtLongInt, @cTemplateFilter, false);
     RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
     RegisterVariable('ready'   , vtLongInt, @cReadyDelay    , false);
     RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);

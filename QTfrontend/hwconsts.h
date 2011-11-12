@@ -110,14 +110,27 @@ extern bool isDevBuild;
                               0xffffef00, /. yellow         ./ \
                               // add new colors here 
                               0 }*/
-#define HW_TEAMCOLOR_ARRAY  { 0xffd12b42, /* red    */ \
+/*
+#define HW_TEAMCOLOR_ARRAY  { 0xffd12b42, /. red    ./ \
+                              0xff4980c1, /. blue   ./ \
+                              0xff6ab530, /. green  ./ \
+                              0xffbc64c4, /. purple ./ \
+                              0xffe76d14, /. orange ./ \
+                              0xff3fb6e6, /. cyan   ./ \
+                              0xffe3e90c, /. yellow ./ \
+                              0xff61d4ac, /. mint   ./ \
+                              0xfff1c3e1, /. pink   ./ \
+                              // add new colors here
+                              0 }*/
+/* another set. this one is a merge of mikade/bugq colours w/ a bit of channel feedback */
+#define HW_TEAMCOLOR_ARRAY  { 0xffff0204, /* red    */ \
                               0xff4980c1, /* blue   */ \
-                              0xff6ab530, /* green  */ \
-                              0xffbc64c4, /* purple */ \
-                              0xffe76d14, /* orange */ \
-                              0xff3fb6e6, /* cyan   */ \
-                              0xffe3e90c, /* yellow */ \
-                              0xff61d4ac, /* mint   */ \
-                              0xfff1c3e1, /* pink   */ \
+                              0xff1de6ba, /* teal   */ \
+                              0xffb541ef, /* purple */ \
+                              0xffe55bb0, /* pink   */ \
+                              0xff20bf00, /* green  */ \
+                              0xfffe8b0e, /* orange */ \
+                              0xff5f3605, /* brown  */ \
+                              0xffffff01, /* yellow */ \
                               /* add new colors here */ \
                               0 }

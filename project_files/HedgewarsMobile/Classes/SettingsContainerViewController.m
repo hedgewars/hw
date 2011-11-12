@@ -68,7 +68,6 @@
         self.baseController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
 
         [self.view addSubview:self.baseController.view];
-        // here setting activeController is not needed as the event is kept active by the uitabbarcontroller
     }
 
     [super viewDidLoad];
@@ -104,26 +103,31 @@
 
 
 #pragma mark -
-#pragma mark additional methods as we're using a UINavigationController programmatically
+#pragma mark view event management propagation
+// every time we add a uiviewcontroller programmatically we need to take care of propgating such messages
 // see http://davidebenini.it/2009/01/03/viewwillappear-not-being-called-inside-a-uinavigationcontroller/
 -(void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     [self.activeController viewWillAppear:animated];
+    [self.baseController viewWillAppear:animated];
+    [super viewWillAppear:animated];
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
     [self.activeController viewWillDisappear:animated];
+    [self.baseController viewWillDisappear:animated];
+    [super viewWillDisappear:animated];
 }
 
 -(void) viewDidAppear:(BOOL)animated {
-    [super viewDidLoad];
     [self.activeController viewDidAppear:animated];
+    [self.baseController viewDidAppear:animated];
+    [super viewDidLoad];
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
-    [super viewDidUnload];
     [self.activeController viewDidDisappear:animated];
+    [self.baseController viewDidDisappear:animated];
+    [super viewDidUnload];
 }
 
 

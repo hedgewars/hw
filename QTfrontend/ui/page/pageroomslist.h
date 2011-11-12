@@ -49,8 +49,9 @@ public:
     QLabel * lblCount;
 
 public slots:
-    void setRoomsList(const QStringList & list);
     void setAdmin(bool);
+    void setRoomsList(const QStringList & list);
+    void setUser(const QString & nickname);
     void updateNickCounter(int cnt);
 
 signals:

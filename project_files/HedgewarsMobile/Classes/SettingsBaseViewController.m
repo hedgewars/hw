@@ -284,5 +284,18 @@
     [super dealloc];
 }
 
+
+-(void) viewWillDisappear:(BOOL)animated {
+    // this will send -viewWillDisappear: only the active view
+    [self.tabController viewWillDisappear:animated];
+    // let's send that to every page, even though only GeneralSettingsViewController needs it
+    [generalSettingsViewController viewWillDisappear:animated];
+    [teamSettingsViewController viewWillDisappear:animated];
+    [weaponSettingsViewController viewWillDisappear:animated];
+    [schemeSettingsViewController viewWillDisappear:animated];
+    [supportViewController viewWillDisappear:animated];
+    [super viewWillDisappear:animated];
+}
+
 @end
 

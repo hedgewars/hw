@@ -63,24 +63,76 @@
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation>När det här valet är aktivt kommer vapnen att ändras när du ändrar spelschema</translation>
     </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished">Spelinställningar</translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation>%1 *** %2 har tagits bort från din ignoreringslista</translation>
+        <translation type="obsolete">%1 *** %2 har tagits bort från din ignoreringslista</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation>%1 *** %2 har lagts till i din ignoreringslista</translation>
+        <translation type="obsolete">%1 *** %2 har lagts till i din ignoreringslista</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation>%1 *** %2 har tagits bort från din kompislista</translation>
+        <translation type="obsolete">%1 *** %2 har tagits bort från din kompislista</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation>%1 *** %2 har lagts till i din kompislista</translation>
+        <translation type="obsolete">%1 *** %2 har lagts till i din kompislista</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not a valid command!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kicking %1 ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -130,6 +182,46 @@
     <message>
         <source>Demo name:</source>
         <translation>Demonamn:</translation>
+    </message>
+    <message>
+        <source>Game aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Lösenord</translation>
+    </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation type="unfinished">Ditt smeknamn (%1) är
+registrerat på Hedgewars.org
+Var god ange ditt lösenord eller välj
+ett annat smeknamn i spelinställningarna:</translation>
+    </message>
+    <message>
+        <source>No password supplied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Smeknamn</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished">Någon använder redan
+ditt smeknamn %1
+på servern.
+Välj ett annat smeknamn:</translation>
+    </message>
+    <message>
+        <source>No nickname supplied.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -257,7 +349,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation>Lösenord</translation>
+        <translation type="obsolete">Lösenord</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -290,24 +382,28 @@ eller välj ett annat smeknamn:</translation>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation>Ditt smeknamn (%1) är
+        <translation type="obsolete">Ditt smeknamn (%1) är
 registrerat på Hedgewars.org
 Var god ange ditt lösenord eller välj
 ett annat smeknamn i spelinställningarna:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>Smeknamn</translation>
+        <translation type="obsolete">Smeknamn</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation>Någon använder redan
+        <translation type="obsolete">Någon använder redan
 ditt smeknamn %1
 på servern.
 Välj ett annat smeknamn:</translation>
+    </message>
+    <message>
+        <source>User quit</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -364,7 +460,7 @@ Välj ett annat smeknamn:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="obsolete">Avbryt</translation>
     </message>
 </context>
 <context>
@@ -498,6 +594,13 @@ Välj ett annat smeknamn:</translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; var rädd och hoppade över turer &lt;b&gt;%2&lt;/b&gt; gånger.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; var rädd och hoppade över turer &lt;b&gt;%2&lt;/b&gt; gånger.</numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>PageInGame</name>
+    <message>
+        <source>In game...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1009,7 +1112,7 @@ Du kan gå med och se på men du måste vänta tills spelet är slut för att ku
     </message>
     <message>
         <source>State:</source>
-        <translation>Status:</translation>
+        <translation type="obsolete">Status:</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1207,7 +1310,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation>Träningsläge (öva dina färdigheter i en rad träningsuppdrag). UNDER UTVECKLING</translation>
+        <translation type="obsolete">Träningsläge (öva dina färdigheter i en rad träningsuppdrag). UNDER UTVECKLING</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
@@ -1219,7 +1322,26 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation>Kampanjläge (...). UNDER UTVECKLING</translation>
+        <translation type="obsolete">Kampanjläge (...). UNDER UTVECKLING</translation>
+    </message>
+    <message>
+        <source>Campaign Mode (...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageTraining</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a mission!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1534,7 +1656,7 @@ Vill du fortfarande gå med i rummet?</translation>
     <name>QLabel</name>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>Detta program distribueras under GNU General Public License</translation>
+        <translation type="obsolete">Detta program distribueras under GNU General Public License</translation>
     </message>
     <message>
         <source>Developers:</source>
@@ -1716,7 +1838,7 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
     </message>
     <message>
         <source>Game Options</source>
-        <translation>Spelinställningar</translation>
+        <translation type="obsolete">Spelinställningar</translation>
     </message>
     <message>
         <source>Style</source>
@@ -1733,6 +1855,10 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
     <message>
         <source>% Get Away Time</source>
         <translation>% flykttid</translation>
+    </message>
+    <message>
+        <source>This program is distributed under the GNU General Public License v2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

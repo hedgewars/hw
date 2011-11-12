@@ -210,7 +210,7 @@
         script = self.schemeWeaponConfigViewController.scriptCommand;
 
     // create the configuration file that is going to be sent to engine
-    NSDictionary *gameDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+    NSDictionary *gameDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:
                                     self.mapConfigViewController.seedCommand,@"seed_command",
                                     self.mapConfigViewController.templateFilterCommand,@"templatefilter_command",
                                     self.mapConfigViewController.mapGenCommand,@"mapgen_command",
@@ -223,9 +223,8 @@
                                     script,@"mission_command",
                                     nil];
 
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] initWithController:self];
-    [bridge startLocalGame:gameDictionary];
-    [bridge release];
+    [GameInterfaceBridge startLocalGame:gameDictionary];
+    [gameDictionary release];
 }
 
 -(void) loadNiceHogs {

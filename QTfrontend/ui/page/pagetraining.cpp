@@ -79,7 +79,7 @@ QLayout * PageTraining::bodyLayoutDefinition()
     pageLayout->addWidget(lstMissions, 1, 0, 1, 2); // span 2 columns
 
     // let's not make the list use more space than needed
-    lstMissions->setFixedWidth(360);
+    lstMissions->setFixedWidth(400);
     pageLayout->setAlignment(lstMissions, Qt::AlignHCenter);
 
     return pageLayout;
@@ -139,6 +139,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 
     // preload mission info for current locale
     m_info = new QSettings(infoFile, QSettings::IniFormat, this);
+    m_info->setIniCodec("UTF-8");
 
 
     QStringList missionList = dataMgr.entryList(

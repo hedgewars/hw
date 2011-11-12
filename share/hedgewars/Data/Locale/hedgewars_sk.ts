@@ -68,24 +68,76 @@
         <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
         <translation>Keď je vybraná táto voľba výberom hernej schémy vyberiete automaticky aj zbraň</translation>
     </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished">Voľby hry</translation>
+    </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation>%1 *** %2 bol(a) odstránený(á) zo zoznamu ignorovaných</translation>
+        <translation type="obsolete">%1 *** %2 bol(a) odstránený(á) zo zoznamu ignorovaných</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation>%1 *** %2 bol(a) pridaný(á) do zoznamu ignorovaných</translation>
+        <translation type="obsolete">%1 *** %2 bol(a) pridaný(á) do zoznamu ignorovaných</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation>%1 *** %2 bol(a) odstránený(á) zo zoznamu priateľov</translation>
+        <translation type="obsolete">%1 *** %2 bol(a) odstránený(á) zo zoznamu priateľov</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation>%1 *** %2 bol(a) pridaný(á) do zoznamu priateľov</translation>
+        <translation type="obsolete">%1 *** %2 bol(a) pridaný(á) do zoznamu priateľov</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not a valid command!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kicking %1 ...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -134,6 +186,48 @@
     </message>
     <message>
         <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Heslo</translation>
+    </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation type="unfinished">Prezývka %1, ktorú ste
+si vybrali je registrovaná na
+Hedgewars.org.
+Prosím, napíšte heslo do poľa
+nižšie alebo si zvoľte inú prezývku
+v nastaveniach hry:</translation>
+    </message>
+    <message>
+        <source>No password supplied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Prezývka</translation>
+    </message>
+    <message>
+        <source>Some one already uses
+ your nickname %1
+on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished">Niekto už používa
+vašu prezývku %1
+na serveri.
+Prosím vyberte si inú prezývku:</translation>
+    </message>
+    <message>
+        <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -262,7 +356,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation>Heslo</translation>
+        <translation type="obsolete">Heslo</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -295,7 +389,7 @@ si vyberte inú prezývku:</translation>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation>Prezývka %1, ktorú ste
+        <translation type="obsolete">Prezývka %1, ktorú ste
 si vybrali je registrovaná na
 Hedgewars.org.
 Prosím, napíšte heslo do poľa
@@ -304,17 +398,21 @@ v nastaveniach hry:</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>Prezývka</translation>
+        <translation type="obsolete">Prezývka</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation>Niekto už používa
+        <translation type="obsolete">Niekto už používa
 vašu prezývku %1
 na serveri.
 Prosím vyberte si inú prezývku:</translation>
+    </message>
+    <message>
+        <source>User quit</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -371,7 +469,7 @@ Prosím vyberte si inú prezývku:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Zrušiť</translation>
+        <translation type="obsolete">Zrušiť</translation>
     </message>
 </context>
 <context>
@@ -513,6 +611,13 @@ Prosím vyberte si inú prezývku:</translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; sa zľakol a preskočil ťah &lt;b&gt;%2&lt;/b&gt;krát.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; sa zľakol a preskočil ťah &lt;b&gt;%2&lt;/b&gt;krát.</numerusform>
         </translation>
+    </message>
+</context>
+<context>
+    <name>PageInGame</name>
+    <message>
+        <source>In game...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1036,7 +1141,7 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     </message>
     <message>
         <source>State:</source>
-        <translation>Stav:</translation>
+        <translation type="obsolete">Stav:</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1235,7 +1340,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation>Tréningový režim (vylepšujte si svoje zručnosti v rade tréningových misií). VO VÝVOJI</translation>
+        <translation type="obsolete">Tréningový režim (vylepšujte si svoje zručnosti v rade tréningových misií). VO VÝVOJI</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
@@ -1247,7 +1352,26 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation>Režim kampane (...) VO VÝVOJI</translation>
+        <translation type="obsolete">Režim kampane (...) VO VÝVOJI</translation>
+    </message>
+    <message>
+        <source>Campaign Mode (...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageTraining</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a mission!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1570,7 +1694,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>Tento program je distribuovaný podľa podmienok GNU General Publice License</translation>
+        <translation type="obsolete">Tento program je distribuovaný podľa podmienok GNU General Publice License</translation>
     </message>
     <message>
         <source>Developers:</source>
@@ -1749,7 +1873,7 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Game Options</source>
-        <translation>Voľby hry</translation>
+        <translation type="obsolete">Voľby hry</translation>
     </message>
     <message>
         <source>Style</source>
@@ -1766,6 +1890,10 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     <message>
         <source>% Get Away Time</source>
         <translation>% času na útek</translation>
+    </message>
+    <message>
+        <source>This program is distributed under the GNU General Public License v2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2140,7 +2268,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Add Bottom Border</source>
-        <source>Pridať spodný okraj</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

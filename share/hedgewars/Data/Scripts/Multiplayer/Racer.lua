@@ -1,6 +1,6 @@
 
 ------------------------------------------
--- RACER 0.4
+-- RACER 0.5
 -- map-independant racing script
 -- by mikade
 -----------------------------------------
@@ -51,6 +51,15 @@
 
 -- update user feedback
 -- add more sounds
+
+-------
+-- 0.5
+-------
+
+-- fix ghost disappearing if hog falls in water or somehow dies
+-- lengthen ghost tracking interval to improve performance on slower machines
+-- increase waypoint limit to 8
+-- allow for persistent showmission information
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -116,7 +125,11 @@ local wpCol = {}
 local wpActive = {}
 local wpRad = 450 --75
 local wpCount = 0
-local wpLimit = 5
+local wpLimit = 8
+
+local roundN
+local lastRound
+local RoundHasChanged
 
 -------------------
 -- general methods
@@ -317,31 +330,50 @@ function AdjustScores()
 
 end
 
+function onNewRound()
+
+	roundNumber = roundNumber + 1
+
+	totalComment = ""
+	for i = 0, (TeamsCount-1) do
+			if teamNameArr[i] ~= " " then				-- teamScore[teamClan[i]]
+				teamComment[i] = teamNameArr[i] .. ": " .. (teamScore[i]/1000) .. loc("s|")
+				totalComment = totalComment .. teamComment[i]
+			elseif teamNameArr[i] == " " then
+				teamComment[i] = "|"
+			end
+	end
+
+	ShowMission(	loc("RACER"),
+					loc("STATUS UPDATE"),
+					loc("Rounds Complete: ") .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" ..
+					loc("Best Team Times: ") .. "|" .. totalComment, 0, 4000)
+
+	-- end game if its at round limit
+	if roundNumber == roundLimit then
+		for i = 0, (numhhs-1) do
+			if GetHogClan(hhs[i]) ~= bestClan then
+				SetEffect(hhs[i], heResurrectable, false)
+				SetHealth(hhs[i],0)
+			end
+		end
+		gameOver = true
+		TurnTimeLeft = 1
+	end
+
+end
+
 function CheckForNewRound()
 
-	if GetHogClan(CurrentHedgehog) == firstClan then
+	-------------
+	------ new
+	-------------
 
-		roundNumber = roundNumber + 1
-
-		totalComment = ""
-		for i = 0, (TeamsCount-1) do
-				if teamNameArr[i] ~= " " then				-- teamScore[teamClan[i]]
-					teamComment[i] = teamNameArr[i] .. ": " .. (teamScore[i]/1000) .. loc("s|")
-					totalComment = totalComment .. teamComment[i]
-				elseif teamNameArr[i] == " " then
-					teamComment[i] = "|"
-				end
-		end
-
-		ShowMission(	loc("RACER"),
-				loc("STATUS UPDATE"),
-				loc("Rounds Complete: ") .. roundNumber .. "/" .. roundLimit .. "|" .. " " .. "|" ..
-				loc("Best Team Times: ") .. "|" .. totalComment, 0, 4000)
-
-		-- end game if its at round limit
-		if roundNumber == roundLimit then
+	--[[turnN = turnN + 1
+	if gameBegun == false then
+		if turnN == 2 then
 			for i = 0, (numhhs-1) do
-				if GetHogClan(hhs[i]) ~= bestClan then
+				if hhs[i] ~= nil then
 					SetEffect(hhs[i], heResurrectable, false)
 					SetHealth(hhs[i],0)
 				end
@@ -349,7 +381,39 @@ function CheckForNewRound()
 			gameOver = true
 			TurnTimeLeft = 1
 		end
+	else
 
+
+	end]]
+
+	--[[if roundBegun == true then
+
+		if RoundHasChanged == true then
+			roundN = roundN + 1
+			RoundHasChanged = false
+			onNewRound()
+		end
+
+		if lastRound ~= TotalRounds then -- new round, but not really
+
+			if RoundHasChanged == false then
+				RoundHasChanged = true
+			end
+
+		end
+
+		AddCaption("RoundN:" .. roundN .. "; " .. "TR: " .. TotalRounds)
+
+		lastRound = TotalRounds
+
+	end]]
+
+	------------
+	----- old
+	------------
+
+	if GetHogClan(CurrentHedgehog) == firstClan then
+		onNewRound()
 	end
 
 end
@@ -402,6 +466,11 @@ end
 
 
 function onGameStart()
+
+	roundN = 0
+	lastRound = TotalRounds
+	RoundHasChanged = false -- true
+
 	RebuildTeamInfo()
 
 	ShowMission	(
@@ -413,8 +482,6 @@ function onGameStart()
 
 				"", 4, 4000
 				)
-
-
 end
 
 function PlaceWayPoint(x,y)
@@ -490,7 +557,7 @@ function onGameTick()
 	-- airstrike detected, convert this into a potential waypoint spot
 	if cGear ~= nil then
 		x,y = GetGearTarget(cGear)
-		
+
 		DeleteGear(cGear)
 
 		if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
@@ -525,7 +592,8 @@ function onGameTick()
 				SetGearPosition(CurrentHedgehog, wpX[0], wpY[0])
 				AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
 				FollowGear(CurrentHedgehog)
-				ShowMission("...", "...", "...", 2, 1)
+
+				HideMission()
 
 			else
 				-- still in placement mode
@@ -546,7 +614,7 @@ function onGameTick()
 
 			--ghost
 			gTimer = gTimer + 1
-			if gTimer == 15 then
+			if gTimer == 40 then
 				gTimer = 0
 				HandleGhost()
 			end
@@ -583,6 +651,10 @@ end
 function onGearResurrect(gear)
 
 	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+
+	if gear == CurrentHedgehog then
+		DisableTumbler()
+	end
 
 	-- if the player stops and "dies" or flies into water, stop him racing
 	--[[if gear == CurrentHedgehog then

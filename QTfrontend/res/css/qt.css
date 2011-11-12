@@ -11,9 +11,9 @@
  * This file can be stored at different locations, but it will be read only
  * once, based on first file found in this order:
  *
- *     <userdir>/Data/css/qt.css
- *     <datadir>/css/qt.css
- *     <internal default style-sheet> (:/res/css/qt.css)
+ *    <userdir>/Data/css/qt.css
+ *    <datadir>/css/qt.css
+ *    <internal default style-sheet> (:/res/css/qt.css)
  *
  *****************************************************************************/
 
@@ -29,6 +29,8 @@ color: #ffcc00;
 selection-background-color: #ffcc00;
 selection-color: #00351d;
 }
+
+a { color:#c8c8ff; }
 
 QLineEdit, QListWidget, QTableView, QTextBrowser, QSpinBox, QComboBox,
 QComboBox QAbstractItemView, QMenu::item {

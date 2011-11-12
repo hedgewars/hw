@@ -55,6 +55,7 @@
 #define WEAPONS_DIRECTORY()     [DOCUMENTS_FOLDER() stringByAppendingString:@"/Weapons/"]
 #define SCHEMES_DIRECTORY()     [DOCUMENTS_FOLDER() stringByAppendingString:@"/Schemes/"]
 #define SAVES_DIRECTORY()       [DOCUMENTS_FOLDER() stringByAppendingString:@"/Saves/"]
+#define SCREENSHOTS_DIRECTORY() [DOCUMENTS_FOLDER() stringByAppendingString:@"/Screenshots/"]
 
 #define GRAPHICS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/"]
 #define ICONS_DIRECTORY()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Graphics/Icons/"]
@@ -78,6 +79,4 @@
 #define IS_NOT_POWERFUL(x)      ([x hasPrefix:@"iPhone1"] || [x hasPrefix:@"iPod1,1"] || [x hasPrefix:@"iPod2,1"])
 #define IS_NOT_VERY_POWERFUL(x) ([x hasPrefix:@"iPad1"] || [x hasPrefix:@"iPhone2"] || [x hasPrefix:@"iPod3"] || [x hasPrefix:@"iPod4"])
 #define IS_VERY_POWERFUL(x)     (IS_NOT_POWERFUL(x) == NO && IS_NOT_VERY_POWERFUL(x) == NO)
-
-#define UIVIEW_HW_SDLVIEW       [[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0]
 

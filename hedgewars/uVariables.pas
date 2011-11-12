@@ -46,6 +46,8 @@ var
     PathPrefix      : shortstring = './';
     UserPathPrefix  : shortstring = './';
     cShowFPS        : boolean     = false;
+    cFlattenFlakes  : boolean     = false;
+    cFlattenClouds  : boolean     = false;
     cAltDamage      : boolean     = true;
     cReducedQuality : LongWord    = rqNone;
     UserNick        : shortstring = '';
@@ -83,7 +85,6 @@ var
     cMineDudPercent : LongWord;
     cTemplateFilter : LongInt;
     cMapGen         : LongInt;
-    cMazeSize       : LongInt;
     cRopePercent    : LongWord;
     cGetAwayTime    : LongWord;
 
@@ -126,6 +127,7 @@ var
     cLandMines      : Longword;
     cExplosives     : Longword;
 
+    cScriptName     : shortstring;
     cSeed           : shortstring;
     cVolumeDelta    : LongInt;
     cHasFocus       : boolean;
@@ -345,7 +347,7 @@ const
             (FileName:    'AirBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAirBomb
             (FileName:   'Airplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 254; Height: 101; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAirplane
+            Width: 256; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAirplane
             (FileName: 'amAirplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAmAirplane
             (FileName:   'amGirder'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
@@ -1209,8 +1211,7 @@ const
                             ammoprop_NeedTarget or
                             ammoprop_AttackingPut or
                             ammoprop_DontHold or
-                            ammoprop_NotBorder or
-                            ammoprop_SetBounce;
+                            ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2338,7 +2339,7 @@ var
     framel, framer, depthl, depthr: GLuint;
     texl, texr: GLuint;
 
-    VisualGearLayers: array[0..3] of PVisualGear;
+    VisualGearLayers: array[0..6] of PVisualGear;
     lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
     vobVelocity, vobFallSpeed: LongInt;
@@ -2465,7 +2466,6 @@ begin
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
     cMapGen             := 0;   // MAPGEN_REGULAR
-    cMazeSize           := 0;
     cHedgehogTurnTime   := 45000;
     cMinesTime          := 3000;
     cMaxAIThinkTime     := 9000;
@@ -2505,6 +2505,7 @@ begin
     isFirstFrame    := true;
     isSEBackup      := true;
     autoCameraOn    := true;
+    cScriptName     := '';
     cSeed           := '';
     cVolumeDelta    := 0;
     cHasFocus       := true;
@@ -2555,10 +2556,13 @@ begin
     PathPrefix      := './';
     UserPathPrefix  := './';
     cShowFPS        := false;
+    cFlattenFlakes  := false;
+    cFlattenClouds  := false;
     cAltDamage      := true;
     cReducedQuality := rqNone;
     UserNick        := '';
     recordFileName  := '';
+    cScriptName     := '';
     cReadyDelay     := 5000;
     cStereoMode     := smNone;
 end;
