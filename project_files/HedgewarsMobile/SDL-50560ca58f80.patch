@@ -1,6 +1,6 @@
-diff -r 50560ca58f80 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
---- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Mon Oct 24 23:18:53 2011 -0400
-+++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Wed Nov 02 09:22:08 2011 +0100
+diff -r 9738f2a8eee4 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
+--- a/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Wed Nov 09 02:35:49 2011 -0500
++++ b/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj	Sat Nov 12 21:55:27 2011 +0100
 @@ -1596,9 +1596,12 @@
  				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
  				GCC_C_LANGUAGE_STANDARD = c99;
@@ -29,9 +29,37 @@ diff -r 50560ca58f80 Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj/project.pbxproj
  				PREBINDING = NO;
  				SDKROOT = iphoneos;
  				TARGETED_DEVICE_FAMILY = "1,2";
-diff -r 50560ca58f80 include/SDL_config_iphoneos.h
---- a/include/SDL_config_iphoneos.h	Mon Oct 24 23:18:53 2011 -0400
-+++ b/include/SDL_config_iphoneos.h	Wed Nov 02 09:22:08 2011 +0100
+@@ -1630,6 +1636,7 @@
+ 				DEPLOYMENT_LOCATION = NO;
+ 				GCC_DYNAMIC_NO_PIC = NO;
+ 				GCC_OPTIMIZATION_LEVEL = 0;
++				GCC_PREPROCESSOR_DEFINITIONS = SDL_NO_COMPAT;
+ 				PREBINDING = NO;
+ 				PRODUCT_NAME = SDL;
+ 				SKIP_INSTALL = YES;
+@@ -1644,6 +1651,7 @@
+ 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+ 				DEPLOYMENT_LOCATION = NO;
+ 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
++				GCC_PREPROCESSOR_DEFINITIONS = SDL_NO_COMPAT;
+ 				PREBINDING = NO;
+ 				PRODUCT_NAME = SDL;
+ 				SKIP_INSTALL = YES;
+diff -r 9738f2a8eee4 include/SDL_compat.h
+--- a/include/SDL_compat.h	Wed Nov 09 02:35:49 2011 -0500
++++ b/include/SDL_compat.h	Sat Nov 12 21:55:27 2011 +0100
+@@ -40,7 +40,7 @@
+ 
+  /*@}*/
+ 
+-#ifdef SDL_NO_COMPAT
++#ifndef SDL_NO_COMPAT
+ #define _SDL_compat_h
+ #endif
+ 
+diff -r 9738f2a8eee4 include/SDL_config_iphoneos.h
+--- a/include/SDL_config_iphoneos.h	Wed Nov 09 02:35:49 2011 -0500
++++ b/include/SDL_config_iphoneos.h	Sat Nov 12 21:55:27 2011 +0100
 @@ -106,7 +106,7 @@
  /* enable iPhone version of Core Audio driver */
  #define SDL_AUDIO_DRIVER_COREAUDIO 1
@@ -61,10 +89,117 @@ diff -r 50560ca58f80 include/SDL_config_iphoneos.h
  
  /* Set max recognized G-force from accelerometer
     See src/joystick/uikit/SDLUIAccelerationDelegate.m for notes on why this is needed
-diff -r 50560ca58f80 src/video/uikit/SDL_uikitopenglview.m
---- a/src/video/uikit/SDL_uikitopenglview.m	Mon Oct 24 23:18:53 2011 -0400
-+++ b/src/video/uikit/SDL_uikitopenglview.m	Wed Nov 02 09:22:08 2011 +0100
-@@ -114,8 +114,8 @@
+diff -r 9738f2a8eee4 include/SDL_events.h
+--- a/include/SDL_events.h	Wed Nov 09 02:35:49 2011 -0500
++++ b/include/SDL_events.h	Sat Nov 12 21:55:27 2011 +0100
+@@ -107,11 +107,12 @@
+ 
+     SDL_CLIPBOARDUPDATE = 0x900, /**< The clipboard changed */
+ 
++#ifndef SDL_NO_COMPAT
+     /* Obsolete events */
+     SDL_EVENT_COMPAT1 = 0x7000, /**< SDL 1.2 events for compatibility */
+     SDL_EVENT_COMPAT2,
+     SDL_EVENT_COMPAT3,
+-
++#endif
+ 
+     /** Events ::SDL_USEREVENT through ::SDL_LASTEVENT are for your use,
+      *  and should be allocated with SDL_RegisterEvents()
+diff -r 9738f2a8eee4 src/SDL_compat.c
+--- a/src/SDL_compat.c	Wed Nov 09 02:35:49 2011 -0500
++++ b/src/SDL_compat.c	Sat Nov 12 21:55:27 2011 +0100
+@@ -29,6 +29,7 @@
+ #include "video/SDL_pixels_c.h"
+ #include "render/SDL_yuv_sw_c.h"
+ 
++#ifndef SDL_NO_COMPAT
+ 
+ static SDL_Window *SDL_VideoWindow = NULL;
+ static SDL_Surface *SDL_WindowSurface = NULL;
+@@ -1813,4 +1814,5 @@
+     return 0;
+ }
+ 
++#endif /* SDL_NO_COMPAT */
+ /* vi: set ts=4 sw=4 expandtab: */
+diff -r 9738f2a8eee4 src/video/SDL_surface.c
+--- a/src/video/SDL_surface.c	Wed Nov 09 02:35:49 2011 -0500
++++ b/src/video/SDL_surface.c	Sat Nov 12 21:55:27 2011 +0100
+@@ -195,12 +195,14 @@
+         SDL_InvalidateMap(surface->map);
+     }
+ 
++#ifndef SDL_NO_COMPAT
+     /* Compatibility mode */
+     if (surface->map->info.flags & SDL_COPY_COLORKEY) {
+         surface->flags |= SDL_SRCCOLORKEY;
+     } else {
+         surface->flags &= ~SDL_SRCCOLORKEY;
+     }
++#endif
+ 
+     return 0;
+ }
+@@ -405,12 +407,14 @@
+         SDL_InvalidateMap(surface->map);
+     }
+ 
++#ifndef SDL_NO_COMPAT
+     /* Compatibility mode */
+     if (surface->map->info.flags & SDL_COPY_BLEND) {
+         surface->flags |= SDL_SRCALPHA;
+     } else {
+         surface->flags &= ~SDL_SRCALPHA;
+     }
++#endif
+ 
+     return status;
+ }
+diff -r 9738f2a8eee4 src/video/uikit/SDL_uikitappdelegate.h
+--- a/src/video/uikit/SDL_uikitappdelegate.h	Wed Nov 09 02:35:49 2011 -0500
++++ b/src/video/uikit/SDL_uikitappdelegate.h	Sat Nov 12 21:55:27 2011 +0100
+@@ -24,7 +24,7 @@
+ @interface SDLUIKitDelegate : NSObject<UIApplicationDelegate> {
+ }
+ 
+-+ (SDLUIKitDelegate *)sharedAppDelegate;
+++ (id) sharedAppDelegate;
+ + (NSString *)getAppDelegateClassName;
+ 
+ @end
+diff -r 9738f2a8eee4 src/video/uikit/SDL_uikitappdelegate.m
+--- a/src/video/uikit/SDL_uikitappdelegate.m	Wed Nov 09 02:35:49 2011 -0500
++++ b/src/video/uikit/SDL_uikitappdelegate.m	Sat Nov 12 21:55:27 2011 +0100
+@@ -79,10 +79,10 @@
+ @implementation SDLUIKitDelegate
+ 
+ /* convenience method */
+-+ (SDLUIKitDelegate *)sharedAppDelegate
+++ (id) sharedAppDelegate
+ {
+     /* the delegate is set in UIApplicationMain(), which is garaunteed to be called before this method */
+-    return (SDLUIKitDelegate *)[[UIApplication sharedApplication] delegate];
++    return [[UIApplication sharedApplication] delegate];
+ }
+ 
+ + (NSString *)getAppDelegateClassName
+diff -r 9738f2a8eee4 src/video/uikit/SDL_uikitopengles.m
+--- a/src/video/uikit/SDL_uikitopengles.m	Wed Nov 09 02:35:49 2011 -0500
++++ b/src/video/uikit/SDL_uikitopengles.m	Sat Nov 12 21:55:27 2011 +0100
+@@ -79,7 +79,7 @@
+ 
+ void UIKit_GL_SwapWindow(_THIS, SDL_Window * window)
+ {
+-#ifdef SDL_POWER_UIKIT
++#if SDL_POWER_UIKIT
+     // Check once a frame to see if we should turn off the battery monitor.
+     SDL_UIKit_UpdateBatteryMonitoring();
+ #endif
+diff -r 9738f2a8eee4 src/video/uikit/SDL_uikitopenglview.m
+--- a/src/video/uikit/SDL_uikitopenglview.m	Wed Nov 09 02:35:49 2011 -0500
++++ b/src/video/uikit/SDL_uikitopenglview.m	Sat Nov 12 21:55:27 2011 +0100
+@@ -117,8 +117,8 @@
  
          // !!! FIXME: use the screen this is on!
          /* Use the main screen scale (for retina display support) */
@@ -75,7 +210,7 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitopenglview.m
  
          self.autoresizingMask = 0;  // don't allow autoresize, since we need to do some magic in -(void)updateFrame.
      }
-@@ -144,8 +144,8 @@
+@@ -147,8 +147,8 @@
  
      // !!! FIXME: use the screen this is on!
      /* Use the main screen scale (for retina display support) */
@@ -86,19 +221,10 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitopenglview.m
  }
  
  - (void)setCurrentContext
-diff -r 50560ca58f80 src/video/uikit/SDL_uikitvideo.m
---- a/src/video/uikit/SDL_uikitvideo.m	Mon Oct 24 23:18:53 2011 -0400
-+++ b/src/video/uikit/SDL_uikitvideo.m	Wed Nov 02 09:22:08 2011 +0100
-@@ -178,7 +178,7 @@
- 
-     // UIScreenMode showed up in 3.2 (the iPad and later). We're
-     //  misusing this supports_multiple_displays flag here for that.
--    if (!SDL_UIKit_supports_multiple_displays) {
-+    if (SDL_UIKit_supports_multiple_displays) {
-         UIScreenMode *uimode = [uiscreen currentMode];
-         [uimode retain];  // once for the desktop_mode
-         [uimode retain];  // once for the current_mode
-@@ -200,10 +200,8 @@
+diff -r 9738f2a8eee4 src/video/uikit/SDL_uikitvideo.m
+--- a/src/video/uikit/SDL_uikitvideo.m	Wed Nov 09 02:35:49 2011 -0500
++++ b/src/video/uikit/SDL_uikitvideo.m	Sat Nov 12 21:55:27 2011 +0100
+@@ -201,10 +201,8 @@
  {
      _this->gl_config.driver_loaded = 1;
  
@@ -111,19 +237,19 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitvideo.m
  
      // Add the main screen.
      UIScreen *uiscreen = [UIScreen mainScreen];
-diff -r 50560ca58f80 src/video/uikit/SDL_uikitview.m
---- a/src/video/uikit/SDL_uikitview.m	Mon Oct 24 23:18:53 2011 -0400
-+++ b/src/video/uikit/SDL_uikitview.m	Wed Nov 02 09:22:08 2011 +0100
-@@ -311,7 +311,7 @@
+diff -r 9738f2a8eee4 src/video/uikit/SDL_uikitview.m
+--- a/src/video/uikit/SDL_uikitview.m	Wed Nov 09 02:35:49 2011 -0500
++++ b/src/video/uikit/SDL_uikitview.m	Sat Nov 12 21:55:27 2011 +0100
+@@ -316,7 +316,7 @@
  /* iPhone keyboard addition functions */
  #if SDL_IPHONE_KEYBOARD
  
--SDL_uikitview * getWindowView(SDL_Window * window)
+-static SDL_uikitview * getWindowView(SDL_Window * window)
 +SDL_uikitview *SDL_getUikitView(SDL_Window *window)
  {
      if (window == NULL) {
          SDL_SetError("Window does not exist");
-@@ -328,9 +328,9 @@
+@@ -333,9 +333,9 @@
      return view;
  }
  
@@ -135,7 +261,7 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitview.m
      if (view == nil) {
          return -1;
      }
-@@ -339,9 +339,9 @@
+@@ -344,9 +344,9 @@
      return 0;
  }
  
@@ -147,7 +273,7 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitview.m
      if (view == nil) {
          return -1;
      }
-@@ -350,9 +350,9 @@
+@@ -355,9 +355,9 @@
      return 0;
  }
  
@@ -159,7 +285,7 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitview.m
      if (view == nil) {
          return 0;
      }
-@@ -360,9 +360,9 @@
+@@ -365,9 +365,9 @@
      return view.keyboardVisible;
  }
  
@@ -171,7 +297,7 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitview.m
      if (view == nil) {
          return -1;
      }
-@@ -380,24 +380,24 @@
+@@ -385,24 +385,24 @@
  
  /* stubs, used if compiled without keyboard support */
  
@@ -200,10 +326,10 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitview.m
  {
      SDL_SetError("Not compiled with keyboard support");
      return -1;
-diff -r 50560ca58f80 src/video/uikit/SDL_uikitviewcontroller.m
---- a/src/video/uikit/SDL_uikitviewcontroller.m	Mon Oct 24 23:18:53 2011 -0400
-+++ b/src/video/uikit/SDL_uikitviewcontroller.m	Wed Nov 02 09:22:08 2011 +0100
-@@ -28,8 +28,8 @@
+diff -r 9738f2a8eee4 src/video/uikit/SDL_uikitviewcontroller.m
+--- a/src/video/uikit/SDL_uikitviewcontroller.m	Wed Nov 09 02:35:49 2011 -0500
++++ b/src/video/uikit/SDL_uikitviewcontroller.m	Sat Nov 12 21:55:27 2011 +0100
+@@ -30,8 +30,8 @@
  
  #include "SDL_uikitwindow.h"
  
@@ -214,7 +340,7 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitviewcontroller.m
  
  @implementation SDL_uikitviewcontroller
  
-@@ -116,38 +116,17 @@
+@@ -118,38 +118,17 @@
      const UIInterfaceOrientation toInterfaceOrientation = [self interfaceOrientation];
      SDL_WindowData *data = self->window->driverdata;
      UIWindow *uiwindow = data->uiwindow;
@@ -258,4 +384,4 @@ diff -r 50560ca58f80 src/video/uikit/SDL_uikitviewcontroller.m
 +    SDL_SendWindowEvent(self->window, SDL_WINDOWEVENT_RESIZED, frame.size.width, frame.size.height);
  }
  
- @end
+ #endif /* SDL_VIDEO_DRIVER_UIKIT */

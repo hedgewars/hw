@@ -58,9 +58,9 @@ static NSInteger activeEnginePort;
 #pragma mark -
 #pragma mark Spawner functions
 +(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
-    EngineProtocolNetwork *proto = [[EngineProtocolNetwork alloc] init];
-    proto.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
-    [proto.stream open];
+    id proto = [[self alloc] init];
+    [proto setStream: (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil];
+    [[proto stream] open];
 
     // +detachNewThreadSelector retain/release self automatically
     [NSThread detachNewThreadSelector:@selector(engineProtocol:)

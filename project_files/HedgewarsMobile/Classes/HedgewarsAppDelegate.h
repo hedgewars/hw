@@ -34,7 +34,5 @@
 @property (nonatomic,retain) UIWindow *uiwindow;
 @property (nonatomic,retain) UIWindow *secondWindow;
 
-+(HedgewarsAppDelegate *)sharedAppDelegate;
-
 @end
 

@@ -36,11 +36,6 @@
 @implementation HedgewarsAppDelegate
 @synthesize mainViewController, uiwindow, secondWindow;
 
-// convenience method
-+(HedgewarsAppDelegate *)sharedAppDelegate {
-    return (HedgewarsAppDelegate *)[[UIApplication sharedApplication] delegate];
-}
-
 #pragma mark -
 #pragma mark AppDelegate methods
 -(id) init {

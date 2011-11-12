@@ -37,6 +37,6 @@
 -(id) init:(NSInteger) onPort withAddress:(NSString *)address;
 -(id) initOnPort:(NSInteger) port;
 -(id) initToAddress:(NSString *)address;
-+(ServerProtocolNetwork *)openServerConnection;
++(id) openServerConnection;
 
 @end

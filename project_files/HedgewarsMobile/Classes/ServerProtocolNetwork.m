@@ -58,8 +58,8 @@ static ServerProtocolNetwork *serverConnection;
     [super dealloc];
 }
 
-+(ServerProtocolNetwork *)openServerConnection {
-    ServerProtocolNetwork *connection = [[ServerProtocolNetwork alloc] init];
++(id) openServerConnection {
+    id connection = [[self alloc] init];
     [NSThread detachNewThreadSelector:@selector(serverProtocol)
                              toTarget:connection
                            withObject:nil];

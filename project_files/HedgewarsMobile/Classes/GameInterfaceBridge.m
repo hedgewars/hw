@@ -158,7 +158,7 @@
 #pragma mark Class methods for setting up the engine from outsite
 +(void) startGame:(TGameType) type atPath:(NSString *)path withOptions:(NSDictionary *)config {
     [HWUtils setGameType:type];
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] init];
+    id bridge = [[self alloc] init];
     [bridge earlyEngineLaunch:path withOptions:config];
     [bridge release];
 }
