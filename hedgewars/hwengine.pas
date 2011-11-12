@@ -31,7 +31,8 @@ program hwengine;
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
-     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted,uTouch {$IFDEF ANDROID}, GLUnit {$ENDIF};
+     sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
+     {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF};
 
 {$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
@@ -258,8 +259,6 @@ begin
     cBits:= 32;
     cFullScreen:= false;
     cTimerInterval:= 8;
-    PathPrefix:= 'Data';
-    UserPathPrefix:= '../Documents';
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     val(gameArgs[0], ipcPort);
     val(gameArgs[1], cScreenWidth);
@@ -273,7 +272,7 @@ begin
     isMusicEnabled:= gameArgs[7] = '1';
     cAltDamage:= gameArgs[8] = '1';
     PathPrefix:= gameArgs[9];
-    UserPathPrefix:= PathPrefix;
+    UserPathPrefix:= '../Documents';
     recordFileName:= gameArgs[10];
     cStereoMode:= smNone;
 {$ENDIF}
@@ -388,10 +387,8 @@ begin
 
     if complete then
     begin
-{$IFDEF ANDROID}
-	GLUnit.init;
-{$ENDIF}
-        uTouch.initModule;
+{$IFDEF ANDROID}GLUnit.init;{$ENDIF}
+{$IFDEF SDL13}uTouch.initModule;{$ENDIF}
 	uAI.initModule;
         //uAIActions does not need initialization
         //uAIAmmoTests does not need initialization
