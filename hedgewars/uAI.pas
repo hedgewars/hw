@@ -320,7 +320,10 @@ AddFileLog('Enter Think Thread');
 //TODO: sdl_thread works on device but crashes in simulator, most likely because of outdated toolchain
 BeginThread(@Think, Me, ThinkThread);
 {$ELSE}
+{$IFDEF SDL13}
 ThinkThread := SDL_CreateThread(@Think, nil, Me);
+{$ELSE}
+ThinkThread := SDL_CreateThread(@Think, Me);
 {$ENDIF}
 AddFileLog('Thread started');
 end;
