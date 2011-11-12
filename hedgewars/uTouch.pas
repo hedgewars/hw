@@ -24,6 +24,10 @@ interface
 
 uses sysutils, math, uConsole, uVariables, SDLh, uTypes, uFloat, uConsts, uIO, uCommands, GLUnit;
 
+// TODO: this type should be Int64
+// TODO: this type should be named TSDL_FingerId
+type SDL_FingerId = LongInt;
+
 type
     PTouch_Finger = ^Touch_Finger;
     Touch_Finger = record

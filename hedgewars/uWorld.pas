@@ -306,6 +306,11 @@ begin
                     inc(g)
                     end;
                 inc(t)
+                end;
+            for g:= g to cMaxSlotAmmoIndex do
+                DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 1);
+            DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
+            inc(y, AMSlotSize);
             end;
 
     DrawSprite(sprAMCorners, x - BORDERSIZE, y, 2);

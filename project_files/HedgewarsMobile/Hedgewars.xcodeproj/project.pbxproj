@@ -366,12 +366,12 @@
 		6103D39C129B350700911D8D /* arrowRight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrowRight@2x.png"; path = "Resources/Overlay/arrowRight@2x.png"; sourceTree = "<group>"; };
 		6103D39D129B350700911D8D /* arrowUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "arrowUp@2x.png"; path = "Resources/Overlay/arrowUp@2x.png"; sourceTree = "<group>"; };
 		6103D39E129B350700911D8D /* cornerButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "cornerButton@2x.png"; path = "Resources/Overlay/cornerButton@2x.png"; sourceTree = "<group>"; };
-		611D7A4F142FDCD3006E0798 /* uTouch.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTouch.pas; path = ../../hedgewars/uTouch.pas; sourceTree = SOURCE_ROOT; };
 		61077E86143FB09800645B29 /* MissionTrainingViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController-iPad.xib"; sourceTree = "<group>"; };
 		61078029143FCCC800645B29 /* startGameButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "startGameButton@2x.png"; path = "Resources/Frontend/startGameButton@2x.png"; sourceTree = "<group>"; };
 		610782931440EE5C00645B29 /* basicFlags.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = basicFlags.plist; path = Resources/basicFlags.plist; sourceTree = "<group>"; };
 		610782941440EE5C00645B29 /* credits.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = credits.plist; path = Resources/credits.plist; sourceTree = "<group>"; };
 		610782951440EE5C00645B29 /* gameMods.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = gameMods.plist; path = Resources/gameMods.plist; sourceTree = "<group>"; };
+		611D7A4F142FDCD3006E0798 /* uTouch.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTouch.pas; path = ../../hedgewars/uTouch.pas; sourceTree = SOURCE_ROOT; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
 		611D9BFA12497E9800008271 /* SavedGamesViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SavedGamesViewController.xib; sourceTree = "<group>"; };

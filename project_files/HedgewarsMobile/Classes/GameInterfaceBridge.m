@@ -20,7 +20,6 @@
 
 
 #import "GameInterfaceBridge.h"
-#import "ServerSetup.h"
 #import "EngineProtocolNetwork.h"
 #import "OverlayViewController.h"
 #import "StatsPageViewController.h"
@@ -28,46 +27,70 @@
 #import "ObjcExports.h"
 
 @implementation GameInterfaceBridge
-@synthesize parentController, savePath, overlayController, engineProtocol, ipcPort, gameType;
-
--(id) initWithController:(id) viewController {
-    if (self = [super init]) {
-        self.ipcPort = [ServerSetup randomPort];
-        self.gameType = gtNone;
-        self.savePath = nil;
-
-        self.parentController = (UIViewController *)viewController;
-        self.engineProtocol = [[EngineProtocolNetwork alloc] initOnPort:self.ipcPort];
-        self.engineProtocol.delegate = self;
-
-        self.overlayController = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
-    }
-    return self;
-}
-
--(void) dealloc {
-    releaseAndNil(engineProtocol);
-    releaseAndNil(savePath);
-    releaseAndNil(overlayController);
-    [super dealloc];
-}
+@synthesize blackView;
 
 #pragma mark -
-// overlay with controls, become visible later, with a transparency effect since the sdlwindow is not yet created
--(void) displayOverlayLater:(id) object {
-    // in order to get rotation events we have to insert the view inside the first view of the second window
-    // when multihead we have to make sure that overlay is displayed in the touch-enabled window
-    UIView *injected = (IS_DUALHEAD() ? self.parentController.view : UIVIEW_HW_SDLVIEW);
-    [injected addSubview:self.overlayController.view];
+#pragma mark Instance methods for engine interaction
+// prepares the controllers for hosting a game
+-(void) earlyEngineLaunch:(NSString *)pathOrNil withOptions:(NSDictionary *)optionsOrNil {
+    [self retain];
+    [AudioManagerController stopBackgroundMusic];
+    [EngineProtocolNetwork spawnThread:pathOrNil withOptions:optionsOrNil];
+
+    // add a black view hiding the background
+    CGRect theFrame = [[UIScreen mainScreen] bounds];
+    UIWindow *thisWindow = [[HedgewarsAppDelegate sharedAppDelegate] uiwindow];
+    self.blackView = [[UIView alloc] initWithFrame:theFrame];
+    self.blackView.opaque = YES;
+    self.blackView.backgroundColor = [UIColor blackColor];
+    self.blackView.alpha = 0;
+    [UIView beginAnimations:@"fade out" context:NULL];
+    [UIView setAnimationDuration:1];
+    self.blackView.alpha = 1;
+    [UIView commitAnimations];
+    [thisWindow addSubview:self.blackView];
+    [self.blackView release];
+
+    // keep track of uncompleted games
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:pathOrNil forKey:@"savedGamePath"];
+    [userDefaults synchronize];
+
+    // let's launch the engine using this -perfomSelector so that the runloop can deal with queued messages first
+    [self performSelector:@selector(engineLaunch:) withObject:pathOrNil afterDelay:0.1f];
+}
+
+// cleans up everything
+-(void) lateEngineLaunch {
+    // remove completed games notification
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@"" forKey:@"savedGamePath"];
+    [userDefaults synchronize];
+
+    // remove the cover view with a transition
+    self.blackView.alpha = 1;
+    [UIView beginAnimations:@"fade in" context:NULL];
+    [UIView setAnimationDuration:1];
+    self.blackView.alpha = 0;
+    [UIView commitAnimations];
+    [self.blackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+
+    // the overlay is not needed any more and can be removed
+    [[OverlayViewController mainOverlay] removeOverlay];
+
+    // restart music and we're done
+    [AudioManagerController playBackgroundMusic];
+    [self release];
 }
 
 // main routine for calling the actual game engine
--(void) engineLaunch {
+-(void) engineLaunch:(NSString *)pathOrNil {
     const char *gameArgs[11];
     CGFloat width, height;
+    NSInteger enginePort = [EngineProtocolNetwork activeEnginePort];
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
-    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.ipcPort];
-    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
+    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",enginePort];
+    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
     if (IS_DUALHEAD()) {
@@ -82,6 +105,7 @@
 
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", (int)(width * screenScale)];
     NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", (int)(height * screenScale)];
+    NSString *resourcePath = [[NSString alloc] initWithFormat:@"%@/Data", [[NSBundle mainBundle] resourcePath]];
 
     NSString *modelId = [HWUtils modelType];
     NSInteger tmpQuality;
@@ -94,6 +118,8 @@
     else                                                                                                        // = everything else
         tmpQuality = 0;                                                                 // full quality
 
+    // disable ammomenu animation
+    tmpQuality = tmpQuality | 0x00000080;
     // disable tooltips on iPhone
     if (IS_IPAD() == NO)
         tmpQuality = tmpQuality | 0x00000400;
@@ -112,115 +138,59 @@
     gameArgs[ 6] = [[[settings objectForKey:@"sound"] stringValue] UTF8String];                 //isSoundEnabled
     gameArgs[ 7] = [[[settings objectForKey:@"music"] stringValue] UTF8String];                 //isMusicEnabled
     gameArgs[ 8] = [[[settings objectForKey:@"alternate"] stringValue] UTF8String];             //cAltDamage
-    gameArgs[ 9] = [[[NSBundle mainBundle] resourcePath] UTF8String];                           //PathPrefix
-    gameArgs[10] = (self.gameType == gtSave) ? [self.savePath UTF8String] : NULL;               //recordFileName
+    gameArgs[ 9] = [resourcePath UTF8String];                                                   //PathPrefix
+    gameArgs[10] = ([HWUtils gameType] == gtSave) ? [pathOrNil UTF8String] : NULL;              //recordFileName
 
     [verticalSize release];
     [horizontalSize release];
+    [resourcePath release];
     [localeString release];
     [ipcString release];
 
-    [ObjcExports initialize];
+    [HWUtils setGameStatus:gsLoading];
 
-    // this is the pascal fuction that starts the game, wrapped around isInGame
-    [HedgewarsAppDelegate sharedAppDelegate].isInGame = YES;
+    // this is the pascal function that starts the game
     Game(gameArgs);
-    [HedgewarsAppDelegate sharedAppDelegate].isInGame = NO;
+    [self lateEngineLaunch];
 }
 
-// prepares the controllers for hosting a game
--(void) prepareEngineLaunch {
-    // we add a black view hiding the background
-    CGRect theFrame = CGRectMake(0, 0, self.parentController.view.frame.size.height, self.parentController.view.frame.size.width);
-    UIView *blackView = [[UIView alloc] initWithFrame:theFrame];
-    [self.parentController.view addSubview:blackView];
-    blackView.opaque = YES;
-    blackView.backgroundColor = [UIColor blackColor];
-    blackView.alpha = 0;
-    // when dual screen we apply a little transition
-    if (IS_DUALHEAD()) {
-        [UIView beginAnimations:@"fade out" context:NULL];
-        [UIView setAnimationDuration:1];
-        blackView.alpha = 1;
-        [UIView commitAnimations];
-    } else
-        blackView.alpha = 1;
-
-    // prepare options for overlay and add it to the future sdl uiwindow
-    [self performSelector:@selector(displayOverlayLater:) withObject:nil afterDelay:3];
-
-    // keep track of uncompleted games
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
-    [userDefaults synchronize];
-
-    [AudioManagerController pauseBackgroundMusic];
-
-    // SYSTEMS ARE GO!!
-    [self engineLaunch];
-    
-    // remove completed games notification
-    [userDefaults setObject:@"" forKey:@"savedGamePath"];
-    [userDefaults synchronize];
-
-    // now we can remove the cover with a transition
-    blackView.frame = theFrame;
-    blackView.alpha = 1;
-    [UIView beginAnimations:@"fade in" context:NULL];
-    [UIView setAnimationDuration:1];
-    blackView.alpha = 0;
-    [UIView commitAnimations];
-    [blackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
-    [blackView release];
-
-    // the overlay is not needed any more and can be removed
-    [self.overlayController removeOverlay];
-
-    // warn our host that it's going to be visible again
-    [self.parentController viewWillAppear:YES];
-
-    [AudioManagerController playBackgroundMusic];
+#pragma mark -
+#pragma mark Class methods for setting up the engine from outsite
++(void) startGame:(TGameType) type atPath:(NSString *)path withOptions:(NSDictionary *)config {
+    [HWUtils setGameType:type];
+    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] init];
+    [bridge earlyEngineLaunch:path withOptions:config];
+    [bridge release];
 }
 
-// set up variables for a local game
--(void) startLocalGame:(NSDictionary *)withOptions {
-    self.gameType = gtLocal;
-
++(void) startLocalGame:(NSDictionary *)withOptions {
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
     [outputFormatter setDateFormat:@"yyyy-MM-dd '@' HH.mm"];
-    NSString *path = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
+    NSString *savePath = [[NSString alloc] initWithFormat:@"%@%@.hws",SAVES_DIRECTORY(),[outputFormatter stringFromDate:[NSDate date]]];
     [outputFormatter release];
-    self.savePath = path;
-    [path release];
 
-    // in the rare case in which a savefile with the same name exists the older one must be removed (or it gets corrupted)
-    if ([[NSFileManager defaultManager] fileExistsAtPath:self.savePath])
-        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
+    // in the rare case in which a savefile with the same name exists the older one must be removed (otherwise it gets corrupted)
+    if ([[NSFileManager defaultManager] fileExistsAtPath:savePath])
+        [[NSFileManager defaultManager] removeItemAtPath:savePath error:nil];
 
-    [self.engineProtocol spawnThread:self.savePath withOptions:withOptions];
-    [self prepareEngineLaunch];
+    [self startGame:gtLocal atPath:savePath withOptions:withOptions];
+    [savePath release];
 }
 
-// set up variables for a save game
--(void) startSaveGame:(NSString *)atPath {
-    self.gameType = gtSave;
-    self.savePath = atPath;
-
-    [self.engineProtocol spawnThread:self.savePath];
-    [self prepareEngineLaunch];
++(void) startSaveGame:(NSString *)atPath {
+    [self startGame:gtSave atPath:atPath withOptions:nil];
 }
 
--(void) startMissionGame:(NSString *)withScript {
-    self.gameType = gtMission;
-    self.savePath = nil;
-
++(void) startMissionGame:(NSString *)withScript {
     NSString *missionPath = [[NSString alloc] initWithFormat:@"escript Missions/Training/%@.lua",withScript];
-    NSDictionary *config = [NSDictionary dictionaryWithObject:missionPath forKey:@"mission_command"];
+    NSDictionary *missionLine = [[NSDictionary alloc] initWithObjectsAndKeys:missionPath,@"mission_command",nil];
     [missionPath release];
-    [self.engineProtocol spawnThread:nil withOptions:config];
-    [self prepareEngineLaunch];
+
+    [self startGame:gtMission atPath:nil withOptions:missionLine];
+    [missionLine release];
 }
 
+/*
 -(void) gameHasEndedWithStats:(NSArray *)stats {
     // wrap this around a retain/realse to prevent being deallocated too soon
     [self retain];
@@ -237,9 +207,10 @@
     }
 
     // can remove the savefile if the replay has ended
-    if (self.gameType == gtSave)
+    if ([HWUtils gameType] == gtSave)
         [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
     [self release];
 }
+*/
 
 @end
