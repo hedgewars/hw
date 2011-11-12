@@ -1131,7 +1131,7 @@ else
 if (Gear^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0) and
    (Gear^.State and (gstHHJumping or gstHHHJump or gstAttacking) = 0) and
    not Gear^.dY.isNegative and
-   (GameTicks mod (100*hwRound(cMaxWindSpeed*2/cGravity)) = 0) and 
+   (GameTicks mod (200*LongWord(hwRound(cMaxWindSpeed/cGravity))) = 0) and 
    (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
     begin
     slope:= CalcSlopeBelowGear(Gear);
