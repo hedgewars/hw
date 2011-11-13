@@ -23,7 +23,7 @@ data Identifier = Identifier String
 data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
-    | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe Expression)
+    | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe InitExpression)
     | FunctionDeclaration Identifier TypeDecl (Maybe Phrase)
     deriving Show
 data TypeDecl = SimpleType Identifier
@@ -49,7 +49,7 @@ data Phrase = ProcCall Identifier [Expression]
         | WhileCycle Expression Phrase
         | RepeatCycle Expression [Phrase]
         | ForCycle Identifier Expression Expression Phrase
-        | WithBlock Expression Phrase
+        | WithBlock Reference Phrase
         | Phrases [Phrase]
         | SwitchCase Expression [(Expression, Phrase)] (Maybe Phrase)
         | Assignment Reference Expression
@@ -71,6 +71,18 @@ data Reference = ArrayElement [Expression] Reference
     | Dereference Reference
     | RecordField Reference Reference
     | Address Reference
+    deriving Show
+data InitExpression = InitBinOp String InitExpression InitExpression
+    | InitPrefixOp String InitExpression
+    | InitReference Identifier
+    | InitArray [InitExpression]
+    | InitRecord [(Identifier, InitExpression)]
+    | InitFloat String
+    | InitNumber String
+    | InitHexNumber String
+    | InitString String
+    | InitChar String
+    | InitNull
     deriving Show
     
 pascalLanguageDef
@@ -183,7 +195,7 @@ aVarDecl endsWithSemi = do
     init <- option Nothing $ do
         char '='
         comments
-        e <- expression
+        e <- initExpression
         comments
         return (Just e)
     return $ VarDeclaration False (ids, t) init
@@ -204,7 +216,7 @@ constsDecl = do
             return ()
         char '='
         comments
-        e <- expression
+        e <- initExpression
         comments
         return $ VarDeclaration False ([i], UnknownType) (Just e)
         
@@ -213,9 +225,9 @@ typeDecl = choice [
     , try (string "shortstring") >> return String
     , arrayDecl
     , recordDecl
-    , rangeDecl >>= return . RangeType
     , sequenceDecl >>= return . Sequence
-    , identifier pas >>= return . SimpleType . Identifier
+    , try (identifier pas) >>= return . SimpleType . Identifier
+    , rangeDecl >>= return . RangeType
     ] <?> "type declaration"
     where
     arrayDecl = do
@@ -336,7 +348,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ [FunctionDeclaration i ret Nothing]
+        return $ [FunctionDeclaration i ret b]
 
 program = do
     string "program"
@@ -400,8 +412,8 @@ expression = buildExpressionParser table term <?> "expression"
            , Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
           ]
-        , [  Infix (try $ string "shl" >> return (BinOp "and")) AssocNone
-           , Infix (try $ string "shr" >> return (BinOp "or")) AssocNone
+        , [  Infix (try $ string "shl" >> return (BinOp "shl")) AssocNone
+           , Infix (try $ string "shr" >> return (BinOp "shr")) AssocNone
           ]
         , [Prefix (try (string "not") >> return (PrefixOp "not"))]
         ]
@@ -459,12 +471,12 @@ whileCycle = do
 withBlock = do
     try $ string "with"
     comments
-    e <- expression
+    r <- reference
     comments
     string "do"
     comments
     o <- phrase
-    return $ WithBlock e o
+    return $ WithBlock r o
     
 repeatCycle = do
     try $ string "repeat"
@@ -543,3 +555,54 @@ uses = liftM Uses (option [] u)
             char ';'
             comments
             return u
+
+initExpression = buildExpressionParser table term <?> "initialization expression"
+    where
+    term = comments >> choice [
+        try $ parens pas (commaSep pas $ initExpression) >>= return . InitArray
+        , parens pas (semiSep pas $ recField) >>= return . InitRecord
+        , try $ integer pas >>= \i -> notFollowedBy (char '.') >> (return . InitNumber . show) i
+        , try $ float pas >>= return . InitFloat . show
+        , stringLiteral pas >>= return . InitString
+        , char '#' >> many digit >>= return . InitChar
+        , char '$' >> many hexDigit >>= return . InitHexNumber
+        , try $ string "nil" >> return InitNull
+        , iD >>= return . InitReference
+        ]
+        
+    recField = do
+        i <- iD
+        spaces
+        char ':'
+        spaces
+        e <- initExpression
+        spaces
+        return (i ,e)
+
+    table = [ 
+          [  Infix (char '*' >> return (InitBinOp "*")) AssocLeft
+           , Infix (char '/' >> return (InitBinOp "/")) AssocLeft
+           , Infix (try (string "div") >> return (InitBinOp "div")) AssocLeft
+           , Infix (try (string "mod") >> return (InitBinOp "mod")) AssocLeft
+          ]
+        , [  Infix (char '+' >> return (InitBinOp "+")) AssocLeft
+           , Infix (char '-' >> return (InitBinOp "-")) AssocLeft
+           , Prefix (char '-' >> return (InitPrefixOp "-"))
+          ]
+        , [  Infix (try (string "<>") >> return (InitBinOp "<>")) AssocNone
+           , Infix (try (string "<=") >> return (InitBinOp "<=")) AssocNone
+           , Infix (try (string ">=") >> return (InitBinOp ">=")) AssocNone
+           , Infix (char '<' >> return (InitBinOp "<")) AssocNone
+           , Infix (char '>' >> return (InitBinOp ">")) AssocNone
+           , Infix (char '=' >> return (InitBinOp "=")) AssocNone
+          ]
+        , [  Infix (try $ string "and" >> return (InitBinOp "and")) AssocLeft
+           , Infix (try $ string "or" >> return (InitBinOp "or")) AssocLeft
+           , Infix (try $ string "xor" >> return (InitBinOp "xor")) AssocLeft
+          ]
+        , [  Infix (try $ string "shl" >> return (InitBinOp "and")) AssocNone
+           , Infix (try $ string "shr" >> return (InitBinOp "or")) AssocNone
+          ]
+        , [Prefix (try (string "not") >> return (InitPrefixOp "not"))]
+        ]
+    

@@ -233,7 +233,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                begin
                by:= t div 2; bx:= i div 2;
                end;
-           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and not disableLandBack then
+           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
                begin
                inc(cnt);
                LandPixels[by, bx]:= LandBackPixel(i, t)
@@ -255,7 +255,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                begin
                by:= t div 2; bx:= i div 2;
                end;
-           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and not disableLandBack then
+           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
                begin
                inc(cnt);
                LandPixels[by, bx]:= LandBackPixel(i, t)
@@ -277,7 +277,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                begin
                by:= t div 2; bx:= i div 2;
                end;
-           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and not disableLandBack then
+           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
                begin
                inc(cnt);
                LandPixels[by, bx]:= LandBackPixel(i, t)
@@ -298,7 +298,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                begin
                by:= t div 2; bx:= i div 2;
                end;
-           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and not disableLandBack then
+           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and not (disableLandBack) then
                begin
                inc(cnt);
                LandPixels[by, bx]:= LandBackPixel(i, t)
@@ -468,7 +468,7 @@ for i:= 0 to Pred(Count) do
                     begin
                     by:= ty div 2; bx:= tx div 2;
                     end;
-                if ((Land[ty, tx] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and not disableLandBack then
+                if ((Land[ty, tx] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
                     LandPixels[by, bx]:= LandBackPixel(tx, ty)
                 else if ((Land[ty, tx] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
                     LandPixels[by, bx]:= 0
@@ -588,7 +588,7 @@ for i:= -HalfWidth to HalfWidth do
                 begin
                 by:= ty div 2; bx:= tx div 2;
                 end;
-            if ((Land[ty, tx] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and not disableLandBack then
+            if ((Land[ty, tx] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
                 LandPixels[by, bx]:= LandBackPixel(tx, ty)
             else if ((Land[ty, tx] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
                 LandPixels[by, bx]:= 0;

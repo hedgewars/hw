@@ -4,7 +4,15 @@ import PascalParser
 import Text.PrettyPrint.HughesPJ
 import Data.Maybe
 import Data.Char
+import Text.Parsec.String
 
+
+pas2C :: String -> IO String
+pas2C fileName = do
+    ptree <- parseFromFile pascalUnit fileName
+    case ptree of
+         (Left a) -> return (show a)
+         (Right a) -> (return . render . pascal2C) a
 
 pascal2C :: PascalUnit -> Doc
 pascal2C (Unit unitName interface implementation init fin) = implementation2C implementation
@@ -21,17 +29,38 @@ typesAndVars2C (TypesAndVars ts) = vcat $ map tvar2C ts
 tvar2C :: TypeVarDeclaration -> Doc
 tvar2C (FunctionDeclaration (Identifier name) returnType Nothing) = 
     type2C returnType <+> text (name ++ "();")
-
-    
 tvar2C (FunctionDeclaration (Identifier name) returnType (Just phrase)) = 
     type2C returnType <+> text (name ++ "()") 
     $$
     phrase2C phrase
-tvar2C _ = empty
+tvar2C (TypeDeclaration (Identifier i) t) = text "type" <+> text i <+> type2C t <> text ";"
+tvar2C (VarDeclaration isConst (ids, t) mInitExpr) = 
+    if isConst then text "const" else empty
+    <+>
+    type2C t
+    <+>
+    (hsep . punctuate (char ',') . map (\(Identifier i) -> text i) $ ids)
+    <+>
+    initExpr mInitExpr
+    <>
+    text ";"
+    where
+    initExpr Nothing = empty
+    initExpr (Just e) = text "=" <+> initExpr2C e
+
+initExpr2C :: InitExpression -> Doc    
+initExpr2C _ = text "<<expression>>"
 
 type2C :: TypeDecl -> Doc
 type2C UnknownType = text "void"
-type2C _ = text "<<type>>"
+type2C String = text "string"
+type2C (SimpleType (Identifier i)) = text i
+type2C (PointerTo t) = type2C t <> text "*"
+type2C (RecordType tvs) = text "{" $+$ (nest 4 . vcat . map tvar2C $ tvs) $+$ text "}"
+type2C (RangeType r) = text "<<range type>>"
+type2C (Sequence ids) = text "<<sequence type>>"
+type2C (ArrayDecl r t) = text "<<array type>>"
+
 
 phrase2C :: Phrase -> Doc
 phrase2C (Phrases p) = text "{" $+$ (nest 4 . vcat . map phrase2C $ p) $+$ text "}"
@@ -46,14 +75,17 @@ phrase2C (SwitchCase expr cases mphrase) = text "switch" <> parens (expr2C expr)
     where
     case2C :: (Expression, Phrase) -> Doc
     case2C (e, p) = text "case" <+> parens (expr2C e) <> char ':' <> nest 4 (phrase2C p $+$ text "break;")
-{-
-        | RepeatCycle Expression Phrase
-        | ForCycle
-        -}
-phrase2C _ = empty
+phrase2C (WithBlock ref p) = text "namespace" <> parens (ref2C ref) $$ (phrase2C $ wrapPhrase p)
+phrase2C (ForCycle (Identifier i) e1 e2 p) = 
+    text "for" <> (parens . hsep . punctuate (char ';') $ [text i <+> text "=" <+> expr2C e1, text i <+> text "<=" <+> expr2C e2, text "++" <> text i])
+    $$
+    phrase2C (wrapPhrase p)
+phrase2C (RepeatCycle e p) = text "do" <+> phrase2C (Phrases p) <+> text "while" <> parens (text "!" <> parens (expr2C e))
+
 
 wrapPhrase p@(Phrases _) = p
 wrapPhrase p = Phrases [p]
+
 
 expr2C :: Expression -> Doc
 expr2C (Expression s) = text s
@@ -78,6 +110,7 @@ ref2C (RecordField ref1 ref2) = ref2C ref1 <> text "." <> ref2C ref2
 ref2C (Dereference ref) = parens $ text "*" <> ref2C ref
 ref2C (FunCall params ref) = ref2C ref <> parens (hsep . punctuate (char ',') . map expr2C $ params)
 ref2C (Address ref) = text "&" <> ref2C ref
+
 
 op2C "or" = text "|"
 op2C "and" = text "&"
