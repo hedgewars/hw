@@ -21,15 +21,22 @@
 
 #import <Foundation/Foundation.h>
 
+@class EngineProtocolNetwork;
 
 @interface GameInterfaceBridge : NSObject {
     UIView *blackView;
+    NSString *savePath;
+    EngineProtocolNetwork *proto;
 }
 
 @property (nonatomic,retain) UIView *blackView;
+@property (nonatomic,retain) NSString *savePath;
+@property (nonatomic,retain) EngineProtocolNetwork *proto;
 
 +(void) startLocalGame:(NSDictionary *)withOptions;
 +(void) startSaveGame:(NSString *)atPath;
 +(void) startMissionGame:(NSString *)withScript;
+
++(void) registerCallingController:(UIViewController *)controller;
 
 @end

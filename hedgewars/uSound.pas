@@ -41,7 +41,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure InitSound; // Initiates sound-system if isSoundEnabled.
-procedure ReleaseSound; // Releases sound-system and used resources.
+procedure ReleaseSound(complete: boolean); // Releases sound-system and used resources.
 procedure SoundLoad; // Preloads some sounds for performance reasons.
 
 
@@ -176,24 +176,41 @@ begin
     ChangeVolume(cInitVolume)
 end;
 
-procedure ReleaseSound;
+// when complete is false, this procedure just releases some of the chucks on inactive channels
+// this way music is not stopped, nor are chucks currently being plauyed
+procedure ReleaseSound(complete: boolean);
 var i: TSound;
     t: Longword;
 begin
+    // release and nil all sounds
     for t:= 0 to cMaxTeams do
         if voicepacks[t].name <> '' then
             for i:= Low(TSound) to High(TSound) do
                 if voicepacks[t].chunks[i] <> nil then
-                    Mix_FreeChunk(voicepacks[t].chunks[i]);
+                    if complete or (Mix_Playing(lastChan[i]) = 0) then
+                        begin
+                        Mix_HaltChannel(lastChan[i]);
+                        lastChan[i]:= -1;
+                        Mix_FreeChunk(voicepacks[t].chunks[i]);
+                        voicepacks[t].chunks[i]:= nil;
+                        end;
 
-    if Mus <> nil then
-        Mix_FreeMusic(Mus);
+    // stop music
+    if complete then
+        begin
+        if Mus <> nil then
+            begin
+            Mix_HaltMusic();
+            Mix_FreeMusic(Mus);
+            Mus:= nil;
+            end;
 
-    // make sure all instances of sdl_mixer are unloaded before continuing
-    while Mix_Init(0) <> 0 do
-        Mix_Quit();
+        // make sure all instances of sdl_mixer are unloaded before continuing
+        while Mix_Init(0) <> 0 do
+            Mix_Quit();
 
-    Mix_CloseAudio();
+        Mix_CloseAudio();
+        end;
 end;
 
 procedure SoundLoad;
@@ -205,15 +222,16 @@ begin
 
     defVoicepack:= AskForVoicepack('Default');
 
+    // initialize all voices to nil so that they can be loaded when needed
     for t:= 0 to cMaxTeams do
         if voicepacks[t].name <> '' then
             for i:= Low(TSound) to High(TSound) do
                 voicepacks[t].chunks[i]:= nil;
 
+    // preload all the big sound files (>32k) that would otherwise lockup the game
     for i:= Low(TSound) to High(TSound) do
     begin
         defVoicepack^.chunks[i]:= nil;
-        // preload all the big sound files (>32k) that would otherwise lockup the game
         if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun,
                   sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo])
             and (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
@@ -289,7 +307,7 @@ begin
     if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd = snd) and  (LastVoice.voicepack = voicepack)) then exit;
     if (snd = sndVictory) or (snd = sndFlawless) then
         begin
-        for i:= 1 to Succ(chanTPU) do StopSound(i);
+        Mix_HaltChannel(-1);
         for i:= 0 to 7 do VoiceList[i].snd:= sndNone;
         LastVoice.snd:= sndNone;
         end;
@@ -480,7 +498,7 @@ end;
 procedure freeModule;
 begin
     if isSoundEnabled then
-        ReleaseSound();
+        ReleaseSound(true);
 end;
 
 end.

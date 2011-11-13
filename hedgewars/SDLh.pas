@@ -956,6 +956,7 @@ function  Mix_PausedMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerL
 function  Mix_PauseMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_ResumeMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_HaltChannel(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_HaltMusic: LongInt; cdecl; external SDL_MixerLibName;
 
 function  Mix_FadeInChannelTimed(channel: LongInt; chunk: PMixChunk; loops: LongInt; fadems: LongInt; ticks: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_FadeOutChannel(channel: LongInt; fadems: LongInt): LongInt; cdecl; external SDL_MixerLibName;

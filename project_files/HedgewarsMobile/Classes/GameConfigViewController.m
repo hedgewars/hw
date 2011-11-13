@@ -223,6 +223,7 @@
                                     script,@"mission_command",
                                     nil];
 
+    [GameInterfaceBridge registerCallingController:self];
     [GameInterfaceBridge startLocalGame:gameDictionary];
     [gameDictionary release];
 }

@@ -189,6 +189,7 @@
     self.numberOfItems++;
     [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationNone];
 
+    [GameInterfaceBridge registerCallingController:self];
     [GameInterfaceBridge startSaveGame:currentFilePath];
     [currentFilePath release];
 }

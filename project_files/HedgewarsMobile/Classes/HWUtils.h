@@ -22,7 +22,7 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {gtNone, gtLocal, gtSave, gtMission, gtNet} TGameType;
-typedef enum {gsNone, gsLoading, gsInGame, gsEnded} TGameStatus;
+typedef enum {gsNone, gsLoading, gsInGame, gsInterrupted, gsEnded} TGameStatus;
 
 @interface HWUtils : NSObject {
 

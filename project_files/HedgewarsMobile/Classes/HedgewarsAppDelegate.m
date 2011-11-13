@@ -88,6 +88,7 @@
     // don't stop music if it is playing
     if ([HWUtils isGameLaunched]) {
         [AudioManagerController releaseCache];
+        HW_memoryWarningCallback();
     }
     MSG_MEMCLEAN();
     // don't clean mainMenuViewController here!!!

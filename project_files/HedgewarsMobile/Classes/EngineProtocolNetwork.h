@@ -22,21 +22,15 @@
 #import <Foundation/Foundation.h>
 #import "SDL_net.h"
 
-@protocol EngineProtocolDelegate <NSObject>
-
--(void) gameHasEndedWithStats:(NSArray *)stats;
-
-@end
 
 @interface EngineProtocolNetwork : NSObject {
-    id<EngineProtocolDelegate> delegate;
-
+    NSArray *statsArray;
     NSOutputStream *stream;
     TCPsocket csd;
     NSInteger enginePort;
 }
 
-@property (nonatomic,assign) id<EngineProtocolDelegate> delegate;
+@property (nonatomic,assign) NSArray *statsArray;
 @property (nonatomic,retain) NSOutputStream *stream;
 @property (assign) TCPsocket csd;
 @property (assign) NSInteger enginePort;
@@ -44,11 +38,10 @@
 
 -(id)   init;
 
-+(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary;
+-(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary;
 +(NSInteger) activeEnginePort;
 
 -(void) engineProtocol:(id) object;
--(void) gameHasEndedWithStats:(NSArray *)stats;
 
 -(int)  sendToEngine:(NSString *)string;
 -(int)  sendToEngineNoSave:(NSString *)string;

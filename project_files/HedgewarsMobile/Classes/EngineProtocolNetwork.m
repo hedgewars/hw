@@ -28,12 +28,11 @@
 static NSInteger activeEnginePort;
 
 @implementation EngineProtocolNetwork
-@synthesize delegate, stream, csd, enginePort;
+@synthesize statsArray, stream, csd, enginePort;
 
 -(id) init {
     if (self = [super init]) {
-        self.delegate = nil;
-
+        self.statsArray = nil;
         self.csd = NULL;
         self.stream = nil;
         self.enginePort = [HWUtils randomPort];
@@ -42,31 +41,22 @@ static NSInteger activeEnginePort;
     return self;
 }
 
--(void) gameHasEndedWithStats:(NSArray *)stats {
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(gameHasEndedWithStats:)])
-        [self.delegate gameHasEndedWithStats:stats];
-    else
-        DLog(@"Error! delegate == nil");
-}
-
 -(void) dealloc {
-    self.delegate = nil;
+    releaseAndNil(statsArray);
     releaseAndNil(stream);
     [super dealloc];
 }
 
 #pragma mark -
 #pragma mark Spawner functions
-+(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
-    id proto = [[self alloc] init];
-    [proto setStream: (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil];
-    [[proto stream] open];
+-(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
+    self.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
+    [self.stream open];
 
     // +detachNewThreadSelector retain/release self automatically
     [NSThread detachNewThreadSelector:@selector(engineProtocol:)
-                             toTarget:proto
+                             toTarget:self
                            withObject:dictionary];
-    [proto release];
 }
 
 +(NSInteger) activeEnginePort {
@@ -232,7 +222,7 @@ static NSInteger activeEnginePort;
 -(void) engineProtocol:(id) object {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSDictionary *gameConfig = (NSDictionary *)object;
-    NSMutableArray *statsArray = nil;
+    NSMutableArray *tempStats = nil;
     TCPsocket sd;
     IPaddress ip;
     int eProto;
@@ -347,10 +337,10 @@ static NSInteger activeEnginePort;
                 }
                 break;
             case 'i':
-                if (statsArray == nil) {
-                    statsArray = [[NSMutableArray alloc] initWithCapacity:10 - 2];
+                if (tempStats == nil) {
+                    tempStats = [[NSMutableArray alloc] initWithCapacity:10 - 2];
                     NSMutableArray *ranking = [[NSMutableArray alloc] initWithCapacity:4];
-                    [statsArray insertObject:ranking atIndex:0];
+                    [tempStats insertObject:ranking atIndex:0];
                     [ranking release];
                 }
                 NSString *tempStr = [NSString stringWithUTF8String:&buffer[2]];
@@ -359,16 +349,16 @@ static NSInteger activeEnginePort;
                 int index = [arg length] + 3;
                 switch (buffer[1]) {
                     case 'r':           // winning team
-                        [statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
+                        [tempStats insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
                         break;
                     case 'D':           // best shot
-                        [statsArray addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
+                        [tempStats addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
                         break;
                     case 'k':           // best hedgehog
-                        [statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kills in a turn", &buffer[index], arg]];
+                        [tempStats addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kills in a turn", &buffer[index], arg]];
                         break;
                     case 'K':           // number of hogs killed
-                        [statsArray addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
+                        [tempStats addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
                         break;
                     case 'H':           // team health/graph
                         break;
@@ -376,16 +366,16 @@ static NSInteger activeEnginePort;
                         // still WIP in statsPage.cpp
                         break;
                     case 'P':           // teams ranking
-                        [[statsArray objectAtIndex:0] addObject:tempStr];
+                        [[tempStats objectAtIndex:0] addObject:tempStr];
                         break;
                     case 's':           // self damage
-                        [statsArray addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];
+                        [tempStats addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];
                         break;
                     case 'S':           // friendly fire
-                        [statsArray addObject:[NSString stringWithFormat:@"%s killed %@ of his own hedgehogs", &buffer[index], arg]];
+                        [tempStats addObject:[NSString stringWithFormat:@"%s killed %@ of his own hedgehogs", &buffer[index], arg]];
                         break;
                     case 'B':           // turn skipped
-                        [statsArray addObject:[NSString stringWithFormat:@"%s was scared and skipped turn %@ times", &buffer[index], arg]];
+                        [tempStats addObject:[NSString stringWithFormat:@"%s was scared and skipped turn %@ times", &buffer[index], arg]];
                         break;
                     default:
                         DLog(@"Unhandled stat message, see statsPage.cpp");
@@ -393,12 +383,15 @@ static NSInteger activeEnginePort;
                 }
                 break;
             case 'q':
-                // game ended, can remove the savefile and present the statistics of the match
+                // game ended and match finished, statsArray is full of delicious statistics
                 [HWUtils setGameStatus:gsEnded];
-                [self gameHasEndedWithStats:statsArray];
+                self.statsArray = [[NSArray arrayWithArray:tempStats] retain];
+                // closing connection here would trigger a "IPC connection lost" error, so we have to wait until recv fails
                 break;
             case 'Q':
-                // game exited but not completed, nothing to do (just don't save the message)
+                // game exited but not completed, skip this message in the savefile
+                [HWUtils setGameStatus:gsInterrupted];
+                // same here, don't set clientQuit to YES
                 break;
             default:
                 [self dumpRawData:buffer ofSize:msgSize];
@@ -406,9 +399,10 @@ static NSInteger activeEnginePort;
         }
     }
     DLog(@"Engine exited, ending thread");
+
     [self.stream close];
     [self.stream release];
-    [statsArray release];
+    [tempStats release];
 
     // Close the client socket
     SDLNet_TCP_Close(csd);
