@@ -287,6 +287,13 @@ procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 var i : LongInt;
 begin
     if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd = snd) and  (LastVoice.voicepack = voicepack)) then exit;
+    if (snd = sndVictory) or (snd = sndFlawless) then
+        begin
+        for i:= 1 to Succ(chanTPU) do StopSound(i);
+        for i:= 0 to 7 do VoiceList[i].snd:= sndNone;
+        LastVoice.snd:= sndNone;
+        end;
+
     i:= 0;
     while (i<8) and (VoiceList[i].snd <> sndNone) do inc(i);
 
