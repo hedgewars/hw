@@ -355,6 +355,12 @@ function HW_getMaxNumberOfTeams: LongInt; cdecl; export;
 begin
     exit(cMaxTeams);
 end;
+
+procedure HW_memoryWarningCallback; cdecl; export;
+begin
+    ReleaseSound(false);
+end;
+
 {$ENDIF}
 
 end.

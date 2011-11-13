@@ -98,6 +98,8 @@ extern "C" {
     int  HW_getTurnsForCurrentTeam(void);
     int  HW_getMaxNumberOfHogs(void);
     int  HW_getMaxNumberOfTeams(void);
+
+    void HW_memoryWarningCallback(void);
     
 #ifdef __cplusplus
 }
