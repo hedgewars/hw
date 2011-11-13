@@ -401,7 +401,7 @@ Por favor escolha outro nome de utilizador.</translation>
     </message>
     <message>
         <source>User quit</source>
-        <translation">Utilizador saiu</translation>
+        <translation>Utilizador saiu</translation>
     </message>
 </context>
 <context>
