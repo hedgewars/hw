@@ -36,7 +36,8 @@
 
     if (theButton.tag != 0) {
         [AudioManagerController playClickSound];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"launchRestoredGame" object:nil];
+        [GameInterfaceBridge registerCallingController:self.parentViewController];
+        [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
     } else {
         [AudioManagerController playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];

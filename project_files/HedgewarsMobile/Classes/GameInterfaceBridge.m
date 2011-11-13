@@ -26,16 +26,22 @@
 #import "AudioManagerController.h"
 #import "ObjcExports.h"
 
+static UIViewController *callingController;
+
 @implementation GameInterfaceBridge
-@synthesize blackView;
+@synthesize blackView, savePath, proto;
 
 #pragma mark -
 #pragma mark Instance methods for engine interaction
 // prepares the controllers for hosting a game
--(void) earlyEngineLaunch:(NSString *)pathOrNil withOptions:(NSDictionary *)optionsOrNil {
+-(void) earlyEngineLaunch:(NSDictionary *)optionsOrNil {
     [self retain];
     [AudioManagerController stopBackgroundMusic];
-    [EngineProtocolNetwork spawnThread:pathOrNil withOptions:optionsOrNil];
+
+    EngineProtocolNetwork *engineProtocol = [[EngineProtocolNetwork alloc] init];
+    self.proto = engineProtocol;
+    [engineProtocol release];
+    [self.proto spawnThread:self.savePath withOptions:optionsOrNil];
 
     // add a black view hiding the background
     CGRect theFrame = [[UIScreen mainScreen] bounds];
@@ -53,15 +59,19 @@
 
     // keep track of uncompleted games
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:pathOrNil forKey:@"savedGamePath"];
+    [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
     [userDefaults synchronize];
 
     // let's launch the engine using this -perfomSelector so that the runloop can deal with queued messages first
-    [self performSelector:@selector(engineLaunch:) withObject:pathOrNil afterDelay:0.1f];
+    [self performSelector:@selector(engineLaunch) withObject:nil afterDelay:0.1f];
 }
 
 // cleans up everything
 -(void) lateEngineLaunch {
+    // notify views below that they are getting the spotlight again
+    [[[HedgewarsAppDelegate sharedAppDelegate] uiwindow] makeKeyAndVisible];
+    [callingController viewWillAppear:YES];
+
     // remove completed games notification
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:@"" forKey:@"savedGamePath"];
@@ -78,16 +88,36 @@
     // the overlay is not needed any more and can be removed
     [[OverlayViewController mainOverlay] removeOverlay];
 
+    // engine thread *should* be done by now
+    NSArray *stats = self.proto.statsArray;
+    if (stats != nil) {
+        StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        statsPage.statsArray = stats;
+        statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
+            statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
+
+        [callingController presentModalViewController:statsPage animated:YES];
+        [statsPage release];
+    }
+    [stats release];    // we retained the array before
+
+    // can remove the savefile if the replay has ended
+    if ([HWUtils gameType] == gtSave)
+        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
+
     // restart music and we're done
     [AudioManagerController playBackgroundMusic];
+    [HWUtils setGameStatus:gsNone];
+    [HWUtils setGameType:gtNone];
     [self release];
 }
 
 // main routine for calling the actual game engine
--(void) engineLaunch:(NSString *)pathOrNil {
+-(void) engineLaunch {
     const char *gameArgs[11];
     CGFloat width, height;
-    NSInteger enginePort = [EngineProtocolNetwork activeEnginePort];
+    NSInteger enginePort = self.proto.enginePort;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",enginePort];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
@@ -139,7 +169,7 @@
     gameArgs[ 7] = [[[settings objectForKey:@"music"] stringValue] UTF8String];                 //isMusicEnabled
     gameArgs[ 8] = [[[settings objectForKey:@"alternate"] stringValue] UTF8String];             //cAltDamage
     gameArgs[ 9] = [rotation UTF8String];                                                       //rotateQt
-    gameArgs[10] = ([HWUtils gameType] == gtSave) ? [pathOrNil UTF8String] : NULL;              //recordFileName
+    gameArgs[10] = ([HWUtils gameType] == gtSave) ? [self.savePath UTF8String] : NULL;          //recordFileName
 
     [verticalSize release];
     [horizontalSize release];
@@ -154,12 +184,24 @@
     [self lateEngineLaunch];
 }
 
+-(void) dealloc {
+    releaseAndNil(blackView);
+    releaseAndNil(savePath);
+    releaseAndNil(proto);
+    [super dealloc];
+}
+
 #pragma mark -
 #pragma mark Class methods for setting up the engine from outsite
++(void) registerCallingController:(UIViewController *)controller {
+    callingController = controller;
+}
+
 +(void) startGame:(TGameType) type atPath:(NSString *)path withOptions:(NSDictionary *)config {
     [HWUtils setGameType:type];
     id bridge = [[self alloc] init];
-    [bridge earlyEngineLaunch:path withOptions:config];
+    [bridge setSavePath:path];
+    [bridge earlyEngineLaunch:config];
     [bridge release];
 }
 
@@ -190,27 +232,5 @@
     [missionLine release];
 }
 
-/*
--(void) gameHasEndedWithStats:(NSArray *)stats {
-    // wrap this around a retain/realse to prevent being deallocated too soon
-    [self retain];
-    // display stats page if there is something to display
-    if (stats != nil) {
-        StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        statsPage.statsArray = stats;
-        statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
-            statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
-
-        [self.parentController presentModalViewController:statsPage animated:YES];
-        [statsPage release];
-    }
-
-    // can remove the savefile if the replay has ended
-    if ([HWUtils gameType] == gtSave)
-        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
-    [self release];
-}
-*/
 
 @end

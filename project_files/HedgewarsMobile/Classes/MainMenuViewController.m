@@ -27,7 +27,6 @@
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
 #import "MissionTrainingViewController.h"
-#import "GameInterfaceBridge.h"
 #import "Appirater.h"
 #import "ServerProtocolNetwork.h"
 
@@ -114,7 +113,6 @@
     // prompt for restoring any previous game
     NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
     if (saveString != nil && [saveString isEqualToString:@""] == NO) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchRestoredGame) name:@"launchRestoredGame" object:nil];
         if (self.restoreViewController == nil) {
             NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
             RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
@@ -232,12 +230,6 @@
             [alert release];
             break;
     }
-}
-
-#pragma mark -
--(void) launchRestoredGame {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
 }
 
 #pragma mark -

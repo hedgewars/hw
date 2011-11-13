@@ -74,6 +74,7 @@
         [AudioManagerController playBackSound];
         [[self parentViewController] dismissModalViewControllerAnimated:YES];
     } else {
+        [GameInterfaceBridge registerCallingController:self];
         [GameInterfaceBridge startMissionGame:self.missionName];
     }
 }
