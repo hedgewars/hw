@@ -222,7 +222,6 @@ static NSInteger activeEnginePort;
 -(void) engineProtocol:(id) object {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSDictionary *gameConfig = (NSDictionary *)object;
-    NSMutableArray *tempStats = nil;
     TCPsocket sd;
     IPaddress ip;
     int eProto;
@@ -337,10 +336,10 @@ static NSInteger activeEnginePort;
                 }
                 break;
             case 'i':
-                if (tempStats == nil) {
-                    tempStats = [[NSMutableArray alloc] initWithCapacity:10 - 2];
+                if (self.statsArray == nil) {
+                    self.statsArray = [[NSMutableArray alloc] initWithCapacity:10 - 2];
                     NSMutableArray *ranking = [[NSMutableArray alloc] initWithCapacity:4];
-                    [tempStats insertObject:ranking atIndex:0];
+                    [self.statsArray insertObject:ranking atIndex:0];
                     [ranking release];
                 }
                 NSString *tempStr = [NSString stringWithUTF8String:&buffer[2]];
@@ -349,16 +348,16 @@ static NSInteger activeEnginePort;
                 int index = [arg length] + 3;
                 switch (buffer[1]) {
                     case 'r':           // winning team
-                        [tempStats insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
+                        [self.statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
                         break;
                     case 'D':           // best shot
-                        [tempStats addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
+                        [self.statsArray addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
                         break;
                     case 'k':           // best hedgehog
-                        [tempStats addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kills in a turn", &buffer[index], arg]];
+                        [self.statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kill(s) in a turn", &buffer[index], arg]];
                         break;
                     case 'K':           // number of hogs killed
-                        [tempStats addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
                         break;
                     case 'H':           // team health/graph
                         break;
@@ -366,16 +365,16 @@ static NSInteger activeEnginePort;
                         // still WIP in statsPage.cpp
                         break;
                     case 'P':           // teams ranking
-                        [[tempStats objectAtIndex:0] addObject:tempStr];
+                        [[self.statsArray objectAtIndex:0] addObject:tempStr];
                         break;
                     case 's':           // self damage
-                        [tempStats addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];
                         break;
                     case 'S':           // friendly fire
-                        [tempStats addObject:[NSString stringWithFormat:@"%s killed %@ of his own hedgehogs", &buffer[index], arg]];
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s killed %@ of his own hedgehogs", &buffer[index], arg]];
                         break;
                     case 'B':           // turn skipped
-                        [tempStats addObject:[NSString stringWithFormat:@"%s was scared and skipped turn %@ times", &buffer[index], arg]];
+                        [self.statsArray addObject:[NSString stringWithFormat:@"%s was scared and skipped turn %@ times", &buffer[index], arg]];
                         break;
                     default:
                         DLog(@"Unhandled stat message, see statsPage.cpp");
@@ -385,7 +384,6 @@ static NSInteger activeEnginePort;
             case 'q':
                 // game ended and match finished, statsArray is full of delicious statistics
                 [HWUtils setGameStatus:gsEnded];
-                self.statsArray = [[NSArray arrayWithArray:tempStats] retain];
                 // closing connection here would trigger a "IPC connection lost" error, so we have to wait until recv fails
                 break;
             case 'Q':
@@ -402,7 +400,6 @@ static NSInteger activeEnginePort;
 
     [self.stream close];
     [self.stream release];
-    [tempStats release];
 
     // Close the client socket
     SDLNet_TCP_Close(csd);

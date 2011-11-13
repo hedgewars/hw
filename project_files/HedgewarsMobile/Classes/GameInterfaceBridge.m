@@ -89,8 +89,8 @@ static UIViewController *callingController;
     [[OverlayViewController mainOverlay] removeOverlay];
 
     // engine thread *should* be done by now
-    NSArray *stats = self.proto.statsArray;
-    if (stats != nil) {
+    NSArray *stats = [[NSArray alloc] initWithArray:self.proto.statsArray copyItems:YES];
+    if ([HWUtils gameStatus] == gsEnded && stats != nil) {
         StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
         statsPage.statsArray = stats;
         statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
@@ -100,7 +100,7 @@ static UIViewController *callingController;
         [callingController presentModalViewController:statsPage animated:YES];
         [statsPage release];
     }
-    [stats release];    // we retained the array before
+    [stats release];
 
     // can remove the savefile if the replay has ended
     if ([HWUtils gameType] == gtSave)
