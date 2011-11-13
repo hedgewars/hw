@@ -70,7 +70,7 @@
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished">Opcje</translation>
+        <translation>Opcje</translation>
     </message>
 </context>
 <context>
@@ -93,51 +93,51 @@
     </message>
     <message>
         <source>%1 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 został usunięty z listy ignorowanych</translation>
     </message>
     <message>
         <source>%1 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 został dodany do listy ignorowanych</translation>
     </message>
     <message>
         <source>%1 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 został usunięty z listy przyjaciół</translation>
     </message>
     <message>
         <source>%1 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 został dodany do listy przyjaciół</translation>
     </message>
     <message>
         <source>Stylesheet imported from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkusz stylów został zaimportowany z %1</translation>
     </message>
     <message>
         <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
-        <translation type="unfinished"></translation>
+        <translation>Wpisz %1 jeśli chcesz użyć tego arkusza stylów w przyszłości. Wpisz %2 by go zresetować!</translation>
     </message>
     <message>
         <source>Couldn&apos;t read %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można odczytać %1</translation>
     </message>
     <message>
         <source>StyleSheet discarded</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkusz stylów został odrzucony</translation>
     </message>
     <message>
         <source>StyleSheet saved to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Arkusz stylów został zapisany jako %1</translation>
     </message>
     <message>
         <source>Failed to save StyleSheet to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można było zapisać arkusza stylów jako %1</translation>
     </message>
     <message>
         <source>%1 is not a valid command!</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 nie jest poprawnym poleceniem!</translation>
     </message>
     <message>
         <source>Kicking %1 ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyrzucam %1...</translation>
     </message>
 </context>
 <context>
@@ -190,43 +190,43 @@
     </message>
     <message>
         <source>Game aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Gra przerwana</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Hasło</translation>
+        <translation>Hasło</translation>
     </message>
     <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished">Twój nick %1 jest zarejestrowany
+        <translation>Twój nick %1 jest zarejestrowany
 na Hedgewars.org
 Proszę podać hasło bądź zmienić nick
 w ustawieniach gry:</translation>
     </message>
     <message>
         <source>No password supplied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie podano hasła.</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Nick</translation>
+        <translation>Nick</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished">Ktoś właśnie używa
+        <translation>Ktoś właśnie używa
 tego nicku %1
 na serwerze.
-Przoszę wybrać nowy nick:</translation>
+Proszę wybrać nowy nick:</translation>
     </message>
     <message>
         <source>No nickname supplied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie podano nicku.</translation>
     </message>
 </context>
 <context>
@@ -412,7 +412,7 @@ Przoszę wybrać nowy nick:</translation>
     </message>
     <message>
         <source>User quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Użytkownik wyszedł</translation>
     </message>
 </context>
 <context>
@@ -617,7 +617,7 @@ Przoszę wybrać nowy nick:</translation>
     <name>PageInGame</name>
     <message>
         <source>In game...</source>
-        <translation type="unfinished"></translation>
+        <translation>W trakcie gry...</translation>
     </message>
 </context>
 <context>
@@ -763,7 +763,7 @@ Przoszę wybrać nowy nick:</translation>
     <message>
         <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
         <comment>Tips</comment>
-        <translation>Hedgewars jest darmową grą o otwartym kodzie źródłowym którą tworzymy w naszym wolnym czasie. Jeśli ktokolwiek sprzedał Tobie tę grę pownieneś upomnieć się o swoje pieniądze!</translation>
+        <translation>Hedgewars jest darmową grą o otwartym kodzie źródłowym którą tworzymy w naszym wolnym czasie. Jeśli ktokolwiek sprzedał Tobie tę grę powinieneś upomnieć się o swoje pieniądze!</translation>
     </message>
     <message>
         <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
@@ -803,7 +803,7 @@ Przoszę wybrać nowy nick:</translation>
     <message>
         <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
         <comment>Tips</comment>
-        <translation>Cuchnący ser nie powoduje wielkiego wybuchu. Jednakże pod wpływem wiatu chmura śmierdzącego gazu może bardzo daleko zawędrować i otruć wiele jeży naraz.</translation>
+        <translation>Cuchnący ser nie powoduje wielkiego wybuchu. Jednakże pod wpływem wiatru chmura śmierdzącego gazu może bardzo daleko zawędrować i otruć wiele jeży naraz.</translation>
     </message>
     <message>
         <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
@@ -917,7 +917,7 @@ Przoszę wybrać nowy nick:</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation>Dodatki do pobrania</translation>
+        <translation>Dodatki</translation>
     </message>
 </context>
 <context>
@@ -1110,7 +1110,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation>Schemat określa ustawnienia i preferencje takie jak Czas trwania tury, Nagłą śmierć, Wampiryzm itp.</translation>
+        <translation>Schemat określa ustawienia i preferencje takie jak Czas trwania tury, Nagłą śmierć, Wampiryzm itp.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
@@ -1361,22 +1361,22 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Campaign Mode (...)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kampania (...)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions)</source>
-        <translation type="unfinished"></translation>
+        <translation>Trening (sprawdź swoje umiejętności podczas misji treningowych)</translation>
     </message>
 </context>
 <context>
     <name>PageTraining</name>
     <message>
         <source>No description available</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak opisu</translation>
     </message>
     <message>
         <source>Select a mission!</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz misję!</translation>
     </message>
 </context>
 <context>
@@ -1395,7 +1395,7 @@ Czy chcesz dołączyć do pokoju?</translation>
     </message>
     <message>
         <source>Restrict Team Additions</source>
-        <translation>Zabroń dodawania drużyn</translation>
+        <translation>Zablokuj drużyny</translation>
     </message>
     <message>
         <source>Info</source>
@@ -1903,7 +1903,7 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten program jest rozprowadzany na zasadach GNU GPL v2</translation>
     </message>
 </context>
 <context>
