@@ -12,7 +12,7 @@
 00:09=Desert Eagle
 00:10=Dinamite
 00:11=Mazza da Baseball
-00:12=Pugno di Fuoco
+00:12=Shoryuken
 00:13=sec
 00:14=Paracadute
 00:15=Attacco Missilistico
@@ -36,13 +36,13 @@
 00:33=Danno Extra
 00:34=Invulnerabilità
 00:35=Tempo Extra
-00:36=Mirino LASER
+00:36=Mirino Laser
 00:37=Vampirismo
 00:38=Fucile di Precisione
 00:39=Disco Volante
 00:40=Bomba Molotov
 00:41=Uccellino
-00:42=Dispositivo Portatile per Portali
+00:42=Portal Gun
 00:43=Ultima Sonata
 00:44=Vecchio Limburger
 00:45=Pistola Sinusoidale (beta)
@@ -53,6 +53,9 @@
 00:50=Attacco Perforante
 00:51=Palla di Fango
 00:52=Nessuna arma selezionata
+00:53=Macchina del Tempo
+00:54=Costruzione
+00:55=Land Spray
 
 01:00=Combattiamo!
 01:01=Round in parità
@@ -69,6 +72,12 @@
 01:12=Ultimo turno prima del Sudden Death!
 01:13=%1 turni rimanenti prima del Sudden Death!
 01:14=Preparati, %1!
+01:15=Delicato
+01:16=Basso
+01:17=Medio
+01:18=Alto
+01:19=Forte
+01:20=%1 Rimbalzato
 
 ; Event messages
 ; Hog (%1) died
@@ -77,7 +86,7 @@
 02:00=%1 ha visto la luce!
 02:00=%1 non ha capito cosa stesse succedendo!
 02:00=%1 non sapeva con chi aveva a che fare!
-02:00=%1 ha un appuntamento col Tristo Mietitore
+02:00=%1 ha un appuntamento con l'Oscuro Mietitore
 02:00=%1 puzza di cadavere!
 02:00=%1 ha un grande futuro dietro le spalle
 02:00=%1 è ormai mangime per vermi
@@ -88,16 +97,16 @@
 02:00=%1 non ha pagato il conto!
 02:00=%1 ha rifiutato l'offerta che non poteva rifiutare!
 02:00=%1 ora fa parte del panorama!
+02:00=%1 ha lanciato il suo ultimo missile
+02:00=%1 ha scagliato la sua ultima granata
+02:00=%1 ha infornato la sua ultima torta
+02:00=%1 lascia una moglie e quattro figli...
 02:00=%1 se n'è andato in un posto migliore!
 02:00=%1 saluta questo mondo!
-02:00=%1 incontra il creatore!
+02:00=%1 incontra il Creatore!
 02:00=%1 non può più aspettare!
 02:00=%1 ha finito il suo tempo!
 02:00=%1 sarà ricordato con affetto!
-02:00=%1 ha lanciato il suo ultimo missile!
-02:00=%1 ha scagliato la sua ultima granata!
-02:00=%1 ha infornato la sua ultima torta!
-02:00=%1 ha gettato la sua ultima anguria!
 02:00=%1 se n'è andato per giocare a un gioco migliore!
 02:00=%1 fallisce!
 02:00=%1 avrebbe davvero dovuto usare una cassa salute!
@@ -122,6 +131,13 @@
 02:00=I gatti hanno sette vite, %1 no!
 02:00=%1 è caduto per l'onore della sua squadra!
 02:00=%1 non ama questo gioco
+02:00=Non c'è speranza per %1
+02:00=%1 è morto eroicamente per la patria.
+02:00=%1 ti consiglio vivamente il Tetris
+02:00=%1 vuole la mamma
+02:00=%1 non è morto invano...(forse)
+02:00=L'inferno ti attende, %1
+02:00=%1 vivrà per sempre nei nostri cuori
 
 ; Hog (%1) drowned
 02:01=%1 gioca a fare il sottomarino!
@@ -171,7 +187,11 @@
 02:01=%1 avrebbe dovuto fare qualche lezione di nuoto
 02:01=E' abbastanza salata l'acqua, %1?
 02:01=%1 sprofonda nei più neri abissi
-; Match starts
+02:01=Pazzia...QUESTA E' SPARTAAAAAAAAAAAAAAAAAAAAAAAAA!!
+02:01=%1 è a 20000 leghe sotto i mari
+02:01=%1 è il nuovo amichetto di SpongeBob
+
+; Round starts
 02:02=Combattiamo!
 02:02=Armato e pronto!
 02:02=Alle armi!
@@ -186,7 +206,6 @@
 02:02=Perdere non è un opzione
 02:02=Vittoria o morte
 02:02=Chi perde pulisce!
-02:02=Fai del tuo meglio!
 02:02=Che inizi la battaglia del millennio
 02:02=Che inizi la battaglia del secolo
 02:02=Che inizi la battaglia del decennio
@@ -194,17 +213,23 @@
 02:02=Che inizi la battaglia del mese
 02:02=Che inizi la battaglia della settimana
 02:02=Che inizi la battaglia del giorno
+02:02=Fai del tuo meglio!
+02:02=Distruggi il nemico!
 02:02=Buona fortuna
 02:02=Divertitevi!
 02:02=Combatti con onore!
 02:02=Combatti a oltranza!
 02:02=Mai arrendersi!
 02:02=Nessuna paura!
+02:02=Che la festa abbia inizio!
 02:02=Preparatevi alla gloria!
+
 ; Round ends (win; unused atm)
 02:03=...
+
 ; Round ends (draw; unused atm)
 02:04=...
+
 ; New health crate
 02:05=Pronto soccorso in arrivo!
 02:05=Chi ha bisogno di cure?
@@ -225,6 +250,8 @@
 02:05=Direttamente dall'ospedale!
 02:05=Correte! Casse salute in omaggio!
 02:05=Una superpozione! Ops... gioco sbagliato!
+02:05=Attenzione! Può causare effetti collaterali indesiderati.
+
 ; New ammo crate
 02:06=Altre armi!
 02:06=È qui la festa?!
@@ -232,7 +259,7 @@
 02:06=Armi! Armi! Armi!
 02:06=È ora di ravvivare la serata!
 02:06=Mi chiedo che arma ci sia là...
-02:06=Il natale arriva presto in Hedgewars
+02:06=Il Natale arriva presto in Hedgewars
 02:06=Un regalo!
 02:06=Consegna speciale!
 02:06=È stato un incubo farlo passare in dogana...
@@ -250,6 +277,7 @@
 02:06=Regali per ricci simpatici!
 02:06=Con questo non avrai più problemi!
 02:06=Nuove armi solo per te!
+
 ; New utility crate
 02:07=Attrezzi per tutti!
 02:07=Nuovi accessori per la casa!
@@ -261,6 +289,7 @@
 02:07=Oooh questa cassa è pesante
 02:07=Potrebbe servirti
 02:07=Utilissime queste utilità!
+
 ; Hog (%1) skips his turn
 02:08=%1 è così noioso...
 02:08=%1 deve riordinare le idee
@@ -295,6 +324,9 @@
 02:08=%1 adotta una nuova strategia
 02:08=%1 preferisce rimanere neutrale
 02:08=%1 ha alzato la bandiera bianca
+02:08=%Che vergogna!
+02:08=Se ci fosse stato Chuck Norris dietro di te, ti avrebbe preso a calci volanti
+02:08=%1 pensava troppo alle donnine nude
 
 ; Hog (%1) hurts himself only
 02:09=%1 dovrebbe migliorare la sua mira!
@@ -321,7 +353,7 @@
 02:09=%1 è decisamente goffo
 02:09=%1 mostra al nemico di cosa è capace
 02:09=%1 non può aspettarsi di esser sempre bravo
-02:09=Non preoccuparti %1, nettuno è persetto
+02:09=Non preoccuparti %1, nessuno è perfetto
 02:09=%1 l'ha fatto chiaramente di proposito
 02:09=Non lo dirò a nessuno se non vuoi, %1
 02:09=Imbarazzante!
@@ -333,11 +365,20 @@
 02:09=Il colpo peggiore. Della storia.
 02:09=%1 fa la figura del peracottaio
 02:09=%1 fa la figura del cioccolataio
+02:09=%1 aiuta il nemico!
+02:09=Sono sicuro che nessuno l'abbia visto, %1
+02:09=No comment.
 
 ; Hog shot an home run (using the bat and another hog)
 02:10=Un fuori campo!
 02:10=E' un uccello, è un aereo, ...
-02:10=Quello lì è fuori!
+02:10=E' fuori!
+02:10=BEL COLPO!
+
+; Hog (%1) has to leave (team is gone)
+02:11=%1 deve andare a nanna! 
+02:11=%1 sembra che non abbia tempo per giocare
+02:11=%1 se ne deve andare.
 
 ; Weapon Categories
 03:00=Granata a tempo
@@ -358,7 +399,7 @@
 03:15=Attacco Aereo
 03:16=Attacco Aereo
 03:17=Strumeno di Scavo
-03:18=Utilitàdi costruzione
+03:18=Utilità di costruzione
 03:19=Mezzo di Trasporto
 03:20=Azione di Cambio
 03:21=Arma Balistica
@@ -392,23 +433,28 @@
 03:48=E' tempo di martellate!
 03:49=Antica Arte Mistica
 03:50=Attacco Aereo
+03:51=Trovata per terra
+03:52=NON USATO
+03:53=Modello N.40
+03:54=Costruisce qualcosa
+03:55=Utilità di costruzione
 
 ; Weapon Descriptions (use | as line breaks)
-04:00=Attacca i tuoi nemici con una semplice granata.|Esploderà quando il suo timer arriverà a zero.|1-5: Imposta il timer della granata|Attacco: Tieni premuto per lanciare con più forza
-04:01=Attacca i tuoi nemici con una bomba a grappolo.|Si dividerà in bombe più piccole quando il suo|timer arriverà a zero.|1-5: Imposta il timer della granata|Attacco: Tieni premuto per lanciare con più forza
+04:00=Attacca i tuoi nemici con una semplice granata.|Esploderà quando il timer arriverà a zero.|1-5: Imposta il timer della granata|Attacco: Tieni premuto per lanciare con più forza
+04:01=Attacca i tuoi nemici con una bomba a grappolo.|Si dividerà in bombe più piccole quando il |timer arriverà a zero.|1-5: Imposta il timer della granata|Attacco: Tieni premuto per lanciare con più forza
 04:02=Attacca i nemici usando un proiettile balistico|che può essere influenzato dal vento.|Attacco: Tieni premuto per sparare con più potenza
-04:03=Lancia un'ape esplosiva che cercerà il|bersaglio scelto. Non sparare alla massima potenza|per migliorarne la precisione.|Cursore: Scegli il bersaglio|Attacco: Tieni premuto per sparare con più potenza
-04:04=Attacca i nemici usando un fucile con due colpi.|Grazie al suo raggio non hai bisogno di un colpo|diretto per ferire i nemici.|Attacco: Spara (più volte)
+04:03=Lancia un'ape esplosiva che cercherà il|bersaglio scelto. Non sparare alla massima potenza|per migliorarne la precisione.|Cursore: Scegli il bersaglio|Attacco: Tieni premuto per sparare con più potenza
+04:04=Attacca i nemici usando i due colpi del fucile.|Grazie al suo raggio non hai bisogno di un colpo|diretto per ferire i nemici.|Attacco: Spara (più volte)
 04:05=Spostati sottoterra! Usa il martello pneumatico|per scavare un buco nel terreno e raggiungere|altre zone.|Attacco: Inizia o ferma lo scavo
 04:06=Annoiato? Non hai modo di attaccare? Non vuoi|sprecare munizioni? Nessun problema!|Salta il turno, codardo!|Attacco: Salta il turno senza combattere
-04:07=Copri lunghe distanze usando colpi precisi del|rampino. Usa la tua inerzia per scivolare contro altri|ricci o fai cadere granate o altre armi|su di loro.|Attacco: Spara o rilascia il rampino|Salto Lungo: Lascia granate o armi simili
+04:07=Copri lunghe distanze usando colpi precisi del|rampino. Usa la tua inerzia per scivolare contro altri|ricci o fai cadere granate o altre armi|su di loro.|Attacco: Spara o rilascia il rampino|Salto Lungo: Lascia cadere granate o armi simili
 04:08=Tieni i tuoi nemici alla larga lasciando una|mina in passaggi stretti o proprio sotto i loro|piedi. Assicurati di scappare prima di azionarla|tu stesso!|Attacco: Lascia la mina davanti a te
 04:09=Non confidi nella tua mira? Usa la Desert|Eagle per attaccare usando fino a quattro colpi.|Attacco: Spara (quattro volte)
 04:10=La forza bruta è sempre un'opzione. Lascia questo|classico esplosivo vicino ai tuoi nemici e|batti in ritirata.|Attacco: Lascia la dinamite davanti a te
 04:11=Liberati dei ricci nemici battendoli oltre|i bordi della mappa o nell'acqua. Oppure che|ne diresti di buttare alcune mine ai|tuoi amici?|Attacco: colpisci qualunque cosa di fronte a te
 04:12=Avvicinati faccia a faccia per scatenare il|potere di questa mortale tecnica di arti marziali.|Attacco: esegue il Pugno di Fuoco
 04:13=NON USATO
-04:14=Soffri di vertigini? Meglio avere un paracadute.|Si aprirà quando|cadrete da troppo in alto|e salverà il vostro riccio dai|danni da caduta.|Attacco: Apre il paracadute
+04:14=Soffri di vertigini? Meglio avere un paracadute.|Si aprirà quando|cadrete da troppo in alto|e salverà il vostro riccio dai|danni da caduta.|Attacco: Apre il paracadute|Salto Lungo: lascia cadere granate o armi simili
 04:15=Chiama un aeroplano per attaccare i nemici|usando un bombardamento a tappeto.|Destra/Sinistra: Determina la direzione dell'attacco|Cursore: Sceglie la zona da attaccare
 04:16=Chiama un aeroplano che butterà diverse mine|nell'area scelta.|Destra/Sinistra: Determina la direzione dell'attacco|Cursore: Sceglie la zona da attaccare
 04:17=Serve un riparo? Usate la Torcia Infuocata|per scavare un tunnel nel terreno e|garantirvi una copertura.|Attacco: Inizia o smetti di scavare
@@ -419,13 +465,13 @@
 04:22=Non solo per Indiana Jones! La frusta è una|utile arma in molte situazioni. Specialmente|quando si vuole spingere qualcuno giù da un|burrone.|Attacco: Colpisci qualunque cosa di fronte a te
 04:23=Se non avete niente da perdere, questo può|esservi d'aiuto. Sacrificate il vostro riccio|lanciandolo in una direzione, facendogli urtare|tutto ciò che incontra per poi esplodere alla fine.|Attacco: Lancia il mortale e devastante attacco
 04:24=Buon Compleanno! Lancia questa torta, falla camminare|fino ai tuoi nemici e lasciagli avere un party|esplosivo. La torta può passare quasi tutti i terreni|ma potrebbe detonare prima in questo modo.|Attacco: Avvia la torta o fermala per farla esplodere
-04:25=Usa questo kit di travestimento per far saltare|i nemici verso il tuo riccio (e in qualche|precipzio o buco).|Attacco: Usa il kit e cerca di sedurre un altro riccio
+04:25=Usa questo kit di travestimento per far saltare|i nemici verso il tuo riccio (e in qualche|precipizio o buco).|Attacco: Usa il kit e cerca di sedurre un altro riccio
 04:26=Lancia questa succosa anguria ai tuoi nemici.|Quando il timer finirà, si dividerà in molti altri|pezzi esplosivi.|1-5: Imposta il timer dell'anguria|Attacco: Tieni premuto per lanciare con più forza
 04:27=Lascia che il fuoco dell'inferno cada sui nemici|usando questo diabolico esplosivo. Non|avvicinarti troppo all'esplosione dato che piccoli|fuochi possono perdurare di più.|Attacco: Tieni premuto per lanciare con più forza
 04:28=Poco dopo averlo lanciato, questo razzo inizierà|a scavare attraverso il terreno ed esploderà|quando la sua spoletta verrà azionata o tornerà|di nuovo in superficie.|Attacco: Tieni premuto per lanciare con più forza
 04:29=Questa non è adatta ai bambini! La Sparapalle spara|tonnellate di piccole palline colorate riempite di|esplosivo.|Attacco: Spara alla massima potenza|Su/Giu: Continua a mirare
-04:30=Chiama un aeroplano per lanciare un potente|attacco aereo napalm. Con la giusta mira questo attacco|può sradicare grandi zone di terreno, inclusi|gli sfortunati ricci nella zona.|Destra/Sinitra: Determina la direzione dell'attacco|Cursore: Sceglie la zona da attaccare
-04:31=L'Aereo Radiocomandato è l'arma ideale per|raccogliere casse attaccare ricci lontani. Potete|sterzare contro i nemici o lasciargli cadere alcune|bombe prima di farlo.|Attacco: Lancia l'Aereo o lascia le bombe|Salto Lungo: Fai cavalcare le Valchirie in battaglia|Su/Giu: Manovra l'aereo
+04:30=Chiama un aeroplano per lanciare un potente|attacco napalm. Con la giusta mira questo attacco|può sradicare grandi zone di terreno, inclusi|gli sfortunati ricci nella zona.|Destra/Sinitra: Determina la direzione dell'attacco|Cursore: Sceglie la zona da attaccare
+04:31=L'Aereo Radiocomandato è l'arma ideale per|raccogliere casse e attaccare ricci lontani. Potete|sterzare contro i nemici o lasciargli cadere alcune|bombe prima di farlo.|Attacco: Lancia l'Aereo o lascia le bombe|Salto Lungo: Fai cavalcare le Valchirie in battaglia|Su/Giù/Sinistra/Destra: Manovra l'aereo
 04:32=La bassa gravità è più funzionale di ogni dieta!|Saltate più in alto e coprite grandi distanze o fate|volare i nemici ancora più lontano.|Attacco: Attiva
 04:33=A volte è necessaria quella piccola spintarella in|più per causare più danni.|Attacco: Attiva
 04:34=Non potete toccarmi!|Attacco: Attiva
@@ -436,16 +482,20 @@
 04:39=Vola in un'altra parte della mappa usando il|disco volante. Questo veicolo difficile da imparare|è in grado di portarvi quasi in ogni zona del|campo di battaglia.|Lo potete usare anche per andare sott'acqua!|Attacco: Attiva|Su/Destra/Sinistra: Applica forza in una direzione
 04:40=Dai fuoco a una parte di terreno usando questa|bottiglia piena di liquido infiammabile.|Attacco: Tieni premuto per lanciare con più potenza
 04:41=La prova che la natura può persino fare meglio|del disco volante. L'uccellino può trasportare|il vostro riccio e bombardare di uova i nemici!|Attacco: Attiva e lancia le uova|Su/Giu/Destra/Sinistra: Vola in una direzione
-04:42=Questo creatore portatile di portali|può trasferire all'istante voi, i vostri nemici|o le vostre armi da un punto all'altro del|terreno.|Usatelo con accortezza e potrà riverlarsi|la vostra arma vincente!|Attacco: Lancia un portale|Tab: Cambia il colore del portale
+04:42=Questo dispositivo portatile crea dei portali dimensionali|che possono trasferire all'istante voi, i vostri nemici|o le vostre armi da un punto all'altro del|terreno.|Usatelo saggiamente e potrà riverlarsi...un GRANDE SUCCESSO!|Attacco: Lancia un portale|Tab: Cambia il colore del portale
 04:43=Do! Re! Mi! Fa! Sol! La! Si!|Suonate il mitico pianoforte di Beathoven e|sarà un successo esplosivo!|Il pianoforte cadrà dal cielo ma|qualcuno deve suonarlo e questo costerà|la sua vita!|Cursore: Sceglie la zona da attaccare|F1-F9: Suona il pianoforte
 04:44=Questo non è normale formaggio, è guerriglia biologica!| Non farà un gran danno al momento dell'esplosione|ma avvelenerà chiunque ne senta lo spiacevole odore!|1-5: Imposta il timer del limburger|Attacco: Tieni premuto per lanciare con più forza
 04:45=Tutto il potere della fisica e della scienza in|mano vostra con questa potente arma|in grado di generare una potente curva|sinusoidale di pura energia.|Attenzione! Questa arma vi darà un forte|contraccolpo (ancora in versione beta)|Attacco: Spara
 04:46=Lanciate delle brucianti fiamme contro i vostri nemici.|Assolutamente scottante!|Attacco: Attiva|Su/Giù: Continua a mirare|Sinistra/Destra: Modifica la potenza di fuoriuscita delle fiamme
 04:47=Raddoppiate il divertimento con due appiccicose mine.|Usatele per difendervi o creare potenti reazioni a catena (o ambedue le cose!)|Attacco: Tieni premuto per lanciare con più forza (due volte)
 04:48=Colpite i vostri nemici con forza!|Un buon colpo di questo martello toglierà|un terzo della vita della vittima e la farà|sprofondare nel terreno.|Attacco: Attiva
-04:49=Risuscitate i vostri ricci morti in battaglia.|Ma attenzione a non risuscitare i vostri nemici!|Attacco: Tieni premuto per risuscitare lentamente|Su: Accelera la risurrezione
-04:50=Scavate dall'alto verso il basso!|Con questo attacco aereo è possibile scavare a fondo grazie|a cinque razzi trivella lanciati dall'alto, che colpiranno|tutto quello che sarà a tiro.|Cursore: Sceglie la zona da attaccare
+04:49=Resuscitate i vostri ricci morti in battaglia.|Ma attenzione a non resuscitare i vostri nemici!|Attacco: Tieni premuto per risuscitare lentamente|Su: Accelera la risurrezione
+04:50=Scavate dall'alto verso il basso!|Con questo attacco aereo è possibile scavare a fondo grazie|a cinque razzi trivella lanciati dall'alto, che colpiranno|tutto quello che sarà a tiro.|Il timer indica fin quanto possono scavare prima di esplodere.|Cursore: Sceglie la zona da attaccare
 04:51=Spingete i nemici in acqua o sopra le mine!|Questa semplice arma non farà molti danni ma|spingerà con forza i nemici che colpisce!|Nei temi Snow e Christmas è una palla di neve!|Attacco: Tieni premuto per lanciare con più forza
+04:52=NON USATO
+04:53=Avventurati attraverso lo spazio-tempo,|lasciando che i tuoi compagni se la sbrigano da soli.|Preparati a ritornare in qualsiasi momento,|o per il Sudden Death o se sono stati tutti sconfitti.|Attenzione. Non funziona durante il Sudden Death,|se sei rimasto da solo, o se sei il Re.
+04:54=INCOMPLETO                                                                                                                                    
+04:55=Spruzza della schiuma attaccaticcia.|Utile per costruire ponti, seppellire nemici, sigillare tunnel.|Usate con cautela!
 
 ; Game goal strings
 05:00=Modalità di Gioco
@@ -469,3 +519,4 @@
 05:18=Attacchi illimitati
 05:19=Le armi verranno resettate allo stato di partenza alla fine di ogni turno
 05:20=Le armi non sono condivise tra i ricci della stessa squadra
+05:21=Tag Team: Le squadre amiche guadagnano dei turni|Tempo di condivisione: le squadre tra di loro condividono lo stesso tempo di turno
