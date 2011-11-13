@@ -771,7 +771,6 @@ if Gear^.Hedgehog^.Unplaced then
    Gear^.dY:= _0;
    Gear^.dX:= _0;
    Gear^.State:= Gear^.State and not gstMoving;
-   while TestCollisionYWithGear(Gear,1) = 0 do Gear^.Y:= Gear^.Y+_1;
    exit
    end;
 isFalling:= (Gear^.dY.isNegative) or not TestCollisionYKick(Gear, 1);
