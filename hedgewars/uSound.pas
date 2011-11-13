@@ -307,7 +307,7 @@ begin
     if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd = snd) and  (LastVoice.voicepack = voicepack)) then exit;
     if (snd = sndVictory) or (snd = sndFlawless) then
         begin
-        for i:= 1 to Succ(chanTPU) do StopSound(i);
+        Mix_HaltChannel(-1);
         for i:= 0 to 7 do VoiceList[i].snd:= sndNone;
         LastVoice.snd:= sndNone;
         end;
