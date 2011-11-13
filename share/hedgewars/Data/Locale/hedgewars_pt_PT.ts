@@ -65,7 +65,7 @@
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished">Opções de Jogo</translation>
+        <translation>Opções de Jogo</translation>
     </message>
 </context>
 <context>
@@ -88,51 +88,51 @@
     </message>
     <message>
         <source>%1 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 foi removido da tua lista de utilizadores ignorados</translation>
     </message>
     <message>
         <source>%1 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 foi adicionado à tua lista de utilizadores ignorados</translation>
     </message>
     <message>
         <source>%1 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 foi removido da tua lista de amigos</translation>
     </message>
     <message>
         <source>%1 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 foi adicionado à tua lista de amigos</translation>
     </message>
     <message>
         <source>Stylesheet imported from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Stylesheet importado de %1</translation>
     </message>
     <message>
         <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
-        <translation type="unfinished"></translation>
+        <translation>Introduz %1 se quiseres utilizar o StyleSheet corrente no futuro, introduz %2 para limpar!</translation>
     </message>
     <message>
         <source>Couldn&apos;t read %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possivel carregar %1</translation>
     </message>
     <message>
         <source>StyleSheet discarded</source>
-        <translation type="unfinished"></translation>
+        <translation>StyleSheet eliminado</translation>
     </message>
     <message>
         <source>StyleSheet saved to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>StyleSheet gravado em %1</translation>
     </message>
     <message>
         <source>Failed to save StyleSheet to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível gravar o StyleSheet em %1</translation>
     </message>
     <message>
         <source>%1 is not a valid command!</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 não é um comando valido!</translation>
     </message>
     <message>
         <source>Kicking %1 ...</source>
-        <translation type="unfinished"></translation>
+        <translation>A expulsar %1 ...</translation>
     </message>
 </context>
 <context>
@@ -185,42 +185,42 @@
     </message>
     <message>
         <source>Game aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Jogo abortado</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Password</translation>
+        <translation>Password</translation>
     </message>
     <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished">O nome de utilizador %1 está
+        <translation>O nome de utilizador %1 está
 registado em Hedgewars.org
-Por favor digite a sua palavra passe ou escolha
+Por favor digita a tua palavra passe ou escolhe
 outro nome de utilizador no menu de configuração:</translation>
     </message>
     <message>
         <source>No password supplied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi fornecida uma palavra passe.</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Nome de utilizador</translation>
+        <translation>Nome de utilizador</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished">O nome de utilizador %1
-já está a ser utilizado no servidor.
-Por favor escolha outro nome de utilizador.</translation>
+        <translation>O nome de utilizador %1
+já está a ser utilizado.
+Por favor escolhe outro nome de utilizador.</translation>
     </message>
     <message>
         <source>No nickname supplied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi fornecido um nome de utilizador.</translation>
     </message>
 </context>
 <context>
@@ -401,7 +401,7 @@ Por favor escolha outro nome de utilizador.</translation>
     </message>
     <message>
         <source>User quit</source>
-        <translation type="unfinished"></translation>
+        <translation">Utilizador saiu</translation>
     </message>
 </context>
 <context>
@@ -594,7 +594,7 @@ Por favor escolha outro nome de utilizador.</translation>
     <name>PageInGame</name>
     <message>
         <source>In game...</source>
-        <translation type="unfinished"></translation>
+        <translation>Em jogo...</translation>
     </message>
 </context>
 <context>
@@ -854,8 +854,7 @@ Por favor escolha outro nome de utilizador.</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation>Conteúdo Transferível
-Downloadable Content</translation>
+        <translation>Conteúdo Transferível (DLC)</translation>
     </message>
 </context>
 <context>
@@ -1292,22 +1291,22 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Campaign Mode (...)</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo Campanha (...)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions)</source>
-        <translation type="unfinished"></translation>
+        <translation>Modo Treino (Treina as tuas habilidades numa panóplia de missões de treino)</translation>
     </message>
 </context>
 <context>
     <name>PageTraining</name>
     <message>
         <source>No description available</source>
-        <translation type="unfinished"></translation>
+        <translation>Sem descrição disponível</translation>
     </message>
     <message>
         <source>Select a mission!</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecciona uma missão!</translation>
     </message>
 </context>
 <context>
@@ -1782,7 +1781,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
-        <translation type="unfinished"></translation>
+        <translation>Esta aplicação é distribuída sob a GNU General Public License v2</translation>
     </message>
 </context>
 <context>
