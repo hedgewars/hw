@@ -453,8 +453,16 @@ procedure chSetMap(var s: shortstring);
 begin
 if isDeveloperMode then
     begin
-    UserPathz[ptMapCurrent]:= UserPathz[ptMaps] + '/' + s;
-    Pathz[ptMapCurrent]:= Pathz[ptMaps] + '/' + s;
+    if s = '' then
+        begin
+        UserPathz[ptMapCurrent]:= s;
+        Pathz[ptMapCurrent]:= s;
+        end
+    else
+        begin
+        UserPathz[ptMapCurrent]:= UserPathz[ptMaps] + '/' + s;
+        Pathz[ptMapCurrent]:= Pathz[ptMaps] + '/' + s;
+        end;
     InitStepsFlags:= InitStepsFlags or cifMap
     end;
 

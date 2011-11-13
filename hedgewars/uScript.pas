@@ -1642,8 +1642,7 @@ cSuddenDTurns    := ScriptGetInteger('SuddenDeathTurns');
 cWaterRise       := ScriptGetInteger('WaterRise');
 cHealthDecrease  := ScriptGetInteger('HealthDecrease');
 
-if ScriptGetString('Map') <> '' then
-    ParseCommand('map ' + ScriptGetString('Map'), true);
+ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then
     ParseCommand('theme ' + ScriptGetString('Theme'), true);
 LuaGoals:= ScriptGetString('Goals');
