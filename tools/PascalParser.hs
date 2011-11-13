@@ -61,12 +61,14 @@ data Expression = Expression String
     | StringLiteral String
     | CharCode String
     | NumberLiteral String
+    | FloatLiteral String
     | HexNumber String
     | Reference Reference
     | Null
     deriving Show
 data Reference = ArrayElement [Expression] Reference
     | FunCall [Expression] Reference
+    | BuiltInFunCall [Expression] Reference
     | SimpleReference Identifier
     | Dereference Reference
     | RecordField Reference Reference
@@ -84,6 +86,7 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitChar String
     | InitNull
     deriving Show
+
     
 pascalLanguageDef
     = emptyDef
@@ -100,7 +103,8 @@ pascalLanguageDef
             , "type", "var", "const", "out", "array", "packed"
             , "procedure", "function", "with", "for", "to"
             , "downto", "div", "mod", "record", "set", "nil"
-            , "string", "shortstring"
+            , "string", "shortstring", "succ", "pred", "low"
+            , "high"
             ]
     , reservedOpNames= [] 
     , caseSensitive  = False   
@@ -383,6 +387,8 @@ expression = buildExpressionParser table term <?> "expression"
     where
     term = comments >> choice [
         parens pas $ expression 
+        , try $ integer pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
+        , try $ float pas >>= return . FloatLiteral . show
         , try $ integer pas >>= return . NumberLiteral . show
         , stringLiteral pas >>= return . StringLiteral
         , char '#' >> many digit >>= return . CharCode
