@@ -19,6 +19,7 @@
 package org.hedgewars.hedgeroid;
 
 import org.hedgewars.hedgeroid.Downloader.DownloadActivity;
+import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
 import org.hedgewars.hedgeroid.Downloader.DownloadService;
 
 import android.app.Activity;
@@ -49,7 +50,8 @@ public class MainActivity extends Activity {
 	
 	private OnClickListener downloadClicker = new OnClickListener(){
 		public void onClick(View v){
-			startActivityForResult(new Intent(getApplicationContext(), DownloadActivity.class), 0);
+			//startActivityForResult(new Intent(getApplicationContext(), DownloadActivity.class), 0);
+			startActivityForResult(new Intent(getApplicationContext(), DownloadListActivity.class), 0);
 		}
 	};
 

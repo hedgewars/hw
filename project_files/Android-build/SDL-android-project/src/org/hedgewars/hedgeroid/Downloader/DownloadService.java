@@ -20,6 +20,7 @@
 package org.hedgewars.hedgeroid.Downloader;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.hedgewars.hedgeroid.MainActivity;
 import org.hedgewars.hedgeroid.R;
@@ -30,6 +31,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -41,6 +43,13 @@ import android.widget.RemoteViews;
 
 public class DownloadService extends Service {
 
+	public final static int TASKID_SETUP = 0;
+	public final static int TASKID_CANCEL = 1;
+	public final static int TASKID_ADDTASK = 2;
+
+	public final static String INTENT_TASKID = "taskId";
+	public final static String INTENT_TASK = "task";
+
 	public static final String PREF_DOWNLOADED = "downloaded";
 	public static final int MSG_CANCEL = 0;
 	public static final int MSG_REGISTER_CLIENT = 1;
@@ -49,12 +58,13 @@ public class DownloadService extends Service {
 	public static final int NOTIFICATION_PROCESSING = 0;
 	public static final int NOTIFICATION_DONE = 1;
 
-	private DownloadAsyncTask downloadTask;
+	private DownloadAsyncTask asyncExecutor;
 	private final Messenger messenger = new Messenger(new DownloadHandler());
 	private NotificationManager nM;
 	private RemoteViews contentView;
 	private Notification notification;
 
+	private LinkedList<DownloadTask> downloadTasks = new LinkedList<DownloadTask>();
 	private ArrayList<Messenger> clientList = new ArrayList<Messenger>();
 	private Message onRegisterMessage = null;
 
@@ -64,7 +74,7 @@ public class DownloadService extends Service {
 		public void handleMessage(Message msg){
 			switch(msg.what){
 			case MSG_CANCEL:
-				downloadTask.cancel(false);
+				asyncExecutor.cancel(false);
 				break;
 			case MSG_REGISTER_CLIENT:
 				clientList.add(msg.replyTo);
@@ -82,23 +92,19 @@ public class DownloadService extends Service {
 			}
 		}
 	}
+	public IBinder onBind(Intent intent) {
+		return messenger.getBinder();
+	}
 
-	public final static int TASKID_START = 0;
-	public final static int TASKID_CANCEL = 1;
-	public final static int TASKID_RETRY = 2;
-	
+	/**
+	 * This is the main method which controls how DownloadService and DownloadAsyncTask are running
+	 */
 	public int onStartCommand(Intent intent, int flags, int startId){
-		switch(intent.getIntExtra("taskID", TASKID_START)){
-		case TASKID_RETRY:
-			if(downloadTask != null){
-				downloadTask.cancel(false);
-				downloadTask = null;
-			}
-		case TASKID_START:
+		switch(intent.getIntExtra("taskID", TASKID_SETUP)){
+		case TASKID_SETUP:
 			nM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
 			notification = new Notification(R.drawable.statusbar, getString(R.string.notification_title), System.currentTimeMillis());
-			//notification.flags |= Notification.FLAG_ONGOING_EVENT;// | Notification.FLAG_NO_CLEAR | Notification.FLAG_FOREGROUND_SERVICE;
 			notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
 			contentView = new RemoteViews(getPackageName(), R.layout.notification);
@@ -108,67 +114,66 @@ public class DownloadService extends Service {
 			PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, DownloadActivity.class), Intent.FLAG_ACTIVITY_NEW_TASK);
 			notification.contentIntent = contentIntent;
 
-			//nM.notify(NOTIFICATION_PROCESSING, notification);
-			startForeground(NOTIFICATION_PROCESSING, notification);
-
-			if(downloadTask == null){
-				downloadTask = new DownloadAsyncTask(this);
-				downloadTask.execute(Utils.getDownloadPath(this));
-			}	
+			asyncExecutor = new DownloadAsyncTask(this);
+			break;
+		case TASKID_ADDTASK:
+			//Add downloadtask to the queue
+			DownloadTask task = intent.getParcelableExtra(DownloadService.INTENT_TASK);
+			downloadTasks.offer(task);
+			runNextTask();
 			break;
 		case TASKID_CANCEL:
-			downloadTask.cancel(false);
-			stopService();
+			asyncExecutor.cancel(false);
 			break;
 		}		
 		return 0;
 	}
 
-	public void onDestroy(){
-		Log.e("bla", "onDestroy");
-		downloadTask.cancel(false);	
+	private synchronized void runNextTask(){
+		if(!asyncExecutor.getStatus().equals(AsyncTask.Status.RUNNING)){//if the task isnt running right now...
+			DownloadTask task = downloadTasks.poll();
+			if(task == null){
+				startForeground(NOTIFICATION_PROCESSING, notification);
+				asyncExecutor.execute(task);
+			}
+		}
 	}
 
-	public IBinder onBind(Intent intent) {
-		return messenger.getBinder();
+	public void onDestroy(){
+		super.onDestroy();
+		asyncExecutor.cancel(false);	
 	}
 
 	/*
-	 * Thread safe method to let clients know the processing is starting and will process int max kbytes
+	 * Callbacks called from the async tasks
 	 */
+
+	//Thread safe method to let clients know the processing is starting and will process int max kbytes
 	public void start(int max){
 		onRegisterMessage = Message.obtain(null, DownloadActivity.MSG_START, max, -1);
 		sendMessageToClients(onRegisterMessage);
 	}
 
-	/*
-	 * periodically gets called by the ASyncTask, we can't tell for sure when it's called
-	 */
+	//periodically gets called by the ASyncTask, we can't tell for sure when it's called
 	public void update(int progress, int max, String fileName){
 		progress = (progress/1024);
 		updateNotification(progress, max, fileName);
 
 		sendMessageToClients(Message.obtain(null, DownloadActivity.MSG_UPDATE, progress, max, fileName));
 	}
-	
-	/*
-	 * Call back from the ASync task when the task has either run into an error or finished otherwise
-	 */
+
+	//Call back from the ASync task when the task has either run into an error or finished otherwise
 	public void done(boolean succesful){
 		if(succesful){
-			PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(DownloadService.PREF_DOWNLOADED, true).commit();
 			sendMessageToClients(Message.obtain(null, DownloadActivity.MSG_DONE));
 		}else sendMessageToClients(Message.obtain(null, DownloadActivity.MSG_FAILED));
-		stopService();//stopService clears all notifications and thus must be called before we show the ready notification
+		nM.cancel(NOTIFICATION_PROCESSING);
+		stopForeground(true);
 		showDoneNotification();
+		runNextTask();//see if there are more tasks
 	}
 
-	private void stopService(){
-		nM.cancelAll();
-		stopForeground(true);
-		stopSelf();
-	}
-	
+
 	private void updateNotification(int progress, int max, String fileName){
 
 		contentView.setProgressBar(R.id.notification_progress, max, progress, false);
@@ -177,9 +182,6 @@ public class DownloadService extends Service {
 	}
 
 	private void showDoneNotification(){
-		nM.cancelAll();
-		stopForeground(true);
-
 		String title = getString(R.string.notification_title);
 
 		notification = new Notification(R.drawable.icon, title, System.currentTimeMillis());
@@ -187,7 +189,8 @@ public class DownloadService extends Service {
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), Intent.FLAG_ACTIVITY_NEW_TASK);
 		notification.setLatestEventInfo(this, title, getString(R.string.notification_done), contentIntent);
 		nM.notify(NOTIFICATION_DONE, notification);
-	}	
+	}
+
 	private void sendMessageToClients(Message msg){
 		for(Messenger m : clientList){
 			try {

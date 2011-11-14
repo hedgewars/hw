@@ -28,6 +28,13 @@
  		  		  android:launchMode="singleTask">
         </activity>
         
+        <activity android:name=".Downloader.DownloadListActivity"
+                  android:label="@string/app_name"
+				  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        </activity>
+        
+        <service android:name=".Downloader.DownloadService"/>
+        
         <activity android:name="StartGameActivity"
                   android:label="@string/app_name"
 				  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
@@ -38,12 +45,10 @@
 				  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
 				  android:screenOrientation='landscape'>
         </activity>
-                <activity android:name="TeamCreatorActivity"
+        <activity android:name="TeamCreatorActivity"
                   android:label="@string/app_name"
 				  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
 				  android:screenOrientation='landscape'>
         </activity>
-        
-        <service android:name=".Downloader.DownloadService"/>
     </application>
 </manifest> 
