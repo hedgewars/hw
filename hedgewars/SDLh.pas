@@ -41,8 +41,8 @@ interface
   {$IFDEF HAIKU}
     {$linklib root}
   {$ELSE}
-    {$IFNDEF ANDROID}    
-	{$linklib pthread}
+    {$IFNDEF ANDROID}
+      {$linklib pthread}
     {$ENDIF}
   {$ENDIF}
 {$ENDIF}
@@ -464,9 +464,6 @@ type
         text: array[0..31] of Byte;
         end;
 
-    SDL_TouchID = LongInt;
-    SDL_FingerID = LongInt;
-
     TSDL_TouchFingerEvent = record
         type_: LongWord;
         windowId: LongWord;
@@ -614,8 +611,6 @@ type
         padding1: Byte;
 {$ENDIF}
         end;
-
-//TODO: implement SDL_TouchButtonEvent, SDL_MultiGestureEvent, SDL_DollarGestureEvent
 
     TSDL_QuitEvent = record
         type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
@@ -865,9 +860,9 @@ function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
-function  SDL_CreateThread(fn: pointer; name: PChar; data: pointer): PSDL_Thread; cdecl; external SDLLibName;
+function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 {$ELSE}
-function  SDL_CreateThread(fn: pointer; data: pointer): PSDL_Thread; cdecl; external SDLLibName;
+function  SDL_CreateThread(fn: Pointer; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: LongWord): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
