@@ -591,11 +591,8 @@ ScriptCall('onGearDelete', gear^.uid);
 
 DeleteCI(Gear);
 
-if Gear^.Tex <> nil then
-    begin
-    FreeTexture(Gear^.Tex);
-    Gear^.Tex:= nil
-    end;
+FreeTexture(Gear^.Tex);
+Gear^.Tex:= nil;
 
 // make sure that portals have their link removed before deletion
 if (Gear^.Kind = gtPortal) then
@@ -660,7 +657,7 @@ else if Gear^.Kind = gtHedgehog then
             with CurrentHedgehog^ do 
                 begin
                 inc(Team^.stats.AIKills);
-                if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
+                FreeTexture(Team^.AIKillsTex);
                 Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
                 end
         end;
@@ -803,7 +800,7 @@ while t <> nil do
         begin
         if Gear^.RenderTimer and (Gear^.Timer > 500) and ((Gear^.Timer mod 1000) = 0) then
             begin
-            if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+            FreeTexture(Gear^.Tex);
             Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), cWhiteColor, fntSmall);
             end;
         Gear^.doStep(Gear);
@@ -1684,7 +1681,7 @@ begin
         with CurrentHedgehog^ do 
             begin
             inc(Team^.stats.AIKills);
-            if Team^.AIKillsTex <> nil then FreeTexture(Team^.AIKillsTex);
+            FreeTexture(Team^.AIKillsTex);
             Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
             end;
     tempTeam := gear^.Hedgehog^.Team;

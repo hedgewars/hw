@@ -143,7 +143,7 @@ begin
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
                 begin
-                if tex <> nil then FreeTexture(tex);
+                FreeTexture(tex);
                 tex:= nil;
                 end;
 end;

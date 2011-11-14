@@ -110,7 +110,7 @@ for t:= 0 to Pred(TeamsCount) do
     if SDL_MustLock(texsurf) then
         SDL_UnlockSurface(texsurf);
 
-    if CrosshairTex <> nil then FreeTexture(CrosshairTex);
+    FreeTexture(CrosshairTex);
     CrosshairTex:= Surface2Tex(texsurf, false);
     SDL_FreeSurface(texsurf)
     end;
@@ -376,24 +376,22 @@ AddProgress;
 // name of weapons in ammo menu
 for ai:= Low(TAmmoType) to High(TAmmoType) do
     with Ammoz[ai] do
-    begin
+        begin
         TryDo(trAmmo[NameId] <> '','No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
-        if (NameTex <> nil) then
-            FreeTexture(NameTex);
+        FreeTexture(NameTex);
         NameTex:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
-    end;
+        end;
 
 // number of weapons in ammo menu
 for i:= Low(CountTexz) to High(CountTexz) do
 begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
     tmpsurf:= doSurfaceConversion(tmpsurf);
-    if (CountTexz[i] <> nil) then
-        FreeTexture(CountTexz[i]);
+    FreeTexture(CountTexz[i]);
     CountTexz[i]:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf)
 end;
@@ -444,9 +442,9 @@ begin
 
     // free all team and hedgehog textures
     for t:= 0 to Pred(TeamsCount) do
-    begin
-        if TeamsArray[t] <> nil then
         begin
+        if TeamsArray[t] <> nil then
+            begin
             FreeTexture(TeamsArray[t]^.NameTagTex);
             TeamsArray[t]^.NameTagTex:= nil;
             FreeTexture(TeamsArray[t]^.CrosshairTex);
@@ -460,26 +458,26 @@ begin
             FreeTexture(TeamsArray[t]^.FlagTex);
             TeamsArray[t]^.FlagTex:= nil;
             for i:= 0 to cMaxHHIndex do
-            begin
+                begin
                 FreeTexture(TeamsArray[t]^.Hedgehogs[i].NameTagTex);
                 TeamsArray[t]^.Hedgehogs[i].NameTagTex:= nil;
                 FreeTexture(TeamsArray[t]^.Hedgehogs[i].HealthTagTex);
                 TeamsArray[t]^.Hedgehogs[i].HealthTagTex:= nil;
                 FreeTexture(TeamsArray[t]^.Hedgehogs[i].HatTex);
                 TeamsArray[t]^.Hedgehogs[i].HatTex:= nil;
+                end;
             end;
         end;
-    end;
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
-    begin
+        begin
         glDeleteTextures(1, @texl);
         glDeleteRenderbuffersEXT(1, @depthl);
         glDeleteFramebuffersEXT(1, @framel);
         glDeleteTextures(1, @texr);
         glDeleteRenderbuffersEXT(1, @depthr);
         glDeleteFramebuffersEXT(1, @framer)
-    end
+        end
 {$ENDIF}
 end;
 
@@ -488,8 +486,7 @@ procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
     str(Hedgehog.Gear^.Health, s);
-    if Hedgehog.HealthTagTex <> nil then
-        FreeTexture(Hedgehog.HealthTagTex);
+    FreeTexture(Hedgehog.HealthTagTex);
     Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
@@ -938,8 +935,6 @@ end;
 procedure FreeWeaponTooltip;
 begin
 // free the existing texture (if there is any)
-if WeaponTooltipTex = nil then
-    exit;
 FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
 end;

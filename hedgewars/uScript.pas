@@ -725,7 +725,7 @@ begin
             gear^.Hedgehog^.Name:= hogName;
 
 	    FreeTexture(gear^.Hedgehog^.NameTagTex);
-            gear^.Hedgehog^.NameTagTex:= RenderStringTex(gear^.Hedgehog^.Name, gear^.Hedgehog^.Team^.Clan^.Color, fnt16);
+        gear^.Hedgehog^.NameTagTex:= RenderStringTex(gear^.Hedgehog^.Name, gear^.Hedgehog^.Team^.Clan^.Color, fnt16);
 
         end;
     lc_sethogname:= 0;
