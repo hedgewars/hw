@@ -35,17 +35,24 @@ uses uTextures, uRenderUtils, uVariables, uRender;
 type TCaptionStr = record
                    Tex: PTexture;
                    EndTime: LongWord;
+                   Text: shortstring;
                    end;
 var
     Captions: array[TCapGroup] of TCaptionStr;
 
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
-    if Captions[Group].Tex <> nil then
+    if (Captions[Group].Tex <> nil) and (Captions[Group].Text <> s) then
+        begin
         FreeTexture(Captions[Group].Tex);
-    Captions[Group].Tex:= nil;
-
-    Captions[Group].Tex:= RenderStringTex(s, Color, fntBig);
+        Captions[Group].Tex:= nil
+        end;
+    
+    if Captions[Group].Text <> s then
+        begin
+        Captions[Group].Text:= s;
+        Captions[Group].Tex:= RenderStringTex(s, Color, fntBig)
+        end;
 
     case Group of
         capgrpGameState: Captions[Group].EndTime:= RealTicks + 2200
