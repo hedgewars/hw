@@ -102,10 +102,16 @@ end;
 
 // For uStore texture recreation
 procedure ReloadLines;
-var i: LongWord;
+var i, t: LongWord;
 begin
-    SetLine(InputStr, InputStr.s, true);
-    for i:= 0 to MaxStrIndex do SetLine(Strs[i], Strs[i].s, false)
+    if InputStr.s <> '' then SetLine(InputStr, InputStr.s, true);
+    for i:= 0 to MaxStrIndex do
+        if Strs[i].s <> '' then
+            begin
+            t:= Strs[i].Time;
+            SetLine(Strs[i], Strs[i].s, false);
+            Strs[i].Time:= t
+            end;
 end;
 
 procedure AddChatString(s: shortstring);
