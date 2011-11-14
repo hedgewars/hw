@@ -132,20 +132,7 @@ int main(int argc, char *argv[]) {
     if (checkForDir(cfgdir->absolutePath()))
     {
         // alternative loading/lookup paths
-        // TODO: Uncomment paths as they're implemented
         checkForDir(cfgdir->absolutePath() + "/Data");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Forts");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics/Flags");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics/Graves");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Graphics/Hats");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Maps");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Missions");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Missions/Campaign");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Missions/Training");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Sounds");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Sounds/voices");
-        //checkForDir(cfgdir->absolutePath() + "/Data/Themes");
 
         // config/save paths
         checkForDir(cfgdir->absolutePath() + "/Demos");
