@@ -114,7 +114,7 @@ public class DownloadActivity extends Activity{
 	private OnClickListener cancelClicker = new OnClickListener(){
 		public void onClick(View v){
 			Intent i = new Intent(getApplicationContext(), DownloadService.class);
-			i.putExtra("taskID", DownloadService.TASKID_CANCEL);
+			i.putExtra(DownloadService.INTENT_TASKID, DownloadService.TASKID_CANCEL);
 			startService(i);
 			finish();
 		}
@@ -128,13 +128,13 @@ public class DownloadActivity extends Activity{
 	
 	private OnClickListener tryAgainClicker = new OnClickListener(){
 		public void onClick(View v){
-			bindToService(DownloadService.TASKID_RETRY);
+			bindToService(DownloadService.TASKID_ADDTASK);
 		}
 	};
 	
 	public void onStart(){
 		super.onStart();
-		bindToService(DownloadService.TASKID_START);
+		bindToService(DownloadService.TASKID_SETUP);
 	}
 	
 	public void onStop(){
@@ -163,7 +163,7 @@ public class DownloadActivity extends Activity{
 	
 	private void bindToService(int taskId){
 		Intent i = new Intent(getApplicationContext(), DownloadService.class);
-		i.putExtra("taskID", taskId);
+		i.putExtra(DownloadService.INTENT_TASKID, taskId);
 		startService(i);
 		bindService(new Intent(getApplicationContext(), DownloadService.class), connection, Context.BIND_AUTO_CREATE);
 		boundToService = true;

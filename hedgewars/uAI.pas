@@ -325,6 +325,7 @@ ThinkThread := SDL_CreateThread(@Think, nil, Me);
 {$ELSE}
 ThinkThread := SDL_CreateThread(@Think, Me);
 {$ENDIF}
+{$ENDIF}
 AddFileLog('Thread started');
 end;
 

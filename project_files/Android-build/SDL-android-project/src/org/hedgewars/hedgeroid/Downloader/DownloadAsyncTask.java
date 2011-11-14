@@ -32,7 +32,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import android.os.AsyncTask;
-import android.util.Log;
 /**
  * This is an AsyncTask which will download a zip from an URL and unzip it to a specified path
  * 
@@ -40,13 +39,12 @@ import android.util.Log;
  * @author Xeli
  *
  */
-public class DownloadAsyncTask extends AsyncTask<String, Object, Long> {
+public class DownloadAsyncTask extends AsyncTask<DownloadTask, Object, Long> {
 
-	private final static String URL_WITHOUT_SUFFIX = "http://hedgewars.googlecode.com/files/data_5631.";
 	//private final static String URL_WITHOUT_SUFFIX = "http://www.xelification.com/tmp/firebutton.";
-	private final static String URL_ZIP_SUFFIX = "zip";
-	private final static String URL_HASH_SUFFIX = "hash";
-
+	private final static String URL_ZIP_SUFFIX = ".zip";
+	private final static String URL_HASH_SUFFIX = ".hash";
+	
 	private DownloadService service;
 	private long lastUpdateMillis = 0;
 
@@ -56,18 +54,20 @@ public class DownloadAsyncTask extends AsyncTask<String, Object, Long> {
 
 	/**
 	 * 
-	 * @param params - 2 Strings, first is the path where the unzipped files will be stored, second is the URL to download from
+	 * @param params - A {@link}DownloadTask which gives information about where to download from and store the files to 
 	 */
-	protected Long doInBackground(String... params) {
+	protected Long doInBackground(DownloadTask...tasks) {
+		DownloadTask task = tasks[0];//just use one task per execute call for now
+		
 		HttpURLConnection conn = null;
 		MessageDigest digester = null;
-		String rootZipDest = params[0];
+		String rootZipDest = task.getPathToStore();
 
 		File rootDest = new File(rootZipDest);//TODO check for nullpointer, it hints to the absence of an sdcard
 		rootDest.mkdir();
 
 		try {
-			URL url = new URL(URL_WITHOUT_SUFFIX + URL_ZIP_SUFFIX);
+			URL url = new URL(task.getURL() + URL_ZIP_SUFFIX);
 			conn = (HttpURLConnection)url.openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -161,7 +161,7 @@ public class DownloadAsyncTask extends AsyncTask<String, Object, Long> {
 
 		if(conn != null) conn.disconnect();
 
-		if(checkMD5(digester))return 0l;
+		if(checkMD5(digester, task))return 0l;
 		else return -1l;
 	}
 
@@ -174,12 +174,12 @@ public class DownloadAsyncTask extends AsyncTask<String, Object, Long> {
 		service.update((Integer)objects[0], (Integer)objects[1], (String)objects[2]);
 	}
 
-	private boolean checkMD5(MessageDigest digester){
+	private boolean checkMD5(MessageDigest digester, DownloadTask task){
 		if(digester != null) {
 			byte[] messageDigest = digester.digest();
 
 			try {
-				URL url = new URL(URL_WITHOUT_SUFFIX + URL_HASH_SUFFIX);
+				URL url = new URL(task.getURL() + URL_HASH_SUFFIX);
 				HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 
 				byte[] buffer = new byte[1024];//size is large enough to hold the entire hash
