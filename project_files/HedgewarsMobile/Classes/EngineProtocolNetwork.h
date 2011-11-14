@@ -24,13 +24,13 @@
 
 
 @interface EngineProtocolNetwork : NSObject {
-    NSArray *statsArray;
+    NSMutableArray *statsArray;
     NSOutputStream *stream;
     TCPsocket csd;
     NSInteger enginePort;
 }
 
-@property (nonatomic,assign) NSArray *statsArray;
+@property (nonatomic,assign) NSMutableArray *statsArray;
 @property (nonatomic,retain) NSOutputStream *stream;
 @property (assign) TCPsocket csd;
 @property (assign) NSInteger enginePort;
