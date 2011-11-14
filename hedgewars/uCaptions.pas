@@ -44,7 +44,7 @@ var
 
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
-    if (Captions[Group].Tex <> nil) and (Captions[Group].Text <> s) then
+    if Captions[Group].Text <> s then
         begin
         FreeTexture(Captions[Group].Tex);
         Captions[Group].Tex:= nil
@@ -69,7 +69,7 @@ var Group: TCapGroup;
 begin
 for Group:= Low(TCapGroup) to High(TCapGroup) do
     begin
-    if Captions[Group].Tex <> nil then FreeTexture(Captions[Group].Tex);
+    FreeTexture(Captions[Group].Tex);
     Captions[Group].Tex:= RenderStringTex(Captions[Group].Text, Captions[Group].Color, fntBig)
     end
 end;

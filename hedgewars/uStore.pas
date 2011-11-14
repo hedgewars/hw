@@ -21,7 +21,7 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions;
+uses sysutils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -1043,6 +1043,7 @@ begin
 
         ResetLand;
         ReloadCaptions;
+        ReloadLines;
 
         UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT)
         end;
