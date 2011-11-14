@@ -48,7 +48,7 @@ begin
         Captions[Group].Tex:= nil
         end;
     
-    if Captions[Group].Text <> s then
+    if Captions[Group].Tex = nil then
         begin
         Captions[Group].Text:= s;
         Captions[Group].Tex:= RenderStringTex(s, Color, fntBig)
