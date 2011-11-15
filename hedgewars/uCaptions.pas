@@ -71,7 +71,8 @@ begin
 for Group:= Low(TCapGroup) to High(TCapGroup) do
     begin
     FreeTexture(Captions[Group].Tex);
-    Captions[Group].Tex:= RenderStringTex(Captions[Group].Text, Captions[Group].Color, fntBig)
+    if Captions[Group].Text <> '' then
+        Captions[Group].Tex:= RenderStringTex(Captions[Group].Text, Captions[Group].Color, fntBig)
     end
 end;
 
@@ -108,8 +109,7 @@ begin
 end;
 
 procedure freeModule;
-var
-    group: TCapGroup;
+var group: TCapGroup;
 begin
     for group:= Low(TCapGroup) to High(TCapGroup) do
         begin

@@ -31,7 +31,7 @@ procedure ResetLand;
 implementation
 uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender;
 
-const TEXSIZE = 256;
+const TEXSIZE = 512;
 
 type TLandRecord = record
             shouldUpdate: boolean;
