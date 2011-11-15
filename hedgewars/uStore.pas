@@ -1034,13 +1034,12 @@ begin
         else glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
 
         StoreRelease(true);
+        ReloadCaptions;
+        ReloadLines;
         StoreLoad(true);
 
         ResetLand;
-        ReloadCaptions;
-        ReloadLines;
-
-        UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT)
+        UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
         end;
 end;
 

@@ -139,7 +139,7 @@ end;
 procedure ResetLand;
 var x, y: LongInt;
 begin
-    for x:= 0 to LANDTEXARW -1 do
+    for x:= 0 to LANDTEXARW - 1 do
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
                 begin

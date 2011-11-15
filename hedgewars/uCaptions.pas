@@ -63,6 +63,7 @@ begin
         Captions[Group].EndTime:= RealTicks + 1400 + LongWord(Captions[Group].Tex^.w) * 3;
     end;
 end;
+
 // For uStore texture recreation
 procedure ReloadCaptions;
 var Group: TCapGroup;
