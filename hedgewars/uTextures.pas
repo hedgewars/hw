@@ -226,7 +226,12 @@ end;
 
 procedure freeModule;
 begin
-    while TextureList <> nil do FreeTexture(TextureList);
+    if TextureList <> nil then AddFileLog('FIXME FIXME FIXME. App shutdown without full cleanup of texture list.');
+    while TextureList <> nil do 
+        begin
+        AddFileLog('Texture not freed: width='+inttostr(LongInt(TextureList^.w))+' height='+inttostr(LongInt(TextureList^.h))+' priority='+inttostr(round(TextureList^.priority*1000)));
+        FreeTexture(TextureList);
+        end
 end;
 
 end.
