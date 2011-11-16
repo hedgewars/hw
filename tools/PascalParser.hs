@@ -36,7 +36,7 @@ data TypeDecl = SimpleType Identifier
     | UnknownType
     deriving Show
 data Range = Range Identifier
-           | RangeFromTo Expression Expression
+           | RangeFromTo InitExpression InitExpression
     deriving Show
 data Initialize = Initialize String
     deriving Show
@@ -55,6 +55,7 @@ data Phrase = ProcCall Identifier [Expression]
         | Assignment Reference Expression
     deriving Show
 data Expression = Expression String
+    | BuiltInFunCall [Expression] Reference
     | PrefixOp String Expression
     | PostfixOp String Expression
     | BinOp String Expression Expression
@@ -68,7 +69,6 @@ data Expression = Expression String
     deriving Show
 data Reference = ArrayElement [Expression] Reference
     | FunCall [Expression] Reference
-    | BuiltInFunCall [Expression] Reference
     | SimpleReference Identifier
     | Dereference Reference
     | RecordField Reference Reference
@@ -84,9 +84,11 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitHexNumber String
     | InitString String
     | InitChar String
+    | BuiltInFunction String [InitExpression]
     | InitNull
     deriving Show
 
+builtin = ["succ", "pred", "low", "high"]
     
 pascalLanguageDef
     = emptyDef
@@ -103,12 +105,15 @@ pascalLanguageDef
             , "type", "var", "const", "out", "array", "packed"
             , "procedure", "function", "with", "for", "to"
             , "downto", "div", "mod", "record", "set", "nil"
-            , "string", "shortstring"--, "succ", "pred", "low"
-            --, "high"
-            ]
+            , "string", "shortstring"
+            ] ++ builtin
     , reservedOpNames= [] 
     , caseSensitive  = False   
     }
+    
+caseInsensitiveString s = do
+    mapM_ (\a -> satisfy (\b -> toUpper a == toUpper b)) s <?> s
+    return s
     
 pas = patch $ makeTokenParser pascalLanguageDef
     where
@@ -280,9 +285,9 @@ rangeDecl = choice [
     ] <?> "range declaration"
     where
     rangeft = do
-    e1 <- expression
+    e1 <- initExpression
     string ".."
-    e2 <- expression
+    e2 <- initExpression
     return $ RangeFromTo e1 e2
     
 typeVarDeclaration isImpl = (liftM concat . many . choice) [
@@ -391,7 +396,8 @@ implementation = do
 expression = buildExpressionParser table term <?> "expression"
     where
     term = comments >> choice [
-        parens pas $ expression 
+        builtInFunction expression >>= \(n, e) -> return $ BuiltInFunCall e (SimpleReference (Identifier n))
+        , parens pas $ expression 
         , try $ integer pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
         , try $ float pas >>= return . FloatLiteral . show
         , try $ integer pas >>= return . NumberLiteral . show
@@ -570,10 +576,12 @@ uses = liftM Uses (option [] u)
 initExpression = buildExpressionParser table term <?> "initialization expression"
     where
     term = comments >> choice [
-        try $ parens pas (commaSep pas $ initExpression) >>= return . InitArray
+        liftM (uncurry BuiltInFunction) $ builtInFunction initExpression 
+        , try $ parens pas (commaSep pas $ initExpression) >>= return . InitArray
         , parens pas (semiSep pas $ recField) >>= return . InitRecord
         , try $ integer pas >>= \i -> notFollowedBy (char '.') >> (return . InitNumber . show) i
         , try $ float pas >>= return . InitFloat . show
+        , try $ integer pas >>= return . InitNumber . show
         , stringLiteral pas >>= return . InitString
         , char '#' >> many digit >>= return . InitChar
         , char '$' >> many hexDigit >>= return . InitHexNumber
@@ -616,4 +624,10 @@ initExpression = buildExpressionParser table term <?> "initialization expression
           ]
         , [Prefix (try (string "not") >> return (InitPrefixOp "not"))]
         ]
-    
+
+builtInFunction e = do
+    name <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) builtin
+    spaces
+    exprs <- many1 e
+    spaces
+    return (name, exprs)
