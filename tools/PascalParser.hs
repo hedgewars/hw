@@ -103,8 +103,8 @@ pascalLanguageDef
             , "type", "var", "const", "out", "array", "packed"
             , "procedure", "function", "with", "for", "to"
             , "downto", "div", "mod", "record", "set", "nil"
-            , "string", "shortstring", "succ", "pred", "low"
-            , "high"
+            , "string", "shortstring"--, "succ", "pred", "low"
+            --, "high"
             ]
     , reservedOpNames= [] 
     , caseSensitive  = False   
@@ -162,17 +162,22 @@ unit = do
 reference = buildExpressionParser table term <?> "reference"
     where
     term = comments >> choice [
-        parens pas reference 
-        , char '@' >> reference >>= return . Address
-        , iD >>= return . SimpleReference
+        parens pas (reference >>= postfixes) >>= postfixes
+        , char '@' >> reference >>= postfixes >>= return . Address
+        , liftM SimpleReference iD >>= postfixes 
         ] <?> "simple reference"
 
     table = [ 
-            [Postfix $ (parens pas) (option [] parameters) >>= return . FunCall]
-          , [Postfix (char '^' >> return Dereference)]
-          , [Postfix $ (brackets pas) (commaSep1 pas $ expression) >>= return . ArrayElement]
-          , [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
+            [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
         ]
+    
+    postfixes r = many postfix >>= return . foldl fp r
+    postfix = choice [
+            parens pas (option [] parameters) >>= return . FunCall
+          , char '^' >> return Dereference
+          , (brackets pas) (commaSep1 pas $ expression) >>= return . ArrayElement
+        ]
+    fp r f = f r
 
     
 varsDecl1 = varsParser sepEndBy1    
@@ -477,12 +482,12 @@ whileCycle = do
 withBlock = do
     try $ string "with"
     comments
-    r <- reference
+    (r:rs) <- (commaSep1 pas) reference
     comments
     string "do"
     comments
     o <- phrase
-    return $ WithBlock r o
+    return $ WithBlock r (foldl (\ph r -> WithBlock r ph) o rs)
     
 repeatCycle = do
     try $ string "repeat"
