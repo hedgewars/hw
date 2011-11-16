@@ -482,12 +482,12 @@ whileCycle = do
 withBlock = do
     try $ string "with"
     comments
-    (r:rs) <- (commaSep1 pas) reference
+    rs <- (commaSep1 pas) reference
     comments
     string "do"
     comments
     o <- phrase
-    return $ WithBlock r (foldl (\ph r -> WithBlock r ph) o rs)
+    return $ foldr WithBlock o rs
     
 repeatCycle = do
     try $ string "repeat"
