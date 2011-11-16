@@ -1300,7 +1300,7 @@ begin
         end
     else
         begin
-        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), lfIndestructible) then
+        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), $FF00) then
             begin
             Gear^.dY := Gear^.dY + cGravity;
             Gear^.Y := Gear^.Y + Gear^.dY
@@ -1309,7 +1309,7 @@ begin
         end;
 
     Gear^.X := Gear^.X + HHGear^.dX;
-    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, lfIndestructible) then
+    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, $FF00) then
         begin
         HHGear^.X := Gear^.X;
         HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius)
