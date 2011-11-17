@@ -60,6 +60,49 @@ BestActions.Count:= 0;
 BestActions.Pos:= 0
 end;
 
+
+
+const cBranchStackSize = 12;
+type TStackEntry = record
+                   WastedTicks: Longword;
+                   MadeActions: TActions;
+                   Hedgehog: TGear;
+                   end;
+
+var Stack: record
+           Count: Longword;
+           States: array[0..Pred(cBranchStackSize)] of TStackEntry;
+           end;
+
+function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
+var bRes: boolean;
+begin
+    bRes:= (Stack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
+    if bRes then
+        with Stack.States[Stack.Count] do
+            begin
+            WastedTicks:= Ticks;
+            MadeActions:= Actions;
+            Hedgehog:= Me;
+            Hedgehog.Message:= Dir;
+            inc(Stack.Count)
+            end;
+    Push:= bRes
+end;
+
+procedure Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear);
+begin
+    dec(Stack.Count);
+    with Stack.States[Stack.Count] do
+        begin
+        Ticks:= WastedTicks;
+        Actions:= MadeActions;
+        Me:= Hedgehog
+        end
+end;
+
+
+
 procedure TestAmmos(var Actions: TActions; Me: PGear; isMoved: boolean);
 var BotLevel: Byte;
     ap: TAttackParams;
@@ -131,46 +174,6 @@ end;
 
 procedure Walk(Me: PGear);
 const FallPixForBranching = cHHRadius * 2 + 8;
-      cBranchStackSize = 12;
-
-type TStackEntry = record
-                   WastedTicks: Longword;
-                   MadeActions: TActions;
-                   Hedgehog: TGear;
-                   end;
-
-var Stack: record
-           Count: Longword;
-           States: array[0..Pred(cBranchStackSize)] of TStackEntry;
-           end;
-
-    function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
-    var bRes: boolean;
-    begin
-    bRes:= (Stack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
-    if bRes then
-       with Stack.States[Stack.Count] do
-            begin
-            WastedTicks:= Ticks;
-            MadeActions:= Actions;
-            Hedgehog:= Me;
-            Hedgehog.Message:= Dir;
-            inc(Stack.Count)
-            end;
-    Push:= bRes
-    end;
-
-    procedure Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear);
-    begin
-    dec(Stack.Count);
-    with Stack.States[Stack.Count] do
-         begin
-         Ticks:= WastedTicks;
-         Actions:= MadeActions;
-         Me:= Hedgehog
-         end
-    end;
-
 var Actions: TActions;
     ticks, maxticks, steps, tmp: Longword;
     BaseRate, BestRate, Rate: integer;
@@ -178,12 +181,17 @@ var Actions: TActions;
     CanGo: boolean;
     AltMe: TGear;
     BotLevel: Byte;
+    a: TAmmoType;
 begin
 ticks:= 0; // avoid compiler hint
 Actions.Count:= 0;
 Actions.Pos:= 0;
 Actions.Score:= 0;
 Stack.Count:= 0;
+
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(Me^.Hedgehog^, a);
+
 BotLevel:= Me^.Hedgehog^.BotLevel;
 
 tmp:= random(2) + 1;
@@ -289,7 +297,6 @@ InterlockedDecrement(hasThread)
 end;
 
 procedure StartThink(Me: PGear);
-var a: TAmmoType;
 begin
 if ((Me^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0)
    or isInMultiShoot then exit;
@@ -313,8 +320,6 @@ if Targets.Count = 0 then
    end;
 
 FillBonuses((Me^.State and gstAttacked) <> 0);
-for a:= Low(TAmmoType) to High(TAmmoType) do
-    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(Me^.Hedgehog^, a);
 AddFileLog('Enter Think Thread');
 BeginThread(@Think, Me, ThinkThread)
 end;
