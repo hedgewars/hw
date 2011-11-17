@@ -172,9 +172,9 @@ for i:= 0 to Pred(Targets.Count) do
        end
 end;
 
-procedure Walk(Me: PGear);
+procedure Walk(Me: PGear; var Actions: TActions);
 const FallPixForBranching = cHHRadius * 2 + 8;
-var Actions: TActions;
+var
     ticks, maxticks, steps, tmp: Longword;
     BaseRate, BestRate, Rate: integer;
     GoInfo: TGoInfo;
@@ -184,9 +184,6 @@ var Actions: TActions;
     a: TAmmoType;
 begin
 ticks:= 0; // avoid compiler hint
-Actions.Count:= 0;
-Actions.Pos:= 0;
-Actions.Score:= 0;
 Stack.Count:= 0;
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
@@ -264,33 +261,77 @@ end;
 
 function Think(Me: Pointer): ptrint;
 var BackMe, WalkMe: TGear;
-    StartTicks: Longword;
+    StartTicks, currHedgehogIndex, itHedgehog, switchesNum, i: Longword;
+    switchImmediatelyAvailable, switchAvailable: boolean;
+    Actions: TActions;
 begin
 InterlockedIncrement(hasThread);
 StartTicks:= GameTicks;
-BackMe:= PGear(Me)^;
+currHedgehogIndex:= CurrentTeam^.CurrHedgehog;
+itHedgehog:= currHedgehogIndex;
+switchesNum:= 0;
+
+switchImmediatelyAvailable:= (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtSwitcher);
+switchAvailable:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch);
 
 if (PGear(Me)^.State and gstAttacked) = 0 then
    if Targets.Count > 0 then
       begin
-      WalkMe:= BackMe;
-      Walk(@WalkMe);
-      if (StartTicks > GameTicks - 1500) and (not StopThinking) then SDL_Delay(1000);
-      if BestActions.Score < -1023 then
-         begin
-         BestActions.Count:= 0;
-         AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
-         end;
+        // iterate over current team hedgehogs
+        repeat
+            WalkMe:= CurrentTeam^.Hedgehogs[itHedgehog].Gear^;
+
+            Actions.Count:= 0;
+            Actions.Pos:= 0;
+            Actions.Score:= 0;
+            if switchesNum > 0 then
+                begin
+                if not switchImmediatelyAvailable then
+                    begin
+                    // when AI has to use switcher, make it cost smth
+                    Actions.Score:= -20000;
+                    AddAction(Actions, aia_Weapon, Longword(amSwitch), 300 + random(200), 0, 0);                    
+                    AddAction(Actions, aia_attack, aim_push, 300 + random(300), 0, 0);
+                    AddAction(Actions, aia_attack, aim_release, 1, 0, 0);
+                    end;
+                for i:= 1 to switchesNum do
+                    AddAction(Actions, aia_Switch, 0, 300 + random(200), 0, 0);
+                end;
+            Walk(@WalkMe, Actions);
+
+            // find another hog in team
+            repeat
+                itHedgehog:= Succ(itHedgehog) mod CurrentTeam^.HedgehogsNumber;
+            until (itHedgehog = currHedgehogIndex) or (CurrentTeam^.Hedgehogs[itHedgehog].Gear <> nil);
+
+            inc(switchesNum);
+        until (not (switchImmediatelyAvailable or switchAvailable))
+            or StopThinking 
+            or (itHedgehog = currHedgehogIndex);
+
+        if (StartTicks > GameTicks - 1500) and (not StopThinking) then SDL_Delay(1000);
+
+        if BestActions.Score < -1023 then
+            begin
+            BestActions.Count:= 0;
+            AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+            end;
+
       end else
 else begin
-      while (not StopThinking) and (BestActions.Count = 0) do
-            begin
-            FillBonuses(true);
-            WalkMe:= BackMe;
-            Walk(@WalkMe);
-            if not StopThinking then SDL_Delay(100)
-            end
-      end;
+    BackMe:= PGear(Me)^;
+    while (not StopThinking) and (BestActions.Count = 0) do
+        begin
+        FillBonuses(true);
+        WalkMe:= BackMe;
+        Actions.Count:= 0;
+        Actions.Pos:= 0;
+        Actions.Score:= 0;
+        Walk(@WalkMe, Actions);
+        if not StopThinking then SDL_Delay(100)
+        end
+    end;
+
 PGear(Me)^.State:= PGear(Me)^.State and not gstHHThinking;
 Think:= 0;
 InterlockedDecrement(hasThread)

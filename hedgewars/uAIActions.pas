@@ -30,6 +30,7 @@ const MAXACTIONS     = 96;
       aia_attack     = 4;
       aia_Up         = 5;
       aia_Down       = 6;
+      aia_Switch     = 7;
 
       aia_Weapon     = $8000;
       aia_WaitXL     = $8001;
@@ -64,14 +65,15 @@ procedure ProcessAction(var Actions: TActions; Me: PGear);
 implementation
 uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uUtils, uDebug, uIO;
 
-const ActionIdToStr: array[0..6] of string[16] = (
+const ActionIdToStr: array[0..7] of string[16] = (
 {aia_none}           '',
 {aia_Left}           'left',
 {aia_Right}          'right',
 {aia_Timer}          'timer',
 {aia_attack}         'attack',
 {aia_Up}             'up',
-{aia_Down}           'down'
+{aia_Down}           'down',
+{aia_Switch}         'switch'
                      );
 
 {$IFDEF TRACEAIACTIONS}
