@@ -15,8 +15,13 @@ pas2C fileName = do
          (Right a) -> (return . render . pascal2C) a
 
 pascal2C :: PascalUnit -> Doc
-pascal2C (Unit unitName interface implementation init fin) = implementation2C implementation
+pascal2C (Unit unitName interface implementation init fin) = 
+    interface2C interface
+    $+$ 
+    implementation2C implementation
 
+interface2C :: Interface -> Doc
+interface2C (Interface uses tvars) = typesAndVars2C tvars
 
 implementation2C :: Implementation -> Doc
 implementation2C (Implementation uses tvars) = typesAndVars2C tvars
@@ -48,7 +53,15 @@ tvar2C (VarDeclaration isConst (ids, t) mInitExpr) =
     initExpr Nothing = empty
     initExpr (Just e) = text "=" <+> initExpr2C e
 
-initExpr2C :: InitExpression -> Doc    
+initExpr2C :: InitExpression -> Doc
+initExpr2C (InitBinOp op expr1 expr2) = parens $ (initExpr2C expr1) <+> op2C op <+> (initExpr2C expr2)
+initExpr2C (InitNumber s) = text s
+initExpr2C (InitFloat s) = text s
+initExpr2C (InitHexNumber s) = text "0x" <> (text . map toLower $ s)
+initExpr2C (InitString s) = doubleQuotes $ text s 
+initExpr2C (InitReference (Identifier i)) = text i
+
+
 initExpr2C _ = text "<<expression>>"
 
 type2C :: TypeDecl -> Doc

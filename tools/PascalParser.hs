@@ -85,6 +85,7 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitString String
     | InitChar String
     | BuiltInFunction String [InitExpression]
+    | InitSet [Identifier]
     | InitNull
     deriving Show
 
@@ -577,6 +578,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
     where
     term = comments >> choice [
         liftM (uncurry BuiltInFunction) $ builtInFunction initExpression 
+        , try $ brackets pas (commaSep pas $ iD) >>= return . InitSet
         , try $ parens pas (commaSep pas $ initExpression) >>= return . InitArray
         , parens pas (semiSep pas $ recField) >>= return . InitRecord
         , try $ integer pas >>= \i -> notFollowedBy (char '.') >> (return . InitNumber . show) i
