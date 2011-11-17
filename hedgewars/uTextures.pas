@@ -31,7 +31,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses GLunit, uUtils, uVariables, uConsts, uDebug;
+uses GLunit, uUtils, uVariables, uConsts, uDebug, uConsole;
 
 var TextureList: PTexture;
 
@@ -226,7 +226,7 @@ end;
 
 procedure freeModule;
 begin
-    if TextureList <> nil then AddFileLog('FIXME FIXME FIXME. App shutdown without full cleanup of texture list.');
+    if TextureList <> nil then WriteToConsole('FIXME FIXME FIXME. App shutdown without full cleanup of texture list; read game0.log and please report this problem');
     while TextureList <> nil do 
         begin
         AddFileLog('Texture not freed: width='+inttostr(LongInt(TextureList^.w))+' height='+inttostr(LongInt(TextureList^.h))+' priority='+inttostr(round(TextureList^.priority*1000)));

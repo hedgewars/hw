@@ -42,7 +42,7 @@ procedure FreeWeaponTooltip;
 procedure MakeCrossHairs;
 
 implementation
-uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands, uDebug;
+uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands, uDebug, uWorld;
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -277,8 +277,9 @@ if not reload then
 WriteNames(fnt16);
 MakeCrossHairs;
 LoadGraves;
+if not reload then
+    AddProgress;
 
-AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
         // FIXME - add a sprite attribute to match on rq flags?
@@ -358,7 +359,8 @@ for ii:= Low(TSprite) to High(TSprite) do
                 Surface:= nil
         end;
 
-AddProgress;
+if not reload then
+    AddProgress;
 
 tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifTransparent);
 if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
@@ -371,7 +373,8 @@ PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
 ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
 SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
-AddProgress;
+if not reload then
+    AddProgress;
 
 // name of weapons in ammo menu
 for ai:= Low(TAmmoType) to High(TAmmoType) do
@@ -396,7 +399,8 @@ begin
     SDL_FreeSurface(tmpsurf)
 end;
 
-AddProgress;
+if not reload then
+    AddProgress;
 IMG_Quit();
 end;
 
@@ -416,16 +420,21 @@ begin
             end
         end;
     SDL_FreeSurface(MissionIcons);
+
+    // free the textures declared in uVariables
+    FreeTexture(WeaponTooltipTex);
+    WeaponTooltipTex:= nil;
+    FreeTexture(PauseTexture);
+    PauseTexture:= nil;
+    FreeTexture(SyncTexture);
+    SyncTexture:= nil;
+    FreeTexture(ConfirmTexture);
+    ConfirmTexture:= nil;
     FreeTexture(ropeIconTex);
     ropeIconTex:= nil;
     FreeTexture(HHTexture);
     HHTexture:= nil;
-    FreeTexture(PauseTexture);
-    PauseTexture:= nil;
-    FreeTexture(ConfirmTexture);
-    ConfirmTexture:= nil;
-    FreeTexture(SyncTexture);
-    SyncTexture:= nil;
+
     // free all ammo name textures
     for ai:= Low(TAmmoType) to High(TAmmoType) do
         begin
@@ -760,9 +769,10 @@ end;
 
 procedure FinishProgress;
 begin
+    uMobile.GameLoaded();
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
-    uMobile.GameLoaded();
+    ProgrTex:= nil;
     Step:= 0
 end;
 
@@ -973,6 +983,10 @@ begin
         SetScale(cDefaultZoomLevel);
 {$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
         reinit:= true;
+        StoreRelease(true);
+        ResetLand;
+        ResetWorldTex;
+        //uTextures.freeModule; //DEBUG ONLY
 {$ENDIF}
         AddFileLog('Freeing old primary surface...');
         SDL_FreeSurface(SDLPrimSurface);
@@ -1027,18 +1041,19 @@ begin
     SetupOpenGL();
     if reinit then
         begin
+        // clean the window from any previous content
+        glClear(GL_COLOR_BUFFER_BIT);
         if SuddenDeathDmg then
              glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99)
         else if ((cReducedQuality and rqNoBackground) = 0) then 
              glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99)
         else glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
 
-        StoreRelease(true);
-        ReloadCaptions;
+        // reload everything we had before
+        ReloadCaptions(false);
         ReloadLines;
         StoreLoad(true);
-
-        ResetLand;
+        // redraw all land
         UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
         end;
 end;

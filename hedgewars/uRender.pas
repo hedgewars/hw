@@ -45,8 +45,6 @@ procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: 
 procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
 
-var
-    HHTexture: PTexture;
 
 implementation
 uses uVariables;

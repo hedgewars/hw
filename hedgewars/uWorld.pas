@@ -27,6 +27,8 @@ procedure initModule;
 procedure freeModule;
 
 procedure InitWorld;
+procedure ResetWorldTex;
+
 procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
@@ -210,6 +212,17 @@ end;
 procedure InitCameraBorders;
 begin
 cGearScrEdgesDist:= min(2 * cScreenHeight div 5, 2 * cScreenWidth div 5);
+end;
+
+// for uStore texture resetting
+procedure ResetWorldTex;
+begin
+    FreeTexture(fpsTexture);
+    fpsTexture:= nil;
+    FreeTexture(timeTexture);
+    timeTexture:= nil;
+    FreeTexture(missionTex);
+    missionTex:= nil;
 end;
 
 procedure ShowAmmoMenu;

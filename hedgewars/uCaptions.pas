@@ -25,7 +25,7 @@ uses uTypes;
 
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 procedure DrawCaptions;
-procedure ReloadCaptions;
+procedure ReloadCaptions(unload: boolean);
 
 procedure initModule;
 procedure freeModule;
@@ -65,15 +65,13 @@ begin
 end;
 
 // For uStore texture recreation
-procedure ReloadCaptions;
+procedure ReloadCaptions(unload: boolean);
 var Group: TCapGroup;
 begin
 for Group:= Low(TCapGroup) to High(TCapGroup) do
-    begin
-    FreeTexture(Captions[Group].Tex);
-    if Captions[Group].Text <> '' then
+    if unload then FreeTexture(Captions[Group].Tex)
+    else if Captions[Group].Text <> '' then
         Captions[Group].Tex:= RenderStringTex(Captions[Group].Text, Captions[Group].Color, fntBig)
-    end
 end;
 
 procedure DrawCaptions;
