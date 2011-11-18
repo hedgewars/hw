@@ -132,6 +132,7 @@ for i:= 0 to Pred(Targets.Count) do
               begin
               BestActions:= Actions;
               inc(BestActions.Score, Score);
+              BestActions.isWalkingToABetterPlace:= false;
 
               if (ap.Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
               else if (ap.Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
@@ -245,6 +246,7 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
        if Rate > BestRate then
           begin
           BestActions:= Actions;
+          BestActions.isWalkingToABetterPlace:= true;
           BestRate:= Rate;
           Me^.State:= Me^.State or gstAttacked // we have better place, go there and do not use ammo
           end
@@ -307,11 +309,12 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
             inc(switchesNum);
         until (not (switchImmediatelyAvailable or switchAvailable))
             or StopThinking 
-            or (itHedgehog = currHedgehogIndex);
+            or (itHedgehog = currHedgehogIndex)
+            or BestActions.isWalkingToABetterPlace;
 
         if (StartTicks > GameTicks - 1500) and (not StopThinking) then SDL_Delay(1000);
 
-        if BestActions.Score < -1023 then
+        if (BestActions.Score < -1023) and (not BestActions.isWalkingToABetterPlace) then
             begin
             BestActions.Count:= 0;
             AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
@@ -349,6 +352,7 @@ Me^.Message:= 0;
 BestActions.Count:= 0;
 BestActions.Pos:= 0;
 BestActions.Score:= Low(LongInt);
+BestActions.isWalkingToABetterPlace:= false;
 
 StopThinking:= false;
 ThinkingHH:= Me;

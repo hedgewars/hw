@@ -57,6 +57,7 @@ type TAction = record
                 Count, Pos: Longword;
                 actions: array[0..Pred(MAXACTIONS)] of TAction;
                 Score: LongInt;
+                isWalkingToABetterPlace: boolean;
                 end;
 
 procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; TimeDelta: Longword; X, Y: LongInt);
