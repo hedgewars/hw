@@ -9,6 +9,7 @@ import Text.Parsec.Combinator
 import Text.Parsec.String
 import Control.Monad
 import Data.Char
+import Data.Maybe
 
 data PascalUnit =
     Program Identifier Implementation
@@ -24,7 +25,7 @@ data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
     | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe InitExpression)
-    | FunctionDeclaration Identifier TypeDecl (Maybe Phrase)
+    | FunctionDeclaration Identifier TypeDecl (Maybe (TypesAndVars,Phrase))
     deriving Show
 data TypeDecl = SimpleType Identifier
     | RangeType Range
@@ -32,7 +33,7 @@ data TypeDecl = SimpleType Identifier
     | ArrayDecl Range TypeDecl
     | RecordType [TypeVarDeclaration]
     | PointerTo TypeDecl
-    | String
+    | String Integer
     | UnknownType
     deriving Show
 data Range = Range Identifier
@@ -237,7 +238,8 @@ constsDecl = do
         
 typeDecl = choice [
     char '^' >> typeDecl >>= return . PointerTo
-    , try (string "shortstring") >> return String
+    , try (string "shortstring") >> return (String 255)
+    , try (string "string") >> optionMaybe (brackets pas $ integer pas) >>= return . String . fromMaybe 255
     , arrayDecl
     , recordDecl
     , sequenceDecl >>= return . Sequence
@@ -324,17 +326,11 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         try $ string "procedure"
         comments
         i <- iD
-        optional $ do
-            char '('
-            varsDecl False
-            char ')'
+        optional $ parens pas $ varsDecl False
         comments
         char ';'
+        comments
         b <- if isImpl then
-                do
-                comments
-                optional $ typeVarDeclaration True
-                comments
                 liftM Just functionBody
                 else
                 return Nothing
@@ -345,10 +341,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         try $ string "function"
         comments
         i <- iD
-        optional $ do
-            char '('
-            varsDecl False
-            char ')'
+        optional $ parens pas $ varsDecl False
         comments
         char ':'
         comments
@@ -357,9 +350,6 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         char ';'
         comments
         b <- if isImpl then
-                do
-                optional $ typeVarDeclaration True
-                comments
                 liftM Just functionBody
                 else
                 return Nothing
@@ -540,6 +530,7 @@ switchCase = do
         comments
         return o
     string "end"
+    comments
     return $ SwitchCase e cs o2
     where
     aCase = do
@@ -559,10 +550,12 @@ procCall = do
 parameters = (commaSep pas) expression <?> "parameters"
         
 functionBody = do
+    tv <- typeVarDeclaration True
+    comments
     p <- phrasesBlock
     char ';'
     comments
-    return p
+    return (TypesAndVars tv, p)
 
 uses = liftM Uses (option [] u)
     where
