@@ -70,7 +70,7 @@
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished">Voľby hry</translation>
+        <translation>Voľby hry</translation>
     </message>
 </context>
 <context>
@@ -93,51 +93,51 @@
     </message>
     <message>
         <source>%1 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bol odstránený zo zoznamu ignorovaných</translation>
     </message>
     <message>
         <source>%1 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bol pridaný na zoznam ignorovaných</translation>
     </message>
     <message>
         <source>%1 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bol odstránený zo zoznamu priateľov</translation>
     </message>
     <message>
         <source>%1 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bol pridaný do zoznamu priateľov</translation>
     </message>
     <message>
         <source>Stylesheet imported from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Súbor so štýlom importovaný z %1</translation>
     </message>
     <message>
         <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
-        <translation type="unfinished"></translation>
+        <translation>Zadajte %1, ak chcete použiť aktuálny súbor so štýlom v budúcnosti, zadajte %2 pre resetovanie!</translation>
     </message>
     <message>
         <source>Couldn&apos;t read %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodarilo sa prečítať %1</translation>
     </message>
     <message>
         <source>StyleSheet discarded</source>
-        <translation type="unfinished"></translation>
+        <translation>Súbor so štýlom zneplatnený</translation>
     </message>
     <message>
         <source>StyleSheet saved to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Súbor so štýlom uložený do %1</translation>
     </message>
     <message>
         <source>Failed to save StyleSheet to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nepodarilo sa uložiť súbor so štýlom do %1</translation>
     </message>
     <message>
         <source>%1 is not a valid command!</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 nie je platným príkazom!</translation>
     </message>
     <message>
         <source>Kicking %1 ...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyhadzujem %1...</translation>
     </message>
 </context>
 <context>
@@ -182,26 +182,26 @@
     </message>
     <message>
         <source>Demo name</source>
-        <translation type="unfinished"></translation>
+        <translation>Demo meno</translation>
     </message>
     <message>
         <source>Demo name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Demo meno:</translation>
     </message>
     <message>
         <source>Game aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Hra zrušená</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Heslo</translation>
+        <translation>Heslo</translation>
     </message>
     <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished">Prezývka %1, ktorú ste
+        <translation>Prezývka %1, ktorú ste
 si vybrali je registrovaná na
 Hedgewars.org.
 Prosím, napíšte heslo do poľa
@@ -210,25 +210,25 @@ v nastaveniach hry:</translation>
     </message>
     <message>
         <source>No password supplied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nebolo zadané žiadne heslo.</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Prezývka</translation>
+        <translation>Prezývka</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished">Niekto už používa
+        <translation>Niekto už používa
 vašu prezývku %1
 na serveri.
 Prosím vyberte si inú prezývku:</translation>
     </message>
     <message>
         <source>No nickname supplied.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nebola zadaná žiadna prezývka.</translation>
     </message>
 </context>
 <context>
@@ -412,7 +412,7 @@ Prosím vyberte si inú prezývku:</translation>
     </message>
     <message>
         <source>User quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Užívateľ odišiel</translation>
     </message>
 </context>
 <context>
@@ -504,11 +504,11 @@ Prosím vyberte si inú prezývku:</translation>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>Kreslené mapy</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Všetky súbory</translation>
     </message>
 </context>
 <context>
@@ -617,7 +617,7 @@ Prosím vyberte si inú prezývku:</translation>
     <name>PageInGame</name>
     <message>
         <source>In game...</source>
-        <translation type="unfinished"></translation>
+        <translation>Prebieha hra...</translation>
     </message>
 </context>
 <context>
@@ -793,7 +793,7 @@ Prosím vyberte si inú prezývku:</translation>
     <message>
         <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
-        <translation>Klavírový útok je najzničujúcejší vzdušný útok. Pri jeho použití prídete o ježka, čo je jeho veľké mínus.</translation>
+        <translation>Klavírový útok je najničivejší vzdušný útok. Pri jeho použití prídete o ježka, čo je jeho veľké mínus.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
@@ -912,7 +912,7 @@ Prosím vyberte si inú prezývku:</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation type="unfinished"></translation>
+        <translation>Stiahnuteľný obsah</translation>
     </message>
 </context>
 <context>
@@ -1306,7 +1306,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>Pridať nezničiteľný okraj popri spodku obrazovky</translation>
     </message>
 </context>
 <context>
@@ -1356,22 +1356,22 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Campaign Mode (...)</source>
-        <translation type="unfinished"></translation>
+        <translation>Režim kampane (...)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tréningový režim (Vycvičte sa v rade tréningových misií)</translation>
     </message>
 </context>
 <context>
     <name>PageTraining</name>
     <message>
         <source>No description available</source>
-        <translation type="unfinished"></translation>
+        <translation>Žiaden popis nie je dostupný</translation>
     </message>
     <message>
         <source>Select a mission!</source>
-        <translation type="unfinished"></translation>
+        <translation>Vyberte misiu!</translation>
     </message>
 </context>
 <context>
@@ -1893,7 +1893,7 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tento program je distribuovaný pod licenciou GNU General Public License v2</translation>
     </message>
 </context>
 <context>
@@ -1904,7 +1904,7 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>hedgehog %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ježko %1</translation>
     </message>
 </context>
 <context>
@@ -2268,7 +2268,7 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Add Bottom Border</source>
-        <translation type="unfinished"></translation>
+        <translation>Pridať spodný okraj</translation>
     </message>
 </context>
 <context>
