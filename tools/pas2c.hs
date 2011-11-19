@@ -34,10 +34,14 @@ typesAndVars2C (TypesAndVars ts) = vcat $ map tvar2C ts
 tvar2C :: TypeVarDeclaration -> Doc
 tvar2C (FunctionDeclaration (Identifier name) returnType Nothing) = 
     type2C returnType <+> text (name ++ "();")
-tvar2C (FunctionDeclaration (Identifier name) returnType (Just phrase)) = 
+tvar2C (FunctionDeclaration (Identifier name) returnType (Just (tvars, phrase))) = 
     type2C returnType <+> text (name ++ "()") 
     $$
+    text "{" $+$ (nest 4 $ typesAndVars2C tvars)
+    $+$
     phrase2C phrase
+    $+$ 
+    text "}"
 tvar2C (TypeDeclaration (Identifier i) t) = text "type" <+> text i <+> type2C t <> text ";"
 tvar2C (VarDeclaration isConst (ids, t) mInitExpr) = 
     if isConst then text "const" else empty
@@ -66,7 +70,7 @@ initExpr2C _ = text "<<expression>>"
 
 type2C :: TypeDecl -> Doc
 type2C UnknownType = text "void"
-type2C String = text "string"
+type2C (String l) = text $ "string" ++ show l
 type2C (SimpleType (Identifier i)) = text i
 type2C (PointerTo t) = type2C t <> text "*"
 type2C (RecordType tvs) = text "{" $+$ (nest 4 . vcat . map tvar2C $ tvs) $+$ text "}"
