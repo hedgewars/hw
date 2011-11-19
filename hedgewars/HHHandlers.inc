@@ -1093,7 +1093,7 @@ if ((Gear^.State and gstWait) = 0) and
     begin
     if Gear^.Timer = 0 then
         begin
-        Gear^.State:= Gear^.State and not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable);
+        Gear^.State:= Gear^.State and not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstHHChooseTarget);
         Gear^.Active:= false;
         AddGearCI(Gear);
         exit
