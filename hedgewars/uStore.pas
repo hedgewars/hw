@@ -21,7 +21,7 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, SDLh, GLunit, uTypes, uLandTexture;
+uses sysutils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -42,7 +42,7 @@ procedure FreeWeaponTooltip;
 procedure MakeCrossHairs;
 
 implementation
-uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands, uDebug;
+uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands, uDebug, uWorld;
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -110,7 +110,7 @@ for t:= 0 to Pred(TeamsCount) do
     if SDL_MustLock(texsurf) then
         SDL_UnlockSurface(texsurf);
 
-    if CrosshairTex <> nil then FreeTexture(CrosshairTex);
+    FreeTexture(CrosshairTex);
     CrosshairTex:= Surface2Tex(texsurf, false);
     SDL_FreeSurface(texsurf)
     end;
@@ -277,8 +277,9 @@ if not reload then
 WriteNames(fnt16);
 MakeCrossHairs;
 LoadGraves;
+if not reload then
+    AddProgress;
 
-AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
         // FIXME - add a sprite attribute to match on rq flags?
@@ -358,7 +359,8 @@ for ii:= Low(TSprite) to High(TSprite) do
                 Surface:= nil
         end;
 
-AddProgress;
+if not reload then
+    AddProgress;
 
 tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifTransparent);
 if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
@@ -371,34 +373,34 @@ PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
 ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
 SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
-AddProgress;
+if not reload then
+    AddProgress;
 
 // name of weapons in ammo menu
 for ai:= Low(TAmmoType) to High(TAmmoType) do
     with Ammoz[ai] do
-    begin
+        begin
         TryDo(trAmmo[NameId] <> '','No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
-        if (NameTex <> nil) then
-            FreeTexture(NameTex);
+        FreeTexture(NameTex);
         NameTex:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
-    end;
+        end;
 
 // number of weapons in ammo menu
 for i:= Low(CountTexz) to High(CountTexz) do
 begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
     tmpsurf:= doSurfaceConversion(tmpsurf);
-    if (CountTexz[i] <> nil) then
-        FreeTexture(CountTexz[i]);
+    FreeTexture(CountTexz[i]);
     CountTexz[i]:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf)
 end;
 
-AddProgress;
+if not reload then
+    AddProgress;
 IMG_Quit();
 end;
 
@@ -418,16 +420,21 @@ begin
             end
         end;
     SDL_FreeSurface(MissionIcons);
+
+    // free the textures declared in uVariables
+    FreeTexture(WeaponTooltipTex);
+    WeaponTooltipTex:= nil;
+    FreeTexture(PauseTexture);
+    PauseTexture:= nil;
+    FreeTexture(SyncTexture);
+    SyncTexture:= nil;
+    FreeTexture(ConfirmTexture);
+    ConfirmTexture:= nil;
     FreeTexture(ropeIconTex);
     ropeIconTex:= nil;
     FreeTexture(HHTexture);
     HHTexture:= nil;
-    FreeTexture(PauseTexture);
-    PauseTexture:= nil;
-    FreeTexture(ConfirmTexture);
-    ConfirmTexture:= nil;
-    FreeTexture(SyncTexture);
-    SyncTexture:= nil;
+
     // free all ammo name textures
     for ai:= Low(TAmmoType) to High(TAmmoType) do
         begin
@@ -444,9 +451,9 @@ begin
 
     // free all team and hedgehog textures
     for t:= 0 to Pred(TeamsCount) do
-    begin
-        if TeamsArray[t] <> nil then
         begin
+        if TeamsArray[t] <> nil then
+            begin
             FreeTexture(TeamsArray[t]^.NameTagTex);
             TeamsArray[t]^.NameTagTex:= nil;
             FreeTexture(TeamsArray[t]^.CrosshairTex);
@@ -460,26 +467,26 @@ begin
             FreeTexture(TeamsArray[t]^.FlagTex);
             TeamsArray[t]^.FlagTex:= nil;
             for i:= 0 to cMaxHHIndex do
-            begin
+                begin
                 FreeTexture(TeamsArray[t]^.Hedgehogs[i].NameTagTex);
                 TeamsArray[t]^.Hedgehogs[i].NameTagTex:= nil;
                 FreeTexture(TeamsArray[t]^.Hedgehogs[i].HealthTagTex);
                 TeamsArray[t]^.Hedgehogs[i].HealthTagTex:= nil;
                 FreeTexture(TeamsArray[t]^.Hedgehogs[i].HatTex);
                 TeamsArray[t]^.Hedgehogs[i].HatTex:= nil;
+                end;
             end;
         end;
-    end;
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
-    begin
+        begin
         glDeleteTextures(1, @texl);
         glDeleteRenderbuffersEXT(1, @depthl);
         glDeleteFramebuffersEXT(1, @framel);
         glDeleteTextures(1, @texr);
         glDeleteRenderbuffersEXT(1, @depthr);
         glDeleteFramebuffersEXT(1, @framer)
-    end
+        end
 {$ENDIF}
 end;
 
@@ -488,8 +495,7 @@ procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
     str(Hedgehog.Gear^.Health, s);
-    if Hedgehog.HealthTagTex <> nil then
-        FreeTexture(Hedgehog.HealthTagTex);
+    FreeTexture(Hedgehog.HealthTagTex);
     Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
@@ -763,9 +769,10 @@ end;
 
 procedure FinishProgress;
 begin
+    uMobile.GameLoaded();
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
-    uMobile.GameLoaded();
+    ProgrTex:= nil;
     Step:= 0
 end;
 
@@ -938,8 +945,6 @@ end;
 procedure FreeWeaponTooltip;
 begin
 // free the existing texture (if there is any)
-if WeaponTooltipTex = nil then
-    exit;
 FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
 end;
@@ -978,6 +983,10 @@ begin
         SetScale(cDefaultZoomLevel);
 {$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
         reinit:= true;
+        StoreRelease(true);
+        ResetLand;
+        ResetWorldTex;
+        //uTextures.freeModule; //DEBUG ONLY
 {$ENDIF}
         AddFileLog('Freeing old primary surface...');
         SDL_FreeSurface(SDLPrimSurface);
@@ -1032,18 +1041,20 @@ begin
     SetupOpenGL();
     if reinit then
         begin
+        // clean the window from any previous content
+        glClear(GL_COLOR_BUFFER_BIT);
         if SuddenDeathDmg then
              glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99)
         else if ((cReducedQuality and rqNoBackground) = 0) then 
              glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99)
         else glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
 
-        StoreRelease(true);
+        // reload everything we had before
+        ReloadCaptions(false);
+        ReloadLines;
         StoreLoad(true);
-
-        ResetLand;
-
-        UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT)
+        // redraw all land
+        UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
         end;
 end;
 

@@ -60,6 +60,49 @@ BestActions.Count:= 0;
 BestActions.Pos:= 0
 end;
 
+
+
+const cBranchStackSize = 12;
+type TStackEntry = record
+                   WastedTicks: Longword;
+                   MadeActions: TActions;
+                   Hedgehog: TGear;
+                   end;
+
+var Stack: record
+           Count: Longword;
+           States: array[0..Pred(cBranchStackSize)] of TStackEntry;
+           end;
+
+function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
+var bRes: boolean;
+begin
+    bRes:= (Stack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
+    if bRes then
+        with Stack.States[Stack.Count] do
+            begin
+            WastedTicks:= Ticks;
+            MadeActions:= Actions;
+            Hedgehog:= Me;
+            Hedgehog.Message:= Dir;
+            inc(Stack.Count)
+            end;
+    Push:= bRes
+end;
+
+procedure Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear);
+begin
+    dec(Stack.Count);
+    with Stack.States[Stack.Count] do
+        begin
+        Ticks:= WastedTicks;
+        Actions:= MadeActions;
+        Me:= Hedgehog
+        end
+end;
+
+
+
 procedure TestAmmos(var Actions: TActions; Me: PGear; isMoved: boolean);
 var BotLevel: Byte;
     ap: TAttackParams;
@@ -89,6 +132,7 @@ for i:= 0 to Pred(Targets.Count) do
               begin
               BestActions:= Actions;
               inc(BestActions.Score, Score);
+              BestActions.isWalkingToABetterPlace:= false;
 
               if (ap.Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
               else if (ap.Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
@@ -129,61 +173,23 @@ for i:= 0 to Pred(Targets.Count) do
        end
 end;
 
-procedure Walk(Me: PGear);
+procedure Walk(Me: PGear; var Actions: TActions);
 const FallPixForBranching = cHHRadius * 2 + 8;
-      cBranchStackSize = 12;
-
-type TStackEntry = record
-                   WastedTicks: Longword;
-                   MadeActions: TActions;
-                   Hedgehog: TGear;
-                   end;
-
-var Stack: record
-           Count: Longword;
-           States: array[0..Pred(cBranchStackSize)] of TStackEntry;
-           end;
-
-    function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
-    var bRes: boolean;
-    begin
-    bRes:= (Stack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
-    if bRes then
-       with Stack.States[Stack.Count] do
-            begin
-            WastedTicks:= Ticks;
-            MadeActions:= Actions;
-            Hedgehog:= Me;
-            Hedgehog.Message:= Dir;
-            inc(Stack.Count)
-            end;
-    Push:= bRes
-    end;
-
-    procedure Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear);
-    begin
-    dec(Stack.Count);
-    with Stack.States[Stack.Count] do
-         begin
-         Ticks:= WastedTicks;
-         Actions:= MadeActions;
-         Me:= Hedgehog
-         end
-    end;
-
-var Actions: TActions;
+var
     ticks, maxticks, steps, tmp: Longword;
     BaseRate, BestRate, Rate: integer;
     GoInfo: TGoInfo;
     CanGo: boolean;
     AltMe: TGear;
     BotLevel: Byte;
+    a: TAmmoType;
 begin
 ticks:= 0; // avoid compiler hint
-Actions.Count:= 0;
-Actions.Pos:= 0;
-Actions.Score:= 0;
 Stack.Count:= 0;
+
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(Me^.Hedgehog^, a);
+
 BotLevel:= Me^.Hedgehog^.BotLevel;
 
 tmp:= random(2) + 1;
@@ -240,6 +246,7 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
        if Rate > BestRate then
           begin
           BestActions:= Actions;
+          BestActions.isWalkingToABetterPlace:= true;
           BestRate:= Rate;
           Me^.State:= Me^.State or gstAttacked // we have better place, go there and do not use ammo
           end
@@ -256,40 +263,84 @@ end;
 
 function Think(Me: Pointer): ptrint;
 var BackMe, WalkMe: TGear;
-    StartTicks: Longword;
+    StartTicks, currHedgehogIndex, itHedgehog, switchesNum, i: Longword;
+    switchImmediatelyAvailable, switchAvailable: boolean;
+    Actions: TActions;
 begin
 InterlockedIncrement(hasThread);
 StartTicks:= GameTicks;
-BackMe:= PGear(Me)^;
+currHedgehogIndex:= CurrentTeam^.CurrHedgehog;
+itHedgehog:= currHedgehogIndex;
+switchesNum:= 0;
+
+switchImmediatelyAvailable:= (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtSwitcher);
+switchAvailable:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch);
 
 if (PGear(Me)^.State and gstAttacked) = 0 then
    if Targets.Count > 0 then
       begin
-      WalkMe:= BackMe;
-      Walk(@WalkMe);
-      if (StartTicks > GameTicks - 1500) and (not StopThinking) then SDL_Delay(1000);
-      if BestActions.Score < -1023 then
-         begin
-         BestActions.Count:= 0;
-         AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
-         end;
+        // iterate over current team hedgehogs
+        repeat
+            WalkMe:= CurrentTeam^.Hedgehogs[itHedgehog].Gear^;
+
+            Actions.Count:= 0;
+            Actions.Pos:= 0;
+            Actions.Score:= 0;
+            if switchesNum > 0 then
+                begin
+                if not switchImmediatelyAvailable then
+                    begin
+                    // when AI has to use switcher, make it cost smth
+                    Actions.Score:= -20000;
+                    AddAction(Actions, aia_Weapon, Longword(amSwitch), 300 + random(200), 0, 0);                    
+                    AddAction(Actions, aia_attack, aim_push, 300 + random(300), 0, 0);
+                    AddAction(Actions, aia_attack, aim_release, 1, 0, 0);
+                    end;
+                for i:= 1 to switchesNum do
+                    AddAction(Actions, aia_Switch, 0, 300 + random(200), 0, 0);
+                end;
+            Walk(@WalkMe, Actions);
+
+            // find another hog in team
+            repeat
+                itHedgehog:= Succ(itHedgehog) mod CurrentTeam^.HedgehogsNumber;
+            until (itHedgehog = currHedgehogIndex) or (CurrentTeam^.Hedgehogs[itHedgehog].Gear <> nil);
+
+            inc(switchesNum);
+        until (not (switchImmediatelyAvailable or switchAvailable))
+            or StopThinking 
+            or (itHedgehog = currHedgehogIndex)
+            or BestActions.isWalkingToABetterPlace;
+
+        if (StartTicks > GameTicks - 1500) and (not StopThinking) then SDL_Delay(1000);
+
+        if (BestActions.Score < -1023) and (not BestActions.isWalkingToABetterPlace) then
+            begin
+            BestActions.Count:= 0;
+            AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+            end;
+
       end else
 else begin
-      while (not StopThinking) and (BestActions.Count = 0) do
-            begin
-            FillBonuses(true);
-            WalkMe:= BackMe;
-            Walk(@WalkMe);
-            if not StopThinking then SDL_Delay(100)
-            end
-      end;
+    BackMe:= PGear(Me)^;
+    while (not StopThinking) and (BestActions.Count = 0) do
+        begin
+        FillBonuses(true);
+        WalkMe:= BackMe;
+        Actions.Count:= 0;
+        Actions.Pos:= 0;
+        Actions.Score:= 0;
+        Walk(@WalkMe, Actions);
+        if not StopThinking then SDL_Delay(100)
+        end
+    end;
+
 PGear(Me)^.State:= PGear(Me)^.State and not gstHHThinking;
 Think:= 0;
 InterlockedDecrement(hasThread)
 end;
 
 procedure StartThink(Me: PGear);
-var a: TAmmoType;
 begin
 if ((Me^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0)
    or isInMultiShoot then exit;
@@ -301,6 +352,7 @@ Me^.Message:= 0;
 BestActions.Count:= 0;
 BestActions.Pos:= 0;
 BestActions.Score:= Low(LongInt);
+BestActions.isWalkingToABetterPlace:= false;
 
 StopThinking:= false;
 ThinkingHH:= Me;
@@ -313,8 +365,6 @@ if Targets.Count = 0 then
    end;
 
 FillBonuses((Me^.State and gstAttacked) <> 0);
-for a:= Low(TAmmoType) to High(TAmmoType) do
-    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(Me^.Hedgehog^, a);
 AddFileLog('Enter Think Thread');
 BeginThread(@Think, Me, ThinkThread)
 end;

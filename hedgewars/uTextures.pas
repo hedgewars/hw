@@ -31,7 +31,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses GLunit, uUtils, uVariables, uConsts, uDebug;
+uses GLunit, uUtils, uVariables, uConsts, uDebug, uConsole;
 
 var TextureList: PTexture;
 
@@ -207,7 +207,7 @@ end;
 procedure FreeTexture(tex: PTexture);
 begin
     if tex <> nil then
-    begin
+        begin
         if tex^.NextTexture <> nil then
             tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
         if tex^.PrevTexture <> nil then
@@ -216,7 +216,7 @@ begin
             TextureList:= tex^.NextTexture;
         glDeleteTextures(1, @tex^.id);
         Dispose(tex);
-    end
+        end
 end;
 
 procedure initModule;
@@ -226,7 +226,12 @@ end;
 
 procedure freeModule;
 begin
-    while TextureList <> nil do FreeTexture(TextureList);
+    if TextureList <> nil then WriteToConsole('FIXME FIXME FIXME. App shutdown without full cleanup of texture list; read game0.log and please report this problem');
+    while TextureList <> nil do 
+        begin
+        AddFileLog('Texture not freed: width='+inttostr(LongInt(TextureList^.w))+' height='+inttostr(LongInt(TextureList^.h))+' priority='+inttostr(round(TextureList^.priority*1000)));
+        FreeTexture(TextureList);
+        end
 end;
 
 end.

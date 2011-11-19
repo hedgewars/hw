@@ -24,6 +24,7 @@ interface
 
 procedure initModule;
 procedure freeModule;
+procedure ReloadLines;
 
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
@@ -72,15 +73,15 @@ if cl.Tex <> nil then
 cl.s:= str;
 
 if isInput then
-begin
+    begin
     color:= colors[#6];
     str:= UserNick + '> ' + str + '_'
-end
+    end
 else
-begin
+    begin
     color:= colors[str[1]];
     delete(str, 1, 1)
-end;
+    end;
 
 font:= CheckCJKFont(str, fnt16);
 w:= 0; h:= 0; // avoid compiler hints
@@ -97,6 +98,20 @@ cl.Time:= RealTicks + 12500;
 cl.Tex:= Surface2Tex(resSurface, false);
 
 SDL_FreeSurface(resSurface)
+end;
+
+// For uStore texture recreation
+procedure ReloadLines;
+var i, t: LongWord;
+begin
+    if InputStr.s <> '' then SetLine(InputStr, InputStr.s, true);
+    for i:= 0 to MaxStrIndex do
+        if Strs[i].s <> '' then
+            begin
+            t:= Strs[i].Time;
+            SetLine(Strs[i], Strs[i].s, false);
+            Strs[i].Time:= t
+            end;
 end;
 
 procedure AddChatString(s: shortstring);
@@ -370,20 +385,14 @@ begin
     missedCount:= 0;
 
     inputStr.Tex := nil;
-    for i:= 0 to MaxStrIndex do
-    begin
-        Strs[i].Tex := nil;
-    end;
+    for i:= 0 to MaxStrIndex do Strs[i].Tex := nil;
 end;
 
 procedure freeModule;
 var i: ShortInt;
 begin
     FreeTexture(InputStr.Tex);
-    for i:= 0 to MaxStrIndex do
-    begin
-        FreeTexture(Strs[i].Tex);
-    end;
+    for i:= 0 to MaxStrIndex do FreeTexture(Strs[i].Tex);
 end;
 
 end.

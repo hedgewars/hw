@@ -1300,7 +1300,7 @@ begin
         end
     else
         begin
-        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), lfIndestructible) then
+        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), $FF00) then
             begin
             Gear^.dY := Gear^.dY + cGravity;
             Gear^.Y := Gear^.Y + Gear^.dY
@@ -1309,7 +1309,7 @@ begin
         end;
 
     Gear^.X := Gear^.X + HHGear^.dX;
-    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, lfIndestructible) then
+    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, $FF00) then
         begin
         HHGear^.X := Gear^.X;
         HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius)
@@ -3641,7 +3641,7 @@ begin
         begin
         Gear^.Damage:= i;
         //AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
-        if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+        FreeTexture(Gear^.Tex);
         Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
                      '%', cWhiteColor, fntSmall)
         end;
@@ -4685,7 +4685,7 @@ begin
         if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
-            if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+            FreeTexture(Gear^.Tex);
             Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
                          '%', cWhiteColor, fntSmall)
             end
@@ -4757,7 +4757,7 @@ begin
         if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
-            if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+            FreeTexture(Gear^.Tex);
             Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
                          '%', cWhiteColor, fntSmall)
             end
@@ -4816,7 +4816,7 @@ while i > 0 do
         if (tmp^.Kind = gtHedgehog) or (tmp^.Kind = gtMine) or (tmp^.Kind = gtExplosives) then
             begin
             //tmp^.State:= tmp^.State or gstFlatened;
-            ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
+            if not tmp^.Invulnerable then ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
             //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
             tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
             tmp2^.IntersectGear:= tmp;

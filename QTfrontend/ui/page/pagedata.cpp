@@ -59,7 +59,7 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     initPage();
 
     web->setOpenLinks(false);
-    fetchList();
+//    fetchList();
 }
 
 void PageDataDownload::request(const QUrl &url)

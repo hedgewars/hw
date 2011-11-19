@@ -401,8 +401,7 @@ end;
 
 procedure DeleteVisualGear(Gear: PVisualGear);
 begin
-    if Gear^.Tex <> nil then
-        FreeTexture(Gear^.Tex);
+    FreeTexture(Gear^.Tex);
     Gear^.Tex:= nil;
 
     if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;

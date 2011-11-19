@@ -31,7 +31,7 @@ procedure ResetLand;
 implementation
 uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender;
 
-const TEXSIZE = 256;
+const TEXSIZE = 512;
 
 type TLandRecord = record
             shouldUpdate: boolean;
@@ -139,11 +139,11 @@ end;
 procedure ResetLand;
 var x, y: LongInt;
 begin
-    for x:= 0 to LANDTEXARW -1 do
+    for x:= 0 to LANDTEXARW - 1 do
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
                 begin
-                if tex <> nil then FreeTexture(tex);
+                FreeTexture(tex);
                 tex:= nil;
                 end;
 end;

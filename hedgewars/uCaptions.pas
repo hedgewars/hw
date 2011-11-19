@@ -25,6 +25,7 @@ uses uTypes;
 
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 procedure DrawCaptions;
+procedure ReloadCaptions(unload: boolean);
 
 procedure initModule;
 procedure freeModule;
@@ -36,13 +37,14 @@ type TCaptionStr = record
                    Tex: PTexture;
                    EndTime: LongWord;
                    Text: shortstring;
+                   Color: Longword
                    end;
 var
     Captions: array[TCapGroup] of TCaptionStr;
 
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
-    if (Captions[Group].Tex <> nil) and (Captions[Group].Text <> s) then
+    if Captions[Group].Text <> s then
         begin
         FreeTexture(Captions[Group].Tex);
         Captions[Group].Tex:= nil
@@ -50,6 +52,7 @@ begin
     
     if Captions[Group].Tex = nil then
         begin
+        Captions[Group].Color:= Color;
         Captions[Group].Text:= s;
         Captions[Group].Tex:= RenderStringTex(s, Color, fntBig)
         end;
@@ -59,6 +62,16 @@ begin
     else
         Captions[Group].EndTime:= RealTicks + 1400 + LongWord(Captions[Group].Tex^.w) * 3;
     end;
+end;
+
+// For uStore texture recreation
+procedure ReloadCaptions(unload: boolean);
+var Group: TCapGroup;
+begin
+for Group:= Low(TCapGroup) to High(TCapGroup) do
+    if unload then FreeTexture(Captions[Group].Tex)
+    else if Captions[Group].Text <> '' then
+        Captions[Group].Tex:= RenderStringTex(Captions[Group].Text, Captions[Group].Color, fntBig)
 end;
 
 procedure DrawCaptions;
@@ -75,16 +88,17 @@ begin
     for grp:= Low(TCapGroup) to High(TCapGroup) do
         with Captions[grp] do
             if Tex <> nil then
-            begin
+                begin
                 DrawCentered(0, offset, Tex);
                 inc(offset, Tex^.h + 2);
                 if EndTime <= RealTicks then
-                begin
+                    begin
                     FreeTexture(Tex);
                     Tex:= nil;
+                    Text:= '';
                     EndTime:= 0
+                    end;
                 end;
-            end;
 end;
 
 procedure initModule;
@@ -93,13 +107,13 @@ begin
 end;
 
 procedure freeModule;
-var
-    group: TCapGroup;
+var group: TCapGroup;
 begin
     for group:= Low(TCapGroup) to High(TCapGroup) do
-    begin
+        begin
         FreeTexture(Captions[group].Tex);
-    end;
+        Captions[group].Tex:= nil
+        end
 end;
 
 end.

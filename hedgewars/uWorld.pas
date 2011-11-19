@@ -27,6 +27,8 @@ procedure initModule;
 procedure freeModule;
 
 procedure InitWorld;
+procedure ResetWorldTex;
+
 procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
@@ -210,6 +212,17 @@ end;
 procedure InitCameraBorders;
 begin
 cGearScrEdgesDist:= min(2 * cScreenHeight div 5, 2 * cScreenWidth div 5);
+end;
+
+// for uStore texture resetting
+procedure ResetWorldTex;
+begin
+    FreeTexture(fpsTexture);
+    fpsTexture:= nil;
+    FreeTexture(timeTexture);
+    timeTexture:= nil;
+    FreeTexture(missionTex);
+    missionTex:= nil;
 end;
 
 procedure ShowAmmoMenu;
@@ -1087,12 +1100,10 @@ begin
         if t < 10 then s:= '0' + s;
         s:= inttostr(i div 60) + ':' + s;
    
-        if timeTexture <> nil then
-            FreeTexture(timeTexture);
-        timeTexture:= nil;
     
         tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
         tmpSurface:= doSurfaceConversion(tmpSurface);
+        FreeTexture(timeTexture);
         timeTexture:= Surface2Tex(tmpSurface, false);
         SDL_FreeSurface(tmpSurface)
     end;
@@ -1108,11 +1119,9 @@ begin
             Frames:= 0;
             CountTicks:= 0;
             s:= inttostr(FPS) + ' fps';
-            if fpsTexture <> nil then
-                FreeTexture(fpsTexture);
-            fpsTexture:= nil;
             tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
             tmpSurface:= doSurfaceConversion(tmpSurface);
+            FreeTexture(fpsTexture);
             fpsTexture:= Surface2Tex(tmpSurface, false);
             SDL_FreeSurface(tmpSurface)
         end;
@@ -1316,9 +1325,7 @@ r.h:= 32;
 
 if time = 0 then time:= 5000;
 missionTimer:= time;
-if missionTex <> nil then
-    FreeTexture(missionTex);
-missionTex:= nil;
+FreeTexture(missionTex);
 
 if icon > -1 then
     begin
@@ -1384,8 +1391,11 @@ procedure freeModule;
 begin
     stereoDepth:= stereoDepth; // avoid hint
     FreeTexture(fpsTexture);
+    fpsTexture:= nil;
     FreeTexture(timeTexture);
+    timeTexture:= nil;
     FreeTexture(missionTex);
+    missionTex:= nil
 end;
 
 end.

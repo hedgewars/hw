@@ -150,7 +150,8 @@ var
     cLaserSighting  : boolean;
     cVampiric       : boolean;
     cArtillery      : boolean;
-    WeaponTooltipTex : PTexture;
+    WeaponTooltipTex: PTexture;
+    HHTexture       : PTexture;
 
     flagMakeCapture : boolean;
 
