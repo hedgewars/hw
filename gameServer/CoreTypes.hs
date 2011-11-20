@@ -79,7 +79,6 @@ newGameInfo =
     GameInfo
         Data.Sequence.empty
         []
-        []
 
 data RoomInfo =
     RoomInfo
