@@ -23,8 +23,6 @@
 #import "OverlayViewController.h"
 #import "AmmoMenuViewController.h"
 
-//FIXME: add a proper #import when this is exposed in SDL
-extern UIView *SDL_getUikitView(void *);
 
 // cache the grenade time
 static NSInteger grenadeTime;
@@ -55,7 +53,7 @@ void startLoadingIndicator() {
     overlay_instance = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     // in order to get rotation events we have to insert the view inside the first view of the second window
     //TODO: when multihead make sure that overlay is displayed in the touch-enabled window
-    [SDL_getUikitView(HW_getSDLWindow()) addSubview:overlay_instance.view];
+    [[HWUtils mainSDLViewInstance] addSubview:overlay_instance.view];
     grenadeTime = 2;
 
     if ([HWUtils gameType] == gtSave) {

@@ -37,9 +37,11 @@ typedef enum {gsNone, gsLoading, gsInGame, gsInterrupted, gsEnded} TGameStatus;
 
 +(NSString *)modelType;
 +(NSArray *)teamColors;
++(void) releaseCache;
+
 +(NSInteger) randomPort;
 +(BOOL) isNetworkReachable;
-+(void) releaseCache;
++(UIView *)mainSDLViewInstance;
 
 @end
 

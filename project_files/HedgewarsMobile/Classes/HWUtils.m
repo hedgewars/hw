@@ -26,6 +26,7 @@
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import "hwconsts.h"
 #import "EngineProtocolNetwork.h"
+#import "SDL_uikitwindow.h"
 
 static NSString *cachedModel = nil;
 static NSArray *cachedColors = nil;
@@ -62,7 +63,7 @@ static TGameStatus gameStatus = gsNone;
 }
 
 #pragma mark -
-#pragma mark Helper Functions
+#pragma mark Helper Functions with cache
 +(NSString *)modelType {
     if (cachedModel == nil) {
         size_t size;
@@ -94,6 +95,13 @@ static TGameStatus gameStatus = gsNone;
     return cachedColors;
 }
 
++(void) releaseCache {
+    [cachedModel release], cachedModel = nil;
+    [cachedColors release], cachedColors = nil;
+}
+
+#pragma mark -
+#pragma mark Helper Functions without cache
 +(NSInteger) randomPort {
     srandom(time(NULL));
     NSInteger res = (random() % 64511) + 1024;
@@ -138,9 +146,15 @@ static TGameStatus gameStatus = gsNone;
     return ((isReachable && !needsConnection) || nonWiFi) ? testResult : NO;
 }
 
-+(void) releaseCache {
-    [cachedModel release], cachedModel = nil;
-    [cachedColors release], cachedColors = nil;
++(UIView *)mainSDLViewInstance {
+    SDL_Window *window = HW_getSDLWindow();
+    if (window == NULL) {
+        SDL_SetError("Window does not exist");
+        return nil;
+    }
+    SDL_WindowData *data = (SDL_WindowData *)window->driverdata;
+    SDL_uikitview *view = data != NULL ? data->view : nil;
+    return view;
 }
 
 @end
