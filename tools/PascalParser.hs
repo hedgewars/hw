@@ -1,15 +1,17 @@
 module PascalParser where
 
-import Text.Parsec.Expr
+import Text.Parsec
 import Text.Parsec.Char
 import Text.Parsec.Token
 import Text.Parsec.Language
+import Text.Parsec.Expr
 import Text.Parsec.Prim
 import Text.Parsec.Combinator
 import Text.Parsec.String
 import Control.Monad
-import Data.Char
 import Data.Maybe
+
+import PascalBasics
 
 data PascalUnit =
     Program Identifier Implementation
@@ -90,65 +92,11 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitNull
     deriving Show
 
-builtin = ["succ", "pred", "low", "high"]
-    
-pascalLanguageDef
-    = emptyDef
-    { commentStart   = "(*"
-    , commentEnd     = "*)"
-    , commentLine    = "//"
-    , nestedComments = False
-    , identStart     = letter <|> oneOf "_"
-    , identLetter    = alphaNum <|> oneOf "_."
-    , reservedNames  = [
-            "begin", "end", "program", "unit", "interface"
-            , "implementation", "and", "or", "xor", "shl"
-            , "shr", "while", "do", "repeat", "until", "case", "of"
-            , "type", "var", "const", "out", "array", "packed"
-            , "procedure", "function", "with", "for", "to"
-            , "downto", "div", "mod", "record", "set", "nil"
-            , "string", "shortstring"
-            ] ++ builtin
-    , reservedOpNames= [] 
-    , caseSensitive  = False   
-    }
-    
-caseInsensitiveString s = do
-    mapM_ (\a -> satisfy (\b -> toUpper a == toUpper b)) s <?> s
-    return s
-    
-pas = patch $ makeTokenParser pascalLanguageDef
-    where
-    patch tp = tp {stringLiteral = sl}
-    sl = do
-        (char '\'')
-        s <- (many $ noneOf "'")
-        (char '\'')
-        ss <- many $ do
-            (char '\'')
-            s' <- (many $ noneOf "'")
-            (char '\'')
-            return $ '\'' : s'
-        comments    
-        return $ concat (s:ss)
-    
-comments = do
-    spaces
-    skipMany $ do
-        comment
-        spaces
-
 pascalUnit = do
     comments
     u <- choice [program, unit]
     comments
     return u
-
-comment = choice [
-        char '{' >> manyTill anyChar (try $ char '}')
-        , (try $ string "(*") >> manyTill anyChar (try $ string "*)")
-        , (try $ string "//") >> manyTill anyChar (try newline)
-        ]
 
 iD = do
     i <- liftM Identifier (identifier pas)
@@ -389,12 +337,13 @@ expression = buildExpressionParser table term <?> "expression"
     term = comments >> choice [
         builtInFunction expression >>= \(n, e) -> return $ BuiltInFunCall e (SimpleReference (Identifier n))
         , parens pas $ expression 
-        , try $ integer pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
+        , try $ natural pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
         , try $ float pas >>= return . FloatLiteral . show
-        , try $ integer pas >>= return . NumberLiteral . show
+        , try $ natural pas >>= return . NumberLiteral . show
         , stringLiteral pas >>= return . StringLiteral
         , char '#' >> many digit >>= return . CharCode
         , char '$' >> many hexDigit >>= return . HexNumber
+        , char '-' >> expression >>= return . PrefixOp "-"
         , try $ string "nil" >> return Null
         , reference >>= return . Reference
         ] <?> "simple expression"
@@ -407,7 +356,6 @@ expression = buildExpressionParser table term <?> "expression"
           ]
         , [  Infix (char '+' >> return (BinOp "+")) AssocLeft
            , Infix (char '-' >> return (BinOp "-")) AssocLeft
-           , Prefix (char '-' >> return (PrefixOp "-"))
           ]
         , [  Infix (try (string "<>") >> return (BinOp "<>")) AssocNone
            , Infix (try (string "<=") >> return (BinOp "<=")) AssocNone
@@ -626,3 +574,4 @@ builtInFunction e = do
     exprs <- parens pas $ commaSep1 pas $ e
     spaces
     return (name, exprs)
+        
