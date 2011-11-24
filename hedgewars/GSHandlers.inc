@@ -655,7 +655,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSnowflake(Gear: PGear);
-var xx, yy, px, py: LongInt;
+var xx, yy, px, py, rx, ry, lx, ly: LongInt;
     move, draw, allpx, gun: Boolean;
     s: PSDL_Surface;
     p: PLongwordArray;
@@ -756,34 +756,35 @@ if draw then
             for py:= 0 to Pred(s^.h) do
                 begin
                 for px:= 0 to Pred(s^.w) do
-                    if ((((yy + py) and LAND_HEIGHT_MASK) = 0) and (((xx + px) and LAND_WIDTH_MASK) = 0)) and ((Land[yy + py, xx + px] and $FF) = 0) then
+                    begin
+                    lx:=xx + px; ly:=yy + py;
+                    if (ly and LAND_HEIGHT_MASK = 0) and (lx and LAND_WIDTH_MASK = 0) and (Land[ly, lx] and $FF = 0) then
                         begin
-                        if gun then
+                        rx:= lx;
+                        ry:= ly;
+                        if cReducedQuality and rqBlurryLand <> 0 then
                             begin
-                            // try to avoid speckles. might need disabling
-                            LandDirty[yy div 32, xx div 32]:= 1;
-                            Land[yy + py, xx + px]:= (Land[yy + py, xx + px] or lfDamaged or lfObject) and not lfBasic;
-                            end
-                        else if Land[yy + py, xx + px] and $FF00 = 0 then Land[yy + py, xx + px]:= lf;
-                        if (cReducedQuality and rqBlurryLand) = 0 then
-                            begin
-                            if gun then
-                                LandPixels[yy + py, xx + px]:= (cExplosionBorderColor and not AMask) or (p^[px] and AMask)
-                            else LandPixels[yy + py, xx + px]:= addBgColor(LandPixels[yy + py, xx + px], p^[px]);
-                            end
-                        else
-                            begin
-                            if gun then
-                                LandPixels[(yy + py) div 2, (xx + px) div 2]:= (cExplosionBorderColor and not AMask) or (p^[px] and AMask)
-                            else LandPixels[(yy + py) div 2, (xx + px) div 2]:= addBgColor(LandPixels[(yy + py) div 2, (xx + px) div 2], p^[px]);
+                            rx:= rx div 2;ry:= ry div 2;
                             end;
+                        if Land[yy + py, xx + px] and $FF00 = 0 then
+                            if gun then
+                                begin
+                                LandDirty[yy div 32, xx div 32]:= 1;
+                                if LandPixels[ry, rx] = 0 then Land[ly, lx]:=  lfDamaged or lfObject
+                                else Land[ly, lx]:=  lfDamaged or lfBasic
+                                end
+                            else Land[ly, lx]:= lf;
+                        if gun then
+                            LandPixels[ry, rx]:= (cExplosionBorderColor and not AMask) or (p^[px] and AMask)
+                        else LandPixels[ry, rx]:= addBgColor(LandPixels[ry, rx], p^[px]);
                         end
-                    else allpx:= false;
+                    else allpx:= false
+                    end;
                 p:= @(p^[s^.pitch shr 2])
                 end;
             
-            
-            Land[py, px+1]:= lfBasic;
+            // Why is this here.  For one thing, there's no test on +1 being safe. 
+            //Land[py, px+1]:= lfBasic;
             
             if allpx then UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w))
             else
