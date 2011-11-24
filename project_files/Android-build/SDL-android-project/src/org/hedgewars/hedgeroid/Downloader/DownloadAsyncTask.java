@@ -31,6 +31,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.hedgewars.hedgeroid.Downloader.DownloadService.DownloadTask;
+
 import android.os.AsyncTask;
 /**
  * This is an AsyncTask which will download a zip from an URL and unzip it to a specified path
@@ -39,35 +41,35 @@ import android.os.AsyncTask;
  * @author Xeli
  *
  */
-public class DownloadAsyncTask extends AsyncTask<DownloadTask, Object, Long> {
+public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> {
 
 	//private final static String URL_WITHOUT_SUFFIX = "http://www.xelification.com/tmp/firebutton.";
 	private final static String URL_ZIP_SUFFIX = ".zip";
 	private final static String URL_HASH_SUFFIX = ".hash";
 	
-	private DownloadService service;
+	private DownloadTask task;
 	private long lastUpdateMillis = 0;
 
-	public DownloadAsyncTask(DownloadService _service){
-		service = _service;
+	public DownloadAsyncTask(DownloadTask _task){
+		task = _task;
 	}
 
 	/**
 	 * 
 	 * @param params - A {@link}DownloadTask which gives information about where to download from and store the files to 
 	 */
-	protected Long doInBackground(DownloadTask...tasks) {
-		DownloadTask task = tasks[0];//just use one task per execute call for now
+	protected Long doInBackground(DownloadPackage...packages) {
+		DownloadPackage pack = packages[0];//just use one task per execute call for now
 		
 		HttpURLConnection conn = null;
 		MessageDigest digester = null;
-		String rootZipDest = task.getPathToStore();
+		String rootZipDest = pack.getPathToStore();
 
 		File rootDest = new File(rootZipDest);//TODO check for nullpointer, it hints to the absence of an sdcard
 		rootDest.mkdir();
 
 		try {
-			URL url = new URL(task.getURL() + URL_ZIP_SUFFIX);
+			URL url = new URL(pack.getURL() + URL_ZIP_SUFFIX);
 			conn = (HttpURLConnection)url.openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -83,7 +85,7 @@ public class DownloadAsyncTask extends AsyncTask<DownloadTask, Object, Long> {
 			int kbytesToProcess = conn.getContentLength()/1024;
 
 			byte[] buffer = new byte[1024];
-			service.start(kbytesToProcess);
+			task.start(kbytesToProcess);
 
 			try {
 				digester = MessageDigest.getInstance("MD5");
@@ -98,7 +100,7 @@ public class DownloadAsyncTask extends AsyncTask<DownloadTask, Object, Long> {
 			}catch(IOException e){
 				e.printStackTrace();
 				if(conn != null) conn.disconnect();
-				return -1l;
+				return -2l;
 			}
 
 			while(entry != null){
@@ -134,11 +136,11 @@ public class DownloadAsyncTask extends AsyncTask<DownloadTask, Object, Long> {
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 						if(conn != null) conn.disconnect();
-						return -1l;
+						return -3l;
 					} catch (IOException e) {
 						e.printStackTrace();
 						if(conn != null) conn.disconnect();
-						return -1l;
+						return -4l;
 					}finally{
 						try {
 							if( output != null) output.close();
@@ -161,20 +163,20 @@ public class DownloadAsyncTask extends AsyncTask<DownloadTask, Object, Long> {
 
 		if(conn != null) conn.disconnect();
 
-		if(checkMD5(digester, task))return 0l;
+		if(checkMD5(digester, pack))return 0l;
 		else return -1l;
 	}
 
 	//TODO proper result handling
 	protected void onPostExecute(Long result){
-		service.done(result > -1l);
+		task.done(result > -1l);
 	}
 
 	protected void onProgressUpdate(Object...objects){
-		service.update((Integer)objects[0], (Integer)objects[1], (String)objects[2]);
+		task.update((Integer)objects[0], (Integer)objects[1], (String)objects[2]);
 	}
 
-	private boolean checkMD5(MessageDigest digester, DownloadTask task){
+	private boolean checkMD5(MessageDigest digester, DownloadPackage task){
 		if(digester != null) {
 			byte[] messageDigest = digester.digest();
 

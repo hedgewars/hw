@@ -1,49 +1,49 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <team>
   <name>Team 1</name>
-  <flag>cm_cog</flag>
-  <fort>Cake</fort>
-  <grave>coffin</grave>
+  <flag>hedgewars</flag>
+  <fort>Lego</fort>
+  <grave>Bone</grave>
   <voice>Classic</voice>
   <hash>0</hash>
   <hog>
     <name>Leonidas</name>
-    <hat>spartan</hat>
+    <hat>NoHat</hat>
     <level>0</level>
   </hog>
   <hog>
     <name>Pipo</name>
-    <hat>clown-copper</hat>
+    <hat>NoHat</hat>
     <level>0</level>
   </hog>
   <hog>
     <name>Sonic</name>
-    <hat>Sonic</hat>
+    <hat>NoHat</hat>
     <level>0</level>
   </hog>
   <hog>
     <name>Xin</name>
-    <hat>StrawHat</hat>
+    <hat>NoHat</hat>
     <level>0</level>
   </hog>
   <hog>
     <name>Arnold</name>
-    <hat>cyborg</hat>
+    <hat>NoHat</hat>
     <level>0</level>
   </hog>
   <hog>
     <name>Jack</name>
-    <hat>Pumpkin_Hat</hat>
+    <hat>NoHat</hat>
     <level>0</level>
   </hog>
   <hog>
     <name>Tom</name>
-    <hat>Samurai</hat>
+    <hat>NoHat</hat>
     <level>0</level>
   </hog>
   <hog>
     <name>Goldie</name>
-    <hat>diglett</hat>
+    <hat>NoHat</hat>
     <level>0</level>
   </hog>
 </team>

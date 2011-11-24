@@ -12,7 +12,7 @@
         
     <!-- Notification -->
     <string name="notification_title">Downloading hedgewars files...</string>
-    <string name="notification_done">Success - Download complete</string>
+    <string name="notification_done">Successfully downloaded: </string>
     
     <!-- Download Activity -->
     <string name="download_background">Continue in background</string>
@@ -22,6 +22,12 @@
     <string name="download_tryagain">Try again</string>
     <string name="download_failed">The download has failed, check the internet connectivity and please try again</string>
     <string name="download_userexplain">Before starting the game we must download some extra files...</string>
+    
+    <string name="download_areyousure">Are you sure you want to download this package?</string>
+    <string name="download_alreadydownloaded">You\'ve already downloaded this package, are you sure you want to download it again?</string>
+    <string name="download_downloadnow">Download now!</string>
+    
+    <string name="download_queued">This download has been queued</string>
     
     <!-- start game -->
     

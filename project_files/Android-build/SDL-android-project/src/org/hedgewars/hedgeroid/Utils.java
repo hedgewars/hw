@@ -30,29 +30,35 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 public class Utils {
 
+	private static final String ROOT_DIR = "Data/";
 	
 	/**
 	 * get the path to which we should download all the data files
 	 * @param c context 
 	 * @return absolute path
 	 */
-	public static String getDownloadPath(Context c){
+	public static String getCachePath(Context c){
 		if(Build.VERSION.SDK_INT < 8){//8 == Build.VERSION_CODES.FROYO
-			return PreFroyoSDCardDir.getDownloadPath(c);
+			return PreFroyoSDCardDir.getDownloadPath(c) + '/';
 		}else{
-			return FroyoSDCardDir.getDownloadPath(c);
+			return FroyoSDCardDir.getDownloadPath(c) + '/';
 		}
+	}
+	
+	public static String getDataPath(Context c){
+		return getCachePath(c) + ROOT_DIR;
 	}
 	
 	static class FroyoSDCardDir{
 		public static String getDownloadPath(Context c){
 			File f =  c.getExternalCacheDir();
 			if(f != null){
-				return f.getAbsolutePath() + "/Data/";
+				return f.getAbsolutePath();
 			}else{
 				Toast.makeText(c, R.string.sdcard_not_mounted, Toast.LENGTH_LONG).show();
 				return null;
@@ -78,11 +84,15 @@ public class Utils {
 	 * @return string of files
 	 */
 	public static String[] getFileNamesFromRelativeDir(Context c, String dirName){
-		String prefix = getDownloadPath(c);
+		String prefix = getDataPath(c);
 		File f = new File(prefix + dirName);
 		
 		if(f.exists() && f.isDirectory()) return f.list();
-		else throw new IllegalArgumentException("File not a directory or doesn't exist dirName = " + f.getAbsolutePath());
+		else{
+			
+			Log.e("Utils::", "Couldn't find dir: " + dirName);
+			return new String[0];
+		}
 	}
 	
 	/**
@@ -92,11 +102,14 @@ public class Utils {
 	 * @return
 	 */
 	public static File[] getFilesFromRelativeDir(Context c, String dirName){
-		String prefix = getDownloadPath(c);
+		String prefix = getDataPath(c);
 		File f = new File(prefix + dirName);
 		
 		if(f.exists() && f.isDirectory()) return f.listFiles();
-		else throw new IllegalArgumentException("File not a directory or doesn't exist dirName = " + f.getAbsolutePath());
+		else {
+			Log.e("Utils::", "Dir not found: " + dirName);
+			return new File[0];
+		}
 	}
 	
 	/**

@@ -142,7 +142,7 @@ public class StartGameActivity extends Activity {
 
 		public void onItemSelected(AdapterView<?> arg0, View view, int position, long rowId) {
 			String themeName = (String) arg0.getAdapter().getItem(position);
-			Drawable themeIconDrawable = Drawable.createFromPath(Utils.getDownloadPath(StartGameActivity.this) + "Themes/" + themeName + "/icon@2X.png");
+			Drawable themeIconDrawable = Drawable.createFromPath(Utils.getDataPath(StartGameActivity.this) + "Themes/" + themeName + "/icon@2X.png");
 			themeIcon.setImageDrawable(themeIconDrawable);
 			config.theme = themeName;
 		}

@@ -85,8 +85,8 @@ public class FrontendDataUtils {
 	}
 
 	public static ArrayList<HashMap<String, ?>> getGraves(Context c){
-		String pathPrefix = Utils.getDownloadPath(c) + "Graphics/Graves/";
-		ArrayList<String> names = Utils.getFilesFromDirWithSuffix(c, "Graphics/Graves", ".png", true);
+		String pathPrefix = Utils.getDataPath(c) + "Graphics/Graves/";
+		ArrayList<String> names = Utils.getFilesFromDirWithSuffix(c,"Graphics/Graves", ".png", true);
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(names.size());
 
 		for(String s : names){
@@ -106,7 +106,7 @@ public class FrontendDataUtils {
 	}
 
 	public static ArrayList<HashMap<String, ?>> getFlags(Context c){
-		String pathPrefix = Utils.getDownloadPath(c) + "Graphics/Flags/";
+		String pathPrefix = Utils.getDataPath(c) + "Graphics/Flags/";
 		ArrayList<String> names = Utils.getFilesFromDirWithSuffix(c, "Graphics/Flags", ".png", true);
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(names.size());
 
@@ -131,7 +131,7 @@ public class FrontendDataUtils {
 	}
 
 	public static ArrayList<String> getForts(Context c){
-		return Utils.getFilesFromDirWithSuffix(c, "Forts", "L.png", true);
+		return Utils.getFilesFromDirWithSuffix(c,"Forts", "L.png", true);
 	}
 	public static ArrayList<HashMap<String, ?>> getTypes(Context c){
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(6);
@@ -149,8 +149,8 @@ public class FrontendDataUtils {
 	}
 
 	public static ArrayList<HashMap<String, ?>> getHats(Context c){
-		ArrayList<String> files = Utils.getFilesFromDirWithSuffix(c, "Graphics/Hats", ".png", true);
-		String pathPrefix = Utils.getDownloadPath(c) + "Graphics/Hats/";
+		ArrayList<String> files = Utils.getFilesFromDirWithSuffix(c,"Graphics/Hats", ".png", true);
+		String pathPrefix = Utils.getDataPath(c) + "Graphics/Hats/";
 		int size = files.size();
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(size);
 
