@@ -1,0 +1,27 @@
+SDL_ANDROID_DIR=./SDL-android-project
+
+PPCROSSARM=${FPC_DIR}/compiler/ppcrossarm
+PPCROSSARM_FLAGS= -Xd -O- -Tlinux -XParm-linux-androideabi- -vwnh -XS -a- -B
+PPCROSSARM_INCLUDES= \
+	-FD${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin \
+	-Fu${FPC_DIR}/rtl/units/arm-linux \
+	-Fl${ANDROID_NDK}/platforms/android-${ANDROID_NDK_API_LVL}/arch-arm/usr/lib \
+	-Fl$(SDL_ANDROID_DIR)/libs/armeabi \
+	-Fl${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/lib/gcc/arm-linux/arm-linux-androideabi/4.4.3/ \
+#LINKERFLAGS= -k"--static"
+FPC_DEFINES=-dandroid -darm
+
+
+all:
+	-${CMAKE_COMMAND} -E make_directory out
+
+	${ANDROID_NDK}/ndk-build -C $(SDL_ANDROID_DIR) -j 8
+
+	$(PPCROSSARM) $(LINKERFLAGS) $(PPCROSSARM_FLAGS) $(PPCROSSARM_INCLUDES) $(FPC_DEFINES) -oout/libhwengine.so ../../hedgewars/hwLibrary.pas
+	${CMAKE_COMMAND} -E copy out/libhwengine.so SDL-android-project/libs/armeabi/
+
+	${ANT} install -f $(SDL_ANDROID_DIR)/build.xml
+clean:  
+	${CMAKE_COMMAND} -E remove_directory out
+	${ANDROID_NDK}/ndk-build -C $(SDL_ANDROID_DIR) -j 8 clean
+	${ANT} clean -f $(SDL_ANDROID_DIR)/build.xml

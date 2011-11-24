@@ -192,6 +192,11 @@ endif(WITH_SERVER)
 add_subdirectory(misc/liblua)
 add_subdirectory(hedgewars)
 
+#run cmake -DBUILD_ANDROID_PORT=1 to enable this
+if(BUILD_ANDROID_PORT)
+	add_subdirectory(project_files/Android-build)
+endif()
+
 if(NOT BUILD_ENGINE_LIBRARY)
 	add_subdirectory(bin)
 	add_subdirectory(misc/quazip)
@@ -264,7 +269,7 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"CMakeCache\\\\.txt$"
 #	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
 #	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
-#	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
+	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
 #	"^${CMAKE_CURRENT_SOURCE_DIR}/misc/libtremor"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/project_files/HedgewarsMobile/"
 	"^${CMAKE_CURRENT_SOURCE_DIR}/bin/[a-z]"

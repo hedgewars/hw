@@ -340,6 +340,7 @@ FT_BEGIN_HEADER
 #define FT_MULFIX_ASSEMBLER  FT_MulFix_arm
 
   /* documentation is in freetype.h */
+  // Xeli: Got this snippet from  a 2.4.6 source
 
   static __inline__ FT_Int32
   FT_MulFix_arm( FT_Int32  a,
@@ -347,7 +348,6 @@ FT_BEGIN_HEADER
   {
     register FT_Int32  t, t2;
 
-<<<<<<< Updated upstream
 
     __asm__ __volatile__ (
       "smull  %1, %2, %4, %3\n\t"       /* (lo=%1,hi=%2) = a*b */
@@ -357,17 +357,6 @@ FT_BEGIN_HEADER
       "adc    %2, %2, #0\n\t"           /* %2 += carry */
       "mov    %0, %1, lsr #16\n\t"      /* %0  = %1 >> 16 */
       "orr    %0, %0, %2, lsl #16\n\t"  /* %0 |= %2 << 16 */
-=======
-#warning Should this be __asm__ ?
-    asm __volatile__ (
-      "smull  %1, %2, %4, %3\n\t"   /* (lo=%1,hi=%2) = a*b */
-      "mov    %0, %2, asr #31\n\t"  /* %0  = (hi >> 31) */
-      "add    %0, %0, #0x8000\n\t"  /* %0 += 0x8000 */
-      "adds   %1, %1, %0\n\t"       /* %1 += %0 */
-      "adc    %2, %2, #0\n\t"       /* %2 += carry */
-      "mov    %0, %1, lsr #16\n\t"  /* %0  = %1 >> 16 */
-      "orr    %0, %2, lsl #16\n\t"  /* %0 |= %2 << 16 */
->>>>>>> Stashed changes
       : "=r"(a), "=&r"(t2), "=&r"(t)
       : "r"(a), "r"(b) );
     return a;

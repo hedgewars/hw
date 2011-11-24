@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+  <RelativeLayout
+  		android:layout_width="fill_parent"
+  		android:layout_height="wrap_content"
+  		android:background="@drawable/box"
+  		android:layout_margin="3dp">
+  		<Spinner
+  			android:id="@+id/spinTeam1"
+  			android:layout_width="wrap_content"
+  			android:layout_height="wrap_content"
+  			android:layout_alignParentRight="true"
+  			android:layout_toRightOf="@+id/btnTeam1"
+  			android:background="@drawable/dropdown"/>
+  		<EditText
+  			android:id="@+id/txtTeam1"
+  			android:layout_width="fill_parent"
+  			android:layout_height="wrap_content"
+  			android:layout_below="@id/spinTeam1"
+  			android:background="@drawable/box"
+  			android:gravity="center"
+  			android:textColor="#FFF"
+  			android:text="Arnold"/>
+  		<ImageButton
+  			android:id="@id/btnTeam1"
+  			android:layout_height="wrap_content"
+  			android:layout_width="wrap_content"
+  			android:layout_alignLeft="@id/txtTeam1"
+  			android:layout_above="@id/txtTeam1"
+  			android:layout_alignTop="@id/spinTeam1"
+  			android:adjustViewBounds="true"
+  			android:scaleType="centerInside"
+  			android:background="@android:color/transparent"
+  			android:src="@drawable/dice"/>
+  </RelativeLayout>
+</merge>

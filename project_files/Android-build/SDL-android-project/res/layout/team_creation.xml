@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<include layout="@layout/background"/>
+	<LinearLayout
+	  xmlns:android="http://schemas.android.com/apk/res/android"
+	  android:orientation="horizontal"
+	  android:layout_width="fill_parent"
+	  android:layout_height="fill_parent"
+	  android:padding="3dp">
+	  
+	  <RelativeLayout
+	  	android:layout_width="fill_parent"
+	  	android:layout_height="fill_parent"
+	  	android:layout_weight="1">
+	  	<include layout="@layout/backbutton"/>
+	  	<include layout="@layout/savebutton"/>
+	  	<ScrollView
+		  	android:layout_width="fill_parent"
+		  	android:layout_height="fill_parent"
+		  	android:layout_above="@+id/btnBack"
+		  	android:background="@drawable/box"
+		  	android:scrollbarFadeDuration="0">
+		  	<TableLayout
+		  		android:layout_width="fill_parent"
+		  		android:layout_height="fill_parent"
+		  		android:stretchColumns="1"
+		  		android:layout_marginRight="4dip">
+		  		<TableRow android:padding="2dip">
+			  		<TextView
+			  			android:id="@+id/nameTag"
+			  			android:layout_width="wrap_content"
+			  			android:layout_height="wrap_content"
+			  			android:text="@string/name"/>
+			  		<EditText
+			  			android:id="@+id/txtName"
+			  			android:layout_width="fill_parent"
+			  			android:layout_height="wrap_content"
+			  			android:layout_margin="3dip"
+			  			android:background="@drawable/box"
+			  			android:text="@string/name_default"
+			  			android:textColor="#FFF"/>
+		  		</TableRow>
+		  		<TableRow android:padding="2dip">
+			  		<TextView
+			  			android:id="@+id/typeTag"
+			  			android:layout_width="wrap_content"
+			  			android:layout_height="fill_parent"
+			  			android:layout_alignTop="@+id/spinType"
+			  			android:layout_alignBottom="@id/spinType"
+			  			android:gravity="center"
+			  			android:text="@string/type"/>
+			  		<Spinner
+			  			android:id="@id/spinType"
+			  			android:layout_width="fill_parent"
+			  			android:layout_height="wrap_content"
+			  			android:layout_marginLeft="3dip"
+			  			android:background="@drawable/dropdown"/>
+		  		</TableRow>
+		  		<TableRow android:padding="2dip">
+		  			<TextView
+			  			android:id="@+id/graveTag"
+			  			android:layout_width="wrap_content"
+			  			android:layout_height="fill_parent"
+			  			android:layout_alignTop="@+id/spinGrave"
+			  			android:layout_alignBottom="@id/spinGrave"
+			  			android:gravity="center"
+			  			android:text="@string/grave"/>
+			  		<Spinner
+			  			android:id="@id/spinGrave"
+			  			android:layout_width="wrap_content"
+			  			android:layout_height="wrap_content"
+			  			android:layout_marginLeft="3dip"
+			  			android:background="@drawable/dropdown"/>
+		  		</TableRow>
+		  		<TableRow android:padding="2dip">
+		   			<TextView
+			  			android:id="@+id/FlagTag"
+			  			android:layout_width="wrap_content"
+			  			android:layout_height="fill_parent"
+			  			android:layout_alignTop="@+id/spinFlag"
+			  			android:layout_alignBottom="@id/spinFlag"
+			  			android:gravity="center"
+			  			android:text="@string/flag"/>
+			  		<Spinner
+			  			android:id="@id/spinFlag"
+			  			android:layout_width="fill_parent"
+			  			android:layout_height="wrap_content"
+			  			android:layout_marginLeft="3dip"
+			  			android:background="@drawable/dropdown"/>
+		  		</TableRow>
+		  		<TableRow android:padding="2dip">
+		  		  	<TextView
+			  			android:id="@+id/voiceTag"
+			  			android:layout_width="wrap_content"
+			  			android:layout_height="fill_parent"
+			  			android:layout_alignTop="@+id/spinVoice"
+			  			android:layout_alignBottom="@id/spinVoice"
+			  			android:gravity="center"
+			  			android:text="@string/voice"/>
+			  		<RelativeLayout
+			  			android:layout_width="fill_parent"
+			  			android:layout_height="wrap_content"
+			  			android:layout_marginLeft="3dip">
+			  			<ImageButton
+			  				android:id="@+id/btnPlay"
+			  				android:layout_width="wrap_content"
+			  				android:layout_height="wrap_content"
+			  				android:layout_alignParentRight="true"
+			  				android:adjustViewBounds="true"
+			  				android:scaleType="centerInside"
+			  				android:src="@drawable/playsound"
+			  				android:background="@android:color/transparent"/>
+			  			<Spinner
+			  				android:id="@+id/spinVoice"
+			  				android:layout_width="fill_parent"
+			  				android:layout_height="fill_parent"
+			  				android:layout_centerVertical="true"
+			  				android:layout_alignParentLeft="true"
+			  				android:layout_toLeftOf="@id/btnPlay"
+			  				android:background="@drawable/dropdown"/>
+			  		</RelativeLayout>
+		  		</TableRow>
+		  		<TableRow android:padding="2dip">
+		  			<TextView
+			  			android:id="@+id/fortTag"
+			  			android:layout_width="wrap_content"
+			  			android:layout_height="wrap_content"
+			  			android:layout_marginTop="2dip"
+			  			android:gravity="top"
+			  			android:text="@string/fort"/>
+		  			<RelativeLayout
+			  			android:layout_width="fill_parent"
+			  			android:layout_height="wrap_content"
+			  			android:layout_marginLeft="3dip">
+			  			<Spinner
+			  				android:id="@+id/spinFort"
+			  				android:layout_width="fill_parent"
+			  				android:layout_height="wrap_content"
+			  				android:layout_centerHorizontal="true"
+			  				android:background="@drawable/dropdown"/>
+			  			<ImageView
+			  				android:id="@+id/imgFort"
+			  				android:layout_width="128dip"
+			  				android:layout_height="128dip"
+			  				android:layout_centerHorizontal="true"
+			  				android:layout_below="@id/spinFort"
+			  				android:adjustViewBounds="true"
+			  				android:scaleType="centerInside"
+			  				android:background="@android:color/transparent"
+			  				android:src="@drawable/fort"/>
+			  			
+			  		</RelativeLayout>
+		  		</TableRow>
+		  	</TableLayout>
+		  </ScrollView>
+	  </RelativeLayout>
+	  
+	  <ScrollView
+	  	android:id="@+id/scroller"
+	  	android:layout_width="fill_parent"
+	  	android:layout_height="fill_parent"
+	  	android:layout_weight="1"
+	  	android:background="@drawable/box"
+	  	android:scrollbarFadeDuration="0">
+	  	<LinearLayout
+	  		android:id="@+id/HogsContainer"
+	  		android:orientation="vertical"
+	  		android:layout_width="fill_parent"
+	  		android:layout_height="fill_parent">
+	  		<include layout="@layout/team_creation_entry"/>
+	  		<include layout="@layout/team_creation_entry"/>
+	  		<include layout="@layout/team_creation_entry"/>
+	  		<include layout="@layout/team_creation_entry"/>
+	  		<include layout="@layout/team_creation_entry"/>
+	  		<include layout="@layout/team_creation_entry"/>
+	  		<include layout="@layout/team_creation_entry"/>
+	  		<include layout="@layout/team_creation_entry"/>
+	  	</LinearLayout>
+	  </ScrollView>
+	</LinearLayout>
+</FrameLayout>

@@ -291,7 +291,7 @@ for ii:= Low(TSprite) to High(TSprite) do
            ((vobCount > 0) or (ii <> sprFlake)) then
         begin
             if AltPath = ptNone then
-                if ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk] then // FIXME: hack
+                if ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk, sprFireButton] then // FIXME: hack
                     begin
                     if not reload then
                         begin
@@ -1008,7 +1008,7 @@ begin
     y:= SDL_WINDOWPOS_CENTERED_MASK;
     flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN;
 
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
     // make the sdl window appear on the second monitor when present
     x:= x or (SDL_GetNumVideoDisplays() - 1);
     y:= y or (SDL_GetNumVideoDisplays() - 1);

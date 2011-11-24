@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<array name="schemes">
+	<item>@raw/basicflags</item>
+	<item>@raw/scheme_default_scheme</item>
+	<item>@raw/scheme_barrelmayhem</item>
+	<item>@raw/scheme_cleanslate</item>
+	<item>@raw/scheme_fortmode</item>
+	<item>@raw/scheme_kingmode</item>
+	<item>@raw/scheme_minefield</item>
+	<item>@raw/scheme_promode</item>
+	<item>@raw/scheme_shoppa</item>
+	<item>@raw/scheme_thinkingwithportals</item>
+	<item>@raw/scheme_timeless</item>
+	<item>@raw/scheme_tunnelhogs</item>
+</array>
+
+<array name="weapons">
+    <item>@raw/weapon_default</item>
+    <item>@raw/weapon_clean</item>
+    <item>@raw/weapon_crazy</item>
+    <item>@raw/weapon_mines</item>
+    <item>@raw/weapon_portals</item>
+    <item>@raw/weapon_promode</item>
+    <item>@raw/weapon_shoppa</item>
+</array>
+
+<array name="teams">
+	<item>@raw/team_one</item>
+	<item>@raw/team_two</item>
+
+</array>
+</resources>

@@ -135,7 +135,7 @@ static UIViewController *callingController;
 
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", (int)(width * screenScale)];
     NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", (int)(height * screenScale)];
-    NSString *rotation = [[NSString alloc] initWithString:@"0"];
+    NSString *resourcePath = [[NSString alloc] initWithFormat:@"%@/Data", [[NSBundle mainBundle] resourcePath]];
 
     NSString *modelId = [HWUtils modelType];
     NSInteger tmpQuality;
@@ -168,12 +168,12 @@ static UIViewController *callingController;
     gameArgs[ 6] = [[[settings objectForKey:@"sound"] stringValue] UTF8String];                 //isSoundEnabled
     gameArgs[ 7] = [[[settings objectForKey:@"music"] stringValue] UTF8String];                 //isMusicEnabled
     gameArgs[ 8] = [[[settings objectForKey:@"alternate"] stringValue] UTF8String];             //cAltDamage
-    gameArgs[ 9] = [rotation UTF8String];                                                       //rotateQt
+    gameArgs[ 9] = [resourcePath UTF8String];                                                   //PathPrefix
     gameArgs[10] = ([HWUtils gameType] == gtSave) ? [self.savePath UTF8String] : NULL;          //recordFileName
 
     [verticalSize release];
     [horizontalSize release];
-    [rotation release];
+    [resourcePath release];
     [localeString release];
     [ipcString release];
 

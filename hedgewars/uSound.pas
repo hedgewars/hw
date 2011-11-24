@@ -148,7 +148,7 @@ begin
     WriteToConsole('Init sound...');
     isSoundEnabled:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
 
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
     channels:= 1;
 {$ELSE}
     channels:= 2;

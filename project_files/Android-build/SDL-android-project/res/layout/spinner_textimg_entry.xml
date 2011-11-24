@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:gravity="center">
+	<ImageView
+		android:id="@+id/spinner_img"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center"
+		android:adjustViewBounds="true"
+		android:scaleType="centerInside"
+		android:layout_marginRight="5dip"
+		/>
+	<TextView
+		android:id="@+id/spinner_txt"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="14dip"
+		android:textColor="#FFF"
+		android:gravity="center"/>
+</LinearLayout>
