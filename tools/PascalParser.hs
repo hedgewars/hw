@@ -14,7 +14,7 @@ import Data.Maybe
 import PascalBasics
 
 data PascalUnit =
-    Program Identifier Implementation
+    Program Identifier Implementation Phrase
     | Unit Identifier Interface Implementation (Maybe Initialize) (Maybe Finalize)
     deriving Show
 data Interface = Interface Uses TypesAndVars
@@ -27,7 +27,7 @@ data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
     | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe InitExpression)
-    | FunctionDeclaration Identifier TypeDecl (Maybe (TypesAndVars,Phrase))
+    | FunctionDeclaration Identifier TypeDecl (Maybe (TypesAndVars, Phrase))
     deriving Show
 data TypeDecl = SimpleType Identifier
     | RangeType Range
@@ -54,7 +54,7 @@ data Phrase = ProcCall Identifier [Expression]
         | ForCycle Identifier Expression Expression Phrase
         | WithBlock Reference Phrase
         | Phrases [Phrase]
-        | SwitchCase Expression [(Expression, Phrase)] (Maybe Phrase)
+        | SwitchCase Expression [([Expression], Phrase)] (Maybe Phrase)
         | Assignment Reference Expression
     deriving Show
 data Expression = Expression String
@@ -278,11 +278,12 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         comments
         char ';'
         comments
-        b <- if isImpl then
+        forward <- liftM isJust $ optionMaybe ((try $ string "forward;") >> comments)
+        b <- if isImpl && (not forward) then
                 liftM Just functionBody
                 else
                 return Nothing
-        comments
+--        comments
         return $ [FunctionDeclaration i UnknownType b]
         
     funcDecl = do
@@ -297,7 +298,8 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         comments
         char ';'
         comments
-        b <- if isImpl then
+        forward <- liftM isJust $ optionMaybe ((try $ string "forward;") >> comments)
+        b <- if isImpl && (not forward) then
                 liftM Just functionBody
                 else
                 return Nothing
@@ -309,9 +311,16 @@ program = do
     name <- iD
     (char ';')
     comments
-    impl <- implementation
     comments
-    return $ Program name impl
+    u <- uses
+    comments
+    tv <- typeVarDeclaration True
+    comments
+    p <- phrase
+    comments
+    char '.'
+    comments
+    return $ Program name (Implementation u (TypesAndVars tv)) p
 
 interface = do
     string "interface"
@@ -341,8 +350,8 @@ expression = buildExpressionParser table term <?> "expression"
         , try $ float pas >>= return . FloatLiteral . show
         , try $ natural pas >>= return . NumberLiteral . show
         , stringLiteral pas >>= return . StringLiteral
-        , char '#' >> many digit >>= return . CharCode
-        , char '$' >> many hexDigit >>= return . HexNumber
+        , char '#' >> many digit >>= \c -> comments >> return (CharCode c)
+        , char '$' >> many hexDigit >>=  \h -> comments >> return (HexNumber h)
         , char '-' >> expression >>= return . PrefixOp "-"
         , try $ string "nil" >> return Null
         , reference >>= return . Reference
@@ -482,7 +491,7 @@ switchCase = do
     return $ SwitchCase e cs o2
     where
     aCase = do
-        e <- expression
+        e <- (commaSep pas) expression
         comments
         char ':'
         comments
@@ -574,3 +583,4 @@ builtInFunction e = do
     exprs <- parens pas $ commaSep1 pas $ e
     spaces
     return (name, exprs)
+        

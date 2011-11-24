@@ -4,22 +4,47 @@ import PascalParser
 import Text.PrettyPrint.HughesPJ
 import Data.Maybe
 import Data.Char
-import Text.Parsec.String
+import Text.Parsec.Prim
+import Control.Monad.State
+import System.IO
+import System.Directory
+import Control.Monad.IO.Class
+import PascalPreprocessor
+import Control.Exception
+import System.IO.Error
+import qualified Data.Set as Set
 
 
 pas2C :: String -> IO String
-pas2C fileName = do
-    ptree <- parseFromFile pascalUnit fileName
-    case ptree of
-         (Left a) -> return (show a)
-         (Right a) -> (return . render . pascal2C) a
-
+pas2C = flip evalStateT initState . f
+    where
+    printLn = liftIO . hPutStrLn stderr
+    initState = Set.empty
+    f :: String -> StateT (Set.Set String) IO String
+    f fileName = do
+        liftIO $ setCurrentDirectory "../hedgewars/"
+        
+        fc' <- liftIO $ tryJust (guard . isDoesNotExistError) $ preprocess fileName
+        case fc' of
+            (Left a) -> return ""
+            (Right fc) -> do
+                modify $ Set.insert fileName
+                printLn $ "Preprocessed " ++ fileName
+                liftIO $ writeFile "debug.txt" fc
+                let ptree = parse pascalUnit fileName fc
+                case ptree of
+                     (Left a) -> return (show a)
+                     (Right a) -> (return . render . pascal2C) a
+         
 pascal2C :: PascalUnit -> Doc
 pascal2C (Unit unitName interface implementation init fin) = 
     interface2C interface
     $+$ 
     implementation2C implementation
-
+pascal2C (Program _ implementation mainFunction) =
+    implementation2C implementation
+    $+$
+    tvar2C (FunctionDeclaration (Identifier "main") (SimpleType $ Identifier "int") (Just (TypesAndVars [], mainFunction)))
 interface2C :: Interface -> Doc
 interface2C (Interface uses tvars) = typesAndVars2C tvars
 
@@ -90,8 +115,8 @@ phrase2C (Assignment ref expr) = ref2C ref <> text " = " <> expr2C expr <> semi
 phrase2C (WhileCycle expr phrase) = text "while" <> parens (expr2C expr) $$ (phrase2C $ wrapPhrase phrase)
 phrase2C (SwitchCase expr cases mphrase) = text "switch" <> parens (expr2C expr) <> text "of" $+$ (nest 4 . vcat . map case2C) cases
     where
-    case2C :: (Expression, Phrase) -> Doc
-    case2C (e, p) = text "case" <+> parens (expr2C e) <> char ':' <> nest 4 (phrase2C p $+$ text "break;")
+    case2C :: ([Expression], Phrase) -> Doc
+    case2C (e, p) = text "case" <+> parens (hsep . punctuate (char ',') . map expr2C $ e) <> char ':' <> nest 4 (phrase2C p $+$ text "break;")
 phrase2C (WithBlock ref p) = text "namespace" <> parens (ref2C ref) $$ (phrase2C $ wrapPhrase p)
 phrase2C (ForCycle (Identifier i) e1 e2 p) = 
     text "for" <> (parens . hsep . punctuate (char ';') $ [text i <+> text "=" <+> expr2C e1, text i <+> text "<=" <+> expr2C e2, text "++" <> text i])
