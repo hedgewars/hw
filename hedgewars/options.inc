@@ -27,16 +27,28 @@
 
 {$DEFINE GLunit:=GL}
 
+{$IFDEF ANDROID}
+  {$DEFINE SDL13}
+  {$DEFINE HWLIBRARY}
+  {$DEFINE S3D_DISABLED}
+  {$DEFINE GLunit:=gles11}
+  {$DEFINE MOBILE}
+  {$DEFINE Java_Prefix := 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
+{$ENDIF}
+
 {$IFDEF IPHONEOS}
   {$DEFINE SDL13}
   {$DEFINE HWLIBRARY}
   {$DEFINE S3D_DISABLED}
   {$DEFINE GLunit:=gles11}
-{$ELSE}
+  {$DEFINE MOBILE}
+{$ENDIF}
+
+{$IFNDEF IPHONEOS}
+  // not needed on ios because it is switched from the compiler command line arguments
   {$DEFINE DEBUGFILE}
   //{$DEFINE TRACEAIACTIONS}
   //{$DEFINE COUNTTICKS}
 {$ENDIF}
-
 
 //also available LUA_DISABLED

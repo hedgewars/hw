@@ -274,7 +274,7 @@ var l, i : LongInt;
     tmpstr: array[0..256] of WideChar;
 begin
 
-{$IFNDEF IPHONEOS}
+{$IFNDEF MOBILE}
 // remove chinese fonts for now
 if (font >= CJKfnt16) or (length(s) = 0) then
 {$ENDIF}
@@ -333,12 +333,13 @@ CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 end;
 
 procedure initModule;
-{$IFDEF DEBUGFILE}{$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}{$ENDIF}
+{$IFDEF DEBUGFILE}{$IFNDEF MOBILE}var i: LongInt;{$ENDIF}{$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
 {$I-}
-{$IFDEF IPHONEOS}
-    Assign(f,'../Documents/hw-' + cLogfileBase + '.log');
+{$IFDEF MOBILE}
+    {$IFDEF IPHONEOS} Assign(f,'../Documents/hw-' + cLogfileBase + '.log'); {$ENDIF}
+    {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + cLogfileBase + '.log'); {$ENDIF}
     Rewrite(f);
 {$ELSE}
     if (UserPathPrefix <> '') then

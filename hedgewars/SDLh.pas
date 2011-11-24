@@ -41,7 +41,9 @@ interface
   {$IFDEF HAIKU}
     {$linklib root}
   {$ELSE}
-    {$linklib pthread}
+    {$IFNDEF ANDROID}
+      {$linklib pthread}
+    {$ENDIF}
   {$ENDIF}
 {$ENDIF}
 
@@ -858,7 +860,9 @@ function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
+function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 {$ELSE}
+function  SDL_CreateThread(fn: Pointer; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: LongWord): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
@@ -876,6 +880,7 @@ procedure SDL_WM_SetIcon(icon: PSDL_Surface; mask : Byte); cdecl; external SDLLi
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
 function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 
+procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
 function  SDL_CreateMutex: PSDL_mutex; cdecl; external SDLLibName;
 procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
 function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexP';

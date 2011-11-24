@@ -32,6 +32,10 @@ uses uTypes, uConsts, uVariables, GLunit, uKeys, uSound, uAmmos, uUtils, uComman
 
 {$INCLUDE "config.inc"}
 procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
+function HW_getNumberOfWeapons:LongInt; cdecl; export;
+function HW_getMaxNumberOfTeams:LongInt; cdecl; export;
+function HW_getMaxNumberOfHogs:LongInt; cdecl; export;
+procedure HW_terminate(closeFrontend: Boolean); cdecl; export;
 
 implementation
 {$IFDEF HWLIBRARY}

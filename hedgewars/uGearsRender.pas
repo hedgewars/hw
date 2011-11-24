@@ -188,7 +188,7 @@ end;
 procedure DrawHH(Gear: PGear; ox, oy: LongInt);
 var i, t: LongInt;
     amt: TAmmoType;
-    sign, hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
+    sign, hx, hy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
     dx, dy, ax, ay, aAngle, dAngle, hAngle, lx, ly: real;  // laser, change
     defaultPos, HatVisible: boolean;
     HH: PHedgehog;
@@ -319,10 +319,12 @@ begin
                     end;
                 end;
             // draw crosshair
-            cx:= Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle));
-            cy:= Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.CurAmmoType, Gear^.Angle));
+            CrosshairX := Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle));
+            CrosshairY := Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.CurAmmoType, Gear^.Angle));
+ 
+            
             DrawRotatedTex(HH^.Team^.CrosshairTex,
-                    12, 12, cx + WorldDx, cy + WorldDy, 0,
+                    12, 12, CrosshairX + WorldDx, CrosshairY + WorldDy, 0,
                     sign * (Gear^.Angle * 180.0) / cMaxAngle);
             end;
         hx:= ox + 8 * sign;
