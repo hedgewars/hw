@@ -99,12 +99,11 @@ public class TeamCreatorActivity extends Activity {
 			hogName.add((EditText) team_creation_entry
 					.findViewById(R.id.txtTeam1));
 		}
-		ArrayList<HashMap<String, ?>> gravesData = FrontendDataUtils
-				.getGraves(this);
+		ArrayList<HashMap<String, ?>> gravesData = FrontendDataUtils.getGraves(this);
 		SimpleAdapter sa = new SimpleAdapter(this, gravesData,
 				R.layout.spinner_textimg_entry, new String[] { "txt", "img" },
 				new int[] { R.id.spinner_txt, R.id.spinner_img });
-
+		sa.setDropDownViewResource(R.layout.spinner_textimg_dropdown_entry);
 		sa.setViewBinder(viewBinder);
 		grave.setAdapter(sa);
 		grave.setOnFocusChangeListener(focusser);
@@ -114,6 +113,7 @@ public class TeamCreatorActivity extends Activity {
 		sa = new SimpleAdapter(this, flagsData, R.layout.spinner_textimg_entry,
 				new String[] { "txt", "img" }, new int[] { R.id.spinner_txt,
 						R.id.spinner_img });
+		sa.setDropDownViewResource(R.layout.spinner_textimg_dropdown_entry);
 		sa.setViewBinder(viewBinder);
 		flag.setAdapter(sa);
 		flag.setOnFocusChangeListener(focusser);
@@ -123,6 +123,7 @@ public class TeamCreatorActivity extends Activity {
 		sa = new SimpleAdapter(this, typesData, R.layout.spinner_textimg_entry,
 				new String[] { "txt", "img" }, new int[] { R.id.spinner_txt,
 						R.id.spinner_img });
+		sa.setDropDownViewResource(R.layout.spinner_textimg_dropdown_entry);
 		difficulty.setAdapter(sa);
 		difficulty.setOnFocusChangeListener(focusser);
 
@@ -131,6 +132,7 @@ public class TeamCreatorActivity extends Activity {
 		sa = new SimpleAdapter(this, hatsData, R.layout.spinner_textimg_entry,
 				new String[] { "txt", "img" }, new int[] { R.id.spinner_txt,
 						R.id.spinner_img });
+		sa.setDropDownViewResource(R.layout.spinner_textimg_dropdown_entry);
 		sa.setViewBinder(viewBinder);
 		for (Spinner spin : hogHat) {
 			spin.setAdapter(sa);
@@ -138,12 +140,14 @@ public class TeamCreatorActivity extends Activity {
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				R.layout.listview_item, FrontendDataUtils.getVoices(this));
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		voice.setAdapter(adapter);
 		voice.setOnFocusChangeListener(focusser);
 		voiceButton.setOnClickListener(voiceClicker);
 
 		adapter = new ArrayAdapter<String>(this, R.layout.listview_item,
 				FrontendDataUtils.getForts(this));
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		fort.setAdapter(adapter);
 		fort.setOnItemSelectedListener(fortSelector);
 		fort.setOnFocusChangeListener(focusser);
@@ -294,7 +298,7 @@ public class TeamCreatorActivity extends Activity {
 			settingsChanged = true;
 			String fortName = (String) arg0.getAdapter().getItem(position);
 			Drawable fortIconDrawable = Drawable.createFromPath(Utils
-					.getDownloadPath(TeamCreatorActivity.this)
+					.getDataPath(TeamCreatorActivity.this)
 					+ "Forts/"
 					+ fortName + "L.png");
 			imgFort.setImageDrawable(fortIconDrawable);
@@ -314,7 +318,7 @@ public class TeamCreatorActivity extends Activity {
 		public void onClick(View v) {
 			try {
 				File dir = new File(String.format("%sSounds/voices/%s",
-						Utils.getDownloadPath(TeamCreatorActivity.this),
+						Utils.getDataPath(TeamCreatorActivity.this),
 						voice.getSelectedItem()));
 				String file = "";
 				File[] dirs = dir.listFiles();

@@ -277,7 +277,7 @@ class SDLMain implements Runnable {
 		//Set up the IPC socket server to communicate with the engine
 		EngineProtocolNetwork ipc = new EngineProtocolNetwork(config);
 
-		String path = Utils.getDownloadPath(SDLActivity.mSingleton);//This represents the data directory
+		String path = Utils.getDataPath(SDLActivity.mSingleton);//This represents the data directory
 		path = path.substring(0, path.length()-1);//remove the trailing '/'
 
 		

@@ -18,36 +18,54 @@
 
 package org.hedgewars.hedgeroid;
 
-import org.hedgewars.hedgeroid.Downloader.DownloadActivity;
+import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
+import org.hedgewars.hedgeroid.Downloader.DownloadFragment;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
 import org.hedgewars.hedgeroid.Downloader.DownloadService;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
-	Button downloader, startGame;
-	
+	private Button downloader, startGame;
+	private ProgressDialog assetsDialog;
+
 	public void onCreate(Bundle sis){
 		super.onCreate(sis);
 		setContentView(R.layout.main);
-		
+
 		downloader = (Button)findViewById(R.id.downloader);
 		startGame = (Button)findViewById(R.id.startGame);
-		
+
 		downloader.setOnClickListener(downloadClicker);
 		startGame.setOnClickListener(startGameClicker);
+
+		boolean assetsCopied = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("assetscopied", false);
+
+		if(!assetsCopied){
+			DownloadAssets assetsAsyncTask = new DownloadAssets(this);
+			assetsDialog = ProgressDialog.show(this, "Please wait a moment", "Moving assets...");
+			assetsAsyncTask.execute((Object[])null);
+		}
 	}
-	
-	
-	
+
+	public void onAssetsDownloaded(boolean result){
+		if(result){
+			PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("assetscopied", true).commit();
+		}else{
+			Toast.makeText(this, R.string.download_failed, Toast.LENGTH_LONG);
+		}
+		assetsDialog.dismiss();
+	}
+
 	private OnClickListener downloadClicker = new OnClickListener(){
 		public void onClick(View v){
 			//startActivityForResult(new Intent(getApplicationContext(), DownloadActivity.class), 0);
@@ -57,13 +75,7 @@ public class MainActivity extends Activity {
 
 	private OnClickListener startGameClicker = new OnClickListener(){
 		public void onClick(View v){
-			if(PreferenceManager.getDefaultSharedPreferences(MainActivity.this).getBoolean(DownloadService.PREF_DOWNLOADED, false))
-				startActivity(new Intent(getApplicationContext(), StartGameActivity.class));
-			else {
-				Toast.makeText(MainActivity.this, R.string.download_userexplain, Toast.LENGTH_LONG).show();
-				startActivityForResult(new Intent(getApplicationContext(), DownloadActivity.class), 0);
-			}
+			startActivity(new Intent(getApplicationContext(), StartGameActivity.class));
 		}
 	};
-	
 }

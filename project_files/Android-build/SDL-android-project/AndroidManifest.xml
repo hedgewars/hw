@@ -22,15 +22,15 @@
 		  android:screenOrientation='landscape'>
         </activity>
         
-        <activity android:name=".Downloader.DownloadActivity"
+        <activity android:name=".Downloader.DownloadFragment"
                   android:label="@string/app_name"
-				  android:theme="@android:style/Theme.Dialog"
- 		  		  android:launchMode="singleTask">
+				  android:theme="@android:style/Theme.Dialog">
         </activity>
         
         <activity android:name=".Downloader.DownloadListActivity"
                   android:label="@string/app_name"
-				  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+				  android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+				  android:screenOrientation='landscape'>
         </activity>
         
         <service android:name=".Downloader.DownloadService"/>
