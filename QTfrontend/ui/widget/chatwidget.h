@@ -123,6 +123,7 @@ private:
   void nickCountUpdate(int cnt);
 
  private:
+  bool m_isAdmin;
   QGridLayout mainLayout;
   QTextBrowser* chatText;
   QStringList chatStrings;
