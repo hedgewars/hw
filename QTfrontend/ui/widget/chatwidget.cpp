@@ -245,6 +245,9 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 {
     this->gameSettings = gameSettings;
     this->notify = notify;
+
+    m_isAdmin = false;
+
     if(gameSettings->value("frontend/sound", true).toBool())
     {
         if (notify)
@@ -710,10 +713,7 @@ void HWChatWidget::onKick()
 {
     QListWidgetItem * curritem = chatNicks->currentItem();
     if (curritem)
-    {
-        displayNotice(tr("Kicking %1 ...").arg(Qt::escape(curritem->text())));
         emit kick(curritem->text());
-    }
 }
 
 void HWChatWidget::onBan()
@@ -832,6 +832,11 @@ void HWChatWidget::chatNickSelected(int index)
     else
         nick = m_clickedNick;
 
+    // don't display all actions for own nick
+    bool isSelf = (nick == m_userNick);
+
+    acFollow->setVisible(!isSelf);
+
     // update context menu labels according to possible action
     if(ignoreList.contains(nick, Qt::CaseInsensitive))
     {
@@ -842,6 +847,7 @@ void HWChatWidget::chatNickSelected(int index)
     {
         acIgnore->setText(QAction::tr("Ignore"));
         acIgnore->setIcon(QIcon(":/res/ignore.png"));
+        acIgnore->setVisible(!isSelf);
     }
 
     if(friendsList.contains(nick, Qt::CaseInsensitive))
@@ -853,6 +859,13 @@ void HWChatWidget::chatNickSelected(int index)
     {
         acFriend->setText(QAction::tr("Add friend"));
         acFriend->setIcon(QIcon(":/res/addfriend.png"));
+        acFriend->setVisible(!isSelf);
+    }
+
+    if (m_isAdmin)
+    {
+        acKick->setVisible(!isSelf);
+        acBan->setVisible(!isSelf);
     }
 }
 
@@ -881,6 +894,8 @@ void HWChatWidget::adminAccess(bool b)
 {
     chatNicks->removeAction(acKick);
     chatNicks->removeAction(acBan);
+
+    m_isAdmin = b;
 
     if(b)
     {
