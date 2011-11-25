@@ -204,16 +204,19 @@ typeDecl = choice [
             optional $ (try $ string "packed") >> comments
             string "array"
         comments
-        r <- optionMaybe $ do
+        r <- option [] $ do
             char '['
-            r <- rangeDecl
+            r <- commaSep pas rangeDecl
             char ']'
             comments
             return r
         string "of"
         comments
         t <- typeDecl
-        return $ ArrayDecl r t
+        if null r then
+            return $ ArrayDecl Nothing t
+            else
+            return $ foldr (\a b -> ArrayDecl (Just a) b) (ArrayDecl (Just $ head r) t) (tail r) 
     recordDecl = do
         try $ do
             optional $ (try $ string "packed") >> comments

@@ -159,7 +159,7 @@ begin
     recordFileName:= ParamStr(3);
     paramIndex:= 4;
     wrongParameter:= false;
-    while (paramIndex <= ParamCount) and not wrongParameter do
+    while (paramIndex <= ParamCount) and (not wrongParameter) do
         begin
         if ParamStr(paramIndex) = '--set-video'  then
 //--set-video [screen width] [screen height] [color dept]
