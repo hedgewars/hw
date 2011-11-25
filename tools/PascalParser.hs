@@ -27,15 +27,17 @@ data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
     | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe InitExpression)
-    | FunctionDeclaration Identifier TypeDecl (Maybe (TypesAndVars, Phrase))
+    | FunctionDeclaration Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     deriving Show
 data TypeDecl = SimpleType Identifier
     | RangeType Range
     | Sequence [Identifier]
-    | ArrayDecl Range TypeDecl
-    | RecordType [TypeVarDeclaration]
+    | ArrayDecl (Maybe Range) TypeDecl
+    | RecordType [TypeVarDeclaration] (Maybe [[TypeVarDeclaration]])
     | PointerTo TypeDecl
     | String Integer
+    | Set TypeDecl
+    | FunctionType TypeDecl [TypeVarDeclaration]
     | UnknownType
     deriving Show
 data Range = Range Identifier
@@ -126,13 +128,12 @@ reference = buildExpressionParser table term <?> "reference"
             [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
         ]
     
-    postfixes r = many postfix >>= return . foldl fp r
+    postfixes r = many postfix >>= return . foldl (flip ($)) r
     postfix = choice [
             parens pas (option [] parameters) >>= return . FunCall
           , char '^' >> return Dereference
           , (brackets pas) (commaSep1 pas $ expression) >>= return . ArrayElement
         ]
-    fp r f = f r
 
     
 varsDecl1 = varsParser sepEndBy1    
@@ -142,7 +143,7 @@ varsParser m endsWithSemi = do
     return vs
 
 aVarDecl endsWithSemi = do
-    when (not endsWithSemi) $
+    unless endsWithSemi $
         optional $ choice [
             try $ string "var"
             , try $ string "const"
@@ -177,6 +178,7 @@ constsDecl = do
             char ':'
             comments
             t <- typeDecl
+            comments
             return ()
         char '='
         comments
@@ -190,30 +192,75 @@ typeDecl = choice [
     , try (string "string") >> optionMaybe (brackets pas $ integer pas) >>= return . String . fromMaybe 255
     , arrayDecl
     , recordDecl
+    , setDecl
+    , functionType
     , sequenceDecl >>= return . Sequence
     , try (identifier pas) >>= return . SimpleType . Identifier
     , rangeDecl >>= return . RangeType
     ] <?> "type declaration"
     where
     arrayDecl = do
-        try $ string "array"
+        try $ do
+            optional $ (try $ string "packed") >> comments
+            string "array"
         comments
-        char '['
-        r <- rangeDecl
-        char ']'
-        comments
+        r <- optionMaybe $ do
+            char '['
+            r <- rangeDecl
+            char ']'
+            comments
+            return r
         string "of"
         comments
         t <- typeDecl
         return $ ArrayDecl r t
     recordDecl = do
-        optional $ (try $ string "packed") >> comments
-        try $ string "record"
+        try $ do
+            optional $ (try $ string "packed") >> comments
+            string "record"
         comments
         vs <- varsDecl True
+        union <- optionMaybe $ do
+            string "case"
+            comments
+            iD
+            comments
+            string "of"
+            comments
+            many unionCase
         string "end"
-        return $ RecordType vs
-    sequenceDecl = (parens pas) $ (commaSep pas) iD
+        return $ RecordType vs union
+    setDecl = do
+        try $ string "set" >> space
+        comments
+        string "of"
+        comments
+        liftM Set typeDecl
+    unionCase = do
+        try $ commaSep pas $ (iD >> return ()) <|> (integer pas >> return ())
+        char ':'
+        comments
+        u <- parens pas $ varsDecl True
+        char ';'
+        comments
+        return u
+    sequenceDecl = (parens pas) $ (commaSep pas) (iD >>= \i -> optional (spaces >> char '=' >> spaces >> integer pas) >> return i)
+    functionType = do
+        fp <- try (string "function") <|> try (string "procedure")
+        comments
+        vs <- option [] $ parens pas $ varsDecl False
+        comments
+        ret <- if (fp == "function") then do
+            char ':'
+            comments
+            ret <- typeDecl
+            comments
+            return ret
+            else
+            return UnknownType
+        optional $ try $ char ';' >> comments >> string "cdecl"
+        comments
+        return $ FunctionType ret vs
 
 typesDecl = many (aTypeDecl >>= \t -> comments >> return t)
     where
@@ -245,8 +292,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
     varSection,
     constSection,
     typeSection,
-    funcDecl,
-    procDecl
+    funcDecl
     ]
     where
     varSection = do
@@ -270,41 +316,34 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         comments
         return t
         
-    procDecl = do
-        try $ string "procedure"
-        comments
-        i <- iD
-        optional $ parens pas $ varsDecl False
-        comments
-        char ';'
-        comments
-        forward <- liftM isJust $ optionMaybe ((try $ string "forward;") >> comments)
-        b <- if isImpl && (not forward) then
-                liftM Just functionBody
-                else
-                return Nothing
---        comments
-        return $ [FunctionDeclaration i UnknownType b]
-        
     funcDecl = do
-        try $ string "function"
+        fp <- try (string "function") <|> try (string "procedure")
         comments
         i <- iD
-        optional $ parens pas $ varsDecl False
+        vs <- option [] $ parens pas $ varsDecl False
         comments
-        char ':'
-        comments
-        ret <- typeDecl
-        comments
+        ret <- if (fp == "function") then do
+            char ':'
+            comments
+            ret <- typeDecl
+            comments
+            return ret
+            else
+            return UnknownType
         char ';'
         comments
-        forward <- liftM isJust $ optionMaybe ((try $ string "forward;") >> comments)
+        forward <- liftM isJust $ optionMaybe (try (string "forward;") >> comments)
+        many functionDecorator
         b <- if isImpl && (not forward) then
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ [FunctionDeclaration i ret b]
-
+        return $ [FunctionDeclaration i ret vs b]
+    functionDecorator = choice [
+        try $ string "inline;"
+        , try $ string "cdecl;"
+        , try (string "external") >> comments >> iD >> optional (string "name" >> comments >> stringLiteral pas)>> string ";"
+        ] >> comments
 program = do
     string "program"
     comments
@@ -366,6 +405,7 @@ expression = buildExpressionParser table term <?> "expression"
         , [  Infix (char '+' >> return (BinOp "+")) AssocLeft
            , Infix (char '-' >> return (BinOp "-")) AssocLeft
           ]
+        , [Prefix (try (string "not") >> return (PrefixOp "not"))]
         , [  Infix (try (string "<>") >> return (BinOp "<>")) AssocNone
            , Infix (try (string "<=") >> return (BinOp "<=")) AssocNone
            , Infix (try (string ">=") >> return (BinOp ">=")) AssocNone
@@ -380,7 +420,6 @@ expression = buildExpressionParser table term <?> "expression"
         , [  Infix (try $ string "shl" >> return (BinOp "shl")) AssocNone
            , Infix (try $ string "shr" >> return (BinOp "shr")) AssocNone
           ]
-        , [Prefix (try (string "not") >> return (PrefixOp "not"))]
         ]
     
 phrasesBlock = do
@@ -416,7 +455,7 @@ ifBlock = do
     o1 <- phrase
     comments
     o2 <- optionMaybe $ do
-        try $ string "else"
+        try $ string "else" >> space
         comments
         o <- phrase
         comments
@@ -434,7 +473,7 @@ whileCycle = do
     return $ WhileCycle e o
 
 withBlock = do
-    try $ string "with"
+    try $ string "with" >> space
     comments
     rs <- (commaSep1 pas) reference
     comments
@@ -444,7 +483,7 @@ withBlock = do
     return $ foldr WithBlock o rs
     
 repeatCycle = do
-    try $ string "repeat"
+    try $ string "repeat" >> space
     comments
     o <- many phrase
     string "until"
@@ -454,7 +493,7 @@ repeatCycle = do
     return $ RepeatCycle e o
 
 forCycle = do
-    try $ string "for"
+    try $ string "for" >> space
     comments
     i <- iD
     comments

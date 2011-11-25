@@ -12,30 +12,44 @@ import Control.Monad.IO.Class
 import PascalPreprocessor
 import Control.Exception
 import System.IO.Error
-import qualified Data.Set as Set
+import qualified Data.Map as Map
 
 
-pas2C :: String -> IO String
-pas2C = flip evalStateT initState . f
+pas2C :: String -> IO ()
+pas2C fn = do
+    setCurrentDirectory "../hedgewars/"
+    flip evalStateT initState $ f fn
     where
     printLn = liftIO . hPutStrLn stderr
-    initState = Set.empty
-    f :: String -> StateT (Set.Set String) IO String
+    initState = Map.empty
+    f :: String -> StateT (Map.Map String PascalUnit) IO ()
     f fileName = do
-        liftIO $ setCurrentDirectory "../hedgewars/"
-        
-        fc' <- liftIO $ tryJust (guard . isDoesNotExistError) $ preprocess fileName
-        case fc' of
-            (Left a) -> return ""
-            (Right fc) -> do
-                modify $ Set.insert fileName
-                printLn $ "Preprocessed " ++ fileName
-                liftIO $ writeFile "debug.txt" fc
-                let ptree = parse pascalUnit fileName fc
-                case ptree of
-                     (Left a) -> return (show a)
-                     (Right a) -> (return . render . pascal2C) a
+        processed <- gets $ Map.member fileName
+        unless processed $ do
+            fc' <- liftIO 
+                $ tryJust (guard . isDoesNotExistError) 
+                $ hPutStr stderr ("Preprocessing '" ++ fileName ++ ".pas'... ") >> preprocess (fileName ++ ".pas")
+            case fc' of
+                (Left a) -> printLn "doesn't exist"
+                (Right fc) -> do
+                    printLn "ok"
+                    let ptree = parse pascalUnit fileName fc
+                    case ptree of
+                         (Left a) -> do
+                            liftIO $ writeFile "preprocess.out" fc
+                            printLn $ show a ++ "\nsee preprocess.out for preprocessed source"
+                            fail "stop"
+                         (Right a) -> do
+                            modify (Map.insert fileName a)
+                            mapM_ f (usesFiles a)
+                            
          
+usesFiles :: PascalUnit -> [String]         
+usesFiles (Program _ (Implementation uses _) _) = uses2List uses
+usesFiles (Unit _ (Interface uses1 _) (Implementation uses2 _) _ _) = uses2List uses1 ++ uses2List uses2
+
+
+
 pascal2C :: PascalUnit -> Doc
 pascal2C (Unit unitName interface implementation init fin) = 
     interface2C interface
@@ -44,29 +58,40 @@ pascal2C (Unit unitName interface implementation init fin) =
 pascal2C (Program _ implementation mainFunction) =
     implementation2C implementation
     $+$
-    tvar2C (FunctionDeclaration (Identifier "main") (SimpleType $ Identifier "int") (Just (TypesAndVars [], mainFunction)))
+    tvar2C (FunctionDeclaration (Identifier "main") (SimpleType $ Identifier "int") [] (Just (TypesAndVars [], mainFunction)))
 interface2C :: Interface -> Doc
-interface2C (Interface uses tvars) = typesAndVars2C tvars
+interface2C (Interface uses tvars) = uses2C uses $+$ typesAndVars2C tvars
 
 implementation2C :: Implementation -> Doc
-implementation2C (Implementation uses tvars) = typesAndVars2C tvars
+implementation2C (Implementation uses tvars) = uses2C uses $+$ typesAndVars2C tvars
 
 
 typesAndVars2C :: TypesAndVars -> Doc
 typesAndVars2C (TypesAndVars ts) = vcat $ map tvar2C ts
 
+uses2C :: Uses -> Doc
+uses2C uses = vcat $ map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
+
+uses2List :: Uses -> [String]
+uses2List (Uses ids) = map (\(Identifier i) -> i) ids
 
 tvar2C :: TypeVarDeclaration -> Doc
-tvar2C (FunctionDeclaration (Identifier name) returnType Nothing) = 
+tvar2C (FunctionDeclaration (Identifier name) returnType params Nothing) = 
     type2C returnType <+> text (name ++ "();")
-tvar2C (FunctionDeclaration (Identifier name) returnType (Just (tvars, phrase))) = 
+tvar2C (FunctionDeclaration (Identifier name) returnType params (Just (tvars, phrase))) = 
     type2C returnType <+> text (name ++ "()") 
-    $$
-    text "{" $+$ (nest 4 $ typesAndVars2C tvars)
     $+$
-    phrase2C phrase
-    $+$ 
+    text "{" 
+    $+$ nest 4 (
+        typesAndVars2C tvars
+        $+$
+        phrase2C' phrase
+        )
+    $+$
     text "}"
+    where
+    phrase2C' (Phrases p) = vcat $ map phrase2C p
+    phrase2C' p = phrase2C p
 tvar2C (TypeDeclaration (Identifier i) t) = text "type" <+> text i <+> type2C t <> text ";"
 tvar2C (VarDeclaration isConst (ids, t) mInitExpr) = 
     if isConst then text "const" else empty
@@ -98,7 +123,7 @@ type2C UnknownType = text "void"
 type2C (String l) = text $ "string" ++ show l
 type2C (SimpleType (Identifier i)) = text i
 type2C (PointerTo t) = type2C t <> text "*"
-type2C (RecordType tvs) = text "{" $+$ (nest 4 . vcat . map tvar2C $ tvs) $+$ text "}"
+type2C (RecordType tvs union) = text "{" $+$ (nest 4 . vcat . map tvar2C $ tvs) $+$ text "}"
 type2C (RangeType r) = text "<<range type>>"
 type2C (Sequence ids) = text "<<sequence type>>"
 type2C (ArrayDecl r t) = text "<<array type>>"
