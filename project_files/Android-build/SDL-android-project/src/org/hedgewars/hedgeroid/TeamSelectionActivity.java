@@ -241,7 +241,8 @@ public class TeamSelectionActivity extends Activity{
 			selectAvailableTeamsItem(position);
 			return true;
 		case 1://delete
-			File f = new File(String.format("%s/%s/%s.xml", TeamSelectionActivity.this.getFilesDir(), Team.DIRECTORY_TEAMS, availableTeamsList.get(position).get("txt")));
+			Team team = (Team)availableTeamsList.get(position).get("team");
+			File f = new File(String.format("%s/%s/%s", TeamSelectionActivity.this.getFilesDir(), Team.DIRECTORY_TEAMS, team.file));
 			f.delete();
 			availableTeamsList.remove(position);
 			((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
