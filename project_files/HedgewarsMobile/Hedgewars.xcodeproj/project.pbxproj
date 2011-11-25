@@ -377,6 +377,9 @@
 		6115651A147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/About.strings; sourceTree = "<group>"; };
 		6115651B147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6115651C147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Scheme.strings; sourceTree = "<group>"; };
+		61156526147F49E1006729A9 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Locale/Spanish.lproj/About.strings; sourceTree = "<group>"; };
+		61156527147F4A2E006729A9 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Locale/Spanish.lproj/Localizable.strings; sourceTree = "<group>"; };
+		61156528147F4A3C006729A9 /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Locale/Spanish.lproj/Scheme.strings; sourceTree = "<group>"; };
 		611D7A4F142FDCD3006E0798 /* uTouch.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTouch.pas; path = ../../hedgewars/uTouch.pas; sourceTree = SOURCE_ROOT; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
@@ -1279,6 +1282,7 @@
 				Japanese,
 				French,
 				German,
+				Spanish,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1691,6 +1695,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				6115651A147F48AE006729A9 /* English */,
+				61156526147F49E1006729A9 /* Spanish */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1699,6 +1704,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				6115651B147F48AE006729A9 /* English */,
+				61156527147F4A2E006729A9 /* Spanish */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1707,6 +1713,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				6115651C147F48AE006729A9 /* English */,
+				61156528147F4A3C006729A9 /* Spanish */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
