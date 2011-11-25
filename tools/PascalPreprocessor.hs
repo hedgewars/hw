@@ -15,9 +15,11 @@ comment = choice [
         , (try $ string "//") >> manyTill anyChar (try newline) >> return "\n"
         ]
 
+initDefines = Map.fromList [("FPC", "")]
+        
 preprocess :: String -> IO String
 preprocess fn = do
-    r <- runParserT (preprocessFile fn) (Map.empty, [True]) "" ""
+    r <- runParserT (preprocessFile fn) (initDefines, [True]) "" ""
     case r of
          (Left a) -> do
              hPutStrLn stderr (show a)
@@ -81,7 +83,7 @@ preprocess fn = do
         let f = if s == "IFNDEF" then not else id
         
         spaces
-        d <- many1 alphaNum
+        d <- identifier
         spaces
         char '}'
         
@@ -103,7 +105,7 @@ preprocess fn = do
         try $ string "DEFINE"
         spaces
         i <- identifier        
-        d <- option "" (string ":=" >> many (noneOf "}"))
+        d <- ((string ":=" >> return ())<|> spaces) >> many (noneOf "}")
         char '}'
         updateState $ \(m, b) -> (if and b then Map.insert i d m else m, b)
         return ""

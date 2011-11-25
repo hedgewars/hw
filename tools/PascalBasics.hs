@@ -25,7 +25,7 @@ pascalLanguageDef
             , "type", "var", "const", "out", "array", "packed"
             , "procedure", "function", "with", "for", "to"
             , "downto", "div", "mod", "record", "set", "nil"
-            , "string", "shortstring"
+            , "string", "shortstring", "cdecl", "external"
             ] ++ builtin
     , reservedOpNames= [] 
     , caseSensitive  = False   
