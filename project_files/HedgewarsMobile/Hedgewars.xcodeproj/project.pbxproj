@@ -33,6 +33,9 @@
 		610782981440EE5C00645B29 /* gameMods.plist in Resources */ = {isa = PBXBuildFile; fileRef = 610782951440EE5C00645B29 /* gameMods.plist */; };
 		610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
 		610D5FB31270E26C0033333A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
+		61156521147F48B6006729A9 /* About.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156520147F48B6006729A9 /* About.strings */; };
+		61156523147F48B7006729A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156522147F48B7006729A9 /* Localizable.strings */; };
+		61156525147F48B8006729A9 /* Scheme.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156524147F48B8006729A9 /* Scheme.strings */; };
 		61188BF212A6FE530026C5DA /* ammoButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6103D399129B350700911D8D /* ammoButton@2x.png */; };
 		61188BF312A6FE540026C5DA /* arrowDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6103D39A129B350700911D8D /* arrowDown@2x.png */; };
 		61188BF412A6FE560026C5DA /* arrowLeft@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6103D39B129B350700911D8D /* arrowLeft@2x.png */; };
@@ -371,6 +374,9 @@
 		610782931440EE5C00645B29 /* basicFlags.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = basicFlags.plist; path = Resources/basicFlags.plist; sourceTree = "<group>"; };
 		610782941440EE5C00645B29 /* credits.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = credits.plist; path = Resources/credits.plist; sourceTree = "<group>"; };
 		610782951440EE5C00645B29 /* gameMods.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = gameMods.plist; path = Resources/gameMods.plist; sourceTree = "<group>"; };
+		6115651A147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/About.strings; sourceTree = "<group>"; };
+		6115651B147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6115651C147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Scheme.strings; sourceTree = "<group>"; };
 		611D7A4F142FDCD3006E0798 /* uTouch.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTouch.pas; path = ../../hedgewars/uTouch.pas; sourceTree = SOURCE_ROOT; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
@@ -711,6 +717,7 @@
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
+				61156510147F481B006729A9 /* Locale */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				61370652117B1D50004EE44A /* Entitlements-Distribution.plist */,
 				611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */,
@@ -786,6 +793,16 @@
 				6199E81912463EC400DADF8C /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		61156510147F481B006729A9 /* Locale */ = {
+			isa = PBXGroup;
+			children = (
+				61156520147F48B6006729A9 /* About.strings */,
+				61156522147F48B7006729A9 /* Localizable.strings */,
+				61156524147F48B8006729A9 /* Scheme.strings */,
+			);
+			name = Locale;
 			sourceTree = "<group>";
 		};
 		611D9BF312497B7700008271 /* Satellite Controllers */ = {
@@ -1497,6 +1514,9 @@
 				610782971440EE5C00645B29 /* credits.plist in Resources */,
 				610782981440EE5C00645B29 /* gameMods.plist in Resources */,
 				61B9A86814423A9D001541C1 /* GameConfigViewController-iPad.xib in Resources */,
+				61156521147F48B6006729A9 /* About.strings in Resources */,
+				61156523147F48B7006729A9 /* Localizable.strings in Resources */,
+				61156525147F48B8006729A9 /* Scheme.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1665,6 +1685,33 @@
 			targetProxy = 928301590F10E41300CC5A3C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		61156520147F48B6006729A9 /* About.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6115651A147F48AE006729A9 /* English */,
+			);
+			name = About.strings;
+			sourceTree = "<group>";
+		};
+		61156522147F48B7006729A9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6115651B147F48AE006729A9 /* English */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		61156524147F48B8006729A9 /* Scheme.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6115651C147F48AE006729A9 /* English */,
+			);
+			name = Scheme.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {

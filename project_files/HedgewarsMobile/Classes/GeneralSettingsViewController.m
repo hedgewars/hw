@@ -134,13 +134,13 @@
     NSString *sectionTitle = nil;
     switch (section) {
         case 0:
-            sectionTitle = NSLocalizedString(@"Main Configuration", @"");
+            sectionTitle = NSLocalizedString(@"Main Configuration", @"from the settings table");
             break;
         case 1:
-            sectionTitle = NSLocalizedString(@"Audio Preferences", @"");
+            sectionTitle = NSLocalizedString(@"Audio Preferences", @"from the settings table");
             break;
         case 2:
-            sectionTitle = NSLocalizedString(@"Other Settings", @"");
+            sectionTitle = NSLocalizedString(@"Other Settings", @"from the settings table");
             break;
         default:
             DLog(@"Nope");
@@ -173,13 +173,13 @@
             
             if (row == 0) {
                 editableCell.titleLabel.text = NSLocalizedString(@"Nickname","from the settings table");
-                editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"");
+                editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"from the settings table");
                 editableCell.textField.text = [settings objectForKey:@"username"];
                 editableCell.textField.secureTextEntry = NO;
                 editableCell.tag = 40;
             } else {
                 editableCell.titleLabel.text = NSLocalizedString(@"Password","from the settings table");
-                editableCell.textField.placeholder = NSLocalizedString(@"Insert your password",@"");
+                editableCell.textField.placeholder = NSLocalizedString(@"Insert your password",@"from the settings table");
                 editableCell.textField.text = [settings objectForKey:@"password"];
                 editableCell.textField.secureTextEntry = YES;
                 editableCell.tag = 50;
@@ -200,11 +200,11 @@
             
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
-                cell.textLabel.text = NSLocalizedString(@"Sound", @"");
+                cell.textLabel.text = NSLocalizedString(@"Sound", @"from the settings table");
                 switchContent.on = [[settings objectForKey:@"sound"] boolValue];
                 switchContent.tag = 10;
             } else {
-                cell.textLabel.text = NSLocalizedString(@"Music", @"");
+                cell.textLabel.text = NSLocalizedString(@"Music", @"from the settings table");
                 switchContent.on = [[settings objectForKey:@"music"] boolValue];
                 switchContent.tag = 20;
             }
@@ -223,20 +223,20 @@
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
             switch (row) {
                 case 0:
-                    cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"");
+                    cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"from the settings table");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"from the settings table");
                     switchContent.on = [[settings objectForKey:@"alternate"] boolValue];
                     switchContent.tag = 30;
                     break;
                 case 1:
                     cell.textLabel.text = NSLocalizedString(@"Sync Schemes and Weapons", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"Choosing a Scheme will select its associated Weapon", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Choosing a Scheme will select its associated Weapon", @"from the settings table");
                     switchContent.on = [[settings objectForKey:@"sync_ws"] boolValue];
                     switchContent.tag = 90;
                     break;
                 case 2:
                     cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"from the settings table");
                     switchContent.on = [[settings objectForKey:@"classic_menu"] boolValue];
                     switchContent.tag = 60;
                     break;
