@@ -383,6 +383,9 @@
 		6115652B147F4C45006729A9 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = Locale/French.lproj/Scheme.strings; sourceTree = "<group>"; };
 		6115652C147F4C4C006729A9 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = Locale/French.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6115652D147F4C52006729A9 /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = Locale/French.lproj/About.strings; sourceTree = "<group>"; };
+		61156530147F4D10006729A9 /* Polish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Polish; path = Locale/Polish.lproj/About.strings; sourceTree = "<group>"; };
+		61156531147F4D17006729A9 /* Polish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Polish; path = Locale/Polish.lproj/Localizable.strings; sourceTree = "<group>"; };
+		61156532147F4D1E006729A9 /* Polish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Polish; path = Locale/Polish.lproj/Scheme.strings; sourceTree = "<group>"; };
 		611D7A4F142FDCD3006E0798 /* uTouch.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTouch.pas; path = ../../hedgewars/uTouch.pas; sourceTree = SOURCE_ROOT; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
@@ -1286,6 +1289,7 @@
 				French,
 				German,
 				Spanish,
+				Polish,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1700,6 +1704,7 @@
 				6115651A147F48AE006729A9 /* English */,
 				61156526147F49E1006729A9 /* Spanish */,
 				6115652D147F4C52006729A9 /* French */,
+				61156530147F4D10006729A9 /* Polish */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1710,6 +1715,7 @@
 				6115651B147F48AE006729A9 /* English */,
 				61156527147F4A2E006729A9 /* Spanish */,
 				6115652C147F4C4C006729A9 /* French */,
+				61156531147F4D17006729A9 /* Polish */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1720,6 +1726,7 @@
 				6115651C147F48AE006729A9 /* English */,
 				61156528147F4A3C006729A9 /* Spanish */,
 				6115652B147F4C45006729A9 /* French */,
+				61156532147F4D1E006729A9 /* Polish */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
