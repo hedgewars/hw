@@ -19,6 +19,7 @@
 package org.hedgewars.hedgeroid.EngineProtocol;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -30,6 +31,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Xml;
@@ -61,6 +63,7 @@ public class Team implements Parcelable{
 	private static final int STATE_HOG_ROOT = 2;
 
 	public String name, grave, flag, voice, fort, hash;
+	public String file = null;
 
 	public static int maxNumberOfHogs = 0;
 	public static int maxNumberOfTeams = 0;
@@ -130,6 +133,22 @@ public class Team implements Parcelable{
 		}
 	}
 
+	public void setFileName(Context c){
+		if(file == null){
+		  	file = validFileName(c, name);
+		}
+	}
+	private String validFileName(Context c, String fileName){
+		String absolutePath = String.format("%s/%s", c.getFilesDir(), fileName);
+		File f = new File(absolutePath);
+		if(f.exists()){
+			String newFileName = fileName + (int)(Math.random()*10);
+			return validFileName(c, newFileName);
+		}else{
+			return fileName;
+		}
+	}
+	
 	/*
 	 * XML METHODS
 	 */
@@ -311,6 +330,7 @@ public class Team implements Parcelable{
 		dest.writeIntArray(levels);
 		dest.writeInt(color);
 		dest.writeInt(hogCount);
+		dest.writeString(file);
 	}
 
 
@@ -326,6 +346,7 @@ public class Team implements Parcelable{
 		src.readIntArray(levels);
 		color = src.readInt();
 		hogCount = src.readInt();
+		file = src.readString();
 	}
 
 	public static final Parcelable.Creator<Team> CREATOR = new Parcelable.Creator<Team>() {

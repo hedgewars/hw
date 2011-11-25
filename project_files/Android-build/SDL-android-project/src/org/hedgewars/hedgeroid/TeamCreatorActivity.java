@@ -64,6 +64,7 @@ public class TeamCreatorActivity extends Activity {
 	private MediaPlayer mp = null;
 	private boolean settingsChanged = false;
 	private boolean saved = false;
+	private String fileName = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -197,6 +198,7 @@ public class TeamCreatorActivity extends Activity {
 
 				hogName.get(i).setText(t.hogNames[i]);
 			}
+			this.fileName = t.file;
 		}
 	}
 
@@ -242,8 +244,7 @@ public class TeamCreatorActivity extends Activity {
 			saved = true;
 			Team team = new Team();
 			team.name = name.getText().toString();
-			HashMap<String, Object> hashmap = (HashMap<String, Object>) flag
-					.getSelectedItem();
+			HashMap<String, Object> hashmap = (HashMap<String, Object>) flag.getSelectedItem();
 
 			team.flag = (String) hashmap.get("txt");
 			team.fort = fort.getSelectedItem().toString();
@@ -251,6 +252,7 @@ public class TeamCreatorActivity extends Activity {
 			team.grave = hashmap.get("txt").toString();
 			team.hash = "0";
 			team.voice = voice.getSelectedItem().toString();
+			team.file = fileName;
 
 			hashmap = ((HashMap<String, Object>) difficulty.getSelectedItem());
 			String levelString = hashmap.get("txt").toString();
@@ -271,18 +273,17 @@ public class TeamCreatorActivity extends Activity {
 
 			for (int i = 0; i < hogName.size(); i++) {
 				team.hogNames[i] = hogName.get(i).getText().toString();
-				hashmap = (HashMap<String, Object>) hogHat.get(i)
-						.getSelectedItem();
+				hashmap = (HashMap<String, Object>) hogHat.get(i).getSelectedItem();
 				team.hats[i] = hashmap.get("txt").toString();
 				team.levels[i] = levelInt;
 			}
 			try {
-				File teamsDir = new File(getFilesDir().getAbsolutePath() + '/'
-						+ Team.DIRECTORY_TEAMS);
-				if (!teamsDir.exists())
-					teamsDir.mkdir();
-				FileOutputStream fos = new FileOutputStream(String.format(
-						"%s/%s.xml", teamsDir.getAbsolutePath(), team.name));
+				File teamsDir = new File(getFilesDir().getAbsolutePath() + '/' + Team.DIRECTORY_TEAMS);
+				if (!teamsDir.exists()) teamsDir.mkdir();
+				if(team.file == null){
+					team.setFileName(TeamCreatorActivity.this);
+				}
+				FileOutputStream fos = new FileOutputStream(String.format("%s/%s", teamsDir.getAbsolutePath(), team.file));
 				team.writeToXml(fos);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

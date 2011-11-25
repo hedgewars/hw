@@ -176,6 +176,7 @@ public class FrontendDataUtils {
 			for(File s : teamFileNames){
 				Team t = Team.getTeamFromXml(s.getAbsolutePath());
 				if(t != null){
+					t.file = s.getName();
 					ret.add(teamToHashMap(t));
 				}
 			}
