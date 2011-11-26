@@ -42,6 +42,7 @@
 #include <QInputDialog>
 #include <QPropertyAnimation>
 #include <QGraphicsEffect>
+#include <QParallelAnimationGroup>
 
 #include "hwform.h"
 #include "game.h"
@@ -560,27 +561,30 @@ void HWForm::GoToPage(int id)
     if (frontendEffects && !stopAnim)
     {
         /**Start animation :**/
-
+        int coeff = 1;
+#ifdef Q_OS_LINUX
+        coeff = 2;
         QGraphicsOpacityEffect *effectNew = new QGraphicsOpacityEffect(ui.Pages->widget(id));
         ui.Pages->widget(id)->setGraphicsEffect(effectNew);
 
         QGraphicsOpacityEffect *effectLast = new QGraphicsOpacityEffect(ui.Pages->widget(lastid));
         ui.Pages->widget(lastid)->setGraphicsEffect(effectLast);
+#endif
 
         //New page animation
         animationNewSlide = new QPropertyAnimation(ui.Pages->widget(id), "pos");
         animationNewSlide->setDuration(500);
-        animationNewSlide->setStartValue(QPoint(width()/2, 0));
+        animationNewSlide->setStartValue(QPoint(width()/coeff, 0));
         animationNewSlide->setEndValue(QPoint(0, 0));
-        animationNewSlide->setEasingCurve(QEasingCurve::OutCubic);
-        animationNewSlide->start();
+        animationNewSlide->setEasingCurve(QEasingCurve::OutExpo);
 
+#ifdef Q_OS_LINUX
         animationNewOpacity = new QPropertyAnimation(effectNew, "opacity");
         animationNewOpacity->setDuration(500);
         animationNewOpacity->setStartValue(0.01);
         animationNewOpacity->setEndValue(1);
-        animationNewOpacity->setEasingCurve(QEasingCurve::OutCubic);
-        animationNewOpacity->start();
+        animationNewOpacity->setEasingCurve(QEasingCurve::OutExpo);
+#endif
 
         //Last page animation
         ui.Pages->widget(lastid)->setHidden(false);
@@ -588,16 +592,25 @@ void HWForm::GoToPage(int id)
         animationOldSlide = new QPropertyAnimation(ui.Pages->widget(lastid), "pos");
         animationOldSlide->setDuration(500);
         animationOldSlide->setStartValue(QPoint(0, 0));
-        animationOldSlide->setEndValue(QPoint(-width()/2, 0));
-        animationOldSlide->setEasingCurve(QEasingCurve::OutCubic);
-        animationOldSlide->start();
+        animationOldSlide->setEndValue(QPoint(-width()/coeff, 0));
+        animationOldSlide->setEasingCurve(QEasingCurve::OutExpo);
 
+#ifdef Q_OS_LINUX
         animationOldOpacity = new QPropertyAnimation(effectLast, "opacity");
         animationOldOpacity->setDuration(500);
         animationOldOpacity->setStartValue(1);
         animationOldOpacity->setEndValue(0.01);
-        animationOldOpacity->setEasingCurve(QEasingCurve::OutCubic);
-        animationOldOpacity->start();
+        animationOldOpacity->setEasingCurve(QEasingCurve::OutExpo);
+#endif
+
+        QParallelAnimationGroup *group = new QParallelAnimationGroup;
+        group->addAnimation(animationOldSlide);
+        group->addAnimation(animationNewSlide);
+#ifdef Q_OS_LINUX
+        group->addAnimation(animationOldOpacity);
+        group->addAnimation(animationNewOpacity);
+#endif
+        group->start();
 
         connect(animationOldSlide, SIGNAL(finished()), ui.Pages->widget(lastid), SLOT(hide()));
     }
@@ -654,45 +667,56 @@ void HWForm::GoBack()
 
     if (curid != 0 && frontendEffects && !stopAnim)
     {
-
+        int coeff = 1;
+#ifdef Q_OS_LINUX
+        coeff = 2;
         QGraphicsOpacityEffect *effectNew = new QGraphicsOpacityEffect(ui.Pages->widget(id));
         effectNew->setOpacity(1);
         ui.Pages->widget(id)->setGraphicsEffect(effectNew);
 
         QGraphicsOpacityEffect *effectLast = new QGraphicsOpacityEffect(ui.Pages->widget(curid));
         ui.Pages->widget(curid)->setGraphicsEffect(effectLast);
+#endif
 
         //Last page animation
         animationOldSlide = new QPropertyAnimation(ui.Pages->widget(id), "pos");
         animationOldSlide->setDuration(500);
-        animationOldSlide->setStartValue(QPoint(-width()/2, 0));
+        animationOldSlide->setStartValue(QPoint(-width()/coeff, 0));
         animationOldSlide->setEndValue(QPoint(0, 0));
-        animationOldSlide->setEasingCurve(QEasingCurve::OutCubic);
-        animationOldSlide->start();
+        animationOldSlide->setEasingCurve(QEasingCurve::OutExpo);
 
+#ifdef Q_OS_LINUX
         animationOldOpacity = new QPropertyAnimation(effectLast, "opacity");
         animationOldOpacity->setDuration(500);
         animationOldOpacity->setStartValue(1);
         animationOldOpacity->setEndValue(0.01);
-        animationOldOpacity->setEasingCurve(QEasingCurve::OutCubic);
-        animationOldOpacity->start();
-
+        animationOldOpacity->setEasingCurve(QEasingCurve::OutExpo);
+#endif
         //New page animation
         ui.Pages->widget(curid)->setHidden(false);
 
         animationNewSlide = new QPropertyAnimation(ui.Pages->widget(curid), "pos");
         animationNewSlide->setDuration(500);
         animationNewSlide->setStartValue(QPoint(0, 0));
-        animationNewSlide->setEndValue(QPoint(width()/2, 0));
-        animationNewSlide->setEasingCurve(QEasingCurve::OutCubic);
-        animationNewSlide->start();
+        animationNewSlide->setEndValue(QPoint(width()/coeff, 0));
+        animationNewSlide->setEasingCurve(QEasingCurve::OutExpo);
 
+#ifdef Q_OS_LINUX
         animationNewOpacity = new QPropertyAnimation(effectNew, "opacity");
         animationNewOpacity->setDuration(500);
         animationNewOpacity->setStartValue(0.01);
         animationNewOpacity->setEndValue(1);
-        animationNewOpacity->setEasingCurve(QEasingCurve::OutCubic);
-        animationNewOpacity->start();
+        animationNewOpacity->setEasingCurve(QEasingCurve::OutExpo);
+#endif
+
+        QParallelAnimationGroup *group = new QParallelAnimationGroup;
+        group->addAnimation(animationOldSlide);
+        group->addAnimation(animationNewSlide);
+#ifdef Q_OS_LINUX
+        group->addAnimation(animationOldOpacity);
+        group->addAnimation(animationNewOpacity);
+#endif
+        group->start();
 
         connect(animationNewSlide, SIGNAL(finished()), ui.Pages->widget(curid), SLOT(hide()));
     }
