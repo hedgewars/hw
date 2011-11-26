@@ -40,6 +40,8 @@
 #include <QShortcut>
 #include <QDesktopServices>
 #include <QInputDialog>
+#include <QPropertyAnimation>
+#include <QGraphicsEffect>
 
 #include "hwform.h"
 #include "game.h"
@@ -544,32 +546,101 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 
 void HWForm::GoToPage(int id)
 {
+    bool stopAnim = false;
+
     int lastid = ui.Pages->currentIndex();
     PagesStack.push(ui.Pages->currentIndex());
+
     OnPageShown(id, lastid);
     ui.Pages->setCurrentIndex(id);
+
+    if (id == ID_PAGE_DRAWMAP)
+        stopAnim = true;
+
+    if (frontendEffects && !stopAnim)
+    {
+        /**Start animation :**/
+
+        QGraphicsOpacityEffect *effectNew = new QGraphicsOpacityEffect(ui.Pages->widget(id));
+        ui.Pages->widget(id)->setGraphicsEffect(effectNew);
+
+        QGraphicsOpacityEffect *effectLast = new QGraphicsOpacityEffect(ui.Pages->widget(lastid));
+        ui.Pages->widget(lastid)->setGraphicsEffect(effectLast);
+
+        //New page animation
+        animationNewSlide = new QPropertyAnimation(ui.Pages->widget(id), "pos");
+        animationNewSlide->setDuration(500);
+        animationNewSlide->setStartValue(QPoint(width()/2, 0));
+        animationNewSlide->setEndValue(QPoint(0, 0));
+        animationNewSlide->setEasingCurve(QEasingCurve::OutCubic);
+        animationNewSlide->start();
+
+        animationNewOpacity = new QPropertyAnimation(effectNew, "opacity");
+        animationNewOpacity->setDuration(500);
+        animationNewOpacity->setStartValue(0.01);
+        animationNewOpacity->setEndValue(1);
+        animationNewOpacity->setEasingCurve(QEasingCurve::OutCubic);
+        animationNewOpacity->start();
+
+        //Last page animation
+        ui.Pages->widget(lastid)->setHidden(false);
+
+        animationOldSlide = new QPropertyAnimation(ui.Pages->widget(lastid), "pos");
+        animationOldSlide->setDuration(500);
+        animationOldSlide->setStartValue(QPoint(0, 0));
+        animationOldSlide->setEndValue(QPoint(-width()/2, 0));
+        animationOldSlide->setEasingCurve(QEasingCurve::OutCubic);
+        animationOldSlide->start();
+
+        animationOldOpacity = new QPropertyAnimation(effectLast, "opacity");
+        animationOldOpacity->setDuration(500);
+        animationOldOpacity->setStartValue(1);
+        animationOldOpacity->setEndValue(0.01);
+        animationOldOpacity->setEasingCurve(QEasingCurve::OutCubic);
+        animationOldOpacity->start();
+
+        connect(animationOldSlide, SIGNAL(finished()), ui.Pages->widget(lastid), SLOT(hide()));
+    }
 }
 
 void HWForm::GoBack()
 {
+    bool stopAnim = false;
     int curid = ui.Pages->currentIndex();
     if (curid == ID_PAGE_MAIN)
+    {
+        stopAnim = true;
         exit();
+    }
 
     int id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
     ui.Pages->setCurrentIndex(id);
     OnPageShown(id, curid);
 
     if (id == ID_PAGE_CONNECTING)
+    {
+        stopAnim = true;
         GoBack();
+    }
     if (id == ID_PAGE_NETSERVER)
+    {
+        stopAnim = true;
         GoBack();
+    }
     if ((!hwnet) && (id == ID_PAGE_ROOMSLIST))
+    {
+        stopAnim = true;
         GoBack();
+    }
+    if (curid == ID_PAGE_DRAWMAP)
+        stopAnim = true;
 
     if ((!hwnet) || (!hwnet->isInRoom()))
         if (id == ID_PAGE_NETGAME || id == ID_PAGE_NETGAME)
+        {
+            stopAnim = true;
             GoBack();
+        }
 
     if (curid == ID_PAGE_ROOMSLIST || curid == ID_PAGE_CONNECTING) NetDisconnect();
     if (curid == ID_PAGE_NETGAME && hwnet && hwnet->isInRoom()) hwnet->partRoom();
@@ -578,6 +649,55 @@ void HWForm::GoBack()
 
     if (curid == ID_PAGE_SCHEME)
         ammoSchemeModel->Save();
+
+    /**Start animation :**/
+
+    if (curid != 0 && frontendEffects && !stopAnim)
+    {
+
+        QGraphicsOpacityEffect *effectNew = new QGraphicsOpacityEffect(ui.Pages->widget(id));
+        effectNew->setOpacity(1);
+        ui.Pages->widget(id)->setGraphicsEffect(effectNew);
+
+        QGraphicsOpacityEffect *effectLast = new QGraphicsOpacityEffect(ui.Pages->widget(curid));
+        ui.Pages->widget(curid)->setGraphicsEffect(effectLast);
+
+        //Last page animation
+        animationOldSlide = new QPropertyAnimation(ui.Pages->widget(id), "pos");
+        animationOldSlide->setDuration(500);
+        animationOldSlide->setStartValue(QPoint(-width()/2, 0));
+        animationOldSlide->setEndValue(QPoint(0, 0));
+        animationOldSlide->setEasingCurve(QEasingCurve::OutCubic);
+        animationOldSlide->start();
+
+        animationOldOpacity = new QPropertyAnimation(effectLast, "opacity");
+        animationOldOpacity->setDuration(500);
+        animationOldOpacity->setStartValue(1);
+        animationOldOpacity->setEndValue(0.01);
+        animationOldOpacity->setEasingCurve(QEasingCurve::OutCubic);
+        animationOldOpacity->start();
+
+        //New page animation
+        ui.Pages->widget(curid)->setHidden(false);
+
+        animationNewSlide = new QPropertyAnimation(ui.Pages->widget(curid), "pos");
+        animationNewSlide->setDuration(500);
+        animationNewSlide->setStartValue(QPoint(0, 0));
+        animationNewSlide->setEndValue(QPoint(width()/2, 0));
+        animationNewSlide->setEasingCurve(QEasingCurve::OutCubic);
+        animationNewSlide->start();
+
+        animationNewOpacity = new QPropertyAnimation(effectNew, "opacity");
+        animationNewOpacity->setDuration(500);
+        animationNewOpacity->setStartValue(0.01);
+        animationNewOpacity->setEndValue(1);
+        animationNewOpacity->setEasingCurve(QEasingCurve::OutCubic);
+        animationNewOpacity->start();
+
+        connect(animationNewSlide, SIGNAL(finished()), ui.Pages->widget(curid), SLOT(hide()));
+    }
+
+
 }
 
 void HWForm::OpenSnapshotFolder()
