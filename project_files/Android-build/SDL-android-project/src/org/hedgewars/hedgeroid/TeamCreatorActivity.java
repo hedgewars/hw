@@ -159,12 +159,6 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 	}
 
 	public void run(){
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		ArrayList<HashMap<String, ?>> gravesData = FrontendDataUtils.getGraves(this);
 		ArrayList<HashMap<String, ?>> flagsData = FrontendDataUtils.getFlags(this);
 		ArrayList<HashMap<String, ?>> typesData = FrontendDataUtils.getTypes(this);
