@@ -24,7 +24,7 @@
 SquareLabel::SquareLabel(QWidget * parent) :
     QWidget(parent)
 {
-    if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
+    //if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
 void SquareLabel::paintEvent(QPaintEvent * event)

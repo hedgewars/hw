@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 unit uVariables;
 interface
@@ -264,7 +264,7 @@ const
             );
 
     SpritesData: array[TSprite] of record
-            FileName: String[16];
+            FileName: string[16];
             Path, AltPath: TPathType;
             Texture: PTexture;
             Surface: PSDL_Surface;
@@ -635,7 +635,7 @@ const
             Sprite: TSprite;
             FramesCount: Longword;
             Interval: Longword;
-            cmd: String[20];
+            cmd: string[20];
             Voice: TSound;
             VoiceDelay: LongWord;
             end = (
@@ -649,7 +649,7 @@ const
             );
 
     Soundz: array[TSound] of record
-            FileName: String[25];
+            FileName: string[25];
             Path    : TPathType;
             end = (
             (FileName:                         ''; Path: ptNone  ),// sndNone

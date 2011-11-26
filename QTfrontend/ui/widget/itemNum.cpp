@@ -27,7 +27,7 @@ ItemNum::ItemNum(const QImage& im, const QImage& img, QWidget * parent, unsigned
   numItems(min+2 >= max ? min : min+2)
 {
     enabled = true;
-    if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
+    //if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
 ItemNum::~ItemNum()

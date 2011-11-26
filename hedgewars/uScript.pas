@@ -2104,6 +2104,10 @@ begin
 ParseCommandOverride:= value
 end;
 
+procedure ScriptOnScreenResize;
+begin
+end;
+
 procedure initModule;
 begin
 end;
