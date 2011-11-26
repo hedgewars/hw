@@ -262,7 +262,7 @@ procedure AddFileLog(s: shortstring);
 begin
 s:= s;
 {$IFDEF DEBUGFILE}
-writeln(f, GameTicks: 6, ': ', s);
+writeln(f, GameTicks, ': ', s);
 flush(f)
 {$ENDIF}
 end;
