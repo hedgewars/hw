@@ -21,7 +21,6 @@ package org.hedgewars.hedgeroid.EngineProtocol;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -167,8 +166,8 @@ public class FrontendDataUtils {
 		return data;
 	}
 
-	public static ArrayList<HashMap<String, Object>> getTeams(Context c){
-		ArrayList<HashMap<String, Object>> ret = new ArrayList<HashMap<String, Object>>();
+	public static List<HashMap<String, Object>> getTeams(Context c){
+		List<HashMap<String, Object>> ret = new ArrayList<HashMap<String, Object>>();
 
 		File teamsDir = new File(c.getFilesDir().getAbsolutePath() + '/' + Team.DIRECTORY_TEAMS);
 		File[] teamFileNames = teamsDir.listFiles();
@@ -177,14 +176,14 @@ public class FrontendDataUtils {
 				Team t = Team.getTeamFromXml(s.getAbsolutePath());
 				if(t != null){
 					t.file = s.getName();
-					ret.add(teamToHashMap(t));
+					ret.add(teamToMap(t));
 				}
 			}
 		}
 		return ret;
 	}
 
-	public static HashMap<String, Object> teamToHashMap(Team t){
+	public static HashMap<String, Object> teamToMap(Team t){
 		HashMap<String, Object> hashmap = new HashMap<String, Object>();
 		hashmap.put("team", t);
 		hashmap.put("txt", t.name);
