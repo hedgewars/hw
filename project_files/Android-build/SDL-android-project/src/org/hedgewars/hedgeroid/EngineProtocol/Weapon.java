@@ -24,7 +24,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -33,8 +32,9 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
-public class Weapon implements Parcelable{
+public class Weapon implements Parcelable, Comparable<Weapon>{
 
 	public static final String DIRECTORY_WEAPON = "weapons";
 	
@@ -95,7 +95,6 @@ public class Weapon implements Parcelable{
 		String dir = c.getFilesDir().getAbsolutePath() + '/' + DIRECTORY_WEAPON + '/';
 		String[] files = new File(dir).list();
 		if(files == null) files = new String[]{};
-		Arrays.sort(files);
 		
 		ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 
@@ -209,4 +208,15 @@ public class Weapon implements Parcelable{
 		}
 		
 	};
+
+	public int compareTo(Weapon another) {
+		boolean equalsDefault = name.toLowerCase().equals("crazy");
+		boolean otherEqualsDefault = another.name.toLowerCase().equals("crazy");
+		if(equalsDefault && otherEqualsDefault)	return 0;
+		else if(equalsDefault && !otherEqualsDefault) return -1;
+		else if((!equalsDefault) && otherEqualsDefault)	return 1;
+		else return name.compareTo(another.name);
+	}
+	
+	
 }

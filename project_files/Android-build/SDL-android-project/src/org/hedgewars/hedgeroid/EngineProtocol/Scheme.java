@@ -36,7 +36,7 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Scheme implements Parcelable{
+public class Scheme implements Parcelable, Comparable<Scheme>{
 
 	public static final String DIRECTORY_SCHEME = "schemes";
 
@@ -355,4 +355,13 @@ public class Scheme implements Parcelable{
 		}
 		
 	};
+
+	public int compareTo(Scheme another) {
+		boolean equalsDefault = name.toLowerCase().equals("default");
+		boolean otherEqualsDefault = another.name.toLowerCase().equals("default");
+		if(equalsDefault && otherEqualsDefault)	return 0;
+		else if(equalsDefault && !otherEqualsDefault) return -1;
+		else if((!equalsDefault) && otherEqualsDefault)	return 1;
+		else return name.compareTo(another.name);
+	}
 }
