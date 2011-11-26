@@ -322,9 +322,9 @@ begin
 str(z.Round, cstr);
 if z.Frac <> 0 then
    begin
-   str(z.Frac / $100000000:1:10, tmpstr);
+   str(z.Frac / $100000000, tmpstr);
    delete(tmpstr, 1, 2);
-   cstr:= cstr + '.' + tmpstr
+   cstr:= cstr + '.' + copy(tmpstr, 1, 10)
    end;
 if z.isNegative then cstr:= '-' + cstr
 end;

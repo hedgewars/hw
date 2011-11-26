@@ -28,6 +28,7 @@ data TypesAndVars = TypesAndVars [TypeVarDeclaration]
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
     | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe InitExpression)
     | FunctionDeclaration Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
+    | OperatorDeclaration String Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     deriving Show
 data TypeDecl = SimpleType Identifier
     | RangeType Range
@@ -173,7 +174,7 @@ constsDecl = do
     where
     aConstDecl = do
         comments
-        i <- iD <?> "const declaration"
+        i <- iD
         optional $ do
             char ':'
             comments
@@ -295,29 +296,55 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
     varSection,
     constSection,
     typeSection,
-    funcDecl
+    funcDecl,
+    operatorDecl
     ]
     where
     varSection = do
         try $ string "var"
         comments
-        v <- varsDecl1 True
+        v <- varsDecl1 True <?> "variable declaration"
         comments
         return v
 
     constSection = do
         try $ string "const"
         comments
-        c <- constsDecl
+        c <- constsDecl <?> "const declaration"
         comments
         return c
 
     typeSection = do
         try $ string "type"
         comments
-        t <- typesDecl
+        t <- typesDecl <?> "type declaration"
         comments
         return t
+        
+    operatorDecl = do
+        try $ string "operator"
+        comments
+        i <- manyTill anyChar space
+        comments
+        vs <- parens pas $ varsDecl False
+        comments
+        rid <- iD
+        comments
+        char ':'
+        comments
+        ret <- typeDecl
+        comments
+        return ret
+        char ';'
+        comments
+        forward <- liftM isJust $ optionMaybe (try (string "forward;") >> comments)
+        many functionDecorator
+        b <- if isImpl && (not forward) then
+                liftM Just functionBody
+                else
+                return Nothing
+        return $ [OperatorDeclaration i rid ret vs b]
+
         
     funcDecl = do
         fp <- try (string "function") <|> try (string "procedure")
@@ -342,11 +369,14 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
                 else
                 return Nothing
         return $ [FunctionDeclaration i ret vs b]
+        
     functionDecorator = choice [
         try $ string "inline;"
         , try $ string "cdecl;"
         , try (string "external") >> comments >> iD >> optional (string "name" >> comments >> stringLiteral pas)>> string ";"
         ] >> comments
+        
+        
 program = do
     string "program"
     comments
