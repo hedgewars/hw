@@ -34,7 +34,8 @@ public class GameConfig implements Parcelable{
 	public Scheme scheme = null;
 	public Weapon weapon = null;
 	
-	public String mission = null;
+	public String style = null;
+	public String training = null;
 	public String seed = null;
 	
 	public ArrayList<Team> teams = new ArrayList<Team>();
@@ -53,7 +54,8 @@ public class GameConfig implements Parcelable{
 		Log.d("HW_Frontend", "Sending Gameconfig...");
 		int teamCount = 4;
 		epn.sendToEngine("TL"); //Write game mode
-		if(mission != null) epn.sendToEngine(mission);
+		if(training != null) epn.sendToEngine(String.format("escript Scripts/Training/%s.lua", training));
+		else if(style != null) epn.sendToEngine(String.format("escript Scripts/Multiplayer/%s.lua", style));
 		
 		//seed info
 		epn.sendToEngine(String.format("eseed {%s}", UUID.randomUUID().toString()));
@@ -85,7 +87,8 @@ public class GameConfig implements Parcelable{
 		dest.writeString(theme);
 		dest.writeParcelable(scheme, flags);
 		dest.writeParcelable(weapon, flags);
-		dest.writeString(mission);
+		dest.writeString(style);
+		dest.writeString(training);
 		dest.writeString(seed);
 		dest.writeParcelableArray((Team[])teams.toArray(new Team[1]), 0);
 	}
@@ -96,7 +99,8 @@ public class GameConfig implements Parcelable{
 		theme = src.readString();
 		scheme = src.readParcelable(Scheme.class.getClassLoader());
 		weapon = src.readParcelable(Weapon.class.getClassLoader());
-		mission = src.readString();
+		style = src.readString();
+		training = src.readString();
 		seed = src.readString();
 		Parcelable[] parcelables = src.readParcelableArray(Team[].class.getClassLoader());
 		for(Parcelable team : parcelables){

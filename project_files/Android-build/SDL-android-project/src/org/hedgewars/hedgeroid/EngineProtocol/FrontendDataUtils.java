@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Utils;
@@ -52,23 +53,18 @@ public class FrontendDataUtils {
 		return ret;
 	}
 
-	public static String[] getGameplay(Context c){
+	public static List<String> getGameplay(Context c){
 		String[] files = Utils.getFileNamesFromRelativeDir(c, "Scripts/Multiplayer");
-		int retCounter = 0;
-
+		ArrayList<String> ret = new ArrayList<String>();
+		
 		for(int i = 0; i < files.length; i++){
 			if(files[i].endsWith(".lua")){
-				files[i] = files[i].replace('_', ' ').substring(0, files[i].length()-4); //replace _ by a space and removed the last four characters (.lua)
-				retCounter++;
-			}else files[i] = null;
+				ret.add(files[i].replace('_', ' ').substring(0, files[i].length()-4)); //replace _ by a space and removed the last four characters (.lua)
+			}
 		}
-		String[] ret = new String[retCounter];
-		retCounter = 0;
-		for(String s : files){
-			if(s != null) ret[retCounter++] = s;
-		}
-		Arrays.sort(ret);
+		Collections.sort(ret);
 
+		ret.add(0,"None");
 		return ret;	
 	}
 
@@ -76,12 +72,16 @@ public class FrontendDataUtils {
 		return Utils.getDirsWithFileSuffix(c, "Themes", "icon.png");
 	}
 
-	public static ArrayList<Scheme> getSchemes(Context c){
-		return Scheme.getSchemes(c);
+	public static List<Scheme> getSchemes(Context c){
+		List<Scheme> list = Scheme.getSchemes(c);
+		Collections.sort(list);
+		return list;
 	}
 
-	public static ArrayList<Weapon> getWeapons(Context c){
-		return Weapon.getWeapons(c);
+	public static List<Weapon> getWeapons(Context c){
+		List<Weapon> list = Weapon.getWeapons(c);
+		Collections.sort(list);
+		return list;
 	}
 
 	public static ArrayList<HashMap<String, ?>> getGraves(Context c){
