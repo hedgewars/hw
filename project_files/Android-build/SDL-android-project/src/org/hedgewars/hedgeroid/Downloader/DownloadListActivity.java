@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +38,11 @@ public class DownloadListActivity extends FragmentActivity implements OnItemMove
 		downloadQueueContainer = (LinearLayout) findViewById(R.id.downloadQueueContainer);
 	}
 
+	public void onDestroy(){
+		super.onDestroy();
+		Log.d("tag", "on destroy");
+	}
+	
 	public void onNewItemSelected(DownloadPackage _task, int x, int minX, int maxX, int size) {
 		if(layout != null){
 			if(!_task.equals(task)){//if it's a new task refresh the whole thing

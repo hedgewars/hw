@@ -41,12 +41,19 @@ import android.os.AsyncTask;
  * @author Xeli
  *
  */
-public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> {
+public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Integer> {
 
 	//private final static String URL_WITHOUT_SUFFIX = "http://www.xelification.com/tmp/firebutton.";
 	private final static String URL_ZIP_SUFFIX = ".zip";
 	private final static String URL_HASH_SUFFIX = ".hash";
-	
+
+	public static final int EXIT_SUCCESS = 0;
+	public static final int EXIT_URLFAIL = 1;
+	public static final int EXIT_CONNERROR = 2;
+	public static final int EXIT_FNF = 3;
+	public static final int EXIT_MD5 = 4;
+	public static final int EXIT_CANCELLED = 5;
+
 	private DownloadTask task;
 	private long lastUpdateMillis = 0;
 
@@ -58,9 +65,9 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 	 * 
 	 * @param params - A {@link}DownloadTask which gives information about where to download from and store the files to 
 	 */
-	protected Long doInBackground(DownloadPackage...packages) {
+	protected Integer doInBackground(DownloadPackage...packages) {
 		DownloadPackage pack = packages[0];//just use one task per execute call for now
-		
+
 		HttpURLConnection conn = null;
 		MessageDigest digester = null;
 		String rootZipDest = pack.getPathToStore();
@@ -73,7 +80,7 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 			conn = (HttpURLConnection)url.openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
-			return -1l;
+			return EXIT_URLFAIL;
 		}
 
 		String contentType = conn.getContentType();
@@ -82,6 +89,7 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 			int bytesDecompressed = 0;
 			ZipEntry entry = null;
 			ZipInputStream input = null;
+			FileOutputStream output = null;
 			int kbytesToProcess = conn.getContentLength()/1024;
 
 			byte[] buffer = new byte[1024];
@@ -100,25 +108,26 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 			}catch(IOException e){
 				e.printStackTrace();
 				if(conn != null) conn.disconnect();
-				return -2l;
+				return EXIT_CONNERROR;
 			}
 
+
+
 			while(entry != null){
+
 				if(isCancelled()) break;
 
-				String fileName = entry.getName();
-				File f = new File(rootZipDest + fileName);
-				bytesDecompressed += entry.getCompressedSize();
+				try {
+					String fileName = entry.getName();
+					File f = new File(rootZipDest + fileName);
+					bytesDecompressed += entry.getCompressedSize();
 
-				if(entry.isDirectory()){
-					f.mkdir();
-				}else{
-					if(f.exists()){
-						f.delete();
-					}
-
-					FileOutputStream output = null;
-					try {
+					if(entry.isDirectory()){
+						f.mkdir();
+					}else{
+						if(f.exists()){
+							f.delete();
+						}
 						f.createNewFile();
 						output = new FileOutputStream(f);
 
@@ -133,47 +142,46 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 						}
 						output.flush();
 						input.closeEntry();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-						if(conn != null) conn.disconnect();
-						return -3l;
-					} catch (IOException e) {
-						e.printStackTrace();
-						if(conn != null) conn.disconnect();
-						return -4l;
-					}finally{
-						try {
-							if( output != null) output.close();
-						} catch (IOException e) {}
-					}
-				}
-				try{
+					}//if isDir 
 					entry = input.getNextEntry();
-				}catch(IOException e){
+				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 					if(conn != null) conn.disconnect();
-					return -1l;
+					return EXIT_FNF;
+				} catch (IOException e) {
+					e.printStackTrace();
+					if(conn != null) conn.disconnect();
+					return EXIT_CONNERROR;
+				}finally{
+					try {
+						if( output != null) output.close();
+
+					} catch (IOException e) {}
 				}
 			}//end while(entry != null)
-
-			try {
-				input.close();
-			} catch (IOException e) {}
+			if( input != null)
+				try {
+					input.close();
+				} catch (IOException e) {}
 		}//end if contentType == "zip"
 
 		if(conn != null) conn.disconnect();
 
-		if(checkMD5(digester, pack))return 0l;
-		else return -1l;
+		if(checkMD5(digester, pack))return EXIT_SUCCESS;
+		else return EXIT_MD5;
 	}
 
 	//TODO proper result handling
-	protected void onPostExecute(Long result){
-		task.done(result > -1l);
+	protected void onPostExecute(Integer result){
+		task.done(result);
 	}
 
 	protected void onProgressUpdate(Object...objects){
 		task.update((Integer)objects[0], (Integer)objects[1], (String)objects[2]);
+	}
+
+	protected void onCancelled(){
+		onPostExecute(EXIT_CANCELLED);
 	}
 
 	private boolean checkMD5(MessageDigest digester, DownloadPackage task){
@@ -197,16 +205,16 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 						sb.append(Integer.toHexString(tmp));
 					}
 					sb.append('\n');//add newline to become identical with the hash file
-					
+
 					return hash.equals(sb.toString());
 				}
 				return false;
 			} catch (IOException e) {
 				e.printStackTrace();
-				return false;
+				return true;
 			}
 		}else{
-			return false;	
+			return true;	
 		}
 
 	}

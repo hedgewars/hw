@@ -19,12 +19,10 @@
 
 package org.hedgewars.hedgeroid.Downloader;
 
-import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.hedgewars.hedgeroid.MainActivity;
 import org.hedgewars.hedgeroid.R;
 
 import android.app.Notification;
@@ -32,7 +30,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -61,6 +58,7 @@ public class DownloadService extends Service {
 	private RemoteViews contentView;
 
 	private Deque<DownloadTask> downloadTasks = new LinkedList<DownloadTask>();
+	private DownloadTask currentTask = null;
 
 	public class DownloadHandler extends Handler{
 
@@ -87,7 +85,10 @@ public class DownloadService extends Service {
 					runNextTask();
 					return;
 				case MSG_CANCEL:
-					if(task != null && task.getPackage().equals(pack) && task.getStatus() == TASK_STATE.RUNNING){
+					if(task != null && task.getPackage().equals(pack) && task.getStatus() == TASK_STATE.PENDING){
+						downloadTasks.remove(task);
+					}
+					if(currentTask.getPackage().equals(pack)){
 						asyncExecutor.cancel(false);
 					}
 					return;
@@ -111,10 +112,10 @@ public class DownloadService extends Service {
 
 	private void runNextTask(){
 		if(asyncExecutor == null){//if (task isnt running right now) ...
-			DownloadTask task = downloadTasks.pollFirst();
-			if(task != null){
-				asyncExecutor = new DownloadAsyncTask(task);
-				asyncExecutor.execute(task.getPackage());
+			currentTask = downloadTasks.pollFirst();
+			if(currentTask != null){
+				asyncExecutor = new DownloadAsyncTask(currentTask);
+				asyncExecutor.execute(currentTask.getPackage());
 			}
 		}
 	}
@@ -178,7 +179,7 @@ public class DownloadService extends Service {
 			PendingIntent contentIntent = PendingIntent.getActivity(DownloadService.this, 0, new Intent(DownloadService.this, DownloadFragment.class), Intent.FLAG_ACTIVITY_NEW_TASK);
 			progressNotification.contentIntent = contentIntent;
 
-			startForeground(NOTIFICATION_PROCESSING, progressNotification);//TODO werkt het?
+			startForeground(NOTIFICATION_PROCESSING, progressNotification);
 
 			Message msg = Message.obtain(null, DownloadFragment.MSG_START, max, 0);
 			sendMessageToClients(msg);
@@ -196,10 +197,18 @@ public class DownloadService extends Service {
 		}
 
 		//Call back from the ASync task when the task has either run into an error or finished otherwise
-		public void done(boolean succesful){
-			if(succesful){
-				sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_DONE));
-			}else sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED));
+		public void done(int result){
+			switch(result){
+			case DownloadAsyncTask.EXIT_SUCCESS: 	sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_DONE)); break;
+			case DownloadAsyncTask.EXIT_CONNERROR:  sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
+			case DownloadAsyncTask.EXIT_FNF:		sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
+			case DownloadAsyncTask.EXIT_MD5:		sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
+			case DownloadAsyncTask.EXIT_URLFAIL:	sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
+			case DownloadAsyncTask.EXIT_CANCELLED:	sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_DONE)); break;
+				
+				
+			}
+			
 			stopForeground(true);
 			nM.cancel(NOTIFICATION_PROCESSING);
 
