@@ -52,7 +52,7 @@ public class DownloadFragment extends Fragment{
 
 	private TextView progress_sub;
 	private ProgressBar progress;
-	private Button positive, negative;
+	private Button /*positive,*/ negative;
 
 	private DownloadPackage pack;
 
@@ -84,9 +84,9 @@ public class DownloadFragment extends Fragment{
 		progress_sub = (TextView)v.findViewById(R.id.progressbar_sub);
 		progress = (ProgressBar)v.findViewById(R.id.progressbar);
 
-		positive = (Button) v.findViewById(R.id.background);
+		//positive = (Button) v.findViewById(R.id.background);
 		negative = (Button) v.findViewById(R.id.cancelDownload);
-		positive.setOnClickListener(backgroundClicker);
+		//positive.setOnClickListener(backgroundClicker);
 		negative.setOnClickListener(cancelClicker);
 
 		pack = getArguments().getParcelable(DownloadFragment.EXTRA_TASK);
@@ -107,7 +107,7 @@ public class DownloadFragment extends Fragment{
 					messengerService.send(message);
 				} catch (RemoteException e) {}
 			}
-			getActivity().finish();
+			//getActivity().finish();
 		}
 	};
 	private OnClickListener doneClicker = new OnClickListener(){
@@ -181,8 +181,8 @@ public class DownloadFragment extends Fragment{
 			case MSG_START:
 				progress.setMax(msg.arg1);
 				progress_sub.setText(String.format("%dkb/%dkb\n%s", 0, msg.arg1, ""));
-				positive.setText(R.string.download_background);
-				positive.setOnClickListener(backgroundClicker);
+				//positive.setText(R.string.download_background);
+				//positive.setOnClickListener(backgroundClicker);
 				negative.setText(R.string.download_cancel);
 				negative.setOnClickListener(cancelClicker);
 				break;
@@ -194,16 +194,16 @@ public class DownloadFragment extends Fragment{
 				progress.setProgress(progress.getMax());
 				progress_sub.setText(R.string.download_done);
 
-				positive.setText(R.string.download_back);
-				positive.setOnClickListener(doneClicker);
+			//	positive.setText(R.string.download_back);
+			//	positive.setOnClickListener(doneClicker);
 
 				negative.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_FAILED:
 				progress.setProgress(progress.getMax());
 				progress_sub.setText(R.string.download_failed);
-				positive.setText(R.string.download_back);
-				positive.setOnClickListener(doneClicker);
+			//	positive.setText(R.string.download_back);
+			//	positive.setOnClickListener(doneClicker);
 
 				negative.setText(R.string.download_tryagain);
 				negative.setOnClickListener(tryAgainClicker);
