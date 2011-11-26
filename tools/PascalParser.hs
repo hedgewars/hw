@@ -67,6 +67,7 @@ data Expression = Expression String
     | BinOp String Expression Expression
     | StringLiteral String
     | CharCode String
+    | HexCharCode String
     | NumberLiteral String
     | FloatLiteral String
     | HexNumber String
@@ -175,17 +176,17 @@ constsDecl = do
     aConstDecl = do
         comments
         i <- iD
-        optional $ do
+        t <- optionMaybe $ do
             char ':'
             comments
             t <- typeDecl
             comments
-            return ()
+            return t
         char '='
         comments
         e <- initExpression
         comments
-        return $ VarDeclaration False ([i], UnknownType) (Just e)
+        return $ VarDeclaration False ([i], fromMaybe UnknownType t) (Just e)
         
 typeDecl = choice [
     char '^' >> typeDecl >>= return . PointerTo
@@ -373,6 +374,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
     functionDecorator = choice [
         try $ string "inline;"
         , try $ string "cdecl;"
+        , try $ string "overload;"
         , try (string "external") >> comments >> iD >> optional (string "name" >> comments >> stringLiteral pas)>> string ";"
         ] >> comments
         
@@ -422,6 +424,7 @@ expression = buildExpressionParser table term <?> "expression"
         , try $ float pas >>= return . FloatLiteral . show
         , try $ natural pas >>= return . NumberLiteral . show
         , stringLiteral pas >>= return . StringLiteral
+        , try (string "#$") >> many hexDigit >>= \c -> comments >> return (HexCharCode c)
         , char '#' >> many digit >>= \c -> comments >> return (CharCode c)
         , char '$' >> many hexDigit >>=  \h -> comments >> return (HexNumber h)
         , char '-' >> expression >>= return . PrefixOp "-"
@@ -458,7 +461,7 @@ expression = buildExpressionParser table term <?> "expression"
 phrasesBlock = do
     try $ string "begin"
     comments
-    p <- manyTill phrase (try $ string "end")
+    p <- manyTill phrase (try $ string "end" >> notFollowedBy alphaNum)
     comments
     return $ Phrases p
     
@@ -607,8 +610,8 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         , try $ float pas >>= return . InitFloat . show
         , try $ integer pas >>= return . InitNumber . show
         , stringLiteral pas >>= return . InitString
-        , char '#' >> many digit >>= return . InitChar
-        , char '$' >> many hexDigit >>= return . InitHexNumber
+        , char '#' >> many digit >>= \c -> comments >> return (InitChar c)
+        , char '$' >> many hexDigit >>= \h -> comments >> return (InitHexNumber h)
         , try $ string "nil" >> return InitNull
         , iD >>= return . InitReference
         ]

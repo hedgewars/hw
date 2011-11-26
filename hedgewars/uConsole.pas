@@ -91,7 +91,7 @@ PByte(@ConsoleLines[CurrLine].s)^:= 0
 {$ENDIF}
 end;
 
-function ShortStringAsPChar(s: ShortString) : PChar;
+function ShortStringAsPChar(s: shortstring) : PChar;
 begin
     if Length(s) = High(s) then Dec(s[0]);
     s[Ord(Length(s))+1] := #0;

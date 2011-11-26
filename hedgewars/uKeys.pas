@@ -147,7 +147,7 @@ if CurrentBinds[i][0] <> #0 then
     if (tkbd[i] = 0) and (tkbdn[i] <> 0) then
          begin
          ParseCommand(CurrentBinds[i], Trusted);
-         if (CurrentTeam <> nil) and not CurrentTeam^.ExtDriven and (ReadyTimeLeft > 1) then ParseCommand('gencmd R', true)
+         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then ParseCommand('gencmd R', true)
          end
     else if (CurrentBinds[i][1] = '+')
             and (tkbdn[i] = 0)
@@ -156,7 +156,7 @@ if CurrentBinds[i][0] <> #0 then
             s:= CurrentBinds[i];
             s[1]:= '-';
             ParseCommand(s, Trusted);
-            if (CurrentTeam <> nil) and not CurrentTeam^.ExtDriven and (ReadyTimeLeft > 1) then ParseCommand('gencmd R', true)
+            if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then ParseCommand('gencmd R', true)
             end;
     tkbd[i]:= tkbdn[i]
     end
