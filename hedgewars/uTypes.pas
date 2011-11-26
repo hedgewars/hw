@@ -256,7 +256,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             PortalCounter: LongWord;  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
             LastDamage: PHedgehog;
         end;
-    TPGearArray = Array of PGear;
+    TPGearArray = array of PGear;
 
     PVisualGear = ^TVisualGear;
     TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
@@ -324,7 +324,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
 
     THedgehog = record
-            Name: string[MAXNAMELEN];
+            Name: string[192];
             Gear: PGear;
             GearHidden: PGear;
             SpeechGear: PVisualGear;
@@ -345,12 +345,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;
-            Effects: Array[THogEffect] of boolean;
+            Effects: array[THogEffect] of boolean;
             end;
 
     TTeam = record
             Clan: PClan;
-            TeamName: string[MAXNAMELEN];
+            TeamName: string[192];
             ExtDriven: boolean;
             Binds: TBinds;
             Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
