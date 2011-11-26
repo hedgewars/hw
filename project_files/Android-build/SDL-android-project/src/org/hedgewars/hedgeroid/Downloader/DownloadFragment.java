@@ -32,6 +32,7 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -63,22 +64,22 @@ public class DownloadFragment extends Fragment{
 		DownloadFragment df = new DownloadFragment();
 		Bundle args = new Bundle();
 		args.putParcelable(DownloadFragment.EXTRA_TASK, task);
-		
+
 		df.setArguments(args);
-		
+
 		return df;
 	}
-	
+
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
+
 		messageHandler = new Handler(messageCallback);
 		messenger = new Messenger(messageHandler);
-		 Intent i = new Intent(getActivity(), DownloadService.class);
-         getActivity().startService(i);
-         getActivity().bindService(new Intent(getActivity(), DownloadService.class), connection, Context.BIND_AUTO_CREATE);
+		Intent i = new Intent(getActivity().getApplicationContext(), DownloadService.class);
+		getActivity().startService(i);
+		getActivity().bindService(new Intent(getActivity().getApplicationContext(), DownloadService.class), connection, Context.BIND_AUTO_CREATE);
 	}
-	
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewgroup, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.download_progress, viewgroup, false);
 		progress_sub = (TextView)v.findViewById(R.id.progressbar_sub);
@@ -101,7 +102,7 @@ public class DownloadFragment extends Fragment{
 	};
 	private OnClickListener cancelClicker = new OnClickListener(){
 		public void onClick(View v){
-			if(messenger != null){
+			if(messengerService != null){
 				Message message = Message.obtain(messageHandler, DownloadService.MSG_CANCEL, pack);
 				try {
 					messengerService.send(message);
@@ -118,7 +119,7 @@ public class DownloadFragment extends Fragment{
 
 	private OnClickListener tryAgainClicker = new OnClickListener(){
 		public void onClick(View v){
-			if(messenger != null){
+			if(messengerService != null){
 				Message message = Message.obtain(messageHandler, DownloadService.MSG_ADDTASK, pack);
 				message.replyTo = messenger;
 				try {
@@ -130,9 +131,9 @@ public class DownloadFragment extends Fragment{
 		}
 	};
 
-	public void onStop(){
-		super.onStop();
+	public void onDestroy(){
 		unBindFromService();
+		super.onDestroy();
 	}
 
 	private ServiceConnection connection = new ServiceConnection(){
@@ -142,7 +143,7 @@ public class DownloadFragment extends Fragment{
 
 			try{
 				//give the service a task
-				if(messenger != null){
+				if(messengerService != null){
 					Message message = Message.obtain(messageHandler, DownloadService.MSG_ADDTASK, pack);
 					message.replyTo = messenger;
 					messengerService.send(message);
@@ -157,21 +158,18 @@ public class DownloadFragment extends Fragment{
 
 	};
 
-	private void unBindFromService(){
-		if(boundToService){
-			if(messenger != null){
-				try {
-					Message message = Message.obtain(messageHandler, DownloadService.MSG_UNREGISTER_CLIENT, pack);
-					message.replyTo = messenger;
-					messengerService.send(message);
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
+	public void unBindFromService(){
+		if(messengerService != null){
+			try {
+				Message message = Message.obtain(messageHandler, DownloadService.MSG_UNREGISTER_CLIENT, pack);
+				message.replyTo = messenger;
+				messengerService.send(message);
+			} catch (RemoteException e) {
+				e.printStackTrace();
 			}
-			
-			boundToService = false;
-			getActivity().unbindService(connection);
-		}	
+		}
+
+		getActivity().unbindService(connection);
 	}
 
 	private Handler.Callback messageCallback = new Handler.Callback() {
@@ -194,16 +192,16 @@ public class DownloadFragment extends Fragment{
 				progress.setProgress(progress.getMax());
 				progress_sub.setText(R.string.download_done);
 
-			//	positive.setText(R.string.download_back);
-			//	positive.setOnClickListener(doneClicker);
+				//	positive.setText(R.string.download_back);
+				//	positive.setOnClickListener(doneClicker);
 
 				negative.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_FAILED:
 				progress.setProgress(progress.getMax());
 				progress_sub.setText(R.string.download_failed);
-			//	positive.setText(R.string.download_back);
-			//	positive.setOnClickListener(doneClicker);
+				//	positive.setText(R.string.download_back);
+				//	positive.setOnClickListener(doneClicker);
 
 				negative.setText(R.string.download_tryagain);
 				negative.setOnClickListener(tryAgainClicker);
