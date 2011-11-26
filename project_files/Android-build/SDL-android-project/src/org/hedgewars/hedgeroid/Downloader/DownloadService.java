@@ -205,8 +205,6 @@ public class DownloadService extends Service {
 			case DownloadAsyncTask.EXIT_MD5:		sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
 			case DownloadAsyncTask.EXIT_URLFAIL:	sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
 			case DownloadAsyncTask.EXIT_CANCELLED:	sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_DONE)); break;
-				
-				
 			}
 			
 			stopForeground(true);

@@ -163,8 +163,9 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Intege
 				try {
 					input.close();
 				} catch (IOException e) {}
-		}//end if contentType == "zip"
-
+		}else{//end if contentType == "zip"
+			return EXIT_URLFAIL;
+		}
 		if(conn != null) conn.disconnect();
 
 		if(checkMD5(digester, pack))return EXIT_SUCCESS;
@@ -195,20 +196,20 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Intege
 				byte[] buffer = new byte[1024];//size is large enough to hold the entire hash
 				BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
 				int bytesRead = bis.read(buffer);
+				String hash = null;
 				if(bytesRead > -1){
-					String hash = new String(buffer, 0, bytesRead);
-					StringBuffer sb = new StringBuffer();
-					Integer tmp = 0;
-					for(int i = 0; i < messageDigest.length; i++){
-						tmp = 0xFF & messageDigest[i];
-						if(tmp < 0xF) sb.append('0');
-						sb.append(Integer.toHexString(tmp));
-					}
-					sb.append('\n');//add newline to become identical with the hash file
-
-					return hash.equals(sb.toString());
+					hash = new String(buffer, 0, bytesRead);
 				}
-				return false;
+				StringBuffer sb = new StringBuffer();
+				Integer tmp = 0;
+				for(int i = 0; i < messageDigest.length; i++){
+					tmp = 0xFF & messageDigest[i];
+					if(tmp < 0xF) sb.append('0');
+					sb.append(Integer.toHexString(tmp));
+				}
+				sb.append('\n');//add newline to become identical with the hash file
+
+				return hash.equals(sb.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 				return true;

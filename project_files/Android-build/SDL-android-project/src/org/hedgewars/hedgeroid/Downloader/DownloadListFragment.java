@@ -79,19 +79,27 @@ public class DownloadListFragment extends ListFragment implements OnItemClickLis
 						});
 					}
 				}
-				eventType = xmlPuller.nextTag();
+				eventType = getEventType(xmlPuller);
 			}
 			
 			
 		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
 
-
+	/**
+	 * Skips whitespaces..
+	 */
+	private static int getEventType(XmlPullParser xmlPuller)throws XmlPullParserException, IOException{
+		int eventType = xmlPuller.next();
+		while(eventType == XmlPullParser.TEXT && xmlPuller.isWhitespace()){
+			eventType = xmlPuller.next();
+		}
+		return eventType;
 	}
 
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
