@@ -23,7 +23,7 @@ unit uCommands;
 interface
 
 var isDeveloperMode: boolean;
-type TVariableType = (vtCommand, vtLongInt, vthwFloat, vtBoolean);
+type TVariableType = (vtCommand, vtLongInt, vtBoolean);
      TCommandHandler = procedure (var params: shortstring);
 
 procedure initModule;
@@ -75,7 +75,7 @@ begin
 //WriteLnToConsole(CmdStr);
 if CmdStr[0]=#0 then exit;
 c:= CmdStr[1];
-if c in ['/', '$'] then Delete(CmdStr, 1, 1) else c:= '/';
+if (c = '/') or (c = '$') then Delete(CmdStr, 1, 1) else c:= '/';
 s:= '';
 SplitBySpace(CmdStr, s);
 AddFileLog('[Cmd] ' + c + CmdStr + ' (' + inttostr(length(s)) + ')');
@@ -96,12 +96,6 @@ while t <> nil do
                             str(PLongInt(t^.Handler)^, s);
                             WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
                             end else val(s, PLongInt(t^.Handler)^);
-              vthwFloat: if c='$' then
-                         if s[0]=#0 then
-                            begin
-                            //str(PhwFloat(t^.Handler)^:4:6, s);
-                            WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end else; //val(s, PhwFloat(t^.Handler)^, i);
              vtBoolean: if c='$' then
                          if s[0]=#0 then
                             begin

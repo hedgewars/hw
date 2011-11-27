@@ -50,15 +50,16 @@ data Finalize = Finalize String
     deriving Show
 data Uses = Uses [Identifier]
     deriving Show
-data Phrase = ProcCall Identifier [Expression]
+data Phrase = ProcCall Reference [Expression]
         | IfThenElse Expression Phrase (Maybe Phrase)
         | WhileCycle Expression Phrase
         | RepeatCycle Expression [Phrase]
         | ForCycle Identifier Expression Expression Phrase
         | WithBlock Reference Phrase
         | Phrases [Phrase]
-        | SwitchCase Expression [([Expression], Phrase)] (Maybe Phrase)
+        | SwitchCase Expression [([InitExpression], Phrase)] (Maybe Phrase)
         | Assignment Reference Expression
+        | NOP
     deriving Show
 data Expression = Expression String
     | BuiltInFunCall [Expression] Reference
@@ -72,10 +73,12 @@ data Expression = Expression String
     | FloatLiteral String
     | HexNumber String
     | Reference Reference
+    | SetExpression [Identifier]
     | Null
     deriving Show
 data Reference = ArrayElement [Expression] Reference
     | FunCall [Expression] Reference
+    | TypeCast Identifier Reference
     | SimpleReference Identifier
     | Dereference Reference
     | RecordField Reference Reference
@@ -95,6 +98,8 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitSet [Identifier]
     | InitNull
     deriving Show
+    
+knownTypes = ["shortstring"]
 
 pascalUnit = do
     comments
@@ -122,7 +127,8 @@ reference = buildExpressionParser table term <?> "reference"
     where
     term = comments >> choice [
         parens pas (reference >>= postfixes) >>= postfixes
-        , char '@' >> reference >>= postfixes >>= return . Address
+        , typeCast >>= postfixes
+        , char '@' >> liftM Address reference >>= postfixes
         , liftM SimpleReference iD >>= postfixes 
         ] <?> "simple reference"
 
@@ -137,6 +143,12 @@ reference = buildExpressionParser table term <?> "reference"
           , (brackets pas) (commaSep1 pas $ expression) >>= return . ArrayElement
         ]
 
+    typeCast = do
+        t <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) knownTypes
+        r <- parens pas reference
+        comments
+        return $ TypeCast (Identifier t) r
+        
     
 varsDecl1 = varsParser sepEndBy1    
 varsDecl = varsParser sepEndBy
@@ -420,6 +432,7 @@ expression = buildExpressionParser table term <?> "expression"
     term = comments >> choice [
         builtInFunction expression >>= \(n, e) -> return $ BuiltInFunCall e (SimpleReference (Identifier n))
         , parens pas $ expression 
+        , brackets pas (commaSep pas iD) >>= return . SetExpression
         , try $ natural pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
         , try $ float pas >>= return . FloatLiteral . show
         , try $ natural pas >>= return . NumberLiteral . show
@@ -437,6 +450,7 @@ expression = buildExpressionParser table term <?> "expression"
            , Infix (char '/' >> return (BinOp "/")) AssocLeft
            , Infix (try (string "div") >> return (BinOp "div")) AssocLeft
            , Infix (try (string "mod") >> return (BinOp "mod")) AssocLeft
+           , Infix (try (string "in") >> return (BinOp "in")) AssocNone
           ]
         , [  Infix (char '+' >> return (BinOp "+")) AssocLeft
            , Infix (char '-' >> return (BinOp "-")) AssocLeft
@@ -493,7 +507,7 @@ ifBlock = do
     o2 <- optionMaybe $ do
         try $ string "else" >> space
         comments
-        o <- phrase
+        o <- option NOP phrase
         comments
         return o
     return $ IfThenElse e o1 o2
@@ -556,7 +570,7 @@ switchCase = do
     comments
     cs <- many1 aCase
     o2 <- optionMaybe $ do
-        try $ string "else"
+        try $ string "else" >> notFollowedBy alphaNum
         comments
         o <- phrase
         comments
@@ -566,7 +580,7 @@ switchCase = do
     return $ SwitchCase e cs o2
     where
     aCase = do
-        e <- (commaSep pas) expression
+        e <- (commaSep pas) initExpression
         comments
         char ':'
         comments
@@ -575,9 +589,9 @@ switchCase = do
         return (e, p)
     
 procCall = do
-    i <- iD
+    r <- reference
     p <- option [] $ (parens pas) parameters
-    return $ ProcCall i p
+    return $ ProcCall r p
 
 parameters = (commaSep pas) expression <?> "parameters"
         

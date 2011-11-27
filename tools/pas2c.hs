@@ -131,7 +131,7 @@ type2C (ArrayDecl r t) = text "<<array type>>"
 
 phrase2C :: Phrase -> Doc
 phrase2C (Phrases p) = text "{" $+$ (nest 4 . vcat . map phrase2C $ p) $+$ text "}"
-phrase2C (ProcCall (Identifier name) params) = text name <> parens (hsep . punctuate (char ',') . map expr2C $ params) <> semi
+phrase2C (ProcCall ref params) = ref2C ref <> parens (hsep . punctuate (char ',') . map expr2C $ params) <> semi
 phrase2C (IfThenElse (expr) phrase1 mphrase2) = text "if" <> parens (expr2C expr) $+$ (phrase2C . wrapPhrase) phrase1 $+$ elsePart
     where
     elsePart | isNothing mphrase2 = empty
@@ -140,8 +140,8 @@ phrase2C (Assignment ref expr) = ref2C ref <> text " = " <> expr2C expr <> semi
 phrase2C (WhileCycle expr phrase) = text "while" <> parens (expr2C expr) $$ (phrase2C $ wrapPhrase phrase)
 phrase2C (SwitchCase expr cases mphrase) = text "switch" <> parens (expr2C expr) <> text "of" $+$ (nest 4 . vcat . map case2C) cases
     where
-    case2C :: ([Expression], Phrase) -> Doc
-    case2C (e, p) = text "case" <+> parens (hsep . punctuate (char ',') . map expr2C $ e) <> char ':' <> nest 4 (phrase2C p $+$ text "break;")
+    case2C :: ([InitExpression], Phrase) -> Doc
+    case2C (e, p) = text "case" <+> parens (hsep . punctuate (char ',') . map initExpr2C $ e) <> char ':' <> nest 4 (phrase2C p $+$ text "break;")
 phrase2C (WithBlock ref p) = text "namespace" <> parens (ref2C ref) $$ (phrase2C $ wrapPhrase p)
 phrase2C (ForCycle (Identifier i) e1 e2 p) = 
     text "for" <> (parens . hsep . punctuate (char ';') $ [text i <+> text "=" <+> expr2C e1, text i <+> text "<=" <+> expr2C e2, text "++" <> text i])

@@ -142,7 +142,7 @@ with CurrentTeam^ do
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
     with ClansArray[c]^ do
-        if (CurrTeam = TagTeamIndex) and ((GameFlags And gfTagTeam) <> 0) then
+        if (CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0) then
             begin
             TagTeamIndex:= Pred(TagTeamIndex) mod TeamsNumber;
             CurrTeam:= Pred(CurrTeam) mod TeamsNumber;
@@ -150,7 +150,7 @@ repeat
             NextClan:= true;
             end;
 
-    if (GameFlags And gfTagTeam) = 0 then inc(c);
+    if (GameFlags and gfTagTeam) = 0 then inc(c);
 
     if c = ClansCount then
         begin
@@ -171,7 +171,7 @@ repeat
                     CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
                 until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
                 end
-        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags And gfTagTeam) <> 0));
+        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0));
         end
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
@@ -243,7 +243,7 @@ if PlacingHogs then
     if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 15000
     else TurnTimeLeft:= 0
     end
-else if ((GameFlags And gfTagTeam) <> 0) and not NextClan then
+else if ((GameFlags and gfTagTeam) <> 0) and (not NextClan) then
     begin
     if TagTurnTimeLeft <> 0 then TurnTimeLeft:= TagTurnTimeLeft;
     TagTurnTimeLeft:= 0;
