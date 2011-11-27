@@ -434,8 +434,8 @@ expression = buildExpressionParser table term <?> "expression"
         , parens pas $ expression 
         , brackets pas (commaSep pas iD) >>= return . SetExpression
         , try $ natural pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
-        , try $ float pas >>= return . FloatLiteral . show
-        , try $ natural pas >>= return . NumberLiteral . show
+        , float pas >>= return . FloatLiteral . show
+        , natural pas >>= return . NumberLiteral . show
         , stringLiteral pas >>= return . StringLiteral
         , try (string "#$") >> many hexDigit >>= \c -> comments >> return (HexCharCode c)
         , char '#' >> many digit >>= \c -> comments >> return (CharCode c)
