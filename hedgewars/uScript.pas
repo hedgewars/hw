@@ -53,7 +53,7 @@ procedure freeModule;
 
 implementation
 {$IFNDEF LUA_DISABLED}
-uses LuaPas in 'LuaPas.pas',
+uses LuaPas,
     uConsole,
     uConsts,
     uVisualGears,
@@ -1715,7 +1715,7 @@ end;
 
 procedure ScriptCall(fname : shortstring);
 begin
-if not ScriptLoaded or not ScriptExists(fname) then
+if not ScriptLoaded or (not ScriptExists(fname)) then
     exit;
 SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
@@ -1763,7 +1763,7 @@ end;
 
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
-if not ScriptLoaded or not ScriptExists(fname) then
+if not ScriptLoaded or (not ScriptExists(fname)) then
     exit;
 SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));

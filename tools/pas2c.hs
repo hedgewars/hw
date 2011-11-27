@@ -30,7 +30,9 @@ pas2C fn = do
                 $ tryJust (guard . isDoesNotExistError) 
                 $ hPutStr stderr ("Preprocessing '" ++ fileName ++ ".pas'... ") >> preprocess (fileName ++ ".pas")
             case fc' of
-                (Left a) -> printLn "doesn't exist"
+                (Left a) -> do
+                    modify (Map.insert fileName System)
+                    printLn "doesn't exist"
                 (Right fc) -> do
                     printLn "ok"
                     let ptree = parse pascalUnit fileName fc

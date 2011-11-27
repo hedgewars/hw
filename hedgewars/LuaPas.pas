@@ -15,7 +15,7 @@ interface
 {$INCLUDE "config.inc"}
 
 type
-  size_t   = type Cardinal;
+  size_t   = Cardinal;
   Psize_t  = ^size_t;
   PPointer = ^Pointer;
 
@@ -45,8 +45,8 @@ const
 ** ===================================================================
 *)
 type
-  LUA_NUMBER_  = type Double;            // ending underscore is needed in Pascal
-  LUA_INTEGER_ = type PtrInt;
+  LUA_NUMBER_  = Double;            // ending underscore is needed in Pascal
+  LUA_INTEGER_ = PtrInt;
 
 (*
 @@ LUA_IDSIZE gives the maximum size for the description of the source
@@ -115,7 +115,7 @@ const
   LUA_AUTHORS     = 'R. Ierusalimschy, L. H. de Figueiredo & W. Celes';
 
   (* mark for precompiled code (`<esc>Lua') *)
-  LUA_SIGNATURE = #27'Lua';
+  LUA_SIGNATURE = #27 + 'Lua';
 
   (* option for multiple returns in `lua_pcall' and `lua_call' *)
   LUA_MULTRET = -1;
@@ -429,8 +429,8 @@ procedure lua_getregistry(L : Plua_State);
 function lua_getgccount(L : Plua_State) : LongInt;
 
 type
-  lua_Chuckreader = type lua_Reader;
-  lua_Chuckwriter = type lua_Writer;
+  lua_Chuckreader = lua_Reader;
+  lua_Chuckwriter = lua_Writer;
 
 (* ====================================================================== *)
 
@@ -983,7 +983,7 @@ procedure luaL_addchar(B : PluaL_Buffer; c : Char);
 begin
   if not(B^.p < B^.buffer + LUAL_BUFFERSIZE) then
     luaL_prepbuffer(B);
-  B^.p^ := c;
+  (B^.p^) := c;
   Inc(B^.p);
 end;
 

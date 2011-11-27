@@ -327,7 +327,7 @@ begin
     SendIPC('s' + s);
 
     if copy(s, 1, 4) = '/me ' then
-        s:= #2'* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
+        s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
         s:= #1 + UserNick + ': ' + s;
 

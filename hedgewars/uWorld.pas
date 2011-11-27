@@ -1220,11 +1220,11 @@ var EdgesDist, wdy, shs,z: LongInt;
     PrevSentPointTime: LongWord = 0;
 begin
 {$IFNDEF MOBILE}
-if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus and (GameState <> gsConfirm) then
+if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) and cHasFocus and (GameState <> gsConfirm) then
     uCursor.updatePosition();
 {$ENDIF}
 z:= round(200/zoom);
-if not PlacingHogs and (FollowGear <> nil) and not isCursorVisible and not bShowAmmoMenu and not fastUntilLag then
+if not PlacingHogs and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) then
     if (not autoCameraOn) or ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
         begin
         FollowGear:= nil;

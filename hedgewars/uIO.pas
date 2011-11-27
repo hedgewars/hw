@@ -142,8 +142,7 @@ end;
 procedure IPCCheckSock;
 const ss: shortstring = '';
 var i: LongInt;
-    buf: array[0..255] of byte;
-    s: shortstring absolute buf;
+    s: shortstring;
 begin
 if IPCSock = nil then
    exit;
@@ -153,10 +152,10 @@ SDLNet_AddSocket(fds, IPCSock);
 
 while SDLNet_CheckSockets(fds, 0) > 0 do
     begin
-    i:= SDLNet_TCP_Recv(IPCSock, @buf[1], 255 - Length(ss));
+    i:= SDLNet_TCP_Recv(IPCSock, @s[1], 255 - Length(ss));
     if i > 0 then
         begin
-        buf[0]:= i;
+        s[0]:= char(i);
         ss:= ss + s;
         while (Length(ss) > 1) and (Length(ss) > byte(ss[1])) do
             begin
@@ -171,8 +170,7 @@ procedure LoadRecordFromFile(fileName: shortstring);
 var f: file;
     ss: shortstring = '';
     i: LongInt;
-    buf: array[0..255] of byte;
-    s: shortstring absolute buf;
+    s: shortstring;
 begin
 
 // set RDNLY on file open
@@ -184,12 +182,12 @@ reset(f, 1);
 tryDo(IOResult = 0, 'Error opening file ' + fileName, true);
 
 i:= 0; // avoid compiler hints
-buf[0]:= 0;
+s[0]:= #0;
 repeat
-    BlockRead(f, buf[1], 255 - Length(ss), i);
+    BlockRead(f, s[1], 255 - Length(ss), i);
     if i > 0 then
         begin
-        buf[0]:= i;
+        s[0]:= char(i);
         ss:= ss + s;
         while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
             begin
@@ -315,7 +313,7 @@ while (headcmd <> nil)
             end;
         'b': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg '#4 + s, true);
+            ParseCommand('chatmsg ' + #4 + s, true);
             WriteLnToConsole(s)
             end;
 // TODO: deprecate 'F'

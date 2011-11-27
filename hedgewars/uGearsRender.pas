@@ -197,7 +197,7 @@ begin
     HH:= Gear^.Hedgehog;
     if HH^.Unplaced then exit;
     m:= 1;
-    if ((Gear^.State and gstHHHJump) <> 0) and not cArtillery then m:= -1;
+    if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then m:= -1;
     sx:= ox + 1; // this offset is very common
     sy:= oy - 3;
     sign:= hwSign(Gear^.dX);
@@ -542,7 +542,7 @@ begin
             begin
             if (TWave(Gear^.Tag) < Low(TWave)) or (TWave(Gear^.Tag) > High(TWave)) then
                 begin
-                Gear^.State:= Gear^.State and not gstAnimation;
+                Gear^.State:= Gear^.State and (not gstAnimation);
                 end
             else
                 begin
@@ -805,7 +805,7 @@ begin
 
     with HH^ do
         begin
-        if ((Gear^.State and not gstWinner) = 0)
+        if ((Gear^.State and (not gstWinner)) = 0)
             or ((Gear^.State = gstWait) and (Gear^.dY.QWordValue = 0))
             or (bShowFinger and ((Gear^.State and gstHHDriven) <> 0)) then
             begin

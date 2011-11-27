@@ -192,7 +192,7 @@ repeat
         k:= CountNonZeroz(x2, y)
         until (x2 >= (rightX-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
         if (x2 < (rightX - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
-            and not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144) then break;
+            and (not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144)) then break;
         end;
 x1:= 0;
 until y > (LAND_HEIGHT-125);
@@ -345,7 +345,7 @@ with Obj do
         y:= 8;
         repeat
             if CheckLand(r, x, y - 8, lfBasic)
-            and not CheckIntersect(x, y, Width, Height) then
+            and (not CheckIntersect(x, y, Width, Height)) then
             begin
             ar[cnt].x:= x;
             ar[cnt].y:= y;

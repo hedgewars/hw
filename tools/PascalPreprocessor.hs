@@ -58,6 +58,7 @@ preprocess fn = do
         s <- choice [
             include
             , ifdef
+            , if'
             , elseSwitch
             , endIf
             , define
@@ -89,10 +90,20 @@ preprocess fn = do
         
         updateState $ \(m, b) ->
             (m, (f $ d `Map.member` m) : b)
-        
       
         return ""
+
+    if' = do
+        s <- try (string "IF" >> notFollowedBy alphaNum)
         
+        manyTill anyChar (char '}')
+        --char '}'
+        
+        updateState $ \(m, b) ->
+            (m, False : b)
+      
+        return ""
+
     elseSwitch = do
         try $ string "ELSE}"
         updateState $ \(m, b:bs) -> (m, (not b):bs)

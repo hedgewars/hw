@@ -38,7 +38,7 @@ implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
      uVariables, uUtils, uCommands, Adler32, uDebug, uLandPainted, uTextures;
 
-operator=(const a, b: direction) c: Boolean;
+operator = (const a, b: direction) c: Boolean;
 begin
     c := (a.x = b.x) and (a.y = b.y);
 end;
@@ -685,7 +685,7 @@ found_cell := false;
 if getrandom(2) = 1 then next_dir_clockwise := true
 else next_dir_clockwise := false;
 
-while (tries < 5) and not found_cell do
+while (tries < 5) and (not found_cell) do
 begin
     if when_seen(x + dir.x, y + dir.y) = current_step then //we are seeing ourselves, try another direction
     begin
@@ -1076,7 +1076,7 @@ begin
                     else if (Land[y, x+1] = lfBasic) and (LandPixels[y, x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
                     else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x]
                     else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x];
-                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (128 shl AShift)
+                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (128 shl AShift)
                     end;
                 Land[y,x]:= lfObject
             end
@@ -1096,7 +1096,7 @@ begin
                     else if (Land[y, x+1] = lfBasic) and (LandPixels[y,x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
                     else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x]
                     else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x];
-                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and not AMask) or (64 shl AShift)
+                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (64 shl AShift)
                     end;
                 Land[y,x]:= lfObject
             end;

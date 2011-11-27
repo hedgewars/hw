@@ -393,7 +393,7 @@ var ldx, ldy, rdx, rdy: LongInt;
     i, j, k, mx, my, li, ri, jfr, jto, tmpo : ShortInt;
     tmpx, tmpy: LongWord;
     dx, dy, s: hwFloat;
-    offset: Array[0..7,0..1] of ShortInt;
+    offset: array[0..7,0..1] of ShortInt;
     isColl: Boolean;
 
 begin
@@ -523,7 +523,7 @@ end;
 function CalcSlopeBelowGear(Gear: PGear): hwFloat;
 var dx, dy: hwFloat;
     collX, i, y, x, gx, sdx, sdy: LongInt;
-    isColl, succ: Boolean;
+    isColl, bSucc: Boolean;
 begin
 
 
@@ -560,13 +560,13 @@ if isColl then
 
     sdx:= 0;
     sdy:= 0;
-    succ := CalcSlopeTangent(Gear, collX, y, sdx, sdy, 255);
+    bSucc := CalcSlopeTangent(Gear, collX, y, sdx, sdy, 255);
 
     // restore original dx/dy
     Gear^.dX := dx;
     Gear^.dY := dy;
 
-    if succ and (sdx <> 0) and (sdy <> 0) then
+    if bSucc and (sdx <> 0) and (sdy <> 0) then
     begin
         dx := int2hwFloat(sdy) / (abs(sdx) + abs(sdy));
         dx.isNegative := (sdx * sdy) < 0;

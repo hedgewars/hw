@@ -120,11 +120,11 @@ var gear: PVisualGear;
 begin
 AddVisualGear:= nil;
 if ((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet))) and // we are scrolling now
-   ((Kind <> vgtCloud) and not Critical) then exit;
+   ((Kind <> vgtCloud) and (not Critical)) then exit;
 
 if ((cReducedQuality and rqAntiBoom) <> 0) and
-   not Critical and
-   not (Kind in
+   (not Critical) and
+   (not (Kind in
    [vgtTeamHealthSorter,
     vgtSmallDamageTag,
     vgtSpeechBubble,
@@ -133,7 +133,7 @@ if ((cReducedQuality and rqAntiBoom) <> 0) and
     vgtSmokeTrace,
     vgtEvilTrace,
     vgtNote,
-    vgtSmoothWindBar]) then exit;
+    vgtSmoothWindBar])) then exit;
 
 inc(VGCounter);
 New(gear);

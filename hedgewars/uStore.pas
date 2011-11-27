@@ -413,7 +413,7 @@ begin
         begin
         FreeTexture(SpritesData[ii].Texture);
         SpritesData[ii].Texture:= nil;
-        if (SpritesData[ii].Surface <> nil) and not reload then
+        if (SpritesData[ii].Surface <> nil) and (not reload) then
             begin
             SDL_FreeSurface(SpritesData[ii].Surface);
             SpritesData[ii].Surface:= nil
@@ -955,7 +955,7 @@ var flags: Longword = 0;
     {$IFNDEF DARWIN}ico: PSDL_Surface;{$ENDIF}
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
-    if Length(s) = 0 then cFullScreen:= not cFullScreen
+    if Length(s) = 0 then cFullScreen:= (not cFullScreen)
     else cFullScreen:= s = '1';
 
     AddFileLog('Preparing to change video parameters...');

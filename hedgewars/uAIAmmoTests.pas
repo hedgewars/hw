@@ -470,7 +470,7 @@ var Vx, Vy: hwFloat;
             EY:= hwRound(y);
         until TestCollExcludingMe(Me, EX, EY, 5) or (EY > cWaterLine);
 
-        if (EY < cWaterLine) and not dY.isNegative then
+        if (EY < cWaterLine) and (not dY.isNegative) then
             begin
             value:= RateExplosion(Me, EX, EY, 91);
             if (value = 0) then

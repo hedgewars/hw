@@ -58,7 +58,7 @@ if loaded then
        begin
        readln(f, s);
        if Length(s) = 0 then continue;
-       if not (s[1] in ['0'..'9']) then continue;
+       if (s[1] < '0') or (s[1] > '9') then continue;
        TryDo(Length(s) > 6, 'Load locale: empty string', true);
        val(s[1]+s[2], a, c);
        TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
