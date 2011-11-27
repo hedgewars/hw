@@ -214,7 +214,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('l');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmLeft and InputMask);
+    Message:= Message and (not (gmLeft and InputMask));
     ScriptCall('onLeftUp');
 end;
 
@@ -235,7 +235,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('r');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmRight and InputMask);
+    Message:= Message and (not (gmRight and InputMask));
     ScriptCall('onRightUp');
 end;
 
@@ -256,7 +256,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('u');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmUp and InputMask);
+    Message:= Message and (not (gmUp and InputMask));
     ScriptCall('onUpUp');
 end;
 
@@ -277,7 +277,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('d');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmDown and InputMask);
+    Message:= Message and (not (gmDown and InputMask));
     ScriptCall('onDownUp');
 end;
 
@@ -298,7 +298,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then exit;
 if not CurrentTeam^.ExtDriven then SendIPC('z');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmPrecise and InputMask);
+    Message:= Message and (not (gmPrecise and InputMask));
     ScriptCall('onPreciseUp');
 end;
 
@@ -350,7 +350,7 @@ with CurrentHedgehog^.Gear^ do
     begin
     if not CurrentTeam^.ExtDriven and
         ((Message and gmAttack) <> 0) then SendIPC('a');
-    Message:= Message and not (gmAttack and InputMask);
+    Message:= Message and (not (gmAttack and InputMask));
     ScriptCall('onAttackUp');
     end
 end;
@@ -505,7 +505,7 @@ else
             if bShowAmmoMenu then bShowAmmoMenu:= false
             else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
                     ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
-                    ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
+                    ((Gear^.State and gstHHDriven) = 0) then begin end else bShowAmmoMenu:= true
             end;
     end
 end;

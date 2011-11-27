@@ -4045,7 +4045,7 @@ begin
                 continue;
         end
         else
-            if not (Gear^.dX*ox + Gear^.dY*oy).isNegative then
+            if not ((Gear^.dX*ox + Gear^.dY*oy).isNegative) then
                 continue;
 
         isbullet:= (iterator^.Kind in [gtShotgunShot, gtDEagleShot, gtSniperRifleShot, gtSineGunShot]);
@@ -4105,7 +4105,7 @@ begin
         ny := Gear^.dX;
         // ... decide where the top is based on the hog's direction when firing the portal
         if Gear^.Elasticity.isNegative then
-            nx.isNegative := not nx.isNegative
+            nx.isNegative := (not nx.isNegative)
         else
             ny.isNegative := not ny.isNegative;
 
@@ -4137,7 +4137,7 @@ begin
         nx := conPortal^.dY;
         ny := conPortal^.dX;
         if conPortal^.Elasticity.isNegative then
-            nx.isNegative := not nx.isNegative
+            nx.isNegative := (not nx.isNegative)
         else
             ny.isNegative := not ny.isNegative;
 
@@ -4364,7 +4364,7 @@ begin
     newPortal^.IntersectGear := nil;
 
     if CurrentHedgehog <> nil then
-        With CurrentHedgehog^ do
+        with CurrentHedgehog^ do
         begin
             CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
             // let's save the HH's dX's direction so we can decide where the "top" of the portal hole

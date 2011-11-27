@@ -653,7 +653,7 @@ else if Gear^.Kind = gtHedgehog then
 
         inc(KilledHHs);
         RecountTeamHealth(team);
-        if (CurrentHedgehog <> nil) and CurrentHedgehog^.Effects[heResurrectable] and not Gear^.Hedgehog^.Effects[heResurrectable] then
+        if (CurrentHedgehog <> nil) and CurrentHedgehog^.Effects[heResurrectable] and (not Gear^.Hedgehog^.Effects[heResurrectable]) then
             with CurrentHedgehog^ do 
                 begin
                 inc(Team^.stats.AIKills);
@@ -698,9 +698,9 @@ while Gear <> nil do
 
             if (Gear^.Hedgehog^.Team = CurrentTeam) and
                (Gear^.Damage <> Gear^.Karma) and
-                not Gear^.Hedgehog^.King and
-                not Gear^.Hedgehog^.Effects[hePoisoned] and
-                not SuddenDeathDmg then
+                (not Gear^.Hedgehog^.King) and
+                (not Gear^.Hedgehog^.Effects[hePoisoned]) and
+                (not SuddenDeathDmg) then
                 Gear^.State:= Gear^.State or gstLoser;
 
             spawnHealthTagForHH(Gear, dmg);
@@ -863,7 +863,7 @@ case step of
     stHealth: begin
             if (cWaterRise <> 0) or (cHealthDecrease <> 0) then
                 begin
-                if (TotalRounds = cSuddenDTurns) and not SuddenDeath and not isInMultiShoot then
+                if (TotalRounds = cSuddenDTurns) and (not SuddenDeath) and (not isInMultiShoot) then
                     begin
                     SuddenDeath:= true;
                     if cHealthDecrease <> 0 then
@@ -884,13 +884,13 @@ case step of
                     MusicFN:= SDMusic;
                     ChangeMusic
                     end
-                else if (TotalRounds < cSuddenDTurns) and not isInMultiShoot then
+                else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
                     begin
                     i:= cSuddenDTurns - TotalRounds;
                     s:= inttostr(i);
                     if i = 1 then
                         AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
-                    else if i in [2, 5, 10, 15, 20, 25, 50, 100] then
+                    else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
                         AddCaption(Format(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
                     end;
                 end;
@@ -940,14 +940,14 @@ else if ((GameFlags and gfInfAttack) <> 0) then
         begin
         dec(delay2);
 
-        if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and not CurrentHedgehog^.Unplaced then
+        if ((delay2 mod cInactDelay) = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and (not CurrentHedgehog^.Unplaced) then
             begin
             if (CurrentHedgehog^.Gear^.State and gstAttacked <> 0) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
                 begin
                 CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstHHChooseTarget;
                 isCursorVisible := true
                 end;
-            CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and not gstAttacked;
+            CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and (not gstAttacked);
             end;
         if delay2 = 0 then
             begin
@@ -969,7 +969,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
 if TurnTimeLeft > 0 then
         if CurrentHedgehog^.Gear <> nil then
             if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
-                and not isInMultiShoot then
+                and (not isInMultiShoot) then
                 begin
                 if (TurnTimeLeft = 5000)
                     and (cHedgehogTurnTime >= 10000)
@@ -1067,7 +1067,7 @@ begin
         t:= t^.NextGear
         end;
    
-    if ((GameFlags and gfResetWeps) <> 0) and not PlacingHogs then
+    if ((GameFlags and gfResetWeps) <> 0) and (not PlacingHogs) then
         ResetWeapons;
 
     if (GameFlags and gfResetHealth) <> 0 then
@@ -1121,7 +1121,7 @@ begin
             end;
         if ((GameFlags and gfKarma) <> 0) and
            ((GameFlags and gfInvulnerable) = 0) and
-           not CurrentHedgehog^.Gear^.Invulnerable then
+           (not CurrentHedgehog^.Gear^.Invulnerable) then
            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
            inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
            CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
@@ -1328,7 +1328,7 @@ while Gear <> nil do
                                 Gear^.Active:= true;
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear
                                 end;
-                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and not Gear^.Invulnerable then
+                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and (not Gear^.Invulnerable) then
                                 Gear^.Hedgehog^.Effects[hePoisoned] := true;
                             end;
 
@@ -1479,7 +1479,7 @@ while i > 0 do
                         Gear^.State:= Gear^.State or gstWinner;
                     if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then 
                         begin
-                        if (Ammo^.Hedgehog^.Gear <> nil) then Ammo^.Hedgehog^.Gear^.State:= Ammo^.Hedgehog^.Gear^.State and not gstNotKickable;
+                        if (Ammo^.Hedgehog^.Gear <> nil) then Ammo^.Hedgehog^.Gear^.State:= Ammo^.Hedgehog^.Gear^.State and (not gstNotKickable);
                         ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
                         end;
 
@@ -1964,7 +1964,7 @@ while tryAgain do
 
         dec(Delta, 60)
     until (cnt2 > 0) or (Delta < 70);
-    if (cnt2 = 0) and skipProximity and not reallySkip then tryAgain:= true
+    if (cnt2 = 0) and skipProximity and (not reallySkip) then tryAgain:= true
     else tryAgain:= false;
     reallySkip:= true;
     end;

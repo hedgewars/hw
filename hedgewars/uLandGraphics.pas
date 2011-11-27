@@ -298,7 +298,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                begin
                by:= t div 2; bx:= i div 2;
                end;
-           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and not (disableLandBack) then
+           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
                begin
                inc(cnt);
                LandPixels[by, bx]:= LandBackPixel(i, t)
@@ -676,7 +676,7 @@ case bpp of
      4: for y:= 0 to Pred(h) do
             begin
             for x:= 0 to Pred(w) do
-                if PLongword(@(p^[x * 4]))^ <> 0 then
+                if (PLongword(@(p^[x * 4]))^) <> 0 then
                    if ((cpY + y) <= Longint(topY)) or
                       ((cpY + y) >= LAND_HEIGHT) or
                       ((cpX + x) <= Longint(leftX)) or
@@ -705,7 +705,7 @@ case bpp of
      4: for y:= 0 to Pred(h) do
             begin
             for x:= 0 to Pred(w) do
-                if PLongword(@(p^[x * 4]))^ <> 0 then
+                if (PLongword(@(p^[x * 4]))^) <> 0 then
                    begin
                    if (cReducedQuality and rqBlurryLand) = 0 then
                        begin
@@ -781,7 +781,7 @@ if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0
 
     if c < 4 then // 0-3 neighbours
         begin
-        if ((Land[Y, X] and lfBasic) <> 0) and not disableLandBack then
+        if ((Land[Y, X] and lfBasic) <> 0) and (not disableLandBack) then
             LandPixels[yy, xx]:= LandBackPixel(X, Y)
         else
             LandPixels[yy, xx]:= 0;
@@ -804,7 +804,7 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
         begin
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
-            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then LandPixels[y,x]:= (cExplosionBorderColor and not AMask) or (128 shl AShift)
+            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then LandPixels[y,x]:= (cExplosionBorderColor and (not AMask)) or (128 shl AShift)
             else
                 LandPixels[y,x]:=
                                 (((((LandPixels[y,x] and RMask shr RShift) div 2)+((cExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
@@ -826,7 +826,7 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
         begin
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
-            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then LandPixels[y,x]:= (cExplosionBorderColor and not AMask) or (64 shl AShift)
+            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then LandPixels[y,x]:= (cExplosionBorderColor and (not AMask)) or (64 shl AShift)
             else
                 LandPixels[y,x]:=
                                 (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((cExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or

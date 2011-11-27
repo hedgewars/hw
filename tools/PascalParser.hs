@@ -16,6 +16,7 @@ import PascalBasics
 data PascalUnit =
     Program Identifier Implementation Phrase
     | Unit Identifier Interface Implementation (Maybe Initialize) (Maybe Finalize)
+    | System
     deriving Show
 data Interface = Interface Uses TypesAndVars
     deriving Show
@@ -57,7 +58,7 @@ data Phrase = ProcCall Reference [Expression]
         | ForCycle Identifier Expression Expression Phrase
         | WithBlock Reference Phrase
         | Phrases [Phrase]
-        | SwitchCase Expression [([InitExpression], Phrase)] (Maybe Phrase)
+        | SwitchCase Expression [([InitExpression], Phrase)] (Maybe [Phrase])
         | Assignment Reference Expression
         | NOP
     deriving Show
@@ -78,11 +79,12 @@ data Expression = Expression String
     deriving Show
 data Reference = ArrayElement [Expression] Reference
     | FunCall [Expression] Reference
-    | TypeCast Identifier Reference
+    | TypeCast Identifier Expression
     | SimpleReference Identifier
     | Dereference Reference
     | RecordField Reference Reference
     | Address Reference
+    | RefExpression Expression
     deriving Show
 data InitExpression = InitBinOp String InitExpression InitExpression
     | InitPrefixOp String InitExpression
@@ -95,11 +97,14 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitString String
     | InitChar String
     | BuiltInFunction String [InitExpression]
-    | InitSet [Identifier]
+    | InitSet [InitExpression]
+    | InitAddress InitExpression
     | InitNull
+    | InitRange Range
+    | InitTypeCast Identifier InitExpression
     deriving Show
     
-knownTypes = ["shortstring"]
+knownTypes = ["shortstring", "char", "byte"]
 
 pascalUnit = do
     comments
@@ -126,14 +131,13 @@ unit = do
 reference = buildExpressionParser table term <?> "reference"
     where
     term = comments >> choice [
-        parens pas (reference >>= postfixes) >>= postfixes
-        , typeCast >>= postfixes
+        parens pas (liftM RefExpression expression >>= postfixes) >>= postfixes
+        , try $ typeCast >>= postfixes
         , char '@' >> liftM Address reference >>= postfixes
         , liftM SimpleReference iD >>= postfixes 
         ] <?> "simple reference"
 
     table = [ 
-            [Infix (try (char '.' >> notFollowedBy (char '.')) >> return RecordField) AssocLeft]
         ]
     
     postfixes r = many postfix >>= return . foldl (flip ($)) r
@@ -141,13 +145,14 @@ reference = buildExpressionParser table term <?> "reference"
             parens pas (option [] parameters) >>= return . FunCall
           , char '^' >> return Dereference
           , (brackets pas) (commaSep1 pas $ expression) >>= return . ArrayElement
+          , (char '.' >> notFollowedBy (char '.')) >> liftM RecordField reference
         ]
 
     typeCast = do
         t <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) knownTypes
-        r <- parens pas reference
+        e <- parens pas expression
         comments
-        return $ TypeCast (Identifier t) r
+        return $ TypeCast (Identifier t) e
         
     
 varsDecl1 = varsParser sepEndBy1    
@@ -293,6 +298,7 @@ typesDecl = many (aTypeDecl >>= \t -> comments >> return t)
         semi pas
         comments
         return $ TypeDeclaration i t
+
         
 rangeDecl = choice [
     try $ rangeft
@@ -303,7 +309,7 @@ rangeDecl = choice [
     e1 <- initExpression
     string ".."
     e2 <- initExpression
-    return $ RangeFromTo e1 e2
+    return $ RangeFromTo e1 e2        
     
 typeVarDeclaration isImpl = (liftM concat . many . choice) [
     varSection,
@@ -385,8 +391,10 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         
     functionDecorator = choice [
         try $ string "inline;"
-        , try $ string "cdecl;"
+        , try $ caseInsensitiveString "cdecl;"
         , try $ string "overload;"
+        , try $ string "export;"
+        , try $ string "varargs;"
         , try (string "external") >> comments >> iD >> optional (string "name" >> comments >> stringLiteral pas)>> string ";"
         ] >> comments
         
@@ -431,7 +439,7 @@ expression = buildExpressionParser table term <?> "expression"
     where
     term = comments >> choice [
         builtInFunction expression >>= \(n, e) -> return $ BuiltInFunCall e (SimpleReference (Identifier n))
-        , parens pas $ expression 
+        , try (parens pas $ expression >>= \e -> notFollowedBy (comments >> char '.') >> return e)
         , brackets pas (commaSep pas iD) >>= return . SetExpression
         , try $ natural pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
         , float pas >>= return . FloatLiteral . show
@@ -490,6 +498,7 @@ phrase = do
         , forCycle
         , (try $ reference >>= \r -> string ":=" >> return r) >>= \r -> expression >>= return . Assignment r
         , procCall
+        , char ';' >> comments >> return NOP
         ]
     optional $ char ';'
     comments
@@ -572,7 +581,7 @@ switchCase = do
     o2 <- optionMaybe $ do
         try $ string "else" >> notFollowedBy alphaNum
         comments
-        o <- phrase
+        o <- many phrase
         comments
         return o
     string "end"
@@ -580,7 +589,7 @@ switchCase = do
     return $ SwitchCase e cs o2
     where
     aCase = do
-        e <- (commaSep pas) initExpression
+        e <- (commaSep pas) $ (liftM InitRange rangeDecl <|> initExpression)
         comments
         char ':'
         comments
@@ -617,16 +626,18 @@ initExpression = buildExpressionParser table term <?> "initialization expression
     where
     term = comments >> choice [
         liftM (uncurry BuiltInFunction) $ builtInFunction initExpression 
-        , try $ brackets pas (commaSep pas $ iD) >>= return . InitSet
+        , try $ brackets pas (commaSep pas $ initExpression) >>= return . InitSet
         , try $ parens pas (commaSep pas $ initExpression) >>= return . InitArray
-        , parens pas (semiSep pas $ recField) >>= return . InitRecord
+        , parens pas (sepEndBy recField (char ';' >> comments)) >>= return . InitRecord
         , try $ integer pas >>= \i -> notFollowedBy (char '.') >> (return . InitNumber . show) i
         , try $ float pas >>= return . InitFloat . show
         , try $ integer pas >>= return . InitNumber . show
         , stringLiteral pas >>= return . InitString
         , char '#' >> many digit >>= \c -> comments >> return (InitChar c)
         , char '$' >> many hexDigit >>= \h -> comments >> return (InitHexNumber h)
+        , char '@' >> initExpression >>= \c -> comments >> return (InitAddress c)
         , try $ string "nil" >> return InitNull
+        , itypeCast
         , iD >>= return . InitReference
         ]
         
@@ -666,6 +677,12 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         , [Prefix (try (string "not") >> return (InitPrefixOp "not"))]
         ]
 
+    itypeCast = do
+        t <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) knownTypes
+        i <- parens pas initExpression
+        comments
+        return $ InitTypeCast (Identifier t) i
+        
 builtInFunction e = do
     name <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) builtin
     spaces
