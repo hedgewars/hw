@@ -4041,7 +4041,7 @@ begin
         // won't port stuff that does not move towards the front/portal entrance
         if iscake then
         begin
-            if not ((iterator^.X - Gear^.X)*ox + (iterator^.Y - Gear^.Y)*oy).isNegative then
+            if not (((iterator^.X - Gear^.X)*ox + (iterator^.Y - Gear^.Y)*oy).isNegative) then
                 continue;
         end
         else
