@@ -624,7 +624,7 @@ const
             Width:  80; Height: 50; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSDSplash
             (FileName:  'SDDroplet'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprSDDroplet
-            (FileName:  'Egg'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;//TODO change back 'Egg' to 'Tardis'
+            (FileName:  'TARDIS'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  0; Height: 0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprTardis
             (FileName: 'firebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 450; Height: 150; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true) // sprFireButton
@@ -764,8 +764,8 @@ const
             (FileName:            'parachute.ogg'; Path: ptSounds),// sndParachute
             (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
             (FileName:            'hogchant3.ogg'; Path: ptSounds),// sndResurrector
-            (FileName:                'plane.ogg'; Path: ptSounds), // sndPlane
-            (FileName:                'plane.ogg'; Path: ptSounds) // sndTardis TODO change when using a new data set
+            (FileName:                'plane.ogg'; Path: ptSounds),// sndPlane
+            (FileName:               'TARDIS.ogg'; Path: ptSounds) // sndTardis
             );
 
     Ammoz: array [TAmmoType] of record
