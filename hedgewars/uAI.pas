@@ -30,13 +30,17 @@ procedure FreeActionsList;
 
 implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
-     uAmmos, SysUtils{$IFDEF UNIX}{$IFNDEF ANDROID}, cthreads{$ENDIF}{$ENDIF}, uTypes,
+     uAmmos, SysUtils{$IFNDEF USE_SDLTHREADS} {$IFDEF UNIX}, cthreads{$ENDIF} {$ENDIF}, uTypes,
      uVariables, uCommands, uUtils, uDebug;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
     StopThinking: boolean;
+{$IFDEF USE_SDL_THREADS} 
     ThinkThread: PSDL_Thread = nil;
+{$ELSE}
+    ThinkThread: TThreadID;
+{$ENDIF}
     hasThread: LongInt;
 
 procedure FreeActionsList;
@@ -117,8 +121,11 @@ for i:= 0 to Pred(Targets.Count) do
        with CurrentHedgehog^ do
             a:= CurAmmoType;
        aa:= a;
+{$IFDEF USE_SDLTHREADS}
        SDL_delay(0);    //ThreadSwitch was only a hint
-       
+{$ELSE}
+       ThreadSwitch();
+{$ENDIF}       
        repeat
         if (CanUseAmmo[a]) and
            ((not isMoved) or ((AmmoTests[a].flags and amtest_OnTurn) = 0)) then
@@ -365,11 +372,10 @@ if Targets.Count = 0 then
 
 FillBonuses((Me^.State and gstAttacked) <> 0);
 AddFileLog('Enter Think Thread');
-{$IFDEF IPHONEOS}
-//TODO: sdl_thread works on device but crashes in simulator, most likely because of outdated toolchain
-BeginThread(@Think, Me, ThinkThread);
-{$ELSE}
+{$IFDEF USE_SDLTHREADS}
 ThinkThread := SDL_CreateThread(@Think{$IFDEF SDL13}, nil{$ENDIF}, Me);
+{$ELSE}
+BeginThread(@Think, Me, ThinkThread);
 {$ENDIF}
 AddFileLog('Thread started');
 end;
