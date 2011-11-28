@@ -19,7 +19,6 @@
 
 package org.hedgewars.hedgeroid.Downloader;
 
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class DownloadService extends Service {
 	private NotificationManager nM;
 	private RemoteViews contentView;
 
-	private Deque<DownloadTask> downloadTasks = new LinkedList<DownloadTask>();
+	private LinkedList<DownloadTask> downloadTasks = new LinkedList<DownloadTask>();
 	private DownloadTask currentTask = null;
 
 	public class DownloadHandler extends Handler{
@@ -112,7 +111,7 @@ public class DownloadService extends Service {
 
 	private void runNextTask(){
 		if(asyncExecutor == null){//if (task isnt running right now) ...
-			currentTask = downloadTasks.pollFirst();
+			currentTask = downloadTasks.poll();
 			if(currentTask != null){
 				asyncExecutor = new DownloadAsyncTask(currentTask);
 				asyncExecutor.execute(currentTask.getPackage());
