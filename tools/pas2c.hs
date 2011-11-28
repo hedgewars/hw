@@ -18,23 +18,26 @@ import qualified Data.Map as Map
 pas2C :: String -> IO ()
 pas2C fn = do
     setCurrentDirectory "../hedgewars/"
-    flip evalStateT initState $ f fn
+    s <- flip execStateT initState $ f fn
+    writeFile "dump" $ show s
     where
     printLn = liftIO . hPutStrLn stderr
+    print = liftIO . hPutStr stderr
     initState = Map.empty
     f :: String -> StateT (Map.Map String PascalUnit) IO ()
     f fileName = do
         processed <- gets $ Map.member fileName
         unless processed $ do
+            print ("Preprocessing '" ++ fileName ++ ".pas'... ")
             fc' <- liftIO 
                 $ tryJust (guard . isDoesNotExistError) 
-                $ hPutStr stderr ("Preprocessing '" ++ fileName ++ ".pas'... ") >> preprocess (fileName ++ ".pas")
+                $ preprocess (fileName ++ ".pas")
             case fc' of
                 (Left a) -> do
                     modify (Map.insert fileName System)
                     printLn "doesn't exist"
                 (Right fc) -> do
-                    printLn "ok"
+                    print "ok, parsing... "
                     let ptree = parse pascalUnit fileName fc
                     case ptree of
                          (Left a) -> do
@@ -42,10 +45,11 @@ pas2C fn = do
                             printLn $ show a ++ "\nsee preprocess.out for preprocessed source"
                             fail "stop"
                          (Right a) -> do
+                            printLn "ok"
                             modify (Map.insert fileName a)
                             mapM_ f (usesFiles a)
-                            
-         
+
+
 usesFiles :: PascalUnit -> [String]         
 usesFiles (Program _ (Implementation uses _) _) = uses2List uses
 usesFiles (Unit _ (Interface uses1 _) (Implementation uses2 _) _ _) = uses2List uses1 ++ uses2List uses2
