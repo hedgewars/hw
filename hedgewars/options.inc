@@ -34,6 +34,7 @@
   {$DEFINE GLunit:=gles11}
   {$DEFINE MOBILE}
   {$DEFINE Java_Prefix := 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
+  {$DEFINE USE_SDLTHREADS}
 {$ENDIF}
 
 {$IFDEF IPHONEOS}
