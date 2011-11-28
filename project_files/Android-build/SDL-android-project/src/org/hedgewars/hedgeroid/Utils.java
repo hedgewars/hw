@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -36,7 +37,7 @@ import android.widget.Toast;
 public class Utils {
 
 	private static final String ROOT_DIR = "Data/";
-	
+
 	/**
 	 * get the path to which we should download all the data files
 	 * @param c context 
@@ -49,34 +50,32 @@ public class Utils {
 			return FroyoSDCardDir.getDownloadPath(c) + '/';
 		}
 	}
-	
+
 	public static String getDataPath(Context c){
 		return getCachePath(c) + ROOT_DIR;
 	}
-	
+
 	static class FroyoSDCardDir{
 		public static String getDownloadPath(Context c){
 			File f =  c.getExternalCacheDir();
 			if(f != null){
 				return f.getAbsolutePath();
 			}else{
-				Toast.makeText(c, R.string.sdcard_not_mounted, Toast.LENGTH_LONG).show();
 				return null;
 			}	
 		}
 	}
-	
+
 	static class PreFroyoSDCardDir{
 		public static String getDownloadPath(Context c){
 			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
 				if(Environment.getExternalStorageDirectory() != null)
 					return Environment.getExternalStorageDirectory().getAbsolutePath() + "/Hedgewars/";				
 			}
-			Toast.makeText(c, R.string.sdcard_not_mounted, Toast.LENGTH_LONG).show();
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Get files from dirName, dir name is relative to {@link getDownloadPath}
 	 * @param dirName
@@ -86,15 +85,15 @@ public class Utils {
 	public static String[] getFileNamesFromRelativeDir(Context c, String dirName){
 		String prefix = getDataPath(c);
 		File f = new File(prefix + dirName);
-		
+
 		if(f.exists() && f.isDirectory()) return f.list();
 		else{
-			
+
 			Log.e("Utils::", "Couldn't find dir: " + dirName);
 			return new String[0];
 		}
 	}
-	
+
 	/**
 	 * Return a File array with all the files from dirName
 	 * @param c
@@ -104,14 +103,14 @@ public class Utils {
 	public static File[] getFilesFromRelativeDir(Context c, String dirName){
 		String prefix = getDataPath(c);
 		File f = new File(prefix + dirName);
-		
+
 		if(f.exists() && f.isDirectory()) return f.listFiles();
 		else {
 			Log.e("Utils::", "Dir not found: " + dirName);
 			return new File[0];
 		}
 	}
-	
+
 	/**
 	 * Checks if this directory has a file with suffix suffix
 	 * @param f - directory
@@ -127,7 +126,7 @@ public class Utils {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Gives back all dirs which contain a file with suffix fileSuffix
 	 * @param c
@@ -139,7 +138,7 @@ public class Utils {
 		File[] files = getFilesFromRelativeDir(c,path);
 		String[] validFiles = new String[files.length];
 		int validCounter = 0;
-		
+
 		for(File f : files){
 			if(hasFileWithSuffix(f, fileSuffix)) validFiles[validCounter++] = f.getName();
 		}
@@ -147,7 +146,7 @@ public class Utils {
 		System.arraycopy(validFiles, 0, ret, 0, validCounter);
 		return ret;
 	}
-	
+
 	/**
 	 * Get all files from directory dir which have the given suffix
 	 * @param c
@@ -167,13 +166,13 @@ public class Utils {
 		}
 		return ret;
 	}
-	
-    /**
-     * Moves resources pointed to by sourceResId (from @res/raw/) to the app's private data directory
-     * @param c
-     * @param sourceResId
-     * @param directory
-     */
+
+	/**
+	 * Moves resources pointed to by sourceResId (from @res/raw/) to the app's private data directory
+	 * @param c
+	 * @param sourceResId
+	 * @param directory
+	 */
 	public static void resRawToFilesDir(Context c, int sourceResId, String directory){
 		byte[] buffer = new byte[1024];
 		InputStream bis = null;
@@ -214,12 +213,12 @@ public class Utils {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				if(bos != null)
-					try {
-						bos.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					if(bos != null)
+						try {
+							bos.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 			}
 		}
 	}
