@@ -19,11 +19,12 @@
 package org.hedgewars.hedgeroid;
 
 import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
-import org.hedgewars.hedgeroid.Downloader.DownloadFragment;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
-import org.hedgewars.hedgeroid.Downloader.DownloadService;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -48,13 +49,32 @@ public class MainActivity extends FragmentActivity {
 		downloader.setOnClickListener(downloadClicker);
 		startGame.setOnClickListener(startGameClicker);
 
-		boolean assetsCopied = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("assetscopied", false);
 
-		if(!assetsCopied){
-			DownloadAssets assetsAsyncTask = new DownloadAssets(this);
-			assetsDialog = ProgressDialog.show(this, "Please wait a moment", "Moving assets...");
-			assetsAsyncTask.execute((Object[])null);
+		String cacheDir = Utils.getCachePath(this);
+		if(cacheDir == null){
+			showDialog(0);
+		}else{
+			boolean assetsCopied = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("assetscopied", false);
+
+			if(!assetsCopied){
+				DownloadAssets assetsAsyncTask = new DownloadAssets(this);
+				assetsDialog = ProgressDialog.show(this, "Please wait a moment", "Moving assets...");
+				assetsAsyncTask.execute((Object[])null);
+			}
 		}
+	}
+
+	public Dialog onCreateDialog(int id, Bundle args){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.sdcard_not_mounted_title);
+		builder.setMessage(R.string.sdcard_not_mounted);
+		builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener(){
+			public void onClick(DialogInterface dialog, int which) {
+				finish();				
+			}
+		});
+
+		return builder.create();
 	}
 
 	public void onAssetsDownloaded(boolean result){
