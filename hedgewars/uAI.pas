@@ -36,7 +36,7 @@ uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
     StopThinking: boolean;
-{$IFDEF USE_SDL_THREADS} 
+{$IFDEF USE_SDLTHREADS} 
     ThinkThread: PSDL_Thread = nil;
 {$ELSE}
     ThinkThread: TThreadID;
