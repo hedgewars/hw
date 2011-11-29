@@ -119,6 +119,8 @@ for y:= 0 to Pred(Surf^.h) do
     fromP4:= @(fromP4^[Surf^.pitch div 4])
     end;
 end;
+
+
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 var tw, th, x, y: Longword;
     tmpp: pointer;
