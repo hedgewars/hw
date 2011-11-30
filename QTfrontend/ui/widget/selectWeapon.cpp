@@ -129,7 +129,6 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     int i = 0, k = 0;
     for(; i < m_numItems; ++i) {
         if (i == 6) continue;
-        if (i == 52) continue; // Disable structures for now
         if (k % 4 == 0) ++j;
         SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
         weaponItems[i].append(swi);
