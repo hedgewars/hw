@@ -398,7 +398,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMolotov(Gear: PGear);
 var 
-	s: Longword;
+    s: Longword;
     i, gX, gY: LongInt;
     dX, dY: hwFloat;
     smoke, glass: PVisualGear;
@@ -4941,8 +4941,12 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepStructure(Gear: PGear);
 var 
-    x, y: LongInt;
+    x, y, i: LongInt;
+    HH: PHedgehog;
+    t: PGear;
 begin
+    HH:= Gear^.Hedgehog;
+
     if (Gear^.State and gstMoving) <> 0 then
         begin
         AddGearCI(Gear);
@@ -4951,44 +4955,66 @@ begin
         Gear^.State:= Gear^.State and (not gstMoving);
         end;
 
-    if CurAmmoGear = Gear then
-        begin
-        if (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then
-            begin
-            DeleteGear(Gear);
-            exit
-            end;
-        if Gear = CurAmmoGear then CurAmmoGear := nil;
-        Gear^.Hedgehog:= CurrentHedgehog;
-        RemoveGearFromList(CurrentHedgehog^.Gear);
-        CurrentHedgehog^.Gear^.Z := cHHZ;
-        CurrentHedgehog^.Gear^.Active := false;
-        CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and (not gstHHDriven);
-        CurrentHedgehog^.GearHidden:= CurrentHedgehog^.Gear;
-        CurrentHedgehog^.Gear:= nil;
-        Gear^.Tag:= TotalRounds + Gear^.Tag;
-        AddGearCI(Gear);
-        end;
-
     dec(Gear^.Health, Gear^.Damage);
-    Gear^.Damage := 0;
+    Gear^.Damage:= 0;
         
-    if (Gear^.Tag = TotalRounds) or (Gear^.Health <= 0) then
+    if Gear^.Pos = 1 then
         begin
-        if Gear^.Hedgehog <> nil then
-            begin
-            Gear^.Hedgehog^.Gear:= Gear^.Hedgehog^.GearHidden;
-            Gear^.Hedgehog^.GearHidden:= nil;
-            Gear^.Hedgehog^.Gear^.X:= Gear^.X;
-            Gear^.Hedgehog^.Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Radius + cHHRadius);
-            InsertGearToList(Gear^.Hedgehog^.Gear);
-            Gear^.Hedgehog:= nil;
-            SetAllHHToActive;
-            end;
+        AddGearCI(Gear);
+        AfterAttack;
+        if Gear = CurAmmoGear then CurAmmoGear:= nil;
+        if HH^.Gear <> nil then HideHog(HH);
+        Gear^.Pos:= 2
         end;
+        
+    if Gear^.Pos = 2 then
+        begin
+        if ((GameTicks mod 100) = 0) and (Gear^.Timer < 1000) then
+            begin
+            if (Gear^.Timer mod 10) = 0 then
+                begin
+                DeleteCI(Gear);
+                Gear^.Y:= Gear^.Y - _0_5;
+                AddGearCI(Gear);
+                end;
+            inc(Gear^.Timer);
+            end;
+        if Gear^.Tag <= TotalRounds then Gear^.Pos:= 3;
+        end;
+        
+    if Gear^.Pos = 3 then
+        if Gear^.Timer < 1000 then
+            begin
+            if (Gear^.Timer mod 10) = 0 then
+                begin
+                DeleteCI(Gear);
+                Gear^.Y:= Gear^.Y - _0_5;
+                AddGearCI(Gear);
+                end;
+            inc(Gear^.Timer);
+            end
+        else
+            begin
+            if HH^.GearHidden <> nil then RestoreHog(HH);
+            Gear^.Pos:= 4;
+            end;
+        
+    if Gear^.Pos = 4 then
+        if ((GameTicks mod 1000) = 0) and ((GameFlags And gfInvulnerable) = 0) then
+            begin
+            t:= GearsList;
+            while t <> nil do
+                begin
+                if (t^.Kind = gtHedgehog) and (t^.Hedgehog^.Team^.Clan = HH^.Team^.Clan) then
+                    t^.Invulnerable:= true;
+                t:= t^.NextGear;
+                end;
+            end;
         
     if Gear^.Health <= 0 then
         begin
+        if HH^.GearHidden <> nil then RestoreHog(HH);
+        
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
 
@@ -5052,10 +5078,10 @@ if (Gear^.Pos = 1) and (GameTicks and $1F = 0) and (Gear^.Power < 255) then
        ((HH^.Gear^.State and (gstMoving or gstHHDeath or gstHHGone)) = 0) then
         with HH^.Gear^ do
             begin
-	        State:= State or gstAnimation;
-	        Tag:= 2;
-	        Timer:= 0;
-	        Pos:= 0
+            State:= State or gstAnimation;
+            Tag:= 2;
+            Timer:= 0;
+            Pos:= 0
             end
     end;
 if (Gear^.Pos = 3) and (GameTicks and $1F = 0) and (Gear^.Power > 0) then dec(Gear^.Power);

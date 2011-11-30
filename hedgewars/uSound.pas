@@ -52,6 +52,7 @@ procedure PlayMusic;
 procedure PauseMusic;
 procedure ResumeMusic;
 procedure ChangeMusic; // Replaces music track with current MusicFN and plays it.
+procedure StopMusic; // Stops and releases the current track
 
 
 // SOUNDS
@@ -458,7 +459,8 @@ begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
-    Mix_PauseMusic(Mus);
+    if Mus <> nil then
+    	Mix_PauseMusic(Mus);
 end;
 
 procedure ResumeMusic;
@@ -466,7 +468,8 @@ begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
-    Mix_ResumeMusic(Mus);
+    if Mus <> nil then
+    	Mix_ResumeMusic(Mus);
 end;
 
 procedure ChangeMusic;
@@ -474,11 +477,17 @@ begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
-    // get rid of current music
+    StopMusic;
+    PlayMusic;
+end;
+
+procedure StopMusic;
+begin
+    if (MusicFN = '') or (not isMusicEnabled) then
+        exit;
+
     if Mus <> nil then
         Mix_FreeMusic(Mus);
-
-    PlayMusic;
 end;
 
 procedure chVoicepack(var s: shortstring);
