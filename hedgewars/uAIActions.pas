@@ -119,28 +119,27 @@ with Actions do
      end
 end;
 
+procedure CheckHang(Me: PGear);
+const PrevX: LongInt = 0;
+      timedelta: Longword = 0;
+begin
+if hwRound(Me^.X) <> PrevX then
+   begin
+   PrevX:= hwRound(Me^.X);
+   timedelta:= 0
+   end else
+   begin
+   inc(timedelta);
+   if timedelta > 1700 then
+      begin
+      timedelta:= 0;
+      FreeActionsList
+      end
+   end
+end;
+
 procedure ProcessAction(var Actions: TActions; Me: PGear);
 var s: shortstring;
-
-    procedure CheckHang;
-    const PrevX: LongInt = 0;
-          timedelta: Longword = 0;
-    begin
-    if hwRound(Me^.X) <> PrevX then
-       begin
-       PrevX:= hwRound(Me^.X);
-       timedelta:= 0
-       end else
-       begin
-       inc(timedelta);
-       if timedelta > 1700 then
-          begin
-          timedelta:= 0;
-          FreeActionsList
-          end
-       end
-    end;
-
 begin
 repeat
 if Actions.Pos >= Actions.Count then exit;
@@ -165,7 +164,7 @@ with Actions.actions[Actions.Pos] do
                                FreeActionsList;
                                exit
                                end
-                          else begin CheckHang; exit end;
+                          else begin CheckHang(Me); exit end;
            aia_WaitXR: if hwRound(Me^.X) = Param then
                           begin
                           Action:= aia_LookRight;
@@ -178,7 +177,7 @@ with Actions.actions[Actions.Pos] do
                                FreeActionsList;
                                exit
                                end
-                          else begin CheckHang; exit end;
+                          else begin CheckHang(Me); exit end;
          aia_LookLeft: if not Me^.dX.isNegative then
                           begin
                           ParseCommand('+left', true);

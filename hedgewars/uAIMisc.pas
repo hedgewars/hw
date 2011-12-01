@@ -115,20 +115,19 @@ if e > f then friendlyfactor:= 300 + (e - f) * 30
 else friendlyfactor:= max(30, 300 - f * 80 div max(1,e))
 end;
 
+procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt);
+begin
+bonuses.ar[bonuses.Count].x:= x;
+bonuses.ar[bonuses.Count].y:= y;
+bonuses.ar[bonuses.Count].Radius:= r;
+bonuses.ar[bonuses.Count].Score:= s;
+inc(bonuses.Count);
+TryDo(bonuses.Count <= MAXBONUS, 'Bonuses overflow', true)
+end;
+
 procedure FillBonuses(isAfterAttack: boolean; filter: TGearsType);
 var Gear: PGear;
     MyClan: PClan;
-
-    procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt);
-    begin
-    bonuses.ar[bonuses.Count].x:= x;
-    bonuses.ar[bonuses.Count].y:= y;
-    bonuses.ar[bonuses.Count].Radius:= r;
-    bonuses.ar[bonuses.Count].Score:= s;
-    inc(bonuses.Count);
-    TryDo(bonuses.Count <= MAXBONUS, 'Bonuses overflow', true)
-    end;
-
 begin
 bonuses.Count:= 0;
 MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
