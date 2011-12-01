@@ -124,33 +124,11 @@ end;
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, r, mX, mY: real;
     rTime: LongInt;
-    Score, EX, EY: LongInt;
+    EX, EY: LongInt;
     valueResult: LongInt;
-
-    function CheckTrace: LongInt;
-    var x, y, dX, dY: real;
-        t: LongInt;
-        value: LongInt;
-    begin
-    x:= mX;
-    y:= mY;
-    dX:= Vx;
-    dY:= -Vy;
-    t:= rTime;
-    repeat
-      x:= x + dX;
-      y:= y + dY;
-      dX:= dX + cWindSpeedf;
-      dY:= dY + cGravityf;
-      dec(t)
-    until TestCollExcludingMe(Me, trunc(x), trunc(y), 5) or (t <= 0);
-    EX:= trunc(x);
-    EY:= trunc(y);
-    value:= RateExplosion(Me, EX, EY, 101);
-    if value = 0 then value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
-    CheckTrace:= value;
-    end;
-
+    x, y, dX, dY: real;
+    t: LongInt;
+    value: LongInt;
 begin
 mX:= hwFloat2Float(Me^.X);
 mY:= hwFloat2Float(Me^.Y);
@@ -165,15 +143,30 @@ repeat
   r:= sqrt(sqr(Vx) + sqr(Vy));
   if not (r > 1) then
      begin
-     Score:= CheckTrace;
-     if valueResult <= Score then
+        x:= mX;
+        y:= mY;
+        dX:= Vx;
+        dY:= -Vy;
+        t:= rTime;
+        repeat
+              x:= x + dX;
+              y:= y + dY;
+              dX:= dX + cWindSpeedf;
+              dY:= dY + cGravityf;
+              dec(t)
+        until TestCollExcludingMe(Me, trunc(x), trunc(y), 5) or (t <= 0);
+        EX:= trunc(x);
+        EY:= trunc(y);
+        value:= RateExplosion(Me, EX, EY, 101);
+        if value = 0 then value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
+     if valueResult <= value then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
         ap.Power:= trunc(r * cMaxPower) - random((Level - 1) * 17 + 1);
         ap.ExplR:= 100;
         ap.ExplX:= EX;
         ap.ExplY:= EY;
-        valueResult:= Score
+        valueResult:= value
         end;
      end
 until (rTime > 4250);
@@ -183,32 +176,11 @@ end;
 function TestSnowball(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, r: hwFloat;
     rTime: LongInt;
-    Score, EX, EY: LongInt;
+    EX, EY: LongInt;
     valueResult: LongInt;
-
-    function CheckTrace: LongInt;
-    var x, y, dX, dY: hwFloat;
-        t: LongInt;
-        value: LongInt;
-    begin
-    x:= Me^.X;
-    y:= Me^.Y;
-    dX:= Vx;
-    dY:= -Vy;
-    t:= rTime;
-    repeat
-      x:= x + dX;
-      y:= y + dY;
-      dX:= dX + cWindSpeed;
-      dY:= dY + cGravity;
-      dec(t)
-    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t <= 0);
-    EX:= hwRound(x);
-    EY:= hwRound(y);
-    value:= RateExplosion(Me, EX, EY, 5);
-    if value = 0 then value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
-    CheckTrace:= value;
-    end;
+    x, y, dX, dY: hwFloat;
+    t: LongInt;
+    value: LongInt;
 
 begin
 ap.Time:= 0;
@@ -222,16 +194,32 @@ repeat
   r:= Distance(Vx, Vy);
   if not (r > _1) then
      begin
-     Score:= CheckTrace;
-     if valueResult <= Score then
-        begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
-        ap.Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
-        ap.ExplR:= 100;
-        ap.ExplX:= EX;
-        ap.ExplY:= EY;
-        valueResult:= Score
-        end;
+        x:= Me^.X;
+        y:= Me^.Y;
+        dX:= Vx;
+        dY:= -Vy;
+        t:= rTime;
+        repeat
+          x:= x + dX;
+          y:= y + dY;
+          dX:= dX + cWindSpeed;
+          dY:= dY + cGravity;
+          dec(t)
+        until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t <= 0);
+        EX:= hwRound(x);
+        EY:= hwRound(y);
+        value:= RateExplosion(Me, EX, EY, 5);
+        if value = 0 then value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
+
+        if valueResult <= value then
+            begin
+            ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+            ap.Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
+            ap.ExplR:= 100;
+            ap.ExplX:= EX;
+            ap.ExplY:= EY;
+            valueResult:= value
+            end;
      end
 until (rTime > 4250);
 TestSnowball:= valueResult
@@ -241,26 +229,8 @@ function TestMolotov(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackPar
 var Vx, Vy, r: hwFloat;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
-
-    function CheckTrace: LongInt;
-    var x, y, dY: hwFloat;
-        t: LongInt;
-    begin
-    x:= Me^.X;
-    y:= Me^.Y;
-    dY:= -Vy;
-    t:= TestTime;
-    repeat
-      x:= x + Vx;
-      y:= y + dY;
-      dY:= dY + cGravity;
-      dec(t)
-    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 7) or (t = 0);
-    EX:= hwRound(x);
-    EY:= hwRound(y);
-    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 97)  // average of 17 attempts, most good, but some failing spectacularly
-              else CheckTrace:= BadTurn
-    end;
+    x, y, dY: hwFloat;
+    t: LongInt;
 begin
 valueResult:= BadTurn;
 TestTime:= 0;
@@ -272,17 +242,31 @@ repeat
   r:= Distance(Vx, Vy);
   if not (r > _1) then
      begin
-     Score:= CheckTrace;
-     if valueResult < Score then
-        begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
-        ap.Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15);
-        ap.Time:= TestTime;
-        ap.ExplR:= 100;
-        ap.ExplX:= EX;
-        ap.ExplY:= EY;
-        valueResult:= Score
-        end;
+        x:= Me^.X;
+        y:= Me^.Y;
+        dY:= -Vy;
+        t:= TestTime;
+        repeat
+          x:= x + Vx;
+          y:= y + dY;
+          dY:= dY + cGravity;
+          dec(t)
+        until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 7) or (t = 0);
+        EX:= hwRound(x);
+        EY:= hwRound(y);
+        if t < 50 then Score:= RateExplosion(Me, EX, EY, 97)  // average of 17 attempts, most good, but some failing spectacularly
+                  else Score:= BadTurn;
+                  
+        if valueResult < Score then
+            begin
+            ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+            ap.Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15);
+            ap.Time:= TestTime;
+            ap.ExplR:= 100;
+            ap.ExplX:= EX;
+            ap.ExplY:= EY;
+            valueResult:= Score
+            end;
      end
 until (TestTime > 4250);
 TestMolotov:= valueResult
@@ -293,26 +277,8 @@ const tDelta = 24;
 var Vx, Vy, r: hwFloat;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
-
-    function CheckTrace: LongInt;
-    var x, y, dY: hwFloat;
-        t: LongInt;
-    begin
-    x:= Me^.X;
-    y:= Me^.Y;
-    dY:= -Vy;
-    t:= TestTime;
-    repeat
-      x:= x + Vx;
-      y:= y + dY;
-      dY:= dY + cGravity;
-      dec(t)
-    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
-    EX:= hwRound(x);
-    EY:= hwRound(y);
-    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 101)
-              else CheckTrace:= BadTurn
-    end;
+    x, y, dY: hwFloat;
+    t: LongInt;
 begin
 valueResult:= BadTurn;
 TestTime:= 0;
@@ -323,9 +289,25 @@ repeat
   Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime + tDelta);
   r:= Distance(Vx, Vy);
   if not (r > _1) then
-     begin
-     Score:= CheckTrace;
-     if valueResult < Score then
+    begin
+    x:= Me^.X;
+    y:= Me^.Y;
+    dY:= -Vy;
+    t:= TestTime;
+    repeat
+        x:= x + Vx;
+        y:= y + dY;
+        dY:= dY + cGravity;
+        dec(t)
+    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
+    EX:= hwRound(x);
+    EY:= hwRound(y);
+    if t < 50 then 
+        Score:= RateExplosion(Me, EX, EY, 101)
+    else 
+        Score:= BadTurn;
+
+    if valueResult < Score then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15);
@@ -335,7 +317,7 @@ repeat
         ap.ExplY:= EY;
         valueResult:= Score
         end;
-     end
+    end
 until (TestTime = 4000);
 TestGrenade:= valueResult
 end;
@@ -345,26 +327,8 @@ const tDelta = 24;
 var Vx, Vy, r: hwFloat;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
-
-    function CheckTrace: LongInt;
-    var x, y, dY: hwFloat;
-        t: LongInt;
-    begin
-    x:= Me^.X;
-    y:= Me^.Y;
-    dY:= -Vy;
-    t:= TestTime;
-    repeat
-      x:= x + Vx;
-      y:= y + dY;
-      dY:= dY + cGravity;
-      dec(t)
-    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
-    EX:= hwRound(x);
-    EY:= hwRound(y);
-    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 41)
-              else CheckTrace:= BadTurn
-    end;
+    x, y, dY: hwFloat;
+    t: LongInt;
 begin
 valueResult:= BadTurn;
 TestTime:= 0;
@@ -380,7 +344,23 @@ repeat
   r:= Distance(Vx, Vy);
   if not (r > _1) then
      begin
-     Score:= CheckTrace;
+    x:= Me^.X;
+    y:= Me^.Y;
+    dY:= -Vy;
+    t:= TestTime;
+    repeat
+        x:= x + Vx;
+        y:= y + dY;
+        dY:= dY + cGravity;
+        dec(t)
+    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
+    EX:= hwRound(x);
+    EY:= hwRound(y);
+    if t < 50 then 
+        Score:= RateExplosion(Me, EX, EY, 41)
+    else 
+        Score:= BadTurn;
+
      if valueResult < Score then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
@@ -401,26 +381,8 @@ const tDelta = 24;
 var Vx, Vy, r: hwFloat;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
-
-    function CheckTrace: LongInt;
-    var x, y, dY: hwFloat;
-        t: LongInt;
-    begin
-    x:= Me^.X;
-    y:= Me^.Y;
-    dY:= -Vy;
-    t:= TestTime;
-    repeat
-      x:= x + Vx;
-      y:= y + dY;
-      dY:= dY + cGravity;
-      dec(t)
-    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
-    EX:= hwRound(x);
-    EY:= hwRound(y);
-    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 381)
-              else CheckTrace:= BadTurn
-    end;
+    x, y, dY: hwFloat;
+    t: LongInt;
 begin
 valueResult:= BadTurn;
 TestTime:= 0;
@@ -431,9 +393,25 @@ repeat
   Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y-200) - Me^.Y) / int2hwFloat(TestTime + tDelta);
   r:= Distance(Vx, Vy);
   if not (r > _1) then
-     begin
-     Score:= CheckTrace;
-     if valueResult < Score then
+    begin
+    x:= Me^.X;
+    y:= Me^.Y;
+    dY:= -Vy;
+    t:= TestTime;
+    repeat
+        x:= x + Vx;
+        y:= y + dY;
+        dY:= dY + cGravity;
+        dec(t)
+    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
+    EX:= hwRound(x);
+    EY:= hwRound(y);
+    if t < 50 then 
+        Score:= RateExplosion(Me, EX, EY, 381)
+    else 
+        Score:= BadTurn;
+        
+    if valueResult < Score then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= hwRound(r * cMaxPower * _0_9) + AIrndSign(random(Level) * 15);
@@ -443,56 +421,19 @@ repeat
         ap.ExplY:= EY;
         valueResult:= Score
         end;
-     end
+    end
 until (TestTime = 4000);
 TestWatermelon:= valueResult
 end;
 
-function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-//const tDelta = 24;
-var Vx, Vy: hwFloat;
-    Score, EX, EY, valueResult: LongInt;
-    TestTime: Longword;
 
-    function CheckTrace: LongInt;
-    var x, y, dY: hwFloat;
-        value: LongInt;
-    begin
-        x:= Me^.X;
-        y:= Me^.Y;
-        dY:= -Vy;
-
-        repeat
-            x:= x + Vx;
-            y:= y + dY;
-            dY:= dY + cGravity;
-            EX:= hwRound(x);
-            EY:= hwRound(y);
-        until TestCollExcludingMe(Me, EX, EY, 5) or (EY > cWaterLine);
-
-        if (EY < cWaterLine) and (not dY.isNegative) then
-            begin
-            value:= RateExplosion(Me, EX, EY, 91);
-            if (value = 0) then
-                if (dY > _0_15) then
-                    value:= - abs(Targ.Y - EY) div 32
-                else
-                    value:= BadTurn
-            else if (value < 0) then value:= BadTurn
-            end
-        else
-            value:= BadTurn;
-
-        CheckTrace:= value;
-    end;
-
-    function Solve: LongWord;
+    function Solve(TX, TY, MX, MY: LongInt): LongWord;
     var A, B, D, T: hwFloat;
         C: LongInt;
     begin
         A:= hwSqr(cGravity) * _0_25;
-        B:= - cGravity * (Targ.Y - hwRound(Me^.Y)) - _1;
-        C:= sqr(Targ.Y - hwRound(Me^.Y)) + sqr(Targ.X - hwRound(Me^.X));
+        B:= - cGravity * (TY - MY) - _1;
+        C:= sqr(TY - MY) + sqr(TX - MX);
         D:= hwSqr(B) - (A * C * 4);
         if D.isNegative = false then
             begin
@@ -504,21 +445,51 @@ var Vx, Vy: hwFloat;
             Solve:= hwRound(T)
             end else Solve:= 0
     end;
-
+    
+function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+//const tDelta = 24;
+var Vx, Vy: hwFloat;
+    Score, EX, EY, valueResult: LongInt;
+    TestTime: Longword;
+    x, y, dY: hwFloat;
 begin
 valueResult:= BadTurn;
 ap.ExplR:= 0;
 
 if (Level > 2) then exit(BadTurn);
 
-TestTime:= Solve;
+TestTime:= Solve(Targ.X, Targ.Y, hwRound(Me^.X), hwRound(Me^.Y));
 
 if TestTime = 0 then exit(BadTurn);
 
     Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime);
     Vy:= cGravity * (TestTime div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime);
 
-    Score:= CheckTrace;
+    x:= Me^.X;
+    y:= Me^.Y;
+    dY:= -Vy;
+
+    repeat
+        x:= x + Vx;
+        y:= y + dY;
+        dY:= dY + cGravity;
+        EX:= hwRound(x);
+        EY:= hwRound(y);
+    until TestCollExcludingMe(Me, EX, EY, 5) or (EY > cWaterLine);
+
+    if (EY < cWaterLine) and (not dY.isNegative) then
+        begin
+        Score:= RateExplosion(Me, EX, EY, 91);
+        if (Score = 0) then
+            if (dY > _0_15) then
+                Score:= - abs(Targ.Y - EY) div 32
+            else
+                Score:= BadTurn
+        else if (Score < 0) then Score:= BadTurn
+        end
+    else
+        Score:= BadTurn;
+
     if valueResult < Score then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));

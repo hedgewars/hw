@@ -52,10 +52,14 @@ pas2C fn = do
 
 toCFiles :: (String, PascalUnit) -> IO ()
 toCFiles (_, System) = return ()
-toCFiles (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render . pascal2C) p
-toCFiles (fn, (Unit _ interface implementation _ _)) = do
-    writeFile (fn ++ ".h") $ (render . interface2C) interface
-    writeFile (fn ++ ".c") $ (render . implementation2C) implementation
+toCFiles p@(fn, pu) = do
+    hPutStrLn stderr $ "Rendering '" ++ fn ++ "'..."
+    toCFiles' p
+    where
+    toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render . pascal2C) p
+    toCFiles' (fn, (Unit _ interface implementation _ _)) = do
+        writeFile (fn ++ ".h") $ (render . interface2C) interface
+        writeFile (fn ++ ".c") $ (render . implementation2C) implementation
                             
 usesFiles :: PascalUnit -> [String]
 usesFiles (Program _ (Implementation uses _) _) = uses2List uses
@@ -71,18 +75,18 @@ pascal2C (Unit _ interface implementation init fin) =
 pascal2C (Program _ implementation mainFunction) =
     implementation2C implementation
     $+$
-    tvar2C (FunctionDeclaration (Identifier "main") (SimpleType $ Identifier "int") [] (Just (TypesAndVars [], mainFunction)))
+    tvar2C True (FunctionDeclaration (Identifier "main") (SimpleType $ Identifier "int") [] (Just (TypesAndVars [], mainFunction)))
     
     
 interface2C :: Interface -> Doc
-interface2C (Interface uses tvars) = uses2C uses $+$ typesAndVars2C tvars
+interface2C (Interface uses tvars) = uses2C uses $+$ typesAndVars2C True tvars
 
 implementation2C :: Implementation -> Doc
-implementation2C (Implementation uses tvars) = uses2C uses $+$ typesAndVars2C tvars
+implementation2C (Implementation uses tvars) = uses2C uses $+$ typesAndVars2C True tvars
 
 
-typesAndVars2C :: TypesAndVars -> Doc
-typesAndVars2C (TypesAndVars ts) = vcat $ map tvar2C ts
+typesAndVars2C :: Bool -> TypesAndVars -> Doc
+typesAndVars2C b (TypesAndVars ts) = vcat $ map (tvar2C b) ts
 
 uses2C :: Uses -> Doc
 uses2C uses = vcat $ map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
@@ -90,15 +94,15 @@ uses2C uses = vcat $ map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List
 uses2List :: Uses -> [String]
 uses2List (Uses ids) = map (\(Identifier i) -> i) ids
 
-tvar2C :: TypeVarDeclaration -> Doc
-tvar2C (FunctionDeclaration (Identifier name) returnType params Nothing) = 
-    type2C returnType <+> text name <> parens (hcat $ map tvar2C params) <> text ";"
-tvar2C (FunctionDeclaration (Identifier name) returnType params (Just (tvars, phrase))) = 
-    type2C returnType <+> text name <> parens (hcat $ map tvar2C params)
+tvar2C :: Bool -> TypeVarDeclaration -> Doc
+tvar2C _ (FunctionDeclaration (Identifier name) returnType params Nothing) = 
+    type2C returnType <+> text name <> parens (hcat $ map (tvar2C False) params) <> text ";"
+tvar2C True (FunctionDeclaration (Identifier name) returnType params (Just (tvars, phrase))) = 
+    type2C returnType <+> text name <> parens (hcat $ map (tvar2C False) params)
     $+$
     text "{" 
     $+$ nest 4 (
-        typesAndVars2C tvars
+        typesAndVars2C False tvars
         $+$
         phrase2C' phrase
         )
@@ -107,8 +111,9 @@ tvar2C (FunctionDeclaration (Identifier name) returnType params (Just (tvars, ph
     where
     phrase2C' (Phrases p) = vcat $ map phrase2C p
     phrase2C' p = phrase2C p
-tvar2C (TypeDeclaration (Identifier i) t) = text "type" <+> text i <+> type2C t <> text ";"
-tvar2C (VarDeclaration isConst (ids, t) mInitExpr) = 
+tvar2C False (FunctionDeclaration (Identifier name) _ _ _) = error $ "nested functions not allowed: " ++ name
+tvar2C _ (TypeDeclaration (Identifier i) t) = text "type" <+> text i <+> type2C t <> text ";"
+tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = 
     if isConst then text "const" else empty
     <+>
     type2C t
@@ -121,8 +126,8 @@ tvar2C (VarDeclaration isConst (ids, t) mInitExpr) =
     where
     initExpr Nothing = empty
     initExpr (Just e) = text "=" <+> initExpr2C e
-tvar2C (OperatorDeclaration op _ ret params body) = 
-    tvar2C (FunctionDeclaration (Identifier "<op>") ret params body)
+tvar2C f (OperatorDeclaration op _ ret params body) = 
+    tvar2C f (FunctionDeclaration (Identifier $ "<op " ++ op ++ ">") ret params body)
 
 initExpr2C :: InitExpression -> Doc
 initExpr2C (InitBinOp op expr1 expr2) = parens $ (initExpr2C expr1) <+> op2C op <+> (initExpr2C expr2)
@@ -140,7 +145,7 @@ type2C UnknownType = text "void"
 type2C (String l) = text $ "string" ++ show l
 type2C (SimpleType (Identifier i)) = text i
 type2C (PointerTo t) = type2C t <> text "*"
-type2C (RecordType tvs union) = text "{" $+$ (nest 4 . vcat . map tvar2C $ tvs) $+$ text "}"
+type2C (RecordType tvs union) = text "{" $+$ (nest 4 . vcat . map (tvar2C False) $ tvs) $+$ text "}"
 type2C (RangeType r) = text "<<range type>>"
 type2C (Sequence ids) = text "<<sequence type>>"
 type2C (ArrayDecl r t) = text "<<array type>>"

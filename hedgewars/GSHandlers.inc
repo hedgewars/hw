@@ -1378,15 +1378,7 @@ begin
     end
 end;
 
-procedure doStepRopeWork(Gear: PGear);
-var 
-    HHGear: PGear;
-    len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
-    lx, ly, cd: LongInt;
-    haveCollision,
-    haveDivided: boolean;
-
-procedure DeleteMe;
+procedure RopeDeleteMe(Gear, HHGear: PGear);
 begin
     with HHGear^ do
     begin
@@ -1396,7 +1388,7 @@ begin
     DeleteGear(Gear)
 end;
 
-procedure WaitCollision;
+procedure RopeWaitCollision(Gear, HHGear: PGear);
 begin
     with HHGear^ do
     begin
@@ -1408,6 +1400,14 @@ begin
     Gear^.doStep := @doStepRopeAfterAttack
 end;
 
+procedure doStepRopeWork(Gear: PGear);
+var 
+    HHGear: PGear;
+    len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
+    lx, ly, cd: LongInt;
+    haveCollision,
+    haveDivided: boolean;
+
 begin
     HHGear := Gear^.Hedgehog^.Gear;
 
@@ -1415,7 +1415,7 @@ begin
        or (CheckGearDrowning(HHGear)) then
         begin
         PlaySound(sndRopeRelease);
-        DeleteMe;
+        RopeDeleteMe(Gear, HHGear);
         exit
         end;
 
@@ -1629,9 +1629,9 @@ begin
                 begin
                 PlaySound(sndRopeRelease);
                 if CurAmmoType <> amParachute then
-                    WaitCollision
+                    RopeWaitCollision(Gear, HHGear)
                 else
-                    DeleteMe
+                    RopeDeleteMe(Gear, HHGear)
                 end
         end
     else
@@ -1639,12 +1639,7 @@ begin
             Gear^.State := Gear^.State or gsttmpFlag;
 end;
 
-procedure doStepRopeAttach(Gear: PGear);
-var 
-    HHGear: PGear;
-    tx, ty, tt: hwFloat;
-
-procedure RemoveFromAmmo;
+procedure RopeRemoveFromAmmo(Gear, HHGear: PGear);
 begin
     if (Gear^.State and gstAttacked) = 0 then
     begin
@@ -1654,6 +1649,10 @@ begin
     ApplyAmmoChanges(HHGear^.Hedgehog^)
 end;
 
+procedure doStepRopeAttach(Gear: PGear);
+var 
+    HHGear: PGear;
+    tx, ty, tt: hwFloat;
 begin
     Gear^.X := Gear^.X - Gear^.dX;
     Gear^.Y := Gear^.Y - Gear^.dY;
@@ -1702,7 +1701,7 @@ begin
                     Message := Message and (not gmAttack)
                     end;
 
-                RemoveFromAmmo;
+                RopeRemoveFromAmmo(Gear, HHGear);
 
                 tt := _0;
                 exit
@@ -1728,7 +1727,7 @@ begin
             Message := Message and (not gmAttack)
             end;
 
-        RemoveFromAmmo;
+        RopeRemoveFromAmmo(Gear, HHGear);
 
         exit
         end;
