@@ -5000,7 +5000,7 @@ begin
             end;
         
     if Gear^.Pos = 4 then
-        if ((GameTicks mod 1000) = 0) and ((GameFlags And gfInvulnerable) = 0) then
+        if ((GameTicks mod 1000) = 0) and ((GameFlags and gfInvulnerable) = 0) then
             begin
             t:= GearsList;
             while t <> nil do
