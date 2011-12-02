@@ -321,11 +321,11 @@ var
     particle: PVisualGear;
     isSubmersible: boolean;
 begin
-    isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
     // probably needs tweaking. might need to be in a case statement based upon gear type
     Y:= hwRound(Gear^.Y);
     if cWaterLine < Y + Gear^.Radius then
         begin
+        isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
         skipSpeed := _0_25;
         skipAngle := _1_9;
         skipDecay := _0_87;

@@ -197,7 +197,7 @@ begin
         if land <> 0 then
             begin
             collV := -1;
-            if land and lfIce <> 0 then Gear^.dX := Gear^.dX * (_1 - (_1 - Gear^.Friction) / _10)
+            if land and lfIce <> 0 then Gear^.dX := Gear^.dX * (_0_9 + Gear^.Friction * _0_1)
             else Gear^.dX := Gear^.dX * Gear^.Friction;
 
             Gear^.dY := - Gear^.dY * Gear^.Elasticity;
@@ -206,14 +206,16 @@ begin
         else if (Gear^.AdvBounce=1) and (TestCollisionYwithGear(Gear, 1) <> 0) then collV := 1;
         end
     else 
-        begin
+        begin // Gear^.dY.isNegative is false
         land:= TestCollisionYwithGear(Gear, 1);
         if land <> 0 then
             begin
             collV := 1;
             isFalling := false;
-            if land and lfIce <> 0 then Gear^.dX := Gear^.dX * (_1 - (_1 - Gear^.Friction) / _10)
-            else Gear^.dX := Gear^.dX * Gear^.Friction;
+            if land and lfIce <> 0 then 
+                Gear^.dX := Gear^.dX * (_0_9 + Gear^.Friction * _0_1)
+            else 
+                Gear^.dX := Gear^.dX * Gear^.Friction;
 
             Gear^.dY := - Gear^.dY * Gear^.Elasticity;
             Gear^.State := Gear^.State or gstCollision
@@ -221,7 +223,7 @@ begin
         else
             begin
             isFalling := true;
-            if (Gear^.AdvBounce=1) and (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, -1) <> 0) then
+            if (Gear^.AdvBounce=1) and (TestCollisionYwithGear(Gear, -1) <> 0) then
                 collV := -1
             end
         end;
@@ -261,8 +263,7 @@ begin
     if Gear^.Kind <> gtBee then
         CheckGearDrowning(Gear);
     //if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_0002) and
-    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_02.QWordValue) and
-       (not isFalling) then
+    if (not isFalling) and ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_02.QWordValue) then
         Gear^.State := Gear^.State and (not gstMoving)
     else
         Gear^.State := Gear^.State or      gstMoving;
@@ -376,23 +377,23 @@ begin
         end;
     DeleteGear(Gear);
     exit
-end;
-
-CalcRotationDirAngle(Gear);
-
-if Gear^.Kind = gtHellishBomb then
-begin
-
-    if Gear^.Timer = 3000 then
-    begin
-        Gear^.nImpactSounds := 0;
-        PlaySound(sndHellish);
     end;
 
-    if (GameTicks and $3F) = 0 then
-        if (Gear^.State and gstCollision) = 0 then
-            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEvilTrace);
-end;
+    CalcRotationDirAngle(Gear);
+
+    if Gear^.Kind = gtHellishBomb then
+    begin
+
+        if Gear^.Timer = 3000 then
+        begin
+            Gear^.nImpactSounds := 0;
+            PlaySound(sndHellish);
+        end;
+
+        if (GameTicks and $3F) = 0 then
+            if (Gear^.State and gstCollision) = 0 then
+                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtEvilTrace);
+    end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1363,7 +1364,7 @@ begin
     if (GameFlags and gfMoreWind) <> 0 then HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
 
     if (Gear^.Message and gmAttack) <> 0 then
-    begin
+        begin
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y;
 
@@ -1371,11 +1372,11 @@ begin
 
         Gear^.dX := SignAs(AngleSin(HHGear^.Angle), HHGear^.dX);
         Gear^.dY := -AngleCos(HHGear^.Angle);
-        Gear^.Friction := _450 * _0_01 * cRopePercent;
+        Gear^.Friction := _4_5 * cRopePercent;
         Gear^.Elasticity := _0;
         Gear^.State := Gear^.State and (not gsttmpflag);
         Gear^.doStep := @doStepRope;
-    end
+        end
 end;
 
 procedure RopeDeleteMe(Gear, HHGear: PGear);
@@ -1786,7 +1787,7 @@ begin
             else if Gear^.dX.isNegative and (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
                  inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
         
-        if (Gear^.Damage > random(30)) and ((GameTicks and $FF) = 0) then
+        if ((GameTicks and $FF) = 0) and (Gear^.Damage > random(30)) then
             begin
             vg:= AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
             if vg <> nil then vg^.Scale:= 0.5
@@ -1841,7 +1842,10 @@ end;
 procedure doStepSMine(Gear: PGear);
 begin
     // TODO: do real calculation?
-    if TestCollisionXwithGear(Gear, 2) or (TestCollisionYwithGear(Gear, -2) <> 0) or TestCollisionXwithGear(Gear, -2) or (TestCollisionYwithGear(Gear, 2) <> 0) then
+    if TestCollisionXwithGear(Gear, 2) 
+        or (TestCollisionYwithGear(Gear, -2) <> 0) 
+        or TestCollisionXwithGear(Gear, -2) 
+        or (TestCollisionYwithGear(Gear, 2) <> 0) then
     begin
         if (hwAbs(Gear^.dX) > _0) or (hwAbs(Gear^.dY) > _0) then
         begin
@@ -1870,13 +1874,14 @@ begin
         else // gstAttacking <> 0
         begin
             AllInactive := false;
-            if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
             if Gear^.Timer = 0 then
             begin
                 doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
                 DeleteGear(Gear);
                 exit
-            end;
+            end else
+                if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
+
             dec(Gear^.Timer);
         end
     end
