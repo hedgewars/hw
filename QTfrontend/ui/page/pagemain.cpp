@@ -42,19 +42,25 @@ QLayout * PageMain::bodyLayoutDefinition()
     pageLayout->setRowStretch(4, 1);
 
     BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, true);
-    BtnSinglePlayer->setToolTip(tr("Local Game (Play a game on a single computer)"));
+    BtnSinglePlayer->setToolTip(tr("Local Game"));
+    BtnSinglePlayer->setWhatsThis(tr("Play a game on a single computer"));
     pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 
     BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
-    BtnNet->setToolTip(tr("Network Game (Play a game across a network)"));
+    BtnNet->setToolTip(tr("Network Game"));
+    BtnNet->setWhatsThis(tr("Play a game across a network"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
     // button order matters for overlapping (what's on top and what isn't)
     BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
     BtnInfo->setStyleSheet("border: transparent;background: transparent;");
+    //BtnInfo->setToolTip(tr("Credits")); //tooltip looks horrible with transparent background buttons
+    BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
     BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 4, 0, 1, 4, false);
+    //BtnDataDownload->setToolTip(tr(Downloadable Content"));
+    BtnDataDownload->setWhatsThis(tr("Access the user created content downloadable from our website"));
     pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
 
     return pageLayout;
@@ -91,13 +97,11 @@ PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
 
     if(!isDevBuild)
     {
-        //mainNote->setText(QLabel::tr("Tip: ") + randomTip());
         setDefautDescription(QLabel::tr("Tip: ") + randomTip());
     }
     else
     {
         setDefautDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
-        //mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
     }
 
 }
