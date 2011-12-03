@@ -13,9 +13,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.View;
@@ -103,6 +100,8 @@ public class DownloadListFragment extends ListFragment implements OnItemClickLis
 	}
 
 	public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+		DownloadPackage task = (DownloadPackage)arg0.getAdapter().getItem(position);
+		/*
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 
@@ -111,12 +110,12 @@ public class DownloadListFragment extends ListFragment implements OnItemClickLis
 		ft.addToBackStack(null);
 
 		//create a new dialog based on this task
-		DownloadPackage task = (DownloadPackage)arg0.getAdapter().getItem(position);
+		
 		DialogFragment newFragment = DownloadDialogFragment.newInstance(task);
 
 		//show it
-		//newFragment.show(ft, "dialog");
-
+		newFragment.show(ft, "dialog");
+		 */
 		targetView = arg1;
 
 		//determine state
