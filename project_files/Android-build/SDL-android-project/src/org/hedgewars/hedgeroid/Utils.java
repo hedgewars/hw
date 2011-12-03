@@ -25,14 +25,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 public class Utils {
 
@@ -134,16 +133,13 @@ public class Utils {
 	 * @param fileSuffix
 	 * @return
 	 */
-	public static String[] getDirsWithFileSuffix(Context c, String path, String fileSuffix){
+	public static List<String> getDirsWithFileSuffix(Context c, String path, String fileSuffix){
 		File[] files = getFilesFromRelativeDir(c,path);
-		String[] validFiles = new String[files.length];
-		int validCounter = 0;
+		ArrayList<String> ret = new ArrayList<String>();
 
 		for(File f : files){
-			if(hasFileWithSuffix(f, fileSuffix)) validFiles[validCounter++] = f.getName();
+			if(hasFileWithSuffix(f, fileSuffix)) ret.add(f.getName());
 		}
-		String[] ret = new String[validCounter];
-		System.arraycopy(validFiles, 0, ret, 0, validCounter);
 		return ret;
 	}
 

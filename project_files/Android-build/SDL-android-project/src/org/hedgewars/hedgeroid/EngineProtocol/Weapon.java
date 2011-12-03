@@ -210,12 +210,7 @@ public class Weapon implements Parcelable, Comparable<Weapon>{
 	};
 
 	public int compareTo(Weapon another) {
-		boolean equalsDefault = name.toLowerCase().equals("crazy");
-		boolean otherEqualsDefault = another.name.toLowerCase().equals("crazy");
-		if(equalsDefault && otherEqualsDefault)	return 0;
-		else if(equalsDefault && !otherEqualsDefault) return -1;
-		else if((!equalsDefault) && otherEqualsDefault)	return 1;
-		else return name.compareTo(another.name);
+		return name.compareTo(another.name);
 	}
 	
 	
