@@ -74,20 +74,16 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 end;
 
 
-procedure DrawRope(Gear: PGear);
-var roplen: LongInt;
-    i: Longword;
-
-    procedure DrawRopeLine(X1, Y1, X2, Y2: LongInt);
-    var  eX, eY, dX, dY: LongInt;
-        i, sX, sY, x, y, d: LongInt;
-        b: boolean;
-    begin
+procedure DrawRopeLine(X1, Y1, X2, Y2, roplen: LongInt);
+var  eX, eY, dX, dY: LongInt;
+    i, sX, sY, x, y, d: LongInt;
+    b: boolean;
+begin
     if (X1 = X2) and (Y1 = Y2) then
-    begin
-    //OutError('WARNING: zero length rope line!', false);
-    exit
-    end;
+        begin
+        //OutError('WARNING: zero length rope line!', false);
+        exit
+        end;
     eX:= 0;
     eY:= 0;
     dX:= X2 - X1;
@@ -101,44 +97,50 @@ var roplen: LongInt;
         dX:= -dX
         end else sX:= dX;
 
-    if (dY > 0) then sY:= 1
+    if (dY > 0) then 
+        sY:= 1
     else
-    if (dY < 0) then
-        begin
-        sY:= -1;
-        dY:= -dY
-        end else sY:= dY;
-
-        if (dX > dY) then d:= dX
-                    else d:= dY;
-
-        x:= X1;
-        y:= Y1;
-
-        for i:= 0 to d do
+        if (dY < 0) then
             begin
-            inc(eX, dX);
-            inc(eY, dY);
-            b:= false;
-            if (eX > d) then
-                begin
-                dec(eX, d);
-                inc(x, sX);
-                b:= true
-                end;
-            if (eY > d) then
-                begin
-                dec(eY, d);
-                inc(y, sY);
-                b:= true
-                end;
-            if b then
-                begin
-                inc(roplen);
-                if (roplen mod 4) = 0 then DrawSprite(sprRopeNode, x - 2, y - 2, 0)
-                end
-        end
-    end;
+            sY:= -1;
+            dY:= -dY
+            end else 
+            sY:= dY;
+
+    if (dX > dY) then d:= dX
+                else d:= dY;
+
+    x:= X1;
+    y:= Y1;
+
+    for i:= 0 to d do
+        begin
+        inc(eX, dX);
+        inc(eY, dY);
+        b:= false;
+        if (eX > d) then
+            begin
+            dec(eX, d);
+            inc(x, sX);
+            b:= true
+            end;
+        if (eY > d) then
+            begin
+            dec(eY, d);
+            inc(y, sY);
+            b:= true
+            end;
+        if b then
+            begin
+            inc(roplen);
+            if (roplen mod 4) = 0 then DrawSprite(sprRopeNode, x - 2, y - 2, 0)
+            end
+    end
+end;
+
+procedure DrawRope(Gear: PGear);
+var roplen: LongInt;
+    i: Longword;
 begin
     if (cReducedQuality and rqSimpleRope) <> 0 then
         DrawRopeLinesRQ(Gear)
@@ -151,17 +153,17 @@ begin
             while i < Pred(RopePoints.Count) do
                     begin
                     DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
-                                hwRound(RopePoints.ar[Succ(i)].X) + WorldDx, hwRound(RopePoints.ar[Succ(i)].Y) + WorldDy);
+                                hwRound(RopePoints.ar[Succ(i)].X) + WorldDx, hwRound(RopePoints.ar[Succ(i)].Y) + WorldDy, roplen);
                     inc(i)
                     end;
             DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
-                        hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy);
+                        hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, roplen);
             DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-                        hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy);
+                        hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy, roplen);
             end else
             if Gear^.Elasticity.QWordValue > 0 then
             DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-                        hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy);
+                        hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy, roplen);
         end;
 
 

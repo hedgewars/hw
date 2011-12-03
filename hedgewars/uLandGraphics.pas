@@ -38,6 +38,7 @@ procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
+procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
 
@@ -961,5 +962,57 @@ begin
     end
 end;
 
+
+procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
+var
+  eX, eY, dX, dY: LongInt;
+  i, sX, sY, x, y, d: LongInt;
+begin
+eX:= 0;
+eY:= 0;
+dX:= X2 - X1;
+dY:= Y2 - Y1;
+
+if (dX > 0) then sX:= 1
+else
+  if (dX < 0) then
+     begin
+     sX:= -1;
+     dX:= -dX
+     end else sX:= dX;
+
+if (dY > 0) then sY:= 1
+  else
+  if (dY < 0) then
+     begin
+     sY:= -1;
+     dY:= -dY
+     end else sY:= dY;
+
+if (dX > dY) then d:= dX
+             else d:= dY;
+
+x:= X1;
+y:= Y1;
+
+for i:= 0 to d do
+    begin
+    inc(eX, dX);
+    inc(eY, dY);
+    if (eX > d) then
+       begin
+       dec(eX, d);
+       inc(x, sX);
+       end;
+    if (eY > d) then
+       begin
+       dec(eY, d);
+       inc(y, sY);
+       end;
+
+    if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
+       Land[y, x]:= Color;
+    end
+end;
 
 end.

@@ -2890,24 +2890,23 @@ begin
 end;
 
 
+procedure PrevAngle(Gear: PGear; dA: LongInt);
+begin
+    Gear^.Angle := (LongInt(Gear^.Angle) + 4 - dA) mod 4
+end;
+
+procedure NextAngle(Gear: PGear; dA: LongInt);
+begin
+    Gear^.Angle := (LongInt(Gear^.Angle) + 4 + dA) mod 4
+end;
+
 procedure doStepCakeWork(Gear: PGear);
 
 const dirs: array[0..3] of TPoint =   ((x: 0; y: -1), (x: 1; y: 0),(x: 0; y: 1),(x: -1; y: 0));
 var 
     xx, yy, xxn, yyn: LongInt;
-    da: LongInt;
+    dA: LongInt;
     tdx, tdy: hwFloat;
-
-procedure PrevAngle;
-begin
-    Gear^.Angle := (LongInt(Gear^.Angle) + 4 - dA) mod 4
-end;
-
-procedure NextAngle;
-begin
-    Gear^.Angle := (LongInt(Gear^.Angle) + 4 + dA) mod 4
-end;
-
 begin
     AllInactive := false;
 
@@ -2922,7 +2921,7 @@ begin
 
     if (xx = 0) then
         if TestCollisionYwithGear(Gear, yy) <> 0 then
-            PrevAngle
+            PrevAngle(Gear, dA)
     else
     begin
         Gear^.Tag := 0;
@@ -2930,13 +2929,13 @@ begin
         if not TestCollisionXwithGear(Gear, xxn) then
         begin
             Gear^.X := Gear^.X + int2hwFloat(xxn);
-            NextAngle
+            NextAngle(Gear, dA)
         end;
     end;
 
     if (yy = 0) then
         if TestCollisionXwithGear(Gear, xx) then
-            PrevAngle
+            PrevAngle(Gear, dA)
     else
     begin
         Gear^.Tag := 0;
@@ -2944,7 +2943,7 @@ begin
         if not TestCollisionY(Gear, yyn) then
         begin
             Gear^.Y := Gear^.Y + int2hwFloat(yyn);
-            NextAngle
+            NextAngle(Gear, dA)
         end;
     end;
 
@@ -4134,10 +4133,7 @@ begin
     end;
 end;
 
-procedure doStepMovingPortal_real(Gear: PGear);
-var 
-    x, y, tx, ty: LongInt;
-    s: hwFloat;
+
 
 procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
 var
@@ -4165,6 +4161,10 @@ begin
     if destroyGear then oldPortal^.Timer:= 0;
 end;
 
+procedure doStepMovingPortal_real(Gear: PGear);
+var 
+    x, y, tx, ty: LongInt;
+    s: hwFloat;
 begin
     x := hwRound(Gear^.X);
     y := hwRound(Gear^.Y);
