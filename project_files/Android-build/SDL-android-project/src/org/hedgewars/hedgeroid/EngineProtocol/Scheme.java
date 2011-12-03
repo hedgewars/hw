@@ -44,13 +44,12 @@ public class Scheme implements Parcelable, Comparable<Scheme>{
 	//private ArrayList<Integer> basic;
 	private Integer gamemod;
 	private ArrayList<Integer> basic;;
-	private static ArrayList<LinkedHashMap<String, ?>> basicflags = new ArrayList<LinkedHashMap<String, ?>>();
+	private static ArrayList<LinkedHashMap<String, ?>> basicflags = new ArrayList<LinkedHashMap<String, ?>>();//TODO why is it static?
 	
 	public Scheme(String _name, ArrayList<Integer> _basic, int _gamemod){
 		name = _name;
 		gamemod = _gamemod;
 		basic = _basic;
-
 	}
 	
 	public Scheme(Parcel in){
@@ -329,7 +328,6 @@ public class Scheme implements Parcelable, Comparable<Scheme>{
 	}
 
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -337,7 +335,6 @@ public class Scheme implements Parcelable, Comparable<Scheme>{
 		dest.writeString(name);
 		dest.writeInt(gamemod);
 		dest.writeList(basic);
-		
 	}
 	
 	public void readFromParcel(Parcel src){
@@ -357,11 +354,6 @@ public class Scheme implements Parcelable, Comparable<Scheme>{
 	};
 
 	public int compareTo(Scheme another) {
-		boolean equalsDefault = name.toLowerCase().equals("default");
-		boolean otherEqualsDefault = another.name.toLowerCase().equals("default");
-		if(equalsDefault && otherEqualsDefault)	return 0;
-		else if(equalsDefault && !otherEqualsDefault) return -1;
-		else if((!equalsDefault) && otherEqualsDefault)	return 1;
-		else return name.compareTo(another.name);
+		return name.compareTo(another.name);
 	}
 }

@@ -61,14 +61,15 @@ public class FrontendDataUtils {
 				ret.add(files[i].replace('_', ' ').substring(0, files[i].length()-4)); //replace _ by a space and removed the last four characters (.lua)
 			}
 		}
-		Collections.sort(ret);
-
 		ret.add(0,"None");
+		Collections.sort(ret);
 		return ret;	
 	}
 
-	public static String[] getThemes(Context c){
-		return Utils.getDirsWithFileSuffix(c, "Themes", "icon.png");
+	public static List<String> getThemes(Context c){
+		List<String> list = Utils.getDirsWithFileSuffix(c, "Themes", "icon.png");
+		Collections.sort(list);
+		return list;
 	}
 
 	public static List<Scheme> getSchemes(Context c){

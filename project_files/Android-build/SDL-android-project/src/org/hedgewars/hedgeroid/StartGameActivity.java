@@ -22,6 +22,7 @@ package org.hedgewars.hedgeroid;
 import org.hedgewars.hedgeroid.EngineProtocol.FrontendDataUtils;
 import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
 import org.hedgewars.hedgeroid.EngineProtocol.Map;
+import org.hedgewars.hedgeroid.EngineProtocol.Map.MapType;
 import org.hedgewars.hedgeroid.EngineProtocol.Scheme;
 import org.hedgewars.hedgeroid.EngineProtocol.Team;
 import org.hedgewars.hedgeroid.EngineProtocol.Weapon;
@@ -93,27 +94,53 @@ public class StartGameActivity extends Activity {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		maps.setAdapter(adapter);
 		maps.setOnItemSelectedListener(mapsClicker);
+		//set to first nonmap
+		for(int i = 0; i < adapter.getCount(); i++){
+			if(((Map)adapter.getItem(i)).getType() == MapType.TYPE_DEFAULT){
+				maps.setSelection(i, false);
+				break;
+			}
+		}
 
 		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, FrontendDataUtils.getGameplay(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		gameplay.setAdapter(adapter);
 		gameplay.setOnItemSelectedListener(gameplayClicker);
+		//set to first nonmap
+		for(int i = 0; i < adapter.getCount(); i++){
+			if(((String)adapter.getItem(i)).equals("None")){
+				gameplay.setSelection(i, false);
+				break;
+			}
+		}
 
 		adapter = new ArrayAdapter<Scheme>(this, R.layout.listview_item, FrontendDataUtils.getSchemes(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		gamescheme.setAdapter(adapter);
 		gamescheme.setOnItemSelectedListener(schemeClicker);
-
+		//set to first nonmap
+		for(int i = 0; i < adapter.getCount(); i++){
+			if(((Scheme)adapter.getItem(i)).toString().equals("Default")){
+				gamescheme.setSelection(i, false);
+				break;
+			}
+		}
+		
+		
 		adapter = new ArrayAdapter<Weapon>(this, R.layout.listview_item, FrontendDataUtils.getWeapons(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		weapons.setAdapter(adapter);
 		weapons.setOnItemSelectedListener(weaponClicker);
-
+		for(int i = 0; i < adapter.getCount(); i++){
+			if(((Weapon)adapter.getItem(i)).toString().equals("Crazy")){
+				weapons.setSelection(i, false);
+				break;
+			}
+		}
 		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, FrontendDataUtils.getThemes(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		themes.setAdapter(adapter);
 		themes.setOnItemSelectedListener(themesClicker);
-
 	}
 
 	private void startTeamsActivity(){
