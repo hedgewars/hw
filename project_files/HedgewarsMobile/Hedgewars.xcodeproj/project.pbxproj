@@ -386,6 +386,9 @@
 		61156530147F4D10006729A9 /* Polish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Polish; path = Locale/Polish.lproj/About.strings; sourceTree = "<group>"; };
 		61156531147F4D17006729A9 /* Polish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Polish; path = Locale/Polish.lproj/Localizable.strings; sourceTree = "<group>"; };
 		61156532147F4D1E006729A9 /* Polish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Polish; path = Locale/Polish.lproj/Scheme.strings; sourceTree = "<group>"; };
+		61177BA7148A658900686905 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Locale/German.lproj/Localizable.strings; sourceTree = "<group>"; };
+		61177BA9148A660C00686905 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Locale/German.lproj/Scheme.strings; sourceTree = "<group>"; };
+		61177BAA148A661600686905 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Locale/German.lproj/About.strings; sourceTree = "<group>"; };
 		611D7A4F142FDCD3006E0798 /* uTouch.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTouch.pas; path = ../../hedgewars/uTouch.pas; sourceTree = SOURCE_ROOT; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
@@ -1705,6 +1708,7 @@
 				61156526147F49E1006729A9 /* Spanish */,
 				6115652D147F4C52006729A9 /* French */,
 				61156530147F4D10006729A9 /* Polish */,
+				61177BAA148A661600686905 /* German */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1716,6 +1720,7 @@
 				61156527147F4A2E006729A9 /* Spanish */,
 				6115652C147F4C4C006729A9 /* French */,
 				61156531147F4D17006729A9 /* Polish */,
+				61177BA7148A658900686905 /* German */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1727,6 +1732,7 @@
 				61156528147F4A3C006729A9 /* Spanish */,
 				6115652B147F4C45006729A9 /* French */,
 				61156532147F4D1E006729A9 /* Polish */,
+				61177BA9148A660C00686905 /* German */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
