@@ -22,10 +22,14 @@
  */
 
 #include "AbstractPage.h"
+#include <QLabel>
+#include <QSize>
+#include <QFontMetricsF>
 
 AbstractPage::AbstractPage(QWidget* parent)
 {
     Q_UNUSED(parent);
+    defautDesc = new QString();
 
     font14 = new QFont("MS Shell Dlg", 14);
 }
@@ -45,12 +49,20 @@ void AbstractPage::initPage()
     pageLayout->addWidget(btnBack, 1, 0, 1, 1, Qt::AlignLeft | Qt::AlignBottom);
 
     // add body layout as defined by the subclass
-    pageLayout->addLayout(bodyLayoutDefinition(), 0, 0, 1, 2);
+    pageLayout->addLayout(bodyLayoutDefinition(), 0, 0, 1, 3);
+
+    descLabel = new QLabel();
+    descLabel->setAlignment(Qt::AlignCenter);
+    descLabel->setWordWrap(true);
+    descLabel->setOpenExternalLinks(true);
+    descLabel->setFixedHeight(50);
+    descLabel->setStyleSheet("font-size: 16px");
+    pageLayout->addWidget(descLabel, 1, 1);
 
     // add footer layout
     QLayout * fld = footerLayoutDefinition();
     if (fld != NULL)
-        pageLayout->addLayout(fld, 1, 1);
+        pageLayout->addLayout(fld, 1, 2);
 
     // connect signals
     connect(btnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
@@ -96,4 +108,20 @@ QPushButton * AbstractPage::addButton(const QString & name, QBoxLayout * box, in
 void AbstractPage::setBackButtonVisible(bool visible)
 {
     btnBack->setVisible(visible);
+}
+
+void AbstractPage::setButtonDescription(QString desc)
+{
+    descLabel->setText(desc);
+}
+
+void AbstractPage::setDefautDescription(QString text)
+{
+    *defautDesc = text;
+    descLabel->setText(text);
+}
+
+QString * AbstractPage::getDefautDescription()
+{
+    return defautDesc;
 }
