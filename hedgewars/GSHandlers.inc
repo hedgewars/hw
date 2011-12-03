@@ -4940,7 +4940,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepStructure(Gear: PGear);
 var 
-    x, y, i: LongInt;
+    x, y: LongInt;
     HH: PHedgehog;
     t: PGear;
 begin

@@ -31,7 +31,7 @@ function  GenPreview: TPreview;
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
      uVariables, uUtils, uCommands, Adler32, uDebug, uLandPainted, uTextures,
-     uLandGraphics, uLandGenMaze, uLandOutline;
+     uLandGenMaze, uLandOutline;
 
 
 procedure ColorizeLand(Surface: PSDL_Surface);

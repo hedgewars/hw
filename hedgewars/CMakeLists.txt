@@ -36,8 +36,10 @@ set(engine_sources
     uIO.pas
     uKeys.pas
     uLand.pas
+    uLandGenMaze.pas
     uLandGraphics.pas
     uLandObjects.pas
+    uLandOutline.pas
     uLandPainted.pas
     uLandTemplates.pas
     uLandTexture.pas
