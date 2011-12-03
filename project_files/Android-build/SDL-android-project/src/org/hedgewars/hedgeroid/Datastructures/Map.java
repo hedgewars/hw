@@ -16,10 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-package org.hedgewars.hedgeroid.EngineProtocol;
+package org.hedgewars.hedgeroid.Datastructures;
 
 import java.io.File;
 import java.io.IOException;
+
+import org.hedgewars.hedgeroid.EngineProtocol.EngineProtocolNetwork;
+
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

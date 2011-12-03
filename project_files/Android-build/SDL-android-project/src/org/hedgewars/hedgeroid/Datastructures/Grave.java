@@ -17,8 +17,20 @@
  */
 
 
-package org.hedgewars.hedgeroid.EngineProtocol;
+package org.hedgewars.hedgeroid.Datastructures;
 
-public enum GameMode {
-		MODE_LOCAL, MODE_DEMO, MODE_NET, MODE_SAVE
+public class Grave{
+
+	public final String name;
+	public final String path;
+	
+	public Grave(String _name, String _path) {
+		name = _name;
+		path = _path;
+	}
+
+	public String toString(){
+		return name;
+	}
+	
 }
