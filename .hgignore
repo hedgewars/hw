@@ -6,8 +6,10 @@ glob:*.o
 glob:Makefile
 glob:bin
 glob:*.hi
+glob:*.ppu
 glob:*.*~
 glob:*.core
+glob:hedgewars.pro.user
 glob:config.inc
 glob:cmake_install.cmake
 glob:QTfrontend/hwconsts.cpp
