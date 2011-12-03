@@ -9,7 +9,7 @@ import javax.microedition.khronos.egl.EGLSurface;
 import org.hedgewars.hedgeroid.EngineProtocol.EngineProtocolNetwork;
 import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
 import org.hedgewars.hedgeroid.EngineProtocol.PascalExports;
-import org.hedgewars.hedgeroid.TouchInterface.TouchInterface;
+import org.hedgewars.hedgeroid.UserInput.TouchInterface;
 
 import android.app.Activity;
 import android.content.Context;
