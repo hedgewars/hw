@@ -151,22 +151,22 @@ if RectCount > 0 then
 CheckIntersect:= res;
 end;
 
+
+function CountNonZeroz(x, y: LongInt): Longword;
+var i: LongInt;
+    lRes: Longword;
+begin
+    lRes:= 0;
+    for i:= y to y + 15 do
+        if Land[i, x] <> 0 then inc(lRes);
+    CountNonZeroz:= lRes;
+end;
+
 function AddGirder(gX: LongInt): boolean;
 var tmpsurf: PSDL_Surface;
     x1, x2, y, k, i: LongInt;
     rr: TSDL_Rect;
     bRes: boolean;
-
-    function CountNonZeroz(x, y: LongInt): Longword;
-    var i: LongInt;
-        lRes: Longword;
-    begin
-    lRes:= 0;
-    for i:= y to y + 15 do
-        if Land[i, x] <> 0 then inc(lRes);
-    CountNonZeroz:= lRes;
-    end;
-
 begin
 y:= topY+150;
 repeat
@@ -376,19 +376,21 @@ with Obj do
 TryPut:= bRes;
 end;
 
+
+procedure CheckRect(Width, Height, x, y, w, h: LongWord);
+begin
+    if (x + w > Width) then 
+        OutError('Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
+    if (y + h > Height) then 
+        OutError('Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
+end;
+
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
 var s, key: shortstring;
     f: textfile;
     i: LongInt;
     ii, t: Longword;
     c2: TSDL_Color;
-
-    procedure CheckRect(Width, Height, x, y, w, h: LongWord);
-    begin
-    if (x + w > Width) then OutError('Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
-    if (y + h > Height) then OutError('Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
-    end;
-
 begin
 
 AddProgress;
