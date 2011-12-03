@@ -16,7 +16,7 @@ procedure RandomizePoints(var pa: TPixAr);
 
 implementation
 
-uses uLandGraphics, uDebug, uVariables, uLandTemplates, uMisc, uRandom, uUtils;
+uses uLandGraphics, uDebug, uVariables, uLandTemplates, uRandom, uUtils;
 
 
 
