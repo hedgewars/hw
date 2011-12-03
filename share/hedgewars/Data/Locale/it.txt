@@ -324,7 +324,7 @@
 02:08=%1 adotta una nuova strategia
 02:08=%1 preferisce rimanere neutrale
 02:08=%1 ha alzato la bandiera bianca
-02:08=%Che vergogna!
+02:08=Che vergogna %1!
 02:08=Se ci fosse stato Chuck Norris dietro di te, ti avrebbe preso a calci volanti
 02:08=%1 pensava troppo alle donnine nude
 
