@@ -25,8 +25,6 @@ public class DownloadAssets extends AsyncTask<Object, Long, Long>{
 		act = _act;
 	}
 	
-	
-	
 	public static Long copyFileOrDir(Context c, String path) {
 	    AssetManager assetManager = c.getAssets();
 	    String assets[] = null;

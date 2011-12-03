@@ -37,11 +37,6 @@ public class DownloadListActivity extends FragmentActivity implements OnItemMove
 		layout = (FrameLayout)findViewById(R.id.downloadFrameLayout);
 		downloadQueueContainer = (LinearLayout) findViewById(R.id.downloadQueueContainer);
 	}
-
-	public void onDestroy(){
-		super.onDestroy();
-		Log.d("tag", "on destroy");
-	}
 	
 	public void onNewItemSelected(DownloadPackage _task, int x, int minX, int maxX, int size) {
 		if(layout != null){
