@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.hedgewars.hedgeroid.EngineProtocol.FrontendDataUtils;
-import org.hedgewars.hedgeroid.EngineProtocol.Team;
+import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
+import org.hedgewars.hedgeroid.Datastructures.Team;
 
 import android.app.Activity;
 import android.content.Intent;

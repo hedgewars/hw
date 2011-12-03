@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-package org.hedgewars.hedgeroid.EngineProtocol;
+package org.hedgewars.hedgeroid.Datastructures;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 
+import org.hedgewars.hedgeroid.EngineProtocol.EngineProtocolNetwork;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;

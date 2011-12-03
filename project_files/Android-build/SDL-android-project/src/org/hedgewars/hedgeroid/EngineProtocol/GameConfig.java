@@ -22,6 +22,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.hedgewars.hedgeroid.Datastructures.GameMode;
+import org.hedgewars.hedgeroid.Datastructures.Map;
+import org.hedgewars.hedgeroid.Datastructures.Scheme;
+import org.hedgewars.hedgeroid.Datastructures.Team;
+import org.hedgewars.hedgeroid.Datastructures.Weapon;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;

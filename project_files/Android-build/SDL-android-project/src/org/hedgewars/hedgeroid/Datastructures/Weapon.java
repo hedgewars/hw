@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-package org.hedgewars.hedgeroid.EngineProtocol;
+package org.hedgewars.hedgeroid.Datastructures;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,6 +25,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.hedgewars.hedgeroid.EngineProtocol.EngineProtocolNetwork;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -32,7 +33,6 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 public class Weapon implements Parcelable, Comparable<Weapon>{
 

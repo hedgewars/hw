@@ -19,13 +19,13 @@
 
 package org.hedgewars.hedgeroid;
 
-import org.hedgewars.hedgeroid.EngineProtocol.FrontendDataUtils;
+import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
+import org.hedgewars.hedgeroid.Datastructures.Map;
+import org.hedgewars.hedgeroid.Datastructures.Map.MapType;
+import org.hedgewars.hedgeroid.Datastructures.Scheme;
+import org.hedgewars.hedgeroid.Datastructures.Team;
+import org.hedgewars.hedgeroid.Datastructures.Weapon;
 import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
-import org.hedgewars.hedgeroid.EngineProtocol.Map;
-import org.hedgewars.hedgeroid.EngineProtocol.Map.MapType;
-import org.hedgewars.hedgeroid.EngineProtocol.Scheme;
-import org.hedgewars.hedgeroid.EngineProtocol.Team;
-import org.hedgewars.hedgeroid.EngineProtocol.Weapon;
 
 import android.app.Activity;
 import android.content.Intent;
