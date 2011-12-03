@@ -11,7 +11,7 @@ data Interface = Interface Uses TypesAndVars
     deriving Show
 data Implementation = Implementation Uses TypesAndVars
     deriving Show
-data Identifier = Identifier String
+data Identifier = Identifier String BaseType
     deriving Show
 data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
@@ -92,3 +92,17 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitRange Range
     | InitTypeCast Identifier InitExpression
     deriving Show
+
+data BaseType = Unknown
+    | BTChar
+    | BTString
+    | BTInt
+    | BTRecord
+    | BTArray
+    | BTFunction
+    | BTPointerTo BaseType
+    | BTSet
+    | BTEnum [String]
+    | Void
+    deriving Show
+    
