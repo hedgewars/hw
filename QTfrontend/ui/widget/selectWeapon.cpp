@@ -254,7 +254,7 @@ void SelWeaponWidget::newWeaponsName()
     if(wconf->contains(newName)) {
         //name already used -> look for an appropriate name:
         int i=2;
-        while(wconf->contains(newName = tr("new")+QString::number(i++)));
+        while(wconf->contains(newName = tr("new")+QString::number(i++))) ;
     }
     setWeaponsName(newName);
 }
@@ -285,7 +285,7 @@ void SelWeaponWidget::copy()
         if(wconf->contains(newName)) {
             //name already used -> look for an appropriate name:
             int i=2;
-            while(wconf->contains(newName = tr("copy of") + " " + curWeaponsName+QString::number(i++)));
+            while(wconf->contains(newName = tr("copy of") + " " + curWeaponsName+QString::number(i++))) ;
         }
         setWeaponsName(newName);
         setWeapons(ammo);
