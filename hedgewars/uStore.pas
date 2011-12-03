@@ -118,16 +118,15 @@ for t:= 0 to Pred(TeamsCount) do
 SDL_FreeSurface(tmpsurf)
 end;
 
-procedure StoreLoad(reload: boolean);
-var s: shortstring;
 
-    procedure WriteNames(Font: THWFont);
-    var t: LongInt;
-        i: LongInt;
-        r, rr: TSDL_Rect;
-        drY: LongInt;
-        texsurf, flagsurf, iconsurf: PSDL_Surface;
-    begin
+procedure WriteNames(Font: THWFont);
+var t: LongInt;
+    i: LongInt;
+    r, rr: TSDL_Rect;
+    drY: LongInt;
+    texsurf, flagsurf, iconsurf: PSDL_Surface;
+    s: shortstring;
+begin
     r.x:= 0;
     r.y:= 0;
     drY:= - 4;
@@ -220,11 +219,11 @@ var s: shortstring;
         SDL_FreeSurface(iconsurf);
         iconsurf:= nil;
         end;
-    end;
+end;
 
-    procedure InitHealth;
-    var i, t: LongInt;
-    begin
+procedure InitHealth;
+var i, t: LongInt;
+begin
     for t:= 0 to Pred(TeamsCount) do
         if TeamsArray[t] <> nil then
             with TeamsArray[t]^ do
@@ -233,12 +232,12 @@ var s: shortstring;
                     if Hedgehogs[i].Gear <> nil then
                         RenderHealth(Hedgehogs[i]);
                 end
-    end;
+end;
 
-    procedure LoadGraves;
-    var t: LongInt;
-        texsurf: PSDL_Surface;
-    begin
+procedure LoadGraves;
+var t: LongInt;
+    texsurf: PSDL_Surface;
+begin
     for t:= 0 to Pred(TeamsCount) do
     if TeamsArray[t] <> nil then
         with TeamsArray[t]^ do
@@ -251,9 +250,11 @@ var s: shortstring;
             GraveTex:= Surface2Tex(texsurf, false);
             SDL_FreeSurface(texsurf)
             end
-    end;
+end;
 
-var ii: TSprite;
+procedure StoreLoad(reload: boolean);
+var s: shortstring;
+    ii: TSprite;
     fi: THWFont;
     ai: TAmmoType;
     tmpsurf: PSDL_Surface;
