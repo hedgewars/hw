@@ -56,6 +56,27 @@ class AbstractPage : public QWidget
 {
     Q_OBJECT
 
+    public:
+
+        /**
+        * @brief Changes the desc text (should not be called manualy)
+        *
+        * @param desc the description of the widget focused
+        */
+        void setButtonDescription(QString desc);
+
+        /**
+        * @brief Changes the desc defaut text
+        *
+        * @param text the defaut desc
+        */
+        void setDefautDescription(QString text);
+
+        /**
+        * @brief Get the desc defaut text
+        */
+        QString * getDefautDescription();
+
     signals:
         /**
          * @brief This signal is emitted when going back to the previous is
@@ -152,6 +173,9 @@ class AbstractPage : public QWidget
         void setBackButtonVisible(bool visible = true);
 
         QFont * font14; ///< used font
+
+        QLabel * descLabel; ///< text description
+        QString * defautDesc;
 
     private:
 

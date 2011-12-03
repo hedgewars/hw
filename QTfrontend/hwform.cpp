@@ -82,6 +82,7 @@
 #include "bgwidget.h"
 #include "xfire.h"
 #include "drawmapwidget.h"
+#include "mouseoverfilter.h"
 
 #include "HWDataManager.h"
 
@@ -280,6 +281,23 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
        wBackground->lower();
        wBackground->init();
        wBackground->startAnimation();
+    }
+
+    //Install all eventFilters :
+
+    MouseOverFilter *filter = new MouseOverFilter();
+    filter->setUi(&ui);
+
+    QList<QWidget *> widgets;
+
+    for (int i=0; i < ui.Pages->count(); i++)
+    {
+        widgets = ui.Pages->widget(i)->findChildren<QWidget *>();
+
+        for (int i=0; i < widgets.size(); i++)
+        {
+            widgets.at(i)->installEventFilter(filter);
+        }
     }
 
     PagesStack.push(ID_PAGE_MAIN);

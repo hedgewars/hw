@@ -91,10 +91,14 @@ PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
 
     if(!isDevBuild)
     {
-        mainNote->setText(QLabel::tr("Tip: ") + randomTip());
+        //mainNote->setText(QLabel::tr("Tip: ") + randomTip());
+        setDefautDescription(QLabel::tr("Tip: ") + randomTip());
     }
     else
-        mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
+    {
+        setDefautDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
+        //mainNote->setText(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
+    }
 
 }
 

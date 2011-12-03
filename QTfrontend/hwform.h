@@ -61,6 +61,8 @@ public:
     void updateXfire();
     void PlayDemoQuick(const QString & demofilename);
     void exit();
+    void setButtonDescription(QString desc);
+    void backDescription();
 
 private slots:
     void GoToSaves();
