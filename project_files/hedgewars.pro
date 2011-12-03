@@ -96,7 +96,6 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
 	../QTfrontend/KB.h \
     ../QTfrontend/hwconsts.h \
     ../QTfrontend/sdlkeys.h \
-    ../QTfrontend/mouseoverfilter.h \
     ../QTfrontend/ui/mouseoverfilter.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
