@@ -23,7 +23,7 @@ pascalUnit = do
     return u
 
 iD = do
-    i <- liftM Identifier (identifier pas)
+    i <- liftM (flip Identifier Unknown) (identifier pas)
     comments
     return i
         
@@ -62,7 +62,7 @@ reference = buildExpressionParser table term <?> "reference"
         t <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) knownTypes
         e <- parens pas expression
         comments
-        return $ TypeCast (Identifier t) e
+        return $ TypeCast (Identifier t Unknown) e
         
     
 varsDecl1 = varsParser sepEndBy1    
@@ -124,7 +124,7 @@ typeDecl = choice [
     , setDecl
     , functionType
     , sequenceDecl >>= return . Sequence
-    , try (identifier pas) >>= return . SimpleType . Identifier
+    , try iD >>= return . SimpleType
     , rangeDecl >>= return . RangeType
     ] <?> "type declaration"
     where
@@ -348,7 +348,7 @@ implementation = do
 expression = buildExpressionParser table term <?> "expression"
     where
     term = comments >> choice [
-        builtInFunction expression >>= \(n, e) -> return $ BuiltInFunCall e (SimpleReference (Identifier n))
+        builtInFunction expression >>= \(n, e) -> return $ BuiltInFunCall e (SimpleReference (Identifier n Unknown))
         , try (parens pas $ expression >>= \e -> notFollowedBy (comments >> char '.') >> return e)
         , brackets pas (commaSep pas iD) >>= return . SetExpression
         , try $ natural pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
@@ -591,7 +591,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         t <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) knownTypes
         i <- parens pas initExpression
         comments
-        return $ InitTypeCast (Identifier t) i
+        return $ InitTypeCast (Identifier t Unknown) i
         
 builtInFunction e = do
     name <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) builtin

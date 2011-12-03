@@ -75,7 +75,7 @@ pascal2C (Unit _ interface implementation init fin) =
 pascal2C (Program _ implementation mainFunction) =
     implementation2C implementation
     $+$
-    tvar2C True (FunctionDeclaration (Identifier "main") (SimpleType $ Identifier "int") [] (Just (TypesAndVars [], mainFunction)))
+    tvar2C True (FunctionDeclaration (Identifier "main" BTInt) (SimpleType $ Identifier "int" BTInt) [] (Just (TypesAndVars [], mainFunction)))
     
     
 interface2C :: Interface -> Doc
@@ -92,12 +92,12 @@ uses2C :: Uses -> Doc
 uses2C uses = vcat $ map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
 
 uses2List :: Uses -> [String]
-uses2List (Uses ids) = map (\(Identifier i) -> i) ids
+uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
 tvar2C :: Bool -> TypeVarDeclaration -> Doc
-tvar2C _ (FunctionDeclaration (Identifier name) returnType params Nothing) = 
+tvar2C _ (FunctionDeclaration (Identifier name _) returnType params Nothing) = 
     type2C returnType <+> text name <> parens (hcat $ map (tvar2C False) params) <> text ";"
-tvar2C True (FunctionDeclaration (Identifier name) returnType params (Just (tvars, phrase))) = 
+tvar2C True (FunctionDeclaration (Identifier name _) returnType params (Just (tvars, phrase))) = 
     type2C returnType <+> text name <> parens (hcat $ map (tvar2C False) params)
     $+$
     text "{" 
@@ -111,14 +111,14 @@ tvar2C True (FunctionDeclaration (Identifier name) returnType params (Just (tvar
     where
     phrase2C' (Phrases p) = vcat $ map phrase2C p
     phrase2C' p = phrase2C p
-tvar2C False (FunctionDeclaration (Identifier name) _ _ _) = error $ "nested functions not allowed: " ++ name
-tvar2C _ (TypeDeclaration (Identifier i) t) = text "type" <+> text i <+> type2C t <> text ";"
+tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
+tvar2C _ (TypeDeclaration (Identifier i _) t) = text "type" <+> text i <+> type2C t <> text ";"
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = 
     if isConst then text "const" else empty
     <+>
     type2C t
     <+>
-    (hsep . punctuate (char ',') . map (\(Identifier i) -> text i) $ ids)
+    (hsep . punctuate (char ',') . map (\(Identifier i _) -> text i) $ ids)
     <+>
     initExpr mInitExpr
     <>
@@ -127,7 +127,7 @@ tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) =
     initExpr Nothing = empty
     initExpr (Just e) = text "=" <+> initExpr2C e
 tvar2C f (OperatorDeclaration op _ ret params body) = 
-    tvar2C f (FunctionDeclaration (Identifier $ "<op " ++ op ++ ">") ret params body)
+    tvar2C f (FunctionDeclaration (Identifier ("<op " ++ op ++ ">") Unknown) ret params body)
 
 initExpr2C :: InitExpression -> Doc
 initExpr2C (InitBinOp op expr1 expr2) = parens $ (initExpr2C expr1) <+> op2C op <+> (initExpr2C expr2)
@@ -135,7 +135,7 @@ initExpr2C (InitNumber s) = text s
 initExpr2C (InitFloat s) = text s
 initExpr2C (InitHexNumber s) = text "0x" <> (text . map toLower $ s)
 initExpr2C (InitString s) = doubleQuotes $ text s 
-initExpr2C (InitReference (Identifier i)) = text i
+initExpr2C (InitReference (Identifier i _)) = text i
 
 
 initExpr2C _ = text "<<expression>>"
@@ -143,7 +143,7 @@ initExpr2C _ = text "<<expression>>"
 type2C :: TypeDecl -> Doc
 type2C UnknownType = text "void"
 type2C (String l) = text $ "string" ++ show l
-type2C (SimpleType (Identifier i)) = text i
+type2C (SimpleType (Identifier i _)) = text i
 type2C (PointerTo t) = type2C t <> text "*"
 type2C (RecordType tvs union) = text "{" $+$ (nest 4 . vcat . map (tvar2C False) $ tvs) $+$ text "}"
 type2C (RangeType r) = text "<<range type>>"
@@ -167,7 +167,7 @@ phrase2C (SwitchCase expr cases mphrase) = text "switch" <> parens (expr2C expr)
     case2C :: ([InitExpression], Phrase) -> Doc
     case2C (e, p) = text "case" <+> parens (hsep . punctuate (char ',') . map initExpr2C $ e) <> char ':' <> nest 4 (phrase2C p $+$ text "break;")
 phrase2C (WithBlock ref p) = text "namespace" <> parens (ref2C ref) $$ (phrase2C $ wrapPhrase p)
-phrase2C (ForCycle (Identifier i) e1 e2 p) = 
+phrase2C (ForCycle (Identifier i _) e1 e2 p) = 
     text "for" <> (parens . hsep . punctuate (char ';') $ [text i <+> text "=" <+> expr2C e1, text i <+> text "<=" <+> expr2C e2, text "++" <> text i])
     $$
     phrase2C (wrapPhrase p)
@@ -195,13 +195,13 @@ expr2C _ = text "<<expression>>"
 
 ref2C :: Reference -> Doc
 ref2C (ArrayElement exprs ref) = ref2C ref <> (brackets . hcat) (punctuate comma $ map expr2C exprs)
-ref2C (SimpleReference (Identifier name)) = text name
+ref2C (SimpleReference (Identifier name _)) = text name
 ref2C (RecordField (Dereference ref1) ref2) = ref2C ref1 <> text "->" <> ref2C ref2
 ref2C (RecordField ref1 ref2) = ref2C ref1 <> text "." <> ref2C ref2
 ref2C (Dereference ref) = parens $ text "*" <> ref2C ref
 ref2C (FunCall params ref) = ref2C ref <> parens (hsep . punctuate (char ',') . map expr2C $ params)
 ref2C (Address ref) = text "&" <> parens (ref2C ref)
-ref2C (TypeCast (Identifier t) expr) = parens (text t) <> expr2C expr
+ref2C (TypeCast (Identifier t _) expr) = parens (text t) <> expr2C expr
 ref2C (RefExpression expr) = expr2C expr
 
 op2C "or" = text "|"
