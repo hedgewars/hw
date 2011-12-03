@@ -422,23 +422,21 @@ begin
     RecountTeamHealth(tempTeam);
 end;
 
+function CountNonZeroz(x, y, r, c: LongInt): LongInt;
+var i: LongInt;
+    count: LongInt = 0;
+begin
+if (y and LAND_HEIGHT_MASK) = 0 then
+    for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
+        if Land[y, i] <> 0 then
+            begin
+            inc(count);
+            if count = c then exit(count)
+            end;
+CountNonZeroz:= count;
+end;
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
-
-    function CountNonZeroz(x, y, r, c: LongInt): LongInt;
-    var i: LongInt;
-        count: LongInt = 0;
-    begin
-    if (y and LAND_HEIGHT_MASK) = 0 then
-        for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
-            if Land[y, i] <> 0 then
-               begin
-               inc(count);
-               if count = c then exit(count)
-               end;
-    CountNonZeroz:= count;
-    end;
-
 var x: LongInt;
     y, sy: LongInt;
     ar: array[0..511] of TPoint;
