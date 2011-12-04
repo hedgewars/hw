@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>command</key>
-	<string>escript Scripts/Multiplayer/GaudyRacer.lua</string>
+	<string>escript Scripts/Multiplayer/Highlander.lua</string>
 	<key>description</key>
 	<string></string>
 	<key>scheme</key>

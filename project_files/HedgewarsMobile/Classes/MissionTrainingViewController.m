@@ -93,13 +93,13 @@
         NSString *descComplete = [[NSString alloc] initWithContentsOfFile:descLocation encoding:NSUTF8StringEncoding error:NULL];
         [descLocation release];
         NSArray *descArray = [descComplete componentsSeparatedByString:@"\n"];
-        NSMutableArray *filteredArray = [[NSMutableArray alloc] initWithCapacity:[descArray count]];
+        NSMutableArray *filteredArray = [[NSMutableArray alloc] initWithCapacity:[descArray count]/3];
         [descComplete release];
         // sanity check to avoid having missions and descriptions conflicts
         for (int i = 0; i < [self.listOfMissions count]; i++) {
             NSString *desc = [[self.listOfMissions objectAtIndex:i] stringByDeletingPathExtension];
             for (NSString *str in descArray)
-                if ([str hasPrefix:desc]) {
+                if ([str hasPrefix:desc] && [str hasSuffix:@"\""]) {
                     NSArray *descriptionText = [str componentsSeparatedByString:@"\""];
                     [filteredArray insertObject:[descriptionText objectAtIndex:1] atIndex:i];
                     break;
