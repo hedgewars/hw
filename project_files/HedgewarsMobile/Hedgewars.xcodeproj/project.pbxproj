@@ -392,6 +392,9 @@
 		61177BAC148A671600686905 /* Turkish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Turkish; path = Locale/Turkish.lproj/About.strings; sourceTree = "<group>"; };
 		61177BAD148A672000686905 /* Turkish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Turkish; path = Locale/Turkish.lproj/Localizable.strings; sourceTree = "<group>"; };
 		61177BAE148A672C00686905 /* Turkish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Turkish; path = Locale/Turkish.lproj/Scheme.strings; sourceTree = "<group>"; };
+		61177BE4148B881C00686905 /* Danish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Danish; path = Locale/Danish.lproj/About.strings; sourceTree = "<group>"; };
+		61177BF0148B882500686905 /* Danish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Danish; path = Locale/Danish.lproj/Localizable.strings; sourceTree = "<group>"; };
+		61177BF1148B882F00686905 /* Danish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Danish; path = Locale/Danish.lproj/Scheme.strings; sourceTree = "<group>"; };
 		611D7A4F142FDCD3006E0798 /* uTouch.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTouch.pas; path = ../../hedgewars/uTouch.pas; sourceTree = SOURCE_ROOT; };
 		611D9BF812497E9800008271 /* SavedGamesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SavedGamesViewController.h; sourceTree = "<group>"; };
 		611D9BF912497E9800008271 /* SavedGamesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SavedGamesViewController.m; sourceTree = "<group>"; };
@@ -1297,6 +1300,7 @@
 				Spanish,
 				Polish,
 				Turkish,
+				Danish,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1714,6 +1718,7 @@
 				61156530147F4D10006729A9 /* Polish */,
 				61177BAA148A661600686905 /* German */,
 				61177BAC148A671600686905 /* Turkish */,
+				61177BE4148B881C00686905 /* Danish */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1727,6 +1732,7 @@
 				61156531147F4D17006729A9 /* Polish */,
 				61177BA7148A658900686905 /* German */,
 				61177BAD148A672000686905 /* Turkish */,
+				61177BF0148B882500686905 /* Danish */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1740,6 +1746,7 @@
 				61156532147F4D1E006729A9 /* Polish */,
 				61177BA9148A660C00686905 /* German */,
 				61177BAE148A672C00686905 /* Turkish */,
+				61177BF1148B882F00686905 /* Danish */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
