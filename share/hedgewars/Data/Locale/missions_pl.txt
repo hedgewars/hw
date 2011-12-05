@@ -4,6 +4,9 @@ Basic_Training_-_Bazooka.desc="Pamiętaj o tym, że wiatr może działać na two
 Basic_Training_-_Grenade.name=Podstawy rzucania granatami
 Basic_Training_-_Grenade.desc="Najpierw wyciągasz zawleczkę, POTEM rzucasz!"
 
+Basic_Training_-_Cluster_Bomb.name=Podstawy rzucania bomb kasetowych
+Basic_Training_-_Cluster_Bomb.desc="Ktoś tutaj czeka na gorący prysznic..."
+
 Basic_Training_-_Shotgun.name=Podstawy strzelania ze strzelby
 Basic_Training_-_Shotgun.desc="Wpierw strzelaj. Pytania zadasz później."
 
