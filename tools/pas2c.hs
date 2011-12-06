@@ -101,17 +101,22 @@ uses2C uses = return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ 
 uses2List :: Uses -> [String]
 uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
+id2C :: Bool -> Identifier -> Reader a Doc
+id2C isDecl (Identifier i _) = return $ text i
+
 tvar2C :: Bool -> TypeVarDeclaration -> Reader a Doc
-tvar2C _ (FunctionDeclaration (Identifier name _) returnType params Nothing) = do
+tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType 
     p <- liftM hcat $ mapM (tvar2C False) params
-    return $ t <+> text name <> parens p <> text ";"
-tvar2C True (FunctionDeclaration (Identifier name _) returnType params (Just (tvars, phrase))) = do
+    n <- id2C True name
+    return $ t <+> n <> parens p <> text ";"
+tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
     t <- type2C returnType 
     p <- liftM hcat $ mapM (tvar2C False) params
     ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
+    n <- id2C True name
     return $ 
-        t <+> text name <> parens p
+        t <+> n <> parens p
         $+$
         text "{" 
         $+$ 
@@ -125,66 +130,106 @@ tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested f
 tvar2C _ (TypeDeclaration (Identifier i _) t) = do
     tp <- type2C t
     return $ text "type" <+> text i <+> tp <> text ";"
-tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = 
-    if isConst then text "const" else empty
-    <+>
-    type2C t
-    <+>
-    (hsep . punctuate (char ',') . map (\(Identifier i _) -> text i) $ ids)
-    <+>
-    initExpr mInitExpr
-    <>
-    text ";"
+tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
+    t' <- type2C t
+    i <- mapM (id2C True) ids
+    ie <- initExpr mInitExpr
+    return $ if isConst then text "const" else empty
+        <+> t'
+        <+> (hsep . punctuate (char ',') $ i)
+        <+> ie
+        <> text ";"
     where
-    initExpr Nothing = empty
-    initExpr (Just e) = text "=" <+> initExpr2C e
+    initExpr Nothing = return $ empty
+    initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
 tvar2C f (OperatorDeclaration op _ ret params body) = 
     tvar2C f (FunctionDeclaration (Identifier ("<op " ++ op ++ ">") Unknown) ret params body)
 
 initExpr2C :: InitExpression -> Reader a Doc
-initExpr2C (InitBinOp op expr1 expr2) = parens $ (initExpr2C expr1) <+> op2C op <+> (initExpr2C expr2)
-initExpr2C (InitNumber s) = text s
-initExpr2C (InitFloat s) = text s
-initExpr2C (InitHexNumber s) = text "0x" <> (text . map toLower $ s)
-initExpr2C (InitString s) = doubleQuotes $ text s 
-initExpr2C (InitReference (Identifier i _)) = text i
+initExpr2C (InitBinOp op expr1 expr2) = do
+    e1 <- initExpr2C expr1
+    e2 <- initExpr2C expr2
+    o <- op2C op
+    return $ parens $ e1 <+> o <+> e2
+initExpr2C (InitNumber s) = return $ text s
+initExpr2C (InitFloat s) = return $ text s
+initExpr2C (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
+initExpr2C (InitString s) = return $ doubleQuotes $ text s 
+initExpr2C (InitReference i) = id2C False i
+initExpr2C _ = return $ text "<<expression>>"
 
-
-initExpr2C _ = text "<<expression>>"
 
 type2C :: TypeDecl -> Reader a Doc
-type2C UnknownType = text "void"
-type2C (String l) = text $ "string" ++ show l
-type2C (SimpleType (Identifier i _)) = text i
-type2C (PointerTo t) = type2C t <> text "*"
-type2C (RecordType tvs union) = text "{" $+$ (nest 4 . vcat . map (tvar2C False) $ tvs) $+$ text "}"
-type2C (RangeType r) = text "<<range type>>"
-type2C (Sequence ids) = text "<<sequence type>>"
-type2C (ArrayDecl r t) = text "<<array type>>"
-type2C (Set t) = text "<<set>>"
-type2C (FunctionType returnType params) = text "<<function>>"
+type2C UnknownType = return $ text "void"
+type2C (String l) = return $ text $ "string" ++ show l
+type2C (SimpleType i) = id2C True i
+type2C (PointerTo t) = liftM (<> text "*") $ type2C t
+type2C (RecordType tvs union) = do
+    t <- mapM (tvar2C False) tvs
+    return $ text "{" $+$ (nest 4 . vcat $ t) $+$ text "}"
+type2C (RangeType r) = return $ text "<<range type>>"
+type2C (Sequence ids) = return $ text "<<sequence type>>"
+type2C (ArrayDecl r t) = return $ text "<<array type>>"
+type2C (Set t) = return $ text "<<set>>"
+type2C (FunctionType returnType params) = return $ text "<<function>>"
 
 phrase2C :: Phrase -> Reader a Doc
-phrase2C (Phrases p) = text "{" $+$ (nest 4 . vcat . map phrase2C $ p) $+$ text "}"
-phrase2C (ProcCall f@(FunCall {}) []) = ref2C f <> semi
-phrase2C (ProcCall ref params) = ref2C ref <> parens (hsep . punctuate (char ',') . map expr2C $ params) <> semi
-phrase2C (IfThenElse (expr) phrase1 mphrase2) = text "if" <> parens (expr2C expr) $+$ (phrase2C . wrapPhrase) phrase1 $+$ elsePart
+phrase2C (Phrases p) = do
+    ps <- mapM phrase2C p
+    return $ text "{" $+$ (nest 4 . vcat $ ps) $+$ text "}"
+phrase2C (ProcCall f@(FunCall {}) []) = liftM (<> semi) $ ref2C f
+phrase2C (ProcCall ref params) = do
+    r <- ref2C ref
+    ps <- mapM expr2C params
+    return $ r <> parens (hsep . punctuate (char ',') $ ps) <> semi
+phrase2C (IfThenElse (expr) phrase1 mphrase2) = do
+    e <- expr2C expr
+    p1 <- (phrase2C . wrapPhrase) phrase1
+    el <- elsePart
+    return $ 
+        text "if" <> parens e $+$ p1 $+$ el
     where
-    elsePart | isNothing mphrase2 = empty
-             | otherwise = text "else" $$ (phrase2C . wrapPhrase) (fromJust mphrase2)
-phrase2C (Assignment ref expr) = ref2C ref <> text " = " <> expr2C expr <> semi
-phrase2C (WhileCycle expr phrase) = text "while" <> parens (expr2C expr) $$ (phrase2C $ wrapPhrase phrase)
-phrase2C (SwitchCase expr cases mphrase) = text "switch" <> parens (expr2C expr) <> text "of" $+$ (nest 4 . vcat . map case2C) cases
+    elsePart | isNothing mphrase2 = return $ empty
+             | otherwise = liftM (text "else" $$) $ (phrase2C . wrapPhrase) (fromJust mphrase2)
+phrase2C (Assignment ref expr) = do
+    r <- ref2C ref 
+    e <- expr2C expr
+    return $
+        r <> text " = " <> e <> semi
+phrase2C (WhileCycle expr phrase) = do
+    e <- expr2C expr
+    p <- phrase2C $ wrapPhrase phrase
+    return $ text "while" <> parens e $$ p
+phrase2C (SwitchCase expr cases mphrase) = do
+    e <- expr2C expr
+    cs <- mapM case2C cases
+    return $ 
+        text "switch" <> parens e <> text "of" $+$ (nest 4 . vcat) cs
     where
-    case2C :: ([InitExpression], Phrase) -> Doc
-    case2C (e, p) = text "case" <+> parens (hsep . punctuate (char ',') . map initExpr2C $ e) <> char ':' <> nest 4 (phrase2C p $+$ text "break;")
-phrase2C (WithBlock ref p) = text "namespace" <> parens (ref2C ref) $$ (phrase2C $ wrapPhrase p)
-phrase2C (ForCycle (Identifier i _) e1 e2 p) = 
-    text "for" <> (parens . hsep . punctuate (char ';') $ [text i <+> text "=" <+> expr2C e1, text i <+> text "<=" <+> expr2C e2, text "++" <> text i])
-    $$
-    phrase2C (wrapPhrase p)
-phrase2C (RepeatCycle e p) = text "do" <+> phrase2C (Phrases p) <+> text "while" <> parens (text "!" <> parens (expr2C e))
-phrase2C NOP = text ";"
+    case2C :: ([InitExpression], Phrase) -> Reader a Doc
+    case2C (e, p) = do
+        ie <- mapM initExpr2C e
+        ph <- phrase2C p
+        return $ 
+            text "case" <+> parens (hsep . punctuate (char ',') $ ie) <> char ':' <> nest 4 (ph $+$ text "break;")
+phrase2C (WithBlock ref p) = do
+    r <- ref2C ref 
+    ph <- phrase2C $ wrapPhrase p
+    return $ text "namespace" <> parens r $$ ph
+phrase2C (ForCycle i' e1' e2' p) = do
+    i <- id2C False i'
+    e1 <- expr2C e1'
+    e2 <- expr2C e2'
+    ph <- phrase2C (wrapPhrase p)
+    return $ 
+        text "for" <> (parens . hsep . punctuate (char ';') $ [i <+> text "=" <+> e1, i <+> text "<=" <+> e2, text "++" <> i])
+        $$
+        ph
+phrase2C (RepeatCycle e' p') = do
+    e <- expr2C e'
+    p <- phrase2C (Phrases p')
+    return $ text "do" <+> p <+> text "while" <> parens (text "!" <> parens e)
+phrase2C NOP = return $ text ";"
 
 
 wrapPhrase p@(Phrases _) = p
@@ -192,41 +237,71 @@ wrapPhrase p = Phrases [p]
 
 
 expr2C :: Expression -> Reader a Doc
-expr2C (Expression s) = text s
-expr2C (BinOp op expr1 expr2) = parens $ (expr2C expr1) <+> op2C op <+> (expr2C expr2)
-expr2C (NumberLiteral s) = text s
-expr2C (FloatLiteral s) = text s
-expr2C (HexNumber s) = text "0x" <> (text . map toLower $ s)
-expr2C (StringLiteral s) = doubleQuotes $ text s 
+expr2C (Expression s) = return $ text s
+expr2C (BinOp op expr1 expr2) = do
+    e1 <- expr2C expr1
+    e2 <- expr2C expr2
+    o <- op2C op
+    return $ parens $ e1 <+> o <+> e2
+expr2C (NumberLiteral s) = return $ text s
+expr2C (FloatLiteral s) = return $ text s
+expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
+expr2C (StringLiteral s) = return $ doubleQuotes $ text s 
 expr2C (Reference ref) = ref2C ref
-expr2C (PrefixOp op expr) = op2C op <+> expr2C expr
-expr2C Null = text "NULL"
-expr2C (BuiltInFunCall params ref) = ref2C ref <> parens (hsep . punctuate (char ',') . map expr2C $ params)
-expr2C _ = text "<<expression>>"
+expr2C (PrefixOp op expr) = liftM2 (<+>) (op2C op) (expr2C expr)
+expr2C Null = return $ text "NULL"
+expr2C (BuiltInFunCall params ref) = do
+    r <- ref2C ref 
+    ps <- mapM expr2C params
+    return $ 
+        r <> parens (hsep . punctuate (char ',') $ ps)
+expr2C _ = return $ text "<<expression>>"
 
 
 ref2C :: Reference -> Reader a Doc
-ref2C (ArrayElement exprs ref) = ref2C ref <> (brackets . hcat) (punctuate comma $ map expr2C exprs)
-ref2C (SimpleReference (Identifier name _)) = text name
-ref2C (RecordField (Dereference ref1) ref2) = ref2C ref1 <> text "->" <> ref2C ref2
-ref2C (RecordField ref1 ref2) = ref2C ref1 <> text "." <> ref2C ref2
-ref2C (Dereference ref) = parens $ text "*" <> ref2C ref
-ref2C (FunCall params ref) = ref2C ref <> parens (hsep . punctuate (char ',') . map expr2C $ params)
-ref2C (Address ref) = text "&" <> parens (ref2C ref)
-ref2C (TypeCast (Identifier t _) expr) = parens (text t) <> expr2C expr
+ref2C (ArrayElement exprs ref) = do
+    r <- ref2C ref 
+    es <- mapM expr2C exprs
+    return $ r <> (brackets . hcat) (punctuate comma es)
+ref2C (SimpleReference name) = id2C False name
+ref2C (RecordField (Dereference ref1) ref2) = do
+    r1 <- ref2C ref1 
+    r2 <- ref2C ref2
+    return $ 
+        r1 <> text "->" <> r2
+ref2C (RecordField ref1 ref2) = do
+    r1 <- ref2C ref1 
+    r2 <- ref2C ref2
+    return $ 
+        r1 <> text "." <> r2
+ref2C (Dereference ref) = liftM ((parens $ text "*") <>) $ ref2C ref
+ref2C (FunCall params ref) = do
+    r <- ref2C ref
+    ps <- mapM expr2C params
+    return $ 
+        r <> parens (hsep . punctuate (char ',') $ ps)
+ref2C (Address ref) = do
+    r <- ref2C ref
+    return $ text "&" <> parens r
+ref2C (TypeCast t' expr) = do
+    t <- id2C False t'
+    e <- expr2C expr
+    return $ parens t <> e
 ref2C (RefExpression expr) = expr2C expr
 
-op2C "or" = text "|"
-op2C "and" = text "&"
-op2C "not" = text "!"
-op2C "xor" = text "^"
-op2C "div" = text "/"
-op2C "mod" = text "%"
-op2C "shl" = text "<<"
-op2C "shr" = text ">>"
-op2C "<>" = text "!="
-op2C "=" = text "=="
-op2C a = text a
+
+op2C :: String -> Reader a Doc
+op2C "or" = return $ text "|"
+op2C "and" = return $ text "&"
+op2C "not" = return $ text "!"
+op2C "xor" = return $ text "^"
+op2C "div" = return $ text "/"
+op2C "mod" = return $ text "%"
+op2C "shl" = return $ text "<<"
+op2C "shr" = return $ text ">>"
+op2C "<>" = return $ text "!="
+op2C "=" = return $ text "=="
+op2C a = return $ text a
 
 maybeVoid "" = "void"
 maybeVoid a = a
