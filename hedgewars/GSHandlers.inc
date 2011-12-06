@@ -1626,14 +1626,13 @@ begin
     if not haveCollision then
         begin
         if (Gear^.State and gsttmpFlag) <> 0 then
-            with Gear^.Hedgehog^ do
-                begin
-                PlaySound(sndRopeRelease);
-                if CurAmmoType <> amParachute then
-                    RopeWaitCollision(Gear, HHGear)
-                else
-                    RopeDeleteMe(Gear, HHGear)
-                end
+            begin
+            PlaySound(sndRopeRelease);
+            if Gear^.Hedgehog^.CurAmmoType <> amParachute then
+                RopeWaitCollision(Gear, HHGear)
+            else
+                RopeDeleteMe(Gear, HHGear)
+            end
         end
     else
         if (Gear^.State and gsttmpFlag) = 0 then
