@@ -74,7 +74,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 end;
 
 
-procedure DrawRopeLine(X1, Y1, X2, Y2, roplen: LongInt);
+function DrawRopeLine(X1, Y1, X2, Y2, roplen: LongInt): LongInt;
 var  eX, eY, dX, dY: LongInt;
     i, sX, sY, x, y, d: LongInt;
     b: boolean;
@@ -135,7 +135,8 @@ begin
             inc(roplen);
             if (roplen mod 4) = 0 then DrawSprite(sprRopeNode, x - 2, y - 2, 0)
             end
-    end
+    end;
+DrawRopeLine:= roplen;
 end;
 
 procedure DrawRope(Gear: PGear);
@@ -152,17 +153,17 @@ begin
             i:= 0;
             while i < Pred(RopePoints.Count) do
                     begin
-                    DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
+                    roplen:= DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
                                 hwRound(RopePoints.ar[Succ(i)].X) + WorldDx, hwRound(RopePoints.ar[Succ(i)].Y) + WorldDy, roplen);
                     inc(i)
                     end;
-            DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
+            roplen:= DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
                         hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, roplen);
-            DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+            roplen:= DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
                         hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy, roplen);
             end else
             if Gear^.Elasticity.QWordValue > 0 then
-            DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+            roplen:= DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
                         hwRound(Gear^.Hedgehog^.Gear^.X) + WorldDx, hwRound(Gear^.Hedgehog^.Gear^.Y) + WorldDy, roplen);
         end;
 
