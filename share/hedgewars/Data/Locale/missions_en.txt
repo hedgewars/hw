@@ -13,6 +13,9 @@ Basic_Training_-_Shotgun.desc="Shoot first, ask questions later!"
 Basic_Training_-_Sniper_Rifle.name=Basic Sniper Rifle Training
 Basic_Training_-_Sniper_Rifle.desc="Boom, headshot!"
 
+Basic_Training_-_Rope.name=Basic Rope Training
+Basic_Training_-_Rope.desc="Get out there and swing!"
+
 User_Mission_-_Dangerous_Ducklings.name=Mission: Dangerous Ducklings
 User_Mission_-_Dangerous_Ducklings.desc="Alright, rookie! Time to put what we learned in Basic Training into practice!"
 
