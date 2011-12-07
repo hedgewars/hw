@@ -199,7 +199,7 @@ begin
                     if Hat <> 'NoHat' then
                         begin
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
-                            LoadHedgehogHat(Gear, 'Reserved/' + Copy(Hat,9,Length(s)-8))
+                            LoadHedgehogHat(Gear, 'Reserved/' + Copy(Hat,9,Length(Hat)-8))
                         else
                             LoadHedgehogHat(Gear, Hat);
                         end

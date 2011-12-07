@@ -551,8 +551,8 @@ case Gear^.Pos of
                     else
                         begin
                         for i:= 0 to GameTicks and $7F do GetRandom(2); // Burn some random numbers
-                        if Gear^.Pos = posCaseUtility then a:= GetUtility
-                        else a:= GetAmmo
+                        if Gear^.Pos = posCaseUtility then a:= GetUtility(HH^.Hedgehog)
+                        else a:= GetAmmo(HH^.Hedgehog)
                         end;
                     AddAmmo(HH^.Hedgehog^, a);
 // Possibly needs to check shared clan ammo game flag once added.
