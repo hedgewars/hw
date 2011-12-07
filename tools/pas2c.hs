@@ -23,7 +23,7 @@ pas2C :: String -> IO ()
 pas2C fn = do
     setCurrentDirectory "../hedgewars/"
     s <- flip execStateT initState $ f fn
-    mapM_ toCFiles (Map.toList s)
+    renderCFiles s
     where
     printLn = liftIO . hPutStrLn stderr
     print = liftIO . hPutStr stderr
@@ -52,6 +52,12 @@ pas2C fn = do
                             printLn "ok"
                             modify (Map.insert fileName a)
                             mapM_ f (usesFiles a)
+
+
+renderCFiles :: Map.Map String PascalUnit -> IO ()
+renderCFiles units = do
+    let u = Map.toList units
+    mapM_ toCFiles u
 
 toCFiles :: (String, PascalUnit) -> IO ()
 toCFiles (_, System _) = return ()
@@ -172,7 +178,7 @@ initExpr2C _ = return $ text "<<expression>>"
 type2C :: TypeDecl -> State RenderState Doc
 type2C UnknownType = return $ text "void"
 type2C (String l) = return $ text $ "string" ++ show l
-type2C (SimpleType i) = id2C True i
+type2C (SimpleType i) = id2C False i
 type2C (PointerTo t) = liftM (<> text "*") $ type2C t
 type2C (RecordType tvs union) = do
     t <- mapM (tvar2C False) tvs
