@@ -12,10 +12,12 @@ import PascalPreprocessor
 import Control.Exception
 import System.IO.Error
 import qualified Data.Map as Map
-
+import Data.List (find)
 
 import PascalParser
 import PascalUnitSyntaxTree
+
+type RenderState = [(String, String)]
 
 pas2C :: String -> IO ()
 pas2C fn = do
@@ -36,7 +38,7 @@ pas2C fn = do
                 $ preprocess (fileName ++ ".pas")
             case fc' of
                 (Left a) -> do
-                    modify (Map.insert fileName System)
+                    modify (Map.insert fileName (System []))
                     printLn "doesn't exist"
                 (Right fc) -> do
                     print "ok, parsing... "
@@ -52,7 +54,7 @@ pas2C fn = do
                             mapM_ f (usesFiles a)
 
 toCFiles :: (String, PascalUnit) -> IO ()
-toCFiles (_, System) = return ()
+toCFiles (_, System _) = return ()
 toCFiles p@(fn, pu) = do
     hPutStrLn stderr $ "Rendering '" ++ fn ++ "'..."
     toCFiles' p
@@ -62,18 +64,15 @@ toCFiles p@(fn, pu) = do
         writeFile (fn ++ ".h") $ "#pragma once\n" ++ (render2C . interface2C $ interface)
         writeFile (fn ++ ".c") $ (render2C . implementation2C) implementation
 
-system :: [(String, String)]
-system = []
-        
-render2C = render . flip evalState system
+render2C = render . flip evalState []
 
 usesFiles :: PascalUnit -> [String]
-usesFiles (Program _ (Implementation uses _) _) = uses2List uses
-usesFiles (Unit _ (Interface uses1 _) (Implementation uses2 _) _ _) = uses2List uses1 ++ uses2List uses2
+usesFiles (Program _ (Implementation uses _) _) = "pas2cSystem" : uses2List uses
+usesFiles (Unit _ (Interface uses1 _) (Implementation uses2 _) _ _) = "pas2cSystem" : uses2List uses1 ++ uses2List uses2
+usesFiles (System {}) = []
 
 
-
-pascal2C :: PascalUnit -> State a Doc
+pascal2C :: PascalUnit -> State RenderState Doc
 pascal2C (Unit _ interface implementation init fin) =
     liftM2 ($+$) (interface2C interface) (implementation2C implementation)
     
@@ -85,26 +84,37 @@ pascal2C (Program _ implementation mainFunction) = do
 
     
     
-interface2C :: Interface -> State a Doc
+interface2C :: Interface -> State RenderState Doc
 interface2C (Interface uses tvars) = liftM2 ($+$) (uses2C uses) (typesAndVars2C True tvars)
 
-implementation2C :: Implementation -> State a Doc
+implementation2C :: Implementation -> State RenderState Doc
 implementation2C (Implementation uses tvars) = liftM2 ($+$) (uses2C uses) (typesAndVars2C True tvars)
 
 
-typesAndVars2C :: Bool -> TypesAndVars -> State a Doc
+typesAndVars2C :: Bool -> TypesAndVars -> State RenderState Doc
 typesAndVars2C b (TypesAndVars ts) = liftM vcat $ mapM (tvar2C b) ts
 
-uses2C :: Uses -> State a Doc
+uses2C :: Uses -> State RenderState Doc
 uses2C uses = return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
 
 uses2List :: Uses -> [String]
 uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
-id2C :: Bool -> Identifier -> State a Doc
-id2C True (Identifier i _) = return $ text i
 
-tvar2C :: Bool -> TypeVarDeclaration -> State a Doc
+id2C :: Bool -> Identifier -> State RenderState Doc
+id2C True (Identifier i _) = do
+    modify (\s -> (map toLower i, i) : s)
+    return $ text i
+id2C False (Identifier i _) = do
+    let i' = map toLower i
+    v <- gets $ find (\(a, _) -> a == i')
+    if isNothing v then 
+        error $ "Not defined: " ++ i' 
+        else 
+        return . text . snd . fromJust $ v
+
+    
+tvar2C :: Bool -> TypeVarDeclaration -> State RenderState Doc
 tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType 
     p <- liftM hcat $ mapM (tvar2C False) params
@@ -145,7 +155,7 @@ tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
 tvar2C f (OperatorDeclaration op _ ret params body) = 
     tvar2C f (FunctionDeclaration (Identifier ("<op " ++ op ++ ">") Unknown) ret params body)
 
-initExpr2C :: InitExpression -> State a Doc
+initExpr2C :: InitExpression -> State RenderState Doc
 initExpr2C (InitBinOp op expr1 expr2) = do
     e1 <- initExpr2C expr1
     e2 <- initExpr2C expr2
@@ -159,7 +169,7 @@ initExpr2C (InitReference i) = id2C False i
 initExpr2C _ = return $ text "<<expression>>"
 
 
-type2C :: TypeDecl -> State a Doc
+type2C :: TypeDecl -> State RenderState Doc
 type2C UnknownType = return $ text "void"
 type2C (String l) = return $ text $ "string" ++ show l
 type2C (SimpleType i) = id2C True i
@@ -173,7 +183,7 @@ type2C (ArrayDecl r t) = return $ text "<<array type>>"
 type2C (Set t) = return $ text "<<set>>"
 type2C (FunctionType returnType params) = return $ text "<<function>>"
 
-phrase2C :: Phrase -> State a Doc
+phrase2C :: Phrase -> State RenderState Doc
 phrase2C (Phrases p) = do
     ps <- mapM phrase2C p
     return $ text "{" $+$ (nest 4 . vcat $ ps) $+$ text "}"
@@ -206,7 +216,7 @@ phrase2C (SwitchCase expr cases mphrase) = do
     return $ 
         text "switch" <> parens e <> text "of" $+$ (nest 4 . vcat) cs
     where
-    case2C :: ([InitExpression], Phrase) -> State a Doc
+    case2C :: ([InitExpression], Phrase) -> State RenderState Doc
     case2C (e, p) = do
         ie <- mapM initExpr2C e
         ph <- phrase2C p
@@ -236,7 +246,7 @@ wrapPhrase p@(Phrases _) = p
 wrapPhrase p = Phrases [p]
 
 
-expr2C :: Expression -> State a Doc
+expr2C :: Expression -> State RenderState Doc
 expr2C (Expression s) = return $ text s
 expr2C (BinOp op expr1 expr2) = do
     e1 <- expr2C expr1
@@ -258,7 +268,7 @@ expr2C (BuiltInFunCall params ref) = do
 expr2C _ = return $ text "<<expression>>"
 
 
-ref2C :: Reference -> State a Doc
+ref2C :: Reference -> State RenderState Doc
 ref2C (ArrayElement exprs ref) = do
     r <- ref2C ref 
     es <- mapM expr2C exprs
@@ -290,7 +300,7 @@ ref2C (TypeCast t' expr) = do
 ref2C (RefExpression expr) = expr2C expr
 
 
-op2C :: String -> State a Doc
+op2C :: String -> State RenderState Doc
 op2C "or" = return $ text "|"
 op2C "and" = return $ text "&"
 op2C "not" = return $ text "!"

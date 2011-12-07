@@ -5,7 +5,7 @@ import Data.Traversable
 data PascalUnit =
     Program Identifier Implementation Phrase
     | Unit Identifier Interface Implementation (Maybe Initialize) (Maybe Finalize)
-    | System
+    | System [TypeVarDeclaration]
     deriving Show
 data Interface = Interface Uses TypesAndVars
     deriving Show
