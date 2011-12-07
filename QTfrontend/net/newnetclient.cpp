@@ -376,12 +376,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if(lst[0] == "ROOMABANDONED") {
         netClientState = InLobby;
+        askRoomsList();
         emit LeftRoom(tr("Room destroyed"));
         return;
     }
 
     if(lst[0] == "KICKED") {
         netClientState = InLobby;
+        askRoomsList();
         emit LeftRoom(tr("You got kicked"));
         return;
     }
@@ -746,6 +748,7 @@ void HWNewNet::partRoom()
 {
     netClientState = InLobby;
     RawSendNet(QString("PART"));
+    askRoomsList();
 }
 
 bool HWNewNet::isInRoom()
