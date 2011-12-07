@@ -576,6 +576,9 @@
 		6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = "../../../Library/SDL_mixer/Xcode-iPhoneOS/SDL_mixer.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_ttf.xcodeproj; path = "../../../Library/SDL_ttf/Xcode-iPhoneOS/SDL_ttf.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Data; path = ../../../trunk/project_files/HedgewarsMobile/Data; sourceTree = "<group>"; };
+		617BC22D1490210E00E1C294 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Locale/Italian.lproj/About.strings; sourceTree = "<group>"; };
+		617BC2391490211500E1C294 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Locale/Italian.lproj/Localizable.strings; sourceTree = "<group>"; };
+		617BC23A1490211F00E1C294 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Locale/Italian.lproj/Scheme.strings; sourceTree = "<group>"; };
 		6183D83C11E2BCE200A88903 /* Default-ipad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-ipad-Landscape.png"; path = "Resources/Icons/Default-ipad-Landscape.png"; sourceTree = "<group>"; };
 		6183D83D11E2BCE200A88903 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Icons/Default.png; sourceTree = "<group>"; };
 		61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageInGameViewController-iPad.xib"; sourceTree = "<group>"; };
@@ -1307,6 +1310,7 @@
 				Polish,
 				Turkish,
 				Danish,
+				Italian,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1727,6 +1731,7 @@
 				61177BAA148A661600686905 /* German */,
 				61177BAC148A671600686905 /* Turkish */,
 				61177BE4148B881C00686905 /* Danish */,
+				617BC22D1490210E00E1C294 /* Italian */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1741,6 +1746,7 @@
 				61177BA7148A658900686905 /* German */,
 				61177BAD148A672000686905 /* Turkish */,
 				61177BF0148B882500686905 /* Danish */,
+				617BC2391490211500E1C294 /* Italian */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1755,6 +1761,7 @@
 				61177BA9148A660C00686905 /* German */,
 				61177BAE148A672C00686905 /* Turkish */,
 				61177BF1148B882F00686905 /* Danish */,
+				617BC23A1490211F00E1C294 /* Italian */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
