@@ -17,7 +17,11 @@ import Data.List (find)
 import PascalParser
 import PascalUnitSyntaxTree
 
-type RenderState = [(String, String)]
+data RenderState = RenderState 
+    {
+        currentScope :: [(String, String)],
+        namespaces :: Map.Map String [(String, String)]
+    }
 
 pas2C :: String -> IO ()
 pas2C fn = do
@@ -57,20 +61,35 @@ pas2C fn = do
 renderCFiles :: Map.Map String PascalUnit -> IO ()
 renderCFiles units = do
     let u = Map.toList units
-    mapM_ toCFiles u
-
-toCFiles :: (String, PascalUnit) -> IO ()
-toCFiles (_, System _) = return ()
-toCFiles p@(fn, pu) = do
+    let ns = Map.map toNamespace units
+    mapM_ (toCFiles ns) u
+    where
+        toNamespace :: PascalUnit -> [(String, String)]
+        toNamespace = concatMap tv2id . extractTVs
+        extractTVs (System tv) = tv
+        extractTVs (Program {}) = []
+        extractTVs (Unit _ (Interface _ (TypesAndVars tv)) _ _ _) = tv
+        tv2id :: TypeVarDeclaration -> [(String, String)]
+        tv2id (TypeDeclaration (Identifier i _) _) = [(map toLower i, i)]
+        tv2id (VarDeclaration _ (ids, _) _) = map (\(Identifier i _) -> (map toLower i, i)) ids
+        tv2id (FunctionDeclaration (Identifier i _) _ _ _) = [(map toLower i, i)]
+        tv2id (OperatorDeclaration i _ _ _ _) = [(map toLower i, i)]
+    
+    
+toCFiles :: Map.Map String [(String, String)] -> (String, PascalUnit) -> IO ()
+toCFiles _ (_, System _) = return ()
+toCFiles ns p@(fn, pu) = do
     hPutStrLn stderr $ "Rendering '" ++ fn ++ "'..."
     toCFiles' p
     where
-    toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C . pascal2C) p
+    toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C (RenderState [] ns) . pascal2C) p
     toCFiles' (fn, (Unit _ interface implementation _ _)) = do
-        writeFile (fn ++ ".h") $ "#pragma once\n" ++ (render2C . interface2C $ interface)
-        writeFile (fn ++ ".c") $ (render2C . implementation2C) implementation
+        let (a, s) = runState (interface2C interface) (RenderState [] ns)
+        writeFile (fn ++ ".h") $ "#pragma once\n" ++ (render a)
+        writeFile (fn ++ ".c") $ (render2C s . implementation2C) implementation
 
-render2C = render . flip evalState []
+    render2C :: RenderState -> State RenderState Doc -> String
+    render2C a = render . flip evalState a
 
 usesFiles :: PascalUnit -> [String]
 usesFiles (Program _ (Implementation uses _) _) = "pas2cSystem" : uses2List uses
@@ -101,7 +120,14 @@ typesAndVars2C :: Bool -> TypesAndVars -> State RenderState Doc
 typesAndVars2C b (TypesAndVars ts) = liftM vcat $ mapM (tvar2C b) ts
 
 uses2C :: Uses -> State RenderState Doc
-uses2C uses = return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
+uses2C uses@(Uses unitIds) = do
+    mapM_ injectNamespace (Identifier "pas2cSystem" undefined : unitIds)
+    return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
+    where
+        injectNamespace (Identifier i _) = do
+        getNS <- gets (flip Map.lookup . namespaces)
+        let f = flip (foldl (\a b -> b:a)) (fromMaybe [] (getNS i))
+        modify (\s -> s{currentScope = f $ currentScope s})
 
 uses2List :: Uses -> [String]
 uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
@@ -109,13 +135,14 @@ uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
 id2C :: Bool -> Identifier -> State RenderState Doc
 id2C True (Identifier i _) = do
-    modify (\s -> (map toLower i, i) : s)
+    modify (\s -> s{currentScope = (map toLower i, i) : currentScope s})
     return $ text i
 id2C False (Identifier i _) = do
     let i' = map toLower i
-    v <- gets $ find (\(a, _) -> a == i')
+    v <- gets $ find (\(a, _) -> a == i') . currentScope
+    --ns <- gets currentScope
     if isNothing v then 
-        error $ "Not defined: " ++ i' 
+        error $ "Not defined: '" ++ i' ++ "'"-- ++ show ns
         else 
         return . text . snd . fromJust $ v
 
@@ -143,9 +170,10 @@ tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) 
     phrase2C' (Phrases p) = liftM vcat $ mapM phrase2C p
     phrase2C' p = phrase2C p
 tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
-tvar2C _ (TypeDeclaration (Identifier i _) t) = do
+tvar2C _ (TypeDeclaration i' t) = do
     tp <- type2C t
-    return $ text "type" <+> text i <+> tp <> text ";"
+    i <- id2C True i'
+    return $ text "type" <+> i <+> tp <> text ";"
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- type2C t
     i <- mapM (id2C True) ids
