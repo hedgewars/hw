@@ -39,8 +39,14 @@ procedure initModule;
 procedure freeModule;
 function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
 function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean ): PGear;
+<<<<<<< local
 function  GetAmmo: TAmmoType;
 function  GetUtility: TAmmoType;
+=======
+function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
+function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
+procedure ResurrectHedgehog(gear: PGear);
+>>>>>>> other
 procedure HideHog(HH: PHedgehog);
 procedure RestoreHog(HH: PHedgehog);
 procedure ProcessGears;
@@ -350,6 +356,8 @@ case step of
                         ChangeToSDClouds;
                         ChangeToSDFlakes;
                         glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99);
+                        Ammoz[amTardis].SkipTurns:= 9999;
+                        Ammoz[amTardis].Probability:= 0;
                         end;
                     AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                     playSound(sndSuddenDeath);
@@ -1104,7 +1112,7 @@ begin
     SpawnFakeCrateAt := FollowGear;
 end;
 
-function GetAmmo: TAmmoType;
+function GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 var t, aTot: LongInt;
     i: TAmmoType;
 begin
@@ -1129,14 +1137,14 @@ if (t > 0) then
 GetAmmo:= i
 end;
 
-function GetUtility: TAmmoType;
+function GetUtility(Hedgehog: PHedgehog): TAmmoType;
 var t, uTot: LongInt;
     i: TAmmoType;
 begin
 
 uTot:= 0;
 for i:= Low(TAmmoType) to High(TAmmoType) do
-    if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+    if ((Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0) and ((Hedgehog^.Team^.HedgehogsNumber > 1) or (Ammoz[i].Ammo.AmmoType <> amSwitch)) then
         inc(uTot, Ammoz[i].Probability);
 
 t:= uTot;
@@ -1147,7 +1155,7 @@ if (t > 0) then
     while t >= 0 do
       begin
       inc(i);
-      if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+      if ((Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0) and ((Hedgehog^.Team^.HedgehogsNumber > 1) or (Ammoz[i].Ammo.AmmoType <> amSwitch)) then
           dec(t, Ammoz[i].Probability)
       end
     end;
