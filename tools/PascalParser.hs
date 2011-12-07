@@ -18,7 +18,7 @@ knownTypes = ["shortstring", "char", "byte"]
 
 pascalUnit = do
     comments
-    u <- choice [program, unit]
+    u <- choice [program, unit, systemUnit]
     comments
     return u
 
@@ -599,4 +599,13 @@ builtInFunction e = do
     exprs <- parens pas $ commaSep1 pas $ e
     spaces
     return (name, exprs)
-        
+
+systemUnit = do
+    string "system;"
+    comments
+    string "type"
+    comments
+    t <- typesDecl
+    string "var"
+    v <- varsDecl True
+    return $ System (t ++ v)
