@@ -64,16 +64,18 @@ renderCFiles units = do
     let ns = Map.map toNamespace units
     mapM_ (toCFiles ns) u
     where
-        toNamespace :: PascalUnit -> [(String, String)]
-        toNamespace = concatMap tv2id . extractTVs
-        extractTVs (System tv) = tv
-        extractTVs (Program {}) = []
-        extractTVs (Unit _ (Interface _ (TypesAndVars tv)) _ _ _) = tv
-        tv2id :: TypeVarDeclaration -> [(String, String)]
-        tv2id (TypeDeclaration (Identifier i _) _) = [(map toLower i, i)]
-        tv2id (VarDeclaration _ (ids, _) _) = map (\(Identifier i _) -> (map toLower i, i)) ids
-        tv2id (FunctionDeclaration (Identifier i _) _ _ _) = [(map toLower i, i)]
-        tv2id (OperatorDeclaration i _ _ _ _) = [(map toLower i, i)]
+    toNamespace :: PascalUnit -> [(String, String)]
+    toNamespace = concatMap tv2id . extractTVs
+    
+    extractTVs (System tv) = tv
+    extractTVs (Program {}) = []
+    extractTVs (Unit _ (Interface _ (TypesAndVars tv)) _ _ _) = tv
+    
+    tv2id :: TypeVarDeclaration -> [(String, String)]
+    tv2id (TypeDeclaration (Identifier i _) _) = [(map toLower i, i)]
+    tv2id (VarDeclaration _ (ids, _) _) = map (\(Identifier i _) -> (map toLower i, i)) ids
+    tv2id (FunctionDeclaration (Identifier i _) _ _ _) = [(map toLower i, i)]
+    tv2id (OperatorDeclaration i _ _ _ _) = [(map toLower i, i)]
     
     
 toCFiles :: Map.Map String [(String, String)] -> (String, PascalUnit) -> IO ()
@@ -124,7 +126,7 @@ uses2C uses@(Uses unitIds) = do
     mapM_ injectNamespace (Identifier "pas2cSystem" undefined : unitIds)
     return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
     where
-        injectNamespace (Identifier i _) = do
+    injectNamespace (Identifier i _) = do
         getNS <- gets (flip Map.lookup . namespaces)
         let f = flip (foldl (\a b -> b:a)) (fromMaybe [] (getNS i))
         modify (\s -> s{currentScope = f $ currentScope s})
@@ -153,6 +155,7 @@ tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     p <- liftM hcat $ mapM (tvar2C False) params
     n <- id2C True name
     return $ t <+> n <> parens p <> text ";"
+    
 tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
     t <- type2C returnType 
     p <- liftM hcat $ mapM (tvar2C False) params
@@ -169,11 +172,13 @@ tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) 
     where
     phrase2C' (Phrases p) = liftM vcat $ mapM phrase2C p
     phrase2C' p = phrase2C p
+    
 tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
 tvar2C _ (TypeDeclaration i' t) = do
     tp <- type2C t
     i <- id2C True i'
     return $ text "type" <+> i <+> tp <> text ";"
+    
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- type2C t
     i <- mapM (id2C True) ids
@@ -186,9 +191,11 @@ tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     where
     initExpr Nothing = return $ empty
     initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
+    
 tvar2C f (OperatorDeclaration op _ ret params body) = 
     tvar2C f (FunctionDeclaration (Identifier ("<op " ++ op ++ ">") Unknown) ret params body)
 
+    
 initExpr2C :: InitExpression -> State RenderState Doc
 initExpr2C (InitBinOp op expr1 expr2) = do
     e1 <- initExpr2C expr1
