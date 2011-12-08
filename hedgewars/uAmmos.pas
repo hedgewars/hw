@@ -428,10 +428,9 @@ begin
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       for i:= 0 to cMaxHHIndex do
-         begin
-         FillAmmoStore(Hedgehogs[i].Ammo, InitialCounts[Hedgehogs[i].AmmoStore]);
-         Hedgehogs[i].CurAmmoType:= amNothing
-         end;
+         Hedgehogs[i].CurAmmoType:= amNothing;
+
+for i:= 0 to Pred(StoreCnt) do FillAmmoStore(StoresList[i], InitialCounts[i]);
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
     if Ammoz[a].SkipTurns >= 10000 then dec(Ammoz[a].SkipTurns,10000)
