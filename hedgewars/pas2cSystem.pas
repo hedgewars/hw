@@ -5,6 +5,11 @@ type
     LongWord = integer;
     Cardinal = integer;
     PtrInt = integer;
+    Word = integer;
+    Integer = integer;
+    Byte = integer;
+    SmallInt = integer;
+    ShortInt = integer;
 
     pointer = pointer;
     PChar = pointer;
@@ -21,7 +26,16 @@ type
     ansistring = string;
 
     char = char;
+    
+    PByte = ^Byte;
+    PLongInt = ^LongInt;
+    PLongWord = ^LongWord;
+    PInteger = ^Integer;
 var 
     false, true: boolean;
-    write, writeln, read, readln: procedure;
-    strlen : function : integer;
+    write, writeLn, read, readLn, inc, dec: procedure;
+    StrLen, ord, Succ, Pred : function : integer;
+    Low, High : function : integer;
+    Now : function : integer;
+    SysUtils.StrPas, FormatDateTime : function : shortstring;
+    exit : procedure;

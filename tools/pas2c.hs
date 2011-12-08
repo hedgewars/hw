@@ -72,10 +72,12 @@ renderCFiles units = do
     extractTVs (Unit _ (Interface _ (TypesAndVars tv)) _ _ _) = tv
     
     tv2id :: TypeVarDeclaration -> [(String, String)]
+    tv2id (TypeDeclaration i (Sequence ids)) = map (\(Identifier i _) -> fi i) $ i : ids
     tv2id (TypeDeclaration (Identifier i _) _) = [(map toLower i, i)]
-    tv2id (VarDeclaration _ (ids, _) _) = map (\(Identifier i _) -> (map toLower i, i)) ids
-    tv2id (FunctionDeclaration (Identifier i _) _ _ _) = [(map toLower i, i)]
-    tv2id (OperatorDeclaration i _ _ _ _) = [(map toLower i, i)]
+    tv2id (VarDeclaration _ (ids, _) _) = map (\(Identifier i _) -> fi i) ids
+    tv2id (FunctionDeclaration (Identifier i _) _ _ _) = [fi i]
+    tv2id (OperatorDeclaration i _ _ _ _) = [fi i]
+    fi i = (map toLower i, i)
     
     
 toCFiles :: Map.Map String [(String, String)] -> (String, PascalUnit) -> IO ()
@@ -214,12 +216,15 @@ type2C :: TypeDecl -> State RenderState Doc
 type2C UnknownType = return $ text "void"
 type2C (String l) = return $ text $ "string" ++ show l
 type2C (SimpleType i) = id2C False i
+type2C (PointerTo (SimpleType i)) = liftM (<> text "*") $ id2C True i
 type2C (PointerTo t) = liftM (<> text "*") $ type2C t
 type2C (RecordType tvs union) = do
     t <- mapM (tvar2C False) tvs
     return $ text "{" $+$ (nest 4 . vcat $ t) $+$ text "}"
 type2C (RangeType r) = return $ text "<<range type>>"
-type2C (Sequence ids) = return $ text "<<sequence type>>"
+type2C (Sequence ids) = do
+    mapM_ (id2C True) ids
+    return $ text "<<sequence type>>"
 type2C (ArrayDecl r t) = return $ text "<<array type>>"
 type2C (Set t) = return $ text "<<set>>"
 type2C (FunctionType returnType params) = return $ text "<<function>>"

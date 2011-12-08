@@ -26,7 +26,7 @@ pascalLanguageDef
             , "procedure", "function", "with", "for", "to"
             , "downto", "div", "mod", "record", "set", "nil"
             , "cdecl", "external", "if", "then", "else"
-            ] ++ builtin
+            ] -- ++ builtin
     , reservedOpNames= [] 
     , caseSensitive  = False   
     }
