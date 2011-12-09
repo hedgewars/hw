@@ -487,7 +487,10 @@ begin
         exit;
 
     if Mus <> nil then
+        begin
         Mix_FreeMusic(Mus);
+        Mus:= nil;
+        end
 end;
 
 procedure chVoicepack(var s: shortstring);
