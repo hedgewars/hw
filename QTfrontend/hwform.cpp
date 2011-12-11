@@ -201,8 +201,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageOptions, SIGNAL(newTeamRequested()), this, SLOT(NewTeam()));
     connect(ui.pageOptions, SIGNAL(editTeamRequested(const QString&)), this, SLOT(EditTeam(const QString&)));
     connect(ui.pageOptions, SIGNAL(deleteTeamRequested(const QString&)), this, SLOT(DeleteTeam(const QString&)));
-    connect(ui.pageOptions->btnSave, SIGNAL(clicked()), config, SLOT(SaveOptions()));
-    connect(ui.pageOptions->btnSave, SIGNAL(clicked()), this, SLOT(GoBack()));
+    connect(ui.pageOptions, SIGNAL(goBack()), config, SLOT(SaveOptions()));
     connect(ui.pageOptions->BtnAssociateFiles, SIGNAL(clicked()), this, SLOT(AssociateFiles()));
 
     connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));

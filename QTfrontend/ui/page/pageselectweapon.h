@@ -30,7 +30,6 @@ class PageSelectWeapon : public AbstractPage
 public:
     PageSelectWeapon(QWidget* parent = 0);
 
-    QPushButton *btnSave;
     QPushButton *BtnDefault;
     QPushButton *BtnDelete;
     QPushButton *BtnNew;

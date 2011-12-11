@@ -63,7 +63,6 @@ public:
 #endif
 
     FPSEdit *fpsedit;
-    QPushButton *btnSave;
     QLabel *labelNN;
     QLabel *labelNetPassword;
     QSpinBox * volumeBox;

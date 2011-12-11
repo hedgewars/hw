@@ -206,18 +206,12 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
 
 QLayout * PageEditTeam::footerLayoutDefinition()
 {
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
-
-    btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);;
-    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
-    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
-
-    return bottomLayout;
+    return NULL;
 }
 
 void PageEditTeam::connectSignals()
 {
-    connect(btnSave, SIGNAL(clicked()), this, SLOT(saveTeam()));
+    connect(this, SIGNAL(goBack()), this, SLOT(saveTeam()));
 
     signalMapper1 = new QSignalMapper(this);
     signalMapper2 = new QSignalMapper(this);
