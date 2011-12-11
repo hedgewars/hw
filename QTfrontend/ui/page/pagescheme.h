@@ -34,7 +34,6 @@ public:
     QPushButton * BtnCopy;
     QPushButton * BtnNew;
     QPushButton * BtnDelete;
-    QPushButton * btnSave;
     QComboBox * selectScheme;
 
     void setModel(QAbstractItemModel * model);

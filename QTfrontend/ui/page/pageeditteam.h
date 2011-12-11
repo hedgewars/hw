@@ -78,9 +78,6 @@ private:
     QPushButton * btnRandomTeam;
     QPushButton * btnTestSound;
 
-    // footer
-    QPushButton * btnSave;
-
 private slots:
     void saveTeam();
     void setRandomNames();

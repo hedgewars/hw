@@ -408,11 +408,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
 QLayout * PageOptions::footerLayoutDefinition()
 {
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
-    btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);
-    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
-    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
-    return bottomLayout;
+    return NULL;
 }
 
 void PageOptions::connectSignals()
