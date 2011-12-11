@@ -63,8 +63,10 @@ SDLInteraction::~SDLInteraction()
     stopMusic();
     if (m_audioInitialized)
     {
-        if (m_music != NULL)
+        if (m_music != NULL) {
+            Mix_HaltMusic();
             Mix_FreeMusic(m_music);
+        }
         Mix_CloseAudio();
     }
     SDL_Quit();
