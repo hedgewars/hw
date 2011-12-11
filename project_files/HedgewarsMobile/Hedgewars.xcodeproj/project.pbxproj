@@ -598,6 +598,9 @@
 		6199E836124647DE00DADF8C /* SupportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportViewController.h; sourceTree = "<group>"; };
 		6199E837124647DE00DADF8C /* SupportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SupportViewController.m; sourceTree = "<group>"; };
 		6199E86C12464A8E00DADF8C /* surprise.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = surprise.png; path = Resources/surprise.png; sourceTree = "<group>"; };
+		619BCEC41495615700C1C409 /* Bulgarian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Bulgarian; path = Locale/Bulgarian.lproj/About.strings; sourceTree = "<group>"; };
+		619BCED01495615F00C1C409 /* Bulgarian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Bulgarian; path = Locale/Bulgarian.lproj/Localizable.strings; sourceTree = "<group>"; };
+		619BCED11495616700C1C409 /* Bulgarian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Bulgarian; path = Locale/Bulgarian.lproj/Scheme.strings; sourceTree = "<group>"; };
 		619C5AF3124F7E3100D041AE /* LuaPas.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = LuaPas.pas; path = ../../hedgewars/LuaPas.pas; sourceTree = SOURCE_ROOT; };
 		619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPreviewButtonView.h; path = Classes/MapPreviewButtonView.h; sourceTree = "<group>"; };
 		619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapPreviewButtonView.m; path = Classes/MapPreviewButtonView.m; sourceTree = "<group>"; };
@@ -1311,6 +1314,7 @@
 				Turkish,
 				Danish,
 				Italian,
+				Bulgarian,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1732,6 +1736,7 @@
 				61177BAC148A671600686905 /* Turkish */,
 				61177BE4148B881C00686905 /* Danish */,
 				617BC22D1490210E00E1C294 /* Italian */,
+				619BCEC41495615700C1C409 /* Bulgarian */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1747,6 +1752,7 @@
 				61177BAD148A672000686905 /* Turkish */,
 				61177BF0148B882500686905 /* Danish */,
 				617BC2391490211500E1C294 /* Italian */,
+				619BCED01495615F00C1C409 /* Bulgarian */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1762,6 +1768,7 @@
 				61177BAE148A672C00686905 /* Turkish */,
 				61177BF1148B882F00686905 /* Danish */,
 				617BC23A1490211F00E1C294 /* Italian */,
+				619BCED11495616700C1C409 /* Bulgarian */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
