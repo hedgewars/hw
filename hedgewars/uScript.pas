@@ -557,6 +557,39 @@ begin
     lc_setgearmessage:= 0
 end;
 
+function lc_getgearpos(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetGearPos!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, gear^.Pos)
+        else
+            lua_pushnil(L);
+        end;
+    lc_getgearpos:= 1
+end;
+
+function lc_setgearpos(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        LuaError('Lua: Wrong number of parameters passed to SetGearPos!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            gear^.Pos:= lua_tointeger(L, 2);
+        end;
+    lc_setgearpos:= 0
+end;
+
 function lc_gethoglevel(L : Plua_State): LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1635,6 +1668,7 @@ cCaseFactor      := ScriptGetInteger('CaseFreq');
 cHealthCaseProb  := ScriptGetInteger('HealthCaseProb');
 cHealthCaseAmount:= ScriptGetInteger('HealthCaseAmount');
 cDamagePercent   := ScriptGetInteger('DamagePercent');
+cRopePercent     := ScriptGetInteger('RopePercent');
 cLandMines       := ScriptGetInteger('MinesNum');
 cMinesTime       := ScriptGetInteger('MinesTime');
 cMineDudPercent  := ScriptGetInteger('MineDudPercent');
@@ -2032,6 +2066,8 @@ lua_register(luaState, 'GetGearElasticity', @lc_getgearelasticity);
 lua_register(luaState, 'GetGearRadius', @lc_getgearradius);
 lua_register(luaState, 'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, 'SetGearMessage', @lc_setgearmessage);
+lua_register(luaState, 'GetGearPos', @lc_getgearpos);
+lua_register(luaState, 'SetGearPos', @lc_setgearpos);
 lua_register(luaState, 'GetRandom', @lc_getrandom);
 lua_register(luaState, 'SetWind', @lc_setwind);
 lua_register(luaState, 'GetDataPath', @lc_getdatapath);
