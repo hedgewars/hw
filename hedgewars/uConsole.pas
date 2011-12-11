@@ -26,7 +26,7 @@ procedure freeModule;
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 function  GetLastConsoleLine: shortstring;
-function ShortStringAsPChar(s: shortstring): PChar;
+function  ShortStringAsPChar(s: shortstring): PChar;
 
 implementation
 uses Types, uVariables, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};

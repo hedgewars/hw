@@ -30,7 +30,7 @@ function  Format(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 implementation
-uses uRandom, uUtils, uVariables, uDebug;
+uses uRandom, uUtils, uVariables, uDebug, uConsole;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
@@ -85,7 +85,8 @@ if loaded then
            5: if (b >=0) and (b <= ord(High(TGoalStrId))) then trgoal[TGoalStrId(b)]:= s;
            end;
        end;
-   Close(f)
+   Close(f);
+   WriteLnToConsole('Locale loaded "' + FileName + '"');
    end;
 {$I+}
 end;
