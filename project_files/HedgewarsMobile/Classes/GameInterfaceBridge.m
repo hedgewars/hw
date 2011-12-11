@@ -120,7 +120,7 @@ static UIViewController *callingController;
     NSInteger enginePort = self.proto.enginePort;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",enginePort];
-    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
+    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale preferredLanguages] objectAtIndex:0]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
     if (IS_DUALHEAD()) {
@@ -163,7 +163,7 @@ static UIViewController *callingController;
     gameArgs[ 1] = [horizontalSize UTF8String];                                                 //cScreenWidth
     gameArgs[ 2] = [verticalSize UTF8String];                                                   //cScreenHeight
     gameArgs[ 3] = [[NSString stringWithFormat:@"%d",tmpQuality] UTF8String];                   //quality
-    gameArgs[ 4] = "en.txt";//[localeString UTF8String];                                        //cLocaleFName
+    gameArgs[ 4] = [localeString UTF8String];                                                   //cLocaleFName
     gameArgs[ 5] = [username UTF8String];                                                       //UserNick
     gameArgs[ 6] = [[[settings objectForKey:@"sound"] stringValue] UTF8String];                 //isSoundEnabled
     gameArgs[ 7] = [[[settings objectForKey:@"music"] stringValue] UTF8String];                 //isMusicEnabled
