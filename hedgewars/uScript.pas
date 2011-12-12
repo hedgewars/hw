@@ -1401,6 +1401,22 @@ begin
     lc_setammo:= 0
 end;
 
+function lc_setammostore(L : Plua_State) : LongInt; Cdecl;
+var np: LongInt;
+begin
+    np:= lua_gettop(L);
+    if (np <> 4) then
+        LuaError('Lua: Wrong number of parameters passed to SetAmmoStore!')
+    else
+        begin
+        ScriptAmmoLoadout:= lua_tostring(L, 1);
+        ScriptAmmoProbability:= lua_tostring(L, 2);
+        ScriptAmmoDelay:= lua_tostring(L, 3);
+        ScriptAmmoReinforcement:= lua_tostring(L, 4);
+        end;
+    lc_setammostore:= 0
+end;
+
 function lc_getrandom(L : Plua_State) : LongInt; Cdecl;
 var m : LongInt;
 begin
@@ -2028,6 +2044,7 @@ lua_register(luaState, 'ShowMission', @lc_showmission);
 lua_register(luaState, 'HideMission', @lc_hidemission);
 lua_register(luaState, 'AddCaption', @lc_addcaption);
 lua_register(luaState, 'SetAmmo', @lc_setammo);
+lua_register(luaState, 'SetAmmoStore', @lc_setammostore);
 lua_register(luaState, 'PlaySound', @lc_playsound);
 lua_register(luaState, 'AddTeam', @lc_addteam);
 lua_register(luaState, 'AddHog', @lc_addhog);
