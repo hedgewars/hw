@@ -729,16 +729,8 @@ while Gear <> nil do
                             if ((Mask and EXPLDoNotTouchAny) = 0) and (((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog)) then
                                 begin
                                 DeleteCI(Gear);
-                                if Gear^.Kind <> gtHedgehog then
-                                    begin
-                                    Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - fX)/Gear^.Density;
-                                    Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - fY)/Gear^.Density;
-                                    end
-                                else
-                                    begin
-                                    Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - fX);
-                                    Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - fY);
-                                    end;
+                                Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - fX)/(Gear^.Density/_3);
+                                Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - fY)/(Gear^.Density/_3);
 
                                 Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
                                 if not Gear^.Invulnerable then
@@ -909,8 +901,8 @@ while i > 0 do
                         end
                     else
                         begin
-                        Gear^.dX:= Ammo^.dX * Power * _0_01;
-                        Gear^.dY:= Ammo^.dY * Power * _0_01
+                        Gear^.dX:= (Ammo^.dX * Power * _0_01)/(Gear^.Density/_3);
+                        Gear^.dY:= (Ammo^.dY * Power * _0_01)/(Gear^.Density/_3);
                         end;
 
                     Gear^.Active:= true;
