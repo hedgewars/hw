@@ -3169,9 +3169,10 @@ begin
         end
     end;
 
-    t := CheckGearsCollision(Gear);
+    if GameTicks > Gear^.FlightTime then t := CheckGearsCollision(Gear)
+    else t := nil;
     //fixes drill not exploding when touching HH bug
-    if (Gear^.Timer = 0) or (t^.Count <> 0) or 
+    if (Gear^.Timer = 0) or ((t <> nil) and (t^.Count <> 0)) or 
        ( ((Gear^.State and gsttmpFlag) = 0) and
          (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) = 0)
          and (not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))))
@@ -3222,16 +3223,17 @@ begin
         Gear^.dX := oldDx;
         Gear^.dY := oldDy;
 
-        t := CheckGearsCollision(Gear);
-        if (t^.Count = 0) then
-        begin
+        if GameTicks > Gear^.FlightTime then t := CheckGearsCollision(Gear)
+        else t := nil;
+        if (t = nil) or (t^.Count = 0) then
+            begin
             //hit the ground not the HH
             t2 := _0_5 / Distance(Gear^.dX, Gear^.dY);
             Gear^.dX := Gear^.dX * t2;
             Gear^.dY := Gear^.dY * t2;
-        end
-        else
-        begin
+            end
+        else if (t <> nil) then
+            begin
             //explode right on contact with HH
             if (Gear^.State and gsttmpFlag) <> 0 then
                 doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound)
@@ -3239,7 +3241,7 @@ begin
                 doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
             DeleteGear(Gear);
             exit;
-        end;
+            end;
 
         Gear^.SoundChannel := LoopSound(sndDrillRocket);
         Gear^.doStep := @doStepDrillDrilling;
