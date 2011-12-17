@@ -367,7 +367,9 @@ with Gear^,
                   amResurrector, amStructure,
                        amTardis, amPiano: CurAmmoGear:= newGear;
                   end;
-              if (CurAmmoType = amMine) or (CurAmmoType = amSMine) and (GameFlags and gfInfAttack <> 0) then newGear^.FlightTime:= GameTicks + 1000;
+              if ((CurAmmoType = amMine) or (CurAmmoType = amSMine)) and (GameFlags and gfInfAttack <> 0) then
+                 newGear^.FlightTime:= GameTicks + 1000
+              else if CurAmmoType = amDrill then newGear^.FlightTime:= GameTicks + 250;
         if Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then
             begin
             newGear^.Target.X:= TargetPoint.X;
