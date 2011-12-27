@@ -85,24 +85,24 @@ p:= Image^.pixels;
 for y:= 0 to Pred(Image^.h) do
     begin
     for x:= 0 to Pred(Width) do
-        begin
-            if (cReducedQuality and rqBlurryLand) = 0 then
+        if (p^[x] and AMask) <> 0 then
             begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                begin
                 if (LandPixels[cpY + y, cpX + x] = 0) or 
 		   (((p^[x] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
                     LandPixels[cpY + y, cpX + x]:= p^[x];
-            end
+                end
             else
                 if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then 
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
-
-        if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then
-            begin
-            Land[cpY + y, cpX + x]:= lfObject;
-            Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or extraFlags
+            if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then
+                begin
+                Land[cpY + y, cpX + x]:= lfObject;
+                Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or extraFlags
+                end;
             end;
-        end;
     p:= @(p^[Image^.pitch shr 2])
     end;
 
