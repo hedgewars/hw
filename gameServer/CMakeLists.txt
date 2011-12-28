@@ -24,6 +24,7 @@ set(hwserver_sources
 set(hwserv_main ${hedgewars_SOURCE_DIR}/gameServer/hedgewars-server.hs)
 
 set(ghc_flags
+    -O2
 	--make ${hwserv_main}
 	-i${hedgewars_SOURCE_DIR}/gameServer
 	-o ${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}
