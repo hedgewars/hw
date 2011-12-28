@@ -163,7 +163,7 @@ if(Optz)
 else(Optz)
 #	set(pascal_compiler_flags_cmn "-O-" "-g" "-gh" "-gl" "-dDEBUGFILE" ${pascal_compiler_flags_cmn})
 	set(pascal_compiler_flags_cmn "-O-" "-g" "-gl" "-dDEBUGFILE" ${pascal_compiler_flags_cmn})
-	set(haskell_compiler_flags_cmn "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind")
+	set(haskell_compiler_flags_cmn "-O2" "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind")
 endif(Optz)
 
 
