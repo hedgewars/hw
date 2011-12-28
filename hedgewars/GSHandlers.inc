@@ -2620,13 +2620,13 @@ begin
     if ((Gear^.Message and (not gmSwitch)) <> 0) or (TurnTimeLeft = 0) then
     begin
         HHGear := Gear^.Hedgehog^.Gear;
-        Msg := Gear^.Message and (not gmSwitch);
+        //Msg := Gear^.Message and (not gmSwitch);
         DeleteGear(Gear);
         ApplyAmmoChanges(HHGear^.Hedgehog^);
 
         HHGear := CurrentHedgehog^.Gear;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
-        HHGear^.Message := Msg;
+        //HHGear^.Message := Msg;
         exit
     end;
 
