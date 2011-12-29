@@ -81,6 +81,9 @@ void HWNewNet::CreateRoom(const QString & room)
 
     RawSendNet(QString("CREATE_ROOM%1%2").arg(delimeter).arg(room));
     isChief = true;
+
+    //set our ready status to be true
+    RawSendNet(QString("TOGGLE_READY"));
 }
 
 void HWNewNet::JoinRoom(const QString & room)
@@ -167,7 +170,7 @@ void HWNewNet::ClientRead()
 }
 
 void HWNewNet::OnConnect()
-{
+{   
     netClientState = Connected;
 }
 
@@ -341,8 +344,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 {
                     for(int i = 2; i < lst.size(); ++i)
                     {
-                        if (lst[i] == mynick)
+                        if (lst[i] == mynick) {
                             emit setMyReadyStatus(setFlag);
+                        }
+
                         emit setReadyStatus(lst[i], setFlag);
                     }
                 }

@@ -67,13 +67,13 @@ QLayout * PageNetGame::footerLayoutDefinition()
     leRoomName->setMinimumWidth(200);
     leRoomName->setMaximumWidth(400);
 
+    //Button to signify whether the player is ready to start playing
     BtnGo = new QPushButton(this);
     BtnGo->setToolTip(QPushButton::tr("Ready"));
     BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
     BtnGo->setIconSize(QSize(25, 34));
     BtnGo->setMinimumWidth(50);
     BtnGo->setMinimumHeight(50);
-
 
     bottomLayout->addWidget(leRoomName);
     BtnUpdate = addButton(QAction::tr("Update"), bottomLayout, 1);
@@ -172,6 +172,10 @@ void PageNetGame::setMasterMode(bool isMaster)
     BtnStart->setVisible(isMaster);
     BtnUpdate->setVisible(isMaster);
     leRoomName->setVisible(isMaster);
+
+    //disable the `toggle ready` button, because the start button does the same
+    //job when the user is chief
+    BtnGo->setVisible(!isMaster);
 }
 
 void PageNetGame::setUser(const QString & nickname)
