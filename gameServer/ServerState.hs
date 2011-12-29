@@ -6,11 +6,13 @@ module ServerState
     client's,
     allClientsS,
     roomClientsS,
+    sameProtoClientsS,
     io
     ) where
 
 import Control.Monad.State.Strict
-import Data.Set as Set
+import Data.Set as Set(Set)
+import Data.Word
 ----------------------
 import RoomsAndClients
 import CoreTypes
@@ -43,5 +45,10 @@ roomClientsS ri = do
     rnc <- gets roomsClients
     io $ roomClientsM rnc ri
 
+sameProtoClientsS :: Word16 -> StateT ServerState IO [ClientInfo]
+sameProtoClientsS p = liftM f allClientsS
+    where
+        f = filter (\c -> clientProto c == p)
+    
 io :: IO a -> StateT ServerState IO a
 io = liftIO

@@ -17,6 +17,7 @@ import qualified Text.Show.ByteString as BS
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.UTF8 as UTF8
 import qualified Data.ByteString as BW
+import Data.Maybe
 -------------------------------------------------
 import CoreTypes
 
@@ -121,3 +122,16 @@ caseInsensitiveCompare :: B.ByteString -> B.ByteString -> Bool
 caseInsensitiveCompare a b = f a == f b
     where
         f = map Char.toUpper . UTF8.toString
+
+roomInfo n r 
+    | isRestrictedJoins r = []
+    | otherwise = [
+        showB $ isJust $ gameInfo r,
+        name r,
+        showB $ playersIn r,
+        showB $ length $ teams r,
+        n,
+        Map.findWithDefault "+rnd+" "MAP" (mapParams r),
+        head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
+        head (Map.findWithDefault ["Default"] "AMMO" (params r))
+        ]
