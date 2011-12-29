@@ -243,10 +243,16 @@ processAction ChangeMaster = do
         AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
         ]
 
+    proto <- client's clientProto
+    newRoom <- io $ room'sM rnc id ri
+    chans <- liftM (map sendChan) $! sameProtoClientsS proto
+    processAction $ AnswerClients chans ("ROOM" : "ADD" : roomInfo (nick newMaster) newRoom)
+
 processAction (AddRoom roomName roomPassword) = do
     Just clId <- gets clientIndex
     rnc <- gets roomsClients
-    proto <- io $ client'sM rnc clientProto clId
+    proto <- client's clientProto
+    n <- client's nick
 
     let rm = newRoom{
             masterID = clId,
@@ -259,10 +265,10 @@ processAction (AddRoom roomName roomPassword) = do
 
     processAction $ MoveToRoom rId
 
-    chans <- liftM (map sendChan) $! roomClientsS lobbyId
+    chans <- liftM (map sendChan) $! sameProtoClientsS proto
 
     mapM_ processAction [
-        AnswerClients chans ["ROOM", "ADD", roomName]
+        AnswerClients chans ("ROOM" : "ADD" : roomInfo n rm)
         , ModifyClient (\cl -> cl{isMaster = True})
         ]
 
@@ -273,10 +279,11 @@ processAction RemoveRoom = do
     ri <- io $ clientRoomM rnc clId
     roomName <- io $ room'sM rnc name ri
     others <- othersChans
-    lobbyChans <- liftM (map sendChan) $! roomClientsS lobbyId
+    proto <- client's clientProto
+    chans <- liftM (map sendChan) $! sameProtoClientsS proto
 
     mapM_ processAction [
-            AnswerClients lobbyChans ["ROOM", "DEL", roomName],
+            AnswerClients chans ["ROOM", "DEL", roomName],
             AnswerClients others ["ROOMABANDONED", roomName]
         ]
 

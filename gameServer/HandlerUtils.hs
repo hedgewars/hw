@@ -48,6 +48,12 @@ thisClientChans = do
     (ci, rnc) <- ask
     return [sendChan (rnc `client` ci)]
 
+sameProtoChans :: Reader (ClientIndex, IRnC) [ClientChan]
+sameProtoChans = do
+    (ci, rnc) <- ask
+    let p = clientProto (rnc `client` ci)
+    return . map sendChan . filter (\c -> clientProto c == p) . map (client rnc) $ allClients rnc
+
 answerClient :: [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
 answerClient msg = liftM ((: []) . flip AnswerClients msg) thisClientChans
 

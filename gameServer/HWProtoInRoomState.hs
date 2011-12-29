@@ -252,6 +252,8 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
 handleCmd_inRoom ["ROOM_NAME", newName] = do
     cl <- thisClient
     rs <- allRoomInfos
+    rm <- thisRoom
+    chans <- sameProtoChans
     
     return $
         if not $ isMaster cl then
@@ -260,7 +262,10 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
         if isJust $ find (\r -> newName == name r) rs then
             [Warning "Room with such name already exists"]
         else
-            [ModifyRoom (\r -> r{name = newName})]
+            [ModifyRoom roomUpdate,
+            AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (nick cl) (roomUpdate rm))]
+    where
+        roomUpdate r = r{name = newName}
 
 
 handleCmd_inRoom ["KICK", kickNick] = do

@@ -24,6 +24,7 @@ answerAllTeams cl = concatMap toAnswer
             AnswerClients [clChan] ["TEAM_COLOR", teamname team, teamcolor team],
             AnswerClients [clChan] ["HH_NUM", teamname team, showB $ hhnum team]]
 
+
 handleCmd_lobby :: CmdHandler
 
 
@@ -31,19 +32,8 @@ handleCmd_lobby ["LIST"] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
     rooms <- allRoomInfos
-    let roomsInfoList = concatMap (roomInfo irnc) . filter (\r -> (roomProto r == clientProto cl) && not (isRestrictedJoins r))
+    let roomsInfoList = concatMap (\r -> roomInfo (nick $ irnc `client` masterID r) r) . filter (\r -> (roomProto r == clientProto cl))
     return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
-    where
-        roomInfo irnc r = [
-                showB $ isJust $ gameInfo r,
-                name r,
-                showB $ playersIn r,
-                showB $ length $ teams r,
-                nick $ irnc `client` masterID r,
-                Map.findWithDefault "+rnd+" "MAP" (mapParams r),
-                head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
-                head (Map.findWithDefault ["Default"] "AMMO" (params r))
-                ]
 
 
 handleCmd_lobby ["CHAT", msg] = do
