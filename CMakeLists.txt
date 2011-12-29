@@ -79,12 +79,12 @@ if(APPLE)
 		set(minimum_macosx_version ${current_macosx_version})
 	endif()
 
-	#who uses them anyway?
+	#lower systems don't have enough processing power anyways
 	if (minimum_macosx_version LESS "10.4")
 		message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
 	endif()
 
-	#this variable needs to be set for frapascal universal binary
+	#this variable needs to be set for freepascal universal binary
 	if(NOT CMAKE_OSX_ARCHITECTURES)
 		if(current_macosx_version LESS "10.6")
 			if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
@@ -148,22 +148,22 @@ endif()
 
 #set default flags values for all the project
 set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
-set(CMAKE_C_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
+set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
 set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")
 set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
 set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_compiler_flags_cmn})
+set(haskell_compiler_flags_cmn "-O2" ${haskell_compiler_flags_cmn})
 
 if(Optz)
 #	set(pascal_compiler_flags_cmn "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
-	set(pascal_compiler_flags_cmn "-O2" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
-	set(haskell_compiler_flags_cmn "-O2" "-w" "-fno-warn-unused-do-bind")
+	set(pascal_compiler_flags_cmn "-Os" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
+	set(haskell_compiler_flags_cmn "-w" "-fno-warn-unused-do-bind" ${haskell_compiler_flags_cmn})
 else(Optz)
-#	set(pascal_compiler_flags_cmn "-O-" "-g" "-gh" "-gl" "-dDEBUGFILE" ${pascal_compiler_flags_cmn})
-	set(pascal_compiler_flags_cmn "-O-" "-g" "-gl" "-dDEBUGFILE" ${pascal_compiler_flags_cmn})
-	set(haskell_compiler_flags_cmn "-O2" "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind")
+	set(pascal_compiler_flags_cmn "-O-" "-g" "-gl" "-gv" "-dDEBUGFILE" ${pascal_compiler_flags_cmn})
+	set(haskell_compiler_flags_cmn "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_compiler_flags_cmn})
 endif(Optz)
 
 
