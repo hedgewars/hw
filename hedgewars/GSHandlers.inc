@@ -133,90 +133,6 @@ ScriptCall('onHogRestore', HH^.Gear^.Uid)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepDrowningGear(Gear: PGear);
-forward;
-
-function CheckGearDrowning(Gear: PGear): boolean;
-var 
-    skipSpeed, skipAngle, skipDecay: hwFloat;
-    i, maxDrops, X, Y: LongInt;
-    vdX, vdY: real;
-    particle: PVisualGear;
-    isSubmersible: boolean;
-begin
-    isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
-    // probably needs tweaking. might need to be in a case statement based upon gear type
-    Y:= hwRound(Gear^.Y);
-    if cWaterLine < Y + Gear^.Radius then
-        begin
-        skipSpeed := _0_25;
-        skipAngle := _1_9;
-        skipDecay := _0_87;
-        X:= hwRound(Gear^.X);
-        vdX:= hwFloat2Float(Gear^.dX);
-        vdY:= hwFloat2Float(Gear^.dY);
-        // this could perhaps be a tiny bit higher.
-        if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) and
-           (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
-            begin
-            Gear^.dY.isNegative := true;
-            Gear^.dY := Gear^.dY * skipDecay;
-            Gear^.dX := Gear^.dX * skipDecay;
-            CheckGearDrowning := false;
-            PlaySound(sndSkip)
-            end
-        else
-            begin
-            if not isSubmersible then
-                begin
-                CheckGearDrowning := true;
-                Gear^.State := gstDrowning;
-                Gear^.RenderTimer := false;
-                if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and 
-                   (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
-                    if Gear^.Kind = gtHedgehog then
-                        begin
-                        if Gear^.Hedgehog^.Effects[heResurrectable] then
-                            ResurrectHedgehog(Gear)
-                        else
-                            begin
-                            Gear^.doStep := @doStepDrowningGear;
-                            Gear^.State := Gear^.State and (not gstHHDriven);
-                            AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
-                            end
-                        end
-                    else Gear^.doStep := @doStepDrowningGear;
-                    if Gear^.Kind = gtFlake then exit // skip splashes 
-                end;
-            if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
-               (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
-                // don't play splash if they are already way past the surface
-                PlaySound(sndSplash)
-            end;
-
-        if ((cReducedQuality and rqPlainSplash) = 0) and 
-           (((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
-             (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01)))) then
-            begin
-            AddVisualGear(X, cWaterLine, vgtSplash);
-
-            maxDrops := (Gear^.Radius div 2) + round(vdX * Gear^.Radius * 2) + round(vdY * Gear^.Radius * 2);
-            for i:= max(maxDrops div 3, min(32, Random(maxDrops))) downto 0 do
-                begin
-                particle := AddVisualGear(X - 3 + Random(6), cWaterLine, vgtDroplet);
-                if particle <> nil then
-                    begin
-                    particle^.dX := particle^.dX - vdX / 10;
-                    particle^.dY := particle^.dY - vdY / 5;
-                    end
-                end
-            end;
-        if isSubmersible and (CurAmmoGear^.Pos = 0) then CurAmmoGear^.Pos := 1000
-        end
-    else
-        CheckGearDrowning := false;
-end;
-
 procedure CheckCollision(Gear: PGear); inline;
 begin
     if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) or (TestCollisionYwithGear(Gear, hwSign(Gear^.dY)) <> 0) then
@@ -232,52 +148,9 @@ begin
     else Gear^.State := Gear^.State and (not gstCollision)
 end;
 
-procedure CheckHHDamage(Gear: PGear);
-var 
-    dmg: Longword;
-    i: LongInt;
-    particle: PVisualGear;
-begin
-    if _0_4 < Gear^.dY then
-        begin
-        dmg := ModifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70), Gear);
-        PlaySound(sndBump);
-        if dmg < 1 then exit;
-
-        for i:= min(12, (3 + dmg div 10)) downto 0 do
-            begin
-            particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
-            if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480);
-            end;
-
-        if (Gear^.Invulnerable) then exit;
-
-        //if _0_6 < Gear^.dY then
-        //    PlaySound(sndOw4, Gear^.Hedgehog^.Team^.voicepack)
-        //else
-        //    PlaySound(sndOw1, Gear^.Hedgehog^.Team^.voicepack);
-
-        if Gear^.LastDamage <> nil then
-            ApplyDamage(Gear, Gear^.LastDamage, dmg, dsFall)
-            else
-            ApplyDamage(Gear, CurrentHedgehog, dmg, dsFall);
-    end
-end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure CalcRotationDirAngle(Gear: PGear);
-var 
-    dAngle: real;
-begin
-    dAngle := (Gear^.dX.QWordValue + Gear^.dY.QWordValue) / $80000000;
-    if not Gear^.dX.isNegative then
-        Gear^.DirAngle := Gear^.DirAngle + dAngle
-    else
-        Gear^.DirAngle := Gear^.DirAngle - dAngle;
 
-    if Gear^.DirAngle < 0 then Gear^.DirAngle := Gear^.DirAngle + 360
-    else if 360 < Gear^.DirAngle then Gear^.DirAngle := Gear^.DirAngle - 360
-end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear);
