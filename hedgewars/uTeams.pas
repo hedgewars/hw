@@ -36,7 +36,8 @@ function  CheckForWin: boolean;
 procedure TeamGoneEffect(var Team: TTeam);
 
 implementation
-uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript;
+uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript,
+    uGearsUtils, uGearsList;
 
 const MaxTeamHealth: LongInt = 0;
 

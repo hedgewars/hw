@@ -52,16 +52,14 @@ procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
 function  GearByUID(uid : Longword) : PGear;
-procedure InsertGearToList(Gear: PGear);
-procedure RemoveGearFromList(Gear: PGear);
-procedure DeleteGear(Gear: PGear); 
+procedure doStepDrowningGear(Gear: PGear);
 
 
 implementation
 uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
      uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
      uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
-     uGearsHedgehog;
+     uGearsHedgehog, uGearsUtils, uGearsList;
 
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
@@ -69,8 +67,6 @@ procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure ShotgunShot(Gear: PGear); forward;
-procedure PickUp(HH, Gear: PGear); forward;
-procedure HHSetWeapon(HHGear: PGear); forward;
 procedure doStepCase(Gear: PGear); forward;
 
 // For better maintainability the step handlers of gears are stored in
@@ -78,70 +74,6 @@ procedure doStepCase(Gear: PGear); forward;
 // Note: step handlers of gears that are hedgehogs are in a different file
 //       than the handlers for all other gears.
 {$INCLUDE "GSHandlers.inc"}
-
-const doStepHandlers: array[TGearType] of TGearStepProcedure = (
-            @doStepBomb,
-            @doStepHedgehog,
-            @doStepShell,
-            @doStepGrave,
-            @doStepBee,
-            @doStepShotgunShot,
-            @doStepPickHammer,
-            @doStepRope,
-            @doStepMine,
-            @doStepCase,
-            @doStepDEagleShot,
-            @doStepDynamite,
-            @doStepBomb,
-            @doStepCluster,
-            @doStepShover,
-            @doStepFlame,
-            @doStepFirePunch,
-            @doStepActionTimer,
-            @doStepActionTimer,
-            @doStepParachute,
-            @doStepAirAttack,
-            @doStepAirBomb,
-            @doStepBlowTorch,
-            @doStepGirder,
-            @doStepTeleport,
-            @doStepSwitcher,
-            @doStepTarget,
-            @doStepMortar,
-            @doStepWhip,
-            @doStepKamikaze,
-            @doStepCake,
-            @doStepSeduction,
-            @doStepBomb,
-            @doStepCluster,
-            @doStepBomb,
-            @doStepWaterUp,
-            @doStepDrill,
-            @doStepBallgun,
-            @doStepBomb,
-            @doStepRCPlane,
-            @doStepSniperRifleShot,
-            @doStepJetpack,
-            @doStepMolotov,
-            @doStepCase,
-            @doStepBirdy,
-            @doStepEggWork,
-            @doStepPortalShot,
-            @doStepPiano,
-            @doStepBomb,
-            @doStepSineGunShot,
-            @doStepFlamethrower,
-            @doStepSMine,
-            @doStepPoisonCloud,
-            @doStepHammer,
-            @doStepHammerHit,
-            @doStepResurrector,
-            @doStepNapalmBomb,
-            @doStepSnowball,
-            @doStepSnowflake,
-            @doStepStructure,
-            @doStepLandGun,
-            @doStepTardis);
 
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
 var Gear: PGear;
@@ -1226,7 +1158,72 @@ begin
 end;
 
 procedure initModule;
+const handlers: array[TGearType] of TGearStepProcedure = (
+            @doStepBomb,
+            @doStepHedgehog,
+            @doStepShell,
+            @doStepGrave,
+            @doStepBee,
+            @doStepShotgunShot,
+            @doStepPickHammer,
+            @doStepRope,
+            @doStepMine,
+            @doStepCase,
+            @doStepDEagleShot,
+            @doStepDynamite,
+            @doStepBomb,
+            @doStepCluster,
+            @doStepShover,
+            @doStepFlame,
+            @doStepFirePunch,
+            @doStepActionTimer,
+            @doStepActionTimer,
+            @doStepParachute,
+            @doStepAirAttack,
+            @doStepAirBomb,
+            @doStepBlowTorch,
+            @doStepGirder,
+            @doStepTeleport,
+            @doStepSwitcher,
+            @doStepTarget,
+            @doStepMortar,
+            @doStepWhip,
+            @doStepKamikaze,
+            @doStepCake,
+            @doStepSeduction,
+            @doStepBomb,
+            @doStepCluster,
+            @doStepBomb,
+            @doStepWaterUp,
+            @doStepDrill,
+            @doStepBallgun,
+            @doStepBomb,
+            @doStepRCPlane,
+            @doStepSniperRifleShot,
+            @doStepJetpack,
+            @doStepMolotov,
+            @doStepCase,
+            @doStepBirdy,
+            @doStepEggWork,
+            @doStepPortalShot,
+            @doStepPiano,
+            @doStepBomb,
+            @doStepSineGunShot,
+            @doStepFlamethrower,
+            @doStepSMine,
+            @doStepPoisonCloud,
+            @doStepHammer,
+            @doStepHammerHit,
+            @doStepResurrector,
+            @doStepNapalmBomb,
+            @doStepSnowball,
+            @doStepSnowflake,
+            @doStepStructure,
+            @doStepLandGun,
+            @doStepTardis);
 begin
+    doStepHandlers:= handlers;
+
     RegisterVariable('skip', vtCommand, @chSkip, false);
     RegisterVariable('hogsay', vtCommand, @chHogSay, true );
 

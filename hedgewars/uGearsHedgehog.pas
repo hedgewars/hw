@@ -27,6 +27,7 @@ procedure AfterAttack;
 procedure HedgehogStep(Gear: PGear); 
 procedure doStepHedgehogMoving(Gear: PGear); 
 procedure HedgehogChAngle(HHGear: PGear); 
+procedure PickUp(HH, Gear: PGear);
 
 implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions, uMisc, 

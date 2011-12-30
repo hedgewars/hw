@@ -33,12 +33,16 @@ procedure ResurrectHedgehog(gear: PGear);
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean = false);
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
 function  CheckGearsNear(mX, mY: LongInt; Kind: TGearsType; rX, rY: LongInt): PGear;
+function  CheckGearDrowning(Gear: PGear): boolean;
+
+var doStepHandlers: array[TGearType] of TGearStepProcedure;
 
 
 implementation
 uses uFloat, uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
     uVariables, uLandGraphics, uScript, uStats, uCaptions, uTeams, uStore,
-    uLocale, uTextures, uRenderUtils, uRandom, uGearsList, SDLh, uDebug;
+    uLocale, uTextures, uRenderUtils, uRandom, SDLh, uDebug, uGears,
+    uGearsList;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
 var Gear: PGear;
