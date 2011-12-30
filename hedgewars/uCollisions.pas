@@ -57,7 +57,7 @@ function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
-uses uConsts, uLandGraphics, uVariables, uDebug, uGears;
+uses uConsts, uLandGraphics, uVariables, uDebug, uGears, uGearsList;
 
 type TCollisionEntry = record
             X, Y, Radius: LongInt;

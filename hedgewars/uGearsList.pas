@@ -24,11 +24,14 @@ uses uFloat, uTypes;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure DeleteGear(Gear: PGear);
+procedure InsertGearToList(Gear: PGear);
+procedure RemoveGearFromList(Gear: PGear);
 
 implementation
 
-uses uDebug, uRandom, uUtils, uConsts, uVariables, uAmmos, uTeams, uStats,
-    uTextures, uScript, uRenderUtils, uAI, uCollisions, uGearsHedgehog;
+uses uRandom, uUtils, uConsts, uVariables, uAmmos, uTeams, uStats,
+    uTextures, uScript, uRenderUtils, uAI, uCollisions,
+    uGearsRender, uGearsUtils;
 
 procedure InsertGearToList(Gear: PGear);
 var tmp, ptmp: PGear;
