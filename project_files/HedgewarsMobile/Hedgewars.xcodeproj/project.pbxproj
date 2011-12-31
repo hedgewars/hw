@@ -635,6 +635,9 @@
 		61D08D7114AEA7FE0007C078 /* uGearsHedgehog.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHedgehog.pas; path = ../../hedgewars/uGearsHedgehog.pas; sourceTree = SOURCE_ROOT; };
 		61D08D7214AEA7FE0007C078 /* uGearsList.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsList.pas; path = ../../hedgewars/uGearsList.pas; sourceTree = SOURCE_ROOT; };
 		61D08D7314AEA7FE0007C078 /* uGearsUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsUtils.pas; path = ../../hedgewars/uGearsUtils.pas; sourceTree = SOURCE_ROOT; };
+		61D08D8714AEA9670007C078 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Locale/Japanese.lproj/About.strings; sourceTree = "<group>"; };
+		61D08D8814AEA9700007C078 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Locale/Japanese.lproj/Localizable.strings; sourceTree = "<group>"; };
+		61D08D8914AEA9780007C078 /* Japanese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Japanese; path = Locale/Japanese.lproj/Scheme.strings; sourceTree = "<group>"; };
 		61D0BDF71457508C0011A899 /* ExtraCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExtraCategories.h; path = Classes/ExtraCategories.h; sourceTree = "<group>"; };
 		61D0BDF81457508C0011A899 /* ExtraCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExtraCategories.m; path = Classes/ExtraCategories.m; sourceTree = "<group>"; };
 		61D2059F127CDD1100ABD83E /* ObjcExports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjcExports.h; path = Classes/ObjcExports.h; sourceTree = "<group>"; };
@@ -1749,6 +1752,7 @@
 				61177BE4148B881C00686905 /* Danish */,
 				617BC22D1490210E00E1C294 /* Italian */,
 				619BCEC41495615700C1C409 /* Bulgarian */,
+				61D08D8714AEA9670007C078 /* Japanese */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1765,6 +1769,7 @@
 				61177BF0148B882500686905 /* Danish */,
 				617BC2391490211500E1C294 /* Italian */,
 				619BCED01495615F00C1C409 /* Bulgarian */,
+				61D08D8814AEA9700007C078 /* Japanese */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1781,6 +1786,7 @@
 				61177BF1148B882F00686905 /* Danish */,
 				617BC23A1490211F00E1C294 /* Italian */,
 				619BCED11495616700C1C409 /* Bulgarian */,
+				61D08D8914AEA9780007C078 /* Japanese */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
