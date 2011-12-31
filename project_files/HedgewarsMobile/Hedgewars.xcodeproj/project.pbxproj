@@ -229,6 +229,9 @@
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
 		61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C28D3E142D380400DA16C2 /* AudioManagerController.m */; };
 		61CADE331402EE290030C3EB /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61CADE321402EE290030C3EB /* ImageIO.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		61D08D7414AEA7FE0007C078 /* uGearsHedgehog.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61D08D7114AEA7FE0007C078 /* uGearsHedgehog.pas */; };
+		61D08D7514AEA7FE0007C078 /* uGearsList.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61D08D7214AEA7FE0007C078 /* uGearsList.pas */; };
+		61D08D7614AEA7FE0007C078 /* uGearsUtils.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61D08D7314AEA7FE0007C078 /* uGearsUtils.pas */; };
 		61D0BDF91457508C0011A899 /* ExtraCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D0BDF81457508C0011A899 /* ExtraCategories.m */; };
 		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61D3D2A51290E03A003CE7C3 /* irc.png in Resources */ = {isa = PBXBuildFile; fileRef = 61D3D2A41290E03A003CE7C3 /* irc.png */; };
@@ -629,6 +632,9 @@
 		61C28D3D142D380400DA16C2 /* AudioManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioManagerController.h; path = Classes/AudioManagerController.h; sourceTree = "<group>"; };
 		61C28D3E142D380400DA16C2 /* AudioManagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioManagerController.m; path = Classes/AudioManagerController.m; sourceTree = "<group>"; };
 		61CADE321402EE290030C3EB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		61D08D7114AEA7FE0007C078 /* uGearsHedgehog.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHedgehog.pas; path = ../../hedgewars/uGearsHedgehog.pas; sourceTree = SOURCE_ROOT; };
+		61D08D7214AEA7FE0007C078 /* uGearsList.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsList.pas; path = ../../hedgewars/uGearsList.pas; sourceTree = SOURCE_ROOT; };
+		61D08D7314AEA7FE0007C078 /* uGearsUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsUtils.pas; path = ../../hedgewars/uGearsUtils.pas; sourceTree = SOURCE_ROOT; };
 		61D0BDF71457508C0011A899 /* ExtraCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExtraCategories.h; path = Classes/ExtraCategories.h; sourceTree = "<group>"; };
 		61D0BDF81457508C0011A899 /* ExtraCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ExtraCategories.m; path = Classes/ExtraCategories.m; sourceTree = "<group>"; };
 		61D2059F127CDD1100ABD83E /* ObjcExports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjcExports.h; path = Classes/ObjcExports.h; sourceTree = "<group>"; };
@@ -1196,6 +1202,10 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61D08D7114AEA7FE0007C078 /* uGearsHedgehog.pas */,
+				61D08D7214AEA7FE0007C078 /* uGearsList.pas */,
+				61D08D7314AEA7FE0007C078 /* uGearsUtils.pas */,
+				61798892114AA56300BA94A9 /* inc */,
 				61177C00148B8BB100686905 /* uLandGenMaze.pas */,
 				61177C01148B8BB100686905 /* uLandOutline.pas */,
 				611D7A4F142FDCD3006E0798 /* uTouch.pas */,
@@ -1215,7 +1225,6 @@
 				61A4A39312A5CCC2004D81E6 /* uVariables.pas */,
 				61399012125D19C0003C2DC0 /* uMobile.pas */,
 				619C5AF3124F7E3100D041AE /* LuaPas.pas */,
-				61798892114AA56300BA94A9 /* inc */,
 				61E1F4F711D004240016A5AA /* adler32.pas */,
 				617987E7114AA34C00BA94A9 /* hwengine.pas */,
 				617987E9114AA34C00BA94A9 /* hwLibrary.pas */,
@@ -1711,6 +1720,9 @@
 				61D0BDF91457508C0011A899 /* ExtraCategories.m in Sources */,
 				61177C02148B8BB100686905 /* uLandGenMaze.pas in Sources */,
 				61177C03148B8BB100686905 /* uLandOutline.pas in Sources */,
+				61D08D7414AEA7FE0007C078 /* uGearsHedgehog.pas in Sources */,
+				61D08D7514AEA7FE0007C078 /* uGearsList.pas in Sources */,
+				61D08D7614AEA7FE0007C078 /* uGearsUtils.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
