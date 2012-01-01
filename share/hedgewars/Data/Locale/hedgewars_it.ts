@@ -16,7 +16,7 @@
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation>Errore file</translation>
+        <translation>Errore con il file</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>Illegal ammo scheme</source>
-        <translation>Schema armi non valido</translation>
+        <translation>Schema delle armi non valido</translation>
     </message>
     <message>
         <source>Edit schemes</source>
@@ -196,7 +196,7 @@
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished">Il nickname %1 è
+        <translation>Il nickname %1 è
 registrato su Hedgewars.org
 Per favore inserisci la tua password
 o scegli un altro nickname:</translation>
@@ -215,9 +215,9 @@ o scegli un altro nickname:</translation>
 on the server.
 Please pick another nickname:</source>
         <translation>Qualcun altro sta usando
- il tuo nickname %1
+ il nickname %1
 sul server.
-Per favore scelto un altro nickname:</translation>
+Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>No nickname supplied.</source>
@@ -232,7 +232,7 @@ Per favore scelto un altro nickname:</translation>
     </message>
     <message>
         <source>Cannot open demofile %1</source>
-        <translation>Impossibile aprire file demo %1</translation>
+        <translation>Impossibile aprire il file demo %1</translation>
     </message>
 </context>
 <context>
@@ -401,9 +401,9 @@ o scegli un altro nickname:</translation>
 on the server.
 Please pick another nickname:</source>
         <translation type="obsolete">Qualcun altro sta usando
- il tuo nickname %1
+ il nickname %1
 sul server.
-Per favore scelto un altro nickname:</translation>
+Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>User quit</source>
@@ -414,7 +414,7 @@ Per favore scelto un altro nickname:</translation>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf ha restituito un errore durante il rendering del testo, probabilmente relativo ad un bug in freetype2. Si raccomanda di aggiornare le proprie librerie freetype.</translation>
+        <translation>SDL_ttf ha restituito un errore durante il rendering del testo, probabilmente relativo ad un bug della libreria freetype2. Si raccomanda di aggiornare le proprie librerie freetype.</translation>
     </message>
 </context>
 <context>
@@ -932,15 +932,15 @@ Per favore scelto un altro nickname:</translation>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="obsolete">Nuovo schema armi</translation>
+        <translation type="obsolete">Nuovo schema delle armi</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="obsolete">Modifica schema armi</translation>
+        <translation type="obsolete">Modifica schema delle armi</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="obsolete">Elimina schema armi</translation>
+        <translation type="obsolete">Elimina schema delle armi</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
@@ -1240,7 +1240,7 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Wind will affect almost everything.</source>
-        <translation>Il vento avrà effetto su praticamente ogni arma.</translation>
+        <translation>Il vento avrà effetto su tutte (o quasi tutte) le armi.</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -1248,7 +1248,7 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation>Le squadre di ogni clan possono avere turni consecutivi condividendo il tempo del loro turno.</translation>
+        <translation>Le squadre di ogni clan giocano turni consecutivi condividendo il tempo di ogni turno.</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
@@ -1364,7 +1364,7 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Unignore</source>
-        <translation>Togli ignora</translation>
+        <translation>Non ignorare</translation>
     </message>
     <message>
         <source>Remove friend</source>
@@ -1640,7 +1640,7 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation>Porta:</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1997,7 +1997,7 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>more</source>
-        <translation>Altro</translation>
+        <translation>altro</translation>
     </message>
 </context>
 <context>
@@ -2141,7 +2141,7 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Disable Land Objects</source>
-        <translation>Disabilita Oggetti</translation>
+        <translation>Disabilita Oggetti Terreno</translation>
     </message>
     <message>
         <source>AI Survival Mode</source>
@@ -2149,7 +2149,7 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Reset Health</source>
-        <translation>Resetta la Vita</translation>
+        <translation>Resetta la vita allo stato di partenza</translation>
     </message>
     <message>
         <source>Unlimited Attacks</source>
@@ -2157,7 +2157,7 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Reset Weapons</source>
-        <translation>Resetta le Armi</translation>
+        <translation>Resetta le armi allo stato di partenza</translation>
     </message>
     <message>
         <source>Per Hedgehog Ammo</source>
@@ -2204,7 +2204,7 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>put</source>
-        <translation>usa</translation>
+        <translation>usa/piazza sul terreno</translation>
     </message>
     <message>
         <source>switch</source>
