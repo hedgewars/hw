@@ -1,0 +1,31 @@
+Hedgewars, é um estrondo!
+
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+Hedgewars está disponível na Mac Appstore! Pesquise Hedgewars no seu Mac e obtenha a sua cópia GRATUITA hoje!
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭ 
+
+A versão de iOS tem algumas funcionalidades exclusivas, como
+* Saída VGA no iPad: ligue a um ecrã externo e jogue em resolução completa;
+* Suporte para Retina: jogue numa resolução mais alta durante todo o jogo;
+* Multitarefa: pause o jogo a qualquer altura;
+* Recuperação de jogo: vai ser sempre possível completar o jogo.
+
+Descrição:
+Este é o jogo mais divertido e viciante que alguma vez jogou - diversão hilariante que pode aproveitar onde estiver, quando quiser. Hedgewars é um jogo de estratégia por turnos mas o verdadeiro interesse é ver a destruição causada pelos hedgehogs com as suas fantásticas armas - bichinhos com má atitude!
+
+Por outras palavras Hedgewars é um jogo, de estratégia por turnos, artilharia, acção e comédia, com os hedgehogs cor-de-rosa com atitude enquanto lutam das profundezas do inferno até ao espaço.
+
+Como comandante, é o seu trabalho reunir a melhor equipa de soldados hedgehog e levar a guerra ao seu inimigo.
+
+Cada jogador controla uma equipa de vários hedgehogs. Durante o decorrer do jogo, os jogadores, por turnos, usam os seus hedgehogs. Depois usam qualquer ferramenta ou arma disponível para atacar e matar os hedgehogs do oponente, ganhando assim o jogo. Os Hedgehogs podem mover-se pelo terreno de variadíssimas maneiras, normalmente a andar e a saltar, mas também utilizando ferramentas como "Corda" ou "Paraquedas", para chegarem a áreas de outro modo inacessíveis. Cada turno tem tempo limitado para garantir que os jogadores não passam demasiado tempo a pensar. Uma grande variadade de ferramentas e armas estão disponíveis durante o jogo: Granada, Bomba Cluster, Bazooka, UFO, Caçadeira, Desert Eagle, Murro de Fogo, Taco de Baseball, Dinamite, Mina, Corda, Martelo pneumático, Paraquedas. A maioria das armas, quando usadas, causam explosões que deformam o terreno. A paisagem é uma ilha a flutuar na água, ou uma gruta com água no fundo. Um hedgehog morre quando toca na água (caíndo da ilha, ou através de um buraco), é atirado para fora da arena ou quando a sua vida é reduzida a zero (os danos realizados ao hedgehog atacado ou hedgehogs após o turno dum jogador ou de um CPU é apenas mostrado quando todo o movimento no campo de batalha tiver acabado.).
+
+* Jogo de combate por turnos devastante e hilariante até 6 jogadores
+* Multijogador local e em rede, com oponentes AI artificiais
+* Batalhe num número infinito de mapas gerados ao acaso
+* Utilize 48 (e a aumentar) armas! Incluindo o ataque piano e o bolo robótico explosivo
+* Jogue o jogo à sua maneira, com mais de 20 modificadores de jogo diferentes, mude quase todos os aspectos do jogo
+* Personalize a sua equipa, com mais de 120 fatos, 30 graves, 12 fortes, 100s de bandeiras e packs de voz únicos
+* Grandes batalhas com até 64 hogs
+

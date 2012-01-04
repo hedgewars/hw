@@ -631,6 +631,9 @@
 		61C079E311F35A300072BF46 /* EditableCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditableCellView.m; path = Classes/EditableCellView.m; sourceTree = "<group>"; };
 		61C28D3D142D380400DA16C2 /* AudioManagerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioManagerController.h; path = Classes/AudioManagerController.h; sourceTree = "<group>"; };
 		61C28D3E142D380400DA16C2 /* AudioManagerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioManagerController.m; path = Classes/AudioManagerController.m; sourceTree = "<group>"; };
+		61C6783F14B3DD020087425A /* Portuguese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Portuguese; path = Locale/Portuguese.lproj/About.strings; sourceTree = "<group>"; };
+		61C6784B14B3DD0B0087425A /* Portuguese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Portuguese; path = Locale/Portuguese.lproj/Localizable.strings; sourceTree = "<group>"; };
+		61C6784C14B3DD140087425A /* Portuguese */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Portuguese; path = Locale/Portuguese.lproj/Scheme.strings; sourceTree = "<group>"; };
 		61CADE321402EE290030C3EB /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		61D08D7114AEA7FE0007C078 /* uGearsHedgehog.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHedgehog.pas; path = ../../hedgewars/uGearsHedgehog.pas; sourceTree = SOURCE_ROOT; };
 		61D08D7214AEA7FE0007C078 /* uGearsList.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsList.pas; path = ../../hedgewars/uGearsList.pas; sourceTree = SOURCE_ROOT; };
@@ -1327,6 +1330,7 @@
 				Danish,
 				Italian,
 				Bulgarian,
+				Portuguese,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1753,6 +1757,7 @@
 				617BC22D1490210E00E1C294 /* Italian */,
 				619BCEC41495615700C1C409 /* Bulgarian */,
 				61D08D8714AEA9670007C078 /* Japanese */,
+				61C6783F14B3DD020087425A /* Portuguese */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1770,6 +1775,7 @@
 				617BC2391490211500E1C294 /* Italian */,
 				619BCED01495615F00C1C409 /* Bulgarian */,
 				61D08D8814AEA9700007C078 /* Japanese */,
+				61C6784B14B3DD0B0087425A /* Portuguese */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1787,6 +1793,7 @@
 				617BC23A1490211F00E1C294 /* Italian */,
 				619BCED11495616700C1C409 /* Bulgarian */,
 				61D08D8914AEA9780007C078 /* Japanese */,
+				61C6784C14B3DD140087425A /* Portuguese */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
