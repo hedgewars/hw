@@ -148,6 +148,7 @@ const
     SDL_DOLLARRECORD      = $801;
     SDL_MULTIGESTURE      = $802;
     SDL_CLIPBOARDUPDATE   = $900;
+    SDL_DROPFILE          = $1000;
     SDL_USEREVENT         = $8000;
     SDL_LASTEVENT         = $FFFF;
     // no compatibility events $7000
@@ -443,6 +444,7 @@ type
 
     TSDL_WindowEvent = record
         type_: LongWord;
+        timestamp: LongWord;
         windowID: LongWord;
         event: Byte;
         padding1, padding2, padding3: Byte;
@@ -452,6 +454,7 @@ type
     // available in sdl12 but not exposed
     TSDL_TextEditingEvent = record
         type_: LongWord;
+        timestamp: LongWord;
         windowID: LongWord;
         text: array[0..31] of Byte;
         start, lenght: LongInt;
@@ -460,12 +463,14 @@ type
     // available in sdl12 but not exposed
     TSDL_TextInputEvent = record
         type_: LongWord;
+        timestamp: LongWord;
         windowID: LongWord;
         text: array[0..31] of Byte;
         end;
 
     TSDL_TouchFingerEvent = record
         type_: LongWord;
+        timestamp: LongWord;
         windowId: LongWord;
         touchId: Int64;
         fingerId: Int64;
@@ -477,6 +482,7 @@ type
 
     TSDL_TouchButtonEvent = record
         type_: LongWord;
+        timestamp: LongWord;
         windowId: LongWord;
         touchId: Int64;
         state, button, padding1, padding2: Byte;
@@ -484,6 +490,7 @@ type
 
     TSDL_MultiGestureEvent = record
         type_: LongWord;
+        timestamp: LongWord;
         windowId: LongWord;
         touchId: Int64;
         dTheta, dDist, x, y: Single;
@@ -492,6 +499,7 @@ type
 
     TSDL_DollarGestureEvent = record
         type_: LongWord;
+        timestamp: LongWord;
         windowId: LongWord;
         touchId: Int64;
         gesturedId: Int64;
@@ -499,8 +507,15 @@ type
         error: Single;
         end;
 
+    TSDL_DropEvent = record
+        type_: LongWord;
+        timestamp: LongWord;
+        filename: PChar;
+        end;
+
     TSDL_SysWMEvent = record
         type_: LongWord;
+        timestamp: LongWord;
         msg: Pointer;
         end;
 {$ELSE}
@@ -526,6 +541,7 @@ type
     TSDL_KeyboardEvent = record
 {$IFDEF SDL13}
         type_: LongWord;
+        timestamp: LongWord;
         windowID: LongWord;
         state, repeat_, padding2, padding3: Byte;
 {$ELSE}
@@ -537,6 +553,7 @@ type
     TSDL_MouseMotionEvent = record
 {$IFDEF SDL13}
         type_: LongWord;
+        timestamp: LongWord;
         windowID: LongWord;
         state, padding1, padding2, padding3: Byte;
         x, y, z, xrel, yrel : LongInt;
@@ -549,6 +566,7 @@ type
     TSDL_MouseButtonEvent = record
 {$IFDEF SDL13}
         type_: LongWord;
+        timestamp: LongWord;
         windowID: LongWord;
         buttonm, state, padding1, padding2: Byte;
         x, y: LongInt;
@@ -561,6 +579,7 @@ type
     TSDL_MouseWheelEvent = record
         type_: LongWord;
 {$IFDEF SDL13}
+        timestamp: LongWord;
         windowID: LongWord;
 {$ELSE}
         which: Byte;
@@ -569,7 +588,12 @@ type
         end;
 
     TSDL_JoyAxisEvent = record
-        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
+{$IFDEF SDL13}
+        type_: LongWord;
+        timestamp: LongWord;
+{$ELSE}
+        type_: Byte;
+{$ENDIF}
         which: Byte;
         axis: Byte;
 {$IFDEF SDL13}
@@ -581,7 +605,12 @@ type
         end;
 
     TSDL_JoyBallEvent = record
-        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
+{$IFDEF SDL13}
+        type_: LongWord;
+        timestamp: LongWord;
+{$ELSE}
+        type_: Byte;
+{$ENDIF}
         which: Byte;
         ball: Byte;
 {$IFDEF SDL13}
@@ -593,7 +622,12 @@ type
         end;
 
     TSDL_JoyHatEvent = record
-        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
+{$IFDEF SDL13}
+        type_: LongWord;
+        timestamp: LongWord;
+{$ELSE}
+        type_: Byte;
+{$ENDIF}
         which: Byte;
         hat: Byte;
         value: Byte;
@@ -603,7 +637,12 @@ type
         end;
 
     TSDL_JoyButtonEvent = record
-        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
+{$IFDEF SDL13}
+        type_: LongWord;
+        timestamp: LongWord;
+{$ELSE}
+        type_: Byte;
+{$ENDIF}
         which: Byte;
         button: Byte;
         state: Byte;
@@ -613,12 +652,18 @@ type
         end;
 
     TSDL_QuitEvent = record
-        type_: {$IFDEF SDL13}LongWord{$ELSE}Byte{$ENDIF};
+{$IFDEF SDL13}
+        type_: LongWord;
+        timestamp: LongWord;
+{$ELSE}
+        type_: Byte;
+{$ENDIF}
         end;
 
     TSDL_UserEvent = record
 {$IFDEF SDL13}
         type_: LongWord;
+        timestamp: LongWord;
         windowID: LongWord;
 {$ELSE}
         type_: Byte;
@@ -656,6 +701,7 @@ type
             SDL_TOUCHBUTTONDOWN: (tbutton: TSDL_TouchButtonEvent);
             SDL_MULTIGESTURE: (mgesture: TSDL_MultiGestureEvent);
             SDL_DOLLARGESTURE: (dgesture: TSDL_DollarGestureEvent);
+            SDL_DROPFILE: (drop: TSDL_DropEvent);
             SDL_ALLEVENTS: (foo: shortstring);
 {$ELSE}
         case Byte of

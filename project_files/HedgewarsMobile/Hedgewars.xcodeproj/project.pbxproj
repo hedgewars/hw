@@ -1208,10 +1208,10 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61798892114AA56300BA94A9 /* inc */,
 				61D08D7114AEA7FE0007C078 /* uGearsHedgehog.pas */,
 				61D08D7214AEA7FE0007C078 /* uGearsList.pas */,
 				61D08D7314AEA7FE0007C078 /* uGearsUtils.pas */,
-				61798892114AA56300BA94A9 /* inc */,
 				61177C00148B8BB100686905 /* uLandGenMaze.pas */,
 				61177C01148B8BB100686905 /* uLandOutline.pas */,
 				611D7A4F142FDCD3006E0798 /* uTouch.pas */,

@@ -217,7 +217,6 @@ end;
 procedure SoundLoad;
 var i: TSound;
     t: Longword;
-    s:shortstring;
 begin
     if not isSoundEnabled then exit;
 
@@ -229,10 +228,11 @@ begin
             for i:= Low(TSound) to High(TSound) do
                 voicepacks[t].chunks[i]:= nil;
 
-    // preload all the big sound files (>32k) that would otherwise lockup the game
     for i:= Low(TSound) to High(TSound) do
     begin
         defVoicepack^.chunks[i]:= nil;
+        (* this is not necessary when SDL_mixer is compiled with USE_OGG_TREMOR
+        // preload all the big sound files (>32k) that would otherwise lockup the game
         if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun,
                   sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo])
             and (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
@@ -241,9 +241,9 @@ begin
             if not FileExists(s) then s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-            TryDo(defVoicepack^.chunks[i] <> nil, msgFailed, true);
+            SDLTry(defVoicepack^.chunks[i] <> nil, true);
             WriteLnToConsole(msgOK);
-        end;
+        end;*)
     end;
 
 end;
@@ -295,7 +295,7 @@ begin
             if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-            TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
+            SDLTry(defVoicepack^.chunks[snd] <> nil, true);
             WriteLnToConsole(msgOK);
             end;
         lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
@@ -387,7 +387,7 @@ begin
             if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-            TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
+            SDLTry(defVoicepack^.chunks[snd] <> nil, true);
             WriteLnToConsole(msgOK);
         end;
         if fadems > 0 then
@@ -435,7 +435,7 @@ begin
     WriteToConsole(msgLoading + s + ' ');
 
     Mus:= Mix_LoadMUS(Str2PChar(s));
-    TryDo(Mus <> nil, msgFailed, false);
+    SDLTry(Mus <> nil, false);
     WriteLnToConsole(msgOK);
 
     SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, false)
