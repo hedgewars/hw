@@ -37,5 +37,5 @@ var
     StrLen, ord, Succ, Pred : function : integer;
     Low, High : function : integer;
     Now : function : integer;
-    SysUtils.StrPas, FormatDateTime : function : shortstring;
+    StrPas, FormatDateTime : function : shortstring;
     exit : procedure;

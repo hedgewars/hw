@@ -22,7 +22,7 @@ unit uLandTemplates;
 interface
 uses SDLh;
 
-const NTPX = Low(TSDL_Rect.x);
+const NTPX = Low(LongInt);
 
 type PPointArray = ^TPointArray;
      TPointArray = array[0..64] of TSDL_Rect;
