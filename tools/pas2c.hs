@@ -126,6 +126,7 @@ typesAndVars2C b (TypesAndVars ts) = liftM vcat $ mapM (tvar2C b) ts
 uses2C :: Uses -> State RenderState Doc
 uses2C uses@(Uses unitIds) = do
     mapM_ injectNamespace (Identifier "pas2cSystem" undefined : unitIds)
+    mapM_ (id2C True) unitIds
     return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
     where
     injectNamespace (Identifier i _) = do

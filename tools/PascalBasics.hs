@@ -17,7 +17,7 @@ pascalLanguageDef
     , commentLine    = "//"
     , nestedComments = False
     , identStart     = letter <|> oneOf "_"
-    , identLetter    = alphaNum <|> oneOf "_."
+    , identLetter    = alphaNum <|> oneOf "_"
     , reservedNames  = [
             "begin", "end", "program", "unit", "interface"
             , "implementation", "and", "or", "xor", "shl"
