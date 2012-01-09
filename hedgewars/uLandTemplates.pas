@@ -22,12 +22,7 @@ unit uLandTemplates;
 interface
 uses SDLh;
 
-{$IFDEF SDL13}
-const NTPX = Low(LongInt);
-{$ELSE}
 const NTPX = Low(SmallInt);
-{$ENDIF}
-
 
 type PPointArray = ^TPointArray;
      TPointArray = array[0..64] of TSDL_Rect;
