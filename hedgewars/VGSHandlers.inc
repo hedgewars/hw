@@ -46,11 +46,11 @@ with Gear^ do
         inc(Frame);
         if Frame = vobSDFramesCount then Frame:= 0
         end;
-    X:= X + (cWindSpeedf * 400 + dX + tdX) * Steps;
+    X:= X + (cWindSpeedf * 400 + dX + tdX) * Steps * Gear^.Scale;
     if SuddenDeathDmg then
-        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps
+        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps * Gear^.Scale
     else
-        Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps;
+        Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps * Gear^.Scale;
     Angle:= Angle + dAngle * Steps;
     if Angle > 360 then
         Angle:= Angle - 360
@@ -103,11 +103,11 @@ procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
 var s: Longword;
     t: real;
 begin
-Gear^.X:= Gear^.X + (cWindSpeedf * 750 * Gear^.dX) * Steps;
+Gear^.X:= Gear^.X + (cWindSpeedf * 750 * Gear^.dX * Gear^.Scale) * Steps;
 
 // up-and-down-bounce magic
 s := (GameTicks + Gear^.Timer) mod 4096;
-t := 8 * hwFloat2Float(AngleSin(s mod 2048));
+t := 8 * Gear^.Scale * hwFloat2Float(AngleSin(s mod 2048));
 if (s < 2048) then t := -t;
 
 Gear^.Y := LAND_HEIGHT - 1184 + LongInt(Gear^.Timer mod 8) + t;
