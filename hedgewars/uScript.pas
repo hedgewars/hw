@@ -1661,6 +1661,7 @@ ScriptSetInteger('CaseFreq', cCaseFactor);
 ScriptSetInteger('HealthCaseProb', cHealthCaseProb);
 ScriptSetInteger('HealthCaseAmount', cHealthCaseAmount);
 ScriptSetInteger('DamagePercent', cDamagePercent);
+ScriptSetInteger('RopePercent', cRopePercent);
 ScriptSetInteger('MinesNum', cLandMines);
 ScriptSetInteger('MinesTime', cMinesTime);
 ScriptSetInteger('MineDudPercent', cMineDudPercent);
