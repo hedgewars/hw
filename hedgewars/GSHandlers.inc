@@ -1413,7 +1413,7 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
 
     if ((HHGear^.State and gstHHDriven) = 0)
-       or (CheckGearDrowning(HHGear)) then
+       or (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
         begin
         PlaySound(sndRopeRelease);
         RopeDeleteMe(Gear, HHGear);
@@ -3876,10 +3876,6 @@ begin
         // don't port hogs on rope
         // TODO: this will also prevent hogs while falling after rope use from
         //       falling through portals... fix that!
-        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
-           and (iterator = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =
-           gtRope) then
-            continue;
 
         // check if gear fits through portal
         if (iterator^.Radius > Gear^.Radius) then
@@ -4108,6 +4104,10 @@ begin
             inc(iterator^.PortalCounter);
             iterator^.State:= iterator^.State and (not gstHHHJump)
             end;
+
+        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
+           and (iterator = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =
+           gtRope) then CurAmmoGear^.PortalCounter:= 1;
 
         if not isbullet and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
