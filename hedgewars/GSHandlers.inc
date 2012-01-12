@@ -3831,7 +3831,7 @@ begin
     // destroy portal if ground it was attached too is gone
     if ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0)
        or (Gear^.Timer < 1)
-       or (Gear^.Hedgehog <> CurrentHedgehog)
+       or (Gear^.Hedgehog^.Team <> CurrentHedgehog^.Team)
        or (hwRound(Gear^.Y) > cWaterLine) then
     begin
         deleteGear(Gear);
@@ -4218,8 +4218,8 @@ procedure doStepMovingPortal(Gear: PGear);
 begin
     doPortalColorSwitch();
     doStepPerPixel(Gear, @doStepMovingPortal_real, true);
-    if (Gear^.Timer < 1)
-       or (Gear^.Hedgehog <> CurrentHedgehog) then
+    if (Gear^.Timer < 1) 
+       or (Gear^.Hedgehog^.Team <> CurrentHedgehog^.Team) then
             deleteGear(Gear);
 end;
 
@@ -4259,19 +4259,19 @@ begin
             while iterator <> nil do
             begin
                 if (iterator^.Kind = gtPortal) then
-                    if (iterator <> newPortal) and (iterator^.Timer > 0) then
+                    if (iterator <> newPortal) and (iterator^.Timer > 0) and (iterator^.Hedgehog = CurrentHedgehog) then
                     begin
-                        if (iterator^.Tag and 2) = (newPortal^.Tag and 2) then
-                        begin
+                        if ((iterator^.Tag and 2) = (newPortal^.Tag and 2)) then
+                            begin
                             iterator^.Timer:= 0;
-                        end
+                            end
                         else
-                        begin
+                            begin
                             // link portals with each other
                             newPortal^.IntersectGear := iterator;
                             iterator^.IntersectGear := newPortal;
                             iterator^.Health := newPortal^.Health;
-                        end;
+                            end;
                     end;
                 iterator^.PortalCounter:= 0;
                 iterator := iterator^.NextGear
