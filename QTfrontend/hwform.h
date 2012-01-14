@@ -24,6 +24,10 @@
 #include <QTime>
 #include <QPointer>
 #include <QPropertyAnimation>
+#include <QUrl>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
 
 #include "netserver.h"
 #include "game.h"
@@ -116,6 +120,15 @@ private slots:
     void onFrontendFullscreen(bool value);
     void Music(bool checked);
     void UpdateCampaignPage(int index);
+    //Starts the transmission process for the feedback
+    void SendFeedback();
+    //Make a xml representation of the issue to be created
+    bool CreateIssueXml();
+    //Called the first time when receiving authorization token from google,
+    //second time when receiving the response after posting the issue
+    void finishedSlot(QNetworkReply* reply);
+    //Filter the auth token from the reply from google
+    bool getAuthToken(QString str);
 
     void NetGameChangeStatus(bool isMaster);
     void NetGameMaster();
@@ -158,7 +171,8 @@ private:
         ID_PAGE_NETTYPE         = 18,
         ID_PAGE_CAMPAIGN        = 19,
         ID_PAGE_DRAWMAP         = 20,
-        ID_PAGE_DATADOWNLOAD    = 21
+        ID_PAGE_DATADOWNLOAD    = 21,
+        ID_PAGE_FEEDBACK        = 22
         };
     QPointer<HWGame> game;
     QPointer<HWNetServer> pnetserver;
@@ -172,6 +186,9 @@ private:
     BGWidget * wBackground;
     QSignalMapper * pageSwitchMapper;
     QByteArray m_lastDemo;
+    QNetworkAccessManager * nam;
+    QString issueXml;
+    QString authToken;
 
     QPropertyAnimation *animationNewSlide;
     QPropertyAnimation *animationOldSlide;

@@ -31,6 +31,7 @@ public:
     QPushButton * BtnSinglePlayer;
     QPushButton * BtnNet;
     QPushButton * BtnSetup;
+    QPushButton * BtnFeedback;
     QPushButton * BtnInfo;
     QPushButton * BtnDataDownload;
     QLabel * mainNote;

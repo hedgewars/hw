@@ -78,6 +78,7 @@ QLayout * PageMain::footerLayoutDefinition()
     bottomLayout->setStretch(0,1);
 
     BtnSetup = addButton(":/res/Settings.png", bottomLayout, 1, true);
+    BtnFeedback = addButton("Feedback", bottomLayout, 0);
     bottomLayout->setStretch(1,0);
 
     return bottomLayout;
