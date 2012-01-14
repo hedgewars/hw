@@ -65,6 +65,7 @@
 #include "pagemultiplayer.h"
 #include "pagenet.h"
 #include "pagemain.h"
+#include "pagefeedback.h"
 #include "pagenetserver.h"
 #include "pagedrawmap.h"
 #include "pagenettype.h"
@@ -93,6 +94,7 @@
 #include "SparkleAutoUpdater.h"
 #endif
 #endif
+
 
 // I started handing this down to each place it touches, but it was getting ridiculous
 // and this one flag does not warrant a static class
@@ -170,6 +172,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnSetup, ID_PAGE_SETUP);
+
+    connect(ui.pageMain->BtnFeedback, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnFeedback, ID_PAGE_FEEDBACK);
     
     connect(ui.pageMain->BtnNet, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnNet, ID_PAGE_NETTYPE);
@@ -182,6 +187,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     //connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     //connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
+
+    connect(ui.pageFeedback->BtnSend, SIGNAL(clicked()), this, SLOT(SendFeedback()));
 
     connect(ui.pageEditTeam, SIGNAL(teamEdited()), this, SLOT(AfterTeamEdit()));
 
@@ -1553,4 +1560,107 @@ void HWForm::saveDemoWithCustomName()
         } while(!fileName.isEmpty() && !ok);
     }
 }
+
+void HWForm::SendFeedback()
+{
+    //Create Xml representation of google code issue first
+    if (!CreateIssueXml())
+    {
+        QMessageBox::warning(this, QMessageBox::tr("Fields required"),
+              QMessageBox::tr("Please fill out all fields"));
+        return;
+    }
+    
+    //Google login using fake account (feedback.hedgewars@gmail.com)
+    nam = new QNetworkAccessManager(this);
+    connect(nam, SIGNAL(finished(QNetworkReply*)),
+	this, SLOT(finishedSlot(QNetworkReply*)));
+
+    QUrl url(string(string("https://www.google.com/accounts/ClientLogin?"
+             "accountType=GOOGLE&Email=feedback.hedgewars@gmail.com&Passwd=hwfeedback&service=code&source=HedgewarsFoundation-Hedgewars-")
+	     + (cVersionString?(*cVersionString):QString("")).toStdString()).c_str());
+    nam->get(QNetworkRequest(url));
+
+}
+
+bool HWForm::CreateIssueXml()
+{
+    QString summary = ui.pageFeedback->summary->text();
+    QString description = ui.pageFeedback->description->toPlainText();
+
+    //Check if all necessary information is entered
+    if (summary.isEmpty() || description.isEmpty())
+	return false;
+
+    issueXml =
+	"<?xml version='1.0' encoding='UTF-8'?>"
+	"<entry xmlns='http://www.w3.org/2005/Atom' xmlns:issues='http://code.google.com/p/hedgewars/issues/list'>"
+        "<title>";
+    issueXml.append(summary);
+    issueXml.append("</title><content type='html'>");
+    issueXml.append(description);
+    issueXml.append("</content><author><name>feedback.hedgewars</name></author></entry>");
+
+    return true;
+}
+
+void HWForm::finishedSlot(QNetworkReply* reply)
+{
+    if (reply && reply->error() == QNetworkReply::NoError)
+    {
+	QByteArray array = reply->readAll();
+        QString str(array);
+
+        if (authToken.length() != 0)
+	{
+	   QMessageBox::information(this, QMessageBox::tr("Success"),
+              QMessageBox::tr("Successfully posted the issue on code.google.com!"));
+	   ui.pageFeedback->summary->clear();
+	   ui.pageFeedback->description->clear();
+	   authToken = "";
+	   return;
+	}
+
+	if(!getAuthToken(str))
+	{
+	   QMessageBox::warning(this, QMessageBox::tr("Network"),
+              QMessageBox::tr("Error during authentication with www.google.com"));
+	   return;
+	}
+
+	QByteArray body(issueXml.toStdString().c_str());
+	QNetworkRequest header(QUrl("https://code.google.com/feeds/issues/p/hedgewars/issues/full"));
+	header.setRawHeader("Content-Length", QString::number(issueXml.length()).toAscii());
+	header.setRawHeader("Content-Type", "application/atom+xml");
+	header.setRawHeader("Authorization", string(
+	   string("GoogleLogin auth=") + authToken.toStdString()).c_str());
+	nam->post(header, body);
+
+    }
+    else if (authToken.length() == 0)
+	QMessageBox::warning(this, QMessageBox::tr("Network"),
+              QMessageBox::tr("Error during authentication with www.google.com"));
+    else
+    {
+	QMessageBox::warning(this, QMessageBox::tr("Network"),
+              QMessageBox::tr("Error creating the issue"));
+	authToken = "";
+    }
+	
+}
+
+bool HWForm::getAuthToken(QString str)
+{
+   QRegExp ex("Auth=(.+)");
+
+   if (-1 == ex.indexIn(str))
+	return false;
+   
+   authToken = ex.cap(1);
+   authToken.remove(QChar('\n'));
+
+   return true;
+}
+
+
 
