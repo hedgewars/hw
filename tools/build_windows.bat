@@ -1,7 +1,7 @@
 @echo off
 :edit these variables if you need
-SET PASCAL=c:\Development\FPC\2.4.4\bin\i386-win32\
-SET QTDIR=c:\Development\QtSDK\Desktop\Qt\4.7.4\mingw\bin
+SET PASCAL=C:\FPC\2.4.4\bin\i386-win32\
+SET QTDIR=C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin
 SET PATH=%PATH%;%PASCAL%
 
 :SETUP
