@@ -96,7 +96,9 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
 	../QTfrontend/KB.h \
     ../QTfrontend/hwconsts.h \
     ../QTfrontend/sdlkeys.h \
-    ../QTfrontend/ui/mouseoverfilter.h
+    ../QTfrontend/ui/mouseoverfilter.h \
+    ../QTfrontend/ui/qpushbuttonwithsound.h \
+    ../QTfrontend/ui/widget/qpushbuttonwithsound.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/themesmodel.cpp \
@@ -171,7 +173,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/team.cpp \
     ../QTfrontend/ui_hwform.cpp \
     ../QTfrontend/hwconsts.cpp \
-    ../QTfrontend/ui/mouseoverfilter.cpp
+    ../QTfrontend/ui/mouseoverfilter.cpp \
+    ../QTfrontend/ui/widget/qpushbuttonwithsound.cpp
 
 win32 {
 	SOURCES += ../QTfrontend/xfire.cpp

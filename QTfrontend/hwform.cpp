@@ -43,6 +43,7 @@
 #include <QPropertyAnimation>
 #include <QGraphicsEffect>
 #include <QParallelAnimationGroup>
+#include <QSettings>
 
 #include "hwform.h"
 #include "game.h"
@@ -101,6 +102,9 @@
 bool frontendEffects = true;
 QString playerHash;
 
+GameUIConfig* HWForm::config = NULL;
+QSettings* HWForm::gameSettings = NULL;
+
 HWForm::HWForm(QWidget *parent, QString styleSheet)
   : QMainWindow(parent)
   , game(0)
@@ -130,7 +134,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageOptions->CBResolution->addItems(SDLInteraction::instance().getResolutions());
 
     config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
-
 
 #ifdef __APPLE__
     panel = new M3Panel;
