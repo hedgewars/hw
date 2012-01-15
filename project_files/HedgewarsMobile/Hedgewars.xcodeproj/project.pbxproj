@@ -429,6 +429,9 @@
 		61399012125D19C0003C2DC0 /* uMobile.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uMobile.pas; path = ../../hedgewars/uMobile.pas; sourceTree = SOURCE_ROOT; };
 		6147DAD21253DCDE0010357E /* savesButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = savesButton.png; path = Resources/Frontend/savesButton.png; sourceTree = "<group>"; };
 		614E333D11DE9A93009DBA4E /* VGSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = VGSHandlers.inc; path = ../../hedgewars/VGSHandlers.inc; sourceTree = SOURCE_ROOT; };
+		6154A53114C37E4A00F6EEF6 /* Romanian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Romanian; path = Locale/Romanian.lproj/About.strings; sourceTree = "<group>"; };
+		6154A53E14C37E5400F6EEF6 /* Romanian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Romanian; path = Locale/Romanian.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6154A54014C37EB100F6EEF6 /* Romanian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Romanian; path = Locale/Romanian.lproj/Scheme.strings; sourceTree = "<group>"; };
 		61589C5A144B4322007BFAA4 /* config.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; path = config.inc; sourceTree = "<group>"; };
 		615AD96112073B4D00F2FF04 /* startGameButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = startGameButton.png; path = Resources/Frontend/startGameButton.png; sourceTree = "<group>"; };
 		615AD9E8120764CA00F2FF04 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backButton.png; path = Resources/Frontend/backButton.png; sourceTree = "<group>"; };
@@ -1331,6 +1334,7 @@
 				Italian,
 				Bulgarian,
 				Portuguese,
+				Romanian,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1758,6 +1762,7 @@
 				619BCEC41495615700C1C409 /* Bulgarian */,
 				61D08D8714AEA9670007C078 /* Japanese */,
 				61C6783F14B3DD020087425A /* Portuguese */,
+				6154A53114C37E4A00F6EEF6 /* Romanian */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1776,6 +1781,7 @@
 				619BCED01495615F00C1C409 /* Bulgarian */,
 				61D08D8814AEA9700007C078 /* Japanese */,
 				61C6784B14B3DD0B0087425A /* Portuguese */,
+				6154A53E14C37E5400F6EEF6 /* Romanian */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1794,6 +1800,7 @@
 				619BCED11495616700C1C409 /* Bulgarian */,
 				61D08D8914AEA9780007C078 /* Japanese */,
 				61C6784C14B3DD140087425A /* Portuguese */,
+				6154A54014C37EB100F6EEF6 /* Romanian */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
