@@ -25,6 +25,8 @@
 #include <QLabel>
 #include <QSize>
 #include <QFontMetricsF>
+#include <qpushbuttonwithsound.h>
+#include <QMessageBox>
 
 AbstractPage::AbstractPage(QWidget* parent)
 {
@@ -71,7 +73,7 @@ void AbstractPage::initPage()
 
 QPushButton * AbstractPage::formattedButton(const QString & name, bool hasIcon)
 {
-    QPushButton * btn = new QPushButton(this);
+    QPushButtonWithSound * btn = new QPushButtonWithSound(this);
 
     if (hasIcon)
     {

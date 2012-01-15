@@ -60,8 +60,8 @@ class HWForm : public QMainWindow
 public:
     HWForm(QWidget *parent = 0, QString styleSheet = "");
     Ui_HWForm ui;
-    GameUIConfig * config;
-    QSettings * gameSettings; // Same file GameUIConfig points to but without the baggage.  Needs sync() calls if you want to get GameUIConfig changes though
+    static GameUIConfig * config;
+    static QSettings * gameSettings; // Same file GameUIConfig points to but without the baggage.  Needs sync() calls if you want to get GameUIConfig changes though
     void updateXfire();
     void PlayDemoQuick(const QString & demofilename);
     void exit();
