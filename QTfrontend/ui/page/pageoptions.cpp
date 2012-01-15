@@ -275,7 +275,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             GBAlayout->addWidget(CBFrontendFullscreen);
 
             CBFrontendEffects = new QCheckBox(AGGroupBox);
-            CBFrontendEffects->setText(QCheckBox::tr("Frontend effects") + " *");
+            CBFrontendEffects->setText(QCheckBox::tr("Frontend effects"));
             GBAlayout->addWidget(CBFrontendEffects);
 
             CBEnableFrontendSound = new QCheckBox(AGGroupBox);
@@ -390,11 +390,6 @@ QLayout * PageOptions::bodyLayoutDefinition()
             hr->setLineWidth(3);
             hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
-
-            QLabel *restartNote = new QLabel(this);
-            restartNote->setText(QString("* ") + QLabel::tr("Restart game to apply"));
-            restartNote->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-            GBAlayout->addWidget(restartNote);
 
             gbTBLayout->addWidget(AGGroupBox, 0, 1, 3, 1);
         }

@@ -82,7 +82,7 @@ void SpritePosition::init()
     fX = qrand() % (wParent->width() + 1);
 }
 
-BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
+BGWidget::BGWidget(QWidget * parent) : QWidget(parent), enabled(false)
 {
     setAttribute(Qt::WA_NoSystemBackground, true);
     sprite.load(":/res/Star.png");
@@ -123,6 +123,8 @@ BGWidget::~BGWidget()
 void BGWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
+    if (!enabled)
+        return;
 
     QPainter p;
 
@@ -139,6 +141,9 @@ void BGWidget::paintEvent(QPaintEvent *event)
 
 void BGWidget::animate()
 {
+    if (!enabled)
+        return;
+
     for (int i = 0; i < SPRITE_MAX; i++)
     {
         QPoint oldPos = spritePositions[i]->pos();
@@ -159,6 +164,7 @@ void BGWidget::startAnimation()
 void BGWidget::stopAnimation()
 {
     timerAnimation->stop();
+    repaint();
 }
 
 void BGWidget::init()

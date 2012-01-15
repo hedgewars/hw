@@ -63,6 +63,8 @@ public:
     void startAnimation();
     void stopAnimation();
     void init();
+    bool enabled;
+
 private:
     QImage sprite;
     QTimer * timerAnimation;

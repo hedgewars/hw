@@ -220,6 +220,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageOptions->SchemeEdit, SIGNAL(clicked()), this, SLOT(GoToEditScheme()));
     connect(ui.pageOptions->SchemeNew, SIGNAL(clicked()), this, SLOT(GoToNewScheme()));
     connect(ui.pageOptions->SchemeDelete, SIGNAL(clicked()), this, SLOT(DeleteScheme()));
+    connect(ui.pageOptions->CBFrontendEffects, SIGNAL(toggled(bool)), this, SLOT(onFrontendEffects(bool)) );
     connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
 
     connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
@@ -283,14 +284,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageMultiplayer->gameCFG->GameSchemes->setModel(ammoSchemeModel);
     ui.pageOptions->SchemesName->setModel(ammoSchemeModel);
 
-    wBackground = NULL;
-    if (config->isFrontendEffects()) {
-       wBackground = new BGWidget(this);
-       wBackground->setFixedSize(this->width(), this->height());
-       wBackground->lower();
-       wBackground->init();
-       wBackground->startAnimation();
-    }
+    wBackground = new BGWidget(this);
+    wBackground->setFixedSize(this->width(), this->height());
+    wBackground->lower();
+    wBackground->init();
+    wBackground->enabled = config->isFrontendEffects();
+    wBackground->startAnimation();
 
     //Install all eventFilters :
 
@@ -363,6 +362,15 @@ void HWForm::onFrontendFullscreen(bool value)
   else {
     setWindowState(windowState() & static_cast<int>(!Qt::WindowFullScreen));
   }
+}
+
+void HWForm::onFrontendEffects(bool value)
+{
+    wBackground->enabled = value;
+    if (value)
+        wBackground->startAnimation();
+    else
+        wBackground->stopAnimation();
 }
 
 /*
@@ -585,7 +593,7 @@ void HWForm::GoToPage(int id)
     if (id == ID_PAGE_DRAWMAP)
         stopAnim = true;
 
-    if (frontendEffects && !stopAnim)
+    if (!stopAnim)
     {
         /**Start animation :**/
         int coeff = 1;
@@ -597,17 +605,19 @@ void HWForm::GoToPage(int id)
         QGraphicsOpacityEffect *effectLast = new QGraphicsOpacityEffect(ui.Pages->widget(lastid));
         ui.Pages->widget(lastid)->setGraphicsEffect(effectLast);
 #endif
+        // no effects, means 0 effect duration :D
+        int duration = config->isFrontendEffects() ? 500 : 0;
 
         //New page animation
         animationNewSlide = new QPropertyAnimation(ui.Pages->widget(id), "pos");
-        animationNewSlide->setDuration(500);
+        animationNewSlide->setDuration(duration);
         animationNewSlide->setStartValue(QPoint(width()/coeff, 0));
         animationNewSlide->setEndValue(QPoint(0, 0));
         animationNewSlide->setEasingCurve(QEasingCurve::OutExpo);
 
 #ifndef Q_OS_MAC
         animationNewOpacity = new QPropertyAnimation(effectNew, "opacity");
-        animationNewOpacity->setDuration(500);
+        animationNewOpacity->setDuration(duration);
         animationNewOpacity->setStartValue(0.01);
         animationNewOpacity->setEndValue(1);
         animationNewOpacity->setEasingCurve(QEasingCurve::OutExpo);
@@ -617,14 +627,14 @@ void HWForm::GoToPage(int id)
         ui.Pages->widget(lastid)->setHidden(false);
 
         animationOldSlide = new QPropertyAnimation(ui.Pages->widget(lastid), "pos");
-        animationOldSlide->setDuration(500);
+        animationOldSlide->setDuration(duration);
         animationOldSlide->setStartValue(QPoint(0, 0));
         animationOldSlide->setEndValue(QPoint(-width()/coeff, 0));
         animationOldSlide->setEasingCurve(QEasingCurve::OutExpo);
 
 #ifndef Q_OS_MAC
         animationOldOpacity = new QPropertyAnimation(effectLast, "opacity");
-        animationOldOpacity->setDuration(500);
+        animationOldOpacity->setDuration(duration);
         animationOldOpacity->setStartValue(1);
         animationOldOpacity->setEndValue(0.01);
         animationOldOpacity->setEasingCurve(QEasingCurve::OutExpo);
@@ -692,7 +702,7 @@ void HWForm::GoBack()
 
     /**Start animation :**/
 
-    if (curid != 0 && frontendEffects && !stopAnim)
+    if (curid != 0 && !stopAnim)
     {
         int coeff = 1;
 #ifndef Q_OS_MAC
@@ -704,17 +714,19 @@ void HWForm::GoBack()
         QGraphicsOpacityEffect *effectLast = new QGraphicsOpacityEffect(ui.Pages->widget(curid));
         ui.Pages->widget(curid)->setGraphicsEffect(effectLast);
 #endif
+        // no effects, means 0 effect duration :D
+        int duration = config->isFrontendEffects() ? 500 : 0;
 
         //Last page animation
         animationOldSlide = new QPropertyAnimation(ui.Pages->widget(id), "pos");
-        animationOldSlide->setDuration(500);
+        animationOldSlide->setDuration(duration);
         animationOldSlide->setStartValue(QPoint(-width()/coeff, 0));
         animationOldSlide->setEndValue(QPoint(0, 0));
         animationOldSlide->setEasingCurve(QEasingCurve::OutExpo);
 
 #ifndef Q_OS_MAC
         animationOldOpacity = new QPropertyAnimation(effectLast, "opacity");
-        animationOldOpacity->setDuration(500);
+        animationOldOpacity->setDuration(duration);
         animationOldOpacity->setStartValue(1);
         animationOldOpacity->setEndValue(0.01);
         animationOldOpacity->setEasingCurve(QEasingCurve::OutExpo);
@@ -723,14 +735,14 @@ void HWForm::GoBack()
         ui.Pages->widget(curid)->setHidden(false);
 
         animationNewSlide = new QPropertyAnimation(ui.Pages->widget(curid), "pos");
-        animationNewSlide->setDuration(500);
+        animationNewSlide->setDuration(duration);
         animationNewSlide->setStartValue(QPoint(0, 0));
         animationNewSlide->setEndValue(QPoint(width()/coeff, 0));
         animationNewSlide->setEasingCurve(QEasingCurve::OutExpo);
 
 #ifndef Q_OS_MAC
         animationNewOpacity = new QPropertyAnimation(effectNew, "opacity");
-        animationNewOpacity->setDuration(500);
+        animationNewOpacity->setDuration(duration);
         animationNewOpacity->setStartValue(0.01);
         animationNewOpacity->setEndValue(1);
         animationNewOpacity->setEasingCurve(QEasingCurve::OutExpo);
@@ -747,8 +759,6 @@ void HWForm::GoBack()
 
         connect(animationNewSlide, SIGNAL(finished()), ui.Pages->widget(curid), SLOT(hide()));
     }
-
-
 }
 
 void HWForm::OpenSnapshotFolder()

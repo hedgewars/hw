@@ -118,6 +118,7 @@ private slots:
     void CreateNetGame();
     void UpdateWeapons();
     void onFrontendFullscreen(bool value);
+    void onFrontendEffects(bool value);
     void Music(bool checked);
     void UpdateCampaignPage(int index);
     //Starts the transmission process for the feedback

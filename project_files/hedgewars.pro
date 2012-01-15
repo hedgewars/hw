@@ -16,7 +16,7 @@ INCLUDEPATH += ../misc/quazip/
 DESTDIR = .
 
 win32 {
-	RC_FILE	= ../QTfrontend/res/hedgewars.rc
+        RC_FILE	= ../QTfrontend/hedgewars.rc
 }
 
 QT += network
@@ -98,7 +98,8 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/sdlkeys.h \
     ../QTfrontend/ui/mouseoverfilter.h \
     ../QTfrontend/ui/qpushbuttonwithsound.h \
-    ../QTfrontend/ui/widget/qpushbuttonwithsound.h
+    ../QTfrontend/ui/widget/qpushbuttonwithsound.h \
+    ../QTfrontend/ui/page/pagefeedback.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/themesmodel.cpp \
@@ -174,7 +175,9 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui_hwform.cpp \
     ../QTfrontend/hwconsts.cpp \
     ../QTfrontend/ui/mouseoverfilter.cpp \
-    ../QTfrontend/ui/widget/qpushbuttonwithsound.cpp
+    ../QTfrontend/ui/mouseoverfilter.cpp \
+    ../QTfrontend/ui/widget/qpushbuttonwithsound.cpp \
+    ../QTfrontend/ui/page/pagefeedback.cpp
 
 win32 {
 	SOURCES += ../QTfrontend/xfire.cpp
