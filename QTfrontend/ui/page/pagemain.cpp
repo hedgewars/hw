@@ -63,6 +63,9 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnDataDownload->setWhatsThis(tr("Access the user created content downloadable from our website"));
     pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
 
+    // disable exit button sound
+    btnBack->isSoundEnabled = false;
+
     return pageLayout;
 }
 
