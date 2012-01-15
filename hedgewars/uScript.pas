@@ -1881,7 +1881,7 @@ ScriptAmmoReinforcement[ord(ammo)]:= inttostr(reinforcement)[1];
 end;
 
 procedure ScriptApplyAmmoStore;
-var i, j : LongInt;
+var i, j, k : LongInt;
 begin
 SetAmmoLoadout(ScriptAmmoLoadout);
 SetAmmoProbability(ScriptAmmoProbability);
@@ -1890,14 +1890,26 @@ SetAmmoReinforcement(ScriptAmmoReinforcement);
 
 if (GameFlags and gfSharedAmmo) <> 0 then
     for i:= 0 to Pred(ClansCount) do
-        AddAmmoStore
+        begin
+        AddAmmoStore;
+        for j:= 0 to Pred(ClansArray[i]^.TeamsNumber) do
+            for k:= 0 to Pred(ClansArray[i]^.Teams[j]^.HedgehogsNumber) do
+                ClansArray[i]^.Teams[j]^.Hedgehogs[k].AmmoStore:= StoreCnt - 1
+        end
 else if (GameFlags and gfPerHogAmmo) <> 0 then
     for i:= 0 to Pred(TeamsCount) do
         for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
-            AddAmmoStore
+            begin
+            AddAmmoStore;
+            TeamsArray[i]^.Hedgehogs[j].AmmoStore:= StoreCnt - 1
+            end
 else 
     for i:= 0 to Pred(TeamsCount) do
-        AddAmmoStore
+        begin
+        AddAmmoStore;
+        for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
+            TeamsArray[i]^.Hedgehogs[j].AmmoStore:= StoreCnt - 1
+        end
 end;
 
 procedure initModule;
