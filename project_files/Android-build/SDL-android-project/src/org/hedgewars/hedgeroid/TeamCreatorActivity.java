@@ -67,8 +67,12 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 	private boolean saved = false;
 	private String fileName = null;
 
-	private List<HashMap<String, ?>> flagsData, typesData, gravesData, hatsData;
-	private List<String> voicesData, fortsData;
+	private final List<HashMap<String, ?>> flagsData = new ArrayList<HashMap<String, ?>>();
+	private final List<HashMap<String, ?>> typesData = new ArrayList<HashMap<String, ?>>();
+	private final List<HashMap<String, ?>> gravesData = new ArrayList<HashMap<String, ?>>();
+	private final List<HashMap<String, ?>> hatsData = new ArrayList<HashMap<String, ?>>();
+	private final List<String> voicesData = new ArrayList<String>();
+	private final List<String> fortsData = new ArrayList<String>();
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -104,7 +108,6 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 					.findViewById(R.id.txtTeam1));
 		}
 
-		gravesData = new ArrayList<HashMap<String, ?>>();
 		SimpleAdapter sa = new SimpleAdapter(this, gravesData,
 				R.layout.spinner_textimg_entry, new String[] { "txt", "img" },
 				new int[] { R.id.spinner_txt, R.id.spinner_img });
@@ -113,7 +116,6 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 		grave.setAdapter(sa);
 		grave.setOnFocusChangeListener(focusser);
 
-		flagsData = new ArrayList<HashMap<String, ?>>();
 		sa = new SimpleAdapter(this, flagsData, R.layout.spinner_textimg_entry,
 				new String[] { "txt", "img" }, new int[] { R.id.spinner_txt,
 				R.id.spinner_img });
@@ -122,7 +124,6 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 		flag.setAdapter(sa);
 		flag.setOnFocusChangeListener(focusser);
 
-		typesData = new ArrayList<HashMap<String, ?>>();
 		sa = new SimpleAdapter(this, typesData, R.layout.spinner_textimg_entry,
 				new String[] { "txt", "img" }, new int[] { R.id.spinner_txt,
 				R.id.spinner_img });
@@ -130,7 +131,6 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 		difficulty.setAdapter(sa);
 		difficulty.setOnFocusChangeListener(focusser);
 
-		hatsData = new ArrayList<HashMap<String, ?>>();
 		sa = new SimpleAdapter(this, hatsData, R.layout.spinner_textimg_entry,
 				new String[] { "txt", "img" }, new int[] { R.id.spinner_txt,
 				R.id.spinner_img });
@@ -140,14 +140,12 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 			spin.setAdapter(sa);
 		}
 
-		voicesData = new ArrayList<String>();
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_item, voicesData);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		voice.setAdapter(adapter);
 		voice.setOnFocusChangeListener(focusser);
 		voiceButton.setOnClickListener(voiceClicker);
 
-		fortsData = new ArrayList<String>();
 		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, fortsData);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		fort.setAdapter(adapter);
@@ -158,28 +156,33 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 	}
 
 	public void run(){
-		ArrayList<HashMap<String, ?>> gravesData = FrontendDataUtils.getGraves(this);
-		ArrayList<HashMap<String, ?>> flagsData = FrontendDataUtils.getFlags(this);
-		ArrayList<HashMap<String, ?>> typesData = FrontendDataUtils.getTypes(this);
-		ArrayList<HashMap<String, ?>> hatsData = FrontendDataUtils.getHats(this);
-		ArrayList<String> voicesData = FrontendDataUtils.getVoices(this);
-		ArrayList<String> fortsData = FrontendDataUtils.getForts(this);
+		final ArrayList<HashMap<String, ?>> gravesDataNew = FrontendDataUtils.getGraves(this);
+		final ArrayList<HashMap<String, ?>> flagsDataNew = FrontendDataUtils.getFlags(this);
+		final ArrayList<HashMap<String, ?>> typesDataNew = FrontendDataUtils.getTypes(this);
+		final ArrayList<HashMap<String, ?>> hatsDataNew = FrontendDataUtils.getHats(this);
+		final ArrayList<String> voicesDataNew = FrontendDataUtils.getVoices(this);
+		final ArrayList<String> fortsDataNew = FrontendDataUtils.getForts(this);
 		
-		copy(this.gravesData, gravesData);
-		copy(this.flagsData, flagsData);
-		copy(this.typesData, typesData);
-		copy(this.hatsData, hatsData);
-		copy(this.voicesData, voicesData);
-		copy(this.fortsData, fortsData);
 		
 		this.runOnUiThread(new Runnable(){
 			public void run() {
+				copy(gravesData, gravesDataNew);
 				((SimpleAdapter)grave.getAdapter()).notifyDataSetChanged();
+				
+				copy(flagsData, flagsDataNew);
 				((SimpleAdapter)flag.getAdapter()).notifyDataSetChanged();
+				
+				copy(typesData, typesDataNew);
 				((SimpleAdapter)difficulty.getAdapter()).notifyDataSetChanged();
-				((SimpleAdapter)hogHat.get(0).getAdapter()).notifyDataSetChanged();				
+				
+				copy(hatsData, hatsDataNew);
+				((SimpleAdapter)hogHat.get(0).getAdapter()).notifyDataSetChanged();
+				
+				copy(voicesData, voicesDataNew);
 				((ArrayAdapter<String>)fort.getAdapter()).notifyDataSetChanged();
-				((ArrayAdapter<String>)voice.getAdapter()).notifyDataSetChanged();
+				
+				copy(fortsData, fortsDataNew);
+				((ArrayAdapter<String>)voice.getAdapter()).notifyDataSetChanged();			
 			}
 		});		
 

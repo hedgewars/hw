@@ -32,7 +32,6 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -199,10 +198,14 @@ public class DownloadFragment extends Fragment{
 				break;
 			case MSG_FAILED:
 				progress.setProgress(progress.getMax());
-				progress_sub.setText(R.string.download_failed);
-				//	positive.setText(R.string.download_back);
-				//	positive.setOnClickListener(doneClicker);
-
+				
+				String errorMsg = getString(R.string.download_failed);
+				switch(msg.arg1){
+				case DownloadAsyncTask.EXIT_CONNERROR: progress_sub.setText(errorMsg + " " + "Connection error"); break;
+				case DownloadAsyncTask.EXIT_FNF: progress_sub.setText(errorMsg + " " + "File not found"); break;
+				case DownloadAsyncTask.EXIT_MD5: progress_sub.setText(errorMsg + " " + "MD5 check failed"); break;
+				case DownloadAsyncTask.EXIT_URLFAIL: progress_sub.setText(errorMsg + " " + "Invalid url"); break;
+				}
 				negative.setText(R.string.download_tryagain);
 				negative.setOnClickListener(tryAgainClicker);
 				break;

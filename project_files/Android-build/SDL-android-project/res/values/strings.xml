@@ -21,7 +21,7 @@
     <string name="download_done">Done</string>
     <string name="download_back">Back to main menu</string>
     <string name="download_tryagain">Try again</string>
-    <string name="download_failed">The download has failed, check the internet connectivity and please try again</string>
+    <string name="download_failed">The download has failed because of: </string>
     <string name="download_userexplain">Before starting the game we must download some extra files...</string>
     
     <string name="download_areyousure">Are you sure you want to download this package?</string>
