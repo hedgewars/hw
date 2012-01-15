@@ -16,7 +16,7 @@ INCLUDEPATH += ../misc/quazip/
 DESTDIR = .
 
 win32 {
-        RC_FILE	= ../QTfrontend/hedgewars.rc
+    RC_FILE = ../QTfrontend/hedgewars.rc
 }
 
 QT += network
@@ -93,7 +93,7 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/achievements.h \
     ../QTfrontend/binds.h \
     ../QTfrontend/ui_hwform.h \
-	../QTfrontend/KB.h \
+    ../QTfrontend/KB.h \
     ../QTfrontend/hwconsts.h \
     ../QTfrontend/sdlkeys.h \
     ../QTfrontend/ui/mouseoverfilter.h \
@@ -180,7 +180,7 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/page/pagefeedback.cpp
 
 win32 {
-	SOURCES += ../QTfrontend/xfire.cpp
+    SOURCES += ../QTfrontend/xfire.cpp
 }
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts 
@@ -213,22 +213,21 @@ RESOURCES += ../QTfrontend/hedgewars.qrc
 LIBS += -L../misc/quazip -lquazip
 
 !macx {
-        LIBS += -lSDL -lSDL_mixer
+    LIBS += -lSDL -lSDL_mixer
 } else {
-	QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
-	QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
-	
-	OBJECTIVE_SOURCES += ../QTfrontend/*.m ../QTfrontend/*.mm 
-	SOURCES += ../QTfrontend/AutoUpdater.cpp ../QTfrontend/InstallController.cpp \
-			../../build/QTfrontend/hwconsts.cpp
-	HEADERS += ../QTfrontend/M3InstallController.h ../QTfrontend/M3Panel.h \
-		../QTfrontend/NSWorkspace_RBAdditions.h ../QTfrontend/AutoUpdater.h \
-		../QTfrontend/CocoaInitializer.h ../QTfrontend/InstallController.h \
-		../QTfrontend/SparkleAutoUpdater.h 
-	
-	LIBS += -lobjc -framework AppKit -framework IOKit -framework Foundation -framework SDL -framework SDL_Mixer -framework Sparkle -DSPARKLE_ENABLED 
-	INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers /Library/Frameworks/SDL_Mixer.framework/Headers
-	CONFIG += warn_on x86
+    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
+    QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
 
- 	#CONFIG += x86 ppc x86_64 ppc64
+    OBJECTIVE_SOURCES += ../QTfrontend/*.m ../QTfrontend/*.mm
+    SOURCES += ../QTfrontend/AutoUpdater.cpp ../QTfrontend/InstallController.cpp \
+               ../../build/QTfrontend/hwconsts.cpp
+    HEADERS += ../QTfrontend/M3InstallController.h ../QTfrontend/M3Panel.h \
+               ../QTfrontend/NSWorkspace_RBAdditions.h ../QTfrontend/AutoUpdater.h \
+               ../QTfrontend/CocoaInitializer.h ../QTfrontend/InstallController.h \
+               ../QTfrontend/SparkleAutoUpdater.h
+
+    LIBS += -lobjc -framework AppKit -framework IOKit -framework Foundation -framework SDL -framework SDL_Mixer -framework Sparkle -DSPARKLE_ENABLED
+    INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers /Library/Frameworks/SDL_Mixer.framework/Headers
+    CONFIG += warn_on x86
+    #CONFIG += x86 ppc x86_64 ppc64
 }

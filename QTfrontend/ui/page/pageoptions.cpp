@@ -385,12 +385,6 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBShowFPS->setText(QCheckBox::tr("Show FPS"));
             GBAlayout->addWidget(CBShowFPS);
 
-            hr = new QFrame(AGGroupBox);
-            hr->setFrameStyle(QFrame::HLine);
-            hr->setLineWidth(3);
-            hr->setFixedHeight(10);
-            GBAlayout->addWidget(hr);
-
             gbTBLayout->addWidget(AGGroupBox, 0, 1, 3, 1);
         }
 
