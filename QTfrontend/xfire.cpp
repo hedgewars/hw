@@ -23,6 +23,7 @@
 #include "xfire.h"
 #include "../misc/xfire/xfiregameclient.h"
 
+#ifdef USE_XFIRE
 // use_xfire: stores if xfire is loaded and functions should do something at all
 bool use_xfire = false;
 char *keys[XFIRE_KEY_COUNT];
@@ -81,3 +82,4 @@ void xfire_update(void)
         return;
     XfireSetCustomGameDataA(XFIRE_KEY_COUNT, (const char**)keys, (const char**)values);
 }
+#endif // USE_XFIRE
