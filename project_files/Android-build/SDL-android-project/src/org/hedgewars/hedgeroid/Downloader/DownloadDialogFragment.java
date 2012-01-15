@@ -60,7 +60,7 @@ public class DownloadDialogFragment extends DialogFragment {
 
 		public void onClick(DialogInterface dialog, int which) {
 			if(which == Dialog.BUTTON_POSITIVE){
-				Intent i = new Intent(getActivity(), DownloadFragment.class);
+				Intent i = new Intent(getActivity(), DownloadListActivity.class);
 				i.putExtra(DownloadFragment.EXTRA_TASK, task);
 				getActivity().startActivity(i);
 			}
