@@ -175,7 +175,7 @@ public class DownloadService extends Service {
 			contentView.setProgressBar(R.id.notification_progress, 100, 34, false);
 			progressNotification.contentView = contentView;
 
-			PendingIntent contentIntent = PendingIntent.getActivity(DownloadService.this, 0, new Intent(DownloadService.this, DownloadFragment.class), Intent.FLAG_ACTIVITY_NEW_TASK);
+			PendingIntent contentIntent = PendingIntent.getActivity(DownloadService.this, 0, new Intent(DownloadService.this, DownloadListActivity.class), Intent.FLAG_ACTIVITY_NEW_TASK);
 			progressNotification.contentIntent = contentIntent;
 
 			startForeground(NOTIFICATION_PROCESSING, progressNotification);
@@ -199,10 +199,10 @@ public class DownloadService extends Service {
 		public void done(int result){
 			switch(result){
 			case DownloadAsyncTask.EXIT_SUCCESS: 	sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_DONE)); break;
-			case DownloadAsyncTask.EXIT_CONNERROR:  sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
-			case DownloadAsyncTask.EXIT_FNF:		sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
-			case DownloadAsyncTask.EXIT_MD5:		sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
-			case DownloadAsyncTask.EXIT_URLFAIL:	sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED)); break;
+			case DownloadAsyncTask.EXIT_CONNERROR:  sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED, DownloadAsyncTask.EXIT_CONNERROR, 0)); break;
+			case DownloadAsyncTask.EXIT_FNF:		sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED, DownloadAsyncTask.EXIT_FNF, 0)); break;
+			case DownloadAsyncTask.EXIT_MD5:		sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED, DownloadAsyncTask.EXIT_MD5, 0)); break;
+			case DownloadAsyncTask.EXIT_URLFAIL:	sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_FAILED, DownloadAsyncTask.EXIT_URLFAIL, 0)); break;
 			case DownloadAsyncTask.EXIT_CANCELLED:	sendMessageToClients(Message.obtain(handler, DownloadFragment.MSG_DONE)); break;
 			}
 			
