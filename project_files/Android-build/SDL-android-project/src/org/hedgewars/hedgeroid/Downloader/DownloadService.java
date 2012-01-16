@@ -87,7 +87,7 @@ public class DownloadService extends Service {
 					if(task != null && task.getPackage().equals(pack) && task.getStatus() == TASK_STATE.PENDING){
 						downloadTasks.remove(task);
 					}
-					if(currentTask.getPackage().equals(pack)){
+					if(currentTask != null && currentTask.getPackage().equals(pack)){//TODO synchronization problem?
 						asyncExecutor.cancel(false);
 					}
 					return;
