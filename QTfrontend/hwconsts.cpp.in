@@ -71,3 +71,6 @@ quint16 netPort = NETGAME_DEFAULT_PORT;
 
 bool haveServer = ${HAVE_NETSERVER};
 bool isDevBuild = ${HW_DEV};
+
+int season = SEASON_NONE;
+int years_since_foundation = 0;

@@ -18,6 +18,7 @@
  */
 
 #include "bgwidget.h"
+#include "hwconsts.h"
 
 SpritePosition::SpritePosition(QWidget * parent, int sw, int sh)
 {
@@ -85,7 +86,24 @@ void SpritePosition::init()
 BGWidget::BGWidget(QWidget * parent) : QWidget(parent), enabled(false)
 {
     setAttribute(Qt::WA_NoSystemBackground, true);
-    sprite.load(":/res/Star.png");
+
+    QString fname;
+
+    //For each season, there is a replacement for the star (Star.png)
+    //Todo: change element for easter and birthday
+    //Simply replace Confetti.png and Egg.png with an appropriate graphic)
+    switch (season)
+    {
+    case SEASON_CHRISTMAS : fname = "Flake.png";
+			    break;
+    case SEASON_EASTER : fname = "Egg.png";
+			 break;
+    case SEASON_HWBDAY : fname = "Confetti.png";
+			 break;
+    default : fname = "Star.png";
+    }
+
+    sprite.load(":/res/" + fname);
 
     setAutoFillBackground(false);
 
@@ -164,7 +182,7 @@ void BGWidget::startAnimation()
 void BGWidget::stopAnimation()
 {
     timerAnimation->stop();
-    repaint();
+	repaint();
 }
 
 void BGWidget::init()

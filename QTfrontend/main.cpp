@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QSettings>
 #include <QStringListModel>
+#include <QDate>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -38,6 +39,50 @@
 #ifdef __APPLE__
 #include "CocoaInitializer.h"
 #endif
+
+
+//Determines the day of easter in year
+//from http://aa.usno.navy.mil/faq/docs/easter.php,adapted to C/C++
+QDate calculateEaster(long year)
+{
+    int c, n, k, i, j, l, m, d;
+    
+    c = year/100;
+    n = year - 19*(year/19);
+    k = (c - 17)/25;
+    i = c - c/4 - (c - k)/3 + 19*n + 15;
+    i = i - 30*(i/30);
+    i = i - (i/28)*(1 - (i/28)*(29/(i + 1))*((21 - n)/11));
+    j = year + year/4 + i + 2 - c + c/4;
+    j = j - 7*(j/7);
+    l = i - j;
+    m = 3 + (l + 40)/44;
+    d = l + 28 - 31*(m / 4);
+
+    return QDate(year, m, d);
+}
+
+//Checks season and assigns it to the variable season in "hwconsts.h"
+void checkSeason()
+{
+   QDate date = QDate::currentDate();
+   
+   //Christmas?
+   if (date.month() == 12 && date.daysInMonth() >= 24 
+	&& date.daysInMonth() <= 26)
+	season = SEASON_CHRISTMAS;
+   //Hedgewars birthday?
+   else if (date.month() == 10 && date.daysInMonth() == 31)
+   {
+   	season = SEASON_HWBDAY;
+	years_since_foundation = date.year() - 2004;
+   }
+   //Easter?
+   else if (calculateEaster(date.year()) == date)
+	season = SEASON_EASTER;
+   else
+	season = SEASON_NONE;
+}
 
 bool checkForDir(const QString & dir)
 {
@@ -244,11 +289,28 @@ int main(int argc, char *argv[]) {
 #endif
 
     QString style = "";
+    QString fname;
+    
+    checkSeason();
+    //For each season, there is an extra stylesheet
+    //Todo: change background for easter and birthday
+    //(simply replace res/BackgroundBirthday.png and res/BackgroundEaster.png
+    //with an appropriate background
+    switch (season)
+    {
+    case SEASON_CHRISTMAS : fname = "christmas.css";
+			    break;
+    case SEASON_EASTER : fname = "easter.css";
+			 break;
+    case SEASON_HWBDAY : fname = "birthday.css";
+			 break;
+    default : fname = "qt.css";
+    }
 
     // load external stylesheet if there is any
-    QFile extFile(dataMgr.findFileForRead("css/qt.css"));
+    QFile extFile(dataMgr.findFileForRead("css/" + fname));
 
-    QFile resFile(":/res/css/qt.css");
+    QFile resFile(":/res/css/" + fname);
 
     QFile & file = (extFile.exists()?extFile:resFile);
 
