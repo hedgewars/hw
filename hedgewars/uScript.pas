@@ -1643,6 +1643,7 @@ lua_pop(luaState, 1);
 end;
 
 procedure ScriptOnGameInit;
+var i, j, k: LongInt;
 begin
 // not required if there is no script to run
 if not ScriptLoaded then
@@ -1704,6 +1705,29 @@ if ScriptGetString('Theme') <> '' then
     ParseCommand('theme ' + ScriptGetString('Theme'), true);
 LuaGoals:= ScriptGetString('Goals');
 
+// Support lua changing the ammo layout - assume all hogs have same ammo, note this might leave a few ammo stores lying around.
+k:= 0;
+if (GameFlags and gfSharedAmmo) <> 0 then
+    for i:= 0 to Pred(ClansCount) do
+        for j:= 0 to Pred(ClansArray[i]^.TeamsNumber) do
+            for k:= 0 to Pred(ClansArray[i]^.Teams[j]^.HedgehogsNumber) do
+                ClansArray[i]^.Teams[j]^.Hedgehogs[k].AmmoStore:= i
+else if (GameFlags and gfPerHogAmmo) <> 0 then
+    for i:= 0 to Pred(TeamsCount) do
+        for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
+            begin
+            TeamsArray[i]^.Hedgehogs[j].AmmoStore:= k;
+            if StoreCnt-1 < k then AddAmmoStore;
+            inc(k)
+            end
+else 
+    for i:= 0 to Pred(TeamsCount) do
+        begin
+        for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
+            TeamsArray[i]^.Hedgehogs[j].AmmoStore:= k;
+        if StoreCnt-1 < k then AddAmmoStore;
+        inc(k)
+        end;
 if ScriptExists('onAmmoStoreInit') then
     begin
     ScriptPrepareAmmoStore;
