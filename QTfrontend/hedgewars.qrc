@@ -1,8 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file alias="Ammos.png">../share/hedgewars/Data/Graphics/AmmoMenu/Ammos.png</file>
-		  <file>res/css/qt.css</file>
-		  <file>res/css/chat.css</file>
+        <file>res/css/qt.css</file>
+        <file>res/css/chat.css</file>
+        <file>res/css/christmas.css</file>
+        <file>res/css/easter.css</file>
+        <file>res/css/birthday.css</file>		  
         <file>res/hh25x25.png</file>
         <file>res/hh25x25grey.png</file>
         <file>res/ammopic.png</file>
@@ -34,6 +37,9 @@
         <file>res/Multiplayer.png</file>
         <file>res/Trainings.png</file>
         <file>res/Background.png</file>
+        <file>res/BackgroundChristmas.png</file>
+        <file>res/BackgroundEaster.png</file>
+        <file>res/BackgroundBirthday.png</file>
         <file>res/Exit.png</file>
         <file>res/HedgewarsTitle.png</file>
         <file>res/LocalPlay.png</file>
@@ -95,6 +101,9 @@
         <file>res/iconRope.png</file>
         <file>res/dice.png</file>
         <file>res/Star.png</file>
+	<file>res/Flake.png</file>
+	<file>res/Egg.png</file>
+	<file>res/Confetti.png</file>
         <file>res/file_save.png</file>
         <file>res/file_demo.png</file>
         <file>res/chat_default.png</file>
