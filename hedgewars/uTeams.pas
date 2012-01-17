@@ -55,7 +55,8 @@ for t:= 0 to Pred(ClansCount) do
         end;
 
 if (AliveCount > 1)
-or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then exit(false);
+or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then
+    exit(false);
 CheckForWin:= true;
 
 TurnTimeLeft:= 0;
@@ -67,7 +68,8 @@ if not GameOver then
         AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
         SendStat(siGameResult, trmsg[sidDraw]);
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
-        end else // win
+        end
+    else // win
         with AliveClan^ do
             begin
             if TeamsNumber = 1 then
@@ -109,7 +111,8 @@ with CurrentHedgehog^ do
            begin
            DeleteCI(Gear);
            FindPlace(Gear, false, 0, LAND_WIDTH);
-           if Gear <> nil then AddGearCI(Gear)
+           if Gear <> nil then
+               AddGearCI(Gear)
            end
         end;
 
@@ -134,7 +137,8 @@ with CurrentTeam^ do
         repeat
             begin
             inc(c);
-            if c > cMaxHHIndex then c:= 0
+            if c > cMaxHHIndex then
+                c:= 0
             end
         until (c = CurrHedgehog) or (Hedgehogs[c].Gear <> nil);
         LocalAmmo:= Hedgehogs[c].AmmoStore
@@ -151,11 +155,13 @@ repeat
             NextClan:= true;
             end;
 
-    if (GameFlags and gfTagTeam) = 0 then inc(c);
+    if (GameFlags and gfTagTeam) = 0 then
+        inc(c);
 
     if c = ClansCount then
         begin
-        if not PlacingHogs then inc(TotalRounds);
+        if not PlacingHogs then
+            inc(TotalRounds);
         c:= 0
         end;
 
@@ -185,25 +191,27 @@ var i, t: LongInt;
 
 begin
 if PlacingHogs then
-   begin
-   PlacingHogs:= false;
-   for t:= 0 to Pred(TeamsCount) do
-      for i:= 0 to cMaxHHIndex do
-          if (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].Unplaced) then
-             PlacingHogs:= true;
+    begin
+    PlacingHogs:= false;
+    for t:= 0 to Pred(TeamsCount) do
+        for i:= 0 to cMaxHHIndex do
+            if (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].Unplaced) then
+                PlacingHogs:= true;
 
-   if not PlacingHogs then // Reset  various things I mucked with
-      begin
-      for i:= 0 to ClansCount do
-         if ClansArray[i] <> nil then ClansArray[i]^.TurnNumber:= 0;
-      ResetWeapons
-      end
-   end;
+    if not PlacingHogs then // Reset  various things I mucked with
+        begin
+        for i:= 0 to ClansCount do
+            if ClansArray[i] <> nil then
+                ClansArray[i]^.TurnNumber:= 0;
+        ResetWeapons
+        end
+    end;
 
 inc(CurrentTeam^.Clan^.TurnNumber);
 
 CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
-if CurWeapon^.Count = 0 then CurrentHedgehog^.CurAmmoType:= amNothing;
+if CurWeapon^.Count = 0 then
+    CurrentHedgehog^.CurAmmoType:= amNothing;
 
 with CurrentHedgehog^ do
     begin
@@ -235,18 +243,21 @@ if (GameFlags and gfDisableWind) = 0 then
 
 ApplyAmmoChanges(CurrentHedgehog^);
 
-if (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then SetBinds(CurrentTeam^.Binds);
+if (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
+    SetBinds(CurrentTeam^.Binds);
 
 bShowFinger:= true;
 
 if PlacingHogs then
     begin
-    if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 15000
+    if CurrentHedgehog^.Unplaced then
+        TurnTimeLeft:= 15000
     else TurnTimeLeft:= 0
     end
 else if ((GameFlags and gfTagTeam) <> 0) and (not NextClan) then
     begin
-    if TagTurnTimeLeft <> 0 then TurnTimeLeft:= TagTurnTimeLeft;
+    if TagTurnTimeLeft <> 0 then
+        TurnTimeLeft:= TagTurnTimeLeft;
     TagTurnTimeLeft:= 0;
     end
 else
@@ -261,7 +272,8 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
         AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
     else
         AddVoice(sndYesSir, CurrentTeam^.voicepack);
-    if PlacingHogs or (cHedgehogTurnTime < 1000000) then ReadyTimeLeft:= cReadyDelay;
+    if PlacingHogs or (cHedgehogTurnTime < 1000000) then
+        ReadyTimeLeft:= cReadyDelay;
     AddCaption(Format(shortstring(trmsg[sidReady]), CurrentTeam^.TeamName), cWhiteColor, capgrpGameState)
     end
 else
@@ -293,22 +305,23 @@ inc(TeamsCount);
 c:= Pred(ClansCount);
 while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
 if c < 0 then
-   begin
-   new(team^.Clan);
-   FillChar(team^.Clan^, sizeof(TClan), 0);
-   ClansArray[ClansCount]:= team^.Clan;
-   inc(ClansCount);
-   with team^.Clan^ do
+    begin
+    new(team^.Clan);
+    FillChar(team^.Clan^, sizeof(TClan), 0);
+    ClansArray[ClansCount]:= team^.Clan;
+    inc(ClansCount);
+    with team^.Clan^ do
         begin
         ClanIndex:= Pred(ClansCount);
         Color:= TeamColor;
         TagTeamIndex:= 0;
         Flawless:= true
         end
-   end else
-   begin
-   team^.Clan:= ClansArray[c];
-   end;
+    end
+else
+    begin
+    team^.Clan:= ClansArray[c];
+    end;
 
 with team^.Clan^ do
     begin
@@ -344,8 +357,9 @@ for t:= 0 to Pred(TeamsCount) do
         th:= 0;
         for i:= 0 to cMaxHHIndex do
             if Hedgehogs[i].Gear <> nil then
-               inc(th, Hedgehogs[i].Gear^.Health);
-        if th > MaxTeamHealth then MaxTeamHealth:= th;
+                inc(th, Hedgehogs[i].Gear^.Health);
+        if th > MaxTeamHealth then
+            MaxTeamHealth:= th;
         // Some initial King buffs
         if (GameFlags and gfKing) <> 0 then
             begin
@@ -358,9 +372,11 @@ for t:= 0 to Pred(TeamsCount) do
                 begin
                 dec(th, h);
                 inc(th, Hedgehogs[0].Gear^.Health);
-                if th > MaxTeamHealth then MaxTeamHealth:= th
+                if th > MaxTeamHealth then
+                    MaxTeamHealth:= th
                 end
-            else Hedgehogs[0].Gear^.Health:= h;
+            else
+                Hedgehogs[0].Gear^.Health:= h;
             Hedgehogs[0].InitialHealth:= Hedgehogs[0].Gear^.Health
             end;
         end;
@@ -373,7 +389,8 @@ var i, value: Longword;
 begin
 value:= 0;
 for i:= 0 to cMaxHHIndex do
-    if p^.Hedgehogs[i].Gear <> nil then inc(value);
+    if p^.Hedgehogs[i].Gear <> nil then
+        inc(value);
 TeamSize:= value;
 end;
 
@@ -407,7 +424,8 @@ with team^ do
         begin
         MaxTeamHealth:= NewTeamHealthBarWidth;
         RecountAllTeamsHealth;
-        end else if NewTeamHealthBarWidth > 0 then NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
+        end else if NewTeamHealthBarWidth > 0 then
+            NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
     end;
 
 RecountClanHealth(team^.Clan);
@@ -445,56 +463,58 @@ procedure chAddHH(var id: shortstring);
 var s: shortstring;
     Gear: PGear;
 begin
-    s:= '';
-    if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
-    with CurrentTeam^ do
+s:= '';
+if (not isDeveloperMode) or (CurrentTeam = nil) then
+    exit;
+with CurrentTeam^ do
+    begin
+    SplitBySpace(id, s);
+    CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
+    val(id, CurrentHedgehog^.BotLevel);
+    Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
+    SplitBySpace(s, id);
+    val(s, Gear^.Health);
+    TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
+    Gear^.Hedgehog^.Team:= CurrentTeam;
+    if (GameFlags and gfSharedAmmo) <> 0 then
+        CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
+    else if (GameFlags and gfPerHogAmmo) <> 0 then
         begin
-        SplitBySpace(id, s);
-        CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
-        val(id, CurrentHedgehog^.BotLevel);
-        Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
-        SplitBySpace(s, id);
-        val(s, Gear^.Health);
-        TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
-        Gear^.Hedgehog^.Team:= CurrentTeam;
-        if (GameFlags and gfSharedAmmo) <> 0 then CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
-        else if (GameFlags and gfPerHogAmmo) <> 0 then
-            begin
-            AddAmmoStore;
-            CurrentHedgehog^.AmmoStore:= StoreCnt - 1
-            end
-        else CurrentHedgehog^.AmmoStore:= TeamsCount - 1;
-        CurrentHedgehog^.Gear:= Gear;
-        CurrentHedgehog^.Name:= id;
-        CurrentHedgehog^.InitialHealth:= Gear^.Health;
-        CurrHedgehog:= HedgehogsNumber;
-        inc(HedgehogsNumber)
+        AddAmmoStore;
+        CurrentHedgehog^.AmmoStore:= StoreCnt - 1
         end
+    else CurrentHedgehog^.AmmoStore:= TeamsCount - 1;
+    CurrentHedgehog^.Gear:= Gear;
+    CurrentHedgehog^.Name:= id;
+    CurrentHedgehog^.InitialHealth:= Gear^.Health;
+    CurrHedgehog:= HedgehogsNumber;
+    inc(HedgehogsNumber)
+    end
 end;
 
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
     ts, cs: shortstring;
 begin
-    cs:= '';
-    ts:= '';
-    if isDeveloperMode then
-        begin
-        SplitBySpace(s, cs);
-        SplitBySpace(cs, ts);
-        val(cs, Color);
-        TryDo(Color <> 0, 'Error: black team color', true);
+cs:= '';
+ts:= '';
+if isDeveloperMode then
+    begin
+    SplitBySpace(s, cs);
+    SplitBySpace(cs, ts);
+    val(cs, Color);
+    TryDo(Color <> 0, 'Error: black team color', true);
 
-        // color is always little endian so the mask must be constant also in big endian archs
-        Color:= Color or $FF000000;
+    // color is always little endian so the mask must be constant also in big endian archs
+    Color:= Color or $FF000000;
+    AddTeam(Color);
+    CurrentTeam^.TeamName:= ts;
+    CurrentTeam^.PlayerHash:= s;
+    if GameType in [gmtDemo, gmtSave] then
+        CurrentTeam^.ExtDriven:= true;
 
-        AddTeam(Color);
-        CurrentTeam^.TeamName:= ts;
-        CurrentTeam^.PlayerHash:= s;
-        if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true;
-
-        CurrentTeam^.voicepack:= AskForVoicepack('Default')
-        end
+    CurrentTeam^.voicepack:= AskForVoicepack('Default')
+    end
 end;
 
 procedure chSetHHCoords(var x: shortstring);
@@ -502,7 +522,8 @@ var y: shortstring;
     t: Longint;
 begin
 y:= '';
-if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then exit;
+if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then
+    exit;
 SplitBySpace(x, y);
 val(x, t);
 CurrentHedgehog^.Gear^.X:= int2hwFloat(t);
@@ -515,23 +536,28 @@ var s: shortstring;
     b: LongInt;
 begin
 s:= '';
-if CurrentTeam = nil then exit;
+if CurrentTeam = nil then
+    exit;
 SplitBySpace(id, s);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+if s[1]='"' then
+    Delete(s, 1, 1);
+if s[byte(s[0])]='"' then
+    Delete(s, byte(s[0]), 1);
 b:= KeyNameToCode(id);
-if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"', false)
-        else CurrentTeam^.Binds[b]:= s
+if b = 0 then
+    OutError(errmsgUnknownVariable + ' "' + id + '"', false)
+else
+    CurrentTeam^.Binds[b]:= s
 end;
 
 procedure chTeamGone(var s:shortstring);
 var t: LongInt;
 begin
 t:= 0;
-while (t < cMaxTeams)
-    and (TeamsArray[t] <> nil)
-    and (TeamsArray[t]^.TeamName <> s) do inc(t);
-if (t = cMaxTeams) or (TeamsArray[t] = nil) then exit;
+while (t < cMaxTeams) and (TeamsArray[t] <> nil) and (TeamsArray[t]^.TeamName <> s) do
+    inc(t);
+if (t = cMaxTeams) or (TeamsArray[t] = nil) then
+    exit;
 
 with TeamsArray[t]^ do
     begin
@@ -562,41 +588,42 @@ end;
 
 procedure initModule;
 begin
-    RegisterVariable('addhh', vtCommand, @chAddHH, false);
-    RegisterVariable('addteam', vtCommand, @chAddTeam, false);
-    RegisterVariable('hhcoords', vtCommand, @chSetHHCoords, false);
-    RegisterVariable('bind', vtCommand, @chBind, true );
-    RegisterVariable('teamgone', vtCommand, @chTeamGone, true );
-    RegisterVariable('finish', vtCommand, @chFinish, true ); // all teams gone
+RegisterVariable('addhh', vtCommand, @chAddHH, false);
+RegisterVariable('addteam', vtCommand, @chAddTeam, false);
+RegisterVariable('hhcoords', vtCommand, @chSetHHCoords, false);
+RegisterVariable('bind', vtCommand, @chBind, true );
+RegisterVariable('teamgone', vtCommand, @chTeamGone, true );
+RegisterVariable('finish', vtCommand, @chFinish, true ); // all teams gone
 
-    CurrentTeam:= nil;
-    PreviousTeam:= nil;
-    CurrentHedgehog:= nil;
-    TeamsCount:= 0;
-    ClansCount:= 0;
-    LocalClan:= -1;
-    LocalTeam:= -1;
-    LocalAmmo:= -1;
-    GameOver:= false;
-    NextClan:= true;
+CurrentTeam:= nil;
+PreviousTeam:= nil;
+CurrentHedgehog:= nil;
+TeamsCount:= 0;
+ClansCount:= 0;
+LocalClan:= -1;
+LocalTeam:= -1;
+LocalAmmo:= -1;
+GameOver:= false;
+NextClan:= true;
 end;
 
 procedure freeModule;
 var i, h: LongWord;
 begin
-   if TeamsCount > 0 then
-     begin
-     for i:= 0 to Pred(TeamsCount) do
+if TeamsCount > 0 then
+    begin
+    for i:= 0 to Pred(TeamsCount) do
         begin
-            for h:= 0 to cMaxHHIndex do
-                if TeamsArray[i]^.Hedgehogs[h].GearHidden <> nil then
-                    Dispose(TeamsArray[i]^.Hedgehogs[h].GearHidden);
-            Dispose(TeamsArray[i]);
-        end;
-     for i:= 0 to Pred(ClansCount) do Dispose(ClansArray[i]);
-     end;
-   TeamsCount:= 0;
-   ClansCount:= 0;
+        for h:= 0 to cMaxHHIndex do
+            if TeamsArray[i]^.Hedgehogs[h].GearHidden <> nil then
+                Dispose(TeamsArray[i]^.Hedgehogs[h].GearHidden);
+        Dispose(TeamsArray[i]);
+    end;
+for i:= 0 to Pred(ClansCount) do
+    Dispose(ClansArray[i]);
+    end;
+TeamsCount:= 0;
+ClansCount:= 0;
 end;
 
 end.

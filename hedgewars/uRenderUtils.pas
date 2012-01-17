@@ -37,7 +37,8 @@ procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surfa
 var r: TSDL_Rect;
 begin
     r:= rect^;
-    if Clear then SDL_FillRect(Surface, @r, 0);
+    if Clear then
+        SDL_FillRect(Surface, @r, 0);
 
     BorderColor:= SDL_MapRGB(Surface^.format, BorderColor shr 16, BorderColor shr 8, BorderColor and $FF);
     FillColor:= SDL_MapRGB(Surface^.format, FillColor shr 16, FillColor shr 8, FillColor and $FF);
@@ -226,11 +227,13 @@ begin
 
     numLines:= 0;
 
-    if length(s) = 0 then s:= '...';
+    if length(s) = 0 then
+        s:= '...';
     font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);
-    if w<8 then w:= 8;
+    if w<8 then
+        w:= 8;
     j:= 0;
     if (length(s) > 20) then
         begin
@@ -249,7 +252,8 @@ begin
                 substr:= copy(s, prevpos+1, pos-prevpos-1);
                 i:= 0; j:= 0;
                 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(substr), @i, @j);
-                if i > w then w:= i;
+                if i > w then
+                    w:= i;
                 prevpos:= pos;
                 end;
             inc(pos);
@@ -347,22 +351,24 @@ begin
         begin
         if (s[pos] = #1) or (pos = length(s)) then
             begin
-            if s[pos] <> #1 then inc(pos);
-            while s[prevpos+1] = ' 'do inc(prevpos);
+            if s[pos] <> #1 then
+                inc(pos);
+            while s[prevpos+1] = ' 'do
+                inc(prevpos);
             substr:= copy(s, prevpos+1, pos-prevpos-1);
             if Length(substr) <> 0 then
-            begin
-            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColorChannels);
-            rect.x:= edgeHeight + 1 + ((i - w) div 2);
-            // trying to more evenly position the text, vertically
-            rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
-            SDLTry(tmpsurf <> nil, true);
-            SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
-            SDL_FreeSurface(tmpsurf);
-            inc(line);
-            prevpos:= pos;
-            end;
-            end;
+                begin
+                tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColorChannels);
+                rect.x:= edgeHeight + 1 + ((i - w) div 2);
+                // trying to more evenly position the text, vertically
+                rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
+                SDLTry(tmpsurf <> nil, true);
+                SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
+                SDL_FreeSurface(tmpsurf);
+                inc(line);
+                prevpos:= pos;
+                end;
+                end;
         inc(pos);
         end;
 

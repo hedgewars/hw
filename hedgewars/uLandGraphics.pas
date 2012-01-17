@@ -84,7 +84,7 @@ if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
         if (Land[y + dy, i] and lfIndestructible) = 0 then
             Land[y + dy, i]:= Value;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if (Land[y - dy, i] and lfIndestructible) = 0 then
             Land[y - dy, i]:= Value;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
@@ -101,78 +101,87 @@ procedure ChangeCircleLines(x, y, dx, dy: LongInt; doSet: boolean);
 var i: LongInt;
 begin
 if not doSet then
-   begin
-   if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-          if (Land[y + dy, i] > 0) and (Land[y + dy, i] < 256) then dec(Land[y + dy, i]); // check > 0 because explosion can erase collision data
-   if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-          if (Land[y - dy, i] > 0) and (Land[y - dy, i] < 256) then dec(Land[y - dy, i]);
-   if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-          if (Land[y + dx, i] > 0) and (Land[y + dx, i] < 256) then dec(Land[y + dx, i]);
-   if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-          if (Land[y - dx, i] > 0) and (Land[y - dx, i] < 256) then dec(Land[y - dx, i]);
-   end else
-   begin
-   if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-          if (Land[y + dy, i] < 256) then
-              inc(Land[y + dy, i]);
-   if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-          if (Land[y - dy, i] < 256) then
-              inc(Land[y - dy, i]);
-   if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-          if (Land[y + dx, i] < 256) then
-              inc(Land[y + dx, i]);
-   if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-          if (Land[y - dx, i] < 256) then
-              inc(Land[y - dx, i]);
-   end
+    begin
+    if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+            if (Land[y + dy, i] > 0) and (Land[y + dy, i] < 256) then
+                dec(Land[y + dy, i]); // check > 0 because explosion can erase collision data
+    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+            if (Land[y - dy, i] > 0) and (Land[y - dy, i] < 256) then
+                dec(Land[y - dy, i]);
+    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+            if (Land[y + dx, i] > 0) and (Land[y + dx, i] < 256) then
+                dec(Land[y + dx, i]);
+    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+            if (Land[y - dx, i] > 0) and (Land[y - dx, i] < 256) then
+                dec(Land[y - dx, i]);
+    end
+else
+    begin
+    if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+            if (Land[y + dy, i] < 256) then
+                inc(Land[y + dy, i]);
+    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+            if (Land[y - dy, i] < 256) then
+                inc(Land[y - dy, i]);
+    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+            if (Land[y + dx, i] < 256) then
+                inc(Land[y + dx, i]);
+    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+            if (Land[y - dx, i] < 256) then
+                inc(Land[y - dx, i]);
+    end
 end;
 
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
 var dx, dy, d: LongInt;
 begin
-  dx:= 0;
-  dy:= Radius;
-  d:= 3 - 2 * Radius;
-  while (dx < dy) do
-     begin
-     FillCircleLines(x, y, dx, dy, Value);
-     if (d < 0)
-     then d:= d + 4 * dx + 6
-     else begin
-          d:= d + 4 * (dx - dy) + 10;
-          dec(dy)
-          end;
-     inc(dx)
-     end;
-  if (dx = dy) then FillCircleLines(x, y, dx, dy, Value);
+dx:= 0;
+dy:= Radius;
+d:= 3 - 2 * Radius;
+while (dx < dy) do
+    begin
+    FillCircleLines(x, y, dx, dy, Value);
+    if (d < 0) then
+        d:= d + 4 * dx + 6
+    else
+        begin
+        d:= d + 4 * (dx - dy) + 10;
+        dec(dy)
+        end;
+    inc(dx)
+    end;
+if (dx = dy) then
+    FillCircleLines(x, y, dx, dy, Value);
 end;
 
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
 var dx, dy, d: LongInt;
 begin
-  dx:= 0;
-  dy:= Radius;
-  d:= 3 - 2 * Radius;
-  while (dx < dy) do
-     begin
-     ChangeCircleLines(x, y, dx, dy, doSet);
-     if (d < 0)
-     then d:= d + 4 * dx + 6
-     else begin
-          d:= d + 4 * (dx - dy) + 10;
-          dec(dy)
-          end;
-     inc(dx)
-     end;
-  if (dx = dy) then ChangeCircleLines(x, y, dx, dy, doSet)
+dx:= 0;
+dy:= Radius;
+d:= 3 - 2 * Radius;
+while (dx < dy) do
+    begin
+    ChangeCircleLines(x, y, dx, dy, doSet);
+    if (d < 0) then
+        d:= d + 4 * dx + 6
+    else
+        begin
+        d:= d + 4 * (dx - dy) + 10;
+        dec(dy)
+        end;
+    inc(dx)
+    end;
+if (dx = dy) then
+    ChangeCircleLines(x, y, dx, dy, doSet)
 end;
 
 procedure FillLandCircleLines0(x, y, dx, dy: LongInt);
@@ -223,90 +232,90 @@ begin
 cnt:= 0;
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-       if (Land[t, i] and lfIndestructible) = 0 then
-           begin
-           if (cReducedQuality and rqBlurryLand) = 0 then
-               begin
-               by:= t; bx:= i;
-               end
-           else
-               begin
-               by:= t div 2; bx:= i div 2;
-               end;
-           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
-               begin
-               inc(cnt);
-               LandPixels[by, bx]:= LandBackPixel(i, t)
-               end
-           else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
-               LandPixels[by, bx]:= 0
-           end;
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+        if (Land[t, i] and lfIndestructible) = 0 then
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                begin
+                by:= t; bx:= i;
+                end
+            else
+                begin
+                by:= t div 2; bx:= i div 2;
+                end;
+            if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
+                begin
+                inc(cnt);
+                LandPixels[by, bx]:= LandBackPixel(i, t)
+                end
+            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
+                LandPixels[by, bx]:= 0
+            end;
 
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-       if (Land[t, i] and lfIndestructible) = 0 then
-           begin
-           if (cReducedQuality and rqBlurryLand) = 0 then
-               begin
-               by:= t; bx:= i;
-               end
-           else
-               begin
-               by:= t div 2; bx:= i div 2;
-               end;
-           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
-               begin
-               inc(cnt);
-               LandPixels[by, bx]:= LandBackPixel(i, t)
-               end
-           else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
-               LandPixels[by, bx]:= 0
-           end;
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+        if (Land[t, i] and lfIndestructible) = 0 then
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                begin
+                by:= t; bx:= i;
+                end
+            else
+                begin
+                by:= t div 2; bx:= i div 2;
+                end;
+            if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
+                begin
+                inc(cnt);
+                LandPixels[by, bx]:= LandBackPixel(i, t)
+                end
+            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
+                LandPixels[by, bx]:= 0
+            end;
 
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-       if (Land[t, i] and lfIndestructible) = 0 then
-           begin
-           if (cReducedQuality and rqBlurryLand) = 0 then
-               begin
-               by:= t; bx:= i;
-               end
-           else
-               begin
-               by:= t div 2; bx:= i div 2;
-               end;
-           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
-               begin
-               inc(cnt);
-               LandPixels[by, bx]:= LandBackPixel(i, t)
-               end
-           else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
-               LandPixels[by, bx]:= 0
-           end;
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+        if (Land[t, i] and lfIndestructible) = 0 then
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                begin
+                by:= t; bx:= i;
+                end
+            else
+                begin
+                by:= t div 2; bx:= i div 2;
+                end;
+            if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
+                begin
+                inc(cnt);
+                LandPixels[by, bx]:= LandBackPixel(i, t)
+                end
+            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
+                LandPixels[by, bx]:= 0
+            end;
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-       if (Land[t, i] and lfIndestructible) = 0 then
-           begin
-           if (cReducedQuality and rqBlurryLand) = 0 then
-               begin
-               by:= t; bx:= i;
-               end
-           else
-               begin
-               by:= t div 2; bx:= i div 2;
-               end;
-           if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
-               begin
-               inc(cnt);
-               LandPixels[by, bx]:= LandBackPixel(i, t)
-               end
-           else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
-               LandPixels[by, bx]:= 0
-           end;
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+        if (Land[t, i] and lfIndestructible) = 0 then
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                begin
+                by:= t; bx:= i;
+                end
+            else
+                begin
+                by:= t div 2; bx:= i div 2;
+                end;
+            if ((Land[t, i] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
+                begin
+                inc(cnt);
+                LandPixels[by, bx]:= LandBackPixel(i, t)
+                end
+            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
+                LandPixels[by, bx]:= 0
+            end;
 FillLandCircleLinesBG:= cnt;
 end;
 
@@ -315,62 +324,62 @@ var i, t: LongInt;
 begin
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
-          begin
-           if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[t, i]:= cExplosionBorderColor
-          else
-            LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+        if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[t, i]:= cExplosionBorderColor
+            else
+                LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
 
-          Land[t, i]:= Land[t, i] or lfDamaged;
-          //Despeckle(i, t);
-          LandDirty[t div 32, i div 32]:= 1;
-          end;
+            Land[t, i]:= Land[t, i] or lfDamaged;
+            //Despeckle(i, t);
+            LandDirty[t div 32, i div 32]:= 1;
+            end;
 
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
-          begin
-           if (cReducedQuality and rqBlurryLand) = 0 then
-              LandPixels[t, i]:= cExplosionBorderColor
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+        if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[t, i]:= cExplosionBorderColor
             else
-              LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
-          Land[t, i]:= Land[t, i] or lfDamaged;
-          //Despeckle(i, t);
-          LandDirty[t div 32, i div 32]:= 1;
-          end;
+                LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
+            Land[t, i]:= Land[t, i] or lfDamaged;
+            //Despeckle(i, t);
+            LandDirty[t div 32, i div 32]:= 1;
+            end;
 
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
-           begin
-           if (cReducedQuality and rqBlurryLand) = 0 then
-           LandPixels[t, i]:= cExplosionBorderColor
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+        if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[t, i]:= cExplosionBorderColor
             else
-           LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
+               LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
 
-           Land[t, i]:= Land[t, i] or lfDamaged;
-           //Despeckle(i, t);
-           LandDirty[t div 32, i div 32]:= 1;
-           end;
+            Land[t, i]:= Land[t, i] or lfDamaged;
+            //Despeckle(i, t);
+            LandDirty[t div 32, i div 32]:= 1;
+            end;
 
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-   for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-       if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
-          begin
-           if (cReducedQuality and rqBlurryLand) = 0 then
-          LandPixels[t, i]:= cExplosionBorderColor
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+        if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
+            begin
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[t, i]:= cExplosionBorderColor
             else
-          LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
+                LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
 
-          Land[t, i]:= Land[t, i] or lfDamaged;
-          //Despeckle(i, y - dy);
-          LandDirty[t div 32, i div 32]:= 1;
-          end;
+            Land[t, i]:= Land[t, i] or lfDamaged;
+            //Despeckle(i, y - dy);
+            LandDirty[t div 32, i div 32]:= 1;
+            end;
 end;
 
 function DrawExplosion(X, Y, Radius: LongInt): Longword;
@@ -388,15 +397,17 @@ begin
     while (dx < dy) do
         begin
         inc(cnt, FillLandCircleLinesBG(x, y, dx, dy));
-        if (d < 0)
-        then d:= d + 4 * dx + 6
-        else begin
+        if (d < 0) then
+            d:= d + 4 * dx + 6
+        else
+            begin
             d:= d + 4 * (dx - dy) + 10;
             dec(dy)
             end;
         inc(dx)
         end;
-    if (dx = dy) then inc(cnt, FillLandCircleLinesBG(x, y, dx, dy));
+    if (dx = dy) then
+        inc(cnt, FillLandCircleLinesBG(x, y, dx, dy));
     end;
 
 // draw a hole in land
@@ -409,15 +420,17 @@ if Radius > 20 then
     while (dx < dy) do
         begin
         FillLandCircleLines0(x, y, dx, dy);
-        if (d < 0)
-        then d:= d + 4 * dx + 6
-        else begin
+        if (d < 0) then
+            d:= d + 4 * dx + 6
+        else
+            begin
             d:= d + 4 * (dx - dy) + 10;
             dec(dy)
             end;
         inc(dx)
         end;
-    if (dx = dy) then FillLandCircleLines0(x, y, dx, dy);
+    if (dx = dy) then
+        FillLandCircleLines0(x, y, dx, dy);
     end;
 
   // FillRoundInLand after erasing land pixels to allow Land 0 check for mask.png to function
@@ -432,15 +445,17 @@ if Radius > 20 then
     while (dx < dy) do
         begin
         FillLandCircleLinesEBC(x, y, dx, dy);
-        if (d < 0)
-        then d:= d + 4 * dx + 6
-        else begin
+        if (d < 0) then
+            d:= d + 4 * dx + 6
+        else
+            begin
             d:= d + 4 * (dx - dy) + 10;
             dec(dy)
             end;
         inc(dx)
         end;
-    if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);
+    if (dx = dy) then
+        FillLandCircleLinesEBC(x, y, dx, dy);
     end;
 
 tx:= Max(X - Radius - 1, 0);
@@ -487,10 +502,10 @@ for i:= 0 to Pred(Count) do
         for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
             if ((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0) then
                 begin
-                    if (cReducedQuality and rqBlurryLand) = 0 then
-                        LandPixels[ty, tx]:= cExplosionBorderColor
-                    else
-                        LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor;
+                 if (cReducedQuality and rqBlurryLand) = 0 then
+                    LandPixels[ty, tx]:= cExplosionBorderColor
+                else
+                    LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor;
 
                 Land[ty, tx]:= Land[ty, tx] or lfDamaged;
                 LandDirty[ty div 32, tx div 32]:= 1;
@@ -530,10 +545,9 @@ for i:= 0 to 7 do
     Y:= Y + dY;
     tx:= hwRound(X);
     ty:= hwRound(Y);
-    if ((ty and LAND_HEIGHT_MASK) = 0) and
-       ((tx and LAND_WIDTH_MASK) = 0) and
-       (((Land[ty, tx] and lfBasic) <> 0) or
-       ((Land[ty, tx] and lfObject) <> 0)) then
+    if ((ty and LAND_HEIGHT_MASK) = 0)
+    and ((tx and LAND_WIDTH_MASK) = 0)
+    and (((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         if despeckle then 
             begin
@@ -542,7 +556,8 @@ for i:= 0 to 7 do
             end;
         if (cReducedQuality and rqBlurryLand) = 0 then
             LandPixels[ty, tx]:= cExplosionBorderColor
-        else LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+        else
+            LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
         end
     end;
     nx:= nx - dY;
@@ -554,23 +569,23 @@ for i:= -HalfWidth to HalfWidth do
     X:= nx - dX8;
     Y:= ny - dY8;
     for t:= 0 to 7 do
-    begin
-    X:= X + dX;
-    Y:= Y + dY;
-    tx:= hwRound(X);
-    ty:= hwRound(Y);
-    if ((ty and LAND_HEIGHT_MASK) = 0) and
-       ((tx and LAND_WIDTH_MASK) = 0) and
-       (((Land[ty, tx] and lfBasic) <> 0) or
-       ((Land[ty, tx] and lfObject) <> 0)) then
         begin
-        Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-        if despeckle then LandDirty[ty div 32, tx div 32]:= 1;
-        if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[ty, tx]:= cExplosionBorderColor
-        else LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
-        end
-    end;
+        X:= X + dX;
+        Y:= Y + dY;
+        tx:= hwRound(X);
+        ty:= hwRound(Y);
+        if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (((Land[ty, tx] and lfBasic) <> 0)
+        or ((Land[ty, tx] and lfObject) <> 0)) then
+            begin
+            Land[ty, tx]:= Land[ty, tx] or lfDamaged;
+            if despeckle then
+                LandDirty[ty div 32, tx div 32]:= 1;
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                LandPixels[ty, tx]:= cExplosionBorderColor
+            else
+                LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+            end
+        end;
     X:= nx;
     Y:= ny;
     for t:= 0 to ticks do
@@ -602,18 +617,18 @@ for i:= -HalfWidth to HalfWidth do
     Y:= Y + dY;
     tx:= hwRound(X);
     ty:= hwRound(Y);
-    if ((ty and LAND_HEIGHT_MASK) = 0) and
-       ((tx and LAND_WIDTH_MASK) = 0) and
-       (((Land[ty, tx] and lfBasic) <> 0) or
-       ((Land[ty, tx] and lfObject) <> 0)) then
+    if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (((Land[ty, tx] and lfBasic) <> 0)
+    or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-        if despeckle then LandDirty[ty div 32, tx div 32]:= 1;
+        if despeckle then
+            LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
             LandPixels[ty, tx]:= cExplosionBorderColor
-        else LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+        else
+            LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
         end
-    end;
+        end;
     nx:= nx - dY;
     ny:= ny + dX;
     end;
@@ -628,16 +643,16 @@ for i:= 0 to 7 do
     Y:= Y + dY;
     tx:= hwRound(X);
     ty:= hwRound(Y);
-    if ((ty and LAND_HEIGHT_MASK) = 0) and
-       ((tx and LAND_WIDTH_MASK) = 0) and
-       (((Land[ty, tx] and lfBasic) <> 0) or
-       ((Land[ty, tx] and lfObject) <> 0)) then
+    if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (((Land[ty, tx] and lfBasic) <> 0)
+    or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
         Land[ty, tx]:= Land[ty, tx] or lfDamaged;
-        if despeckle then LandDirty[ty div 32, tx div 32]:= 1;
+        if despeckle then
+            LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
             LandPixels[ty, tx]:= cExplosionBorderColor
-        else LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+        else
+            LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
         end
     end;
     nx:= nx - dY;
@@ -667,72 +682,70 @@ row:= Frame mod numFramesFirstCol;
 col:= Frame div numFramesFirstCol;
 
 if SDL_MustLock(Image) then
-   SDLTry(SDL_LockSurface(Image) >= 0, true);
+    SDLTry(SDL_LockSurface(Image) >= 0, true);
 
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
 // Check that sprite fits free space
 p:= @(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]);
 case bpp of
-     4: for y:= 0 to Pred(h) do
-            begin
-            for x:= 0 to Pred(w) do
-                if (PLongword(@(p^[x * 4]))^) <> 0 then
-                   if ((cpY + y) <= Longint(topY)) or
-                      ((cpY + y) >= LAND_HEIGHT) or
-                      ((cpX + x) <= Longint(leftX)) or
-                      ((cpX + x) >= Longint(rightX)) or
-                      (Land[cpY + y, cpX + x] <> 0) then
-                      begin
-                      if SDL_MustLock(Image) then
-                         SDL_UnlockSurface(Image);
-                      exit(false)
-                      end;
-            p:= @(p^[Image^.pitch]);
-            end;
-     end;
+    4: for y:= 0 to Pred(h) do
+        begin
+        for x:= 0 to Pred(w) do
+            if (PLongword(@(p^[x * 4]))^) <> 0 then
+                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT)
+                or ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0) then
+                    begin
+                    if SDL_MustLock(Image) then
+                        SDL_UnlockSurface(Image);
+                    exit(false)
+                    end;
+        p:= @(p^[Image^.pitch]);
+        end;
+    end;
 
 TryPlaceOnLand:= true;
 if not doPlace then
-   begin
-   if SDL_MustLock(Image) then
-      SDL_UnlockSurface(Image);
-   exit
-   end;
+    begin
+    if SDL_MustLock(Image) then
+        SDL_UnlockSurface(Image);
+    exit
+    end;
 
 // Checked, now place
 p:= @(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]);
 case bpp of
-     4: for y:= 0 to Pred(h) do
-            begin
-            for x:= 0 to Pred(w) do
-                if (PLongword(@(p^[x * 4]))^) <> 0 then
+    4: for y:= 0 to Pred(h) do
+        begin
+        for x:= 0 to Pred(w) do
+            if (PLongword(@(p^[x * 4]))^) <> 0 then
                    begin
-                   if (cReducedQuality and rqBlurryLand) = 0 then
-                       begin
-                       gX:= cpX + x;
-                       gY:= cpY + y;
-                       end
-                   else
-                       begin
-                       gX:= (cpX + x) div 2;
-                       gY:= (cpY + y) div 2;
-                       end;
-                   if indestructible then
-                       Land[cpY + y, cpX + x]:= lfIndestructible
-                   else if (LandPixels[gY, gX] and AMask) shr AShift = 255 then  // This test assumes lfBasic and lfObject differ only graphically
-                       Land[cpY + y, cpX + x]:= lfBasic
-                   else
-                       Land[cpY + y, cpX + x]:= lfObject;
-                   // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
-                   if (Theme = 'Snow') or (Theme = 'Christmas') then Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or lfIce;
-                   LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
-                   end;
-            p:= @(p^[Image^.pitch]);
-            end;
-     end;
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                    begin
+                    gX:= cpX + x;
+                    gY:= cpY + y;
+                    end
+                else
+                     begin
+                     gX:= (cpX + x) div 2;
+                     gY:= (cpY + y) div 2;
+                    end;
+                if indestructible then
+                    Land[cpY + y, cpX + x]:= lfIndestructible
+                else if (LandPixels[gY, gX] and AMask) shr AShift = 255 then  // This test assumes lfBasic and lfObject differ only graphically
+                    Land[cpY + y, cpX + x]:= lfBasic
+                else
+                    Land[cpY + y, cpX + x]:= lfObject;
+                // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
+                if (Theme = 'Snow') or (Theme = 'Christmas') then
+                    Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or lfIce;
+                    LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
+                end;
+        p:= @(p^[Image^.pitch]);
+        end;
+    end;
 if SDL_MustLock(Image) then
-   SDL_UnlockSurface(Image);
+    SDL_UnlockSurface(Image);
 
 x:= Max(cpX, leftX);
 w:= Min(cpX + Image^.w, LAND_WIDTH) - x;
@@ -746,15 +759,15 @@ var nx, ny, i, j, c, xx, yy: LongInt;
     pixelsweep: boolean;
 begin
 if (cReducedQuality and rqBlurryLand) = 0 then
-   begin
-   xx:= X;
-   yy:= Y;
-   end
+    begin
+    xx:= X;
+    yy:= Y;
+    end
 else
-   begin
-   xx:= X div 2;
-   yy:= Y div 2;
-   end;
+    begin
+    xx:= X div 2;
+    yy:= Y div 2;
+    end;
 pixelsweep:= ((Land[Y, X] and $FF00) = 0) and (LandPixels[yy, xx] <> 0);
 if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
@@ -774,9 +787,11 @@ if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0
                             nx:= nx div 2;
                             ny:= ny div 2
                             end;
-                        if LandPixels[ny, nx] <> 0 then inc(c);
+                        if LandPixels[ny, nx] <> 0 then
+                            inc(c);
                         end
-                    else if Land[ny, nx] > 255 then inc(c);
+                    else if Land[ny, nx] > 255 then
+                        inc(c);
                     end
                 end;
 
@@ -788,7 +803,8 @@ if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0
             LandPixels[yy, xx]:= 0;
 
         Land[Y, X]:= 0;
-        if not pixelsweep then exit(true);
+        if not pixelsweep then
+            exit(true);
         end;
     end;
 Despeckle:= false
@@ -798,69 +814,78 @@ procedure Smooth(X, Y: LongInt);
 begin
 // a bit of AA for explosions
 if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and 
-   (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
+    (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
     begin
-    if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0)) or
-       (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then
+    if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0))
+    or (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then
         begin
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
-            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then LandPixels[y,x]:= (cExplosionBorderColor and (not AMask)) or (128 shl AShift)
+            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then
+                LandPixels[y,x]:= (cExplosionBorderColor and (not AMask)) or (128 shl AShift)
             else
                 LandPixels[y,x]:=
                                 (((((LandPixels[y,x] and RMask shr RShift) div 2)+((cExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
                                 (((((LandPixels[y,x] and GMask shr GShift) div 2)+((cExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
                                 (((((LandPixels[y,x] and BMask shr BShift) div 2)+((cExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
             end;
-        if (Land[y, x-1] = lfObject) then Land[y,x]:= lfObject
-        else if (Land[y, x+1] = lfObject) then Land[y,x]:= lfObject
-        else Land[y,x]:= lfBasic;
+        if (Land[y, x-1] = lfObject) then
+            Land[y,x]:= lfObject
+        else if (Land[y, x+1] = lfObject) then
+            Land[y,x]:= lfObject
+        else
+            Land[y,x]:= lfBasic;
         end
-    else if ((((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0)) or
-            (((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0)) or
-            (((Land[y, x+1] and lfDamaged) <> 0) and ((Land[y+1,x+1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0)) or
-            (((Land[y, x+1] and lfDamaged) <> 0) and ((Land[y-1,x+1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0)) or
-            (((Land[y+1, x] and lfDamaged) <> 0) and ((Land[y+1,x+1] and lfDamaged) <> 0) and ((Land[y,x+2] and lfDamaged) <> 0)) or
-            (((Land[y-1, x] and lfDamaged) <> 0) and ((Land[y-1,x+1] and lfDamaged) <> 0) and ((Land[y,x+2] and lfDamaged) <> 0)) or
-            (((Land[y+1, x] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y,x-2] and lfDamaged) <> 0)) or
-            (((Land[y-1, x] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y,x-2] and lfDamaged) <> 0))) then
+    else if ((((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0))
+    or (((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0))
+    or (((Land[y, x+1] and lfDamaged) <> 0) and ((Land[y+1,x+1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0))
+    or (((Land[y, x+1] and lfDamaged) <> 0) and ((Land[y-1,x+1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0))
+    or (((Land[y+1, x] and lfDamaged) <> 0) and ((Land[y+1,x+1] and lfDamaged) <> 0) and ((Land[y,x+2] and lfDamaged) <> 0))
+    or (((Land[y-1, x] and lfDamaged) <> 0) and ((Land[y-1,x+1] and lfDamaged) <> 0) and ((Land[y,x+2] and lfDamaged) <> 0))
+    or (((Land[y+1, x] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y,x-2] and lfDamaged) <> 0))
+    or (((Land[y-1, x] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y,x-2] and lfDamaged) <> 0))) then
         begin
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
-            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then LandPixels[y,x]:= (cExplosionBorderColor and (not AMask)) or (64 shl AShift)
+            if ((LandPixels[y,x] and AMask) shr AShift) < 10 then
+                LandPixels[y,x]:= (cExplosionBorderColor and (not AMask)) or (64 shl AShift)
             else
                 LandPixels[y,x]:=
                                 (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((cExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
                                 (((((LandPixels[y,x] and GMask shr GShift) * 3 div 4)+((cExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
                                 (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((cExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift)
             end;
-        if (Land[y, x-1] = lfObject) then Land[y, x]:= lfObject
-        else if (Land[y, x+1] = lfObject) then Land[y, x]:= lfObject
-        else if (Land[y+1, x] = lfObject) then Land[y, x]:= lfObject
-        else if (Land[y-1, x] = lfObject) then Land[y, x]:= lfObject
+        if (Land[y, x-1] = lfObject) then
+            Land[y, x]:= lfObject
+        else if (Land[y, x+1] = lfObject) then
+            Land[y, x]:= lfObject
+        else if (Land[y+1, x] = lfObject) then
+            Land[y, x]:= lfObject
+        else if (Land[y-1, x] = lfObject) then
+        Land[y, x]:= lfObject
         else Land[y,x]:= lfBasic
         end
     end
-else if ((cReducedQuality and rqBlurryLand) = 0) and (LandPixels[Y, X] and AMask = 255) and
-    ((Land[Y, X] and (lfDamaged or lfBasic) = lfBasic) or (Land[Y, X] and (lfDamaged or lfBasic) = lfBasic)) and 
-    (Y > LongInt(topY) + 1) and (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
+else if ((cReducedQuality and rqBlurryLand) = 0) and (LandPixels[Y, X] and AMask = 255)
+and ((Land[Y, X] and (lfDamaged or lfBasic) = lfBasic) or (Land[Y, X] and (lfDamaged or lfBasic) = lfBasic))
+and (Y > LongInt(topY) + 1) and (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
     begin
-    if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0)) or
-       (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then
+    if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0))
+    or (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then
         begin
         LandPixels[y,x]:=
                         (((((LandPixels[y,x] and RMask shr RShift) div 2)+((cExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
                         (((((LandPixels[y,x] and GMask shr GShift) div 2)+((cExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
                         (((((LandPixels[y,x] and BMask shr BShift) div 2)+((cExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
         end
-    else if ((((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0)) or
-            (((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0)) or
-            (((Land[y, x+1] and lfDamaged) <> 0) and ((Land[y+1,x+1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0)) or
-            (((Land[y, x+1] and lfDamaged) <> 0) and ((Land[y-1,x+1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0)) or
-            (((Land[y+1, x] and lfDamaged) <> 0) and ((Land[y+1,x+1] and lfDamaged) <> 0) and ((Land[y,x+2] and lfDamaged) <> 0)) or
-            (((Land[y-1, x] and lfDamaged) <> 0) and ((Land[y-1,x+1] and lfDamaged) <> 0) and ((Land[y,x+2] and lfDamaged) <> 0)) or
-            (((Land[y+1, x] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y,x-2] and lfDamaged) <> 0)) or
-            (((Land[y-1, x] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y,x-2] and lfDamaged) <> 0))) then
+    else if ((((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0))
+    or (((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0))
+    or (((Land[y, x+1] and lfDamaged) <> 0) and ((Land[y+1,x+1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0))
+    or (((Land[y, x+1] and lfDamaged) <> 0) and ((Land[y-1,x+1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0))
+    or (((Land[y+1, x] and lfDamaged) <> 0) and ((Land[y+1,x+1] and lfDamaged) <> 0) and ((Land[y,x+2] and lfDamaged) <> 0))
+    or (((Land[y-1, x] and lfDamaged) <> 0) and ((Land[y-1,x+1] and lfDamaged) <> 0) and ((Land[y,x+2] and lfDamaged) <> 0))
+    or (((Land[y+1, x] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y,x-2] and lfDamaged) <> 0))
+    or (((Land[y-1, x] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y,x-2] and lfDamaged) <> 0))) then
         begin
         LandPixels[y,x]:=
                         (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((cExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
@@ -922,7 +947,8 @@ while recheck do
                                     end
                                 end;
                     end;
-                if updateBlock then UpdateLandTexture(tx, 32, ty, 32);
+                if updateBlock then
+                    UpdateLandTexture(tx, 32, ty, 32);
                 LandDirty[y, x]:= 2;
                 end;
             end;
@@ -948,18 +974,19 @@ end;
 // Return true if outside of land or not the value tested, used right now for some X/Y movement that does not use normal hedgehog movement in GSHandlers.inc
 function CheckLandValue(X, Y: LongInt; LandFlag: Word): boolean; inline;
 begin
-     CheckLandValue:= ((X and LAND_WIDTH_MASK <> 0) or (Y and LAND_HEIGHT_MASK <> 0)) or ((Land[Y, X] and LandFlag) = 0)
+    CheckLandValue:= ((X and LAND_WIDTH_MASK <> 0) or (Y and LAND_HEIGHT_MASK <> 0)) or ((Land[Y, X] and LandFlag) = 0)
 end;
 
 function LandBackPixel(x, y: LongInt): LongWord; inline;
 var p: PLongWordArray;
 begin
-    if LandBackSurface = nil then LandBackPixel:= 0
+    if LandBackSurface = nil then
+        LandBackPixel:= 0
     else
-    begin
+        begin
         p:= LandBackSurface^.pixels;
         LandBackPixel:= p^[LandBackSurface^.w * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
-    end
+        end
 end;
 
 
@@ -973,24 +1000,32 @@ eY:= 0;
 dX:= X2 - X1;
 dY:= Y2 - Y1;
 
-if (dX > 0) then sX:= 1
+if (dX > 0) then
+    sX:= 1
 else
-  if (dX < 0) then
-     begin
-     sX:= -1;
-     dX:= -dX
-     end else sX:= dX;
+    if (dX < 0) then
+        begin
+        sX:= -1;
+        dX:= -dX
+        end
+    else
+        sX:= dX;
 
-if (dY > 0) then sY:= 1
-  else
-  if (dY < 0) then
-     begin
-     sY:= -1;
-     dY:= -dY
-     end else sY:= dY;
+if (dY > 0) then
+    sY:= 1
+else
+    if (dY < 0) then
+        begin
+        sY:= -1;
+        dY:= -dY
+        end
+    else
+        sY:= dY;
 
-if (dX > dY) then d:= dX
-             else d:= dY;
+if (dX > dY) then
+    d:= dX
+else
+    d:= dY;
 
 x:= X1;
 y:= Y1;
@@ -1000,18 +1035,18 @@ for i:= 0 to d do
     inc(eX, dX);
     inc(eY, dY);
     if (eX > d) then
-       begin
-       dec(eX, d);
-       inc(x, sX);
-       end;
+        begin
+        dec(eX, d);
+        inc(x, sX);
+        end;
     if (eY > d) then
-       begin
-       dec(eY, d);
-       inc(y, sY);
-       end;
+        begin
+        dec(eY, d);
+        inc(y, sY);
+        end;
 
     if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
-       Land[y, x]:= Color;
+        Land[y, x]:= Color;
     end
 end;
 

@@ -31,14 +31,15 @@ procedure Push(_xl, _xr, _y, _dir: LongInt);
 begin
     TryDo(Stack.Count <= 8192, 'FillLand: stack overflow', true);
     _y:= _y + _dir;
-    if (_y < 0) or (_y >= LAND_HEIGHT) then exit;
+    if (_y < 0) or (_y >= LAND_HEIGHT) then
+        exit;
     with Stack.points[Stack.Count] do
-            begin
-            xl:= _xl;
-            xr:= _xr;
-            y:= _y;
-            dir:= _dir
-            end;
+        begin
+        xl:= _xl;
+        xr:= _xr;
+        y:= _y;
+        dir:= _dir
+        end;
     inc(Stack.Count)
 end;
 
@@ -66,11 +67,14 @@ begin
     while Stack.Count > 0 do
         begin
         Pop(xl, xr, y, dir);
-        while (xl > 0) and (Land[y, xl] <> 0) do dec(xl);
-        while (xr < LAND_WIDTH - 1) and (Land[y, xr] <> 0) do inc(xr);
+        while (xl > 0) and (Land[y, xl] <> 0) do
+            dec(xl);
+        while (xr < LAND_WIDTH - 1) and (Land[y, xr] <> 0) do
+            inc(xr);
         while (xl < xr) do
             begin
-            while (xl <= xr) and (Land[y, xl] = 0) do inc(xl);
+            while (xl <= xr) and (Land[y, xl] = 0) do
+                inc(xl);
             x:= xl;
             while (xl <= xr) and (Land[y, xl] <> 0) do
                 begin
@@ -112,8 +116,10 @@ begin
     d1:= DistanceI(p2.X - p3.X, p2.Y - p3.Y);
     d2:= Distance(Vx, Vy);
 
-    if d1 < d then d:= d1;
-    if d2 < d then d:= d2;
+    if d1 < d then
+        d:= d1;
+    if d2 < d then
+        d:= d2;
 
     d:= d * _1div3;
 
@@ -148,11 +154,14 @@ Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
 {$HINTS ON}
 repeat
     inc(pi);
-    if pi > EndI then pi:= StartI;
+    if pi > EndI then
+        pi:= StartI;
     inc(i);
-    if i > EndI then i:= StartI;
+    if i > EndI then
+        i:= StartI;
     inc(ni);
-    if ni > EndI then ni:= StartI;
+    if ni > EndI then
+        ni:= StartI;
     PVx:= NVx;
     PVy:= NVy;
     Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
@@ -167,20 +176,20 @@ repeat
     cy2:= int2hwFloat(y2) + NVy;
     t:= _0;
     while t.Round = 0 do
-          begin
-          tsq:= t * t;
-          tcb:= tsq * t;
-          r1:= (_1 - t*3 + tsq*3 - tcb);
-          r2:= (     t*3 - tsq*6 + tcb*3);
-          r3:= (           tsq*3 - tcb*3);
-          X:= hwRound(r1 * x1 + r2 * cx1 + r3 * cx2 + tcb * x2);
-          Y:= hwRound(r1 * y1 + r2 * cy1 + r3 * cy2 + tcb * y2);
-          t:= t + Delta;
-          pa.ar[pa.Count].x:= X;
-          pa.ar[pa.Count].y:= Y;
-          inc(pa.Count);
-          TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
-          end;
+        begin
+        tsq:= t * t;
+        tcb:= tsq * t;
+        r1:= (_1 - t*3 + tsq*3 - tcb);
+        r2:= (     t*3 - tsq*6 + tcb*3);
+        r3:= (           tsq*3 - tcb*3);
+        X:= hwRound(r1 * x1 + r2 * cx1 + r3 * cx2 + tcb * x2);
+        Y:= hwRound(r1 * y1 + r2 * cy1 + r3 * cy2 + tcb * y2);
+        t:= t + Delta;
+        pa.ar[pa.Count].x:= X;
+        pa.ar[pa.Count].y:= Y;
+        inc(pa.Count);
+        TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
+        end;
 until i = StartI;
 pa.ar[pa.Count].x:= opa.ar[StartI].X;
 pa.ar[pa.Count].y:= opa.ar[StartI].Y;
@@ -197,14 +206,14 @@ i:= 0;
 StartLoop:= 0;
 while i < LongInt(opa.Count) do
     if (opa.ar[i + 1].X = NTPX) then
-       begin
-       AddLoopPoints(pa, opa, StartLoop, i, Delta);
-       inc(i, 2);
-       StartLoop:= i;
-       pa.ar[pa.Count].X:= NTPX;
-       pa.ar[pa.Count].Y:= 0;
-       inc(pa.Count);
-       end else inc(i)
+        begin
+        AddLoopPoints(pa, opa, StartLoop, i, Delta);
+        inc(i, 2);
+        StartLoop:= i;
+        pa.ar[pa.Count].X:= NTPX;
+        pa.ar[pa.Count].Y:= 0;
+        inc(pa.Count);
+        end else inc(i)
 end;
 
 
@@ -213,18 +222,23 @@ var c1, c2, dm: LongInt;
 begin
     dm:= (V4.y - V3.y) * (V2.x - V1.x) - (V4.x - V3.x) * (V2.y - V1.y);
     c1:= (V4.x - V3.x) * (V1.y - V3.y) - (V4.y - V3.y) * (V1.x - V3.x);
-    if dm = 0 then exit(false);
+    if dm = 0 then
+            exit(false);
 
     c2:= (V2.x - V3.x) * (V1.y - V3.y) - (V2.y - V3.y) * (V1.x - V3.x);
     if dm > 0 then
         begin
-        if (c1 < 0) or (c1 > dm) then exit(false);
-        if (c2 < 0) or (c2 > dm) then exit(false)
+        if (c1 < 0) or (c1 > dm) then
+            exit(false);
+        if (c2 < 0) or (c2 > dm) then
+            exit(false)
         end 
     else
         begin
-        if (c1 > 0) or (c1 < dm) then exit(false);
-        if (c2 > 0) or (c2 < dm) then exit(false)
+        if (c1 > 0) or (c1 < dm) then
+            exit(false);
+        if (c2 > 0) or (c2 < dm) then
+            exit(false)
         end;
 
     //AddFileLog('1  (' + inttostr(V1.x) + ',' + inttostr(V1.y) + ')x(' + inttostr(V2.x) + ',' + inttostr(V2.y) + ')');
@@ -236,14 +250,17 @@ end;
 function CheckSelfIntersect(var pa: TPixAr; ind: Longword): boolean;
 var i: Longword;
 begin
-    if (ind <= 0) or (ind >= Pred(pa.Count)) then exit(false);
+    if (ind <= 0) or (ind >= Pred(pa.Count)) then
+                exit(false);
     for i:= 1 to pa.Count - 3 do
         if (i <= ind - 1) or (i >= ind + 2) then
         begin
         if (i <> ind - 1) and
-            CheckIntersect(pa.ar[ind], pa.ar[ind - 1], pa.ar[i], pa.ar[i - 1]) then exit(true);
+            CheckIntersect(pa.ar[ind], pa.ar[ind - 1], pa.ar[i], pa.ar[i - 1]) then
+                exit(true);
         if (i <> ind + 2) and
-            CheckIntersect(pa.ar[ind], pa.ar[ind + 1], pa.ar[i], pa.ar[i - 1]) then exit(true);
+            CheckIntersect(pa.ar[ind], pa.ar[ind + 1], pa.ar[i], pa.ar[i - 1]) then
+                exit(true);
         end;
     CheckSelfIntersect:= false
 end;

@@ -67,12 +67,13 @@ FillChar(Ammo^, sizeof(Ammo^), 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
     if cnts[a] > 0 then
-       begin
-       TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
-       with Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]] do Count:= cnts[a];
-       inc(mi[Ammoz[a].Slot])
-       end
+        begin
+        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
+        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
+        with Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]] do
+            Count:= cnts[a];
+        inc(mi[Ammoz[a].Slot])
+        end
     end
 end;
 
@@ -103,30 +104,36 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             cnt:= AMMO_INFINITE;
             Ammoz[a].Probability:= 0
             end;
-        if Ammoz[a].NumberInCase = 0 then Ammoz[a].Probability:= 0;
+        if Ammoz[a].NumberInCase = 0 then
+            Ammoz[a].Probability:= 0;
 
         // avoid things we already have by scheme
         // merge this into DisableSomeWeapons ?
-        if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0)) or
-           ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0)) or
-           ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0)) or
-           ((a = amVampiric) and ((GameFlags and gfVampiric) <> 0)) or
-           ((a = amExtraTime) and (cHedgehogTurnTime >= 1000000)) then
+        if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0))
+        or ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0))
+        or ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0))
+        or ((a = amVampiric) and ((GameFlags and gfVampiric) <> 0))
+        or ((a = amExtraTime) and (cHedgehogTurnTime >= 1000000)) then
             begin
             cnt:= 0;
             Ammoz[a].Probability:= 0
             end;
         ammos[a]:= cnt;
 
-        if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) and (Ammoz[a].SkipTurns = 0) and (a <> amTeleport) and (a <> amSkip) then
+        if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0)
+        and (Ammoz[a].SkipTurns = 0) and (a <> amTeleport) and (a <> amSkip) then
             Ammoz[a].SkipTurns:= 1;
 
-        if ((GameFlags and gfPlaceHog) <> 0) and
-            (a <> amTeleport) and (a <> amSkip) and
-            (Ammoz[a].SkipTurns < 10000) then inc(Ammoz[a].SkipTurns,10000);
-    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then ammos[a]:= AMMO_INFINITE
+        if ((GameFlags and gfPlaceHog) <> 0)
+        and (a <> amTeleport) and (a <> amSkip)
+        and (Ammoz[a].SkipTurns < 10000) then
+            inc(Ammoz[a].SkipTurns,10000);
+    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
+        ammos[a]:= AMMO_INFINITE
         end 
-    else ammos[a]:= AMMO_INFINITE;
+        
+    else
+        ammos[a]:= AMMO_INFINITE;
     if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
         InitialCounts[Pred(StoreCnt)][a]:= cnt
     else
@@ -153,9 +160,11 @@ with Hedgehog do
     begin
     slot:= Ammoz[am].Slot;
     ammoidx:= 0;
-    while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> am) do inc(ammoidx);
+    while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> am) do
+        inc(ammoidx);
     GetAmmoEntry:= @Ammo^[slot, ammoidx];
-    if (Ammo^[slot, ammoidx].AmmoType <> am) then GetAmmoEntry:= GetAmmoEntry(Hedgehog, amNothing)
+    if (Ammo^[slot, ammoidx].AmmoType <> am) then
+        GetAmmoEntry:= GetAmmoEntry(Hedgehog, amNothing)
     end;
 end;
 
@@ -164,18 +173,18 @@ var t: LongInt;
     i: Longword;
 begin
 for t:= 0 to Pred(TeamsCount) do
-   with TeamsArray[t]^ do
-      begin
-      for i:= 0 to cMaxHHIndex do
-          if Hedgehogs[i].Gear <> nil then
-             begin
-             Hedgehogs[i].Ammo:= GetAmmoByNum(Hedgehogs[i].AmmoStore);
-             if (GameFlags and gfPlaceHog) <> 0 then
-                Hedgehogs[i].CurAmmoType:= amTeleport
-             else
-                Hedgehogs[i].CurAmmoType:= amNothing
-             end
-      end
+    with TeamsArray[t]^ do
+        begin
+        for i:= 0 to cMaxHHIndex do
+            if Hedgehogs[i].Gear <> nil then
+                begin
+                Hedgehogs[i].Ammo:= GetAmmoByNum(Hedgehogs[i].AmmoStore);
+                if (GameFlags and gfPlaceHog) <> 0 then
+                    Hedgehogs[i].CurAmmoType:= amTeleport
+                else
+                    Hedgehogs[i].CurAmmoType:= amNothing
+                end
+        end
 end;
 
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
@@ -183,8 +192,10 @@ var cnt: LongWord;
     a: PAmmo;
 begin
 a:= GetAmmoEntry(Hedgehog, ammo);
-if (a^.AmmoType <> amNothing) then cnt:= a^.Count
-else cnt:= 0;
+if (a^.AmmoType <> amNothing) then
+    cnt:= a^.Count
+else
+    cnt:= 0;
 if (cnt <> AMMO_INFINITE) then
     begin
     inc(cnt, Ammoz[ammo].NumberInCase);
@@ -206,7 +217,7 @@ hhammo:= Hedgehog.Ammo;
 for slot:= 0 to cMaxSlotIndex do
     for ami:= 0 to cMaxSlotAmmoIndex do
         if hhammo^[slot, ami].Count > 0 then
-           ammos[hhammo^[slot, ami].AmmoType]:= hhammo^[slot, ami].Count;
+            ammos[hhammo^[slot, ami].AmmoType]:= hhammo^[slot, ami].Count;
 
 ammos[ammo]:= cnt;
 if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE;
@@ -214,11 +225,11 @@ if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE;
 FillAmmoStore(hhammo, ammos);
 CurWeapon:= GetAmmoEntry(Hedgehog);
 with Hedgehog, CurWeapon^ do
-        if (Count = 0) or (AmmoType = amNothing) then
-            begin
-            PackAmmo(Ammo, Ammoz[AmmoType].Slot);
-            CurAmmoType:= amNothing
-            end
+    if (Count = 0) or (AmmoType = amNothing) then
+        begin
+        PackAmmo(Ammo, Ammoz[AmmoType].Slot);
+        CurAmmoType:= amNothing
+        end
 end;
 
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
@@ -226,17 +237,19 @@ var ami: LongInt;
     b: boolean;
 begin
     repeat
-      b:= false;
-      ami:= 0;
-      while (not b) and (ami < cMaxSlotAmmoIndex) do
-          if (Ammo^[Slot, ami].Count = 0)
-             and (Ammo^[Slot, ami + 1].Count > 0) then b:= true
-                                                  else inc(ami);
-      if b then // there is a free item in ammo stack
-         begin
-         Ammo^[Slot, ami]:= Ammo^[Slot, ami + 1];
-         Ammo^[Slot, ami + 1].Count:= 0
-         end;
+        b:= false;
+        ami:= 0;
+        while (not b) and (ami < cMaxSlotAmmoIndex) do
+            if (Ammo^[Slot, ami].Count = 0)
+            and (Ammo^[Slot, ami + 1].Count > 0) then
+                b:= true
+            else
+                inc(ami);
+        if b then // there is a free item in ammo stack
+            begin
+            Ammo^[Slot, ami]:= Ammo^[Slot, ami + 1];
+            Ammo^[Slot, ami + 1].Count:= 0
+            end;
     until not b;
 end;
 
@@ -269,10 +282,10 @@ begin
 Slot:= Ammoz[Ammo].Slot;
 ami:= 0;
 while (ami <= cMaxSlotAmmoIndex) do
-      begin
-      with Hedgehog.Ammo^[Slot, ami] do
+        begin
+        with Hedgehog.Ammo^[Slot, ami] do
             if (AmmoType = Ammo) then
-               exit((Count > 0) and (Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns));
+                exit((Count > 0) and (Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns));
       inc(ami)
       end;
 HHHasAmmo:= false
@@ -290,8 +303,10 @@ with Hedgehog do
 
     with Hedgehog.Gear^ do
         begin
-        if Angle < CurMinAngle then Angle:= CurMinAngle;
-        if Angle > CurMaxAngle then Angle:= CurMaxAngle;
+        if Angle < CurMinAngle then
+            Angle:= CurMinAngle;
+        if Angle > CurMaxAngle then
+            Angle:= CurMaxAngle;
         end
     end
 end;
@@ -308,11 +323,10 @@ with Hedgehog do
         ((Ammo^[slot, ammoidx].Count = 0) or
         (Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
         do
-        begin
-        while (ammoidx <= cMaxSlotAmmoIndex) and
-            ((Ammo^[slot, ammoidx].Count = 0) or
-            (Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
-            do inc(ammoidx);
+            begin
+            while (ammoidx <= cMaxSlotAmmoIndex)
+            and ((Ammo^[slot, ammoidx].Count = 0) or (Ammoz[Ammo^[slot, ammoidx].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
+                do inc(ammoidx);
 
         if (ammoidx > cMaxSlotAmmoIndex) then
             begin
@@ -339,7 +353,8 @@ with Hedgehog do
 
     if (CurWeapon^.Count = 0) then
         SwitchToFirstLegalAmmo(Hedgehog)
-    else if CurWeapon^.AmmoType = amNothing then Hedgehog.CurAmmoType:= amNothing;
+    else if CurWeapon^.AmmoType = amNothing then
+        Hedgehog.CurAmmoType:= amNothing;
 
     CurWeapon:= GetAmmoEntry(Hedgehog);
 
@@ -353,11 +368,13 @@ with Hedgehog do
         if (Propz and ammoprop_Timerable) <> 0 then
             s:= s + ', ' + IntToStr(Timer div 1000) + ' ' + trammo[sidSeconds];
         AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
-        if (Propz and ammoprop_NeedTarget) <> 0
-            then begin
+        if (Propz and ammoprop_NeedTarget) <> 0 then
+            begin
             Gear^.State:= Gear^.State or      gstHHChooseTarget;
             isCursorVisible:= true
-            end else begin
+            end
+        else
+            begin
             Gear^.State:= Gear^.State and not gstHHChooseTarget;
             isCursorVisible:= false
             end;
@@ -368,8 +385,8 @@ end;
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 begin
 with Hedgehog do
-    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_DontHold) <> 0) or
-        (Ammoz[CurAmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0) then
+    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_DontHold) <> 0)
+    or (Ammoz[CurAmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0) then
         SwitchToFirstLegalAmmo(Hedgehog);
 end;
 
@@ -397,7 +414,8 @@ for i:= 0 to Pred(StoreCnt) do
         end;
 
 for t:= Low(TAmmoType) to High(TAmmoType) do
-    if (Ammoz[t].Ammo.Propz and ammoprop_NotBorder) <> 0 then Ammoz[t].Probability:= 0
+    if (Ammoz[t].Ammo.Propz and ammoprop_NotBorder) <> 0 then
+        Ammoz[t].Probability:= 0
 end;
 
 procedure SetAmmoLoadout(s: shortstring);
@@ -426,14 +444,16 @@ var i, t: Longword;
     a: TAmmoType;
 begin
 for t:= 0 to Pred(TeamsCount) do
-   with TeamsArray[t]^ do
-      for i:= 0 to cMaxHHIndex do
-         Hedgehogs[i].CurAmmoType:= amNothing;
+    with TeamsArray[t]^ do
+        for i:= 0 to cMaxHHIndex do
+            Hedgehogs[i].CurAmmoType:= amNothing;
 
-for i:= 0 to Pred(StoreCnt) do FillAmmoStore(StoresList[i], InitialCounts[i]);
+for i:= 0 to Pred(StoreCnt) do
+    FillAmmoStore(StoresList[i], InitialCounts[i]);
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
-    if Ammoz[a].SkipTurns >= 10000 then dec(Ammoz[a].SkipTurns,10000)
+    if Ammoz[a].SkipTurns >= 10000 then
+        dec(Ammoz[a].SkipTurns,10000)
 end;
 
 
@@ -464,7 +484,8 @@ procedure freeModule;
 var i: LongWord;
 begin
     if StoreCnt > 0 then
-        for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i])
+        for i:= 0 to Pred(StoreCnt) do
+            Dispose(StoresList[i])
 end;
 
 end.

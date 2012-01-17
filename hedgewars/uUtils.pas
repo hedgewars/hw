@@ -82,10 +82,13 @@ i:= Pos(' ', a);
 if i > 0 then
     begin
     for t:= 1 to Pred(i) do
-        if (a[t] >= 'A')and(a[t] <= 'Z') then Inc(a[t], 32);
+        if (a[t] >= 'A')and(a[t] <= 'Z') then
+            Inc(a[t], 32);
     b:= copy(a, i + 1, Length(a) - i);
     byte(a[0]):= Pred(i)
-    end else b:= '';
+    end
+else
+    b:= '';
 end;
 
 procedure SplitByChar(var a, b: ansistring; c: char);
@@ -131,12 +134,18 @@ end;
 
 function Min(a, b: LongInt): LongInt;
 begin
-if a < b then Min:= a else Min:= b
+if a < b then
+    Min:= a
+else
+    Min:= b
 end;
 
 function Max(a, b: LongInt): LongInt;
 begin
-if a > b then Max:= a else Max:= b
+if a > b then
+    Max:= a
+else
+    Max:= b
 end;
 
 
@@ -155,9 +164,11 @@ function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
 var dY, dX: Extended;
 begin
 dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then dY:= - dY;
+if _dY.isNegative then
+    dY:= - dY;
 dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then dX:= - dX;
+if _dX.isNegative then
+    dX:= - dX;
 DxDy2Angle:= arctan2(dY, dX) * 180 / pi
 end;
 
@@ -166,9 +177,11 @@ const _16divPI: Extended = 16/pi;
 var dY, dX: Extended;
 begin
 dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then dY:= - dY;
+if _dY.isNegative then
+    dY:= - dY;
 dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then dX:= - dX;
+if _dX.isNegative then
+    dX:= - dX;
 DxDy2Angle32:= trunc(arctan2(dY, dX) * _16divPI) and $1f
 end;
 
@@ -177,9 +190,11 @@ const MaxAngleDivPI: Extended = cMaxAngle/pi;
 var dY, dX: Extended;
 begin
 dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then dY:= - dY;
+if _dY.isNegative then
+    dY:= - dY;
 dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then dX:= - dX;
+if _dX.isNegative then
+    dX:= - dX;
 DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
 end;
 
@@ -215,8 +230,12 @@ c:= 0;
 for i:= 1 to Length(s) do
     begin
     t:= Pos(s[i], table);
-    if s[i] = '=' then inc(c);
-    if t > 0 then byte(s[i]):= t - 1 else byte(s[i]):= 0
+    if s[i] = '=' then
+        inc(c);
+    if t > 0 then
+        byte(s[i]):= t - 1
+    else
+        byte(s[i]):= 0
     end;
 
 i:= 1;
@@ -230,7 +249,8 @@ while i <= length(s) do
     inc(i, 4)
     end;
 
-if c < 3 then t:= t - c;
+if c < 3 then
+    t:= t - c;
 
 byte(DecodeBase64[0]):= t - 1
 end;
@@ -309,7 +329,7 @@ end;
 
 function GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 begin
-    GetLaunchX:= 0
+GetLaunchX:= 0
 (*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
         GetLaunchX:= sign(dir) * (8 + hwRound(AngleSin(angle) * Ammoz[at].ejectX) + hwRound(AngleCos(angle) * Ammoz[at].ejectY))
@@ -319,7 +339,7 @@ end;
 
 function GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 begin
-    GetLaunchY:= 0
+GetLaunchY:= 0
 (*
     if (Ammoz[at].ejectX <> 0) or (Ammoz[at].ejectY <> 0) then
         GetLaunchY:= hwRound(AngleSin(angle) * Ammoz[at].ejectY) - hwRound(AngleCos(angle) * Ammoz[at].ejectX) - 2
@@ -349,10 +369,12 @@ begin
             begin
                 assign(f, UserPathPrefix + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
                 rewrite(f);
-                if IOResult = 0 then break;
+                if IOResult = 0 then
+                    break;
                 inc(i)
             end;
-            if i = 7 then f:= stderr; // if everything fails, write to stderr
+            if i = 7 then
+                f:= stderr; // if everything fails, write to stderr
         end
     else
         f:= stderr;
@@ -364,7 +386,7 @@ end;
 
 procedure freeModule;
 begin
-    recordFileName:= '';
+recordFileName:= '';
 
 {$IFDEF DEBUGFILE}
     writeln(f, 'halt at ', GameTicks, ' ticks. TurnTimeLeft = ', TurnTimeLeft);

@@ -160,11 +160,12 @@ begin
    King check should be in here instead of ApplyDamage since Tiy wants them kicked less
 *)
 i:= _1;
-if (CurrentHedgehog <> nil) and CurrentHedgehog^.King then i:= _1_5;
+if (CurrentHedgehog <> nil) and CurrentHedgehog^.King then
+    i:= _1_5;
 if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.King) then
-   ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent * _0_5)
+    ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent * _0_5)
 else
-   ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent)
+    ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent)
 end;
 
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
@@ -172,56 +173,58 @@ var s: shortstring;
     vampDmg, tmpDmg, i: Longword;
     vg: PVisualGear;
 begin
-  if Damage = 0 then exit; // nothing to apply
+    if Damage = 0 then
+        exit; // nothing to apply
 
     if (Gear^.Kind = gtHedgehog) then
-    begin
-    Gear^.LastDamage := AttackerHog;
-
-    Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
-    HHHurt(Gear^.Hedgehog, Source);
-    AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);
-    tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
-    if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (tmpDmg >= 1) then
         begin
-        if cVampiric then
+        Gear^.LastDamage := AttackerHog;
+
+        Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
+        HHHurt(Gear^.Hedgehog, Source);
+        AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, Gear^.Hedgehog^.Team^.Clan^.Color);
+        tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
+        if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (tmpDmg >= 1) then
             begin
-            vampDmg:= hwRound(int2hwFloat(tmpDmg)*_0_8);
-            if vampDmg >= 1 then
+            if cVampiric then
                 begin
-                // was considering pulsing on attack, Tiy thinks it should be permanent while in play
-                //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
-                inc(CurrentHedgehog^.Gear^.Health,vampDmg);
-                str(vampDmg, s);
-                s:= '+' + s;
-                AddCaption(s, CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
-                RenderHealth(CurrentHedgehog^);
-                RecountTeamHealth(CurrentHedgehog^.Team);
-                i:= 0;
-                while i < vampDmg do
+                vampDmg:= hwRound(int2hwFloat(tmpDmg)*_0_8);
+                if vampDmg >= 1 then
                     begin
-                    vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtStraightShot);
-                    if vg <> nil then
-                        with vg^ do
-                            begin
-                            Tint:= $FF0000FF;
-                            State:= ord(sprHealth)
-                            end;
-                    inc(i, 5);
-                    end;
-                end
+                    // was considering pulsing on attack, Tiy thinks it should be permanent while in play
+                    //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
+                    inc(CurrentHedgehog^.Gear^.Health,vampDmg);
+                    str(vampDmg, s);
+                    s:= '+' + s;
+                    AddCaption(s, CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    RenderHealth(CurrentHedgehog^);
+                    RecountTeamHealth(CurrentHedgehog^.Team);
+                    i:= 0;
+                    while i < vampDmg do
+                        begin
+                        vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtStraightShot);
+                        if vg <> nil then
+                            with vg^ do
+                                begin
+                                Tint:= $FF0000FF;
+                                State:= ord(sprHealth)
+                                end;
+                        inc(i, 5);
+                        end;
+                    end
+                end;
+        if ((GameFlags and gfKarma) <> 0) and 
+        ((GameFlags and gfInvulnerable) = 0)
+        and (not CurrentHedgehog^.Gear^.Invulnerable) then
+            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
+            inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
+            CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
+            spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
             end;
-        if ((GameFlags and gfKarma) <> 0) and
-           ((GameFlags and gfInvulnerable) = 0) and
-           (not CurrentHedgehog^.Gear^.Invulnerable) then
-           begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
-           inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
-           CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
-           spawnHealthTagForHH(CurrentHedgehog^.Gear, tmpDmg);
-           end;
         uStats.HedgehogDamaged(Gear, AttackerHog, Damage, false);    
         end;
-    end else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
+    end
+    else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         begin
         Gear^.Hedgehog:= AttackerHog;
         end;
@@ -272,15 +275,18 @@ begin
         begin
         dmg := ModifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70), Gear);
         PlaySound(sndBump);
-        if dmg < 1 then exit;
+        if dmg < 1 then
+            exit;
 
         for i:= min(12, (3 + dmg div 10)) downto 0 do
             begin
             particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
-            if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480);
+            if particle <> nil then
+                particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480);
             end;
 
-        if (Gear^.Invulnerable) then exit;
+        if (Gear^.Invulnerable) then
+            exit;
 
         //if _0_6 < Gear^.dY then
         //    PlaySound(sndOw4, Gear^.Hedgehog^.Team^.voicepack)
@@ -289,7 +295,7 @@ begin
 
         if Gear^.LastDamage <> nil then
             ApplyDamage(Gear, Gear^.LastDamage, dmg, dsFall)
-            else
+        else
             ApplyDamage(Gear, CurrentHedgehog, dmg, dsFall);
     end
 end;
@@ -305,8 +311,10 @@ begin
     else
         Gear^.DirAngle := Gear^.DirAngle - dAngle;
 
-    if Gear^.DirAngle < 0 then Gear^.DirAngle := Gear^.DirAngle + 360
-    else if 360 < Gear^.DirAngle then Gear^.DirAngle := Gear^.DirAngle - 360
+    if Gear^.DirAngle < 0 then
+        Gear^.DirAngle := Gear^.DirAngle + 360
+    else if 360 < Gear^.DirAngle then
+        Gear^.DirAngle := Gear^.DirAngle - 360
 end;
 
 function CheckGearDrowning(Gear: PGear): boolean;
@@ -329,8 +337,8 @@ begin
         vdX:= hwFloat2Float(Gear^.dX);
         vdY:= hwFloat2Float(Gear^.dY);
         // this could perhaps be a tiny bit higher.
-        if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) and
-           (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
+        if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed)
+        and (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
             begin
             Gear^.dY.isNegative := true;
             Gear^.dY := Gear^.dY * skipDecay;
@@ -345,8 +353,8 @@ begin
                 CheckGearDrowning := true;
                 Gear^.State := gstDrowning;
                 Gear^.RenderTimer := false;
-                if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and 
-                   (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
+                if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot)
+                and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
                     if Gear^.Kind = gtHedgehog then
                         begin
                         if Gear^.Hedgehog^.Effects[heResurrectable] then
@@ -358,18 +366,22 @@ begin
                             AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
                             end
                         end
-                    else Gear^.doStep := @doStepDrowningGear;
-                    if Gear^.Kind = gtFlake then exit // skip splashes 
+                    else
+                        Gear^.doStep := @doStepDrowningGear;
+                        if Gear^.Kind = gtFlake then
+                            exit // skip splashes 
                 end;
-            if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
-               (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01))) then
+            if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
+            or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0)
+            and (CurAmmoGear^.dY < _0_01))) then
                 // don't play splash if they are already way past the surface
                 PlaySound(sndSplash)
             end;
 
-        if ((cReducedQuality and rqPlainSplash) = 0) and 
-           (((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius)) or
-             (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0) and (CurAmmoGear^.dY < _0_01)))) then
+        if ((cReducedQuality and rqPlainSplash) = 0)
+        and (((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
+        or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0)
+        and (CurAmmoGear^.dY < _0_01)))) then
             begin
             AddVisualGear(X, cWaterLine, vgtSplash);
 
@@ -384,7 +396,8 @@ begin
                     end
                 end
             end;
-        if isSubmersible and (CurAmmoGear^.Pos = 0) then CurAmmoGear^.Pos := 1000
+        if isSubmersible and (CurAmmoGear^.Pos = 0) then
+            CurAmmoGear^.Pos := 1000
         end
     else
         CheckGearDrowning := false;
@@ -410,7 +423,8 @@ begin
     tempTeam := gear^.Hedgehog^.Team;
     DeleteCI(gear);
     FindPlace(gear, false, 0, LAND_WIDTH, true); 
-    if gear <> nil then begin
+    if gear <> nil then
+        begin
         RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;
@@ -427,7 +441,8 @@ if (y and LAND_HEIGHT_MASK) = 0 then
         if Land[y, i] <> 0 then
             begin
             inc(count);
-            if count = c then exit(count)
+            if count = c then
+                exit(count)
             end;
 CountNonZeroz:= count;
 end;
@@ -465,19 +480,22 @@ while tryAgain do
                     inc(y);
                 until (y >= cWaterLine) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) <> 0);
 
-                if (y - sy > Gear^.Radius * 2) and
-                   (((Gear^.Kind = gtExplosives)
-                       and (y < cWaterLine)
-                       and (reallySkip or (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 60, 60) = nil))
-                       and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius))
-                   or
-                     ((Gear^.Kind <> gtExplosives)
-                       and (y < cWaterLine)
-                       and (reallySkip or (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 110, 110) = nil)))) then
-                    begin
+                if (y - sy > Gear^.Radius * 2)
+                    and (((Gear^.Kind = gtExplosives)
+                    and (y < cWaterLine)
+                    and (reallySkip or (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 60, 60) = nil))
+                    and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius))
+                or
+                    ((Gear^.Kind <> gtExplosives)
+                    and (y < cWaterLine)
+                    and (reallySkip or (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 110, 110) = nil)))) then
+                 
+                          begin
                     ar[cnt].X:= x;
-                    if withFall then ar[cnt].Y:= sy + Gear^.Radius
-                                else ar[cnt].Y:= y - Gear^.Radius;
+                    if withFall then
+                        ar[cnt].Y:= sy + Gear^.Radius
+                    else
+                        ar[cnt].Y:= y - Gear^.Radius;
                     inc(cnt)
                     end;
 
@@ -495,7 +513,8 @@ while tryAgain do
 
         dec(Delta, 60)
     until (cnt2 > 0) or (Delta < 70);
-    if (cnt2 = 0) and skipProximity and (not reallySkip) then tryAgain:= true
+    if (cnt2 = 0) and skipProximity and (not reallySkip) then
+        tryAgain:= true
     else tryAgain:= false;
     reallySkip:= true;
     end;
@@ -510,7 +529,8 @@ if cnt2 > 0 then
     else
     begin
     OutError('Can''t find place for Gear', false);
-    if Gear^.Kind = gtHedgehog then Gear^.Hedgehog^.Effects[heResurrectable] := false;
+    if Gear^.Kind = gtHedgehog then
+        Gear^.Hedgehog^.Effects[heResurrectable] := false;
     DeleteGear(Gear);
     Gear:= nil
     end

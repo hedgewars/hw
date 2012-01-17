@@ -36,11 +36,11 @@ uses SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO
 const MaxStrIndex = 27;
 
 type TChatLine = record
-        Tex: PTexture;
-        Time: Longword;
-        Width: LongInt;
-        s: shortstring;
-        end;
+    Tex: PTexture;
+    Time: Longword;
+    Width: LongInt;
+    s: shortstring;
+    end;
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
@@ -104,7 +104,8 @@ end;
 procedure ReloadLines;
 var i, t: LongWord;
 begin
-    if InputStr.s <> '' then SetLine(InputStr, InputStr.s, true);
+    if InputStr.s <> '' then
+        SetLine(InputStr, InputStr.s, true);
     for i:= 0 to MaxStrIndex do
         if Strs[i].s <> '' then
             begin
@@ -152,8 +153,7 @@ r.x:= 6 - cScreenWidth div 2;
 r.y:= (visibleCount - t) * 16 + 10;
 r.h:= 16;
 
-if (GameState = gsChat)
-    and (InputStr.Tex <> nil) then
+if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
     r.w:= InputStr.Width;
     DrawFillRect(r);
@@ -165,9 +165,8 @@ if (GameState = gsChat)
 
 dec(r.y, 16);
 
-while (((t < 7) and (Strs[i].Time > RealTicks)) or
-       ((t < MaxStrIndex) and showAll)) and
-      (Strs[i].Tex <> nil) do
+while (((t < 7) and (Strs[i].Time > RealTicks)) or ((t < MaxStrIndex) and showAll))
+and (Strs[i].Tex <> nil) do
     begin
     r.w:= Strs[i].Width;
     DrawFillRect(r);
@@ -177,7 +176,11 @@ while (((t < 7) and (Strs[i].Time > RealTicks)) or
     DrawTexture(8 - cScreenWidth div 2, (visibleCount - t) * 16 - 6, Strs[i].Tex);
     dec(r.y, 16);
 
-    if i = 0 then i:= MaxStrIndex else dec(i);
+    if i = 0 then
+        i:= MaxStrIndex
+    else
+        dec(i);
+        
     inc(cnt);
     inc(t)
     end;
@@ -198,12 +201,19 @@ var i: TWave;
 begin
 t:= LocalTeam;
 x:= 0;
-if (s[1] = '"') and (s[Length(s)] = '"') then x:= 1
-else if (s[1] = '''') and (s[Length(s)] = '''') then x:= 2
-else if (s[1] = '-') and (s[Length(s)] = '-') then x:= 3;
+if (s[1] = '"') and (s[Length(s)] = '"')
+    then x:= 1
+    
+else if (s[1] = '''') and (s[Length(s)] = '''') then
+    x:= 2
+    
+else if (s[1] = '-') and (s[Length(s)] = '-') then
+    x:= 3;
+    
 if not CurrentTeam^.ExtDriven and (x <> 0) then
     for c:= 0 to Pred(TeamsCount) do
-        if (TeamsArray[c] = CurrentTeam) then t:= c;
+        if (TeamsArray[c] = CurrentTeam) then
+            t:= c;
 
 if x <> 0 then
     begin
@@ -295,10 +305,14 @@ if Key <> 0 then
             GameState:= gsGame;
             end;
     else
-    if (Key < $80) then btw:= 1
-    else if (Key < $800) then btw:= 2
-    else if (Key < $10000) then btw:= 3
-    else btw:= 4;
+        if (Key < $80) then
+            btw:= 1
+        else if (Key < $800) then
+            btw:= 2
+        else if (Key < $10000) then
+            btw:= 3
+        else
+            btw:= 4;
 
     utf8:= '';
 
@@ -310,7 +324,8 @@ if Key <> 0 then
 
     utf8:= char(Key or firstByteMark[btw]) + utf8;
 
-    if byte(InputStr.s[0]) + btw > 240 then exit;
+    if byte(InputStr.s[0]) + btw > 240 then
+        exit;
 
     InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
     SetLine(InputStr, InputStr.s + utf8, true)
@@ -385,14 +400,16 @@ begin
     missedCount:= 0;
 
     inputStr.Tex := nil;
-    for i:= 0 to MaxStrIndex do Strs[i].Tex := nil;
+    for i:= 0 to MaxStrIndex do
+        Strs[i].Tex := nil;
 end;
 
 procedure freeModule;
 var i: ShortInt;
 begin
     FreeTexture(InputStr.Tex);
-    for i:= 0 to MaxStrIndex do FreeTexture(Strs[i].Tex);
+    for i:= 0 to MaxStrIndex do
+        FreeTexture(Strs[i].Tex);
 end;
 
 end.

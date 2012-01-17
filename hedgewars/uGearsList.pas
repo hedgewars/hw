@@ -48,20 +48,23 @@ begin
         begin
         Gear^.NextGear:= ptmp^.NextGear;
         Gear^.PrevGear:= ptmp;
-        if ptmp^.NextGear <> nil then ptmp^.NextGear^.PrevGear:= Gear;
+        if ptmp^.NextGear <> nil then
+            ptmp^.NextGear^.PrevGear:= Gear;
         ptmp^.NextGear:= Gear
         end
     else
         begin
         Gear^.NextGear:= GearsList;
-        if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear;
+        if Gear^.NextGear <> nil then
+            Gear^.NextGear^.PrevGear:= Gear;
         GearsList:= Gear;
         end;
 end;
 
 procedure RemoveGearFromList(Gear: PGear);
 begin
-if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
+if Gear^.NextGear <> nil then
+    Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
 if Gear^.PrevGear <> nil then
     Gear^.PrevGear^.NextGear:= Gear^.NextGear
 else
@@ -96,7 +99,8 @@ gear^.nImpactSounds:= 0;
 gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
-if Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then gear^.Z:= cHHZ+1
+if Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then
+    gear^.Z:= cHHZ+1
 else gear^.Z:= cUsualZ;
 
 if CurrentHedgehog <> nil then
@@ -117,7 +121,8 @@ case Kind of
                 gear^.Friction:= _0_8;
                 gear^.Density:= _1_5;
                 gear^.RenderTimer:= true;
-                if gear^.Timer = 0 then gear^.Timer:= 3000
+                if gear^.Timer = 0 then
+                    gear^.Timer:= 3000
                 end;
   gtWatermelon: begin
                 gear^.ImpactSound:= sndMelonImpact;
@@ -128,7 +133,8 @@ case Kind of
                 gear^.Friction:= _0_995;
                 gear^.Density:= _2;
                 gear^.RenderTimer:= true;
-                if gear^.Timer = 0 then gear^.Timer:= 3000
+                if gear^.Timer = 0 then
+                    gear^.Timer:= 3000
                 end;
   gtMelonPiece: begin
                 gear^.Density:= _2;
@@ -170,7 +176,8 @@ case Kind of
                         dx.QWordValue:= GetRandom(100000000);
                         dy.isNegative:= false;
                         dy.QWordValue:= GetRandom(70000000);
-                        if GetRandom(2) = 0 then dx := -dx
+                        if GetRandom(2) = 0 then
+                            dx := -dx
                         end;
                     State:= State or gstInvisible;
                     Health:= random(vobFrameTicks);
@@ -327,7 +334,10 @@ case Kind of
                 gear^.Z:= cOnHHZ;
                 gear^.RenderTimer:= true;
                 gear^.DirAngle:= -90 * hwSign(Gear^.dX);
-                if not dX.isNegative then gear^.Angle:= 1 else gear^.Angle:= 3
+                if not dX.isNegative then
+                    gear^.Angle:= 1
+                else
+                    gear^.Angle:= 3
                 end;
  gtHellishBomb: begin
                 gear^.ImpactSound:= sndHellishImpact1;
@@ -341,7 +351,8 @@ case Kind of
                 gear^.Timer:= 5000
                 end;
        gtDrill: begin
-                if gear^.Timer = 0 then gear^.Timer:= 5000;
+                if gear^.Timer = 0 then
+                    gear^.Timer:= 5000;
                 // Tag for drill strike. if 1 then first impact occured already
                 gear^.Tag := 0;
                 gear^.Radius:= 4;
@@ -385,7 +396,8 @@ case Kind of
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_96;
                 gear^.Density:= _1;
-                if gear^.Timer = 0 then gear^.Timer:= 3000
+                if gear^.Timer = 0 then
+                    gear^.Timer:= 3000
                 end;
       gtPortal: begin
                 gear^.ImpactSound:= sndMelonImpact;
@@ -488,7 +500,8 @@ else if Gear^.Kind = gtHedgehog then
             begin
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
-            if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cWaterOpacity < $FF))) and (hwRound(Gear^.Y) < cWaterLine + 256) then
+            if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cWaterOpacity < $FF)))
+            and (hwRound(Gear^.Y) < cWaterLine + 256) then
                 spawnHealthTagForHH(Gear, t);
             end;
 
@@ -497,7 +510,9 @@ else if Gear^.Kind = gtHedgehog then
             begin
             AttackBar:= 0;
             FreeActionsList; // to avoid ThinkThread on drawned gear
-            if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (CurrentHedgehog^.MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
+            if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0)
+            and (CurrentHedgehog^.MultiShootAttacks > 0) then
+                OnUsedAmmo(CurrentHedgehog^);
             end;
 
         Gear^.Hedgehog^.Gear:= nil;
@@ -506,7 +521,8 @@ else if Gear^.Kind = gtHedgehog then
             // are there any other kings left? Just doing nil check.  Presumably a mortally wounded king will get reaped soon enough
             k:= false;
             for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
-                if (team^.Clan^.Teams[i]^.Hedgehogs[0].Gear <> nil) then k:= true;
+                if (team^.Clan^.Teams[i]^.Hedgehogs[0].Gear <> nil) then
+                    k:= true;
             if not k then
                 for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
                     begin
@@ -524,7 +540,8 @@ else if Gear^.Kind = gtHedgehog then
 
         inc(KilledHHs);
         RecountTeamHealth(team);
-        if (CurrentHedgehog <> nil) and CurrentHedgehog^.Effects[heResurrectable] and (not Gear^.Hedgehog^.Effects[heResurrectable]) then
+        if (CurrentHedgehog <> nil) and CurrentHedgehog^.Effects[heResurrectable] and
+        (not Gear^.Hedgehog^.Effects[heResurrectable]) then
             with CurrentHedgehog^ do 
                 begin
                 inc(Team^.stats.AIKills);
@@ -535,9 +552,12 @@ else if Gear^.Kind = gtHedgehog then
 with Gear^ do
     AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
 
-if CurAmmoGear = Gear then CurAmmoGear:= nil;
-if FollowGear = Gear then FollowGear:= nil;
-if lastGearByUID = Gear then lastGearByUID := nil;
+if CurAmmoGear = Gear then
+    CurAmmoGear:= nil;
+if FollowGear = Gear then
+    FollowGear:= nil;
+if lastGearByUID = Gear then
+    lastGearByUID := nil;
 RemoveGearFromList(Gear);
 Dispose(Gear)
 end;

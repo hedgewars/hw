@@ -67,9 +67,11 @@ begin
         repeat
             while (yd > 0) and (Land[yd, x] =  0) do dec(yd);
 
-            if (yd < 0) then yd:= 0;
+            if (yd < 0) then
+                yd:= 0;
 
-            while (yd < LAND_HEIGHT) and (Land[yd, x] <> 0) do inc(yd);
+            while (yd < LAND_HEIGHT) and (Land[yd, x] <> 0) do
+                inc(yd);
             dec(yd);
             yu:= yd;
 
@@ -77,7 +79,7 @@ begin
             while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
 
             if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
-            begin
+                begin
                 rr.x:= x;
                 rr.y:= yd - 15;
                 r.x:= x mod tmpsurf^.w;
@@ -85,9 +87,9 @@ begin
                 r.w:= 1;
                 r.h:= 16;
                 SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-            end;
+                end;
             if (yu > 0) then
-            begin
+                begin
                 rr.x:= x;
                 rr.y:= yu;
                 r.x:= x mod tmpsurf^.w;
@@ -95,7 +97,7 @@ begin
                 r.w:= 1;
                 r.h:= Min(16, yd - yu + 1);
                 SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-            end;
+                end;
             yd:= yu - 1;
         until yd < 0;
     end;
@@ -106,25 +108,25 @@ procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr);
 var i: LongInt;
 begin
 with Template do
-     begin
-     pa.Count:= BasePointsCount;
-     for i:= 0 to pred(pa.Count) do
-         begin
-         pa.ar[i].x:= BasePoints^[i].x + LongInt(GetRandom(BasePoints^[i].w));
-         if pa.ar[i].x <> NTPX then
-            pa.ar[i].x:= pa.ar[i].x + ((LAND_WIDTH - Template.TemplateWidth) div 2);
-         pa.ar[i].y:= BasePoints^[i].y + LongInt(GetRandom(BasePoints^[i].h)) + LAND_HEIGHT - LongInt(Template.TemplateHeight)
-         end;
+    begin
+    pa.Count:= BasePointsCount;
+    for i:= 0 to pred(pa.Count) do
+        begin
+        pa.ar[i].x:= BasePoints^[i].x + LongInt(GetRandom(BasePoints^[i].w));
+        if pa.ar[i].x <> NTPX then
+           pa.ar[i].x:= pa.ar[i].x + ((LAND_WIDTH - Template.TemplateWidth) div 2);
+        pa.ar[i].y:= BasePoints^[i].y + LongInt(GetRandom(BasePoints^[i].h)) + LAND_HEIGHT - LongInt(Template.TemplateHeight)
+        end;
 
-     if canMirror then
+    if canMirror then
         if getrandom(2) = 0 then
-           begin
-           for i:= 0 to pred(BasePointsCount) do
-             if pa.ar[i].x <> NTPX then
-               pa.ar[i].x:= LAND_WIDTH - 1 - pa.ar[i].x;
-           for i:= 0 to pred(FillPointsCount) do
-               FillPoints^[i].x:= LAND_WIDTH - 1 - FillPoints^[i].x;
-           end;
+            begin
+            for i:= 0 to pred(BasePointsCount) do
+               if pa.ar[i].x <> NTPX then
+                   pa.ar[i].x:= LAND_WIDTH - 1 - pa.ar[i].x;
+            for i:= 0 to pred(FillPointsCount) do
+                FillPoints^[i].x:= LAND_WIDTH - 1 - FillPoints^[i].x;
+            end;
 
 (*  Experiment in making this option more useful
      if ((not isNegative) and (cTemplateFilter = 4)) or
@@ -146,30 +148,30 @@ with Template do
      end
 *)
 // template recycling.  Pull these off the floor a bit
-     if (not isNegative) and (cTemplateFilter = 4) then
-           begin
-           for i:= 0 to pred(BasePointsCount) do
-               begin
-               dec(pa.ar[i].y, 100);
-               if pa.ar[i].y < 0 then
-                   pa.ar[i].y:= 0;
-               end;
-           for i:= 0 to pred(FillPointsCount) do
-               begin
-               dec(FillPoints^[i].y, 100);
-               if FillPoints^[i].y < 0 then
-                   FillPoints^[i].y:= 0;
-               end;
-           end;
+    if (not isNegative) and (cTemplateFilter = 4) then
+        begin
+        for i:= 0 to pred(BasePointsCount) do
+            begin
+            dec(pa.ar[i].y, 100);
+            if pa.ar[i].y < 0 then
+                pa.ar[i].y:= 0;
+            end;
+        for i:= 0 to pred(FillPointsCount) do
+            begin
+            dec(FillPoints^[i].y, 100);
+            if FillPoints^[i].y < 0 then
+                FillPoints^[i].y:= 0;
+            end;
+        end;
 
-     if (canFlip and (getrandom(2) = 0)) then
-           begin
-           for i:= 0 to pred(BasePointsCount) do
-               pa.ar[i].y:= LAND_HEIGHT - 1 - pa.ar[i].y;
-           for i:= 0 to pred(FillPointsCount) do
-               FillPoints^[i].y:= LAND_HEIGHT - 1 - FillPoints^[i].y;
-           end;
-     end
+    if (canFlip and (getrandom(2) = 0)) then
+        begin
+        for i:= 0 to pred(BasePointsCount) do
+            pa.ar[i].y:= LAND_HEIGHT - 1 - pa.ar[i].y;
+        for i:= 0 to pred(FillPointsCount) do
+            FillPoints^[i].y:= LAND_HEIGHT - 1 - FillPoints^[i].y;
+        end;
+    end
 end;
 
 
@@ -190,7 +192,8 @@ begin
         RandomizePoints(pa);
         RandomizePoints(pa)
         end;
-    for i:= 1 to Template.RandPassesCount do RandomizePoints(pa);
+    for i:= 1 to Template.RandPassesCount do
+        RandomizePoints(pa);
     BezierizeEdge(pa, _0_1);
 
 
@@ -212,9 +215,9 @@ begin
     topY:= LAND_HEIGHT - playHeight;
 
     // HACK: force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
-    if (cTemplateFilter = 4) or
-    (Template.canInvert and (getrandom(2) = 0)) or
-        (not Template.canInvert and Template.isNegative) then
+    if (cTemplateFilter = 4)
+    or (Template.canInvert and (getrandom(2) = 0))
+    or (not Template.canInvert and Template.isNegative) then
         begin
         hasBorder:= true;
         for y:= 0 to LAND_HEIGHT - 1 do
@@ -222,12 +225,12 @@ begin
                 if (y < topY) or (x < leftX) or (x > rightX) then
                     Land[y, x]:= 0
                 else
-                begin
-                if Land[y, x] = 0 then
-                    Land[y, x]:= lfBasic
-                else if Land[y, x] = lfBasic then
-                    Land[y, x]:= 0;
-                end;
+                    begin
+                    if Land[y, x] = 0 then
+                        Land[y, x]:= lfBasic
+                    else if Land[y, x] = lfBasic then
+                        Land[y, x]:= 0;
+                    end;
         end;
 end;
 
@@ -276,9 +279,9 @@ for y:= 0 to LAND_HEIGHT - 1 do
     for x:= 0 to LAND_WIDTH - 1 do
     if Land[y, x] <> 0 then
         if (cReducedQuality and rqBlurryLand) = 0 then
-             LandPixels[y, x]:= p^[x] or AMask
+            LandPixels[y, x]:= p^[x] or AMask
         else
-             LandPixels[y div 2, x div 2]:= p^[x] or AMask;
+            LandPixels[y div 2, x div 2]:= p^[x] or AMask;
 
     p:= @(p^[Surface^.pitch div 4]);
     end;
@@ -318,11 +321,20 @@ begin
             begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
-                    if (Land[y, x-1] = lfBasic) and (LandPixels[y, x-1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x-1]
-                    else if (Land[y, x+1] = lfBasic) and (LandPixels[y, x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
-                    else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x]
-                    else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1, x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x];
-                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (128 shl AShift)
+                    if (Land[y, x-1] = lfBasic) and (LandPixels[y, x-1] and AMask <> 0) then
+                        LandPixels[y, x]:= LandPixels[y, x-1]
+                        
+                    else if (Land[y, x+1] = lfBasic) and (LandPixels[y, x+1] and AMask <> 0) then
+                        LandPixels[y, x]:= LandPixels[y, x+1]
+                        
+                    else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1, x] and AMask <> 0) then
+                        LandPixels[y, x]:= LandPixels[y-1, x]
+                        
+                    else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1, x] and AMask <> 0) then
+                        LandPixels[y, x]:= LandPixels[y+1, x];
+                        
+                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
+                        LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (128 shl AShift)
                     end;
                 Land[y,x]:= lfObject
             end
@@ -335,14 +347,27 @@ begin
                     ((Land[y-1, x] = lfBasic) and (Land[y-1,x+1] = lfBasic) and (Land[y,x+2] = lfBasic)) or
                     ((Land[y+1, x] = lfBasic) and (Land[y+1,x-1] = lfBasic) and (Land[y,x-2] = lfBasic)) or
                     ((Land[y-1, x] = lfBasic) and (Land[y-1,x-1] = lfBasic) and (Land[y,x-2] = lfBasic))) then
-            begin
+                    
+                begin
+                
                 if (cReducedQuality and rqBlurryLand) = 0 then
+                
                     begin
-                    if (Land[y, x-1] = lfBasic) and (LandPixels[y,x-1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x-1]
-                    else if (Land[y, x+1] = lfBasic) and (LandPixels[y,x+1] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y, x+1]
-                    else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y+1, x]
-                    else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1,x] and AMask <> 0) then LandPixels[y, x]:= LandPixels[y-1, x];
-                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (64 shl AShift)
+                    
+                    if (Land[y, x-1] = lfBasic) and (LandPixels[y,x-1] and AMask <> 0) then
+                        LandPixels[y, x]:= LandPixels[y, x-1]
+                        
+                    else if (Land[y, x+1] = lfBasic) and (LandPixels[y,x+1] and AMask <> 0) then
+                        LandPixels[y, x]:= LandPixels[y, x+1]
+                        
+                    else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1,x] and AMask <> 0) then
+                        LandPixels[y, x]:= LandPixels[y+1, x]
+                        
+                    else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1,x] and AMask <> 0) then
+                        LandPixels[y, x]:= LandPixels[y-1, x];
+                        
+                    if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
+                        LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (64 shl AShift)
                     end;
                 Land[y,x]:= lfObject
             end;
@@ -364,12 +389,14 @@ topY:= LAND_HEIGHT - playHeight;
 WriteLnToConsole('Generating forts land...');
 
 tmpsurf:= LoadImage(UserPathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifTransparent or ifIgnoreCaps);
-if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then
+    tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 BlitImageAndGenerateCollisionInfo(leftX+150, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 tmpsurf:= LoadImage(UserPathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
-if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then
+    tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 end;
@@ -381,17 +408,19 @@ var tmpsurf: PSDL_Surface;
     x, y, cpX, cpY: Longword;
 begin
 tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then
+    tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(Pathz[ptMapCurrent]);
     tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then
+        tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
     end;
 
 
 if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
-begin
+    begin
     disableLandBack:= true;
 
     cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
@@ -427,8 +456,10 @@ begin
         begin
         // freed in freeModule() below
         LandBackSurface:= LoadImage(UserPathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
-        if LandBackSurface = nil then LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
-        if (LandBackSurface <> nil) and cGrayScale then Surface2GrayScale(LandBackSurface)
+        if LandBackSurface = nil then
+            LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+        if (LandBackSurface <> nil) and cGrayScale then
+            Surface2GrayScale(LandBackSurface)
         end;
 end;
 if (tmpsurf <> nil) then
@@ -446,33 +477,38 @@ isMap:= true;
 WriteLnToConsole('Loading land from file...');
 AddProgress;
 tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
-if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then
+    tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(Pathz[ptMapCurrent]);
     tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
-    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then
+        tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
     end;
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 
 // unC0Rr - should this be passed from the GUI? I am not sure which layer does what
 s:= UserPathz[ptMapCurrent] + '/map.cfg';
-if not FileExists(s) then s:= Pathz[ptMapCurrent] + '/map.cfg';
+if not FileExists(s) then
+    s:= Pathz[ptMapCurrent] + '/map.cfg';
 WriteLnToConsole('Fetching map HH limit');
 {$I-}
 Assign(f, s);
 filemode:= 0; // readonly
 Reset(f);
 if IOResult <> 0 then
-begin
+    begin
     s:= Pathz[ptMissionMaps] + '/' + mapName + '/map.cfg';
     Assign(f, s);
     Reset(f);
-end;
+    end;
 Readln(f);
-if not eof(f) then Readln(f, MaxHedgehogs);
+if not eof(f) then
+    Readln(f, MaxHedgehogs);
 {$I+}
-if (MaxHedgehogs = 0) then MaxHedgehogs:= 18;
+if (MaxHedgehogs = 0) then
+    MaxHedgehogs:= 18;
 
 playHeight:= tmpsurf^.h;
 playWidth:= tmpsurf^.w;
@@ -597,14 +633,17 @@ if hasBorder then
         end;
     end;
 
-if (GameFlags and gfBottomBorder) <> 0 then DrawBottomBorder;
+if (GameFlags and gfBottomBorder) <> 0 then
+    DrawBottomBorder;
 
-if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false;
+if (GameFlags and gfDisableGirders) <> 0 then
+    hasGirders:= false;
 
-if ((GameFlags and gfForts) = 0)
-    and (Pathz[ptMapCurrent] = '')
-    then AddObjects
-else AddProgress();
+if ((GameFlags and gfForts) = 0) and (Pathz[ptMapCurrent] = '') then
+    AddObjects
+    
+else
+    AddProgress();
 
 FreeLandObjects;
 
@@ -618,7 +657,8 @@ if cGrayScale then
                 w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
                       (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
                       (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
-                if w > 255 then w:= 255;
+                if w > 255 then
+                    w:= 255;
                 w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y,x] and AMask);
                 LandPixels[y,x]:= w or (LandPixels[y, x] and AMask)
                 end
@@ -628,8 +668,9 @@ if cGrayScale then
                 begin
                 w:= LandPixels[y div 2,x div 2];
                 w:= ((w shr RShift and $FF) +  (w shr BShift and $FF) + (w shr GShift and $FF)) div 3;
-                if w > 255 then w:= 255;
-               w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y div 2,x div 2] and AMask);
+                if w > 255 then
+                    w:= 255;
+                w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y div 2,x div 2] and AMask);
                 LandPixels[y,x]:= w or (LandPixels[y div 2, x div 2] and AMask)
                 end
     end;
@@ -662,7 +703,8 @@ begin
                 cbit:= bit * 8;
                 for yy:= y * lh to y * lh + 7 do
                     for xx:= x * lw + cbit to x * lw + cbit + 7 do
-                        if Land[yy, xx] <> 0 then inc(t);
+                        if Land[yy, xx] <> 0 then
+                            inc(t);
                 if t > 8 then
                     Preview[y, x]:= Preview[y, x] or ($80 shr bit);
             end;

@@ -66,7 +66,8 @@ var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
-if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
+if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then
+    exit;
 
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
@@ -206,10 +207,11 @@ glPushMatrix;
 glTranslatef(X, Y, 0);
 
 if Dir < 0 then
-   glRotatef(Angle, 0, 0, -1)
+    glRotatef(Angle, 0, 0, -1)
 else
-   glRotatef(Angle, 0, 0,  1);
-if Dir < 0 then glScalef(-1.0, 1.0, 1.0);
+    glRotatef(Angle, 0, 0,  1);
+if Dir < 0 then
+    glScalef(-1.0, 1.0, 1.0);
 
 DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
 
@@ -229,11 +231,12 @@ glPushMatrix;
 glTranslatef(X, Y, 0);
 
 if Dir < 0 then
-   begin
-   hw:= - hw;
-   glRotatef(Angle, 0, 0, -1);
-   end else
-   glRotatef(Angle, 0, 0,  1);
+    begin
+    hw:= - hw;
+    glRotatef(Angle, 0, 0, -1);
+    end
+else
+    glRotatef(Angle, 0, 0,  1);
 
 
 glBindTexture(GL_TEXTURE_2D, Tex^.id);
@@ -257,7 +260,8 @@ end;
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
 var row, col, numFramesFirstCol: LongInt;
 begin
-if SpritesData[Sprite].imageHeight = 0 then exit;
+if SpritesData[Sprite].imageHeight = 0 then
+    exit;
 numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
 row:= Frame mod numFramesFirstCol;
 col:= Frame div numFramesFirstCol;
@@ -410,13 +414,14 @@ begin
     b:= (Pos + 1) * 32 / HHTexture^.h;
 
     if Dir = -1 then
-    begin
-    l:= (Step + 1) * 32 / HHTexture^.w;
-    r:= Step * 32 / HHTexture^.w
-    end else
-    begin
-    l:= Step * 32 / HHTexture^.w;
-    r:= (Step + 1) * 32 / HHTexture^.w
+        begin
+        l:= (Step + 1) * 32 / HHTexture^.w;
+        r:= Step * 32 / HHTexture^.w
+        end
+    else
+        begin
+        l:= Step * 32 / HHTexture^.w;
+        r:= (Step + 1) * 32 / HHTexture^.w
     end;
 
 
@@ -457,7 +462,8 @@ if nc = lastTint then
 if cGrayScale then
     begin
     tw:= round(r * RGB_LUMINANCE_RED + g * RGB_LUMINANCE_GREEN + b * RGB_LUMINANCE_BLUE);
-    if tw > 255 then tw:= 255;
+    if tw > 255 then
+        tw:= 255;
     r:= tw;
     g:= tw;
     b:= tw

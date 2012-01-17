@@ -80,7 +80,7 @@ procedure MakeCrossHairs;
 var t: LongInt;
     tmpsurf, texsurf: PSDL_Surface;
     Color, i: Longword;
-    s : shortstring;
+    s: shortstring;
 begin
 s:= UserPathz[ptGraphics] + '/' + cCHFileName;
 if not FileExists(s+'.png') then s:= Pathz[ptGraphics] + '/' + cCHFileName;
@@ -105,7 +105,8 @@ for t:= 0 to Pred(TeamsCount) do
 
     // make black pixel be alpha-transparent
     for i:= 0 to texsurf^.w * texsurf^.h - 1 do
-        if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= (RMask or GMask or BMask) and Color;
+        if PLongwordArray(texsurf^.pixels)^[i] = AMask then
+            PLongwordArray(texsurf^.pixels)^[i]:= (RMask or GMask or BMask) and Color;
 
     if SDL_MustLock(texsurf) then
         SDL_UnlockSurface(texsurf);
@@ -127,11 +128,11 @@ var t: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
     s: shortstring;
 begin
-    r.x:= 0;
-    r.y:= 0;
-    drY:= - 4;
-    for t:= 0 to Pred(TeamsCount) do
-        with TeamsArray[t]^ do
+r.x:= 0;
+r.y:= 0;
+drY:= - 4;
+for t:= 0 to Pred(TeamsCount) do
+    with TeamsArray[t]^ do
         begin
         NameTagTex:= RenderStringTex(TeamName, Clan^.Color, Font);
 
@@ -164,14 +165,18 @@ begin
 
         // overwrite flag for cpu teams and keep players from using it
         if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
-            if Flag = 'hedgewars' then Flag:= 'cpu'
+            if Flag = 'hedgewars' then
+                Flag:= 'cpu'
         else if Flag = 'cpu' then
             Flag:= 'hedgewars';
 
         flagsurf:= LoadImage(UserPathz[ptFlags] + '/' + Flag, ifNone);
-        if flagsurf = nil then flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
-        if flagsurf = nil then flagsurf:= LoadImage(UserPathz[ptFlags] + '/hedgewars', ifNone);
-        if flagsurf = nil then flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
+        if flagsurf = nil then
+            flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
+        if flagsurf = nil then
+            flagsurf:= LoadImage(UserPathz[ptFlags] + '/hedgewars', ifNone);
+        if flagsurf = nil then
+            flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
         TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
         copyToXY(flagsurf, texsurf, 2, 2);
         SDL_FreeSurface(flagsurf);
@@ -206,7 +211,8 @@ begin
                     end;
         end;
     MissionIcons:= LoadImage(UserPathz[ptGraphics] + '/missions', ifNone);
-    if MissionIcons = nil then MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
+    if MissionIcons = nil then
+        MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
     iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
     if iconsurf <> nil then
         begin
@@ -224,29 +230,33 @@ end;
 procedure InitHealth;
 var i, t: LongInt;
 begin
-    for t:= 0 to Pred(TeamsCount) do
-        if TeamsArray[t] <> nil then
-            with TeamsArray[t]^ do
-                begin
-                for i:= 0 to cMaxHHIndex do
-                    if Hedgehogs[i].Gear <> nil then
-                        RenderHealth(Hedgehogs[i]);
-                end
+for t:= 0 to Pred(TeamsCount) do
+    if TeamsArray[t] <> nil then
+        with TeamsArray[t]^ do
+            begin
+            for i:= 0 to cMaxHHIndex do
+                if Hedgehogs[i].Gear <> nil then
+                    RenderHealth(Hedgehogs[i]);
+            end
 end;
 
 procedure LoadGraves;
 var t: LongInt;
     texsurf: PSDL_Surface;
 begin
-    for t:= 0 to Pred(TeamsCount) do
+for t:= 0 to Pred(TeamsCount) do
     if TeamsArray[t] <> nil then
         with TeamsArray[t]^ do
             begin
-            if GraveName = '' then GraveName:= 'Statue';
+            if GraveName = '' then
+                GraveName:= 'Statue';
             texsurf:= LoadImage(UserPathz[ptGraves] + '/' + GraveName, ifTransparent);
-            if texsurf = nil then texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifTransparent);
-            if texsurf = nil then texsurf:= LoadImage(UserPathz[ptGraves] + '/Statue', ifTransparent);
-            if texsurf = nil then texsurf:= LoadImage(Pathz[ptGraves] + '/Statue', ifCritical or ifTransparent);
+            if texsurf = nil then
+                texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifTransparent);
+            if texsurf = nil then
+                texsurf:= LoadImage(UserPathz[ptGraves] + '/Statue', ifTransparent);
+            if texsurf = nil then
+                texsurf:= LoadImage(Pathz[ptGraves] + '/Statue', ifCritical or ifTransparent);
             GraveTex:= Surface2Tex(texsurf, false);
             SDL_FreeSurface(texsurf)
             end
@@ -267,7 +277,8 @@ if not reload then
         with Fontz[fi] do
             begin
             s:= UserPathz[ptFonts] + '/' + Name;
-            if not FileExists(s) then s:= Pathz[ptFonts] + '/' + Name;
+            if not FileExists(s) then
+                s:= Pathz[ptFonts] + '/' + Name;
             WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
             Handle:= TTF_OpenFont(Str2PChar(s), Height);
             SDLTry(Handle <> nil, true);
@@ -290,35 +301,44 @@ for ii:= Low(TSprite) to High(TSprite) do
            (((cReducedQuality and rqKillFlakes) = 0) or (Theme = 'Snow') or (Theme = 'Christmas') or ((not (ii in [sprFlake, sprSDFlake])))) and
            ((cCloudsNumber > 0) or (ii <> sprCloud)) and
            ((vobCount > 0) or (ii <> sprFlake)) then
-        begin
+            begin
             if AltPath = ptNone then
                 if ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk, sprFireButton] then // FIXME: hack
                     begin
                     if not reload then
                         begin
                         tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                        if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
+                        if tmpsurf = nil then
+                           tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
                         end
-                    else tmpsurf:= Surface
+                    else
+                           tmpsurf:= Surface
                     end
                 else
                     begin
                     if not reload then
                         begin
-                        tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                        if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
+                           tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                        if tmpsurf = nil then
+                           tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
                         end
-                    else tmpsurf:= Surface
+                    else
+                           tmpsurf:= Surface
                     end
-            else begin
+            else
+                begin
                 if not reload then
                     begin
                     tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then tmpsurf:= LoadImage(UserPathz[AltPath] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent)
+                    if tmpsurf = nil then
+                        tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                    if tmpsurf = nil then
+                        tmpsurf:= LoadImage(UserPathz[AltPath] + '/' + FileName, ifAlpha or ifTransparent);
+                    if tmpsurf = nil then
+                        tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent)
                     end
-                else tmpsurf:= Surface
+                else
+                        tmpsurf:= Surface
                 end;
 
             if tmpsurf <> nil then
@@ -352,7 +372,10 @@ for ii:= Low(TSprite) to High(TSprite) do
 {$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
                     Surface:= tmpsurf 
 {$ELSE}
-                    if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
+                    if saveSurf then
+                        Surface:= tmpsurf
+                    else
+                        SDL_FreeSurface(tmpsurf)
 {$ENDIF}
                     end
                 end
@@ -363,8 +386,10 @@ for ii:= Low(TSprite) to High(TSprite) do
 if not reload then
     AddProgress;
 
-tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifTransparent);
-if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
+    tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifTransparent);
+if tmpsurf = nil then
+    tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
+    
 HHTexture:= Surface2Tex(tmpsurf, false);
 SDL_FreeSurface(tmpsurf);
 
@@ -392,13 +417,13 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
 
 // number of weapons in ammo menu
 for i:= Low(CountTexz) to High(CountTexz) do
-begin
+    begin
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
     tmpsurf:= doSurfaceConversion(tmpsurf);
     FreeTexture(CountTexz[i]);
     CountTexz[i]:= Surface2Tex(tmpsurf, false);
     SDL_FreeSurface(tmpsurf)
-end;
+    end;
 
 if not reload then
     AddProgress;
@@ -410,45 +435,45 @@ var ii: TSprite;
     ai: TAmmoType;
     i, t: LongInt;
 begin
-    for ii:= Low(TSprite) to High(TSprite) do
+for ii:= Low(TSprite) to High(TSprite) do
+    begin
+    FreeTexture(SpritesData[ii].Texture);
+    SpritesData[ii].Texture:= nil;
+    if (SpritesData[ii].Surface <> nil) and (not reload) then
         begin
-        FreeTexture(SpritesData[ii].Texture);
-        SpritesData[ii].Texture:= nil;
-        if (SpritesData[ii].Surface <> nil) and (not reload) then
-            begin
-            SDL_FreeSurface(SpritesData[ii].Surface);
-            SpritesData[ii].Surface:= nil
-            end
-        end;
-    SDL_FreeSurface(MissionIcons);
+        SDL_FreeSurface(SpritesData[ii].Surface);
+        SpritesData[ii].Surface:= nil
+        end
+    end;
+SDL_FreeSurface(MissionIcons);
 
-    // free the textures declared in uVariables
-    FreeTexture(WeaponTooltipTex);
-    WeaponTooltipTex:= nil;
-    FreeTexture(PauseTexture);
-    PauseTexture:= nil;
-    FreeTexture(SyncTexture);
-    SyncTexture:= nil;
-    FreeTexture(ConfirmTexture);
-    ConfirmTexture:= nil;
-    FreeTexture(ropeIconTex);
-    ropeIconTex:= nil;
-    FreeTexture(HHTexture);
-    HHTexture:= nil;
+// free the textures declared in uVariables
+FreeTexture(WeaponTooltipTex);
+WeaponTooltipTex:= nil;
+FreeTexture(PauseTexture);
+PauseTexture:= nil;
+FreeTexture(SyncTexture);
+SyncTexture:= nil;
+FreeTexture(ConfirmTexture);
+ConfirmTexture:= nil;
+FreeTexture(ropeIconTex);
+ropeIconTex:= nil;
+FreeTexture(HHTexture);
+HHTexture:= nil;
 
-    // free all ammo name textures
-    for ai:= Low(TAmmoType) to High(TAmmoType) do
-        begin
-        FreeTexture(Ammoz[ai].NameTex);
-        Ammoz[ai].NameTex:= nil
-        end;
+// free all ammo name textures
+for ai:= Low(TAmmoType) to High(TAmmoType) do
+    begin
+    FreeTexture(Ammoz[ai].NameTex);
+    Ammoz[ai].NameTex:= nil
+    end;
 
-    // free all count textures
-    for i:= Low(CountTexz) to High(CountTexz) do
-        begin
-        FreeTexture(CountTexz[i]);
-        CountTexz[i]:= nil
-        end;
+// free all count textures
+for i:= Low(CountTexz) to High(CountTexz) do
+    begin
+    FreeTexture(CountTexz[i]);
+    CountTexz[i]:= nil
+    end;
 
     // free all team and hedgehog textures
     for t:= 0 to Pred(TeamsCount) do
@@ -495,19 +520,19 @@ end;
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
-    str(Hedgehog.Gear^.Health, s);
-    FreeTexture(Hedgehog.HealthTagTex);
-    Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
+str(Hedgehog.Gear^.Health, s);
+FreeTexture(Hedgehog.HealthTagTex);
+Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-    WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
+WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
 
-    s:= filename + '.png';
-    tmpsurf:= IMG_Load(Str2PChar(s));
+s:= filename + '.png';
+tmpsurf:= IMG_Load(Str2PChar(s));
 
     if tmpsurf = nil then
         begin
@@ -516,12 +541,12 @@ begin
         end;
 
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
-    begin
+        begin
         SDL_FreeSurface(tmpsurf);
         OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
         // dummy surface to replace non-critical textures that failed to load due to their size
         exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask));
-    end;
+        end;
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
 
@@ -536,8 +561,9 @@ end;
 procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
 var texsurf: PSDL_Surface;
 begin
-    texsurf:= LoadImage(UserPathz[ptHats] + '/' + newHat, ifNone);
-    if texsurf = nil then texsurf:= LoadImage(Pathz[ptHats] + '/' + newHat, ifNone);
+texsurf:= LoadImage(UserPathz[ptHats] + '/' + newHat, ifNone);
+    if texsurf = nil then
+        texsurf:= LoadImage(Pathz[ptHats] + '/' + newHat, ifNone);
 
     // only do something if the hat could be loaded
     if texsurf <> nil then
@@ -646,7 +672,7 @@ begin
     begin
         // prepare left and right frame buffers and associated textures
         if glLoadExtension('GL_EXT_framebuffer_object') then
-        begin
+            begin
             // left
             glGenFramebuffersEXT(1, @framel);
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
@@ -677,7 +703,7 @@ begin
 
             // reset
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
-        end
+            end
         else
             cStereoMode:= smNone;
     end;
@@ -711,19 +737,20 @@ end;
 
 procedure SetScale(f: GLfloat);
 begin
-    // leave immediately if scale factor did not change
-    if f = cScaleFactor then exit;
+// leave immediately if scale factor did not change
+    if f = cScaleFactor then
+        exit;
 
     if f = cDefaultZoomLevel then
         glPopMatrix         // "return" to default scaling
     else                    // other scaling
-    begin
+        begin
         glPushMatrix;       // save default scaling
         glLoadIdentity;
         glRotatef(rotationQt, 0, 0, 1);
         glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
         glTranslatef(0, -cScreenHeight / 2, 0);
-    end;
+        end;
 
     cScaleFactor:= f;
 end;
@@ -737,7 +764,8 @@ begin
     begin
         WriteToConsole(msgLoading + 'progress sprite: ');
         texsurf:= LoadImage(UserPathz[ptGraphics] + '/Progress', ifTransparent);
-        if texsurf = nil then texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
+        if texsurf = nil then
+            texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
 
         ProgrTex:= Surface2Tex(texsurf, false);
 
@@ -746,13 +774,15 @@ begin
         SDL_FreeSurface(texsurf);
 
         uMobile.GameLoading();
-    end;
+        end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
 
     glClear(GL_COLOR_BUFFER_BIT);
-    if Step < numsquares then r.x:= 0
-    else r.x:= squaresize;
+    if Step < numsquares then
+        r.x:= 0
+    else
+        r.x:= squaresize;
 
     r.y:= (Step mod numsquares) * squaresize;
     r.w:= squaresize;
@@ -786,8 +816,10 @@ var tmpsurf: PSDL_SURFACE;
     tmpline, tmpline2, tmpdesc: ansistring;
 begin
 // make sure there is a caption as well as a sub caption - description is optional
-if caption = '' then caption:= '???';
-if subcaption = '' then subcaption:= ' ';
+if caption = '' then
+    caption:= '???';
+if subcaption = '' then
+    subcaption:= ' ';
 
 font:= CheckCJKFont(caption,fnt16);
 font:= CheckCJKFont(subcaption,font);
@@ -812,7 +844,8 @@ h:= j + ha;
 // get sub caption's dimensions
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(subcaption), @i, @j);
 // width adds 36 px (image + space)
-if w < (i + 36 + wa) then w:= i + 36 + wa;
+if w < (i + 36 + wa) then
+    w:= i + 36 + wa;
 inc(h, j + ha);
 
 // get description's dimensions
@@ -824,7 +857,8 @@ while tmpdesc <> '' do
     if tmpline <> '' then
         begin
         TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(tmpline), @i, @j);
-        if w < (i + wa) then w:= i + wa;
+        if w < (i + wa) then
+            w:= i + wa;
         inc(h, j + ha)
         end
     end;
@@ -833,7 +867,8 @@ if extra <> '' then
     begin
     // get extra label's dimensions
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(extra), @i, @j);
-    if w < (i + wa) then w:= i + wa;
+    if w < (i + wa) then
+        w:= i + wa;
     inc(h, j + ha);
     end;
 
@@ -895,12 +930,12 @@ var r: TSDL_Rect;
     extra: ansistring;
     extracolor: LongInt;
 begin
-    // don't do anything if the window shouldn't be shown
+// don't do anything if the window shouldn't be shown
     if (cReducedQuality and rqTooltipsOff) <> 0 then
-    begin
+        begin
         WeaponTooltipTex:= nil;
         exit
-    end;
+        end;
 
 // free old texture
 FreeWeaponTooltip;
@@ -956,8 +991,10 @@ var flags: Longword = 0;
     {$IFNDEF DARWIN}ico: PSDL_Surface;{$ENDIF}
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
-    if Length(s) = 0 then cFullScreen:= (not cFullScreen)
-    else cFullScreen:= s = '1';
+    if Length(s) = 0 then
+        cFullScreen:= (not cFullScreen)
+    else
+        cFullScreen:= s = '1';
 
     AddFileLog('Preparing to change video parameters...');
 {$IFNDEF IPHONEOS}
@@ -971,7 +1008,8 @@ begin
         // load engine icon
 {$IFNDEF DARWIN}
         ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
-        if ico = nil then ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+        if ico = nil then
+            ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
         if ico <> nil then
             begin
             SDL_WM_SetIcon(ico, 0);
@@ -1019,8 +1057,10 @@ begin
 {$ENDIF}
 
     if SDLwindow = nil then
-        if cFullScreen then SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
-        else SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
+        if cFullScreen then
+            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
+        else
+            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
     flags:= SDL_OPENGL or SDL_RESIZABLE;
@@ -1045,10 +1085,11 @@ begin
         // clean the window from any previous content
         glClear(GL_COLOR_BUFFER_BIT);
         if SuddenDeathDmg then
-             glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99)
+            glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99)
         else if ((cReducedQuality and rqNoBackground) = 0) then 
-             glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99)
-        else glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
+            glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99)
+        else
+            glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
 
         // reload everything we had before
         ReloadCaptions(false);

@@ -24,7 +24,7 @@ interface
 
 var isDeveloperMode: boolean;
 type TVariableType = (vtCommand, vtLongInt, vtBoolean);
-     TCommandHandler = procedure (var params: shortstring);
+    TCommandHandler = procedure (var params: shortstring);
 
 procedure initModule;
 procedure freeModule;
@@ -36,19 +36,20 @@ implementation
 uses Types, uConsts, uVariables, uConsole, uUtils, uDebug;
 
 type  PVariable = ^TVariable;
-      TVariable = record
-                     Next: PVariable;
-                     Name: string[15];
-                    VType: TVariableType;
-                  Handler: pointer;
-                  Trusted: boolean;
-                  end;
+    TVariable = record
+        Next: PVariable;
+        Name: string[15];
+        VType: TVariableType;
+        Handler: pointer;
+        Trusted: boolean;
+        end;
 
 var
-      Variables: PVariable;
+    Variables: PVariable;
 
 procedure RegisterVariable(Name: shortstring; VType: TVariableType; p: pointer; Trusted: boolean);
-var value: PVariable;
+var
+    value: PVariable;
 begin
 New(value);
 TryDo(value <> nil, 'RegisterVariable: value = nil', true);
@@ -58,11 +59,13 @@ value^.VType:= VType;
 value^.Handler:= p;
 value^.Trusted:= Trusted;
 
-if Variables = nil then Variables:= value
-                   else begin
-                        value^.Next:= Variables;
-                        Variables:= value
-                        end;
+if Variables = nil then
+    Variables:= value
+else
+    begin
+    value^.Next:= Variables;
+    Variables:= value
+    end;
 end;
 
 
@@ -73,56 +76,71 @@ var ii: LongInt;
     c: char;
 begin
 //WriteLnToConsole(CmdStr);
-if CmdStr[0]=#0 then exit;
+if CmdStr[0]=#0 then
+    exit;
 c:= CmdStr[1];
-if (c = '/') or (c = '$') then Delete(CmdStr, 1, 1) else c:= '/';
+if (c = '/') or (c = '$') then
+    Delete(CmdStr, 1, 1)
+else
+    c:= '/';
 s:= '';
 SplitBySpace(CmdStr, s);
 AddFileLog('[Cmd] ' + c + CmdStr + ' (' + inttostr(length(s)) + ')');
 t:= Variables;
 while t <> nil do
-      begin
-      if t^.Name = CmdStr then
-         begin
-         if TrustedSource or t^.Trusted then
+    begin
+    if t^.Name = CmdStr then
+        begin
+        if TrustedSource or t^.Trusted then
             case t^.VType of
-              vtCommand: if c='/' then
-                         begin
-                         TCommandHandler(t^.Handler)(s);
-                         end;
-              vtLongInt: if c='$' then
-                         if s[0]=#0 then
-                            begin
-                            str(PLongInt(t^.Handler)^, s);
-                            WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end else val(s, PLongInt(t^.Handler)^);
-             vtBoolean: if c='$' then
-                         if s[0]=#0 then
-                            begin
-                            str(ord(boolean(t^.Handler^)), s);
-                            WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end else
-                            begin
-                            val(s, ii);
-                            boolean(t^.Handler^):= not (ii = 0)
-                            end;
-              end;
-         exit
-         end else t:= t^.Next
-      end;
+                vtCommand: if c='/' then
+                    begin
+                    TCommandHandler(t^.Handler)(s);
+                    end;
+                vtLongInt: if c='$' then
+                    if s[0]=#0 then
+                        begin
+                        str(PLongInt(t^.Handler)^, s);
+                        WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
+                        end
+                    else
+                        val(s, PLongInt(t^.Handler)^);
+                vtBoolean: if c='$' then
+                    if s[0]=#0 then
+                        begin
+                        str(ord(boolean(t^.Handler^)), s);
+                        WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
+                        end
+                    else
+                        begin
+                        val(s, ii);
+                        boolean(t^.Handler^):= not (ii = 0)
+                        end;
+                end;
+            exit
+            end
+        else
+            t:= t^.Next
+        end;
 case c of
-     '$': WriteLnToConsole(errmsgUnknownVariable + ': "$' + CmdStr + '"')
-     else WriteLnToConsole(errmsgUnknownCommand  + ': "/' + CmdStr + '"') end
+    '$': WriteLnToConsole(errmsgUnknownVariable + ': "$' + CmdStr + '"')
+    else
+        WriteLnToConsole(errmsgUnknownCommand  + ': "/' + CmdStr + '"') end
 end;
 
 
 procedure StopMessages(Message: Longword);
 begin
-if (Message and gmLeft) <> 0 then ParseCommand('/-left', true) else
-if (Message and gmRight) <> 0 then ParseCommand('/-right', true) else
-if (Message and gmUp) <> 0 then ParseCommand('/-up', true) else
-if (Message and gmDown) <> 0 then ParseCommand('/-down', true) else
-if (Message and gmAttack) <> 0 then ParseCommand('/-attack', true)
+if (Message and gmLeft) <> 0 then
+    ParseCommand('/-left', true)
+else if (Message and gmRight) <> 0 then
+    ParseCommand('/-right', true) 
+else if (Message and gmUp) <> 0 then
+    ParseCommand('/-up', true)
+else if (Message and gmDown) <> 0 then
+    ParseCommand('/-down', true)
+else if (Message and gmAttack) <> 0 then
+    ParseCommand('/-attack', true)
 end;
 
 procedure initModule;

@@ -71,14 +71,15 @@ command^.loTime:= Time;
 command^.str:= str;
 if command^.cmd <> 'F' then dec(command^.len, 2); // cut timestamp
 if headcmd = nil then
-   begin
-   headcmd:= command;
-   lastcmd:= command
-   end else
-   begin
-   lastcmd^.Next:= command;
-   lastcmd:= command
-   end;
+    begin
+    headcmd:= command;
+    lastcmd:= command
+    end
+else
+    begin
+    lastcmd^.Next:= command;
+    lastcmd:= command
+    end;
 AddCmd:= command;
 end;
 
@@ -88,7 +89,8 @@ begin
 TryDo(headcmd <> nil, 'Engine bug: headcmd = nil', true);
 tmp:= headcmd;
 headcmd:= headcmd^.Next;
-if headcmd = nil then lastcmd:= nil;
+if headcmd = nil then
+    lastcmd:= nil;
 dispose(tmp)
 end;
 
@@ -145,7 +147,7 @@ var i: LongInt;
     s: shortstring;
 begin
 if IPCSock = nil then
-   exit;
+    exit;
 
 fds^.numsockets:= 0;
 SDLNet_AddSocket(fds, IPCSock);
@@ -162,7 +164,9 @@ while SDLNet_CheckSockets(fds, 0) > 0 do
             ParseIPCCommand(copy(ss, 2, byte(ss[1])));
             Delete(ss, 1, Succ(byte(ss[1])))
             end
-        end else OutError('IPC connection lost', true)
+        end
+    else
+        OutError('IPC connection lost', true)
     end;
 end;
 
@@ -215,7 +219,9 @@ begin
 if IPCSock <> nil then
     begin
     SendEmptyPacketTicks:= 0;
-    if s[0]>#251 then s[0]:= #251;
+    if s[0]>#251 then
+        s[0]:= #251;
+        
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
     AddFileLog('[IPC out] '+ s[1]);
     inc(s[0], 2);
@@ -226,9 +232,9 @@ end;
 procedure SendIPCRaw(p: pointer; len: Longword);
 begin
 if IPCSock <> nil then
-   begin
-   SDLNet_TCP_Send(IPCSock, p, len)
-   end
+    begin
+    SDLNet_TCP_Send(IPCSock, p, len)
+    end
 end;
 
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
@@ -245,8 +251,8 @@ procedure IPCWaitPongEvent;
 begin
 isPonged:= false;
 repeat
-   IPCCheckSock;
-   SDL_Delay(1)
+    IPCCheckSock;
+    SDL_Delay(1)
 until isPonged
 end;
 
@@ -305,28 +311,28 @@ while (headcmd <> nil)
         'c': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('gencmd ' + s, true);
-            end;
+             end;
         's': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('chatmsg ' + s, true);
             WriteLnToConsole(s)
-            end;
+             end;
         'b': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('chatmsg ' + #4 + s, true);
             WriteLnToConsole(s)
-            end;
+             end;
 // TODO: deprecate 'F'
         'F': ParseCommand('teamgone ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'N': begin
             tmpflag:= false;
             AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime))
-            end;
+             end;
         'p': begin
             x16:= SDLNet_Read16(@(headcmd^.X));
             y16:= SDLNet_Read16(@(headcmd^.Y));
             doPut(x16, y16, false)
-            end;
+             end;
         'P': begin
             // these are equations solved for CursorPoint
             // SDLNet_Read16(@(headcmd^.X)) == CursorPoint.X - WorldDx;
@@ -336,7 +342,7 @@ while (headcmd <> nil)
                CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X))) + WorldDx;
                CursorPoint.Y:= cScreenHeight - SmallInt(SDLNet_Read16(@(headcmd^.Y))) - WorldDy
                end
-            end;
+             end;
         'w': ParseCommand('setweap ' + headcmd^.str[2], true);
         't': ParseCommand('taunt ' + headcmd^.str[2], true);
         'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
@@ -367,7 +373,8 @@ end;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
-if CheckNoTeamOrHH or isPaused then exit;
+if CheckNoTeamOrHH or isPaused then
+    exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
     begin
@@ -386,7 +393,8 @@ with CurrentHedgehog^.Gear^,
                 begin
                 TargetPoint.X:= putX;
                 TargetPoint.Y:= putY
-                end else
+                end
+            else
                 begin
                 TargetPoint.X:= CursorPoint.X - WorldDx;
                 TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;

@@ -34,11 +34,11 @@ implementation
 uses uTextures, uRenderUtils, uVariables, uRender;
 
 type TCaptionStr = record
-                   Tex: PTexture;
-                   EndTime: LongWord;
-                   Text: shortstring;
-                   Color: Longword
-                   end;
+    Tex: PTexture;
+    EndTime: LongWord;
+    Text: shortstring;
+    Color: Longword
+    end;
 var
     Captions: array[TCapGroup] of TCaptionStr;
 
@@ -69,7 +69,8 @@ procedure ReloadCaptions(unload: boolean);
 var Group: TCapGroup;
 begin
 for Group:= Low(TCapGroup) to High(TCapGroup) do
-    if unload then FreeTexture(Captions[Group].Tex)
+    if unload then
+        FreeTexture(Captions[Group].Tex)
     else if Captions[Group].Text <> '' then
         Captions[Group].Tex:= RenderStringTex(Captions[Group].Text, Captions[Group].Color, fntBig)
 end;
