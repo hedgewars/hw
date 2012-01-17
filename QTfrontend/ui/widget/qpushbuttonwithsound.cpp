@@ -8,14 +8,15 @@
 #include <gameuiconfig.h>
 
 QPushButtonWithSound::QPushButtonWithSound(QWidget *parent) :
-    QPushButton(parent)
+    QPushButton(parent),
+    isSoundEnabled(true)
 {
     connect(this, SIGNAL(clicked()), this, SLOT(buttonClicked()));
 }
 
 void QPushButtonWithSound::buttonClicked()
 {
-    if (!HWForm::config->isFrontendSoundEnabled())
+    if ( !isSoundEnabled || !HWForm::config->isFrontendSoundEnabled())
         return;
 
     HWDataManager & dataMgr = HWDataManager::instance();
