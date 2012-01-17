@@ -39,22 +39,22 @@ const MaxRects = 512;
 type PRectArray = ^TRectsArray;
      TRectsArray = array[0..MaxRects] of TSDL_Rect;
      TThemeObject = record
-                    Surf: PSDL_Surface;
-                    inland: TSDL_Rect;
-                    outland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
-                    rectcnt: Longword;
-                    Width, Height: Longword;
-                    Maxcnt: Longword;
-                    end;
+                     Surf: PSDL_Surface;
+                     inland: TSDL_Rect;
+                     outland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
+                     rectcnt: Longword;
+                     Width, Height: Longword;
+                     Maxcnt: Longword;
+                     end;
      TThemeObjects = record
                      Count: LongInt;
                      objs: array[0..Pred(MAXTHEMEOBJECTS)] of TThemeObject;
                      end;
      TSprayObject = record
-                    Surf: PSDL_Surface;
-                    Width, Height: Longword;
-                    Maxcnt: Longword;
-                    end;
+                     Surf: PSDL_Surface;
+                     Width, Height: Longword;
+                     Maxcnt: Longword;
+                     end;
      TSprayObjects = record
                      Count: LongInt;
                      objs: array[0..Pred(MAXTHEMEOBJECTS)] of TSprayObject
@@ -74,12 +74,13 @@ begin
 WriteToConsole('Generating collision info... ');
 
 if SDL_MustLock(Image) then
-   SDLTry(SDL_LockSurface(Image) >= 0, true);
+    SDLTry(SDL_LockSurface(Image) >= 0, true);
 
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'Land object should be 32bit', true);
 
-if Width = 0 then Width:= Image^.w;
+if Width = 0 then
+    Width:= Image^.w;
 
 p:= Image^.pixels;
 for y:= 0 to Pred(Image^.h) do
@@ -89,8 +90,8 @@ for y:= 0 to Pred(Image^.h) do
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
                 begin
-                if (LandPixels[cpY + y, cpX + x] = 0) or 
-		   (((p^[x] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
+                if (LandPixels[cpY + y, cpX + x] = 0)
+                or (((p^[x] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
                     LandPixels[cpY + y, cpX + x]:= p^[x];
                 end
             else
@@ -107,19 +108,19 @@ for y:= 0 to Pred(Image^.h) do
     end;
 
 if SDL_MustLock(Image) then
-   SDL_UnlockSurface(Image);
+    SDL_UnlockSurface(Image);
 WriteLnToConsole(msgOK)
 end;
 
 procedure AddRect(x1, y1, w1, h1: LongInt);
 begin
 with Rects^[RectCount] do
-     begin
-     x:= x1;
-     y:= y1;
-     w:= w1;
-     h:= h1
-     end;
+    begin
+    x:= x1;
+    y:= y1;
+    w:= w1;
+    h:= h1
+    end;
 inc(RectCount);
 TryDo(RectCount < MaxRects, 'AddRect: overflow', true)
 end;
@@ -142,12 +143,11 @@ begin
 
 i:= 0;
 if RectCount > 0 then
-   repeat
-   with Rects^[i] do
-        res:= (x < x1 + w1) and (x1 < x + w) and
-                 (y < y1 + h1) and (y1 < y + h);
-   inc(i)
-   until (i = RectCount) or (res);
+    repeat
+    with Rects^[i] do
+        res:= (x < x1 + w1) and (x1 < x + w) and (y < y1 + h1) and (y1 < y + h);
+    inc(i)
+    until (i = RectCount) or (res);
 CheckIntersect:= res;
 end;
 
@@ -158,7 +158,8 @@ var i: LongInt;
 begin
     lRes:= 0;
     for i:= y to y + 15 do
-        if Land[i, x] <> 0 then inc(lRes);
+        if Land[i, x] <> 0 then
+            inc(lRes);
     CountNonZeroz:= lRes;
 end;
 
@@ -174,7 +175,8 @@ repeat
     x1:= gX;
     x2:= gX;
 
-    while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
+    while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y) = 0) do
+        dec(x1, 2);
 
     i:= x1 - 12;
     repeat
@@ -185,14 +187,17 @@ repeat
     inc(x1, 2);
     if k = 16 then
         begin
-        while (x2 < (rightX-150)) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
+        while (x2 < (rightX-150)) and (CountNonZeroz(x2, y) = 0) do
+            inc(x2, 2);
         i:= x2 + 12;
         repeat
         inc(x2, 2);
         k:= CountNonZeroz(x2, y)
         until (x2 >= (rightX-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
+        
         if (x2 < (rightX - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
-            and (not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144)) then break;
+        and (not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144)) then
+                break;
         end;
 x1:= 0;
 until y > (LAND_HEIGHT-125);
@@ -201,9 +206,12 @@ if x1 > 0 then
 begin
     bRes:= true;
     tmpsurf:= LoadImage(UserPathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
-    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
-    if tmpsurf = nil then tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/Girder', ifTransparent or ifIgnoreCaps);
-    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', ifCritical or ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then
+        tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then
+        tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/Girder', ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then
+        tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', ifCritical or ifTransparent or ifIgnoreCaps);
 
     rr.x:= x1;
     while rr.x < x2 do
@@ -236,25 +244,25 @@ by:= rect.y + rect.h;
 tmpx:= rect.x;
 tmpx2:= bx;
 while (tmpx <= bx - rect.w div 2 - 1) and bRes do
-      begin
-      bRes:= ((rect.y and LAND_HEIGHT_MASK) = 0) and ((by and LAND_HEIGHT_MASK) = 0) and
-             ((tmpx and LAND_WIDTH_MASK) = 0) and ((tmpx2 and LAND_WIDTH_MASK) = 0) and
-             (Land[rect.y, tmpx] = Color) and (Land[by, tmpx] = Color) and
-             (Land[rect.y, tmpx2] = Color) and (Land[by, tmpx2] = Color);
-      inc(tmpx);
-      dec(tmpx2)
-      end;
+    begin
+    bRes:= ((rect.y and LAND_HEIGHT_MASK) = 0) and ((by and LAND_HEIGHT_MASK) = 0)
+    and ((tmpx and LAND_WIDTH_MASK) = 0) and ((tmpx2 and LAND_WIDTH_MASK) = 0)
+    and (Land[rect.y, tmpx] = Color) and (Land[by, tmpx] = Color)
+    and (Land[rect.y, tmpx2] = Color) and (Land[by, tmpx2] = Color);
+    inc(tmpx);
+    dec(tmpx2)
+    end;
 tmpy:= rect.y+1;
 tmpy2:= by-1;
 while (tmpy <= by - rect.h div 2 - 1) and bRes do
-      begin
-      bRes:= ((tmpy and LAND_HEIGHT_MASK) = 0) and ((tmpy2 and LAND_HEIGHT_MASK) = 0) and
-             ((rect.x and LAND_WIDTH_MASK) = 0) and ((bx and LAND_WIDTH_MASK) = 0) and
-             (Land[tmpy, rect.x] = Color) and (Land[tmpy, bx] = Color) and
-             (Land[tmpy2, rect.x] = Color) and (Land[tmpy2, bx] = Color);
-      inc(tmpy);
-      dec(tmpy2)
-      end;
+    begin
+    bRes:= ((tmpy and LAND_HEIGHT_MASK) = 0) and ((tmpy2 and LAND_HEIGHT_MASK) = 0)
+    and ((rect.x and LAND_WIDTH_MASK) = 0) and ((bx and LAND_WIDTH_MASK) = 0)
+    and (Land[tmpy, rect.x] = Color) and (Land[tmpy, bx] = Color)
+    and (Land[tmpy2, rect.x] = Color) and (Land[tmpy2, bx] = Color);
+    inc(tmpy);
+    dec(tmpy2)
+    end;
 {$WARNINGS ON}
 CheckLand:= bRes;
 end;
@@ -264,18 +272,19 @@ var i: Longword;
     bRes: boolean;
 begin
 with Obj do
-     if CheckLand(inland, x, y, lfBasic) then
+    if CheckLand(inland, x, y, lfBasic) then
         begin
         bRes:= true;
         i:= 1;
         while bRes and (i <= rectcnt) do
-              begin
-              bRes:= CheckLand(outland[i], x, y, 0);
-              inc(i)
-              end;
+            begin
+            bRes:= CheckLand(outland[i], x, y, 0);
+            inc(i)
+            end;
         if bRes then
-           bRes:= not CheckIntersect(x, y, Width, Height)
-        end else
+            bRes:= not CheckIntersect(x, y, Width, Height)
+        end
+    else
         bRes:= false;
 CheckCanPlace:= bRes;
 end;
@@ -289,37 +298,38 @@ var x, y: Longword;
 begin
 cnt:= 0;
 with Obj do
-     begin
-     if Maxcnt = 0 then
+    begin
+    if Maxcnt = 0 then
         exit(false);
-     x:= 0;
-     repeat
-         y:= topY+32; // leave room for a hedgie to teleport in
-         repeat
-             if CheckCanPlace(x, y, Obj) then
+    x:= 0;
+    repeat
+        y:= topY+32; // leave room for a hedgie to teleport in
+        repeat
+            if CheckCanPlace(x, y, Obj) then
                 begin
                 ar[cnt].x:= x;
                 ar[cnt].y:= y;
                 inc(cnt);
                 if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
-                   begin
-                   y:= 5000;
-                   x:= 5000;
-                   end
+                    begin
+                    y:= 5000;
+                    x:= 5000;
+                    end
                 end;
-             inc(y, 3);
-         until y >= LAND_HEIGHT - Height;
-         inc(x, getrandom(6) + 3)
-     until x >= LAND_WIDTH - Width;
-     bRes:= cnt <> 0;
-     if bRes then
+            inc(y, 3);
+        until y >= LAND_HEIGHT - Height;
+        inc(x, getrandom(6) + 3)
+    until x >= LAND_WIDTH - Width;
+    bRes:= cnt <> 0;
+    if bRes then
         begin
         i:= getrandom(cnt);
         BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, 0, Obj.Surf);
         AddRect(ar[i].x, ar[i].y, Width, Height);
         dec(Maxcnt)
-        end else Maxcnt:= 0
-     end;
+        end
+    else Maxcnt:= 0
+    end;
 TryPut:= bRes;
 end;
 
@@ -346,16 +356,16 @@ with Obj do
         repeat
             if CheckLand(r, x, y - 8, lfBasic)
             and (not CheckIntersect(x, y, Width, Height)) then
-            begin
-            ar[cnt].x:= x;
-            ar[cnt].y:= y;
-            inc(cnt);
-            if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
                 begin
-                y:= 5000;
-                x:= 5000;
-                end
-            end;
+                ar[cnt].x:= x;
+                ar[cnt].y:= y;
+                inc(cnt);
+                if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
+                    begin
+                    y:= 5000;
+                    x:= 5000;
+                    end
+                end;
             inc(y, 12);
         until y >= LAND_HEIGHT - Height - 8;
         inc(x, getrandom(12) + 12)
@@ -371,7 +381,8 @@ with Obj do
         SDL_UpperBlit(Obj.Surf, nil, Surface, @r);
         AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
         dec(Maxcnt)
-        end else Maxcnt:= 0
+        end
+    else Maxcnt:= 0
     end;
 TryPut:= bRes;
 end;
@@ -400,7 +411,8 @@ if cGrayScale then
     for i:= 0 to 3 do
         begin
         t:= round(SDWaterColorArray[i].r * RGB_LUMINANCE_RED + SDWaterColorArray[i].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[i].b * RGB_LUMINANCE_BLUE);
-        if t > 255 then t:= 255;
+        if t > 255 then
+            t:= 255;
         SDWaterColorArray[i].r:= t;
         SDWaterColorArray[i].g:= t;
         SDWaterColorArray[i].b:= t
@@ -408,7 +420,8 @@ if cGrayScale then
     for i:= 0 to 1 do
         begin
         t:= round(WaterColorArray[i].r * RGB_LUMINANCE_RED + WaterColorArray[i].g * RGB_LUMINANCE_GREEN + WaterColorArray[i].b * RGB_LUMINANCE_BLUE);
-        if t > 255 then t:= 255;
+        if t > 255 then
+            t:= 255;
         WaterColorArray[i].r:= t;
         WaterColorArray[i].g:= t;
         WaterColorArray[i].b:= t
@@ -416,7 +429,8 @@ if cGrayScale then
     end;
 
 s:= UserPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
-if not FileExists(s) then s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
+if not FileExists(s) then
+    s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 Assign(f, s);
 {$I-}
@@ -429,8 +443,10 @@ SprayObjects.Count:= 0;
 while not eof(f) do
     begin
     Readln(f, s);
-    if Length(s) = 0 then continue;
-    if s[1] = ';' then continue;
+    if Length(s) = 0 then
+        continue;
+    if s[1] = ';' then
+        continue;
 
     i:= Pos('=', s);
     key:= Trim(Copy(s, 1, Pred(i)));
@@ -445,10 +461,12 @@ while not eof(f) do
         SkyColor.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         SkyColor.b:= StrToInt(Trim(s));
-        if cGrayScale then
+        if cGrayScale
+            then
             begin
             t:= round(SkyColor.r * RGB_LUMINANCE_RED + SkyColor.g * RGB_LUMINANCE_GREEN + SkyColor.b * RGB_LUMINANCE_BLUE);
-            if t > 255 then t:= 255;
+            if t > 255 then
+                t:= 255;
             SkyColor.r:= t;
             SkyColor.g:= t;
             SkyColor.b:= t
@@ -470,7 +488,8 @@ while not eof(f) do
         if cGrayScale then
             begin
             t:= round(SkyColor.r * RGB_LUMINANCE_RED + SkyColor.g * RGB_LUMINANCE_GREEN + SkyColor.b * RGB_LUMINANCE_BLUE);
-            if t > 255 then t:= 255;
+            if t > 255 then
+                t:= 255;
             c2.r:= t;
             c2.g:= t;
             c2.b:= t
@@ -490,7 +509,8 @@ while not eof(f) do
         if cGrayScale then
             begin
             t:= round(WaterColorArray[0].r * RGB_LUMINANCE_RED + WaterColorArray[0].g * RGB_LUMINANCE_GREEN + WaterColorArray[0].b * RGB_LUMINANCE_BLUE);
-            if t > 255 then t:= 255;
+            if t > 255 then
+                t:= 255;
             WaterColorArray[0].r:= t;
             WaterColorArray[0].g:= t;
             WaterColorArray[0].b:= t
@@ -510,7 +530,8 @@ while not eof(f) do
         if cGrayScale then
             begin
             t:= round(WaterColorArray[2].r * RGB_LUMINANCE_RED + WaterColorArray[2].g * RGB_LUMINANCE_GREEN + WaterColorArray[2].b * RGB_LUMINANCE_BLUE);
-            if t > 255 then t:= 255;
+            if t > 255 then
+                t:= 255;
             WaterColorArray[2].r:= t;
             WaterColorArray[2].g:= t;
             WaterColorArray[2].b:= t
@@ -522,7 +543,8 @@ while not eof(f) do
         cWaterOpacity:= StrToInt(Trim(s));
         cSDWaterOpacity:= cWaterOpacity
         end
-    else if key = 'music' then MusicFN:= Trim(s)
+    else if key = 'music' then
+        MusicFN:= Trim(s)
     else if key = 'clouds' then
         begin
         cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH;
@@ -535,14 +557,16 @@ while not eof(f) do
             begin
             i:= Pos(',', s);
             Surf:= LoadImage(UserPathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps);
-            if Surf = nil then Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
+            if Surf = nil then
+                Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);
             i:= Pos(',', s);
             Maxcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
-            if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
+            if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then
+                OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
             with inland do
                 begin
                 i:= Pos(',', s);
@@ -574,7 +598,8 @@ while not eof(f) do
                     i:= Pos(',', s);
                     w:= StrToInt(Trim(Copy(s, 1, Pred(i))));
                     Delete(s, 1, i);
-                    if ii = rectcnt then h:= StrToInt(Trim(s))
+                    if ii = rectcnt then
+                        h:= StrToInt(Trim(s))
                     else
                         begin
                         i:= Pos(',', s);
@@ -592,7 +617,8 @@ while not eof(f) do
             begin
             i:= Pos(',', s);
             Surf:= LoadImage(UserPathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps);
-            if Surf = nil then Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
+            if Surf = nil then
+                Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + Trim(Copy(s, 1, Pred(i))), ifCritical or ifTransparent or ifIgnoreCaps);
             Width:= Surf^.w;
             Height:= Surf^.h;
             Delete(s, 1, i);
@@ -618,8 +644,10 @@ while not eof(f) do
             vobFallSpeed:= StrToInt(Trim(s));
             end;
         end
-    else if key = 'flatten-flakes' then cFlattenFlakes:= true
-    else if key = 'flatten-clouds' then cFlattenClouds:= true
+    else if key = 'flatten-flakes' then
+        cFlattenFlakes:= true
+    else if key = 'flatten-clouds' then
+        cFlattenClouds:= true
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);
@@ -633,7 +661,8 @@ while not eof(f) do
         if cGrayScale then
             begin
             t:= round(SDWaterColorArray[0].r * RGB_LUMINANCE_RED + SDWaterColorArray[0].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[0].b * RGB_LUMINANCE_BLUE);
-            if t > 255 then t:= 255;
+            if t > 255 then
+                t:= 255;
             SDWaterColorArray[0].r:= t;
             SDWaterColorArray[0].g:= t;
             SDWaterColorArray[0].b:= t
@@ -653,15 +682,18 @@ while not eof(f) do
         if cGrayScale then
             begin
             t:= round(SDWaterColorArray[2].r * RGB_LUMINANCE_RED + SDWaterColorArray[2].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[2].b * RGB_LUMINANCE_BLUE);
-            if t > 255 then t:= 255;
+            if t > 255 then
+                t:= 255;
             SDWaterColorArray[2].r:= t;
             SDWaterColorArray[2].g:= t;
             SDWaterColorArray[2].b:= t
             end;
         SDWaterColorArray[3]:= SDWaterColorArray[2];
         end
-    else if key = 'sd-water-opacity' then cSDWaterOpacity:= StrToInt(Trim(s))
-    else if key = 'sd-clouds' then cSDCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH
+    else if key = 'sd-water-opacity' then
+        cSDWaterOpacity:= StrToInt(Trim(s))
+    else if key = 'sd-clouds' then
+        cSDCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH
     else if key = 'sd-flakes' then
         begin
         i:= Pos(',', s);
@@ -695,7 +727,8 @@ while not eof(f) do
             if cGrayScale then
                 begin
                 t:= round(RQSkyColor.r * RGB_LUMINANCE_RED + RQSkyColor.g * RGB_LUMINANCE_GREEN + RQSkyColor.b * RGB_LUMINANCE_BLUE);
-                if t > 255 then t:= 255;
+                if t > 255 then
+                    t:= 255;
                 RQSkyColor.r:= t;
                 RQSkyColor.g:= t;
                 RQSkyColor.b:= t
@@ -718,7 +751,8 @@ procedure AddThemeObjects(var ThemeObjects: TThemeObjects);
 var i, ii, t: LongInt;
     b: boolean;
 begin
-    if ThemeObjects.Count = 0 then exit;
+    if ThemeObjects.Count = 0 then
+        exit;
     WriteLnToConsole('Adding theme objects...');
 
     for i:=0 to ThemeObjects.Count do
@@ -741,7 +775,8 @@ procedure AddSprayObjects(Surface: PSDL_Surface; var SprayObjects: TSprayObjects
 var i, ii, t: LongInt;
     b: boolean;
 begin
-    if SprayObjects.Count = 0 then exit;
+    if SprayObjects.Count = 0 then
+        exit;
     WriteLnToConsole('Adding spray objects...');
 
     for i:=0 to SprayObjects.Count do
@@ -773,7 +808,8 @@ if hasGirders then
         i:=i+int;
     until (i>rightX-int);
     end;
-if (GameFlags and gfDisableLandObjects) = 0 then AddThemeObjects(ThemeObjects);
+if (GameFlags and gfDisableLandObjects) = 0 then
+    AddThemeObjects(ThemeObjects);
 AddProgress();
 FreeRects();
 end;

@@ -1045,7 +1045,7 @@ const SinTable: array[0..1024] of QWord = (
      $FFFF4E59,
      $FFFFB10B,
      $FFFFEC43,
-    $100000000
+     $100000000
      );
 
 implementation

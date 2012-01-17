@@ -56,8 +56,10 @@ begin
         cGrayScale:= true;
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-9)))
         end
-    else if tmp <= 9 then cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp)))
-    else cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-6)));
+    else if tmp <= 9 then 
+        cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp)))
+    else 
+        cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-6)));
     cLocaleFName:= ParamStr(17);
 end;
 

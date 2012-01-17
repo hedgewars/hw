@@ -55,55 +55,61 @@ begin
         inc(RealTicks, Lag);
 
     case GameState of
-        gsLandGen: begin
-                GenMap;
-                ParseCommand('sendlanddigest', true);
-                GameState:= gsStart;
+        gsLandGen:
+            begin
+            GenMap;
+            ParseCommand('sendlanddigest', true);
+            GameState:= gsStart;
+            end;
+        gsStart:
+            begin
+            if HasBorder then
+                DisableSomeWeapons;
+            AddClouds;
+            AddFlakes;
+            AssignHHCoords;
+            AddMiscGears;
+            StoreLoad;
+            InitWorld;
+            ResetKbd;
+            SoundLoad;
+            if GameType = gmtSave then
+                begin
+                isSEBackup:= isSoundEnabled;
+                isSoundEnabled:= false
                 end;
-        gsStart: begin
-                if HasBorder then DisableSomeWeapons;
-                AddClouds;
-                AddFlakes;
-                AssignHHCoords;
-                AddMiscGears;
-                StoreLoad;
-                InitWorld;
-                ResetKbd;
-                SoundLoad;
-                if GameType = gmtSave then
-                    begin
-                    isSEBackup:= isSoundEnabled;
-                    isSoundEnabled:= false
-                    end;
-                FinishProgress;
-                PlayMusic;
-                SetScale(zoom);
-                ScriptCall('onGameStart');
-                GameState:= gsGame;
+            FinishProgress;
+            PlayMusic;
+            SetScale(zoom);
+            ScriptCall('onGameStart');
+            GameState:= gsGame;
+            end;
+        gsConfirm, gsGame:
+            begin
+            DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
+            ProcessKbd;
+            if not isPaused then
+                begin
+                DoGameTick(Lag);
+                ProcessVisualGears(Lag);
                 end;
-        gsConfirm,
-        gsGame: begin
-                DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
-                ProcessKbd;
-                if not isPaused then
-                    begin
-                    DoGameTick(Lag);
-                    ProcessVisualGears(Lag);
-                    end;
+            end;
+        gsChat:
+            begin
+            DrawWorld(Lag);
+            if not isPaused then
+                begin
+                DoGameTick(Lag);
+                ProcessVisualGears(Lag);
                 end;
-        gsChat: begin
-                DrawWorld(Lag);
-                if not isPaused then
-                    begin
-                    DoGameTick(Lag);
-                    ProcessVisualGears(Lag);
-                    end;
-                end;
-        gsExit: begin
-                isTerminated:= true;
-                end;
-        gsSuspend: exit;
-        end;
+            end;
+        gsExit:
+            begin
+            isTerminated:= true;
+            end;
+        gsSuspend:
+            exit;
+            end;
 
 {$IFDEF SDL13}
     SDL_GL_SwapWindow(SDLwindow);
@@ -112,17 +118,20 @@ begin
 {$ENDIF}
 
     if flagMakeCapture then
-    begin
+        begin
         flagMakeCapture:= false;
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
 
         playSound(sndShutter);
-        if MakeScreenshot(s) then WriteLnToConsole('Screenshot saved: ' + s)
-        else begin
+        
+        if MakeScreenshot(s) then
+            WriteLnToConsole('Screenshot saved: ' + s)
+        else
+            begin
             WriteLnToConsole('Screenshot failed.');
             AddChatString(#5 + 'screen capture failed (lack of memory or write permissions)');
             end
-    end;
+        end;
 end;
 
 ////////////////////
@@ -162,9 +171,11 @@ begin
         begin
             case event.type_ of
 {$IFDEF SDL13}
-                SDL_KEYDOWN: if GameState = gsChat then
+                SDL_KEYDOWN:
+                if GameState = gsChat then
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                     KeyPressChat(event.key.keysym.sym);
+                    
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
                         begin
@@ -189,14 +200,28 @@ begin
                         cScreenResizeDelay:= RealTicks+500;
                         *)
                         end;
-                SDL_FINGERMOTION: onTouchMotion(event.tfinger.x, event.tfinger.y,event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
-                SDL_FINGERDOWN: onTouchDown(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
-                SDL_FINGERUP: onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
+                        
+                SDL_FINGERMOTION:
+                    onTouchMotion(event.tfinger.x, event.tfinger.y,event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
+                
+                SDL_FINGERDOWN:
+                    onTouchDown(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
+                
+                SDL_FINGERUP:
+                    onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
 {$ELSE}
-                SDL_KEYDOWN: if GameState = gsChat then
-                    KeyPressChat(event.key.keysym.unicode);
-                SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then wheelDown:= true;
-                SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then wheelUp:= true;
+                SDL_KEYDOWN:
+                    if GameState = gsChat then
+                        KeyPressChat(event.key.keysym.unicode);
+                    
+                SDL_MOUSEBUTTONDOWN:
+                    if event.button.button = SDL_BUTTON_WHEELDOWN then
+                        wheelDown:= true;
+                
+                SDL_MOUSEBUTTONUP:
+                    if event.button.button = SDL_BUTTON_WHEELUP then
+                        wheelUp:= true;
+                    
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                         begin
@@ -205,7 +230,9 @@ begin
                         if prevFocusState xor cHasFocus then
                             onFocusStateChanged()
                         end;
-                SDL_VIDEORESIZE: begin
+                        
+                SDL_VIDEORESIZE:
+                    begin
                     // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
                     // Change by sheepluva:
                     // Let's only use even numbers for custom width/height since I ran into scaling issues with odd width values.
@@ -215,15 +242,21 @@ begin
                     cScreenResizeDelay:= RealTicks+500;
                     end;
 {$ENDIF}
-                SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
-                SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
-                SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
-                SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
-                SDL_QUITEV: isTerminated:= true
-            end; //end case event.type_ of
-        end; //end while SDL_PollEvent(@event) <> 0 do
+                SDL_JOYAXISMOTION:
+                    ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
+                SDL_JOYHATMOTION:
+                    ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
+                SDL_JOYBUTTONDOWN:
+                    ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
+                SDL_JOYBUTTONUP:
+                    ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
+                SDL_QUITEV:
+                    isTerminated:= true
+        end; //end case event.type_ of
+    end; //end while SDL_PollEvent(@event) <> 0 do
 
-        if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
+        if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks)
+        and ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
             begin
             cScreenResizeDelay:= 0;
             cScreenWidth:= cNewScreenWidth;
@@ -251,7 +284,8 @@ end;
 
 ///////////////
 procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
-var p: TPathType;
+var
+    p: TPathType;
     s: shortstring;
     i: LongInt;
 begin
@@ -265,8 +299,12 @@ begin
     val(gameArgs[2], cScreenHeight);
     val(gameArgs[3], cReducedQuality);
     cLocaleFName:= gameArgs[4];
-    if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
-    else cLocale := Copy(cLocaleFName,1,2);
+    
+    if (Length(cLocaleFName) > 6) then
+        cLocale := Copy(cLocaleFName,1,5)
+    else
+        cLocale := Copy(cLocaleFName,1,2);
+        
     UserNick:= gameArgs[5];
     isSoundEnabled:= gameArgs[6] = '1';
     isMusicEnabled:= gameArgs[7] = '1';
@@ -285,16 +323,19 @@ begin
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
     AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
+    
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
-        if (p <> ptMapCurrent) and (p <> ptData) then UserPathz[p]:= UserPathPrefix + '/Data/' + Pathz[p];
+        if (p <> ptMapCurrent) and (p <> ptData) then
+            UserPathz[p]:= UserPathPrefix + '/Data/' + Pathz[p];
 
     UserPathz[ptData]:= UserPathPrefix + '/Data';
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
-        if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
+        if p <> ptMapCurrent then
+            Pathz[p]:= PathPrefix + '/' + Pathz[p];
 
     WriteToConsole('Init SDL... ');
     SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
@@ -308,8 +349,10 @@ begin
     WriteLnToConsole(msgOK);
 
     // show main window
-    if cFullScreen then ParseCommand('fullscr 1', true)
-    else ParseCommand('fullscr 0', true);
+    if cFullScreen then
+        ParseCommand('fullscr 1', true)
+    else
+        ParseCommand('fullscr 0', true);
 
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
@@ -362,15 +405,18 @@ begin
     OnDestroy();
     // clean up all the other memory allocated
     freeEverything(true);
-    if alsoShutdownFrontend then halt;
+    if alsoShutdownFrontend then
+        halt;
 end;
 
 procedure initEverything (complete:boolean);
 begin
     Randomize();
 
-    if complete then cLogfileBase:= 'game'
-    else cLogfileBase:= 'preview';
+    if complete then
+        cLogfileBase:= 'game'
+    else
+        cLogfileBase:= 'preview';
 
     // uConsts does not need initialization as they are all consts
     uUtils.initModule;
@@ -386,7 +432,7 @@ begin
     uIO.initModule;
 
     if complete then
-    begin
+        begin
 {$IFDEF ANDROID}GLUnit.init;{$ENDIF}
 {$IFDEF SDL13}uTouch.initModule;{$ENDIF}
         uAI.initModule;
@@ -414,13 +460,13 @@ begin
         uVisualGears.initModule;
         uWorld.initModule;
         uCaptions.initModule;
-    end;
+        end;
 end;
 
 procedure freeEverything (complete:boolean);
 begin
     if complete then
-    begin
+        begin
         uCaptions.freeModule;
         uWorld.freeModule;
         uVisualGears.freeModule;
@@ -446,7 +492,7 @@ begin
         //uAIAmmoTests does not need to be freed
         //uAIActions does not need to be freed
         uAI.freeModule;             //stub
-    end;
+        end;
 
     uIO.freeModule;             //stub
     uLand.freeModule;
@@ -462,7 +508,8 @@ end;
 
 /////////////////////////
 procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
-var Preview: TPreview;
+var
+    Preview: TPreview;
 begin
     initEverything(false);
 {$IFDEF HWLIBRARY}
@@ -502,8 +549,10 @@ begin
     WriteLn('Read documentation online at http://code.google.com/p/hedgewars/wiki/CommandLineOptions for more information');
     WriteLn();
     Write('PARSED COMMAND: ');
+    
     for i:=0 to ParamCount do
         Write(ParamStr(i) + ' ');
+        
     WriteLn();
 end;
 
@@ -529,11 +578,15 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 begin
     GetParams();
-    if (Length(cLocaleFName) > 6) then cLocale := Copy(cLocaleFName,1,5)
-    else cLocale := Copy(cLocaleFName,1,2);
+    if (Length(cLocaleFName) > 6) then
+        cLocale := Copy(cLocaleFName,1,5)
+    else
+        cLocale := Copy(cLocaleFName,1,2);
 
-    if GameType = gmtLandPreview then GenLandPreview()
-    else if GameType = gmtSyntax then DisplayUsage()
+    if GameType = gmtLandPreview then
+        GenLandPreview()
+    else if GameType = gmtSyntax then
+        DisplayUsage()
     else Game();
 
     // return 1 when engine is not called correctly

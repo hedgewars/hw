@@ -109,8 +109,14 @@ for j:= 0 to Pred(ControllerNumControllers) do
     begin
     for i:= 0 to Pred(ControllerNumAxes[j]) do
         begin
-        if ControllerAxes[j][i] > 20000 then tkbdn[k + 0]:= 1 else tkbdn[k + 0]:= 0;
-        if ControllerAxes[j][i] < -20000 then tkbdn[k + 1]:= 1 else tkbdn[k + 1]:= 0;
+        if ControllerAxes[j][i] > 20000 then
+            tkbdn[k + 0]:= 1
+        else
+            tkbdn[k + 0]:= 0;
+        if ControllerAxes[j][i] < -20000 then
+            tkbdn[k + 1]:= 1
+        else
+            tkbdn[k + 1]:= 0;
         inc(k, 2);
         end;
     for i:= 0 to Pred(ControllerNumHats[j]) do
@@ -132,9 +138,9 @@ for j:= 0 to Pred(ControllerNumControllers) do
 // ctrl/cmd + q to close engine and frontend
 {$IFDEF DARWIN}
     if ((tkbdn[KeyNameToCode('left_meta')] = 1) or (tkbdn[KeyNameToCode('right_meta')] = 1)) then
-{$ELSE}
+        {$ELSE}
     if ((tkbdn[KeyNameToCode('left_ctrl')] = 1) or (tkbdn[KeyNameToCode('right_ctrl')] = 1)) then
-{$ENDIF}
+        {$ENDIF}
     begin
         if tkbdn[KeyNameToCode('q')] = 1 then ParseCommand ('halt', true)
     end;
@@ -145,19 +151,19 @@ if CurrentBinds[i][0] <> #0 then
     begin
     if (i > 3) and (tkbdn[i] <> 0) and not ((CurrentBinds[i] = 'put') or (CurrentBinds[i] = 'ammomenu') or (CurrentBinds[i] = '+cur_u') or (CurrentBinds[i] = '+cur_d') or (CurrentBinds[i] = '+cur_l') or (CurrentBinds[i] = '+cur_r')) then hideAmmoMenu:= true;
     if (tkbd[i] = 0) and (tkbdn[i] <> 0) then
-         begin
-         ParseCommand(CurrentBinds[i], Trusted);
-         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then ParseCommand('gencmd R', true)
-         end
-    else if (CurrentBinds[i][1] = '+')
-            and (tkbdn[i] = 0)
-            and (tkbd[i] <> 0) then
-            begin
-            s:= CurrentBinds[i];
-            s[1]:= '-';
-            ParseCommand(s, Trusted);
-            if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then ParseCommand('gencmd R', true)
-            end;
+        begin
+        ParseCommand(CurrentBinds[i], Trusted);
+        if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
+            ParseCommand('gencmd R', true)
+        end
+    else if (CurrentBinds[i][1] = '+') and (tkbdn[i] = 0) and (tkbd[i] <> 0) then
+        begin
+        s:= CurrentBinds[i];
+        s[1]:= '-';
+        ParseCommand(s, Trusted);
+        if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
+            ParseCommand('gencmd R', true)
+        end;
     tkbd[i]:= tkbdn[i]
     end
 end;
@@ -205,8 +211,14 @@ for j:= 0 to Pred(ControllerNumControllers) do
     begin
     for i:= 0 to Pred(ControllerNumAxes[j]) do
         begin
-        if ControllerAxes[j][i] > 20000 then tkbdn[k + 0]:= 1 else tkbdn[k + 0]:= 0;
-        if ControllerAxes[j][i] < -20000 then tkbdn[k + 1]:= 1 else tkbdn[k + 1]:= 0;
+        if ControllerAxes[j][i] > 20000 then
+            tkbdn[k + 0]:= 1
+        else
+            tkbdn[k + 0]:= 0;
+        if ControllerAxes[j][i] < -20000 then
+            tkbdn[k + 1]:= 1
+        else
+            tkbdn[k + 1]:= 0;
         inc(k, 2);
         end;
     for i:= 0 to Pred(ControllerNumHats[j]) do
@@ -248,7 +260,8 @@ for i:= 6 to cKeyMaxIndex do
     else 
         begin
         for t:= 1 to Length(s) do
-            if s[t] = ' ' then s[t]:= '_';
+            if s[t] = ' ' then
+                s[t]:= '_';
         KeyNames[i]:= s
         end;
     end;
@@ -404,7 +417,9 @@ exit; // joystick subsystem disabled on iPhone
 
 SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 ControllerNumControllers:= SDL_NumJoysticks();
-if ControllerNumControllers > 6 then ControllerNumControllers:= 6;
+
+if ControllerNumControllers > 6 then
+    ControllerNumControllers:= 6;
 
 WriteLnToConsole('Number of game controllers: ' + IntToStr(ControllerNumControllers));
 
@@ -428,10 +443,15 @@ if ControllerNumControllers > 0 then
             WriteLnToConsole('* Number of buttons: ' + IntToStr(ControllerNumButtons[j]));
             ControllerEnabled:= 1;
 
-            if ControllerNumAxes[j] > 20 then ControllerNumAxes[j]:= 20;
+            if ControllerNumAxes[j] > 20 then
+                ControllerNumAxes[j]:= 20;
             //if ControllerNumBalls[j] > 20 then ControllerNumBalls[j]:= 20;
-            if ControllerNumHats[j] > 20 then ControllerNumHats[j]:= 20;
-            if ControllerNumButtons[j] > 20 then ControllerNumButtons[j]:= 20;
+            
+            if ControllerNumHats[j] > 20 then
+                ControllerNumHats[j]:= 20;
+                
+            if ControllerNumButtons[j] > 20 then
+                ControllerNumButtons[j]:= 20;
 
             // reset all buttons/axes
             for i:= 0 to pred(ControllerNumAxes[j]) do
@@ -474,8 +494,10 @@ end;
 
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 begin
-    if pressed then ControllerButtons[joy][button]:= 1
-    else ControllerButtons[joy][button]:= 0;
+    if pressed then
+        ControllerButtons[joy][button]:= 1
+    else
+        ControllerButtons[joy][button]:= 0;
 end;
 
 procedure initModule;

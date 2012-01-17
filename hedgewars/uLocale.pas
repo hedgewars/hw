@@ -44,45 +44,55 @@ var s: ansistring;
     loaded: boolean;
 begin
 loaded:= false;
-for e:= Low(TEventId) to High(TEventId) do first[e]:= true;
+for e:= Low(TEventId) to High(TEventId) do
+    first[e]:= true;
 
 {$I-} // iochecks off
 Assign(f, FileName);
 filemode:= 0; // readonly
 Reset(f);
-if IOResult = 0 then loaded:= true;
+if IOResult = 0 then
+    loaded:= true;
 TryDo(loaded, 'Cannot load locale "' + FileName + '"', false);
 if loaded then
-   begin
-   while not eof(f) do
-       begin
-       readln(f, s);
-       if Length(s) = 0 then continue;
-       if (s[1] < '0') or (s[1] > '9') then continue;
-       TryDo(Length(s) > 6, 'Load locale: empty string', true);
-       val(s[1]+s[2], a, c);
-       TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
-       TryDo(s[3] = ':', 'Load locale: ":" expected', true);
-       val(s[4]+s[5], b, c);
-       TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
-       TryDo(s[6] = '=', 'Load locale: "=" expected', true);
-       Delete(s, 1, 6);
-       case a of
-           0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b)]:= s;
-           1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
-           2: if (b >=0) and (b <= ord(High(TEventId))) then begin
-               TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + IntToStr(a) + ':' + IntToStr(b), false);
-               if first[TEventId(b)] then
-                   begin
-                   trevt_n[TEventId(b)]:= 0;
-                   first[TEventId(b)]:= false;
-                   end;
-               trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
-               inc(trevt_n[TEventId(b)]);
-               end;
-           3: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammoc[TAmmoStrId(b)]:= s;
-           4: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammod[TAmmoStrId(b)]:= s;
-           5: if (b >=0) and (b <= ord(High(TGoalStrId))) then trgoal[TGoalStrId(b)]:= s;
+    begin
+    while not eof(f) do
+        begin
+        readln(f, s);
+        if Length(s) = 0 then
+            continue;
+        if (s[1] < '0') or (s[1] > '9') then
+            continue;
+        TryDo(Length(s) > 6, 'Load locale: empty string', true);
+        val(s[1]+s[2], a, c);
+        TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
+        TryDo(s[3] = ':', 'Load locale: ":" expected', true);
+        val(s[4]+s[5], b, c);
+        TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
+        TryDo(s[6] = '=', 'Load locale: "=" expected', true);
+        Delete(s, 1, 6);
+        case a of
+            0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
+                trammo[TAmmoStrId(b)]:= s;
+            1: if (b >=0) and (b <= ord(High(TMsgStrId))) then
+                trmsg[TMsgStrId(b)]:= s;
+            2: if (b >=0) and (b <= ord(High(TEventId))) then
+                begin
+                TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + IntToStr(a) + ':' + IntToStr(b), false);
+                if first[TEventId(b)] then
+                    begin
+                    trevt_n[TEventId(b)]:= 0;
+                    first[TEventId(b)]:= false;
+                    end;
+                trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
+                inc(trevt_n[TEventId(b)]);
+                end;
+            3: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
+                trammoc[TAmmoStrId(b)]:= s;
+            4: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
+                trammod[TAmmoStrId(b)]:= s;
+            5: if (b >=0) and (b <= ord(High(TGoalStrId))) then
+                trgoal[TGoalStrId(b)]:= s;
            end;
        end;
    Close(f);
@@ -103,16 +113,20 @@ function Format(fmt: shortstring; var arg: shortstring): shortstring;
 var i: LongInt;
 begin
 i:= Pos('%1', fmt);
-if i = 0 then Format:= fmt
-         else Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
+if i = 0 then
+    Format:= fmt
+else
+    Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
 function Format(fmt: ansistring; var arg: ansistring): ansistring;
 var i: LongInt;
 begin
 i:= Pos('%1', fmt);
-if i = 0 then Format:= fmt
-         else Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
+if i = 0 then
+    Format:= fmt
+else
+    Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
 procedure LoadLocaleWrapper(str: pchar); cdecl; export;

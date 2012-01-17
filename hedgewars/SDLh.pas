@@ -22,48 +22,48 @@ unit SDLh;
 interface
 
 {$IFDEF LINUX}
-  {$DEFINE UNIX}
+    {$DEFINE UNIX}
 {$ENDIF}
 {$IFDEF FREEBSD}
-  {$DEFINE UNIX}
+    {$DEFINE UNIX}
 {$ENDIF}
 {$IFDEF DARWIN}
-  {$DEFINE UNIX}
+    {$DEFINE UNIX}
 {$ENDIF}
 {$IFDEF HAIKU}
-  {$DEFINE UNIX}
+    {$DEFINE UNIX}
 {$ENDIF}
 
 {$IFDEF UNIX}
-  {$IFNDEF DARWIN}
-    {$linklib c}
-  {$ENDIF}
-  {$IFDEF HAIKU}
-    {$linklib root}
-  {$ELSE}
-    {$IFNDEF ANDROID}
-      {$linklib pthread}
+    {$IFNDEF DARWIN}
+        {$linklib c}
     {$ENDIF}
-  {$ENDIF}
+    {$IFDEF HAIKU}
+        {$linklib root}
+    {$ELSE}
+        {$IFNDEF ANDROID}
+        {$linklib pthread}
+    {$ENDIF}
+    {$ENDIF}
 {$ENDIF}
 
 {$IFDEF FPC}
-  {$PACKRECORDS C}
+    {$PACKRECORDS C}
 {$ELSE}
-  {$DEFINE cdecl attribute(cdecl)}
+    {$DEFINE cdecl attribute(cdecl)}
 {$ENDIF}
 
 {$IFDEF DARWIN}
-  {$IFNDEF IPHONEOS}
-    {$PASCALMAINNAME SDL_main}
-    {$linkframework Cocoa}
-    {$linkframework SDL}
-    {$linkframework SDL_net}
-    {$linkframework SDL_image}
-    {$linkframework SDL_ttf}
-    {$linkframework SDL_mixer}
-    {$linkframework OpenGL}
-  {$ENDIF}
+    {$IFNDEF IPHONEOS}
+        {$PASCALMAINNAME SDL_main}
+        {$linkframework Cocoa}
+        {$linkframework SDL}
+        {$linkframework SDL_net}
+        {$linkframework SDL_image}
+        {$linkframework SDL_ttf}
+        {$linkframework SDL_mixer}
+        {$linkframework OpenGL}
+    {$ENDIF}
 {$ENDIF}
 
 
@@ -76,19 +76,19 @@ const
     SDL_ImageLibName = 'SDL_image.dll';
     SDL_NetLibName = 'SDL_net.dll';
 {$ELSE}
-  {$IFDEF DARWIN}
+    {$IFDEF DARWIN}
     SDLLibName = 'SDL';
     SDL_TTFLibName = 'SDL_ttf';
     SDL_MixerLibName = 'SDL_mixer';
     SDL_ImageLibName = 'SDL_image';
     SDL_NetLibName = 'SDL_net';
-  {$ELSE}
+    {$ELSE}
     SDLLibName = 'libSDL.so';
     SDL_TTFLibName = 'libSDL_ttf.so';
     SDL_MixerLibName = 'libSDL_mixer.so';
     SDL_ImageLibName = 'libSDL_image.so';
     SDL_NetLibName = 'libSDL_net.so';
-  {$ENDIF}
+    {$ENDIF}
 {$ENDIF}
 
 /////////////////////////////////////////////////////////////////
@@ -794,40 +794,40 @@ type
     TMix_Fading = (MIX_NO_FADING, MIX_FADING_OUT, MIX_FADING_IN);
 
     TMidiSong = record
-               samples : LongInt;
-               events  : Pointer;
-               end;
+                samples : LongInt;
+                events  : Pointer;
+                end;
 
     TMusicUnion = record
         case Byte of
-             0: ( midi : TMidiSong );
-             1: ( ogg  : Pointer);
-             end;
+            0: ( midi : TMidiSong );
+            1: ( ogg  : Pointer);
+            end;
 
     PMixMusic = ^TMixMusic;
     TMixMusic = record
-                 end;
+                end;
 
     {* SDL_net *}
     TIPAddress = record
-                  host: LongWord;
-                  port: Word;
-                  end;
+                host: LongWord;
+                port: Word;
+                end;
 
     PTCPSocket = ^TTCPSocket;
     TTCPSocket = record
-                  ready: LongInt;
-                  channel: LongInt;
-                  remoteAddress: TIPaddress;
-                  localAddress: TIPaddress;
-                  sflag: LongInt;
-                  end;
+                ready: LongInt;
+                channel: LongInt;
+                remoteAddress: TIPaddress;
+                localAddress: TIPaddress;
+                sflag: LongInt;
+                end;
     PSDLNet_SocketSet = ^TSDLNet_SocketSet;
     TSDLNet_SocketSet = record
-                         numsockets,
-                         maxsockets: LongInt;
-                         sockets: PTCPSocket;
-                         end;
+                        numsockets,
+                        maxsockets: LongInt;
+                        sockets: PTCPSocket;
+                        end;
 
 
 /////////////////////////////////////////////////////////////////

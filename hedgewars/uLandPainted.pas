@@ -59,24 +59,32 @@ begin
     dX:= X2 - X1;
     dY:= Y2 - Y1;
 
-    if (dX > 0) then sX:= 1
+    if (dX > 0) then
+        sX:= 1
     else
-    if (dX < 0) then
-        begin
-        sX:= -1;
-        dX:= -dX
-        end else sX:= dX;
+        if (dX < 0) then
+            begin
+            sX:= -1;
+            dX:= -dX
+            end
+        else
+            sX:= dX;
 
-    if (dY > 0) then sY:= 1
+    if (dY > 0) then
+        sY:= 1
     else
-    if (dY < 0) then
-        begin
-        sY:= -1;
-        dY:= -dY
-        end else sY:= dY;
+        if (dY < 0) then
+            begin
+            sY:= -1;
+            dY:= -dY
+            end
+        else
+            sY:= dY;
 
-        if (dX > dY) then d:= dX
-                    else d:= dY;
+        if (dX > dY) then
+            d:= dX
+        else
+            d:= dY;
 
         x:= X1;
         y:= Y1;
@@ -101,7 +109,8 @@ begin
             if b then
                 begin
                 inc(len);
-                if (len mod 4) = 0 then FillRoundInLand(X, Y, 34, lfBasic)
+                if (len mod 4) = 0 then
+                    FillRoundInLand(X, Y, 34, lfBasic)
                 end
         end
 end;

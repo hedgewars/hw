@@ -26,9 +26,9 @@ const cMaxGearArrayInd = 1023;
 
 type PGearArray = ^TGearArray;
     TGearArray = record
-            ar: array[0..cMaxGearArrayInd] of PGear;
-            Count: Longword
-            end;
+        ar: array[0..cMaxGearArrayInd] of PGear;
+        Count: Longword
+        end;
 
 procedure initModule;
 procedure freeModule;
@@ -60,9 +60,9 @@ implementation
 uses uConsts, uLandGraphics, uVariables, uDebug, uGears, uGearsList;
 
 type TCollisionEntry = record
-            X, Y, Radius: LongInt;
-            cGear: PGear;
-            end;
+    X, Y, Radius: LongInt;
+    cGear: PGear;
+    end;
 
 const MAXRECTSINDEX = 1023;
 var Count: Longword;
@@ -72,7 +72,8 @@ var Count: Longword;
 procedure AddGearCI(Gear: PGear);
 var t: PGear;
 begin
-if Gear^.CollisionIndex >= 0 then exit;
+if Gear^.CollisionIndex >= 0 then
+    exit;
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
 with cinfos[Count] do
     begin
@@ -90,7 +91,8 @@ if (Count > (MAXRECTSINDEX-20)) then
     t:= GearsList;
     while (t <> nil) and (t^.Kind <> gtMine) do 
         t:= t^.NextGear;
-    if (t <> nil) then DeleteGear(t)
+    if (t <> nil) then
+        DeleteGear(t)
     end;
 end;
 
@@ -113,7 +115,8 @@ var mx, my, tr: LongInt;
 begin
 CheckGearsCollision:= @ga;
 ga.Count:= 0;
-if Count = 0 then exit;
+if Count = 0 then
+    exit;
 mx:= hwRound(Gear^.X);
 my:= hwRound(Gear^.Y);
 
@@ -134,29 +137,33 @@ var x, y, i: LongInt;
     TestWord: LongWord;
 begin
 if Gear^.IntersectGear <> nil then
-   with Gear^ do
-        if (hwRound(IntersectGear^.X) + IntersectGear^.Radius < hwRound(X) - Radius) or
-           (hwRound(IntersectGear^.X) - IntersectGear^.Radius > hwRound(X) + Radius) then
-           begin
-           IntersectGear:= nil;
-           TestWord:= 0
-           end else
-           TestWord:= 255
-   else TestWord:= 0;
+    with Gear^ do
+        if (hwRound(IntersectGear^.X) + IntersectGear^.Radius < hwRound(X) - Radius)
+        or (hwRound(IntersectGear^.X) - IntersectGear^.Radius > hwRound(X) + Radius) then
+            begin
+            IntersectGear:= nil;
+            TestWord:= 0
+            end
+        else
+            TestWord:= 255
+    else TestWord:= 0;
 
 x:= hwRound(Gear^.X);
-if Dir < 0 then x:= x - Gear^.Radius
-           else x:= x + Gear^.Radius;
+if Dir < 0 then
+    x:= x - Gear^.Radius
+else
+    x:= x + Gear^.Radius;
 if (x and LAND_WIDTH_MASK) = 0 then
-   begin
-   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
-   i:= y + Gear^.Radius * 2 - 2;
-   repeat
-     if (y and LAND_HEIGHT_MASK) = 0 then
-        if Land[y, x] > TestWord then exit(true);
-     inc(y)
-   until (y > i);
-   end;
+    begin
+    y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+    i:= y + Gear^.Radius * 2 - 2;
+    repeat
+        if (y and LAND_HEIGHT_MASK) = 0 then
+            if Land[y, x] > TestWord then
+                exit(true);
+        inc(y)
+    until (y > i);
+    end;
 TestCollisionXwithGear:= false
 end;
 
@@ -165,29 +172,34 @@ var x, y, i: LongInt;
     TestWord: LongWord;
 begin
 if Gear^.IntersectGear <> nil then
-   with Gear^ do
+    with Gear^ do
         if (hwRound(IntersectGear^.Y) + IntersectGear^.Radius < hwRound(Y) - Radius) or
-           (hwRound(IntersectGear^.Y) - IntersectGear^.Radius > hwRound(Y) + Radius) then
-           begin
-           IntersectGear:= nil;
-           TestWord:= 0
-           end else
-           TestWord:= 255
-   else TestWord:= 0;
+            (hwRound(IntersectGear^.Y) - IntersectGear^.Radius > hwRound(Y) + Radius) then
+                begin
+                IntersectGear:= nil;
+                TestWord:= 0
+                end
+        else
+            TestWord:= 255
+else
+    TestWord:= 0;
 
 y:= hwRound(Gear^.Y);
-if Dir < 0 then y:= y - Gear^.Radius
-           else y:= y + Gear^.Radius;
+if Dir < 0 then
+    y:= y - Gear^.Radius
+else
+    y:= y + Gear^.Radius;
 if (y and LAND_HEIGHT_MASK) = 0 then
-   begin
-   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
-   i:= x + Gear^.Radius * 2 - 2;
-   repeat
-     if (x and LAND_WIDTH_MASK) = 0 then
-        if Land[y, x] > TestWord then exit(Land[y, x]);
+    begin
+    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+    i:= x + Gear^.Radius * 2 - 2;
+    repeat
+        if (x and LAND_WIDTH_MASK) = 0 then
+            if Land[y, x] > TestWord then
+                exit(Land[y, x]);
      inc(x)
-   until (x > i);
-   end;
+    until (x > i);
+    end;
 TestCollisionYwithGear:= 0
 end;
 
@@ -197,50 +209,55 @@ var x, y, mx, my, i: LongInt;
 begin
 flag:= false;
 x:= hwRound(Gear^.X);
-if Dir < 0 then x:= x - Gear^.Radius
-           else x:= x + Gear^.Radius;
+if Dir < 0 then
+    x:= x - Gear^.Radius
+else
+    x:= x + Gear^.Radius;
 if (x and LAND_WIDTH_MASK) = 0 then
-   begin
-   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
-   i:= y + Gear^.Radius * 2 - 2;
-   repeat
-     if (y and LAND_HEIGHT_MASK) = 0 then
-           if Land[y, x] > 255 then exit(true)
-           else if Land[y, x] <> 0 then flag:= true;
-     inc(y)
-   until (y > i);
-   end;
+    begin
+    y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+    i:= y + Gear^.Radius * 2 - 2;
+    repeat
+        if (y and LAND_HEIGHT_MASK) = 0 then
+            if Land[y, x] > 255 then
+                exit(true)
+            else if Land[y, x] <> 0 then
+                flag:= true;
+    inc(y)
+    until (y > i);
+    end;
 TestCollisionXKick:= flag;
 
 if flag then
-   begin
-   if hwAbs(Gear^.dX) < cHHKick then exit;
-   if (Gear^.State and gstHHJumping <> 0)
-   and (hwAbs(Gear^.dX) < _0_4) then exit;
+    begin
+    if hwAbs(Gear^.dX) < cHHKick then
+        exit;
+    if (Gear^.State and gstHHJumping <> 0)
+    and (hwAbs(Gear^.dX) < _0_4) then
+        exit;
 
-   mx:= hwRound(Gear^.X);
-   my:= hwRound(Gear^.Y);
+    mx:= hwRound(Gear^.X);
+    my:= hwRound(Gear^.Y);
 
-   for i:= 0 to Pred(Count) do
-    with cinfos[i] do
-      if (Gear <> cGear) and
-         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
-         ((mx > x) xor (Dir > 0)) then
-         if ((cGear^.Kind in [gtHedgehog, gtMine]) and ((Gear^.State and gstNotKickable) = 0)) or
-            // only apply X kick if the barrel is knocked over
-            ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0)) then
-             begin
-             with cGear^ do
-                  begin
-                  dX:= Gear^.dX;
-                  dY:= Gear^.dY * _0_5;
-                  State:= State or gstMoving;
-                  Active:= true
-                  end;
-             DeleteCI(cGear);
-             exit(false)
-             end
-   end
+    for i:= 0 to Pred(Count) do
+        with cinfos[i] do
+            if (Gear <> cGear) and (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2))
+            and ((mx > x) xor (Dir > 0)) then
+                if ((cGear^.Kind in [gtHedgehog, gtMine]) and ((Gear^.State and gstNotKickable) = 0)) or
+                // only apply X kick if the barrel is knocked over
+                ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0)) then
+                    begin
+                    with cGear^ do
+                        begin
+                        dX:= Gear^.dX;
+                        dY:= Gear^.dY * _0_5;
+                        State:= State or gstMoving;
+                        Active:= true
+                        end;
+                    DeleteCI(cGear);
+                    exit(false)
+                    end
+    end
 end;
 
 function TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
@@ -249,50 +266,56 @@ var x, y, mx, my, i: LongInt;
 begin
 flag:= false;
 y:= hwRound(Gear^.Y);
-if Dir < 0 then y:= y - Gear^.Radius
-           else y:= y + Gear^.Radius;
+if Dir < 0 then
+    y:= y - Gear^.Radius
+else
+    y:= y + Gear^.Radius;
 if (y and LAND_HEIGHT_MASK) = 0 then
-   begin
-   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
-   i:= x + Gear^.Radius * 2 - 2;
-   repeat
-     if (x and LAND_WIDTH_MASK) = 0 then
+    begin
+    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+    i:= x + Gear^.Radius * 2 - 2;
+    repeat
+    if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 0 then
-           if Land[y, x] > 255 then exit(true)
-           else if Land[y, x] <> 0 then flag:= true;
-     inc(x)
-   until (x > i);
-   end;
+            if Land[y, x] > 255 then
+                exit(true)
+            else if Land[y, x] <> 0 then
+                flag:= true;
+    inc(x)
+    until (x > i);
+    end;
 TestCollisionYKick:= flag;
 
 if flag then
-   begin
-   if hwAbs(Gear^.dY) < cHHKick then exit(true);
-   if (Gear^.State and gstHHJumping <> 0)
-   and (not Gear^.dY.isNegative)
-   and (Gear^.dY < _0_4) then exit;
+    begin
+    if hwAbs(Gear^.dY) < cHHKick then
+        exit(true);
+    if (Gear^.State and gstHHJumping <> 0)
+    and (not Gear^.dY.isNegative)
+    and (Gear^.dY < _0_4) then
+        exit;
 
-   mx:= hwRound(Gear^.X);
-   my:= hwRound(Gear^.Y);
+    mx:= hwRound(Gear^.X);
+    my:= hwRound(Gear^.Y);
 
-   for i:= 0 to Pred(Count) do
-    with cinfos[i] do
-      if (Gear <> cGear) and
-         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
-         ((my > y) xor (Dir > 0)) then
-         if (cGear^.Kind in [gtHedgehog, gtMine, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
-             begin
-             with cGear^ do
-                  begin
-                  if (Kind <> gtExplosives) or ((State and gsttmpflag) <> 0) then dX:= Gear^.dX * _0_5;
-                  dY:= Gear^.dY;
-                  State:= State or gstMoving;
-                  Active:= true
-                  end;
-             DeleteCI(cGear);
-             exit(false)
-             end
-   end
+    for i:= 0 to Pred(Count) do
+        with cinfos[i] do
+            if (Gear <> cGear) and (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2))
+            and ((my > y) xor (Dir > 0)) then
+                if (cGear^.Kind in [gtHedgehog, gtMine, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
+                    begin
+                    with cGear^ do
+                        begin
+                        if (Kind <> gtExplosives) or ((State and gsttmpflag) <> 0) then
+                            dX:= Gear^.dX * _0_5;
+                        dY:= Gear^.dY;
+                        State:= State or gstMoving;
+                        Active:= true
+                        end;
+                    DeleteCI(cGear);
+                    exit(false)
+                    end
+    end
 end;
 
 function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
@@ -309,18 +332,21 @@ function TestCollisionX(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
 begin
 x:= hwRound(Gear^.X);
-if Dir < 0 then x:= x - Gear^.Radius
-           else x:= x + Gear^.Radius;
+if Dir < 0 then
+    x:= x - Gear^.Radius
+else
+    x:= x + Gear^.Radius;
 if (x and LAND_WIDTH_MASK) = 0 then
-   begin
-   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
-   i:= y + Gear^.Radius * 2 - 2;
-   repeat
-     if (y and LAND_HEIGHT_MASK) = 0 then
-        if Land[y, x] > 255 then exit(true);
-     inc(y)
-   until (y > i);
-   end;
+    begin
+    y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+    i:= y + Gear^.Radius * 2 - 2;
+    repeat
+        if (y and LAND_HEIGHT_MASK) = 0 then
+            if Land[y, x] > 255 then
+                exit(true);
+    inc(y)
+    until (y > i);
+    end;
 TestCollisionX:= false
 end;
 
@@ -328,18 +354,21 @@ function TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
 begin
 y:= hwRound(Gear^.Y);
-if Dir < 0 then y:= y - Gear^.Radius
-           else y:= y + Gear^.Radius;
+if Dir < 0 then
+    y:= y - Gear^.Radius
+else
+    y:= y + Gear^.Radius;
 if (y and LAND_HEIGHT_MASK) = 0 then
-   begin
-   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
-   i:= x + Gear^.Radius * 2 - 2;
-   repeat
-     if (x and LAND_WIDTH_MASK) = 0 then
-        if Land[y, x] > 255 then exit(true);
-     inc(x)
-   until (x > i);
-   end;
+    begin
+    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+    i:= x + Gear^.Radius * 2 - 2;
+    repeat
+        if (x and LAND_WIDTH_MASK) = 0 then
+            if Land[y, x] > 255 then
+                exit(true);
+    inc(x)
+    until (x > i);
+    end;
 TestCollisionY:= false
 end;
 
@@ -347,8 +376,12 @@ function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: Lo
 begin
 Gear^.X:= Gear^.X + int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
-if withGear then TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir) <> 0
-else TestCollisionYwithXYShift:= TestCollisionY(Gear, Dir);
+
+if withGear then
+  TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir) <> 0
+else
+  TestCollisionYwithXYShift:= TestCollisionY(Gear, Dir);
+  
 Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
@@ -363,18 +396,18 @@ else
     TestWord:= 0;
 
 if x1 > x2 then
-begin
+    begin
     x  := x1;
     x1 := x2;
     x2 := x;
-end;
+  end;
 
 if y1 > y2 then
-begin
+    begin
     y  := y1;
     y1 := y2;
     y2 := y;
-end;
+  end;
 
 if (hasBorder and ((y1 < 0) or (x1 < 0) or (x2 > LAND_WIDTH))) then
     exit(true);
@@ -382,7 +415,7 @@ if (hasBorder and ((y1 < 0) or (x1 < 0) or (x2 > LAND_WIDTH))) then
 for y := y1 to y2 do
     for x := x1 to x2 do
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
-          and (Land[y, x] > TestWord) then
+        and (Land[y, x] > TestWord) then
             exit(true);
 
 TestRectancleForObstacle:= false
@@ -442,13 +475,18 @@ begin
                     end;
             end;
 
-        if i = 7 then break;
+        if i = 7 then
+            break;
 
         // prepare offset for next check (clockwise)
-        if (mx = -1) and (my <> -1) then my:= my - 1
-        else if (my = -1) and (mx <> 1) then mx:= mx + 1
-        else if (mx = 1) and (my <> 1) then my:= my + 1
-        else mx:= mx - 1;
+        if (mx = -1) and (my <> -1) then
+            my:= my - 1
+        else if (my = -1) and (mx <> 1) then
+            mx:= mx + 1
+        else if (mx = 1) and (my <> 1) then
+            my:= my + 1
+        else
+            mx:= mx - 1;
 
         end;
 
@@ -475,15 +513,16 @@ begin
                 tmpx:= ldx + k * offset[tmpo,0];
                 tmpy:= ldy + k * offset[tmpo,1];
                 if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                    and (Land[tmpy,tmpx] > TestWord) then
-                        begin
-                        ldx:= tmpx;
-                        ldy:= tmpy;
-                        isColl:= true;
-                        break;
-                        end;
+                and (Land[tmpy,tmpx] > TestWord) then
+                    begin
+                    ldx:= tmpx;
+                    ldy:= tmpy;
+                    isColl:= true;
+                    break;
+                    end;
                 end;
-            if isColl then break;
+            if isColl then
+                break;
             end;
 
         jfr:= 8+ri-1;
@@ -498,22 +537,24 @@ begin
                 tmpx:= rdx + k * offset[tmpo,0];
                 tmpy:= rdy + k * offset[tmpo,1];
                 if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                    and (Land[tmpy,tmpx] > TestWord) then
-                        begin
-                        rdx:= tmpx;
-                        rdy:= tmpy;
-                        isColl:= true;
-                        break;
-                        end;
+                and (Land[tmpy,tmpx] > TestWord) then
+                    begin
+                    rdx:= tmpx;
+                    rdy:= tmpy;
+                    isColl:= true;
+                    break;
+                    end;
                 end;
-            if isColl then break;
+            if isColl then
+                break;
             end;
         end;
 
     ldx:= rdx - ldx;
     ldy:= rdy - ldy;
 
-    if ((ldx = 0) and (ldy = 0)) then EXIT(false);
+    if ((ldx = 0) and (ldy = 0)) then
+        EXIT(false);
 
 outDeltaX:= ldx;
 outDeltaY:= ldy;
@@ -533,20 +574,20 @@ collX := gx;
 isColl:= false;
 
 if (y and LAND_HEIGHT_MASK) = 0 then
-   begin
-   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
-   i:= x + Gear^.Radius * 2 - 2;
-   repeat
-     if (x and LAND_WIDTH_MASK) = 0 then
+    begin
+    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+    i:= x + Gear^.Radius * 2 - 2;
+    repeat
+    if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 255 then
             if not isColl or (abs(x-gx) < abs(collX-gx)) then
                 begin
                 isColl:= true;
                 collX := x;
                 end;
-     inc(x)
-   until (x > i);
-   end;
+    inc(x)
+    until (x > i);
+    end;
 
 if isColl then
     begin

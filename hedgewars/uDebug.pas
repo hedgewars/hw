@@ -42,12 +42,14 @@ end;
 
 procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);
 begin
-if not Assert then OutError(Msg, isFatal)
+if not Assert then
+    OutError(Msg, isFatal)
 end;
 
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 begin
-if not Assert then OutError(SDL_GetError, isFatal)
+if not Assert then
+    OutError(SDL_GetError, isFatal)
 end;
 
 end.

@@ -65,7 +65,8 @@ end;
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
 var tx, ty: Longword;
 begin
-    if (Width <= 0) or (Height <= 0) then exit;
+    if (Width <= 0) or (Height <= 0) then
+        exit;
     TryDo((X >= 0) and (X < LAND_WIDTH), 'UpdateLandTexture: wrong X parameter', true);
     TryDo(X + Width <= LAND_WIDTH, 'UpdateLandTexture: wrong Width parameter', true);
     TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
@@ -89,9 +90,9 @@ if LandTextures[0, 0].tex = nil then
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
                 begin
-                    tex:= NewTexture(TEXSIZE, TEXSIZE, Pixels(x, y));
-                    glBindTexture(GL_TEXTURE_2D, tex^.id);
-                    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, tpHigh);
+                tex:= NewTexture(TEXSIZE, TEXSIZE, Pixels(x, y));
+                glBindTexture(GL_TEXTURE_2D, tex^.id);
+                glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, tpHigh);
                 end
 else
     for x:= 0 to LANDTEXARW -1 do

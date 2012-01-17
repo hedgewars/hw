@@ -23,42 +23,43 @@ interface
 uses uFloat, uTypes;
 
 const MAXACTIONS     = 96;
-      aia_none       = 0;
-      aia_Left       = 1;
-      aia_Right      = 2;
-      aia_Timer      = 3;
-      aia_attack     = 4;
-      aia_Up         = 5;
-      aia_Down       = 6;
-      aia_Switch     = 7;
+    aia_none       = 0;
+    aia_Left       = 1;
+    aia_Right      = 2;
+    aia_Timer      = 3;
+    aia_attack     = 4;
+    aia_Up         = 5;
+    aia_Down       = 6;
+    aia_Switch     = 7;
 
-      aia_Weapon     = $8000;
-      aia_WaitXL     = $8001;
-      aia_WaitXR     = $8002;
-      aia_LookLeft   = $8003;
-      aia_LookRight  = $8004;
-      aia_AwareExpl  = $8005;
-      aia_HJump      = $8006;
-      aia_LJump      = $8007;
-      aia_Skip       = $8008;
-      aia_Wait       = $8009;
-      aia_Put        = $800A;
-
-      aim_push       = $8000;
-      aim_release    = $8001;
-      ai_specmask    = $8000;
+    aia_Weapon     = $8000;
+    aia_WaitXL     = $8001;
+    aia_WaitXR     = $8002;
+    aia_LookLeft   = $8003;
+    aia_LookRight  = $8004;
+    aia_AwareExpl  = $8005;
+    aia_HJump      = $8006;
+    aia_LJump      = $8007;
+    aia_Skip       = $8008;
+    aia_Wait       = $8009;
+    aia_Put        = $800A;
+    
+    aim_push       = $8000;
+    aim_release    = $8001;
+    ai_specmask    = $8000;
 
 type TAction = record
-               Action: Longword;
-               X, Y, Param: LongInt;
-               Time: Longword;
-               end;
-     TActions = record
-                Count, Pos: Longword;
-                actions: array[0..Pred(MAXACTIONS)] of TAction;
-                Score: LongInt;
-                isWalkingToABetterPlace: boolean;
-                end;
+        Action: Longword;
+        X, Y, Param: LongInt;
+        Time: Longword;
+        end;
+        
+    TActions = record
+        Count, Pos: Longword;
+        actions: array[0..Pred(MAXACTIONS)] of TAction;
+        Score: LongInt;
+        isWalkingToABetterPlace: boolean;
+        end;
 
 procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; TimeDelta: Longword; X, Y: LongInt);
 procedure ProcessAction(var Actions: TActions; Me: PGear);
@@ -94,29 +95,34 @@ const SpecActionIdToStr: array[$8000..$8009] of string[16] = (
 procedure DumpAction(Action: TAction; Me: PGear);
 begin
 if (Action.Action and ai_specmask) = 0 then
-   WriteLnToConsole('AI action: '+ActionIdToStr[Action.Action])
-else begin
-   WriteLnToConsole('AI action: '+SpecActionIdToStr[Action.Action]);
-   if (Action.Action = aia_WaitXL) or (Action.Action = aia_WaitXR) then
-      WriteLnToConsole('AI action Wait X = '+IntToStr(Action.Param)+', current X = '+IntToStr(hwRound(Me^.X)))
-   else if (Action.Action = aia_AwareExpl) then WriteLnToConsole('Aware X = ' + IntToStr(Action.X) + ', Y = ' + IntToStr(Action.Y));
-   end
+    WriteLnToConsole('AI action: '+ActionIdToStr[Action.Action])
+else
+    begin
+    WriteLnToConsole('AI action: '+SpecActionIdToStr[Action.Action]);
+    if (Action.Action = aia_WaitXL) or (Action.Action = aia_WaitXR) then
+        WriteLnToConsole('AI action Wait X = '+IntToStr(Action.Param)+', current X = '+IntToStr(hwRound(Me^.X)))
+        
+    else if (Action.Action = aia_AwareExpl) then
+        WriteLnToConsole('Aware X = ' + IntToStr(Action.X) + ', Y = ' + IntToStr(Action.Y));
+    end
 end;
 {$ENDIF}
 
 procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; TimeDelta: Longword; X, Y: LongInt);
 begin
 with Actions do
-     begin
-     actions[Count].Action:= Action;
-     actions[Count].Param:= Param;
-     actions[Count].X:= X;
-     actions[Count].Y:= Y;
-     if Count > 0 then actions[Count].Time:= TimeDelta
-                  else actions[Count].Time:= GameTicks + TimeDelta;
-     inc(Count);
-     TryDo(Count < MAXACTIONS, 'AI: actions overflow', true);
-     end
+    begin
+    actions[Count].Action:= Action;
+    actions[Count].Param:= Param;
+    actions[Count].X:= X;
+    actions[Count].Y:= Y;
+    if Count > 0 then
+        actions[Count].Time:= TimeDelta
+    else
+        actions[Count].Time:= GameTicks + TimeDelta;
+    inc(Count);
+    TryDo(Count < MAXACTIONS, 'AI: actions overflow', true);
+    end
 end;
 
 procedure CheckHang(Me: PGear);
@@ -124,18 +130,18 @@ const PrevX: LongInt = 0;
       timedelta: Longword = 0;
 begin
 if hwRound(Me^.X) <> PrevX then
-   begin
-   PrevX:= hwRound(Me^.X);
-   timedelta:= 0
-   end else
-   begin
-   inc(timedelta);
-   if timedelta > 1700 then
-      begin
-      timedelta:= 0;
-      FreeActionsList
-      end
-   end
+    begin
+    PrevX:= hwRound(Me^.X);
+    timedelta:= 0
+    end else
+        begin
+        inc(timedelta);
+        if timedelta > 1700 then
+            begin
+            timedelta:= 0;
+            FreeActionsList
+            end
+        end
 end;
 
 procedure ProcessAction(var Actions: TActions; Me: PGear);
@@ -144,70 +150,101 @@ begin
 repeat
 if Actions.Pos >= Actions.Count then exit;
 with Actions.actions[Actions.Pos] do
-     begin
-     if Time > GameTicks then exit;
-     {$IFDEF TRACEAIACTIONS}
-     DumpAction(Actions.actions[Actions.Pos], Me);
-     {$ENDIF}
-     if (Action and ai_specmask) <> 0 then
+    begin
+    if Time > GameTicks then
+        exit;
+    {$IFDEF TRACEAIACTIONS}
+    DumpAction(Actions.actions[Actions.Pos], Me);
+    {$ENDIF}
+    if (Action and ai_specmask) <> 0 then
         case Action of
-           aia_Weapon: SetWeapon(TAmmoType(Param));
-           aia_WaitXL: if hwRound(Me^.X) = Param then
-                          begin
-                          Action:= aia_LookLeft;
-                          Time:= GameTicks;
-                          exit
-                          end
-                          else if hwRound(Me^.X) < Param then
-                               begin
-                               //OutError('AI: WaitXL assert (' + IntToStr(hwRound(Me^.X)) + ' < ' + IntToStr(Param) + ')', false);
-                               FreeActionsList;
-                               exit
-                               end
-                          else begin CheckHang(Me); exit end;
-           aia_WaitXR: if hwRound(Me^.X) = Param then
-                          begin
-                          Action:= aia_LookRight;
-                          Time:= GameTicks;
-                          exit
-                          end
-                          else if hwRound(Me^.X) > Param then
-                               begin
-                               //OutError('AI: WaitXR assert (' + IntToStr(hwRound(Me^.X)) + ' > ' + IntToStr(Param) + ')', false);
-                               FreeActionsList;
-                               exit
-                               end
-                          else begin CheckHang(Me); exit end;
-         aia_LookLeft: if not Me^.dX.isNegative then
-                          begin
-                          ParseCommand('+left', true);
-                          exit
-                          end else ParseCommand('-left', true);
-        aia_LookRight: if Me^.dX.isNegative then
-                          begin
-                          ParseCommand('+right', true);
-                          exit
-                          end else ParseCommand('-right', true);
-        aia_AwareExpl: AwareOfExplosion(X, Y, Param);
-            aia_HJump: ParseCommand('hjump', true);
-            aia_LJump: ParseCommand('ljump', true);
-             aia_Skip: ParseCommand('skip', true);
-              aia_Put: doPut(X, Y, true);
-             end else
-        begin
-        s:= ActionIdToStr[Action];
-        if (Param and ai_specmask) <> 0 then
-           case Param of
-             aim_push: s:= '+' + s;
-          aim_release: s:= '-' + s;
-             end
-          else if Param <> 0 then s:= s + ' ' + IntToStr(Param);
+            aia_Weapon: 
+            SetWeapon(TAmmoType(Param));
+            
+            aia_WaitXL: 
+            if hwRound(Me^.X) = Param then
+                begin
+                Action:= aia_LookLeft;
+                Time:= GameTicks;
+                exit
+                end
+                else if hwRound(Me^.X) < Param then
+                    begin
+                    //OutError('AI: WaitXL assert (' + IntToStr(hwRound(Me^.X)) + ' < ' + IntToStr(Param) + ')', false);
+                    FreeActionsList;
+                    exit
+                    end
+                else
+                    begin CheckHang(Me);
+                    exit
+                    end;
+                            
+            aia_WaitXR: 
+            if hwRound(Me^.X) = Param then
+                begin
+                Action:= aia_LookRight;
+                Time:= GameTicks;
+                exit
+                end
+                else if hwRound(Me^.X) > Param then
+                    begin
+                    //OutError('AI: WaitXR assert (' + IntToStr(hwRound(Me^.X)) + ' > ' + IntToStr(Param) + ')', false);
+                    FreeActionsList;
+                    exit
+                    end
+                else
+                    begin CheckHang(Me);
+                    exit
+                    end;
+            aia_LookLeft:
+            if not Me^.dX.isNegative then
+                begin
+                ParseCommand('+left', true);
+                exit
+                end
+            else
+                ParseCommand('-left', true);
+            aia_LookRight:
+            if Me^.dX.isNegative then
+                begin
+                ParseCommand('+right', true);
+                exit
+                end
+            else ParseCommand('-right', true);
+            aia_AwareExpl:
+            AwareOfExplosion(X, Y, Param);
+            
+            aia_HJump:
+            ParseCommand('hjump', true);
+            
+            aia_LJump:
+            ParseCommand('ljump', true);
+            
+            aia_Skip:
+            ParseCommand('skip', true);
+            
+            aia_Put:
+            doPut(X, Y, true);
+            end
+        else
+            begin
+            s:= ActionIdToStr[Action];
+            if (Param and ai_specmask) <> 0 then
+                case Param of
+                aim_push:
+                s:= '+' + s;
+                
+                aim_release:
+                s:= '-' + s;
+            end
+        else if Param <> 0 then
+            s:= s + ' ' + IntToStr(Param);
         ParseCommand(s, true)
         end
-     end;
+    end;
 inc(Actions.Pos);
 if Actions.Pos <= Actions.Count then
-   inc(Actions.actions[Actions.Pos].Time, GameTicks);
+    inc(Actions.actions[Actions.Pos].Time, GameTicks);
 until false
 end;
 

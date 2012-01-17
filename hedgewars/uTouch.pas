@@ -102,8 +102,8 @@ procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 var 
     finger: PTouch_Finger;
 begin
-    finger := addFinger(x,y,pointerId);
-    case pointerCount of
+finger := addFinger(x,y,pointerId);
+case pointerCount of
         1:
         begin
             moveCursor:= false;
@@ -161,22 +161,22 @@ var
     currentPinchDelta, zoom : hwFloat;
     tmpX, tmpY: LongInt;
 begin
-    x := x;
-    y := y;
-    dx := dx;
-    dy := dy;
-    finger:= findFinger(pointerId);
-    tmpX := convertToCursor(cScreenWidth, x);
-    tmpY := convertToCursor(cScreenHeight, y);
+x := x;
+y := y;
+dx := dx;
+dy := dy;
+finger:= findFinger(pointerId);
+tmpX := convertToCursor(cScreenWidth, x);
+tmpY := convertToCursor(cScreenHeight, y);
 
-    if moveCursor then
+if moveCursor then
     begin
         if invertCursor then
         begin
             CursorPoint.X := CursorPoint.X + (finger^.x - tmpX);
             CursorPoint.Y := CursorPoint.Y - (finger^.y - tmpY);
         end
-        else
+    else
         begin
             CursorPoint.X := CursorPoint.X - (finger^.x - tmpX);
             CursorPoint.Y := CursorPoint.Y + (finger^.y - tmpY);
@@ -200,20 +200,22 @@ begin
        currentPinchDelta := calculateDelta(finger^, secondFinger^) - pinchSize;
        zoom := currentPinchDelta/cScreenWidth;
        ZoomValue := baseZoomValue - ((hwFloat2Float(zoom) * cMinMaxZoomLevelDelta));
-       if ZoomValue < cMaxZoomLevel then ZoomValue := cMaxZoomLevel;
-       if ZoomValue > cMinZoomLevel then ZoomValue := cMinZoomLevel;
+       if ZoomValue < cMaxZoomLevel then
+           ZoomValue := cMaxZoomLevel;
+       if ZoomValue > cMinZoomLevel then
+           ZoomValue := cMinZoomLevel;
     end;
 end;
 
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
 begin
-    x := x;
-    y := y;
-    aiming:= false;
-    stopFiring:= true;
-    deleteFinger(pointerId);
+x := x;
+y := y;
+aiming:= false;
+stopFiring:= true;
+deleteFinger(pointerId);
 
-    if walkingLeft then
+if walkingLeft then
     begin
         ParseCommand('-left', true);
         walkingLeft := false;
@@ -228,18 +230,18 @@ end;
 
 procedure onTouchDoubleClick(finger: Touch_Finger);
 begin
-    finger := finger;//avoid compiler hint
-    ParseCommand('ljump', true);
+finger := finger;//avoid compiler hint
+ParseCommand('ljump', true);
 end;
 
 procedure onTouchClick(finger: Touch_Finger);
 begin
-    if (SDL_GetTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, finger.Y-yTouchClick) < _30) then
+if (SDL_GetTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, finger.Y-yTouchClick) < _30) then
     begin
     onTouchDoubleClick(finger);
     exit; 
     end
-    else
+else
     begin
         xTouchClick := finger.x;
         yTouchClick := finger.y;
@@ -273,7 +275,8 @@ begin
     if length(fingers) < Integer(pointerCount) then 
     begin
         setLength(fingers, length(fingers)*2);
-        for index := length(fingers) div 2 to length(fingers) do fingers[index].id := nilFingerId;
+        for index := length(fingers) div 2 to length(fingers) do
+            fingers[index].id := nilFingerId;
     end;
     
     
@@ -301,16 +304,16 @@ begin
     dec(pointerCount);
     for index := 0 to pointerCount do
     begin
-         if fingers[index].id = id then
-         begin
-             //Check for onTouchClick event
-             if ((SDL_GetTicks - fingers[index].timeSinceDown) < clickTime) AND  
-                 not(fingerHasMoved(fingers[index])) then onTouchClick(fingers[index]);
-
-             //put the last finger into the spot of the finger to be removed, 
-             //so that all fingers are packed to the far left
-             if  pointerCount <> index then
-             begin
+        if fingers[index].id = id then
+        begin
+            //Check for onTouchClick event
+            if ((SDL_GetTicks - fingers[index].timeSinceDown) < clickTime) AND not(fingerHasMoved(fingers[index])) then
+                onTouchClick(fingers[index]);
+ 
+            //put the last finger into the spot of the finger to be removed, 
+            //so that all fingers are packed to the far left
+            if  pointerCount <> index then
+                begin
                 fingers[index].id := fingers[pointerCount].id;    
                 fingers[index].x := fingers[pointerCount].x;    
                 fingers[index].y := fingers[pointerCount].y;    
@@ -319,10 +322,10 @@ begin
                 fingers[index].timeSinceDown := fingers[pointerCount].timeSinceDown;
 
                 fingers[pointerCount].id := nilFingerId;
-             end
-             else fingers[index].id := nilFingerId;
-             break;
-         end;
+            end
+        else fingers[index].id := nilFingerId;
+            break;
+        end;
     end;
 
 end;
@@ -335,44 +338,44 @@ begin
     if aiming then
     begin
         if CurrentHedgehog^.Gear <> nil then
-        begin
+            begin
             deltaAngle:= CurrentHedgehog^.Gear^.Angle - targetAngle;
             if (deltaAngle <> 0) and not(movingCrosshair) then 
-            begin
+                begin
                 ParseCommand('+' + crosshairCommand, true);
                 movingCrosshair := true;
-            end
+                end
             else 
                 if movingCrosshair then 
-                begin
+                    begin
                     ParseCommand('-' + crosshairCommand, true);
                     movingCrosshair:= false;
-                end;
-        end;
+                   end;
+            end;
     end
     else if movingCrosshair then 
-    begin
+        begin
         ParseCommand('-' + crosshairCommand, true);
         movingCrosshair := false;
-    end;
+        end;
 
     if stopFiring then 
-    begin
+        begin
         ParseCommand('-attack', true);
         stopFiring:= false;
-    end;
+        end;
     
     if stopRight then
-    begin
+        begin
         stopRight := false;
         ParseCommand('-right', true);
-    end;
+        end;
  
     if stopLeft then
-    begin
+        begin
         stopLeft := false;
         ParseCommand('-left', true);
-    end;
+        end;
     
 end;
 
@@ -380,12 +383,12 @@ function findFinger(id: SDL_FingerId): PTouch_Finger;
 var
     index: LongWord;
 begin
-   for index := 0 to High(fingers) do
-       if fingers[index].id = id then 
-       begin
-           findFinger := @fingers[index];
-           break;
-       end;
+    for index := 0 to High(fingers) do
+        if fingers[index].id = id then 
+            begin
+            findFinger := @fingers[index];
+            break;
+            end;
 end;
 
 procedure aim(finger: Touch_Finger);
@@ -408,13 +411,15 @@ begin
         targetAngle:= (hwRound(tmpAngle) + 2048) div 2;
 
         tmp := crosshairCommand;
-        if CurrentHedgehog^.Gear^.Angle - targetAngle < 0 then crosshairCommand := 'down'
-        else crosshairCommand:= 'up';
+        if CurrentHedgehog^.Gear^.Angle - targetAngle < 0 then
+            crosshairCommand := 'down'
+        else
+            crosshairCommand:= 'up';
         if movingCrosshair and (tmp <> crosshairCommand) then 
-        begin
+            begin
             ParseCommand('-' + tmp, true);
             movingCrosshair := false;
-        end;
+            end;
 
     end; //if CurrentHedgehog^.Gear <> nil
 end;
@@ -478,8 +483,10 @@ end;
 // If the pointer to be ignored is not pointerIds[0] the second must be there
 function getSecondFinger(finger: Touch_Finger): PTouch_Finger;
 begin
-    if fingers[0].id = finger.id then getSecondFinger := @fingers[1]
-    else getSecondFinger := @fingers[0];
+    if fingers[0].id = finger.id then
+        getSecondFinger := @fingers[1]
+    else
+        getSecondFinger := @fingers[0];
 end;
 
 procedure printFinger(finger: Touch_Finger);

@@ -24,51 +24,58 @@ interface
 procedure DoGameTick(Lag: LongInt);
 
 ////////////////////
-   implementation
+    implementation
 ////////////////////
 uses uKeys, uTeams, uIO, uAI, uGears, uSound, uMobile, uVisualGears, uTypes, uVariables{$IFDEF SDL13}, uTouch{$ENDIF};
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;
 begin
-if isPaused then exit;
+if isPaused then
+    exit;
 if (not CurrentTeam^.ExtDriven) then
     begin
     NetGetNextCmd; // its for the case of receiving "/say" message
     isInLag:= false;
     SendKeepAliveMessage(Lag)
     end;
-if Lag > 100 then Lag:= 100
-else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then Lag:= 2500;
+if Lag > 100 then
+    Lag:= 100
+else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
+    Lag:= 2500;
 
 if (GameType = gmtDemo) then 
-    if isSpeed then Lag:= Lag * 10
+    if isSpeed then
+        Lag:= Lag * 10
     else
-        if cOnlyStats then Lag:= High(LongInt);
+        if cOnlyStats then
+            Lag:= High(LongInt);
 PlayNextVoice;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do
     begin
     if not CurrentTeam^.ExtDriven then
-       begin
-       if CurrentHedgehog^.BotLevel <> 0 then ProcessBot;
-       ProcessGears;
-       {$IFDEF SDL13}ProcessTouch;{$ENDIF}
-       end else
-       begin
-       NetGetNextCmd;
-       if isInLag then
-          case GameType of
+        begin
+        if CurrentHedgehog^.BotLevel <> 0 then
+            ProcessBot;
+        ProcessGears;
+        {$IFDEF SDL13}ProcessTouch;{$ENDIF}
+        end
+    else
+        begin
+        NetGetNextCmd;
+        if isInLag then
+            case GameType of
                 gmtNet: begin
                         // just update the health bars
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         break;
                         end;
-               gmtDemo: begin
+                gmtDemo: begin
                         GameState:= gsExit;
                         exit
                         end;
-               gmtSave: begin
+                gmtSave: begin
                         RestoreTeamsFromSave;
                         SetBinds(CurrentTeam^.Binds);
                         //CurrentHedgehog^.Gear^.Message:= 0; <- produces bugs with further save restoring and demos
@@ -80,9 +87,9 @@ while (GameState <> gsExit) and (i <= Lag) do
                         {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
                         uMobile.SaveLoadingEnded();
                         end;
-               end
-          else ProcessGears
-       end;
+                end
+        else ProcessGears
+        end;
     inc(i)
     end
 end;

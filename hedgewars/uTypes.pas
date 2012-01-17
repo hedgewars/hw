@@ -190,12 +190,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             end;
 
     TVertex2f = record
-        X, Y: GLfloat;
-        end;
+            X, Y: GLfloat;
+            end;
 
     TVertex2i = record
-        X, Y: GLint;
-        end;
+            X, Y: GLint;
+            end;
 
     PTexture = ^TTexture;
     TTexture = record
@@ -255,7 +255,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             SoundChannel: LongInt;
             PortalCounter: LongWord;  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
             LastDamage: PHedgehog;
-        end;
+            end;
     TPGearArray = array of PGear;
 
     PVisualGear = ^TVisualGear;

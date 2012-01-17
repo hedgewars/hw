@@ -32,12 +32,12 @@ implementation
 uses Types, uVariables, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
 
 const cLineWidth: LongInt = 0;
-      cLinesCount = 8;
+    cLinesCount = 8;
 
 type
-      TTextLine = record
-                  s: shortstring;
-                  end;
+    TTextLine = record
+        s: shortstring
+        end;
 
 var   ConsoleLines: array[byte] of TTextLine;
       CurrLine: LongInt;
@@ -45,7 +45,7 @@ var   ConsoleLines: array[byte] of TTextLine;
 procedure SetLine(var tl: TTextLine; str: shortstring);
 begin
 with tl do
-     s:= str;
+    s:= str;
 end;
 
 procedure WriteToConsole(s: shortstring);
@@ -55,7 +55,7 @@ begin
 {$IFNDEF NOCONSOLE}
 AddFileLog('[Con] ' + s);
 {$IFDEF ANDROID}
-  Log.__android_log_write(Log.Android_LOG_DEBUG, 'HW_Engine', ShortStringAsPChar('[Con]' + s));
+    Log.__android_log_write(Log.Android_LOG_DEBUG, 'HW_Engine', ShortStringAsPChar('[Con]' + s));
 {$ELSE}
 Write(stderr, s);
 done:= false;
@@ -68,7 +68,8 @@ while not done do
     if byte(ConsoleLines[CurrLine].s[0]) = cLineWidth then
         begin
         inc(CurrLine);
-        if CurrLine = cLinesCount then CurrLine:= 0;
+        if CurrLine = cLinesCount then
+            CurrLine:= 0;
         PByte(@ConsoleLines[CurrLine].s)^:= 0
         end;
     done:= (Length(s) = 0);
@@ -93,7 +94,8 @@ end;
 
 function ShortStringAsPChar(s: shortstring) : PChar;
 begin
-    if Length(s) = High(s) then Dec(s[0]);
+    if Length(s) = High(s) then
+        Dec(s[0]);
     s[Ord(Length(s))+1] := #0;
     exit(@s[1]);
 end;

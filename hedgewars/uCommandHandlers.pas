@@ -31,11 +31,12 @@ uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh,
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
-     'R': if ReadyTimeLeft > 1 then 
-          begin
-          ReadyTimeLeft:= 1;
-          if not CurrentTeam^.ExtDriven then SendIPC('c'+s);
-          end
+    'R': if ReadyTimeLeft > 1 then 
+        begin
+        ReadyTimeLeft:= 1;
+        if not CurrentTeam^.ExtDriven then
+            SendIPC('c'+s);
+        end
     end
 end;
 
@@ -48,7 +49,8 @@ begin
         prevGState:= GameState;
         GameState:= gsConfirm;
         SDL_ShowCursor(1)
-        end else
+        end
+    else
         if GameState = gsConfirm then
             begin
             GameState:= prevGState;
@@ -88,7 +90,8 @@ begin
     if isDeveloperMode then
         begin
         val(s, i, c);
-        if (c <> 0) or (i = 0) then exit;
+        if (c <> 0) or (i = 0) then
+            exit;
         TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
     end
@@ -97,39 +100,52 @@ end;
 procedure chTeamLocal(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if not isDeveloperMode then exit;
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/rdriven"', true);
+if not isDeveloperMode then
+    exit;
+if CurrentTeam = nil then
+    OutError(errmsgIncorrectUse + ' "/rdriven"', true);
 CurrentTeam^.ExtDriven:= true
 end;
 
 procedure chGrave(var s: shortstring);
 begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/grave"', true);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+if CurrentTeam = nil then
+    OutError(errmsgIncorrectUse + ' "/grave"', true);
+if s[1]='"' then
+    Delete(s, 1, 1);
+if s[byte(s[0])]='"' then
+    Delete(s, byte(s[0]), 1);
 CurrentTeam^.GraveName:= s
 end;
 
 procedure chFort(var s: shortstring);
 begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/fort"', true);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+if CurrentTeam = nil then
+    OutError(errmsgIncorrectUse + ' "/fort"', true);
+if s[1]='"' then
+    Delete(s, 1, 1);
+if s[byte(s[0])]='"' then
+    Delete(s, byte(s[0]), 1);
 CurrentTeam^.FortName:= s
 end;
 
 procedure chFlag(var s: shortstring);
 begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/flag"', true);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+if CurrentTeam = nil then
+    OutError(errmsgIncorrectUse + ' "/flag"', true);
+if s[1]='"' then
+    Delete(s, 1, 1);
+if s[byte(s[0])]='"' then
+    Delete(s, byte(s[0]), 1);
 CurrentTeam^.flag:= s
 end;
 
 procedure chScript(var s: shortstring);
 begin
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+if s[1]='"' then
+    Delete(s, 1, 1);
+if s[byte(s[0])]='"' then
+    Delete(s, byte(s[0]), 1);
 cScriptName:= s;
 ScriptLoad(s)
 end;
@@ -140,9 +156,9 @@ if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
 with CurrentTeam^ do
     begin
     if not CurrentHedgehog^.King then
-    if (s = '') or
-        (((GameFlags and gfKing) <> 0) and (s = 'crown')) or
-        ((Length(s) > 39) and (Copy(s,1,8) = 'Reserved') and (Copy(s,9,32) <> PlayerHash)) then
+    if (s = '')
+    or (((GameFlags and gfKing) <> 0) and (s = 'crown'))
+    or ((Length(s) > 39) and (Copy(s,1,8) = 'Reserved') and (Copy(s,9,32) <> PlayerHash)) then
         CurrentHedgehog^.Hat:= 'NoHat'
     else
         CurrentHedgehog^.Hat:= s
@@ -200,8 +216,10 @@ end;
 procedure chLeft_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('L');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('L');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmLeft and InputMask);
@@ -211,8 +229,10 @@ end;
 procedure chLeft_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('l');
+if CheckNoTeamOrHH then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('l');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmLeft and InputMask));
     ScriptCall('onLeftUp');
@@ -221,8 +241,10 @@ end;
 procedure chRight_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('R');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('R');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmRight and InputMask);
@@ -232,8 +254,10 @@ end;
 procedure chRight_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('r');
+if CheckNoTeamOrHH then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('r');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmRight and InputMask));
     ScriptCall('onRightUp');
@@ -242,8 +266,10 @@ end;
 procedure chUp_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('U');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('U');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmUp and InputMask);
@@ -253,8 +279,10 @@ end;
 procedure chUp_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('u');
+if CheckNoTeamOrHH then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('u');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmUp and InputMask));
     ScriptCall('onUpUp');
@@ -263,8 +291,10 @@ end;
 procedure chDown_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('D');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('D');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmDown and InputMask);
@@ -274,8 +304,10 @@ end;
 procedure chDown_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('d');
+if CheckNoTeamOrHH then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('d');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmDown and InputMask));
     ScriptCall('onDownUp');
@@ -284,8 +316,10 @@ end;
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('Z');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('Z');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmPrecise and InputMask);
@@ -295,8 +329,10 @@ end;
 procedure chPrecise_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('z');
+if CheckNoTeamOrHH then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('z');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmPrecise and InputMask));
     ScriptCall('onPreciseUp');
@@ -305,8 +341,10 @@ end;
 procedure chLJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('j');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('j');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmLJump and InputMask);
@@ -316,8 +354,10 @@ end;
 procedure chHJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('J');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('J');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmHJump and InputMask);
@@ -327,7 +367,8 @@ end;
 procedure chAttack_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
+if CheckNoTeamOrHH or isPaused then
+    exit;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -335,7 +376,8 @@ with CurrentHedgehog^.Gear^ do
     if ((State and gstHHDriven) <> 0) then
         begin
         FollowGear:= CurrentHedgehog^.Gear;
-        if not CurrentTeam^.ExtDriven then SendIPC('A');
+        if not CurrentTeam^.ExtDriven then
+            SendIPC('A');
         Message:= Message or (gmAttack and InputMask);
         ScriptCall('onAttack');
         end
@@ -345,11 +387,13 @@ end;
 procedure chAttack_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH then
+    exit;
 with CurrentHedgehog^.Gear^ do
     begin
     if not CurrentTeam^.ExtDriven and
-        ((Message and gmAttack) <> 0) then SendIPC('a');
+        ((Message and gmAttack) <> 0) then
+            SendIPC('a');
     Message:= Message and (not (gmAttack and InputMask));
     ScriptCall('onAttackUp');
     end
@@ -358,8 +402,10 @@ end;
 procedure chSwitch(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('S');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC('S');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmSwitch and InputMask);
@@ -371,15 +417,18 @@ begin
     s:= s; // avoid compiler hint
     TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
-    if not CurrentTeam^.ExtDriven then SendIPC('N');
+    if not CurrentTeam^.ExtDriven then
+        SendIPC('N');
     AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
 end;
 
 procedure chTimer(var s: shortstring);
 begin
-if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or CheckNoTeamOrHH then exit;
+if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or CheckNoTeamOrHH then
+    exit;
 
-if not CurrentTeam^.ExtDriven then SendIPC(s);
+if not CurrentTeam^.ExtDriven then
+    SendIPC(s);
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -392,10 +441,13 @@ end;
 procedure chSlot(var s: shortstring);
 var slot: LongWord;
 begin
-if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+if (s[0] <> #1) or CheckNoTeamOrHH then
+    exit;
 slot:= byte(s[1]) - 49;
-if slot > cMaxSlotIndex then exit;
-if not CurrentTeam^.ExtDriven then SendIPC(char(byte(s[1]) + 79));
+if slot > cMaxSlotIndex then
+    exit;
+if not CurrentTeam^.ExtDriven then
+    SendIPC(char(byte(s[1]) + 79));
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -407,27 +459,33 @@ end;
 
 procedure chSetWeapon(var s: shortstring);
 begin
-    if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+    if (s[0] <> #1) or CheckNoTeamOrHH then
+        exit;
 
-    if TAmmoType(s[1]) > High(TAmmoType) then exit;
+    if TAmmoType(s[1]) > High(TAmmoType) then
+        exit;
 
-    if not CurrentTeam^.ExtDriven then SendIPC('w' + s);
+    if not CurrentTeam^.ExtDriven then
+        SendIPC('w' + s);
 
     with CurrentHedgehog^.Gear^ do
-    begin
+        begin
         Message:= Message or (gmWeapon and InputMask);
         MsgParam:= byte(s[1]);
-    ScriptCall('onSetWeapon');
-    end;
+        ScriptCall('onSetWeapon');
+        end;
 end;
 
 procedure chTaunt(var s: shortstring);
 begin
-if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+if (s[0] <> #1) or CheckNoTeamOrHH then
+    exit;
 
-if TWave(s[1]) > High(TWave) then exit;
+if TWave(s[1]) > High(TWave) then
+    exit;
 
-if not CurrentTeam^.ExtDriven then SendIPC('t' + s);
+if not CurrentTeam^.ExtDriven then
+    SendIPC('t' + s);
 
 with CurrentHedgehog^.Gear^ do
     begin
@@ -472,23 +530,23 @@ end;
 procedure chSetTheme(var s: shortstring);
 begin
 if isDeveloperMode then
-begin
-UserPathz[ptCurrTheme]:= UserPathz[ptThemes] + '/' + s;
-Pathz[ptCurrTheme]:= Pathz[ptThemes] + '/' + s;
-Theme:= s;
-InitStepsFlags:= InitStepsFlags or cifTheme
-end
+    begin
+    UserPathz[ptCurrTheme]:= UserPathz[ptThemes] + '/' + s;
+    Pathz[ptCurrTheme]:= Pathz[ptThemes] + '/' + s;
+    Theme:= s;
+    InitStepsFlags:= InitStepsFlags or cifTheme
+    end
 end;
 
 procedure chSetSeed(var s: shortstring);
 begin
 if isDeveloperMode then
-begin
-SetRandomSeed(s);
-cSeed:= s;
-InitStepsFlags:= InitStepsFlags or cifRandomize
-end
-end;
+    begin
+    SetRandomSeed(s);
+    cSeed:= s;
+    InitStepsFlags:= InitStepsFlags or cifRandomize
+    end
+    end;
 
 procedure chAmmoMenu(var s: shortstring);
 begin
@@ -502,10 +560,15 @@ else
             begin
             bSelected:= false;
 
-            if bShowAmmoMenu then bShowAmmoMenu:= false
-            else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
-                    ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
-                    ((Gear^.State and gstHHDriven) = 0) then begin end else bShowAmmoMenu:= true
+            if bShowAmmoMenu then
+                bShowAmmoMenu:= false
+            else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
+            or ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0))
+            or ((Gear^.State and gstHHDriven) = 0) then
+                begin
+                end
+            else
+                bShowAmmoMenu:= true
             end;
     end
 end;
@@ -525,17 +588,20 @@ end;
 procedure chFindhh(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
+if CheckNoTeamOrHH or isPaused then
+    exit;
 
 if FollowGear <> nil then
     begin
     AddCaption('Auto Camera Off', $CCCCCC, capgrpVolume);
     autoCameraOn:= false
     end
-    else begin
+    else
+        begin
     AddCaption('Auto Camera On', $CCCCCC, capgrpVolume);
     bShowFinger:= true;
-    if not CurrentHedgehog^.Unplaced then FollowGear:= CurrentHedgehog^.Gear;
+    if not CurrentHedgehog^.Unplaced then
+        FollowGear:= CurrentHedgehog^.Gear;
     autoCameraOn:= true
     end
 end;
@@ -555,7 +621,10 @@ end;
 procedure chRotateMask(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if ((GameFlags and gfInvulnerable) = 0) then cTagsMask:= cTagsMasks[cTagsMask] else cTagsMask:= cTagsMasksNoHealth[cTagsMask];
+if ((GameFlags and gfInvulnerable) = 0) then
+    cTagsMask:= cTagsMasks[cTagsMask]
+else
+    cTagsMask:= cTagsMasksNoHealth[cTagsMask];
 end;
 
 procedure chSpeedup_p(var s: shortstring);

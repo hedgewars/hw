@@ -32,9 +32,13 @@ uses uTypes, uConsts, uVariables, GLunit, uKeys, uSound, uAmmos, uUtils, uComman
 
 {$INCLUDE "config.inc"}
 procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
+
 function HW_getNumberOfWeapons:LongInt; cdecl; export;
+
 function HW_getMaxNumberOfTeams:LongInt; cdecl; export;
+
 function HW_getMaxNumberOfHogs:LongInt; cdecl; export;
+
 procedure HW_terminate(closeFrontend: Boolean); cdecl; export;
 
 implementation
@@ -225,8 +229,8 @@ end;
 
 function HW_isAmmoMenuNotAllowed: boolean; cdecl; export;
 begin;
-    exit( (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or
-          ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) );
+    exit( (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil)
+    or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) );
 end;
 
 function HW_isWeaponRequiringClick: boolean; cdecl; export;
@@ -270,7 +274,7 @@ procedure HW_setPianoSound(snd: LongInt); cdecl; export;
 begin
     // this most likely won't work in network game
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0)
-       and (CurrentHedgehog^.CurAmmoType = amPiano) then
+        and (CurrentHedgehog^.CurAmmoType = amPiano) then
         case snd of
             0: PlaySound(sndPiano0);
             1: PlaySound(sndPiano1);

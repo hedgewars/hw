@@ -91,8 +91,10 @@ case GetRandom(4) of
 end;
 tries := 0;
 found_cell := false;
-if getrandom(2) = 1 then next_dir_clockwise := true
-else next_dir_clockwise := false;
+if getrandom(2) = 1 then
+    next_dir_clockwise := true
+else
+    next_dir_clockwise := false;
 
 while (tries < 5) and (not found_cell) do
 begin
@@ -104,12 +106,21 @@ begin
         //or just warn that inverted+braid+indestructible terrain != good idea
         begin
             case dir.x of
-                -1: if x > 0 then ywalls[x-1, y] := false;
-                1: if x < seen_cells_x - 1 then ywalls[x, y] := false;
+            
+                -1:
+                if x > 0 then
+                    ywalls[x-1, y] := false;
+                1:
+                if x < seen_cells_x - 1 then
+                    ywalls[x, y] := false;
             end;
             case dir.y of
-                -1: if y > 0 then xwalls[x, y-1] := false;
-                1: if y < seen_cells_y - 1 then xwalls[x, y] := false;
+                -1:
+                if y > 0 then
+                    xwalls[x, y-1] := false;
+                1:
+                if y < seen_cells_y - 1 then
+                    xwalls[x, y] := false;
             end;
         end;
         if next_dir_clockwise then
@@ -136,7 +147,7 @@ begin
         end
     end
     else if when_seen(x + dir.x, y + dir.y) = -1 then //cell was not seen yet, go there
-    begin
+        begin
         case dir.y of
             -1: xwalls[x, y-1] := false;
             1: xwalls[x, y] := false;
@@ -151,23 +162,27 @@ begin
         came_from[current_step, came_from_pos[current_step]].x := x;
         came_from[current_step, came_from_pos[current_step]].y := y;
         found_cell := true;
-    end
+        end
     else //we are seeing someone else, quit
-    begin
+        begin
         step_done[current_step] := true;
         found_cell := true;
-    end;
+        end;
 
     tries := tries + 1;
 end;
 if not found_cell then
-begin
+    begin
     last_cell[current_step].x := came_from[current_step, came_from_pos[current_step]].x;
     last_cell[current_step].y := came_from[current_step, came_from_pos[current_step]].y;
     came_from_pos[current_step] := came_from_pos[current_step] - 1;
-    if came_from_pos[current_step] >= 0 then see_cell
-    else step_done[current_step] := true;
-end;
+    
+    if came_from_pos[current_step] >= 0 then
+        see_cell
+        
+    else
+        step_done[current_step] := true;
+    end;
 end;
 
 procedure add_vertex(x, y: LongInt);
@@ -187,10 +202,15 @@ begin
 end
 else
 begin
-    if maze_inverted or (x mod 2 = 0) then tmp_x := cellsize
-    else tmp_x := cellsize * 2 div 3;
-    if maze_inverted or (y mod 2 = 0) then tmp_y := cellsize
-    else tmp_y := cellsize * 2 div 3;
+    if maze_inverted or (x mod 2 = 0) then
+        tmp_x := cellsize
+    else
+        tmp_x := cellsize * 2 div 3;
+        
+    if maze_inverted or (y mod 2 = 0) then
+        tmp_y := cellsize
+    else
+        tmp_y := cellsize * 2 div 3;
 
     pa.ar[num_vertices].x := (x-1)*cellsize + tmp_x;
     pa.ar[num_vertices].y := (y-1)*cellsize + tmp_y + off_y;
@@ -202,64 +222,64 @@ procedure add_edge(x, y: LongInt; dir: direction);
 var i: LongInt;
 begin
 if dir = DIR_N then
-begin
+    begin
     dir := DIR_W
-end
+    end
 else if dir = DIR_E then
-begin
+    begin
     dir := DIR_N
-end
+    end
 else if dir = DIR_S then
-begin
+    begin
     dir := DIR_E
-end
+    end
 else
-begin
+    begin
     dir := DIR_S;
-end;
+    end;
 
 for i := 0 to 3 do
-begin
-        if dir = DIR_N then
-            dir := DIR_E
-        else if dir = DIR_E then
-            dir := DIR_S
-        else if dir = DIR_S then
-            dir := DIR_W
-        else
-            dir := DIR_N;
+    begin
+    if dir = DIR_N then
+        dir := DIR_E
+    else if dir = DIR_E then
+        dir := DIR_S
+    else if dir = DIR_S then
+        dir := DIR_W
+    else
+        dir := DIR_N;
 
-    if (dir = DIR_N) and is_x_edge(x, y) then
-        begin
-            x_edge_list[x, y] := false;
-            add_vertex(x+1, y);
-            add_edge(x, y-1, DIR_N);
-            break;
-        end;
+if (dir = DIR_N) and is_x_edge(x, y) then
+    begin
+        x_edge_list[x, y] := false;
+        add_vertex(x+1, y);
+        add_edge(x, y-1, DIR_N);
+        break;
+    end;
 
-    if (dir = DIR_E) and is_y_edge(x+1, y) then
-        begin
-            y_edge_list[x+1, y] := false;
-            add_vertex(x+2, y+1);
-            add_edge(x+1, y, DIR_E);
-            break;
-        end;
+if (dir = DIR_E) and is_y_edge(x+1, y) then
+    begin
+        y_edge_list[x+1, y] := false;
+        add_vertex(x+2, y+1);
+        add_edge(x+1, y, DIR_E);
+        break;
+    end;
 
-    if (dir = DIR_S) and is_x_edge(x, y+1) then
-        begin
-            x_edge_list[x, y+1] := false;
-            add_vertex(x+1, y+2);
-            add_edge(x, y+1, DIR_S);
-            break;
-        end;
+if (dir = DIR_S) and is_x_edge(x, y+1) then
+    begin
+        x_edge_list[x, y+1] := false;
+        add_vertex(x+1, y+2);
+        add_edge(x, y+1, DIR_S);
+        break;
+    end;
 
-    if (dir = DIR_W) and is_y_edge(x, y) then
-        begin
-            y_edge_list[x, y] := false;
-            add_vertex(x, y+1);
-            add_edge(x-1, y, DIR_W);
-            break;
-        end;
+if (dir = DIR_W) and is_y_edge(x, y) then
+    begin
+        y_edge_list[x, y] := false;
+        add_vertex(x, y+1);
+        add_edge(x-1, y, DIR_W);
+        break;
+    end;
 end;
 
 end;
@@ -294,11 +314,16 @@ case cTemplateFilter of
 end;
 
 num_cells_x := LAND_WIDTH div cellsize;
-if not odd(num_cells_x) then num_cells_x := num_cells_x - 1; //needs to be odd
+if not odd(num_cells_x) then
+    num_cells_x := num_cells_x - 1; //needs to be odd
+    
 num_cells_y := LAND_HEIGHT div cellsize;
-if not odd(num_cells_y) then num_cells_y := num_cells_y - 1;
+if not odd(num_cells_y) then
+    num_cells_y := num_cells_y - 1;
+    
 num_edges_x := num_cells_x - 1;
 num_edges_y := num_cells_y - 1;
+
 seen_cells_x := num_cells_x div 2;
 seen_cells_y := num_cells_y div 2;
 
@@ -306,14 +331,17 @@ if maze_inverted then
     num_steps := 3 //TODO randomize, between 3 and 5?
 else
     num_steps := 1;
+    
 SetLength(step_done, num_steps);
 SetLength(last_cell, num_steps);
 SetLength(came_from_pos, num_steps);
 SetLength(came_from, num_steps, num_cells_x*num_cells_y);
 done := false;
+
 for current_step := 0 to num_steps - 1 do
     step_done[current_step] := false;
     came_from_pos[current_step] := 0;
+    
 current_step := 0;
 
 SetLength(seen_list, seen_cells_x, seen_cells_y);
@@ -362,14 +390,14 @@ for x := 0 to num_cells_x - 1 do
         y_edge_list[x, y] := false;
 
 for current_step := 0 to num_steps-1 do
-begin
+    begin
     x := GetRandom(seen_cells_x - 1) div LongWord(num_steps);
     last_cell[current_step].x := x + current_step * seen_cells_x div num_steps;
     last_cell[current_step].y := GetRandom(seen_cells_y);
 end;
 
 while not done do
-begin
+    begin
     done := true;
     for current_step := 0 to num_steps-1 do
     begin
@@ -414,13 +442,13 @@ for x := 0 to num_cells_x - 1 do
 for x := 0 to num_edges_x - 1 do
     for y := 0 to num_cells_y - 1 do
         if x_edge_list[x, y] then
-        begin
+            begin
             x_edge_list[x, y] := false;
             add_vertex(x+1, y+1);
             add_vertex(x+1, y);
             add_edge(x, y-1, DIR_N);
             add_vertex(NTPX, 0);
-        end;
+            end;
 
 pa.count := num_vertices;
 
@@ -434,18 +462,20 @@ DrawEdge(pa, 0);
 if maze_inverted then
     FillLand(1, 1+off_y)
 else
-begin
+    begin
     x := 0;
     while Land[cellsize div 2 + cellsize + off_y, x] = lfBasic do
         x := x + 1;
     while Land[cellsize div 2 + cellsize + off_y, x] = 0 do
         x := x + 1;
     FillLand(x+1, cellsize div 2 + cellsize + off_y);
-end;
+    end;
 
 MaxHedgehogs:= 32;
-if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false
-else hasGirders := true;
+if (GameFlags and gfDisableGirders) <> 0 then
+    hasGirders:= false
+else
+    hasGirders := true;
 leftX:= 0;
 rightX:= playWidth;
 topY:= off_y;
