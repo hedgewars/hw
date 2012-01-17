@@ -182,7 +182,7 @@ void BGWidget::startAnimation()
 void BGWidget::stopAnimation()
 {
     timerAnimation->stop();
-	repaint();
+    repaint();
 }
 
 void BGWidget::init()

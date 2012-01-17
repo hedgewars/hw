@@ -71,7 +71,7 @@ void AbstractPage::initPage()
     connectSignals();
 }
 
-QPushButton * AbstractPage::formattedButton(const QString & name, bool hasIcon)
+QPushButtonWithSound * AbstractPage::formattedButton(const QString & name, bool hasIcon)
 {
     QPushButtonWithSound * btn = new QPushButtonWithSound(this);
 
@@ -93,16 +93,16 @@ QPushButton * AbstractPage::formattedButton(const QString & name, bool hasIcon)
     return btn;
 }
 
-QPushButton * AbstractPage::addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan, int columnSpan, bool hasIcon)
+QPushButtonWithSound * AbstractPage::addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan, int columnSpan, bool hasIcon)
 {
-    QPushButton * btn = formattedButton(name, hasIcon);
+    QPushButtonWithSound * btn = formattedButton(name, hasIcon);
     grid->addWidget(btn, row, column, rowSpan, columnSpan);
     return btn;
 }
 
-QPushButton * AbstractPage::addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon)
+QPushButtonWithSound * AbstractPage::addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon)
 {
-    QPushButton * btn = formattedButton(name, hasIcon);
+    QPushButtonWithSound * btn = formattedButton(name, hasIcon);
     box->addWidget(btn, where);
     return btn;
 }

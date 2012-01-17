@@ -25,13 +25,13 @@
 #define ABSTRACTPAGE_H
 
 #include <QWidget>
-#include <QPushButton>
+#include <qpushbuttonwithsound.h>
 #include <QFont>
 #include <QGridLayout>
 #include <QComboBox>
 #include <QSignalMapper>
 
-class QPushButton;
+class QPushButtonWithSound;
 class QGroupBox;
 class QComboBox;
 class QLabel;
@@ -134,7 +134,7 @@ class AbstractPage : public QWidget
          *
          * @return the button.
          */
-        QPushButton * formattedButton(const QString & name, bool hasIcon = false);
+        QPushButtonWithSound * formattedButton(const QString & name, bool hasIcon = false);
 
         /**
          * @brief Creates a default formatted button and adds it to a
@@ -150,7 +150,7 @@ class AbstractPage : public QWidget
          *
          * @return the button.
          */
-        QPushButton * addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan = 1, int columnSpan = 1, bool hasIcon = false);
+        QPushButtonWithSound * addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan = 1, int columnSpan = 1, bool hasIcon = false);
 
         /**
          * @brief Creates a default formatted button and adds it to a
@@ -163,7 +163,7 @@ class AbstractPage : public QWidget
          *
          * @return the button.
          */
-        QPushButton * addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
+        QPushButtonWithSound * addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
 
         /**
          * @brief Changes visibility of the back-button.
@@ -177,9 +177,7 @@ class AbstractPage : public QWidget
         QLabel * descLabel; ///< text description
         QString * defautDesc;
 
-    private:
-
-        QPushButton * btnBack; ///< back button
+        QPushButtonWithSound * btnBack; ///< back button
 };
 
 #endif
