@@ -58,7 +58,11 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
-    BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 4, 0, 1, 4, false);
+    BtnFeedback = addButton("Feedback", pageLayout, 4, 0, 1, 4, false);
+    BtnFeedback->setWhatsThis(tr("Leave a feeback here, reporting issues, suggesting features or just saying how you like Hedgewars"));
+    pageLayout->setAlignment(BtnFeedback, Qt::AlignHCenter);
+
+    BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 5, 0, 1, 4, false);
     //BtnDataDownload->setToolTip(tr(Downloadable Content"));
     BtnDataDownload->setWhatsThis(tr("Access the user created content downloadable from our website"));
     pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
@@ -78,9 +82,6 @@ QLayout * PageMain::footerLayoutDefinition()
     bottomLayout->setStretch(0,1);
 
     BtnSetup = addButton(":/res/Settings.png", bottomLayout, 1, true);
-    BtnFeedback = addButton("Feedback", bottomLayout, 0);
-    bottomLayout->setStretch(1,0);
-
     return bottomLayout;
 }
 
