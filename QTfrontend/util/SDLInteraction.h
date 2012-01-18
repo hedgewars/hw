@@ -59,6 +59,8 @@ private:
 
     QMap<QString,Mix_Chunk*> * m_soundMap; ///< maps sound file paths to channels
 
+    int lastchannel; ///< channel of the last music played
+
 public:
     /**
      * @brief Returns reference to the <i>singleton</i> instance of this class.
