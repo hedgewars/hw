@@ -193,9 +193,10 @@ void SDLInteraction::playSoundFile(const QString & soundFile)
     if (!m_soundMap->contains(soundFile))
         m_soundMap->insert(soundFile, Mix_LoadWAV(soundFile.toLocal8Bit().constData()));
 
-    Mix_PlayChannel(-1, m_soundMap->value(soundFile), 0);
+    //FIXME: this is a hack, but works as long as we have few concurrent playing sounds
+    if (Mix_Playing(lastchannel) == false)
+        lastchannel = Mix_PlayChannel(-1, m_soundMap->value(soundFile), 0);
 }
-
 
 void SDLInteraction::setMusicTrack(const QString & musicFile)
 {
