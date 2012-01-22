@@ -55,16 +55,22 @@ endif()
 set(SDL_DIR /home/richard/Downloads/android-project)
 
 
-set(ANDROID_SDK_API_LVL 8)
+set(ANDROID_SDK_API_LVL 14)
 set(ANDROID_NDK_API_LVL 5)
 
-MESSAGE(STATUS "Creating android scripts and configuration files")
+MESSAGE(STATUS "Creating Makefile.android...")
 
-configure_file(Templates/complete_build.sh .)
-configure_file(Templates/default.properties SDL-android-project/)
-configure_file(Templates/local.properties SDL-android-project/)
 configure_file(Templates/Makefile.android .)
-configure_file(Templates/pushToDevice.sh .)
+
+find_program(ANDROID android "${ANDROID_SDK}" "${ANDROID_SDK}/tools")
+if(ANDROID)
+    exec_program(${ANDROID}
+                 ARGS "update project"
+                 "--path ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project"
+                 "--target android-${ANDROID_SDK_API_LVL}"
+                 OUTPUT_VARIABLE dontcare
+                ) 
+endif(ANDROID)
 
 if(SDL_DIR_TEMP_DISABLE)
     MESSAGE("Moving Android port of SDL to the proper directories")

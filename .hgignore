@@ -44,9 +44,9 @@ glob:project_files/Android-build/SDL-android-project/libs
 glob:project_files/Android-build/SDL-android-project/bin
 glob:project_files/Android-build/SDL-android-project/gen
 glob:project_files/Android-build/SDL-android-project/local.properties
+glob:project_files/Android-build/SDL-android-project/project.properties
 glob:project_files/Android-build/SDL-android-project/default.properties
+glob:project_files/Android-build/SDL-android-project/proguard.cfg
 glob:project_files/Android-build/SDL-android-project/.*
-glob:project_files/Android-build/complete_build.sh
-glob:project_files/Android-build/pushToDevice.sh
-glob:project_files/Android-build/Makefile.android
 glob:project_files/Android-build/out
+glob:project_files/Android-build/Makefile.android
