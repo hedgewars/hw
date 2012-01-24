@@ -418,10 +418,10 @@ if TurnTimeLeft > 0 then
                 and (not PlacingHogs)
                 and (CurrentHedgehog^.Gear <> nil)
                 and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
-                    AddVoice(sndHurry, CurrentTeam^.voicepack);
+                    PlaySound(sndHurry, CurrentTeam^.voicepack);
             if ReadyTimeLeft > 0 then
                 begin
-                if ReadyTimeLeft = 2000 then
+                if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) then
                     AddVoice(sndComeonthen, CurrentTeam^.voicepack);
                 dec(ReadyTimeLeft)
                 end
