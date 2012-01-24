@@ -61,6 +61,7 @@ set(ANDROID_NDK_API_LVL 5)
 MESSAGE(STATUS "Creating Makefile.android...")
 
 configure_file(Templates/Makefile.android .)
+configure_file(Templates/default.properties SDL-android-project/)
 
 find_program(ANDROID android "${ANDROID_SDK}" "${ANDROID_SDK}/tools")
 if(ANDROID)
