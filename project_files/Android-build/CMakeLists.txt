@@ -77,7 +77,16 @@ exec_program(${HGCOMMAND}
     ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
     OUTPUT_VARIABLE dontcare
 )
-    exec_program(${HGCOMMAND}
+exec_program(${HGCOMMAND}
     ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
     OUTPUT_VARIABLE dontcare
 )
+exec_program(${HGCOMMAND}
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL_mixer/Android.mk
+    OUTPUT_VARIABLE dontcare
+)
+exec_program(${HGCOMMAND}
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL_ttf/Android.mk
+    OUTPUT_VARIABLE dontcare
+)
+
