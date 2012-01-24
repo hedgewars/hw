@@ -72,37 +72,11 @@ if(ANDROID)
                 ) 
 endif(ANDROID)
 
-if(SDL_DIR_TEMP_DISABLE)
-    MESSAGE("Moving Android port of SDL to the proper directories")
-    set(DirsToCopy
-        SDL
-        SDL_image
-        SDL_mixer
-        SDL_ttf
-	jpeg
-	png
-         mikmod
-        ) 
-    foreach(DIR ${DirsToCopy})
-        exec_program( 
-            ${CMAKE_COMMAND} 
-            ARGS -E copy_directory 
-            ${SDL_DIR}/jni/${DIR}
-            ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/${DIR}
-        )
-        MESSAGE(STATUS "Moved ${DIR}")
-    endforeach(DIR)
+exec_program(${HGCOMMAND}
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
+    OUTPUT_VARIABLE dontcare
+)
     exec_program(${HGCOMMAND}
-        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
-	)
-    exec_program(${HGCOMMAND}
-        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
-	)
-    exec_program(${HGCOMMAND}
-        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.c
-        )
-
-    exec_program(${HGCOMMAND}
-        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.h
-	)
-endif(SDL_DIR_TEMP_DISABLE)
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
+    OUTPUT_VARIABLE dontcare
+)
