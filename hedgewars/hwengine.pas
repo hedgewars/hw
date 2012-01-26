@@ -295,7 +295,6 @@ var
 begin
 {$IFDEF HWLIBRARY}
     cBits:= 32;
-    cFullScreen:= true;
     cTimerInterval:= 8;
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     val(gameArgs[0], ipcPort);
@@ -303,6 +302,8 @@ begin
     val(gameArgs[2], cScreenHeight);
     val(gameArgs[3], cReducedQuality);
     cLocaleFName:= gameArgs[4];
+    // cFullScreen functionality is platform dependent, ifdef it if you need to modify it
+    cFullScreen:= false;
     
     if (Length(cLocaleFName) > 6) then
         cLocale := Copy(cLocaleFName,1,5)

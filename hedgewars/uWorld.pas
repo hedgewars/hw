@@ -191,6 +191,9 @@ prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - (LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  - (LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
+// AMSlotSize is the active dimension of the ammo icon
+// AMWidth is the horizontal size of the whole ammomenu
+// cMaxSlotIndex is the amount of weapons per row
 AMSlotSize:= 33;
 {$IFDEF MOBILE}
 if isPhone() then
