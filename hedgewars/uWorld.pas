@@ -192,7 +192,7 @@ prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - (LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  - (LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 AMSlotSize:= 33;
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
 if isPhone() then
     begin
     AMxOffset:= -30 + cScreenHeight div 2;
@@ -289,7 +289,7 @@ begin
     SlotsNum:= 0;
     x:= (cScreenWidth shr 1) - AMWidth + AMxShift;
 
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
     Slot:= cMaxSlotIndex;
     x:= x - cOffsetY;
     y:= AMyOffset;
@@ -418,7 +418,7 @@ begin
                 RenderWeaponTooltip(amSel)
                 end;
 
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
             DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + AMxShift, AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
             if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
                 DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + 163, AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
@@ -442,8 +442,12 @@ begin
         FreeWeaponTooltip;
 
     if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
+    {$IFDEF ANDROID}
+        ShowWeaponTooltip((AMxOffset - (cScreenHeight div 2)) - WeaponTooltipTex^.w, (AMyOffset + ((SlotsNum * AmSlotSize)div 2)) - (WeaponTooltipTex^.h div 2));
+    {$ELSE}
         ShowWeaponTooltip(-WeaponTooltipTex^.w div 2, 100);
+    {$ENDIF}
 {$ELSE}
         ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, Min(y + 1, cScreenHeight - WeaponTooltipTex^.h - 40));
 {$ENDIF}
@@ -983,6 +987,7 @@ DrawCaptions;
 // Draw buttons Related to the Touch interface
 DrawTexture(Round(-cScreenWidth*0.5 + cScreenHeight*0.02),Round((cScreenHeight*0.98)-(spritesData[sprFireButton].Height*0.4) ),spritesData[sprFireButton].Texture, 0.4);
 {$ENDIF}
+
 // Teams Healths
 if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
     begin

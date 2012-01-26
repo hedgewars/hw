@@ -41,7 +41,7 @@ procedure NewTurnBeginning; inline;
 procedure SaveLoadingEnded; inline;
 
 implementation
-uses uVariables;
+uses uVariables, uConsole;
 
 // this function is just to determine whether we are running on a limited screen device
 function isPhone: Boolean; inline;
@@ -49,7 +49,16 @@ begin
 {$IFDEF IPHONEOS}
     exit(isApplePhone());
 {$ENDIF}
+{$IFDEF ANDROID}
+    //nasty nasty hack. TODO: implement callback to java to have a unified way of determining if it is a tablet
+    if (cScreenWidth < 1000) and (cScreenHeight < 500) then
+    begin
+        exit(true);
+    end
+    else exit(false);
+{$ELSE}
     exit(false);
+{$ENDIF}
 end;
 
 // this function should make the device vibrate in some way
