@@ -201,6 +201,11 @@
 		619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619C5AF3124F7E3100D041AE /* LuaPas.pas */; };
 		619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		61A19AFC14D20170004B1E6D /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19AEA14D2010A004B1E6D /* libSDL.a */; };
+		61A19B7714D20B7A004B1E6D /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19B6614D20B6C004B1E6D /* libSDL_image.a */; };
+		61A19BC714D20CE7004B1E6D /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19BC614D20CDA004B1E6D /* libSDL_ttf.a */; };
+		61A19BFA14D20D95004B1E6D /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19BF914D20D83004B1E6D /* libSDL_net.a */; };
+		61A19C2414D20F5A004B1E6D /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19C2314D20F51004B1E6D /* libSDL_mixer.a */; };
 		61A4A39412A5CCC2004D81E6 /* uCommandHandlers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38912A5CCC2004D81E6 /* uCommandHandlers.pas */; };
 		61A4A39512A5CCC2004D81E6 /* uCommands.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38A12A5CCC2004D81E6 /* uCommands.pas */; };
 		61A4A39612A5CCC2004D81E6 /* uDebug.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38B12A5CCC2004D81E6 /* uDebug.pas */; };
@@ -220,11 +225,6 @@
 		61AC067412B2E32D000B52A2 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 61AC067312B2E32D000B52A2 /* Appirater.m */; };
 		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61B7A33812CC21080086B604 /* StatsPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B7A33712CC21080086B604 /* StatsPageViewController.m */; };
-		61B7A61512FA13B00051E14E /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A54E12FA129F0051E14E /* libSDL.a */; };
-		61B7A61612FA13B00051E14E /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A55812FA12AD0051E14E /* libSDL_image.a */; };
-		61B7A61712FA13B00051E14E /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A56012FA12BF0051E14E /* libSDL_mixer.a */; };
-		61B7A61812FA13B00051E14E /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A56812FA12D00051E14E /* libSDL_net.a */; };
-		61B7A61912FA13B00051E14E /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61B7A59012FA13330051E14E /* libSDL_ttf.a */; };
 		61B9A86814423A9D001541C1 /* GameConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
 		61C28D3F142D380400DA16C2 /* AudioManagerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C28D3E142D380400DA16C2 /* AudioManagerController.m */; };
@@ -302,46 +302,46 @@
 			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = libFreetype;
 		};
-		61B7A54D12FA129F0051E14E /* PBXContainerItemProxy */ = {
+		61A19AE914D2010A004B1E6D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */;
+			containerPortal = 61A19AE314D2010A004B1E6D /* SDL.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = FD6526630DE8FCCB002AD96B;
-			remoteInfo = StaticLibiPhoneOS;
+			remoteGlobalIDString = FD6526630DE8FCCB002AD96B /* libSDL.a */;
+			remoteInfo = libSDL;
 		};
-		61B7A54F12FA129F0051E14E /* PBXContainerItemProxy */ = {
+		61A19AEB14D2010A004B1E6D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */;
+			containerPortal = 61A19AE314D2010A004B1E6D /* SDL.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 006E982211955059001DE610;
+			remoteGlobalIDString = 006E982211955059001DE610 /* testsdl.app */;
 			remoteInfo = testsdl;
 		};
-		61B7A55712FA12AD0051E14E /* PBXContainerItemProxy */ = {
+		61A19B6514D20B6C004B1E6D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6127232E117DF752005B90CF /* SDL_image.xcodeproj */;
+			containerPortal = 61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = BE1FA74107AF4C45004B6283;
+			remoteGlobalIDString = BE1FA74107AF4C45004B6283 /* libSDL_image.a */;
+			remoteInfo = libSDL_image;
+		};
+		61A19BC514D20CDA004B1E6D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61A19BC114D20CDA004B1E6D /* SDL_ttf.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BE48FD6E07AFA17000BB41DA /* libSDL_ttf.a */;
 			remoteInfo = "Static Library";
 		};
-		61B7A55F12FA12BF0051E14E /* PBXContainerItemProxy */ = {
+		61A19BF814D20D83004B1E6D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */;
+			containerPortal = 61A19BF414D20D83004B1E6D /* SDL_net.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = BE1FA95407AF96B2004B6283;
+			remoteGlobalIDString = BE48FF6F07AFA9A900BB41DA /* libSDL_net.a */;
 			remoteInfo = "Static Library";
 		};
-		61B7A56712FA12D00051E14E /* PBXContainerItemProxy */ = {
+		61A19C2214D20F51004B1E6D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */;
+			containerPortal = 61A19C1E14D20F51004B1E6D /* SDL_mixer.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = BE48FF6F07AFA9A900BB41DA;
-			remoteInfo = "Static Library";
-		};
-		61B7A58F12FA13330051E14E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = BE48FD6E07AFA17000BB41DA;
+			remoteGlobalIDString = BE1FA95407AF96B2004B6283 /* libSDL_mixer.a */;
 			remoteInfo = "Static Library";
 		};
 		928301590F10E41300CC5A3C /* PBXContainerItemProxy */ = {
@@ -420,7 +420,6 @@
 		611EEBC3122B355700DF6938 /* helpright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpright.png; path = Resources/Overlay/helpright.png; sourceTree = "<group>"; };
 		611EEC30122B54D700DF6938 /* helpplain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpplain.png; path = Resources/Overlay/helpplain.png; sourceTree = "<group>"; };
 		611F4D4A11B27A9900F9759A /* uScript.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uScript.pas; path = ../../hedgewars/uScript.pas; sourceTree = SOURCE_ROOT; };
-		6127232E117DF752005B90CF /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = ../../../Library/SDL_image/Xcode_iPhone/SDL_image.xcodeproj; sourceTree = SOURCE_ROOT; };
 		61272338117DF778005B90CF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		6129B9F611EFB04D0017E305 /* denied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = denied.png; path = Resources/denied.png; sourceTree = "<group>"; };
 		612CABAA1391CE68005E9596 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -577,10 +576,7 @@
 		6179880C114AA34C00BA94A9 /* uTeams.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTeams.pas; path = ../../hedgewars/uTeams.pas; sourceTree = SOURCE_ROOT; };
 		6179880E114AA34C00BA94A9 /* uVisualGears.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVisualGears.pas; path = ../../hedgewars/uVisualGears.pas; sourceTree = SOURCE_ROOT; };
 		6179880F114AA34C00BA94A9 /* uWorld.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uWorld.pas; path = ../../hedgewars/uWorld.pas; sourceTree = SOURCE_ROOT; };
-		617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDLiPhoneOS.xcodeproj; path = "../../../Library/SDL/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61798934114AB25F00BA94A9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = "../../../Library/SDL_mixer/Xcode-iPhoneOS/SDL_mixer.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_ttf.xcodeproj; path = "../../../Library/SDL_ttf/Xcode-iPhoneOS/SDL_ttf.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Data; path = ../../../trunk/project_files/HedgewarsMobile/Data; sourceTree = "<group>"; };
 		617BC22D1490210E00E1C294 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Locale/Italian.lproj/About.strings; sourceTree = "<group>"; };
 		617BC2391490211500E1C294 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Locale/Italian.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -592,7 +588,6 @@
 		61842B3F122B66280096E335 /* helpleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpleft.png; path = Resources/Overlay/helpleft.png; sourceTree = "<group>"; };
 		618899811299516000D55FD6 /* title@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "title@2x~iphone.png"; path = "Resources/Frontend/title@2x~iphone.png"; sourceTree = "<group>"; };
 		61889984129995B500D55FD6 /* title~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "title~ipad.png"; path = "Resources/Frontend/title~ipad.png"; sourceTree = "<group>"; };
-		618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_net.xcodeproj; path = "../../../Library/SDL_net/Xcode-iPhoneOS/SDL_net.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61915D58143A4E2C00299991 /* MissionTrainingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissionTrainingViewController.h; sourceTree = "<group>"; };
 		61915D59143A4E2C00299991 /* MissionTrainingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissionTrainingViewController.m; sourceTree = "<group>"; };
 		61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController-iPhone.xib"; sourceTree = "<group>"; };
@@ -611,6 +606,11 @@
 		619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPreviewButtonView.h; path = Classes/MapPreviewButtonView.h; sourceTree = "<group>"; };
 		619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapPreviewButtonView.m; path = Classes/MapPreviewButtonView.m; sourceTree = "<group>"; };
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		61A19AE314D2010A004B1E6D /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../../Library/SDL/Xcode-iOS/SDL/SDL.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = "../../../Library/SDL_image/Xcode-iOS/SDL_image.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		61A19BC114D20CDA004B1E6D /* SDL_ttf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_ttf.xcodeproj; path = "../../../Library/SDL_ttf/Xcode-iOS/SDL_ttf.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		61A19BF414D20D83004B1E6D /* SDL_net.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_net.xcodeproj; path = "../../../Library/SDL_net/Xcode-iOS/SDL_net.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		61A19C1E14D20F51004B1E6D /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = "../../../Library/SDL_mixer/Xcode-iOS/SDL_mixer.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61A4A38912A5CCC2004D81E6 /* uCommandHandlers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCommandHandlers.pas; path = ../../hedgewars/uCommandHandlers.pas; sourceTree = SOURCE_ROOT; };
 		61A4A38A12A5CCC2004D81E6 /* uCommands.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCommands.pas; path = ../../hedgewars/uCommands.pas; sourceTree = SOURCE_ROOT; };
 		61A4A38B12A5CCC2004D81E6 /* uDebug.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uDebug.pas; path = ../../hedgewars/uDebug.pas; sourceTree = SOURCE_ROOT; };
@@ -700,11 +700,11 @@
 				619599C01364E66B00B429B6 /* libFreetype.a in Frameworks */,
 				619599451364C83D00B429B6 /* libLua.a in Frameworks */,
 				6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */,
-				61B7A61512FA13B00051E14E /* libSDL.a in Frameworks */,
-				61B7A61612FA13B00051E14E /* libSDL_image.a in Frameworks */,
-				61B7A61712FA13B00051E14E /* libSDL_mixer.a in Frameworks */,
-				61B7A61812FA13B00051E14E /* libSDL_net.a in Frameworks */,
-				61B7A61912FA13B00051E14E /* libSDL_ttf.a in Frameworks */,
+				61A19AFC14D20170004B1E6D /* libSDL.a in Frameworks */,
+				61A19B7714D20B7A004B1E6D /* libSDL_image.a in Frameworks */,
+				61A19C2414D20F5A004B1E6D /* libSDL_mixer.a in Frameworks */,
+				61A19BFA14D20D95004B1E6D /* libSDL_net.a in Frameworks */,
+				61A19BC714D20CE7004B1E6D /* libSDL_ttf.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -818,11 +818,11 @@
 				619599BA1364E65900B429B6 /* Freetype.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
 				619598181364BCD200B429B6 /* Tremor.xcodeproj */,
-				617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */,
-				6127232E117DF752005B90CF /* SDL_image.xcodeproj */,
-				6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */,
-				618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */,
-				61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */,
+				61A19AE314D2010A004B1E6D /* SDL.xcodeproj */,
+				61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */,
+				61A19C1E14D20F51004B1E6D /* SDL_mixer.xcodeproj */,
+				61A19BF414D20D83004B1E6D /* SDL_net.xcodeproj */,
+				61A19BC114D20CDA004B1E6D /* SDL_ttf.xcodeproj */,
 				61798934114AB25F00BA94A9 /* AudioToolbox.framework */,
 				612CABAA1391CE68005E9596 /* AVFoundation.framework */,
 				61A117FE1168322700359010 /* CoreGraphics.framework */,
@@ -1056,43 +1056,43 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		61B7A54712FA129F0051E14E /* Products */ = {
+		61A19AE414D2010A004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61B7A54E12FA129F0051E14E /* libSDL.a */,
-				61B7A55012FA129F0051E14E /* testsdl.app */,
+				61A19AEA14D2010A004B1E6D /* libSDL.a */,
+				61A19AEC14D2010A004B1E6D /* testsdl.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		61B7A55412FA12AD0051E14E /* Products */ = {
+		61A19B6214D20B6C004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61B7A55812FA12AD0051E14E /* libSDL_image.a */,
+				61A19B6614D20B6C004B1E6D /* libSDL_image.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		61B7A55C12FA12BF0051E14E /* Products */ = {
+		61A19BC214D20CDA004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61B7A56012FA12BF0051E14E /* libSDL_mixer.a */,
+				61A19BC614D20CDA004B1E6D /* libSDL_ttf.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		61B7A56412FA12D00051E14E /* Products */ = {
+		61A19BF514D20D83004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61B7A56812FA12D00051E14E /* libSDL_net.a */,
+				61A19BF914D20D83004B1E6D /* libSDL_net.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		61B7A58C12FA13330051E14E /* Products */ = {
+		61A19C1F14D20F51004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61B7A59012FA13330051E14E /* libSDL_ttf.a */,
+				61A19C2314D20F51004B1E6D /* libSDL_mixer.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1348,24 +1348,24 @@
 					ProjectRef = 6195993F1364C82B00B429B6 /* Lua.xcodeproj */;
 				},
 				{
-					ProductGroup = 61B7A55412FA12AD0051E14E /* Products */;
-					ProjectRef = 6127232E117DF752005B90CF /* SDL_image.xcodeproj */;
+					ProductGroup = 61A19AE414D2010A004B1E6D /* Products */;
+					ProjectRef = 61A19AE314D2010A004B1E6D /* SDL.xcodeproj */;
 				},
 				{
-					ProductGroup = 61B7A55C12FA12BF0051E14E /* Products */;
-					ProjectRef = 6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */;
+					ProductGroup = 61A19B6214D20B6C004B1E6D /* Products */;
+					ProjectRef = 61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */;
 				},
 				{
-					ProductGroup = 61B7A56412FA12D00051E14E /* Products */;
-					ProjectRef = 618E27B612A2C30700C20EF0 /* SDL_net.xcodeproj */;
+					ProductGroup = 61A19C1F14D20F51004B1E6D /* Products */;
+					ProjectRef = 61A19C1E14D20F51004B1E6D /* SDL_mixer.xcodeproj */;
 				},
 				{
-					ProductGroup = 61B7A58C12FA13330051E14E /* Products */;
-					ProjectRef = 61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */;
+					ProductGroup = 61A19BF514D20D83004B1E6D /* Products */;
+					ProjectRef = 61A19BF414D20D83004B1E6D /* SDL_net.xcodeproj */;
 				},
 				{
-					ProductGroup = 61B7A54712FA129F0051E14E /* Products */;
-					ProjectRef = 617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */;
+					ProductGroup = 61A19BC214D20CDA004B1E6D /* Products */;
+					ProjectRef = 61A19BC114D20CDA004B1E6D /* SDL_ttf.xcodeproj */;
 				},
 				{
 					ProductGroup = 619598191364BCD200B429B6 /* Products */;
@@ -1403,46 +1403,46 @@
 			remoteRef = 619599BE1364E65900B429B6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61B7A54E12FA129F0051E14E /* libSDL.a */ = {
+		61A19AEA14D2010A004B1E6D /* libSDL.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libSDL.a;
-			remoteRef = 61B7A54D12FA129F0051E14E /* PBXContainerItemProxy */;
+			remoteRef = 61A19AE914D2010A004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61B7A55012FA129F0051E14E /* testsdl.app */ = {
+		61A19AEC14D2010A004B1E6D /* testsdl.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
 			path = testsdl.app;
-			remoteRef = 61B7A54F12FA129F0051E14E /* PBXContainerItemProxy */;
+			remoteRef = 61A19AEB14D2010A004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61B7A55812FA12AD0051E14E /* libSDL_image.a */ = {
+		61A19B6614D20B6C004B1E6D /* libSDL_image.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libSDL_image.a;
-			remoteRef = 61B7A55712FA12AD0051E14E /* PBXContainerItemProxy */;
+			remoteRef = 61A19B6514D20B6C004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61B7A56012FA12BF0051E14E /* libSDL_mixer.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSDL_mixer.a;
-			remoteRef = 61B7A55F12FA12BF0051E14E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		61B7A56812FA12D00051E14E /* libSDL_net.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libSDL_net.a;
-			remoteRef = 61B7A56712FA12D00051E14E /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		61B7A59012FA13330051E14E /* libSDL_ttf.a */ = {
+		61A19BC614D20CDA004B1E6D /* libSDL_ttf.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libSDL_ttf.a;
-			remoteRef = 61B7A58F12FA13330051E14E /* PBXContainerItemProxy */;
+			remoteRef = 61A19BC514D20CDA004B1E6D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		61A19BF914D20D83004B1E6D /* libSDL_net.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL_net.a;
+			remoteRef = 61A19BF814D20D83004B1E6D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		61A19C2314D20F51004B1E6D /* libSDL_mixer.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL_mixer.a;
+			remoteRef = 61A19C2214D20F51004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
