@@ -171,7 +171,7 @@ extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_nativeQuit(
 }
 
 // Pause
-extern "C" void Java_org_libsdl_app_SDLActivity_nativePause(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_nativePause(
                                     JNIEnv* env, jclass cls)
 {
     if (Android_Window) {
@@ -181,7 +181,7 @@ extern "C" void Java_org_libsdl_app_SDLActivity_nativePause(
 }
 
 // Resume
-extern "C" void Java_org_libsdl_app_SDLActivity_nativeResume(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_nativeResume(
                                     JNIEnv* env, jclass cls)
 {
     if (Android_Window) {
@@ -190,7 +190,7 @@ extern "C" void Java_org_libsdl_app_SDLActivity_nativeResume(
     }
 }
 
-extern "C" void Java_org_libsdl_app_SDLActivity_nativeRunAudioThread(
+extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_nativeRunAudioThread(
                                     JNIEnv* env, jclass cls)
 {
     /* This is the audio thread, with a different environment */

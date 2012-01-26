@@ -369,7 +369,7 @@ for ii:= Low(TSprite) to High(TSprite) do
 // This should maybe be flagged. It wastes quite a bit of memory.
                 if not reload then
                     begin
-{$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
+{$IF DEFINED(DARWIN) OR DEFINED(WIN32) or DEFINED(ANDROID)}
                     Surface:= tmpsurf 
 {$ELSE}
                     if saveSurf then
@@ -998,7 +998,11 @@ begin
 
     AddFileLog('Preparing to change video parameters...');
 {$IFNDEF IPHONEOS}
+    {$IFDEF SDL13}
+    if SDLwindow = nil then
+    {$ELSE}
     if SDLPrimSurface = nil then
+    {$ENDIF}
         begin
         // set window title
         SDL_WM_SetCaption('Hedgewars', nil);
@@ -1006,7 +1010,7 @@ begin
         SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
         WriteLnToConsole(msgOK);
         // load engine icon
-{$IFNDEF DARWIN}
+    {$IFNDEF DARWIN}
         ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
         if ico = nil then
             ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
@@ -1015,18 +1019,18 @@ begin
             SDL_WM_SetIcon(ico, 0);
             SDL_FreeSurface(ico)
             end;
-{$ENDIF}
+    {$ENDIF}
         end
     else
         begin
         SetScale(cDefaultZoomLevel);
-{$IF DEFINED(DARWIN) OR DEFINED(WIN32)}
+     {$IF DEFINED(DARWIN) OR DEFINED(WIN32) or DEFINED(ANDROID)}
         reinit:= true;
         StoreRelease(true);
         ResetLand;
         ResetWorldTex;
         //uTextures.freeModule; //DEBUG ONLY
-{$ENDIF}
+    {$ENDIF}
         AddFileLog('Freeing old primary surface...');
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
@@ -1047,14 +1051,14 @@ begin
     y:= SDL_WINDOWPOS_CENTERED_MASK;
     flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN;
 
-{$IFDEF MOBILE}
+    {$IFDEF MOBILE}
     // make the sdl window appear on the second monitor when present
     x:= x or (SDL_GetNumVideoDisplays() - 1);
     y:= y or (SDL_GetNumVideoDisplays() - 1);
 
     SDL_SetHint('SDL_IOS_ORIENTATIONS','LandscapeLeft LandscapeRight');
     flags:= flags or SDL_WINDOW_BORDERLESS or SDL_WINDOW_RESIZABLE;
-{$ENDIF}
+    {$ENDIF}
 
     if SDLwindow = nil then
         if cFullScreen then
@@ -1069,13 +1073,13 @@ begin
 
     if not cOnlyStats then
         begin
-{$IFDEF WIN32}
+    {$IFDEF WIN32}
         s:= SDL_getenv('SDL_VIDEO_CENTERED');
         SDL_putenv('SDL_VIDEO_CENTERED=1');
-{$ENDIF}
+    {$ENDIF}
         SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
         SDLTry(SDLPrimSurface <> nil, true);
-{$IFDEF WIN32}SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));{$ENDIF}
+    {$IFDEF WIN32}SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));{$ENDIF}
         end;
 {$ENDIF}
 
