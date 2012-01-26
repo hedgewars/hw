@@ -68,11 +68,11 @@ void checkSeason()
    QDate date = QDate::currentDate();
    
    //Christmas?
-   if (date.month() == 12 && date.daysInMonth() >= 24 
-	&& date.daysInMonth() <= 26)
+   if (date.month() == 12 && date.day() >= 24
+        && date.day() <= 26)
 	season = SEASON_CHRISTMAS;
    //Hedgewars birthday?
-   else if (date.month() == 10 && date.daysInMonth() == 31)
+   else if (date.month() == 10 && date.day() == 31)
    {
    	season = SEASON_HWBDAY;
 	years_since_foundation = date.year() - 2004;
