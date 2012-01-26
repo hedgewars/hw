@@ -167,6 +167,7 @@ begin
     while isTerminated = false do
     begin
         SDL_PumpEvents();
+ 
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL13}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
         begin
             case event.type_ of
@@ -190,6 +191,9 @@ begin
                     else if event.window.event = SDL_WINDOWEVENT_RESTORED then
                         begin
                         GameState:= previousGameState;
+{$IFDEF ANDROID}        //This call is used to reinitialize the glcontext and reload the textures
+                        ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+{$ENDIF}
                         end
                     else if event.window.event = SDL_WINDOWEVENT_RESIZED then
                         begin
@@ -291,7 +295,7 @@ var
 begin
 {$IFDEF HWLIBRARY}
     cBits:= 32;
-    cFullScreen:= false;
+    cFullScreen:= true;
     cTimerInterval:= 8;
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     val(gameArgs[0], ipcPort);
