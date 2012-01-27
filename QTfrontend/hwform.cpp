@@ -41,9 +41,12 @@
 #include <QDesktopServices>
 #include <QInputDialog>
 #include <QPropertyAnimation>
+#include <QSettings>
+
+#if (QT_VERSION >= 0x040600)
 #include <QGraphicsEffect>
 #include <QParallelAnimationGroup>
-#include <QSettings>
+#endif
 
 #include "hwform.h"
 #include "game.h"
@@ -593,6 +596,7 @@ void HWForm::GoToPage(int id)
     if (id == ID_PAGE_DRAWMAP)
         stopAnim = true;
 
+#if (QT_VERSION >= 0x040600)
     if (!stopAnim)
     {
         /**Start animation :**/
@@ -651,6 +655,7 @@ void HWForm::GoToPage(int id)
 
         connect(animationOldSlide, SIGNAL(finished()), ui.Pages->widget(lastid), SLOT(hide()));
     }
+#endif
 }
 
 void HWForm::GoBack()
@@ -700,8 +705,8 @@ void HWForm::GoBack()
     if (curid == ID_PAGE_SCHEME)
         ammoSchemeModel->Save();
 
+#if (QT_VERSION >= 0x040600)
     /**Start animation :**/
-
     if (curid != 0 && !stopAnim)
     {
         int coeff = 1;
@@ -759,6 +764,7 @@ void HWForm::GoBack()
 
         connect(animationNewSlide, SIGNAL(finished()), ui.Pages->widget(curid), SLOT(hide()));
     }
+#endif
 }
 
 void HWForm::OpenSnapshotFolder()
