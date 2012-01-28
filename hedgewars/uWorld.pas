@@ -207,7 +207,7 @@ else
     AMyOffset:= AMSlotSize * 2;
     end;
 //aligns it to the bottom of the screen, minus the border
-AMShiftTarget:= ((cMaxSlotAmmoIndex + 1) * AMSlotSize) + AMyOffset;
+AMShiftTarget:= ((cMaxSlotAmmoIndex + 2) * AMSlotSize) + AMyOffset;
 AMShift:= AMShiftTarget;
 {$ELSE}
 AMxOffset:= 10;
@@ -308,18 +308,24 @@ begin
     y:= cScreenHeight - AMShiftTarget + AMShift;
     dec(x, BORDERSIZE);
     DrawSprite(sprAMCorners, x, y - BORDERSIZE, 0);//top left corner
-    for i:= 0 to cMaxSlotAmmoIndex do
+    for i:= 0 to cMaxSlotAmmoIndex +1 do
         DrawSprite(sprAMBorderVertical, x, y + i * AMSlotSize, 0);
-    DrawSprite(sprAMCorners, x, y + ((cMaxSlotAmmoIndex+1) * AMSlotSize) , 2);
+    DrawSprite(sprAMCorners, x, y + ((cMaxSlotAmmoIndex+2) * AMSlotSize) , 2);//bottom left corner
     inc(x, BORDERSIZE);
 
+    for i:= 0 to SlotsNum -2 do
+        DrawSprite(sprAMSlot, x + i * AMSlotSize, y, 2);
+    DrawSprite(sprAMSlot, x + (SlotsNum-1) * AMSlotSize, y, 1);
+
+    inc(y, AMSlotSize);
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
             if (CursorPoint.X >= x) and (CursorPoint.X <= x + AMSlotSize) then
                 Slot:= i;
-            DrawSprite(sprAMBorderHorizontal, x, y - BORDERSIZE, 0);
+            DrawSprite(sprAMBorderHorizontal, x, y - BORDERSIZE - AMSlotSize, 0);
             g:= 0;
+            
             for t:=0 to cMaxSlotAmmoIndex do
                 begin
                 DrawSprite(sprAMSlot, x, y + t * AMSlotSize, 1);
@@ -355,8 +361,10 @@ begin
     DrawSprite(sprAMCorners, x, y + ((cMaxSlotAmmoIndex+1) * AMSlotSize), 3); //bottom right corner
     DrawSprite(sprAMCorners, x - BORDERSIZE, y + (AMSlotSize * cMaxSlotAmmoIndex), 1);//top right  corner
 
-    for i:= 0 to cMaxSlotAmmoIndex do
+    dec(y, AMSlotSize);
+    for i:= 0 to cMaxSlotAmmoIndex + 1 do
         DrawSprite(sprAMBorderVertical, x,y + i * AMSlotSize, 1);
+    inc(y, AMSlotSize);
 {$ELSE}
     Slot:= 0;
     x:= (cScreenWidth shr 1) - AMShiftTarget + AMShift;
@@ -432,9 +440,13 @@ begin
                 end;
 
 {$IFDEF MOBILE}
-            DrawTexture(AMxOffset - ((SlotsNum * AMSlotSize) shr 1) + (AMSlotSize shr 1), cScreenHeight - AMShiftTarget + AMShift - (AMSlotSize shr 1), Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
+            DrawTexture(AMxOffset - ((SlotsNum * AMSlotSize) shr 1) + (AMSlotSize shr 1),
+                        cScreenHeight - AMShiftTarget + AMShift + (Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex^.h shr 1),
+                        Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
             if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
-                DrawTexture(AMxOffset - ((SlotsNum * AMSlotSize) shr 1) + Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex^.w + 25, cScreenHeight - AMShiftTarget + AMShift - (AMSlotSize shr 1), CountTexz[Ammo^[Slot, Pos].Count]);
+                DrawTexture(AMxOffset + ((SlotsNum * AMSlotSize) shr 1) - Round(Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex^.h * 1.5),
+                            cScreenHeight - AMShiftTarget + AMShift + (Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex^.h shr 1),
+                            CountTexz[Ammo^[Slot, Pos].Count]);
 {$ELSE}
             DrawTexture(cScreenWidth div 2 - (AMShiftTarget - 10) + AMShift, cScreenHeight - AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
             if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
@@ -1309,10 +1321,10 @@ begin
         CursorPoint.X:= AMxOffset - ((SlotsNum* AMSlotSize) shr 1);
     if CursorPoint.X > (AMxOffset + (SlotsNum * AMSlotSize) shr 1) then//check right
         CursorPoint.X:= (AMxOffset + (SlotsNum * AMSlotSize) shr 1);
-    if CursorPoint.Y > (AMShiftTarget + AMShift) then//check top
-        CursorPoint.Y:= AMShiftTarget + AMShift;
-    if CursorPoint.Y < (AMShiftTarget + AMShift) - ((cMaxSlotAmmoIndex+1) * AMSlotSize) then//check bottom
-        CursorPoint.Y:= (AMShiftTarget + AMShift) - ((cMaxSlotAmmoIndex+1) * AMSlotSize);
+    if CursorPoint.Y > (AMShiftTarget + AMShift - AMSlotSize) then//check top
+        CursorPoint.Y:= AMShiftTarget + AMShift - AMSlotSize;
+    if CursorPoint.Y < (AMShiftTarget + AMShift) - ((cMaxSlotAmmoIndex+2) * AMSlotSize) then//check bottom
+        CursorPoint.Y:= (AMShiftTarget + AMShift) - ((cMaxSlotAmmoIndex+2) * AMSlotSize);
 {$ELSE}
     if CursorPoint.X < cScreenWidth div 2 + AMShift - AMShiftTarget + AMSlotSize then
         CursorPoint.X:= cScreenWidth div 2 + AMShift - AMShiftTarget + AMSlotSize;
