@@ -61,7 +61,7 @@ uses
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
-    AMSlotSize, AMxOffset, AMyOffset, AMWidth, AMxShift, SlotsNum: LongInt;
+    AMSlotSize, AMxOffset, AMyOffset, AMShiftTarget, AMShift, SlotsNum: LongInt;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture;
     timeTexture: PTexture;
@@ -199,20 +199,22 @@ AMSlotSize:= 33;
 if isPhone() then
     begin
     AMxOffset:= -30 + cScreenHeight div 2;
-    AMyOffset:= 10;
+    AMyOffset:= AMSlotSize;
     end
 else
     begin
-    AMxOffset:= AMSlotSize + cScreenHeight div 2;
-    AMyOffset:= -10 + cScreenWidth div 3;
+    AMxOffset:= 0;
+    AMyOffset:= AMSlotSize * 2;
     end;
-AMWidth:= (cMaxSlotAmmoIndex + 1) * AMSlotSize + AMxOffset;
+//aligns it to the bottom of the screen, minus the border
+AMShiftTarget:= ((cMaxSlotAmmoIndex + 1) * AMSlotSize) + AMyOffset;
+AMShift:= AMShiftTarget;
 {$ELSE}
 AMxOffset:= 10;
 AMyOffset:= 60;
-AMWidth:= (cMaxSlotAmmoIndex + 2) * AMSlotSize + AMxOffset;
+AMShiftTarget:= (cMaxSlotAmmoIndex + 2) * AMSlotSize + AMxOffset;
+AMShift:= AMShiftTarget;
 {$ENDIF}
-AMxShift:= AMWidth;
 SkyOffset:= 0;
 HorizontOffset:= 0;
 end;
@@ -248,32 +250,36 @@ begin
     // show ammo menu
         begin
         FollowGear:= nil;
-        if AMxShift = AMWidth then
+        if AMShift = AMShiftTarget then
+{$IFDEF MOBILE}
+            prevPoint.Y:= 0;
+{$ELSE}
             prevPoint.X:= 0;
+{$ENDIF}
         if (cReducedQuality and rqSlowMenu) <> 0 then
-            AMxShift:= 0
+            AMShift:= 0
         else
-            if AMxShift > MENUSPEED then
-                dec(AMxShift, MENUSPEED)
+            if AMShift > MENUSPEED then
+                dec(AMShift, MENUSPEED)
             else
-                AMxShift:= 0;
+                AMShift:= 0;
         end
     else
     // hide ammo menu
         begin
-        if AMxShift = 0 then
+        if AMShift = 0 then
             begin
             CursorPoint.X:= cScreenWidth shr 1;
             CursorPoint.Y:= cScreenHeight shr 1;
             prevPoint:= CursorPoint;
             end;
         if (cReducedQuality and rqSlowMenu) <> 0 then
-            AMxShift:= AMWidth+2
+            AMShift:= AMShiftTarget+2
         else
-            if AMxShift < (AMWidth - MENUSPEED) then
-                inc(AMxShift, MENUSPEED)
+            if AMShift < (AMShiftTarget - MENUSPEED) then
+                inc(AMShift, MENUSPEED)
             else
-                AMxShift:= AMWidth;
+                AMShift:= AMShiftTarget;
         end;
 
     // give the assigned ammo to hedgehog
@@ -290,77 +296,81 @@ begin
         exit
         end;
     SlotsNum:= 0;
-    x:= (cScreenWidth shr 1) - AMWidth + AMxShift;
 
 {$IFDEF MOBILE}
     Slot:= cMaxSlotIndex;
-    x:= x - cOffsetY;
-    y:= AMyOffset;
-    dec(y, BORDERSIZE);
-    DrawSprite(sprAMCorners, x - BORDERSIZE, y, 0);
+
+    for i:= 0 to cMaxSlotIndex do
+        if((i = 0) and (Ammo^[i,1].Count > 0)) or ((i <> 0) and (Ammo^[i,0].Count > 0)) then
+            inc(SlotsNum);
+
+    x:= AMxOffset - ((SlotsNum * AMSlotSize) shr 1);
+    y:= cScreenHeight - AMShiftTarget + AMShift;
+    dec(x, BORDERSIZE);
+    DrawSprite(sprAMCorners, x, y - BORDERSIZE, 0);//top left corner
     for i:= 0 to cMaxSlotAmmoIndex do
-        DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 0);
-    DrawSprite(sprAMCorners, x + AMWidth - AMxOffset, y, 1);
-    inc(y, BORDERSIZE);
+        DrawSprite(sprAMBorderVertical, x, y + i * AMSlotSize, 0);
+    DrawSprite(sprAMCorners, x, y + ((cMaxSlotAmmoIndex+1) * AMSlotSize) , 2);
+    inc(x, BORDERSIZE);
 
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
-            if (cScreenHeight - CursorPoint.Y >= y) and (cScreenHeight - CursorPoint.Y <= y + AMSlotSize) then
+            if (CursorPoint.X >= x) and (CursorPoint.X <= x + AMSlotSize) then
                 Slot:= i;
-            inc(SlotsNum);
-            DrawSprite(sprAMBorderVertical, x - BORDERSIZE, y, 0);
-            t:= 0;
+            DrawSprite(sprAMBorderHorizontal, x, y - BORDERSIZE, 0);
             g:= 0;
-            while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
+            for t:=0 to cMaxSlotAmmoIndex do
                 begin
-                DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 1);
-                if (Ammo^[i, t].AmmoType <> amNothing) then
+                DrawSprite(sprAMSlot, x, y + t * AMSlotSize, 1);
+                if (Ammo^[i, t].Count > 0) then
                     begin
-                    STurns:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
+                    if (Ammo^[i, t].AmmoType <> amNothing) then
+                        begin
+                        STurns:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
 
-                    if STurns >= 0 then
-                        begin
-                        DrawSprite(sprAMAmmosBW, x + g * AMSlotSize, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
-                        if STurns < 100 then
-                            DrawSprite(sprTurnsLeft, x + (g + 1) * AMSlotSize - 16, y + AMSlotSize - 16, STurns);
-                        end
-                    else
-                        DrawSprite(sprAMAmmos, x + g * AMSlotSize, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
-                    if (Slot = i) and (CursorPoint.X >= x + g * AMSlotSize) and
-                       (CursorPoint.X <= x + (g + 1) * AMSlotSize) then
-                        begin
-                        if (STurns < 0) then
-                            DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 0);
-                        Pos:= t;
+                        if STurns >= 0 then //weapon not usable yet, draw grayed out with turns remaining
+                            begin
+                            DrawSprite(sprAMAmmosBW, x, y + (g * AMSlotSize) + 1, LongInt(Ammo^[i, t].AmmoType)-1);
+                            if STurns < 100 then
+                                DrawSprite(sprTurnsLeft, x + AMSlotSize-16, y + (g + 1) * AMSlotSize-16, STurns);
+                            end
+                        else //draw colored version
+                            DrawSprite(sprAMAmmos, x, y + (g * AMSlotSize) + 1, LongInt(Ammo^[i, t].AmmoType)-1);
+                        if (Slot = i) and (CursorPoint.Y <= (cScreenHeight - y) - (g * AMSlotSize)) and
+                           (CursorPoint.Y >= (cScreenHeight - y) - ((g+1) * AMSlotSize)) then
+                            begin
+                            if (STurns < 0) then
+                                DrawSprite(sprAMSlot, x, y + (g * AMSlotSize), 0);
+                            Pos:= t;
+                            end;
+                        inc(g);
                         end;
-                    inc(g)
                     end;
-                inc(t)
                 end;
-            for g:= g to cMaxSlotAmmoIndex do
-                DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 1);
-            DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
-            inc(y, AMSlotSize);
+            DrawSprite(sprAMBorderHorizontal, x, y + ((cMaxSlotAmmoIndex+1) * AMSlotSize), 1);
+            inc(x, AMSlotSize);
             end;
 
-    DrawSprite(sprAMCorners, x - BORDERSIZE, y, 2);
+    DrawSprite(sprAMCorners, x, y + ((cMaxSlotAmmoIndex+1) * AMSlotSize), 3); //bottom right corner
+    DrawSprite(sprAMCorners, x - BORDERSIZE, y + (AMSlotSize * cMaxSlotAmmoIndex), 1);//top right  corner
+
     for i:= 0 to cMaxSlotAmmoIndex do
-        DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 1);
-    DrawSprite(sprAMCorners, x + AMWidth - AMxOffset, y, 3);
+        DrawSprite(sprAMBorderVertical, x,y + i * AMSlotSize, 1);
 {$ELSE}
     Slot:= 0;
+    x:= (cScreenWidth shr 1) - AMShiftTarget + AMShift;
     y:= cScreenHeight - AMyOffset;
     DrawSprite(sprAMCorners, x - BORDERSIZE, y, 2);
     for i:= 0 to cMaxSlotAmmoIndex + 1 do
         DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 1);
-    DrawSprite(sprAMCorners, x + AMWidth - AMxOffset, y, 3);
+    DrawSprite(sprAMCorners, x + AMShiftTarget - AMxOffset, y, 3);
     dec(y, AMSlotSize);
     DrawSprite(sprAMBorderVertical, x - BORDERSIZE, y, 0);
     for i:= 0 to cMaxSlotAmmoIndex do
         DrawSprite(sprAMSlot, x + i * AMSlotSize, y, 2);
     DrawSprite(sprAMSlot, x + (cMaxSlotAmmoIndex + 1) * AMSlotSize, y, 1);
-    DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
+    DrawSprite(sprAMBorderVertical, x + AMShiftTarget - AMxOffset, y, 1);
 
     for i:= cMaxSlotIndex downto 0 do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
@@ -401,14 +411,14 @@ begin
                 end;
             for g:= g to cMaxSlotAmmoIndex + 1 do
                 DrawSprite(sprAMSlot, x + g * AMSlotSize, y, 1);
-            DrawSprite(sprAMBorderVertical, x + AMWidth - AMxOffset, y, 1);
+            DrawSprite(sprAMBorderVertical, x + AMShiftTarget - AMxOffset, y, 1);
             end;
 
     dec(y, BORDERSIZE);
     DrawSprite(sprAMCorners, x - BORDERSIZE, y, 0);
     for i:= 0 to cMaxSlotAmmoIndex + 1 do
         DrawSprite(sprAMBorderHorizontal, x + i * AMSlotSize, y, 0);
-    DrawSprite(sprAMCorners, x + AMWidth - AMxOffset, y, 1);
+    DrawSprite(sprAMCorners, x + AMShiftTarget - AMxOffset, y, 1);
 {$ENDIF}
 
     if (Pos >= 0) then
@@ -422,11 +432,11 @@ begin
                 end;
 
 {$IFDEF MOBILE}
-            DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + AMxShift, AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
+            DrawTexture(cScreenWidth div 2 - (AMShiftTarget - 10) + AMShift, AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
             if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
-                DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + 163, AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
+                DrawTexture(cScreenWidth div 2 - (AMShiftTarget - 10) + 163, AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
 {$ELSE}
-            DrawTexture(cScreenWidth div 2 - (AMWidth - 10) + AMxShift, cScreenHeight - AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
+            DrawTexture(cScreenWidth div 2 - (AMShiftTarget - 10) + AMShift, cScreenHeight - AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
             if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
                 DrawTexture(cScreenWidth div 2 + AMxOffset - 45, cScreenHeight - AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
 {$ENDIF}
@@ -444,19 +454,15 @@ begin
     else
         FreeWeaponTooltip;
 
-    if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
+    if (WeaponTooltipTex <> nil) and (AMShift = 0) then
 {$IFDEF MOBILE}
-    {$IFDEF ANDROID}
-        ShowWeaponTooltip((AMxOffset - (cScreenHeight div 2)) - WeaponTooltipTex^.w, (AMyOffset + ((SlotsNum * AmSlotSize)div 2)) - (WeaponTooltipTex^.h div 2));
-    {$ELSE}
-        ShowWeaponTooltip(-WeaponTooltipTex^.w div 2, 100);
-    {$ENDIF}
+        ShowWeaponTooltip(-WeaponTooltipTex^.w div 2, cScreenHeight - (AMShiftTarget + AMSlotSize + WeaponTooltipTex^.h));
 {$ELSE}
         ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, Min(y + 1, cScreenHeight - WeaponTooltipTex^.h - 40));
 {$ENDIF}
 
     bSelected:= false;
-    if AMxShift = 0 then
+    if AMShift = 0 then
         DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
 end;
 
@@ -1099,7 +1105,7 @@ if isInLag then
         end;
 
 // AmmoMenu
-if (AMxShift < AMWidth) or bShowAmmoMenu then
+if (AMShift < AMShiftTarget) or bShowAmmoMenu then
     ShowAmmoMenu;
 
 // Cursor
@@ -1296,22 +1302,22 @@ if WorldDy < wdy then
 if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then
     exit;
 
-if AMxShift < AMWidth then
+if AMShift < AMShiftTarget then
 begin
 {$IFDEF MOBILE}
-    if CursorPoint.X < cScreenWidth div 2 + AMxShift - AMWidth then
-        CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMWidth;
-    if CursorPoint.X > cScreenWidth div 2 + AMxShift - AMxOffset then
-        CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMxOffset;
-    if CursorPoint.Y < cScreenHeight - AMyOffset - SlotsNum * AMSlotSize then
-        CursorPoint.Y:= cScreenHeight - AMyOffset - SlotsNum * AMSlotSize;
-    if CursorPoint.Y > cScreenHeight - AMyOffset then
-        CursorPoint.Y:= cScreenHeight - AMyOffset;
+    if CursorPoint.X < AMxOffset - ((SlotsNum * AMSlotSize) shr 1) then//check left 
+        CursorPoint.X:= AMxOffset - ((SlotsNum* AMSlotSize) shr 1);
+    if CursorPoint.X > (AMxOffset + (SlotsNum * AMSlotSize) shr 1) then//check right
+        CursorPoint.X:= (AMxOffset + (SlotsNum * AMSlotSize) shr 1);
+    if CursorPoint.Y > (AMShiftTarget + AMShift) then//check top
+        CursorPoint.Y:= AMShiftTarget + AMShift;
+    if CursorPoint.Y < (AMShiftTarget + AMShift) - ((cMaxSlotAmmoIndex+1) * AMSlotSize) then//check bottom
+        CursorPoint.Y:= (AMShiftTarget + AMShift) - ((cMaxSlotAmmoIndex+1) * AMSlotSize);
 {$ELSE}
-    if CursorPoint.X < cScreenWidth div 2 + AMxShift - AMWidth + AMSlotSize then
-        CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMWidth + AMSlotSize;
-    if CursorPoint.X > cScreenWidth div 2 + AMxShift - AMxOffset then
-        CursorPoint.X:= cScreenWidth div 2 + AMxShift - AMxOffset;
+    if CursorPoint.X < cScreenWidth div 2 + AMShift - AMShiftTarget + AMSlotSize then
+        CursorPoint.X:= cScreenWidth div 2 + AMShift - AMShiftTarget + AMSlotSize;
+    if CursorPoint.X > cScreenWidth div 2 + AMShift - AMxOffset then
+        CursorPoint.X:= cScreenWidth div 2 + AMShift - AMxOffset;
     if CursorPoint.Y > AMyOffset + (SlotsNum + 1) * AMSlotSize then
         CursorPoint.Y:= AMyOffset + (SlotsNum + 1) * AMSlotSize;
     if CursorPoint.Y < AMyOffset + AMSlotSize then
