@@ -61,7 +61,7 @@ uses
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
-    AMSlotSize, AMxOffset, AMyOffset, AMShiftTarget, AMShift, SlotsNum: LongInt;
+    AMxOffset, AMyOffset, AMShiftTarget, AMShift, SlotsNum: LongInt;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture;
     timeTexture: PTexture;
@@ -189,34 +189,25 @@ InitCameraBorders();
 uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
-WorldDx:=  - (LAND_WIDTH div 2) + cScreenWidth div 2;
-WorldDy:=  - (LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
-// AMSlotSize is the active dimension of the ammo icon
-// AMWidth is the horizontal size of the whole ammomenu
-// cMaxSlotIndex is the amount of weapons per row
-AMSlotSize:= 33;
-{$IFDEF MOBILE}
-if isPhone() then
-    begin
-    AMxOffset:= -30 + cScreenHeight div 2;
-    AMyOffset:= AMSlotSize;
-    end
-else
-    begin
-    AMxOffset:= 0;
-    AMyOffset:= AMSlotSize * 2;
-    end;
+WorldDx:=  -(LAND_WIDTH div 2) + cScreenWidth div 2;
+WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
+
 //aligns it to the bottom of the screen, minus the border
-AMShiftTarget:= ((cMaxSlotAmmoIndex + 2) * AMSlotSize) + AMyOffset;
+AMShiftTarget:= (cMaxSlotAmmoIndex + 2) * AMSlotSize + AMxOffset;
 AMShift:= AMShiftTarget;
+SkyOffset:= 0;
+HorizontOffset:= 0;
+
+{$IFDEF MOBILE}
+AMxOffset:= 0;
+if isPhone() then
+    AMyOffset:= AMSlotSize
+else
+    AMyOffset:= AMSlotSize * 2;
 {$ELSE}
 AMxOffset:= 10;
 AMyOffset:= 60;
-AMShiftTarget:= (cMaxSlotAmmoIndex + 2) * AMSlotSize + AMxOffset;
-AMShift:= AMShiftTarget;
 {$ENDIF}
-SkyOffset:= 0;
-HorizontOffset:= 0;
 end;
 
 procedure InitCameraBorders;
