@@ -193,8 +193,6 @@ WorldDx:=  -(LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 
 //aligns it to the bottom of the screen, minus the border
-AMShiftTarget:= (cMaxSlotAmmoIndex + 2) * AMSlotSize + AMxOffset;
-AMShift:= AMShiftTarget;
 SkyOffset:= 0;
 HorizontOffset:= 0;
 
@@ -204,10 +202,14 @@ if isPhone() then
     AMyOffset:= AMSlotSize
 else
     AMyOffset:= AMSlotSize * 2;
+AMShiftTarget:= (cMaxSlotAmmoIndex + 2) * AMSlotSize + AMyOffset;
 {$ELSE}
 AMxOffset:= 10;
 AMyOffset:= 60;
+AMShiftTarget:= (cMaxSlotAmmoIndex + 2) * AMSlotSize + AMxOffset;
 {$ENDIF}
+
+AMShift:= AMShiftTarget;
 end;
 
 procedure InitCameraBorders;
