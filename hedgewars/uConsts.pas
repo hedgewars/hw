@@ -289,7 +289,7 @@ const
     htHealth      = $04;
     htTransparent = $08;
 
-
+    AMSlotSize = 33;
 
 implementation
 
