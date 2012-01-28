@@ -432,9 +432,9 @@ begin
                 end;
 
 {$IFDEF MOBILE}
-            DrawTexture(cScreenWidth div 2 - (AMShiftTarget - 10) + AMShift, AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
+            DrawTexture(AMxOffset - ((SlotsNum * AMSlotSize) shr 1) + (AMSlotSize shr 1), cScreenHeight - AMShiftTarget + AMShift - (AMSlotSize shr 1), Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
             if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
-                DrawTexture(cScreenWidth div 2 - (AMShiftTarget - 10) + 163, AMyOffset - 25, CountTexz[Ammo^[Slot, Pos].Count]);
+                DrawTexture(AMxOffset - ((SlotsNum * AMSlotSize) shr 1) + Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex^.w + 25, cScreenHeight - AMShiftTarget + AMShift - (AMSlotSize shr 1), CountTexz[Ammo^[Slot, Pos].Count]);
 {$ELSE}
             DrawTexture(cScreenWidth div 2 - (AMShiftTarget - 10) + AMShift, cScreenHeight - AMyOffset - 25, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
             if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
