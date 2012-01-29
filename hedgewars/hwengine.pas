@@ -191,18 +191,16 @@ begin
                     else if event.window.event = SDL_WINDOWEVENT_RESTORED then
                         begin
                         GameState:= previousGameState;
-{$IFDEF ANDROID}        //This call is used to reinitialize the glcontext and reload the textures
+{$IFDEF ANDROID}
+                        //This call is used to reinitialize the glcontext and reload the textures
                         ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
 {$ENDIF}
                         end
                     else if event.window.event = SDL_WINDOWEVENT_RESIZED then
                         begin
-                        // way too broken right now
-                        (*
                         cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
                         cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
-                        cScreenResizeDelay:= RealTicks+500;
-                        *)
+                        cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
                         end;
                         
                 SDL_FINGERMOTION:

@@ -625,7 +625,8 @@ begin
 {$IFDEF SDL13}
     // this function creates an opengles1.1 context by default on mobile devices
     // use SDL_GL_SetAttribute to change this behaviour
-    SDLGLcontext:=SDL_GL_CreateContext(SDLwindow);
+    if SDLGLcontext = nil then
+        SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
     SDLTry(SDLGLcontext <> nil, true);
     SDL_GL_SetSwapInterval(1);
 {$ENDIF}
@@ -710,15 +711,11 @@ begin
 {$ENDIF}
 
     // set view port to whole window
-    if (rotationQt = 0) or (rotationQt = 180) then
-        glViewport(0, 0, cScreenWidth, cScreenHeight)
-    else
-        glViewport(0, 0, cScreenHeight, cScreenWidth);
+    glViewport(0, 0, cScreenWidth, cScreenHeight)
 
     glMatrixMode(GL_MODELVIEW);
     // prepare default translation/scaling
     glLoadIdentity();
-    glRotatef(rotationQt, 0, 0, 1);
     glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
     glTranslatef(0, -cScreenHeight / 2, 0);
 
@@ -747,7 +744,6 @@ begin
         begin
         glPushMatrix;       // save default scaling
         glLoadIdentity;
-        glRotatef(rotationQt, 0, 0, 1);
         glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
         glTranslatef(0, -cScreenHeight / 2, 0);
         end;
@@ -997,15 +993,14 @@ begin
         cFullScreen:= s = '1';
 
     AddFileLog('Preparing to change video parameters...');
-{$IFNDEF IPHONEOS}
-    {$IFDEF SDL13}
+{$IFDEF SDL13}
     if SDLwindow = nil then
-    {$ELSE}
+{$ELSE}
     if SDLPrimSurface = nil then
-    {$ENDIF}
+{$ENDIF}
         begin
         // set window title
-        SDL_WM_SetCaption('Hedgewars', nil);
+        {$IFNDEF SDL13}SDL_WM_SetCaption('Hedgewars', nil);{$ENDIF}
         WriteToConsole('Init SDL_image... ');
         SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
         WriteLnToConsole(msgOK);
@@ -1023,6 +1018,17 @@ begin
         end
     else
         begin
+{$IFDEF IPHONEOS}
+        // chFullScr is called when there is a rotation event and needs the SetScale and SetupOpenGL to set up the new resolution
+        // this 6 gl functions are the relevant ones and are hacked together here for optimisation
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix;
+        glLoadIdentity();
+        glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
+        glTranslatef(0, -cScreenHeight / 2, 0);
+        glViewport(0, 0, cScreenWidth, cScreenHeight);
+        exit;
+{$ELSE}
         SetScale(cDefaultZoomLevel);
      {$IF DEFINED(DARWIN) OR DEFINED(WIN32) or DEFINED(ANDROID)}
         reinit:= true;
@@ -1034,8 +1040,8 @@ begin
         AddFileLog('Freeing old primary surface...');
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
-        end;
 {$ENDIF}
+        end;
 
     // these attributes must be set up before creating the sdl window
 {$IFNDEF WIN32}
@@ -1056,7 +1062,10 @@ begin
     x:= x or (SDL_GetNumVideoDisplays() - 1);
     y:= y or (SDL_GetNumVideoDisplays() - 1);
 
-    SDL_SetHint('SDL_IOS_ORIENTATIONS','LandscapeLeft LandscapeRight');
+    if isPhone() then
+        SDL_SetHint('SDL_IOS_ORIENTATIONS','LandscapeLeft LandscapeRight');
+
+    // on mobile the SDL_WINDOW_RESIZABLE makes the window respond to rotation events
     flags:= flags or SDL_WINDOW_BORDERLESS or SDL_WINDOW_RESIZABLE;
     {$ENDIF}
 
@@ -1112,7 +1121,6 @@ begin
 
     SDLPrimSurface:= nil;
 
-    rotationQt:= 0;
     cScaleFactor:= 2.0;
     Step:= 0;
     ProgrTex:= nil;
