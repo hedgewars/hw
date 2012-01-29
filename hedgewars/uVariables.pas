@@ -2334,8 +2334,7 @@ var
     ProgrTex: PTexture;
     MissionIcons: PSDL_Surface;
     ropeIconTex: PTexture;
-    // orientation of the viewport
-    rotationQt: GLfloat;
+
     // stereoscopic framebuffer and textures
     framel, framer, depthl, depthr: GLuint;
     texl, texr: GLuint;
