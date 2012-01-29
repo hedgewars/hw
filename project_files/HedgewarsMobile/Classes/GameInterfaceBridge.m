@@ -129,8 +129,14 @@ static UIViewController *callingController;
         height = screenBounds.size.height;
     } else {
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
-        width = screenBounds.size.height;
-        height = screenBounds.size.width;
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        if ((orientation == UIInterfaceOrientationLandscapeLeft) || (orientation == UIInterfaceOrientationLandscapeRight)) {
+            width = screenBounds.size.height;
+            height = screenBounds.size.width;
+        } else {
+            width = screenBounds.size.width;
+            height = screenBounds.size.height;
+        }
     }
 
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", (int)(width * screenScale)];

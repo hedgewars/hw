@@ -38,7 +38,7 @@
 
 
 #define ZAssert(condition, ...) do { if (!(condition)) { ALog(__VA_ARGS__); }} while(0)
-#define rotationManager(x) (x == UIInterfaceOrientationLandscapeRight) || (x == UIInterfaceOrientationLandscapeLeft)
+#define rotationManager(x) (IS_IPAD() ? YES : (x == UIInterfaceOrientationLandscapeRight) || (x == UIInterfaceOrientationLandscapeLeft))
 
 #define START_TIMER NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
 #define END_TIMER(msg) 	NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; CMLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
