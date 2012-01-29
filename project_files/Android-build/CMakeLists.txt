@@ -81,6 +81,10 @@ exec_program(${HGCOMMAND}
     OUTPUT_VARIABLE dontcare
 )
 exec_program(${HGCOMMAND}
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/file/SDL_rwops.c
+    OUTPUT_VARIABLE dontcare
+)
+exec_program(${HGCOMMAND}
     ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL_mixer/Android.mk
     OUTPUT_VARIABLE dontcare
 )
