@@ -1,21 +1,21 @@
 #if the headers are not installed, the newer apis won't be activated
 
-#find which version of SDL we are building against
-find_file(sdl_h SDL_version.h ${SDL_INCLUDE_DIR})
-if(sdl_h)
-    file(STRINGS ${sdl_h} sdl_majorversion_tmp REGEX "SDL_MAJOR_VERSION[\t' ']+[0-9]+")
-    file(STRINGS ${sdl_h} sdl_minorversion_tmp REGEX "SDL_MINOR_VERSION[\t' ']+[0-9]+")
-    file(STRINGS ${sdl_h} sdl_patchversion_tmp REGEX "SDL_PATCHLEVEL[\t' ']+[0-9]+")
-    string(REGEX MATCH ".([0-9]+)" sdl_majorversion "${sdl_majorversion_tmp}")
-    string(REGEX MATCH ".([0-9]+)" sdl_minorversion "${sdl_minorversion_tmp}")
-    string(REGEX MATCH ".([0-9]+)" sdl_patchversion "${sdl_patchversion_tmp}")
-    math(EXPR sdl_version "${sdl_majorversion}*10000 + ${sdl_minorversion}*100 + ${sdl_patchversion}")
-
-    if(NOT (sdl_version LESS "010300"))
-        message(STATUS "Enabling SDL-1.3+ calls")
-        set(pascal_compiler_flags_cmn "-dSDL13" ${pascal_compiler_flags_cmn})
-    endif()
-endif()
+##find which version of SDL we are building against
+#find_file(sdl_h SDL_version.h ${SDL_INCLUDE_DIR})
+#if(sdl_h)
+#    file(STRINGS ${sdl_h} sdl_majorversion_tmp REGEX "SDL_MAJOR_VERSION[\t' ']+[0-9]+")
+#    file(STRINGS ${sdl_h} sdl_minorversion_tmp REGEX "SDL_MINOR_VERSION[\t' ']+[0-9]+")
+#    file(STRINGS ${sdl_h} sdl_patchversion_tmp REGEX "SDL_PATCHLEVEL[\t' ']+[0-9]+")
+#    string(REGEX MATCH ".([0-9]+)" sdl_majorversion "${sdl_majorversion_tmp}")
+#    string(REGEX MATCH ".([0-9]+)" sdl_minorversion "${sdl_minorversion_tmp}")
+#    string(REGEX MATCH ".([0-9]+)" sdl_patchversion "${sdl_patchversion_tmp}")
+#    math(EXPR sdl_version "${sdl_majorversion}*10000 + ${sdl_minorversion}*100 + ${sdl_patchversion}")
+#
+#    if(NOT (sdl_version LESS "010300"))
+#        message(STATUS "Enabling SDL-1.3+ calls")
+#        set(pascal_compiler_flags_cmn "-dSDL13" ${pascal_compiler_flags_cmn})
+#    endif()
+#endif()
 
 #find which version of SDL_mixer we have (for Mix_Init)
 find_file(sdlmixer_h SDL_mixer.h ${SDLMIXER_INCLUDE_DIR})
