@@ -36,7 +36,7 @@ QLayout * PageCampaign::bodyLayoutDefinition()
 
     pageLayout->addWidget(CBTeam, 1, 1);
     pageLayout->addWidget(CBSelect, 2, 1);
-    
+
     BtnStartCampaign = new QPushButton(this);
     BtnStartCampaign->setFont(*font14);
     BtnStartCampaign->setText(QPushButton::tr("Go!"));

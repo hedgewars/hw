@@ -28,15 +28,15 @@
 
 class ToggleButtonWidget : public QPushButton
 {
-    Q_OBJECT
-public:
-    ToggleButtonWidget(QWidget * parent, QString img);
-    ~ToggleButtonWidget();
-private:
-    QPixmap pmChecked;
-    QPixmap pmDisabled;
-private slots:
-    void eventToggled(bool checked);
+        Q_OBJECT
+    public:
+        ToggleButtonWidget(QWidget * parent, QString img);
+        ~ToggleButtonWidget();
+    private:
+        QPixmap pmChecked;
+        QPixmap pmDisabled;
+    private slots:
+        void eventToggled(bool checked);
 };
 
 #endif // TOGGLEBUTTONWIDGET_H

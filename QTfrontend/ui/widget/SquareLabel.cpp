@@ -33,10 +33,13 @@ void SquareLabel::paintEvent(QPaintEvent * event)
 
     QPainter painter(this);
     int pixsize;
-    if (width() > height()) {
+    if (width() > height())
+    {
         pixsize = height();
         painter.translate((width() - pixsize) / 2, 0);
-    } else {
+    }
+    else
+    {
         pixsize = width();
         painter.translate(0, (height() - pixsize) / 2);
     }

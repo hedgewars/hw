@@ -36,20 +36,20 @@ void IconedGroupBox::setIcon(const QIcon & icon)
 {
     if (this->icon.isNull())
         setStyleSheet(QString(
-            "IconedGroupBox{"
-                "margin-top: 46px;"
-                "margin-left: 12px;"
-                "padding: %1px 2px 5px 2px;"
-                "}"
-            "IconedGroupBox::title{"
-                "subcontrol-origin: margin;"
-                "subcontrol-position: top left;"
-                "padding-left: %2px;"
-                "padding-top: %1px;"
-                "text-align: left;"
-                "}"
-                ).arg(contentTopPadding).arg(titleLeftPadding)
-        );
+                          "IconedGroupBox{"
+                          "margin-top: 46px;"
+                          "margin-left: 12px;"
+                          "padding: %1px 2px 5px 2px;"
+                          "}"
+                          "IconedGroupBox::title{"
+                          "subcontrol-origin: margin;"
+                          "subcontrol-position: top left;"
+                          "padding-left: %2px;"
+                          "padding-top: %1px;"
+                          "text-align: left;"
+                          "}"
+                      ).arg(contentTopPadding).arg(titleLeftPadding)
+                     );
 
     this->icon = icon;
     repaint();

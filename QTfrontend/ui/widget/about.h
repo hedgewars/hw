@@ -26,17 +26,17 @@
 
 class About : public QWidget
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    About(QWidget * parent = 0);
+    public:
+        About(QWidget * parent = 0);
 
-protected:
-    virtual void dragEnterEvent(QDragEnterEvent * event);
-    virtual void dropEvent(QDropEvent * event);
+    protected:
+        virtual void dragEnterEvent(QDragEnterEvent * event);
+        virtual void dropEvent(QDropEvent * event);
 
-private:
-    QTextBrowser * lbl2;
+    private:
+        QTextBrowser * lbl2;
 };
 
 #endif // _ABOUT_H

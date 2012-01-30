@@ -24,19 +24,18 @@ QVariant DataBrowser::loadResource(int type, const QUrl & name)
         {
             return resources.take(name.toString());
         }
-        else
-            if(!requestedResources.contains(name.toString()))
-            {
-                qDebug() << "Requesting resource" << name.toString();
-                requestedResources.insert(name.toString());
+        else if(!requestedResources.contains(name.toString()))
+        {
+            qDebug() << "Requesting resource" << name.toString();
+            requestedResources.insert(name.toString());
 
-                QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + name.toString()));
-                newRequest.setAttribute(typeAttribute, type);
-                newRequest.setAttribute(urlAttribute, name);
+            QNetworkRequest newRequest(QUrl("http://www.hedgewars.org" + name.toString()));
+            newRequest.setAttribute(typeAttribute, type);
+            newRequest.setAttribute(urlAttribute, name);
 
-                QNetworkReply *reply = manager->get(newRequest);
-                connect(reply, SIGNAL(finished()), this, SLOT(resourceDownloaded()));
-            }
+            QNetworkReply *reply = manager->get(newRequest);
+            connect(reply, SIGNAL(finished()), this, SLOT(resourceDownloaded()));
+        }
     }
 
     return QVariant();

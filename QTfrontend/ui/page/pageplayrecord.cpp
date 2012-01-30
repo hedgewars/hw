@@ -31,7 +31,7 @@
 QLayout * PagePlayDemo::bodyLayoutDefinition()
 {
     QGridLayout * pageLayout = new QGridLayout();
-    
+
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 2);
     pageLayout->setColumnStretch(2, 1);
@@ -81,7 +81,8 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
         dir.cd("Demos");
         extension = "hwd";
         BtnPlayDemo->setText(QPushButton::tr("Play demo"));
-    } else
+    }
+    else
     {
         dir.cd("Saves");
         extension = "hws";
@@ -108,9 +109,9 @@ void PagePlayDemo::renameRecord()
     if (!curritem)
     {
         QMessageBox::critical(this,
-                tr("Error"),
-                tr("Please select record from the list"),
-                tr("OK"));
+                              tr("Error"),
+                              tr("Please select record from the list"),
+                              tr("OK"));
         return ;
     }
     QFile rfile(curritem->data(Qt::UserRole).toString());
@@ -124,10 +125,10 @@ void PagePlayDemo::renameRecord()
     if(ok && newname.size())
     {
         QString newfullname = QString("%1/%2.%3.%4")
-                                      .arg(finfo.absolutePath())
-                                      .arg(newname)
-                                      .arg(*cProtoVer)
-                                      .arg(finfo.suffix());
+                              .arg(finfo.absolutePath())
+                              .arg(newname)
+                              .arg(*cProtoVer)
+                              .arg(finfo.suffix());
 
         ok = rfile.rename(newfullname);
         if(!ok)
@@ -143,9 +144,9 @@ void PagePlayDemo::removeRecord()
     if (!curritem)
     {
         QMessageBox::critical(this,
-                tr("Error"),
-                tr("Please select record from the list"),
-                tr("OK"));
+                              tr("Error"),
+                              tr("Please select record from the list"),
+                              tr("OK"));
         return ;
     }
     QFile rfile(curritem->data(Qt::UserRole).toString());

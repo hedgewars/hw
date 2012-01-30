@@ -25,7 +25,7 @@
 #include "SmartLineEdit.h"
 
 SmartLineEdit::SmartLineEdit(QWidget * parent, int maxHistorySize)
-: HistoryLineEdit(parent, maxHistorySize)
+    : HistoryLineEdit(parent, maxHistorySize)
 {
     m_whitespace = QRegExp("\\s");
 

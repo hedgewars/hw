@@ -20,7 +20,7 @@
 #include "weaponItem.h"
 
 WeaponItem::WeaponItem(const QImage& im, const QImage& img, QWidget * parent) :
-  ItemNum(im, img, parent, 0)
+    ItemNum(im, img, parent, 0)
 {
 }
 
@@ -30,11 +30,11 @@ WeaponItem::~WeaponItem()
 
 void WeaponItem::incItems()
 {
-  ++numItems;
+    ++numItems;
 }
 
 void WeaponItem::decItems()
 {
-  --numItems;
+    --numItems;
 }
 

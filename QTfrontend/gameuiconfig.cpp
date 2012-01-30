@@ -44,10 +44,11 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/weaponTooltips", true).toBool());
 
     int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
-    if (t < 0) {
+    if (t < 0)
+    {
         if (Form->ui.pageOptions->CBResolution->count() > 1)
             Form->ui.pageOptions->CBResolution->setCurrentIndex(1);
-        else 
+        else
             Form->ui.pageOptions->CBResolution->setCurrentIndex(0);
     }
     else Form->ui.pageOptions->CBResolution->setCurrentIndex(t);
@@ -67,9 +68,9 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
     QString netNick = value("net/nick", "").toString();
     Form->ui.pageOptions->editNetNick->setText(netNick);
-    
+
     Form->ui.pageOptions->editNetPassword->installEventFilter(this);
-    
+
     int passLength = value("net/passwordlength", 0).toInt();
     setNetPasswordLength(passLength);
 
@@ -87,7 +88,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     Form->ui.pageOptions->CBNameWithDate->setChecked(value("misc/appendTimeToRecords", false).toBool());
 
 #ifdef SPARKLE_ENABLED
-        Form->ui.pageOptions->CBAutoUpdate->setChecked(value("misc/autoUpdate", true).toBool());
+    Form->ui.pageOptions->CBAutoUpdate->setChecked(value("misc/autoUpdate", true).toBool());
 #endif
 
     Form->ui.pageOptions->CBLanguage->setCurrentIndex(Form->ui.pageOptions->CBLanguage->findData(value("misc/locale", "").toString()));
@@ -103,16 +104,17 @@ QStringList GameUIConfig::GetTeamsList()
     teamdir.cd(cfgdir->absolutePath() + "/Teams");
     QStringList teamslist = teamdir.entryList(QStringList("*.hwt"),QDir::Files|QDir::Hidden);
     QStringList cleanedList;
-    for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
-            QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.hwt$"), "\\1");
-            cleanedList.push_back(tmpTeamStr);
+    for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it )
+    {
+        QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.hwt$"), "\\1");
+        cleanedList.push_back(tmpTeamStr);
     }
     return cleanedList;
 }
 
 void GameUIConfig::resizeToConfigValues()
 {
-        Form->resize(value("frontend/width", 800).toUInt(), value("frontend/height", 600).toUInt());
+    Form->resize(value("frontend/width", 800).toUInt(), value("frontend/height", 600).toUInt());
 }
 
 void GameUIConfig::SaveOptions()
@@ -130,11 +132,14 @@ void GameUIConfig::SaveOptions()
     bool ffscr = isFrontendFullscreen();
     setValue("frontend/fullscreen", ffscr);
     emit frontendFullscreen(ffscr);
-    if (!ffscr) {
-      setValue("frontend/width", Form->width());
-      setValue("frontend/height", Form->height());
-    } else {
-      //resizeToConfigValues(); // TODO: why this has been made?
+    if (!ffscr)
+    {
+        setValue("frontend/width", Form->width());
+        setValue("frontend/height", Form->height());
+    }
+    else
+    {
+        //resizeToConfigValues(); // TODO: why this has been made?
     }
 
     setValue("audio/sound", isSoundEnabled());
@@ -156,13 +161,13 @@ void GameUIConfig::SaveOptions()
 
     setValue("fps/show", isShowFPSEnabled());
     setValue("fps/limit", Form->ui.pageOptions->fpsedit->value());
-    
+
     setValue("misc/altdamage", isAltDamageEnabled());
     setValue("misc/appendTimeToRecords", appendDateTimeToRecordName());
     setValue("misc/locale", language());
 
 #ifdef SPARKLE_ENABLED
-        setValue("misc/autoUpdate", isAutoUpdateEnabled());
+    setValue("misc/autoUpdate", isAutoUpdateEnabled());
 #endif
     Form->gameSettings->sync();
 }
@@ -204,47 +209,48 @@ quint32 GameUIConfig::translateQuality()
     quint32 rqClampLess = 0x00000200;  // don't clamp textures
     quint32 rqTooltipsOff = 0x00000400;  // tooltips are not drawn
     quint32 rqDesyncVBlank = 0x00000800;  // don't sync on vblank
-    
+
     quint32 result = (Form->ui.pageOptions->WeaponTooltip->isChecked()) ? rqNone : rqTooltipsOff;
-    
-    switch (Form->ui.pageOptions->SLQuality->value()) {
-      case 5:
-        break;
-      case 4:
-        result |= rqBlurryLand;
-        break;
-      case 3:
-        result |= rqBlurryLand | rqKillFlakes | rqPlainSplash;
-        break;
-      case 2:
-        result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
-                  rqAntiBoom | rqSlowMenu;
-        break;
-      case 1:
-        result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
-                  rqAntiBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank;
-        break;
-      case 0:
-        result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
-                  rqAntiBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank |
-                  rqNoBackground | rqClampLess;
-        break;
-      default:
-        fprintf(stderr,"unset value from slider");
-        break;
+
+    switch (Form->ui.pageOptions->SLQuality->value())
+    {
+        case 5:
+            break;
+        case 4:
+            result |= rqBlurryLand;
+            break;
+        case 3:
+            result |= rqBlurryLand | rqKillFlakes | rqPlainSplash;
+            break;
+        case 2:
+            result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
+                      rqAntiBoom | rqSlowMenu;
+            break;
+        case 1:
+            result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
+                      rqAntiBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank;
+            break;
+        case 0:
+            result |= rqBlurryLand | rqKillFlakes | rqPlainSplash | rq2DWater |
+                      rqAntiBoom | rqSlowMenu | rqSimpleRope | rqDesyncVBlank |
+                      rqNoBackground | rqClampLess;
+            break;
+        default:
+            fprintf(stderr,"unset value from slider");
+            break;
     }
-    
+
     return result;
 }
 
 bool GameUIConfig::isFrontendEffects() const
 {
-  return Form->ui.pageOptions->CBFrontendEffects->isChecked();
+    return Form->ui.pageOptions->CBFrontendEffects->isChecked();
 }
 
 bool GameUIConfig::isFrontendFullscreen() const
 {
-  return Form->ui.pageOptions->CBFrontendFullscreen->isChecked();
+    return Form->ui.pageOptions->CBFrontendFullscreen->isChecked();
 }
 
 bool GameUIConfig::isSoundEnabled()
@@ -340,7 +346,7 @@ bool GameUIConfig::eventFilter(QObject *object, QEvent *event)
             }
         }
     }
-    
+
     // Don't filter anything
     return false;
 }

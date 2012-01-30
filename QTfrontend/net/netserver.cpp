@@ -48,5 +48,5 @@ void HWNetServer::StopServer()
 
 quint16 HWNetServer::getRunningPort() const
 {
-  return ds_port;
+    return ds_port;
 }

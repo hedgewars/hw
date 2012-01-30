@@ -25,22 +25,22 @@ class SelWeaponWidget;
 
 class PageSelectWeapon : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageSelectWeapon(QWidget* parent = 0);
+    public:
+        PageSelectWeapon(QWidget* parent = 0);
 
-    QPushButton *BtnDefault;
-    QPushButton *BtnDelete;
-    QPushButton *BtnNew;
-    QPushButton *BtnCopy;
-    SelWeaponWidget* pWeapons;
-    QComboBox* selectWeaponSet;
+        QPushButton *BtnDefault;
+        QPushButton *BtnDelete;
+        QPushButton *BtnNew;
+        QPushButton *BtnCopy;
+        SelWeaponWidget* pWeapons;
+        QComboBox* selectWeaponSet;
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 };
 
 #endif

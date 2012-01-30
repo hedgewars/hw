@@ -27,7 +27,7 @@
 #include "HistoryLineEdit.h"
 
 HistoryLineEdit::HistoryLineEdit(QWidget * parent, int maxHistorySize)
-: QLineEdit(parent)
+    : QLineEdit(parent)
 {
     m_curHistEntryIdx = 0;
     m_maxHistorySize = maxHistorySize;
@@ -80,10 +80,10 @@ void HistoryLineEdit::navigateHistory(bool isGoingUp)
 {
     // save possible changes to new entry
     if ((m_curHistEntryIdx >= m_history->size() ||
-        (text() != m_history->at(m_curHistEntryIdx))))
-        {
-            rememberCurrentText();
-        }
+            (text() != m_history->at(m_curHistEntryIdx))))
+    {
+        rememberCurrentText();
+    }
 
     if (isGoingUp)
         m_curHistEntryIdx--;

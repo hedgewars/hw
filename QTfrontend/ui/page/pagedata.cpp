@@ -86,7 +86,8 @@ void PageDataDownload::request(const QUrl &url)
         QProgressBar *progressBar = new QProgressBar(this);
         progressBarsLayout->addWidget(progressBar);
         progressBars.insert(reply, progressBar);
-    } else
+    }
+    else
     {
         qWarning() << "Page Request" << url.toString();
 
@@ -166,8 +167,8 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
     zip.setIoDevice(&buffer);
     if(!zip.open(QuaZip::mdUnzip))
     {
-      qWarning("testRead(): zip.open(): %d", zip.getZipError());
-      return false;
+        qWarning("testRead(): zip.open(): %d", zip.getZipError());
+        return false;
     }
 
     QuaZipFile file(&zip);
@@ -190,7 +191,8 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
         {
             QFileInfo fi(filePath);
             QDir().mkpath(fi.filePath());
-        } else
+        }
+        else
         {
             qDebug() << "Extracting" << filePath;
             QFile out(filePath);
@@ -204,12 +206,14 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
 
             out.close();
 
-            if(file.getZipError() != UNZ_OK) {
+            if(file.getZipError() != UNZ_OK)
+            {
                 qWarning("file.getFileName(): %d", file.getZipError());
                 return false;
             }
 
-            if(!file.atEnd()) {
+            if(!file.atEnd())
+            {
                 qWarning("read all but not EOF");
                 return false;
             }
@@ -217,7 +221,8 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
 
         file.close();
 
-        if(file.getZipError()!=UNZ_OK) {
+        if(file.getZipError()!=UNZ_OK)
+        {
             qWarning("file.close(): %d", file.getZipError());
             return false;
         }

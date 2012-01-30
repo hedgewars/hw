@@ -126,7 +126,7 @@ QStringList HWNamegen::dictContents(const QString filename)
 
     // find .txt to load the names from
     QFile * file = new QFile(HWDataManager::instance().findFileForRead(QString(
-                                                "Names/%1.txt").arg(filename)));
+                                 "Names/%1.txt").arg(filename)));
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -143,7 +143,7 @@ QStringList HWNamegen::dictContents(const QString filename)
     delete file;
 
     if (list.size() == 0)
-         list.append(filename);
+        list.append(filename);
 
     return list;
 }
@@ -155,7 +155,7 @@ QStringList HWNamegen::dictsForHat(const QString hatname)
 
     // find .cfg to load the dicts from
     QFile * file = new QFile(HWDataManager::instance().findFileForRead(QString(
-                                                "Names/%1.cfg").arg(hatname)));
+                                 "Names/%1.cfg").arg(hatname)));
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -172,7 +172,7 @@ QStringList HWNamegen::dictsForHat(const QString hatname)
     delete file;
 
     if (list.size() == 0)
-         list.append(QString("generic"));
+        list.append(QString("generic"));
 
     return list;
 }
@@ -244,10 +244,10 @@ QString HWNamegen::getRandomGrave()
 
     //list all available Graves
     Graves.append(HWDataManager::instance().entryList(
-                         "Graphics/Graves",
-                         QDir::Files,
-                         QStringList("*.png")
-                     ).replaceInStrings(QRegExp("\\.png$"), "")
+                      "Graphics/Graves",
+                      QDir::Files,
+                      QStringList("*.png")
+                  ).replaceInStrings(QRegExp("\\.png$"), "")
                  );
 
     if(Graves.size()==0)
@@ -266,10 +266,10 @@ QString HWNamegen::getRandomFort()
 
     //list all available Forts
     Forts.append(HWDataManager::instance().entryList(
-                        "Forts",
-                        QDir::Files,
-                        QStringList("*L.png")
-                    ).replaceInStrings(QRegExp("L\\.png$"), "")
+                     "Forts",
+                     QDir::Files,
+                     QStringList("*L.png")
+                 ).replaceInStrings(QRegExp("L\\.png$"), "")
                 );
 
     if(Forts.size()==0)

@@ -30,51 +30,51 @@
 
 class TeamLabel : public QLabel
 {
- Q_OBJECT
+        Q_OBJECT
 
- public:
- TeamLabel(const QString& inp_str) : QLabel(inp_str) {};
+    public:
+        TeamLabel(const QString& inp_str) : QLabel(inp_str) {};
 
- signals:
- void teamActivated(QString team_name);
+    signals:
+        void teamActivated(QString team_name);
 
- public slots:
- void teamButtonClicked();
+    public slots:
+        void teamButtonClicked();
 
 };
 
 class TeamShowWidget : public QWidget
 {
- Q_OBJECT
+        Q_OBJECT
 
- public slots:
- void changeTeamColor(QColor color=QColor());
- void hhNumChanged();
+    public slots:
+        void changeTeamColor(QColor color=QColor());
+        void hhNumChanged();
 
- private slots:
- void activateTeam();
+    private slots:
+        void activateTeam();
 
- public:
- TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
- void setPlaying(bool isPlaying);
- void setHHNum(unsigned int num);
- void setInteractivity(bool interactive);
- HWTeam getTeam() const;
+    public:
+        TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
+        void setPlaying(bool isPlaying);
+        void setHHNum(unsigned int num);
+        void setInteractivity(bool interactive);
+        HWTeam getTeam() const;
 
- private:
- TeamShowWidget();
- QHBoxLayout mainLayout;
- HWTeam m_team;
- bool m_isPlaying;
- CHedgehogerWidget* phhoger;
- QPushButton* colorButt;
- QPushButton* butt;
+    private:
+        TeamShowWidget();
+        QHBoxLayout mainLayout;
+        HWTeam m_team;
+        bool m_isPlaying;
+        CHedgehogerWidget* phhoger;
+        QPushButton* colorButt;
+        QPushButton* butt;
 // QPushButton* bText;
 
- signals:
- void teamStatusChanged(HWTeam team);
- void hhNmChanged(const HWTeam&);
- void teamColorChanged(const HWTeam&);
+    signals:
+        void teamStatusChanged(HWTeam team);
+        void hhNmChanged(const HWTeam&);
+        void teamColorChanged(const HWTeam&);
 };
 
 #endif // _TEAMSEL_HELPER_INCLUDED

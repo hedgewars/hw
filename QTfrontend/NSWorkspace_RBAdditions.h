@@ -32,6 +32,7 @@ extern NSString* NSWorkspace_RBserverURL;
 //- NSWorkspace_RBimagefilepath: should be present for disk images only. Shows the path of the disk image file.
 //- NSWorkspace_RBserverURL: should be present for remote volumes only. Shows the server URL.
 
-- (NSDictionary*)propertiesForPath:(NSString*)path;
+- (NSDictionary*)propertiesForPath:
+(NSString*)path;
 
 @end

@@ -54,7 +54,7 @@ class QGridlayout;
 
 class AbstractPage : public QWidget
 {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
 
@@ -112,7 +112,10 @@ class AbstractPage : public QWidget
          *
          * Use it to define layout (not behavior) of the page's footer.
          */
-        virtual QLayout * footerLayoutDefinition() { return NULL; };
+        virtual QLayout * footerLayoutDefinition()
+        {
+            return NULL;
+        };
 
         /**
          * @brief Used during page construction.

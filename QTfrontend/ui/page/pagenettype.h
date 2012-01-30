@@ -23,16 +23,16 @@
 
 class PageNetType : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageNetType(QWidget* parent = 0);
+    public:
+        PageNetType(QWidget* parent = 0);
 
-    QPushButton * BtnLAN;
-    QPushButton * BtnOfficialServer;
+        QPushButton * BtnLAN;
+        QPushButton * BtnOfficialServer;
 
-protected:
-    QLayout * bodyLayoutDefinition();
+    protected:
+        QLayout * bodyLayoutDefinition();
 };
 
 #endif

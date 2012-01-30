@@ -23,17 +23,17 @@
 
 class PageConnecting : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageConnecting(QWidget* parent = 0);
+    public:
+        PageConnecting(QWidget* parent = 0);
 
-signals:
-    void cancelConnection();
+    signals:
+        void cancelConnection();
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        void connectSignals();
 };
 
 #endif

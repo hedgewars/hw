@@ -50,10 +50,10 @@ HWDataManager & HWDataManager::instance()
 
 
 QStringList HWDataManager::entryList(
-                    const QString & subDirectory,
-                    QDir::Filters filters,
-                    const QStringList & nameFilters
-                    ) const
+    const QString & subDirectory,
+    QDir::Filters filters,
+    const QStringList & nameFilters
+) const
 {
     QStringList result;
 
@@ -83,7 +83,7 @@ QStringList HWDataManager::entryList(
 
 
 QString HWDataManager::findFileForRead(
-                                const QString & relativeDataFilePath) const
+    const QString & relativeDataFilePath) const
 {
     QString path;
 
@@ -98,7 +98,7 @@ QString HWDataManager::findFileForRead(
 
 
 QString HWDataManager::findFileForWrite(
-                                const QString & relativeDataFilePath) const
+    const QString & relativeDataFilePath) const
 {
     if (userData != NULL)
     {

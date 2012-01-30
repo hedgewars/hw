@@ -63,7 +63,8 @@ SDLInteraction::~SDLInteraction()
     stopMusic();
     if (m_audioInitialized)
     {
-        if (m_music != NULL) {
+        if (m_music != NULL)
+        {
             Mix_HaltMusic();
             Mix_FreeMusic(m_music);
         }
@@ -86,7 +87,8 @@ QStringList SDLInteraction::getResolutions() const
     if((modes == (SDL_Rect **)0) || (modes == (SDL_Rect **)-1))
     {
         result << "640x480";
-    } else
+    }
+    else
     {
         for(int i = 0; modes[i]; ++i)
             if ((modes[i]->w >= 640) && (modes[i]->h >= 480))
@@ -239,9 +241,11 @@ void SDLInteraction::startMusic()
 
 void SDLInteraction::stopMusic()
 {
-    if (m_isPlayingMusic && (m_music != NULL)) {
+    if (m_isPlayingMusic && (m_music != NULL))
+    {
         // fade out music to finish 0,5 seconds from now
-        while(!Mix_FadeOutMusic(1000) && Mix_PlayingMusic()) {
+        while(!Mix_FadeOutMusic(1000) && Mix_PlayingMusic())
+        {
             SDL_Delay(100);
         }
     }

@@ -32,77 +32,77 @@
 
 /**
  * @brief Class for interacting with SDL (used for music and keys)
- * 
+ *
  * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
  */
 class SDLInteraction
 {
 
-private:
-    /**
-     * @brief Class constructor of the <i>singleton</i>.
-     * 
-     * Not to be used from outside the class,
-     * use the static {@link HWDataManager::instance()} instead.
-     * 
-     * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
-     */
-    SDLInteraction();
+    private:
+        /**
+         * @brief Class constructor of the <i>singleton</i>.
+         *
+         * Not to be used from outside the class,
+         * use the static {@link HWDataManager::instance()} instead.
+         *
+         * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+         */
+        SDLInteraction();
 
-    /// Initializes SDL for sound output if needed.
-    void SDLAudioInit();
+        /// Initializes SDL for sound output if needed.
+        void SDLAudioInit();
 
-    bool m_audioInitialized; ///< true if audio is initialized already
-    Mix_Music * m_music; ///< pointer to the music channel of the mixer
-    QString m_musicTrack; ///< path to the music track;
-    bool m_isPlayingMusic; ///< true if music was started but not stopped again.
+        bool m_audioInitialized; ///< true if audio is initialized already
+        Mix_Music * m_music; ///< pointer to the music channel of the mixer
+        QString m_musicTrack; ///< path to the music track;
+        bool m_isPlayingMusic; ///< true if music was started but not stopped again.
 
-    QMap<QString,Mix_Chunk*> * m_soundMap; ///< maps sound file paths to channels
+        QMap<QString,Mix_Chunk*> * m_soundMap; ///< maps sound file paths to channels
 
-    int lastchannel; ///< channel of the last music played
+        int lastchannel; ///< channel of the last music played
 
-public:
-    /**
-     * @brief Returns reference to the <i>singleton</i> instance of this class.
-     *
-     * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
-     *
-     * @return reference to the instance.
-     */
-    static SDLInteraction & instance();
+    public:
+        /**
+         * @brief Returns reference to the <i>singleton</i> instance of this class.
+         *
+         * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+         *
+         * @return reference to the instance.
+         */
+        static SDLInteraction & instance();
 
-    /// Class Destructor.
-    ~SDLInteraction();
+        /// Class Destructor.
+        ~SDLInteraction();
 
-    /**
-     * @brief Returns available (screen) resolutions.
-     *
-     * @return list of resolutions in the format WIDTHxHEIGHT.
-     */
-    QStringList getResolutions() const;
+        /**
+         * @brief Returns available (screen) resolutions.
+         *
+         * @return list of resolutions in the format WIDTHxHEIGHT.
+         */
+        QStringList getResolutions() const;
 
-    /// Adds all available joystick controlls to the list of SDL keys.
-    void addGameControllerKeys() const;
+        /// Adds all available joystick controlls to the list of SDL keys.
+        void addGameControllerKeys() const;
 
-    /**
-     * @brief Plays a sound file.
-     *
-     * @param soundFile path of the sound file.
-     */
-    void playSoundFile(const QString & soundFile);
+        /**
+         * @brief Plays a sound file.
+         *
+         * @param soundFile path of the sound file.
+         */
+        void playSoundFile(const QString & soundFile);
 
-    /**
-     * @brief Sets the music track to be played (or not).
-     *
-     * @param musicFile path of the music file.
-     */
-    void setMusicTrack(const QString & musicFile);
+        /**
+         * @brief Sets the music track to be played (or not).
+         *
+         * @param musicFile path of the music file.
+         */
+        void setMusicTrack(const QString & musicFile);
 
-    /// Starts the background music if not already playing.
-    void startMusic();
+        /// Starts the background music if not already playing.
+        void startMusic();
 
-    /// Fades out and stops the background music (if playing).
-    void stopMusic();
+        /// Fades out and stops the background music (if playing).
+        void stopMusic();
 };
 
 

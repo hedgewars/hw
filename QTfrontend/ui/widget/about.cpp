@@ -27,7 +27,7 @@
 #include "about.h"
 
 About::About(QWidget * parent) :
-  QWidget(parent)
+    QWidget(parent)
 {
     QGridLayout *mainLayout = new QGridLayout(this);
 
@@ -45,16 +45,16 @@ About::About(QWidget * parent) :
     QLabel *lbl1 = new QLabel(this);
     lbl1->setOpenExternalLinks(true);
     lbl1->setText(
-            "<style type=\"text/css\">"
-            "a { color: #ffcc00; }"
+        "<style type=\"text/css\">"
+        "a { color: #ffcc00; }"
 //            "a:hover { color: yellow; }"
-            "</style>"
-            "<div align=\"center\"><h1>Hedgewars</h1>"
-            "<h3>" + QLabel::tr("Version") + " " + *cVersionString + "</h3>"
-            "<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p><br>" +
-            QLabel::tr("This program is distributed under the GNU General Public License v2") +
-            "</div>"
-            );
+        "</style>"
+        "<div align=\"center\"><h1>Hedgewars</h1>"
+        "<h3>" + QLabel::tr("Version") + " " + *cVersionString + "</h3>"
+        "<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p><br>" +
+        QLabel::tr("This program is distributed under the GNU General Public License v2") +
+        "</div>"
+    );
     lbl1->setWordWrap(true);
     mainLayout->addWidget(lbl1, 0, 1);
 
@@ -62,33 +62,33 @@ About::About(QWidget * parent) :
 
     lbl2->setOpenExternalLinks(true);
     lbl2->setText(
-            "<style type=\"text/css\">"
-            "a { color: #ffcc00; }"
+        "<style type=\"text/css\">"
+        "a { color: #ffcc00; }"
 //            "a:hover { color: yellow; }"
-            "</style>" +
-            QString("<h2>") +
-            QLabel::tr("Developers:") +
-            "</h2><p>"
-            "Engine, frontend, net server: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
-            "Many frontend improvements: Igor Ulyanov &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;<br>"
-            "Many engine and frontend improvements: Derek Pomery &lt;<a href=\"mailto:nemo@m8y.org\">nemo@m8y.org</a>&gt;<br>"
-            "Drill rocket, Ballgun, RC Plane weapons: Martin Boze &lt;<a href=\"mailto:afffect@gmail.com\">afffect@gmail.com</a>&gt;<br>"
-            "Mine number and time game settings: David A. Cuadrado &lt;<a href=\"mailto:krawek@gmail.com\">krawek@gmail.com</a>&gt;<br>"
-            "Frontend improvements: Martin Minarik &lt;<a href=\"mailto:ttsmj@pokec.sk\">ttsmj@pokec.sk</a>&gt;<br>"
-            "Frontend improvements: Kristian Lehmann &lt;<a href=\"mailto:email@thexception.net\">email@thexception.net</a>&gt;<br>"
-            "Mac OS X/iPhone port, OpenGL-ES conversion: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;<br>"
-            "Many engine and frontend improvements (and bugs): Richard Karolyi &lt;<a href=\"mailto:sheepluva@" "ercatec.net\">sheepluva@" "ercatec.net</a>&gt;<br>"
-            "Gamepad and Lua integration: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@gmail.com\">mario.liebisch@gmail.com</a>&gt;<br>"
-            "Many engine improvements and graphics: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
-            "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;<br>"
-            "Engine and frontend improvements: Henrik Rostedt &lt;<a href=\"mailto:henrik.rostedt@gmail.com\">henrik.rostedt@gmail.com</a>&gt;<br>"
-            "Lua game modes and missions: John Lambert &lt;<a href=\"mailto:redgrinner@gmail.com\">redgrinner@gmail.com</a>&gt;<br>"
-            "Frontend improvements: Mayur Pawashe &lt;<a href=\"mailto:zorgiepoo@gmail.com\">zorgiepoo@gmail.com</a>&gt;<br>"
-            "Android port: Richard Deurwaarder &lt;<a href=\"mailto:xeli@xelification.com\">xeli@xelification.com</a>&gt;<br>"
-            "</p><h2>" +
+        "</style>" +
+        QString("<h2>") +
+        QLabel::tr("Developers:") +
+        "</h2><p>"
+        "Engine, frontend, net server: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
+        "Many frontend improvements: Igor Ulyanov &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;<br>"
+        "Many engine and frontend improvements: Derek Pomery &lt;<a href=\"mailto:nemo@m8y.org\">nemo@m8y.org</a>&gt;<br>"
+        "Drill rocket, Ballgun, RC Plane weapons: Martin Boze &lt;<a href=\"mailto:afffect@gmail.com\">afffect@gmail.com</a>&gt;<br>"
+        "Mine number and time game settings: David A. Cuadrado &lt;<a href=\"mailto:krawek@gmail.com\">krawek@gmail.com</a>&gt;<br>"
+        "Frontend improvements: Martin Minarik &lt;<a href=\"mailto:ttsmj@pokec.sk\">ttsmj@pokec.sk</a>&gt;<br>"
+        "Frontend improvements: Kristian Lehmann &lt;<a href=\"mailto:email@thexception.net\">email@thexception.net</a>&gt;<br>"
+        "Mac OS X/iPhone port, OpenGL-ES conversion: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;<br>"
+        "Many engine and frontend improvements (and bugs): Richard Karolyi &lt;<a href=\"mailto:sheepluva@" "ercatec.net\">sheepluva@" "ercatec.net</a>&gt;<br>"
+        "Gamepad and Lua integration: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@gmail.com\">mario.liebisch@gmail.com</a>&gt;<br>"
+        "Many engine improvements and graphics: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
+        "Maze maps: Henning K&uuml;hn &lt;<a href=\"mailto:prg@cooco.de\">prg@cooco.de</a>&gt;<br>"
+        "Engine and frontend improvements: Henrik Rostedt &lt;<a href=\"mailto:henrik.rostedt@gmail.com\">henrik.rostedt@gmail.com</a>&gt;<br>"
+        "Lua game modes and missions: John Lambert &lt;<a href=\"mailto:redgrinner@gmail.com\">redgrinner@gmail.com</a>&gt;<br>"
+        "Frontend improvements: Mayur Pawashe &lt;<a href=\"mailto:zorgiepoo@gmail.com\">zorgiepoo@gmail.com</a>&gt;<br>"
+        "Android port: Richard Deurwaarder &lt;<a href=\"mailto:xeli@xelification.com\">xeli@xelification.com</a>&gt;<br>"
+        "</p><h2>" +
 
-            QLabel::tr("Art:") + "</h2>"
-            + QString::fromUtf8(
+        QLabel::tr("Art:") + "</h2>"
+        + QString::fromUtf8(
             "<p>John Dum &lt;<a href=\"mailto:fizzy@gmail.com\">fizzy@gmail.com</a>&gt;"
             "<br>"
             "Joshua Frese &lt;<a href=\"mailto:joshfrese@gmail.com\">joshfrese@gmail.com</a>&gt;"
@@ -105,18 +105,18 @@ About::About(QWidget * parent) :
             "<br>"
             "Hats: Trey Perry &lt;<a href=\"mailto:tx.perry.j@gmail.com\">tx.perry.j@gmail.com</a>&gt;"
             "</p><h2>") +
-            QLabel::tr("Sounds:") + "</h2>"
-            "Hedgehogs voice: Stephen Alexander &lt;<a href=\"mailto:ArmagonNo1@gmail.com\">ArmagonNo1@gmail.com</a>&gt;"
-            "<br>"
-            "John Dum &lt;<a href=\"mailto:fizzy@gmail.com\">fizzy@gmail.com</a>&gt;"
-            "<br>"
-            "Jonatan Nilsson &lt;<a href=\"mailto:jonatanfan@gmail.com\">jonatanfan@gmail.com</a>&gt;"
-            "<br>"
-            "Daniel Martin &lt;<a href=\"mailto:elhombresinremedio@gmail.com\">elhombresinremedio@gmail.com</a>&gt;"
-            "</p><h2>" +
+        QLabel::tr("Sounds:") + "</h2>"
+        "Hedgehogs voice: Stephen Alexander &lt;<a href=\"mailto:ArmagonNo1@gmail.com\">ArmagonNo1@gmail.com</a>&gt;"
+        "<br>"
+        "John Dum &lt;<a href=\"mailto:fizzy@gmail.com\">fizzy@gmail.com</a>&gt;"
+        "<br>"
+        "Jonatan Nilsson &lt;<a href=\"mailto:jonatanfan@gmail.com\">jonatanfan@gmail.com</a>&gt;"
+        "<br>"
+        "Daniel Martin &lt;<a href=\"mailto:elhombresinremedio@gmail.com\">elhombresinremedio@gmail.com</a>&gt;"
+        "</p><h2>" +
 
-            QLabel::tr("Translations:") + "</h2><p>"
-            + QString::fromUtf8(
+        QLabel::tr("Translations:") + "</h2><p>"
+        + QString::fromUtf8(
             "Brazilian Portuguese: Romulo Fernandes Machado &lt;<a href=\"mailto:abra185@gmail.com\">abra185@gmail.com</a>&gt;<br>"
             "Bulgarian: Svetoslav Stefanov<br>"
             "Czech: Petr Řezáček &lt;<a href=\"mailto:rezacek@gmail.com\">rezacek@gmail.com</a>&gt;<br>"
@@ -139,13 +139,13 @@ About::About(QWidget * parent) :
             "Ukrainian: Eugene V. Lyubimkin &lt;<a href=\"mailto:jackyf.devel@gmail.com\">jackyf.devel@gmail.com</a>&gt;, Igor Paliychuk &lt;<a href=\"mailto:mansonigor@gmail.com\">mansonigor@gmail.com</a>&gt;, Eugene Sakara &lt;<a href=\"mailto:eresid@gmail.com\">eresid@gmail.com</a>&gt;"
             "</p><h2>") +
 
-            QLabel::tr("Special thanks:") + "</h2><p>"
-            "Aleksey Andreev &lt;<a href=\"mailto:blaknayabr@gmail.com\">blaknayabr@gmail.com</a>&gt;<br>"
-            "Aleksander Rudalev &lt;<a href=\"mailto:alexv@pomorsu.ru\">alexv@pomorsu.ru</a>&gt;<br>"
-            "Natasha Korotaeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;<br>"
-            "Adam Higerd (aka ahigerd at FreeNode)"
-            "</p>"
-            );
+        QLabel::tr("Special thanks:") + "</h2><p>"
+        "Aleksey Andreev &lt;<a href=\"mailto:blaknayabr@gmail.com\">blaknayabr@gmail.com</a>&gt;<br>"
+        "Aleksander Rudalev &lt;<a href=\"mailto:alexv@pomorsu.ru\">alexv@pomorsu.ru</a>&gt;<br>"
+        "Natasha Korotaeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;<br>"
+        "Adam Higerd (aka ahigerd at FreeNode)"
+        "</p>"
+    );
     mainLayout->addWidget(lbl2, 1, 1);
 
     setAcceptDrops(true);

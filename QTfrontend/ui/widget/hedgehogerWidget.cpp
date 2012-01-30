@@ -24,53 +24,53 @@
 CHedgehogerWidget::CHedgehogerWidget(const QImage& im, const QImage& img, QWidget * parent) :
     ItemNum(im, img, parent, 1)
 {
-  // TODO: maxHedgehogsPerGame doesn't reset properly and won't match map limits for now
-  /*if(parent) {
-    pOurFrameTeams = dynamic_cast<FrameTeams*>(parent->parentWidget());
-  }
-  if(pOurFrameTeams->overallHedgehogs + 4 > pOurFrameTeams->maxHedgehogsPerGame) {
-    numItems = pOurFrameTeams->maxHedgehogsPerGame - pOurFrameTeams->overallHedgehogs;
-  } else numItems = 4;
-  pOurFrameTeams->overallHedgehogs += numItems;*/
+    // TODO: maxHedgehogsPerGame doesn't reset properly and won't match map limits for now
+    /*if(parent) {
+      pOurFrameTeams = dynamic_cast<FrameTeams*>(parent->parentWidget());
+    }
+    if(pOurFrameTeams->overallHedgehogs + 4 > pOurFrameTeams->maxHedgehogsPerGame) {
+      numItems = pOurFrameTeams->maxHedgehogsPerGame - pOurFrameTeams->overallHedgehogs;
+    } else numItems = 4;
+    pOurFrameTeams->overallHedgehogs += numItems;*/
 }
 
 void CHedgehogerWidget::incItems()
 {
-  //if (pOurFrameTeams->overallHedgehogs < pOurFrameTeams->maxHedgehogsPerGame) {
+    //if (pOurFrameTeams->overallHedgehogs < pOurFrameTeams->maxHedgehogsPerGame) {
     numItems++;
     //pOurFrameTeams->overallHedgehogs++;
     emit hedgehogsNumChanged();
-  //}
+    //}
 }
 
 void CHedgehogerWidget::decItems()
 {
-  numItems--;
-  //pOurFrameTeams->overallHedgehogs--;
-  emit hedgehogsNumChanged();
+    numItems--;
+    //pOurFrameTeams->overallHedgehogs--;
+    emit hedgehogsNumChanged();
 }
 
 CHedgehogerWidget::~CHedgehogerWidget()
 {
-  // TODO: not called?
-  //pOurFrameTeams->overallHedgehogs-=numItems;
+    // TODO: not called?
+    //pOurFrameTeams->overallHedgehogs-=numItems;
 }
 
 void CHedgehogerWidget::setNonInteractive()
 {
-  nonInteractive=true;
+    nonInteractive=true;
 }
 
 void CHedgehogerWidget::setHHNum(unsigned int num)
 {
-  /*unsigned int diff = num - numItems;
-  numItems += diff;
-  pOurFrameTeams->overallHedgehogs += diff;*/
-  numItems = num;
-  repaint();
+    /*unsigned int diff = num - numItems;
+    numItems += diff;
+    pOurFrameTeams->overallHedgehogs += diff;*/
+    numItems = num;
+    repaint();
 }
 
 unsigned char CHedgehogerWidget::getHedgehogsNum() const
 {
-  return numItems;
+    return numItems;
 }

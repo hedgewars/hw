@@ -31,63 +31,63 @@ class SquareLabel;
 
 class PageEditTeam : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageEditTeam(QWidget* parent);
+    public:
+        PageEditTeam(QWidget* parent);
 
-    void createTeam(const QString & name, const QString & playerHash);
-    void editTeam(const QString & name, const QString & playerHash);
-    void deleteTeam(const QString & name);
+        void createTeam(const QString & name, const QString & playerHash);
+        void editTeam(const QString & name, const QString & playerHash);
+        void deleteTeam(const QString & name);
 
-signals:
-    void teamEdited();
+    signals:
+        void teamEdited();
 
-public slots:
-    void CBFort_activated(const QString & gravename);
+    public slots:
+        void CBFort_activated(const QString & gravename);
 
-private:
-    QSignalMapper* signalMapper1;
-    QSignalMapper* signalMapper2;
-    QGroupBox *GBoxHedgehogs;
-    QGroupBox *GBoxTeam;
-    QGroupBox *GBoxFort;
-    QComboBox *CBFort;
-    SquareLabel *FortPreview;
-    QComboBox *CBGrave;
-    QComboBox *CBFlag;
-    QComboBox *CBTeamLvl;
-    QComboBox *CBVoicepack;
-    QGroupBox *GBoxBinds;
-    QToolBox *BindsBox;
-    QLineEdit * TeamNameEdit;
-    QLineEdit * HHNameEdit[HEDGEHOGS_PER_TEAM];
-    QComboBox * HHHats[HEDGEHOGS_PER_TEAM];
-    QComboBox * CBBind[BINDS_NUMBER];
-    HWTeam data();
-    QString m_playerHash;
+    private:
+        QSignalMapper* signalMapper1;
+        QSignalMapper* signalMapper2;
+        QGroupBox *GBoxHedgehogs;
+        QGroupBox *GBoxTeam;
+        QGroupBox *GBoxFort;
+        QComboBox *CBFort;
+        SquareLabel *FortPreview;
+        QComboBox *CBGrave;
+        QComboBox *CBFlag;
+        QComboBox *CBTeamLvl;
+        QComboBox *CBVoicepack;
+        QGroupBox *GBoxBinds;
+        QToolBox *BindsBox;
+        QLineEdit * TeamNameEdit;
+        QLineEdit * HHNameEdit[HEDGEHOGS_PER_TEAM];
+        QComboBox * HHHats[HEDGEHOGS_PER_TEAM];
+        QComboBox * CBBind[BINDS_NUMBER];
+        HWTeam data();
+        QString m_playerHash;
 
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-    void loadTeam(const HWTeam & team);
+        void loadTeam(const HWTeam & team);
 
-    // page 1
-    QPushButton * btnRandomHogName[HEDGEHOGS_PER_TEAM];
-    QPushButton * btnRandomTeam;
-    QPushButton * btnTestSound;
+        // page 1
+        QPushButton * btnRandomHogName[HEDGEHOGS_PER_TEAM];
+        QPushButton * btnRandomTeam;
+        QPushButton * btnTestSound;
 
-private slots:
-    void saveTeam();
-    void setRandomNames();
+    private slots:
+        void saveTeam();
+        void setRandomNames();
 
-    void setRandomName(int hh_index);
-    
-    /// Plays a random voice sound of the currently edited team.
-    void testSound();
+        void setRandomName(int hh_index);
 
-    void fixHHname(int idx);
+        /// Plays a random voice sound of the currently edited team.
+        void testSound();
+
+        void fixHHname(int idx);
 };
 
 #endif

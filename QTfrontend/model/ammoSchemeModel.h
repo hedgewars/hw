@@ -26,54 +26,54 @@
 
 class AmmoSchemeModel : public QAbstractTableModel
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    AmmoSchemeModel(QObject * parent, const QString & fileName);
+    public:
+        AmmoSchemeModel(QObject * parent, const QString & fileName);
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    int rowCount(const QModelIndex & parent) const;
-    int columnCount(const QModelIndex & parent) const;
-    Qt::ItemFlags flags(const QModelIndex & index) const;
-    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
-    bool insertRows(int row, int count, const QModelIndex & parent = QModelIndex());
-    bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
-    QVariant data(const QModelIndex &index, int role) const;
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        int rowCount(const QModelIndex & parent) const;
+        int columnCount(const QModelIndex & parent) const;
+        Qt::ItemFlags flags(const QModelIndex & index) const;
+        bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+        bool insertRows(int row, int count, const QModelIndex & parent = QModelIndex());
+        bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
+        QVariant data(const QModelIndex &index, int role) const;
 
-    int numberOfDefaultSchemes;
-    QStringList predefSchemesNames;
-    QStringList spNames;
+        int numberOfDefaultSchemes;
+        QStringList predefSchemesNames;
+        QStringList spNames;
 
-public slots:
-    void Save();
+    public slots:
+        void Save();
 
-signals:
-    void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
+    signals:
+        void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
 
-protected:
-    QList< QList<QVariant> > schemes;
+    protected:
+        QList< QList<QVariant> > schemes;
 
-private:
-    QSettings fileConfig;
+    private:
+        QSettings fileConfig;
 };
 
 class NetAmmoSchemeModel : public QAbstractTableModel
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    NetAmmoSchemeModel(QObject * parent);
+    public:
+        NetAmmoSchemeModel(QObject * parent);
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    int rowCount(const QModelIndex & parent) const;
-    int columnCount(const QModelIndex & parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        int rowCount(const QModelIndex & parent) const;
+        int columnCount(const QModelIndex & parent) const;
+        QVariant data(const QModelIndex &index, int role) const;
 
-public slots:
-    void setNetSchemeConfig(QStringList & cfg);
+    public slots:
+        void setNetSchemeConfig(QStringList & cfg);
 
-private:
-    QList<QVariant> netScheme;
+    private:
+        QList<QVariant> netScheme;
 };
 
 #endif // _AMMO_SCHEME_MODEL_INCLUDED

@@ -27,12 +27,12 @@ class HWTeam;
 
 class HWNamegen
 {
-public:
+    public:
 
-    static void teamRandomName(HWTeam & team, const int HedgehogNumber);
-    static void teamRandomNames(HWTeam & team, const bool changeteamname);
+        static void teamRandomName(HWTeam & team, const int HedgehogNumber);
+        static void teamRandomNames(HWTeam & team, const bool changeteamname);
 
-private:
+    private:
         HWNamegen();
 
         static QList<QStringList> TypesTeamnames;

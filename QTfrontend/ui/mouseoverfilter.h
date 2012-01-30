@@ -8,19 +8,19 @@
 
 class MouseOverFilter : public QObject
 {
-    Q_OBJECT
-public:
-    explicit MouseOverFilter(QObject *parent = 0);
-    void setUi(Ui_HWForm *uiForm);
-protected:
-    bool eventFilter( QObject *dist, QEvent *event );
-signals:
+        Q_OBJECT
+    public:
+        explicit MouseOverFilter(QObject *parent = 0);
+        void setUi(Ui_HWForm *uiForm);
+    protected:
+        bool eventFilter( QObject *dist, QEvent *event );
+    signals:
 
-public slots:
+    public slots:
 
-private:
-    Ui_HWForm *ui;
-    AbstractPage* abstractpage;
+    private:
+        Ui_HWForm *ui;
+        AbstractPage* abstractpage;
 
 };
 

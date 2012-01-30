@@ -7,22 +7,22 @@
 
 class ThemesModel : public QAbstractListModel
 {
-    Q_OBJECT
-public:
-    explicit ThemesModel(QStringList themes, QObject *parent = 0);
+        Q_OBJECT
+    public:
+        explicit ThemesModel(QStringList themes, QObject *parent = 0);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role) const;
-    bool setData(const QModelIndex &index, const QVariant &value,
-                 int role = Qt::EditRole);
+        int rowCount(const QModelIndex &parent = QModelIndex()) const;
+        QVariant data(const QModelIndex &index, int role) const;
+        bool setData(const QModelIndex &index, const QVariant &value,
+                     int role = Qt::EditRole);
 
-signals:
+    signals:
 
-public slots:
+    public slots:
 
-private:
+    private:
 
-    QList<QHash<int, QVariant> > m_data;
+        QList<QHash<int, QVariant> > m_data;
 };
 
 #endif // THEMESMODEL_H

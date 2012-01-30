@@ -175,11 +175,11 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     QRegExp nohierarchy("^.[^ .]+$");
 
     QStringList victims = QString(style).
-                                remove(displayed). // remove visible stuff
-                                trimmed().
-                                split(split). // get a list of the names
-                                filter(nohierarchy). // only direct class names
-                                replaceInStrings(QRegExp("^."),""); // crop .
+                          remove(displayed). // remove visible stuff
+                          trimmed().
+                          split(split). // get a list of the names
+                          filter(nohierarchy). // only direct class names
+                          replaceInStrings(QRegExp("^."),""); // crop .
 
 
     if (victims.contains("timestamp"))
@@ -240,8 +240,8 @@ void HWChatWidget::displayWarning(const QString & message)
 
 
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify) :
-  QWidget(parent),
-  mainLayout(this)
+    QWidget(parent),
+    mainLayout(this)
 {
     this->gameSettings = gameSettings;
     this->notify = notify;
@@ -252,10 +252,10 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     {
         if (notify)
             m_helloSound = HWDataManager::instance().findFileForRead(
-                            "Sounds/voices/Classic/Hello.ogg");
+                               "Sounds/voices/Classic/Hello.ogg");
 
         m_hilightSound = HWDataManager::instance().findFileForRead(
-                        "Sounds/beep.ogg");
+                             "Sounds/beep.ogg");
 
         //m_hilightSound = m_helloSound;//"Sounds/beep.ogg";
     }
@@ -281,7 +281,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatText->setOpenLinks(false);
     connect(chatText, SIGNAL(anchorClicked(const QUrl&)),
-        this, SLOT(linkClicked(const QUrl&)));
+            this, SLOT(linkClicked(const QUrl&)));
     mainLayout.addWidget(chatText, 0, 0, 2, 1);
 
     chatNicks = new QListWidget(this);
@@ -291,9 +291,9 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
     connect(chatNicks, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-        this, SLOT(chatNickDoubleClicked(QListWidgetItem *)));
+            this, SLOT(chatNickDoubleClicked(QListWidgetItem *)));
     connect(chatNicks, SIGNAL(currentRowChanged(int)),
-        this, SLOT(chatNickSelected(int)));
+            this, SLOT(chatNickSelected(int)));
 
     mainLayout.addWidget(chatNicks, 0, 1, 3, 1);
 
@@ -383,11 +383,13 @@ void HWChatWidget::linkClicked(const QUrl & link)
 
 void HWChatWidget::setShowFollow(bool enabled)
 {
-    if (enabled) {
+    if (enabled)
+    {
         if (!(chatNicks->actions().contains(acFollow)))
             chatNicks->insertAction(acFriend, acFollow);
     }
-    else {
+    else
+    {
         if (chatNicks->actions().contains(acFollow))
             chatNicks->removeAction(acFollow);
     }
@@ -513,7 +515,7 @@ QString HWChatWidget::linkedNick(const QString & nickname)
 {
     if (nickname != m_userNick)
         return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
-               QString(nickname.toUtf8().toBase64())).arg(Qt::escape(nickname));
+                   QString(nickname.toUtf8().toBase64())).arg(Qt::escape(nickname));
 
     // unlinked nick (if own one)
     return QString("<span class=\"nick\">%1</span>").arg(Qt::escape(nickname));
@@ -531,7 +533,8 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
 {
     bool isFriend = false;
 
-    if (!nick.isEmpty()) {
+    if (!nick.isEmpty())
+    {
         // don't show chat lines that are from ignored nicks
         if (ignoreList.contains(nick, Qt::CaseInsensitive))
             return;
@@ -567,7 +570,7 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
     bool isHL = false;
 
     if ((c != 3) && (!nick.isEmpty()) &&
-        (nick != m_userNick) && (!m_userNick.isEmpty()))
+            (nick != m_userNick) && (!m_userNick.isEmpty()))
     {
         QString lcStr = str.toLower();
 
@@ -638,8 +641,9 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
     emit nickCountUpdate(chatNicks->count());
 
-    if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool()) {
-       SDLInteraction::instance().playSoundFile(m_helloSound);
+    if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool())
+    {
+        SDLInteraction::instance().playSoundFile(m_helloSound);
     }
 }
 
@@ -648,7 +652,7 @@ void HWChatWidget::nickRemoved(const QString& nick)
     chatEditLine->removeNickname(nick);
 
     foreach(QListWidgetItem * item, chatNicks->findItems(nick, Qt::MatchExactly))
-        chatNicks->takeItem(chatNicks->row(item));
+    chatNicks->takeItem(chatNicks->row(item));
 
     emit nickCountUpdate(chatNicks->count());
 }
@@ -686,7 +690,7 @@ void HWChatWidget::clear()
             foreach (QString word, list)
             {
                 m_highlights.append(QRegExp(
-                                hlRegExp.arg(QRegExp::escape(word.toLower()))));
+                                        hlRegExp.arg(QRegExp::escape(word.toLower()))));
             }
         }
 

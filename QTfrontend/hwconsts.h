@@ -121,7 +121,7 @@ extern int years_since_foundation;
                               0xffcfcfc4, /. pastel gray    ./ \
                               0xffbff000, /. lime           ./ \
                               0xffffef00, /. yellow         ./ \
-                              // add new colors here 
+                              // add new colors here
                               0 }*/
 /*
 #define HW_TEAMCOLOR_ARRAY  { 0xffd12b42, /. red    ./ \

@@ -44,7 +44,7 @@ struct HWHog
 // class representing a team
 class HWTeam : public QObject
 {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
 
@@ -62,19 +62,19 @@ class HWTeam : public QObject
         bool fileExists();
 
         // attribute getters
-         unsigned int campaignProgress() const;
-               QColor color() const;
-         unsigned int difficulty() const;
-              QString flag() const;
-              QString fort() const;
-              QString grave() const;
+        unsigned int campaignProgress() const;
+        QColor color() const;
+        unsigned int difficulty() const;
+        QString flag() const;
+        QString fort() const;
+        QString grave() const;
         const HWHog & hedgehog(unsigned int idx) const;
-                 bool isNetTeam() const;
-              QString keyBind(unsigned int idx) const;
-              QString name() const;
+        bool isNetTeam() const;
+        QString keyBind(unsigned int idx) const;
+        QString name() const;
         unsigned char numHedgehogs() const;
-              QString owner() const;
-              QString voicepack() const;
+        QString owner() const;
+        QString voicepack() const;
 
         // attribute setters
         void bindKey(unsigned int idx, const QString & key);
