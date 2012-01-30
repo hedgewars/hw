@@ -114,9 +114,9 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     CBTeamLvl->addItem(QIcon(":/res/botlevels/0.png"), QComboBox::tr("Human"));
     for(int i = 5; i > 0; i--)
         CBTeamLvl->addItem(
-                QIcon(QString(":/res/botlevels/%1.png").arg(6 - i)),
-                QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
-                );
+            QIcon(QString(":/res/botlevels/%1.png").arg(6 - i)),
+            QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
+        );
     GBTLayout->addWidget(CBTeamLvl, 1, 1);
 
     CBGrave = new QComboBox(GBoxTeam);
@@ -170,7 +170,8 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     QWidget * curW = NULL;
     QGridLayout * pagelayout = NULL;
     QLabel* l = NULL;
-    while (i < BINDS_NUMBER) {
+    while (i < BINDS_NUMBER)
+    {
         if(cbinds[i].category != NULL)
         {
             if(curW != NULL)
@@ -222,21 +223,21 @@ void PageEditTeam::connectSignals()
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         connect(HHNameEdit[i], SIGNAL(editingFinished()), signalMapper1, SLOT(map()));
-            signalMapper1->setMapping(HHNameEdit[i], i);
+        signalMapper1->setMapping(HHNameEdit[i], i);
 
         connect(btnRandomHogName[i], SIGNAL(clicked()), signalMapper2, SLOT(map()));
-            signalMapper2->setMapping(btnRandomHogName[i], i);
+        signalMapper2->setMapping(btnRandomHogName[i], i);
     }
 
     connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomNames()));
-    
+
     connect(btnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 
     connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) :
-  AbstractPage(parent)
+    AbstractPage(parent)
 {
     initPage();
 
@@ -250,7 +251,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 
 
     // voicepacks
-    list = dataMgr.entryList("Sounds/voices", 
+    list = dataMgr.entryList("Sounds/voices",
                              QDir::AllDirs | QDir::NoDotAndDotDot);
 
     CBVoicepack->addItems(list);
@@ -344,20 +345,20 @@ void PageEditTeam::testSound()
     QString voiceDir = QString("Sounds/voices/") + CBVoicepack->currentText();
 
     QStringList list = dataMgr.entryList(
-            voiceDir,
-            QDir::Files,
-            QStringList() <<
-                "Illgetyou.ogg" <<
-                "Incoming.ogg" <<
-                "Stupid.ogg" <<
-                "Coward.ogg" <<
-                "Firstblood.ogg"
-            );
+                           voiceDir,
+                           QDir::Files,
+                           QStringList() <<
+                           "Illgetyou.ogg" <<
+                           "Incoming.ogg" <<
+                           "Stupid.ogg" <<
+                           "Coward.ogg" <<
+                           "Firstblood.ogg"
+                       );
 
     if (!list.isEmpty())
         SDLInteraction::instance().playSoundFile(
             dataMgr.findFileForRead(voiceDir + "/" +
-                list[rand() % list.size()])
+                                    list[rand() % list.size()])
         );
 }
 

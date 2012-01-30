@@ -35,14 +35,14 @@ class HWForm;
  */
 class HWApplication : public QApplication
 {
-    Q_OBJECT
-public:
-    HWApplication(int &argc, char **argv);
-    ~HWApplication() {};
+        Q_OBJECT
+    public:
+        HWApplication(int &argc, char **argv);
+        ~HWApplication() {};
 
-    HWForm *form;
-protected:
-    bool event(QEvent *);
+        HWForm *form;
+    protected:
+        bool event(QEvent *);
 };
 
 #endif

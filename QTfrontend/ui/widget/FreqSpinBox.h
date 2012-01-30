@@ -35,23 +35,23 @@
  */
 class FreqSpinBox : public QSpinBox
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    /**
-     * @brief Class constructor.
-     * @param parent parent widget.
-     */
-    FreqSpinBox(QWidget * parent);
+    public:
+        /**
+         * @brief Class constructor.
+         * @param parent parent widget.
+         */
+        FreqSpinBox(QWidget * parent);
 
-protected:
-    /**
-     * Returns it's value as localized frequency.
-     * 'Never', 'Every Turn', 'Every 2 Turns', etc.
-     * @param value integer value to be representing as string.
-     * @return the turn frequence-like string representation.
-     */
-    QString textFromValue(int value) const;
+    protected:
+        /**
+         * Returns it's value as localized frequency.
+         * 'Never', 'Every Turn', 'Every 2 Turns', etc.
+         * @param value integer value to be representing as string.
+         * @return the turn frequence-like string representation.
+         */
+        QString textFromValue(int value) const;
 };
 
 

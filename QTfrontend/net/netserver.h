@@ -25,18 +25,18 @@
 
 class HWNetServer : public QObject
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    ~HWNetServer();
-    bool StartServer(quint16 port);
-    void StopServer();
-    QString getRunningHostName() const;
-    quint16 getRunningPort() const;
+    public:
+        ~HWNetServer();
+        bool StartServer(quint16 port);
+        void StopServer();
+        QString getRunningHostName() const;
+        quint16 getRunningPort() const;
 
-private:
-    quint16 ds_port;
-    QProcess process;
+    private:
+        quint16 ds_port;
+        QProcess process;
 };
 
 #endif // _NETSERVER_INCLUDED

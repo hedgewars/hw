@@ -23,7 +23,7 @@
 
 class PageInGame : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
         PageInGame(QWidget * parent = 0);

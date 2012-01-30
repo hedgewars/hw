@@ -23,22 +23,22 @@
 
 class PageFeedback : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageFeedback(QWidget * parent = 0);
-    
-    QPushButton * BtnSend;
-    QLineEdit * summary;
-    QTextBrowser * description;
-    QLabel * info;
-    QLabel * label_summary;
-    QLabel * label_description;
+    public:
+        PageFeedback(QWidget * parent = 0);
 
-private:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+        QPushButton * BtnSend;
+        QLineEdit * summary;
+        QTextBrowser * description;
+        QLabel * info;
+        QLabel * label_summary;
+        QLabel * label_description;
+
+    private:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 };
 
 #endif

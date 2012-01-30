@@ -35,47 +35,47 @@
 
 class TCPBase : public QObject
 {
-  Q_OBJECT
+        Q_OBJECT
 
- public:
-  TCPBase(bool demoMode);
-  virtual ~TCPBase();
+    public:
+        TCPBase(bool demoMode);
+        virtual ~TCPBase();
 
- signals:
-  void isReadyNow();
+    signals:
+        void isReadyNow();
 
- protected:
-  quint16 ipc_port;
+    protected:
+        quint16 ipc_port;
 
-  void Start();
+        void Start();
 
-  QByteArray readbuffer;
+        QByteArray readbuffer;
 
-  QByteArray toSendBuf;
-  QByteArray demo;
+        QByteArray toSendBuf;
+        QByteArray demo;
 
-  void SendIPC(const QByteArray & buf);
-  void RawSendIPC(const QByteArray & buf);
+        void SendIPC(const QByteArray & buf);
+        void RawSendIPC(const QByteArray & buf);
 
-  virtual QStringList getArguments()=0;
-  virtual void onClientRead();
-  virtual void onClientDisconnect();
-  virtual void SendToClientFirst();
+        virtual QStringList getArguments()=0;
+        virtual void onClientRead();
+        virtual void onClientDisconnect();
+        virtual void SendToClientFirst();
 
- private:
-  static QPointer<QTcpServer> IPCServer;
+    private:
+        static QPointer<QTcpServer> IPCServer;
 
-  bool m_isDemoMode;
-  void RealStart();
-  QPointer<QTcpSocket> IPCSocket;
+        bool m_isDemoMode;
+        void RealStart();
+        QPointer<QTcpSocket> IPCSocket;
 
- private slots:
-  void NewConnection();
-  void ClientDisconnect();
-  void ClientRead();
-  void StartProcessError(QProcess::ProcessError error);
+    private slots:
+        void NewConnection();
+        void ClientDisconnect();
+        void ClientRead();
+        void StartProcessError(QProcess::ProcessError error);
 
-  void tcpServerReady();
+        void tcpServerReady();
 };
 
 #endif // _TCPBASE_INCLUDED

@@ -23,25 +23,25 @@
 
 class PageNetServer : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageNetServer(QWidget* parent = 0);
+    public:
+        PageNetServer(QWidget* parent = 0);
 
-    QPushButton *BtnStart;
-    QPushButton *BtnDefault;
-    QLabel *labelSD;
-    QLineEdit *leServerDescr;
-    QLabel *labelPort;
-    QSpinBox *sbPort;
+        QPushButton *BtnStart;
+        QPushButton *BtnDefault;
+        QLabel *labelSD;
+        QLineEdit *leServerDescr;
+        QLabel *labelPort;
+        QSpinBox *sbPort;
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-private slots:
-    void setDefaultPort();
+    private slots:
+        void setDefaultPort();
 };
 
 #endif

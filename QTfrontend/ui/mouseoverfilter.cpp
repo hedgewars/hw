@@ -39,7 +39,8 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
         QComboBox * droplist = dynamic_cast<QComboBox*>(dist);
         QSlider * slider = dynamic_cast<QSlider*>(dist);
         QTabWidget * tab = dynamic_cast<QTabWidget*>(dist);
-        if (HWForm::config->isFrontendSoundEnabled() && (button || textfield || checkbox || droplist || slider || tab)) {
+        if (HWForm::config->isFrontendSoundEnabled() && (button || textfield || checkbox || droplist || slider || tab))
+        {
             HWDataManager & dataMgr = HWDataManager::instance();
             SDLInteraction::instance().playSoundFile(dataMgr.findFileForRead("Sounds/steps.ogg"));
         }

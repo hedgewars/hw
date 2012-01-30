@@ -148,7 +148,7 @@ void PageRoomsList::connectSignals()
 
 
 PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings) :
-  AbstractPage(parent)
+    AbstractPage(parent)
 {
     m_gameSettings = gameSettings;
 
@@ -160,7 +160,8 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings) :
         CBRules->addItem(ammoSchemeModel->predefSchemesNames.at(i).toAscii().constData());
 
     CBWeapons->addItem(QComboBox::tr("Any"));
-    for (int i = 0; i < cDefaultAmmos.count(); i++) {
+    for (int i = 0; i < cDefaultAmmos.count(); i++)
+    {
         QPair<QString,QString> ammo = cDefaultAmmos.at(i);
         CBWeapons->addItem(ammo.first.toAscii().constData());
     }
@@ -199,24 +200,24 @@ void PageRoomsList::setRoomsList(const QStringList & list)
     QBrush green(QColor(0, 255, 0));
 
     listFromServer = list;
-    
+
     QString selection = "";
-    
+
     if(QTableWidgetItem *item = roomsList->item(roomsList->currentRow(), 0))
         selection = item->text();
-    
+
     roomsList->clear();
     roomsList->setColumnCount(7);
     roomsList->setHorizontalHeaderLabels(
-            QStringList() <<
-            QTableWidget::tr("Room Name") <<
-            QTableWidget::tr("C") <<
-            QTableWidget::tr("T") <<
-            QTableWidget::tr("Owner") <<
-            QTableWidget::tr("Map") <<
-            QTableWidget::tr("Rules") <<
-            QTableWidget::tr("Weapons")
-            );
+        QStringList() <<
+        QTableWidget::tr("Room Name") <<
+        QTableWidget::tr("C") <<
+        QTableWidget::tr("T") <<
+        QTableWidget::tr("Owner") <<
+        QTableWidget::tr("Map") <<
+        QTableWidget::tr("Rules") <<
+        QTableWidget::tr("Weapons")
+    );
 
     // set minimum sizes
 //  roomsList->horizontalHeader()->resizeSection(0, 200);
@@ -240,42 +241,67 @@ void PageRoomsList::setRoomsList(const QStringList & list)
     {
         // if we are joining a game
         // TODO: Should NOT be done here
-        if (gameInLobby) {
-            if (gameInLobbyName == list[i + 1]) {
+        if (gameInLobby)
+        {
+            if (gameInLobbyName == list[i + 1])
+            {
                 gameCanBeJoined = list[i].compare("True");
             }
         }
-        
+
         // check filter settings
-        #define NO_FILTER_MATCH roomsList->setRowCount(roomsList->rowCount() - 1); --r; continue
-        
-        if (list[i].compare("True") && CBState->currentIndex() == 2) { NO_FILTER_MATCH; }
-        if (list[i].compare("False") && CBState->currentIndex() == 1) { NO_FILTER_MATCH; }
-        if (CBRules->currentIndex() != 0 && list[i + 6].compare(CBRules->currentText())) { NO_FILTER_MATCH; }
-        if (CBWeapons->currentIndex() != 0 && list[i + 7].compare(CBWeapons->currentText())) { NO_FILTER_MATCH; }
+#define NO_FILTER_MATCH roomsList->setRowCount(roomsList->rowCount() - 1); --r; continue
+
+        if (list[i].compare("True") && CBState->currentIndex() == 2)
+        {
+            NO_FILTER_MATCH;
+        }
+        if (list[i].compare("False") && CBState->currentIndex() == 1)
+        {
+            NO_FILTER_MATCH;
+        }
+        if (CBRules->currentIndex() != 0 && list[i + 6].compare(CBRules->currentText()))
+        {
+            NO_FILTER_MATCH;
+        }
+        if (CBWeapons->currentIndex() != 0 && list[i + 7].compare(CBWeapons->currentText()))
+        {
+            NO_FILTER_MATCH;
+        }
         bool found = list[i + 1].contains(searchText->text(), Qt::CaseInsensitive);
-        if (!found) {
-            for (int a = 4; a <= 7; ++a) {
+        if (!found)
+        {
+            for (int a = 4; a <= 7; ++a)
+            {
                 QString compString = list[i + a];
-                if (a == 5 && compString == "+rnd+") {
+                if (a == 5 && compString == "+rnd+")
+                {
                     compString = "Random Map";
-                } else if (a == 5 && compString == "+maze+") {
+                }
+                else if (a == 5 && compString == "+maze+")
+                {
                     compString = "Random Maze";
-                } else if (a == 5 && compString == "+drawn+") {
+                }
+                else if (a == 5 && compString == "+drawn+")
+                {
                     compString = "Drawn Map";
                 }
-                if (compString.contains(searchText->text(), Qt::CaseInsensitive)) {
+                if (compString.contains(searchText->text(), Qt::CaseInsensitive))
+                {
                     found = true;
                     break;
                 }
             }
         }
-        if (!searchText->text().isEmpty() && !found) { NO_FILTER_MATCH; }
-        
+        if (!searchText->text().isEmpty() && !found)
+        {
+            NO_FILTER_MATCH;
+        }
+
         QTableWidgetItem * item;
         item = new QTableWidgetItem(list[i + 1]); // room name
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        
+
         // pick appropriate room icon and tooltip (game in progress yes/no; later maybe locked rooms etc.)
         if(list[i].compare("True"))
         {
@@ -325,7 +351,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         else
         {
             item = new QTableWidgetItem(list[i + 5]); // selected map
-            
+
             // check to see if we've got this map
             // not perfect but a start
             if(!mapList->contains(list[i + 5]))
@@ -335,12 +361,12 @@ void PageRoomsList::setRoomsList(const QStringList & list)
             }
             else
             {
-               // todo: mission icon?
+                // todo: mission icon?
 // FIXME - need real icons. Disabling until then
 //               item->setIcon(QIcon(":/res/mapCustom.png"));
             }
         }
-        
+
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setToolTip(tr("Games may be played on precreated or randomized maps."));
         roomsList->setItem(r, 4, item);
@@ -368,11 +394,15 @@ void PageRoomsList::setRoomsList(const QStringList & list)
     roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
 
     // TODO: Should NOT be done here
-    if (gameInLobby) {
+    if (gameInLobby)
+    {
         gameInLobby = false;
-        if (gameCanBeJoined) {
+        if (gameCanBeJoined)
+        {
             emit askForJoinRoom(gameInLobbyName);
-        } else {
+        }
+        else
+        {
             emit askJoinConfirmation(gameInLobbyName);
         }
     }
@@ -386,9 +416,9 @@ void PageRoomsList::onCreateClick()
         emit askForCreateRoom(roomName->text());
     else
         QMessageBox::critical(this,
-                tr("Error"),
-                tr("Please enter room name"),
-                tr("OK"));
+                              tr("Error"),
+                              tr("Please enter room name"),
+                              tr("OK"));
 }
 
 void PageRoomsList::onJoinClick()
@@ -397,23 +427,28 @@ void PageRoomsList::onJoinClick()
     if (!curritem)
     {
         QMessageBox::critical(this,
-                tr("Error"),
-                tr("Please select room from the list"),
-                tr("OK"));
+                              tr("Error"),
+                              tr("Please select room from the list"),
+                              tr("OK"));
         return;
     }
 
-    for (int i = 0; i < listFromServer.size(); i += 8) {
-        if (listFromServer[i + 1] == curritem->data(Qt::DisplayRole).toString()) {
+    for (int i = 0; i < listFromServer.size(); i += 8)
+    {
+        if (listFromServer[i + 1] == curritem->data(Qt::DisplayRole).toString())
+        {
             gameInLobby = listFromServer[i].compare("True");
             break;
         }
     }
-    
-    if (gameInLobby) {
+
+    if (gameInLobby)
+    {
         gameInLobbyName = curritem->data(Qt::DisplayRole).toString();
         emit askForRoomList();
-    } else {
+    }
+    else
+    {
         emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
     }
 }
@@ -434,9 +469,9 @@ void PageRoomsList::onClearClick()
 void PageRoomsList::onJoinConfirmation(const QString & room)
 {
     if (QMessageBox::warning(this,
-        tr("Warning"),
-        tr("The game you are trying to join has started.\nDo you still want to join the room?"),
-        QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+                             tr("Warning"),
+                             tr("The game you are trying to join has started.\nDo you still want to join the room?"),
+                             QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
     {
         emit askForJoinRoom(room);
     }

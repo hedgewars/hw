@@ -125,12 +125,12 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
         loc = QLocale::system().name();
 
     QString infoFile = dataMgr.findFileForRead(
-                            QString("Locale/missions_" + loc + ".txt"));
+                           QString("Locale/missions_" + loc + ".txt"));
 
     // if file is non-existant try with language only
     if (!QFile::exists(infoFile))
         infoFile = dataMgr.findFileForRead(QString(
-                "Locale/missions_" + loc.remove(QRegExp("_.*$")) + ".txt"));
+                                               "Locale/missions_" + loc.remove(QRegExp("_.*$")) + ".txt"));
 
     // fallback if file for current locale is non-existant
     if (!QFile::exists(infoFile))
@@ -145,7 +145,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     QStringList missionList = dataMgr.entryList(
                                   "Missions/Training",
                                   QDir::Files, QStringList("*.lua")).
-                                  replaceInStrings(QRegExp("\\.lua$"), "");
+                              replaceInStrings(QRegExp("\\.lua$"), "");
 
     // scripts to lost - TODO: model?
     foreach (const QString & mission, missionList)
@@ -191,9 +191,9 @@ void PageTraining::updateInfo()
     {
         // TODO also use .pngs in userdata folder
         QString thumbFile = dataMgr.findFileForRead(
-                    "Graphics/Missions/Training/" +
-                    lstMissions->currentItem()->data(Qt::UserRole).toString() +
-                    "@2x.png");
+                                "Graphics/Missions/Training/" +
+                                lstMissions->currentItem()->data(Qt::UserRole).toString() +
+                                "@2x.png");
 
         if (QFile::exists(thumbFile))
             btnPreview->setIcon(QIcon(thumbFile));
@@ -201,13 +201,13 @@ void PageTraining::updateInfo()
             btnPreview->setIcon(QIcon(":/res/Trainings.png"));
 
         QString realName = lstMissions->currentItem()->data(
-                           Qt::UserRole).toString();
+                               Qt::UserRole).toString();
 
-        QString caption = m_info->value(realName + ".name", 
-                          lstMissions->currentItem()->text()).toString();
+        QString caption = m_info->value(realName + ".name",
+                                        lstMissions->currentItem()->text()).toString();
 
         QString description = m_info->value(realName + ".desc",
-                              tr("No description available")).toString();
+                                            tr("No description available")).toString();
 
         lblCaption->setText("<h2>" + caption +"</h2>");
         lblDescription->setText(description);

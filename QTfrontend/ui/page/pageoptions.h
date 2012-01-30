@@ -26,80 +26,80 @@ class IconedGroupBox;
 
 class PageOptions : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageOptions(QWidget* parent = 0);
+    public:
+        PageOptions(QWidget* parent = 0);
 
-    QCheckBox *WeaponTooltip;
-    QPushButton *WeaponNew;
-    QPushButton *WeaponEdit;
-    QPushButton *WeaponDelete;
-    QComboBox *WeaponsName;
-    QPushButton *SchemeNew;
-    QPushButton *SchemeEdit;
-    QPushButton *SchemeDelete;
-    QComboBox *SchemesName;
+        QCheckBox *WeaponTooltip;
+        QPushButton *WeaponNew;
+        QPushButton *WeaponEdit;
+        QPushButton *WeaponDelete;
+        QComboBox *WeaponsName;
+        QPushButton *SchemeNew;
+        QPushButton *SchemeEdit;
+        QPushButton *SchemeDelete;
+        QComboBox *SchemesName;
 
-    QComboBox *CBLanguage;
+        QComboBox *CBLanguage;
 
-    IconedGroupBox *teamsBox;;
-    QPushButton *BtnAssociateFiles;
-    QComboBox *CBTeamName;
-    IconedGroupBox *AGGroupBox;
-    QComboBox *CBResolution;
-    QComboBox *CBStereoMode;
-    QCheckBox *CBEnableSound;
-    QCheckBox *CBEnableFrontendSound;
-    QCheckBox *CBEnableMusic;
-    QCheckBox *CBEnableFrontendMusic;
-    QCheckBox *CBFullscreen;
-    QCheckBox *CBFrontendFullscreen;
-    QCheckBox *CBShowFPS;
-    QCheckBox *CBAltDamage;
-    QCheckBox *CBNameWithDate;
+        IconedGroupBox *teamsBox;;
+        QPushButton *BtnAssociateFiles;
+        QComboBox *CBTeamName;
+        IconedGroupBox *AGGroupBox;
+        QComboBox *CBResolution;
+        QComboBox *CBStereoMode;
+        QCheckBox *CBEnableSound;
+        QCheckBox *CBEnableFrontendSound;
+        QCheckBox *CBEnableMusic;
+        QCheckBox *CBEnableFrontendMusic;
+        QCheckBox *CBFullscreen;
+        QCheckBox *CBFrontendFullscreen;
+        QCheckBox *CBShowFPS;
+        QCheckBox *CBAltDamage;
+        QCheckBox *CBNameWithDate;
 #ifdef __APPLE__
-    QCheckBox *CBAutoUpdate;
+        QCheckBox *CBAutoUpdate;
 #endif
 
-    FPSEdit *fpsedit;
-    QLabel *labelNN;
-    QLabel *labelNetPassword;
-    QSpinBox * volumeBox;
-    QLineEdit *editNetNick;
-    QLineEdit *editNetPassword;
-    QSlider *SLQuality;
-    QCheckBox *CBFrontendEffects;
+        FPSEdit *fpsedit;
+        QLabel *labelNN;
+        QLabel *labelNetPassword;
+        QSpinBox * volumeBox;
+        QLineEdit *editNetNick;
+        QLineEdit *editNetPassword;
+        QSlider *SLQuality;
+        QCheckBox *CBFrontendEffects;
 
-    void setTeamOptionsEnabled(bool enabled);
+        void setTeamOptionsEnabled(bool enabled);
 
-signals:
-    void newTeamRequested();
-    void editTeamRequested(const QString & teamName);
-    void deleteTeamRequested(const QString & teamName);
+    signals:
+        void newTeamRequested();
+        void editTeamRequested(const QString & teamName);
+        void deleteTeamRequested(const QString & teamName);
 
 
-private:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    private:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-    bool previousFullscreenValue;
-    int previousResolutionIndex;
-    int previousQuality;
-    QLabel *LblNoEditTeam;
-    QPushButton *BtnNewTeam;
-    QPushButton *BtnEditTeam;
-    QPushButton *BtnDeleteTeam;
+        bool previousFullscreenValue;
+        int previousResolutionIndex;
+        int previousQuality;
+        QLabel *LblNoEditTeam;
+        QPushButton *BtnNewTeam;
+        QPushButton *BtnEditTeam;
+        QPushButton *BtnDeleteTeam;
 
-private slots:
-    void forceFullscreen(int index);
-    void setFullscreen(int state);
-    void setResolution(int state);
-    void setQuality(int value);
-    void trimNetNick();
-    void requestEditSelectedTeam();
-    void requestDeleteSelectedTeam();
+    private slots:
+        void forceFullscreen(int index);
+        void setFullscreen(int state);
+        void setResolution(int state);
+        void setQuality(int value);
+        void trimNetNick();
+        void requestEditSelectedTeam();
+        void requestDeleteSelectedTeam();
 };
 
 #endif

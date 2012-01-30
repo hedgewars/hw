@@ -32,7 +32,7 @@ QLayout * PageAdmin::bodyLayoutDefinition()
 
     // 0
     pbAsk = addButton(tr("Fetch data"), pageLayout, 0, 0, 1, 3);
-    
+
     // 1
     QLabel * lblSMN = new QLabel(this);
     lblSMN->setText(tr("Server message for latest version:"));
@@ -66,10 +66,10 @@ QLayout * PageAdmin::bodyLayoutDefinition()
     tb->setOpenExternalLinks(true);
     tb->document()->setDefaultStyleSheet(HWChatWidget::styleSheet());
     pageLayout->addWidget(tb, 4, 1, 1, 2);
-    
+
     // 5
     pbClearAccountsCache = addButton(tr("Clear Accounts Cache"), pageLayout, 5, 0);
-    
+
     // 6
     pbSetSM = addButton(tr("Set data"), pageLayout, 6, 0, 1, 3);
 

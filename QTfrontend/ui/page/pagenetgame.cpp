@@ -153,9 +153,9 @@ void PageNetGame::onUpdateClick()
     {
         leRoomName->clear();
         QMessageBox::critical(this,
-                tr("Error"),
-                tr("Please enter room name"),
-                tr("OK"));
+                              tr("Error"),
+                              tr("Please enter room name"),
+                              tr("OK"));
     }
 }
 

@@ -22,15 +22,17 @@
 #include "hwform.h"
 
 HWApplication::HWApplication(int &argc,  char **argv):
-     QApplication(argc, argv)
+    QApplication(argc, argv)
 {
 
 }
 
-bool HWApplication::event(QEvent *event) {
+bool HWApplication::event(QEvent *event)
+{
     QFileOpenEvent *openEvent;
 
-    switch (event->type()) {
+    switch (event->type())
+    {
         case QEvent::FileOpen:
             openEvent = (QFileOpenEvent *)event;
             if (form) form->PlayDemoQuick(openEvent->file());

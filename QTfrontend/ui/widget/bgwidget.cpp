@@ -94,13 +94,17 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent), enabled(false)
     //Simply replace Confetti.png and Egg.png with an appropriate graphic)
     switch (season)
     {
-    case SEASON_CHRISTMAS : fname = "Flake.png";
-			    break;
-    case SEASON_EASTER : fname = "Egg.png";
-			 break;
-    case SEASON_HWBDAY : fname = "Confetti.png";
-			 break;
-    default : fname = "Star.png";
+        case SEASON_CHRISTMAS :
+            fname = "Flake.png";
+            break;
+        case SEASON_EASTER :
+            fname = "Egg.png";
+            break;
+        case SEASON_HWBDAY :
+            fname = "Confetti.png";
+            break;
+        default :
+            fname = "Star.png";
     }
 
     sprite.load(":/res/" + fname);
@@ -118,7 +122,7 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent), enabled(false)
 
         QPainter p;
         p.begin(rotatedSprites[i]);
-    //  p.setRenderHint(QPainter::Antialiasing);
+        //  p.setRenderHint(QPainter::Antialiasing);
         p.setRenderHint(QPainter::SmoothPixmapTransform);
         p.translate(translate.x(), translate.y());
         p.rotate(4 * i);

@@ -29,52 +29,52 @@ class QSettings;
 
 class GameUIConfig : public QSettings
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    HWForm * Form;
-    GameUIConfig(HWForm * FormWidgets, const QString & fileName);
-    QStringList GetTeamsList();
-    QRect vid_Resolution();
-    bool vid_Fullscreen();
-    quint32 translateQuality();
-    bool isSoundEnabled();
-    bool isFrontendSoundEnabled();
-    QString language();
-    bool isMusicEnabled();
-    bool isFrontendMusicEnabled();
-    bool isShowFPSEnabled();
-    bool isAltDamageEnabled();
-    bool appendDateTimeToRecordName();
-    quint8 volume();
-    quint8 timerInterval();
-    quint8 bitDepth();
-    QString netNick();
-    QByteArray netPasswordHash();
-    int netPasswordLength();
-    void setNetPasswordLength(int passwordLength);
-    bool isReducedQuality() const;
-    bool isFrontendEffects() const;
-    bool isFrontendFullscreen() const;
-    void resizeToConfigValues();
-    quint32 stereoMode() const;
+    public:
+        HWForm * Form;
+        GameUIConfig(HWForm * FormWidgets, const QString & fileName);
+        QStringList GetTeamsList();
+        QRect vid_Resolution();
+        bool vid_Fullscreen();
+        quint32 translateQuality();
+        bool isSoundEnabled();
+        bool isFrontendSoundEnabled();
+        QString language();
+        bool isMusicEnabled();
+        bool isFrontendMusicEnabled();
+        bool isShowFPSEnabled();
+        bool isAltDamageEnabled();
+        bool appendDateTimeToRecordName();
+        quint8 volume();
+        quint8 timerInterval();
+        quint8 bitDepth();
+        QString netNick();
+        QByteArray netPasswordHash();
+        int netPasswordLength();
+        void setNetPasswordLength(int passwordLength);
+        bool isReducedQuality() const;
+        bool isFrontendEffects() const;
+        bool isFrontendFullscreen() const;
+        void resizeToConfigValues();
+        quint32 stereoMode() const;
 
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED
-    bool isAutoUpdateEnabled();
+        bool isAutoUpdateEnabled();
 #endif
 #endif
 
- signals:
-    void frontendFullscreen(bool value);
+    signals:
+        void frontendFullscreen(bool value);
 
-public slots:
-    void SaveOptions();
-    void updNetNick();
-private:
-    bool netPasswordIsValid();
-    bool eventFilter(QObject *object, QEvent *event);
-    quint8 depth;
+    public slots:
+        void SaveOptions();
+        void updNetNick();
+    private:
+        bool netPasswordIsValid();
+        bool eventFilter(QObject *object, QEvent *event);
+        quint8 depth;
 };
 
 #endif

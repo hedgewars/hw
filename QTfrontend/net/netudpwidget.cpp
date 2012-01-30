@@ -22,7 +22,7 @@
 #include "netudpwidget.h"
 
 HWNetUdpModel::HWNetUdpModel(QObject* parent) :
-  HWNetServersModel(parent)
+    HWNetServersModel(parent)
 {
     pUdpSocket = new QUdpSocket(this);
 
@@ -41,7 +41,8 @@ void HWNetUdpModel::updateList()
 
 void HWNetUdpModel::onClientRead()
 {
-    while (pUdpSocket->hasPendingDatagrams()) {
+    while (pUdpSocket->hasPendingDatagrams())
+    {
         QByteArray datagram;
         datagram.resize(pUdpSocket->pendingDatagramSize());
         QHostAddress clientAddr;
@@ -50,7 +51,8 @@ void HWNetUdpModel::onClientRead()
         pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
 
         QString packet = QString::fromUtf8(datagram.data());
-        if(packet.startsWith("hedgewars server")) {
+        if(packet.startsWith("hedgewars server"))
+        {
             QStringList sl;
             sl << packet.remove(0, 17) << clientAddr.toString() << "46631";
             games.append(sl);
@@ -64,9 +66,9 @@ QVariant HWNetUdpModel::data(const QModelIndex &index,
                              int role) const
 {
     if (!index.isValid() || index.row() < 0
-        || index.row() >= games.size()
-        || role != Qt::DisplayRole)
-    return QVariant();
+            || index.row() >= games.size()
+            || role != Qt::DisplayRole)
+        return QVariant();
 
     return games[index.row()][index.column()];
 }

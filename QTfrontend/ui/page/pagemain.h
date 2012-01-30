@@ -23,25 +23,25 @@
 
 class PageMain : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageMain(QWidget * parent = 0);
+    public:
+        PageMain(QWidget * parent = 0);
 
-    QPushButton * BtnSinglePlayer;
-    QPushButton * BtnNet;
-    QPushButton * BtnSetup;
-    QPushButton * BtnFeedback;
-    QPushButton * BtnInfo;
-    QPushButton * BtnDataDownload;
-    QLabel * mainNote;
+        QPushButton * BtnSinglePlayer;
+        QPushButton * BtnNet;
+        QPushButton * BtnSetup;
+        QPushButton * BtnFeedback;
+        QPushButton * BtnInfo;
+        QPushButton * BtnDataDownload;
+        QLabel * mainNote;
 
-private:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    private:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-    QString randomTip() const;
+        QString randomTip() const;
 };
 
 #endif

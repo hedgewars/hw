@@ -25,26 +25,26 @@ class DrawMapWidget;
 
 class PageDrawMap : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageDrawMap(QWidget* parent = 0);
+    public:
+        PageDrawMap(QWidget* parent = 0);
 
-    DrawMapWidget * drawMapWidget;
+        DrawMapWidget * drawMapWidget;
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        void connectSignals();
 
-private:
-    QPushButton * pbUndo;
-    QPushButton * pbClear;
-    QPushButton * pbLoad;
-    QPushButton * pbSave;
+    private:
+        QPushButton * pbUndo;
+        QPushButton * pbClear;
+        QPushButton * pbLoad;
+        QPushButton * pbSave;
 
-private slots:
-    void load();
-    void save();
+    private slots:
+        void load();
+        void save();
 };
 
 #endif

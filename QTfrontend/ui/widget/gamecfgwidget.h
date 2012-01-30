@@ -34,53 +34,53 @@ class QTableView;
 
 class GameCFGWidget : public QGroupBox
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    GameCFGWidget(QWidget* parent);
-    quint32 getGameFlags() const;
-    quint32 getInitHealth() const;
-    QByteArray getFullConfig() const;
-    QComboBox * Scripts;
-    QComboBox * GameSchemes;
-    QComboBox * WeaponsName;
-    HWMapContainer* pMapContainer;
-    QTableView * tv;
-    QVariant schemeData(int column) const;
+    public:
+        GameCFGWidget(QWidget* parent);
+        quint32 getGameFlags() const;
+        quint32 getInitHealth() const;
+        QByteArray getFullConfig() const;
+        QComboBox * Scripts;
+        QComboBox * GameSchemes;
+        QComboBox * WeaponsName;
+        HWMapContainer* pMapContainer;
+        QTableView * tv;
+        QVariant schemeData(int column) const;
 
-public slots:
-    void setParam(const QString & param, const QStringList & value);
-    void fullNetConfig();
-    void resendSchemeData();
+    public slots:
+        void setParam(const QString & param, const QStringList & value);
+        void fullNetConfig();
+        void resendSchemeData();
 
-signals:
-    void paramChanged(const QString & param, const QStringList & value);
-    void goToSchemes(int);
-    void goToWeapons(int);
-    void goToDrawMap();
+    signals:
+        void paramChanged(const QString & param, const QStringList & value);
+        void goToSchemes(int);
+        void goToWeapons(int);
+        void goToDrawMap();
 
-private slots:
-    void ammoChanged(int index);
-    void mapChanged(const QString &);
-    void templateFilterChanged(int);
-    void seedChanged(const QString &);
-    void themeChanged(const QString &);
-    void schemeChanged(int);
-    void scriptChanged(int);
-    void jumpToSchemes();
-    void jumpToWeapons();
-    void mapgenChanged(MapGenerator m);
-    void maze_sizeChanged(int s);
-    void onDrawnMapChanged(const QByteArray & data);
+    private slots:
+        void ammoChanged(int index);
+        void mapChanged(const QString &);
+        void templateFilterChanged(int);
+        void seedChanged(const QString &);
+        void themeChanged(const QString &);
+        void schemeChanged(int);
+        void scriptChanged(int);
+        void jumpToSchemes();
+        void jumpToWeapons();
+        void mapgenChanged(MapGenerator m);
+        void maze_sizeChanged(int s);
+        void onDrawnMapChanged(const QByteArray & data);
 
-private:
-    QGridLayout mainLayout;
-    QCheckBox * bindEntries;
-    QString curNetAmmoName;
-    QString curNetAmmo;
-    QRegExp seedRegexp;
+    private:
+        QGridLayout mainLayout;
+        QCheckBox * bindEntries;
+        QString curNetAmmoName;
+        QString curNetAmmo;
+        QRegExp seedRegexp;
 
-    void setNetAmmo(const QString& name, const QString& ammo);
+        void setNetAmmo(const QString& name, const QString& ammo);
 
 };
 

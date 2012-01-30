@@ -23,17 +23,17 @@
 
 class PageCampaign : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageCampaign(QWidget* parent = 0);
+    public:
+        PageCampaign(QWidget* parent = 0);
 
-    QPushButton *BtnStartCampaign;
-    QComboBox   *CBSelect;
-    QComboBox   *CBTeam;
+        QPushButton *BtnStartCampaign;
+        QComboBox   *CBSelect;
+        QComboBox   *CBTeam;
 
-protected:
-    QLayout * bodyLayoutDefinition();
+    protected:
+        QLayout * bodyLayoutDefinition();
 };
 
 #endif

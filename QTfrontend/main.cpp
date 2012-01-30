@@ -46,7 +46,7 @@
 QDate calculateEaster(long year)
 {
     int c, n, k, i, j, l, m, d;
-    
+
     c = year/100;
     n = year - 19*(year/19);
     k = (c - 17)/25;
@@ -65,23 +65,23 @@ QDate calculateEaster(long year)
 //Checks season and assigns it to the variable season in "hwconsts.h"
 void checkSeason()
 {
-   QDate date = QDate::currentDate();
-   
-   //Christmas?
-   if (date.month() == 12 && date.day() >= 24
-        && date.day() <= 26)
-	season = SEASON_CHRISTMAS;
-   //Hedgewars birthday?
-   else if (date.month() == 10 && date.day() == 31)
-   {
-   	season = SEASON_HWBDAY;
-	years_since_foundation = date.year() - 2004;
-   }
-   //Easter?
-   else if (calculateEaster(date.year()) == date)
-	season = SEASON_EASTER;
-   else
-	season = SEASON_NONE;
+    QDate date = QDate::currentDate();
+
+    //Christmas?
+    if (date.month() == 12 && date.day() >= 24
+            && date.day() <= 26)
+        season = SEASON_CHRISTMAS;
+    //Hedgewars birthday?
+    else if (date.month() == 10 && date.day() == 31)
+    {
+        season = SEASON_HWBDAY;
+        years_since_foundation = date.year() - 2004;
+    }
+    //Easter?
+    else if (calculateEaster(date.year()) == date)
+        season = SEASON_EASTER;
+    else
+        season = SEASON_NONE;
 }
 
 bool checkForDir(const QString & dir)
@@ -91,15 +91,16 @@ bool checkForDir(const QString & dir)
         if (!tmpdir.mkdir(dir))
         {
             QMessageBox::critical(0,
-                    QObject::tr("Error"),
-                    QObject::tr("Cannot create directory %1").arg(dir),
-                    QObject::tr("OK"));
+                                  QObject::tr("Error"),
+                                  QObject::tr("Cannot create directory %1").arg(dir),
+                                  QObject::tr("OK"));
             return false;
         }
     return true;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
     HWApplication app(argc, argv);
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
@@ -107,29 +108,36 @@ int main(int argc, char *argv[]) {
     QMap<QString, QString> parsedArgs;
     {
         QList<QString>::iterator i = arguments.begin();
-        while(i != arguments.end()) {
+        while(i != arguments.end())
+        {
             QString arg = *i;
 
             QRegExp opt("--(\\S+)=(.+)");
-            if(opt.exactMatch(arg)) {
+            if(opt.exactMatch(arg))
+            {
                 parsedArgs[opt.cap(1)] = opt.cap(2);
                 i = arguments.erase(i);
-            } else {
-              ++i;
+            }
+            else
+            {
+                ++i;
             }
         }
     }
 
-    if(parsedArgs.contains("data-dir")) {
+    if(parsedArgs.contains("data-dir"))
+    {
         QFileInfo f(parsedArgs["data-dir"]);
-        if(!f.exists()) {
+        if(!f.exists())
+        {
             qWarning() << "WARNING: Cannot open DATA_PATH=" << f.absoluteFilePath();
         }
         *cDataDir = f.absoluteFilePath();
         custom_data = true;
     }
 
-    if(parsedArgs.contains("config-dir")) {
+    if(parsedArgs.contains("config-dir"))
+    {
         QFileInfo f(parsedArgs["config-dir"]);
         *cConfigDir = f.absoluteFilePath();
         custom_config = true;
@@ -189,11 +197,12 @@ int main(int argc, char *argv[]) {
 
     datadir->cd(bindir->absolutePath());
     datadir->cd(*cDataDir);
-    if(!datadir->cd("hedgewars/Data")) {
+    if(!datadir->cd("hedgewars/Data"))
+    {
         QMessageBox::critical(0, QMessageBox::tr("Error"),
-            QMessageBox::tr("Failed to open data directory:\n%1\n"
-                    "Please check your installation").
-                    arg(datadir->absolutePath()+"/hedgewars/Data"));
+                              QMessageBox::tr("Failed to open data directory:\n%1\n"
+                                              "Please check your installation").
+                              arg(datadir->absolutePath()+"/hedgewars/Data"));
         return 1;
     }
 
@@ -203,8 +212,8 @@ int main(int argc, char *argv[]) {
         QStringList themes;
 
         themes.append(dataMgr.entryList(
-                         "Themes",
-                         QDir::AllDirs | QDir::NoDotAndDotDot)
+                          "Themes",
+                          QDir::AllDirs | QDir::NoDotAndDotDot)
                      );
 
         QList<QPair<QIcon, QIcon> > icons;
@@ -213,20 +222,21 @@ int main(int argc, char *argv[]) {
         for(int i = themes.size() - 1; i >= 0; --i)
         {
             QString file = dataMgr.findFileForRead(
-                QString("Themes/%1/icon.png").arg(themes.at(i))
-            );
+                               QString("Themes/%1/icon.png").arg(themes.at(i))
+                           );
 
             if(QFile::exists(file))
-            { // load icon
+            {
+                // load icon
                 QPair<QIcon, QIcon> ic;
                 ic.first = QIcon(file);
 
                 // load preview icon
                 ic.second = QIcon(
-                    dataMgr.findFileForRead(
-                        QString("Themes/%1/icon@2x.png").arg(themes.at(i))
-                    )
-                );
+                                dataMgr.findFileForRead(
+                                    QString("Themes/%1/icon@2x.png").arg(themes.at(i))
+                                )
+                            );
 
                 icons.prepend(ic);
             }
@@ -246,17 +256,17 @@ int main(int argc, char *argv[]) {
     }
 
     mapList = new QStringList(dataMgr.entryList(
-                                 QString("Maps"),
-                                 QDir::Dirs | QDir::NoDotAndDotDot
-                                 )
+                                  QString("Maps"),
+                                  QDir::Dirs | QDir::NoDotAndDotDot
+                              )
                              );
- 
+
     scriptList = new QStringList(dataMgr.entryList(
                                      QString("Scripts/Multiplayer"),
                                      QDir::Files,
                                      QStringList("*.lua")
-                                     )
-                                 );
+                                 )
+                                );
 
     QTranslator Translator;
     {
@@ -290,7 +300,7 @@ int main(int argc, char *argv[]) {
 
     QString style = "";
     QString fname;
-    
+
     checkSeason();
     //For each season, there is an extra stylesheet
     //Todo: change background for easter and birthday
@@ -298,13 +308,17 @@ int main(int argc, char *argv[]) {
     //with an appropriate background
     switch (season)
     {
-    case SEASON_CHRISTMAS : fname = "christmas.css";
-			    break;
-    case SEASON_EASTER : fname = "easter.css";
-			 break;
-    case SEASON_HWBDAY : fname = "birthday.css";
-			 break;
-    default : fname = "qt.css";
+        case SEASON_CHRISTMAS :
+            fname = "christmas.css";
+            break;
+        case SEASON_EASTER :
+            fname = "easter.css";
+            break;
+        case SEASON_HWBDAY :
+            fname = "birthday.css";
+            break;
+        default :
+            fname = "qt.css";
     }
 
     // load external stylesheet if there is any

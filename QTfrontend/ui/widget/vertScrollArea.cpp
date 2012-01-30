@@ -22,7 +22,7 @@
 #include <QResizeEvent>
 
 VertScrArea::VertScrArea(QColor frameColor, QWidget * parent) :
-  QScrollArea(parent)
+    QScrollArea(parent)
 {
     QPalette newPalette = palette();
     newPalette.setColor(QPalette::Background, frameColor);

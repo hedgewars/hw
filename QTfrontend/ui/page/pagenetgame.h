@@ -29,53 +29,53 @@ class GameCFGWidget;
 
 class PageNetGame : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageNetGame(QWidget* parent, QSettings * gameSettings);
+    public:
+        PageNetGame(QWidget* parent, QSettings * gameSettings);
 
-    /**
-     * Sets the room name to display.
-     * @param roomName room name to be displayed.
-     */
-    void setRoomName(const QString & roomName);
+        /**
+         * Sets the room name to display.
+         * @param roomName room name to be displayed.
+         */
+        void setRoomName(const QString & roomName);
 
-    void displayError(const QString & message);
-    void displayNotice(const QString & message);
-    void displayWarning(const QString & message);
+        void displayError(const QString & message);
+        void displayNotice(const QString & message);
+        void displayWarning(const QString & message);
 
-    QPushButton *BtnGo;
-    QPushButton *BtnMaster;
-    QPushButton *BtnStart;
-    QPushButton *BtnUpdate;
+        QPushButton *BtnGo;
+        QPushButton *BtnMaster;
+        QPushButton *BtnStart;
+        QPushButton *BtnUpdate;
 
-    QAction * restrictJoins;
-    QAction * restrictTeamAdds;
+        QAction * restrictJoins;
+        QAction * restrictTeamAdds;
 
-    HWChatWidget* pChatWidget;
+        HWChatWidget* pChatWidget;
 
-    TeamSelWidget* pNetTeamsWidget;
-    GameCFGWidget* pGameCFG;
+        TeamSelWidget* pNetTeamsWidget;
+        GameCFGWidget* pGameCFG;
 
-public slots:
-    void setReadyStatus(bool isReady);
-    void setUser(const QString & nickname);
-    void onUpdateClick();
-    void setMasterMode(bool isMaster);
+    public slots:
+        void setReadyStatus(bool isReady);
+        void setUser(const QString & nickname);
+        void onUpdateClick();
+        void setMasterMode(bool isMaster);
 
-signals:
-    void SetupClicked();
-    void askForUpdateRoomName(const QString &);
+    signals:
+        void SetupClicked();
+        void askForUpdateRoomName(const QString &);
 
-private:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    private:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-    QSettings * m_gameSettings;
+        QSettings * m_gameSettings;
 
-    HistoryLineEdit * leRoomName;
-    QPushButton * btnSetup;
+        HistoryLineEdit * leRoomName;
+        QPushButton * btnSetup;
 };
 
 #endif

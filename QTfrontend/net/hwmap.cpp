@@ -21,7 +21,7 @@
 #include "hwmap.h"
 
 HWMap::HWMap() :
-  TCPBase(false)
+    TCPBase(false)
 {
 }
 
@@ -84,7 +84,8 @@ void HWMap::SendToClientFirst()
             }
             break;
         }
-        default: ;
+        default:
+            ;
     }
 
     SendIPC("!");

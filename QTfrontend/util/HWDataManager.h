@@ -36,72 +36,72 @@ class QStringList;
 
 /**
  * @brief Offers access to the data files of hedgewars.
- * 
+ *
  * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
- * 
+ *
  * @author sheepluva
  * @since 0.9.17
  */
 class HWDataManager
 {
-public:
-    /**
-     * @brief Returns reference to the <i>singleton</i> instance of this class.
-     * 
-     * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
-     * 
-     * @return reference to the instance.
-     */
-    static HWDataManager & instance();
+    public:
+        /**
+         * @brief Returns reference to the <i>singleton</i> instance of this class.
+         *
+         * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+         *
+         * @return reference to the instance.
+         */
+        static HWDataManager & instance();
 
-    /**
-     * @brief Returns a sorted list of data directory entries.
-     * 
-     * @param subDirectory sub-directory to search.
-     * @param filters filters for entry type.
-     * @param nameFilters filters by name patterns.
-     * @return a sorted list of matches in the subDirectory of data directory.
-     */
-    QStringList entryList(const QString & subDirectory,
-                          QDir::Filters filters = QDir::NoFilter,
-                          const QStringList & nameFilters = QStringList("*")
-                         ) const;
+        /**
+         * @brief Returns a sorted list of data directory entries.
+         *
+         * @param subDirectory sub-directory to search.
+         * @param filters filters for entry type.
+         * @param nameFilters filters by name patterns.
+         * @return a sorted list of matches in the subDirectory of data directory.
+         */
+        QStringList entryList(const QString & subDirectory,
+                              QDir::Filters filters = QDir::NoFilter,
+                              const QStringList & nameFilters = QStringList("*")
+                             ) const;
 
-    /**
-     * @brief Returns the path for the desires data file.
-     * 
-     * Use this method if you want to read an existing data file.
-     * 
-     * @param relativeDataFilePath relative path of the data file.
-     * @return real path to the file.
-     */
-    QString findFileForRead(const QString & relativeDataFilePath) const;
-
-
-    /**
-     * @brief Returns the path for the data file that is to be written.
-     * 
-     * Use this method if you want to create or write into a data file.
-     * 
-     * @param relativeDataFilePath relative path of data file write path.
-     * @return destination of path data file.
-     */
-    QString findFileForWrite(const QString & relativeDataFilePath) const;
+        /**
+         * @brief Returns the path for the desires data file.
+         *
+         * Use this method if you want to read an existing data file.
+         *
+         * @param relativeDataFilePath relative path of the data file.
+         * @return real path to the file.
+         */
+        QString findFileForRead(const QString & relativeDataFilePath) const;
 
 
-private:
-    /**
-     * @brief Class constructor of the <i>singleton</i>.
-     * 
-     * Not to be used from outside the class,
-     * use the static {@link HWDataManager::instance()} instead.
-     * 
-     * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
-     */
-    HWDataManager();
+        /**
+         * @brief Returns the path for the data file that is to be written.
+         *
+         * Use this method if you want to create or write into a data file.
+         *
+         * @param relativeDataFilePath relative path of data file write path.
+         * @return destination of path data file.
+         */
+        QString findFileForWrite(const QString & relativeDataFilePath) const;
 
-    QDir * defaultData; ///< directory of the installed data
-    QDir * userData;    ///< directory of custom data in the user's directory
+
+    private:
+        /**
+         * @brief Class constructor of the <i>singleton</i>.
+         *
+         * Not to be used from outside the class,
+         * use the static {@link HWDataManager::instance()} instead.
+         *
+         * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
+         */
+        HWDataManager();
+
+        QDir * defaultData; ///< directory of the installed data
+        QDir * userData;    ///< directory of custom data in the user's directory
 };
 
 #endif // HEDGEWARS_HWDATAMANAGER_H

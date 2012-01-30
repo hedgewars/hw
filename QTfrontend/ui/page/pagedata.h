@@ -29,31 +29,31 @@ class QVBoxLayout;
 
 class PageDataDownload : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageDataDownload(QWidget* parent = 0);
+    public:
+        PageDataDownload(QWidget* parent = 0);
 
-public slots:
-    void fetchList();
+    public slots:
+        void fetchList();
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        void connectSignals();
 
-private:
-    DataBrowser *web;
-    QHash<QNetworkReply*, QProgressBar *> progressBars;
-    QVBoxLayout *progressBarsLayout;
+    private:
+        DataBrowser *web;
+        QHash<QNetworkReply*, QProgressBar *> progressBars;
+        QVBoxLayout *progressBarsLayout;
 
-    bool extractDataPack(QByteArray * buf);
+        bool extractDataPack(QByteArray * buf);
 
-private slots:
-    void request(const QUrl &url);
+    private slots:
+        void request(const QUrl &url);
 
-    void pageDownloaded();
-    void fileDownloaded();
-    void downloadProgress(qint64, qint64);
+        void pageDownloaded();
+        void fileDownloaded();
+        void downloadProgress(qint64, qint64);
 };
 
 #endif

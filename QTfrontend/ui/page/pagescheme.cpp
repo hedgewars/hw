@@ -50,11 +50,11 @@ QLayout * PageScheme::bodyLayoutDefinition()
 
     // TODO name stuff and put CSS into main style sheet
     gbGameModes->setStyleSheet(".QGroupBox {"
-            "background-color: #130f2c; background-image:url();"
-            "}");
+                               "background-color: #130f2c; background-image:url();"
+                               "}");
     gbBasicSettings->setStyleSheet(".QGroupBox {"
-            "background-color: #130f2c; background-image:url();"
-            "}");
+                                   "background-color: #130f2c; background-image:url();"
+                                   "}");
 
     gbGameModes->setSizePolicy(sp);
     gbBasicSettings->setSizePolicy(sp);
@@ -381,7 +381,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     SB_GetAwayTime->setValue(100);
     SB_GetAwayTime->setSingleStep(25);
     glBSLayout->addWidget(SB_GetAwayTime,14,2,1,1);
- 
+
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Scheme Name:"));
 
@@ -470,7 +470,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_WaterRise, 37);
     mapper->addMapping(SB_HealthDecrease, 38);
     mapper->addMapping(SB_RopeModifier, 39);
-	mapper->addMapping(SB_GetAwayTime, 40);
+    mapper->addMapping(SB_GetAwayTime, 40);
 
     mapper->toFirst();
 }
@@ -493,7 +493,8 @@ void PageScheme::deleteRow()
 {
     QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Schemes"), QMessageBox::tr("Really delete this game scheme?"), QMessageBox::Ok | QMessageBox::Cancel);
 
-    if (reallyDelete.exec() == QMessageBox::Ok) {
+    if (reallyDelete.exec() == QMessageBox::Ok)
+    {
         QAbstractItemModel * model = mapper->model();
         model->removeRow(selectScheme->currentIndex());
     }

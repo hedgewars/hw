@@ -24,21 +24,21 @@
 
 class WeaponItem : public ItemNum
 {
-  Q_OBJECT
+        Q_OBJECT
 
- public:
-  WeaponItem(const QImage& im, const QImage& img, QWidget * parent);
-  virtual ~WeaponItem();
+    public:
+        WeaponItem(const QImage& im, const QImage& img, QWidget * parent);
+        virtual ~WeaponItem();
 
- signals:
-  void hedgehogsNumChanged();
+    signals:
+        void hedgehogsNumChanged();
 
- protected:
-  virtual void incItems();
-  virtual void decItems();
+    protected:
+        virtual void incItems();
+        virtual void decItems();
 
- private:
-  WeaponItem();
+    private:
+        WeaponItem();
 };
 
 #endif // _WEAPON_ITEM

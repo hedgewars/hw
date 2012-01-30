@@ -51,40 +51,40 @@ class HWForm;
 
 class Ui_HWForm
 {
-public:
-    QWidget *centralWidget;
+    public:
+        QWidget *centralWidget;
 
-    PageMain *pageMain;
-    PageEditTeam *pageEditTeam;
-    PageMultiplayer *pageMultiplayer;
-    PagePlayDemo *pagePlayDemo;
-    PageOptions *pageOptions;
-    PageFeedback *pageFeedback;
-    PageNet *pageNet;
-    PageNetServer * pageNetServer;
-    PageNetChat *pageNetChat;
-    PageNetGame *pageNetGame;
-    PageInfo *pageInfo;
-    PageDataDownload *pageDataDownload;
-    PageGameStats *pageGameStats;
-    PageSinglePlayer *pageSinglePlayer;
-    PageTraining *pageTraining;
-    PageSelectWeapon *pageSelectWeapon;
-    PageInGame *pageInGame;
-    PageRoomsList *pageRoomsList;
-    PageConnecting *pageConnecting;
-    PageScheme *pageScheme;
-    PageAdmin *pageAdmin;
-    PageNetType *pageNetType;
-    PageCampaign *pageCampaign;
-    PageDrawMap *pageDrawMap;
+        PageMain *pageMain;
+        PageEditTeam *pageEditTeam;
+        PageMultiplayer *pageMultiplayer;
+        PagePlayDemo *pagePlayDemo;
+        PageOptions *pageOptions;
+        PageFeedback *pageFeedback;
+        PageNet *pageNet;
+        PageNetServer * pageNetServer;
+        PageNetChat *pageNetChat;
+        PageNetGame *pageNetGame;
+        PageInfo *pageInfo;
+        PageDataDownload *pageDataDownload;
+        PageGameStats *pageGameStats;
+        PageSinglePlayer *pageSinglePlayer;
+        PageTraining *pageTraining;
+        PageSelectWeapon *pageSelectWeapon;
+        PageInGame *pageInGame;
+        PageRoomsList *pageRoomsList;
+        PageConnecting *pageConnecting;
+        PageScheme *pageScheme;
+        PageAdmin *pageAdmin;
+        PageNetType *pageNetType;
+        PageCampaign *pageCampaign;
+        PageDrawMap *pageDrawMap;
 
-    QStackedLayout *Pages;
-    QFont *font14;
+        QStackedLayout *Pages;
+        QFont *font14;
 
-    void setupUi(HWForm *HWForm);
-    void SetupFonts();
-    void SetupPages(QWidget *Parent, HWForm *HWForm);
+        void setupUi(HWForm *HWForm);
+        void SetupFonts();
+        void SetupPages(QWidget *Parent, HWForm *HWForm);
 };
 
 #endif // UI_HWFORM_H

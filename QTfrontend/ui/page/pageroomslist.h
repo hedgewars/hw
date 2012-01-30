@@ -26,59 +26,59 @@ class AmmoSchemeModel;
 
 class PageRoomsList : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageRoomsList(QWidget* parent, QSettings * config);
-    void displayError(const QString & message);
-    void displayNotice(const QString & message);
-    void displayWarning(const QString & message);
+    public:
+        PageRoomsList(QWidget* parent, QSettings * config);
+        void displayError(const QString & message);
+        void displayNotice(const QString & message);
+        void displayWarning(const QString & message);
 
-    QLineEdit * roomName;
-    QLineEdit * searchText;
-    QTableWidget * roomsList;
-    QPushButton * BtnCreate;
-    QPushButton * BtnJoin;
-    QPushButton * BtnRefresh;
-    QPushButton * BtnAdmin;
-    QPushButton * BtnClear;
-    QComboBox * CBState;
-    QComboBox * CBRules;
-    QComboBox * CBWeapons;
-    HWChatWidget * chatWidget;
-    QLabel * lblCount;
+        QLineEdit * roomName;
+        QLineEdit * searchText;
+        QTableWidget * roomsList;
+        QPushButton * BtnCreate;
+        QPushButton * BtnJoin;
+        QPushButton * BtnRefresh;
+        QPushButton * BtnAdmin;
+        QPushButton * BtnClear;
+        QComboBox * CBState;
+        QComboBox * CBRules;
+        QComboBox * CBWeapons;
+        HWChatWidget * chatWidget;
+        QLabel * lblCount;
 
-public slots:
-    void setAdmin(bool);
-    void setRoomsList(const QStringList & list);
-    void setUser(const QString & nickname);
-    void updateNickCounter(int cnt);
+    public slots:
+        void setAdmin(bool);
+        void setRoomsList(const QStringList & list);
+        void setUser(const QString & nickname);
+        void updateNickCounter(int cnt);
 
-signals:
-    void askForCreateRoom(const QString &);
-    void askForJoinRoom(const QString &);
-    void askForRoomList();
-    void askJoinConfirmation(const QString &);
+    signals:
+        void askForCreateRoom(const QString &);
+        void askForJoinRoom(const QString &);
+        void askForRoomList();
+        void askJoinConfirmation(const QString &);
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-private slots:
-    void onCreateClick();
-    void onJoinClick();
-    void onRefreshClick();
-    void onClearClick();
-    void onJoinConfirmation(const QString &);
+    private slots:
+        void onCreateClick();
+        void onJoinClick();
+        void onRefreshClick();
+        void onClearClick();
+        void onJoinConfirmation(const QString &);
 
-private:
-    QSettings * m_gameSettings;
+    private:
+        QSettings * m_gameSettings;
 
-    bool gameInLobby;
-    QString gameInLobbyName;
-    QStringList listFromServer;
-    AmmoSchemeModel * ammoSchemeModel;
+        bool gameInLobby;
+        QString gameInLobbyName;
+        QStringList listFromServer;
+        AmmoSchemeModel * ammoSchemeModel;
 
 };
 

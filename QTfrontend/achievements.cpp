@@ -21,7 +21,8 @@
 #include "achievements.h"
 
 // TODO: use some structs instead?
-const char achievements[][6][256] = {
+const char achievements[][6][256] =
+{
     // 6 array members each: id, caption, description, image, required number, attributes
     /*
     {"rounds1",  QT_TRANSLATE_NOOP("achievements", "No complete Newbie!"),  QT_TRANSLATE_NOOP("achievements", "Manage to survive %1 games playing on the official server, no matter if it's a draw or win."), "nonewb",     "1", ""},

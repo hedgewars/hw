@@ -27,29 +27,30 @@
 #include "qaspectratiolayout.h"
 #include "drawmapscene.h"
 
-namespace Ui {
+namespace Ui
+{
     class Ui_DrawMapWidget
     {
-    public:
-        QGraphicsView *graphicsView;
+        public:
+            QGraphicsView *graphicsView;
 
-        void setupUi(QWidget *drawMapWidget)
-        {
-            QAspectRatioLayout * arLayout = new QAspectRatioLayout(drawMapWidget);
-            arLayout->setMargin(0);
+            void setupUi(QWidget *drawMapWidget)
+            {
+                QAspectRatioLayout * arLayout = new QAspectRatioLayout(drawMapWidget);
+                arLayout->setMargin(0);
 
-            graphicsView = new QGraphicsView(drawMapWidget);
-            arLayout->addWidget(graphicsView);
+                graphicsView = new QGraphicsView(drawMapWidget);
+                arLayout->addWidget(graphicsView);
 
-            retranslateUi(drawMapWidget);
+                retranslateUi(drawMapWidget);
 
-            QMetaObject::connectSlotsByName(drawMapWidget);
-        } // setupUi
+                QMetaObject::connectSlotsByName(drawMapWidget);
+            } // setupUi
 
-        void retranslateUi(QWidget *drawMapWidget)
-        {
-            Q_UNUSED(drawMapWidget);
-        } // retranslateUi
+            void retranslateUi(QWidget *drawMapWidget)
+            {
+                Q_UNUSED(drawMapWidget);
+            } // retranslateUi
 
     };
 
@@ -58,29 +59,29 @@ namespace Ui {
 
 class DrawMapWidget : public QWidget
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    explicit DrawMapWidget(QWidget *parent = 0);
-    ~DrawMapWidget();
+    public:
+        explicit DrawMapWidget(QWidget *parent = 0);
+        ~DrawMapWidget();
 
-    void setScene(DrawMapScene * scene);
+        void setScene(DrawMapScene * scene);
 
-public slots:
-    void undo();
-    void clear();
-    void save(const QString & fileName);
-    void load(const QString & fileName);
+    public slots:
+        void undo();
+        void clear();
+        void save(const QString & fileName);
+        void load(const QString & fileName);
 
-protected:
-    void changeEvent(QEvent *e);
-    virtual void resizeEvent(QResizeEvent * event);
-    virtual void showEvent(QShowEvent * event);
+    protected:
+        void changeEvent(QEvent *e);
+        virtual void resizeEvent(QResizeEvent * event);
+        virtual void showEvent(QShowEvent * event);
 
-private:
-    Ui::DrawMapWidget *ui;
+    private:
+        Ui::DrawMapWidget *ui;
 
-    DrawMapScene * m_scene;
+        DrawMapScene * m_scene;
 };
 
 #endif // DRAWMAPWIDGET_H

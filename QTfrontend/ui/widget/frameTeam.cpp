@@ -26,7 +26,7 @@
 #include "hwconsts.h"
 
 FrameTeams::FrameTeams(QWidget* parent) :
-  QFrame(parent), maxHedgehogsPerGame(48), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
+    QFrame(parent), maxHedgehogsPerGame(48), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
 {
     QPalette newPalette = palette();
     newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
@@ -46,7 +46,8 @@ FrameTeams::FrameTeams(QWidget* parent) :
 void FrameTeams::setInteractivity(bool interactive)
 {
     nonInteractive = !interactive;
-    for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ++it) {
+    for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ++it)
+    {
         TeamShowWidget* pts = dynamic_cast<TeamShowWidget*>(it.value());
         if(!pts) throw;
         pts->setInteractivity(interactive);
@@ -55,74 +56,75 @@ void FrameTeams::setInteractivity(bool interactive)
 
 void FrameTeams::resetColors()
 {
-  currentColor=availableColors.end() - 1; // ensure next color is the first one
+    currentColor=availableColors.end() - 1; // ensure next color is the first one
 }
 
 QColor FrameTeams::getNextColor() const
 {
-  QList<QColor>::ConstIterator nextColor=currentColor;
-  ++nextColor;
-  if (nextColor==availableColors.end()) nextColor=availableColors.begin();
-  return *nextColor;
+    QList<QColor>::ConstIterator nextColor=currentColor;
+    ++nextColor;
+    if (nextColor==availableColors.end()) nextColor=availableColors.begin();
+    return *nextColor;
 }
 
 void FrameTeams::addTeam(HWTeam team, bool willPlay)
 {
-  TeamShowWidget* pTeamShowWidget = new TeamShowWidget(team, willPlay, this);
-  if(nonInteractive) pTeamShowWidget->setInteractivity(false);
+    TeamShowWidget* pTeamShowWidget = new TeamShowWidget(team, willPlay, this);
+    if(nonInteractive) pTeamShowWidget->setInteractivity(false);
 //  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
-  mainLayout.addWidget(pTeamShowWidget);
-  teamToWidget.insert(team, pTeamShowWidget);
-  QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
-  QCoreApplication::postEvent(parentWidget(), pevent);
+    mainLayout.addWidget(pTeamShowWidget);
+    teamToWidget.insert(team, pTeamShowWidget);
+    QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+    QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
 void FrameTeams::removeTeam(HWTeam team)
 {
-  tmapTeamToWidget::iterator it=teamToWidget.find(team);
-  if(it==teamToWidget.end()) return;
-  mainLayout.removeWidget(it.value());
-  it.value()->deleteLater();
-  teamToWidget.erase(it);
+    tmapTeamToWidget::iterator it=teamToWidget.find(team);
+    if(it==teamToWidget.end()) return;
+    mainLayout.removeWidget(it.value());
+    it.value()->deleteLater();
+    teamToWidget.erase(it);
 }
 
 void FrameTeams::resetTeams()
 {
-  for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ) {
-    mainLayout.removeWidget(it.value());
-    it.value()->deleteLater();
-    teamToWidget.erase(it++);
-  }
+    for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); )
+    {
+        mainLayout.removeWidget(it.value());
+        it.value()->deleteLater();
+        teamToWidget.erase(it++);
+    }
 }
 
 void FrameTeams::setHHNum(const HWTeam& team)
 {
-  TeamShowWidget* pTeamShowWidget = dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
-  if(!pTeamShowWidget) return;
-  pTeamShowWidget->setHHNum(team.numHedgehogs());
+    TeamShowWidget* pTeamShowWidget = dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
+    if(!pTeamShowWidget) return;
+    pTeamShowWidget->setHHNum(team.numHedgehogs());
 }
 
 void FrameTeams::setTeamColor(const HWTeam& team)
 {
-  TeamShowWidget* pTeamShowWidget = dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
-  if(!pTeamShowWidget) return;
-  pTeamShowWidget->changeTeamColor(team.color());
+    TeamShowWidget* pTeamShowWidget = dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
+    if(!pTeamShowWidget) return;
+    pTeamShowWidget->changeTeamColor(team.color());
 }
 
 QWidget* FrameTeams::getTeamWidget(HWTeam team)
 {
 //qDebug() << "FrameTeams::getTeamWidget getNetID() = " << team.getNetID();
-  tmapTeamToWidget::iterator it=teamToWidget.find(team);
-  QWidget* ret = it!=teamToWidget.end() ? it.value() : 0;
-  return ret;
+    tmapTeamToWidget::iterator it=teamToWidget.find(team);
+    QWidget* ret = it!=teamToWidget.end() ? it.value() : 0;
+    return ret;
 }
 
 bool FrameTeams::isFullTeams() const
 {
-  return overallHedgehogs==maxHedgehogsPerGame;
+    return overallHedgehogs==maxHedgehogsPerGame;
 }
 
 void FrameTeams::emitTeamColorChanged(const HWTeam& team)
 {
-  emit teamColorChanged(team);
+    emit teamColorChanged(team);
 }

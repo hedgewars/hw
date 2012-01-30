@@ -58,7 +58,8 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
             QPointF pos = mouseEvent->scenePos();
             path.setElementPositionAt(c - 1, pos.x(), pos.y());
 
-        } else
+        }
+        else
         {
             path.lineTo(mouseEvent->scenePos());
             paths.first().append(mouseEvent->scenePos().toPoint());
@@ -127,7 +128,8 @@ void DrawMapScene::clearMap()
     oldItems.clear();
 
     // do this since clear() would _destroy_ all items
-    while(items().size()) {
+    while(items().size())
+    {
         oldItems.push_front(items().first());
         removeItem(items().first());
     }
@@ -214,7 +216,7 @@ void DrawMapScene::simplifyLast()
     while(i < points.size())
     {
         if( (i != points.size() - 1)
-            && (sqr(prevPoint.x() - points[i].x()) + sqr(prevPoint.y() - points[i].y()) < 1000)
+                && (sqr(prevPoint.x() - points[i].x()) + sqr(prevPoint.y() - points[i].y()) < 1000)
           )
             points.removeAt(i);
         else
@@ -246,7 +248,7 @@ QPainterPath DrawMapScene::pointsToPath(const QList<QPoint> points)
         path.moveTo(p);
 
         foreach(QPoint p, points)
-            path.lineTo(p);
+        path.lineTo(p);
     }
 
     return path;

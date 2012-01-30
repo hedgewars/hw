@@ -23,38 +23,38 @@
 
 class PageAdmin : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageAdmin(QWidget* parent = 0);
+    public:
+        PageAdmin(QWidget* parent = 0);
 
-public slots:
-    void serverMessageNew(const QString & str);
-    void serverMessageOld(const QString & str);
-    void protocol(int proto);
+    public slots:
+        void serverMessageNew(const QString & str);
+        void serverMessageOld(const QString & str);
+        void protocol(int proto);
 
-signals:
-    void setServerMessageNew(const QString & str);
-    void setServerMessageOld(const QString & str);
-    void setProtocol(int proto);
-    void askServerVars();
-    void clearAccountsCache();
+    signals:
+        void setServerMessageNew(const QString & str);
+        void setServerMessageOld(const QString & str);
+        void setProtocol(int proto);
+        void askServerVars();
+        void clearAccountsCache();
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        void connectSignals();
 
-private:
-    QLineEdit * leServerMessageNew;
-    QLineEdit * leServerMessageOld;
-    QPushButton * pbSetSM;
-    QPushButton * pbAsk;
-    QSpinBox * sbProtocol;
-    QTextBrowser * tb;
-    QPushButton * pbClearAccountsCache;
+    private:
+        QLineEdit * leServerMessageNew;
+        QLineEdit * leServerMessageOld;
+        QPushButton * pbSetSM;
+        QPushButton * pbAsk;
+        QSpinBox * sbProtocol;
+        QTextBrowser * tb;
+        QPushButton * pbClearAccountsCache;
 
-private slots:
-    void smChanged();
+    private slots:
+        void smChanged();
 };
 
 #endif

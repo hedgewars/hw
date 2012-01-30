@@ -26,29 +26,29 @@
 #include "HWDataManager.h"
 
 HatsModel::HatsModel(QObject* parent) :
-  QAbstractListModel(parent)
+    QAbstractListModel(parent)
 {
     HWDataManager & dataMgr = HWDataManager::instance();
 
     QPixmap hhpix = QPixmap(
-        dataMgr.findFileForRead("Graphics/Hedgehog/Idle.png")
-    ).copy(0, 0, 32, 32);
+                        dataMgr.findFileForRead("Graphics/Hedgehog/Idle.png")
+                    ).copy(0, 0, 32, 32);
 
     // my reserved hats
     QStringList hatsList = dataMgr.entryList(
-                                   "Graphics/Hats/Reserved",
-                                   QDir::Files,
-                                   QStringList(playerHash+"*.png")
-                               );
+                               "Graphics/Hats/Reserved",
+                               QDir::Files,
+                               QStringList(playerHash+"*.png")
+                           );
 
     int nReserved = hatsList.size();
 
     // regular hats
     hatsList.append(dataMgr.entryList(
-                                   "Graphics/Hats",
-                                   QDir::Files,
-                                   QStringList("*.png")
-                               )
+                        "Graphics/Hats",
+                        QDir::Files,
+                        QStringList("*.png")
+                    )
                    );
 
 
@@ -62,7 +62,7 @@ HatsModel::HatsModel(QObject* parent) :
         str = str.remove(QRegExp("\\.png$"));
         QPixmap pix(
             dataMgr.findFileForRead(
-                "Graphics/Hats/" + QString(isReserved?"Reserved/":"") + str + 
+                "Graphics/Hats/" + QString(isReserved?"Reserved/":"") + str +
                 ".png"
             )
         );
@@ -89,7 +89,7 @@ HatsModel::HatsModel(QObject* parent) :
 }
 
 QVariant HatsModel::headerData(int section,
-            Qt::Orientation orientation, int role) const
+                               Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(section);
     Q_UNUSED(orientation);
@@ -118,8 +118,8 @@ QVariant HatsModel::data(const QModelIndex &index,
                          int role) const
 {
     if (!index.isValid() || index.row() < 0
-        || index.row() >= hats.size()
-        || (role != Qt::DisplayRole && role != Qt::DecorationRole))
+            || index.row() >= hats.size()
+            || (role != Qt::DisplayRole && role != Qt::DecorationRole))
         return QVariant();
 
     if (role == Qt::DisplayRole)

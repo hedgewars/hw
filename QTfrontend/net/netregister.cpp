@@ -19,7 +19,7 @@
 #include "netregister.h"
 
 HWNetRegisterServer::HWNetRegisterServer(QObject *parent, const QString & descr, quint16 port) :
-  QObject(parent)
+    QObject(parent)
 {
     Q_UNUSED(descr);
     Q_UNUSED(port);

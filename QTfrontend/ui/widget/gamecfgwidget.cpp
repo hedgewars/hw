@@ -34,9 +34,9 @@
 #include "proto.h"
 
 GameCFGWidget::GameCFGWidget(QWidget* parent) :
-  QGroupBox(parent)
-  , mainLayout(this)
-  , seedRegexp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}")
+    QGroupBox(parent)
+    , mainLayout(this)
+    , seedRegexp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}")
 {
     mainLayout.setMargin(0);
 //  mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
@@ -59,13 +59,15 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     Scripts->addItem("Normal");
     Scripts->insertSeparator(1);
 
-    for (int i = 0; i < scriptList->size(); ++i) {
+    for (int i = 0; i < scriptList->size(); ++i)
+    {
         QString script = (*scriptList)[i].remove(".lua", Qt::CaseInsensitive);
         QList<QVariant> scriptInfo;
         scriptInfo.push_back(script);
         QFile scriptCfgFile(HWDataManager::instance().findFileForRead(
-            QString("Scripts/Multiplayer/%2.cfg").arg(script)));
-        if (scriptCfgFile.exists() && scriptCfgFile.open(QFile::ReadOnly)) {
+                                QString("Scripts/Multiplayer/%2.cfg").arg(script)));
+        if (scriptCfgFile.exists() && scriptCfgFile.open(QFile::ReadOnly))
+        {
             QString scheme;
             QString weapons;
             QTextStream input(&scriptCfgFile);
@@ -104,7 +106,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     SchemeWidgetLayout->addWidget(new QLabel(QLabel::tr("Scheme"), SchemeWidget), 0, 0);
 
     QPixmap pmEdit(":/res/edit.png");
-    
+
     QPushButton * goToSchemePage = new QPushButton(SchemeWidget);
     goToSchemePage->setToolTip(tr("Edit schemes"));
     goToSchemePage->setIconSize(pmEdit.size());
@@ -283,13 +285,14 @@ QByteArray GameCFGWidget::getFullConfig() const
             }
             break;
         }
-        default: ;
+        default:
+            ;
     }
 
     QByteArray result;
 
     foreach(QByteArray ba, bcfg)
-        HWProto::addByteArrayToBuffer(result, ba);
+    HWProto::addByteArrayToBuffer(result, ba);
 
     return result;
 }
@@ -301,10 +304,13 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
         QMessageBox::critical(this, tr("Error"), tr("Illegal ammo scheme"));
 
     int pos = WeaponsName->findText(name);
-    if ((pos == -1) || illegal) { // prevent from overriding schemes with bad ones
+    if ((pos == -1) || illegal)   // prevent from overriding schemes with bad ones
+    {
         WeaponsName->addItem(name, ammo);
         WeaponsName->setCurrentIndex(WeaponsName->count() - 1);
-    } else {
+    }
+    else
+    {
         WeaponsName->setItemData(pos, ammo);
         WeaponsName->setCurrentIndex(pos);
     }
@@ -335,38 +341,47 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
     if (slValue.size() == 1)
     {
         QString value = slValue[0];
-        if (param == "MAP") {
+        if (param == "MAP")
+        {
             pMapContainer->setMap(value);
             return;
         }
-        if (param == "SEED") {
+        if (param == "SEED")
+        {
             pMapContainer->setSeed(value);
-            if (!seedRegexp.exactMatch(value)) {
+            if (!seedRegexp.exactMatch(value))
+            {
                 pMapContainer->seedEdit->setVisible(true);
-                }
+            }
             return;
         }
-        if (param == "THEME") {
+        if (param == "THEME")
+        {
             pMapContainer->setTheme(value);
             return;
         }
-        if (param == "TEMPLATE") {
+        if (param == "TEMPLATE")
+        {
             pMapContainer->setTemplateFilter(value.toUInt());
             return;
         }
-        if (param == "MAPGEN") {
+        if (param == "MAPGEN")
+        {
             pMapContainer->setMapgen((MapGenerator)value.toUInt());
             return;
         }
-        if (param == "MAZE_SIZE") {
+        if (param == "MAZE_SIZE")
+        {
             pMapContainer->setMazeSize(value.toUInt());
             return;
         }
-        if (param == "SCRIPT") {
+        if (param == "SCRIPT")
+        {
             Scripts->setCurrentIndex(Scripts->findText(value));
             return;
         }
-        if (param == "DRAWNMAP") {
+        if (param == "DRAWNMAP")
+        {
             pMapContainer->setDrawnMapData(qUncompress(QByteArray::fromBase64(slValue[0].toLatin1())));
             return;
         }
@@ -374,7 +389,8 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 
     if (slValue.size() == 2)
     {
-        if (param == "AMMO") {
+        if (param == "AMMO")
+        {
             setNetAmmo(slValue[0], slValue[1]);
             return;
         }
@@ -389,12 +405,12 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
                 pMapContainer->seedEdit->setVisible(true);
 
             pMapContainer->setAllMapParameters(
-                    slValue[0],
-                    (MapGenerator)slValue[1].toUInt(),
-                    slValue[2].toUInt(),
-                    seed,
-                    slValue[4].toUInt()
-                    );
+                slValue[0],
+                (MapGenerator)slValue[1].toUInt(),
+                slValue[2].toUInt(),
+                seed,
+                slValue[4].toUInt()
+            );
             return;
         }
     }
@@ -404,7 +420,8 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 
 void GameCFGWidget::ammoChanged(int index)
 {
-    if (index >= 0) {
+    if (index >= 0)
+    {
         emit paramChanged(
             "AMMO",
             QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
@@ -489,16 +506,19 @@ void GameCFGWidget::schemeChanged(int index)
 
     emit paramChanged("SCHEME", sl);
 
-    if (isEnabled() && bindEntries->isEnabled() && bindEntries->isChecked()) {
+    if (isEnabled() && bindEntries->isEnabled() && bindEntries->isChecked())
+    {
         QString schemeName = GameSchemes->itemText(index);
-        for (int i = 0; i < WeaponsName->count(); i++) {
-             QString weapName = WeaponsName->itemText(i);
-             int res = QString::compare(weapName, schemeName, Qt::CaseSensitive);
-             if (0 == res) {
-                 WeaponsName->setCurrentIndex(i);
-                 emit ammoChanged(i);
-                 break;
-             }
+        for (int i = 0; i < WeaponsName->count(); i++)
+        {
+            QString weapName = WeaponsName->itemText(i);
+            int res = QString::compare(weapName, schemeName, Qt::CaseSensitive);
+            if (0 == res)
+            {
+                WeaponsName->setCurrentIndex(i);
+                emit ammoChanged(i);
+                break;
+            }
         }
     }
 }

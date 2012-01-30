@@ -48,9 +48,9 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     templateFilter = 0;
 
     mainLayout.setContentsMargins(HWApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
-        1,
-        HWApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
-        HWApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
+                                  1,
+                                  HWApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
+                                  HWApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
 
     QWidget* mapWidget = new QWidget(this);
     mainLayout.addWidget(mapWidget, 0, 0, Qt::AlignHCenter);
@@ -70,12 +70,12 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     chooseMap->addItem(
 // FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapRandom.png"), 
-QComboBox::tr("generated map..."));
+//QIcon(":/res/mapRandom.png"),
+        QComboBox::tr("generated map..."));
     chooseMap->addItem(
 // FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapMaze.png"), 
-QComboBox::tr("generated maze..."));
+//QIcon(":/res/mapMaze.png"),
+        QComboBox::tr("generated maze..."));
 
     chooseMap->addItem(QComboBox::tr("hand drawn map..."));
     chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
@@ -86,29 +86,34 @@ QComboBox::tr("generated maze..."));
     numMissions = 0;
     QFile mapLuaFile;
     QFile mapCfgFile;
-    for (int i = 0; i < mapList->size(); ++i) {
+    for (int i = 0; i < mapList->size(); ++i)
+    {
         QString map = (*mapList)[i];
         mapCfgFile.setFileName(
-                QString("%1/Data/Maps/%2/map.cfg")
+            QString("%1/Data/Maps/%2/map.cfg")
+            .arg(cfgdir->absolutePath())
+            .arg(map));
+        if (mapCfgFile.exists())
+        {
+            mapLuaFile.setFileName(
+                QString("%1/Data/Maps/%2/map.lua")
                 .arg(cfgdir->absolutePath())
                 .arg(map));
-        if (mapCfgFile.exists()) {
-            mapLuaFile.setFileName(
-                    QString("%1/Data/Maps/%2/map.lua")
-                    .arg(cfgdir->absolutePath())
-                    .arg(map));
-        } else {
+        }
+        else
+        {
             mapCfgFile.setFileName(
-                    QString("%1/Maps/%2/map.cfg")
-                    .arg(datadir->absolutePath())
-                    .arg(map));
+                QString("%1/Maps/%2/map.cfg")
+                .arg(datadir->absolutePath())
+                .arg(map));
             mapLuaFile.setFileName(
-                    QString("%1/Maps/%2/map.lua")
-                    .arg(datadir->absolutePath())
-                    .arg(map));
+                QString("%1/Maps/%2/map.lua")
+                .arg(datadir->absolutePath())
+                .arg(map));
         }
 
-        if (mapCfgFile.open(QFile::ReadOnly)) {
+        if (mapCfgFile.open(QFile::ReadOnly))
+        {
             QString theme;
             quint32 limit = 0;
             QString scheme;
@@ -144,17 +149,17 @@ QComboBox::tr("generated maze..."));
 
             if(isMission)
             {
-                chooseMap->insertItem(missionindex++, 
+                chooseMap->insertItem(missionindex++,
 // FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapMission.png"), 
-QComboBox::tr("Mission") + ": " + map, mapInfo);
+//QIcon(":/res/mapMission.png"),
+                                      QComboBox::tr("Mission") + ": " + map, mapInfo);
                 numMissions++;
             }
             else
                 chooseMap->addItem(
 // FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapCustom.png"), 
-map, mapInfo);
+//QIcon(":/res/mapCustom.png"),
+                    map, mapInfo);
             mapCfgFile.close();
         }
     }
@@ -218,17 +223,17 @@ map, mapInfo);
 
     // override default style to tighten up theme scroller
     lvThemes->setStyleSheet(QString(
-        "QListView{"
-            "border: solid;"
-            "border-width: 0px;"
-            "border-radius: 0px;"
-            "border-color: transparent;"
-            "background-color: #0d0544;"
-            "color: #ffcc00;"
-            "font: bold 13px;"
-            "}"
-        )
-    );
+                                "QListView{"
+                                "border: solid;"
+                                "border-width: 0px;"
+                                "border-radius: 0px;"
+                                "border-color: transparent;"
+                                "background-color: #0d0544;"
+                                "color: #ffcc00;"
+                                "font: bold 13px;"
+                                "}"
+                            )
+                           );
 
     gbTLayout->addWidget(lvThemes);
     lvThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
@@ -289,49 +294,50 @@ void HWMapContainer::setHHLimit(int newHHLimit)
 
 void HWMapContainer::mapChanged(int index)
 {
-    switch(index) {
-    case MAPGEN_REGULAR:
-        mapgen = MAPGEN_REGULAR;
-        updatePreview();
-        gbThemes->show();
-        lblFilter->show();
-        cbTemplateFilter->show();
-        maze_size_label->hide();
-        cbMazeSize->hide();
-        emit mapChanged("+rnd+");
-        emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
-        break;
-    case MAPGEN_MAZE:
-        mapgen = MAPGEN_MAZE;
-        updatePreview();
-        gbThemes->show();
-        lblFilter->hide();
-        cbTemplateFilter->hide();
-        maze_size_label->show();
-        cbMazeSize->show();
-        emit mapChanged("+maze+");
-        emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
-        break;
-    case MAPGEN_DRAWN:
-        mapgen = MAPGEN_DRAWN;
-        updatePreview();
-        gbThemes->show();
-        lblFilter->hide();
-        cbTemplateFilter->hide();
-        maze_size_label->hide();
-        cbMazeSize->hide();
-        emit mapChanged("+drawn+");
-        emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
-        break;
-    default:
-        mapgen = MAPGEN_MAP;
-        updatePreview();
-        gbThemes->hide();
-        lblFilter->hide();
-        cbTemplateFilter->hide();
-        maze_size_label->hide();
-        cbMazeSize->hide();
-        emit mapChanged(chooseMap->itemData(index).toList()[0].toString());
+    switch(index)
+    {
+        case MAPGEN_REGULAR:
+            mapgen = MAPGEN_REGULAR;
+            updatePreview();
+            gbThemes->show();
+            lblFilter->show();
+            cbTemplateFilter->show();
+            maze_size_label->hide();
+            cbMazeSize->hide();
+            emit mapChanged("+rnd+");
+            emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
+            break;
+        case MAPGEN_MAZE:
+            mapgen = MAPGEN_MAZE;
+            updatePreview();
+            gbThemes->show();
+            lblFilter->hide();
+            cbTemplateFilter->hide();
+            maze_size_label->show();
+            cbMazeSize->show();
+            emit mapChanged("+maze+");
+            emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
+            break;
+        case MAPGEN_DRAWN:
+            mapgen = MAPGEN_DRAWN;
+            updatePreview();
+            gbThemes->show();
+            lblFilter->hide();
+            cbTemplateFilter->hide();
+            maze_size_label->hide();
+            cbMazeSize->hide();
+            emit mapChanged("+drawn+");
+            emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
+            break;
+        default:
+            mapgen = MAPGEN_MAP;
+            updatePreview();
+            gbThemes->hide();
+            lblFilter->hide();
+            cbTemplateFilter->hide();
+            maze_size_label->hide();
+            cbMazeSize->hide();
+            emit mapChanged(chooseMap->itemData(index).toList()[0].toString());
     }
 
     emit mapgenChanged(mapgen);
@@ -374,7 +380,7 @@ void HWMapContainer::askForGeneratedPreview()
                    get_mapgen(),
                    getMazeSize(),
                    getDrawnMapData()
-            );
+                  );
 }
 
 void HWMapContainer::themeSelected(const QModelIndex & current, const QModelIndex &)
@@ -440,7 +446,7 @@ quint32 HWMapContainer::getTemplateFilter() const
 void HWMapContainer::resizeEvent ( QResizeEvent * event )
 {
     Q_UNUSED(event);
-  //imageButt->setIconSize(imageButt->size());
+    //imageButt->setIconSize(imageButt->size());
 }
 
 void HWMapContainer::intSetSeed(const QString & seed)
@@ -467,7 +473,8 @@ void HWMapContainer::intSetMap(const QString & map)
             break;
         }
 
-    if(id > 0) {
+    if(id > 0)
+    {
         if (pMap)
         {
             disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
@@ -497,19 +504,19 @@ void HWMapContainer::setRandomMap()
     setRandomSeed();
     switch(chooseMap->currentIndex())
     {
-    case MAPGEN_REGULAR:
-    case MAPGEN_MAZE:
-        setRandomTheme();
-        break;
-    case MAPGEN_DRAWN:
-        emit drawMapRequested();
-        break;
-    default:
-        if(chooseMap->currentIndex() <= numMissions + MAPGEN_MAP + 1)
-            setRandomMission();
-        else
-            setRandomStatic();
-        break;
+        case MAPGEN_REGULAR:
+        case MAPGEN_MAZE:
+            setRandomTheme();
+            break;
+        case MAPGEN_DRAWN:
+            emit drawMapRequested();
+            break;
+        default:
+            if(chooseMap->currentIndex() <= numMissions + MAPGEN_MAP + 1)
+                setRandomMission();
+            else
+                setRandomStatic();
+            break;
     }
 }
 
@@ -641,27 +648,28 @@ void HWMapContainer::updatePreview()
 
     switch(curIndex)
     {
-    case MAPGEN_REGULAR:
-        askForGeneratedPreview();
-        break;
-    case MAPGEN_MAZE:
-        askForGeneratedPreview();
-        break;
-    case MAPGEN_DRAWN:
-        askForGeneratedPreview();
-        break;
-    default:
-        QPixmap mapImage;
-        QFile tmpfile;
-        tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
-        if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
-        if(!mapImage.load(QFileInfo(tmpfile).absoluteFilePath())) {
-            imageButt->setIcon(QIcon());
-            return;
-        }
+        case MAPGEN_REGULAR:
+            askForGeneratedPreview();
+            break;
+        case MAPGEN_MAZE:
+            askForGeneratedPreview();
+            break;
+        case MAPGEN_DRAWN:
+            askForGeneratedPreview();
+            break;
+        default:
+            QPixmap mapImage;
+            QFile tmpfile;
+            tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
+            if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
+            if(!mapImage.load(QFileInfo(tmpfile).absoluteFilePath()))
+            {
+                imageButt->setIcon(QIcon());
+                return;
+            }
 
-        hhLimit = chooseMap->itemData(curIndex).toList()[2].toInt();
-        addInfoToPreview(mapImage);
+            hhLimit = chooseMap->itemData(curIndex).toList()[2].toInt();
+            addInfoToPreview(mapImage);
     }
 }
 
