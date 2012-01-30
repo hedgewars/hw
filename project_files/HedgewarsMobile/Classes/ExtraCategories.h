@@ -25,6 +25,7 @@
 @interface UIScreen (safe)
 
 -(CGFloat) safeScale;
+-(CGRect) safeBounds;
 
 @end
 

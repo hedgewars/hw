@@ -69,6 +69,10 @@ void startLoadingIndicator() {
     overlay_instance.loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     overlay_instance.loadingIndicator.hidesWhenStopped = YES;
     overlay_instance.loadingIndicator.center = loaderCenter;
+    overlay_instance.loadingIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
+                                                         UIViewAutoresizingFlexibleRightMargin |
+                                                         UIViewAutoresizingFlexibleTopMargin |
+                                                         UIViewAutoresizingFlexibleBottomMargin;
     [overlay_instance.loadingIndicator startAnimating];
     [overlay_instance.view addSubview:overlay_instance.loadingIndicator];
     [overlay_instance.loadingIndicator release];
