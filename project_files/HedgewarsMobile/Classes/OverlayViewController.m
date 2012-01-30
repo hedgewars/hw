@@ -65,13 +65,7 @@ static OverlayViewController *mainOverlay;
 
 -(void) viewDidLoad {
     // fill all the screen available as sdlview disables autoresizing
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    if ((orientation == UIInterfaceOrientationLandscapeLeft) || (orientation == UIInterfaceOrientationLandscapeRight)) {
-        self.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
-    } else {
-        self.view.frame = CGRectMake(0, 0, rect.size.width, rect.size.height);
-    }
+    self.view.frame = [[UIScreen mainScreen] safeBounds];
     // the timer used to dim the overlay
     dimTimer = [[NSTimer alloc] initWithFireDate:(IS_DUALHEAD()) ? HIDING_TIME_NEVER : [NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000

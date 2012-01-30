@@ -91,6 +91,7 @@
 
 #pragma mark -
 -(void) viewDidLoad {
+    self.view.frame = [[UIScreen mainScreen] safeBounds];
     [super viewDidLoad];
 
     // get the app's version
