@@ -711,7 +711,7 @@ begin
 {$ENDIF}
 
     // set view port to whole window
-    glViewport(0, 0, cScreenWidth, cScreenHeight)
+    glViewport(0, 0, cScreenWidth, cScreenHeight);
 
     glMatrixMode(GL_MODELVIEW);
     // prepare default translation/scaling
