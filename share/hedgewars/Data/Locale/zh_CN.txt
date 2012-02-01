@@ -72,11 +72,11 @@
 ; Event messages
 ; Hog (%1) died
 ; 02:00=%1 has kicked the bucket!
-02:00=%1 离去！
+02:00=%1 翘辫子了！
 ; 02:00=%1 has seen the light!
 02:00=%1 目睹圣光降临！
 ; 02:00=%1 never saw that coming!
-02:00=%1 无法瞑目
+02:00=%1 无法瞑目！
 ; 02:00=%1 waves goodbye!
 02:00=%1 向大家挥手道别。
 ; 02:00=%1 has gone to a better place!
@@ -102,7 +102,7 @@
 ; 02:00=%1 has an aneurysm!
 02:00=%1 不治而亡。
 ; 02:00=%1 leaves behind a wife and child
-02:00=%1 留下一家孤儿寡母。
+02:00=%1 留下一家孤儿寡母
 ; 02:00=%1 has launched his last bazooka
 02:00=%1 发射了最后一发火箭弹
 ; 02:00=%1 has tossed his last grenade
@@ -118,9 +118,9 @@
 ; 02:00=%1 has thrown his last melon
 02:00=%1 最后一次扔出了西瓜炸弹
 ; 02:00=%1 has drawn his last deagle
-02:00=%1 最后一次拔出了沙鹰
+02:00=%1 最后一次拔出了沙漠之鹰
 ; 02:00=%1 took one shot too many
-02:00=%1 挨了太多枪了
+02:00=%1 挨了太多枪子了
 ; 02:00=%1 could really have used a health crate
 02:00=%1 真该用下医疗包的
 ; 02:00=%1 has gone to play a better game
@@ -134,17 +134,17 @@
 ; 02:00=%1 prefers wormux
 02:00=%1 更喜欢 Warmux
 ; 02:00=%1 has been blocking shots with his face
-02:00=%1 勇于面对，结果相当惨烈
+02:00=%1 勇于面对子弹，结果相当惨烈
 ; 02:00=%1 is a hero amongst me...err..hogs
-02:00=%1 是我的英雄！
+02:00=%1 是位英雄……额……在刺猬当中
 ; 02:00=%1 finds his place in Valhalla
-02:00=%1 在勇者纪念碑上找到了位置
+02:00=%1 在勇者纪念碑上找到了自己的位置
 ; 02:00=%1 has left the building
 02:00=%1 离开了这间屋子
 ; 02:00=%1 goes the way of the dinosaurs
 02:00=%1 步上了恐龙的道路
 ; 02:00=%1 brings hedgehogs one step closer to extinction
-02:00=%1 让刺猬物种灭绝更近了一步
+02:00=%1 让刺猬向物种灭绝更近了一步
 ; 02:00=%1 brings a tear to my eye
 02:00=%1 带走了我一滴眼泪
 ; 02:00=%1 is an ex-hog
@@ -180,13 +180,13 @@
 ; 02:00=%1 had a low tolerance for being shot
 02:00=%1 抗打击能力不足
 ; 02:00=%1 could have used an extra life
-02:00=%1 本该用另一条命的
+02:00=%1 本该有第二条命的
 ; 02:00=Is there a doctor in the house?
-02:00=有医生吗？
+02:00=这里有医生吗？
 
 ; Hog (%1) drowned
 ; 02:01=%1 plays submarine!
-02:01=%1 以为自己是潜水艇!
+02:01=%1 去玩潜水艇了!
 ; 02:01=%1 mimics the Titanic!
 02:01=%1 学泰坦尼克去了!
 ; 02:01=%1 swims like a stone!
@@ -204,9 +204,9 @@
 ;02:01=%1 left his surfboard at home
 02:01=%1 把救生圈忘家了
 ;02:01=%1 is washed up
-02:01=%1 冲走了
+02:01=%1 被冲走了
 ;02:01=%1 is one soggy hog
-02:01=%1 湿掉了
+02:01=%1 脑子进水了
 ;02:01=%1 forgot to bring his life jacket
 02:01=%1 忘记带救生衣了
 ;02:01=%1 goes splish splash splish
@@ -214,9 +214,9 @@
 ;02:01=%1 is sleeping with the fishes
 02:01=%1 将会和鱼睡在一起
 ;02:01=%1 thinks the water physics suck in this game
-02:01=%1 认为这游戏的设定糟糕透了
+02:01=%1 认为这游戏关于落水的设定糟糕透了
 ;02:01=%1 looks thirsty
-02:01=%1 好像很渴
+02:01=%1 看样子很渴
 ;02:01=the sea claims %1
 02:01=大海吞没了 %1
 ;02:01=%1 is lost at sea
@@ -256,9 +256,9 @@
 ;02:01=%1 has found the lost city of Atlantis
 02:01=%1 找到了传说中的亚特兰蒂斯城
 ;02:01=%1 aims for the lead role in Bioshock 3
-02:01=%1 的目的是为了在生化奇兵3中起带头作用
+02:01=%1 立志在生化奇兵3中担任头号角色
 ;02:01=Your doggy paddle could use a little work, %1
-02:01=狗爬式会有用的, %1
+02:01=你的狗刨式会有点用的, %1
 ;02:01=%1 should have brought a jet ski
 02:01=%1 竟然没带摩托艇
 ;02:01=%1 doesn't like watersports
@@ -266,7 +266,7 @@
 ;02:01=%1 is forever blowing bubbles
 02:01=%1 学会了绝技: 神风吹泡泡
 ;02:01=%1 is short of a raft
-02:01=%1 腿太短了
+02:01=%1 需要一个救生艇
 ;02:01=%1 thinks salt water is good for the skin
 02:01=%1 认为盐水对皮肤有好处
 ;02:01=%1 gets salt water in his wounds
@@ -276,32 +276,32 @@
 ;02:01=%1 has a bath
 02:01=%1 洗澡去了
 ;02:01=%1 is wet wet wet
-02:01=%1 全身是水
+02:01=%1 全身都是水,水,水……
 ;02:01=%1 gets his quills wet
-02:01=%1 把刚毛弄湿了
+02:01=%1 把刺全弄湿了
 ;02:01=It's Davy Jones' locker for %1
 02:01=深海阎王正在等待 %1
 
 ; Round starts
 ; 02:02=Let's fight!
-02:02=开战!
+02:02=开战吧!
 ; 02:02=Armed and ready!
-02:02=准备!
+02:02=武装准备!
 ;02:02=Let's get ready to rumble!
 02:02=准备对轰!
 ;02:02=Let's get it on!
-02:02=让我们得到胜利!
+02:02=为胜利而战吧!
 ;02:02=Let's get this party started
-02:02=这个Party要开始了
+02:02=让我们开始这个派对吧
 ;02:02=Last hog standing wins
 02:02=胜利属于最后一个生还者
 ;02:02=Let's go!
 02:02=出发吧!
 ;02:02=Let's rock!
-02:02=起点
+02:02=一起摇滚吧！
 ;02:02=Let's jam!
 ;02:02=It's beginning...
-02:02=开始了
+02:02=开始了...
 ;02:02=This is the start of something big
 02:02=这是一个伟大的开始
 ;02:02=Welcome to Hedgewars
@@ -319,7 +319,7 @@
 ;02:02=Losing is not an option
 02:02=字典里面应该没有"输"这个字的
 ;02:02=Cry havoc! Let loose the hogs of war!
-02:02=放声哭吧! 这是刺猬的战争！
+02:02=放声喊吧! 这是刺猬的战争！
 ;02:02=Hedgewars, brought to you by Hedgewars.org
 02:02=欢迎来到刺猬大作战, Hedgewars.org 为你呈现
 02:02=GL HF
@@ -378,7 +378,7 @@
 ;02:02=I hope you're ready for a tussle!
 02:02=你准备好恶战了么?
 ;02:02=Go Go Go!
-02:02=上！
+02:02=冲冲冲！
 ;02:02=Hedgehogs advance!
 02:02=刺猬向前冲！
 ;02:02=Bring it to them!
@@ -703,16 +703,16 @@
 ;03:41=Huge fan of Squawks
 03:41=粉丝的呼喊
 ;03:42=I'm making a note here...
-03:42=我将在此记录...
+03:42=我将在此做一记录...
 ; the misspelled "Beethoven" is intentional (-> to beat)
 ;03:43=Performing Beathoven's deadly sonata
-03:43=特殊的圣诞表演
+03:43=正在演奏贝揍芬的死亡奏鸣曲
 ;03:44=Best before: 1923
 03:44=此日期前最佳：1923
 ;03:45=The power of science
 03:45=科学的力量
 ;03:46=Hot Hot Hot!
-03:46=好烫烫烫！
+03:46=烫烫烫！
 ;03:47=Stick these somewhere useful!
 03:47= 呆在有利的地方！
 ;03:48=It's Hammer time!
@@ -764,9 +764,10 @@
 04:38=你也知道狙击枪的威力,|能打比较远的地方.|攻击键: 射击 (2发子弹)
 04:39=驾驶飞碟可以飞到地图上的任何角落.|不过这个东西连发明者都认为很难用.|攻击键: 激活|上/左/右方向键: 向某方向飞|前跳：攻击敌人
 04:40=把地面填满汽油然后....|攻击键: 按住蓄力.
-;04:41=自然的力量要盖过飞盘。|带着刺猬的鸟竟然毫不犹豫的空中下蛋！|攻击键: 激活和放蛋|上/左/右方向键: 向某方向飞
+;04:41=The evidence nature might even top the flying|saucer. Birdy can carry your hog around and|drop eggs on your enemies!|Be quick, as using Birdy eats into your turn|time!|Attack: Activate and drop eggs|Up/Left/Right: Flap in one direction
+04:41=自然的力量胜过飞盘的证据。|鸟儿可以携带刺猬并在敌人头上下蛋！|要快！使用鸟儿会消耗回合时间！|攻击键: 激活鸟儿和下蛋|上/左/右方向键: 向某方向飞
 ;04:42=This portable portal device is capable|of instantly transporting you, your enemies,|or your weaponry between two points on the|terrain.|Use it wisely and your campaign will be a...|HUGE SUCCESS!|Attack: Shoot a portal|Switch: Cycle portal colours
-04:42=移动传送装置|迅速传输自己或者敌人或者|你的武器，直接连接|地表的两个不同位置。|用的聪明那么。。。|攻击键: 发射一个传送点|切换键: 改变颜色
+04:42=移动传送装置|迅速传输自己或者敌人或者|你的武器，直接连接|地表的两个不同位置。|如果用的聪明那你的战斗将是一场……|巨大的胜利！|攻击键: 发射一个传送点|切换键: 改变颜色
 ;04:43=Make your musical debut an explosive success!|Drop a piano from the heavens, but beware...|someone needs to play it, and that may cost you|your life!|Cursor: Select target region|F1-F9: Play the piano
 04:43=音乐细胞的迸发!|钢琴从天堂降落，带|着演奏者最终回归天堂|光标: 选择目标区域|F1-F9:演奏钢琴
 04:44=这不是奶酪！而是生化武器！|爆炸只有一次，带来的毒害是深远的！|1-5: 设定定时器|攻击键: 按住蓄力
