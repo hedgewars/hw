@@ -9,22 +9,23 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation>备份</translation>
+        <translation>副本</translation>
     </message>
 </context>
 <context>
     <name>DrawMapWidget</name>
     <message>
         <source>File error</source>
-        <translation type="unfinished">文件错误</translation>
+        <translation>文件错误</translation>
     </message>
     <message>
         <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished">无法打开文件 &apos;%1&apos; 写入</translation>
+        <translatorcomment>无法打开文件 &apos;%1&apos; 写入</translatorcomment>
+        <translation>无法打开要写入的文件 &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished">无法读取文件 &apos;%1&apos;</translation>
+        <translation>无法读取文件 &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -64,7 +65,7 @@
     </message>
     <message>
         <source>Game Options</source>
-        <translation type="unfinished"></translation>
+        <translation>游戏选项</translation>
     </message>
 </context>
 <context>
@@ -87,51 +88,51 @@
     </message>
     <message>
         <source>%1 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 已从您的忽略列表中移除</translation>
     </message>
     <message>
         <source>%1 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 已被添加到您的忽略列表中</translation>
     </message>
     <message>
         <source>%1 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 已从您的好友列表中移除</translation>
     </message>
     <message>
         <source>%1 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 已加入您的好友列表</translation>
     </message>
     <message>
         <source>Stylesheet imported from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>已从 %1 导入样式表</translation>
     </message>
     <message>
         <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
-        <translation type="unfinished"></translation>
+        <translation>键入 %1 以使用当前的样式表，键入 %2 以重置!</translation>
     </message>
     <message>
         <source>Couldn&apos;t read %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无法读取 %1</translation>
     </message>
     <message>
         <source>StyleSheet discarded</source>
-        <translation type="unfinished"></translation>
+        <translation>已丢弃样式表</translation>
     </message>
     <message>
         <source>StyleSheet saved to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>样式表已保存到 %1</translation>
     </message>
     <message>
         <source>Failed to save StyleSheet to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>保存样式表到 %1 失败</translation>
     </message>
     <message>
         <source>%1 is not a valid command!</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 不是一个有效的命令！</translation>
     </message>
     <message>
         <source>Kicking %1 ...</source>
-        <translation type="unfinished"></translation>
+        <translation>正在踢出 %1 ...</translation>
     </message>
 </context>
 <context>
@@ -176,48 +177,51 @@
     </message>
     <message>
         <source>Demo name</source>
-        <translation type="unfinished"></translation>
+        <translation>回放录像名称</translation>
     </message>
     <message>
         <source>Demo name:</source>
-        <translation type="unfinished"></translation>
+        <translation>回放录像名称：</translation>
     </message>
     <message>
         <source>Game aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>游戏被中断</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">密码</translation>
+        <translation>密码</translation>
     </message>
     <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished">您的昵称%1
+        <translation>您的昵称%1
 在Hedgewars.org已注册
 请输入您的密码
 或从游戏配置中选择另一个昵称:</translation>
     </message>
     <message>
         <source>No password supplied.</source>
-        <translation type="unfinished"></translation>
+        <translation>没有填写密码.</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">昵称</translation>
+        <translation>昵称</translation>
     </message>
     <message>
         <source>Some one already uses
  your nickname %1
 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>您的昵称 %1
+以被其他人
+在服务器上使用
+请选择另一个昵称：</translation>
     </message>
     <message>
         <source>No nickname supplied.</source>
-        <translation type="unfinished"></translation>
+        <translation>没有填写昵称。</translation>
     </message>
 </context>
 <context>
@@ -389,7 +393,7 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>User quit</source>
-        <translation type="unfinished"></translation>
+        <translation>用户退出</translation>
     </message>
 </context>
 <context>
@@ -419,11 +423,11 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Server message for latest version:</source>
-        <translation>最新版本的服务器信息</translation>
+        <translation>最新版本的服务器信息：</translation>
     </message>
     <message>
         <source>Server message for previous versions:</source>
-        <translation>之前版本的服务器信息</translation>
+        <translation>之前版本的服务器信息：</translation>
     </message>
     <message>
         <source>Latest version protocol number:</source>
@@ -481,11 +485,11 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation type="unfinished"></translation>
+        <translation>绘制的地图</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>全部文件</translation>
     </message>
 </context>
 <context>
@@ -531,18 +535,18 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>最佳射手&lt;b&gt;%1&lt;/b&gt;为同族制造了&lt;b&gt;%2&lt;/b&gt;点创伤</translation>
+        <translation>最佳射手&lt;b&gt;%1&lt;/b&gt;制造了&lt;b&gt;%2&lt;/b&gt;点伤害。</translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
         <translation>
-            <numerusform>最佳杀手&lt;b&gt;%1&lt;/b&gt; 完成了单回合&lt;b&gt;%2&lt;/b&gt;次击杀</numerusform>
+            <numerusform>最佳杀手 &lt;b&gt;%1&lt;/b&gt; 完成了单回合&lt;b&gt;%2&lt;/b&gt;次击杀。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
         <translation>
-            <numerusform>总共&lt;b&gt;%1&lt;/b&gt;只刺猬在本轮失去生命。</numerusform>
+            <numerusform>总共 &lt;b&gt;%1&lt;/b&gt; 只刺猬在本轮失去生命。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -614,12 +618,12 @@ or pick another nickname in game config:</source>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
         <comment>Tips</comment>
-        <translation>如果您确定好了一个昵称不想让别人使用，那么在  http://www.hedgewars.org/. 注册一个帐号吧</translation>
+        <translation>如果您确定好了一个昵称不想让别人使用，那么在  http://www.hedgewars.org/. 注册一个帐号吧。</translation>
     </message>
     <message>
         <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
         <comment>Tips</comment>
-        <translation>厌倦了默认的玩法？试试任务——</translation>
+        <translation>厌倦了默认的玩法？试试任务吧——每个任务都有不同的玩法。</translation>
     </message>
     <message>
         <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
@@ -674,7 +678,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
         <comment>Tips</comment>
-        <translation>假如你的显卡不能提供OpenGL硬件加速，试着用降低效果的方式运行</translation>
+        <translation>假如你的显卡不能提供OpenGL硬件加速，试着用降低效果的方式运行。</translation>
     </message>
     <message>
         <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
@@ -699,7 +703,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
         <comment>Tips</comment>
-        <translation>您不应该在不属于您的计算机上安装刺猬大作战——比如学校/工作场所。</translation>
+        <translation>您不应该在不属于您的计算机上安装刺猬大作战——比如学校/工作场所等。您应当向计算机的负责人咨询！</translation>
     </message>
     <message>
         <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
@@ -709,7 +713,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>No hedgehogs were harmed in making this game.</source>
         <comment>Tips</comment>
-        <translation>制作这个游戏时不曾伤害任何刺猬</translation>
+        <translation>在制作这款游戏时没有任何刺猬受到伤害。</translation>
     </message>
     <message>
         <source>Connect one or more gamepads before launching the game to be able to assign their controls to your teams.</source>
@@ -814,7 +818,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
         <comment>Tips</comment>
-        <translation>在游戏开始前连接游戏手柄才能用于操控</translation>
+        <translation>在游戏开始前连接游戏手柄才能用它们操控你的队伍。</translation>
     </message>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
@@ -844,7 +848,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
-        <translation>你可以使用网络浏览器或已存在的文件关联刺猬大作战的相关文件（比如存档和回放）</translation>
+        <translation>你可以关联刺猬大作战的相关文件（比如存档和回放）到本游戏以便在网络或文件浏览器中直接打开这些文件。</translation>
     </message>
     <message>
         <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
@@ -869,21 +873,21 @@ or pick another nickname in game config:</source>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>Windows版本的刺猬大作战支持Xfire。您可以添加刺猬大作战到它的游戏列表里让您的朋友看到。</translation>
     </message>
     <message>
         <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>使用燃烧瓶或火焰喷射器可以短时阻止刺猬通过特定区域（比如隧道或平台）.</translation>
     </message>
     <message>
         <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished"></translation>
+        <translation>使用归巢的蜜蜂有些技巧，它的回转半径和发射速度有关，所以最好不要全力发射。</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation type="unfinished"></translation>
+        <translation>可下载内容</translation>
     </message>
 </context>
 <context>
@@ -912,15 +916,15 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">错误</translation>
+        <translation>错误</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">请键入房间名</translation>
+        <translation>请键入房间名</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>确定</translation>
     </message>
 </context>
 <context>
@@ -1138,8 +1142,8 @@ Do you still want to join the room?</source>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 个玩家在线</numerusform>
         </translation>
     </message>
 </context>
@@ -1207,15 +1211,15 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation>随机出场顺序</translation>
+        <translation>出场顺序是随机的而不是按照房间顺序。</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation>国王不能死!!</translation>
+        <translation>国王不能死。</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation>在开局前手动放置刺猬</translation>
+        <translation>在开局前轮流手动放置刺猬。</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
@@ -1223,31 +1227,31 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation>禁止随机生成地图使用梁</translation>
+        <translation>禁止随机生成地图时使用梁。</translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation>禁止随机生成地图使用地面物体</translation>
+        <translation type="unfinished">禁止随机生成地图时使用地面物体。</translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation>AI 死亡再生</translation>
+        <translation>AI 死亡再生。</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation>攻击不会结束当前回合</translation>
+        <translation>攻击不会结束当前回合。</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation>每回合开始武器自动重置到默认设定</translation>
+        <translation>在每回合武器将自动重置到开始设定。</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation>每个刺猬都有独立的弹药，非团队分享</translation>
+        <translation>每个刺猬都有独立的弹药，而非团队分享。</translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation>所有活着的刺猬回合结尾时彻底恢复健康。</translation>
+        <translation>所有活着的刺猬在回合结束时完全恢复健康</translation>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
@@ -1263,7 +1267,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished"></translation>
+        <translation>在同一集团中的队伍在共用的回合时间里使用连续的回合。</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
@@ -1271,7 +1275,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>在底部添加一个不可毁坏的边界</translation>
     </message>
 </context>
 <context>
@@ -1321,29 +1325,29 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Campaign Mode (...)</source>
-        <translation type="unfinished"></translation>
+        <translation>战役模式 (...)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions)</source>
-        <translation type="unfinished"></translation>
+        <translation>训练模式（在一系列训练任务中练习你的技能）</translation>
     </message>
 </context>
 <context>
     <name>PageTraining</name>
     <message>
         <source>No description available</source>
-        <translation type="unfinished"></translation>
+        <translation>没有可用描述</translation>
     </message>
     <message>
         <source>Select a mission!</source>
-        <translation type="unfinished"></translation>
+        <translation>选择一个任务！</translation>
     </message>
 </context>
 <context>
     <name>QAction</name>
     <message>
         <source>Kick</source>
-        <translation>踢</translation>
+        <translation>踢出</translation>
     </message>
     <message>
         <source>Start</source>
@@ -1355,7 +1359,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Restrict Team Additions</source>
-        <translation>限制团队插件</translation>
+        <translation>限制增加团队</translation>
     </message>
     <message>
         <source>Info</source>
@@ -1387,7 +1391,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">更新</translation>
+        <translation>更新</translation>
     </message>
 </context>
 <context>
@@ -1465,7 +1469,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>generated maze...</source>
-        <translation>生成迷宫</translation>
+        <translation>生成迷宫...</translation>
     </message>
     <message>
         <source>Mission</source>
@@ -1521,43 +1525,43 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>hand drawn map...</source>
-        <translation>手绘地图</translation>
+        <translation>手绘地图...</translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>禁用</translation>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>红/青</translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>青/红</translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished"></translation>
+        <translation>红/蓝</translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>蓝/红</translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished"></translation>
+        <translation>红/绿</translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished"></translation>
+        <translation>绿/红</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished"></translation>
+        <translation>横向排列</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>自顶向下</translation>
     </message>
     <message>
         <source>Wiggle</source>
@@ -1565,27 +1569,27 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">红/青 灰度</translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">青/红 灰度</translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">红/蓝 灰度</translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">蓝/红 灰度</translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">红/绿 灰度</translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">绿/红 灰度</translation>
     </message>
 </context>
 <context>
@@ -1819,27 +1823,27 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation type="unfinished"></translation>
+        <translation>立体渲染</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">样式</translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">模式</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">密码</translation>
+        <translation>密码</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation type="unfinished"></translation>
+        <translation>% 脱身时间</translation>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
-        <translation type="unfinished"></translation>
+        <translation>本程序在GNU通用许可证协议第二版（GNU GPLv2）下发布</translation>
     </message>
 </context>
 <context>
@@ -1850,7 +1854,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>hedgehog %1</source>
-        <translation type="unfinished"></translation>
+        <translation>刺猬 %1</translation>
     </message>
 </context>
 <context>
@@ -1900,7 +1904,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation>不能覆盖默认的武器配置 &apos;%1&apos;</translation>
+        <translation>不能覆盖默认的武器配置 &apos;%1&apos;！</translation>
     </message>
     <message>
         <source>All file associations have been set.</source>
@@ -1924,7 +1928,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation>文件关联失败</translation>
+        <translation>文件关联失败。</translation>
     </message>
     <message>
         <source>Really delete this game scheme?</source>
@@ -2030,7 +2034,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>more</source>
-        <translation type="unfinished"></translation>
+        <translation>更多</translation>
     </message>
 </context>
 <context>
@@ -2088,7 +2092,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished">备份</translation>
+        <translation>副本</translation>
     </message>
 </context>
 <context>
@@ -2202,15 +2206,15 @@ Please check your installation</source>
     </message>
     <message>
         <source>More Wind</source>
-        <translation>让风来地更猛烈吧！</translation>
+        <translation>让风来地更猛烈吧</translation>
     </message>
     <message>
         <source>Tag Team</source>
-        <translation type="unfinished"></translation>
+        <translation>为队伍添加标签</translation>
     </message>
     <message>
         <source>Add Bottom Border</source>
-        <translation type="unfinished"></translation>
+        <translation>添加底部边界</translation>
     </message>
 </context>
 <context>
