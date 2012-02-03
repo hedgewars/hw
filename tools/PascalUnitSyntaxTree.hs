@@ -1,6 +1,7 @@
 module PascalUnitSyntaxTree where
 
-import Data.Traversable
+--import Data.Traversable
+import Data.Maybe
 
 data PascalUnit =
     Program Identifier Implementation Phrase
@@ -93,16 +94,31 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitTypeCast Identifier InitExpression
     deriving Show
 
-data BaseType = Unknown
+data BaseType = BTUnknown
     | BTChar
     | BTString
     | BTInt
-    | BTRecord
-    | BTArray
+    | BTRecord [(String, BaseType)]
+    | BTArray BaseType BaseType
     | BTFunction
     | BTPointerTo BaseType
     | BTSet
     | BTEnum [String]
-    | Void
+    | BTVoid
     deriving Show
+    
+
+type2BaseType :: TypeDecl -> BaseType
+type2BaseType (SimpleType (Identifier s _)) = f s
+    where
+    f "longint" = BTInt
+    f "integer" = BTInt
+    f "word" = BTInt
+    f "pointer" = BTPointerTo BTVoid
+    f _ = BTUnknown
+type2BaseType (Sequence ids) = BTEnum $ map (\(Identifier i _) -> i) ids
+type2BaseType (RecordType tv mtvs) = BTRecord $ concatMap f (concat $ tv : fromMaybe [] mtvs)
+    where
+    f (VarDeclaration _ (ids, td) _) = map (\(Identifier i _) -> (i, type2BaseType td)) ids
+type2BaseType _ = BTUnknown  
     

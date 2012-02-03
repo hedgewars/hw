@@ -17,10 +17,13 @@ import Data.List (find)
 import PascalParser
 import PascalUnitSyntaxTree
 
+
+type Record = (String, (String, BaseType))
 data RenderState = RenderState 
     {
-        currentScope :: [(String, String)],
-        namespaces :: Map.Map String [(String, String)]
+        currentScope :: [Record],
+        lastType :: BaseType,
+        namespaces :: Map.Map String [Record]
     }
 
 pas2C :: String -> IO ()
@@ -64,33 +67,34 @@ renderCFiles units = do
     let ns = Map.map toNamespace units
     mapM_ (toCFiles ns) u
     where
-    toNamespace :: PascalUnit -> [(String, String)]
+    toNamespace :: PascalUnit -> [Record]
     toNamespace = concatMap tv2id . extractTVs
     
     extractTVs (System tv) = tv
     extractTVs (Program {}) = []
     extractTVs (Unit _ (Interface _ (TypesAndVars tv)) _ _ _) = tv
     
-    tv2id :: TypeVarDeclaration -> [(String, String)]
-    tv2id (TypeDeclaration i (Sequence ids)) = map (\(Identifier i _) -> fi i) $ i : ids
-    tv2id (TypeDeclaration (Identifier i _) _) = [(map toLower i, i)]
-    tv2id (VarDeclaration _ (ids, _) _) = map (\(Identifier i _) -> fi i) ids
-    tv2id (FunctionDeclaration (Identifier i _) _ _ _) = [fi i]
-    tv2id (OperatorDeclaration i _ _ _ _) = [fi i]
-    fi i = (map toLower i, i)
+    tv2id :: TypeVarDeclaration -> [Record]
+    tv2id (TypeDeclaration i t@(Sequence ids)) = map (\(Identifier i _) -> fi i (type2BaseType t)) $ i : ids
+    tv2id (TypeDeclaration (Identifier i _) t) = [(map toLower i, (i, type2BaseType t))]
+    tv2id (VarDeclaration _ (ids, t) _) = map (\(Identifier i _) -> fi i (type2BaseType t)) ids
+    tv2id (FunctionDeclaration (Identifier i _) _ _ _) = [fi i BTUnknown]
+    tv2id (OperatorDeclaration i _ _ _ _) = [fi i BTUnknown]
+    fi i t = (map toLower i, (i, t))
     
-    
-toCFiles :: Map.Map String [(String, String)] -> (String, PascalUnit) -> IO ()
+   
+toCFiles :: Map.Map String [Record] -> (String, PascalUnit) -> IO ()
 toCFiles _ (_, System _) = return ()
 toCFiles ns p@(fn, pu) = do
     hPutStrLn stderr $ "Rendering '" ++ fn ++ "'..."
     toCFiles' p
     where
-    toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C (RenderState [] ns) . pascal2C) p
+    toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C initialState . pascal2C) p
     toCFiles' (fn, (Unit _ interface implementation _ _)) = do
-        let (a, s) = runState (interface2C interface) (RenderState [] ns)
+        let (a, s) = runState (interface2C interface) initialState
         writeFile (fn ++ ".h") $ "#pragma once\n" ++ (render a)
         writeFile (fn ++ ".c") $ (render2C s . implementation2C) implementation
+    initialState = RenderState [] BTUnknown ns
 
     render2C :: RenderState -> State RenderState Doc -> String
     render2C a = render . flip evalState a
@@ -139,18 +143,22 @@ uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
 
 id2C :: Bool -> Identifier -> State RenderState Doc
-id2C True (Identifier i _) = do
-    modify (\s -> s{currentScope = (map toLower i, i) : currentScope s})
+id2C True (Identifier i t) = do
+    modify (\s -> s{currentScope = (map toLower i, (i, t)) : currentScope s})
     return $ text i
-id2C False (Identifier i _) = do
+id2C False (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ find (\(a, _) -> a == i') . currentScope
     --ns <- gets currentScope
+    modify (\s -> s{lastType = t})
     if isNothing v then 
         error $ "Not defined: '" ++ i' ++ "'"-- ++ show ns
         else 
-        return . text . snd . fromJust $ v
+        return . text . fst . snd . fromJust $ v
 
+id2CTyped :: BaseType -> Identifier -> State RenderState Doc
+id2CTyped BTUnknown i = error $ show i
+id2CTyped bt (Identifier i _) = id2C True (Identifier i bt)
     
 tvar2C :: Bool -> TypeVarDeclaration -> State RenderState Doc
 tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
@@ -177,14 +185,15 @@ tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) 
     phrase2C' p = phrase2C p
     
 tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
-tvar2C _ (TypeDeclaration i' t) = do
+
+tvar2C _ td@(TypeDeclaration i' t) = do
     tp <- type2C t
-    i <- id2C True i'
+    i <- id2CTyped (type2BaseType t) i'
     return $ text "type" <+> i <+> tp <> text ";"
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- type2C t
-    i <- mapM (id2C True) ids
+    i <- mapM (id2CTyped (type2BaseType t)) ids
     ie <- initExpr mInitExpr
     return $ if isConst then text "const" else empty
         <+> t'
@@ -196,7 +205,7 @@ tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
     
 tvar2C f (OperatorDeclaration op _ ret params body) = 
-    tvar2C f (FunctionDeclaration (Identifier ("<op " ++ op ++ ">") Unknown) ret params body)
+    tvar2C f (FunctionDeclaration (Identifier ("<op " ++ op ++ ">") BTUnknown) ret params body)
 
     
 initExpr2C :: InitExpression -> State RenderState Doc
@@ -326,8 +335,12 @@ ref2C (RecordField (Dereference ref1) ref2) = do
     r2 <- ref2C ref2
     return $ 
         r1 <> text "->" <> r2
-ref2C (RecordField ref1 ref2) = do
-    r1 <- ref2C ref1 
+ref2C rf@(RecordField ref1 ref2) = do
+    r1 <- ref2C ref1
+    t <- gets lastType
+    case t of
+        r@(BTRecord _) -> error $ show r
+        a -> error $ "dereferencing from " ++ show a ++ " - " ++ show rf
     r2 <- ref2C ref2
     return $ 
         r1 <> text "." <> r2
