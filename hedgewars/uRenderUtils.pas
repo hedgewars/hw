@@ -26,6 +26,9 @@ uses SDLh, uTypes;
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
 procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL
 procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
+procedure copyToXY(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
+procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt; frame: LongInt = 0);
+procedure DrawLine2Surf(dest: PSDL_Surface; x0,y0,x1,y1:LongInt; r,g,b: byte);
 function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
 function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
@@ -121,20 +124,26 @@ begin
 end;
 
 procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
-var srcX, srcY, i, j, maxDest: LongInt;
+begin
+    copyToXY(src, dest, 0,0,src^.w, src^.h, destX, destY);
+end;
+
+procedure copyToXY(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
+var i, j, maxDest, maxSrc, iX, iY: LongInt;
     srcPixels, destPixels: PLongWordArray;
     r0, g0, b0, a0, r1, g1, b1, a1: Byte;
 begin
     maxDest:= (dest^.pitch div 4) * dest^.h;
+    maxSrc:= (src^.pitch div 4) * src^.h;
     srcPixels:= src^.pixels;
     destPixels:= dest^.pixels;
 
-    for srcX:= 0 to src^.w - 1 do
-    for srcY:= 0 to src^.h - 1 do
+    for iX:= 0 to srcW - 1 do
+    for iY:= 0 to srcH - 1 do
         begin
-        i:= (destY + srcY) * (dest^.pitch div 4) + destX + srcX;
-        j:= srcY * (src^.pitch div 4) + srcX;
-        if (i < maxDest) and (srcPixels^[j] and AMask <> 0) then
+        i:= (destY + iY) * (dest^.pitch div 4) + (destX + iX);
+        j:= (srcY  + iY) * (src^.pitch  div 4) + (srcX  + iX);
+        if (i < maxDest) and (j < maxSrc) and (srcPixels^[j] and AMask <> 0) then
             begin
             SDL_GetRGBA(destPixels^[i], dest^.format, @r0, @g0, @b0, @a0);
             SDL_GetRGBA(srcPixels^[j], src^.format, @r1, @g1, @b1, @a1);
@@ -145,6 +154,59 @@ begin
             destPixels^[i]:= SDL_MapRGBA(dest^.format, r0, g0, b0, a0);
             end;
         end;
+end;
+
+procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y,frame: LongInt);
+var numFramesFirstCol, row, col: LongInt;
+begin
+    numFramesFirstCol:= SpritesData[sprite].imageHeight div SpritesData[sprite].Height;
+    row:= Frame mod numFramesFirstCol;
+    col:= Frame div numFramesFirstCol;
+    
+    copyToXY(SpritesData[sprite].Surface, dest, 
+             col*SpritesData[sprite].Width, 
+             row*SpritesData[sprite].Height, 
+             SpritesData[sprite].Width, 
+             spritesData[sprite].Height, 
+             x,y);
+end;
+
+procedure DrawLine2Surf(dest: PSDL_Surface; x0, y0,x1,y1: LongInt; r,g,b: byte);
+var
+    max: LongInt;
+    dx,dy,err,e2,sx,sy: LongInt;
+    yMax: LongInt;
+    destPixels: PLongwordArray;
+begin
+    max:= (dest^.pitch div 4) * dest^.h;
+    yMax:= dest^.pitch div 4;
+    destPixels:= dest^.pixels;
+
+    dx:= abs(x1-x0);
+    dy:= abs(y1-y0);
+    if x0 < x1 then sx:= 1 else sx:= -1;
+    if y0 < y1 then sy:= 1 else sy:= -1;
+    err:= dx-dy; 
+
+    while(true) do
+        begin
+        destPixels^[(y0 * yMax) + x0]:= SDL_MapRGB(dest^.format, r,g,b); //But will it blend? no
+
+        if (x0 = x1) and (y0 = y1) then break;
+
+        e2:= 2*err;
+        if e2 > -dy then
+            begin
+            err:= err - dy;
+            x0 := x0 + sx;
+            end;
+
+        if e2 < dx then
+            begin
+            err:= err + dx;
+            y0:=y0+sy
+            end;
+        end; 
 end;
 
 procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL, apparently
