@@ -153,7 +153,10 @@ var
     cVampiric       : boolean;
     cArtillery      : boolean;
     WeaponTooltipTex: PTexture;
+    AmmoMenuTex     : PTexture;
+    AmmoMenuInvalidated: boolean;
     HHTexture       : PTexture;
+
 
     flagMakeCapture : boolean;
 
@@ -332,15 +335,15 @@ const
             (FileName:       'SkyR'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: true; getImageDimensions: true),// sprSky
             (FileName:  'BorderHorizontal'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: AMSlotSize; Height:  2; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderHorizontal
+            Width: 32; Height:  2; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderHorizontal
             (FileName:  'BorderVertical'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 2; Height: AMSlotSize; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderVertical
+            Width: 2; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderVertical
             (FileName:   'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: AMSlotSize; Height: AMSlotSize; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlot
+            Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlot
             (FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMAmmos
             (FileName:   'Ammos_bw'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprAMAmmosBW
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprAMAmmosBW
             (FileName:   'SlotKeys'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlotKeys
             (FileName:  'Corners'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -408,7 +411,7 @@ const
             (FileName:     'Mortar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMortar
             (FileName:  'TurnsLeft'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTurnsLeft
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTurnsLeft
             (FileName: 'amKamikaze'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprKamikaze
             (FileName:     'amWhip'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;

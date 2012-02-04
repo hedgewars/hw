@@ -380,6 +380,7 @@ with Hedgehog do
             end;
         end
     end;
+AmmoMenuInvalidated:= true;
 end;
 
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);

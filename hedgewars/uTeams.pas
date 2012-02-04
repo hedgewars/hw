@@ -183,6 +183,8 @@ repeat
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
 CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+
+AmmoMenuInvalidated:= true;
 end;
 
 procedure AfterSwitchHedgehog;
