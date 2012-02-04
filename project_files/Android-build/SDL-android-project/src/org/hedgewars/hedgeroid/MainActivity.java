@@ -26,6 +26,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -54,7 +56,13 @@ public class MainActivity extends FragmentActivity {
 		if(cacheDir == null){
 			showDialog(0);
 		}else{
-			boolean assetsCopied = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("assetscopied", false);
+			int versionCode = 0;
+			try {
+				versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
+			} catch (NameNotFoundException e) {
+
+			}
+			boolean assetsCopied = PreferenceManager.getDefaultSharedPreferences(this).getInt("latestAssets", 0) >= versionCode;
 
 			if(!assetsCopied){
 				DownloadAssets assetsAsyncTask = new DownloadAssets(this);
@@ -79,7 +87,11 @@ public class MainActivity extends FragmentActivity {
 
 	public void onAssetsDownloaded(boolean result){
 		if(result){
-			PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("assetscopied", true).commit();
+			try {
+				int versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
+				PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("latestAssets", versionCode).commit();
+			} catch (NameNotFoundException e) {}
+			
 		}else{
 			Toast.makeText(this, R.string.download_failed, Toast.LENGTH_LONG);
 		}
