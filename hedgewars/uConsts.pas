@@ -289,8 +289,13 @@ const
     htHealth      = $04;
     htTransparent = $08;
 
+{$IFDEF MOBILE}
+    AMSlotSize = 48;
+    AMTITLE = 30;
+{$ELSE}
     AMSlotSize = 33;
-
+{$ENDIF}
+    AMSlotPadding = (AMSlotSize - 32) shr 1;
 implementation
 
 end.
