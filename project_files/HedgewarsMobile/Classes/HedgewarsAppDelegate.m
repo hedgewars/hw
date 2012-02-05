@@ -34,7 +34,7 @@
 @end
 
 @implementation HedgewarsAppDelegate
-@synthesize mainViewController, uiwindow, secondWindow;
+@synthesize mainViewController, uiwindow;
 
 #pragma mark -
 #pragma mark AppDelegate methods
@@ -42,7 +42,6 @@
     if (self = [super init]){
         mainViewController = nil;
         uiwindow = nil;
-        secondWindow = nil;
     }
     return self;
 }
@@ -50,7 +49,6 @@
 -(void) dealloc {
     [mainViewController release];
     [uiwindow release];
-    [secondWindow release];
     [super dealloc];
 }
 
@@ -67,20 +65,6 @@
     [self.mainViewController release];
     self.uiwindow.backgroundColor = [UIColor blackColor];
     [self.uiwindow makeKeyAndVisible];
-
-    // check for dual monitor support
-    if (IS_DUALHEAD()) {
-        DLog(@"Dualhead mode");
-        self.secondWindow = [[UIWindow alloc] initWithFrame:[[[UIScreen screens] objectAtIndex:1] bounds]];
-        self.secondWindow.backgroundColor = [UIColor blackColor];
-        self.secondWindow.screen = [[UIScreen screens] objectAtIndex:1];
-        UIImage *titleImage = [UIImage imageWithContentsOfFile:@"title.png"];
-        UIImageView *titleView = [[UIImageView alloc] initWithImage:titleImage];
-        titleView.center = self.secondWindow.center;
-        [self.secondWindow addSubview:titleView];
-        [titleView release];
-        [self.secondWindow makeKeyAndVisible];
-    }
 }
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {

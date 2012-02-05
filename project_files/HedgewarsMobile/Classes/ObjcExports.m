@@ -21,7 +21,6 @@
 
 #import "ObjcExports.h"
 #import "OverlayViewController.h"
-#import "AmmoMenuViewController.h"
 
 
 // cache the grenade time
@@ -64,7 +63,7 @@ void startLoadingIndicator() {
         overlay_instance.view.userInteractionEnabled = NO;
     }
     CGPoint center = overlay_instance.view.center;
-    CGPoint loaderCenter = ((IS_DUALHEAD() || [HWUtils gameType] == gtSave) ? center : CGPointMake(center.x, center.y * 5/3));
+    CGPoint loaderCenter = ([HWUtils gameType] == gtSave) ? center : CGPointMake(center.x, center.y * 5/3);
 
     overlay_instance.loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
     overlay_instance.loadingIndicator.hidesWhenStopped = YES;
@@ -117,10 +116,6 @@ void clearView() {
         overlay_instance.grenadeTimeSegment.tag = 0;
     }
     grenadeTime = 2;
-}
-
-void updateVisualsNewTurn(void) {
-    [overlay_instance.amvc updateAmmoVisuals];
 }
 
 // dummy function to prevent linkage fail

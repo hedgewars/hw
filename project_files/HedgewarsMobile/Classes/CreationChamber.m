@@ -31,7 +31,6 @@
     [settings setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"music"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sound"];
-    [settings setObject:[NSNumber numberWithBool:NO] forKey:@"classic_menu"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sync_ws"];
 
     // don't overwrite these two strings when present

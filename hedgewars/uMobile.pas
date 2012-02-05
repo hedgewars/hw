@@ -27,7 +27,6 @@ procedure clearView; cdecl; external;
 procedure startLoadingIndicator; cdecl; external;
 procedure stopLoadingIndicator; cdecl; external;
 procedure saveFinishedSynching; cdecl; external;
-procedure updateVisualsNewTurn; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
 procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
@@ -36,7 +35,6 @@ procedure performRumble; inline;
 
 procedure GameLoading; inline;
 procedure GameLoaded; inline;
-procedure AmmoUpdate; // do not inline
 procedure NewTurnBeginning; inline;
 procedure SaveLoadingEnded; inline;
 
@@ -88,21 +86,11 @@ begin
 {$ENDIF}
 end;
 
-procedure AmmoUpdate; // do not inline
-begin
-{$IFDEF IPHONEOS}
-    if (CurrentTeam = nil) or (CurrentTeam^.ExtDriven) or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
-        exit(); // the other way around throws a compiler error
-    updateVisualsNewTurn();
-{$ENDIF}
-end;
-
 procedure NewTurnBeginning; inline;
 begin
 {$IFDEF IPHONEOS}
     clearView();
 {$ENDIF}
-    AmmoUpdate();
 end;
 
 procedure SaveLoadingEnded; inline;

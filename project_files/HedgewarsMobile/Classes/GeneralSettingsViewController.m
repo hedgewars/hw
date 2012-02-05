@@ -88,9 +88,6 @@
         case 90:    //synched weapons/scheme
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"sync_ws"];
             break;
-        case 60:    //classic menu
-            [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"classic_menu"];
-            break;
         default:
             DLog(@"Wrong tag");
             break;
@@ -121,7 +118,7 @@
             return 2;
             break;
         case 2:     // other options
-            return 3;
+            return 2;
             break;
         default:
             DLog(@"Nope");
@@ -233,12 +230,6 @@
                     cell.detailTextLabel.text = NSLocalizedString(@"Choosing a Scheme will select its associated Weapon", @"from the settings table");
                     switchContent.on = [[settings objectForKey:@"sync_ws"] boolValue];
                     switchContent.tag = 90;
-                    break;
-                case 2:
-                    cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"from the settings table");
-                    switchContent.on = [[settings objectForKey:@"classic_menu"] boolValue];
-                    switchContent.tag = 60;
                     break;
                 default:
                     DLog(@"Nope");

@@ -123,15 +123,9 @@ static UIViewController *callingController;
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale preferredLanguages] objectAtIndex:0]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
-    if (IS_DUALHEAD()) {
-        CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
-        width = screenBounds.size.width;
-        height = screenBounds.size.height;
-    } else {
-        CGRect screenBounds = [[UIScreen mainScreen] safeBounds];
-        width = screenBounds.size.width;
-        height = screenBounds.size.height;
-    }
+    CGRect screenBounds = [[UIScreen mainScreen] safeBounds];
+    width = screenBounds.size.width;
+    height = screenBounds.size.height;
 
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", (int)(width * screenScale)];
     NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", (int)(height * screenScale)];
