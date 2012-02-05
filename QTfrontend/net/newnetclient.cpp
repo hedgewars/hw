@@ -362,7 +362,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                             emit setMyReadyStatus(setFlag);
                         }
 
-                        emit setReadyStatus(lst[i], setFlag);
+                        if (!isChief) emit setReadyStatus(lst[i], setFlag);
+                        else emit setReadyStatus(lst[i], true);
                     }
                 }
             }
