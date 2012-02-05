@@ -877,7 +877,7 @@ begin
 end;
  
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
-var i, t: LongInt;
+var i, t, h: LongInt;
     r: TSDL_Rect;
     tdx, tdy: Double;
     s: string[15];
@@ -1065,6 +1065,7 @@ else smallScreenOffset:= 0;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
+        h:= 0;
         highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
 
         if highlight then
@@ -1087,6 +1088,14 @@ for t:= 0 to Pred(TeamsCount) do
         inc(r.x, cTeamHealthWidth + 2);
         r.w:= 3;
         DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+
+        if not highlight and not hasGone then
+            for i:= 0 to cMaxHHIndex do
+                if Hedgehogs[i].Gear <> nil then
+                    begin
+                    inc(h,round(Hedgehogs[i].Gear^.Health*(TeamHealthBarWidth/TeamHealth)));
+                    if h < TeamHealthBarWidth-1 then DrawTexture(14 + h, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
+                    end;
 
         // draw ai kill counter for gfAISurvival
         if (GameFlags and gfAISurvival) <> 0 then

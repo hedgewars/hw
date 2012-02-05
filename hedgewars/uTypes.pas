@@ -53,8 +53,8 @@ type
             sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
             sprClusterBomb, sprClusterParticle, sprFlame,
             sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR,
-            sprAMBorderHorizontal, sprAMBorderVertical, sprAMSlot,
-            sprAMAmmos, sprAMAmmosBW, sprAMSlotKeys, sprAMCorners,
+//    sprAMBorderHorizontal, sprAMBorderVertical, 
+            sprAMSlot, sprAMAmmos, sprAMAmmosBW, sprAMSlotKeys, sprAMCorners,
             sprFinger, sprAirBomb, sprAirplane, sprAmAirplane, sprAmGirder,
             sprHHTelepMask, sprSwitch, sprParachute, sprTarget, sprRopeNode,
             sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
@@ -83,7 +83,7 @@ type
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
-            sprFireButton
+            sprFireButton, sprSlider
             );
 
     // Gears that interact with other Gears and/or Land
