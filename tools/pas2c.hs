@@ -75,9 +75,9 @@ renderCFiles units = do
     extractTVs (Unit _ (Interface _ (TypesAndVars tv)) _ _ _) = tv
     
     tv2id :: TypeVarDeclaration -> [Record]
-    tv2id (TypeDeclaration i t@(Sequence ids)) = map (\(Identifier i _) -> fi i (type2BaseType t)) $ i : ids
-    tv2id (TypeDeclaration (Identifier i _) t) = [(map toLower i, (i, type2BaseType t))]
-    tv2id (VarDeclaration _ (ids, t) _) = map (\(Identifier i _) -> fi i (type2BaseType t)) ids
+    tv2id (TypeDeclaration i t@(Sequence ids)) = map (\(Identifier i _) -> fi i BTUnknown) $ i : ids
+    tv2id (TypeDeclaration (Identifier i _) t) = [(map toLower i, (i, BTUnknown))]
+    tv2id (VarDeclaration _ (ids, t) _) = map (\(Identifier i _) -> fi i BTUnknown) ids
     tv2id (FunctionDeclaration (Identifier i _) _ _ _) = [fi i BTUnknown]
     tv2id (OperatorDeclaration i _ _ _ _) = [fi i BTUnknown]
     fi i t = (map toLower i, (i, t))
@@ -157,8 +157,35 @@ id2C False (Identifier i t) = do
         return . text . fst . snd . fromJust $ v
 
 id2CTyped :: BaseType -> Identifier -> State RenderState Doc
-id2CTyped BTUnknown i = error $ show i
+id2CTyped BTUnknown i = do
+    ns <- gets currentScope
+    error $ show i ++ "\n" ++ show ns
 id2CTyped bt (Identifier i _) = id2C True (Identifier i bt)
+
+
+resolveType :: TypeDecl -> State RenderState BaseType
+resolveType st@(SimpleType (Identifier i _)) = do
+    let i' = map toLower i
+    v <- gets $ find (\(a, _) -> a == i') . currentScope
+    if isJust v then return . snd . snd $ fromJust v else return $ f i'
+    where
+    f "integer" = BTInt
+    f "pointer" = BTPointerTo BTVoid
+    f _ = error $ show st
+resolveType (PointerTo t) = liftM BTPointerTo $ resolveType t
+resolveType (RecordType tv mtvs) = do
+    tvs <- mapM f (concat $ tv : fromMaybe [] mtvs)
+    return . BTRecord . concat $ tvs
+    where
+        f :: TypeVarDeclaration -> State RenderState [(String, BaseType)]
+        f (VarDeclaration _ (ids, td) _) = mapM (\(Identifier i _) -> liftM ((,) i) $ resolveType td) ids
+resolveType (ArrayDecl (Just _) t) = liftM (BTArray BTInt) $ resolveType t
+resolveType (ArrayDecl Nothing t) = liftM (BTArray BTInt) $ resolveType t
+resolveType (FunctionType _ _) = return BTFunction
+resolveType (DeriveType _) = return BTInt
+--resolveType UnknownType = return BTUnknown    
+resolveType a = error $ "resolveType: " ++ show a
+    
     
 tvar2C :: Bool -> TypeVarDeclaration -> State RenderState Doc
 tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
@@ -188,12 +215,14 @@ tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested f
 
 tvar2C _ td@(TypeDeclaration i' t) = do
     tp <- type2C t
-    i <- id2CTyped (type2BaseType t) i'
+    tb <- resolveType t
+    i <- id2CTyped tb i'
     return $ text "type" <+> i <+> tp <> text ";"
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- type2C t
-    i <- mapM (id2CTyped (type2BaseType t)) ids
+    tb <- resolveType t
+    i <- mapM (id2CTyped tb) ids
     ie <- initExpr mInitExpr
     return $ if isConst then text "const" else empty
         <+> t'
@@ -238,6 +267,7 @@ type2C (Sequence ids) = do
 type2C (ArrayDecl r t) = return $ text "<<array type>>"
 type2C (Set t) = return $ text "<<set>>"
 type2C (FunctionType returnType params) = return $ text "<<function>>"
+type2C (DeriveType _) = return $ text "<<type derived from constant literal>>"
 
 phrase2C :: Phrase -> State RenderState Doc
 phrase2C (Phrases p) = do

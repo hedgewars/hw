@@ -30,7 +30,7 @@ function  GenPreview: TPreview;
 
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
-     uVariables, uUtils, uCommands, Adler32, uDebug, uLandPainted, uTextures,
+     uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
      uLandGenMaze, uLandOutline;
 
 

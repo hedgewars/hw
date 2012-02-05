@@ -1,7 +1,7 @@
 module PascalUnitSyntaxTree where
 
---import Data.Traversable
 import Data.Maybe
+import Data.Char
 
 data PascalUnit =
     Program Identifier Implementation Phrase
@@ -30,6 +30,7 @@ data TypeDecl = SimpleType Identifier
     | String Integer
     | Set TypeDecl
     | FunctionType TypeDecl [TypeVarDeclaration]
+    | DeriveType InitExpression 
     | UnknownType
     deriving Show
 data Range = Range Identifier
@@ -108,17 +109,19 @@ data BaseType = BTUnknown
     deriving Show
     
 
+{--
 type2BaseType :: TypeDecl -> BaseType
-type2BaseType (SimpleType (Identifier s _)) = f s
+type2BaseType st@(SimpleType (Identifier s _)) = f (map toLower s)
     where
     f "longint" = BTInt
     f "integer" = BTInt
     f "word" = BTInt
     f "pointer" = BTPointerTo BTVoid
-    f _ = BTUnknown
+    f _ = error $ show st
 type2BaseType (Sequence ids) = BTEnum $ map (\(Identifier i _) -> i) ids
 type2BaseType (RecordType tv mtvs) = BTRecord $ concatMap f (concat $ tv : fromMaybe [] mtvs)
     where
     f (VarDeclaration _ (ids, td) _) = map (\(Identifier i _) -> (i, type2BaseType td)) ids
-type2BaseType _ = BTUnknown  
-    
+type2BaseType (PointerTo t) = BTPointerTo $ type2BaseType t
+type2BaseType a = error $ show a
+--}
