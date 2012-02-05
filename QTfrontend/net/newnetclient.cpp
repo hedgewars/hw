@@ -359,11 +359,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                     {
                         if (lst[i] == mynick)
                         {
-                            emit setMyReadyStatus(setFlag);
+                            if (isChief && !setFlag) ToggleReady();
+                            else emit setMyReadyStatus(setFlag);
                         }
 
-                        if (!isChief) emit setReadyStatus(lst[i], setFlag);
-                        else emit setReadyStatus(lst[i], true);
+                        emit setReadyStatus(lst[i], setFlag);
                     }
                 }
             }
