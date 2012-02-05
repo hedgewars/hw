@@ -33,6 +33,7 @@ type
     Touch_Finger = record
         id                       : SDL_FingerId;
         x,y                      : LongInt;
+        dx,dy                    : LongInt;
         historicalX, historicalY : LongInt;
         timeSinceDown            : Longword;
         end;
@@ -43,8 +44,12 @@ procedure ProcessTouch;
 procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 procedure onTouchMotion(x,y: Longword; dx,dy: LongInt; pointerId: SDL_FingerId);
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
-function convertToCursor(scale: LongInt; xy: LongInt): LongInt;
+function convertToCursorX(x: LongInt): LongInt;
+function convertToCursorY(y: LongInt): LongInt;
+function convertToCursorDeltaX(x: LongInt): LongInt;
+function convertToCursorDeltaY(y: LongInt): LongInt;
 function addFinger(x,y: Longword; id: SDL_FingerId): PTouch_Finger;
+function updateFinger(x,y,dx,dy: Longword; id: SDL_FingerId): PTouch_Finger;
 procedure deleteFinger(id: SDL_FingerId);
 procedure onTouchClick(finger: Touch_Finger);
 procedure onTouchDoubleClick(finger: Touch_Finger);
@@ -125,7 +130,7 @@ case pointerCount of
                 ParseCommand('+attack', true);
                 exit;
             end;
-            if (finger^.x < leftButtonBoundary) and (finger^.y < 390) then
+{            if (finger^.x < leftButtonBoundary) and (finger^.y < 390) then
             begin
                 ParseCommand('+left', true);
                 walkingLeft := true;
@@ -142,7 +147,7 @@ case pointerCount of
                 ParseCommand('hjump', true);
                 exit;
             end;
-            moveCursor:= true; 
+ }           moveCursor:= true; 
         end;
         2:
         begin
@@ -159,35 +164,23 @@ procedure onTouchMotion(x,y: Longword;dx,dy: LongInt; pointerId: SDL_FingerId);
 var
     finger, secondFinger: PTouch_Finger;
     currentPinchDelta, zoom : hwFloat;
-    tmpX, tmpY: LongInt;
 begin
-x := x;
-y := y;
-dx := dx;
-dy := dy;
-finger:= findFinger(pointerId);
-tmpX := convertToCursor(cScreenWidth, x);
-tmpY := convertToCursor(cScreenHeight, y);
+finger:= updateFinger(x,y,dx,dy,pointerId);
 
 if moveCursor then
     begin
         if invertCursor then
         begin
-            CursorPoint.X := CursorPoint.X + (finger^.x - tmpX);
-            CursorPoint.Y := CursorPoint.Y - (finger^.y - tmpY);
+            CursorPoint.X := CursorPoint.X - finger^.dx;
+            CursorPoint.Y := CursorPoint.Y + finger^.dy;
         end
     else
         begin
-            CursorPoint.X := CursorPoint.X - (finger^.x - tmpX);
-            CursorPoint.Y := CursorPoint.Y + (finger^.y - tmpY);
+            CursorPoint.X := CursorPoint.X + finger^.dx;
+            CursorPoint.Y := CursorPoint.Y - finger^.dy;
         end;
-        finger^.x := tmpX;
-        finger^.y := tmpY;
         exit //todo change into switch rather than ugly ifs
     end;
-    
-    finger^.x := tmpX;
-    finger^.y := tmpY;
     
     if aiming then 
     begin
@@ -208,11 +201,18 @@ if moveCursor then
 end;
 
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
+var
+    finger: PTouch_Finger;
 begin
 x := x;
 y := y;
 aiming:= false;
 stopFiring:= true;
+finger:= updateFinger(x,y,0,0,pointerId);
+//Check for onTouchClick event
+if ((SDL_GetTicks - finger^.timeSinceDown) < clickTime) AND not(fingerHasMoved(finger^)) then
+    onTouchClick(finger^);
+
 deleteFinger(pointerId);
 
 if walkingLeft then
@@ -239,31 +239,33 @@ begin
 if (SDL_GetTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, finger.Y-yTouchClick) < _30) then
     begin
     onTouchDoubleClick(finger);
+    timeSinceClick:= -1;
     exit; 
-    end
-else
-    begin
-        xTouchClick := finger.x;
-        yTouchClick := finger.y;
-        timeSinceClick := SDL_GetTicks;
     end;
 
-    if bShowAmmoMenu then 
+xTouchClick:= finger.x;
+yTouchClick:= finger.y;
+timeSinceClick:= SDL_GetTicks;
+
+if bShowAmmoMenu then 
     begin
-        doPut(CursorPoint.X, CursorPoint.Y, false); 
-        exit
+    CursorPoint.X:= finger.x;
+    CursorPoint.Y:= finger.y;
+    doPut(CursorPoint.X, CursorPoint.Y, false); 
+    WriteToConsole(Format('%d %d', [CursorPoint.X, CursorPoint.Y]));
+    exit
     end;
 
-    if isOnCurrentHog(finger) then
+if isOnCurrentHog(finger) then
     begin
-        bShowAmmoMenu := true;
-        exit;
+    bShowAmmoMenu := true;
+    exit;
     end;
 
-    if finger.y < topButtonBoundary then
+if finger.y < topButtonBoundary then
     begin
-        ParseCommand('hjump', true);
-        exit;
+    ParseCommand('hjump', true);
+    exit;
     end;
 end;
 
@@ -280,8 +282,8 @@ begin
     end;
     
     
-    xCursor := convertToCursor(cScreenWidth, x);
-    yCursor := convertToCursor(cScreenHeight, y);
+    xCursor := convertToCursorX(x);
+    yCursor := convertToCursorY(y);
     
     //on removing fingers, all fingers are moved to the left
     //with dynamic arrays being zero based, the new position of the finger is the old pointerCount
@@ -290,10 +292,22 @@ begin
     fingers[pointerCount].historicalY := yCursor;
     fingers[pointerCount].x := xCursor;
     fingers[pointerCount].y := yCursor;
+    fingers[pointerCount].dx := 0;
+    fingers[pointerCount].dy := 0;
     fingers[pointerCount].timeSinceDown:= SDL_GetTicks;
  
     addFinger:= @fingers[pointerCount];
     inc(pointerCount);
+end;
+
+function updateFinger(x,y,dx,dy: Longword; id: SDL_FingerId): PTouch_Finger;
+begin
+   updateFinger:= findFinger(id);
+
+   updateFinger^.x:= convertToCursorX(x);
+   updateFinger^.y:= convertToCursorY(y);
+   updateFinger^.dx:= convertToCursorDeltaX(dx);
+   updateFinger^.dy:= convertToCursorDeltaY(dy);
 end;
 
 procedure deleteFinger(id: SDL_FingerId);
@@ -306,9 +320,6 @@ begin
     begin
         if fingers[index].id = id then
         begin
-            //Check for onTouchClick event
-            if ((SDL_GetTicks - fingers[index].timeSinceDown) < clickTime) AND not(fingerHasMoved(fingers[index])) then
-                onTouchClick(fingers[index]);
  
             //put the last finger into the spot of the finger to be removed, 
             //so that all fingers are packed to the far left
@@ -424,9 +435,28 @@ begin
     end; //if CurrentHedgehog^.Gear <> nil
 end;
 
-function convertToCursor(scale: LongInt; xy: LongInt): LongInt;
+//These 4 convertToCursor functions convert xy coords from the SDL coordinate system to our CursorPoint coor system
+// the SDL coordinate system goes from 0 to 32768 on the x axis and 0 to 32768 on the y axis, (0,0) being top left.
+// the CursorPoint coordinate system goes from -cScreenWidth/2 to cScreenWidth/2 on the x axis 
+//  and 0 to cScreenHeight on the x axis, (-cScreenWidth, cScreenHeight) being top left,
+function convertToCursorX(x: LongInt): LongInt;
 begin
-    convertToCursor := round(xy/32768*scale)
+    convertToCursorX := round((x/32768)*cScreenWidth) - (cScreenWidth shr 1);
+end;
+
+function convertToCursorY(y: LongInt): LongInt;
+begin
+    convertToCursorY := cScreenHeight - round((y/32768)*cScreenHeight)
+end;
+
+function convertToCursorDeltaX(x: LongInt): LongInt;
+begin
+    convertToCursorDeltaX := round(x/32768*cScreenWidth)
+end;
+
+function convertToCursorDeltaY(y: LongInt): LongInt;
+begin
+    convertToCursorDeltaY := round(y/32768*cScreenHeight)
 end;
 
 function isOnFireButton(finger: Touch_Finger): boolean;
@@ -450,14 +480,16 @@ var
 begin
     x := _0;
     y := _0;
-    convertToFingerCoord(x, y, CurrentHedgehog^.Gear^.X, CurrentHedgehog^.Gear^.Y);
+    convertToFingerCoord(x,y, CurrentHedgehog^.Gear^.X, CurrentHedgehog^.Gear^.Y);
+    WriteToConsole(Format('%d %s %d %s', [finger.x, cstr(x), finger.y, cstr(y) ]));
+    
     isOnCurrentHog := Distance(int2hwFloat(finger.X)-x, int2hwFloat(finger.Y)-y) < _50;
 end;
 
 procedure convertToFingerCoord(var x,y : hwFloat; oldX, oldY: hwFloat);
 begin
-    x := oldX + int2hwFloat(WorldDx + (cScreenWidth div 2));
-    y := oldY + int2hwFloat(WorldDy);
+    x := oldX + int2hwFloat(WorldDx);
+    y := int2hwFloat(cScreenHeight) - (oldY + int2hwFloat(WorldDy));
 end;
 
 procedure convertToWorldCoord(var x,y: hwFloat; finger: Touch_Finger);
