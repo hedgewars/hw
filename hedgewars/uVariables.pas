@@ -334,10 +334,12 @@ const
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: true; getImageDimensions: true),// sprSky
             (FileName:       'SkyR'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: true; getImageDimensions: true),// sprSky
+(*
             (FileName:  'BorderHorizontal'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 32; Height:  2; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderHorizontal
             (FileName:  'BorderVertical'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 2; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderVertical
+*)
             (FileName:   'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlot
             (FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -585,7 +587,7 @@ const
             (FileName:   'amSMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandSMine
             (FileName:  'amHammer'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprWhip
+            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprHammer
             (FileName: 'amResurrector'; Path: ptHedgehog; AltPath: ptNone;
                 Texture: nil; Surface: nil; Width: 32; Height: 32;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
@@ -630,7 +632,9 @@ const
             (FileName:  'TARDIS'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  0; Height: 0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprTardis
             (FileName: 'firebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 450; Height: 150; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true) // sprFireButton
+            Width: 450; Height: 150; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprFireButton
+            (FileName:  'slider'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 5; Height: 17; imageWidth: 5; imageHeight: 15; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprSlider
             );
 
 
