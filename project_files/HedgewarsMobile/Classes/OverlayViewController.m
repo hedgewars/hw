@@ -22,22 +22,20 @@
 #import "OverlayViewController.h"
 #import "InGameMenuViewController.h"
 #import "HelpPageViewController.h"
-#import "AmmoMenuViewController.h"
 #import "CGPointUtils.h"
 #import "ObjcExports.h"
 
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
 #define HIDING_TIME_NEVER   [NSDate dateWithTimeIntervalSinceNow:10000]
-#define doDim()             [dimTimer setFireDate: (IS_DUALHEAD()) ? HIDING_TIME_NEVER : HIDING_TIME_DEFAULT]
+#define doDim()             [dimTimer setFireDate:HIDING_TIME_DEFAULT]
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
 
 static OverlayViewController *mainOverlay;
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, amvc, initialScreenCount, loadingIndicator,
-            confirmButton, grenadeTimeSegment;
+@synthesize popoverController, popupMenu, helpPage, loadingIndicator, confirmButton, grenadeTimeSegment;
 
 #pragma mark -
 #pragma mark rotation
@@ -52,7 +50,6 @@ static OverlayViewController *mainOverlay;
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
         isAttacking = NO;
         isPopoverVisible = NO;
-        initialScreenCount = (IS_DUALHEAD() ? 2 : 1);
         loadingIndicator = nil;
         mainOverlay = self;
     }
@@ -67,7 +64,7 @@ static OverlayViewController *mainOverlay;
     // fill all the screen available as sdlview disables autoresizing
     self.view.frame = [[UIScreen mainScreen] safeBounds];
     // the timer used to dim the overlay
-    dimTimer = [[NSTimer alloc] initWithFireDate:(IS_DUALHEAD()) ? HIDING_TIME_NEVER : [NSDate dateWithTimeIntervalSinceNow:6]
+    dimTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
                                           target:self
                                         selector:@selector(dimOverlay)
@@ -81,18 +78,6 @@ static OverlayViewController *mainOverlay;
                                              selector:@selector(showHelp:)
                                                  name:@"show help ingame"
                                                object:nil];
-
-    if (IS_IPAD()) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(numberOfScreensIncreased)
-                                                     name:UIScreenDidConnectNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(numberOfScreensDecreased)
-                                                     name:UIScreenDidDisconnectNotification
-                                                   object:nil];
-    }
     
     // present the overlay
     self.view.alpha = 0;
@@ -115,7 +100,6 @@ static OverlayViewController *mainOverlay;
     self.helpPage = nil;
     [self dismissPopover];
     self.popoverController = nil;
-    self.amvc = nil;
     self.loadingIndicator = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
@@ -126,8 +110,6 @@ static OverlayViewController *mainOverlay;
         self.popupMenu = nil;
     if (self.helpPage.view.superview == nil)
         self.helpPage = nil;
-    if (self.amvc.view.superview == nil)
-        self.amvc = nil;
     if (self.loadingIndicator.superview == nil)
         self.loadingIndicator = nil;
     if (self.confirmButton.superview == nil)
@@ -146,38 +128,11 @@ static OverlayViewController *mainOverlay;
     releaseAndNil(popupMenu);
     releaseAndNil(helpPage);
     releaseAndNil(popoverController);
-    releaseAndNil(amvc);
     releaseAndNil(loadingIndicator);
     releaseAndNil(confirmButton);
     releaseAndNil(grenadeTimeSegment);
     // dimTimer is autoreleased
     [super dealloc];
-}
-
--(void) numberOfScreensIncreased {
-    if (self.initialScreenCount == 1) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New display detected"
-                                                        message:NSLocalizedString(@"Hedgewars supports multi-monitor configurations, but the screen has to be connected before launching the game.",@"")
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        HW_pause();
-    }
-}
-
--(void) numberOfScreensDecreased {
-    if (self.initialScreenCount == 2) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Oh noes! Display disconnected"
-                                                        message:NSLocalizedString(@"A monitor has been disconnected while playing and this has ended the match! You need to restart the game if you wish to use the second display again.",@"")
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Ok"
-                                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-        HW_terminate(NO);
-    }
 }
 
 #pragma mark -
@@ -281,34 +236,14 @@ static OverlayViewController *mainOverlay;
             break;
         case 10:
             [AudioManagerController playClickSound];
-            clearView();
             HW_pause();
-            if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
-                doDim();
-                [self.amvc disappear];
-            }
             clearView();
             [self showPopover];
             break;
         case 11:
             [AudioManagerController playClickSound];
             clearView();
-            
-            if (IS_DUALHEAD() || [[[NSUserDefaults standardUserDefaults] objectForKey:@"classic_menu"] boolValue] == NO) {
-                if (self.amvc == nil)
-                    self.amvc = [[AmmoMenuViewController alloc] init];
-
-                if (self.amvc.isVisible) {
-                    doDim();
-                    [self.amvc disappear];
-                } else {
-                    if (HW_isAmmoMenuNotAllowed() == NO) {
-                        doNotDim();
-                        [self.amvc appearInView:self.view];
-                    }
-                }
-            } else
-                HW_ammoMenu();
+            HW_ammoMenu();
             break;
         default:
             DLog(@"Nope");
@@ -420,10 +355,6 @@ static OverlayViewController *mainOverlay;
     if (isPopoverVisible)
         [self dismissPopover];
 
-    if (self.amvc.isVisible && IS_DUALHEAD() == NO) {
-        doDim();
-        [self.amvc disappear];
-    }
     // reset default dimming
     doDim();
 

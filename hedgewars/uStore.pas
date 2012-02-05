@@ -1055,18 +1055,14 @@ begin
     // these values in x and y make the window appear in the center
     x:= SDL_WINDOWPOS_CENTERED_MASK;
     y:= SDL_WINDOWPOS_CENTERED_MASK;
-    flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN;
+    // SDL_WINDOW_RESIZABLE makes the window respond to rotation events on mobile devices
+    flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN or SDL_WINDOW_RESIZABLE;
 
     {$IFDEF MOBILE}
-    // make the sdl window appear on the second monitor when present
-    x:= x or (SDL_GetNumVideoDisplays() - 1);
-    y:= y or (SDL_GetNumVideoDisplays() - 1);
-
     if isPhone() then
         SDL_SetHint('SDL_IOS_ORIENTATIONS','LandscapeLeft LandscapeRight');
-
-    // on mobile the SDL_WINDOW_RESIZABLE makes the window respond to rotation events
-    flags:= flags or SDL_WINDOW_BORDERLESS or SDL_WINDOW_RESIZABLE;
+    // no need for borders on mobile devices
+    flags:= flags or SDL_WINDOW_BORDERLESS;
     {$ENDIF}
 
     if SDLwindow = nil then

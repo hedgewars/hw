@@ -235,7 +235,6 @@
 		61D0BDF91457508C0011A899 /* ExtraCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D0BDF81457508C0011A899 /* ExtraCategories.m */; };
 		61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */ = {isa = PBXBuildFile; fileRef = 61D205A0127CDD1100ABD83E /* ObjcExports.m */; };
 		61D3D2A51290E03A003CE7C3 /* irc.png in Resources */ = {isa = PBXBuildFile; fileRef = 61D3D2A41290E03A003CE7C3 /* irc.png */; };
-		61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */; };
 		61DF0EDC1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */; };
 		61DF0F211284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */; };
 		61E1F4F811D004240016A5AA /* adler32.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61E1F4F711D004240016A5AA /* adler32.pas */; };
@@ -649,8 +648,6 @@
 		61D2059F127CDD1100ABD83E /* ObjcExports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjcExports.h; path = Classes/ObjcExports.h; sourceTree = "<group>"; };
 		61D205A0127CDD1100ABD83E /* ObjcExports.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ObjcExports.m; path = Classes/ObjcExports.m; sourceTree = "<group>"; };
 		61D3D2A41290E03A003CE7C3 /* irc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = irc.png; path = Resources/Icons/irc.png; sourceTree = "<group>"; };
-		61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmmoMenuViewController.h; sourceTree = "<group>"; };
-		61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AmmoMenuViewController.m; sourceTree = "<group>"; };
 		61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageLobbyViewController-iPhone.xib"; sourceTree = "<group>"; };
 		61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageInGameViewController-iPhone.xib"; sourceTree = "<group>"; };
 		61E1F4F711D004240016A5AA /* adler32.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = adler32.pas; path = ../../hedgewars/adler32.pas; sourceTree = SOURCE_ROOT; };
@@ -967,8 +964,6 @@
 		6163EE6C11CC253F001C0453 /* Overlay */ = {
 			isa = PBXGroup;
 			children = (
-				61DE8F201257EB1100B80214 /* AmmoMenuViewController.h */,
-				61DE8F211257EB1100B80214 /* AmmoMenuViewController.m */,
 				616591F811CA9BA200D6E256 /* InGameMenuViewController.h */,
 				616591F911CA9BA200D6E256 /* InGameMenuViewController.m */,
 				616591F611CA9BA200D6E256 /* OverlayViewController.h */,
@@ -1701,7 +1696,6 @@
 				611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */,
 				619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */,
 				619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */,
-				61DE8F221257EB1100B80214 /* AmmoMenuViewController.m in Sources */,
 				61399013125D19C0003C2DC0 /* uMobile.pas in Sources */,
 				61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */,
 				61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */,

@@ -27,12 +27,10 @@
 @interface HedgewarsAppDelegate : SDLUIKitDelegate {
     MainMenuViewController *mainViewController;
     UIWindow *uiwindow;
-    UIWindow *secondWindow;
 }
 
 @property (nonatomic,retain) MainMenuViewController *mainViewController;
 @property (nonatomic,retain) UIWindow *uiwindow;
-@property (nonatomic,retain) UIWindow *secondWindow;
 
 @end
 

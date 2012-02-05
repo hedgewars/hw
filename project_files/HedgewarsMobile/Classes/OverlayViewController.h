@@ -23,7 +23,6 @@
 
 @class InGameMenuViewController;
 @class HelpPageViewController;
-@class AmmoMenuViewController;
 
 @interface OverlayViewController : UIViewController {
     // the timer that dims the overlay
@@ -36,17 +35,11 @@
 
     // the help menu
     HelpPageViewController *helpPage;
-
-    // the objc ammomenu
-    AmmoMenuViewController *amvc;
     
     // ths touch section
     CGFloat initialDistanceForPinching;
     CGPoint startingPoint;
     BOOL isAttacking;
-    
-    // dual head support
-    NSInteger initialScreenCount;
 
     // various other widgets
     UIActivityIndicatorView *loadingIndicator;
@@ -57,13 +50,9 @@
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
 @property (nonatomic,retain) HelpPageViewController *helpPage;
-@property (nonatomic,retain) AmmoMenuViewController *amvc;
 @property (nonatomic,retain) UIActivityIndicatorView *loadingIndicator;
 @property (nonatomic,retain) UIButton *confirmButton;
 @property (nonatomic,retain) UISegmentedControl *grenadeTimeSegment;
-
-@property (assign) NSInteger initialScreenCount;
-
 
 +(OverlayViewController *)mainOverlay;
 

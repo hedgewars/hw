@@ -49,7 +49,7 @@ function  GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 var StoreCnt: Longword;
 
 implementation
-uses uLocale, uMobile, uVariables, uCommands, uUtils, uCaptions, uDebug;
+uses uLocale, uVariables, uCommands, uUtils, uCaptions, uDebug;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
@@ -273,7 +273,6 @@ with Hedgehog do
                 end
             end
     end;
-uMobile.AmmoUpdate;
 end;
 
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
