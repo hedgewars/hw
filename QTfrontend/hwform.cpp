@@ -623,7 +623,7 @@ void HWForm::GoToPage(int id)
     {
         /**Start animation :**/
         int coeff = 1;
-#ifndef Q_OS_MAC
+#ifdef false
         coeff = 2;
         QGraphicsOpacityEffect *effectNew = new QGraphicsOpacityEffect(ui.Pages->widget(id));
         ui.Pages->widget(id)->setGraphicsEffect(effectNew);
@@ -641,7 +641,7 @@ void HWForm::GoToPage(int id)
         animationNewSlide->setEndValue(QPoint(0, 0));
         animationNewSlide->setEasingCurve(QEasingCurve::OutExpo);
 
-#ifndef Q_OS_MAC
+#ifdef false
         animationNewOpacity = new QPropertyAnimation(effectNew, "opacity");
         animationNewOpacity->setDuration(duration);
         animationNewOpacity->setStartValue(0.01);
@@ -658,7 +658,7 @@ void HWForm::GoToPage(int id)
         animationOldSlide->setEndValue(QPoint(-width()/coeff, 0));
         animationOldSlide->setEasingCurve(QEasingCurve::OutExpo);
 
-#ifndef Q_OS_MAC
+#ifdef false
         animationOldOpacity = new QPropertyAnimation(effectLast, "opacity");
         animationOldOpacity->setDuration(duration);
         animationOldOpacity->setStartValue(1);
@@ -669,7 +669,7 @@ void HWForm::GoToPage(int id)
         QParallelAnimationGroup *group = new QParallelAnimationGroup;
         group->addAnimation(animationOldSlide);
         group->addAnimation(animationNewSlide);
-#ifndef Q_OS_MAC
+#ifdef false
         group->addAnimation(animationOldOpacity);
         group->addAnimation(animationNewOpacity);
 #endif
@@ -732,7 +732,7 @@ void HWForm::GoBack()
     if (curid != 0 && !stopAnim)
     {
         int coeff = 1;
-#ifndef Q_OS_MAC
+#ifdef false
         coeff = 2;
         QGraphicsOpacityEffect *effectNew = new QGraphicsOpacityEffect(ui.Pages->widget(id));
         effectNew->setOpacity(1);
@@ -751,7 +751,7 @@ void HWForm::GoBack()
         animationOldSlide->setEndValue(QPoint(0, 0));
         animationOldSlide->setEasingCurve(QEasingCurve::OutExpo);
 
-#ifndef Q_OS_MAC
+#ifdef false
         animationOldOpacity = new QPropertyAnimation(effectLast, "opacity");
         animationOldOpacity->setDuration(duration);
         animationOldOpacity->setStartValue(1);
@@ -767,7 +767,7 @@ void HWForm::GoBack()
         animationNewSlide->setEndValue(QPoint(width()/coeff, 0));
         animationNewSlide->setEasingCurve(QEasingCurve::OutExpo);
 
-#ifndef Q_OS_MAC
+#ifdef false
         animationNewOpacity = new QPropertyAnimation(effectNew, "opacity");
         animationNewOpacity->setDuration(duration);
         animationNewOpacity->setStartValue(0.01);
@@ -778,7 +778,7 @@ void HWForm::GoBack()
         QParallelAnimationGroup *group = new QParallelAnimationGroup;
         group->addAnimation(animationOldSlide);
         group->addAnimation(animationNewSlide);
-#ifndef Q_OS_MAC
+#ifdef false
         group->addAnimation(animationOldOpacity);
         group->addAnimation(animationNewOpacity);
 #endif
