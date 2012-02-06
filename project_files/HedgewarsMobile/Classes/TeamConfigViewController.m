@@ -56,6 +56,7 @@
     aTableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     aTableView.separatorColor = [UIColor whiteColor];
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.tableView = aTableView;
     [aTableView release];
 

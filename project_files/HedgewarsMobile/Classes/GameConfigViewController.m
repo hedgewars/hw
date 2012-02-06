@@ -26,9 +26,9 @@
 #import "HelpPageViewController.h"
 #import "GameInterfaceBridge.h"
 
-
 @implementation GameConfigViewController
-@synthesize imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
+@synthesize imgContainer, helpPage, titleImage, sliderBackground,
+            mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -243,7 +243,9 @@
         [self.imgContainer removeFromSuperview];
 
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
-    for (int i = 0; i < 1 + random()%20; i++) {
+    NSInteger numberOfHogs = 1 + random() % 20;
+    DLog(@"Drawing %d nice hedgehogs", numberOfHogs);
+    for (int i = 0; i < numberOfHogs; i++) {
         NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
 
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
@@ -282,16 +284,17 @@
 -(void) viewDidLoad {
     self.view.backgroundColor = [UIColor blackColor];
 
-    CGRect screen = [[UIScreen mainScreen] bounds];
-    self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
+    CGRect screenRect = [[UIScreen mainScreen] safeBounds];
+    self.view.frame = screenRect;
 
     if (IS_IPAD()) {
         // the label for the filter slider
-        UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(116, 714, 310, 40)
-                                                     andTitle:nil
-                                              withBorderWidth:2.0f];
-        [self.view insertSubview:filterLabel belowSubview:self.mapConfigViewController.slider];
-        [filterLabel release];
+        UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(116, 714, 310, 40)
+                                                   andTitle:nil
+                                            withBorderWidth:2.0f];
+        self.sliderBackground = backLabel;
+        [backLabel release];
+        [self.view addSubview:self.sliderBackground];
 
         // the label for max hogs
         UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(598, 714, 310, 40)
@@ -303,19 +306,48 @@
         [self.view addSubview:maxLabel];
         self.mapConfigViewController.maxLabel = maxLabel;
         [maxLabel release];
-
-        // as this is loaded from a NIB we need to set its size and position
-        self.mapConfigViewController.view.frame = CGRectMake(704, 0, 320, 680);
     } else {
-        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width-44);
+        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width-44);
     }
     [self.view addSubview:self.mapConfigViewController.view];
+    [self.view bringSubviewToFront:self.mapConfigViewController.slider];
 
     [super viewDidLoad];
 }
 
+-(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval) duration {
+    if (IS_IPAD() == NO)
+        return;
+
+    if ((toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+         toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
+        if (self.imgContainer == nil)
+            [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
+
+        self.imgContainer.alpha = 1;
+        self.titleImage.frame = CGRectMake(357, 17, 309, 165);
+        self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 60, 320, 620);
+        self.mapConfigViewController.view.frame = CGRectMake(704, 0, 320, 680);
+        self.teamConfigViewController.view.frame = CGRectMake(337, 187, 350, 505);
+        self.mapConfigViewController.maxLabel.frame = CGRectMake(121, 714, 300, 40);
+        self.sliderBackground.frame = CGRectMake(603, 714, 300, 40);
+        self.mapConfigViewController.slider.frame = CGRectMake(653, 724, 200, 23);
+    } else {
+        self.imgContainer.alpha = 0;
+        self.titleImage.frame = CGRectMake(37, 28, 309, 165);
+        self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 214, 378, 366);
+        self.mapConfigViewController.view.frame = CGRectMake(390, 0, 378, 580);
+        self.teamConfigViewController.view.frame = CGRectMake(170, 590, 428, 366);
+        self.mapConfigViewController.maxLabel.frame = CGRectMake(104, 975, 200, 40);
+        self.sliderBackground.frame = CGRectMake(465, 975, 200, 40);
+        self.mapConfigViewController.slider.frame = CGRectMake(475, 983, 180, 23);
+    }
+}
+
 -(void) viewWillAppear:(BOOL)animated {
-    if (IS_IPAD())
+    // load hogs only on iPad and when interface allows enough space
+    if (IS_IPAD() && (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+                      self.interfaceOrientation == UIInterfaceOrientationLandscapeRight))
         [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
 
     [self.mapConfigViewController viewWillAppear:animated];
@@ -350,6 +382,11 @@
 -(void) didReceiveMemoryWarning {
     self.imgContainer = nil;
 
+    if (self.titleImage.superview == nil)
+        self.titleImage = nil;
+    if (self.sliderBackground.superview == nil)
+        self.sliderBackground = nil;
+
     if (self.mapConfigViewController.view.superview == nil)
         self.mapConfigViewController = nil;
     if (self.teamConfigViewController.view.superview == nil)
@@ -364,6 +401,8 @@
 
 -(void) viewDidUnload {
     self.imgContainer = nil;
+    self.titleImage = nil;
+    self.sliderBackground = nil;
     self.schemeWeaponConfigViewController = nil;
     self.teamConfigViewController = nil;
     self.mapConfigViewController = nil;
@@ -374,6 +413,8 @@
 
 -(void) dealloc {
     releaseAndNil(imgContainer);
+    releaseAndNil(titleImage);
+    releaseAndNil(sliderBackground);
     releaseAndNil(schemeWeaponConfigViewController);
     releaseAndNil(teamConfigViewController);
     releaseAndNil(mapConfigViewController);

@@ -124,6 +124,7 @@ static SchemeWeaponConfigViewController *controllerInstance;
     aTableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     aTableView.separatorColor = [UIColor whiteColor];
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.tableView = aTableView;
     [aTableView release];
     [self.view addSubview:self.tableView];
@@ -320,6 +321,9 @@ static SchemeWeaponConfigViewController *controllerInstance;
         theLabel.center = CGPointMake(controllerInstance.view.frame.size.width/2, controllerInstance.view.frame.size.height/2);
         theLabel.numberOfLines = 2;
         theLabel.tag = LABEL_TAG;
+        theLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth |
+                                    UIViewAutoresizingFlexibleTopMargin |
+                                    UIViewAutoresizingFlexibleBottomMargin;
 
         [controllerInstance.view addSubview:theLabel];
         [theLabel release];

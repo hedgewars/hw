@@ -24,13 +24,12 @@
 #import "SchemeWeaponConfigViewController.h"
 #import "GameConfigViewController.h"
 
-
 #define scIndex         self.segmentedControl.selectedSegmentIndex
 #define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
-            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy,
+            missionCommand, tableView, maxLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy,
             oldPage, oldValue;
 
 
@@ -282,7 +281,7 @@
             break;
     }
 
-    self.sizeLabel.text = labelText;
+    self.slider.textValue = labelText;
     self.templateFilterCommand = templateCommand;
     self.mazeSizeCommand = mazeCommand;
 }
@@ -320,7 +319,6 @@
             staticmap = @"map Bamboo";
             mission = @"";
             self.slider.enabled = NO;
-            self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
             [SchemeWeaponConfigViewController fillInstanceSections];
             break;
 
@@ -339,7 +337,6 @@
             staticmap = @"map Bamboo";
             mission = @"";
             self.slider.enabled = NO;
-            self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
             [SchemeWeaponConfigViewController emptyInstanceSections];
             break;
 
@@ -407,32 +404,13 @@
     return dataSourceArray;
 }
 
--(MapPreviewButtonView *)previewButton {
-    if (previewButton == nil) {
-        MapPreviewButtonView *preview = [[MapPreviewButtonView alloc] initWithFrame:CGRectMake(32, 26, 256, 128)];
-        preview.delegate = self;
-        [preview addTarget:self action:@selector(mapButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:preview];
-        self.previewButton = preview;
-        [preview release];
-    }
-    return previewButton;
-}
-
 -(void) viewDidLoad {
     [super viewDidLoad];
-
     srandom(time(NULL));
-
-    /*
-    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-    self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-    */
     
     // initialize some "default" values
     self.slider.value = 0.05f;
     self.slider.enabled = NO;
-    self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
     self.oldValue = 5;
     self.busy = NO;
     self.oldPage = self.segmentedControl.selectedSegmentIndex;
@@ -451,6 +429,7 @@
         self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 10, 0);
 
         UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 14, 300, 190) andTitle:nil withBorderWidth:2.3f];
+        backLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.view insertSubview:backLabel belowSubview:self.segmentedControl];
         [backLabel release];
     }
@@ -480,7 +459,6 @@
     self.previewButton = nil;
     self.tableView = nil;
     self.maxLabel = nil;
-    self.sizeLabel = nil;
     self.segmentedControl = nil;
     self.slider = nil;
 
@@ -499,7 +477,6 @@
     if (self.view.superview == nil) {
         self.tableView = nil;
         self.maxLabel = nil;
-        self.sizeLabel = nil;
         self.slider = nil;
     }
 
@@ -518,7 +495,6 @@
     releaseAndNil(previewButton);
     releaseAndNil(tableView);
     releaseAndNil(maxLabel);
-    releaseAndNil(sizeLabel);
     releaseAndNil(segmentedControl);
     releaseAndNil(slider);
 
