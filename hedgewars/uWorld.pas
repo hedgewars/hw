@@ -223,8 +223,8 @@ arrowLeftH:= Round(spritesData[sprArrowLeft].Texture^.h * buttonScale);
 
 arrowRightX:= -(cScreenWidth shr 1)+ Round(spritesData[sprArrowUp].Texture^.h * buttonScale *2);
 arrowRightY:= -Round(spritesData[sprArrowRight].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprArrowRight].Texture^.h*buttonScale);
-arrowLeftW:= Round(spritesData[sprArrowRight].Texture^.w * buttonScale);
-arrowLeftH:= Round(spritesData[sprArrowRight].Texture^.h * buttonScale);
+arrowRightW:= Round(spritesData[sprArrowRight].Texture^.w * buttonScale);
+arrowRightH:= Round(spritesData[sprArrowRight].Texture^.h * buttonScale);
 
 arrowUpX:= -(cScreenWidth shr 1) + Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
 arrowUpY:= -Round(spritesData[sprArrowUp].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprArrowUp].Texture^.h*buttonScale*2);
