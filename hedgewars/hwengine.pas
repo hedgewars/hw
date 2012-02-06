@@ -518,6 +518,7 @@ begin
 {$IFDEF HWLIBRARY}
     WriteLnToConsole('Preview connecting on port ' + inttostr(port));
     ipcPort:= port;
+    InitStepsFlags:= cifRandomize;
 {$ENDIF}
     InitIPC;
     IPCWaitPongEvent;

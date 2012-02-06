@@ -28,6 +28,8 @@
 
 @interface GameConfigViewController : UIViewController {
     UIView *imgContainer;
+    UIImageView *titleImage;
+    UILabel *sliderBackground;
 
     SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
     TeamConfigViewController *teamConfigViewController;
@@ -36,6 +38,8 @@
 }
 
 @property (retain) UIView *imgContainer;
+@property (nonatomic,retain) UILabel * sliderBackground;
+@property (nonatomic,retain) IBOutlet UIImageView *titleImage;
 @property (nonatomic,retain) IBOutlet SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
 @property (nonatomic,retain) IBOutlet TeamConfigViewController *teamConfigViewController;
 @property (nonatomic,retain) IBOutlet MapConfigViewController *mapConfigViewController;

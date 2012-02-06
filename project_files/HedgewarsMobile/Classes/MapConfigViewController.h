@@ -21,7 +21,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MapPreviewButtonView.h"
-
+#import "ValueTrackingSliderView.h"
 
 @interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, MapPreviewViewDelegate> {
     NSInteger oldValue;     // for the slider
@@ -42,9 +42,8 @@
     MapPreviewButtonView *previewButton;
     UITableView *tableView;
     UILabel *maxLabel;
-    UILabel *sizeLabel;
     UISegmentedControl *segmentedControl;
-    UISlider *slider;
+    ValueTrackingSliderView *slider;
 
     // internal objects
     NSIndexPath *lastIndexPath;
@@ -67,9 +66,8 @@
 @property (nonatomic,retain) IBOutlet MapPreviewButtonView *previewButton;
 @property (nonatomic,retain) IBOutlet UITableView *tableView;
 @property (nonatomic,retain) IBOutlet UILabel *maxLabel;
-@property (nonatomic,retain) IBOutlet UILabel *sizeLabel;
 @property (nonatomic,retain) IBOutlet UISegmentedControl *segmentedControl;
-@property (nonatomic,retain) IBOutlet UISlider *slider;
+@property (nonatomic,retain) IBOutlet ValueTrackingSliderView *slider;
 
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 @property (nonatomic,retain) NSArray *dataSourceArray;
