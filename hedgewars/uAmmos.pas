@@ -74,7 +74,8 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             Count:= cnts[a];
         inc(mi[Ammoz[a].Slot])
         end
-    end
+    end;
+AmmoMenuInvalidated:= true;
 end;
 
 procedure AddAmmoStore;
@@ -251,6 +252,7 @@ begin
             Ammo^[Slot, ami + 1].Count:= 0
             end;
     until not b;
+AmmoMenuInvalidated:= true;
 end;
 
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
@@ -379,7 +381,6 @@ with Hedgehog do
             end;
         end
     end;
-AmmoMenuInvalidated:= true;
 end;
 
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
