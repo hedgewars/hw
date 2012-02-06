@@ -235,14 +235,14 @@ begin
     SlotsNumY:= SlotsNum + 1;
 {$ENDIF}
 
-    ammoRect.w:= (BORDERSIZE*2) + (SlotsNumX * AMSlotSize) + (SlotsNumX-1);
-    ammoRect.h:= (BORDERSIZE*2) + (SlotsNumY * AMSlotSize) + (SlotsNumY-1);
-    amSurface := SDL_CreateRGBSurface(SDL_SWSURFACE, ammoRect.w, ammoRect.h, 32, RMask, GMask, BMask, AMask);
+    AmmoRect.w:= (BORDERSIZE*2) + (SlotsNumX * AMSlotSize) + (SlotsNumX-1);
+    AmmoRect.h:= (BORDERSIZE*2) + (SlotsNumY * AMSlotSize) + (SlotsNumY-1);
+    amSurface := SDL_CreateRGBSurface(SDL_SWSURFACE, AmmoRect.w, AmmoRect.h, 32, RMask, GMask, BMask, AMask);
     
     AMRect.x:= BORDERSIZE;
     AMRect.y:= BORDERSIZE;
-    AMRect.w:= ammoRect.w - (BORDERSIZE*2);
-    AMRect.h:= ammoRect.h - (BORDERSIZE*2);
+    AMRect.w:= AmmoRect.w - (BORDERSIZE*2);
+    AMRect.h:= AmmoRect.h - (BORDERSIZE*2);
 
     SDL_FillRect(amSurface, @AMRect, SDL_MapRGB(amSurface^.format, 0,0,0));
 
@@ -320,7 +320,7 @@ const BORDERSIZE = 2;
       MENUSPEED = 15;
 var Slot, Pos: LongInt;
     Ammo: PHHAmmo;
-    i,g,t,CursorXtmp, CursorYtmp,STurns: LongInt;
+    c,i,g,t,CursorXtmp, CursorYtmp,STurns: LongInt;
 begin
 if (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil)
 or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then
@@ -428,25 +428,27 @@ else  // hide ammo menu
 
     Pos:= -1;
     Slot:= -1;
+    c:= -1;
 {$IFDEF MOBILE}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
+            inc(c);
             g:= 0;
             for t:=0 to cMaxSlotAmmoIndex do
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
                     if (CursorPoint.Y <= (cScreenHeight - AmmoRect.y) - ( g    * (AMSlotSize+1))) and
                        (CursorPoint.Y >= (cScreenHeight - AmmoRect.y) - ((g+1) * (AMSlotSize+1))) and
-                       (CursorPoint.X >= AmmoRect.x                   + ( i    * (AMSlotSize+1))) and 
-                       (CursorPoint.X <= AmmoRect.x                   + ((i+1) * (AMSlotSize+1))) then
+                       (CursorPoint.X >= AmmoRect.x                   + ( c    * (AMSlotSize+1))) and 
+                       (CursorPoint.X <= AmmoRect.x                   + ((c+1) * (AMSlotSize+1))) then
                         begin
                         Slot:= i;
                         Pos:= t;
                         STurns:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
                         if (STurns < 0) and (AMShiftX = 0) and (AMShiftY = 0) then
                             DrawSprite(sprAMSlot, 
-                                       AmmoRect.x + BORDERSIZE + (Slot * (AMSlotSize+1)) + AMSlotPadding -1, 
+                                       AmmoRect.x + BORDERSIZE + (c * (AMSlotSize+1)) + AMSlotPadding -1, 
                                        AmmoRect.y + BORDERSIZE + (g  * (AMSlotSize+1)) + AMSlotPadding -1, 0);
                         end;
                         inc(g);
@@ -456,12 +458,13 @@ else  // hide ammo menu
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
+            inc(c);
             g:= 0;
             for t:=0 to cMaxSlotAmmoIndex do
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
-                    if (CursorPoint.Y <= (cScreenHeight - AmmoRect.y) - ( i    * (AMSlotSize+1))) and
-                       (CursorPoint.Y >= (cScreenHeight - AmmoRect.y) - ((i+1) * (AMSlotSize+1))) and
+                    if (CursorPoint.Y <= (cScreenHeight - AmmoRect.y) - ( c    * (AMSlotSize+1))) and
+                       (CursorPoint.Y >= (cScreenHeight - AmmoRect.y) - ((c+1) * (AMSlotSize+1))) and
                        (CursorPoint.X >= AmmoRect.x                   + ( g    * (AMSlotSize+1))) and 
                        (CursorPoint.X <= AmmoRect.x                   + ((g+1) * (AMSlotSize+1))) then
                         begin
@@ -471,7 +474,7 @@ else  // hide ammo menu
                         if (STurns < 0) and (AMShiftX = 0) and (AMShiftY = 0) then
                             DrawSprite(sprAMSlot, 
                                        AmmoRect.x + BORDERSIZE + (g * (AMSlotSize+1)) + AMSlotPadding -1, 
-                                       AmmoRect.y + BORDERSIZE + (Slot  * (AMSlotSize+1)) + AMSlotPadding -1, 0);
+                                       AmmoRect.y + BORDERSIZE + (c  * (AMSlotSize+1)) + AMSlotPadding -1, 0);
                         end;
                         inc(g);
                    end;
