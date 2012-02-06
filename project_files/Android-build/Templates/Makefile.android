@@ -20,7 +20,7 @@ all:
 	$(PPCROSSARM) $(LINKERFLAGS) $(PPCROSSARM_FLAGS) $(PPCROSSARM_INCLUDES) $(FPC_DEFINES) -oout/libhwengine.so ../../hedgewars/hwLibrary.pas
 	${CMAKE_COMMAND} -E copy out/libhwengine.so SDL-android-project/libs/armeabi/
         
-        ${ANT} clean -f $(SDL_ANDROID_DIR)/build.xml
+	${ANT} clean -f $(SDL_ANDROID_DIR)/build.xml
 	${ANT} debug install -f $(SDL_ANDROID_DIR)/build.xml
 clean:  
 	${CMAKE_COMMAND} -E remove_directory out
