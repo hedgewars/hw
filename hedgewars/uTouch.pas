@@ -58,12 +58,12 @@ function findFinger(id: SDL_FingerId): PTouch_Finger;
 procedure aim(finger: Touch_Finger);
 function isOnCrosshair(finger: Touch_Finger): boolean;
 function isOnCurrentHog(finger: Touch_Finger): boolean;
-function isOnFireButton(finger: Touch_Finger): boolean;
 procedure convertToWorldCoord(var x,y: hwFloat; finger: Touch_Finger);
 procedure convertToFingerCoord(var x,y: hwFloat; oldX, oldY: hwFloat);
 function fingerHasMoved(finger: Touch_Finger): boolean;
 function calculateDelta(finger1, finger2: Touch_Finger): hwFloat;
 function getSecondFinger(finger: Touch_Finger): PTouch_Finger;
+function isOnRect(x,y,w,h: LongInt; finger: Touch_Finger): boolean;
 procedure printFinger(finger: Touch_Finger);
 implementation
 
@@ -72,14 +72,6 @@ const
     nilFingerId = High(SDL_FingerId);
 
 var
-    fireButtonLeft, fireButtonRight, fireButtonTop, fireButtonBottom : LongInt;
-        
-
-
-    leftButtonBoundary  : LongInt;
-    rightButtonBoundary : LongInt;
-    topButtonBoundary   : LongInt;
-    
     pointerCount : Longword;
     fingers: array of Touch_Finger;
     moveCursor : boolean;
@@ -92,9 +84,9 @@ var
     pinchSize : hwFloat;
     baseZoomValue: GLFloat;
 
-
     //aiming
-    aiming, movingCrosshair: boolean; 
+    aiming, movingCrosshair: boolean;
+    aimingUp, aimingDown: boolean; 
     crosshairCommand: ShortString;
     targetAngle: LongInt;
     stopFiring: boolean;
@@ -124,30 +116,50 @@ case pointerCount of
                 exit;
             end;
 
-            if isOnFireButton(finger^) then
+            if isOnRect(fireButtonX, fireButtonY, fireButtonW, fireButtonH, finger^) then
             begin
                 stopFiring:= false;
                 ParseCommand('+attack', true);
                 exit;
             end;
-{            if (finger^.x < leftButtonBoundary) and (finger^.y < 390) then
+            if isOnRect(arrowLeftX, arrowLeftY, arrowLeftW, arrowLeftH, finger^) then
             begin
                 ParseCommand('+left', true);
                 walkingLeft := true;
                 exit;
             end;
-            if finger^.x > rightButtonBoundary then
+            if isOnRect(arrowRightX, arrowRightY, arrowRightW, arrowRightH, finger^) then
             begin
                 ParseCommand('+right', true);
                 walkingRight:= true;
                 exit;
             end;
-            if finger^.y < topButtonBoundary then
+            if isOnRect(arrowUpX, arrowUpY, arrowUpW, arrowUpH, finger^) then
+            begin
+                ParseCommand('+up', true);
+                aimingUp:= true;
+                exit;
+            end;
+            if isOnRect(arrowDownX, arrowDownY, arrowUpW, arrowUpH, finger^) then
+            begin
+                ParseCommand('+down', true);
+                aimingDown:= true;
+                exit;
+            end;
+
+            if isOnRect(backjumpX, backjumpY, backjumpW, backjumpH, finger^) then
             begin
                 ParseCommand('hjump', true);
                 exit;
             end;
- }           moveCursor:= true; 
+            if isOnRect(forwardjumpX, forwardjumpY, forwardjumpW, forwardjumpH, finger^) then
+            begin
+                ParseCommand('ljump', true);
+                exit;
+            end;
+
+          
+            moveCursor:= true; 
         end;
         2:
         begin
@@ -221,17 +233,30 @@ if walkingLeft then
         walkingLeft := false;
     end;
 
-    if walkingRight then
+if walkingRight then
     begin
         ParseCommand('-right', true);
         walkingRight := false;
     end;
+
+if aimingUp then
+    begin
+    ParseCommand('-up', true);
+    aimingUp:= false;
+    end;
+if aimingDown then
+    begin
+    ParseCommand('-down', true);
+    aimingDown:= false;
+    end;
+
+
 end;
 
 procedure onTouchDoubleClick(finger: Touch_Finger);
 begin
 finger := finger;//avoid compiler hint
-ParseCommand('ljump', true);
+//ParseCommand('ljump', true);
 end;
 
 procedure onTouchClick(finger: Touch_Finger);
@@ -252,7 +277,6 @@ if bShowAmmoMenu then
     CursorPoint.X:= finger.x;
     CursorPoint.Y:= finger.y;
     doPut(CursorPoint.X, CursorPoint.Y, false); 
-    WriteToConsole(Format('%d %d', [CursorPoint.X, CursorPoint.Y]));
     exit
     end;
 
@@ -262,11 +286,11 @@ if isOnCurrentHog(finger) then
     exit;
     end;
 
-if finger.y < topButtonBoundary then
+{if finger.y < topButtonBoundary then
     begin
     ParseCommand('hjump', true);
     exit;
-    end;
+    end;}
 end;
 
 function addFinger(x,y: Longword; id: SDL_FingerId): PTouch_Finger;
@@ -423,9 +447,9 @@ begin
 
         tmp := crosshairCommand;
         if CurrentHedgehog^.Gear^.Angle - targetAngle < 0 then
-            crosshairCommand := 'down'
+            crosshairCommand := 'up'
         else
-            crosshairCommand:= 'up';
+            crosshairCommand:= 'down';
         if movingCrosshair and (tmp <> crosshairCommand) then 
             begin
             ParseCommand('-' + tmp, true);
@@ -459,11 +483,6 @@ begin
     convertToCursorDeltaY := round(y/32768*cScreenHeight)
 end;
 
-function isOnFireButton(finger: Touch_Finger): boolean;
-begin
-    isOnFireButton:= (finger.x <= fireButtonRight) and (finger.x >= fireButtonLeft) and (finger.y <= fireButtonBottom) and (finger.y >= fireButtonTop);
-end;
-
 function isOnCrosshair(finger: Touch_Finger): boolean;
 var
     x,y : hwFloat;
@@ -481,8 +500,6 @@ begin
     x := _0;
     y := _0;
     convertToFingerCoord(x,y, CurrentHedgehog^.Gear^.X, CurrentHedgehog^.Gear^.Y);
-    WriteToConsole(Format('%d %s %d %s', [finger.x, cstr(x), finger.y, cstr(y) ]));
-    
     isOnCurrentHog := Distance(int2hwFloat(finger.X)-x, int2hwFloat(finger.Y)-y) < _50;
 end;
 
@@ -521,6 +538,15 @@ begin
         getSecondFinger := @fingers[0];
 end;
 
+function isOnRect(x,y,w,h: LongInt; finger: Touch_Finger): boolean;
+begin
+WriteToConsole(Format('(%d,%d) (%d, %d) %d',[finger.x, finger.y, x,y, w]));
+isOnRect:= (finger.x > x)   and
+           (finger.x < x+w) and
+           (cScreenHeight - finger.y > y)   and
+           (cScreenHeight - finger.y < (y+w));
+end;
+
 procedure printFinger(finger: Touch_Finger);
 begin
     WriteToConsole(Format('id:%d, (%d,%d), (%d,%d), time: %d', [finger.id, finger.x, finger.y, finger.historicalX, finger.historicalY, finger.timeSinceDown]));
@@ -536,20 +562,9 @@ begin
     walkingLeft := false;
     walkingRight := false;
 
-    leftButtonBoundary := cScreenWidth div 4;
-    rightButtonBoundary := cScreenWidth div 4*3;
-    topButtonBoundary := cScreenHeight div 6;
-    
     setLength(fingers, 4);
     for index := 0 to High(fingers) do 
         fingers[index].id := nilFingerId;
-
-
-    //uRenderCoordScaleX := Round(cScreenWidth/0.8 * 2);
-    fireButtonLeft := Round(cScreenWidth*0.01);
-    fireButtonRight := Round(fireButtonLeft + (spritesData[sprFireButton].Width*0.4));
-    fireButtonBottom := Round(cScreenHeight*0.99);
-    fireButtonTop := fireButtonBottom - Round(spritesData[sprFireButton].Height*0.4);
 end;
 
 begin
