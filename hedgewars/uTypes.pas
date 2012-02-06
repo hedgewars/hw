@@ -58,6 +58,9 @@ type
             sprFinger, sprAirBomb, sprAirplane, sprAmAirplane, sprAmGirder,
             sprHHTelepMask, sprSwitch, sprParachute, sprTarget, sprRopeNode,
             sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
+{$IFDEF ANDROID}
+            sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight, sprBackjump, sprForwardjump,
+{$ENDIF}
             sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
             sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
             sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
@@ -83,7 +86,7 @@ type
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
-            sprFireButton, sprSlider
+            sprSlider
             );
 
     // Gears that interact with other Gears and/or Land
