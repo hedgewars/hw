@@ -85,9 +85,8 @@ var
     baseZoomValue: GLFloat;
 
     //aiming
-    aiming, movingCrosshair: boolean;
+    aiming: boolean;
     aimingUp, aimingDown: boolean; 
-    crosshairCommand: ShortString;
     targetAngle: LongInt;
     stopFiring: boolean;
 
@@ -103,11 +102,12 @@ finger := addFinger(x,y,pointerId);
 case pointerCount of
         1:
         begin
-            moveCursor:= not bShowAmmoMenu;
+            moveCursor:= false;
 
             if isOnCrosshair(finger^) then
             begin
                 aiming:= true;
+                aim(finger^);
                 exit;
             end;
 
@@ -152,6 +152,7 @@ case pointerCount of
                 ParseCommand('ljump', true);
                 exit;
             end;
+            moveCursor:= not bShowAmmoMenu;
         end;
         2:
         begin
@@ -186,12 +187,13 @@ if moveCursor then
         exit //todo change into switch rather than ugly ifs
     end;
     
-    if aiming then 
+if aiming then 
     begin
         aim(finger^);
         exit
     end;
-    if pointerCount = 2 then
+
+if pointerCount = 2 then
     begin
        secondFinger := getSecondFinger(finger^);
        currentPinchDelta := calculateDelta(finger^, secondFinger^) - pinchSize;
@@ -202,6 +204,7 @@ if moveCursor then
        if ZoomValue > cMinZoomLevel then
            ZoomValue := cMinZoomLevel;
     end;
+
 end;
 
 procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
@@ -221,14 +224,14 @@ deleteFinger(pointerId);
 
 if walkingLeft then
     begin
-        ParseCommand('-left', true);
-        walkingLeft := false;
+    ParseCommand('-left', true);
+    walkingLeft := false;
     end;
 
 if walkingRight then
     begin
-        ParseCommand('-right', true);
-        walkingRight := false;
+    ParseCommand('-right', true);
+    walkingRight := false;
     end;
 
 if aimingUp then
@@ -241,8 +244,6 @@ if aimingDown then
     ParseCommand('-down', true);
     aimingDown:= false;
     end;
-
-
 end;
 
 procedure onTouchDoubleClick(finger: Touch_Finger);
@@ -367,48 +368,79 @@ procedure ProcessTouch;
 var
     deltaAngle: LongInt;
 begin
-    invertCursor := not(bShowAmmoMenu);
-    if aiming then
-    begin
-        if CurrentHedgehog^.Gear <> nil then
+invertCursor := not(bShowAmmoMenu);
+if aiming then
+    if CurrentHedgehog^.Gear <> nil then
+        begin
+        deltaAngle:= CurrentHedgehog^.Gear^.Angle - targetAngle;
+        if (deltaAngle = 0) then 
             begin
-            deltaAngle:= CurrentHedgehog^.Gear^.Angle - targetAngle;
-            if (deltaAngle <> 0) and not(movingCrosshair) then 
+            if aimingUp then
                 begin
-                ParseCommand('+' + crosshairCommand, true);
-                movingCrosshair := true;
+                ParseCommand('-up', true);
+                aimingUp:= false;
+                end;
+            if aimingDown then
+                begin
+                ParseCommand('-down', true);
+                aimingDown:= false;
                 end
-            else 
-                if movingCrosshair then 
+            end
+        else
+            begin
+            if (deltaAngle < 0) then
+                begin
+                if aimingUp then
                     begin
-                    ParseCommand('-' + crosshairCommand, true);
-                    movingCrosshair:= false;
-                   end;
+                    ParseCommand('-up', true);
+                    aimingUp:= false;
+                    end;
+                ParseCommand('+down', true);
+                aimingDown:= true;
+                end
+            else
+                begin
+                if aimingDown then
+                    begin
+                    ParseCommand('-down', true);
+                    aimingDown:= false;
+                    end;
+                ParseCommand('+up', true);
+                aimingUp:= true;
+                end; 
             end;
-    end
-    else if movingCrosshair then 
+        end
+    else  
         begin
-        ParseCommand('-' + crosshairCommand, true);
-        movingCrosshair := false;
+        if aimingUp then
+            begin
+            ParseCommand('-up', true);
+            aimingUp:= false;
+            end;
+        if aimingDown then
+            begin
+            ParseCommand('-down', true);
+            aimingDown:= false;
+            end;
         end;
+       
+if stopFiring then 
+    begin
+    ParseCommand('-attack', true);
+    stopFiring:= false;
+    end;
 
-    if stopFiring then 
-        begin
-        ParseCommand('-attack', true);
-        stopFiring:= false;
-        end;
-    
-    if stopRight then
-        begin
-        stopRight := false;
-        ParseCommand('-right', true);
-        end;
+if stopRight then
+    begin
+    stopRight := false;
+    ParseCommand('-right', true);
+    end;
  
-    if stopLeft then
-        begin
-        stopLeft := false;
-        ParseCommand('-left', true);
-        end;
+if stopLeft then
+    begin
+    stopLeft := false;
+    ParseCommand('-left', true);
+    end;
     
 end;
 
@@ -427,10 +459,9 @@ end;
 procedure aim(finger: Touch_Finger);
 var 
     hogX, hogY, touchX, touchY, deltaX, deltaY, tmpAngle: hwFloat;
-    tmp: ShortString;
 begin
     if CurrentHedgehog^.Gear <> nil then
-    begin
+        begin
         touchX := _0;//avoid compiler hint
         touchY := _0;
         hogX := CurrentHedgehog^.Gear^.X;
@@ -442,19 +473,7 @@ begin
         
         tmpAngle:= DeltaY / Distance(deltaX, deltaY) *_2048;
         targetAngle:= (hwRound(tmpAngle) + 2048) div 2;
-
-        tmp := crosshairCommand;
-        if CurrentHedgehog^.Gear^.Angle - targetAngle < 0 then
-            crosshairCommand := 'up'
-        else
-            crosshairCommand:= 'down';
-        if movingCrosshair and (tmp <> crosshairCommand) then 
-            begin
-            ParseCommand('-' + tmp, true);
-            movingCrosshair := false;
-            end;
-
-    end; //if CurrentHedgehog^.Gear <> nil
+        end; //if CurrentHedgehog^.Gear <> nil
 end;
 
 //These 4 convertToCursor functions convert xy coords from the SDL coordinate system to our CursorPoint coor system
@@ -510,9 +529,9 @@ end;
 procedure convertToWorldCoord(var x,y: hwFloat; finger: Touch_Finger);
 begin
 //if x <> nil then 
-    x := int2hwFloat((finger.x-WorldDx) - (cScreenWidth div 2));
+    x := int2hwFloat((finger.x-WorldDx));
 //if y <> nil then 
-    y := int2hwFloat(finger.y-WorldDy);
+    y := int2hwFloat((cScreenHeight - finger.y)-WorldDy);
 end;
 
 //Method to calculate the distance this finger has moved since the downEvent
@@ -538,11 +557,10 @@ end;
 
 function isOnRect(x,y,w,h: LongInt; finger: Touch_Finger): boolean;
 begin
-WriteToConsole(Format('(%d,%d) (%d, %d) %d',[finger.x, finger.y, x,y, w]));
 isOnRect:= (finger.x > x)   and
            (finger.x < x+w) and
            (cScreenHeight - finger.y > y)   and
-           (cScreenHeight - finger.y < (y+w));
+           (cScreenHeight - finger.y < (y+h));
 end;
 
 procedure printFinger(finger: Touch_Finger);
@@ -555,7 +573,6 @@ var
     index: Longword;
     //uRenderCoordScaleX, uRenderCoordScaleY: Longword;
 begin
-    movingCrosshair := false;
     stopFiring:= false;
     walkingLeft := false;
     walkingRight := false;
