@@ -198,6 +198,46 @@ WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 SkyOffset:= 0;
 HorizontOffset:= 0;
 
+{$IFDEF ANDROID}
+//positioning of the buttons
+buttonScale:= 1.5/cDefaultZoomLevel;
+firebuttonX:= (cScreenWidth shr 1) - Round(spritesData[sprFireButton].Texture^.h * buttonScale);
+firebuttonY:= -Round(spritesData[sprFireButton].Texture^.h* buttonScale) + cScreenHeight;
+firebuttonW:= Round(spritesData[sprFireButton].Texture^.w * buttonScale);
+firebuttonH:= Round(spritesData[sprFireButton].Texture^.h * buttonScale);
+
+backjumpX:= (cScreenWidth shr 1) - Round(spritesData[sprbackjump].Texture^.h * 2 * buttonScale);
+backjumpY:= -Round(spritesData[sprbackjump].Texture^.h * 1.2 *  buttonScale) + cScreenHeight;
+backjumpW:= Round(spritesData[sprbackjump].Texture^.w * buttonScale);
+backjumpH:= Round(spritesData[sprbackjump].Texture^.h * buttonScale);
+
+forwardjumpX:= (cScreenWidth shr 1) - Round(spritesData[sprforwardjump].Texture^.h * 1.2 * buttonScale);
+forwardjumpY:= -Round(spritesData[sprforwardjump].Texture^.h * 2 * buttonScale) + cScreenHeight;
+forwardjumpW:= Round(spritesData[sprforwardjump].Texture^.w * buttonScale);
+forwardjumpH:= Round(spritesData[sprforwardjump].Texture^.h * buttonScale);
+
+arrowLeftX:= -(cScreenWidth shr 1);
+arrowLeftY:= -Round(spritesData[sprArrowLeft].Texture^.h*buttonScale) + cScreenHeight  - Round(spritesData[sprArrowLeft].Texture^.h*buttonScale);
+arrowLeftW:= Round(spritesData[sprArrowLeft].Texture^.h * buttonScale);
+arrowLeftH:= Round(spritesData[sprArrowLeft].Texture^.h * buttonScale);
+
+arrowRightX:= -(cScreenWidth shr 1)+ Round(spritesData[sprArrowUp].Texture^.h * buttonScale *2);
+arrowRightY:= -Round(spritesData[sprArrowRight].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprArrowRight].Texture^.h*buttonScale);
+arrowRightW:= Round(spritesData[sprArrowRight].Texture^.w * buttonScale);
+arrowRightH:= Round(spritesData[sprArrowRight].Texture^.h * buttonScale);
+
+arrowUpX:= -(cScreenWidth shr 1) + Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
+arrowUpY:= -Round(spritesData[sprArrowUp].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprArrowUp].Texture^.h*buttonScale*2);
+arrowUpW:= Round(spritesData[sprArrowUp].Texture^.w * buttonScale);
+arrowUpH:= Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
+
+arrowDownX:= -(cScreenWidth shr 1) + Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
+arrowDownY:= -Round(spritesData[sprArrowDown].Texture^.h*buttonscale) + cScreenHeight;
+arrowDownW:= Round(spritesData[sprArrowDown].Texture^.w * buttonScale);
+arrowDownH:= Round(spritesData[sprArrowDown].Texture^.h * buttonScale);
+
+
+{$ENDIF}
 end;
 
 procedure InitCameraBorders;
@@ -887,6 +927,7 @@ var i, t, h: LongInt;
     highlight: Boolean;
     smallScreenOffset, offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
+    scale: GLFloat;
 begin
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
@@ -1053,7 +1094,14 @@ DrawCaptions;
 
 {$IFDEF ANDROID}
 // Draw buttons Related to the Touch interface
-DrawTexture(Round(-cScreenWidth*0.5 + cScreenHeight*0.02),Round((cScreenHeight*0.98)-(spritesData[sprFireButton].Height*0.4) ),spritesData[sprFireButton].Texture, 0.4);
+DrawTexture(arrowLeftX, arrowLeftY,spritesData[sprArrowLeft].Texture, buttonScale);
+DrawTexture(arrowRightX, arrowRightY,spritesData[sprArrowRight].Texture, buttonScale);
+DrawTexture(arrowUpX, arrowUpY,spritesData[sprArrowUp].Texture, buttonScale);
+DrawTexture(arrowDownX, arrowDownY,spritesData[sprArrowDown].Texture, buttonScale);
+
+DrawTexture(fireButtonX, firebuttonY, spritesData[sprFireButton].Texture, buttonScale);
+DrawTexture(backjumpX, backjumpY, spritesData[sprBackjump].Texture, buttonScale);
+DrawTexture(forwardjumpX, forwardjumpY, spritesData[sprForwardjump].Texture, buttonScale);
 {$ENDIF}
 
 // Teams Healths

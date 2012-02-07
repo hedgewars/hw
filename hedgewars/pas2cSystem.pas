@@ -1,12 +1,12 @@
 system;
 
 type 
+    Integer = integer;
     LongInt = integer;
     LongWord = integer;
     Cardinal = integer;
     PtrInt = integer;
     Word = integer;
-    Integer = integer;
     Byte = integer;
     SmallInt = integer;
     ShortInt = integer;
