@@ -179,16 +179,18 @@
     return 45.0;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
+-(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
+    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 70/100, 30);
     NSString *text = (section == 0) ? NSLocalizedString(@"Playing Teams",@"") : NSLocalizedString(@"Available Teams",@"");
     UILabel *theLabel = [[UILabel alloc] initWithFrame:frame andTitle:text];
     theLabel.center = CGPointMake(self.view.frame.size.width/2, 20);
+    theLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 
-    UIView *theView = [[[UIView alloc] init] autorelease];
+    UIView *theView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, 30)];
+    theView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [theView addSubview:theLabel];
     [theLabel release];
-    return theView;
+    return [theView autorelease];
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -199,6 +201,7 @@
     NSInteger height = IS_IPAD() ? 40 : 20;
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, height)];
     footer.backgroundColor = [UIColor clearColor];
+    footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*80/100, height)];
     label.center = CGPointMake(aTableView.frame.size.width/2, height/2);
@@ -206,12 +209,14 @@
     label.font = [UIFont italicSystemFontOfSize:12];
     label.textColor = [UIColor whiteColor];
     label.numberOfLines = 2;
+    label.backgroundColor = [UIColor clearColor];
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+
     if (section == 0)
         label.text = NSLocalizedString(@"Tap to add hogs or change color, touch and hold to remove a team.",@"");
     else
         label.text = NSLocalizedString(@"The robot badge indicates an AI-controlled team.",@"");
 
-    label.backgroundColor = [UIColor clearColor];
     [footer addSubview:label];
     [label release];
     return [footer autorelease];
