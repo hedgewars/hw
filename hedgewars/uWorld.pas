@@ -305,7 +305,7 @@ begin
                     AMFrame:= LongInt(Ammo^[i,t].AmmoType) - 1;
                     if STurns >= 0 then //weapon not usable yet, draw grayed out with turns remaining
                         begin
-                        DrawSprite2Surf(sprAMAmmosBW, amSurface, x + AMSlotPadding, 
+                        DrawSprite2Surf(sprAMAmmosBW, amSurface, x + AMSlotPadding + 1, 
                                                                  y + AMSlotPadding + 1, AMFrame);
                         if STurns < 100 then
                             DrawSprite2Surf(sprTurnsLeft, amSurface, 
@@ -314,7 +314,7 @@ begin
                         end
                     else //draw colored version
                         begin
-                            DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
+                            DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding + 1, 
        						       y + AMSlotPadding + 1, AMFrame);
                         end;
 {$IFDEF MOBILE}
@@ -488,7 +488,7 @@ else  // hide ammo menu
                         STurns:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
                         if (STurns < 0) and (AMShiftX = 0) and (AMShiftY = 0) then
                             DrawSprite(sprAMSlot, 
-                                       AmmoRect.x + BORDERSIZE + (c * (AMSlotSize+1)) + AMSlotPadding -1, 
+                                       AmmoRect.x + BORDERSIZE + (c * (AMSlotSize+1)) + AMSlotPadding, 
                                        AmmoRect.y + BORDERSIZE + (g  * (AMSlotSize+1)) + AMSlotPadding -1, 0);
                         end;
                         inc(g);
@@ -513,7 +513,7 @@ else  // hide ammo menu
                         STurns:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
                         if (STurns < 0) and (AMShiftX = 0) and (AMShiftY = 0) then
                             DrawSprite(sprAMSlot, 
-                                       AmmoRect.x + BORDERSIZE + (g * (AMSlotSize+1)) + AMSlotPadding -1, 
+                                       AmmoRect.x + BORDERSIZE + (g * (AMSlotSize+1)) + AMSlotPadding, 
                                        AmmoRect.y + BORDERSIZE + (c  * (AMSlotSize+1)) + AMSlotPadding -1, 0);
                         end;
                         inc(g);
