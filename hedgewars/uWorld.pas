@@ -1145,7 +1145,7 @@ for t:= 0 to Pred(TeamsCount) do
                 if Hedgehogs[i].Gear <> nil then
                     begin
                     inc(h,Hedgehogs[i].Gear^.Health);
-                    if h < TeamHealth then DrawTexture(14 + round(h*TeamHealthBarWidth/TeamHealth), cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
+                    if h < TeamHealth then DrawTexture(15 + h*TeamHealthBarWidth div TeamHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
                     end;
 
         // draw ai kill counter for gfAISurvival
