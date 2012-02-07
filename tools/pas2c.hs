@@ -64,28 +64,21 @@ pas2C fn = do
 renderCFiles :: Map.Map String PascalUnit -> IO ()
 renderCFiles units = do
     let u = Map.toList units
-    let ns = Map.map toNamespace units
-    mapM_ (toCFiles ns) u
+    let nss = Map.map (toNamespace nss) units
+    mapM_ (toCFiles nss) u
     where
-    toNamespace :: PascalUnit -> [Record]
-    toNamespace = concatMap tv2id . extractTVs
-    
-    extractTVs (System tv) = tv
-    extractTVs (Program {}) = []
-    extractTVs (Unit _ (Interface _ (TypesAndVars tv)) _ _ _) = tv
-    
-    tv2id :: TypeVarDeclaration -> [Record]
-    tv2id (TypeDeclaration i t@(Sequence ids)) = map (\(Identifier i _) -> fi i BTUnknown) $ i : ids
-    tv2id (TypeDeclaration (Identifier i _) t) = [(map toLower i, (i, BTUnknown))]
-    tv2id (VarDeclaration _ (ids, t) _) = map (\(Identifier i _) -> fi i BTUnknown) ids
-    tv2id (FunctionDeclaration (Identifier i _) _ _ _) = [fi i BTUnknown]
-    tv2id (OperatorDeclaration i _ _ _ _) = [fi i BTUnknown]
-    fi i t = (map toLower i, (i, t))
-    
+    toNamespace :: Map.Map String [Record] -> PascalUnit -> [Record]
+    toNamespace nss (System tvs) = 
+        currentScope $ execState (mapM_ (tvar2C True) tvs) (RenderState [] BTUnknown nss)
+    toNamespace _ (Program {}) = []
+    toNamespace nss (Unit _ interface _ _ _) = 
+        currentScope $ execState (interface2C interface) (RenderState [] BTUnknown nss)
+
    
 toCFiles :: Map.Map String [Record] -> (String, PascalUnit) -> IO ()
 toCFiles _ (_, System _) = return ()
 toCFiles ns p@(fn, pu) = do
+    hPutStrLn stdout $ show $ Map.lookup "pas2cSystem" ns
     hPutStrLn stderr $ "Rendering '" ++ fn ++ "'..."
     toCFiles' p
     where
@@ -149,10 +142,10 @@ id2C True (Identifier i t) = do
 id2C False (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ find (\(a, _) -> a == i') . currentScope
-    --ns <- gets currentScope
+    ns <- gets currentScope
     modify (\s -> s{lastType = t})
     if isNothing v then 
-        error $ "Not defined: '" ++ i' ++ "'"-- ++ show ns
+        error $ "Not defined: '" ++ i' ++ "'\n" ++ show ns
         else 
         return . text . fst . snd . fromJust $ v
 
@@ -171,7 +164,8 @@ resolveType st@(SimpleType (Identifier i _)) = do
     where
     f "integer" = BTInt
     f "pointer" = BTPointerTo BTVoid
-    f _ = error $ show st
+    f "boolean" = BTBool
+    f _ = error $ "Unknown system type: " ++ show st
 resolveType (PointerTo t) = liftM BTPointerTo $ resolveType t
 resolveType (RecordType tv mtvs) = do
     tvs <- mapM f (concat $ tv : fromMaybe [] mtvs)
@@ -183,6 +177,7 @@ resolveType (ArrayDecl (Just _) t) = liftM (BTArray BTInt) $ resolveType t
 resolveType (ArrayDecl Nothing t) = liftM (BTArray BTInt) $ resolveType t
 resolveType (FunctionType _ _) = return BTFunction
 resolveType (DeriveType _) = return BTInt
+resolveType (String _) = return BTString
 --resolveType UnknownType = return BTUnknown    
 resolveType a = error $ "resolveType: " ++ show a
     
@@ -216,6 +211,7 @@ tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested f
 tvar2C _ td@(TypeDeclaration i' t) = do
     tp <- type2C t
     tb <- resolveType t
+    error $ show (td, tb)
     i <- id2CTyped tb i'
     return $ text "type" <+> i <+> tp <> text ";"
     

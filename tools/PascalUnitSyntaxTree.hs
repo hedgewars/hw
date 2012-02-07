@@ -99,6 +99,7 @@ data BaseType = BTUnknown
     | BTChar
     | BTString
     | BTInt
+    | BTBool
     | BTRecord [(String, BaseType)]
     | BTArray BaseType BaseType
     | BTFunction
