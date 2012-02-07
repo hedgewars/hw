@@ -103,12 +103,7 @@ finger := addFinger(x,y,pointerId);
 case pointerCount of
         1:
         begin
-            moveCursor:= false;
-            if bShowAmmoMenu then
-            begin
-                moveCursor := true;
-                exit;
-            end;
+            moveCursor:= not bShowAmmoMenu;
 
             if isOnCrosshair(finger^) then
             begin
@@ -157,9 +152,6 @@ case pointerCount of
                 ParseCommand('ljump', true);
                 exit;
             end;
-
-          
-            moveCursor:= true; 
         end;
         2:
         begin
@@ -272,13 +264,19 @@ xTouchClick:= finger.x;
 yTouchClick:= finger.y;
 timeSinceClick:= SDL_GetTicks;
 
-if bShowAmmoMenu then 
-    begin
-    CursorPoint.X:= finger.x;
-    CursorPoint.Y:= finger.y;
-    doPut(CursorPoint.X, CursorPoint.Y, false); 
-    exit
+if bShowAmmoMenu then
+    begin 
+    if isOnRect(AmmoRect.x, AmmoRect.y, AmmoRect.w, AmmoRect.h, finger) then
+        begin
+        CursorPoint.X:= finger.x;
+        CursorPoint.Y:= finger.y;
+        doPut(CursorPoint.X, CursorPoint.Y, false); 
+        end
+    else
+        bShowAmmoMenu:= false;
+    exit;
     end;
+
 
 if isOnCurrentHog(finger) then
     begin

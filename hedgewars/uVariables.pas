@@ -155,6 +155,7 @@ var
     WeaponTooltipTex: PTexture;
     AmmoMenuTex     : PTexture;
     AmmoMenuInvalidated: boolean;
+    AmmoRect: TSDL_Rect;
     HHTexture       : PTexture;
 
 
