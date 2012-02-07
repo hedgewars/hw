@@ -14,9 +14,9 @@ type
     pointer = pointer;
     PChar = pointer;
 
+    float = float;
     double = float;
     real = float;
-    float = float;
 
     boolean = boolean;
     LongBool = boolean;
