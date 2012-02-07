@@ -276,6 +276,11 @@
         [hog release];
     }
 
+    // don't place the nice hogs if there is no space for them
+    if ((self.interfaceOrientation == UIInterfaceOrientationPortrait ||
+         self.interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown))
+        self.imgContainer.alpha = 0;
+
     [self.view addSubview:self.imgContainer];
     [hogSprite release];
     [pool drain];
@@ -321,9 +326,6 @@
 
     if ((toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
          toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
-        if (self.imgContainer == nil)
-            [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
-
         self.imgContainer.alpha = 1;
         self.titleImage.frame = CGRectMake(357, 17, 309, 165);
         self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 60, 320, 620);
@@ -342,12 +344,13 @@
         self.sliderBackground.frame = CGRectMake(465, 975, 200, 40);
         self.mapConfigViewController.slider.frame = CGRectMake(475, 983, 180, 23);
     }
+
+    [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
+                                                                            duration:duration];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    // load hogs only on iPad and when interface allows enough space
-    if (IS_IPAD() && (self.interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-                      self.interfaceOrientation == UIInterfaceOrientationLandscapeRight))
+    if (IS_IPAD())
         [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
 
     [self.mapConfigViewController viewWillAppear:animated];
