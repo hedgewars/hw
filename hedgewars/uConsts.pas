@@ -293,7 +293,7 @@ const
     AMSlotSize = 48;
     AMTITLE = 30;
 {$ELSE}
-    AMSlotSize = 33;
+    AMSlotSize = 32;
 {$ENDIF}
     AMSlotPadding = (AMSlotSize - 32) shr 1;
 implementation

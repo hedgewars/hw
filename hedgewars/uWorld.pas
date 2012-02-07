@@ -284,17 +284,16 @@ begin
     AMRect.h:= AmmoRect.h - (BORDERSIZE*2);
 
     SDL_FillRect(amSurface, @AMRect, SDL_MapRGB(amSurface^.format, 0,0,0));
-
     
-    x:= 0;
-    y:= 0;
+    x:= AMRect.x;
+    y:= AMRect.y;
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
 {$IFDEF MOBILE}
-            y:= 0;
+            y:= AMRect.y;
 {$ELSE}
-            x:= 0;
+            x:= AMRect.x;
 {$ENDIF}
             for t:=0 to cMaxSlotAmmoIndex do
                 begin
@@ -304,8 +303,8 @@ begin
                     AMFrame:= LongInt(Ammo^[i,t].AmmoType) - 1;
                     if STurns >= 0 then //weapon not usable yet, draw grayed out with turns remaining
                         begin
-                        DrawSprite2Surf(sprAMAmmosBW, amSurface, x + AMSlotPadding + 1, 
-                                                                 y + AMSlotPadding + 1, AMFrame);
+                        DrawSprite2Surf(sprAMAmmosBW, amSurface, x + AMSlotPadding, 
+                                                                 y + AMSlotPadding, AMFrame);
                         if STurns < 100 then
                             DrawSprite2Surf(sprTurnsLeft, amSurface, 
 			    	    x + AMSlotSize-16, 
@@ -313,8 +312,8 @@ begin
                         end
                     else //draw colored version
                         begin
-                            DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding + 1, 
-       						       y + AMSlotPadding + 1, AMFrame);
+                            DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
+       						       y + AMSlotPadding, AMFrame);
                         end;
 {$IFDEF MOBILE}
 	    inc(y, AMSlotSize + 1); //the plus one is for the border
@@ -349,7 +348,6 @@ DrawLine2Surf(amSurface, i, BORDERSIZE, i, AMRect.h + BORDERSIZE,160,160,160);//
 DrawLine2Surf(amSurface, AMRect.w+BORDERSIZE+i, BORDERSIZE, AMRect.w + BORDERSIZE+i, AMRect.h + BORDERSIZE, 160,160,160);//right
 end;
 
-  
 GetAmmoMenuTexture:= Surface2Tex(amSurface, false);
 if amSurface <> nil then SDL_FreeSurface(amSurface);
 end;
