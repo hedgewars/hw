@@ -65,7 +65,6 @@ var cWaveWidth, cWaveHeight: LongInt;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture;
     timeTexture: PTexture;
-    AmmoRect: TSDL_Rect;
     MenuSpeedX, MenuSpeedY: LongInt;
     FPS: Longword;
     CountTicks: Longword;
@@ -360,7 +359,7 @@ const BORDERSIZE = 2;
       MENUSPEED = 15;
 var Slot, Pos: LongInt;
     Ammo: PHHAmmo;
-    c,i,g,t,CursorXtmp, CursorYtmp,STurns: LongInt;
+    c,i,g,t,STurns: LongInt;
 begin
 if (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil)
 or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then
@@ -423,12 +422,6 @@ end;
 if bShowAmmoMenu then // show ammo menu
     begin
     FollowGear:= nil;
-    if (AMShiftX = 0) and (AMShiftY = 0) then
-{$IFDEF MOBILE}
-        prevPoint.Y:= 0;
-{$ELSE}
-        prevPoint.X:= 0;
-{$ENDIF}
     if (cReducedQuality and rqSlowMenu) <> 0 then
         begin
         AMShiftX:= 0;
@@ -441,6 +434,11 @@ if bShowAmmoMenu then // show ammo menu
             if AMShiftX < 0 then AMShiftX:= 0;
             dec(AMShiftY, MenuSpeedY);
             if AMShiftY < 0 then AMShiftY:= 0;
+            if (AMShiftX = 0) and (AMShiftY = 0) then
+                begin
+                CursorPoint.X:= AmmoRect.x + AmmoRect.w;
+                CursorPoint.Y:= AmmoRect.y;
+                end;
             end
     end
 else  // hide ammo menu
@@ -561,8 +559,10 @@ else  // hide ammo menu
 {$ENDIF}
 
     bSelected:= false;
-    if (AMShiftX = 0) and (AMShiftY = 0) then
+{$IFNDEF MOBILE}
+   if (AMShiftX = 0) and (AMShiftY = 0) then
         DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
+{$ENDIF}
 end;
 
 procedure DrawWater(Alpha: byte; OffsetY: LongInt);
@@ -927,7 +927,6 @@ var i, t, h: LongInt;
     highlight: Boolean;
     smallScreenOffset, offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
-    scale: GLFloat;
 begin
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
