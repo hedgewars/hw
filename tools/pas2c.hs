@@ -78,7 +78,6 @@ renderCFiles units = do
 toCFiles :: Map.Map String [Record] -> (String, PascalUnit) -> IO ()
 toCFiles _ (_, System _) = return ()
 toCFiles ns p@(fn, pu) = do
-    hPutStrLn stdout $ show $ Map.lookup "pas2cSystem" ns
     hPutStrLn stderr $ "Rendering '" ++ fn ++ "'..."
     toCFiles' p
     where
@@ -152,7 +151,7 @@ id2C False (Identifier i t) = do
 id2CTyped :: BaseType -> Identifier -> State RenderState Doc
 id2CTyped BTUnknown i = do
     ns <- gets currentScope
-    error $ show i ++ "\n" ++ show ns
+    error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\n" ++ show ns
 id2CTyped bt (Identifier i _) = id2C True (Identifier i bt)
 
 
@@ -165,6 +164,9 @@ resolveType st@(SimpleType (Identifier i _)) = do
     f "integer" = BTInt
     f "pointer" = BTPointerTo BTVoid
     f "boolean" = BTBool
+    f "float" = BTFloat
+    f "char" = BTChar
+    f "string" = BTString
     f _ = error $ "Unknown system type: " ++ show st
 resolveType (PointerTo t) = liftM BTPointerTo $ resolveType t
 resolveType (RecordType tv mtvs) = do
@@ -209,10 +211,9 @@ tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) 
 tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
 
 tvar2C _ td@(TypeDeclaration i' t) = do
-    tp <- type2C t
     tb <- resolveType t
-    error $ show (td, tb)
     i <- id2CTyped tb i'
+    tp <- type2C t
     return $ text "type" <+> i <+> tp <> text ";"
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do

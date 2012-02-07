@@ -100,6 +100,7 @@ data BaseType = BTUnknown
     | BTString
     | BTInt
     | BTBool
+    | BTFloat
     | BTRecord [(String, BaseType)]
     | BTArray BaseType BaseType
     | BTFunction
@@ -108,21 +109,3 @@ data BaseType = BTUnknown
     | BTEnum [String]
     | BTVoid
     deriving Show
-    
-
-{--
-type2BaseType :: TypeDecl -> BaseType
-type2BaseType st@(SimpleType (Identifier s _)) = f (map toLower s)
-    where
-    f "longint" = BTInt
-    f "integer" = BTInt
-    f "word" = BTInt
-    f "pointer" = BTPointerTo BTVoid
-    f _ = error $ show st
-type2BaseType (Sequence ids) = BTEnum $ map (\(Identifier i _) -> i) ids
-type2BaseType (RecordType tv mtvs) = BTRecord $ concatMap f (concat $ tv : fromMaybe [] mtvs)
-    where
-    f (VarDeclaration _ (ids, td) _) = map (\(Identifier i _) -> (i, type2BaseType td)) ids
-type2BaseType (PointerTo t) = BTPointerTo $ type2BaseType t
-type2BaseType a = error $ show a
---}
