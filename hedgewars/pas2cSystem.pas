@@ -10,6 +10,9 @@ type
     Byte = integer;
     SmallInt = integer;
     ShortInt = integer;
+    QWord = integer;
+    GLInt = integer;
+    GLUInt = integer;
 
     pointer = pointer;
     PChar = pointer;
@@ -17,6 +20,8 @@ type
     float = float;
     double = float;
     real = float;
+    extended = float;
+    GLFloat = float;
 
     boolean = boolean;
     LongBool = boolean;
