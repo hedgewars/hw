@@ -330,9 +330,9 @@ begin
     end;
 
 for i:= 1 to SlotsNumX -1 do
-DrawLine2Surf(amSurface, i * (AMSlotSize+1), BORDERSIZE, i * (AMSlotSize+1), AMRect.h + BORDERSIZE - AMSlotSize - 2,160,160,160);            
+DrawLine2Surf(amSurface, i * (AMSlotSize+1)+1, BORDERSIZE, i * (AMSlotSize+1)+1, AMRect.h + BORDERSIZE - AMSlotSize - 2,160,160,160);            
 for i:= 1 to SlotsNumY -1 do
-DrawLine2Surf(amSurface, BORDERSIZE, i * (AMSlotSize+1), AMRect.w + BORDERSIZE, i * (AMSlotSize+1),160,160,160);
+DrawLine2Surf(amSurface, BORDERSIZE, i * (AMSlotSize+1)+1, AMRect.w + BORDERSIZE, i * (AMSlotSize+1)+1,160,160,160);
 
 //draw outer border
 DrawSprite2Surf(sprAMCorners, amSurface, 0                    , 0                    , 0);
