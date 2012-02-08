@@ -148,11 +148,14 @@ id2C False (Identifier i t) = do
         else 
         return . text . fst . snd . fromJust $ v
 
-id2CTyped :: BaseType -> Identifier -> State RenderState Doc
-id2CTyped BTUnknown i = do
+id2CTyped :: TypeDecl -> Identifier -> State RenderState Doc
+id2CTyped t (Identifier i _) = do
+    tb <- resolveType t
+    id2C True (Identifier i tb)
+{--id2CTyped BTUnknown i = do
     ns <- gets currentScope
     error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\n" ++ show ns
-id2CTyped bt (Identifier i _) = id2C True (Identifier i bt)
+id2CTyped bt (Identifier i _) = id2C True (Identifier i bt)--}
 
 
 resolveType :: TypeDecl -> State RenderState BaseType
@@ -168,7 +171,7 @@ resolveType st@(SimpleType (Identifier i _)) = do
     f "char" = BTChar
     f "string" = BTString
     f _ = error $ "Unknown system type: " ++ show st
-resolveType (PointerTo t) = liftM BTPointerTo $ resolveType t
+resolveType (PointerTo t) = return $ BTPointerTo BTUnknown  -- can't resolveType for t here
 resolveType (RecordType tv mtvs) = do
     tvs <- mapM f (concat $ tv : fromMaybe [] mtvs)
     return . BTRecord . concat $ tvs
@@ -180,6 +183,9 @@ resolveType (ArrayDecl Nothing t) = liftM (BTArray BTInt) $ resolveType t
 resolveType (FunctionType _ _) = return BTFunction
 resolveType (DeriveType _) = return BTInt
 resolveType (String _) = return BTString
+resolveType (Sequence ids) = return $ BTEnum $ map (\(Identifier i _) -> map toLower i) ids
+resolveType (RangeType _) = return $ BTInt
+resolveType (Set t) = liftM BTSet $ resolveType t
 --resolveType UnknownType = return BTUnknown    
 resolveType a = error $ "resolveType: " ++ show a
     
@@ -211,15 +217,13 @@ tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) 
 tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
 
 tvar2C _ td@(TypeDeclaration i' t) = do
-    tb <- resolveType t
-    i <- id2CTyped tb i'
+    i <- id2CTyped t i'
     tp <- type2C t
     return $ text "type" <+> i <+> tp <> text ";"
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- type2C t
-    tb <- resolveType t
-    i <- mapM (id2CTyped tb) ids
+    i <- mapM (id2CTyped t) ids
     ie <- initExpr mInitExpr
     return $ if isConst then text "const" else empty
         <+> t'

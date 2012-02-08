@@ -105,7 +105,7 @@ data BaseType = BTUnknown
     | BTArray BaseType BaseType
     | BTFunction
     | BTPointerTo BaseType
-    | BTSet
+    | BTSet BaseType
     | BTEnum [String]
     | BTVoid
     deriving Show
