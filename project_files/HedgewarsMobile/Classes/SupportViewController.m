@@ -143,14 +143,18 @@
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger) section {
     if (section == 1) {
         UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 240)];
+        footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
         UIImage *img = [[UIImage alloc] initWithContentsOfFile:@"surprise.png"];
         UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
         [img release];
         imgView.center = CGPointMake(self.tableView.frame.size.width/2, 120);
+        imgView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [footer addSubview:imgView];
         [imgView release];
         
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
+        label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         label.textAlignment = UITextAlignmentCenter;
         label.text = @" ♥ THANK YOU ♥ ";
         label.backgroundColor = [UIColor clearColor];

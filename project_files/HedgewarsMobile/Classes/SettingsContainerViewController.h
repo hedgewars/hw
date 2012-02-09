@@ -22,15 +22,14 @@
 #import <UIKit/UIKit.h>
 
 @class SettingsBaseViewController;
+@class MGSplitViewController;
 
 @interface SettingsContainerViewController : UIViewController {
     SettingsBaseViewController *baseController;
-    UINavigationController *activeController;
-    UISplitViewController *splitViewRootController;
+    MGSplitViewController *splitViewRootController;
 }
 
 @property (nonatomic,retain) SettingsBaseViewController *baseController;
-@property (nonatomic,retain) UINavigationController *activeController;
-@property (nonatomic,retain) UISplitViewController *splitViewRootController;
+@property (nonatomic,retain) MGSplitViewController *splitViewRootController;
 
 @end
