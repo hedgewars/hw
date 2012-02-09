@@ -481,14 +481,14 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 		Log.v("SDL", "surfaceCreated()");
 		holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
 		SDLActivity.createEGLSurface();
-		enableSensor(Sensor.TYPE_ACCELEROMETER, true);
+//		enableSensor(Sensor.TYPE_ACCELEROMETER, true);
 	}
 
 	// Called when we lose the surface
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.v("SDL", "surfaceDestroyed()");
 		SDLActivity.nativePause();
-		enableSensor(Sensor.TYPE_ACCELEROMETER, false);
+//		enableSensor(Sensor.TYPE_ACCELEROMETER, false);
 	}
 
 	// Called when the surface is resized
