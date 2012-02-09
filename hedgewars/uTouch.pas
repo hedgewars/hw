@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses sysutils, math, uConsole, uVariables, SDLh, uTypes, uFloat, uConsts, uIO, uCommands, GLUnit;
+uses sysutils, math, uConsole, uVariables, SDLh, uFloat, uConsts, uIO, GLUnit;
 
 // TODO: this type should be Int64
 // TODO: this type should be named TSDL_FingerId
@@ -114,42 +114,42 @@ case pointerCount of
             if isOnRect(fireButtonX, fireButtonY, fireButtonW, fireButtonH, finger^) then
             begin
                 stopFiring:= false;
-                ParseCommand('+attack', true);
+                spaceKey:= true;
                 exit;
             end;
             if isOnRect(arrowLeftX, arrowLeftY, arrowLeftW, arrowLeftH, finger^) then
             begin
-                ParseCommand('+left', true);
+                leftKey:= true;
                 walkingLeft := true;
                 exit;
             end;
             if isOnRect(arrowRightX, arrowRightY, arrowRightW, arrowRightH, finger^) then
             begin
-                ParseCommand('+right', true);
+                rightKey:= true;
                 walkingRight:= true;
                 exit;
             end;
             if isOnRect(arrowUpX, arrowUpY, arrowUpW, arrowUpH, finger^) then
             begin
-                ParseCommand('+up', true);
+                upKey:= true;
                 aimingUp:= true;
                 exit;
             end;
             if isOnRect(arrowDownX, arrowDownY, arrowUpW, arrowUpH, finger^) then
             begin
-                ParseCommand('+down', true);
+                downKey:= true;
                 aimingDown:= true;
                 exit;
             end;
 
             if isOnRect(backjumpX, backjumpY, backjumpW, backjumpH, finger^) then
             begin
-                ParseCommand('hjump', true);
+                enterKey:= true;
                 exit;
             end;
             if isOnRect(forwardjumpX, forwardjumpY, forwardjumpW, forwardjumpH, finger^) then
             begin
-                ParseCommand('ljump', true);
+                backspaceKey:= true;
                 exit;
             end;
             moveCursor:= not bShowAmmoMenu;
@@ -224,24 +224,24 @@ deleteFinger(pointerId);
 
 if walkingLeft then
     begin
-    ParseCommand('-left', true);
+    leftKey:= false;
     walkingLeft := false;
     end;
 
 if walkingRight then
     begin
-    ParseCommand('-right', true);
+    rightKey:= false;
     walkingRight := false;
     end;
 
 if aimingUp then
     begin
-    ParseCommand('-up', true);
+    upKey:= false;
     aimingUp:= false;
     end;
 if aimingDown then
     begin
-    ParseCommand('-down', true);
+    downKey:= false;
     aimingDown:= false;
     end;
 end;
@@ -249,7 +249,6 @@ end;
 procedure onTouchDoubleClick(finger: Touch_Finger);
 begin
 finger := finger;//avoid compiler hint
-//ParseCommand('ljump', true);
 end;
 
 procedure onTouchClick(finger: Touch_Finger);
@@ -257,7 +256,7 @@ begin
 if (SDL_GetTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, finger.Y-yTouchClick) < _30) then
     begin
     onTouchDoubleClick(finger);
-    timeSinceClick:= -1;
+    timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds) 
     exit; 
     end;
 
@@ -284,12 +283,6 @@ if isOnCurrentHog(finger) then
     bShowAmmoMenu := true;
     exit;
     end;
-
-{if finger.y < topButtonBoundary then
-    begin
-    ParseCommand('hjump', true);
-    exit;
-    end;}
 end;
 
 function addFinger(x,y: Longword; id: SDL_FingerId): PTouch_Finger;
@@ -377,12 +370,12 @@ if aiming then
             begin
             if aimingUp then
                 begin
-                ParseCommand('-up', true);
+                upKey:= false;
                 aimingUp:= false;
                 end;
             if aimingDown then
                 begin
-                ParseCommand('-down', true);
+                downKey:= false;
                 aimingDown:= false;
                 end
             end
@@ -392,20 +385,20 @@ if aiming then
                 begin
                 if aimingUp then
                     begin
-                    ParseCommand('-up', true);
+                    upKey:= false;
                     aimingUp:= false;
                     end;
-                ParseCommand('+down', true);
+                downKey:= true;
                 aimingDown:= true;
                 end
             else
                 begin
                 if aimingDown then
                     begin
-                    ParseCommand('-down', true);
+                    downKey:= false;
                     aimingDown:= false;
                     end;
-                ParseCommand('+up', true);
+                upKey:= true;
                 aimingUp:= true;
                 end; 
             end;
@@ -414,32 +407,32 @@ if aiming then
         begin
         if aimingUp then
             begin
-            ParseCommand('-up', true);
+            upKey:= false;
             aimingUp:= false;
             end;
         if aimingDown then
             begin
-            ParseCommand('-down', true);
+            upKey:= false;
             aimingDown:= false;
             end;
         end;
        
 if stopFiring then 
     begin
-    ParseCommand('-attack', true);
+    spaceKey:= false;
     stopFiring:= false;
     end;
 
 if stopRight then
     begin
     stopRight := false;
-    ParseCommand('-right', true);
+    rightKey:= false;
     end;
  
 if stopLeft then
     begin
     stopLeft := false;
-    ParseCommand('-left', true);
+    leftKey:= false;
     end;
     
 end;
