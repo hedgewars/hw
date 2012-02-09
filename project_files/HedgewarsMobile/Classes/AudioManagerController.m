@@ -22,12 +22,17 @@
 #import "AudioManagerController.h"
 #import "AVFoundation/AVAudioPlayer.h"
 #import <AudioToolbox/AudioToolbox.h>
-
+#import "MXAudioPlayerFadeOperation.h"
 
 static AVAudioPlayer *backgroundMusic = nil;
 static SystemSoundID clickSound = -1;
 static SystemSoundID backSound = -1;
 static SystemSoundID selSound = -1;
+
+static NSOperationQueue *audioFaderQueue = nil;
+static MXAudioPlayerFadeOperation *fadeIn = nil;
+static MXAudioPlayerFadeOperation *fadeOut = nil;
+
 
 @implementation AudioManagerController
 
@@ -38,7 +43,7 @@ static SystemSoundID selSound = -1;
     backgroundMusic = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:musicString] error:nil];
 
     backgroundMusic.delegate = nil;
-    backgroundMusic.volume = 0.4f;
+    backgroundMusic.volume = 0;
     backgroundMusic.numberOfLoops = -1;
     [backgroundMusic prepareToPlay];
 }
@@ -50,6 +55,7 @@ static SystemSoundID selSound = -1;
     if (backgroundMusic == nil)
         [AudioManagerController loadBackgroundMusic];
 
+    backgroundMusic.volume = 0.45f;
     [backgroundMusic play];
 }
 
@@ -59,6 +65,28 @@ static SystemSoundID selSound = -1;
 
 +(void) stopBackgroundMusic {
     [backgroundMusic stop];
+}
+
++(void) fadeOutBackgroundMusic {
+    if (audioFaderQueue == nil)
+        audioFaderQueue = [[NSOperationQueue alloc] init];
+    if (backgroundMusic == nil)
+        [AudioManagerController loadBackgroundMusic];
+    if (fadeOut == nil)
+        fadeOut = [[MXAudioPlayerFadeOperation alloc] initFadeWithAudioPlayer:backgroundMusic toVolume:0.0 overDuration:3.0];
+
+    [audioFaderQueue addOperation:fadeOut];
+}
+
++(void) fadeInBackgroundMusic {
+    if (audioFaderQueue == nil)
+        audioFaderQueue = [[NSOperationQueue alloc] init];
+    if (backgroundMusic == nil)
+        [AudioManagerController loadBackgroundMusic];
+    if (fadeIn == nil)
+        fadeIn = [[MXAudioPlayerFadeOperation alloc] initFadeWithAudioPlayer:backgroundMusic toVolume:0.45 overDuration:2.0];
+
+    [audioFaderQueue addOperation:fadeIn];
 }
 
 #pragma mark -
@@ -111,6 +139,9 @@ static SystemSoundID selSound = -1;
 +(void) releaseCache {
     [backgroundMusic stop];
     [backgroundMusic release], backgroundMusic = nil;
+    [fadeOut release], fadeOut = nil;
+    [fadeIn release], fadeIn = nil;
+    [audioFaderQueue release], audioFaderQueue = nil;
     AudioServicesDisposeSystemSoundID(clickSound), clickSound = -1;
     AudioServicesDisposeSystemSoundID(backSound), backSound = -1;
     AudioServicesDisposeSystemSoundID(selSound), selSound = -1;
