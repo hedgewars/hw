@@ -34,7 +34,7 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
-    NSString *trFilePath = [NSString stringWithFormat:@"%@/en.txt",LOCALE_DIRECTORY()];
+    NSString *trFilePath = [NSString stringWithFormat:@"%@/%@.txt",LOCALE_DIRECTORY(),[[NSLocale preferredLanguages] objectAtIndex:0]];
     // fill the data structure that we are going to read
     LoadLocaleWrapper([trFilePath UTF8String]);
     

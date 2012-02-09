@@ -96,7 +96,7 @@ if loaded then
            end;
        end;
    Close(f);
-   WriteLnToConsole('Locale loaded "' + FileName + '"');
+   {$IFNDEF IPHONEOS}WriteLnToConsole('Locale loaded "' + FileName + '"');{$ENDIF}
    end;
 {$I+}
 end;
