@@ -89,6 +89,7 @@
 		615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD96112073B4D00F2FF04 /* startGameButton.png */; };
 		615AD9E9120764CA00F2FF04 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9E8120764CA00F2FF04 /* backButton.png */; };
 		615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9EA1207654E00F2FF04 /* helpButton.png */; };
+		615E755A14E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E755914E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m */; };
 		615FEAE212A2A6640098EE92 /* localplayButton~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEADF12A2A6640098EE92 /* localplayButton~ipad.png */; };
 		615FEAE312A2A6640098EE92 /* localplayButton~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEAE012A2A6640098EE92 /* localplayButton~iphone.png */; };
 		6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */; };
@@ -437,6 +438,8 @@
 		615AD96112073B4D00F2FF04 /* startGameButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = startGameButton.png; path = Resources/Frontend/startGameButton.png; sourceTree = "<group>"; };
 		615AD9E8120764CA00F2FF04 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backButton.png; path = Resources/Frontend/backButton.png; sourceTree = "<group>"; };
 		615AD9EA1207654E00F2FF04 /* helpButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpButton.png; path = Resources/Frontend/helpButton.png; sourceTree = "<group>"; };
+		615E755814E41E8C00FBA131 /* MXAudioPlayerFadeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXAudioPlayerFadeOperation.h; sourceTree = "<group>"; };
+		615E755914E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXAudioPlayerFadeOperation.m; sourceTree = "<group>"; };
 		615FEAD912A2A4C10098EE92 /* checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox@2x.png"; path = "Resources/Icons/checkbox@2x.png"; sourceTree = "<group>"; };
 		615FEADE12A2A6640098EE92 /* localplayButton@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "localplayButton@2x~iphone.png"; path = "Resources/Frontend/localplayButton@2x~iphone.png"; sourceTree = "<group>"; };
 		615FEADF12A2A6640098EE92 /* localplayButton~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "localplayButton~ipad.png"; path = "Resources/Frontend/localplayButton~ipad.png"; sourceTree = "<group>"; };
@@ -1162,6 +1165,8 @@
 		61F8535314578999002CA294 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				615E755814E41E8C00FBA131 /* MXAudioPlayerFadeOperation.h */,
+				615E755914E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m */,
 				61C28D3D142D380400DA16C2 /* AudioManagerController.h */,
 				61C28D3E142D380400DA16C2 /* AudioManagerController.m */,
 				6165922411CA9BD500D6E256 /* CGPointUtils.h */,
@@ -1734,6 +1739,7 @@
 				61D08D7514AEA7FE0007C078 /* uGearsList.pas in Sources */,
 				61D08D7614AEA7FE0007C078 /* uGearsUtils.pas in Sources */,
 				610C8E3714E018D200CF5C4C /* ValueTrackingSliderView.m in Sources */,
+				615E755A14E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

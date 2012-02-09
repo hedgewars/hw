@@ -30,6 +30,9 @@
 +(void) pauseBackgroundMusic;
 +(void) stopBackgroundMusic;
 
++(void) fadeInBackgroundMusic;
++(void) fadeOutBackgroundMusic;
+
 +(void) playClickSound;
 +(void) playBackSound;
 +(void) playSelectSound;
