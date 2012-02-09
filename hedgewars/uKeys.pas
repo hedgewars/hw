@@ -40,7 +40,7 @@ procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
 procedure setiPhoneBinds;
 {$ENDIF}
 
@@ -63,7 +63,7 @@ procedure ProcessKbd;
 var  i, j, k: LongInt;
      s: shortstring;
      Trusted: boolean;
-{$IFNDEF IPHONEOS}pkbd: PByteArray;{$ENDIF}
+{$IFNDEF MOBILE}pkbd: PByteArray;{$ENDIF}
 begin
 hideAmmoMenu:= false;
 Trusted:= (CurrentTeam <> nil)
@@ -76,7 +76,7 @@ movecursor(5 * CursorMovementX, 5 * CursorMovementY);
 
 k:= SDL_GetMouseState(nil, nil);
 
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
 SDL_GetKeyState(@j);
 {$ELSE}
 pkbd:= SDL_GetKeyState(@j);
@@ -100,7 +100,7 @@ tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
 
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
 setiPhoneBinds();
 {$ELSE}
 // Controller(s)
@@ -170,18 +170,18 @@ end;
 
 procedure ResetKbd;
 var j, k, t: LongInt;
-{$IFNDEF IPHONEOS}
+{$IFNDEF MOBILE}
     i: LongInt;
     pkbd: PByteArray;
 {$ENDIF}
 begin
 
 k:= SDL_GetMouseState(nil, nil);
-{$IFNDEF IPHONEOS}pkbd:={$ENDIF}SDL_GetKeyState(@j);
+{$IFNDEF MOBILE}pkbd:={$ENDIF}SDL_GetKeyState(@j);
 
 TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + IntToStr(j) + ')', true);
 
-{$IFNDEF IPHONEOS}
+{$IFNDEF MOBILE}
 for i:= 1 to pred(j) do
     tkbdn[i]:= pkbd^[i];
 {$ENDIF}
@@ -202,7 +202,7 @@ tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
 
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
 setiPhoneBinds();
 {$ELSE}
 // Controller(s)
@@ -325,7 +325,7 @@ DefaultBinds[ 8]:= 'hjump';
 DefaultBinds[ 9]:= 'switch';
 DefaultBinds[13]:= 'ljump';
 DefaultBinds[32]:= '+attack';
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
 DefaultBinds[23]:= '+up';
 DefaultBinds[24]:= '+down';
 DefaultBinds[25]:= '+left';
@@ -349,7 +349,7 @@ end;
 
 procedure SetBinds(var binds: TBinds);
 begin
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
     binds:= binds; // avoid hint
     CurrentBinds:= DefaultBinds;
 {$ELSE}
@@ -362,7 +362,7 @@ begin
     CurrentBinds:= DefaultBinds;
 end;
 
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
 procedure setiPhoneBinds;
 begin
     tkbdn[ 1]:= ord(leftClick);
@@ -411,7 +411,7 @@ procedure ControllerInit;
 var i, j: Integer;
 begin
 ControllerEnabled:= 0;
-{$IFDEF IPHONEOS}
+{$IFDEF MOBILE}
 exit; // joystick subsystem disabled on iPhone
 {$ENDIF}
 
