@@ -18,6 +18,11 @@ import PascalParser
 import PascalUnitSyntaxTree
 
 
+data InsertOption = 
+    IOInsert
+    | IOLookup
+    | IODeferred
+
 type Record = (String, (String, BaseType))
 data RenderState = RenderState 
     {
@@ -122,7 +127,7 @@ typesAndVars2C b (TypesAndVars ts) = liftM vcat $ mapM (tvar2C b) ts
 uses2C :: Uses -> State RenderState Doc
 uses2C uses@(Uses unitIds) = do
     mapM_ injectNamespace (Identifier "pas2cSystem" undefined : unitIds)
-    mapM_ (id2C True) unitIds
+    mapM_ (id2C IOInsert) unitIds
     return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
     where
     injectNamespace (Identifier i _) = do
@@ -134,28 +139,37 @@ uses2List :: Uses -> [String]
 uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
 
-id2C :: Bool -> Identifier -> State RenderState Doc
-id2C True (Identifier i t) = do
+id2C :: InsertOption -> Identifier -> State RenderState Doc
+id2C IOInsert (Identifier i t) = do
     modify (\s -> s{currentScope = (map toLower i, (i, t)) : currentScope s})
     return $ text i
-id2C False (Identifier i t) = do
+id2C IOLookup (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ find (\(a, _) -> a == i') . currentScope
     ns <- gets currentScope
     modify (\s -> s{lastType = t})
     if isNothing v then 
-        error $ "Not defined: '" ++ i' ++ "'\n" ++ show ns
+        error $ "Not defined: '" ++ i' ++ "'\n" -- ++ show ns
         else 
+        return . text . fst . snd . fromJust $ v
+id2C IODeferred (Identifier i t) = do
+    let i' = map toLower i
+    v <- gets $ find (\(a, _) -> a == i') . currentScope
+    if (isNothing v) then
+        do
+        modify (\s -> s{currentScope = (i', (i, t)) : currentScope s})
+        return $ text i
+        else
         return . text . fst . snd . fromJust $ v
 
 id2CTyped :: TypeDecl -> Identifier -> State RenderState Doc
 id2CTyped t (Identifier i _) = do
     tb <- resolveType t
-    id2C True (Identifier i tb)
-{--id2CTyped BTUnknown i = do
-    ns <- gets currentScope
-    error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\n" ++ show ns
-id2CTyped bt (Identifier i _) = id2C True (Identifier i bt)--}
+    case tb of 
+        BTUnknown -> do
+            ns <- gets currentScope
+            error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\ntype: " ++ show t ++ "\nnamespace: " ++ show ns
+        _ -> id2C IOInsert (Identifier i tb)
 
 
 resolveType :: TypeDecl -> State RenderState BaseType
@@ -194,14 +208,14 @@ tvar2C :: Bool -> TypeVarDeclaration -> State RenderState Doc
 tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType 
     p <- liftM hcat $ mapM (tvar2C False) params
-    n <- id2C True name
+    n <- id2C IOInsert name
     return $ t <+> n <> parens p <> text ";"
     
 tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
     t <- type2C returnType 
     p <- liftM hcat $ mapM (tvar2C False) params
     ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
-    n <- id2C True name
+    n <- id2C IOInsert name
     return $ 
         t <+> n <> parens p
         $+$
@@ -248,22 +262,22 @@ initExpr2C (InitNumber s) = return $ text s
 initExpr2C (InitFloat s) = return $ text s
 initExpr2C (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 initExpr2C (InitString s) = return $ doubleQuotes $ text s 
-initExpr2C (InitReference i) = id2C False i
+initExpr2C (InitReference i) = id2C IOLookup i
 initExpr2C _ = return $ text "<<expression>>"
 
 
 type2C :: TypeDecl -> State RenderState Doc
 type2C UnknownType = return $ text "void"
 type2C (String l) = return $ text $ "string" ++ show l
-type2C (SimpleType i) = id2C False i
-type2C (PointerTo (SimpleType i)) = liftM (<> text "*") $ id2C True i
+type2C (SimpleType i) = id2C IOLookup i
+type2C (PointerTo (SimpleType i)) = liftM (<> text "*") $ id2C IODeferred i
 type2C (PointerTo t) = liftM (<> text "*") $ type2C t
 type2C (RecordType tvs union) = do
     t <- mapM (tvar2C False) tvs
     return $ text "{" $+$ (nest 4 . vcat $ t) $+$ text "}"
 type2C (RangeType r) = return $ text "<<range type>>"
 type2C (Sequence ids) = do
-    mapM_ (id2C True) ids
+    mapM_ (id2C IOInsert) ids
     return $ text "<<sequence type>>"
 type2C (ArrayDecl r t) = return $ text "<<array type>>"
 type2C (Set t) = return $ text "<<set>>"
@@ -314,7 +328,7 @@ phrase2C (WithBlock ref p) = do
     ph <- phrase2C $ wrapPhrase p
     return $ text "namespace" <> parens r $$ ph
 phrase2C (ForCycle i' e1' e2' p) = do
-    i <- id2C False i'
+    i <- id2C IOLookup i'
     e1 <- expr2C e1'
     e2 <- expr2C e2'
     ph <- phrase2C (wrapPhrase p)
@@ -360,7 +374,7 @@ ref2C (ArrayElement exprs ref) = do
     r <- ref2C ref 
     es <- mapM expr2C exprs
     return $ r <> (brackets . hcat) (punctuate comma es)
-ref2C (SimpleReference name) = id2C False name
+ref2C (SimpleReference name) = id2C IOLookup name
 ref2C (RecordField (Dereference ref1) ref2) = do
     r1 <- ref2C ref1 
     r2 <- ref2C ref2
@@ -385,7 +399,7 @@ ref2C (Address ref) = do
     r <- ref2C ref
     return $ text "&" <> parens r
 ref2C (TypeCast t' expr) = do
-    t <- id2C False t'
+    t <- id2C IOLookup t'
     e <- expr2C expr
     return $ parens t <> e
 ref2C (RefExpression expr) = expr2C expr
