@@ -387,7 +387,6 @@ type
         end;
 
 
-    PSDL_Color = ^TSDL_Color;
     TSDL_Color = record
         case Byte of
             0: ( r: Byte;
@@ -396,6 +395,7 @@ type
                  unused: Byte; );
             1: ( value: LongWord; );
         end;
+    PSDL_Color = ^TSDL_Color;
 
 
     PSDL_RWops = ^TSDL_RWops;

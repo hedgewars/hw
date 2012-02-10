@@ -36,11 +36,15 @@ type
     PLongInt = ^LongInt;
     PLongWord = ^LongWord;
     PInteger = ^Integer;
+    
+    Handle = integer;
+    stderr = Handle;
 var 
     false, true: boolean;
     write, writeLn, read, readLn, inc, dec: procedure;
     StrLen, ord, Succ, Pred : function : integer;
     Low, High : function : integer;
     Now : function : integer;
+    Length : function : integer;
     StrPas, FormatDateTime : function : shortstring;
     exit : procedure;
