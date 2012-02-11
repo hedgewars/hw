@@ -287,7 +287,7 @@ static OverlayViewController *mainOverlay;
 // show up a popover containing a popupMenuViewController; we hook it with setPopoverContentSize
 // on iphone instead just use the tableViewController directly (and implement manually all animations)
 -(IBAction) showPopover{
-    CGRect screen = [[UIScreen mainScreen] bounds];
+    CGRect screen = [[UIScreen mainScreen] safeBounds];
     isPopoverVisible = YES;
 
     if (IS_IPAD()) {
@@ -299,7 +299,7 @@ static OverlayViewController *mainOverlay;
             [self.popoverController setPassthroughViews:[NSArray arrayWithObject:self.view]];
         }
 
-        [self.popoverController presentPopoverFromRect:CGRectMake(screen.size.height / 2, screen.size.width / 2, 1, 1)
+        [self.popoverController presentPopoverFromRect:CGRectMake(screen.size.width / 2, screen.size.height / 2, 1, 1)
                                            inView:self.view
                          permittedArrowDirections:UIPopoverArrowDirectionAny
                                          animated:YES];
@@ -336,10 +336,10 @@ static OverlayViewController *mainOverlay;
 
     // ignore activity near the dpad and buttons
     CGPoint touchPoint = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
-    CGSize screen = [[UIScreen mainScreen] bounds].size;
+    CGSize screen = [[UIScreen mainScreen] safeBounds].size;
 
-    if ((touchPoint.x < 160 && touchPoint.y > screen.width - 155 ) || 
-        (touchPoint.x > screen.height - 135 && touchPoint.y > screen.width - 140))
+    if ((touchPoint.x < 160 && touchPoint.y > screen.height - 155 ) ||
+        (touchPoint.x > screen.width - 135 && touchPoint.y > screen.height - 140))
         return YES;
     return NO;
 }
@@ -386,14 +386,14 @@ static OverlayViewController *mainOverlay;
     if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
 
-    CGRect screen = [[UIScreen mainScreen] bounds];
+    CGRect screen = [[UIScreen mainScreen] safeBounds];
     CGPoint currentPosition = [[[allTouches allObjects] objectAtIndex:0] locationInView:self.view];
 
     switch ([allTouches count]) {
         case 1:
             // if we're in the menu we just click in the point
             if (HW_isAmmoMenuOpen()) {
-                HW_setCursor(HWXZ(currentPosition.x), HWYZ(currentPosition.y));
+                HW_setCursor(HWXZ(currentPosition.x),HWYZ(currentPosition.y));
                 // this click doesn't need any wrapping because the ammoMenu already limits the cursor
                 HW_click();
             } else
@@ -479,7 +479,7 @@ static OverlayViewController *mainOverlay;
     if ([self shouldIgnoreTouch:allTouches] == YES)
         return;
 
-    CGRect screen = [[UIScreen mainScreen] bounds];
+    CGRect screen = [[UIScreen mainScreen] safeBounds];
     int x, y, dx, dy;
     UITouch *touch, *first, *second;
 
