@@ -11,17 +11,19 @@ PPCROSSARM_INCLUDES= \
 #LINKERFLAGS= -k"--static"
 FPC_DEFINES=-dandroid -darm
 
-
-all:
+all: install
+build:
 	-${CMAKE_COMMAND} -E make_directory out
 
 	${ANDROID_NDK}/ndk-build -C $(SDL_ANDROID_DIR) -j 8
 
 	$(PPCROSSARM) $(LINKERFLAGS) $(PPCROSSARM_FLAGS) $(PPCROSSARM_INCLUDES) $(FPC_DEFINES) -oout/libhwengine.so ../../hedgewars/hwLibrary.pas
 	${CMAKE_COMMAND} -E copy out/libhwengine.so SDL-android-project/libs/armeabi/
-        
 	${ANT} clean -f $(SDL_ANDROID_DIR)/build.xml
-	${ANT} debug install -f $(SDL_ANDROID_DIR)/build.xml
+	${ANT} debug -f $(SDL_ANDROID_DIR)/build.xml
+install: build
+	${ANT} installd -f $(SDL_ANDROID_DIR)/build.xml
+       
 clean:  
 	${CMAKE_COMMAND} -E remove_directory out
 	${ANDROID_NDK}/ndk-build -C $(SDL_ANDROID_DIR) -j 8 clean
