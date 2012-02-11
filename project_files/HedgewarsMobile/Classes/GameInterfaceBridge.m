@@ -44,12 +44,12 @@ static UIViewController *callingController;
     [self.proto spawnThread:self.savePath withOptions:optionsOrNil];
 
     // add a black view hiding the background
-    CGRect theFrame = [[UIScreen mainScreen] bounds];
     UIWindow *thisWindow = [[HedgewarsAppDelegate sharedAppDelegate] uiwindow];
-    self.blackView = [[UIView alloc] initWithFrame:theFrame];
+    self.blackView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.blackView.opaque = YES;
     self.blackView.backgroundColor = [UIColor blackColor];
     self.blackView.alpha = 0;
+    self.blackView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [UIView beginAnimations:@"fade out" context:NULL];
     [UIView setAnimationDuration:1];
     self.blackView.alpha = 1;

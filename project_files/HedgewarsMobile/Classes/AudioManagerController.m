@@ -68,6 +68,9 @@ static MXAudioPlayerFadeOperation *fadeOut = nil;
 }
 
 +(void) fadeOutBackgroundMusic {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"music"] boolValue] == NO)
+        return;
+
     if (audioFaderQueue == nil)
         audioFaderQueue = [[NSOperationQueue alloc] init];
     if (backgroundMusic == nil)
@@ -79,6 +82,9 @@ static MXAudioPlayerFadeOperation *fadeOut = nil;
 }
 
 +(void) fadeInBackgroundMusic {
+    if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"music"] boolValue] == NO)
+        return;
+
     if (audioFaderQueue == nil)
         audioFaderQueue = [[NSOperationQueue alloc] init];
     if (backgroundMusic == nil)
