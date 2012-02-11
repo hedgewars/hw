@@ -240,7 +240,7 @@
             break;
         case 2:
             if (self.segmentedControl.selectedSegmentIndex == 0) {
-                labelText = NSLocalizedString(@"Small",@"");
+                labelText = NSLocalizedString(@"Large",@"");
             } else {
                 labelText = NSLocalizedString(@"Small Floating Islands",@"");
             }
@@ -258,7 +258,7 @@
             break;
         case 4:
             if (self.segmentedControl.selectedSegmentIndex == 0) {
-                labelText = NSLocalizedString(@"Large",@"");
+                labelText = NSLocalizedString(@"Small",@"");
             } else {
                 labelText = NSLocalizedString(@"Medium Tunnels",@"");
             }
