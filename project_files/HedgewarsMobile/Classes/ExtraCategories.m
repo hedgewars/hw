@@ -36,11 +36,9 @@
 
 -(CGRect) safeBounds {
     CGRect original = [self bounds];
-    if (IS_IPAD() &&
-        ([[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortrait ||
-         [[UIApplication sharedApplication] statusBarOrientation] == UIInterfaceOrientationPortraitUpsideDown) ) {
+    if (IS_IPAD() && UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]))
         return original;
-    } else
+    else
         return CGRectMake(original.origin.x, original.origin.y, original.size.height, original.size.width);
 }
 
