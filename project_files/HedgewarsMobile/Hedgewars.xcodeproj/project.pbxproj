@@ -289,7 +289,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libFreetype.a */;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = libFreetype;
 		};
 		6195981C1364BCD200B429B6 /* PBXContainerItemProxy */ = {
