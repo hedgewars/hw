@@ -24,11 +24,11 @@
 #define degreesToRadians(x) ( M_PI * x / 180.0)
 #define radiansToDegrees(x) (180.0 * x / M_PI )
 
-#define HWX(x) (int)(x-screen.size.height/2)/HW_zoomFactor()
-#define HWY(x) (int)(screen.size.width-x)/HW_zoomFactor() + (IS_IPAD()?40:17.5)*HW_zoomLevel()/HW_zoomFactor()
+#define HWX(x) (int)(x-screen.size.width/2)/HW_zoomFactor()
+#define HWY(x) (int)(screen.size.height-x)/HW_zoomFactor()+(IS_IPAD()?40:17.5)*HW_zoomLevel()/HW_zoomFactor()
 
-#define HWXZ(x) (int)(x-screen.size.height/2)
-#define HWYZ(x) (int)(screen.size.width-x)
+#define HWXZ(x) (int)(x-screen.size.width/2)
+#define HWYZ(x) (int)(screen.size.height-x)
 
 CGFloat distanceBetweenPoints (CGPoint first, CGPoint second);
 CGFloat angleBetweenPoints(CGPoint first, CGPoint second);
