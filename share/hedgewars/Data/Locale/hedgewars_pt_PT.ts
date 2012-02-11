@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.0" language="pt_PT">
 <context>
@@ -19,12 +19,12 @@
         <translation>Erro no ficheiro</translation>
     </message>
     <message>
-        <source>Cannot open file '%1' for writing</source>
-        <translation>Impossivel abrir o ficheiro '%1' para escrita</translation>
+        <source>Cannot open file &apos;%1&apos; for writing</source>
+        <translation>Impossivel abrir o ficheiro &apos;%1&apos; para escrita</translation>
     </message>
     <message>
-        <source>Cannot read file '%1'</source>
-        <translation>Impossivel let o ficheiro '%1'</translation>
+        <source>Cannot read file &apos;%1&apos;</source>
+        <translation>Impossivel let o ficheiro &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -111,7 +111,7 @@
         <translation>Introduz %1 se quiseres utilizar o StyleSheet corrente no futuro, introduz %2 para limpar!</translation>
     </message>
     <message>
-        <source>Couldn't read %1</source>
+        <source>Couldn&apos;t read %1</source>
         <translation>Não foi possivel carregar %1</translation>
     </message>
     <message>
@@ -407,7 +407,7 @@ Por favor escolha outro nome de utilizador.</translation>
 <context>
     <name>KB</name>
     <message>
-        <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It's recommended to update your freetype lib.</source>
+        <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf retornou um erro ao renderizar o texto, muito provavelmente está relacionado com o bug no freetype2. É recomendado actualizar a sua lib freetype.</translation>
     </message>
 </context>
@@ -569,7 +569,7 @@ Por favor escolha outro nome de utilizador.</translation>
         </translation>
     </message>
     <message numerus="yes">
-        <source>&lt;b&gt;%1&lt;/b&gt; thought it's good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
+        <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; axou que seria divertido atacar a sua própria equipa fazendo &lt;b&gt;%2&lt;/b&gt; ponto de dano.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; axou que seria divertido atacar a sua própria equipa fazendo &lt;b&gt;%2&lt;/b&gt; pontos de dano.</numerusform>
@@ -608,7 +608,7 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>Jogo em rede (Joga em rede ou na internet)</translation>
     </message>
     <message>
-        <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they'll win or lose together.</source>
+        <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
         <translation>Simplesmente selecciona a mesma cor de outro jogador para jogarem em equipa. Continuas a ter total controlo dos teus ouriços, mas ganham ou perdem juntos.</translation>
     </message>
@@ -618,27 +618,27 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>Algumas armas podem não fazer muito dano, mas em ocasiões especificas podem-se demonstrar bastante mais letais. Experimenta usar a Desert Eagle para empurrar varios ouriços para a água.</translation>
     </message>
     <message>
-        <source>If you're unsure what to do and don't want to waste ammo, skip one round. But don't let too much time pass as there will be Sudden Death!</source>
+        <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
         <comment>Tips</comment>
         <translation>Se não tens a certeza do que fazer a seguir não desperdiçes munições, passa o turno. Mas não desperdices muito tempo, a Morte Súbita aproxima-se.</translation>
     </message>
     <message>
-        <source>If you'd like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
+        <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
         <comment>Tips</comment>
         <translation>Se não queres que outros usem o teu nome de utilizador preferido no servidor oficial, regista-o em http://www.hedgewars.org/.</translation>
     </message>
     <message>
-        <source>You're bored of default gameplay? Try one of the missions - they'll offer different gameplay depending on the one you picked.</source>
+        <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
         <comment>Tips</comment>
         <translation>Estás cansado do modo de jogo habitual? Experimenta uma das missões - existem várias por onde escolher, e todas com objectivos um pouco diferentes.</translation>
     </message>
     <message>
-        <source>By default the game will always record the last game played as a demo. Select 'Local Game' and pick the 'Demos' button on the lower right corner to play or manage them.</source>
+        <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
         <comment>Tips</comment>
-        <translation>Por defeito, o ultimo jogo em que participaste é sempre gravado como 'demo'. Selecciona 'Jogo Local' e aí a opção 'Demos' no canto inferior direito para os gerir ou reproduzir.</translation>
+        <translation>Por defeito, o ultimo jogo em que participaste é sempre gravado como &apos;demo&apos;. Selecciona &apos;Jogo Local&apos; e aí a opção &apos;Demos&apos; no canto inferior direito para os gerir ou reproduzir.</translation>
     </message>
     <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you've got problems, ask on our forums but please don't expect 24/7 support!</source>
+        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
         <comment>Tips</comment>
         <translation>O Hedgewars é Open Source e Freeware, desenvolvido nos tempos livres. Se tiveres algum problema pergunta nos fóruns, mas por favor não esperes suporte 24/7!</translation>
     </message>
@@ -668,7 +668,7 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>O Hedgewars está disponível para vários sistemas operativos incluindo Microsoft Windows, Mac OS X e Linux.</translation>
     </message>
     <message>
-        <source>Always remember you're able to set up your own games in local and network/online play. You're not restricted to the 'Simple Game' option.</source>
+        <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
         <comment>Tips</comment>
         <translation>Lembra-te que tens sempre a opção de poder jogar na tua rede local ou online. Não estás restrito ao modo de Jogo Local.</translation>
     </message>
@@ -678,12 +678,12 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>Lembra-te de fazer pequenos intervalos durante sessões de jogo prolongadas.</translation>
     </message>
     <message>
-        <source>If your graphics card isn't able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
+        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
         <comment>Tips</comment>
         <translation>Se a tua placa gráfica não é capaz de fornecer aceleração por hardware para OpenGL experimenta activar o modo de baixa qualidade para melhorar a performance.</translation>
     </message>
     <message>
-        <source>We're open to suggestions and constructive feedback. If you don't like something or got a great idea, let us know!</source>
+        <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
         <comment>Tips</comment>
         <translation>Estamos abertos a sugestões e críticas construtivas. Se há algo que não gostas em particular ou tiveste uma boa ideia, deixa-nos saber!</translation>
     </message>
@@ -693,17 +693,17 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>Especialmente durante partidas online é importante ser educado. Lembra-te que podem haver menores a jogar com ou contra ti!</translation>
     </message>
     <message>
-        <source>Special game modes such as 'Vampirism' or 'Karma' allow you to develop completely new tactics. Try them in a custom game!</source>
+        <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
         <comment>Tips</comment>
-        <translation>Modos de jogo especiais como 'Vampirismo' ou 'Karma' permitem-te desenvolver tácticas completamente novas! Experimenta-os num jogo personalizado!</translation>
+        <translation>Modos de jogo especiais como &apos;Vampirismo&apos; ou &apos;Karma&apos; permitem-te desenvolver tácticas completamente novas! Experimenta-os num jogo personalizado!</translation>
     </message>
     <message>
-        <source>You should never install Hedgewars on computers you don't own (school, university, work, etc.). Please ask the responsible person instead!</source>
+        <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
         <comment>Tips</comment>
         <translation>Não deves instalar o Hedgewars em computadores que não te pertençam (escola, universidade, trabalho, etc.). Por favor contacta o responsável caso o pretendas fazer.</translation>
     </message>
     <message>
-        <source>Hedgewars can be perfect for short games during breaks. Just ensure you don't add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
+        <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
         <comment>Tips</comment>
         <translation>O Hedgewars é perfeito para pequenos jogos durante intervalos. Tem apenas a certeza que não adicionas muitos ouriços ou usas um mapa muito grande. Reduzir o tempo e pontos de vida pode ajudar também.</translation>
     </message>
@@ -728,7 +728,7 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>Cria uma conta em http://www.hedgewars.org/ para prevenir que outros usem o teu nome de utilizador favorito no servidor oficial.</translation>
     </message>
     <message>
-        <source>If your graphics card isn't able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
+        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
         <comment>Tips</comment>
         <translation>Se a tua placa gráfica se está a demonstrar incapaz de fornecer aceleração gráfica em OpenGL, experimenta actualizar os drivers da mesma.</translation>
     </message>
@@ -743,12 +743,12 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>Com medo de cair de um penhasco? Deixa o [botão de precisão] pressionado e vira-te para a [direita] ou [esquerda] sem sair do sitio.</translation>
     </message>
     <message>
-        <source>Some weapons require special strategies or just lots of training, so don't give up on a particular tool if you miss an enemy once.</source>
+        <source>Some weapons require special strategies or just lots of training, so don&apos;t give up on a particular tool if you miss an enemy once.</source>
         <comment>Tips</comment>
         <translation>Algumas armas requerem estratégias especiais ou imensa prática, por isso não desistas imediatamente dessa ferramenta em particular se falhares o alvo.</translation>
     </message>
     <message>
-        <source>Most weapons won't work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
+        <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
         <comment>Tips</comment>
         <translation>A maiora das armas deixa de funcionar se tocarem na água. A Abelha Teleguiada e o Bolo são excepções a esta regra.</translation>
     </message>
@@ -758,7 +758,7 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>O Limburger Venho causa apenas uma pequena explosão. No entanto a pequena nuvem malcheirosa, afectada pelo vento, pode envenenar vários ouriços de uma vez.</translation>
     </message>
     <message>
-        <source>The Piano Strike is the most damaging air strike. You'll lose the hedgehog performing it, so there's a huge downside as well.</source>
+        <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
         <comment>Tips</comment>
         <translation>O Piano é o ataque aéreo que mais potencial dano causa. No entanto uma enorme desvantagem, é necessario sacrificar um ouriço para o utilizar.</translation>
     </message>
@@ -773,12 +773,12 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>O melhor local para usar o Martelo é em pontes ou vigas. Os ouriços atingidos nestes locais vão simplesmente furar pelo chão.</translation>
     </message>
     <message>
-        <source>If you're stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
+        <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
         <comment>Tips</comment>
         <translation>Se ficares preso atrás de um ouriço inimigo utiliza o Martelo para te libertares sem ser necessário levar dano de uma explosão.</translation>
     </message>
     <message>
-        <source>The Cake's maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
+        <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
         <comment>Tips</comment>
         <translation>A distancia máxima que o Bolo é capaz de alcançar depende do terreno que tenha de ultrapassar. Podes também utilizar [ataque] para o detonar a qualquer altura.</translation>
     </message>
@@ -788,7 +788,7 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>Embora o Lança-chamas seja uma arma, pode também ser usado para escavar túneis.</translation>
     </message>
     <message>
-        <source>Want to know who's behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
+        <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
         <comment>Tips</comment>
         <translation>Gostavas de saber quem está por traz deste jogo? Clica no logótipo do Hedgewars no menu inicial para aceder aos créditos.</translation>
     </message>
@@ -798,7 +798,7 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>Gostas do Hedgewars? Torna-te fã no %1 ou segue-nos pelo %2!</translation>
     </message>
     <message>
-        <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you'll have to share them somewhere to use them online.</source>
+        <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
         <comment>Tips</comment>
         <translation>Está à vontade para desenhar as tuas próprias sepulturas, chapéus, bandeiras ou mesmo mapas e temas! Tem em nota que vai ser necessário partilha-los algures para que os consigas usar online.</translation>
     </message>
@@ -813,29 +813,29 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation>Mantém os drivers da placa gráfica actualizados de forma a evitar problemas com o jogo.</translation>
     </message>
     <message>
-        <source>You can find your Hedgewars configuration files under "My Documents\Hedgewars". Create backups or take the files with you, but don't edit them by hand.</source>
+        <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em "Documentos\Hedgewars". Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Documentos\Hedgewars&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
     </message>
     <message>
-        <source>You're able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
+        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
         <comment>Tips</comment>
         <translation>É possivel associar os ficheiros relacionados com o Hedgewars (partidas e demonstrações) directamente com o jogo para que seja possivel lançalos directamente do teu explorador de ficheiros ou internet favorito.</translation>
     </message>
     <message>
-        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don't touch the ground you'll reuse your rope without wasting ammo!</source>
+        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
         <comment>Tips</comment>
         <translation>Gostavas de poupar algumas cordas? Solta a corda enquanto no ar e dispara-a novamente. Desde que não toques no solo podes reutilizar a usar a mesma corda quantas vezes quiseres!</translation>
     </message>
     <message>
-        <source>You can find your Hedgewars configuration files under "Library/Application Support/Hedgewars" in your home directory. Create backups or take the files with you, but don't edit them by hand.</source>
+        <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em "Library/Application Support/Hedgewars" dentro da tua "Pasta Pessoal". Cria cópias de segurança ou leva os ficheiros contigo, mas não os edites manualmente.</translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Library/Application Support/Hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, mas não os edites manualmente.</translation>
     </message>
     <message>
-        <source>You can find your Hedgewars configuration files under ".hedgewars" in your home directory. Create backups or take the files with you, but don't edit them by hand.</source>
+        <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em ".hedgewars" dentro da tua "Pasta Pessoal". Cria cópias de segurança ou leva os ficheiros contigo, mas não os edites manualmente.</translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;.hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, mas não os edites manualmente.</translation>
     </message>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
@@ -932,7 +932,7 @@ Por favor escolha outro nome de utilizador.</translation>
         <translation type="obsolete">Apagar esquema de armas</translation>
     </message>
     <message>
-        <source>You can't edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
+        <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation>Não é possível editar equipas do menu de selecção de equipa. Volte ao menu principal se pretender adicionar, editar ou apagar equipas.</translation>
     </message>
     <message>
@@ -1029,7 +1029,7 @@ Pode-se juntar e jogar assim que o jogo começe.</translation>
     </message>
     <message>
         <source>This game is in progress.
-You may join and spectate now but you'll have to wait for the game to end to start playing.</source>
+You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation>Este jogo está em progresso.
 Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder jogar.</translation>
     </message>
@@ -1209,11 +1209,11 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation>Atacar não termina o turno.</translation>
+        <translation>Atacar não faz o turno terminar.</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation>O armamento é reiniciado para os valores iniciais em cada turno.</translation>
+        <translation>O armamento é redefinido para os valores iniciais todos os turnos.</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
@@ -1503,7 +1503,7 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
     </message>
     <message>
         <source>Wiggle</source>
-        <translation>"Wiggle"</translation>
+        <translation>&quot;Wiggle&quot;</translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
@@ -1728,8 +1728,8 @@ Desejas juntar-te ao jogo de qualquer maneira?</translation>
         <translation>Dica: </translation>
     </message>
     <message>
-        <source>This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation>This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</translation>
+        <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
+        <translation>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>Quality</source>
@@ -1841,8 +1841,8 @@ Por favor verifique a sua instalação</translation>
         <translation>Deseja mesmo eliminar este esquema de armas?</translation>
     </message>
     <message>
-        <source>Can not overwrite default weapon set '%1'!</source>
-        <translation>Não é possivel sobrescrever o esquema de armas por omissão '%1'!</translation>
+        <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
+        <translation>Não é possivel sobrescrever o esquema de armas por omissão &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>All file associations have been set.</source>
@@ -1865,16 +1865,16 @@ Por favor verifique a sua instalação</translation>
         <translation>Esquemas</translation>
     </message>
     <message>
-        <source>Can not delete default scheme '%1'!</source>
-        <translation>Não é possível eliminar o esquema por omisão '%1'!</translation>
+        <source>Can not delete default scheme &apos;%1&apos;!</source>
+        <translation>Não é possível eliminar o esquema por omisão &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Really delete this game scheme?</source>
         <translation>Deseja mesmo apagar este esquema de jogo?</translation>
     </message>
     <message>
-        <source>Can not delete default weapon set '%1'!</source>
-        <translation>Não é possível eliminar o esquema de armas por omisão '%1'!</translation>
+        <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation>Não é possível eliminar o esquema de armas por omisão &apos;%1&apos;!</translation>
     </message>
 </context>
 <context>
@@ -2378,7 +2378,7 @@ ouriços</translation>
         <translation>Mover o cursor ou camara sem usar o rato:</translation>
     </message>
     <message>
-        <source>Modify the camera's zoom level:</source>
+        <source>Modify the camera&apos;s zoom level:</source>
         <translation>Modificar o nível de zoom da camara:</translation>
     </message>
     <message>
@@ -2390,7 +2390,7 @@ ouriços</translation>
         <translation>Pausar, continuar ou abandonar o jogo:</translation>
     </message>
     <message>
-        <source>Modify the game's volume while playing:</source>
+        <source>Modify the game&apos;s volume while playing:</source>
         <translation>Modificar o volume durante o jogo:</translation>
     </message>
     <message>
