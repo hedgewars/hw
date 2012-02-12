@@ -79,8 +79,8 @@ QLayout * PageAdmin::bodyLayoutDefinition()
 void PageAdmin::connectSignals()
 {
     connect(pbAsk, SIGNAL(clicked()), this, SIGNAL(askServerVars()));
-    connect(leServerMessageNew, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
-    connect(leServerMessageOld, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
+    connect(leServerMessageNew, SIGNAL(textChanged(QString)), tb, SLOT(setHtml(const QString &)));
+    connect(leServerMessageOld, SIGNAL(textChanged(QString)), tb, SLOT(setHtml(const QString &)));
     connect(pbClearAccountsCache, SIGNAL(clicked()), this, SIGNAL(clearAccountsCache()));
     connect(pbSetSM, SIGNAL(clicked()), this, SLOT(smChanged()));
 }
