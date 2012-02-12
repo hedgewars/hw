@@ -126,7 +126,6 @@ var t: LongInt;
     r, rr: TSDL_Rect;
     drY: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
-    s: shortstring;
 begin
 r.x:= 0;
 r.y:= 0;
@@ -369,7 +368,7 @@ for ii:= Low(TSprite) to High(TSprite) do
 // This should maybe be flagged. It wastes quite a bit of memory.
                 if not reload then
                     begin
-{$IF DEFINED(DARWIN) OR DEFINED(WIN32) or DEFINED(ANDROID)}
+{$IFDEF USE_CONTEXT_RESTORE}
                     Surface:= tmpsurf 
 {$ELSE}
                     if saveSurf then
@@ -1030,7 +1029,7 @@ begin
         exit;
 {$ELSE}
         SetScale(cDefaultZoomLevel);
-     {$IF DEFINED(DARWIN) OR DEFINED(WIN32) or DEFINED(ANDROID)}
+     {$IFDEF USE_CONTEXT_RESTORE}
         reinit:= true;
         StoreRelease(true);
         ResetLand;
