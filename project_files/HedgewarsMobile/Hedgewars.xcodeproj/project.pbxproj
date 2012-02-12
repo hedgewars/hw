@@ -31,7 +31,7 @@
 		610782961440EE5C00645B29 /* basicFlags.plist in Resources */ = {isa = PBXBuildFile; fileRef = 610782931440EE5C00645B29 /* basicFlags.plist */; };
 		610782971440EE5C00645B29 /* credits.plist in Resources */ = {isa = PBXBuildFile; fileRef = 610782941440EE5C00645B29 /* credits.plist */; };
 		610782981440EE5C00645B29 /* gameMods.plist in Resources */ = {isa = PBXBuildFile; fileRef = 610782951440EE5C00645B29 /* gameMods.plist */; };
-		610C8E3714E018D200CF5C4C /* ValueTrackingSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 610C8E3614E018D200CF5C4C /* ValueTrackingSliderView.m */; };
+		610C8E3714E018D200CF5C4C /* MNEValueTrackingSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 610C8E3614E018D200CF5C4C /* MNEValueTrackingSlider.m */; };
 		610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
 		610D5FB31270E26C0033333A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
 		61156521147F48B6006729A9 /* About.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156520147F48B6006729A9 /* About.strings */; };
@@ -383,8 +383,8 @@
 		610782931440EE5C00645B29 /* basicFlags.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = basicFlags.plist; path = Resources/basicFlags.plist; sourceTree = "<group>"; };
 		610782941440EE5C00645B29 /* credits.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = credits.plist; path = Resources/credits.plist; sourceTree = "<group>"; };
 		610782951440EE5C00645B29 /* gameMods.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = gameMods.plist; path = Resources/gameMods.plist; sourceTree = "<group>"; };
-		610C8E3514E018D200CF5C4C /* ValueTrackingSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ValueTrackingSliderView.h; path = Classes/ValueTrackingSliderView.h; sourceTree = "<group>"; };
-		610C8E3614E018D200CF5C4C /* ValueTrackingSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ValueTrackingSliderView.m; path = Classes/ValueTrackingSliderView.m; sourceTree = "<group>"; };
+		610C8E3514E018D200CF5C4C /* MNEValueTrackingSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNEValueTrackingSlider.h; path = Classes/MNEValueTrackingSlider.h; sourceTree = "<group>"; };
+		610C8E3614E018D200CF5C4C /* MNEValueTrackingSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MNEValueTrackingSlider.m; path = Classes/MNEValueTrackingSlider.m; sourceTree = "<group>"; };
 		6115651A147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/About.strings; sourceTree = "<group>"; };
 		6115651B147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6115651C147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Scheme.strings; sourceTree = "<group>"; };
@@ -1126,8 +1126,8 @@
 			isa = PBXGroup;
 			children = (
 				615E75C014E42C9000FBA131 /* MGSplitViewController */,
-				610C8E3514E018D200CF5C4C /* ValueTrackingSliderView.h */,
-				610C8E3614E018D200CF5C4C /* ValueTrackingSliderView.m */,
+				610C8E3514E018D200CF5C4C /* MNEValueTrackingSlider.h */,
+				610C8E3614E018D200CF5C4C /* MNEValueTrackingSlider.m */,
 				619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */,
 				619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */,
 				61F544C512AF1748007FD913 /* HoldTableViewCell.h */,
@@ -1763,7 +1763,7 @@
 				61D08D7414AEA7FE0007C078 /* uGearsHedgehog.pas in Sources */,
 				61D08D7514AEA7FE0007C078 /* uGearsList.pas in Sources */,
 				61D08D7614AEA7FE0007C078 /* uGearsUtils.pas in Sources */,
-				610C8E3714E018D200CF5C4C /* ValueTrackingSliderView.m in Sources */,
+				610C8E3714E018D200CF5C4C /* MNEValueTrackingSlider.m in Sources */,
 				615E755A14E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m in Sources */,
 				615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */,
 				615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */,
