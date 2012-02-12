@@ -802,9 +802,11 @@ if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0
         else
             LandPixels[yy, xx]:= 0;
 
-        Land[Y, X]:= 0;
         if not pixelsweep then
-            exit(true);
+            begin
+            Land[Y, X]:= 0;
+            exit(true)
+            end
         end;
     end;
 Despeckle:= false
