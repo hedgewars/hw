@@ -75,6 +75,7 @@
 #define MSG_DIDUNLOAD()         DLog(@"unloaded");
 
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define IS_ON_PORTRAIT()        (IS_IPAD() && UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]))
 #define IS_NOT_POWERFUL(x)      ([x hasPrefix:@"iPhone1"] || [x hasPrefix:@"iPod1,1"] || [x hasPrefix:@"iPod2,1"])
 #define IS_NOT_VERY_POWERFUL(x) ([x hasPrefix:@"iPad1"] || [x hasPrefix:@"iPhone2"] || [x hasPrefix:@"iPod3"] || [x hasPrefix:@"iPod4"])
 #define IS_VERY_POWERFUL(x)     (IS_NOT_POWERFUL(x) == NO && IS_NOT_VERY_POWERFUL(x) == NO)
