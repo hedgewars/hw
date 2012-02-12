@@ -93,11 +93,11 @@ var
     //moving
     stopLeft, stopRight, walkingLeft, walkingRight :  boolean;
 
-
 procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
 var 
     finger: PTouch_Finger;
 begin
+{$IFDEF USE_TOUCH_INTERFACE}
 finger := addFinger(x,y,pointerId);
 case pointerCount of
         1:
@@ -163,6 +163,7 @@ case pointerCount of
             baseZoomValue := ZoomValue
         end;
     end;//end case pointerCount of
+{$ENDIF}
 end;
 
 procedure onTouchMotion(x,y: Longword;dx,dy: LongInt; pointerId: SDL_FingerId);
