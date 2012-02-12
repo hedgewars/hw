@@ -1638,9 +1638,9 @@ void HWForm::SendFeedback()
     connect(nam, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(finishedSlot(QNetworkReply*)));
 
-    QUrl url(string(string("https://www.google.com/accounts/ClientLogin?"
-                           "accountType=GOOGLE&Email=feedback.hedgewars@gmail.com&Passwd=hwfeedback&service=code&source=HedgewarsFoundation-Hedgewars-")
-                    + (cVersionString?(*cVersionString):QString("")).toStdString()).c_str());
+    QUrl url(QString("https://www.google.com/accounts/ClientLogin?"
+                     "accountType=GOOGLE&Email=feedback.hedgewars@gmail.com&Passwd=hwfeedback&service=code&source=HedgewarsFoundation-Hedgewars-")
+                    + (cVersionString?(*cVersionString):QString("")));
     nam->get(QNetworkRequest(url));
 
 }
@@ -1690,12 +1690,11 @@ void HWForm::finishedSlot(QNetworkReply* reply)
             return;
         }
 
-        QByteArray body(issueXml.toStdString().c_str());
+        QByteArray body(issueXml.toUtf8());
         QNetworkRequest header(QUrl("https://code.google.com/feeds/issues/p/hedgewars/issues/full"));
         header.setRawHeader("Content-Length", QString::number(issueXml.length()).toAscii());
         header.setRawHeader("Content-Type", "application/atom+xml");
-        header.setRawHeader("Authorization", string(
-                                string("GoogleLogin auth=") + authToken.toStdString()).c_str());
+        header.setRawHeader("Authorization", QString("GoogleLogin auth=%1").arg(authToken).toUtf8());
         nam->post(header, body);
 
     }

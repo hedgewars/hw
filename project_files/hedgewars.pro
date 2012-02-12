@@ -175,7 +175,6 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui_hwform.cpp \
     ../QTfrontend/hwconsts.cpp \
     ../QTfrontend/ui/mouseoverfilter.cpp \
-    ../QTfrontend/ui/mouseoverfilter.cpp \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.cpp \
     ../QTfrontend/ui/page/pagefeedback.cpp
 
