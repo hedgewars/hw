@@ -189,7 +189,7 @@
     if (0 == [indexPath section])
         return aTableView.rowHeight;
     else
-        return UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]) ? 208 : 120;
+        return IS_ON_PORTRAIT() ? 208 : 120;
 }
 
 -(NSString *)tableView:(UITableView *)aTableView titleForHeaderInSection:(NSInteger)section {

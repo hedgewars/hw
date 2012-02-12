@@ -220,19 +220,19 @@
             str = NSLocalizedString(@"Initial quantity",@"ammo selection");
             break;
         case 200:
-            if (IS_IPAD() && (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])))
+            if (IS_ON_PORTRAIT())
                 str = NSLocalizedString(@"Probability in crates",@"ammo selection");
             else
                 str = NSLocalizedString(@"Presence probability in crates",@"ammo selection");
             break;
         case 300:
-            if (IS_IPAD() && (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])))
+            if (IS_ON_PORTRAIT())
                 str = NSLocalizedString(@"Weapon delay",@"ammo selection");
             else
                 str = NSLocalizedString(@"Turns before this weapon becomes usable",@"ammo selection");
             break;
         case 400:
-            if (IS_IPAD() && (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])))
+            if (IS_ON_PORTRAIT())
                 str = NSLocalizedString(@"Quantity per crate",@"ammo selection");
             else
                 str = NSLocalizedString(@"Quantity you will find in a crate",@"ammo selection");
