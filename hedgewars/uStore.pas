@@ -1017,6 +1017,7 @@ begin
         end
     else
         begin
+        AmmoMenuInvalidated:= true;
 {$IFDEF IPHONEOS}
         // chFullScr is called when there is a rotation event and needs the SetScale and SetupOpenGL to set up the new resolution
         // this 6 gl functions are the relevant ones and are hacked together here for optimisation
