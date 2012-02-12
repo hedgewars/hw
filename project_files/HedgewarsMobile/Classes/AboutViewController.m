@@ -30,8 +30,7 @@
 }
 
 -(void) viewDidLoad {
-    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
-        self.tableView.backgroundView = nil;
+    [self.tableView setBackgroundColorForAnyTable:[UIColor clearColor]];
     self.tableView.allowsSelection = NO;
 
     NSArray *array = [[NSArray alloc] initWithContentsOfFile:CREDITS_FILE()];
@@ -44,8 +43,13 @@
     else
         imgName = @"smallerBackground~iphone.png";
     UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:img];
+    UIImageView *background = [[UIImageView alloc] initWithImage:img];
     [img release];
+    background.frame = self.view.frame;
+    background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.view insertSubview:background atIndex:0];
+    [background release];
+
     [super viewDidLoad];
 }
 

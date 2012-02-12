@@ -94,6 +94,7 @@
 						<int key="NSvFlags">289</int>
 						<string key="NSFrame">{{986, 19}, {18, 19}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
+						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<float key="IBUIAlpha">0.31690141558647156</float>
 						<int key="IBUITag">3</int>
