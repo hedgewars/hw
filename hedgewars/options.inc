@@ -33,8 +33,9 @@
     {$DEFINE S3D_DISABLED}
     {$DEFINE GLunit:=gles11}
     {$DEFINE MOBILE}
-    {$DEFINE Java_Prefix := 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
+    {$DEFINE Java_Prefix:= 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
     {$DEFINE USE_SDLTHREADS}
+    {$DEFINE USE_CONTEXT_RESTORE}
 {$ENDIF}
 
 {$IFDEF IPHONEOS}
@@ -45,8 +46,15 @@
     {$DEFINE MOBILE}
 {$ENDIF}
 
+{$IFDEF WIN32}
+    {$DEFINE USE_CONTEXT_RESTORE}
+{$ENDIF}
+
 {$IFNDEF IPHONEOS}
-    // not needed on ios because it is switched from the compiler command line arguments
+    {$IFDEF DARWIN}
+        {$DEFINE USE_CONTEXT_RESTORE}
+    {$ENDIF}
+    // not needed on ios because DEBUGFILE is switched from command line
     {$DEFINE DEBUGFILE}
     //{$DEFINE TRACEAIACTIONS}
     //{$DEFINE COUNTTICKS}
