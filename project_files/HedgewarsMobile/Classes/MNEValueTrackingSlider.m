@@ -1,41 +1,27 @@
-/*
- * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 06/02/2012.
- */
-
-// class heavily based on: http://blog.neuwert-media.com/2011/04/customized-uislider-with-visual-value-tracking/
+//
+// MNEValueTrackingSlider
+//
+// Copyright 2011 Michael Neuwert
+// "You can use the code in your own project and modify it as you like."
+// http://blog.neuwert-media.com/2011/04/customized-uislider-with-visual-value-tracking/
+//
 
 
-#import "ValueTrackingSliderView.h"
+#import "MNEValueTrackingSlider.h"
 
 #pragma mark -
 #pragma mark Private UIView subclass rendering the popup showing slider value
-@interface SliderValuePopupView : UIView  
-@property (nonatomic) float value;
+@interface SliderValuePopupView : UIView
 @property (nonatomic, retain) UIFont *font;
-@property (nonatomic, retain) NSString *text;
+@property (nonatomic, copy) NSString *text;
+@property (nonatomic) float arrowOffset;
 @end
 
 @implementation SliderValuePopupView
 
-@synthesize value = _value;
 @synthesize font = _font;
 @synthesize text = _text;
+@synthesize arrowOffset = _arrowOffset;
 
 -(id) initWithFrame:(CGRect) frame {
     self = [super initWithFrame:frame];
@@ -59,13 +45,21 @@
 
     // Create the arrow path
     UIBezierPath *arrowPath = [UIBezierPath bezierPath];
-    CGFloat midX = CGRectGetMidX(self.bounds);
+    /*
+    // Make sure the arrow offset is nice
+    if (-self.arrowOffset + 1 > CGRectGetMidX(self.bounds) / 2)
+        self.arrowOffset = -CGRectGetMidX(self.bounds) / 2 + 1;
+    if (self.arrowOffset > CGRectGetMidX(self.bounds) / 2)
+        self.arrowOffset = CGRectGetMidX(self.bounds) / 2 -1;
+     */
+
+    CGFloat midX = CGRectGetMidX(self.bounds) + self.arrowOffset;
     CGPoint p0 = CGPointMake(midX, CGRectGetMaxY(self.bounds));
     [arrowPath moveToPoint:p0];
     [arrowPath addLineToPoint:CGPointMake((midX - 10.0), CGRectGetMaxY(roundedRect))];
     [arrowPath addLineToPoint:CGPointMake((midX + 10.0), CGRectGetMaxY(roundedRect))];
     [arrowPath closePath];
-    
+
     // Attach the arrow path to the rounded rect
     [roundedRectPath appendPath:arrowPath];
 
@@ -83,11 +77,11 @@
         CGSize s = [_text sizeWithFont:self.font];
         CGFloat yOffset = (roundedRect.size.height - s.height) / 2;
         CGRect textRect = CGRectMake(roundedRect.origin.x, yOffset, roundedRect.size.width, s.height);
-        
-        [_text drawInRect:textRect 
-                 withFont:self.font 
-            lineBreakMode:UILineBreakModeWordWrap 
-                alignment:UITextAlignmentCenter];    
+
+        [_text drawInRect:textRect
+                 withFont:self.font
+            lineBreakMode:UILineBreakModeWordWrap
+                alignment:UITextAlignmentCenter];
     }
 }
 
@@ -95,7 +89,7 @@
 
 #pragma mark -
 #pragma mark MNEValueTrackingSlider implementations
-@implementation ValueTrackingSliderView
+@implementation MNEValueTrackingSlider
 
 @synthesize thumbRect, textValue;
 
@@ -122,7 +116,20 @@
 -(void) _positionAndUpdatePopupView {
     CGRect _thumbRect = self.thumbRect;
     CGRect popupRect = CGRectOffset(_thumbRect, 0, -floorf(_thumbRect.size.height * 1.5));
-    valuePopupView.frame = CGRectInset(popupRect, -100, -15);
+    // (-100, -15) determines the size of the the rect
+    popupRect = CGRectInset(popupRect, -100, -15);
+
+    // this prevents drawing the popup outside the slider view
+    if (popupRect.origin.x < -self.frame.origin.x+5)
+        popupRect.origin.x = -self.frame.origin.x+5;
+    else if (popupRect.origin.x > self.superview.frame.size.width - popupRect.size.width - self.frame.origin.x - 5)
+        popupRect.origin.x = self.superview.frame.size.width - popupRect.size.width - self.frame.origin.x - 5;
+    //else if (CGRectGetMaxX(popupRect) > CGRectGetMaxX(self.superview.bounds))
+    //    popupRect.origin.x = CGRectGetMaxX(self.superview.bounds) - CGRectGetWidth(popupRect) - 1.0;
+
+    valuePopupView.arrowOffset = CGRectGetMidX(_thumbRect) - CGRectGetMidX(popupRect);
+
+    valuePopupView.frame = popupRect;
     valuePopupView.text = self.textValue;
     [valuePopupView setNeedsDisplay];
 }
@@ -157,9 +164,9 @@
     // Fade in and update the popup view
     CGPoint touchPoint = [touch locationInView:self];
     // Check if the knob is touched. Only in this case show the popup-view
-    if(CGRectContainsPoint(CGRectInset(self.thumbRect, -12.0, -12.0), touchPoint)) {
+    if(CGRectContainsPoint(CGRectInset(self.thumbRect, -14.0, -12.0), touchPoint)) {
         [self _positionAndUpdatePopupView];
-        [self _fadePopupViewInAndOut:YES]; 
+        [self _fadePopupViewInAndOut:YES];
     }
     return [super beginTrackingWithTouch:touch withEvent:event];
 }
@@ -184,7 +191,7 @@
 #pragma mark Custom property accessors
 -(CGRect) thumbRect {
     CGRect trackRect = [self trackRectForBounds:self.bounds];
-    CGRect thumbR = [self thumbRectForBounds:self.bounds 
+    CGRect thumbR = [self thumbRectForBounds:self.bounds
                                          trackRect:trackRect
                                              value:self.value];
     return thumbR;
