@@ -312,7 +312,7 @@
         self.mapConfigViewController.maxLabel = maxLabel;
         [maxLabel release];
     } else {
-        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width-44);
+        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height-44);
     }
     [self.view addSubview:self.mapConfigViewController.view];
     [self.view bringSubviewToFront:self.mapConfigViewController.slider];

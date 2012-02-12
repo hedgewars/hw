@@ -66,7 +66,7 @@
             [sbvc release];
         }
         self.baseController.targetController = nil;
-        self.baseController.view.frame = CGRectMake(0, 0, screenRect.size.height, screenRect.size.width);
+        self.baseController.view.frame = screenRect;
 
         [self.view addSubview:self.baseController.view];
     }
