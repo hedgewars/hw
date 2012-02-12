@@ -118,21 +118,28 @@
 -(void) viewDidAppear:(BOOL)animated {
     [self.splitViewRootController.detailViewController viewDidAppear:animated];
     [self.baseController viewDidAppear:animated];
-    [super viewDidLoad];
+    [super viewDidAppear:animated];
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
     [self.splitViewRootController.detailViewController viewDidDisappear:animated];
     [self.baseController viewDidDisappear:animated];
-    [super viewDidUnload];
+    [super viewDidDisappear:animated];
+}
+
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [self.splitViewRootController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self.baseController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
 }
 
 -(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    if (IS_IPAD() == NO)
-        return;
+    [self.splitViewRootController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self.baseController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
 
-    CGRect screenRect = [[UIScreen mainScreen] safeBounds];
-    self.splitViewRootController.masterViewController.view.frame = CGRectMake(0, 0, 320, screenRect.size.height);
+-(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [self.splitViewRootController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self.baseController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
 }
 
 @end

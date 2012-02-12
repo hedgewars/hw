@@ -139,6 +139,16 @@
     [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissModalViewControllerAnimated:YES];
 }
 
+-(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (IS_IPAD() == NO)
+        return;
+
+    if (self.targetController != nil) {
+        CGRect screenRect = [[UIScreen mainScreen] safeBounds];
+        self.view.frame = CGRectMake(0, 0, 320, screenRect.size.height);
+    }
+}
+
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {

@@ -87,6 +87,13 @@
     [schemeFile release];
 }
 
+// force a redraw of the game mod section to reposition the slider
+-(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (IS_IPAD() == NO)
+        return;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+}
+
 #pragma mark -
 #pragma mark editableCellView delegate
 // set the new value
@@ -166,11 +173,7 @@
                 cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1
                                                reuseIdentifier:CellIdentifier1] autorelease];
 
-                int offset = 0;
-                if (IS_IPAD())
-                    offset = 50;
-
-                UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(offset+260, 12, offset+150, 23)];
+                UISlider *slider = [[UISlider alloc] init];
                 [slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventValueChanged];
                 [cell.contentView addSubview:slider];
                 [slider release];
@@ -204,6 +207,20 @@
             cellSlider.maximumValue = [[detail objectForKey:@"max"] floatValue];
             cellSlider.minimumValue = [[detail objectForKey:@"min"] floatValue];
             cellSlider.value = [[[self.schemeDictionary objectForKey:@"basic"] objectAtIndex:row] floatValue];
+            // redraw the slider here
+            NSInteger hOffset = 260;
+            NSInteger vOffset = 12;
+            NSInteger sliderLength = 150;
+            if (IS_IPAD()) {
+                hOffset = 310;
+                sliderLength = 230;
+                if (IS_ON_PORTRAIT()) {
+                    hOffset = 50;
+                    vOffset = 40;
+                    sliderLength = 285;
+                }
+            }
+            cellSlider.frame = CGRectMake(hOffset, vOffset, sliderLength, 23);
 
             NSString *prestring = nil;
             checkValueString(prestring,cellLabel.text,cellSlider);
@@ -321,11 +338,13 @@
     return sectionTitle;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section] == 2)
-        return 56;
+-(CGFloat) tableView:(UITableView *)aTableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([indexPath section] == 0)
+        return aTableView.rowHeight;
+    else if ([indexPath section] == 1)
+        return IS_ON_PORTRAIT() ? 72 : aTableView.rowHeight;
     else
-        return self.tableView.rowHeight;
+        return 56;
 }
 
 #pragma mark -
