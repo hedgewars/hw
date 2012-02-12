@@ -195,7 +195,7 @@ var
 
 /////////////////////////////////////
 //Buttons
-{$IFDEF MOBILE}
+{$IFDEF USE_TOUCH_INTERFACE}
     buttonScale: GLFloat;
 
     arrowUpX, arrowUpY, arrowUpW, arrowUpH: LongInt; 
@@ -395,7 +395,7 @@ const
             Width:  80; Height: 13; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprWindL
             (FileName:      'WindR'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  80; Height: 13; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprWindR
-{$IFDEF ANDROID}
+{$IFDEF USE_TOUCH_INTERFACE}
             (FileName: 'firebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprFireButton
             (FileName: 'arrowUp'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;

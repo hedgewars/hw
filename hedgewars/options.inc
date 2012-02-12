@@ -36,6 +36,8 @@
     {$DEFINE Java_Prefix:= 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
     {$DEFINE USE_SDLTHREADS}
     {$DEFINE USE_CONTEXT_RESTORE}
+    {$DEFINE USE_LANDSCAPE_AMMOMENU}
+    {$DEFINE USE_TOUCH_INTERFACE}
 {$ENDIF}
 
 {$IFDEF IPHONEOS}
@@ -44,6 +46,7 @@
     {$DEFINE S3D_DISABLED}
     {$DEFINE GLunit:=gles11}
     {$DEFINE MOBILE}
+    {$DEFINE USE_LANDSCAPE_AMMOMENU}
 {$ENDIF}
 
 {$IFDEF WIN32}

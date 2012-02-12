@@ -197,7 +197,7 @@ WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 SkyOffset:= 0;
 HorizontOffset:= 0;
 
-{$IFDEF ANDROID}
+{$IFDEF USE_TOUCH_INTERFACE}
 //positioning of the buttons
 buttonScale:= 1.5/cDefaultZoomLevel;
 firebuttonX:= (cScreenWidth shr 1) - Round(spritesData[sprFireButton].Texture^.h * buttonScale);
@@ -266,7 +266,7 @@ begin
     for i:= 0 to cMaxSlotIndex do
         if((i = 0) and (Ammo^[i,1].Count > 0)) or ((i <> 0) and (Ammo^[i,0].Count > 0)) then
             inc(SlotsNum);
-{$IFDEF MOBILE}
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
     SlotsNumX:= SlotsNum;
     SlotsNumY:= cMaxSlotAmmoIndex + 2;
 {$ELSE}
@@ -290,7 +290,7 @@ begin
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
-{$IFDEF MOBILE}
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
             y:= AMRect.y;
 {$ELSE}
             x:= AMRect.x;
@@ -315,14 +315,14 @@ begin
                             DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
        						       y + AMSlotPadding, AMFrame);
                         end;
-{$IFDEF MOBILE}
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
 	    inc(y, AMSlotSize + 1); //the plus one is for the border
 {$ELSE}
 	    inc(x, AMSlotSize + 1);
 {$ENDIF}
 	    end;
 	end;
-{$IFDEF MOBILE}
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
     inc(x, AMSlotSize + 1);
 {$ELSE}
     inc(y, AMSlotSize + 1);
@@ -385,7 +385,7 @@ if(AmmoMenuInvalidated) then
     FreeTexture(AmmoMenuTex);
     AmmoMenuTex:= GetAmmoMenuTexture(Ammo);
 
-{$IFDEF MOBILE}
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
     if isPhone() then
         begin
         AmmoRect.x:= -(AmmoRect.w shr 1);
@@ -465,7 +465,7 @@ else  // hide ammo menu
     Pos:= -1;
     Slot:= -1;
     c:= -1;
-{$IFDEF MOBILE}
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
@@ -549,7 +549,7 @@ else  // hide ammo menu
         FreeWeaponTooltip;
 
     if (WeaponTooltipTex <> nil) and (AMShiftX = 0) and (AMShiftY = 0) then
-{$IFDEF MOBILE}
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
         if not isPhone() then
             ShowWeaponTooltip(-WeaponTooltipTex^.w div 2, AmmoRect.y - WeaponTooltipTex^.h - AMSlotSize);
 {$ELSE}
@@ -557,7 +557,7 @@ else  // hide ammo menu
 {$ENDIF}
 
     bSelected:= false;
-{$IFNDEF MOBILE}
+{$IFNDEF USE_LANDSCAPE_AMMOMENU}
    if (AMShiftX = 0) and (AMShiftY = 0) then
         DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
 {$ENDIF}
@@ -1089,7 +1089,7 @@ if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) th
 // Captions
 DrawCaptions;
 
-{$IFDEF ANDROID}
+{$IFDEF USE_TOUCH_INTERFACE}
 // Draw buttons Related to the Touch interface
 DrawTexture(arrowLeftX, arrowLeftY,spritesData[sprArrowLeft].Texture, buttonScale);
 DrawTexture(arrowRightX, arrowRightY,spritesData[sprArrowRight].Texture, buttonScale);

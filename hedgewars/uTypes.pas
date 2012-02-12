@@ -58,7 +58,7 @@ type
             sprFinger, sprAirBomb, sprAirplane, sprAmAirplane, sprAmGirder,
             sprHHTelepMask, sprSwitch, sprParachute, sprTarget, sprRopeNode,
             sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
-{$IFDEF ANDROID}
+{$IFDEF USE_TOUCH_INTERFACE}
             sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight, sprBackjump, sprForwardjump,
 {$ENDIF}
             sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
