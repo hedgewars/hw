@@ -268,6 +268,7 @@ begin
             WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
             ScriptOnScreenResize();
             InitCameraBorders();
+            InitTouchInterface();
             end;
 
         if isTerminated = false then
