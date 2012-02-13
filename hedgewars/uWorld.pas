@@ -35,6 +35,7 @@ procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongIn
 procedure HideMission;
 procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
+procedure InitTouchInterface;
 procedure MoveCamera;
 procedure onFocusStateChanged;
 
@@ -197,6 +198,16 @@ WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 SkyOffset:= 0;
 HorizontOffset:= 0;
 
+InitTouchInterface();
+end;
+
+procedure InitCameraBorders;
+begin
+cGearScrEdgesDist:= min(2 * cScreenHeight div 5, 2 * cScreenWidth div 5);
+end;
+
+procedure InitTouchInterface;
+begin
 {$IFDEF USE_TOUCH_INTERFACE}
 //positioning of the buttons
 buttonScale:= 1.5/cDefaultZoomLevel;
@@ -234,14 +245,7 @@ arrowDownX:= -(cScreenWidth shr 1) + Round(spritesData[sprArrowUp].Texture^.h * 
 arrowDownY:= -Round(spritesData[sprArrowDown].Texture^.h*buttonscale) + cScreenHeight;
 arrowDownW:= Round(spritesData[sprArrowDown].Texture^.w * buttonScale);
 arrowDownH:= Round(spritesData[sprArrowDown].Texture^.h * buttonScale);
-
-
 {$ENDIF}
-end;
-
-procedure InitCameraBorders;
-begin
-cGearScrEdgesDist:= min(2 * cScreenHeight div 5, 2 * cScreenWidth div 5);
 end;
 
 // for uStore texture resetting
