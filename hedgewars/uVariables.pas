@@ -198,8 +198,9 @@ var
 {$IFDEF USE_TOUCH_INTERFACE}
     buttonScale: GLFloat;
 
-    arrowUp, arrowDown, arrowLeft, arrowRight: TOnScreenWidget; 
-    firebutton, backjump, forwardjump: TOnScreenWidget; 
+    arrowUp, arrowDown, arrowLeft, arrowRight: TOnScreenWidget;
+    firebutton, backjump, forwardjump: TOnScreenWidget;
+	pauseButton: TOnScreenWidget;
 {$ENDIF}
 const
     cHHFileName = 'Hedgehog';
@@ -343,12 +344,6 @@ const
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: true; getImageDimensions: true),// sprSky
             (FileName:       'SkyR'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: true; getImageDimensions: true),// sprSky
-(*
-            (FileName:  'BorderHorizontal'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 32; Height:  2; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderHorizontal
-            (FileName:  'BorderVertical'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 2; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderVertical
-*)
             (FileName:   'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlot
             (FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -404,6 +399,8 @@ const
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprBackjump
             (FileName: 'forwardjump'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprForwardJump
+            (FileName: 'pause'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 120; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprPauseButton
 {$ENDIF}
             (FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprFlake
