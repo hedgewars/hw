@@ -155,7 +155,7 @@ var
     WeaponTooltipTex: PTexture;
     AmmoMenuTex     : PTexture;
     AmmoMenuInvalidated: boolean;
-    AmmoRect: TSDL_Rect;
+    AmmoRect		: TSDL_Rect;
     HHTexture       : PTexture;
 
 
@@ -198,14 +198,8 @@ var
 {$IFDEF USE_TOUCH_INTERFACE}
     buttonScale: GLFloat;
 
-    arrowUpX, arrowUpY, arrowUpW, arrowUpH: LongInt; 
-    arrowDownX, arrowDownY, arrowDownW, arrowDownH: LongInt; 
-    arrowLeftX, arrowLeftY, arrowLeftW, arrowLeftH: LongInt; 
-    arrowRightX, arrowRightY, arrowRightW, arrowRightH: LongInt; 
-
-    firebuttonX, fireButtonY, fireButtonW, fireButtonH: LongInt; 
-    backjumpX, backjumpY, backjumpW, backjumpH: LongInt; 
-    forwardjumpX, forwardjumpY, forwardjumpW, forwardjumpH: LongInt; 
+    arrowUp, arrowDown, arrowLeft, arrowRight: TOnScreenWidget; 
+    firebutton, backjump, forwardjump: TOnScreenWidget; 
 {$ENDIF}
 const
     cHHFileName = 'Hedgehog';
