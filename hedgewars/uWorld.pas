@@ -261,6 +261,14 @@ arrowDown.width:= Round(spritesData[sprArrowDown].Texture^.w * buttonScale);
 arrowDown.height:= Round(spritesData[sprArrowDown].Texture^.h * buttonScale);
 arrowDown.hOffset:= 0;
 arrowDown.vOffset:= 0;
+
+pauseButton.x:= cScreenWidth div 2 - Round(spritesData[sprPauseButton].Texture^.w * buttonscale);
+pauseButton.y:= 0; //-Round(spritesData[sprPauseButton].Texture^.h * buttonscale);
+pauseButton.width:= Round(spritesData[sprPauseButton].Texture^.w * buttonScale);;
+pauseButton.height:= Round(spritesData[sprPauseButton].Texture^.h * buttonScale);;
+pauseButton.hOffset:= 0;
+pauseButton.vOffset:= 0;
+
 {$ENDIF}
 end;
 
@@ -1077,7 +1085,7 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
 SetScale(cDefaultZoomLevel);
 
 // Turn time
-{$IFDEF MOBILE}
+{$IFDEF USE_TOUCH_INTERFACE}
 offsetX:= cScreenHeight - 13;
 {$ELSE}
 offsetX:= 48;
@@ -1119,6 +1127,7 @@ DrawTexture(arrowDown.x, arrowDown.y, spritesData[sprArrowDown].Texture, buttonS
 DrawTexture(fireButton.x, firebutton.y, spritesData[sprFireButton].Texture, buttonScale);
 DrawTexture(backjump.x, backjump.y, spritesData[sprBackjump].Texture, buttonScale);
 DrawTexture(forwardjump.x, forwardjump.y, spritesData[sprForwardjump].Texture, buttonScale);
+DrawTexture(pauseButton.x, pauseButton.y, spritesData[sprPauseButton].Texture, buttonScale);
 {$ENDIF}
 
 // Teams Healths
@@ -1207,7 +1216,7 @@ if isInLag then
     DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
 
 // Wind bar
-{$IFDEF MOBILE}
+{$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= cScreenHeight - 13;
     offsetY:= (cScreenWidth shr 1) + 74;
 {$ELSE}
@@ -1264,8 +1273,8 @@ if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (Game
     end;
 
 // fps
-{$IFDEF MOBILE}
-offsetX:= 8;
+{$IFDEF USE_TOUCH_INTERFACE}
+offsetX:= pauseButton.y + pauseButton.height + 12;
 {$ELSE}
 offsetX:= 10;
 {$ENDIF}

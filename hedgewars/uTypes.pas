@@ -53,13 +53,13 @@ type
             sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
             sprClusterBomb, sprClusterParticle, sprFlame,
             sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR,
-//    sprAMBorderHorizontal, sprAMBorderVertical, 
             sprAMSlot, sprAMAmmos, sprAMAmmosBW, sprAMSlotKeys, sprAMCorners,
             sprFinger, sprAirBomb, sprAirplane, sprAmAirplane, sprAmGirder,
             sprHHTelepMask, sprSwitch, sprParachute, sprTarget, sprRopeNode,
             sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
 {$IFDEF USE_TOUCH_INTERFACE}
-            sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight, sprBackjump, sprForwardjump,
+            sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight,
+            sprBackjump, sprForwardjump, sprPauseButton,
 {$ENDIF}
             sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
             sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
@@ -424,10 +424,10 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TDirtyTag = packed array of array of byte;
 
 	TOnScreenWidget = record
-		x, y: LongInt;			 	// graphical coordinates
-		hOffset, width: LongInt;	// horizontal active region
-		vOffset, height: LongInt;	// vertical active region
-		end;
+        x, y: LongInt;			 	// graphical coordinates
+        hOffset, width: LongInt;	// horizontal active region
+        vOffset, height: LongInt;	// vertical active region
+        end;
 
 implementation
 

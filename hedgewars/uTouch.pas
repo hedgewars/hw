@@ -153,6 +153,11 @@ case pointerCount of
                 backspaceKey:= true;
                 exit;
             end;
+            if isOnRect(pauseButton, finger^) then
+            begin
+                isPaused:= not isPaused;
+                exit;
+            end;
             moveCursor:= not bShowAmmoMenu;
         end;
         2:

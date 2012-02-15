@@ -80,7 +80,7 @@ var
     grp: TCapGroup;
     offset: LongInt;
 begin
-{$IFDEF MOBILE}
+{$IFDEF USE_TOUCH_INTERFACE}
     offset:= 48;
 {$ELSE}
     offset:= 8;
