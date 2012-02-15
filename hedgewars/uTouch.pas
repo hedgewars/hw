@@ -63,7 +63,8 @@ procedure convertToFingerCoord(var x,y: hwFloat; oldX, oldY: hwFloat);
 function fingerHasMoved(finger: Touch_Finger): boolean;
 function calculateDelta(finger1, finger2: Touch_Finger): hwFloat;
 function getSecondFinger(finger: Touch_Finger): PTouch_Finger;
-function isOnRect(x,y,w,h: LongInt; finger: Touch_Finger): boolean;
+function isOnRect(widget: TOnScreenWidget; finger: Touch_Finger): boolean;
+function isOnRect(rect: TSDL_Rect; finger: Touch_Finger): boolean;
 procedure printFinger(finger: Touch_Finger);
 implementation
 
@@ -111,43 +112,43 @@ case pointerCount of
                 exit;
             end;
 
-            if isOnRect(fireButtonX, fireButtonY, fireButtonW, fireButtonH, finger^) then
+            if isOnRect(fireButton, finger^) then
             begin
                 stopFiring:= false;
                 spaceKey:= true;
                 exit;
             end;
-            if isOnRect(arrowLeftX, arrowLeftY, arrowLeftW, arrowLeftH, finger^) then
+            if isOnRect(arrowLeft, finger^) then
             begin
                 leftKey:= true;
                 walkingLeft := true;
                 exit;
             end;
-            if isOnRect(arrowRightX, arrowRightY, arrowRightW, arrowRightH, finger^) then
+            if isOnRect(arrowRight, finger^) then
             begin
                 rightKey:= true;
                 walkingRight:= true;
                 exit;
             end;
-            if isOnRect(arrowUpX, arrowUpY, arrowUpW, arrowUpH, finger^) then
+            if isOnRect(arrowUp, finger^) then
             begin
                 upKey:= true;
                 aimingUp:= true;
                 exit;
             end;
-            if isOnRect(arrowDownX, arrowDownY, arrowUpW, arrowUpH, finger^) then
+            if isOnRect(arrowDown, finger^) then
             begin
                 downKey:= true;
                 aimingDown:= true;
                 exit;
             end;
 
-            if isOnRect(backjumpX, backjumpY, backjumpW, backjumpH, finger^) then
+            if isOnRect(backjump, finger^) then
             begin
                 enterKey:= true;
                 exit;
             end;
-            if isOnRect(forwardjumpX, forwardjumpY, forwardjumpW, forwardjumpH, finger^) then
+            if isOnRect(forwardjump, finger^) then
             begin
                 backspaceKey:= true;
                 exit;
@@ -267,7 +268,7 @@ timeSinceClick:= SDL_GetTicks;
 
 if bShowAmmoMenu then
     begin 
-    if isOnRect(AmmoRect.x, AmmoRect.y, AmmoRect.w, AmmoRect.h, finger) then
+    if isOnRect(AmmoRect, finger) then
         begin
         CursorPoint.X:= finger.x;
         CursorPoint.Y:= finger.y;
@@ -549,12 +550,25 @@ begin
         getSecondFinger := @fingers[0];
 end;
 
-function isOnRect(x,y,w,h: LongInt; finger: Touch_Finger): boolean;
+function isOnRect(rect: TSDL_Rect; finger: Touch_Finger): boolean;
+var widget: TOnScreenWidget;
 begin
-isOnRect:= (finger.x > x)   and
-           (finger.x < x+w) and
-           (cScreenHeight - finger.y > y)   and
-           (cScreenHeight - finger.y < (y+h));
+	widget.x:= rect.x;
+	widget.y:= rect.y;
+	widget.width:= rect.width;
+	widget.height:= rect.height;
+	widget.hOffset:= 0;
+	widget.vOffset:= 0;
+	exit(isOnRect(widget, finger));
+end;
+
+function isOnRect(widget: TOnScreenWidget; finger: Touch_Finger): boolean;
+begin
+with widget do
+	isOnRect:= (finger.x > x + hOffset)   and
+               (finger.x < x + w + hOffset) and
+               (cScreenHeight - finger.y > y + vOffset)   and
+               (cScreenHeight - finger.y < y + h + vOffset));
 end;
 
 procedure printFinger(finger: Touch_Finger);

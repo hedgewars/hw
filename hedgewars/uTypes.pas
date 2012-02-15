@@ -423,6 +423,11 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TPreview  = packed array[0..127, 0..31] of byte;
     TDirtyTag = packed array of array of byte;
 
+	TOnScreenWidget = record
+		x, y: LongInt;			 	// graphical coordinates
+		hOffset, width: LongInt;	// horizontal active region
+		vOffset, height: LongInt;	// vertical active region
+		end;
 
 implementation
 

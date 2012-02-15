@@ -211,40 +211,56 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}
 //positioning of the buttons
 buttonScale:= 1.5/cDefaultZoomLevel;
-firebuttonX:= (cScreenWidth shr 1) - Round(spritesData[sprFireButton].Texture^.h * buttonScale);
-firebuttonY:= -Round(spritesData[sprFireButton].Texture^.h* buttonScale) + cScreenHeight;
-firebuttonW:= Round(spritesData[sprFireButton].Texture^.w * buttonScale);
-firebuttonH:= Round(spritesData[sprFireButton].Texture^.h * buttonScale);
 
-backjumpX:= (cScreenWidth shr 1) - Round(spritesData[sprbackjump].Texture^.h * 2 * buttonScale);
-backjumpY:= -Round(spritesData[sprbackjump].Texture^.h * 1.2 *  buttonScale) + cScreenHeight;
-backjumpW:= Round(spritesData[sprbackjump].Texture^.w * buttonScale);
-backjumpH:= Round(spritesData[sprbackjump].Texture^.h * buttonScale);
+//TODO: add sensible hOffset and vOffset values
+firebutton.x:= (cScreenWidth shr 1) - Round(spritesData[sprFireButton].Texture^.h * buttonScale);
+firebutton.y:= -Round(spritesData[sprFireButton].Texture^.h* buttonScale) + cScreenHeight;
+firebutton.width:= Round(spritesData[sprFireButton].Texture^.w * buttonScale);
+firebutton.height:= Round(spritesData[sprFireButton].Texture^.h * buttonScale);
+firebutton.hOffset:= 0;
+firebutton.vOffset:= 0;
 
-forwardjumpX:= (cScreenWidth shr 1) - Round(spritesData[sprforwardjump].Texture^.h * 1.2 * buttonScale);
-forwardjumpY:= -Round(spritesData[sprforwardjump].Texture^.h * 2 * buttonScale) + cScreenHeight;
-forwardjumpW:= Round(spritesData[sprforwardjump].Texture^.w * buttonScale);
-forwardjumpH:= Round(spritesData[sprforwardjump].Texture^.h * buttonScale);
+backjump.x:= (cScreenWidth shr 1) - Round(spritesData[sprbackjump].Texture^.h * 2 * buttonScale);
+backjump.y:= -Round(spritesData[sprbackjump].Texture^.h * 1.2 *  buttonScale) + cScreenHeight;
+backjump.width:= Round(spritesData[sprbackjump].Texture^.w * buttonScale);
+backjump.height:= Round(spritesData[sprbackjump].Texture^.h * buttonScale);
+backjump.hOffset:= 0;
+backjump.vOffset:= 0;
 
-arrowLeftX:= -(cScreenWidth shr 1);
-arrowLeftY:= -Round(spritesData[sprArrowLeft].Texture^.h*buttonScale) + cScreenHeight  - Round(spritesData[sprArrowLeft].Texture^.h*buttonScale);
-arrowLeftW:= Round(spritesData[sprArrowLeft].Texture^.h * buttonScale);
-arrowLeftH:= Round(spritesData[sprArrowLeft].Texture^.h * buttonScale);
+forwardjump.x:= (cScreenWidth shr 1) - Round(spritesData[sprforwardjump].Texture^.h * 1.2 * buttonScale);
+forwardjump.y:= -Round(spritesData[sprforwardjump].Texture^.h * 2 * buttonScale) + cScreenHeight;
+forwardjump.width:= Round(spritesData[sprforwardjump].Texture^.w * buttonScale);
+forwardjump.height:= Round(spritesData[sprforwardjump].Texture^.h * buttonScale);
+forwardjump.hOffset:= 0;
+forwardjump.vOffset:= 0;
 
-arrowRightX:= -(cScreenWidth shr 1)+ Round(spritesData[sprArrowUp].Texture^.h * buttonScale *2);
-arrowRightY:= -Round(spritesData[sprArrowRight].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprArrowRight].Texture^.h*buttonScale);
-arrowRightW:= Round(spritesData[sprArrowRight].Texture^.w * buttonScale);
-arrowRightH:= Round(spritesData[sprArrowRight].Texture^.h * buttonScale);
+arrowLeft.x:= -(cScreenWidth shr 1);
+arrowLeft.y:= -Round(spritesData[sprArrowLeft].Texture^.h*buttonScale) + cScreenHeight  - Round(spritesData[sprArrowLeft].Texture^.h*buttonScale);
+arrowLeft.width:= Round(spritesData[sprArrowLeft].Texture^.h * buttonScale);
+arrowLeft.height:= Round(spritesData[sprArrowLeft].Texture^.h * buttonScale);
+arrowLeft.hOffset:= 0;
+arrowLeft.vOffset:= 0;
 
-arrowUpX:= -(cScreenWidth shr 1) + Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
-arrowUpY:= -Round(spritesData[sprArrowUp].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprArrowUp].Texture^.h*buttonScale*2);
-arrowUpW:= Round(spritesData[sprArrowUp].Texture^.w * buttonScale);
-arrowUpH:= Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
+arrowRight.x:= -(cScreenWidth shr 1)+ Round(spritesData[sprArrowUp].Texture^.h * buttonScale *2);
+arrowRight.y:= -Round(spritesData[sprArrowRight].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprArrowRight].Texture^.h*buttonScale);
+arrowRight.width:= Round(spritesData[sprArrowRight].Texture^.w * buttonScale);
+arrowRight.height:= Round(spritesData[sprArrowRight].Texture^.h * buttonScale);
+arrowRight.hOffset:= 0;
+arrowRight.vOffset:= 0;
 
-arrowDownX:= -(cScreenWidth shr 1) + Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
-arrowDownY:= -Round(spritesData[sprArrowDown].Texture^.h*buttonscale) + cScreenHeight;
-arrowDownW:= Round(spritesData[sprArrowDown].Texture^.w * buttonScale);
-arrowDownH:= Round(spritesData[sprArrowDown].Texture^.h * buttonScale);
+arrowUp.x:= -(cScreenWidth shr 1) + Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
+arrowUp.y:= -Round(spritesData[sprArrowUp].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprArrowUp].Texture^.h*buttonScale*2);
+arrowUp.width:= Round(spritesData[sprArrowUp].Texture^.w * buttonScale);
+arrowUp.height:= Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
+arrowUp.hOffset:= 0;
+arrowUp.vOffset:= 0;
+
+arrowDown.x:= -(cScreenWidth shr 1) + Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
+arrowDown.y:= -Round(spritesData[sprArrowDown].Texture^.h*buttonscale) + cScreenHeight;
+arrowDown.width:= Round(spritesData[sprArrowDown].Texture^.w * buttonScale);
+arrowDown.height:= Round(spritesData[sprArrowDown].Texture^.h * buttonScale);
+arrowDown.hOffset:= 0;
+arrowDown.vOffset:= 0;
 {$ENDIF}
 end;
 
@@ -1095,14 +1111,14 @@ DrawCaptions;
 
 {$IFDEF USE_TOUCH_INTERFACE}
 // Draw buttons Related to the Touch interface
-DrawTexture(arrowLeftX, arrowLeftY,spritesData[sprArrowLeft].Texture, buttonScale);
-DrawTexture(arrowRightX, arrowRightY,spritesData[sprArrowRight].Texture, buttonScale);
-DrawTexture(arrowUpX, arrowUpY,spritesData[sprArrowUp].Texture, buttonScale);
-DrawTexture(arrowDownX, arrowDownY,spritesData[sprArrowDown].Texture, buttonScale);
+DrawTexture(arrowLeft.x, arrowLeft.y, spritesData[sprArrowLeft].Texture, buttonScale);
+DrawTexture(arrowRight.x, arrowRight.y, spritesData[sprArrowRight].Texture, buttonScale);
+DrawTexture(arrowUp.x, arrowUp.y, spritesData[sprArrowUp].Texture, buttonScale);
+DrawTexture(arrowDown.x, arrowDown.y, spritesData[sprArrowDown].Texture, buttonScale);
 
-DrawTexture(fireButtonX, firebuttonY, spritesData[sprFireButton].Texture, buttonScale);
-DrawTexture(backjumpX, backjumpY, spritesData[sprBackjump].Texture, buttonScale);
-DrawTexture(forwardjumpX, forwardjumpY, spritesData[sprForwardjump].Texture, buttonScale);
+DrawTexture(fireButton.x, firebutton.y, spritesData[sprFireButton].Texture, buttonScale);
+DrawTexture(backjump.x, backjump.y, spritesData[sprBackjump].Texture, buttonScale);
+DrawTexture(forwardjump.x, forwardjump.y, spritesData[sprForwardjump].Texture, buttonScale);
 {$ENDIF}
 
 // Teams Healths
