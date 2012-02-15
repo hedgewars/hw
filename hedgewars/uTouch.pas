@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses sysutils, math, uConsole, uVariables, SDLh, uFloat, uConsts, uIO, GLUnit;
+uses sysutils, math, uConsole, uVariables, SDLh, uFloat, uConsts, uIO, GLUnit, uTypes;
 
 // TODO: this type should be Int64
 // TODO: this type should be named TSDL_FingerId
@@ -553,22 +553,22 @@ end;
 function isOnRect(rect: TSDL_Rect; finger: Touch_Finger): boolean;
 var widget: TOnScreenWidget;
 begin
-	widget.x:= rect.x;
-	widget.y:= rect.y;
-	widget.width:= rect.width;
-	widget.height:= rect.height;
-	widget.hOffset:= 0;
-	widget.vOffset:= 0;
-	exit(isOnRect(widget, finger));
+    widget.x:= rect.x;
+    widget.y:= rect.y;
+    widget.width:= rect.w;
+    widget.height:= rect.h;
+    widget.hOffset:= 0;
+    widget.vOffset:= 0;
+    exit(isOnRect(widget, finger));
 end;
 
 function isOnRect(widget: TOnScreenWidget; finger: Touch_Finger): boolean;
 begin
 with widget do
-	isOnRect:= (finger.x > x + hOffset)   and
-               (finger.x < x + w + hOffset) and
+    isOnRect:= (finger.x > x + hOffset)   and
+               (finger.x < x + width + hOffset) and
                (cScreenHeight - finger.y > y + vOffset)   and
-               (cScreenHeight - finger.y < y + h + vOffset));
+               (cScreenHeight - finger.y < y + height + vOffset);
 end;
 
 procedure printFinger(finger: Touch_Finger);
