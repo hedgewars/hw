@@ -224,7 +224,7 @@ aiming:= false;
 stopFiring:= true;
 finger:= updateFinger(x,y,0,0,pointerId);
 //Check for onTouchClick event
-if ((SDL_GetTicks - finger^.timeSinceDown) < clickTime) AND not(fingerHasMoved(finger^)) then
+if ((RealTicks - finger^.timeSinceDown) < clickTime) AND not(fingerHasMoved(finger^)) then
     onTouchClick(finger^);
 
 deleteFinger(pointerId);
@@ -260,7 +260,7 @@ end;
 
 procedure onTouchClick(finger: Touch_Finger);
 begin
-if (SDL_GetTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, finger.Y-yTouchClick) < _30) then
+if (RealTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, finger.Y-yTouchClick) < _30) then
     begin
     onTouchDoubleClick(finger);
     timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds) 
@@ -269,7 +269,7 @@ if (SDL_GetTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, fi
 
 xTouchClick:= finger.x;
 yTouchClick:= finger.y;
-timeSinceClick:= SDL_GetTicks;
+timeSinceClick:= RealTicks;
 
 if bShowAmmoMenu then
     begin 
@@ -317,7 +317,7 @@ begin
     fingers[pointerCount].y := yCursor;
     fingers[pointerCount].dx := 0;
     fingers[pointerCount].dy := 0;
-    fingers[pointerCount].timeSinceDown:= SDL_GetTicks;
+    fingers[pointerCount].timeSinceDown:= RealTicks;
  
     addFinger:= @fingers[pointerCount];
     inc(pointerCount);
