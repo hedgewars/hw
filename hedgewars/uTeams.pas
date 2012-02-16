@@ -190,7 +190,6 @@ if (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoCrosshair) = 0
         begin
         animateWidget(@arrowUp, true, true);
         animateWidget(@arrowDown, true, true);
-        animateWidget(@arrowRight, false, true);
         end;
     end
 else
@@ -198,7 +197,6 @@ else
         begin
         animateWidget(@arrowUp, true, false);
         animateWidget(@arrowDown, true, false);
-        animateWidget(@arrowRight, false, true);
         end;
 {$ENDIF}
 AmmoMenuInvalidated:= true;
