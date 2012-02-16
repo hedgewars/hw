@@ -618,6 +618,24 @@ else  // hide ammo menu
                 SetWeapon(Ammo^[Slot, Pos].AmmoType);
                 bSelected:= false;
                 FreeWeaponTooltip;
+{$IFDEF USE_TOUCH_INTERFACE}//show the aiming buttons + animation
+                if (Ammo^[Slot, Pos].Propz and ammoprop_NoCrosshair) = 0 then
+                    begin
+                    if not(arrowUp.show) then
+                        begin
+                        animateWidget(@arrowUp, true, true);
+                        animateWidget(@arrowDown, true, true);
+                        animateWidget(@arrowRight, false, true);
+                        end;
+                    end
+                else
+                    if arrowUp.show then
+                        begin
+                        animateWidget(@arrowUp, true, false);
+                        animateWidget(@arrowDown, true, false);
+                        animateWidget(@arrowRight, false, true);
+                        end;
+{$ENDIF}
 
                 exit
                 end;
