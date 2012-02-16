@@ -206,11 +206,12 @@ handleCmd_inRoom ["EM", msg] = do
 
 
 handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
+    clId <- asks fst
     cl <- thisClient
     rm <- thisRoom
     chans <- roomClientsChans
 
-    if isMaster cl && (isJust $ gameInfo rm) then
+    if isMaster cl && isCorrect && (isJust $ gameInfo rm) then
         return $
             SaveReplay
             : ModifyRoom
@@ -222,7 +223,7 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
             : UnreadyRoomClients
             : answerRemovedTeams chans rm
         else
-        return []
+        return [RemoveClientTeams clId]
     where
         answerRemovedTeams chans = map (\t -> AnswerClients chans ["REMOVE_TEAM", t]) . leftTeams . fromJust . gameInfo
         isCorrect = correctly == "1"
