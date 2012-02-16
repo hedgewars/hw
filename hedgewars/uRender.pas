@@ -451,6 +451,7 @@ end;
 procedure DrawScreenWidget(widget: POnScreenWidget);
 var alpha: byte = $FF;
 begin
+{$IFDEF USE_TOUCH_INTERFACE}
 with widget^ do
     begin
     if (fadeAnimStart <> 0) then
@@ -485,6 +486,7 @@ with widget^ do
         Tint($FF, $FF, $FF, $FF);
         end;
     end;
+{$ENDIF}
 end;
 
 procedure Tint(r, g, b, a: Byte); inline;
