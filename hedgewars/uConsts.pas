@@ -296,6 +296,11 @@ const
     AMSlotSize = 32;
 {$ENDIF}
     AMSlotPadding = (AMSlotSize - 32) shr 1;
+
+{$IFDEF USE_TOUCH_INTERFACE}
+    FADE_ANIM_TIME = 500;
+    MOVE_ANIM_TIME = 500;
+{$ENDIF}
 implementation
 
 end.
