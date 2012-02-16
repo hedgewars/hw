@@ -245,8 +245,8 @@ with arrowLeft do
     begin
     show:= true;
     sprite:= sprArrowLeft;
-    x:= -(cScreenWidth shr 1);
-    y:= -Round(spritesData[sprite].Texture^.h*buttonScale) + cScreenHeight  - Round(spritesData[sprite].Texture^.h*buttonScale);
+    x:= -(cScreenWidth shr 1) + Round(spritesData[sprite].Texture^.h*buttonScale * 0.25);
+    y:= -Round(spritesData[sprite].Texture^.h*buttonScale) + cScreenHeight  - Round(spritesData[sprite].Texture^.h*buttonScale *0.5);
     width:= Round(spritesData[sprite].Texture^.h * buttonScale);
     height:= Round(spritesData[sprite].Texture^.h * buttonScale);
     hOffset:= 0;
@@ -256,27 +256,20 @@ with arrowRight do
     begin
     show:= true;
     sprite:= sprArrowRight;
-    x:= -(cScreenWidth shr 1)+ Round(spritesData[sprite].Texture^.h * buttonScale);
-    y:= -Round(spritesData[sprite].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprite].Texture^.h*buttonScale);
+    x:= -(cScreenWidth shr 1) + Round(spritesData[sprite].Texture^.h * buttonScale *1.5);
+    y:= -Round(spritesData[sprite].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprite].Texture^.h*buttonScale * 0.5);
     width:= Round(spritesData[sprite].Texture^.w * buttonScale);
     height:= Round(spritesData[sprite].Texture^.h * buttonScale);
     hOffset:= 0;
     vOffset:= 0;
-    with moveAnim do
-        begin
-        targetToX:= arrowRight.x;
-        targetToY:= arrowRight.y;
-        targetFromX:= arrowRight.x + Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
-        targetFromY:= arrowRight.y;
-        end;
     end;
 
 with arrowUp do
     begin
     show:= false;
     sprite:= sprArrowUp;
-    x:= -(cScreenWidth shr 1) + Round(spritesData[sprite].Texture^.h * buttonScale);
-    y:= arrowRight.y;
+    x:= (cScreenWidth shr 1) - Round(spritesData[sprite].Texture^.w * buttonScale *2);
+    y:= backjump.y -Round(spritesData[sprite].Texture^.h * buttonScale*2.25);
     width:= Round(spritesData[sprite].Texture^.w * buttonScale);
     height:= Round(spritesData[sprite].Texture^.h * buttonScale);
     hOffset:= 0;
@@ -285,8 +278,8 @@ with arrowUp do
          begin
          targetToX:= arrowUp.x;
          targetToY:= arrowUp.y;
-         targetFromX:= arrowUp.x;
-         targetFromY:= -Round(spritesData[sprite].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprite].Texture^.h*buttonScale*2);
+         targetFromX:= arrowUp.x - Round(spritesData[sprite].Texture^.w * buttonScale *0.75);
+         targetFromY:= arrowUp.y;
          end;
     end;
 
@@ -294,18 +287,18 @@ with arrowDown do
     begin
     show:= false;
     sprite:= sprArrowDown;
-    x:= -(cScreenWidth shr 1) + Round(spritesData[sprArrowUp].Texture^.h * buttonScale);
-    y:= arrowRight.y;
-    width:= Round(spritesData[sprArrowDown].Texture^.w * buttonScale);
-    height:= Round(spritesData[sprArrowDown].Texture^.h * buttonScale);
+    x:= (cScreenWidth shr 1) - Round(spritesData[sprite].Texture^.w * buttonScale * 2);
+    y:= backjump.y -Round(spritesData[sprite].Texture^.h * buttonScale *2.25);
+    width:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    height:= Round(spritesData[sprite].Texture^.h * buttonScale);
     hOffset:= 0;
     vOffset:= 0;
     with moveAnim do
         begin
         targetToX:= arrowDown.x;
         targetToY:= arrowDown.y;
-        targetFromX:= arrowDown.x;
-        targetFromY:= -Round(spritesData[sprArrowDown].Texture^.h*buttonscale) + cScreenHeight;
+        targetFromX:= arrowDown.x + Round(spritesData[sprite].Texture^.w * buttonScale *0.75);
+        targetFromY:= arrowDown.y;
         end;
     end;
 
@@ -625,7 +618,6 @@ else  // hide ammo menu
                         begin
                         animateWidget(@arrowUp, true, true);
                         animateWidget(@arrowDown, true, true);
-                        animateWidget(@arrowRight, false, true);
                         end;
                     end
                 else
@@ -633,7 +625,6 @@ else  // hide ammo menu
                         begin
                         animateWidget(@arrowUp, true, false);
                         animateWidget(@arrowDown, true, false);
-                        animateWidget(@arrowRight, false, true);
                         end;
 {$ENDIF}
 
