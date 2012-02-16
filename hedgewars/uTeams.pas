@@ -20,7 +20,7 @@
 
 unit uTeams;
 interface
-uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uTypes;
+uses uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uTypes, uWorld;
 
 procedure initModule;
 procedure freeModule;
@@ -183,7 +183,24 @@ repeat
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
 CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
-
+{$IFDEF USE_TOUCH_INTERFACE}
+if (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
+    begin
+    if not(arrowUp.show) then
+        begin
+        animateWidget(@arrowUp, true, true);
+        animateWidget(@arrowDown, true, true);
+        animateWidget(@arrowRight, false, true);
+        end;
+    end
+else
+    if arrowUp.show then
+        begin
+        animateWidget(@arrowUp, true, false);
+        animateWidget(@arrowDown, true, false);
+        animateWidget(@arrowRight, false, true);
+        end;
+{$ENDIF}
 AmmoMenuInvalidated:= true;
 end;
 
