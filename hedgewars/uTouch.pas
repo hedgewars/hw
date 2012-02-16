@@ -24,57 +24,44 @@ interface
 
 uses sysutils, math, uConsole, uVariables, SDLh, uFloat, uConsts, uIO, GLUnit, uTypes;
 
-// TODO: this type should be Int64
-// TODO: this type should be named TSDL_FingerId
-type SDL_FingerId = LongInt;
-
-type
-    PTouch_Finger = ^Touch_Finger;
-    Touch_Finger = record
-        id                       : SDL_FingerId;
-        x,y                      : LongInt;
-        dx,dy                    : LongInt;
-        historicalX, historicalY : LongInt;
-        timeSinceDown            : Longword;
-        end;
 
 procedure initModule;
 
 procedure ProcessTouch;
-procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
-procedure onTouchMotion(x,y: Longword; dx,dy: LongInt; pointerId: SDL_FingerId);
-procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
+procedure onTouchDown(x,y: Longword; pointerId: TSDL_FingerId);
+procedure onTouchMotion(x,y: Longword; dx,dy: LongInt; pointerId: TSDL_FingerId);
+procedure onTouchUp(x,y: Longword; pointerId: TSDL_FingerId);
 function convertToCursorX(x: LongInt): LongInt;
 function convertToCursorY(y: LongInt): LongInt;
 function convertToCursorDeltaX(x: LongInt): LongInt;
 function convertToCursorDeltaY(y: LongInt): LongInt;
-function addFinger(x,y: Longword; id: SDL_FingerId): PTouch_Finger;
-function updateFinger(x,y,dx,dy: Longword; id: SDL_FingerId): PTouch_Finger;
-procedure deleteFinger(id: SDL_FingerId);
-procedure onTouchClick(finger: Touch_Finger);
-procedure onTouchDoubleClick(finger: Touch_Finger);
+function addFinger(x,y: Longword; id: TSDL_FingerId): PTouch_Data;
+function updateFinger(x,y,dx,dy: Longword; id: TSDL_FingerId): PTouch_Data;
+procedure deleteFinger(id: TSDL_FingerId);
+procedure onTouchClick(finger: TTouch_Data);
+procedure onTouchDoubleClick(finger: TTouch_Data);
 
-function findFinger(id: SDL_FingerId): PTouch_Finger;
-procedure aim(finger: Touch_Finger);
-function isOnCrosshair(finger: Touch_Finger): boolean;
-function isOnCurrentHog(finger: Touch_Finger): boolean;
-procedure convertToWorldCoord(var x,y: hwFloat; finger: Touch_Finger);
+function findFinger(id: TSDL_FingerId): PTouch_Data;
+procedure aim(finger: TTouch_Data);
+function isOnCrosshair(finger: TTouch_Data): boolean;
+function isOnCurrentHog(finger: TTouch_Data): boolean;
+procedure convertToWorldCoord(var x,y: hwFloat; finger: TTouch_Data);
 procedure convertToFingerCoord(var x,y: hwFloat; oldX, oldY: hwFloat);
-function fingerHasMoved(finger: Touch_Finger): boolean;
-function calculateDelta(finger1, finger2: Touch_Finger): hwFloat;
-function getSecondFinger(finger: Touch_Finger): PTouch_Finger;
-function isOnRect(widget: TOnScreenWidget; finger: Touch_Finger): boolean;
-function isOnRect(rect: TSDL_Rect; finger: Touch_Finger): boolean;
-procedure printFinger(finger: Touch_Finger);
+function fingerHasMoved(finger: TTouch_Data): boolean;
+function calculateDelta(finger1, finger2: TTouch_Data): hwFloat;
+function getSecondFinger(finger: TTouch_Data): PTouch_Data;
+function isOnRect(widget: TOnScreenWidget; finger: TTouch_Data): boolean;
+function isOnRect(rect: TSDL_Rect; finger: TTouch_Data): boolean;
+procedure printFinger(finger: TTouch_Data);
 implementation
 
 const
     clicktime = 200;
-    nilFingerId = High(SDL_FingerId);
+    nilFingerId = High(TSDL_FingerId);
 
 var
     pointerCount : Longword;
-    fingers: array of Touch_Finger;
+    fingers: array of TTouch_Data;
     moveCursor : boolean;
     invertCursor : boolean;
 
@@ -94,9 +81,9 @@ var
     //moving
     stopLeft, stopRight, walkingLeft, walkingRight :  boolean;
 
-procedure onTouchDown(x,y: Longword; pointerId: SDL_FingerId);
+procedure onTouchDown(x,y: Longword; pointerId: TSDL_FingerId);
 var 
-    finger: PTouch_Finger;
+    finger: PTouch_Data;
 begin
 {$IFDEF USE_TOUCH_INTERFACE}
 finger := addFinger(x,y,pointerId);
@@ -172,9 +159,9 @@ case pointerCount of
 {$ENDIF}
 end;
 
-procedure onTouchMotion(x,y: Longword;dx,dy: LongInt; pointerId: SDL_FingerId);
+procedure onTouchMotion(x,y: Longword;dx,dy: LongInt; pointerId: TSDL_FingerId);
 var
-    finger, secondFinger: PTouch_Finger;
+    finger, secondFinger: PTouch_Data;
     currentPinchDelta, zoom : hwFloat;
 begin
 finger:= updateFinger(x,y,dx,dy,pointerId);
@@ -214,9 +201,9 @@ if pointerCount = 2 then
 
 end;
 
-procedure onTouchUp(x,y: Longword; pointerId: SDL_FingerId);
+procedure onTouchUp(x,y: Longword; pointerId: TSDL_FingerId);
 var
-    finger: PTouch_Finger;
+    finger: PTouch_Data;
 begin
 x := x;
 y := y;
@@ -253,12 +240,12 @@ if aimingDown then
     end;
 end;
 
-procedure onTouchDoubleClick(finger: Touch_Finger);
+procedure onTouchDoubleClick(finger: TTouch_Data);
 begin
 finger := finger;//avoid compiler hint
 end;
 
-procedure onTouchClick(finger: Touch_Finger);
+procedure onTouchClick(finger: TTouch_Data);
 begin
 if (RealTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, finger.Y-yTouchClick) < _30) then
     begin
@@ -292,7 +279,7 @@ if isOnCurrentHog(finger) then
     end;
 end;
 
-function addFinger(x,y: Longword; id: SDL_FingerId): PTouch_Finger;
+function addFinger(x,y: Longword; id: TSDL_FingerId): PTouch_Data;
 var 
     xCursor, yCursor, index : LongInt;
 begin
@@ -323,7 +310,7 @@ begin
     inc(pointerCount);
 end;
 
-function updateFinger(x,y,dx,dy: Longword; id: SDL_FingerId): PTouch_Finger;
+function updateFinger(x,y,dx,dy: Longword; id: TSDL_FingerId): PTouch_Data;
 begin
    updateFinger:= findFinger(id);
 
@@ -333,7 +320,7 @@ begin
    updateFinger^.dy:= convertToCursorDeltaY(dy);
 end;
 
-procedure deleteFinger(id: SDL_FingerId);
+procedure deleteFinger(id: TSDL_FingerId);
 var
     index : Longword;
 begin
@@ -444,7 +431,7 @@ if stopLeft then
     
 end;
 
-function findFinger(id: SDL_FingerId): PTouch_Finger;
+function findFinger(id: TSDL_FingerId): PTouch_Data;
 var
     index: LongWord;
 begin
@@ -456,7 +443,7 @@ begin
             end;
 end;
 
-procedure aim(finger: Touch_Finger);
+procedure aim(finger: TTouch_Data);
 var 
     hogX, hogY, touchX, touchY, deltaX, deltaY, tmpAngle: hwFloat;
 begin
@@ -476,10 +463,10 @@ begin
         end; //if CurrentHedgehog^.Gear <> nil
 end;
 
-//These 4 convertToCursor functions convert xy coords from the SDL coordinate system to our CursorPoint coor system
-// the SDL coordinate system goes from 0 to 32768 on the x axis and 0 to 32768 on the y axis, (0,0) being top left.
-// the CursorPoint coordinate system goes from -cScreenWidth/2 to cScreenWidth/2 on the x axis 
-//  and 0 to cScreenHeight on the x axis, (-cScreenWidth, cScreenHeight) being top left,
+// These 4 convertToCursor functions convert xy coords from the SDL coordinate system to our CursorPoint coor system:
+// - the SDL coordinate system goes from 0 to 32768 on the x axis and 0 to 32768 on the y axis, (0,0) being top left;
+// - the CursorPoint coordinate system goes from -cScreenWidth/2 to cScreenWidth/2 on the x axis
+//   and 0 to cScreenHeight on the x axis, (-cScreenWidth, cScreenHeight) being top left.
 function convertToCursorX(x: LongInt): LongInt;
 begin
     convertToCursorX := round((x/32768)*cScreenWidth) - (cScreenWidth shr 1);
@@ -500,7 +487,7 @@ begin
     convertToCursorDeltaY := round(y/32768*cScreenHeight)
 end;
 
-function isOnCrosshair(finger: Touch_Finger): boolean;
+function isOnCrosshair(finger: TTouch_Data): boolean;
 var
     x,y : hwFloat;
 begin
@@ -510,7 +497,7 @@ begin
     isOnCrosshair:= Distance(int2hwFloat(finger.x)-x, int2hwFloat(finger.y)-y) < _50;
 end;
 
-function isOnCurrentHog(finger: Touch_Finger): boolean;
+function isOnCurrentHog(finger: TTouch_Data): boolean;
 var
     x,y : hwFloat;
 begin
@@ -526,7 +513,7 @@ begin
     y := int2hwFloat(cScreenHeight) - (oldY + int2hwFloat(WorldDy));
 end;
 
-procedure convertToWorldCoord(var x,y: hwFloat; finger: Touch_Finger);
+procedure convertToWorldCoord(var x,y: hwFloat; finger: TTouch_Data);
 begin
 //if x <> nil then 
     x := int2hwFloat((finger.x-WorldDx));
@@ -535,19 +522,19 @@ begin
 end;
 
 //Method to calculate the distance this finger has moved since the downEvent
-function fingerHasMoved(finger: Touch_Finger): boolean;
+function fingerHasMoved(finger: TTouch_Data): boolean;
 begin
     fingerHasMoved := trunc(sqrt(Power(finger.X-finger.historicalX,2) + Power(finger.y-finger.historicalY, 2))) > 330;
 end;
 
-function calculateDelta(finger1, finger2: Touch_Finger): hwFloat; inline;
+function calculateDelta(finger1, finger2: TTouch_Data): hwFloat; inline;
 begin
     calculateDelta := DistanceI(finger2.x-finger1.x, finger2.y-finger1.y);
 end;
 
-// Under the premise that all pointer ids in pointerIds:SDL_FingerId are packed to the far left.
+// Under the premise that all pointer ids in pointerIds:TSDL_FingerId are packed to the far left.
 // If the pointer to be ignored is not pointerIds[0] the second must be there
-function getSecondFinger(finger: Touch_Finger): PTouch_Finger;
+function getSecondFinger(finger: TTouch_Data): PTouch_Data;
 begin
     if fingers[0].id = finger.id then
         getSecondFinger := @fingers[1]
@@ -555,7 +542,7 @@ begin
         getSecondFinger := @fingers[0];
 end;
 
-function isOnRect(rect: TSDL_Rect; finger: Touch_Finger): boolean;
+function isOnRect(rect: TSDL_Rect; finger: TTouch_Data): boolean;
 var widget: TOnScreenWidget;
 begin
     widget.x:= rect.x;
@@ -567,7 +554,7 @@ begin
     exit(isOnRect(widget, finger));
 end;
 
-function isOnRect(widget: TOnScreenWidget; finger: Touch_Finger): boolean;
+function isOnRect(widget: TOnScreenWidget; finger: TTouch_Data): boolean;
 begin
 with widget do
     isOnRect:= (finger.x > x + hOffset)   and
@@ -576,7 +563,7 @@ with widget do
                (cScreenHeight - finger.y < y + height + vOffset);
 end;
 
-procedure printFinger(finger: Touch_Finger);
+procedure printFinger(finger: TTouch_Data);
 begin
     WriteToConsole(Format('id:%d, (%d,%d), (%d,%d), time: %d', [finger.id, finger.x, finger.y, finger.historicalX, finger.historicalY, finger.timeSinceDown]));
 end;
