@@ -307,6 +307,8 @@ type
     PSDL_Renderer = Pointer;
     PSDL_Texture  = Pointer;
     PSDL_GLContext= Pointer;
+    TSDL_FingerId = Int64;
+    TSDL_TouchId  = Int64;
 {$ENDIF}
 
     PSDL_Rect = ^TSDL_Rect;
@@ -472,8 +474,8 @@ type
         type_: LongWord;
         timestamp: LongWord;
         windowId: LongWord;
-        touchId: Int64;
-        fingerId: Int64;
+        touchId: TSDL_TouchId;
+        fingerId: TSDL_FingerId;
         state, padding1, padding2, padding3: Byte;
         x, y: Word;
         dx, dy: SmallInt;
@@ -484,7 +486,7 @@ type
         type_: LongWord;
         timestamp: LongWord;
         windowId: LongWord;
-        touchId: Int64;
+        touchId: TSDL_TouchId;
         state, button, padding1, padding2: Byte;
         end;
 
@@ -492,7 +494,7 @@ type
         type_: LongWord;
         timestamp: LongWord;
         windowId: LongWord;
-        touchId: Int64;
+        touchId: TSDL_TouchId;
         dTheta, dDist, x, y: Single;
         numFingers, padding: Word;
         end;

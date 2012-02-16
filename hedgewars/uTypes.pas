@@ -442,6 +442,15 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         moveAnim: TWidgetMovement;
         end;
 
+    PTouch_Data = ^TTouch_Data;
+    TTouch_Data = record
+        id                       : TSDL_FingerId;
+        x,y                      : LongInt;
+        dx,dy                    : LongInt;
+        historicalX, historicalY : LongInt;
+        timeSinceDown            : Longword;
+        end;
+
 implementation
 
 end.
