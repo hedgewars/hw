@@ -423,10 +423,23 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TPreview  = packed array[0..127, 0..31] of byte;
     TDirtyTag = packed array of array of byte;
 
-	TOnScreenWidget = record
-        x, y: LongInt;			 	// graphical coordinates
-        hOffset, width: LongInt;	// horizontal active region
-        vOffset, height: LongInt;	// vertical active region
+    PWidgetMovement = ^TWidgetMovement;
+    TWidgetMovement = record
+        animate: Boolean;
+        targetFromX, targetFromY: LongInt;
+        targetToX, targetToY: LongInt;
+        startTime: Longword;
+        end;
+
+    POnScreenWidget = ^TOnScreenWidget;
+    TOnScreenWidget = record
+        show: boolean;
+        sprite: TSprite;
+        x, y: LongInt;	                // graphical coordinates
+        hOffset, width: LongInt;        // horizontal active region
+        vOffset, height: LongInt;       // vertical active region
+        fadeAnimStart: Longword;        //time the fade started, 0 means don't fade
+        moveAnim: TWidgetMovement;
         end;
 
 implementation

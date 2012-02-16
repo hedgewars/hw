@@ -42,6 +42,7 @@ procedure DrawFillRect(r: TSDL_Rect);
 procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 procedure DrawCircle(X, Y, Radius, Width: LongInt);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
+procedure DrawScreenWidget(widget: POnScreenWidget);
 procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
 
@@ -447,6 +448,44 @@ begin
     glPopMatrix
 end;
 
+procedure DrawScreenWidget(widget: POnScreenWidget);
+var alpha: byte = $FF;
+begin
+with widget^ do
+    begin
+    if (fadeAnimStart <> 0) then
+        begin
+        if RealTicks > (fadeAnimStart + FADE_ANIM_TIME) then
+            fadeAnimStart:= 0
+        else
+            if show then 
+                alpha:= Byte(trunc((RealTicks - fadeAnimStart)/FADE_ANIM_TIME * $FF))
+            else 
+                alpha:= Byte($FF - trunc((RealTicks - fadeAnimStart)/FADE_ANIM_TIME * $FF));
+        end;
+
+    with moveAnim do
+        if animate then
+            if RealTicks > (startTime + MOVE_ANIM_TIME) then
+                begin
+                startTime:= 0;
+                x:= targetToX;
+                y:= targetToY;
+                end
+            else
+                begin
+                x:= targetFromX + Round((targetToX - targetFromX) * ((RealTicks - startTime) / MOVE_ANIM_TIME));
+                y:= targetFromY + Round((targetToY - targetFromY) * ((RealTicks - startTime) / MOVE_ANIM_TIME));
+                end;
+
+    if show or (fadeAnimStart <> 0) then
+        begin
+        Tint($FF, $FF, $FF, alpha);
+        DrawTexture(x, y, spritesData[sprite].Texture, buttonScale);
+        Tint($FF, $FF, $FF, $FF);
+        end;
+    end;
+end;
 
 procedure Tint(r, g, b, a: Byte); inline;
 const 
