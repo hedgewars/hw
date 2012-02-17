@@ -75,10 +75,8 @@ var
     aiming: boolean;
     aimingUp, aimingDown: boolean; 
     targetAngle: LongInt;
-    stopFiring: boolean;
 
-    //moving
-    stopLeft, stopRight, walkingLeft, walkingRight :  boolean;
+    buttonsDown: Longword;
 
 procedure onTouchDown(x,y: Longword; pointerId: TSDL_FingerId);
 var 
@@ -86,75 +84,86 @@ var
 begin
 {$IFDEF USE_TOUCH_INTERFACE}
 finger := addFinger(x,y,pointerId);
-case pointerCount of
-        1:
+if isOnCrosshair(finger^) then
+begin
+    aiming:= true;
+    aim(finger^);
+    exit;
+end;
+
+inc(buttonsDown);//inc buttonsDown, if we don't see a button down we'll dec it
+if isOnRect(fireButton.active, finger^) then
+    begin
+    spaceKey:= true;
+    moveCursor:= false;
+    finger^.pressedWidget:= @fireButton;
+    exit;
+    end;
+if isOnRect(arrowLeft.active, finger^) then
+    begin
+    leftKey:= true;
+    moveCursor:= false;
+    finger^.pressedWidget:= @arrowLeft;
+    exit;
+    end;
+if isOnRect(arrowRight.active, finger^) then
+    begin
+    rightKey:= true;
+    moveCursor:= false;
+    finger^.pressedWidget:= @arrowRight;
+    exit;
+    end;
+if isOnRect(arrowUp.active, finger^) then
+     begin
+     upKey:= true;
+     aimingUp:= true;
+     moveCursor:= false;
+     finger^.pressedWidget:= @arrowUp;
+     exit;
+     end;
+if isOnRect(arrowDown.active, finger^) then
+     begin
+     downKey:= true;
+     aimingDown:= true;
+     moveCursor:= false;
+     finger^.pressedWidget:= @arrowDown;
+     exit;
+     end;
+
+if isOnRect(backjump.active, finger^) then
+     begin
+     enterKey:= true;
+     moveCursor:= false;
+     finger^.pressedWidget:= @backjump;
+     exit;
+     end;
+if isOnRect(forwardjump.active, finger^) then
+     begin
+     backspaceKey:= true;
+     moveCursor:= false;
+     finger^.pressedWidget:= @forwardjump;
+     exit;
+     end;
+if isOnRect(pauseButton.active, finger^) then
+     begin
+     isPaused:= not isPaused;
+     moveCursor:= false;
+     finger^.pressedWidget:= @pauseButton;
+     exit;
+     end;
+
+dec(buttonsDown);//no buttonsDown, undo the inc() above
+if buttonsDown = 0 then
+    begin
+    moveCursor:= true;
+    if pointerCount = 2 then
         begin
-            moveCursor:= false;
-
-            if isOnCrosshair(finger^) then
-            begin
-                aiming:= true;
-                aim(finger^);
-                exit;
-            end;
-
-            if isOnRect(fireButton.active, finger^) then
-            begin
-                stopFiring:= false;
-                spaceKey:= true;
-                exit;
-            end;
-            if isOnRect(arrowLeft.active, finger^) then
-            begin
-                leftKey:= true;
-                walkingLeft := true;
-                exit;
-            end;
-            if isOnRect(arrowRight.active, finger^) then
-            begin
-                rightKey:= true;
-                walkingRight:= true;
-                exit;
-            end;
-            if isOnRect(arrowUp.active, finger^) then
-            begin
-                upKey:= true;
-                aimingUp:= true;
-                exit;
-            end;
-            if isOnRect(arrowDown.active, finger^) then
-            begin
-                downKey:= true;
-                aimingDown:= true;
-                exit;
-            end;
-
-            if isOnRect(backjump.active, finger^) then
-            begin
-                enterKey:= true;
-                exit;
-            end;
-            if isOnRect(forwardjump.active, finger^) then
-            begin
-                backspaceKey:= true;
-                exit;
-            end;
-            if isOnRect(pauseButton.active, finger^) then
-            begin
-                isPaused:= not isPaused;
-                exit;
-            end;
-            moveCursor:= not bShowAmmoMenu;
-        end;
-        2:
-        begin
-            aiming:= false;
-            stopFiring:= true;
-            moveCursor:= false;
-            pinchSize := calculateDelta(finger^, getSecondFinger(finger^)^);
-            baseZoomValue := ZoomValue
-        end;
-    end;//end case pointerCount of
+        aiming:= false;
+        moveCursor:= false;
+        pinchSize := calculateDelta(finger^, getSecondFinger(finger^)^);
+        baseZoomValue := ZoomValue
+    end;
+end;
 {$ENDIF}
 end;
 
@@ -186,7 +195,7 @@ if aiming then
         exit
     end;
 
-if pointerCount = 2 then
+if (buttonsDown = 0) and (pointerCount = 2) then
     begin
        secondFinger := getSecondFinger(finger^);
        currentPinchDelta := calculateDelta(finger^, secondFinger^) - pinchSize;
@@ -203,40 +212,45 @@ end;
 procedure onTouchUp(x,y: Longword; pointerId: TSDL_FingerId);
 var
     finger: PTouch_Data;
+    widget: POnScreenWidget;
 begin
 x := x;
 y := y;
 aiming:= false;
-stopFiring:= true;
 finger:= updateFinger(x,y,0,0,pointerId);
 //Check for onTouchClick event
 if ((RealTicks - finger^.timeSinceDown) < clickTime) AND not(fingerHasMoved(finger^)) then
     onTouchClick(finger^);
+WriteToConsole(Format('%d', [buttonsDown]));
 
+widget:= finger^.pressedWidget;
+if (buttonsDown > 0) and (widget <> nil) then
+    begin
+    dec(buttonsDown);
+    
+    if widget = @arrowLeft then
+        leftKey:= false;
+    
+    if widget = @arrowRight then
+        rightKey:= false;
+
+    if widget = @arrowUp then
+        upKey:= false;
+
+    if widget = @arrowDown then
+        downKey:= false;
+
+    if widget = @fireButton then
+        spaceKey:= false;
+
+    if widget = @backjump then
+        enterKey:= false;
+
+    if widget = @forwardjump then
+        backspaceKey:= false;
+    end;
+ 
 deleteFinger(pointerId);
-
-if walkingLeft then
-    begin
-    leftKey:= false;
-    walkingLeft := false;
-    end;
-
-if walkingRight then
-    begin
-    rightKey:= false;
-    walkingRight := false;
-    end;
-
-if aimingUp then
-    begin
-    upKey:= false;
-    aimingUp:= false;
-    end;
-if aimingDown then
-    begin
-    downKey:= false;
-    aimingDown:= false;
-    end;
 end;
 
 procedure onTouchDoubleClick(finger: TTouch_Data);
@@ -304,6 +318,7 @@ begin
     fingers[pointerCount].dx := 0;
     fingers[pointerCount].dy := 0;
     fingers[pointerCount].timeSinceDown:= RealTicks;
+    fingers[pointerCount].pressedWidget:= nil;
  
     addFinger:= @fingers[pointerCount];
     inc(pointerCount);
@@ -409,25 +424,6 @@ if aiming then
             aimingDown:= false;
             end;
         end;
-       
-if stopFiring then 
-    begin
-    spaceKey:= false;
-    stopFiring:= false;
-    end;
-
-if stopRight then
-    begin
-    stopRight := false;
-    rightKey:= false;
-    end;
- 
-if stopLeft then
-    begin
-    stopLeft := false;
-    leftKey:= false;
-    end;
-    
 end;
 
 function findFinger(id: TSDL_FingerId): PTouch_Data;
@@ -559,9 +555,7 @@ var
     index: Longword;
     //uRenderCoordScaleX, uRenderCoordScaleY: Longword;
 begin
-    stopFiring:= false;
-    walkingLeft := false;
-    walkingRight := false;
+    buttonsDown:= 0;
 
     setLength(fingers, 4);
     for index := 0 to High(fingers) do 
