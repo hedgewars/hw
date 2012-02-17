@@ -425,20 +425,20 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 
     PWidgetMovement = ^TWidgetMovement;
     TWidgetMovement = record
-        animate: Boolean;
-        source: TPoint;
-        target: TPoint;
-        startTime: Longword;
+        animate   : Boolean;
+        source    : TPoint;
+        target    : TPoint;
+        startTime : Longword;
         end;
 
     POnScreenWidget = ^TOnScreenWidget;
     TOnScreenWidget = record
-        show: boolean;                      // if false widget will not be drawn
-        sprite: TSprite;                    // a convenience type
-        frame: TSDL_Rect;                   // graphical coordinates
-        active: TSDL_Rect;                  // active touch region
-        fadeAnimStart: Longword;            // time the fade started, 0 means don't fade
-        moveAnim: TWidgetMovement;          // the animation associated to the widget
+        show          : boolean;                      // if false widget will not be drawn
+        sprite        : TSprite;                    // a convenience type
+        frame         : TSDL_Rect;                   // graphical coordinates
+        active        : TSDL_Rect;                  // active touch region
+        fadeAnimStart : Longword;            // time the fade started, 0 means don't fade
+        moveAnim      : TWidgetMovement;          // the animation associated to the widget
         end;
 
 {$IFDEF SDL13}
@@ -449,6 +449,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         dx,dy                    : LongInt;
         historicalX, historicalY : LongInt;
         timeSinceDown            : Longword;
+        pressedWidget            : POnScreenWidget;
         end;
 {$ENDIF}
 
