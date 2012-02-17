@@ -1,9 +1,9 @@
 //
 // MNEValueTrackingSlider
 //
-// Copyright 2011 Michael Neuwert
+// Copyright 2012 Michael Neuwert
 // "You can use the code in your own project and modify it as you like."
-// http://blog.neuwert-media.com/2011/04/customized-uislider-with-visual-value-tracking/
+// http://blog.neuwert-media.com/2012/04/customized-uislider-with-visual-value-tracking/
 //
 
 
