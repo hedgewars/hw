@@ -470,19 +470,19 @@ with widget^ do
             if RealTicks > (startTime + MOVE_ANIM_TIME) then
                 begin
                 startTime:= 0;
-                x:= targetToX;
-                y:= targetToY;
+                frame.x:= target.x;
+                frame.y:= target.y;
                 end
             else
                 begin
-                x:= targetFromX + Round((targetToX - targetFromX) * ((RealTicks - startTime) / MOVE_ANIM_TIME));
-                y:= targetFromY + Round((targetToY - targetFromY) * ((RealTicks - startTime) / MOVE_ANIM_TIME));
+                frame.x:= source.x + Round((target.x - source.x) * ((RealTicks - startTime) / MOVE_ANIM_TIME));
+                frame.y:= source.y + Round((target.y - source.y) * ((RealTicks - startTime) / MOVE_ANIM_TIME));
                 end;
 
     if show or (fadeAnimStart <> 0) then
         begin
         Tint($FF, $FF, $FF, alpha);
-        DrawTexture(x, y, spritesData[sprite].Texture, buttonScale);
+        DrawTexture(frame.x, frame.y, spritesData[sprite].Texture, buttonScale);
         Tint($FF, $FF, $FF, $FF);
         end;
     end;

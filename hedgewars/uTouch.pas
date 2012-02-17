@@ -50,7 +50,6 @@ procedure convertToFingerCoord(var x,y: hwFloat; oldX, oldY: hwFloat);
 function fingerHasMoved(finger: TTouch_Data): boolean;
 function calculateDelta(finger1, finger2: TTouch_Data): hwFloat;
 function getSecondFinger(finger: TTouch_Data): PTouch_Data;
-function isOnRect(widget: TOnScreenWidget; finger: TTouch_Data): boolean;
 function isOnRect(rect: TSDL_Rect; finger: TTouch_Data): boolean;
 procedure printFinger(finger: TTouch_Data);
 implementation
@@ -99,48 +98,48 @@ case pointerCount of
                 exit;
             end;
 
-            if isOnRect(fireButton, finger^) then
+            if isOnRect(fireButton.active, finger^) then
             begin
                 stopFiring:= false;
                 spaceKey:= true;
                 exit;
             end;
-            if isOnRect(arrowLeft, finger^) then
+            if isOnRect(arrowLeft.active, finger^) then
             begin
                 leftKey:= true;
                 walkingLeft := true;
                 exit;
             end;
-            if isOnRect(arrowRight, finger^) then
+            if isOnRect(arrowRight.active, finger^) then
             begin
                 rightKey:= true;
                 walkingRight:= true;
                 exit;
             end;
-            if isOnRect(arrowUp, finger^) then
+            if isOnRect(arrowUp.active, finger^) then
             begin
                 upKey:= true;
                 aimingUp:= true;
                 exit;
             end;
-            if isOnRect(arrowDown, finger^) then
+            if isOnRect(arrowDown.active, finger^) then
             begin
                 downKey:= true;
                 aimingDown:= true;
                 exit;
             end;
 
-            if isOnRect(backjump, finger^) then
+            if isOnRect(backjump.active, finger^) then
             begin
                 enterKey:= true;
                 exit;
             end;
-            if isOnRect(forwardjump, finger^) then
+            if isOnRect(forwardjump.active, finger^) then
             begin
                 backspaceKey:= true;
                 exit;
             end;
-            if isOnRect(pauseButton, finger^) then
+            if isOnRect(pauseButton.active, finger^) then
             begin
                 isPaused:= not isPaused;
                 exit;
@@ -543,24 +542,10 @@ begin
 end;
 
 function isOnRect(rect: TSDL_Rect; finger: TTouch_Data): boolean;
-var widget: TOnScreenWidget;
-begin
-    widget.x:= rect.x;
-    widget.y:= rect.y;
-    widget.width:= rect.w;
-    widget.height:= rect.h;
-    widget.hOffset:= 0;
-    widget.vOffset:= 0;
-    exit(isOnRect(widget, finger));
-end;
-
-function isOnRect(widget: TOnScreenWidget; finger: TTouch_Data): boolean;
-begin
-with widget do
-    isOnRect:= (finger.x > x + hOffset)   and
-               (finger.x < x + width + hOffset) and
-               (cScreenHeight - finger.y > y + vOffset)   and
-               (cScreenHeight - finger.y < y + height + vOffset);
+    isOnRect:= (finger.x > rect.x)   and
+               (finger.x < rect.x + rect.w) and
+               (cScreenHeight - finger.y > rect.y) and
+               (cScreenHeight - finger.y < rect.y + rect.h);
 end;
 
 procedure printFinger(finger: TTouch_Data);
