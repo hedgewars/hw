@@ -51,6 +51,7 @@ function fingerHasMoved(finger: TTouch_Data): boolean;
 function calculateDelta(finger1, finger2: TTouch_Data): LongInt;
 function getSecondFinger(finger: TTouch_Data): PTouch_Data;
 function isOnRect(rect: TSDL_Rect; finger: TTouch_Data): boolean;
+function isOnRect(x,y,w,h: LongInt; finger: TTouch_Data): boolean;
 procedure printFinger(finger: TTouch_Data);
 implementation
 
@@ -72,7 +73,7 @@ var
     baseZoomValue: GLFloat;
 
     //aiming
-    aiming: boolean;
+    aimingCrosshair: boolean;
     aimingUp, aimingDown: boolean; 
     targetAngle: LongInt;
 
@@ -84,14 +85,17 @@ var
 begin
 {$IFDEF USE_TOUCH_INTERFACE}
 finger := addFinger(x,y,pointerId);
+
+inc(buttonsDown);//inc buttonsDown, if we don't see a button down we'll dec it
+
 if isOnCrosshair(finger^) then
 begin
-    aiming:= true;
+    aimingCrosshair:= true;
     aim(finger^);
+    moveCursor:= false;
     exit;
 end;
 
-inc(buttonsDown);//inc buttonsDown, if we don't see a button down we'll dec it
 if isOnRect(fireButton.active, finger^) then
     begin
     spaceKey:= true;
@@ -158,7 +162,6 @@ if buttonsDown = 0 then
     moveCursor:= true;
     if pointerCount = 2 then
         begin
-        aiming:= false;
         moveCursor:= false;
         pinchSize := calculateDelta(finger^, getSecondFinger(finger^)^);
         baseZoomValue := ZoomValue
@@ -189,7 +192,7 @@ if moveCursor then
         exit //todo change into switch rather than ugly ifs
     end;
     
-if aiming then 
+if aimingCrosshair then 
     begin
         aim(finger^);
         exit
@@ -216,12 +219,17 @@ var
 begin
 x := x;
 y := y;
-aiming:= false;
 finger:= updateFinger(x,y,0,0,pointerId);
 //Check for onTouchClick event
 if ((RealTicks - finger^.timeSinceDown) < clickTime) AND not(fingerHasMoved(finger^)) then
     onTouchClick(finger^);
 WriteToConsole(Format('%d', [buttonsDown]));
+
+if aimingCrosshair then
+    begin
+    aimingCrosshair:= false;
+    dec(buttonsDown);
+    end;
 
 widget:= finger^.pressedWidget;
 if (buttonsDown > 0) and (widget <> nil) then
@@ -370,7 +378,7 @@ var
     deltaAngle: LongInt;
 begin
 invertCursor := not(bShowAmmoMenu);
-if aiming then
+if aimingCrosshair or aimingUp or aimingDown then
     if CurrentHedgehog^.Gear <> nil then
         begin
         deltaAngle:= CurrentHedgehog^.Gear^.Angle - targetAngle;
@@ -453,7 +461,7 @@ begin
         deltaX := abs(TouchX-HogX);
         deltaY := TouchY-HogY;
         
-        targetAngle:= (Round(DeltaY / sqrt(sqr(deltaX) + sqr(deltaY))) + 2048) div 2;
+        targetAngle:= (Round(DeltaY / sqrt(sqr(deltaX) + sqr(deltaY)) * 2048) + 2048) div 2;
         end; //if CurrentHedgehog^.Gear <> nil
 end;
 
@@ -488,7 +496,8 @@ begin
     x := 0;//avoid compiler hint
     y := 0;
     convertToFingerCoord(x, y, CrosshairX, CrosshairY);
-    isOnCrosshair:= sqrt(sqr(finger.x-x) + sqr(finger.y-y)) < 50;
+  isOnCrosshair:= sqrt(sqr(finger.x-x) + sqr(finger.y-y)) < 50;
+//    isOnCrosshair:= isOnRect(x-24, y-24, 48, 48, finger);
 end;
 
 function isOnCurrentHog(finger: TTouch_Data): boolean;
@@ -538,10 +547,15 @@ end;
 
 function isOnRect(rect: TSDL_Rect; finger: TTouch_Data): boolean;
 begin
-    isOnRect:= (finger.x > rect.x)   and
-               (finger.x < rect.x + rect.w) and
-               (cScreenHeight - finger.y > rect.y) and
-               (cScreenHeight - finger.y < rect.y + rect.h);
+    isOnRect:= isOnRect(rect.x, rect.y, rect.w, rect.h, finger);
+end;
+
+function isOnRect(x,y,w,h: LongInt; finger: TTouch_Data): boolean;
+begin
+    isOnRect:= (finger.x > x)   and
+               (finger.x < x + w) and
+               (cScreenHeight - finger.y > y) and
+               (cScreenHeight - finger.y < y + h);
 end;
 
 procedure printFinger(finger: TTouch_Data);
