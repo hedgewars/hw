@@ -306,12 +306,14 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         if(list[i].compare("True"))
         {
             item->setIcon(QIcon(":/res/iconTime.png"));// game is in lobby
-            item->setToolTip(tr("This game is in lobby.\nYou may join and start playing once the game starts."));
+            item->setToolTip(tr("Waiting..."));
+            item->setWhatsThis(tr("This game is in lobby: you may join and start playing once the game starts."));
         }
         else
         {
             item->setIcon(QIcon(":/res/iconDamage.png"));// game has started
-            item->setToolTip(tr("This game is in progress.\nYou may join and spectate now but you'll have to wait for the game to end to start playing."));
+            item->setToolTip(tr("In progress..."));
+            item->setWhatsThis(tr("This game is in progress: you may join and spectate now but you'll have to wait for the game to end to start playing."));
         }
 
         roomsList->setItem(r, 0, item);
@@ -319,13 +321,13 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         item = new QTableWidgetItem(list[i + 2]); // number of clients
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setTextAlignment(Qt::AlignCenter);
-        item->setToolTip(tr("There are %1 clients connected to this room.", "", list[i + 2].toInt()).arg(list[i + 2]));
+        item->setWhatsThis(tr("There are %1 clients connected to this room.", "", list[i + 2].toInt()).arg(list[i + 2]));
         roomsList->setItem(r, 1, item);
 
         item = new QTableWidgetItem(list[i + 3]); // number of teams
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         item->setTextAlignment(Qt::AlignCenter);
-        item->setToolTip(tr("There are %1 teams participating in this room.", "", list[i + 3].toInt()).arg(list[i + 3]));
+        item->setWhatsThis(tr("There are %1 teams participating in this room.", "", list[i + 3].toInt()).arg(list[i + 3]));
         //Should we highlight "full" games? Might get misinterpreted
         //if(list[i + 3].toInt() >= cMaxTeams)
         //    item->setForeground(red);
@@ -333,7 +335,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 
         item = new QTableWidgetItem(list[i + 4].left(15)); // name of host
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setToolTip(tr("%1 is the host. He may adjust settings and start the game.").arg(list[i + 4]));
+        item->setWhatsThis(tr("%1 is the host. He may adjust settings and start the game.").arg(list[i + 4]));
         roomsList->setItem(r, 3, item);
 
         if(list[i + 5] == "+rnd+")
@@ -368,17 +370,17 @@ void PageRoomsList::setRoomsList(const QStringList & list)
         }
 
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setToolTip(tr("Games may be played on precreated or randomized maps."));
+        item->setWhatsThis(tr("Games may be played on precreated or randomized maps."));
         roomsList->setItem(r, 4, item);
 
         item = new QTableWidgetItem(list[i + 6].left(24)); // selected game scheme
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setToolTip(tr("The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism."));
+        item->setWhatsThis(tr("The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism."));
         roomsList->setItem(r, 5, item);
 
         item = new QTableWidgetItem(list[i + 7].left(24)); // selected weapon scheme
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-        item->setToolTip(tr("The Weapon Scheme defines available weapons and their ammunition count."));
+        item->setWhatsThis(tr("The Weapon Scheme defines available weapons and their ammunition count."));
         roomsList->setItem(r, 6, item);
 
         if(!list[i + 1].compare(selection) && !selection.isEmpty())
