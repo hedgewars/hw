@@ -120,7 +120,6 @@ if isOnRect(arrowRight.active, finger^) then
 if isOnRect(arrowUp.active, finger^) then
      begin
      upKey:= true;
-     aimingUp:= true;
      moveCursor:= false;
      finger^.pressedWidget:= @arrowUp;
      exit;
@@ -128,7 +127,6 @@ if isOnRect(arrowUp.active, finger^) then
 if isOnRect(arrowDown.active, finger^) then
      begin
      downKey:= true;
-     aimingDown:= true;
      moveCursor:= false;
      finger^.pressedWidget:= @arrowDown;
      exit;
@@ -228,6 +226,8 @@ WriteToConsole(Format('%d', [buttonsDown]));
 if aimingCrosshair then
     begin
     aimingCrosshair:= false;
+    upKey:= false;
+    downKey:= false;
     dec(buttonsDown);
     end;
 
@@ -378,22 +378,16 @@ var
     deltaAngle: LongInt;
 begin
 invertCursor := not(bShowAmmoMenu);
-if aimingCrosshair or aimingUp or aimingDown then
+if aimingCrosshair then
     if CurrentHedgehog^.Gear <> nil then
         begin
         deltaAngle:= CurrentHedgehog^.Gear^.Angle - targetAngle;
-        if (deltaAngle = 0) then 
+        if (deltaAngle > -5) and (deltaAngle < 5) then 
             begin
-            if aimingUp then
-                begin
                 upKey:= false;
                 aimingUp:= false;
-                end;
-            if aimingDown then
-                begin
                 downKey:= false;
                 aimingDown:= false;
-                end
             end
         else
             begin
