@@ -213,73 +213,76 @@ begin
 //positioning of the buttons
 buttonScale:= 1.5/cDefaultZoomLevel;
 
-//TODO: add sensible hOffset and vOffset values
-firebutton.x:= (cScreenWidth shr 1) - Round(spritesData[sprFireButton].Texture^.h * buttonScale);
-firebutton.y:= -Round(spritesData[sprFireButton].Texture^.h* buttonScale) + cScreenHeight;
-firebutton.width:= Round(spritesData[sprFireButton].Texture^.w * buttonScale);
-firebutton.height:= Round(spritesData[sprFireButton].Texture^.h * buttonScale);
-firebutton.hOffset:= 0;
-firebutton.vOffset:= 0;
-firebutton.sprite:= sprFireButton;
-firebutton.show:= true;
+with firebutton do
+    begin
+    show:= true;
+    sprite:= sprFireButton;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= (cScreenWidth shr 1) - frame.w;
+    frame.y:= cScreenHeight - frame.h;
+    active:= frame;
+    end;
 
-backjump.x:= (cScreenWidth shr 1) - Round(spritesData[sprbackjump].Texture^.h * 2 * buttonScale);
-backjump.y:= -Round(spritesData[sprbackjump].Texture^.h * 1.2 *  buttonScale) + cScreenHeight;
-backjump.width:= Round(spritesData[sprbackjump].Texture^.w * buttonScale);
-backjump.height:= Round(spritesData[sprbackjump].Texture^.h * buttonScale);
-backjump.hOffset:= 0;
-backjump.vOffset:= 0;
-backjump.sprite:= sprbackjump;
-backjump.show:= true;
+with backjump do
+    begin
+    show:= true;
+    sprite:= sprbackjump;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= (cScreenWidth shr 1) - frame.w * 2;
+    frame.y:= cScreenHeight - Round(frame.h * 1.2);
+    active:= frame;
+    end;
 
-forwardjump.x:= (cScreenWidth shr 1) - Round(spritesData[sprforwardjump].Texture^.h * 1.2 * buttonScale);
-forwardjump.y:= -Round(spritesData[sprforwardjump].Texture^.h * 2 * buttonScale) + cScreenHeight;
-forwardjump.width:= Round(spritesData[sprforwardjump].Texture^.w * buttonScale);
-forwardjump.height:= Round(spritesData[sprforwardjump].Texture^.h * buttonScale);
-forwardjump.hOffset:= 0;
-forwardjump.vOffset:= 0;
-forwardjump.sprite:= sprforwardjump;
-forwardjump.show:= true;
+with forwardjump do
+    begin
+    show:= true;
+    sprite:= sprforwardjump;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= (cScreenWidth shr 1) - Round(frame.w * 1.2);
+    frame.y:= cScreenHeight - frame.h * 2;
+    active:= frame;
+    end;
 
 with arrowLeft do
     begin
     show:= true;
     sprite:= sprArrowLeft;
-    x:= -(cScreenWidth shr 1) + Round(spritesData[sprite].Texture^.h*buttonScale * 0.25);
-    y:= -Round(spritesData[sprite].Texture^.h*buttonScale) + cScreenHeight  - Round(spritesData[sprite].Texture^.h*buttonScale *0.5);
-    width:= Round(spritesData[sprite].Texture^.h * buttonScale);
-    height:= Round(spritesData[sprite].Texture^.h * buttonScale);
-    hOffset:= 0;
-    vOffset:= 0;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= -(cScreenWidth shr 1) + Round(frame.w * 0.25);
+    frame.y:= cScreenHeight - Round(frame.h * 1.5);
+    active:= frame;
     end;
+
 with arrowRight do
     begin
     show:= true;
     sprite:= sprArrowRight;
-    x:= -(cScreenWidth shr 1) + Round(spritesData[sprite].Texture^.h * buttonScale *1.5);
-    y:= -Round(spritesData[sprite].Texture^.h*buttonScale) + cScreenHeight - Round(spritesData[sprite].Texture^.h*buttonScale * 0.5);
-    width:= Round(spritesData[sprite].Texture^.w * buttonScale);
-    height:= Round(spritesData[sprite].Texture^.h * buttonScale);
-    hOffset:= 0;
-    vOffset:= 0;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= -(cScreenWidth shr 1) + Round(frame.w * 1.5);
+    frame.y:= cScreenHeight - Round(frame.h * 1.5);
+    active:= frame;
     end;
 
 with arrowUp do
     begin
     show:= false;
     sprite:= sprArrowUp;
-    x:= (cScreenWidth shr 1) - Round(spritesData[sprite].Texture^.w * buttonScale *2);
-    y:= backjump.y -Round(spritesData[sprite].Texture^.h * buttonScale*2.25);
-    width:= Round(spritesData[sprite].Texture^.w * buttonScale);
-    height:= Round(spritesData[sprite].Texture^.h * buttonScale);
-    hOffset:= 0;
-    vOffset:= 0;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= (cScreenWidth shr 1) - frame.w * 2;
+    frame.y:= backjump.frame.y - Round(frame.h * 2.25);
+    active:= frame;
     with moveAnim do
          begin
-         targetToX:= arrowUp.x;
-         targetToY:= arrowUp.y;
-         targetFromX:= arrowUp.x - Round(spritesData[sprite].Texture^.w * buttonScale *0.75);
-         targetFromY:= arrowUp.y;
+         target.x:= frame.x;
+         target.y:= frame.y;
+         source.x:= frame.x - Round(frame.w * 0.75);
+         source.y:= frame.y;
          end;
     end;
 
@@ -287,29 +290,30 @@ with arrowDown do
     begin
     show:= false;
     sprite:= sprArrowDown;
-    x:= (cScreenWidth shr 1) - Round(spritesData[sprite].Texture^.w * buttonScale * 2);
-    y:= backjump.y -Round(spritesData[sprite].Texture^.h * buttonScale *2.25);
-    width:= Round(spritesData[sprite].Texture^.w * buttonScale);
-    height:= Round(spritesData[sprite].Texture^.h * buttonScale);
-    hOffset:= 0;
-    vOffset:= 0;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= (cScreenWidth shr 1) - frame.w * 2;
+    frame.y:= backjump.frame.y - Round(frame.h * 2.25);
+    active:= frame;
     with moveAnim do
         begin
-        targetToX:= arrowDown.x;
-        targetToY:= arrowDown.y;
-        targetFromX:= arrowDown.x + Round(spritesData[sprite].Texture^.w * buttonScale *0.75);
-        targetFromY:= arrowDown.y;
+        target.x:= frame.x;
+        target.y:= frame.y;
+        source.x:= frame.x + Round(frame.w * 0.75);
+        source.y:= frame.y;
         end;
     end;
 
-pauseButton.x:= cScreenWidth div 2 - Round(spritesData[sprPauseButton].Texture^.w * buttonscale);
-pauseButton.y:= 0; //-Round(spritesData[sprPauseButton].Texture^.h * buttonscale);
-pauseButton.width:= Round(spritesData[sprPauseButton].Texture^.w * buttonScale);;
-pauseButton.height:= Round(spritesData[sprPauseButton].Texture^.h * buttonScale);;
-pauseButton.hOffset:= 0;
-pauseButton.vOffset:= 0;
-pauseButton.sprite:= sprPauseButton;
-pauseButton.show:= true;
+with pauseButton do
+    begin
+    show:= true;
+    sprite:= sprPauseButton;
+    frame.w:= Round(spritesData[sprPauseButton].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprPauseButton].Texture^.h * buttonScale);
+    frame.x:= cScreenWidth div 2 - frame.w;
+    frame.y:= 0;
+    active:= frame;
+    end;
 
 {$ENDIF}
 end;
@@ -1187,17 +1191,7 @@ DrawScreenWidget(@fireButton);
 DrawScreenWidget(@backjump);
 DrawScreenWidget(@forwardjump);
 DrawScreenWidget(@pauseButton);
-{
-DrawTexture(arrowLeft.x, arrowLeft.y, spritesData[sprArrowLeft].Texture, buttonScale);
-DrawTexture(arrowRight.x, arrowRight.y, spritesData[sprArrowRight].Texture, buttonScale);
-DrawTexture(arrowUp.x, arrowUp.y, spritesData[sprArrowUp].Texture, buttonScale);
-DrawTexture(arrowDown.x, arrowDown.y, spritesData[sprArrowDown].Texture, buttonScale);
-
-DrawTexture(fireButton.x, firebutton.y, spritesData[sprFireButton].Texture, buttonScale);
-DrawTexture(backjump.x, backjump.y, spritesData[sprBackjump].Texture, buttonScale);
-DrawTexture(forwardjump.x, forwardjump.y, spritesData[sprForwardjump].Texture, buttonScale);
-DrawTexture(pauseButton.x, pauseButton.y, spritesData[sprPauseButton].Texture, buttonScale);
-}{$ENDIF}
+{$ENDIF}
 
 // Teams Healths
 if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
@@ -1343,7 +1337,7 @@ if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (Game
 
 // fps
 {$IFDEF USE_TOUCH_INTERFACE}
-offsetX:= pauseButton.y + pauseButton.height + 12;
+offsetX:= pauseButton.frame.y + pauseButton.frame.h + 12;
 {$ELSE}
 offsetX:= 10;
 {$ENDIF}
@@ -1649,12 +1643,12 @@ with widget^ do
         begin
         animate:= true;
         startTime:= RealTicks;
-        targetFromX:= targetFromX xor targetToX;//swap From <-> To
-        targetToX:= targetFromX xor targetToX;
-        targetFromX:= targetFromX xor targetToX;
-        targetFromY:= targetFromY xor targetToY;
-        targetToY:= targetFromY xor targetToY;
-        targetFromY:= targetFromY xor targetToY;
+        source.x:= source.x xor target.x; //swap source <-> target
+        target.x:= source.x xor target.x;
+        source.x:= source.x xor target.x;
+        source.y:= source.y xor target.y;
+        target.y:= source.y xor target.y;
+        source.y:= source.y xor target.y;
         end;
     end;
 end;

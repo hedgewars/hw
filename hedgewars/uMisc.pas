@@ -27,7 +27,11 @@ procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function  MakeScreenshot(filename: shortstring): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
-
+{$IFDEF SDL13}
+function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect;
+{$ELSE}
+function SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect;
+{$ENDIF}
 procedure initModule;
 procedure freeModule;
 
@@ -144,6 +148,19 @@ begin
     exit(tmpsurf);
 end;
 
+{$IFDEF SDL13}
+function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect;
+{$ELSE}
+function SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect;
+{$ENDIF}
+var rect: TSDL_Rect;
+begin
+    rect.x:= x;
+    rect.y:= y;
+    rect.w:= width;
+    rect.h:= height;
+    exit(rect);
+end;
 
 function GetTeamStatString(p: PTeam): shortstring;
 var s: ansistring;
