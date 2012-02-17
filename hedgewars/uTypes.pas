@@ -442,6 +442,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         moveAnim: TWidgetMovement;
         end;
 
+{$IFDEF SDL13}
     PTouch_Data = ^TTouch_Data;
     TTouch_Data = record
         id                       : TSDL_FingerId;
@@ -450,6 +451,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         historicalX, historicalY : LongInt;
         timeSinceDown            : Longword;
         end;
+{$ENDIF}
 
 implementation
 
