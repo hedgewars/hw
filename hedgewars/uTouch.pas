@@ -542,6 +542,7 @@ begin
 end;
 
 function isOnRect(rect: TSDL_Rect; finger: TTouch_Data): boolean;
+begin
     isOnRect:= (finger.x > rect.x)   and
                (finger.x < rect.x + rect.w) and
                (cScreenHeight - finger.y > rect.y) and
