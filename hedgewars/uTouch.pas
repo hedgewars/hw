@@ -45,10 +45,10 @@ function findFinger(id: TSDL_FingerId): PTouch_Data;
 procedure aim(finger: TTouch_Data);
 function isOnCrosshair(finger: TTouch_Data): boolean;
 function isOnCurrentHog(finger: TTouch_Data): boolean;
-procedure convertToWorldCoord(var x,y: hwFloat; finger: TTouch_Data);
-procedure convertToFingerCoord(var x,y: hwFloat; oldX, oldY: hwFloat);
+procedure convertToWorldCoord(var x,y: LongInt; finger: TTouch_Data);
+procedure convertToFingerCoord(var x,y: LongInt; oldX, oldY: LongInt);
 function fingerHasMoved(finger: TTouch_Data): boolean;
-function calculateDelta(finger1, finger2: TTouch_Data): hwFloat;
+function calculateDelta(finger1, finger2: TTouch_Data): LongInt;
 function getSecondFinger(finger: TTouch_Data): PTouch_Data;
 function isOnRect(rect: TSDL_Rect; finger: TTouch_Data): boolean;
 procedure printFinger(finger: TTouch_Data);
@@ -68,7 +68,7 @@ var
     timeSinceClick : Longword;
 
     //Pinch to zoom 
-    pinchSize : hwFloat;
+    pinchSize : LongInt;
     baseZoomValue: GLFloat;
 
     //aiming
@@ -170,7 +170,7 @@ end;
 procedure onTouchMotion(x,y: Longword;dx,dy: LongInt; pointerId: TSDL_FingerId);
 var
     finger, secondFinger: PTouch_Data;
-    currentPinchDelta, zoom : hwFloat;
+    currentPinchDelta, zoom : single;
 begin
 finger:= updateFinger(x,y,dx,dy,pointerId);
 
@@ -200,7 +200,7 @@ if (buttonsDown = 0) and (pointerCount = 2) then
        secondFinger := getSecondFinger(finger^);
        currentPinchDelta := calculateDelta(finger^, secondFinger^) - pinchSize;
        zoom := currentPinchDelta/cScreenWidth;
-       ZoomValue := baseZoomValue - ((hwFloat2Float(zoom) * cMinMaxZoomLevelDelta));
+       ZoomValue := baseZoomValue - (zoom * cMinMaxZoomLevelDelta);
        if ZoomValue < cMaxZoomLevel then
            ZoomValue := cMaxZoomLevel;
        if ZoomValue > cMinZoomLevel then
@@ -260,7 +260,7 @@ end;
 
 procedure onTouchClick(finger: TTouch_Data);
 begin
-if (RealTicks - timeSinceClick < 300) and (DistanceI(finger.X-xTouchClick, finger.Y-yTouchClick) < _30) then
+if (RealTicks - timeSinceClick < 300) and (sqrt(sqr(finger.X-xTouchClick) + sqr(finger.Y-yTouchClick)) < 30) then
     begin
     onTouchDoubleClick(finger);
     timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds) 
@@ -440,21 +440,20 @@ end;
 
 procedure aim(finger: TTouch_Data);
 var 
-    hogX, hogY, touchX, touchY, deltaX, deltaY, tmpAngle: hwFloat;
+    hogX, hogY, touchX, touchY, deltaX, deltaY: LongInt;
 begin
     if CurrentHedgehog^.Gear <> nil then
         begin
-        touchX := _0;//avoid compiler hint
-        touchY := _0;
-        hogX := CurrentHedgehog^.Gear^.X;
-        hogY := CurrentHedgehog^.Gear^.Y;
+        touchX := 0;//avoid compiler hint
+        touchY := 0;
+        hogX := hwRound(CurrentHedgehog^.Gear^.X);
+        hogY := hwRound(CurrentHedgehog^.Gear^.Y);
 
         convertToWorldCoord(touchX, touchY, finger);
-        deltaX := hwAbs(TouchX-HogX);
-        deltaY := (TouchY-HogY);
+        deltaX := abs(TouchX-HogX);
+        deltaY := TouchY-HogY;
         
-        tmpAngle:= DeltaY / Distance(deltaX, deltaY) *_2048;
-        targetAngle:= (hwRound(tmpAngle) + 2048) div 2;
+        targetAngle:= (Round(DeltaY / sqrt(sqr(deltaX) + sqr(deltaY))) + 2048) div 2;
         end; //if CurrentHedgehog^.Gear <> nil
 end;
 
@@ -484,36 +483,36 @@ end;
 
 function isOnCrosshair(finger: TTouch_Data): boolean;
 var
-    x,y : hwFloat;
+    x,y : LongInt;
 begin
-    x := _0;//avoid compiler hint
-    y := _0;
-    convertToFingerCoord(x, y, int2hwFloat(CrosshairX), int2hwFloat(CrosshairY));
-    isOnCrosshair:= Distance(int2hwFloat(finger.x)-x, int2hwFloat(finger.y)-y) < _50;
+    x := 0;//avoid compiler hint
+    y := 0;
+    convertToFingerCoord(x, y, CrosshairX, CrosshairY);
+    isOnCrosshair:= sqrt(sqr(finger.x-x) + sqr(finger.y-y)) < 50;
 end;
 
 function isOnCurrentHog(finger: TTouch_Data): boolean;
 var
-    x,y : hwFloat;
+    x,y : LongInt;
 begin
-    x := _0;
-    y := _0;
-    convertToFingerCoord(x,y, CurrentHedgehog^.Gear^.X, CurrentHedgehog^.Gear^.Y);
-    isOnCurrentHog := Distance(int2hwFloat(finger.X)-x, int2hwFloat(finger.Y)-y) < _50;
+    x := 0;
+    y := 0;
+    convertToFingerCoord(x,y, hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y));
+    isOnCurrentHog := sqrt(sqr(finger.X-x) + sqr(finger.Y-y)) < 50;
 end;
 
-procedure convertToFingerCoord(var x,y : hwFloat; oldX, oldY: hwFloat);
+procedure convertToFingerCoord(var x,y : LongInt; oldX, oldY: LongInt);
 begin
-    x := oldX + int2hwFloat(WorldDx);
-    y := int2hwFloat(cScreenHeight) - (oldY + int2hwFloat(WorldDy));
+    x := oldX + WorldDx;
+    y := cScreenHeight - (oldY + WorldDy);
 end;
 
-procedure convertToWorldCoord(var x,y: hwFloat; finger: TTouch_Data);
+procedure convertToWorldCoord(var x,y: LongInt; finger: TTouch_Data);
 begin
 //if x <> nil then 
-    x := int2hwFloat((finger.x-WorldDx));
+    x := finger.x-WorldDx;
 //if y <> nil then 
-    y := int2hwFloat((cScreenHeight - finger.y)-WorldDy);
+    y := (cScreenHeight - finger.y)-WorldDy;
 end;
 
 //Method to calculate the distance this finger has moved since the downEvent
@@ -522,9 +521,9 @@ begin
     fingerHasMoved := trunc(sqrt(Power(finger.X-finger.historicalX,2) + Power(finger.y-finger.historicalY, 2))) > 330;
 end;
 
-function calculateDelta(finger1, finger2: TTouch_Data): hwFloat; inline;
+function calculateDelta(finger1, finger2: TTouch_Data): LongInt; inline;
 begin
-    calculateDelta := DistanceI(finger2.x-finger1.x, finger2.y-finger1.y);
+    calculateDelta := Round(sqrt(sqr(finger2.x-finger1.x) + sqr(finger2.y-finger1.y)));
 end;
 
 // Under the premise that all pointer ids in pointerIds:TSDL_FingerId are packed to the far left.
