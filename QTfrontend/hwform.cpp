@@ -1025,18 +1025,18 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 
     GoToPage(ID_PAGE_CONNECTING);
 
-    connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
-    connect(hwnet, SIGNAL(connected()), this, SLOT(NetConnected()));
-    connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)));
-    connect(hwnet, SIGNAL(Warning(const QString&)), this, SLOT(NetWarning(const QString&)));
-    connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
-    connect(hwnet, SIGNAL(LeftRoom(const QString&)), this, SLOT(NetLeftRoom(const QString&)));
-    connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
-    connect(hwnet, SIGNAL(RemoveNetTeam(const HWTeam&)), this, SLOT(RemoveNetTeam(const HWTeam&)));
-    connect(hwnet, SIGNAL(TeamAccepted(const QString&)), this, SLOT(NetTeamAccepted(const QString&)));
-    connect(hwnet, SIGNAL(AskForPassword(const QString&)), this, SLOT(NetPassword(const QString&)));
-    connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)));
-    connect(hwnet, SIGNAL(AuthFailed()), this, SLOT(NetAuthFailed()));
+    connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(connected()), this, SLOT(NetConnected()), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(Warning(const QString&)), this, SLOT(NetWarning(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(LeftRoom(const QString&)), this, SLOT(NetLeftRoom(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(RemoveNetTeam(const HWTeam&)), this, SLOT(RemoveNetTeam(const HWTeam&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(TeamAccepted(const QString&)), this, SLOT(NetTeamAccepted(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(AskForPassword(const QString&)), this, SLOT(NetPassword(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(AuthFailed()), this, SLOT(NetAuthFailed()), Qt::QueuedConnection);
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
 // rooms list page stuff
