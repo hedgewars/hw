@@ -48,6 +48,7 @@ void AbstractPage::initPage()
 
     // add back/exit button
     btnBack = formattedButton(":/res/Exit.png", true);
+    btnBack->setWhatsThis(tr("Go back"));
     pageLayout->addWidget(btnBack, 1, 0, 1, 1, Qt::AlignLeft | Qt::AlignBottom);
 
     // add body layout as defined by the subclass

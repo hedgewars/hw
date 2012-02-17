@@ -123,21 +123,21 @@ QLayout * PageOptions::bodyLayoutDefinition()
         WeaponsLayout->addWidget(SchemesName, 1, 1);
 
         SchemeNew = new QPushButton(groupWeapons);
-        SchemeNew->setToolTip(tr("New scheme"));
+        SchemeNew->setWhatsThis(tr("New scheme"));
         SchemeNew->setIconSize(pmNew.size());
         SchemeNew->setIcon(pmNew);
         SchemeNew->setMaximumWidth(pmNew.width() + 6);
         WeaponsLayout->addWidget(SchemeNew, 1, 2);
 
         SchemeEdit = new QPushButton(groupWeapons);
-        SchemeEdit->setToolTip(tr("Edit scheme"));
+        SchemeEdit->setWhatsThis(tr("Edit scheme"));
         SchemeEdit->setIconSize(pmEdit.size());
         SchemeEdit->setIcon(pmEdit);
         SchemeEdit->setMaximumWidth(pmEdit.width() + 6);
         WeaponsLayout->addWidget(SchemeEdit, 1, 3);
 
         SchemeDelete = new QPushButton(groupWeapons);
-        SchemeDelete->setToolTip(tr("Delete scheme"));
+        SchemeDelete->setWhatsThis(tr("Delete scheme"));
         SchemeDelete->setIconSize(pmDelete.size());
         SchemeDelete->setIcon(pmDelete);
         SchemeDelete->setMaximumWidth(pmDelete.width() + 6);
@@ -151,21 +151,21 @@ QLayout * PageOptions::bodyLayoutDefinition()
         WeaponsLayout->addWidget(WeaponsName, 2, 1);
 
         WeaponNew = new QPushButton(groupWeapons);
-        WeaponNew->setToolTip(tr("New weapon set"));
+        WeaponNew->setWhatsThis(tr("New weapon set"));
         WeaponNew->setIconSize(pmNew.size());
         WeaponNew->setIcon(pmNew);
         WeaponNew->setMaximumWidth(pmNew.width() + 6);
         WeaponsLayout->addWidget(WeaponNew, 2, 2);
 
         WeaponEdit = new QPushButton(groupWeapons);
-        WeaponEdit->setToolTip(tr("Edit weapon set"));
+        WeaponEdit->setWhatsThis(tr("Edit weapon set"));
         WeaponEdit->setIconSize(pmEdit.size());
         WeaponEdit->setIcon(pmEdit);
         WeaponEdit->setMaximumWidth(pmEdit.width() + 6);
         WeaponsLayout->addWidget(WeaponEdit, 2, 3);
 
         WeaponDelete = new QPushButton(groupWeapons);
-        WeaponDelete->setToolTip(tr("Delete weapon set"));
+        WeaponDelete->setWhatsThis(tr("Delete weapon set"));
         WeaponDelete->setIconSize(pmDelete.size());
         WeaponDelete->setIcon(pmDelete);
         WeaponDelete->setMaximumWidth(pmDelete.width() + 6);

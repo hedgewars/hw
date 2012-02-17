@@ -40,7 +40,6 @@ QLayout * PageTraining::bodyLayoutDefinition()
 
     // declare start button, caption and description
     btnPreview = formattedButton(":/res/Trainings.png", true);
-    btnPreview->setToolTip(QPushButton::tr("Go!"));
 
     // make both rows equal height
     pageLayout->setRowStretch(0, 1);
@@ -76,6 +75,7 @@ QLayout * PageTraining::bodyLayoutDefinition()
 
     // mission list
     lstMissions = new QListWidget(this);
+    lstMissions->setWhatsThis(tr("Pick the mission or training to play"));
     pageLayout->addWidget(lstMissions, 1, 0, 1, 2); // span 2 columns
 
     // let's not make the list use more space than needed
@@ -90,6 +90,7 @@ QLayout * PageTraining::footerLayoutDefinition()
     QBoxLayout * bottomLayout = new QVBoxLayout();
 
     btnStart = formattedButton(QPushButton::tr("Go!"));
+    btnStart->setWhatsThis(tr("Start fighting"));
     btnStart->setFixedWidth(140);
 
     bottomLayout->addWidget(btnStart);

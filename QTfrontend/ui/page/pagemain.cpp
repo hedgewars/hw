@@ -84,7 +84,10 @@ QLayout * PageMain::footerLayoutDefinition()
     bottomLayout->addWidget(mainNote, 0);
     bottomLayout->setStretch(0,1);
 
+    btnBack->setWhatsThis(tr("Exit game"));
+    
     BtnSetup = addButton(":/res/Settings.png", bottomLayout, 1, true);
+    BtnSetup->setWhatsThis(tr("Edit game preferences"));
     return bottomLayout;
 }
 
