@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses sysutils, math, uConsole, uVariables, SDLh, uFloat, uConsts, uIO, GLUnit, uTypes;
+uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uIO, GLUnit, uTypes;
 
 
 procedure initModule;
@@ -527,7 +527,7 @@ end;
 //Method to calculate the distance this finger has moved since the downEvent
 function fingerHasMoved(finger: TTouch_Data): boolean;
 begin
-    fingerHasMoved := trunc(sqrt(Power(finger.X-finger.historicalX,2) + Power(finger.y-finger.historicalY, 2))) > 330;
+    fingerHasMoved := trunc(sqrt(sqr(finger.X-finger.historicalX) + sqr(finger.y-finger.historicalY))) > 330;
 end;
 
 function calculateDelta(finger1, finger2: TTouch_Data): LongInt; inline;
