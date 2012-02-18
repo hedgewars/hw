@@ -91,7 +91,7 @@ static UIViewController *callingController;
     // engine thread *should* be done by now
     NSArray *stats = [[NSArray alloc] initWithArray:self.proto.statsArray copyItems:YES];
     if ([HWUtils gameStatus] == gsEnded && stats != nil) {
-        StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        StatsPageViewController *statsPage = [[StatsPageViewController alloc] init];
         statsPage.statsArray = stats;
         statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
         if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])

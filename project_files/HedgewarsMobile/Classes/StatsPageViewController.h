@@ -21,7 +21,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface StatsPageViewController : UITableViewController {
+@interface StatsPageViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
     NSArray *statsArray;
 }
 
