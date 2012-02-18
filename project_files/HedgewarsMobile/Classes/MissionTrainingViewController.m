@@ -34,11 +34,6 @@
 #pragma mark -
 #pragma mark View management
 -(void) viewDidLoad {
-    NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
-    UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:img];
-    [img release];
-    
     self.previewImage.layer.borderColor = [[UIColor darkYellowColor] CGColor];
     self.previewImage.layer.borderWidth = 3.8f;
     self.previewImage.layer.cornerRadius = 14;
