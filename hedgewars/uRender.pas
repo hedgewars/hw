@@ -470,8 +470,11 @@ with widget^ do
             if RealTicks > (startTime + MOVE_ANIM_TIME) then
                 begin
                 startTime:= 0;
+                animate:= false;
                 frame.x:= target.x;
                 frame.y:= target.y;
+                active.x:= active.x + (target.x - source.x);
+                active.y:= active.y + (target.y - source.y);
                 end
             else
                 begin
