@@ -47,14 +47,6 @@
 }
 
 -(void) viewDidLoad {
-    NSString *imgName;
-    if (IS_IPAD())
-        imgName = @"smallerBackground~ipad.png";
-    else
-        imgName = @"smallerBackground~iphone.png";
-    UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:img];
-    [img release];
     [super viewDidLoad];
 }
 
