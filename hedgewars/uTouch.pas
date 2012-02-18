@@ -141,7 +141,7 @@ if isOnRect(pauseButton.active, finger^) then
      finger^.pressedWidget:= @pauseButton;
      exit;
      end;
-
+     
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
     begin
@@ -254,7 +254,7 @@ end;
 
 procedure onTouchLongClick(finger: TTouch_Data);
 begin
-if isOnRect(backjump.active, finger) then
+if isOnRect(jumpWidget.active, finger) then
     begin
     ParseCommand('ljump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
     if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
@@ -290,13 +290,13 @@ if bShowAmmoMenu then
     end;
 
 
-if isOnCurrentHog(finger) then
+if isOnCurrentHog(finger) or isOnRect(AMWidget.active, finger) then
     begin
     bShowAmmoMenu := true;
     exit;
     end;
 
-if isOnRect(backjump.active, finger) then
+if isOnRect(jumpWidget.active, finger) then
     begin
     ParseCommand('hjump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
     if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then

@@ -213,42 +213,29 @@ begin
 //positioning of the buttons
 buttonScale:= 1.5/cDefaultZoomLevel;
 
-with firebutton do
-    begin
-    show:= true;
-    sprite:= sprFireButton;
-    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
-    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
-    frame.x:= (cScreenWidth shr 1) - frame.w;
-    frame.y:= cScreenHeight - frame.h;
-    active.x:= frame.x;
-    active.y:= frame.y;
-    active.w:= frame.w;
-    active.h:= frame.h;
-    end;
 
-with backjump do
+with JumpWidget do
     begin
     show:= true;
-    sprite:= sprbackjump;
-    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
-    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
-    frame.x:= (cScreenWidth shr 1) - frame.w * 2;
-    frame.y:= cScreenHeight - Round(frame.h * 1.2);
-    active.x:= frame.x;
-    active.y:= frame.y;
-    active.w:= frame.w;
-    active.h:= frame.h;
-    end;
-
-with forwardjump do
-    begin
-    show:= true;
-    sprite:= sprforwardjump;
+    sprite:= sprJumpWidget;
     frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - Round(frame.w * 1.2);
     frame.y:= cScreenHeight - frame.h * 2;
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
+    end;
+
+with AMWidget do
+    begin
+    show:= true;
+    sprite:= sprAMWidget;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= (cScreenWidth shr 1) - frame.w * 2;
+    frame.y:= cScreenHeight - Round(frame.h * 1.2);
     active.x:= frame.x;
     active.y:= frame.y;
     active.w:= frame.w;
@@ -283,6 +270,20 @@ with arrowRight do
     active.h:= frame.h;
     end;
 
+with firebutton do
+    begin
+    show:= true;
+    sprite:= sprFireButton;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= arrowRight.frame.x + arrowRight.frame.w;
+    frame.y:= arrowRight.frame.y + (arrowRight.frame.w shr 1) - (frame.w shr 1);
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
+    end;
+
 with arrowUp do
     begin
     show:= false;
@@ -290,7 +291,7 @@ with arrowUp do
     frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - frame.w * 2;
-    frame.y:= backjump.frame.y - Round(frame.h * 2.25);
+    frame.y:= jumpWidget.frame.y - Round(frame.h * 2.25);
     active.x:= frame.x;
     active.y:= frame.y;
     active.w:= frame.w;
@@ -311,7 +312,7 @@ with arrowDown do
     frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - frame.w * 2;
-    frame.y:= backjump.frame.y - Round(frame.h * 2.25);
+    frame.y:= jumpWidget.frame.y - Round(frame.h * 2.25);
     active.x:= frame.x;
     active.y:= frame.y;
     active.w:= frame.w;
@@ -1212,8 +1213,8 @@ DrawScreenWidget(@arrowUp);
 DrawScreenWidget(@arrowDown);
 
 DrawScreenWidget(@fireButton);
-DrawScreenWidget(@backjump);
-DrawScreenWidget(@forwardjump);
+DrawScreenWidget(@jumpWidget);
+DrawScreenWidget(@AMWidget);
 DrawScreenWidget(@pauseButton);
 {$ENDIF}
 
