@@ -254,6 +254,7 @@ end;
 
 procedure onTouchLongClick(finger: TTouch_Data);
 begin
+{$IFDEF USE_TOUCH_INTERFACE}
 if isOnRect(jumpWidget.active, finger) then
     begin
     ParseCommand('ljump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
@@ -261,6 +262,7 @@ if isOnRect(jumpWidget.active, finger) then
         ParseCommand('gencmd R', true);
     exit;
     end;
+{$ENDIF}
 end;
 
 procedure onTouchClick(finger: TTouch_Data);
@@ -289,7 +291,7 @@ if bShowAmmoMenu then
     exit;
     end;
 
-
+{$IFDEF USE_TOUCH_INTERFACE}
 if isOnCurrentHog(finger) or isOnRect(AMWidget.active, finger) then
     begin
     bShowAmmoMenu := true;
@@ -303,6 +305,7 @@ if isOnRect(jumpWidget.active, finger) then
         ParseCommand('gencmd R', true);
     exit;
     end;
+{$ENDIF}
 end;
 
 function addFinger(x,y: Longword; id: TSDL_FingerId): PTouch_Data;
