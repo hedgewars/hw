@@ -215,6 +215,7 @@ var
     finger: PTouch_Data;
     widget: POnScreenWidget;
 begin
+{$IFDEF USE_TOUCH_INTERFACE}
 x := x;
 y := y;
 finger:= updateFinger(x,y,0,0,pointerId);
@@ -259,6 +260,7 @@ if (buttonsDown > 0) and (widget <> nil) then
     end;
  
 deleteFinger(pointerId);
+{$ENDIF}
 end;
 
 procedure onTouchDoubleClick(finger: TTouch_Data);
