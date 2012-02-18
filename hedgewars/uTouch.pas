@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uIO, GLUnit, uTypes;
+uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes;
 
 
 procedure initModule;
@@ -40,6 +40,7 @@ function updateFinger(x,y,dx,dy: Longword; id: TSDL_FingerId): PTouch_Data;
 procedure deleteFinger(id: TSDL_FingerId);
 procedure onTouchClick(finger: TTouch_Data);
 procedure onTouchDoubleClick(finger: TTouch_Data);
+procedure onTouchLongClick(finger: TTouch_Data);
 
 function findFinger(id: TSDL_FingerId): PTouch_Data;
 procedure aim(finger: TTouch_Data);
@@ -56,7 +57,8 @@ procedure printFinger(finger: TTouch_Data);
 implementation
 
 const
-    clicktime = 200;
+    clickTime = 200;
+    longClickTime = 400;
     nilFingerId = High(TSDL_FingerId);
 
 var
@@ -132,20 +134,6 @@ if isOnRect(arrowDown.active, finger^) then
      exit;
      end;
 
-if isOnRect(backjump.active, finger^) then
-     begin
-     enterKey:= true;
-     moveCursor:= false;
-     finger^.pressedWidget:= @backjump;
-     exit;
-     end;
-if isOnRect(forwardjump.active, finger^) then
-     begin
-     backspaceKey:= true;
-     moveCursor:= false;
-     finger^.pressedWidget:= @forwardjump;
-     exit;
-     end;
 if isOnRect(pauseButton.active, finger^) then
      begin
      isPaused:= not isPaused;
@@ -220,9 +208,11 @@ x := x;
 y := y;
 finger:= updateFinger(x,y,0,0,pointerId);
 //Check for onTouchClick event
-if ((RealTicks - finger^.timeSinceDown) < clickTime) AND not(fingerHasMoved(finger^)) then
-    onTouchClick(finger^);
-WriteToConsole(Format('%d', [buttonsDown]));
+if not(fingerHasMoved(finger^)) then
+    if (RealTicks - finger^.timeSinceDown) < clickTime then
+        onTouchClick(finger^)
+    else
+        onTouchLongClick(finger^);
 
 if aimingCrosshair then
     begin
@@ -251,12 +241,6 @@ if (buttonsDown > 0) and (widget <> nil) then
 
     if widget = @fireButton then
         spaceKey:= false;
-
-    if widget = @backjump then
-        enterKey:= false;
-
-    if widget = @forwardjump then
-        backspaceKey:= false;
     end;
  
 deleteFinger(pointerId);
@@ -268,14 +252,25 @@ begin
 finger := finger;//avoid compiler hint
 end;
 
+procedure onTouchLongClick(finger: TTouch_Data);
+begin
+if isOnRect(backjump.active, finger) then
+    begin
+    ParseCommand('ljump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
+    if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
+        ParseCommand('gencmd R', true);
+    exit;
+    end;
+end;
+
 procedure onTouchClick(finger: TTouch_Data);
 begin
-if (RealTicks - timeSinceClick < 300) and (sqrt(sqr(finger.X-xTouchClick) + sqr(finger.Y-yTouchClick)) < 30) then
-    begin
-    onTouchDoubleClick(finger);
-    timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds) 
-    exit; 
-    end;
+//if (RealTicks - timeSinceClick < 300) and (sqrt(sqr(finger.X-xTouchClick) + sqr(finger.Y-yTouchClick)) < 30) then
+//    begin
+//    onTouchDoubleClick(finger);
+//    timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds) 
+//    exit; 
+//    end;
 
 xTouchClick:= finger.x;
 yTouchClick:= finger.y;
@@ -298,6 +293,14 @@ if bShowAmmoMenu then
 if isOnCurrentHog(finger) then
     begin
     bShowAmmoMenu := true;
+    exit;
+    end;
+
+if isOnRect(backjump.active, finger) then
+    begin
+    ParseCommand('hjump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
+    if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
+        ParseCommand('gencmd R', true);
     exit;
     end;
 end;
