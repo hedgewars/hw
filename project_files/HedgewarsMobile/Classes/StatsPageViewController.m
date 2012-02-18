@@ -30,23 +30,16 @@
 }
 
 -(void) viewDidLoad {
-    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
-        self.tableView.backgroundView = nil;
+    [self.tableView setBackgroundColorForAnyTable:[UIColor clearColor]];
 
-    NSString *imgName;
-    if (IS_IPAD())
-        imgName = @"mediumBackground~ipad.png";
-    else
-        imgName = @"smallerBackground~iphone.png";
-
-    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)]) {
-        UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:imgName];
-        UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
-        [backgroundImage release];
-        [self.tableView setBackgroundView:background];
-        [background release];
-    } else
-        self.view.backgroundColor = [UIColor blackColor];
+    NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
+    UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
+    UIImageView *background = [[UIImageView alloc] initWithImage:img];
+    [img release];
+    background.frame = self.view.frame;
+    background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.view insertSubview:background atIndex:0];
+    [background release];
 
     self.tableView.separatorColor = [UIColor darkYellowColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -125,10 +118,13 @@
 -(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
         UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 160)];
+        header.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
         UIImage *img = [[UIImage alloc] initWithContentsOfFile:@"smallerTitle.png"];
         UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
         [img release];
-        imgView.center = CGPointMake(self.tableView.frame.size.height/2, 160/2);
+        imgView.center = CGPointMake(self.tableView.frame.size.width/2, 160/2);
+        imgView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [header addSubview:imgView];
         [imgView release];
 
@@ -143,11 +139,10 @@
 
 -(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     if (section == 2) {
-
-        UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height * 70 / 100, self.tableView.rowHeight)];
+        UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width * 70 / 100, self.tableView.rowHeight)];
         footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 17, self.view.frame.size.height * 70 / 100, self.tableView.rowHeight)];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 17, self.view.frame.size.width * 70 / 100, self.tableView.rowHeight)];
         button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [button setTitle:NSLocalizedString(@"Done",@"") forState:UIControlStateNormal];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
