@@ -221,7 +221,10 @@ with firebutton do
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - frame.w;
     frame.y:= cScreenHeight - frame.h;
-    active:= frame;
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
     end;
 
 with backjump do
@@ -232,7 +235,10 @@ with backjump do
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - frame.w * 2;
     frame.y:= cScreenHeight - Round(frame.h * 1.2);
-    active:= frame;
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
     end;
 
 with forwardjump do
@@ -243,7 +249,10 @@ with forwardjump do
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - Round(frame.w * 1.2);
     frame.y:= cScreenHeight - frame.h * 2;
-    active:= frame;
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
     end;
 
 with arrowLeft do
@@ -254,7 +263,10 @@ with arrowLeft do
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= -(cScreenWidth shr 1) + Round(frame.w * 0.25);
     frame.y:= cScreenHeight - Round(frame.h * 1.5);
-    active:= frame;
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
     end;
 
 with arrowRight do
@@ -265,7 +277,10 @@ with arrowRight do
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= -(cScreenWidth shr 1) + Round(frame.w * 1.5);
     frame.y:= cScreenHeight - Round(frame.h * 1.5);
-    active:= frame;
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
     end;
 
 with arrowUp do
@@ -276,7 +291,10 @@ with arrowUp do
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - frame.w * 2;
     frame.y:= backjump.frame.y - Round(frame.h * 2.25);
-    active:= frame;
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
     with moveAnim do
          begin
          target.x:= frame.x;
@@ -294,7 +312,10 @@ with arrowDown do
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - frame.w * 2;
     frame.y:= backjump.frame.y - Round(frame.h * 2.25);
-    active:= frame;
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
     with moveAnim do
         begin
         target.x:= frame.x;
@@ -312,7 +333,10 @@ with pauseButton do
     frame.h:= Round(spritesData[sprPauseButton].Texture^.h * buttonScale);
     frame.x:= cScreenWidth div 2 - frame.w;
     frame.y:= 0;
-    active:= frame;
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
     end;
 
 {$ENDIF}
