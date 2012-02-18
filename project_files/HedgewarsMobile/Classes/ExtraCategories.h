@@ -48,12 +48,19 @@
 @end
 
 
+@interface UIButton (quickStyle)
+
+-(id) initWithFrame:(CGRect) frame andTitle:(NSString *)title;
+
+@end
+
+
 @interface UILabel (quickStyle)
 
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title;
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth;
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth
-          withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor;
+-(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title;
+-(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth;
+-(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth
+    withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor;
 
 @end
 

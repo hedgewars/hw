@@ -20,7 +20,6 @@
 
 
 #import "StatsPageViewController.h"
-#import <QuartzCore/QuartzCore.h>
 
 @implementation StatsPageViewController
 @synthesize statsArray;
@@ -148,18 +147,9 @@
         UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width * 70 / 100, aTableView.rowHeight)];
         footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 17, self.view.frame.size.width * 70 / 100, aTableView.rowHeight)];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 17, self.view.frame.size.width * 70 / 100, aTableView.rowHeight)
+                                                  andTitle:NSLocalizedString(@"Done",@"")];
         button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        [button setTitle:NSLocalizedString(@"Done",@"") forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-
-        button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-        button.backgroundColor = [UIColor blackColorTransparent];
-        [button.layer setBorderWidth:1];
-        [button.layer setBorderColor:[[UIColor darkYellowColor] CGColor]];
-        [button.layer setCornerRadius:9.0f];
-        [button.layer setMasksToBounds:YES];
         [button addTarget:self action:@selector(dismissView) forControlEvents:UIControlEventTouchUpInside];
         [footer addSubview:button];
         [button release];
