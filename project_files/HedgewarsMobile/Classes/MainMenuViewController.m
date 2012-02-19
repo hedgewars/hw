@@ -29,6 +29,7 @@
 #import "MissionTrainingViewController.h"
 #import "Appirater.h"
 #import "ServerProtocolNetwork.h"
+#import "GameInterfaceBridge.h"
 
 
 @implementation MainMenuViewController
@@ -220,6 +221,10 @@
                 [missions release];
             }
             [self presentModalViewController:self.missionsViewController animated:YES];
+            break;
+        case 6:
+            [GameInterfaceBridge registerCallingController:self];
+            [GameInterfaceBridge startSimpleGame];
             break;
         default:
             alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
