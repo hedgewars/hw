@@ -23,8 +23,6 @@
 
 
 @interface SchemeWeaponConfigViewController : UIViewController <UITableViewDelegate,UITableViewDataSource> {
-    UITableView *tableView;
-
     NSArray *listOfSchemes;
     NSArray *listOfWeapons;
     NSArray *listOfScripts;
@@ -42,7 +40,6 @@
     BOOL sectionsHidden;
 }
 
-@property (nonatomic,retain) UITableView *tableView;
 @property (nonatomic,retain) NSArray *listOfSchemes;
 @property (nonatomic,retain) NSArray *listOfWeapons;
 @property (nonatomic,retain) NSArray *listOfScripts;
