@@ -36,6 +36,7 @@
 +(void) startLocalGame:(NSDictionary *)withOptions;
 +(void) startSaveGame:(NSString *)atPath;
 +(void) startMissionGame:(NSString *)withScript;
++(void) startSimpleGame;
 
 +(void) registerCallingController:(UIViewController *)controller;
 

@@ -226,5 +226,67 @@ static UIViewController *callingController;
     [missionLine release];
 }
 
++(void) startSimpleGame {
+    srand(time(0));
+
+    // generate a seed
+    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+    NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
+    CFRelease(uuid);
+    NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
+
+    // pick a random static map
+    NSArray *listOfMaps = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
+    NSString *mapName = [listOfMaps objectAtIndex:random()%[listOfMaps count]];
+    NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg",MAPS_DIRECTORY(),mapName];
+    NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
+    [fileCfg release];
+    NSArray *split = [contents componentsSeparatedByString:@"\n"];
+    [contents release];
+    NSString *themeCommand = [[NSString alloc] initWithFormat:@"etheme %@", [split objectAtIndex:0]];
+    NSString *staticMapCommand = [[NSString alloc] initWithFormat:@"emap %@", mapName];
+
+    // select teams with two different colors
+    NSArray *colorArray = [HWUtils teamColors];
+    NSInteger firstColorIndex, secondColorIndex;
+    do {
+        firstColorIndex = random()%[colorArray count];
+        secondColorIndex = random()%[colorArray count];
+    } while (firstColorIndex == secondColorIndex);
+    unsigned int firstColor = [[colorArray objectAtIndex:firstColorIndex] intValue];
+    unsigned int secondColor = [[colorArray objectAtIndex:secondColorIndex] intValue];
+
+    NSDictionary *firstTeam = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:4],@"number",
+                                                                           [NSNumber numberWithUnsignedInt:firstColor],@"color",
+                                                                           @"Ninjas.plist",@"team",nil];
+    NSDictionary *secondTeam = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:4],@"number",
+                                                                            [NSNumber numberWithUnsignedInt:secondColor],@"color",
+                                                                            @"Robots.plist",@"team",nil];
+    NSArray *listOfTeams = [[NSArray alloc] initWithObjects:firstTeam,secondTeam,nil];
+    [firstTeam release];
+    [secondTeam release];
+
+    // create the configuration
+    NSDictionary *gameDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    seedCmd,@"seed_command",
+                                    @"e$template_filter 0",@"templatefilter_command",
+                                    @"e$mapgen 0",@"mapgen_command",
+                                    @"e$maze_size 0",@"mazesize_command",
+                                    themeCommand,@"theme_command",
+                                    staticMapCommand,@"staticmap_command",
+                                    listOfTeams,@"teams_list",
+                                    @"Default.plist",@"scheme",
+                                    @"Default.plist",@"weapon",
+                                    @"",@"mission_command",
+                                    nil];
+    [listOfTeams release];
+    [staticMapCommand release];
+    [themeCommand release];
+    [seedCmd release];
+
+    // launch game
+    [GameInterfaceBridge startLocalGame:gameDictionary];
+    [gameDictionary release];
+}
 
 @end
