@@ -24,11 +24,12 @@
 
 
 #define LABEL_TAG 57423
+#define TABLE_TAG 45657
 
 static SchemeWeaponConfigViewController *controllerInstance;
 
 @implementation SchemeWeaponConfigViewController
-@synthesize tableView, listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
+@synthesize listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
             selectedScheme, selectedWeapon, selectedScript, scriptCommand, topControl, sectionsHidden;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -101,16 +102,24 @@ static SchemeWeaponConfigViewController *controllerInstance;
 -(void) viewDidLoad {
     self.sectionsHidden = NO;
 
-    UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+    UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 45, self.view.frame.size.width, self.view.frame.size.height-48)
                                                            style:UITableViewStyleGrouped];
     aTableView.delegate = self;
     aTableView.dataSource = self;
     if (IS_IPAD()) {
-        [aTableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
-        aTableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
-        aTableView.layer.borderWidth = 2.7f;
-        aTableView.layer.cornerRadius = 8;
-        aTableView.contentInset = UIEdgeInsetsMake(5, 0, 5, 0);
+        [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
+        UILabel *background = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+                                                    andTitle:nil
+                                             withBorderWidth:2.7f];
+        background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self.view insertSubview:background atIndex:0];
+        [background release];
+
+        self.topControl.frame = CGRectMake(0, 4, self.view.frame.size.width * 80/100, 30);
+        self.topControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
+        [self.topControl addTarget:aTableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
+        [self.view addSubview:self.topControl];
     } else {
         UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
@@ -120,26 +129,21 @@ static SchemeWeaponConfigViewController *controllerInstance;
         [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
     }
 
+    aTableView.tag = TABLE_TAG;
     aTableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     aTableView.separatorColor = [UIColor whiteColor];
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.tableView = aTableView;
+    [self.view addSubview:aTableView];
     [aTableView release];
-    [self.view addSubview:self.tableView];
 
     [super viewDidLoad];
     controllerInstance = self;
 }
 
-// this is a workaround to keep the uisegmented control visible
--(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    [self.tableView reloadData];
-}
-
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)aTableView {
     return (self.sectionsHidden ? 0 : 1);
 }
 
@@ -209,16 +213,18 @@ static SchemeWeaponConfigViewController *controllerInstance;
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 50.0;
+-(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
+    return IS_IPAD() ? 50.0 : 0;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+-(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
+    if (IS_IPAD())
+        return nil;
     UIView *theView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
     theView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.topControl.frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
     self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
-    [self.topControl addTarget:self.tableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
+    [self.topControl addTarget:aTableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
     [theView addSubview:self.topControl];
     return [theView autorelease];
 }
@@ -307,9 +313,9 @@ static SchemeWeaponConfigViewController *controllerInstance;
     if (controllerInstance.sectionsHidden == YES) {
         controllerInstance.sectionsHidden = NO;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
-        [controllerInstance.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        controllerInstance.tableView.scrollEnabled = YES;
-
+        UITableView *aTableView = (UITableView *)[controllerInstance.view viewWithTag:TABLE_TAG];
+        [aTableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        aTableView.scrollEnabled = YES;
         [[controllerInstance.view viewWithTag:LABEL_TAG] removeFromSuperview];
     }
 }
@@ -318,8 +324,9 @@ static SchemeWeaponConfigViewController *controllerInstance;
     if (controllerInstance.sectionsHidden == NO) {
         controllerInstance.sectionsHidden = YES;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
-        [controllerInstance.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        controllerInstance.tableView.scrollEnabled = NO;
+        UITableView *aTableView = (UITableView *)[controllerInstance.view viewWithTag:TABLE_TAG];
+        [aTableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        aTableView.scrollEnabled = NO;
 
         CGRect frame = CGRectMake(0, 0, controllerInstance.view.frame.size.width * 80/100, 60);
         UILabel *theLabel = [[UILabel alloc] initWithFrame:frame
@@ -340,7 +347,6 @@ static SchemeWeaponConfigViewController *controllerInstance;
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
     if ([HWUtils isGameLaunched]) {
-        self.tableView = nil;
         self.lastIndexPath_sc = nil;
         self.lastIndexPath_we = nil;
         self.lastIndexPath_lu = nil;
@@ -358,7 +364,6 @@ static SchemeWeaponConfigViewController *controllerInstance;
 }
 
 -(void) viewDidUnload {
-    self.tableView = nil;
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
@@ -375,7 +380,6 @@ static SchemeWeaponConfigViewController *controllerInstance;
 }
 
 -(void) dealloc {
-    releaseAndNil(tableView);
     releaseAndNil(listOfSchemes);
     releaseAndNil(listOfWeapons);
     releaseAndNil(listOfScripts);
