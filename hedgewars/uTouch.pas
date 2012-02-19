@@ -53,6 +53,7 @@ function calculateDelta(finger1, finger2: TTouch_Data): LongInt;
 function getSecondFinger(finger: TTouch_Data): PTouch_Data;
 function isOnRect(rect: TSDL_Rect; finger: TTouch_Data): boolean;
 function isOnRect(x,y,w,h: LongInt; finger: TTouch_Data): boolean;
+function isOnWidget(widget: TOnScreenWidget; finger: TTouch_Data): boolean;
 procedure printFinger(finger: TTouch_Data);
 implementation
 
@@ -98,35 +99,35 @@ begin
     exit;
 end;
 
-if isOnRect(fireButton.active, finger^) then
+if isOnWidget(fireButton, finger^) then
     begin
     spaceKey:= true;
     moveCursor:= false;
     finger^.pressedWidget:= @fireButton;
     exit;
     end;
-if isOnRect(arrowLeft.active, finger^) then
+if isOnWidget(arrowLeft, finger^) then
     begin
     leftKey:= true;
     moveCursor:= false;
     finger^.pressedWidget:= @arrowLeft;
     exit;
     end;
-if isOnRect(arrowRight.active, finger^) then
+if isOnWidget(arrowRight, finger^) then
     begin
     rightKey:= true;
     moveCursor:= false;
     finger^.pressedWidget:= @arrowRight;
     exit;
     end;
-if isOnRect(arrowUp.active, finger^) then
+if isOnWidget(arrowUp, finger^) then
      begin
      upKey:= true;
      moveCursor:= false;
      finger^.pressedWidget:= @arrowUp;
      exit;
      end;
-if isOnRect(arrowDown.active, finger^) then
+if isOnWidget(arrowDown, finger^) then
      begin
      downKey:= true;
      moveCursor:= false;
@@ -134,7 +135,7 @@ if isOnRect(arrowDown.active, finger^) then
      exit;
      end;
 
-if isOnRect(pauseButton.active, finger^) then
+if isOnWidget(pauseButton, finger^) then
      begin
      isPaused:= not isPaused;
      moveCursor:= false;
@@ -255,7 +256,7 @@ end;
 procedure onTouchLongClick(finger: TTouch_Data);
 begin
 {$IFDEF USE_TOUCH_INTERFACE}
-if isOnRect(jumpWidget.active, finger) then
+if isOnWidget(jumpWidget, finger) then
     begin
     ParseCommand('ljump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
     if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
@@ -292,13 +293,13 @@ if bShowAmmoMenu then
     end;
 
 {$IFDEF USE_TOUCH_INTERFACE}
-if isOnCurrentHog(finger) or isOnRect(AMWidget.active, finger) then
+if isOnCurrentHog(finger) or isOnWidget(AMWidget, finger) then
     begin
     bShowAmmoMenu := true;
     exit;
     end;
 
-if isOnRect(jumpWidget.active, finger) then
+if isOnWidget(jumpWidget, finger) then
     begin
     ParseCommand('hjump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
     if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
@@ -558,6 +559,11 @@ begin
                (finger.x < x + w) and
                (cScreenHeight - finger.y > y) and
                (cScreenHeight - finger.y < y + h);
+end;
+
+function isOnWidget(widget: TOnScreenWidget; finger: TTouch_Data): boolean;
+begin
+    isOnWidget:= widget.show and isOnRect(widget.active, finger);
 end;
 
 procedure printFinger(finger: TTouch_Data);
