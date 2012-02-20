@@ -46,6 +46,7 @@ public class Scheme implements Parcelable, Comparable<Scheme>{
 	private Integer gamemod;
 	private ArrayList<Integer> basic;;
 	private static ArrayList<LinkedHashMap<String, ?>> basicflags = new ArrayList<LinkedHashMap<String, ?>>();//TODO why is it static?
+	public int health;
 	
 	public Scheme(String _name, ArrayList<Integer> _basic, int _gamemod){
 		name = _name;
@@ -65,6 +66,12 @@ public class Scheme implements Parcelable, Comparable<Scheme>{
 			
 			String command = (String)basicflag.get("command");
 			Integer value = basic.get(pos);
+			
+			if(command.equals("inithealth")){//Health is a special case, it doesn't need to be send 				                             
+				health = value;              //to the engine yet, we'll do that with the other HH info
+				continue;
+			}
+			
 			Boolean checkOverMax = (Boolean) basicflag.get("checkOverMax");
 			Boolean times1000 = (Boolean) basicflag.get("times1000");
 			Integer max = (Integer) basicflag.get("max");
@@ -106,6 +113,7 @@ public class Scheme implements Parcelable, Comparable<Scheme>{
 				String name = null;
 				ArrayList<Integer> basic = new ArrayList<Integer>();
 				Integer gamemod = 0;
+				int health = 0;
 				int mask = 0x000000004;
 
 				int eventType = xmlPuller.getEventType();
