@@ -157,35 +157,52 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 
 	public void run(){
 		final ArrayList<HashMap<String, ?>> gravesDataNew = FrontendDataUtils.getGraves(this);
-		final ArrayList<HashMap<String, ?>> flagsDataNew = FrontendDataUtils.getFlags(this);
-		final ArrayList<HashMap<String, ?>> typesDataNew = FrontendDataUtils.getTypes(this);
-		final ArrayList<HashMap<String, ?>> hatsDataNew = FrontendDataUtils.getHats(this);
-		final ArrayList<String> voicesDataNew = FrontendDataUtils.getVoices(this);
-		final ArrayList<String> fortsDataNew = FrontendDataUtils.getForts(this);
-		
-		
 		this.runOnUiThread(new Runnable(){
 			public void run() {
 				copy(gravesData, gravesDataNew);
 				((SimpleAdapter)grave.getAdapter()).notifyDataSetChanged();
-				
+			}
+		});
+		
+		final ArrayList<HashMap<String, ?>> flagsDataNew = FrontendDataUtils.getFlags(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
 				copy(flagsData, flagsDataNew);
 				((SimpleAdapter)flag.getAdapter()).notifyDataSetChanged();
-				
+			}
+		});
+		
+		final ArrayList<HashMap<String, ?>> typesDataNew = FrontendDataUtils.getTypes(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
 				copy(typesData, typesDataNew);
 				((SimpleAdapter)difficulty.getAdapter()).notifyDataSetChanged();
-				
+			}
+		});
+		
+		final ArrayList<HashMap<String, ?>> hatsDataNew = FrontendDataUtils.getHats(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
 				copy(hatsData, hatsDataNew);
 				((SimpleAdapter)hogHat.get(0).getAdapter()).notifyDataSetChanged();
-				
+			}
+		});
+		
+		final ArrayList<String> voicesDataNew = FrontendDataUtils.getVoices(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
 				copy(voicesData, voicesDataNew);
 				((ArrayAdapter<String>)voice.getAdapter()).notifyDataSetChanged();
-				
-				copy(fortsData, fortsDataNew);
-				((ArrayAdapter<String>)fort.getAdapter()).notifyDataSetChanged();			
 			}
-		});		
-
+		});
+		
+		final ArrayList<String> fortsDataNew = FrontendDataUtils.getForts(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
+				copy(fortsData, fortsDataNew);
+				((ArrayAdapter<String>)fort.getAdapter()).notifyDataSetChanged();
+			}
+		});
 	}
 	
 	private static <T> void copy(List<T> dest, List<T> src){
