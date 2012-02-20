@@ -9,7 +9,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.hedgewars.hedgeroid.MainActivity;
+import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Utils;
+import org.hedgewars.hedgeroid.Datastructures.Scheme;
+import org.hedgewars.hedgeroid.Datastructures.Team;
+import org.hedgewars.hedgeroid.Datastructures.Weapon;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -82,6 +86,9 @@ public class DownloadAssets extends AsyncTask<Object, Long, Long>{
 	}
 
 	protected Long doInBackground(Object... params) {
+		Utils.resRawToFilesDir(act,R.array.schemes, Scheme.DIRECTORY_SCHEME);
+		Utils.resRawToFilesDir(act, R.array.weapons, Weapon.DIRECTORY_WEAPON);
+		Utils.resRawToFilesDir(act, R.array.teams, Team.DIRECTORY_TEAMS);
 		buffer = new byte[8192];//allocate the buffer
 		return DownloadAssets.copyFileOrDir(act, "Data");
 	}
