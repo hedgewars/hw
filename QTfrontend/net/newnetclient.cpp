@@ -191,6 +191,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
     switch (socketError)
     {
         case QAbstractSocket::RemoteHostClosedError:
+            emit disconnected(tr("Remote host has closed connection"));
             break;
         case QAbstractSocket::HostNotFoundError:
             emit disconnected(tr("The host was not found. Please check the host name and port settings."));
