@@ -30,6 +30,7 @@
 
 #include "hwform.h"
 #include "hwconsts.h"
+#include "newnetclient.h"
 
 #include "HWDataManager.h"
 
@@ -150,6 +151,8 @@ int main(int argc, char *argv[])
     rand();
 
     Q_INIT_RESOURCE(hedgewars);
+
+    qRegisterMetaType<HWTeam>("HWTeam");
 
     bindir->cd("bin"); // workaround over NSIS installer
 
