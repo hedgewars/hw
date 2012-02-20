@@ -179,10 +179,10 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 				((SimpleAdapter)hogHat.get(0).getAdapter()).notifyDataSetChanged();
 				
 				copy(voicesData, voicesDataNew);
-				((ArrayAdapter<String>)fort.getAdapter()).notifyDataSetChanged();
+				((ArrayAdapter<String>)voice.getAdapter()).notifyDataSetChanged();
 				
 				copy(fortsData, fortsDataNew);
-				((ArrayAdapter<String>)voice.getAdapter()).notifyDataSetChanged();			
+				((ArrayAdapter<String>)fort.getAdapter()).notifyDataSetChanged();			
 			}
 		});		
 
@@ -283,7 +283,6 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 	};
 
 	private OnItemSelectedListener fortSelector = new OnItemSelectedListener() {
-		@SuppressWarnings("unchecked")
 		public void onItemSelected(AdapterView<?> arg0, View arg1,
 				int position, long arg3) {
 			settingsChanged = true;
