@@ -56,17 +56,6 @@ public class StartGameActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean firstTime = sharedPref.getBoolean("firstTime", true);
-		//Copy all the xml files to the device TODO only do first time launch of the app...
-		if(firstTime){
-			sharedPref.edit().putBoolean("firstTime", false).commit();
-			
-			Utils.resRawToFilesDir(this,R.array.schemes, Scheme.DIRECTORY_SCHEME);
-			Utils.resRawToFilesDir(this, R.array.weapons, Weapon.DIRECTORY_WEAPON);
-			Utils.resRawToFilesDir(this, R.array.teams, Team.DIRECTORY_TEAMS);
-		}
-
 		Scheme.parseBasicFlags(this);
 		config = new GameConfig();
 
