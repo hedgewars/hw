@@ -88,6 +88,7 @@
 #include "xfire.h"
 #include "drawmapwidget.h"
 #include "mouseoverfilter.h"
+#include "roomslistmodel.h"
 
 #include "HWDataManager.h"
 
@@ -1040,6 +1041,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
 // rooms list page stuff
+    ui.pageRoomsList->roomsList->setModel(hwnet->roomsListModel());
     connect(hwnet, SIGNAL(roomsList(const QStringList&)),
             ui.pageRoomsList, SLOT(setRoomsList(const QStringList&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(adminAccess(bool)),

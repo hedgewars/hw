@@ -25,6 +25,7 @@
 #include "newnetclient.h"
 #include "proto.h"
 #include "game.h"
+#include "roomslistmodel.h"
 
 char delimeter='\n';
 
@@ -34,6 +35,7 @@ HWNewNet::HWNewNet() :
     loginStep(0),
     netClientState(Disconnected)
 {
+    m_roomsListModel = new RoomsListModel(this);
 // socket stuff
     connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
@@ -830,4 +832,9 @@ void HWNewNet::handleNotice(int n)
             break;
         }
     }
+}
+
+RoomsListModel * HWNewNet::roomsListModel()
+{
+    return m_roomsListModel;
 }
