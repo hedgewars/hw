@@ -23,6 +23,7 @@
 
 class HWChatWidget;
 class AmmoSchemeModel;
+class QTableView;
 
 class PageRoomsList : public AbstractPage
 {
@@ -36,7 +37,7 @@ class PageRoomsList : public AbstractPage
 
         QLineEdit * roomName;
         QLineEdit * searchText;
-        QTableWidget * roomsList;
+        QTableView * roomsList;
         QPushButton * BtnCreate;
         QPushButton * BtnJoin;
         QPushButton * BtnRefresh;
@@ -50,7 +51,6 @@ class PageRoomsList : public AbstractPage
 
     public slots:
         void setAdmin(bool);
-        void setRoomsList(const QStringList & list);
         void setUser(const QString & nickname);
         void updateNickCounter(int cnt);
 

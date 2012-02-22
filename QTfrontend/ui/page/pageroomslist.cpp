@@ -24,7 +24,7 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QHeaderView>
-#include <QTableWidget>
+#include <QTableView>
 
 #include "ammoSchemeModel.h"
 #include "pageroomslist.h"
@@ -44,7 +44,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     newRoomLayout->addWidget(roomName);
     pageLayout->addLayout(newRoomLayout, 0, 0, 1, 2);
 
-    roomsList = new QTableWidget(this);
+    roomsList = new QTableView(this);
     roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
     roomsList->verticalHeader()->setVisible(false);
     roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
@@ -192,6 +192,7 @@ void PageRoomsList::setAdmin(bool flag)
     BtnAdmin->setVisible(flag);
 }
 
+/*
 void PageRoomsList::setRoomsList(const QStringList & list)
 {
     QBrush red(QColor(255, 0, 0));
@@ -209,14 +210,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
     roomsList->clear();
     roomsList->setColumnCount(7);
     roomsList->setHorizontalHeaderLabels(
-        QStringList() <<
-        QTableWidget::tr("Room Name") <<
-        QTableWidget::tr("C") <<
-        QTableWidget::tr("T") <<
-        QTableWidget::tr("Owner") <<
-        QTableWidget::tr("Map") <<
-        QTableWidget::tr("Rules") <<
-        QTableWidget::tr("Weapons")
+
     );
 
     // set minimum sizes
@@ -411,6 +405,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 
 //  roomsList->resizeColumnsToContents();
 }
+*/
 
 void PageRoomsList::onCreateClick()
 {
@@ -425,6 +420,7 @@ void PageRoomsList::onCreateClick()
 
 void PageRoomsList::onJoinClick()
 {
+    /*
     QTableWidgetItem * curritem = roomsList->item(roomsList->currentRow(), 0);
     if (!curritem)
     {
@@ -453,6 +449,7 @@ void PageRoomsList::onJoinClick()
     {
         emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
     }
+*/
 }
 
 void PageRoomsList::onRefreshClick()

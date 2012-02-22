@@ -31,6 +31,7 @@
 class GameUIConfig;
 class GameCFGWidget;
 class TeamSelWidget;
+class RoomsListModel;
 
 extern char delimeter;
 
@@ -53,6 +54,7 @@ class HWNewNet : public QObject
         QString getNick();
         QString getRoom();
         QString getHost();
+        RoomsListModel * roomsListModel();
 
     private:
         bool isChief;
@@ -62,6 +64,7 @@ class HWNewNet : public QObject
         QTcpSocket NetSocket;
         QString seed;
         bool m_game_connected;
+        RoomsListModel * m_roomsListModel;
 
         template <typename T>
         void SendCfgStrNet(T a)
