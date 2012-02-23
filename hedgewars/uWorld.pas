@@ -857,21 +857,18 @@ end;
 
 procedure DrawWorld(Lag: LongInt);
 begin
-if not isPaused then
+    if ZoomValue < zoom then
     begin
-        if ZoomValue < zoom then
+        zoom:= zoom - 0.002 * Lag;
+        if ZoomValue > zoom then
+            zoom:= ZoomValue
+    end
+    else
+        if ZoomValue > zoom then
         begin
-            zoom:= zoom - 0.002 * Lag;
-            if ZoomValue > zoom then
-                zoom:= ZoomValue
-        end
-        else
-            if ZoomValue > zoom then
-            begin
-            zoom:= zoom + 0.002 * Lag;
-            if ZoomValue < zoom then
-                zoom:= ZoomValue
-            end
+        zoom:= zoom + 0.002 * Lag;
+        if ZoomValue < zoom then
+            zoom:= ZoomValue
         end
     else
         ZoomValue:= zoom;
