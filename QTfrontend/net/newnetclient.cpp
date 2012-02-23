@@ -257,7 +257,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         }
 
         RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
-        RawSendNet(QString("PROTO%1%2").arg(delimeter).arg("41"));
+        RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
         netClientState = Connected;
         m_game_connected = true;
         emit adminAccess(false);
