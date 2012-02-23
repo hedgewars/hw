@@ -51,8 +51,7 @@ procedure freeEverything(complete:boolean); forward;
 procedure DoTimer(Lag: LongInt);
 var s: shortstring;
 begin
-    if isPaused = false then
-        inc(RealTicks, Lag);
+    inc(RealTicks, Lag);
 
     case GameState of
         gsLandGen:
@@ -88,20 +87,14 @@ begin
             begin
             DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
             ProcessKbd;
-            if not isPaused then
-                begin
-                DoGameTick(Lag);
-                ProcessVisualGears(Lag);
-                end;
+            DoGameTick(Lag);
+            ProcessVisualGears(Lag);
             end;
         gsChat:
             begin
             DrawWorld(Lag);
-            if not isPaused then
-                begin
-                DoGameTick(Lag);
-                ProcessVisualGears(Lag);
-                end;
+            DoGameTick(Lag);
+            ProcessVisualGears(Lag);
             end;
         gsExit:
             begin
