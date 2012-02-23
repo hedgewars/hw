@@ -165,8 +165,6 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings) :
         QPair<QString,QString> ammo = cDefaultAmmos.at(i);
         CBWeapons->addItem(ammo.first.toAscii().constData());
     }
-
-    gameInLobby = false;
 }
 
 
@@ -420,9 +418,9 @@ void PageRoomsList::onCreateClick()
 
 void PageRoomsList::onJoinClick()
 {
-    /*
-    QTableWidgetItem * curritem = roomsList->item(roomsList->currentRow(), 0);
-    if (!curritem)
+    QModelIndexList mdl = roomsList->selectionModel()->selectedRows();
+
+    if(mdl.size() != 1)
     {
         QMessageBox::critical(this,
                               tr("Error"),
@@ -431,25 +429,13 @@ void PageRoomsList::onJoinClick()
         return;
     }
 
-    for (int i = 0; i < listFromServer.size(); i += 8)
-    {
-        if (listFromServer[i + 1] == curritem->data(Qt::DisplayRole).toString())
-        {
-            gameInLobby = listFromServer[i].compare("True");
-            break;
-        }
-    }
+    bool gameInLobby = roomsList->model()->index(mdl[0].row(), 0).data().toString().compare("True");
+    QString roomName = roomsList->model()->index(mdl[0].row(), 1).data().toString();
 
-    if (gameInLobby)
-    {
-        gameInLobbyName = curritem->data(Qt::DisplayRole).toString();
-        emit askForRoomList();
-    }
+    if (!gameInLobby)
+        emit askJoinConfirmation(roomName);
     else
-    {
-        emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
-    }
-*/
+        emit askForJoinRoom(roomName);
 }
 
 void PageRoomsList::onRefreshClick()
@@ -490,12 +476,14 @@ void PageRoomsList::setModel(QAbstractTableModel *model)
 {
     roomsList->setModel(model);
 
+    roomsList->hideColumn(0);
+
     QHeaderView * h = roomsList->horizontalHeader();
-    h->resizeSection(0, 200);
-    h->resizeSection(1, 50);
+    h->resizeSection(1, 200);
     h->resizeSection(2, 50);
-    h->resizeSection(3, 100);
+    h->resizeSection(3, 50);
     h->resizeSection(4, 100);
     h->resizeSection(5, 100);
     h->resizeSection(6, 100);
+    h->resizeSection(7, 100);
 }

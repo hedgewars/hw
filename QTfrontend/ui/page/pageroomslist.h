@@ -77,9 +77,6 @@ class PageRoomsList : public AbstractPage
     private:
         QSettings * m_gameSettings;
 
-        bool gameInLobby;
-        QString gameInLobbyName;
-        QStringList listFromServer;
         AmmoSchemeModel * ammoSchemeModel;
 
 };
