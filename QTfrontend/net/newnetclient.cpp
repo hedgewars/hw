@@ -257,7 +257,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         }
 
         RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
-        RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
+        RawSendNet(QString("PROTO%1%2").arg(delimeter).arg("41"));
         netClientState = Connected;
         m_game_connected = true;
         emit adminAccess(false);
@@ -275,9 +275,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ROOMS")
     {
+        if(lst.size() % 8 != 1)
+        {
+            qWarning("Net: Malformed ROOMS message");
+            return;
+        }
         QStringList tmp = lst;
         tmp.removeFirst();
-        emit roomsList(tmp);
+        m_roomsListModel->setRoomsList(tmp);
         return;
     }
 
@@ -478,14 +483,30 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if(lst[0] == "ROOM")
+    if(lst[0] == "ROOM" && lst.size() == 10 && lst[1] == "ADD")
     {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad ROOM message");
-            return;
-        }
-        RawSendNet(QString("LIST"));
+        QStringList tmp = lst;
+        tmp.removeFirst();
+        tmp.removeFirst();
+
+        m_roomsListModel->addRoom(tmp);
+        return;
+    }
+
+    if(lst[0] == "ROOM" && lst.size() == 11 && lst[1] == "UPD")
+    {
+        QStringList tmp = lst;
+        tmp.removeFirst();
+        tmp.removeFirst();
+
+        QString roomName = tmp.takeFirst();
+        m_roomsListModel->updateRoom(roomName, tmp);
+        return;
+    }
+
+    if(lst[0] == "ROOM" && lst.size() == 3 && lst[1] == "DEL")
+    {
+        m_roomsListModel->removeRoom(lst[2]);
         return;
     }
 

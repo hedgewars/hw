@@ -15,9 +15,17 @@ public:
     int columnCount(const QModelIndex & parent) const;
     QVariant data(const QModelIndex &index, int role) const;
 
+public slots:
+    void setRoomsList(const QStringList & rooms);
+    void addRoom(const QStringList & info);
+    void removeRoom(const QString & name);
+    void updateRoom(const QString & name, const QStringList & info);
+
 private:
     QList<QStringList> m_data;
     QStringList m_headerData;
+
+    QStringList roomInfo2RoomRecord(const QStringList & info);
 };
 
 #endif // ROOMSLISTMODEL_H
