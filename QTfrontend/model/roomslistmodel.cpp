@@ -5,6 +5,7 @@ RoomsListModel::RoomsListModel(QObject *parent) :
 {
     m_headerData =
     QStringList()
+     << QString()
      << tr("Room Name")
      << tr("C")
      << tr("T")
@@ -35,14 +36,14 @@ int RoomsListModel::columnCount(const QModelIndex & parent) const
     if(parent.isValid())
         return 0;
     else
-        return 7;
+        return 8;
 }
 
 QVariant RoomsListModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.row() < 0
             || index.row() >= m_data.size()
-            || index.column() >= 7
+            || index.column() >= 8
             || (role != Qt::EditRole && role != Qt::DisplayRole)
        )
         return QVariant();
@@ -116,7 +117,6 @@ QStringList RoomsListModel::roomInfo2RoomRecord(const QStringList & info)
     QStringList result;
 
     result = info;
-    result.removeFirst();
 
     return result;
 }
