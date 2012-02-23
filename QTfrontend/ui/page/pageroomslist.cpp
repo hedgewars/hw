@@ -485,3 +485,17 @@ void PageRoomsList::setUser(const QString & nickname)
 {
     chatWidget->setUser(nickname);
 }
+
+void PageRoomsList::setModel(QAbstractTableModel *model)
+{
+    roomsList->setModel(model);
+
+    QHeaderView * h = roomsList->horizontalHeader();
+    h->resizeSection(0, 200);
+    h->resizeSection(1, 50);
+    h->resizeSection(2, 50);
+    h->resizeSection(3, 100);
+    h->resizeSection(4, 100);
+    h->resizeSection(5, 100);
+    h->resizeSection(6, 100);
+}

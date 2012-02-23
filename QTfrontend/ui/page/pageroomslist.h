@@ -49,6 +49,8 @@ class PageRoomsList : public AbstractPage
         HWChatWidget * chatWidget;
         QLabel * lblCount;
 
+        void setModel(QAbstractTableModel * model);
+
     public slots:
         void setAdmin(bool);
         void setUser(const QString & nickname);
