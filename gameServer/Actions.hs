@@ -236,6 +236,7 @@ processAction ChangeMaster = do
     rnc <- gets roomsClients
     newMasterId <- liftM (head . filter (/= ci)) . io $ roomClientsIndicesM rnc ri
     newMaster <- io $ client'sM rnc id newMasterId
+    oldRoomName <- io $ room'sM rnc name ri
     let newRoomName = nick newMaster
     mapM_ processAction [
         ModifyRoom (\r -> r{masterID = newMasterId, name = newRoomName}),
@@ -246,7 +247,7 @@ processAction ChangeMaster = do
     proto <- client's clientProto
     newRoom <- io $ room'sM rnc id ri
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "ADD" : roomInfo (nick newMaster) newRoom)
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo (nick newMaster) newRoom)
 
 processAction (AddRoom roomName roomPassword) = do
     Just clId <- gets clientIndex

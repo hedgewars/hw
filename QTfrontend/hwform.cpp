@@ -1042,8 +1042,6 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 
 // rooms list page stuff
     ui.pageRoomsList->roomsList->setModel(hwnet->roomsListModel());
-    connect(hwnet, SIGNAL(roomsList(const QStringList&)),
-            ui.pageRoomsList, SLOT(setRoomsList(const QStringList&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(adminAccess(bool)),
             ui.pageRoomsList, SLOT(setAdmin(bool)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(adminAccess(bool)),
