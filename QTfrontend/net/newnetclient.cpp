@@ -254,6 +254,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             // TODO: Warn user, disconnect
             qWarning() << "Server too old";
+            RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("Server too old"));
+            Disconnect();
+            emit disconnected(tr("The server is too old. Disconnecting now."));
+            return;
         }
 
         RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
