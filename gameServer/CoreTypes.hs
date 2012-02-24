@@ -133,7 +133,7 @@ data ServerInfo =
         latestReleaseVersion :: Word16,
         earliestCompatibleVersion :: Word16,
         listenPort :: PortNumber,
-        nextRoomID :: Int,
+        --nextRoomID :: Int,
         dbHost :: B.ByteString,
         dbName :: B.ByteString,
         dbLogin :: B.ByteString,
@@ -153,11 +153,11 @@ newServerInfo =
     ServerInfo
         True
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-        "<font color=yellow><h3 align=center>Hedgewars 0.9.16 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        39
-        31 -- 0.9.13
+        "<font color=yellow><h3 align=center>Hedgewars 0.9.17 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
+        41
+        43 -- 0.9.18
         46631
-        0
+        --0
         ""
         ""
         ""

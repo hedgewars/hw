@@ -35,7 +35,7 @@ bool custom_config = false;
 bool custom_data = false;
 
 int cMaxTeams = 8;
-int cMinServerVersion = 0;
+int cMinServerVersion = 1;
 
 QString * cDefaultAmmoStore = new QString( AMMOLINE_DEFAULT_QT AMMOLINE_DEFAULT_PROB
                                            AMMOLINE_DEFAULT_DELAY AMMOLINE_DEFAULT_CRATE );
