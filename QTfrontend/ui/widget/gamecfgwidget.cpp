@@ -504,7 +504,7 @@ void GameCFGWidget::schemeChanged(int index)
     for(int i = 0; i < size; ++i)
         sl << schemeData(i).toString();
 
-    emit paramChanged("SCHEME", sl);
+    if (sl.size()!=1) emit paramChanged("SCHEME", sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
 
     if (isEnabled() && bindEntries->isEnabled() && bindEntries->isChecked())
     {
