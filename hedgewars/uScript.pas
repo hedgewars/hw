@@ -1966,7 +1966,7 @@ if (GameFlags and gfSharedAmmo) <> 0 then
         if ScriptExists('onNewAmmoStore') then
             begin
             ScriptPrepareAmmoStore;
-            ScriptCall('onAmmoStoreInit');
+            ScriptCall('onNewAmmoStore');
             end;
         AddAmmoStore;
         for j:= 0 to Pred(ClansArray[i]^.TeamsNumber) do
@@ -1980,7 +1980,7 @@ else if (GameFlags and gfPerHogAmmo) <> 0 then
             if ScriptExists('onNewAmmoStore') then
                 begin
                 ScriptPrepareAmmoStore;
-                ScriptCall('onAmmoStoreInit');
+                ScriptCall('onNewAmmoStore');
                 end;
             AddAmmoStore;
             TeamsArray[i]^.Hedgehogs[j].AmmoStore:= StoreCnt - 1
@@ -1991,7 +1991,7 @@ else
         if ScriptExists('onNewAmmoStore') then
             begin
             ScriptPrepareAmmoStore;
-            ScriptCall('onAmmoStoreInit');
+            ScriptCall('onNewAmmoStore');
             end;
         AddAmmoStore;
         for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
