@@ -761,8 +761,11 @@ bool HWNewNet::isRoomChief()
 
 void HWNewNet::gameFinished(bool correctly)
 {
-    if (netClientState == InGame) netClientState = InRoom;
-    RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimeter).arg(correctly ? "1" : "0"));
+    if (netClientState == InGame)
+    {
+        netClientState = InRoom;
+        RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimeter).arg(correctly ? "1" : "0"));
+    }
 }
 
 void HWNewNet::banPlayer(const QString & nick)
