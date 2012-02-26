@@ -48,6 +48,8 @@ class TeamShowWidget : public QWidget
         Q_OBJECT
 
     public slots:
+        void incrementTeamColor();
+        void decrementTeamColor();
         void changeTeamColor(QColor color=QColor());
         void hhNumChanged();
 
