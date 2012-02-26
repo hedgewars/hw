@@ -118,7 +118,7 @@ BotLevel:= Me^.Hedgehog^.BotLevel;
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
         begin
-        with CurrentHedgehog^ do
+        with Me^.Hedgehog^ do
             a:= CurAmmoType;
         aa:= a;
 {$IFDEF USE_SDLTHREADS}
@@ -333,6 +333,7 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
             repeat
                 itHedgehog:= Succ(itHedgehog) mod CurrentTeam^.HedgehogsNumber;
             until (itHedgehog = currHedgehogIndex) or (CurrentTeam^.Hedgehogs[itHedgehog].Gear <> nil);
+
 
             inc(switchesNum);
         until (not (switchImmediatelyAvailable or switchAvailable))
