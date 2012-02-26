@@ -1775,6 +1775,9 @@ else
         end;
 if ScriptExists('onAmmoStoreInit') then
     begin
+    // reset ammostore (quite unclean, but works?)
+    uAmmos.freeModule;
+    uAmmos.initModule;
     ScriptPrepareAmmoStore;
     ScriptCall('onAmmoStoreInit');
     ScriptApplyAmmoStore
@@ -1925,9 +1928,6 @@ end;
 procedure ScriptPrepareAmmoStore;
 var i: ShortInt;
 begin
-// reset ammostore (quite unclean, but works?)
-uAmmos.freeModule;
-uAmmos.initModule;
 ScriptAmmoLoadout:= '';
 ScriptAmmoDelay:= '';
 ScriptAmmoProbability:= '';
@@ -1963,6 +1963,11 @@ SetAmmoReinforcement(ScriptAmmoReinforcement);
 if (GameFlags and gfSharedAmmo) <> 0 then
     for i:= 0 to Pred(ClansCount) do
         begin
+        if ScriptExists('onNewAmmoStore') then
+            begin
+            ScriptPrepareAmmoStore;
+            ScriptCall('onAmmoStoreInit');
+            end;
         AddAmmoStore;
         for j:= 0 to Pred(ClansArray[i]^.TeamsNumber) do
             for k:= 0 to Pred(ClansArray[i]^.Teams[j]^.HedgehogsNumber) do
@@ -1972,12 +1977,22 @@ else if (GameFlags and gfPerHogAmmo) <> 0 then
     for i:= 0 to Pred(TeamsCount) do
         for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
             begin
+            if ScriptExists('onNewAmmoStore') then
+                begin
+                ScriptPrepareAmmoStore;
+                ScriptCall('onAmmoStoreInit');
+                end;
             AddAmmoStore;
             TeamsArray[i]^.Hedgehogs[j].AmmoStore:= StoreCnt - 1
             end
 else 
     for i:= 0 to Pred(TeamsCount) do
         begin
+        if ScriptExists('onNewAmmoStore') then
+            begin
+            ScriptPrepareAmmoStore;
+            ScriptCall('onAmmoStoreInit');
+            end;
         AddAmmoStore;
         for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
             TeamsArray[i]^.Hedgehogs[j].AmmoStore:= StoreCnt - 1
