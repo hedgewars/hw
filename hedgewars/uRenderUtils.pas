@@ -29,7 +29,7 @@ procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
 procedure copyToXY(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
 procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt; frame: LongInt = 0);
 procedure DrawLine2Surf(dest: PSDL_Surface; x0,y0,x1,y1:LongInt; r,g,b: byte);
-function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
+function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord = 0): PTexture;
 function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 
@@ -66,13 +66,14 @@ begin
     SDL_FillRect(Surface, @r, FillColor)
 end;
 
-function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
+function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring; maxLength: LongWord = 0): TSDL_Rect;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
     finalRect: TSDL_Rect;
 begin
     TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
+    if (maxLength <> 0) and (w > maxLength) then w := maxLength;
     finalRect.x:= X;
     finalRect.y:= Y;
     finalRect.w:= w + FontBorder * 2 + 4;
@@ -229,7 +230,7 @@ begin
             end;
 end;
 
-function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
+function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord = 0): PTexture;
 var w, h: LongInt;
     finalSurface: PSDL_Surface;
 begin
@@ -237,13 +238,14 @@ begin
     font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);
+    if (maxLength <> 0) and (w > maxLength) then w := maxLength;
 
     finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
             32, RMask, GMask, BMask, AMask);
 
     TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);
 
-    WriteInRoundRect(finalSurface, 0, 0, Color, font, s);
+    WriteInRoundRect(finalSurface, 0, 0, Color, font, s, maxLength);
 
     TryDo(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
