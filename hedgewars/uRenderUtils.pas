@@ -70,7 +70,7 @@ function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
-    finalRect: TSDL_Rect;
+    finalRect, textRect: TSDL_Rect;
 begin
     TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
     if (maxLength <> 0) and (w > maxLength) then w := maxLength;
@@ -78,6 +78,10 @@ begin
     finalRect.y:= Y;
     finalRect.w:= w + FontBorder * 2 + 4;
     finalRect.h:= h + FontBorder * 2;
+    textRect.x:= X;
+    textRect.y:= Y;
+    textRect.w:= w;
+    textRect.h:= h;
     DrawRoundRect(@finalRect, cWhiteColor, endian(cNearBlackColorChannels.value), Surface, true);
     clr.r:= (Color shr 16) and $FF;
     clr.g:= (Color shr 8) and $FF;
@@ -86,7 +90,7 @@ begin
     finalRect.x:= X + FontBorder + 2;
     finalRect.y:= Y + FontBorder;
     SDLTry(tmpsurf <> nil, true);
-    SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
+    SDL_UpperBlit(tmpsurf, @textRect, Surface, @finalRect);
     SDL_FreeSurface(tmpsurf);
     finalRect.x:= X;
     finalRect.y:= Y;
