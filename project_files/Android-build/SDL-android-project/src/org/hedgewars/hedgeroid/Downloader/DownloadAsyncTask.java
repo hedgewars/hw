@@ -73,7 +73,7 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Intege
 		String rootZipDest = pack.getPathToStore();
 
 		File rootDest = new File(rootZipDest);//TODO check for nullpointer, it hints to the absence of an sdcard
-		rootDest.mkdir();
+		rootDest.mkdirs();
 
 		try {
 			URL url = new URL(pack.getURL() + URL_ZIP_SUFFIX);
