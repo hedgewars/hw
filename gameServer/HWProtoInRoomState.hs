@@ -210,6 +210,7 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
     cl <- thisClient
     rm <- thisRoom
     chans <- roomClientsChans
+    let clTeams = map teamname . filter (\t -> teamowner t == nick cl) . teams $ rm
 
     if isJust $ gameInfo rm then
         if isMaster cl && isCorrect then
@@ -224,7 +225,7 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
                 : UnreadyRoomClients
                 : answerRemovedTeams chans rm
             else if not isCorrect then
-                return [RemoveClientTeams clId]
+                return $ map SendTeamRemovalMessage clTeams
                 else
                 return []
         else
