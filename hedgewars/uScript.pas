@@ -1780,8 +1780,8 @@ if ScriptExists('onAmmoStoreInit') or ScriptExists('onNewAmmoStore') then
     uAmmos.initModule;
     if ScriptExists('onAmmoStoreInit') then
         begin
-        ScriptCall('onAmmoStoreInit');
         ScriptPrepareAmmoStore;
+        ScriptCall('onAmmoStoreInit');
         SetAmmoLoadout(ScriptAmmoLoadout);
         SetAmmoProbability(ScriptAmmoProbability);
         SetAmmoDelay(ScriptAmmoDelay);
