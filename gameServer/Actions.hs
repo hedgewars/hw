@@ -36,6 +36,7 @@ data Action =
     | MoveToRoom RoomIndex
     | MoveToLobby B.ByteString
     | RemoveTeam B.ByteString
+    | SendTeamRemovalMessage B.ByteString
     | RemoveRoom
     | UnreadyRoomClients
     | JoinLobby
@@ -304,6 +305,20 @@ processAction (UnreadyRoomClients) = do
         notReadyMessage p nicks = if p < 38 then "NOT_READY" : nicks else "CLIENT_FLAGS" : "-r" : nicks
 
 
+processAction (SendTeamRemovalMessage teamName) = do
+    chans <- othersChans
+    mapM_ processAction [
+        AnswerClients chans ["EM", rmTeamMsg],
+        ModifyRoom (\r -> r{
+                gameInfo = liftM (\g -> g{
+                roundMsgs = roundMsgs g Seq.|> rmTeamMsg
+                }) $ gameInfo r
+            })
+        ]
+    where
+        rmTeamMsg = toEngineMsg $ 'F' `B.cons` teamName
+    
+    
 processAction (RemoveTeam teamName) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
@@ -316,17 +331,14 @@ processAction (RemoveTeam teamName) = do
                 ]
         else
             mapM_ processAction [
-                AnswerClients chans ["EM", rmTeamMsg],
+                SendTeamRemovalMessage teamName,
                 ModifyRoom (\r -> r{
                     teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r,
                         gameInfo = liftM (\g -> g{
-                        leftTeams = teamName : leftTeams g,
-                        roundMsgs = roundMsgs g Seq.|> rmTeamMsg
+                        leftTeams = teamName : leftTeams g
                         }) $ gameInfo r
                     })
                 ]
-    where
-        rmTeamMsg = toEngineMsg $ 'F' `B.cons` teamName
 
 
 processAction (RemoveClientTeams clId) = do
