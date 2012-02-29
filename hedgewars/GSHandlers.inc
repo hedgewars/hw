@@ -1807,9 +1807,10 @@ begin
                 State := State and (not gstAttacking);
                 Message := Message and (not gmAttack)
                 end;
-        DeleteGear(Gear)
+        DeleteGear(Gear);
+	exit;
         end;
-    CheckGearDrowning(HHGear)
+    if CheckGearDrowning(HHGear) then DeleteGear(Gear)
 end;
 
 procedure doStepRope(Gear: PGear);
