@@ -38,6 +38,7 @@ data Action =
     | RemoveTeam B.ByteString
     | SendTeamRemovalMessage B.ByteString
     | RemoveRoom
+    | FinishGame
     | UnreadyRoomClients
     | JoinLobby
     | ProtocolError B.ByteString
@@ -250,6 +251,7 @@ processAction ChangeMaster = do
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
     processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo (nick newMaster) newRoom)
 
+    
 processAction (AddRoom roomName roomPassword) = do
     Just clId <- gets clientIndex
     rnc <- gets roomsClients
@@ -292,7 +294,7 @@ processAction RemoveRoom = do
     io $ removeRoom rnc ri
 
 
-processAction (UnreadyRoomClients) = do
+processAction UnreadyRoomClients = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     roomPlayers <- roomClientsS ri
@@ -304,7 +306,26 @@ processAction (UnreadyRoomClients) = do
     where
         notReadyMessage p nicks = if p < 38 then "NOT_READY" : nicks else "CLIENT_FLAGS" : "-r" : nicks
 
+        
+processAction FinishGame = do
+    rnc <- gets roomsClients
+    ri <- clientRoomA
+    thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
+    clNick <- client's nick
+    answerRemovedTeams <- io $ 
+         room'sM rnc (map (\t -> AnswerClients thisRoomChans ["REMOVE_TEAM", t]) . leftTeams . fromJust . gameInfo) ri
+    
+    mapM_ processAction $ SaveReplay
+        : ModifyRoom
+            (\r -> r{
+                gameInfo = Nothing,
+                readyPlayers = 0
+                }
+            )
+        : UnreadyRoomClients
+        : answerRemovedTeams
 
+        
 processAction (SendTeamRemovalMessage teamName) = do
     chans <- othersChans
     mapM_ processAction [
@@ -316,6 +337,12 @@ processAction (SendTeamRemovalMessage teamName) = do
                 }) $ gameInfo r
             })
         ]
+        
+    rnc <- gets roomsClients
+    ri <- clientRoomA
+    gi <- io $ room'sM rnc gameInfo ri
+    when (isJust gi && 0 == teamsInGameNumber (fromJust gi)) $
+        processAction FinishGame        
     where
         rmTeamMsg = toEngineMsg $ 'F' `B.cons` teamName
     

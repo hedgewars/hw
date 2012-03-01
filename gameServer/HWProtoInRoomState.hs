@@ -209,22 +209,11 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
     clId <- asks fst
     cl <- thisClient
     rm <- thisRoom
-    chans <- roomClientsChans
     let clTeams = map teamname . filter (\t -> teamowner t == nick cl) . teams $ rm
-    let isLastPlayer = (teamsInGameNumber . fromJust . gameInfo $ rm) == length clTeams
 
     if isJust $ gameInfo rm then
-        if (isMaster cl && isCorrect) || isLastPlayer then
-            return $
-                SaveReplay
-                : ModifyRoom
-                    (\r -> r{
-                        gameInfo = Nothing,
-                        readyPlayers = 0
-                        }
-                    )
-                : UnreadyRoomClients
-                : answerRemovedTeams chans rm
+        if (isMaster cl && isCorrect) then
+            return [FinishGame]
             else if not isCorrect then
                 return $ map SendTeamRemovalMessage clTeams
                 else
@@ -232,7 +221,6 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
         else
         return []
     where
-        answerRemovedTeams chans = map (\t -> AnswerClients chans ["REMOVE_TEAM", t]) . leftTeams . fromJust . gameInfo
         isCorrect = correctly == "1"
 
 -- compatibility with clients with protocol < 38
