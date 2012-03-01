@@ -63,7 +63,7 @@ void RoomsListModel::setRoomsList(const QStringList & rooms)
     for(int i = 0; i < rooms.size(); i += 8)
     {
         QStringList l;
-        l.reserve(8);
+        //l.reserve(8);  not really that useful an optimisation and causes problems w/ old Qt.  Harmless to leave it out.
         for(int t = 0; t < 8; ++t)
             l.append(rooms[i + t]);
 
