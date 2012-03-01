@@ -311,6 +311,7 @@ processAction (SendTeamRemovalMessage teamName) = do
         AnswerClients chans ["EM", rmTeamMsg],
         ModifyRoom (\r -> r{
                 gameInfo = liftM (\g -> g{
+                teamsInGameNumber = teamsInGameNumber g - 1,
                 roundMsgs = roundMsgs g Seq.|> rmTeamMsg
                 }) $ gameInfo r
             })
