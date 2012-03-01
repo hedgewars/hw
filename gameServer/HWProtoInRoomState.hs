@@ -179,7 +179,7 @@ handleCmd_inRoom ["START_GAME"] = do
             return [
                 ModifyRoom
                     (\r -> r{
-                        gameInfo = Just $ newGameInfo (teams rm) allPlayersRegistered (mapParams rm) (params rm)
+                        gameInfo = Just $ newGameInfo (teams rm) (length $ teams rm) allPlayersRegistered (mapParams rm) (params rm)
                         }
                     ),
                 AnswerClients chans ["RUN_GAME"]
@@ -211,9 +211,10 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
     rm <- thisRoom
     chans <- roomClientsChans
     let clTeams = map teamname . filter (\t -> teamowner t == nick cl) . teams $ rm
+    let isLastPlayer = (teamsInGameNumber . fromJust . gameInfo $ rm) == length clTeams
 
     if isJust $ gameInfo rm then
-        if isMaster cl && isCorrect then
+        if (isMaster cl && isCorrect) || isLastPlayer then
             return $
                 SaveReplay
                 : ModifyRoom
