@@ -59,7 +59,7 @@ QLayout * PageMain::bodyLayoutDefinition()
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
     BtnFeedback = addButton("Feedback", pageLayout, 4, 0, 1, 4, false);
-    BtnFeedback->setWhatsThis(tr("Leave a feeback here, reporting issues, suggesting features or just saying how you like Hedgewars"));
+    BtnFeedback->setWhatsThis(tr("Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars"));
     pageLayout->setAlignment(BtnFeedback, Qt::AlignHCenter);
 
     BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 5, 0, 1, 4, false);
