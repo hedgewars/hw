@@ -3369,19 +3369,17 @@ begin
         
         if (Gear^.State and gsttmpFlag) <> 0 then
             gear^.RenderTimer:= true;
-        dec(Gear^.Timer)
+        if Gear^.Timer > 0 then dec(Gear^.Timer)
         end
-        
-        else if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Tag <> 0) then
+    else if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Tag <> 0) then
+        begin
+        if Gear^.Timer > 0 then dec(Gear^.Timer);
+        if Gear^.Timer = 0 then
             begin
-            if Gear^.Timer = 0 then
-                begin
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
-                DeleteGear(Gear);
-                end
-            else
-                dec(Gear^.Timer);
-            end;
+            doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
+            DeleteGear(Gear);
+            end
+        end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
