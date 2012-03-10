@@ -63,6 +63,7 @@ uses LuaPas,
     uFloat,
     uWorld,
     uAmmos,
+    uTeams,
     uSound,
     uChat,
     uStats,
@@ -1057,7 +1058,8 @@ begin
 
         if (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             begin  
-        RenderHealth(gear^.Hedgehog^);
+            RenderHealth(gear^.Hedgehog^);
+            RecountTeamHealth(gear^.Hedgehog^.Team)
             end;
 
             SetAllToActive;
