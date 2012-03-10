@@ -466,6 +466,7 @@ AddAmmoStore
 end;
 
 procedure initModule;
+var i: Longword;
 begin
     RegisterVariable('ammloadt', vtCommand, @SetAmmoLoadout, false);
     RegisterVariable('ammdelay', vtCommand, @SetAmmoDelay, false);
@@ -478,6 +479,13 @@ begin
     ammoProbability:= '';
     ammoDelay:= '';
     ammoReinforcement:= '';
+    for i:=1 to ord(High(TAmmoType)) do
+        begin
+        ammoLoadout:= ammoLoadout + '0';
+        ammoProbability:= ammoProbability + '0';
+        ammoDelay:= ammoDelay + '0';
+        ammoReinforcement:= ammoReinforcement + '0'
+        end;
     FillChar(InitialCounts, sizeof(InitialCounts), 0)
 end;
 
