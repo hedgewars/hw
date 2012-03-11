@@ -263,7 +263,8 @@ begin
     while true do
         begin
         x:= x + dX;
-        y:= y + dY + cGravityf;
+        y:= y + dY;
+        dY:= dY + cGravityf;
         skipLandCheck:= (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
         if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then exit(false);
         if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(true);
