@@ -2972,7 +2972,8 @@ end;
 procedure doStepCakeDown(Gear: PGear);
 var 
     gi: PGear;
-    dmg: LongInt;
+    dmg, dmgBase: LongInt;
+    fX, fY, tdX, tdY: hwFloat;
 begin
     AllInactive := false;
 
@@ -2983,17 +2984,34 @@ begin
 
     if Gear^.Pos = 0 then
         begin
+///////////// adapted from doMakeExplosion ///////////////////////////
+        //fX:= Gear^.X;
+        //fY:= Gear^.Y;
+        //fX.QWordValue:= fX.QWordValue and $FFFFFFFF00000000;
+        //fY.QWordValue:= fY.QWordValue and $FFFFFFFF00000000;
+        fX:= int2hwFloat(hwRound(Gear^.X));
+        fY:= int2hwFloat(hwRound(Gear^.Y));
+        dmgBase:= cakeDmg shl 1 + cHHRadius div 2;
         gi := GearsList;
         while gi <> nil do
             begin
-            dmg := cakeDmg * 2 - hwRound(Distance(gi^.X - Gear^.X, gi^.Y - Gear^.Y));
-            if (dmg > 1) and (gi^.Kind = gtHedgehog) then
-                if (CurrentHedgehog^.Gear = gi) and (not gi^.Invulnerable) then
-                    gi^.State := gi^.State or gstLoser
-            else
-                gi^.State := gi^.State or gstWinner;
+            if gi^.Kind = gtHedgehog then
+                begin
+                dmg:= 0;
+                tdX:= gi^.X-fX;
+                tdY:= gi^.Y-fY;
+                if hwRound(hwAbs(tdX)+hwAbs(tdY)) < dmgBase then
+                    dmg:= dmgBase - max(hwRound(Distance(tdX, tdY)),gi^.Radius);
+                if (dmg > 1) then dmg:= ModifyDamage(min(dmg div 2, cakeDmg), gi);
+                if (dmg > 1) then
+                    if (CurrentHedgehog^.Gear = gi) and (not gi^.Invulnerable) then
+                        gi^.State := gi^.State or gstLoser
+                    else
+                        gi^.State := gi^.State or gstWinner;
+                end;
             gi := gi^.NextGear
             end;
+//////////////////////////////////////////////////////////////////////
         Gear^.doStep := @doStepCakeExpl;
         PlaySound(sndCake)
         end

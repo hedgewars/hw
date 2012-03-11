@@ -263,7 +263,7 @@ const
 
     AMMO_INFINITE = 100;
 
-    EXPLAllDamageInRadius = $00000001;
+    //EXPLAllDamageInRadius = $00000001;  Completely unused for ages
     EXPLAutoSound         = $00000002;
     EXPLNoDamage          = $00000004;
     EXPLDoNotTouchHH      = $00000008;

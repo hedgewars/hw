@@ -47,7 +47,7 @@ uses uFloat, uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
 var Gear: PGear;
     dmg, dmgRadius, dmgBase: LongInt;
-    fX, fY: hwFloat;
+    fX, fY, tdX, tdY: hwFloat;
     vg: PVisualGear;
     i, cnt: LongInt;
 begin
@@ -64,11 +64,12 @@ if ((Mask and EXPLNoGfx) = 0) then
     end;
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion);
 
-if (Mask and EXPLAllDamageInRadius) = 0 then
+(*if (Mask and EXPLAllDamageInRadius) = 0 then
     dmgRadius:= Radius shl 1
 else
     dmgRadius:= Radius;
-dmgBase:= dmgRadius + cHHRadius div 2;
+dmgBase:= dmgRadius + cHHRadius div 2;*)
+dmgBase:= Radius shl 1 + cHHRadius div 2;
 fX:= int2hwFloat(X);
 fY:= int2hwFloat(Y);
 Gear:= GearsList;
@@ -94,8 +95,10 @@ while Gear <> nil do
                 gtExplosives,
                 gtStructure: begin
 // Run the calcs only once we know we have a type that will need damage
-                        if hwRound(hwAbs(Gear^.X-fX)+hwAbs(Gear^.Y-fY)) < dmgBase then
-                            dmg:= dmgBase - max(hwRound(Distance(Gear^.X - fX, Gear^.Y - fY)),Gear^.Radius);
+                        tdX:= Gear^.X-fX;
+                        tdY:= Gear^.Y-fY;
+                        if hwRound(hwAbs(tdX)+hwAbs(tdY)) < dmgBase then
+                            dmg:= dmgBase - max(hwRound(Distance(tdX, tdY)),Gear^.Radius);
                         if dmg > 1 then
                             begin
                             dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
@@ -110,8 +113,8 @@ while Gear <> nil do
                             if ((Mask and EXPLDoNotTouchAny) = 0) and (((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog)) then
                                 begin
                                 DeleteCI(Gear);
-                                Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - fX)/(Gear^.Density/_3);
-                                Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - fY)/(Gear^.Density/_3);
+                                Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, tdX)/(Gear^.Density/_3);
+                                Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, tdY)/(Gear^.Density/_3);
 
                                 Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
                                 if not Gear^.Invulnerable then
@@ -126,8 +129,10 @@ while Gear <> nil do
                         end;
                 gtGrave: begin
 // Run the calcs only once we know we have a type that will need damage
-                        if hwRound(hwAbs(Gear^.X-fX)+hwAbs(Gear^.Y-fY)) < dmgBase then
-                            dmg:= dmgBase - hwRound(Distance(Gear^.X - fX, Gear^.Y - fY));
+                        tdX:= Gear^.X-fX;
+                        tdY:= Gear^.Y-fY;
+                        if hwRound(hwAbs(tdX)+hwAbs(tdY)) < dmgBase then
+                            dmg:= dmgBase - hwRound(Distance(tdX, tdY));
                         if dmg > 1 then
                             begin
                             dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
