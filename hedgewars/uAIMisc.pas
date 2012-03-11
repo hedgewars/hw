@@ -235,7 +235,7 @@ TestColl:=(((x+r) and LAND_WIDTH_MASK) = 0)and(((y+r) and LAND_HEIGHT_MASK) = 0)
 end;
 
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
-var i, dmg, rate: LongInt;
+var i, dmg, dmgBase, rate: LongInt;
 begin
 rate:= 0;
 // add our virtual position
@@ -246,10 +246,13 @@ with Targets.ar[Targets.Count] do
     Score:= - ThinkingHH^.Health
     end;
 // rate explosion
+dmgBase:= r + cHHRadius div 2;
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
         begin
-        dmg:= hwRound(_0_01 * cDamageModifier * min((r + cHHRadius div 2 - LongInt(DistanceI(Point.x - x, Point.y - y).Round)) div 2, r) * cDamagePercent);
+        dmg:= 0;
+        if abs(Point.x - x) + abs(Point.y - y) < dmgBase then
+            dmg:= hwRound(_0_01 * cDamageModifier * min((dmgBase - LongInt(DistanceI(Point.x - x, Point.y - y).Round)) div 2, r) * cDamagePercent);
 
         if dmg > 0 then
             begin
