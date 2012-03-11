@@ -142,6 +142,18 @@ begin
     lc_bnot := 1;
 end;
 
+function lc_div(L: PLua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 2 then 
+        begin
+        LuaError('Lua: Wrong number of parameters passed to div!');
+        lua_pushnil(L);
+        end
+    else
+        lua_pushinteger(L, lua_tointeger(L, 2) div lua_tointeger(L, 1));
+    lc_div := 1;
+end;
+
 function lc_getinputmask(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 0 then
@@ -2133,6 +2145,7 @@ ScriptSetInteger('gstInvisible'      ,$00200000);
 lua_register(luaState, 'band', @lc_band);
 lua_register(luaState, 'bor', @lc_bor);
 lua_register(luaState, 'bnot', @lc_bnot);
+lua_register(luaState, 'div', @lc_div);
 lua_register(luaState, 'GetInputMask', @lc_getinputmask);
 lua_register(luaState, 'SetInputMask', @lc_setinputmask);
 lua_register(luaState, 'AddGear', @lc_addgear);
