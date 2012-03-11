@@ -158,7 +158,9 @@ repeat
         
         EX:= trunc(x);
         EY:= trunc(y);
-        value:= RateExplosion(Me, EX, EY, 101);
+        if Me^.Hedgehog^.BotLevel = 1 then
+            value:= RateExplosion(Me, EX, EY, 101, 3)
+        else value:= RateExplosion(Me, EX, EY, 101);
         if value = 0 then
             value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
     if valueResult <= value then
