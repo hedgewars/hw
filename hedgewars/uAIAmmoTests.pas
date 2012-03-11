@@ -173,7 +173,7 @@ repeat
         valueResult:= value
         end;
     end
-until (rTime > 4250);
+until (value > 204800) or (rTime > 4250);
 TestBazooka:= valueResult
 end;
 
@@ -310,7 +310,9 @@ repeat
     EX:= hwRound(x);
     EY:= hwRound(y);
     if t < 50 then 
-        Score:= RateExplosion(Me, EX, EY, 101)
+        if Me^.Hedgehog^.BotLevel = 1 then
+            Score:= RateExplosion(Me, EX, EY, 101, 3)
+        else Score:= RateExplosion(Me, EX, EY, 101)
     else 
         Score:= BadTurn;
 
@@ -325,7 +327,7 @@ repeat
         valueResult:= Score
         end;
     end
-until (TestTime = 4000);
+until (Score > 204800) or (TestTime > 4000);
 TestGrenade:= valueResult
 end;
 
