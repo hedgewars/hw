@@ -46,7 +46,7 @@ uses uFloat, uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
 var Gear: PGear;
-    dmg, dmgRadius, dmgBase: LongInt;
+    dmg, dmgBase: LongInt;
     fX, fY, tdX, tdY: hwFloat;
     vg: PVisualGear;
     i, cnt: LongInt;

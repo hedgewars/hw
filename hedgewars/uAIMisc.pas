@@ -256,6 +256,7 @@ function TraceDrown(eX, eY: LongInt; x, y, dX, dY: Real; r: LongWord): boolean;
 var skipLandCheck: boolean;
     rCorner: real;
 begin
+    skipLandCheck:= true;
     if x - eX < 0 then dX*=-1;
     if y - eY < 0 then dY*=-1;
     // ok. attempt approximate search for an unbroken trajectory into water.  if it continues far enough, assume out of map
@@ -265,7 +266,7 @@ begin
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
-        skipLandCheck:= (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
+        skipLandCheck:= skipLandCheck and (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
         if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then exit(false);
         if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(true);
         end;
