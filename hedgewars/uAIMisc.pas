@@ -49,11 +49,11 @@ procedure freeModule;
 
 procedure FillTargets;
 procedure FillBonuses(isAfterAttack: boolean; filter: TGearsType = []);
-procedure AwareOfExplosion(x, y, r: LongInt);
+procedure AwareOfExplosion(x, y, r: LongInt); inline;
 function RatePlace(Gear: PGear): LongInt;
-function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean;
-function TestColl(x, y, r: LongInt): boolean;
-function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
+function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
+function TestColl(x, y, r: LongInt): boolean; inline;
+function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord = 0): LongInt;
 function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
 function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
 function RateHammer(Me: PGear): LongInt;
@@ -115,7 +115,7 @@ if e > f then friendlyfactor:= 300 + (e - f) * 30
 else friendlyfactor:= max(30, 300 - f * 80 div max(1,e))
 end;
 
-procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt);
+procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
 begin
 bonuses.ar[bonuses.Count].x:= x;
 bonuses.ar[bonuses.Count].y:= y;
@@ -234,8 +234,46 @@ if b then
 TestColl:=(((x+r) and LAND_WIDTH_MASK) = 0)and(((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] <> 0)
 end;
 
-function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
-var i, dmg, dmgBase, rate: LongInt;
+function TestCollWithLand(x, y, r: LongInt): boolean; inline;
+var b: boolean;
+begin
+b:= (((x-r) and LAND_WIDTH_MASK) = 0)and(((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] > 255);
+if b then
+    exit(true);
+    
+b:=(((x-r) and LAND_WIDTH_MASK) = 0)and(((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] > 255);
+if b then
+    exit(true);
+    
+b:=(((x+r) and LAND_WIDTH_MASK) = 0)and(((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] > 255);
+if b then
+    exit(true);
+    
+TestCollWithLand:=(((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > 255)
+end;
+
+function TraceDrown(eX, eY: LongInt; x, y, dX, dY: Real; r: LongWord): boolean;
+var skipLandCheck: boolean;
+    rCorner: real;
+begin
+    if x - eX < 0 then dX*=-1;
+    if y - eY < 0 then dY*=-1;
+    // ok. attempt approximate search for an unbroken trajectory into water.  if it continues far enough, assume out of map
+    rCorner:= r * 0.75;
+    while true do
+        begin
+        x:= x + dX;
+        y:= y + dY + cGravityf;
+        skipLandCheck:= (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
+        if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then exit(false);
+        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(true);
+        end;
+end;
+
+// Flags are not defined yet but 1 for checking drowning and 2 for assuming land erasure.
+function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord = 0): LongInt;
+var i, dmg, dmgBase, rate, erasure: LongInt;
+    dX, dY: real;
 begin
 rate:= 0;
 // add our virtual position
@@ -247,6 +285,8 @@ with Targets.ar[Targets.Count] do
     end;
 // rate explosion
 dmgBase:= r + cHHRadius div 2;
+if (Flags and 2 <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
+else erasure:= 0;
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
         begin
@@ -256,7 +296,19 @@ for i:= 0 to Targets.Count do
 
         if dmg > 0 then
             begin
-            if dmg >= abs(Score) then
+            if Flags and 1 <> 0 then
+                begin
+                dX:= 0.005 * dmg + 0.01;
+                dY:= dX;
+                end;
+            if (Flags and 1 <> 0) and TraceDrown(x, y, Point.x, Point.y, dX, dY, erasure) then
+                if Score > 0 then
+                    begin
+                    inc(rate, KillScore)
+                    end
+                else
+                    dec(rate, KillScore * friendlyfactor div 100)
+            else if dmg >= abs(Score) then
                 if Score > 0 then
                     inc(rate, KillScore)
                 else
