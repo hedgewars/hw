@@ -33,7 +33,7 @@ procedure SetAmmoReinforcement(s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
-function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
+function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): LongWord;
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
 procedure ApplyAngleBounds(var Hedgehog: THedgehog; AmmoType: TAmmoType);
@@ -277,7 +277,7 @@ with Hedgehog do
     end;
 end;
 
-function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
+function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): LongWord;
 var slot, ami: LongInt;
 begin
 Slot:= Ammoz[Ammo].Slot;
@@ -286,10 +286,12 @@ while (ami <= cMaxSlotAmmoIndex) do
         begin
         with Hedgehog.Ammo^[Slot, ami] do
             if (AmmoType = Ammo) then
-                exit((Count > 0) and (Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns));
+                if Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns then
+                    exit(Count)
+                else exit(0);
       inc(ami)
       end;
-HHHasAmmo:= false
+HHHasAmmo:= 0
 end;
 
 procedure ApplyAngleBounds(var Hedgehog: THedgehog; AmmoType: TAmmoType);

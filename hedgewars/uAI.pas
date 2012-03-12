@@ -199,7 +199,7 @@ ticks:= 0; // avoid compiler hint
 Stack.Count:= 0;
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
-    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(Me^.Hedgehog^, a);
+    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and (HHHasAmmo(Me^.Hedgehog^, a) > 0);
 
 BotLevel:= Me^.Hedgehog^.BotLevel;
 
@@ -291,8 +291,8 @@ end;
 
 function Think(Me: Pointer): ptrint;
 var BackMe, WalkMe: TGear;
-    StartTicks, currHedgehogIndex, itHedgehog, switchesNum, i: Longword;
-    switchImmediatelyAvailable, switchAvailable: boolean;
+    StartTicks, currHedgehogIndex, itHedgehog, switchesNum, i, switchCount: Longword;
+    switchImmediatelyAvailable: boolean;
     Actions: TActions;
 begin
 InterlockedIncrement(hasThread);
@@ -302,7 +302,7 @@ itHedgehog:= currHedgehogIndex;
 switchesNum:= 0;
 
 switchImmediatelyAvailable:= (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtSwitcher);
-switchAvailable:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch);
+switchCount:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch);
 
 if (PGear(Me)^.State and gstAttacked) = 0 then
     if Targets.Count > 0 then
@@ -316,10 +316,10 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
             Actions.Score:= 0;
             if switchesNum > 0 then
                 begin
-                if not switchImmediatelyAvailable then
+                if not switchImmediatelyAvailable  then
                     begin
-                    // when AI has to use switcher, make it cost smth
-                    Actions.Score:= -20000;
+                    // when AI has to use switcher, make it cost smth unless they have a lot of switches
+                    if (SwitchCount < 10) then Actions.Score:= (-27+SwitchCount*3)*4000;
                     AddAction(Actions, aia_Weapon, Longword(amSwitch), 300 + random(200), 0, 0);                    
                     AddAction(Actions, aia_attack, aim_push, 300 + random(300), 0, 0);
                     AddAction(Actions, aia_attack, aim_release, 1, 0, 0);
@@ -336,7 +336,7 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
 
 
             inc(switchesNum);
-        until (not (switchImmediatelyAvailable or switchAvailable))
+        until (not (switchImmediatelyAvailable or (switchCount > 0)))
             or StopThinking 
             or (itHedgehog = currHedgehogIndex)
             or BestActions.isWalkingToABetterPlace;
