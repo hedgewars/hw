@@ -41,6 +41,7 @@ function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackPar
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -66,7 +67,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestDesertEagle; flags: 0), // amDEagle
             (proc: nil;              flags: 0), // amDynamite
             (proc: @TestFirePunch;   flags: 0), // amFirePunch
-            (proc: @TestFirePunch;   flags: 0), // amWhip
+            (proc: @TestWhip;        flags: 0), // amWhip
             (proc: @TestBaseballBat; flags: 0), // amBaseballBat
             (proc: nil;              flags: 0), // amParachute
             (proc: @TestAirAttack;   flags: amtest_OnTurn), // amAirAttack
@@ -618,7 +619,8 @@ if (Targ.X) - hwRound(x) >= 0 then
     ap.Angle:=   cMaxAngle div 4
 else
     ap.Angle:= - cMaxAngle div 4;
-valueResult:= RateShove(Me, hwRound(x) + 10 * hwSign(int2hwFloat(Targ.X) - x), hwRound(y), 15, 30);
+
+valueResult:= RateShove(Me, hwRound(x) + 10 * hwSign(int2hwFloat(Targ.X) - x), hwRound(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, 1);
 if valueResult <= 0 then
     valueResult:= BadTurn
 else
@@ -641,7 +643,7 @@ if (Abs(hwRound(x) - Targ.X) > 25)
 or (Abs(hwRound(y) - 50 - Targ.Y) > 50) then
     begin
     if TestColl(hwRound(x), hwRound(y) - 16, 6)
-    and (RateShove(Me, hwRound(x) + 10 * hwSign(Me^.dX), hwRound(y) - 40, 30, 30) = 0) then
+    and (RateShove(Me, hwRound(x) + 10 * hwSign(Me^.dX), hwRound(y) - 40, 30, 30, 40, hwSign(Me^.dX)*0.45, -0.9,  1) = 0) then
         valueResult:= Succ(BadTurn)
     else
         valueResult:= BadTurn;
@@ -651,13 +653,47 @@ or (Abs(hwRound(y) - 50 - Targ.Y) > 50) then
 valueResult:= 0;
 for i:= 0 to 4 do
     valueResult:= valueResult + RateShove(Me, hwRound(x) + 10 * hwSign(int2hwFloat(Targ.X) - x),
-                                    hwRound(y) - 20 * i - 5, 10, 30);
+                                    hwRound(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX)*0.45, -0.9, 1);
 if valueResult <= 0 then
     valueResult:= BadTurn
 else
     inc(valueResult);
 
 TestFirePunch:= valueResult;
+end;
+
+function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+var i, valueResult: LongInt;
+    x, y: hwFloat;
+begin
+Level:= Level; // avoid compiler hint
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.Power:= 1;
+ap.Angle:= 0;
+x:= Me^.X;
+y:= Me^.Y;
+if (Abs(hwRound(x) - Targ.X) > 25)
+or (Abs(hwRound(y) - 50 - Targ.Y) > 50) then
+    begin
+    if TestColl(hwRound(x), hwRound(y) - 16, 6)
+    and (RateShove(Me, hwRound(x) + 10 * hwSign(Me^.dX), hwRound(y) - 40, 30, 30, 40, hwSign(Me^.dX), -0.8,  1) = 0) then
+        valueResult:= Succ(BadTurn)
+    else
+        valueResult:= BadTurn;
+    exit(valueResult)
+    end;
+
+valueResult:= 0;
+for i:= 0 to 4 do
+    valueResult:= valueResult + RateShove(Me, hwRound(x) + 10 * hwSign(int2hwFloat(Targ.X) - x),
+                                    hwRound(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX), -0.8, 1);
+if valueResult <= 0 then
+    valueResult:= BadTurn
+else
+    inc(valueResult);
+
+TestWhip:= valueResult;
 end;
 
 function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;

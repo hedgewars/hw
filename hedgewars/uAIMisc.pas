@@ -54,7 +54,7 @@ function RatePlace(Gear: PGear): LongInt;
 function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 function TestColl(x, y, r: LongInt): boolean; inline;
 function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord = 0): LongInt;
-function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
+function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
 function RateHammer(Me: PGear): LongInt;
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
@@ -267,7 +267,21 @@ begin
         y:= y + dY;
         dY:= dY + cGravityf;
         skipLandCheck:= skipLandCheck and (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
+        // consider adding dX/dY calc here for fall damage
         if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then exit(false);
+        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(true);
+        end;
+end;
+
+function TraceShoveDrown(Me: PGear; x, y, dX, dY: Real): boolean;
+begin
+    while true do
+        begin
+        x:= x + dX;
+        y:= y + dY;
+        dY:= dY + cGravityf;
+        // consider adding dX/dY calc here for fall damage
+        if TestCollExcludingMe(Me, trunc(x), trunc(y), cHHRadius) then exit(false);
         if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(true);
         end;
 end;
@@ -305,9 +319,7 @@ for i:= 0 to Targets.Count do
                 end;
             if (Flags and 1 <> 0) and TraceDrown(x, y, Point.x, Point.y, dX, dY, erasure) then
                 if Score > 0 then
-                    begin
                     inc(rate, KillScore)
-                    end
                 else
                     dec(rate, KillScore * friendlyfactor div 100)
             else if dmg >= abs(Score) then
@@ -325,19 +337,32 @@ for i:= 0 to Targets.Count do
 RateExplosion:= rate * 1024;
 end;
 
-function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
+function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 var i, dmg, rate: LongInt;
+    dX, dY: real;
 begin
 Me:= Me; // avoid compiler hint
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
         begin
-        dmg:= r - hwRound(DistanceI(Point.x - x, Point.y - y));
+        dmg:= 0;
+        if abs(Point.x - x) + abs(Point.y - y) < r then
+            dmg:= r - hwRound(DistanceI(Point.x - x, Point.y - y));
         dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
         if dmg > 0 then
             begin
-            if power >= abs(Score) then
+            if Flags and 1 <> 0 then
+                begin
+                dX:= gdX * 0.005 * kick;
+                dY:= gdY * 0.005 * kick;
+                end;
+            if (Flags and 1 <> 0) and TraceShoveDrown(Me, Point.x, Point.y, dX, dY) then
+                if Score > 0 then
+                    inc(rate, KillScore)
+                else
+                    dec(rate, KillScore * friendlyfactor div 100)
+            else if power >= abs(Score) then
                 if Score > 0 then
                     inc(rate, KillScore)
                 else
