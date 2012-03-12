@@ -576,7 +576,7 @@ ap.Time:= 0;
 ap.Power:= 1;
 x:= Me^.X;
 y:= Me^.Y;
-if Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) < 80 then
+if Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) < 320 then
    exit(BadTurn);
 t:= _0_5 / Distance(int2hwFloat(Targ.X) - x, int2hwFloat(Targ.Y) - y);
 Vx:= (int2hwFloat(Targ.X) - x) * t;
@@ -598,7 +598,11 @@ until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4)
     or (d > 200);
 
 if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then
-    valueResult:= Max(0, (4 - d div 50) * 7 * 1024)
+    begin
+    if TraceShoveDrown(Me, Targ.X, Targ.Y, hwFloat2Float(vX) * 0.005 * 20, hwFloat2Float(vY) * 0.005 * 20) then
+        valueResult:= 204800
+    else valueResult:= Max(0, (4 - d div 50) * 7 * 1024)
+    end
 else
     valueResult:= BadTurn;
 TestDesertEagle:= valueResult
