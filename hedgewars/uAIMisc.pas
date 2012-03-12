@@ -319,9 +319,9 @@ for i:= 0 to Targets.Count do
                 end;
             if (Flags and 1 <> 0) and TraceDrown(x, y, Point.x, Point.y, dX, dY, erasure) then
                 if Score > 0 then
-                    inc(rate, KillScore + Score)   // Add a bit of a bonus for bigger hog drownings
+                    inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
                 else
-                    dec(rate, KillScore * friendlyfactor div 100 - Score) // and more of a punishment for drowning bigger friendly hogs
+                    dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
             else if dmg >= abs(Score) then
                 if Score > 0 then
                     inc(rate, KillScore)
