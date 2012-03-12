@@ -55,7 +55,7 @@ function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 function TestColl(x, y, r: LongInt): boolean; inline;
 function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord = 0): LongInt;
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
-function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
+function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 function RateHammer(Me: PGear): LongInt;
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 function AIrndSign(num: LongInt): LongInt;
@@ -348,8 +348,10 @@ for i:= 0 to Pred(Targets.Count) do
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < r then
+            begin
             dmg:= r - hwRound(DistanceI(Point.x - x, Point.y - y));
-        dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
+            dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
+            end;
         if dmg > 0 then
             begin
             if Flags and 1 <> 0 then
@@ -377,8 +379,9 @@ for i:= 0 to Pred(Targets.Count) do
 RateShove:= rate * 1024
 end;
 
-function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
-var i, dmg, rate: LongInt;
+function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
+var i, dmg, baseDmg, rate, erasure: LongInt;
+    dX, dY: real;
 begin
 rate:= 0;
 // add our virtual position
@@ -389,19 +392,35 @@ with Targets.ar[Targets.Count] do
     Score:= - ThinkingHH^.Health
     end;
 // rate shot
+baseDmg:= cHHRadius + cShotgunRadius + 4;
+if GameFlags and gfSolidLand = 0 then erasure:= cShotgunRadius
+else erasure:= 0;
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
         begin
-        dmg:= min(cHHRadius + cShotgunRadius + 4 - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
-        dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
+        dmg:= 0;
+        if abs(Point.x - x) + abs(Point.y - y) < baseDmg then
+            begin
+            dmg:= min(baseDmg - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
+            dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
+            end;
         if dmg > 0 then
             begin
-                if dmg >= abs(Score) then
-                    dmg := KillScore;
+            dX:= gdX * dmg * 0.01;
+            dY:= gdY * dmg * 0.01;
+            if dX < 0 then dX:= dX - 0.01
+            else dX:= dX + 0.01;
+            if TraceDrown(x, y, Point.x, Point.y, dX, dY, erasure) then
                 if Score > 0 then
-                    inc(rate, dmg)
+                    inc(rate, KillScore)
                 else
-                    dec(rate, dmg * friendlyfactor div 100);
+                    dec(rate, KillScore * friendlyfactor div 100)
+            else if dmg >= abs(Score) then
+                dmg := KillScore;
+            if Score > 0 then
+                inc(rate, dmg)
+            else
+                dec(rate, dmg * friendlyfactor div 100);
             end;
         end;        
 RateShotgun:= rate * 1024;
