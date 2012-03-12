@@ -319,9 +319,9 @@ for i:= 0 to Targets.Count do
                 end;
             if (Flags and 1 <> 0) and TraceDrown(x, y, Point.x, Point.y, dX, dY, erasure) then
                 if Score > 0 then
-                    inc(rate, KillScore)
+                    inc(rate, KillScore + Score)   // Add a bit of a bonus for bigger hog drownings
                 else
-                    dec(rate, KillScore * friendlyfactor div 100)
+                    dec(rate, KillScore * friendlyfactor div 100 - Score) // and more of a punishment for drowning bigger friendly hogs
             else if dmg >= abs(Score) then
                 if Score > 0 then
                     inc(rate, KillScore)
@@ -361,9 +361,9 @@ for i:= 0 to Pred(Targets.Count) do
                 end;
             if (Flags and 1 <> 0) and TraceShoveDrown(Me, Point.x, Point.y, dX, dY) then
                 if Score > 0 then
-                    inc(rate, KillScore)
+                    inc(rate, KillScore + Score)   // Add a bit of a bonus for bigger hog drownings
                 else
-                    dec(rate, KillScore * friendlyfactor div 100)
+                    dec(rate, KillScore * friendlyfactor div 100 - Score) // and more of a punishment for drowning bigger friendly hogs
             else if power >= abs(Score) then
                 if Score > 0 then
                     inc(rate, KillScore)
@@ -412,9 +412,9 @@ for i:= 0 to Targets.Count do
             else dX:= dX + 0.01;
             if TraceDrown(x, y, Point.x, Point.y, dX, dY, erasure) then
                 if Score > 0 then
-                    inc(rate, KillScore)
+                    inc(rate, KillScore + Score)   // Add a bit of a bonus for bigger hog drownings
                 else
-                    dec(rate, KillScore * friendlyfactor div 100)
+                    dec(rate, KillScore * friendlyfactor div 100 - Score) // and more of a punishment for drowning bigger friendly hogs
             else if dmg >= abs(Score) then
                 dmg := KillScore;
             if Score > 0 then

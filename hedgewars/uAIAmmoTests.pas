@@ -174,7 +174,8 @@ repeat
         valueResult:= value
         end;
     end
-until (value > 204800) or (rTime > 4250);
+//until (value > 204800) or (rTime > 4250); not so useful since adding score to the drowning
+until rTime > 4250;
 TestBazooka:= valueResult
 end;
 
@@ -328,7 +329,8 @@ repeat
         valueResult:= Score
         end;
     end
-until (Score > 204800) or (TestTime > 4000);
+//until (Score > 204800) or (TestTime > 4000);
+until TestTime > 4000;
 TestGrenade:= valueResult
 end;
 
