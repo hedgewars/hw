@@ -290,8 +290,9 @@ end;
 // Flags are not defined yet but 1 for checking drowning and 2 for assuming land erasure.
 function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord = 0): LongInt;
 var i, dmg, dmgBase, rate, erasure: LongInt;
-    dX, dY: real;
+    dX, dY, dmgMod: real;
 begin
+dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 // add our virtual position
 with Targets.ar[Targets.Count] do
@@ -309,7 +310,7 @@ for i:= 0 to Targets.Count do
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < dmgBase then
-            dmg:= hwRound(_0_01 * cDamageModifier * min((dmgBase - LongInt(DistanceI(Point.x - x, Point.y - y).Round)) div 2, r) * cDamagePercent);
+            dmg:= trunc(dmgMod * min((dmgBase - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)))) div 2, r));
 
         if dmg > 0 then
             begin
@@ -340,8 +341,11 @@ end;
 
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 var i, dmg, rate: LongInt;
-    dX, dY: real;
+    dX, dY, dmgMod: real;
 begin
+dX:= gdX * 0.005 * kick;
+dY:= gdY * 0.005 * kick;
+dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Me:= Me; // avoid compiler hint
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
@@ -350,16 +354,11 @@ for i:= 0 to Pred(Targets.Count) do
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < r then
             begin
-            dmg:= r - hwRound(DistanceI(Point.x - x, Point.y - y));
-            dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
+            dmg:= r - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
+            dmg:= trunc(dmg * dmgMod);
             end;
         if dmg > 0 then
             begin
-            if Flags and 1 <> 0 then
-                begin
-                dX:= gdX * 0.005 * kick;
-                dY:= gdY * 0.005 * kick;
-                end;
             if (Flags and 1 <> 0) and TraceShoveDrown(Me, Point.x, Point.y, dX, dY) then
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
@@ -382,9 +381,12 @@ end;
 
 function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 var i, dmg, baseDmg, rate, erasure: LongInt;
-    dX, dY: real;
+    dX, dY, dmgMod: real;
 begin
+dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
+gdX*=0.01;
+gdY*=0.01;
 // add our virtual position
 with Targets.ar[Targets.Count] do
     begin
@@ -402,13 +404,13 @@ for i:= 0 to Targets.Count do
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < baseDmg then
             begin
-            dmg:= min(baseDmg - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
-            dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
+            dmg:= min(baseDmg - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y))), 25);
+            dmg:= trunc(dmg * dmgMod);
             end;
         if dmg > 0 then
             begin
-            dX:= gdX * dmg * 0.01;
-            dY:= gdY * dmg * 0.01;
+            dX:= gdX * dmg;
+            dY:= gdY * dmg;
             if dX < 0 then dX:= dX - 0.01
             else dX:= dX + 0.01;
             if TraceDrown(x, y, Point.x, Point.y, dX, dY, erasure) then
@@ -439,7 +441,8 @@ for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
         begin
          // hammer hit radius is 8, shift is 10
-        r:= hwRound(DistanceI(Point.x - x, Point.y - y));
+        if abs(Point.x - x) + abs(Point.y - y) < 18 then
+        r:= trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
 
         if r <= 18 then
             if Score > 0 then 

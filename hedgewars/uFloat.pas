@@ -89,6 +89,7 @@ function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
 function SignAs(const num, signum: hwFloat): hwFloat; inline; // Returns an hwFloat with the value of parameter num and the sign of signum.
 function hwSign(r: hwFloat): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
+function hwSign(r: real): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
 function isZero(const z: hwFloat): boolean; inline;
 {$IFDEF FPC}
 {$J-}
@@ -404,6 +405,14 @@ function hwSign(r: hwFloat): LongInt;
 begin
 // yes, we have negative zero for a reason
 if r.isNegative then
+    hwSign:= -1
+else
+    hwSign:= 1
+end;
+
+function hwSign(r: real): LongInt;
+begin
+if r < 0 then
     hwSign:= -1
 else
     hwSign:= 1
