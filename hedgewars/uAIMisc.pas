@@ -258,8 +258,8 @@ var skipLandCheck: boolean;
     rCorner: real;
 begin
     skipLandCheck:= true;
-    if x - eX < 0 then dX*=-1;
-    if y - eY < 0 then dY*=-1;
+    if x - eX < 0 then dX:= -dX;
+    if y - eY < 0 then dY:= -dY;
     // ok. attempt approximate search for an unbroken trajectory into water.  if it continues far enough, assume out of map
     rCorner:= r * 0.75;
     while true do
@@ -385,8 +385,8 @@ var i, dmg, baseDmg, rate, erasure: LongInt;
 begin
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
-gdX*=0.01;
-gdY*=0.01;
+gdX:= gdX * 0.01;
+gdY:= gdX * 0.01;
 // add our virtual position
 with Targets.ar[Targets.Count] do
     begin
