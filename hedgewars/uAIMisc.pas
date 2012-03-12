@@ -195,8 +195,10 @@ for i:= 0 to Pred(bonuses.Count) do
     with bonuses.ar[i] do
         begin
         r:= hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
-        if r < Radius then
-            inc(rate, Score * (Radius - r))
+        if r < 15 then
+                inc(rate, Score * Radius)
+        else if r < Radius then
+                inc(rate, Score * (Radius - r))
         end;
     RatePlace:= rate;
 end;
