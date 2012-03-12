@@ -546,7 +546,7 @@ repeat
         begin
         x:= x + vX * 8;
         y:= y + vY * 8;
-        valueResult:= RateShotgun(Me, rx, ry);
+        valueResult:= RateShotgun(Me, hwFloat2Float(vX), hwFloat2Float(vY), rx, ry);
      
     if valueResult = 0 then 
         valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
