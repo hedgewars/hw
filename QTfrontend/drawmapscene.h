@@ -24,7 +24,7 @@
 
 class QGraphicsPathItem;
 
-typedef QList<QList<QPoint> > Paths;
+typedef QList<QPair<quint8, QList<QPoint> > > Paths;
 
 class DrawMapScene : public QGraphicsScene
 {
@@ -54,8 +54,12 @@ class DrawMapScene : public QGraphicsScene
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
+        virtual void wheelEvent(QGraphicsSceneWheelEvent *);
 
         QPainterPath pointsToPath(const QList<QPoint> points);
+
+        quint8 serializePenWidth(int width);
+        int deserializePenWidth(quint8 width);
 };
 
 #endif // DRAWMAPSCENE_H
