@@ -503,17 +503,23 @@ if(AmmoMenuInvalidated) then
     AMShiftTargetY:= cScreenHeight - AmmoRect.y;
     AMShiftX:= AMShiftTargetX;
     AMShiftY:= AMShiftTargetY;
-
-    if (AMShiftTargetX div MENUSPEED) <  (AMShiftTargetY div MENUSPEED) then
+    
+    if (AMShiftTargetX = 0) or (AMShiftTargetY = 0) then
         begin
         MenuSpeedX:= MENUSPEED;
-        MenuSpeedY:= AMShiftTargetY div (AMShiftTargetX div MENUSPEED);
+        MENUSpeedY:= MENUSPEED;
         end
     else
-        begin
-        MenuSpeedX:= AMShiftTargetX div (AMShiftTargetY div MENUSPEED);
-        MenuSpeedY:= MENUSPEED;
-        end;
+        if (AMShiftTargetX div MENUSPEED) <  (AMShiftTargetY div MENUSPEED) then
+            begin
+            MenuSpeedX:= MENUSPEED;
+            MenuSpeedY:= AMShiftTargetY div (AMShiftTargetX div MENUSPEED);
+            end
+        else
+            begin
+            MenuSpeedX:= AMShiftTargetX div (AMShiftTargetY div MENUSPEED);
+            MenuSpeedY:= MENUSPEED;
+            end;
 end;
 
 if bShowAmmoMenu then // show ammo menu
