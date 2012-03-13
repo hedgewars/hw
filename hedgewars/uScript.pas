@@ -1397,7 +1397,9 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
-            lua_pushinteger(L, hwRound(gear^.dX * 1000000));
+            // gear dX determines hog orientation
+            if (gear^.dX.isNegative) and (gear^.dX = _0) then lua_pushinteger(L, -1)
+            else lua_pushinteger(L, hwRound(gear^.dX * 1000000));
             lua_pushinteger(L, hwRound(gear^.dY * 1000000))
             end
         end;
