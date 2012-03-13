@@ -1385,6 +1385,7 @@ end;
 
 function lc_getgearvelocity(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
+var t: LongInt;
 begin
     if lua_gettop(L) <> 1 then
         begin
@@ -1397,9 +1398,10 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             begin
+            t:= hwRound(gear^.dX * 1000000);
             // gear dX determines hog orientation
-            if (gear^.dX.isNegative) and (gear^.dX = _0) then lua_pushinteger(L, -1)
-            else lua_pushinteger(L, hwRound(gear^.dX * 1000000));
+            if (gear^.dX.isNegative) and (t = 0) then t:= -1;
+            lua_pushinteger(L, t);
             lua_pushinteger(L, hwRound(gear^.dY * 1000000))
             end
         end;
