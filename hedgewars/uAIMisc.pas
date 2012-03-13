@@ -189,12 +189,17 @@ end;
 function RatePlace(Gear: PGear): LongInt;
 var i, r: LongInt;
     rate: LongInt;
+    gX, gY: real;
 begin
+gX:= hwFloat2Float(Gear^.X);
+gY:= hwFloat2Float(Gear^.Y);
 rate:= 0;
 for i:= 0 to Pred(bonuses.Count) do
     with bonuses.ar[i] do
         begin
-        r:= hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+        r:= Radius;
+        if abs(gX-X)+abs(gY-Y) < Radius then
+            r:= trunc(sqrt(sqr(gX - X)+sqr(gY - Y)));
         if r < 15 then
                 inc(rate, Score * Radius)
         else if r < Radius then
@@ -361,7 +366,7 @@ for i:= 0 to Pred(Targets.Count) do
             end;
         if dmg > 0 then
             begin
-            if (Flags and 1 <> 0) and TraceShoveDrown(Me, Point.x, Point.y, dX, dY) then
+            if (Flags and 1 <> 0) and TraceShoveDrown(Me, Point.x, Point.y-2, dX, dY) then
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
                 else
