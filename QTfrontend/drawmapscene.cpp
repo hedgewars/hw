@@ -40,7 +40,7 @@ DrawMapScene::DrawMapScene(QObject *parent) :
     gradient.setColorAt(1, QColor(155, 155, 60));
     setBackgroundBrush(QBrush(gradient));
 
-    m_pen.setWidth(67);
+    m_pen.setWidth(72);
     m_pen.setJoinStyle(Qt::RoundJoin);
     m_pen.setCapStyle(Qt::RoundCap);
     m_currPath = 0;
@@ -62,7 +62,7 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
         else
         {
             path.lineTo(mouseEvent->scenePos());
-            paths.first().append(mouseEvent->scenePos().toPoint());
+            paths.first().second.append(mouseEvent->scenePos().toPoint());
         }
         m_currPath->setPath(path);
 
@@ -79,7 +79,7 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     p += QPointF(0.01, 0.01);
     path.moveTo(p);
     path.lineTo(mouseEvent->scenePos());
-    paths.prepend(QList<QPoint>() << mouseEvent->scenePos().toPoint());
+    paths.prepend(qMakePair(serializePenWidth(m_pen.width()), QList<QPoint>() << mouseEvent->scenePos().toPoint()));
     m_currPath->setPath(path);
 
     emit pathChanged();
@@ -91,12 +91,26 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
     {
         QPainterPath path = m_currPath->path();
         path.lineTo(mouseEvent->scenePos());
-        paths.first().append(mouseEvent->scenePos().toPoint());
+        paths.first().second.append(mouseEvent->scenePos().toPoint());
         m_currPath->setPath(path);
 
         simplifyLast();
 
         m_currPath = 0;
+    }
+}
+
+void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
+{
+    if(wheelEvent->delta() > 0 && m_pen.width() < 512)
+        m_pen.setWidth(m_pen.width() + 10);
+    else if(wheelEvent->delta() < 0 && m_pen.width() >= 12)
+        m_pen.setWidth(m_pen.width() - 10);
+
+    if(m_currPath)
+    {
+        m_currPath->setPen(m_pen);
+        paths.first().first = serializePenWidth(m_pen.width());
     }
 }
 
@@ -148,13 +162,13 @@ QByteArray DrawMapScene::encode()
     for(int i = paths.size() - 1; i >= 0; --i)
     {
         int cnt = 0;
-        QList<QPoint> points = paths.at(i);
-        foreach(QPoint point, points)
+        QPair<quint8, QList<QPoint> > points = paths.at(i);
+        foreach(QPoint point, points.second)
         {
             qint16 px = qToBigEndian((qint16)point.x());
             qint16 py = qToBigEndian((qint16)point.y());
-            quint8 flags = 2;
-            if(!cnt) flags |= 0x80;
+            quint8 flags = 0;
+            if(!cnt) flags = 0x80 + points.first;
             b.append((const char *)&px, 2);
             b.append((const char *)&py, 2);
             b.append((const char *)&flags, 1);
@@ -174,7 +188,7 @@ void DrawMapScene::decode(QByteArray data)
     clear();
     paths.clear();
 
-    QList<QPoint> points;
+    QPair<quint8, QList<QPoint> > points;
 
     while(data.size() >= 5)
     {
@@ -185,20 +199,28 @@ void DrawMapScene::decode(QByteArray data)
         quint8 flags = *(quint8 *)data.data();
         data.remove(0, 1);
 
-        if((flags & 0x80) && points.size())
+        if(flags & 0x80)
         {
-            addPath(pointsToPath(points), m_pen);
-            paths.prepend(points);
+            if(points.second.size())
+            {
+                addPath(pointsToPath(points.second), m_pen);
 
-            points.clear();
+                paths.prepend(points);
+
+                points.second.clear();
+            }
+
+            quint8 penWidth = flags & 0x7f;
+            m_pen.setWidth(deserializePenWidth(penWidth));
+            points.first = penWidth;
         }
 
-        points.append(QPoint(px, py));
+        points.second.append(QPoint(px, py));
     }
 
-    if(points.size())
+    if(points.second.size())
     {
-        addPath(pointsToPath(points), m_pen);
+        addPath(pointsToPath(points.second), m_pen);
         paths.prepend(points);
     }
 
@@ -209,7 +231,7 @@ void DrawMapScene::simplifyLast()
 {
     if(!paths.size()) return;
 
-    QList<QPoint> points = paths.at(0);
+    QList<QPoint> points = paths.at(0).second;
 
     QPoint prevPoint = points.first();
     int i = 1;
@@ -226,13 +248,13 @@ void DrawMapScene::simplifyLast()
         }
     }
 
-    paths[0] = points;
+    paths[0].second = points;
 
 
     // redraw path
     {
         QGraphicsPathItem * pathItem = static_cast<QGraphicsPathItem *>(items()[0]);
-        pathItem->setPath(pointsToPath(paths[0]));
+        pathItem->setPath(pointsToPath(paths[0].second));
     }
 
     emit pathChanged();
@@ -252,4 +274,14 @@ QPainterPath DrawMapScene::pointsToPath(const QList<QPoint> points)
     }
 
     return path;
+}
+
+quint8 DrawMapScene::serializePenWidth(int width)
+{
+    return (width - 6) / 10;
+}
+
+int DrawMapScene::deserializePenWidth(quint8 width)
+{
+    return width * 10 + 6;
 }

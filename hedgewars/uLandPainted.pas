@@ -43,7 +43,7 @@ type
 
 var pointsListHead, pointsListLast: PPointEntry;
 
-procedure DrawLineOnLand(X1, Y1, X2, Y2: LongInt);
+procedure DrawLineOnLand(X1, Y1, X2, Y2, radius: LongInt);
 var  eX, eY, dX, dY: LongInt;
     i, sX, sY, x, y, d: LongInt;
     b: boolean;
@@ -110,7 +110,7 @@ begin
                 begin
                 inc(len);
                 if (len mod 4) = 0 then
-                    FillRoundInLand(X, Y, 34, lfBasic)
+                    FillRoundInLand(X, Y, radius, lfBasic)
                 end
         end
 end;
@@ -147,10 +147,12 @@ end;
 procedure Draw;
 var pe: PPointEntry;
     prevPoint: PointRec;
+    radius: LongInt;
 begin
     // shutup compiler
     prevPoint.X:= 0;
     prevPoint.Y:= 0;
+    radius:= 0;
 
     pe:= pointsListHead;
     TryDo((pe = nil) or (pe^.point.flags and $80 <> 0), 'Corrupted draw data', true);
@@ -159,13 +161,14 @@ begin
         begin
         if (pe^.point.flags and $80 <> 0) then
             begin
+            radius:= (pe^.point.flags and $7F) * 5 + 3;
             AddFileLog('[DRAW] Move to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
-            FillRoundInLand(pe^.point.X, pe^.point.Y, 34, lfBasic)
+            FillRoundInLand(pe^.point.X, pe^.point.Y, radius, lfBasic)
             end
             else
             begin
             AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
-            DrawLineOnLand(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y);
+            DrawLineOnLand(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y, radius);
             end;
 
         prevPoint:= pe^.point;
