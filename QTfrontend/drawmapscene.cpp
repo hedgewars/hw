@@ -40,7 +40,7 @@ DrawMapScene::DrawMapScene(QObject *parent) :
     gradient.setColorAt(1, QColor(155, 155, 60));
     setBackgroundBrush(QBrush(gradient));
 
-    m_pen.setWidth(72);
+    m_pen.setWidth(76);
     m_pen.setJoinStyle(Qt::RoundJoin);
     m_pen.setCapStyle(Qt::RoundCap);
     m_currPath = 0;
@@ -102,9 +102,9 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
 void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
 {
-    if(wheelEvent->delta() > 0 && m_pen.width() < 512)
+    if(wheelEvent->delta() > 0 && m_pen.width() < 516)
         m_pen.setWidth(m_pen.width() + 10);
-    else if(wheelEvent->delta() < 0 && m_pen.width() >= 12)
+    else if(wheelEvent->delta() < 0 && m_pen.width() >= 16)
         m_pen.setWidth(m_pen.width() - 10);
 
     if(m_currPath)
