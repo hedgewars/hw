@@ -53,7 +53,7 @@ procedure AwareOfExplosion(x, y, r: LongInt); inline;
 function RatePlace(Gear: PGear): LongInt;
 function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 function TestColl(x, y, r: LongInt): boolean; inline;
-function TraceShoveDrown(Me: PGear; x, y, dX, dY: Real): boolean;
+function TraceShoveFall(Me: PGear; x, y, dX, dY: Real): LongInt;
 function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord = 0): LongInt;
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
@@ -260,9 +260,10 @@ if b then
 TestCollWithLand:=(((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > 255)
 end;
 
-function TraceDrown(eX, eY: LongInt; x, y, dX, dY: Real; r: LongWord): boolean;
+function TraceFall(eX, eY: LongInt; x, y, dX, dY: Real; r: LongWord): LongInt;
 var skipLandCheck: boolean;
     rCorner: real;
+    dmg: LongInt;
 begin
     skipLandCheck:= true;
     if x - eX < 0 then dX:= -dX;
@@ -275,13 +276,21 @@ begin
         y:= y + dY;
         dY:= dY + cGravityf;
         skipLandCheck:= skipLandCheck and (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
-        // consider adding dX/dY calc here for fall damage
-        if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then exit(false);
-        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(true);
+        if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then
+            begin
+            if 0.4 < dY then
+                begin
+                dmg := 1 + trunc((abs(dY) - 0.4) * 70);
+                if dmg >= 1 then exit(dmg)
+                end;
+            exit(0)
+            end;
+        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(-1); // returning -1 for drowning so it can be considered in the Rate routine
         end;
 end;
 
-function TraceShoveDrown(Me: PGear; x, y, dX, dY: Real): boolean;
+function TraceShoveFall(Me: PGear; x, y, dX, dY: Real): LongInt;
+var dmg: LongInt;
 begin
     while true do
         begin
@@ -289,16 +298,25 @@ begin
         y:= y + dY;
         dY:= dY + cGravityf;
         // consider adding dX/dY calc here for fall damage
-        if TestCollExcludingMe(Me, trunc(x), trunc(y), cHHRadius) then exit(false);
-        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(true);
+        if TestCollExcludingMe(Me, trunc(x), trunc(y), cHHRadius) then
+            begin
+            if 0.4 < dY then
+                begin
+                dmg := 1 + trunc((abs(dY) - 0.4) * 70);
+                if dmg >= 1 then exit(dmg)
+                end;
+            exit(0)
+            end;
+        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(-1); // returning -1 for drowning so it can be considered in the Rate routine
         end;
 end;
 
 // Flags are not defined yet but 1 for checking drowning and 2 for assuming land erasure.
 function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord = 0): LongInt;
-var i, dmg, dmgBase, rate, erasure: LongInt;
+var i, fallDmg, dmg, dmgBase, rate, erasure: LongInt;
     dX, dY, dmgMod: real;
 begin
+fallDmg:= 0;
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 // add our virtual position
@@ -325,31 +343,33 @@ for i:= 0 to Targets.Count do
                 begin
                 dX:= 0.005 * dmg + 0.01;
                 dY:= dX;
+                fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
                 end;
-            if (Flags and 1 <> 0) and TraceDrown(x, y, Point.x, Point.y, dX, dY, erasure) then
+            if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
                 else
                     dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
-            else if dmg >= abs(Score) then
+            else if (dmg+fallDmg) >= abs(Score) then
                 if Score > 0 then
                     inc(rate, KillScore)
                 else
                     dec(rate, KillScore * friendlyfactor div 100)
             else
                 if Score > 0 then
-                    inc(rate, dmg)
+                    inc(rate, dmg+fallDmg)
             else
-                dec(rate, dmg * friendlyfactor div 100)
+                dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
             end;
         end;
 RateExplosion:= rate * 1024;
 end;
 
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
-var i, dmg, rate: LongInt;
+var i, fallDmg, dmg, rate: LongInt;
     dX, dY, dmgMod: real;
 begin
+fallDmg:= 0;
 dX:= gdX * 0.005 * kick;
 dY:= gdY * 0.005 * kick;
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
@@ -365,28 +385,30 @@ for i:= 0 to Pred(Targets.Count) do
             end;
         if dmg > 0 then
             begin
-            if (Flags and 1 <> 0) and TraceShoveDrown(Me, Point.x, Point.y-2, dX, dY) then
+            if (Flags and 1 <> 0) then 
+                fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y-2, dX, dY) * dmgMod);
+            if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
                 else
                     dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
-            else if power >= abs(Score) then
+            else if power+fallDmg >= abs(Score) then
                 if Score > 0 then
                     inc(rate, KillScore)
                 else
                     dec(rate, KillScore * friendlyfactor div 100)
             else
                 if Score > 0 then
-                    inc(rate, power)
+                    inc(rate, power+fallDmg)
                 else
-                    dec(rate, power * friendlyfactor div 100)
+                    dec(rate, (power+fallDmg) * friendlyfactor div 100)
             end;
         end;
 RateShove:= rate * 1024
 end;
 
 function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
-var i, dmg, baseDmg, rate, erasure: LongInt;
+var i, dmg, fallDmg, baseDmg, rate, erasure: LongInt;
     dX, dY, dmgMod: real;
 begin
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
@@ -419,17 +441,22 @@ for i:= 0 to Targets.Count do
             dY:= gdY * dmg;
             if dX < 0 then dX:= dX - 0.01
             else dX:= dX + 0.01;
-            if TraceDrown(x, y, Point.x, Point.y, dX, dY, erasure) then
+            fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
+            if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
                 else
                     dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
-            else if dmg >= abs(Score) then
-                dmg := KillScore;
-            if Score > 0 then
-                inc(rate, dmg)
+            else if (dmg+fallDmg) >= abs(Score) then
+                if Score > 0 then
+                    inc(rate, KillScore)
+                else
+                    dec(rate, KillScore * friendlyfactor div 100)
             else
-                dec(rate, dmg * friendlyfactor div 100);
+                if Score > 0 then
+                    inc(rate, dmg+fallDmg)
+            else
+                dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
             end;
         end;        
 RateShotgun:= rate * 1024;

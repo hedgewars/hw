@@ -579,10 +579,11 @@ TestShotgun:= BadTurn
 end;
 
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var Vx, Vy, x, y, t: real;
+var Vx, Vy, x, y, t, dmgMod: real;
     d: Longword;
-    valueResult: LongInt;
+    fallDmg, valueResult: LongInt;
 begin
+dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
@@ -612,9 +613,10 @@ until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4)
 
 if Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 3 then
     begin
-    if TraceShoveDrown(Me, Targ.X, Targ.Y, vX * 0.005 * 20, vY * 0.005 * 20) then
+    fallDmg:= TraceShoveFall(Me, Targ.X, Targ.Y, vX * 0.005 * 20, vY * 0.005 * 20);
+    if fallDmg < 0 then
         valueResult:= 204800
-    else valueResult:= Max(0, (4 - d div 50) * 7 * 1024)
+    else valueResult:= Max(0, (4 - d div 50) * trunc((7+fallDmg)*dmgMod) * 1024)
     end
 else
     valueResult:= BadTurn;
