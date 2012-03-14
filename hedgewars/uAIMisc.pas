@@ -353,7 +353,6 @@ begin
 dX:= gdX * 0.005 * kick;
 dY:= gdY * 0.005 * kick;
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
-Me:= Me; // avoid compiler hint
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do

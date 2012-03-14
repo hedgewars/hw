@@ -648,37 +648,53 @@ TestBaseballBat:= valueResult;
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var i, valueResult: LongInt;
+var i, val1, val2, t: LongInt;
     x, y: real;
 begin
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
-ap.Angle:= 0;
+ap.Angle:= hwSign(Me^.dX);
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 if (Abs(trunc(x) - Targ.X) > 25)
 or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
     begin
-    if TestColl(trunc(x), trunc(y) - 16, 6)
-    and (RateShove(Me, trunc(x) + 10 * hwSign(Me^.dX), trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX)*0.45, -0.9,  1) = 0) then
-        valueResult:= Succ(BadTurn)
+// TODO - find out WTH this works.
+    if TestColl(trunc(x), trunc(y) - 16, 6) and 
+       (RateShove(Me, trunc(x) + 10 * hwSign(Me^.dX), 
+                      trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX)*0.45, -0.9,  1) = 0) then
+        val1:= Succ(BadTurn)
     else
-        valueResult:= BadTurn;
-    exit(valueResult)
+        val1:= BadTurn;
+    exit(val1)
+    end;
+(*
+For some silly reason, having this enabled w/ the AI 
+val1:= 0;
+for i:= 0 to 4 do
+    begin
+    t:= RateShove(Me, trunc(x) + 10 * hwSign(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX)*0.45, -0.9, 1);
+    if (val1 < 0) or (t < 0) then val1:= BadTurn
+    else if t > 0 then val1:= t;
     end;
 
-valueResult:= 0;
+val2:= 0;
 for i:= 0 to 4 do
-    valueResult:= valueResult + RateShove(Me, trunc(x) + 10 * hwSign(Targ.X - x),
-                                    trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX)*0.45, -0.9, 1);
-if valueResult <= 0 then
-    valueResult:= BadTurn
-else
-    inc(valueResult);
-
-TestFirePunch:= valueResult;
+    begin
+    t:= RateShove(Me, trunc(x) + 10 * hwSign(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, -hwSign(Me^.dX)*0.45, -0.9, 1);
+    if (val2 < 0) or (t < 0) then val2:= BadTurn
+    else if t > 0 then val2:= t;
+    end;
+if (val1 > val2) and (val1 > 0) then 
+    TestFirePunch:= val1
+else if (val2 > val1) and (val2 > 0) then
+    begin
+    ap.Angle:= -hwSign(Me^.dX);
+    TestFirePunch:= val2
+    end
+else TestFirePunch:= BadTurn;*)
 end;
 
 function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
