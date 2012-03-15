@@ -82,6 +82,7 @@ function cstr(const z: hwFloat): shortstring; // Returns a shortstring represent
 function hwRound(const t: hwFloat): LongInt; inline; // Does NOT really round but returns the integer representation of the hwFloat without fractional digits. (-_0_9 -> -0, _1_5 -> _1)
 function hwAbs(const t: hwFloat): hwFloat; inline; // Returns the value of t with positive sign.
 function hwSqr(const t: hwFloat): hwFloat; inline; // Returns the square value of parameter t.
+function hwPow(const t: hwFloat; p: LongWord): hwFloat; inline; // Returns the power of the value
 function hwSqrt(const t: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
 function Distance(const dx, dy: hwFloat): hwFloat; // Returns the distance between two points in 2-dimensional space, of which the parameters are the horizontal and vertical distance.
 function DistanceI(const dx, dy: LongInt): hwFloat; // Same as above for integer parameters.
@@ -148,6 +149,7 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
             _1_9: hwFloat = (isNegative: false; QWordValue:  8160437862);
               _2: hwFloat = (isNegative: false; QWordValue:  4294967296 * 2);
               _3: hwFloat = (isNegative: false; QWordValue:  4294967296 * 3);
+             _PI: hwFloat = (isNegative: false; QWordValue: 13493037704);
               _4: hwFloat = (isNegative: false; QWordValue:  4294967296 * 4);
             _4_5: hwFloat = (isNegative: false; QWordValue:  4294967296 * 9 div 2);
               _5: hwFloat = (isNegative: false; QWordValue:  4294967296 * 5);
@@ -353,6 +355,18 @@ function hwSqr(const t: hwFloat): hwFloat;
 begin
 hwSqr.isNegative:= false;
 hwSqr.QWordValue:= ((QWord(t.Round) * t.Round) shl 32) + QWord(t.Round) * t.Frac * 2 + ((QWord(t.Frac) * t.Frac) shr 32);
+end;
+
+function hwPow(const t: hwFloat;p: LongWord): hwFloat;
+begin
+hwPow:= t;
+if p mod 2 = 0 then hwPow.isNegative:= t.isNegative;
+
+while p > 0 do
+    begin
+    hwPow.QWordValue:= QWord(hwPow.Round) * t.Frac + QWord(hwPow.Frac) * t.Round + ((QWord(hwPow.Frac) * t.Frac) shr 32);
+    dec(p)
+    end
 end;
 
 function hwSqrt(const t: hwFloat): hwFloat;

@@ -3466,11 +3466,9 @@ begin
         fChanged := true;
         if Gear^.Angle > 2048 then
             dec(Gear^.Angle)
-        else
-            if Gear^.Angle < 2048 then
-                inc(Gear^.Angle)
-        else
-            fChanged := false
+        else if Gear^.Angle < 2048 then
+            inc(Gear^.Angle)
+        else fChanged := false
     end
     else
         begin
@@ -4034,7 +4032,7 @@ begin
             break;
 
         // don't port portals or other gear that wouldn't make sense
-        if (iterator^.Kind in [gtPortal, gtRope, gtRCPlane])
+        if (iterator^.Kind in [gtPortal, gtRope])
         or (iterator^.PortalCounter > 32) then
             continue;
 
@@ -4271,6 +4269,22 @@ begin
             begin
             inc(iterator^.PortalCounter);
             iterator^.State:= iterator^.State and (not gstHHHJump)
+            end;
+
+        // is it worth adding an arcsin table?  Just how often would we end up doing something like this?
+        if iterator^.Kind = gtRCPlane then
+            begin
+            // recycling as temp vars
+            resety.isNegative:= false;
+            resety.QWordValue:= 4294967296 * 112;
+            resetx.isNegative:= false;
+            resetx.QWordValue:= 4294967296 * 35;
+            resetdx.isNegative:= false;
+            resetdx.QWordValue:= 4294967296 * 1152;
+    
+            resetdy:=hwAbs(iterator^.dX*4);
+            resetdy:= resetdy + hwPow(resetdy,3)/_6 + _3 * hwPow(resetdy,5) / _40 + _5 * hwPow(resetdy,7) / resety + resetx * hwPow(resetdy,9) / resetdx;
+            iterator^.Angle:= hwRound(resetdy*_2048 / _PI)
             end;
 
         if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)

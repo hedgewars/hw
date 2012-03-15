@@ -358,8 +358,7 @@ for i:= 0 to Targets.Count do
             else
                 if Score > 0 then
                     inc(rate, dmg+fallDmg)
-            else
-                dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
+                else dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
             end;
         end;
 RateExplosion:= rate * 1024;
@@ -475,7 +474,7 @@ for i:= 0 to Pred(Targets.Count) do
         begin
          // hammer hit radius is 8, shift is 10
         if abs(Point.x - x) + abs(Point.y - y) < 18 then
-        r:= trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
+            r:= trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
 
         if r <= 18 then
             if Score > 0 then 
