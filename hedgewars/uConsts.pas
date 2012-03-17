@@ -289,7 +289,7 @@ const
     htHealth      = $04;
     htTransparent = $08;
 
-    AMAnimDuration = 500;
+    AMAnimDuration = 200;
     AMHidden    = 0;//AMState values
     AMShowingUp = 1;
     AMShowing   = 2;
