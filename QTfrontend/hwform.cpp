@@ -638,7 +638,7 @@ void HWForm::GoToPage(int id)
         //New page animation
         animationNewSlide = new QPropertyAnimation(ui.Pages->widget(id), "pos");
         animationNewSlide->setDuration(duration);
-        animationNewSlide->setStartValue(QPoint(width()/coeff, 0));
+        animationNewSlide->setStartValue(QPoint(20000/coeff, 0));
         animationNewSlide->setEndValue(QPoint(0, 0));
         animationNewSlide->setEasingCurve(QEasingCurve::OutExpo);
 
@@ -656,7 +656,7 @@ void HWForm::GoToPage(int id)
         animationOldSlide = new QPropertyAnimation(ui.Pages->widget(lastid), "pos");
         animationOldSlide->setDuration(duration);
         animationOldSlide->setStartValue(QPoint(0, 0));
-        animationOldSlide->setEndValue(QPoint(-width()/coeff, 0));
+        animationOldSlide->setEndValue(QPoint(-20000/coeff, 0));
         animationOldSlide->setEasingCurve(QEasingCurve::OutExpo);
 
 #ifdef false
