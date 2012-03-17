@@ -616,7 +616,7 @@ void HWForm::GoToPage(int id)
     OnPageShown(id, lastid);
     ui.Pages->setCurrentIndex(id);
 
-    if (id == ID_PAGE_DRAWMAP)
+    if (id == ID_PAGE_DRAWMAP || id == ID_PAGE_GAMESTATS)
         stopAnim = true;
 
 #if (QT_VERSION >= 0x040600)
