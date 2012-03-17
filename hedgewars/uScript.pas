@@ -1720,9 +1720,6 @@ ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('MapGen', cMapGen);
 ScriptSetInteger('ScreenHeight', cScreenHeight);
 ScriptSetInteger('ScreenWidth', cScreenWidth);
-ScriptSetInteger('LeftX', leftX);
-ScriptSetInteger('RightX', rightX);
-ScriptSetInteger('TopY', topY);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
 ScriptSetInteger('CaseFreq', cCaseFactor);
 ScriptSetInteger('HealthCaseProb', cHealthCaseProb);
@@ -1857,6 +1854,9 @@ ScriptSetInteger('GameTime', GameTicks);
 ScriptSetInteger('RealTime', RealTicks);
 ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
+ScriptSetInteger('LeftX', leftX);
+ScriptSetInteger('RightX', rightX);
+ScriptSetInteger('TopY', topY);
 if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
     ScriptSetInteger('CurrentHedgehog', CurrentHedgehog^.Gear^.UID)
 else
