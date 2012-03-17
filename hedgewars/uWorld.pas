@@ -64,12 +64,11 @@ uses
 
 var cWaveWidth, cWaveHeight: LongInt;
     AMShiftTargetX, AMShiftTargetY, AMShiftX, AMShiftY, SlotsNum: LongInt;
+    AMAnimStartTime, AMState : LongInt;
+    AMAnimState: Single;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture;
     timeTexture: PTexture;
-    AMAnimStartTime : LongInt;
-    AMAnimState: Single;
-    AMState: LongInt;
     FPS: Longword;
     CountTicks: Longword;
     SoundTimerTicks: Longword;
@@ -201,7 +200,7 @@ SkyOffset:= 0;
 HorizontOffset:= 0;
 
 InitTouchInterface();
-
+AMAnimType:= AMTypeMaskX or AMTypeMaskAlpha;
 end;
 
 procedure InitCameraBorders;
@@ -501,8 +500,10 @@ if(AmmoMenuInvalidated) then
         AmmoRect.x:= (cScreenWidth shr 1) - AmmoRect.w - AMSlotSize;
         AmmoRect.y:= cScreenHeight - (AmmoRect.h + AMSlotSize);
 {$ENDIF}
-    AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x;
-    AMShiftTargetY:= cScreenHeight        - AmmoRect.y;
+    if (AMAnimType and AMTypeMaskX) <> 0 then AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x
+    else AMShiftTargetX:= 0;
+    if (AMAnimType and AMTypeMaskY) <> 0 then AMShiftTargetY:= cScreenHeight        - AmmoRect.y
+    else AMShiftTargetY:= 0;
     AMShiftX:= AMShiftTargetX;
     AMShiftY:= AMShiftTargetY;
 end;
@@ -522,7 +523,8 @@ if AMState = AMShowingUp then // show ammo menu
             begin
             AMShiftX:= Round(AMShiftTargetX * (1 - AMAnimState));
             AMShiftY:= Round(AMShiftTargetY * (1 - AMAnimState));
-            Tint($FF, $ff, $ff, Round($ff * AMAnimState));
+            if (AMAnimType and AMTypeMaskAlpha) <> 0 then 
+                Tint($FF, $ff, $ff, Round($ff * AMAnimState));
             end
         else
             begin
@@ -546,7 +548,8 @@ if AMState = AMHiding then // hide ammo menu
             begin
             AMShiftX:= Round(AMShiftTargetX * AMAnimState);
             AMShiftY:= Round(AMShiftTargetY * AMAnimState);
-            Tint($FF, $ff, $ff, Round($ff * (1-AMAnimState)));
+            if (AMAnimType and AMTypeMaskAlpha) <> 0 then 
+                Tint($FF, $ff, $ff, Round($ff * (1-AMAnimState)));
             end
          else 
             begin
@@ -558,11 +561,13 @@ if AMState = AMHiding then // hide ammo menu
     end;
     
 DrawTexture(AmmoRect.x + AMShiftX, AmmoRect.y + AMShiftY, AmmoMenuTex);
-Tint($FF, $ff, $ff, $ff);
 
-    Pos:= -1;
-    Slot:= -1;
-    c:= -1;
+if ((AMState = AMHiding) or (AMState = AMShowingUp)) and ((AMAnimType and AMTypeMaskAlpha) <> 0 )then 
+    Tint($FF, $ff, $ff, $ff);
+
+Pos:= -1;
+Slot:= -1;
+c:= -1;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
