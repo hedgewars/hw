@@ -4272,6 +4272,7 @@ begin
             end;
 
         // is it worth adding an arcsin table?  Just how often would we end up doing something like this?
+        // SYNCED ANGLE UPDATE
         if iterator^.Kind = gtRCPlane then
             begin
             // recycling as temp vars
@@ -4285,9 +4286,13 @@ begin
             resetdy:=hwAbs(iterator^.dX*4);
             resetdy:= resetdy + hwPow(resetdy,3)/_6 + _3 * hwPow(resetdy,5) / _40 + _5 * hwPow(resetdy,7) / resety + resetx * hwPow(resetdy,9) / resetdx;
             iterator^.Angle:= hwRound(resetdy*_2048 / _PI);
-            if not iterator^.dY.isNegative then iterator^.Angle:= 2048-iterator^.Angle;
+            end
+        // VISUAL USE OF ANGLE ONLY
+        else if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtKamikaze) and (CurAmmoGear^.Hedgehog = iterator^.Hedgehog) then
+            begin
+            iterator^.Angle:= DxDy2AttackAngle(iterator^.dX, iterator^.dY);
+            iterator^.Angle:= 2048-iterator^.Angle;
             if iterator^.dX.isNegative then iterator^.Angle:= 4096-iterator^.Angle;
-            
             end;
 
         if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
