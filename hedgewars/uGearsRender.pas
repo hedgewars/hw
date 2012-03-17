@@ -908,6 +908,7 @@ procedure RenderGear(Gear: PGear; x, y: LongInt);
 var
     HHGear: PGear;
     i: Longword;
+    aAngle: real;
     startX, endX, startY, endY: LongInt;
 begin
     if Gear^.Target.X <> NoPointX then
@@ -926,19 +927,12 @@ begin
                   else DrawSprite(sprMolotov, x, y, 8);
 
        gtRCPlane: begin
+                  aangle:= Gear^.Angle * 360 / 4096;
+                  if Gear^.Tag < 0 then aangle:= 360-aangle;
                   Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
-                  if Gear^.Tag = -1 then
-                      begin
-                      DrawRotatedF(sprPlane, x, y, 0, -1, DxDy2Angle(Gear^.dX, Gear^.dY) + 90);
-                      Tint($FF, $FF, $FF, $FF);
-                      DrawRotatedF(sprPlane, x, y, 1, -1, DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
-                      end
-                  else
-                      begin
-                      DrawRotatedF(sprPlane, x, y, 0, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-                      Tint($FF, $FF, $FF, $FF);
-                      DrawRotatedF(sprPlane, x, y, 1, 0, DxDy2Angle(Gear^.dY, Gear^.dX))
-                      end
+                  DrawRotatedF(sprPlane, x, y, 0, Gear^.Tag, aangle - 90);
+                  Tint($FF, $FF, $FF, $FF);
+                  DrawRotatedF(sprPlane, x, y, 1, Gear^.Tag, aangle - 90)
                   end;
        gtBall: DrawRotatedf(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
 
