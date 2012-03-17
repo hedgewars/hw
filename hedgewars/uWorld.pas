@@ -292,7 +292,7 @@ with arrowUp do
     frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - frame.w * 2;
-    frame.y:= jumpWidget.frame.y - Round(frame.h * 2.25);
+    frame.y:= jumpWidget.frame.y - Round(frame.h * 1.25);
     active.x:= frame.x;
     active.y:= frame.y;
     active.w:= frame.w;
@@ -313,7 +313,7 @@ with arrowDown do
     frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
     frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
     frame.x:= (cScreenWidth shr 1) - frame.w * 2;
-    frame.y:= jumpWidget.frame.y - Round(frame.h * 2.25);
+    frame.y:= jumpWidget.frame.y - Round(frame.h * 1.25);
     active.x:= frame.x;
     active.y:= frame.y;
     active.w:= frame.w;
