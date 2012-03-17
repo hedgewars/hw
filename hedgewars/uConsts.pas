@@ -290,10 +290,15 @@ const
     htTransparent = $08;
 
     AMAnimDuration = 500;
-    AMHidden    = 0;
+    AMHidden    = 0;//AMState values
     AMShowingUp = 1;
     AMShowing   = 2;
     AMHiding    = 3;
+
+    AMTypeMaskX     = $00000001;
+    AMTypeMaskY     = $00000002;
+    AMTypeMaskAlpha = $00000004;
+    AMTypeMaskSlide = $00000008;
 
 {$IFDEF MOBILE}
     AMSlotSize = 48;

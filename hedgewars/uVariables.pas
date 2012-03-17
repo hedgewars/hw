@@ -202,6 +202,8 @@ var
     firebutton, jumpWidget, AMWidget          : TOnScreenWidget;
     pauseButton                               : TOnScreenWidget;
 {$ENDIF}
+
+    AMAnimType      : LongInt;
 const
     cHHFileName = 'Hedgehog';
     cCHFileName = 'Crosshair';
