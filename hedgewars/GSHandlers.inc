@@ -2905,8 +2905,8 @@ begin
                         end
                 end;
         AfterAttack;
-        DeleteGear(Gear);
         DeleteGear(HHGear);
+        DeleteGear(Gear);
     end
     else
         begin

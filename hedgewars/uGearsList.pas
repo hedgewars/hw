@@ -496,6 +496,8 @@ else if Gear^.Kind = gtHedgehog then
         end
     else*)
         begin
+        if (Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtKamikaze) then
+            Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
         if (hwRound(Gear^.Y) >= cWaterLine) then
             begin
             t:= max(Gear^.Damage, Gear^.Health);
