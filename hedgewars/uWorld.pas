@@ -67,7 +67,9 @@ var cWaveWidth, cWaveHeight: LongInt;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture;
     timeTexture: PTexture;
-    MenuSpeedX, MenuSpeedY: LongInt;
+    AMAnimStartTime : LongInt;
+    AMAnimState: Single;
+    AMState: LongInt;
     FPS: Longword;
     CountTicks: Longword;
     SoundTimerTicks: Longword;
@@ -84,7 +86,6 @@ const cStereo_Sky           = 0.0500;
       cStereo_Land          = 0.0075;
       cStereo_Water_near    = 0.0025;
       cStereo_Outside       = -0.0400;
-
 
 // helper functions to create the goal/game mode string
 function AddGoal(s: ansistring; gf: longword; si: TGoalStrId; i: LongInt): ansistring;
@@ -200,6 +201,7 @@ SkyOffset:= 0;
 HorizontOffset:= 0;
 
 InitTouchInterface();
+
 end;
 
 procedure InitCameraBorders;
@@ -453,7 +455,6 @@ end;
 
 procedure ShowAmmoMenu;
 const BORDERSIZE = 2;
-      MENUSPEED = 15;
 var Slot, Pos: LongInt;
     Ammo: PHHAmmo;
     c,i,g,t,STurns: LongInt;
@@ -474,6 +475,7 @@ Pos:= -1;
 if Ammo = nil then
 begin
 bShowAmmoMenu:= false;
+AMState:= AMHidden;
 exit
 end;
 
@@ -500,72 +502,63 @@ if(AmmoMenuInvalidated) then
         AmmoRect.y:= cScreenHeight - (AmmoRect.h + AMSlotSize);
 {$ENDIF}
     AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x;
-    AMShiftTargetY:= cScreenHeight - AmmoRect.y;
+    AMShiftTargetY:= cScreenHeight        - AmmoRect.y;
     AMShiftX:= AMShiftTargetX;
     AMShiftY:= AMShiftTargetY;
-    
-    if (AMShiftTargetX = 0) or (AMShiftTargetY = 0) then
-        begin
-        MenuSpeedX:= MENUSPEED;
-        MENUSpeedY:= MENUSPEED;
-        end
-    else
-        if (AMShiftTargetX div MENUSPEED) <  (AMShiftTargetY div MENUSPEED) then
-            begin
-            MenuSpeedX:= MENUSPEED;
-            MenuSpeedY:= AMShiftTargetY div (AMShiftTargetX div MENUSPEED);
-            end
-        else
-            begin
-            MenuSpeedX:= AMShiftTargetX div (AMShiftTargetY div MENUSPEED);
-            MenuSpeedY:= MENUSPEED;
-            end;
 end;
 
-if bShowAmmoMenu then // show ammo menu
+AMAnimState:= (RealTicks - AMAnimStartTime) / AMAnimDuration;
+if AMState = AMShowingUp then // show ammo menu
     begin
     FollowGear:= nil;
     if (cReducedQuality and rqSlowMenu) <> 0 then
         begin
         AMShiftX:= 0;
         AMShiftY:= 0;
+        AMState:= AMShowing;
         end
     else
-        if (AMShiftX <> 0) or (AMShiftY <> 0) then
+        if AMAnimState < 1 then
             begin
-            dec(AMShiftX, MenuSpeedX);
-            if AMShiftX < 0 then AMShiftX:= 0;
-            dec(AMShiftY, MenuSpeedY);
-            if AMShiftY < 0 then AMShiftY:= 0;
-            if (AMShiftX = 0) and (AMShiftY = 0) then
-                begin
-                CursorPoint.X:= AmmoRect.x + AmmoRect.w;
-                CursorPoint.Y:= AmmoRect.y;
-                end;
+            AMShiftX:= Round(AMShiftTargetX * (1 - AMAnimState));
+            AMShiftY:= Round(AMShiftTargetY * (1 - AMAnimState));
+            Tint($FF, $ff, $ff, Round($ff * AMAnimState));
             end
-    end
-else  // hide ammo menu
+        else
+            begin
+            AMShiftX:= 0;
+            AMShiftY:= 0;
+            CursorPoint.X:= AmmoRect.x + AmmoRect.w;
+            CursorPoint.Y:= AmmoRect.y;
+            AMState:= AMShowing;
+            end;
+    end;
+if AMState = AMHiding then // hide ammo menu
     begin
-    if (AMShiftX = AMShiftTargetX) and (AMShiftY = AMShiftTargetY) then
-        begin
-        prevPoint:= CursorPoint;
-        end;
     if (cReducedQuality and rqSlowMenu) <> 0 then
         begin
         AMShiftX:= AMShiftTargetX;
         AMShiftY:= AMShiftTargetY;
+        AMState:= AMHidden;
         end
     else
-        if (AMShiftX <> AMShiftTargetX) or (AMShiftY <> AMShiftTargetY) then
+        if AMAnimState < 1 then
             begin
-            inc(AMShiftX, MenuSpeedX);
-            if AMShiftX > AMShiftTargetX then AMShiftX:= AMShiftTargetX;
-            inc(AMShiftY, MenuSpeedY);
-            if AMShiftY> AMShiftTargetY then AMShiftY:= AMShiftTargetY;
+            AMShiftX:= Round(AMShiftTargetX * AMAnimState);
+            AMShiftY:= Round(AMShiftTargetY * AMAnimState);
+            Tint($FF, $ff, $ff, Round($ff * (1-AMAnimState)));
             end
+         else 
+            begin
+            AMShiftX:= AMShiftTargetX;
+            AMShiftY:= AMShiftTargetY;
+            prevPoint:= CursorPoint;
+            AMState:= AMHidden;
+            end;
     end;
-
-    DrawTexture(AmmoRect.x + AMShiftX, AmmoRect.y + AMShiftY, AmmoMenuTex);
+    
+DrawTexture(AmmoRect.x + AMShiftX, AmmoRect.y + AMShiftY, AmmoMenuTex);
+Tint($FF, $ff, $ff, $ff);
 
     Pos:= -1;
     Slot:= -1;
@@ -1339,7 +1332,24 @@ if isInLag then
         end;
 
 // AmmoMenu
-if bShowAmmoMenu or ((AMShiftX <> AMShiftTargetX) or (AMShiftY <> AMShiftTargetY)) then
+if bShowAmmoMenu and ((AMState = AMHidden) or (AMState = AMHiding)) then
+    begin
+    if (AMState = AMHidden) then
+        AMAnimStartTime:= RealTicks
+    else
+        AMAnimStartTime:= RealTicks - (AMAnimDuration - (RealTicks - AMAnimStartTime));
+    AMState:= AMShowingUp;
+    end;
+if not(bShowAmmoMenu) and ((AMstate = AMShowing) or (AMState = AMShowingUp)) then
+    begin
+    if (AMState = AMShowing) then
+        AMAnimStartTime:= RealTicks
+    else
+        AMAnimStartTime:= RealTicks - (AMAnimDuration - (RealTicks - AMAnimStartTime));
+    AMState:= AMHiding;
+    end; 
+
+if bShowAmmoMenu or (AMState = AMHiding) then
     ShowAmmoMenu;
 
 // Cursor
@@ -1704,6 +1714,7 @@ missionTimer:= 0;
 missionTex:= nil;
 cOffsetY:= 0;
 stereoDepth:= 0;
+AMState:= AMHidden;
 end;
 
 procedure freeModule;

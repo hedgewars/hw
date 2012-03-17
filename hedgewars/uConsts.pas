@@ -289,6 +289,12 @@ const
     htHealth      = $04;
     htTransparent = $08;
 
+    AMAnimDuration = 500;
+    AMHidden    = 0;
+    AMShowingUp = 1;
+    AMShowing   = 2;
+    AMHiding    = 3;
+
 {$IFDEF MOBILE}
     AMSlotSize = 48;
     AMTITLE = 30;
