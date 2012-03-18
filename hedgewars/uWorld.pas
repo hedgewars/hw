@@ -500,10 +500,14 @@ if(AmmoMenuInvalidated) then
         AmmoRect.x:= (cScreenWidth shr 1) - AmmoRect.w - AMSlotSize;
         AmmoRect.y:= cScreenHeight - (AmmoRect.h + AMSlotSize);
 {$ENDIF}
+    AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x;
+    AMShiftTargetY:= cScreenHeight        - AmmoRect.y;
+(*
     if (AMAnimType and AMTypeMaskX) <> 0 then AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x
     else AMShiftTargetX:= 0;
     if (AMAnimType and AMTypeMaskY) <> 0 then AMShiftTargetY:= cScreenHeight        - AmmoRect.y
     else AMShiftTargetY:= 0;
+*)
     AMShiftX:= AMShiftTargetX;
     AMShiftY:= AMShiftTargetY;
 end;
