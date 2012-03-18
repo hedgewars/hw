@@ -502,20 +502,25 @@ if(AmmoMenuInvalidated) then
 {$ENDIF}
     AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x;
     AMShiftTargetY:= cScreenHeight        - AmmoRect.y;
-(*
+
     if (AMAnimType and AMTypeMaskX) <> 0 then AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x
     else AMShiftTargetX:= 0;
     if (AMAnimType and AMTypeMaskY) <> 0 then AMShiftTargetY:= cScreenHeight        - AmmoRect.y
     else AMShiftTargetY:= 0;
-*)
+
     AMShiftX:= AMShiftTargetX;
     AMShiftY:= AMShiftTargetY;
 end;
 
 AMAnimState:= (RealTicks - AMAnimStartTime) / AMAnimDuration;
+
+if AMState = AMShowing then
+    begin
+    FollowGear:=nil;
+    end;
+
 if AMState = AMShowingUp then // show ammo menu
     begin
-    FollowGear:= nil;
     if (cReducedQuality and rqSlowMenu) <> 0 then
         begin
         AMShiftX:= 0;
@@ -1555,7 +1560,7 @@ if WorldDy < wdy then
 if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then
     exit;
 
-if (AMShiftX <> AMShiftTargetX) and (AMShiftY <> AMShiftTargetY) then
+if (AMState = AMShowingUp) or (AMState = AMShowing) then
 begin
     if CursorPoint.X < AmmoRect.x then//check left 
         CursorPoint.X:= AmmoRect.x;
