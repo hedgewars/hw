@@ -4511,9 +4511,9 @@ begin
         begin
         Gear^.dY := Gear^.dY + cGravity * 2;
         Gear^.Y := Gear^.Y + Gear^.dY;
-        CheckGearDrowning(Gear);
-        if (Gear^.State and gstDrowning) <> 0 then
+        if CheckGearDrowning(Gear) then
             begin
+            Gear^.Y:= Gear^.Y + _50;
             OnUsedAmmo(CurrentHedgehog^);
             if CurrentHedgehog^.Gear <> nil then
                 begin
@@ -4536,6 +4536,7 @@ begin
 
     if (Gear^.State and gstDrowning) <> 0 then
         begin
+        Gear^.Y:= Gear^.Y + _50;
         OnUsedAmmo(CurrentHedgehog^);
         if CurrentHedgehog^.Gear <> nil then
             begin

@@ -20,7 +20,7 @@
 
 unit uGearsUtils;
 interface
-uses uTypes;
+uses uTypes, math;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord = $FFFFFFFF); 
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
@@ -327,7 +327,7 @@ var
     skipSpeed, skipAngle, skipDecay: hwFloat;
     i, maxDrops, X, Y: LongInt;
     vdX, vdY: real;
-    particle: PVisualGear;
+    particle, splash: PVisualGear;
     isSubmersible: boolean;
 begin
     // probably needs tweaking. might need to be in a case statement based upon gear type
@@ -388,9 +388,15 @@ begin
         or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0)
         and (CurAmmoGear^.dY < _0_01)))) then
             begin
-            AddVisualGear(X, cWaterLine, vgtSplash);
+            splash:= AddVisualGear(X, cWaterLine, vgtSplash);
+            if splash <> nil then 
+                begin
+                splash^.Scale:= hwFloat2Float(Gear^.Density / _3);
+                if splash^.Scale > 1 then splash^.Scale:= power(splash^.Scale,0.3333)
+                else splash^.Scale:= splash^.Scale + ((1-splash^.Scale) / 2);
+                end;
 
-            maxDrops := (Gear^.Radius div 2) + round(vdX * Gear^.Radius * 2) + round(vdY * Gear^.Radius * 2);
+            maxDrops := (hwRound(Gear^.Density) * 3) div 2 + round(vdX * hwRound(Gear^.Density) * 6) + round(vdY * hwRound(Gear^.Density) * 6);
             for i:= max(maxDrops div 3, min(32, Random(maxDrops))) downto 0 do
                 begin
                 particle := AddVisualGear(X - 3 + Random(6), cWaterLine, vgtDroplet);
@@ -398,6 +404,19 @@ begin
                     begin
                     particle^.dX := particle^.dX - vdX / 10;
                     particle^.dY := particle^.dY - vdY / 5;
+                    if splash <> nil then
+                        begin
+                        if splash^.Scale > 1 then 
+                            begin
+                            particle^.dX:= particle^.dX * power(splash^.Scale,0.3333); // tone down the droplet height further
+                            particle^.dY:= particle^.dY * power(splash^.Scale, 0.3333)
+                            end
+                        else 
+                            begin
+                            particle^.dX:= particle^.dX * splash^.Scale;
+                            particle^.dY:= particle^.dY * splash^.Scale
+                            end
+                        end
                     end
                 end
             end;
