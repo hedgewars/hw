@@ -379,8 +379,12 @@ begin
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
             or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0)
             and (CurAmmoGear^.dY < _0_01))) then
-                // don't play splash if they are already way past the surface
-                PlaySound(sndSplash)
+                if Gear^.Density * Gear^.dY > _1 then
+                    PlaySound(sndSplash)
+                else if Gear^.Density * Gear^.dY > _0_5 then 
+                    PlaySound(sndSkip)
+                else
+                    PlaySound(sndDroplet2);
             end;
 
         if ((cReducedQuality and rqPlainSplash) = 0)
@@ -391,7 +395,7 @@ begin
             splash:= AddVisualGear(X, cWaterLine, vgtSplash);
             if splash <> nil then 
                 begin
-                splash^.Scale:= hwFloat2Float(Gear^.Density / _3);
+                splash^.Scale:= hwFloat2Float(Gear^.Density / _3 * Gear^.dY);
                 if splash^.Scale > 1 then splash^.Scale:= power(splash^.Scale,0.3333)
                 else splash^.Scale:= splash^.Scale + ((1-splash^.Scale) / 2);
                 end;
