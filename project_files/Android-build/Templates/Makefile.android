@@ -1,13 +1,13 @@
 SDL_ANDROID_DIR=./SDL-android-project
 
-PPCROSSARM=${FPC_DIR}/compiler/ppcrossarm
+PPCROSSARM=${FPC_DIR}/ppcrossarm
 PPCROSSARM_FLAGS= -Xd -O2 -g -Tlinux -XParm-linux-androideabi- -B -vwnh
 PPCROSSARM_INCLUDES= \
-	-FD${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/bin \
+	-FD${ANDROID_NDK_TOOLCHAINDIR}/bin \
 	-Fu${FPC_DIR}/rtl/units/arm-linux \
 	-Fl${ANDROID_NDK}/platforms/android-${ANDROID_NDK_API_LVL}/arch-arm/usr/lib \
 	-Fl$(SDL_ANDROID_DIR)/libs/armeabi \
-	-Fl${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt/linux-x86/lib/gcc/arm-linux/arm-linux-androideabi/4.4.3/ \
+	-Fl${ANDROID_NDK_TOOLCHAINDIR}/lib/gcc/arm-linux/arm-linux-androideabi/4.4.3/ \
 #LINKERFLAGS= -k"--static"
 FPC_DEFINES=-dandroid -darm
 
