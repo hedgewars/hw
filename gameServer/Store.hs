@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns, GeneralizedNewtypeDeriving #-}
 module Store(
     ElemIndex(),
     MStore(),
@@ -22,10 +23,11 @@ import qualified Data.Array.IO as IOA
 import qualified Data.IntSet as IntSet
 import Data.IORef
 import Control.Monad
+import Control.DeepSeq
 
 
 newtype ElemIndex = ElemIndex Int
-    deriving (Eq, Show, Read, Ord)
+    deriving (Eq, Show, Read, Ord, NFData)
 newtype MStore e = MStore (IORef (IntSet.IntSet, IntSet.IntSet, IOA.IOArray Int e))
 newtype IStore e = IStore (IntSet.IntSet, IA.Array Int e)
 
@@ -84,7 +86,7 @@ addElem :: MStore e -> e -> IO ElemIndex
 addElem m@(MStore ref) element = do
     growIfNeeded m
     (busyElems, freeElems, arr) <- readIORef ref
-    let (n, freeElems') = IntSet.deleteFindMin freeElems
+    let (!n, freeElems') = IntSet.deleteFindMin freeElems
     IOA.writeArray arr n element
     writeIORef ref (IntSet.insert n busyElems, freeElems', arr)
     return $ ElemIndex n
@@ -113,12 +115,12 @@ modifyElem (MStore ref) f (ElemIndex n) = do
 
 elemExists :: MStore e -> ElemIndex -> IO Bool
 elemExists (MStore ref) (ElemIndex n) = do
-    (_, free, _) <- readIORef ref
+    (_, !free, _) <- readIORef ref
     return $ n `IntSet.notMember` free
 
 indicesM :: MStore e -> IO [ElemIndex]
 indicesM (MStore ref) = do
-    (busy, _, _) <- readIORef ref
+    (!busy, _, _) <- readIORef ref
     return $ map ElemIndex $ IntSet.toList busy
 
 
