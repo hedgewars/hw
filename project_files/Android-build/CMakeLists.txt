@@ -17,6 +17,9 @@
 ###################################################################################
 
 find_program(ANT ant)
+if(NOT EXISTS ${ANT})
+    MESSAGE(FATAL_ERROR "Couldn't detect the Ant build tool")
+endif()
 
 if(NOT ANDROID_NDK)
     find_path(ANDROID_NDK ndk-build)
@@ -28,8 +31,24 @@ else ()
     MESSAGE(FATAL_ERROR "Couldn't detect the Android NDK directory")
 endif()
 
+if(NOT ANDROID_NDK_TOOLCHAINDIR)
+    set(toolchainbase "${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt")
+    find_program(ANDROID_NDK_TOOLCHAINDIR arm-linux-androideabi-as
+                "${toolchainbase}/linux-x86/bin"
+                "${toolchainbase}/windows/bin")
+    get_filename_component(ANDROID_NDK_TOOLCHAINDIR "${ANDROID_NDK_TOOLCHAINDIR}" PATH)
+    get_filename_component(ANDROID_NDK_TOOLCHAINDIR "${ANDROID_NDK_TOOLCHAINDIR}" PATH)
+endif()
+
+if(IS_DIRECTORY "${ANDROID_NDK_TOOLCHAINDIR}")
+    MESSAGE(STATUS "Detected the Android NDK toolchain at: " ${ANDROID_NDK_TOOLCHAINDIR}) 
+else ()
+    MESSAGE(FATAL_ERROR "Couldn't detect the Android NDK toolchain directory")
+endif()
+
 if(NOT ANDROID_SDK)#Check if its defined at the cmdline
-    find_path(ANDROID_SDK adb ) #assume they've added platform-tools to their path
+    find_program(ANDROID_SDK adb) #assume they've added platform-tools to their path
+    get_filename_component(ANDROID_SDK "${ANDROID_SDK}" PATH)
     get_filename_component(ANDROID_SDK "${ANDROID_SDK}" PATH)
     set(ANDROID_SDK "${ANDROID_SDK}" CACHE PATH "Path to the android sdk" FORCE)
 endif()
@@ -41,7 +60,7 @@ else ()
 endif()
 
 if( NOT FPC_DIR)
-    find_path(FPC_DIR ppcrossarm)
+    find_program(FPC_DIR ppcrossarm)
     get_filename_component(FPC_DIR "${FPC_DIR}" PATH)
     set(FPC_DIR "${FPC_DIR}" CACHE PATH "Path to fpc dir used in the android port" FORCE)
 endif()
@@ -62,15 +81,18 @@ MESSAGE(STATUS "Creating Makefile.android...")
 
 configure_file(Templates/Makefile.android .)
 
-find_program(ANDROID android "${ANDROID_SDK}" "${ANDROID_SDK}/tools")
+find_program(ANDROID NAMES android android.bat PATHS "${ANDROID_SDK}/platform-tools" "${ANDROID_SDK}/tools")
 if(ANDROID)
     exec_program(${ANDROID}
                  ARGS "update project"
                  "--path ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project"
                  "--target android-${ANDROID_SDK_API_LVL}"
-                 OUTPUT_VARIABLE dontcare
-                ) 
-endif(ANDROID)
+                 OUTPUT_VARIABLE androidoutput
+                )
+    MESSAGE(STATUS "Updating android project config...\n" ${androidoutput})
+else()
+    MESSAGE(FATAL_ERROR "Couldn't find the android executable in ${ANDROID_SDK}/platform-tools or ${ANDROID_SDK}/tools.")
+endif()
 
 exec_program(${HGCOMMAND}
     ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
