@@ -341,6 +341,26 @@ with pauseButton do
     active.h:= frame.h;
     end;
 
+with utilityWidget do
+    begin
+    show:= false;
+    sprite:= sprTimerButton;
+    frame.w:= Round(spritesData[sprite].Texture^.w * buttonScale);
+    frame.h:= Round(spritesData[sprite].Texture^.h * buttonScale);
+    frame.x:= arrowLeft.frame.x;
+    frame.y:= arrowLeft.frame.y - Round(frame.h * 1.25);
+    active.x:= frame.x;
+    active.y:= frame.y;
+    active.w:= frame.w;
+    active.h:= frame.h;
+    with moveAnim do
+        begin
+        target.x:= frame.x;
+        target.y:= frame.y;
+        source.x:= frame.x;
+        source.y:= frame.y;
+        end;
+    end;
 {$ENDIF}
 end;
 
@@ -668,6 +688,14 @@ c:= -1;
                         animateWidget(@arrowUp, true, false);
                         animateWidget(@arrowDown, true, false);
                         end;
+                if (Ammo^[Slot, Pos].Propz and ammoprop_Timerable) <> 0 then
+                    begin
+                    if not utilityWidget.show then
+                        animateWidget(@utilityWidget, true, true); 
+                    end
+                else
+                    if utilityWidget.show then
+                        animateWidget(@utilityWidget, true, false); 
 {$ENDIF}
 
                 exit
@@ -1226,6 +1254,7 @@ DrawScreenWidget(@fireButton);
 DrawScreenWidget(@jumpWidget);
 DrawScreenWidget(@AMWidget);
 DrawScreenWidget(@pauseButton);
+DrawScreenWidget(@utilityWidget);
 {$ENDIF}
 
 // Teams Healths

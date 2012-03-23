@@ -59,7 +59,7 @@ type
             sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
 {$IFDEF USE_TOUCH_INTERFACE}
             sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight,
-            sprJumpWidget, sprAMWidget, sprPauseButton,
+            sprJumpWidget, sprAMWidget, sprPauseButton, sprTimerButton,
 {$ENDIF}
             sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
             sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,

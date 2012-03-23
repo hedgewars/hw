@@ -121,28 +121,32 @@ if isOnWidget(arrowRight, finger^) then
     exit;
     end;
 if isOnWidget(arrowUp, finger^) then
-     begin
-     upKey:= true;
-     moveCursor:= false;
-     finger^.pressedWidget:= @arrowUp;
-     exit;
-     end;
+    begin
+    upKey:= true;
+    moveCursor:= false;
+    finger^.pressedWidget:= @arrowUp;
+    exit;
+    end;
 if isOnWidget(arrowDown, finger^) then
-     begin
-     downKey:= true;
-     moveCursor:= false;
-     finger^.pressedWidget:= @arrowDown;
-     exit;
-     end;
+    begin
+    downKey:= true;
+    moveCursor:= false;
+    finger^.pressedWidget:= @arrowDown;
+    exit;
+    end;
 
 if isOnWidget(pauseButton, finger^) then
-     begin
-     isPaused:= not isPaused;
-     moveCursor:= false;
-     finger^.pressedWidget:= @pauseButton;
-     exit;
-     end;
-     
+    begin
+    isPaused:= not isPaused;
+    moveCursor:= false;
+    finger^.pressedWidget:= @pauseButton;
+    exit;
+    end;
+
+if isOnWidget(utilityWidget, finger^) then
+    begin
+    ParseCommand('/timer ' + inttostr((CurrentHedgeHog^.CurWeapon^.Timer div 1000 + 1) mod 5));
+    end; 
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
     begin
