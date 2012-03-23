@@ -145,7 +145,7 @@ if isOnWidget(pauseButton, finger^) then
 
 if isOnWidget(utilityWidget, finger^) then
     begin
-    ParseCommand('/timer ' + inttostr((CurrentHedgeHog^.CurWeapon^.Timer div 1000 + 1) mod 5));
+    //ParseCommand('/timer ' + inttostr((CurrentHedgeHog^.CurWeapon^.Timer div 1000 + 1) mod 5));
     end; 
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
