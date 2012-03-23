@@ -488,7 +488,7 @@ processAction (AddClient cl) = do
         [
             AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
             , CheckBanned
-            --, AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
+            , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
         ]
 
 
