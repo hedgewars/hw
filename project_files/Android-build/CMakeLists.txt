@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
 ###################################################################################
 
-find_program(ANT ant)
+find_program(ANT ant DOC "Path to the java package creator: ant")
 if(NOT EXISTS ${ANT})
     MESSAGE(FATAL_ERROR "Couldn't detect the Ant build tool")
 endif()
@@ -33,17 +33,15 @@ endif()
 
 if(NOT ANDROID_NDK_TOOLCHAINDIR)
     set(toolchainbase "${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt")
-    find_program(ANDROID_NDK_TOOLCHAINDIR arm-linux-androideabi-as
-                "${toolchainbase}/linux-x86/bin"
-                "${toolchainbase}/windows/bin")
-    get_filename_component(ANDROID_NDK_TOOLCHAINDIR "${ANDROID_NDK_TOOLCHAINDIR}" PATH)
-    get_filename_component(ANDROID_NDK_TOOLCHAINDIR "${ANDROID_NDK_TOOLCHAINDIR}" PATH)
+    find_path(ANDROID_NDK_TOOLCHAINDIR arm-linux-androideabi
+                "${toolchainbase}/linux-x86"
+                "${toolchainbase}/windows")
 endif()
 
 if(IS_DIRECTORY "${ANDROID_NDK_TOOLCHAINDIR}")
-    MESSAGE(STATUS "Detected the Android NDK toolchain at: " ${ANDROID_NDK_TOOLCHAINDIR}) 
+    MESSAGE(STATUS "Detected the Android NDK toolchain at: ${ANDROID_NDK_TOOLCHAINDIR}") 
 else ()
-    MESSAGE(FATAL_ERROR "Couldn't detect the Android NDK toolchain directory")
+    MESSAGE(FATAL_ERROR "Couldn't detect the Android NDK toolchain directory: ${ANDROID_NDK_TOOLCHAINDIR}")
 endif()
 
 if(NOT ANDROID_SDK)#Check if its defined at the cmdline
@@ -62,7 +60,9 @@ endif()
 if( NOT FPC_DIR)
     find_program(FPC_DIR ppcrossarm)
     get_filename_component(FPC_DIR "${FPC_DIR}" PATH)
-    set(FPC_DIR "${FPC_DIR}" CACHE PATH "Path to fpc dir used in the android port" FORCE)
+    if(IS_DIRECTORY "${FPC_DIR}") 
+    	set(FPC_DIR "${FPC_DIR}" CACHE PATH "Path to fpc dir used in the android port" FORCE)
+    endif()
 endif()
 
 if( IS_DIRECTORY "${FPC_DIR}")
@@ -81,9 +81,9 @@ MESSAGE(STATUS "Creating Makefile.android...")
 
 configure_file(Templates/Makefile.android .)
 
-find_program(ANDROID NAMES android android.bat PATHS "${ANDROID_SDK}/platform-tools" "${ANDROID_SDK}/tools")
-if(ANDROID)
-    exec_program(${ANDROID}
+find_program(ANDROID_EXEC NAMES android android.bat PATHS "${ANDROID_SDK}/platform-tools" "${ANDROID_SDK}/tools")
+if(ANDROID_EXEC)
+    exec_program(${ANDROID_EXEC}
                  ARGS "update project"
                  "--path ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project"
                  "--target android-${ANDROID_SDK_API_LVL}"

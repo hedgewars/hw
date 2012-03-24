@@ -193,7 +193,7 @@ add_subdirectory(misc/liblua)
 add_subdirectory(hedgewars)
 
 #run cmake -DBUILD_ANDROID_PORT=1 to enable this
-if(BUILD_ANDROID_PORT)
+if(ANDROID)
 	add_subdirectory(project_files/Android-build)
 endif()
 
