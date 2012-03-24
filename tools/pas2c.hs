@@ -124,10 +124,13 @@ implementation2C (Implementation uses tvars) = liftM2 ($+$) (uses2C uses) (types
 typesAndVars2C :: Bool -> TypesAndVars -> State RenderState Doc
 typesAndVars2C b (TypesAndVars ts) = liftM vcat $ mapM (tvar2C b) ts
 
+setBaseType :: BaseType -> Identifier -> Identifier
+setBaseType bt (Identifier i _) = Identifier i bt
+
 uses2C :: Uses -> State RenderState Doc
 uses2C uses@(Uses unitIds) = do
     mapM_ injectNamespace (Identifier "pas2cSystem" undefined : unitIds)
-    mapM_ (id2C IOInsert) unitIds
+    mapM_ (id2C IOInsert . setBaseType BTUnit) unitIds
     return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
     where
     injectNamespace (Identifier i _) = do
@@ -147,11 +150,10 @@ id2C IOLookup (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ find (\(a, _) -> a == i') . currentScope
     ns <- gets currentScope
-    modify (\s -> s{lastType = t})
     if isNothing v then 
         error $ "Not defined: '" ++ i' ++ "'\n" -- ++ show ns
         else 
-        return . text . fst . snd . fromJust $ v
+        let vv = snd $ fromJust v in modify (\s -> s{lastType = snd vv}) >> (return . text . fst $ vv)
 id2C IODeferred (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ find (\(a, _) -> a == i') . currentScope
@@ -383,8 +385,10 @@ ref2C (RecordField (Dereference ref1) ref2) = do
 ref2C rf@(RecordField ref1 ref2) = do
     r1 <- ref2C ref1
     t <- gets lastType
+    ns <- gets currentScope
     case t of
         r@(BTRecord _) -> error $ show r
+        r@(BTUnit) -> error $ show r
         a -> error $ "dereferencing from " ++ show a ++ " - " ++ show rf
     r2 <- ref2C ref2
     return $ 
