@@ -108,4 +108,5 @@ data BaseType = BTUnknown
     | BTSet BaseType
     | BTEnum [String]
     | BTVoid
+    | BTUnit
     deriving Show
