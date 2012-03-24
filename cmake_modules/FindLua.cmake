@@ -18,7 +18,7 @@ else (ANDROID)
 			ENDIF()
 			#remove the path (fpc doesn't like it - why?)
 			GET_FILENAME_COMPONENT(LUA_DEFAULT ${LUA_DEFAULT} NAME)
-                ENDIF(APPLE
+                ENDIF(APPLE)
 	ENDIF(WIN32)
 ENDIF(ANDROID)
 SET(LUA_LIBRARY ${LUA_DEFAULT} CACHE STRING "Lua library to link to; file name without path only!")
