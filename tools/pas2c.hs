@@ -27,6 +27,7 @@ type Record = (String, (String, BaseType))
 data RenderState = RenderState 
     {
         currentScope :: [Record],
+        lastIdentifier :: String,
         lastType :: BaseType,
         namespaces :: Map.Map String [Record]
     }
@@ -74,12 +75,19 @@ renderCFiles units = do
     where
     toNamespace :: Map.Map String [Record] -> PascalUnit -> [Record]
     toNamespace nss (System tvs) = 
-        currentScope $ execState (mapM_ (tvar2C True) tvs) (RenderState [] BTUnknown nss)
+        currentScope $ execState (mapM_ (tvar2C True) tvs) (RenderState [] "" BTUnknown nss)
     toNamespace _ (Program {}) = []
     toNamespace nss (Unit _ interface _ _ _) = 
-        currentScope $ execState (interface2C interface) (RenderState [] BTUnknown nss)
+        currentScope $ execState (interface2C interface) (RenderState [] "" BTUnknown nss)
 
    
+withLastIdNamespace :: State RenderState Doc -> State RenderState Doc
+withLastIdNamespace f = do
+    li <- gets lastIdentifier
+    nss <- gets namespaces
+    st <- gets id
+    return $ evalState f st{currentScope = fromMaybe [] $ Map.lookup li (namespaces st)}
+
 toCFiles :: Map.Map String [Record] -> (String, PascalUnit) -> IO ()
 toCFiles _ (_, System _) = return ()
 toCFiles ns p@(fn, pu) = do
@@ -91,7 +99,7 @@ toCFiles ns p@(fn, pu) = do
         let (a, s) = runState (interface2C interface) initialState
         writeFile (fn ++ ".h") $ "#pragma once\n" ++ (render a)
         writeFile (fn ++ ".c") $ (render2C s . implementation2C) implementation
-    initialState = RenderState [] BTUnknown ns
+    initialState = RenderState [] "" BTUnknown ns
 
     render2C :: RenderState -> State RenderState Doc -> String
     render2C a = render . flip evalState a
@@ -153,7 +161,7 @@ id2C IOLookup (Identifier i t) = do
     if isNothing v then 
         error $ "Not defined: '" ++ i' ++ "'\n" -- ++ show ns
         else 
-        let vv = snd $ fromJust v in modify (\s -> s{lastType = snd vv}) >> (return . text . fst $ vv)
+        let vv = snd $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
 id2C IODeferred (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ find (\(a, _) -> a == i') . currentScope
@@ -385,12 +393,10 @@ ref2C (RecordField (Dereference ref1) ref2) = do
 ref2C rf@(RecordField ref1 ref2) = do
     r1 <- ref2C ref1
     t <- gets lastType
-    ns <- gets currentScope
-    case t of
+    r2 <- case t of
         r@(BTRecord _) -> error $ show r
-        r@(BTUnit) -> error $ show r
+        r@(BTUnit) -> withLastIdNamespace $ ref2C ref2
         a -> error $ "dereferencing from " ++ show a ++ " - " ++ show rf
-    r2 <- ref2C ref2
     return $ 
         r1 <> text "." <> r2
 ref2C (Dereference ref) = liftM ((parens $ text "*") <>) $ ref2C ref
