@@ -912,7 +912,7 @@ end;
 
 function lua_tostring(L : Plua_State; idx : LongInt) : AnsiString;
 begin
-    lua_tostring := SysUtils.StrPas(lua_tolstring(L, idx, nil));
+    lua_tostring := StrPas(lua_tolstring(L, idx, nil));
 end;
 
 function lua_open : Plua_State;
