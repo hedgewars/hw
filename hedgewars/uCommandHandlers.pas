@@ -434,7 +434,7 @@ with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmTimer and InputMask);
     MsgParam:= byte(s[1]) - ord('0');
-    ScriptCall('onTimer');
+    ScriptCall('onTimer', MsgParam);
     end
 end;
 
@@ -453,7 +453,7 @@ with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmSlot and InputMask);
     MsgParam:= slot; 
-    ScriptCall('onSlot');
+    ScriptCall('onSlot', MsgParam);
     end
 end;
 
@@ -472,7 +472,7 @@ begin
         begin
         Message:= Message or (gmWeapon and InputMask);
         MsgParam:= byte(s[1]);
-        ScriptCall('onSetWeapon');
+        ScriptCall('onSetWeapon', MsgParam);
         end;
 end;
 
@@ -491,7 +491,7 @@ with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmAnimate and InputMask);
     MsgParam:= byte(s[1]) ; 
-    ScriptCall('onTaunt');
+    ScriptCall('onTaunt', MsgParam);
     end
 end;
 
