@@ -1,6 +1,6 @@
 --------------------------------
 -- HIGHLANDER / HOGS OF WAR
--- version 0.3b
+-- version 0.3c
 -- by mikade
 --------------------------------
 
@@ -43,12 +43,39 @@
 -- hammer wep removed
 -- all hogs have kamikaze
 
+-----------
+--0.3c
+-----------
+
+-- restructured some code
+-- added napalm (whoops) to list of possible weapons you can get
+-- hogs no longer recieve airstrike-related weps on border maps
+
 loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
 
-local wepArray = {}
-local atkArray = {}
-local utilArray = {}
+local airWeapons = 	{amAirAttack, amMineStrike, amNapalm, amDrillStrike --[[,amPiano]]}
+
+local atkArray = 	{
+					amBazooka, amBee, amMortar, amDrill, --[[amSnowball,]]
+					amGrenade, amClusterBomb, amMolotov, amWatermelon, amHellishBomb, amGasBomb,
+					amShotgun, amDEagle, amFlamethrower, amSniperRifle, amSineGun,
+					amFirePunch, amWhip, amBaseballBat, --[[amKamikaze,]] amSeduction, --[[amHammer,]]
+					amMine, amDynamite, amCake, amBallgun, amRCPlane, amSMine,
+					amRCPlane, amSMine,
+					amBirdy
+					}
+
+local utilArray = 	{
+					amBlowTorch, amPickHammer, amGirder, amPortalGun,
+					amRope, amParachute, amTeleport, amJetpack,
+					amInvulnerable, amLaserSight, --[[amVampiric,]]
+					amLowGravity, amExtraDamage, --[[amExtraTime,]]
+					amLandGun
+					--[[,amTardis, amResurrector, amSwitch]]
+					}
+
+local wepArray = 	{}
 
 local currName
 local lastName
@@ -57,7 +84,7 @@ local switchStage = 0
 
 function StartingSetUp(gear)
 
-	for i = 1, #wepArray do	
+	for i = 1, #wepArray do
 		setGearValue(gear,wepArray[i],0)
 	end
 
@@ -85,7 +112,7 @@ end]]
 
 function ConvertValues(gear)
 
-	for i = 1, #wepArray do	
+	for i = 1, #wepArray do
 		AddAmmo(gear, wepArray[i], getGearValue(gear,wepArray[i]) )
 	end
 
@@ -97,7 +124,7 @@ function TransferWeps(gear)
 
 	if CurrentHedgehog ~= nil then
 
-		for i = 1, #wepArray do		
+		for i = 1, #wepArray do
 			val = getGearValue(gear,wepArray[i])
 			if val ~= 0 then
 				setGearValue(CurrentHedgehog, wepArray[i], val)
@@ -108,8 +135,6 @@ function TransferWeps(gear)
 	end
 
 end
-
-
 
 function onGameInit()
 	GameFlags = gfInfAttack + gfRandomOrder
@@ -130,41 +155,19 @@ function onGameStart()
 				"", 4, 4000
 				)
 
-	atkArray = 	{amBazooka, amBee, amMortar, amDrill, --[[amSnowball,]]
-			amGrenade, amClusterBomb, amMolotov, amWatermelon, amHellishBomb, amGasBomb,
-			amShotgun, amDEagle, amFlamethrower, amSniperRifle, amSineGun,
-			amFirePunch, amWhip, amBaseballBat, --[[amKamikaze,]] amSeduction, --[[amHammer,]]
-			amMine, amDynamite, amCake, amBallgun, amRCPlane, amSMine,
-			amAirAttack, amMineStrike, amDrillStrike, --[[amPiano,]] amRCPlane, amSMine,
-			amBirdy
+	if MapHasBorder() == false then
+        for i, w in pairs(airWeapons) do
+            table.insert(atkArray, w)
+        end
+    end
 
-			} 
+	for i, w in pairs(atkArray) do
+        table.insert(wepArray, w)
+	end
 
-	utilArray = 	{amBlowTorch, amPickHammer, amGirder, amPortalGun,
-			amRope, amParachute, amTeleport, amJetpack,
-			amInvulnerable, amLaserSight, --[[amVampiric,]]
-			amLowGravity, amExtraDamage, --[[amExtraTime,]]
-			amLandGun
-			}
-
-	wepArray = 	{amBazooka, amBee, amMortar, amDrill, --[[amSnowball,]]
-			amGrenade, amClusterBomb, amMolotov, amWatermelon, amHellishBomb, amGasBomb,
-			amShotgun, amDEagle, amFlamethrower, amSniperRifle, amSineGun,
-			amFirePunch, amWhip, amBaseballBat, --[[amKamikaze,]] amSeduction, --[[amHammer,]]
-			amMine, amDynamite, amCake, amBallgun, amRCPlane, amSMine,
-			amAirAttack, amMineStrike, amDrillStrike, --[[amPiano,]] amRCPlane, amSMine,
-			amBirdy,
-			
-			amBlowTorch, amPickHammer, amGirder, amPortalGun,
-			amRope, amParachute, amTeleport, amJetpack,
-			amInvulnerable, amLaserSight, --[[amVampiric,]]
-			amLowGravity, amExtraDamage, --[[amExtraTime,]]
-			amLandGun
-
-			}
-
-	-- REMOVED
-	-- amTardis, amResurrector, amSwitch 
+	for i, w in pairs(utilArray) do
+        table.insert(wepArray, w)
+	end
 
 	runOnGears(StartingSetUp)
 	runOnGears(ConvertValues)
