@@ -189,7 +189,7 @@ typeDecl = choice [
             comments
             return ret
             else
-            return UnknownType
+            return VoidType
         optional $ try $ char ';' >> comments >> string "cdecl"
         comments
         return $ FunctionType ret vs
