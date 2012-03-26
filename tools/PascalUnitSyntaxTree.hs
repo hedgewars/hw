@@ -102,10 +102,11 @@ data BaseType = BTUnknown
     | BTInt
     | BTBool
     | BTFloat
-    | BTRecord
+    | BTRecord [(String, BaseType)]
     | BTArray BaseType BaseType
     | BTFunction BaseType
     | BTPointerTo BaseType
+    | BTUnresolved String
     | BTSet BaseType
     | BTEnum [String]
     | BTVoid

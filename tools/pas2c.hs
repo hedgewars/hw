@@ -80,14 +80,23 @@ renderCFiles units = do
     toNamespace nss (Unit _ interface _ _ _) = 
         currentScope $ execState (interface2C interface) (RenderState [] "" BTUnknown nss)
 
-   
+
+withState' :: (a -> a) -> State a b -> State a b
+withState' f s = do
+    st <- gets id
+    return $ evalState s (f st)
+
 withLastIdNamespace :: State RenderState Doc -> State RenderState Doc
 withLastIdNamespace f = do
     li <- gets lastIdentifier
     nss <- gets namespaces
-    st <- gets id
-    error $ show $ Map.keys nss
-    return $ evalState f st{currentScope = fromMaybe [] $ Map.lookup li (namespaces st)}
+    withState' (\st -> st{currentScope = fromMaybe [] $ Map.lookup li (namespaces st)}) f
+
+withRecordNamespace :: [(String, BaseType)] -> State RenderState Doc -> State RenderState Doc
+withRecordNamespace recs = withState' f
+    where
+        f st = st{currentScope = records ++ currentScope st}
+        records = map (\(a, b) -> (map toLower a, (a, b))) recs
 
 toCFiles :: Map.Map String [Record] -> (String, PascalUnit) -> IO ()
 toCFiles _ (_, System _) = return ()
@@ -196,15 +205,14 @@ resolveType st@(SimpleType (Identifier i _)) = do
     f "char" = BTChar
     f "string" = BTString
     f _ = error $ "Unknown system type: " ++ show st
-resolveType (PointerTo t) = return $ BTPointerTo BTUnknown  -- can't resolveType for t here
+resolveType (PointerTo (SimpleType (Identifier i _))) = return . BTPointerTo $ BTUnresolved (map toLower i)
+resolveType (PointerTo t) = liftM BTPointerTo $ resolveType t
 resolveType (RecordType tv mtvs) = do
-    li <- gets lastIdentifier
-    tvs <- liftM concat $ mapM f (concat $ tv : fromMaybe [] mtvs)
-    modify (\s -> s{namespaces = Map.insert li tvs (namespaces s)})
-    return BTRecord
+    tvs <- mapM f (concat $ tv : fromMaybe [] mtvs)
+    return . BTRecord . concat $ tvs
     where
-        f :: TypeVarDeclaration -> State RenderState [Record]
-        f (VarDeclaration _ (ids, td) _) = mapM (\(Identifier i _) -> liftM (\t -> (map toLower i, (i, t))) $ resolveType td) ids
+        f :: TypeVarDeclaration -> State RenderState [(String, BaseType)]
+        f (VarDeclaration _ (ids, td) _) = mapM (\(Identifier i _) -> liftM ((,) i) $ resolveType td) ids
 resolveType (ArrayDecl (Just _) t) = liftM (BTArray BTInt) $ resolveType t
 resolveType (ArrayDecl Nothing t) = liftM (BTArray BTInt) $ resolveType t
 resolveType (FunctionType t _) = liftM BTFunction $ resolveType t
@@ -227,8 +235,10 @@ tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     
 tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
     t <- type2C returnType 
-    p <- liftM hcat $ mapM (tvar2C False) params
-    ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
+    (p, ph) <- withState' id $ do
+        p <- liftM hcat $ mapM (tvar2C False) params
+        ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
+        return (p, ph)
     n <- id2C IOInsert name
     return $ 
         t <+> n <> parens p
@@ -384,8 +394,12 @@ expr2C _ = return $ text "<<expression>>"
 
 
 ref2C :: Reference -> State RenderState Doc
-ref2C (ArrayElement exprs ref) = do
+ref2C ae@(ArrayElement exprs ref) = do
     r <- ref2C ref 
+    t <- gets lastType
+    case t of
+         (BTArray _ t') -> modify (\st -> st{lastType = t'})
+         a -> error $ show a ++ "\n" ++ show ae
     es <- mapM expr2C exprs
     return $ r <> (brackets . hcat) (punctuate comma es)
 ref2C (SimpleReference name) = id2C IOLookup name
@@ -398,12 +412,18 @@ ref2C rf@(RecordField ref1 ref2) = do
     r1 <- ref2C ref1
     t <- gets lastType
     r2 <- case t of
-        BTRecord -> withLastIdNamespace $ ref2C ref2
+        BTRecord rs -> withRecordNamespace rs $ ref2C ref2
         BTUnit -> withLastIdNamespace $ ref2C ref2
         a -> error $ "dereferencing from " ++ show a ++ " - " ++ show rf
     return $ 
         r1 <> text "." <> r2
-ref2C (Dereference ref) = liftM ((parens $ text "*") <>) $ ref2C ref
+ref2C (Dereference ref) = do
+    r <- ref2C ref
+    t <- gets lastType
+    case t of
+         (BTPointerTo t') -> modify (\st -> st{lastType = t'})
+         a -> error $ "Dereferencing from non-pointer type " ++ show a
+    return $ (parens $ text "*") <> r
 ref2C (FunCall params ref) = do
     ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
     r <- ref2C ref
