@@ -455,7 +455,6 @@
     self.staticMapCommand = nil;
     self.missionCommand = nil;
 
-    self.previewButton = nil;
     self.tableView = nil;
     self.maxLabel = nil;
     self.segmentedControl = nil;
@@ -470,10 +469,10 @@
 
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
-    self.previewButton = nil;
     [super didReceiveMemoryWarning];
 
     if (self.view.superview == nil) {
+        self.previewButton = nil;
         self.tableView = nil;
         self.maxLabel = nil;
         self.slider = nil;
