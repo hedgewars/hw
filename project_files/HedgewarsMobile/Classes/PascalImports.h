@@ -83,8 +83,9 @@ extern "C" {
     BOOL HW_isWeaponRope(void);
 
     void HW_setGrenadeTime(int time);
+    int  HW_getGrenadeTime(void);
+
     void HW_setPianoSound(int snd);
-    
     void HW_setWeapon(int whichone);
     BOOL HW_isWeaponAnEffect(int whichone);
     char *HW_getWeaponNameByIndex(int whichone);

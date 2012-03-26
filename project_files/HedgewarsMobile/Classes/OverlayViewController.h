@@ -45,7 +45,6 @@
     UIActivityIndicatorView *loadingIndicator;
     UIButton *confirmButton;
     UISegmentedControl *grenadeTimeSegment;
-    NSInteger cachedGrenadeTime;
 }
 
 @property (nonatomic,retain) id popoverController;
@@ -54,7 +53,6 @@
 @property (nonatomic,retain) UIActivityIndicatorView *loadingIndicator;
 @property (nonatomic,retain) UIButton *confirmButton;
 @property (nonatomic,retain) UISegmentedControl *grenadeTimeSegment;
-@property (assign) NSInteger cachedGrenadeTime;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;

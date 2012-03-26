@@ -270,6 +270,18 @@ begin
     ParseCommand('/timer ' + inttostr(time), true);
 end;
 
+function HW_getGrenadeTime: LongInt; cdecl; export;
+var CurWeapon: PAmmo;
+    res: LongInt = 3;
+begin
+    if HW_isWeaponTimerable then
+    begin
+        CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+        res:= CurWeapon^.Timer div 1000;
+    end;
+    exit(res);
+end;
+
 procedure HW_setPianoSound(snd: LongInt); cdecl; export;
 begin
     // this most likely won't work in network game
