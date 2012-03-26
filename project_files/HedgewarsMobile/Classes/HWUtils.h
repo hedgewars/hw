@@ -40,6 +40,7 @@ typedef enum {gsNone, gsLoading, gsInGame, gsInterrupted, gsEnded} TGameStatus;
 +(void) releaseCache;
 
 +(NSInteger) randomPort;
++(void) freePort:(NSInteger) port;
 +(BOOL) isNetworkReachable;
 +(UIView *)mainSDLViewInstance;
 

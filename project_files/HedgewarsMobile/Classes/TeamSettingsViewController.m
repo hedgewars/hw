@@ -20,7 +20,6 @@
 
 
 #import "TeamSettingsViewController.h"
-#import "CreationChamber.h"
 #import "SingleTeamViewController.h"
 
 @implementation TeamSettingsViewController

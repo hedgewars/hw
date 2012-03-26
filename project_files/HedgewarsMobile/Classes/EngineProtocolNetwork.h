@@ -20,8 +20,6 @@
 
 
 #import <Foundation/Foundation.h>
-#import "SDL_net.h"
-
 
 @interface EngineProtocolNetwork : NSObject {
     NSMutableArray *statsArray;
@@ -37,10 +35,7 @@
 
 
 -(id)   init;
-
 -(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary;
-+(NSInteger) activeEnginePort;
-
 -(void) engineProtocol:(id) object;
 
 -(int)  sendToEngine:(NSString *)string;

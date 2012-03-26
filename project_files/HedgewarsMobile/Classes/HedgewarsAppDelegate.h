@@ -25,7 +25,7 @@
 @class MainMenuViewController;
 
 @interface HedgewarsAppDelegate : SDLUIKitDelegate {
-    MainMenuViewController *mainViewController;
+    MainMenuViewController *mainViewController;     // required to dismiss the SettingsBaseViewController
     UIWindow *uiwindow;
 }
 

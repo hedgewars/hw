@@ -20,12 +20,9 @@
 
 
 #import "EngineProtocolNetwork.h"
-#import "OverlayViewController.h"
 
 
 #define BUFFER_SIZE 255     // like in original frontend
-
-static NSInteger activeEnginePort;
 
 @implementation EngineProtocolNetwork
 @synthesize statsArray, stream, csd, enginePort;
@@ -37,7 +34,6 @@ static NSInteger activeEnginePort;
         self.stream = nil;
         self.enginePort = [HWUtils randomPort];
     }
-    activeEnginePort = self.enginePort;
     return self;
 }
 
@@ -57,10 +53,6 @@ static NSInteger activeEnginePort;
     [NSThread detachNewThreadSelector:@selector(engineProtocol:)
                              toTarget:self
                            withObject:dictionary];
-}
-
-+(NSInteger) activeEnginePort {
-    return activeEnginePort;
 }
 
 #pragma mark -
@@ -402,6 +394,7 @@ static NSInteger activeEnginePort;
     [self.stream release];
 
     // Close the client socket
+    [HWUtils freePort:self.enginePort];
     SDLNet_TCP_Close(csd);
     SDLNet_Quit();
 

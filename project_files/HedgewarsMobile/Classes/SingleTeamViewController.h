@@ -20,7 +20,6 @@
 
 
 #import <UIKit/UIKit.h>
-#import "EditableCellView.h"
 
 @class HogHatViewController;
 @class GravesViewController;

@@ -24,12 +24,11 @@
 #import <sys/sysctl.h>
 #import <netinet/in.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
-#import "hwconsts.h"
-#import "EngineProtocolNetwork.h"
 #import "SDL_uikitwindow.h"
 
 static NSString *cachedModel = nil;
 static NSArray *cachedColors = nil;
+static NSMutableArray *activePorts = nil;
 
 static TGameType gameType = gtNone;
 static TGameStatus gameStatus = gsNone;
@@ -98,18 +97,31 @@ static TGameStatus gameStatus = gsNone;
 +(void) releaseCache {
     [cachedModel release], cachedModel = nil;
     [cachedColors release], cachedColors = nil;
+    // don't release activePorts here
 }
 
 #pragma mark -
 #pragma mark Helper Functions without cache
 +(NSInteger) randomPort {
-    srandom(time(NULL));
-    NSInteger res = (random() % 64511) + 1024;
-    // recall self until you get a free port
-    if (res == NETGAME_DEFAULT_PORT || res == [EngineProtocolNetwork activeEnginePort])
-        return [self randomPort];
-    else
-        return res;
+    // set a new feed only at initialization time and forbid connecting to the server port
+    if (activePorts == nil) {
+        srandom(time(NULL));
+        activePorts = [[NSMutableArray arrayWithObject:[NSNumber numberWithInt:NETGAME_DEFAULT_PORT]] retain];
+    }
+
+    // pick a random number from the free ports list
+    NSInteger res = 0;
+    do {
+        res = (random() % 64511) + 1024;
+    } while ([activePorts containsObject:[NSNumber numberWithInt:res]]);
+
+    // add this number to the forbdding list
+    [activePorts addObject:[NSNumber numberWithInt:res]];
+    return res;
+}
+
++(void) freePort:(NSInteger) port {
+    [activePorts removeObject:[NSNumber numberWithInt:port]];
 }
 
 +(BOOL) isNetworkReachable {

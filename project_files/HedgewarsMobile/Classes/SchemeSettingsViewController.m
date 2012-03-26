@@ -20,7 +20,6 @@
 
 
 #import "SchemeSettingsViewController.h"
-#import "CreationChamber.h"
 #import "SingleSchemeViewController.h"
 
 @implementation SchemeSettingsViewController
