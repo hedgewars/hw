@@ -79,7 +79,7 @@ void HWNamegen::teamRandomNames(HWTeam & team, const bool changeteamname)
 
         // there is a chance that this hog has the same hat as the previous one
         // let's reuse the hat-specific dict in this case
-        if ((i == 0) or (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
+        if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
         {
             dicts = dictsForHat(team.hedgehog(i).Hat);
             dict  = dictContents(dicts[rand()%(dicts.size())]);
