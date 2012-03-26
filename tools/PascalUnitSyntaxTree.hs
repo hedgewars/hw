@@ -31,6 +31,7 @@ data TypeDecl = SimpleType Identifier
     | Set TypeDecl
     | FunctionType TypeDecl [TypeVarDeclaration]
     | DeriveType InitExpression 
+    | VoidType
     | UnknownType
     deriving Show
 data Range = Range Identifier
@@ -101,9 +102,9 @@ data BaseType = BTUnknown
     | BTInt
     | BTBool
     | BTFloat
-    | BTRecord [(String, BaseType)]
+    | BTRecord
     | BTArray BaseType BaseType
-    | BTFunction
+    | BTFunction BaseType
     | BTPointerTo BaseType
     | BTSet BaseType
     | BTEnum [String]

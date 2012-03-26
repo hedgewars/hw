@@ -86,6 +86,7 @@ withLastIdNamespace f = do
     li <- gets lastIdentifier
     nss <- gets namespaces
     st <- gets id
+    error $ show $ Map.keys nss
     return $ evalState f st{currentScope = fromMaybe [] $ Map.lookup li (namespaces st)}
 
 toCFiles :: Map.Map String [Record] -> (String, PascalUnit) -> IO ()
@@ -178,7 +179,7 @@ id2CTyped t (Identifier i _) = do
     case tb of 
         BTUnknown -> do
             ns <- gets currentScope
-            error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\ntype: " ++ show t ++ "\nnamespace: " ++ show ns
+            error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\ntype: " ++ show t ++ "\nnamespace: " -- ++ show ns
         _ -> id2C IOInsert (Identifier i tb)
 
 
@@ -197,16 +198,19 @@ resolveType st@(SimpleType (Identifier i _)) = do
     f _ = error $ "Unknown system type: " ++ show st
 resolveType (PointerTo t) = return $ BTPointerTo BTUnknown  -- can't resolveType for t here
 resolveType (RecordType tv mtvs) = do
-    tvs <- mapM f (concat $ tv : fromMaybe [] mtvs)
-    return . BTRecord . concat $ tvs
+    li <- gets lastIdentifier
+    tvs <- liftM concat $ mapM f (concat $ tv : fromMaybe [] mtvs)
+    modify (\s -> s{namespaces = Map.insert li tvs (namespaces s)})
+    return BTRecord
     where
-        f :: TypeVarDeclaration -> State RenderState [(String, BaseType)]
-        f (VarDeclaration _ (ids, td) _) = mapM (\(Identifier i _) -> liftM ((,) i) $ resolveType td) ids
+        f :: TypeVarDeclaration -> State RenderState [Record]
+        f (VarDeclaration _ (ids, td) _) = mapM (\(Identifier i _) -> liftM (\t -> (map toLower i, (i, t))) $ resolveType td) ids
 resolveType (ArrayDecl (Just _) t) = liftM (BTArray BTInt) $ resolveType t
 resolveType (ArrayDecl Nothing t) = liftM (BTArray BTInt) $ resolveType t
-resolveType (FunctionType _ _) = return BTFunction
+resolveType (FunctionType t _) = liftM BTFunction $ resolveType t
 resolveType (DeriveType _) = return BTInt
 resolveType (String _) = return BTString
+resolveType VoidType = return BTVoid
 resolveType (Sequence ids) = return $ BTEnum $ map (\(Identifier i _) -> map toLower i) ids
 resolveType (RangeType _) = return $ BTInt
 resolveType (Set t) = liftM BTSet $ resolveType t
@@ -394,17 +398,22 @@ ref2C rf@(RecordField ref1 ref2) = do
     r1 <- ref2C ref1
     t <- gets lastType
     r2 <- case t of
-        r@(BTRecord _) -> error $ show r
-        r@(BTUnit) -> withLastIdNamespace $ ref2C ref2
+        BTRecord -> withLastIdNamespace $ ref2C ref2
+        BTUnit -> withLastIdNamespace $ ref2C ref2
         a -> error $ "dereferencing from " ++ show a ++ " - " ++ show rf
     return $ 
         r1 <> text "." <> r2
 ref2C (Dereference ref) = liftM ((parens $ text "*") <>) $ ref2C ref
 ref2C (FunCall params ref) = do
+    ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
     r <- ref2C ref
-    ps <- mapM expr2C params
-    return $ 
-        r <> parens (hsep . punctuate (char ',') $ ps)
+    t <- gets lastType
+    case t of
+        BTFunction t -> do
+            modify (\s -> s{lastType = t})
+            return $ r <> ps
+        _ -> return $ parens r <> ps
+        
 ref2C (Address ref) = do
     r <- ref2C ref
     return $ text "&" <> parens r
