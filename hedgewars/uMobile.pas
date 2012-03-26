@@ -54,9 +54,8 @@ begin
         exit(true);
     end
     else exit(false);
-{$ELSE}
-    exit(false);
 {$ENDIF}
+    exit(false);
 end;
 
 // this function should make the device vibrate in some way

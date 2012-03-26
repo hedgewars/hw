@@ -22,7 +22,6 @@
 #import "MapConfigViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SchemeWeaponConfigViewController.h"
-#import "GameConfigViewController.h"
 
 #define scIndex         self.segmentedControl.selectedSegmentIndex
 #define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)

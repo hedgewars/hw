@@ -23,7 +23,6 @@
 #import "InGameMenuViewController.h"
 #import "HelpPageViewController.h"
 #import "CGPointUtils.h"
-#import "ObjcExports.h"
 
 
 #define HIDING_TIME_DEFAULT [NSDate dateWithTimeIntervalSinceNow:2.7]
@@ -32,10 +31,8 @@
 #define doNotDim()          [dimTimer setFireDate:HIDING_TIME_NEVER]
 
 
-static OverlayViewController *mainOverlay;
-
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, loadingIndicator, confirmButton, grenadeTimeSegment;
+@synthesize popoverController, popupMenu, helpPage, loadingIndicator, confirmButton, grenadeTimeSegment, cachedGrenadeTime;
 
 #pragma mark -
 #pragma mark rotation
@@ -51,13 +48,8 @@ static OverlayViewController *mainOverlay;
         isAttacking = NO;
         isPopoverVisible = NO;
         loadingIndicator = nil;
-        mainOverlay = self;
     }
     return self;
-}
-
-+(OverlayViewController *)mainOverlay {
-    return mainOverlay;
 }
 
 -(void) viewDidLoad {
@@ -96,7 +88,6 @@ static OverlayViewController *mainOverlay;
 
     // only objects initialized in viewDidLoad should be here
     dimTimer = nil;
-    mainOverlay = nil;
     self.helpPage = nil;
     [self dismissPopover];
     self.popoverController = nil;
@@ -153,12 +144,17 @@ static OverlayViewController *mainOverlay;
     doNotDim();
 }
 
--(void) removeOverlay {
-    [self.popupMenu performSelectorOnMainThread:@selector(dismiss) withObject:nil waitUntilDone:YES];
-    [self.popoverController performSelectorOnMainThread:@selector(dismissPopoverAnimated:) withObject:nil waitUntilDone:YES];
-    [self.view performSelectorOnMainThread:@selector(removeFromSuperview) withObject:nil waitUntilDone:YES];
-    [self performSelectorOnMainThread:@selector(release) withObject:nil waitUntilDone:YES];
-    mainOverlay = nil;
+-(void) clearOverlay {
+    [UIView beginAnimations:@"remove button" context:NULL];
+    [UIView setAnimationDuration:ANIMATION_DURATION];
+    self.confirmButton.alpha = 0;
+    self.grenadeTimeSegment.alpha = 0;
+    [UIView commitAnimations];
+
+    if (self.confirmButton)
+        [self.confirmButton performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
+    if (self.grenadeTimeSegment)
+        [self.grenadeTimeSegment performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
 }
 
 #pragma mark -
@@ -237,12 +233,12 @@ static OverlayViewController *mainOverlay;
         case 10:
             [AudioManagerController playClickSound];
             HW_pause();
-            clearView();
+            [self clearOverlay];
             [self showPopover];
             break;
         case 11:
             [AudioManagerController playClickSound];
-            clearView();
+            [self clearOverlay];
             HW_ammoMenu();
             break;
         default:
@@ -256,16 +252,17 @@ static OverlayViewController *mainOverlay;
 }
 
 -(void) sendHWClick {
+    [self clearOverlay];
     HW_click();
-    clearView();
     doDim();
 }
 
 -(void) setGrenadeTime:(id) sender {
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
-    if ([ObjcExports grenadeTime] != theSegment.selectedSegmentIndex) {
-        HW_setGrenadeTime(theSegment.selectedSegmentIndex + 1);
-        [ObjcExports setGrenadeTime:theSegment.selectedSegmentIndex];
+    NSInteger timeIndex = theSegment.selectedSegmentIndex;
+    if (self.cachedGrenadeTime != timeIndex) {
+        HW_setGrenadeTime(timeIndex + 1);
+        self.cachedGrenadeTime = timeIndex;
     }
 }
 
@@ -424,14 +421,13 @@ static OverlayViewController *mainOverlay;
                     doNotDim();
                 } else
                     if (HW_isWeaponTimerable()) {
-                        if (self.grenadeTimeSegment.tag != 0) {
+                        if (self.grenadeTimeSegment.superview != nil) {
                             [UIView beginAnimations:@"removing segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
                             self.grenadeTimeSegment.alpha = 0;
                             [UIView commitAnimations];
 
                             [self.grenadeTimeSegment performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
-                            self.grenadeTimeSegment.tag = 0;
                         } else {
                             if (self.grenadeTimeSegment == nil) {
                                 NSArray *items = [[NSArray alloc] initWithObjects:@"1",@"2",@"3",@"4",@"5",nil];
@@ -441,18 +437,20 @@ static OverlayViewController *mainOverlay;
                                 self.grenadeTimeSegment = grenadeSegment;
                                 [grenadeSegment release];
                             }
-                            self.grenadeTimeSegment.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width, 250, 50);
-                            self.grenadeTimeSegment.selectedSegmentIndex = [ObjcExports grenadeTime];
+                            self.grenadeTimeSegment.frame = CGRectMake(screen.size.width / 2 - 125, screen.size.height, 250, 50);
+                            self.grenadeTimeSegment.selectedSegmentIndex = self.cachedGrenadeTime;
                             self.grenadeTimeSegment.alpha = 1;
+                            self.grenadeTimeSegment.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
+                                                                       UIViewAutoresizingFlexibleRightMargin |
+                                                                       UIViewAutoresizingFlexibleTopMargin;
                             [self.view addSubview:self.grenadeTimeSegment];
 
                             [UIView beginAnimations:@"inserting segmented control" context:NULL];
                             [UIView setAnimationDuration:ANIMATION_DURATION];
                             [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-                            self.grenadeTimeSegment.frame = CGRectMake(screen.size.height / 2 - 125, screen.size.width - 100, 250, 50);
+                            self.grenadeTimeSegment.frame = CGRectMake(screen.size.width / 2 - 125, screen.size.height - 100, 250, 50);
                             [UIView commitAnimations];
 
-                            self.grenadeTimeSegment.tag++;
                             [self activateOverlay];
                             doNotDim();
                         }

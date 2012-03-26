@@ -20,7 +20,6 @@
 
 
 #import <UIKit/UIKit.h>
-#import "EditableCellView.h"
 #import "WeaponCellView.h"
 
 @interface SingleWeaponViewController : UITableViewController <EditableCellViewDelegate, WeaponButtonControllerDelegate> {

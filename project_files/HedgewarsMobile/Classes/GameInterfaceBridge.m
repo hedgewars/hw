@@ -21,10 +21,7 @@
 
 #import "GameInterfaceBridge.h"
 #import "EngineProtocolNetwork.h"
-#import "OverlayViewController.h"
 #import "StatsPageViewController.h"
-#import "AudioManagerController.h"
-#import "ObjcExports.h"
 
 static UIViewController *callingController;
 
@@ -84,9 +81,6 @@ static UIViewController *callingController;
     self.blackView.alpha = 0;
     [UIView commitAnimations];
     [self.blackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
-
-    // the overlay is not needed any more and can be removed
-    [[OverlayViewController mainOverlay] removeOverlay];
 
     // engine thread *should* be done by now
     NSArray *stats = [[NSArray alloc] initWithArray:self.proto.statsArray copyItems:YES];

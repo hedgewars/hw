@@ -45,6 +45,7 @@
     UIActivityIndicatorView *loadingIndicator;
     UIButton *confirmButton;
     UISegmentedControl *grenadeTimeSegment;
+    NSInteger cachedGrenadeTime;
 }
 
 @property (nonatomic,retain) id popoverController;
@@ -53,8 +54,7 @@
 @property (nonatomic,retain) UIActivityIndicatorView *loadingIndicator;
 @property (nonatomic,retain) UIButton *confirmButton;
 @property (nonatomic,retain) UISegmentedControl *grenadeTimeSegment;
-
-+(OverlayViewController *)mainOverlay;
+@property (assign) NSInteger cachedGrenadeTime;
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
@@ -66,9 +66,10 @@
 
 -(void) showPopover;
 -(void) dismissPopover;
+
 -(void) dimOverlay;
 -(void) activateOverlay;
--(void) removeOverlay;
+-(void) clearOverlay;
 
 #define ANIMATION_DURATION 0.25
 #define CONFIRMATION_TAG 5959

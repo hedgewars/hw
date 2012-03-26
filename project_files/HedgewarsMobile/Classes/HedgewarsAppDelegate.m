@@ -21,12 +21,10 @@
 
 #import "HedgewarsAppDelegate.h"
 #import "MainMenuViewController.h"
-#import "ObjcExports.h"
-#include <unistd.h>
-
 
 @implementation SDLUIKitDelegate (customDelegate)
 
+// hijack the the SDL_UIKitAppDelegate to use the UIApplicationDelegate we implement here
 +(NSString *)getAppDelegateClassName {
     return @"HedgewarsAppDelegate";
 }
@@ -57,13 +55,13 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
     self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.uiwindow.backgroundColor = [UIColor blackColor];
 
     NSString *controllerName = (IS_IPAD() ? @"MainMenuViewController-iPad" : @"MainMenuViewController-iPhone");
     self.mainViewController = [[MainMenuViewController alloc] initWithNibName:controllerName bundle:nil];
-
     [self.uiwindow addSubview:self.mainViewController.view];
     [self.mainViewController release];
-    self.uiwindow.backgroundColor = [UIColor blackColor];
+
     [self.uiwindow makeKeyAndVisible];
 }
 
@@ -78,10 +76,10 @@
     // don't clean mainMenuViewController here!!!
 }
 
-// true multitasking with sdl works only on 4.2 and above; we close the game to avoid a black screen at return
+// true multitasking with SDL works only on 4.2 and above; we close the game to avoid a black screen at return
 -(void) applicationWillResignActive:(UIApplication *)application {
     if ([HWUtils isGameLaunched] && [[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f)
-         HW_terminate(NO);
+        HW_terminate(NO);
 
     [super applicationWillResignActive:application];
 }

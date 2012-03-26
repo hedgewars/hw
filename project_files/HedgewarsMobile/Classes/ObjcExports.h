@@ -19,16 +19,6 @@
  */
 
 
-@interface ObjcExports : NSObject {
-
-}
-
-+(void) setGrenadeTime:(NSInteger) value;
-+(NSInteger) grenadeTime;
-
-@end
-
-
 void clearView(void);
 BOOL isApplePhone(void);
 

@@ -20,8 +20,6 @@
 
 
 #import "MapPreviewButtonView.h"
-#import "MapConfigViewController.h"
-#import "UIImageExtra.h"
 #import <pthread.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -116,6 +114,7 @@
         }
     }
 
+    [HWUtils freePort:port];
     SDLNet_TCP_Close(sd);
     SDLNet_Quit();
     return map;

@@ -20,7 +20,6 @@
 
 
 #import <UIKit/UIKit.h>
-#import "EditableCellView.h"
 
 @interface SingleSchemeViewController : UITableViewController <EditableCellViewDelegate> {
     NSString *schemeName;

@@ -20,7 +20,6 @@
 
 
 #import "WeaponSettingsViewController.h"
-#import "CreationChamber.h"
 #import "SingleWeaponViewController.h"
 
 @implementation WeaponSettingsViewController

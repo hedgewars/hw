@@ -20,7 +20,6 @@
 
 
 #import "HoldTableViewCell.h"
-#import "CGPointUtils.h"
 
 @implementation HoldTableViewCell
 @synthesize delegate;

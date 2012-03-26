@@ -22,24 +22,8 @@
 #import "ObjcExports.h"
 #import "OverlayViewController.h"
 
-
-// cache the grenade time
-static NSInteger grenadeTime;
 // the reference to the newMenu instance
 static OverlayViewController *overlay_instance;
-
-@implementation ObjcExports
-
-+(void) setGrenadeTime:(NSInteger) value {
-    grenadeTime = value;
-}
-
-+(NSInteger) grenadeTime {
-    return grenadeTime;
-}
-
-@end
-
 
 #pragma mark -
 #pragma mark functions called by pascal code
@@ -51,9 +35,7 @@ void startLoadingIndicator() {
     // this is the first ojbc function called by engine, so we have to initialize some variables here
     overlay_instance = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     // in order to get rotation events we have to insert the view inside the first view of the second window
-    //TODO: when multihead make sure that overlay is displayed in the touch-enabled window
     [[HWUtils mainSDLViewInstance] addSubview:overlay_instance.view];
-    grenadeTime = 2;
 
     if ([HWUtils gameType] == gtSave) {
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
@@ -102,20 +84,7 @@ void saveFinishedSynching() {
 }
 
 void clearView() {
-    // don't use any engine calls here as this function is called every time the ammomenu is opened
-    [UIView beginAnimations:@"remove button" context:NULL];
-    [UIView setAnimationDuration:ANIMATION_DURATION];
-    overlay_instance.confirmButton.alpha = 0;
-    overlay_instance.grenadeTimeSegment.alpha = 0;
-    [UIView commitAnimations];
-
-    if (overlay_instance.confirmButton)
-        [overlay_instance.confirmButton performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
-    if (overlay_instance.grenadeTimeSegment) {
-        [overlay_instance.grenadeTimeSegment performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:ANIMATION_DURATION];
-        overlay_instance.grenadeTimeSegment.tag = 0;
-    }
-    grenadeTime = 2;
+    [overlay_instance clearOverlay];
 }
 
 // dummy function to prevent linkage fail

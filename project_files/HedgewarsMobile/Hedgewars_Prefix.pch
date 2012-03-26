@@ -23,12 +23,16 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import <UIKit/UIKit.h>
-#import "PascalImports.h"
-#import "UIImageExtra.h"
-#import "DefinesAndMacros.h"
 #import "HedgewarsAppDelegate.h"
 #import "AudioManagerController.h"
-#import "HWUtils.h"
 #import "ExtraCategories.h"
+#import "UIImageExtra.h"
+#import "PascalImports.h"
+#import "DefinesAndMacros.h"
+#import "EditableCellView.h"
+#import "CreationChamber.h"
+#import "HWUtils.h"
+#import "hwconsts.h"
+#import "SDL_net.h"
 #endif
 
