@@ -32,7 +32,7 @@
 
 
 @implementation OverlayViewController
-@synthesize popoverController, popupMenu, helpPage, loadingIndicator, confirmButton, grenadeTimeSegment, cachedGrenadeTime;
+@synthesize popoverController, popupMenu, helpPage, loadingIndicator, confirmButton, grenadeTimeSegment;
 
 #pragma mark -
 #pragma mark rotation
@@ -259,11 +259,9 @@
 
 -(void) setGrenadeTime:(id) sender {
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
-    NSInteger timeIndex = theSegment.selectedSegmentIndex;
-    if (self.cachedGrenadeTime != timeIndex) {
-        HW_setGrenadeTime(timeIndex + 1);
-        self.cachedGrenadeTime = timeIndex;
-    }
+    NSInteger timeIndex = theSegment.selectedSegmentIndex + 1;
+    if (HW_getGrenadeTime() != timeIndex)
+        HW_setGrenadeTime(timeIndex);
 }
 
 #pragma mark -
@@ -438,7 +436,7 @@
                                 [grenadeSegment release];
                             }
                             self.grenadeTimeSegment.frame = CGRectMake(screen.size.width / 2 - 125, screen.size.height, 250, 50);
-                            self.grenadeTimeSegment.selectedSegmentIndex = self.cachedGrenadeTime;
+                            self.grenadeTimeSegment.selectedSegmentIndex = HW_getGrenadeTime() - 1;
                             self.grenadeTimeSegment.alpha = 1;
                             self.grenadeTimeSegment.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
                                                                        UIViewAutoresizingFlexibleRightMargin |
