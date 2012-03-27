@@ -22,7 +22,7 @@
 #import <UIKit/UIKit.h>
 
 @class InGameMenuViewController;
-@class HelpPageViewController;
+@class HelpPageInGameViewController;
 
 @interface OverlayViewController : UIViewController {
     // the timer that dims the overlay
@@ -34,7 +34,7 @@
     BOOL isPopoverVisible;
 
     // the help menu
-    HelpPageViewController *helpPage;
+    HelpPageInGameViewController *helpPage;
     
     // ths touch section
     CGFloat initialDistanceForPinching;
@@ -49,7 +49,7 @@
 
 @property (nonatomic,retain) id popoverController;
 @property (nonatomic,retain) InGameMenuViewController *popupMenu;
-@property (nonatomic,retain) HelpPageViewController *helpPage;
+@property (nonatomic,retain) HelpPageInGameViewController *helpPage;
 @property (nonatomic,retain) UIActivityIndicatorView *loadingIndicator;
 @property (nonatomic,retain) UIButton *confirmButton;
 @property (nonatomic,retain) UISegmentedControl *grenadeTimeSegment;

@@ -71,7 +71,7 @@
 		611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */; };
 		611EE974122A9C4100DF6938 /* clickSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE973122A9C4100DF6938 /* clickSound.wav */; };
 		611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D8122AA10A00DF6938 /* selSound.wav */; };
-		611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */; };
+		611EEAEE122B2A4D00DF6938 /* HelpPageInGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611EEAEC122B2A4D00DF6938 /* HelpPageInGameViewController.m */; };
 		611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */; };
 		611EEBC1122B34A800DF6938 /* helpingame.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC0122B34A800DF6938 /* helpingame.png */; };
 		611EEBC4122B355700DF6938 /* helpbottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC2122B355700DF6938 /* helpbottom.png */; };
@@ -205,6 +205,7 @@
 		6199E86D12464A8E00DADF8C /* surprise.png in Resources */ = {isa = PBXBuildFile; fileRef = 6199E86C12464A8E00DADF8C /* surprise.png */; };
 		619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619C5AF3124F7E3100D041AE /* LuaPas.pas */; };
 		619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */; };
+		619E173A15227E8E0016654A /* HelpPageLobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 619E173915227E8E0016654A /* HelpPageLobbyViewController.m */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61A19AFC14D20170004B1E6D /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19AEA14D2010A004B1E6D /* libSDL.a */; };
 		61A19B7714D20B7A004B1E6D /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19B6614D20B6C004B1E6D /* libSDL_image.a */; };
@@ -418,8 +419,8 @@
 		611EE973122A9C4100DF6938 /* clickSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = clickSound.wav; path = Resources/clickSound.wav; sourceTree = "<group>"; };
 		611EE9D7122AA10A00DF6938 /* backSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = backSound.wav; path = Resources/backSound.wav; sourceTree = "<group>"; };
 		611EE9D8122AA10A00DF6938 /* selSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = selSound.wav; path = Resources/selSound.wav; sourceTree = "<group>"; };
-		611EEAEB122B2A4D00DF6938 /* HelpPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageViewController.h; sourceTree = "<group>"; };
-		611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageViewController.m; sourceTree = "<group>"; };
+		611EEAEB122B2A4D00DF6938 /* HelpPageInGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageInGameViewController.h; sourceTree = "<group>"; };
+		611EEAEC122B2A4D00DF6938 /* HelpPageInGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageInGameViewController.m; sourceTree = "<group>"; };
 		611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageLobbyViewController-iPad.xib"; sourceTree = "<group>"; };
 		611EEBC0122B34A800DF6938 /* helpingame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpingame.png; path = Resources/Overlay/helpingame.png; sourceTree = "<group>"; };
 		611EEBC2122B355700DF6938 /* helpbottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpbottom.png; path = Resources/Overlay/helpbottom.png; sourceTree = "<group>"; };
@@ -620,6 +621,8 @@
 		619C5AF3124F7E3100D041AE /* LuaPas.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = LuaPas.pas; path = ../../hedgewars/LuaPas.pas; sourceTree = SOURCE_ROOT; };
 		619C5BA0124FA59000D041AE /* MapPreviewButtonView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapPreviewButtonView.h; path = Classes/MapPreviewButtonView.h; sourceTree = "<group>"; };
 		619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapPreviewButtonView.m; path = Classes/MapPreviewButtonView.m; sourceTree = "<group>"; };
+		619E173815227E8E0016654A /* HelpPageLobbyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageLobbyViewController.h; sourceTree = "<group>"; };
+		619E173915227E8E0016654A /* HelpPageLobbyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageLobbyViewController.m; sourceTree = "<group>"; };
 		61A117FE1168322700359010 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61A19AE314D2010A004B1E6D /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../../Library/SDL/Xcode-iOS/SDL/SDL.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_image.xcodeproj; path = "../../../Library/SDL_image/Xcode-iOS/SDL_image.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -1002,13 +1005,15 @@
 		6163EE6C11CC253F001C0453 /* Overlay */ = {
 			isa = PBXGroup;
 			children = (
+				619E173815227E8E0016654A /* HelpPageLobbyViewController.h */,
+				619E173915227E8E0016654A /* HelpPageLobbyViewController.m */,
 				616591F811CA9BA200D6E256 /* InGameMenuViewController.h */,
 				616591F911CA9BA200D6E256 /* InGameMenuViewController.m */,
 				616591F611CA9BA200D6E256 /* OverlayViewController.h */,
 				616591F711CA9BA200D6E256 /* OverlayViewController.m */,
 				6165925011CA9CB400D6E256 /* OverlayViewController.xib */,
-				611EEAEB122B2A4D00DF6938 /* HelpPageViewController.h */,
-				611EEAEC122B2A4D00DF6938 /* HelpPageViewController.m */,
+				611EEAEB122B2A4D00DF6938 /* HelpPageInGameViewController.h */,
+				611EEAEC122B2A4D00DF6938 /* HelpPageInGameViewController.m */,
 				61DF0F201284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib */,
 				61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */,
 				61DF0EDB1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib */,
@@ -1726,7 +1731,7 @@
 				61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */,
 				61C079E411F35A300072BF46 /* EditableCellView.m in Sources */,
 				61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */,
-				611EEAEE122B2A4D00DF6938 /* HelpPageViewController.m in Sources */,
+				611EEAEE122B2A4D00DF6938 /* HelpPageInGameViewController.m in Sources */,
 				6199E839124647DE00DADF8C /* SupportViewController.m in Sources */,
 				611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */,
 				619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */,
@@ -1768,6 +1773,7 @@
 				615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */,
 				615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */,
 				615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */,
+				619E173A15227E8E0016654A /* HelpPageLobbyViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

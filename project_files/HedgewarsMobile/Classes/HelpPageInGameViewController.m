@@ -19,10 +19,10 @@
  */
 
 
-#import "HelpPageViewController.h"
+#import "HelpPageInGameViewController.h"
 
 
-@implementation HelpPageViewController
+@implementation HelpPageInGameViewController
 @synthesize scrollView;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -36,14 +36,13 @@
 
 // on iPhone the XIBs contain UIScrollView
 -(void) viewDidLoad {
-    if (scrollView.tag == 0)    // ipad
-        scrollView.contentSize = CGSizeMake(480,650);
-    else                        // iphone
+    if (IS_IPAD() == NO) {
         scrollView.contentSize = CGSizeMake(480,470);
-    scrollView.maximumZoomScale = 4.0;
-    scrollView.minimumZoomScale = 0.75;
-    scrollView.clipsToBounds = YES;
-    scrollView.delegate = self;
+        scrollView.maximumZoomScale = 4.0;
+        scrollView.minimumZoomScale = 0.75;
+        scrollView.clipsToBounds = YES;
+        scrollView.delegate = self;
+    }
     [super viewDidLoad];
 }
 
@@ -58,7 +57,7 @@
 }
 
 -(IBAction) dismiss {
-    [UIView beginAnimations:@"helpingame" context:NULL];
+    [UIView beginAnimations:@"dismiss help" context:NULL];
     self.view.alpha = 0;
     [UIView commitAnimations];
     [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
