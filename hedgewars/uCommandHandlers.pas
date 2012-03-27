@@ -523,7 +523,7 @@ if isDeveloperMode then
         end;
     InitStepsFlags:= InitStepsFlags or cifMap
     end;
-
+cMapName:= s;
 ScriptLoad('Maps/' + s + '/map.lua')
 end;
 

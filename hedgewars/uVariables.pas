@@ -57,6 +57,7 @@ var
     cStereoMode     : TStereoMode = smNone;
     cOnlyStats      : boolean = False;
 //////////////////////////
+    cMapName        : shortstring = '';
 
     alsoShutdownFrontend: boolean = false;
 
