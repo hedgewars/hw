@@ -53,7 +53,7 @@
 @property (nonatomic,retain) UISegmentedControl *topControl;
 @property (nonatomic,assign) BOOL sectionsHidden;
 
-+(void) fillInstanceSections;
-+(void) emptyInstanceSections;
+-(void) fillSections;
+-(void) emptySections;
 
 @end

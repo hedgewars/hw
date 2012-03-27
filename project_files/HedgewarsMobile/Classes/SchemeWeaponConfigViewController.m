@@ -26,8 +26,6 @@
 #define LABEL_TAG 57423
 #define TABLE_TAG 45657
 
-static SchemeWeaponConfigViewController *controllerInstance;
-
 @implementation SchemeWeaponConfigViewController
 @synthesize listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
             selectedScheme, selectedWeapon, selectedScript, scriptCommand, topControl, sectionsHidden;
@@ -138,7 +136,16 @@ static SchemeWeaponConfigViewController *controllerInstance;
     [aTableView release];
 
     [super viewDidLoad];
-    controllerInstance = self;
+
+    // display or hide the lists, driven by MapConfigViewController
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(fillSections)
+                                                 name:@"fillsections"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(emptySections)
+                                                 name:@"emptysections"
+                                               object:nil];
 }
 
 #pragma mark -
@@ -308,37 +315,37 @@ static SchemeWeaponConfigViewController *controllerInstance;
 }
 
 #pragma mark -
-#pragma mark called externally to empty or fill the sections completely
-+(void) fillInstanceSections {
-    if (controllerInstance.sectionsHidden == YES) {
-        controllerInstance.sectionsHidden = NO;
+#pragma mark called by an NSNotification to empty or fill the sections completely
+-(void) fillSections {
+    if (self.sectionsHidden == YES) {
+        self.sectionsHidden = NO;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
-        UITableView *aTableView = (UITableView *)[controllerInstance.view viewWithTag:TABLE_TAG];
+        UITableView *aTableView = (UITableView *)[self.view viewWithTag:TABLE_TAG];
         [aTableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
         aTableView.scrollEnabled = YES;
-        [[controllerInstance.view viewWithTag:LABEL_TAG] removeFromSuperview];
+        [[self.view viewWithTag:LABEL_TAG] removeFromSuperview];
     }
 }
 
-+(void) emptyInstanceSections {
-    if (controllerInstance.sectionsHidden == NO) {
-        controllerInstance.sectionsHidden = YES;
+-(void) emptySections {
+    if (self.sectionsHidden == NO) {
+        self.sectionsHidden = YES;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
-        UITableView *aTableView = (UITableView *)[controllerInstance.view viewWithTag:TABLE_TAG];
+        UITableView *aTableView = (UITableView *)[self.view viewWithTag:TABLE_TAG];
         [aTableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
         aTableView.scrollEnabled = NO;
 
-        CGRect frame = CGRectMake(0, 0, controllerInstance.view.frame.size.width * 80/100, 60);
+        CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 60);
         UILabel *theLabel = [[UILabel alloc] initWithFrame:frame
                                                   andTitle:NSLocalizedString(@"Missions don't need further configuration",@"")];
-        theLabel.center = CGPointMake(controllerInstance.view.frame.size.width/2, controllerInstance.view.frame.size.height/2);
+        theLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
         theLabel.numberOfLines = 2;
         theLabel.tag = LABEL_TAG;
         theLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth |
                                     UIViewAutoresizingFlexibleTopMargin |
                                     UIViewAutoresizingFlexibleBottomMargin;
 
-        [controllerInstance.view addSubview:theLabel];
+        [self.view addSubview:theLabel];
         [theLabel release];
     }
 }
@@ -364,6 +371,7 @@ static SchemeWeaponConfigViewController *controllerInstance;
 }
 
 -(void) viewDidUnload {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
