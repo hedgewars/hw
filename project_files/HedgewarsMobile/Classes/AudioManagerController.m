@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 23/09/2012.
  */
 
 
@@ -23,6 +21,7 @@
 #import "AVFoundation/AVAudioPlayer.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "MXAudioPlayerFadeOperation.h"
+
 
 static AVAudioPlayer *backgroundMusic = nil;
 static SystemSoundID clickSound = -1;
@@ -32,7 +31,6 @@ static SystemSoundID selSound = -1;
 static NSOperationQueue *audioFaderQueue = nil;
 static MXAudioPlayerFadeOperation *fadeIn = nil;
 static MXAudioPlayerFadeOperation *fadeOut = nil;
-
 
 @implementation AudioManagerController
 

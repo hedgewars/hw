@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 02/04/2010.
  */
 
 
 #import <UIKit/UIKit.h>
 #import "SDL_mixer.h"
+
 
 @interface VoicesViewController : UITableViewController {
     NSMutableDictionary *teamDictionary;

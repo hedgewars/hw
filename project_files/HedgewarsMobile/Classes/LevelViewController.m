@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 0211-1307, USA.
- *
- * File created on 02/04/2010.
  */
 
 
@@ -25,11 +23,9 @@
 @implementation LevelViewController
 @synthesize teamDictionary, levelArray, levelSprites, lastIndexPath;
 
-
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
-
 
 #pragma mark -
 #pragma mark View lifecycle
