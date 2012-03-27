@@ -1735,7 +1735,8 @@ ScriptSetInteger('Ready', cReadyDelay);
 ScriptSetInteger('SuddenDeathTurns', cSuddenDTurns);
 ScriptSetInteger('WaterRise', cWaterRise);
 ScriptSetInteger('HealthDecrease', cHealthDecrease);
-ScriptSetString('Map', 'CHANGE_ME');
+ScriptSetString('Map', cMapName);
+
 ScriptSetString('Theme', '');
 ScriptSetString('Goals', '');
 
@@ -1762,8 +1763,7 @@ cSuddenDTurns    := ScriptGetInteger('SuddenDeathTurns');
 cWaterRise       := ScriptGetInteger('WaterRise');
 cHealthDecrease  := ScriptGetInteger('HealthDecrease');
 
-if ScriptGetString('Map') <> 'CHANGE_ME' then
-    ParseCommand('map ' + ScriptGetString('Map'), true);
+ParseCommand('map ' + ScriptGetString('Map'), true);
 if ScriptGetString('Theme') <> '' then
     ParseCommand('theme ' + ScriptGetString('Theme'), true);
 LuaGoals:= ScriptGetString('Goals');
