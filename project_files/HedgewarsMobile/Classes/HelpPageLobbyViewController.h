@@ -22,7 +22,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface HelpPageViewController : UIViewController <UIScrollViewDelegate> {
+@interface HelpPageLobbyViewController : UIViewController <UIScrollViewDelegate> {
     UIScrollView *scrollView;
 }
 

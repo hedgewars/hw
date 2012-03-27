@@ -21,7 +21,7 @@
 
 #import "OverlayViewController.h"
 #import "InGameMenuViewController.h"
-#import "HelpPageViewController.h"
+#import "HelpPageInGameViewController.h"
 #import "CGPointUtils.h"
 
 
@@ -269,7 +269,7 @@
 -(void) showHelp:(id) sender {
     if (self.helpPage == nil) {
         NSString *xibName = (IS_IPAD() ? @"HelpPageInGameViewController-iPad" : @"HelpPageInGameViewController-iPhone");
-        self.helpPage = [[HelpPageViewController alloc] initWithNibName:xibName bundle:nil];
+        self.helpPage = [[HelpPageInGameViewController alloc] initWithNibName:xibName bundle:nil];
     }
     self.helpPage.view.alpha = 0;
     [self.view addSubview:helpPage.view];

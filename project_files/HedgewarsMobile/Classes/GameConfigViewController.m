@@ -23,7 +23,7 @@
 #import "MapConfigViewController.h"
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
-#import "HelpPageViewController.h"
+#import "HelpPageLobbyViewController.h"
 #import "GameInterfaceBridge.h"
 
 @implementation GameConfigViewController
@@ -70,7 +70,7 @@
         case 2:
             [AudioManagerController playClickSound];
             if (self.helpPage == nil)
-                self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
+                self.helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
             [self.view addSubview:self.helpPage.view];
             [UIView beginAnimations:@"helplobby" context:NULL];
@@ -106,7 +106,7 @@
             break;
         case 3:
             if (helpPage == nil) {
-                helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPhone" bundle:nil];
+                helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPhone" bundle:nil];
                 [self.view addSubview:helpPage.view];
             }
             // this message is compulsory otherwise the table won't be loaded at all
