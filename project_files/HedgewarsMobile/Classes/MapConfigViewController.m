@@ -21,7 +21,6 @@
 
 #import "MapConfigViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "SchemeWeaponConfigViewController.h"
 
 #define scIndex         self.segmentedControl.selectedSegmentIndex
 #define isRandomness()  (segmentedControl.selectedSegmentIndex == 0 || segmentedControl.selectedSegmentIndex == 2)
@@ -309,7 +308,7 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
-            [SchemeWeaponConfigViewController fillInstanceSections];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"fillsections" object:nil];
             break;
 
         case 1: // Map
@@ -318,7 +317,7 @@
             staticmap = @"map Bamboo";
             mission = @"";
             self.slider.enabled = NO;
-            [SchemeWeaponConfigViewController fillInstanceSections];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"fillsections" object:nil];
             break;
 
         case 2: // Maze
@@ -327,7 +326,7 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
-            [SchemeWeaponConfigViewController fillInstanceSections];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"fillsections" object:nil];
             break;
 
         case 3: // Mission
@@ -336,7 +335,7 @@
             staticmap = @"map Bamboo";
             mission = @"";
             self.slider.enabled = NO;
-            [SchemeWeaponConfigViewController emptyInstanceSections];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"emptysections" object:nil];
             break;
 
         default:
