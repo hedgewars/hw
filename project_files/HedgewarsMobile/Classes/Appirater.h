@@ -1,5 +1,5 @@
 /*
- This file is part of Appirater.
+ This file is part of Appirater, http://arashpayan.com
  
  Copyright (c) 2010, Arash Payan
  All rights reserved.
@@ -25,14 +25,7 @@
  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  OTHER DEALINGS IN THE SOFTWARE.
  */
-/*
- * Appirater.h
- * appirater
- *
- * Created by Arash Payan on 9/5/09.
- * http://arashpayan.com
- * Copyright 2010 Arash Payan. All rights reserved.
- */
+
 
 #import <Foundation/Foundation.h>
 
