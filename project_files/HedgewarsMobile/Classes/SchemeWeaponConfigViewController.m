@@ -100,7 +100,11 @@
 -(void) viewDidLoad {
     self.sectionsHidden = NO;
 
-    UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 45, self.view.frame.size.width, self.view.frame.size.height-48)
+    NSInteger verticalOffset = IS_IPAD() ? 45 : 0;
+    UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0,
+                                                                            verticalOffset,
+                                                                            self.view.frame.size.width,
+                                                                            self.view.frame.size.height - verticalOffset)
                                                            style:UITableViewStyleGrouped];
     aTableView.delegate = self;
     aTableView.dataSource = self;
@@ -221,7 +225,7 @@
 }
 
 -(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
-    return IS_IPAD() ? 50.0 : 0;
+    return IS_IPAD() ? 0 : 50;
 }
 
 -(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
