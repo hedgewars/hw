@@ -46,5 +46,5 @@ var
     Low, High : function : integer;
     Now : function : integer;
     Length : function : integer;
-    StrPas, FormatDateTime : function : shortstring;
+    StrPas, FormatDateTime, copy, delete : function : shortstring;
     exit : procedure;

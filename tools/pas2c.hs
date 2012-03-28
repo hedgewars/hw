@@ -185,10 +185,11 @@ id2C IODeferred (Identifier i t) = do
 id2CTyped :: TypeDecl -> Identifier -> State RenderState Doc
 id2CTyped t (Identifier i _) = do
     tb <- resolveType t
+    ns <- gets currentScope
     case tb of 
         BTUnknown -> do
             ns <- gets currentScope
-            error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\ntype: " ++ show t ++ "\nnamespace: " -- ++ show ns
+            error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\ntype: " ++ show t ++ "\nnamespace: " ++ show (take 100 ns)
         _ -> id2C IOInsert (Identifier i tb)
 
 
@@ -216,11 +217,19 @@ resolveType (RecordType tv mtvs) = do
 resolveType (ArrayDecl (Just _) t) = liftM (BTArray BTInt) $ resolveType t
 resolveType (ArrayDecl Nothing t) = liftM (BTArray BTInt) $ resolveType t
 resolveType (FunctionType t _) = liftM BTFunction $ resolveType t
-resolveType (DeriveType _) = return BTInt
+resolveType (DeriveType (InitHexNumber _)) = return BTInt
+resolveType (DeriveType (InitNumber _)) = return BTInt
+resolveType (DeriveType (InitFloat _)) = return BTFloat
+resolveType (DeriveType (InitString _)) = return BTString
+resolveType (DeriveType (InitBinOp {})) = return BTInt
+resolveType (DeriveType (InitPrefixOp {})) = return BTInt
+resolveType (DeriveType (BuiltInFunction{})) = return BTInt
+resolveType (DeriveType (InitReference (Identifier{}))) = return BTBool -- TODO: derive from actual type
+resolveType (DeriveType _) = return BTUnknown
 resolveType (String _) = return BTString
 resolveType VoidType = return BTVoid
 resolveType (Sequence ids) = return $ BTEnum $ map (\(Identifier i _) -> map toLower i) ids
-resolveType (RangeType _) = return $ BTInt
+resolveType (RangeType _) = return $ BTUnknown
 resolveType (Set t) = liftM BTSet $ resolveType t
 --resolveType UnknownType = return BTUnknown    
 resolveType a = error $ "resolveType: " ++ show a
@@ -408,12 +417,12 @@ expr2C _ = return $ text "<<expression>>"
 
 ref2C :: Reference -> State RenderState Doc
 ref2C ae@(ArrayElement exprs ref) = do
+    es <- mapM expr2C exprs
     r <- ref2C ref 
     t <- gets lastType
     case t of
          (BTArray _ t') -> modify (\st -> st{lastType = t'})
          a -> error $ show a ++ "\n" ++ show ae
-    es <- mapM expr2C exprs
     return $ r <> (brackets . hcat) (punctuate comma es)
 ref2C (SimpleReference name) = id2C IOLookup name
 ref2C (RecordField (Dereference ref1) ref2) = do
@@ -424,10 +433,11 @@ ref2C (RecordField (Dereference ref1) ref2) = do
 ref2C rf@(RecordField ref1 ref2) = do
     r1 <- ref2C ref1
     t <- gets lastType
+    ns <- gets currentScope
     r2 <- case t of
         BTRecord rs -> withRecordNamespace rs $ ref2C ref2
         BTUnit -> withLastIdNamespace $ ref2C ref2
-        a -> error $ "dereferencing from " ++ show a ++ " - " ++ show rf
+        a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf ++ "\n" ++ show (take 100 ns)
     return $ 
         r1 <> text "." <> r2
 ref2C (Dereference ref) = do
