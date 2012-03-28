@@ -2751,6 +2751,7 @@ begin
         until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0);
 
         CurrentHedgehog := @CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog];
+        AmmoMenuInvalidated:= true; 
 
         HHGear := CurrentHedgehog^.Gear;
         HHGear^.State := State;
