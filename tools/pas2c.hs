@@ -225,7 +225,20 @@ resolveType (Set t) = liftM BTSet $ resolveType t
 --resolveType UnknownType = return BTUnknown    
 resolveType a = error $ "resolveType: " ++ show a
     
-    
+
+fromPointer :: BaseType -> State RenderState BaseType    
+fromPointer (BTPointerTo t) = f t
+    where
+        f (BTUnresolved s) = do
+            v <- gets $ find (\(a, _) -> a == s) . currentScope
+            if isJust v then
+                f . snd . snd . fromJust $ v
+                else
+                error $ "Unknown type " ++ show t
+        f t = return t
+fromPointer t = error $ "Dereferencing from non-pointer type " ++ show t
+
+
 tvar2C :: Bool -> TypeVarDeclaration -> State RenderState Doc
 tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType 
@@ -419,10 +432,8 @@ ref2C rf@(RecordField ref1 ref2) = do
         r1 <> text "." <> r2
 ref2C (Dereference ref) = do
     r <- ref2C ref
-    t <- gets lastType
-    case t of
-         (BTPointerTo t') -> modify (\st -> st{lastType = t'})
-         a -> error $ "Dereferencing from non-pointer type " ++ show a
+    t <- fromPointer =<< gets lastType
+    modify (\st -> st{lastType = t})
     return $ (parens $ text "*") <> r
 ref2C (FunCall params ref) = do
     ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
