@@ -288,7 +288,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
             comments
             return ret
             else
-            return UnknownType
+            return VoidType
         char ';'
         comments
         forward <- liftM isJust $ optionMaybe (try (string "forward;") >> comments)

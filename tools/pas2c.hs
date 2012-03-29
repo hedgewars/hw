@@ -31,6 +31,9 @@ data RenderState = RenderState
         lastType :: BaseType,
         namespaces :: Map.Map String [Record]
     }
+    
+docToLower :: Doc -> Doc
+docToLower = text . map toLower . render
 
 pas2C :: String -> IO ()
 pas2C fn = do
@@ -256,18 +259,22 @@ tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     return $ t <+> n <> parens p <> text ";"
     
 tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
-    t <- type2C returnType 
+    t <- type2C returnType
     (p, ph) <- withState' id $ do
         p <- liftM hcat $ mapM (tvar2C False) params
         ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
         return (p, ph)
     n <- id2C IOInsert name
+    let res = docToLower $ n <> text "_result"
+    let phrasesBlock = case returnType of
+            VoidType -> ph
+            _ -> t <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
     return $ 
         t <+> n <> parens p
         $+$
         text "{" 
         $+$ 
-        nest 4 ph
+        nest 4 phrasesBlock
         $+$
         text "}"
     where
@@ -279,7 +286,7 @@ tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested f
 tvar2C _ td@(TypeDeclaration i' t) = do
     i <- id2CTyped t i'
     tp <- type2C t
-    return $ text "type" <+> i <+> tp <> text ";"
+    return $ text "type" <+> i <+> tp <> semi
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- type2C t
@@ -313,7 +320,7 @@ initExpr2C _ = return $ text "<<expression>>"
 
 
 type2C :: TypeDecl -> State RenderState Doc
-type2C UnknownType = return $ text "void"
+type2C VoidType = return $ text "void"
 type2C (String l) = return $ text $ "string" ++ show l
 type2C (SimpleType i) = id2C IOLookup i
 type2C (PointerTo (SimpleType i)) = liftM (<> text "*") $ id2C IODeferred i
@@ -422,6 +429,7 @@ ref2C ae@(ArrayElement exprs ref) = do
     t <- gets lastType
     case t of
          (BTArray _ t') -> modify (\st -> st{lastType = t'})
+         (BTString) -> modify (\st -> st{lastType = BTChar})
          a -> error $ show a ++ "\n" ++ show ae
     return $ r <> (brackets . hcat) (punctuate comma es)
 ref2C (SimpleReference name) = id2C IOLookup name
