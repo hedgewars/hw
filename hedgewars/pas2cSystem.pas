@@ -46,5 +46,8 @@ var
     Low, High : function : integer;
     Now : function : integer;
     Length : function : integer;
-    StrPas, FormatDateTime, copy, delete : function : shortstring;
-    exit : procedure;
+    Abs, Sqr : function : integer;
+    StrPas, FormatDateTime, copy, delete, str : function : shortstring;
+    exit, flush : procedure;
+    Sqrt : function : float;
+    TextFile : Handle;

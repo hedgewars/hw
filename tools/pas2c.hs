@@ -32,6 +32,8 @@ data RenderState = RenderState
         namespaces :: Map.Map String [Record]
     }
     
+emptyState = RenderState [] "" BTUnknown
+    
 docToLower :: Doc -> Doc
 docToLower = text . map toLower . render
 
@@ -78,16 +80,16 @@ renderCFiles units = do
     where
     toNamespace :: Map.Map String [Record] -> PascalUnit -> [Record]
     toNamespace nss (System tvs) = 
-        currentScope $ execState (mapM_ (tvar2C True) tvs) (RenderState [] "" BTUnknown nss)
+        currentScope $ execState (mapM_ (tvar2C True) tvs) (emptyState nss)
     toNamespace _ (Program {}) = []
     toNamespace nss (Unit _ interface _ _ _) = 
-        currentScope $ execState (interface2C interface) (RenderState [] "" BTUnknown nss)
+        currentScope $ execState (interface2C interface) (emptyState nss)
 
 
 withState' :: (a -> a) -> State a b -> State a b
 withState' f s = do
-    st <- gets id
-    return $ evalState s (f st)
+    st <- liftM f get
+    return $ evalState s st
 
 withLastIdNamespace :: State RenderState Doc -> State RenderState Doc
 withLastIdNamespace f = do
@@ -112,7 +114,7 @@ toCFiles ns p@(fn, pu) = do
         let (a, s) = runState (interface2C interface) initialState
         writeFile (fn ++ ".h") $ "#pragma once\n" ++ (render a)
         writeFile (fn ++ ".c") $ (render2C s . implementation2C) implementation
-    initialState = RenderState [] "" BTUnknown ns
+    initialState = emptyState ns
 
     render2C :: RenderState -> State RenderState Doc -> String
     render2C a = render . flip evalState a
@@ -165,8 +167,10 @@ uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
 id2C :: InsertOption -> Identifier -> State RenderState Doc
 id2C IOInsert (Identifier i t) = do
-    modify (\s -> s{currentScope = (map toLower i, (i, t)) : currentScope s})
+    modify (\s -> s{currentScope = (n, (i, t)) : currentScope s, lastIdentifier = n})
     return $ text i
+    where
+        n = map toLower i
 id2C IOLookup (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ find (\(a, _) -> a == i') . currentScope
@@ -258,13 +262,14 @@ tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     n <- id2C IOInsert name
     return $ t <+> n <> parens p <> text ";"
     
-tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
+tvar2C True (FunctionDeclaration (Identifier i _) returnType params (Just (tvars, phrase))) = do
     t <- type2C returnType
-    (p, ph) <- withState' id $ do
+    t'<- gets lastType
+    n <- id2C IOInsert (Identifier i (BTFunction t'))
+    (p, ph) <- withState' (\st -> st{currentScope = (lastIdentifier st, (lastIdentifier st ++ "_result", t')) : currentScope st}) $ do
         p <- liftM hcat $ mapM (tvar2C False) params
         ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
         return (p, ph)
-    n <- id2C IOInsert name
     let res = docToLower $ n <> text "_result"
     let phrasesBlock = case returnType of
             VoidType -> ph
@@ -301,8 +306,8 @@ tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     initExpr Nothing = return $ empty
     initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
     
-tvar2C f (OperatorDeclaration op _ ret params body) = 
-    tvar2C f (FunctionDeclaration (Identifier ("<op " ++ op ++ ">") BTUnknown) ret params body)
+tvar2C f (OperatorDeclaration op i ret params body) = 
+    tvar2C f (FunctionDeclaration i ret params body)
 
     
 initExpr2C :: InitExpression -> State RenderState Doc
