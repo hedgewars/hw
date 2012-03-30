@@ -258,7 +258,7 @@ fromPointer t = error $ "Dereferencing from non-pointer type " ++ show t
 tvar2C :: Bool -> TypeVarDeclaration -> State RenderState Doc
 tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType 
-    p <- liftM hcat $ mapM (tvar2C False) params
+    p <- withState' id $ liftM hcat $ mapM (tvar2C False) params
     n <- id2C IOInsert name
     return $ t <+> n <> parens p <> text ";"
     
@@ -325,22 +325,28 @@ initExpr2C _ = return $ text "<<expression>>"
 
 
 type2C :: TypeDecl -> State RenderState Doc
-type2C VoidType = return $ text "void"
-type2C (String l) = return $ text $ "string" ++ show l
 type2C (SimpleType i) = id2C IOLookup i
-type2C (PointerTo (SimpleType i)) = liftM (<> text "*") $ id2C IODeferred i
-type2C (PointerTo t) = liftM (<> text "*") $ type2C t
-type2C (RecordType tvs union) = do
-    t <- mapM (tvar2C False) tvs
-    return $ text "{" $+$ (nest 4 . vcat $ t) $+$ text "}"
-type2C (RangeType r) = return $ text "<<range type>>"
-type2C (Sequence ids) = do
-    mapM_ (id2C IOInsert) ids
-    return $ text "<<sequence type>>"
-type2C (ArrayDecl r t) = return $ text "<<array type>>"
-type2C (Set t) = return $ text "<<set>>"
-type2C (FunctionType returnType params) = return $ text "<<function>>"
-type2C (DeriveType _) = return $ text "<<type derived from constant literal>>"
+type2C t = do
+    r <- type2C' t
+    rt <- resolveType t
+    modify (\st -> st{lastType = rt})
+    return r
+    where
+    type2C' VoidType = return $ text "void"
+    type2C' (String l) = return $ text $ "string" ++ show l
+    type2C' (PointerTo (SimpleType i)) = liftM (<> text "*") $ id2C IODeferred i
+    type2C' (PointerTo t) = liftM (<> text "*") $ type2C t
+    type2C' (RecordType tvs union) = do
+        t <- mapM (tvar2C False) tvs
+        return $ text "{" $+$ (nest 4 . vcat $ t) $+$ text "}"
+    type2C' (RangeType r) = return $ text "<<range type>>"
+    type2C' (Sequence ids) = do
+        mapM_ (id2C IOInsert) ids
+        return $ text "<<sequence type>>"
+    type2C' (ArrayDecl r t) = return $ text "<<array type>>"
+    type2C' (Set t) = return $ text "<<set>>"
+    type2C' (FunctionType returnType params) = return $ text "<<function>>"
+    type2C' (DeriveType _) = return $ text "<<type derived from constant literal>>"
 
 phrase2C :: Phrase -> State RenderState Doc
 phrase2C (Phrases p) = do
@@ -432,10 +438,12 @@ ref2C ae@(ArrayElement exprs ref) = do
     es <- mapM expr2C exprs
     r <- ref2C ref 
     t <- gets lastType
+    ns <- gets currentScope
     case t of
+         (BTArray _ (BTArray _ t')) -> modify (\st -> st{lastType = t'})
          (BTArray _ t') -> modify (\st -> st{lastType = t'})
          (BTString) -> modify (\st -> st{lastType = BTChar})
-         a -> error $ show a ++ "\n" ++ show ae
+         a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae ++ "\n" ++ show (take 100 ns)
     return $ r <> (brackets . hcat) (punctuate comma es)
 ref2C (SimpleReference name) = id2C IOLookup name
 ref2C (RecordField (Dereference ref1) ref2) = do
