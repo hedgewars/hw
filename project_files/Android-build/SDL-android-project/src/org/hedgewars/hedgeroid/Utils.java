@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
@@ -54,6 +55,7 @@ public class Utils {
 		return getCachePath(c) + ROOT_DIR;
 	}
 
+	@TargetApi(8)
 	static class FroyoSDCardDir{
 		public static String getDownloadPath(Context c){
 			File f =  c.getExternalCacheDir();

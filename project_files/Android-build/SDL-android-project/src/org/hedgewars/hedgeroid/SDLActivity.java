@@ -571,34 +571,29 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 
 	// Touch events
 	public boolean onTouch(View v, MotionEvent event) {
-		{
-			final int touchDevId = event.getDeviceId();
-			final int pointerCount = event.getPointerCount();
-			// touchId, pointerId, action, x, y, pressure
-			int actionPointerIndex = event.getActionIndex();
-			int pointerFingerId = event.getPointerId(actionPointerIndex);
-			int action = event.getActionMasked();
+		final int action = event.getAction() & MotionEvent.ACTION_MASK;
+		final int actionPointerIndex = event.getAction() & MotionEvent.ACTION_POINTER_ID_MASK;		
 
-			float x = event.getX(actionPointerIndex);
-			float y = event.getY(actionPointerIndex);
-			float p = event.getPressure(actionPointerIndex);
-
-			if (action == MotionEvent.ACTION_MOVE && pointerCount > 1) {
-				// TODO send motion to every pointer if its position has
-				// changed since prev event.
-				for (int i = 0; i < pointerCount; i++) {
-					pointerFingerId = event.getPointerId(i);
-					x = event.getX(i);
-					y = event.getY(i);
-					p = event.getPressure(i);
-					SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, p);
-				}
-			} else {
-				SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, p);
+		if (action == MotionEvent.ACTION_MOVE) {
+			// TODO send motion to every pointer if its position has
+			// changed since prev event.
+			for (int i = 0; i < event.getPointerCount(); i++) {
+				sendNativeTouch(event, action, i);
 			}
+		} else {
+			sendNativeTouch(event, action, actionPointerIndex);
 		}
 		return true;
 	} 
+	
+	private static void sendNativeTouch(MotionEvent event, int action, int pointerIndex) {
+		int touchDevId = event.getDeviceId();
+		int pointerFingerId = event.getPointerId(pointerIndex);
+		float x = event.getX(pointerIndex);
+		float y = event.getY(pointerIndex);
+		float pressure = event.getPressure(pointerIndex);
+		SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, pressure);
+	}
 
 	// Sensor events
 	public void enableSensor(int sensortype, boolean enabled) {
@@ -624,6 +619,5 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 					event.values[2] / SensorManager.GRAVITY_EARTH);
 		}
 	}
-
 }
 
