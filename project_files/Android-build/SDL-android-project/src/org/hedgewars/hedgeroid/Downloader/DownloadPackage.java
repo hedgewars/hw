@@ -29,7 +29,6 @@ import android.content.SharedPreferences;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class DownloadPackage implements Parcelable{
 	private String url_without_suffix;

@@ -311,7 +311,7 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 			imgFort.setImageDrawable(fortIconDrawable);
 			scroller.fullScroll(ScrollView.FOCUS_DOWN);// Scroll the scrollview
 			// to the bottom, work
-			// around for scollview
+			// around for scrollview
 			// invalidation (scrolls
 			// back to top)
 		}
