@@ -88,6 +88,7 @@ public class Team implements Parcelable{
 		readFromParcel(in);
 	}
 
+	@Override
 	public boolean equals(Object o){
 		if(super.equals(o)) return true;
 		else if(o instanceof Team){
@@ -102,6 +103,19 @@ public class Team implements Parcelable{
 		}else{
 			return false;
 		}
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((grave == null) ? 0 : grave.hashCode());
+		result = prime * result + ((flag == null) ? 0 : flag.hashCode());
+		result = prime * result + ((voice == null) ? 0 : voice.hashCode());
+		result = prime * result + ((fort == null) ? 0 : fort.hashCode());
+		result = prime * result + ((hash == null) ? 0 : hash.hashCode());
+		return result;
 	}
 
 	public void setRandomColor(int[] illegalcolors){
