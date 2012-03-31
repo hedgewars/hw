@@ -107,7 +107,7 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Intege
 				entry = input.getNextEntry();	
 			}catch(IOException e){
 				e.printStackTrace();
-				if(conn != null) conn.disconnect();
+				conn.disconnect();
 				return EXIT_CONNERROR;
 			}
 
