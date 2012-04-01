@@ -38,8 +38,8 @@
 #define ZAssert(condition, ...) do { if (!(condition)) { ALog(__VA_ARGS__); }} while(0)
 #define rotationManager(x) (IS_IPAD() ? YES : (x == UIInterfaceOrientationLandscapeRight) || (x == UIInterfaceOrientationLandscapeLeft))
 
-#define START_TIMER NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
-#define END_TIMER(msg) 	NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; CMLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
+#define START_TIMER()   NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
+#define END_TIMER(msg) 	NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; DLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
 
 
 #define DOCUMENTS_FOLDER()      [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
