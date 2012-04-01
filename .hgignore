@@ -40,7 +40,7 @@ glob:*.bak
 glob:*.rej
 glob:project_files/Android-build/SDL-android-project/jni/**
 glob:project_files/Android-build/SDL-android-project/obj
-glob:project_files/Android-build/SDL-android-project/libs
+glob:project_files/Android-build/SDL-android-project/libs/armeabi*
 glob:project_files/Android-build/SDL-android-project/bin
 glob:project_files/Android-build/SDL-android-project/gen
 glob:project_files/Android-build/SDL-android-project/local.properties
