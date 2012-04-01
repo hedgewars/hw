@@ -232,6 +232,13 @@ class BasicSettingMeta {
 		}
 		return result;
 	}
+
+	@Override
+	public String toString() {
+		return String
+				.format("BasicSettingMeta [command=%s, title=%s, def=%s, min=%s, max=%s, times1000=%s, checkOverMax=%s]",
+						command, title, def, min, max, times1000, checkOverMax);
+	}
 }
 
 // TODO: Extend with additional metadata
@@ -248,5 +255,10 @@ class GameModMeta {
 			throw new IllegalArgumentException("gamemods.ini, section "+section.getName()+" is missing required setting "+key+".");
 		}
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("GameModMeta [bitmaskIndex=%s]", bitmaskIndex);
 	}
 }
