@@ -54,7 +54,7 @@ public class StartGameActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
-		Scheme.parseBasicFlags(this);
+		Scheme.parseConfiguration(this);
 		config = new GameConfig();
 
 		setContentView(R.layout.starting_game);

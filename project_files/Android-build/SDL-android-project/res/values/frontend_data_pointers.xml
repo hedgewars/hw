@@ -2,7 +2,8 @@
 <resources>
 
 <array name="schemes">
-	<item>@raw/basicflags</item>
+	<item>@raw/basicsettings</item>
+    <item>@raw/gamemods</item>
 	<item>@raw/scheme_default_scheme</item>
 	<item>@raw/scheme_barrelmayhem</item>
 	<item>@raw/scheme_cleanslate</item>

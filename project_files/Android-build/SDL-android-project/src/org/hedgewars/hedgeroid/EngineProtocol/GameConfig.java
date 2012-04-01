@@ -79,7 +79,7 @@ public class GameConfig implements Parcelable{
 		weapon.sendToEngine(epn, teamCount);
 		
 		for(Team t : teams){
-			if(t != null)t.sendToEngine(epn, teamCount, scheme.health);
+			if(t != null)t.sendToEngine(epn, teamCount, scheme.getHealth());
 		}
 	}
 	
