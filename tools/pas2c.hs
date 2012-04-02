@@ -394,11 +394,16 @@ phrase2C (SwitchCase expr cases mphrase) = do
         ph <- phrase2C p
         return $ 
             text "case" <+> parens (hsep . punctuate (char ',') $ ie) <> char ':' <> nest 4 (ph $+$ text "break;")
-phrase2C (WithBlock ref p) = do
+phrase2C wb@(WithBlock ref p) = do
     r <- ref2C ref 
-    (BTRecord rs) <- gets lastType
-    ph <- withRecordNamespace rs $ phrase2C $ wrapPhrase p
-    return $ text "namespace" <> parens r $$ ph
+    t <- gets lastType
+    case t of
+        (BTRecord rs) -> do
+            ph <- withRecordNamespace rs $ phrase2C $ wrapPhrase p
+            return $ text "namespace" <> parens r $$ ph
+        a -> do
+            ns <- gets currentScope
+            error $ "'with' block referencing non-record type " ++ show a ++ "\n" ++ show wb ++ "\nnamespace: " ++ show (take 100 ns)
 phrase2C (ForCycle i' e1' e2' p) = do
     i <- id2C IOLookup i'
     e1 <- expr2C e1'
@@ -448,7 +453,9 @@ ref2C ae@(ArrayElement exprs ref) = do
     t <- gets lastType
     ns <- gets currentScope
     case t of
-         (BTArray _ (BTArray _ t')) -> modify (\st -> st{lastType = t'})
+         (BTArray _ ta@(BTArray _ t')) 
+            | length exprs == 2 -> modify (\st -> st{lastType = t'})
+            | otherwise -> modify (\st -> st{lastType = ta})
          (BTArray _ t') -> modify (\st -> st{lastType = t'})
          (BTString) -> modify (\st -> st{lastType = BTChar})
          a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae ++ "\n" ++ show (take 100 ns)
