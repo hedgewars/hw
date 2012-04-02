@@ -170,7 +170,7 @@ begin
 end;
 
 procedure initModule;
-const SDL_PIXELFORMAT_ABGR8888 = ((1 shl 31) or (6 shl 24) or (7 shl 20) or (6 shl 16) or (32 shl 8) or 4);
+const SDL_PIXELFORMAT_ABGR8888 = (1 shl 31) or (6 shl 24) or (7 shl 20) or (6 shl 16) or (32 shl 8) or 4;
 begin
     conversionFormat:= SDL_AllocFormat(SDL_PIXELFORMAT_ABGR8888);
 end;

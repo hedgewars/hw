@@ -60,12 +60,12 @@ var
     trunc, round : function : integer;
     Abs, Sqr : function : integer;
 
-    StrPas, FormatDateTime, copy, delete, str : function : shortstring;
+    StrPas, FormatDateTime, copy, delete, str, pos : function : shortstring;
 
-    assign, rewrite, reset, flush : procedure;
+    assign, rewrite, reset, flush, BlockWrite, close : procedure;
     IOResult : function : integer;
     exit, break, halt : procedure;
-    TextFile : Handle;
+    TextFile, file : Handle;
 
     Sqrt, ArcTan2, pi, cos, sin : function : float;
 
@@ -86,6 +86,6 @@ var
     glcolor4ub, gl_texture_wrap_s, gltexparameteri,
     gl_texture_wrap_t, gl_texture_min_filter,
     gl_linear, gl_texture_mag_filter, glgentextures,
-    gldeletetextures : procedure;
+    gldeletetextures, glreadpixels : procedure;
 
     TThreadId : function : integer;

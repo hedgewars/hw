@@ -32,7 +32,6 @@ data TypeDecl = SimpleType Identifier
     | FunctionType TypeDecl [TypeVarDeclaration]
     | DeriveType InitExpression 
     | VoidType
-    | UnknownType
     deriving Show
 data Range = Range Identifier
            | RangeFromTo InitExpression InitExpression
