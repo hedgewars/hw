@@ -76,6 +76,8 @@ renderCFiles :: Map.Map String PascalUnit -> IO ()
 renderCFiles units = do
     let u = Map.toList units
     let nss = Map.map (toNamespace nss) units
+    hPutStrLn stderr $ "Units: " ++ (show . Map.keys . Map.filter (not . null) $ nss)
+    writeFile "pas2c.log" $ unlines . map (\t -> show (fst t) ++ "\n" ++ (unlines . map ((:) '\t' . show) . snd $ t)) . Map.toList $ nss
     mapM_ (toCFiles nss) u
     where
     toNamespace :: Map.Map String [Record] -> PascalUnit -> [Record]
@@ -158,7 +160,7 @@ uses2C uses@(Uses unitIds) = do
     where
     injectNamespace (Identifier i _) = do
         getNS <- gets (flip Map.lookup . namespaces)
-        let f = flip (foldl (\a b -> b:a)) (fromMaybe [] (getNS i))
+        let f = flip (foldl (flip (:))) (fromMaybe [] (getNS i))
         modify (\s -> s{currentScope = f $ currentScope s})
 
 uses2List :: Uses -> [String]
@@ -167,6 +169,12 @@ uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
 id2C :: InsertOption -> Identifier -> State RenderState Doc
 id2C IOInsert (Identifier i t) = do
+    ns <- gets currentScope
+{--    case t of 
+        BTUnknown -> do
+            ns <- gets currentScope
+            error $ "id2C IOInsert: type BTUnknown for " ++ show i ++ "\nnamespace: " ++ show (take 100 ns)
+        _ -> do --}
     modify (\s -> s{currentScope = (n, (i, t)) : currentScope s, lastIdentifier = n})
     return $ text i
     where
@@ -176,15 +184,13 @@ id2C IOLookup (Identifier i t) = do
     v <- gets $ find (\(a, _) -> a == i') . currentScope
     ns <- gets currentScope
     if isNothing v then 
-        error $ "Not defined: '" ++ i' ++ "'\n" -- ++ show ns
+        error $ "Not defined: '" ++ i' ++ "'\n" ++ show (take 100 ns)
         else 
         let vv = snd $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
 id2C IODeferred (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ find (\(a, _) -> a == i') . currentScope
     if (isNothing v) then
-        do
-        modify (\s -> s{currentScope = (i', (i, t)) : currentScope s})
         return $ text i
         else
         return . text . fst . snd . fromJust $ v
@@ -197,7 +203,8 @@ id2CTyped t (Identifier i _) = do
         BTUnknown -> do
             ns <- gets currentScope
             error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\ntype: " ++ show t ++ "\nnamespace: " ++ show (take 100 ns)
-        _ -> id2C IOInsert (Identifier i tb)
+        _ -> return ()
+    id2C IOInsert (Identifier i tb)
 
 
 resolveType :: TypeDecl -> State RenderState BaseType
@@ -236,11 +243,9 @@ resolveType (DeriveType _) = return BTUnknown
 resolveType (String _) = return BTString
 resolveType VoidType = return BTVoid
 resolveType (Sequence ids) = return $ BTEnum $ map (\(Identifier i _) -> map toLower i) ids
-resolveType (RangeType _) = return $ BTUnknown
+resolveType (RangeType _) = return $ BTVoid
 resolveType (Set t) = liftM BTSet $ resolveType t
---resolveType UnknownType = return BTUnknown    
-resolveType a = error $ "resolveType: " ++ show a
-    
+   
 
 fromPointer :: BaseType -> State RenderState BaseType    
 fromPointer (BTPointerTo t) = f t
@@ -252,7 +257,9 @@ fromPointer (BTPointerTo t) = f t
                 else
                 error $ "Unknown type " ++ show t
         f t = return t
-fromPointer t = error $ "Dereferencing from non-pointer type " ++ show t
+fromPointer t = do
+    ns <- gets currentScope
+    error $ "Dereferencing from non-pointer type " ++ show t ++ "\n\n" ++ show (take 100 ns)
 
 
 tvar2C :: Bool -> TypeVarDeclaration -> State RenderState Doc
@@ -337,7 +344,7 @@ type2C t = do
     type2C' (PointerTo (SimpleType i)) = liftM (<> text "*") $ id2C IODeferred i
     type2C' (PointerTo t) = liftM (<> text "*") $ type2C t
     type2C' (RecordType tvs union) = do
-        t <- mapM (tvar2C False) tvs
+        t <- withState' id $ mapM (tvar2C False) tvs
         return $ text "{" $+$ (nest 4 . vcat $ t) $+$ text "}"
     type2C' (RangeType r) = return $ text "<<range type>>"
     type2C' (Sequence ids) = do
@@ -389,7 +396,8 @@ phrase2C (SwitchCase expr cases mphrase) = do
             text "case" <+> parens (hsep . punctuate (char ',') $ ie) <> char ':' <> nest 4 (ph $+$ text "break;")
 phrase2C (WithBlock ref p) = do
     r <- ref2C ref 
-    ph <- phrase2C $ wrapPhrase p
+    (BTRecord rs) <- gets lastType
+    ph <- withRecordNamespace rs $ phrase2C $ wrapPhrase p
     return $ text "namespace" <> parens r $$ ph
 phrase2C (ForCycle i' e1' e2' p) = do
     i <- id2C IOLookup i'
@@ -446,9 +454,14 @@ ref2C ae@(ArrayElement exprs ref) = do
          a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae ++ "\n" ++ show (take 100 ns)
     return $ r <> (brackets . hcat) (punctuate comma es)
 ref2C (SimpleReference name) = id2C IOLookup name
-ref2C (RecordField (Dereference ref1) ref2) = do
+ref2C rf@(RecordField (Dereference ref1) ref2) = do
     r1 <- ref2C ref1 
-    r2 <- ref2C ref2
+    t <- fromPointer =<< gets lastType
+    ns <- gets currentScope
+    r2 <- case t of
+        BTRecord rs -> withRecordNamespace rs $ ref2C ref2
+        BTUnit -> withLastIdNamespace $ ref2C ref2
+        a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf ++ "\n" ++ show (take 100 ns)
     return $ 
         r1 <> text "->" <> r2
 ref2C rf@(RecordField ref1 ref2) = do
