@@ -52,6 +52,10 @@
 00:49=Oživovač
 00:50=Vrtákový útok
 00:51=Hrouda bláta
+00:52=Není vybrána žádná zbraň
+00:53=TimeBox
+00:54=Struktura
+00:55=Pozemek s rozprašovačem
 
 01:00=Do boje!
 01:01=Kolo nerozhodně
@@ -68,6 +72,12 @@
 01:12=Poslední kolo před Náhlou smrtí!
 01:13=%1 kol do Náhlé smrti!
 01:14=Připrav se, %1!
+01:15=Nepatrný
+01:16=Nízký
+01:17=Normální
+01:18=Vysoký
+01:19=Extrémní
+01:20=%1 odskočit
 
 ; Event messages
 ; Hog (%1) died
@@ -175,7 +185,7 @@
 02:01=%1 má v ranách slanou vodu
 02:01=%1 šel po prkně
 02:01=%1 si dává koupel
-02:01=%1 je moc moc moc mokrý
+02:01=%1 je moc moc moc mokrý
 02:01=%1 si namočil bodliny
 02:01=%1 našel truhlu Mrtvého muže
 
@@ -434,6 +444,11 @@
 03:48=Čas na kladivo!
 03:49=Dělá to, co myslíš
 03:50=Krtkův fanda
+03:51=Nalezeno na zemi
+03:52=NEPOUŽITO
+03:53=Typ 40
+03:54=Vytvořit něco
+03:55=Užitečnost
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Zaútoč na nepřítele pomocí obyčejného granátu.|Exploduje jakmile časovač dojde k nule.|1-5: Nastavuje časovač|Útok: Drž pro hození větší silou
@@ -487,6 +502,12 @@
 04:47=Zdvojnásob zábavu pomocí dvou ostnatých, zákeřných, lepkavých|min. Vytvoř řetězovou reakci nebo se braň (nebo oboje!)|Útok: Drž pro hození větší silou (dvakrát)
 04:48=Proč by se měli týrat jen krtci? Mlácení ježků může|být stejná zábava! Jedna dobrá rána tímhle kladivem|uštědří poškození za jednu třetinu ježkova zdraví a|zarazí ho pod zem.|Útok: Aktivace
 04:49=Vzkřis své přátele! Ale měj se na pozoru, protože|tohle vzkřísí i tvé protivníky.|Útok: Drž stisknuto pro pomalé oživování|Nahoru: Zrychlí oživování
+04:50=Je někdo skrývá v podzemí?|Vykopat s vrtačkou stávky!|Časovač určuje, jak daleko to bude kopat.
+04:51=Získat ve volném záběru vrhá kouli bláta.|Žihadla bit, a srazí prasata zpět.
+04:52=NEPOUŽITO
+04:53=Vydejte se na dobrodružství v čase a prostoru,|přičemž vaši kamarádi bojovat dál sám.|Být připraven vrátit kdykoliv,|nebo náhlé smrti nebo pokud jsou všichni poraženi.|Prohlášení. Nefunguje v náhlé smrti,|Pokud jste sami, nebo jste-li král.
+04:54=NEÚPLNÝ                  
+04:55=Sprej proud lepkavými vločkami.|Stavět mosty, pohřbít nepřátele, utěsnění tunely.|Buďte opatrní, nechcete dostat každý z vás!
 
 ; Game goal strings
 05:00=Herní módy
@@ -510,3 +531,4 @@
 05:18=Neomezeně útoků
 05:19=Zbraně jsou obnoveny na konci tahu
 05:20=Zbraně nejsou sdíleny mezi ježky
+05:21=Tag týmu: Týmy v klanu se postupně střídají|Sdílené čas: Týmy v rámci podílu klan zase čas
