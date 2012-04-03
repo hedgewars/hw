@@ -77,7 +77,7 @@ renderCFiles units = do
     let u = Map.toList units
     let nss = Map.map (toNamespace nss) units
     hPutStrLn stderr $ "Units: " ++ (show . Map.keys . Map.filter (not . null) $ nss)
-    writeFile "pas2c.log" $ unlines . map (\t -> show (fst t) ++ "\n" ++ (unlines . map ((:) '\t' . show) . snd $ t)) . Map.toList $ nss
+    --writeFile "pas2c.log" $ unlines . map (\t -> show (fst t) ++ "\n" ++ (unlines . map ((:) '\t' . show) . snd $ t)) . Map.toList $ nss
     mapM_ (toCFiles nss) u
     where
     toNamespace :: Map.Map String [Record] -> PascalUnit -> [Record]
@@ -88,10 +88,12 @@ renderCFiles units = do
         currentScope $ execState (interface2C interface) (emptyState nss)
 
 
-withState' :: (a -> a) -> State a b -> State a b
-withState' f s = do
+withState' :: (RenderState -> RenderState) -> State RenderState a -> State RenderState a
+withState' f sf = do
     st <- liftM f get
-    return $ evalState s st
+    let (a, s) = runState sf st
+    modify(\st -> st{lastType = lastType s})
+    return a
 
 withLastIdNamespace :: State RenderState Doc -> State RenderState Doc
 withLastIdNamespace f = do
@@ -100,6 +102,7 @@ withLastIdNamespace f = do
     withState' (\st -> st{currentScope = fromMaybe [] $ Map.lookup li (namespaces st)}) f
 
 withRecordNamespace :: [(String, BaseType)] -> State RenderState Doc -> State RenderState Doc
+withRecordNamespace [] = error "withRecordNamespace: empty record"
 withRecordNamespace recs = withState' f
     where
         f st = st{currentScope = records ++ currentScope st}
@@ -183,8 +186,9 @@ id2C IOLookup (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ find (\(a, _) -> a == i') . currentScope
     ns <- gets currentScope
+    lt <- gets lastType
     if isNothing v then 
-        error $ "Not defined: '" ++ i' ++ "'\n" ++ show (take 100 ns)
+        error $ "Not defined: '" ++ i' ++ "'\n" ++ show lt ++ "\n" ++ show (take 100 ns)
         else 
         let vv = snd $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
 id2C IODeferred (Identifier i t) = do
@@ -455,7 +459,8 @@ ref2C ae@(ArrayElement exprs ref) = do
     case t of
          (BTArray _ ta@(BTArray _ t')) 
             | length exprs == 2 -> modify (\st -> st{lastType = t'})
-            | otherwise -> modify (\st -> st{lastType = ta})
+            | length exprs == 1 -> modify (\st -> st{lastType = ta})
+            | otherwise -> error $ "Array has more than two dimensions"
          (BTArray _ t') -> modify (\st -> st{lastType = t'})
          (BTString) -> modify (\st -> st{lastType = BTChar})
          a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae ++ "\n" ++ show (take 100 ns)

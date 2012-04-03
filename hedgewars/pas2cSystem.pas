@@ -64,8 +64,13 @@ var
 
     assign, rewrite, reset, flush, BlockWrite, close : procedure;
     IOResult : function : integer;
-    exit, break, halt : procedure;
+    exit, break, halt, continue : procedure;
     TextFile, file : Handle;
+    FileMode : integer;
+    eof : function : boolean;
+    
+    ParamCount : function : integer;
+    ParamStr : function : string;
 
     Sqrt, ArcTan2, pi, cos, sin : function : float;
 
@@ -89,3 +94,8 @@ var
     gldeletetextures, glreadpixels : procedure;
 
     TThreadId : function : integer;
+    ThreadSwitch : procedure;
+    
+    random : function : integer;
+    
+    Assigned : function : boolean;
