@@ -251,32 +251,33 @@ resolveType (RangeType _) = return $ BTVoid
 resolveType (Set t) = liftM BTSet $ resolveType t
    
 
-fromPointer :: BaseType -> State RenderState BaseType    
-fromPointer (BTPointerTo t) = f t
+fromPointer :: String -> BaseType -> State RenderState BaseType    
+fromPointer s (BTPointerTo t) = f t
     where
         f (BTUnresolved s) = do
             v <- gets $ find (\(a, _) -> a == s) . currentScope
             if isJust v then
                 f . snd . snd . fromJust $ v
                 else
-                error $ "Unknown type " ++ show t
+                error $ "Unknown type " ++ show t ++ "\n" ++ s
         f t = return t
-fromPointer t = do
+fromPointer s t = do
     ns <- gets currentScope
-    error $ "Dereferencing from non-pointer type " ++ show t ++ "\n\n" ++ show (take 100 ns)
+    error $ "Dereferencing from non-pointer type " ++ show t ++ "\n" ++ s ++ "\n\n" ++ show (take 100 ns)
 
 
 tvar2C :: Bool -> TypeVarDeclaration -> State RenderState Doc
 tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType 
+    t'<- gets lastType
     p <- withState' id $ liftM hcat $ mapM (tvar2C False) params
-    n <- id2C IOInsert name
+    n <- id2C IOInsert $ setBaseType (BTFunction t') name
     return $ t <+> n <> parens p <> text ";"
     
-tvar2C True (FunctionDeclaration (Identifier i _) returnType params (Just (tvars, phrase))) = do
+tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
     t <- type2C returnType
     t'<- gets lastType
-    n <- id2C IOInsert (Identifier i (BTFunction t'))
+    n <- id2C IOInsert $ setBaseType (BTFunction t') name
     (p, ph) <- withState' (\st -> st{currentScope = (lastIdentifier st, (lastIdentifier st ++ "_result", t')) : currentScope st}) $ do
         p <- liftM hcat $ mapM (tvar2C False) params
         ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
@@ -455,6 +456,7 @@ ref2C :: Reference -> State RenderState Doc
 ref2C r@(RecordField ref1 (ArrayElement exprs ref2)) = ref2C $ ArrayElement exprs (RecordField ref1 ref2)
 ref2C r@(RecordField ref1 (Dereference ref2)) = ref2C $ Dereference (RecordField ref1 ref2)
 ref2C r@(RecordField ref1 (RecordField ref2 ref3)) = ref2C $ RecordField (RecordField ref1 ref2) ref3
+ref2C r@(RecordField ref1 (FunCall params ref2)) = ref2C $ FunCall params (RecordField ref1 ref2)
 -- conversion routines
 ref2C ae@(ArrayElement exprs ref) = do
     es <- mapM expr2C exprs
@@ -473,7 +475,7 @@ ref2C ae@(ArrayElement exprs ref) = do
 ref2C (SimpleReference name) = id2C IOLookup name
 ref2C rf@(RecordField (Dereference ref1) ref2) = do
     r1 <- ref2C ref1 
-    t <- fromPointer =<< gets lastType
+    t <- fromPointer (show ref1) =<< gets lastType
     ns <- gets currentScope
     r2 <- case t of
         BTRecord rs -> withRecordNamespace rs $ ref2C ref2
@@ -491,9 +493,9 @@ ref2C rf@(RecordField ref1 ref2) = do
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf ++ "\n" ++ show (take 100 ns)
     return $ 
         r1 <> text "." <> r2
-ref2C (Dereference ref) = do
+ref2C d@(Dereference ref) = do
     r <- ref2C ref
-    t <- fromPointer =<< gets lastType
+    t <- fromPointer (show d) =<< gets lastType
     modify (\st -> st{lastType = t})
     return $ (parens $ text "*") <> r
 ref2C (FunCall params ref) = do
