@@ -115,8 +115,8 @@ toCFiles ns p@(fn, pu) = do
     toCFiles' p
     where
     toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C initialState . pascal2C) p
-    toCFiles' (fn, (Unit _ interface implementation _ _)) = do
-        let (a, s) = runState (interface2C interface) initialState
+    toCFiles' (fn, (Unit unitId interface implementation _ _)) = do
+        let (a, s) = runState (id2C IOInsert (setBaseType BTUnit unitId) >> interface2C interface) initialState
         writeFile (fn ++ ".h") $ "#pragma once\n" ++ (render a)
         writeFile (fn ++ ".c") $ (render2C s . implementation2C) implementation
     initialState = emptyState ns
@@ -451,6 +451,11 @@ expr2C _ = return $ text "<<expression>>"
 
 
 ref2C :: Reference -> State RenderState Doc
+-- rewrite into proper form
+ref2C r@(RecordField ref1 (ArrayElement exprs ref2)) = ref2C $ ArrayElement exprs (RecordField ref1 ref2)
+ref2C r@(RecordField ref1 (Dereference ref2)) = ref2C $ Dereference (RecordField ref1 ref2)
+ref2C r@(RecordField ref1 (RecordField ref2 ref3)) = ref2C $ RecordField (RecordField ref1 ref2) ref3
+-- conversion routines
 ref2C ae@(ArrayElement exprs ref) = do
     es <- mapM expr2C exprs
     r <- ref2C ref 

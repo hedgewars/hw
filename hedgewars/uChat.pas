@@ -361,7 +361,7 @@ end;
 procedure chHistory(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    uChat.showAll:= not uChat.showAll
+    showAll:= not showAll
 end;
 
 procedure chChat(var s: shortstring);
