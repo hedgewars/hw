@@ -55,8 +55,6 @@ var
     odd, even : function : boolean;
 
     Now : function : integer;
-    Length : function : integer;
-    SetLength, val : procedure;
 
     new, dispose, FillChar, Move : procedure;
 
@@ -64,6 +62,8 @@ var
     Abs, Sqr : function : integer;
 
     StrPas, FormatDateTime, copy, delete, str, pos, trim : function : shortstring;
+    Length, StrToInt : function : integer;
+    SetLength, val : procedure;
 
     assign, rewrite, reset, flush, BlockWrite, BlockRead, close : procedure;
     IOResult : function : integer;
@@ -112,7 +112,10 @@ var
     gl_dither, gl_vertex_array, gl_texture_coord_array,
     glviewport, glloadidentity, glmatrixmode, glhint,
     glblendfunc, glenableclientstate, gl_color_buffer_bit,
-    glclear : procedure;
+    glclear, gldisableclientstate, gl_color_array,
+    glcolorpointer, gl_depth_buffer_bit, gl_quads,
+    glbegin, glend, gltexcoord2f, glvertex2d,
+    gl_true, gl_false, glcolormask, gl_projection : procedure;
 
     TThreadId : function : integer;
     BeginThread, ThreadSwitch : procedure;
