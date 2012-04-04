@@ -94,8 +94,11 @@ var
     gldeletetextures, glreadpixels : procedure;
 
     TThreadId : function : integer;
-    ThreadSwitch : procedure;
+    BeginThread, ThreadSwitch : procedure;
+    InterlockedIncrement, InterlockedDecrement : procedure;
     
     random : function : integer;
     
     Assigned : function : boolean;
+    
+
