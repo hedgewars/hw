@@ -47,7 +47,7 @@ procedure ChangeToSDFlakes;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
 implementation
-uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils, uStore;
+uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils, uStore, uUtils;
 
 const cExplFrameTicks = 110;
 
