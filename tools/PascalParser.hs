@@ -581,8 +581,8 @@ initExpression = buildExpressionParser table term <?> "initialization expression
            , Infix (try $ string "or" >> return (InitBinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (InitBinOp "xor")) AssocLeft
           ]
-        , [  Infix (try $ string "shl" >> return (InitBinOp "and")) AssocNone
-           , Infix (try $ string "shr" >> return (InitBinOp "or")) AssocNone
+        , [  Infix (try $ string "shl" >> return (InitBinOp "shl")) AssocNone
+           , Infix (try $ string "shr" >> return (InitBinOp "shr")) AssocNone
           ]
         , [Prefix (try (string "not") >> return (InitPrefixOp "not"))]
         ]
