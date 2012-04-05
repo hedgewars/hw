@@ -103,12 +103,12 @@ withLastIdNamespace f = do
     nss <- gets namespaces
     withState' (\st -> st{currentScope = fromMaybe [] $ Map.lookup li (namespaces st)}) f
 
-withRecordNamespace :: [(String, BaseType)] -> State RenderState Doc -> State RenderState Doc
-withRecordNamespace [] = error "withRecordNamespace: empty record"
-withRecordNamespace recs = withState' f
+withRecordNamespace :: String -> [(String, BaseType)] -> State RenderState Doc -> State RenderState Doc
+withRecordNamespace _ [] = error "withRecordNamespace: empty record"
+withRecordNamespace prefix recs = withState' f
     where
         f st = st{currentScope = records ++ currentScope st}
-        records = map (\(a, b) -> (map toLower a, (a, b))) recs
+        records = map (\(a, b) -> (map toLower a, (prefix ++ a, b))) recs
 
 toCFiles :: Map.Map String [Record] -> (String, PascalUnit) -> IO ()
 toCFiles _ (_, System _) = return ()
@@ -119,8 +119,8 @@ toCFiles ns p@(fn, pu) = do
     toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C initialState . pascal2C) p
     toCFiles' (fn, (Unit unitId interface implementation _ _)) = do
         let (a, s) = runState (id2C IOInsert (setBaseType BTUnit unitId) >> interface2C interface) initialState
-        writeFile (fn ++ ".h") $ "#pragma once\n" ++ (render a)
-        writeFile (fn ++ ".c") $ (render2C s . implementation2C) implementation
+        writeFile (fn ++ ".h") $ "#pragma once\n\n" ++ (render a)
+        writeFile (fn ++ ".c") $ "#include \"pas2c.h\"\n#include \"" ++ fn ++ ".h\"\n" ++ (render2C s . implementation2C) implementation
     initialState = emptyState ns
 
     render2C :: RenderState -> State RenderState Doc -> String
@@ -342,6 +342,7 @@ initExpr2C (InitReference i) = id2C IOLookup i
 initExpr2C (InitRecord fields) = do
     (fs :: [Doc]) <- mapM (\(Identifier a _, b) -> liftM (text "." <> text a <+> equals <+>) $ initExpr2C b) fields
     return $ lbrace $+$ (nest 4 . vcat $ fs) $+$ rbrace
+initExpr2C (InitArray [value]) = initExpr2C value
 initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
 initExpr2C (InitRange _) = return $ text "<<range expression>>"
 initExpr2C (InitSet _) = return $ text "<<set>>"
@@ -426,9 +427,7 @@ phrase2C wb@(WithBlock ref p) = do
     r <- ref2C ref 
     t <- gets lastType
     case t of
-        (BTRecord rs) -> do
-            ph <- withRecordNamespace rs $ phrase2C $ wrapPhrase p
-            return $ text "namespace" <> parens r $$ ph
+        (BTRecord rs) -> withRecordNamespace (render r ++ ".") rs $ phrase2C $ wrapPhrase p
         a -> do
             ns <- gets currentScope
             error $ "'with' block referencing non-record type " ++ show a ++ "\n" ++ show wb ++ "\nnamespace: " ++ show (take 100 ns)
@@ -501,7 +500,7 @@ ref2C rf@(RecordField (Dereference ref1) ref2) = do
     t <- fromPointer (show ref1) =<< gets lastType
     ns <- gets currentScope
     r2 <- case t of
-        BTRecord rs -> withRecordNamespace rs $ ref2C ref2
+        BTRecord rs -> withRecordNamespace "" rs $ ref2C ref2
         BTUnit -> withLastIdNamespace $ ref2C ref2
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf ++ "\n" ++ show (take 100 ns)
     return $ 
@@ -511,7 +510,7 @@ ref2C rf@(RecordField ref1 ref2) = do
     t <- gets lastType
     ns <- gets currentScope
     r2 <- case t of
-        BTRecord rs -> withRecordNamespace rs $ ref2C ref2
+        BTRecord rs -> withRecordNamespace "" rs $ ref2C ref2
         BTUnit -> withLastIdNamespace $ ref2C ref2
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf ++ "\n" ++ show (take 100 ns)
     return $ 
@@ -520,7 +519,7 @@ ref2C d@(Dereference ref) = do
     r <- ref2C ref
     t <- fromPointer (show d) =<< gets lastType
     modify (\st -> st{lastType = t})
-    return $ (parens $ text "*") <> r
+    return $ (parens $ text "*" <> r)
 ref2C (FunCall params ref) = do
     ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
     r <- ref2C ref
