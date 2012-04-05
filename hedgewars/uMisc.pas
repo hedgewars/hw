@@ -153,13 +153,11 @@ function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect;
 {$ELSE}
 function SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect;
 {$ENDIF}
-var rect: TSDL_Rect;
 begin
-    rect.x:= x;
-    rect.y:= y;
-    rect.w:= width;
-    rect.h:= height;
-    exit(rect);
+    SDL_RectMake.x:= x;
+    SDL_RectMake.y:= y;
+    SDL_RectMake.w:= width;
+    SDL_RectMake.h:= height;
 end;
 
 function GetTeamStatString(p: PTeam): shortstring;
