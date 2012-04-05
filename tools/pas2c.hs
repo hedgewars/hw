@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module Pas2C where
 
 import Text.PrettyPrint.HughesPJ
@@ -13,6 +14,7 @@ import Control.Exception
 import System.IO.Error
 import qualified Data.Map as Map
 import Data.List (find)
+import Numeric
 
 import PascalParser
 import PascalUnitSyntaxTree
@@ -323,6 +325,9 @@ tvar2C f (OperatorDeclaration op i ret params body) =
 
     
 initExpr2C :: InitExpression -> State RenderState Doc
+initExpr2C InitNull = return $ text "NULL"
+initExpr2C (InitAddress expr) = liftM ((<>) (text "&")) (initExpr2C expr)
+initExpr2C (InitPrefixOp op expr) = liftM2 (<>) (op2C op) (initExpr2C expr)
 initExpr2C (InitBinOp op expr1 expr2) = do
     e1 <- initExpr2C expr1
     e2 <- initExpr2C expr2
@@ -332,8 +337,16 @@ initExpr2C (InitNumber s) = return $ text s
 initExpr2C (InitFloat s) = return $ text s
 initExpr2C (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 initExpr2C (InitString s) = return $ doubleQuotes $ text s 
+initExpr2C (InitChar a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
 initExpr2C (InitReference i) = id2C IOLookup i
-initExpr2C _ = return $ text "<<expression>>"
+initExpr2C (InitRecord fields) = do
+    (fs :: [Doc]) <- mapM (\(Identifier a _, b) -> liftM (text "." <> text a <+> equals <+>) $ initExpr2C b) fields
+    return $ lbrace $+$ (nest 4 . vcat $ fs) $+$ rbrace
+initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
+initExpr2C (InitRange _) = return $ text "<<range expression>>"
+initExpr2C (InitSet _) = return $ text "<<set>>"
+initExpr2C (BuiltInFunction {}) = return $ text "<<built-in function>>"
+initExpr2C a = error $ "Don't know how to render " ++ show a
 
 
 type2C :: TypeDecl -> State RenderState Doc
@@ -350,15 +363,25 @@ type2C t = do
     type2C' (PointerTo t) = liftM (<> text "*") $ type2C t
     type2C' (RecordType tvs union) = do
         t <- withState' id $ mapM (tvar2C False) tvs
-        return $ text "{" $+$ (nest 4 . vcat $ t) $+$ text "}"
+        return $ lbrace $+$ (nest 4 . vcat $ t) $+$ rbrace
     type2C' (RangeType r) = return $ text "<<range type>>"
     type2C' (Sequence ids) = do
         mapM_ (id2C IOInsert) ids
         return $ text "<<sequence type>>"
-    type2C' (ArrayDecl r t) = return $ text "<<array type>>"
+    type2C' (ArrayDecl r t) = do
+        t' <- type2C t
+        return $ t' <> brackets (text "<<range>>")
     type2C' (Set t) = return $ text "<<set>>"
     type2C' (FunctionType returnType params) = return $ text "<<function>>"
-    type2C' (DeriveType _) = return $ text "<<type derived from constant literal>>"
+    type2C' (DeriveType (InitBinOp {})) = return $ text "int"
+    type2C' (DeriveType (InitPrefixOp _ i)) = type2C' (DeriveType i)
+    type2C' (DeriveType (InitNumber _)) = return $ text "int"
+    type2C' (DeriveType (InitHexNumber _)) = return $ text "int"
+    type2C' (DeriveType (InitFloat _)) = return $ text "float"
+    type2C' (DeriveType (BuiltInFunction {})) = return $ text "int"
+    type2C' (DeriveType (InitString {})) = return $ text "string255"
+    type2C' (DeriveType (InitReference {})) = return $ text "<<some type>>"
+    type2C' (DeriveType a) = error $ "Can't derive type from " ++ show a
 
 phrase2C :: Phrase -> State RenderState Doc
 phrase2C (Phrases p) = do
@@ -441,22 +464,26 @@ expr2C (FloatLiteral s) = return $ text s
 expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 expr2C (StringLiteral s) = return $ doubleQuotes $ text s 
 expr2C (Reference ref) = ref2C ref
-expr2C (PrefixOp op expr) = liftM2 (<+>) (op2C op) (expr2C expr)
+expr2C (PrefixOp op expr) = liftM2 (<>) (op2C op) (expr2C expr)
 expr2C Null = return $ text "NULL"
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref 
     ps <- mapM expr2C params
     return $ 
         r <> parens (hsep . punctuate (char ',') $ ps)
-expr2C _ = return $ text "<<expression>>"
+expr2C (CharCode a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
+expr2C (HexCharCode a) = return $ quotes $ text "\\x" <> text (map toLower a)
+expr2C (SetExpression ids) = mapM (id2C IOLookup) ids >>= return . parens . hcat . punctuate (text " | ")
+expr2C a = error $ "Don't know how to render " ++ show a
 
 
 ref2C :: Reference -> State RenderState Doc
 -- rewrite into proper form
-ref2C r@(RecordField ref1 (ArrayElement exprs ref2)) = ref2C $ ArrayElement exprs (RecordField ref1 ref2)
-ref2C r@(RecordField ref1 (Dereference ref2)) = ref2C $ Dereference (RecordField ref1 ref2)
-ref2C r@(RecordField ref1 (RecordField ref2 ref3)) = ref2C $ RecordField (RecordField ref1 ref2) ref3
-ref2C r@(RecordField ref1 (FunCall params ref2)) = ref2C $ FunCall params (RecordField ref1 ref2)
+ref2C (RecordField ref1 (ArrayElement exprs ref2)) = ref2C $ ArrayElement exprs (RecordField ref1 ref2)
+ref2C (RecordField ref1 (Dereference ref2)) = ref2C $ Dereference (RecordField ref1 ref2)
+ref2C (RecordField ref1 (RecordField ref2 ref3)) = ref2C $ RecordField (RecordField ref1 ref2) ref3
+ref2C (RecordField ref1 (FunCall params ref2)) = ref2C $ FunCall params (RecordField ref1 ref2)
+ref2C (ArrayElement (a:b:xs) ref) = ref2C $ ArrayElement (b:xs) (ArrayElement [a] ref)
 -- conversion routines
 ref2C ae@(ArrayElement exprs ref) = do
     es <- mapM expr2C exprs
@@ -464,10 +491,6 @@ ref2C ae@(ArrayElement exprs ref) = do
     t <- gets lastType
     ns <- gets currentScope
     case t of
-         (BTArray _ ta@(BTArray _ t')) 
-            | length exprs == 2 -> modify (\st -> st{lastType = t'})
-            | length exprs == 1 -> modify (\st -> st{lastType = ta})
-            | otherwise -> error $ "Array has more than two dimensions"
          (BTArray _ t') -> modify (\st -> st{lastType = t'})
          (BTString) -> modify (\st -> st{lastType = BTChar})
          a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae ++ "\n" ++ show (take 100 ns)
@@ -531,5 +554,3 @@ op2C "<>" = return $ text "!="
 op2C "=" = return $ text "=="
 op2C a = return $ text a
 
-maybeVoid "" = "void"
-maybeVoid a = a
