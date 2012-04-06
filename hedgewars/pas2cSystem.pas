@@ -126,4 +126,5 @@ var
     
     Assigned : function : boolean;
     
-
+    _strconcat : function : string;
+    _strcompare, _strncompare : function : boolean;

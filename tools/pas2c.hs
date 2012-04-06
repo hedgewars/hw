@@ -327,12 +327,11 @@ tvar2C f (OperatorDeclaration op i ret params body) =
 initExpr2C :: InitExpression -> State RenderState Doc
 initExpr2C InitNull = return $ text "NULL"
 initExpr2C (InitAddress expr) = liftM ((<>) (text "&")) (initExpr2C expr)
-initExpr2C (InitPrefixOp op expr) = liftM2 (<>) (op2C op) (initExpr2C expr)
+initExpr2C (InitPrefixOp op expr) = liftM (text (op2C op) <>) (initExpr2C expr)
 initExpr2C (InitBinOp op expr1 expr2) = do
     e1 <- initExpr2C expr1
     e2 <- initExpr2C expr2
-    o <- op2C op
-    return $ parens $ e1 <+> o <+> e2
+    return $ parens $ e1 <+> text (op2C op) <+> e2
 initExpr2C (InitNumber s) = return $ text s
 initExpr2C (InitFloat s) = return $ text s
 initExpr2C (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
@@ -455,15 +454,21 @@ expr2C :: Expression -> State RenderState Doc
 expr2C (Expression s) = return $ text s
 expr2C (BinOp op expr1 expr2) = do
     e1 <- expr2C expr1
+    t1 <- gets lastType
     e2 <- expr2C expr2
-    o <- op2C op
-    return $ parens $ e1 <+> o <+> e2
+    case (op2C op, t1) of
+        ("+", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction BTString))
+        --("==", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction BTBool))
+        --("!=", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction BTBool))
+        ("&", BTBool) -> return $ parens $ e1 <+> text "&&" <+> e2
+        ("|", BTBool) -> return $ parens $ e1 <+> text "||" <+> e2
+        (o, _) -> return $ parens $ e1 <+> text o <+> e2
 expr2C (NumberLiteral s) = return $ text s
 expr2C (FloatLiteral s) = return $ text s
 expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 expr2C (StringLiteral s) = return $ doubleQuotes $ text s 
 expr2C (Reference ref) = ref2C ref
-expr2C (PrefixOp op expr) = liftM2 (<>) (op2C op) (expr2C expr)
+expr2C (PrefixOp op expr) = liftM (text (op2C op) <>) (expr2C expr)
 expr2C Null = return $ text "NULL"
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref 
@@ -540,16 +545,16 @@ ref2C (TypeCast t' expr) = do
 ref2C (RefExpression expr) = expr2C expr
 
 
-op2C :: String -> State RenderState Doc
-op2C "or" = return $ text "|"
-op2C "and" = return $ text "&"
-op2C "not" = return $ text "!"
-op2C "xor" = return $ text "^"
-op2C "div" = return $ text "/"
-op2C "mod" = return $ text "%"
-op2C "shl" = return $ text "<<"
-op2C "shr" = return $ text ">>"
-op2C "<>" = return $ text "!="
-op2C "=" = return $ text "=="
-op2C a = return $ text a
+op2C :: String -> String
+op2C "or" = "|"
+op2C "and" = "&"
+op2C "not" = "!"
+op2C "xor" = "^"
+op2C "div" = "/"
+op2C "mod" = "%"
+op2C "shl" = "<<"
+op2C "shr" = ">>"
+op2C "<>" = "!="
+op2C "=" = "=="
+op2C a = a
 
