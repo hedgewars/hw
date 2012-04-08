@@ -53,9 +53,10 @@ static UIViewController *callingController;
     [thisWindow addSubview:self.blackView];
     [self.blackView release];
 
-    // keep track of uncompleted games
+    // keep the point of return for games that completed loading
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
+    [userDefaults setObject:[NSNumber numberWithBool:NO] forKey:@"saveIsValid"];
     [userDefaults synchronize];
 
     // let's launch the engine using this -perfomSelector so that the runloop can deal with queued messages first

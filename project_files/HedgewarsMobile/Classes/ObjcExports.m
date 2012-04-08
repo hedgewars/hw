@@ -64,6 +64,9 @@ void stopLoadingIndicator() {
         [overlay_instance.loadingIndicator removeFromSuperview];
         [HWUtils setGameStatus:gsInGame];
     }
+    // mark the savefile as valid, eg it's been loaded correctly
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"saveIsValid"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 void saveFinishedSynching() {
