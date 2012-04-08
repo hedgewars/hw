@@ -138,9 +138,9 @@ for j:= 0 to Pred(ControllerNumControllers) do
 // ctrl/cmd + q to close engine and frontend
 {$IFDEF DARWIN}
     if ((tkbdn[KeyNameToCode('left_meta')] = 1) or (tkbdn[KeyNameToCode('right_meta')] = 1)) then
-        {$ELSE}
+{$ELSE}
     if ((tkbdn[KeyNameToCode('left_ctrl')] = 1) or (tkbdn[KeyNameToCode('right_ctrl')] = 1)) then
-        {$ENDIF}
+{$ENDIF}
     begin
         if tkbdn[KeyNameToCode('q')] = 1 then ParseCommand ('halt', true)
     end;
