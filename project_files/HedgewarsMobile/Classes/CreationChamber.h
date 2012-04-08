@@ -24,6 +24,7 @@
 
 }
 
++(void) createFirstLaunch;
 +(void) createSettings;
 
 +(void) createTeamNamed:(NSString *)nameWithoutExt;
