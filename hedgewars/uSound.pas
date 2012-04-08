@@ -36,6 +36,7 @@ interface
 uses SDLh, uConsts, uTypes, sysutils;
 
 var MusicFN: shortstring; // music file name
+    previousVolume: LongInt; // cached volume value
 
 procedure initModule;
 procedure freeModule;
@@ -90,6 +91,9 @@ function  ChangeVolume(voldelta: LongInt): LongInt;
 // Returns a pointer to the voicepack with the given name.
 function  AskForVoicepack(name: shortstring): Pointer;
 
+// Drastically lower the volume when we lose focus (and restore the previous value)
+procedure DampenAudio;
+procedure UndampenAudio;
 
 implementation
 uses uVariables, uConsole, uUtils, uCommands, uDebug;
@@ -475,6 +479,17 @@ begin
     if isMusicEnabled then
         Mix_VolumeMusic(Volume * 4 div 8);
     ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
+end;
+
+procedure DampenAudio;
+begin
+previousVolume:= Volume;
+ChangeVolume(-Volume * 7 div 9);
+end;
+
+procedure UndampenAudio;
+begin
+ChangeVolume(previousVolume - Volume);
 end;
 
 procedure PauseMusic;

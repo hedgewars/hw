@@ -1712,6 +1712,9 @@ procedure onFocusStateChanged;
 begin
 if (not cHasFocus) and (GameState <> gsConfirm) then
     ParseCommand('quit', true);
+
+if not cHasFocus then DampenAudio()
+else UndampenAudio();
 end;
 
 procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);
