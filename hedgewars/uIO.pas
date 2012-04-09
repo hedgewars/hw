@@ -348,7 +348,7 @@ while (headcmd <> nil)
         'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
         else
-            if headcmd^.cmd >= #128 and headcmd^.cmd <= char(128 + cMaxSlotIndex) then
+            if (headcmd^.cmd >= #128) and (headcmd^.cmd <= char(128 + cMaxSlotIndex)) then
                 ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
                 else
                 OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
