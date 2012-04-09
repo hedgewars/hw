@@ -305,13 +305,13 @@ tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested f
 tvar2C _ td@(TypeDeclaration i' t) = do
     i <- id2CTyped t i'
     tp <- type2C t
-    return $ text "typedef" <+> i <+> tp <> semi
+    return $ text "typedef" <+> tp <+> i <> semi
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- type2C t
     i <- mapM (id2CTyped t) ids
     ie <- initExpr mInitExpr
-    return $ if isConst then text "const" else empty
+    return $ (if isConst then text "const" else empty)
         <+> t'
         <+> (hsep . punctuate (char ',') $ i)
         <+> ie
@@ -368,11 +368,11 @@ type2C t = do
     where
     type2C' VoidType = return $ text "void"
     type2C' (String l) = return $ text $ "string" ++ show l
-    type2C' (PointerTo (SimpleType i)) = liftM (<> text "*") $ id2C IODeferred i
+    type2C' (PointerTo (SimpleType i)) = liftM (\i -> text "struct" <+> i <+> text "*") $ id2C IODeferred i
     type2C' (PointerTo t) = liftM (<> text "*") $ type2C t
     type2C' (RecordType tvs union) = do
         t <- withState' id $ mapM (tvar2C False) tvs
-        return $ lbrace $+$ (nest 4 . vcat $ t) $+$ rbrace
+        return $ text "struct" <+> lbrace $+$ (nest 4 . vcat $ t) $+$ rbrace
     type2C' (RangeType r) = return $ text "<<range type>>"
     type2C' (Sequence ids) = do
         mapM_ (id2C IOInsert) ids

@@ -113,7 +113,7 @@ constsDecl = do
         comments
         e <- initExpression
         comments
-        return $ VarDeclaration False ([i], fromMaybe (DeriveType e) t) (Just e)
+        return $ VarDeclaration (isNothing t) ([i], fromMaybe (DeriveType e) t) (Just e)
         
 typeDecl = choice [
     char '^' >> typeDecl >>= return . PointerTo
