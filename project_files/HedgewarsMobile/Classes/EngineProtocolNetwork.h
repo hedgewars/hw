@@ -18,6 +18,7 @@
 
 
 #import <Foundation/Foundation.h>
+#import "SDL_net.h"
 
 
 @interface EngineProtocolNetwork : NSObject {

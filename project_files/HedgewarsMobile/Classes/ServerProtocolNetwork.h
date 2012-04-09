@@ -18,7 +18,7 @@
 
 
 #import <Foundation/Foundation.h>
-//#import "EngineProtocolNetwork.h"
+#import "SDL_net.h"
 
 
 @interface ServerProtocolNetwork : NSObject {
