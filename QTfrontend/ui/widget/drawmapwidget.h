@@ -70,6 +70,7 @@ class DrawMapWidget : public QWidget
     public slots:
         void undo();
         void clear();
+        void setErasing(bool erasing);
         void save(const QString & fileName);
         void load(const QString & fileName);
 

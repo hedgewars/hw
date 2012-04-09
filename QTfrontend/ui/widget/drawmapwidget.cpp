@@ -80,6 +80,11 @@ void DrawMapWidget::clear()
     if(m_scene) m_scene->clearMap();
 }
 
+void DrawMapWidget::setErasing(bool erasing)
+{
+    if(m_scene) m_scene->setErasing(erasing);
+}
+
 void DrawMapWidget::save(const QString & fileName)
 {
     if(m_scene)

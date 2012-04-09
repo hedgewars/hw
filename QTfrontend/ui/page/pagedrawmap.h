@@ -41,6 +41,7 @@ class PageDrawMap : public AbstractPage
         QPushButton * pbClear;
         QPushButton * pbLoad;
         QPushButton * pbSave;
+        QCheckBox * cbEraser;
 
     private slots:
         void load();

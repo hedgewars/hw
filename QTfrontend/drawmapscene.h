@@ -24,7 +24,14 @@
 
 class QGraphicsPathItem;
 
-typedef QList<QPair<quint8, QList<QPoint> > > Paths;
+struct PathParams
+{
+    quint8 width;
+    bool erasing;
+    QList<QPoint> points;
+};
+
+typedef QList<PathParams> Paths;
 
 class DrawMapScene : public QGraphicsScene
 {
@@ -42,13 +49,16 @@ class DrawMapScene : public QGraphicsScene
         void undo();
         void clearMap();
         void simplifyLast();
+        void setErasing(bool erasing);
 
     private:
         QPen m_pen;
+        QBrush m_eraser;
         QBrush m_brush;
         QGraphicsPathItem  * m_currPath;
         Paths paths;
         Paths oldPaths;
+        bool m_isErasing;
         QList<QGraphicsItem *> oldItems;
 
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
