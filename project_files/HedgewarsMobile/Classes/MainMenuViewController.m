@@ -82,7 +82,7 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    [AudioManagerController playBackgroundMusic];
+    [[AudioManagerController mainManager] playBackgroundMusic];
     [super viewWillAppear:animated];
 }
 
@@ -93,7 +93,7 @@
     NSString *xib = nil;
     NSString *debugStr = nil;
 
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {

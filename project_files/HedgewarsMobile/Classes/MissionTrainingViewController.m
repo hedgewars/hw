@@ -64,7 +64,7 @@
     UIButton *button = (UIButton *)sender;
 
     if (button.tag == 0) {
-        [AudioManagerController playBackSound];
+        [[AudioManagerController mainManager] playBackSound];
         [[self parentViewController] dismissModalViewControllerAnimated:YES];
     } else {
         [GameInterfaceBridge registerCallingController:self];
