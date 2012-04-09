@@ -127,9 +127,8 @@ static AudioManagerController *mainInstance;
     SystemSoundID soundID;
 
     // get the filename of the sound file in a NSURL format
-    NSString *path = [[NSString alloc] initWithFormat:@"%@/%@",[[NSBundle mainBundle] resourcePath],snd];
+    NSString *path = [[NSBundle mainBundle] pathForResource:snd ofType:@"caf"];
     NSURL *filePath = [NSURL fileURLWithPath:path isDirectory:NO];
-    [path release];
 
     // use audio sevices to create and play the sound
     AudioServicesCreateSystemSoundID((CFURLRef)filePath, &soundID);
@@ -147,7 +146,7 @@ static AudioManagerController *mainInstance;
         return;
     
     if (self.clickSound == -1)
-        self.clickSound = [self loadSound:@"clickSound.wav"];
+        self.clickSound = [self loadSound:@"clickSound"];
     
     AudioServicesPlaySystemSound(self.clickSound);
 }
@@ -157,7 +156,7 @@ static AudioManagerController *mainInstance;
         return;
     
     if (self.backSound == -1)
-        self.backSound = [self loadSound:@"backSound.wav"];
+        self.backSound = [self loadSound:@"backSound"];
     
     AudioServicesPlaySystemSound(self.backSound);
 }
@@ -167,7 +166,7 @@ static AudioManagerController *mainInstance;
         return;
     
     if (self.selSound == -1)
-        self.selSound = [self loadSound:@"selSound.wav"];
+        self.selSound = [self loadSound:@"selSound"];
     
     AudioServicesPlaySystemSound(self.selSound);
 }

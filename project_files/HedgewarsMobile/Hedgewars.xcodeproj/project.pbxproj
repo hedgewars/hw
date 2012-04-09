@@ -69,8 +69,8 @@
 		611E0EE711FB20610077A41E /* ammoButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE511FB20610077A41E /* ammoButton.png */; };
 		611E0EE811FB20610077A41E /* cornerButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 611E0EE611FB20610077A41E /* cornerButton.png */; };
 		611E12FF117BBBDA0044B62F /* Entitlements-Development.plist in Resources */ = {isa = PBXBuildFile; fileRef = 611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */; };
-		611EE974122A9C4100DF6938 /* clickSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE973122A9C4100DF6938 /* clickSound.wav */; };
-		611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D8122AA10A00DF6938 /* selSound.wav */; };
+		611EE974122A9C4100DF6938 /* clickSound.caf in Resources */ = {isa = PBXBuildFile; fileRef = 611EE973122A9C4100DF6938 /* clickSound.caf */; };
+		611EE9DA122AA10A00DF6938 /* selSound.caf in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D8122AA10A00DF6938 /* selSound.caf */; };
 		611EEAEE122B2A4D00DF6938 /* HelpPageInGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 611EEAEC122B2A4D00DF6938 /* HelpPageInGameViewController.m */; };
 		611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */; };
 		611EEBC1122B34A800DF6938 /* helpingame.png in Resources */ = {isa = PBXBuildFile; fileRef = 611EEBC0122B34A800DF6938 /* helpingame.png */; };
@@ -190,7 +190,7 @@
 		6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880E114AA34C00BA94A9 /* uVisualGears.pas */; };
 		6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
 		61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798934114AB25F00BA94A9 /* AudioToolbox.framework */; };
-		61808A5D128C930A005D0E2F /* backSound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D7122AA10A00DF6938 /* backSound.wav */; };
+		61808A5D128C930A005D0E2F /* backSound.caf in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D7122AA10A00DF6938 /* backSound.caf */; };
 		61842B24122B619D0096E335 /* HelpPageInGameViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61842B23122B619D0096E335 /* HelpPageInGameViewController-iPad.xib */; };
 		61842B3E122B65BD0096E335 /* helpabove.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3D122B65BD0096E335 /* helpabove.png */; };
 		61842B40122B66280096E335 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61842B3F122B66280096E335 /* helpleft.png */; };
@@ -416,9 +416,9 @@
 		611E0EE511FB20610077A41E /* ammoButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ammoButton.png; path = Resources/Overlay/ammoButton.png; sourceTree = "<group>"; };
 		611E0EE611FB20610077A41E /* cornerButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cornerButton.png; path = Resources/Overlay/cornerButton.png; sourceTree = "<group>"; };
 		611E12FE117BBBDA0044B62F /* Entitlements-Development.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Development.plist"; sourceTree = "<group>"; };
-		611EE973122A9C4100DF6938 /* clickSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = clickSound.wav; path = Resources/clickSound.wav; sourceTree = "<group>"; };
-		611EE9D7122AA10A00DF6938 /* backSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = backSound.wav; path = Resources/backSound.wav; sourceTree = "<group>"; };
-		611EE9D8122AA10A00DF6938 /* selSound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = selSound.wav; path = Resources/selSound.wav; sourceTree = "<group>"; };
+		611EE973122A9C4100DF6938 /* clickSound.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = clickSound.caf; path = Resources/clickSound.caf; sourceTree = "<group>"; };
+		611EE9D7122AA10A00DF6938 /* backSound.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = backSound.caf; path = Resources/backSound.caf; sourceTree = "<group>"; };
+		611EE9D8122AA10A00DF6938 /* selSound.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = selSound.caf; path = Resources/selSound.caf; sourceTree = "<group>"; };
 		611EEAEB122B2A4D00DF6938 /* HelpPageInGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageInGameViewController.h; sourceTree = "<group>"; };
 		611EEAEC122B2A4D00DF6938 /* HelpPageInGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageInGameViewController.m; sourceTree = "<group>"; };
 		611EEAED122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "HelpPageLobbyViewController-iPad.xib"; sourceTree = "<group>"; };
@@ -891,9 +891,9 @@
 			isa = PBXGroup;
 			children = (
 				612CABC71391D3CC005E9596 /* hwclassic.mp3 */,
-				611EE973122A9C4100DF6938 /* clickSound.wav */,
-				611EE9D7122AA10A00DF6938 /* backSound.wav */,
-				611EE9D8122AA10A00DF6938 /* selSound.wav */,
+				611EE973122A9C4100DF6938 /* clickSound.caf */,
+				611EE9D7122AA10A00DF6938 /* backSound.caf */,
+				611EE9D8122AA10A00DF6938 /* selSound.caf */,
 			);
 			name = Sounds;
 			sourceTree = "<group>";
@@ -1516,8 +1516,8 @@
 				615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */,
 				615AD9E9120764CA00F2FF04 /* backButton.png in Resources */,
 				615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */,
-				611EE974122A9C4100DF6938 /* clickSound.wav in Resources */,
-				611EE9DA122AA10A00DF6938 /* selSound.wav in Resources */,
+				611EE974122A9C4100DF6938 /* clickSound.caf in Resources */,
+				611EE9DA122AA10A00DF6938 /* selSound.caf in Resources */,
 				611EEAEF122B2A4D00DF6938 /* HelpPageLobbyViewController-iPad.xib in Resources */,
 				611EEBC1122B34A800DF6938 /* helpingame.png in Resources */,
 				611EEBC4122B355700DF6938 /* helpbottom.png in Resources */,
@@ -1538,7 +1538,7 @@
 				61E2F7451283752C00E12521 /* tw.png in Resources */,
 				61DF0EDC1284DF2300F3F10B /* HelpPageLobbyViewController-iPhone.xib in Resources */,
 				61DF0F211284F72A00F3F10B /* HelpPageInGameViewController-iPhone.xib in Resources */,
-				61808A5D128C930A005D0E2F /* backSound.wav in Resources */,
+				61808A5D128C930A005D0E2F /* backSound.caf in Resources */,
 				61D3D2A51290E03A003CE7C3 /* irc.png in Resources */,
 				6172FED91298CF9800D73365 /* background~iphone.png in Resources */,
 				6172FEEF1298D25D00D73365 /* mediumBackground~ipad.png in Resources */,
