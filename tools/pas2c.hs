@@ -305,7 +305,7 @@ tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested f
 tvar2C _ td@(TypeDeclaration i' t) = do
     i <- id2CTyped t i'
     tp <- type2C t
-    return $ text "type" <+> i <+> tp <> semi
+    return $ text "typedef" <+> i <+> tp <> semi
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- type2C t
@@ -335,6 +335,7 @@ initExpr2C (InitBinOp op expr1 expr2) = do
 initExpr2C (InitNumber s) = return $ text s
 initExpr2C (InitFloat s) = return $ text s
 initExpr2C (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
+initExpr2C (InitString [a]) = return . quotes $ text [a]
 initExpr2C (InitString s) = return $ doubleQuotes $ text s 
 initExpr2C (InitChar a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
 initExpr2C (InitReference i) = id2C IOLookup i
@@ -348,8 +349,14 @@ initExpr2C (InitRange a) = return $ text "<<range>>"
 initExpr2C (InitSet []) = return $ text "0"
 initExpr2C (InitSet a) = return $ text "<<set>>"
 initExpr2C (BuiltInFunction {}) = return $ text "<<built-in function>>"
-initExpr2C a = error $ "Don't know how to render " ++ show a
+initExpr2C a = error $ "initExpr2C: don't know how to render " ++ show a
 
+range2C :: InitExpression -> State RenderState [Doc]
+range2C (InitString [a]) = return [quotes $ text [a]]
+range2C (InitRange (Range i)) = liftM (flip (:) []) $ id2C IOLookup i
+range2C (InitRange (RangeFromTo (InitString [a]) (InitString [b]))) = return $ map (\i -> quotes $ text [i]) [a..b]
+    
+range2C a = liftM (flip (:) []) $ initExpr2C a
 
 type2C :: TypeDecl -> State RenderState Doc
 type2C (SimpleType i) = id2C IOLookup i
@@ -415,15 +422,21 @@ phrase2C (WhileCycle expr phrase) = do
 phrase2C (SwitchCase expr cases mphrase) = do
     e <- expr2C expr
     cs <- mapM case2C cases
+    d <- dflt
     return $ 
-        text "switch" <> parens e <> text "of" $+$ (nest 4 . vcat) cs
+        text "switch" <> parens e <> text "of" $+$ braces (nest 4 . vcat $ cs ++ d)
     where
     case2C :: ([InitExpression], Phrase) -> State RenderState Doc
     case2C (e, p) = do
-        ie <- mapM initExpr2C e
+        ies <- mapM range2C e
         ph <- phrase2C p
         return $ 
-            text "case" <+> parens (hsep . punctuate (char ',') $ ie) <> char ':' <> nest 4 (ph $+$ text "break;")
+             vcat (map (\i -> text "case" <+> i <> colon) . concat $ ies) <> nest 4 (ph $+$ text "break;")
+    dflt | isNothing mphrase = return []
+         | otherwise = do
+             ph <- mapM phrase2C $ fromJust mphrase
+             return [text "default:" <+> nest 4 (vcat ph)]
+                                         
 phrase2C wb@(WithBlock ref p) = do
     r <- ref2C ref 
     t <- gets lastType
@@ -451,7 +464,6 @@ phrase2C NOP = return $ text ";"
 wrapPhrase p@(Phrases _) = p
 wrapPhrase p = Phrases [p]
 
-
 expr2C :: Expression -> State RenderState Doc
 expr2C (Expression s) = return $ text s
 expr2C (BinOp op expr1 expr2) = do
@@ -468,6 +480,7 @@ expr2C (BinOp op expr1 expr2) = do
 expr2C (NumberLiteral s) = return $ text s
 expr2C (FloatLiteral s) = return $ text s
 expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
+expr2C (StringLiteral [a]) = return . quotes $ text [a]
 expr2C (StringLiteral s) = return $ doubleQuotes $ text s 
 expr2C (Reference ref) = ref2C ref
 expr2C (PrefixOp op expr) = liftM (text (op2C op) <>) (expr2C expr)
