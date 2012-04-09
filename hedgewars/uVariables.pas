@@ -2563,6 +2563,12 @@ begin
     else
         cMaxCaptions:= 4;
 
+    vobFrameTicks:= 99999;
+    vobFramesCount:= 4;
+    vobCount:= 0;
+    vobVelocity:= 10;
+    vobFallSpeed:= 100;
+
     vobSDFrameTicks:= 99999;
     vobSDFramesCount:= 4;
     vobSDCount:= 30 * cScreenSpace div LAND_WIDTH;
