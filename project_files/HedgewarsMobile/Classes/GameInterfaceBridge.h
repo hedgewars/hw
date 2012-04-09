@@ -18,19 +18,18 @@
 
 
 #import <Foundation/Foundation.h>
+#import "EngineProtocolNetwork.h"
 
 
-@class EngineProtocolNetwork;
-
-@interface GameInterfaceBridge : NSObject {
+@interface GameInterfaceBridge : NSObject <EngineProtocolDelegate> {
     UIView *blackView;
     NSString *savePath;
-    EngineProtocolNetwork *proto;
+    NSInteger port;
 }
 
 @property (nonatomic,retain) UIView *blackView;
 @property (nonatomic,retain) NSString *savePath;
-@property (nonatomic,retain) EngineProtocolNetwork *proto;
+@property (assign) NSInteger port;
 
 +(void) startLocalGame:(NSDictionary *)withOptions;
 +(void) startSaveGame:(NSString *)atPath;
