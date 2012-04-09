@@ -343,8 +343,10 @@ initExpr2C (InitRecord fields) = do
     return $ lbrace $+$ (nest 4 . vcat $ fs) $+$ rbrace
 initExpr2C (InitArray [value]) = initExpr2C value
 initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
-initExpr2C (InitRange _) = return $ text "<<range expression>>"
-initExpr2C (InitSet _) = return $ text "<<set>>"
+initExpr2C (InitRange (Range i)) = id2C IOLookup i
+initExpr2C (InitRange a) = return $ text "<<range>>"
+initExpr2C (InitSet []) = return $ text "0"
+initExpr2C (InitSet a) = return $ text "<<set>>"
 initExpr2C (BuiltInFunction {}) = return $ text "<<built-in function>>"
 initExpr2C a = error $ "Don't know how to render " ++ show a
 
@@ -458,8 +460,8 @@ expr2C (BinOp op expr1 expr2) = do
     e2 <- expr2C expr2
     case (op2C op, t1) of
         ("+", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction BTString))
-        --("==", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction BTBool))
-        --("!=", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction BTBool))
+        ("==", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction BTBool))
+        ("!=", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction BTBool))
         ("&", BTBool) -> return $ parens $ e1 <+> text "&&" <+> e2
         ("|", BTBool) -> return $ parens $ e1 <+> text "||" <+> e2
         (o, _) -> return $ parens $ e1 <+> text o <+> e2
@@ -497,6 +499,11 @@ ref2C ae@(ArrayElement exprs ref) = do
     case t of
          (BTArray _ t') -> modify (\st -> st{lastType = t'})
          (BTString) -> modify (\st -> st{lastType = BTChar})
+         (BTPointerTo t) -> do
+                t'' <- fromPointer (show t) =<< gets lastType
+                case t'' of
+                     BTChar -> modify (\st -> st{lastType = BTChar})
+                     a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae ++ "\n" ++ show (take 100 ns)
          a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae ++ "\n" ++ show (take 100 ns)
     return $ r <> (brackets . hcat) (punctuate comma es)
 ref2C (SimpleReference name) = id2C IOLookup name
