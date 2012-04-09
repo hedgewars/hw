@@ -43,7 +43,7 @@ type
 
 var pointsListHead, pointsListLast: PPointEntry;
 
-procedure DrawLineOnLand(X1, Y1, X2, Y2, radius: LongInt);
+procedure DrawLineOnLand(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
 var  eX, eY, dX, dY: LongInt;
     i, sX, sY, x, y, d: LongInt;
     b: boolean;
@@ -110,7 +110,7 @@ begin
                 begin
                 inc(len);
                 if (len mod 4) = 0 then
-                    FillRoundInLand(X, Y, radius, lfBasic)
+                    FillRoundInLand(X, Y, radius, color)
                 end
         end
 end;
@@ -148,6 +148,7 @@ procedure Draw;
 var pe: PPointEntry;
     prevPoint: PointRec;
     radius: LongInt;
+    color: Longword;
 begin
     // shutup compiler
     prevPoint.X:= 0;
@@ -161,14 +162,18 @@ begin
         begin
         if (pe^.point.flags and $80 <> 0) then
             begin
-            radius:= (pe^.point.flags and $7F) * 5 + 3;
-            AddFileLog('[DRAW] Move to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
-            FillRoundInLand(pe^.point.X, pe^.point.Y, radius, lfBasic)
+            if (pe^.point.flags and $40 <> 0) then
+                color:= 0
+                else
+                color:= lfBasic;
+            radius:= (pe^.point.flags and $3F) * 5 + 3;
+            AddFileLog('[DRAW] Move to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+'), radius = '+inttostr(radius));
+            FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color)
             end
             else
             begin
-            AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
-            DrawLineOnLand(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y, radius);
+            AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+'), radius = '+inttostr(radius));
+            DrawLineOnLand(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y, radius, color);
             end;
 
         prevPoint:= pe^.point;

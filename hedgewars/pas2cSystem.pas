@@ -17,7 +17,6 @@ type
     Int = integer;
 
     pointer = pointer;
-    PChar = pointer;
 
     float = float;
     single = float;
@@ -36,6 +35,7 @@ type
     widechar = string;
 
     char = char;
+    PChar = ^char;
     
     PByte = ^Byte;
     PLongInt = ^LongInt;
