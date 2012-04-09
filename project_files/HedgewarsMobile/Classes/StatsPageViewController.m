@@ -161,7 +161,7 @@
 #pragma mark -
 #pragma mark button delegate
 -(void) dismissView {
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
     [self dismissModalViewControllerAnimated:YES];
 }
 

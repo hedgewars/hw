@@ -47,12 +47,12 @@
                 [alert show];
                 [alert release];
             } else {
-                [AudioManagerController playBackSound];
+                [[AudioManagerController mainManager] playBackSound];
                 [[self parentViewController] dismissModalViewControllerAnimated:YES];
             }
             break;
         case 1:
-            [AudioManagerController playClickSound];
+            [[AudioManagerController mainManager] playClickSound];
             if ([self isEverythingSet] == NO)
                 return;
             theButton.enabled = NO;
@@ -66,7 +66,7 @@
             
             break;
         case 2:
-            [AudioManagerController playClickSound];
+            [[AudioManagerController mainManager] playClickSound];
             if (self.helpPage == nil)
                 self.helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
@@ -85,7 +85,7 @@
 
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
 
-    [AudioManagerController playSelectSound];
+    [[AudioManagerController mainManager] playSelectSound];
     switch (theSegment.selectedSegmentIndex) {
         case 0:
             // this message is compulsory otherwise the table won't be loaded at all

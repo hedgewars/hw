@@ -68,7 +68,7 @@
     [HWUtils releaseCache];
     // don't stop music if it is playing
     if ([HWUtils isGameLaunched]) {
-        [AudioManagerController releaseCache];
+        [[AudioManagerController mainManager] didReceiveMemoryWarning];
         HW_memoryWarningCallback();
     }
     MSG_MEMCLEAN();

@@ -31,11 +31,11 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if (theButton.tag != 0) {
-        [AudioManagerController playClickSound];
+        [[AudioManagerController mainManager] playClickSound];
         [GameInterfaceBridge registerCallingController:self.parentViewController];
         [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
     } else {
-        [AudioManagerController playBackSound];
+        [[AudioManagerController mainManager] playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
         [defaults synchronize];
     }

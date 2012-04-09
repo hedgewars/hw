@@ -18,23 +18,41 @@
 
 
 #import <Foundation/Foundation.h>
+#import <AudioToolbox/AudioToolbox.h>
 
+
+@class AVAudioPlayer;
 
 @interface AudioManagerController : NSObject {
+    @private
+    AVAudioPlayer *backgroundMusic;
+    SystemSoundID clickSound;
+    SystemSoundID backSound;
+    SystemSoundID selSound;
 
+    NSOperationQueue *audioFaderQueue;
 }
 
-+(void) playBackgroundMusic;
-+(void) pauseBackgroundMusic;
-+(void) stopBackgroundMusic;
+@property (nonatomic,retain) AVAudioPlayer *backgroundMusic;
+@property (assign) SystemSoundID clickSound;
+@property (assign) SystemSoundID backSound;
+@property (assign) SystemSoundID selSound;
 
-+(void) fadeInBackgroundMusic;
-+(void) fadeOutBackgroundMusic;
+@property (nonatomic,retain) NSOperationQueue *audioFaderQueue;
 
-+(void) playClickSound;
-+(void) playBackSound;
-+(void) playSelectSound;
++(id) mainManager;
 
-+(void) releaseCache;
+-(void) playBackgroundMusic;
+-(void) pauseBackgroundMusic;
+-(void) stopBackgroundMusic;
+
+-(void) fadeInBackgroundMusic;
+-(void) fadeOutBackgroundMusic;
+
+-(void) playClickSound;
+-(void) playBackSound;
+-(void) playSelectSound;
+-(SystemSoundID) loadSound:(NSString *)snd;
+-(void) unloadSounds;
 
 @end

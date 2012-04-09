@@ -32,7 +32,7 @@ static UIViewController *callingController;
 // prepares the controllers for hosting a game
 -(void) earlyEngineLaunch:(NSDictionary *)optionsOrNil {
     [self retain];
-    [AudioManagerController fadeOutBackgroundMusic];
+    [[AudioManagerController mainManager] fadeOutBackgroundMusic];
 
     EngineProtocolNetwork *engineProtocol = [[EngineProtocolNetwork alloc] init];
     self.proto = engineProtocol;
@@ -101,7 +101,7 @@ static UIViewController *callingController;
         [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
 
     // restart music and we're done
-    [AudioManagerController fadeInBackgroundMusic];
+    [[AudioManagerController mainManager] fadeInBackgroundMusic];
     [HWUtils setGameStatus:gsNone];
     [HWUtils setGameType:gtNone];
     [self release];
