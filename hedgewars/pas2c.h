@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 typedef char string255[];
 
 typedef int SmallInt;
@@ -7,7 +9,16 @@ typedef int Word;
 typedef int LongInt;
 typedef int LongWord;
 typedef int Byte;
-typedef Byte * PByte;
+typedef int Integer;
+
+typedef float extended;
+typedef float real;
+
+typedef bool boolean;
 
 typedef void * pointer;
+typedef Byte * PByte;
+typedef char * PChar;
+typedef LongInt * PLongInt;
+typedef Integer * PInteger;
 
