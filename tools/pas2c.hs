@@ -119,12 +119,12 @@ toCFiles ns p@(fn, pu) = do
     toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C initialState . pascal2C) p
     toCFiles' (fn, (Unit unitId interface implementation _ _)) = do
         let (a, s) = runState (id2C IOInsert (setBaseType BTUnit unitId) >> interface2C interface) initialState
-        writeFile (fn ++ ".h") $ "#pragma once\n\n" ++ (render a)
+        writeFile (fn ++ ".h") $ "#pragma once\n\n" ++ (render (a $+$ text ""))
         writeFile (fn ++ ".c") $ "#include \"pas2c.h\"\n#include \"" ++ fn ++ ".h\"\n" ++ (render2C s . implementation2C) implementation
     initialState = emptyState ns
 
     render2C :: RenderState -> State RenderState Doc -> String
-    render2C a = render . flip evalState a
+    render2C a = render . ($+$ text "") . flip evalState a
 
 usesFiles :: PascalUnit -> [String]
 usesFiles (Program _ (Implementation uses _) _) = "pas2cSystem" : uses2List uses
@@ -138,7 +138,7 @@ pascal2C (Unit _ interface implementation init fin) =
     
 pascal2C (Program _ implementation mainFunction) = do
     impl <- implementation2C implementation
-    main <- tvar2C True 
+    [main] <- tvar2C True 
         (FunctionDeclaration (Identifier "main" BTInt) (SimpleType $ Identifier "int" BTInt) [] (Just (TypesAndVars [], mainFunction)))
     return $ impl $+$ main
 
@@ -152,7 +152,7 @@ implementation2C (Implementation uses tvars) = liftM2 ($+$) (uses2C uses) (types
 
 
 typesAndVars2C :: Bool -> TypesAndVars -> State RenderState Doc
-typesAndVars2C b (TypesAndVars ts) = liftM vcat $ mapM (tvar2C b) ts
+typesAndVars2C b (TypesAndVars ts) = liftM (vcat . map (<> semi) . concat) $ mapM (tvar2C b) ts
 
 setBaseType :: BaseType -> Identifier -> Identifier
 setBaseType bt (Identifier i _) = Identifier i bt
@@ -267,35 +267,37 @@ fromPointer s t = do
     ns <- gets currentScope
     error $ "Dereferencing from non-pointer type " ++ show t ++ "\n" ++ s ++ "\n\n" ++ show (take 100 ns)
 
+    
+functionParams2C params = liftM (hcat . punctuate comma . concat) $ mapM (tvar2C False) params
 
-tvar2C :: Bool -> TypeVarDeclaration -> State RenderState Doc
+tvar2C :: Bool -> TypeVarDeclaration -> State RenderState [Doc]
 tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType 
     t'<- gets lastType
-    p <- withState' id $ liftM hcat $ mapM (tvar2C False) params
+    p <- withState' id $ functionParams2C params
     n <- id2C IOInsert $ setBaseType (BTFunction t') name
-    return $ t <+> n <> parens p <> text ";"
+    return [t empty <+> n <> parens p]
     
 tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
     t <- type2C returnType
     t'<- gets lastType
     n <- id2C IOInsert $ setBaseType (BTFunction t') name
     (p, ph) <- withState' (\st -> st{currentScope = (lastIdentifier st, (lastIdentifier st ++ "_result", t')) : currentScope st}) $ do
-        p <- liftM hcat $ mapM (tvar2C False) params
+        p <- functionParams2C params
         ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
         return (p, ph)
     let res = docToLower $ n <> text "_result"
     let phrasesBlock = case returnType of
             VoidType -> ph
-            _ -> t <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
-    return $ 
-        t <+> n <> parens p
+            _ -> t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
+    return [ 
+        t empty <+> n <> parens p
         $+$
         text "{" 
         $+$ 
         nest 4 phrasesBlock
         $+$
-        text "}"
+        text "}"]
     where
     phrase2C' (Phrases p) = liftM vcat $ mapM phrase2C p
     phrase2C' p = phrase2C p
@@ -305,17 +307,12 @@ tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested f
 tvar2C _ td@(TypeDeclaration i' t) = do
     i <- id2CTyped t i'
     tp <- type2C t
-    return $ text "typedef" <+> tp <+> i <> semi
+    return [text "typedef" <+> tp i]
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
-    t' <- type2C t
-    i <- mapM (id2CTyped t) ids
+    t' <- liftM (((if isConst then text "const" else empty) <+>) . ) $ type2C t
     ie <- initExpr mInitExpr
-    return $ (if isConst then text "const" else empty)
-        <+> t'
-        <+> (hsep . punctuate (char ',') $ i)
-        <+> ie
-        <> text ";"
+    liftM (map(\i -> t' i <+> ie)) $ mapM (id2CTyped t) ids
     where
     initExpr Nothing = return $ empty
     initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
@@ -345,6 +342,7 @@ initExpr2C (InitRecord fields) = do
 initExpr2C (InitArray [value]) = initExpr2C value
 initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
 initExpr2C (InitRange (Range i)) = id2C IOLookup i
+initExpr2C (InitRange (RangeFromTo (InitNumber "0") (InitNumber a))) = return . text $ show (read a + 1)
 initExpr2C (InitRange a) = return $ text "<<range>>"
 initExpr2C (InitSet []) = return $ text "0"
 initExpr2C (InitSet a) = return $ text "<<set>>"
@@ -358,38 +356,47 @@ range2C (InitRange (RangeFromTo (InitString [a]) (InitString [b]))) = return $ m
     
 range2C a = liftM (flip (:) []) $ initExpr2C a
 
-type2C :: TypeDecl -> State RenderState Doc
-type2C (SimpleType i) = id2C IOLookup i
+type2C :: TypeDecl -> State RenderState (Doc -> Doc)
+type2C (SimpleType i) = liftM (\i a -> i <+> a) $ id2C IOLookup i
 type2C t = do
     r <- type2C' t
     rt <- resolveType t
     modify (\st -> st{lastType = rt})
     return r
     where
-    type2C' VoidType = return $ text "void"
-    type2C' (String l) = return $ text $ "string" ++ show l
-    type2C' (PointerTo (SimpleType i)) = liftM (\i -> text "struct" <+> i <+> text "*") $ id2C IODeferred i
-    type2C' (PointerTo t) = liftM (<> text "*") $ type2C t
+    type2C' VoidType = return (text "void" <+>)
+    type2C' (String l) = return (text ("string" ++ show l) <+>)
+    type2C' (PointerTo (SimpleType i)) = liftM (\i a -> text "struct" <+> i <+> text "*" <+> a) $ id2C IODeferred i
+    type2C' (PointerTo t) = liftM (\t a -> t (text "*" <> a)) $ type2C t
     type2C' (RecordType tvs union) = do
         t <- withState' id $ mapM (tvar2C False) tvs
-        return $ text "struct" <+> lbrace $+$ (nest 4 . vcat $ t) $+$ rbrace
-    type2C' (RangeType r) = return $ text "<<range type>>"
+        return $ \i -> text "struct" <+> lbrace $+$ (nest 4 . vcat . map (<> semi) . concat $ t) $+$ rbrace <+> i
+    type2C' (RangeType r) = return (text "<<range type>>" <+>)
     type2C' (Sequence ids) = do
-        mapM_ (id2C IOInsert) ids
-        return $ text "<<sequence type>>"
-    type2C' (ArrayDecl r t) = do
+        is <- mapM (id2C IOInsert . setBaseType bt) ids
+        return (text "enum" <+> (braces . vcat . punctuate comma . map (\(a, b) -> a <+> equals <+> text "0x" <> text (showHex b "")) $ zip is (iterate (*2) 1)) <+>)
+        where
+            bt = BTEnum $ map (\(Identifier i _) -> map toLower i) ids
+    type2C' (ArrayDecl Nothing t) = do
         t' <- type2C t
-        return $ t' <> brackets (text "<<range>>")
-    type2C' (Set t) = return $ text "<<set>>"
-    type2C' (FunctionType returnType params) = return $ text "<<function>>"
-    type2C' (DeriveType (InitBinOp {})) = return $ text "int"
+        return $ \i -> t' i <> brackets empty
+    type2C' (ArrayDecl (Just r) t) = do
+        t' <- type2C t
+        r' <- initExpr2C (InitRange r)
+        return $ \i -> t' i <> brackets r'
+    type2C' (Set t) = return (text "<<set>>" <+>)
+    type2C' (FunctionType returnType params) = do
+        t <- type2C returnType
+        p <- withState' id $ functionParams2C params
+        return (\i -> t empty <+> i <> parens p)
+    type2C' (DeriveType (InitBinOp {})) = return (text "int" <+>)
     type2C' (DeriveType (InitPrefixOp _ i)) = type2C' (DeriveType i)
-    type2C' (DeriveType (InitNumber _)) = return $ text "int"
-    type2C' (DeriveType (InitHexNumber _)) = return $ text "int"
-    type2C' (DeriveType (InitFloat _)) = return $ text "float"
-    type2C' (DeriveType (BuiltInFunction {})) = return $ text "int"
-    type2C' (DeriveType (InitString {})) = return $ text "string255"
-    type2C' (DeriveType (InitReference {})) = return $ text "<<some type>>"
+    type2C' (DeriveType (InitNumber _)) = return (text "int" <+>)
+    type2C' (DeriveType (InitHexNumber _)) = return (text "int" <+>)
+    type2C' (DeriveType (InitFloat _)) = return (text "float" <+>)
+    type2C' (DeriveType (BuiltInFunction {})) = return (text "int" <+>)
+    type2C' (DeriveType (InitString {})) = return (text "string255" <+>)
+    type2C' (DeriveType (InitReference {})) = return (text "<<some type>>" <+>)
     type2C' (DeriveType a) = error $ "Can't derive type from " ++ show a
 
 phrase2C :: Phrase -> State RenderState Doc
