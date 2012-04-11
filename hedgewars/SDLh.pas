@@ -422,10 +422,10 @@ type
         end;
 
     TSDL_RWops = record
-        seek: TSeek;
-        read: TRead;
-        write: TWrite;
-        close: TClose;
+        seek: ^TSeek;
+        read: ^TRead;
+        write: ^TWrite;
+        close: ^TClose;
         type_: LongWord;
         case Byte of
             0: (stdio: TStdio);
