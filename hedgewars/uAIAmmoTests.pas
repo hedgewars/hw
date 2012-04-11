@@ -641,7 +641,7 @@ if (Targ.X) - trunc(x) >= 0 then
 else
     ap.Angle:= - cMaxAngle div 4;
 
-valueResult:= RateShove(Me, trunc(x) + 10 * hwSign(Targ.X - x), trunc(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, 1);
+valueResult:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, 1);
 if valueResult <= 0 then
     valueResult:= BadTurn
 else
@@ -723,7 +723,7 @@ or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
 
 valueResult:= 0;
 for i:= 0 to 4 do
-    valueResult:= valueResult + RateShove(Me, trunc(x) + 10 * hwSign(Targ.X - x),
+    valueResult:= valueResult + RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x),
                                     trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX), -0.8, 1);
 if valueResult <= 0 then
     valueResult:= BadTurn
