@@ -270,23 +270,23 @@ fromPointer s t = do
     
 functionParams2C params = liftM (hcat . punctuate comma . concat) $ mapM (tvar2C False) params
 
-tvar2C :: Bool -> TypeVarDeclaration -> State RenderState [Doc]
-tvar2C _ (FunctionDeclaration name returnType params Nothing) = do
+fun2C :: Bool -> String -> TypeVarDeclaration -> State RenderState [Doc]
+fun2C _ _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType 
     t'<- gets lastType
     p <- withState' id $ functionParams2C params
     n <- id2C IOInsert $ setBaseType (BTFunction t') name
     return [t empty <+> n <> parens p]
     
-tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
+fun2C True rv (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
+    let res = docToLower $ text rv <> text "_result"
     t <- type2C returnType
     t'<- gets lastType
     n <- id2C IOInsert $ setBaseType (BTFunction t') name
-    (p, ph) <- withState' (\st -> st{currentScope = (lastIdentifier st, (lastIdentifier st ++ "_result", t')) : currentScope st}) $ do
+    (p, ph) <- withState' (\st -> st{currentScope = (map toLower rv, (render res, t')) : currentScope st}) $ do
         p <- functionParams2C params
         ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
         return (p, ph)
-    let res = docToLower $ n <> text "_result"
     let phrasesBlock = case returnType of
             VoidType -> ph
             _ -> t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
@@ -302,8 +302,12 @@ tvar2C True (FunctionDeclaration name returnType params (Just (tvars, phrase))) 
     phrase2C' (Phrases p) = liftM vcat $ mapM phrase2C p
     phrase2C' p = phrase2C p
     
-tvar2C False (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
+fun2C False _ (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
+fun2C _ tv _ = error $ "fun2C: I don't render " ++ show tv
 
+tvar2C :: Bool -> TypeVarDeclaration -> State RenderState [Doc]
+tvar2C b f@(FunctionDeclaration (Identifier name _) _ _ _) =
+    fun2C b name f
 tvar2C _ td@(TypeDeclaration i' t) = do
     i <- id2CTyped t i'
     tp <- type2C t
@@ -317,10 +321,35 @@ tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     initExpr Nothing = return $ empty
     initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
     
-tvar2C f (OperatorDeclaration op i ret params body) = 
-    tvar2C f (FunctionDeclaration i ret params body)
+tvar2C f (OperatorDeclaration op (Identifier i _) ret params body) = do
+    r <- op2CTyped op (extractTypes params)
+    fun2C f i (FunctionDeclaration r ret params body)
 
     
+op2CTyped :: String -> [TypeDecl] -> State RenderState Identifier
+op2CTyped op t = do
+    t' <- liftM (render . hcat . punctuate (char '_') . map (\t -> t empty)) $ mapM type2C t
+    bt <- gets lastType
+    return $ case bt of
+         BTRecord {} -> Identifier (t' ++ "_op_" ++ opStr) bt
+         _ -> Identifier t' bt
+    where 
+    opStr = case op of
+                    "+" -> "add"
+                    "-" -> "sub"
+                    "*" -> "mul"
+                    "/" -> "div"
+                    "=" -> "eq"
+                    "<" -> "lt"
+                    ">" -> "gt"
+                    _ -> error $ "op2CTyped: unknown op '" ++ op ++ "'"
+    
+extractTypes :: [TypeVarDeclaration] -> [TypeDecl]
+extractTypes = concatMap f
+    where
+        f (VarDeclaration _ (ids, t) _) = replicate (length ids) t
+        f a = error $ "extractTypes: can't extract from " ++ show a
+
 initExpr2C :: InitExpression -> State RenderState Doc
 initExpr2C InitNull = return $ text "NULL"
 initExpr2C (InitAddress expr) = liftM ((<>) (text "&")) (initExpr2C expr)
