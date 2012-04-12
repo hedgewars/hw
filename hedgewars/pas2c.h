@@ -2,7 +2,10 @@
 
 #include <stdbool.h>
 
-typedef char string255[];
+typedef struct string255_
+    {
+        char s[256];
+    } string255;
 
 typedef int SmallInt;
 typedef int Word;

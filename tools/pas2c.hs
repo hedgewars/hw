@@ -119,8 +119,8 @@ toCFiles ns p@(fn, pu) = do
     toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C initialState . pascal2C) p
     toCFiles' (fn, (Unit unitId interface implementation _ _)) = do
         let (a, s) = runState (id2C IOInsert (setBaseType BTUnit unitId) >> interface2C interface) initialState
-        writeFile (fn ++ ".h") $ "#pragma once\n\n" ++ (render (a $+$ text ""))
-        writeFile (fn ++ ".c") $ "#include \"pas2c.h\"\n#include \"" ++ fn ++ ".h\"\n" ++ (render2C s . implementation2C) implementation
+        writeFile (fn ++ ".h") $ "#pragma once\n\n#include \"pas2c.h\"\n\n" ++ (render (a $+$ text ""))
+        writeFile (fn ++ ".c") $ "#include \"" ++ fn ++ ".h\"\n" ++ (render2C s . implementation2C) implementation
     initialState = emptyState ns
 
     render2C :: RenderState -> State RenderState Doc -> String
@@ -362,7 +362,7 @@ initExpr2C (InitNumber s) = return $ text s
 initExpr2C (InitFloat s) = return $ text s
 initExpr2C (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 initExpr2C (InitString [a]) = return . quotes $ text [a]
-initExpr2C (InitString s) = return $ doubleQuotes $ text s 
+initExpr2C (InitString s) = return $ braces $ text ".s = " <> doubleQuotes (text s)
 initExpr2C (InitChar a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
 initExpr2C (InitReference i) = id2C IOLookup i
 initExpr2C (InitRecord fields) = do
