@@ -17,7 +17,6 @@
 *)
 
 {$INCLUDE "options.inc"}
-{$DEFINE PNG_SCREENSHOTS}
 
 unit uMisc;
 interface
