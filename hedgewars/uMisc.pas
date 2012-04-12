@@ -17,6 +17,7 @@
 *)
 
 {$INCLUDE "options.inc"}
+{$DEFINE PNG_SCREENSHOTS}
 
 unit uMisc;
 interface
@@ -36,7 +37,17 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses typinfo, sysutils, uVariables, uUtils;
+uses typinfo, sysutils, uVariables, uUtils
+     {$IFDEF PNG_SCREENSHOTS}, PNGh, png {$ENDIF}
+     {$IFNDEF USE_SDLTHREADS} {$IFDEF UNIX}, cthreads{$ENDIF} {$ENDIF};
+
+type PScreenshot = ^TScreenshot;
+     TScreenshot = record
+         buffer: PByte;
+         filename: shortstring;
+         width, height: LongInt;
+         size: QWord;
+         end;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -49,12 +60,63 @@ Inc(y, dy);
 SDL_WarpMouse(x, y);
 end;
 
-// captures and saves the screen. returns true on success.
-function MakeScreenshot(filename: shortstring): Boolean;
-var success: boolean;
-    p: Pointer;
-    size: QWord;
+{$IFDEF PNG_SCREENSHOTS}
+// this funtion will be executed in separate thread
+function SaveScreenshot(screenshot: pointer): PtrInt;
+var i: LongInt;
+    png_ptr: ^png_struct;
+    info_ptr: ^png_info;
     f: file;
+    image: PScreenshot;
+begin
+image:= PScreenshot(screenshot);
+
+png_ptr := png_create_write_struct(png_get_libpng_ver(nil), nil, nil, nil);
+if png_ptr = nil then
+begin
+    // AddFileLog('Error: Could not create png write struct.');
+    exit(0);
+end;
+
+info_ptr := png_create_info_struct(png_ptr);
+if info_ptr = nil then
+begin
+    png_destroy_write_struct(@png_ptr, nil);
+    // AddFileLog('Error: Could not create png info struct.');
+    exit(0);
+end;
+
+{$IOCHECKS OFF}
+Assign(f, image^.filename);
+Rewrite(f, 1);
+if IOResult = 0 then
+    begin
+    png_init_pascal_io(png_ptr,@f);
+    png_set_IHDR(png_ptr, info_ptr, image^.width, image^.height,
+                 8, // bit depth
+                 PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE,
+                 PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    png_write_info(png_ptr, info_ptr);
+    // glReadPixels and libpng number rows in different order
+    for i:= image^.height-1 downto 0 do
+        png_write_row(png_ptr, image^.buffer + i*4*image^.width);
+    png_write_end(png_ptr, info_ptr);
+    Close(f);
+    end;
+{$IOCHECKS ON}
+
+// free everything
+png_destroy_write_struct(@png_ptr, @info_ptr);
+FreeMem(image^.buffer, image^.size);
+Dispose(image);
+SaveScreenshot:= 0;
+end;
+
+{$ELSE} // no PNG_SCREENSHOTS
+
+// this funtion will be executed in separate thread
+function SaveScreenshot(screenshot: pointer): PtrInt;
+var f: file;
     // Windows Bitmap Header
     head: array[0..53] of Byte = (
     $42, $4D,       // identifier ("BM")
@@ -73,14 +135,76 @@ var success: boolean;
     0, 0, 0, 0,     // number of colors (all)
     0, 0, 0, 0      // number of important colors
     );
+    image: PScreenshot;
+    size: QWord;
+begin
+image:= PScreenshot(screenshot);
+
+size:= image^.Width*image^.Height*4;
+
+head[$02]:= (size + 54) and $ff;
+head[$03]:= ((size + 54) shr 8) and $ff;
+head[$04]:= ((size + 54) shr 16) and $ff;
+head[$05]:= ((size + 54) shr 24) and $ff;
+head[$12]:= image^.Width and $ff;
+head[$13]:= (image^.Width shr 8) and $ff;
+head[$14]:= (image^.Width shr 16) and $ff;
+head[$15]:= (image^.Width shr 24) and $ff;
+head[$16]:= image^.Height and $ff;
+head[$17]:= (image^.Height shr 8) and $ff;
+head[$18]:= (image^.Height shr 16) and $ff;
+head[$19]:= (image^.Height shr 24) and $ff;
+head[$22]:= size and $ff;
+head[$23]:= (size shr 8) and $ff;
+head[$24]:= (size shr 16) and $ff;
+head[$25]:= (size shr 24) and $ff;
+
+{$IOCHECKS OFF}
+Assign(f, image^.filename);
+Rewrite(f, 1);
+if IOResult = 0 then
+    begin
+    BlockWrite(f, head, sizeof(head));
+    BlockWrite(f, image^.buffer^, size);
+    Close(f);
+    end
+else
+    begin
+    //AddFileLog('Error: Could not write to ' + filename);
+    end;
+{$IOCHECKS ON}
+
+// free everything
+FreeMem(image^.buffer, image^.size);
+Dispose(image);
+SaveScreenshot:= 0;
+end;
+
+{$ENDIF} // no PNG_SCREENSHOTS
+
+// captures and saves the screen. returns true on success.
+function MakeScreenshot(filename: shortstring): Boolean;
+var p: Pointer;
+    size: QWord;
+    image: PScreenshot;
+    format: GLenum;
+    ext: string[4];
 begin
 // flash
 ScreenFade:= sfFromWhite;
 ScreenFadeValue:= sfMax;
 ScreenFadeSpeed:= 5;
 
+{$IFDEF PNG_SCREENSHOTS}
+format:= GL_RGBA;
+ext:= '.png';
+{$ELSE}
+format:= GL_BGRA;
+ext:= '.bmp';
+{$ENDIF}
+
 size:= toPowerOf2(cScreenWidth) * toPowerOf2(cScreenHeight) * 4;
-p:= GetMem(size);
+p:= GetMem(size); // will be freed in SaveScreenshot()
 
 // memory could not be allocated
 if p = nil then
@@ -89,48 +213,23 @@ begin
     exit(false);
 end;
 
-// update header information and file name
-filename:= UserPathPrefix + '/Screenshots/' + filename + '.bmp';
-
-head[$02]:= (size + 54) and $ff;
-head[$03]:= ((size + 54) shr 8) and $ff;
-head[$04]:= ((size + 54) shr 16) and $ff;
-head[$05]:= ((size + 54) shr 24) and $ff;
-head[$12]:= cScreenWidth and $ff;
-head[$13]:= (cScreenWidth shr 8) and $ff;
-head[$14]:= (cScreenWidth shr 16) and $ff;
-head[$15]:= (cScreenWidth shr 24) and $ff;
-head[$16]:= cScreenHeight and $ff;
-head[$17]:= (cScreenHeight shr 8) and $ff;
-head[$18]:= (cScreenHeight shr 16) and $ff;
-head[$19]:= (cScreenHeight shr 24) and $ff;
-head[$22]:= size and $ff;
-head[$23]:= (size shr 8) and $ff;
-head[$24]:= (size shr 16) and $ff;
-head[$25]:= (size shr 24) and $ff;
-
 // read pixel from the front buffer
-glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGRA, GL_UNSIGNED_BYTE, p);
+glReadPixels(0, 0, cScreenWidth, cScreenHeight, format, GL_UNSIGNED_BYTE, p);
 
-{$IOCHECKS OFF}
-Assign(f, filename);
-Rewrite(f, 1);
-if IOResult = 0 then
-    begin
-    BlockWrite(f, head, sizeof(head));
-    BlockWrite(f, p^, size);
-    Close(f);
-    success:= true;
-    end
-else
-    begin
-    AddFileLog('Error: Could not write to ' + filename);
-    success:= false;
-    end;
-{$IOCHECKS ON}
+// allocate and fill structure that will be passed to new thread
+New(image); // will be disposed in SaveScreenshot()
+image^.filename:= UserPathPrefix + '/Screenshots/' + filename + ext;
+image^.width:= cScreenWidth;
+image^.height:= cScreenHeight;
+image^.size:= size;
+image^.buffer:= p;
 
-FreeMem(p, size);
-MakeScreenshot:= success;
+{$IFDEF USE_SDLTHREADS}
+SDL_CreateThread(@SaveScreenshot{$IFDEF SDL13}, nil{$ENDIF}, image);
+{$ELSE}
+BeginThread(@SaveScreenshot, image);
+{$ENDIF}
+MakeScreenshot:= true; // possibly it is not true but we will not wait for thread to terminate
 end;
 
 // http://www.idevgames.com/forums/thread-5602-post-21860.html#pid21860

@@ -16,6 +16,7 @@ set(engine_output_name "hwengine")
 set(engine_sources
     ${hwengine_project}
     SDLh.pas
+    PNGh.pas
     uAI.pas
     uAIActions.pas
     uAIAmmoTests.pas
