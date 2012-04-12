@@ -63,4 +63,8 @@
     //{$DEFINE COUNTTICKS}
 {$ENDIF}
 
+{$IFNDEF MOBILE}
+    {$DEFINE PNG_SCREENSHOTS}
+{$ENDIF}
+
 //also available LUA_DISABLED
