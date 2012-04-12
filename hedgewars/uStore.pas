@@ -623,7 +623,9 @@ begin
 
 {$IFDEF SDL13}
     // this function creates an opengles1.1 context by default on mobile devices
-    // use SDL_GL_SetAttribute to change this behaviour
+    // unless you un-comment this two attributes
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     if SDLGLcontext = nil then
         SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
     SDLTry(SDLGLcontext <> nil, true);
@@ -665,7 +667,9 @@ begin
     AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
     AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
     AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
-    AddFileLog('  \----- Texture Size: ' + inttostr(MaxTextureSize));
+    AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
+    AddFileLog('  \----- Extensions: ' + shortstring(pchar(glGetString(GL_EXTENSIONS))));
+    //TODO: don't have the Extensions line trimmed but slipt it into multiple lines
 
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
