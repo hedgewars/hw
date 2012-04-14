@@ -375,8 +375,14 @@ initExpr2C (InitRange (RangeFromTo (InitNumber "0") (InitNumber a))) = return . 
 initExpr2C (InitRange a) = return $ text "<<range>>"
 initExpr2C (InitSet []) = return $ text "0"
 initExpr2C (InitSet a) = return $ text "<<set>>"
-initExpr2C (BuiltInFunction {}) = return $ text "<<built-in function>>"
+initExpr2C (BuiltInFunction "low" [InitReference e]) = return $ 
+    case e of
+         (Identifier "LongInt" _) -> int (-2^31)
+         _ -> error $ show e
+initExpr2C (BuiltInFunction "succ" [InitReference e]) = liftM (<> text " + 1") $ id2C IOLookup e
+initExpr2C b@(BuiltInFunction _ _) = error $ show b    
 initExpr2C a = error $ "initExpr2C: don't know how to render " ++ show a
+
 
 range2C :: InitExpression -> State RenderState [Doc]
 range2C (InitString [a]) = return [quotes $ text [a]]
@@ -413,7 +419,7 @@ type2C t = do
     type2C' (RangeType r) = return (text "<<range type>>" <+>)
     type2C' (Sequence ids) = do
         is <- mapM (id2C IOInsert . setBaseType bt) ids
-        return (text "enum" <+> (braces . vcat . punctuate comma . map (\(a, b) -> a <+> equals <+> text "0x" <> text (showHex b "")) $ zip is (iterate (*2) 1)) <+>)
+        return (text "enum" <+> (braces . vcat . punctuate comma . map (\(a, b) -> a <+> equals <+> text "0x" <> text (showHex b "")) $ zip is [1..]) <+>)
         where
             bt = BTEnum $ map (\(Identifier i _) -> map toLower i) ids
     type2C' (ArrayDecl Nothing t) = do
