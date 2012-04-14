@@ -174,7 +174,7 @@ type
             Handle: PTTF_Font;
             Height: LongInt;
             style: LongInt;
-            Name: string[21];
+            Name: string[31];
             end;
 
     PAmmo = ^TAmmo;

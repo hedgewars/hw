@@ -6,6 +6,14 @@ typedef struct string255_
     {
         char s[256];
     } string255;
+typedef struct string192_
+    {
+        char s[193];
+    } string192;
+typedef struct string31_
+    {
+        char s[32];
+    } string31;
 
 typedef int SmallInt;
 typedef int Word;
