@@ -2233,22 +2233,23 @@ const
         );
 
     GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (    
-(*        gtGrenade *)   amGrenade
+(*          gtFlame *)   amNothing
 (*       gtHedgehog *) , amNothing
+(*           gtMine *) , amNothing
+(*           gtCase *) , amNothing
+(*     gtExplosives *) , amNothing
+(*        gtGrenade *) , amGrenade
 (*          gtShell *) , amBazooka
 (*          gtGrave *) , amNothing
 (*            gtBee *) , amBee
 (*    gtShotgunShot *) , amShotgun
 (*     gtPickHammer *) , amPickHammer
 (*           gtRope *) , amRope
-(*           gtMine *) , amNothing
-(*           gtCase *) , amNothing
 (*     gtDEagleShot *) , amDEagle
 (*       gtDynamite *) , amDynamite
 (*    gtClusterBomb *) , amClusterBomb
 (*        gtCluster *) , amClusterBomb
 (*         gtShover *) , amBaseballBat  // Shover is only used for baseball bat right now
-(*          gtFlame *) , amNothing
 (*      gtFirePunch *) , amFirePunch
 (*    gtATStartGame *) , amNothing
 (*   gtATFinishGame *) , amNothing
@@ -2276,7 +2277,6 @@ const
 (*gtSniperRifleShot *) , amSniperRifle
 (*        gtJetpack *) , amJetpack
 (*        gtMolotov *) , amMolotov
-(*     gtExplosives *) , amNothing
 (*          gtBirdy *) , amBirdy
 (*            gtEgg *) , amBirdy
 (*         gtPortal *) , amPortalGun
