@@ -48,7 +48,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure FillTargets;
-procedure FillBonuses(isAfterAttack: boolean; filter: TGearsType = []);
+procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
 function RatePlace(Gear: PGear): LongInt;
 function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
@@ -126,7 +126,7 @@ inc(bonuses.Count);
 TryDo(bonuses.Count <= MAXBONUS, 'Bonuses overflow', true)
 end;
 
-procedure FillBonuses(isAfterAttack: boolean; filter: TGearsType);
+procedure FillBonuses(isAfterAttack: boolean);
 var Gear: PGear;
     MyClan: PClan;
 begin
@@ -135,7 +135,6 @@ MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
 Gear:= GearsList;
 while Gear <> nil do
     begin
-    if (filter = []) or (Gear^.Kind in filter) then
         case Gear^.Kind of
             gtCase:
             AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
