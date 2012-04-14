@@ -90,15 +90,16 @@ type
             );
 
     // Gears that interact with other Gears and/or Land
-    TGearType = (gtGrenade, gtHedgehog, gtShell, gtGrave, gtBee, // 4
-            gtShotgunShot, gtPickHammer, gtRope, gtMine, gtCase, // 9
-            gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 14
-            gtFlame, gtFirePunch, gtATStartGame, // 17
-            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 22
-            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 27
-            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 33
-            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 39
-            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 44
+    TGearType = ({-->}gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives, // <-- these are gears which should be avoided when searching a spawn place
+            gtGrenade, gtShell, gtGrave, gtBee, // 8
+            gtShotgunShot, gtPickHammer, gtRope,  // 11
+            gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 16
+            gtFirePunch, gtATStartGame, // 18
+            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 23
+            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 28
+            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
+            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
+            gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 44
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
             gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis); // 61
@@ -111,8 +112,6 @@ type
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
             vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail, vgtBulletHit, vgtCircle,
             vgtSmoothWindBar, vgtStraightShot);
-
-    TGearsType = set of TGearType;
 
     // Damage can be caused by different sources
     TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);

@@ -826,8 +826,9 @@ var
     maxTop: longword;
 begin
     TestTeleport := BadTurn;
+    exit();
     Level:= Level; // avoid compiler hint
-    FillBonuses(true, [gtCase]);
+    //FillBonuses(true, [gtCase]);
     if bonuses.Count = 0 then
         begin
         if Me^.Health <= 100  then

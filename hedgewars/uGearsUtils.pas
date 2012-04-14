@@ -32,7 +32,6 @@ procedure CalcRotationDirAngle(Gear: PGear);
 procedure ResurrectHedgehog(gear: PGear);
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean = false);
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
-function  CheckGearsNear(mX, mY: LongInt; Kind: TGearsType; rX, rY: LongInt): PGear;
 function  CheckGearDrowning(Gear: PGear): boolean;
 
 var doStepHandlers: array[TGearType] of TGearStepProcedure;
@@ -475,6 +474,24 @@ if (y and LAND_HEIGHT_MASK) = 0 then
 CountNonZeroz:= count;
 end;
 
+
+function NoGearsToAvoid(mX, mY: LongInt; rX, rY: LongInt): boolean;
+var t: PGear;
+begin
+t:= GearsList;
+rX:= sqr(rX);
+rY:= sqr(rY);
+while t <> nil do
+    begin
+    if t^.Kind <= gtExplosives then
+        if not (hwSqr(int2hwFloat(mX) - t^.X) / rX + hwSqr(int2hwFloat(mY) - t^.Y) / rY > _1) then
+            exit(false);
+    t:= t^.NextGear
+    end;
+NoGearsToAvoid:= true
+end;
+
+
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 var x: LongInt;
     y, sy: LongInt;
@@ -511,14 +528,14 @@ while tryAgain do
                 if (y - sy > Gear^.Radius * 2)
                     and (((Gear^.Kind = gtExplosives)
                     and (y < cWaterLine)
-                    and (reallySkip or (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 60, 60) = nil))
+                    and (reallySkip or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
                     and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius))
                 or
                     ((Gear^.Kind <> gtExplosives)
                     and (y < cWaterLine)
-                    and (reallySkip or (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 110, 110) = nil)))) then
-                 
-                          begin
+                    and (reallySkip or NoGearsToAvoid(x, y - Gear^.Radius, 110, 110))
+                    )) then
+                    begin
                     ar[cnt].X:= x;
                     if withFall then
                         ar[cnt].Y:= sy + Gear^.Radius
@@ -582,20 +599,4 @@ while t <> nil do
 CheckGearNear:= nil
 end;
 
-
-function CheckGearsNear(mX, mY: LongInt; Kind: TGearsType; rX, rY: LongInt): PGear;
-var t: PGear;
-begin
-t:= GearsList;
-rX:= sqr(rX);
-rY:= sqr(rY);
-while t <> nil do
-    begin
-    if t^.Kind in Kind then
-        if not (hwSqr(int2hwFloat(mX) - t^.X) / rX + hwSqr(int2hwFloat(mY) - t^.Y) / rY > _1) then
-            exit(t);
-    t:= t^.NextGear
-    end;
-CheckGearsNear:= nil
-end;
 end.
