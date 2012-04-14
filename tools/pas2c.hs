@@ -310,7 +310,9 @@ tvar2C b f@(FunctionDeclaration (Identifier name _) _ _ _) =
     fun2C b name f
 tvar2C _ td@(TypeDeclaration i' t) = do
     i <- id2CTyped t i'
-    tp <- type2C t
+    tp <- case t of
+        FunctionType {} -> type2C (PointerTo t)
+        _ -> type2C t
     return [text "typedef" <+> tp i]
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
@@ -370,16 +372,25 @@ initExpr2C (InitRecord fields) = do
     return $ lbrace $+$ (nest 4 . vcat . punctuate comma $ fs) $+$ rbrace
 initExpr2C (InitArray [value]) = initExpr2C value
 initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
-initExpr2C (InitRange (Range i)) = id2C IOLookup i
-initExpr2C (InitRange (RangeFromTo (InitNumber "0") (InitNumber a))) = return . text $ show (read a + 1)
-initExpr2C (InitRange a) = return $ text "<<range>>"
+initExpr2C r@(InitRange (Range i@(Identifier i' _))) = do
+    id2C IOLookup i
+    t <- gets lastType
+    case t of
+         BTEnum s -> return . int $ length s
+         BTInt -> case i' of
+                       "byte" -> return $ int 256
+                       _ -> error $ "InitRange identifier: " ++ i'
+         _ -> error $ "InitRange: " ++ show r
+initExpr2C (InitRange (RangeFromTo (InitNumber "0") r)) = initExpr2C $ BuiltInFunction "succ" [r]
+initExpr2C (InitRange a) = error $ show a --return $ text "<<range>>"
 initExpr2C (InitSet []) = return $ text "0"
 initExpr2C (InitSet a) = return $ text "<<set>>"
 initExpr2C (BuiltInFunction "low" [InitReference e]) = return $ 
     case e of
          (Identifier "LongInt" _) -> int (-2^31)
          _ -> error $ show e
-initExpr2C (BuiltInFunction "succ" [InitReference e]) = liftM (<> text " + 1") $ id2C IOLookup e
+initExpr2C (BuiltInFunction "succ" [e]) = liftM (<> text " + 1") $ initExpr2C e
+initExpr2C (BuiltInFunction "pred" [e]) = liftM (<> text " - 1") $ initExpr2C e
 initExpr2C b@(BuiltInFunction _ _) = error $ show b    
 initExpr2C a = error $ "initExpr2C: don't know how to render " ++ show a
 
@@ -402,7 +413,7 @@ type2C t = do
     type2C' VoidType = return (text "void" <+>)
     type2C' (String l) = return (text ("string" ++ show l) <+>)
     type2C' (PointerTo (SimpleType i)) = liftM (\i a -> text "struct" <+> i <+> text "*" <+> a) $ id2C IODeferred i
-    type2C' (PointerTo t) = liftM (\t a -> t (text "*" <> a)) $ type2C t
+    type2C' (PointerTo t) = liftM (\t a -> t (parens $ text "*" <> a)) $ type2C t
     type2C' (RecordType tvs union) = do
         t <- withState' id $ mapM (tvar2C False) tvs
         u <- unions

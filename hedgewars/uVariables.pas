@@ -113,7 +113,7 @@ var
     // originally from uConsts
     Pathz: array[TPathType] of shortstring;
     UserPathz: array[TPathType] of shortstring;
-    CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
+    CountTexz: array[0..Pred(AMMO_INFINITE)] of PTexture;
     LAND_WIDTH       : Word;
     LAND_HEIGHT      : Word;
     LAND_WIDTH_MASK  : LongWord;
@@ -280,7 +280,7 @@ const
             );
 
     SpritesData: array[TSprite] of record
-            FileName: string[16];
+            FileName: string[15];
             Path, AltPath: TPathType;
             Texture: PTexture;
             Surface: PSDL_Surface;
@@ -620,7 +620,7 @@ const
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true),
             //sprHandResurrector
-            (FileName: 'Cross'; Path: ptGraphics; altPath: ptNone;
+            (FileName: 'Cross'; Path: ptGraphics; AltPath: ptNone;
                 Texture: nil; Surface: nil; Width: 108; Height: 138;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true),
@@ -667,7 +667,7 @@ const
             Sprite: TSprite;
             FramesCount: Longword;
             Interval: Longword;
-            cmd: string[20];
+            cmd: string[31];
             Voice: TSound;
             VoiceDelay: LongWord;
             end = (
@@ -681,7 +681,7 @@ const
             );
 
     Soundz: array[TSound] of record
-            FileName: string[25];
+            FileName: string[31];
             Path    : TPathType;
             end = (
             (FileName:                         ''; Path: ptNone  ),// sndNone
