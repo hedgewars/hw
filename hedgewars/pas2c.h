@@ -13,6 +13,7 @@ typedef int LongInt;
 typedef int LongWord;
 typedef int Byte;
 typedef int Integer;
+typedef long long int QWord;
 
 typedef float extended;
 typedef float real;

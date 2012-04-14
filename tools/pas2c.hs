@@ -367,7 +367,7 @@ initExpr2C (InitChar a) = return $ quotes $ text "\\x" <> text (showHex (read a)
 initExpr2C (InitReference i) = id2C IOLookup i
 initExpr2C (InitRecord fields) = do
     (fs :: [Doc]) <- mapM (\(Identifier a _, b) -> liftM (text "." <> text a <+> equals <+>) $ initExpr2C b) fields
-    return $ lbrace $+$ (nest 4 . vcat $ fs) $+$ rbrace
+    return $ lbrace $+$ (nest 4 . vcat . punctuate comma $ fs) $+$ rbrace
 initExpr2C (InitArray [value]) = initExpr2C value
 initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
 initExpr2C (InitRange (Range i)) = id2C IOLookup i
@@ -399,7 +399,17 @@ type2C t = do
     type2C' (PointerTo t) = liftM (\t a -> t (text "*" <> a)) $ type2C t
     type2C' (RecordType tvs union) = do
         t <- withState' id $ mapM (tvar2C False) tvs
-        return $ \i -> text "struct" <+> lbrace $+$ (nest 4 . vcat . map (<> semi) . concat $ t) $+$ rbrace <+> i
+        u <- unions
+        return $ \i -> text "struct" <+> lbrace $+$ nest 4 ((vcat . map (<> semi) . concat $ t) $$ u) $+$ rbrace <+> i
+        where
+            unions = case union of
+                     Nothing -> return empty
+                     Just a -> do
+                         structs <- mapM struct2C a
+                         return $ text "union" $+$ braces (nest 4 $ vcat structs) <> semi
+            struct2C tvs = do
+                t <- withState' id $ mapM (tvar2C False) tvs
+                return $ text "struct" $+$ braces (nest 4 (vcat . map (<> semi) . concat $ t)) <> semi
     type2C' (RangeType r) = return (text "<<range type>>" <+>)
     type2C' (Sequence ids) = do
         is <- mapM (id2C IOInsert . setBaseType bt) ids
