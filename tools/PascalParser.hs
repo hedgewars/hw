@@ -14,7 +14,7 @@ import Data.Maybe
 import PascalBasics
 import PascalUnitSyntaxTree
     
-knownTypes = ["shortstring", "char", "byte"]
+knownTypes = ["shortstring", "ansistring", "char", "byte"]
 
 pascalUnit = do
     comments
@@ -119,6 +119,7 @@ typeDecl = choice [
     char '^' >> typeDecl >>= return . PointerTo
     , try (string "shortstring") >> return (String 255)
     , try (string "string") >> optionMaybe (brackets pas $ integer pas) >>= return . String . fromMaybe 255
+    , try (string "ansistring") >> optionMaybe (brackets pas $ integer pas) >>= return . String . fromMaybe 255
     , arrayDecl
     , recordDecl
     , setDecl

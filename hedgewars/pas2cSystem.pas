@@ -11,8 +11,8 @@ type
     SmallInt = integer;
     ShortInt = integer;
     QWord = integer;
-    GLInt = integer;
-    GLUInt = integer;
+    GLint = integer;
+    GLuint = integer;
     gl_unsigned_byte = integer;
     Int = integer;
 
@@ -23,7 +23,7 @@ type
     double = float;
     real = float;
     extended = float;
-    GLFloat = float;
+    GLfloat = float;
     gl_float = float;
 
     boolean = boolean;

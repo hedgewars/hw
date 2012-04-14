@@ -103,11 +103,13 @@ const
     MAXNAMELEN = 192;
     MAXROPEPOINTS = 3840;
 
+    {$IFNDEF PAS2C}
     // some opengl headers do not have these macros
     GL_BGR              = $80E0;
     GL_BGRA             = $80E1;
     GL_CLAMP_TO_EDGE    = $812F;
     GL_TEXTURE_PRIORITY = $8066;
+    {$ENDIF}
 
     cSendCursorPosTime  : LongWord = 50;
     cVisibleWater       : LongInt = 128;

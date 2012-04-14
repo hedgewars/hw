@@ -14,6 +14,10 @@ typedef struct string31_
     {
         char s[32];
     } string31;
+typedef struct string15_
+    {
+        char s[16];
+    } string15;
 
 typedef int SmallInt;
 typedef int Word;
