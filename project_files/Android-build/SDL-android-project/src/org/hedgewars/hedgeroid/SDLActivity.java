@@ -101,7 +101,6 @@ public class SDLActivity extends Activity {
 	}
 
 	public void onBackPressed(){
-		super.onBackPressed();
 		PascalExports.HWterminate(true);
 	}
 
@@ -441,7 +440,7 @@ class SDLMain implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//Log.v("SDL", "SDL thread terminated");
+		Log.v("SDL", "SDL thread terminated");
 		//Log.v("SDL", "SDL thread terminated");
 	}
 }
