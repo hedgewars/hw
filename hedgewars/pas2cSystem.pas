@@ -45,6 +45,9 @@ type
     Handle = integer;
     stderr = Handle;
 
+    png_structp = pointer;
+    png_size_t = integer;
+
 var 
     false, true: boolean;
     
@@ -115,7 +118,9 @@ var
     glclear, gldisableclientstate, gl_color_array,
     glcolorpointer, gl_depth_buffer_bit, gl_quads,
     glbegin, glend, gltexcoord2f, glvertex2d,
-    gl_true, gl_false, glcolormask, gl_projection : procedure;
+    gl_true, gl_false, glcolormask, gl_projection,
+    gl_texture_priority, glenum, gl_clamp_to_edge,
+    gl_extensions : procedure;
 
     TThreadId : function : integer;
     BeginThread, ThreadSwitch : procedure;
@@ -128,3 +133,9 @@ var
     
     _strconcat : function : string;
     _strcompare, _strncompare : function : boolean;
+
+    png_structp, png_set_write_fn, png_get_io_ptr,
+    png_get_libpng_ver, png_create_write_struct,
+    png_create_info_struct, png_destroy_write_struct,
+    png_write_row, png_set_ihdr, png_write_info,
+    png_write_end : procedure;

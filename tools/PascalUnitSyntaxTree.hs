@@ -35,6 +35,7 @@ data TypeDecl = SimpleType Identifier
     deriving Show
 data Range = Range Identifier
            | RangeFromTo InitExpression InitExpression
+           | RangeInfinite
     deriving Show
 data Initialize = Initialize String
     deriving Show
@@ -102,7 +103,7 @@ data BaseType = BTUnknown
     | BTBool
     | BTFloat
     | BTRecord [(String, BaseType)]
-    | BTArray BaseType BaseType
+    | BTArray Range BaseType BaseType
     | BTFunction BaseType
     | BTPointerTo BaseType
     | BTUnresolved String

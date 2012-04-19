@@ -234,8 +234,10 @@ resolveType (RecordType tv mtvs) = do
     where
         f :: TypeVarDeclaration -> State RenderState [(String, BaseType)]
         f (VarDeclaration _ (ids, td) _) = mapM (\(Identifier i _) -> liftM ((,) i) $ resolveType td) ids
-resolveType (ArrayDecl (Just _) t) = liftM (BTArray BTInt) $ resolveType t
-resolveType (ArrayDecl Nothing t) = liftM (BTArray BTInt) $ resolveType t
+resolveType (ArrayDecl (Just i) t) = do
+    t' <- resolveType t
+    return $ BTArray i BTInt t' 
+resolveType (ArrayDecl Nothing t) = liftM (BTArray RangeInfinite BTInt) $ resolveType t
 resolveType (FunctionType t _) = liftM BTFunction $ resolveType t
 resolveType (DeriveType (InitHexNumber _)) = return BTInt
 resolveType (DeriveType (InitNumber _)) = return BTInt
@@ -382,13 +384,23 @@ initExpr2C r@(InitRange (Range i@(Identifier i' _))) = do
                        _ -> error $ "InitRange identifier: " ++ i'
          _ -> error $ "InitRange: " ++ show r
 initExpr2C (InitRange (RangeFromTo (InitNumber "0") r)) = initExpr2C $ BuiltInFunction "succ" [r]
+initExpr2C (InitRange (RangeFromTo (InitChar "0") (InitChar r))) = initExpr2C $ BuiltInFunction "succ" [InitNumber r]
 initExpr2C (InitRange a) = error $ show a --return $ text "<<range>>"
 initExpr2C (InitSet []) = return $ text "0"
 initExpr2C (InitSet a) = return $ text "<<set>>"
 initExpr2C (BuiltInFunction "low" [InitReference e]) = return $ 
     case e of
          (Identifier "LongInt" _) -> int (-2^31)
-         _ -> error $ show e
+         (Identifier "SmallInt" _) -> int (-2^15)
+         _ -> error $ "BuiltInFunction 'low': " ++ show e
+initExpr2C (BuiltInFunction "high" [e]) = do
+    initExpr2C e
+    t <- gets lastType
+    case t of
+         (BTArray i _ _) -> initExpr2C $ BuiltInFunction "pred" [InitRange i]
+         a -> error $ "BuiltInFunction 'high': " ++ show a
+initExpr2C (BuiltInFunction "succ" [BuiltInFunction "pred" [e]]) = initExpr2C e
+initExpr2C (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C e
 initExpr2C (BuiltInFunction "succ" [e]) = liftM (<> text " + 1") $ initExpr2C e
 initExpr2C (BuiltInFunction "pred" [e]) = liftM (<> text " - 1") $ initExpr2C e
 initExpr2C b@(BuiltInFunction _ _) = error $ show b    
@@ -573,7 +585,7 @@ ref2C ae@(ArrayElement exprs ref) = do
     t <- gets lastType
     ns <- gets currentScope
     case t of
-         (BTArray _ t') -> modify (\st -> st{lastType = t'})
+         (BTArray _ _ t') -> modify (\st -> st{lastType = t'})
          (BTString) -> modify (\st -> st{lastType = BTChar})
          (BTPointerTo t) -> do
                 t'' <- fromPointer (show t) =<< gets lastType
