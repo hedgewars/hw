@@ -1120,7 +1120,7 @@ const
                 Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
-            MinAngle: 0;
+            minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
@@ -1144,7 +1144,7 @@ const
                 Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
-            MinAngle: 0;
+            minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
@@ -2062,7 +2062,7 @@ const
                 Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
-            MinAngle: 0;
+            minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;

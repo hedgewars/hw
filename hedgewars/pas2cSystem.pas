@@ -139,3 +139,5 @@ var
     png_create_info_struct, png_destroy_write_struct,
     png_write_row, png_set_ihdr, png_write_info,
     png_write_end : procedure;
+
+    EnumToStr : function : string;

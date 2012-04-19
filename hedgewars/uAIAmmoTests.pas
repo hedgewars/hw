@@ -166,7 +166,7 @@ repeat
             value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
         if valueResult <= value then
             begin
-            ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
             ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
             ap.ExplR:= 100;
             ap.ExplX:= EX;
@@ -223,7 +223,7 @@ repeat
 
         if valueResult <= value then
             begin
-            ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
             ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
             ap.ExplR:= 0;
             ap.ExplX:= EX;
@@ -273,7 +273,7 @@ repeat
                   
         if valueResult < Score then
             begin
-            ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
             ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
             ap.Time:= TestTime;
             ap.ExplR:= 100;
@@ -327,7 +327,7 @@ repeat
 
     if valueResult < Score then
         begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime;
         ap.ExplR:= 100;
@@ -384,7 +384,7 @@ repeat
 
      if valueResult < Score then
         begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= trunc(sqrt(r) * cMaxPower * 0.9) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime;
         ap.ExplR:= 90;
@@ -436,7 +436,7 @@ repeat
         
     if valueResult < Score then
         begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= trunc(sqrt(r) * cMaxPower * 0.9) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime;
         ap.ExplR:= 300;
@@ -522,7 +522,7 @@ if TestTime = 0 then
 
     if valueResult < Score then
         begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= 1;
         ap.ExplR:= 100;
         ap.ExplX:= EX;
@@ -551,7 +551,7 @@ if ( range < MIN_RANGE ) or ( range > MAX_RANGE ) then
     exit(BadTurn);
 Vx:= (Targ.X - x) * 1 / 1024;
 Vy:= (Targ.Y - y) * 1 / 1024;
-ap.Angle:= DxDy2AttackAngle(Vx, -Vy);
+ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 repeat
     x:= x + vX;
     y:= y + vY;
@@ -595,7 +595,7 @@ if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
 t:= 0.5 / sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
 Vx:= (Targ.X - x) * t;
 Vy:= (Targ.Y - y) * t;
-ap.Angle:= DxDy2AttackAngle(Vx, -Vy);
+ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 d:= 0;
 
 repeat
