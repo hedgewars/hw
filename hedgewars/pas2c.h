@@ -38,3 +38,11 @@ typedef char * PChar;
 typedef LongInt * PLongInt;
 typedef Integer * PInteger;
 
+#define new(a) __new(a, sizeof(*(a)))
+void __new(pointer p);
+
+#define FillChar(a, b, c) __FillChar(&(a), b, c)
+
+void __FillChar(pointer p, int size, char fill);
+string255 _strconcat(string255 a, string255 b);
+

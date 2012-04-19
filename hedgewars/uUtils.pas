@@ -26,12 +26,14 @@ uses uTypes, uFloat, GLunit;
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: ansistring; c: char);
 
+{$IFNDEF PAS2C}
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
+{$ENDIF}
 
 function  Min(a, b: LongInt): LongInt; inline;
 function  Max(a, b: LongInt): LongInt; inline;
@@ -42,7 +44,7 @@ function  FloatToStr(n: hwFloat): shortstring;
 function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
 function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
-function  DxDy2AttackAngle(const _dY, _dX: extended): LongInt;
+function  DxDy2AttackAnglef(const _dY, _dX: extended): LongInt;
 
 procedure SetLittle(var r: hwFloat);
 
@@ -102,6 +104,7 @@ if i > 0 then
     end else b:= '';
 end;
 
+{$IFNDEF PAS2C}
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
@@ -130,7 +133,7 @@ function EnumToStr(const en: TCapGroup) : shortstring; overload;
 begin
 EnumToStr := GetEnumName(TypeInfo(TCapGroup), ord(en))
 end;
-
+{$ENDIF}
 
 function Min(a, b: LongInt): LongInt;
 begin
@@ -198,9 +201,9 @@ if _dX.isNegative then
 DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
 end;
 
-function DxDy2AttackAngle(const _dY, _dX: extended): LongInt; inline;
+function DxDy2AttackAnglef(const _dY, _dX: extended): LongInt; inline;
 begin
-DxDy2AttackAngle:= trunc(arctan2(_dY, _dX) * (cMaxAngle/pi))
+DxDy2AttackAnglef:= trunc(arctan2(_dY, _dX) * (cMaxAngle/pi))
 end;
 
 

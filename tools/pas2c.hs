@@ -439,15 +439,13 @@ type2C t = do
             struct2C tvs = do
                 t <- withState' id $ mapM (tvar2C False) tvs
                 return $ text "struct" $+$ braces (nest 4 (vcat . map (<> semi) . concat $ t)) <> semi
-    type2C' (RangeType r) = return (text "<<range type>>" <+>)
+    type2C' (RangeType r) = return (text "int" <+>)
     type2C' (Sequence ids) = do
         is <- mapM (id2C IOInsert . setBaseType bt) ids
         return (text "enum" <+> (braces . vcat . punctuate comma . map (\(a, b) -> a <+> equals <+> text "0x" <> text (showHex b "")) $ zip is [1..]) <+>)
         where
             bt = BTEnum $ map (\(Identifier i _) -> map toLower i) ids
-    type2C' (ArrayDecl Nothing t) = do
-        t' <- type2C t
-        return $ \i -> t' i <> brackets empty
+    type2C' (ArrayDecl Nothing t) = type2C (PointerTo t)
     type2C' (ArrayDecl (Just r) t) = do
         t' <- type2C t
         r' <- initExpr2C (InitRange r)
