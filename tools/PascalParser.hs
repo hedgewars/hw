@@ -598,7 +598,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
 builtInFunction e = do
     name <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) builtin
     spaces
-    exprs <- option [] $ parens pas $ commaSep1 pas $ e
+    exprs <- option [] $ parens pas $ option [] $ commaSep1 pas $ e
     spaces
     return (name, exprs)
 
