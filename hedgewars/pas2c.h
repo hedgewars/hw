@@ -2,9 +2,15 @@
 
 #include <stdbool.h>
 
-typedef struct string255_
+typedef union string255_
     {
-        char s[256];
+        struct {
+            char s[256];
+        };
+        struct {
+            char len;
+            char str[255];
+        };
     } string255;
 typedef struct string192_
     {
@@ -53,3 +59,4 @@ int Length(string255 a);
 string255 copy(string255 a, int s, int l);
 string255 delete(string255 a, int s, int l);
 
+#define STRCONSTDECL(a, b) const string255 a = {.len = sizeof(b), .str = b}

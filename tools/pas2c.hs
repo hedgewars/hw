@@ -31,10 +31,36 @@ data RenderState = RenderState
         currentScope :: [Record],
         lastIdentifier :: String,
         lastType :: BaseType,
+        stringConsts :: [(String, String)],
+        uniqCounter :: Int,
         namespaces :: Map.Map String [Record]
     }
     
-emptyState = RenderState [] "" BTUnknown
+emptyState = RenderState [] "" BTUnknown [] 0
+
+getUniq :: State RenderState Int
+getUniq = do
+    i <- gets uniqCounter
+    modify(\s -> s{uniqCounter = uniqCounter s + 1})
+    return i
+    
+addStringConst :: String -> State RenderState Doc
+addStringConst str = do
+    i <- getUniq
+    let sn = "__str" ++ show i
+    modify (\s -> s{stringConsts = (sn, str) : stringConsts s})
+    return $ text sn
+    
+escapeStr :: String -> String
+escapeStr = foldr escapeChar []
+
+escapeChar :: Char -> ShowS
+escapeChar '"' s = "\\\"" ++ s
+escapeChar a s = a : s
+
+renderStringConsts :: State RenderState Doc
+renderStringConsts = liftM (vcat . map (\(a, b) -> text "STRCONSTDECL" <> parens (text a <> comma <+> doubleQuotes (text $ escapeStr b)) <> semi)) 
+    $ gets stringConsts
     
 docToLower :: Doc -> Doc
 docToLower = text . map toLower . render
@@ -94,7 +120,11 @@ withState' :: (RenderState -> RenderState) -> State RenderState a -> State Rende
 withState' f sf = do
     st <- liftM f get
     let (a, s) = runState sf st
-    modify(\st -> st{lastType = lastType s})
+    modify(\st -> st{
+        lastType = lastType s
+        , uniqCounter = uniqCounter s
+        , stringConsts = stringConsts s
+        })
     return a
 
 withLastIdNamespace :: State RenderState Doc -> State RenderState Doc
@@ -148,7 +178,11 @@ interface2C :: Interface -> State RenderState Doc
 interface2C (Interface uses tvars) = liftM2 ($+$) (uses2C uses) (typesAndVars2C True tvars)
 
 implementation2C :: Implementation -> State RenderState Doc
-implementation2C (Implementation uses tvars) = liftM2 ($+$) (uses2C uses) (typesAndVars2C True tvars)
+implementation2C (Implementation uses tvars) = do
+    u <- uses2C uses
+    tv <- typesAndVars2C True tvars
+    r <- renderStringConsts
+    return (u $+$ r $+$ tv)
 
 
 typesAndVars2C :: Bool -> TypesAndVars -> State RenderState Doc
@@ -561,7 +595,7 @@ expr2C (NumberLiteral s) = return $ text s
 expr2C (FloatLiteral s) = return $ text s
 expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 expr2C (StringLiteral [a]) = return . quotes $ text [a]
-expr2C (StringLiteral s) = return $ doubleQuotes $ text s 
+expr2C (StringLiteral s) = addStringConst s
 expr2C (Reference ref) = ref2C ref
 expr2C (PrefixOp op expr) = liftM (text (op2C op) <>) (expr2C expr)
 expr2C Null = return $ text "NULL"
