@@ -424,12 +424,12 @@ type2C t = do
     where
     type2C' VoidType = return (text "void" <+>)
     type2C' (String l) = return (text ("string" ++ show l) <+>)
-    type2C' (PointerTo (SimpleType i)) = liftM (\i a -> text "struct" <+> i <+> text "*" <+> a) $ id2C IODeferred i
+    type2C' (PointerTo (SimpleType i)) = liftM (\i a -> text "struct __" <> i <+> text "*" <+> a) $ id2C IODeferred i
     type2C' (PointerTo t) = liftM (\t a -> t (parens $ text "*" <> a)) $ type2C t
     type2C' (RecordType tvs union) = do
         t <- withState' id $ mapM (tvar2C False) tvs
         u <- unions
-        return $ \i -> text "struct" <+> lbrace $+$ nest 4 ((vcat . map (<> semi) . concat $ t) $$ u) $+$ rbrace <+> i
+        return $ \i -> text "struct __" <> i <+> lbrace $+$ nest 4 ((vcat . map (<> semi) . concat $ t) $$ u) $+$ rbrace <+> i
         where
             unions = case union of
                      Nothing -> return empty
@@ -497,7 +497,7 @@ phrase2C (SwitchCase expr cases mphrase) = do
     cs <- mapM case2C cases
     d <- dflt
     return $ 
-        text "switch" <> parens e <> text "of" $+$ braces (nest 4 . vcat $ cs ++ d)
+        text "switch" <> parens e $+$ braces (nest 4 . vcat $ cs ++ d)
     where
     case2C :: ([InitExpression], Phrase) -> State RenderState Doc
     case2C (e, p) = do
@@ -533,6 +533,13 @@ phrase2C (RepeatCycle e' p') = do
     return $ text "do" <+> p <+> text "while" <> parens (text "!" <> parens e)
 phrase2C NOP = return $ text ";"
 
+phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "exit" BTUnknown))) = return $ text "return" <> semi
+phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "exit" BTUnknown))) = liftM (\e -> text "return" <> e <> semi) $ expr2C e
+phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "dec" BTUnknown))) = liftM (\e -> text "--" <> e <> semi) $ expr2C e
+phrase2C (BuiltInFunctionCall [e1, e2] (SimpleReference (Identifier "dec" BTUnknown))) = liftM2 (\a b -> a <> text " -= " <> b <> semi) (expr2C e1) (expr2C e2)
+phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "inc" BTUnknown))) = liftM (\e -> text "++" <> e <> semi) $ expr2C e
+phrase2C (BuiltInFunctionCall [e1, e2] (SimpleReference (Identifier "inc" BTUnknown))) = liftM2 (\a b -> a <+> text "+=" <+> b <> semi) (expr2C e1) (expr2C e2)
+phrase2C a = error $ "phrase2C: " ++ show a
 
 wrapPhrase p@(Phrases _) = p
 wrapPhrase p = Phrases [p]
@@ -547,9 +554,9 @@ expr2C (BinOp op expr1 expr2) = do
         ("+", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction BTString))
         ("==", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction BTBool))
         ("!=", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction BTBool))
-        ("&", BTBool) -> return $ parens $ e1 <+> text "&&" <+> e2
-        ("|", BTBool) -> return $ parens $ e1 <+> text "||" <+> e2
-        (o, _) -> return $ parens $ e1 <+> text o <+> e2
+        ("&", BTBool) -> return $ parens e1 <+> text "&&" <+> parens e2
+        ("|", BTBool) -> return $ parens e1 <+> text "||" <+> parens e2
+        (o, _) -> return $ parens e1 <+> text o <+> parens e2
 expr2C (NumberLiteral s) = return $ text s
 expr2C (FloatLiteral s) = return $ text s
 expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
@@ -558,14 +565,16 @@ expr2C (StringLiteral s) = return $ doubleQuotes $ text s
 expr2C (Reference ref) = ref2C ref
 expr2C (PrefixOp op expr) = liftM (text (op2C op) <>) (expr2C expr)
 expr2C Null = return $ text "NULL"
+expr2C (CharCode a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
+expr2C (HexCharCode a) = return $ quotes $ text "\\x" <> text (map toLower a)
+expr2C (SetExpression ids) = mapM (id2C IOLookup) ids >>= return . parens . hcat . punctuate (text " | ")
+expr2C b@(BuiltInFunCall [e] (SimpleReference (Identifier "ord" _))) = liftM parens $ expr2C e
+expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "succ" _))) = liftM (<> text " + 1") $ expr2C e
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref 
     ps <- mapM expr2C params
     return $ 
         r <> parens (hsep . punctuate (char ',') $ ps)
-expr2C (CharCode a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
-expr2C (HexCharCode a) = return $ quotes $ text "\\x" <> text (map toLower a)
-expr2C (SetExpression ids) = mapM (id2C IOLookup) ids >>= return . parens . hcat . punctuate (text " | ")
 expr2C a = error $ "Don't know how to render " ++ show a
 
 
@@ -577,8 +586,8 @@ ref2C (RecordField ref1 (RecordField ref2 ref3)) = ref2C $ RecordField (RecordFi
 ref2C (RecordField ref1 (FunCall params ref2)) = ref2C $ FunCall params (RecordField ref1 ref2)
 ref2C (ArrayElement (a:b:xs) ref) = ref2C $ ArrayElement (b:xs) (ArrayElement [a] ref)
 -- conversion routines
-ref2C ae@(ArrayElement exprs ref) = do
-    es <- mapM expr2C exprs
+ref2C ae@(ArrayElement [expr] ref) = do
+    e <- expr2C expr
     r <- ref2C ref 
     t <- gets lastType
     ns <- gets currentScope
@@ -591,7 +600,9 @@ ref2C ae@(ArrayElement exprs ref) = do
                      BTChar -> modify (\st -> st{lastType = BTChar})
                      a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae ++ "\n" ++ show (take 100 ns)
          a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae ++ "\n" ++ show (take 100 ns)
-    return $ r <> (brackets . hcat) (punctuate comma es)
+    case t of
+         BTString ->  return $ r <> text ".s" <> brackets e
+         _ -> return $ r <> brackets e
 ref2C (SimpleReference name) = id2C IOLookup name
 ref2C rf@(RecordField (Dereference ref1) ref2) = do
     r1 <- ref2C ref1 

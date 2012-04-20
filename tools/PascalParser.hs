@@ -408,6 +408,7 @@ phrase = do
         , withBlock
         , forCycle
         , (try $ reference >>= \r -> string ":=" >> return r) >>= \r -> expression >>= return . Assignment r
+        , builtInFunction expression >>= \(n, e) -> return $ BuiltInFunctionCall e (SimpleReference (Identifier n BTUnknown))
         , procCall
         , char ';' >> comments >> return NOP
         ]
@@ -597,7 +598,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
 builtInFunction e = do
     name <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) builtin
     spaces
-    exprs <- parens pas $ commaSep1 pas $ e
+    exprs <- option [] $ parens pas $ commaSep1 pas $ e
     spaces
     return (name, exprs)
 

@@ -52,6 +52,7 @@ data Phrase = ProcCall Reference [Expression]
         | Phrases [Phrase]
         | SwitchCase Expression [([InitExpression], Phrase)] (Maybe [Phrase])
         | Assignment Reference Expression
+        | BuiltInFunctionCall [Expression] Reference
         | NOP
     deriving Show
 data Expression = Expression String
