@@ -39,10 +39,17 @@ typedef LongInt * PLongInt;
 typedef Integer * PInteger;
 
 #define new(a) __new(a, sizeof(*(a)))
-void __new(pointer p);
+void __new(pointer p, int size);
+
+#define dispose(a) __dispose(a, sizeof(*(a)))
+void __dispose(pointer p, int size);
 
 #define FillChar(a, b, c) __FillChar(&(a), b, c)
 
 void __FillChar(pointer p, int size, char fill);
 string255 _strconcat(string255 a, string255 b);
+
+int Length(string255 a);
+string255 copy(string255 a, int s, int l);
+string255 delete(string255 a, int s, int l);
 
