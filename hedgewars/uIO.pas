@@ -233,7 +233,7 @@ end;
 procedure SendIPCc(c: char);
 var s: shortstring;
 begin
-    s[0]:= #0;
+    s[0]:= #1;
     s[1]:= c;
     SendIPC(s);
 end;
