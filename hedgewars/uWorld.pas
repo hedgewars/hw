@@ -381,6 +381,7 @@ var x, y, i, t, SlotsNumY, SlotsNumX, AMFrame: LongInt;
     STurns: LongInt;
     amSurface: PSDL_Surface;
     AMRect: TSDL_Rect;
+    tmpsurf: PSDL_Surface;
 begin
     SlotsNum:= 0;
     for i:= 0 to cMaxSlotIndex do
@@ -389,10 +390,17 @@ begin
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
     SlotsNumX:= SlotsNum;
     SlotsNumY:= cMaxSlotAmmoIndex + 2;
+    {$IFDEF USE_AM_NUMCOLUMN}
+    inc(SlotsNumY);
+    {$ENDIF}
 {$ELSE}
     SlotsNumX:= cMaxSlotAmmoIndex + 1;
     SlotsNumY:= SlotsNum + 1;
+    {$IFDEF USE_AM_NUMCOLUMN}
+    inc(SlotsNumX);
+    {$ENDIF}
 {$ENDIF}
+
 
     AmmoRect.w:= (BORDERSIZE*2) + (SlotsNumX * AMSlotSize) + (SlotsNumX-1);
     AmmoRect.h:= (BORDERSIZE*2) + (SlotsNumY * AMSlotSize) + (SlotsNumY-1);
@@ -415,6 +423,21 @@ begin
 {$ELSE}
             x:= AMRect.x;
 {$ENDIF}
+{$IFDEF USE_AM_NUMCOLUMN}
+            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar('F' + IntToStr(i)), cWhiteColorChannels);
+            copyToXY(tmpsurf, amSurface,
+                     x + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.w shr 1),
+                     y + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.h shr 1));
+
+            SDL_FreeSurface(tmpsurf);
+    {$IFDEF USE_LANDSCAPE_AMMOMENU}
+            y:= AMRect.y + AMSlotSize + 1;
+    {$ELSE}
+            x:= AMRect.x + AMSlotSize + 1;
+    {$ENDIF}
+{$ENDIF}
+
+
             for t:=0 to cMaxSlotAmmoIndex do
                 begin
                 if (Ammo^[i, t].Count > 0)  and (Ammo^[i, t].AmmoType <> amNothing) then
@@ -432,8 +455,8 @@ begin
                         end
                     else //draw colored version
                         begin
-                            DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
-       						       y + AMSlotPadding, AMFrame);
+                        DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
+                                                               y + AMSlotPadding, AMFrame);
                         end;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
 	    inc(y, AMSlotSize + 1); //the plus one is for the border
@@ -596,13 +619,17 @@ if ((AMState = AMHiding) or (AMState = AMShowingUp)) and ((AMAnimType and AMType
 
 Pos:= -1;
 Slot:= -1;
-c:= -1;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
+c:= -1;
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
             inc(c);
+{$IFDEF USE_AM_NUMCOLUMN}
+            g:= 1;
+{$ELSE}
             g:= 0;
+{$ENDIF}
             for t:=0 to cMaxSlotAmmoIndex do
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
@@ -623,11 +650,20 @@ c:= -1;
                    end;
             end;
 {$ELSE}
+{$IFDEF USE_AM_NUMCOLUMN}
+c:= 0;
+{$ELSE}
+c:= -1;
+{$ENDIF}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
             inc(c);
+{$IFDEF USE_AM_NUMCOLUMN}
+            g:= 1;
+{$ELSE}
             g:= 0;
+{$ENDIF}
             for t:=0 to cMaxSlotAmmoIndex do
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
@@ -714,7 +750,7 @@ c:= -1;
 {$ENDIF}
 
     bSelected:= false;
-{$IFNDEF USE_LANDSCAPE_AMMOMENU}
+{$IFNDEF USE_TOUCH_INTERFACE}
    if (AMShiftX = 0) and (AMShiftY = 0) then
         DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
 {$ENDIF}
