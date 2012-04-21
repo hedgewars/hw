@@ -737,8 +737,8 @@ end;
 
 procedure initModule;
 begin
-    RegisterVariable('landcheck', vtCommand, @chLandCheck, false);
-    RegisterVariable('sendlanddigest', vtCommand, @chSendLandDigest, false);
+    RegisterVariable('landcheck', @chLandCheck, false);
+    RegisterVariable('sendlanddigest', @chSendLandDigest, false);
 
     LandBackSurface:= nil;
     digest:= '';

@@ -1117,7 +1117,7 @@ procedure initModule;
 var ai: TAmmoType;
     i: LongInt;
 begin
-    RegisterVariable('fullscr', vtCommand, @chFullScr, true);
+    RegisterVariable('fullscr', @chFullScr, true);
 
     SDLPrimSurface:= nil;
 

@@ -605,12 +605,12 @@ end;
 
 procedure initModule;
 begin
-RegisterVariable('addhh', vtCommand, @chAddHH, false);
-RegisterVariable('addteam', vtCommand, @chAddTeam, false);
-RegisterVariable('hhcoords', vtCommand, @chSetHHCoords, false);
-RegisterVariable('bind', vtCommand, @chBind, true );
-RegisterVariable('teamgone', vtCommand, @chTeamGone, true );
-RegisterVariable('finish', vtCommand, @chFinish, true ); // all teams gone
+RegisterVariable('addhh', @chAddHH, false);
+RegisterVariable('addteam', @chAddTeam, false);
+RegisterVariable('hhcoords', @chSetHHCoords, false);
+RegisterVariable('bind', @chBind, true );
+RegisterVariable('teamgone', @chTeamGone, true );
+RegisterVariable('finish', @chFinish, true ); // all teams gone
 
 CurrentTeam:= nil;
 PreviousTeam:= nil;

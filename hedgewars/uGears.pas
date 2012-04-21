@@ -1302,8 +1302,8 @@ const handlers: array[TGearType] of TGearStepProcedure = (
 begin
     doStepHandlers:= handlers;
 
-    RegisterVariable('skip', vtCommand, @chSkip, false);
-    RegisterVariable('hogsay', vtCommand, @chHogSay, true );
+    RegisterVariable('skip', @chSkip, false);
+    RegisterVariable('hogsay', @chHogSay, true );
 
     CurAmmoGear:= nil;
     GearsList:= nil;

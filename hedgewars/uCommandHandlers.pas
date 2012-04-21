@@ -659,90 +659,191 @@ begin
     ZoomValue:= cDefaultZoomLevel;
 end;
 
+procedure chMapGen(var s: shortstring);
+begin
+val(s, cMapGen)
+end;
+
+procedure chTemplateFilter(var s: shortstring);
+begin
+val(s, cTemplateFilter)
+end;
+
+procedure chInactDelay(var s: shortstring);
+begin
+val(s, cInactDelay)
+end;
+
+procedure chReadyDelay(var s: shortstring);
+begin
+val(s, cReadyDelay)
+end;
+
+procedure chCaseFactor(var s: shortstring);
+begin
+val(s, cCaseFactor)
+end;
+
+procedure chHealthCaseProb(var s: shortstring);
+begin
+val(s, cHealthCaseProb)
+end;
+
+procedure chHealthCaseAmount(var s: shortstring);
+begin
+val(s, cHealthCaseAmount)
+end;
+
+procedure chSuddenDTurns(var s: shortstring);
+begin
+val(s, cSuddenDTurns)
+end;
+
+procedure chWaterRise(var s: shortstring);
+begin
+val(s, cWaterRise)
+end;
+
+procedure chHealthDecrease(var s: shortstring);
+begin
+val(s, cHealthDecrease)
+end;
+
+procedure chDamagePercent(var s: shortstring);
+begin
+val(s, cDamagePercent)
+end;
+
+procedure chRopePercent(var s: shortstring);
+begin
+val(s, cRopePercent)
+end;
+
+procedure chGetAwayTime(var s: shortstring);
+begin
+val(s, cGetAwayTime)
+end;
+
+procedure chMineDudPercent(var s: shortstring);
+begin
+val(s, cMineDudPercent)
+end;
+
+procedure chLandMines(var s: shortstring);
+begin
+val(s, cLandMines)
+end;
+
+procedure chExplosives(var s: shortstring);
+begin
+val(s, cExplosives)
+end;
+
+procedure chGameFlags(var s: shortstring);
+begin
+val(s, GameFlags)
+end;
+
+procedure chHedgehogTurnTime(var s: shortstring);
+begin
+val(s, cHedgehogTurnTime)
+end;
+
+procedure chMinesTime(var s: shortstring);
+begin
+val(s, cMinesTime)
+end;
+
+procedure chFastUntilLag(var s: shortstring);
+var i: LongInt;
+begin
+val(s, i);
+fastUntilLag:= i <> 0
+end;
 
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
-    RegisterVariable('+right'  , vtCommand, @chRight_p      , false);
-    RegisterVariable('-right'  , vtCommand, @chRight_m      , false);
-    RegisterVariable('+up'     , vtCommand, @chUp_p         , false);
-    RegisterVariable('-up'     , vtCommand, @chUp_m         , false);
-    RegisterVariable('+left'   , vtCommand, @chLeft_p       , false);
-    RegisterVariable('-left'   , vtCommand, @chLeft_m       , false);
-    RegisterVariable('+attack' , vtCommand, @chAttack_p     , false);
-    RegisterVariable('+down'   , vtCommand, @chDown_p       , false);
-    RegisterVariable('-down'   , vtCommand, @chDown_m       , false);
-    RegisterVariable('hjump'   , vtCommand, @chHJump        , false);
-    RegisterVariable('ljump'   , vtCommand, @chLJump        , false);
-    RegisterVariable('nextturn', vtCommand, @chNextTurn     , false);
-    RegisterVariable('-attack' , vtCommand, @chAttack_m     , false);
-    RegisterVariable('slot'    , vtCommand, @chSlot         , false);
-    RegisterVariable('setweap' , vtCommand, @chSetWeapon    , false);
+    RegisterVariable('+right'  , @chRight_p      , false);
+    RegisterVariable('-right'  , @chRight_m      , false);
+    RegisterVariable('+up'     , @chUp_p         , false);
+    RegisterVariable('-up'     , @chUp_m         , false);
+    RegisterVariable('+left'   , @chLeft_p       , false);
+    RegisterVariable('-left'   , @chLeft_m       , false);
+    RegisterVariable('+attack' , @chAttack_p     , false);
+    RegisterVariable('+down'   , @chDown_p       , false);
+    RegisterVariable('-down'   , @chDown_m       , false);
+    RegisterVariable('hjump'   , @chHJump        , false);
+    RegisterVariable('ljump'   , @chLJump        , false);
+    RegisterVariable('nextturn', @chNextTurn     , false);
+    RegisterVariable('-attack' , @chAttack_m     , false);
+    RegisterVariable('slot'    , @chSlot         , false);
+    RegisterVariable('setweap' , @chSetWeapon    , false);
 //////// End top by freq analysis
-    RegisterVariable('gencmd'  , vtCommand, @chGenCmd       , false);
-    RegisterVariable('flag'    , vtCommand, @chFlag         , false);
-    RegisterVariable('script'  , vtCommand, @chScript       , false);
-    RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
-    RegisterVariable('spectate', vtBoolean, @fastUntilLag   , false);
-    RegisterVariable('capture' , vtCommand, @chCapture      , true );
-    RegisterVariable('rotmask' , vtCommand, @chRotateMask   , true );
-    RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
-    RegisterVariable('map'     , vtCommand, @chSetMap       , false);
-    RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
-    RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
-    RegisterVariable('template_filter', vtLongInt, @cTemplateFilter, false);
-    RegisterVariable('mapgen'  , vtLongInt, @cMapGen        , false);
-    RegisterVariable('maze_size',vtLongInt, @cTemplateFilter, false);
-    RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
-    RegisterVariable('ready'   , vtLongInt, @cReadyDelay    , false);
-    RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
-    RegisterVariable('healthprob', vtLongInt, @cHealthCaseProb, false);
-    RegisterVariable('hcaseamount', vtLongInt, @cHealthCaseAmount, false);
-    RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
-    RegisterVariable('waterrise', vtLongInt, @cWaterRise    , false);
-    RegisterVariable('healthdec', vtLongInt, @cHealthDecrease, false);
-    RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
-    RegisterVariable('ropepct' , vtLongInt, @cRopePercent   , false);
-    RegisterVariable('getawaytime' , vtLongInt, @cGetAwayTime , false);
-    RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);
-    RegisterVariable('minesnum', vtLongInt, @cLandMines     , false);
-    RegisterVariable('explosives',vtLongInt,@cExplosives    , false);
-    RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
-    RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
-    RegisterVariable('minestime',vtLongInt, @cMinesTime     , false);
-    RegisterVariable('fort'    , vtCommand, @chFort         , false);
-    RegisterVariable('grave'   , vtCommand, @chGrave        , false);
-    RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
-    RegisterVariable('quit'    , vtCommand, @chQuit         , true );
-    RegisterVariable('forcequit', vtCommand, @chForceQuit   , true );
-    RegisterVariable('confirm' , vtCommand, @chConfirm      , true );
-    RegisterVariable('halt',     vtCommand, @chHalt         , true );
-    RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
-    RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
-    RegisterVariable('zoomin'  , vtCommand, @chZoomIn       , true );
-    RegisterVariable('zoomout' , vtCommand, @chZoomOut      , true );
-    RegisterVariable('zoomreset',vtCommand, @chZoomReset    , true );
-    RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , true);
-    RegisterVariable('+precise', vtCommand, @chPrecise_p    , false);
-    RegisterVariable('-precise', vtCommand, @chPrecise_m    , false);
-    RegisterVariable('switch'  , vtCommand, @chSwitch       , false);
-    RegisterVariable('timer'   , vtCommand, @chTimer        , false);
-    RegisterVariable('taunt'   , vtCommand, @chTaunt        , false);
-    RegisterVariable('put'     , vtCommand, @chPut          , false);
-    RegisterVariable('+volup'  , vtCommand, @chVol_p        , true );
-    RegisterVariable('-volup'  , vtCommand, @chVol_m        , true );
-    RegisterVariable('+voldown', vtCommand, @chVol_m        , true );
-    RegisterVariable('-voldown', vtCommand, @chVol_p        , true );
-    RegisterVariable('findhh'  , vtCommand, @chFindhh       , true );
-    RegisterVariable('pause'   , vtCommand, @chPause        , true );
-    RegisterVariable('+cur_u'  , vtCommand, @chCurU_p       , true );
-    RegisterVariable('-cur_u'  , vtCommand, @chCurU_m       , true );
-    RegisterVariable('+cur_d'  , vtCommand, @chCurD_p       , true );
-    RegisterVariable('-cur_d'  , vtCommand, @chCurD_m       , true );
-    RegisterVariable('+cur_l'  , vtCommand, @chCurL_p       , true );
-    RegisterVariable('-cur_l'  , vtCommand, @chCurL_m       , true );
-    RegisterVariable('+cur_r'  , vtCommand, @chCurR_p       , true );
-    RegisterVariable('-cur_r'  , vtCommand, @chCurR_m       , true );
+    RegisterVariable('gencmd'  , @chGenCmd       , false);
+    RegisterVariable('flag'    , @chFlag         , false);
+    RegisterVariable('script'  , @chScript       , false);
+    RegisterVariable('proto'   , @chCheckProto   , true );
+    RegisterVariable('spectate', @chFastUntilLag   , false);
+    RegisterVariable('capture' , @chCapture      , true );
+    RegisterVariable('rotmask' , @chRotateMask   , true );
+    RegisterVariable('rdriven' , @chTeamLocal    , false);
+    RegisterVariable('map'     , @chSetMap       , false);
+    RegisterVariable('theme'   , @chSetTheme     , false);
+    RegisterVariable('seed'    , @chSetSeed      , false);
+    RegisterVariable('template_filter', @chTemplateFilter, false);
+    RegisterVariable('mapgen'  , @chMapGen        , false);
+    RegisterVariable('maze_size',@chTemplateFilter, false);
+    RegisterVariable('delay'   , @chInactDelay    , false);
+    RegisterVariable('ready'   , @chReadyDelay    , false);
+    RegisterVariable('casefreq', @chCaseFactor    , false);
+    RegisterVariable('healthprob', @chHealthCaseProb, false);
+    RegisterVariable('hcaseamount', @chHealthCaseAmount, false);
+    RegisterVariable('sd_turns', @chSuddenDTurns  , false);
+    RegisterVariable('waterrise', @chWaterRise    , false);
+    RegisterVariable('healthdec', @chHealthDecrease, false);
+    RegisterVariable('damagepct',@chDamagePercent , false);
+    RegisterVariable('ropepct' , @chRopePercent   , false);
+    RegisterVariable('getawaytime' , @chGetAwayTime , false);
+    RegisterVariable('minedudpct',@chMineDudPercent, false);
+    RegisterVariable('minesnum', @chLandMines     , false);
+    RegisterVariable('explosives',@chExplosives    , false);
+    RegisterVariable('gmflags' , @chGameFlags      , false);
+    RegisterVariable('turntime', @chHedgehogTurnTime, false);
+    RegisterVariable('minestime',@chMinesTime     , false);
+    RegisterVariable('fort'    , @chFort         , false);
+    RegisterVariable('grave'   , @chGrave        , false);
+    RegisterVariable('hat'     , @chSetHat       , false);
+    RegisterVariable('quit'    , @chQuit         , true );
+    RegisterVariable('forcequit', @chForceQuit   , true );
+    RegisterVariable('confirm' , @chConfirm      , true );
+    RegisterVariable('halt',     @chHalt         , true );
+    RegisterVariable('+speedup', @chSpeedup_p    , true );
+    RegisterVariable('-speedup', @chSpeedup_m    , true );
+    RegisterVariable('zoomin'  , @chZoomIn       , true );
+    RegisterVariable('zoomout' , @chZoomOut      , true );
+    RegisterVariable('zoomreset',@chZoomReset    , true );
+    RegisterVariable('ammomenu', @chAmmoMenu     , true);
+    RegisterVariable('+precise', @chPrecise_p    , false);
+    RegisterVariable('-precise', @chPrecise_m    , false);
+    RegisterVariable('switch'  , @chSwitch       , false);
+    RegisterVariable('timer'   , @chTimer        , false);
+    RegisterVariable('taunt'   , @chTaunt        , false);
+    RegisterVariable('put'     , @chPut          , false);
+    RegisterVariable('+volup'  , @chVol_p        , true );
+    RegisterVariable('-volup'  , @chVol_m        , true );
+    RegisterVariable('+voldown', @chVol_m        , true );
+    RegisterVariable('-voldown', @chVol_p        , true );
+    RegisterVariable('findhh'  , @chFindhh       , true );
+    RegisterVariable('pause'   , @chPause        , true );
+    RegisterVariable('+cur_u'  , @chCurU_p       , true );
+    RegisterVariable('-cur_u'  , @chCurU_m       , true );
+    RegisterVariable('+cur_d'  , @chCurD_p       , true );
+    RegisterVariable('-cur_d'  , @chCurD_m       , true );
+    RegisterVariable('+cur_l'  , @chCurL_p       , true );
+    RegisterVariable('-cur_l'  , @chCurL_m       , true );
+    RegisterVariable('+cur_r'  , @chCurR_p       , true );
+    RegisterVariable('-cur_r'  , @chCurR_m       , true );
 end;
 
 procedure freeModule;

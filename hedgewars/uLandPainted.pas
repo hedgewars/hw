@@ -186,7 +186,7 @@ begin
     pointsListHead:= nil;
     pointsListLast:= nil;
 
-    RegisterVariable('draw', vtCommand, @chDraw, false);
+    RegisterVariable('draw', @chDraw, false);
 end;
 
 procedure freeModule;
