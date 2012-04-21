@@ -289,7 +289,7 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
         AddVoice(sndIllGetYou, CurrentTeam^.voicepack)
     else
         AddVoice(sndYesSir, CurrentTeam^.voicepack);
-    if PlacingHogs or (cHedgehogTurnTime < 1000000) then
+    if HedgehogTurnTime < 1000000 then
         ReadyTimeLeft:= cReadyDelay;
     AddCaption(Format(shortstring(trmsg[sidReady]), CurrentTeam^.TeamName), cWhiteColor, capgrpGameState)
     end
