@@ -388,11 +388,11 @@ end;
 procedure initModule;
 var i: ShortInt;
 begin
-    RegisterVariable('chatmsg', vtCommand, @chChatMessage, true);
-    RegisterVariable('say', vtCommand, @chSay, true);
-    RegisterVariable('team', vtCommand, @chTeamSay, true);
-    RegisterVariable('history', vtCommand, @chHistory, true );
-    RegisterVariable('chat', vtCommand, @chChat, true );
+    RegisterVariable('chatmsg', @chChatMessage, true);
+    RegisterVariable('say', @chSay, true);
+    RegisterVariable('team', @chTeamSay, true);
+    RegisterVariable('history', @chHistory, true );
+    RegisterVariable('chat', @chChat, true );
 
     lastStr:= 0;
     visibleCount:= 0;

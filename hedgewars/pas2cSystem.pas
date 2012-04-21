@@ -67,6 +67,7 @@ var
     StrPas, FormatDateTime, copy, delete, str, pos, trim : function : shortstring;
     Length, StrToInt : function : integer;
     SetLength, val : procedure;
+    _pchar : function : PChar;
 
     assign, rewrite, reset, flush, BlockWrite, BlockRead, close : procedure;
     IOResult : function : integer;
@@ -131,7 +132,7 @@ var
     
     Assigned : function : boolean;
     
-    _strconcat : function : string;
+    _strconcat, _strappend, _strprepend : function : string;
     _strcompare, _strncompare : function : boolean;
 
     png_structp, png_set_write_fn, png_get_io_ptr,

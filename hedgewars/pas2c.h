@@ -54,9 +54,22 @@ void __dispose(pointer p, int size);
 
 void __FillChar(pointer p, int size, char fill);
 string255 _strconcat(string255 a, string255 b);
+string255 _strappend(string255 s, char c);
+string255 _strprepend(char c, string255 s);
+char * _pchar(string255 s);
 
 int Length(string255 a);
 string255 copy(string255 a, int s, int l);
 string255 delete(string255 a, int s, int l);
 
 #define STRCONSTDECL(a, b) const string255 a = {.len = sizeof(b), .str = b}
+
+typedef int file;
+extern int FileMode;
+extern int IOResult;
+
+void assign(int f, string255 fileName);
+void reset(int f, int size);
+#define BlockRead(a, b, c, d) BlockRead_(a, &(b), c, &(d))
+void BlockRead_(int f, void * p, int size, int * sizeRead);
+void close(int f);

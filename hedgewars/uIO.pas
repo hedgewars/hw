@@ -104,7 +104,7 @@ begin
     WriteLnToConsole(msgOK);
     WriteToConsole('Establishing IPC connection to tcp 127.0.0.1:' + IntToStr(ipcPort) + ' ');
     {$HINTS OFF}
-    SDLTry(SDLNet_ResolveHost(ipaddr, '127.0.0.1', ipcPort) = 0, true);
+    SDLTry(SDLNet_ResolveHost(ipaddr, PChar('127.0.0.1'), ipcPort) = 0, true);
     {$HINTS ON}
     IPCSock:= SDLNet_TCP_Open(ipaddr);
     SDLTry(IPCSock <> nil, true);
@@ -206,7 +206,7 @@ close(f)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'rDkKHTPsSB';
+const stc: array [TStatInfoType] of char = ('r', 'D', 'k', 'K', 'H', 'T', 'P', 's', 'S', 'B');
 var buf: shortstring;
 begin
 buf:= 'i' + stc[sit] + s;
@@ -420,7 +420,7 @@ end;
 
 procedure initModule;
 begin
-    RegisterVariable('fatal', vtCommand, @chFatalError, true );
+    RegisterVariable('fatal', @chFatalError, true );
 
     IPCSock:= nil;
 

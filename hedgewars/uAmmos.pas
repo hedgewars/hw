@@ -26,10 +26,10 @@ procedure initModule;
 procedure freeModule;
 
 procedure AddAmmoStore;
-procedure SetAmmoLoadout(s: shortstring);
-procedure SetAmmoProbability(s: shortstring);
-procedure SetAmmoDelay(s: shortstring);
-procedure SetAmmoReinforcement(s: shortstring);
+procedure SetAmmoLoadout(var s: shortstring);
+procedure SetAmmoProbability(var s: shortstring);
+procedure SetAmmoDelay(var s: shortstring);
+procedure SetAmmoReinforcement(var s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
@@ -421,22 +421,22 @@ for t:= Low(TAmmoType) to High(TAmmoType) do
         Ammoz[t].Probability:= 0
 end;
 
-procedure SetAmmoLoadout(s: shortstring);
+procedure SetAmmoLoadout(var s: shortstring);
 begin
     ammoLoadout:= s;
 end;
 
-procedure SetAmmoProbability(s: shortstring);
+procedure SetAmmoProbability(var s: shortstring);
 begin
     ammoProbability:= s;
 end;
 
-procedure SetAmmoDelay(s: shortstring);
+procedure SetAmmoDelay(var s: shortstring);
 begin
     ammoDelay:= s;
 end;
 
-procedure SetAmmoReinforcement(s: shortstring);
+procedure SetAmmoReinforcement(var s: shortstring);
 begin
     ammoReinforcement:= s;
 end;
@@ -470,11 +470,11 @@ end;
 procedure initModule;
 var i: Longword;
 begin
-    RegisterVariable('ammloadt', vtCommand, @SetAmmoLoadout, false);
-    RegisterVariable('ammdelay', vtCommand, @SetAmmoDelay, false);
-    RegisterVariable('ammprob',  vtCommand, @SetAmmoProbability, false);
-    RegisterVariable('ammreinf', vtCommand, @SetAmmoReinforcement, false);
-    RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
+    RegisterVariable('ammloadt', @SetAmmoLoadout, false);
+    RegisterVariable('ammdelay', @SetAmmoDelay, false);
+    RegisterVariable('ammprob',  @SetAmmoProbability, false);
+    RegisterVariable('ammreinf', @SetAmmoReinforcement, false);
+    RegisterVariable('ammstore', @chAddAmmoStore , false);
 
     StoreCnt:= 0;
     ammoLoadout:= '';

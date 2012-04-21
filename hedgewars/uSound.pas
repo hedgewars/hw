@@ -543,7 +543,7 @@ end;
 
 procedure initModule;
 begin
-    RegisterVariable('voicepack', vtCommand, @chVoicepack, false);
+    RegisterVariable('voicepack', @chVoicepack, false);
     MusicFN:='';
 end;
 

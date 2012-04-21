@@ -23,12 +23,11 @@ unit uCommands;
 interface
 
 var isDeveloperMode: boolean;
-type TVariableType = (vtCommand, vtLongInt, vtBoolean);
-    TCommandHandler = procedure (var params: shortstring);
+type TCommandHandler = procedure (var params: shortstring);
 
 procedure initModule;
 procedure freeModule;
-procedure RegisterVariable(Name: shortstring; VType: TVariableType; p: pointer; Trusted: boolean);
+procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 procedure StopMessages(Message: Longword);
 
@@ -39,15 +38,14 @@ type  PVariable = ^TVariable;
     TVariable = record
         Next: PVariable;
         Name: string[15];
-        VType: TVariableType;
-        Handler: pointer;
+        Handler: TCommandHandler;
         Trusted: boolean;
         end;
 
 var
     Variables: PVariable;
 
-procedure RegisterVariable(Name: shortstring; VType: TVariableType; p: pointer; Trusted: boolean);
+procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean);
 var
     value: PVariable;
 begin
@@ -55,7 +53,6 @@ New(value);
 TryDo(value <> nil, 'RegisterVariable: value = nil', true);
 FillChar(value^, sizeof(TVariable), 0);
 value^.Name:= Name;
-value^.VType:= VType;
 value^.Handler:= p;
 value^.Trusted:= Trusted;
 
@@ -80,48 +77,22 @@ if CmdStr[0]=#0 then
     exit;
 c:= CmdStr[1];
 if (c = '/') or (c = '$') then
-    Delete(CmdStr, 1, 1)
-else
-    c:= '/';
+    Delete(CmdStr, 1, 1);
 s:= '';
 SplitBySpace(CmdStr, s);
-AddFileLog('[Cmd] ' + c + CmdStr + ' (' + inttostr(length(s)) + ')');
+AddFileLog('[Cmd] ' + CmdStr + ' (' + inttostr(length(s)) + ')');
 t:= Variables;
 while t <> nil do
     begin
     if t^.Name = CmdStr then
         begin
         if TrustedSource or t^.Trusted then
-            case t^.VType of
-                vtCommand: if c='/' then
-                    begin
-                    TCommandHandler(t^.Handler)(s);
-                    end;
-                vtLongInt: if c='$' then
-                    if s[0]=#0 then
-                        begin
-                        str(PLongInt(t^.Handler)^, s);
-                        WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                        end
-                    else
-                        val(s, PLongInt(t^.Handler)^);
-                vtBoolean: if c='$' then
-                    if s[0]=#0 then
-                        begin
-                        str(ord(boolean(t^.Handler^)), s);
-                        WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                        end
-                    else
-                        begin
-                        val(s, ii);
-                        boolean(t^.Handler^):= not (ii = 0)
-                        end;
-                end;
-            exit
-            end
-        else
-            t:= t^.Next
-        end;
+            t^.Handler(s);
+        exit
+        end
+    else
+        t:= t^.Next
+    end;
 case c of
     '$': WriteLnToConsole(errmsgUnknownVariable + ': "$' + CmdStr + '"')
     else
