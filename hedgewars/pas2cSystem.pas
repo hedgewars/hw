@@ -70,7 +70,7 @@ var
     _pchar : function : PChar;
 
     assign, rewrite, reset, flush, BlockWrite, BlockRead, close : procedure;
-    IOResult : function : integer;
+    IOResult : integer;
     exit, break, halt, continue : procedure;
     TextFile, file : Handle;
     FileMode : integer;

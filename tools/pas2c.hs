@@ -48,7 +48,7 @@ addStringConst :: String -> State RenderState Doc
 addStringConst str = do
     i <- getUniq
     let sn = "__str" ++ show i
-    modify (\s -> s{stringConsts = (sn, str) : stringConsts s})
+    modify (\s -> s{lastType = BTString, stringConsts = (sn, str) : stringConsts s})
     return $ text sn
     
 escapeStr :: String -> String
@@ -154,7 +154,7 @@ toCFiles ns p@(fn, pu) = do
     initialState = emptyState ns
 
     render2C :: RenderState -> State RenderState Doc -> String
-    render2C a = render . ($+$ text "") . flip evalState a
+    render2C a = render . ($+$ empty) . flip evalState a
 
 usesFiles :: PascalUnit -> [String]
 usesFiles (Program _ (Implementation uses _) _) = "pas2cSystem" : uses2List uses
@@ -564,7 +564,7 @@ phrase2C (ForCycle i' e1' e2' p) = do
 phrase2C (RepeatCycle e' p') = do
     e <- expr2C e'
     p <- phrase2C (Phrases p')
-    return $ text "do" <+> p <+> text "while" <> parens (text "!" <> parens e)
+    return $ text "do" <+> p <+> text "while" <> parens (text "!" <> parens e) <> semi
 phrase2C NOP = return $ text ";"
 
 phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "exit" BTUnknown))) = return $ text "return" <> semi
@@ -584,33 +584,55 @@ expr2C (BinOp op expr1 expr2) = do
     e1 <- expr2C expr1
     t1 <- gets lastType
     e2 <- expr2C expr2
-    case (op2C op, t1) of
-        ("+", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction BTString))
-        ("==", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction BTBool))
-        ("!=", BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction BTBool))
-        ("&", BTBool) -> return $ parens e1 <+> text "&&" <+> parens e2
-        ("|", BTBool) -> return $ parens e1 <+> text "||" <+> parens e2
-        (o, _) -> return $ parens e1 <+> text o <+> parens e2
+    t2 <- gets lastType
+    case (op2C op, t1, t2) of
+        ("+", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction BTString))
+        ("+", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappend" (BTFunction BTString))
+        ("+", BTChar, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprepend" (BTFunction BTString))
+        ("==", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction BTBool))
+        ("!=", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction BTBool))
+        ("&", BTBool, _) -> return $ parens e1 <+> text "&&" <+> parens e2
+        ("|", BTBool, _) -> return $ parens e1 <+> text "||" <+> parens e2
+        (o, _, _) -> return $ parens e1 <+> text o <+> parens e2
 expr2C (NumberLiteral s) = return $ text s
 expr2C (FloatLiteral s) = return $ text s
 expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
-expr2C (StringLiteral [a]) = return . quotes $ text [a]
+expr2C (StringLiteral [a]) = do
+    modify(\s -> s{lastType = BTChar})
+    return . quotes $ text [a]
 expr2C (StringLiteral s) = addStringConst s
-expr2C (Reference ref) = ref2C ref
+expr2C (Reference ref) = ref2CF ref
 expr2C (PrefixOp op expr) = liftM (text (op2C op) <>) (expr2C expr)
 expr2C Null = return $ text "NULL"
-expr2C (CharCode a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
+expr2C (CharCode a) = do
+    modify(\s -> s{lastType = BTChar})
+    return $ quotes $ text "\\x" <> text (showHex (read a) "")
 expr2C (HexCharCode a) = return $ quotes $ text "\\x" <> text (map toLower a)
 expr2C (SetExpression ids) = mapM (id2C IOLookup) ids >>= return . parens . hcat . punctuate (text " | ")
-expr2C b@(BuiltInFunCall [e] (SimpleReference (Identifier "ord" _))) = liftM parens $ expr2C e
+
+expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "ord" _))) = liftM parens $ expr2C e
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "succ" _))) = liftM (<> text " + 1") $ expr2C e
+expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "pred" _))) = liftM (<> text " - 1") $ expr2C e
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref 
+    t <- gets lastType
     ps <- mapM expr2C params
+    case t of
+        BTFunction t' -> do
+            modify (\s -> s{lastType = t'})
+        _ -> error $ "BuiltInFunCall lastType: " ++ show t
     return $ 
         r <> parens (hsep . punctuate (char ',') $ ps)
 expr2C a = error $ "Don't know how to render " ++ show a
 
+ref2CF :: Reference -> State RenderState Doc
+ref2CF (SimpleReference name) = do
+    i <- id2C IOLookup name
+    t <- gets lastType
+    case t of
+         BTFunction _ -> return $ i <> parens empty
+         _ -> return $ i
+ref2CF r = ref2C r
 
 ref2C :: Reference -> State RenderState Doc
 -- rewrite into proper form
@@ -663,23 +685,28 @@ ref2C d@(Dereference ref) = do
     t <- fromPointer (show d) =<< gets lastType
     modify (\st -> st{lastType = t})
     return $ (parens $ text "*" <> r)
-ref2C (FunCall params ref) = do
-    ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
+ref2C f@(FunCall params ref) = do
     r <- ref2C ref
     t <- gets lastType
     case t of
-        BTFunction t -> do
-            modify (\s -> s{lastType = t})
+        BTFunction t' -> do
+            ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
+            modify (\s -> s{lastType = t'})
             return $ r <> ps
-        _ -> return $ parens r <> ps
+        _ -> case (ref, params) of
+                  (SimpleReference i, [p]) -> ref2C $ TypeCast i p
+                  _ -> error $ "ref2C FunCall erroneous type cast detected: " ++ show f ++ "\nType detected: " ++ show t
         
 ref2C (Address ref) = do
     r <- ref2C ref
     return $ text "&" <> parens r
-ref2C (TypeCast t' expr) = do
-    t <- id2C IOLookup t'
-    e <- expr2C expr
-    return $ parens t <> e
+ref2C (TypeCast t'@(Identifier i _) expr) = do
+    case map toLower i of
+        "pchar" -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pchar" $ BTPointerTo BTChar))
+        a -> do
+            e <- expr2C expr
+            t <- id2C IOLookup t'    
+            return $ parens t <> e
 ref2C (RefExpression expr) = expr2C expr
 
 

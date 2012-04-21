@@ -44,8 +44,8 @@ typedef char * PChar;
 typedef LongInt * PLongInt;
 typedef Integer * PInteger;
 
-#define new(a) __new(a, sizeof(*(a)))
-void __new(pointer p, int size);
+#define new(a) __new(&a, sizeof(*(a)))
+void __new(pointer * p, int size);
 
 #define dispose(a) __dispose(a, sizeof(*(a)))
 void __dispose(pointer p, int size);
@@ -68,7 +68,8 @@ typedef int file;
 extern int FileMode;
 extern int IOResult;
 
-void assign(int f, string255 fileName);
+#define assign(a, b) assign_(&(a), b)
+void assign_(int * f, string255 fileName);
 void reset(int f, int size);
 #define BlockRead(a, b, c, d) BlockRead_(a, &(b), c, &(d))
 void BlockRead_(int f, void * p, int size, int * sizeRead);
