@@ -26,7 +26,7 @@
 @synthesize delegate, stream, csd, enginePort;
 
 -(id) initWithPort:(NSInteger) port {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.delegate = nil;
         self.csd = NULL;
         self.stream = nil;
@@ -118,7 +118,7 @@
     // if we're loading an older version of ammos fill the engine message with 0s
     int diff = HW_getNumberOfWeapons() - [[ammoData objectForKey:@"ammostore_initialqt"] length];
     NSString *update = @"";
-    while ([update length] < diff)
+    while ((int)[update length] < diff)
         update = [update stringByAppendingString:@"0"];
 
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@%@", [ammoData objectForKey:@"ammostore_initialqt"], update];
@@ -170,7 +170,7 @@
     result = [[basicArray objectAtIndex:0] intValue];
     NSArray *basic = [[NSArray alloc] initWithContentsOfFile:BASICFLAGS_FILE()];
 
-    for (int i = 1; i < [basicArray count]; i++) {
+    for (NSUInteger i = 1; i < [basicArray count]; i++) {
         NSDictionary *dict = [basic objectAtIndex:i];
         NSString *command = [dict objectForKey:@"command"];
         NSInteger value = [[basicArray objectAtIndex:i] intValue];

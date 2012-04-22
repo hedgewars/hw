@@ -159,7 +159,7 @@
     }
 
     // play if there aren't too many teams
-    if ([self.teamConfigViewController.listOfSelectedTeams count] > HW_getMaxNumberOfTeams()) {
+    if ((int)[self.teamConfigViewController.listOfSelectedTeams count] > HW_getMaxNumberOfTeams()) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many teams",@"")
                                                         message:NSLocalizedString(@"You exceeded the maximum number of tems allowed in a game",@"")
                                                        delegate:nil

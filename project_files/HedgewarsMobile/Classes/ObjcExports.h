@@ -20,7 +20,8 @@
 void clearView(void);
 BOOL isApplePhone(void);
 
-void startSpinningProgress(void);
-void stopSpinningProgress(void);
+void startLoadingIndicator(void);
+void stopLoadingIndicator(void);
+
 void saveBeganSynching(void);
 void saveFinishedSynching(void);

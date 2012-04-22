@@ -30,8 +30,8 @@
     id<EditableCellViewDelegate> delegate;
     UITextField *textField;
     UILabel *titleLabel;
-    NSInteger minimumCharacters;
-    NSInteger maximumCharacters;
+    NSUInteger minimumCharacters;
+    NSUInteger maximumCharacters;
     BOOL respectEditing;
 
 @private
@@ -41,8 +41,8 @@
 @property (nonatomic,assign) id<EditableCellViewDelegate> delegate;
 @property (nonatomic,retain,readonly) UITextField *textField;
 @property (nonatomic,retain,readonly) UILabel *titleLabel;
-@property (nonatomic,assign) NSInteger minimumCharacters;
-@property (nonatomic,assign) NSInteger maximumCharacters;
+@property (nonatomic,assign) NSUInteger minimumCharacters;
+@property (nonatomic,assign) NSUInteger maximumCharacters;
 @property (nonatomic,assign) BOOL respectEditing;
 @property (nonatomic,retain) NSString *oldValue;
 

@@ -272,9 +272,9 @@
             if ([[settings objectForKey:@"sync_ws"] boolValue]) {
                 for (NSString *str in self.listOfWeapons) {
                     if ([str isEqualToString:self.selectedScheme]) {
-                        int index = [self.listOfSchemes indexOfObject:str];
+                        int row = [self.listOfSchemes indexOfObject:str];
                         self.selectedWeapon = str;
-                        self.lastIndexPath_we = [NSIndexPath indexPathForRow:index inSection:1];
+                        self.lastIndexPath_we = [NSIndexPath indexPathForRow:row inSection:1];
                         break;
                     }
                 }

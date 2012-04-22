@@ -93,7 +93,7 @@
 
 @synthesize thumbRect, textValue;
 
-#pragma Private methods
+#pragma mark Private methods
 
 -(void) _constructSlider {
     valuePopupView = [[SliderValuePopupView alloc] initWithFrame:CGRectZero];
