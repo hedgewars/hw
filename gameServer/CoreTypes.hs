@@ -192,6 +192,7 @@ type IRnC = IRoomsAndClients RoomInfo ClientInfo
 data Notice =
     NickAlreadyInUse
     | AdminLeft
+    | WrongPassword
     deriving Enum
 
 data ShutdownException =
