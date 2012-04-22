@@ -1180,6 +1180,7 @@ void HWForm::NetConnect()
         netPort = hpd->sbPort->value();
         NetConnectServer(*netHost, netPort);
     }
+    delete hpd;
 }
 
 void HWForm::NetStartServer()
