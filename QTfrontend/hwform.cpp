@@ -83,6 +83,7 @@
 #include "netudpserver.h"
 #include "chatwidget.h"
 #include "input_ip.h"
+#include "input_password.h"
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
 #include "xfire.h"
@@ -935,25 +936,34 @@ void HWForm::NetConnectOfficialServer()
 
 void HWForm::NetPassword(const QString & nick)
 {
-    bool ok = false;
     int passLength = config->value("net/passwordlength", 0).toInt();
     QString hash = config->value("net/passwordhash", "").toString();
 
     // If the password is blank, ask the user to enter one in
     if (passLength == 0)
     {
-        QString password = QInputDialog::getText(this, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(nick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
-
-        if (!ok)
+        HWPasswordDialog * hpd = new HWPasswordDialog(this, tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(nick));
+        hpd->cbSave->setChecked(config->value("net/savepassword", true).toBool());
+        if (hpd->exec() != QDialog::Accepted)
         {
             ForcedDisconnect(tr("No password supplied."));
+            delete hpd;
             return;
         }
 
+        QString password = hpd->lePassword->text();
         hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
-        config->setValue("net/passwordhash", hash);
-        config->setValue("net/passwordlength", password.size());
-        config->setNetPasswordLength(password.size());
+
+        bool save = hpd->cbSave->isChecked();
+        config->setValue("net/savepassword", save);
+        if (save) // user wants to save password
+        {
+            config->setValue("net/passwordhash", hash);
+            config->setValue("net/passwordlength", password.size());
+            config->setNetPasswordLength(password.size());
+        }
+
+        delete hpd;
     }
 
     hwnet->SendPasswordHash(hash);

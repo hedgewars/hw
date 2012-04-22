@@ -100,7 +100,8 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/ui/qpushbuttonwithsound.h \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.h \
     ../QTfrontend/ui/page/pagefeedback.h \
-    ../QTfrontend/model/roomslistmodel.h
+    ../QTfrontend/model/roomslistmodel.h \
+    ../QTfrontend/ui/dialog/input_password.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/themesmodel.cpp \
@@ -178,7 +179,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/mouseoverfilter.cpp \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.cpp \
     ../QTfrontend/ui/page/pagefeedback.cpp \
-    ../QTfrontend/model/roomslistmodel.cpp
+    ../QTfrontend/model/roomslistmodel.cpp \
+    ../QTfrontend/ui/dialog/input_password.cpp
 
 win32 {
     SOURCES += ../QTfrontend/xfire.cpp
