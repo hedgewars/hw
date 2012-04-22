@@ -75,23 +75,23 @@ Trusted:= (CurrentTeam <> nil)
 movecursor(5 * CursorMovementX, 5 * CursorMovementY);
 
 pkbd:= SDL_GetKeyState(@j);
-for i:= 1 to pred(j) do 
+for i:= 6 to pred(j) do // first 6 will be overwritten
     tkbdn[i]:= pkbd^[i];
 
 k:= SDL_GetMouseState(nil, nil);
 // mouse buttons
 {$IFDEF DARWIN}
-tkbdn[SDL_SCANCODE_MOUSEL]:= ((k and 1) and not (tkbdn[306] or tkbdn[305]));
-tkbdn[SDL_SCANCODE_MOUSER]:= ((k and 1) and (tkbdn[306] or tkbdn[305])) or (k and 4);
+tkbdn[1]:= ((k and 1) and not (tkbdn[306] or tkbdn[305]));
+tkbdn[3]:= ((k and 1) and (tkbdn[306] or tkbdn[305])) or (k and 4);
 {$ELSE}
-tkbdn[SDL_SCANCODE_MOUSEL]:= (k and 1);
-tkbdn[SDL_SCANCODE_MOUSER]:= ((k shr 2) and 1);
+tkbdn[1]:= (k and 1);
+tkbdn[3]:= ((k shr 2) and 1);
 {$ENDIF}
-tkbdn[SDL_SCANCODE_MOUSEM]:= ((k shr 1) and 1);
+tkbdn[2]:= ((k shr 1) and 1);
 
 // mouse wheels
-tkbdn[SDL_SCANCODE_WHEELDOWN]:= ord(wheelDown);
-tkbdn[SDL_SCANCODE_WHEELUP]:= ord(wheelUp);
+tkbdn[4]:= ord(wheelDown);
+tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
 
@@ -101,7 +101,7 @@ setTouchWidgetStates();
 
 {$IFNDEF MOBILE}
 // Controller(s)
-k:= SDL_SCANCODE_CONTROLLER; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
+k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
     begin
     for i:= 0 to Pred(ControllerNumAxes[j]) do
@@ -134,12 +134,12 @@ for j:= 0 to Pred(ControllerNumControllers) do
 
 // ctrl/cmd + q to close engine and frontend
 {$IFDEF DARWIN}
-    if ((tkbdn[SDL_SCANCODE_LGUI] = 1) or (tkbdn[SDL_SCANCODE_RGUI] = 1)) then
+    if ((tkbdn[KeyNameToCode('left_meta')] = 1) or (tkbdn[KeyNameToCode('right_meta')] = 1)) then
 {$ELSE}
-    if ((tkbdn[SDL_SCANCODE_LCTRL] = 1) or (tkbdn[SDL_SCANCODE_RCTRL] = 1)) then
+    if ((tkbdn[KeyNameToCode('left_ctrl')] = 1) or (tkbdn[KeyNameToCode('right_ctrl')] = 1)) then
 {$ENDIF}
     begin
-        if tkbdn[SDL_SCANCODE_Q] = 1 then ParseCommand ('halt', true)
+        if tkbdn[KeyNameToCode('q')] = 1 then ParseCommand ('halt', true)
     end;
 
 // now process strokes
@@ -181,17 +181,17 @@ for i:= 1 to pred(j) do
 
 // mouse buttons
 {$IFDEF DARWIN}
-tkbdn[SDL_SCANCODE_MOUSEL]:= ((k and 1) and not (tkbdn[306] or tkbdn[305]));
-tkbdn[SDL_SCANCODE_MOUSER]:= ((k and 1) and (tkbdn[306] or tkbdn[305])) or (k and 4);
+tkbdn[1]:= ((k and 1) and not (tkbdn[306] or tkbdn[305]));
+tkbdn[3]:= ((k and 1) and (tkbdn[306] or tkbdn[305])) or (k and 4);
 {$ELSE}
-tkbdn[SDL_SCANCODE_MOUSEL]:= (k and 1);
-tkbdn[SDL_SCANCODE_MOUSER]:= ((k shr 2) and 1);
+tkbdn[1]:= (k and 1);
+tkbdn[3]:= ((k shr 2) and 1);
 {$ENDIF}
-tkbdn[SDL_SCANCODE_MOUSEM]:= ((k shr 1) and 1);
+tkbdn[2]:= ((k shr 1) and 1);
 
 // mouse wheels
-tkbdn[SDL_SCANCODE_WHEELDOWN]:= ord(wheelDown);
-tkbdn[SDL_SCANCODE_WHEELUP]:= ord(wheelUp);
+tkbdn[4]:= ord(wheelDown);
+tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
 
@@ -201,7 +201,7 @@ setTouchWidgetStates();
 
 {$IFNDEF MOBILE}
 // Controller(s)
-k:= SDL_SCANCODE_CONTROLLER; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
+k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
     begin
     for i:= 0 to Pred(ControllerNumAxes[j]) do
@@ -241,7 +241,13 @@ procedure InitKbdKeyTable;
 var i, j, k, t: LongInt;
     s: string[15];
 begin
-for i:= 0 to cKeyMaxIndex do
+KeyNames[1]:= 'mousel';
+KeyNames[2]:= 'mousem';
+KeyNames[3]:= 'mouser';
+KeyNames[4]:= 'wheelup';
+KeyNames[5]:= 'wheeldown';
+
+for i:= 6 to cKeyMaxIndex do
     begin
     s:= shortstring(sdl_getkeyname(i));
     //WriteToConsole(IntToStr(i) + ': ' + s);
@@ -255,14 +261,11 @@ for i:= 0 to cKeyMaxIndex do
         end;
     end;
 
-KeyNames[SDL_SCANCODE_MOUSEL]:= 'mousel';
-KeyNames[SDL_SCANCODE_MOUSEM]:= 'mousem';
-KeyNames[SDL_SCANCODE_MOUSER]:= 'mouser';
-KeyNames[SDL_SCANCODE_WHEELUP]:= 'wheelup';
-KeyNames[SDL_SCANCODE_WHEELDOWN]:= 'wheeldown';
 //for i:= 0 to cKeyMaxIndex do writeln(stdout,IntToStr(i) + ': ' + KeyNames[i]);
 
-k:= SDL_SCANCODE_CONTROLLER;
+// get the size of keyboard array
+SDL_GetKeyState(@k);
+
 // Controller(s)
 for j:= 0 to Pred(ControllerNumControllers) do
     begin
@@ -287,59 +290,54 @@ for j:= 0 to Pred(ControllerNumControllers) do
         end;
     end;
 
-DefaultBinds[SDL_SCANCODE_ESCAPE]:= 'quit';
-DefaultBinds[SDL_SCANCODE_GRAVE]:= 'history';
+DefaultBinds[ 27]:= 'quit';
+DefaultBinds[ 96]:= 'history';
 DefaultBinds[127]:= 'rotmask';
 
 //numpad
 //DefaultBinds[265]:= '+volup';
 //DefaultBinds[256]:= '+voldown';
 
-DefaultBinds[SDL_SCANCODE_0]:= '+volup';
-DefaultBinds[SDL_SCANCODE_9]:= '+voldown';
-DefaultBinds[SDL_SCANCODE_C]:= 'capture';
-DefaultBinds[SDL_SCANCODE_H]:= 'findhh';
-DefaultBinds[SDL_SCANCODE_P]:= 'pause';
-DefaultBinds[SDL_SCANCODE_S]:= '+speedup';
-DefaultBinds[SDL_SCANCODE_T]:= 'chat';
-DefaultBinds[SDL_SCANCODE_Y]:= 'confirm';
+DefaultBinds[KeyNameToCode('0')]:= '+volup';
+DefaultBinds[KeyNameToCode('9')]:= '+voldown';
+DefaultBinds[KeyNameToCode('c')]:= 'capture';
+DefaultBinds[KeyNameToCode('h')]:= 'findhh';
+DefaultBinds[KeyNameToCode('p')]:= 'pause';
+DefaultBinds[KeyNameToCode('s')]:= '+speedup';
+DefaultBinds[KeyNameToCode('t')]:= 'chat';
+DefaultBinds[KeyNameToCode('y')]:= 'confirm';
 
-DefaultBinds[SDL_SCANCODE_MOUSEM]:= 'zoomreset';
-DefaultBinds[SDL_SCANCODE_WHEELUP]:= 'zoomout';
-DefaultBinds[SDL_SCANCODE_WHEELDOWN]:= 'zoomin';
+DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
+DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomout';
+DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomin';
 
-DefaultBinds[SDL_SCANCODE_F12]:= 'fullscr';
+DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 
 
-DefaultBinds[SDL_SCANCODE_MOUSEL]:= '/put';
-DefaultBinds[SDL_SCANCODE_MOUSER]:= 'ammomenu';
-DefaultBinds[SDL_SCANCODE_BACKSPACE]:= 'hjump';
-DefaultBinds[SDL_SCANCODE_TAB]:= 'switch';
-DefaultBinds[SDL_SCANCODE_RETURN]:= 'ljump';
-DefaultBinds[SDL_SCANCODE_SPACE]:= '+attack';
+DefaultBinds[ 1]:= '/put';
+DefaultBinds[ 3]:= 'ammomenu';
+DefaultBinds[ 8]:= 'hjump';
+DefaultBinds[ 9]:= 'switch';
+DefaultBinds[13]:= 'ljump';
+DefaultBinds[32]:= '+attack';
+{$IFDEF MOBILE}
+DefaultBinds[23]:= '+up';
+DefaultBinds[24]:= '+down';
+DefaultBinds[25]:= '+left';
+DefaultBinds[26]:= '+right';
+DefaultBinds[27]:= '+precise';
+DefaultBinds[44]:= 'chat';
+DefaultBinds[55]:= 'pause';
+{$ELSE}
+DefaultBinds[KeyNameToCode('up')]:= '+up';
+DefaultBinds[KeyNameToCode('down')]:= '+down';
+DefaultBinds[KeyNameToCode('left')]:= '+left';
+DefaultBinds[KeyNameToCode('right')]:= '+right';
+DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
+{$ENDIF}
 
-DefaultBinds[SDL_SCANCODE_UP]:= '+up';
-DefaultBinds[SDL_SCANCODE_DOWN]:= '+down';
-DefaultBinds[SDL_SCANCODE_LEFT]:= '+left';
-DefaultBinds[SDL_SCANCODE_RIGHT]:= '+right';
-DefaultBinds[SDL_SCANCODE_LSHIFT]:= '+precise';
-
-DefaultBinds[SDL_SCANCODE_F1]:= 'slot 1';
-DefaultBinds[SDL_SCANCODE_F2]:= 'slot 2';
-DefaultBinds[SDL_SCANCODE_F3]:= 'slot 3';
-DefaultBinds[SDL_SCANCODE_F4]:= 'slot 4';
-DefaultBinds[SDL_SCANCODE_F5]:= 'slot 5';
-DefaultBinds[SDL_SCANCODE_F6]:= 'slot 6';
-DefaultBinds[SDL_SCANCODE_F7]:= 'slot 7';
-DefaultBinds[SDL_SCANCODE_F8]:= 'slot 8';
-DefaultBinds[SDL_SCANCODE_F9]:= 'slot 9';
-DefaultBinds[SDL_SCANCODE_F10]:= 'slot 10';
-
-DefaultBinds[SDL_SCANCODE_1]:= 'timer 1';
-DefaultBinds[SDL_SCANCODE_2]:= 'timer 2';
-DefaultBinds[SDL_SCANCODE_3]:= 'timer 3';
-DefaultBinds[SDL_SCANCODE_4]:= 'timer 4';
-DefaultBinds[SDL_SCANCODE_5]:= 'timer 5';
+for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
+for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
 
 SetDefaultBinds();
 end;
@@ -362,23 +360,23 @@ end;
 {$IFDEF MOBILE}
 procedure setTouchWidgetStates;
 begin
-    tkbdn[SDL_SCANCODE_MOUSEL]:= tkbdn[SDL_SCANCODE_MOUSEL] or ord(leftClick);
-    tkbdn[SDL_SCANCODE_MOUSEM]:= tkbdn[SDL_SCANCODE_MOUSEM] or ord(middleClick);
-    tkbdn[SDL_SCANCODE_MOUSER]:= tkbdn[SDL_SCANCODE_MOUSER] or ord(rightClick);
+    tkbdn[ 1]:= ord(leftClick);
+    tkbdn[ 2]:= ord(middleClick);
+    tkbdn[ 3]:= ord(rightClick);
 
-    tkbdn[SDL_SCANCODE_UP]    := tkbdn[SDL_SCANCODE_UP] or ord(upKey);
-    tkbdn[SDL_SCANCODE_DOWN]  := tkbdn[SDL_SCANCODE_DOWN] or ord(downKey);
-    tkbdn[SDL_SCANCODE_LEFT]  := tkbdn[SDL_SCANCODE_LEFT] or ord(leftKey);
-    tkbdn[SDL_SCANCODE_RIGHT] := tkbdn[SDL_SCANCODE_RIGHT] or ord(rightKey);
-    tkbdn[SDL_SCANCODE_LSHIFT]:= tkbdn[SDL_SCANCODE_LSHIFT] or ord(preciseKey);
+    tkbdn[23]:= ord(upKey);
+    tkbdn[24]:= ord(downKey);
+    tkbdn[25]:= ord(leftKey);
+    tkbdn[26]:= ord(rightKey);
+    tkbdn[27]:= ord(preciseKey);
 
-    tkbdn[SDL_SCANCODE_BACKSPACE]:= tkbdn[SDL_SCANCODE_BACKSPACE] or ord(backspaceKey);
-    tkbdn[SDL_SCANCODE_TAB]:= tkbdn[SDL_SCANCODE_TAB] or ord(tabKey);
-    tkbdn[SDL_SCANCODE_RETURN]:= ord(enterKey);
-    tkbdn[SDL_SCANCODE_SPACE]:= ord(spaceKey);
+    tkbdn[ 8]:= ord(backspaceKey);
+    tkbdn[ 9]:= ord(tabKey);
+    tkbdn[13]:= ord(enterKey);
+    tkbdn[32]:= ord(spaceKey);
 
-    tkbdn[SDL_SCANCODE_T]:= tkbdn[SDL_SCANCODE_T] or ord(chatAction);
-    tkbdn[SDL_SCANCODE_PAUSE]:= ord(pauseAction);
+    tkbdn[44]:= ord(chatAction);
+    tkbdn[55]:= ord(pauseAction);
 
     // set to false the keys that only need one stoke
     leftClick:= false;
