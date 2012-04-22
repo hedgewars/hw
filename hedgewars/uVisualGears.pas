@@ -365,7 +365,11 @@ vgtBigExplosion:
                 Frame:= 7;
                 Angle:= 0;
                 end;
-vgtSmoothWindBar: Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+vgtSmoothWindBar: 
+                begin
+                Angle:= hwFloat2Float(cMaxWindSpeed)*2 / 1440; // seems rate below is supposed to change wind bar at 1px per 10ms. Max time, 1440ms. This tries to match the rate of change
+                Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+                end;
  vgtStraightShot:
                 begin
                 Angle:= 0;
