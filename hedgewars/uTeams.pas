@@ -205,6 +205,8 @@ end;
 procedure AfterSwitchHedgehog;
 var i, t: LongInt;
     CurWeapon: PAmmo;
+    w: real;
+    vg: PVisualGear;
 
 begin
 if PlacingHogs then
@@ -249,12 +251,9 @@ ResetKbd;
 if (GameFlags and gfDisableWind) = 0 then
     begin
     cWindSpeed:= rndSign(GetRandom * 2 * cMaxWindSpeed);
-    // cWindSpeedf:= cWindSpeed.QWordValue / _1.QWordValue throws 'Internal error 200502052' on Darwin
-    // see http://mantis.freepascal.org/view.php?id=17714
-    cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
-    if cWindSpeed.isNegative then
-        CWindSpeedf := -cWindSpeedf;
-    AddVisualGear(0, 0, vgtSmoothWindBar);
+    w:= hwFloat2Float(cWindSpeed);
+    vg:= AddVisualGear(0, 0, vgtSmoothWindBar);
+    if vg <> nil then vg^.dAngle:= w;
     AddFileLog('Wind = '+FloatToStr(cWindSpeed));
     end;
 
