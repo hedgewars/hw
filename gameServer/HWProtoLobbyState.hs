@@ -76,7 +76,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             else if isRestrictedJoins jRoom then
             [Warning "Joining restricted"]
             else if roomPassword /= password jRoom then
-            [Warning "Wrong password"]
+            [NoticeMessage WrongPassword]
             else
             [
                 MoveToRoom jRI,
