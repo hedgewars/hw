@@ -64,6 +64,7 @@ class GameUIConfig : public QSettings
         bool isAutoUpdateEnabled();
 #endif
 #endif
+        void reloadValues(void);
 
     signals:
         void frontendFullscreen(bool value);

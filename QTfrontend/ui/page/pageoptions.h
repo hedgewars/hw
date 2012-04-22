@@ -56,6 +56,7 @@ class PageOptions : public AbstractPage
         QCheckBox *CBFullscreen;
         QCheckBox *CBFrontendFullscreen;
         QCheckBox *CBShowFPS;
+        QCheckBox *CBSavePassword;
         QCheckBox *CBAltDamage;
         QCheckBox *CBNameWithDate;
 #ifdef __APPLE__
@@ -100,6 +101,7 @@ class PageOptions : public AbstractPage
         void trimNetNick();
         void requestEditSelectedTeam();
         void requestDeleteSelectedTeam();
+        void savePwdChanged(int state);
 };
 
 #endif

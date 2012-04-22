@@ -187,28 +187,12 @@ QLayout * PageOptions::bodyLayoutDefinition()
         groupMisc->setTitle(QGroupBox::tr("Misc"));
         QGridLayout * MiscLayout = new QGridLayout(groupMisc);
 
-        labelNN = new QLabel(groupMisc);
-        labelNN->setText(QLabel::tr("Net nick"));
-        MiscLayout->addWidget(labelNN, 0, 0);
-
-        editNetNick = new QLineEdit(groupMisc);
-        editNetNick->setMaxLength(20);
-        editNetNick->setText(QLineEdit::tr("unnamed"));
-        connect(editNetNick, SIGNAL(editingFinished()), this, SLOT(trimNetNick()));
-        MiscLayout->addWidget(editNetNick, 0, 1);
-
-        labelNetPassword = new QLabel(groupMisc);
-        labelNetPassword->setText(QLabel::tr("Password"));
-        MiscLayout->addWidget(labelNetPassword, 1, 0);
-
-        editNetPassword = new QLineEdit(groupMisc);
-        editNetPassword->setEchoMode(QLineEdit::Password);
-        MiscLayout->addWidget(editNetPassword, 1, 1);
-
+        // Label for "Language"
         QLabel *labelLanguage = new QLabel(groupMisc);
         labelLanguage->setText(QLabel::tr("Locale") + " *");
-        MiscLayout->addWidget(labelLanguage, 2, 0);
+        MiscLayout->addWidget(labelLanguage, 0, 0);
 
+        // List of installed languages
         CBLanguage = new QComboBox(groupMisc);
         QDir tmpdir;
         tmpdir.cd(cfgdir->absolutePath());
@@ -233,26 +217,49 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
         }
 
-        MiscLayout->addWidget(CBLanguage, 2, 1);
+        MiscLayout->addWidget(CBLanguage, 0, 1);
+
+        // Label and field for net nick
+        labelNN = new QLabel(groupMisc);
+        labelNN->setText(QLabel::tr("Nickname"));
+        MiscLayout->addWidget(labelNN, 1, 0);
+
+        editNetNick = new QLineEdit(groupMisc);
+        editNetNick->setMaxLength(20);
+        editNetNick->setText(QLineEdit::tr("anonymous"));
+        MiscLayout->addWidget(editNetNick, 1, 1);
+
+        // Label and field for password
+        labelNetPassword = new QLabel(groupMisc);
+        labelNetPassword->setText(QLabel::tr("Password"));
+        MiscLayout->addWidget(labelNetPassword, 2, 0);
+
+        editNetPassword = new QLineEdit(groupMisc);
+        editNetPassword->setEchoMode(QLineEdit::Password);
+        MiscLayout->addWidget(editNetPassword, 2, 1);
+
+        CBSavePassword = new QCheckBox(groupMisc);
+        CBSavePassword->setText(QCheckBox::tr("Save password"));
+        MiscLayout->addWidget(CBSavePassword, 3, 0, 1, 2);
 
         CBAltDamage = new QCheckBox(groupMisc);
         CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
-        MiscLayout->addWidget(CBAltDamage, 3, 0, 1, 2);
+        MiscLayout->addWidget(CBAltDamage, 4, 0, 1, 2);
 
         CBNameWithDate = new QCheckBox(groupMisc);
         CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-        MiscLayout->addWidget(CBNameWithDate, 4, 0, 1, 2);
+        MiscLayout->addWidget(CBNameWithDate, 5, 0, 1, 2);
 
         BtnAssociateFiles = new QPushButton(groupMisc);
         BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
         BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
-        MiscLayout->addWidget(BtnAssociateFiles, 5, 0, 1, 2);
+        MiscLayout->addWidget(BtnAssociateFiles, 6, 0, 1, 2);
 
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED
         CBAutoUpdate = new QCheckBox(groupMisc);
         CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
-        MiscLayout->addWidget(CBAutoUpdate, 6, 0, 1, 3);
+        MiscLayout->addWidget(CBAutoUpdate, 7, 0, 1, 3);
 #endif
 #endif
         gbTBLayout->addWidget(groupMisc, 2, 0);
@@ -338,7 +345,6 @@ QLayout * PageOptions::bodyLayoutDefinition()
         CBStereoMode->addItem(QComboBox::tr("Blue/Red grayscale"));
         CBStereoMode->addItem(QComboBox::tr("Red/Green grayscale"));
         CBStereoMode->addItem(QComboBox::tr("Green/Red grayscale"));
-        connect(CBStereoMode, SIGNAL(currentIndexChanged(int)), this, SLOT(forceFullscreen(int)));
 
         GBAstereolayout->addWidget(CBStereoMode);
         GBAlayout->addLayout(GBAstereolayout);
@@ -402,9 +408,12 @@ QLayout * PageOptions::footerLayoutDefinition()
 
 void PageOptions::connectSignals()
 {
+    connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
     connect(CBResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(setResolution(int)));
     connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(int)));
-    connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
+    connect(CBStereoMode, SIGNAL(currentIndexChanged(int)), this, SLOT(forceFullscreen(int)));
+    connect(editNetNick, SIGNAL(editingFinished()), this, SLOT(trimNetNick()));
+    connect(CBSavePassword, SIGNAL(stateChanged(int)), this, SLOT(savePwdChanged(int)));
 }
 
 PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent)
@@ -464,6 +473,14 @@ void PageOptions::setResolution(int state)
 void PageOptions::trimNetNick()
 {
     editNetNick->setText(editNetNick->text().trimmed());
+}
+
+void PageOptions::savePwdChanged(int state) {
+    if (state == 0) {
+        editNetPassword->setEnabled(false);
+        editNetPassword->setText("");
+    } else
+        editNetPassword->setEnabled(true);
 }
 
 void PageOptions::requestEditSelectedTeam()

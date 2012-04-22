@@ -593,6 +593,11 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         ui.pageOptions->setTeamOptionsEnabled(true);
     }
 
+    if (id == ID_PAGE_SETUP)
+    {
+        config->reloadValues();
+    }
+
     // load and save ignore/friends lists
     if (lastid == ID_PAGE_NETGAME) // leaving a room
         ui.pageNetGame->pChatWidget->saveLists(ui.pageOptions->editNetNick->text());
