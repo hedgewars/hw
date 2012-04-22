@@ -82,7 +82,7 @@ k:= SDL_GetMouseState(nil, nil);
 // mouse buttons
 {$IFDEF DARWIN}
 tkbdn[SDL_SCANCODE_MOUSEL]:= ((k and 1) and not (tkbdn[306] or tkbdn[305]));
-tkbdni[SDL_SCANCODE_MOUSER]:= ((k and 1) and (tkbdn[306] or tkbdn[305])) or (k and 4);
+tkbdn[SDL_SCANCODE_MOUSER]:= ((k and 1) and (tkbdn[306] or tkbdn[305])) or (k and 4);
 {$ELSE}
 tkbdn[SDL_SCANCODE_MOUSEL]:= (k and 1);
 tkbdn[SDL_SCANCODE_MOUSER]:= ((k shr 2) and 1);
