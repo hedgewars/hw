@@ -41,6 +41,11 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     //Form->resize(value("frontend/width", 640).toUInt(), value("frontend/height", 450).toUInt());
     resizeToConfigValues();
 
+    reloadValues();
+}
+
+void GameUIConfig::reloadValues(void)
+{
     Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/weaponTooltips", true).toBool());
 
     int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
@@ -68,11 +73,18 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
     QString netNick = value("net/nick", "").toString();
     Form->ui.pageOptions->editNetNick->setText(netNick);
+    bool savePwd = value("net/savepassword",true).toBool();
+    Form->ui.pageOptions->CBSavePassword->setChecked(savePwd);
 
     Form->ui.pageOptions->editNetPassword->installEventFilter(this);
 
     int passLength = value("net/passwordlength", 0).toInt();
     setNetPasswordLength(passLength);
+    if (savePwd == false) {
+        Form->ui.pageOptions->editNetPassword->setEnabled(savePwd);
+        Form->ui.pageOptions->editNetPassword->setText("");
+        setNetPasswordLength(0);        
+    }
 
     delete netHost;
     netHost = new QString(value("net/ip", "").toString());
@@ -149,11 +161,12 @@ void GameUIConfig::SaveOptions()
     setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
 
     setValue("net/nick", netNick());
-    if (netPasswordIsValid())
+    if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked())
     {
         setValue("net/passwordhash", netPasswordHash());
         setValue("net/passwordlength", netPasswordLength());
     }
+    setValue("net/savepassword", Form->ui.pageOptions->CBSavePassword->isChecked());
     setValue("net/ip", *netHost);
     setValue("net/port", netPort);
     setValue("net/servername", Form->ui.pageNetServer->leServerDescr->text());
