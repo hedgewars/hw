@@ -36,7 +36,7 @@
 #pragma mark -
 #pragma mark AppDelegate methods
 -(id) init {
-    if (self = [super init]){
+    if ((self = [super init])) {
         mainViewController = nil;
         uiwindow = nil;
     }

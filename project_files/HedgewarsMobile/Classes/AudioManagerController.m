@@ -38,7 +38,7 @@ static AudioManagerController *mainInstance;
 }
 
 -(id) init {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.backgroundMusic = nil;
         self.clickSound = -1;
         self.backSound = -1;

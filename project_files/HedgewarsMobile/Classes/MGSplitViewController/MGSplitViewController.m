@@ -702,7 +702,7 @@
 }
 
 
-- (IBAction)showMasterPopover:(id)sender
+- (IBAction)showMasterPopover:(id) sender
 {
 	if (_hiddenPopoverController && !(_hiddenPopoverController.popoverVisible)) {
 		// Inform delegate.

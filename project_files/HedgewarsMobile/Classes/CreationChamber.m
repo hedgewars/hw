@@ -280,7 +280,7 @@
 
     NSArray *mods = [[NSArray alloc] initWithContentsOfFile:GAMEMODS_FILE()];
     NSMutableArray *gamemodArray= [[NSMutableArray alloc] initWithCapacity:[mods count]];
-    for (int i = 0; i < [mods count]; i++)
+    for (NSUInteger i = 0; i < [mods count]; i++)
         [gamemodArray addObject:[NSNumber numberWithBool:NO]];
     [mods release];
 
