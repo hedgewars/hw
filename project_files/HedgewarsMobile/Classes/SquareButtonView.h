@@ -21,15 +21,16 @@
 
 
 @interface SquareButtonView : UIButton {
-    NSInteger colorIndex;
+    NSMutableDictionary *ownerDictionary;
+    NSUInteger colorIndex;
     NSUInteger selectedColor;
     NSArray *colorArray;
-    NSMutableDictionary *ownerDictionary;
 }
 
-@property (nonatomic,retain) NSArray *colorArray;
-@property (nonatomic) NSUInteger selectedColor;
 @property (nonatomic,retain) NSMutableDictionary *ownerDictionary;
+@property (nonatomic,retain) NSArray *colorArray;
+@property (nonatomic,assign) NSUInteger selectedColor;
+@property (nonatomic,assign) NSUInteger colorIndex;
 
 -(void) nextColor;
 -(void) selectColor:(NSUInteger) color;

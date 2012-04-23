@@ -22,12 +22,12 @@
 
 
 @implementation SquareButtonView
-@synthesize colorArray, selectedColor, ownerDictionary;
+@synthesize ownerDictionary, colorIndex, selectedColor, colorArray;
 
 -(id) initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        colorIndex = -1;
-        selectedColor = 0;
+        self.colorIndex = 0;
+        self.selectedColor = 0;
 
         self.colorArray = [HWUtils teamColors];
 
@@ -47,24 +47,21 @@
 }
 
 -(void) nextColor {
-    colorIndex++;
+    self.colorIndex++;
 
-    if (colorIndex >= [colorArray count])
-        colorIndex = 0;
+    if (self.colorIndex >= [self.colorArray count])
+        self.colorIndex = 0;
 
-    NSUInteger color = [[self.colorArray objectAtIndex:colorIndex] unsignedIntValue];
-    self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f
-                                           green:((color & 0x0000FF00) >> 8)/255.0f
-                                            blue: (color & 0x000000FF)/255.0f
-                                           alpha:1.0f];
-
-    [ownerDictionary setObject:[NSNumber numberWithInt:color] forKey:@"color"];
+    NSNumber *colorNumber = [self.colorArray objectAtIndex:colorIndex];
+    [self.ownerDictionary setObject:colorNumber forKey:@"color"];
+    NSUInteger color = [colorNumber unsignedIntValue];
+    [self selectColor:color];
 }
 
 -(void) selectColor:(NSUInteger) color {
-    if (color != selectedColor) {
-        selectedColor = color;
-        colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
+    if (color != self.selectedColor) {
+        self.selectedColor = color;
+        self.colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
 
         self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f
                                                green:((color & 0x0000FF00) >> 8)/255.0f
