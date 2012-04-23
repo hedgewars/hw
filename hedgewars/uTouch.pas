@@ -101,35 +101,37 @@ end;
 
 if isOnWidget(fireButton, finger^) then
     begin
-    spaceKey:= true;
+    ParseTeamCommand('+attack');
     moveCursor:= false;
     finger^.pressedWidget:= @fireButton;
     exit;
     end;
 if isOnWidget(arrowLeft, finger^) then
     begin
-    leftKey:= true;
+    ParseTeamCommand('+left');
     moveCursor:= false;
     finger^.pressedWidget:= @arrowLeft;
     exit;
     end;
 if isOnWidget(arrowRight, finger^) then
     begin
-    rightKey:= true;
+    ParseTeamCommand('+right');
     moveCursor:= false;
     finger^.pressedWidget:= @arrowRight;
     exit;
     end;
 if isOnWidget(arrowUp, finger^) then
     begin
-    upKey:= true;
+    ParseTeamCommand('+up');
+    aimingUp:= true;
     moveCursor:= false;
     finger^.pressedWidget:= @arrowUp;
     exit;
     end;
 if isOnWidget(arrowDown, finger^) then
     begin
-    downKey:= true;
+    ParseTeamCommand('+down');
+    aimingDown:= true;
     moveCursor:= false;
     finger^.pressedWidget:= @arrowDown;
     exit;
@@ -261,12 +263,7 @@ procedure onTouchLongClick(finger: TTouch_Data);
 begin
 {$IFDEF USE_TOUCH_INTERFACE}
 if isOnWidget(jumpWidget, finger) then
-    begin
-    ParseCommand('ljump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
-    if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
-        ParseCommand('gencmd R', true);
-    exit;
-    end;
+    ParseTeamCommand('ljump');
 {$ENDIF}
 end;
 
@@ -305,9 +302,7 @@ if isOnCurrentHog(finger) or isOnWidget(AMWidget, finger) then
 
 if isOnWidget(jumpWidget, finger) then
     begin
-    ParseCommand('hjump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
-    if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
-        ParseCommand('gencmd R', true);
+    ParseTeamCommand('hjump');    
     exit;
     end;
 {$ENDIF}
@@ -397,10 +392,16 @@ if aimingCrosshair then
         deltaAngle:= CurrentHedgehog^.Gear^.Angle - targetAngle;
         if (deltaAngle > -5) and (deltaAngle < 5) then 
             begin
-                upKey:= false;
-                aimingUp:= false;
-                downKey:= false;
-                aimingDown:= false;
+                if(aimingUp)then
+                    begin
+                    aimingUp:= false;
+                    ParseTeamCommand('-up');
+                    end;
+                if(aimingDown)then
+                    begin
+                    aimingDown:= false;
+                    ParseTeamCommand('-down');
+                    end
             end
         else
             begin
@@ -408,21 +409,27 @@ if aimingCrosshair then
                 begin
                 if aimingUp then
                     begin
-                    upKey:= false;
                     aimingUp:= false;
+                    ParseTeamCommand('-up');
                     end;
-                downKey:= true;
-                aimingDown:= true;
+                if(aimingDown)then
+                    begin
+                    aimingDown:= true;
+                    ParseTeamCommand('-down');
+                    end
                 end
             else
                 begin
                 if aimingDown then
                     begin
-                    downKey:= false;
+                    ParseTeamCommand('-down');
                     aimingDown:= false;
                     end;
-                upKey:= true;
-                aimingUp:= true;
+                if aimingUp then
+                    begin
+                    aimingUp:= true;
+                    ParseTeamCommand('+up');
+                    end;
                 end; 
             end;
         end
@@ -430,12 +437,12 @@ if aimingCrosshair then
         begin
         if aimingUp then
             begin
-            upKey:= false;
+            ParseTeamCommand('-up');
             aimingUp:= false;
             end;
         if aimingDown then
             begin
-            upKey:= false;
+            ParseTeamCommand('-down');
             aimingDown:= false;
             end;
         end;
