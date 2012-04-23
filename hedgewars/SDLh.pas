@@ -111,6 +111,10 @@ const
 
     SDL_ALLEVENTS        = $FFFFFFFF;
     SDL_APPINPUTFOCUS    = $02;
+
+    SDL_BUTTON_LEFT      = 1;
+    SDL_BUTTON_MIDDLE    = 2;
+    SDL_BUTTON_RIGHT     = 3;
     SDL_BUTTON_WHEELUP   = 4;
     SDL_BUTTON_WHEELDOWN = 5;
 
@@ -705,7 +709,7 @@ type
 {$IFDEF SDL13}
     TSDL_KeySym = record
         scancode: LongInt;
-        sym: LongInt;
+        sym: LongWord;
         modifier: Word;
         unicode: LongWord;
         end;
@@ -809,9 +813,9 @@ type
     TSDL_KeyboardEvent = record
 {$IFDEF SDL13}
         type_: LongWord;
-        timestamp: LongWord;
+//        timestamp: LongWord;
         windowID: LongWord;
-        state, repeat_, padding2, padding3: Byte;
+        state, repeat_ {*,padding2, padding3*}: Byte;
 {$ELSE}
         type_, which, state: Byte;
 {$ENDIF}
@@ -836,7 +840,7 @@ type
         type_: LongWord;
         timestamp: LongWord;
         windowID: LongWord;
-        buttonm, state, padding1, padding2: Byte;
+        button, state, padding1, padding2: Byte;
         x, y: LongInt;
 {$ELSE}
         type_, which, button, state: Byte;
@@ -1183,6 +1187,8 @@ function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_even
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: LongWord): PChar; cdecl; external SDLLibName;
 function  SDL_GetScancodeName(key: LongWord): PChar; cdecl; external SDLLibName;
+function  SDL_GetKeyFromScancode(key: LongWord): LongInt; cdecl; external SDLLibName;
+
 
 procedure SDL_PumpEvents; cdecl; external SDLLibName;
 function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;

@@ -86,7 +86,7 @@ begin
         gsConfirm, gsGame:
             begin
             DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
-            ProcessKbd;
+//            ProcessKbd;
             DoGameTick(Lag);
             ProcessVisualGears(Lag);
             end;
@@ -168,7 +168,12 @@ begin
                 SDL_KEYDOWN:
                 if GameState = gsChat then
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
-                    KeyPressChat(event.key.keysym.sym);
+                    KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym))//TODO correct for keymodifiers
+                else
+                    ProcessKey(event.key);
+                SDL_KEYUP:
+                if GameState <> gsChat then
+                    ProcessKey(event.key);
                     
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
@@ -207,15 +212,17 @@ begin
 {$ELSE}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
-                        KeyPressChat(event.key.keysym.unicode);
+                        KeyPressChat(event.key.keysym.unicode)
+                    else
+                        ProcessKey(event.key);
+                SDL_KEYUP:
+                if GameState <> gsChat then
+                    ProcessKey(event.key);
                     
                 SDL_MOUSEBUTTONDOWN:
-                    if event.button.button = SDL_BUTTON_WHEELDOWN then
-                        wheelDown:= true;
-                
+                    ProcessMouse(event.button, true); 
                 SDL_MOUSEBUTTONUP:
-                    if event.button.button = SDL_BUTTON_WHEELUP then
-                        wheelUp:= true;
+                    ProcessMouse(event.button, false); 
                     
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
