@@ -155,7 +155,12 @@ const
     cShotgunRadius = 22;
     cBlowTorchC    = 6;
 
+{$IFDEF SDL13}
+    cKeyMaxIndex = SDL_NUM_SCANCODES;
+{$ELSE}
     cKeyMaxIndex = 1023;
+{$ENDIF}
+
 
     // do not change this value
     cDefaultZoomLevel = 2.0;
@@ -261,6 +266,7 @@ const
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
     ammoprop_SetBounce    = $00004000;
+    ammoprop_NeedUpDown   = $00008000;//Used by 
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
