@@ -424,7 +424,7 @@ begin
             x:= AMRect.x;
 {$ENDIF}
 {$IFDEF USE_AM_NUMCOLUMN}
-            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar('F' + IntToStr(i)), cWhiteColorChannels);
+            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar('F' + IntToStr(i+1)), cWhiteColorChannels);
             copyToXY(tmpsurf, amSurface,
                      x + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.w shr 1),
                      y + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.h shr 1));
@@ -503,23 +503,22 @@ var Slot, Pos: LongInt;
 begin
 if (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil)
 or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then
-bShowAmmoMenu:= false;
-
+    bShowAmmoMenu:= false;
 
 // give the assigned ammo to hedgehog
 Ammo:= nil;
 if (CurrentTeam <> nil) and (CurrentHedgehog <> nil)
 and (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
-Ammo:= CurrentHedgehog^.Ammo
+    Ammo:= CurrentHedgehog^.Ammo
 else if (LocalAmmo <> -1) then
-Ammo:= GetAmmoByNum(LocalAmmo);
+    Ammo:= GetAmmoByNum(LocalAmmo);
 Pos:= -1;
 if Ammo = nil then
-begin
-bShowAmmoMenu:= false;
-AMState:= AMHidden;
-exit
-end;
+    begin
+    bShowAmmoMenu:= false;
+    AMState:= AMHidden;
+    exit
+    end;
 
 //Init the menu 
 if(AmmoMenuInvalidated) then 
@@ -620,16 +619,20 @@ if ((AMState = AMHiding) or (AMState = AMShowingUp)) and ((AMAnimType and AMType
 Pos:= -1;
 Slot:= -1;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
+    {$IFDEF USE_AM_NUMCOLUMN}
+c:= 0;
+    {$ELSE}
 c:= -1;
+    {$ENDIF}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
             inc(c);
-{$IFDEF USE_AM_NUMCOLUMN}
+    {$IFDEF USE_AM_NUMCOLUMN}
             g:= 1;
-{$ELSE}
+    {$ELSE}
             g:= 0;
-{$ENDIF}
+    {$ENDIF}
             for t:=0 to cMaxSlotAmmoIndex do
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
@@ -650,20 +653,20 @@ c:= -1;
                    end;
             end;
 {$ELSE}
-{$IFDEF USE_AM_NUMCOLUMN}
-c:= 0;
-{$ELSE}
+    {$IFDEF USE_AM_NUMCOLUMN}
 c:= -1;
-{$ENDIF}
+    {$ELSE}
+c:= 0;
+    {$ENDIF}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
             inc(c);
-{$IFDEF USE_AM_NUMCOLUMN}
+    {$IFDEF USE_AM_NUMCOLUMN}
             g:= 1;
-{$ELSE}
+    {$ELSE}
             g:= 0;
-{$ENDIF}
+    {$ENDIF}
             for t:=0 to cMaxSlotAmmoIndex do
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
