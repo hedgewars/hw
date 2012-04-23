@@ -29,6 +29,7 @@ procedure initModule;
 procedure freeModule;
 procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
+procedure ParseTeamCommand(s: shortstring);
 procedure StopMessages(Message: Longword);
 
 implementation
@@ -98,6 +99,18 @@ case c of
     else
         WriteLnToConsole(errmsgUnknownCommand  + ': "/' + CmdStr + '"') end
 end;
+
+procedure ParseTeamCommand(s: shortstring);
+var Trusted: boolean;
+begin
+Trusted:= (CurrentTeam <> nil)
+          and (not CurrentTeam^.ExtDriven)
+          and (CurrentHedgehog^.BotLevel = 0);
+ParseCommand(s, Trusted);
+if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
+    ParseCommand('gencmd R', true)
+end;
+
 
 
 procedure StopMessages(Message: Longword);
