@@ -142,6 +142,13 @@ else()
     message(FATAL_ERROR "No Pascal compiler found!")
 endif()
 
+find_package(png)
+if(${PNG_LIBRARY})
+    set(pascal_compiler_flags_cmn "-dPNG_SCREENSHOTS" ${pascal_compiler_flags_cmn})
+else()
+    message(STATUS "PNG library not found, switching to screenshots in BMP format")
+endif()
+
 set(pascal_compiler ${fpc_executable})
 set(pascal_compiler_flags ${noexecstack_flags} ${pascal_compiler_flags_cmn} ${hwengine_project})
 
