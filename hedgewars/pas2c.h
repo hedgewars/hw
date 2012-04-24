@@ -56,6 +56,7 @@ void __FillChar(pointer p, int size, char fill);
 string255 _strconcat(string255 a, string255 b);
 string255 _strappend(string255 s, char c);
 string255 _strprepend(char c, string255 s);
+bool _strcompare(string255 a, string255 b);
 char * _pchar(string255 s);
 
 int Length(string255 a);
