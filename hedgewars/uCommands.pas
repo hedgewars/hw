@@ -33,7 +33,7 @@ procedure ParseTeamCommand(s: shortstring);
 procedure StopMessages(Message: Longword);
 
 implementation
-uses Types, uConsts, uVariables, uConsole, uUtils, uDebug;
+uses uConsts, uVariables, uConsole, uUtils, uDebug;
 
 type  PVariable = ^TVariable;
     TVariable = record

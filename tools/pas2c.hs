@@ -49,6 +49,8 @@ addStringConst str = do
     strs <- gets stringConsts
     let a = find ((==) str . snd) strs
     if isJust a then
+        do
+        modify (\s -> s{lastType = BTString})
         return . text . fst . fromJust $ a
     else
         do
@@ -463,7 +465,7 @@ type2C t = do
     return r
     where
     type2C' VoidType = return (text "void" <+>)
-    type2C' (String l) = return (text ("string" ++ show l) <+>)
+    type2C' (String l) = return (text "string255" <+>)--return (text ("string" ++ show l) <+>)
     type2C' (PointerTo (SimpleType i)) = liftM (\i a -> text "struct __" <> i <+> text "*" <+> a) $ id2C IODeferred i
     type2C' (PointerTo t) = liftM (\t a -> t (parens $ text "*" <> a)) $ type2C t
     type2C' (RecordType tvs union) = do
@@ -510,10 +512,11 @@ phrase2C (Phrases p) = do
     ps <- mapM phrase2C p
     return $ text "{" $+$ (nest 4 . vcat $ ps) $+$ text "}"
 phrase2C (ProcCall f@(FunCall {}) []) = liftM (<> semi) $ ref2C f
-phrase2C (ProcCall ref params) = do
+phrase2C (ProcCall ref []) = liftM (<> semi) $ ref2CF ref
+phrase2C (ProcCall ref params) = error $ "ProcCall"{-do
     r <- ref2C ref
     ps <- mapM expr2C params
-    return $ r <> parens (hsep . punctuate (char ',') $ ps) <> semi
+    return $ r <> parens (hsep . punctuate (char ',') $ ps) <> semi -}
 phrase2C (IfThenElse (expr) phrase1 mphrase2) = do
     e <- expr2C expr
     p1 <- (phrase2C . wrapPhrase) phrase1
@@ -524,10 +527,12 @@ phrase2C (IfThenElse (expr) phrase1 mphrase2) = do
     elsePart | isNothing mphrase2 = return $ empty
              | otherwise = liftM (text "else" $$) $ (phrase2C . wrapPhrase) (fromJust mphrase2)
 phrase2C (Assignment ref expr) = do
-    r <- ref2C ref 
-    e <- expr2C expr
-    return $
-        r <> text " = " <> e <> semi
+    r <- ref2C ref
+    t <- gets lastType
+    e <- case (t, expr) of
+         (BTFunction _, (Reference r')) -> ref2C r'
+         _ -> expr2C expr
+    return $ r <+> text "=" <+> e <> semi
 phrase2C (WhileCycle expr phrase) = do
     e <- expr2C expr
     p <- phrase2C $ wrapPhrase phrase
@@ -599,7 +604,12 @@ expr2C (BinOp op expr1 expr2) = do
         ("!=", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction BTBool))
         ("&", BTBool, _) -> return $ parens e1 <+> text "&&" <+> parens e2
         ("|", BTBool, _) -> return $ parens e1 <+> text "||" <+> parens e2
-        (o, _, _) -> return $ parens e1 <+> text o <+> parens e2
+        (o, _, _) | o `elem` boolOps -> do
+                        modify(\s -> s{lastType = BTBool})
+                        return $ parens e1 <+> text o <+> parens e2
+                  | otherwise -> return $ parens e1 <+> text o <+> parens e2
+    where
+        boolOps = ["==", "!=", "<", ">", "<=", ">="]
 expr2C (NumberLiteral s) = return $ text s
 expr2C (FloatLiteral s) = return $ text s
 expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
