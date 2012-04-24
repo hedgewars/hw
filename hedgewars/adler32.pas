@@ -66,7 +66,7 @@ That means no btypes, file loading, and the assembly version disabled.
 Also, the structure was removed to simplify C conversion
 *)
 
-procedure Adler32Update ( var adler     :longint; Msg     :pointer; Len     :longint );
+function Adler32Update ( var adler     :longint; Msg     :pointer; Len     :longint ) : longint;
 
 implementation
 
@@ -124,7 +124,7 @@ begin
 end;
 *)
 
-procedure Adler32Update(var adler: longint; Msg: pointer; Len :longint);
+function Adler32Update(var adler: longint; Msg: pointer; Len :longint) : longint;
     {-update Adler32 with Msg data}
     const
         BASE = 65521; {max. prime < 65536 }
@@ -152,7 +152,7 @@ procedure Adler32Update(var adler: longint; Msg: pointer; Len :longint);
             s2 := s2 mod BASE;
             dec(len, n);
             end;
-        adler:= (s2 shl 16) or s1;
+        Adler32Update:= (s2 shl 16) or s1;
     end;
 
 end.
