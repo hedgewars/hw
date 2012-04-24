@@ -44,8 +44,8 @@ typedef char * PChar;
 typedef LongInt * PLongInt;
 typedef Integer * PInteger;
 
-#define new(a) __new(&a, sizeof(*(a)))
-void __new(pointer * p, int size);
+#define new(a) __new((void **)&a, sizeof(*(a)))
+void __new(void ** p, int size);
 
 #define dispose(a) __dispose(a, sizeof(*(a)))
 void __dispose(pointer p, int size);
