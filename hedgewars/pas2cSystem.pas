@@ -36,6 +36,7 @@ type
 
     char = char;
     PChar = ^char;
+    PPChar = ^Pchar;
     
     PByte = ^Byte;
     PLongInt = ^LongInt;
