@@ -228,7 +228,7 @@ if PlacingHogs then
 
 inc(CurrentTeam^.Clan^.TurnNumber);
 
-CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
 if CurWeapon^.Count = 0 then
     CurrentHedgehog^.CurAmmoType:= amNothing;
 

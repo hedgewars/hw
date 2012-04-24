@@ -1585,7 +1585,7 @@ if isCursorVisible then
                 begin
             if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) then
                 DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
-            i:= GetAmmoEntry(CurrentHedgehog^)^.Pos;
+            i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
             with Ammoz[CurAmmoType] do
                 if PosCount > 1 then
                     DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
