@@ -728,7 +728,7 @@ var adler, i: LongInt;
 begin
     adler:= 1;
     for i:= 0 to LAND_HEIGHT-1 do
-        Adler32Update(adler, @Land[i,0], LAND_WIDTH);
+        adler:= Adler32Update(adler, @Land[i,0], LAND_WIDTH);
     s:= 'M' + IntToStr(adler) + cScriptName;
 
     chLandCheck(s);
