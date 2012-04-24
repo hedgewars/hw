@@ -63,6 +63,7 @@ interface
 (*
 As per the license above, noting that this implementation of adler32 was stripped of everything we didn't need.
 That means no btypes, file loading, and the assembly version disabled.
+Also, the structure was removed to simplify C conversion
 *)
 
 procedure Adler32Update ( var adler     :longint; Msg     :pointer; Len     :longint );
@@ -128,16 +129,12 @@ procedure Adler32Update(var adler: longint; Msg: pointer; Len :longint);
     const
         BASE = 65521; {max. prime < 65536 }
         NMAX = 3854; {max. n with 255n(n+1)/2 + (n+1)(BASE-1) < 2^31}
-    type
-        LH = packed record
-            L, H: word;
-            end;
     var
         s1, s2: longint;
         i, n: integer;
     begin
-        s1 := LH(adler).L;
-        s2 := LH(adler).H;
+        s1 := adler and $FFFF;
+        s2 := adler shr 16;
         while Len>0 do
             begin
             if Len<NMAX then
@@ -155,8 +152,7 @@ procedure Adler32Update(var adler: longint; Msg: pointer; Len :longint);
             s2 := s2 mod BASE;
             dec(len, n);
             end;
-        LH(adler).L := word(s1);
-        LH(adler).H := word(s2);
+        adler:= (s2 shl 16) or s1;
     end;
 
 end.
