@@ -276,7 +276,7 @@ var CurWeapon: PAmmo;
 begin
     if HW_isWeaponTimerable then
     begin
-        CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+        CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
         res:= CurWeapon^.Timer div 1000;
     end;
     exit(res);
