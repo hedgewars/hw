@@ -46,10 +46,16 @@ getUniq = do
     
 addStringConst :: String -> State RenderState Doc
 addStringConst str = do
-    i <- getUniq
-    let sn = "__str" ++ show i
-    modify (\s -> s{lastType = BTString, stringConsts = (sn, str) : stringConsts s})
-    return $ text sn
+    strs <- gets stringConsts
+    let a = find ((==) str . snd) strs
+    if isJust a then
+        return . text . fst . fromJust $ a
+    else
+        do
+        i <- getUniq
+        let sn = "__str" ++ show i
+        modify (\s -> s{lastType = BTString, stringConsts = (sn, str) : strs})
+        return $ text sn
     
 escapeStr :: String -> String
 escapeStr = foldr escapeChar []
