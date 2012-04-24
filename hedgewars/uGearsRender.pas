@@ -592,7 +592,7 @@ begin
                 dec(HH^.Timer)
                 end;
             amt:= CurrentHedgehog^.CurAmmoType;
-            CurWeapon:= GetAmmoEntry(HH^);
+            CurWeapon:= GetCurAmmoEntry(HH^);
             case amt of
                 amBazooka: DrawRotated(sprHandBazooka, hx, hy, sign, aangle);
                 amSnowball: DrawRotated(sprHandSnowball, hx, hy, sign, aangle);

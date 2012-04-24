@@ -3973,7 +3973,7 @@ begin
                     begin
                     CurrentHedgehog^.Gear^.Message := CurrentHedgehog^.Gear^.Message and (not gmSwitch);
                 
-                    CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+                    CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
                     if CurWeapon^.Pos <> 0 then
                         CurWeapon^.Pos := 0
                         
@@ -4344,7 +4344,7 @@ begin
     if CurrentHedgehog <> nil then
         with CurrentHedgehog^ do
             begin
-            CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+            CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
             if (CurAmmoType = amPortalGun) then
                 begin
                 if not destroyGear then
@@ -4444,7 +4444,7 @@ begin
     if CurrentHedgehog <> nil then
         with CurrentHedgehog^ do
             begin
-            CurWeapon:= GetAmmoEntry(CurrentHedgehog^);
+            CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
             // let's save the HH's dX's direction so we can decide where the "top" of the portal hole
             newPortal^.Elasticity.isNegative := CurrentHedgehog^.Gear^.dX.isNegative;
             // when doing a backjump the dx is the opposite of the facing direction

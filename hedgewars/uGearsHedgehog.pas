@@ -131,7 +131,7 @@ var CurWeapon: PAmmo;
     color: LongWord;
 begin
 Gear^.Message:= Gear^.Message and (not gmTimer);
-CurWeapon:= GetAmmoEntry(Gear^.Hedgehog^);
+CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 with Gear^.Hedgehog^ do
     if ((Gear^.Message and gmPrecise) <> 0) and ((CurWeapon^.Propz and ammoprop_SetBounce) <> 0) then
         begin
@@ -178,7 +178,7 @@ var xx, yy, newDx, newDy, lx, ly: hwFloat;
 begin
 newGear:= nil;
 bShowFinger:= false;
-CurWeapon:= GetAmmoEntry(Gear^.Hedgehog^);
+CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 with Gear^,
     Gear^.Hedgehog^ do
         begin
@@ -640,7 +640,7 @@ procedure HedgehogStep(Gear: PGear);
 var PrevdX: LongInt;
     CurWeapon: PAmmo;
 begin
-CurWeapon:= GetAmmoEntry(Gear^.Hedgehog^);
+CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     begin
     if isCursorVisible then
