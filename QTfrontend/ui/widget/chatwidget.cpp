@@ -250,14 +250,18 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 
     if(gameSettings->value("frontend/sound", true).toBool())
     {
-        if (notify)
-            m_helloSound = HWDataManager::instance().findFileForRead(
-                               "Sounds/voices/Classic/Hello.ogg");
+        QStringList vpList =
+             QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
+
+        foreach (QString vp, vpList)
+        {
+            m_helloSounds.append(HWDataManager::instance().findFileForRead(
+                               QString("Sounds/voices/%1/Hello.ogg").arg(vp)));
+        }
 
         m_hilightSound = HWDataManager::instance().findFileForRead(
                              "Sounds/beep.ogg");
 
-        //m_hilightSound = m_helloSound;//"Sounds/beep.ogg";
     }
 
     mainLayout.setSpacing(1);
@@ -643,7 +647,8 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
     if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool())
     {
-        SDLInteraction::instance().playSoundFile(m_helloSound);
+        SDLInteraction::instance().playSoundFile(
+                            m_helloSounds.at(rand() % m_helloSounds.size()));
     }
 }
 
