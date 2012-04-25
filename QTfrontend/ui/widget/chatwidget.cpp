@@ -247,6 +247,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     this->notify = notify;
 
     m_isAdmin = false;
+    m_autoKickEnabled = false;
 
     if(gameSettings->value("frontend/sound", true).toBool())
     {
@@ -397,6 +398,11 @@ void HWChatWidget::setShowFollow(bool enabled)
         if (chatNicks->actions().contains(acFollow))
             chatNicks->removeAction(acFollow);
     }
+}
+
+void HWChatWidget::setIgnoreListKick(bool enabled)
+{
+    m_autoKickEnabled = enabled;
 }
 
 void HWChatWidget::loadList(QStringList & list, const QString & file)
@@ -636,6 +642,13 @@ void HWChatWidget::onServerMessage(const QString& str)
 void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 {
     bool isIgnored = ignoreList.contains(nick, Qt::CaseInsensitive);
+
+    if (isIgnored && m_isAdmin && m_autoKickEnabled)
+    {
+        emit kick(nick);
+        return;
+    }
+
     QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), isIgnored);
     updateNickItem(item);
     chatNicks->addItem(item);

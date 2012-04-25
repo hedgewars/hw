@@ -72,6 +72,7 @@ class HWChatWidget : public QWidget
         HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify);
         void loadLists(const QString & nick);
         void saveLists(const QString & nick);
+        void setIgnoreListKick(bool enabled); ///< automatically kick people on ignore list (if possible)
         void setShowReady(bool s);
         void setShowFollow(bool enabled);
         QStringList ignoreList, friendsList;
@@ -143,6 +144,7 @@ class HWChatWidget : public QWidget
         QList<QRegExp> m_highlights; ///< regular expressions used for highlighting
         bool notify;
         bool showReady;
+        bool m_autoKickEnabled;
 
     private slots:
         void returnPressed();
