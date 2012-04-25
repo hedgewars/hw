@@ -136,7 +136,7 @@ class HWChatWidget : public QWidget
         QAction * acIgnore;
         QAction * acFriend;
         QSettings * gameSettings;
-        QString m_helloSound;
+        QStringList m_helloSounds;
         QString m_hilightSound;
         QString m_userNick;
         QString m_clickedNick;
