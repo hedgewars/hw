@@ -105,6 +105,7 @@ class HWMapContainer : public QWidget
         QComboBox* chooseMap;
         IconedGroupBox* gbThemes;
         QListView* lvThemes;
+        ThemeModel * m_themeModel;
         HWMap* pMap;
         QString m_seed;
         QPushButton* seedSet;

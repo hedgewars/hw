@@ -22,7 +22,7 @@ win32 {
 QT += network
 QT += webkit
 
-HEADERS += ../QTfrontend/model/themesmodel.h \
+HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/model/ammoSchemeModel.h \
     ../QTfrontend/model/netserverslist.h \
     ../QTfrontend/model/hats.h \
@@ -104,7 +104,7 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/ui/dialog/input_password.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
-    ../QTfrontend/model/themesmodel.cpp \
+    ../QTfrontend/model/ThemeModel.cpp \
     ../QTfrontend/model/hats.cpp \
     ../QTfrontend/model/netserverslist.cpp \
     ../QTfrontend/ui/qaspectratiolayout.cpp \

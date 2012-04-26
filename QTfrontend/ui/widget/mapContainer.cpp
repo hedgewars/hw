@@ -122,7 +122,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     lvThemes = new QListView(mapWidget);
     lvThemes->setMinimumHeight(30);
     lvThemes->setFixedWidth(140);
-    lvThemes->setModel(themesModel);
+    m_themeModel = DataManager::instance().themeModel();
+    lvThemes->setModel(m_themeModel);
     lvThemes->setIconSize(QSize(16, 16));
     lvThemes->setEditTriggers(QListView::NoEditTriggers);
 
@@ -400,7 +401,7 @@ void HWMapContainer::setMap(const QString &map)
 
 void HWMapContainer::setTheme(const QString & theme)
 {
-    QModelIndexList mdl = themesModel->match(themesModel->index(0), Qt::DisplayRole, theme);
+    QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), Qt::DisplayRole, theme);
 
     if(mdl.size())
         lvThemes->setCurrentIndex(mdl.at(0));
@@ -452,9 +453,9 @@ void HWMapContainer::setRandomSeed()
 
 void HWMapContainer::setRandomTheme()
 {
-    if(!themesModel->rowCount()) return;
-    quint32 themeNum = rand() % themesModel->rowCount();
-    lvThemes->setCurrentIndex(themesModel->index(themeNum));
+    if(!m_themeModel->rowCount()) return;
+    quint32 themeNum = rand() % m_themeModel->rowCount();
+    lvThemes->setCurrentIndex(m_themeModel->index(themeNum));
 }
 
 void HWMapContainer::intSetTemplateFilter(int filter)

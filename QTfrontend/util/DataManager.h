@@ -30,9 +30,12 @@
 
 #include <QStringList>
 
+#include "ThemeModel.h"
+
 class QDir;
 class QFile;
 class QStringList;
+class ThemeModel;
 
 /**
  * @brief Offers access to the data files of hedgewars.
@@ -90,6 +93,14 @@ class DataManager: public QObject
          */
         QString findFileForWrite(const QString & relativeDataFilePath) const;
 
+        /**
+         * @brief Returns pointer to a model for the available themes.
+         *
+         * The model is kept up to date automatically.
+         *
+         * @return theme model pointer
+         */
+        ThemeModel * themeModel();
 
     public slots:
         /**
@@ -116,8 +127,10 @@ class DataManager: public QObject
          */
         DataManager();
 
-        QDir * defaultData; ///< directory of the installed data
-        QDir * userData;    ///< directory of custom data in the user's directory
+        QDir * m_defaultData; ///< directory of the installed data
+        QDir * m_userData;    ///< directory of custom data in the user's directory
+
+        ThemeModel * m_themeModel; ///< themes model instance
 };
 
 #endif // HEDGEWARS_DATAMANAGER_H

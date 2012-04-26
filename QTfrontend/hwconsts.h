@@ -22,7 +22,6 @@
 #include <QStringList>
 #include <QPair>
 
-#include "themesmodel.h"
 
 extern QString * cProtoVer;
 extern QString * cVersionString;
@@ -41,7 +40,6 @@ extern int cMinServerVersion;
 
 class QStringListModel;
 
-extern ThemesModel * themesModel;
 extern QStringList * scriptList;
 
 extern QString * cDefaultAmmoStore;

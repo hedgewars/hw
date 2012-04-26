@@ -34,11 +34,13 @@
 
 DataManager::DataManager()
 {
-    userData = new QDir(cfgdir->absolutePath());
-    if (!userData->cd("Data"))
-        userData = NULL;
+    m_userData = new QDir(cfgdir->absolutePath());
+    if (!m_userData->cd("Data"))
+        m_userData = NULL;
 
-    defaultData = new QDir(datadir->absolutePath());
+    m_defaultData = new QDir(datadir->absolutePath());
+
+    m_themeModel = NULL;
 }
 
 
@@ -57,14 +59,14 @@ QStringList DataManager::entryList(
 {
     QStringList result;
 
-    if (userData != NULL)
+    if (m_userData != NULL)
     {
-        QDir tmpDir(*userData);
+        QDir tmpDir(*m_userData);
         if (tmpDir.cd(subDirectory))
             result.append(tmpDir.entryList(nameFilters, filters));
     }
 
-    QDir tmpDir(*defaultData);
+    QDir tmpDir(*m_defaultData);
     if (tmpDir.cd(subDirectory))
         result.append(tmpDir.entryList(nameFilters, filters));
 
@@ -87,11 +89,11 @@ QString DataManager::findFileForRead(
 {
     QString path;
 
-    if (userData != NULL)
-        path = userData->absolutePath()+"/"+relativeDataFilePath;
+    if (m_userData != NULL)
+        path = m_userData->absolutePath()+"/"+relativeDataFilePath;
 
     if ((!path.isEmpty()) && (!QFile::exists(path)))
-        path = defaultData->absolutePath()+"/"+relativeDataFilePath;
+        path = m_defaultData->absolutePath()+"/"+relativeDataFilePath;
 
     return path;
 }
@@ -100,9 +102,9 @@ QString DataManager::findFileForRead(
 QString DataManager::findFileForWrite(
     const QString & relativeDataFilePath) const
 {
-    if (userData != NULL)
+    if (m_userData != NULL)
     {
-        QString path = userData->absolutePath()+"/"+relativeDataFilePath;
+        QString path = m_userData->absolutePath()+"/"+relativeDataFilePath;
 
         // create folders if needed
         QDir tmp;
@@ -115,7 +117,17 @@ QString DataManager::findFileForWrite(
     return "";
 }
 
+ThemeModel * DataManager::themeModel()
+{
+    if (m_themeModel == NULL) {
+        m_themeModel = new ThemeModel();
+        m_themeModel->loadThemes();
+    }
+    return m_themeModel;
+}
+
 void DataManager::reload()
 {
+    m_themeModel->loadThemes();
     emit updated();
 }

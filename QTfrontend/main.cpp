@@ -211,53 +211,6 @@ int main(int argc, char *argv[])
 
     DataManager & dataMgr = DataManager::instance();
 
-    {
-        QStringList themes;
-
-        themes.append(dataMgr.entryList(
-                          "Themes",
-                          QDir::AllDirs | QDir::NoDotAndDotDot)
-                     );
-
-        QList<QPair<QIcon, QIcon> > icons;
-
-        themes.sort();
-        for(int i = themes.size() - 1; i >= 0; --i)
-        {
-            QString file = dataMgr.findFileForRead(
-                               QString("Themes/%1/icon.png").arg(themes.at(i))
-                           );
-
-            if(QFile::exists(file))
-            {
-                // load icon
-                QPair<QIcon, QIcon> ic;
-                ic.first = QIcon(file);
-
-                // load preview icon
-                ic.second = QIcon(
-                                dataMgr.findFileForRead(
-                                    QString("Themes/%1/icon@2x.png").arg(themes.at(i))
-                                )
-                            );
-
-                icons.prepend(ic);
-            }
-            else
-            {
-                themes.removeAt(i);
-            }
-        }
-
-        themesModel = new ThemesModel(themes);
-        Q_ASSERT(themes.size() == icons.size());
-        for(int i = 0; i < icons.size(); ++i)
-        {
-            themesModel->setData(themesModel->index(i), icons[i].first, Qt::DecorationRole);
-            themesModel->setData(themesModel->index(i), icons[i].second, Qt::UserRole);
-        }
-    }
-
     scriptList = new QStringList(dataMgr.entryList(
                                      QString("Scripts/Multiplayer"),
                                      QDir::Files,
