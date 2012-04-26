@@ -31,7 +31,8 @@ template <class T> T sqr(const T & x)
 DrawMapScene::DrawMapScene(QObject *parent) :
     QGraphicsScene(parent),
     m_pen(Qt::yellow),
-    m_brush(Qt::yellow)
+    m_brush(Qt::yellow),
+    m_cursor(new QGraphicsEllipseItem(-0.5, -0.5, 1, 1))
 {
     setSceneRect(0, 0, 4096, 2048);
 
@@ -47,6 +48,11 @@ DrawMapScene::DrawMapScene(QObject *parent) :
     m_pen.setJoinStyle(Qt::RoundJoin);
     m_pen.setCapStyle(Qt::RoundCap);
     m_currPath = 0;
+
+    m_isCursorShown = false;
+    m_cursor->setPen(QPen(Qt::green));
+    m_cursor->setZValue(1);
+    m_cursor->setScale(m_pen.width());
 }
 
 void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
@@ -71,6 +77,10 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
 
         emit pathChanged();
     }
+
+    if(!m_isCursorShown)
+        showCursor();
+    m_cursor->setPos(mouseEvent->scenePos());
 }
 
 void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
@@ -115,6 +125,8 @@ void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
     else if(wheelEvent->delta() < 0 && m_pen.width() >= 16)
         m_pen.setWidth(m_pen.width() - 10);
 
+    m_cursor->setScale(m_pen.width());
+
     if(m_currPath)
     {
         m_currPath->setPen(m_pen);
@@ -122,8 +134,30 @@ void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
     }
 }
 
+void DrawMapScene::showCursor()
+{
+    qDebug() << "show cursor";
+    if(!m_isCursorShown)
+        addItem(m_cursor);
+
+    m_isCursorShown = true;
+}
+
+void DrawMapScene::hideCursor()
+{
+    qDebug() << "hide cursor";
+    if(m_isCursorShown)
+        removeItem(m_cursor);
+
+    m_isCursorShown = false;
+}
+
 void DrawMapScene::undo()
 {
+    // cursor is a part of items()
+    if(m_isCursorShown)
+        return;
+
     if(items().size())
     {
         removeItem(items().first());
@@ -143,6 +177,10 @@ void DrawMapScene::undo()
 
 void DrawMapScene::clearMap()
 {
+    // cursor is a part of items()
+    if(m_isCursorShown)
+        return;
+
     // don't clear if already cleared
     if(!items().size())
         return;
@@ -280,7 +318,7 @@ void DrawMapScene::simplifyLast()
 
     // redraw path
     {
-        QGraphicsPathItem * pathItem = static_cast<QGraphicsPathItem *>(items()[0]);
+        QGraphicsPathItem * pathItem = static_cast<QGraphicsPathItem *>(items()[m_isCursorShown ? 1 : 0]);
         pathItem->setPath(pointsToPath(paths[0].points));
     }
 
