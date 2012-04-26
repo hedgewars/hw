@@ -27,6 +27,8 @@
 #include <QByteArray>
 #include <QLineEdit>
 
+#include "DataManager.h"
+
 #include "hwmap.h"
 #include "drawmapscene.h"
 
@@ -92,6 +94,7 @@ class HWMapContainer : public QWidget
         void themeSelected(const QModelIndex & current, const QModelIndex &);
         void addInfoToPreview(QPixmap image);
         void seedEdited();
+        void loadMapList();
 
     protected:
         virtual void resizeEvent ( QResizeEvent * event );

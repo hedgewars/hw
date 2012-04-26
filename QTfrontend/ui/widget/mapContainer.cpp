@@ -68,102 +68,9 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     chooseMap = new QComboBox(mapWidget);
     chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    chooseMap->addItem(
-// FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapRandom.png"),
-        QComboBox::tr("generated map..."));
-    chooseMap->addItem(
-// FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapMaze.png"),
-        QComboBox::tr("generated maze..."));
 
-    chooseMap->addItem(QComboBox::tr("hand drawn map..."));
-    chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
-
-    chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
-
-    int missionindex = chooseMap->count();
-    numMissions = 0;
-    QFile mapLuaFile;
-    QFile mapCfgFile;
-    for (int i = 0; i < mapList->size(); ++i)
-    {
-        QString map = (*mapList)[i];
-        mapCfgFile.setFileName(
-            QString("%1/Data/Maps/%2/map.cfg")
-            .arg(cfgdir->absolutePath())
-            .arg(map));
-        if (mapCfgFile.exists())
-        {
-            mapLuaFile.setFileName(
-                QString("%1/Data/Maps/%2/map.lua")
-                .arg(cfgdir->absolutePath())
-                .arg(map));
-        }
-        else
-        {
-            mapCfgFile.setFileName(
-                QString("%1/Maps/%2/map.cfg")
-                .arg(datadir->absolutePath())
-                .arg(map));
-            mapLuaFile.setFileName(
-                QString("%1/Maps/%2/map.lua")
-                .arg(datadir->absolutePath())
-                .arg(map));
-        }
-
-        if (mapCfgFile.open(QFile::ReadOnly))
-        {
-            QString theme;
-            quint32 limit = 0;
-            QString scheme;
-            QString weapons;
-            QList<QVariant> mapInfo;
-            bool isMission = mapLuaFile.exists();
-
-            QTextStream input(&mapCfgFile);
-            input >> theme;
-            input >> limit;
-            input >> scheme;
-            input >> weapons;
-            mapInfo.push_back(map);
-            mapInfo.push_back(theme);
-            if (limit)
-                mapInfo.push_back(limit);
-            else
-                mapInfo.push_back(18);
-
-
-            mapInfo.push_back(isMission);
-
-            if (scheme.isEmpty())
-                scheme = "locked";
-            scheme.replace("_", " ");
-
-            if (weapons.isEmpty())
-                weapons = "locked";
-            weapons.replace("_", " ");
-
-            mapInfo.push_back(scheme);
-            mapInfo.push_back(weapons);
-
-            if(isMission)
-            {
-                chooseMap->insertItem(missionindex++,
-// FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapMission.png"),
-                                      QComboBox::tr("Mission") + ": " + map, mapInfo);
-                numMissions++;
-            }
-            else
-                chooseMap->addItem(
-// FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapCustom.png"),
-                    map, mapInfo);
-            mapCfgFile.close();
-        }
-    }
-    chooseMap->insertSeparator(missionindex); // separator between missions and maps
+    loadMapList();
+    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(loadMapList()));
 
     connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
     mapLayout->addWidget(chooseMap, 1, 1);
@@ -682,4 +589,107 @@ void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int
     intSetTemplateFilter(tmpl);
 
     updatePreview();
+}
+
+
+void HWMapContainer::loadMapList()
+{
+    // TODO: convert to model
+
+    // remember previous selection
+    QString selMap = getCurrentMap();
+
+    chooseMap->clear();
+
+    chooseMap->addItem(
+// FIXME - need real icons. Disabling until then
+//QIcon(":/res/mapRandom.png"),
+        QComboBox::tr("generated map..."));
+    chooseMap->addItem(
+// FIXME - need real icons. Disabling until then
+//QIcon(":/res/mapMaze.png"),
+        QComboBox::tr("generated maze..."));
+
+    chooseMap->addItem(QComboBox::tr("hand drawn map..."));
+
+    chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
+    chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
+
+    int missionindex = chooseMap->count();
+    numMissions = 0;
+    QFile mapLuaFile;
+    QFile mapCfgFile;
+
+    DataManager & dataMgr = DataManager::instance();
+
+    QStringList mapList = dataMgr.entryList(
+                              QString("Maps"),
+                              QDir::Dirs | QDir::NoDotAndDotDot
+                          );
+
+    foreach (QString map, mapList)
+    {
+        mapCfgFile.setFileName(
+            dataMgr.findFileForRead(QString("Maps/%1/map.cfg").arg(map)));
+        mapLuaFile.setFileName(
+            dataMgr.findFileForRead(QString("Maps/%1/map.lua").arg(map)));
+
+        if (mapCfgFile.open(QFile::ReadOnly))
+        {
+            QString theme;
+            quint32 limit = 0;
+            QString scheme;
+            QString weapons;
+            QList<QVariant> mapInfo;
+            bool isMission = mapLuaFile.exists();
+
+            QTextStream input(&mapCfgFile);
+            input >> theme;
+            input >> limit;
+            input >> scheme;
+            input >> weapons;
+            mapInfo.push_back(map);
+            mapInfo.push_back(theme);
+            if (limit)
+                mapInfo.push_back(limit);
+            else
+                mapInfo.push_back(18);
+
+
+            mapInfo.push_back(isMission);
+
+            if (scheme.isEmpty())
+                scheme = "locked";
+            scheme.replace("_", " ");
+
+            if (weapons.isEmpty())
+                weapons = "locked";
+            weapons.replace("_", " ");
+
+            mapInfo.push_back(scheme);
+            mapInfo.push_back(weapons);
+
+            if(isMission)
+            {
+                chooseMap->insertItem(missionindex++,
+// FIXME - need real icons. Disabling until then
+//QIcon(":/res/mapMission.png"),
+                                      QComboBox::tr("Mission") + ": " + map, mapInfo);
+                numMissions++;
+            }
+            else
+                chooseMap->addItem(
+// FIXME - need real icons. Disabling until then
+//QIcon(":/res/mapCustom.png"),
+                    map, mapInfo);
+            mapCfgFile.close();
+        }
+    }
+
+    chooseMap->insertSeparator(missionindex); // separator between missions and maps
+
+    // if a map was selected already let's reselect it after reloading the map list
+    if (!selMap.isEmpty()) {
+        setMap(selMap);
+    }
 }

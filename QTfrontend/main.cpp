@@ -258,12 +258,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    mapList = new QStringList(dataMgr.entryList(
-                                  QString("Maps"),
-                                  QDir::Dirs | QDir::NoDotAndDotDot
-                              )
-                             );
-
     scriptList = new QStringList(dataMgr.entryList(
                                      QString("Scripts/Multiplayer"),
                                      QDir::Files,

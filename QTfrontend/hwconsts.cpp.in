@@ -28,7 +28,6 @@ QDir * cfgdir = new QDir();
 QDir * datadir = new QDir();
 
 ThemesModel * themesModel;
-QStringList * mapList;
 QStringList * scriptList;
 
 bool custom_config = false;
