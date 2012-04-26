@@ -43,7 +43,7 @@ class SDLInteraction
          * @brief Class constructor of the <i>singleton</i>.
          *
          * Not to be used from outside the class,
-         * use the static {@link HWDataManager::instance()} instead.
+         * use the static {@link DataManager::instance()} instead.
          *
          * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
          */

@@ -23,12 +23,12 @@
 #include "hwform.h"
 #include "hats.h"
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 HatsModel::HatsModel(QObject* parent) :
     QAbstractListModel(parent)
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     QPixmap hhpix = QPixmap(
                         dataMgr.findFileForRead("Graphics/Hedgehog/Idle.png")

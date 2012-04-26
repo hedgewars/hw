@@ -32,7 +32,7 @@
 #include "hwconsts.h"
 #include "newnetclient.h"
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #ifdef _WIN32
 #include <Shlobj.h>
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     {
         QStringList themes;

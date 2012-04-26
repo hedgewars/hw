@@ -11,7 +11,7 @@
 #include "ui_hwform.h"
 #include "hwform.h"
 #include "gameuiconfig.h"
-#include "HWDataManager.h"
+#include "DataManager.h"
 #include "SDLInteraction.h"
 
 MouseOverFilter::MouseOverFilter(QObject *parent) :
@@ -41,7 +41,7 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
         QTabWidget * tab = dynamic_cast<QTabWidget*>(dist);
         if (HWForm::config->isFrontendSoundEnabled() && (button || textfield || checkbox || droplist || slider || tab))
         {
-            HWDataManager & dataMgr = HWDataManager::instance();
+            DataManager & dataMgr = DataManager::instance();
             SDLInteraction::instance().playSoundFile(dataMgr.findFileForRead("Sounds/steps.ogg"));
         }
 

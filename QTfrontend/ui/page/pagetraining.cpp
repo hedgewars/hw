@@ -28,7 +28,7 @@
 #include <QSettings>
 
 #include "hwconsts.h"
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #include "pagetraining.h"
 
@@ -115,7 +115,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 {
     initPage();
 
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     // get locale
     QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini",
@@ -186,7 +186,7 @@ void PageTraining::startSelected()
 
 void PageTraining::updateInfo()
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     if (lstMissions->currentItem())
     {

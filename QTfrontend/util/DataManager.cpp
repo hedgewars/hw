@@ -19,7 +19,7 @@
 
 /**
  * @file
- * @brief HWDataManager class implementation
+ * @brief DataManager class implementation
  */
 
 #include <QMap>
@@ -29,10 +29,10 @@
 
 #include "hwconsts.h"
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 
-HWDataManager::HWDataManager()
+DataManager::DataManager()
 {
     userData = new QDir(cfgdir->absolutePath());
     if (!userData->cd("Data"))
@@ -42,14 +42,14 @@ HWDataManager::HWDataManager()
 }
 
 
-HWDataManager & HWDataManager::instance()
+DataManager & DataManager::instance()
 {
-    static HWDataManager instance;
+    static DataManager instance;
     return instance;
 }
 
 
-QStringList HWDataManager::entryList(
+QStringList DataManager::entryList(
     const QString & subDirectory,
     QDir::Filters filters,
     const QStringList & nameFilters
@@ -82,7 +82,7 @@ QStringList HWDataManager::entryList(
 }
 
 
-QString HWDataManager::findFileForRead(
+QString DataManager::findFileForRead(
     const QString & relativeDataFilePath) const
 {
     QString path;
@@ -97,7 +97,7 @@ QString HWDataManager::findFileForRead(
 }
 
 
-QString HWDataManager::findFileForWrite(
+QString DataManager::findFileForWrite(
     const QString & relativeDataFilePath) const
 {
     if (userData != NULL)

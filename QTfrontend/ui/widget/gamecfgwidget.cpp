@@ -28,7 +28,7 @@
 
 #include "gamecfgwidget.h"
 #include "igbox.h"
-#include "HWDataManager.h"
+#include "DataManager.h"
 #include "hwconsts.h"
 #include "ammoSchemeModel.h"
 #include "proto.h"
@@ -64,7 +64,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
         QString script = (*scriptList)[i].remove(".lua", Qt::CaseInsensitive);
         QList<QVariant> scriptInfo;
         scriptInfo.push_back(script);
-        QFile scriptCfgFile(HWDataManager::instance().findFileForRead(
+        QFile scriptCfgFile(DataManager::instance().findFileForRead(
                                 QString("Scripts/Multiplayer/%2.cfg").arg(script)));
         if (scriptCfgFile.exists() && scriptCfgFile.open(QFile::ReadOnly))
         {

@@ -23,7 +23,7 @@
 #include <QLineEdit>
 
 #include "hwform.h"
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #include "namegen.h"
 
@@ -125,7 +125,7 @@ QStringList HWNamegen::dictContents(const QString filename)
     QStringList list;
 
     // find .txt to load the names from
-    QFile * file = new QFile(HWDataManager::instance().findFileForRead(QString(
+    QFile * file = new QFile(DataManager::instance().findFileForRead(QString(
                                  "Names/%1.txt").arg(filename)));
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
@@ -154,7 +154,7 @@ QStringList HWNamegen::dictsForHat(const QString hatname)
     QStringList list;
 
     // find .cfg to load the dicts from
-    QFile * file = new QFile(HWDataManager::instance().findFileForRead(QString(
+    QFile * file = new QFile(DataManager::instance().findFileForRead(QString(
                                  "Names/%1.cfg").arg(hatname)));
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
@@ -184,7 +184,7 @@ bool HWNamegen::loadTypes()
 
     // find .ini to load the names from
     QFile * file = new QFile(
-        HWDataManager::instance().findFileForRead(QString("Names/types.ini")));
+        DataManager::instance().findFileForRead(QString("Names/types.ini")));
 
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
@@ -243,7 +243,7 @@ QString HWNamegen::getRandomGrave()
     QStringList Graves;
 
     //list all available Graves
-    Graves.append(HWDataManager::instance().entryList(
+    Graves.append(DataManager::instance().entryList(
                       "Graphics/Graves",
                       QDir::Files,
                       QStringList("*.png")
@@ -265,7 +265,7 @@ QString HWNamegen::getRandomFort()
     QStringList Forts;
 
     //list all available Forts
-    Forts.append(HWDataManager::instance().entryList(
+    Forts.append(DataManager::instance().entryList(
                      "Forts",
                      QDir::Files,
                      QStringList("*L.png")
