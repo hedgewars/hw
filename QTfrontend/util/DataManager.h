@@ -42,8 +42,10 @@ class QStringList;
  * @author sheepluva
  * @since 0.9.17
  */
-class DataManager
+class DataManager: public QObject
 {
+        Q_OBJECT
+
     public:
         /**
          * @brief Returns reference to the <i>singleton</i> instance of this class.
@@ -87,6 +89,20 @@ class DataManager
          * @return destination of path data file.
          */
         QString findFileForWrite(const QString & relativeDataFilePath) const;
+
+
+    public slots:
+        /**
+         * @brief Reloads data from storage.
+         */
+        void reload();
+
+
+    signals:
+        /**
+         * @brief This signal is emitted after the data has been updated.
+         */
+        void updated();
 
 
     private:

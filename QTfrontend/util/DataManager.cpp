@@ -115,3 +115,7 @@ QString DataManager::findFileForWrite(
     return "";
 }
 
+void DataManager::reload()
+{
+    emit updated();
+}
