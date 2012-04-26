@@ -119,6 +119,7 @@ set(hwfr_moc_hdrs
     HWApplication.h
     hwform.h
     team.h
+    util/DataManager.h
     )
 
 set(hwfr_hdrs
