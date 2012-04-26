@@ -19,11 +19,11 @@
 
 /**
  * @file
- * @brief HWDataManager class definition
+ * @brief DataManager class definition
  */
 
-#ifndef HEDGEWARS_HWDATAMANAGER_H
-#define HEDGEWARS_HWDATAMANAGER_H
+#ifndef HEDGEWARS_DATAMANAGER_H
+#define HEDGEWARS_DATAMANAGER_H
 
 #include <QDir>
 #include <QFile>
@@ -42,7 +42,7 @@ class QStringList;
  * @author sheepluva
  * @since 0.9.17
  */
-class HWDataManager
+class DataManager
 {
     public:
         /**
@@ -52,7 +52,7 @@ class HWDataManager
          *
          * @return reference to the instance.
          */
-        static HWDataManager & instance();
+        static DataManager & instance();
 
         /**
          * @brief Returns a sorted list of data directory entries.
@@ -94,14 +94,14 @@ class HWDataManager
          * @brief Class constructor of the <i>singleton</i>.
          *
          * Not to be used from outside the class,
-         * use the static {@link HWDataManager::instance()} instead.
+         * use the static {@link DataManager::instance()} instead.
          *
          * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
          */
-        HWDataManager();
+        DataManager();
 
         QDir * defaultData; ///< directory of the installed data
         QDir * userData;    ///< directory of custom data in the user's directory
 };
 
-#endif // HEDGEWARS_HWDATAMANAGER_H
+#endif // HEDGEWARS_DATAMANAGER_H

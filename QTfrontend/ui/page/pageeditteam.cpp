@@ -32,7 +32,7 @@
 #include "hats.h"
 #include "HWApplication.h"
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #include "pageeditteam.h"
 
@@ -245,7 +245,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 
     m_playerHash = "0000000000000000000000000000000000000000";
 
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     QStringList list;
 
@@ -333,14 +333,14 @@ void PageEditTeam::fixHHname(int idx)
 
 void PageEditTeam::CBFort_activated(const QString & fortname)
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
     QPixmap pix(dataMgr.findFileForRead("Forts/" + fortname + "L.png"));
     FortPreview->setPixmap(pix);
 }
 
 void PageEditTeam::testSound()
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     QString voiceDir = QString("Sounds/voices/") + CBVoicepack->currentText();
 

@@ -91,7 +91,7 @@
 #include "mouseoverfilter.h"
 #include "roomslistmodel.h"
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #ifdef __APPLE__
 #include "M3Panel.h"
@@ -120,7 +120,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 {
     // set music track
     SDLInteraction::instance().setMusicTrack(
-        HWDataManager::instance().findFileForRead("Music/main_theme.ogg")
+        DataManager::instance().findFileForRead("Music/main_theme.ogg")
     );
 
 #ifdef USE_XFIRE
@@ -1540,7 +1540,7 @@ void HWForm::UpdateCampaignPage(int index)
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBSelect->clear();
 
-    QStringList entries = HWDataManager::instance().entryList(
+    QStringList entries = DataManager::instance().entryList(
                               "Missions/Campaign",
                               QDir::Files,
                               QStringList("*#*.lua")
