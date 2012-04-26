@@ -42,7 +42,6 @@ extern int cMinServerVersion;
 class QStringListModel;
 
 extern ThemesModel * themesModel;
-extern QStringList * mapList;
 extern QStringList * scriptList;
 
 extern QString * cDefaultAmmoStore;
