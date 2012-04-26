@@ -30,6 +30,7 @@
 #include "pagedata.h"
 #include "databrowser.h"
 #include "hwconsts.h"
+#include "DataManager.h"
 
 #include "quazip.h"
 #include "quazipfile.h"
@@ -52,6 +53,7 @@ QLayout * PageDataDownload::bodyLayoutDefinition()
 void PageDataDownload::connectSignals()
 {
     connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
+    connect(this, SIGNAL(goBack()), this, SLOT(onPageLeave()));
 }
 
 PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
@@ -60,6 +62,8 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
 
     web->setOpenLinks(false);
 //    fetchList();
+
+    m_contentDownloaded = false;
 }
 
 void PageDataDownload::request(const QUrl &url)
@@ -217,6 +221,8 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
                 qWarning("read all but not EOF");
                 return false;
             }
+
+            m_contentDownloaded = true;
         }
 
         file.close();
@@ -231,4 +237,14 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
     zip.close();
 
     return true;
+}
+
+
+void PageDataDownload::onPageLeave()
+{
+    if (m_contentDownloaded)
+    {
+        m_contentDownloaded = false;
+        DataManager::instance().reload();
+    }
 }

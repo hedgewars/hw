@@ -46,6 +46,8 @@ class PageDataDownload : public AbstractPage
         QHash<QNetworkReply*, QProgressBar *> progressBars;
         QVBoxLayout *progressBarsLayout;
 
+        bool m_contentDownloaded; ///< true if something was downloaded since last page leave
+
         bool extractDataPack(QByteArray * buf);
 
     private slots:
@@ -54,6 +56,8 @@ class PageDataDownload : public AbstractPage
         void pageDownloaded();
         void fileDownloaded();
         void downloadProgress(qint64, qint64);
+
+        void onPageLeave();
 };
 
 #endif
