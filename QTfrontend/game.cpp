@@ -115,10 +115,11 @@ void HWGame::SendConfig()
 void HWGame::SendQuickConfig()
 {
     QByteArray teamscfg;
+    ThemeModel * themeModel = DataManager::instance().themeModel();
 
     HWProto::addStringToBuffer(teamscfg, "TL");
     HWProto::addStringToBuffer(teamscfg, QString("etheme %1")
-                               .arg((themesModel->rowCount() > 0) ? themesModel->index(rand() % themesModel->rowCount()).data().toString() : "steel"));
+                               .arg((themeModel->rowCount() > 0) ? themeModel->index(rand() % themeModel->rowCount()).data().toString() : "steel"));
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
     HWTeam team1;
