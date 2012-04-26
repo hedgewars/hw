@@ -21,6 +21,7 @@
 
 #include <QGraphicsScene>
 #include <QPainterPath>
+#include <QGraphicsEllipseItem>
 
 class QGraphicsPathItem;
 
@@ -50,6 +51,8 @@ class DrawMapScene : public QGraphicsScene
         void clearMap();
         void simplifyLast();
         void setErasing(bool erasing);
+        void showCursor();
+        void hideCursor();
 
     private:
         QPen m_pen;
@@ -60,6 +63,8 @@ class DrawMapScene : public QGraphicsScene
         Paths oldPaths;
         bool m_isErasing;
         QList<QGraphicsItem *> oldItems;
+        QGraphicsEllipseItem * m_cursor;
+        bool m_isCursorShown;
 
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);

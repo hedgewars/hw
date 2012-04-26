@@ -27,19 +27,39 @@
 #include "qaspectratiolayout.h"
 #include "drawmapscene.h"
 
+
+class DrawMapView : public QGraphicsView
+{
+    Q_OBJECT
+
+public:
+    explicit DrawMapView(QWidget *parent = 0);
+    ~DrawMapView();
+
+    void setScene(DrawMapScene *scene);
+
+protected:
+    void enterEvent(QEvent * event);
+    void leaveEvent(QEvent * event);
+    bool viewportEvent(QEvent * event);
+
+private:
+    DrawMapScene * m_scene;
+};
+
 namespace Ui
 {
     class Ui_DrawMapWidget
     {
         public:
-            QGraphicsView *graphicsView;
+            DrawMapView *graphicsView;
 
             void setupUi(QWidget *drawMapWidget)
             {
                 QAspectRatioLayout * arLayout = new QAspectRatioLayout(drawMapWidget);
                 arLayout->setMargin(0);
 
-                graphicsView = new QGraphicsView(drawMapWidget);
+                graphicsView = new DrawMapView(drawMapWidget);
                 arLayout->addWidget(graphicsView);
 
                 retranslateUi(drawMapWidget);

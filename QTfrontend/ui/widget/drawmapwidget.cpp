@@ -19,6 +19,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QEvent>
+#include <QDebug>
 
 #include "drawmapwidget.h"
 
@@ -51,8 +52,9 @@ void DrawMapWidget::changeEvent(QEvent *e)
 
 void DrawMapWidget::setScene(DrawMapScene * scene)
 {
-    ui->graphicsView->setScene(scene);
     m_scene = scene;
+
+    ui->graphicsView->setScene(scene);
 }
 
 void DrawMapWidget::resizeEvent(QResizeEvent * event)
@@ -109,4 +111,49 @@ void DrawMapWidget::load(const QString & fileName)
         else
             m_scene->decode(qUncompress(QByteArray::fromBase64(f.readAll())));
     }
+}
+
+
+
+DrawMapView::DrawMapView(QWidget *parent) :
+    QGraphicsView(parent)
+{
+   setMouseTracking(true);
+
+    m_scene = 0;
+}
+
+
+DrawMapView::~DrawMapView()
+{
+
+}
+
+void DrawMapView::setScene(DrawMapScene *scene)
+{
+    m_scene = scene;
+
+    QGraphicsView::setScene(scene);
+}
+
+// Why don't I ever recieve this event?
+void DrawMapView::enterEvent(QEvent *event)
+{
+    if(m_scene)
+        m_scene->showCursor();
+
+    QGraphicsView::enterEvent(event);
+}
+
+void DrawMapView::leaveEvent(QEvent *event)
+{
+    if(m_scene)
+        m_scene->hideCursor();
+
+    QGraphicsView::leaveEvent(event);
+}
+
+bool DrawMapView::viewportEvent(QEvent *event)
+{
+    return QGraphicsView::viewportEvent(event);
 }
