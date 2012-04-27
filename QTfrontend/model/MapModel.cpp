@@ -1,66 +1,28 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
+ * Copyright (c) 2007-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ */
+
+/**
+ * @file
+ * @brief MapModel class implementation
+ */
 
 #include "MapModel.h"
-
-MapModel::MapInfo MapModel::mapInfoFromData(const QVariant data)
-{
-    MapInfo mapInfo;
-
-    mapInfo.type = Invalid;
-    mapInfo.name = "";
-    mapInfo.theme = "";
-    mapInfo.limit = 0;
-    mapInfo.scheme = "";
-    mapInfo.weapons = "";
-
-    if (data.isValid())
-    {
-        QList<QVariant> list = data.toList();
-        if (list.size() < 1) {
-            mapInfo.type = Invalid;
-            return mapInfo;
-        }
-        mapInfo.type = (MapType)list[0].toInt();
-        switch (mapInfo.type)
-        {
-            case GeneratedMap:
-            case GeneratedMaze:
-            case HandDrawnMap:
-                return mapInfo;
-
-            default:
-                mapInfo.name = list[1].toString();
-                mapInfo.theme = list[2].toString();
-                mapInfo.limit = list[3].toInt();
-                mapInfo.scheme = list[4].toString();
-                mapInfo.weapons = list[5].toString();
-        }
-    }
-
-    return mapInfo;
-}
-
-MapModel::MapModel(QObject *parent) :
-    QAbstractListModel(parent)
-{
-    m_data = QList<QMap<int, QVariant> >();
-}
-
-int MapModel::rowCount(const QModelIndex &parent) const
-{
-    if(parent.isValid())
-        return 0;
-    else
-        return m_data.size();
-}
-
-
-QVariant MapModel::data(const QModelIndex &index, int role) const
-{
-    if(index.column() > 0 || index.row() >= m_data.size())
-        return QVariant();
-    else
-        return m_data.at(index.row()).value(role, QVariant());
-}
 
 
 void MapModel::loadMaps()
@@ -73,33 +35,21 @@ void MapModel::loadMaps()
     QStringList maps =
         datamgr.entryList("Maps", QDir::AllDirs | QDir::NoDotAndDotDot);
 
-    m_data.clear();
+    QStandardItemModel::clear();
 
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
-    m_data.reserve(maps.size());
-#endif
-
-    QMap<int, QVariant> tmp;
-    QList<QVariant> mapInfo;
+    QList<QStandardItem *> genMaps;
+    QList<QStandardItem *> missionMaps;
+    QList<QStandardItem *> staticMaps;
 
     // TODO: icons for these
-    tmp.insert(Qt::DisplayRole, QComboBox::tr("generated map..."));
-    mapInfo.append(GeneratedMap);
-    tmp.insert(Qt::UserRole, mapInfo);
-    m_data.append(tmp);
-    tmp.insert(Qt::DisplayRole, QComboBox::tr("generated maze..."));
-    mapInfo.replace(0, GeneratedMaze);
-    tmp.insert(Qt::UserRole, mapInfo);
-    m_data.append(tmp);
-    tmp.insert(Qt::DisplayRole, QComboBox::tr("hand drawn map..."));
-    mapInfo.replace(0, HandDrawnMap);
-    tmp.insert(Qt::UserRole, mapInfo);
-    m_data.append(tmp);
 
-    m_nGenerators = 3;
+    genMaps.append(
+        infoToItem(QIcon(), QComboBox::tr("generated map..."), GeneratedMap, "+rnd+"));
+    genMaps.append(
+        infoToItem(QIcon(), QComboBox::tr("generated maze..."), GeneratedMaze, "+maze+"));
+    genMaps.append(
+        infoToItem(QIcon(), QComboBox::tr("hand drawn map..."), HandDrawnMap, "+drawn+"));
 
-
-    m_nMissions = 0;
 
     QFile mapLuaFile;
     QFile mapCfgFile;
@@ -111,80 +61,113 @@ void MapModel::loadMaps()
         mapLuaFile.setFileName(
             datamgr.findFileForRead(QString("Maps/%1/map.lua").arg(map)));
 
-        QMap<int, QVariant> dataset;
-
 
         if (mapCfgFile.open(QFile::ReadOnly))
         {
+            QString caption;
             QString theme;
             quint32 limit = 0;
             QString scheme;
             QString weapons;
-            QList<QVariant> mapInfo;
             bool isMission = mapLuaFile.exists();
-            int type = isMission?MissionMap:StaticMap;
+            MapType type = isMission?MissionMap:StaticMap;
 
             QTextStream input(&mapCfgFile);
             input >> theme;
             input >> limit;
             input >> scheme;
             input >> weapons;
-            mapInfo.push_back(type);
-            mapInfo.push_back(map);
-            mapInfo.push_back(theme);
-            if (limit)
-                mapInfo.push_back(limit);
-            else
-                mapInfo.push_back(18);
+            mapCfgFile.close();
+
+            if (limit == 0)
+                limit = 18;
 
 
             if (scheme.isEmpty())
                 scheme = "locked";
-            scheme.replace("_", " ");
+            else
+                scheme.replace("_", " ");
 
             if (weapons.isEmpty())
                 weapons = "locked";
-            weapons.replace("_", " ");
+            else
+                weapons.replace("_", " ");
 
-            mapInfo.push_back(scheme);
-            mapInfo.push_back(weapons);
-
-            if(isMission)
+            if (isMission)
             {
                 // TODO: icon
-                map = QComboBox::tr("Mission") + ": " + map;
+                caption = QComboBox::tr("Mission") + ": " + map;
                 m_nMissions++;
             }
-
-            mapCfgFile.close();
-
-            // set name
-            dataset.insert(Qt::DisplayRole, map);
-
-            // TODO
-            // dataset.insert(Qt::DecorationRole, icon);
-
-            // set mapinfo
-            dataset.insert(Qt::UserRole, mapInfo);
-
-            if (isMission) // insert missions before regular maps
-                m_data.insert(m_nGenerators + m_nMissions, dataset);
             else
-                m_data.append(dataset);
+                caption = map;
+
+            QStandardItem * item = infoToItem(
+                QIcon(), caption, type, map, theme, limit, scheme, weapons);
+
+            if (isMission)
+                missionMaps.append(item);
+            else
+                staticMaps.append(item);
         
         }
 
     }
 
+    m_nMissions = missionMaps.size();
+
+    QStandardItem separator("---");
+    separator.setData(QLatin1String("separator"), Qt::AccessibleDescriptionRole);
+    separator.setFlags(separator.flags() & ~( Qt::ItemIsEnabled | Qt::ItemIsSelectable ) );
+
+    QList<QStandardItem * > items;
+    items.append(genMaps);
+    items.append(separator.clone());
+    items.append(separator.clone());
+    items.append(missionMaps);
+    items.append(separator.clone());
+    items.append(staticMaps);
+
+    QStandardItemModel::appendColumn(items);
+
     endResetModel();
 }
 
-int MapModel::generatorCount() const
-{
-    return m_nGenerators;
-}
 
 int MapModel::missionCount() const
 {
     return m_nMissions;
+}
+
+
+QStandardItem * MapModel::infoToItem(
+    const QIcon & icon,
+    const QString caption,
+    MapType type,
+    QString name,
+    QString theme,
+    quint32 limit,
+    QString scheme,
+    QString weapons)
+const
+{
+    QStandardItem * item = new QStandardItem(icon, caption);
+    MapInfo mapInfo;
+    QVariant qvar(QVariant::UserType);
+
+    mapInfo.type = type;
+    mapInfo.name = name;
+    mapInfo.theme = theme;
+    mapInfo.limit = limit;
+    mapInfo.scheme = scheme;
+    mapInfo.weapons = weapons;
+
+
+    qvar.setValue(mapInfo);
+    item->setData(qvar, Qt::UserRole + 1);
+
+    if (mapInfo.type == Invalid)
+            Q_ASSERT(false);
+
+    return item;
 }
