@@ -131,6 +131,7 @@ class HWMapContainer : public QWidget
         void updatePreview();
 
         MapModel::MapInfo m_mapInfo;
+        QString m_theme;
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED

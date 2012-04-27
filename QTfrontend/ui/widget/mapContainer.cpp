@@ -250,10 +250,15 @@ void HWMapContainer::mapChanged(int index)
             cbTemplateFilter->hide();
             maze_size_label->hide();
             cbMazeSize->hide();
+            m_theme = m_mapInfo.theme;
     }
 
+    // the map has no pre-defined theme, so let's use the selected one
     if (m_mapInfo.theme.isEmpty())
-        emit themeChanged(lvThemes->currentIndex().data().toString());
+    {
+        m_theme = lvThemes->currentIndex().data().toString();
+        emit themeChanged(m_theme);
+    }
     emit mapChanged(m_mapInfo.name);
     emit mapgenChanged(mapgen);
 }
@@ -300,10 +305,10 @@ void HWMapContainer::askForGeneratedPreview()
 
 void HWMapContainer::themeSelected(const QModelIndex & current, const QModelIndex &)
 {
-    m_mapInfo.theme = current.data().toString();
+    m_theme = current.data().toString();
 
     gbThemes->setIcon(qVariantValue<QIcon>(current.data(Qt::UserRole)));
-    emit themeChanged(m_mapInfo.theme);
+    emit themeChanged(m_theme);
 }
 
 QString HWMapContainer::getCurrentSeed() const
@@ -319,7 +324,7 @@ QString HWMapContainer::getCurrentMap() const
 
 QString HWMapContainer::getCurrentTheme() const
 {
-    return(m_mapInfo.theme);
+    return(m_theme);
 }
 
 bool HWMapContainer::getCurrentIsMission() const
