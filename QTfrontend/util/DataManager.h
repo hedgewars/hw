@@ -30,11 +30,13 @@
 
 #include <QStringList>
 
+#include "MapModel.h"
 #include "ThemeModel.h"
 
 class QDir;
 class QFile;
 class QStringList;
+class MapModel;
 class ThemeModel;
 
 /**
@@ -94,11 +96,20 @@ class DataManager: public QObject
         QString findFileForWrite(const QString & relativeDataFilePath) const;
 
         /**
+         * @brief Returns pointer to a model for the available maps.
+         *
+         * The model is kept up to date automatically.
+         *
+         * @return map model pointer.
+         */
+        MapModel * mapModel();
+
+        /**
          * @brief Returns pointer to a model for the available themes.
          *
          * The model is kept up to date automatically.
          *
-         * @return theme model pointer
+         * @return theme model pointer.
          */
         ThemeModel * themeModel();
 
@@ -130,7 +141,8 @@ class DataManager: public QObject
         QDir * m_defaultData; ///< directory of the installed data
         QDir * m_userData;    ///< directory of custom data in the user's directory
 
-        ThemeModel * m_themeModel; ///< themes model instance
+        MapModel * m_mapModel; ///< map model instance
+        ThemeModel * m_themeModel; ///< theme model instance
 };
 
 #endif // HEDGEWARS_DATAMANAGER_H
