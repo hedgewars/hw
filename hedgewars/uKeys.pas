@@ -46,7 +46,9 @@ implementation
 uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
 
 var tkbd, tkbdn: TKeyboardState;
+    quitKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
+    
 
 function KeyNameToCode(name: shortstring): word;
 var code: Word;
@@ -105,17 +107,6 @@ for j:= 0 to Pred(ControllerNumControllers) do
     end;
 {$ENDIF}
 
-
-//TODO reimplement this
-// ctrl/cmd + q to close engine and frontend
-{$IFDEF DARWIN}
-    if ((tkbdn[KeyNameToCode('left_meta')] = 1) or (tkbdn[KeyNameToCode('right_meta')] = 1)) then
-{$ELSE}
-    if ((tkbdn[KeyNameToCode('left_ctrl')] = 1) or (tkbdn[KeyNameToCode('right_ctrl')] = 1)) then
-{$ENDIF}
-    begin
-        if tkbdn[KeyNameToCode('q')] = 1 then ParseCommand ('halt', true)
-    end;
 end;
 
 
@@ -130,6 +121,17 @@ Trusted:= (CurrentTeam <> nil)
           and (CurrentHedgehog^.BotLevel = 0);
 
 tkbdn[code]:= ord(KeyDown);
+
+// ctrl/cmd + q to close engine and frontend
+if(KeyDown and (code = quitKeyCode)) then
+    begin
+{$IFDEF DARWIN}
+    if ((tkbdn[KeyNameToCode('left_meta')] = 1) or (tkbdn[KeyNameToCode('right_meta')] = 1)) then
+{$ELSE}
+    if ((tkbdn[KeyNameToCode('left_ctrl')] = 1) or (tkbdn[KeyNameToCode('right_ctrl')] = 1)) then
+{$ENDIF}
+        ParseCommand('halt', true);    
+    end;
 
 if CurrentBinds[code][0] <> #0 then
     begin
@@ -255,7 +257,7 @@ for i:= 6 to cKeyMaxIndex do
         end;
     end;
 
-//for i:= 0 to cKeyMaxIndex do writeln(stdout,IntToStr(i) + ': ' + KeyNames[i]);
+quitKeyCode:= KeyNameToCode('q');
 
 // get the size of keyboard array
 SDL_GetKeyState(@k);
