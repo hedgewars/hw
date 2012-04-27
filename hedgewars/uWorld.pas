@@ -713,7 +713,7 @@ c:= 0;
                 bSelected:= false;
                 FreeWeaponTooltip;
 {$IFDEF USE_TOUCH_INTERFACE}//show the aiming buttons + animation
-                if (Ammo^[Slot, Pos].Propz and ammoprop_NoCrosshair) = 0 then
+                if (Ammo^[Slot, Pos].Propz and ammoprop_NeedUpDown) <> 0 then
                     begin
                     if not(arrowUp.show) then
                         begin

@@ -842,7 +842,11 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_AltUse or 
+                          ammoprop_SetBounce or
+                          ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -866,7 +870,11 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 3;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_AltUse or 
+                          ammoprop_SetBounce or
+                          ammoprop_NeedUpDown;
                 Count: 5;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -890,7 +898,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -914,7 +924,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_NeedTarget or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedTarget or 
+                          ammoprop_DontHold or
+                          ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -938,7 +951,8 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs;
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -962,7 +976,10 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInMove or ammoprop_NoCrosshair or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_AttackInMove or 
+                          ammoprop_NoCrosshair or 
+                          ammoprop_DontHold;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -986,7 +1003,8 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_DontHold;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1014,7 +1032,8 @@ const
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_Utility or
-                          ammoprop_AltAttack;
+                          ammoprop_AltAttack or
+                          ammoprop_NeedUpDown;
                     Count: 5;
                     NumPerTurn: 0;
                     Timer: 0;
@@ -1038,7 +1057,11 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_AttackInMove or 
+                          ammoprop_DontHold or 
+                          ammoprop_AltUse or 
+                          ammoprop_SetBounce;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1062,7 +1085,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: 0;
+            Ammo: (Propz: ammoprop_NeedUpDown;
                 Count: 3;
                 NumPerTurn: 3;
                 Timer: 0;
@@ -1086,7 +1109,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_AttackInMove or 
+                          ammoprop_DontHold or 
+                          ammoprop_AltUse;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1110,7 +1136,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_ForwMsgs or ammoprop_AttackInMove;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_ForwMsgs or 
+                          ammoprop_AttackInMove;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1158,7 +1186,8 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_DontHold or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1188,7 +1217,8 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
-                          ammoprop_AltAttack;
+                          ammoprop_AltAttack or
+                          ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1213,10 +1243,10 @@ const
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_DontHold or
+                          ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1241,10 +1271,10 @@ const
             Probability: 200;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_DontHold or
+                          ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1268,7 +1298,8 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_ForwMsgs;
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1401,7 +1432,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_AttackInMove;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_DontHold or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AttackInMove;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1425,7 +1459,9 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_NoCrosshair or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NoCrosshair or 
+                          ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1449,7 +1485,9 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_NoCrosshair;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_DontHold or
+                          ammoprop_NoCrosshair;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1473,7 +1511,10 @@ const
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: 0;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -1497,7 +1538,9 @@ const
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: 0;
                 NumPerTurn: 0;
                 Timer: 5000;
@@ -1522,10 +1565,10 @@ const
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_DontHold or
+                          ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1549,7 +1592,9 @@ const
             NameTex: nil;
             Probability: 300;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1573,7 +1618,9 @@ const
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_DontHold;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 5001;
@@ -1597,9 +1644,10 @@ const
             NameTex: nil;
             Probability: 200;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs{ or
-                            ammoprop_DontHold or
-                            ammoprop_AltAttack};
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NeedUpDown{ or
+                          ammoprop_DontHold or
+                          ammoprop_AltAttack};
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1744,6 +1792,7 @@ const
                           ammoprop_DontHold or
                           ammoprop_AltUse or
                           ammoprop_Utility or
+                          ammoprop_NeedUpDown or
                           ammoprop_Effect;
                     Count: 1;
                     NumPerTurn: 0;
@@ -1797,7 +1846,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: 0;
+            Ammo: (Propz: ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -1827,6 +1876,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
+                          ammoprop_NeedUpDown or
                           ammoprop_AltAttack;
                 Count: 1;
                 NumPerTurn: 0;
@@ -1851,7 +1901,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -1877,6 +1929,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
+                          ammoprop_NeedUpDown or
                           ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
@@ -1904,6 +1957,7 @@ const
             Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_AttackInMove or
                           ammoprop_DontHold or
+                          ammoprop_NeedUpDown or
                           ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 3;
@@ -1956,7 +2010,11 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_AltUse or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_SetBounce;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -1980,7 +2038,8 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_AttackInMove;
+            Ammo: (Propz: ammoprop_AttackInMove or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2004,7 +2063,9 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 5001;
@@ -2028,7 +2089,8 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
+            Ammo: (Propz: ammoprop_Power or
+                          ammoprop_NeedUpDown; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
                 Count: 1;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -2133,6 +2195,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or 
                           ammoprop_AltUse or
+                          ammoprop_NeedTarget or
                           ammoprop_NoRoundEnd;
                 Count: 2;
                 NumPerTurn: 0;
@@ -2212,6 +2275,7 @@ const
             Probability: 20;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEnd or
+                          ammoprop_NeedTarget or
                           ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 0;

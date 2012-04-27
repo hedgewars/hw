@@ -266,7 +266,7 @@ const
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
     ammoprop_SetBounce    = $00004000;
-    ammoprop_NeedUpDown   = $00008000;//Used by 
+    ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets 
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
