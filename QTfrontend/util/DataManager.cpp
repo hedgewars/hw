@@ -40,6 +40,7 @@ DataManager::DataManager()
 
     m_defaultData = new QDir(datadir->absolutePath());
 
+    m_mapModel = NULL;
     m_themeModel = NULL;
 }
 
@@ -117,6 +118,15 @@ QString DataManager::findFileForWrite(
     return "";
 }
 
+MapModel * DataManager::mapModel()
+{
+    if (m_mapModel == NULL) {
+        m_mapModel = new MapModel();
+        m_mapModel->loadMaps();
+    }
+    return m_mapModel;
+}
+
 ThemeModel * DataManager::themeModel()
 {
     if (m_themeModel == NULL) {
@@ -128,6 +138,7 @@ ThemeModel * DataManager::themeModel()
 
 void DataManager::reload()
 {
+    m_mapModel->loadMaps();
     m_themeModel->loadThemes();
     emit updated();
 }

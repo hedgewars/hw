@@ -68,11 +68,12 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     chooseMap = new QComboBox(mapWidget);
     chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_mapModel = DataManager::instance().mapModel();
+    chooseMap->setModel(m_mapModel);
 
-    loadMapList();
-    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(loadMapList()));
+    // update model views after model changes (to e.g. re-adjust separators)
+    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(updateModelViews()));
 
-    connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
     mapLayout->addWidget(chooseMap, 1, 1);
 
     QLabel * lblMap = new QLabel(tr("Map"), mapWidget);
@@ -172,6 +173,13 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     setRandomSeed();
     setRandomTheme();
+
+    chooseMap->setCurrentIndex(0);
+    m_mapInfo = MapModel::mapInfoFromData(chooseMap->itemData(0));
+    mapChanged(0);
+    connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
+
+    updateModelViews();
 }
 
 void HWMapContainer::setImage(const QImage newImage)
@@ -202,9 +210,11 @@ void HWMapContainer::setHHLimit(int newHHLimit)
 
 void HWMapContainer::mapChanged(int index)
 {
-    switch(index)
+    m_mapInfo = MapModel::mapInfoFromData(chooseMap->itemData(chooseMap->currentIndex()));
+
+    switch(m_mapInfo.type)
     {
-        case MAPGEN_REGULAR:
+        case MapModel::GeneratedMap:
             mapgen = MAPGEN_REGULAR;
             updatePreview();
             gbThemes->show();
@@ -213,9 +223,9 @@ void HWMapContainer::mapChanged(int index)
             maze_size_label->hide();
             cbMazeSize->hide();
             emit mapChanged("+rnd+");
-            emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
+            emit themeChanged(m_mapInfo.theme);
             break;
-        case MAPGEN_MAZE:
+        case MapModel::GeneratedMaze:
             mapgen = MAPGEN_MAZE;
             updatePreview();
             gbThemes->show();
@@ -224,9 +234,9 @@ void HWMapContainer::mapChanged(int index)
             maze_size_label->show();
             cbMazeSize->show();
             emit mapChanged("+maze+");
-            emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
+            emit themeChanged(m_mapInfo.theme);
             break;
-        case MAPGEN_DRAWN:
+        case MapModel::HandDrawnMap:
             mapgen = MAPGEN_DRAWN;
             updatePreview();
             gbThemes->show();
@@ -235,7 +245,7 @@ void HWMapContainer::mapChanged(int index)
             maze_size_label->hide();
             cbMazeSize->hide();
             emit mapChanged("+drawn+");
-            emit themeChanged(chooseMap->itemData(index).toList()[1].toString());
+            emit themeChanged(m_mapInfo.theme);
             break;
         default:
             mapgen = MAPGEN_MAP;
@@ -245,7 +255,7 @@ void HWMapContainer::mapChanged(int index)
             cbTemplateFilter->hide();
             maze_size_label->hide();
             cbMazeSize->hide();
-            emit mapChanged(chooseMap->itemData(index).toList()[0].toString());
+            emit mapChanged(m_mapInfo.name);
     }
 
     emit mapgenChanged(mapgen);
@@ -316,19 +326,17 @@ QString HWMapContainer::getCurrentSeed() const
 
 QString HWMapContainer::getCurrentMap() const
 {
-    if(chooseMap->currentIndex() < MAPGEN_MAP) return QString();
-    return chooseMap->itemData(chooseMap->currentIndex()).toList()[0].toString();
+    return(m_mapInfo.name);
 }
 
 QString HWMapContainer::getCurrentTheme() const
 {
-    return chooseMap->itemData(chooseMap->currentIndex()).toList()[1].toString();
+    return(m_mapInfo.theme);
 }
 
 bool HWMapContainer::getCurrentIsMission() const
 {
-    if(!chooseMap->currentIndex()) return false;
-    return chooseMap->itemData(chooseMap->currentIndex()).toList()[3].toBool();
+    return(m_mapInfo.type == MapModel::MissionMap);
 }
 
 int HWMapContainer::getCurrentHHLimit() const
@@ -338,12 +346,12 @@ int HWMapContainer::getCurrentHHLimit() const
 
 QString HWMapContainer::getCurrentScheme() const
 {
-    return chooseMap->itemData(chooseMap->currentIndex()).toList()[4].toString();
+    return(m_mapInfo.scheme);
 }
 
 QString HWMapContainer::getCurrentWeapons() const
 {
-    return chooseMap->itemData(chooseMap->currentIndex()).toList()[5].toString();
+    return(m_mapInfo.weapons);
 }
 
 quint32 HWMapContainer::getTemplateFilter() const
@@ -367,7 +375,7 @@ void HWMapContainer::intSetSeed(const QString & seed)
 void HWMapContainer::setSeed(const QString & seed)
 {
     intSetSeed(seed);
-    if (chooseMap->currentIndex() < MAPGEN_DRAWN)
+    if ((m_mapInfo.type == MapModel::GeneratedMap) || (m_mapInfo.type == MapModel::GeneratedMaze))
         updatePreview();
 }
 
@@ -375,11 +383,15 @@ void HWMapContainer::intSetMap(const QString & map)
 {
     int id = 0;
     for(int i = 0; i < chooseMap->count(); i++)
-        if(!chooseMap->itemData(i).isNull() && chooseMap->itemData(i).toList()[0].toString() == map)
+    {
+        MapModel::MapInfo mapInfo = MapModel::mapInfoFromData(chooseMap->itemData(i));
+
+        if (mapInfo.name == map) 
         {
             id = i;
             break;
         }
+    }
 
     if(id > 0)
     {
@@ -410,21 +422,23 @@ void HWMapContainer::setTheme(const QString & theme)
 void HWMapContainer::setRandomMap()
 {
     setRandomSeed();
-    switch(chooseMap->currentIndex())
+    switch(m_mapInfo.type)
     {
-        case MAPGEN_REGULAR:
-        case MAPGEN_MAZE:
+        case MapModel::GeneratedMap:
+        case MapModel::GeneratedMaze:
             setRandomTheme();
             break;
-        case MAPGEN_DRAWN:
+        case MapModel::HandDrawnMap:
             emit drawMapRequested();
             break;
-        default:
-            if(chooseMap->currentIndex() <= numMissions + MAPGEN_MAP + 1)
-                setRandomMission();
-            else
-                setRandomStatic();
+        case MapModel::MissionMap:
+            setRandomMission();
             break;
+        case MapModel::StaticMap:
+            setRandomStatic();
+            break;
+        case MapModel::Invalid:
+            Q_ASSERT(false);
     }
 }
 
@@ -444,11 +458,8 @@ void HWMapContainer::setRandomMission()
 
 void HWMapContainer::setRandomSeed()
 {
-    m_seed = QUuid::createUuid().toString();
-    seedEdit->setText(m_seed);
+    setSeed(QUuid::createUuid().toString());
     emit seedChanged(m_seed);
-    if (chooseMap->currentIndex() < MAPGEN_MAP)
-        updatePreview();
 }
 
 void HWMapContainer::setRandomTheme()
@@ -552,31 +563,29 @@ void HWMapContainer::mapDrawingFinished()
 
 void HWMapContainer::updatePreview()
 {
-    int curIndex = chooseMap->currentIndex();
-
-    switch(curIndex)
+    switch(m_mapInfo.type)
     {
-        case MAPGEN_REGULAR:
+        case MapModel::GeneratedMap:
             askForGeneratedPreview();
             break;
-        case MAPGEN_MAZE:
+        case MapModel::GeneratedMaze:
             askForGeneratedPreview();
             break;
-        case MAPGEN_DRAWN:
+        case MapModel::HandDrawnMap:
             askForGeneratedPreview();
             break;
         default:
             QPixmap mapImage;
             QFile tmpfile;
-            tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
-            if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Maps/" + chooseMap->itemData(curIndex).toList()[0].toString() + "/preview.png");
+            tmpfile.setFileName(cfgdir->absolutePath() + "/Data/Maps/" + m_mapInfo.name + "/preview.png");
+            if (!tmpfile.exists()) tmpfile.setFileName(datadir->absolutePath() + "/Maps/" + m_mapInfo.name + "/preview.png");
             if(!mapImage.load(QFileInfo(tmpfile).absoluteFilePath()))
             {
                 imageButt->setIcon(QIcon());
                 return;
             }
 
-            hhLimit = chooseMap->itemData(curIndex).toList()[2].toInt();
+            hhLimit = m_mapInfo.limit;
             addInfoToPreview(mapImage);
     }
 }
@@ -593,104 +602,20 @@ void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int
 }
 
 
-void HWMapContainer::loadMapList()
+void HWMapContainer::updateModelViews()
 {
-    // TODO: convert to model
+    numMissions = m_mapModel->missionCount();
 
-    // remember previous selection
-    QString selMap = getCurrentMap();
+    intSetMap(m_mapInfo.name);
 
-    chooseMap->clear();
+/*
+    int nGenMaps = m_mapModel->generatorCount();
 
-    chooseMap->addItem(
-// FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapRandom.png"),
-        QComboBox::tr("generated map..."));
-    chooseMap->addItem(
-// FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapMaze.png"),
-        QComboBox::tr("generated maze..."));
+    // insert double separator after random maps/mazes/etc
+    chooseMap->insertSeparator(nGenMaps);
+    chooseMap->insertSeparator(nGenMaps);
 
-    chooseMap->addItem(QComboBox::tr("hand drawn map..."));
-
-    chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
-    chooseMap->insertSeparator(chooseMap->count()); // separator between generators and missions
-
-    int missionindex = chooseMap->count();
-    numMissions = 0;
-    QFile mapLuaFile;
-    QFile mapCfgFile;
-
-    DataManager & dataMgr = DataManager::instance();
-
-    QStringList mapList = dataMgr.entryList(
-                              QString("Maps"),
-                              QDir::Dirs | QDir::NoDotAndDotDot
-                          );
-
-    foreach (QString map, mapList)
-    {
-        mapCfgFile.setFileName(
-            dataMgr.findFileForRead(QString("Maps/%1/map.cfg").arg(map)));
-        mapLuaFile.setFileName(
-            dataMgr.findFileForRead(QString("Maps/%1/map.lua").arg(map)));
-
-        if (mapCfgFile.open(QFile::ReadOnly))
-        {
-            QString theme;
-            quint32 limit = 0;
-            QString scheme;
-            QString weapons;
-            QList<QVariant> mapInfo;
-            bool isMission = mapLuaFile.exists();
-
-            QTextStream input(&mapCfgFile);
-            input >> theme;
-            input >> limit;
-            input >> scheme;
-            input >> weapons;
-            mapInfo.push_back(map);
-            mapInfo.push_back(theme);
-            if (limit)
-                mapInfo.push_back(limit);
-            else
-                mapInfo.push_back(18);
-
-
-            mapInfo.push_back(isMission);
-
-            if (scheme.isEmpty())
-                scheme = "locked";
-            scheme.replace("_", " ");
-
-            if (weapons.isEmpty())
-                weapons = "locked";
-            weapons.replace("_", " ");
-
-            mapInfo.push_back(scheme);
-            mapInfo.push_back(weapons);
-
-            if(isMission)
-            {
-                chooseMap->insertItem(missionindex++,
-// FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapMission.png"),
-                                      QComboBox::tr("Mission") + ": " + map, mapInfo);
-                numMissions++;
-            }
-            else
-                chooseMap->addItem(
-// FIXME - need real icons. Disabling until then
-//QIcon(":/res/mapCustom.png"),
-                    map, mapInfo);
-            mapCfgFile.close();
-        }
-    }
-
-    chooseMap->insertSeparator(missionindex); // separator between missions and maps
-
-    // if a map was selected already let's reselect it after reloading the map list
-    if (!selMap.isEmpty()) {
-        setMap(selMap);
-    }
+    // separator between missions and regular maps
+    chooseMap->insertSeparator(nGenMaps + m_mapModel->missionCount());
+*/
 }

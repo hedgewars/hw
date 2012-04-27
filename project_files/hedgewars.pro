@@ -23,6 +23,7 @@ QT += network
 QT += webkit
 
 HEADERS += ../QTfrontend/model/ThemeModel.h \
+    ../QTfrontend/model/MapModel.h \
     ../QTfrontend/model/ammoSchemeModel.h \
     ../QTfrontend/model/netserverslist.h \
     ../QTfrontend/model/hats.h \
@@ -104,6 +105,7 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/dialog/input_password.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
+    ../QTfrontend/model/MapModel.cpp \
     ../QTfrontend/model/ThemeModel.cpp \
     ../QTfrontend/model/hats.cpp \
     ../QTfrontend/model/netserverslist.cpp \

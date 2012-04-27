@@ -35,6 +35,7 @@
 class QPushButton;
 class IconedGroupBox;
 class QListView;
+class SeparatorPainter;
 
 class MapFileErrorException
 {
@@ -71,6 +72,7 @@ class HWMapContainer : public QWidget
         void setMazeSize(int size);
         void setDrawnMapData(const QByteArray & ar);
         void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl);
+        void updateModelViews();
 
     signals:
         void seedChanged(const QString & seed);
@@ -94,7 +96,6 @@ class HWMapContainer : public QWidget
         void themeSelected(const QModelIndex & current, const QModelIndex &);
         void addInfoToPreview(QPixmap image);
         void seedEdited();
-        void loadMapList();
 
     protected:
         virtual void resizeEvent ( QResizeEvent * event );
@@ -103,6 +104,7 @@ class HWMapContainer : public QWidget
         QGridLayout mainLayout;
         QPushButton* imageButt;
         QComboBox* chooseMap;
+        MapModel * m_mapModel;
         IconedGroupBox* gbThemes;
         QListView* lvThemes;
         ThemeModel * m_themeModel;
@@ -127,6 +129,8 @@ class HWMapContainer : public QWidget
         void intSetTemplateFilter(int);
         void intSetMazeSize(int size);
         void updatePreview();
+
+        MapModel::MapInfo m_mapInfo;
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED
