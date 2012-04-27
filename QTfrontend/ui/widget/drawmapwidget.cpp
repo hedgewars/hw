@@ -55,6 +55,7 @@ void DrawMapWidget::setScene(DrawMapScene * scene)
     m_scene = scene;
 
     ui->graphicsView->setScene(scene);
+    connect(scene, SIGNAL(pathChanged()), this, SLOT(pathChanged()));
 }
 
 void DrawMapWidget::resizeEvent(QResizeEvent * event)
@@ -111,6 +112,11 @@ void DrawMapWidget::load(const QString & fileName)
         else
             m_scene->decode(qUncompress(QByteArray::fromBase64(f.readAll())));
     }
+}
+
+void DrawMapWidget::pathChanged()
+{
+    ui->lblPoints->setNum(m_scene->pointsCount());
 }
 
 

@@ -42,6 +42,7 @@ class DrawMapScene : public QGraphicsScene
 
         QByteArray encode();
         void decode(QByteArray data);
+        int pointsCount();
 
     signals:
         void pathChanged();
