@@ -235,19 +235,19 @@ if (buttonsDown > 0) and (widget <> nil) then
     dec(buttonsDown);
     
     if widget = @arrowLeft then
-        leftKey:= false;
+        ParseTeamCommand('-left');
     
     if widget = @arrowRight then
-        rightKey:= false;
+        ParseTeamCommand('-right');
 
     if widget = @arrowUp then
-        upKey:= false;
+        ParseTeamCommand('-up');
 
     if widget = @arrowDown then
-        downKey:= false;
+        ParseTeamCommand('-down');
 
     if widget = @fireButton then
-        spaceKey:= false;
+        ParseTeamCommand('-attack');
     end;
  
 deleteFinger(pointerId);
