@@ -325,6 +325,15 @@ void DrawMapScene::simplifyLast()
     emit pathChanged();
 }
 
+int DrawMapScene::pointsCount()
+{
+    int cnt = 0;
+    foreach(PathParams p, paths)
+        cnt += p.points.size();
+
+    return cnt;
+}
+
 QPainterPath DrawMapScene::pointsToPath(const QList<QPoint> points)
 {
     QPainterPath path;

@@ -23,6 +23,7 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QGraphicsView>
+#include <QLabel>
 
 #include "qaspectratiolayout.h"
 #include "drawmapscene.h"
@@ -53,11 +54,17 @@ namespace Ui
     {
         public:
             DrawMapView *graphicsView;
+            QLabel * lblPoints;
 
             void setupUi(QWidget *drawMapWidget)
             {
-                QAspectRatioLayout * arLayout = new QAspectRatioLayout(drawMapWidget);
+                QVBoxLayout * vbox = new QVBoxLayout(drawMapWidget);
+                vbox->setMargin(0);
+                lblPoints = new QLabel("0", drawMapWidget);
+                vbox->addWidget(lblPoints);
+                QAspectRatioLayout * arLayout = new QAspectRatioLayout();
                 arLayout->setMargin(0);
+                vbox->addLayout(arLayout);
 
                 graphicsView = new DrawMapView(drawMapWidget);
                 arLayout->addWidget(graphicsView);
@@ -103,6 +110,9 @@ class DrawMapWidget : public QWidget
         Ui::DrawMapWidget *ui;
 
         DrawMapScene * m_scene;
+
+    private slots:
+        void pathChanged();
 };
 
 #endif // DRAWMAPWIDGET_H
