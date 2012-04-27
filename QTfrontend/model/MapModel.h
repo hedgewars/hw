@@ -25,7 +25,7 @@
 #ifndef HEDGEWARS_MAPMODEL_H
 #define HEDGEWARS_MAPMODEL_H
 
-#include <QAbstractListModel>
+#include <QStandardItemModel>
 #include <QStringList>
 #include <QTextStream>
 #include <QMap>
@@ -40,7 +40,7 @@
  * @author sheepluva
  * @since 0.9.18
  */
-class MapModel : public QAbstractListModel
+class MapModel : public QStandardItemModel
 {
         Q_OBJECT
 
@@ -64,13 +64,6 @@ class MapModel : public QAbstractListModel
             QString weapons;
         };
 
-        static MapInfo mapInfoFromData(const QVariant data); 
-
-        explicit MapModel(QObject *parent = 0);
-
-        int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        QVariant data(const QModelIndex &index, int role) const;
-        int generatorCount() const;
         int missionCount() const;
 
 
@@ -80,9 +73,19 @@ class MapModel : public QAbstractListModel
 
 
     private:
-        QList<QMap<int, QVariant> > m_data;
-        int m_nGenerators;
         int m_nMissions;
+
+        QStandardItem * infoToItem(
+            const QIcon & icon,
+            const QString caption,
+            MapType type = Invalid,
+            QString name = "",
+            QString theme = "",
+            quint32 limit = 0,
+            QString scheme = "",
+            QString weapons = "") const;
 };
+
+Q_DECLARE_METATYPE(MapModel::MapInfo)
 
 #endif // HEDGEWARS_MAPMODEL_H
