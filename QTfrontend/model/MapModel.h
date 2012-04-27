@@ -54,27 +54,45 @@ class MapModel : public QStandardItemModel
             StaticMap
         };
 
+        /// a struct for holding the attributes of a map.
         struct MapInfo
         {
-            MapType type;
-            QString name;
-            QString theme;
-            quint32 limit;
-            QString scheme;
-            QString weapons;
+            MapType type; ///< The map-type
+            QString name; ///< The internal name.
+            QString theme; ///< The theme to be used. (can be empty)
+            quint32 limit; ///< The maximum allowed number of hedgehogs.
+            QString scheme; ///< Default scheme name or "locked", for mission-maps.
+            QString weapons; ///< Default weaponset name or "locked", for missions-maps.
         };
 
+        /**
+         * @brief Returns the number of available mission maps.
+         * @return mission map count.
+         */
         int missionCount() const;
 
 
     public slots:
-        /// reloads the maps from the DataManager
+        /// reloads the maps using the DataManager
         void loadMaps();
 
 
     private:
-        int m_nMissions;
+        int m_nMissions; ///< used to keep track of the mission amount
 
+        /**
+         * @brief Creates a QStandardItem, that holds the map info and item appearance.
+         * The used role for the data is Qt::UserRole + 1.
+         * @param icon the icon to be displayed (can be an empty QIcon()).
+         * @param caption the text to be displayed.
+         * @param type the type of the map.
+         * @param name the internal name of the map.
+         * @param theme the theme of the map (or empty if none).
+         * @param limit the hedgehog limit of the map.
+         * @param scheme mission map: default scheme name or "locked".
+         * @param weapons mission map: default weaponset name or "locked".
+         * @return pointer to item representing the map info: at Qt::UserRole + 1.
+         */
         QStandardItem * infoToItem(
             const QIcon & icon,
             const QString caption,
