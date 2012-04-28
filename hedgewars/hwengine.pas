@@ -29,7 +29,7 @@ interface
 program hwengine;
 {$ENDIF}
 
-uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
+uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
      sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
      {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF};
@@ -449,7 +449,7 @@ begin
         //uFloat does not need initialization
         //uGame does not need initialization
         uGears.initModule;
-        uKeys.initModule;
+        uInputHandler.initModule;
         //uLandGraphics does not need initialization
         //uLandObjects does not need initialization
         //uLandTemplates does not need initialization
@@ -485,7 +485,7 @@ begin
         uLandTexture.freeModule;
         //uLandObjects does not need to be freed
         //uLandGraphics does not need to be freed
-        uKeys.freeModule;           //stub
+        uInputHandler.freeModule;           //stub
         uGears.freeModule;
         //uGame does not need to be freed
         //uFloat does not need to be freed

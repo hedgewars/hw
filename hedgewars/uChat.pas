@@ -31,7 +31,7 @@ procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
 implementation
-uses SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
+uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
 
 const MaxStrIndex = 27;
 

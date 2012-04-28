@@ -35,7 +35,7 @@ set(engine_sources
     uGears.pas
     uGearsRender.pas
     uIO.pas
-    uKeys.pas
+    uInputHandler.pas
     uLand.pas
     uLandGenMaze.pas
     uLandGraphics.pas

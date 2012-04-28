@@ -28,7 +28,7 @@ unit PascalExports;
  *           http://en.wikipedia.org/wiki/X86_calling_conventions#cdecl
  *)
 interface
-uses uTypes, uConsts, uVariables, GLunit, uKeys, uSound, uAmmos, uUtils, uCommands;
+uses uTypes, uConsts, uVariables, GLunit, uInputHandler, uSound, uAmmos, uUtils, uCommands;
 
 {$INCLUDE "config.inc"}
 procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
@@ -118,7 +118,7 @@ end;
 procedure HW_allKeysUp; cdecl; export;
 begin
     // set all keys to released
-    uKeys.initModule;
+    uInputHandler.initModule;
 end;
 
 procedure HW_walkLeft; cdecl; export;
