@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes;
+uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes, uCaptions;
 
 
 procedure initModule;
@@ -80,6 +80,7 @@ var
     targetAngle: LongInt;
 
     buttonsDown: Longword;
+    targetting: boolean; //true when targetting an airstrike or the like
 
 procedure onTouchDown(x,y: Longword; pointerId: TSDL_FingerId);
 var 
@@ -100,7 +101,9 @@ end;
 
 if isOnWidget(fireButton, finger^) then
     begin
-    ParseTeamCommand('+attack');
+    if not((CurrentHedgehog <> nil) and 
+       (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)) then
+        ParseTeamCommand('+attack');
     moveCursor:= false;
     finger^.pressedWidget:= @fireButton;
     exit;
@@ -152,13 +155,17 @@ dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
     begin
     moveCursor:= true;
-    if pointerCount = 2 then
-        begin
-        moveCursor:= false;
-        pinchSize := calculateDelta(finger^, getSecondFinger(finger^)^);
-        baseZoomValue := ZoomValue
+    case pointerCount of
+        1:
+            targetting:= (CurrentHedgehog <> nil) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0);
+        2:
+            begin
+            moveCursor:= false;
+            pinchSize := calculateDelta(finger^, getSecondFinger(finger^)^);
+            baseZoomValue := ZoomValue
+            end;
+        end;
     end;
-end;
 {$ENDIF}
 end;
 
@@ -248,8 +255,15 @@ if (buttonsDown > 0) and (widget <> nil) then
         ParseTeamCommand('-down');
 
     if widget = @fireButton then
-        ParseTeamCommand('-attack');
+        if (CurrentHedgehog <> nil) and 
+           (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)then
+            ParseTeamCommand('put')
+        else
+            ParseTeamCommand('-attack');
     end;
+        
+if targetting then
+    AddCaption('Press the attack button to mark the target', cWhiteColor, capgrpAmmoInfo);
  
 deleteFinger(pointerId);
 {$ENDIF}
@@ -270,8 +284,6 @@ if isOnWidget(jumpWidget, finger) then
     exit;
     end;
 
-if (CurrentHedgehog <> nil) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)then
-    ParseTeamCommand('put');
 {$ENDIF}
 end;
 
@@ -393,7 +405,7 @@ procedure ProcessTouch;
 var
     deltaAngle: LongInt;
 begin
-invertCursor := not(bShowAmmoMenu);
+invertCursor := not(bShowAmmoMenu or targetting); 
 if aimingCrosshair then
     if CurrentHedgehog^.Gear <> nil then
         begin
