@@ -117,7 +117,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     //gbThemes->setStyleSheet("padding: 0px"); // doesn't work - stylesheet is set with icon
     mapLayout->addWidget(gbThemes, 0, 2, 3, 1);
-
+    // disallow row to be collapsed (so it can't get ignored when Qt applies rowSpan of gbThemes)
+    mapLayout->setRowMinimumHeight(2, 13);
     QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
     gbTLayout->setContentsMargins(0, 0, 0 ,0);
     gbTLayout->setSpacing(0);
