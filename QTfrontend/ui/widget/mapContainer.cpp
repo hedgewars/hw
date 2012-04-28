@@ -378,11 +378,12 @@ void HWMapContainer::intSetMap(const QString & map)
     int id = 0;
     for(int i = 0; i < chooseMap->count(); i++)
     {
-        // skip separators
-        if (chooseMap->itemData(i, Qt::AccessibleDescriptionRole) == QLatin1String("separator"))
+        QVariant data = chooseMap->itemData(i, Qt::UserRole + 1);
+        // skip separators etc
+        if (!data.isValid())
             continue;
-        Q_ASSERT(chooseMap->itemData(i, Qt::UserRole + 1).canConvert<MapModel::MapInfo>());
-        MapModel::MapInfo mapInfo = chooseMap->itemData(i, Qt::UserRole + 1).value<MapModel::MapInfo>();
+        Q_ASSERT(data.canConvert<MapModel::MapInfo>());
+        MapModel::MapInfo mapInfo = data.value<MapModel::MapInfo>();
 
         if (mapInfo.name == map)
         {
@@ -419,6 +420,8 @@ void HWMapContainer::setTheme(const QString & theme)
 
 void HWMapContainer::setRandomMap()
 {
+    int idx;
+
     setRandomSeed();
     switch(m_mapInfo.type)
     {
@@ -430,29 +433,17 @@ void HWMapContainer::setRandomMap()
             emit drawMapRequested();
             break;
         case MapModel::MissionMap:
-            setRandomMission();
-            break;
         case MapModel::StaticMap:
-            setRandomStatic();
+            // get random map of same type
+            idx = m_mapModel->randomMap(m_mapInfo.type);
+            chooseMap->setCurrentIndex(idx);
+            mapChanged(idx);
             break;
         case MapModel::Invalid:
             Q_ASSERT(false);
     }
 }
 
-void HWMapContainer::setRandomStatic()
-{
-    int i = MAPGEN_MAP + 3 + numMissions + rand() % (chooseMap->count() - MAPGEN_MAP - 3 - numMissions);
-    chooseMap->setCurrentIndex(i);
-    mapChanged(i);
-}
-
-void HWMapContainer::setRandomMission()
-{
-    int i = MAPGEN_MAP + 2 + rand() % numMissions;
-    chooseMap->setCurrentIndex(i);
-    mapChanged(i);
-}
 
 void HWMapContainer::setRandomSeed()
 {
@@ -604,8 +595,8 @@ void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int
 
 void HWMapContainer::updateModelViews()
 {
-    numMissions = m_mapModel->missionCount();
-
+    // TODO: reselect theme
+    // FIXME: issues with generated maps?
     if (!m_mapInfo.name.isEmpty())
         intSetMap(m_mapInfo.name);
 }

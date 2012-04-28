@@ -35,7 +35,7 @@
 #include "DataManager.h"
 
 /**
- * @brief A model listing available themes
+ * @brief A model that vertically lists available maps
  *
  * @author sheepluva
  * @since 0.9.18
@@ -66,10 +66,18 @@ class MapModel : public QStandardItemModel
         };
 
         /**
-         * @brief Returns the number of available mission maps.
-         * @return mission map count.
+         * @brief Returns the number of available maps of a specified type.
+         * @param type map type to get the count of.
+         * @return count of maps that have the specified type.
          */
-        int missionCount() const;
+        int mapCount(MapType type) const;
+
+        /**
+         * @brief Returns the row-index of a random map with a specified type.
+         * @param type desired type of map.
+         * @return row-index of a map with the desired type, -1 if none found.
+         */
+        int randomMap(MapType type) const;
 
 
     public slots:
@@ -78,7 +86,8 @@ class MapModel : public QStandardItemModel
 
 
     private:
-        int m_nMissions; ///< used to keep track of the mission amount
+        ///< start-index and map count for each map-type
+        QMap<MapType, QPair<int,int> > typeLoc;
 
         /**
          * @brief Creates a QStandardItem, that holds the map info and item appearance.

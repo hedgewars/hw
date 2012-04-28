@@ -91,8 +91,6 @@ class HWMapContainer : public QWidget
         void setRandomSeed();
         void setRandomTheme();
         void setRandomMap();
-        void setRandomStatic();
-        void setRandomMission();
         void themeSelected(const QModelIndex & current, const QModelIndex &);
         void addInfoToPreview(QPixmap image);
         void seedEdited();
@@ -120,7 +118,6 @@ class HWMapContainer : public QWidget
         QLabel *maze_size_label;
         QComboBox *cbMazeSize;
         MapGenerator mapgen;
-        int numMissions;
         DrawMapScene drawMapScene;
 
         void intSetSeed(const QString & seed);
