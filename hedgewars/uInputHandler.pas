@@ -18,7 +18,7 @@
 
 {$INCLUDE "options.inc"}
 
-unit uKeys;
+unit uInputHandler;
 interface
 uses SDLh, uTypes;
 
