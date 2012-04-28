@@ -1,7 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2011-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +97,7 @@ class DataManager: public QObject
         /**
          * @brief Returns pointer to a model for the available maps.
          *
-         * The model is kept up to date automatically.
+         * The model is updated automatically on data reload.
          *
          * @return map model pointer.
          */
@@ -107,23 +106,19 @@ class DataManager: public QObject
         /**
          * @brief Returns pointer to a model for the available themes.
          *
-         * The model is kept up to date automatically.
+         * The model is updated automatically on data reload.
          *
          * @return theme model pointer.
          */
         ThemeModel * themeModel();
 
     public slots:
-        /**
-         * @brief Reloads data from storage.
-         */
+        /// Reloads data from storage.
         void reload();
 
 
     signals:
-        /**
-         * @brief This signal is emitted after the data has been updated.
-         */
+        /// This signal is emitted after the data has been updated.
         void updated();
 
 
