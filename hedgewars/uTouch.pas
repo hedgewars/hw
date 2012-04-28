@@ -277,7 +277,6 @@ end;
 procedure onTouchLongClick(finger: TTouch_Data);
 begin
 {$IFDEF USE_TOUCH_INTERFACE}
-WriteLnToConsole('blabla');
 if isOnWidget(jumpWidget, finger) then
     begin
     ParseTeamCommand('ljump');
@@ -562,7 +561,6 @@ end;
 function fingerHasMoved(finger: TTouch_Data): boolean;
 begin
     fingerHasMoved := trunc(sqrt(sqr(finger.X-finger.historicalX) + sqr(finger.y-finger.historicalY))) > 30;
-    WriteLnToConsole(inttostr(ord(fingerHasMoved)) + ' xy' + inttostr(finger.x) + ' ' + inttostr(finger.historicalx));
 end;
 
 function calculateDelta(finger1, finger2: TTouch_Data): LongInt; inline;
