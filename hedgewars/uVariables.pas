@@ -2195,7 +2195,6 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or 
                           ammoprop_AltUse or
-                          ammoprop_NeedTarget or
                           ammoprop_NoRoundEnd;
                 Count: 2;
                 NumPerTurn: 0;
