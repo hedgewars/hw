@@ -59,7 +59,6 @@ implementation
 
 const
     clickTime = 200;
-    longClickTime = 400;
     nilFingerId = High(TSDL_FingerId);
 
 var
@@ -216,10 +215,12 @@ y := y;
 finger:= updateFinger(x,y,0,0,pointerId);
 //Check for onTouchClick event
 if not(fingerHasMoved(finger^)) then
+    begin
     if (RealTicks - finger^.timeSinceDown) < clickTime then
         onTouchClick(finger^)
     else
-        onTouchLongClick(finger^);
+            onTouchLongClick(finger^);
+    end;
 
 if aimingCrosshair then
     begin
@@ -262,8 +263,15 @@ end;
 procedure onTouchLongClick(finger: TTouch_Data);
 begin
 {$IFDEF USE_TOUCH_INTERFACE}
+WriteLnToConsole('blabla');
 if isOnWidget(jumpWidget, finger) then
+    begin
     ParseTeamCommand('ljump');
+    exit;
+    end;
+
+if (CurrentHedgehog <> nil) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)then
+    ParseTeamCommand('put');
 {$ENDIF}
 end;
 
@@ -541,7 +549,8 @@ end;
 //Method to calculate the distance this finger has moved since the downEvent
 function fingerHasMoved(finger: TTouch_Data): boolean;
 begin
-    fingerHasMoved := trunc(sqrt(sqr(finger.X-finger.historicalX) + sqr(finger.y-finger.historicalY))) > 330;
+    fingerHasMoved := trunc(sqrt(sqr(finger.X-finger.historicalX) + sqr(finger.y-finger.historicalY))) > 30;
+    WriteLnToConsole(inttostr(ord(fingerHasMoved)) + ' xy' + inttostr(finger.x) + ' ' + inttostr(finger.historicalx));
 end;
 
 function calculateDelta(finger1, finger2: TTouch_Data): LongInt; inline;
