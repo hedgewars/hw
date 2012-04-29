@@ -156,6 +156,7 @@ ThemeModel * DataManager::themeModel()
 
 void DataManager::reload()
 {
+    m_gameStyleModel->loadGameStyles();
     m_hatModel->loadHats();
     m_mapModel->loadMaps();
     m_themeModel->loadThemes();
