@@ -25,7 +25,6 @@
 
 #include "team.h"
 #include "hwform.h"
-#include "hats.h"
 
 HWTeam::HWTeam(const QString & teamname) :
     QObject(0)

@@ -29,12 +29,14 @@
 
 #include <QStringList>
 
+#include "HatModel.h"
 #include "MapModel.h"
 #include "ThemeModel.h"
 
 class QDir;
 class QFile;
 class QStringList;
+class HatModel;
 class MapModel;
 class ThemeModel;
 
@@ -94,8 +96,18 @@ class DataManager: public QObject
          */
         QString findFileForWrite(const QString & relativeDataFilePath) const;
 
+
         /**
-         * @brief Returns pointer to a model for the available maps.
+         * @brief Returns pointer to a model of available hats.
+         *
+         * The model is updated automatically on data reload.
+         *
+         * @return hat model pointer.
+         */
+        HatModel * hatModel();
+
+        /**
+         * @brief Returns pointer to a model of available maps.
          *
          * The model is updated automatically on data reload.
          *
@@ -104,7 +116,7 @@ class DataManager: public QObject
         MapModel * mapModel();
 
         /**
-         * @brief Returns pointer to a model for the available themes.
+         * @brief Returns pointer to a model of available themes.
          *
          * The model is updated automatically on data reload.
          *
@@ -136,6 +148,7 @@ class DataManager: public QObject
         QDir * m_defaultData; ///< directory of the installed data
         QDir * m_userData;    ///< directory of custom data in the user's directory
 
+        HatModel * m_hatModel; ///< hat model instance
         MapModel * m_mapModel; ///< map model instance
         ThemeModel * m_themeModel; ///< theme model instance
 };

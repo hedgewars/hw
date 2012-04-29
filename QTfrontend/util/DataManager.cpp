@@ -39,6 +39,7 @@ DataManager::DataManager()
 
     m_defaultData = new QDir(datadir->absolutePath());
 
+    m_hatModel = NULL;
     m_mapModel = NULL;
     m_themeModel = NULL;
 }
@@ -117,6 +118,15 @@ QString DataManager::findFileForWrite(
     return "";
 }
 
+HatModel * DataManager::hatModel()
+{
+    if (m_hatModel == NULL) {
+        m_hatModel = new HatModel();
+        m_hatModel->loadHats();
+    }
+    return m_hatModel;
+}
+
 MapModel * DataManager::mapModel()
 {
     if (m_mapModel == NULL) {
@@ -137,6 +147,7 @@ ThemeModel * DataManager::themeModel()
 
 void DataManager::reload()
 {
+    m_hatModel->loadHats();
     m_mapModel->loadMaps();
     m_themeModel->loadThemes();
     emit updated();

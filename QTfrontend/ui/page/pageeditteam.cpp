@@ -29,7 +29,6 @@
 
 #include "sdlkeys.h"
 #include "SquareLabel.h"
-#include "hats.h"
 #include "HWApplication.h"
 
 #include "DataManager.h"
@@ -61,11 +60,12 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
 
-    HatsModel * hatsModel = new HatsModel(GBoxHedgehogs);
+    HatModel * hatModel = DataManager::instance().hatModel();
+
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         HHHats[i] = new QComboBox(GBoxHedgehogs);
-        HHHats[i]->setModel(hatsModel);
+        HHHats[i]->setModel(hatModel);
         HHHats[i]->setIconSize(QSize(32, 37));
         //HHHats[i]->setSizeAdjustPolicy(QComboBox::AdjustToContents);
         //HHHats[i]->setModelColumn(1);

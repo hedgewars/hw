@@ -16,8 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef _HATS_INCLUDED
-#define _HATS_INCLUDED
+/**
+ * @file
+ * @brief HatModel class definition
+ */
+
+#ifndef HEDGEWARS_HATMODEL_H
+#define HEDGEWARS_HATMODEL_H
 
 #include <QAbstractListModel>
 #include <QStringList>
@@ -25,20 +30,24 @@
 #include <QPair>
 #include <QIcon>
 
-class HatsModel : public QAbstractListModel
+class HatModel : public QAbstractListModel
 {
         Q_OBJECT
 
     public:
-        HatsModel(QObject *parent = 0);
+        HatModel(QObject *parent = 0);
 
         QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         int rowCount(const QModelIndex & parent) const;
         //int columnCount(const QModelIndex & parent) const;
+
+    public slots:
+        /// Reloads hats using the DataManager.
+        void loadHats();
 
         QVariant data(const QModelIndex &index, int role) const;
     protected:
         QVector<QPair<QString, QIcon> > hats;
 };
 
-#endif // _HATS_INCLUDED
+#endif // HEDGEWARS_HATMODEL_H
