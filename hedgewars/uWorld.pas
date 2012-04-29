@@ -1751,6 +1751,7 @@ end;
 
 procedure SetUtilityWidgetState(ammoType: TAmmoType);
 begin
+{$IFDEF TOUCH_INTERFACE}
 if(ammoType = amNothing)then
     ammoType:= CurrentHedgehog^.CurAmmoType;
 
@@ -1772,6 +1773,7 @@ if(CurrentHedgehog <> nil)then
         end
     else if utilityWidget.show then
         animateWidget(@utilityWidget, true, false); 
+{$ENDIF}
 end;
 
 procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);
