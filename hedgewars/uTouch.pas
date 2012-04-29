@@ -265,12 +265,15 @@ if (buttonsDown > 0) and (widget <> nil) then
         ParseTeamCommand('-attack');
     
     if widget = @utilityWidget then
-        if (CurrentHedgehog <> nil) and 
-           (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)then
-            begin
-            ParseTeamCommand('put');
-            targetted:= true;
-            end;
+        if (CurrentHedgehog <> nil)then
+            if(Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)then
+                begin
+                ParseTeamCommand('put');
+                targetted:= true;
+                end
+            else if CurAmmoGear^.AmmoType = amSwitch then
+                ParseTeamCommand('switch')
+            else WriteLnToConsole(inttostr(ord(Ammoz[CurrentHedgehog^.CurAmmoType].NameId)) + ' ' + inttostr(ord(sidSwitch)));
     end;
         
 if targetting then
