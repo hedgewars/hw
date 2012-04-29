@@ -1765,6 +1765,11 @@ if(CurrentHedgehog <> nil)then
         utilityWidget.sprite:= sprTargetButton;
         animateWidget(@utilityWidget, true, true);
         end
+    else if ammoType = amSwitch then
+        begin
+        utilityWidget.sprite:= sprTargetButton;
+        animateWidget(@utilityWidget, true, true);
+        end
     else if utilityWidget.show then
         animateWidget(@utilityWidget, true, false); 
 end;
