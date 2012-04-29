@@ -36,6 +36,7 @@ procedure HideMission;
 procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
 procedure InitTouchInterface;
+procedure SetUtilityWidgetState(ammoType: TAmmoType = amNothing);
 procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);
 procedure MoveCamera;
 procedure onFocusStateChanged;
@@ -727,20 +728,8 @@ c:= 0;
                         animateWidget(@arrowUp, true, false);
                         animateWidget(@arrowDown, true, false);
                         end;
-                if (Ammo^[Slot, Pos].Propz and ammoprop_Timerable) <> 0 then
-                    begin
-                    utilityWidget.sprite:= sprTimerButton;
-                    animateWidget(@utilityWidget, true, true);
-                    end 
-                else if (Ammo^[Slot, Pos].Propz and ammoprop_NeedTarget) <> 0 then
-                    begin
-                    utilityWidget.sprite:= sprTargetButton;
-                    animateWidget(@utilityWidget, true, true);
-                    end
-                else if utilityWidget.show then
-                    animateWidget(@utilityWidget, true, false); 
+                SetUtilityWidgetState(Ammo^[Slot, Pos].AmmoType);
 {$ENDIF}
-
                 exit
                 end;
             end
@@ -1758,6 +1747,26 @@ if (not cHasFocus) and (GameState <> gsConfirm) then
 
 if not cHasFocus then DampenAudio()
 else UndampenAudio();
+end;
+
+procedure SetUtilityWidgetState(ammoType: TAmmoType);
+begin
+if(ammoType = amNothing)then
+    ammoType:= CurrentHedgehog^.CurAmmoType;
+
+if(CurrentHedgehog <> nil)then
+    if (Ammoz[ammoType].Ammo.Propz and ammoprop_Timerable) <> 0 then
+        begin
+        utilityWidget.sprite:= sprTimerButton;
+        animateWidget(@utilityWidget, true, true);
+        end 
+    else if (Ammoz[ammoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
+        begin
+        utilityWidget.sprite:= sprTargetButton;
+        animateWidget(@utilityWidget, true, true);
+        end
+    else if utilityWidget.show then
+        animateWidget(@utilityWidget, true, false); 
 end;
 
 procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);
