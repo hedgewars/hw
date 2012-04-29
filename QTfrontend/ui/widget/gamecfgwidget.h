@@ -72,6 +72,7 @@ class GameCFGWidget : public QGroupBox
         void mapgenChanged(MapGenerator m);
         void maze_sizeChanged(int s);
         void onDrawnMapChanged(const QByteArray & data);
+        void updateModelViews();
 
     private:
         QGridLayout mainLayout;
@@ -79,6 +80,7 @@ class GameCFGWidget : public QGroupBox
         QString curNetAmmoName;
         QString curNetAmmo;
         QRegExp seedRegexp;
+        QString m_curScript;
 
         void setNetAmmo(const QString& name, const QString& ammo);
 
