@@ -29,6 +29,7 @@
 
 #include <QStringList>
 
+#include "GameStyleModel.h"
 #include "HatModel.h"
 #include "MapModel.h"
 #include "ThemeModel.h"
@@ -36,6 +37,7 @@
 class QDir;
 class QFile;
 class QStringList;
+class GameStyleModel;
 class HatModel;
 class MapModel;
 class ThemeModel;
@@ -98,6 +100,15 @@ class DataManager: public QObject
 
 
         /**
+         * @brief Returns pointer to a model of available game styles.
+         *
+         * The model is updated automatically on data reload.
+         *
+         * @return game style model pointer.
+         */
+        GameStyleModel * gameStyleModel();
+
+        /**
          * @brief Returns pointer to a model of available hats.
          *
          * The model is updated automatically on data reload.
@@ -148,6 +159,7 @@ class DataManager: public QObject
         QDir * m_defaultData; ///< directory of the installed data
         QDir * m_userData;    ///< directory of custom data in the user's directory
 
+        GameStyleModel * m_gameStyleModel; ///< game style model instance
         HatModel * m_hatModel; ///< hat model instance
         MapModel * m_mapModel; ///< map model instance
         ThemeModel * m_themeModel; ///< theme model instance

@@ -211,13 +211,6 @@ int main(int argc, char *argv[])
 
     DataManager & dataMgr = DataManager::instance();
 
-    scriptList = new QStringList(dataMgr.entryList(
-                                     QString("Scripts/Multiplayer"),
-                                     QDir::Files,
-                                     QStringList("*.lua")
-                                 )
-                                );
-
     QTranslator Translator;
     {
         QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);

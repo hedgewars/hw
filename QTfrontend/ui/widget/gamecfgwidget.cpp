@@ -56,41 +56,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     Scripts = new QComboBox(GBoxOptions);
     GBoxOptionsLayout->addWidget(Scripts, 1, 1);
 
-    Scripts->addItem("Normal");
-    Scripts->insertSeparator(1);
-
-    for (int i = 0; i < scriptList->size(); ++i)
-    {
-        QString script = (*scriptList)[i].remove(".lua", Qt::CaseInsensitive);
-        QList<QVariant> scriptInfo;
-        scriptInfo.push_back(script);
-        QFile scriptCfgFile(DataManager::instance().findFileForRead(
-                                QString("Scripts/Multiplayer/%2.cfg").arg(script)));
-        if (scriptCfgFile.exists() && scriptCfgFile.open(QFile::ReadOnly))
-        {
-            QString scheme;
-            QString weapons;
-            QTextStream input(&scriptCfgFile);
-            input >> scheme;
-            input >> weapons;
-            if (scheme.isEmpty())
-                scheme = "locked";
-            scheme.replace("_", " ");
-            if (weapons.isEmpty())
-                weapons = "locked";
-            weapons.replace("_", " ");
-            scriptInfo.push_back(scheme);
-            scriptInfo.push_back(weapons);
-            scriptCfgFile.close();
-        }
-        else
-        {
-            scriptInfo.push_back("locked");
-            scriptInfo.push_back("locked");
-        }
-        Scripts->addItem(script.replace("_", " "), scriptInfo);
-    }
-
+    Scripts->setModel(DataManager::instance().gameStyleModel());
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
 
     QWidget *SchemeWidget = new QWidget(GBoxOptions);
@@ -244,7 +210,7 @@ QByteArray GameCFGWidget::getFullConfig() const
 
     if (Scripts->currentIndex() > 0)
     {
-        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->itemData(Scripts->currentIndex()).toList()[0].toString()).toUtf8();
+        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString()).toUtf8();
     }
 
     bcfg << QString("eseed " + pMapContainer->getCurrentSeed()).toUtf8();
@@ -527,8 +493,8 @@ void GameCFGWidget::scriptChanged(int index)
 {
     if(isEnabled() && index > 0)
     {
-        QString scheme = Scripts->itemData(Scripts->currentIndex()).toList()[1].toString();
-        QString weapons = Scripts->itemData(Scripts->currentIndex()).toList()[2].toString();
+        QString scheme = Scripts->itemData(Scripts->currentIndex(), GameStyleModel::SchemeRole).toString();
+        QString weapons = Scripts->itemData(Scripts->currentIndex(), GameStyleModel::WeaponsRole).toString();
 
         if (scheme == "locked")
         {
