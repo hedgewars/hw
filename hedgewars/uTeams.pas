@@ -37,7 +37,7 @@ procedure TeamGoneEffect(var Team: TTeam);
 
 implementation
 uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript,
-    uGearsUtils, uGearsList, uTouch;
+    uGearsUtils, uGearsList{$IFDEF SDL13}, uTouch{$ENDIF};
 
 const MaxTeamHealth: LongInt = 0;
 
@@ -300,7 +300,9 @@ else
     end;
 
 uMobile.NewTurnBeginning();
+{$IFDEF SDL13}
 uTouch.NewTurnBeginning();
+{$ENDIF}
 ScriptCall('onNewTurn');
 end;
 
