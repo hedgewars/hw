@@ -112,6 +112,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
     connect(pMapContainer, SIGNAL(drawMapRequested()), this, SIGNAL(goToDrawMap()));
     connect(pMapContainer, SIGNAL(drawnMapChanged(const QByteArray &)), this, SLOT(onDrawnMapChanged(const QByteArray &)));
+
+    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(updateModelViews()));
 }
 
 void GameCFGWidget::jumpToSchemes()
@@ -491,10 +493,13 @@ void GameCFGWidget::schemeChanged(int index)
 
 void GameCFGWidget::scriptChanged(int index)
 {
+    const QString & name = Scripts->itemText(index);
+    m_curScript = name;
+
     if(isEnabled() && index > 0)
     {
-        QString scheme = Scripts->itemData(Scripts->currentIndex(), GameStyleModel::SchemeRole).toString();
-        QString weapons = Scripts->itemData(Scripts->currentIndex(), GameStyleModel::WeaponsRole).toString();
+        QString scheme = Scripts->itemData(index, GameStyleModel::SchemeRole).toString();
+        QString weapons = Scripts->itemData(index, GameStyleModel::WeaponsRole).toString();
 
         if (scheme == "locked")
         {
@@ -537,7 +542,7 @@ void GameCFGWidget::scriptChanged(int index)
         WeaponsName->setEnabled(true);
         bindEntries->setEnabled(true);
     }
-    emit paramChanged("SCRIPT", QStringList(Scripts->itemText(index)));
+    emit paramChanged("SCRIPT", QStringList(name));
 }
 
 void GameCFGWidget::mapgenChanged(MapGenerator m)
@@ -558,4 +563,18 @@ void GameCFGWidget::resendSchemeData()
 void GameCFGWidget::onDrawnMapChanged(const QByteArray & data)
 {
     emit paramChanged("DRAWNMAP", QStringList(qCompress(data, 9).toBase64()));
+}
+
+
+void GameCFGWidget::updateModelViews()
+{
+    // restore game-style selection
+    if (!m_curScript.isEmpty())
+    {
+        int idx = Scripts->findText(m_curScript);
+        if (idx >= 0)
+            Scripts->setCurrentIndex(idx);
+        else
+            Scripts->setCurrentIndex(0);
+    }
 }

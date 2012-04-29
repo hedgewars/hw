@@ -178,7 +178,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     chooseMap->setCurrentIndex(0);
     mapChanged(0);
-    connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
+    connect(chooseMap, SIGNAL(currentIndexChanged(int)), this, SLOT(mapChanged(int)));
 
     updateModelViews();
 }
@@ -212,7 +212,8 @@ void HWMapContainer::setHHLimit(int newHHLimit)
 void HWMapContainer::mapChanged(int index)
 {
     Q_ASSERT(chooseMap->itemData(index, Qt::UserRole + 1).canConvert<MapModel::MapInfo>());
-    m_mapInfo = chooseMap->itemData(chooseMap->currentIndex(), Qt::UserRole + 1).value<MapModel::MapInfo>();
+    m_mapInfo = chooseMap->itemData(index, Qt::UserRole + 1).value<MapModel::MapInfo>();
+    m_curMap = chooseMap->currentText();
 
     switch(m_mapInfo.type)
     {
@@ -437,7 +438,6 @@ void HWMapContainer::setRandomMap()
             // get random map of same type
             idx = m_mapModel->randomMap(m_mapInfo.type);
             chooseMap->setCurrentIndex(idx);
-            mapChanged(idx);
             break;
         case MapModel::Invalid:
             Q_ASSERT(false);
@@ -595,8 +595,25 @@ void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int
 
 void HWMapContainer::updateModelViews()
 {
-    // TODO: reselect theme
-    // FIXME: issues with generated maps?
-    if (!m_mapInfo.name.isEmpty())
-        intSetMap(m_mapInfo.name);
+    // restore theme selection
+    // do this before map selection restore, because map may overwrite theme
+    if (!m_theme.isEmpty())
+    {
+        QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), Qt::DisplayRole, m_theme);
+        if (mdl.size() > 0)
+            lvThemes->setCurrentIndex(mdl.at(0));
+        else
+            setRandomTheme();
+    }
+
+    // restore map selection
+    if (!m_curMap.isEmpty())
+    {
+        int idx = chooseMap->findText(m_curMap);
+        if (idx >= 0)
+            chooseMap->setCurrentIndex(idx);
+        else
+            chooseMap->setCurrentIndex(0);
+    }
+
 }
