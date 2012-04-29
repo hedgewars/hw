@@ -40,8 +40,6 @@ extern int cMinServerVersion;
 
 class QStringListModel;
 
-extern QStringList * scriptList;
-
 extern QString * cDefaultAmmoStore;
 extern int cAmmoNumber;
 extern QList< QPair<QString, QString> > cDefaultAmmos;

@@ -118,6 +118,15 @@ QString DataManager::findFileForWrite(
     return "";
 }
 
+GameStyleModel * DataManager::gameStyleModel()
+{
+    if (m_gameStyleModel == NULL) {
+        m_gameStyleModel = new GameStyleModel();
+        m_gameStyleModel->loadGameStyles();
+    }
+    return m_gameStyleModel;
+}
+
 HatModel * DataManager::hatModel()
 {
     if (m_hatModel == NULL) {
