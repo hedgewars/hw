@@ -729,12 +729,16 @@ c:= 0;
                         end;
                 if (Ammo^[Slot, Pos].Propz and ammoprop_Timerable) <> 0 then
                     begin
-                    if not utilityWidget.show then
-                        animateWidget(@utilityWidget, true, true); 
+                    utilityWidget.sprite:= sprTimerButton;
+                    animateWidget(@utilityWidget, true, true);
+                    end 
+                else if (Ammo^[Slot, Pos].Propz and ammoprop_NeedTarget) <> 0 then
+                    begin
+                    utilityWidget.sprite:= sprTargetButton;
+                    animateWidget(@utilityWidget, true, true);
                     end
-                else
-                    if utilityWidget.show then
-                        animateWidget(@utilityWidget, true, false); 
+                else if utilityWidget.show then
+                    animateWidget(@utilityWidget, true, false); 
 {$ENDIF}
 
                 exit

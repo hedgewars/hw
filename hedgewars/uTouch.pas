@@ -80,7 +80,7 @@ var
     targetAngle: LongInt;
 
     buttonsDown: Longword;
-    targetting: boolean; //true when targetting an airstrike or the like
+    targetting, targetted: boolean; //true when targetting an airstrike or the like
 
 procedure onTouchDown(x,y: Longword; pointerId: TSDL_FingerId);
 var 
@@ -101,9 +101,7 @@ end;
 
 if isOnWidget(fireButton, finger^) then
     begin
-    if not((CurrentHedgehog <> nil) and 
-       (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)) then
-        ParseTeamCommand('+attack');
+    ParseTeamCommand('+attack');
     moveCursor:= false;
     finger^.pressedWidget:= @fireButton;
     exit;
@@ -149,11 +147,14 @@ if isOnWidget(pauseButton, finger^) then
 
 if isOnWidget(utilityWidget, finger^) then
     begin
+    finger^.pressedWidget:= @utilityWidget;
+    moveCursor:= false;
     if(CurrentHedgehog <> nil) then
         begin
         if Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Timerable <> 0 then
             ParseTeamCommand('/timer ' + inttostr((GetCurAmmoEntry(CurrentHedgeHog^)^.Timer div 1000) mod 5 + 1));
         end;
+    exit;
     end; 
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
@@ -161,7 +162,7 @@ if buttonsDown = 0 then
     moveCursor:= true;
     case pointerCount of
         1:
-            targetting:= (CurrentHedgehog <> nil) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0);
+            targetting:= not(targetted) and (CurrentHedgehog <> nil) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0);
         2:
             begin
             moveCursor:= false;
@@ -259,15 +260,19 @@ if (buttonsDown > 0) and (widget <> nil) then
         ParseTeamCommand('-down');
 
     if widget = @fireButton then
+        ParseTeamCommand('-attack');
+    
+    if widget = @utilityWidget then
         if (CurrentHedgehog <> nil) and 
            (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)then
-            ParseTeamCommand('put')
-        else
-            ParseTeamCommand('-attack');
+            begin
+            ParseTeamCommand('put');
+            targetted:= true;
+            end;
     end;
         
 if targetting then
-    AddCaption('Press the attack button to mark the target', cWhiteColor, capgrpAmmoInfo);
+    AddCaption('Press the target button to mark the target', cWhiteColor, capgrpAmmoInfo);
  
 deleteFinger(pointerId);
 {$ENDIF}
