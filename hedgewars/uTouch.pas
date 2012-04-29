@@ -22,12 +22,14 @@ unit uTouch;
 
 interface
 
-uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes, uCaptions, uAmmos;
+uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes, uCaptions, uAmmos, uWorld;
 
 
 procedure initModule;
 
 procedure ProcessTouch;
+procedure NewTurnBeginning;
+
 procedure onTouchDown(x,y: Longword; pointerId: TSDL_FingerId);
 procedure onTouchMotion(x,y: Longword; dx,dy: LongInt; pointerId: TSDL_FingerId);
 procedure onTouchUp(x,y: Longword; pointerId: TSDL_FingerId);
@@ -408,6 +410,14 @@ begin
     end;
 
 end;
+
+procedure NewTurnBeginning;
+begin
+targetted:= false;
+targetting:= false;
+SetUtilityWidgetState;
+end;
+
 
 procedure ProcessTouch;
 var
