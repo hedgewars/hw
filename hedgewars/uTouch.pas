@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes, uCaptions;
+uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes, uCaptions, uAmmos;
 
 
 procedure initModule;
@@ -149,7 +149,11 @@ if isOnWidget(pauseButton, finger^) then
 
 if isOnWidget(utilityWidget, finger^) then
     begin
-    //ParseCommand('/timer ' + inttostr((CurrentHedgeHog^.CurWeapon^.Timer div 1000 + 1) mod 5));
+    if(CurrentHedgehog <> nil) then
+        begin
+        if Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Timerable <> 0 then
+            ParseTeamCommand('/timer ' + inttostr((GetCurAmmoEntry(CurrentHedgeHog^)^.Timer div 1000) mod 5 + 1));
+        end;
     end; 
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
