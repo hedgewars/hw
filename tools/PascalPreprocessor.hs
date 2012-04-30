@@ -74,7 +74,7 @@ preprocess fn = do
         char '"'
         spaces
         char '}'
-        f <- liftIO (readFile fn)
+        f <- liftIO (readFile fn `catch` error ("File not found: " ++ fn))
         c <- getInput
         setInput $ f ++ c
         return ""
