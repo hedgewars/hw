@@ -65,7 +65,7 @@ var
     trunc, round : function : integer;
     Abs, Sqr : function : integer;
 
-    StrPas, FormatDateTime, copy, delete, str, pos, trim : function : shortstring;
+    StrPas, FormatDateTime, copy, delete, str, pos, trim, LowerCase : function : shortstring;
     Length, StrToInt : function : integer;
     SetLength, val : procedure;
     _pchar : function : PChar;
@@ -122,7 +122,7 @@ var
     glbegin, glend, gltexcoord2f, glvertex2d,
     gl_true, gl_false, glcolormask, gl_projection,
     gl_texture_priority, glenum, gl_clamp_to_edge,
-    gl_extensions : procedure;
+    gl_extensions, gl_bgra : procedure;
 
     TThreadId : function : integer;
     BeginThread, ThreadSwitch : procedure;
