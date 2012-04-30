@@ -304,16 +304,18 @@ resolveType (RangeType _) = return $ BTVoid
 resolveType (Set t) = liftM BTSet $ resolveType t
    
 
-fromPointer :: String -> BaseType -> State RenderState BaseType    
-fromPointer s (BTPointerTo t) = f t
-    where
-        f (BTUnresolved s) = do
-            v <- gets $ find (\(a, _) -> a == s) . currentScope
-            if isJust v then
-                f . snd . snd . fromJust $ v
-                else
-                error $ "Unknown type " ++ show t ++ "\n" ++ s
-        f t = return t
+resolve :: String -> BaseType -> State RenderState BaseType
+resolve s (BTUnresolved t) = do
+    v <- gets $ find (\(a, _) -> a == t) . currentScope
+    if isJust v then
+        resolve s . snd . snd . fromJust $ v
+        else
+        error $ "Unknown type " ++ show t ++ "\n" ++ s
+resolve _ t = return t
+
+fromPointer :: String -> BaseType -> State RenderState BaseType
+fromPointer s (BTPointerTo t) = resolve s t
+fromPointer s (BTFunctionReturn _ (BTPointerTo t)) = resolve s t
 fromPointer s t = do
     ns <- gets currentScope
     error $ "Dereferencing from non-pointer type " ++ show t ++ "\n" ++ s ++ "\n\n" ++ show (take 100 ns)
@@ -334,7 +336,7 @@ fun2C True rv (FunctionDeclaration name returnType params (Just (tvars, phrase))
     t <- type2C returnType
     t'<- gets lastType
     n <- id2C IOInsert $ setBaseType (BTFunction t') name
-    (p, ph) <- withState' (\st -> st{currentScope = (map toLower rv, (render res, t')) : currentScope st}) $ do
+    (p, ph) <- withState' (\st -> st{currentScope = (map toLower rv, (render res, BTFunctionReturn (render n) t')) : currentScope st}) $ do
         p <- functionParams2C params
         ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
         return (p, ph)
@@ -672,6 +674,8 @@ ref2C ae@(ArrayElement [expr] ref) = do
     ns <- gets currentScope
     case t of
          (BTArray _ _ t') -> modify (\st -> st{lastType = t'})
+         (BTFunctionReturn _ (BTArray _ _ t')) -> modify (\st -> st{lastType = t'})
+         (BTFunctionReturn _ (BTString)) -> modify (\st -> st{lastType = BTChar})
          (BTString) -> modify (\st -> st{lastType = BTChar})
          (BTPointerTo t) -> do
                 t'' <- fromPointer (show t) =<< gets lastType
@@ -698,8 +702,9 @@ ref2C rf@(RecordField ref1 ref2) = do
     t <- gets lastType
     ns <- gets currentScope
     r2 <- case t of
+        BTFunctionReturn s (BTRecord rs) -> withRecordNamespace "" rs $ ref2C ref2       
         BTRecord rs -> withRecordNamespace "" rs $ ref2C ref2
-        BTUnit -> withLastIdNamespace $ ref2C ref2
+        BTUnit -> withLastIdNamespace $ ref2C ref2        
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf ++ "\n" ++ show (take 100 ns)
     return $ 
         r1 <> text "." <> r2
@@ -716,6 +721,10 @@ ref2C f@(FunCall params ref) = do
             ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
             modify (\s -> s{lastType = t'})
             return $ r <> ps
+        BTFunctionReturn r t' -> do
+            ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
+            modify (\s -> s{lastType = t'})
+            return $ text r <> ps
         _ -> case (ref, params) of
                   (SimpleReference i, [p]) -> ref2C $ TypeCast i p
                   _ -> error $ "ref2C FunCall erroneous type cast detected: " ++ show f ++ "\nType detected: " ++ show t

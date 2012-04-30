@@ -63,7 +63,7 @@ int Length(string255 a);
 string255 copy(string255 a, int s, int l);
 string255 delete(string255 a, int s, int l);
 
-#define STRINIT(a) {.len = sizeof(a), .str = a}
+#define STRINIT(a) {.len = sizeof(a) - 1, .str = a}
 
 typedef int file;
 extern int FileMode;
