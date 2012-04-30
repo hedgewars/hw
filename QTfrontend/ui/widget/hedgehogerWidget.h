@@ -42,6 +42,8 @@ class CHedgehogerWidget : public ItemNum
         virtual void incItems();
         virtual void decItems();
 
+        virtual void paintEvent(QPaintEvent* event);
+
     private:
         CHedgehogerWidget();
         FrameTeams* pOurFrameTeams;
