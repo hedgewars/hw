@@ -35,7 +35,7 @@ CHedgehogerWidget::CHedgehogerWidget(const QImage& im, const QImage& img, QWidge
     } else numItems = 4;
     pOurFrameTeams->overallHedgehogs += numItems;*/
 
-    this->setMinimumWidth(20);
+    this->setMinimumWidth(48);
 }
 
 void CHedgehogerWidget::incItems()
@@ -83,12 +83,30 @@ void CHedgehogerWidget::paintEvent(QPaintEvent* event)
 {
     Q_UNUSED(event);
 
-    if (this->width() >= 11 * numItems + 28)
+    if (this->width() >= 11 * numItems + 26)
         ItemNum::paintEvent(event);
+    else
+    {
+        int width = this->width() - 38;
+        QPainter painter(this);
+
+        for(int i=0; i<numItems; i++)
+        {
+            QRect target((i * width) / (numItems -1), i % 2, 25, 35);
+            if (enabled)
+            {
+                painter.drawImage(target, m_im);
+            }
+            else
+            {
+                painter.drawImage(target, m_img);
+            }
+        }
+    }
 
     QPainter painter(this);
     const QFont font("MS Shell Dlg", 12);
     painter.setFont(font);
-    painter.drawText(this->width() - 14, 24, QString::number(numItems));
+    painter.drawText(this->width() - 12, 24, QString::number(numItems));
 
 }
