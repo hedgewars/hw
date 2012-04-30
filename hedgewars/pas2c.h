@@ -63,7 +63,7 @@ int Length(string255 a);
 string255 copy(string255 a, int s, int l);
 string255 delete(string255 a, int s, int l);
 
-#define STRCONSTDECL(a, b) const string255 a = {.len = sizeof(b), .str = b}
+#define STRINIT(a) {.len = sizeof(a), .str = a}
 
 typedef int file;
 extern int FileMode;

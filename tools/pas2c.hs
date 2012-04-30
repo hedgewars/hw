@@ -66,8 +66,11 @@ escapeChar :: Char -> ShowS
 escapeChar '"' s = "\\\"" ++ s
 escapeChar a s = a : s
 
+strInit :: String -> Doc
+strInit a = text "STRINIT" <> parens (doubleQuotes (text $ escapeStr a))
+
 renderStringConsts :: State RenderState Doc
-renderStringConsts = liftM (vcat . map (\(a, b) -> text "STRCONSTDECL" <> parens (text a <> comma <+> doubleQuotes (text $ escapeStr b)) <> semi)) 
+renderStringConsts = liftM (vcat . map (\(a, b) -> text "const string255" <+> (text a) <+> text "=" <+> strInit b <> semi)) 
     $ gets stringConsts
     
 docToLower :: Doc -> Doc
@@ -183,8 +186,12 @@ pascal2C (Program _ implementation mainFunction) = do
     
     
 interface2C :: Interface -> State RenderState Doc
-interface2C (Interface uses tvars) = liftM2 ($+$) (uses2C uses) (typesAndVars2C True tvars)
-
+interface2C (Interface uses tvars) = do
+    u <- uses2C uses
+    tv <- typesAndVars2C True tvars
+    r <- renderStringConsts
+    return (u $+$ r $+$ tv)
+    
 implementation2C :: Implementation -> State RenderState Doc
 implementation2C (Implementation uses tvars) = do
     u <- uses2C uses
@@ -408,7 +415,7 @@ initExpr2C (InitNumber s) = return $ text s
 initExpr2C (InitFloat s) = return $ text s
 initExpr2C (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 initExpr2C (InitString [a]) = return . quotes $ text [a]
-initExpr2C (InitString s) = return $ braces $ text ".s = " <> doubleQuotes (text s)
+initExpr2C (InitString s) = return $ strInit s
 initExpr2C (InitChar a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
 initExpr2C (InitReference i) = id2C IOLookup i
 initExpr2C (InitRecord fields) = do
