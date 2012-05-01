@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdint.h>
 #include <stdbool.h>
 
 typedef union string255_
@@ -25,14 +26,16 @@ typedef struct string15_
         char s[16];
     } string15;
 
-typedef int SmallInt;
-typedef int Word;
-typedef int LongInt;
-typedef int LongWord;
-typedef int Byte;
-typedef int Integer;
-typedef long long int QWord;
+typedef uint8_t Byte;
+typedef int8_t ShortInt;
+typedef uint16_t Word;
+typedef int16_t SmallInt;
+typedef uint32_t LongWord;
+typedef int32_t LongInt;
+typedef uint64_t QWord;
+typedef int64_t Int64;
 
+typedef LongInt Integer;
 typedef float extended;
 typedef float real;
 
@@ -43,6 +46,17 @@ typedef Byte * PByte;
 typedef char * PChar;
 typedef LongInt * PLongInt;
 typedef Integer * PInteger;
+
+#ifdef __GNUG__
+#define NULL __null
+#else   /* G++ */
+/* shield NULL definition for non-gnu parsers */
+#ifndef __cplusplus
+#define NULL ((void *)0)
+#else
+#define NULL 0
+#endif  /* __cplusplus */
+#endif  /* G++ */
 
 #define new(a) __new((void **)&a, sizeof(*(a)))
 void __new(void ** p, int size);
