@@ -259,8 +259,8 @@ byte(DecodeBase64[0]):= t - 1
 end;
 
 
+var CharArray: array[byte] of Char;
 function Str2PChar(const s: shortstring): PChar;
-const CharArray: array[byte] of Char = '';
 begin
 CharArray:= s;
 CharArray[Length(s)]:= #0;
