@@ -32,10 +32,11 @@ void TeamLabel::teamButtonClicked()
     emit teamActivated(text());
 }
 
-TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
+TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, FrameTeams * parent) :
     QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0),
     colorButt(0)
 {
+    m_parentFrameTeams = parent;
     QPalette newPalette = palette();
     newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
     setPalette(newPalette);
@@ -129,43 +130,31 @@ void TeamShowWidget::activateTeam()
 
 void TeamShowWidget::incrementTeamColor()
 {
-    FrameTeams* pOurFrameTeams=dynamic_cast<FrameTeams*>(parentWidget());
-    QColor color;
-    if(++pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end())
-        pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
-    color=*pOurFrameTeams->currentColor;
-
-    changeTeamColor(color);
+    changeTeamColor(m_parentFrameTeams->getNextColor());
 }
 void TeamShowWidget::decrementTeamColor()
 {
-    FrameTeams* pOurFrameTeams=dynamic_cast<FrameTeams*>(parentWidget());
-    QColor color;
-    if(pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.begin())
-        pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.end()-1;
-    else --pOurFrameTeams->currentColor;
-    color=*pOurFrameTeams->currentColor;
+    const QList<QColor> & availColors = m_parentFrameTeams->availableColors;
+    int idx = availColors.indexOf(m_parentFrameTeams->currentColor);
 
-    changeTeamColor(color);
+    idx--;
+
+    if (idx < 0)
+        idx = availColors.size() - 1;
+
+    changeTeamColor(availColors.at(idx));
 }
 
 void TeamShowWidget::changeTeamColor(QColor color)
 {
-    FrameTeams* pOurFrameTeams=dynamic_cast<FrameTeams*>(parentWidget());
-    // set according color iterator
-    pOurFrameTeams->currentColor=std::find(pOurFrameTeams->availableColors.begin(),
-                                           pOurFrameTeams->availableColors.end(), color);
-    if(pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end())
-    {
-        // error condition
-        pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
-    }
+    QColor & curColor = m_parentFrameTeams->currentColor;
+    curColor = color;
 
     colorButt->setStyleSheet(QString("QPushButton{"
                                      "background-color: %1;"
                                      "border-width: 1px;"
                                      "border-radius: 2px;"
-                                     "}").arg(pOurFrameTeams->currentColor->name()));
+                                     "}").arg(curColor.name()));
 
     m_team.setColor(color);
     emit teamColorChanged(m_team);

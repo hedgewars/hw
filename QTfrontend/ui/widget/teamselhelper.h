@@ -57,7 +57,7 @@ class TeamShowWidget : public QWidget
         void activateTeam();
 
     public:
-        TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
+        TeamShowWidget(HWTeam team, bool isPlaying, FrameTeams * parent);
         void setPlaying(bool isPlaying);
         void setHHNum(unsigned int num);
         void setInteractivity(bool interactive);
@@ -71,6 +71,7 @@ class TeamShowWidget : public QWidget
         CHedgehogerWidget* phhoger;
         QPushButton* colorButt;
         QPushButton* butt;
+        FrameTeams * m_parentFrameTeams;
 // QPushButton* bText;
 
     signals:
