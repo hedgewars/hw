@@ -1119,9 +1119,9 @@ begin
       gtNapalmBomb: DrawRotated(sprNapalmBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
            gtFlake: if Gear^.State and (gstDrowning or gstTmpFlag) <> 0  then
                         begin
-                        Tint((cExplosionBorderColor shr RShift) and $FF, 
-                             (cExplosionBorderColor shr GShift) and $FF, 
-                             (cExplosionBorderColor shr BShift) and $FF, 
+                        Tint((ExplosionBorderColor shr RShift) and $FF, 
+                             (ExplosionBorderColor shr GShift) and $FF, 
+                             (ExplosionBorderColor shr BShift) and $FF, 
                              $FF);
                         // Needs a nicer white texture to tint
                         DrawRotatedTextureF(SpritesData[sprSnowDust].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle);

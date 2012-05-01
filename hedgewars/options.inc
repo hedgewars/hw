@@ -17,7 +17,7 @@
  *)
 
 {$IFDEF FPC}
-    {$WRITEABLECONST ON} 
+    {$WRITEABLECONST OFF} 
     {$MODE OBJFPC}
 {$ELSE}
     {$ERROR Only Free Pascal supported!}

@@ -408,8 +408,7 @@ AddFileLog('Thread started');
 end;
 
 procedure ProcessBot;
-const StartTicks: Longword = 0;
-      cStopThinkTime = 40;
+const cStopThinkTime = 40;
 begin
 with CurrentHedgehog^ do
     if (Gear <> nil)
@@ -439,6 +438,7 @@ end;
 procedure initModule;
 begin
     hasThread:= 0;
+    StartTicks:= 0;
     ThinkThread:= ThinkThread;
 end;
 

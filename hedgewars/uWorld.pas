@@ -1186,9 +1186,9 @@ DrawGears;
 DrawVisualGears(6);
 
 if SuddenDeathDmg then
-    DrawWater(cSDWaterOpacity, 0)
+    DrawWater(SDWaterOpacity, 0)
 else
-    DrawWater(cWaterOpacity, 0);
+    DrawWater(WaterOpacity, 0);
 
     // Waves
 ChangeDepth(RM, cStereo_Water_near);
@@ -1196,19 +1196,19 @@ DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
 
 if (cReducedQuality and rq2DWater) = 0 then
     begin
-    //DrawWater(cWaterOpacity, - offsetY div 40);
+    //DrawWater(WaterOpacity, - offsetY div 40);
     ChangeDepth(RM, cStereo_Water_near);
     DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
     if SuddenDeathDmg then
-        DrawWater(cSDWaterOpacity, - offsetY div 20)
+        DrawWater(SDWaterOpacity, - offsetY div 20)
     else
-        DrawWater(cWaterOpacity, - offsetY div 20);
+        DrawWater(WaterOpacity, - offsetY div 20);
     ChangeDepth(RM, cStereo_Water_near);
     DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
         if SuddenDeathDmg then
-            DrawWater(cSDWaterOpacity, - offsetY div 10)
+            DrawWater(SDWaterOpacity, - offsetY div 10)
         else
-            DrawWater(cWaterOpacity, - offsetY div 10);
+            DrawWater(WaterOpacity, - offsetY div 10);
         ChangeDepth(RM, cStereo_Water_near);
         DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
         end

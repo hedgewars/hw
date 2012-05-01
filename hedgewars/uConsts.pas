@@ -51,7 +51,6 @@ const
     cWhiteColor           : Longword = $FFFFFFFF;
     cYellowColor          : Longword = $FFFFFF00;
     cNearBlackColor       : Longword = $FF000010;
-    cExplosionBorderColor : LongWord = $FF808080;
 
 {$WARNINGS OFF}
     cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   3006477107); // 1.4
@@ -115,8 +114,6 @@ const
     cVisibleWater       : LongInt = 128;
     cCursorEdgesDist    : LongInt = 100;
     cTeamHealthWidth    : LongInt = 128;
-    cWaterOpacity       : byte = $80;
-    cSDWaterOpacity     : byte = $80;
 
     cifRandomize = $00000001;
     cifTheme     = $00000002;
@@ -124,16 +121,10 @@ const
     cifAllInited = cifRandomize or cifTheme or cifMap;
 
     cTransparentColor: Longword = $00000000;
-    cGrayScale: Boolean = false;
 
     RGB_LUMINANCE_RED    = 0.212671;
     RGB_LUMINANCE_GREEN  = 0.715160;
     RGB_LUMINANCE_BLUE   = 0.072169;
-(*
-    RGB_LUMINANCE_RED    = 0.3333333333;
-    RGB_LUMINANCE_GREEN  = 0.3333333333;
-    RGB_LUMINANCE_BLUE   = 0.3333333333;
-*)
 
     cMaxTeams        = 8;
     cMaxHHIndex      = 7;
@@ -157,6 +148,11 @@ const
 
     cKeyMaxIndex = 1023;
 
+    cHHFileName = 'Hedgehog';
+    cCHFileName = 'Crosshair';
+    cThemeCFGFilename = 'theme.cfg';
+
+    cFontBorder = 2;
 
     // do not change this value
     cDefaultZoomLevel = 2.0;
@@ -316,6 +312,10 @@ const
     FADE_ANIM_TIME = 500;
     MOVE_ANIM_TIME = 500;
 {$ENDIF}
+
+    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
+       
 implementation
 
 end.

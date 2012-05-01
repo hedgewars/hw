@@ -143,27 +143,26 @@ case s[1] of
 end;
 
 procedure IPCCheckSock;
-const ss: shortstring = '';
 var i: LongInt;
     s: shortstring;
 begin
-if IPCSock = nil then
-    exit;
+    if IPCSock = nil then
+        exit;
 
-fds^.numsockets:= 0;
-SDLNet_AddSocket(fds, IPCSock);
+    fds^.numsockets:= 0;
+    SDLNet_AddSocket(fds, IPCSock);
 
-while SDLNet_CheckSockets(fds, 0) > 0 do
+    while SDLNet_CheckSockets(fds, 0) > 0 do
     begin
-    i:= SDLNet_TCP_Recv(IPCSock, @s[1], 255 - Length(ss));
-    if i > 0 then
+        i:= SDLNet_TCP_Recv(IPCSock, @s[1], 255 - Length(SocketString));
+        if i > 0 then
         begin
-        s[0]:= char(i);
-        ss:= ss + s;
-        while (Length(ss) > 1) and (Length(ss) > byte(ss[1])) do
+            s[0]:= char(i);
+            SocketString:= SocketString + s;
+            while (Length(SocketString) > 1) and (Length(SocketString) > byte(SocketString[1])) do
             begin
-            ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-            Delete(ss, 1, Succ(byte(ss[1])))
+                ParseIPCCommand(copy(SocketString, 2, byte(SocketString[1])));
+                Delete(SocketString, 1, Succ(byte(SocketString[1])))
             end
         end
     else
@@ -435,8 +434,9 @@ begin
 
     headcmd:= nil;
     lastcmd:= nil;
-    isPonged:= false;   // was const
-
+    isPonged:= false;
+    SocketString:= '';
+    
     hiTicks:= 0;
     SendEmptyPacketTicks:= 0;
 end;

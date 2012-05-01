@@ -41,7 +41,6 @@ case s[1] of
 end;
 
 procedure chQuit(var s: shortstring);
-const prevGState: TGameState = gsConfirm;
 begin
     s:= s; // avoid compiler hint
     if (GameState = gsGame) or (GameState = gsChat) then

@@ -39,7 +39,7 @@ implementation
 uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript,
     uGearsUtils, uGearsList{$IFDEF SDL13}, uTouch{$ENDIF};
 
-const MaxTeamHealth: LongInt = 0;
+var MaxTeamHealth: LongInt;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
@@ -624,6 +624,7 @@ LocalTeam:= -1;
 LocalAmmo:= -1;
 GameOver:= false;
 NextClan:= true;
+MaxTeamHealth:= 0;
 end;
 
 procedure freeModule;

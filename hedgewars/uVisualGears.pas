@@ -113,7 +113,6 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0; Critical: Boolean = false): PVisualGear;
-const VGCounter: Longword = 0;
 var gear: PVisualGear;
     t: Longword;
     sp: real;
@@ -980,6 +979,7 @@ end;
 procedure initModule;
 var i: LongWord;
 begin
+VGCounter:= 0;
 for i:= 0 to 6 do
     VisualGearLayers[i]:= nil;
 end;
@@ -987,6 +987,7 @@ end;
 procedure freeModule;
 var i: LongWord;
 begin
+VGCounter:= 0;
 for i:= 0 to 6 do
     while VisualGearLayers[i] <> nil do DeleteVisualGear(VisualGearLayers[i]);
 end;

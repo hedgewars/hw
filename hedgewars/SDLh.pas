@@ -1088,13 +1088,14 @@ begin
     exit(0);
 end;
 {$ELSE}
-function SDL_AllocFormat(format: LongWord): PSDL_PixelFormat;
 const conversionFormat: TSDL_PixelFormat = (
         palette: nil; BitsPerPixel: 32; BytesPerPixel: 4;
         Rloss: 0; Gloss: 0; Bloss: 0; Aloss: 0;
         Rshift: RShift; Gshift: GShift; Bshift: BShift; Ashift: AShift;
         RMask: RMask; GMask: GMask; BMask: BMask; AMask: AMask;
         colorkey: 0; alpha: 255);
+
+function SDL_AllocFormat(format: LongWord): PSDL_PixelFormat;
 begin
     format:= format;
     exit(@conversionFormat);

@@ -1573,7 +1573,7 @@ const Template42Points: array[0..13] of TSDL_Rect =
       );
 
 ////////////////////////////////////////////////////////////////////////
-const EdgeTemplates: array[0..42] of TEdgeTemplate =
+var EdgeTemplates: array[0..42] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));

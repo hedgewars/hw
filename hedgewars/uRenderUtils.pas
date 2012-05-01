@@ -76,8 +76,8 @@ begin
     if (maxLength <> 0) and (w > maxLength) then w := maxLength;
     finalRect.x:= X;
     finalRect.y:= Y;
-    finalRect.w:= w + FontBorder * 2 + 4;
-    finalRect.h:= h + FontBorder * 2;
+    finalRect.w:= w + cFontBorder * 2 + 4;
+    finalRect.h:= h + cFontBorder * 2;
     textRect.x:= X;
     textRect.y:= Y;
     textRect.w:= w;
@@ -87,15 +87,15 @@ begin
     clr.g:= (Color shr 8) and $FF;
     clr.b:= Color and $FF;
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
-    finalRect.x:= X + FontBorder + 2;
-    finalRect.y:= Y + FontBorder;
+    finalRect.x:= X + cFontBorder + 2;
+    finalRect.y:= Y + cFontBorder;
     SDLTry(tmpsurf <> nil, true);
     SDL_UpperBlit(tmpsurf, @textRect, Surface, @finalRect);
     SDL_FreeSurface(tmpsurf);
     finalRect.x:= X;
     finalRect.y:= Y;
-    finalRect.w:= w + FontBorder * 2 + 4;
-    finalRect.h:= h + FontBorder * 2;
+    finalRect.w:= w + cFontBorder * 2 + 4;
+    finalRect.h:= h + cFontBorder * 2;
     WriteInRoundRect:= finalRect;
 end;
 
@@ -244,7 +244,7 @@ begin
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);
     if (maxLength <> 0) and (w > maxLength) then w := maxLength;
 
-    finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
+    finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder * 2 + 4, h + cFontBorder * 2,
             32, RMask, GMask, BMask, AMask);
 
     TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);

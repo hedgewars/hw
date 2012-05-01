@@ -48,7 +48,7 @@ uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
 var tkbd, tkbdn: TKeyboardState;
     quitKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
-    
+    CurrentBinds: TBinds;
 
 function KeyNameToCode(name: shortstring): word;
 var code: Word;
@@ -450,31 +450,6 @@ procedure initModule;
 begin
     wheelUp:= false;
     wheelDown:= false;
-{$IFDEF HWLIBRARY}
-    // this function is called by HW_allKeysUp so be careful
-
-    // mouse emulation
-    leftClick:= false;
-    middleClick:= false;
-    rightClick:= false;
-
-    // arrow key emulation
-    upKey:= false;
-    downKey:= false;
-    rightKey:= false;
-    leftKey:= false;
-    preciseKey:= false;
-
-    // action key emulation
-    backspaceKey:= false;
-    spaceKey:= false;
-    enterKey:= false;
-    tabKey:= false;
-
-    // other key emulation
-    chatAction:= false;
-    pauseAction:= false;
-{$ENDIF}
 end;
 
 procedure freeModule;

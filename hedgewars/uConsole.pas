@@ -31,8 +31,8 @@ function  ShortStringAsPChar(s: shortstring): PChar;
 implementation
 uses Types, uVariables, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
 
-const cLineWidth: LongInt = 0;
-    cLinesCount = 8;
+const cLinesCount = 8;
+var   cLineWidth: LongInt;
 
 type
     TTextLine = record

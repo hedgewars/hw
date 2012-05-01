@@ -156,7 +156,7 @@ if SDL_MustLock(surf) then
 
 fromP4:= Surf^.pixels;
 
-if cGrayScale then
+if GrayScale then
     Surface2GrayScale(Surf);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then

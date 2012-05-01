@@ -57,10 +57,10 @@ var w, h: LongInt;
 begin
 w:= 0; h:= 0; // avoid compiler hints
 TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
-finalRect.x:= X + FontBorder + 2;
-finalRect.y:= Y + FontBorder;
-finalRect.w:= w + FontBorder * 2 + 4;
-finalRect.h:= h + FontBorder * 2;
+finalRect.x:= X + cFontBorder + 2;
+finalRect.y:= Y + cFontBorder;
+finalRect.w:= w + cFontBorder * 2 + 4;
+finalRect.h:= h + cFontBorder * 2;
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
@@ -71,8 +71,8 @@ SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
 SDL_FreeSurface(tmpsurf);
 finalRect.x:= X;
 finalRect.y:= Y;
-finalRect.w:= w + FontBorder * 2 + 4;
-finalRect.h:= h + FontBorder * 2;
+finalRect.w:= w + cFontBorder * 2 + 4;
+finalRect.h:= h + cFontBorder * 2;
 WriteInRect:= finalRect
 end;
 
@@ -827,8 +827,8 @@ font:= CheckCJKFont(extra,font);
 
 w:= 0;
 h:= 0;
-wa:= FontBorder * 2 + 4;
-ha:= FontBorder * 2;
+wa:= cFontBorder * 2 + 4;
+ha:= cFontBorder * 2;
 
 i:= 0; j:= 0; // avoid compiler hints
 
@@ -886,9 +886,9 @@ r.h:= h;
 DrawRoundRect(@r, cWhiteColor, cNearBlackColor, tmpsurf, true);
 
 // render caption
-r:= WriteInRect(tmpsurf, 36 + FontBorder + 2, ha, $ffffffff, font, caption);
+r:= WriteInRect(tmpsurf, 36 + cFontBorder + 2, ha, $ffffffff, font, caption);
 // render sub caption
-r:= WriteInRect(tmpsurf, 36 + FontBorder + 2, r.y + r.h, $ffc7c7c7, font, subcaption);
+r:= WriteInRect(tmpsurf, 36 + cFontBorder + 2, r.y + r.h, $ffc7c7c7, font, subcaption);
 
 // render all description lines
 tmpdesc:= description;
@@ -899,21 +899,21 @@ while tmpdesc <> '' do
     r2:= r;
     if tmpline <> '' then
         begin
-        r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
+        r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
 
         // render highlighted caption (if there is a ':')
         tmpline2:= '';
         SplitByChar(tmpline, tmpline2, ':');
         if tmpline2 <> '' then
-            WriteInRect(tmpsurf, FontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');
+            WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');
         end
     end;
 
 if extra <> '' then
-    r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, extracolor, font, extra);
+    r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, extracolor, font, extra);
 
-r.x:= FontBorder + 6;
-r.y:= FontBorder + 4;
+r.x:= cFontBorder + 6;
+r.y:= cFontBorder + 4;
 r.w:= 32;
 r.h:= 32;
 SDL_FillRect(tmpsurf, @r, $ffffffff);
