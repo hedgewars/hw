@@ -43,8 +43,10 @@ public slots:
     void addRoom(const QStringList & info);
     void removeRoom(const QString & name);
     void updateRoom(const QString & name, const QStringList & info);
+    int rowOfRoom(const QString & name);
 
 private:
+    const int c_nColumns;
     QList<QStringList> m_data;
     QStringList m_headerData;
 
