@@ -370,8 +370,8 @@ tvar2C _ td@(TypeDeclaration i' t) = do
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- liftM (((if isConst then text "const" else empty) <+>) . ) $ type2C t
-    lt <- gets lastType
     ie <- initExpr mInitExpr
+    lt <- gets lastType
     case (isConst, lt, ids, mInitExpr) of
          (True, BTInt, [i], Just _) -> do
              i' <- id2CTyped t i
@@ -467,8 +467,13 @@ range2C :: InitExpression -> State RenderState [Doc]
 range2C (InitString [a]) = return [quotes $ text [a]]
 range2C (InitRange (Range i)) = liftM (flip (:) []) $ id2C IOLookup i
 range2C (InitRange (RangeFromTo (InitString [a]) (InitString [b]))) = return $ map (\i -> quotes $ text [i]) [a..b]
-    
 range2C a = liftM (flip (:) []) $ initExpr2C a
+
+baseType2C :: String -> BaseType -> Doc
+baseType2C _ BTFloat = text "float"
+baseType2C _ BTBool = text "bool"
+baseType2C _ BTString = text "string255"
+baseType2C s a = error $ "baseType2C: " ++ show a ++ "\n" ++ s
 
 type2C :: TypeDecl -> State RenderState (Doc -> Doc)
 type2C (SimpleType i) = liftM (\i a -> i <+> a) $ id2C IOLookup i
@@ -511,14 +516,17 @@ type2C t = do
         t <- type2C returnType
         p <- withState' id $ functionParams2C params
         return (\i -> t empty <+> i <> parens p)
-    type2C' (DeriveType (InitBinOp {})) = return (text "int" <+>)
+    type2C' (DeriveType (InitBinOp _ _ i)) = type2C' (DeriveType i)
     type2C' (DeriveType (InitPrefixOp _ i)) = type2C' (DeriveType i)
     type2C' (DeriveType (InitNumber _)) = return (text "int" <+>)
     type2C' (DeriveType (InitHexNumber _)) = return (text "int" <+>)
     type2C' (DeriveType (InitFloat _)) = return (text "float" <+>)
     type2C' (DeriveType (BuiltInFunction {})) = return (text "int" <+>)
     type2C' (DeriveType (InitString {})) = return (text "string255" <+>)
-    type2C' (DeriveType (InitReference {})) = return (text "<<some type>>" <+>)
+    type2C' (DeriveType r@(InitReference {})) = do
+        initExpr2C r
+        t <- gets lastType
+        return (baseType2C (show r) t <+>)
     type2C' (DeriveType a) = error $ "Can't derive type from " ++ show a
 
 phrase2C :: Phrase -> State RenderState Doc
