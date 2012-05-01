@@ -123,9 +123,7 @@ caseInsensitiveCompare a b = f a == f b
     where
         f = map Char.toUpper . UTF8.toString
 
-roomInfo n r 
-    | isRestrictedJoins r = []
-    | otherwise = [
+roomInfo n r = [
         showB $ isJust $ gameInfo r,
         name r,
         showB $ playersIn r,
