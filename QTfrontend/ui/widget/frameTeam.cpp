@@ -63,7 +63,10 @@ QColor FrameTeams::getNextColor() const
 {
     int idx = availableColors.indexOf(currentColor);
 
-    idx = ++idx % availableColors.size();
+    idx++;
+
+    if (idx >= availableColors.size())
+        idx = 0;
 
     return availableColors.at(idx);
 }

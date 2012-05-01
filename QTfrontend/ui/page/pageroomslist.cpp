@@ -479,11 +479,12 @@ void PageRoomsList::setModel(QAbstractTableModel *model)
     roomsList->hideColumn(0);
 
     QHeaderView * h = roomsList->horizontalHeader();
-    h->resizeSection(1, 200);
-    h->resizeSection(2, 50);
-    h->resizeSection(3, 50);
+    h->setResizeMode(1, QHeaderView::Stretch);
+    h->resizeSection(2, 16);
+    h->resizeSection(3, 16);
     h->resizeSection(4, 100);
     h->resizeSection(5, 100);
     h->resizeSection(6, 100);
     h->resizeSection(7, 100);
+
 }
