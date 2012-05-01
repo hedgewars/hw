@@ -370,8 +370,13 @@ tvar2C _ td@(TypeDeclaration i' t) = do
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
     t' <- liftM (((if isConst then text "const" else empty) <+>) . ) $ type2C t
+    lt <- gets lastType
     ie <- initExpr mInitExpr
-    liftM (map(\i -> t' i <+> ie)) $ mapM (id2CTyped t) ids
+    case (isConst, lt, ids, mInitExpr) of
+         (True, BTInt, [i], Just _) -> do
+             i' <- id2CTyped t i
+             return [text "enum" <> braces (i' <+> ie)]
+         _ -> liftM (map(\i -> t' i <+> ie)) $ mapM (id2CTyped t) ids
     where
     initExpr Nothing = return $ empty
     initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
