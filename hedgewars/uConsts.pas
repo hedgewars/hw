@@ -155,11 +155,7 @@ const
     cShotgunRadius = 22;
     cBlowTorchC    = 6;
 
-{$IFDEF SDL13}
-    cKeyMaxIndex = SDL_NUM_SCANCODES;
-{$ELSE}
     cKeyMaxIndex = 1023;
-{$ENDIF}
 
 
     // do not change this value
