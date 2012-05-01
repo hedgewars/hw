@@ -17,12 +17,12 @@
  *)
 
 {$IFDEF FPC}
-    {$J+}
+    {$WRITEABLECONST ON} 
+    {$MODE OBJFPC}
 {$ELSE}
     {$ERROR Only Free Pascal supported!}
 {$ENDIF}
 
-{$MODE OBJFPC}
 {$MACRO ON}
 
 {$DEFINE GLunit:=GL}

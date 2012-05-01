@@ -51,6 +51,9 @@ interface
     {$PACKRECORDS C}
 {$ELSE}
     {$DEFINE cdecl attribute(cdecl)}
+    type PByte = ^Byte;
+    type PInteger = ^Integer;
+    type PLongInt = ^LongInt;
 {$ENDIF}
 
 {$IFDEF DARWIN}
@@ -371,7 +374,7 @@ type
 {$ENDIF}
         end;
 
-    SDL_eventaction = (SDL_ADDEVENT = 0, SDL_PEEPEVENT, SDL_GETEVENT);
+    TSDL_eventaction = (SDL_ADDEVENT, SDL_PEEPEVENT, SDL_GETEVENT);
 
     PSDL_Surface = ^TSDL_Surface;
     TSDL_Surface = record
@@ -910,11 +913,11 @@ procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; exte
 function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
 
-function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
 function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 {$ELSE}
 function  SDL_CreateThread(fn: Pointer; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
-function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: SDL_eventaction; mask: LongWord): LongInt; cdecl; external SDLLibName;
+function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; mask: LongWord): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
 
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
@@ -1051,11 +1054,10 @@ function  SDLNet_Read16(buf: Pointer): Word;
 function  SDLNet_Read32(buf: Pointer): LongWord;
 
 implementation
+{$IFDEF SDL13}
 uses strings, uVariables;
 
-{$IFDEF SDL13}
-// this needs to be reimplemented because in SDL_compat.c the window is the one created in the SDL_SetVideoMode
-// compatible function, but we use SDL_CreateWindow, so the window would be NULL
+// compatible functions
 procedure SDL_WarpMouse(x, y: Word);
 begin
     SDL_WarpMouseInWindow(SDLwindow, x, y);
@@ -1079,8 +1081,10 @@ begin
     exit(0);
 end;
 
-function SDL_EnableKeyRepeat(delay_, interval: LongInt): LongInt;
+function SDL_EnableKeyRepeat(timedelay, interval: LongInt): LongInt;
 begin
+    timedelay:= timedelay;  // avoid hint
+    interval:= interval;    // avoid hint
     exit(0);
 end;
 {$ELSE}
@@ -1098,7 +1102,7 @@ end;
 
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat);
 begin
-    pixelformat:= pixelformat;
+    pixelformat:= pixelformat;  // avoid hint
 end;
 {$ENDIF}
 
