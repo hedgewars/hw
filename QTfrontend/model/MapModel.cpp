@@ -148,18 +148,35 @@ void MapModel::loadMaps()
     items.append(separator.clone());
     items.append(staticMaps);
 
+
+    // create row-index lookup table
+
+    m_mapIndexes.clear();
+
+    int count = items.size();
+
+    for (int i = 0; i < count; i++)
+    {
+        QStandardItem * si = items.at(i);
+        QVariant v = si->data(Qt::UserRole + 1);
+        if (v.canConvert<MapInfo>())
+            m_mapIndexes.insert(v.value<MapInfo>().name, i);
+    }
+
+
     // store start-index and count of relevant types
-    typeLoc.insert(GeneratedMap, QPair<int,int>(0, 1));
-    typeLoc.insert(GeneratedMaze, QPair<int,int>(1, 1));
-    typeLoc.insert(HandDrawnMap, QPair<int,int>(2, 1));
+
+    m_typeLoc.insert(GeneratedMap, QPair<int,int>(0, 1));
+    m_typeLoc.insert(GeneratedMaze, QPair<int,int>(1, 1));
+    m_typeLoc.insert(HandDrawnMap, QPair<int,int>(2, 1));
     // mission maps
     int startIdx = genMaps.size() + 2; // start after genMaps and 2 separators
-    int count = missionMaps.size();
-    typeLoc.insert(MissionMap, QPair<int,int>(startIdx, count));
+    count = missionMaps.size();
+    m_typeLoc.insert(MissionMap, QPair<int,int>(startIdx, count));
     // static maps
     startIdx += count + 1; // start after missions and 2 separators
     count = staticMaps.size();
-    typeLoc.insert(StaticMap, QPair<int,int>(startIdx, count));
+    m_typeLoc.insert(StaticMap, QPair<int,int>(startIdx, count));
 
     // store list contents in the item model
     QStandardItemModel::appendColumn(items);
@@ -169,18 +186,10 @@ void MapModel::loadMaps()
 }
 
 
-int MapModel::mapCount(MapType type) const
-{
-    // return the count for this type
-    // fetch it from the second int in typeLoc, return 0 if no entry
-    return typeLoc.value(type, QPair<int,int>(0,0)).second;
-}
-
-
 int MapModel::randomMap(MapType type) const
 {
     // return a random index for this type or -1 if none available
-    QPair<int,int> loc = typeLoc.value(type, QPair<int,int>(-1,0));
+    QPair<int,int> loc = m_typeLoc.value(type, QPair<int,int>(-1,0));
 
     int startIdx = loc.first;
     int count = loc.second;
@@ -220,3 +229,10 @@ const
 
     return item;
 }
+
+
+int MapModel::indexOf(const QString & map) const
+{
+    return m_mapIndexes.value(map, -1);
+}
+

@@ -105,8 +105,7 @@ void CHedgehogerWidget::paintEvent(QPaintEvent* event)
     }
 
     QPainter painter(this);
-    const QFont font("MS Shell Dlg", 12);
-    painter.setFont(font);
-    painter.drawText(this->width() - 12, 24, QString::number(numItems));
+    painter.setFont(QFont("MS Shell Dlg", 10, QFont::Bold));
+    painter.drawText(this->width() - 12, 23, QString::number(numItems));
 
 }

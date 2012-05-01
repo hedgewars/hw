@@ -27,6 +27,8 @@
 #include <QAbstractTableModel>
 #include <QStringList>
 
+#include "DataManager.h"
+
 class RoomsListModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -49,6 +51,7 @@ private:
     const int c_nColumns;
     QList<QStringList> m_data;
     QStringList m_headerData;
+    MapModel * m_mapModel;
 
     QStringList roomInfo2RoomRecord(const QStringList & info);
 };

@@ -27,6 +27,7 @@
 #include <QStandardItemModel>
 #include <QStringList>
 #include <QTextStream>
+#include <QHash>
 #include <QMap>
 #include <QIcon>
 #include <QComboBox>
@@ -65,11 +66,11 @@ class MapModel : public QStandardItemModel
         };
 
         /**
-         * @brief Returns the number of available maps of a specified type.
-         * @param type map type to get the count of.
-         * @return count of maps that have the specified type.
+         * @brief Returns the row-index of the given map.
+         * @param map map of which to get the row-index of.
+         * @return row-index of map or -1 if not available.
          */
-        int mapCount(MapType type) const;
+        int indexOf(const QString & map) const;
 
         /**
          * @brief Returns the row-index of a random map with a specified type.
@@ -78,7 +79,6 @@ class MapModel : public QStandardItemModel
          */
         int randomMap(MapType type) const;
 
-
     public slots:
         /// Reloads the maps using the DataManager.
         void loadMaps();
@@ -86,7 +86,10 @@ class MapModel : public QStandardItemModel
 
     private:
         /// start-index and map count for each map-type.
-        QMap<MapType, QPair<int,int> > typeLoc;
+        QMap<MapType, QPair<int,int> > m_typeLoc;
+
+        /// map index lookup table
+        QHash<QString, int> m_mapIndexes;
 
         /**
          * @brief Creates a QStandardItem, that holds the map info and item appearance.

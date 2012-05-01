@@ -23,6 +23,8 @@
 
 #include "roomslistmodel.h"
 
+#include <QBrush>
+#include <QColor>
 #include <QIcon>
 
 RoomsListModel::RoomsListModel(QObject *parent) :
@@ -39,6 +41,8 @@ RoomsListModel::RoomsListModel(QObject *parent) :
      << tr("Map")
      << tr("Rules")
      << tr("Weapons");
+
+    m_mapModel = DataManager::instance().mapModel();
 }
 
 
@@ -73,20 +77,30 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
 {
     int column = index.column();
     int row = index.row();
-    
-    if (!index.isValid() || (row < 0)
-            || (row >= m_data.size())
-            || (column >= c_nColumns)
-            || ((role != Qt::DecorationRole) && (role != Qt::DisplayRole))
-       )
+
+    // invalid index
+    if (!index.isValid())
         return QVariant();
+
+    // invalid row
+    if ((row < 0) || (row >= m_data.size()))
+        return QVariant();
+
+    // invalid column
+    if ((column < 0) || (column >= c_nColumns))
+        return QVariant();
+
+    // not a role we have data for
+    if (role != Qt::DisplayRole)
+        // only decorate name column
+        if ((role != Qt::DecorationRole) || (column != 1))
+            // only dye map column
+            if ((role != Qt::ForegroundRole) || (column != 5))
+                return QVariant();
 
     // decorate room name based on room state
     if (role == Qt::DecorationRole)
     {
-        if (column != 1)
-            return QVariant();
-
         const QIcon roomBusyIcon(":/res/iconDamage.png");
         const QIcon roomWaitingIcon(":/res/iconTime.png");
 
@@ -98,10 +112,42 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
 
     QString content = m_data.at(row).at(column);
 
-    if (column == 0)
-        return QVariant(!content.isEmpty());
+    if (role == Qt::DisplayRole)
+    {
+        // supply in progress flag as bool
+        if (column == 0)
+            return QVariant(!content.isEmpty());
 
-    return content;
+        // display room names
+        if (column == 5)
+        {
+            // special names
+            if (content[0] == '+')
+            {
+                if (content == "+rnd+") return tr("Random Map");
+                if (content == "+maze+") return tr("Random Maze");
+                if (content == "+drawn+") return tr("Hand-drawn");
+            }
+
+            // prefix ? if map not available
+            if ((m_mapModel->indexOf(content) < 0))
+                return QString ("? %1").arg(content);
+        }
+
+        return content;
+    }
+
+    // dye map names red if map not available
+    if (role == Qt::ForegroundRole)
+    {
+        if ((m_mapModel->indexOf(content) < 0))
+            return QBrush(QColor("darkred"));
+        else
+            return QVariant();
+    }
+
+    Q_ASSERT(false);
+    return QVariant();
 }
 
 

@@ -376,24 +376,9 @@ void HWMapContainer::setSeed(const QString & seed)
 
 void HWMapContainer::intSetMap(const QString & map)
 {
-    int id = 0;
-    for(int i = 0; i < chooseMap->count(); i++)
-    {
-        QVariant data = chooseMap->itemData(i, Qt::UserRole + 1);
-        // skip separators etc
-        if (!data.isValid())
-            continue;
-        Q_ASSERT(data.canConvert<MapModel::MapInfo>());
-        MapModel::MapInfo mapInfo = data.value<MapModel::MapInfo>();
+    int id = m_mapModel->indexOf(map);
 
-        if (mapInfo.name == map)
-        {
-            id = i;
-            break;
-        }
-    }
-
-    if(id > 0)
+    if(id >= 0)
     {
         if (pMap)
         {

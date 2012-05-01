@@ -57,6 +57,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     GBoxOptionsLayout->addWidget(Scripts, 1, 1);
 
     Scripts->setModel(DataManager::instance().gameStyleModel());
+    m_curScript = Scripts->currentText();
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
 
     QWidget *SchemeWidget = new QWidget(GBoxOptions);
