@@ -55,7 +55,7 @@ class FrameTeams : public QFrame
         const int maxHedgehogsPerGame;
         int overallHedgehogs;
         QList<QColor> availableColors;
-        QList<QColor>::Iterator currentColor;
+        QColor currentColor;
 
         void emitTeamColorChanged(const HWTeam& team);
 

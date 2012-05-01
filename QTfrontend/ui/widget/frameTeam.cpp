@@ -56,15 +56,16 @@ void FrameTeams::setInteractivity(bool interactive)
 
 void FrameTeams::resetColors()
 {
-    currentColor=availableColors.end() - 1; // ensure next color is the first one
+    currentColor = availableColors.last(); // ensure next color is the first one
 }
 
 QColor FrameTeams::getNextColor() const
 {
-    QList<QColor>::ConstIterator nextColor=currentColor;
-    ++nextColor;
-    if (nextColor==availableColors.end()) nextColor=availableColors.begin();
-    return *nextColor;
+    int idx = availableColors.indexOf(currentColor);
+
+    idx = ++idx % availableColors.size();
+
+    return availableColors.at(idx);
 }
 
 void FrameTeams::addTeam(HWTeam team, bool willPlay)
