@@ -975,7 +975,7 @@ function  SDL_AllocFormat(format: LongWord): PSDL_PixelFormat; {$IFDEF SDL13}cde
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 function  SDL_VideoDriverName(namebuf: PChar; maxlen: LongInt): PChar; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 function  SDL_EnableUNICODE(enable: LongInt): LongInt; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
-function  SDL_EnableKeyRepeat(delay_, interval: LongInt): LongInt; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+function  SDL_EnableKeyRepeat(timedelay, interval: LongInt): LongInt; {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 
 (*  SDL_ttf  *)
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
