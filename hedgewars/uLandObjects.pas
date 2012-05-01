@@ -406,7 +406,7 @@ begin
 
 AddProgress;
 // Set default water greyscale values
-if cGrayScale then
+if GrayScale then
     begin
     for i:= 0 to 3 do
         begin
@@ -461,7 +461,7 @@ while not eof(f) do
         SkyColor.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         SkyColor.b:= StrToInt(Trim(s));
-        if cGrayScale
+        if GrayScale
             then
             begin
             t:= round(SkyColor.r * RGB_LUMINANCE_RED + SkyColor.g * RGB_LUMINANCE_GREEN + SkyColor.b * RGB_LUMINANCE_BLUE);
@@ -485,7 +485,7 @@ while not eof(f) do
         c2.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         c2.b:= StrToInt(Trim(s));
-        if cGrayScale then
+        if GrayScale then
             begin
             t:= round(SkyColor.r * RGB_LUMINANCE_RED + SkyColor.g * RGB_LUMINANCE_GREEN + SkyColor.b * RGB_LUMINANCE_BLUE);
             if t > 255 then
@@ -494,7 +494,7 @@ while not eof(f) do
             c2.g:= t;
             c2.b:= t
             end;
-        cExplosionBorderColor:= c2.value or AMask;
+        ExplosionBorderColor:= c2.value or AMask;
         end
     else if key = 'water-top' then
         begin
@@ -506,7 +506,7 @@ while not eof(f) do
         Delete(s, 1, i);
         WaterColorArray[0].b:= StrToInt(Trim(s));
         WaterColorArray[0].a := 255;
-        if cGrayScale then
+        if GrayScale then
             begin
             t:= round(WaterColorArray[0].r * RGB_LUMINANCE_RED + WaterColorArray[0].g * RGB_LUMINANCE_GREEN + WaterColorArray[0].b * RGB_LUMINANCE_BLUE);
             if t > 255 then
@@ -527,7 +527,7 @@ while not eof(f) do
         Delete(s, 1, i);
         WaterColorArray[2].b:= StrToInt(Trim(s));
         WaterColorArray[2].a := 255;
-        if cGrayScale then
+        if GrayScale then
             begin
             t:= round(WaterColorArray[2].r * RGB_LUMINANCE_RED + WaterColorArray[2].g * RGB_LUMINANCE_GREEN + WaterColorArray[2].b * RGB_LUMINANCE_BLUE);
             if t > 255 then
@@ -540,8 +540,8 @@ while not eof(f) do
         end
     else if key = 'water-opacity' then
         begin
-        cWaterOpacity:= StrToInt(Trim(s));
-        cSDWaterOpacity:= cWaterOpacity
+        WaterOpacity:= StrToInt(Trim(s));
+        SDWaterOpacity:= WaterOpacity
         end
     else if key = 'music' then
         MusicFN:= Trim(s)
@@ -658,7 +658,7 @@ while not eof(f) do
         Delete(s, 1, i);
         SDWaterColorArray[0].b:= StrToInt(Trim(s));
         SDWaterColorArray[0].a := 255;
-        if cGrayScale then
+        if GrayScale then
             begin
             t:= round(SDWaterColorArray[0].r * RGB_LUMINANCE_RED + SDWaterColorArray[0].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[0].b * RGB_LUMINANCE_BLUE);
             if t > 255 then
@@ -679,7 +679,7 @@ while not eof(f) do
         Delete(s, 1, i);
         SDWaterColorArray[2].b:= StrToInt(Trim(s));
         SDWaterColorArray[2].a := 255;
-        if cGrayScale then
+        if GrayScale then
             begin
             t:= round(SDWaterColorArray[2].r * RGB_LUMINANCE_RED + SDWaterColorArray[2].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[2].b * RGB_LUMINANCE_BLUE);
             if t > 255 then
@@ -691,7 +691,7 @@ while not eof(f) do
         SDWaterColorArray[3]:= SDWaterColorArray[2];
         end
     else if key = 'sd-water-opacity' then
-        cSDWaterOpacity:= StrToInt(Trim(s))
+        SDWaterOpacity:= StrToInt(Trim(s))
     else if key = 'sd-clouds' then
         cSDCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH
     else if key = 'sd-flakes' then
@@ -724,7 +724,7 @@ while not eof(f) do
             RQSkyColor.g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
             Delete(s, 1, i);
             RQSkyColor.b:= StrToInt(Trim(s));
-            if cGrayScale then
+            if GrayScale then
                 begin
                 t:= round(RQSkyColor.r * RGB_LUMINANCE_RED + RQSkyColor.g * RGB_LUMINANCE_GREEN + RQSkyColor.b * RGB_LUMINANCE_BLUE);
                 if t > 255 then

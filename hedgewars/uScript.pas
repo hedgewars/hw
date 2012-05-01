@@ -1713,7 +1713,7 @@ if not ScriptLoaded then
     exit;
 
 // push game variables so they may be modified by the script
-ScriptSetInteger('BorderColor', cExplosionBorderColor);
+ScriptSetInteger('BorderColor', ExplosionBorderColor);
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);

@@ -69,6 +69,14 @@ procedure SpawnBoxOfSmth; forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure doStepCase(Gear: PGear); forward;
 
+
+var delay: LongWord;
+    delay2: LongWord;
+    step: (stDelay, stChDmg, stSweep, stTurnReact,
+    stAfterDelay, stChWin, stWater, stChWin2, stHealth,
+    stSpawn, stNTurn);
+    upd: Longword;
+
 // For better maintainability the step handlers of gears are stored in
 // separate files.
 // Note: step handlers of gears that are hedgehogs are in a different file
@@ -172,11 +180,6 @@ begin
 end;
 
 procedure ProcessGears;
-const delay: LongWord = 0;
-    delay2: LongWord = 0;
-    step: (stDelay, stChDmg, stSweep, stTurnReact,
-    stAfterDelay, stChWin, stWater, stChWin2, stHealth,
-    stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
     i, AliveCount: LongInt;
     s: shortstring;
@@ -1315,6 +1318,12 @@ begin
 
     AllInactive:= false;
     PrvInactive:= false;
+
+    //typed const
+    delay:= 0;
+    delay2:= 0;
+    step:= stDelay;
+    upd:= 0;
 end;
 
 procedure freeModule;

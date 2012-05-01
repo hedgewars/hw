@@ -634,8 +634,6 @@ case Gear^.Pos of
      end
 end;
 
-const StepTicks: LongWord = 0;
-
 procedure HedgehogStep(Gear: PGear);
 var PrevdX: LongInt;
     CurWeapon: PAmmo;

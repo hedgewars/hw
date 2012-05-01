@@ -170,14 +170,14 @@ procedure doStepDrowningGear(Gear: PGear);
     Gear^.Y := Gear^.Y + cDrownSpeed;
     Gear^.X := Gear^.X + Gear^.dX * cDrownSpeed;
     // Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
-    if ((not SuddenDeathDmg and (cWaterOpacity < $FF))
-    or (SuddenDeathDmg and (cSDWaterOpacity < $FF))) and ((GameTicks and $1F) = 0) then
+    if ((not SuddenDeathDmg and (WaterOpacity < $FF))
+    or (SuddenDeathDmg and (SDWaterOpacity < $FF))) and ((GameTicks and $1F) = 0) then
         if (Gear^.Kind = gtHedgehog) and (Random(4) = 0) then
             AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble)
     else if Random(12) = 0 then
              AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble);
-    if (not SuddenDeathDmg and (cWaterOpacity > $FE))
-    or (SuddenDeathDmg and (cSDWaterOpacity > $FE))
+    if (not SuddenDeathDmg and (WaterOpacity > $FE))
+    or (SuddenDeathDmg and (SDWaterOpacity > $FE))
     or (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
         DeleteGear(Gear);
     end;
@@ -690,7 +690,7 @@ if draw then
                                 end
                             else Land[ly, lx]:= lf;
                         if gun then
-                            LandPixels[ry, rx]:= (cExplosionBorderColor and (not AMask)) or (p^[px] and AMask)
+                            LandPixels[ry, rx]:= (ExplosionBorderColor and (not AMask)) or (p^[px] and AMask)
                         else LandPixels[ry, rx]:= addBgColor(LandPixels[ry, rx], p^[px]);
                         end
                     else allpx:= false
@@ -1032,7 +1032,7 @@ begin
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0
         end;
-    if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Damage < Gear^.Health) and ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cSDWaterOpacity < $FF))) then
+    if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Damage < Gear^.Health) and ((not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF))) then
         begin
         for i:=(Gear^.Health - Gear^.Damage) * 4 downto 0 do
             begin
@@ -2815,8 +2815,6 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepKamikazeWork(Gear: PGear);
-
-const upd: Longword =   0;
 var 
     i: LongWord;
     HHGear: PGear;

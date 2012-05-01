@@ -110,6 +110,22 @@ var
 
     GameTicks   : LongWord;
 
+    // originally typed consts
+    CharArray: array[byte] of Char;
+    LastTint: Longword;
+    SocketString: shortstring;
+    VGCounter: Longword;
+    PrevX: LongInt;
+    timedelta: Longword;
+    StartTicks: Longword;
+    Counter: Longword;
+    StepTicks: LongWord;
+    ExplosionBorderColor: LongWord;
+    WaterOpacity: byte;
+    SDWaterOpacity: byte;
+    prevGState: TGameState;
+    GrayScale: Boolean;
+
     // originally from uConsts
     Pathz: array[TPathType] of shortstring;
     UserPathz: array[TPathType] of shortstring;
@@ -194,6 +210,17 @@ var
 
     LuaGoals        : shortstring;
 
+    VoiceList : array[0..7] of TVoice =  (
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil));
+    LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
+
 /////////////////////////////////////
 //Buttons
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -203,14 +230,11 @@ var
     firebutton, jumpWidget, AMWidget          : TOnScreenWidget;
     pauseButton, utilityWidget                : TOnScreenWidget;
 {$ENDIF}
-
     AMAnimType      : LongInt;
-const
-    cHHFileName = 'Hedgehog';
-    cCHFileName = 'Crosshair';
-    cThemeCFGFilename = 'theme.cfg';
 
-    FontBorder = 2;
+
+const
+    // these consts are here because they would cause circular dependencies in uConsts/uTypes
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
         '',                              // ptData
@@ -235,20 +259,6 @@ const
         'Graphics/SuddenDeath',           // ptSuddenDeath
         'Graphics/Buttons'                // ptButton
     );
-
-    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
-    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
-
-    VoiceList : array[0..7] of TVoice =  (
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil));
-    LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
 
     Fontz: array[THWFont] of THHFont = (
             (Handle: nil;
@@ -279,6 +289,7 @@ const
             {$ENDIF}
             );
 
+var
     SpritesData: array[TSprite] of record
             FileName: string[15];
             Path, AltPath: TPathType;
@@ -664,7 +675,7 @@ const
             Width: 3; Height: 17; imageWidth: 3; imageHeight: 17; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprSlider
             );
 
-
+const
     Wavez: array [TWave] of record
             Sprite: TSprite;
             FramesCount: Longword;
@@ -801,7 +812,7 @@ const
             (FileName:                'plane.ogg'; Path: ptSounds),// sndPlane
             (FileName:               'TARDIS.ogg'; Path: ptSounds) // sndTardis
             );
-
+var
     Ammoz: array [TAmmoType] of record
             NameId: TAmmoStrId;
             NameTex: PTexture;
@@ -2297,6 +2308,7 @@ const
             ejectY: -3)
         );
 
+const
     GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (    
 (*          gtFlame *)   amNothing
 (*       gtHedgehog *) , amNothing
@@ -2443,7 +2455,6 @@ var
     vobSDFrameTicks, vobSDFramesCount, vobSDCount: Longword;
     vobSDVelocity, vobSDFallSpeed: LongInt;
 
-
     hideAmmoMenu: boolean;
     wheelUp: boolean;
     wheelDown: boolean;
@@ -2459,29 +2470,7 @@ var
     ControllerHats: array[0..5] of array[0..19] of Byte;
     ControllerButtons: array[0..5] of array[0..19] of Byte;
 
-    DefaultBinds, CurrentBinds: TBinds;
-
-    coeff: LongInt;
-
-{$IFDEF HWLIBRARY}
-    leftClick: boolean;
-    middleClick: boolean;
-    rightClick: boolean;
-
-    upKey: boolean;
-    downKey: boolean;
-    rightKey: boolean;
-    leftKey: boolean;
-    preciseKey: boolean;
-
-    backspaceKey: boolean;
-    spaceKey: boolean;
-    enterKey: boolean;
-    tabKey: boolean;
-
-    chatAction: boolean;
-    pauseAction: boolean;
-{$ENDIF}
+    DefaultBinds : TBinds;
 
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
@@ -2639,6 +2628,16 @@ begin
     vobSDCount:= 30 * cScreenSpace div LAND_WIDTH;
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
+
+    PrevX:= 0;
+    timedelta:= 0;
+    Counter:= 0;
+    StepTicks:= 0;
+    ExplosionBorderColor:= $FF808080;
+    WaterOpacity:= $80;
+    SDWaterOpacity:= $80;
+    prevGState:= gsConfirm;
+    GrayScale:= false;
 
     LuaGoals:= '';
 end;
