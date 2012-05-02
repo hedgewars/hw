@@ -152,7 +152,13 @@ void PageRoomsList::connectSignals()
     connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
 
+    // save header state on change
+    connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
+            this, SLOT(saveHeaderState()));
+    connect(roomsList->horizontalHeader(), SIGNAL(sectionResized),
+            this, SLOT(saveHeaderState()));
 
+    // sorting
     connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
             this, SLOT(onSortIndicatorChanged(int, Qt::SortOrder)));
 }
@@ -490,6 +496,10 @@ void PageRoomsList::setUser(const QString & nickname)
 
 void PageRoomsList::setModel(RoomsListModel * model)
 {
+    // filter chain:
+    // model -> stateFilteredModel -> schemeFilteredModel ->
+    // -> weaponsFilteredModel -> roomsModel (search filter+sorting)
+
     if (roomsModel == NULL)
     {
         roomsModel = new QSortFilterProxyModel(this);
@@ -514,28 +524,32 @@ void PageRoomsList::setModel(RoomsListModel * model)
         schemeFilteredModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
         weaponsFilteredModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-        stateFilteredModel->setSourceModel(roomsModel);
         schemeFilteredModel->setSourceModel(stateFilteredModel);
         weaponsFilteredModel->setSourceModel(schemeFilteredModel);
+        roomsModel->setSourceModel(weaponsFilteredModel);
 
-        roomsList->setModel(schemeFilteredModel);
+        // let the table view display the last model in the filter chain
+        roomsList->setModel(roomsModel);
     }
 
-    roomsModel->setSourceModel(model);
+    stateFilteredModel->setSourceModel(model);
 
     roomsList->hideColumn(RoomsListModel::StateColumn);
 
     QHeaderView * h = roomsList->horizontalHeader();
 
-    h->setSortIndicatorShown(true);
+    if (!restoreHeaderState())
+    {
+        h->resizeSection(RoomsListModel::PlayerCountColumn, 32);
+        h->resizeSection(RoomsListModel::TeamCountColumn, 32);
+        h->resizeSection(RoomsListModel::OwnerColumn, 100);
+        h->resizeSection(RoomsListModel::MapColumn, 100);
+        h->resizeSection(RoomsListModel::SchemeColumn, 100);
+        h->resizeSection(RoomsListModel::WeaponsColumn, 100);
+    }
 
+    h->setSortIndicatorShown(true);
     h->setResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
-    h->resizeSection(RoomsListModel::PlayerCountColumn, 32);
-    h->resizeSection(RoomsListModel::TeamCountColumn, 32);
-    h->resizeSection(RoomsListModel::OwnerColumn, 100);
-    h->resizeSection(RoomsListModel::MapColumn, 100);
-    h->resizeSection(RoomsListModel::SchemeColumn, 100);
-    h->resizeSection(RoomsListModel::WeaponsColumn, 100);
 }
 
 
@@ -579,4 +593,19 @@ void PageRoomsList::onFilterChanged()
     else
         weaponsFilteredModel->setFilterWildcard(
             QString("*%1*").arg(CBWeapons->currentText()));
+}
+
+
+bool PageRoomsList::restoreHeaderState()
+{
+    if (!m_gameSettings->contains("roomslist_header"))
+        return false;
+    return roomsList->horizontalHeader()->restoreState(
+        m_gameSettings->value("roomslist_header").toByteArray());
+}
+
+void PageRoomsList::saveHeaderState()
+{
+    m_gameSettings->setValue(
+        "roomslist_header", roomsList->horizontalHeader()->saveState());
 }
