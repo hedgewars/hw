@@ -52,33 +52,10 @@ begin
     versionStr^:= cVersionString;
 end;
 
-// emulate mouse/keyboard input
-procedure HW_click; cdecl; export;
-begin
-    leftClick:= true;
-end;
-
-procedure HW_ammoMenu; cdecl; export;
-begin
-    rightClick:= true;
-end;
-
 procedure HW_zoomSet(value: GLfloat); cdecl; export;
 begin
     cZoomVal:= value;
     ZoomValue:= value;
-end;
-
-procedure HW_zoomIn; cdecl; export;
-begin
-    if wheelDown = false then
-        wheelUp:= true;
-end;
-
-procedure HW_zoomOut; cdecl; export;
-begin
-    if wheelUp = false then
-        wheelDown:= true;
 end;
 
 procedure HW_zoomReset; cdecl; export;
@@ -99,92 +76,9 @@ begin
     HW_zoomLevel:= trunc((ZoomValue - cDefaultZoomLevel) / cZoomDelta);
 end;
 
-procedure HW_walkingKeysUp; cdecl; export;
-begin
-    leftKey:= false;
-    rightKey:= false;
-    upKey:= false;
-    downKey:= false;
-    preciseKey:= false;
-end;
-
-procedure HW_otherKeysUp; cdecl; export;
-begin
-    spaceKey:= false;
-    enterKey:= false;
-    backspaceKey:= false;
-end;
-
-procedure HW_allKeysUp; cdecl; export;
-begin
-    // set all keys to released
-    uInputHandler.initModule;
-end;
-
-procedure HW_walkLeft; cdecl; export;
-begin
-    leftKey:= true;
-end;
-
-procedure HW_walkRight; cdecl; export;
-begin
-    rightKey:= true;
-end;
-
-procedure HW_preciseSet(status:boolean); cdecl; export;
-begin
-    preciseKey:= status;
-end;
-
-procedure HW_aimUp; cdecl; export;
-begin
-    upKey:= true;
-end;
-
-procedure HW_aimDown; cdecl; export;
-begin
-    downKey:= true;
-end;
-
-procedure HW_shoot; cdecl; export;
-begin
-    spaceKey:= true;
-end;
-
-procedure HW_jump; cdecl; export;
-begin
-    enterKey:= true;
-end;
-
-procedure HW_backjump; cdecl; export;
-begin
-    backspaceKey:= true;
-end;
-
-procedure HW_tab; cdecl; export;
-begin
-    tabKey:= true;
-end;
-
-procedure HW_chat; cdecl; export;
-begin
-    chatAction:= true;
-end;
-
 procedure HW_screenshot; cdecl; export;
 begin
     flagMakeCapture:= true;
-end;
-
-procedure HW_pause; cdecl; export;
-begin
-    if isPaused = false then
-        pauseAction:= true;
-end;
-
-procedure HW_pauseToggle; cdecl; export;
-begin
-    pauseAction:= true;
 end;
 
 function HW_isPaused: boolean; cdecl; export;
@@ -201,10 +95,7 @@ end;
 
 function HW_getSDLWindow: pointer; cdecl; export;
 begin
-    HW_getSDLWindow:= nil;
-{$IFDEF SDL13}
-    HW_getSDLWindow:= SDLwindow;
-{$ENDIF}
+    HW_getSDLWindow:={$IFDEF SDL13}SDLwindow{$ELSE}nil{$ENDIF};
 end;
 
 // cursor handling
