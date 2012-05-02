@@ -48,7 +48,7 @@
 #pragma mark -
 #pragma mark NSOperation
 -(id) initFadeWithAudioPlayer:(AVAudioPlayer*)player toVolume:(float)volume overDuration:(NSTimeInterval)duration withDelay:(NSTimeInterval)timeDelay {
-  if (self = [super init]) {
+  if ((self = [super init])) {
     self.audioPlayer = player;
     [player prepareToPlay];
     _fadeDuration = duration;

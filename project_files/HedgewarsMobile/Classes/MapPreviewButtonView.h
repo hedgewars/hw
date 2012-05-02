@@ -18,6 +18,7 @@
 
 
 #import <UIKit/UIKit.h>
+#import "SDL_net.h"
 
 
 @protocol MapPreviewViewDelegate <NSObject>

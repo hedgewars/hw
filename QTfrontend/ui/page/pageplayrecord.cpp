@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include "pageplayrecord.h"
+
 #include <QFont>
 #include <QGridLayout>
 #include <QPushButton>
@@ -26,7 +28,8 @@
 #include <QInputDialog>
 
 #include "hwconsts.h"
-#include "pageplayrecord.h"
+
+#include "DataManager.h"
 
 QLayout * PagePlayDemo::bodyLayoutDefinition()
 {
@@ -61,6 +64,7 @@ void PagePlayDemo::connectSignals()
 {
     connect(BtnRenameRecord, SIGNAL(clicked()), this, SLOT(renameRecord()));
     connect(BtnRemoveRecord, SIGNAL(clicked()), this, SLOT(removeRecord()));
+    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(refresh()));
 }
 
 PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
@@ -102,6 +106,14 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
         DemosList->item(i)->setIcon(recType == RT_Demo ? QIcon(":/res/file_demo.png") : QIcon(":/res/file_save.png"));
     }
 }
+
+
+void PagePlayDemo::refresh()
+{
+    if (this->isVisible());
+        FillFromDir(recType);
+}
+
 
 void PagePlayDemo::renameRecord()
 {

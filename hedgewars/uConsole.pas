@@ -31,8 +31,8 @@ function  ShortStringAsPChar(s: shortstring): PChar;
 implementation
 uses Types, uVariables, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
 
-const cLineWidth: LongInt = 0;
-    cLinesCount = 8;
+const cLinesCount = 8;
+var   cLineWidth: LongInt;
 
 type
     TTextLine = record
@@ -97,7 +97,7 @@ begin
     if Length(s) = High(s) then
         Dec(s[0]);
     s[Ord(Length(s))+1] := #0;
-    exit(@s[1]);
+    ShortStringAsPChar:= @s[1];
 end;
 
 function GetLastConsoleLine: shortstring;

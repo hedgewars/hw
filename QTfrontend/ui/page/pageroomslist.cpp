@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,10 @@
 #include <QMessageBox>
 #include <QHeaderView>
 #include <QTableView>
+
+#include <QSortFilterProxyModel>
+
+#include "roomslistmodel.h"
 
 #include "ammoSchemeModel.h"
 #include "pageroomslist.h"
@@ -61,7 +65,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
     filterLayout->addWidget(stateLabel);
     filterLayout->addWidget(CBState);
-    filterLayout->addSpacing(30);
+    filterLayout->addStretch(1);
 
     QLabel * ruleLabel = new QLabel(this);
     ruleLabel->setText(tr("Rules:"));
@@ -69,7 +73,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
     filterLayout->addWidget(ruleLabel);
     filterLayout->addWidget(CBRules);
-    filterLayout->addSpacing(30);
+    filterLayout->addStretch(1);
 
     QLabel * weaponLabel = new QLabel(this);
     weaponLabel->setText(tr("Weapons:"));
@@ -77,14 +81,17 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
     filterLayout->addWidget(weaponLabel);
     filterLayout->addWidget(CBWeapons);
-    filterLayout->addSpacing(30);
+    filterLayout->addStretch(1);
 
     QLabel * searchLabel = new QLabel(this);
     searchLabel->setText(tr("Search:"));
     searchText = new QLineEdit(this);
     searchText->setMaxLength(60);
+    searchText->setMinimumWidth(100);
+    searchText->setMaximumWidth(360);
     filterLayout->addWidget(searchLabel);
     filterLayout->addWidget(searchText);
+    filterLayout->setStretchFactor(searchText, 2);
 
     pageLayout->addLayout(filterLayout, 4, 0, 1, 2);
 
@@ -139,11 +146,21 @@ void PageRoomsList::connectSignals()
     connect(BtnRefresh, SIGNAL(clicked()), this, SLOT(onRefreshClick()));
     connect(BtnClear, SIGNAL(clicked()), this, SLOT(onClearClick()));
     connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
-    connect(CBState, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
-    connect(CBRules, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
-    connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
-    connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onRefreshClick()));
+    connect(CBState, SIGNAL(currentIndexChanged (int)), this, SLOT(onFilterChanged()));
+    connect(CBRules, SIGNAL(currentIndexChanged (int)), this, SLOT(onFilterChanged()));
+    connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onFilterChanged()));
+    connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
+
+    // save header state on change
+    connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
+            this, SLOT(saveHeaderState()));
+    connect(roomsList->horizontalHeader(), SIGNAL(sectionResized),
+            this, SLOT(saveHeaderState()));
+
+    // sorting
+    connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
+            this, SLOT(onSortIndicatorChanged(int, Qt::SortOrder)));
 }
 
 
@@ -151,6 +168,11 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings) :
     AbstractPage(parent)
 {
     m_gameSettings = gameSettings;
+
+    roomsModel = NULL;
+    stateFilteredModel = NULL;
+    schemeFilteredModel = NULL;
+    weaponsFilteredModel = NULL;
 
     initPage();
 
@@ -472,18 +494,118 @@ void PageRoomsList::setUser(const QString & nickname)
     chatWidget->setUser(nickname);
 }
 
-void PageRoomsList::setModel(QAbstractTableModel *model)
+void PageRoomsList::setModel(RoomsListModel * model)
 {
-    roomsList->setModel(model);
+    // filter chain:
+    // model -> stateFilteredModel -> schemeFilteredModel ->
+    // -> weaponsFilteredModel -> roomsModel (search filter+sorting)
 
-    roomsList->hideColumn(0);
+    if (roomsModel == NULL)
+    {
+        roomsModel = new QSortFilterProxyModel(this);
+        roomsModel->setDynamicSortFilter(true);
+        roomsModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+        roomsModel->sort(RoomsListModel::StateColumn, Qt::AscendingOrder);
+
+        stateFilteredModel = new QSortFilterProxyModel(this);
+        schemeFilteredModel = new QSortFilterProxyModel(this);
+        weaponsFilteredModel = new QSortFilterProxyModel(this);
+
+        stateFilteredModel->setDynamicSortFilter(true);
+        schemeFilteredModel->setDynamicSortFilter(true);
+        weaponsFilteredModel->setDynamicSortFilter(true);
+
+        roomsModel->setFilterKeyColumn(-1); // search in all columns
+        stateFilteredModel->setFilterKeyColumn(RoomsListModel::StateColumn);
+        schemeFilteredModel->setFilterKeyColumn(RoomsListModel::SchemeColumn);
+        weaponsFilteredModel->setFilterKeyColumn(RoomsListModel::WeaponsColumn);
+
+        roomsModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        schemeFilteredModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        weaponsFilteredModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+        schemeFilteredModel->setSourceModel(stateFilteredModel);
+        weaponsFilteredModel->setSourceModel(schemeFilteredModel);
+        roomsModel->setSourceModel(weaponsFilteredModel);
+
+        // let the table view display the last model in the filter chain
+        roomsList->setModel(roomsModel);
+    }
+
+    stateFilteredModel->setSourceModel(model);
+
+    roomsList->hideColumn(RoomsListModel::StateColumn);
 
     QHeaderView * h = roomsList->horizontalHeader();
-    h->resizeSection(1, 200);
-    h->resizeSection(2, 50);
-    h->resizeSection(3, 50);
-    h->resizeSection(4, 100);
-    h->resizeSection(5, 100);
-    h->resizeSection(6, 100);
-    h->resizeSection(7, 100);
+
+    if (!restoreHeaderState())
+    {
+        h->resizeSection(RoomsListModel::PlayerCountColumn, 32);
+        h->resizeSection(RoomsListModel::TeamCountColumn, 32);
+        h->resizeSection(RoomsListModel::OwnerColumn, 100);
+        h->resizeSection(RoomsListModel::MapColumn, 100);
+        h->resizeSection(RoomsListModel::SchemeColumn, 100);
+        h->resizeSection(RoomsListModel::WeaponsColumn, 100);
+    }
+
+    h->setSortIndicatorShown(true);
+    h->setResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
+}
+
+
+void PageRoomsList::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
+{
+    if (roomsModel == NULL)
+        return;
+
+    // three state sorting: asc -> dsc -> default (by room state)
+    if ((order == Qt::AscendingOrder) && (logicalIndex == roomsModel->sortColumn()))
+        roomsList->horizontalHeader()->setSortIndicator(
+            RoomsListModel::StateColumn, Qt::AscendingOrder);
+    else
+        roomsModel->sort(logicalIndex, order);
+}
+
+
+void PageRoomsList::onFilterChanged()
+{
+    if (roomsModel == NULL)
+        return;
+
+    roomsModel->setFilterWildcard(QString("*%1*").arg(searchText->text()));
+
+    int stateIdx = CBState->currentIndex();
+    // any = 0, in lobby/false = 1, in progress/true = 2
+
+    if (stateIdx == 0)
+        stateFilteredModel->setFilterWildcard("*"); // "any"
+    else
+        stateFilteredModel->setFilterFixedString(QString(stateIdx == 2));
+
+    if (CBRules->currentIndex() == 0)
+        schemeFilteredModel->setFilterWildcard("*"); // "any"
+    else
+        schemeFilteredModel->setFilterWildcard(
+            QString("*%1*").arg(CBRules->currentText()));
+
+    if (CBWeapons->currentIndex() == 0)
+        weaponsFilteredModel->setFilterWildcard("*"); // "any"
+    else
+        weaponsFilteredModel->setFilterWildcard(
+            QString("*%1*").arg(CBWeapons->currentText()));
+}
+
+
+bool PageRoomsList::restoreHeaderState()
+{
+    if (!m_gameSettings->contains("frontend/roomslist_header"))
+        return false;
+    return roomsList->horizontalHeader()->restoreState(QByteArray::fromHex(
+        (m_gameSettings->value("frontend/roomslist_header").toByteArray())));
+}
+
+void PageRoomsList::saveHeaderState()
+{
+    m_gameSettings->setValue("frontend/roomslist_header",
+        roomsList->horizontalHeader()->saveState().toHex());
 }

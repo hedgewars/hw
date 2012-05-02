@@ -166,7 +166,7 @@ repeat
             value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
         if valueResult <= value then
             begin
-            ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
             ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
             ap.ExplR:= 100;
             ap.ExplX:= EX;
@@ -223,7 +223,7 @@ repeat
 
         if valueResult <= value then
             begin
-            ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
             ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
             ap.ExplR:= 0;
             ap.ExplX:= EX;
@@ -273,7 +273,7 @@ repeat
                   
         if valueResult < Score then
             begin
-            ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
             ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
             ap.Time:= TestTime;
             ap.ExplR:= 100;
@@ -327,7 +327,7 @@ repeat
 
     if valueResult < Score then
         begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime;
         ap.ExplR:= 100;
@@ -384,7 +384,7 @@ repeat
 
      if valueResult < Score then
         begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= trunc(sqrt(r) * cMaxPower * 0.9) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime;
         ap.ExplR:= 90;
@@ -436,7 +436,7 @@ repeat
         
     if valueResult < Score then
         begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= trunc(sqrt(r) * cMaxPower * 0.9) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime;
         ap.ExplR:= 300;
@@ -474,22 +474,22 @@ end;
 function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 //const tDelta = 24;
 var Vx, Vy: real;
-    Score, EX, EY, valueResult: LongInt;
+    Score, EX, EY: LongInt;
     TestTime: Longword;
     x, y, dY, meX, meY: real;
 begin
-valueResult:= BadTurn;
+TestMortar:= BadTurn;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
 
 if (Level > 2) then
-    exit(BadTurn);
+    exit;
 
 TestTime:= Solve(Targ.X, Targ.Y, trunc(meX), trunc(meY));
 
 if TestTime = 0 then
-    exit(BadTurn);
+    exit;
 
     Vx:= (Targ.X - meX) / TestTime;
     Vy:= cGravityf * (TestTime div 2) - (Targ.Y - meY) / TestTime;
@@ -520,17 +520,15 @@ if TestTime = 0 then
     else
         Score:= BadTurn;
 
-    if valueResult < Score then
+    if BadTurn < Score then
         begin
-        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= 1;
         ap.ExplR:= 100;
         ap.ExplX:= EX;
         ap.ExplY:= EY;
-        valueResult:= Score
+        TestMortar:= Score
         end;
-
-TestMortar:= valueResult;
 end;
 
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -541,6 +539,7 @@ var Vx, Vy, x, y: real;
     rx, ry, valueResult: LongInt;
     range: integer;
 begin
+TestShotgun:= BadTurn;
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
@@ -548,26 +547,28 @@ x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 range:= Metric(trunc(x), trunc(y), Targ.X, Targ.Y);
 if ( range < MIN_RANGE ) or ( range > MAX_RANGE ) then
-    exit(BadTurn);
+    exit;
 Vx:= (Targ.X - x) * 1 / 1024;
 Vy:= (Targ.Y - y) * 1 / 1024;
-ap.Angle:= DxDy2AttackAngle(Vx, -Vy);
+ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 repeat
     x:= x + vX;
     y:= y + vY;
     rx:= trunc(x);
     ry:= trunc(y);
     if TestCollExcludingMe(Me, rx, ry, 2) then
-        begin
+    begin
         x:= x + vX * 8;
         y:= y + vY * 8;
         valueResult:= RateShotgun(Me, vX, vY, rx, ry);
      
-    if valueResult = 0 then 
-        valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
-    else 
-        dec(valueResult, Level * 4000);
-    exit(valueResult * 27 div 20) // 27/20 is reuse bonus
+        if valueResult = 0 then 
+            valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
+        else 
+            dec(valueResult, Level * 4000);
+        // 27/20 is reuse bonus
+        TestShotgun:= valueResult * 27 div 20;
+        exit 
     end
 until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4)
     or (x < 0)
@@ -591,11 +592,14 @@ ap.Power:= 1;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
-   exit(BadTurn);
+begin
+    TestDesertEagle:= BadTurn;
+    exit;
+end;
 t:= 0.5 / sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
 Vx:= (Targ.X - x) * t;
 Vy:= (Targ.Y - y) * t;
-ap.Angle:= DxDy2AttackAngle(Vx, -Vy);
+ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 d:= 0;
 
 repeat
@@ -628,11 +632,12 @@ var valueResult: LongInt;
     x, y: real;
 begin
 Level:= Level; // avoid compiler hint
+TestBaseballBat:= BadTurn;
 ap.ExplR:= 0;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 if (Level > 2) or (Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) > 25) then
-    exit(BadTurn);
+    exit;
 
 ap.Time:= 0;
 ap.Power:= 1;
@@ -641,7 +646,7 @@ if (Targ.X) - trunc(x) >= 0 then
 else
     ap.Angle:= - cMaxAngle div 4;
 
-valueResult:= RateShove(Me, trunc(x) + 10 * hwSign(Targ.X - x), trunc(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, 1);
+valueResult:= RateShove(Me, trunc(x) + LongWord(10*hwSignf(Targ.X - x)), trunc(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, 1);
 if valueResult <= 0 then
     valueResult:= BadTurn
 else
@@ -650,7 +655,7 @@ TestBaseballBat:= valueResult;
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var i, val1, val2, t: LongInt;
+var val1: LongInt;
     x, y: real;
 begin
 Level:= Level; // avoid compiler hint
@@ -665,12 +670,13 @@ or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
     begin
 // TODO - find out WTH this works.
     if TestColl(trunc(x), trunc(y) - 16, 6) and 
-       (RateShove(Me, trunc(x) + 10 * hwSign(Me^.dX), 
+       (RateShove(Me, trunc(x) + LongWord(10 * hwSign(Me^.dX)), 
                       trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX)*0.45, -0.9,  1) = 0) then
         val1:= Succ(BadTurn)
     else
         val1:= BadTurn;
-    exit(val1)
+    TestFirePunch:= val1;
+    exit;
     end;
 (*
 For some silly reason, having this enabled w/ the AI 
@@ -714,17 +720,18 @@ if (Abs(trunc(x) - Targ.X) > 25)
 or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
     begin
     if TestColl(trunc(x), trunc(y) - 16, 6)
-    and (RateShove(Me, trunc(x) + 10 * hwSign(Me^.dX), trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX), -0.8,  1) = 0) then
+    and (RateShove(Me, trunc(x) + LongWord(10 * hwSign(Me^.dX)), trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX), -0.8,  1) = 0) then
         valueResult:= Succ(BadTurn)
     else
         valueResult:= BadTurn;
-    exit(valueResult)
+    TestWhip:= valueResult;
+    exit;
     end;
 
 valueResult:= 0;
 for i:= 0 to 4 do
-    valueResult:= valueResult + RateShove(Me, trunc(x) + 10 * hwSign(Targ.X - x),
-                                    trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX), -0.8, 1);
+    valueResult:= valueResult + RateShove(Me, trunc(x) + LongWord(10 * hwSignf(Targ.X - x)),
+                                    trunc(y) - LongWord(20 * i) - 5, 10, 30, 40, hwSign(Me^.dX), -0.8, 1);
 if valueResult <= 0 then
     valueResult:= BadTurn
 else
@@ -762,7 +769,10 @@ begin
 ap.ExplR:= 0;
 ap.Time:= 0;
 if (Level > 3) then
-    exit(BadTurn);
+begin
+    TestAirAttack:= BadTurn;
+    exit;
+end;
 
 ap.AttackPutX:= Targ.X;
 ap.AttackPutY:= Targ.Y;
@@ -790,10 +800,10 @@ repeat
         if b[i] then
             begin
             fexit:= false;
-            if TestColl(trunc(X) + i * 30, trunc(Y), 4) then
+            if TestColl(trunc(X) + LongWord(i * 30), trunc(Y), 4) then
                 begin
                 b[i]:= false;
-                dmg[i]:= RateExplosion(Me, trunc(X) + i * 30, trunc(Y), 58)
+                dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 58)
                 // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
                 end
             end;
@@ -826,8 +836,9 @@ var
     maxTop: longword;
 begin
     TestTeleport := BadTurn;
+    exit;
     Level:= Level; // avoid compiler hint
-    FillBonuses(true, [gtCase]);
+    //FillBonuses(true, [gtCase]);
     if bonuses.Count = 0 then
         begin
         if Me^.Health <= 100  then

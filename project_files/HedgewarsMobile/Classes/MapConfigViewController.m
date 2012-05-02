@@ -35,7 +35,7 @@
 }
 
 -(IBAction) mapButtonPressed:(id) sender {
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
     [self updatePreview];
 }
 
@@ -114,7 +114,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    NSInteger row = [indexPath row];
+    NSUInteger row = [indexPath row];
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
@@ -290,7 +290,7 @@
         [self updatePreview];
         oldValue = num;
     }
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
 }
 
 // perform actions based on the activated section, then call updatePreview to visually update the selection
@@ -299,7 +299,7 @@
     NSString *mapgen, *staticmap, *mission;
     NSInteger newPage = self.segmentedControl.selectedSegmentIndex;
 
-    [AudioManagerController playSelectSound];
+    [[AudioManagerController mainManager] playSelectSound];
     switch (newPage) {
         case 0: // Random
             mapgen = @"e$mapgen 0";

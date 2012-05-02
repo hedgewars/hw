@@ -132,7 +132,7 @@
 }
 
 -(void) dismissSplitView {
-    [AudioManagerController playBackSound];
+    [[AudioManagerController mainManager] playBackSound];
     [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissModalViewControllerAnimated:YES];
 }
 
@@ -240,7 +240,7 @@
         nextController.navigationItem.hidesBackButton = YES;
         [nextController viewWillAppear:NO];
         [targetController.navigationController pushViewController:nextController animated:NO];
-        [AudioManagerController playClickSound];
+        [[AudioManagerController mainManager] playClickSound];
     }
 }
 

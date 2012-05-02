@@ -51,7 +51,6 @@ const
     cWhiteColor           : Longword = $FFFFFFFF;
     cYellowColor          : Longword = $FFFFFF00;
     cNearBlackColor       : Longword = $FF000010;
-    cExplosionBorderColor : LongWord = $FF808080;
 
 {$WARNINGS OFF}
     cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   3006477107); // 1.4
@@ -103,18 +102,18 @@ const
     MAXNAMELEN = 192;
     MAXROPEPOINTS = 3840;
 
+    {$IFNDEF PAS2C}
     // some opengl headers do not have these macros
     GL_BGR              = $80E0;
     GL_BGRA             = $80E1;
     GL_CLAMP_TO_EDGE    = $812F;
     GL_TEXTURE_PRIORITY = $8066;
+    {$ENDIF}
 
     cSendCursorPosTime  : LongWord = 50;
     cVisibleWater       : LongInt = 128;
     cCursorEdgesDist    : LongInt = 100;
     cTeamHealthWidth    : LongInt = 128;
-    cWaterOpacity       : byte = $80;
-    cSDWaterOpacity     : byte = $80;
 
     cifRandomize = $00000001;
     cifTheme     = $00000002;
@@ -122,16 +121,10 @@ const
     cifAllInited = cifRandomize or cifTheme or cifMap;
 
     cTransparentColor: Longword = $00000000;
-    cGrayScale: Boolean = false;
 
     RGB_LUMINANCE_RED    = 0.212671;
     RGB_LUMINANCE_GREEN  = 0.715160;
     RGB_LUMINANCE_BLUE   = 0.072169;
-(*
-    RGB_LUMINANCE_RED    = 0.3333333333;
-    RGB_LUMINANCE_GREEN  = 0.3333333333;
-    RGB_LUMINANCE_BLUE   = 0.3333333333;
-*)
 
     cMaxTeams        = 8;
     cMaxHHIndex      = 7;
@@ -154,6 +147,12 @@ const
     cBlowTorchC    = 6;
 
     cKeyMaxIndex = 1023;
+
+    cHHFileName = 'Hedgehog';
+    cCHFileName = 'Crosshair';
+    cThemeCFGFilename = 'theme.cfg';
+
+    cFontBorder = 2;
 
     // do not change this value
     cDefaultZoomLevel = 2.0;
@@ -259,6 +258,7 @@ const
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
     ammoprop_SetBounce    = $00004000;
+    ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets 
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
@@ -312,6 +312,10 @@ const
     FADE_ANIM_TIME = 500;
     MOVE_ANIM_TIME = 500;
 {$ENDIF}
+
+    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
+       
 implementation
 
 end.

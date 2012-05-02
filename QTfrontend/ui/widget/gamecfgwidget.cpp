@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 
 #include "gamecfgwidget.h"
 #include "igbox.h"
-#include "HWDataManager.h"
+#include "DataManager.h"
 #include "hwconsts.h"
 #include "ammoSchemeModel.h"
 #include "proto.h"
@@ -56,41 +56,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     Scripts = new QComboBox(GBoxOptions);
     GBoxOptionsLayout->addWidget(Scripts, 1, 1);
 
-    Scripts->addItem("Normal");
-    Scripts->insertSeparator(1);
-
-    for (int i = 0; i < scriptList->size(); ++i)
-    {
-        QString script = (*scriptList)[i].remove(".lua", Qt::CaseInsensitive);
-        QList<QVariant> scriptInfo;
-        scriptInfo.push_back(script);
-        QFile scriptCfgFile(HWDataManager::instance().findFileForRead(
-                                QString("Scripts/Multiplayer/%2.cfg").arg(script)));
-        if (scriptCfgFile.exists() && scriptCfgFile.open(QFile::ReadOnly))
-        {
-            QString scheme;
-            QString weapons;
-            QTextStream input(&scriptCfgFile);
-            input >> scheme;
-            input >> weapons;
-            if (scheme.isEmpty())
-                scheme = "locked";
-            scheme.replace("_", " ");
-            if (weapons.isEmpty())
-                weapons = "locked";
-            weapons.replace("_", " ");
-            scriptInfo.push_back(scheme);
-            scriptInfo.push_back(weapons);
-            scriptCfgFile.close();
-        }
-        else
-        {
-            scriptInfo.push_back("locked");
-            scriptInfo.push_back("locked");
-        }
-        Scripts->addItem(script.replace("_", " "), scriptInfo);
-    }
-
+    Scripts->setModel(DataManager::instance().gameStyleModel());
+    m_curScript = Scripts->currentText();
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
 
     QWidget *SchemeWidget = new QWidget(GBoxOptions);
@@ -146,6 +113,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
     connect(pMapContainer, SIGNAL(drawMapRequested()), this, SIGNAL(goToDrawMap()));
     connect(pMapContainer, SIGNAL(drawnMapChanged(const QByteArray &)), this, SLOT(onDrawnMapChanged(const QByteArray &)));
+
+    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(updateModelViews()));
 }
 
 void GameCFGWidget::jumpToSchemes()
@@ -244,7 +213,7 @@ QByteArray GameCFGWidget::getFullConfig() const
 
     if (Scripts->currentIndex() > 0)
     {
-        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->itemData(Scripts->currentIndex()).toList()[0].toString()).toUtf8();
+        bcfg << QString("escript Scripts/Multiplayer/%1.lua").arg(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString()).toUtf8();
     }
 
     bcfg << QString("eseed " + pMapContainer->getCurrentSeed()).toUtf8();
@@ -525,10 +494,13 @@ void GameCFGWidget::schemeChanged(int index)
 
 void GameCFGWidget::scriptChanged(int index)
 {
+    const QString & name = Scripts->itemText(index);
+    m_curScript = name;
+
     if(isEnabled() && index > 0)
     {
-        QString scheme = Scripts->itemData(Scripts->currentIndex()).toList()[1].toString();
-        QString weapons = Scripts->itemData(Scripts->currentIndex()).toList()[2].toString();
+        QString scheme = Scripts->itemData(index, GameStyleModel::SchemeRole).toString();
+        QString weapons = Scripts->itemData(index, GameStyleModel::WeaponsRole).toString();
 
         if (scheme == "locked")
         {
@@ -571,7 +543,7 @@ void GameCFGWidget::scriptChanged(int index)
         WeaponsName->setEnabled(true);
         bindEntries->setEnabled(true);
     }
-    emit paramChanged("SCRIPT", QStringList(Scripts->itemText(index)));
+    emit paramChanged("SCRIPT", QStringList(name));
 }
 
 void GameCFGWidget::mapgenChanged(MapGenerator m)
@@ -592,4 +564,18 @@ void GameCFGWidget::resendSchemeData()
 void GameCFGWidget::onDrawnMapChanged(const QByteArray & data)
 {
     emit paramChanged("DRAWNMAP", QStringList(qCompress(data, 9).toBase64()));
+}
+
+
+void GameCFGWidget::updateModelViews()
+{
+    // restore game-style selection
+    if (!m_curScript.isEmpty())
+    {
+        int idx = Scripts->findText(m_curScript);
+        if (idx >= 0)
+            Scripts->setCurrentIndex(idx);
+        else
+            Scripts->setCurrentIndex(0);
+    }
 }

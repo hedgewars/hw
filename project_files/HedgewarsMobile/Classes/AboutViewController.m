@@ -52,12 +52,12 @@
 }
 
 -(IBAction) buttonPressed:(id) sender {
-    [AudioManagerController playBackSound];
+    [[AudioManagerController mainManager] playBackSound];
     [[self parentViewController] dismissModalViewControllerAnimated:YES];
 }
 
 -(IBAction) segmentedControlChanged:(id) sender {
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
     [self.tableView setContentOffset:CGPointMake(0, 0) animated:NO];
     [self.tableView reloadData];
 }

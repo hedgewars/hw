@@ -22,12 +22,14 @@ unit uTouch;
 
 interface
 
-uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes;
+uses sysutils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes, uCaptions, uAmmos, uWorld;
 
 
 procedure initModule;
 
 procedure ProcessTouch;
+procedure NewTurnBeginning;
+
 procedure onTouchDown(x,y: Longword; pointerId: TSDL_FingerId);
 procedure onTouchMotion(x,y: Longword; dx,dy: LongInt; pointerId: TSDL_FingerId);
 procedure onTouchUp(x,y: Longword; pointerId: TSDL_FingerId);
@@ -59,7 +61,6 @@ implementation
 
 const
     clickTime = 200;
-    longClickTime = 400;
     nilFingerId = High(TSDL_FingerId);
 
 var
@@ -81,6 +82,7 @@ var
     targetAngle: LongInt;
 
     buttonsDown: Longword;
+    targetting, targetted: boolean; //true when targetting an airstrike or the like
 
 procedure onTouchDown(x,y: Longword; pointerId: TSDL_FingerId);
 var 
@@ -101,35 +103,37 @@ end;
 
 if isOnWidget(fireButton, finger^) then
     begin
-    spaceKey:= true;
+    ParseTeamCommand('+attack');
     moveCursor:= false;
     finger^.pressedWidget:= @fireButton;
     exit;
     end;
 if isOnWidget(arrowLeft, finger^) then
     begin
-    leftKey:= true;
+    ParseTeamCommand('+left');
     moveCursor:= false;
     finger^.pressedWidget:= @arrowLeft;
     exit;
     end;
 if isOnWidget(arrowRight, finger^) then
     begin
-    rightKey:= true;
+    ParseTeamCommand('+right');
     moveCursor:= false;
     finger^.pressedWidget:= @arrowRight;
     exit;
     end;
 if isOnWidget(arrowUp, finger^) then
     begin
-    upKey:= true;
+    ParseTeamCommand('+up');
+    aimingUp:= true;
     moveCursor:= false;
     finger^.pressedWidget:= @arrowUp;
     exit;
     end;
 if isOnWidget(arrowDown, finger^) then
     begin
-    downKey:= true;
+    ParseTeamCommand('+down');
+    aimingDown:= true;
     moveCursor:= false;
     finger^.pressedWidget:= @arrowDown;
     exit;
@@ -145,19 +149,30 @@ if isOnWidget(pauseButton, finger^) then
 
 if isOnWidget(utilityWidget, finger^) then
     begin
-    //ParseCommand('/timer ' + inttostr((CurrentHedgeHog^.CurWeapon^.Timer div 1000 + 1) mod 5));
+    finger^.pressedWidget:= @utilityWidget;
+    moveCursor:= false;
+    if(CurrentHedgehog <> nil) then
+        begin
+        if Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Timerable <> 0 then
+            ParseTeamCommand('/timer ' + inttostr((GetCurAmmoEntry(CurrentHedgeHog^)^.Timer div 1000) mod 5 + 1));
+        end;
+    exit;
     end; 
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
     begin
     moveCursor:= true;
-    if pointerCount = 2 then
-        begin
-        moveCursor:= false;
-        pinchSize := calculateDelta(finger^, getSecondFinger(finger^)^);
-        baseZoomValue := ZoomValue
+    case pointerCount of
+        1:
+            targetting:= not(targetted) and (CurrentHedgehog <> nil) and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0);
+        2:
+            begin
+            moveCursor:= false;
+            pinchSize := calculateDelta(finger^, getSecondFinger(finger^)^);
+            baseZoomValue := ZoomValue
+            end;
+        end;
     end;
-end;
 {$ENDIF}
 end;
 
@@ -214,10 +229,12 @@ y := y;
 finger:= updateFinger(x,y,0,0,pointerId);
 //Check for onTouchClick event
 if not(fingerHasMoved(finger^)) then
+    begin
     if (RealTicks - finger^.timeSinceDown) < clickTime then
         onTouchClick(finger^)
     else
-        onTouchLongClick(finger^);
+            onTouchLongClick(finger^);
+    end;
 
 if aimingCrosshair then
     begin
@@ -233,20 +250,34 @@ if (buttonsDown > 0) and (widget <> nil) then
     dec(buttonsDown);
     
     if widget = @arrowLeft then
-        leftKey:= false;
+        ParseTeamCommand('-left');
     
     if widget = @arrowRight then
-        rightKey:= false;
+        ParseTeamCommand('-right');
 
     if widget = @arrowUp then
-        upKey:= false;
+        ParseTeamCommand('-up');
 
     if widget = @arrowDown then
-        downKey:= false;
+        ParseTeamCommand('-down');
 
     if widget = @fireButton then
-        spaceKey:= false;
+        ParseTeamCommand('-attack');
+    
+    if widget = @utilityWidget then
+        if (CurrentHedgehog <> nil)then
+            if(Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)then
+                begin
+                ParseTeamCommand('put');
+                targetted:= true;
+                end
+            else if CurAmmoGear^.AmmoType = amSwitch then
+                ParseTeamCommand('switch')
+            else WriteLnToConsole(inttostr(ord(Ammoz[CurrentHedgehog^.CurAmmoType].NameId)) + ' ' + inttostr(ord(sidSwitch)));
     end;
+        
+if targetting then
+    AddCaption('Press the target button to mark the target', cWhiteColor, capgrpAmmoInfo);
  
 deleteFinger(pointerId);
 {$ENDIF}
@@ -262,11 +293,10 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}
 if isOnWidget(jumpWidget, finger) then
     begin
-    ParseCommand('ljump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
-    if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
-        ParseCommand('gencmd R', true);
+    ParseTeamCommand('ljump');
     exit;
     end;
+
 {$ENDIF}
 end;
 
@@ -305,9 +335,7 @@ if isOnCurrentHog(finger) or isOnWidget(AMWidget, finger) then
 
 if isOnWidget(jumpWidget, finger) then
     begin
-    ParseCommand('hjump', (CurrentTeam <> nil) and not(CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel=0));
-    if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
-        ParseCommand('gencmd R', true);
+    ParseTeamCommand('hjump');    
     exit;
     end;
 {$ENDIF}
@@ -386,21 +414,35 @@ begin
 
 end;
 
+procedure NewTurnBeginning;
+begin
+targetted:= false;
+targetting:= false;
+SetUtilityWidgetState;
+end;
+
+
 procedure ProcessTouch;
 var
     deltaAngle: LongInt;
 begin
-invertCursor := not(bShowAmmoMenu);
+invertCursor := not(bShowAmmoMenu or targetting); 
 if aimingCrosshair then
     if CurrentHedgehog^.Gear <> nil then
         begin
         deltaAngle:= CurrentHedgehog^.Gear^.Angle - targetAngle;
         if (deltaAngle > -5) and (deltaAngle < 5) then 
             begin
-                upKey:= false;
-                aimingUp:= false;
-                downKey:= false;
-                aimingDown:= false;
+                if(aimingUp)then
+                    begin
+                    aimingUp:= false;
+                    ParseTeamCommand('-up');
+                    end;
+                if(aimingDown)then
+                    begin
+                    aimingDown:= false;
+                    ParseTeamCommand('-down');
+                    end
             end
         else
             begin
@@ -408,21 +450,27 @@ if aimingCrosshair then
                 begin
                 if aimingUp then
                     begin
-                    upKey:= false;
                     aimingUp:= false;
+                    ParseTeamCommand('-up');
                     end;
-                downKey:= true;
-                aimingDown:= true;
+                if(aimingDown)then
+                    begin
+                    aimingDown:= true;
+                    ParseTeamCommand('-down');
+                    end
                 end
             else
                 begin
                 if aimingDown then
                     begin
-                    downKey:= false;
+                    ParseTeamCommand('-down');
                     aimingDown:= false;
                     end;
-                upKey:= true;
-                aimingUp:= true;
+                if aimingUp then
+                    begin
+                    aimingUp:= true;
+                    ParseTeamCommand('+up');
+                    end;
                 end; 
             end;
         end
@@ -430,12 +478,12 @@ if aimingCrosshair then
         begin
         if aimingUp then
             begin
-            upKey:= false;
+            ParseTeamCommand('-up');
             aimingUp:= false;
             end;
         if aimingDown then
             begin
-            upKey:= false;
+            ParseTeamCommand('-down');
             aimingDown:= false;
             end;
         end;
@@ -534,7 +582,7 @@ end;
 //Method to calculate the distance this finger has moved since the downEvent
 function fingerHasMoved(finger: TTouch_Data): boolean;
 begin
-    fingerHasMoved := trunc(sqrt(sqr(finger.X-finger.historicalX) + sqr(finger.y-finger.historicalY))) > 330;
+    fingerHasMoved := trunc(sqrt(sqr(finger.X-finger.historicalX) + sqr(finger.y-finger.historicalY))) > 30;
 end;
 
 function calculateDelta(finger1, finger2: TTouch_Data): LongInt; inline;

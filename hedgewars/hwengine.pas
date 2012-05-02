@@ -1,20 +1,20 @@
 (*
-* Hedgewars, a free turn based strategy game
-* Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; version 2 of the License
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*)
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ *)
 
 {$INCLUDE "options.inc"}
 
@@ -29,7 +29,7 @@ interface
 program hwengine;
 {$ENDIF}
 
-uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uKeys, uSound,
+uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
      sysutils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
      {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF};
@@ -68,7 +68,7 @@ begin
             AddFlakes;
             AssignHHCoords;
             AddMiscGears;
-            StoreLoad;
+            StoreLoad(false);
             InitWorld;
             ResetKbd;
             SoundLoad;
@@ -86,7 +86,7 @@ begin
         gsConfirm, gsGame:
             begin
             DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
-            ProcessKbd;
+//            ProcessKbd;
             DoGameTick(Lag);
             ProcessVisualGears(Lag);
             end;
@@ -132,7 +132,7 @@ procedure OnDestroy;
 begin
     WriteLnToConsole('Freeing resources...');
     FreeActionsList();
-    StoreRelease();
+    StoreRelease(false);
     ControllerClose();
     CloseIPC();
     TTF_Quit();
@@ -168,7 +168,12 @@ begin
                 SDL_KEYDOWN:
                 if GameState = gsChat then
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
-                    KeyPressChat(event.key.keysym.sym);
+                    KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym))//TODO correct for keymodifiers
+                else
+                    ProcessKey(event.key);
+                SDL_KEYUP:
+                if GameState <> gsChat then
+                    ProcessKey(event.key);
                     
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
@@ -207,15 +212,17 @@ begin
 {$ELSE}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
-                        KeyPressChat(event.key.keysym.unicode);
+                        KeyPressChat(event.key.keysym.unicode)
+                    else
+                        ProcessKey(event.key);
+                SDL_KEYUP:
+                if GameState <> gsChat then
+                    ProcessKey(event.key);
                     
                 SDL_MOUSEBUTTONDOWN:
-                    if event.button.button = SDL_BUTTON_WHEELDOWN then
-                        wheelDown:= true;
-                
+                    ProcessMouse(event.button, true); 
                 SDL_MOUSEBUTTONUP:
-                    if event.button.button = SDL_BUTTON_WHEELUP then
-                        wheelUp:= true;
+                    ProcessMouse(event.button, false); 
                     
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
@@ -250,31 +257,31 @@ begin
         end; //end case event.type_ of
     end; //end while SDL_PollEvent(@event) <> 0 do
 
-        if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks)
-        and ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
-            begin
-            cScreenResizeDelay:= 0;
-            cScreenWidth:= cNewScreenWidth;
-            cScreenHeight:= cNewScreenHeight;
+    if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and
+       ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
+    begin
+        cScreenResizeDelay:= 0;
+        cScreenWidth:= cNewScreenWidth;
+        cScreenHeight:= cNewScreenHeight;
 
-            ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
-            WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
-            ScriptOnScreenResize();
-            InitCameraBorders();
-            InitTouchInterface();
-            end;
+        ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+        WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
+        ScriptOnScreenResize();
+        InitCameraBorders();
+        InitTouchInterface();
+    end;
 
-        if isTerminated = false then
-            begin
-            CurrTime:= SDL_GetTicks;
-            if PrevTime + longword(cTimerInterval) <= CurrTime then
-                begin
-                DoTimer(CurrTime - PrevTime);
-                PrevTime:= CurrTime
-                end
-            else SDL_Delay(1);
-            IPCCheckSock();
-            end;
+    if isTerminated = false then
+    begin
+        CurrTime:= SDL_GetTicks;
+        if PrevTime + longword(cTimerInterval) <= CurrTime then
+        begin
+            DoTimer(CurrTime - PrevTime);
+            PrevTime:= CurrTime
+        end
+        else SDL_Delay(1);
+        IPCCheckSock();
+        end;
     end;
 end;
 
@@ -442,7 +449,7 @@ begin
         //uFloat does not need initialization
         //uGame does not need initialization
         uGears.initModule;
-        uKeys.initModule;
+        uInputHandler.initModule;
         //uLandGraphics does not need initialization
         //uLandObjects does not need initialization
         //uLandTemplates does not need initialization
@@ -478,7 +485,7 @@ begin
         uLandTexture.freeModule;
         //uLandObjects does not need to be freed
         //uLandGraphics does not need to be freed
-        uKeys.freeModule;           //stub
+        uInputHandler.freeModule;           //stub
         uGears.freeModule;
         //uGame does not need to be freed
         //uFloat does not need to be freed

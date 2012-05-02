@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2008-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,29 +16,42 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef _HATS_INCLUDED
-#define _HATS_INCLUDED
+/**
+ * @file
+ * @brief ThemeModel class definition
+ */
+
+#ifndef HEDGEWARS_THEMEMODEL_H
+#define HEDGEWARS_THEMEMODEL_H
 
 #include <QAbstractListModel>
 #include <QStringList>
-#include <QVector>
-#include <QPair>
+#include <QMap>
 #include <QIcon>
 
-class HatsModel : public QAbstractListModel
+#include "DataManager.h"
+
+/**
+ * @brief A model listing available themes
+ */
+class ThemeModel : public QAbstractListModel
 {
         Q_OBJECT
 
     public:
-        HatsModel(QObject *parent = 0);
+        explicit ThemeModel(QObject *parent = 0);
 
-        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-        int rowCount(const QModelIndex & parent) const;
-        //int columnCount(const QModelIndex & parent) const;
-
+        int rowCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role) const;
-    protected:
-        QVector<QPair<QString, QIcon> > hats;
+
+
+    public slots:
+        /// reloads the themes from the DataManager
+        void loadThemes();
+
+
+    private:
+        QList<QMap<int, QVariant> > m_data;
 };
 
-#endif // _HATS_INCLUDED
+#endif // HEDGEWARS_THEMEMODEL_H

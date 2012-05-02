@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     pChatWidget = new HWChatWidget(this, m_gameSettings, true);
     pChatWidget->setShowReady(true); // show status bulbs by default
     pChatWidget->setShowFollow(false); // don't show follow in nicks' context menus
+    pChatWidget->setIgnoreListKick(true); // kick ignored players automatically
     pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
     pageLayout->setRowStretch(1, 100);
     pageLayout->setRowStretch(2, 100);

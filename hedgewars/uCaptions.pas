@@ -90,7 +90,7 @@ begin
         with Captions[grp] do
             if Tex <> nil then
                 begin
-                DrawCentered(0, offset, Tex);
+                DrawTextureCentered(0, offset, Tex);
                 inc(offset, Tex^.h + 2);
                 if EndTime <= RealTicks then
                     begin

@@ -17,7 +17,7 @@
  */
 
 
-#import <CoreGraphics/CoreGraphics.h>
+#include <CoreGraphics/CoreGraphics.h>
 
 
 #define degreesToRadians(x) ( M_PI * x / 180.0)

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004, 2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +17,12 @@
  *)
 
 {$IFDEF FPC}
-    {$J+}
+    {$WRITEABLECONST OFF} 
+    {$MODE OBJFPC}
 {$ELSE}
     {$ERROR Only Free Pascal supported!}
 {$ENDIF}
 
-{$MODE OBJFPC}
 {$MACRO ON}
 
 {$DEFINE GLunit:=GL}
@@ -61,6 +61,10 @@
     {$DEFINE DEBUGFILE}
     //{$DEFINE TRACEAIACTIONS}
     //{$DEFINE COUNTTICKS}
+{$ENDIF}
+
+{$IFNDEF MOBILE}
+    {$DEFINE USE_AM_NUMCOLUMN}
 {$ENDIF}
 
 //also available LUA_DISABLED

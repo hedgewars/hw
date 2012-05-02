@@ -1,4 +1,4 @@
-(*
+/*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
@@ -14,6 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- *)
+ */
 
-////////////////////////////////////////////////////////////////////////////////
+#ifndef INPUT_PASSWORD_H
+#define INPUT_PASSWORD_H
+
+#include <QDialog>
+
+class QLineEdit;
+class QCheckBox;
+
+class HWPasswordDialog : public QDialog
+{
+        Q_OBJECT
+    public:
+        HWPasswordDialog(QWidget* parent, const QString & label);
+
+        QLineEdit* lePassword;
+        QCheckBox* cbSave;
+};
+
+
+#endif // INPUT_PASSWORD_H

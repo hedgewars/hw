@@ -32,13 +32,12 @@ class ItemNum : public QFrame
         unsigned char getItemsNum() const;
         void setItemsNum(const unsigned char num);
 
-    private:
+    protected:
         QImage m_im;
         QImage m_img;
         bool infinityState;
         bool enabled;
 
-    protected:
         ItemNum(const QImage& im, const QImage& img, QWidget * parent, unsigned char min=2, unsigned char max=8);
         virtual QSize sizeHint () const;
         virtual ~ItemNum()=0;

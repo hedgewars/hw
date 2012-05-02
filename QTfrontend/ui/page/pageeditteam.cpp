@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,10 +29,9 @@
 
 #include "sdlkeys.h"
 #include "SquareLabel.h"
-#include "hats.h"
 #include "HWApplication.h"
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #include "pageeditteam.h"
 
@@ -61,11 +60,12 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
 
-    HatsModel * hatsModel = new HatsModel(GBoxHedgehogs);
+    HatModel * hatModel = DataManager::instance().hatModel();
+
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         HHHats[i] = new QComboBox(GBoxHedgehogs);
-        HHHats[i]->setModel(hatsModel);
+        HHHats[i]->setModel(hatModel);
         HHHats[i]->setIconSize(QSize(32, 37));
         //HHHats[i]->setSizeAdjustPolicy(QComboBox::AdjustToContents);
         //HHHats[i]->setModelColumn(1);
@@ -245,7 +245,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 
     m_playerHash = "0000000000000000000000000000000000000000";
 
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     QStringList list;
 
@@ -333,14 +333,14 @@ void PageEditTeam::fixHHname(int idx)
 
 void PageEditTeam::CBFort_activated(const QString & fortname)
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
     QPixmap pix(dataMgr.findFileForRead("Forts/" + fortname + "L.png"));
     FortPreview->setPixmap(pix);
 }
 
 void PageEditTeam::testSound()
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     QString voiceDir = QString("Sounds/voices/") + CBVoicepack->currentText();
 

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -46,6 +46,8 @@ class PageDataDownload : public AbstractPage
         QHash<QNetworkReply*, QProgressBar *> progressBars;
         QVBoxLayout *progressBarsLayout;
 
+        bool m_contentDownloaded; ///< true if something was downloaded since last page leave
+
         bool extractDataPack(QByteArray * buf);
 
     private slots:
@@ -54,6 +56,8 @@ class PageDataDownload : public AbstractPage
         void pageDownloaded();
         void fileDownloaded();
         void downloadProgress(qint64, qint64);
+
+        void onPageLeave();
 };
 
 #endif

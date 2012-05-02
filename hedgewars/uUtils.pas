@@ -26,12 +26,14 @@ uses uTypes, uFloat, GLunit;
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: ansistring; c: char);
 
+{$IFNDEF PAS2C}
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
+{$ENDIF}
 
 function  Min(a, b: LongInt): LongInt; inline;
 function  Max(a, b: LongInt): LongInt; inline;
@@ -42,7 +44,7 @@ function  FloatToStr(n: hwFloat): shortstring;
 function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
 function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
-function  DxDy2AttackAngle(const _dY, _dX: extended): LongInt;
+function  DxDy2AttackAnglef(const _dY, _dX: extended): LongInt;
 
 procedure SetLittle(var r: hwFloat);
 
@@ -102,6 +104,7 @@ if i > 0 then
     end else b:= '';
 end;
 
+{$IFNDEF PAS2C}
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
@@ -130,7 +133,7 @@ function EnumToStr(const en: TCapGroup) : shortstring; overload;
 begin
 EnumToStr := GetEnumName(TypeInfo(TCapGroup), ord(en))
 end;
-
+{$ENDIF}
 
 function Min(a, b: LongInt): LongInt;
 begin
@@ -198,9 +201,9 @@ if _dX.isNegative then
 DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
 end;
 
-function DxDy2AttackAngle(const _dY, _dX: extended): LongInt; inline;
+function DxDy2AttackAnglef(const _dY, _dX: extended): LongInt; inline;
 begin
-DxDy2AttackAngle:= trunc(arctan2(_dY, _dX) * (cMaxAngle/pi))
+DxDy2AttackAnglef:= trunc(arctan2(_dY, _dX) * (cMaxAngle/pi))
 end;
 
 
@@ -256,8 +259,8 @@ byte(DecodeBase64[0]):= t - 1
 end;
 
 
+var CharArray: array[byte] of Char;
 function Str2PChar(const s: shortstring): PChar;
-const CharArray: array[byte] of Char = '';
 begin
 CharArray:= s;
 CharArray[Length(s)]:= #0;
@@ -293,12 +296,13 @@ var l, i : LongInt;
     u: WideChar;
     tmpstr: array[0..256] of WideChar;
 begin
+CheckCJKFont:= font;
 
 {$IFNDEF MOBILE}
 // remove chinese fonts for now
 if (font >= CJKfnt16) or (length(s) = 0) then
 {$ENDIF}
-    exit(font);
+    exit;
 
 l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
 i:= 0;
@@ -317,10 +321,13 @@ while i < l do
        ((#$AC00  <= u) and (u <= #$D7AF))  or // Hangul Syllables
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
        ((#$FE30  <= u) and (u <= #$FE4F)))    // CJK Compatibility Forms
-       then exit(THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) ));
+       then 
+        begin
+            CheckCJKFont:=  THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) );
+            exit;
+        end;
     inc(i)
     end;
-exit(font);
 (* two more to check. pascal WideChar is only 16 bit though
        ((#$20000 <= u) and (u >= #$2A6DF)) or // CJK Unified Ideographs Extension B
        ((#$2F800 <= u) and (u >= #$2FA1F)))   // CJK Compatibility Ideographs Supplement *)

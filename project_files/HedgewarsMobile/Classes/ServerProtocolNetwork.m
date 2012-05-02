@@ -30,7 +30,7 @@ static ServerProtocolNetwork *serverConnection;
 #pragma mark -
 #pragma mark init and class methods
 -(id) init:(NSInteger) onPort withAddress:(NSString *)address {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         self.serverPort = onPort;
         self.serverAddress = address;
     }

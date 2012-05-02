@@ -25,11 +25,11 @@ static OverlayViewController *overlay_instance;
 
 #pragma mark -
 #pragma mark functions called by pascal code
-BOOL inline isApplePhone() {
+BOOL inline isApplePhone(void) {
     return (IS_IPAD() == NO);
 }
 
-void startLoadingIndicator() {
+void startLoadingIndicator(void) {
     // this is the first ojbc function called by engine, so we have to initialize some variables here
     overlay_instance = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
     // in order to get rotation events we have to insert the view inside the first view of the second window
@@ -57,16 +57,19 @@ void startLoadingIndicator() {
     [overlay_instance.loadingIndicator release];
 }
 
-void stopLoadingIndicator() {
+void stopLoadingIndicator(void) {
     HW_zoomSet(1.7);
     if ([HWUtils gameType] != gtSave) {
         [overlay_instance.loadingIndicator stopAnimating];
         [overlay_instance.loadingIndicator removeFromSuperview];
         [HWUtils setGameStatus:gsInGame];
     }
+    // mark the savefile as valid, eg it's been loaded correctly
+    [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithBool:YES] forKey:@"saveIsValid"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-void saveFinishedSynching() {
+void saveFinishedSynching(void) {
     [UIView beginAnimations:@"fading from save synch" context:NULL];
     [UIView setAnimationDuration:1];
     overlay_instance.view.backgroundColor = [UIColor clearColor];
@@ -81,7 +84,7 @@ void saveFinishedSynching() {
     [HWUtils setGameStatus:gsInGame];
 }
 
-void clearView() {
+void clearView(void) {
     [overlay_instance clearOverlay];
 }
 

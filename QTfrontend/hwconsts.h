@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,6 @@
 #include <QStringList>
 #include <QPair>
 
-#include "themesmodel.h"
 
 extern QString * cProtoVer;
 extern QString * cVersionString;
@@ -40,10 +39,6 @@ extern int cMaxTeams;
 extern int cMinServerVersion;
 
 class QStringListModel;
-
-extern ThemesModel * themesModel;
-extern QStringList * mapList;
-extern QStringList * scriptList;
 
 extern QString * cDefaultAmmoStore;
 extern int cAmmoNumber;

@@ -31,7 +31,7 @@ procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
 implementation
-uses SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
+uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
 
 const MaxStrIndex = 27;
 
@@ -52,7 +52,8 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     ChatReady: boolean;
     showAll: boolean;
 
-const colors: array[#1..#6] of TSDL_Color = (
+const colors: array[#0..#6] of TSDL_Color = (
+    (r:$FF; g:$FF; b:$FF; unused:$FF), // unused, feel free to take it for anything
     (r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
     (r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
     (r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
@@ -272,7 +273,7 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
 end;
 
 procedure KeyPressChat(Key: Longword);
-const firstByteMark: array[1..4] of byte = (0, $C0, $E0, $F0);
+const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw: integer;
     utf8: shortstring;
 begin
@@ -322,7 +323,7 @@ if Key <> 0 then
         Key:= Key shr 6
         end;
 
-    utf8:= char(Key or firstByteMark[btw]) + utf8;
+    utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
 
     if byte(InputStr.s[0]) + btw > 240 then
         exit;
@@ -361,7 +362,7 @@ end;
 procedure chHistory(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    uChat.showAll:= not uChat.showAll
+    showAll:= not showAll
 end;
 
 procedure chChat(var s: shortstring);
@@ -387,11 +388,11 @@ end;
 procedure initModule;
 var i: ShortInt;
 begin
-    RegisterVariable('chatmsg', vtCommand, @chChatMessage, true);
-    RegisterVariable('say', vtCommand, @chSay, true);
-    RegisterVariable('team', vtCommand, @chTeamSay, true);
-    RegisterVariable('history', vtCommand, @chHistory, true );
-    RegisterVariable('chat', vtCommand, @chChat, true );
+    RegisterVariable('chatmsg', @chChatMessage, true);
+    RegisterVariable('say', @chSay, true);
+    RegisterVariable('team', @chTeamSay, true);
+    RegisterVariable('history', @chHistory, true );
+    RegisterVariable('chat', @chChat, true );
 
     lastStr:= 0;
     visibleCount:= 0;

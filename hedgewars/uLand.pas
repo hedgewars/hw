@@ -57,7 +57,7 @@ begin
     // freed in freeModule() below
     LandBackSurface:= LoadImage(UserPathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
     if LandBackSurface = nil then LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
-    if (LandBackSurface <> nil) and cGrayScale then Surface2GrayScale(LandBackSurface);
+    if (LandBackSurface <> nil) and GrayScale then Surface2GrayScale(LandBackSurface);
 
     tmpsurf:= LoadImage(UserPathz[ptCurrTheme] + '/Border', ifIgnoreCaps or ifTransparent);
     if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
@@ -458,7 +458,7 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
         LandBackSurface:= LoadImage(UserPathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
         if LandBackSurface = nil then
             LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
-        if (LandBackSurface <> nil) and cGrayScale then
+        if (LandBackSurface <> nil) and GrayScale then
             Surface2GrayScale(LandBackSurface)
         end;
 end;
@@ -647,7 +647,7 @@ else
 
 FreeLandObjects;
 
-if cGrayScale then
+if GrayScale then
     begin
     if (cReducedQuality and rqBlurryLand) = 0 then
         for x:= leftX to rightX do
@@ -728,7 +728,7 @@ var adler, i: LongInt;
 begin
     adler:= 1;
     for i:= 0 to LAND_HEIGHT-1 do
-        Adler32Update(adler, @Land[i,0], LAND_WIDTH);
+        adler:= Adler32Update(adler, @Land[i,0], LAND_WIDTH);
     s:= 'M' + IntToStr(adler) + cScriptName;
 
     chLandCheck(s);
@@ -737,8 +737,8 @@ end;
 
 procedure initModule;
 begin
-    RegisterVariable('landcheck', vtCommand, @chLandCheck, false);
-    RegisterVariable('sendlanddigest', vtCommand, @chSendLandDigest, false);
+    RegisterVariable('landcheck', @chLandCheck, false);
+    RegisterVariable('sendlanddigest', @chSendLandDigest, false);
 
     LandBackSurface:= nil;
     digest:= '';

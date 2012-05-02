@@ -64,7 +64,7 @@
     UIButton *button = (UIButton *)sender;
 
     if (button.tag == 0) {
-        [AudioManagerController playBackSound];
+        [[AudioManagerController mainManager] playBackSound];
         [[self parentViewController] dismissModalViewControllerAnimated:YES];
     } else {
         [GameInterfaceBridge registerCallingController:self];
@@ -89,7 +89,7 @@
         NSMutableArray *filteredArray = [[NSMutableArray alloc] initWithCapacity:[descArray count]/3];
         [descComplete release];
         // sanity check to avoid having missions and descriptions conflicts
-        for (int i = 0; i < [self.listOfMissions count]; i++) {
+        for (NSUInteger i = 0; i < [self.listOfMissions count]; i++) {
             NSString *desc = [[self.listOfMissions objectAtIndex:i] stringByDeletingPathExtension];
             for (NSString *str in descArray)
                 if ([str hasPrefix:desc] && [str hasSuffix:@"\""]) {

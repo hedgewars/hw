@@ -100,11 +100,6 @@ public class SDLActivity extends Activity {
 		super.onResume();
 	}
 
-	public void onBackPressed(){
-		super.onBackPressed();
-		PascalExports.HWterminate(true);
-	}
-
 	protected void onDestroy() {
 		super.onDestroy();
 		Log.v("SDL", "onDestroy()");
@@ -441,7 +436,7 @@ class SDLMain implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		//Log.v("SDL", "SDL thread terminated");
+		Log.v("SDL", "SDL thread terminated");
 		//Log.v("SDL", "SDL thread terminated");
 	}
 }
@@ -481,14 +476,14 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 		Log.v("SDL", "surfaceCreated()");
 		holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
 		SDLActivity.createEGLSurface();
-//		enableSensor(Sensor.TYPE_ACCELEROMETER, true);
+		//		enableSensor(Sensor.TYPE_ACCELEROMETER, true);
 	}
 
 	// Called when we lose the surface
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.v("SDL", "surfaceDestroyed()");
 		SDLActivity.nativePause();
-//		enableSensor(Sensor.TYPE_ACCELEROMETER, false);
+		//		enableSensor(Sensor.TYPE_ACCELEROMETER, false);
 	}
 
 	// Called when the surface is resized
@@ -554,7 +549,15 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 
 	// Key events
 	public boolean onKey(View  v, int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK) return false;
+		switch(keyCode){
+		case KeyEvent.KEYCODE_BACK:
+		        PascalExports.HWterminate(true);
+                        return true;
+		case KeyEvent.KEYCODE_VOLUME_DOWN:
+		case KeyEvent.KEYCODE_VOLUME_UP:
+		case KeyEvent.KEYCODE_VOLUME_MUTE:
+			return false;
+		}
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
 			//Log.v("SDL", "key down: " + keyCode);
 			SDLActivity.onNativeKeyDown(keyCode);

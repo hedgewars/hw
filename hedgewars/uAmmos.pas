@@ -26,13 +26,13 @@ procedure initModule;
 procedure freeModule;
 
 procedure AddAmmoStore;
-procedure SetAmmoLoadout(s: shortstring);
-procedure SetAmmoProbability(s: shortstring);
-procedure SetAmmoDelay(s: shortstring);
-procedure SetAmmoReinforcement(s: shortstring);
+procedure SetAmmoLoadout(var s: shortstring);
+procedure SetAmmoProbability(var s: shortstring);
+procedure SetAmmoDelay(var s: shortstring);
+procedure SetAmmoReinforcement(var s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
-procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
+procedure SetAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): LongWord;
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
@@ -43,7 +43,7 @@ procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
 procedure ResetWeapons;
 function  GetAmmoByNum(num: Longword): PHHAmmo;
-function  GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
+function  GetCurAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 function  GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 
 var StoreCnt: Longword;
@@ -145,13 +145,13 @@ end;
 
 function GetAmmoByNum(num: Longword): PHHAmmo;
 begin
-TryDo(num < StoreCnt, 'Invalid store number', true);
-exit(StoresList[num])
+    TryDo(num < StoreCnt, 'Invalid store number', true);
+    GetAmmoByNum:= StoresList[num]
 end;
 
-function GetAmmoEntry(var Hedgehog: THedgehog): PAmmo;
+function GetCurAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 begin
-GetAmmoEntry:= GetAmmoEntry(Hedgehog, Hedgehog.CurAmmoType)
+    GetCurAmmoEntry:= GetAmmoEntry(Hedgehog, Hedgehog.CurAmmoType)
 end;
 
 function GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
@@ -200,11 +200,11 @@ else
 if (cnt <> AMMO_INFINITE) then
     begin
     inc(cnt, Ammoz[ammo].NumberInCase);
-    AddAmmo(Hedgehog, ammo, cnt)
+    SetAmmo(Hedgehog, ammo, cnt)
     end
 end;
 
-procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
+procedure SetAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
 var ammos: TAmmoCounts;
     slot, ami: LongInt;
     hhammo: PHHAmmo;
@@ -224,7 +224,7 @@ ammos[ammo]:= cnt;
 if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE;
 
 FillAmmoStore(hhammo, ammos);
-CurWeapon:= GetAmmoEntry(Hedgehog);
+CurWeapon:= GetCurAmmoEntry(Hedgehog);
 with Hedgehog, CurWeapon^ do
     if (Count = 0) or (AmmoType = amNothing) then
         begin
@@ -258,7 +258,7 @@ end;
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
 var CurWeapon: PAmmo;
 begin
-CurWeapon:= GetAmmoEntry(Hedgehog);
+CurWeapon:= GetCurAmmoEntry(Hedgehog);
 with Hedgehog do
     begin
 
@@ -280,18 +280,21 @@ end;
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): LongWord;
 var slot, ami: LongInt;
 begin
-Slot:= Ammoz[Ammo].Slot;
-ami:= 0;
-while (ami <= cMaxSlotAmmoIndex) do
-        begin
+    HHHasAmmo:= 0;
+    Slot:= Ammoz[Ammo].Slot;
+    ami:= 0;
+    while (ami <= cMaxSlotAmmoIndex) do
+    begin
         with Hedgehog.Ammo^[Slot, ami] do
             if (AmmoType = Ammo) then
                 if Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns then
-                    exit(Count)
-                else exit(0);
-      inc(ami)
-      end;
-HHHasAmmo:= 0
+                begin
+                    HHHasAmmo:= Count;
+                    exit;
+                end
+                else exit;
+        inc(ami)
+    end;
 end;
 
 procedure ApplyAngleBounds(var Hedgehog: THedgehog; AmmoType: TAmmoType);
@@ -352,14 +355,14 @@ with Hedgehog do
     begin
     Timer:= 10;
 
-    CurWeapon:= GetAmmoEntry(Hedgehog);
+    CurWeapon:= GetCurAmmoEntry(Hedgehog);
 
     if (CurWeapon^.Count = 0) then
         SwitchToFirstLegalAmmo(Hedgehog)
     else if CurWeapon^.AmmoType = amNothing then
         Hedgehog.CurAmmoType:= amNothing;
 
-    CurWeapon:= GetAmmoEntry(Hedgehog);
+    CurWeapon:= GetCurAmmoEntry(Hedgehog);
 
     ApplyAngleBounds(Hedgehog, CurWeapon^.AmmoType);
 
@@ -421,22 +424,22 @@ for t:= Low(TAmmoType) to High(TAmmoType) do
         Ammoz[t].Probability:= 0
 end;
 
-procedure SetAmmoLoadout(s: shortstring);
+procedure SetAmmoLoadout(var s: shortstring);
 begin
     ammoLoadout:= s;
 end;
 
-procedure SetAmmoProbability(s: shortstring);
+procedure SetAmmoProbability(var s: shortstring);
 begin
     ammoProbability:= s;
 end;
 
-procedure SetAmmoDelay(s: shortstring);
+procedure SetAmmoDelay(var s: shortstring);
 begin
     ammoDelay:= s;
 end;
 
-procedure SetAmmoReinforcement(s: shortstring);
+procedure SetAmmoReinforcement(var s: shortstring);
 begin
     ammoReinforcement:= s;
 end;
@@ -470,11 +473,11 @@ end;
 procedure initModule;
 var i: Longword;
 begin
-    RegisterVariable('ammloadt', vtCommand, @SetAmmoLoadout, false);
-    RegisterVariable('ammdelay', vtCommand, @SetAmmoDelay, false);
-    RegisterVariable('ammprob',  vtCommand, @SetAmmoProbability, false);
-    RegisterVariable('ammreinf', vtCommand, @SetAmmoReinforcement, false);
-    RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
+    RegisterVariable('ammloadt', @SetAmmoLoadout, false);
+    RegisterVariable('ammdelay', @SetAmmoDelay, false);
+    RegisterVariable('ammprob',  @SetAmmoProbability, false);
+    RegisterVariable('ammreinf', @SetAmmoReinforcement, false);
+    RegisterVariable('ammstore', @chAddAmmoStore , false);
 
     StoreCnt:= 0;
     ammoLoadout:= '';

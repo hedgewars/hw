@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2007-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ class SDLInteraction
          * @brief Class constructor of the <i>singleton</i>.
          *
          * Not to be used from outside the class,
-         * use the static {@link HWDataManager::instance()} instead.
+         * use the static {@link DataManager::instance()} instead.
          *
          * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
          */

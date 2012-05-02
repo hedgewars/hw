@@ -728,16 +728,26 @@ procedure doStepSmoothWindBar(Gear: PVisualGear; Steps: Longword);
 begin
 inc(Gear^.Timer, Steps);
     
-    while Gear^.Timer >= 10 do
-        begin
-        dec(Gear^.Timer, 10);
-        if WindBarWidth < Gear^.Tag then
-            inc(WindBarWidth)
-        else if WindBarWidth > Gear^.Tag then
-            dec(WindBarWidth);
-        end;
+while Gear^.Timer >= 10 do
+    begin
+    dec(Gear^.Timer, 10);
+    if WindBarWidth < Gear^.Tag then
+        inc(WindBarWidth)
+    else if WindBarWidth > Gear^.Tag then
+        dec(WindBarWidth);
+    end;
+if cWindspeedf > Gear^.dAngle then
+    begin
+    cWindspeedf := cWindspeedf - Gear^.Angle*Steps;
+    if cWindspeedf < Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
+    end
+else if cWindspeedf < Gear^.dAngle then
+    begin
+    cWindspeedf := cWindspeedf + Gear^.Angle*Steps;
+    if cWindspeedf > Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
+    end;
         
-if WindBarWidth = Gear^.Tag then 
+if (WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)  then 
     DeleteVisualGear(Gear)
 end;
 ////////////////////////////////////////////////////////////////////////////////

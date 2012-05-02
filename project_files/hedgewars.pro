@@ -22,7 +22,8 @@ win32 {
 QT += network
 QT += webkit
 
-HEADERS += ../QTfrontend/model/themesmodel.h \
+HEADERS += ../QTfrontend/model/ThemeModel.h \
+    ../QTfrontend/model/MapModel.h \
     ../QTfrontend/model/ammoSchemeModel.h \
     ../QTfrontend/model/netserverslist.h \
     ../QTfrontend/model/hats.h \
@@ -72,7 +73,7 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/ui/widget/mapContainer.h \
     ../QTfrontend/ui/widget/HistoryLineEdit.h \
     ../QTfrontend/ui/widget/SmartLineEdit.h \
-    ../QTfrontend/util/HWDataManager.h \
+    ../QTfrontend/util/DataManager.h \
     ../QTfrontend/net/netregister.h \
     ../QTfrontend/net/netserver.h \
     ../QTfrontend/net/netudpwidget.h \
@@ -100,10 +101,12 @@ HEADERS += ../QTfrontend/model/themesmodel.h \
     ../QTfrontend/ui/qpushbuttonwithsound.h \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.h \
     ../QTfrontend/ui/page/pagefeedback.h \
-    ../QTfrontend/model/roomslistmodel.h
+    ../QTfrontend/model/roomslistmodel.h \
+    ../QTfrontend/ui/dialog/input_password.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
-    ../QTfrontend/model/themesmodel.cpp \
+    ../QTfrontend/model/MapModel.cpp \
+    ../QTfrontend/model/ThemeModel.cpp \
     ../QTfrontend/model/hats.cpp \
     ../QTfrontend/model/netserverslist.cpp \
     ../QTfrontend/ui/qaspectratiolayout.cpp \
@@ -152,7 +155,7 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/widget/mapContainer.cpp \
     ../QTfrontend/ui/widget/HistoryLineEdit.cpp \
     ../QTfrontend/ui/widget/SmartLineEdit.cpp \
-    ../QTfrontend/util/HWDataManager.cpp \
+    ../QTfrontend/util/DataManager.cpp \
     ../QTfrontend/net/tcpBase.cpp \
     ../QTfrontend/net/netregister.cpp \
     ../QTfrontend/net/proto.cpp \
@@ -178,7 +181,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/mouseoverfilter.cpp \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.cpp \
     ../QTfrontend/ui/page/pagefeedback.cpp \
-    ../QTfrontend/model/roomslistmodel.cpp
+    ../QTfrontend/model/roomslistmodel.cpp \
+    ../QTfrontend/ui/dialog/input_password.cpp
 
 win32 {
     SOURCES += ../QTfrontend/xfire.cpp

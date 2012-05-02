@@ -36,6 +36,7 @@ procedure HideMission;
 procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
 procedure InitTouchInterface;
+procedure SetUtilityWidgetState(ammoType: TAmmoType);
 procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);
 procedure MoveCamera;
 procedure onFocusStateChanged;
@@ -381,6 +382,7 @@ var x, y, i, t, SlotsNumY, SlotsNumX, AMFrame: LongInt;
     STurns: LongInt;
     amSurface: PSDL_Surface;
     AMRect: TSDL_Rect;
+    tmpsurf: PSDL_Surface;
 begin
     SlotsNum:= 0;
     for i:= 0 to cMaxSlotIndex do
@@ -389,10 +391,17 @@ begin
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
     SlotsNumX:= SlotsNum;
     SlotsNumY:= cMaxSlotAmmoIndex + 2;
+    {$IFDEF USE_AM_NUMCOLUMN}
+    inc(SlotsNumY);
+    {$ENDIF}
 {$ELSE}
     SlotsNumX:= cMaxSlotAmmoIndex + 1;
     SlotsNumY:= SlotsNum + 1;
+    {$IFDEF USE_AM_NUMCOLUMN}
+    inc(SlotsNumX);
+    {$ENDIF}
 {$ENDIF}
+
 
     AmmoRect.w:= (BORDERSIZE*2) + (SlotsNumX * AMSlotSize) + (SlotsNumX-1);
     AmmoRect.h:= (BORDERSIZE*2) + (SlotsNumY * AMSlotSize) + (SlotsNumY-1);
@@ -415,6 +424,21 @@ begin
 {$ELSE}
             x:= AMRect.x;
 {$ENDIF}
+{$IFDEF USE_AM_NUMCOLUMN}
+            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar('F' + IntToStr(i+1)), cWhiteColorChannels);
+            copyToXY(tmpsurf, amSurface,
+                     x + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.w shr 1),
+                     y + AMSlotPadding + (AMSlotSize shr 1) - (tmpsurf^.h shr 1));
+
+            SDL_FreeSurface(tmpsurf);
+    {$IFDEF USE_LANDSCAPE_AMMOMENU}
+            y:= AMRect.y + AMSlotSize + 1;
+    {$ELSE}
+            x:= AMRect.x + AMSlotSize + 1;
+    {$ENDIF}
+{$ENDIF}
+
+
             for t:=0 to cMaxSlotAmmoIndex do
                 begin
                 if (Ammo^[i, t].Count > 0)  and (Ammo^[i, t].AmmoType <> amNothing) then
@@ -432,8 +456,8 @@ begin
                         end
                     else //draw colored version
                         begin
-                            DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
-       						       y + AMSlotPadding, AMFrame);
+                        DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
+                                                               y + AMSlotPadding, AMFrame);
                         end;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
 	    inc(y, AMSlotSize + 1); //the plus one is for the border
@@ -480,23 +504,22 @@ var Slot, Pos: LongInt;
 begin
 if (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil)
 or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then
-bShowAmmoMenu:= false;
-
+    bShowAmmoMenu:= false;
 
 // give the assigned ammo to hedgehog
 Ammo:= nil;
 if (CurrentTeam <> nil) and (CurrentHedgehog <> nil)
 and (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
-Ammo:= CurrentHedgehog^.Ammo
+    Ammo:= CurrentHedgehog^.Ammo
 else if (LocalAmmo <> -1) then
-Ammo:= GetAmmoByNum(LocalAmmo);
+    Ammo:= GetAmmoByNum(LocalAmmo);
 Pos:= -1;
 if Ammo = nil then
-begin
-bShowAmmoMenu:= false;
-AMState:= AMHidden;
-exit
-end;
+    begin
+    bShowAmmoMenu:= false;
+    AMState:= AMHidden;
+    exit
+    end;
 
 //Init the menu 
 if(AmmoMenuInvalidated) then 
@@ -596,13 +619,21 @@ if ((AMState = AMHiding) or (AMState = AMShowingUp)) and ((AMAnimType and AMType
 
 Pos:= -1;
 Slot:= -1;
-c:= -1;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
+    {$IFDEF USE_AM_NUMCOLUMN}
+c:= 0;
+    {$ELSE}
+c:= -1;
+    {$ENDIF}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
             inc(c);
+    {$IFDEF USE_AM_NUMCOLUMN}
+            g:= 1;
+    {$ELSE}
             g:= 0;
+    {$ENDIF}
             for t:=0 to cMaxSlotAmmoIndex do
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
@@ -623,11 +654,20 @@ c:= -1;
                    end;
             end;
 {$ELSE}
+    {$IFDEF USE_AM_NUMCOLUMN}
+c:= -1;
+    {$ELSE}
+c:= 0;
+    {$ENDIF}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
             inc(c);
+    {$IFDEF USE_AM_NUMCOLUMN}
+            g:= 1;
+    {$ELSE}
             g:= 0;
+    {$ENDIF}
             for t:=0 to cMaxSlotAmmoIndex do
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
@@ -674,7 +714,7 @@ c:= -1;
                 bSelected:= false;
                 FreeWeaponTooltip;
 {$IFDEF USE_TOUCH_INTERFACE}//show the aiming buttons + animation
-                if (Ammo^[Slot, Pos].Propz and ammoprop_NoCrosshair) = 0 then
+                if (Ammo^[Slot, Pos].Propz and ammoprop_NeedUpDown) <> 0 then
                     begin
                     if not(arrowUp.show) then
                         begin
@@ -688,16 +728,8 @@ c:= -1;
                         animateWidget(@arrowUp, true, false);
                         animateWidget(@arrowDown, true, false);
                         end;
-                if (Ammo^[Slot, Pos].Propz and ammoprop_Timerable) <> 0 then
-                    begin
-                    if not utilityWidget.show then
-                        animateWidget(@utilityWidget, true, true); 
-                    end
-                else
-                    if utilityWidget.show then
-                        animateWidget(@utilityWidget, true, false); 
+                SetUtilityWidgetState(Ammo^[Slot, Pos].AmmoType);
 {$ENDIF}
-
                 exit
                 end;
             end
@@ -714,7 +746,7 @@ c:= -1;
 {$ENDIF}
 
     bSelected:= false;
-{$IFNDEF USE_LANDSCAPE_AMMOMENU}
+{$IFNDEF USE_TOUCH_INTERFACE}
    if (AMShiftX = 0) and (AMShiftY = 0) then
         DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
 {$ENDIF}
@@ -1154,9 +1186,9 @@ DrawGears;
 DrawVisualGears(6);
 
 if SuddenDeathDmg then
-    DrawWater(cSDWaterOpacity, 0)
+    DrawWater(SDWaterOpacity, 0)
 else
-    DrawWater(cWaterOpacity, 0);
+    DrawWater(WaterOpacity, 0);
 
     // Waves
 ChangeDepth(RM, cStereo_Water_near);
@@ -1164,19 +1196,19 @@ DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
 
 if (cReducedQuality and rq2DWater) = 0 then
     begin
-    //DrawWater(cWaterOpacity, - offsetY div 40);
+    //DrawWater(WaterOpacity, - offsetY div 40);
     ChangeDepth(RM, cStereo_Water_near);
     DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
     if SuddenDeathDmg then
-        DrawWater(cSDWaterOpacity, - offsetY div 20)
+        DrawWater(SDWaterOpacity, - offsetY div 20)
     else
-        DrawWater(cWaterOpacity, - offsetY div 20);
+        DrawWater(WaterOpacity, - offsetY div 20);
     ChangeDepth(RM, cStereo_Water_near);
     DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
         if SuddenDeathDmg then
-            DrawWater(cSDWaterOpacity, - offsetY div 10)
+            DrawWater(SDWaterOpacity, - offsetY div 10)
         else
-            DrawWater(cWaterOpacity, - offsetY div 10);
+            DrawWater(WaterOpacity, - offsetY div 10);
         ChangeDepth(RM, cStereo_Water_near);
         DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
         end
@@ -1200,9 +1232,9 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     with PHedgehog(CurrentHedgehog)^ do
         begin
         if CurAmmoType = amBee then
-            DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+            DrawSpriteRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
         else
-            DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+            DrawSpriteRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
         end
     end;
 {$WARNINGS ON}
@@ -1286,13 +1318,13 @@ for t:= 0 to Pred(TeamsCount) do
         r.y:= 0;
         r.w:= 2 + TeamHealthBarWidth;
         r.h:= HealthTex^.h;
-        DrawFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+        DrawTextureFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
         // draw health bars right border
         inc(r.x, cTeamHealthWidth + 2);
         if TeamHealth = 0 then inc(r.x);
         r.w:= 3;
-        DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+        DrawTextureFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
         if not highlight and not hasGone and (TeamHealth > 1) then
             for i:= 0 to cMaxHHIndex do
@@ -1321,15 +1353,15 @@ for t:= 0 to Pred(TeamsCount) do
             r.y:= 2;
             r.w:= NameTagTex^.w - 4;
             r.h:= NameTagTex^.h - 4;
-            DrawFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, NameTagTex);
+            DrawTextureFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, NameTagTex);
             // draw flag
             r.w:= 22;
             r.h:= 15;
-            DrawFromRect(-12, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, FlagTex);
+            DrawTextureFromRect(-12, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, FlagTex);
             // draw health bar
             r.w:= TeamHealthBarWidth + 1;
             r.h:= HealthTex^.h - 4;
-            DrawFromRect(16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
+            DrawTextureFromRect(16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
             end;
         end;
 if smallScreenOffset <> 0 then
@@ -1404,9 +1436,9 @@ DrawChat;
 
 // various captions
 if fastUntilLag then
-    DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
+    DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then
-    DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
+    DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
 if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
     begin
     if (ReadyTimeLeft = 0) and (missionTimer > 0) then
@@ -1414,7 +1446,7 @@ if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (Game
     if missionTimer < 0 then
         missionTimer:= 0; // avoid subtracting below 0
     if missionTex <> nil then
-        DrawCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
+        DrawTextureCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
     end;
 
 // fps
@@ -1491,7 +1523,7 @@ if SoundTimerTicks >= 50 then
    end;
 
 if GameState = gsConfirm then
-    DrawCentered(0, (cScreenHeight shr 1), ConfirmTexture);
+    DrawTextureCentered(0, (cScreenHeight shr 1), ConfirmTexture);
 
 if ScreenFade <> sfNone then
     begin
@@ -1546,7 +1578,7 @@ if isCursorVisible then
                 begin
             if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) then
                 DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
-            i:= GetAmmoEntry(CurrentHedgehog^)^.Pos;
+            i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
             with Ammoz[CurAmmoType] do
                 if PosCount > 1 then
                     DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
@@ -1712,6 +1744,38 @@ procedure onFocusStateChanged;
 begin
 if (not cHasFocus) and (GameState <> gsConfirm) then
     ParseCommand('quit', true);
+
+if not cHasFocus then DampenAudio()
+else UndampenAudio();
+end;
+
+procedure SetUtilityWidgetState(ammoType: TAmmoType);
+begin
+{$IFDEF TOUCH_INTERFACE}
+if(ammoType = amNothing)then
+    ammoType:= CurrentHedgehog^.CurAmmoType;
+
+if(CurrentHedgehog <> nil)then
+    if (Ammoz[ammoType].Ammo.Propz and ammoprop_Timerable) <> 0 then
+        begin
+        utilityWidget.sprite:= sprTimerButton;
+        animateWidget(@utilityWidget, true, true);
+        end 
+    else if (Ammoz[ammoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
+        begin
+        utilityWidget.sprite:= sprTargetButton;
+        animateWidget(@utilityWidget, true, true);
+        end
+    else if ammoType = amSwitch then
+        begin
+        utilityWidget.sprite:= sprTargetButton;
+        animateWidget(@utilityWidget, true, true);
+        end
+    else if utilityWidget.show then
+        animateWidget(@utilityWidget, true, false);
+{$ELSE}
+ammoType:= ammoType; // avoid hint
+{$ENDIF}
 end;
 
 procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);

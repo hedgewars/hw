@@ -328,9 +328,9 @@ if (t and LAND_HEIGHT_MASK) = 0 then
         if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
-                LandPixels[t, i]:= cExplosionBorderColor
+                LandPixels[t, i]:= ExplosionBorderColor
             else
-                LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
+                LandPixels[t div 2, i div 2]:= ExplosionBorderColor;
 
             Land[t, i]:= Land[t, i] or lfDamaged;
             //Despeckle(i, t);
@@ -343,9 +343,9 @@ if (t and LAND_HEIGHT_MASK) = 0 then
         if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
-                LandPixels[t, i]:= cExplosionBorderColor
+                LandPixels[t, i]:= ExplosionBorderColor
             else
-                LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
+                LandPixels[t div 2, i div 2]:= ExplosionBorderColor;
             Land[t, i]:= Land[t, i] or lfDamaged;
             //Despeckle(i, t);
             LandDirty[t div 32, i div 32]:= 1;
@@ -357,9 +357,9 @@ if (t and LAND_HEIGHT_MASK) = 0 then
         if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
-                LandPixels[t, i]:= cExplosionBorderColor
+                LandPixels[t, i]:= ExplosionBorderColor
             else
-               LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
+               LandPixels[t div 2, i div 2]:= ExplosionBorderColor;
 
             Land[t, i]:= Land[t, i] or lfDamaged;
             //Despeckle(i, t);
@@ -372,9 +372,9 @@ if (t and LAND_HEIGHT_MASK) = 0 then
         if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
-                LandPixels[t, i]:= cExplosionBorderColor
+                LandPixels[t, i]:= ExplosionBorderColor
             else
-                LandPixels[t div 2, i div 2]:= cExplosionBorderColor;
+                LandPixels[t div 2, i div 2]:= ExplosionBorderColor;
 
             Land[t, i]:= Land[t, i] or lfDamaged;
             //Despeckle(i, y - dy);
@@ -503,9 +503,9 @@ for i:= 0 to Pred(Count) do
             if ((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0) then
                 begin
                  if (cReducedQuality and rqBlurryLand) = 0 then
-                    LandPixels[ty, tx]:= cExplosionBorderColor
+                    LandPixels[ty, tx]:= ExplosionBorderColor
                 else
-                    LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor;
+                    LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor;
 
                 Land[ty, tx]:= Land[ty, tx] or lfDamaged;
                 LandDirty[ty div 32, tx div 32]:= 1;
@@ -555,9 +555,9 @@ for i:= 0 to 7 do
             LandDirty[ty div 32, tx div 32]:= 1
             end;
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[ty, tx]:= cExplosionBorderColor
+            LandPixels[ty, tx]:= ExplosionBorderColor
         else
-            LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+            LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor
         end
     end;
     nx:= nx - dY;
@@ -581,9 +581,9 @@ for i:= -HalfWidth to HalfWidth do
             if despeckle then
                 LandDirty[ty div 32, tx div 32]:= 1;
             if (cReducedQuality and rqBlurryLand) = 0 then
-                LandPixels[ty, tx]:= cExplosionBorderColor
+                LandPixels[ty, tx]:= ExplosionBorderColor
             else
-                LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+                LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor
             end
         end;
     X:= nx;
@@ -624,9 +624,9 @@ for i:= -HalfWidth to HalfWidth do
         if despeckle then
             LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[ty, tx]:= cExplosionBorderColor
+            LandPixels[ty, tx]:= ExplosionBorderColor
         else
-            LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+            LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor
         end
         end;
     nx:= nx - dY;
@@ -650,9 +650,9 @@ for i:= 0 to 7 do
         if despeckle then
             LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
-            LandPixels[ty, tx]:= cExplosionBorderColor
+            LandPixels[ty, tx]:= ExplosionBorderColor
         else
-            LandPixels[ty div 2, tx div 2]:= cExplosionBorderColor
+            LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor
         end
     end;
     nx:= nx - dY;
@@ -672,6 +672,7 @@ var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
 begin
+TryPlaceOnLand:= false;
 numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
 
 TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
@@ -693,12 +694,12 @@ case bpp of
         begin
         for x:= 0 to Pred(w) do
             if (PLongword(@(p^[x * 4]))^) <> 0 then
-                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT)
-                or ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0) then
+                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+                   ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0) then
                     begin
-                    if SDL_MustLock(Image) then
-                        SDL_UnlockSurface(Image);
-                    exit(false)
+                        if SDL_MustLock(Image) then
+                            SDL_UnlockSurface(Image);
+                        exit;
                     end;
         p:= @(p^[Image^.pitch]);
         end;
@@ -758,58 +759,61 @@ function Despeckle(X, Y: LongInt): boolean;
 var nx, ny, i, j, c, xx, yy: LongInt;
     pixelsweep: boolean;
 begin
-if (cReducedQuality and rqBlurryLand) = 0 then
+    Despeckle:= true;
+
+    if (cReducedQuality and rqBlurryLand) = 0 then
     begin
-    xx:= X;
-    yy:= Y;
+        xx:= X;
+        yy:= Y;
     end
-else
+    else
     begin
-    xx:= X div 2;
-    yy:= Y div 2;
+        xx:= X div 2;
+        yy:= Y div 2;
     end;
-pixelsweep:= ((Land[Y, X] and $FF00) = 0) and (LandPixels[yy, xx] <> 0);
-if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
+
+    pixelsweep:= ((Land[Y, X] and $FF00) = 0) and (LandPixels[yy, xx] <> 0);
+    if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
-    c:= 0;
-    for i:= -1 to 1 do
-        for j:= -1 to 1 do
-            if (i <> 0) or (j <> 0) then
+        c:= 0;
+        for i:= -1 to 1 do
+            for j:= -1 to 1 do
+                if (i <> 0) or (j <> 0) then
                 begin
-                ny:= Y + i;
-                nx:= X + j;
-                if ((ny and LAND_HEIGHT_MASK) = 0) and ((nx and LAND_WIDTH_MASK) = 0) then
+                    ny:= Y + i;
+                    nx:= X + j;
+                    if ((ny and LAND_HEIGHT_MASK) = 0) and ((nx and LAND_WIDTH_MASK) = 0) then
                     begin
-                    if pixelsweep then
+                        if pixelsweep then
                         begin
-                        if ((cReducedQuality and rqBlurryLand) <> 0) then
+                            if ((cReducedQuality and rqBlurryLand) <> 0) then
                             begin
-                            nx:= nx div 2;
-                            ny:= ny div 2
+                                nx:= nx div 2;
+                                ny:= ny div 2
                             end;
-                        if LandPixels[ny, nx] <> 0 then
-                            inc(c);
+                            if LandPixels[ny, nx] <> 0 then
+                                inc(c);
                         end
                     else if Land[ny, nx] > 255 then
                         inc(c);
                     end
                 end;
 
-    if c < 4 then // 0-3 neighbours
+        if c < 4 then // 0-3 neighbours
         begin
-        if ((Land[Y, X] and lfBasic) <> 0) and (not disableLandBack) then
-            LandPixels[yy, xx]:= LandBackPixel(X, Y)
-        else
-            LandPixels[yy, xx]:= 0;
+            if ((Land[Y, X] and lfBasic) <> 0) and (not disableLandBack) then
+                LandPixels[yy, xx]:= LandBackPixel(X, Y)
+            else
+                LandPixels[yy, xx]:= 0;
 
-        if not pixelsweep then
+            if not pixelsweep then
             begin
-            Land[Y, X]:= 0;
-            exit(true)
+                Land[Y, X]:= 0;
+                exit
             end
         end;
     end;
-Despeckle:= false
+    Despeckle:= false
 end;
 
 procedure Smooth(X, Y: LongInt);
@@ -824,12 +828,12 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
             if ((LandPixels[y,x] and AMask) shr AShift) < 10 then
-                LandPixels[y,x]:= (cExplosionBorderColor and (not AMask)) or (128 shl AShift)
+                LandPixels[y,x]:= (ExplosionBorderColor and (not AMask)) or (128 shl AShift)
             else
                 LandPixels[y,x]:=
-                                (((((LandPixels[y,x] and RMask shr RShift) div 2)+((cExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
-                                (((((LandPixels[y,x] and GMask shr GShift) div 2)+((cExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
-                                (((((LandPixels[y,x] and BMask shr BShift) div 2)+((cExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
+                                (((((LandPixels[y,x] and RMask shr RShift) div 2)+((ExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
+                                (((((LandPixels[y,x] and GMask shr GShift) div 2)+((ExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
+                                (((((LandPixels[y,x] and BMask shr BShift) div 2)+((ExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
             end;
         if (Land[y, x-1] = lfObject) then
             Land[y,x]:= lfObject
@@ -850,12 +854,12 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
         if (cReducedQuality and rqBlurryLand) = 0 then
             begin
             if ((LandPixels[y,x] and AMask) shr AShift) < 10 then
-                LandPixels[y,x]:= (cExplosionBorderColor and (not AMask)) or (64 shl AShift)
+                LandPixels[y,x]:= (ExplosionBorderColor and (not AMask)) or (64 shl AShift)
             else
                 LandPixels[y,x]:=
-                                (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((cExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
-                                (((((LandPixels[y,x] and GMask shr GShift) * 3 div 4)+((cExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
-                                (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((cExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift)
+                                (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((ExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
+                                (((((LandPixels[y,x] and GMask shr GShift) * 3 div 4)+((ExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
+                                (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((ExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift)
             end;
         if (Land[y, x-1] = lfObject) then
             Land[y, x]:= lfObject
@@ -876,9 +880,9 @@ and (Y > LongInt(topY) + 1) and (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1)
     or (((Land[y, x+1] and lfDamaged) <> 0) and (((Land[y-1,x] and lfDamaged) <> 0) or ((Land[y+1,x] and lfDamaged) <> 0)))) then
         begin
         LandPixels[y,x]:=
-                        (((((LandPixels[y,x] and RMask shr RShift) div 2)+((cExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
-                        (((((LandPixels[y,x] and GMask shr GShift) div 2)+((cExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
-                        (((((LandPixels[y,x] and BMask shr BShift) div 2)+((cExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
+                        (((((LandPixels[y,x] and RMask shr RShift) div 2)+((ExplosionBorderColor and RMask) shr RShift) div 2) and $FF) shl RShift) or
+                        (((((LandPixels[y,x] and GMask shr GShift) div 2)+((ExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
+                        (((((LandPixels[y,x] and BMask shr BShift) div 2)+((ExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
         end
     else if ((((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0))
     or (((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0))
@@ -890,9 +894,9 @@ and (Y > LongInt(topY) + 1) and (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1)
     or (((Land[y-1, x] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y,x-2] and lfDamaged) <> 0))) then
         begin
         LandPixels[y,x]:=
-                        (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((cExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
-                        (((((LandPixels[y,x] and GMask shr GShift) * 3 div 4)+((cExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
-                        (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((cExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift)
+                        (((((LandPixels[y,x] and RMask shr RShift) * 3 div 4)+((ExplosionBorderColor and RMask) shr RShift) div 4) and $FF) shl RShift) or
+                        (((((LandPixels[y,x] and GMask shr GShift) * 3 div 4)+((ExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
+                        (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((ExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift)
         end
     end
 end;

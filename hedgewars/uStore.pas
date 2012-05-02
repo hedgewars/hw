@@ -26,8 +26,8 @@ uses sysutils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 procedure initModule;
 procedure freeModule;
 
-procedure StoreLoad(reload: boolean = false);
-procedure StoreRelease(reload: boolean = false);
+procedure StoreLoad(reload: boolean);
+procedure StoreRelease(reload: boolean);
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
@@ -57,10 +57,10 @@ var w, h: LongInt;
 begin
 w:= 0; h:= 0; // avoid compiler hints
 TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
-finalRect.x:= X + FontBorder + 2;
-finalRect.y:= Y + FontBorder;
-finalRect.w:= w + FontBorder * 2 + 4;
-finalRect.h:= h + FontBorder * 2;
+finalRect.x:= X + cFontBorder + 2;
+finalRect.y:= Y + cFontBorder;
+finalRect.w:= w + cFontBorder * 2 + 4;
+finalRect.h:= h + cFontBorder * 2;
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
@@ -71,8 +71,8 @@ SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
 SDL_FreeSurface(tmpsurf);
 finalRect.x:= X;
 finalRect.y:= Y;
-finalRect.w:= w + FontBorder * 2 + 4;
-finalRect.h:= h + FontBorder * 2;
+finalRect.w:= w + cFontBorder * 2 + 4;
+finalRect.h:= h + cFontBorder * 2;
 WriteInRect:= finalRect
 end;
 
@@ -524,28 +524,30 @@ FreeTexture(Hedgehog.HealthTagTex);
 Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
-function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+function LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
+    LoadImage:= nil;
+    WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
 
-s:= filename + '.png';
-tmpsurf:= IMG_Load(Str2PChar(s));
+    s:= filename + '.png';
+    tmpsurf:= IMG_Load(Str2PChar(s));
 
     if tmpsurf = nil then
-        begin
+    begin
         OutError(msgFailed, (imageFlags and ifCritical) <> 0);
-        exit(nil)
-        end;
+        exit;
+    end;
 
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
-        begin
+    begin
         SDL_FreeSurface(tmpsurf);
         OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
         // dummy surface to replace non-critical textures that failed to load due to their size
-        exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask));
-        end;
+        LoadImage:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask);
+        exit;
+    end;
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
 
@@ -623,7 +625,9 @@ begin
 
 {$IFDEF SDL13}
     // this function creates an opengles1.1 context by default on mobile devices
-    // use SDL_GL_SetAttribute to change this behaviour
+    // unless you un-comment this two attributes
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     if SDLGLcontext = nil then
         SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
     SDLTry(SDLGLcontext <> nil, true);
@@ -665,7 +669,9 @@ begin
     AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
     AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
     AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
-    AddFileLog('  \----- Texture Size: ' + inttostr(MaxTextureSize));
+    AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
+    AddFileLog('  \----- Extensions: ' + shortstring(pchar(glGetString(GL_EXTENSIONS))));
+    //TODO: don't have the Extensions line trimmed but slipt it into multiple lines
 
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
@@ -783,7 +789,7 @@ begin
     r.w:= squaresize;
     r.h:= squaresize;
 
-    DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
+    DrawTextureFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 
 {$IFDEF SDL13}
     SDL_GL_SwapWindow(SDLwindow);
@@ -823,8 +829,8 @@ font:= CheckCJKFont(extra,font);
 
 w:= 0;
 h:= 0;
-wa:= FontBorder * 2 + 4;
-ha:= FontBorder * 2;
+wa:= cFontBorder * 2 + 4;
+ha:= cFontBorder * 2;
 
 i:= 0; j:= 0; // avoid compiler hints
 
@@ -882,9 +888,9 @@ r.h:= h;
 DrawRoundRect(@r, cWhiteColor, cNearBlackColor, tmpsurf, true);
 
 // render caption
-r:= WriteInRect(tmpsurf, 36 + FontBorder + 2, ha, $ffffffff, font, caption);
+r:= WriteInRect(tmpsurf, 36 + cFontBorder + 2, ha, $ffffffff, font, caption);
 // render sub caption
-r:= WriteInRect(tmpsurf, 36 + FontBorder + 2, r.y + r.h, $ffc7c7c7, font, subcaption);
+r:= WriteInRect(tmpsurf, 36 + cFontBorder + 2, r.y + r.h, $ffc7c7c7, font, subcaption);
 
 // render all description lines
 tmpdesc:= description;
@@ -895,21 +901,21 @@ while tmpdesc <> '' do
     r2:= r;
     if tmpline <> '' then
         begin
-        r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
+        r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
 
         // render highlighted caption (if there is a ':')
         tmpline2:= '';
         SplitByChar(tmpline, tmpline2, ':');
         if tmpline2 <> '' then
-            WriteInRect(tmpsurf, FontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');
+            WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');
         end
     end;
 
 if extra <> '' then
-    r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, extracolor, font, extra);
+    r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, extracolor, font, extra);
 
-r.x:= FontBorder + 6;
-r.y:= FontBorder + 4;
+r.x:= cFontBorder + 6;
+r.y:= cFontBorder + 4;
 r.w:= 32;
 r.h:= 32;
 SDL_FillRect(tmpsurf, @r, $ffffffff);
@@ -1113,7 +1119,7 @@ procedure initModule;
 var ai: TAmmoType;
     i: LongInt;
 begin
-    RegisterVariable('fullscr', vtCommand, @chFullScr, true);
+    RegisterVariable('fullscr', @chFullScr, true);
 
     SDLPrimSurface:= nil;
 
