@@ -227,13 +227,13 @@
             HW_backjump();
             break;
         case 10:
-            [AudioManagerController playClickSound];
+            [[AudioManagerController mainManager] playClickSound];
             HW_pause();
             [self clearOverlay];
             [self showPopover];
             break;
         case 11:
-            [AudioManagerController playClickSound];
+            [[AudioManagerController mainManager] playClickSound];
             [self clearOverlay];
             HW_ammoMenu();
             break;

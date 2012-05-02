@@ -35,7 +35,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure SetRandomSeed(Seed: shortstring); // Sets the seed that should be used for generating pseudo-random values.
-function  GetRandom: hwFloat; overload; // Returns a pseudo-random hwFloat.
+function  GetRandomf: hwFloat; overload; // Returns a pseudo-random hwFloat.
 function  GetRandom(m: LongWord): LongWord; overload; // Returns a positive pseudo-random integer smaller than m.
 function  rndSign(num: hwFloat): hwFloat; // Returns num with a random chance of having a inverted sign.
 
@@ -73,11 +73,11 @@ for i:= 0 to 1023 do
     GetNext
 end;
 
-function GetRandom: hwFloat;
+function GetRandomf: hwFloat;
 begin
 GetNext;
-GetRandom.isNegative:= false;
-GetRandom.QWordValue:= GetNext
+GetRandomf.isNegative:= false;
+GetRandomf.QWordValue:= GetNext
 end;
 
 function GetRandom(m: LongWord): LongWord;

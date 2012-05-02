@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@ class PageOptions : public AbstractPage
         QCheckBox *CBFullscreen;
         QCheckBox *CBFrontendFullscreen;
         QCheckBox *CBShowFPS;
+        QCheckBox *CBSavePassword;
         QCheckBox *CBAltDamage;
         QCheckBox *CBNameWithDate;
 #ifdef __APPLE__
@@ -100,6 +101,7 @@ class PageOptions : public AbstractPage
         void trimNetNick();
         void requestEditSelectedTeam();
         void requestDeleteSelectedTeam();
+        void savePwdChanged(int state);
 };
 
 #endif

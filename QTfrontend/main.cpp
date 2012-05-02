@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 #include "hwconsts.h"
 #include "newnetclient.h"
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #ifdef _WIN32
 #include <Shlobj.h>
@@ -209,67 +209,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    HWDataManager & dataMgr = HWDataManager::instance();
-
-    {
-        QStringList themes;
-
-        themes.append(dataMgr.entryList(
-                          "Themes",
-                          QDir::AllDirs | QDir::NoDotAndDotDot)
-                     );
-
-        QList<QPair<QIcon, QIcon> > icons;
-
-        themes.sort();
-        for(int i = themes.size() - 1; i >= 0; --i)
-        {
-            QString file = dataMgr.findFileForRead(
-                               QString("Themes/%1/icon.png").arg(themes.at(i))
-                           );
-
-            if(QFile::exists(file))
-            {
-                // load icon
-                QPair<QIcon, QIcon> ic;
-                ic.first = QIcon(file);
-
-                // load preview icon
-                ic.second = QIcon(
-                                dataMgr.findFileForRead(
-                                    QString("Themes/%1/icon@2x.png").arg(themes.at(i))
-                                )
-                            );
-
-                icons.prepend(ic);
-            }
-            else
-            {
-                themes.removeAt(i);
-            }
-        }
-
-        themesModel = new ThemesModel(themes);
-        Q_ASSERT(themes.size() == icons.size());
-        for(int i = 0; i < icons.size(); ++i)
-        {
-            themesModel->setData(themesModel->index(i), icons[i].first, Qt::DecorationRole);
-            themesModel->setData(themesModel->index(i), icons[i].second, Qt::UserRole);
-        }
-    }
-
-    mapList = new QStringList(dataMgr.entryList(
-                                  QString("Maps"),
-                                  QDir::Dirs | QDir::NoDotAndDotDot
-                              )
-                             );
-
-    scriptList = new QStringList(dataMgr.entryList(
-                                     QString("Scripts/Multiplayer"),
-                                     QDir::Files,
-                                     QStringList("*.lua")
-                                 )
-                                );
+    DataManager & dataMgr = DataManager::instance();
 
     QTranslator Translator;
     {

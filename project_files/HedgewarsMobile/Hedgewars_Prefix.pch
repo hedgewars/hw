@@ -31,6 +31,5 @@
 #import "CreationChamber.h"
 #import "HWUtils.h"
 #import "hwconsts.h"
-#import "SDL_net.h"
 #endif
 

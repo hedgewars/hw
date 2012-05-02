@@ -14,7 +14,7 @@ import Data.Maybe
 import PascalBasics
 import PascalUnitSyntaxTree
     
-knownTypes = ["shortstring", "char", "byte"]
+knownTypes = ["shortstring", "ansistring", "char", "byte"]
 
 pascalUnit = do
     comments
@@ -113,12 +113,13 @@ constsDecl = do
         comments
         e <- initExpression
         comments
-        return $ VarDeclaration False ([i], fromMaybe (DeriveType e) t) (Just e)
+        return $ VarDeclaration (isNothing t) ([i], fromMaybe (DeriveType e) t) (Just e)
         
 typeDecl = choice [
     char '^' >> typeDecl >>= return . PointerTo
     , try (string "shortstring") >> return (String 255)
     , try (string "string") >> optionMaybe (brackets pas $ integer pas) >>= return . String . fromMaybe 255
+    , try (string "ansistring") >> optionMaybe (brackets pas $ integer pas) >>= return . String . fromMaybe 255
     , arrayDecl
     , recordDecl
     , setDecl
@@ -407,6 +408,7 @@ phrase = do
         , withBlock
         , forCycle
         , (try $ reference >>= \r -> string ":=" >> return r) >>= \r -> expression >>= return . Assignment r
+        , builtInFunction expression >>= \(n, e) -> return $ BuiltInFunctionCall e (SimpleReference (Identifier n BTUnknown))
         , procCall
         , char ';' >> comments >> return NOP
         ]
@@ -581,8 +583,8 @@ initExpression = buildExpressionParser table term <?> "initialization expression
            , Infix (try $ string "or" >> return (InitBinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (InitBinOp "xor")) AssocLeft
           ]
-        , [  Infix (try $ string "shl" >> return (InitBinOp "and")) AssocNone
-           , Infix (try $ string "shr" >> return (InitBinOp "or")) AssocNone
+        , [  Infix (try $ string "shl" >> return (InitBinOp "shl")) AssocNone
+           , Infix (try $ string "shr" >> return (InitBinOp "shr")) AssocNone
           ]
         , [Prefix (try (string "not") >> return (InitPrefixOp "not"))]
         ]
@@ -596,7 +598,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
 builtInFunction e = do
     name <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) builtin
     spaces
-    exprs <- parens pas $ commaSep1 pas $ e
+    exprs <- option [] $ parens pas $ option [] $ commaSep1 pas $ e
     spaces
     return (name, exprs)
 

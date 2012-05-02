@@ -15,7 +15,7 @@ comment = choice [
         , (try $ string "//") >> manyTill anyChar (try newline) >> return "\n"
         ]
 
-initDefines = Map.fromList [("FPC", "")]
+initDefines = Map.fromList [("FPC", ""), ("PAS2C", "")]
         
 preprocess :: String -> IO String
 preprocess fn = do
@@ -74,7 +74,7 @@ preprocess fn = do
         char '"'
         spaces
         char '}'
-        f <- liftIO (readFile fn)
+        f <- liftIO (readFile fn `catch` error ("File not found: " ++ fn))
         c <- getInput
         setInput $ f ++ c
         return ""

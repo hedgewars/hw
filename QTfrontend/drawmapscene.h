@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,10 +21,18 @@
 
 #include <QGraphicsScene>
 #include <QPainterPath>
+#include <QGraphicsEllipseItem>
 
 class QGraphicsPathItem;
 
-typedef QList<QPair<quint8, QList<QPoint> > > Paths;
+struct PathParams
+{
+    quint8 width;
+    bool erasing;
+    QList<QPoint> points;
+};
+
+typedef QList<PathParams> Paths;
 
 class DrawMapScene : public QGraphicsScene
 {
@@ -34,6 +42,7 @@ class DrawMapScene : public QGraphicsScene
 
         QByteArray encode();
         void decode(QByteArray data);
+        int pointsCount();
 
     signals:
         void pathChanged();
@@ -42,14 +51,21 @@ class DrawMapScene : public QGraphicsScene
         void undo();
         void clearMap();
         void simplifyLast();
+        void setErasing(bool erasing);
+        void showCursor();
+        void hideCursor();
 
     private:
         QPen m_pen;
+        QBrush m_eraser;
         QBrush m_brush;
         QGraphicsPathItem  * m_currPath;
         Paths paths;
         Paths oldPaths;
+        bool m_isErasing;
         QList<QGraphicsItem *> oldItems;
+        QGraphicsEllipseItem * m_cursor;
+        bool m_isCursorShown;
 
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);

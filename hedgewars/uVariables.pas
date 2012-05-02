@@ -110,10 +110,26 @@ var
 
     GameTicks   : LongWord;
 
+    // originally typed consts
+    CharArray: array[byte] of Char;
+    LastTint: Longword;
+    SocketString: shortstring;
+    VGCounter: Longword;
+    PrevX: LongInt;
+    timedelta: Longword;
+    StartTicks: Longword;
+    Counter: Longword;
+    StepTicks: LongWord;
+    ExplosionBorderColor: LongWord;
+    WaterOpacity: byte;
+    SDWaterOpacity: byte;
+    prevGState: TGameState;
+    GrayScale: Boolean;
+
     // originally from uConsts
     Pathz: array[TPathType] of shortstring;
     UserPathz: array[TPathType] of shortstring;
-    CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
+    CountTexz: array[0..Pred(AMMO_INFINITE)] of PTexture;
     LAND_WIDTH       : Word;
     LAND_HEIGHT      : Word;
     LAND_WIDTH_MASK  : LongWord;
@@ -194,6 +210,17 @@ var
 
     LuaGoals        : shortstring;
 
+    VoiceList : array[0..7] of TVoice =  (
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil));
+    LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
+
 /////////////////////////////////////
 //Buttons
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -203,14 +230,11 @@ var
     firebutton, jumpWidget, AMWidget          : TOnScreenWidget;
     pauseButton, utilityWidget                : TOnScreenWidget;
 {$ENDIF}
-
     AMAnimType      : LongInt;
-const
-    cHHFileName = 'Hedgehog';
-    cCHFileName = 'Crosshair';
-    cThemeCFGFilename = 'theme.cfg';
 
-    FontBorder = 2;
+
+const
+    // these consts are here because they would cause circular dependencies in uConsts/uTypes
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
         '',                              // ptData
@@ -235,20 +259,6 @@ const
         'Graphics/SuddenDeath',           // ptSuddenDeath
         'Graphics/Buttons'                // ptButton
     );
-
-    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
-    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
-
-    VoiceList : array[0..7] of TVoice =  (
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil));
-    LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
 
     Fontz: array[THWFont] of THHFont = (
             (Handle: nil;
@@ -279,8 +289,9 @@ const
             {$ENDIF}
             );
 
+var
     SpritesData: array[TSprite] of record
-            FileName: string[16];
+            FileName: string[15];
             Path, AltPath: TPathType;
             Texture: PTexture;
             Surface: PSDL_Surface;
@@ -406,6 +417,8 @@ const
             Width: 120; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprPauseButton
             (FileName: 'pause'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;//TODO correct image
             Width: 120; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTimerButton
+            (FileName: 'forwardjump'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;//TODO correct image
+            Width: 120; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTargetButton
 {$ENDIF}
             (FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprFlake
@@ -620,7 +633,7 @@ const
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true),
             //sprHandResurrector
-            (FileName: 'Cross'; Path: ptGraphics; altPath: ptNone;
+            (FileName: 'Cross'; Path: ptGraphics; AltPath: ptNone;
                 Texture: nil; Surface: nil; Width: 108; Height: 138;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true),
@@ -662,12 +675,12 @@ const
             Width: 3; Height: 17; imageWidth: 3; imageHeight: 17; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprSlider
             );
 
-
+const
     Wavez: array [TWave] of record
             Sprite: TSprite;
             FramesCount: Longword;
             Interval: Longword;
-            cmd: string[20];
+            cmd: string[31];
             Voice: TSound;
             VoiceDelay: LongWord;
             end = (
@@ -681,7 +694,7 @@ const
             );
 
     Soundz: array[TSound] of record
-            FileName: string[25];
+            FileName: string[31];
             Path    : TPathType;
             end = (
             (FileName:                         ''; Path: ptNone  ),// sndNone
@@ -799,7 +812,7 @@ const
             (FileName:                'plane.ogg'; Path: ptSounds),// sndPlane
             (FileName:               'TARDIS.ogg'; Path: ptSounds) // sndTardis
             );
-
+var
     Ammoz: array [TAmmoType] of record
             NameId: TAmmoStrId;
             NameTex: PTexture;
@@ -842,7 +855,11 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_AltUse or 
+                          ammoprop_SetBounce or
+                          ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -866,7 +883,11 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 3;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_AltUse or 
+                          ammoprop_SetBounce or
+                          ammoprop_NeedUpDown;
                 Count: 5;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -890,7 +911,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -914,7 +937,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_NeedTarget or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedTarget or 
+                          ammoprop_DontHold or
+                          ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -938,7 +964,8 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs;
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -962,7 +989,10 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInMove or ammoprop_NoCrosshair or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_AttackInMove or 
+                          ammoprop_NoCrosshair or 
+                          ammoprop_DontHold;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -986,7 +1016,8 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_DontHold;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1014,7 +1045,8 @@ const
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_Utility or
-                          ammoprop_AltAttack;
+                          ammoprop_AltAttack or
+                          ammoprop_NeedUpDown;
                     Count: 5;
                     NumPerTurn: 0;
                     Timer: 0;
@@ -1038,7 +1070,11 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_AttackInMove or 
+                          ammoprop_DontHold or 
+                          ammoprop_AltUse or 
+                          ammoprop_SetBounce;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1062,7 +1098,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: 0;
+            Ammo: (Propz: ammoprop_NeedUpDown;
                 Count: 3;
                 NumPerTurn: 3;
                 Timer: 0;
@@ -1086,7 +1122,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_AttackInMove or 
+                          ammoprop_DontHold or 
+                          ammoprop_AltUse;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1110,7 +1149,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_ForwMsgs or ammoprop_AttackInMove;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_ForwMsgs or 
+                          ammoprop_AttackInMove;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1120,7 +1161,7 @@ const
                 Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
-            MinAngle: 0;
+            minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
@@ -1144,7 +1185,7 @@ const
                 Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
-            MinAngle: 0;
+            minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
@@ -1158,7 +1199,8 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_DontHold or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1188,7 +1230,8 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
-                          ammoprop_AltAttack;
+                          ammoprop_AltAttack or
+                          ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1213,10 +1256,10 @@ const
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_DontHold or
+                          ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1241,10 +1284,10 @@ const
             Probability: 200;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_DontHold or
+                          ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1268,7 +1311,8 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_ForwMsgs;
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1401,7 +1445,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_AttackInMove;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_DontHold or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AttackInMove;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1425,7 +1472,9 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_NoCrosshair or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NoCrosshair or 
+                          ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1449,7 +1498,9 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_NoCrosshair;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_DontHold or
+                          ammoprop_NoCrosshair;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1473,7 +1524,10 @@ const
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: 0;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -1497,7 +1551,9 @@ const
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: 0;
                 NumPerTurn: 0;
                 Timer: 5000;
@@ -1522,10 +1578,10 @@ const
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_DontHold or
+                          ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1549,7 +1605,9 @@ const
             NameTex: nil;
             Probability: 300;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1573,7 +1631,9 @@ const
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_DontHold;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 5001;
@@ -1597,9 +1657,10 @@ const
             NameTex: nil;
             Probability: 200;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs{ or
-                            ammoprop_DontHold or
-                            ammoprop_AltAttack};
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NeedUpDown{ or
+                          ammoprop_DontHold or
+                          ammoprop_AltAttack};
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1744,6 +1805,7 @@ const
                           ammoprop_DontHold or
                           ammoprop_AltUse or
                           ammoprop_Utility or
+                          ammoprop_NeedUpDown or
                           ammoprop_Effect;
                     Count: 1;
                     NumPerTurn: 0;
@@ -1797,7 +1859,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: 0;
+            Ammo: (Propz: ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -1827,6 +1889,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
+                          ammoprop_NeedUpDown or
                           ammoprop_AltAttack;
                 Count: 1;
                 NumPerTurn: 0;
@@ -1851,7 +1914,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -1877,6 +1942,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
+                          ammoprop_NeedUpDown or
                           ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
@@ -1904,6 +1970,7 @@ const
             Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_AttackInMove or
                           ammoprop_DontHold or
+                          ammoprop_NeedUpDown or
                           ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 3;
@@ -1956,7 +2023,11 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_AltUse or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_SetBounce;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -1980,7 +2051,8 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_AttackInMove;
+            Ammo: (Propz: ammoprop_AttackInMove or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2004,7 +2076,9 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 5001;
@@ -2028,7 +2102,8 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
+            Ammo: (Propz: ammoprop_Power or
+                          ammoprop_NeedUpDown; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
                 Count: 1;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -2062,7 +2137,7 @@ const
                 Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
-            MinAngle: 0;
+            minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
@@ -2212,6 +2287,7 @@ const
             Probability: 20;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEnd or
+                          ammoprop_NeedTarget or
                           ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 0;
@@ -2232,23 +2308,25 @@ const
             ejectY: -3)
         );
 
+const
     GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (    
-(*        gtGrenade *)   amGrenade
+(*          gtFlame *)   amNothing
 (*       gtHedgehog *) , amNothing
+(*           gtMine *) , amNothing
+(*           gtCase *) , amNothing
+(*     gtExplosives *) , amNothing
+(*        gtGrenade *) , amGrenade
 (*          gtShell *) , amBazooka
 (*          gtGrave *) , amNothing
 (*            gtBee *) , amBee
 (*    gtShotgunShot *) , amShotgun
 (*     gtPickHammer *) , amPickHammer
 (*           gtRope *) , amRope
-(*           gtMine *) , amNothing
-(*           gtCase *) , amNothing
 (*     gtDEagleShot *) , amDEagle
 (*       gtDynamite *) , amDynamite
 (*    gtClusterBomb *) , amClusterBomb
 (*        gtCluster *) , amClusterBomb
 (*         gtShover *) , amBaseballBat  // Shover is only used for baseball bat right now
-(*          gtFlame *) , amNothing
 (*      gtFirePunch *) , amFirePunch
 (*    gtATStartGame *) , amNothing
 (*   gtATFinishGame *) , amNothing
@@ -2276,7 +2354,6 @@ const
 (*gtSniperRifleShot *) , amSniperRifle
 (*        gtJetpack *) , amJetpack
 (*        gtMolotov *) , amMolotov
-(*     gtExplosives *) , amNothing
 (*          gtBirdy *) , amBirdy
 (*            gtEgg *) , amBirdy
 (*         gtPortal *) , amPortalGun
@@ -2378,7 +2455,6 @@ var
     vobSDFrameTicks, vobSDFramesCount, vobSDCount: Longword;
     vobSDVelocity, vobSDFallSpeed: LongInt;
 
-
     hideAmmoMenu: boolean;
     wheelUp: boolean;
     wheelDown: boolean;
@@ -2394,29 +2470,7 @@ var
     ControllerHats: array[0..5] of array[0..19] of Byte;
     ControllerButtons: array[0..5] of array[0..19] of Byte;
 
-    DefaultBinds, CurrentBinds: TBinds;
-
-    coeff: LongInt;
-
-{$IFDEF HWLIBRARY}
-    leftClick: boolean;
-    middleClick: boolean;
-    rightClick: boolean;
-
-    upKey: boolean;
-    downKey: boolean;
-    rightKey: boolean;
-    leftKey: boolean;
-    preciseKey: boolean;
-
-    backspaceKey: boolean;
-    spaceKey: boolean;
-    enterKey: boolean;
-    tabKey: boolean;
-
-    chatAction: boolean;
-    pauseAction: boolean;
-{$ENDIF}
+    DefaultBinds : TBinds;
 
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
@@ -2563,11 +2617,27 @@ begin
     else
         cMaxCaptions:= 4;
 
+    vobFrameTicks:= 99999;
+    vobFramesCount:= 4;
+    vobCount:= 0;
+    vobVelocity:= 10;
+    vobFallSpeed:= 100;
+
     vobSDFrameTicks:= 99999;
     vobSDFramesCount:= 4;
     vobSDCount:= 30 * cScreenSpace div LAND_WIDTH;
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
+
+    PrevX:= 0;
+    timedelta:= 0;
+    Counter:= 0;
+    StepTicks:= 0;
+    ExplosionBorderColor:= $FF808080;
+    WaterOpacity:= $80;
+    SDWaterOpacity:= $80;
+    prevGState:= gsConfirm;
+    GrayScale:= false;
 
     LuaGoals:= '';
 end;

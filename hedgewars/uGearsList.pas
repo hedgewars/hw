@@ -72,7 +72,6 @@ else
 end;
     
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
-const Counter: Longword = 0;
 var gear: PGear;
 begin
 inc(Counter);
@@ -285,8 +284,8 @@ case Kind of
                 gear^.Density:= _1;
                 if (gear^.dY.QWordValue = 0) and (gear^.dX.QWordValue = 0) then
                     begin
-                    gear^.dY:= (getrandom - _0_8) * _0_03;
-                    gear^.dX:= (getrandom - _0_5) * _0_4
+                    gear^.dY:= (getrandomf - _0_8) * _0_03;
+                    gear^.dX:= (getrandomf - _0_5) * _0_4
                     end
                 end;
    gtFirePunch: begin
@@ -502,7 +501,7 @@ else if Gear^.Kind = gtHedgehog then
             begin
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
-            if ((not SuddenDeathDmg and (cWaterOpacity < $FF)) or (SuddenDeathDmg and (cWaterOpacity < $FF)))
+            if ((not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (WaterOpacity < $FF)))
             and (hwRound(Gear^.Y) < cWaterLine + 256) then
                 spawnHealthTagForHH(Gear, t);
             end;

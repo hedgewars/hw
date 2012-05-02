@@ -43,7 +43,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize];
     if ([[userDefaults objectForKey:@"music"] boolValue] == NO)
-        [AudioManagerController stopBackgroundMusic];
+        [[AudioManagerController mainManager] stopBackgroundMusic];
 
     [super viewWillDisappear:animated];
 }
@@ -63,7 +63,7 @@
             [theOtherSwitch setOn:NO animated:YES];
 
             // since switching sound on won't turn music on anyways, we can always turn off music
-            [AudioManagerController pauseBackgroundMusic];
+            [[AudioManagerController mainManager]pauseBackgroundMusic];
             [settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
             break;
         case 20:    //musicSwitch
@@ -76,9 +76,9 @@
                 [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"music"];
 
             if (theSwitch.on)
-                [AudioManagerController playBackgroundMusic];
+                [[AudioManagerController mainManager] playBackgroundMusic];
             else
-                [AudioManagerController pauseBackgroundMusic];
+                [[AudioManagerController mainManager] pauseBackgroundMusic];
             break;
         case 30:    //alternateSwitch
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];

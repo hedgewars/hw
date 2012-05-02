@@ -32,10 +32,10 @@ data TypeDecl = SimpleType Identifier
     | FunctionType TypeDecl [TypeVarDeclaration]
     | DeriveType InitExpression 
     | VoidType
-    | UnknownType
     deriving Show
 data Range = Range Identifier
            | RangeFromTo InitExpression InitExpression
+           | RangeInfinite
     deriving Show
 data Initialize = Initialize String
     deriving Show
@@ -52,6 +52,7 @@ data Phrase = ProcCall Reference [Expression]
         | Phrases [Phrase]
         | SwitchCase Expression [([InitExpression], Phrase)] (Maybe [Phrase])
         | Assignment Reference Expression
+        | BuiltInFunctionCall [Expression] Reference
         | NOP
     deriving Show
 data Expression = Expression String
@@ -103,8 +104,9 @@ data BaseType = BTUnknown
     | BTBool
     | BTFloat
     | BTRecord [(String, BaseType)]
-    | BTArray BaseType BaseType
+    | BTArray Range BaseType BaseType
     | BTFunction BaseType
+    | BTFunctionReturn String BaseType
     | BTPointerTo BaseType
     | BTUnresolved String
     | BTSet BaseType

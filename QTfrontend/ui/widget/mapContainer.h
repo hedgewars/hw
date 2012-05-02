@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,12 +27,15 @@
 #include <QByteArray>
 #include <QLineEdit>
 
+#include "DataManager.h"
+
 #include "hwmap.h"
 #include "drawmapscene.h"
 
 class QPushButton;
 class IconedGroupBox;
 class QListView;
+class SeparatorPainter;
 
 class MapFileErrorException
 {
@@ -69,6 +72,7 @@ class HWMapContainer : public QWidget
         void setMazeSize(int size);
         void setDrawnMapData(const QByteArray & ar);
         void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl);
+        void updateModelViews();
 
     signals:
         void seedChanged(const QString & seed);
@@ -87,8 +91,6 @@ class HWMapContainer : public QWidget
         void setRandomSeed();
         void setRandomTheme();
         void setRandomMap();
-        void setRandomStatic();
-        void setRandomMission();
         void themeSelected(const QModelIndex & current, const QModelIndex &);
         void addInfoToPreview(QPixmap image);
         void seedEdited();
@@ -100,8 +102,10 @@ class HWMapContainer : public QWidget
         QGridLayout mainLayout;
         QPushButton* imageButt;
         QComboBox* chooseMap;
+        MapModel * m_mapModel;
         IconedGroupBox* gbThemes;
         QListView* lvThemes;
+        ThemeModel * m_themeModel;
         HWMap* pMap;
         QString m_seed;
         QPushButton* seedSet;
@@ -114,7 +118,6 @@ class HWMapContainer : public QWidget
         QLabel *maze_size_label;
         QComboBox *cbMazeSize;
         MapGenerator mapgen;
-        int numMissions;
         DrawMapScene drawMapScene;
 
         void intSetSeed(const QString & seed);
@@ -123,6 +126,10 @@ class HWMapContainer : public QWidget
         void intSetTemplateFilter(int);
         void intSetMazeSize(int size);
         void updatePreview();
+
+        MapModel::MapInfo m_mapInfo;
+        QString m_theme;
+        QString m_curMap;
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED

@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ class HWChatWidget : public QWidget
         HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify);
         void loadLists(const QString & nick);
         void saveLists(const QString & nick);
+        void setIgnoreListKick(bool enabled); ///< automatically kick people on ignore list (if possible)
         void setShowReady(bool s);
         void setShowFollow(bool enabled);
         QStringList ignoreList, friendsList;
@@ -136,13 +137,14 @@ class HWChatWidget : public QWidget
         QAction * acIgnore;
         QAction * acFriend;
         QSettings * gameSettings;
-        QString m_helloSound;
+        QStringList m_helloSounds;
         QString m_hilightSound;
         QString m_userNick;
         QString m_clickedNick;
         QList<QRegExp> m_highlights; ///< regular expressions used for highlighting
         bool notify;
         bool showReady;
+        bool m_autoKickEnabled;
 
     private slots:
         void returnPressed();

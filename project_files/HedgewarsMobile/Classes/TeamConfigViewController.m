@@ -68,7 +68,7 @@
         self.cachedContentsOfDir = contentsOfDir;
         NSArray *colors = [HWUtils teamColors];
         NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
-        for (int i = 0; i < [contentsOfDir count]; i++) {
+        for (NSUInteger i = 0; i < [contentsOfDir count]; i++) {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                          [contentsOfDir objectAtIndex:i],@"team",
                                          [NSNumber numberWithInt:4],@"number",
@@ -224,8 +224,8 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
+    NSUInteger row = [indexPath row];
+    NSUInteger section = [indexPath section];
 
     if (section == 1 && [self.listOfAllTeams count] > row) {
         [self.listOfSelectedTeams addObject:[self.listOfAllTeams objectAtIndex:row]];
@@ -254,7 +254,7 @@
 }
 
 -(void) holdAction:(NSString *)content onTable:(UITableView *)aTableView {
-    NSInteger row;
+    NSUInteger row;
     for (row = 0; row < [self.listOfSelectedTeams count]; row++) {
         NSDictionary *dict = [self.listOfSelectedTeams objectAtIndex:row];
         if ([content isEqualToString:[[dict objectForKey:@"team"] stringByDeletingPathExtension]])

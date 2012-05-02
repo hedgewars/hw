@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@
 #include <QMessageBox>
 
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 #include "hwconsts.h"
 #include "gameuiconfig.h"
 
@@ -126,7 +126,7 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     if (orgStyleSheet.isEmpty())
     {
         // load external stylesheet if there is any
-        QFile extFile(HWDataManager::instance().findFileForRead("css/chat.css"));
+        QFile extFile(DataManager::instance().findFileForRead("css/chat.css"));
 
         QFile resFile(":/res/css/chat.css");
 
@@ -247,17 +247,22 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     this->notify = notify;
 
     m_isAdmin = false;
+    m_autoKickEnabled = false;
 
     if(gameSettings->value("frontend/sound", true).toBool())
     {
-        if (notify)
-            m_helloSound = HWDataManager::instance().findFileForRead(
-                               "Sounds/voices/Classic/Hello.ogg");
+        QStringList vpList =
+             QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
 
-        m_hilightSound = HWDataManager::instance().findFileForRead(
+        foreach (QString vp, vpList)
+        {
+            m_helloSounds.append(DataManager::instance().findFileForRead(
+                               QString("Sounds/voices/%1/Hello.ogg").arg(vp)));
+        }
+
+        m_hilightSound = DataManager::instance().findFileForRead(
                              "Sounds/beep.ogg");
 
-        //m_hilightSound = m_helloSound;//"Sounds/beep.ogg";
     }
 
     mainLayout.setSpacing(1);
@@ -393,6 +398,11 @@ void HWChatWidget::setShowFollow(bool enabled)
         if (chatNicks->actions().contains(acFollow))
             chatNicks->removeAction(acFollow);
     }
+}
+
+void HWChatWidget::setIgnoreListKick(bool enabled)
+{
+    m_autoKickEnabled = enabled;
 }
 
 void HWChatWidget::loadList(QStringList & list, const QString & file)
@@ -632,6 +642,13 @@ void HWChatWidget::onServerMessage(const QString& str)
 void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 {
     bool isIgnored = ignoreList.contains(nick, Qt::CaseInsensitive);
+
+    if (isIgnored && m_isAdmin && m_autoKickEnabled)
+    {
+        emit kick(nick);
+        return;
+    }
+
     QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), isIgnored);
     updateNickItem(item);
     chatNicks->addItem(item);
@@ -643,7 +660,8 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
     if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool())
     {
-        SDLInteraction::instance().playSoundFile(m_helloSound);
+        SDLInteraction::instance().playSoundFile(
+                            m_helloSounds.at(rand() % m_helloSounds.size()));
     }
 }
 
@@ -968,7 +986,7 @@ void HWChatWidget::discardStyleSheet()
 void HWChatWidget::saveStyleSheet()
 {
     QString dest =
-        HWDataManager::instance().findFileForWrite("css/chat.css");
+        DataManager::instance().findFileForWrite("css/chat.css");
 
     QFile file(dest);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))

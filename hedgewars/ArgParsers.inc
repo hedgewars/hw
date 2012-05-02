@@ -50,10 +50,10 @@ begin
     UserNick:= DecodeBase64(ParamStr(14));
     val(ParamStr(15), cReducedQuality);
     val(ParamStr(16), tmp);
-    cGrayScale:= false;
+    GrayScale:= false;
     if (tmp > 9) and (tmp < 16) then 
         begin
-        cGrayScale:= true;
+        GrayScale:= true;
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-9)))
         end
     else if tmp <= 9 then 

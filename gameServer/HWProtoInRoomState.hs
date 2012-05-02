@@ -278,6 +278,8 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     where
         engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "(team): ", msg, "\x20\x20"]
 
+handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
+
 handleCmd_inRoom (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: in room)"]
 
 handleCmd_inRoom [] = return [ProtocolError "Empty command (state: in room)"]

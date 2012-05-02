@@ -2,7 +2,7 @@
 #include <QDir>
 
 #include "qpushbuttonwithsound.h"
-#include "HWDataManager.h"
+#include "DataManager.h"
 #include "SDLInteraction.h"
 #include "hwform.h"
 #include "gameuiconfig.h"
@@ -19,7 +19,7 @@ void QPushButtonWithSound::buttonClicked()
     if ( !isSoundEnabled || !HWForm::config->isFrontendSoundEnabled())
         return;
 
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     if (this->isEnabled())
         SDLInteraction::instance().playSoundFile(dataMgr.findFileForRead("Sounds/roperelease.ogg"));

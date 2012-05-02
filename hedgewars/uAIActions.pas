@@ -126,8 +126,6 @@ with Actions do
 end;
 
 procedure CheckHang(Me: PGear);
-const PrevX: LongInt = 0;
-      timedelta: Longword = 0;
 begin
 if hwRound(Me^.X) <> PrevX then
     begin

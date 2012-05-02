@@ -37,56 +37,6 @@
     return rotationManager(interfaceOrientation);
 }
 
-// check if some configuration files are already set; if they are present it means that the current copy must be updated
--(void) createNecessaryFiles {
-    DLog(@"Creating necessary files");
-    NSInteger index;
-    
-    // SAVES - just delete and overwrite
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SAVES_DIRECTORY()])
-        [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
-    [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY()
-                              withIntermediateDirectories:NO
-                                               attributes:nil
-                                                    error:NULL];
-
-    // SCREENSHOTS - just create it the first time
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SCREENSHOTS_DIRECTORY()] == NO)
-        [[NSFileManager defaultManager] createDirectoryAtPath:SCREENSHOTS_DIRECTORY()
-                                  withIntermediateDirectories:NO
-                                                   attributes:nil
-                                                        error:NULL];
-
-    // SETTINGS - nsuserdefaults ftw
-    [CreationChamber createSettings];
-
-    // TEAMS - update exisiting teams with new format
-    NSArray *teamNames = [[NSArray alloc] initWithObjects:@"Edit Me!",@"Ninjas",@"Pirates",@"Robots",nil];
-    index = 0;
-    for (NSString *name in teamNames)
-        [CreationChamber createTeamNamed:name ofType:index++ controlledByAI:[name isEqualToString:@"Robots"]];
-    [teamNames release];
-
-    // SCHEMES - always overwrite and delete custom ones
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
-        [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
-    NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",
-                            @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Fort Mode",@"Timeless",
-                            @"Thinking with Portals",@"King Mode",nil];
-    index = 0;
-    for (NSString *name in schemeNames)
-        [CreationChamber createSchemeNamed:name ofType:index++];
-    [schemeNames release];
-
-    // WEAPONS - always overwrite as merge is not needed (missing weaps are 0ed automatically)
-    NSArray *weaponNames = [[NSArray alloc] initWithObjects:@"Default",@"Crazy",@"Pro Mode",@"Shoppa",@"Clean Slate",
-                            @"Minefield",@"Thinking with Portals",nil];
-    index = 0;
-    for (NSString *name in weaponNames)
-        [CreationChamber createWeaponNamed:name ofType:index++];
-    [weaponNames release];
-}
-
 #pragma mark -
 -(void) viewDidLoad {
     self.view.frame = [[UIScreen mainScreen] safeBounds];
@@ -104,14 +54,14 @@
         [userDefaults setObject:@"" forKey:@"savedGamePath"];
         // update the tracking version with the new one
         [userDefaults setObject:version forKey:@"HedgeVersion"];
-
         [userDefaults synchronize];
-        [self createNecessaryFiles];
+
+        [CreationChamber createFirstLaunch];
     }
 
     // prompt for restoring any previous game
     NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
-    if (saveString != nil && [saveString isEqualToString:@""] == NO) {
+    if (saveString != nil && [saveString isEqualToString:@""] == NO && [[userDefaults objectForKey:@"saveIsValid"] boolValue]) {
         if (self.restoreViewController == nil) {
             NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
             RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
@@ -132,7 +82,7 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    [AudioManagerController playBackgroundMusic];
+    [[AudioManagerController mainManager] playBackgroundMusic];
     [super viewWillAppear:animated];
 }
 
@@ -143,7 +93,7 @@
     NSString *xib = nil;
     NSString *debugStr = nil;
 
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {

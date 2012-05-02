@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,6 +83,7 @@
 #include "netudpserver.h"
 #include "chatwidget.h"
 #include "input_ip.h"
+#include "input_password.h"
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
 #include "xfire.h"
@@ -90,7 +91,7 @@
 #include "mouseoverfilter.h"
 #include "roomslistmodel.h"
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #ifdef __APPLE__
 #include "M3Panel.h"
@@ -119,7 +120,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 {
     // set music track
     SDLInteraction::instance().setMusicTrack(
-        HWDataManager::instance().findFileForRead("Music/main_theme.ogg")
+        DataManager::instance().findFileForRead("Music/main_theme.ogg")
     );
 
 #ifdef USE_XFIRE
@@ -154,8 +155,10 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect (hideFrontend, SIGNAL(activated()), this, SLOT(showMinimized()));
 #else
     // ctrl+q closes frontend for consistency
-    QShortcut *closeFrontend = new QShortcut(QKeySequence("Ctrl+Q"), this);
+    QShortcut * closeFrontend = new QShortcut(QKeySequence("Ctrl+Q"), this);
     connect (closeFrontend, SIGNAL(activated()), this, SLOT(close()));
+    QShortcut * updateData = new QShortcut(QKeySequence("F5"), this);
+    connect (updateData, SIGNAL(activated()), &DataManager::instance(), SLOT(reload()));
 #endif
 
     UpdateTeamsLists();
@@ -592,6 +595,11 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         ui.pageOptions->setTeamOptionsEnabled(true);
     }
 
+    if (id == ID_PAGE_SETUP)
+    {
+        config->reloadValues();
+    }
+
     // load and save ignore/friends lists
     if (lastid == ID_PAGE_NETGAME) // leaving a room
         ui.pageNetGame->pChatWidget->saveLists(ui.pageOptions->editNetNick->text());
@@ -638,7 +646,7 @@ void HWForm::GoToPage(int id)
         //New page animation
         animationNewSlide = new QPropertyAnimation(ui.Pages->widget(id), "pos");
         animationNewSlide->setDuration(duration);
-        animationNewSlide->setStartValue(QPoint(20000/coeff, 0));
+        animationNewSlide->setStartValue(QPoint(this->width()*1.5/coeff, 0));
         animationNewSlide->setEndValue(QPoint(0, 0));
         animationNewSlide->setEasingCurve(QEasingCurve::OutExpo);
 
@@ -656,7 +664,7 @@ void HWForm::GoToPage(int id)
         animationOldSlide = new QPropertyAnimation(ui.Pages->widget(lastid), "pos");
         animationOldSlide->setDuration(duration);
         animationOldSlide->setStartValue(QPoint(0, 0));
-        animationOldSlide->setEndValue(QPoint(-20000/coeff, 0));
+        animationOldSlide->setEndValue(QPoint(this->width()*1.5/coeff, 0));
         animationOldSlide->setEasingCurve(QEasingCurve::OutExpo);
 
 #ifdef false
@@ -935,25 +943,34 @@ void HWForm::NetConnectOfficialServer()
 
 void HWForm::NetPassword(const QString & nick)
 {
-    bool ok = false;
     int passLength = config->value("net/passwordlength", 0).toInt();
     QString hash = config->value("net/passwordhash", "").toString();
 
     // If the password is blank, ask the user to enter one in
     if (passLength == 0)
     {
-        QString password = QInputDialog::getText(this, tr("Password"), tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(nick), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'), &ok);
-
-        if (!ok)
+        HWPasswordDialog * hpd = new HWPasswordDialog(this, tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(nick));
+        hpd->cbSave->setChecked(config->value("net/savepassword", true).toBool());
+        if (hpd->exec() != QDialog::Accepted)
         {
             ForcedDisconnect(tr("No password supplied."));
+            delete hpd;
             return;
         }
 
+        QString password = hpd->lePassword->text();
         hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
-        config->setValue("net/passwordhash", hash);
-        config->setValue("net/passwordlength", password.size());
-        config->setNetPasswordLength(password.size());
+
+        bool save = hpd->cbSave->isChecked();
+        config->setValue("net/savepassword", save);
+        if (save) // user wants to save password
+        {
+            config->setValue("net/passwordhash", hash);
+            config->setValue("net/passwordlength", password.size());
+            config->setNetPasswordLength(password.size());
+        }
+
+        delete hpd;
     }
 
     hwnet->SendPasswordHash(hash);
@@ -1180,6 +1197,7 @@ void HWForm::NetConnect()
         netPort = hpd->sbPort->value();
         NetConnectServer(*netHost, netPort);
     }
+    delete hpd;
 }
 
 void HWForm::NetStartServer()
@@ -1524,7 +1542,7 @@ void HWForm::UpdateCampaignPage(int index)
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBSelect->clear();
 
-    QStringList entries = HWDataManager::instance().entryList(
+    QStringList entries = DataManager::instance().entryList(
                               "Missions/Campaign",
                               QDir::Files,
                               QStringList("*#*.lua")

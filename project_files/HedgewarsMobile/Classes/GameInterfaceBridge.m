@@ -25,19 +25,20 @@
 static UIViewController *callingController;
 
 @implementation GameInterfaceBridge
-@synthesize blackView, savePath, proto;
+@synthesize blackView, savePath, port;
 
 #pragma mark -
 #pragma mark Instance methods for engine interaction
 // prepares the controllers for hosting a game
 -(void) earlyEngineLaunch:(NSDictionary *)optionsOrNil {
     [self retain];
-    [AudioManagerController fadeOutBackgroundMusic];
+    [[AudioManagerController mainManager] fadeOutBackgroundMusic];
 
     EngineProtocolNetwork *engineProtocol = [[EngineProtocolNetwork alloc] init];
-    self.proto = engineProtocol;
+    self.port = engineProtocol.enginePort;
+    engineProtocol.delegate = self;
+    [engineProtocol spawnThread:self.savePath withOptions:optionsOrNil];
     [engineProtocol release];
-    [self.proto spawnThread:self.savePath withOptions:optionsOrNil];
 
     // add a black view hiding the background
     UIWindow *thisWindow = [[HedgewarsAppDelegate sharedAppDelegate] uiwindow];
@@ -53,9 +54,10 @@ static UIViewController *callingController;
     [thisWindow addSubview:self.blackView];
     [self.blackView release];
 
-    // keep track of uncompleted games
+    // keep the point of return for games that completed loading
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
+    [userDefaults setObject:[NSNumber numberWithBool:NO] forKey:@"saveIsValid"];
     [userDefaults synchronize];
 
     // let's launch the engine using this -perfomSelector so that the runloop can deal with queued messages first
@@ -81,26 +83,12 @@ static UIViewController *callingController;
     [UIView commitAnimations];
     [self.blackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
-    // engine thread *should* be done by now
-    NSArray *stats = [[NSArray alloc] initWithArray:self.proto.statsArray copyItems:YES];
-    if ([HWUtils gameStatus] == gsEnded && stats != nil) {
-        StatsPageViewController *statsPage = [[StatsPageViewController alloc] init];
-        statsPage.statsArray = stats;
-        statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
-            statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
-
-        [callingController presentModalViewController:statsPage animated:YES];
-        [statsPage release];
-    }
-    [stats release];
-
     // can remove the savefile if the replay has ended
     if ([HWUtils gameType] == gtSave)
         [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
 
     // restart music and we're done
-    [AudioManagerController fadeInBackgroundMusic];
+    [[AudioManagerController mainManager] fadeInBackgroundMusic];
     [HWUtils setGameStatus:gsNone];
     [HWUtils setGameType:gtNone];
     [self release];
@@ -110,9 +98,8 @@ static UIViewController *callingController;
 -(void) engineLaunch {
     const char *gameArgs[11];
     CGFloat width, height;
-    NSInteger enginePort = self.proto.enginePort;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
-    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",enginePort];
+    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",self.port];
     NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale preferredLanguages] objectAtIndex:0]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
@@ -174,8 +161,20 @@ static UIViewController *callingController;
 -(void) dealloc {
     releaseAndNil(blackView);
     releaseAndNil(savePath);
-    releaseAndNil(proto);
     [super dealloc];
+}
+
+#pragma mark -
+#pragma mark EngineProtocolDelegate methods
+-(void) gameEndedWithStatistics:(NSArray *)stats {
+    if (stats != nil) {
+        StatsPageViewController *statsPage = [[StatsPageViewController alloc] init];
+        statsPage.statsArray = stats;
+        statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+
+        [callingController presentModalViewController:statsPage animated:YES];
+        [statsPage release];
+    }
 }
 
 #pragma mark -

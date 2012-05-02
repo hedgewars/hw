@@ -16,6 +16,7 @@ set(engine_output_name "hwengine")
 set(engine_sources
     ${hwengine_project}
     SDLh.pas
+    PNGh.pas
     uAI.pas
     uAIActions.pas
     uAIAmmoTests.pas
@@ -34,7 +35,7 @@ set(engine_sources
     uGears.pas
     uGearsRender.pas
     uIO.pas
-    uKeys.pas
+    uInputHandler.pas
     uLand.pas
     uLandGenMaze.pas
     uLandGraphics.pas
@@ -63,7 +64,6 @@ set(engine_sources
     uWorld.pas
     GSHandlers.inc
     VGSHandlers.inc
-    HHHandlers.inc
     ArgParsers.inc
     options.inc
     adler32.pas
@@ -141,11 +141,24 @@ else()
     message(FATAL_ERROR "No Pascal compiler found!")
 endif()
 
+
+#DEPENDECIES AND EXECUTABLES SECTION
+find_package(PNG)
+if(${PNG_FOUND})
+    message(STATUS "PNG screenshots enabled (library found at ${PNG_LIBRARY})")
+    set(pascal_compiler_flags_cmn "-dPNG_SCREENSHOTS" ${pascal_compiler_flags_cmn})
+    if(APPLE)  # need to explictly link with the static lib
+        string(REGEX REPLACE "(.*)libpng.*" "\\1" PNG_LIBDIR "${PNG_LIBRARY}")
+        set(pascal_compiler_flags_cmn "-k${PNG_LIBDIR}/libpng.a" ${pascal_compiler_flags_cmn})
+    endif()
+else()
+    message(STATUS "PNG library not found, switching to screenshots in BMP format")
+endif()
+
 set(pascal_compiler ${fpc_executable})
 set(pascal_compiler_flags ${noexecstack_flags} ${pascal_compiler_flags_cmn} ${hwengine_project})
 
 
-#DEPENDECIES AND EXECUTABLES SECTION
 IF(NOT APPLE)
     #here is the command for standard executables or for shared library
     add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}"

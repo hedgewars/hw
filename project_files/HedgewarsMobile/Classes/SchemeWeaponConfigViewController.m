@@ -98,11 +98,12 @@
 -(void) viewDidLoad {
     self.sectionsHidden = NO;
 
-    NSInteger verticalOffset = IS_IPAD() ? 45 : 0;
+    NSInteger topOffset = IS_IPAD() ? 45 : 0;
+    NSInteger bottomOffset = IS_IPAD() ? 3 : 0;
     UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0,
-                                                                            verticalOffset,
+                                                                            topOffset,
                                                                             self.view.frame.size.width,
-                                                                            self.view.frame.size.height - verticalOffset)
+                                                                            self.view.frame.size.height - topOffset - bottomOffset)
                                                            style:UITableViewStyleGrouped];
     aTableView.delegate = self;
     aTableView.dataSource = self;
@@ -271,9 +272,9 @@
             if ([[settings objectForKey:@"sync_ws"] boolValue]) {
                 for (NSString *str in self.listOfWeapons) {
                     if ([str isEqualToString:self.selectedScheme]) {
-                        int index = [self.listOfSchemes indexOfObject:str];
+                        int row = [self.listOfSchemes indexOfObject:str];
                         self.selectedWeapon = str;
-                        self.lastIndexPath_we = [NSIndexPath indexPathForRow:index inSection:1];
+                        self.lastIndexPath_we = [NSIndexPath indexPathForRow:row inSection:1];
                         break;
                     }
                 }

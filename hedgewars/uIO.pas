@@ -26,6 +26,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure SendIPC(s: shortstring);
+procedure SendIPCc(c: char);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
@@ -104,7 +105,7 @@ begin
     WriteLnToConsole(msgOK);
     WriteToConsole('Establishing IPC connection to tcp 127.0.0.1:' + IntToStr(ipcPort) + ' ');
     {$HINTS OFF}
-    SDLTry(SDLNet_ResolveHost(ipaddr, '127.0.0.1', ipcPort) = 0, true);
+    SDLTry(SDLNet_ResolveHost(ipaddr, PChar('127.0.0.1'), ipcPort) = 0, true);
     {$HINTS ON}
     IPCSock:= SDLNet_TCP_Open(ipaddr);
     SDLTry(IPCSock <> nil, true);
@@ -123,7 +124,7 @@ var loTicks: Word;
 begin
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
-     '?': SendIPC('!');
+     '?': SendIPCc('!');
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
@@ -142,27 +143,26 @@ case s[1] of
 end;
 
 procedure IPCCheckSock;
-const ss: shortstring = '';
 var i: LongInt;
     s: shortstring;
 begin
-if IPCSock = nil then
-    exit;
+    if IPCSock = nil then
+        exit;
 
-fds^.numsockets:= 0;
-SDLNet_AddSocket(fds, IPCSock);
+    fds^.numsockets:= 0;
+    SDLNet_AddSocket(fds, IPCSock);
 
-while SDLNet_CheckSockets(fds, 0) > 0 do
+    while SDLNet_CheckSockets(fds, 0) > 0 do
     begin
-    i:= SDLNet_TCP_Recv(IPCSock, @s[1], 255 - Length(ss));
-    if i > 0 then
+        i:= SDLNet_TCP_Recv(IPCSock, @s[1], 255 - Length(SocketString));
+        if i > 0 then
         begin
-        s[0]:= char(i);
-        ss:= ss + s;
-        while (Length(ss) > 1) and (Length(ss) > byte(ss[1])) do
+            s[0]:= char(i);
+            SocketString:= SocketString + s;
+            while (Length(SocketString) > 1) and (Length(SocketString) > byte(SocketString[1])) do
             begin
-            ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-            Delete(ss, 1, Succ(byte(ss[1])))
+                ParseIPCCommand(copy(SocketString, 2, byte(SocketString[1])));
+                Delete(SocketString, 1, Succ(byte(SocketString[1])))
             end
         end
     else
@@ -206,7 +206,7 @@ close(f)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'rDkKHTPsSB';
+const stc: array [TStatInfoType] of char = ('r', 'D', 'k', 'K', 'H', 'T', 'P', 's', 'S', 'B');
 var buf: shortstring;
 begin
 buf:= 'i' + stc[sit] + s;
@@ -227,6 +227,14 @@ if IPCSock <> nil then
     inc(s[0], 2);
     SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
     end
+end;
+
+procedure SendIPCc(c: char);
+var s: shortstring;
+begin
+    s[0]:= #1;
+    s[1]:= c;
+    SendIPC(s);
 end;
 
 procedure SendIPCRaw(p: pointer; len: Longword);
@@ -259,7 +267,7 @@ end;
 procedure SendIPCAndWaitReply(s: shortstring);
 begin
 SendIPC(s);
-SendIPC('?');
+SendIPCc('?');
 IPCWaitPongEvent
 end;
 
@@ -267,7 +275,7 @@ procedure SendKeepAliveMessage(Lag: Longword);
 begin
 inc(SendEmptyPacketTicks, Lag);
 if (SendEmptyPacketTicks >= cSendEmptyPacketTime) then
-    SendIPC('+')
+    SendIPCc('+')
 end;
 
 procedure NetGetNextCmd;
@@ -347,9 +355,11 @@ while (headcmd <> nil)
         't': ParseCommand('taunt ' + headcmd^.str[2], true);
         'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
-        #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
         else
-            OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
+            if (headcmd^.cmd >= #128) and (headcmd^.cmd <= char(128 + cMaxSlotIndex)) then
+                ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
+                else
+                OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
         end;
     RemoveCmd
     end;
@@ -418,14 +428,15 @@ end;
 
 procedure initModule;
 begin
-    RegisterVariable('fatal', vtCommand, @chFatalError, true );
+    RegisterVariable('fatal', @chFatalError, true );
 
     IPCSock:= nil;
 
     headcmd:= nil;
     lastcmd:= nil;
-    isPonged:= false;   // was const
-
+    isPonged:= false;
+    SocketString:= '';
+    
     hiTicks:= 0;
     SendEmptyPacketTicks:= 0;
 end;

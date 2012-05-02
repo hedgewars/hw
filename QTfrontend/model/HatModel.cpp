@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2008-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,35 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+/**
+ * @file
+ * @brief HatModel class implementation
+ */
+
+#include "HatModel.h"
+
 #include <QDir>
 #include <QPixmap>
 #include <QPainter>
-#include "hwconsts.h"
-#include "hwform.h"
-#include "hats.h"
+#include "hwform.h" // player hash
 
-#include "HWDataManager.h"
+#include "DataManager.h"
 
-HatsModel::HatsModel(QObject* parent) :
+HatModel::HatModel(QObject* parent) :
     QAbstractListModel(parent)
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    hats = QVector<QPair<QString, QIcon> >();
+}
+
+void HatModel::loadHats()
+{
+    // this method resets the contents of this model (important to know for views).
+    beginResetModel();
+
+    // prepare hats Vector
+    hats.clear();
+
+    DataManager & dataMgr = DataManager::instance();
 
     QPixmap hhpix = QPixmap(
                         dataMgr.findFileForRead("Graphics/Hedgehog/Idle.png")
@@ -86,9 +102,12 @@ HatsModel::HatsModel(QObject* parent) :
         else
             hats.append(qMakePair(str, QIcon(tmppix)));
     }
+
+
+    endResetModel();
 }
 
-QVariant HatsModel::headerData(int section,
+QVariant HatModel::headerData(int section,
                                Qt::Orientation orientation, int role) const
 {
     Q_UNUSED(section);
@@ -98,7 +117,7 @@ QVariant HatsModel::headerData(int section,
     return QVariant();
 }
 
-int HatsModel::rowCount(const QModelIndex &parent) const
+int HatModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
@@ -106,7 +125,7 @@ int HatsModel::rowCount(const QModelIndex &parent) const
         return hats.size();
 }
 
-/*int HatsModel::columnCount(const QModelIndex & parent) const
+/*int HatModel::columnCount(const QModelIndex & parent) const
 {
     if (parent.isValid())
         return 0;
@@ -114,7 +133,7 @@ int HatsModel::rowCount(const QModelIndex &parent) const
         return 2;
 }
 */
-QVariant HatsModel::data(const QModelIndex &index,
+QVariant HatModel::data(const QModelIndex &index,
                          int role) const
 {
     if (!index.isValid() || index.row() < 0

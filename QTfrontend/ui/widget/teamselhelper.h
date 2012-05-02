@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -57,7 +57,7 @@ class TeamShowWidget : public QWidget
         void activateTeam();
 
     public:
-        TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
+        TeamShowWidget(HWTeam team, bool isPlaying, FrameTeams * parent);
         void setPlaying(bool isPlaying);
         void setHHNum(unsigned int num);
         void setInteractivity(bool interactive);
@@ -71,6 +71,7 @@ class TeamShowWidget : public QWidget
         CHedgehogerWidget* phhoger;
         QPushButton* colorButt;
         QPushButton* butt;
+        FrameTeams * m_parentFrameTeams;
 // QPushButton* bText;
 
     signals:

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include <QSettings>
 
 #include "hwconsts.h"
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #include "pagetraining.h"
 
@@ -115,7 +115,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 {
     initPage();
 
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     // get locale
     QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini",
@@ -186,7 +186,7 @@ void PageTraining::startSelected()
 
 void PageTraining::updateInfo()
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     if (lstMissions->currentItem())
     {

@@ -1023,7 +1023,7 @@ begin
             if lua_gettop(L) = 2 then
                 AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)))
             else
-                AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)), lua_tointeger(L, 3))
+                SetAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)), lua_tointeger(L, 3))
         end
     else LuaError('Lua: Wrong number of parameters passed to AddAmmo!');
     lc_addammo:= 0
@@ -1713,7 +1713,7 @@ if not ScriptLoaded then
     exit;
 
 // push game variables so they may be modified by the script
-ScriptSetInteger('BorderColor', cExplosionBorderColor);
+ScriptSetInteger('BorderColor', ExplosionBorderColor);
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);

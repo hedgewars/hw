@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QEvent>
+#include <QDebug>
 
 #include "drawmapwidget.h"
 
@@ -51,8 +52,10 @@ void DrawMapWidget::changeEvent(QEvent *e)
 
 void DrawMapWidget::setScene(DrawMapScene * scene)
 {
-    ui->graphicsView->setScene(scene);
     m_scene = scene;
+
+    ui->graphicsView->setScene(scene);
+    connect(scene, SIGNAL(pathChanged()), this, SLOT(pathChanged()));
 }
 
 void DrawMapWidget::resizeEvent(QResizeEvent * event)
@@ -80,6 +83,11 @@ void DrawMapWidget::clear()
     if(m_scene) m_scene->clearMap();
 }
 
+void DrawMapWidget::setErasing(bool erasing)
+{
+    if(m_scene) m_scene->setErasing(erasing);
+}
+
 void DrawMapWidget::save(const QString & fileName)
 {
     if(m_scene)
@@ -104,4 +112,54 @@ void DrawMapWidget::load(const QString & fileName)
         else
             m_scene->decode(qUncompress(QByteArray::fromBase64(f.readAll())));
     }
+}
+
+void DrawMapWidget::pathChanged()
+{
+    ui->lblPoints->setNum(m_scene->pointsCount());
+}
+
+
+
+DrawMapView::DrawMapView(QWidget *parent) :
+    QGraphicsView(parent)
+{
+   setMouseTracking(true);
+
+    m_scene = 0;
+}
+
+
+DrawMapView::~DrawMapView()
+{
+
+}
+
+void DrawMapView::setScene(DrawMapScene *scene)
+{
+    m_scene = scene;
+
+    QGraphicsView::setScene(scene);
+}
+
+// Why don't I ever recieve this event?
+void DrawMapView::enterEvent(QEvent *event)
+{
+    if(m_scene)
+        m_scene->showCursor();
+
+    QGraphicsView::enterEvent(event);
+}
+
+void DrawMapView::leaveEvent(QEvent *event)
+{
+    if(m_scene)
+        m_scene->hideCursor();
+
+    QGraphicsView::leaveEvent(event);
+}
+
+bool DrawMapView::viewportEvent(QEvent *event)
+{
+    return QGraphicsView::viewportEvent(event);
 }
