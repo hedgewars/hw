@@ -76,10 +76,14 @@ class PageRoomsList : public AbstractPage
         void onClearClick();
         void onJoinConfirmation(const QString &);
         void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
+        void onFilterChanged();
 
     private:
         QSettings * m_gameSettings;
         QSortFilterProxyModel * roomsModel;
+        QSortFilterProxyModel * stateFilteredModel;
+        QSortFilterProxyModel * schemeFilteredModel;
+        QSortFilterProxyModel * weaponsFilteredModel;
 
         AmmoSchemeModel * ammoSchemeModel;
 

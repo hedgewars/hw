@@ -119,7 +119,7 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
     {
         // supply in progress flag as bool
         if (column == 0)
-            return QVariant(!content.isEmpty());
+            return QVariant(QString(!content.isEmpty()));
 
         // display room names
         if (column == 5)
