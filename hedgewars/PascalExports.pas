@@ -146,7 +146,7 @@ end;
 
 function HW_isWeaponRope: boolean cdecl; export;
 begin
-    HW_isWeaponRope:= false
+    HW_isWeaponRope:= false;
     if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Ammo <> nil) and (CurrentHedgehog^.BotLevel = 0) then
         HW_isWeaponRope:= (CurrentHedgehog^.CurAmmoType = amRope);
 end;
