@@ -68,7 +68,7 @@ begin
             AddFlakes;
             AssignHHCoords;
             AddMiscGears;
-            StoreLoad;
+            StoreLoad(false);
             InitWorld;
             ResetKbd;
             SoundLoad;
@@ -132,7 +132,7 @@ procedure OnDestroy;
 begin
     WriteLnToConsole('Freeing resources...');
     FreeActionsList();
-    StoreRelease();
+    StoreRelease(false);
     ControllerClose();
     CloseIPC();
     TTF_Quit();

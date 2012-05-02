@@ -24,25 +24,31 @@ interface
 
 uses SDLh, uTypes, GLunit, uConsts;
 
-procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
-procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
+procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+
+procedure DrawSprite(Sprite: TSprite; X, Y, Frame: LongInt);
+procedure DrawSprite(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
+procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat = 1.0);
+
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture); inline;
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
-procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
+
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
+procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
+
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 procedure DrawFillRect(r: TSDL_Rect);
-procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 procedure DrawCircle(X, Y, Radius, Width: LongInt);
+procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawScreenWidget(widget: POnScreenWidget);
+
 procedure Tint(r, g, b, a: Byte); inline;
 procedure Tint(c: Longword); inline;
 
@@ -112,6 +118,10 @@ glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 end;
 
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture); inline;
+begin
+    DrawTexture(X, Y, Texture, 1.0);
+end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 begin
@@ -258,15 +268,25 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 glPopMatrix
 end;
 
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
+procedure DrawSprite(Sprite: TSprite; X, Y, Frame: LongInt);
 var row, col, numFramesFirstCol: LongInt;
 begin
-if SpritesData[Sprite].imageHeight = 0 then
-    exit;
-numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
-row:= Frame mod numFramesFirstCol;
-col:= Frame div numFramesFirstCol;
-DrawSprite2 (Sprite, X, Y, col, row);
+    if SpritesData[Sprite].imageHeight = 0 then
+        exit;
+    numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
+    row:= Frame mod numFramesFirstCol;
+    col:= Frame div numFramesFirstCol;
+    DrawSprite(Sprite, X, Y, col, row);
+end;
+
+procedure DrawSprite(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
+var r: TSDL_Rect;
+begin
+    r.x:= FrameX * SpritesData[Sprite].Width;
+    r.w:= SpritesData[Sprite].Width;
+    r.y:= FrameY * SpritesData[Sprite].Height;
+    r.h:= SpritesData[Sprite].Height;
+    DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
@@ -291,16 +311,6 @@ dec(r.h, r.y);
 dec(r.w, r.x);
 
 DrawFromRect(X + r.x, Y + r.y, @r, SpritesData[Sprite].Texture)
-end;
-
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
-var r: TSDL_Rect;
-begin
-    r.x:= FrameX * SpritesData[Sprite].Width;
-    r.w:= SpritesData[Sprite].Width;
-    r.y:= FrameY * SpritesData[Sprite].Height;
-    r.h:= SpritesData[Sprite].Height;
-    DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
@@ -495,28 +505,28 @@ end;
 procedure Tint(r, g, b, a: Byte); inline;
 var nc, tw: Longword;
 begin
-nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
+    nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
 
-if nc = lastTint then
-    exit;
+    if nc = lastTint then
+        exit;
 
-if GrayScale then
-    begin
-    tw:= round(r * RGB_LUMINANCE_RED + g * RGB_LUMINANCE_GREEN + b * RGB_LUMINANCE_BLUE);
-    if tw > 255 then
-        tw:= 255;
-    r:= tw;
-    g:= tw;
-    b:= tw
-    end;
+    if GrayScale then
+        begin
+        tw:= round(r * RGB_LUMINANCE_RED + g * RGB_LUMINANCE_GREEN + b * RGB_LUMINANCE_BLUE);
+        if tw > 255 then
+            tw:= 255;
+        r:= tw;
+        g:= tw;
+        b:= tw
+        end;
 
-glColor4ub(r, g, b, a);
-lastTint:= nc;
+    glColor4ub(r, g, b, a);
+    lastTint:= nc;
 end;
 
 procedure Tint(c: Longword); inline;
 begin
-Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
+    Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
 end;
 
 end.
