@@ -71,8 +71,9 @@ begin
 movecursor(5 * CursorMovementX, 5 * CursorMovementY);
 
 
-//TODO reimplement
-{$IFDEF 0}
+(* 
+TODO reimplement
+$IFNDEF MOBILE
 // Controller(s)
 k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
@@ -103,7 +104,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
         inc(k, 1);
         end;
     end;
-{$ENDIF}
+$ENDIF *)
 
 end;
 
