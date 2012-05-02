@@ -504,5 +504,9 @@ void PageRoomsList::setModel(QAbstractTableModel *model)
 
 void PageRoomsList::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
 {
-    roomsModel->sort(logicalIndex, order);
+    // three state sorting: asc -> dsc -> default (by room state)
+    if ((order == Qt::AscendingOrder) && (logicalIndex == roomsModel->sortColumn()))
+        roomsList->horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
+    else
+        roomsModel->sort(logicalIndex, order);
 }
