@@ -89,3 +89,5 @@ void reset(int f, int size);
 #define BlockRead(a, b, c, d) BlockRead_(a, &(b), c, &(d))
 void BlockRead_(int f, void * p, int size, int * sizeRead);
 void close(int f);
+
+bool odd(int i);

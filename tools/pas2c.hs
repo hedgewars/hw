@@ -376,6 +376,10 @@ tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
          (True, BTInt, [i], Just _) -> do
              i' <- id2CTyped t i
              return [text "enum" <> braces (i' <+> ie)]
+         (True, BTFloat, [i], Just e) -> do
+             i' <- id2CTyped t i
+             ie <- initExpr2C e
+             return [text "#define" <+> i' <+> parens ie <> text "\n"]
          _ -> liftM (map(\i -> t' i <+> ie)) $ mapM (id2CTyped t) ids
     where
     initExpr Nothing = return $ empty
