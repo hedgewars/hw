@@ -480,11 +480,14 @@ void PageRoomsList::setModel(QAbstractTableModel *model)
     roomsModel->setSourceModel(model);
     roomsModel->setDynamicSortFilter(true);
     roomsModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    roomsModel->sort(0, Qt::AscendingOrder);
     roomsList->setModel(roomsModel);
 
     roomsList->hideColumn(0);
 
     QHeaderView * h = roomsList->horizontalHeader();
+
+    h->setSortIndicatorShown(true);
 
     h->setResizeMode(1, QHeaderView::Stretch);
     h->resizeSection(2, 32);
@@ -501,6 +504,5 @@ void PageRoomsList::setModel(QAbstractTableModel *model)
 
 void PageRoomsList::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
 {
-    roomsList->horizontalHeader()->setSortIndicatorShown(true);
     roomsModel->sort(logicalIndex, order);
 }
