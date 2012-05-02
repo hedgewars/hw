@@ -1302,7 +1302,8 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepSnowflake,
             @doStepStructure,
             @doStepLandGun,
-            @doStepTardis);
+            @doStepTardis,
+            @doStepIceGun);
 begin
     doStepHandlers:= handlers;
 
