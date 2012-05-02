@@ -301,11 +301,12 @@ var x, y: Longword;
     cnt, i: Longword;
     bRes: boolean;
 begin
+TryPut:= false;
 cnt:= 0;
 with Obj do
     begin
     if Maxcnt = 0 then
-        exit(false);
+        exit;
     x:= 0;
     repeat
         y:= topY+32; // leave room for a hedgie to teleport in
@@ -346,11 +347,12 @@ var x, y: Longword;
     r: TSDL_Rect;
     bRes: boolean;
 begin
+TryPut:= false;
 cnt:= 0;
 with Obj do
     begin
     if Maxcnt = 0 then
-        exit(false);
+        exit;
     x:= 0;
     r.x:= 0;
     r.y:= 0;

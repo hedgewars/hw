@@ -474,22 +474,22 @@ end;
 function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 //const tDelta = 24;
 var Vx, Vy: real;
-    Score, EX, EY, valueResult: LongInt;
+    Score, EX, EY: LongInt;
     TestTime: Longword;
     x, y, dY, meX, meY: real;
 begin
-valueResult:= BadTurn;
+TestMortar:= BadTurn;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
 
 if (Level > 2) then
-    exit(BadTurn);
+    exit;
 
 TestTime:= Solve(Targ.X, Targ.Y, trunc(meX), trunc(meY));
 
 if TestTime = 0 then
-    exit(BadTurn);
+    exit;
 
     Vx:= (Targ.X - meX) / TestTime;
     Vy:= cGravityf * (TestTime div 2) - (Targ.Y - meY) / TestTime;
@@ -520,17 +520,15 @@ if TestTime = 0 then
     else
         Score:= BadTurn;
 
-    if valueResult < Score then
+    if BadTurn < Score then
         begin
         ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= 1;
         ap.ExplR:= 100;
         ap.ExplX:= EX;
         ap.ExplY:= EY;
-        valueResult:= Score
+        TestMortar:= Score
         end;
-
-TestMortar:= valueResult;
 end;
 
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -541,6 +539,7 @@ var Vx, Vy, x, y: real;
     rx, ry, valueResult: LongInt;
     range: integer;
 begin
+TestShotgun:= BadTurn;
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
@@ -548,7 +547,7 @@ x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 range:= Metric(trunc(x), trunc(y), Targ.X, Targ.Y);
 if ( range < MIN_RANGE ) or ( range > MAX_RANGE ) then
-    exit(BadTurn);
+    exit;
 Vx:= (Targ.X - x) * 1 / 1024;
 Vy:= (Targ.Y - y) * 1 / 1024;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
@@ -558,16 +557,18 @@ repeat
     rx:= trunc(x);
     ry:= trunc(y);
     if TestCollExcludingMe(Me, rx, ry, 2) then
-        begin
+    begin
         x:= x + vX * 8;
         y:= y + vY * 8;
         valueResult:= RateShotgun(Me, vX, vY, rx, ry);
      
-    if valueResult = 0 then 
-        valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
-    else 
-        dec(valueResult, Level * 4000);
-    exit(valueResult * 27 div 20) // 27/20 is reuse bonus
+        if valueResult = 0 then 
+            valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
+        else 
+            dec(valueResult, Level * 4000);
+        // 27/20 is reuse bonus
+        TestShotgun:= valueResult * 27 div 20;
+        exit 
     end
 until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4)
     or (x < 0)
@@ -591,7 +592,10 @@ ap.Power:= 1;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
-   exit(BadTurn);
+begin
+    TestDesertEagle:= BadTurn;
+    exit;
+end;
 t:= 0.5 / sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
 Vx:= (Targ.X - x) * t;
 Vy:= (Targ.Y - y) * t;
@@ -628,11 +632,12 @@ var valueResult: LongInt;
     x, y: real;
 begin
 Level:= Level; // avoid compiler hint
+TestBaseballBat:= BadTurn;
 ap.ExplR:= 0;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 if (Level > 2) or (Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) > 25) then
-    exit(BadTurn);
+    exit;
 
 ap.Time:= 0;
 ap.Power:= 1;
@@ -670,7 +675,8 @@ or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
         val1:= Succ(BadTurn)
     else
         val1:= BadTurn;
-    exit(val1)
+    TestFirePunch:= val1;
+    exit;
     end;
 (*
 For some silly reason, having this enabled w/ the AI 
@@ -718,7 +724,8 @@ or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
         valueResult:= Succ(BadTurn)
     else
         valueResult:= BadTurn;
-    exit(valueResult)
+    TestWhip:= valueResult;
+    exit;
     end;
 
 valueResult:= 0;
@@ -762,7 +769,10 @@ begin
 ap.ExplR:= 0;
 ap.Time:= 0;
 if (Level > 3) then
-    exit(BadTurn);
+begin
+    TestAirAttack:= BadTurn;
+    exit;
+end;
 
 ap.AttackPutX:= Targ.X;
 ap.AttackPutY:= Targ.Y;
@@ -826,7 +836,7 @@ var
     maxTop: longword;
 begin
     TestTeleport := BadTurn;
-    exit();
+    exit;
     Level:= Level; // avoid compiler hint
     //FillBonuses(true, [gtCase]);
     if bonuses.Count = 0 then

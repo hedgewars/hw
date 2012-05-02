@@ -216,51 +216,64 @@ end;
 function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 var MeX, MeY: LongInt;
 begin
+    TestCollExcludingMe:= false;
     if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
-        begin
+    begin
         MeX:= hwRound(Me^.X);
         MeY:= hwRound(Me^.Y);
         // We are still inside the hog. Skip radius test
         if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and ((Land[y, x] and $FF00) = 0) then
-            exit(false);
-        end;
-    exit(TestColl(x, y, r))
+            exit;
+    end;
+    TestCollExcludingMe:= TestColl(x, y, r)
 end;
 
 function TestColl(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
-b:= (((x-r) and LAND_WIDTH_MASK) = 0)and(((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] <> 0);
-if b then
-    exit(true);
+    TestColl:= true;
+
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] <> 0);
+    if b then
+        exit;
     
-b:=(((x-r) and LAND_WIDTH_MASK) = 0)and(((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] <> 0);
-if b then
-    exit(true);
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] <> 0);
+    if b then
+        exit;
     
-b:=(((x+r) and LAND_WIDTH_MASK) = 0)and(((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] <> 0);
-if b then
-    exit(true);
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] <> 0);
+    if b then
+        exit;
     
-TestColl:=(((x+r) and LAND_WIDTH_MASK) = 0)and(((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] <> 0)
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] <> 0);
+    if b then
+        exit;
+    
+    TestColl:= false;
 end;
 
 function TestCollWithLand(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
-b:= (((x-r) and LAND_WIDTH_MASK) = 0)and(((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] > 255);
-if b then
-    exit(true);
+    TestCollWithLand:= true;
     
-b:=(((x-r) and LAND_WIDTH_MASK) = 0)and(((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] > 255);
-if b then
-    exit(true);
-    
-b:=(((x+r) and LAND_WIDTH_MASK) = 0)and(((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] > 255);
-if b then
-    exit(true);
-    
-TestCollWithLand:=(((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > 255)
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] > 255);
+    if b then
+        exit;
+        
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] > 255);
+    if b then
+        exit;
+        
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] > 255);
+    if b then
+        exit;
+        
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > 255);
+    if b then
+        exit;
+
+    TestCollWithLand:= false;
 end;
 
 function TraceFall(eX, eY: LongInt; x, y, dX, dY: Real; r: LongWord): LongInt;
@@ -274,44 +287,64 @@ begin
     // ok. attempt approximate search for an unbroken trajectory into water.  if it continues far enough, assume out of map
     rCorner:= r * 0.75;
     while true do
-        begin
+    begin
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
         skipLandCheck:= skipLandCheck and (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
         if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then
-            begin
+        begin
             if 0.4 < dY then
-                begin
+            begin
                 dmg := 1 + trunc((abs(dY) - 0.4) * 70);
-                if dmg >= 1 then exit(dmg)
+                if dmg >= 1 then
+                begin
+                    TraceFall:= dmg;
+                    exit
                 end;
-            exit(0)
             end;
-        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(-1); // returning -1 for drowning so it can be considered in the Rate routine
+            TraceFall:= 0;
+            exit
         end;
+        if (y > cWaterLine) or (x > 4096) or (x < 0) then
+        begin
+            // returning -1 for drowning so it can be considered in the Rate routine
+            TraceFall:= -1;
+            exit;
+        end;
+    end;
 end;
 
 function TraceShoveFall(Me: PGear; x, y, dX, dY: Real): LongInt;
 var dmg: LongInt;
 begin
     while true do
-        begin
+    begin
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
         // consider adding dX/dY calc here for fall damage
         if TestCollExcludingMe(Me, trunc(x), trunc(y), cHHRadius) then
-            begin
+        begin
             if 0.4 < dY then
-                begin
+            begin
                 dmg := 1 + trunc((abs(dY) - 0.4) * 70);
-                if dmg >= 1 then exit(dmg)
+                if dmg >= 1 then
+                begin
+                    TraceShoveFall:= dmg;
+                    exit
                 end;
-            exit(0)
             end;
-        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(-1); // returning -1 for drowning so it can be considered in the Rate routine
+            TraceShoveFall:= 0;
+            exit
         end;
+        if (y > cWaterLine) or (x > 4096) or (x < 0) then
+        begin
+            // returning -1 for drowning so it can be considered in the Rate routine
+            TraceShoveFall:= -1;
+            exit;
+        end;
+    end;
 end;
 
 // Flags are not defined yet but 1 for checking drowning and 2 for assuming land erasure.
@@ -495,95 +528,95 @@ end;
 
 function HHJump(Gear: PGear; JumpType: TJumpType; var GoInfo: TGoInfo): boolean;
 var bX, bY: LongInt;
-    bRes: boolean;
 begin
-bRes:= false;
+HHJump:= false;
 GoInfo.Ticks:= 0;
 GoInfo.JumpType:= jmpNone;
 bX:= hwRound(Gear^.X);
 bY:= hwRound(Gear^.Y);
 case JumpType of
-    jmpNone:
-    exit(bRes);
+    jmpNone: exit;
     
     jmpHJump:
-    if TestCollisionYwithGear(Gear, -1) = 0 then
+        if TestCollisionYwithGear(Gear, -1) = 0 then
         begin
-        Gear^.dY:= -_0_2;
-        SetLittle(Gear^.dX);
-        Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
+            Gear^.dY:= -_0_2;
+            SetLittle(Gear^.dX);
+            Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
         end
     else
-        exit(bRes);
+        exit;
         
     jmpLJump:
-    begin
-    if TestCollisionYwithGear(Gear, -1) <> 0 then
-          if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then
-            Gear^.Y:= Gear^.Y - int2hwFloat(2)
-        else
-            if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then
-                Gear^.Y:= Gear^.Y - _1;
-        if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+        begin
+            if TestCollisionYwithGear(Gear, -1) <> 0 then
+                if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then
+                    Gear^.Y:= Gear^.Y - int2hwFloat(2)
+                else
+                    if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then
+                        Gear^.Y:= Gear^.Y - _1;
+            if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) or
+               (TestCollisionYwithGear(Gear, -1) <> 0)) then
             begin
-            Gear^.dY:= -_0_15;
-            Gear^.dX:= SignAs(_0_15, Gear^.dX);
-            Gear^.State:= Gear^.State or gstMoving or gstHHJumping
+                Gear^.dY:= -_0_15;
+                Gear^.dX:= SignAs(_0_15, Gear^.dX);
+                Gear^.State:= Gear^.State or gstMoving or gstHHJumping
             end
         else
-            exit(bRes)
-    end
-    end;
+            exit
+        end
+end;
 
 repeat
     if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then
-        exit(bRes);
+        exit;
     if (Gear^.State and gstMoving) <> 0 then
-        begin
+    begin
         if (GoInfo.Ticks = 350) then
             if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
-                begin
+            begin
                 Gear^.dY:= -_0_25;
                 Gear^.dX:= SignAs(_0_02, Gear^.dX)
-                end;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
-        Gear^.X:= Gear^.X + Gear^.dX;
-    inc(GoInfo.Ticks);
-    Gear^.dY:= Gear^.dY + cGravity;
-    if Gear^.dY > _0_4 then
-        exit(bRes);
-    if (Gear^.dY.isNegative)and (TestCollisionYwithGear(Gear, -1) <> 0) then
-        Gear^.dY:= _0;
-    Gear^.Y:= Gear^.Y + Gear^.dY;
-    if (not Gear^.dY.isNegative)and (TestCollisionYwithGear(Gear, 1) <> 0) then
-        begin
-        Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
-        Gear^.dY:= _0;
-        case JumpType of
-            jmpHJump:
-            if bY - hwRound(Gear^.Y) > 5 then
-                begin
-                bRes:= true;
-                GoInfo.JumpType:= jmpHJump;
-                inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
-                end;
-            jmpLJump: if abs(bX - hwRound(Gear^.X)) > 30 then
-                begin
-                bRes:= true;
-                GoInfo.JumpType:= jmpLJump;
-                inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
-                end
-                end;
-            exit(bRes)
             end;
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
+            Gear^.X:= Gear^.X + Gear^.dX;
+        inc(GoInfo.Ticks);
+        Gear^.dY:= Gear^.dY + cGravity;
+        if Gear^.dY > _0_4 then
+            exit;
+        if (Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, -1) <> 0) then
+            Gear^.dY:= _0;
+        Gear^.Y:= Gear^.Y + Gear^.dY;
+        if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
+        begin
+            Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
+            Gear^.dY:= _0;
+            case JumpType of
+                jmpHJump:
+                    if bY - hwRound(Gear^.Y) > 5 then
+                    begin
+                        HHJump:= true;
+                        GoInfo.JumpType:= jmpHJump;
+                        inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
+                    end;
+                jmpLJump:
+                    if abs(bX - hwRound(Gear^.X)) > 30 then
+                    begin
+                        HHJump:= true;
+                        GoInfo.JumpType:= jmpLJump;
+                        inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
+                    end
+            end;
+            exit
         end;
+    end;
 until false
 end;
 
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 var pX, pY: LongInt;
 begin
+HHGo:= false;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;
@@ -593,7 +626,7 @@ repeat
 pX:= hwRound(Gear^.X);
 pY:= hwRound(Gear^.Y);
 if pY + cHHRadius >= cWaterLine then
-    exit(false);
+    exit;
 if (Gear^.State and gstMoving) <> 0 then
     begin
     inc(GoInfo.Ticks);
@@ -602,7 +635,7 @@ if (Gear^.State and gstMoving) <> 0 then
         begin
         Goinfo.FallPix:= 0;
         HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall with damage
-        exit(false)
+        exit
         end;
     Gear^.Y:= Gear^.Y + Gear^.dY;
     if hwRound(Gear^.Y) > pY then
@@ -613,7 +646,8 @@ if (Gear^.State and gstMoving) <> 0 then
         Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
         Gear^.dY:= _0;
         HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall
-        exit(true)
+        HHGo:= true;
+        exit
         end;
     continue
     end;
@@ -621,9 +655,9 @@ if (Gear^.State and gstMoving) <> 0 then
         Gear^.dX:= -cLittle
     else
         if (Gear^.Message and gmRight )<>0 then
-             Gear^.dX:=  cLittle
+            Gear^.dX:=  cLittle
         else
-                exit(false);
+            exit;
     if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
         begin
         if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
@@ -651,17 +685,18 @@ if (Gear^.State and gstMoving) <> 0 then
         end;
 
     if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
-        begin
+    begin
         Gear^.X:= Gear^.X + int2hwFloat(hwSign(Gear^.dX));
         inc(GoInfo.Ticks, cHHStepTicks)
-        end;
-        
+    end;
+
+    // too scared to reformat this part
     if TestCollisionYwithGear(Gear, 1) = 0 then
         begin
         Gear^.Y:= Gear^.Y + _1;
         
     if TestCollisionYwithGear(Gear, 1) = 0 then
-          begin
+        begin
         Gear^.Y:= Gear^.Y + _1;
         
     if TestCollisionYwithGear(Gear, 1) = 0 then
@@ -693,10 +728,12 @@ if (Gear^.State and gstMoving) <> 0 then
     end
     end;
 if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
-    exit(true);
+begin
+    HHGo:= true;
+    exit;
+end;
 until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and gstMoving) = 0);
 HHJump(AltGear, jmpHJump, GoInfo);
-HHGo:= false;
 end;
 
 function AIrndSign(num: LongInt): LongInt;

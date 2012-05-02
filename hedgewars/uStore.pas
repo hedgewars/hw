@@ -524,28 +524,30 @@ FreeTexture(Hedgehog.HealthTagTex);
 Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
-function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+function LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
+    LoadImage:= nil;
+    WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
 
-s:= filename + '.png';
-tmpsurf:= IMG_Load(Str2PChar(s));
+    s:= filename + '.png';
+    tmpsurf:= IMG_Load(Str2PChar(s));
 
     if tmpsurf = nil then
-        begin
+    begin
         OutError(msgFailed, (imageFlags and ifCritical) <> 0);
-        exit(nil)
-        end;
+        exit;
+    end;
 
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
-        begin
+    begin
         SDL_FreeSurface(tmpsurf);
         OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
         // dummy surface to replace non-critical textures that failed to load due to their size
-        exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask));
-        end;
+        LoadImage:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask);
+        exit;
+    end;
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
 

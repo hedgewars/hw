@@ -46,6 +46,7 @@ var AliveClan: PClan;
     s: shortstring;
     t, AliveCount, i, j: LongInt;
 begin
+CheckForWin:= false;
 AliveCount:= 0;
 for t:= 0 to Pred(ClansCount) do
     if ClansArray[t]^.ClanHealth > 0 then
@@ -54,9 +55,8 @@ for t:= 0 to Pred(ClansCount) do
         AliveClan:= ClansArray[t]
         end;
 
-if (AliveCount > 1)
-or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then
-    exit(false);
+if (AliveCount > 1) or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then
+    exit;
 CheckForWin:= true;
 
 TurnTimeLeft:= 0;

@@ -1070,22 +1070,22 @@ begin
     if (name <> nil) and (namebuf <> nil) then
         begin
         strlcopy(namebuf, name, maxlen);
-        exit(namebuf)
+        SDL_VideoDriverName:= namebuf
         end;
-    exit(name);
+    SDL_VideoDriverName:= name;
 end;
 
 function SDL_EnableUNICODE(enable: LongInt): LongInt;
 begin
     SDL_StartTextInput();
-    exit(0);
+    SDL_EnableUNICODE:= 0;
 end;
 
 function SDL_EnableKeyRepeat(timedelay, interval: LongInt): LongInt;
 begin
     timedelay:= timedelay;  // avoid hint
     interval:= interval;    // avoid hint
-    exit(0);
+    SDL_EnableKeyRepeat:= 0;
 end;
 {$ELSE}
 const conversionFormat: TSDL_PixelFormat = (
@@ -1098,7 +1098,7 @@ const conversionFormat: TSDL_PixelFormat = (
 function SDL_AllocFormat(format: LongWord): PSDL_PixelFormat;
 begin
     format:= format;
-    exit(@conversionFormat);
+    SDL_AllocFormat:= @conversionFormat;
 end;
 
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat);
@@ -1120,7 +1120,7 @@ end;
 {$IFNDEF SDL_MIXER_NEWER}
 function  Mix_Init(flags: LongInt): LongInt;
 begin
-    exit(flags);
+    Mix_Init:= flags;
 end;
 
 procedure Mix_Quit;
@@ -1131,7 +1131,7 @@ end;
 {$IFNDEF SDL_IMAGE_NEWER}
 function  IMG_Init(flags: LongInt): LongInt;
 begin
-    exit(flags);
+    IMG_Init:= flags;
 end;
 
 procedure IMG_Quit;

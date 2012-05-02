@@ -473,21 +473,25 @@ function CountNonZeroz(x, y, r, c: LongInt): LongInt;
 var i: LongInt;
     count: LongInt = 0;
 begin
-if (y and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
-        if Land[y, i] <> 0 then
+    if (y and LAND_HEIGHT_MASK) = 0 then
+        for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
+            if Land[y, i] <> 0 then
             begin
-            inc(count);
-            if count = c then
-                exit(count)
+                inc(count);
+                if count = c then
+                begin
+                    CountNonZeroz:= count;
+                    exit
+                end;
             end;
-CountNonZeroz:= count;
+    CountNonZeroz:= count;
 end;
 
 
 function NoGearsToAvoid(mX, mY: LongInt; rX, rY: LongInt): boolean;
 var t: PGear;
 begin
+NoGearsToAvoid:= false;
 t:= GearsList;
 rX:= sqr(rX);
 rY:= sqr(rY);
@@ -495,7 +499,7 @@ while t <> nil do
     begin
     if t^.Kind <= gtExplosives then
         if not (hwSqr(int2hwFloat(mX) - t^.X) / rX + hwSqr(int2hwFloat(mY) - t^.Y) / rY > _1) then
-            exit(false);
+            exit;
     t:= t^.NextGear
     end;
 NoGearsToAvoid:= true
@@ -606,7 +610,10 @@ while t <> nil do
     begin
     if (t <> Gear) and (t^.Kind = Kind) then
         if not((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1) then
-        exit(t);
+        begin
+            CheckGearNear:= t;
+            exit;
+        end;
     t:= t^.NextGear
     end;
 
