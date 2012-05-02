@@ -291,7 +291,8 @@ end;
 
 function Think(Me: Pointer): ptrint;
 var BackMe, WalkMe: TGear;
-    StartTicks, currHedgehogIndex, itHedgehog, switchesNum, i, switchCount: Longword;
+    switchCount: LongInt;
+    StartTicks, currHedgehogIndex, itHedgehog, switchesNum, i: Longword;
     switchImmediatelyAvailable: boolean;
     Actions: TActions;
 begin
@@ -319,7 +320,7 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
                 if not switchImmediatelyAvailable  then
                     begin
                     // when AI has to use switcher, make it cost smth unless they have a lot of switches
-                    if (SwitchCount < 10) then Actions.Score:= (-27+SwitchCount*3)*4000;
+                    if (switchCount < 10) then Actions.Score:= (-27+switchCount*3)*4000;
                     AddAction(Actions, aia_Weapon, Longword(amSwitch), 300 + random(200), 0, 0);                    
                     AddAction(Actions, aia_attack, aim_push, 300 + random(300), 0, 0);
                     AddAction(Actions, aia_attack, aim_release, 1, 0, 0);

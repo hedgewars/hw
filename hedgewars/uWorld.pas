@@ -1772,7 +1772,9 @@ if(CurrentHedgehog <> nil)then
         animateWidget(@utilityWidget, true, true);
         end
     else if utilityWidget.show then
-        animateWidget(@utilityWidget, true, false); 
+        animateWidget(@utilityWidget, true, false);
+{$ELSE}
+ammoType:= ammoType; // avoid hint
 {$ENDIF}
 end;
 

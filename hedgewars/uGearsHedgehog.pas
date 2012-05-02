@@ -30,7 +30,7 @@ procedure HedgehogChAngle(HHGear: PGear);
 procedure PickUp(HH, Gear: PGear);
 
 implementation
-uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions, uMisc, 
+uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions, 
     uCommands, uLocale, uUtils, uVisualGears, uStats, uIO, uScript,
     uGearsList, uGears, uCollisions, uRandom, uStore, uTeams, 
     uGearsUtils;

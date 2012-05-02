@@ -2715,7 +2715,7 @@ end;
 procedure doStepSwitcherWork(Gear: PGear);
 var 
     HHGear: PGear;
-    Msg, State: Longword;
+    State: Longword;
 begin
     AllInactive := false;
 
