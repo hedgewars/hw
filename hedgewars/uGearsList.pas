@@ -284,8 +284,8 @@ case Kind of
                 gear^.Density:= _1;
                 if (gear^.dY.QWordValue = 0) and (gear^.dX.QWordValue = 0) then
                     begin
-                    gear^.dY:= (getrandom - _0_8) * _0_03;
-                    gear^.dX:= (getrandom - _0_5) * _0_4
+                    gear^.dY:= (getrandomf - _0_8) * _0_03;
+                    gear^.dX:= (getrandomf - _0_5) * _0_4
                     end
                 end;
    gtFirePunch: begin

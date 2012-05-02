@@ -250,7 +250,7 @@ ResetKbd;
 
 if (GameFlags and gfDisableWind) = 0 then
     begin
-    cWindSpeed:= rndSign(GetRandom * 2 * cMaxWindSpeed);
+    cWindSpeed:= rndSign(GetRandomf * 2 * cMaxWindSpeed);
     w:= hwFloat2Float(cWindSpeed);
     vg:= AddVisualGear(0, 0, vgtSmoothWindBar);
     if vg <> nil then vg^.dAngle:= w;
