@@ -1015,7 +1015,7 @@ begin
                     else
                         DrawRotatedF(sprExplosivesRoll, x, y + 4, 1, 0, Gear^.DirAngle);
                     end;
-        gtDynamite: DrawSprite2(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
+        gtDynamite: DrawSprite(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawRotated(sprClusterBomb, x, y, 0, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, x - 8, y - 8, 0);
            gtFlame: if Gear^.Tag and 1 = 0 then

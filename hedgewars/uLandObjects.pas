@@ -25,7 +25,8 @@ uses SDLh;
 procedure AddObjects();
 procedure FreeLandObjects();
 procedure LoadThemeConfig;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word = 0);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
@@ -65,8 +66,12 @@ var Rects: PRectArray;
     ThemeObjects: TThemeObjects;
     SprayObjects: TSprayObjects;
 
-
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word = 0);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
+begin
+    BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0);
+end;
+    
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word);
 var p: PLongwordArray;
     x, y: Longword;
     bpp: LongInt;

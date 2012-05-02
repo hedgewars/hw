@@ -34,17 +34,23 @@ uses uConsts, uFloat, GLunit, uTypes, uWorld;
 procedure initModule;
 procedure freeModule;
 
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0; Critical: Boolean = false): PVisualGear;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord): PVisualGear; inline;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear;
+
 procedure ProcessVisualGears(Steps: Longword);
-procedure KickFlakes(Radius, X, Y: LongInt);
 procedure DrawVisualGears(Layer: LongWord);
 procedure DeleteVisualGear(Gear: PVisualGear);
 function  VisualGearByUID(uid : Longword) : PVisualGear;
+
 procedure AddClouds;
-procedure ChangeToSDClouds;
 procedure AddFlakes;
-procedure ChangeToSDFlakes;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
+
+procedure ChangeToSDClouds;
+procedure ChangeToSDFlakes;
+
+procedure KickFlakes(Radius, X, Y: LongInt);
 
 implementation
 uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils, uStore, uUtils;
@@ -112,7 +118,17 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepStraightShot
         );
 
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord = 0; Critical: Boolean = false): PVisualGear;
+function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
+begin
+    AddVisualGear:= AddVisualGear(X, Y, Kind, 0, false);
+end;
+
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord): PVisualGear; inline;
+begin
+    AddVisualGear:= AddVisualGear(X, Y, Kind, State, false);
+end;
+
+function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear;
 var gear: PVisualGear;
     t: Longword;
     sp: real;

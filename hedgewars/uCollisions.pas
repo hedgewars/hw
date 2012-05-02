@@ -47,8 +47,10 @@ function  TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionX(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 
-function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
-function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
+function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean; inline;
+function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean): boolean;
+function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean; inline;
+function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): boolean;
 
 function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 
@@ -318,7 +320,12 @@ if flag then
     end
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean; inline;
+begin
+    TestCollisionXwithXYShift:= TestCollisionXwithXYShift(Gear, ShiftX, ShiftY, Dir, true);
+end;
+
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean): boolean;
 begin
 Gear^.X:= Gear^.X + ShiftX;
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
@@ -372,7 +379,12 @@ if (y and LAND_HEIGHT_MASK) = 0 then
 TestCollisionY:= false
 end;
 
-function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
+function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean; inline;
+begin
+    TestCollisionYwithXYShift:= TestCollisionYwithXYShift(Gear, ShiftX, ShiftY, Dir, true);
+end;
+
+function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): boolean;
 begin
 Gear^.X:= Gear^.X + int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);

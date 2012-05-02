@@ -26,8 +26,8 @@ uses sysutils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 procedure initModule;
 procedure freeModule;
 
-procedure StoreLoad(reload: boolean = false);
-procedure StoreRelease(reload: boolean = false);
+procedure StoreLoad(reload: boolean);
+procedure StoreRelease(reload: boolean);
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;

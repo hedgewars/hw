@@ -22,7 +22,9 @@ unit uGearsUtils;
 interface
 uses uTypes, math;
 
-procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord = $FFFFFFFF); 
+procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
+procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord); 
+
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
 procedure spawnHealthTagForHH(HHGear: PGear; dmg: Longword);
@@ -30,7 +32,10 @@ procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
 procedure CheckHHDamage(Gear: PGear);
 procedure CalcRotationDirAngle(Gear: PGear);
 procedure ResurrectHedgehog(gear: PGear);
-procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean = false);
+
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
+
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
 function  CheckGearDrowning(Gear: PGear): boolean;
 
@@ -42,6 +47,11 @@ uses uFloat, uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
     uVariables, uLandGraphics, uScript, uStats, uCaptions, uTeams, uStore,
     uLocale, uTextures, uRenderUtils, uRandom, SDLh, uDebug, uGears,
     uGearsList;
+
+procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
+begin
+    doMakeExplosion(X, Y, Radius, AttackingHog, Mask, $FFFFFFFF);
+end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
 var Gear: PGear;
@@ -491,6 +501,10 @@ while t <> nil do
 NoGearsToAvoid:= true
 end;
 
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
+begin
+    FindPlace(Gear, withFall, Left, Right, false);
+end;
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 var x: LongInt;

@@ -24,14 +24,19 @@ interface
 uses SDLh, uTypes;
 
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
+
 procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL
-procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
+procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); inline;
 procedure copyToXY(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
-procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt; frame: LongInt = 0);
+
+procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt); inline;
+procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt; frame: LongInt);
 procedure DrawLine2Surf(dest: PSDL_Surface; x0,y0,x1,y1:LongInt; r,g,b: byte);
-function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord = 0): PTexture;
-function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
+
+function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
+function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord): PTexture;
+function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 
 implementation
 uses uUtils, uVariables, uConsts, uTextures, sysutils, uDebug;
@@ -65,8 +70,13 @@ begin
     r.h:= rect^.h - 4;
     SDL_FillRect(Surface, @r, FillColor)
 end;
+(*
+function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
+begin
+    WriteInRoundRect:= WriteInRoundRect(Surface, X, Y, Color, Font, s, 0);
+end;*)
 
-function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring; maxLength: LongWord = 0): TSDL_Rect;
+function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring; maxLength: LongWord): TSDL_Rect;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
@@ -128,9 +138,9 @@ begin
             end;
 end;
 
-procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt);
+procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); inline;
 begin
-    copyToXY(src, dest, 0,0,src^.w, src^.h, destX, destY);
+    copyToXY(src, dest, 0, 0, src^.w, src^.h, destX, destY);
 end;
 
 procedure copyToXY(src, dest: PSDL_Surface; srcX, srcY, srcW, srcH, destX, destY: LongInt);
@@ -159,6 +169,11 @@ begin
             destPixels^[i]:= SDL_MapRGBA(dest^.format, r0, g0, b0, a0);
             end;
         end;
+end;
+
+procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt); inline;
+begin
+    DrawSprite2Surf(sprite, dest, x, y, 0);
 end;
 
 procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y,frame: LongInt);
@@ -234,7 +249,12 @@ begin
             end;
 end;
 
-function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord = 0): PTexture;
+function RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
+begin
+    RenderStringTex:= RenderStringTex(s, Color, font, 0);
+end;
+
+function RenderStringTex(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord): PTexture;
 var w, h: LongInt;
     finalSurface: PSDL_Surface;
 begin

@@ -50,16 +50,20 @@ procedure freeModule;
 procedure FillTargets;
 procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
-function RatePlace(Gear: PGear): LongInt;
-function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
-function TestColl(x, y, r: LongInt): boolean; inline;
-function TraceShoveFall(Me: PGear; x, y, dX, dY: Real): LongInt;
-function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord = 0): LongInt;
-function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
-function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
-function RateHammer(Me: PGear): LongInt;
-function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-function AIrndSign(num: LongInt): LongInt;
+
+function  RatePlace(Gear: PGear): LongInt;
+function  TestColl(x, y, r: LongInt): boolean; inline;
+function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
+function  TraceShoveFall(Me: PGear; x, y, dX, dY: Real): LongInt;
+
+function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
+function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
+function  RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
+function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
+function  RateHammer(Me: PGear): LongInt;
+
+function  HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
+function  AIrndSign(num: LongInt): LongInt;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
@@ -178,11 +182,11 @@ if isAfterAttack and (KnownExplosion.Radius > 0) then
         AddBonus(X, Y, Radius + 10, -Radius);
 end;
 
-procedure AwareOfExplosion(x, y, r: LongInt);
+procedure AwareOfExplosion(x, y, r: LongInt); inline;
 begin
-KnownExplosion.X:= x;
-KnownExplosion.Y:= y;
-KnownExplosion.Radius:= r
+    KnownExplosion.X:= x;
+    KnownExplosion.Y:= y;
+    KnownExplosion.Radius:= r
 end;
 
 function RatePlace(Gear: PGear): LongInt;
@@ -209,7 +213,7 @@ end;
 
 // Wrapper to test various approaches.  If it works reasonably, will just replace.
 // Right now, converting to hwFloat is a tad inefficient since the x/y were hwFloat to begin with...
-function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean;
+function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 var MeX, MeY: LongInt;
 begin
     if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
@@ -223,7 +227,7 @@ begin
     exit(TestColl(x, y, r))
 end;
 
-function TestColl(x, y, r: LongInt): boolean;
+function TestColl(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
 b:= (((x-r) and LAND_WIDTH_MASK) = 0)and(((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] <> 0);
@@ -311,7 +315,12 @@ begin
 end;
 
 // Flags are not defined yet but 1 for checking drowning and 2 for assuming land erasure.
-function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord = 0): LongInt;
+function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
+begin
+    RateExplosion:= RateExplosion(Me, x, y, r, 0);
+end;
+
+function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, dmgBase, rate, erasure: LongInt;
     dX, dY, dmgMod: real;
 begin
