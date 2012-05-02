@@ -47,6 +47,9 @@ class PagePlayDemo : public AbstractPage
         QPushButton *BtnRemoveRecord;
         QListWidget *DemosList;
 
+    public slots:
+        void refresh();
+
     private:
         QLayout * bodyLayoutDefinition();
         void connectSignals();
