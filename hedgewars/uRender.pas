@@ -24,33 +24,32 @@ interface
 
 uses SDLh, uTypes, GLunit, uConsts;
 
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawSprite            (Sprite: TSprite; X, Y, Frame: LongInt);
+procedure DrawSprite            (Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
+procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
+procedure DrawSpriteClipped     (Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
+procedure DrawSpriteRotated     (Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
+procedure DrawSpriteRotatedF    (Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 
-procedure DrawSprite(Sprite: TSprite; X, Y, Frame: LongInt);
-procedure DrawSprite(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
-procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
-procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
+procedure DrawTexture           (X, Y: LongInt; Texture: PTexture); inline;
+procedure DrawTexture           (X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
+procedure DrawTextureFromRect   (X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureFromRect   (X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureCentered   (X, Top: LongInt; Source: PTexture);
+procedure DrawTextureF          (Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
+procedure DrawTextureRotated    (Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
+procedure DrawTextureRotatedF   (Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
 
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture); inline;
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
-procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
+procedure DrawCircle            (X, Y, Radius, Width: LongInt);
+procedure DrawCircle            (X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 
-procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
-procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
-procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
-procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
+procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
+procedure DrawFillRect          (r: TSDL_Rect);
+procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
+procedure DrawScreenWidget      (widget: POnScreenWidget);
 
-procedure DrawCentered(X, Top: LongInt; Source: PTexture);
-procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
-procedure DrawFillRect(r: TSDL_Rect);
-procedure DrawCircle(X, Y, Radius, Width: LongInt);
-procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
-procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
-procedure DrawScreenWidget(widget: POnScreenWidget);
-
-procedure Tint(r, g, b, a: Byte); inline;
-procedure Tint(c: Longword); inline;
+procedure Tint                  (r, g, b, a: Byte); inline;
+procedure Tint                  (c: Longword); inline;
 
 
 implementation
@@ -60,15 +59,15 @@ procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Positi
 begin
 r.y:= r.y + Height * Position;
 r.h:= Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
+DrawTextureFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 begin
-DrawFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
+DrawTextureFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
 end;
 
-procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
@@ -112,7 +111,6 @@ TextureBuffer[2].Y:= _b;
 TextureBuffer[3].X:= _l;
 TextureBuffer[3].Y:= _b;
 
-
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
@@ -141,10 +139,10 @@ end;
 
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
 begin
-    DrawRotatedTextureF(Texture, Scale, 0, 0, X, Y, Frame, Dir, w, h, 0)
+    DrawTextureRotatedF(Texture, Scale, 0, 0, X, Y, Frame, Dir, w, h, 0)
 end;
 
-procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
+procedure DrawTextureRotatedF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
 var ft, fb, fl, fr: GLfloat;
     hw, nx, ny: LongInt;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
@@ -204,15 +202,15 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 glPopMatrix
 end;
 
-procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
+procedure DrawSpriteRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 begin
-    DrawRotatedTex(SpritesData[Sprite].Texture,
+    DrawTextureRotated(SpritesData[Sprite].Texture,
         SpritesData[Sprite].Width,
         SpritesData[Sprite].Height,
         X, Y, Dir, Angle)
 end;
 
-procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
+procedure DrawSpriteRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
@@ -229,7 +227,7 @@ DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height
 glPopMatrix
 end;
 
-procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
+procedure DrawTextureRotated(Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
@@ -250,7 +248,7 @@ else
     glRotatef(Angle, 0, 0,  1);
 
 
-glBindTexture(GL_TEXTURE_2D, Tex^.id);
+glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
 VertexBuffer[0].X:= -hw;
 VertexBuffer[0].Y:= -hh;
@@ -262,7 +260,7 @@ VertexBuffer[3].X:= -hw;
 VertexBuffer[3].Y:= hh;
 
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @Tex^.tb);
+glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 glPopMatrix
@@ -286,7 +284,7 @@ begin
     r.w:= SpritesData[Sprite].Width;
     r.y:= FrameY * SpritesData[Sprite].Height;
     r.h:= SpritesData[Sprite].Height;
-    DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
+    DrawTextureFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
@@ -310,10 +308,10 @@ if (X + SpritesData[Sprite].Width > RightX) then
 dec(r.h, r.y);
 dec(r.w, r.x);
 
-DrawFromRect(X + r.x, Y + r.y, @r, SpritesData[Sprite].Texture)
+DrawTextureFromRect(X + r.x, Y + r.y, @r, SpritesData[Sprite].Texture)
 end;
 
-procedure DrawCentered(X, Top: LongInt; Source: PTexture);
+procedure DrawTextureCentered(X, Top: LongInt; Source: PTexture);
 var scale: GLfloat;
 begin
     if (Source^.w + 20) > cScreenWidth then

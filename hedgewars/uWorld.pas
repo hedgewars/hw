@@ -1232,9 +1232,9 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     with PHedgehog(CurrentHedgehog)^ do
         begin
         if CurAmmoType = amBee then
-            DrawRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+            DrawSpriteRotatedF(sprTargetBee, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
         else
-            DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
+            DrawSpriteRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
         end
     end;
 {$WARNINGS ON}
@@ -1318,13 +1318,13 @@ for t:= 0 to Pred(TeamsCount) do
         r.y:= 0;
         r.w:= 2 + TeamHealthBarWidth;
         r.h:= HealthTex^.h;
-        DrawFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+        DrawTextureFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
         // draw health bars right border
         inc(r.x, cTeamHealthWidth + 2);
         if TeamHealth = 0 then inc(r.x);
         r.w:= 3;
-        DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+        DrawTextureFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
         if not highlight and not hasGone and (TeamHealth > 1) then
             for i:= 0 to cMaxHHIndex do
@@ -1353,15 +1353,15 @@ for t:= 0 to Pred(TeamsCount) do
             r.y:= 2;
             r.w:= NameTagTex^.w - 4;
             r.h:= NameTagTex^.h - 4;
-            DrawFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, NameTagTex);
+            DrawTextureFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, NameTagTex);
             // draw flag
             r.w:= 22;
             r.h:= 15;
-            DrawFromRect(-12, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, FlagTex);
+            DrawTextureFromRect(-12, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, FlagTex);
             // draw health bar
             r.w:= TeamHealthBarWidth + 1;
             r.h:= HealthTex^.h - 4;
-            DrawFromRect(16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
+            DrawTextureFromRect(16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
             end;
         end;
 if smallScreenOffset <> 0 then
@@ -1436,9 +1436,9 @@ DrawChat;
 
 // various captions
 if fastUntilLag then
-    DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
+    DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then
-    DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
+    DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
 if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
     begin
     if (ReadyTimeLeft = 0) and (missionTimer > 0) then
@@ -1446,7 +1446,7 @@ if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (Game
     if missionTimer < 0 then
         missionTimer:= 0; // avoid subtracting below 0
     if missionTex <> nil then
-        DrawCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
+        DrawTextureCentered(0, Min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
     end;
 
 // fps
@@ -1523,7 +1523,7 @@ if SoundTimerTicks >= 50 then
    end;
 
 if GameState = gsConfirm then
-    DrawCentered(0, (cScreenHeight shr 1), ConfirmTexture);
+    DrawTextureCentered(0, (cScreenHeight shr 1), ConfirmTexture);
 
 if ScreenFade <> sfNone then
     begin
