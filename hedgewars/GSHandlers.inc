@@ -345,8 +345,8 @@ begin
                 doMakeExplosion(x, y, 20, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 4 do
                     begin
-                    dX := rndSign(GetRandom * _0_1) + Gear^.dX / 5;
-                    dY := (GetRandom - _3) * _0_08;
+                    dX := rndSign(GetRandomf * _0_1) + Gear^.dX / 5;
+                    dY := (GetRandomf - _3) * _0_08;
                     FollowGear := AddGear(x, y, gtCluster, 0, dX, dY, 25)
                     end
                 end;
@@ -357,8 +357,8 @@ begin
                 doMakeExplosion(x, y, 75, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 5 do
                     begin
-                    dX := rndSign(GetRandom * _0_1) + Gear^.dX / 5;
-                    dY := (GetRandom - _1_5) * _0_3;
+                    dX := rndSign(GetRandomf * _0_1) + Gear^.dX / 5;
+                    dY := (GetRandomf - _1_5) * _0_3;
                     FollowGear:= AddGear(x, y, gtMelonPiece, 0, dX, dY, 75);
                     FollowGear^.DirAngle := i * 60
                     end
@@ -371,8 +371,8 @@ begin
 
                 for i:= 0 to 127 do
                     begin
-                    dX := AngleCos(i * 16) * _0_5 * (GetRandom + _1);
-                    dY := AngleSin(i * 16) * _0_5 * (GetRandom + _1);
+                    dX := AngleCos(i * 16) * _0_5 * (GetRandomf + _1);
+                    dY := AngleSin(i * 16) * _0_5 * (GetRandomf + _1);
                     if i mod 2 = 0 then
                         begin
                         AddGear(x, y, gtFlame, gstTmpFlag, dX, dY, 0);
@@ -477,8 +477,8 @@ begin
             end;
         for i:= 0 to 24 do
             begin
-            dX := AngleCos(i * 2) * ((_0_15*(i div 5))) * (GetRandom + _1);
-            dY := AngleSin(i * 8) * _0_5 * (GetRandom + _1);
+            dX := AngleCos(i * 2) * ((_0_15*(i div 5))) * (GetRandomf + _1);
+            dY := AngleSin(i * 8) * _0_5 * (GetRandomf + _1);
             AddGear(gX, gY, gtFlame, gstTmpFlag, dX, dY, 0);
             AddGear(gX, gY, gtFlame, gstTmpFlag, dX,-dY, 0);
             AddGear(gX, gY, gtFlame, gstTmpFlag,-dX, dY, 0);
@@ -2130,8 +2130,8 @@ begin
                 doMakeExplosion(x, y, 75, hog, EXPLAutoSound);
                 for i:= 0 to 31 do
                     begin
-                    dX := AngleCos(i * 64) * _0_5 * (getrandom + _1);
-                    dY := AngleSin(i * 64) * _0_5 * (getrandom + _1);
+                    dX := AngleCos(i * 64) * _0_5 * (getrandomf + _1);
+                    dY := AngleSin(i * 64) * _0_5 * (getrandomf + _1);
                     AddGear(x, y, gtFlame, 0, dX, dY, 0);
                     AddGear(x, y, gtFlame, gstTmpFlag, -dX, -dY, 0);
                     end
@@ -2800,8 +2800,8 @@ begin
         Gear^.dY.isNegative := not dyn;
         for i:= 0 to 4 do
             begin
-            dX := Gear^.dX + (GetRandom - _0_5) * _0_03;
-            dY := Gear^.dY + (GetRandom - _0_5) * _0_03;
+            dX := Gear^.dX + (GetRandomf - _0_5) * _0_03;
+            dY := Gear^.dY + (GetRandomf - _0_5) * _0_03;
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 25);
             end;
 
@@ -3414,8 +3414,8 @@ begin
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
     if (Gear^.Timer mod 100) = 0 then
         begin
-        rx := rndSign(getRandom * _0_1);
-        ry := rndSign(getRandom * _0_1);
+        rx := rndSign(getRandomf * _0_1);
+        ry := rndSign(getRandomf * _0_1);
 
         AddGear(gx, gy, gtBall, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx, AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
 
@@ -3538,8 +3538,8 @@ begin
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, Gear^.Hedgehog, EXPLAutoSound);
             for i:= 0 to 15 do
                 begin
-                dX := AngleCos(i * 64) * _0_5 * (GetRandom + _1);
-                dY := AngleSin(i * 64) * _0_5 * (GetRandom + _1);
+                dX := AngleCos(i * 64) * _0_5 * (GetRandomf + _1);
+                dY := AngleSin(i * 64) * _0_5 * (GetRandomf + _1);
                 AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
                 AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
                 end;
@@ -4754,8 +4754,8 @@ begin
         dec(Gear^.Health);
         if (Gear^.Health mod 5) = 0 then
             begin
-            rx := rndSign(getRandom * _0_1);
-            ry := rndSign(getRandom * _0_1);
+            rx := rndSign(getRandomf * _0_1);
+            ry := rndSign(getRandomf * _0_1);
             speed := _0_5 * (_10 / Gear^.Tag);
     
             AddGear(gx, gy, gtFlame, gstTmpFlag,
@@ -4834,8 +4834,8 @@ begin
         begin
         dec(Gear^.Health);
 
-        rx := rndSign(getRandom * _0_1);
-        ry := rndSign(getRandom * _0_1);
+        rx := rndSign(getRandomf * _0_1);
+        ry := rndSign(getRandomf * _0_1);
         speed := (_3 / Gear^.Tag);
 
         AddGear(gx, gy, gtFlake, gstTmpFlag, 
@@ -5146,8 +5146,8 @@ begin
         gY := hwRound(Gear^.Y); 
         for i:= 0 to 10 do
         begin
-            dX := AngleCos(i * 2) * ((_0_1*(i div 5))) * (GetRandom + _1);
-            dY := AngleSin(i * 8) * _0_5 * (GetRandom + _1);
+            dX := AngleCos(i * 2) * ((_0_1*(i div 5))) * (GetRandomf + _1);
+            dY := AngleSin(i * 8) * _0_5 * (GetRandomf + _1);
             AddGear(gX, gY, gtFlame, 0, dX, dY, 0);
             AddGear(gX, gY, gtFlame, 0, dX, -dY, 0);
             AddGear(gX, gY, gtFlame, 0, -dX, dY, 0);
