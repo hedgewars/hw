@@ -92,11 +92,13 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
 
     // not a role we have data for
     if (role != Qt::DisplayRole)
-        // only decorate name column
-        if ((role != Qt::DecorationRole) || (column != 1))
-            // only dye map column
-            if ((role != Qt::ForegroundRole) || (column != 5))
-                return QVariant();
+        // only custom-align counters
+        if ((role != Qt::TextAlignmentRole) || (column < 2) || (column > 3))
+            // only decorate name column
+            if ((role != Qt::DecorationRole) || (column != 1))
+                // only dye map column
+                if ((role != Qt::ForegroundRole) || (column != 5))
+                    return QVariant();
 
     // decorate room name based on room state
     if (role == Qt::DecorationRole)
@@ -144,6 +146,11 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
             return QBrush(QColor("darkred"));
         else
             return QVariant();
+    }
+
+    if (role == Qt::TextAlignmentRole)
+    {
+        return (int)(Qt::AlignHCenter | Qt::AlignVCenter);
     }
 
     Q_ASSERT(false);
