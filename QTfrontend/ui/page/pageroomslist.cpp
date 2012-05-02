@@ -598,14 +598,14 @@ void PageRoomsList::onFilterChanged()
 
 bool PageRoomsList::restoreHeaderState()
 {
-    if (!m_gameSettings->contains("roomslist_header"))
+    if (!m_gameSettings->contains("frontend/roomslist_header"))
         return false;
-    return roomsList->horizontalHeader()->restoreState(
-        m_gameSettings->value("roomslist_header").toByteArray());
+    return roomsList->horizontalHeader()->restoreState(QByteArray::fromHex(
+        (m_gameSettings->value("frontend/roomslist_header").toByteArray())));
 }
 
 void PageRoomsList::saveHeaderState()
 {
-    m_gameSettings->setValue(
-        "roomslist_header", roomsList->horizontalHeader()->saveState());
+    m_gameSettings->setValue("frontend/roomslist_header",
+        roomsList->horizontalHeader()->saveState().toHex());
 }
