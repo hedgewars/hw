@@ -624,8 +624,12 @@ void HWForm::GoToPage(int id)
     OnPageShown(id, lastid);
     ui.Pages->setCurrentIndex(id);
 
-    if (id == ID_PAGE_DRAWMAP || id == ID_PAGE_GAMESTATS)
+
+   /* if (id == ID_PAGE_DRAWMAP || id == ID_PAGE_GAMESTATS)
         stopAnim = true;
+	This were disabled due to broken flake animations.  I believe the more general problems w/ opacity that forced its disable makes blocking these
+	unnecessary.
+   */
 
 #if (QT_VERSION >= 0x040600)
     if (!stopAnim)
@@ -646,7 +650,7 @@ void HWForm::GoToPage(int id)
         //New page animation
         animationNewSlide = new QPropertyAnimation(ui.Pages->widget(id), "pos");
         animationNewSlide->setDuration(duration);
-        animationNewSlide->setStartValue(QPoint(this->width()*1.5/coeff, 0));
+        animationNewSlide->setStartValue(QPoint(width()/coeff, 0));
         animationNewSlide->setEndValue(QPoint(0, 0));
         animationNewSlide->setEasingCurve(QEasingCurve::OutExpo);
 
@@ -664,7 +668,7 @@ void HWForm::GoToPage(int id)
         animationOldSlide = new QPropertyAnimation(ui.Pages->widget(lastid), "pos");
         animationOldSlide->setDuration(duration);
         animationOldSlide->setStartValue(QPoint(0, 0));
-        animationOldSlide->setEndValue(QPoint(this->width()*1.5/coeff, 0));
+        animationOldSlide->setEndValue(QPoint(-width()/coeff, 0));
         animationOldSlide->setEasingCurve(QEasingCurve::OutExpo);
 
 #ifdef false
@@ -685,6 +689,8 @@ void HWForm::GoToPage(int id)
         group->start();
 
         connect(animationOldSlide, SIGNAL(finished()), ui.Pages->widget(lastid), SLOT(hide()));
+    	/* this is for the situation when the animation below is interrupted by a new animation.  For some reason, finished is not being fired */ 	
+    	for(int i=0;i<MAX_PAGE;i++) if (i!=id && i!=lastid) ui.Pages->widget(i)->hide();
     }
 #endif
 }
@@ -718,8 +724,8 @@ void HWForm::GoBack()
         stopAnim = true;
         GoBack();
     }
-    if (curid == ID_PAGE_DRAWMAP)
-        stopAnim = true;
+    /*if (curid == ID_PAGE_DRAWMAP)
+        stopAnim = true; */
 
     if ((!hwnet) || (!hwnet->isInRoom()))
         if (id == ID_PAGE_NETGAME || id == ID_PAGE_NETGAME)
