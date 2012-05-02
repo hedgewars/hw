@@ -93,12 +93,13 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
     // not a role we have data for
     if (role != Qt::DisplayRole)
         // only custom-align counters
-        if ((role != Qt::TextAlignmentRole) || (column < 2) || (column > 3))
-            // only decorate name column
-            if ((role != Qt::DecorationRole) || (column != 1))
-                // only dye map column
-                if ((role != Qt::ForegroundRole) || (column != 5))
-                    return QVariant();
+        if ((role != Qt::TextAlignmentRole)
+            || ((column != PlayerCountColumn) && (column != TeamCountColumn)))
+                // only decorate name column
+                if ((role != Qt::DecorationRole) || (column != NameColumn))
+                    // only dye map column
+                    if ((role != Qt::ForegroundRole) || (column != MapColumn))
+                        return QVariant();
 
     // decorate room name based on room state
     if (role == Qt::DecorationRole)
@@ -206,7 +207,7 @@ int RoomsListModel::rowOfRoom(const QString & name)
     int i = 0;
 
     // search for record with matching room name
-    while(m_data[i].at(1) != name)
+    while(m_data[i].at(NameColumn) != name)
     {
         i++;
         if(i >= size)
@@ -253,10 +254,10 @@ QStringList RoomsListModel::roomInfo2RoomRecord(const QStringList & info)
 
     // for matters of less memory usage and quicker access store
     // the boolean string as either "t" or empty
-    if (info[0].toLower() == "true")
-        result[0] = "t";
+    if (info[StateColumn].toLower() == "true")
+        result[StateColumn] = "t";
     else
-        result[0] = QString();
+        result[StateColumn] = QString();
 
     return result;
 }

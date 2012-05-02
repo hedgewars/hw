@@ -24,7 +24,7 @@
 class HWChatWidget;
 class AmmoSchemeModel;
 class QTableView;
-
+class RoomsListModel;
 class QSortFilterProxyModel;
 
 class PageRoomsList : public AbstractPage
@@ -51,7 +51,7 @@ class PageRoomsList : public AbstractPage
         HWChatWidget * chatWidget;
         QLabel * lblCount;
 
-        void setModel(QAbstractTableModel * model);
+        void setModel(RoomsListModel * model);
 
     public slots:
         void setAdmin(bool);

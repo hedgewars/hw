@@ -33,6 +33,19 @@ class RoomsListModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
+    // if you add a column here, also incr. c_nColumns in constructor
+    // also adjust header in constructor to changes
+    enum Column {
+        StateColumn,
+        NameColumn,
+        PlayerCountColumn,
+        TeamCountColumn,
+        OwnerColumn,
+        MapColumn,
+        SchemeColumn,
+        WeaponsColumn
+    };
+
     explicit RoomsListModel(QObject *parent = 0);
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
