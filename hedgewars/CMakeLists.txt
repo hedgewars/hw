@@ -64,7 +64,6 @@ set(engine_sources
     uWorld.pas
     GSHandlers.inc
     VGSHandlers.inc
-    HHHandlers.inc
     ArgParsers.inc
     options.inc
     adler32.pas

@@ -28,7 +28,9 @@ procedure freeModule;
 function  KeyNameToCode(name: shortstring): word;
 procedure ProcessKbd;
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
-procedure ProcessKey(event: TSDL_KeyboardEvent);
+procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
+procedure ProcessKey(code: LongInt; KeyDown: boolean);
+
 procedure ResetKbd;
 procedure FreezeEnterKey;
 procedure InitKbdKeyTable;
@@ -60,10 +62,7 @@ begin
 end;
 
 procedure ProcessKbd;
-var  i, j, k: LongInt;
-     s: shortstring;
-     Trusted: boolean;
-     pkbd: PByteArray;
+//var  i, j, k: LongInt;
 begin
 
 // move cursor/camera
@@ -72,9 +71,8 @@ begin
 movecursor(5 * CursorMovementX, 5 * CursorMovementY);
 
 
-{$IFNDEF MOBILE}
-
 //TODO reimplement
+{$IFDEF 0}
 // Controller(s)
 k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
@@ -155,7 +153,7 @@ if CurrentBinds[code][0] <> #0 then
 
 end;
 
-procedure ProcessKey(event: TSDL_KeyboardEvent); 
+procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 begin
     ProcessKey(event.keysym.sym, event.type_ = SDL_KEYDOWN);
 end;

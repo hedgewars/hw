@@ -68,8 +68,7 @@ end;
 
 
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
-var ii: LongInt;
-    s: shortstring;
+var s: shortstring;
     t: PVariable;
     c: char;
 begin

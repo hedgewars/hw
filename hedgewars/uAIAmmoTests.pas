@@ -646,7 +646,7 @@ if (Targ.X) - trunc(x) >= 0 then
 else
     ap.Angle:= - cMaxAngle div 4;
 
-valueResult:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, 1);
+valueResult:= RateShove(Me, trunc(x) + LongWord(10*hwSignf(Targ.X - x)), trunc(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, 1);
 if valueResult <= 0 then
     valueResult:= BadTurn
 else
@@ -655,7 +655,7 @@ TestBaseballBat:= valueResult;
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var i, val1, val2, t: LongInt;
+var val1: LongInt;
     x, y: real;
 begin
 Level:= Level; // avoid compiler hint
@@ -670,7 +670,7 @@ or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
     begin
 // TODO - find out WTH this works.
     if TestColl(trunc(x), trunc(y) - 16, 6) and 
-       (RateShove(Me, trunc(x) + 10 * hwSign(Me^.dX), 
+       (RateShove(Me, trunc(x) + LongWord(10 * hwSign(Me^.dX)), 
                       trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX)*0.45, -0.9,  1) = 0) then
         val1:= Succ(BadTurn)
     else
@@ -720,7 +720,7 @@ if (Abs(trunc(x) - Targ.X) > 25)
 or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
     begin
     if TestColl(trunc(x), trunc(y) - 16, 6)
-    and (RateShove(Me, trunc(x) + 10 * hwSign(Me^.dX), trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX), -0.8,  1) = 0) then
+    and (RateShove(Me, trunc(x) + LongWord(10 * hwSign(Me^.dX)), trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX), -0.8,  1) = 0) then
         valueResult:= Succ(BadTurn)
     else
         valueResult:= BadTurn;
@@ -730,8 +730,8 @@ or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
 
 valueResult:= 0;
 for i:= 0 to 4 do
-    valueResult:= valueResult + RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x),
-                                    trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX), -0.8, 1);
+    valueResult:= valueResult + RateShove(Me, trunc(x) + LongWord(10 * hwSignf(Targ.X - x)),
+                                    trunc(y) - LongWord(20 * i) - 5, 10, 30, 40, hwSign(Me^.dX), -0.8, 1);
 if valueResult <= 0 then
     valueResult:= BadTurn
 else
@@ -800,10 +800,10 @@ repeat
         if b[i] then
             begin
             fexit:= false;
-            if TestColl(trunc(X) + i * 30, trunc(Y), 4) then
+            if TestColl(trunc(X) + LongWord(i * 30), trunc(Y), 4) then
                 begin
                 b[i]:= false;
-                dmg[i]:= RateExplosion(Me, trunc(X) + i * 30, trunc(Y), 58)
+                dmg[i]:= RateExplosion(Me, trunc(X) + LongWord(i * 30), trunc(Y), 58)
                 // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
                 end
             end;

@@ -999,6 +999,7 @@ function GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 var t, aTot: LongInt;
     i: TAmmoType;
 begin
+Hedgehog:= Hedgehog; // avoid hint
 
 aTot:= 0;
 for i:= Low(TAmmoType) to High(TAmmoType) do

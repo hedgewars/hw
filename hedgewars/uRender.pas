@@ -459,9 +459,9 @@ begin
 end;
 
 procedure DrawScreenWidget(widget: POnScreenWidget);
+{$IFDEF USE_TOUCH_INTERFACE}
 var alpha: byte = $FF;
 begin
-{$IFDEF USE_TOUCH_INTERFACE}
 with widget^ do
     begin
     if (fadeAnimStart <> 0) then
@@ -499,6 +499,9 @@ with widget^ do
         Tint($FF, $FF, $FF, $FF);
         end;
     end;
+{$ELSE}
+begin
+widget:= widget; // avoid hint
 {$ENDIF}
 end;
 

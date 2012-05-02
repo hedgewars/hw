@@ -31,9 +31,9 @@ function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function  MakeScreenshot(filename: shortstring): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
 {$IFDEF SDL13}
-function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect;
+function  SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
 {$ELSE}
-function SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect;
+function  SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect; inline;
 {$ENDIF}
 
 implementation
@@ -250,9 +250,9 @@ begin
 end;
 
 {$IFDEF SDL13}
-function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect;
+function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
 {$ELSE}
-function SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect;
+function SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect; inline;
 {$ENDIF}
 begin
     SDL_RectMake.x:= x;

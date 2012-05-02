@@ -193,12 +193,11 @@ end;
 
 procedure DrawLine2Surf(dest: PSDL_Surface; x0, y0,x1,y1: LongInt; r,g,b: byte);
 var
-    max: LongInt;
     dx,dy,err,e2,sx,sy: LongInt;
     yMax: LongInt;
     destPixels: PLongwordArray;
 begin
-    max:= (dest^.pitch div 4) * dest^.h;
+    //max:= (dest^.pitch div 4) * dest^.h;
     yMax:= dest^.pitch div 4;
     destPixels:= dest^.pixels;
 

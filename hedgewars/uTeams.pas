@@ -20,7 +20,7 @@
 
 unit uTeams;
 interface
-uses uConsts, uInputHandler, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uTypes, uWorld;
+uses uConsts, uInputHandler, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uTypes{$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
 
 procedure initModule;
 procedure freeModule;
