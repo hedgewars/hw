@@ -63,7 +63,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
     filterLayout->addWidget(stateLabel);
     filterLayout->addWidget(CBState);
-    filterLayout->addSpacing(30);
+    filterLayout->addStretch(1);
 
     QLabel * ruleLabel = new QLabel(this);
     ruleLabel->setText(tr("Rules:"));
@@ -71,7 +71,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
     filterLayout->addWidget(ruleLabel);
     filterLayout->addWidget(CBRules);
-    filterLayout->addSpacing(30);
+    filterLayout->addStretch(1);
 
     QLabel * weaponLabel = new QLabel(this);
     weaponLabel->setText(tr("Weapons:"));
@@ -79,14 +79,17 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
     filterLayout->addWidget(weaponLabel);
     filterLayout->addWidget(CBWeapons);
-    filterLayout->addSpacing(30);
+    filterLayout->addStretch(1);
 
     QLabel * searchLabel = new QLabel(this);
     searchLabel->setText(tr("Search:"));
     searchText = new QLineEdit(this);
     searchText->setMaxLength(60);
+    searchText->setMinimumWidth(100);
+    searchText->setMaximumWidth(360);
     filterLayout->addWidget(searchLabel);
     filterLayout->addWidget(searchText);
+    filterLayout->setStretchFactor(searchText, 2);
 
     pageLayout->addLayout(filterLayout, 4, 0, 1, 2);
 
