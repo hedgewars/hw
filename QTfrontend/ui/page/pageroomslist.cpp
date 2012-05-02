@@ -26,6 +26,8 @@
 #include <QHeaderView>
 #include <QTableView>
 
+#include <QSortFilterProxyModel>
+
 #include "ammoSchemeModel.h"
 #include "pageroomslist.h"
 #include "hwconsts.h"
@@ -474,17 +476,31 @@ void PageRoomsList::setUser(const QString & nickname)
 
 void PageRoomsList::setModel(QAbstractTableModel *model)
 {
-    roomsList->setModel(model);
+    roomsModel = new QSortFilterProxyModel(this);
+    roomsModel->setSourceModel(model);
+    roomsModel->setDynamicSortFilter(true);
+    roomsModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    roomsList->setModel(roomsModel);
 
     roomsList->hideColumn(0);
 
     QHeaderView * h = roomsList->horizontalHeader();
+
     h->setResizeMode(1, QHeaderView::Stretch);
-    h->resizeSection(2, 16);
-    h->resizeSection(3, 16);
+    h->resizeSection(2, 32);
+    h->resizeSection(3, 32);
     h->resizeSection(4, 100);
     h->resizeSection(5, 100);
     h->resizeSection(6, 100);
     h->resizeSection(7, 100);
 
+    connect(h, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
+            this, SLOT(onSortIndicatorChanged(int, Qt::SortOrder)));
+
+}
+
+void PageRoomsList::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
+{
+    roomsList->horizontalHeader()->setSortIndicatorShown(true);
+    roomsModel->sort(logicalIndex, order);
 }

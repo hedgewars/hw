@@ -25,6 +25,8 @@ class HWChatWidget;
 class AmmoSchemeModel;
 class QTableView;
 
+class QSortFilterProxyModel;
+
 class PageRoomsList : public AbstractPage
 {
         Q_OBJECT
@@ -73,9 +75,11 @@ class PageRoomsList : public AbstractPage
         void onRefreshClick();
         void onClearClick();
         void onJoinConfirmation(const QString &);
+        void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
 
     private:
         QSettings * m_gameSettings;
+        QSortFilterProxyModel * roomsModel;
 
         AmmoSchemeModel * ammoSchemeModel;
 
