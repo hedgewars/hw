@@ -468,8 +468,9 @@ end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
+    ChangeVolume:= 0;
     if not isSoundEnabled then
-        exit(0);
+        exit;
 
     inc(Volume, voldelta);
     if Volume < 0 then
@@ -483,8 +484,8 @@ end;
 
 procedure DampenAudio;
 begin
-previousVolume:= Volume;
-ChangeVolume(-Volume * 7 div 9);
+    previousVolume:= Volume;
+    ChangeVolume(-Volume * 7 div 9);
 end;
 
 procedure UndampenAudio;

@@ -672,6 +672,7 @@ var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
 begin
+TryPlaceOnLand:= false;
 numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
 
 TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
@@ -693,12 +694,12 @@ case bpp of
         begin
         for x:= 0 to Pred(w) do
             if (PLongword(@(p^[x * 4]))^) <> 0 then
-                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT)
-                or ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0) then
+                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+                   ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0) then
                     begin
-                    if SDL_MustLock(Image) then
-                        SDL_UnlockSurface(Image);
-                    exit(false)
+                        if SDL_MustLock(Image) then
+                            SDL_UnlockSurface(Image);
+                        exit;
                     end;
         p:= @(p^[Image^.pitch]);
         end;
@@ -758,58 +759,61 @@ function Despeckle(X, Y: LongInt): boolean;
 var nx, ny, i, j, c, xx, yy: LongInt;
     pixelsweep: boolean;
 begin
-if (cReducedQuality and rqBlurryLand) = 0 then
+    Despeckle:= true;
+
+    if (cReducedQuality and rqBlurryLand) = 0 then
     begin
-    xx:= X;
-    yy:= Y;
+        xx:= X;
+        yy:= Y;
     end
-else
+    else
     begin
-    xx:= X div 2;
-    yy:= Y div 2;
+        xx:= X div 2;
+        yy:= Y div 2;
     end;
-pixelsweep:= ((Land[Y, X] and $FF00) = 0) and (LandPixels[yy, xx] <> 0);
-if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
+
+    pixelsweep:= ((Land[Y, X] and $FF00) = 0) and (LandPixels[yy, xx] <> 0);
+    if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
-    c:= 0;
-    for i:= -1 to 1 do
-        for j:= -1 to 1 do
-            if (i <> 0) or (j <> 0) then
+        c:= 0;
+        for i:= -1 to 1 do
+            for j:= -1 to 1 do
+                if (i <> 0) or (j <> 0) then
                 begin
-                ny:= Y + i;
-                nx:= X + j;
-                if ((ny and LAND_HEIGHT_MASK) = 0) and ((nx and LAND_WIDTH_MASK) = 0) then
+                    ny:= Y + i;
+                    nx:= X + j;
+                    if ((ny and LAND_HEIGHT_MASK) = 0) and ((nx and LAND_WIDTH_MASK) = 0) then
                     begin
-                    if pixelsweep then
+                        if pixelsweep then
                         begin
-                        if ((cReducedQuality and rqBlurryLand) <> 0) then
+                            if ((cReducedQuality and rqBlurryLand) <> 0) then
                             begin
-                            nx:= nx div 2;
-                            ny:= ny div 2
+                                nx:= nx div 2;
+                                ny:= ny div 2
                             end;
-                        if LandPixels[ny, nx] <> 0 then
-                            inc(c);
+                            if LandPixels[ny, nx] <> 0 then
+                                inc(c);
                         end
                     else if Land[ny, nx] > 255 then
                         inc(c);
                     end
                 end;
 
-    if c < 4 then // 0-3 neighbours
+        if c < 4 then // 0-3 neighbours
         begin
-        if ((Land[Y, X] and lfBasic) <> 0) and (not disableLandBack) then
-            LandPixels[yy, xx]:= LandBackPixel(X, Y)
-        else
-            LandPixels[yy, xx]:= 0;
+            if ((Land[Y, X] and lfBasic) <> 0) and (not disableLandBack) then
+                LandPixels[yy, xx]:= LandBackPixel(X, Y)
+            else
+                LandPixels[yy, xx]:= 0;
 
-        if not pixelsweep then
+            if not pixelsweep then
             begin
-            Land[Y, X]:= 0;
-            exit(true)
+                Land[Y, X]:= 0;
+                exit
             end
         end;
     end;
-Despeckle:= false
+    Despeckle:= false
 end;
 
 procedure Smooth(X, Y: LongInt);

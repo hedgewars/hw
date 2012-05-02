@@ -296,12 +296,13 @@ var l, i : LongInt;
     u: WideChar;
     tmpstr: array[0..256] of WideChar;
 begin
+CheckCJKFont:= font;
 
 {$IFNDEF MOBILE}
 // remove chinese fonts for now
 if (font >= CJKfnt16) or (length(s) = 0) then
 {$ENDIF}
-    exit(font);
+    exit;
 
 l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
 i:= 0;
@@ -320,10 +321,13 @@ while i < l do
        ((#$AC00  <= u) and (u <= #$D7AF))  or // Hangul Syllables
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
        ((#$FE30  <= u) and (u <= #$FE4F)))    // CJK Compatibility Forms
-       then exit(THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) ));
+       then 
+        begin
+            CheckCJKFont:=  THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) );
+            exit;
+        end;
     inc(i)
     end;
-exit(font);
 (* two more to check. pascal WideChar is only 16 bit though
        ((#$20000 <= u) and (u >= #$2A6DF)) or // CJK Unified Ideographs Extension B
        ((#$2F800 <= u) and (u >= #$2FA1F)))   // CJK Compatibility Ideographs Supplement *)

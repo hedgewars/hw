@@ -23,6 +23,9 @@ interface
 
 uses SDLh, uConsts, GLunit, uTypes;
 
+procedure initModule;
+procedure freeModule;
+
 procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function  MakeScreenshot(filename: shortstring): boolean;
@@ -32,8 +35,6 @@ function SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect;
 {$ELSE}
 function SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect;
 {$ENDIF}
-procedure initModule;
-procedure freeModule;
 
 implementation
 uses typinfo, sysutils, uVariables, uUtils
@@ -74,7 +75,8 @@ png_ptr := png_create_write_struct(png_get_libpng_ver(nil), nil, nil, nil);
 if png_ptr = nil then
 begin
     // AddFileLog('Error: Could not create png write struct.');
-    exit(0);
+    SaveScreenshot:= 0;
+    exit;
 end;
 
 info_ptr := png_create_info_struct(png_ptr);
@@ -82,7 +84,8 @@ if info_ptr = nil then
 begin
     png_destroy_write_struct(@png_ptr, nil);
     // AddFileLog('Error: Could not create png info struct.');
-    exit(0);
+    SaveScreenshot:= 0;
+    exit;
 end;
 
 {$IOCHECKS OFF}
@@ -209,7 +212,8 @@ p:= GetMem(size); // will be freed in SaveScreenshot()
 if p = nil then
 begin
     AddFileLog('Error: Could not allocate memory for screenshot.');
-    exit(false);
+    MakeScreenshot:= false;
+    exit;
 end;
 
 // read pixel from the front buffer
@@ -235,15 +239,14 @@ end;
 function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 var convertedSurf: PSDL_Surface;
 begin
+    doSurfaceConversion:= tmpsurf;
     if ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) or
        (tmpsurf^.format^.bitsperpixel = 24) then
         begin
         convertedSurf:= SDL_ConvertSurface(tmpsurf, conversionFormat, SDL_SWSURFACE);
         SDL_FreeSurface(tmpsurf);
-        exit(convertedSurf);
+        doSurfaceConversion:= convertedSurf;
         end;
-
-    exit(tmpsurf);
 end;
 
 {$IFDEF SDL13}

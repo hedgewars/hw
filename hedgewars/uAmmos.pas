@@ -145,13 +145,13 @@ end;
 
 function GetAmmoByNum(num: Longword): PHHAmmo;
 begin
-TryDo(num < StoreCnt, 'Invalid store number', true);
-exit(StoresList[num])
+    TryDo(num < StoreCnt, 'Invalid store number', true);
+    GetAmmoByNum:= StoresList[num]
 end;
 
 function GetCurAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 begin
-GetCurAmmoEntry:= GetAmmoEntry(Hedgehog, Hedgehog.CurAmmoType)
+    GetCurAmmoEntry:= GetAmmoEntry(Hedgehog, Hedgehog.CurAmmoType)
 end;
 
 function GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
@@ -280,18 +280,21 @@ end;
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): LongWord;
 var slot, ami: LongInt;
 begin
-Slot:= Ammoz[Ammo].Slot;
-ami:= 0;
-while (ami <= cMaxSlotAmmoIndex) do
-        begin
+    HHHasAmmo:= 0;
+    Slot:= Ammoz[Ammo].Slot;
+    ami:= 0;
+    while (ami <= cMaxSlotAmmoIndex) do
+    begin
         with Hedgehog.Ammo^[Slot, ami] do
             if (AmmoType = Ammo) then
                 if Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns then
-                    exit(Count)
-                else exit(0);
-      inc(ami)
-      end;
-HHHasAmmo:= 0
+                begin
+                    HHHasAmmo:= Count;
+                    exit;
+                end
+                else exit;
+        inc(ami)
+    end;
 end;
 
 procedure ApplyAngleBounds(var Hedgehog: THedgehog; AmmoType: TAmmoType);
