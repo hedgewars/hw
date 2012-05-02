@@ -146,11 +146,15 @@ void PageRoomsList::connectSignals()
     connect(BtnRefresh, SIGNAL(clicked()), this, SLOT(onRefreshClick()));
     connect(BtnClear, SIGNAL(clicked()), this, SLOT(onClearClick()));
     connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
-    connect(CBState, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
-    connect(CBRules, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
-    connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onRefreshClick()));
-    connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onRefreshClick()));
+    connect(CBState, SIGNAL(currentIndexChanged (int)), this, SLOT(onFilterChanged()));
+    connect(CBRules, SIGNAL(currentIndexChanged (int)), this, SLOT(onFilterChanged()));
+    connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onFilterChanged()));
+    connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
+
+
+    connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
+            this, SLOT(onSortIndicatorChanged(int, Qt::SortOrder)));
 }
 
 
@@ -158,6 +162,11 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings) :
     AbstractPage(parent)
 {
     m_gameSettings = gameSettings;
+
+    roomsModel = NULL;
+    stateFilteredModel = NULL;
+    schemeFilteredModel = NULL;
+    weaponsFilteredModel = NULL;
 
     initPage();
 
@@ -479,14 +488,40 @@ void PageRoomsList::setUser(const QString & nickname)
     chatWidget->setUser(nickname);
 }
 
-void PageRoomsList::setModel(RoomsListModel *model)
+void PageRoomsList::setModel(RoomsListModel * model)
 {
-    roomsModel = new QSortFilterProxyModel(this);
+    if (roomsModel == NULL)
+    {
+        roomsModel = new QSortFilterProxyModel(this);
+        roomsModel->setDynamicSortFilter(true);
+        roomsModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+        roomsModel->sort(RoomsListModel::StateColumn, Qt::AscendingOrder);
+
+        stateFilteredModel = new QSortFilterProxyModel(this);
+        schemeFilteredModel = new QSortFilterProxyModel(this);
+        weaponsFilteredModel = new QSortFilterProxyModel(this);
+
+        stateFilteredModel->setDynamicSortFilter(true);
+        schemeFilteredModel->setDynamicSortFilter(true);
+        weaponsFilteredModel->setDynamicSortFilter(true);
+
+        roomsModel->setFilterKeyColumn(-1); // search in all columns
+        stateFilteredModel->setFilterKeyColumn(RoomsListModel::StateColumn);
+        schemeFilteredModel->setFilterKeyColumn(RoomsListModel::SchemeColumn);
+        weaponsFilteredModel->setFilterKeyColumn(RoomsListModel::WeaponsColumn);
+
+        roomsModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        schemeFilteredModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        weaponsFilteredModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+        stateFilteredModel->setSourceModel(roomsModel);
+        schemeFilteredModel->setSourceModel(stateFilteredModel);
+        weaponsFilteredModel->setSourceModel(schemeFilteredModel);
+
+        roomsList->setModel(schemeFilteredModel);
+    }
+
     roomsModel->setSourceModel(model);
-    roomsModel->setDynamicSortFilter(true);
-    roomsModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-    roomsModel->sort(RoomsListModel::StateColumn, Qt::AscendingOrder);
-    roomsList->setModel(roomsModel);
 
     roomsList->hideColumn(RoomsListModel::StateColumn);
 
@@ -501,18 +536,47 @@ void PageRoomsList::setModel(RoomsListModel *model)
     h->resizeSection(RoomsListModel::MapColumn, 100);
     h->resizeSection(RoomsListModel::SchemeColumn, 100);
     h->resizeSection(RoomsListModel::WeaponsColumn, 100);
-
-    connect(h, SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-            this, SLOT(onSortIndicatorChanged(int, Qt::SortOrder)));
-
 }
+
 
 void PageRoomsList::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order)
 {
+    if (roomsModel == NULL)
+        return;
+
     // three state sorting: asc -> dsc -> default (by room state)
     if ((order == Qt::AscendingOrder) && (logicalIndex == roomsModel->sortColumn()))
         roomsList->horizontalHeader()->setSortIndicator(
             RoomsListModel::StateColumn, Qt::AscendingOrder);
     else
         roomsModel->sort(logicalIndex, order);
+}
+
+
+void PageRoomsList::onFilterChanged()
+{
+    if (roomsModel == NULL)
+        return;
+
+    roomsModel->setFilterWildcard(QString("*%1*").arg(searchText->text()));
+
+    int stateIdx = CBState->currentIndex();
+    // any = 0, in lobby/false = 1, in progress/true = 2
+
+    if (stateIdx == 0)
+        stateFilteredModel->setFilterWildcard("*"); // "any"
+    else
+        stateFilteredModel->setFilterFixedString(QString(stateIdx == 2));
+
+    if (CBRules->currentIndex() == 0)
+        schemeFilteredModel->setFilterWildcard("*"); // "any"
+    else
+        schemeFilteredModel->setFilterWildcard(
+            QString("*%1*").arg(CBRules->currentText()));
+
+    if (CBWeapons->currentIndex() == 0)
+        weaponsFilteredModel->setFilterWildcard("*"); // "any"
+    else
+        weaponsFilteredModel->setFilterWildcard(
+            QString("*%1*").arg(CBWeapons->currentText()));
 }
