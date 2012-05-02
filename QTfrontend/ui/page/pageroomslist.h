@@ -77,6 +77,7 @@ class PageRoomsList : public AbstractPage
         void onJoinConfirmation(const QString &);
         void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
         void onFilterChanged();
+        void saveHeaderState();
 
     private:
         QSettings * m_gameSettings;
@@ -87,6 +88,7 @@ class PageRoomsList : public AbstractPage
 
         AmmoSchemeModel * ammoSchemeModel;
 
+        bool restoreHeaderState();
 };
 
 #endif
