@@ -789,7 +789,7 @@ begin
     r.w:= squaresize;
     r.h:= squaresize;
 
-    DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
+    DrawTextureFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 
 {$IFDEF SDL13}
     SDL_GL_SwapWindow(SDLwindow);
