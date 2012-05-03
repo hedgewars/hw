@@ -211,6 +211,9 @@ void HWMapContainer::setHHLimit(int newHHLimit)
 
 void HWMapContainer::mapChanged(int index)
 {
+    if (index < 0)
+        return;
+
     Q_ASSERT(chooseMap->itemData(index, Qt::UserRole + 1).canConvert<MapModel::MapInfo>());
     m_mapInfo = chooseMap->itemData(index, Qt::UserRole + 1).value<MapModel::MapInfo>();
     m_curMap = chooseMap->currentText();
@@ -379,15 +382,19 @@ void HWMapContainer::intSetMap(const QString & map)
 {
     int id = m_mapModel->indexOf(map);
 
-    if(id >= 0)
+    if (pMap)
     {
-        if (pMap)
-        {
-            disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
-            disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
-            pMap = 0;
-        }
-        chooseMap->setCurrentIndex(id);
+        disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
+        disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
+        pMap = 0;
+    }
+
+    chooseMap->setCurrentIndex(id);
+
+    if(id < 0)
+    {
+        m_mapInfo.type = MapModel::Invalid;
+        m_curMap = map;
     }
 }
 
@@ -426,7 +433,7 @@ void HWMapContainer::setRandomMap()
             chooseMap->setCurrentIndex(idx);
             break;
         case MapModel::Invalid:
-            Q_ASSERT(false);
+            chooseMap->setCurrentIndex(0);
     }
 }
 
@@ -538,8 +545,15 @@ void HWMapContainer::mapDrawingFinished()
 
 void HWMapContainer::updatePreview()
 {
+    QPixmap failIcon;
+
     switch(m_mapInfo.type)
     {
+        case MapModel::Invalid:
+            failIcon = QPixmap(":/res/btnDisabled.png");
+            imageButt->setIcon(failIcon);
+            imageButt->setIconSize(failIcon.size());
+            break;
         case MapModel::GeneratedMap:
             askForGeneratedPreview();
             break;
@@ -594,13 +608,7 @@ void HWMapContainer::updateModelViews()
 
     // restore map selection
     if (!m_curMap.isEmpty())
-    {
-        int idx = chooseMap->findText(m_curMap);
-        if (idx >= 0)
-            chooseMap->setCurrentIndex(idx);
-        else
-            chooseMap->setCurrentIndex(0);
-    }
+        setMap(m_curMap);
 
 }
 
