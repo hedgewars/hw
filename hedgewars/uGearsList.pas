@@ -148,7 +148,7 @@ case Kind of
                 gear^.Z:= cHHZ;
                 if (GameFlags and gfAISurvival) <> 0 then
                     if gear^.Hedgehog^.BotLevel > 0 then
-                        gear^.Hedgehog^.Effects[heResurrectable] := true;
+                        gear^.Hedgehog^.Effects[heResurrectable] := 0;
                 end;
        gtShell: begin
                 gear^.Radius:= 4;
@@ -541,8 +541,8 @@ else if Gear^.Kind = gtHedgehog then
 
         inc(KilledHHs);
         RecountTeamHealth(team);
-        if (CurrentHedgehog <> nil) and CurrentHedgehog^.Effects[heResurrectable] and
-        (not Gear^.Hedgehog^.Effects[heResurrectable]) then
+        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Effects[heResurrectable] <> 0)  and
+        (Gear^.Hedgehog^.Effects[heResurrectable] = 0) then
             with CurrentHedgehog^ do 
                 begin
                 inc(Team^.stats.AIKills);

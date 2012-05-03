@@ -232,7 +232,7 @@ begin
     HatVisible:= false;
 
 
-    if HH^.Effects[hePoisoned] then
+    if HH^.Effects[hePoisoned] <> 0 then
         begin
         Tint($00, $FF, $40, $40);
         DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
@@ -877,12 +877,12 @@ begin
             end
         end;
 
-    if HH^.Effects[hePoisoned] then
+    if HH^.Effects[hePoisoned] <> 0 then
         begin
         Tint($00, $FF, $40, $80);
         DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 37) mod 360);
         end;
-    if HH^.Effects[heResurrected] then
+    if HH^.Effects[heResurrected] <> 0 then
         begin
         Tint($f5, $db, $35, $20);
         DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
@@ -914,8 +914,10 @@ begin
     if Gear^.Target.X <> NoPointX then
         if Gear^.AmmoType = amBee then
             DrawSpriteRotatedF(sprTargetBee, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
-        else
-            DrawSpriteRotatedF(sprTargetP, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+	else if Gear^.AmmoType = amIceGun then
+	    DrawSprite(sprSnowDust, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 3) mod 360)
+    else
+        DrawSpriteRotatedF(sprTargetP, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
 
     case Gear^.Kind of
           gtGrenade: DrawSpriteRotated(sprBomb, x, y, 0, Gear^.DirAngle);
