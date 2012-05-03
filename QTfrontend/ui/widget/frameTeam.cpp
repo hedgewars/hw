@@ -41,6 +41,7 @@ FrameTeams::FrameTeams(QWidget* parent) :
         availableColors.push_back(QColor(colors[i++]));
 
     resetColors();
+    this->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 }
 
 void FrameTeams::setInteractivity(bool interactive)
@@ -89,6 +90,8 @@ void FrameTeams::removeTeam(HWTeam team)
     mainLayout.removeWidget(it.value());
     it.value()->deleteLater();
     teamToWidget.erase(it);
+    QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+    QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
 void FrameTeams::resetTeams()
@@ -99,6 +102,8 @@ void FrameTeams::resetTeams()
         it.value()->deleteLater();
         teamToWidget.erase(it++);
     }
+    QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
+    QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
 void FrameTeams::setHHNum(const HWTeam& team)
@@ -131,4 +136,9 @@ bool FrameTeams::isFullTeams() const
 void FrameTeams::emitTeamColorChanged(const HWTeam& team)
 {
     emit teamColorChanged(team);
+}
+
+QSize FrameTeams::sizeHint() const
+{
+    return QSize(-1, teamToWidget.size() * 39 + 9);
 }

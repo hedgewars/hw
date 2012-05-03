@@ -152,12 +152,6 @@ void PageRoomsList::connectSignals()
     connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
 
-    // save header state on change
-    connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-            this, SLOT(saveHeaderState()));
-    connect(roomsList->horizontalHeader(), SIGNAL(sectionResized),
-            this, SLOT(saveHeaderState()));
-
     // sorting
     connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
             this, SLOT(onSortIndicatorChanged(int, Qt::SortOrder)));
@@ -538,6 +532,10 @@ void PageRoomsList::setModel(RoomsListModel * model)
 
     QHeaderView * h = roomsList->horizontalHeader();
 
+    h->setSortIndicatorShown(true);
+    h->setSortIndicator(RoomsListModel::StateColumn, Qt::AscendingOrder);
+    h->setResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
+
     if (!restoreHeaderState())
     {
         h->resizeSection(RoomsListModel::PlayerCountColumn, 32);
@@ -548,8 +546,12 @@ void PageRoomsList::setModel(RoomsListModel * model)
         h->resizeSection(RoomsListModel::WeaponsColumn, 100);
     }
 
-    h->setSortIndicatorShown(true);
-    h->setResizeMode(RoomsListModel::NameColumn, QHeaderView::Stretch);
+
+    // save header state on change
+    connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
+            this, SLOT(saveHeaderState()));
+    connect(roomsList->horizontalHeader(), SIGNAL(sectionResized(int, int, int)),
+            this, SLOT(saveHeaderState()));
 }
 
 
@@ -557,6 +559,12 @@ void PageRoomsList::onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order
 {
     if (roomsModel == NULL)
         return;
+
+    if (logicalIndex == 0)
+    {
+        roomsModel->sort(0, Qt::AscendingOrder);
+        return;
+    }
 
     // three state sorting: asc -> dsc -> default (by room state)
     if ((order == Qt::AscendingOrder) && (logicalIndex == roomsModel->sortColumn()))
@@ -600,12 +608,12 @@ bool PageRoomsList::restoreHeaderState()
 {
     if (!m_gameSettings->contains("frontend/roomslist_header"))
         return false;
-    return roomsList->horizontalHeader()->restoreState(QByteArray::fromHex(
-        (m_gameSettings->value("frontend/roomslist_header").toByteArray())));
+    return roomsList->horizontalHeader()->restoreState(QByteArray::fromBase64(
+        (m_gameSettings->value("frontend/roomslist_header").toString().toAscii())));
 }
 
 void PageRoomsList::saveHeaderState()
 {
     m_gameSettings->setValue("frontend/roomslist_header",
-        roomsList->horizontalHeader()->saveState().toHex());
+        QString(roomsList->horizontalHeader()->saveState().toBase64()));
 }

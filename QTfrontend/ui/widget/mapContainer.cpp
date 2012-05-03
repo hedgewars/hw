@@ -297,6 +297,7 @@ void HWMapContainer::askForGeneratedPreview()
     pMap = new HWMap();
     connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
     connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
+    connect(pMap, SIGNAL(destroyed(QObject *)), this, SLOT(onPreviewMapDestroyed(QObject *)));
     pMap->getImage(m_seed,
                    getTemplateFilter(),
                    get_mapgen(),
@@ -601,4 +602,11 @@ void HWMapContainer::updateModelViews()
             chooseMap->setCurrentIndex(0);
     }
 
+}
+
+
+void HWMapContainer::onPreviewMapDestroyed(QObject * map)
+{
+    if (map == pMap)
+        pMap = 0;
 }
