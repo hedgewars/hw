@@ -1107,7 +1107,7 @@ procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 var i, t, h: LongInt;
     r: TSDL_Rect;
     tdx, tdy: Double;
-    s: string[15];
+    s: shortstring;
     highlight: Boolean;
     smallScreenOffset, offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
@@ -1464,7 +1464,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
         inc(CountTicks, Lag);
     if (GameType = gmtDemo) and (CountTicks >= 1000) then
         begin
-        i:=GameTicks div 1000;
+        i:= GameTicks div 1000;
         t:= i mod 60;
         s:= inttostr(t);
         if t < 10 then
