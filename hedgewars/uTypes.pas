@@ -326,7 +326,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
 
     THedgehog = record
-            Name: string[192];
+            Name: shortstring;
             Gear: PGear;
             GearHidden: PGear;
             SpeechGear: PVisualGear;
@@ -352,7 +352,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 
     TTeam = record
             Clan: PClan;
-            TeamName: string[192];
+            TeamName: shortstring;
             ExtDriven: boolean;
             Binds: TBinds;
             Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
