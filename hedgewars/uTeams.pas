@@ -384,7 +384,7 @@ for t:= 0 to Pred(TeamsCount) do
             begin
             Hedgehogs[0].King:= true;
             Hedgehogs[0].Hat:= 'crown';
-            Hedgehogs[0].Effects[hePoisoned] := false;
+            Hedgehogs[0].Effects[hePoisoned] := 0;
             h:= Hedgehogs[0].Gear^.Health;
             Hedgehogs[0].Gear^.Health:= hwRound(int2hwFloat(th)*_0_375);
             if Hedgehogs[0].Gear^.Health > h then

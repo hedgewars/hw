@@ -132,7 +132,7 @@ while Gear <> nil do
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear
                                 end;
                             if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and (not Gear^.Invulnerable) then
-                                Gear^.Hedgehog^.Effects[hePoisoned] := true;
+                                Gear^.Hedgehog^.Effects[hePoisoned] := 1;
                             end;
 
                         end;
@@ -371,7 +371,7 @@ begin
                 and (Gear^.Kind <> gtDEagleShot) and (Gear^.Kind <> gtSineGunShot) then
                     if Gear^.Kind = gtHedgehog then
                         begin
-                        if Gear^.Hedgehog^.Effects[heResurrectable] then
+                        if Gear^.Hedgehog^.Effects[heResurrectable] <> 0 then
                             ResurrectHedgehog(Gear)
                         else
                             begin
@@ -449,8 +449,8 @@ begin
     gear^.dY := _0;
     gear^.Damage := 0;
     gear^.Health := gear^.Hedgehog^.InitialHealth;
-    gear^.Hedgehog^.Effects[hePoisoned] := false;
-    if not CurrentHedgehog^.Effects[heResurrectable] then
+    gear^.Hedgehog^.Effects[hePoisoned] := 0;
+    if CurrentHedgehog^.Effects[heResurrectable] = 0 then
         with CurrentHedgehog^ do 
             begin
             inc(Team^.stats.AIKills);
@@ -593,7 +593,7 @@ if cnt2 > 0 then
     begin
     OutError('Can''t find place for Gear', false);
     if Gear^.Kind = gtHedgehog then
-        Gear^.Hedgehog^.Effects[heResurrectable] := false;
+        Gear^.Hedgehog^.Effects[heResurrectable] := 0;
     DeleteGear(Gear);
     Gear:= nil
     end

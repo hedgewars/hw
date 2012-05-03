@@ -110,7 +110,7 @@ while Gear <> nil do
                 dec(Gear^.Health, dmg);
 
             if (Gear^.Hedgehog^.Team = CurrentTeam) and (Gear^.Damage <> Gear^.Karma)
-            and (not Gear^.Hedgehog^.King) and (not Gear^.Hedgehog^.Effects[hePoisoned]) and (not SuddenDeathDmg) then
+            and (not Gear^.Hedgehog^.King) and (Gear^.Hedgehog^.Effects[hePoisoned] = 0) and (not SuddenDeathDmg) then
                 Gear^.State:= Gear^.State or gstLoser;
 
             spawnHealthTagForHH(Gear, dmg);
@@ -141,7 +141,7 @@ begin
         if Gear^.Kind = gtHedgehog then
             begin
             tmp:= 0;
-            if Gear^.Hedgehog^.Effects[hePoisoned] then
+            if Gear^.Hedgehog^.Effects[hePoisoned] <> 0 then
                 begin
                 inc(tmp, ModifyDamage(5, Gear));
                 if (GameFlags and gfResetHealth) <> 0 then

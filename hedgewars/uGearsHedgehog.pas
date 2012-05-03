@@ -356,6 +356,7 @@ with Gear^,
                                  //amMelonStrike: AddGear(CurWeapon^.Pos, 0, gtAirAttack, 4, _0, _0, 0);
                     amStructure: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtStructure, gstWait, SignAs(_0_02, dX), _0, 3000);
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
+                       amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
              end;
              
              case CurAmmoType of
@@ -379,7 +380,8 @@ with Gear^,
                       amJetpack, amBirdy,
                  amFlamethrower, amLandGun,
                   amResurrector, amStructure,
-                       amTardis, amPiano: CurAmmoGear:= newGear;
+                       amTardis, amPiano,
+                       amIceGun: CurAmmoGear:= newGear;
              end;
              
             if ((CurAmmoType = amMine) or (CurAmmoType = amSMine)) and (GameFlags and gfInfAttack <> 0) then
@@ -611,7 +613,7 @@ case Gear^.Pos of
                     end;
      posCaseHealth: begin
                     inc(HH^.Health, Gear^.Health);
-                    HH^.Hedgehog^.Effects[hePoisoned] := false;
+                    HH^.Hedgehog^.Effects[hePoisoned] := 0;
                     str(Gear^.Health, s);
                     s:= '+' + s;
                     AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
@@ -1157,8 +1159,8 @@ if (Gear^.Health = 0) then
 
         if (Gear^.State and gstHHGone) = 0 then
             begin
-            Gear^.Hedgehog^.Effects[hePoisoned] := false;
-            if Gear^.Hedgehog^.Effects[heResurrectable] then
+            Gear^.Hedgehog^.Effects[hePoisoned] := 0;
+            if Gear^.Hedgehog^.Effects[heResurrectable] <> 0 then
                 begin
                 ResurrectHedgehog(Gear);
                 end

@@ -209,7 +209,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             PrevTexture, NextTexture: PTexture;
             end;
 
-    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected);
+    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected, heFrozen);
 
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
 
@@ -347,7 +347,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;
-            Effects: array[THogEffect] of boolean;
+            Effects: array[THogEffect] of LongInt;
             end;
 
     TTeam = record
