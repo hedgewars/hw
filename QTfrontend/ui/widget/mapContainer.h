@@ -73,6 +73,7 @@ class HWMapContainer : public QWidget
         void setDrawnMapData(const QByteArray & ar);
         void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl);
         void updateModelViews();
+        void onPreviewMapDestroyed(QObject * map);
 
     signals:
         void seedChanged(const QString & seed);
