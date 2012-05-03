@@ -63,6 +63,9 @@ QLayout * PageNetGame::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout;
 
+    btnDLC = addButton(tr("DLC"), bottomLayout, 0);
+    btnDLC->setWhatsThis(tr("Downloadable Content"));
+
     leRoomName = new HistoryLineEdit(this,10);
     leRoomName->setMaxLength(60);
     leRoomName->setMinimumWidth(200);
@@ -77,21 +80,23 @@ QLayout * PageNetGame::footerLayoutDefinition()
     BtnGo->setMinimumHeight(50);
 
     bottomLayout->addWidget(leRoomName);
-    BtnUpdate = addButton(QAction::tr("Update"), bottomLayout, 1);
+    BtnUpdate = addButton(QAction::tr("Update"), bottomLayout, 2);
 
     bottomLayout->addStretch();
     bottomLayout->addWidget(BtnGo);
 
-    BtnMaster = addButton(tr("Control"), bottomLayout, 3);
+    BtnMaster = addButton(tr("Control"), bottomLayout, 4);
     bottomLayout->insertStretch(3, 100);
 
-    BtnStart = addButton(QAction::tr("Start"), bottomLayout, 3);
+    BtnStart = addButton(QAction::tr("Start"), bottomLayout, 4);
 
     return bottomLayout;
 }
 
 void PageNetGame::connectSignals()
 {
+    connect(btnDLC, SIGNAL(clicked()), this, SIGNAL(DLCClicked()));
+
     connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
 
     connect(BtnUpdate, SIGNAL(clicked()), this, SLOT(onUpdateClick()));
