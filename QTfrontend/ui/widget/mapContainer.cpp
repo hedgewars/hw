@@ -41,11 +41,16 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     QWidget(parent),
     mainLayout(this),
     pMap(0),
-    mapgen(MAPGEN_REGULAR)
+    mapgen(MAPGEN_REGULAR),
+    m_previewSize(256, 128)
 {
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
     templateFilter = 0;
+
+    linearGrad = QLinearGradient(QPoint(128, 0), QPoint(128, 128));
+    linearGrad.setColorAt(1, QColor(0, 0, 192));
+    linearGrad.setColorAt(0, QColor(66, 115, 225));
 
     mainLayout.setContentsMargins(HWApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
                                   1,
@@ -185,18 +190,15 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
 void HWMapContainer::setImage(const QImage newImage)
 {
-    QPixmap px(256, 128);
-    QPixmap pxres(256, 128);
+    QPixmap px(m_previewSize);
+    QPixmap pxres(px.size());
     QPainter p(&pxres);
 
     px.fill(Qt::yellow);
     QBitmap bm = QBitmap::fromImage(newImage);
     px.setMask(bm);
 
-    QLinearGradient linearGrad(QPoint(128, 0), QPoint(128, 128));
-    linearGrad.setColorAt(1, QColor(0, 0, 192));
-    linearGrad.setColorAt(0, QColor(66, 115, 225));
-    p.fillRect(QRect(0, 0, 256, 128), linearGrad);
+    p.fillRect(pxres.rect(), linearGrad);
     p.drawPixmap(QPoint(0, 0), px);
 
     addInfoToPreview(pxres);
@@ -281,7 +283,8 @@ void HWMapContainer::addInfoToPreview(QPixmap image)
     p.setBrush(QColor(0, 0, 0));
     p.drawRect(image.rect().width() - hhSmall.rect().width() - 28, 3, 40, 20);
     p.setFont(QFont("MS Shell Dlg", 10));
-    p.drawText(image.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, QString::number(hhLimit));
+    QString text = (hhLimit > 0) ? QString::number(hhLimit) : "?";
+    p.drawText(image.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, text);
     p.drawPixmap(image.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
 
     imageButt->setIcon(finalImage);
@@ -307,6 +310,20 @@ void HWMapContainer::askForGeneratedPreview()
                    getMazeSize(),
                    getDrawnMapData()
                   );
+
+    setHHLimit(0);
+
+    const QPixmap waitIcon(":/res/iconTime.png");
+
+    QPixmap waitImage(m_previewSize);
+    QPainter p(&waitImage);
+
+    p.fillRect(waitImage.rect(), linearGrad);
+    int x = (waitImage.width() - waitIcon.width()) / 2;
+    int y = (waitImage.height() - waitIcon.height()) / 2;
+    p.drawPixmap(QPoint(x, y), waitIcon);
+
+    addInfoToPreview(waitImage);
 }
 
 void HWMapContainer::themeSelected(const QModelIndex & current, const QModelIndex &)

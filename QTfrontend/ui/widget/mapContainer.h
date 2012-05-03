@@ -131,6 +131,9 @@ class HWMapContainer : public QWidget
         MapModel::MapInfo m_mapInfo;
         QString m_theme;
         QString m_curMap;
+
+        QLinearGradient linearGrad; ///< for preview background
+        QSize m_previewSize;
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED
