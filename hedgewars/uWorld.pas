@@ -447,16 +447,16 @@ begin
                     AMFrame:= LongInt(Ammo^[i,t].AmmoType) - 1;
                     if STurns >= 0 then //weapon not usable yet, draw grayed out with turns remaining
                         begin
-                        DrawSprite2Surf(sprAMAmmosBW, amSurface, x + AMSlotPadding, 
+                        DrawSpriteFrame2Surf(sprAMAmmosBW, amSurface, x + AMSlotPadding, 
                                                                  y + AMSlotPadding, AMFrame);
                         if STurns < 100 then
-                            DrawSprite2Surf(sprTurnsLeft, amSurface, 
-			    	    x + AMSlotSize-16, 
-				    y + AMSlotSize + 1 - 16, STurns);
+                            DrawSpriteFrame2Surf(sprTurnsLeft, amSurface, 
+                                x + AMSlotSize-16, 
+                                y + AMSlotSize + 1 - 16, STurns);
                         end
                     else //draw colored version
                         begin
-                        DrawSprite2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
+                        DrawSpriteFrame2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
                                                                y + AMSlotPadding, AMFrame);
                         end;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
@@ -479,10 +479,10 @@ for i:= 1 to SlotsNumY -1 do
 DrawLine2Surf(amSurface, BORDERSIZE, i * (AMSlotSize+1)+1, AMRect.w + BORDERSIZE, i * (AMSlotSize+1)+1,160,160,160);
 
 //draw outer border
-DrawSprite2Surf(sprAMCorners, amSurface, 0                    , 0                    , 0);
-DrawSprite2Surf(sprAMCorners, amSurface, AMRect.w + BORDERSIZE, AMRect.y             , 1);
-DrawSprite2Surf(sprAMCorners, amSurface, AMRect.x             , AMRect.h + BORDERSIZE, 2);
-DrawSprite2Surf(sprAMCorners, amSurface, AMRect.w + BORDERSIZE, AMRect.h + BORDERSIZE, 3);
+DrawSpriteFrame2Surf(sprAMCorners, amSurface, 0                    , 0                    , 0);
+DrawSpriteFrame2Surf(sprAMCorners, amSurface, AMRect.w + BORDERSIZE, AMRect.y             , 1);
+DrawSpriteFrame2Surf(sprAMCorners, amSurface, AMRect.x             , AMRect.h + BORDERSIZE, 2);
+DrawSpriteFrame2Surf(sprAMCorners, amSurface, AMRect.w + BORDERSIZE, AMRect.h + BORDERSIZE, 3);
 
 for i:=0 to BORDERSIZE-1 do
 begin

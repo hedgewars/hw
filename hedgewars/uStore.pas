@@ -133,7 +133,7 @@ drY:= - 4;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
-        NameTagTex:= RenderStringTex(TeamName, Clan^.Color, Font, cTeamHealthWidth);
+        NameTagTex:= RenderStringTexLim(TeamName, Clan^.Color, Font, cTeamHealthWidth);
 
         r.w:= cTeamHealthWidth + 5;
         r.h:= NameTagTex^.h;
@@ -199,7 +199,7 @@ for t:= 0 to Pred(TeamsCount) do
             with Hedgehogs[i] do
                 if Gear <> nil then
                     begin
-                    NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16, cTeamHealthWidth);
+                    NameTagTex:= RenderStringTexLim(Name, Clan^.Color, fnt16, cTeamHealthWidth);
                     if Hat <> 'NoHat' then
                         begin
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
