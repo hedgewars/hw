@@ -65,6 +65,7 @@ class PageNetGame : public AbstractPage
 
     signals:
         void SetupClicked();
+        void DLCClicked();
         void askForUpdateRoomName(const QString &);
 
     private:
@@ -76,6 +77,7 @@ class PageNetGame : public AbstractPage
 
         HistoryLineEdit * leRoomName;
         QPushButton * btnSetup;
+        QPushButton * btnDLC;
 };
 
 #endif

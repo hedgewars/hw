@@ -41,11 +41,16 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     QWidget(parent),
     mainLayout(this),
     pMap(0),
-    mapgen(MAPGEN_REGULAR)
+    mapgen(MAPGEN_REGULAR),
+    m_previewSize(256, 128)
 {
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
     templateFilter = 0;
+
+    linearGrad = QLinearGradient(QPoint(128, 0), QPoint(128, 128));
+    linearGrad.setColorAt(1, QColor(0, 0, 192));
+    linearGrad.setColorAt(0, QColor(66, 115, 225));
 
     mainLayout.setContentsMargins(HWApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
                                   1,
@@ -71,9 +76,6 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_mapModel = DataManager::instance().mapModel();
     chooseMap->setEditable(false);
     chooseMap->setModel(m_mapModel);
-
-    // update model views after model changes (to e.g. re-adjust separators)
-    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(updateModelViews()));
 
     mapLayout->addWidget(chooseMap, 1, 1);
 
@@ -178,25 +180,25 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     chooseMap->setCurrentIndex(0);
     mapChanged(0);
-    connect(chooseMap, SIGNAL(currentIndexChanged(int)), this, SLOT(mapChanged(int)));
+    // use signal "activated" rather than currentIndexChanged
+    // because index is somtimes changed a few times in a row programmatically
+    connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
 
-    updateModelViews();
+    // update model views after model changes (to e.g. re-adjust separators)
+    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(updateModelViews()));
 }
 
 void HWMapContainer::setImage(const QImage newImage)
 {
-    QPixmap px(256, 128);
-    QPixmap pxres(256, 128);
+    QPixmap px(m_previewSize);
+    QPixmap pxres(px.size());
     QPainter p(&pxres);
 
     px.fill(Qt::yellow);
     QBitmap bm = QBitmap::fromImage(newImage);
     px.setMask(bm);
 
-    QLinearGradient linearGrad(QPoint(128, 0), QPoint(128, 128));
-    linearGrad.setColorAt(1, QColor(0, 0, 192));
-    linearGrad.setColorAt(0, QColor(66, 115, 225));
-    p.fillRect(QRect(0, 0, 256, 128), linearGrad);
+    p.fillRect(pxres.rect(), linearGrad);
     p.drawPixmap(QPoint(0, 0), px);
 
     addInfoToPreview(pxres);
@@ -211,15 +213,24 @@ void HWMapContainer::setHHLimit(int newHHLimit)
 
 void HWMapContainer::mapChanged(int index)
 {
+    if (chooseMap->currentIndex() != index)
+        chooseMap->setCurrentIndex(index);
+
+    if (index < 0)
+    {
+        m_mapInfo.type = MapModel::Invalid;
+        updatePreview();
+        return;
+    }
+
     Q_ASSERT(chooseMap->itemData(index, Qt::UserRole + 1).canConvert<MapModel::MapInfo>());
     m_mapInfo = chooseMap->itemData(index, Qt::UserRole + 1).value<MapModel::MapInfo>();
-    m_curMap = chooseMap->currentText();
+    m_curMap = m_mapInfo.name;
 
     switch(m_mapInfo.type)
     {
         case MapModel::GeneratedMap:
             mapgen = MAPGEN_REGULAR;
-            updatePreview();
             gbThemes->show();
             lblFilter->show();
             cbTemplateFilter->show();
@@ -228,7 +239,6 @@ void HWMapContainer::mapChanged(int index)
             break;
         case MapModel::GeneratedMaze:
             mapgen = MAPGEN_MAZE;
-            updatePreview();
             gbThemes->show();
             lblFilter->hide();
             cbTemplateFilter->hide();
@@ -237,7 +247,6 @@ void HWMapContainer::mapChanged(int index)
             break;
         case MapModel::HandDrawnMap:
             mapgen = MAPGEN_DRAWN;
-            updatePreview();
             gbThemes->show();
             lblFilter->hide();
             cbTemplateFilter->hide();
@@ -246,7 +255,6 @@ void HWMapContainer::mapChanged(int index)
             break;
         default:
             mapgen = MAPGEN_MAP;
-            updatePreview();
             gbThemes->hide();
             lblFilter->hide();
             cbTemplateFilter->hide();
@@ -261,7 +269,9 @@ void HWMapContainer::mapChanged(int index)
         m_theme = lvThemes->currentIndex().data().toString();
         emit themeChanged(m_theme);
     }
-    emit mapChanged(m_mapInfo.name);
+
+    updatePreview();
+    emit mapChanged(m_curMap);
     emit mapgenChanged(mapgen);
 }
 
@@ -278,7 +288,8 @@ void HWMapContainer::addInfoToPreview(QPixmap image)
     p.setBrush(QColor(0, 0, 0));
     p.drawRect(image.rect().width() - hhSmall.rect().width() - 28, 3, 40, 20);
     p.setFont(QFont("MS Shell Dlg", 10));
-    p.drawText(image.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, QString::number(hhLimit));
+    QString text = (hhLimit > 0) ? QString::number(hhLimit) : "?";
+    p.drawText(image.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, text);
     p.drawPixmap(image.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
 
     imageButt->setIcon(finalImage);
@@ -287,22 +298,30 @@ void HWMapContainer::addInfoToPreview(QPixmap image)
 
 void HWMapContainer::askForGeneratedPreview()
 {
-    if (pMap)
-    {
-        disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
-        disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
-        pMap = 0;
-    }
-
     pMap = new HWMap();
     connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
     connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
+    connect(pMap, SIGNAL(destroyed(QObject *)), this, SLOT(onPreviewMapDestroyed(QObject *)));
     pMap->getImage(m_seed,
                    getTemplateFilter(),
                    get_mapgen(),
                    getMazeSize(),
                    getDrawnMapData()
                   );
+
+    setHHLimit(0);
+
+    const QPixmap waitIcon(":/res/iconTime.png");
+
+    QPixmap waitImage(m_previewSize);
+    QPainter p(&waitImage);
+
+    p.fillRect(waitImage.rect(), linearGrad);
+    int x = (waitImage.width() - waitIcon.width()) / 2;
+    int y = (waitImage.height() - waitIcon.height()) / 2;
+    p.drawPixmap(QPoint(x, y), waitIcon);
+
+    addInfoToPreview(waitImage);
 }
 
 void HWMapContainer::themeSelected(const QModelIndex & current, const QModelIndex &)
@@ -321,7 +340,7 @@ QString HWMapContainer::getCurrentSeed() const
 QString HWMapContainer::getCurrentMap() const
 {
     if(chooseMap->currentIndex() < MAPGEN_MAP) return QString();
-    return(m_mapInfo.name);
+    return(m_curMap);
 }
 
 QString HWMapContainer::getCurrentTheme() const
@@ -376,24 +395,17 @@ void HWMapContainer::setSeed(const QString & seed)
 
 void HWMapContainer::intSetMap(const QString & map)
 {
+    m_curMap = map;
+
     int id = m_mapModel->indexOf(map);
 
-    if(id >= 0)
-    {
-        if (pMap)
-        {
-            disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
-            disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
-            pMap = 0;
-        }
-        chooseMap->setCurrentIndex(id);
-    }
+    mapChanged(id);
 }
 
-void HWMapContainer::setMap(const QString &map)
+void HWMapContainer::setMap(const QString & map)
 {
-    intSetMap(map);
-    updatePreview();
+    if ((m_mapInfo.type == MapModel::Invalid) || (map != m_mapInfo.name))
+        intSetMap(map);
 }
 
 void HWMapContainer::setTheme(const QString & theme)
@@ -422,10 +434,10 @@ void HWMapContainer::setRandomMap()
         case MapModel::StaticMap:
             // get random map of same type
             idx = m_mapModel->randomMap(m_mapInfo.type);
-            chooseMap->setCurrentIndex(idx);
+            mapChanged(idx);
             break;
         case MapModel::Invalid:
-            Q_ASSERT(false);
+            mapChanged(0);
     }
 }
 
@@ -452,7 +464,8 @@ void HWMapContainer::intSetTemplateFilter(int filter)
 void HWMapContainer::setTemplateFilter(int filter)
 {
     intSetTemplateFilter(filter);
-    updatePreview();
+    if (m_mapInfo.type == MapModel::GeneratedMap)
+        updatePreview();
 }
 
 MapGenerator HWMapContainer::get_mapgen(void) const
@@ -474,23 +487,52 @@ void HWMapContainer::intSetMazeSize(int size)
 void HWMapContainer::setMazeSize(int size)
 {
     intSetMazeSize(size);
-    updatePreview();
+    if (m_mapInfo.type == MapModel::GeneratedMaze)
+        updatePreview();
 }
 
 void HWMapContainer::intSetMapgen(MapGenerator m)
 {
-    mapgen = m;
+    if (mapgen != m)
+    {
+        mapgen = m;
 
-    if(m != MAPGEN_MAP)
-        chooseMap->setCurrentIndex(m);
+        switch (m)
+        {
+            case MAPGEN_REGULAR:
+                m_mapInfo.type = MapModel::GeneratedMap;
+                break;
+            case MAPGEN_MAZE:
+                m_mapInfo.type = MapModel::GeneratedMaze;
+                break;
+            case MAPGEN_DRAWN:
+                m_mapInfo.type = MapModel::HandDrawnMap;
+                break;
+            case MAPGEN_MAP:
+                switch (m_mapInfo.type)
+                {
+                    case MapModel::GeneratedMap:
+                    case MapModel::GeneratedMaze:
+                    case MapModel::HandDrawnMap:
+                        m_mapInfo.type = MapModel::Invalid;
+                    default:
+                        break;
+                }
+                break;
+        }
 
-    emit mapgenChanged(m);
+        if(m != MAPGEN_MAP)
+            chooseMap->setCurrentIndex(m);
+
+        emit mapgenChanged(m);
+    }
 }
 
 void HWMapContainer::setMapgen(MapGenerator m)
 {
     intSetMapgen(m);
-    updatePreview();
+    if(m != MAPGEN_MAP)
+        updatePreview();
 }
 
 void HWMapContainer::setDrawnMapData(const QByteArray & ar)
@@ -537,8 +579,22 @@ void HWMapContainer::mapDrawingFinished()
 
 void HWMapContainer::updatePreview()
 {
+    if (pMap)
+    {
+        disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
+        disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
+        pMap = 0;
+    }
+
+    QPixmap failIcon;
+
     switch(m_mapInfo.type)
     {
+        case MapModel::Invalid:
+            failIcon = QPixmap(":/res/btnDisabled.png");
+            imageButt->setIcon(failIcon);
+            imageButt->setIconSize(failIcon.size());
+            break;
         case MapModel::GeneratedMap:
             askForGeneratedPreview();
             break;
@@ -568,13 +624,12 @@ void HWMapContainer::updatePreview()
 
 void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int mazesize, const QString &seed, int tmpl)
 {
-    intSetMap(map);
     intSetMapgen(m);
     intSetMazeSize(mazesize);
     intSetSeed(seed);
     intSetTemplateFilter(tmpl);
-
-    updatePreview();
+    // this one last because it will refresh the preview
+    intSetMap(map);
 }
 
 
@@ -592,13 +647,15 @@ void HWMapContainer::updateModelViews()
     }
 
     // restore map selection
-    if (!m_curMap.isEmpty())
-    {
-        int idx = chooseMap->findText(m_curMap);
-        if (idx >= 0)
-            chooseMap->setCurrentIndex(idx);
-        else
-            chooseMap->setCurrentIndex(0);
-    }
+    if ((!m_curMap.isEmpty()) && (chooseMap->currentIndex() < 0))
+        intSetMap(m_curMap);
+    else
+        updatePreview();
+}
 
+
+void HWMapContainer::onPreviewMapDestroyed(QObject * map)
+{
+    if (map == pMap)
+        pMap = 0;
 }

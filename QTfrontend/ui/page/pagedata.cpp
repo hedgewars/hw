@@ -222,7 +222,10 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
                 return false;
             }
 
-            m_contentDownloaded = true;
+            if (this->isVisible())
+                m_contentDownloaded = true;
+            else
+                DataManager::instance().reload();
         }
 
         file.close();

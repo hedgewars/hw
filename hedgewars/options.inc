@@ -17,14 +17,15 @@
  *)
 
 {$IFDEF FPC}
-    {$WRITEABLECONST OFF} 
+    {$WRITEABLECONST OFF}
+    {$IMPLICITEXCEPTIONS OFF}
+    {$VARSTRINGCHECKS ON}
     {$MODE OBJFPC}
 {$ELSE}
     {$ERROR Only Free Pascal supported!}
 {$ENDIF}
 
 {$MACRO ON}
-
 {$DEFINE GLunit:=GL}
 
 {$IFDEF ANDROID}
