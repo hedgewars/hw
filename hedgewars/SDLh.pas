@@ -944,7 +944,7 @@ function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName 
 function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexV';
 
 function  SDL_GL_SetAttribute(attr: TSDL_GLattr; value: LongInt): LongInt; cdecl; external SDLLibName;
-procedure SDL_GL_SwapBuffers(); cdecl; external SDLLibName;
+procedure SDL_GL_SwapBuffers; cdecl; external SDLLibName;
 
 function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
 function  SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;

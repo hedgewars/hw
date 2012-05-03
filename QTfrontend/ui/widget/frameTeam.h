@@ -43,6 +43,7 @@ class FrameTeams : public QFrame
         void setTeamColor(const HWTeam& team);
         void setInteractivity(bool interactive);
         QColor getNextColor() const;
+        QSize sizeHint() const;
 
     signals:
         void teamColorChanged(const HWTeam&);

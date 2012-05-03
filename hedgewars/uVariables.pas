@@ -2305,6 +2305,31 @@ var
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
+            ejectY: -3),
+// Freezer
+            (NameId: sidIceGun;
+            NameTex: nil;
+            Probability: 20;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_DontHold;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 5001;
+                Pos: 0;
+                AmmoType: amFlamethrower;
+                AttackVoice: sndNone;
+                Bounciness: 1000);
+            Slot: 2;
+            TimeAfterTurn: 0;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0; //20;
             ejectY: -3)
         );
 
@@ -2372,6 +2397,7 @@ const
 (*      gtStructure *) , amStructure  // TODO - This will undoubtedly change once there is more than one structure
 (*        gtLandGun *) , amLandGun
 (*         gtTardis *) , amTardis
+(*         gtIceGun *) , amIceGun
     );
 
 var
