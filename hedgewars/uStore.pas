@@ -1141,6 +1141,13 @@ end;
 
 procedure freeModule;
 begin
+    StoreRelease(false);
+    TTF_Quit();
+{$IFDEF SDL13}
+    SDL_GL_DeleteContext(SDLGLcontext);
+    SDL_DestroyWindow(SDLwindow);
+{$ENDIF}
+    SDL_Quit();
 end;
 
 end.

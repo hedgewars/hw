@@ -39,7 +39,6 @@ procedure SetBinds(var binds: TBinds);
 procedure SetDefaultBinds;
 
 procedure ControllerInit;
-procedure ControllerClose;
 procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
@@ -419,14 +418,6 @@ else
     WriteLnToConsole('Not using any game controller');
 end;
 
-procedure ControllerClose;
-var j: Integer;
-begin
-    if ControllerEnabled > 0 then
-        for j:= 0 to pred(ControllerNumControllers) do
-            SDL_JoystickClose(Controller[j]);
-end;
-
 procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 begin
     ControllerAxes[joy][axis]:= value;
@@ -452,8 +443,12 @@ begin
 end;
 
 procedure freeModule;
+var j: LongInt;
 begin
-
+    // close gamepad controllers
+    if ControllerEnabled > 0 then
+        for j:= 0 to pred(ControllerNumControllers) do
+            SDL_JoystickClose(Controller[j]);
 end;
 
 end.

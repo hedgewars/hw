@@ -42,7 +42,6 @@ procedure GenLandPreview(port: Longint); cdecl; export;
 
 implementation
 {$ELSE}
-procedure OnDestroy; forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
@@ -122,24 +121,6 @@ begin
             AddChatString(#5 + 'screen capture failed (lack of memory or write permissions)');
             end
         end;
-end;
-
-////////////////////
-procedure OnDestroy;
-begin
-    WriteLnToConsole('Freeing resources...');
-    FreeActionsList();
-    StoreRelease(false);
-    ControllerClose();
-    CloseIPC();
-    TTF_Quit();
-{$IFDEF SDL13}
-    SDL_GL_DeleteContext(SDLGLcontext);
-    SDL_DestroyWindow(SDLwindow);
-    SDLGLcontext:= nil;
-    SDLwindow:= nil;
-{$ENDIF}
-    SDL_Quit();
 end;
 
 ///////////////////
@@ -383,7 +364,6 @@ begin
         LoadRecordFromFile(recordFileName);
 
     ScriptOnGameInit;
-
     s:= 'eproto ' + inttostr(cNetProtoVersion);
     SendIPCRaw(@s[0], Length(s) + 1); // send proto version
 
@@ -394,12 +374,9 @@ begin
     isDeveloperMode:= false;
     TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
     ParseCommand('rotmask', true);
-
     MainLoop();
 
-    // clean up SDL and GL context
-    OnDestroy();
-    // clean up all the other memory allocated
+    // clean up all the memory allocated
     freeEverything(true);
     if alsoShutdownFrontend then
         halt;
@@ -414,21 +391,19 @@ begin
     else
         cLogfileBase:= 'preview';
 
-    // uConsts does not need initialization as they are all consts
-    uUtils.initModule;
+    uUtils.initModule;      // this opens the debug file, must be the first
     uMisc.initModule;
     uVariables.initModule;
-    uConsole.initModule;    // MUST happen after uMisc
+    uConsole.initModule;
     uCommands.initModule;
     uCommandHandlers.initModule;
 
     uLand.initModule;
     uLandPainted.initModule;
-
     uIO.initModule;
 
     if complete then
-        begin
+    begin
 {$IFDEF ANDROID}GLUnit.init;{$ENDIF}
 {$IFDEF SDL13}uTouch.initModule;{$ENDIF}
         uAI.initModule;
@@ -456,18 +431,21 @@ begin
         uVisualGears.initModule;
         uWorld.initModule;
         uCaptions.initModule;
-        end;
+    end;
 end;
 
 procedure freeEverything (complete:boolean);
 begin
     if complete then
-        begin
+    begin
+        WriteLnToConsole('Freeing resources...');
+        uAI.freeModule;
+        uAIMisc.freeModule;         //stub
         uCaptions.freeModule;
         uWorld.freeModule;
         uVisualGears.freeModule;
         uTeams.freeModule;
-        uStore.freeModule;          //stub
+        uInputHandler.freeModule;
         uStats.freeModule;          //stub
         uSound.freeModule;
         uScript.freeModule;
@@ -477,20 +455,18 @@ begin
         uLandTexture.freeModule;
         //uLandObjects does not need to be freed
         //uLandGraphics does not need to be freed
-        uInputHandler.freeModule;           //stub
         uGears.freeModule;
         //uGame does not need to be freed
         //uFloat does not need to be freed
         uCollisions.freeModule;     //stub
         uChat.freeModule;
         uAmmos.freeModule;
-        uAIMisc.freeModule;         //stub
         //uAIAmmoTests does not need to be freed
         //uAIActions does not need to be freed
-        uAI.freeModule;             //stub
-        end;
+        uStore.freeModule;
+    end;
 
-    uIO.freeModule;             //stub
+    uIO.freeModule;
     uLand.freeModule;
     uLandPainted.freeModule;
 
@@ -504,8 +480,7 @@ end;
 
 /////////////////////////
 procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
-var
-    Preview: TPreview;
+var Preview: TPreview;
 begin
     initEverything(false);
 {$IFDEF HWLIBRARY}
@@ -522,7 +497,6 @@ begin
     SendIPCRaw(@Preview, sizeof(Preview));
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));
     WriteLnToConsole('Preview sent, disconnect');
-    CloseIPC();
     freeEverything(false);
 end;
 

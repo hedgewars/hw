@@ -25,6 +25,7 @@ uses SDLh, uTypes;
 procedure initModule;
 procedure freeModule;
 
+procedure InitIPC;
 procedure SendIPC(s: shortstring);
 procedure SendIPCc(c: char);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
@@ -35,8 +36,6 @@ procedure LoadRecordFromFile(fileName: shortstring);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
-procedure InitIPC;
-procedure CloseIPC;
 procedure NetGetNextCmd;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
@@ -110,13 +109,6 @@ begin
     IPCSock:= SDLNet_TCP_Open(ipaddr);
     SDLTry(IPCSock <> nil, true);
     WriteLnToConsole(msgOK)
-end;
-
-procedure CloseIPC;
-begin
-    SDLNet_FreeSocketSet(fds);
-    SDLNet_TCP_Close(IPCSock);
-    SDLNet_Quit();
 end;
 
 procedure ParseIPCCommand(s: shortstring);
@@ -443,7 +435,10 @@ end;
 
 procedure freeModule;
 begin
-while headcmd <> nil do RemoveCmd
+    while headcmd <> nil do RemoveCmd;
+    SDLNet_FreeSocketSet(fds);
+    SDLNet_TCP_Close(IPCSock);
+    SDLNet_Quit();
 end;
 
 end.
