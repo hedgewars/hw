@@ -239,8 +239,8 @@ if not(fingerHasMoved(finger^)) then
 if aimingCrosshair then
     begin
     aimingCrosshair:= false;
-    upKey:= false;
-    downKey:= false;
+    ParseTeamCommand('-up');
+    ParseTeamCommand('-down');
     dec(buttonsDown);
     end;
 
@@ -418,7 +418,7 @@ procedure NewTurnBeginning;
 begin
 targetted:= false;
 targetting:= false;
-SetUtilityWidgetState;
+SetUtilityWidgetState(amNothing);
 end;
 
 
