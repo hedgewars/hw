@@ -551,7 +551,7 @@ while not eof(f) do
         SDWaterOpacity:= WaterOpacity
         end
     else if key = 'music' then
-        MusicFN:= Trim(s)
+        SetMusic(Trim(s))
     else if key = 'clouds' then
         begin
         cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH;

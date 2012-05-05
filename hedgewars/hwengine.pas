@@ -71,12 +71,8 @@ begin
             StoreLoad(false);
             InitWorld;
             ResetKbd;
-            SoundLoad;
             if GameType = gmtSave then
-                begin
-                isSEBackup:= isSoundEnabled;
-                isSoundEnabled:= false
-                end;
+                SetSound(false);
             FinishProgress;
             PlayMusic;
             SetScale(zoom);
@@ -310,8 +306,8 @@ begin
         cLocale := Copy(cLocaleFName,1,2);
         
     UserNick:= gameArgs[5];
-    isSoundEnabled:= gameArgs[6] = '1';
-    isMusicEnabled:= gameArgs[7] = '1';
+    SetSound(gameArgs[6] = '1');
+    SetMusic(gameArgs[7] = '1');
     cAltDamage:= gameArgs[8] = '1';
     PathPrefix:= gameArgs[9];
     UserPathPrefix:= '../Documents';
@@ -394,17 +390,14 @@ begin
 
     InitTeams();
     AssignStores();
-
-    if isSoundEnabled then
-        InitSound();
+    InitSound();
 
     isDeveloperMode:= false;
-
     TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
-
     ParseCommand('rotmask', true);
 
     MainLoop();
+
     // clean up SDL and GL context
     OnDestroy();
     // clean up all the other memory allocated

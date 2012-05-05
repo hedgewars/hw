@@ -76,6 +76,7 @@ var delay: LongWord;
     stAfterDelay, stChWin, stWater, stChWin2, stHealth,
     stSpawn, stNTurn);
     upd: Longword;
+    //SDMusic: shortstring;
 
 // For better maintainability the step handlers of gears are stored in
 // separate files.
@@ -313,8 +314,7 @@ case step of
                 AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                 playSound(sndSuddenDeath);
                 StopMusic //No SDMusic for now
-                    //MusicFN:= SDMusic;
-                    //ChangeMusic
+                    //ChangeMusic(SDMusic)
                     end
                 else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
                     begin
@@ -1326,6 +1326,8 @@ begin
     delay2:= 0;
     step:= stDelay;
     upd:= 0;
+
+    //SDMusic:= 'hell.ogg';
 end;
 
 procedure freeModule;
