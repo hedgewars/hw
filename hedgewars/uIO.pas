@@ -56,6 +56,7 @@ type PCmd = ^TCmd;
 var IPCSock: PTCPSocket;
     fds: PSDLNet_SocketSet;
     isPonged: boolean;
+    SocketString: shortstring;
 
     headcmd: PCmd;
     lastcmd: PCmd;

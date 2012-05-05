@@ -75,6 +75,7 @@ uses typinfo, Math, uConsts, uVariables, SysUtils;
 {$IFDEF DEBUGFILE}
 var f: textfile;
 {$ENDIF}
+var CharArray: array[byte] of Char;
 
 // should this include "strtolower()" for the split string?
 procedure SplitBySpace(var a, b: shortstring);
@@ -259,7 +260,6 @@ byte(DecodeBase64[0]):= t - 1
 end;
 
 
-var CharArray: array[byte] of Char;
 function Str2PChar(const s: shortstring): PChar;
 begin
 CharArray:= s;

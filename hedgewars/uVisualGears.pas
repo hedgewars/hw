@@ -56,6 +56,7 @@ implementation
 uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils, uStore, uUtils;
 
 const cExplFrameTicks = 110;
+var VGCounter: LongWord;
 
 // For better maintainability the step handlers of visual gears are stored
 // in a separate file.

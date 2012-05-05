@@ -40,6 +40,7 @@ uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uComma
     uGearsUtils, uGearsList{$IFDEF SDL13}, uTouch{$ENDIF};
 
 var MaxTeamHealth: LongInt;
+    GameOver: boolean;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;

@@ -55,6 +55,8 @@ procedure Tint                  (c: Longword); inline;
 implementation
 uses uVariables;
 
+var LastTint: LongWord = 0;
+
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
 begin
 r.y:= r.y + Height * Position;

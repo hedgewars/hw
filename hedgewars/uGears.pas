@@ -61,6 +61,7 @@ uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList;
 
+var skipFlag: boolean;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;

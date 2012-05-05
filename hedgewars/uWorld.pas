@@ -79,6 +79,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     missionTimer: LongInt;
     stereoDepth: GLfloat;
     isFirstFrame: boolean;
+    AMAnimType: LongInt;
 
 const cStereo_Sky           = 0.0500;
       cStereo_Horizon       = 0.0250;

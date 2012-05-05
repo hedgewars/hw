@@ -35,6 +35,8 @@ uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions,
     uGearsList, uGears, uCollisions, uRandom, uStore, uTeams, 
     uGearsUtils;
 
+var GHStepTicks: LongWord = 0;
+
 // Shouldn't more of this ammo switching stuff be moved to uAmmos ?
 function ChangeAmmo(HHGear: PGear): boolean;
 var slot, i: Longword;
@@ -654,7 +656,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
                         Pos:= (Pos + 1) mod Ammoz[AmmoType].PosCount
     else
         exit;
-    StepTicks:= 200;
+    GHStepTicks:= 200;
     exit
     end;
 
@@ -712,7 +714,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         StepSoundTimer:= cHHStepTicks;
         end;
    
-    StepTicks:= cHHStepTicks;
+    GHStepTicks:= cHHStepTicks;
     if PrevdX <> hwSign(Gear^.dX) then
         begin
         FollowGear:= Gear;
@@ -1038,7 +1040,7 @@ if (HHGear^.State and gstAnimation) <> 0 then
     end;
 
 if ((HHGear^.State and gstMoving) <> 0)
-or (StepTicks = cHHStepTicks)
+or (GHStepTicks = cHHStepTicks)
 or (CurAmmoGear <> nil) then // we are moving
     begin
     with Hedgehog^ do
@@ -1116,18 +1118,18 @@ if (HHGear^.State and gstMoving) <> 0 then
         begin
         AddGearCI(HHGear);
         if wasJumping then
-            StepTicks:= 410
+            GHStepTicks:= 410
         else
-            StepTicks:= 95
+            GHStepTicks:= 95
         end;
     exit
     end;
 
     if not isInMultiShoot and (Hedgehog^.Gear <> nil) then
         begin
-        if StepTicks > 0 then
-            dec(StepTicks);
-        if (StepTicks = 0) then
+        if GHStepTicks > 0 then
+            dec(GHStepTicks);
+        if (GHStepTicks = 0) then
             HedgehogStep(HHGear)
         end
 end;
