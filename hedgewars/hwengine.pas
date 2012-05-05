@@ -378,20 +378,13 @@ begin
 
     // clean up all the memory allocated
     freeEverything(true);
-    if alsoShutdownFrontend then
-        halt;
 end;
 
 procedure initEverything (complete:boolean);
 begin
     Randomize();
 
-    if complete then
-        cLogfileBase:= 'game'
-    else
-        cLogfileBase:= 'preview';
-
-    uUtils.initModule;      // this opens the debug file, must be the first
+    uUtils.initModule(complete);      // this opens the debug file, must be the first
     uMisc.initModule;
     uVariables.initModule;
     uConsole.initModule;

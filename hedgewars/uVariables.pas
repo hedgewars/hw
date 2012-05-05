@@ -50,25 +50,21 @@ var
     UserNick        : shortstring = '';
     recordFileName  : shortstring = '';
     cReadyDelay     : Longword    = 5000;
-    cLogfileBase    : shortstring = 'debug';
     cStereoMode     : TStereoMode = smNone;
     cOnlyStats      : boolean = False;
 //////////////////////////
     cMapName        : shortstring = '';
 
-    alsoShutdownFrontend: boolean = false;
-
     isCursorVisible : boolean;
     isInLag         : boolean;
     isPaused        : boolean;
-
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
-    isFirstFrame    : boolean;
 
     fastUntilLag    : boolean;
     autoCameraOn    : boolean;
 
+    GameTicks       : LongWord;
     GameState       : TGameState;
     GameType        : TGameType;
     InputMask       : LongWord;
@@ -102,8 +98,6 @@ var
 
     cWaterLine       : Word;
     cGearScrEdgesDist: LongInt;
-
-    GameTicks   : LongWord;
 
     // originally typed consts
     CharArray: array[byte] of Char;
@@ -193,7 +187,6 @@ var
 
 {$IFDEF SDL13}
     SDLwindow       : PSDL_Window;
-    SDLGLcontext    : PSDL_GLContext;
 {$ENDIF}
 
     WorldDx: LongInt;
@@ -2605,7 +2598,6 @@ begin
     isInMultiShoot  := false;
     isSpeed         := false;
     fastUntilLag    := false;
-    isFirstFrame    := true;
     autoCameraOn    := true;
     cScriptName     := '';
     cSeed           := '';
@@ -2620,7 +2612,6 @@ begin
 
 {$IFDEF SDL13}
     SDLwindow       := nil;
-    SDLGLcontext    := nil;
 {$ENDIF}
 
     // those values still are not perfect

@@ -47,6 +47,8 @@ uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUt
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var MaxTextureSize: LongInt;
+{$IFDEF SDL13}SDLGLcontext: PSDL_GLContext;{$ENDIF}
+
 //    cGPUVendor: TGPUVendor;
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
@@ -1137,6 +1139,9 @@ begin
     // init all count texture pointers
     for i:= Low(CountTexz) to High(CountTexz) do
         CountTexz[i] := nil;
+{$IFDEF SDL13}
+    SDLGLcontext    := nil;
+{$ENDIF}
 end;
 
 procedure freeModule;

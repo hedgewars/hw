@@ -89,7 +89,7 @@ end;
 // equivalent to esc+y; when closeFrontend = true the game exits after memory cleanup
 procedure HW_terminate(closeFrontend: boolean); cdecl; export;
 begin
-    alsoShutdownFrontend:= closeFrontend;
+    closeFrontend:= closeFrontend; // avoid hint
     ParseCommand('forcequit', true);
 end;
 

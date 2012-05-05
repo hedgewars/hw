@@ -65,7 +65,7 @@ function  CheckNoTeamOrHH: boolean; inline;
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
-procedure initModule;
+procedure initModule(isGame: boolean);
 procedure freeModule;
 
 
@@ -359,14 +359,21 @@ begin
 CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 end;
 
-procedure initModule;
-{$IFDEF DEBUGFILE}{$IFNDEF MOBILE}var i: LongInt;{$ENDIF}{$ENDIF}
+procedure initModule(isGame: boolean);
+{$IFDEF DEBUGFILE}
+var logfileBase: shortstring;
+{$IFNDEF MOBILE}var i: LongInt;{$ENDIF}
+{$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
+    if isGame then
+        logfileBase:= 'game'
+    else
+        logfileBase:= 'preview';
 {$I-}
 {$IFDEF MOBILE}
-    {$IFDEF IPHONEOS} Assign(f,'../Documents/hw-' + cLogfileBase + '.log'); {$ENDIF}
-    {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + cLogfileBase + '.log'); {$ENDIF}
+    {$IFDEF IPHONEOS} Assign(f,'../Documents/hw-' + logfileBase + '.log'); {$ENDIF}
+    {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + logfileBase + '.log'); {$ENDIF}
     Rewrite(f);
 {$ELSE}
     if (UserPathPrefix <> '') then
@@ -374,7 +381,7 @@ begin
             i:= 0;
             while(i < 7) do
             begin
-                assign(f, UserPathPrefix + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
+                assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then
                     break;
