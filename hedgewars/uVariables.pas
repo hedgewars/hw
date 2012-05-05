@@ -59,7 +59,6 @@ var
     alsoShutdownFrontend: boolean = false;
 
     isCursorVisible : boolean;
-    isTerminated    : boolean;
     isInLag         : boolean;
     isPaused        : boolean;
 
@@ -2601,7 +2600,6 @@ begin
     bBetweenTurns   := false;
     bWaterRising    := false;
     isCursorVisible := false;
-    isTerminated    := false;
     isInLag         := false;
     isPaused        := false;
     isInMultiShoot  := false;
