@@ -181,7 +181,6 @@ begin
 
     Mix_AllocateChannels(Succ(chanTPU));
     ChangeVolume(cInitVolume);
-    defVoicepack:= AskForVoicepack('Default');
 end;
 
 procedure SetSound;
@@ -547,6 +546,7 @@ begin
     isSEBackup:= isSoundEnabled;
     cInitVolume:= 100;
     Volume:= 0;
+    defVoicepack:= AskForVoicepack('Default');
 
     for i:= Low(TSound) to High(TSound) do
         lastChan[i]:= -1;
