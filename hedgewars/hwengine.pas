@@ -48,9 +48,10 @@ procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
 
 ////////////////////////////////
-procedure DoTimer(Lag: LongInt);
+function DoTimer(Lag: LongInt): boolean;
 var s: shortstring;
 begin
+    DoTimer:= false;
     inc(RealTicks, Lag);
 
     case GameState of
@@ -94,7 +95,7 @@ begin
             end;
         gsExit:
             begin
-            isTerminated:= true;
+            DoTimer:= true;
             end;
         gsSuspend:
             exit;
@@ -139,19 +140,20 @@ begin
     SDLwindow:= nil;
 {$ENDIF}
     SDL_Quit();
-    isTerminated:= false;
 end;
 
 ///////////////////
 procedure MainLoop;
 var event: TSDL_Event;
     PrevTime, CurrTime: Longword;
+    isTerminated: boolean;
 {$IFDEF SDL13}
     previousGameState: TGameState;
 {$ELSE}
     prevFocusState: boolean;
 {$ENDIF}
 begin
+    isTerminated:= false;
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
@@ -162,40 +164,40 @@ begin
             case event.type_ of
 {$IFDEF SDL13}
                 SDL_KEYDOWN:
-                if GameState = gsChat then
+                    if GameState = gsChat then
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
-                    KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym))//TODO correct for keymodifiers
-                else
-                    ProcessKey(event.key);
+                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym))//TODO correct for keymodifiers
+                    else
+                        ProcessKey(event.key);
                 SDL_KEYUP:
-                if GameState <> gsChat then
-                    ProcessKey(event.key);
+                    if GameState <> gsChat then
+                        ProcessKey(event.key);
                     
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
-                        begin
+                    begin
                         cHasFocus:= true;
                         onFocusStateChanged()
-                        end
+                    end
                     else if event.window.event = SDL_WINDOWEVENT_MINIMIZED then
-                        begin
+                    begin
                         previousGameState:= GameState;
                         GameState:= gsSuspend;
-                        end
+                    end
                     else if event.window.event = SDL_WINDOWEVENT_RESTORED then
-                        begin
+                    begin
                         GameState:= previousGameState;
 {$IFDEF ANDROID}
                         //This call is used to reinitialize the glcontext and reload the textures
                         ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
 {$ENDIF}
-                        end
+                    end
                     else if event.window.event = SDL_WINDOWEVENT_RESIZED then
-                        begin
+                    begin
                         cNewScreenWidth:= max(2 * (event.window.data1 div 2), cMinScreenWidth);
                         cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
                         cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
-                        end;
+                    end;
                         
                 SDL_FINGERMOTION:
                     onTouchMotion(event.tfinger.x, event.tfinger.y,event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
@@ -212,25 +214,26 @@ begin
                     else
                         ProcessKey(event.key);
                 SDL_KEYUP:
-                if GameState <> gsChat then
-                    ProcessKey(event.key);
+                    if GameState <> gsChat then
+                        ProcessKey(event.key);
                     
                 SDL_MOUSEBUTTONDOWN:
-                    ProcessMouse(event.button, true); 
+                    ProcessMouse(event.button, true);
+                    
                 SDL_MOUSEBUTTONUP:
                     ProcessMouse(event.button, false); 
                     
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
-                        begin
+                    begin
                         prevFocusState:= cHasFocus;
                         cHasFocus:= event.active.gain = 1;
                         if prevFocusState xor cHasFocus then
                             onFocusStateChanged()
-                        end;
+                    end;
                         
                 SDL_VIDEORESIZE:
-                    begin
+                begin
                     // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
                     // Change by sheepluva:
                     // Let's only use even numbers for custom width/height since I ran into scaling issues with odd width values.
@@ -238,7 +241,7 @@ begin
                     cNewScreenWidth:= max(2 * (event.resize.w div 2), cMinScreenWidth);
                     cNewScreenHeight:= max(2 * (event.resize.h div 2), cMinScreenHeight);
                     cScreenResizeDelay:= RealTicks+500;
-                    end;
+                end;
 {$ENDIF}
                 SDL_JOYAXISMOTION:
                     ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
@@ -250,41 +253,37 @@ begin
                     ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
                 SDL_QUITEV:
                     isTerminated:= true
-        end; //end case event.type_ of
-    end; //end while SDL_PollEvent(@event) <> 0 do
+            end; //end case event.type_ of
+        end; //end while SDL_PollEvent(@event) <> 0 do
 
-    if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and
-       ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
-    begin
-        cScreenResizeDelay:= 0;
-        cScreenWidth:= cNewScreenWidth;
-        cScreenHeight:= cNewScreenHeight;
+        if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and
+           ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
+        begin
+            cScreenResizeDelay:= 0;
+            cScreenWidth:= cNewScreenWidth;
+            cScreenHeight:= cNewScreenHeight;
 
-        ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
-        WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
-        ScriptOnScreenResize();
-        InitCameraBorders();
-        InitTouchInterface();
-    end;
+            ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
+            WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
+            ScriptOnScreenResize();
+            InitCameraBorders();
+            InitTouchInterface();
+        end;
 
-    if isTerminated = false then
-    begin
-        CurrTime:= SDL_GetTicks;
+        CurrTime:= SDL_GetTicks();
         if PrevTime + longword(cTimerInterval) <= CurrTime then
         begin
-            DoTimer(CurrTime - PrevTime);
+            isTerminated:= DoTimer(CurrTime - PrevTime);
             PrevTime:= CurrTime
         end
         else SDL_Delay(1);
         IPCCheckSock();
-        end;
     end;
 end;
 
 ///////////////
 procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
-var
-    p: TPathType;
+var p: TPathType;
     s: shortstring;
     i: LongInt;
 begin
