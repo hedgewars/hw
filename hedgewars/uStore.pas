@@ -47,6 +47,7 @@ uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUt
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var MaxTextureSize: LongInt;
+    SDLPrimSurface: PSDL_Surface;
 {$IFDEF SDL13}SDLGLcontext: PSDL_GLContext;{$ENDIF}
 
 //    cGPUVendor: TGPUVendor;

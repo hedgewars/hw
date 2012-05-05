@@ -42,6 +42,7 @@ var BestActions: TActions;
     ThinkThread: TThreadID;
 {$ENDIF}
     hasThread: LongInt;
+    StartTicks: Longword;
 
 procedure FreeActionsList;
 begin

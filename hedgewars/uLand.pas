@@ -33,6 +33,7 @@ uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
      uLandGenMaze, uLandOutline;
 
+var digest: shortstring;
 
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
@@ -473,7 +474,6 @@ var tmpsurf: PSDL_Surface;
     f: textfile;
     mapName: shortstring = '';
 begin
-isMap:= true;
 WriteLnToConsole('Loading land from file...');
 AddProgress;
 tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
@@ -553,7 +553,6 @@ begin
     hasBorder:= false;
 
     LoadThemeConfig;
-    isMap:= false;
 
     // is this not needed any more? lets hope setlength sets also 0s
     //if ((GameFlags and gfForts) <> 0) or (Pathz[ptMapCurrent] <> '') then

@@ -100,19 +100,9 @@ var
     cGearScrEdgesDist: LongInt;
 
     // originally typed consts
-    CharArray: array[byte] of Char;
-    LastTint: Longword;
-    SocketString: shortstring;
-    VGCounter: Longword;
-    PrevX: LongInt;
-    timedelta: Longword;
-    StartTicks: Longword;
-    Counter: Longword;
-    StepTicks: LongWord;
     ExplosionBorderColor: LongWord;
     WaterOpacity: byte;
     SDWaterOpacity: byte;
-    prevGState: TGameState;
     GrayScale: Boolean;
 
     // originally from uConsts
@@ -141,7 +131,6 @@ var
     bBetweenTurns   : boolean;
     bWaterRising    : boolean;
 
-    //ShowCrosshair   : boolean;  This variable is inconvenient to set.  Easier to decide when rendering
     CrosshairX      : LongInt;
     CrosshairY      : LongInt;
     CursorMovementX : LongInt;
@@ -216,7 +205,6 @@ var
     firebutton, jumpWidget, AMWidget          : TOnScreenWidget;
     pauseButton, utilityWidget                : TOnScreenWidget;
 {$ENDIF}
-    AMAnimType      : LongInt;
 
 
 const
@@ -2392,10 +2380,8 @@ var
     LandDirty: TDirtyTag;
     hasBorder: boolean;
     hasGirders: boolean;
-    isMap: boolean;
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
-    digest: shortstring;
     CurAmmoGear: PGear;
     lastGearByUID: PGear;
     GearsList: PGear;
@@ -2406,7 +2392,6 @@ var
     SuddenDeathDmg: Boolean;
     SpeechType: Longword;
     SpeechText: shortstring;
-    skipFlag: boolean;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
     StepSoundTimer: LongInt;
     StepSoundChannel: LongInt;
@@ -2422,7 +2407,6 @@ var
     LocalTeam: LongInt;  // last non-bot, non-extdriven clan first team
     LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index, updated to next upcoming hog for per-hog-ammo
     CurMinAngle, CurMaxAngle: Longword;
-    GameOver: boolean;
     NextClan: boolean;
 
     FollowGear: PGear;
@@ -2443,7 +2427,6 @@ var
     bAFRRight: Boolean;
 
 
-    SDLPrimSurface: PSDL_Surface;
     PauseTexture,
     SyncTexture,
     ConfirmTexture: PTexture;
@@ -2631,14 +2614,9 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
-    PrevX:= 0;
-    timedelta:= 0;
-    Counter:= 0;
-    StepTicks:= 0;
     ExplosionBorderColor:= $FF808080;
     WaterOpacity:= $80;
     SDWaterOpacity:= $80;
-    prevGState:= gsConfirm;
     GrayScale:= false;
 
     LuaGoals:= '';

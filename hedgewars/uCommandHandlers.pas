@@ -28,6 +28,8 @@ procedure freeModule;
 implementation
 uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions;
 
+var prevGState: TGameState = gsConfirm;
+
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
