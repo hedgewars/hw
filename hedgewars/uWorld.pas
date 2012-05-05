@@ -36,7 +36,7 @@ procedure HideMission;
 procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
 procedure InitTouchInterface;
-procedure SetUtilityWidgetState(ammoType: TAmmoType = amNothing);
+procedure SetUtilityWidgetState(ammoType: TAmmoType);
 procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);
 procedure MoveCamera;
 procedure onFocusStateChanged;
