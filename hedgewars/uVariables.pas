@@ -37,11 +37,8 @@ var
     cBits           : LongInt     = 32;
     ipcPort         : Word        = 0;
     cFullScreen     : boolean     = false;
-    isSoundEnabled  : boolean     = true;
-    isMusicEnabled  : boolean     = false;
     cLocaleFName    : shortstring = 'en.txt';
     cLocale         : shortstring = 'en';
-    cInitVolume     : LongInt     = 100;
     cTimerInterval  : LongInt     = 8;
     PathPrefix      : shortstring = './';
     UserPathPrefix  : shortstring = './';
@@ -66,7 +63,6 @@ var
     isInLag         : boolean;
     isPaused        : boolean;
 
-    isSEBackup      : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
     isFirstFrame    : boolean;
@@ -134,7 +130,6 @@ var
     LAND_HEIGHT      : Word;
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
-    cMaxCaptions     : LongInt;
 
     cLeftScreenBorder     : LongInt;
     cRightScreenBorder    : LongInt;
@@ -184,7 +179,6 @@ var
 
     WaterColorArray : array[0..3] of HwColor4f;
     SDWaterColorArray : array[0..3] of HwColor4f;
-    SDMusic         : shortstring;
     SDTint          : LongInt;
 
     CursorPoint     : TPoint;
@@ -2547,7 +2541,6 @@ begin
     SDWaterColorArray[1]:= SDWaterColorArray[0];
     SDWaterColorArray[3]:= SDWaterColorArray[2];
 
-    SDMusic:= 'hell.ogg';
     SDTint:= $80;
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
@@ -2615,7 +2608,6 @@ begin
     isSpeed         := false;
     fastUntilLag    := false;
     isFirstFrame    := true;
-    isSEBackup      := true;
     autoCameraOn    := true;
     cScriptName     := '';
     cSeed           := '';
@@ -2637,11 +2629,6 @@ begin
     cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
     cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
     cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
-
-    if isPhone() then
-        cMaxCaptions:= 3
-    else
-        cMaxCaptions:= 4;
 
     vobFrameTicks:= 99999;
     vobFramesCount:= 4;
@@ -2676,10 +2663,7 @@ begin
     cBits           := 32;
     ipcPort         := 0;
     cFullScreen     := false;
-    isSoundEnabled  := true;
-    isMusicEnabled  := false;
     cLocaleFName    := 'en.txt';
-    cInitVolume     := 100;
     cTimerInterval  := 8;
     PathPrefix      := './';
     UserPathPrefix  := './';

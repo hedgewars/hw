@@ -40,9 +40,10 @@ begin
     val(ParamStr(4), cBits);
     val(ParamStr(5), ipcPort);
     cFullScreen:= ParamStr(6) = '1';
-    isSoundEnabled:= ParamStr(7) = '1';
-    isMusicEnabled:= ParamStr(8) = '1';
-    val(ParamStr(9), cInitVolume);
+    SetSound(ParamStr(7) = '1');
+    SetMusic(ParamStr(8) = '1');
+    val(ParamStr(9), tmp);
+    SetVolume(tmp);
     val(ParamStr(10), cTimerInterval);
     PathPrefix:= ParamStr(11);
     cShowFPS:= ParamStr(12) = '1';
@@ -101,9 +102,9 @@ end;
 
 procedure setAudio(initialVolume: LongInt; musicEnabled: boolean; soundEnabled: boolean);
 begin
-    cInitVolume:= initialVolume;
-    isMusicEnabled:= musicEnabled;
-    isSoundEnabled:= soundEnabled
+    SetVolume(initialVolume);
+    SetMusic(musicEnabled);
+    SetSound(soundEnabled);
 end;
 
 procedure setAudioWithParameters(initialVolumeParam: string; musicEnabledParam: string; soundEnabledParam: string);
@@ -231,8 +232,8 @@ begin
                             if ParamStr(paramIndex) = '--stats-only'  then
                                 begin
                                 cOnlyStats:= true;
-                                isSoundEnabled:= false;
-                                isMusicEnabled:= false;
+                                SetSound(false);
+                                SetMusic(false);
                                 cReducedQuality:= $FFFFFFFF xor rqLowRes; // HACK
                                 paramIndex:= paramIndex + 1
                                 end
