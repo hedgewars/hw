@@ -78,6 +78,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     missionTex: PTexture;
     missionTimer: LongInt;
     stereoDepth: GLfloat;
+    isFirstFrame: boolean;
 
 const cStereo_Sky           = 0.0500;
       cStereo_Horizon       = 0.0250;
@@ -1802,37 +1803,38 @@ end;
 
 procedure initModule;
 begin
-fpsTexture:= nil;
-FollowGear:= nil;
-WindBarWidth:= 0;
-bShowAmmoMenu:= false;
-bSelected:= false;
-bShowFinger:= false;
-Frames:= 0;
-WorldDx:= -512;
-WorldDy:= -256;
+    fpsTexture:= nil;
+    FollowGear:= nil;
+    WindBarWidth:= 0;
+    bShowAmmoMenu:= false;
+    bSelected:= false;
+    bShowFinger:= false;
+    Frames:= 0;
+    WorldDx:= -512;
+    WorldDy:= -256;
 
-FPS:= 0;
-CountTicks:= 0;
-SoundTimerTicks:= 0;
-prevPoint.X:= 0;
-prevPoint.Y:= 0;
-missionTimer:= 0;
-missionTex:= nil;
-cOffsetY:= 0;
-stereoDepth:= 0;
-AMState:= AMHidden;
+    FPS:= 0;
+    CountTicks:= 0;
+    SoundTimerTicks:= 0;
+    prevPoint.X:= 0;
+    prevPoint.Y:= 0;
+    missionTimer:= 0;
+    missionTex:= nil;
+    cOffsetY:= 0;
+    stereoDepth:= 0;
+    AMState:= AMHidden;
+    isFirstFrame:= true;
 end;
 
 procedure freeModule;
 begin
-stereoDepth:= stereoDepth; // avoid hint
-FreeTexture(fpsTexture);
-fpsTexture:= nil;
-FreeTexture(timeTexture);
-timeTexture:= nil;
-FreeTexture(missionTex);
-missionTex:= nil
+    stereoDepth:= stereoDepth; // avoid hint
+    FreeTexture(fpsTexture);
+    fpsTexture:= nil;
+    FreeTexture(timeTexture);
+    timeTexture:= nil;
+    FreeTexture(missionTex);
+    missionTex:= nil
 end;
 
 end.
