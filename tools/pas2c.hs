@@ -36,10 +36,11 @@ data RenderState = RenderState
         stringConsts :: [(String, String)],
         uniqCounter :: Int,
         toMangle :: Set.Set String,
+        currentUnit :: String,
         namespaces :: Map.Map String Records
     }
     
-emptyState = RenderState Map.empty "" BTUnknown [] 0 Set.empty
+emptyState = RenderState Map.empty "" BTUnknown [] 0 Set.empty ""
 
 getUniq :: State RenderState Int
 getUniq = do
@@ -126,8 +127,8 @@ renderCFiles units = do
     toNamespace nss (System tvs) = 
         currentScope $ execState (mapM_ (tvar2C True) tvs) (emptyState nss)
     toNamespace _ (Program {}) = Map.empty
-    toNamespace nss (Unit _ interface _ _ _) = 
-        currentScope $ execState (interface2C interface) (emptyState nss)
+    toNamespace nss (Unit (Identifier i _) interface _ _ _) = 
+        currentScope $ execState (interface2C interface) (emptyState nss){currentUnit = map toLower i ++ "_"}
 
 
 withState' :: (RenderState -> RenderState) -> State RenderState a -> State RenderState a
@@ -162,8 +163,8 @@ toCFiles ns p@(fn, pu) = do
     toCFiles' p
     where
     toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C initialState . pascal2C) p
-    toCFiles' (fn, (Unit unitId interface implementation _ _)) = do
-        let (a, s) = runState (id2C IOInsert (setBaseType BTUnit unitId) >> interface2C interface) initialState
+    toCFiles' (fn, (Unit unitId@(Identifier i _) interface implementation _ _)) = do
+        let (a, s) = runState (id2C IOInsert (setBaseType BTUnit unitId) >> interface2C interface) initialState{currentUnit = map toLower i ++ "_"}
         writeFile (fn ++ ".h") $ "#pragma once\n\n#include \"pas2c.h\"\n\n" ++ (render (a $+$ text ""))
         writeFile (fn ++ ".c") $ "#include \"" ++ fn ++ ".h\"\n" ++ (render2C s . implementation2C) implementation
     initialState = emptyState ns
@@ -236,8 +237,10 @@ id2C :: InsertOption -> Identifier -> State RenderState Doc
 id2C IOInsert (Identifier i t) = do
     ns <- gets currentScope
     tom <- gets (Set.member n . toMangle)
+    cu <- gets currentUnit
     let i' = case (t, tom) of
-            (BTFunction p _, True) -> i ++ ('_' : show p)
+            (BTFunction p _, True) -> cu ++ i ++ ('_' : show p)
+            (BTFunction _ _, _) -> cu ++ i
             _ -> i
     modify (\s -> s{currentScope = Map.insertWith (++) n [(i', t)] (currentScope s), lastIdentifier = n})
     return $ text i'
@@ -732,20 +735,19 @@ ref2C rf@(RecordField (Dereference ref1) ref2) = do
     t <- fromPointer (show ref1) =<< gets lastType
     r2 <- case t of
         BTRecord rs -> withRecordNamespace "" rs $ ref2C ref2
-        BTUnit -> withLastIdNamespace $ ref2C ref2
+        BTUnit -> withLastIdNamespace $ ref2CF ref2
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
     return $ 
         r1 <> text "->" <> r2
 ref2C rf@(RecordField ref1 ref2) = do
     r1 <- ref2C ref1
     t <- gets lastType
-    r2 <- case t of
---        BTFunctionReturn s (BTRecord rs) -> withRecordNamespace "" rs $ ref2C ref2       
-        BTRecord rs -> withRecordNamespace "" rs $ ref2C ref2
-        BTUnit -> withLastIdNamespace $ ref2C ref2        
+    case t of
+        BTRecord rs -> do
+            r2 <- withRecordNamespace "" rs $ ref2C ref2
+            return $ r1 <> text "." <> r2
+        BTUnit -> withLastIdNamespace $ ref2CF ref2        
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
-    return $ 
-        r1 <> text "." <> r2
 ref2C d@(Dereference ref) = do
     r <- ref2C ref
     t <- fromPointer (show d) =<< gets lastType
