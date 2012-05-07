@@ -13,6 +13,7 @@ import PascalPreprocessor
 import Control.Exception
 import System.IO.Error
 import qualified Data.Map as Map
+import qualified Data.Set as Set
 import Data.List (find)
 import Numeric
 
@@ -23,6 +24,7 @@ import PascalUnitSyntaxTree
 data InsertOption = 
     IOInsert
     | IOLookup
+    | IOLookupFunction Int
     | IODeferred
 
 type Records = Map.Map String [(String, BaseType)]
@@ -33,10 +35,11 @@ data RenderState = RenderState
         lastType :: BaseType,
         stringConsts :: [(String, String)],
         uniqCounter :: Int,
+        toMangle :: Set.Set String,
         namespaces :: Map.Map String Records
     }
     
-emptyState = RenderState Map.empty "" BTUnknown [] 0
+emptyState = RenderState Map.empty "" BTUnknown [] 0 Set.empty
 
 getUniq :: State RenderState Int
 getUniq = do
@@ -200,9 +203,17 @@ implementation2C (Implementation uses tvars) = do
     r <- renderStringConsts
     return (u $+$ r $+$ tv)
 
+checkDuplicateFunDecls :: [TypeVarDeclaration] -> State RenderState ()
+checkDuplicateFunDecls tvs =
+    modify $ \s -> s{toMangle = Map.keysSet . Map.filter (> 1) . foldr ins Map.empty $ tvs}
+    where
+        ins (FunctionDeclaration (Identifier i _) _ _ _) m = Map.insertWith (+) (map toLower i) 1 m
+        ins _ m = m
 
 typesAndVars2C :: Bool -> TypesAndVars -> State RenderState Doc
-typesAndVars2C b (TypesAndVars ts) = liftM (vcat . map (<> semi) . concat) $ mapM (tvar2C b) ts
+typesAndVars2C b (TypesAndVars ts) = do
+    checkDuplicateFunDecls ts
+    liftM (vcat . map (<> semi) . concat) $ mapM (tvar2C b) ts
 
 setBaseType :: BaseType -> Identifier -> Identifier
 setBaseType bt (Identifier i _) = Identifier i bt
@@ -224,13 +235,12 @@ uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 id2C :: InsertOption -> Identifier -> State RenderState Doc
 id2C IOInsert (Identifier i t) = do
     ns <- gets currentScope
-{--    case t of 
-        BTUnknown -> do
-            ns <- gets currentScope
-            error $ "id2C IOInsert: type BTUnknown for " ++ show i ++ "\nnamespace: " ++ show (take 100 ns)
-        _ -> do --}
-    modify (\s -> s{currentScope = Map.insertWith (++) n [(i, t)] (currentScope s), lastIdentifier = n})
-    return $ text i
+    tom <- gets (Set.member n . toMangle)
+    let i' = case (t, tom) of
+            (BTFunction p _, True) -> i ++ ('_' : show p)
+            _ -> i
+    modify (\s -> s{currentScope = Map.insertWith (++) n [(i', t)] (currentScope s), lastIdentifier = n})
+    return $ text i'
     where
         n = map toLower i
 id2C IOLookup (Identifier i t) = do
@@ -241,6 +251,18 @@ id2C IOLookup (Identifier i t) = do
         error $ "Not defined: '" ++ i' ++ "'\n" ++ show lt
         else 
         let vv = head $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+id2C (IOLookupFunction params) (Identifier i t) = do
+    let i' = map toLower i
+    v <- gets $ Map.lookup i' . currentScope
+    lt <- gets lastType
+    if isNothing v then 
+        error $ "Not defined: '" ++ i' ++ "'\n" ++ show lt ++ "\nwith num of params = " ++ show params ++ "\n" ++ show v
+        else 
+        let vv = fromMaybe (head $ fromJust v) . find checkParam $ fromJust v in 
+            modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+    where
+        checkParam (_, BTFunction p _) = p == params
+        checkParam _ = False
 id2C IODeferred (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ Map.lookup i' . currentScope
@@ -312,27 +334,33 @@ resolve _ t = return t
 
 fromPointer :: String -> BaseType -> State RenderState BaseType
 fromPointer s (BTPointerTo t) = resolve s t
-fromPointer s (BTFunctionReturn _ (BTPointerTo t)) = resolve s t
+--fromPointer s (BTFunctionReturn _ (BTPointerTo t)) = resolve s t
 fromPointer s t = do
     error $ "Dereferencing from non-pointer type " ++ show t ++ "\n" ++ s
 
     
 functionParams2C params = liftM (hcat . punctuate comma . concat) $ mapM (tvar2C False) params
 
+numberOfDeclarations :: [TypeVarDeclaration] -> Int
+numberOfDeclarations = sum . map cnt
+    where
+        cnt (VarDeclaration _ (ids, _) _) = length ids
+        cnt _ = 1
+
 fun2C :: Bool -> String -> TypeVarDeclaration -> State RenderState [Doc]
 fun2C _ _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType 
     t'<- gets lastType
     p <- withState' id $ functionParams2C params
-    n <- id2C IOInsert $ setBaseType (BTFunction (length params) t') name
+    n <- id2C IOInsert $ setBaseType (BTFunction (numberOfDeclarations params) t') name
     return [t empty <+> n <> parens p]
     
 fun2C True rv (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
     let res = docToLower $ text rv <> text "_result"
     t <- type2C returnType
     t'<- gets lastType
-    n <- id2C IOInsert $ setBaseType (BTFunction (length params) t') name
-    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [(render res, BTFunctionReturn (render n) t')] $ currentScope st}) $ do
+    n <- id2C IOInsert $ setBaseType (BTFunction (numberOfDeclarations params) t') name
+    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [(render res, t')] $ currentScope st}) $ do
         p <- functionParams2C params
         ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
         return (p, ph)
@@ -686,8 +714,8 @@ ref2C ae@(ArrayElement [expr] ref) = do
     t <- gets lastType
     case t of
          (BTArray _ _ t') -> modify (\st -> st{lastType = t'})
-         (BTFunctionReturn _ (BTArray _ _ t')) -> modify (\st -> st{lastType = t'})
-         (BTFunctionReturn _ (BTString)) -> modify (\st -> st{lastType = BTChar})
+--         (BTFunctionReturn _ (BTArray _ _ t')) -> modify (\st -> st{lastType = t'})
+--         (BTFunctionReturn _ (BTString)) -> modify (\st -> st{lastType = BTChar})
          (BTString) -> modify (\st -> st{lastType = BTChar})
          (BTPointerTo t) -> do
                 t'' <- fromPointer (show t) =<< gets lastType
@@ -712,7 +740,7 @@ ref2C rf@(RecordField ref1 ref2) = do
     r1 <- ref2C ref1
     t <- gets lastType
     r2 <- case t of
-        BTFunctionReturn s (BTRecord rs) -> withRecordNamespace "" rs $ ref2C ref2       
+--        BTFunctionReturn s (BTRecord rs) -> withRecordNamespace "" rs $ ref2C ref2       
         BTRecord rs -> withRecordNamespace "" rs $ ref2C ref2
         BTUnit -> withLastIdNamespace $ ref2C ref2        
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
@@ -724,20 +752,19 @@ ref2C d@(Dereference ref) = do
     modify (\st -> st{lastType = t})
     return $ (parens $ text "*" <> r)
 ref2C f@(FunCall params ref) = do
-    r <- ref2C ref
+    r <- fref2C ref
     t <- gets lastType
     case t of
         BTFunction _ t' -> do
             ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
             modify (\s -> s{lastType = t'})
             return $ r <> ps
-        BTFunctionReturn r t' -> do
-            ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
-            modify (\s -> s{lastType = t'})
-            return $ text r <> ps
         _ -> case (ref, params) of
                   (SimpleReference i, [p]) -> ref2C $ TypeCast i p
                   _ -> error $ "ref2C FunCall erroneous type cast detected: " ++ show f ++ "\nType detected: " ++ show t
+    where
+    fref2C (SimpleReference name) = id2C (IOLookupFunction $ length params) name
+    fref2C a = ref2C a
         
 ref2C (Address ref) = do
     r <- ref2C ref
