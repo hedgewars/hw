@@ -154,7 +154,8 @@ set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
-set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_compiler_flags_cmn})
+separate_arguments(FPFLAGSINT UNIX_COMMAND ${FPFLAGS})
+set(pascal_compiler_flags_cmn ${FPFLAGSINT} "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_compiler_flags_cmn})
 set(haskell_compiler_flags_cmn "-O2" ${haskell_compiler_flags_cmn})
 
 if(Optz)
