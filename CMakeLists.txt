@@ -146,7 +146,7 @@ else()
 endif()
 
 
-#set default flags values for all the project
+#set default flags values for all projects
 set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
 set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
 set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")

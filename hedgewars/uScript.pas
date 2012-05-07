@@ -36,7 +36,7 @@ procedure ScriptClearStack;
 
 procedure ScriptLoad(name : shortstring);
 procedure ScriptOnGameInit;
-procedure ScriptOnScreenResize();
+procedure ScriptOnScreenResize;
 
 procedure ScriptCall(fname : shortstring);
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -52,7 +52,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-{$IFNDEF LUA_DISABLED}
+{$IFDEF USE_LUA_SCRIPT}
 uses LuaPas,
     uConsole,
     uConsts,
@@ -2255,6 +2255,7 @@ end;
 
 procedure ScriptLoad(name : shortstring);
 begin
+    name:= name; // avoid hint
 end;
 
 procedure ScriptOnGameInit;
@@ -2263,36 +2264,59 @@ end;
 
 procedure ScriptCall(fname : shortstring);
 begin
+    fname:= fname; // avoid hint
 end;
 
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
-ScriptCall:= 0
+    // avoid hints
+    fname:= fname;
+    par1:= par1;
+    par2:= par2;
+    par3:= par3;
+    par4:= par4;
+    ScriptCall:= 0
 end;
 
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
 begin
-ScriptCall:= 0
+    // avoid hints
+    fname:= fname;
+    par1:= par1;
+    ScriptCall:= 0
 end;
 
 function ScriptCall(fname : shortstring; par1, par2: LongInt) : LongInt;
 begin
-ScriptCall:= 0
+    // avoid hints
+    fname:= fname;
+    par1:= par1;
+    par2:= par2;
+    ScriptCall:= 0
 end;
 
 function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 begin
-ScriptCall:= 0
+    // avoid hints
+    fname:= fname;
+    par1:= par1;
+    par2:= par2;
+    par3:= par3;
+    ScriptCall:= 0
 end;
 
 function ScriptExists(fname : shortstring) : boolean;
 begin
-ScriptExists:= false
+    fname:= fname; // avoid hint
+    ScriptExists:= false
 end;
 
 function ParseCommandOverride(key, value : shortstring) : shortstring;
 begin
-ParseCommandOverride:= value
+    // avoid hints
+    key:= key;
+    value:= value;
+    ParseCommandOverride:= ''
 end;
 
 procedure ScriptOnScreenResize;
