@@ -1,5 +1,11 @@
 # Find the Lua library
-#
+# --------------------
+# On Android/Windows/OSX this just defines the name of the library that
+#  will be compiled from our bundled sources
+# On Linux it will try to load the system library and fallback to compiling
+#  the bundled one when nothing is found
+
+set(LUA_FOUND true)
 
 if (ANDROID)
 	SET(LUA_DEFAULT "liblua5.1.so")
@@ -14,10 +20,14 @@ else (ANDROID)
 			FIND_LIBRARY(LUA_DEFAULT NAMES lua51 lua5.1 lua-5.1 lua PATHS /lib /usr/lib /usr/local/lib /usr/pkg/lib)
 			IF(${LUA_DEFAULT} MATCHES "LUA_DEFAULT-NOTFOUND")
 				#UNSET(LUA_DEFAULT)
-				MESSAGE(FATAL_ERROR "Couldn't find Lua 5.1 library!")
+				#MESSAGE(FATAL_ERROR "Couldn't find Lua 5.1 library!")
+				set(LUA_DEFAULT lua)
+				set(LUA_FOUND false)
+			ELSE()
+				message(STATUS "LibLua 5.1 found at ${LUA_DEFAULT}")
+				#remove the path (fpc doesn't like it - why?)
+				GET_FILENAME_COMPONENT(LUA_DEFAULT ${LUA_DEFAULT} NAME)
 			ENDIF()
-			#remove the path (fpc doesn't like it - why?)
-			GET_FILENAME_COMPONENT(LUA_DEFAULT ${LUA_DEFAULT} NAME)
                 ENDIF(APPLE)
 	ENDIF(WIN32)
 ENDIF(ANDROID)
