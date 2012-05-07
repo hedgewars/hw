@@ -91,7 +91,11 @@ if(BUILD_ENGINE_LIBRARY)
     endif (APPLE)
 endif(BUILD_ENGINE_LIBRARY)
 
-find_program(fpc_executable fpc)
+IF(FPC)
+    set(fpc_executable ${FPC})
+ELSE()
+    find_program(fpc_executable fpc)
+ENDIF()
 
 if(fpc_executable)
     exec_program(${fpc_executable} ARGS "-iV" OUTPUT_VARIABLE fpc_output)
@@ -138,7 +142,7 @@ if(fpc_version)
         message(FATAL_ERROR "Minimum required version of FreePascal is 2.6.0 on Mac OS X")
     endif()
 else()
-    message(FATAL_ERROR "No Pascal compiler found!")
+    message(FATAL_ERROR "No FreePascal compiler found!")
 endif()
 
 
