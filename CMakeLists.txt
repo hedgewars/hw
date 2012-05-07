@@ -120,8 +120,6 @@ if(APPLE)
 	set(pascal_compiler_flags_cmn "-Ff~/Library/Frameworks" ${pascal_compiler_flags_cmn})
 	#set deployment target
 	set(pascal_compiler_flags_cmn "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
-	#link with liblua.a (which requires readline)
-	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_compiler_flags_cmn})
 	#link with libsdlmain.a (when building an executable)
 	if(NOT BUILD_ENGINE_LIBRARY)
 		set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/libSDLmain.a" ${pascal_compiler_flags_cmn})
@@ -190,7 +188,12 @@ else(WITH_SERVER)
 	set(HAVE_NETSERVER false)
 endif(WITH_SERVER)
 
-add_subdirectory(misc/liblua)
+find_package(Lua)
+if(NOT ${LUA_FOUND})
+	add_subdirectory(misc/liblua)
+	#link with liblua.a (which requires readline)
+	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_compiler_flags_cmn})
+endif()
 add_subdirectory(hedgewars)
 
 #run cmake -DBUILD_ANDROID_PORT=1 to enable this
