@@ -322,8 +322,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         voicepack: PVoicePack;
         end;
 
-    PHHAmmo = ^THHAmmo;
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
+    PHHAmmo = ^THHAmmo;
 
     THedgehog = record
             Name: shortstring;
