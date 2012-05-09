@@ -270,9 +270,9 @@ id2C IODeferred (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ Map.lookup i' . currentScope
     if (isNothing v) then
-        return $ text i
+        modify (\s -> s{lastType = BTUnknown, lastIdentifier = i}) >> return (text i)
         else
-        return . text . fst . head . fromJust $ v
+        let vv = head $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
 
 id2CTyped :: TypeDecl -> Identifier -> State RenderState Doc
 id2CTyped t (Identifier i _) = do
@@ -517,7 +517,13 @@ type2C t = do
     where
     type2C' VoidType = return (text "void" <+>)
     type2C' (String l) = return (text "string255" <+>)--return (text ("string" ++ show l) <+>)
-    type2C' (PointerTo (SimpleType i)) = liftM (\i a -> text "struct __" <> i <+> text "*" <+> a) $ id2C IODeferred i
+    type2C' (PointerTo (SimpleType i)) = do
+        i' <- id2C IODeferred i
+        lt <- gets lastType
+        case lt of
+             BTRecord _ -> return $ \a -> text "struct __" <> i' <+> text "*" <+> a
+             BTUnknown -> return $ \a -> text "struct __" <> i' <+> text "*" <+> a
+             _ -> return $ \a -> i' <+> text "*" <+> a
     type2C' (PointerTo t) = liftM (\t a -> t (parens $ text "*" <> a)) $ type2C t
     type2C' (RecordType tvs union) = do
         t <- withState' id $ mapM (tvar2C False) tvs
