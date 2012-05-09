@@ -24,8 +24,8 @@ uses SDLh;
 
 const NTPX = Low(SmallInt);
 
-type PPointArray = ^TPointArray;
-     TPointArray = array[0..64] of TSDL_Rect;
+type TPointArray = array[0..64] of TSDL_Rect;
+     PPointArray = ^TPointArray;
      TEdgeTemplate = record
                      BasePoints: PPointArray;
                      BasePointsCount: Longword;

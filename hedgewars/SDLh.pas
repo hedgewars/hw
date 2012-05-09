@@ -395,6 +395,7 @@ type
         end;
 
 
+    PSDL_Color = ^TSDL_Color;
     TSDL_Color = record
         case Byte of
             0: ( r: Byte;
@@ -403,7 +404,6 @@ type
                  unused: Byte; );
             1: ( value: LongWord; );
         end;
-    PSDL_Color = ^TSDL_Color;
 
 
     PSDL_RWops = ^TSDL_RWops;
@@ -734,10 +734,10 @@ type
 
     TSDL_EventFilter = function( event : PSDL_Event ): Integer; cdecl;
 
-    PByteArray = ^TByteArray;
     TByteArray = array[0..65535] of Byte;
-    PLongWordArray = ^TLongWordArray;
+    PByteArray = ^TByteArray;
     TLongWordArray = array[0..16383] of LongWord;
+    PLongWordArray = ^TLongWordArray;
 
     PSDL_Thread = Pointer;
     PSDL_mutex = Pointer;
