@@ -37,8 +37,8 @@ const MaxRects = 512;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
 
-type PRectArray = ^TRectsArray;
-     TRectsArray = array[0..MaxRects] of TSDL_Rect;
+type TRectsArray = array[0..MaxRects] of TSDL_Rect;
+     PRectArray = ^TRectsArray;
      TThemeObject = record
                      Surf: PSDL_Surface;
                      inland: TSDL_Rect;
