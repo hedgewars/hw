@@ -63,7 +63,7 @@ var
     new, dispose, FillChar, Move : procedure;
 
     trunc, round : function : integer;
-    abs, Sqr : function : integer;
+    abs, sqr : function : integer;
 
     StrPas, FormatDateTime, copy, delete, str, pos, trim, LowerCase : function : shortstring;
     Length, StrToInt : function : integer;
