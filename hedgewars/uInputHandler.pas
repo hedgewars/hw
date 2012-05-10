@@ -175,12 +175,12 @@ case event.button of
 end;
 
 procedure ResetKbd;
-var j, k, t: LongInt;
+var j, t: LongInt;
     i: LongInt;
     pkbd: PByteArray;
 begin
 
-k:= SDL_GetMouseState(nil, nil);
+//k:= SDL_GetMouseState(nil, nil);
 pkbd:=SDL_GetKeyState(@j);
 
 //TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + IntToStr(j) + ')', true);
@@ -188,7 +188,8 @@ pkbd:=SDL_GetKeyState(@j);
 for i:= 1 to pred(j) do
     tkbdn[i]:= pkbd^[i];
 
-{$IFNDEF MOBILE}
+(*
+// TODO: reimplement
 // Controller(s)
 k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
@@ -219,7 +220,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
         inc(k, 1);
         end;
     end;
-{$ENDIF}
+*)
 
 // what is this final loop for?
 for t:= 0 to cKeyMaxIndex do

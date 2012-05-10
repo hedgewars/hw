@@ -384,7 +384,7 @@ var x, y, i, t, SlotsNumY, SlotsNumX, AMFrame: LongInt;
     STurns: LongInt;
     amSurface: PSDL_Surface;
     AMRect: TSDL_Rect;
-    tmpsurf: PSDL_Surface;
+{$IFDEF USE_AM_NUMCOLUMN}tmpsurf: PSDL_Surface;{$ENDIF}
 begin
     SlotsNum:= 0;
     for i:= 0 to cMaxSlotIndex do
