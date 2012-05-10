@@ -288,11 +288,9 @@ begin
         with Hedgehog.Ammo^[Slot, ami] do
             if (AmmoType = Ammo) then
                 if Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns then
-                begin
-                    HHHasAmmo:= Count;
-                    exit;
-                end
-                else exit;
+                    exit(Count)
+                else 
+                    exit(0);
         inc(ami)
     end;
 end;
