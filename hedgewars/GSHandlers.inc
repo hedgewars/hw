@@ -3164,7 +3164,7 @@ begin
     hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
     if Length(hogs) > 0 then
         begin
-        for i:= 0 to High(hogs) do
+        for i:= 0 to Length(hogs) - 1 do
             begin
             if hogs[i] <> CurrentHedgehog^.Gear then
                 begin
@@ -5079,7 +5079,7 @@ begin
     else 
         begin
         // now really resurrect the hogs with the hp saved in the graves
-        for i:= 0 to High(graves) do
+        for i:= 0 to Length(graves) - 1 do
             if graves[i]^.Health > 0 then
                 begin
                 resgear := AddGear(hwRound(graves[i]^.X), hwRound(graves[i]^.Y), gtHedgehog, gstWait, _0, _0, 0);
@@ -5116,7 +5116,7 @@ begin
 
     if Length(graves) > 0 then
         begin
-        for i:= 0 to High(graves) do
+        for i:= 0 to Length(graves) - 1 do
             begin
             PHedgehog(graves[i]^.Hedgehog)^.Gear := nil;
             graves[i]^.Health := 0;
