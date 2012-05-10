@@ -190,6 +190,7 @@ endif(WITH_SERVER)
 
 find_package(Lua)
 if(NOT ${LUA_FOUND})
+        message(STATUS "Lua library not found, building bundled dependency")
 	add_subdirectory(misc/liblua)
 	#link with liblua.a (which requires readline)
 	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_compiler_flags_cmn})
