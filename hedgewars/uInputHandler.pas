@@ -239,12 +239,8 @@ KeyNames[5]:= 'wheeldown';
 
 for i:= 6 to cKeyMaxIndex do
     begin
-{$IFDEF SDL13}
-    s:= shortstring(SDL_GetScancodeName(i));
-{$ELSE}
     s:= shortstring(sdl_getkeyname(i));
-{$ENDIF}
-    WriteToConsole(IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
+    //WriteToConsole(IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
     if s = 'unknown key' then KeyNames[i]:= ''
     else 
         begin
