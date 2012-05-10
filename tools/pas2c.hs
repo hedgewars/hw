@@ -524,17 +524,18 @@ type2C t = do
              _ -> return $ \a -> i' <+> text "*" <+> a
     type2C' (PointerTo t) = liftM (\t a -> t (parens $ text "*" <> a)) $ type2C t
     type2C' (RecordType tvs union) = do
-        t <- withState' id $ mapM (tvar2C False) tvs
+        t <- withState' f $ mapM (tvar2C False) tvs
         u <- unions
         return $ \i -> text "struct __" <> i <+> lbrace $+$ nest 4 ((vcat . map (<> semi) . concat $ t) $$ u) $+$ rbrace <+> i
         where
+            f s = s{currentUnit = ""}
             unions = case union of
                      Nothing -> return empty
                      Just a -> do
                          structs <- mapM struct2C a
                          return $ text "union" $+$ braces (nest 4 $ vcat structs) <> semi
             struct2C tvs = do
-                t <- withState' id $ mapM (tvar2C False) tvs
+                t <- withState' f $ mapM (tvar2C False) tvs
                 return $ text "struct" $+$ braces (nest 4 (vcat . map (<> semi) . concat $ t)) <> semi
     type2C' (RangeType r) = return (text "int" <+>)
     type2C' (Sequence ids) = do
