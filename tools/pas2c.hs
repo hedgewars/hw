@@ -24,10 +24,12 @@ import PascalUnitSyntaxTree
 data InsertOption = 
     IOInsert
     | IOLookup
+    | IOLookupLast
     | IOLookupFunction Int
     | IODeferred
 
-type Records = Map.Map String [(String, BaseType)]
+type Record = (String, BaseType)
+type Records = Map.Map String [Record]
 data RenderState = RenderState 
     {
         currentScope :: Records,
@@ -246,14 +248,8 @@ id2C IOInsert (Identifier i t) = do
     return $ text i'
     where
         n = map toLower i
-id2C IOLookup (Identifier i t) = do
-    let i' = map toLower i
-    v <- gets $ Map.lookup i' . currentScope
-    lt <- gets lastType
-    if isNothing v then 
-        error $ "Not defined: '" ++ i' ++ "'\n" ++ show lt
-        else 
-        let vv = head $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+id2C IOLookup i = id2CLookup head i
+id2C IOLookupLast i = id2CLookup last i
 id2C (IOLookupFunction params) (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ Map.lookup i' . currentScope
@@ -274,14 +270,31 @@ id2C IODeferred (Identifier i t) = do
         else
         let vv = head $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
 
+id2CLookup :: ([Record] -> Record) -> Identifier -> State RenderState Doc
+id2CLookup f (Identifier i _) = do
+    let i' = map toLower i
+    v <- gets $ Map.lookup i' . currentScope
+    lt <- gets lastType
+    if isNothing v then 
+        error $ "Not defined: '" ++ i' ++ "'\n" ++ show lt
+        else 
+        let vv = f $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+        
+        
 id2CTyped :: TypeDecl -> Identifier -> State RenderState Doc
 id2CTyped t (Identifier i _) = do
     tb <- resolveType t
-    case tb of 
-        BTUnknown -> do
+    case (t, tb) of 
+        (_, BTUnknown) -> do
             error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\ntype: " ++ show t
-        _ -> return ()
-    id2C IOInsert (Identifier i tb)
+        (SimpleType {}, BTRecord _ r) -> do
+            ts <- type2C t
+            id2C IOInsert (Identifier i (BTRecord (render $ ts empty) r))
+        (_, BTRecord _ r) -> do
+            ts <- type2C t
+            id2C IOInsert (Identifier i (BTRecord i r))
+        _ -> id2C IOInsert (Identifier i tb)
+    
 
 
 resolveType :: TypeDecl -> State RenderState BaseType
@@ -301,7 +314,7 @@ resolveType (PointerTo (SimpleType (Identifier i _))) = return . BTPointerTo $ B
 resolveType (PointerTo t) = liftM BTPointerTo $ resolveType t
 resolveType (RecordType tv mtvs) = do
     tvs <- mapM f (concat $ tv : fromMaybe [] mtvs)
-    return . BTRecord . concat $ tvs
+    return . BTRecord "" . concat $ tvs
     where
         f :: TypeVarDeclaration -> State RenderState [(String, BaseType)]
         f (VarDeclaration _ (ids, td) _) = mapM (\(Identifier i _) -> liftM ((,) i) $ resolveType td) ids
@@ -420,9 +433,7 @@ op2CTyped :: String -> [TypeDecl] -> State RenderState Identifier
 op2CTyped op t = do
     t' <- liftM (render . hcat . punctuate (char '_') . map (\t -> t empty)) $ mapM type2C t
     bt <- gets lastType
-    return $ case bt of
-         BTRecord {} -> Identifier (t' ++ "_op_" ++ opStr) bt
-         _ -> Identifier t' bt
+    return $ Identifier (t' ++ "_op_" ++ opStr) bt
     where 
     opStr = case op of
                     "+" -> "add"
@@ -432,6 +443,7 @@ op2CTyped op t = do
                     "=" -> "eq"
                     "<" -> "lt"
                     ">" -> "gt"
+                    "<>" -> "neq"
                     _ -> error $ "op2CTyped: unknown op '" ++ op ++ "'"
     
 extractTypes :: [TypeVarDeclaration] -> [TypeDecl]
@@ -519,7 +531,7 @@ type2C t = do
         i' <- id2C IODeferred i
         lt <- gets lastType
         case lt of
-             BTRecord _ -> return $ \a -> text "struct __" <> i' <+> text "*" <+> a
+             BTRecord _ _ -> return $ \a -> text "struct __" <> i' <+> text "*" <+> a
              BTUnknown -> return $ \a -> text "struct __" <> i' <+> text "*" <+> a
              _ -> return $ \a -> i' <+> text "*" <+> a
     type2C' (PointerTo t) = liftM (\t a -> t (parens $ text "*" <> a)) $ type2C t
@@ -618,7 +630,7 @@ phrase2C wb@(WithBlock ref p) = do
     r <- ref2C ref 
     t <- gets lastType
     case t of
-        (BTRecord rs) -> withRecordNamespace (render r ++ ".") rs $ phrase2C $ wrapPhrase p
+        (BTRecord _ rs) -> withRecordNamespace (render r ++ ".") rs $ phrase2C $ wrapPhrase p
         a -> do
             error $ "'with' block referencing non-record type " ++ show a ++ "\n" ++ show wb
 phrase2C (ForCycle i' e1' e2' p) = do
@@ -638,6 +650,7 @@ phrase2C NOP = return $ text ";"
 
 phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "exit" BTUnknown))) = return $ text "return" <> semi
 phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "break" BTUnknown))) = return $ text "break" <> semi
+phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "continue" BTUnknown))) = return $ text "continue" <> semi
 phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "exit" BTUnknown))) = liftM (\e -> text "return" <+> e <> semi) $ expr2C e
 phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "dec" BTUnknown))) = liftM (\e -> text "--" <> e <> semi) $ expr2C e
 phrase2C (BuiltInFunctionCall [e1, e2] (SimpleReference (Identifier "dec" BTUnknown))) = liftM2 (\a b -> a <> text " -= " <> b <> semi) (expr2C e1) (expr2C e2)
@@ -663,13 +676,18 @@ expr2C (BinOp op expr1 expr2) = do
         ("!=", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction 2 BTBool))
         ("&", BTBool, _) -> return $ parens e1 <+> text "&&" <+> parens e2
         ("|", BTBool, _) -> return $ parens e1 <+> text "||" <+> parens e2
+        (_, BTRecord t1 _, BTRecord t2 _) -> do
+            i <- op2CTyped op [SimpleType (Identifier t1 undefined), SimpleType (Identifier t2 undefined)]
+            ref2C $ FunCall [expr1, expr2] (SimpleReference i)
         (o, _, _) | o `elem` boolOps -> do
                         modify(\s -> s{lastType = BTBool})
                         return $ parens e1 <+> text o <+> parens e2
                   | otherwise -> return $ parens e1 <+> text o <+> parens e2
     where
         boolOps = ["==", "!=", "<", ">", "<=", ">="]
-expr2C (NumberLiteral s) = return $ text s
+expr2C (NumberLiteral s) = do
+    modify(\s -> s{lastType = BTInt})
+    return $ text s
 expr2C (FloatLiteral s) = return $ text s
 expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 expr2C (StringLiteral [a]) = do
@@ -677,7 +695,14 @@ expr2C (StringLiteral [a]) = do
     return . quotes $ text [a]
 expr2C (StringLiteral s) = addStringConst s
 expr2C (Reference ref) = ref2CF ref
-expr2C (PrefixOp op expr) = liftM (text (op2C op) <>) (expr2C expr)
+expr2C (PrefixOp op expr) = do
+    e <- expr2C expr
+    lt <- gets lastType
+    case lt of
+        BTRecord t _ -> do
+            i <- op2CTyped op [SimpleType (Identifier t undefined)]
+            ref2C $ FunCall [expr] (SimpleReference i)
+        _ -> return $ text (op2C op) <> e
 expr2C Null = return $ text "NULL"
 expr2C (CharCode a) = do
     modify(\s -> s{lastType = BTChar})
@@ -759,7 +784,7 @@ ref2C rf@(RecordField (Dereference ref1) ref2) = do
     r1 <- ref2C ref1 
     t <- fromPointer (show ref1) =<< gets lastType
     r2 <- case t of
-        BTRecord rs -> withRecordNamespace "" rs $ ref2C ref2
+        BTRecord _ rs -> withRecordNamespace "" rs $ ref2C ref2
         BTUnit -> withLastIdNamespace $ ref2CF ref2
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
     return $ 
@@ -768,7 +793,7 @@ ref2C rf@(RecordField ref1 ref2) = do
     r1 <- ref2C ref1
     t <- gets lastType
     case t of
-        BTRecord rs -> do
+        BTRecord _ rs -> do
             r2 <- withRecordNamespace "" rs $ ref2C ref2
             return $ r1 <> text "." <> r2
         BTUnit -> withLastIdNamespace $ ref2CF ref2        
