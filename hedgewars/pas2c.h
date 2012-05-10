@@ -105,3 +105,6 @@ bool Assigned(void * a);
 
 int random(int max);
 int abs(int i);
+double sqr(double n);
+double sqrt(double n);
+int trunc(double n);
