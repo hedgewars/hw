@@ -10,9 +10,8 @@ unit LuaPas;
  *)
 
 interface
-
+uses uConsts;
 {.$DEFINE LUA_GETHOOK}
-{$INCLUDE "config.inc"}
 
 type
     size_t   = Cardinal;

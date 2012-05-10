@@ -21,7 +21,7 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
+uses SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;

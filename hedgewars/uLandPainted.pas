@@ -130,7 +130,7 @@ begin
         rec.X:= SDLNet_Read16(@rec.X);
         rec.Y:= SDLNet_Read16(@rec.Y);
 
-        pe:= new(PPointEntry);
+        new(pe);
         if pointsListLast = nil then
             pointsListHead:= pe
         else

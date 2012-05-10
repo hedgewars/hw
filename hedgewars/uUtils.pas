@@ -70,7 +70,7 @@ procedure freeModule;
 
 
 implementation
-uses typinfo, Math, uConsts, uVariables, SysUtils;
+uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils;
 
 {$IFDEF DEBUGFILE}
 var f: textfile;
