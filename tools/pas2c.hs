@@ -638,6 +638,7 @@ phrase2C (RepeatCycle e' p') = do
 phrase2C NOP = return $ text ";"
 
 phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "exit" BTUnknown))) = return $ text "return" <> semi
+phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "break" BTUnknown))) = return $ text "break" <> semi
 phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "exit" BTUnknown))) = liftM (\e -> text "return" <+> e <> semi) $ expr2C e
 phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "dec" BTUnknown))) = liftM (\e -> text "--" <> e <> semi) $ expr2C e
 phrase2C (BuiltInFunctionCall [e1, e2] (SimpleReference (Identifier "dec" BTUnknown))) = liftM2 (\a b -> a <> text " -= " <> b <> semi) (expr2C e1) (expr2C e2)
@@ -802,7 +803,7 @@ ref2C (TypeCast t'@(Identifier i _) expr) = do
         a -> do
             e <- expr2C expr
             t <- id2C IOLookup t'    
-            return $ parens t <> e
+            return . parens $ parens t <> e
 ref2C (RefExpression expr) = expr2C expr
 
 

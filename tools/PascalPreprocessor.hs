@@ -15,7 +15,11 @@ comment = choice [
         , (try $ string "//") >> manyTill anyChar (try newline) >> return "\n"
         ]
 
-initDefines = Map.fromList [("FPC", ""), ("PAS2C", "")]
+initDefines = Map.fromList [
+    ("FPC", "")
+    , ("PAS2C", "")
+    , ("USE_SDLTHREADS", "")
+    ]
         
 preprocess :: String -> IO String
 preprocess fn = do
