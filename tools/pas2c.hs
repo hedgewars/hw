@@ -638,7 +638,7 @@ phrase2C (RepeatCycle e' p') = do
 phrase2C NOP = return $ text ";"
 
 phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "exit" BTUnknown))) = return $ text "return" <> semi
-phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "exit" BTUnknown))) = liftM (\e -> text "return" <> e <> semi) $ expr2C e
+phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "exit" BTUnknown))) = liftM (\e -> text "return" <+> e <> semi) $ expr2C e
 phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "dec" BTUnknown))) = liftM (\e -> text "--" <> e <> semi) $ expr2C e
 phrase2C (BuiltInFunctionCall [e1, e2] (SimpleReference (Identifier "dec" BTUnknown))) = liftM2 (\a b -> a <> text " -= " <> b <> semi) (expr2C e1) (expr2C e2)
 phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "inc" BTUnknown))) = liftM (\e -> text "++" <> e <> semi) $ expr2C e
