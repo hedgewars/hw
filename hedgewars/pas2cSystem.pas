@@ -14,7 +14,7 @@ type
     GLint = integer;
     GLuint = integer;
     gl_unsigned_byte = integer;
-    Int = integer;
+    int = integer;
 
     pointer = pointer;
 
