@@ -65,7 +65,7 @@ const Template0Points: array[0..18] of TSDL_Rect =
       );
       Template0FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template1Points: array[0..15] of TSDL_Rect =
@@ -89,7 +89,7 @@ const Template1Points: array[0..15] of TSDL_Rect =
       );
       Template1FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template2Points: array[0..21] of TSDL_Rect =
@@ -119,7 +119,7 @@ const Template2Points: array[0..21] of TSDL_Rect =
       );
       Template2FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template3Points: array[0..16] of TSDL_Rect =
@@ -144,7 +144,7 @@ const Template3Points: array[0..16] of TSDL_Rect =
       );
       Template3FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template4Points: array[0..22] of TSDL_Rect =
@@ -175,7 +175,7 @@ const Template4Points: array[0..22] of TSDL_Rect =
       );
       Template4FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template5Points: array[0..15] of TSDL_Rect =
@@ -199,7 +199,7 @@ const Template5Points: array[0..15] of TSDL_Rect =
        );
       Template5FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template6Points: array[0..13] of TSDL_Rect =
@@ -221,7 +221,7 @@ const Template6Points: array[0..13] of TSDL_Rect =
        );
       Template6FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template7Points: array[0..5] of TSDL_Rect =
@@ -235,7 +235,7 @@ const Template7Points: array[0..5] of TSDL_Rect =
       );
       Template7FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 
@@ -264,7 +264,7 @@ const Template8Points: array[0..19] of TSDL_Rect =
       );
       Template8FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template9Points: array[0..31] of TSDL_Rect =
@@ -304,7 +304,7 @@ const Template9Points: array[0..31] of TSDL_Rect =
       );
       Template9FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template10Points: array[0..13] of TSDL_Rect =
@@ -326,7 +326,7 @@ const Template10Points: array[0..13] of TSDL_Rect =
       );
       Template10FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template11Points: array[0..9] of TSDL_Rect =
@@ -344,7 +344,7 @@ const Template11Points: array[0..9] of TSDL_Rect =
       );
       Template11FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template12Points: array[0..13] of TSDL_Rect =
@@ -366,7 +366,7 @@ const Template12Points: array[0..13] of TSDL_Rect =
       );
       Template12FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template13Points: array[0..15] of TSDL_Rect =
@@ -390,7 +390,7 @@ const Template13Points: array[0..15] of TSDL_Rect =
       );
       Template13FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template14Points: array[0..13] of TSDL_Rect =
@@ -412,7 +412,7 @@ const Template14Points: array[0..13] of TSDL_Rect =
       );
       Template14FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template15Points: array[0..23] of TSDL_Rect =
@@ -444,7 +444,7 @@ const Template15Points: array[0..23] of TSDL_Rect =
       );
       Template15FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template16Points: array[0..28] of TSDL_Rect =
@@ -481,7 +481,7 @@ const Template16Points: array[0..28] of TSDL_Rect =
       );
       Template16FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 
 const Template17Points: array[0..13] of TSDL_Rect =
@@ -503,7 +503,7 @@ const Template17Points: array[0..13] of TSDL_Rect =
       );
       Template17FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y:    0)
+       (X: 1023; Y:    0)
       );
 //////////////////// MIXING AND MATCHING ORIGINAL //////////////////////////////////////
 const Template18Points: array[0..32] of TSDL_Rect =
@@ -544,7 +544,7 @@ const Template18Points: array[0..32] of TSDL_Rect =
       );
       Template18FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template19Points: array[0..44] of TSDL_Rect =
@@ -597,7 +597,7 @@ const Template19Points: array[0..44] of TSDL_Rect =
       );
       Template19FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template20Points: array[0..45] of TSDL_Rect =
@@ -651,7 +651,7 @@ const Template20Points: array[0..45] of TSDL_Rect =
       );
       Template20FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template21Points: array[0..30] of TSDL_Rect =
@@ -690,7 +690,7 @@ const Template21Points: array[0..30] of TSDL_Rect =
       );
       Template21FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template22Points: array[0..38] of TSDL_Rect =
@@ -737,7 +737,7 @@ const Template22Points: array[0..38] of TSDL_Rect =
       );
       Template22FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template23Points: array[0..29] of TSDL_Rect =
@@ -775,7 +775,7 @@ const Template23Points: array[0..29] of TSDL_Rect =
        );
       Template23FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template24Points: array[0..23] of TSDL_Rect =
@@ -807,7 +807,7 @@ const Template24Points: array[0..23] of TSDL_Rect =
        );
       Template24FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template25Points: array[0..19] of TSDL_Rect =
@@ -835,7 +835,7 @@ const Template25Points: array[0..19] of TSDL_Rect =
       );
       Template25FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 
@@ -896,7 +896,7 @@ const Template26Points: array[0..51] of TSDL_Rect =
       );
       Template26FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template27Points: array[0..42] of TSDL_Rect =
@@ -947,7 +947,7 @@ const Template27Points: array[0..42] of TSDL_Rect =
       );
       Template27FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template28Points: array[0..29] of TSDL_Rect =
@@ -985,7 +985,7 @@ const Template28Points: array[0..29] of TSDL_Rect =
       );
       Template28FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template29Points: array[0..37] of TSDL_Rect =
@@ -1031,7 +1031,7 @@ const Template29Points: array[0..37] of TSDL_Rect =
       );
       Template29FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template30Points: array[0..30] of TSDL_Rect =
@@ -1070,7 +1070,7 @@ const Template30Points: array[0..30] of TSDL_Rect =
       );
       Template30FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template31Points: array[0..32] of TSDL_Rect =
@@ -1111,7 +1111,7 @@ const Template31Points: array[0..32] of TSDL_Rect =
       );
       Template31FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template32Points: array[0..29] of TSDL_Rect =
@@ -1149,7 +1149,7 @@ const Template32Points: array[0..29] of TSDL_Rect =
       );
       Template32FPoints: array[0..0] of TPoint =
       (
-         (x: 2047; y:    0)
+         (X: 2047; Y:    0)
       );
 
 const Template33Points: array[0..45] of TSDL_Rect =
@@ -1203,7 +1203,7 @@ const Template33Points: array[0..45] of TSDL_Rect =
       );
       Template33FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template34Points: array[0..25] of TSDL_Rect =
@@ -1237,7 +1237,7 @@ const Template34Points: array[0..25] of TSDL_Rect =
       );
       Template34FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 const Template35Points: array[0..48] of TSDL_Rect =
@@ -1294,7 +1294,7 @@ const Template35Points: array[0..48] of TSDL_Rect =
       );
       Template35FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 ///////////////////////// CAVERNS ///////////////////////////////////
@@ -1322,7 +1322,7 @@ const Template36Points: array[0..18] of TSDL_Rect =
       );
       Template36FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 ////////////////////////////// ... Silly ...  ////////////////////////////////
 /// Ok. Tiy does not care for these.  Perhaps they could be saved.
@@ -1363,7 +1363,7 @@ const Template37Points: array[0..27] of TSDL_Rect =
       );
       Template37FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 // attempt to make a series of moderate hills/valleys - was before I really figured out the whole probabilities thing
 const Template38Points: array[0..16] of TSDL_Rect =
@@ -1388,7 +1388,7 @@ const Template38Points: array[0..16] of TSDL_Rect =
       );
       Template38FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 
 // 8 tiny islands
@@ -1437,7 +1437,7 @@ const Template39Points: array[0..39] of TSDL_Rect =
       );
       Template39FPoints: array[0..0] of TPoint =
       (
-       (x: 512; y:    0)
+       (X: 512; Y:    0)
       );
 const Template40Points: array[0..7] of TSDL_Rect =
       (
@@ -1452,7 +1452,7 @@ const Template40Points: array[0..7] of TSDL_Rect =
       );
       Template40FPoints: array[0..0] of TPoint =
       (
-       (x: 512; y:    0)
+       (X: 512; Y:    0)
       );
 // Many islands
 const Template41Points: array[0..86] of TSDL_Rect =
@@ -1547,7 +1547,7 @@ const Template41Points: array[0..86] of TSDL_Rect =
       );
       Template41FPoints: array[0..0] of TPoint =
       (
-       (x: 2047; y:    0)
+       (X: 2047; Y:    0)
       );
 // 2 tiny islands
 const Template42Points: array[0..13] of TSDL_Rect =
@@ -1569,7 +1569,7 @@ const Template42Points: array[0..13] of TSDL_Rect =
       );
       Template42FPoints: array[0..0] of TPoint =
       (
-       (x: 512; y:    0)
+       (X: 512; Y:    0)
       );
 
 ////////////////////////////////////////////////////////////////////////
@@ -1584,7 +1584,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template1Points;
         BasePointsCount: Succ(High(Template1Points));
@@ -1595,7 +1595,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template2Points;
         BasePointsCount: Succ(High(Template2Points));
@@ -1606,7 +1606,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template3Points;
         BasePointsCount: Succ(High(Template3Points));
@@ -1617,7 +1617,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template4Points;
         BasePointsCount: Succ(High(Template4Points));
@@ -1628,7 +1628,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template5Points;
         BasePointsCount: Succ(High(Template5Points));
@@ -1639,7 +1639,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template6Points;
         BasePointsCount: Succ(High(Template6Points));
@@ -1650,7 +1650,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template7Points;
         BasePointsCount: Succ(High(Template7Points));
@@ -1661,7 +1661,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template8Points;
         BasePointsCount: Succ(High(Template8Points));
@@ -1672,7 +1672,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template9Points;
         BasePointsCount: Succ(High(Template9Points));
@@ -1683,7 +1683,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template10Points;
         BasePointsCount: Succ(High(Template10Points));
@@ -1694,7 +1694,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template11Points;
         BasePointsCount: Succ(High(Template11Points));
@@ -1705,7 +1705,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template12Points;
         BasePointsCount: Succ(High(Template12Points));
@@ -1716,7 +1716,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template13Points;
         BasePointsCount: Succ(High(Template13Points));
@@ -1727,7 +1727,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template14Points;
         BasePointsCount: Succ(High(Template14Points));
@@ -1738,7 +1738,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template15Points;
         BasePointsCount: Succ(High(Template15Points));
@@ -1749,7 +1749,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template16Points;
         BasePointsCount: Succ(High(Template16Points));
@@ -1760,7 +1760,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template17Points;
         BasePointsCount: Succ(High(Template17Points));
@@ -1771,7 +1771,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 2848;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 18;
+        MaxHedgeHogs: 18;
        ),
        (BasePoints: @Template18Points;
         BasePointsCount: Succ(High(Template18Points));
@@ -1782,7 +1782,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template19Points;
         BasePointsCount: Succ(High(Template19Points));
@@ -1793,7 +1793,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template20Points;
         BasePointsCount: Succ(High(Template20Points));
@@ -1804,7 +1804,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template21Points;
         BasePointsCount: Succ(High(Template21Points));
@@ -1815,7 +1815,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template22Points;
         BasePointsCount: Succ(High(Template22Points));
@@ -1826,7 +1826,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template23Points;
         BasePointsCount: Succ(High(Template23Points));
@@ -1837,7 +1837,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template24Points;
         BasePointsCount: Succ(High(Template24Points));
@@ -1848,7 +1848,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template25Points;
         BasePointsCount: Succ(High(Template25Points));
@@ -1859,7 +1859,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template26Points;
         BasePointsCount: Succ(High(Template26Points));
@@ -1870,7 +1870,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template27Points;
         BasePointsCount: Succ(High(Template27Points));
@@ -1881,7 +1881,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template28Points;
         BasePointsCount: Succ(High(Template28Points));
@@ -1892,7 +1892,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template29Points;
         BasePointsCount: Succ(High(Template29Points));
@@ -1903,7 +1903,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template30Points;
         BasePointsCount: Succ(High(Template30Points));
@@ -1914,7 +1914,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template31Points;
         BasePointsCount: Succ(High(Template31Points));
@@ -1925,7 +1925,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template32Points;
         BasePointsCount: Succ(High(Template32Points));
@@ -1936,7 +1936,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template33Points;
         BasePointsCount: Succ(High(Template33Points));
@@ -1947,7 +1947,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template34Points;
         BasePointsCount: Succ(High(Template34Points));
@@ -1958,7 +1958,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template35Points;
         BasePointsCount: Succ(High(Template35Points));
@@ -1969,7 +1969,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1424; TemplateWidth: 3900;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 36;
+        MaxHedgeHogs: 36;
        ),
        (BasePoints: @Template36Points;
         BasePointsCount: Succ(High(Template36Points));
@@ -1980,7 +1980,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1024; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: true; canInvert: false;
         hasGirders: false;
-        MaxHedgehogs: 32;
+        MaxHedgeHogs: 32;
        ),
        (BasePoints: @Template37Points;
         BasePointsCount: Succ(High(Template37Points));
@@ -1991,7 +1991,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 48;
+        MaxHedgeHogs: 48;
        ),
        (BasePoints: @Template38Points;
         BasePointsCount: Succ(High(Template38Points));
@@ -2002,7 +2002,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 48;
+        MaxHedgeHogs: 48;
        ),
        (BasePoints: @Template39Points;
         BasePointsCount: Succ(High(Template39Points));
@@ -2013,7 +2013,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 512; TemplateWidth: 1536;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: false;
-        MaxHedgehogs: 8;
+        MaxHedgeHogs: 8;
        ),
        (BasePoints: @Template40Points;
         BasePointsCount: Succ(High(Template40Points));
@@ -2024,7 +2024,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 1024; TemplateWidth: 1024;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: false;
-        MaxHedgehogs: 8;
+        MaxHedgeHogs: 8;
        ),
        (BasePoints: @Template41Points;
         BasePointsCount: Succ(High(Template41Points));
@@ -2035,7 +2035,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: true; canFlip: true; isNegative: false; canInvert: false;
         hasGirders: true;
-        MaxHedgehogs: 48;
+        MaxHedgeHogs: 48;
        ),
        (BasePoints: @Template42Points;
         BasePointsCount: Succ(High(Template42Points));
@@ -2046,7 +2046,7 @@ var EdgeTemplates: array[0..42] of TEdgeTemplate =
         TemplateHeight: 512; TemplateWidth: 1536;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: false;
-        MaxHedgehogs: 8;
+        MaxHedgeHogs: 8;
        )
       );
 const SmallTemplates: array[0..2] of Longword = ( 39, 40, 42 );

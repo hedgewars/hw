@@ -470,7 +470,7 @@ initExpr2C (InitReference i) = id2C IOLookup i
 initExpr2C (InitRecord fields) = do
     (fs :: [Doc]) <- mapM (\(Identifier a _, b) -> liftM (text "." <> text a <+> equals <+>) $ initExpr2C b) fields
     return $ lbrace $+$ (nest 4 . vcat . punctuate comma $ fs) $+$ rbrace
-initExpr2C (InitArray [value]) = initExpr2C value
+--initExpr2C (InitArray [value]) = initExpr2C value
 initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
 initExpr2C r@(InitRange (Range i@(Identifier i' _))) = do
     id2C IOLookup i
