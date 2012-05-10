@@ -152,7 +152,7 @@ withRecordNamespace :: String -> [(String, BaseType)] -> State RenderState Doc -
 withRecordNamespace _ [] = error "withRecordNamespace: empty record"
 withRecordNamespace prefix recs = withState' f
     where
-        f st = st{currentScope = Map.unionWith un records (currentScope st)}
+        f st = st{currentScope = Map.unionWith un records (currentScope st), currentUnit = ""}
         records = Map.fromList $ map (\(a, b) -> (map toLower a, [(prefix ++ a, b)])) recs
         un [a] b = a : b
 
@@ -337,7 +337,6 @@ resolve _ t = return t
 
 fromPointer :: String -> BaseType -> State RenderState BaseType
 fromPointer s (BTPointerTo t) = resolve s t
---fromPointer s (BTFunctionReturn _ (BTPointerTo t)) = resolve s t
 fromPointer s t = do
     error $ "Dereferencing from non-pointer type " ++ show t ++ "\n" ++ s
 
@@ -391,9 +390,7 @@ tvar2C b f@(FunctionDeclaration (Identifier name _) _ _ _) =
     fun2C b name f
 tvar2C _ td@(TypeDeclaration i' t) = do
     i <- id2CTyped t i'
-    tp <- case t of
-        FunctionType {} -> type2C (PointerTo t)
-        _ -> type2C t
+    tp <- type2C t
     return [text "typedef" <+> tp i]
     
 tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
@@ -408,6 +405,7 @@ tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
              i' <- id2CTyped t i
              ie <- initExpr2C e
              return [text "#define" <+> i' <+> parens ie <> text "\n"]
+         (_, BTFunction{}, _, Nothing) -> liftM (map(\i -> t' $ text "*" <+> i)) $ mapM (id2CTyped t) ids
          _ -> liftM (map(\i -> t' i <+> ie)) $ mapM (id2CTyped t) ids
     where
     initExpr Nothing = return $ empty
