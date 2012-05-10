@@ -172,11 +172,6 @@ var
 
     Theme           : shortstring;
     disableLandBack : boolean;
-    conversionFormat: PSDL_PixelFormat;
-
-{$IFDEF SDL13}
-    SDLwindow       : PSDL_Window;
-{$ENDIF}
 
     WorldDx: LongInt;
     WorldDy: LongInt;
@@ -2592,10 +2587,6 @@ begin
     disableLandBack := false;
 
     ScreenFade      := sfNone;
-
-{$IFDEF SDL13}
-    SDLwindow       := nil;
-{$ENDIF}
 
     // those values still are not perfect
     cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);

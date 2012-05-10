@@ -34,7 +34,7 @@ procedure LoadLocaleWrapper(str: pchar); cdecl; export;
 {$ENDIF}
 
 implementation
-uses uRandom, uUtils, uVariables, uDebug, uConsole;
+uses uRandom, uUtils, uVariables, uDebug;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
@@ -100,7 +100,6 @@ if loaded then
            end;
        end;
    Close(f);
-   {$IFNDEF HWLIBRARY}WriteLnToConsole('Locale loaded "' + FileName + '"');{$ENDIF}
    end;
 {$I+}
 end;

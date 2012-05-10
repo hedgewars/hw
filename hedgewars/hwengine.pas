@@ -100,11 +100,7 @@ begin
             exit;
             end;
 
-{$IFDEF SDL13}
-    SDL_GL_SwapWindow(SDLwindow);
-{$ELSE}
-    SDL_GL_SwapBuffers();
-{$ENDIF}
+    SwapBuffers;
 
     if flagMakeCapture then
         begin
