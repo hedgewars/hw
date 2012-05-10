@@ -20,7 +20,8 @@
 
 unit uTeams;
 interface
-uses uConsts, uInputHandler, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uTypes{$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
+uses uConsts, uInputHandler, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound,
+     uTypes{$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
 
 procedure initModule;
 procedure freeModule;
@@ -36,7 +37,7 @@ function  CheckForWin: boolean;
 procedure TeamGoneEffect(var Team: TTeam);
 
 implementation
-uses uLocale, uAmmos, uChat, uMobile, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript,
+uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript,
     uGearsUtils, uGearsList{$IFDEF SDL13}, uTouch{$ENDIF};
 
 var MaxTeamHealth: LongInt;
@@ -300,7 +301,6 @@ else
     ReadyTimeLeft:= 0
     end;
 
-uMobile.NewTurnBeginning();
 {$IFDEF SDL13}
 uTouch.NewTurnBeginning();
 {$ENDIF}

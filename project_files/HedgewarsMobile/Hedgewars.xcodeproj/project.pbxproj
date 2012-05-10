@@ -71,6 +71,7 @@
 		615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD96112073B4D00F2FF04 /* startGameButton.png */; };
 		615AD9E9120764CA00F2FF04 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9E8120764CA00F2FF04 /* backButton.png */; };
 		615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9EA1207654E00F2FF04 /* helpButton.png */; };
+		615BE3D4155C5DDF003CA34D /* uInputHandler.pas in Sources */ = {isa = PBXBuildFile; fileRef = 615BE3D3155C5DDF003CA34D /* uInputHandler.pas */; };
 		615E755A14E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E755914E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m */; };
 		615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B714E4421200FBA131 /* MGSplitCornersView.m */; };
 		615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B914E4421200FBA131 /* MGSplitDividerView.m */; };
@@ -139,7 +140,6 @@
 		6174F7C912CD62E300205D6F /* smallerTitle@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6174F7C712CD62E300205D6F /* smallerTitle@2x.png */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
-		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
 		6179881C114AA34C00BA94A9 /* SDLh.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987ED114AA34C00BA94A9 /* SDLh.pas */; };
 		6179881F114AA34C00BA94A9 /* uAI.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F1114AA34C00BA94A9 /* uAI.pas */; };
 		61798820114AA34C00BA94A9 /* uAIActions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F2114AA34C00BA94A9 /* uAIActions.pas */; };
@@ -204,7 +204,6 @@
 		61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
 		61A976B3136F668500DD9878 /* uCursor.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A976B2136F668500DD9878 /* uCursor.pas */; };
 		61AC067412B2E32D000B52A2 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 61AC067312B2E32D000B52A2 /* Appirater.m */; };
-		61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
 		61B7A33812CC21080086B604 /* StatsPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B7A33712CC21080086B604 /* StatsPageViewController.m */; };
 		61B9A86814423A9D001541C1 /* GameConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
@@ -389,6 +388,7 @@
 		615AD96112073B4D00F2FF04 /* startGameButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = startGameButton.png; path = Resources/Frontend/startGameButton.png; sourceTree = "<group>"; };
 		615AD9E8120764CA00F2FF04 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backButton.png; path = Resources/Frontend/backButton.png; sourceTree = "<group>"; };
 		615AD9EA1207654E00F2FF04 /* helpButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = helpButton.png; path = Resources/Frontend/helpButton.png; sourceTree = "<group>"; };
+		615BE3D3155C5DDF003CA34D /* uInputHandler.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uInputHandler.pas; path = ../../hedgewars/uInputHandler.pas; sourceTree = SOURCE_ROOT; };
 		615E755814E41E8C00FBA131 /* MXAudioPlayerFadeOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MXAudioPlayerFadeOperation.h; path = Classes/MXAudioPlayerFadeOperation.h; sourceTree = "<group>"; };
 		615E755914E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MXAudioPlayerFadeOperation.m; path = Classes/MXAudioPlayerFadeOperation.m; sourceTree = "<group>"; };
 		615E76B514E4406400FBA131 /* LICENCE.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = LICENCE.rtf; path = Classes/MGSplitViewController/LICENCE.rtf; sourceTree = "<group>"; };
@@ -503,7 +503,6 @@
 		617987E7114AA34C00BA94A9 /* hwengine.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = hwengine.pas; path = ../../hedgewars/hwengine.pas; sourceTree = SOURCE_ROOT; };
 		617987E9114AA34C00BA94A9 /* hwLibrary.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = hwLibrary.pas; path = ../../hedgewars/hwLibrary.pas; sourceTree = SOURCE_ROOT; };
 		617987EB114AA34C00BA94A9 /* options.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = options.inc; path = ../../hedgewars/options.inc; sourceTree = SOURCE_ROOT; };
-		617987EC114AA34C00BA94A9 /* PascalExports.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = PascalExports.pas; path = ../../hedgewars/PascalExports.pas; sourceTree = SOURCE_ROOT; };
 		617987ED114AA34C00BA94A9 /* SDLh.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = SDLh.pas; path = ../../hedgewars/SDLh.pas; sourceTree = SOURCE_ROOT; };
 		617987F1114AA34C00BA94A9 /* uAI.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAI.pas; path = ../../hedgewars/uAI.pas; sourceTree = SOURCE_ROOT; };
 		617987F2114AA34C00BA94A9 /* uAIActions.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAIActions.pas; path = ../../hedgewars/uAIActions.pas; sourceTree = SOURCE_ROOT; };
@@ -518,7 +517,6 @@
 		617987FB114AA34C00BA94A9 /* uGame.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGame.pas; path = ../../hedgewars/uGame.pas; sourceTree = SOURCE_ROOT; };
 		617987FC114AA34C00BA94A9 /* uGears.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGears.pas; path = ../../hedgewars/uGears.pas; sourceTree = SOURCE_ROOT; };
 		617987FD114AA34C00BA94A9 /* uIO.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uIO.pas; path = ../../hedgewars/uIO.pas; sourceTree = SOURCE_ROOT; };
-		617987FE114AA34C00BA94A9 /* uKeys.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uKeys.pas; path = ../../hedgewars/uKeys.pas; sourceTree = SOURCE_ROOT; };
 		617987FF114AA34C00BA94A9 /* uLand.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLand.pas; path = ../../hedgewars/uLand.pas; sourceTree = SOURCE_ROOT; };
 		61798800114AA34C00BA94A9 /* uLandGraphics.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGraphics.pas; path = ../../hedgewars/uLandGraphics.pas; sourceTree = SOURCE_ROOT; };
 		61798801114AA34C00BA94A9 /* uLandObjects.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandObjects.pas; path = ../../hedgewars/uLandObjects.pas; sourceTree = SOURCE_ROOT; };
@@ -1126,6 +1124,7 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				615BE3D3155C5DDF003CA34D /* uInputHandler.pas */,
 				61798892114AA56300BA94A9 /* inc */,
 				61D08D7114AEA7FE0007C078 /* uGearsHedgehog.pas */,
 				61D08D7214AEA7FE0007C078 /* uGearsList.pas */,
@@ -1152,7 +1151,6 @@
 				61E1F4F711D004240016A5AA /* adler32.pas */,
 				617987E7114AA34C00BA94A9 /* hwengine.pas */,
 				617987E9114AA34C00BA94A9 /* hwLibrary.pas */,
-				617987EC114AA34C00BA94A9 /* PascalExports.pas */,
 				617987ED114AA34C00BA94A9 /* SDLh.pas */,
 				617987F1114AA34C00BA94A9 /* uAI.pas */,
 				617987F2114AA34C00BA94A9 /* uAIActions.pas */,
@@ -1167,7 +1165,6 @@
 				617987FB114AA34C00BA94A9 /* uGame.pas */,
 				617987FC114AA34C00BA94A9 /* uGears.pas */,
 				617987FD114AA34C00BA94A9 /* uIO.pas */,
-				617987FE114AA34C00BA94A9 /* uKeys.pas */,
 				617987FF114AA34C00BA94A9 /* uLand.pas */,
 				61798800114AA34C00BA94A9 /* uLandGraphics.pas */,
 				61798801114AA34C00BA94A9 /* uLandObjects.pas */,
@@ -1518,7 +1515,6 @@
 			files = (
 				61798816114AA34C00BA94A9 /* hwengine.pas in Sources */,
 				61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */,
-				6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */,
 				6179881C114AA34C00BA94A9 /* SDLh.pas in Sources */,
 				6179881F114AA34C00BA94A9 /* uAI.pas in Sources */,
 				61798820114AA34C00BA94A9 /* uAIActions.pas in Sources */,
@@ -1576,7 +1572,6 @@
 				6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */,
 				61E1F4F811D004240016A5AA /* adler32.pas in Sources */,
 				61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */,
-				61B3D71C11EA6F2700EC7420 /* uKeys.pas in Sources */,
 				61C079E411F35A300072BF46 /* EditableCellView.m in Sources */,
 				61F2E7CE1205EDE0005734F7 /* AboutViewController.m in Sources */,
 				6199E839124647DE00DADF8C /* SupportViewController.m in Sources */,
@@ -1620,6 +1615,7 @@
 				615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */,
 				615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */,
 				615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */,
+				615BE3D4155C5DDF003CA34D /* uInputHandler.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
