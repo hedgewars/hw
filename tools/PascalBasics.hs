@@ -8,7 +8,7 @@ import Text.Parsec.Token
 import Text.Parsec.Language
 import Data.Char
 
-builtin = ["succ", "pred", "low", "high", "ord", "inc", "dec", "exit"]
+builtin = ["succ", "pred", "low", "high", "ord", "inc", "dec", "exit", "break"]
     
 pascalLanguageDef
     = emptyDef

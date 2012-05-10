@@ -46,6 +46,7 @@ typedef Byte * PByte;
 typedef char * PChar;
 typedef LongInt * PLongInt;
 typedef Integer * PInteger;
+typedef int * PtrInt;
 
 #ifdef __GNUG__
 #define NULL __null
@@ -91,3 +92,16 @@ void BlockRead_(int f, void * p, int size, int * sizeRead);
 void close(int f);
 
 bool odd(int i);
+
+
+typedef int TThreadId;
+void ThreadSwitch();
+#define InterlockedIncrement(a) __InterlockedIncrement(&(a))
+#define InterlockedDecrement(a) __InterlockedDecrement(&(a))
+void __InterlockedIncrement(int * a);
+void __InterlockedDecrement(int * a);
+
+bool Assigned(void * a);
+
+int random(int max);
+int abs(int i);
