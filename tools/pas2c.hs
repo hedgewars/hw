@@ -685,6 +685,25 @@ expr2C (CharCode a) = do
 expr2C (HexCharCode a) = return $ quotes $ text "\\x" <> text (map toLower a)
 expr2C (SetExpression ids) = mapM (id2C IOLookup) ids >>= return . parens . hcat . punctuate (text " | ")
 
+expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "low" _))) = do
+    e' <- liftM (map toLower . render) $ expr2C e
+    lt <- gets lastType
+    case lt of
+         BTEnum a -> return $ int 0
+         BTInt -> case e' of
+                  "longint" -> return $ int (-2147483648)
+         BTArray {} -> return $ int 0
+         _ -> error $ "BuiltInFunCall 'low' from " ++ show e ++ "\ntype: " ++ show lt
+expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "high" _))) = do
+    e' <- liftM (map toLower . render) $ expr2C e
+    lt <- gets lastType
+    case lt of
+         BTEnum a -> return . int $ length a - 1
+         BTInt -> case e' of
+                  "longint" -> return $ int (2147483647)
+         BTString -> return $ int 255
+         BTArray (RangeFromTo _ n) _ _ -> initExpr2C n
+         _ -> error $ "BuiltInFunCall 'high' from " ++ show e ++ "\ntype: " ++ show lt
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "ord" _))) = liftM parens $ expr2C e
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "succ" _))) = liftM (<> text " + 1") $ expr2C e
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "pred" _))) = liftM (<> text " - 1") $ expr2C e
