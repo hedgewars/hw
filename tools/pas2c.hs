@@ -692,7 +692,10 @@ expr2C (FloatLiteral s) = return $ text s
 expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 expr2C (StringLiteral [a]) = do
     modify(\s -> s{lastType = BTChar})
-    return . quotes $ text [a]
+    return . quotes . text $ escape a
+    where
+        escape '\'' = "\\\'"
+        escape a = [a]
 expr2C (StringLiteral s) = addStringConst s
 expr2C (Reference ref) = ref2CF ref
 expr2C (PrefixOp op expr) = do

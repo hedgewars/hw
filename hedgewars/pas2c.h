@@ -38,8 +38,10 @@ typedef int64_t Int64;
 typedef LongInt Integer;
 typedef float extended;
 typedef float real;
+typedef float single;
 
 typedef bool boolean;
+typedef int LongBool;
 
 typedef void * pointer;
 typedef Byte * PByte;
@@ -72,6 +74,7 @@ string255 _strconcat(string255 a, string255 b);
 string255 _strappend(string255 s, char c);
 string255 _strprepend(char c, string255 s);
 bool _strcompare(string255 a, string255 b);
+bool _strncompare(string255 a, string255 b);
 char * _pchar(string255 s);
 
 int Length(string255 a);
@@ -81,6 +84,7 @@ string255 delete(string255 a, int s, int l);
 #define STRINIT(a) {.len = sizeof(a) - 1, .str = a}
 
 typedef int file;
+typedef int TextFile;
 extern int FileMode;
 extern int IOResult;
 
@@ -108,3 +112,4 @@ int abs(int i);
 double sqr(double n);
 double sqrt(double n);
 int trunc(double n);
+int round(double n);

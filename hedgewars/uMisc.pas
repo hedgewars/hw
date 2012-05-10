@@ -37,7 +37,7 @@ function  SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect; inline;
 {$ENDIF}
 
 implementation
-uses typinfo, sysutils, uVariables, uUtils
+uses SysUtils, uVariables, uUtils
      {$IFDEF PNG_SCREENSHOTS}, PNGh, png {$ENDIF}
      {$IFNDEF USE_SDLTHREADS} {$IFDEF UNIX}, cthreads{$ENDIF} {$ENDIF};
 

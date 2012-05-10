@@ -63,7 +63,9 @@ function hwFloat2Float (const i: hwFloat) : extended; inline;
 // The implemented operators
 
 operator = (const z1, z2: hwFloat) z : boolean; inline;
+{$IFDEF PAS2C}
 operator <> (const z1, z2: hwFloat) z : boolean; inline;
+{$ENDIF}
 operator + (const z1, z2: hwFloat) z : hwFloat; inline;
 operator - (const z1, z2: hwFloat) z : hwFloat; inline;
 operator - (const z1: hwFloat) z : hwFloat; inline;
@@ -213,12 +215,12 @@ begin
     z:= (z1.isNegative = z2.isNegative) and (z1.QWordValue = z2.QWordValue);
 end;
 
-
+{$IFDEF PAS2C}
 operator <> (const z1, z2: hwFloat) z : boolean; inline;
 begin
     z:= (z1.isNegative <> z2.isNegative) or (z1.QWordValue <> z2.QWordValue);
 end;
-
+{$ENDIF}
 
 operator + (const z1, z2: hwFloat) z : hwFloat;
 begin
