@@ -113,3 +113,6 @@ double sqr(double n);
 double sqrt(double n);
 int trunc(double n);
 int round(double n);
+
+string255 ParamStr(int n);
+int ParamCount();
