@@ -134,7 +134,7 @@ var
     Assigned : function : boolean;
     
     _strconcat, _strappend, _strprepend : function : string;
-    _strcompare, _strncompare : function : boolean;
+    _strcompare, _strncompare, _strcomparec : function : boolean;
 
     png_structp, png_set_write_fn, png_get_io_ptr,
     png_get_libpng_ver, png_create_write_struct,
