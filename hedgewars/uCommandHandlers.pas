@@ -71,7 +71,7 @@ begin
     s:= s; // avoid compiler hint
     if GameState = gsConfirm then
     begin
-        SendIPC('Q');
+        SendIPCc('Q');
         GameState:= gsExit
     end
 else
@@ -81,21 +81,19 @@ end;
 procedure chHalt (var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    SendIPC('H');
+    SendIPCc('H');
     GameState:= gsExit
 end;
 
 procedure chCheckProto(var s: shortstring);
-var i, c: LongInt;
+var i: LongInt;
 begin
     if isDeveloperMode then
         begin
-        val(s, i, c);
-        if (c <> 0) or (i = 0) then
-            exit;
+        val(s, i);
         TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
-    end
+        end
 end;
 
 procedure chTeamLocal(var s: shortstring);
@@ -220,7 +218,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('L');
+    SendIPCc('L');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmLeft and InputMask);
@@ -233,7 +231,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('l');
+    SendIPCc('l');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmLeft and InputMask));
     ScriptCall('onLeftUp');
@@ -245,7 +243,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('R');
+    SendIPCc('R');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmRight and InputMask);
@@ -258,7 +256,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('r');
+    SendIPCc('r');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmRight and InputMask));
     ScriptCall('onRightUp');
@@ -270,7 +268,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('U');
+    SendIPCc('U');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmUp and InputMask);
@@ -283,7 +281,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('u');
+    SendIPCc('u');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmUp and InputMask));
     ScriptCall('onUpUp');
@@ -295,7 +293,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('D');
+    SendIPCc('D');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmDown and InputMask);
@@ -308,7 +306,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('d');
+    SendIPCc('d');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmDown and InputMask));
     ScriptCall('onDownUp');
@@ -320,7 +318,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('Z');
+    SendIPCc('Z');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmPrecise and InputMask);
@@ -333,7 +331,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('z');
+    SendIPCc('z');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmPrecise and InputMask));
     ScriptCall('onPreciseUp');
@@ -345,7 +343,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('j');
+    SendIPCc('j');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmLJump and InputMask);
@@ -358,7 +356,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('J');
+    SendIPCc('J');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmHJump and InputMask);
@@ -378,7 +376,7 @@ with CurrentHedgehog^.Gear^ do
         begin
         FollowGear:= CurrentHedgehog^.Gear;
         if not CurrentTeam^.ExtDriven then
-            SendIPC('A');
+            SendIPCc('A');
         Message:= Message or (gmAttack and InputMask);
         ScriptCall('onAttack');
         end
@@ -394,7 +392,7 @@ with CurrentHedgehog^.Gear^ do
     begin
     if not CurrentTeam^.ExtDriven and
         ((Message and gmAttack) <> 0) then
-            SendIPC('a');
+            SendIPCc('a');
     Message:= Message and (not (gmAttack and InputMask));
     ScriptCall('onAttackUp');
     end
@@ -406,7 +404,7 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC('S');
+    SendIPCc('S');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmSwitch and InputMask);
@@ -419,7 +417,7 @@ begin
     TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
     if not CurrentTeam^.ExtDriven then
-        SendIPC('N');
+        SendIPCc('N');
     AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
 end;
 
@@ -448,7 +446,7 @@ slot:= byte(s[1]) - 49;
 if slot > cMaxSlotIndex then
     exit;
 if not CurrentTeam^.ExtDriven then
-    SendIPC(char(byte(s[1]) + 79));
+    SendIPCc(char(byte(s[1]) + 79));
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
