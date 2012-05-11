@@ -18,7 +18,6 @@ comment = choice [
 initDefines = Map.fromList [
     ("FPC", "")
     , ("PAS2C", "")
-    , ("USE_SDLTHREADS", "")
     ]
         
 preprocess :: String -> IO String
