@@ -80,7 +80,7 @@ uses LuaPas,
     uTextures,
     uLandGraphics,
     SDLh,
-    sysutils; 
+    SysUtils; 
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
