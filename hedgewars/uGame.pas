@@ -79,7 +79,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         RestoreTeamsFromSave;
                         SetBinds(CurrentTeam^.Binds);
                         //CurrentHedgehog^.Gear^.Message:= 0; <- produces bugs with further save restoring and demos
-                        SetSound;   // restore previous sound state
+                        ResetSound;   // restore previous sound state
                         PlayMusic;
                         GameType:= gmtLocal;
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
