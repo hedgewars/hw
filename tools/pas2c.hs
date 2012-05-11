@@ -756,6 +756,12 @@ ref2CF (SimpleReference name) = do
     case t of
          BTFunction {} -> return $ i <> parens empty
          _ -> return $ i
+ref2CF r@(RecordField (SimpleReference _) (SimpleReference _)) = do
+    i <- ref2C r
+    t <- gets lastType
+    case t of
+         BTFunction {} -> return $ i <> parens empty
+         _ -> return $ i
 ref2CF r = ref2C r
 
 ref2C :: Reference -> State RenderState Doc
@@ -790,7 +796,7 @@ ref2C rf@(RecordField (Dereference ref1) ref2) = do
     t <- fromPointer (show ref1) =<< gets lastType
     r2 <- case t of
         BTRecord _ rs -> withRecordNamespace "" rs $ ref2C ref2
-        BTUnit -> withLastIdNamespace $ ref2CF ref2
+        BTUnit -> error "What??"
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
     return $ 
         r1 <> text "->" <> r2
@@ -801,7 +807,7 @@ ref2C rf@(RecordField ref1 ref2) = do
         BTRecord _ rs -> do
             r2 <- withRecordNamespace "" rs $ ref2C ref2
             return $ r1 <> text "." <> r2
-        BTUnit -> withLastIdNamespace $ ref2CF ref2        
+        BTUnit -> withLastIdNamespace $ ref2C ref2
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
 ref2C d@(Dereference ref) = do
     r <- ref2C ref
