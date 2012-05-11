@@ -29,7 +29,7 @@ procedure GenMap;
 procedure GenPreview(var Preview: TPreview);
 
 implementation
-uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
+uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
      uLandGenMaze, uLandOutline;
 
