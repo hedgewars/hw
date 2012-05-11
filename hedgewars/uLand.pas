@@ -26,7 +26,7 @@ procedure initModule;
 procedure freeModule;
 procedure DrawBottomBorder;
 procedure GenMap;
-function  GenPreview: TPreview;
+procedure GenPreview(var Preview: TPreview);
 
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
@@ -677,9 +677,8 @@ if GrayScale then
 UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
 end;
 
-function GenPreview: TPreview;
+procedure GenPreview(var Preview: TPreview);
 var x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
-    Preview: TPreview;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
@@ -708,8 +707,6 @@ begin
                     Preview[y, x]:= Preview[y, x] or ($80 shr bit);
             end;
         end;
-
-    GenPreview:= Preview
 end;
 
 
