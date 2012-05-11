@@ -685,6 +685,12 @@ expr2C (BinOp op expr1 expr2) = do
             -- aw, "LongInt" here is hwengine-specific hack
             i <- op2CTyped op [SimpleType (Identifier t1 undefined), SimpleType (Identifier "LongInt" undefined)]
             ref2C $ FunCall [expr1, expr2] (SimpleReference i)
+        ("in", _, _) -> 
+            case expr2 of
+                 SetExpression set -> do
+                     ids <- mapM (id2C IOLookup) set
+                     return . parens . hcat . punctuate (text " || ") . map (\i -> parens $ e1 <+> text "==" <+> i) $ ids
+                 _ -> error "'in' against not set expression"
         (o, _, _) | o `elem` boolOps -> do
                         modify(\s -> s{lastType = BTBool})
                         return $ parens e1 <+> text o <+> parens e2
