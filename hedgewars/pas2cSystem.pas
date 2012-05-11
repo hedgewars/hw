@@ -93,37 +93,30 @@ var
 
     GetMem : function : pointer;
     FreeMem : procedure;
-    
-    gl_texture_2d, glbindtexture, gltexparameterf, gl_rgba, 
-    glteximage2d, glvertexpointer, gltexcoordpointer,
-    gl_triangle_fan, gldrawarrays, glpushmatrix, glpopmatrix,
-    gltranslatef, glscalef, glrotatef, gldisable, glenable,
-    gl_line_smooth, gllinewidth, gl_lines, gl_line_loop,
-    glcolor4ub, gl_texture_wrap_s, gltexparameteri,
-    gl_texture_wrap_t, gl_texture_min_filter,
-    gl_linear, gl_texture_mag_filter, glgentextures,
-    gldeletetextures, glreadpixels, glclearcolor,
-    gl_line_strip, gldeleterenderbuffersext,
-    gldeleteframebuffersext, glext_loadextension,
-    gl_max_texture_size, glgetintegerv, gl_renderer,
-    glgetstring, gl_vendor, gl_version, glgenframebuffersext,
-    glbindframebufferext, glgenrenderbuffersext,
-    glbindrenderbufferext, glrenderbufferstorageext,
-    glframebufferrenderbufferext, glframebuffertexture2dext,
-    gl_framebuffer_ext, gl_depth_component, 
-    gl_depth_attachment_ext, gl_renderbuffer_ext, gl_rgba8,
-    gl_color_attachment0_ext, gl_modelview, gl_blend,
-    gl_src_alpha, gl_one_minus_src_alpha,  
-    gl_perspective_correction_hint, gl_fastest,
-    gl_dither, gl_vertex_array, gl_texture_coord_array,
-    glviewport, glloadidentity, glmatrixmode, glhint,
-    glblendfunc, glenableclientstate, gl_color_buffer_bit,
-    glclear, gldisableclientstate, gl_color_array,
-    glcolorpointer, gl_depth_buffer_bit, gl_quads,
-    glbegin, glend, gltexcoord2f, glvertex2d,
-    gl_true, gl_false, glcolormask, gl_projection,
-    gl_texture_priority, glenum, gl_clamp_to_edge,
-    gl_extensions, gl_bgra : procedure;
+   
+    glGetString : function : pchar;
+ 
+    glBegin, glBindTexture, glBlendFunc, glClear, glClearColor,
+    glColor4ub, glColorMask, glColorPointer, glDeleteTextures,
+    glDisable, glDisableClientState, glDrawArrays, glEnable,
+    glEnableClientState, glEnd, glGenTextures, glGetIntegerv,
+    glHint, glLineWidth, glLoadIdentity, glMatrixMode, glPopMatrix,
+    glPushMatrix, glReadPixels, glRotatef, glScalef, glTexCoord2f,
+    glTexCoordPointer, glTexImage2D, glTexParameterf,
+    glTexParameteri, glTranslatef, glVertex2d, glVertexPointer,
+    glViewport : procedure;
+
+    GL_BGRA, GL_BLEND, GL_CLAMP_TO_EDGE, GL_COLOR_ARRAY,
+    GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GL_DEPTH_COMPONENT,
+    GL_DITHER, GL_EXTENSIONS, GL_FALSE, GL_FASTEST, GL_LINEAR,
+    GL_LINE_LOOP, GL_LINES, GL_LINE_SMOOTH, GL_LINE_STRIP,
+    GL_MAX_TEXTURE_SIZE, GL_MODELVIEW, GL_ONE_MINUS_SRC_ALPHA,
+    GL_PERSPECTIVE_CORRECTION_HINT, GL_PROJECTION, GL_QUADS,
+    GL_RENDERER, GL_RGBA, GL_RGBA8, GL_SRC_ALPHA, GL_TEXTURE_2D,
+    GL_TEXTURE_COORD_ARRAY, GL_TEXTURE_MAG_FILTER,
+    GL_TEXTURE_MIN_FILTER, GL_TEXTURE_PRIORITY, GL_TEXTURE_WRAP_S,
+    GL_TEXTURE_WRAP_T, GL_TRIANGLE_FAN, GL_TRUE, GL_VENDOR,
+    GL_VERSION, GL_VERTEX_ARRAY : integer;
 
     TThreadId : function : integer;
     BeginThread, ThreadSwitch : procedure;
@@ -144,3 +137,4 @@ var
     png_write_end : procedure;
 
     EnumToStr : function : string;
+function glGetString
