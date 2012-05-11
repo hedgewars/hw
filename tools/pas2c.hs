@@ -664,7 +664,7 @@ wrapPhrase p = Phrases [p]
 
 expr2C :: Expression -> State RenderState Doc
 expr2C (Expression s) = return $ text s
-expr2C (BinOp op expr1 expr2) = do
+expr2C b@(BinOp op expr1 expr2) = do
     e1 <- expr2C expr1
     t1 <- gets lastType
     e2 <- expr2C expr2
@@ -764,13 +764,17 @@ ref2CF (SimpleReference name) = do
     i <- id2C IOLookup name
     t <- gets lastType
     case t of
-         BTFunction {} -> return $ i <> parens empty
+         BTFunction _ rt -> do
+             modify(\s -> s{lastType = rt})
+             return $ i <> parens empty
          _ -> return $ i
 ref2CF r@(RecordField (SimpleReference _) (SimpleReference _)) = do
     i <- ref2C r
     t <- gets lastType
     case t of
-         BTFunction {} -> return $ i <> parens empty
+         BTFunction _ rt -> do
+             modify(\s -> s{lastType = rt})
+             return $ i <> parens empty
          _ -> return $ i
 ref2CF r = ref2C r
 

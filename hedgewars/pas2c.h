@@ -47,6 +47,7 @@ typedef void * pointer;
 typedef Byte * PByte;
 typedef char * PChar;
 typedef LongInt * PLongInt;
+typedef LongWord * PLongWord;
 typedef Integer * PInteger;
 typedef int * PtrInt;
 
