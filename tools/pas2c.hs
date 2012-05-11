@@ -747,6 +747,13 @@ expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "high" _))) = do
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "ord" _))) = liftM parens $ expr2C e
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "succ" _))) = liftM (<> text " + 1") $ expr2C e
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "pred" _))) = liftM (<> text " - 1") $ expr2C e
+expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "length" _))) = do
+    e' <- expr2C e
+    lt <- gets lastType
+    case lt of
+         BTString -> return $ text "length" <> parens e'
+         BTArray {} -> return $ text "length_ar" <> parens e'
+         _ -> error $ "length() called on " ++ show lt
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref 
     t <- gets lastType

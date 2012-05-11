@@ -3030,7 +3030,7 @@ end;
 
 procedure doStepCakeWork(Gear: PGear);
 
-const dirs: array[0..3] of TPoint =   ((x: 0; y: -1), (x: 1; y: 0),(x: 0; y: 1),(x: -1; y: 0));
+const dirs: array[0..3] of TPoint =   ((X: 0; Y: -1), (X: 1; Y: 0),(X: 0; Y: 1),(X: -1; Y: 0));
 var 
     xx, yy, xxn, yyn: LongInt;
     dA: LongInt;
