@@ -87,6 +87,9 @@ string255 delete(string255 a, int s, int l);
 
 #define STRINIT(a) {.len = sizeof(a) - 1, .str = a}
 
+
+int length_ar(void * a);
+
 typedef int file;
 typedef int TextFile;
 extern int FileMode;
@@ -131,3 +134,5 @@ int ParamCount();
 
 #define val(a, b) _val(a, (LongInt*)&(b))
 void _val(string255 str, LongInt * a);
+
+extern double pi;

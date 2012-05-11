@@ -82,7 +82,8 @@ var
     ParamCount : function : integer;
     ParamStr : function : string;
 
-    sqrt, arctan2, pi, cos, sin, power : function : float;
+    sqrt, arctan2, cos, sin, power : function : float;
+    pi : float;
 
     TypeInfo, GetEnumName : function : shortstring;
 
