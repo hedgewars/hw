@@ -40,7 +40,7 @@ procedure freeModule;
 
 procedure InitSound;                            // Initiates sound-system if isSoundEnabled.
 procedure ReleaseSound(complete: boolean);      // Releases sound-system and used resources.
-procedure SetSound;                             // Reset sound state to the previous state.
+procedure ResetSound;                           // Reset sound state to the previous state.
 procedure SetSound(enabled: boolean);           // Enable/disable sound-system and backup status.
 
 // MUSIC
@@ -183,7 +183,7 @@ begin
     ChangeVolume(cInitVolume);
 end;
 
-procedure SetSound;
+procedure ResetSound;
 begin
     isSoundEnabled:= isSEBackup;
 end;
