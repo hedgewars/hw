@@ -104,7 +104,11 @@ var
     glPushMatrix, glReadPixels, glRotatef, glScalef, glTexCoord2f,
     glTexCoordPointer, glTexImage2D, glTexParameterf,
     glTexParameteri, glTranslatef, glVertex2d, glVertexPointer,
-    glViewport : procedure;
+    glViewport, glext_LoadExtension, glDeleteRenderbuffersEXT,
+    glDeleteFramebuffersEXT, glGenFramebuffersEXT,
+    glGenRenderbuffersEXT, glBindFramebufferEXT, 
+    glBindRenderbufferEXT, glRenderbufferStorageEXT,
+    glFramebufferRenderbufferEXT, glFramebufferTexture2DEXT : procedure;
 
     GL_BGRA, GL_BLEND, GL_CLAMP_TO_EDGE, GL_COLOR_ARRAY,
     GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GL_DEPTH_COMPONENT,
@@ -116,7 +120,9 @@ var
     GL_TEXTURE_COORD_ARRAY, GL_TEXTURE_MAG_FILTER,
     GL_TEXTURE_MIN_FILTER, GL_TEXTURE_PRIORITY, GL_TEXTURE_WRAP_S,
     GL_TEXTURE_WRAP_T, GL_TRIANGLE_FAN, GL_TRUE, GL_VENDOR,
-    GL_VERSION, GL_VERTEX_ARRAY : integer;
+    GL_VERSION, GL_VERTEX_ARRAY, GLenum,  GL_FRAMEBUFFER_EXT,
+    GL_RENDERBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+    GL_COLOR_ATTACHMENT0_EXT : integer;
 
     TThreadId : function : integer;
     BeginThread, ThreadSwitch : procedure;
