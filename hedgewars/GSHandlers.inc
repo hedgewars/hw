@@ -88,7 +88,7 @@ begin
             if (d > 1) and (not gi^.Invulnerable) and (GetRandom(2) = 0) then
                 begin
                 if (CurrentHedgehog^.Gear = gi) then
-                    PlaySound(sndOops, gi^.Hedgehog^.Team^.voicepack)
+                    PlaySoundV(sndOops, gi^.Hedgehog^.Team^.voicepack)
                     
                 else
                     begin
@@ -96,9 +96,9 @@ begin
                         gi^.State := gi^.State or gstLoser;
                         
                     if d > r div 2 then
-                        PlaySound(sndNooo, gi^.Hedgehog^.Team^.voicepack) 
+                        PlaySoundV(sndNooo, gi^.Hedgehog^.Team^.voicepack) 
                     else
-                        PlaySound(sndUhOh, gi^.Hedgehog^.Team^.voicepack);
+                        PlaySoundV(sndUhOh, gi^.Hedgehog^.Team^.voicepack);
                     end;
                 end;
             end;
@@ -779,7 +779,7 @@ begin
         AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
         AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
         AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         if nuw then
             begin
             Gear^.SoundChannel := LoopSound(sndBeeWater);
@@ -818,7 +818,7 @@ begin
     CheckCollision(Gear);
     if ((Gear^.State and gstCollision) <> 0) then
         begin
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, Gear^.Hedgehog, EXPLAutoSound);
         for i:= 0 to 31 do
             begin
@@ -846,7 +846,7 @@ begin
         begin
         if nuw then
            begin
-            StopSound(Gear^.SoundChannel);
+            StopSoundChan(Gear^.SoundChannel);
             CheckGearDrowning(Gear);
             end
         else
@@ -1181,7 +1181,7 @@ begin
     or((Gear^.Message and gmDestroy) <> 0)
     or((HHGear^.State and gstHHDriven) =0) then
         begin
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         DeleteGear(Gear);
         AfterAttack;
         doStepHedgehogMoving(HHGear);  // for gfInfAttack
@@ -2453,7 +2453,7 @@ begin
     Gear^.doStep := @doStepFirePunchWork;
     DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y + _1, _0_5, _0, cHHRadius * 4, 5);
 
-    PlaySound(TSound(ord(sndFirePunch1) + GetRandom(6)), HHGear^.Hedgehog^.Team^.voicepack)
+    PlaySoundV(TSound(ord(sndFirePunch1) + GetRandom(6)), HHGear^.Hedgehog^.Team^.voicepack)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2543,7 +2543,7 @@ begin
             //                 Gear^.Tag, _0, 5000);
             end;
         Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag);
-        StopSound(Gear^.SoundChannel, 4000);
+        StopSoundChan(Gear^.SoundChannel, 4000);
         end;
 
     if (GameTicks and $3F) = 0 then
@@ -2552,7 +2552,7 @@ begin
     if (hwRound(Gear^.X) > (LAND_WIDTH+2048)) or (hwRound(Gear^.X) < -2048) then
         begin
         // avoid to play forever (is this necessary?)
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         DeleteGear(Gear)
         end;
 end;
@@ -2921,7 +2921,7 @@ begin
     if Gear^.Timer = 0 then
         begin
         Gear^.Pos := 1;
-        PlaySound(sndKamikaze, Gear^.Hedgehog^.Team^.voicepack);
+        PlaySoundV(sndKamikaze, Gear^.Hedgehog^.Team^.voicepack);
         Gear^.doStep := @doStepKamikazeWork
         end
 end;
@@ -3213,7 +3213,7 @@ begin
         Gear^.Timer := 0;
         inc(Gear^.Pos);
         if Gear^.Pos = 5 then
-            PlaySound(sndYoohoo, Gear^.Hedgehog^.Team^.voicepack)
+            PlaySoundV(sndYoohoo, Gear^.Hedgehog^.Team^.voicepack)
         end;
 
     if (Gear^.Pos = 14) and (RealTicks and $3 = 0) then
@@ -3297,7 +3297,7 @@ begin
             AddVisualGear(hwRound(Gear^.X + _20 * Gear^.dX), hwRound(Gear^.Y + _20 * Gear^.dY), vgtDust);
         if (CheckGearDrowning(Gear)) then
            begin
-            StopSound(Gear^.SoundChannel);
+            StopSoundChan(Gear^.SoundChannel);
             exit
     end
     end;
@@ -3314,7 +3314,7 @@ begin
     or (not CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y), lfIndestructible)) then
         begin
         //out of time or exited ground
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         if (Gear^.State and gsttmpFlag) <> 0 then
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound)
         else
@@ -3325,7 +3325,7 @@ begin
         
     else if (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) = 0) and (not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))) then
         begin
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         Gear^.Tag := 1;
         Gear^.doStep := @doStepDrill
         end;
@@ -3529,7 +3529,7 @@ begin
 
     if ((Gear^.State and gstCollision) <> 0) or CheckGearDrowning(Gear) then
         begin
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         StopSound(sndRideOfTheValkyries);
         ResumeMusic;
 
@@ -5054,7 +5054,7 @@ begin
 
     if Length(graves) = 0 then
         begin
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
         exit;
@@ -5099,7 +5099,7 @@ begin
         hh^.Gear^.dY := _0;
         hh^.Gear^.dX := _0;
         doStepHedgehogMoving(hh^.Gear);
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
         end
@@ -5125,7 +5125,7 @@ begin
         end 
     else 
         begin
-        StopSound(Gear^.SoundChannel);
+        StopSoundChan(Gear^.SoundChannel);
         Gear^.Timer := 250;
         Gear^.doStep := @doStepIdle;
         end
@@ -5282,7 +5282,7 @@ begin
 HH:= Gear^.Hedgehog;
 if Gear^.Pos = 2 then
     begin
-    StopSound(Gear^.SoundChannel);
+    StopSoundChan(Gear^.SoundChannel);
     if (Gear^.Timer = 0) then
         begin
         if (HH^.Gear <> nil) and (HH^.Gear^.State and gstInvisible = 0) then
@@ -5326,7 +5326,7 @@ if (Gear^.Pos = 1) and (Gear^.Power = 255) and ((GameTicks mod 2000) = 1000) the
     Gear^.Pos:= 2;
 if (Gear^.Pos = 3) and (Gear^.Power = 0) then
     begin
-    StopSound(Gear^.SoundChannel);
+    StopSoundChan(Gear^.SoundChannel);
     if HH^.GearHidden = nil then
         begin
         DeleteGear(Gear);
