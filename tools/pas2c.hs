@@ -681,6 +681,10 @@ expr2C (BinOp op expr1 expr2) = do
         (_, BTRecord t1 _, BTRecord t2 _) -> do
             i <- op2CTyped op [SimpleType (Identifier t1 undefined), SimpleType (Identifier t2 undefined)]
             ref2C $ FunCall [expr1, expr2] (SimpleReference i)
+        (_, BTRecord t1 _, BTInt) -> do
+            -- aw, "LongInt" here is hwengine-specific hack
+            i <- op2CTyped op [SimpleType (Identifier t1 undefined), SimpleType (Identifier "LongInt" undefined)]
+            ref2C $ FunCall [expr1, expr2] (SimpleReference i)
         (o, _, _) | o `elem` boolOps -> do
                         modify(\s -> s{lastType = BTBool})
                         return $ parens e1 <+> text o <+> parens e2
