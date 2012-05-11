@@ -76,6 +76,7 @@ string255 _strconcat(string255 a, string255 b);
 string255 _strappend(string255 s, char c);
 string255 _strprepend(char c, string255 s);
 bool _strcompare(string255 a, string255 b);
+bool _strcomparec(string255 a, char b);
 bool _strncompare(string255 a, string255 b);
 char * _pchar(string255 s);
 
@@ -99,6 +100,8 @@ void BlockRead_(int f, void * p, int size, int * sizeRead);
 void BlockWrite_(int f, void * p, int size);
 void close(int f);
 
+void write(string255 s);
+
 bool DirectoryExists(string255 dir);
 bool FileExists(string255 filename);
 
@@ -114,6 +117,7 @@ void __InterlockedDecrement(int * a);
 
 bool Assigned(void * a);
 
+void randomize();
 int random(int max);
 int abs(int i);
 double sqr(double n);
@@ -123,3 +127,6 @@ int round(double n);
 
 string255 ParamStr(int n);
 int ParamCount();
+
+#define val(a, b) _val(a, (LongInt*)&(b))
+void _val(string255 str, LongInt * a);

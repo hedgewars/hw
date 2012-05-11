@@ -97,7 +97,7 @@ begin
             DoTimer:= true;
             end;
         gsSuspend:
-            exit;
+            exit(false);
             end;
 
     SwapBuffers;
