@@ -63,9 +63,11 @@ typedef int * PtrInt;
 
 #define new(a) __new((void **)&a, sizeof(*(a)))
 void __new(void ** p, int size);
-
 #define dispose(a) __dispose(a, sizeof(*(a)))
 void __dispose(pointer p, int size);
+
+void * GetMem(int size);
+void FreeMem(void * p, int size);
 
 #define FillChar(a, b, c) __FillChar(&(a), b, c)
 
@@ -93,7 +95,12 @@ void assign_(int * f, string255 fileName);
 void reset(int f, int size);
 #define BlockRead(a, b, c, d) BlockRead_(a, &(b), c, &(d))
 void BlockRead_(int f, void * p, int size, int * sizeRead);
+#define BlockWrite(a, b, c) BlockWrite_(a, &(b), c)
+void BlockWrite_(int f, void * p, int size);
 void close(int f);
+
+bool DirectoryExists(string255 dir);
+bool FileExists(string255 filename);
 
 bool odd(int i);
 

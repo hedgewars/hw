@@ -47,7 +47,7 @@ procedure SetSound(enabled: boolean);           // Enable/disable sound-system a
 
 // Obvious music commands for music track
 procedure SetMusic(enabled: boolean);           // Enable/disable music.
-procedure SetMusic(musicname: shortstring);     // Enable/disable music and set name of musicfile to play.
+procedure SetMusicName(musicname: shortstring);     // Enable/disable music and set name of musicfile to play.
 procedure PlayMusic;                            // Play music from the start.
 procedure PauseMusic;                           // Pause music.
 procedure ResumeMusic;                          // Resume music from pause point.
@@ -62,21 +62,21 @@ procedure StopMusic;                            // Stops and releases the curren
 // then the sound's playback won't be interrupted if asked to play again.
 procedure PlaySound(snd: TSound);
 procedure PlaySound(snd: TSound; keepPlaying: boolean);
-procedure PlaySound(snd: TSound; voicepack: PVoicepack);
-procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 
 // Plays sound snd [of voicepack] in a loop, but starts with fadems milliseconds of fade-in.
 // Returns sound channel of the looped sound.
 function  LoopSound(snd: TSound): LongInt;
 function  LoopSound(snd: TSound; fadems: LongInt): LongInt;
-function  LoopSound(snd: TSound; voicepack: PVoicepack): LongInt; // WTF?
-function  LoopSound(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
+function  LoopSoundV(snd: TSound; voicepack: PVoicepack): LongInt; // WTF?
+function  LoopSoundV(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
 
 // Stops the normal/looped sound of the given type/in the given channel
 // [with a fade-out effect for fadems milliseconds].
 procedure StopSound(snd: TSound);
-procedure StopSound(chn: LongInt);
-procedure StopSound(chn, fadems: LongInt);
+procedure StopSoundChan(chn: LongInt);
+procedure StopSoundChan(chn, fadems: LongInt);
 
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 procedure PlayNextVoice;
@@ -233,20 +233,20 @@ end;
 
 procedure PlaySound(snd: TSound);
 begin
-    PlaySound(snd, nil, false);
+    PlaySoundV(snd, nil, false);
 end;
 
 procedure PlaySound(snd: TSound; keepPlaying: boolean);
 begin
-    PlaySound(snd, nil, keepPlaying);
+    PlaySoundV(snd, nil, keepPlaying);
 end;
 
-procedure PlaySound(snd: TSound; voicepack: PVoicepack);
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
 begin
-    PlaySound(snd, voicepack, false);
+    PlaySoundV(snd, voicepack, false);
 end;
 
-procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 var s:shortstring;
 begin
     if (not isSoundEnabled) or fastUntilLag then
@@ -325,33 +325,33 @@ begin
         LastVoice.snd:= VoiceList[i].snd;
         LastVoice.voicepack:= VoiceList[i].voicepack;
         VoiceList[i].snd:= sndNone;
-        PlaySound(LastVoice.snd, LastVoice.voicepack)
+        PlaySoundV(LastVoice.snd, LastVoice.voicepack)
         end
     else LastVoice.snd:= sndNone;
 end;
 
 function LoopSound(snd: TSound): LongInt;
 begin
-    LoopSound:= LoopSound(snd, nil)
+    LoopSound:= LoopSoundV(snd, nil)
 end;
 
 function LoopSound(snd: TSound; fadems: LongInt): LongInt;
 begin
-    LoopSound:= LoopSound(snd, nil, fadems)
+    LoopSound:= LoopSoundV(snd, nil, fadems)
 end;
 
-function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
+function LoopSoundV(snd: TSound; voicepack: PVoicepack): LongInt;
 begin
     voicepack:= voicepack;    // avoid compiler hint
-    LoopSound:= LoopSound(snd, nil, 0)
+    LoopSoundV:= LoopSoundV(snd, nil, 0)
 end;
 
-function LoopSound(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
+function LoopSoundV(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
 var s: shortstring;
 begin
     if (not isSoundEnabled) or fastUntilLag then
         begin
-        LoopSound:= -1;
+        LoopSoundV:= -1;
         exit
         end;
 
@@ -369,7 +369,7 @@ begin
             else
                 WriteLnToConsole(msgOK)
             end;
-        LoopSound:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], -1, -1)
+        LoopSoundV:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], -1, -1)
         end
     else
         begin
@@ -384,9 +384,9 @@ begin
             WriteLnToConsole(msgOK);
             end;
         if fadems > 0 then
-            LoopSound:= Mix_FadeInChannelTimed(-1, defVoicepack^.chunks[snd], -1, fadems, -1)
+            LoopSoundV:= Mix_FadeInChannelTimed(-1, defVoicepack^.chunks[snd], -1, fadems, -1)
         else
-            LoopSound:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1);
+            LoopSoundV:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1);
         end;
 end;
 
@@ -402,7 +402,7 @@ begin
         end;
 end;
 
-procedure StopSound(chn: LongInt);
+procedure StopSoundChan(chn: LongInt);
 begin
     if not isSoundEnabled then
         exit;
@@ -411,7 +411,7 @@ begin
         Mix_HaltChannel(chn);
 end;
 
-procedure StopSound(chn, fadems: LongInt);
+procedure StopSoundChan(chn, fadems: LongInt);
 begin
     if not isSoundEnabled then
         exit;
@@ -478,7 +478,7 @@ begin
     MusicFN:= '';
 end;
 
-procedure SetMusic(musicname: shortstring);
+procedure SetMusicName(musicname: shortstring);
 begin
     isMusicEnabled:= not (musicname = '');    
     MusicFN:= musicname;

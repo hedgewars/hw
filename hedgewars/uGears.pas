@@ -193,7 +193,7 @@ if (StepSoundTimer > 0) and (StepSoundChannel < 0) then
     StepSoundChannel:= LoopSound(sndSteps)
 else if (StepSoundTimer = 0) and (StepSoundChannel > -1) then
     begin
-    StopSound(StepSoundChannel);
+    StopSoundChan(StepSoundChannel);
     StepSoundChannel:= -1
     end;
 
@@ -422,7 +422,7 @@ if TurnTimeLeft > 0 then
                 and (not PlacingHogs)
                 and (CurrentHedgehog^.Gear <> nil)
                 and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
-                    PlaySound(sndHurry, CurrentTeam^.voicepack);
+                    PlaySoundV(sndHurry, CurrentTeam^.voicepack);
             if ReadyTimeLeft > 0 then
                 begin
                 if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) then
