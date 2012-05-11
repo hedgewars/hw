@@ -452,27 +452,28 @@ extractTypes = concatMap f
         f (VarDeclaration _ (ids, t) _) = replicate (length ids) t
         f a = error $ "extractTypes: can't extract from " ++ show a
 
-initExpr2C :: InitExpression -> State RenderState Doc
-initExpr2C InitNull = return $ text "NULL"
-initExpr2C (InitAddress expr) = liftM ((<>) (text "&")) (initExpr2C expr)
-initExpr2C (InitPrefixOp op expr) = liftM (text (op2C op) <>) (initExpr2C expr)
-initExpr2C (InitBinOp op expr1 expr2) = do
-    e1 <- initExpr2C expr1
-    e2 <- initExpr2C expr2
+initExpr2C, initExpr2C' :: InitExpression -> State RenderState Doc
+initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
+initExpr2C a = initExpr2C' a
+initExpr2C' InitNull = return $ text "NULL"
+initExpr2C' (InitAddress expr) = liftM ((<>) (text "&")) (initExpr2C' expr)
+initExpr2C' (InitPrefixOp op expr) = liftM (text (op2C op) <>) (initExpr2C' expr)
+initExpr2C' (InitBinOp op expr1 expr2) = do
+    e1 <- initExpr2C' expr1
+    e2 <- initExpr2C' expr2
     return $ parens $ e1 <+> text (op2C op) <+> e2
-initExpr2C (InitNumber s) = return $ text s
-initExpr2C (InitFloat s) = return $ text s
-initExpr2C (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
-initExpr2C (InitString [a]) = return . quotes $ text [a]
-initExpr2C (InitString s) = return $ strInit s
-initExpr2C (InitChar a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
-initExpr2C (InitReference i) = id2C IOLookup i
-initExpr2C (InitRecord fields) = do
+initExpr2C' (InitNumber s) = return $ text s
+initExpr2C' (InitFloat s) = return $ text s
+initExpr2C' (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
+initExpr2C' (InitString [a]) = return . quotes $ text [a]
+initExpr2C' (InitString s) = return $ strInit s
+initExpr2C' (InitChar a) = return $ quotes $ text "\\x" <> text (showHex (read a) "")
+initExpr2C' (InitReference i) = id2C IOLookup i
+initExpr2C' (InitRecord fields) = do
     (fs :: [Doc]) <- mapM (\(Identifier a _, b) -> liftM (text "." <> text a <+> equals <+>) $ initExpr2C b) fields
     return $ lbrace $+$ (nest 4 . vcat . punctuate comma $ fs) $+$ rbrace
---initExpr2C (InitArray [value]) = initExpr2C value
-initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
-initExpr2C r@(InitRange (Range i@(Identifier i' _))) = do
+initExpr2C' (InitArray [value]) = initExpr2C value
+initExpr2C' r@(InitRange (Range i@(Identifier i' _))) = do
     id2C IOLookup i
     t <- gets lastType
     case t of
@@ -481,28 +482,28 @@ initExpr2C r@(InitRange (Range i@(Identifier i' _))) = do
                        "byte" -> return $ int 256
                        _ -> error $ "InitRange identifier: " ++ i'
          _ -> error $ "InitRange: " ++ show r
-initExpr2C (InitRange (RangeFromTo (InitNumber "0") r)) = initExpr2C $ BuiltInFunction "succ" [r]
-initExpr2C (InitRange (RangeFromTo (InitChar "0") (InitChar r))) = initExpr2C $ BuiltInFunction "succ" [InitNumber r]
-initExpr2C (InitRange a) = error $ show a --return $ text "<<range>>"
-initExpr2C (InitSet []) = return $ text "0"
-initExpr2C (InitSet a) = return $ text "<<set>>"
-initExpr2C (BuiltInFunction "low" [InitReference e]) = return $ 
+initExpr2C' (InitRange (RangeFromTo (InitNumber "0") r)) = initExpr2C $ BuiltInFunction "succ" [r]
+initExpr2C' (InitRange (RangeFromTo (InitChar "0") (InitChar r))) = initExpr2C $ BuiltInFunction "succ" [InitNumber r]
+initExpr2C' (InitRange a) = error $ show a --return $ text "<<range>>"
+initExpr2C' (InitSet []) = return $ text "0"
+initExpr2C' (InitSet a) = return $ text "<<set>>"
+initExpr2C' (BuiltInFunction "low" [InitReference e]) = return $ 
     case e of
          (Identifier "LongInt" _) -> int (-2^31)
          (Identifier "SmallInt" _) -> int (-2^15)
          _ -> error $ "BuiltInFunction 'low': " ++ show e
-initExpr2C (BuiltInFunction "high" [e]) = do
+initExpr2C' (BuiltInFunction "high" [e]) = do
     initExpr2C e
     t <- gets lastType
     case t of
-         (BTArray i _ _) -> initExpr2C $ BuiltInFunction "pred" [InitRange i]
+         (BTArray i _ _) -> initExpr2C' $ BuiltInFunction "pred" [InitRange i]
          a -> error $ "BuiltInFunction 'high': " ++ show a
-initExpr2C (BuiltInFunction "succ" [BuiltInFunction "pred" [e]]) = initExpr2C e
-initExpr2C (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C e
-initExpr2C (BuiltInFunction "succ" [e]) = liftM (<> text " + 1") $ initExpr2C e
-initExpr2C (BuiltInFunction "pred" [e]) = liftM (<> text " - 1") $ initExpr2C e
-initExpr2C b@(BuiltInFunction _ _) = error $ show b    
-initExpr2C a = error $ "initExpr2C: don't know how to render " ++ show a
+initExpr2C' (BuiltInFunction "succ" [BuiltInFunction "pred" [e]]) = initExpr2C' e
+initExpr2C' (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C' e
+initExpr2C' (BuiltInFunction "succ" [e]) = liftM (<> text " + 1") $ initExpr2C' e
+initExpr2C' (BuiltInFunction "pred" [e]) = liftM (<> text " - 1") $ initExpr2C' e
+initExpr2C' b@(BuiltInFunction _ _) = error $ show b    
+initExpr2C' a = error $ "initExpr2C: don't know how to render " ++ show a
 
 
 range2C :: InitExpression -> State RenderState [Doc]
