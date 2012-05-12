@@ -20,7 +20,7 @@
 
 unit uGearsUtils;
 interface
-uses uTypes, math;
+uses uTypes;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord); 
@@ -46,7 +46,7 @@ implementation
 uses uFloat, uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
     uVariables, uLandGraphics, uScript, uStats, uCaptions, uTeams, uStore,
     uLocale, uTextures, uRenderUtils, uRandom, SDLh, uDebug, uGears,
-    uGearsList;
+    uGearsList, Math;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
 begin

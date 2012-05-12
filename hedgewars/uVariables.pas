@@ -202,7 +202,7 @@ var
 {$ENDIF}
 
 
-const
+var
     // these consts are here because they would cause circular dependencies in uConsts/uTypes
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
