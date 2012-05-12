@@ -1156,8 +1156,8 @@ case Gear^.Kind of
             end;
         if Gear^.Timer = 0 then
             begin
-            SendIPCc('N');
-            SendIPCc('q');
+            SendIPC(_S'N');
+            SendIPC(_S'q');
             GameState := gsExit
             end
     end;

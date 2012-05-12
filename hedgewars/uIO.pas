@@ -27,7 +27,6 @@ procedure freeModule;
 
 procedure InitIPC;
 procedure SendIPC(s: shortstring);
-procedure SendIPCc(c: char);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
@@ -117,7 +116,7 @@ var loTicks: Word;
 begin
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
-     '?': SendIPCc('!');
+     '?': SendIPC(_S'!');
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
@@ -222,14 +221,6 @@ if IPCSock <> nil then
     end
 end;
 
-procedure SendIPCc(c: char);
-var s: shortstring;
-begin
-    s[0]:= #1;
-    s[1]:= c;
-    SendIPC(s);
-end;
-
 procedure SendIPCRaw(p: pointer; len: Longword);
 begin
 if IPCSock <> nil then
@@ -260,7 +251,7 @@ end;
 procedure SendIPCAndWaitReply(s: shortstring);
 begin
 SendIPC(s);
-SendIPCc('?');
+SendIPC(_S'?');
 IPCWaitPongEvent
 end;
 
@@ -268,7 +259,7 @@ procedure SendKeepAliveMessage(Lag: Longword);
 begin
 inc(SendEmptyPacketTicks, Lag);
 if (SendEmptyPacketTicks >= cSendEmptyPacketTime) then
-    SendIPCc('+')
+    SendIPC(_S'+')
 end;
 
 procedure NetGetNextCmd;
