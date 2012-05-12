@@ -446,7 +446,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
     begin
     if (not CurrentTeam^.ExtDriven) then
         begin
-        SendIPCc('#');
+        SendIPC(_S'#');
         AddFileLog('hiTicks increment message sent')
         end;
 
@@ -1161,7 +1161,7 @@ procedure chSkip(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if not CurrentTeam^.ExtDriven then
-    SendIPCc(',');
+    SendIPC(_S',');
 uStats.Skipped;
 skipFlag:= true
 end;
