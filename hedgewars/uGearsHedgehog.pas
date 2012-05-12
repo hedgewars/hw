@@ -440,7 +440,7 @@ with Gear^,
             begin
             if not CurrentTeam^.ExtDriven
             and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_Power) <> 0) then
-                SendIPC('a');
+                SendIPC(_S'a');
             AfterAttack;
             end
         end
