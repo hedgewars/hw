@@ -10,6 +10,7 @@ import Text.Parsec.Combinator
 import Text.Parsec.String
 import Control.Monad
 import Data.Maybe
+import Data.Char
 
 import PascalBasics
 import PascalUnitSyntaxTree
@@ -355,7 +356,8 @@ expression = buildExpressionParser table term <?> "expression"
         , try $ natural pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
         , float pas >>= return . FloatLiteral . show
         , natural pas >>= return . NumberLiteral . show
-        , stringLiteral pas >>= return . StringLiteral
+        , try (string "_S" >> stringLiteral pas) >>= return . StringLiteral
+        , stringLiteral pas >>= return . strOrChar
         , try (string "#$") >> many hexDigit >>= \c -> comments >> return (HexCharCode c)
         , char '#' >> many digit >>= \c -> comments >> return (CharCode c)
         , char '$' >> many hexDigit >>=  \h -> comments >> return (HexNumber h)
@@ -390,6 +392,8 @@ expression = buildExpressionParser table term <?> "expression"
            , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
           ]
         ]
+    strOrChar [a] = CharCode . show . ord $ a
+    strOrChar a = StringLiteral a    
     
 phrasesBlock = do
     try $ string "begin"
@@ -613,4 +617,3 @@ systemUnit = do
     string "var"
     v <- varsDecl True
     return $ System (t ++ v)
-  
