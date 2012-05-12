@@ -252,7 +252,7 @@ for i:= 6 to cKeyMaxIndex do
         end;
     end;
 
-quitKeyCode:= KeyNameToCode('q');
+quitKeyCode:= KeyNameToCode(_S'q');
 
 // get the size of keyboard array
 SDL_GetKeyState(@k);
@@ -289,14 +289,14 @@ DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
 //DefaultBinds[265]:= '+volup';
 //DefaultBinds[256]:= '+voldown';
 
-DefaultBinds[KeyNameToCode('0')]:= '+volup';
-DefaultBinds[KeyNameToCode('9')]:= '+voldown';
-DefaultBinds[KeyNameToCode('c')]:= 'capture';
-DefaultBinds[KeyNameToCode('h')]:= 'findhh';
-DefaultBinds[KeyNameToCode('p')]:= 'pause';
-DefaultBinds[KeyNameToCode('s')]:= '+speedup';
-DefaultBinds[KeyNameToCode('t')]:= 'chat';
-DefaultBinds[KeyNameToCode('y')]:= 'confirm';
+DefaultBinds[KeyNameToCode(_S'0')]:= '+volup';
+DefaultBinds[KeyNameToCode(_S'9')]:= '+voldown';
+DefaultBinds[KeyNameToCode(_S'c')]:= 'capture';
+DefaultBinds[KeyNameToCode(_S'h')]:= 'findhh';
+DefaultBinds[KeyNameToCode(_S'p')]:= 'pause';
+DefaultBinds[KeyNameToCode(_S's')]:= '+speedup';
+DefaultBinds[KeyNameToCode(_S't')]:= 'chat';
+DefaultBinds[KeyNameToCode(_S'y')]:= 'confirm';
 
 DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
 DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomout';
