@@ -354,7 +354,7 @@ begin
     if recordFileName = '' then
         begin
         InitIPC;
-        SendIPCAndWaitReply('C');        // ask for game config
+        SendIPCAndWaitReply(_S'C');        // ask for game config
         end
     else
         LoadRecordFromFile(recordFileName);

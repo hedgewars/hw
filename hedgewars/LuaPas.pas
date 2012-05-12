@@ -14,7 +14,9 @@ uses uConsts;
 {.$DEFINE LUA_GETHOOK}
 
 type
+{$IFNDEF PAS2C}    
     size_t   = Cardinal;
+{$ENDIF}
     Psize_t  = ^size_t;
     PPointer = ^Pointer;
 
