@@ -26,6 +26,8 @@ typedef struct string15_
         char s[16];
     } string15;
 
+typedef string255 shortstring;
+    
 typedef uint8_t Byte;
 typedef int8_t ShortInt;
 typedef uint16_t Word;
