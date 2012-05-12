@@ -49,7 +49,7 @@ typedef char * PChar;
 typedef LongInt * PLongInt;
 typedef LongWord * PLongWord;
 typedef Integer * PInteger;
-typedef int * PtrInt;
+typedef int PtrInt;
 
 #ifdef __GNUG__
 #define NULL __null
