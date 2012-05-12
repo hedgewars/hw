@@ -553,14 +553,18 @@ type2C t = do
     type2C' (RangeType r) = return (text "int" <+>)
     type2C' (Sequence ids) = do
         is <- mapM (id2C IOInsert . setBaseType bt) ids
-        return (text "enum" <+> (braces . vcat . punctuate comma . map (\(a, b) -> a <+> equals <+> text "0x" <> text (showHex b "")) $ zip is [1..]) <+>)
+        return (text "enum" <+> (braces . vcat . punctuate comma . map (\(a, b) -> a <+> equals <+> text "0x" <> text (showHex b "")) $ zip is [0..]) <+>)
         where
             bt = BTEnum $ map (\(Identifier i _) -> map toLower i) ids
     type2C' (ArrayDecl Nothing t) = type2C (PointerTo t)
     type2C' (ArrayDecl (Just r) t) = do
         t' <- type2C t
+        lt <- gets lastType
+        ft <- case lt of
+                BTFunction {} -> type2C (PointerTo t)
+                _ -> return t'
         r' <- initExpr2C (InitRange r)
-        return $ \i -> t' i <> brackets r'
+        return $ \i -> ft i <> brackets r'
     type2C' (Set t) = return (text "<<set>>" <+>)
     type2C' (FunctionType returnType params) = do
         t <- type2C returnType
@@ -601,10 +605,22 @@ phrase2C (IfThenElse (expr) phrase1 mphrase2) = do
 phrase2C (Assignment ref expr) = do
     r <- ref2C ref
     t <- gets lastType
-    e <- case (t, expr) of
-         (BTFunction {}, (Reference r')) -> ref2C r'
-         _ -> expr2C expr
-    return $ r <+> text "=" <+> e <> semi
+    case (t, expr) of
+        (BTFunction {}, (Reference r')) -> do
+            e <- ref2C r'
+            return $ r <+> text "=" <+> e <> semi
+        (BTArray (Range _) _ _, _) -> phrase2C $ 
+            ProcCall (FunCall
+                [
+                Reference $ Address ref
+                , Reference $ Address $ RefExpression expr
+                , Reference $ FunCall [expr] (SimpleReference (Identifier "sizeof" BTUnknown))
+                ]
+                (SimpleReference (Identifier "memcpy" BTUnknown))
+                ) []
+        _ -> do
+            e <- expr2C expr
+            return $ r <+> text "=" <+> e <> semi
 phrase2C (WhileCycle expr phrase) = do
     e <- expr2C expr
     p <- phrase2C $ wrapPhrase phrase

@@ -69,6 +69,7 @@ var
     Length, StrToInt : function : integer;
     SetLength, val : procedure;
     _pchar : function : PChar;
+    memcpy : procedure;
 
     assign, rewrite, reset, flush, BlockWrite, BlockRead, close : procedure;
     IOResult : integer;
@@ -143,4 +144,4 @@ var
     png_write_end : procedure;
 
     EnumToStr : function : string;
-function glGetString
+

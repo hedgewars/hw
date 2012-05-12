@@ -563,14 +563,16 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         return (i ,e)
 
     table = [ 
-          [  Infix (char '*' >> return (InitBinOp "*")) AssocLeft
+          [
+             Prefix (char '-' >> return (InitPrefixOp "-"))
+          ]
+        , [  Infix (char '*' >> return (InitBinOp "*")) AssocLeft
            , Infix (char '/' >> return (InitBinOp "/")) AssocLeft
            , Infix (try (string "div") >> return (InitBinOp "div")) AssocLeft
            , Infix (try (string "mod") >> return (InitBinOp "mod")) AssocLeft
           ]
         , [  Infix (char '+' >> return (InitBinOp "+")) AssocLeft
            , Infix (char '-' >> return (InitBinOp "-")) AssocLeft
-           , Prefix (char '-' >> return (InitPrefixOp "-"))
           ]
         , [  Infix (try (string "<>") >> return (InitBinOp "<>")) AssocNone
            , Infix (try (string "<=") >> return (InitBinOp "<=")) AssocNone

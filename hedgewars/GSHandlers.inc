@@ -466,7 +466,7 @@ begin
                     begin
                     Frame:= 2;
                     Tint:= $41B83ED0 - i * $10081000;
-                    Angle:= random * 360;
+                    Angle:= random(360);
                     dx:= 0.0000001;
                     dy:= 0;
                     if random(2) = 0 then
@@ -1090,7 +1090,7 @@ begin
         begin
         cLaserSighting := true;
         HHGear^.Message := 0;
-        if (HHGear^.Angle - 32 >= 0) then
+        if (HHGear^.Angle >= 32) then
             dec(HHGear^.Angle,32)
         end;
 
@@ -1120,7 +1120,7 @@ begin
                     inc(HHGear^.Angle)
                 end
     else
-        if (HHGear^.Angle - 1 >= 0) then
+        if (HHGear^.Angle >= 1) then
             dec(HHGear^.Angle);
 
     if (TurnTimeLeft > 0) then
@@ -2838,7 +2838,7 @@ begin
         if sparkles <> nil then
             begin
             sparkles^.Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
-            sparkles^.Angle:= random * 360;
+            sparkles^.Angle:= random(360);
             end
         end;
 
@@ -2893,7 +2893,7 @@ begin
                     with sparkles^ do
                         begin
                         Tint:= ((random(210)+45) shl 24) or ((random(210)+45) shl 16) or ((random(210)+45) shl 8) or $FF;
-                        Angle:= random * 360;
+                        Angle:= random(360);
                         dx:= 0.001 * (random(200));
                         dy:= 0.001 * (random(200));
                         if random(2) = 0 then
@@ -4559,7 +4559,7 @@ begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 80 + r0, Gear^.Hedgehog, EXPLAutoSound);
         for r0:= 0 to 4 do
             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtNote);
-        Gear^.dY := odY * -1 + cGravity * 2;
+        Gear^.dY := cGravity * 2 - odY;
         Gear^.Pos := Gear^.Pos + 1;
         end
     else
