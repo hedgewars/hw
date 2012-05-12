@@ -127,7 +127,11 @@ renderCFiles units = do
     where
     toNamespace :: Map.Map String Records -> PascalUnit -> Records
     toNamespace nss (System tvs) = 
-        currentScope $ execState (mapM_ (tvar2C True) tvs) (emptyState nss)
+        currentScope $ execState f (emptyState nss)
+        where
+        f = do
+            checkDuplicateFunDecls tvs
+            mapM_ (tvar2C True) tvs                
     toNamespace _ (Program {}) = Map.empty
     toNamespace nss (Unit (Identifier i _) interface _ _ _) = 
         currentScope $ execState (interface2C interface) (emptyState nss){currentUnit = map toLower i ++ "_"}
@@ -208,8 +212,10 @@ implementation2C (Implementation uses tvars) = do
 
 checkDuplicateFunDecls :: [TypeVarDeclaration] -> State RenderState ()
 checkDuplicateFunDecls tvs =
-    modify $ \s -> s{toMangle = Map.keysSet . Map.filter (> 1) . foldr ins Map.empty $ tvs}
+    modify $ \s -> s{toMangle = Map.keysSet . Map.filter (> 1) . foldr ins initMap $ tvs}
     where
+        initMap = Map.empty
+        --initMap = Map.fromList [("reset", 2)]
         ins (FunctionDeclaration (Identifier i _) _ _ _) m = Map.insertWith (+) (map toLower i) 1 m
         ins _ m = m
 
@@ -766,8 +772,9 @@ expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "pred" _))) = liftM (<> 
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "length" _))) = do
     e' <- expr2C e
     lt <- gets lastType
+    modify (\s -> s{lastType = BTInt})
     case lt of
-         BTString -> return $ text "length" <> parens e'
+         BTString -> return $ text "Length" <> parens e'
          BTArray {} -> return $ text "length_ar" <> parens e'
          _ -> error $ "length() called on " ++ show lt
 expr2C (BuiltInFunCall params ref) = do

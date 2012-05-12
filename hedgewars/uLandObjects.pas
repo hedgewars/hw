@@ -803,17 +803,17 @@ begin
 end;
 
 procedure AddObjects();
-var i, int: Longword;
+var i, g: Longword;
 begin
 InitRects;
 if hasGirders then
     begin
-    int:= max(playWidth div 8, 256);
-    i:=leftX+int;
+    g:= max(playWidth div 8, 256);
+    i:= leftX + g;
     repeat
         AddGirder(i);
-        i:=i+int;
-    until (i>rightX-int);
+        i:=i + g;
+    until (i > rightX - g);
     end;
 if (GameFlags and gfDisableLandObjects) = 0 then
     AddThemeObjects(ThemeObjects);

@@ -26,7 +26,7 @@ const MAX_EVENT_STRINGS = 100;
 
 procedure LoadLocale(FileName: shortstring);
 function  Format(fmt: shortstring; var arg: shortstring): shortstring;
-function  Format(fmt: ansistring; var arg: ansistring): ansistring;
+function  FormatA(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 {$IFDEF HWLIBRARY}
@@ -122,14 +122,14 @@ else
     Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
-function Format(fmt: ansistring; var arg: ansistring): ansistring;
+function FormatA(fmt: ansistring; var arg: ansistring): ansistring;
 var i: LongInt;
 begin
 i:= Pos('%1', fmt);
 if i = 0 then
-    Format:= fmt
+    FormatA:= fmt
 else
-    Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
+    FormatA:= copy(fmt, 1, i - 1) + arg + FormatA(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
 {$IFDEF HWLIBRARY}

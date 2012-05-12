@@ -140,23 +140,23 @@ with Gear^.Hedgehog^ do
         color:= Gear^.Hedgehog^.Team^.Clan^.Color;
         case Gear^.MsgParam of
             1: begin
-               AddCaption(format(trmsg[sidBounce], trmsg[sidBounce1]), color, capgrpAmmostate);
+               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce1]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 350;
                end;
             2: begin
-               AddCaption(format(trmsg[sidBounce], trmsg[sidBounce2]), color, capgrpAmmostate);
+               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce2]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 700;
                end;
             3: begin
-               AddCaption(format(trmsg[sidBounce], trmsg[sidBounce3]), color, capgrpAmmostate);
+               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce3]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 1000;
                end;
             4: begin
-               AddCaption(format(trmsg[sidBounce], trmsg[sidBounce4]), color, capgrpAmmostate);
+               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce4]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 2000;
                end;
             5: begin
-               AddCaption(format(trmsg[sidBounce], trmsg[sidBounce5]), color, capgrpAmmostate);
+               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce5]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 4000;
                end
             end

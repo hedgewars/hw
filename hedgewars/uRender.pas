@@ -408,10 +408,10 @@ end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 const VertexBuffer: array [0..3] of TVertex2f = (
-        (x: -16; y: -16),
-        (x:  16; y: -16),
-        (x:  16; y:  16),
-        (x: -16; y:  16));
+        (X: -16; Y: -16),
+        (X:  16; Y: -16),
+        (X:  16; Y:  16),
+        (X: -16; Y:  16));
 var l, r, t, b: real;
     TextureBuffer: array [0..3] of TVertex2f;
 begin

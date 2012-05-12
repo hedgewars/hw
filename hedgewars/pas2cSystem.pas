@@ -24,7 +24,6 @@ type
     real = float;
     extended = float;
     GLfloat = float;
-    gl_float = float;
 
     boolean = boolean;
     LongBool = boolean;
@@ -123,7 +122,7 @@ var
     GL_TEXTURE_WRAP_T, GL_TRIANGLE_FAN, GL_TRUE, GL_VENDOR,
     GL_VERSION, GL_VERTEX_ARRAY, GLenum,  GL_FRAMEBUFFER_EXT,
     GL_RENDERBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-    GL_COLOR_ATTACHMENT0_EXT : integer;
+    GL_COLOR_ATTACHMENT0_EXT, GL_FLOAT, GL_UNSIGNED_BYTE : integer;
 
     TThreadId : function : integer;
     BeginThread, ThreadSwitch : procedure;

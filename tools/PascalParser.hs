@@ -382,7 +382,6 @@ expression = buildExpressionParser table term <?> "expression"
            , Infix (try (string ">=") >> return (BinOp ">=")) AssocNone
            , Infix (char '<' >> return (BinOp "<")) AssocNone
            , Infix (char '>' >> return (BinOp ">")) AssocNone
-           , Infix (char '=' >> return (BinOp "=")) AssocNone
           ]
         , [  Infix (try $ string "shl" >> return (BinOp "shl")) AssocNone
            , Infix (try $ string "shr" >> return (BinOp "shr")) AssocNone
@@ -390,6 +389,9 @@ expression = buildExpressionParser table term <?> "expression"
         , [  Infix (try $ string "and" >> return (BinOp "and")) AssocLeft
            , Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
+          ]
+        , [
+             Infix (char '=' >> return (BinOp "=")) AssocNone
           ]
         ]
     strOrChar [a] = CharCode . show . ord $ a
