@@ -77,3 +77,4 @@
 {$ENDIF}
 
 {$DEFINE _S:=}
+{$DEFINE _P:=}

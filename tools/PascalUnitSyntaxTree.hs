@@ -61,6 +61,7 @@ data Expression = Expression String
     | PostfixOp String Expression
     | BinOp String Expression Expression
     | StringLiteral String
+    | PCharLiteral String
     | CharCode String
     | HexCharCode String
     | NumberLiteral String

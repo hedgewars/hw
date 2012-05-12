@@ -357,6 +357,7 @@ expression = buildExpressionParser table term <?> "expression"
         , float pas >>= return . FloatLiteral . show
         , natural pas >>= return . NumberLiteral . show
         , try (string "_S" >> stringLiteral pas) >>= return . StringLiteral
+        , try (string "_P" >> stringLiteral pas) >>= return . PCharLiteral
         , stringLiteral pas >>= return . strOrChar
         , try (string "#$") >> many hexDigit >>= \c -> comments >> return (HexCharCode c)
         , char '#' >> many digit >>= \c -> comments >> return (CharCode c)
