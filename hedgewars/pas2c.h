@@ -84,6 +84,7 @@ char * _pchar(string255 s);
 int Length(string255 a);
 string255 copy(string255 a, int s, int l);
 string255 delete(string255 a, int s, int l);
+string255 trim(string255 a);
 
 #define STRINIT(a) {.len = sizeof(a) - 1, .str = a}
 
@@ -97,7 +98,8 @@ extern int IOResult;
 
 #define assign(a, b) assign_(&(a), b)
 void assign_(int * f, string255 fileName);
-void reset(int f, int size);
+void reset_1(int f, int size);
+void reset_2(int f, int size);
 #define BlockRead(a, b, c, d) BlockRead_(a, &(b), c, &(d))
 void BlockRead_(int f, void * p, int size, int * sizeRead);
 #define BlockWrite(a, b, c) BlockWrite_(a, &(b), c)
@@ -136,3 +138,6 @@ int ParamCount();
 void _val(string255 str, LongInt * a);
 
 extern double pi;
+
+string255 EnumToStr(int a);
+string255 ExtractFileName(string255 f);

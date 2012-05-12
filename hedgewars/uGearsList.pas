@@ -170,7 +170,7 @@ case Kind of
                     begin
                     Pos:= 0;
                     Radius:= 1;
-                    DirAngle:= random * 360;
+                    DirAngle:= random(360);
                     if State and gstTmpFlag = 0 then
                         begin
                         dx.isNegative:= GetRandom(2) = 0;

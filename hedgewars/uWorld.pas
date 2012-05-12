@@ -96,7 +96,7 @@ begin
     if (GameFlags and gf) <> 0 then
         begin
         t:= inttostr(i);
-        s:= s + format(trgoal[si], t) + '|'
+        s:= s + FormatA(trgoal[si], t) + '|'
         end;
     AddGoal:= s;
 end;
