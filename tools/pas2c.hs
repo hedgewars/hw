@@ -731,6 +731,7 @@ expr2C (HexNumber s) = return $ text "0x" <> (text . map toLower $ s)
         escape '\'' = "\\\'"
         escape a = [a]-}
 expr2C (StringLiteral s) = addStringConst s
+expr2C (PCharLiteral s) = return . doubleQuotes $ text s
 expr2C (Reference ref) = ref2CF ref
 expr2C (PrefixOp op expr) = do
     e <- expr2C expr
