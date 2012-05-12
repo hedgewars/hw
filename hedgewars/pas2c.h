@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <wchar.h>
 
 typedef union string255_
     {
@@ -36,6 +37,7 @@ typedef uint32_t LongWord;
 typedef int32_t LongInt;
 typedef uint64_t QWord;
 typedef int64_t Int64;
+typedef LongWord Cardinal;
 
 typedef LongInt Integer;
 typedef float extended;
@@ -52,6 +54,7 @@ typedef LongInt * PLongInt;
 typedef LongWord * PLongWord;
 typedef Integer * PInteger;
 typedef int PtrInt;
+typedef wchar_t widechar;
 
 #ifdef __GNUG__
 #define NULL __null

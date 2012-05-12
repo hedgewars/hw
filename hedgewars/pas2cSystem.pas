@@ -13,8 +13,8 @@ type
     QWord = integer;
     GLint = integer;
     GLuint = integer;
-    gl_unsigned_byte = integer;
     int = integer;
+    size_t = integer;
 
     pointer = pointer;
 
