@@ -115,6 +115,7 @@ var BotLevel: Byte;
     a, aa: TAmmoType;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
+windSpeed:= hwFloat2Float(cWindSpeed);
 
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
