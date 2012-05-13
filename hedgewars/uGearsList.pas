@@ -150,7 +150,7 @@ case Kind of
                 gear^.Z:= cHHZ;
                 if (GameFlags and gfAISurvival) <> 0 then
                     if gear^.Hedgehog^.BotLevel > 0 then
-                        gear^.Hedgehog^.Effects[heResurrectable] := 0;
+                        gear^.Hedgehog^.Effects[heResurrectable] := 1;
                 end;
        gtShell: begin
                 gear^.Radius:= 4;
