@@ -2256,7 +2256,6 @@ var
             Probability: 20;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEnd or
-                          ammoprop_NeedTarget or
                           ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 0;
