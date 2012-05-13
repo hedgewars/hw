@@ -745,7 +745,7 @@ expr2C Null = return $ text "NULL"
 expr2C (CharCode a) = do
     modify(\s -> s{lastType = BTChar})
     return $ quotes $ text "\\x" <> text (showHex (read a) "")
-expr2C (HexCharCode a) = return $ quotes $ text "\\x" <> text (map toLower a)
+expr2C (HexCharCode a) = if length a <= 2 then return $ quotes $ text "\\x" <> text (map toLower a) else expr2C $ HexNumber a
 expr2C (SetExpression ids) = mapM (id2C IOLookup) ids >>= return . parens . hcat . punctuate (text " | ")
 
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "low" _))) = do
