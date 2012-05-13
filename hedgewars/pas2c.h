@@ -100,6 +100,7 @@ typedef int file;
 typedef int TextFile;
 extern int FileMode;
 extern int IOResult;
+extern int stderr;
 
 #define assign(a, b) assign_(&(a), b)
 void assign_(int * f, string255 fileName);
