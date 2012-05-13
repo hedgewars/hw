@@ -23,6 +23,8 @@ interface
 uses SDLh, uConsts, uFloat, uTypes;
 const amtest_OnTurn = $00000001;
 
+var windSpeed: real;
+
 type TAttackParams = record
         Time: Longword;
         Angle, Power: LongInt;
@@ -106,7 +108,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestHammer;      flags: 0), // amHammer
             (proc: nil;              flags: 0), // amResurrector
             (proc: nil;              flags: 0), // amDrillStrike
-            (proc: @TestSnowball;    flags: 0), // amSnowball
+            (proc: nil;              flags: 0), // amSnowball
             (proc: nil;              flags: 0), // amTardis
             (proc: nil;              flags: 0), // amStructure
             (proc: nil;              flags: 0), // amLandGun
@@ -140,7 +142,7 @@ ap.ExplR:= 0;
 valueResult:= BadTurn;
 repeat
     rTime:= rTime + 300 + Level * 50 + random(300);
-    Vx:= - cWindSpeedf * rTime * 0.5 + (Targ.X + AIrndSign(2) - mX) / rTime;
+    Vx:= - windSpeed * rTime * 0.5 + (Targ.X + AIrndSign(2) - mX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Y - mY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -153,7 +155,7 @@ repeat
         repeat
             x:= x + dX;
             y:= y + dY;
-            dX:= dX + cWindSpeedf;
+            dX:= dX + windSpeed;
             dY:= dY + cGravityf;
             dec(t)
         until TestCollExcludingMe(Me, trunc(x), trunc(y), 5) or (t <= 0);
@@ -198,7 +200,7 @@ ap.ExplR:= 0;
 valueResult:= BadTurn;
 repeat
     rTime:= rTime + 300 + Level * 50 + random(1000);
-    Vx:= - cWindSpeedf * rTime * 0.5 + ((Targ.X + AIrndSign(2)) - meX) / rTime;
+    Vx:= - windSpeed * rTime * 0.5 + ((Targ.X + AIrndSign(2)) - meX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Y - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -211,7 +213,7 @@ repeat
         repeat
             x:= x + dX;
             y:= y + dY;
-            dX:= dX + cWindSpeedf;
+            dX:= dX + windSpeed;
             dY:= dY + cGravityf;
             dec(t)
         until TestCollExcludingMe(Me, trunc(x), trunc(y), 5) or (t <= 0);
