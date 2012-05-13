@@ -88,7 +88,7 @@ if i > 0 then
         if (a[t] >= 'A')and(a[t] <= 'Z') then
             Inc(a[t], 32);
     b:= copy(a, i + 1, Length(a) - i);
-    byte(a[0]):= Pred(i)
+    a[0]:= char(Pred(i))
     end
 else
     b:= '';
@@ -237,9 +237,9 @@ for i:= 1 to Length(s) do
     if s[i] = '=' then
         inc(c);
     if t > 0 then
-        byte(s[i]):= t - 1
+        s[i]:= char(t - 1)
     else
-        byte(s[i]):= 0
+        s[i]:= #0
     end;
 
 i:= 1;
@@ -256,7 +256,7 @@ while i <= length(s) do
 if c < 3 then
     t:= t - c;
 
-byte(DecodeBase64[0]):= t - 1
+DecodeBase64[0]:= char(t - 1)
 end;
 
 
