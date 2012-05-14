@@ -2425,6 +2425,7 @@ var
     SyncTexture,
     ConfirmTexture: PTexture;
     cScaleFactor: GLfloat;
+    cStereoDepth: GLfloat;
     SupportNPOTT: Boolean;
     Step: LongInt;
     squaresize : LongInt;

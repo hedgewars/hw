@@ -43,6 +43,7 @@ procedure MakeCrossHairs;
 
 procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; inline;
+procedure UpdateProjection;
 
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
@@ -729,9 +730,7 @@ begin
 
     glMatrixMode(GL_MODELVIEW);
     // prepare default translation/scaling
-    glLoadIdentity();
-    glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
-    glTranslatef(0, -cScreenHeight / 2, 0);
+    SetScale(2.0);
 
     // enable alpha blending
     glEnable(GL_BLEND);
@@ -746,23 +745,24 @@ begin
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 end;
 
+procedure UpdateProjection;
+var mat: array[0..15] of GLfloat;
+    s: GLfloat;
+begin
+    s:=cScaleFactor;
+    glMatrixMode(GL_PROJECTION);
+    mat[ 0]:= s/cScreenWidth; mat[ 1]:=  0.0;             mat[ 2]:=0.0; mat[ 3]:=  0.0;
+    mat[ 4]:= 0.0;            mat[ 5]:= -s/cScreenHeight; mat[ 6]:=0.0; mat[ 7]:=  0.0;
+    mat[ 8]:= 0.0;            mat[ 9]:=  0.0;             mat[10]:=1.0; mat[11]:=  0.0;
+    mat[12]:= cStereoDepth;   mat[13]:=  s/2;             mat[14]:=0.0; mat[15]:=  1.0;
+    glLoadMatrixf(@mat);
+    glMatrixMode(GL_MODELVIEW);
+end;
+
 procedure SetScale(f: GLfloat);
 begin
-// leave immediately if scale factor did not change
-    if f = cScaleFactor then
-        exit;
-
-    if f = cDefaultZoomLevel then
-        glPopMatrix         // "return" to default scaling
-    else                    // other scaling
-        begin
-        glPushMatrix;       // save default scaling
-        glLoadIdentity;
-        glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
-        glTranslatef(0, -cScreenHeight / 2, 0);
-        end;
-
-    cScaleFactor:= f;
+    cScaleFactor:=f;
+    UpdateProjection;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1033,11 +1033,7 @@ begin
         // chFullScr is called when there is a rotation event and needs the SetScale and SetupOpenGL to set up the new resolution
         // this 6 gl functions are the relevant ones and are hacked together here for optimisation
         glMatrixMode(GL_MODELVIEW);
-        glPopMatrix;
-        glLoadIdentity();
-        glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
-        glTranslatef(0, -cScreenHeight / 2, 0);
-        glViewport(0, 0, cScreenWidth, cScreenHeight);
+        SetScale(2.0);
         exit;
 {$ELSE}
         SetScale(cDefaultZoomLevel);
