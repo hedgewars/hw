@@ -91,7 +91,7 @@ if LandTextures[0, 0].tex = nil then
             with LandTextures[x, y] do
                 begin
                 tex:= NewTexture(TEXSIZE, TEXSIZE, Pixels(x, y));
-                glBindTexture(GL_TEXTURE_2D, tex^.id);
+                glBindTexture(GL_TEXTURE_2D, tex^.atlas^.id);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, tpHigh);
                 end
 else
@@ -101,7 +101,7 @@ else
                 if shouldUpdate then
                     begin
                     shouldUpdate:= false;
-                    glBindTexture(GL_TEXTURE_2D, tex^.id);
+                    glBindTexture(GL_TEXTURE_2D, tex^.atlas^.id);
                     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXSIZE, TEXSIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x,y));
                     end
 end;
