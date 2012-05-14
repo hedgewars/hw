@@ -26,7 +26,7 @@ procedure initModule;
 procedure freeModule;
 procedure DrawBottomBorder;
 procedure GenMap;
-procedure GenPreview(var Preview: TPreview);
+procedure GenPreview(out Preview: TPreview);
 
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
@@ -677,7 +677,7 @@ if GrayScale then
 UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
 end;
 
-procedure GenPreview(var Preview: TPreview);
+procedure GenPreview(out Preview: TPreview);
 var x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
