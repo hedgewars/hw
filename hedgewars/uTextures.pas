@@ -26,6 +26,7 @@ function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 procedure Surface2GrayScale(surf: PSDL_Surface);
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
+procedure ComputeTexcoords(texture: PTexture; r: PSDL_Rect; tb: PVertexRect);
 
 procedure initModule;
 procedure freeModule;
@@ -47,10 +48,44 @@ begin
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
 
+procedure ComputeTexcoords(texture: PTexture; r: PSDL_Rect; tb: PVertexRect);
+var x0, y0, x1, y1: Real;
+    w, h, aw, ah: LongInt;
+const texelOffset = 0.0;
+begin
+aw:=texture^.atlas^.w;
+ah:=texture^.atlas^.h;
+if texture^.isRotated then
+    begin
+    w:=r^.h;
+    h:=r^.w;
+    end 
+else
+    begin
+    w:=r^.w;
+    h:=r^.h;        
+    end;
+
+x0:= (r^.x +     texelOffset)/aw;
+x1:= (r^.x + w - texelOffset)/aw;
+y0:= (r^.y +     texelOffset)/ah;
+y1:= (r^.y + h - texelOffset)/ah;
+
+tb^[0].X:= x0;
+tb^[0].Y:= y0;
+tb^[1].X:= x1;
+tb^[1].Y:= y0;
+tb^[2].X:= x1;
+tb^[2].Y:= y1;
+tb^[3].X:= x0;
+tb^[3].Y:= y1
+end;
+
 procedure ResetVertexArrays(texture: PTexture);
+var r: TSDL_Rect;
 begin
 with texture^ do
-    begin
+begin
     vb[0].X:= 0;
     vb[0].Y:= 0;
     vb[1].X:= w;
@@ -59,16 +94,13 @@ with texture^ do
     vb[2].Y:= h;
     vb[3].X:= 0;
     vb[3].Y:= h;
+end;
 
-    tb[0].X:= 0;
-    tb[0].Y:= 0;
-    tb[1].X:= rx;
-    tb[1].Y:= 0;
-    tb[2].X:= rx;
-    tb[2].Y:= ry;
-    tb[3].X:= 0;
-    tb[3].Y:= ry
-    end;
+r.x:= 0;
+r.y:= 0;
+r.w:= texture^.w;
+r.h:= texture^.h;
+ComputeTexcoords(texture, @r, @texture^.tb);
 end;
 
 function NewTexture(width, height: Longword; buf: Pointer): PTexture;
@@ -84,16 +116,22 @@ if TextureList <> nil then
     end;
 TextureList:= NewTexture;
 
-NewTexture^.w:= width;
-NewTexture^.h:= height;
-NewTexture^.rx:= 1.0;
-NewTexture^.ry:= 1.0;
+
+// Atlas allocation happens here later on. For now we just allocate one exclusive atlas per sprite
+new(NewTexture^.atlas);
+NewTexture^.atlas^.w:=width;
+NewTexture^.atlas^.h:=height;
+NewTexture^.x:=0;
+NewTexture^.y:=0;
+NewTexture^.w:=width;
+NewTexture^.h:=height;
+NewTexture^.isRotated:=false;
 
 ResetVertexArrays(NewTexture);
 
-glGenTextures(1, @NewTexture^.id);
+glGenTextures(1, @NewTexture^.atlas^.id);
 
-glBindTexture(GL_TEXTURE_2D, NewTexture^.id);
+glBindTexture(GL_TEXTURE_2D, NewTexture^.atlas^.id);
 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
 
 SetTextureParameters(true);
@@ -136,20 +174,27 @@ if TextureList <> nil then
     end;
 TextureList:= Surface2Tex;
 
+// Atlas allocation happens here later on. For now we just allocate one exclusive atlas per sprite
+new(Surface2Tex^.atlas);
+
 Surface2Tex^.w:= surf^.w;
 Surface2Tex^.h:= surf^.h;
+Surface2Tex^.x:=0;
+Surface2Tex^.y:=0;
+Surface2Tex^.isRotated:=false;
+
 
 if (surf^.format^.BytesPerPixel <> 4) then
     begin
     TryDo(false, 'Surface2Tex failed, expecting 32 bit surface', true);
-    Surface2Tex^.id:= 0;
+    Surface2Tex^.atlas^.id:= 0;
     exit
     end;
 
 
-glGenTextures(1, @Surface2Tex^.id);
+glGenTextures(1, @Surface2Tex^.atlas^.id);
 
-glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
+glBindTexture(GL_TEXTURE_2D, Surface2Tex^.atlas^.id);
 
 if SDL_MustLock(surf) then
     SDLTry(SDL_LockSurface(surf) >= 0, true);
@@ -164,8 +209,8 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
     tw:= toPowerOf2(Surf^.w);
     th:= toPowerOf2(Surf^.h);
 
-    Surface2Tex^.rx:= Surf^.w / tw;
-    Surface2Tex^.ry:= Surf^.h / th;
+    Surface2Tex^.atlas^.w:=tw;
+    Surface2Tex^.atlas^.h:=th;
 
     GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
 
@@ -195,8 +240,8 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
     end
 else
     begin
-    Surface2Tex^.rx:= 1.0;
-    Surface2Tex^.ry:= 1.0;
+    Surface2Tex^.atlas^.w:=Surf^.w;
+    Surface2Tex^.atlas^.h:=Surf^.h;
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf^.w, surf^.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surf^.pixels);
     end;
 
@@ -214,13 +259,16 @@ procedure FreeTexture(tex: PTexture);
 begin
 if tex <> nil then
     begin
+    // Atlas cleanup happens here later on. For now we just free as each sprite has one atlas
+    Dispose(tex^.atlas);
+
     if tex^.NextTexture <> nil then
         tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
     if tex^.PrevTexture <> nil then
         tex^.PrevTexture^.NextTexture:= tex^.NextTexture
     else
         TextureList:= tex^.NextTexture;
-    glDeleteTextures(1, @tex^.id);
+    glDeleteTextures(1, @tex^.atlas^.id);
     Dispose(tex);
     end
 end;
@@ -236,7 +284,7 @@ if TextureList <> nil then
     WriteToConsole('FIXME FIXME FIXME. App shutdown without full cleanup of texture list; read game0.log and please report this problem');
     while TextureList <> nil do 
         begin
-        AddFileLog('Texture not freed: width='+inttostr(LongInt(TextureList^.w))+' height='+inttostr(LongInt(TextureList^.h))+' priority='+inttostr(round(TextureList^.priority*1000)));
+        AddFileLog('Sprite not freed: width='+inttostr(LongInt(TextureList^.w))+' height='+inttostr(LongInt(TextureList^.h))+' priority='+inttostr(round(TextureList^.atlas^.priority*1000)));
         FreeTexture(TextureList);
         end
 end;
