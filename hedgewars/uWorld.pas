@@ -77,7 +77,6 @@ var cWaveWidth, cWaveHeight: LongInt;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
-    stereoDepth: GLfloat;
     isFirstFrame: boolean;
     AMAnimType: LongInt;
 
@@ -1080,10 +1079,8 @@ begin
         exit
     else if rm = rmLeftEye then
         d:= -d;
-    stereoDepth:= stereoDepth + d;
-    glMatrixMode(GL_PROJECTION);
-    glTranslatef(d, 0, 0);
-    glMatrixMode(GL_MODELVIEW);
+    cStereoDepth:= cStereoDepth + d;
+    UpdateProjection;
 {$ENDIF}
 end;
  
@@ -1095,10 +1092,8 @@ begin
 {$ELSE}
     if rm = rmDefault then
         exit;
-    glMatrixMode(GL_PROJECTION);
-    glTranslatef(-stereoDepth, 0, 0);
-    glMatrixMode(GL_MODELVIEW);
-    stereoDepth:= 0;
+    cStereoDepth:= 0;
+    UpdateProjection;
 {$ENDIF}
 end;
  
@@ -1819,14 +1814,13 @@ begin
     missionTimer:= 0;
     missionTex:= nil;
     cOffsetY:= 0;
-    stereoDepth:= 0;
+    cStereoDepth:= 0;
     AMState:= AMHidden;
     isFirstFrame:= true;
 end;
 
 procedure freeModule;
 begin
-    stereoDepth:= stereoDepth; // avoid hint
     FreeTexture(fpsTexture);
     fpsTexture:= nil;
     FreeTexture(timeTexture);
