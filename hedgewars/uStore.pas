@@ -761,8 +761,11 @@ end;
 
 procedure SetScale(f: GLfloat);
 begin
-    cScaleFactor:=f;
-    UpdateProjection;
+    if cScaleFactor <> f then
+        begin
+        cScaleFactor:=f;
+        UpdateProjection;
+        end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
