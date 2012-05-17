@@ -26,7 +26,6 @@ procedure initModule;
 procedure freeModule;
 
 function  KeyNameToCode(name: shortstring): word;
-procedure ProcessKbd;
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
@@ -58,16 +57,6 @@ begin
     code:= cKeyMaxIndex;
     while (code > 0) and (KeyNames[code] <> name) do dec(code);
     KeyNameToCode:= code;
-end;
-
-procedure ProcessKbd;
-//var  i, j, k: LongInt;
-begin
-
-// move cursor/camera
-// TODO: Scale on screen dimensions and/or axis value (game controller)?
-//TODO what is this for?
-movecursor(5 * CursorMovementX, 5 * CursorMovementY);
 end;
 
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
