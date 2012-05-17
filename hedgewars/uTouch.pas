@@ -319,7 +319,7 @@ if bShowAmmoMenu then
         begin
         CursorPoint.X:= finger.x;
         CursorPoint.Y:= finger.y;
-        doPut(CursorPoint.X, CursorPoint.Y, false); 
+        ParseTeamCommand('put'); 
         end
     else
         bShowAmmoMenu:= false;
