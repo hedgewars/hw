@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.hedgewars.hedgeroid.EngineProtocol.EngineProtocolNetwork;
+import org.hedgewars.hedgeroid.EngineProtocol.PascalExports;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -46,7 +47,7 @@ public class Weapon implements Parcelable, Comparable<Weapon>{
 	private static int maxWeapons;
 	
 	static{
-		//maxWeapons = PascalExports.HWgetNumberOfWeapons();
+		maxWeapons = PascalExports.HWgetNumberOfWeapons();
 	}
 	
 	public Weapon(String _name, String _QT, String _prob, String _delay, String _crate){
