@@ -153,7 +153,7 @@ void HWGame::SendTrainingConfig()
 {
     QByteArray traincfg;
     HWProto::addStringToBuffer(traincfg, "TL");
-
+    HWProto::addStringToBuffer(traincfg, "eseed " + QUuid::createUuid().toString());
     HWProto::addStringToBuffer(traincfg, "escript " + training);
 
     RawSendIPC(traincfg);
@@ -163,6 +163,7 @@ void HWGame::SendCampaignConfig()
 {
     QByteArray campaigncfg;
     HWProto::addStringToBuffer(campaigncfg, "TL");
+    HWProto::addStringToBuffer(campaigncfg, "eseed " + QUuid::createUuid().toString());
 
     HWProto::addStringToBuffer(campaigncfg, "escript " + campaign);
 
