@@ -1049,8 +1049,10 @@ begin
         //uTextures.freeModule; //DEBUG ONLY
     {$ENDIF}
         AddFileLog('Freeing old primary surface...');
+    {$IFNDEF SDL13}        
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
+    {$ENDIF}
 {$ENDIF}
         end;
 
