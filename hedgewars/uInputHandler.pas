@@ -68,45 +68,7 @@ begin
 // TODO: Scale on screen dimensions and/or axis value (game controller)?
 //TODO what is this for?
 movecursor(5 * CursorMovementX, 5 * CursorMovementY);
-
-
-(* 
-TODO reimplement
-$IFNDEF MOBILE
-// Controller(s)
-k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
-for j:= 0 to Pred(ControllerNumControllers) do
-    begin
-    for i:= 0 to Pred(ControllerNumAxes[j]) do
-        begin
-        if ControllerAxes[j][i] > 20000 then
-            tkbdn[k + 0]:= 1
-        else
-            tkbdn[k + 0]:= 0;
-        if ControllerAxes[j][i] < -20000 then
-            tkbdn[k + 1]:= 1
-        else
-            tkbdn[k + 1]:= 0;
-        inc(k, 2);
-        end;
-    for i:= 0 to Pred(ControllerNumHats[j]) do
-        begin
-        tkbdn[k + 0]:= ControllerHats[j][i] and SDL_HAT_UP;
-        tkbdn[k + 1]:= ControllerHats[j][i] and SDL_HAT_RIGHT;
-        tkbdn[k + 2]:= ControllerHats[j][i] and SDL_HAT_DOWN;
-        tkbdn[k + 3]:= ControllerHats[j][i] and SDL_HAT_LEFT;
-        inc(k, 4);
-        end;
-    for i:= 0 to Pred(ControllerNumButtons[j]) do
-        begin
-        tkbdn[k]:= ControllerButtons[j][i];
-        inc(k, 1);
-        end;
-    end;
-$ENDIF *)
-
 end;
-
 
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 var
@@ -317,6 +279,11 @@ DefaultBinds[KeyNameToCode('left')]:= '+left';
 DefaultBinds[KeyNameToCode('right')]:= '+right';
 DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
 
+
+DefaultBinds[KeyNameToCode('j0a0u')]:= '+left';
+DefaultBinds[KeyNameToCode('j0a0d')]:= '+right';
+DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
+DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
 for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
 for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
 
@@ -352,7 +319,7 @@ procedure ControllerInit;
 var i, j: Integer;
 begin
 ControllerEnabled:= 0;
-{$IFDEF MOBILE}
+{$IFDEF IPHONE}
 exit; // joystick subsystem disabled on iPhone
 {$ENDIF}
 
@@ -416,21 +383,34 @@ else
 end;
 
 procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
+var
+    k: LongInt;
 begin
-    ControllerAxes[joy][axis]:= value;
+    SDL_GetKeyState(@k);
+    k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
+    ProcessKey(k +  axis*2, value > 20000);
+    ProcessKey(k + (axis*2)+1, value < -20000);
 end;
 
 procedure ControllerHatEvent(joy, hat, value: Byte);
+var
+    k: LongInt;
 begin
-    ControllerHats[joy][hat]:= value;
+    SDL_GetKeyState(@k);
+    k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 0, (value and SDL_HAT_UP)   <> 0);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 1, (value and SDL_HAT_RIGHT)<> 0);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 2, (value and SDL_HAT_DOWN) <> 0);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 3, (value and SDL_HAT_LEFT) <> 0);
 end;
 
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
+var
+    k: LongInt;
 begin
-    if pressed then
-        ControllerButtons[joy][button]:= 1
-    else
-        ControllerButtons[joy][button]:= 0;
+    SDL_GetKeyState(@k);
+    k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + button, pressed);
 end;
 
 procedure initModule;
