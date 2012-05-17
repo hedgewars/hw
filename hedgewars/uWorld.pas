@@ -1753,7 +1753,7 @@ end;
 
 procedure SetUtilityWidgetState(ammoType: TAmmoType);
 begin
-{$IFDEF TOUCH_INTERFACE}
+{$IFDEF USE_TOUCH_INTERFACE}
 if(ammoType = amNothing)then
     ammoType:= CurrentHedgehog^.CurAmmoType;
 
