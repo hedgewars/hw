@@ -2286,10 +2286,10 @@ var
                 NumPerTurn: 0;
                 Timer: 5001;
                 Pos: 0;
-                AmmoType: amFlamethrower;
+                AmmoType: amIceGun;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 2;
+            Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
