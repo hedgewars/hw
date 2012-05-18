@@ -5346,14 +5346,8 @@ if (Gear^.Pos = 4) then
             and ((HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.State and gstDrowning) = 0)
             and (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Health > HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then
                 inc(cnt);
-                
     if (cnt = 0) or SuddenDeathDmg or (Gear^.Timer = 0) then
         begin
-        Gear^.SoundChannel := LoopSound(sndTardis);
-        Gear^.Pos:= 1;
-        Gear^.Power:= 0;
-        Gear^.Timer:= 0;
-        
         if HH^.GearHidden <> nil then
             FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH,true);
             
@@ -5361,9 +5355,19 @@ if (Gear^.Pos = 4) then
             begin
             Gear^.X:= HH^.GearHidden^.X;
             Gear^.Y:= HH^.GearHidden^.Y;
-            //HH^.Gear:=HH^.GearHidden;
-            //HH^.GearHidden:= nil;
-            //HH^.Gear^.State:= HH^.Gear^.State or gstInvisible;
+            end;
+        Gear^.Timer:= 0;
+
+        if (HH^.GearHidden <> nil) and (cnt = 0) then // do an emergency jump back in this case. the team needs you!
+            begin
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplosion);
+            Gear^.Pos:= 2;
+            Gear^.Power:= 255;
+            end
+        else begin
+            Gear^.SoundChannel := LoopSound(sndTardis);
+            Gear^.Pos:= 1;
+            Gear^.Power:= 0;
             end
         end
     else dec(Gear^.Timer);
