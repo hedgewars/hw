@@ -45,7 +45,7 @@ local HogData =	{
 					{"sheepluva",		"zoo_Sheep",false},
 					{"Smaxx", 			"NoHat",false},
 					{"shadowzero", 		"NoHat",false},
-					{"Star and Moon",	"NoHat",false},
+					{"Star and Moon",	"SparkleSuperFun",false},
 					{"The 24",			"NoHat",false},
 					{"TLD",				"NoHat",false},
 					{"Tiyuri", 			"sf_ryu",false},
