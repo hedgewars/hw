@@ -202,7 +202,7 @@ if(ANDROID)
 	add_subdirectory(project_files/Android-build)
 endif()
 
-if(NOT BUILD_ENGINE_LIBRARY)
+if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID))
 	add_subdirectory(bin)
 	add_subdirectory(misc/quazip)
 	add_subdirectory(QTfrontend)
