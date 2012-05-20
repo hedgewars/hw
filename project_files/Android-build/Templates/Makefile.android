@@ -1,7 +1,7 @@
 SDL_ANDROID_DIR=${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project
 
 PPCROSSARM=${FPC_DIR}/ppcrossarm
-PPCROSSARM_FLAGS= -Xd -O2 -g -Tlinux -XParm-linux-androideabi- -B -vwnh
+PPCROSSARM_FLAGS= -Xd -O2 -g -Tlinux -XParm-linux-androideabi- -B -vwnh -n
 PPCROSSARM_INCLUDES= \
 	-FD${ANDROID_NDK_TOOLCHAINDIR}/bin \
 	-Fu${FPC_DIR}/../rtl/units/arm-linux \
@@ -22,9 +22,17 @@ build:
 
 	$(PPCROSSARM) $(LINKERFLAGS) $(PPCROSSARM_FLAGS) $(PPCROSSARM_INCLUDES) $(FPC_DEFINES) -o${CMAKE_CURRENT_SOURCE_DIR}/out/libhwengine.so ${CMAKE_CURRENT_SOURCE_DIR}/../../hedgewars/hwLibrary.pas
 	${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/out/libhwengine.so $(SDL_ANDROID_DIR)/libs/armeabi/
+
+debug: build
 	${ANT} clean -f $(SDL_ANDROID_DIR)/build.xml
 	${ANT} debug -f $(SDL_ANDROID_DIR)/build.xml
-install: build
+unsigned: build 
+	${ANT} clean -f $(SDL_ANDROID_DIR)/build.xml
+	${ANT} release -f $(SDL_ANDROID_DIR)/build.xml
+
+install/debug: debug
+	${ANT} installd -f $(SDL_ANDROID_DIR)/build.xml
+install/release: release
 	${ANT} installd -f $(SDL_ANDROID_DIR)/build.xml
        
 clean:  
