@@ -5490,7 +5490,14 @@ begin
             gY:= hwRound(Y);
             if Target.X = NoPointX then t:= hwRound(hwSqr(X-HHGear^.X)+hwSqr(Y-HHGear^.Y));
             if Target.X <> NoPointX then
+                begin
+                if (abs(gX-Target.X) < 2) and (abs(gY-Target.Y) < 2) then
+                    begin
+                    X:= HHGear^.X;
+                    Y:= HHGear^.Y
+                    end;
                 inc(Pos)
+                end
             else if (gY > cWaterLine) or
                     (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
                         and ((Land[gY, gX] and $FF00 and not lfIce <> 0) or

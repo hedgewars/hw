@@ -1198,9 +1198,9 @@ begin
                           if RealTicks mod 2 = 0 then
                                 begin
                                 i:= random(100)+100;
-                                DrawLine(hwRound(HHGear^.X), hwRound(HHGear^.Y), hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, i, i, $FF, $40);
                                 if Gear^.Target.X <> NoPointX then
-                                    DrawLine(Gear^.Target.X, Gear^.Target.Y, hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, i, i, $FF, $40);
+                                    DrawLine(Gear^.Target.X, Gear^.Target.Y, hwRound(HHGear^.X), hwRound(HHGear^.Y), 4.0, i, i, $FF, $40)
+                                else DrawLine(hwRound(HHGear^.X), hwRound(HHGear^.Y), hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, i, i, $FF, $40);
                                 end
                           end
                       end
