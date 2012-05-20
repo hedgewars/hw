@@ -33,7 +33,7 @@ uses uRandom, uUtils, uConsts, uVariables, uAmmos, uTeams, uStats,
     uTextures, uScript, uRenderUtils, uAI, uCollisions,
     uGearsRender, uGearsUtils;
 
-var GCounter: LongWord = 0; // this doesn't get re-initialized, but should be harmless
+var GCounter: LongWord = 0; // this does not get re-initialized, but should be harmless
 
 procedure InsertGearToList(Gear: PGear);
 var tmp, ptmp: PGear;
@@ -457,6 +457,7 @@ gtFlamethrower: begin
                 gear^.Tag:= TotalRounds + 3;
                 gear^.Pos:= 1;
                 end;
+      gtIceGun: gear^.Health:= 1000;
     end;
 
 InsertGearToList(gear);
