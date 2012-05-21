@@ -413,12 +413,19 @@ end;
 
 procedure chNextTurn(var s: shortstring);
 var checksum: Longword;
+    gi: PGear;
 begin
     s:= s; // avoid compiler hint
 
     TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
     checksum:= GameTicks;
+    gi := GearsList;
+    while gi <> nil do
+        begin
+        with gi^ do checksum:= checksum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
+        gi := gi^.NextGear
+        end;
 
     if not CurrentTeam^.ExtDriven then
         begin
