@@ -318,6 +318,7 @@ while (headcmd <> nil)
         'F': ParseCommand('teamgone ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'N': begin
             tmpflag:= false;
+            lastTurnChecksum:= SDLNet_Read32(@headcmd^.str[2]);
             AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime))
              end;
         'p': begin

@@ -2461,6 +2461,8 @@ var
 
     DefaultBinds : TBinds;
 
+    lastTurnChecksum : Longword;
+
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
     trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
