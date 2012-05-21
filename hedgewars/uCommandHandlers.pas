@@ -412,12 +412,23 @@ with CurrentHedgehog^.Gear^ do
 end;
 
 procedure chNextTurn(var s: shortstring);
+var checksum: Longword;
 begin
     s:= s; // avoid compiler hint
+
     TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
+    checksum:= GameTicks;
+
     if not CurrentTeam^.ExtDriven then
-        SendIPC(_S'N');
+        begin
+        s[0]:= #5;
+        s[1]:= 'N';
+        SDLNet_Write32(checksum, @s[2]);
+        SendIPC(s)
+        end
+    else
+        TryDo(checksum = lastTurnChecksum, 'Desync detected', true);
     AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
 end;
 
