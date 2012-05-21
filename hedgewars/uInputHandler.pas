@@ -192,7 +192,7 @@ KeyNames[5]:= 'wheeldown';
 for i:= 6 to cKeyMaxIndex do
     begin
     s:= shortstring(sdl_getkeyname(i));
-    //WriteToConsole(IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
+    //WriteLnToConsole(IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
     if s = 'unknown key' then KeyNames[i]:= ''
     else 
         begin
@@ -250,8 +250,8 @@ DefaultBinds[KeyNameToCode(_S't')]:= 'chat';
 DefaultBinds[KeyNameToCode(_S'y')]:= 'confirm';
 
 DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
-DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomout';
-DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomin';
+DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomin';
+DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomout';
 
 DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 
