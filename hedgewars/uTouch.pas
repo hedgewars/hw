@@ -271,7 +271,7 @@ if (buttonsDown > 0) and (widget <> nil) then
                 ParseTeamCommand('put');
                 targetted:= true;
                 end
-            else if CurAmmoGear^.AmmoType = amSwitch then
+            else if (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amSwitch) then
                 ParseTeamCommand('switch')
             else WriteLnToConsole(inttostr(ord(Ammoz[CurrentHedgehog^.CurAmmoType].NameId)) + ' ' + inttostr(ord(sidSwitch)));
     end;
