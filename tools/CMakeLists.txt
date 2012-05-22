@@ -32,11 +32,11 @@ if (APPLE)
 	string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
 
 	#this tool is present in qt 4.5 but only if you compile from sources; from qt 4.6 is present also in the binary version
-	find_program(macdeployqt_EXE NAMES macdeployqt macdeployqt-mac PATHS ${qt_base_dir}/bin)
-	if(NOT macdeployqt_EXE)
+	find_program(macdeployqt_executable NAMES macdeployqt macdeployqt-mac PATHS ${qt_base_dir}/bin)
+	if(NOT macdeployqt_executable)
 		message(FATAL_ERROR "The utility macdeployqt is required to create the bundle (seached: ${qt_base_dir})")
 	else()
-		message(STATUS "macdeployqt found in ${macdeployqt_EXE}")
+		message(STATUS "macdeployqt found in ${macdeployqt_executable}")
 	endif()
 
 	#dummy target, we're interested in the postscript file
