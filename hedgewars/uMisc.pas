@@ -37,7 +37,7 @@ function  SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect; inline;
 {$ENDIF}
 
 implementation
-uses typinfo, sysutils, uVariables, uUtils
+uses SysUtils, uVariables, uUtils
      {$IFDEF PNG_SCREENSHOTS}, PNGh, png {$ENDIF}
      {$IFNDEF USE_SDLTHREADS} {$IFDEF UNIX}, cthreads{$ENDIF} {$ENDIF};
 
@@ -48,6 +48,8 @@ type PScreenshot = ^TScreenshot;
          width, height: LongInt;
          size: QWord;
          end;
+
+var conversionFormat: PSDL_PixelFormat;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -242,11 +244,11 @@ begin
     doSurfaceConversion:= tmpsurf;
     if ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) or
        (tmpsurf^.format^.bitsperpixel = 24) then
-        begin
+    begin
         convertedSurf:= SDL_ConvertSurface(tmpsurf, conversionFormat, SDL_SWSURFACE);
         SDL_FreeSurface(tmpsurf);
         doSurfaceConversion:= convertedSurf;
-        end;
+    end;
 end;
 
 {$IFDEF SDL13}

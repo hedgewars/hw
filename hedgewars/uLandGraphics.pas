@@ -22,10 +22,10 @@ unit uLandGraphics;
 interface
 uses uFloat, uConsts, uTypes;
 
-type PRangeArray = ^TRangeArray;
-     TRangeArray = array[0..31] of record
+type TRangeArray = array[0..31] of record
                                    Left, Right: LongInt;
                                    end;
+     PRangeArray = ^TRangeArray;
 
 function  addBgColor(OldColor, NewColor: LongWord): LongWord;
 function  SweepDirty: boolean;

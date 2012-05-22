@@ -395,6 +395,7 @@ type
         end;
 
 
+    PSDL_Color = ^TSDL_Color;
     TSDL_Color = record
         case Byte of
             0: ( r: Byte;
@@ -403,7 +404,6 @@ type
                  unused: Byte; );
             1: ( value: LongWord; );
         end;
-    PSDL_Color = ^TSDL_Color;
 
 
     PSDL_RWops = ^TSDL_RWops;
@@ -734,10 +734,10 @@ type
 
     TSDL_EventFilter = function( event : PSDL_Event ): Integer; cdecl;
 
-    PByteArray = ^TByteArray;
     TByteArray = array[0..65535] of Byte;
-    PLongWordArray = ^TLongWordArray;
+    PByteArray = ^TByteArray;
     TLongWordArray = array[0..16383] of LongWord;
+    PLongWordArray = ^TLongWordArray;
 
     PSDL_Thread = Pointer;
     PSDL_mutex = Pointer;
@@ -969,7 +969,7 @@ function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
 {$ENDIF}
 
 {* Compatibility between SDL-1.2 and SDL-1.3 *}
-procedure SDL_WarpMouse(x, y: Word); {$IFNDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
+procedure SDL_WarpMouse(x, y: Word); {$IFDEF SDL13}inline{$ELSE}cdecl; external SDLLibName{$ENDIF};
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
 function  SDL_AllocFormat(format: LongWord): PSDL_PixelFormat; {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat); {$IFDEF SDL13}cdecl; external SDLLibName;{$ENDIF}
@@ -1055,12 +1055,12 @@ function  SDLNet_Read32(buf: Pointer): LongWord;
 
 implementation
 {$IFDEF SDL13}
-uses strings, uVariables;
+uses strings, uVariables, uStore;
 
 // compatible functions
-procedure SDL_WarpMouse(x, y: Word);
+procedure SDL_WarpMouse(x, y: Word); inline;
 begin
-    SDL_WarpMouseInWindow(SDLwindow, x, y);
+    WarpMouse(x, y);
 end;
 
 function SDL_VideoDriverName(namebuf: PChar; maxlen: LongInt): PChar;
@@ -1077,6 +1077,7 @@ end;
 
 function SDL_EnableUNICODE(enable: LongInt): LongInt;
 begin
+    enable:= enable; // avoid hint
     SDL_StartTextInput();
     SDL_EnableUNICODE:= 0;
 end;

@@ -29,7 +29,6 @@ unit uRandom;
  *)
 interface
 uses uFloat;
-{$INCLUDE "config.inc"}
 
 procedure initModule;
 procedure freeModule;

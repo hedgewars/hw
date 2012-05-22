@@ -61,6 +61,7 @@ uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList;
 
+var skipFlag: boolean;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
@@ -76,6 +77,7 @@ var delay: LongWord;
     stAfterDelay, stChWin, stWater, stChWin2, stHealth,
     stSpawn, stNTurn);
     upd: Longword;
+    //SDMusic: shortstring;
 
 // For better maintainability the step handlers of gears are stored in
 // separate files.
@@ -191,7 +193,7 @@ if (StepSoundTimer > 0) and (StepSoundChannel < 0) then
     StepSoundChannel:= LoopSound(sndSteps)
 else if (StepSoundTimer = 0) and (StepSoundChannel > -1) then
     begin
-    StopSound(StepSoundChannel);
+    StopSoundChan(StepSoundChannel);
     StepSoundChannel:= -1
     end;
 
@@ -313,8 +315,7 @@ case step of
                 AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                 playSound(sndSuddenDeath);
                 StopMusic //No SDMusic for now
-                    //MusicFN:= SDMusic;
-                    //ChangeMusic
+                    //ChangeMusic(SDMusic)
                     end
                 else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
                     begin
@@ -421,7 +422,7 @@ if TurnTimeLeft > 0 then
                 and (not PlacingHogs)
                 and (CurrentHedgehog^.Gear <> nil)
                 and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
-                    PlaySound(sndHurry, CurrentTeam^.voicepack);
+                    PlaySoundV(sndHurry, CurrentTeam^.voicepack);
             if ReadyTimeLeft > 0 then
                 begin
                 if (ReadyTimeLeft = 2000) and (LastVoice.snd = sndNone) then
@@ -445,7 +446,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
     begin
     if (not CurrentTeam^.ExtDriven) then
         begin
-        SendIPC('#');
+        SendIPC(_S'#');
         AddFileLog('hiTicks increment message sent')
         end;
 
@@ -1160,7 +1161,7 @@ procedure chSkip(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if not CurrentTeam^.ExtDriven then
-    SendIPC(',');
+    SendIPC(_S',');
 uStats.Skipped;
 skipFlag:= true
 end;
@@ -1326,6 +1327,8 @@ begin
     delay2:= 0;
     step:= stDelay;
     upd:= 0;
+
+    //SDMusic:= 'hell.ogg';
 end;
 
 procedure freeModule;

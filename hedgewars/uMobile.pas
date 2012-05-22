@@ -18,28 +18,34 @@
 
 {$INCLUDE "options.inc"}
 
+(*
+ * This unit contains a lot of useful functions when hw is running on mobile
+ * Unlike HwLibrary when you declare functions that you will call from your code,
+ * here you need to provide functions that Pascall code will call.
+ *)
+
 unit uMobile;
 interface
 
+function  isPhone: Boolean; inline;
+procedure performRumble; inline;
+
+procedure GameLoading; inline;
+procedure GameLoaded; inline;
+procedure SaveLoadingEnded; inline;
+
+implementation
+uses uVariables, uConsole;
+
+// add here any external call that you need
 {$IFDEF IPHONEOS}
 (*  iOS calls written in ObjcExports.m  *)
-procedure clearView; cdecl; external;
 procedure startLoadingIndicator; cdecl; external;
 procedure stopLoadingIndicator; cdecl; external;
 procedure saveFinishedSynching; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
 procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
-function  isPhone: Boolean; inline;
-procedure performRumble; inline;
-
-procedure GameLoading; inline;
-procedure GameLoaded; inline;
-procedure NewTurnBeginning; inline;
-procedure SaveLoadingEnded; inline;
-
-implementation
-uses uVariables, uConsole;
 
 // this function is just to determine whether we are running on a limited screen device
 function isPhone: Boolean; inline;
@@ -56,16 +62,16 @@ begin
 end;
 
 // this function should make the device vibrate in some way
-procedure performRumble; inline;
-const kSystemSoundID_Vibrate = $00000FFF;
+procedure PerformRumble; inline;
+{$IFDEF IPHONEOS}const kSystemSoundID_Vibrate = $00000FFF;{$ENDIF}
 begin
     // do not vibrate while synchronising a demo/save
     if not fastUntilLag then
-        begin
+    begin
 {$IFDEF IPHONEOS}
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 {$ENDIF}
-        end;
+    end;
 end;
 
 procedure GameLoading; inline;
@@ -79,13 +85,6 @@ procedure GameLoaded; inline;
 begin
 {$IFDEF IPHONEOS}
     stopLoadingIndicator();
-{$ENDIF}
-end;
-
-procedure NewTurnBeginning; inline;
-begin
-{$IFDEF IPHONEOS}
-    clearView();
 {$ENDIF}
 end;
 

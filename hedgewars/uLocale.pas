@@ -26,11 +26,15 @@ const MAX_EVENT_STRINGS = 100;
 
 procedure LoadLocale(FileName: shortstring);
 function  Format(fmt: shortstring; var arg: shortstring): shortstring;
-function  Format(fmt: ansistring; var arg: ansistring): ansistring;
+function  FormatA(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
+{$IFDEF HWLIBRARY}
+procedure LoadLocaleWrapper(str: pchar); cdecl; export;
+{$ENDIF}
+
 implementation
-uses uRandom, uUtils, uVariables, uDebug, uConsole;
+uses uRandom, uUtils, uVariables, uDebug;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
@@ -96,7 +100,6 @@ if loaded then
            end;
        end;
    Close(f);
-   {$IFNDEF HWLIBRARY}WriteLnToConsole('Locale loaded "' + FileName + '"');{$ENDIF}
    end;
 {$I+}
 end;
@@ -119,19 +122,21 @@ else
     Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
-function Format(fmt: ansistring; var arg: ansistring): ansistring;
+function FormatA(fmt: ansistring; var arg: ansistring): ansistring;
 var i: LongInt;
 begin
 i:= Pos('%1', fmt);
 if i = 0 then
-    Format:= fmt
+    FormatA:= fmt
 else
-    Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
+    FormatA:= copy(fmt, 1, i - 1) + arg + FormatA(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
+{$IFDEF HWLIBRARY}
 procedure LoadLocaleWrapper(str: pchar); cdecl; export;
 begin
     LoadLocale(Strpas(str));
 end;
+{$ENDIF}
 
 end.

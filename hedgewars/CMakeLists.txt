@@ -3,7 +3,6 @@ find_package(SDL_image)
 find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
-find_package(Lua)
 
 include(${CMAKE_MODULE_PATH}/FindSDL_Extras.cmake)
 
@@ -91,7 +90,11 @@ if(BUILD_ENGINE_LIBRARY)
     endif (APPLE)
 endif(BUILD_ENGINE_LIBRARY)
 
-find_program(fpc_executable fpc)
+IF(FPC)
+    set(fpc_executable ${FPC})
+ELSE()
+    find_program(fpc_executable fpc)
+ENDIF()
 
 if(fpc_executable)
     exec_program(${fpc_executable} ARGS "-iV" OUTPUT_VARIABLE fpc_output)
@@ -138,7 +141,7 @@ if(fpc_version)
         message(FATAL_ERROR "Minimum required version of FreePascal is 2.6.0 on Mac OS X")
     endif()
 else()
-    message(FATAL_ERROR "No Pascal compiler found!")
+    message(FATAL_ERROR "No FreePascal compiler found!")
 endif()
 
 
@@ -184,7 +187,7 @@ ELSE()
             COMMAND "${pascal_compiler}"
             ARGS ${pascal_compiler_flags} -ohwengine.${build_arch} -P${build_arch}
             MAIN_DEPENDENCY ${hwengine_project}
-            DEPENDS ${engine_sources} SDLmain lua
+            DEPENDS ${engine_sources} SDLmain
             )
         add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
     endforeach()
@@ -198,10 +201,19 @@ ENDIF()
 
 
 add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}")
-IF(NOT APPLE)
+
+#when system Lua is not found we need to compile it before engine
+if(NOT ${LUA_FOUND})
+    add_dependencies(${engine_output_name} lua)
+endif()
+
+#this command is a workaround to some inlining issues present in older
+# FreePascal versions and fixed in 2.6, That version is mandatory on OSX,
+# hence the command is not needed there
+if(NOT APPLE)
     add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
     add_dependencies(${engine_output_name} ENGINECLEAN)
-ENDIF()
+endif()
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
 

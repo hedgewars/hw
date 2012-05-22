@@ -25,8 +25,8 @@ uses SDLh, uTypes;
 procedure initModule;
 procedure freeModule;
 
+procedure InitIPC;
 procedure SendIPC(s: shortstring);
-procedure SendIPCc(c: char);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
@@ -35,8 +35,6 @@ procedure LoadRecordFromFile(fileName: shortstring);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
-procedure InitIPC;
-procedure CloseIPC;
 procedure NetGetNextCmd;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
@@ -57,6 +55,7 @@ type PCmd = ^TCmd;
 var IPCSock: PTCPSocket;
     fds: PSDLNet_SocketSet;
     isPonged: boolean;
+    SocketString: shortstring;
 
     headcmd: PCmd;
     lastcmd: PCmd;
@@ -112,19 +111,12 @@ begin
     WriteLnToConsole(msgOK)
 end;
 
-procedure CloseIPC;
-begin
-    SDLNet_FreeSocketSet(fds);
-    SDLNet_TCP_Close(IPCSock);
-    SDLNet_Quit();
-end;
-
 procedure ParseIPCCommand(s: shortstring);
 var loTicks: Word;
 begin
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
-     '?': SendIPCc('!');
+     '?': SendIPC(_S'!');
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
@@ -229,14 +221,6 @@ if IPCSock <> nil then
     end
 end;
 
-procedure SendIPCc(c: char);
-var s: shortstring;
-begin
-    s[0]:= #1;
-    s[1]:= c;
-    SendIPC(s);
-end;
-
 procedure SendIPCRaw(p: pointer; len: Longword);
 begin
 if IPCSock <> nil then
@@ -267,7 +251,7 @@ end;
 procedure SendIPCAndWaitReply(s: shortstring);
 begin
 SendIPC(s);
-SendIPCc('?');
+SendIPC(_S'?');
 IPCWaitPongEvent
 end;
 
@@ -275,7 +259,7 @@ procedure SendKeepAliveMessage(Lag: Longword);
 begin
 inc(SendEmptyPacketTicks, Lag);
 if (SendEmptyPacketTicks >= cSendEmptyPacketTime) then
-    SendIPCc('+')
+    SendIPC(_S'+')
 end;
 
 procedure NetGetNextCmd;
@@ -334,6 +318,7 @@ while (headcmd <> nil)
         'F': ParseCommand('teamgone ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'N': begin
             tmpflag:= false;
+            lastTurnChecksum:= SDLNet_Read32(@headcmd^.str[2]);
             AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime))
              end;
         'p': begin
@@ -443,7 +428,10 @@ end;
 
 procedure freeModule;
 begin
-while headcmd <> nil do RemoveCmd
+    while headcmd <> nil do RemoveCmd;
+    SDLNet_FreeSocketSet(fds);
+    SDLNet_TCP_Close(IPCSock);
+    SDLNet_Quit();
 end;
 
 end.

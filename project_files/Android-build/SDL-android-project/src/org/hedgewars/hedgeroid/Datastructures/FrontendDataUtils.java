@@ -32,6 +32,7 @@ import org.hedgewars.hedgeroid.Datastructures.Map.MapType;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import java.nio.ByteBuffer;
 
 public class FrontendDataUtils {
 
@@ -95,8 +96,11 @@ public class FrontendDataUtils {
 			Bitmap b = BitmapFactory.decodeFile(pathPrefix + s + ".png");//create a full path - decode to to a bitmap
 			int width = b.getWidth();
 			if(b.getHeight() > width){//some pictures contain more 'frames' underneath each other, if so we only use the first frame
-				Bitmap tmp = Bitmap.createBitmap(b, 0, 0, width, width);
-				b.recycle();
+                                Bitmap tmp = Bitmap.createBitmap(width, width, b.getConfig());
+                                int[] pixels = new int[width * width];
+                                b.getPixels(pixels, 0,width,0,0,width,width);
+				tmp.setPixels(pixels,0,width,0,0,width,width);
+                                b.recycle();
 				b = tmp;
 			}
 			map.put("img", b);

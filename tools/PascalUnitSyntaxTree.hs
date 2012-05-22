@@ -61,6 +61,7 @@ data Expression = Expression String
     | PostfixOp String Expression
     | BinOp String Expression Expression
     | StringLiteral String
+    | PCharLiteral String
     | CharCode String
     | HexCharCode String
     | NumberLiteral String
@@ -103,10 +104,9 @@ data BaseType = BTUnknown
     | BTInt
     | BTBool
     | BTFloat
-    | BTRecord [(String, BaseType)]
+    | BTRecord String [(String, BaseType)]
     | BTArray Range BaseType BaseType
-    | BTFunction BaseType
-    | BTFunctionReturn String BaseType
+    | BTFunction Int BaseType
     | BTPointerTo BaseType
     | BTUnresolved String
     | BTSet BaseType

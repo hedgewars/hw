@@ -10,6 +10,7 @@ import Text.Parsec.Combinator
 import Text.Parsec.String
 import Control.Monad
 import Data.Maybe
+import Data.Char
 
 import PascalBasics
 import PascalUnitSyntaxTree
@@ -355,7 +356,9 @@ expression = buildExpressionParser table term <?> "expression"
         , try $ natural pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
         , float pas >>= return . FloatLiteral . show
         , natural pas >>= return . NumberLiteral . show
-        , stringLiteral pas >>= return . StringLiteral
+        , try (string "_S" >> stringLiteral pas) >>= return . StringLiteral
+        , try (string "_P" >> stringLiteral pas) >>= return . PCharLiteral
+        , stringLiteral pas >>= return . strOrChar
         , try (string "#$") >> many hexDigit >>= \c -> comments >> return (HexCharCode c)
         , char '#' >> many digit >>= \c -> comments >> return (CharCode c)
         , char '$' >> many hexDigit >>=  \h -> comments >> return (HexNumber h)
@@ -380,16 +383,20 @@ expression = buildExpressionParser table term <?> "expression"
            , Infix (try (string ">=") >> return (BinOp ">=")) AssocNone
            , Infix (char '<' >> return (BinOp "<")) AssocNone
            , Infix (char '>' >> return (BinOp ">")) AssocNone
-           , Infix (char '=' >> return (BinOp "=")) AssocNone
+          ]
+        , [  Infix (try $ string "shl" >> return (BinOp "shl")) AssocNone
+           , Infix (try $ string "shr" >> return (BinOp "shr")) AssocNone
           ]
         , [  Infix (try $ string "and" >> return (BinOp "and")) AssocLeft
            , Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
           ]
-        , [  Infix (try $ string "shl" >> return (BinOp "shl")) AssocNone
-           , Infix (try $ string "shr" >> return (BinOp "shr")) AssocNone
+        , [
+             Infix (char '=' >> return (BinOp "=")) AssocNone
           ]
         ]
+    strOrChar [a] = CharCode . show . ord $ a
+    strOrChar a = StringLiteral a    
     
 phrasesBlock = do
     try $ string "begin"
@@ -563,14 +570,16 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         return (i ,e)
 
     table = [ 
-          [  Infix (char '*' >> return (InitBinOp "*")) AssocLeft
+          [
+             Prefix (char '-' >> return (InitPrefixOp "-"))
+          ]
+        , [  Infix (char '*' >> return (InitBinOp "*")) AssocLeft
            , Infix (char '/' >> return (InitBinOp "/")) AssocLeft
            , Infix (try (string "div") >> return (InitBinOp "div")) AssocLeft
            , Infix (try (string "mod") >> return (InitBinOp "mod")) AssocLeft
           ]
         , [  Infix (char '+' >> return (InitBinOp "+")) AssocLeft
            , Infix (char '-' >> return (InitBinOp "-")) AssocLeft
-           , Prefix (char '-' >> return (InitPrefixOp "-"))
           ]
         , [  Infix (try (string "<>") >> return (InitBinOp "<>")) AssocNone
            , Infix (try (string "<=") >> return (InitBinOp "<=")) AssocNone
@@ -611,4 +620,3 @@ systemUnit = do
     string "var"
     v <- varsDecl True
     return $ System (t ++ v)
-  

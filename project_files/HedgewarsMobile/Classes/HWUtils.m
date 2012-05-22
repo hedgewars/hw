@@ -157,6 +157,7 @@ static TGameStatus gameStatus = gsNone;
     return ((isReachable && !needsConnection) || nonWiFi) ? testResult : NO;
 }
 
+/*
 +(UIView *)mainSDLViewInstance {
     SDL_Window *window = HW_getSDLWindow();
     if (window == NULL) {
@@ -167,5 +168,6 @@ static TGameStatus gameStatus = gsNone;
     SDL_uikitview *view = data != NULL ? data->view : nil;
     return view;
 }
+*/
 
 @end

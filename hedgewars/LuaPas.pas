@@ -10,12 +10,13 @@ unit LuaPas;
  *)
 
 interface
-
+uses uConsts;
 {.$DEFINE LUA_GETHOOK}
-{$INCLUDE "config.inc"}
 
 type
+{$IFNDEF PAS2C}    
     size_t   = Cardinal;
+{$ENDIF}
     Psize_t  = ^size_t;
     PPointer = ^Pointer;
 

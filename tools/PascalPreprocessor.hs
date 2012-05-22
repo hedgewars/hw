@@ -15,7 +15,10 @@ comment = choice [
         , (try $ string "//") >> manyTill anyChar (try newline) >> return "\n"
         ]
 
-initDefines = Map.fromList [("FPC", ""), ("PAS2C", "")]
+initDefines = Map.fromList [
+    ("FPC", "")
+    , ("PAS2C", "")
+    ]
         
 preprocess :: String -> IO String
 preprocess fn = do
@@ -118,7 +121,7 @@ preprocess fn = do
         i <- identifier        
         d <- ((string ":=" >> return ())<|> spaces) >> many (noneOf "}")
         char '}'
-        updateState $ \(m, b) -> (if and b then Map.insert i d m else m, b)
+        updateState $ \(m, b) -> (if (and b) && (head i /= '_') then Map.insert i d m else m, b)
         return ""
     replace s = do
         (m, _) <- getState

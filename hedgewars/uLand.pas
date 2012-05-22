@@ -26,13 +26,14 @@ procedure initModule;
 procedure freeModule;
 procedure DrawBottomBorder;
 procedure GenMap;
-function  GenPreview: TPreview;
+procedure GenPreview(out Preview: TPreview);
 
 implementation
-uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, sysutils,
+uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
      uLandGenMaze, uLandOutline;
 
+var digest: shortstring;
 
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
@@ -473,7 +474,6 @@ var tmpsurf: PSDL_Surface;
     f: textfile;
     mapName: shortstring = '';
 begin
-isMap:= true;
 WriteLnToConsole('Loading land from file...');
 AddProgress;
 tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
@@ -553,7 +553,6 @@ begin
     hasBorder:= false;
 
     LoadThemeConfig;
-    isMap:= false;
 
     // is this not needed any more? lets hope setlength sets also 0s
     //if ((GameFlags and gfForts) <> 0) or (Pathz[ptMapCurrent] <> '') then
@@ -678,9 +677,8 @@ if GrayScale then
 UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
 end;
 
-function GenPreview: TPreview;
+procedure GenPreview(out Preview: TPreview);
 var x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
-    Preview: TPreview;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
@@ -709,8 +707,6 @@ begin
                     Preview[y, x]:= Preview[y, x] or ($80 shr bit);
             end;
         end;
-
-    GenPreview:= Preview
 end;
 
 

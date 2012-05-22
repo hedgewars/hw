@@ -120,8 +120,6 @@ if(APPLE)
 	set(pascal_compiler_flags_cmn "-Ff~/Library/Frameworks" ${pascal_compiler_flags_cmn})
 	#set deployment target
 	set(pascal_compiler_flags_cmn "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
-	#link with liblua.a (which requires readline)
-	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_compiler_flags_cmn})
 	#link with libsdlmain.a (when building an executable)
 	if(NOT BUILD_ENGINE_LIBRARY)
 		set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/libSDLmain.a" ${pascal_compiler_flags_cmn})
@@ -146,7 +144,7 @@ else()
 endif()
 
 
-#set default flags values for all the project
+#set default flags values for all projects
 set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
 set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
 set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")
@@ -154,7 +152,8 @@ set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
-set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_compiler_flags_cmn})
+separate_arguments(FPFLAGSINT UNIX_COMMAND ${FPFLAGS})
+set(pascal_compiler_flags_cmn ${FPFLAGSINT} "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_compiler_flags_cmn})
 set(haskell_compiler_flags_cmn "-O2" ${haskell_compiler_flags_cmn})
 
 if(Optz)
@@ -189,7 +188,13 @@ else(WITH_SERVER)
 	set(HAVE_NETSERVER false)
 endif(WITH_SERVER)
 
-add_subdirectory(misc/liblua)
+find_package(Lua)
+if(NOT ${LUA_FOUND})
+        message(STATUS "Lua library not found, building bundled dependency")
+	add_subdirectory(misc/liblua)
+	#link with liblua.a (which requires readline)
+	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_compiler_flags_cmn})
+endif()
 add_subdirectory(hedgewars)
 
 #run cmake -DBUILD_ANDROID_PORT=1 to enable this
@@ -197,7 +202,7 @@ if(ANDROID)
 	add_subdirectory(project_files/Android-build)
 endif()
 
-if(NOT BUILD_ENGINE_LIBRARY)
+if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID))
 	add_subdirectory(bin)
 	add_subdirectory(misc/quazip)
 	add_subdirectory(QTfrontend)

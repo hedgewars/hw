@@ -37,11 +37,8 @@ var
     cBits           : LongInt     = 32;
     ipcPort         : Word        = 0;
     cFullScreen     : boolean     = false;
-    isSoundEnabled  : boolean     = true;
-    isMusicEnabled  : boolean     = false;
     cLocaleFName    : shortstring = 'en.txt';
     cLocale         : shortstring = 'en';
-    cInitVolume     : LongInt     = 100;
     cTimerInterval  : LongInt     = 8;
     PathPrefix      : shortstring = './';
     UserPathPrefix  : shortstring = './';
@@ -53,27 +50,21 @@ var
     UserNick        : shortstring = '';
     recordFileName  : shortstring = '';
     cReadyDelay     : Longword    = 5000;
-    cLogfileBase    : shortstring = 'debug';
     cStereoMode     : TStereoMode = smNone;
     cOnlyStats      : boolean = False;
 //////////////////////////
     cMapName        : shortstring = '';
 
-    alsoShutdownFrontend: boolean = false;
-
     isCursorVisible : boolean;
-    isTerminated    : boolean;
     isInLag         : boolean;
     isPaused        : boolean;
-
-    isSEBackup      : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
-    isFirstFrame    : boolean;
 
     fastUntilLag    : boolean;
     autoCameraOn    : boolean;
 
+    GameTicks       : LongWord;
     GameState       : TGameState;
     GameType        : TGameType;
     InputMask       : LongWord;
@@ -108,22 +99,10 @@ var
     cWaterLine       : Word;
     cGearScrEdgesDist: LongInt;
 
-    GameTicks   : LongWord;
-
     // originally typed consts
-    CharArray: array[byte] of Char;
-    LastTint: Longword;
-    SocketString: shortstring;
-    VGCounter: Longword;
-    PrevX: LongInt;
-    timedelta: Longword;
-    StartTicks: Longword;
-    Counter: Longword;
-    StepTicks: LongWord;
     ExplosionBorderColor: LongWord;
     WaterOpacity: byte;
     SDWaterOpacity: byte;
-    prevGState: TGameState;
     GrayScale: Boolean;
 
     // originally from uConsts
@@ -134,7 +113,6 @@ var
     LAND_HEIGHT      : Word;
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
-    cMaxCaptions     : LongInt;
 
     cLeftScreenBorder     : LongInt;
     cRightScreenBorder    : LongInt;
@@ -153,7 +131,6 @@ var
     bBetweenTurns   : boolean;
     bWaterRising    : boolean;
 
-    //ShowCrosshair   : boolean;  This variable is inconvenient to set.  Easier to decide when rendering
     CrosshairX      : LongInt;
     CrosshairY      : LongInt;
     CursorMovementX : LongInt;
@@ -184,7 +161,6 @@ var
 
     WaterColorArray : array[0..3] of HwColor4f;
     SDWaterColorArray : array[0..3] of HwColor4f;
-    SDMusic         : shortstring;
     SDTint          : LongInt;
 
     CursorPoint     : TPoint;
@@ -196,12 +172,6 @@ var
 
     Theme           : shortstring;
     disableLandBack : boolean;
-    conversionFormat: PSDL_PixelFormat;
-
-{$IFDEF SDL13}
-    SDLwindow       : PSDL_Window;
-    SDLGLcontext    : PSDL_GLContext;
-{$ENDIF}
 
     WorldDx: LongInt;
     WorldDy: LongInt;
@@ -230,10 +200,9 @@ var
     firebutton, jumpWidget, AMWidget          : TOnScreenWidget;
     pauseButton, utilityWidget                : TOnScreenWidget;
 {$ENDIF}
-    AMAnimType      : LongInt;
 
 
-const
+var
     // these consts are here because they would cause circular dependencies in uConsts/uTypes
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
@@ -2287,7 +2256,6 @@ var
             Probability: 20;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEnd or
-                          ammoprop_NeedTarget or
                           ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 0;
@@ -2318,10 +2286,10 @@ var
                 NumPerTurn: 0;
                 Timer: 5001;
                 Pos: 0;
-                AmmoType: amFlamethrower;
+                AmmoType: amIceGun;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 2;
+            Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -2406,10 +2374,8 @@ var
     LandDirty: TDirtyTag;
     hasBorder: boolean;
     hasGirders: boolean;
-    isMap: boolean;
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
-    digest: shortstring;
     CurAmmoGear: PGear;
     lastGearByUID: PGear;
     GearsList: PGear;
@@ -2420,7 +2386,6 @@ var
     SuddenDeathDmg: Boolean;
     SpeechType: Longword;
     SpeechText: shortstring;
-    skipFlag: boolean;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
     StepSoundTimer: LongInt;
     StepSoundChannel: LongInt;
@@ -2436,7 +2401,6 @@ var
     LocalTeam: LongInt;  // last non-bot, non-extdriven clan first team
     LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index, updated to next upcoming hog for per-hog-ammo
     CurMinAngle, CurMaxAngle: Longword;
-    GameOver: boolean;
     NextClan: boolean;
 
     FollowGear: PGear;
@@ -2457,7 +2421,6 @@ var
     bAFRRight: Boolean;
 
 
-    SDLPrimSurface: PSDL_Surface;
     PauseTexture,
     SyncTexture,
     ConfirmTexture: PTexture;
@@ -2497,6 +2460,8 @@ var
     ControllerButtons: array[0..5] of array[0..19] of Byte;
 
     DefaultBinds : TBinds;
+
+    lastTurnChecksum : Longword;
 
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
@@ -2547,7 +2512,6 @@ begin
     SDWaterColorArray[1]:= SDWaterColorArray[0];
     SDWaterColorArray[3]:= SDWaterColorArray[2];
 
-    SDMusic:= 'hell.ogg';
     SDTint:= $80;
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
@@ -2608,14 +2572,11 @@ begin
     bBetweenTurns   := false;
     bWaterRising    := false;
     isCursorVisible := false;
-    isTerminated    := false;
     isInLag         := false;
     isPaused        := false;
     isInMultiShoot  := false;
     isSpeed         := false;
     fastUntilLag    := false;
-    isFirstFrame    := true;
-    isSEBackup      := true;
     autoCameraOn    := true;
     cScriptName     := '';
     cSeed           := '';
@@ -2628,20 +2589,10 @@ begin
 
     ScreenFade      := sfNone;
 
-{$IFDEF SDL13}
-    SDLwindow       := nil;
-    SDLGLcontext    := nil;
-{$ENDIF}
-
     // those values still are not perfect
     cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
     cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
     cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
-
-    if isPhone() then
-        cMaxCaptions:= 3
-    else
-        cMaxCaptions:= 4;
 
     vobFrameTicks:= 99999;
     vobFramesCount:= 4;
@@ -2655,14 +2606,9 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
-    PrevX:= 0;
-    timedelta:= 0;
-    Counter:= 0;
-    StepTicks:= 0;
     ExplosionBorderColor:= $FF808080;
     WaterOpacity:= $80;
     SDWaterOpacity:= $80;
-    prevGState:= gsConfirm;
     GrayScale:= false;
 
     LuaGoals:= '';
@@ -2676,10 +2622,7 @@ begin
     cBits           := 32;
     ipcPort         := 0;
     cFullScreen     := false;
-    isSoundEnabled  := true;
-    isMusicEnabled  := false;
     cLocaleFName    := 'en.txt';
-    cInitVolume     := 100;
     cTimerInterval  := 8;
     PathPrefix      := './';
     UserPathPrefix  := './';

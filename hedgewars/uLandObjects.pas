@@ -31,14 +31,14 @@ procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound, GLunit,
-     uTypes, uVariables, uUtils, uDebug, sysutils;
+     uTypes, uVariables, uUtils, uDebug, SysUtils;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
 
-type PRectArray = ^TRectsArray;
-     TRectsArray = array[0..MaxRects] of TSDL_Rect;
+type TRectsArray = array[0..MaxRects] of TSDL_Rect;
+     PRectArray = ^TRectsArray;
      TThemeObject = record
                      Surf: PSDL_Surface;
                      inland: TSDL_Rect;
@@ -551,7 +551,7 @@ while not eof(f) do
         SDWaterOpacity:= WaterOpacity
         end
     else if key = 'music' then
-        MusicFN:= Trim(s)
+        SetMusicName(Trim(s))
     else if key = 'clouds' then
         begin
         cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH;
@@ -803,17 +803,17 @@ begin
 end;
 
 procedure AddObjects();
-var i, int: Longword;
+var i, g: Longword;
 begin
 InitRects;
 if hasGirders then
     begin
-    int:= max(playWidth div 8, 256);
-    i:=leftX+int;
+    g:= max(playWidth div 8, 256);
+    i:= leftX + g;
     repeat
         AddGirder(i);
-        i:=i+int;
-    until (i>rightX-int);
+        i:=i + g;
+    until (i > rightX - g);
     end;
 if (GameFlags and gfDisableLandObjects) = 0 then
     AddThemeObjects(ThemeObjects);

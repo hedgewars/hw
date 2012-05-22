@@ -18,10 +18,6 @@
 
 
 #import "ObjcExports.h"
-#import "OverlayViewController.h"
-
-// the reference to the newMenu instance
-static OverlayViewController *overlay_instance;
 
 #pragma mark -
 #pragma mark functions called by pascal code
@@ -31,17 +27,17 @@ BOOL inline isApplePhone(void) {
 
 void startLoadingIndicator(void) {
     // this is the first ojbc function called by engine, so we have to initialize some variables here
-    overlay_instance = [[OverlayViewController alloc] initWithNibName:@"OverlayViewController" bundle:nil];
-    // in order to get rotation events we have to insert the view inside the first view of the second window
-    [[HWUtils mainSDLViewInstance] addSubview:overlay_instance.view];
 
     if ([HWUtils gameType] == gtSave) {
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 
+        /*
         overlay_instance.view.backgroundColor = [UIColor blackColor];
         overlay_instance.view.alpha = 0.75;
         overlay_instance.view.userInteractionEnabled = NO;
+        */
     }
+    /*
     CGPoint center = overlay_instance.view.center;
     CGPoint loaderCenter = ([HWUtils gameType] == gtSave) ? center : CGPointMake(center.x, center.y * 5/3);
 
@@ -55,13 +51,14 @@ void startLoadingIndicator(void) {
     [overlay_instance.loadingIndicator startAnimating];
     [overlay_instance.view addSubview:overlay_instance.loadingIndicator];
     [overlay_instance.loadingIndicator release];
+    */
 }
 
 void stopLoadingIndicator(void) {
-    HW_zoomSet(1.7);
+    //HW_zoomSet(1.7);
     if ([HWUtils gameType] != gtSave) {
-        [overlay_instance.loadingIndicator stopAnimating];
-        [overlay_instance.loadingIndicator removeFromSuperview];
+        //[overlay_instance.loadingIndicator stopAnimating];
+        //[overlay_instance.loadingIndicator removeFromSuperview];
         [HWUtils setGameStatus:gsInGame];
     }
     // mark the savefile as valid, eg it's been loaded correctly
@@ -70,6 +67,7 @@ void stopLoadingIndicator(void) {
 }
 
 void saveFinishedSynching(void) {
+    /*
     [UIView beginAnimations:@"fading from save synch" context:NULL];
     [UIView setAnimationDuration:1];
     overlay_instance.view.backgroundColor = [UIColor clearColor];
@@ -79,14 +77,12 @@ void saveFinishedSynching(void) {
 
     [overlay_instance.loadingIndicator stopAnimating];
     [overlay_instance.loadingIndicator performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+    */
 
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [HWUtils setGameStatus:gsInGame];
 }
 
-void clearView(void) {
-    [overlay_instance clearOverlay];
-}
 
 // dummy function to prevent linkage fail
 int SDL_main(int argc, char **argv) {

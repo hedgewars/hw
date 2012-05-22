@@ -78,6 +78,8 @@ var cWaveWidth, cWaveHeight: LongInt;
     missionTex: PTexture;
     missionTimer: LongInt;
     stereoDepth: GLfloat;
+    isFirstFrame: boolean;
+    AMAnimType: LongInt;
 
 const cStereo_Sky           = 0.0500;
       cStereo_Horizon       = 0.0250;
@@ -94,7 +96,7 @@ begin
     if (GameFlags and gf) <> 0 then
         begin
         t:= inttostr(i);
-        s:= s + format(trgoal[si], t) + '|'
+        s:= s + FormatA(trgoal[si], t) + '|'
         end;
     AddGoal:= s;
 end;
@@ -382,7 +384,7 @@ var x, y, i, t, SlotsNumY, SlotsNumX, AMFrame: LongInt;
     STurns: LongInt;
     amSurface: PSDL_Surface;
     AMRect: TSDL_Rect;
-    tmpsurf: PSDL_Surface;
+{$IFDEF USE_AM_NUMCOLUMN}tmpsurf: PSDL_Surface;{$ENDIF}
 begin
     SlotsNum:= 0;
     for i:= 0 to cMaxSlotIndex do
@@ -1751,7 +1753,7 @@ end;
 
 procedure SetUtilityWidgetState(ammoType: TAmmoType);
 begin
-{$IFDEF TOUCH_INTERFACE}
+{$IFDEF USE_TOUCH_INTERFACE}
 if(ammoType = amNothing)then
     ammoType:= CurrentHedgehog^.CurAmmoType;
 
@@ -1802,37 +1804,38 @@ end;
 
 procedure initModule;
 begin
-fpsTexture:= nil;
-FollowGear:= nil;
-WindBarWidth:= 0;
-bShowAmmoMenu:= false;
-bSelected:= false;
-bShowFinger:= false;
-Frames:= 0;
-WorldDx:= -512;
-WorldDy:= -256;
+    fpsTexture:= nil;
+    FollowGear:= nil;
+    WindBarWidth:= 0;
+    bShowAmmoMenu:= false;
+    bSelected:= false;
+    bShowFinger:= false;
+    Frames:= 0;
+    WorldDx:= -512;
+    WorldDy:= -256;
 
-FPS:= 0;
-CountTicks:= 0;
-SoundTimerTicks:= 0;
-prevPoint.X:= 0;
-prevPoint.Y:= 0;
-missionTimer:= 0;
-missionTex:= nil;
-cOffsetY:= 0;
-stereoDepth:= 0;
-AMState:= AMHidden;
+    FPS:= 0;
+    CountTicks:= 0;
+    SoundTimerTicks:= 0;
+    prevPoint.X:= 0;
+    prevPoint.Y:= 0;
+    missionTimer:= 0;
+    missionTex:= nil;
+    cOffsetY:= 0;
+    stereoDepth:= 0;
+    AMState:= AMHidden;
+    isFirstFrame:= true;
 end;
 
 procedure freeModule;
 begin
-stereoDepth:= stereoDepth; // avoid hint
-FreeTexture(fpsTexture);
-fpsTexture:= nil;
-FreeTexture(timeTexture);
-timeTexture:= nil;
-FreeTexture(missionTex);
-missionTex:= nil
+    stereoDepth:= stereoDepth; // avoid hint
+    FreeTexture(fpsTexture);
+    fpsTexture:= nil;
+    FreeTexture(timeTexture);
+    timeTexture:= nil;
+    FreeTexture(missionTex);
+    missionTex:= nil
 end;
 
 end.

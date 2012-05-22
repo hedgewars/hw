@@ -20,7 +20,7 @@
 
 unit uGearsUtils;
 interface
-uses uTypes, math;
+uses uTypes;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord); 
@@ -46,7 +46,7 @@ implementation
 uses uFloat, uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
     uVariables, uLandGraphics, uScript, uStats, uCaptions, uTeams, uStore,
     uLocale, uTextures, uRenderUtils, uRandom, SDLh, uDebug, uGears,
-    uGearsList;
+    uGearsList, Math;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
 begin
@@ -261,21 +261,21 @@ procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
 begin
 if (Source = dsFall) or (Source = dsExplosion) then
     case random(3) of
-        0: PlaySound(sndOoff1, Hedgehog^.Team^.voicepack);
-        1: PlaySound(sndOoff2, Hedgehog^.Team^.voicepack);
-        2: PlaySound(sndOoff3, Hedgehog^.Team^.voicepack);
+        0: PlaySoundV(sndOoff1, Hedgehog^.Team^.voicepack);
+        1: PlaySoundV(sndOoff2, Hedgehog^.Team^.voicepack);
+        2: PlaySoundV(sndOoff3, Hedgehog^.Team^.voicepack);
     end
 else if (Source = dsPoison) then
     case random(2) of
-        0: PlaySound(sndPoisonCough, Hedgehog^.Team^.voicepack);
-        1: PlaySound(sndPoisonMoan, Hedgehog^.Team^.voicepack);
+        0: PlaySoundV(sndPoisonCough, Hedgehog^.Team^.voicepack);
+        1: PlaySoundV(sndPoisonMoan, Hedgehog^.Team^.voicepack);
     end
 else
     case random(4) of
-        0: PlaySound(sndOw1, Hedgehog^.Team^.voicepack);
-        1: PlaySound(sndOw2, Hedgehog^.Team^.voicepack);
-        2: PlaySound(sndOw3, Hedgehog^.Team^.voicepack);
-        3: PlaySound(sndOw4, Hedgehog^.Team^.voicepack);
+        0: PlaySoundV(sndOw1, Hedgehog^.Team^.voicepack);
+        1: PlaySoundV(sndOw2, Hedgehog^.Team^.voicepack);
+        2: PlaySoundV(sndOw3, Hedgehog^.Team^.voicepack);
+        3: PlaySoundV(sndOw4, Hedgehog^.Team^.voicepack);
     end
 end;
 
@@ -443,6 +443,8 @@ end;
 
 procedure ResurrectHedgehog(gear: PGear);
 var tempTeam : PTeam;
+    sparkles: PVisualGear;
+    gX, gY: LongInt;
 begin
     AttackBar:= 0;
     gear^.dX := _0;
@@ -459,9 +461,19 @@ begin
             end;
     tempTeam := gear^.Hedgehog^.Team;
     DeleteCI(gear);
+    gX := hwRound(gear^.X);
+    gY := hwRound(gear^.Y);
+    // might need more sparkles for a column
+    sparkles:= AddVisualGear(gX, gY, vgtDust, 1);
+    if sparkles <> nil then
+        begin
+        sparkles^.Tint:= tempTeam^.Clan^.Color shl 8 or $FF;
+        //sparkles^.Angle:= random(360);
+        end;
     FindPlace(gear, false, 0, LAND_WIDTH, true); 
     if gear <> nil then
         begin
+        AddVisualGear(hwRound(gear^.X), hwRound(gear^.Y), vgtExplosion);
         RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;

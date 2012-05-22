@@ -26,7 +26,6 @@ procedure initModule;
 procedure freeModule;
 
 function  KeyNameToCode(name: shortstring): word;
-procedure ProcessKbd;
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
@@ -39,7 +38,6 @@ procedure SetBinds(var binds: TBinds);
 procedure SetDefaultBinds;
 
 procedure ControllerInit;
-procedure ControllerClose;
 procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
@@ -60,54 +58,6 @@ begin
     while (code > 0) and (KeyNames[code] <> name) do dec(code);
     KeyNameToCode:= code;
 end;
-
-procedure ProcessKbd;
-//var  i, j, k: LongInt;
-begin
-
-// move cursor/camera
-// TODO: Scale on screen dimensions and/or axis value (game controller)?
-//TODO what is this for?
-movecursor(5 * CursorMovementX, 5 * CursorMovementY);
-
-
-(* 
-TODO reimplement
-$IFNDEF MOBILE
-// Controller(s)
-k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
-for j:= 0 to Pred(ControllerNumControllers) do
-    begin
-    for i:= 0 to Pred(ControllerNumAxes[j]) do
-        begin
-        if ControllerAxes[j][i] > 20000 then
-            tkbdn[k + 0]:= 1
-        else
-            tkbdn[k + 0]:= 0;
-        if ControllerAxes[j][i] < -20000 then
-            tkbdn[k + 1]:= 1
-        else
-            tkbdn[k + 1]:= 0;
-        inc(k, 2);
-        end;
-    for i:= 0 to Pred(ControllerNumHats[j]) do
-        begin
-        tkbdn[k + 0]:= ControllerHats[j][i] and SDL_HAT_UP;
-        tkbdn[k + 1]:= ControllerHats[j][i] and SDL_HAT_RIGHT;
-        tkbdn[k + 2]:= ControllerHats[j][i] and SDL_HAT_DOWN;
-        tkbdn[k + 3]:= ControllerHats[j][i] and SDL_HAT_LEFT;
-        inc(k, 4);
-        end;
-    for i:= 0 to Pred(ControllerNumButtons[j]) do
-        begin
-        tkbdn[k]:= ControllerButtons[j][i];
-        inc(k, 1);
-        end;
-    end;
-$ENDIF *)
-
-end;
-
 
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 var
@@ -176,12 +126,12 @@ case event.button of
 end;
 
 procedure ResetKbd;
-var j, k, t: LongInt;
+var j, t: LongInt;
     i: LongInt;
     pkbd: PByteArray;
 begin
 
-k:= SDL_GetMouseState(nil, nil);
+//k:= SDL_GetMouseState(nil, nil);
 pkbd:=SDL_GetKeyState(@j);
 
 //TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + IntToStr(j) + ')', true);
@@ -189,7 +139,8 @@ pkbd:=SDL_GetKeyState(@j);
 for i:= 1 to pred(j) do
     tkbdn[i]:= pkbd^[i];
 
-{$IFNDEF MOBILE}
+(*
+// TODO: reimplement
 // Controller(s)
 k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
@@ -220,7 +171,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
         inc(k, 1);
         end;
     end;
-{$ENDIF}
+*)
 
 // what is this final loop for?
 for t:= 0 to cKeyMaxIndex do
@@ -240,12 +191,8 @@ KeyNames[5]:= 'wheeldown';
 
 for i:= 6 to cKeyMaxIndex do
     begin
-{$IFDEF SDL13}
-    s:= shortstring(SDL_GetScancodeName(i));
-{$ELSE}
     s:= shortstring(sdl_getkeyname(i));
-{$ENDIF}
-    WriteToConsole(IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
+    //WriteLnToConsole(IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
     if s = 'unknown key' then KeyNames[i]:= ''
     else 
         begin
@@ -256,7 +203,7 @@ for i:= 6 to cKeyMaxIndex do
         end;
     end;
 
-quitKeyCode:= KeyNameToCode('q');
+quitKeyCode:= KeyNameToCode(_S'q');
 
 // get the size of keyboard array
 SDL_GetKeyState(@k);
@@ -293,18 +240,18 @@ DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
 //DefaultBinds[265]:= '+volup';
 //DefaultBinds[256]:= '+voldown';
 
-DefaultBinds[KeyNameToCode('0')]:= '+volup';
-DefaultBinds[KeyNameToCode('9')]:= '+voldown';
-DefaultBinds[KeyNameToCode('c')]:= 'capture';
-DefaultBinds[KeyNameToCode('h')]:= 'findhh';
-DefaultBinds[KeyNameToCode('p')]:= 'pause';
-DefaultBinds[KeyNameToCode('s')]:= '+speedup';
-DefaultBinds[KeyNameToCode('t')]:= 'chat';
-DefaultBinds[KeyNameToCode('y')]:= 'confirm';
+DefaultBinds[KeyNameToCode(_S'0')]:= '+volup';
+DefaultBinds[KeyNameToCode(_S'9')]:= '+voldown';
+DefaultBinds[KeyNameToCode(_S'c')]:= 'capture';
+DefaultBinds[KeyNameToCode(_S'h')]:= 'findhh';
+DefaultBinds[KeyNameToCode(_S'p')]:= 'pause';
+DefaultBinds[KeyNameToCode(_S's')]:= '+speedup';
+DefaultBinds[KeyNameToCode(_S't')]:= 'chat';
+DefaultBinds[KeyNameToCode(_S'y')]:= 'confirm';
 
 DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
-DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomout';
-DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomin';
+DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomin';
+DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomout';
 
 DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 
@@ -321,6 +268,11 @@ DefaultBinds[KeyNameToCode('left')]:= '+left';
 DefaultBinds[KeyNameToCode('right')]:= '+right';
 DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
 
+
+DefaultBinds[KeyNameToCode('j0a0u')]:= '+left';
+DefaultBinds[KeyNameToCode('j0a0d')]:= '+right';
+DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
+DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
 for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
 for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
 
@@ -356,7 +308,7 @@ procedure ControllerInit;
 var i, j: Integer;
 begin
 ControllerEnabled:= 0;
-{$IFDEF MOBILE}
+{$IFDEF IPHONE}
 exit; // joystick subsystem disabled on iPhone
 {$ENDIF}
 
@@ -419,30 +371,35 @@ else
     WriteLnToConsole('Not using any game controller');
 end;
 
-procedure ControllerClose;
-var j: Integer;
-begin
-    if ControllerEnabled > 0 then
-        for j:= 0 to pred(ControllerNumControllers) do
-            SDL_JoystickClose(Controller[j]);
-end;
-
 procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
+var
+    k: LongInt;
 begin
-    ControllerAxes[joy][axis]:= value;
+    SDL_GetKeyState(@k);
+    k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
+    ProcessKey(k +  axis*2, value > 20000);
+    ProcessKey(k + (axis*2)+1, value < -20000);
 end;
 
 procedure ControllerHatEvent(joy, hat, value: Byte);
+var
+    k: LongInt;
 begin
-    ControllerHats[joy][hat]:= value;
+    SDL_GetKeyState(@k);
+    k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 0, (value and SDL_HAT_UP)   <> 0);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 1, (value and SDL_HAT_RIGHT)<> 0);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 2, (value and SDL_HAT_DOWN) <> 0);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + hat*4 + 3, (value and SDL_HAT_LEFT) <> 0);
 end;
 
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
+var
+    k: LongInt;
 begin
-    if pressed then
-        ControllerButtons[joy][button]:= 1
-    else
-        ControllerButtons[joy][button]:= 0;
+    SDL_GetKeyState(@k);
+    k:= k + joy * (ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + ControllerNumButtons[joy]*2);
+    ProcessKey(k +  ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + button, pressed);
 end;
 
 procedure initModule;
@@ -452,8 +409,12 @@ begin
 end;
 
 procedure freeModule;
+var j: LongInt;
 begin
-
+    // close gamepad controllers
+    if ControllerEnabled > 0 then
+        for j:= 0 to pred(ControllerNumControllers) do
+            SDL_JoystickClose(Controller[j]);
 end;
 
 end.
