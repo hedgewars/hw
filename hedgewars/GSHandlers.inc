@@ -4285,6 +4285,8 @@ begin
             resetdy:=hwAbs(iterator^.dX*4);
             resetdy:= resetdy + hwPow(resetdy,3)/_6 + _3 * hwPow(resetdy,5) / _40 + _5 * hwPow(resetdy,7) / resety + resetx * hwPow(resetdy,9) / resetdx;
             iterator^.Angle:= hwRound(resetdy*_2048 / _PI);
+            if not iterator^.dY.isNegative then iterator^.Angle:= 2048-iterator^.Angle;
+            if iterator^.dX.isNegative then iterator^.Angle:= 4096-iterator^.Angle;
             end
         // VISUAL USE OF ANGLE ONLY
         else if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtKamikaze) and (CurAmmoGear^.Hedgehog = iterator^.Hedgehog) then
@@ -5346,14 +5348,8 @@ if (Gear^.Pos = 4) then
             and ((HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.State and gstDrowning) = 0)
             and (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Health > HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then
                 inc(cnt);
-                
     if (cnt = 0) or SuddenDeathDmg or (Gear^.Timer = 0) then
         begin
-        Gear^.SoundChannel := LoopSound(sndTardis);
-        Gear^.Pos:= 1;
-        Gear^.Power:= 0;
-        Gear^.Timer:= 0;
-        
         if HH^.GearHidden <> nil then
             FindPlace(HH^.GearHidden, false, 0, LAND_WIDTH,true);
             
@@ -5361,9 +5357,19 @@ if (Gear^.Pos = 4) then
             begin
             Gear^.X:= HH^.GearHidden^.X;
             Gear^.Y:= HH^.GearHidden^.Y;
-            //HH^.Gear:=HH^.GearHidden;
-            //HH^.GearHidden:= nil;
-            //HH^.Gear^.State:= HH^.Gear^.State or gstInvisible;
+            end;
+        Gear^.Timer:= 0;
+
+        if (HH^.GearHidden <> nil) and (cnt = 0) then // do an emergency jump back in this case. the team needs you!
+            begin
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplosion);
+            Gear^.Pos:= 2;
+            Gear^.Power:= 255;
+            end
+        else begin
+            Gear^.SoundChannel := LoopSound(sndTardis);
+            Gear^.Pos:= 1;
+            Gear^.Power:= 0;
             end
         end
     else dec(Gear^.Timer);
@@ -5433,16 +5439,36 @@ procedure doStepIceGun(Gear: PGear);
 var 
     HHGear, iter: PGear;
     ndX, ndY: hwFloat;
-    gX, gY: LongInt;
+    t, gX, gY: LongInt;
 begin
+    HHGear := Gear^.Hedgehog^.Gear;
+    if (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
+        begin
+        DeleteGear(Gear);
+        AfterAttack;
+        exit
+        end
+    else
+        begin
+        t:= Gear^.Health div 10;
+        if (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+            begin
+            Gear^.Damage:= t;
+            FreeTexture(Gear^.Tex);
+            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(t) +
+                         '%', cWhiteColor, fntSmall)
+            end
+        end;
+    if GameTicks mod 10 = 0 then dec(Gear^.Health);
     with Gear^ do
         begin
-        HHGear := Hedgehog^.Gear;
         HedgehogChAngle(HHGear);
-        ndX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX);
-        ndY:= -AngleCos(HHGear^.Angle);
+        ndX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _4;
+        ndY:= -AngleCos(HHGear^.Angle) * _4;
         if (ndX <> dX) or (ndY <> dY) then
             begin
+            dX:= ndX;
+            dY:= ndY;
             Pos:= 0;
             Target.X:= NoPointX;
             LastDamage:= nil;
@@ -5455,28 +5481,53 @@ begin
                 if (iter^.Kind = gtHedgehog) and 
                    (iter^.Hedgehog^.Effects[heFrozen] < 0) then 
                     iter^.Hedgehog^.Effects[heFrozen]:= 0;
-                iter:= iter^.NextGear;
-                end;
+                iter:= iter^.NextGear
+                end
             end
         else
             begin
-            gX:= hwRound(X);
-            gY:= hwRound(Y);
             X:= X + dX;
             Y:= Y + dY;
+            gX:= hwRound(X);
+            gY:= hwRound(Y);
+            if Target.X = NoPointX then t:= hwRound(hwSqr(X-HHGear^.X)+hwSqr(Y-HHGear^.Y));
             if Target.X <> NoPointX then
+                begin
+                if (abs(gX-Target.X) < 2) and (abs(gY-Target.Y) < 2) then
+                    begin
+                    X:= HHGear^.X;
+                    Y:= HHGear^.Y
+                    end;
                 inc(Pos)
-            else if (gY > cWaterLine) or 
+                end
+            else if (gY > cWaterLine) or
                     (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
                         and ((Land[gY, gX] and $FF00 and not lfIce <> 0) or
-                             (Land[gY, gX] and $00FF <> 0))) then
+                             ((Land[gY, gX] and $00FF <> 0) and (t > 400)))) then
                 begin
                 Target.X:= gX;
                 Target.Y:= gY;
-                if Land[gY, gX] and $00FF <> 0 then // locate and tag hogs
+                if (gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0) then
                     begin
-                //GearsNear(X, Y, gtHedgehog, Radius);
+                    LandPixels[gY, gX]:= $FFFFFFFF; // just testing
+                    UpdateLandTexture(gX, 1, gY, 1);
+                    if Land[gY, gX] and $00FF <> 0 then // locate and tag hogs
+                        begin
+                    //GearsNear(X, Y, gtHedgehog, Radius);
+                        end
                     end;
+                X:= HHGear^.X;
+                Y:= HHGear^.Y
+                end;
+            if (gX > LAND_WIDTH*2) or
+                    (gX < -LAND_WIDTH) or
+                    (gY < -LAND_HEIGHT) or
+                    (gY > LAND_HEIGHT+512) or
+                    (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
+                     and (Land[gy, gX] > $FF)) then
+                begin
+                X:= HHGear^.X;
+                Y:= HHGear^.Y
                 end
         end
     end;

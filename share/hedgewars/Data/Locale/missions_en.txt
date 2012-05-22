@@ -36,3 +36,12 @@ User_Mission_-_That_Sinking_Feeling.desc="The water is rising rapidly and time i
 
 User_Mission_-_Newton_and_the_Hammock.name=Mission: Newton and the Hammock
 User_Mission_-_Newton_and_the_Hammock.desc="Remember hoglets: The velocity of a body remains constant unless the body is acted upon by an external force!"
+
+User_Mission_-_The_Great_Escape.name=Mission: The Great Escape
+User_Mission_-_The_Great_Escape.desc="You think you can cage me!?"
+
+User_Mission_-_Rope_Knock_Challenge.name=Challenge: Rope Knocking
+User_Mission_-_Rope_Knock_Challenge.desc="Look behind you!"
+
+User_Mission_-_RCPlane_Challenge.name=Challenge: RC Plane
+User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"

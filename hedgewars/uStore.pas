@@ -1048,8 +1048,10 @@ begin
         //uTextures.freeModule; //DEBUG ONLY
     {$ENDIF}
         AddFileLog('Freeing old primary surface...');
+    {$IFNDEF SDL13}        
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
+    {$ENDIF}
 {$ENDIF}
         end;
 
@@ -1125,7 +1127,7 @@ var ai: TAmmoType;
 begin
     RegisterVariable('fullscr', @chFullScr, true);
 
-    cScaleFactor:= 2.0;
+    cScaleFactor:= 0;
     Step:= 0;
     ProgrTex:= nil;
     SupportNPOTT:= false;
