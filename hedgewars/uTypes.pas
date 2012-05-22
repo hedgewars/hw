@@ -199,6 +199,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             X, Y: GLint;
             end;
 
+    TMatrix4x4f = array[0..3, 0..3] of GLfloat;
+
     PAtlas = ^TAtlas;
     PTexture = ^TTexture;
 
