@@ -21,7 +21,7 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
+uses SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -41,13 +41,22 @@ procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
 procedure MakeCrossHairs;
 
+procedure WarpMouse(x, y: Word); inline;
+procedure SwapBuffers; inline;
+
 implementation
-uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands, uDebug, uWorld;
+uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
+     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var MaxTextureSize: LongInt;
-//    cGPUVendor: TGPUVendor;
+{$IFDEF SDL13}
+    SDLwindow: PSDL_Window;
+    SDLGLcontext: PSDL_GLContext;
+{$ELSE}
+    SDLPrimSurface: PSDL_Surface;
+{$ENDIF}
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;
@@ -791,11 +800,7 @@ begin
 
     DrawTextureFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 
-{$IFDEF SDL13}
-    SDL_GL_SwapWindow(SDLwindow);
-{$ELSE}
-    SDL_GL_SwapBuffers();
-{$ENDIF}
+    SwapBuffers;
     inc(Step);
 end;
 
@@ -1044,8 +1049,10 @@ begin
         //uTextures.freeModule; //DEBUG ONLY
     {$ENDIF}
         AddFileLog('Freeing old primary surface...');
+    {$IFNDEF SDL13}        
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
+    {$ENDIF}
 {$ENDIF}
         end;
 
@@ -1121,13 +1128,10 @@ var ai: TAmmoType;
 begin
     RegisterVariable('fullscr', @chFullScr, true);
 
-    SDLPrimSurface:= nil;
-
-    cScaleFactor:= 2.0;
+    cScaleFactor:= 0;
     Step:= 0;
     ProgrTex:= nil;
     SupportNPOTT:= false;
-//    cGPUVendor:= gvUnknown;
 
     // init all ammo name texture pointers
     for ai:= Low(TAmmoType) to High(TAmmoType) do
@@ -1137,10 +1141,41 @@ begin
     // init all count texture pointers
     for i:= Low(CountTexz) to High(CountTexz) do
         CountTexz[i] := nil;
+{$IFDEF SDL13}
+    SDLwindow:= nil;
+    SDLGLcontext:= nil;
+{$ELSE}
+    SDLPrimSurface:= nil;
+{$ENDIF}
 end;
 
 procedure freeModule;
 begin
+    StoreRelease(false);
+    TTF_Quit();
+{$IFDEF SDL13}
+    SDL_GL_DeleteContext(SDLGLcontext);
+    SDL_DestroyWindow(SDLwindow);
+{$ENDIF}
+    SDL_Quit();
+end;
+
+procedure WarpMouse(x, y: Word); inline;
+begin
+{$IFDEF SDL13}
+    SDL_WarpMouseInWindow(SDLwindow, x, y);
+{$ELSE}
+    x:= x; y:= y; // avoid hints
+{$ENDIF}
+end;
+
+procedure SwapBuffers; inline;
+begin
+{$IFDEF SDL13}
+    SDL_GL_SwapWindow(SDLwindow);
+{$ELSE}
+    SDL_GL_SwapBuffers();
+{$ENDIF}
 end;
 
 end.

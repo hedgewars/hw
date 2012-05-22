@@ -16,17 +16,72 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-Library hwLibrary;
 {$INCLUDE "options.inc"}
 
-// Add all your Pascal units to the 'uses' clause below to add them to the program.
-// Mark all Pascal procedures/functions that you wish to call from C/C++/Objective-C code using
-// 'cdecl; export;' (see the fpclogo.pas unit for an example), and then add C-declarations for
-// these procedures/functions to the PascalImports.h file (also in the 'Pascal Sources' group)
-// to make these functions available in the C/C++/Objective-C source files
-// (add '#include PascalImports.h' near the top of these files if it is not there yet)
-uses PascalExports, hwengine{$IFDEF ANDROID}, jni{$ENDIF};
-exports Game, HW_versionInfo;
+(*
+ * When engine is compiled as library this unit will export functions
+ * as C declarations for convenient library usage in your application
+ * and language of choice.
+ *
+ * See also: C declarations on Wikipedia
+ *           http://en.wikipedia.org/wiki/X86_calling_conventions#cdecl
+ *)
+
+Library hwLibrary;
+
+uses hwengine, uTypes, uConsts, uVariables, uSound, uCommands, uUtils,
+     uLocale{$IFDEF ANDROID}, jni{$ENDIF};
+
+{$INCLUDE "config.inc"}
+
+// retrieve protocol information
+procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
+begin
+    netProto^:= cNetProtoVersion;
+    versionStr^:= cVersionString;
+end;
+
+// equivalent to esc+y; when closeFrontend = true the game exits after memory cleanup
+procedure HW_terminate(closeFrontend: boolean); cdecl; export;
+begin
+    closeFrontend:= closeFrontend; // avoid hint
+    ParseCommand('forcequit', true);
+end;
+
+function HW_getWeaponNameByIndex(whichone: LongInt): PChar; cdecl; export;
+begin
+    HW_getWeaponNameByIndex:= (str2pchar(trammo[Ammoz[TAmmoType(whichone+1)].NameId]));
+end;
+
+(*function HW_getWeaponCaptionByIndex(whichone: LongInt): PChar; cdecl; export;
+begin
+    HW_getWeaponCaptionByIndex:= (str2pchar(trammoc[Ammoz[TAmmoType(whichone+1)].NameId]));
+end;
+
+function HW_getWeaponDescriptionByIndex(whichone: LongInt): PChar; cdecl; export;
+begin
+    HW_getWeaponDescriptionByIndex:= (str2pchar(trammod[Ammoz[TAmmoType(whichone+1)].NameId]));
+end;*)
+
+function HW_getNumberOfWeapons: LongInt; cdecl; export;
+begin
+    HW_getNumberOfWeapons:= ord(high(TAmmoType));
+end;
+
+function HW_getMaxNumberOfHogs: LongInt; cdecl; export;
+begin
+    HW_getMaxNumberOfHogs:= cMaxHHIndex + 1;
+end;
+
+function HW_getMaxNumberOfTeams: LongInt; cdecl; export;
+begin
+    HW_getMaxNumberOfTeams:= cMaxTeams;
+end;
+
+procedure HW_memoryWarningCallback; cdecl; export;
+begin
+    ReleaseSound(false);
+end;
 
 {$IFDEF ANDROID}
 function JNI_HW_versionInfoNet(env: PJNIEnv; obj: JObject):JInt;cdecl;
@@ -51,10 +106,21 @@ exports
     HW_getNumberOfweapons name Java_Prefix + 'HWgetNumberOfWeapons',
     HW_getMaxNumberOfHogs name Java_Prefix + 'HWgetMaxNumberOfHogs',
     HW_getMaxNumberOfTeams name Java_Prefix + 'HWgetMaxNumberOfTeams',
-    HW_terminate name Java_Prefix + 'HWterminate';
+    HW_terminate name Java_Prefix + 'HWterminate',
+    Game;
+{$ELSE}
+exports
+    Game,
+    GenLandPreview,
+    LoadLocaleWrapper,
+    HW_versionInfo,
+    HW_terminate,
+    HW_getNumberOfWeapons,
+    HW_getMaxNumberOfHogs,
+    HW_getMaxNumberOfTeams,
+    HW_getWeaponNameByIndex,
+    HW_memoryWarningCallback;
 {$ENDIF}
 
 begin
-
 end.
-

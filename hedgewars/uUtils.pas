@@ -65,16 +65,17 @@ function  CheckNoTeamOrHH: boolean; inline;
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
-procedure initModule;
+procedure initModule(isGame: boolean);
 procedure freeModule;
 
 
 implementation
-uses typinfo, Math, uConsts, uVariables, SysUtils;
+uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils;
 
 {$IFDEF DEBUGFILE}
 var f: textfile;
 {$ENDIF}
+var CharArray: array[byte] of Char;
 
 // should this include "strtolower()" for the split string?
 procedure SplitBySpace(var a, b: shortstring);
@@ -87,7 +88,7 @@ if i > 0 then
         if (a[t] >= 'A')and(a[t] <= 'Z') then
             Inc(a[t], 32);
     b:= copy(a, i + 1, Length(a) - i);
-    byte(a[0]):= Pred(i)
+    a[0]:= char(Pred(i))
     end
 else
     b:= '';
@@ -236,9 +237,9 @@ for i:= 1 to Length(s) do
     if s[i] = '=' then
         inc(c);
     if t > 0 then
-        byte(s[i]):= t - 1
+        s[i]:= char(t - 1)
     else
-        byte(s[i]):= 0
+        s[i]:= #0
     end;
 
 i:= 1;
@@ -255,11 +256,10 @@ while i <= length(s) do
 if c < 3 then
     t:= t - c;
 
-byte(DecodeBase64[0]):= t - 1
+DecodeBase64[0]:= char(t - 1)
 end;
 
 
-var CharArray: array[byte] of Char;
 function Str2PChar(const s: shortstring): PChar;
 begin
 CharArray:= s;
@@ -359,14 +359,21 @@ begin
 CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 end;
 
-procedure initModule;
-{$IFDEF DEBUGFILE}{$IFNDEF MOBILE}var i: LongInt;{$ENDIF}{$ENDIF}
+procedure initModule(isGame: boolean);
+{$IFDEF DEBUGFILE}
+var logfileBase: shortstring;
+{$IFNDEF MOBILE}var i: LongInt;{$ENDIF}
+{$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
+    if isGame then
+        logfileBase:= 'game'
+    else
+        logfileBase:= 'preview';
 {$I-}
 {$IFDEF MOBILE}
-    {$IFDEF IPHONEOS} Assign(f,'../Documents/hw-' + cLogfileBase + '.log'); {$ENDIF}
-    {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + cLogfileBase + '.log'); {$ENDIF}
+    {$IFDEF IPHONEOS} Assign(f,'../Documents/hw-' + logfileBase + '.log'); {$ENDIF}
+    {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + logfileBase + '.log'); {$ENDIF}
     Rewrite(f);
 {$ELSE}
     if (UserPathPrefix <> '') then
@@ -374,7 +381,7 @@ begin
             i:= 0;
             while(i < 7) do
             begin
-                assign(f, UserPathPrefix + '/Logs/' + cLogfileBase + inttostr(i) + '.log');
+                assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
                 rewrite(f);
                 if IOResult = 0 then
                     break;

@@ -33,6 +33,8 @@ uses uRandom, uUtils, uConsts, uVariables, uAmmos, uTeams, uStats,
     uTextures, uScript, uRenderUtils, uAI, uCollisions,
     uGearsRender, uGearsUtils;
 
+var GCounter: LongWord = 0; // this does not get re-initialized, but should be harmless
+
 procedure InsertGearToList(Gear: PGear);
 var tmp, ptmp: PGear;
 begin
@@ -74,8 +76,8 @@ end;
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 var gear: PGear;
 begin
-inc(Counter);
-AddFileLog('AddGear: #' + inttostr(Counter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
+inc(GCounter);
+AddFileLog('AddGear: #' + inttostr(GCounter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
 
 New(gear);
 FillChar(gear^, sizeof(TGear), 0);
@@ -91,7 +93,7 @@ gear^.doStep:= doStepHandlers[Kind];
 gear^.CollisionIndex:= -1;
 gear^.Timer:= Timer;
 gear^.FlightTime:= 0;
-gear^.uid:= Counter;
+gear^.uid:= GCounter;
 gear^.SoundChannel:= -1;
 gear^.ImpactSound:= sndNone;
 gear^.nImpactSounds:= 0;
@@ -148,7 +150,7 @@ case Kind of
                 gear^.Z:= cHHZ;
                 if (GameFlags and gfAISurvival) <> 0 then
                     if gear^.Hedgehog^.BotLevel > 0 then
-                        gear^.Hedgehog^.Effects[heResurrectable] := 0;
+                        gear^.Hedgehog^.Effects[heResurrectable] := 1;
                 end;
        gtShell: begin
                 gear^.Radius:= 4;
@@ -168,7 +170,7 @@ case Kind of
                     begin
                     Pos:= 0;
                     Radius:= 1;
-                    DirAngle:= random * 360;
+                    DirAngle:= random(360);
                     if State and gstTmpFlag = 0 then
                         begin
                         dx.isNegative:= GetRandom(2) = 0;
@@ -455,6 +457,7 @@ gtFlamethrower: begin
                 gear^.Tag:= TotalRounds + 3;
                 gear^.Pos:= 1;
                 end;
+      gtIceGun: gear^.Health:= 1000;
     end;
 
 InsertGearToList(gear);

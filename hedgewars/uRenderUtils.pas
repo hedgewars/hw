@@ -39,7 +39,7 @@ function  RenderStringTexLim(s: ansistring; Color: Longword; font: THWFont; maxL
 function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 
 implementation
-uses uUtils, uVariables, uConsts, uTextures, sysutils, uDebug;
+uses uUtils, uVariables, uConsts, uTextures, SysUtils, uDebug;
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 var r: TSDL_Rect;
@@ -257,7 +257,7 @@ function RenderStringTexLim(s: ansistring; Color: Longword; font: THWFont; maxLe
 var w, h: LongInt;
     finalSurface: PSDL_Surface;
 begin
-    if length(s) = 0 then s:= ' ';
+    if length(s) = 0 then s:= _S' ';
     font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);

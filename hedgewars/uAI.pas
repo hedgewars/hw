@@ -42,26 +42,27 @@ var BestActions: TActions;
     ThinkThread: TThreadID;
 {$ENDIF}
     hasThread: LongInt;
+    StartTicks: Longword;
 
 procedure FreeActionsList;
 begin
-AddFileLog('FreeActionsList called');
-if hasThread <> 0 then
+    AddFileLog('FreeActionsList called');
+    if hasThread <> 0 then
     begin
-    AddFileLog('Waiting AI thread to finish');
-    StopThinking:= true;
-    repeat
-        SDL_Delay(10)
-    until hasThread = 0
+        AddFileLog('Waiting AI thread to finish');
+        StopThinking:= true;
+        repeat
+            SDL_Delay(10)
+        until hasThread = 0
     end;
 
-with CurrentHedgehog^ do
-    if Gear <> nil then
-        if BotLevel <> 0 then
-            StopMessages(Gear^.Message);
+    with CurrentHedgehog^ do
+        if Gear <> nil then
+            if BotLevel <> 0 then
+                StopMessages(Gear^.Message);
 
-BestActions.Count:= 0;
-BestActions.Pos:= 0
+    BestActions.Count:= 0;
+    BestActions.Pos:= 0
 end;
 
 
@@ -114,6 +115,7 @@ var BotLevel: Byte;
     a, aa: TAmmoType;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
+windSpeed:= hwFloat2Float(cWindSpeed);
 
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
@@ -445,7 +447,7 @@ end;
 
 procedure freeModule;
 begin
-
+    FreeActionsList();
 end;
 
 end.

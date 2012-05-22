@@ -67,6 +67,9 @@ procedure ProcessAction(var Actions: TActions; Me: PGear);
 implementation
 uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uUtils, uDebug, uIO{$IFDEF TRACEAIACTIONS}, uConsole{$ENDIF};
 
+var PrevX: LongInt = 0;
+    timedelta: Longword = 0;
+
 const ActionIdToStr: array[0..7] of string[16] = (
 {aia_none}           '',
 {aia_Left}           'left',

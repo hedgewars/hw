@@ -37,7 +37,7 @@ var RopePoints: record
                 end;
 
 implementation
-uses uRender, uUtils, uVariables, uAmmos, Math;
+uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGears;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
 begin
@@ -522,6 +522,11 @@ begin
                     if CurAmmoGear^.Tex <> nil then
                         DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
                     end;
+                gtIceGun:
+                    begin DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                    if CurAmmoGear^.Tex <> nil then
+                        DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
+                    end;
             end;
 
             case CurAmmoGear^.Kind of
@@ -648,6 +653,7 @@ begin
                 amBee: DrawSpriteRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amFlamethrower: DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amLandGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                amIceGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
                 amResurrector: DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
             end;
 
@@ -907,6 +913,7 @@ end;
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 var
     HHGear: PGear;
+    vg: PVisualGear;
     i: Longword;
     aAngle: real;
     startX, endX, startY, endY: LongInt;
@@ -915,7 +922,9 @@ begin
         if Gear^.AmmoType = amBee then
             DrawSpriteRotatedF(sprTargetBee, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
 	else if Gear^.AmmoType = amIceGun then
-	    DrawSprite(sprSnowDust, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 3) mod 360)
+	    //DrawSprite(sprSnowDust, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 2) mod 8)
+        //DrawTextureRotatedF(SpritesData[sprSnowDust].Texture, 1, 0, 0, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 2) mod 8, 1, 22, 22, (RealTicks shr 3) mod 360)
+        DrawTextureRotatedF(SpritesData[sprSnowDust].Texture, 1/(1+(RealTicks shr 8) mod 5), 0, 0, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, (RealTicks shr 2) mod 8, 1, 22, 22, (RealTicks shr 3) mod 360)
     else
         DrawSpriteRotatedF(sprTargetP, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
 
@@ -1169,6 +1178,32 @@ begin
                         Tint($FF, $FF, $FF, $FF)
 *)
                         end;
+            gtIceGun: begin
+                      HHGear := Gear^.Hedgehog^.Gear;
+                      if HHGear <> nil then
+                          begin
+                          i:= hwRound(hwSqr(Gear^.X-HHGear^.X)+hwSqr(Gear^.Y-HHGear^.Y));
+                          if RealTicks mod max(1,50-(round(sqrt(i)) div 4)) = 0 then // experiment in "intensifying" might not get used
+                            begin
+                            vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
+                            if vg <> nil then
+                                begin
+                                i:= random(100)+155;
+                                vg^.Tint:= i shl 24 or i shl 16 or $FF shl 8 or ((random(200)+55));
+                                vg^.Angle:= random(360);
+                                vg^.dx:= 0.001 * (random(80));
+                                vg^.dy:= 0.001 * (random(80))
+                                end
+                            end;
+                          if RealTicks mod 2 = 0 then
+                                begin
+                                i:= random(100)+100;
+                                if Gear^.Target.X <> NoPointX then
+                                    DrawLine(Gear^.Target.X, Gear^.Target.Y, hwRound(HHGear^.X), hwRound(HHGear^.Y), 4.0, i, i, $FF, $40)
+                                else DrawLine(hwRound(HHGear^.X), hwRound(HHGear^.Y), hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, i, i, $FF, $40);
+                                end
+                          end
+                      end
 
 
          end;

@@ -23,6 +23,8 @@ interface
 uses SDLh, uConsts, uFloat, uTypes;
 const amtest_OnTurn = $00000001;
 
+var windSpeed: real;
+
 type TAttackParams = record
         Time: Longword;
         Angle, Power: LongInt;
@@ -106,7 +108,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestHammer;      flags: 0), // amHammer
             (proc: nil;              flags: 0), // amResurrector
             (proc: nil;              flags: 0), // amDrillStrike
-            (proc: @TestSnowball;    flags: 0), // amSnowball
+            (proc: nil;              flags: 0), // amSnowball
             (proc: nil;              flags: 0), // amTardis
             (proc: nil;              flags: 0), // amStructure
             (proc: nil;              flags: 0), // amLandGun
@@ -140,7 +142,7 @@ ap.ExplR:= 0;
 valueResult:= BadTurn;
 repeat
     rTime:= rTime + 300 + Level * 50 + random(300);
-    Vx:= - cWindSpeedf * rTime * 0.5 + (Targ.X + AIrndSign(2) - mX) / rTime;
+    Vx:= - windSpeed * rTime * 0.5 + (Targ.X + AIrndSign(2) - mX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Y - mY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -153,7 +155,7 @@ repeat
         repeat
             x:= x + dX;
             y:= y + dY;
-            dX:= dX + cWindSpeedf;
+            dX:= dX + windSpeed;
             dY:= dY + cGravityf;
             dec(t)
         until TestCollExcludingMe(Me, trunc(x), trunc(y), 5) or (t <= 0);
@@ -198,7 +200,7 @@ ap.ExplR:= 0;
 valueResult:= BadTurn;
 repeat
     rTime:= rTime + 300 + Level * 50 + random(1000);
-    Vx:= - cWindSpeedf * rTime * 0.5 + ((Targ.X + AIrndSign(2)) - meX) / rTime;
+    Vx:= - windSpeed * rTime * 0.5 + ((Targ.X + AIrndSign(2)) - meX) / rTime;
     Vy:= cGravityf * rTime * 0.5 - (Targ.Y - meY) / rTime;
     r:= sqr(Vx) + sqr(Vy);
     if not (r > 1) then
@@ -211,7 +213,7 @@ repeat
         repeat
             x:= x + dX;
             y:= y + dY;
-            dX:= dX + cWindSpeedf;
+            dX:= dX + windSpeed;
             dY:= dY + cGravityf;
             dec(t)
         until TestCollExcludingMe(Me, trunc(x), trunc(y), 5) or (t <= 0);
@@ -479,18 +481,18 @@ var Vx, Vy: real;
     TestTime: Longword;
     x, y, dY, meX, meY: real;
 begin
-TestMortar:= BadTurn;
-ap.ExplR:= 0;
-meX:= hwFloat2Float(Me^.X);
-meY:= hwFloat2Float(Me^.Y);
+    TestMortar:= BadTurn;
+    ap.ExplR:= 0;
+    meX:= hwFloat2Float(Me^.X);
+    meY:= hwFloat2Float(Me^.Y);
 
-if (Level > 2) then
-    exit;
+    if (Level > 2) then
+        exit(BadTurn);
 
-TestTime:= Solve(Targ.X, Targ.Y, trunc(meX), trunc(meY));
+    TestTime:= Solve(Targ.X, Targ.Y, trunc(meX), trunc(meY));
 
-if TestTime = 0 then
-    exit;
+    if TestTime = 0 then
+        exit(BadTurn);
 
     Vx:= (Targ.X - meX) / TestTime;
     Vy:= cGravityf * (TestTime div 2) - (Targ.Y - meY) / TestTime;
@@ -548,7 +550,8 @@ x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 range:= Metric(trunc(x), trunc(y), Targ.X, Targ.Y);
 if ( range < MIN_RANGE ) or ( range > MAX_RANGE ) then
-    exit;
+    exit(BadTurn);
+
 Vx:= (Targ.X - x) * 1 / 1024;
 Vy:= (Targ.Y - y) * 1 / 1024;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
@@ -568,8 +571,7 @@ repeat
         else 
             dec(valueResult, Level * 4000);
         // 27/20 is reuse bonus
-        TestShotgun:= valueResult * 27 div 20;
-        exit 
+        exit(valueResult * 27 div 20)
     end
 until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4)
     or (x < 0)
@@ -593,10 +595,10 @@ ap.Power:= 1;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
-begin
+    begin
     TestDesertEagle:= BadTurn;
-    exit;
-end;
+    exit(BadTurn);
+    end;
 t:= 0.5 / sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
 Vx:= (Targ.X - x) * t;
 Vy:= (Targ.Y - y) * t;
@@ -638,7 +640,7 @@ ap.ExplR:= 0;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 if (Level > 2) or (Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) > 25) then
-    exit;
+    exit(BadTurn);
 
 ap.Time:= 0;
 ap.Power:= 1;
@@ -676,8 +678,7 @@ or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
         val1:= Succ(BadTurn)
     else
         val1:= BadTurn;
-    TestFirePunch:= val1;
-    exit;
+    exit(val1);
     end;
 (*
 For some silly reason, having this enabled w/ the AI 
@@ -725,8 +726,7 @@ or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
         valueResult:= Succ(BadTurn)
     else
         valueResult:= BadTurn;
-    TestWhip:= valueResult;
-    exit;
+    exit(valueResult);
     end;
 
 valueResult:= 0;
@@ -770,10 +770,7 @@ begin
 ap.ExplR:= 0;
 ap.Time:= 0;
 if (Level > 3) then
-begin
-    TestAirAttack:= BadTurn;
-    exit;
-end;
+    exit(BadTurn);
 
 ap.AttackPutX:= Targ.X;
 ap.AttackPutY:= Targ.Y;
@@ -837,7 +834,7 @@ var
     maxTop: longword;
 begin
     TestTeleport := BadTurn;
-    exit;
+    exit(BadTurn);
     Level:= Level; // avoid compiler hint
     //FillBonuses(true, [gtCase]);
     if bonuses.Count = 0 then

@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
     /* add C declarations below for all exported Pascal functions/procedure
-     * that you want to use
+     * that you want to use in your non-Pascal code
      */
 
     void Game(const char *args[]);
@@ -33,68 +33,13 @@ extern "C" {
     void LoadLocaleWrapper(const char *filename);
 
     void HW_versionInfo(int *protoNum, char **versionStr);
-
-    void HW_click(void);
-    void HW_ammoMenu(void);
-    
-    void HW_zoomSet(float value);
-    void HW_zoomIn(void);
-    void HW_zoomOut(void);
-    void HW_zoomReset(void);
-    float HW_zoomFactor(void);
-    int  HW_zoomLevel(void);
-
-    void HW_walkingKeysUp(void);
-    void HW_otherKeysUp(void);
-    void HW_allKeysUp(void);
-
-    void HW_walkLeft(void);
-    void HW_walkRight(void);
-    void HW_aimUp(void);
-    void HW_aimDown(void);
-    void HW_preciseSet(BOOL status);
-
-    void HW_shoot(void);
-    void HW_jump(void);
-    void HW_backjump(void);
-
-    void HW_chat(void);
-    void HW_chatEnd(void);
-    void HW_tab(void);
-    void HW_screenshot(void);
-
-    void HW_pause(void);
-    void HW_pauseToggle(void);
-    BOOL HW_isPaused(void);
-
     void *HW_getSDLWindow(void);
     void HW_terminate(BOOL andCloseFrontend);
 
-    void HW_setCursor(int x, int y);
-    void HW_getCursor(int *x, int *y);
-
-    BOOL HW_isAmmoMenuOpen(void);
-    BOOL HW_isAmmoMenuNotAllowed(void);
-    BOOL HW_isWeaponRequiringClick(void);
-    BOOL HW_isWeaponTimerable(void);
-    BOOL HW_isWeaponSwitch(void);
-    BOOL HW_isWeaponRope(void);
-
-    void HW_setGrenadeTime(int time);
-    int  HW_getGrenadeTime(void);
-
-    void HW_setPianoSound(int snd);
-    void HW_setWeapon(int whichone);
-    BOOL HW_isWeaponAnEffect(int whichone);
     char *HW_getWeaponNameByIndex(int whichone);
-    char *HW_getWeaponCaptionByIndex(int whichone);
-    char *HW_getWeaponDescriptionByIndex(int whichone);
-
-    void HW_getAmmoDelays(unsigned char *pointer);
-    int  HW_getAmmoCounts(int *pointer);
-    
+    //char *HW_getWeaponCaptionByIndex(int whichone);
+    //char *HW_getWeaponDescriptionByIndex(int whichone);
     int  HW_getNumberOfWeapons(void);
-    int  HW_getTurnsForCurrentTeam(void);
     int  HW_getMaxNumberOfHogs(void);
     int  HW_getMaxNumberOfTeams(void);
 
