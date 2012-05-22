@@ -171,14 +171,26 @@ IF(NOT APPLE)
         DEPENDS ${engine_sources}
         )
 ELSE()
-    #let's build sdlmain, which is absent from the framework
-    find_package(SDL REQUIRED)
+    #on OSX we need to provide the main() function when building as executable
+    if(NOT BUILD_ENGINE_LIBRARY)
+        #let's look for the bundled sdlmain, if not found build our own
+        find_package(SDL REQUIRED)
+        #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
+        string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
+        #find libsdmain.a
+        find_file(SDLMAIN_LIB libSDLMain.a PATHS ${sdl_dir}/Resources/)
 
-    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
-    include_directories(${SDL_INCLUDE_DIR})
+        if(SDLMAIN_LIB MATCHES "SDLMAIN_LIB-NOTFOUND")
+            set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+            include_directories(${SDL_INCLUDE_DIR})
+            add_library (SDLmain STATIC SDLMain.m)
+            #add a dependency to the hwengine target
+            set(engine_sources ${engine_sources} "SDLmain")
+            set(SDLMAIN_LIB "${CMAKE_BINARY_DIR}/bin/libSDLmain.a")
+        endif()
 
-    add_library (SDLmain STATIC SDLMain.m)
-
+        set(pascal_compiler_flags "-k${SDLMAIN_LIB}" ${pascal_compiler_flags})
+    endif()
 
     #these are the dependencies for building a universal binary on Mac OS X
     foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
@@ -187,7 +199,7 @@ ELSE()
             COMMAND "${pascal_compiler}"
             ARGS ${pascal_compiler_flags} -ohwengine.${build_arch} -P${build_arch}
             MAIN_DEPENDENCY ${hwengine_project}
-            DEPENDS ${engine_sources} SDLmain
+            DEPENDS ${engine_sources}
             )
         add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
     endforeach()

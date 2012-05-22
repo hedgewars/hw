@@ -120,10 +120,6 @@ if(APPLE)
 	set(pascal_compiler_flags_cmn "-Ff~/Library/Frameworks" ${pascal_compiler_flags_cmn})
 	#set deployment target
 	set(pascal_compiler_flags_cmn "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
-	#link with libsdlmain.a (when building an executable)
-	if(NOT BUILD_ENGINE_LIBRARY)
-		set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/libSDLmain.a" ${pascal_compiler_flags_cmn})
-	endif()
 
 	message(STATUS "Build system: Mac OS X ${current_macosx_version} with GCC:${CMAKE_C_COMPILER}")
 	message(STATUS "Target system: Mac OS X ${minimum_macosx_version} for architecture(s):${CMAKE_OSX_ARCHITECTURES}")
