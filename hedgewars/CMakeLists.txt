@@ -72,17 +72,16 @@ set(engine_sources
 if(BUILD_ENGINE_LIBRARY)
     message(STATUS "Engine will be built as library (experimental)")
     set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
-    set(engine_sources ${hwengine_project} PascalExports.pas ${engine_sources})
-    set(pascal_compiler_flags_cmn "-dHWLIBRARY" ${pascal_compiler_flags_cmn})
+    set(pascal_flags "-dHWLIBRARY" ${pascal_flags})
 
     # create position independent code, only required for x68_64 builds, similar to -fPIC
     if(CMAKE_SIZEOF_VOID_P MATCHES "8")
-        set(pascal_compiler_flags_cmn "-Cg" ${pascal_compiler_flags_cmn})
+        set(pascal_flags "-Cg" ${pascal_flags})
     endif(CMAKE_SIZEOF_VOID_P MATCHES "8")
 
-    # due to compiling/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
+    # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
     if(APPLE AND current_macosx_version GREATER "10.5")
-        set(pascal_compiler_flags_cmn "-k-no_order_inits" ${pascal_compiler_flags_cmn})
+        set(pascal_flags "-k-no_order_inits" ${pascal_flags})
     endif()
 
     if (APPLE)
@@ -122,55 +121,7 @@ if(APPLE)
     if(powerpc_build)
         set(powerpc_build "powerpc")
     endif()
-endif(APPLE)
 
-
-#PASCAL DETECTION SECTION
-string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
-
-if(fpc_version)
-    string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
-    string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
-    string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
-    message(STATUS "Freepascal version installed: ${fpc_vers_major}.${fpc_vers_minor}")
-    math(EXPR fpc_ver "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
-
-    if(fpc_ver LESS "020200")
-        message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
-    elseif(APPLE AND (fpc_ver LESS "020600"))
-        message(FATAL_ERROR "Minimum required version of FreePascal is 2.6.0 on Mac OS X")
-    endif()
-else()
-    message(FATAL_ERROR "No FreePascal compiler found!")
-endif()
-
-
-#DEPENDECIES AND EXECUTABLES SECTION
-find_package(PNG)
-if(${PNG_FOUND})
-    message(STATUS "PNG screenshots enabled (library found at ${PNG_LIBRARY})")
-    set(pascal_compiler_flags_cmn "-dPNG_SCREENSHOTS" ${pascal_compiler_flags_cmn})
-    if(APPLE)  # need to explictly link with the static lib
-        string(REGEX REPLACE "(.*)libpng.*" "\\1" PNG_LIBDIR "${PNG_LIBRARY}")
-        set(pascal_compiler_flags_cmn "-k${PNG_LIBDIR}/libpng.a" ${pascal_compiler_flags_cmn})
-    endif()
-else()
-    message(STATUS "PNG library not found, switching to screenshots in BMP format")
-endif()
-
-set(pascal_compiler ${fpc_executable})
-set(pascal_compiler_flags ${noexecstack_flags} ${pascal_compiler_flags_cmn} ${hwengine_project})
-
-
-IF(NOT APPLE)
-    #here is the command for standard executables or for shared library
-    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}"
-        COMMAND "${pascal_compiler}"
-        ARGS ${pascal_compiler_flags}
-        MAIN_DEPENDENCY ${hwengine_project}
-        DEPENDS ${engine_sources}
-        )
-ELSE()
     #on OSX we need to provide the main() function when building as executable
     if(NOT BUILD_ENGINE_LIBRARY)
         #let's look for the bundled sdlmain, if not found build our own
@@ -185,19 +136,66 @@ ELSE()
             include_directories(${SDL_INCLUDE_DIR})
             add_library (SDLmain STATIC SDLMain.m)
             #add a dependency to the hwengine target
-            set(engine_sources ${engine_sources} "SDLmain")
+            set(engine_sources ${engine_sources} SDLmain)
             set(SDLMAIN_LIB "${CMAKE_BINARY_DIR}/bin/libSDLmain.a")
         endif()
 
-        set(pascal_compiler_flags "-k${SDLMAIN_LIB}" ${pascal_compiler_flags})
+        set(pascal_flags "-k${SDLMAIN_LIB}" ${pascal_flags})
     endif()
+endif(APPLE)
 
+
+#PASCAL DETECTION SECTION
+string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
+
+if(fpc_version)
+    string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
+    string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
+    string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
+    message(STATUS "Freepascal version installed: ${fpc_vers_major}.${fpc_vers_minor}")
+    math(EXPR fpc_version "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
+
+    if(fpc_version LESS "020200")
+        message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
+    elseif(APPLE AND (fpc_version LESS "020600"))
+        message(FATAL_ERROR "Minimum required version of FreePascal is 2.6.0 on Mac OS X")
+    endif()
+else()
+    message(FATAL_ERROR "No FreePascal compiler found!")
+endif()
+
+
+#DEPENDECIES AND EXECUTABLES SECTION
+find_package(PNG)
+if(${PNG_FOUND})
+    message(STATUS "PNG screenshots enabled (library found at ${PNG_LIBRARY})")
+    set(pascal_flags "-dPNG_SCREENSHOTS" ${pascal_flags})
+    if(APPLE)  # need to explictly link with the static lib
+        string(REGEX REPLACE "(.*)libpng.*" "\\1" PNG_LIBDIR "${PNG_LIBRARY}")
+        set(pascal_flags "-k${PNG_LIBDIR}/libpng.a" ${pascal_flags})
+    endif()
+else()
+    message(STATUS "PNG library not found, switching to screenshots in BMP format")
+endif()
+
+set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
+
+
+IF(NOT APPLE)
+    #here is the command for standard executables or for shared library
+    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}"
+        COMMAND "${fpc_executable}"
+        ARGS ${fpc_flags}
+        MAIN_DEPENDENCY ${hwengine_project}
+        DEPENDS ${engine_sources}
+        )
+ELSE()
     #these are the dependencies for building a universal binary on Mac OS X
     foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
         set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}" ${lipo_args_list})
         add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}"
-            COMMAND "${pascal_compiler}"
-            ARGS ${pascal_compiler_flags} -ohwengine.${build_arch} -P${build_arch}
+            COMMAND "${fpc_executable}"
+            ARGS ${fpc_flags} -ohwengine.${build_arch} -P${build_arch}
             MAIN_DEPENDENCY ${hwengine_project}
             DEPENDS ${engine_sources}
             )

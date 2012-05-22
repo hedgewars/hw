@@ -35,9 +35,8 @@ set(ghc_flags
     -i${hedgewars_SOURCE_DIR}/gameServer
     -o ${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}
     -odir ${CMAKE_CURRENT_BINARY_DIR}
-    -hidir ${CMAKE_CURRENT_BINARY_DIR})
-
-set(ghc_flags ${haskell_compiler_flags_cmn} ${ghc_flags})
+    -hidir ${CMAKE_CURRENT_BINARY_DIR}
+    ${haskell_flags})
 
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}"
         COMMAND "${ghc_executable}"
