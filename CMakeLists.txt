@@ -152,7 +152,8 @@ set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
 separate_arguments(fpflags_full UNIX_COMMAND ${FPFLAGS})
 set(pascal_flags ${fpflags_full} "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_flags})
-set(haskell_flags "-O2" ${haskell_flags})
+separate_arguments(ghflags_full UNIX_COMMAND ${GHFLAGS})
+set(haskell_flags "-O2" ${haskell_flags} ${ghflags_full})
 
 if(Optz)
 #	set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
@@ -173,7 +174,11 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 
 if(WITH_SERVER)
-	find_program(ghc_executable ghc)
+	if(GHC)
+		set(ghc_executable ${GHC})
+	else()
+		find_program(ghc_executable ghc)
+	endif()
 
 	if(ghc_executable)
 		set(HAVE_NETSERVER true)

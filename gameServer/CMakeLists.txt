@@ -1,8 +1,3 @@
-find_program(ghc_executable ghc)
-
-if(NOT ghc_executable)
-    message(FATAL_ERROR "Cannot find GHC")
-endif(NOT ghc_executable)
 
 
 set(hwserver_sources
