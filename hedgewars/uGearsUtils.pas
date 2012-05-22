@@ -443,6 +443,8 @@ end;
 
 procedure ResurrectHedgehog(gear: PGear);
 var tempTeam : PTeam;
+    sparkles: PVisualGear;
+    gX, gY: LongInt;
 begin
     AttackBar:= 0;
     gear^.dX := _0;
@@ -459,9 +461,19 @@ begin
             end;
     tempTeam := gear^.Hedgehog^.Team;
     DeleteCI(gear);
+    gX := hwRound(gear^.X);
+    gY := hwRound(gear^.Y);
+    // might need more sparkles for a column
+    sparkles:= AddVisualGear(gX, gY, vgtDust, 1);
+    if sparkles <> nil then
+        begin
+        sparkles^.Tint:= tempTeam^.Clan^.Color shl 8 or $FF;
+        //sparkles^.Angle:= random(360);
+        end;
     FindPlace(gear, false, 0, LAND_WIDTH, true); 
     if gear <> nil then
         begin
+        AddVisualGear(hwRound(gear^.X), hwRound(gear^.Y), vgtExplosion);
         RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;
