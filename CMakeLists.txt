@@ -70,9 +70,18 @@ if(APPLE)
 	#what system are we building for
 	set(minimum_macosx_version $ENV{MACOSX_DEPLOYMENT_TARGET})
 
-	#detect on which system are we
-	EXEC_PROGRAM("/usr/bin/sw_vers" ARGS "-productVersion" OUTPUT_VARIABLE current_macosx_version)
-	STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
+	#detect on which system we are: if sw_vers cannot be found for any reason (re)use minimum_macosx_version
+	find_program(sw_vers sw_vers)
+	if(sw_vers)
+		exec_program(${sw_vers} ARGS "-productVersion" OUTPUT_VARIABLE current_macosx_version)
+		string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
+        else()
+		if(NOT minimum_macosx_version)
+			message(FATAL_ERROR "sw_vers not found! Need explicit MACOSX_DEPLOYMENT_TARGET variable set")
+		else()
+			set(current_macosx_version ${minimum_macosx_version})
+		endif()
+	endif()
 
 	#if nothing is set, we deploy only for the current system
 	if(NOT minimum_macosx_version)
@@ -84,7 +93,16 @@ if(APPLE)
 		message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
 	endif()
 
-	#this variable needs to be set for freepascal universal binary
+	#workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
+	if(current_macosx_version MATCHES "10.4")
+		find_package(SDL_mixer REQUIRED)
+		set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
+		set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
+		set(pascal_flags "-k${DYLIB_SMPEG}" "-k${DYLIB_MIKMOD}" ${pascal_flags})
+		set(CMAKE_C_FLAGS "${DYLIB_SMPEG}" "${DYLIB_MIKMOD}" ${CMAKE_C_FLAGS})
+	endif()
+
+	#CMAKE_OSX_ARCHITECTURES and CMAKE_OSX_SYSROOT need to be set for universal binary and correct linking
 	if(NOT CMAKE_OSX_ARCHITECTURES)
 		if(current_macosx_version LESS "10.6")
 			if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
@@ -97,28 +115,20 @@ if(APPLE)
 		endif()
 	endif()
 
-	#be sure to select ppc-compatible toolchains just in case
-	if(minimum_macosx_version LESS "10.6")
-		set(CMAKE_C_COMPILER "gcc-4.0")
-		set(CMAKE_CXX_COMPILER "g++-4.0")
-	endif()
-
-	if(minimum_macosx_version MATCHES "10.4")
-		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
-		#workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
-		if(current_macosx_version MATCHES "10.4")
-			find_package(SDL_mixer REQUIRED)
-                        set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
-                        set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
-			set(pascal_flags "-k${DYLIB_SMPEG}" "-k${DYLIB_MIKMOD}" ${pascal_flags})
-			set(CMAKE_C_FLAGS "${DYLIB_SMPEG}" "${DYLIB_MIKMOD}" ${CMAKE_C_FLAGS})
+	#CMAKE_OSX_SYSROOT is set at the system version we are supposed to build on
+	#we need to provide the correct one when host and target differ
+	if(NOT ${minimum_macosx_version} MATCHES ${current_macosx_version})
+		if(minimum_macosx_version MATCHES "10.4")
+			set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
+			set(CMAKE_C_COMPILER "gcc-4.0")
+			set(CMAKE_CXX_COMPILER "g++-4.0")
+		else()
+			string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
+			set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
 		endif()
-	else()
-		STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
-		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
 	endif()
 
-	#add user framework directory
+	#add user framework directory, other paths can be passed via FPFLAGS
 	set(pascal_flags "-Ff~/Library/Frameworks" ${pascal_flags})
 	#set deployment target
 	set(pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_flags})
