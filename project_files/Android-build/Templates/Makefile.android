@@ -14,7 +14,7 @@ PPCROSSARM_INCLUDES= \
 #LINKERFLAGS= -k"--static"
 FPC_DEFINES=-dandroid -darm
 
-all: install
+all: install/debug
 build:
 	-${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/out
 
