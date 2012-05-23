@@ -45,7 +45,7 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 implementation
 uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
 
-var tkbd, tkbdn: TKeyboardState;
+var tkbd: TKeyboardState;
     quitKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
@@ -69,29 +69,29 @@ Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
           and (CurrentHedgehog^.BotLevel = 0);
 
-tkbdn[code]:= ord(KeyDown);
+tkbd[code]:= ord(KeyDown);
 
 // ctrl/cmd + q to close engine and frontend
 if(KeyDown and (code = quitKeyCode)) then
     begin
 {$IFDEF DARWIN}
-    if ((tkbdn[KeyNameToCode('left_meta')] = 1) or (tkbdn[KeyNameToCode('right_meta')] = 1)) then
+    if ((tkbd[KeyNameToCode('left_meta')] = 1) or (tkbd[KeyNameToCode('right_meta')] = 1)) then
 {$ELSE}
-    if ((tkbdn[KeyNameToCode('left_ctrl')] = 1) or (tkbdn[KeyNameToCode('right_ctrl')] = 1)) then
+    if ((tkbd[KeyNameToCode('left_ctrl')] = 1) or (tkbd[KeyNameToCode('right_ctrl')] = 1)) then
 {$ENDIF}
         ParseCommand('halt', true);    
     end;
 
 if CurrentBinds[code][0] <> #0 then
     begin
-    if (code > 3) and (tkbdn[code] <> 0) and not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
-    if (tkbd[code] = 0) and (tkbdn[code] <> 0) then
+    if (code > 3) and (tkbd[code] <> 0) and not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
+    if (KeyDown) then
         begin
         ParseCommand(CurrentBinds[code], Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
-    else if (CurrentBinds[code][1] = '+') and (tkbdn[code] = 0) and (tkbd[code] <> 0) then
+    else if (CurrentBinds[code][1] = '+') and not KeyDown then
         begin
         s:= CurrentBinds[code];
         s[1]:= '-';
@@ -99,7 +99,6 @@ if CurrentBinds[code][0] <> #0 then
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end;
-    tkbd[code]:= tkbdn[code]
     end
 
 end;
@@ -126,56 +125,11 @@ case event.button of
 end;
 
 procedure ResetKbd;
-var j, t: LongInt;
-    i: LongInt;
-    pkbd: PByteArray;
+var t: LongInt;
 begin
-
-//k:= SDL_GetMouseState(nil, nil);
-pkbd:=SDL_GetKeyState(@j);
-
-//TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + IntToStr(j) + ')', true);
-
-for i:= 1 to pred(j) do
-    tkbdn[i]:= pkbd^[i];
-
-(*
-// TODO: reimplement
-// Controller(s)
-k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
-for j:= 0 to Pred(ControllerNumControllers) do
-    begin
-    for i:= 0 to Pred(ControllerNumAxes[j]) do
-        begin
-        if ControllerAxes[j][i] > 20000 then
-            tkbdn[k + 0]:= 1
-        else
-            tkbdn[k + 0]:= 0;
-        if ControllerAxes[j][i] < -20000 then
-            tkbdn[k + 1]:= 1
-        else
-            tkbdn[k + 1]:= 0;
-        inc(k, 2);
-        end;
-    for i:= 0 to Pred(ControllerNumHats[j]) do
-        begin
-        tkbdn[k + 0]:= ControllerHats[j][i] and SDL_HAT_UP;
-        tkbdn[k + 1]:= ControllerHats[j][i] and SDL_HAT_RIGHT;
-        tkbdn[k + 2]:= ControllerHats[j][i] and SDL_HAT_DOWN;
-        tkbdn[k + 3]:= ControllerHats[j][i] and SDL_HAT_LEFT;
-        inc(k, 4);
-        end;
-    for i:= 0 to Pred(ControllerNumButtons[j]) do
-        begin
-        tkbdn[k]:= ControllerButtons[j][i];
-        inc(k, 1);
-        end;
-    end;
-*)
-
-// what is this final loop for?
 for t:= 0 to cKeyMaxIndex do
-    tkbd[t]:= tkbdn[t]
+    if(tkbd[t] <> 0) then
+        ProcessKey(t, False);
 end;
 
 procedure InitKbdKeyTable;
