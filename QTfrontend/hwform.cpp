@@ -1484,9 +1484,9 @@ void HWForm::NetGameMaster()
         ui.pageNetGame->setRoomName(hwnet->getRoom());
         ui.pageNetGame->restrictJoins->disconnect(hwnet);
         ui.pageNetGame->restrictTeamAdds->disconnect(hwnet);
+        ui.pageNetGame->disconnect(hwnet, SLOT(updateRoomName(const QString&)));
         connect(ui.pageNetGame->BtnStart, SIGNAL(clicked()), hwnet, SLOT(startGame()));
-        connect(ui.pageNetGame, SIGNAL(askForUpdateRoomName(const QString &)),
-                hwnet, SLOT(updateRoomName(const QString &)));
+        connect(ui.pageNetGame, SIGNAL(askForUpdateRoomName(const QString &)), hwnet, SLOT(updateRoomName(const QString &)));
         connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));
         connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictTeamAdds()));
         connect(ui.pageNetGame->pGameCFG->GameSchemes->model(),
