@@ -166,16 +166,18 @@ endif()
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
-find_package(PNG)
-if(${PNG_FOUND})
-    message(STATUS "PNG screenshots enabled (library found at ${PNG_LIBRARY})")
-    set(pascal_flags "-dPNG_SCREENSHOTS" ${pascal_flags})
-    if(APPLE)  # need to explictly link with the static lib
-        string(REGEX REPLACE "(.*)libpng.*" "\\1" PNG_LIBDIR "${PNG_LIBRARY}")
-        set(pascal_flags "-k${PNG_LIBDIR}/libpng.a" ${pascal_flags})
+if(NOT NOPNG)
+    find_package(PNG)
+    if(${PNG_FOUND})
+        message(STATUS "PNG screenshots enabled (library found at ${PNG_LIBRARY})")
+        set(pascal_flags "-dPNG_SCREENSHOTS" ${pascal_flags})
+        if(APPLE)  # need to explictly link with the static lib
+            string(REGEX REPLACE "(.*)libpng.*" "\\1" PNG_LIBDIR "${PNG_LIBRARY}")
+            set(pascal_flags "-k${PNG_LIBDIR}/libpng.a" ${pascal_flags})
+        endif()
+    else()
+        message(STATUS "PNG library not found, switching to screenshots in BMP format")
     endif()
-else()
-    message(STATUS "PNG library not found, switching to screenshots in BMP format")
 endif()
 
 set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
