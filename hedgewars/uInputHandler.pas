@@ -84,7 +84,8 @@ if(KeyDown and (code = quitKeyCode)) then
 
 if CurrentBinds[code][0] <> #0 then
     begin
-    if (code > 3) and (tkbd[code] <> 0) and not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
+    if (code > 3) and (KeyDown) and not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
+
     if (KeyDown) then
         begin
         ParseCommand(CurrentBinds[code], Trusted);
