@@ -332,8 +332,9 @@ processAction (SendTeamRemovalMessage teamName) = do
         AnswerClients chans ["EM", rmTeamMsg],
         ModifyRoom (\r -> r{
                 gameInfo = liftM (\g -> g{
-                teamsInGameNumber = teamsInGameNumber g - 1,
-                roundMsgs = roundMsgs g Seq.|> rmTeamMsg
+                teamsInGameNumber = teamsInGameNumber g - 1
+                , roundMsgs = roundMsgs g Seq.|> rmTeamMsg
+                , leftTeams = teamName : leftTeams g
                 }) $ gameInfo r
             })
         ]
@@ -354,18 +355,13 @@ processAction (RemoveTeam teamName) = do
     chans <- othersChans
     if not $ inGame then
             mapM_ processAction [
-                AnswerClients chans ["REMOVE_TEAM", teamName],
                 ModifyRoom (\r -> r{teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r})
+                , AnswerClients chans ["REMOVE_TEAM", teamName]
                 ]
         else
             mapM_ processAction [
-                SendTeamRemovalMessage teamName,
-                ModifyRoom (\r -> r{
-                    teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r,
-                        gameInfo = liftM (\g -> g{
-                        leftTeams = teamName : leftTeams g
-                        }) $ gameInfo r
-                    })
+                ModifyRoom (\r -> r{teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r})
+                , SendTeamRemovalMessage teamName
                 ]
 
 

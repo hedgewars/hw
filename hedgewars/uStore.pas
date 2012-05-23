@@ -1128,7 +1128,7 @@ var ai: TAmmoType;
 begin
     RegisterVariable('fullscr', @chFullScr, true);
 
-    cScaleFactor:= 0;
+    cScaleFactor:= 2.0;
     Step:= 0;
     ProgrTex:= nil;
     SupportNPOTT:= false;
