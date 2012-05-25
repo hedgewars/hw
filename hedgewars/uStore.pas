@@ -58,6 +58,9 @@ var MaxTextureSize: LongInt;
 {$ELSE}
     SDLPrimSurface: PSDL_Surface;
 {$ENDIF}
+{$IFDEF GL2}
+    Shader: GLuint;
+{$ENDIF}
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;
@@ -626,6 +629,106 @@ begin
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // try to prefer hardware rendering
 end;
 
+{$IFDEF GL2}
+function CompileShader(shaderFile: string; shaderType: GLenum): GLuint;
+var
+    shader: GLuint;
+    f: Textfile;
+    source, line: AnsiString;
+    sourceA: Pchar;
+    lengthA: GLint;
+    compileResult: GLint;
+    logLength: GLint;
+    log: PChar;
+begin
+    Assign(f, Pathz[ptShaders] + '/' + shaderFile);
+    filemode:= 0; // readonly
+    Reset(f);
+    if IOResult <> 0 then
+    begin
+        AddFileLog('Unable to load ' + shaderFile);
+        halt(-1);
+    end;
+
+    source:='';
+    while not eof(f) do
+    begin
+        ReadLn(f, line);
+        source:= source + line + #10;
+    end;
+    
+    CloseFile(f);
+
+    writeln('Compiling shader: ' + Pathz[ptShaders] + '/' + shaderFile);
+
+    sourceA:=PChar(source);
+    lengthA:=Length(source);
+
+    shader:=glCreateShader(shaderType);
+    glShaderSource(shader, 1, @sourceA, @lengthA);
+    glCompileShader(shader);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, @compileResult);
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, @logLength);
+
+    if logLength > 1 then
+    begin
+        GetMem(log, logLength);
+        glGetShaderInfoLog(shader, logLength, nil, log);
+        writeln('========== Compiler log  ==========');
+        writeln(log);
+        writeln('===================================');
+        FreeMem(log, logLength);
+    end;
+
+    if compileResult <> GL_TRUE then
+    begin
+        writeln('Shader compilation failed, halting');
+        halt(-1);
+    end;
+
+    CompileShader:= shader;
+end;
+
+function CompileProgram(shaderName: string): GLuint;
+var
+    program_: GLuint;
+    vs, fs: GLuint;
+    linkResult: GLint;
+    logLength: GLint;
+    log: PChar;
+begin
+    program_:= glCreateProgram();
+    vs:= CompileShader(shaderName + '.vs', GL_VERTEX_SHADER);
+    fs:= CompileShader(shaderName + '.fs', GL_FRAGMENT_SHADER);
+    glAttachShader(program_, vs);
+    glAttachShader(program_, fs);
+    glLinkProgram(program_);
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+
+    glGetProgramiv(program_, GL_LINK_STATUS, @linkResult);
+    glGetProgramiv(program_, GL_INFO_LOG_LENGTH, @logLength);
+
+    if logLength > 1 then
+    begin
+        GetMem(log, logLength);
+        glGetProgramInfoLog(program_, logLength, nil, log);
+        writeln('========== Compiler log  ==========');
+        writeln(log);
+        writeln('===================================');
+        FreeMem(log, logLength);
+    end;
+
+    if linkResult <> GL_TRUE then
+    begin
+        writeln('Linking program failed, halting');
+        halt(-1);
+    end;
+
+    CompileProgram:= program_;
+end;
+{$ENDIF}
+
 procedure SetupOpenGL;
 //var vendor: shortstring = '';
 var buf: array[byte] of char;
@@ -682,6 +785,13 @@ begin
     AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
     AddFileLog('  \----- Extensions: ' + shortstring(pchar(glGetString(GL_EXTENSIONS))));
     //TODO: don't have the Extensions line trimmed but slipt it into multiple lines
+
+{$IFDEF GL2}
+    Load_GL_VERSION_2_0;
+    Shader:= CompileProgram('default');
+    glUseProgram(Shader);
+    glUniform1i(glGetUniformLocation(Shader, 'tex'), 0);
+{$ENDIF}
 
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
@@ -1151,6 +1261,9 @@ end;
 
 procedure freeModule;
 begin
+{$IFDEF GL2}
+    glDeleteProgram(Shader);
+{$ENDIF}
     StoreRelease(false);
     TTF_Quit();
 {$IFDEF SDL13}

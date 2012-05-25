@@ -225,8 +225,9 @@ var
         'Graphics/Hats',                 // ptHats
         'Graphics/Flags',                // ptFlags
         'Missions/Maps',                 // ptMissionMaps
-        'Graphics/SuddenDeath',           // ptSuddenDeath
-        'Graphics/Buttons'                // ptButton
+        'Graphics/SuddenDeath',          // ptSuddenDeath
+        'Graphics/Buttons',              // ptButton
+        'Shaders'                        // ptShaders
     );
 
     Fontz: array[THWFont] of THHFont = (
