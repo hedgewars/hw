@@ -364,7 +364,7 @@ repeat
         Vx:= ((Targ.X+10) - meX) / (TestTime + tDelta)
     else
         Vx:= ((Targ.X-10) - meX) / (TestTime + tDelta);
-    Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Y-150) - meY) / (TestTime + tDelta);
+    Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
     if not (r > 1) then
         begin
@@ -388,7 +388,7 @@ repeat
      if valueResult < Score then
         begin
         ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
-        ap.Power:= trunc(sqrt(r) * cMaxPower * 0.9) + AIrndSign(random(Level) * 15);
+        ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime;
         ap.ExplR:= 90;
         ap.ExplX:= EX;
@@ -416,7 +416,7 @@ meY:= hwFloat2Float(Me^.Y);
 repeat
     inc(TestTime, 1000);
     Vx:= (Targ.X - meX) / (TestTime + tDelta);
-    Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Y-200) - meY) / (TestTime + tDelta);
+    Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
     if not (r > 1) then
         begin
@@ -424,30 +424,31 @@ repeat
         y:= meY;
         dY:= -Vy;
         t:= TestTime;
-    repeat
-        x:= x + Vx;
-        y:= y + dY;
-        dY:= dY + cGravityf;
-        dec(t)
-    until TestCollExcludingMe(Me, trunc(x), trunc(y), 5) or (t = 0);
-    EX:= trunc(x);
-    EY:= trunc(y);
-    if t < 50 then 
-        Score:= RateExplosion(Me, EX, EY, 381)
-    else 
-        Score:= BadTurn;
+        repeat
+            x:= x + Vx;
+            y:= y + dY;
+            dY:= dY + cGravityf;
+            dec(t)
+        until TestCollExcludingMe(Me, trunc(x), trunc(y), 7) or (t = 0);
         
-    if valueResult < Score then
-        begin
-        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
-        ap.Power:= trunc(sqrt(r) * cMaxPower * 0.9) + AIrndSign(random(Level) * 15);
-        ap.Time:= TestTime;
-        ap.ExplR:= 300;
-        ap.ExplX:= EX;
-        ap.ExplY:= EY;
-        valueResult:= Score
-        end;
-    end
+        EX:= trunc(x);
+        EY:= trunc(y);
+        if t < 50 then 
+            Score:= RateExplosion(Me, EX, EY, 200) + RateExplosion(Me, EX, EY + 120, 200)
+        else 
+            Score:= BadTurn;
+            
+        if valueResult < Score then
+            begin
+            ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
+            ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
+            ap.Time:= TestTime;
+            ap.ExplR:= 300;
+            ap.ExplX:= EX;
+            ap.ExplY:= EY;
+            valueResult:= Score
+            end;
+        end
 until (TestTime = 4000);
 TestWatermelon:= valueResult
 end;
@@ -457,15 +458,15 @@ end;
     var A, B, D, T: real;
         C: LongInt;
     begin
-        A:= sqr(cGravityf) * 0.25;
+        A:= sqr(cGravityf);
         B:= - cGravityf * (TY - MY) - 1;
         C:= sqr(TY - MY) + sqr(TX - MX);
-        D:= sqr(B) - (A * C * 4);
+        D:= sqr(B) - A * C;
         if D >= 0 then
             begin
-            D:= ( - B + sqrt(D)) * 0.5 / A;
+            D:= sqrt(D) - B;
             if D >= 0 then
-                T:= sqrt(D)
+                T:= sqrt(D * 2 / A)
             else
                 T:= 0;
             Solve:= trunc(T)
@@ -772,6 +773,7 @@ ap.Time:= 0;
 if (Level > 3) then
     exit(BadTurn);
 
+ap.Angle:= 0;
 ap.AttackPutX:= Targ.X;
 ap.AttackPutY:= Targ.Y;
 
