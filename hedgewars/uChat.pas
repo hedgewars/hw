@@ -277,7 +277,6 @@ const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw: integer;
     utf8: shortstring;
 begin
-
 if Key <> 0 then
     case Key of
         {Backspace}
@@ -293,6 +292,7 @@ if Key <> 0 then
                 FreezeEnterKey;
                 SDL_EnableKeyRepeat(0,0);
                 GameState:= gsGame;
+                ResetKbd;
                 end;
         {Return}
         3, 13, 271: begin
@@ -304,6 +304,7 @@ if Key <> 0 then
             FreezeEnterKey;
             SDL_EnableKeyRepeat(0,0);
             GameState:= gsGame;
+            ResetKbd;
             end;
     else
         if (Key < $80) then

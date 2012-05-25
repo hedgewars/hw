@@ -580,12 +580,13 @@ if (t = cMaxTeams) or (TeamsArray[t] = nil) then
     exit;
 
 with TeamsArray[t]^ do
-    begin
-    AddChatString('** '+ TeamName + ' is gone');
-    hasGone:= true
-    end;
+    if not hasGone then
+        begin
+        AddChatString('** '+ TeamName + ' is gone');
+        hasGone:= true;
 
-RecountTeamHealth(TeamsArray[t])
+        RecountTeamHealth(TeamsArray[t])
+        end;
 end;
 
 

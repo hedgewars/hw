@@ -3,7 +3,7 @@ message(STATUS "Performing standalone bundle creation...")
 execute_process(COMMAND ls ${frameworks_dir} RESULT_VARIABLE doBundle OUTPUT_QUIET ERROR_QUIET)
 
 execute_process(COMMAND mkdir -p ${frameworks_dir})
-execute_process(COMMAND ${macdeployqt_EXE} ${CMAKE_BINARY_DIR}/${bundle_name} OUTPUT_QUIET ERROR_QUIET)
+execute_process(COMMAND ${macdeployqt_executable} ${CMAKE_BINARY_DIR}/${bundle_name} OUTPUT_QUIET ERROR_QUIET)
 
 if(doBundle EQUAL 1)
     execute_process(COMMAND cp -pPR ${sdl_dir}          ${CMAKE_BINARY_DIR}/${frameworks_dir}/SDL.framework)

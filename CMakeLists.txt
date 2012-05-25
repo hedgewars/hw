@@ -70,9 +70,18 @@ if(APPLE)
 	#what system are we building for
 	set(minimum_macosx_version $ENV{MACOSX_DEPLOYMENT_TARGET})
 
-	#detect on which system are we
-	EXEC_PROGRAM("/usr/bin/sw_vers" ARGS "-productVersion" OUTPUT_VARIABLE current_macosx_version)
-	STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
+	#detect on which system we are: if sw_vers cannot be found for any reason (re)use minimum_macosx_version
+	find_program(sw_vers sw_vers)
+	if(sw_vers)
+		exec_program(${sw_vers} ARGS "-productVersion" OUTPUT_VARIABLE current_macosx_version)
+		string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
+        else()
+		if(NOT minimum_macosx_version)
+			message(FATAL_ERROR "sw_vers not found! Need explicit MACOSX_DEPLOYMENT_TARGET variable set")
+		else()
+			set(current_macosx_version ${minimum_macosx_version})
+		endif()
+	endif()
 
 	#if nothing is set, we deploy only for the current system
 	if(NOT minimum_macosx_version)
@@ -84,7 +93,16 @@ if(APPLE)
 		message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
 	endif()
 
-	#this variable needs to be set for freepascal universal binary
+	#workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
+	if(current_macosx_version MATCHES "10.4")
+		find_package(SDL_mixer REQUIRED)
+		set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
+		set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
+		set(pascal_flags "-k${DYLIB_SMPEG}" "-k${DYLIB_MIKMOD}" ${pascal_flags})
+		set(CMAKE_C_FLAGS "${DYLIB_SMPEG}" "${DYLIB_MIKMOD}" ${CMAKE_C_FLAGS})
+	endif()
+
+	#CMAKE_OSX_ARCHITECTURES and CMAKE_OSX_SYSROOT need to be set for universal binary and correct linking
 	if(NOT CMAKE_OSX_ARCHITECTURES)
 		if(current_macosx_version LESS "10.6")
 			if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
@@ -97,33 +115,23 @@ if(APPLE)
 		endif()
 	endif()
 
-	#be sure to select ppc-compatible toolchains just in case
-	if(minimum_macosx_version LESS "10.6")
-		set(CMAKE_C_COMPILER "gcc-4.0")
-		set(CMAKE_CXX_COMPILER "g++-4.0")
-	endif()
-
-	if(minimum_macosx_version MATCHES "10.4")
-		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
-		#workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
-		if(current_macosx_version MATCHES "10.4")
-			find_package(SDL_mixer REQUIRED)
-			set(pascal_compiler_flags_cmn "-k-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg" "-k-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod" ${pascal_compiler_flags_cmn})
-			set(CMAKE_C_FLAGS "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg -dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
+	#CMAKE_OSX_SYSROOT is set at the system version we are supposed to build on
+	#we need to provide the correct one when host and target differ
+	if(NOT ${minimum_macosx_version} MATCHES ${current_macosx_version})
+		if(minimum_macosx_version MATCHES "10.4")
+			set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
+			set(CMAKE_C_COMPILER "gcc-4.0")
+			set(CMAKE_CXX_COMPILER "g++-4.0")
+		else()
+			string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
+			set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
 		endif()
-	else()
-		STRING(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
-		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
 	endif()
 
-	#add user framework directory
-	set(pascal_compiler_flags_cmn "-Ff~/Library/Frameworks" ${pascal_compiler_flags_cmn})
+	#add user framework directory, other paths can be passed via FPFLAGS
+	set(pascal_flags "-Ff~/Library/Frameworks" ${pascal_flags})
 	#set deployment target
-	set(pascal_compiler_flags_cmn "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
-	#link with libsdlmain.a (when building an executable)
-	if(NOT BUILD_ENGINE_LIBRARY)
-		set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/libSDLmain.a" ${pascal_compiler_flags_cmn})
-	endif()
+	set(pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_flags})
 
 	message(STATUS "Build system: Mac OS X ${current_macosx_version} with GCC:${CMAKE_C_COMPILER}")
 	message(STATUS "Target system: Mac OS X ${minimum_macosx_version} for architecture(s):${CMAKE_OSX_ARCHITECTURES}")
@@ -152,17 +160,18 @@ set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
-separate_arguments(FPFLAGSINT UNIX_COMMAND ${FPFLAGS})
-set(pascal_compiler_flags_cmn ${FPFLAGSINT} "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_compiler_flags_cmn})
-set(haskell_compiler_flags_cmn "-O2" ${haskell_compiler_flags_cmn})
+separate_arguments(fpflags_full UNIX_COMMAND ${FPFLAGS})
+set(pascal_flags ${fpflags_full} "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_flags})
+separate_arguments(ghflags_full UNIX_COMMAND ${GHFLAGS})
+set(haskell_flags "-O2" ${haskell_flags} ${ghflags_full})
 
 if(Optz)
-#	set(pascal_compiler_flags_cmn "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
-	set(pascal_compiler_flags_cmn "-Os" "-Ooregvar" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
-	set(haskell_compiler_flags_cmn "-w" "-fno-warn-unused-do-bind" ${haskell_compiler_flags_cmn})
+#	set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
+	set(pascal_flags "-Os" "-Ooregvar" "-Xs" "-Si" ${pascal_flags})
+	set(haskell_flags "-w" "-fno-warn-unused-do-bind" ${haskell_flags})
 else(Optz)
-	set(pascal_compiler_flags_cmn "-O-" "-g" "-gl" "-gv" "-Ct" "-dDEBUGFILE" ${pascal_compiler_flags_cmn})
-	set(haskell_compiler_flags_cmn "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_compiler_flags_cmn})
+	set(pascal_flags "-O-" "-g" "-gl" "-gv" "-Ct" "-dDEBUGFILE" ${pascal_flags})
+	set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
 endif(Optz)
 
 
@@ -175,7 +184,11 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 
 if(WITH_SERVER)
-	find_program(ghc_executable ghc)
+	if(GHC)
+		set(ghc_executable ${GHC})
+	else()
+		find_program(ghc_executable ghc)
+	endif()
 
 	if(ghc_executable)
 		set(HAVE_NETSERVER true)
@@ -192,12 +205,12 @@ find_package(Lua)
 if(NOT ${LUA_FOUND})
         message(STATUS "Lua library not found, building bundled dependency")
 	add_subdirectory(misc/liblua)
-	#link with liblua.a (which requires readline)
-	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_compiler_flags_cmn})
+	#link with liblua.a (which requires system readline)
+	set(pascal_flags "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_flags})
 endif()
 add_subdirectory(hedgewars)
 
-#run cmake -DBUILD_ANDROID_PORT=1 to enable this
+#run cmake -DANDROID=1 to enable this
 if(ANDROID)
 	add_subdirectory(project_files/Android-build)
 endif()
