@@ -761,11 +761,12 @@ end;
 
 procedure SetScale(f: GLfloat);
 begin
-    if cScaleFactor <> f then
-        begin
+    // This lazy update conflicts with R7103 at the moment, missing the initial SetScale(2.0)
+    //if cScaleFactor <> f then
+    //begin
         cScaleFactor:=f;
         UpdateProjection;
-        end;
+    //end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
