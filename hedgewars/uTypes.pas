@@ -44,7 +44,8 @@ type
     // Different files are stored in different folders, this enumeration is used to tell which folder to use
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
             ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps, ptSuddenDeath, ptButtons);
+            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps, ptSuddenDeath, ptButtons,
+            ptShaders);
 
     // Available sprites for displaying stuff
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
