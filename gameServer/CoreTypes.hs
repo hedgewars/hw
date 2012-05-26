@@ -67,6 +67,7 @@ data GameInfo =
     GameInfo
     {
         roundMsgs :: Seq B.ByteString,
+        leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
         teamsInGameNumber :: Int,
         allPlayersHaveRegisteredAccounts :: Bool,
@@ -78,6 +79,7 @@ data GameInfo =
 newGameInfo = 
     GameInfo
         Data.Sequence.empty
+        []
 
 data RoomInfo =
     RoomInfo
