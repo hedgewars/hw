@@ -63,7 +63,8 @@ class HWTeam : public QObject
 
         // attribute getters
         unsigned int campaignProgress() const;
-        QColor color() const;
+        int color() const;
+        QColor qcolor() const;
         unsigned int difficulty() const;
         QString flag() const;
         QString fort() const;
@@ -78,7 +79,6 @@ class HWTeam : public QObject
 
         // attribute setters
         void bindKey(unsigned int idx, const QString & key);
-        void setColor(const QColor & color);
         void setDifficulty(unsigned int level);
         void setFlag(const QString & flag);
         void setFort(const QString & fort);
@@ -100,6 +100,8 @@ class HWTeam : public QObject
         bool operator < (const HWTeam& t1) const;
         HWTeam & operator = (const HWTeam & other);
 
+public slots:
+        void setColor(int color);
 
     private:
 
@@ -117,7 +119,7 @@ class HWTeam : public QObject
 
         // class members that contain info for the current game setup
         quint8 m_numHedgehogs;
-        QColor m_color;
+        int m_color;
         bool m_isNetTeam;
         QString m_owner;
 

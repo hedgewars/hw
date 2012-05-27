@@ -26,6 +26,7 @@
 #include "teamselhelper.h"
 #include "hwconsts.h"
 #include "frameTeam.h"
+#include "colorwidget.h"
 
 void TeamLabel::teamButtonClicked()
 {
@@ -34,7 +35,7 @@ void TeamLabel::teamButtonClicked()
 
 TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, FrameTeams * parent) :
     QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0),
-    colorButt(0)
+    colorWidget(0)
 {
     m_parentFrameTeams = parent;
     QPalette newPalette = palette();
@@ -67,17 +68,15 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, FrameTeams * parent)
     if(m_isPlaying)
     {
         // team color
-        colorButt = new QPushButton(this);
-        colorButt->setMaximumWidth(26);
-        colorButt->setMinimumHeight(26);
-        colorButt->setGeometry(0, 0, 26, 26);
-
-        incrementTeamColor();
-        connect(colorButt, SIGNAL(clicked()), this, SLOT(incrementTeamColor()));
-
-        colorButt->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(colorButt, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(decrementTeamColor()));
-        mainLayout.addWidget(colorButt);
+        colorWidget = new ColorWidget(colorsModel, this);
+        colorWidget->setMinimumWidth(26);
+        colorWidget->setMaximumWidth(26);
+        colorWidget->setMinimumHeight(26);
+        colorWidget->setMaximumHeight(26);
+        //colorWidget->setGeometry(0, 0, 26, 26);
+        connect(colorWidget, SIGNAL(colorChanged(int)), this, SLOT(onColorChanged(int)));
+        colorWidget->setColor(m_parentFrameTeams->getNextColor());
+        mainLayout.addWidget(colorWidget);
 
         phhoger = new CHedgehogerWidget(QImage(":/res/hh25x25.png"), QImage(":/res/hh25x25grey.png"), this);
         connect(phhoger, SIGNAL(hedgehogsNumChanged()), this, SLOT(hhNumChanged()));
@@ -99,7 +98,7 @@ void TeamShowWidget::setInteractivity(bool interactive)
         butt->setEnabled(interactive);
     }
 
-    colorButt->setEnabled(interactive);
+    colorWidget->setEnabled(interactive);
     phhoger->setEnabled(interactive);
 }
 
@@ -128,35 +127,16 @@ void TeamShowWidget::activateTeam()
   return params;
 }*/
 
-void TeamShowWidget::incrementTeamColor()
+
+void TeamShowWidget::changeTeamColor(int color)
 {
-    changeTeamColor(m_parentFrameTeams->getNextColor());
-}
-void TeamShowWidget::decrementTeamColor()
-{
-    const QList<QColor> & availColors = m_parentFrameTeams->availableColors;
-    int idx = availColors.indexOf(m_parentFrameTeams->currentColor);
-
-    idx--;
-
-    if (idx < 0)
-        idx = availColors.size() - 1;
-
-    changeTeamColor(availColors.at(idx));
+    colorWidget->setColor(color);
 }
 
-void TeamShowWidget::changeTeamColor(QColor color)
+void TeamShowWidget::onColorChanged(int color)
 {
-    QColor & curColor = m_parentFrameTeams->currentColor;
-    curColor = color;
-
-    colorButt->setStyleSheet(QString("QPushButton{"
-                                     "background-color: %1;"
-                                     "border-width: 1px;"
-                                     "border-radius: 2px;"
-                                     "}").arg(curColor.name()));
-
     m_team.setColor(color);
+
     emit teamColorChanged(m_team);
 }
 

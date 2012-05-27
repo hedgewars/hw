@@ -20,6 +20,7 @@
 #include <QResizeEvent>
 #include <QCoreApplication>
 #include <QPalette>
+#include <QStandardItemModel>
 
 #include "frameTeam.h"
 #include "teamselhelper.h"
@@ -35,10 +36,6 @@ FrameTeams::FrameTeams(QWidget* parent) :
 
     mainLayout.setSpacing(1);
     mainLayout.setContentsMargins(4, 4, 4, 4);
-
-    int i = 0;
-    while(colors[i] != 0)
-        availableColors.push_back(QColor(colors[i++]));
 
     resetColors();
     this->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
@@ -57,19 +54,13 @@ void FrameTeams::setInteractivity(bool interactive)
 
 void FrameTeams::resetColors()
 {
-    currentColor = availableColors.last(); // ensure next color is the first one
+    currentColor = colorsModel->rowCount() - 1; // ensure next color is the first one
 }
 
-QColor FrameTeams::getNextColor() const
+int FrameTeams::getNextColor()
 {
-    int idx = availableColors.indexOf(currentColor);
-
-    idx++;
-
-    if (idx >= availableColors.size())
-        idx = 0;
-
-    return availableColors.at(idx);
+    currentColor = (currentColor + 1) % colorsModel->rowCount();
+    return currentColor;
 }
 
 void FrameTeams::addTeam(HWTeam team, bool willPlay)

@@ -22,6 +22,7 @@
 #include <QLineEdit>
 #include <QCryptographicHash>
 #include <QSettings>
+#include <QStandardItemModel>
 
 #include "team.h"
 #include "hwform.h"
@@ -248,10 +249,10 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
     QStringList sl;
     if (m_isNetTeam)
     {
-        sl.push_back(QString("eaddteam %3 %1 %2").arg(m_color.rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toLatin1(), QCryptographicHash::Md5).toHex())));
+        sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toLatin1(), QCryptographicHash::Md5).toHex())));
         sl.push_back("erdriven");
     }
-    else sl.push_back(QString("eaddteam %3 %1 %2").arg(m_color.rgb() & 0xffffff).arg(m_name).arg(playerHash));
+    else sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
 
     sl.push_back(QString("egrave " + m_grave));
     sl.push_back(QString("efort " + m_fort));
@@ -334,11 +335,17 @@ void HWTeam::setDifficulty(unsigned int level)
 }
 
 // color
-QColor HWTeam::color() const
+int HWTeam::color() const
 {
     return m_color;
 }
-void HWTeam::setColor(const QColor & color)
+
+QColor HWTeam::qcolor() const
+{
+    return colorsModel->item(m_color)->data().value<QColor>();
+}
+
+void HWTeam::setColor(int color)
 {
     m_color = color;
 }
@@ -422,4 +429,3 @@ void HWTeam::incWins()
 {
     m_wins++;
 }
-
