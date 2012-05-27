@@ -352,7 +352,7 @@ QColor HWTeam::qcolor() const
 
 void HWTeam::setColor(int color)
 {
-    m_color = color;
+    m_color = color % colorsModel->rowCount();
 }
 
 
