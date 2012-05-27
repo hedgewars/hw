@@ -124,7 +124,7 @@ void HWGame::SendQuickConfig()
 
     HWTeam team1;
     team1.setDifficulty(0);
-    team1.setColor(QColor(colors[0]));
+    team1.setColor(0);
     team1.setNumHedgehogs(4);
     HWNamegen::teamRandomNames(team1,true);
     HWProto::addStringListToBuffer(teamscfg,
@@ -132,7 +132,7 @@ void HWGame::SendQuickConfig()
 
     HWTeam team2;
     team2.setDifficulty(4);
-    team2.setColor(QColor(colors[1]));
+    team2.setColor(1);
     team2.setNumHedgehogs(4);
     do
         HWNamegen::teamRandomNames(team2,true);
