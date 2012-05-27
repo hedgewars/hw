@@ -113,9 +113,9 @@ public slots:
         QString m_fort;
         QString m_flag;
         QString m_voicepack;
-        HWHog m_hedgehogs[HEDGEHOGS_PER_TEAM];
+        QList<HWHog> m_hedgehogs;
         quint8 m_difficulty;
-        BindAction m_binds[BINDS_NUMBER];
+        QList<BindAction> m_binds;
 
         // class members that contain info for the current game setup
         quint8 m_numHedgehogs;
