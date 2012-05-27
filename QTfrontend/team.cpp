@@ -37,6 +37,7 @@ HWTeam::HWTeam(const QString & teamname) :
     OldTeamName = m_name;
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
+        m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name = (QLineEdit::tr("hedgehog %1").arg(i+1));
         m_hedgehogs[i].Hat = "NoHat";
     }
@@ -46,6 +47,7 @@ HWTeam::HWTeam(const QString & teamname) :
     m_flag = "hedgewars";
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
+        m_binds.append(BindAction());
         m_binds[i].action = cbinds[i].action;
         m_binds[i].strbind = cbinds[i].strbind;
     }
@@ -70,6 +72,7 @@ HWTeam::HWTeam(const QStringList& strLst) :
     m_difficulty = strLst[6].toUInt();
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
+        m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name=strLst[i * 2 + 7];
         m_hedgehogs[i].Hat=strLst[i * 2 + 8];
 // Somehow claymore managed an empty hat.  Until we figure out how, this should avoid a repeat
@@ -90,6 +93,7 @@ HWTeam::HWTeam() :
     m_name = QString("Team");
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
+        m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name.sprintf("hedgehog %d", i);
         m_hedgehogs[i].Hat = "NoHat";
     }
@@ -101,6 +105,7 @@ HWTeam::HWTeam() :
 
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
+        m_binds.append(BindAction());
         m_binds[i].action = cbinds[i].action;
         m_binds[i].strbind = cbinds[i].strbind;
     }
