@@ -106,7 +106,7 @@ void HWNewNet::AddTeam(const HWTeam & team)
 {
     QString cmd = QString("ADD_TEAM") + delimeter +
                   team.name() + delimeter +
-                  team.color().name() + delimeter +
+                  QString::number(team.color()) + delimeter +
                   team.grave() + delimeter +
                   team.fort() + delimeter +
                   team.voicepack() + delimeter +
@@ -613,7 +613,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
         HWTeam tmptm(lst[1]);
-        tmptm.setColor(QColor(lst[2]));
+        tmptm.setColor(lst[2].toInt());
         emit teamColorChanged(tmptm);
         return;
     }
@@ -687,7 +687,7 @@ void HWNewNet::onTeamColorChanged(const HWTeam& team)
         RawSendNet(QString("TEAM_COLOR%1%2%1%3")
                    .arg(delimeter)
                    .arg(team.name())
-                   .arg(team.color().name()));
+                   .arg(team.color()));
 }
 
 void HWNewNet::onParamChanged(const QString & param, const QStringList & value)

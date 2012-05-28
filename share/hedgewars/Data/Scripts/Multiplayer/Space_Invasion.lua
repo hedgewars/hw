@@ -297,7 +297,6 @@ local pointBlankHits = 0
 -- tumbler goods
 ---------------------
 
-local moveTimer = 0
 local leftOn = false
 local rightOn = false
 local upOn = false
@@ -318,7 +317,6 @@ local fireTimer = 0
 local primShotsMax = 5
 local primShotsLeft = 0
 
-local TimeLeftCounter = 0
 local TimeLeft = 0
 local stopMovement = false
 local tumbleStarted = false
@@ -330,8 +328,6 @@ local shieldHealth
 local shockwave
 local shockwaveHealth = 0
 local shockwaveRad = 300
-
-local Timer100 = 0
 
 local vTag = {}
 
@@ -346,8 +342,7 @@ local targetHit = false
 local FadeAlpha = 0 -- used to fade the circles out gracefully when player dies
 local pTimer = 0 -- tracking projectiles following player
 
-local circAdjustTimer = 0		-- handle adjustment of circs direction
-local m2Count = 0		-- handle speed of circs
+--local m2Count = 0		-- handle speed of circs
 
 local vCirc = {}
 local vCCount = 0
@@ -1160,7 +1155,7 @@ function ThingsToBeRunOnGears(gear)
 end
 
 
-function onGameTick()
+function onGameTick20()
 
 
 	--WriteLnToConsole("Start of GameTick")
@@ -1175,9 +1170,7 @@ function onGameTick()
 	--end
 
 
-	Timer100 = Timer100 + 1
-	if Timer100 >= 100 then
-		Timer100 = 0
+	if GameTime%100 == 0 then
 
 		if beam == true then
 			shieldHealth = shieldHealth - 1
@@ -1201,7 +1194,7 @@ function onGameTick()
 		--runOnGears(HandleLifeSpan)
 		--runOnGears(DeleteFarFlungBarrel)
 
-		if CirclesAreGo == true then
+		if CirclesAreGo == true and CurrentHedgehog ~= nil then
 			CheckDistances()
 			--runOnGears(CheckVarious)	-- used to be in handletracking for some bizarre reason
 			--runOnGears(ProjectileTrack)
@@ -1225,7 +1218,7 @@ function onGameTick()
 		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) then
 			--AddCaption(LOC_NOT("Good to go!"))
 			tumbleStarted = true
-			TimeLeft = (TurnTime/1000)	--45
+			TimeLeft = div(TurnTime, 1000)	--45
 			FadeAlpha = 0
 			rAlpha = 255
 			AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtGrenade, 0, 0, 0, 1)
@@ -1243,9 +1236,7 @@ function onGameTick()
 		--AddCaption(GetX(CurrentHedgehog) .. ";" .. GetY(CurrentHedgehog) )
 
 		-- Calculate and display turn time
-		TimeLeftCounter = TimeLeftCounter + 1
-		if TimeLeftCounter == 1000 then
-			TimeLeftCounter = 0
+		if GameTime%1000 == 0 then
 			TimeLeft = TimeLeft - 1
 
 			if TimeLeft >= 0 then
@@ -1310,10 +1301,8 @@ function onGameTick()
 			end
 
 			-- handle movement based on IO
-			moveTimer = moveTimer + 1
-			if moveTimer == 100 then -- 100
+			if GameTime%100 == 0 then -- 100
 				--nw WriteLnToConsole("Start of Player MoveTimer")
-				moveTimer = 0
 
 				---------------
 				-- new trail code
@@ -2261,10 +2250,7 @@ function HandleCircles()
 	end
 
 	-- alter the circles velocities
-	circAdjustTimer = circAdjustTimer + 1
-	if circAdjustTimer == 2000 then
-
-		circAdjustTimer = 0
+	if GameTime%2000 == 0 then
 
 		for i = 0,(vCCount-1) do
 
@@ -2272,9 +2258,9 @@ function HandleCircles()
 			-- or make them move in random directions
 
 			if vCircX[i] > 5500 then
-				vCircDX[i] = -5	--5 circmovchange
+				vCircDX[i] = -4	--5 circmovchange
 			elseif vCircX[i] < -1500 then
-				vCircDX[i] = 5	--5 circmovchange
+				vCircDX[i] = 4	--5 circmovchange
 			else
 
 				z = GetRandom(2)
@@ -2287,9 +2273,9 @@ function HandleCircles()
 			end
 
 			if vCircY[i] > 1500 then
-				vCircDY[i] = -5	--5 circmovchange
+				vCircDY[i] = -4	--5 circmovchange
 			elseif vCircY[i] < -2900 then
-				vCircDY[i] = 5	--5 circmovchange
+				vCircDY[i] = 4	--5 circmovchange
 			else
 				z = GetRandom(2)
 				if z == 1 then
@@ -2305,10 +2291,10 @@ function HandleCircles()
 	end
 
 	-- move the circles according to their current velocities
-	m2Count = m2Count + 1
-	if m2Count == 25 then	--25 circmovchange
+	--m2Count = m2Count + 1
+	--if m2Count == 25 then	--25 circmovchange
 
-		m2Count = 0
+	--	m2Count = 0
 		for i = 0,(vCCount-1) do
 			vCircX[i] = vCircX[i] + vCircDX[i]
 			vCircY[i] = vCircY[i] + vCircDY[i]
@@ -2349,7 +2335,7 @@ function HandleCircles()
 
 
 
-	end
+	--end
 
 	for i = 0,(vCCount-1) do
 		g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(vCirc[i])		-- vCircCol[i] g10
