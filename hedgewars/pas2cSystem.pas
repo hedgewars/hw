@@ -68,6 +68,7 @@ var
     Length, StrToInt : function : integer;
     SetLength, val : procedure;
     _pchar : function : PChar;
+    pchar2str : function : string;
     memcpy : procedure;
 
     assign, rewrite, reset, flush, BlockWrite, BlockRead, close : procedure;

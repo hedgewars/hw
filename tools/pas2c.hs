@@ -39,10 +39,11 @@ data RenderState = RenderState
         uniqCounter :: Int,
         toMangle :: Set.Set String,
         currentUnit :: String,
+        currentFunctionResult :: String,
         namespaces :: Map.Map String Records
     }
     
-emptyState = RenderState Map.empty "" BTUnknown [] 0 Set.empty ""
+emptyState = RenderState Map.empty "" BTUnknown [] 0 Set.empty "" ""
 
 getUniq :: State RenderState Int
 getUniq = do
@@ -381,13 +382,19 @@ fun2C True rv (FunctionDeclaration name returnType params (Just (tvars, phrase))
     t <- type2C returnType
     t'<- gets lastType
     n <- id2C IOInsert $ setBaseType (BTFunction (numberOfDeclarations params) t') name
-    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [(render res, t')] $ currentScope st}) $ do
+    
+    let isVoid = case returnType of
+            VoidType -> True
+            _ -> False
+            
+    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [(render res, t')] $ currentScope st
+            , currentFunctionResult = if isVoid then [] else render res}) $ do
         p <- functionParams2C params
         ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
         return (p, ph)
-    let phrasesBlock = case returnType of
-            VoidType -> ph
-            _ -> t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
+        
+    let phrasesBlock = if isVoid then ph else t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
+    
     return [ 
         t empty <+> n <> parens p
         $+$
@@ -615,6 +622,18 @@ phrase2C (Assignment ref expr) = do
         (BTFunction {}, (Reference r')) -> do
             e <- ref2C r'
             return $ r <+> text "=" <+> e <> semi
+        (BTString, _) -> do
+            e <- expr2C expr
+            lt <- gets lastType
+            case lt of
+                -- assume pointer to char for simplicity
+                BTPointerTo _ -> do
+                    e <- expr2C $ Reference $ FunCall [Reference $ RefExpression expr] (SimpleReference (Identifier "pchar2str" BTUnknown))
+                    return $ r <+> text "=" <+> e <> semi
+                BTString -> do
+                    e <- expr2C expr
+                    return $ r <+> text "=" <+> e <> semi
+                _ -> error $ "Assignment to string from " ++ show lt
         (BTArray (Range _) _ _, _) -> phrase2C $ 
             ProcCall (FunCall
                 [
@@ -671,7 +690,12 @@ phrase2C (RepeatCycle e' p') = do
     return $ text "do" <+> p <+> text "while" <> parens (text "!" <> parens e) <> semi
 phrase2C NOP = return $ text ";"
 
-phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "exit" BTUnknown))) = return $ text "return" <> semi
+phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "exit" BTUnknown))) = do
+    f <- gets currentFunctionResult
+    if null f then
+        return $ text "return" <> semi
+        else
+        return $ text "return" <+> text f <> semi
 phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "break" BTUnknown))) = return $ text "break" <> semi
 phrase2C (BuiltInFunctionCall [] (SimpleReference (Identifier "continue" BTUnknown))) = return $ text "continue" <> semi
 phrase2C (BuiltInFunctionCall [e] (SimpleReference (Identifier "exit" BTUnknown))) = liftM (\e -> text "return" <+> e <> semi) $ expr2C e
