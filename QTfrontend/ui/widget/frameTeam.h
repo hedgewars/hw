@@ -42,7 +42,7 @@ class FrameTeams : public QFrame
         void setHHNum(const HWTeam& team);
         void setTeamColor(const HWTeam& team);
         void setInteractivity(bool interactive);
-        QColor getNextColor() const;
+        int getNextColor();
         QSize sizeHint() const;
 
     signals:
@@ -55,8 +55,7 @@ class FrameTeams : public QFrame
     private:
         const int maxHedgehogsPerGame;
         int overallHedgehogs;
-        QList<QColor> availableColors;
-        QColor currentColor;
+        int currentColor;
 
         void emitTeamColorChanged(const HWTeam& team);
 

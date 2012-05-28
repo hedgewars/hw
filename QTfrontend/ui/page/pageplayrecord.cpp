@@ -110,7 +110,7 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
 
 void PagePlayDemo::refresh()
 {
-    if (this->isVisible());
+    if (this->isVisible())
         FillFromDir(recType);
 }
 

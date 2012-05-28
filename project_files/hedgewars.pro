@@ -26,7 +26,6 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/model/MapModel.h \
     ../QTfrontend/model/ammoSchemeModel.h \
     ../QTfrontend/model/netserverslist.h \
-    ../QTfrontend/model/hats.h \
     ../QTfrontend/ui/page/pagedrawmap.h \
     ../QTfrontend/ui/page/pagedata.h \
     ../QTfrontend/ui/page/pagetraining.h \
@@ -102,12 +101,14 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.h \
     ../QTfrontend/ui/page/pagefeedback.h \
     ../QTfrontend/model/roomslistmodel.h \
-    ../QTfrontend/ui/dialog/input_password.h
+    ../QTfrontend/ui/dialog/input_password.h \
+    ../QTfrontend/ui/widget/colorwidget.h \
+    ../QTfrontend/model/HatModel.h \
+    ../QTfrontend/model/GameStyleModel.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
     ../QTfrontend/model/ThemeModel.cpp \
-    ../QTfrontend/model/hats.cpp \
     ../QTfrontend/model/netserverslist.cpp \
     ../QTfrontend/ui/qaspectratiolayout.cpp \
     ../QTfrontend/ui/page/pagemain.cpp \
@@ -182,7 +183,10 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.cpp \
     ../QTfrontend/ui/page/pagefeedback.cpp \
     ../QTfrontend/model/roomslistmodel.cpp \
-    ../QTfrontend/ui/dialog/input_password.cpp
+    ../QTfrontend/ui/dialog/input_password.cpp \
+    ../QTfrontend/ui/widget/colorwidget.cpp \
+    ../QTfrontend/model/HatModel.cpp \
+    ../QTfrontend/model/GameStyleModel.cpp
 
 win32 {
     SOURCES += ../QTfrontend/xfire.cpp
@@ -236,3 +240,5 @@ LIBS += -L../misc/quazip -lquazip
     CONFIG += warn_on x86
     #CONFIG += x86 ppc x86_64 ppc64
 }
+
+FORMS +=
