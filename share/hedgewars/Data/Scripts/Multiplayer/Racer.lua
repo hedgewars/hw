@@ -107,7 +107,6 @@ local teamScore = {}
 --------
 
 local cGear = nil
-local gTimer = 0
 
 local bestClan = nil
 local bestTime = nil
@@ -116,7 +115,6 @@ local gameBegun = false
 local gameOver = false
 local racerActive = false
 local trackTime = 0
-local wpCheckCounter = 0
 
 local wpCirc = {}
 local wpX = {}
@@ -552,7 +550,7 @@ function onNewTurn()
 
 end
 
-function onGameTick()
+function onGameTick20()
 
 	-- airstrike detected, convert this into a potential waypoint spot
 	if cGear ~= nil then
@@ -613,18 +611,14 @@ function onGameTick()
 		if (racerActive == true) and (gameBegun == true) then
 
 			--ghost
-			gTimer = gTimer + 1
-			if gTimer == 40 then
-				gTimer = 0
+			if GameTime%40 == 0 then
 				HandleGhost()
 			end
 
-			trackTime = trackTime + 1
+			trackTime = trackTime + 20
 
-			wpCheckCounter = wpCheckCounter + 1
-			if (wpCheckCounter == 100) then
+			if GameTime%100 == 0 then
 
-				wpCheckCounter = 0
 				AddCaption(trackTime/1000,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
 
 				if (CheckWaypoints() == true) then
@@ -640,7 +634,7 @@ function onGameTick()
 
 
 		-- if the player has expended his tunbling time, stop him tumbling
-		if TurnTimeLeft <= 1 then
+		if TurnTimeLeft <= 20 then
 			DisableTumbler()
 		end
 
