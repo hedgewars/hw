@@ -47,9 +47,13 @@ if not Assert then
 end;
 
 procedure SDLTry(Assert: boolean; isFatal: boolean);
+var s: shortstring;
 begin
 if not Assert then
-    OutError(SDL_GetError, isFatal)
+    begin
+    s:= SDL_GetError();
+    OutError(s, isFatal)
+    end
 end;
 
 end.

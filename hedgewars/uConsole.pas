@@ -49,8 +49,10 @@ with tl do
 end;
 
 procedure WriteToConsole(s: shortstring);
+{$IFNDEF NOCONSOLE}
 var Len: LongInt;
     done: boolean;
+{$ENDIF}
 begin
 {$IFNDEF NOCONSOLE}
 AddFileLog('[Con] ' + s);
