@@ -24,8 +24,6 @@ interface
 
 uses SDLh, uTypes, GLunit, uConsts, uTextures, math;
 
-procedure initModule;
-
 procedure DrawSprite            (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite            (Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
@@ -61,76 +59,71 @@ procedure ResetRotation;
 
 
 implementation
-uses uVariables;
+uses uVariables, uStore;
 
 var LastTint: LongWord = 0;
-    Modelview: TMatrix4x4f;
 
 const DegToRad =  0.01745329252; // 2PI / 360
 
 procedure UpdateModelview;
 begin
-glLoadMatrixf(@Modelview[0,0]);
+{$IFDEF GL2}
+    UpdateModelviewProjection;
+{$ELSE}
+    glLoadMatrixf(@mModelview[0,0]);
+{$ENDIF}
 end;
 
 procedure ResetModelview;
 begin
-Modelview[0,0]:= 1.0; Modelview[1,0]:=0.0; Modelview[3,0]:= 0;
-Modelview[0,1]:= 0.0; Modelview[1,1]:=1.0; Modelview[3,1]:= 0;
-UpdateModelview;
+    mModelview[0,0]:= 1.0; mModelview[1,0]:=0.0; mModelview[3,0]:= 0;
+    mModelview[0,1]:= 0.0; mModelview[1,1]:=1.0; mModelview[3,1]:= 0;
+    UpdateModelview;
 end;
 
 procedure SetOffset(X, Y: Longint);
 begin
-Modelview[3,0]:= X;
-Modelview[3,1]:= Y;
+    mModelview[3,0]:= X;
+    mModelview[3,1]:= Y;
 end;
 
 procedure AddOffset(X, Y: GLfloat); // probably want to refactor this to use integers
 begin
-Modelview[3,0]:=Modelview[3,0] + Modelview[0,0]*X + Modelview[1,0]*Y;
-Modelview[3,1]:=Modelview[3,1] + Modelview[0,1]*X + Modelview[1,1]*Y;
+    mModelview[3,0]:=mModelview[3,0] + mModelview[0,0]*X + mModelview[1,0]*Y;
+    mModelview[3,1]:=mModelview[3,1] + mModelview[0,1]*X + mModelview[1,1]*Y;
 end;
 
 procedure SetScale(Scale: GLfloat);
 begin
-Modelview[0,0]:= Scale;
-Modelview[1,1]:= Scale;
+    mModelview[0,0]:= Scale;
+    mModelview[1,1]:= Scale;
 end;
 
 procedure AddScale(Scale: GLfloat);
 begin
-Modelview[0,0]:= Modelview[0,0]*Scale; Modelview[1,0]:= Modelview[1,0]*Scale;
-Modelview[0,1]:= Modelview[0,1]*Scale; Modelview[1,1]:= Modelview[1,1]*Scale;
+    mModelview[0,0]:= mModelview[0,0]*Scale; mModelview[1,0]:= mModelview[1,0]*Scale;
+    mModelview[0,1]:= mModelview[0,1]*Scale; mModelview[1,1]:= mModelview[1,1]*Scale;
 end;
 
 procedure AddScale(X, Y: GLfloat);
 begin
-Modelview[0,0]:= Modelview[0,0]*X; Modelview[1,0]:= Modelview[1,0]*Y;
-Modelview[0,1]:= Modelview[0,1]*X; Modelview[1,1]:= Modelview[1,1]*Y;
+    mModelview[0,0]:= mModelview[0,0]*X; mModelview[1,0]:= mModelview[1,0]*Y;
+    mModelview[0,1]:= mModelview[0,1]*X; mModelview[1,1]:= mModelview[1,1]*Y;
 end;
 
 
 procedure SetRotation(Angle, ZAxis: GLfloat);
 var s, c: Extended;
 begin
-SinCos(Angle*DegToRad, s, c);
-Modelview[0,0]:= c;       Modelview[1,0]:=-s*ZAxis;
-Modelview[0,1]:= s*ZAxis; Modelview[1,1]:= c;
+    SinCos(Angle*DegToRad, s, c);
+    mModelview[0,0]:= c;       mModelview[1,0]:=-s*ZAxis;
+    mModelview[0,1]:= s*ZAxis; mModelview[1,1]:= c;
 end;
 
 procedure ResetRotation;
 begin
-Modelview[0,0]:= 1.0; Modelview[1,0]:=0.0;
-Modelview[0,1]:= 0.0; Modelview[1,1]:=1.0;
-end;
-
-procedure LoadIdentity(out Matrix: TMatrix4x4f);
-begin
-Matrix[0,0]:= 1.0; Matrix[1,0]:=0.0; Matrix[2,0]:=0.0; Matrix[3,0]:=0.0;
-Matrix[0,1]:= 0.0; Matrix[1,1]:=1.0; Matrix[2,1]:=0.0; Matrix[3,1]:=0.0;
-Matrix[0,2]:= 0.0; Matrix[1,2]:=0.0; Matrix[2,2]:=1.0; Matrix[3,2]:=0.0;
-Matrix[0,3]:= 0.0; Matrix[1,3]:=0.0; Matrix[2,3]:=0.0; Matrix[3,3]:=1.0;
+    mModelview[0,0]:= 1.0; mModelview[1,0]:=0.0;
+    mModelview[0,1]:= 0.0; mModelview[1,1]:=1.0;
 end;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
@@ -578,11 +571,6 @@ end;
 procedure Tint(c: Longword); inline;
 begin
     Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
-end;
-
-procedure initModule;
-begin
-LoadIdentity(Modelview);
 end;
 
 end.

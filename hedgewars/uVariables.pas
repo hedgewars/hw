@@ -21,7 +21,7 @@
 unit uVariables;
 interface
 
-uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
+uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile, uMatrix;
 
 var
 /////// init flags ///////
@@ -2465,6 +2465,9 @@ var
 
     lastTurnChecksum : Longword;
 
+    mModelview: TMatrix4x4f;
+    mProjection: TMatrix4x4f;
+
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
     trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
@@ -2614,6 +2617,9 @@ begin
     GrayScale:= false;
 
     LuaGoals:= '';
+
+    MatrixLoadIdentity(mModelview);
+    MatrixLoadIdentity(mProjection);
 end;
 
 procedure freeModule;
