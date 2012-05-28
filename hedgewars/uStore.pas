@@ -45,9 +45,13 @@ procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; inline;
 procedure UpdateProjection;
 
+{$IFDEF GL2}
+procedure UpdateModelviewProjection;
+{$ENDIF}
+
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
-     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
+     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}, uMatrix;
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -60,6 +64,7 @@ var MaxTextureSize: LongInt;
 {$ENDIF}
 {$IFDEF GL2}
     Shader: GLuint;
+    uMVPLocation: GLint;
 {$ENDIF}
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
@@ -791,6 +796,8 @@ begin
     Shader:= CompileProgram('default');
     glUseProgram(Shader);
     glUniform1i(glGetUniformLocation(Shader, 'tex'), 0);
+    uMVPLocation:= glGetUniformLocation(Shader, 'mvp');
+
 {$ENDIF}
 
 {$IFNDEF S3D_DISABLED}
@@ -855,18 +862,33 @@ begin
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 end;
 
+{$IFDEF GL2}
+procedure UpdateModelviewProjection;
+var
+    mvp: TMatrix4x4f;
+begin
+    MatrixMultiply(mvp, mProjection, mModelview);
+    glUniformMatrix4fv(uMVPLocation, 1, GL_FALSE, @mvp[0, 0]);
+end;
+{$ENDIF GL2}
+
 procedure UpdateProjection;
-var mat: array[0..15] of GLfloat;
+var
     s: GLfloat;
 begin
     s:=cScaleFactor;
+    mProjection[0,0]:= s/cScreenWidth; mProjection[0,1]:=  0.0;             mProjection[0,2]:=0.0; mProjection[0,3]:=  0.0;
+    mProjection[1,0]:= 0.0;            mProjection[1,1]:= -s/cScreenHeight; mProjection[1,2]:=0.0; mProjection[1,3]:=  0.0;
+    mProjection[2,0]:= 0.0;            mProjection[2,1]:=  0.0;             mProjection[2,2]:=1.0; mProjection[2,3]:=  0.0;
+    mProjection[3,0]:= cStereoDepth;   mProjection[3,1]:=  s/2;             mProjection[3,2]:=0.0; mProjection[3,3]:=  1.0;
+
+    {$IFDEF GL2}
+    UpdateModelviewProjection;
+    {$ELSE}
     glMatrixMode(GL_PROJECTION);
-    mat[ 0]:= s/cScreenWidth; mat[ 1]:=  0.0;             mat[ 2]:=0.0; mat[ 3]:=  0.0;
-    mat[ 4]:= 0.0;            mat[ 5]:= -s/cScreenHeight; mat[ 6]:=0.0; mat[ 7]:=  0.0;
-    mat[ 8]:= 0.0;            mat[ 9]:=  0.0;             mat[10]:=1.0; mat[11]:=  0.0;
-    mat[12]:= cStereoDepth;   mat[13]:=  s/2;             mat[14]:=0.0; mat[15]:=  1.0;
-    glLoadMatrixf(@mat);
+    glLoadMatrixf(@mProjection[0, 0]);
     glMatrixMode(GL_MODELVIEW);
+    {$ENDIF}    
 end;
 
 procedure SetScale(f: GLfloat);
