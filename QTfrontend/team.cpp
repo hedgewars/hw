@@ -54,6 +54,7 @@ HWTeam::HWTeam(const QString & teamname) :
     m_rounds = 0;
     m_wins = 0;
     m_campaignProgress = 0;
+    m_color = 0;
 }
 
 HWTeam::HWTeam(const QStringList& strLst) :
@@ -82,6 +83,7 @@ HWTeam::HWTeam(const QStringList& strLst) :
     m_rounds = 0;
     m_wins = 0;
     m_campaignProgress = 0;
+    m_color = 0;
 }
 
 HWTeam::HWTeam() :
@@ -112,6 +114,7 @@ HWTeam::HWTeam() :
     m_rounds = 0;
     m_wins = 0;
     m_campaignProgress = 0;
+    m_color = 0;
 }
 
 HWTeam::HWTeam(const HWTeam & other) :
@@ -157,6 +160,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
         m_campaignProgress = other.m_campaignProgress;
         m_rounds = other.m_rounds;
         m_wins = other.m_wins;
+        m_color = other.m_color;
     }
 
     return *this;
