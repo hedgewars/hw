@@ -64,12 +64,17 @@ var
     Trusted: boolean;
     s      : string;
 begin
+
+if(tkbd[code] = ord(KeyDown)) then exit;
+tkbd[code]:= ord(KeyDown);
+
+
 hideAmmoMenu:= false;
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
           and (CurrentHedgehog^.BotLevel = 0);
 
-tkbd[code]:= ord(KeyDown);
+
 
 // ctrl/cmd + q to close engine and frontend
 if(KeyDown and (code = quitKeyCode)) then
@@ -86,13 +91,13 @@ if CurrentBinds[code][0] <> #0 then
     begin
     if (code > 3) and (KeyDown) and not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
 
-    if (KeyDown) then
+    if KeyDown then
         begin
         ParseCommand(CurrentBinds[code], Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
-    else if (CurrentBinds[code][1] = '+') and not KeyDown then
+    else if (CurrentBinds[code][1] = '+') then
         begin
         s:= CurrentBinds[code];
         s[1]:= '-';
@@ -101,7 +106,6 @@ if CurrentBinds[code][0] <> #0 then
             ParseCommand('gencmd R', true)
         end;
     end
-
 end;
 
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
