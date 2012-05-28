@@ -534,6 +534,7 @@ function onNewTurn()
 			loc("NOT ENOUGH WAYPOINTS"),
 			loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
 			AddAmmo(CurrentHedgehog, amAirAttack, 4000)
+            ParseCommand("setweap " .. string.char(amAirAttack))
 		end
 	end
 
@@ -554,24 +555,28 @@ function onGameTick20()
 
 	-- airstrike detected, convert this into a potential waypoint spot
 	if cGear ~= nil then
-		x,y = GetGearTarget(cGear)
+		x,y = GetGearPosition(cGear)
+        if x > -9000 then
+            x,y = GetGearTarget(cGear)
 
-		DeleteGear(cGear)
 
-		if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-			AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
-			PlaySound(sndDenied)
-		elseif (y > WaterLine-50) then
-			AddCaption(loc("Please place the way-point further from the waterline."))
-			PlaySound(sndDenied)
-		else
-			PlaceWayPoint(x, y)
-			if wpCount == wpLimit then
-				AddCaption(loc("Race complexity limit reached."))
-				DisableTumbler()
-			end
-		end
-
+            if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
+                AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
+                PlaySound(sndDenied)
+            elseif (y > WaterLine-50) then
+                AddCaption(loc("Please place the way-point further from the waterline."))
+                PlaySound(sndDenied)
+            else
+                PlaceWayPoint(x, y)
+                if wpCount == wpLimit then
+                    AddCaption(loc("Race complexity limit reached."))
+                    DisableTumbler()
+                end
+            end
+        else
+            DeleteGear(cGear)
+        end
+        SetGearPosition(cGear, -10000, 0)
 	end
 
 
@@ -618,8 +623,12 @@ function onGameTick20()
 			trackTime = trackTime + 20
 
 			if GameTime%100 == 0 then
-
-				AddCaption(trackTime/1000,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
+                
+                if trackTime%1000 == 0 then
+                    AddCaption((trackTime/1000)..'.0',GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
+                else
+                    AddCaption(trackTime/1000,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
+                end
 
 				if (CheckWaypoints() == true) then
 					AdjustScores()
