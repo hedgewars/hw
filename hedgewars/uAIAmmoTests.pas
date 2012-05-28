@@ -663,14 +663,15 @@ var val1: LongInt;
     x, y: real;
 begin
 Level:= Level; // avoid compiler hint
+TestFirePunch:= BadTurn;
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
 ap.Angle:= hwSign(Me^.dX);
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
-if (Abs(trunc(x) - Targ.X) > 25)
-or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
+if (Abs(trunc(x) - Targ.X) < 25)
+    and (Abs(trunc(y) - 50 - Targ.Y) < 50) then
     begin
 // TODO - find out WTH this works.
     if TestColl(trunc(x), trunc(y) - 16, 6) and 

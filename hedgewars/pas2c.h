@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <wchar.h>
@@ -56,17 +57,6 @@ typedef Integer * PInteger;
 typedef int PtrInt;
 typedef wchar_t widechar;
 
-#ifdef __GNUG__
-#define NULL __null
-#else   /* G++ */
-/* shield NULL definition for non-gnu parsers */
-#ifndef __cplusplus
-#define NULL ((void *)0)
-#else
-#define NULL 0
-#endif  /* __cplusplus */
-#endif  /* G++ */
-
 #define new(a) __new((void **)&a, sizeof(*(a)))
 void __new(void ** p, int size);
 #define dispose(a) __dispose(a, sizeof(*(a)))
@@ -85,6 +75,7 @@ bool _strcompare(string255 a, string255 b);
 bool _strcomparec(string255 a, char b);
 bool _strncompare(string255 a, string255 b);
 char * _pchar(string255 s);
+string255 pchar2str(char * s);
 
 int Length(string255 a);
 string255 copy(string255 a, int s, int l);
@@ -113,6 +104,7 @@ void BlockWrite_(int f, void * p, int size);
 void close(int f);
 
 void write(string255 s);
+void writeLn(string255 s);
 
 bool DirectoryExists(string255 dir);
 bool FileExists(string255 filename);
