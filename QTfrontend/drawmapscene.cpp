@@ -271,7 +271,8 @@ void DrawMapScene::decode(QByteArray data)
 
             quint8 penWidth = flags & 0x3f;
             m_pen.setWidth(deserializePenWidth(penWidth));
-            if(flags & 0x40)
+            params.erasing = flags & 0x40;
+            if(params.erasing)
                 m_pen.setBrush(m_eraser);
             else
                 m_pen.setBrush(m_brush);
