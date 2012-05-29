@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <QStandardItemModel>
+
 #include "hwconsts.h"
 
 QString * cProtoVer = new QString("${HEDGEWARS_PROTO_VER}");
@@ -70,3 +72,19 @@ bool isDevBuild = ${HW_DEV};
 
 int season = SEASON_NONE;
 int years_since_foundation = 0;
+
+QStandardItemModel * colorsModel;
+
+void hwConstsInit()
+{
+    colorsModel = new QStandardItemModel();
+
+    int i = 0;
+    while(colors[i])
+    {
+        QStandardItem * item = new QStandardItem();
+        item->setData(QColor(colors[i]));
+        colorsModel->appendRow(item);
+        ++i;
+    }
+}

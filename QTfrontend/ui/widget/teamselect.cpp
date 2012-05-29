@@ -169,8 +169,8 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
         // return if max playing teams reached
         if(framePlaying->isFullTeams()) return;
         // dont playing team => playing
-        team=*itDontPlay; // for net team info saving in framePlaying (we have only name with netID from network)
         itDontPlay->setColor(framePlaying->getNextColor());
+        team=*itDontPlay; // for net team info saving in framePlaying (we have only name with netID from network)
         curPlayingTeams.push_back(*itDontPlay);
         if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
         m_curNotPlayingTeams.erase(itDontPlay);
@@ -295,6 +295,6 @@ QList<HWTeam> TeamSelWidget::getNotPlayingTeams() const
 
 void TeamSelWidget::pre_changeTeamStatus(HWTeam team)
 {
-    team.setColor(framePlaying->getNextColor());
+    //team.setColor(framePlaying->getNextColor());
     emit acceptRequested(team);
 }

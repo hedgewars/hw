@@ -150,7 +150,7 @@ begin
         lua_pushnil(L);
         end
     else
-        lua_pushinteger(L, lua_tointeger(L, 2) div lua_tointeger(L, 1));
+        lua_pushinteger(L, lua_tointeger(L, 1) div lua_tointeger(L, 2));
     lc_div := 1;
 end;
 

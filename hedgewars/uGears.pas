@@ -455,6 +455,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
     end;
 
 ScriptCall('onGameTick');
+if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 inc(GameTicks)
 end;
 
