@@ -176,7 +176,8 @@ with Actions.actions[Actions.Pos] do
                     exit
                     end
                 else
-                    begin CheckHang(Me);
+                    begin 
+                    CheckHang(Me);
                     exit
                     end;
                             
@@ -194,7 +195,8 @@ with Actions.actions[Actions.Pos] do
                     exit
                     end
                 else
-                    begin CheckHang(Me);
+                    begin 
+                    CheckHang(Me);
                     exit
                     end;
             aia_LookLeft:

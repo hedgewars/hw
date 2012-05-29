@@ -22,6 +22,7 @@
 #include <QLineEdit>
 #include <QCryptographicHash>
 #include <QSettings>
+#include <QStandardItemModel>
 
 #include "team.h"
 #include "hwform.h"
@@ -36,6 +37,7 @@ HWTeam::HWTeam(const QString & teamname) :
     OldTeamName = m_name;
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
+        m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name = (QLineEdit::tr("hedgehog %1").arg(i+1));
         m_hedgehogs[i].Hat = "NoHat";
     }
@@ -45,12 +47,14 @@ HWTeam::HWTeam(const QString & teamname) :
     m_flag = "hedgewars";
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
+        m_binds.append(BindAction());
         m_binds[i].action = cbinds[i].action;
         m_binds[i].strbind = cbinds[i].strbind;
     }
     m_rounds = 0;
     m_wins = 0;
     m_campaignProgress = 0;
+    m_color = 0;
 }
 
 HWTeam::HWTeam(const QStringList& strLst) :
@@ -69,6 +73,7 @@ HWTeam::HWTeam(const QStringList& strLst) :
     m_difficulty = strLst[6].toUInt();
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
+        m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name=strLst[i * 2 + 7];
         m_hedgehogs[i].Hat=strLst[i * 2 + 8];
 // Somehow claymore managed an empty hat.  Until we figure out how, this should avoid a repeat
@@ -78,6 +83,7 @@ HWTeam::HWTeam(const QStringList& strLst) :
     m_rounds = 0;
     m_wins = 0;
     m_campaignProgress = 0;
+    m_color = 0;
 }
 
 HWTeam::HWTeam() :
@@ -89,6 +95,7 @@ HWTeam::HWTeam() :
     m_name = QString("Team");
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
+        m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name.sprintf("hedgehog %d", i);
         m_hedgehogs[i].Hat = "NoHat";
     }
@@ -100,12 +107,14 @@ HWTeam::HWTeam() :
 
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
+        m_binds.append(BindAction());
         m_binds[i].action = cbinds[i].action;
         m_binds[i].strbind = cbinds[i].strbind;
     }
     m_rounds = 0;
     m_wins = 0;
     m_campaignProgress = 0;
+    m_color = 0;
 }
 
 HWTeam::HWTeam(const HWTeam & other) :
@@ -151,6 +160,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
         m_campaignProgress = other.m_campaignProgress;
         m_rounds = other.m_rounds;
         m_wins = other.m_wins;
+        m_color = other.m_color;
     }
 
     return *this;
@@ -248,10 +258,10 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
     QStringList sl;
     if (m_isNetTeam)
     {
-        sl.push_back(QString("eaddteam %3 %1 %2").arg(m_color.rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toLatin1(), QCryptographicHash::Md5).toHex())));
+        sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toLatin1(), QCryptographicHash::Md5).toHex())));
         sl.push_back("erdriven");
     }
-    else sl.push_back(QString("eaddteam %3 %1 %2").arg(m_color.rgb() & 0xffffff).arg(m_name).arg(playerHash));
+    else sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
 
     sl.push_back(QString("egrave " + m_grave));
     sl.push_back(QString("efort " + m_fort));
@@ -334,13 +344,19 @@ void HWTeam::setDifficulty(unsigned int level)
 }
 
 // color
-QColor HWTeam::color() const
+int HWTeam::color() const
 {
     return m_color;
 }
-void HWTeam::setColor(const QColor & color)
+
+QColor HWTeam::qcolor() const
 {
-    m_color = color;
+    return colorsModel->item(m_color)->data().value<QColor>();
+}
+
+void HWTeam::setColor(int color)
+{
+    m_color = color % colorsModel->rowCount();
 }
 
 
@@ -422,4 +438,3 @@ void HWTeam::incWins()
 {
     m_wins++;
 }
-

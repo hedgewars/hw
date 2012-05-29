@@ -616,7 +616,7 @@ else if GameTicks and $7 = 0 then
         // Solid pixel encountered
         else if ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
             begin
-            lf:= Land[yy, xx] and (lfObject or lfBasic);
+            lf:= Land[yy, xx] and (lfObject or lfBasic or lfIndestructible);
             // If there's room below keep falling
             if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
                 begin
@@ -5439,7 +5439,8 @@ procedure doStepIceGun(Gear: PGear);
 var 
     HHGear, iter: PGear;
     ndX, ndY: hwFloat;
-    t, gX, gY: LongInt;
+    i, t, gX, gY: LongInt;
+    hogs: TPGearArray;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
     if (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
@@ -5465,7 +5466,9 @@ begin
         HedgehogChAngle(HHGear);
         ndX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _4;
         ndY:= -AngleCos(HHGear^.Angle) * _4;
-        if (ndX <> dX) or (ndY <> dY) then
+        if (ndX <> dX) or (ndY <> dY) or 
+           ((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and 
+             (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0))) then
             begin
             dX:= ndX;
             dY:= ndY;
@@ -5474,7 +5477,7 @@ begin
             LastDamage:= nil;
             X:= HHGear^.X;
             Y:= HHGear^.Y;
-// unfreeze all semifrozen hogs
+(* unfreeze all semifrozen hogs - make this generic hog cleanup
             iter := GearsList;
             while iter <> nil do
                 begin
@@ -5482,7 +5485,7 @@ begin
                    (iter^.Hedgehog^.Effects[heFrozen] < 0) then 
                     iter^.Hedgehog^.Effects[heFrozen]:= 0;
                 iter:= iter^.NextGear
-                end
+                end *)
             end
         else
             begin
@@ -5498,33 +5501,30 @@ begin
                     X:= HHGear^.X;
                     Y:= HHGear^.Y
                     end;
+// freeze nearby hogs
+                if GameTicks mod 10 = 0 then dec(Gear^.Health);
+                hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
+                if Length(hogs) > 0 then
+                    for i:= 0 to Length(hogs) - 1 do
+                        if hogs[i] <> HHGear then
+                            begin
+                            //if Gear^.Hedgehog^.Effects[heFrozen]:= 0;
+                            end;
                 inc(Pos)
                 end
-            else if (gY > cWaterLine) or
+            else if (t > 400) and ((gY > cWaterLine) or
                     (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
-                        and ((Land[gY, gX] and $FF00 and not lfIce <> 0) or
-                             ((Land[gY, gX] and $00FF <> 0) and (t > 400)))) then
+                        and (Land[gY, gX] <> 0))) then
                 begin
                 Target.X:= gX;
                 Target.Y:= gY;
-                if (gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0) then
-                    begin
-                    LandPixels[gY, gX]:= $FFFFFFFF; // just testing
-                    UpdateLandTexture(gX, 1, gY, 1);
-                    if Land[gY, gX] and $00FF <> 0 then // locate and tag hogs
-                        begin
-                    //GearsNear(X, Y, gtHedgehog, Radius);
-                        end
-                    end;
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
                 end;
             if (gX > LAND_WIDTH*2) or
                     (gX < -LAND_WIDTH) or
                     (gY < -LAND_HEIGHT) or
-                    (gY > LAND_HEIGHT+512) or
-                    (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
-                     and (Land[gy, gX] > $FF)) then
+                    (gY > LAND_HEIGHT+512) then
                 begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y

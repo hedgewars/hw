@@ -314,8 +314,9 @@ processAction FinishGame = do
     clNick <- client's nick
     answerRemovedTeams <- io $ 
          room'sM rnc (map (\t -> AnswerClients thisRoomChans ["REMOVE_TEAM", t]) . leftTeams . fromJust . gameInfo) ri
-    
-    mapM_ processAction $ SaveReplay
+         
+    mapM_ processAction $ 
+        SaveReplay
         : ModifyRoom
             (\r -> r{
                 gameInfo = Nothing,
@@ -332,9 +333,8 @@ processAction (SendTeamRemovalMessage teamName) = do
         AnswerClients chans ["EM", rmTeamMsg],
         ModifyRoom (\r -> r{
                 gameInfo = liftM (\g -> g{
-                teamsInGameNumber = teamsInGameNumber g - 1
-                , roundMsgs = roundMsgs g Seq.|> rmTeamMsg
-                , leftTeams = teamName : leftTeams g
+                    teamsInGameNumber = teamsInGameNumber g - 1
+                    , roundMsgs = roundMsgs g Seq.|> rmTeamMsg
                 }) $ gameInfo r
             })
         ]
@@ -353,16 +353,13 @@ processAction (RemoveTeam teamName) = do
     ri <- clientRoomA
     inGame <- io $ room'sM rnc (isJust . gameInfo) ri
     chans <- othersChans
-    if not $ inGame then
-            mapM_ processAction [
-                ModifyRoom (\r -> r{teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r})
-                , AnswerClients chans ["REMOVE_TEAM", teamName]
-                ]
-        else
-            mapM_ processAction [
-                ModifyRoom (\r -> r{teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r})
-                , SendTeamRemovalMessage teamName
-                ]
+    mapM_ processAction $ 
+        ModifyRoom (\r -> r{
+            teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r
+            , gameInfo = liftM (\g -> g{leftTeams = teamName : leftTeams g}) $ gameInfo r
+            })
+        : AnswerClients chans ["REMOVE_TEAM", teamName]
+        : [SendTeamRemovalMessage teamName | inGame]
 
 
 processAction (RemoveClientTeams clId) = do
