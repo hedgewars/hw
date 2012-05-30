@@ -1057,17 +1057,82 @@ for i:= 0 to d do
     end
 end;
 
-procedure DrawLines(X1, Y1, X2, Y2, dx, dy: LongInt; color: Longword);
+procedure DrawDots(x, y, xx, yy: Longint; Color: Longword); inline;
 begin
-DrawLine(x1 + dx, y1 + dy, x2 + dx, y2 + dy, color);
-DrawLine(x1 + dx, y1 - dy, x2 + dx, y2 - dy, color);
-DrawLine(x1 - dx, y1 + dy, x2 - dx, y2 + dy, color);
-DrawLine(x1 - dx, y1 - dy, x2 - dx, y2 - dy, color);
+    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) then Land[y + yy, x + xx]:= Color;
+    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) then Land[y - yy, x + xx]:= Color;
+    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) then Land[y + yy, x - xx]:= Color;
+    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) then Land[y - yy, x - xx]:= Color;
+    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) then Land[y + xx, x + yy]:= Color;
+    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) then Land[y - xx, x + yy]:= Color;
+    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) then Land[y + xx, x - yy]:= Color;
+    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) then Land[y - xx, x - yy]:= Color;
+end;
 
-DrawLine(x1 + dy, y1 + dx, x2 + dy, y2 + dx, color);
-DrawLine(x1 + dy, y1 - dx, x2 + dy, y2 - dx, color);
-DrawLine(x1 - dy, y1 + dx, x2 - dy, y2 + dx, color);
-DrawLine(x1 - dy, y1 - dx, x2 - dy, y2 - dx, color);
+procedure DrawLines(X1, Y1, X2, Y2, XX, YY: LongInt; color: Longword);
+var
+  eX, eY, dX, dY: LongInt;
+  i, sX, sY, x, y, d: LongInt;
+  f: boolean;
+begin
+    eX:= 0;
+    eY:= 0;
+    dX:= X2 - X1;
+    dY:= Y2 - Y1;
+
+    if (dX > 0) then
+        sX:= 1
+    else
+        if (dX < 0) then
+            begin
+            sX:= -1;
+            dX:= -dX
+            end
+        else
+            sX:= dX;
+
+    if (dY > 0) then
+        sY:= 1
+    else
+        if (dY < 0) then
+            begin
+            sY:= -1;
+            dY:= -dY
+            end
+        else
+            sY:= dY;
+
+    if (dX > dY) then
+        d:= dX
+    else
+        d:= dY;
+
+    x:= X1;
+    y:= Y1;
+
+    for i:= 0 to d do
+        begin
+        inc(eX, dX);
+        inc(eY, dY);
+
+        f:= eX > d;
+        if f then
+            begin
+            dec(eX, d);
+            inc(x, sX);
+            DrawDots(x, y, xx, yy, color)
+            end;
+        if (eY > d) then
+            begin
+            dec(eY, d);
+            inc(y, sY);
+            f:= true;
+            DrawDots(x, y, xx, yy, color)
+            end;
+
+        if not f then
+            DrawDots(x, y, xx, yy, color)
+        end
 end;
 
 procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
