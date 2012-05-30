@@ -65,7 +65,6 @@ class PageOptions : public AbstractPage
 
         FPSEdit *fpsedit;
         QLabel *labelNN;
-        QLabel *labelNetPassword;
         QSpinBox * volumeBox;
         QLineEdit *editNetNick;
         QLineEdit *editNetPassword;
