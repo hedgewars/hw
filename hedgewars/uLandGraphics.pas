@@ -39,6 +39,7 @@ procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
+procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
 
@@ -1054,6 +1055,41 @@ for i:= 0 to d do
     if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
         Land[y, x]:= Color;
     end
+end;
+
+procedure DrawLines(X1, Y1, X2, Y2, dx, dy: LongInt; color: Longword);
+begin
+DrawLine(x1 + dx, y1 + dy, x2 + dx, y2 + dy, color);
+DrawLine(x1 + dx, y1 - dy, x2 + dx, y2 - dy, color);
+DrawLine(x1 - dx, y1 + dy, x2 - dx, y2 + dy, color);
+DrawLine(x1 - dx, y1 - dy, x2 - dx, y2 - dy, color);
+
+DrawLine(x1 + dy, y1 + dx, x2 + dy, y2 + dx, color);
+DrawLine(x1 + dy, y1 - dx, x2 + dy, y2 - dx, color);
+DrawLine(x1 - dy, y1 + dx, x2 - dy, y2 + dx, color);
+DrawLine(x1 - dy, y1 - dx, x2 - dy, y2 - dx, color);
+end;
+
+procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
+var dx, dy, d: LongInt;
+begin
+    dx:= 0;
+    dy:= Radius;
+    d:= 3 - 2 * Radius;
+    while (dx < dy) do
+        begin
+        DrawLines(x1, y1, x2, y2, dx, dy, color);
+        if (d < 0) then
+            d:= d + 4 * dx + 6
+        else
+            begin
+            d:= d + 4 * (dx - dy) + 10;
+            dec(dy)
+            end;
+        inc(dx)
+        end;
+    if (dx = dy) then
+        DrawLines(x1, y1, x2, y2, dx, dy, color);
 end;
 
 end.
