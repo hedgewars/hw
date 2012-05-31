@@ -659,7 +659,7 @@ TestBaseballBat:= valueResult;
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var val1: LongInt;
+var val1, val2, i, t: LongInt;
     x, y: real;
 begin
 Level:= Level; // avoid compiler hint
@@ -670,24 +670,25 @@ ap.Power:= 1;
 ap.Angle:= hwSign(Me^.dX);
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
-if (Abs(trunc(x) - Targ.X) < 25)
-    and (Abs(trunc(y) - 50 - Targ.Y) < 50) then
+{
+// this block is for digging with firepunch when blocked close to walls (notice TestColl check)
+if (Abs(trunc(x) - Targ.X) > 25)
+    or (Abs(trunc(y) + 50 - Targ.Y) > 50) then
     begin
-// TODO - find out WTH this works.
     if TestColl(trunc(x), trunc(y) - 16, 6) and 
        (RateShove(Me, trunc(x) + LongWord(10 * hwSign(Me^.dX)), 
-                      trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX)*0.45, -0.9,  1) = 0) then
+                      trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX)*0.45, -0.9,  1) >= 0) then
         val1:= Succ(BadTurn)
     else
         val1:= BadTurn;
     exit(val1);
     end;
-(*
-For some silly reason, having this enabled w/ the AI 
+    }
+// and this is actual try to attack
 val1:= 0;
 for i:= 0 to 4 do
     begin
-    t:= RateShove(Me, trunc(x) + 10 * hwSign(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX)*0.45, -0.9, 1);
+    t:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX)*0.45, -0.9, 1);
     if (val1 < 0) or (t < 0) then val1:= BadTurn
     else if t > 0 then val1:= t;
     end;
@@ -695,7 +696,7 @@ for i:= 0 to 4 do
 val2:= 0;
 for i:= 0 to 4 do
     begin
-    t:= RateShove(Me, trunc(x) + 10 * hwSign(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, -hwSign(Me^.dX)*0.45, -0.9, 1);
+    t:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, -hwSign(Me^.dX)*0.45, -0.9, 1);
     if (val2 < 0) or (t < 0) then val2:= BadTurn
     else if t > 0 then val2:= t;
     end;
@@ -706,35 +707,57 @@ else if (val2 > val1) and (val2 > 0) then
     ap.Angle:= -hwSign(Me^.dX);
     TestFirePunch:= val2
     end
-else TestFirePunch:= BadTurn;*)
+else TestFirePunch:= BadTurn;
 end;
 
+// TODO: TestWhip, TestFirepunch and TestBaseballBat could be called only once at each position 
+// (now they're called for each possible target in each position)
 function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var i, valueResult: LongInt;
+var valueResult, v1, v2: LongInt;
     x, y: real;
 begin
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
-ap.Angle:= 0;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
-if (Abs(trunc(x) - Targ.X) > 25)
-or (Abs(trunc(y) - 50 - Targ.Y) > 50) then
-    begin
-    if TestColl(trunc(x), trunc(y) - 16, 6)
-    and (RateShove(Me, trunc(x) + LongWord(10 * hwSign(Me^.dX)), trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX), -0.8,  1) = 0) then
-        valueResult:= Succ(BadTurn)
-    else
-        valueResult:= BadTurn;
-    exit(valueResult);
-    end;
 
-valueResult:= 0;
-for i:= 0 to 4 do
-    valueResult:= valueResult + RateShove(Me, trunc(x) + LongWord(10 * hwSignf(Targ.X - x)),
-                                    trunc(y) - LongWord(20 * i) - 5, 10, 30, 40, hwSign(Me^.dX), -0.8, 1);
+if(abs(Targ.X - x) > 50) or (abs(Targ.Y - y) > 30) then // we're way too far from our target
+    exit(BadTurn);
+    
+// check left direction
+{first RateShove checks fartherest of two whip's AmmoShove attacks 
+to encourage distant attacks (damaged hog is excluded from view of second 
+RateShove call)}
+v1:= RateShove(Me, trunc(x) - 15, trunc(y)
+        , 30, 30, 40
+        , -1, -0.8, 1 or fSetSkip);
+v1:= v1 +
+    RateShove(Me, trunc(x), trunc(y)
+        , 30, 30, 40
+        , -1, -0.8, 1);
+// now try opposite direction
+v2:= RateShove(Me, trunc(x) + 15, trunc(y)
+        , 30, 30, 40
+        , 1, -0.8, 1 or fSetSkip);
+v2:= v2 +
+    RateShove(Me, trunc(x), trunc(y)
+        , 30, 30, 40
+        , 1, -0.8, 1);
+
+if (v2 > v1) 
+    or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
+    begin
+    ap.Angle:= 1;
+    valueResult:= v2
+    end
+else 
+    begin
+    ap.Angle:= -1;
+    valueResult:= v1
+    end;
+   
 if valueResult <= 0 then
     valueResult:= BadTurn
 else
