@@ -181,7 +181,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
     {
         IconedGroupBox* groupMisc = new IconedGroupBox(this);
         //groupMisc->setContentTopPadding(0);
-        groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
         groupMisc->setIcon(QIcon(":/res/miscicon.png"));
         //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         groupMisc->setTitle(QGroupBox::tr("Misc"));
@@ -229,22 +229,14 @@ QLayout * PageOptions::bodyLayoutDefinition()
         editNetNick->setText(QLineEdit::tr("anonymous"));
         MiscLayout->addWidget(editNetNick, 1, 1);
 
-        // Label and field for password
-        labelNetPassword = new QLabel(groupMisc);
-        labelNetPassword->setText(QLabel::tr("Password"));
-        MiscLayout->addWidget(labelNetPassword, 2, 0);
+        // checkbox and field for password
+        CBSavePassword = new QCheckBox(groupMisc);
+        CBSavePassword->setText(QCheckBox::tr("Save password"));
+        MiscLayout->addWidget(CBSavePassword, 2, 0);
 
         editNetPassword = new QLineEdit(groupMisc);
         editNetPassword->setEchoMode(QLineEdit::Password);
         MiscLayout->addWidget(editNetPassword, 2, 1);
-
-        CBSavePassword = new QCheckBox(groupMisc);
-        CBSavePassword->setText(QCheckBox::tr("Save password"));
-        MiscLayout->addWidget(CBSavePassword, 3, 0, 1, 2);
-
-        CBAltDamage = new QCheckBox(groupMisc);
-        CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
-        MiscLayout->addWidget(CBAltDamage, 4, 0, 1, 2);
 
         CBNameWithDate = new QCheckBox(groupMisc);
         CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
@@ -252,7 +244,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
         BtnAssociateFiles = new QPushButton(groupMisc);
         BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
-        BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
+        BtnAssociateFiles->setVisible(!custom_data && !custom_config);
         MiscLayout->addWidget(BtnAssociateFiles, 6, 0, 1, 2);
 
 #ifdef __APPLE__
@@ -309,7 +301,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
         CBFullscreen = new QCheckBox(AGGroupBox);
         CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
-        GBAlayout->addWidget(CBFullscreen);
+        GBAreslayout->addWidget(CBFullscreen);
 
         QLabel * quality = new QLabel(AGGroupBox);
         quality->setText(QLabel::tr("Quality"));
@@ -349,36 +341,6 @@ QLayout * PageOptions::bodyLayoutDefinition()
         GBAstereolayout->addWidget(CBStereoMode);
         GBAlayout->addLayout(GBAstereolayout);
 
-        hr = new QFrame(AGGroupBox);
-        hr->setFrameStyle(QFrame::HLine);
-        hr->setLineWidth(3);
-        hr->setFixedHeight(10);
-        GBAlayout->addWidget(hr);
-
-        QHBoxLayout * GBAvollayout = new QHBoxLayout(0);
-        QLabel * vol = new QLabel(AGGroupBox);
-        vol->setText(QLabel::tr("Initial sound volume"));
-        GBAvollayout->addWidget(vol);
-        GBAlayout->addLayout(GBAvollayout);
-        volumeBox = new QSpinBox(AGGroupBox);
-        volumeBox->setRange(0, 100);
-        volumeBox->setSingleStep(5);
-        GBAvollayout->addWidget(volumeBox);
-
-        CBEnableSound = new QCheckBox(AGGroupBox);
-        CBEnableSound->setText(QCheckBox::tr("Enable sound"));
-        GBAlayout->addWidget(CBEnableSound);
-
-        CBEnableMusic = new QCheckBox(AGGroupBox);
-        CBEnableMusic->setText(QCheckBox::tr("Enable music"));
-        GBAlayout->addWidget(CBEnableMusic);
-
-        hr = new QFrame(AGGroupBox);
-        hr->setFrameStyle(QFrame::HLine);
-        hr->setLineWidth(3);
-        hr->setFixedHeight(10);
-        GBAlayout->addWidget(hr);
-
         QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
         QLabel * maxfps = new QLabel(AGGroupBox);
         maxfps->setText(QLabel::tr("FPS limit"));
@@ -389,7 +351,43 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
         CBShowFPS = new QCheckBox(AGGroupBox);
         CBShowFPS->setText(QCheckBox::tr("Show FPS"));
-        GBAlayout->addWidget(CBShowFPS);
+        GBAfpslayout->addWidget(CBShowFPS);
+
+        hr = new QFrame(AGGroupBox);
+        hr->setFrameStyle(QFrame::HLine);
+        hr->setLineWidth(3);
+        hr->setFixedHeight(10);
+        GBAlayout->addWidget(hr);
+
+        QGridLayout * GBAvollayout = new QGridLayout();
+        QLabel * vol = new QLabel(AGGroupBox);
+        vol->setText(QLabel::tr("Initial sound volume"));
+        GBAvollayout->addWidget(vol, 0, 0, 1, 2);
+        GBAlayout->addLayout(GBAvollayout);
+        volumeBox = new QSpinBox(AGGroupBox);
+        volumeBox->setRange(0, 100);
+        volumeBox->setSingleStep(5);
+        GBAvollayout->addWidget(volumeBox, 0, 2);
+
+        CBEnableSound = new QCheckBox(AGGroupBox);
+        CBEnableSound->setText(QCheckBox::tr("Enable sound"));
+        GBAvollayout->addWidget(CBEnableSound, 1, 0, 1, 1);
+
+        CBEnableMusic = new QCheckBox(AGGroupBox);
+        CBEnableMusic->setText(QCheckBox::tr("Enable music"));
+        GBAvollayout->addWidget(CBEnableMusic, 1, 1, 1, 2);
+
+        GBAvollayout->setSizeConstraint(QLayout::SetMinimumSize);
+
+        hr = new QFrame(AGGroupBox);
+        hr->setFrameStyle(QFrame::HLine);
+        hr->setLineWidth(3);
+        hr->setFixedHeight(10);
+        GBAlayout->addWidget(hr);
+
+        CBAltDamage = new QCheckBox(AGGroupBox);
+        CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
+        GBAlayout->addWidget(CBAltDamage);
 
         gbTBLayout->addWidget(AGGroupBox, 0, 1, 3, 1);
     }
