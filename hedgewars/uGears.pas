@@ -779,6 +779,7 @@ while i > 0 do
             Gear^.Active:= true;
             Gear^.State:= Gear^.State or gstMoving;
 
+            // move the gear upwards a bit to throw it over tiny obstacles at start
             if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
                 begin
                 if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
