@@ -86,11 +86,11 @@ begin
 end;
 
 procedure chCheckProto(var s: shortstring);
-var i: LongInt;
+var i, c: LongInt;
 begin
     if isDeveloperMode then
         begin
-        val(s, i);
+        val(s, i, c);
         TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         end
@@ -683,104 +683,102 @@ end;
 
 procedure chMapGen(var s: shortstring);
 begin
-val(s, cMapGen)
+cMapGen:= StrToInt(s)
 end;
 
 procedure chTemplateFilter(var s: shortstring);
 begin
-val(s, cTemplateFilter)
+cTemplateFilter:= StrToInt(s)
 end;
 
 procedure chInactDelay(var s: shortstring);
 begin
-val(s, cInactDelay)
+cInactDelay:= StrToInt(s)
 end;
 
 procedure chReadyDelay(var s: shortstring);
 begin
-val(s, cReadyDelay)
+cReadyDelay:= StrToInt(s)
 end;
 
 procedure chCaseFactor(var s: shortstring);
 begin
-val(s, cCaseFactor)
+cCaseFactor:= StrToInt(s)
 end;
 
 procedure chHealthCaseProb(var s: shortstring);
 begin
-val(s, cHealthCaseProb)
+cHealthCaseProb:= StrToInt(s)
 end;
 
 procedure chHealthCaseAmount(var s: shortstring);
 begin
-val(s, cHealthCaseAmount)
+cHealthCaseAmount:= StrToInt(s)
 end;
 
 procedure chSuddenDTurns(var s: shortstring);
 begin
-val(s, cSuddenDTurns)
+cSuddenDTurns:= StrToInt(s)
 end;
 
 procedure chWaterRise(var s: shortstring);
 begin
-val(s, cWaterRise)
+cWaterRise:= StrToInt(s)
 end;
 
 procedure chHealthDecrease(var s: shortstring);
 begin
-val(s, cHealthDecrease)
+cHealthDecrease:= StrToInt(s)
 end;
 
 procedure chDamagePercent(var s: shortstring);
 begin
-val(s, cDamagePercent)
+cDamagePercent:= StrToInt(s)
 end;
 
 procedure chRopePercent(var s: shortstring);
 begin
-val(s, cRopePercent)
+cRopePercent:= StrToInt(s)
 end;
 
 procedure chGetAwayTime(var s: shortstring);
 begin
-val(s, cGetAwayTime)
+cGetAwayTime:= StrToInt(s)
 end;
 
 procedure chMineDudPercent(var s: shortstring);
 begin
-val(s, cMineDudPercent)
+cMineDudPercent:= StrToInt(s)
 end;
 
 procedure chLandMines(var s: shortstring);
 begin
-val(s, cLandMines)
+cLandMines:= StrToInt(s)
 end;
 
 procedure chExplosives(var s: shortstring);
 begin
-val(s, cExplosives)
+cExplosives:= StrToInt(s)
 end;
 
 procedure chGameFlags(var s: shortstring);
 begin
-val(s, GameFlags)
+GameFlags:= StrToInt(s)
 end;
 
 procedure chHedgehogTurnTime(var s: shortstring);
 begin
-val(s, cHedgehogTurnTime)
+cHedgehogTurnTime:= StrToInt(s)
 end;
 
 procedure chMinesTime(var s: shortstring);
 begin
-val(s, cMinesTime)
+cMinesTime:= StrToInt(s)
 end;
 
 procedure chFastUntilLag(var s: shortstring);
-var i: LongInt;
 begin
-val(s, i);
-fastUntilLag:= i <> 0
+fastUntilLag:= StrToInt(s) <> 0
 end;
 
 procedure initModule;

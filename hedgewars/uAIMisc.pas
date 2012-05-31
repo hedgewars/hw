@@ -23,10 +23,11 @@ interface
 uses SDLh, uConsts, uFloat, uTypes;
 
 const MAXBONUS = 1024;
-
+      fSetSkip = 4;
 type TTarget = record
     Point: TPoint;
     Score: LongInt;
+    skip: boolean;
     end;
 TTargets = record
     Count: Longword;
@@ -100,6 +101,7 @@ for t:= 0 to Pred(TeamsCount) do
                     begin
                     with Targets.ar[Targets.Count], Hedgehogs[i] do
                         begin
+                        skip:= false;
                         Point.X:= hwRound(Gear^.X);
                         Point.Y:= hwRound(Gear^.Y);
                         if Clan <> CurrentTeam^.Clan then
@@ -396,6 +398,9 @@ dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
+      if skip then 
+        if (Flags and fSetSkip = 0) then skip:= false else {still skip}
+      else  
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < r then
@@ -405,8 +410,9 @@ for i:= 0 to Pred(Targets.Count) do
             end;
         if dmg > 0 then
             begin
+            if (Flags and fSetSkip <> 0) then skip:= true;
             if (Flags and 1 <> 0) then 
-                fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y-2, dX, dY) * dmgMod);
+                fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y - 2, dX, dY) * dmgMod);
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings

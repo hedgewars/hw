@@ -39,6 +39,7 @@ function  Min(a, b: LongInt): LongInt; inline;
 function  Max(a, b: LongInt): LongInt; inline;
 
 function  IntToStr(n: LongInt): shortstring;
+function  StrToInt(s: shortstring): LongInt;
 function  FloatToStr(n: hwFloat): shortstring;
 
 function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
@@ -64,6 +65,11 @@ function  CheckNoTeamOrHH: boolean; inline;
 
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
+
+{$IFNDEF PAS2C}
+procedure Write(var f: textfile; s: shortstring);
+procedure WriteLn(var f: textfile; s: shortstring);
+{$ENDIF}
 
 procedure initModule(isGame: boolean);
 procedure freeModule;
@@ -156,6 +162,12 @@ end;
 function IntToStr(n: LongInt): shortstring;
 begin
 str(n, IntToStr)
+end;
+
+function  StrToInt(s: shortstring): LongInt;
+var c: LongInt;
+begin
+val(s, StrToInt, c)
 end;
 
 function FloatToStr(n: hwFloat): shortstring;
@@ -285,7 +297,7 @@ procedure AddFileLog(s: shortstring);
 begin
 s:= s;
 {$IFDEF DEBUGFILE}
-writeln(f, GameTicks, ': ', s);
+writeln(f, inttostr(GameTicks)  + ': ' + s);
 flush(f)
 {$ENDIF}
 end;
@@ -359,6 +371,18 @@ begin
 CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 end;
 
+{$IFNDEF PAS2C}
+procedure Write(var f: textfile; s: shortstring);
+begin
+system.write(f, s)
+end;
+
+procedure WriteLn(var f: textfile; s: shortstring);
+begin
+system.writeln(f, s)
+end;
+{$ENDIF}
+
 procedure initModule(isGame: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
@@ -403,7 +427,7 @@ begin
 recordFileName:= '';
 
 {$IFDEF DEBUGFILE}
-    writeln(f, 'halt at ', GameTicks, ' ticks. TurnTimeLeft = ', TurnTimeLeft);
+    writeln(f, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
     flush(f);
     close(f);
 {$ENDIF}

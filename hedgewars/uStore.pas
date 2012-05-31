@@ -1010,7 +1010,7 @@ begin
 {$ENDIF}
         begin
         // set window title
-        {$IFNDEF SDL13}SDL_WM_SetCaption('Hedgewars', nil);{$ENDIF}
+        {$IFNDEF SDL13}SDL_WM_SetCaption(_P'Hedgewars', nil);{$ENDIF}
         WriteToConsole('Init SDL_image... ');
         SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
         WriteLnToConsole(msgOK);
