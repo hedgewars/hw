@@ -482,6 +482,7 @@ end;
 procedure chAddHH(var id: shortstring);
 var s: shortstring;
     Gear: PGear;
+    c: LongInt;
 begin
 s:= '';
 if (not isDeveloperMode) or (CurrentTeam = nil) then
@@ -490,10 +491,10 @@ with CurrentTeam^ do
     begin
     SplitBySpace(id, s);
     CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
-    val(id, CurrentHedgehog^.BotLevel);
+    val(id, CurrentHedgehog^.BotLevel, c);
     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
     SplitBySpace(s, id);
-    val(s, Gear^.Health);
+    val(s, Gear^.Health, c);
     TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
     Gear^.Hedgehog^.Team:= CurrentTeam;
     if (GameFlags and gfSharedAmmo) <> 0 then
@@ -514,6 +515,7 @@ end;
 
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
+    c: LongInt;
     ts, cs: shortstring;
 begin
 cs:= '';
@@ -522,7 +524,7 @@ if isDeveloperMode then
     begin
     SplitBySpace(s, cs);
     SplitBySpace(cs, ts);
-    val(cs, Color);
+    val(cs, Color, c);
     TryDo(Color <> 0, 'Error: black team color', true);
 
     // color is always little endian so the mask must be constant also in big endian archs
@@ -539,15 +541,15 @@ end;
 
 procedure chSetHHCoords(var x: shortstring);
 var y: shortstring;
-    t: Longint;
+    t, c: Longint;
 begin
 y:= '';
 if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then
     exit;
 SplitBySpace(x, y);
-val(x, t);
+val(x, t, c);
 CurrentHedgehog^.Gear^.X:= int2hwFloat(t);
-val(y, t);
+val(y, t, c);
 CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
 end;
 
