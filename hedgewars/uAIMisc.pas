@@ -23,7 +23,12 @@ interface
 uses SDLh, uConsts, uFloat, uTypes;
 
 const MAXBONUS = 1024;
-      fSetSkip = 4;
+
+      afTrackFall  = $00000001;
+      afErasesLand = $00000002;
+      afSetSkip    = $00000004;
+
+
 type TTarget = record
     Point: TPoint;
     Score: LongInt;
@@ -329,7 +334,6 @@ begin
     end;
 end;
 
-// Flags are not defined yet but 1 for checking drowning and 2 for assuming land erasure.
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
 begin
     RateExplosion:= RateExplosion(Me, x, y, r, 0);
@@ -351,7 +355,7 @@ with Targets.ar[Targets.Count] do
     end;
 // rate explosion
 dmgBase:= r + cHHRadius div 2;
-if (Flags and 2 <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
+if (Flags and afErasesLand <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
 else erasure:= 0;
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
@@ -362,7 +366,7 @@ for i:= 0 to Targets.Count do
 
         if dmg > 0 then
             begin
-            if Flags and 1 <> 0 then
+            if Flags and afTrackFall <> 0 then
                 begin
                 dX:= 0.005 * dmg + 0.01;
                 dY:= dX;
@@ -399,7 +403,7 @@ rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
       if skip then 
-        if (Flags and fSetSkip = 0) then skip:= false else {still skip}
+        if (Flags and afSetSkip = 0) then skip:= false else {still skip}
       else  
         begin
         dmg:= 0;
@@ -410,8 +414,8 @@ for i:= 0 to Pred(Targets.Count) do
             end;
         if dmg > 0 then
             begin
-            if (Flags and fSetSkip <> 0) then skip:= true;
-            if (Flags and 1 <> 0) then 
+            if (Flags and afSetSkip <> 0) then skip:= true;
+            if (Flags and afTrackFall <> 0) then 
                 fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y - 2, dX, dY) * dmgMod);
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then

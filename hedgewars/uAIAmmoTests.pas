@@ -163,7 +163,7 @@ repeat
         EX:= trunc(x);
         EY:= trunc(y);
         if Me^.Hedgehog^.BotLevel = 1 then
-            value:= RateExplosion(Me, EX, EY, 101, 3)
+            value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
         else value:= RateExplosion(Me, EX, EY, 101);
         if value = 0 then
             value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
@@ -220,7 +220,7 @@ repeat
         EX:= trunc(x);
         EY:= trunc(y);
 
-        value:= RateShove(Me, trunc(x), trunc(y), 5, 1, trunc((abs(dX)+abs(dY))*20), -dX, -dY, 1);
+        value:= RateShove(Me, trunc(x), trunc(y), 5, 1, trunc((abs(dX)+abs(dY))*20), -dX, -dY, afTrackFall);
         if value = 0 then
             value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
 
@@ -323,7 +323,7 @@ repeat
     EY:= trunc(y);
     if t < 50 then 
         if Me^.Hedgehog^.BotLevel = 1 then
-            Score:= RateExplosion(Me, EX, EY, 101, 3)
+            Score:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
         else Score:= RateExplosion(Me, EX, EY, 101)
     else 
         Score:= BadTurn;
@@ -650,7 +650,7 @@ if (Targ.X) - trunc(x) >= 0 then
 else
     ap.Angle:= - cMaxAngle div 4;
 
-valueResult:= RateShove(Me, trunc(x) + LongWord(10*hwSignf(Targ.X - x)), trunc(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, 1);
+valueResult:= RateShove(Me, trunc(x) + LongWord(10*hwSignf(Targ.X - x)), trunc(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, afTrackFall);
 if valueResult <= 0 then
     valueResult:= BadTurn
 else
@@ -688,7 +688,7 @@ if (Abs(trunc(x) - Targ.X) > 25)
 val1:= 0;
 for i:= 0 to 4 do
     begin
-    t:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX)*0.45, -0.9, 1);
+    t:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX)*0.45, -0.9, afTrackFall);
     if (val1 < 0) or (t < 0) then val1:= BadTurn
     else if t > 0 then val1:= t;
     end;
@@ -696,7 +696,7 @@ for i:= 0 to 4 do
 val2:= 0;
 for i:= 0 to 4 do
     begin
-    t:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, -hwSign(Me^.dX)*0.45, -0.9, 1);
+    t:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, -hwSign(Me^.dX)*0.45, -0.9, afTrackFall);
     if (val2 < 0) or (t < 0) then val2:= BadTurn
     else if t > 0 then val2:= t;
     end;
@@ -732,19 +732,19 @@ to encourage distant attacks (damaged hog is excluded from view of second
 RateShove call)}
 v1:= RateShove(Me, trunc(x) - 15, trunc(y)
         , 30, 30, 40
-        , -1, -0.8, 1 or fSetSkip);
+        , -1, -0.8, afTrackFall or afSetSkip);
 v1:= v1 +
     RateShove(Me, trunc(x), trunc(y)
         , 30, 30, 40
-        , -1, -0.8, 1);
+        , -1, -0.8, afTrackFall);
 // now try opposite direction
 v2:= RateShove(Me, trunc(x) + 15, trunc(y)
         , 30, 30, 40
-        , 1, -0.8, 1 or fSetSkip);
+        , 1, -0.8, afTrackFall or afSetSkip);
 v2:= v2 +
     RateShove(Me, trunc(x), trunc(y)
         , 30, 30, 40
-        , 1, -0.8, 1);
+        , 1, -0.8, afTrackFall);
 
 if (v2 > v1) 
     or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
