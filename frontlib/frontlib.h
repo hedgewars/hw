@@ -28,10 +28,4 @@ int flib_init(int flags);
  */
 void flib_quit();
 
-/**
- * Start listening for a connection from the engine.
- * Returns the port we are listening on, which needs to be passed to the engine.
- */
-int flib_ipc_listen();
-
 #endif /* FRONTLIB_H_ */
