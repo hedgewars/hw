@@ -24,9 +24,15 @@ uses SDLh, uConsts, uFloat, uTypes;
 
 const MAXBONUS = 1024;
 
+      afTrackFall  = $00000001;
+      afErasesLand = $00000002;
+      afSetSkip    = $00000004;
+
+
 type TTarget = record
     Point: TPoint;
     Score: LongInt;
+    skip: boolean;
     end;
 TTargets = record
     Count: Longword;
@@ -100,6 +106,7 @@ for t:= 0 to Pred(TeamsCount) do
                     begin
                     with Targets.ar[Targets.Count], Hedgehogs[i] do
                         begin
+                        skip:= false;
                         Point.X:= hwRound(Gear^.X);
                         Point.Y:= hwRound(Gear^.Y);
                         if Clan <> CurrentTeam^.Clan then
@@ -327,7 +334,6 @@ begin
     end;
 end;
 
-// Flags are not defined yet but 1 for checking drowning and 2 for assuming land erasure.
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
 begin
     RateExplosion:= RateExplosion(Me, x, y, r, 0);
@@ -349,7 +355,7 @@ with Targets.ar[Targets.Count] do
     end;
 // rate explosion
 dmgBase:= r + cHHRadius div 2;
-if (Flags and 2 <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
+if (Flags and afErasesLand <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
 else erasure:= 0;
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
@@ -360,7 +366,7 @@ for i:= 0 to Targets.Count do
 
         if dmg > 0 then
             begin
-            if Flags and 1 <> 0 then
+            if Flags and afTrackFall <> 0 then
                 begin
                 dX:= 0.005 * dmg + 0.01;
                 dY:= dX;
@@ -396,6 +402,9 @@ dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
+      if skip then 
+        if (Flags and afSetSkip = 0) then skip:= false else {still skip}
+      else  
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < r then
@@ -405,8 +414,9 @@ for i:= 0 to Pred(Targets.Count) do
             end;
         if dmg > 0 then
             begin
-            if (Flags and 1 <> 0) then 
-                fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y-2, dX, dY) * dmgMod);
+            if (Flags and afSetSkip <> 0) then skip:= true;
+            if (Flags and afTrackFall <> 0) then 
+                fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y - 2, dX, dY) * dmgMod);
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings

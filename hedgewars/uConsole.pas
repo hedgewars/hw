@@ -85,7 +85,7 @@ begin
 {$IFNDEF NOCONSOLE}
 WriteToConsole(s);
 {$IFNDEF ANDROID}
-WriteLn(stderr);
+WriteLn(stderr, '');
 inc(CurrLine);
 if CurrLine = cLinesCount then
     CurrLine:= 0;

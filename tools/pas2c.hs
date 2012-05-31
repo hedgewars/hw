@@ -335,7 +335,7 @@ resolveType (DeriveType (InitNumber _)) = return BTInt
 resolveType (DeriveType (InitFloat _)) = return BTFloat
 resolveType (DeriveType (InitString _)) = return BTString
 resolveType (DeriveType (InitBinOp {})) = return BTInt
-resolveType (DeriveType (InitPrefixOp {})) = return BTInt
+resolveType (DeriveType (InitPrefixOp _ e)) = initExpr2C e >> gets lastType
 resolveType (DeriveType (BuiltInFunction{})) = return BTInt
 resolveType (DeriveType (InitReference (Identifier{}))) = return BTBool -- TODO: derive from actual type
 resolveType (DeriveType _) = return BTUnknown
@@ -634,7 +634,7 @@ phrase2C (Assignment ref expr) = do
                     e <- expr2C expr
                     return $ r <+> text "=" <+> e <> semi
                 _ -> error $ "Assignment to string from " ++ show lt
-        (BTArray (Range _) _ _, _) -> phrase2C $ 
+        (BTArray _ _ _, _) -> phrase2C $ 
             ProcCall (FunCall
                 [
                 Reference $ Address ref
@@ -719,6 +719,7 @@ expr2C b@(BinOp op expr1 expr2) = do
         ("+", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction 2 BTString))
         ("+", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappend" (BTFunction 2 BTString))
         ("+", BTChar, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprepend" (BTFunction 2 BTString))
+        ("+", BTChar, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_chrconcat" (BTFunction 2 BTString))
         ("==", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcomparec" (BTFunction 2 BTBool))
         ("==", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction 2 BTBool))
         ("!=", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction 2 BTBool))
@@ -902,9 +903,11 @@ ref2C (Address ref) = do
     r <- ref2C ref
     return $ text "&" <> parens r
 ref2C (TypeCast t'@(Identifier i _) expr) = do
-    case map toLower i of
-        "pchar" -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pchar" $ BTPointerTo BTChar))
-        a -> do
+    lt <- expr2C expr >> gets lastType
+    case (map toLower i, lt) of
+        ("pchar", BTString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pchar" $ BTPointerTo BTChar))
+        ("shortstring", BTPointerTo _) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "pchar2str" $ BTString))
+        (a, _) -> do
             e <- expr2C expr
             t <- id2C IOLookup t'    
             return . parens $ parens t <> e

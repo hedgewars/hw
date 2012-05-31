@@ -155,6 +155,6 @@ begin
     if LandBackSurface <> nil then
         SDL_FreeSurface(LandBackSurface);
     LandBackSurface:= nil;
-    LandTextures:= nil;
+    SetLength(LandTextures, 0, 0);
 end;
 end.
