@@ -263,7 +263,7 @@ begin
             if not FileExists(s) then
                 s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
-            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
             if voicepack^.chunks[snd] = nil then
                 WriteLnToConsole(msgFailed)
             else
@@ -279,7 +279,7 @@ begin
             if not FileExists(s) then
                 s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
-            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
             SDLTry(defVoicepack^.chunks[snd] <> nil, true);
             WriteLnToConsole(msgOK);
             end;
@@ -363,7 +363,7 @@ begin
             if not FileExists(s) then
                 s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
-            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
             if voicepack^.chunks[snd] = nil then
                 WriteLnToConsole(msgFailed)
             else
@@ -379,7 +379,7 @@ begin
             if not FileExists(s) then
                 s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
-            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
             SDLTry(defVoicepack^.chunks[snd] <> nil, true);
             WriteLnToConsole(msgOK);
             end;

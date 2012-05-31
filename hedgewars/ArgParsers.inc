@@ -24,7 +24,7 @@ begin
         playReplayFileWithParameters()
     else
         begin
-        val(ParamStr(2), ipcPort);
+        ipcPort:= StrToInt(ParamStr(2));
         GameType:= gmtLandPreview;
         if ParamStr(3) <> 'landpreview' then
             GameType:= gmtSyntax
@@ -35,22 +35,21 @@ procedure internalStartGameWithParameters();
 var tmp: LongInt;
 begin
     UserPathPrefix:= ParamStr(1);
-    val(ParamStr(2), cScreenWidth);
-    val(ParamStr(3), cScreenHeight);
-    val(ParamStr(4), cBits);
-    val(ParamStr(5), ipcPort);
+    cScreenWidth:= StrToInt(ParamStr(2));
+    cScreenHeight:= StrToInt(ParamStr(3));
+    cBits:= StrToInt(ParamStr(4));
+    ipcPort:= StrToInt(ParamStr(5));
     cFullScreen:= ParamStr(6) = '1';
     SetSound(ParamStr(7) = '1');
     SetMusic(ParamStr(8) = '1');
-    val(ParamStr(9), tmp);
-    SetVolume(tmp);
-    val(ParamStr(10), cTimerInterval);
+    SetVolume(StrToInt(ParamStr(9)));
+    cTimerInterval:= StrToInt(ParamStr(10));
     PathPrefix:= ParamStr(11);
     cShowFPS:= ParamStr(12) = '1';
     cAltDamage:= ParamStr(13) = '1';
     UserNick:= DecodeBase64(ParamStr(14));
-    val(ParamStr(15), cReducedQuality);
-    val(ParamStr(16), tmp);
+    cReducedQuality:= StrToInt(ParamStr(15));
+    tmp:= StrToInt(ParamStr(16));
     GrayScale:= false;
     if (tmp > 9) and (tmp < 16) then 
         begin
@@ -72,11 +71,11 @@ begin
 end;
 
 procedure setVideoWithParameters(screenWidthParam: string; screenHeightParam: string; bitsParam: string);
-var screenWidthAsInt, screenHeightAsInt, bitsStrAsInt: LongInt;
+var screenWidthAsInt, screenHeightAsInt, bitsStrAsInt, c: LongInt;
 begin
-    val(screenWidthParam, screenWidthAsInt);
-    val(screenHeightParam, screenHeightAsInt);
-    val(bitsParam, bitsStrAsInt);
+    val(screenWidthParam, screenWidthAsInt, c);
+    val(screenHeightParam, screenHeightAsInt, c);
+    val(bitsParam, bitsStrAsInt, c);
     setVideo(screenWidthAsInt,screenHeightAsInt,bitsStrAsInt)
 end;
 
@@ -108,10 +107,10 @@ begin
 end;
 
 procedure setAudioWithParameters(initialVolumeParam: string; musicEnabledParam: string; soundEnabledParam: string);
-var initialVolumeAsInt: LongInt;
+var initialVolumeAsInt, c: LongInt;
     musicEnabled, soundEnabled: boolean;
 begin
-    val(initialVolumeParam, initialVolumeAsInt);
+    val(initialVolumeParam, initialVolumeAsInt, c);
     musicEnabled:= musicEnabledParam = '1';
     soundEnabled:= soundEnabledParam = '1';
     setAudio(initialVolumeAsInt,musicEnabled, soundEnabled)
@@ -139,7 +138,7 @@ procedure setAllOptionsWithParameters(screenWidthParam:string; screenHeightParam
                                       languageFileParam:string; fullScreenParam:string; showFPSParam:string;
                                       altDamageParam:string; timeItervalParam:string; reducedQualityParam: string);
 var showFPS, altDamage, reducedQuality: boolean;
-    timeIterval: LongInt;
+    timeIterval, c: LongInt;
 begin
     setMultimediaOptionsWithParameters(screenWidthParam,screenHeightParam, bitsParam,
                                        initialVolumeParam,musicEnabledParam,soundEnabledParam,
@@ -148,7 +147,7 @@ begin
     setShowFPS(showFPS);
 
     altDamage:= altDamageParam = '1';
-    val(timeItervalParam, timeIterval);
+    val(timeItervalParam, timeIterval, c);
     reducedQuality:= reducedQualityParam = '1';
     setAltDamageTimerValueAndQuality(altDamage,timeIterval,reducedQuality);
 end;
