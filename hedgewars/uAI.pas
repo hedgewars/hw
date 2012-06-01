@@ -266,9 +266,11 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
                 with Stack.States[Pred(Stack.Count)] do
                     AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
 
+        // 'not CanGO' means we can't go straight, possible jumps are checked above
         if not CanGo then
             break;
-        inc(steps);
+        
+         inc(steps);
          Actions.actions[Pred(Actions.Count)].Param:= hwRound(Me^.X);
          Rate:= RatePlace(Me);
          if Rate > BestRate then
@@ -284,11 +286,11 @@ while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 
             TestAmmos(Actions, Me, true);
         if GoInfo.FallPix >= FallPixForBranching then
             Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
-        end;
+        end {while};
 
     if BestRate > BaseRate then
         exit
-        end
+        end {while}
 end;
 
 function Think(Me: Pointer): ptrint;

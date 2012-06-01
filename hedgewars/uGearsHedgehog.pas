@@ -723,26 +723,32 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     DeleteCI(Gear); // must be after exit!! (see previous line)
 
     Gear^.Hedgehog^.visStepPos:= (Gear^.Hedgehog^.visStepPos + 1) and 7;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
-        if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-        if not (TestCollisionXwithXYShift(Gear, _0, -5, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-        if not (TestCollisionXwithXYShift(Gear, _0, -4, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-        if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-        if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-        if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+            Gear^.Y:= Gear^.Y + _6
+        end else Gear^.Y:= Gear^.Y + _5 else
+        end else Gear^.Y:= Gear^.Y + _4 else
+        end else Gear^.Y:= Gear^.Y + _3 else
+        end else Gear^.Y:= Gear^.Y + _2 else
+        end else Gear^.Y:= Gear^.Y + _1
         end;
 
     if (not cArtillery) and ((Gear^.Message and gmPrecise) = 0) and (not TestCollisionXwithGear(Gear, hwSign(Gear^.dX))) then
