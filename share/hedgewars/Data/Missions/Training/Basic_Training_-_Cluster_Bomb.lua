@@ -63,9 +63,9 @@ function onGameStart()
 
 end
 
-function onGameTick()
+function onGameTick20()
 
-	if TurnTimeLeft == 1 and scored < 12 and game_lost == false then
+	if TurnTimeLeft < 40 and TurnTimeLeft > 0 and scored < 12 and game_lost == false then
 		game_lost = true
 		ShowMission(loc("Cluster Bomb Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
 		SetHealth(player, 0)
@@ -76,7 +76,7 @@ function onGameTick()
 		if end_timer == 0 then
 			EndGame()
 		else
-			end_timer = end_timer - 1
+			end_timer = end_timer - 20
 			TurnTimeLeft = time_goal
 		end
 	end
@@ -87,8 +87,8 @@ function onNewTurn()
 	ParseCommand("setweap " .. string.char(amClusterBomb))
 end
 
-function onGearAdd(gear)
-end
+--function onGearAdd(gear)
+--end
 
 function onGearDamage(gear, damage)
 
