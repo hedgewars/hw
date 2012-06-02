@@ -321,8 +321,8 @@ begin
                 // reached edge of land. assume infinite beam. Extend it way out past camera
                 if ((ty and LAND_HEIGHT_MASK) <> 0) or ((tx and LAND_WIDTH_MASK) <> 0) then
                     begin
-                    tx:= round(lx + ax * (LAND_WIDTH div 4));
-                    ty:= round(ly + ay * (LAND_WIDTH div 4));
+                    tx:= round(lx + ax * (LAND_WIDTH div 2));
+                    ty:= round(ly + ay * (LAND_WIDTH div 2));
                     end;
 
                 //if (abs(lx-tx)>8) or (abs(ly-ty)>8) then

@@ -968,6 +968,10 @@ function SDL_putenv(const text: PChar): LongInt; cdecl; external SDLLibName;
 function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
 {$ENDIF}
 
+{$IFDEF ANDROID}
+function Android_JNI_getDensity(): Single; cdecl; external SDLLibName;
+{$ENDIF}
+
 {* Compatibility between SDL-1.2 and SDL-1.3 *}
 procedure SDL_WarpMouse(x, y: Word); {$IFDEF SDL13}inline{$ELSE}cdecl; external SDLLibName{$ENDIF};
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
