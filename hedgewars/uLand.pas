@@ -750,9 +750,9 @@ end;
 
 procedure freeModule;
 begin
-    Land:= nil;
-    LandPixels:= nil;
-    LandDirty:= nil;
+    SetLength(Land, 0, 0);
+    SetLength(LandPixels, 0, 0);
+    SetLength(LandDirty, 0, 0);
 end;
 
 end.
