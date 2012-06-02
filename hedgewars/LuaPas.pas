@@ -1,4 +1,5 @@
 {$HINTS OFF}
+{$INCLUDE "options.inc"}
 
 unit LuaPas;
 
@@ -23,8 +24,7 @@ type
     lua_State = record end;
     Plua_State = ^lua_State;
 
-const
-    LuaLibName = cLuaLibrary;
+{$DEFINE LuaLibName:= cLuaLibrary}
 
 
 (*****************************************************************************)
@@ -81,8 +81,8 @@ const
 ** CHANGE them if you want to improve this functionality (e.g., by using
 ** GNU readline and history facilities).
 *)
-function  lua_readline(L : Plua_State;
-var b : PChar; p : PChar): Boolean;
+{function  lua_readline(L : Plua_State;
+var b : PChar; p : PChar): Boolean;}
 
 procedure lua_saveline(L : Plua_State; idx : LongInt);
 
@@ -119,7 +119,7 @@ const
     LUA_AUTHORS     = 'R. Ierusalimschy, L. H. de Figueiredo & W. Celes';
 
     (* mark for precompiled code (`<esc>Lua') *)
-    LUA_SIGNATURE = #27 + 'Lua';
+    //LUA_SIGNATURE = #27'Lua';
 
     (* option for multiple returns in `lua_pcall' and `lua_call' *)
     LUA_MULTRET = -1;
@@ -799,7 +799,7 @@ uses
 (*****************************************************************************)
 (*                            luaconfig.h                                    *)
 (*****************************************************************************)
-
+{
 function  lua_readline(L : Plua_State;
 var
     b : PChar; p : PChar): Boolean;
@@ -811,7 +811,7 @@ begin
     b := PChar(s);                   //   and return it
     lua_readline := (b[0] <> #4);          // test for ctrl-D
 end;
-
+}
 procedure lua_saveline(L : Plua_State; idx : LongInt);
 begin
 end;
@@ -1041,7 +1041,7 @@ begin
         lua_ref := luaL_ref(L, LUA_REGISTRYINDEX)
     else
         begin
-        lua_pushstring(L, 'unlocked references are obsolete');
+        lua_pushstring(L, _P'unlocked references are obsolete');
         lua_error(L);
         lua_ref := 0;
         end;

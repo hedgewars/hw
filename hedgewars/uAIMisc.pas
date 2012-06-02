@@ -24,9 +24,15 @@ uses SDLh, uConsts, uFloat, uTypes;
 
 const MAXBONUS = 1024;
 
+      afTrackFall  = $00000001;
+      afErasesLand = $00000002;
+      afSetSkip    = $00000004;
+
+
 type TTarget = record
     Point: TPoint;
     Score: LongInt;
+    skip: boolean;
     end;
 TTargets = record
     Count: Longword;
@@ -100,6 +106,7 @@ for t:= 0 to Pred(TeamsCount) do
                     begin
                     with Targets.ar[Targets.Count], Hedgehogs[i] do
                         begin
+                        skip:= false;
                         Point.X:= hwRound(Gear^.X);
                         Point.Y:= hwRound(Gear^.Y);
                         if Clan <> CurrentTeam^.Clan then
@@ -122,12 +129,14 @@ end;
 
 procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
 begin
-bonuses.ar[bonuses.Count].x:= x;
-bonuses.ar[bonuses.Count].y:= y;
-bonuses.ar[bonuses.Count].Radius:= r;
-bonuses.ar[bonuses.Count].Score:= s;
-inc(bonuses.Count);
-TryDo(bonuses.Count <= MAXBONUS, 'Bonuses overflow', true)
+if(bonuses.Count < MAXBONUS) then
+    begin
+    bonuses.ar[bonuses.Count].x:= x;
+    bonuses.ar[bonuses.Count].y:= y;
+    bonuses.ar[bonuses.Count].Radius:= r;
+    bonuses.ar[bonuses.Count].Score:= s;
+    inc(bonuses.Count);
+    end;
 end;
 
 procedure FillBonuses(isAfterAttack: boolean);
@@ -155,7 +164,7 @@ while Gear <> nil do
                     
             gtExplosives:
             if isAfterAttack then
-                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 75, -60+Gear^.Health);
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 75, -60 + Gear^.Health);
                 
             gtSMine:
                 AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -30);
@@ -203,7 +212,7 @@ for i:= 0 to Pred(bonuses.Count) do
         r:= Radius;
         if abs(gX-X)+abs(gY-Y) < Radius then
             r:= trunc(sqrt(sqr(gX - X)+sqr(gY - Y)));
-        if r < 15 then
+        if r < 20 then
                 inc(rate, Score * Radius)
         else if r < Radius then
                 inc(rate, Score * (Radius - r))
@@ -327,7 +336,6 @@ begin
     end;
 end;
 
-// Flags are not defined yet but 1 for checking drowning and 2 for assuming land erasure.
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
 begin
     RateExplosion:= RateExplosion(Me, x, y, r, 0);
@@ -349,7 +357,7 @@ with Targets.ar[Targets.Count] do
     end;
 // rate explosion
 dmgBase:= r + cHHRadius div 2;
-if (Flags and 2 <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
+if (Flags and afErasesLand <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
 else erasure:= 0;
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
@@ -360,7 +368,7 @@ for i:= 0 to Targets.Count do
 
         if dmg > 0 then
             begin
-            if Flags and 1 <> 0 then
+            if Flags and afTrackFall <> 0 then
                 begin
                 dX:= 0.005 * dmg + 0.01;
                 dY:= dX;
@@ -396,6 +404,9 @@ dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
+      if skip then 
+        if (Flags and afSetSkip = 0) then skip:= false else {still skip}
+      else  
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < r then
@@ -405,8 +416,9 @@ for i:= 0 to Pred(Targets.Count) do
             end;
         if dmg > 0 then
             begin
-            if (Flags and 1 <> 0) then 
-                fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y-2, dX, dY) * dmgMod);
+            if (Flags and afSetSkip <> 0) then skip:= true;
+            if (Flags and afTrackFall <> 0) then 
+                fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y - 2, dX, dY) * dmgMod);
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
@@ -602,114 +614,124 @@ AltGear^:= Gear^;
 GoInfo.Ticks:= 0;
 GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
+
 repeat
-pX:= hwRound(Gear^.X);
-pY:= hwRound(Gear^.Y);
-if pY + cHHRadius >= cWaterLine then
-    exit(false);
-if (Gear^.State and gstMoving) <> 0 then
-    begin
-    inc(GoInfo.Ticks);
-    Gear^.dY:= Gear^.dY + cGravity;
-    if Gear^.dY > _0_4 then
+    pX:= hwRound(Gear^.X);
+    pY:= hwRound(Gear^.Y);
+    if pY + cHHRadius >= cWaterLine then
+        exit(false);
+        
+    // hog is falling    
+    if (Gear^.State and gstMoving) <> 0 then
         begin
-        Goinfo.FallPix:= 0;
-        HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall with damage
-        exit(false)
+        inc(GoInfo.Ticks);
+        Gear^.dY:= Gear^.dY + cGravity;
+        if Gear^.dY > _0_4 then
+            begin
+            Goinfo.FallPix:= 0;
+            // try ljump instead of fall with damage
+            HHJump(AltGear, jmpLJump, GoInfo); 
+            exit(false)
+            end;
+        Gear^.Y:= Gear^.Y + Gear^.dY;
+        if hwRound(Gear^.Y) > pY then
+            inc(GoInfo.FallPix);
+        if TestCollisionYwithGear(Gear, 1) <> 0 then
+            begin
+            inc(GoInfo.Ticks, 410);
+            Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
+            Gear^.dY:= _0;
+            // try ljump instead of fall
+            HHJump(AltGear, jmpLJump, GoInfo);
+            exit(true)
+            end;
+        continue
         end;
-    Gear^.Y:= Gear^.Y + Gear^.dY;
-    if hwRound(Gear^.Y) > pY then
-        inc(GoInfo.FallPix);
-    if TestCollisionYwithGear(Gear, 1) <> 0 then
-        begin
-        inc(GoInfo.Ticks, 410);
-        Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
-        Gear^.dY:= _0;
-        HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall
-        HHGo:= true;
-        exit(false)
-        end;
-    continue
-    end;
-    if (Gear^.Message and gmLeft  )<>0 then
-        Gear^.dX:= -cLittle
-    else
-        if (Gear^.Message and gmRight )<>0 then
-            Gear^.dX:=  cLittle
+        
+        // usual walk
+        if (Gear^.Message and gmLeft) <> 0 then
+            Gear^.dX:= -cLittle
         else
-            exit(false);
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+            if (Gear^.Message and gmRight) <> 0 then
+                Gear^.dX:=  cLittle
+            else
+                exit(false);
+                
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+            begin
+            Gear^.Y:= Gear^.Y - _1;
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+            begin
+            Gear^.Y:= Gear^.Y - _1;
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+            begin
+            Gear^.Y:= Gear^.Y - _1;
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+            begin
+            Gear^.Y:= Gear^.Y - _1;
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+            begin
+            Gear^.Y:= Gear^.Y - _1;
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+            begin
+            Gear^.Y:= Gear^.Y - _1;
+            if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+                Gear^.Y:= Gear^.Y + _6
+            end else Gear^.Y:= Gear^.Y + _5 else
+            end else Gear^.Y:= Gear^.Y + _4 else
+            end else Gear^.Y:= Gear^.Y + _3 else
+            end else Gear^.Y:= Gear^.Y + _2 else
+            end else Gear^.Y:= Gear^.Y + _1
+            end;
+
+        if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
         begin
-        if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-            
-        if not (TestCollisionXwithXYShift(Gear, _0, -5, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-            
-        if not (TestCollisionXwithXYShift(Gear, _0, -4, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-            
-        if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-        if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
-            
-        if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-        or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-            Gear^.Y:= Gear^.Y - _1;
+            Gear^.X:= Gear^.X + int2hwFloat(hwSign(Gear^.dX));
+            inc(GoInfo.Ticks, cHHStepTicks)
         end;
 
-    if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
-    begin
-        Gear^.X:= Gear^.X + int2hwFloat(hwSign(Gear^.dX));
-        inc(GoInfo.Ticks, cHHStepTicks)
-    end;
+        // too scared to reformat this part
+        if TestCollisionYwithGear(Gear, 1) = 0 then
+            begin
+            Gear^.Y:= Gear^.Y + _1;
+            
+        if TestCollisionYwithGear(Gear, 1) = 0 then
+            begin
+            Gear^.Y:= Gear^.Y + _1;
+            
+        if TestCollisionYwithGear(Gear, 1) = 0 then
+            begin
+            Gear^.Y:= Gear^.Y + _1;
 
-    // too scared to reformat this part
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-        
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-        
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
+        if TestCollisionYwithGear(Gear, 1) = 0 then
+            begin
+            Gear^.Y:= Gear^.Y + _1;
 
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
+        if TestCollisionYwithGear(Gear, 1) = 0 then
+            begin
+            Gear^.Y:= Gear^.Y + _1;
 
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
+        if TestCollisionYwithGear(Gear, 1) = 0 then
+            begin
+            Gear^.Y:= Gear^.Y + _1;
 
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y - _6;
-        Gear^.dY:= _0;
-        Gear^.State:= Gear^.State or gstMoving
+        if TestCollisionYwithGear(Gear, 1) = 0 then
+            begin
+            Gear^.Y:= Gear^.Y - _6;
+            Gear^.dY:= _0;
+            Gear^.State:= Gear^.State or gstMoving
+            end
         end
-    end
-    end
-    end
-    end
-    end
-    end;
-if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
-    exit(true)
+        end
+        end
+        end
+        end
+        end;
+        // we have moved for 1 px
+        if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
+            exit(true)
 until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and gstMoving) = 0);
+
 HHJump(AltGear, jmpHJump, GoInfo);
 end;
 
