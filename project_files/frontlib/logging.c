@@ -3,6 +3,7 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 char* flib_format_ip(uint32_t numip) {
 	static char ip[16];
@@ -27,6 +28,7 @@ static void flib_vflog(FILE *file, const char *prefix, const char *fmt, va_list 
 	fprintf(file, " [%s]", prefix);
 	vfprintf(file, fmt, args);
 	fprintf(file, "\n");
+	fflush(file);
 }
 
 void flib_log_e(const char *fmt, ...) {
