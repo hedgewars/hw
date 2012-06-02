@@ -1,97 +1,91 @@
 #include "ipcconn.h"
 #include "logging.h"
-#include "nonblocksockets.h"
+#include "socket.h"
 
-#include <SDL_net.h>
-#include <time.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
 
-static TCPsocket ipcListenSocket;
-static NonBlockSocket ipcConnSocket;
+typedef struct _flib_ipcconn {
+	char playerName[256];
 
-static uint8_t ipcReadBuffer[256];
-static int ipcReadBufferSize;
+	uint8_t readBuffer[256];
+	int readBufferSize;
 
-static flib_vector demoBuffer;
-static char localPlayerName[255];
+	flib_acceptor acceptor;
+	uint16_t port;
 
-void flib_ipcconn_init() {
-	ipcListenSocket = NULL;
-	ipcConnSocket = NULL;
-	ipcReadBufferSize = 0;
-	demoBuffer=NULL;
-	strncpy(localPlayerName, "Local Player", 255);
-}
+	flib_tcpsocket sock;
+	flib_vector demoBuffer;
+} _flib_ipcconn;
 
-void flib_ipcconn_quit() {
-	flib_vector_destroy(&demoBuffer);
-	flib_ipcconn_close();
-}
+flib_ipcconn flib_ipcconn_create(bool recordDemo, const char *localPlayerName) {
+	flib_ipcconn result = malloc(sizeof(_flib_ipcconn));
+	flib_acceptor acceptor = flib_acceptor_create(0);
 
-int flib_ipcconn_start(bool recordDemo) {
-	if(ipcListenSocket || ipcConnSocket) {
-		flib_log_e("flib_ipcconn_listen: Already listening or connected.");
-		return -1;
+	if(!result || !acceptor) {
+		free(result);
+		flib_acceptor_close(&acceptor);
+		return NULL;
 	}
-	IPaddress addr;
-	addr.host = INADDR_ANY;
 
-	/* SDL_net does not seem to have a way to listen on a random unused port
-	   and find out which port that is, so let's try to find one ourselves. */
-	// TODO: Is socket binding fail-fast on all platforms?
-	srand(time(NULL));
-	rand();
-	for(int i=0; i<1000; i++) {
-		// IANA suggests using ports in the range 49152-65535 for things like this
-		int ipcPort = 49152+(rand()%(65535-49152));
-		SDLNet_Write16(ipcPort, &addr.port);
-		ipcListenSocket = SDLNet_TCP_Open(&addr);
-		if(!ipcListenSocket) {
-			flib_log_w("Failed to start an IPC listening socket on port %i: %s", ipcPort, SDLNet_GetError());
-		} else {
-			flib_log_i("Listening for IPC connections on port %i.", ipcPort);
-			if(recordDemo) {
-				flib_vector_destroy(&demoBuffer);
-				demoBuffer = flib_vector_create();
-			}
-			return ipcPort;
-		}
+	result->acceptor = acceptor;
+	result->sock = NULL;
+	result->readBufferSize = 0;
+	result->port = flib_acceptor_listenport(acceptor);
+
+	if(localPlayerName) {
+		strncpy(result->playerName, localPlayerName, 255);
+	} else {
+		strncpy(result->playerName, "Player", 255);
 	}
-	flib_log_e("Unable to find a free port for IPC.");
-	return -1;
+
+	if(recordDemo) {
+		result->demoBuffer = flib_vector_create();
+	}
+
+	flib_log_i("Started listening for IPC connections on port %u", result->port);
+	return result;
 }
 
-void flib_ipcconn_close() {
-	if(ipcListenSocket) {
-		SDLNet_TCP_Close(ipcListenSocket);
-		ipcListenSocket = NULL;
-	}
-	flib_nbsocket_close(&ipcConnSocket);
-	ipcReadBufferSize = 0;
+uint16_t flib_ipcconn_port(flib_ipcconn ipc) {
+	return ipc->port;
 }
 
-IpcConnState flib_ipcconn_state() {
-	if(ipcConnSocket) {
+void flib_ipcconn_destroy(flib_ipcconn *ipcptr) {
+	if(!ipcptr || !*ipcptr) {
+		return;
+	}
+	flib_ipcconn ipc = *ipcptr;
+	flib_acceptor_close(&ipc->acceptor);
+	flib_socket_close(&ipc->sock);
+	flib_vector_destroy(&ipc->demoBuffer);
+	free(ipc);
+	*ipcptr = NULL;
+}
+
+IpcConnState flib_ipcconn_state(flib_ipcconn ipc) {
+	if(ipc && ipc->sock) {
 		return IPC_CONNECTED;
-	} else if(ipcListenSocket) {
+	} else if(ipc && ipc->acceptor) {
 		return IPC_LISTENING;
 	} else {
 		return IPC_NOT_CONNECTED;
 	}
 }
 
-static void demo_record(const void *data, size_t len) {
-	if(demoBuffer) {
-		if(flib_vector_append(demoBuffer, data, len) < len) {
+static void demo_record(flib_ipcconn ipc, const void *data, size_t len) {
+	if(ipc->demoBuffer) {
+		if(flib_vector_append(ipc->demoBuffer, data, len) < len) {
 			// Out of memory, fail demo recording
-			flib_vector_destroy(&demoBuffer);
+			flib_vector_destroy(&ipc->demoBuffer);
 		}
 	}
 }
 
-static void demo_record_from_engine(const uint8_t *message) {
-	if(!demoBuffer || message[0]==0) {
+static void demo_record_from_engine(flib_ipcconn ipc, const uint8_t *message) {
+	if(!ipc->demoBuffer || message[0]==0) {
 		return;
 	}
 	if(strchr("?CEiQqHb", message[1])) {
@@ -110,12 +104,12 @@ static void demo_record_from_engine(const uint8_t *message) {
 			char converted[257];
 			bool memessage = message[0] >= 7 && !memcmp(message+2, "/me ", 4);
 			const char *template = memessage ? "s\x02* %s %s  " : "s\x01%s: %s  ";
-			int size = snprintf(converted+1, 256, template, localPlayerName, chatMsg);
+			int size = snprintf(converted+1, 256, template, ipc->playerName, chatMsg);
 			converted[0] = size>255 ? 255 : size;
-			demo_record(converted, converted[0]+1);
+			demo_record(ipc, converted, converted[0]+1);
 		}
 	} else {
-		demo_record(message, message[0]+1);
+		demo_record(ipc, message, message[0]+1);
 	}
 }
 
@@ -123,41 +117,53 @@ static void demo_record_from_engine(const uint8_t *message) {
  * Receive a single message and copy it into the data buffer.
  * Returns the length of the received message, -1 when nothing is received.
  */
-int flib_ipcconn_recv_message(void *data) {
-	flib_ipcconn_tick();
+int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data) {
+	flib_ipcconn_tick(ipc);
 
-	if(ipcConnSocket) {
-		int size = flib_nbsocket_recv(ipcConnSocket, ipcReadBuffer+ipcReadBufferSize, sizeof(ipcReadBuffer)-ipcReadBufferSize);
+	if(ipc->sock) {
+		int size = flib_socket_nbrecv(ipc->sock, ipc->readBuffer+ipc->readBufferSize, sizeof(ipc->readBuffer)-ipc->readBufferSize);
 		if(size>=0) {
-			ipcReadBufferSize += size;
+			ipc->readBufferSize += size;
 		} else {
-			flib_nbsocket_close(&ipcConnSocket);
+			flib_socket_close(&ipc->sock);
 		}
 	}
 
-	int msgsize = ipcReadBuffer[0];
-	if(ipcReadBufferSize > msgsize) {
-		demo_record_from_engine(ipcReadBuffer);
-		memcpy(data, ipcReadBuffer+1, msgsize);
-		memmove(ipcReadBuffer, ipcReadBuffer+msgsize+1, ipcReadBufferSize-(msgsize+1));
-		ipcReadBufferSize -= (msgsize+1);
+	int msgsize = ipc->readBuffer[0];
+	if(ipc->readBufferSize > msgsize) {
+		demo_record_from_engine(ipc, ipc->readBuffer);
+		memcpy(data, ipc->readBuffer+1, msgsize);
+		memmove(ipc->readBuffer, ipc->readBuffer+msgsize+1, ipc->readBufferSize-(msgsize+1));
+		ipc->readBufferSize -= (msgsize+1);
 		return msgsize;
-	} else if(!ipcConnSocket && ipcReadBufferSize>0) {
-		flib_log_w("Last message from engine data stream is incomplete (received %u of %u bytes)", ipcReadBufferSize-1, msgsize);
-		ipcReadBufferSize = 0;
+	} else if(!ipc->sock && ipc->readBufferSize>0) {
+		flib_log_w("Last message from engine data stream is incomplete (received %u of %u bytes)", ipc->readBufferSize-1, msgsize);
+		ipc->readBufferSize = 0;
 		return -1;
 	} else {
 		return -1;
 	}
 }
 
-int flib_ipcconn_send_message(void *data, size_t len) {
-	flib_ipcconn_tick();
+int flib_ipcconn_send_raw(flib_ipcconn ipc, void *data, size_t len) {
+	flib_ipcconn_tick(ipc);
 
-	if(!ipcConnSocket) {
+	if(!ipc->sock) {
 		flib_log_w("flib_ipcconn_send_message: Not connected.");
 		return -1;
 	}
+
+	if(flib_socket_send(ipc->sock, data, len) == len) {
+		demo_record(ipc, data, len);
+		return 0;
+	} else {
+		flib_log_w("Failed or incomplete ICP write: engine connection lost.");
+		flib_socket_close(&ipc->sock);
+		return -1;
+	}
+}
+
+int flib_ipcconn_send_message(flib_ipcconn ipc, void *data, size_t len) {
 	if(len>255) {
 		flib_log_e("Attempt to send too much data to the engine in a single message.");
 		return -1;
@@ -166,26 +172,19 @@ int flib_ipcconn_send_message(void *data, size_t len) {
 	uint8_t sendbuf[256];
 	sendbuf[0] = len;
 	memcpy(sendbuf+1, data, len);
-	if(flib_nbsocket_blocksend(ipcConnSocket, sendbuf, len+1) == len+1) {
-		demo_record(sendbuf, len+1);
-		return 0;
-	} else {
-		flib_log_w("Failed or incomplete ICP write: engine connection lost.");
-		flib_nbsocket_close(&ipcConnSocket);
-		return -1;
-	}
+
+	return flib_ipcconn_send_raw(ipc, sendbuf, len+1);
 }
 
-int flib_ipcconn_send_messagestr(char *data) {
-	return flib_ipcconn_send_message(data, strlen(data));
+int flib_ipcconn_send_messagestr(flib_ipcconn ipc, char *data) {
+	return flib_ipcconn_send_message(ipc, data, strlen(data));
 }
 
-void flib_ipcconn_tick() {
-	if(!ipcConnSocket && ipcListenSocket) {
-		ipcConnSocket = flib_nbsocket_accept(ipcListenSocket, true);
-		if(ipcConnSocket) {
-			SDLNet_TCP_Close(ipcListenSocket);
-			ipcListenSocket = NULL;
+void flib_ipcconn_tick(flib_ipcconn ipc) {
+	if(!ipc->sock && ipc->acceptor) {
+		ipc->sock = flib_socket_accept(ipc->acceptor, true);
+		if(ipc->sock) {
+			flib_acceptor_close(&ipc->acceptor);
 		}
 	}
 }
@@ -201,20 +200,20 @@ static void replace_gamemode(flib_buffer buf, char gamemode) {
 	}
 }
 
-flib_constbuffer flib_ipcconn_getdemo() {
-	if(!demoBuffer) {
+flib_constbuffer flib_ipcconn_getdemo(flib_ipcconn ipc) {
+	if(!ipc->demoBuffer) {
 		flib_constbuffer result = {NULL, 0};
 		return result;
 	}
-	replace_gamemode(flib_vector_as_buffer(demoBuffer), 'D');
-	return flib_vector_as_constbuffer(demoBuffer);
+	replace_gamemode(flib_vector_as_buffer(ipc->demoBuffer), 'D');
+	return flib_vector_as_constbuffer(ipc->demoBuffer);
 }
 
-flib_constbuffer flib_ipcconn_getsave() {
-	if(!demoBuffer) {
+flib_constbuffer flib_ipcconn_getsave(flib_ipcconn ipc) {
+	if(!ipc->demoBuffer) {
 		flib_constbuffer result = {NULL, 0};
 		return result;
 	}
-	replace_gamemode(flib_vector_as_buffer(demoBuffer), 'S');
-	return flib_vector_as_constbuffer(demoBuffer);
+	replace_gamemode(flib_vector_as_buffer(ipc->demoBuffer), 'S');
+	return flib_vector_as_constbuffer(ipc->demoBuffer);
 }

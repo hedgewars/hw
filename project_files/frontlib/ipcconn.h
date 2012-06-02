@@ -12,42 +12,35 @@
 
 typedef enum {IPC_NOT_CONNECTED, IPC_LISTENING, IPC_CONNECTED} IpcConnState;
 
-/**
- * Called by flib_init(). Initialize everything related to ipc.
- */
-void flib_ipcconn_init();
+struct _flib_ipcconn;
+typedef struct _flib_ipcconn *flib_ipcconn;
 
 /**
- * Called by flib_quit(). Free resources and shut down.
- */
-void flib_ipcconn_quit();
-
-/**
- * Start listening for a connection from the engine. The system has to be in state
- * IPC_NOT_CONNECTED when calling this function, and will be in state IPC_LISTENING
- * if the function returns successfully.
+ * Start an engine connection by listening on a random port. The selected port can
+ * be queried with flib_ipcconn_port and has to be passed to the engine.
  *
  * The parameter "recordDemo" can be used to control whether demo recording should
- * be enabled for this connection.
+ * be enabled for this connection. The localPlayerName is needed for demo
+ * recording purposes.
  *
- * Returns the port we started listening on, or a negative value if there is an error.
+ * Returns NULL on error. Destroy the created object with flib_ipcconn_destroy.
  *
- * We stop listening once a connection has been established, so if you want to start
- * the engine again and talk to it you need to call this function again after the old
- * connection is closed.
+ * We stop accepting new connections once a connection has been established, so you
+ * need to create a new ipcconn in order to start a new connection.
  */
-int flib_ipcconn_start(bool recordDemo);
+flib_ipcconn flib_ipcconn_create(bool recordDemo, const char *localPlayerName);
+
+uint16_t flib_ipcconn_port(flib_ipcconn ipc);
 
 /**
- * Close the current IPC connection and/or stop listening for an incoming one.
- * This also discards all unread messages.
+ * Free resources, close sockets, and set the pointer to NULL.
  */
-void flib_ipcconn_close();
+void flib_ipcconn_destroy(flib_ipcconn *ipcptr);
 
 /**
  * Determine the current connection state
  */
-IpcConnState flib_ipcconn_state();
+IpcConnState flib_ipcconn_state(flib_ipcconn ipc);
 
 /**
  * Receive a single message (up to 255 bytes) and copy it into the data buffer.
@@ -58,7 +51,9 @@ IpcConnState flib_ipcconn_state();
  * no further message is returned, to ensure you see all messages that were sent
  * before the connection closed.
  */
-int flib_ipcconn_recv_message(void *data);
+int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data);
+
+int flib_ipcconn_send_raw(flib_ipcconn ipc, void *data, size_t len);
 
 /**
  * Write a single message (up to 255 bytes) to the engine. This call blocks until the
@@ -67,43 +62,43 @@ int flib_ipcconn_recv_message(void *data);
  * Calling this function in a state other than IPC_CONNECTED will fail immediately.
  * Returns a negative value on failure.
  */
-int flib_ipcconn_send_message(void *data, size_t len);
+int flib_ipcconn_send_message(flib_ipcconn ipc, void *data, size_t len);
 
 /**
  * Convenience function for sending a 0-delimited string.
  */
-int flib_ipcconn_send_messagestr(char *data);
+int flib_ipcconn_send_messagestr(flib_ipcconn ipc, char *data);
 
 /**
  * Call regularly to allow background work to proceed
  */
-void flib_ipcconn_tick();
+void flib_ipcconn_tick(flib_ipcconn ipc);
 
 /**
- * Get a demo record of the last connection. This should be called after
+ * Get a demo record of the connection. This should be called after
  * the connection is closed and all messages have been received.
  *
- * If demo recording was not enabled in the last call to flib_ipcconn_start(),
- * or if the recording failed for some reason, the buffer will be empty.
+ * If demo recording was not enabled, or if the recording failed for some reason,
+ * the buffer will be empty.
  *
- * The buffer is only valid until the next call to flib_ipcconn_start() or
- * a call to flib_ipcconn_getsave() (save and demo records have some minor
- * differences, and those are performed directly on the buffer before returning it).
+ * The buffer is only valid until a call to flib_ipcconn_getsave(), since save
+ * and demo records have some minor differences, and those are performed directly
+ * on the buffer before returning it).
  */
-flib_constbuffer flib_ipcconn_getdemo();
+flib_constbuffer flib_ipcconn_getdemo(flib_ipcconn ipc);
 
 /**
- * Get a savegame record of the last connection. This should be called after
+ * Get a savegame record of the connection. This should be called after
  * the connection is closed and all messages have been received.
  *
- * If demo recording was not enabled in the last call to flib_ipcconn_start(),
- * or if the recording failed for some reason, the buffer will be empty.
+ * If demo recording was not enabled, or if the recording failed for some reason,
+ * the buffer will be empty.
  *
- * The buffer is only valid until the next call to flib_ipcconn_start() or
- * a call to flib_ipcconn_getdemo() (save and demo records have some minor
- * differences, and those are performed directly on the buffer before returning it).
+ * The buffer is only valid until a call to flib_ipcconn_getdemo(), since save
+ * and demo records have some minor differences, and those are performed directly
+ * on the buffer before returning it).
  */
-flib_constbuffer flib_ipcconn_getsave();
+flib_constbuffer flib_ipcconn_getsave(flib_ipcconn ipc);
 
 #endif /* IPCCONN_H_ */
 

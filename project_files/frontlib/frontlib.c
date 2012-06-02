@@ -1,6 +1,6 @@
 #include "frontlib.h"
 #include "logging.h"
-#include "nonblocksockets.h"
+#include "socket.h"
 #include "ipcconn.h"
 
 #include <SDL.h>
@@ -29,13 +29,10 @@ int flib_init(int flags) {
 		return -1;
 	}
 
-	flib_ipcconn_init();
 	return 0;
 }
 
 void flib_quit() {
-	flib_ipcconn_quit();
-
 	SDLNet_Quit();
 	if(!(flib_initflags | FRONTLIB_SDL_ALREADY_INITIALIZED)) {
 		SDL_Quit();
@@ -43,34 +40,34 @@ void flib_quit() {
 }
 
 int main(int argc, char *argv[]) {
-	flib_init(FRONTLIB_SDL_ALREADY_INITIALIZED);
-	flib_ipcconn_start(true);
+	flib_init(0);
+
+	flib_ipcconn ipc = flib_ipcconn_create(true, "Medo42");
 	char data[256];
-	while(flib_ipcconn_state() != IPC_NOT_CONNECTED) {
-		flib_ipcconn_tick();
-		int size = flib_ipcconn_recv_message(data);
+	while(flib_ipcconn_state(ipc) != IPC_NOT_CONNECTED) {
+		flib_ipcconn_tick(ipc);
+		int size = flib_ipcconn_recv_message(ipc, data);
 		if(size>0) {
 			data[size]=0;
-			flib_log_i("IPC IN: %s", data);
 			switch(data[0]) {
 			case 'C':
 				flib_log_i("Sending config...");
-				flib_ipcconn_send_messagestr("TL");
-				flib_ipcconn_send_messagestr("eseed loremipsum");
-				flib_ipcconn_send_messagestr("escript Missions/Training/Basic_Training_-_Bazooka.lua");
+				flib_ipcconn_send_messagestr(ipc, "TL");
+				flib_ipcconn_send_messagestr(ipc, "eseed loremipsum");
+				flib_ipcconn_send_messagestr(ipc, "escript Missions/Training/Basic_Training_-_Bazooka.lua");
 				break;
 			case '?':
 				flib_log_i("Sending pong...");
-				flib_ipcconn_send_messagestr("!");
+				flib_ipcconn_send_messagestr(ipc, "!");
 				break;
 			case 'Q':
 				flib_log_i("Game interrupted.");
 				break;
 			case 'q':
 				flib_log_i("Game finished.");
-				flib_constbuffer demobuf = flib_ipcconn_getdemo();
+				flib_constbuffer demobuf = flib_ipcconn_getdemo(ipc);
 				flib_log_i("Writing demo (%u bytes)...", demobuf.size);
-				FILE *file = fopen("testdemo.dem", "w");
+				FILE *file = fopen("testdemo.dem", "wb");
 				fwrite(demobuf.data, 1, demobuf.size, file);
 				fclose(file);
 				file = NULL;
@@ -82,6 +79,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	flib_log_i("IPC connection lost.");
+	flib_ipcconn_destroy(&ipc);
 	flib_quit();
 	return 0;
 }
