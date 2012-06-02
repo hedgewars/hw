@@ -24,6 +24,7 @@ import android.media.AudioTrack;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -400,6 +401,11 @@ public class SDLActivity extends Activity {
 			mAudioTrack.stop();
 			mAudioTrack = null;
 		}
+	}
+	
+	public static float getDensity(){
+		DisplayMetrics dm = SDLActivity.getContext().getResources().getDisplayMetrics();
+		return dm.density;
 	}
 }
 
