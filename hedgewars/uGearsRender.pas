@@ -989,7 +989,9 @@ begin
                            DrawSpriteRotated(sprSMineOn, x, y, 0, Gear^.DirAngle)
                        else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                        
-            gtCase: if ((Gear^.Pos and posCaseAmmo) <> 0) then
+            gtCase: begin
+                    if Gear^.Timer < 255 then Tint($FF, $FF, $FF, Gear^.Timer);
+                    if ((Gear^.Pos and posCaseAmmo) <> 0) then
                         begin
                         i:= (GameTicks shr 6) mod 64;
                         if i > 18 then
@@ -1011,6 +1013,8 @@ begin
                         i:= i mod 12;
                         DrawSprite(sprUtility, x - 24, y - 24, i);
                         end;
+                    if Gear^.Timer < 255 then Tint($FF, $FF, $FF, $FF);
+                    end;
       gtExplosives: begin
                     if ((Gear^.State and gstDrowning) <> 0) then
                         DrawSprite(sprExplosivesRoll, x - 24, y - 24, 0)

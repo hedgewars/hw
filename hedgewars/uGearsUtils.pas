@@ -474,6 +474,7 @@ begin
     if gear <> nil then
         begin
         AddVisualGear(hwRound(gear^.X), hwRound(gear^.Y), vgtExplosion);
+        PlaySound(sndWarp);
         RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;

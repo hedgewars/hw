@@ -246,7 +246,8 @@ case Kind of
                 gear^.ImpactSound:= sndGraveImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 16;
-                gear^.Elasticity:= _0_3
+                gear^.Elasticity:= _0_3;
+                gear^.Timer:= 0
                 end;
   gtExplosives: begin
                 gear^.ImpactSound:= sndGrenadeImpact;
