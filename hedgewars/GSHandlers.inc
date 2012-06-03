@@ -702,14 +702,14 @@ if draw then
             //Land[py, px+1]:= lfBasic;
             
             if allpx then
-                UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w))
+                UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w), true)
             else
                 begin
                 UpdateLandTexture(
                     max(0, min(LAND_WIDTH, xx)),
                     min(LAND_WIDTH - xx, Pred(s^.w)),
                     max(0, min(LAND_WIDTH, yy)),
-                    min(LAND_HEIGHT - yy, Pred(s^.h))
+                    min(LAND_HEIGHT - yy, Pred(s^.h)), false // could this be true without unnecessarily creating blanks?
                 );
                 end;
 ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
