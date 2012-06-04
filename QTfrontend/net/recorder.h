@@ -16,22 +16,37 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef BINDS_H
-#define BINDS_H
+#ifndef RECORDER_H
+#define RECORDER_H
 
 #include <QString>
+#include <QByteArray>
 
-#define BINDS_NUMBER 45
+#include "tcpBase.h"
 
-struct BindAction
+class GameUIConfig;
+
+class HWRecorder : public TCPBase
 {
-    QString action;
-    QString strbind;
-    const char * name;
-    const char * category;
-    const char * description;
+        Q_OBJECT
+    public:
+        HWRecorder(GameUIConfig * config);
+        virtual ~HWRecorder();
+
+        void EncodeVideo(const QByteArray & record, const QString & prefix);
+
+    protected:
+        virtual QStringList getArguments();
+        virtual void onClientRead();
+        virtual void onClientDisconnect();
+
+    signals:
+
+    public slots:
+
+    private:
+        GameUIConfig * config;
+        QString prefix;
 };
 
-extern const BindAction cbinds[BINDS_NUMBER];
-
-#endif // BINDS_H
+#endif // RECORDER_H

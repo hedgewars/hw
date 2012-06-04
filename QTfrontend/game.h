@@ -40,6 +40,13 @@ enum GameState
     gsHalted = 6
 };
 
+enum RecordType
+{
+    rtDemo,
+    rtSave,
+    rtNeither,
+};
+
 bool checkForDir(const QString & dir);
 
 class HWGame : public TCPBase
@@ -70,7 +77,7 @@ class HWGame : public TCPBase
         void SendTeamMessage(const QString & msg);
         void GameStateChanged(GameState gameState);
         void GameStats(char type, const QString & info);
-        void HaveRecord(bool isDemo, const QByteArray & record);
+        void HaveRecord(RecordType type, const QByteArray & record);
         void ErrorMessage(const QString &);
 
     public slots:

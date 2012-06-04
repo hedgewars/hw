@@ -199,6 +199,7 @@ int main(int argc, char *argv[])
         checkForDir(cfgdir->absolutePath() + "/Screenshots");
         checkForDir(cfgdir->absolutePath() + "/Teams");
         checkForDir(cfgdir->absolutePath() + "/Logs");
+        checkForDir(cfgdir->absolutePath() + "/Videos");
     }
 
     datadir->cd(bindir->absolutePath());

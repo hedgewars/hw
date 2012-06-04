@@ -59,6 +59,7 @@ set(engine_sources
     uTypes.pas
     uUtils.pas
     uVariables.pas
+    uVideoRec.pas
     uVisualGears.pas
     uWorld.pas
     GSHandlers.inc
@@ -182,6 +183,15 @@ endif()
 
 set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
 
+IF (WIN32)
+    set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+    include_directories(${CMAKE_SOURCE_DIR}/misc/winutils/include)
+    link_directories(${CMAKE_SOURCE_DIR}/misc/winutils/lib)
+    add_library(avwrapper SHARED avwrapper.c)
+    target_link_libraries(avwrapper avcodec avformat avutil)
+ELSE()
+    add_library(avwrapper STATIC avwrapper.c)
+ENDIF()
 
 IF(NOT APPLE)
     #here is the command for standard executables or for shared library
@@ -222,10 +232,12 @@ endif()
 #this command is a workaround to some inlining issues present in older
 # FreePascal versions and fixed in 2.6, That version is mandatory on OSX,
 # hence the command is not needed there
-if(NOT APPLE)
-    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
-    add_dependencies(${engine_output_name} ENGINECLEAN)
-endif()
+# if(NOT APPLE)
+#    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
+#    add_dependencies(${engine_output_name} ENGINECLEAN)
+# endif()
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
-
+IF (WIN32)
+    install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_dir})
+ENDIF()

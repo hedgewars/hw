@@ -90,6 +90,7 @@
 #include "drawmapwidget.h"
 #include "mouseoverfilter.h"
 #include "roomslistmodel.h"
+#include "recorder.h"
 
 #include "DataManager.h"
 
@@ -1357,7 +1358,7 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, 
     connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
     connect(game, SIGNAL(GameStats(char, const QString &)), ui.pageGameStats, SLOT(GameStats(char, const QString &)));
     connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
-    connect(game, SIGNAL(HaveRecord(bool, const QByteArray &)), this, SLOT(GetRecord(bool, const QByteArray &)));
+    connect(game, SIGNAL(HaveRecord(RecordType, const QByteArray &)), this, SLOT(GetRecord(RecordType, const QByteArray &)));
     m_lastDemo = QByteArray();
 }
 
@@ -1368,43 +1369,56 @@ void HWForm::ShowErrorMessage(const QString & msg)
                          msg);
 }
 
-void HWForm::GetRecord(bool isDemo, const QByteArray & record)
+void HWForm::GetRecord(RecordType type, const QByteArray & record)
 {
-    QString filename;
-    QByteArray demo = record;
-    QString recordFileName =
-        config->appendDateTimeToRecordName() ?
-        QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm") :
-        "LastRound";
-
-    QStringList versionParts = cVersionString->split('-');
-    if ( (versionParts.size() == 2) && (!versionParts[1].isEmpty()) && (versionParts[1].contains(':')) )
-        recordFileName = recordFileName + "_" + versionParts[1].replace(':','-');
-
-    if (isDemo)
+    if (type != rtNeither)
     {
-        demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
-        demo.replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
-        demo.replace(QByteArray("\x02TS"), QByteArray("\x02TD"));
-        filename = cfgdir->absolutePath() + "/Demos/" + recordFileName + "." + *cProtoVer + ".hwd";
-        m_lastDemo = demo;
-    }
-    else
-    {
-        demo.replace(QByteArray("\x02TL"), QByteArray("\x02TS"));
-        demo.replace(QByteArray("\x02TN"), QByteArray("\x02TS"));
-        filename = cfgdir->absolutePath() + "/Saves/" + recordFileName + "." + *cProtoVer + ".hws";
+        QString filename;
+        QByteArray demo = record;
+        QString recordFileName =
+            config->appendDateTimeToRecordName() ?
+            QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm") :
+            "LastRound";
+
+        QStringList versionParts = cVersionString->split('-');
+        if ( (versionParts.size() == 2) && (!versionParts[1].isEmpty()) && (versionParts[1].contains(':')) )
+            recordFileName = recordFileName + "_" + versionParts[1].replace(':','-');
+
+        if (type == rtDemo)
+        {
+            demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
+            demo.replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
+            demo.replace(QByteArray("\x02TS"), QByteArray("\x02TD"));
+            filename = cfgdir->absolutePath() + "/Demos/" + recordFileName + "." + *cProtoVer + ".hwd";
+            m_lastDemo = demo;
+        }
+        else
+        {
+            demo.replace(QByteArray("\x02TL"), QByteArray("\x02TS"));
+            demo.replace(QByteArray("\x02TN"), QByteArray("\x02TS"));
+            filename = cfgdir->absolutePath() + "/Saves/" + recordFileName + "." + *cProtoVer + ".hws";
+        }
+
+        QFile demofile(filename);
+        if (!demofile.open(QIODevice::WriteOnly))
+            ShowErrorMessage(tr("Cannot save record to file %1").arg(filename));
+        else
+        {
+            demofile.write(demo);
+            demofile.close();
+        }
     }
 
-
-    QFile demofile(filename);
-    if (!demofile.open(QIODevice::WriteOnly))
+    QDir videosDir(cfgdir->absolutePath() + "/Videos/");
+    QStringList files = videosDir.entryList(QStringList("*.txtout"), QDir::Files);
+    for (QStringList::iterator str = files.begin(); str != files.end(); str++)
     {
-        ShowErrorMessage(tr("Cannot save record to file %1").arg(filename));
-        return ;
+        str->chop(7); // remove ".txtout"
+        // need to rename this file to not open it twice
+        videosDir.rename(*str + ".txtout", *str + ".txtin");
+        HWRecorder* pRecorder = new HWRecorder(config);
+        pRecorder->EncodeVideo(record, *str);
     }
-    demofile.write(demo);
-    demofile.close();
 }
 
 void HWForm::startTraining(const QString & scriptName)

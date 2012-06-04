@@ -114,7 +114,7 @@ class HWForm : public QMainWindow
         void GameStateChanged(GameState gameState);
         void ForcedDisconnect(const QString & reason);
         void ShowErrorMessage(const QString &);
-        void GetRecord(bool isDemo, const QByteArray & record);
+        void GetRecord(RecordType type, const QByteArray & record);
         void CreateNetGame();
         void UpdateWeapons();
         void onFrontendFullscreen(bool value);

@@ -26,8 +26,8 @@
 
 #include "hwconsts.h"
 
-QList<TCPBase*> srvsList;
-QPointer<QTcpServer> TCPBase::IPCServer(0);
+//QList<TCPBase*> srvsList;
+//QPointer<QTcpServer> TCPBase::IPCServer(0);
 
 TCPBase::~TCPBase()
 {
@@ -35,7 +35,7 @@ TCPBase::~TCPBase()
 
 TCPBase::TCPBase(bool demoMode) :
     m_isDemoMode(demoMode),
-    IPCSocket(0)
+    IPCSocket(0), IPCServer(0)
 {
     if(!IPCServer)
     {
@@ -67,7 +67,7 @@ void TCPBase::NewConnection()
     SendToClientFirst();
 }
 
-void TCPBase::RealStart()
+void TCPBase::/*Real*/Start()
 {
     connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
     IPCSocket = 0;
@@ -88,8 +88,8 @@ void TCPBase::ClientDisconnect()
     disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     onClientDisconnect();
 
-    if(srvsList.size()==1) srvsList.pop_front();
-    emit isReadyNow();
+ /*   if(srvsList.size()==1) srvsList.pop_front();
+    emit isReadyNow();*/
     IPCSocket->deleteLater();
     deleteLater();
 }
@@ -109,13 +109,13 @@ void TCPBase::StartProcessError(QProcess::ProcessError error)
                           .arg(error) + bindir->absolutePath() + "/hwengine)");
 }
 
+/*
 void TCPBase::tcpServerReady()
 {
     disconnect(srvsList.takeFirst(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
 
     RealStart();
 }
-
 void TCPBase::Start()
 {
     if(srvsList.isEmpty())
@@ -130,7 +130,7 @@ void TCPBase::Start()
     }
 
     RealStart();
-}
+}*/
 
 void TCPBase::onClientRead()
 {

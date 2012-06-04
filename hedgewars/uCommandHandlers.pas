@@ -26,7 +26,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions;
+uses SysUtils, uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions, uVideoRec;
 
 var prevGState: TGameState = gsConfirm;
 
@@ -529,6 +529,15 @@ s:= s; // avoid compiler hint
 flagMakeCapture:= true
 end;
 
+procedure chRecord(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+if flagPrerecording then
+    StopPreRecording
+else
+    BeginPreRecording(FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()));
+end;
+
 procedure chSetMap(var s: shortstring);
 begin
 if isDeveloperMode then
@@ -864,6 +873,7 @@ begin
     RegisterVariable('-cur_l'  , @chCurL_m       , true );
     RegisterVariable('+cur_r'  , @chCurR_p       , true );
     RegisterVariable('-cur_r'  , @chCurR_m       , true );
+    RegisterVariable('record'  , @chRecord       , true );
 end;
 
 procedure freeModule;

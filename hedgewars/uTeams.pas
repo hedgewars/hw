@@ -532,7 +532,7 @@ if isDeveloperMode then
     AddTeam(Color);
     CurrentTeam^.TeamName:= ts;
     CurrentTeam^.PlayerHash:= s;
-    if GameType in [gmtDemo, gmtSave] then
+    if GameType in [gmtDemo, gmtSave, gmtRecord] then
         CurrentTeam^.ExtDriven:= true;
 
     CurrentTeam^.voicepack:= AskForVoicepack('Default')

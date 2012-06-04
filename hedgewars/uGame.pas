@@ -39,17 +39,20 @@ if (not CurrentTeam^.ExtDriven) then
     isInLag:= false;
     SendKeepAliveMessage(Lag)
     end;
-if Lag > 100 then
-    Lag:= 100
-else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
-    Lag:= 2500;
+if GameType <> gmtRecord then
+    begin
+    if Lag > 100 then
+        Lag:= 100
+    else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
+        Lag:= 2500;
 
-if (GameType = gmtDemo) then 
-    if isSpeed then
-        Lag:= Lag * 10
-    else
-        if cOnlyStats then
-            Lag:= High(LongInt);
+    if (GameType = gmtDemo) then 
+        if isSpeed then
+            Lag:= Lag * 10
+        else
+            if cOnlyStats then
+                Lag:= High(LongInt);
+    end;
 PlayNextVoice;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do
