@@ -62,11 +62,11 @@ class TCPBase : public QObject
         virtual void onClientDisconnect();
         virtual void SendToClientFirst();
 
+      //  void RealStart();
     private:
-        static QPointer<QTcpServer> IPCServer;
+        /*static*/ QPointer<QTcpServer> IPCServer;
 
         bool m_isDemoMode;
-        void RealStart();
         QPointer<QTcpSocket> IPCSocket;
 
     private slots:
@@ -75,7 +75,7 @@ class TCPBase : public QObject
         void ClientRead();
         void StartProcessError(QProcess::ProcessError error);
 
-        void tcpServerReady();
+      //  void tcpServerReady();
 };
 
 #endif // _TCPBASE_INCLUDED

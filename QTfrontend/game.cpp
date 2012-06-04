@@ -53,20 +53,18 @@ void HWGame::onClientDisconnect()
 {
     switch (gameType)
     {
-        case gtSave:
-            if (gameState == gsInterrupted || gameState == gsHalted)
-                emit HaveRecord(false, demo);
-            else if (gameState == gsFinished)
-                emit HaveRecord(true, demo);
-            break;
         case gtDemo:
+            // for video recording we need demo anyway 
+            emit HaveRecord(rtNeither, demo);
             break;
         case gtNet:
-            emit HaveRecord(true, demo);
+            emit HaveRecord(rtDemo, demo);
             break;
         default:
-            if (gameState == gsInterrupted || gameState == gsHalted) emit HaveRecord(false, demo);
-            else if (gameState == gsFinished) emit HaveRecord(true, demo);
+            if (gameState == gsInterrupted || gameState == gsHalted)
+                emit HaveRecord(rtSave, demo);
+            else if (gameState == gsFinished)
+                emit HaveRecord(rtDemo, demo);
     }
     SetGameState(gsStopped);
 }

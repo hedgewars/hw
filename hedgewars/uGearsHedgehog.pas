@@ -601,7 +601,7 @@ case Gear^.Pos of
                     if (not (HH^.Hedgehog^.Team^.ExtDriven 
                     or (HH^.Hedgehog^.BotLevel > 0)))
                     or (HH^.Hedgehog^.Team^.Clan^.ClanIndex = LocalClan)
-                    or (GameType = gmtDemo)  then
+                    or (GameType in [gmtDemo, gmtRecord])  then
                         begin
                         s:= trammo[Ammoz[a].NameId] + ' (+' + IntToStr(Ammoz[a].NumberInCase) + ')';
                         AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);

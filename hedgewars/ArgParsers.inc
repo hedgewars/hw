@@ -61,6 +61,11 @@ begin
     else 
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-6)));
     cLocaleFName:= ParamStr(17);
+    if ParamCount > 17 then
+        begin
+        cRecPrefix:= ParamStr(18);
+        GameType:= gmtRecord;
+        end;
 end;
 
 procedure setVideo(screenWidth: LongInt; screenHeight: LongInt; bitsStr: LongInt);

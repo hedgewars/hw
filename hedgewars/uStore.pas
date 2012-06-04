@@ -40,13 +40,14 @@ procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
 procedure MakeCrossHairs;
+procedure InitOffscreenOpenGL;
 
 procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; inline;
 
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
-     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
+     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}, glut;
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -438,6 +439,29 @@ if not reload then
 IMG_Quit();
 end;
 
+procedure CreateFramebuffer(var frame, depth, tex: GLuint);
+begin
+    glGenFramebuffersEXT(1, @frame);
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frame);
+    glGenRenderbuffersEXT(1, @depth);
+    glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depth);
+    glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
+    glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depth);
+    glGenTextures(1, @tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, tex, 0);
+end;
+
+procedure DeleteFramebuffer(var frame, depth, tex: GLuint);
+begin
+    glDeleteTextures(1, @tex);
+    glDeleteRenderbuffersEXT(1, @depth);
+    glDeleteFramebuffersEXT(1, @frame);
+end;
+
 procedure StoreRelease(reload: boolean);
 var ii: TSprite;
     ai: TAmmoType;
@@ -511,15 +535,13 @@ for i:= Low(CountTexz) to High(CountTexz) do
                 end;
             end;
         end;
+    if defaultFrame <> 0 then
+        DeleteFramebuffer(defaultFrame, depthv, texv);
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
         begin
-        glDeleteTextures(1, @texl);
-        glDeleteRenderbuffersEXT(1, @depthl);
-        glDeleteFramebuffersEXT(1, @framel);
-        glDeleteTextures(1, @texr);
-        glDeleteRenderbuffersEXT(1, @depthr);
-        glDeleteFramebuffersEXT(1, @framer)
+        DeleteFramebuffer(framel, depthl, texl);
+        DeleteFramebuffer(framer, depthr, texr);
         end
 {$ENDIF}
 end;
@@ -628,6 +650,7 @@ end;
 procedure SetupOpenGL;
 //var vendor: shortstring = '';
 var buf: array[byte] of char;
+    AuxBufNum: LongInt;
 begin
     buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
@@ -673,14 +696,41 @@ begin
 {$ENDIF}
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
 *)
+    glGetIntegerv(GL_AUX_BUFFERS, @AuxBufNum);
 
     // everyone love debugging
     AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
     AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
     AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
     AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
-    AddFileLog('  \----- Extensions: ' + shortstring(pchar(glGetString(GL_EXTENSIONS))));
+    AddFileLog('  |----- Number of auxilary buffers: ' + inttostr(AuxBufNum));
+    AddFileLog('  \----- Extensions: ');
+    AddFileLogRaw(glGetString(GL_EXTENSIONS));
+    AddFileLog('');
     //TODO: don't have the Extensions line trimmed but slipt it into multiple lines
+
+    defaultFrame:= 0;
+    if GameType = gmtRecord then
+    begin  
+        if AuxBufNum > 0 then
+        begin
+            glDrawBuffer(GL_AUX0);
+            glReadBuffer(GL_AUX0);
+            AddFileLog('Using auxilary buffer for video recording.');
+        end 
+        else if glLoadExtension('GL_EXT_framebuffer_object') then
+        begin
+            CreateFramebuffer(defaultFrame, depthv, texv);
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame);
+            AddFileLog('Using framebuffer for video recording.');
+        end
+        else
+        begin
+            glDrawBuffer(GL_BACK);
+            glReadBuffer(GL_BACK);
+            AddFileLog('Warning: off-screen rendering is not supported; using back buffer but it may not work.');
+        end;
+    end;
 
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
@@ -688,36 +738,11 @@ begin
         // prepare left and right frame buffers and associated textures
         if glLoadExtension('GL_EXT_framebuffer_object') then
             begin
-            // left
-            glGenFramebuffersEXT(1, @framel);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
-            glGenRenderbuffersEXT(1, @depthl);
-            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthl);
-            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthl);
-            glGenTextures(1, @texl);
-            glBindTexture(GL_TEXTURE_2D, texl);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texl, 0);
-
-            // right
-            glGenFramebuffersEXT(1, @framer);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
-            glGenRenderbuffersEXT(1, @depthr);
-            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthr);
-            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthr);
-            glGenTextures(1, @texr);
-            glBindTexture(GL_TEXTURE_2D, texr);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texr, 0);
+            CreateFramebuffer(framel, depthl, texl);
+            CreateFramebuffer(framer, depthr, texr);
 
             // reset
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame)
             end
         else
             cStereoMode:= smNone;
@@ -991,6 +1016,19 @@ FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
 end;
 
+procedure InitOffscreenOpenGL;
+var ArgCount: LongInt;
+    PrgName: pchar;
+begin
+    ArgCount:= 1;
+    PrgName:= 'hwengine';
+    glutInit(@ArgCount, @PrgName);
+    glutInitWindowSize(cScreenWidth, cScreenHeight);
+    glutCreateWindow('You don''t see this'); // we don't need a window, but if this function is not called then OpenGL will not be initialized
+    glutHideWindow();
+    SetupOpenGL();
+end;
+
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     reinit: boolean = false;
@@ -1171,6 +1209,8 @@ end;
 
 procedure SwapBuffers; inline;
 begin
+    if GameType = gmtRecord then
+        exit;
 {$IFDEF SDL13}
     SDL_GL_SwapWindow(SDLwindow);
 {$ELSE}

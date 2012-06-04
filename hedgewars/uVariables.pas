@@ -52,6 +52,7 @@ var
     cReadyDelay     : Longword    = 5000;
     cStereoMode     : TStereoMode = smNone;
     cOnlyStats      : boolean = False;
+    cRecPrefix      : shortstring = '';
 //////////////////////////
     cMapName        : shortstring = '';
 
@@ -62,6 +63,7 @@ var
     isSpeed         : boolean;
 
     fastUntilLag    : boolean;
+    fastScrolling   : boolean;
     autoCameraOn    : boolean;
 
     GameTicks       : LongWord;
@@ -2437,6 +2439,10 @@ var
     framel, framer, depthl, depthr: GLuint;
     texl, texr: GLuint;
 
+    // video recorder framebuffer and texture
+    defaultFrame, depthv: GLuint;
+    texv: GLuint;
+
     VisualGearLayers: array[0..6] of PVisualGear;
     lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
@@ -2561,7 +2567,7 @@ begin
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
-    GameType        := gmtLocal;
+//    GameType        := gmtLocal;
     zoom            := cDefaultZoomLevel;
     ZoomValue       := cDefaultZoomLevel;
     WeaponTooltipTex:= nil;
@@ -2577,6 +2583,7 @@ begin
     isInMultiShoot  := false;
     isSpeed         := false;
     fastUntilLag    := false;
+    fastScrolling   := false;
     autoCameraOn    := true;
     cScriptName     := '';
     cSeed           := '';

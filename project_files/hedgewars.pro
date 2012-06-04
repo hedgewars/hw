@@ -104,7 +104,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/dialog/input_password.h \
     ../QTfrontend/ui/widget/colorwidget.h \
     ../QTfrontend/model/HatModel.h \
-    ../QTfrontend/model/GameStyleModel.h
+    ../QTfrontend/model/GameStyleModel.h \
+    ../QTfrontend/recorder.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
@@ -186,7 +187,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/dialog/input_password.cpp \
     ../QTfrontend/ui/widget/colorwidget.cpp \
     ../QTfrontend/model/HatModel.cpp \
-    ../QTfrontend/model/GameStyleModel.cpp
+    ../QTfrontend/model/GameStyleModel.cpp \
+    ../QTfrontend/recorder.cpp
 
 win32 {
     SOURCES += ../QTfrontend/xfire.cpp
