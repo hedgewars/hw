@@ -101,6 +101,7 @@ static void demo_record_from_engine(flib_ipcconn ipc, const uint8_t *message) {
 			memcpy(chatMsg, message+2, message[0]-3);
 			chatMsg[message[0]-3] = 0;
 
+			// If the message starts with /me, it will be displayed differently.
 			char converted[257];
 			bool memessage = message[0] >= 7 && !memcmp(message+2, "/me ", 4);
 			const char *template = memessage ? "s\x02* %s %s  " : "s\x01%s: %s  ";
@@ -113,10 +114,6 @@ static void demo_record_from_engine(flib_ipcconn ipc, const uint8_t *message) {
 	}
 }
 
-/**
- * Receive a single message and copy it into the data buffer.
- * Returns the length of the received message, -1 when nothing is received.
- */
 int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data) {
 	flib_ipcconn_tick(ipc);
 
@@ -129,15 +126,15 @@ int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data) {
 		}
 	}
 
-	int msgsize = ipc->readBuffer[0];
-	if(ipc->readBufferSize > msgsize) {
+	int msgsize = ipc->readBuffer[0]+1;
+	if(ipc->readBufferSize >= msgsize) {
 		demo_record_from_engine(ipc, ipc->readBuffer);
-		memcpy(data, ipc->readBuffer+1, msgsize);
-		memmove(ipc->readBuffer, ipc->readBuffer+msgsize+1, ipc->readBufferSize-(msgsize+1));
-		ipc->readBufferSize -= (msgsize+1);
+		memcpy(data, ipc->readBuffer, msgsize);
+		memmove(ipc->readBuffer, ipc->readBuffer+msgsize, ipc->readBufferSize-msgsize);
+		ipc->readBufferSize -= msgsize;
 		return msgsize;
 	} else if(!ipc->sock && ipc->readBufferSize>0) {
-		flib_log_w("Last message from engine data stream is incomplete (received %u of %u bytes)", ipc->readBufferSize-1, msgsize);
+		flib_log_w("Last message from engine data stream is incomplete (received %u of %u bytes)", ipc->readBufferSize, msgsize);
 		ipc->readBufferSize = 0;
 		return -1;
 	} else {
