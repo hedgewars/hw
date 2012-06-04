@@ -43,9 +43,12 @@ void flib_ipcconn_destroy(flib_ipcconn *ipcptr);
 IpcConnState flib_ipcconn_state(flib_ipcconn ipc);
 
 /**
- * Receive a single message (up to 255 bytes) and copy it into the data buffer.
+ * Receive a single message (up to 256 bytes) and copy it into the data buffer.
  * Returns the length of the received message, a negative value if no message could
  * be read.
+ *
+ * The first byte of a message is its content length, which is one less than the returned
+ * value.
  *
  * Note: When a connection is closed, you probably want to call this function until
  * no further message is returned, to ensure you see all messages that were sent

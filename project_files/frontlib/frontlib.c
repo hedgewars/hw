@@ -1,13 +1,14 @@
 #include "frontlib.h"
 #include "logging.h"
 #include "socket.h"
-#include "ipcconn.h"
+#include "ipc.h"
 
 #include <SDL.h>
 #include <SDL_net.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <assert.h>
 
 static int flib_initflags;
 
@@ -39,47 +40,52 @@ void flib_quit() {
 	}
 }
 
+static void onConfigQuery(void *context) {
+	flib_log_i("Sending config...");
+	flib_ipc ipc = (flib_ipc)context;
+	flib_ipc_send_messagestr(ipc, "TL");
+	flib_ipc_send_messagestr(ipc, "eseed loremipsum");
+	flib_ipc_send_messagestr(ipc, "escript Missions/Training/Basic_Training_-_Bazooka.lua");
+}
+
+static void onDisconnect(void *context) {
+	flib_log_i("Connection closed.");
+	flib_ipc_destroy((flib_ipc*)context);
+}
+
+static void onGameEnd(void *context, int gameEndType) {
+	switch(gameEndType) {
+	case GAME_END_FINISHED:
+		flib_log_i("Game finished.");
+		flib_constbuffer demobuf = flib_ipc_getdemo(context);
+		flib_log_i("Writing demo (%u bytes)...", demobuf.size);
+		FILE *file = fopen("testdemo.dem", "wb");
+		fwrite(demobuf.data, 1, demobuf.size, file);
+		fclose(file);
+		file = NULL;
+		break;
+	case GAME_END_HALTED:
+		flib_log_i("Game halted.");
+		break;
+	case GAME_END_INTERRUPTED:
+		flib_log_i("Game iterrupted.");
+		break;
+	}
+}
+
 int main(int argc, char *argv[]) {
 	flib_init(0);
 
-	flib_ipcconn ipc = flib_ipcconn_create(true, "Medo42");
-	char data[256];
-	while(flib_ipcconn_state(ipc) != IPC_NOT_CONNECTED) {
-		flib_ipcconn_tick(ipc);
-		int size = flib_ipcconn_recv_message(ipc, data);
-		if(size>0) {
-			data[size]=0;
-			switch(data[0]) {
-			case 'C':
-				flib_log_i("Sending config...");
-				flib_ipcconn_send_messagestr(ipc, "TL");
-				flib_ipcconn_send_messagestr(ipc, "eseed loremipsum");
-				flib_ipcconn_send_messagestr(ipc, "escript Missions/Training/Basic_Training_-_Bazooka.lua");
-				break;
-			case '?':
-				flib_log_i("Sending pong...");
-				flib_ipcconn_send_messagestr(ipc, "!");
-				break;
-			case 'Q':
-				flib_log_i("Game interrupted.");
-				break;
-			case 'q':
-				flib_log_i("Game finished.");
-				flib_constbuffer demobuf = flib_ipcconn_getdemo(ipc);
-				flib_log_i("Writing demo (%u bytes)...", demobuf.size);
-				FILE *file = fopen("testdemo.dem", "wb");
-				fwrite(demobuf.data, 1, demobuf.size, file);
-				fclose(file);
-				file = NULL;
-				break;
-			case 'H':
-				flib_log_i("Game halted.");
-				break;
-			}
-		}
+	flib_ipc ipc = flib_ipc_create(true, "Medo42");
+	assert(ipc);
+	flib_ipc_onConfigQuery(ipc, &onConfigQuery, ipc);
+	flib_ipc_onDisconnect(ipc, &onDisconnect, &ipc);
+	flib_ipc_onGameEnd(ipc, &onGameEnd, ipc);
+
+	while(ipc) {
+		flib_ipc_tick(ipc);
 	}
-	flib_log_i("IPC connection lost.");
-	flib_ipcconn_destroy(&ipc);
+	flib_log_i("Shutting down...");
 	flib_quit();
 	return 0;
 }
