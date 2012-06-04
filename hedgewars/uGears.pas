@@ -826,7 +826,7 @@ if (GameFlags and gfDivideTeams) <> 0 then
                                 if PlacingHogs then
                                     Unplaced:= true
                                 else
-                                    FindPlace(Gear, false, t, t + LAND_WIDTH div 2);// could make Gear == nil;
+                                    FindPlace(Gear, false, t, t + LAND_WIDTH div 2, true);// could make Gear == nil;
                                 if Gear <> nil then
                                     begin
                                     Gear^.Pos:= GetRandom(49);
@@ -859,7 +859,7 @@ if (GameFlags and gfDivideTeams) <> 0 then
         if PlacingHogs then
             ar[i]^.Unplaced:= true
         else
-            FindPlace(ar[i]^.Gear, false, 0, LAND_WIDTH);
+            FindPlace(ar[i]^.Gear, false, 0, LAND_WIDTH, true);
         if ar[i]^.Gear <> nil then
             begin
             ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > LAND_WIDTH div 2;
