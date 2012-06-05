@@ -49,6 +49,14 @@ procedure UpdateProjection;
 procedure UpdateModelviewProjection;
 {$ENDIF}
 
+procedure Tint(r, g, b, a: Byte); inline;
+procedure Tint(c: Longword); inline;
+procedure SetTexCoordPointer(p: Pointer);
+procedure SetVertexPointer(p: Pointer);
+procedure SetColorPointer(p: Pointer);
+procedure BeginWater;
+procedure EndWater;
+
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
      uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}, uMatrix;
@@ -63,9 +71,26 @@ var MaxTextureSize: LongInt;
     SDLPrimSurface: PSDL_Surface;
 {$ENDIF}
 {$IFDEF GL2}
-    Shader: GLuint;
-    uMVPLocation: GLint;
+    shaderMain: GLuint;
+    shaderWater: GLuint;
+
+    // attributes
+const
+    aVertex: GLint   = 0;
+    aTexCoord: GLint = 1;
+    aColor: GLint    = 2;
+
+var
+    uCurrentMVPLocation: GLint;
+
+    uMainMVPLocation: GLint;
+    uMainTintLocation: GLint;
+
+    uWaterMVPLocation: GLint;
+
 {$ENDIF}
+    LastTint: LongWord = 0;
+
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;
@@ -664,7 +689,7 @@ begin
     
     CloseFile(f);
 
-    writeln('Compiling shader: ' + Pathz[ptShaders] + '/' + shaderFile);
+    WriteLnToConsole('Compiling shader: ' + Pathz[ptShaders] + '/' + shaderFile);
 
     sourceA:=PChar(source);
     lengthA:=Length(source);
@@ -679,15 +704,15 @@ begin
     begin
         GetMem(log, logLength);
         glGetShaderInfoLog(shader, logLength, nil, log);
-        writeln('========== Compiler log  ==========');
-        writeln(log);
-        writeln('===================================');
+        WriteLnToConsole('========== Compiler log  ==========');
+        WriteLnToConsole(log);
+        WriteLnToConsole('===================================');
         FreeMem(log, logLength);
     end;
 
     if compileResult <> GL_TRUE then
     begin
-        writeln('Shader compilation failed, halting');
+        WriteLnToConsole('Shader compilation failed, halting');
         halt(-1);
     end;
 
@@ -707,6 +732,11 @@ begin
     fs:= CompileShader(shaderName + '.fs', GL_FRAGMENT_SHADER);
     glAttachShader(program_, vs);
     glAttachShader(program_, fs);
+
+    glBindAttribLocation(program_, aVertex, 'vertex');
+    glBindAttribLocation(program_, aTexCoord, 'texcoord');
+    glBindAttribLocation(program_, aColor, 'color');
+
     glLinkProgram(program_);
     glDeleteShader(vs);
     glDeleteShader(fs);
@@ -718,20 +748,21 @@ begin
     begin
         GetMem(log, logLength);
         glGetProgramInfoLog(program_, logLength, nil, log);
-        writeln('========== Compiler log  ==========');
-        writeln(log);
-        writeln('===================================');
+        WriteLnToConsole('========== Compiler log  ==========');
+        WriteLnToConsole(log);
+        WriteLnToConsole('===================================');
         FreeMem(log, logLength);
     end;
 
     if linkResult <> GL_TRUE then
     begin
-        writeln('Linking program failed, halting');
+        WriteLnToConsole('Linking program failed, halting');
         halt(-1);
     end;
 
     CompileProgram:= program_;
 end;
+
 {$ENDIF}
 
 procedure SetupOpenGL;
@@ -793,11 +824,22 @@ begin
 
 {$IFDEF GL2}
     Load_GL_VERSION_2_0;
-    Shader:= CompileProgram('default');
-    glUseProgram(Shader);
-    glUniform1i(glGetUniformLocation(Shader, 'tex'), 0);
-    uMVPLocation:= glGetUniformLocation(Shader, 'mvp');
 
+    shaderWater:= CompileProgram('water');
+    glUseProgram(shaderWater);
+    glUniform1i(glGetUniformLocation(shaderWater, 'tex0'), 0);
+    uWaterMVPLocation:= glGetUniformLocation(shaderWater, 'mvp');
+
+    shaderMain:= CompileProgram('default');
+    glUseProgram(shaderMain);
+    glUniform1i(glGetUniformLocation(shaderMain, 'tex0'), 0);
+    uMainMVPLocation:= glGetUniformLocation(shaderMain, 'mvp');
+    uMainTintLocation:= glGetUniformLocation(shaderMain, 'tint');
+
+    uCurrentMVPLocation:= uMainMVPLocation;
+
+    Tint(255, 255, 255, 255);
+    UpdateModelviewProjection;
 {$ENDIF}
 
 {$IFNDEF S3D_DISABLED}
@@ -858,8 +900,77 @@ begin
     glDisable(GL_DITHER);
     // enable common states by default as they save a lot
     glEnable(GL_TEXTURE_2D);
+
+{$IFDEF GL2}
+    glEnableVertexAttribArray(aVertex);
+    glEnableVertexAttribArray(aTexCoord);
+{$ELSE}
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+{$ENDIF}
+end;
+
+
+procedure Tint(r, g, b, a: Byte); inline;
+var
+    nc, tw: Longword;
+const
+    scale = 1.0/255.0;
+begin
+    nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
+
+    if nc = lastTint then
+        exit;
+
+    if GrayScale then
+        begin
+        tw:= round(r * RGB_LUMINANCE_RED + g * RGB_LUMINANCE_GREEN + b * RGB_LUMINANCE_BLUE);
+        if tw > 255 then
+            tw:= 255;
+        r:= tw;
+        g:= tw;
+        b:= tw
+        end;
+
+    {$IFDEF GL2}
+    glUniform4f(uMainTintLocation, r*scale, g*scale, b*scale, a*scale);
+    glColor4ub(r, g, b, a);
+    {$ELSE}
+    glColor4ub(r, g, b, a);
+    {$ENDIF}
+    lastTint:= nc;
+end;
+
+procedure Tint(c: Longword); inline;
+begin
+    Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
+end;
+
+procedure SetTexCoordPointer(p: Pointer);
+begin
+    {$IFDEF GL2}
+    glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, p);
+    {$ELSE}
+    glTexCoordPointer(2, GL_FLOAT, 0, p);
+    {$ENDIF}
+end;
+
+procedure SetVertexPointer(p: Pointer);
+begin
+    {$IFDEF GL2}
+    glVertexAttribPointer(aVertex, 2, GL_FLOAT, GL_FALSE, 0, p);
+    {$ELSE}
+    glVertexPointer(2, GL_FLOAT, 0, p);
+    {$ENDIF}
+end;
+
+procedure SetColorPointer(p: Pointer);
+begin
+    {$IFDEF GL2}
+    glVertexAttribPointer(aColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, p);
+    {$ELSE}
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, p);
+    {$ENDIF}
 end;
 
 {$IFDEF GL2}
@@ -868,7 +979,7 @@ var
     mvp: TMatrix4x4f;
 begin
     MatrixMultiply(mvp, mProjection, mModelview);
-    glUniformMatrix4fv(uMVPLocation, 1, GL_FALSE, @mvp[0, 0]);
+    glUniformMatrix4fv(uCurrentMVPLocation, 1, GL_FALSE, @mvp[0, 0]);
 end;
 {$ENDIF GL2}
 
@@ -899,6 +1010,34 @@ begin
         cScaleFactor:=f;
         UpdateProjection;
     //end;
+end;
+
+procedure BeginWater;
+begin
+    {$IFDEF GL2}
+    glUseProgram(shaderWater);
+    uCurrentMVPLocation:=uWaterMVPLocation;
+    UpdateModelviewProjection;
+    glDisableVertexAttribArray(aTexCoord);
+    glEnableVertexAttribArray(aColor);
+    {$ELSE}
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    {$ENDIF}
+end;
+
+procedure EndWater;
+begin
+    {$IFDEF GL2}
+    glUseProgram(shaderMain);
+    uCurrentMVPLocation:=uMainMVPLocation;
+    UpdateModelviewProjection;
+    glDisableVertexAttribArray(aColor);
+    glEnableVertexAttribArray(aTexCoord);
+    {$ELSE}
+    glDisableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    {$ENDIF}
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1284,7 +1423,8 @@ end;
 procedure freeModule;
 begin
 {$IFDEF GL2}
-    glDeleteProgram(Shader);
+    glDeleteProgram(shaderMain);
+    glDeleteProgram(shaderWater);
 {$ENDIF}
     StoreRelease(false);
     TTF_Quit();
