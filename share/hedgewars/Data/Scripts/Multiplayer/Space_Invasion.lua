@@ -235,7 +235,6 @@ local fMod = 1000000 -- use this for dev and .16+ games
 -- some console stuff
 local shellID = 0
 local explosivesID = 0
-local luaGameTicks = 0
 
 -- gaudyRacer
 local boosterOn = false
@@ -351,7 +350,6 @@ local rCirc = {}
 local rCircX = {}
 local rCircY = {}
 local rAlpha = 255
-local rPingTimer = 0
 local radShotsLeft = 0
 
 local vCircActive = {}
@@ -1159,7 +1157,6 @@ function onGameTick20()
 
 
 	--WriteLnToConsole("Start of GameTick")
-	luaGameTicks = luaGameTicks + 1 -- GameTime
 
 	HandleCircles()
 
@@ -2132,9 +2129,7 @@ function HandleCircles()
 
 	if rAlpha ~= 255 then
 
-		rPingTimer = rPingTimer + 1
-		if rPingTimer == 100 then
-			rPingTimer = 0
+		if GameTime%100 == 0 then
 
 			rAlpha = rAlpha + 5
 			if rAlpha >= 255 then

@@ -20,6 +20,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QStyleFactory>
+#include <QDebug>
 
 #include <algorithm>
 
@@ -33,7 +34,7 @@ void TeamLabel::teamButtonClicked()
     emit teamActivated(text());
 }
 
-TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, FrameTeams * parent) :
+TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams * parent) :
     QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0),
     colorWidget(0)
 {
@@ -73,9 +74,8 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, FrameTeams * parent)
         colorWidget->setMaximumWidth(26);
         colorWidget->setMinimumHeight(26);
         colorWidget->setMaximumHeight(26);
-        //colorWidget->setGeometry(0, 0, 26, 26);
+        colorWidget->setColor(team.color());
         connect(colorWidget, SIGNAL(colorChanged(int)), this, SLOT(onColorChanged(int)));
-        colorWidget->setColor(m_parentFrameTeams->getNextColor());
         mainLayout.addWidget(colorWidget);
 
         phhoger = new CHedgehogerWidget(QImage(":/res/hh25x25.png"), QImage(":/res/hh25x25grey.png"), this);

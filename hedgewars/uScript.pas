@@ -1162,6 +1162,25 @@ begin
     lc_getstate:= 1
 end;
 
+function lc_gettag(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetX!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, gear^.Tag)
+        else
+            lua_pushnil(L);
+        end;
+    lc_gettag:= 1
+end;
+
 function lc_settag(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -2207,6 +2226,7 @@ lua_register(luaState, _P'FollowGear', @lc_followgear);
 lua_register(luaState, _P'GetFollowGear', @lc_getfollowgear);
 lua_register(luaState, _P'SetState', @lc_setstate);
 lua_register(luaState, _P'GetState', @lc_getstate);
+lua_register(luaState, _P'GetTag', @lc_gettag);
 lua_register(luaState, _P'SetTag', @lc_settag);
 lua_register(luaState, _P'SetTimer', @lc_settimer);
 lua_register(luaState, _P'GetTimer', @lc_gettimer);

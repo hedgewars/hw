@@ -43,7 +43,6 @@ type
     PInteger = ^Integer;
     
     Handle = integer;
-    stderr = Handle;
 
     png_structp = pointer;
     png_size_t = integer;
@@ -68,6 +67,7 @@ var
     Length, StrToInt : function : integer;
     SetLength, val : procedure;
     _pchar : function : PChar;
+    pchar2str : function : string;
     memcpy : procedure;
 
     assign, rewrite, reset, flush, BlockWrite, BlockRead, close : procedure;
@@ -78,6 +78,7 @@ var
     FileExists, DirectoryExists, eof : function : boolean;
     ExtractFileName : function : string;
     exitcode : integer;
+    stdout, stderr : Handle;
     
     ParamCount : function : integer;
     ParamStr : function : string;
@@ -133,7 +134,7 @@ var
     
     Assigned : function : boolean;
     
-    _strconcat, _strappend, _strprepend : function : string;
+    _strconcat, _strappend, _strprepend, _chrconcat : function : string;
     _strcompare, _strncompare, _strcomparec : function : boolean;
 
     png_structp, png_set_write_fn, png_get_io_ptr,

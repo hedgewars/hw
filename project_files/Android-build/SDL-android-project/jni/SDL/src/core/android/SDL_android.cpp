@@ -638,6 +638,17 @@ extern "C" int Android_JNI_FileClose(SDL_RWops* ctx)
     return Android_JNI_FileClose(ctx, true);
 }
 
+extern "C" int Android_JNI_getDensity(){
+    jmethodID mid;
+    jint density;
+    //SDLActivity.getDensity()
+    mid = mEnv->GetStaticMethodID(mActivityClass, "getDensity", "()I");
+        if(!mid) return 160;
+    density = mEnv->CallStaticFloatMethod(mActivityClass, mid);
+    return density;
+
+}
+
 #endif /* __ANDROID__ */
 
 /* vi: set ts=4 sw=4 expandtab: */

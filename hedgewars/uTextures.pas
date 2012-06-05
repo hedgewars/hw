@@ -212,7 +212,7 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
     Surface2Tex^.atlas^.w:=tw;
     Surface2Tex^.atlas^.h:=th;
 
-    GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
+    tmpp:= GetMem(tw * th * surf^.format^.BytesPerPixel);
 
     fromP4:= Surf^.pixels;
     toP4:= tmpp;

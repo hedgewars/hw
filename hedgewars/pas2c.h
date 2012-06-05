@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <wchar.h>
@@ -28,6 +29,7 @@ typedef struct string15_
     } string15;
 
 typedef string255 shortstring;
+typedef string255 ansistring;
     
 typedef uint8_t Byte;
 typedef int8_t ShortInt;
@@ -56,17 +58,6 @@ typedef Integer * PInteger;
 typedef int PtrInt;
 typedef wchar_t widechar;
 
-#ifdef __GNUG__
-#define NULL __null
-#else   /* G++ */
-/* shield NULL definition for non-gnu parsers */
-#ifndef __cplusplus
-#define NULL ((void *)0)
-#else
-#define NULL 0
-#endif  /* __cplusplus */
-#endif  /* G++ */
-
 #define new(a) __new((void **)&a, sizeof(*(a)))
 void __new(void ** p, int size);
 #define dispose(a) __dispose(a, sizeof(*(a)))
@@ -81,10 +72,12 @@ void __FillChar(pointer p, int size, char fill);
 string255 _strconcat(string255 a, string255 b);
 string255 _strappend(string255 s, char c);
 string255 _strprepend(char c, string255 s);
+string255 _chrconcat(char a, char b);
 bool _strcompare(string255 a, string255 b);
 bool _strcomparec(string255 a, char b);
 bool _strncompare(string255 a, string255 b);
 char * _pchar(string255 s);
+string255 pchar2str(char * s);
 
 int Length(string255 a);
 string255 copy(string255 a, int s, int l);
@@ -100,6 +93,7 @@ typedef int file;
 typedef int TextFile;
 extern int FileMode;
 extern int IOResult;
+extern int stdout;
 extern int stderr;
 
 #define assign(a, b) assign_(&(a), b)
@@ -112,7 +106,8 @@ void BlockRead_(int f, void * p, int size, int * sizeRead);
 void BlockWrite_(int f, void * p, int size);
 void close(int f);
 
-void write(string255 s);
+void write(int f, string255 s);
+void writeLn(int f, string255 s);
 
 bool DirectoryExists(string255 dir);
 bool FileExists(string255 filename);
@@ -140,8 +135,8 @@ int round(double n);
 string255 ParamStr(int n);
 int ParamCount();
 
-#define val(a, b) _val(a, (LongInt*)&(b))
-void _val(string255 str, LongInt * a);
+#define val(a, b, c) _val(a, (LongInt*)&(b), (LongInt*)&(c))
+void _val(string255 str, LongInt * a, LongInt * c);
 
 extern double pi;
 

@@ -184,15 +184,15 @@ with gear^ do
                     FrameTicks:= random(vobFrameTicks);
                     Frame:= random(vobFramesCount);
                     end;
-                Angle:= random * 360;
+                Angle:= random(360);
                 dx:= 0.0000038654705 * random(10000);
                 dy:= 0.000003506096 * random(7000);
                 if random(2) = 0 then
                     dx := -dx;
                 if SuddenDeathDmg then
-                    dAngle:= (random(2) * 2 - 1) * (1 + random) * vobSDVelocity / 1000
+                    dAngle:= (random(2) * 2 - 1) * (vobSDVelocity + random(vobSDVelocity)) / 1000
                 else
-                    dAngle:= (random(2) * 2 - 1) * (1 + random) * vobVelocity / 1000
+                    dAngle:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) / 1000
                 end;
     vgtCloud:
                 begin

@@ -180,7 +180,7 @@ function onNewTurn()
 end
 
 
-function onGameTick()
+function onGameTick20()
 
 	if (CurrentHedgehog ~= nil) then
 

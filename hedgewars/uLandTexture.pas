@@ -24,17 +24,17 @@ uses SDLh;
 
 procedure initModule;
 procedure freeModule;
-procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
+procedure UpdateLandTexture(X, Width, Y, Height: LongInt; landAdded: boolean);
 procedure DrawLand(dX, dY: LongInt);
 procedure ResetLand;
 
 implementation
 uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender;
 
-const TEXSIZE = 512;
+const TEXSIZE = 128;
 
 type TLandRecord = record
-            shouldUpdate: boolean;
+            shouldUpdate, landAdded: boolean;
             tex: PTexture;
             end;
 
@@ -62,7 +62,7 @@ for ty:= 0 to TEXSIZE - 1 do
 Pixels2:= @tmpPixels
 end;
 
-procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
+procedure UpdateLandTexture(X, Width, Y, Height: LongInt; landAdded: boolean);
 var tx, ty: Longword;
 begin
     if (Width <= 0) or (Height <= 0) then
@@ -75,16 +75,24 @@ begin
     if (cReducedQuality and rqBlurryLand) = 0 then
         for ty:= Y div TEXSIZE to (Y + Height - 1) div TEXSIZE do
             for tx:= X div TEXSIZE to (X + Width - 1) div TEXSIZE do
-                LandTextures[tx, ty].shouldUpdate:= true
+                begin
+                LandTextures[tx, ty].shouldUpdate:= true;
+                LandTextures[tx, ty].landAdded:= landAdded
+                end
     else
         for ty:= (Y div TEXSIZE) div 2 to ((Y + Height - 1) div TEXSIZE) div 2 do
             for tx:= (X div TEXSIZE) div 2 to ((X + Width - 1) div TEXSIZE) div 2 do
+                begin
                 LandTextures[tx, ty].shouldUpdate:= true;
+                LandTextures[tx, ty].landAdded:= landAdded
+                end
 end;
 
 procedure RealLandTexUpdate;
-var x, y: LongWord;
+var x, y, ty, tx, lx, ly : LongWord;
+    isEmpty: boolean;
 begin
+(*
 if LandTextures[0, 0].tex = nil then
     for x:= 0 to LANDTEXARW -1 do
         for y:= 0 to LANDTEXARH - 1 do
@@ -95,14 +103,67 @@ if LandTextures[0, 0].tex = nil then
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, tpHigh);
                 end
 else
+*)
     for x:= 0 to LANDTEXARW -1 do
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
                 if shouldUpdate then
                     begin
                     shouldUpdate:= false;
-                    glBindTexture(GL_TEXTURE_2D, tex^.atlas^.id);
-                    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXSIZE, TEXSIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x,y));
+                    isEmpty:= not landAdded;
+                    landAdded:= false;
+                    ty:= 0;
+                    tx:= 1;
+                    ly:= y * TEXSIZE;
+                    lx:= x * TEXSIZE;
+                    // first check edges
+                    while isEmpty and (ty < TEXSIZE) do
+                        begin
+                        isEmpty:= LandPixels[ly + ty, lx] and AMask = 0;
+                        if isEmpty then isEmpty:= LandPixels[ly + ty, lx + TEXSIZE-1] and AMask = 0;
+                        inc(ty)
+                        end;
+                    while isEmpty and (tx < TEXSIZE-1) do
+                        begin
+                        isEmpty:= LandPixels[ly, lx + tx] and AMask = 0;
+                        if isEmpty then isEmpty:= LandPixels[ly + TEXSIZE-1, lx + tx] and AMask = 0;
+                        inc(tx)
+                        end;
+                    // then search every other remaining. does this sort of stuff defeat compiler opts?
+                    ty:= 2;
+                    while isEmpty and (ty < TEXSIZE-1) do
+                        begin
+                        tx:= 2;
+                        while isEmpty and (tx < TEXSIZE-1) do
+                            begin
+                            isEmpty:= LandPixels[ly + ty, lx + tx] and AMask = 0;
+                            inc(tx,2)
+                            end;
+                        inc(ty,2);
+                        end;
+                    // and repeat
+                    ty:= 1;
+                    while isEmpty and (ty < TEXSIZE-1) do
+                        begin
+                        tx:= 1;
+                        while isEmpty and (tx < TEXSIZE-1) do
+                            begin
+                            isEmpty:= LandPixels[ly + ty, lx + tx] and AMask = 0;
+                            inc(tx,2)
+                            end;
+                        inc(ty,2);
+                        end;
+                    if not isEmpty then
+                        begin
+                        if tex = nil then tex:= NewTexture(TEXSIZE, TEXSIZE, Pixels(x, y));
+                        glBindTexture(GL_TEXTURE_2D, tex^.atlas^.id);
+                        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXSIZE, TEXSIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x,y));
+                        end
+                    else if tex <> nil then
+                        begin
+                        FreeTexture(tex);
+                        tex:= nil
+                        end;
                     end
 end;
 
@@ -114,10 +175,11 @@ RealLandTexUpdate;
 for x:= 0 to LANDTEXARW -1 do
     for y:= 0 to LANDTEXARH - 1 do
         with LandTextures[x, y] do
-            if (cReducedQuality and rqBlurryLand) = 0 then
-                DrawTexture(dX + x * TEXSIZE, dY + y * TEXSIZE, tex)
-            else
-                DrawTexture(dX + x * TEXSIZE * 2, dY + y * TEXSIZE * 2, tex, 2.0)
+            if tex <> nil then
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                    DrawTexture(dX + x * TEXSIZE, dY + y * TEXSIZE, tex)
+                else
+                    DrawTexture(dX + x * TEXSIZE * 2, dY + y * TEXSIZE * 2, tex, 2.0)
 
 end;
 
@@ -144,8 +206,11 @@ begin
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
                 begin
-                FreeTexture(tex);
-                tex:= nil;
+                if tex <> nil then
+                    begin
+                    FreeTexture(tex);
+                    tex:= nil
+                    end
                 end;
 end;
 
@@ -155,6 +220,6 @@ begin
     if LandBackSurface <> nil then
         SDL_FreeSurface(LandBackSurface);
     LandBackSurface:= nil;
-    LandTextures:= nil;
+    SetLength(LandTextures, 0, 0);
 end;
 end.

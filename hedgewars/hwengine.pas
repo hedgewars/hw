@@ -104,7 +104,11 @@ begin
     if flagMakeCapture then
         begin
         flagMakeCapture:= false;
+        {$IFDEF PAS2C}
+        s:= 'hw';
+        {$ELSE}
         s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+        {$ENDIF}
 
         playSound(sndShutter);
         
@@ -267,10 +271,10 @@ begin
     cBits:= 32;
     cTimerInterval:= 8;
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
-    val(gameArgs[0], ipcPort);
-    val(gameArgs[1], cScreenWidth);
-    val(gameArgs[2], cScreenHeight);
-    val(gameArgs[3], cReducedQuality);
+    ipcPort:= StrToInt(gameArgs[0]);
+    cScreenWidth:= StrToInt(gameArgs[1]);
+    cScreenHeight:= StrToInt(gameArgs[2]);
+    cReducedQuality:= StrToInt(gameArgs[3]);
     cLocaleFName:= gameArgs[4];
     // cFullScreen functionality is platform dependent, ifdef it if you need to modify it
     cFullScreen:= false;
@@ -493,26 +497,26 @@ end;
 procedure DisplayUsage;
 var i: LongInt;
 begin
-    WriteLn('Wrong argument format: correct configurations is');
-    WriteLn();
-    WriteLn('  hwengine <path to user hedgewars folder> <path to global data folder> <path to replay file> [options]');
-    WriteLn();
-    WriteLn('where [options] must be specified either as:');
-    WriteLn(' --set-video [screen width] [screen height] [color dept]');
-    WriteLn(' --set-audio [volume] [enable music] [enable sounds]');
-    WriteLn(' --set-other [language file] [full screen] [show FPS]');
-    WriteLn(' --set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
-    WriteLn(' --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
-    WriteLn(' --stats-only');
-    WriteLn();
-    WriteLn('Read documentation online at http://code.google.com/p/hedgewars/wiki/CommandLineOptions for more information');
-    WriteLn();
-    Write('PARSED COMMAND: ');
+    WriteLn(stdout, 'Wrong argument format: correct configurations is');
+    WriteLn(stdout, '');
+    WriteLn(stdout, '  hwengine <path to user hedgewars folder> <path to global data folder> <path to replay file> [options]');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'where [options] must be specified either as:');
+    WriteLn(stdout, ' --set-video [screen width] [screen height] [color dept]');
+    WriteLn(stdout, ' --set-audio [volume] [enable music] [enable sounds]');
+    WriteLn(stdout, ' --set-other [language file] [full screen] [show FPS]');
+    WriteLn(stdout, ' --set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
+    WriteLn(stdout, ' --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
+    WriteLn(stdout, ' --stats-only');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Read documentation online at http://code.google.com/p/hedgewars/wiki/CommandLineOptions for more information');
+    WriteLn(stdout, '');
+    Write(stdout, 'PARSED COMMAND: ');
     
     for i:=0 to ParamCount do
-        Write(ParamStr(i) + ' ');
+        Write(stdout, ParamStr(i) + ' ');
         
-    WriteLn();
+    WriteLn(stdout, '');
 end;
 
 ////////////////////
@@ -549,6 +553,6 @@ begin
     else Game();
 
     // return 1 when engine is not called correctly
-    ExitCode:= LongInt(GameType = gmtSyntax);
+    halt(LongInt(GameType = gmtSyntax));
 {$ENDIF}
 end.

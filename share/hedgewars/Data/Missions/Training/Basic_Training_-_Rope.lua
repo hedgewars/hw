@@ -128,8 +128,8 @@ function onNewTurn()
 	ParseCommand( "setweap " .. string.char( amRope ) ) -- Set the default weapon to Rope
 end
 
-function onGameTick()
-	if TurnTimeLeft == 1 then -- Round starts at 0, so we check if the round is finished by using 1
+function onGameTick20()
+	if TurnTimeLeft < 40 and TurnTimeLeft > 0 then -- Round starts at 0, so we check if the round is finished by using 1
 		GameLost = true -- You lost the game
 		Info( "Aiming Practice", "You did not make it in time, try again!", -amSkip )
 		SetHealth( Player, 0 ) -- Kill the player so he can't keep moving!
@@ -151,7 +151,7 @@ function onGameTick()
 
 			WaitTime = -1
 		else
-			WaitTime = WaitTime - 1
+			WaitTime = WaitTime - 20
 		end
 	end
 
@@ -161,7 +161,7 @@ function onGameTick()
 			FollowTime = 1500
 			FollowGear( Player )
 		else
-			FollowTime = FollowTime - 1
+			FollowTime = FollowTime - 20
 		end
 	end
 
@@ -172,7 +172,7 @@ function onGameTick()
 		end
 	end
 
-	GetTime = GetTime + 1
+	GetTime = GetTime + 20
 
 	CheckPosition( Player, 70 ) -- Run the CheckPosition function to check if the player is close to a target
 end

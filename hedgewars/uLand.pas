@@ -674,7 +674,7 @@ if GrayScale then
                 end
     end;
 
-UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
+UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
 end;
 
 procedure GenPreview(out Preview: TPreview);
@@ -750,9 +750,9 @@ end;
 
 procedure freeModule;
 begin
-    Land:= nil;
-    LandPixels:= nil;
-    LandDirty:= nil;
+    SetLength(Land, 0, 0);
+    SetLength(LandPixels, 0, 0);
+    SetLength(LandDirty, 0, 0);
 end;
 
 end.
