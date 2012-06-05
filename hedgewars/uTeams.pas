@@ -248,8 +248,6 @@ with CurrentHedgehog^ do
     FollowGear:= Gear
     end;
 
-ResetKbd;
-
 if (GameFlags and gfDisableWind) = 0 then
     begin
     cWindSpeed:= rndSign(GetRandomf * 2 * cMaxWindSpeed);
