@@ -185,10 +185,10 @@ procedure hedgehogFlight(Gear: PGear; time: Longword);
 begin
 if time > 4000 then
     begin
-    writeln('FLIGHT');
-    writeln(Gear^.Hedgehog^.Team^.TeamName);
-    writeln(time);
-    writeln;
+    writeln(stdout, 'FLIGHT');
+    writeln(stdout, Gear^.Hedgehog^.Team^.TeamName);
+    writeln(stdout, inttostr(time));
+    writeln(stdout, '');
     end
 end;
 
@@ -293,14 +293,14 @@ if KilledHHs > 0 then
 // now to console
 if winnersClan <> nil then 
     begin
-    writeln('WINNERS');
+    writeln(stdout, 'WINNERS');
     for t:= 0 to winnersClan^.TeamsNumber - 1 do
-        writeln(winnersClan^.Teams[t]^.TeamName);
+        writeln(stdout, winnersClan^.Teams[t]^.TeamName);
     end
 else
-    writeln('DRAW');
+    writeln(stdout, 'DRAW');
 
-writeln;
+writeln(stdout, '');
 end;
 
 procedure initModule;

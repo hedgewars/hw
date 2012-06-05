@@ -217,17 +217,17 @@ function onNewTurn()
 	switchStage = 0
 end
 
-function onGameTick()
+function onGameTick20()
 
 	if (CurrentHedgehog ~= nil) then
 
 		currName = GetHogName(CurrentHedgehog)
 
-		if (currName ~= lastName) and (switchStage > 100) then
+		if (currName ~= lastName) and (switchStage > 5) then
 			AddCaption(loc("Switched to ") .. currName .. "!")
 		end
 
-		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and (switchStage < 100) then
+		if (TurnTimeLeft > 0) and (TurnTimeLeft ~= TurnTime) and (switchStage < 5) then
 
 			AddCaption(loc("Prepare yourself") .. ", " .. currName .. "!")
 
@@ -246,12 +246,12 @@ function onGameTick()
 				elseif switchStage == 3 then
 					SetGearMessage(CurrentHedgehog,gmAttack)
 				elseif switchStage == 4 then
-					switchStage = 110
+					switchStage = 6
 					AddAmmo(CurrentHedgehog, amSwitch, 0)
 				end
 
 			else
-				switchStage = 110
+				switchStage = 6
 			end
 
 

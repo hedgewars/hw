@@ -45,7 +45,7 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 implementation
 uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
 
-var tkbd: TKeyboardState;
+var tkbd: array[0..cKeyMaxIndex] of boolean;
     quitKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
@@ -64,35 +64,40 @@ var
     Trusted: boolean;
     s      : string;
 begin
+
+if not(tkbd[code] xor KeyDown) then exit;
+tkbd[code]:= KeyDown;
+
+
 hideAmmoMenu:= false;
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
           and (CurrentHedgehog^.BotLevel = 0);
 
-tkbd[code]:= ord(KeyDown);
+
 
 // ctrl/cmd + q to close engine and frontend
 if(KeyDown and (code = quitKeyCode)) then
     begin
 {$IFDEF DARWIN}
-    if ((tkbd[KeyNameToCode('left_meta')] = 1) or (tkbd[KeyNameToCode('right_meta')] = 1)) then
+    if tkbd[KeyNameToCode('left_meta')] or tkbd[KeyNameToCode('right_meta')] then
 {$ELSE}
-    if ((tkbd[KeyNameToCode('left_ctrl')] = 1) or (tkbd[KeyNameToCode('right_ctrl')] = 1)) then
+    if tkbd[KeyNameToCode('left_ctrl')] or tkbd[KeyNameToCode('right_ctrl')] then
 {$ENDIF}
         ParseCommand('halt', true);    
     end;
 
 if CurrentBinds[code][0] <> #0 then
     begin
-    if (code > 3) and (KeyDown) and not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
+    if (code > 3) and KeyDown and not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
 
-    if (KeyDown) then
+    if KeyDown then
         begin
         ParseCommand(CurrentBinds[code], Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
-    else if (CurrentBinds[code][1] = '+') and not KeyDown then
+    else if (CurrentBinds[code][1] = '+') then
         begin
         s:= CurrentBinds[code];
         s[1]:= '-';
@@ -101,7 +106,6 @@ if CurrentBinds[code][0] <> #0 then
             ParseCommand('gencmd R', true)
         end;
     end
-
 end;
 
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
@@ -129,7 +133,7 @@ procedure ResetKbd;
 var t: LongInt;
 begin
 for t:= 0 to cKeyMaxIndex do
-    if(tkbd[t] <> 0) then
+    if tkbd[t] then
         ProcessKey(t, False);
 end;
 
@@ -235,11 +239,19 @@ SetDefaultBinds();
 end;
 
 procedure SetBinds(var binds: TBinds);
+{$IFNDEF MOBILE}
+var
+    t: LongInt;
+{$ENDIF}
 begin
 {$IFDEF MOBILE}
     binds:= binds; // avoid hint
     CurrentBinds:= DefaultBinds;
 {$ELSE}
+for t:= 0 to cKeyMaxIndex do
+    if (CurrentBinds[t] <> binds[t]) and tkbd[t] then
+        ProcessKey(t, False);
+
     CurrentBinds:= binds;
 {$ENDIF}
 end;
@@ -251,10 +263,10 @@ end;
 
 procedure FreezeEnterKey;
 begin
-    tkbd[3]:= 1;
-    tkbd[13]:= 1;
-    tkbd[27]:= 1;
-    tkbd[271]:= 1;
+    tkbd[3]:= True;
+    tkbd[13]:= True;
+    tkbd[27]:= True;
+    tkbd[271]:= True;
 end;
 
 var Controller: array [0..5] of PSDL_Joystick;
@@ -279,7 +291,7 @@ if ControllerNumControllers > 0 then
     begin
     for j:= 0 to pred(ControllerNumControllers) do
         begin
-        WriteLnToConsole('Using game controller: ' + SDL_JoystickName(j));
+        WriteLnToConsole('Using game controller: ' + shortstring(SDL_JoystickName(j)));
         Controller[j]:= SDL_JoystickOpen(j);
         if Controller[j] = nil then
             WriteLnToConsole('* Failed to open game controller!')

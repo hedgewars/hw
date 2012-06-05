@@ -961,7 +961,7 @@ begin
 if caption = '' then
     caption:= '???';
 if subcaption = '' then
-    subcaption:= ' ';
+    subcaption:= _S' ';
 
 font:= CheckCJKFont(caption,fnt16);
 font:= CheckCJKFont(subcaption,font);
@@ -1045,9 +1045,9 @@ while tmpdesc <> '' do
         r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
 
         // render highlighted caption (if there is a ':')
-        tmpline2:= '';
+        tmpline2:= _S'';
         SplitByChar(tmpline, tmpline2, ':');
-        if tmpline2 <> '' then
+        if tmpline2 <> _S'' then
             WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');
         end
     end;
@@ -1090,7 +1090,7 @@ r.w:= 32;
 r.h:= 32;
 
 // default (no extra text)
-extra:= '';
+extra:= _S'';
 extracolor:= 0;
 
 if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
@@ -1105,7 +1105,7 @@ else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or
     end
 else
     begin
-    extra:= '';
+    extra:= _S'';
     extracolor:= 0;
     end;
 
@@ -1146,7 +1146,7 @@ begin
 {$ENDIF}
         begin
         // set window title
-        {$IFNDEF SDL13}SDL_WM_SetCaption('Hedgewars', nil);{$ENDIF}
+        {$IFNDEF SDL13}SDL_WM_SetCaption(_P'Hedgewars', nil);{$ENDIF}
         WriteToConsole('Init SDL_image... ');
         SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
         WriteLnToConsole(msgOK);
@@ -1250,7 +1250,7 @@ begin
         ReloadLines;
         StoreLoad(true);
         // redraw all land
-        UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
+        UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
         end;
 end;
 

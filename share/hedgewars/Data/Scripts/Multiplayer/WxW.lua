@@ -598,7 +598,7 @@ function onNewTurn()
 	roundN = roundN + 1
 	if roundN < 2 then
 		TurnTimeLeft = -1
-		SetInputMask(band(0xFFFFFFFF, bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmPrecise+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon)))
+		SetInputMask(0)
 		allowCrate = false
 		HandleStartingStage() -- new
 	end
@@ -670,7 +670,7 @@ function onGameTick()
 				then
 					SetInputMask(0xFFFFFFFF)
 				elseif ropeG == nil then
-					SetInputMask(band(0xFFFFFFFF, bnot(gmAttack)))
+					SetInputMask(bnot(gmAttack))
 				end
 			end
 

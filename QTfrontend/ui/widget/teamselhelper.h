@@ -58,7 +58,7 @@ class TeamShowWidget : public QWidget
         void onColorChanged(int color);
 
     public:
-        TeamShowWidget(HWTeam team, bool isPlaying, FrameTeams * parent);
+        TeamShowWidget(const HWTeam &team, bool isPlaying, FrameTeams * parent);
         void setPlaying(bool isPlaying);
         void setHHNum(unsigned int num);
         void setInteractivity(bool interactive);

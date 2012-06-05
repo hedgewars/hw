@@ -452,7 +452,8 @@ begin
     gear^.Damage := 0;
     gear^.Health := gear^.Hedgehog^.InitialHealth;
     gear^.Hedgehog^.Effects[hePoisoned] := 0;
-    if CurrentHedgehog^.Effects[heResurrectable] = 0 then
+    if (CurrentHedgehog^.Effects[heResurrectable] = 0) or ((CurrentHedgehog^.Effects[heResurrectable] <> 0)
+          and (Gear^.Hedgehog^.Team^.Clan <> CurrentHedgehog^.Team^.Clan)) then
         with CurrentHedgehog^ do 
             begin
             inc(Team^.stats.AIKills);
@@ -474,6 +475,7 @@ begin
     if gear <> nil then
         begin
         AddVisualGear(hwRound(gear^.X), hwRound(gear^.Y), vgtExplosion);
+        PlaySound(sndWarp);
         RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;

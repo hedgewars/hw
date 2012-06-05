@@ -246,7 +246,8 @@ case Kind of
                 gear^.ImpactSound:= sndGraveImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 16;
-                gear^.Elasticity:= _0_3
+                gear^.Elasticity:= _0_3;
+                gear^.Timer:= 0
                 end;
   gtExplosives: begin
                 gear^.ImpactSound:= sndGrenadeImpact;
@@ -545,7 +546,8 @@ else if Gear^.Kind = gtHedgehog then
         inc(KilledHHs);
         RecountTeamHealth(team);
         if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Effects[heResurrectable] <> 0)  and
-        (Gear^.Hedgehog^.Effects[heResurrectable] = 0) then
+        //(Gear^.Hedgehog^.Effects[heResurrectable] = 0) then
+        (Gear^.Hedgehog^.Team^.Clan <> CurrentHedgehog^.Team^.Clan) then
             with CurrentHedgehog^ do 
                 begin
                 inc(Team^.stats.AIKills);

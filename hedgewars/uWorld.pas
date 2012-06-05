@@ -213,8 +213,13 @@ end;
 procedure InitTouchInterface;
 begin
 {$IFDEF USE_TOUCH_INTERFACE}
+
 //positioning of the buttons
+{$IFDEF ANDROID}
+buttonScale:= Android_JNI_getDensity()/cDefaultZoomLevel;
+{$ELSE}
 buttonScale:= 1.5/cDefaultZoomLevel;
+{$ENDIF}
 
 
 with JumpWidget do

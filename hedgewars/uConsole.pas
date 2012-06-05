@@ -49,8 +49,10 @@ with tl do
 end;
 
 procedure WriteToConsole(s: shortstring);
+{$IFNDEF NOCONSOLE}
 var Len: LongInt;
     done: boolean;
+{$ENDIF}
 begin
 {$IFNDEF NOCONSOLE}
 AddFileLog('[Con] ' + s);
@@ -83,7 +85,7 @@ begin
 {$IFNDEF NOCONSOLE}
 WriteToConsole(s);
 {$IFNDEF ANDROID}
-WriteLn(stderr);
+WriteLn(stderr, '');
 inc(CurrLine);
 if CurrLine = cLinesCount then
     CurrLine:= 0;
