@@ -638,16 +638,12 @@ extern "C" int Android_JNI_FileClose(SDL_RWops* ctx)
     return Android_JNI_FileClose(ctx, true);
 }
 
-/*******************************************************************************
-             Functions called by the hwengine into Java
-*******************************************************************************/
-
-extern "C" float Android_JNI_getDensity(){
+extern "C" int Android_JNI_getDensity(){
     jmethodID mid;
-    jfloat density;
+    jint density;
     //SDLActivity.getDensity()
-    mid = mEnv->GetStaticMethodID(mActivityClass, "getDensity", "()F");
-        if(!mid) return 1.5f;
+    mid = mEnv->GetStaticMethodID(mActivityClass, "getDensity", "()I");
+        if(!mid) return 160;
     density = mEnv->CallStaticFloatMethod(mActivityClass, mid);
     return density;
 
