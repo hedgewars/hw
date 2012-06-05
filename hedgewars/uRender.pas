@@ -48,9 +48,6 @@ procedure DrawFillRect          (r: TSDL_Rect);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawScreenWidget      (widget: POnScreenWidget);
 
-procedure Tint                  (r, g, b, a: Byte); inline;
-procedure Tint                  (c: Longword); inline;
-
 // This is just temporary and becomes non public once everything changed to GL2
 procedure UpdateModelview;
 procedure ResetModelview;
@@ -60,8 +57,6 @@ procedure ResetRotation;
 
 implementation
 uses uVariables, uStore;
-
-var LastTint: LongWord = 0;
 
 const DegToRad =  0.01745329252; // 2PI / 360
 
@@ -169,8 +164,8 @@ VertexBuffer[2].Y:= rr.h + Y;
 VertexBuffer[3].X:= X;
 VertexBuffer[3].Y:= rr.h + Y;
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+SetVertexPointer(@VertexBuffer[0]);
+SetTexCoordPointer(@TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 end;
 
@@ -188,8 +183,8 @@ UpdateModelview;
 
 glBindTexture(GL_TEXTURE_2D, Texture^.atlas^.id);
 
-glVertexPointer(2, GL_FLOAT, 0, @Texture^.vb);
-glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
+SetVertexPointer(@Texture^.vb);
+SetTexCoordPointer(@Texture^.tb);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
 ResetModelview;
 end;
@@ -243,8 +238,8 @@ VertexBuffer[2].Y:= w / 2;
 VertexBuffer[3].X:= -hw;
 VertexBuffer[3].Y:= w / 2;
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+SetVertexPointer(@VertexBuffer[0]);
+SetTexCoordPointer(@TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 ResetModelview;
@@ -305,8 +300,8 @@ VertexBuffer[2].Y:= hh;
 VertexBuffer[3].X:= -hw;
 VertexBuffer[3].Y:= hh;
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
+SetVertexPointer(@VertexBuffer[0]);
+SetTexCoordPointer(@Texture^.tb);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 ResetModelview;
@@ -384,7 +379,7 @@ begin
     VertexBuffer[1].X:= X1;
     VertexBuffer[1].Y:= Y1;
 
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    SetVertexPointer(@VertexBuffer[0]);
     glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
     Tint($FF, $FF, $FF, $FF);
     
@@ -420,7 +415,7 @@ VertexBuffer[2].Y:= r.y + r.h;
 VertexBuffer[3].X:= r.x;
 VertexBuffer[3].Y:= r.y + r.h;
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+SetVertexPointer(@VertexBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 Tint($FF, $FF, $FF, $FF);
@@ -451,7 +446,7 @@ begin
     ResetRotation;
     UpdateModelview;
     glLineWidth(Width);
-    glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);
+    SetVertexPointer(@CircleVertex[0]);
     glDrawArrays(GL_LINE_LOOP, 0, 60);
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_LINE_SMOOTH);
@@ -490,10 +485,10 @@ begin
 
     glBindTexture(GL_TEXTURE_2D, HHTexture^.atlas^.id);
     if Dir = -1 then
-        glVertexPointer(2, GL_FLOAT, 0, @VertexBuffers[1][0])
+        SetVertexPointer(@VertexBuffers[1][0])
     else
-        glVertexPointer(2, GL_FLOAT, 0, @VertexBuffers[0][0]);
-    glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+        SetVertexPointer(@VertexBuffers[0][0]);
+    SetTexCoordPointer(@TextureBuffer[0]);
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
     ResetModelview;
@@ -544,33 +539,6 @@ with widget^ do
 begin
 widget:= widget; // avoid hint
 {$ENDIF}
-end;
-
-procedure Tint(r, g, b, a: Byte); inline;
-var nc, tw: Longword;
-begin
-    nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
-
-    if nc = lastTint then
-        exit;
-
-    if GrayScale then
-        begin
-        tw:= round(r * RGB_LUMINANCE_RED + g * RGB_LUMINANCE_GREEN + b * RGB_LUMINANCE_BLUE);
-        if tw > 255 then
-            tw:= 255;
-        r:= tw;
-        g:= tw;
-        b:= tw
-        end;
-
-    glColor4ub(r, g, b, a);
-    lastTint:= nc;
-end;
-
-procedure Tint(c: Longword); inline;
-begin
-    Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
 end;
 
 end.

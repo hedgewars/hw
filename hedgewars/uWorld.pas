@@ -798,20 +798,20 @@ if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterL
         VertexBuffer[3].X:= -lw;
         VertexBuffer[3].Y:= lh;
 
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
+        BeginWater;        
         if SuddenDeathDmg then
-            glColorPointer(4, GL_UNSIGNED_BYTE, 0, @SDWaterColorArray[0])
+            SetColorPointer(@SDWaterColorArray[0])
         else
-            glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
+            SetColorPointer(@WaterColorArray[0]);
 
-        glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+        SetVertexPointer(@VertexBuffer[0]);
 
         glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-        glDisableClientState(GL_COLOR_ARRAY);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        EndWater;
+        {$IFNDEF GL2}
         glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
+        {$ENDIF}
         glEnable(GL_TEXTURE_2D);
     end;
 end;
@@ -863,8 +863,8 @@ r.h:= SpritesData[sprite].Texture^.h;
 ComputeTexcoords(SpritesData[sprite].Texture, @r, @TextureBuffer);
 
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+SetVertexPointer(@VertexBuffer[0]);
+SetTexCoordPointer(@TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 Tint($FF, $FF, $FF, $FF);
@@ -1075,31 +1075,17 @@ end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
 begin
-{$IFDEF S3D_DISABLED}
-    rm:= rm; d:= d; // avoid hint
-    exit;
-{$ELSE}
     d:= d / 5;
-    if rm = rmDefault then
-        exit
-    else if rm = rmLeftEye then
+    if rm = rmLeftEye then
         d:= -d;
     cStereoDepth:= cStereoDepth + d;
     UpdateProjection;
-{$ENDIF}
 end;
  
 procedure ResetDepth(rm: TRenderMode);
 begin
-{$IFDEF S3D_DISABLED}
-    rm:= rm; // avoid hint
-    exit;
-{$ELSE}
-    if rm = rmDefault then
-        exit;
     cStereoDepth:= 0;
     UpdateProjection;
-{$ENDIF}
 end;
  
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
@@ -1555,7 +1541,7 @@ if ScreenFade <> sfNone then
 
         glDisable(GL_TEXTURE_2D);
 
-        glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+        SetVertexPointer(@VertexBuffer[0]);
         glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
         glEnable(GL_TEXTURE_2D);
