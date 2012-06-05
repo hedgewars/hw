@@ -436,7 +436,7 @@ begin
         end
     else
         TryDo(checksum = lastTurnChecksum, 'Desync detected', true);
-    AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
+    AddFileLog('Next turn: time '+inttostr(GameTicks));
 end;
 
 procedure chTimer(var s: shortstring);
