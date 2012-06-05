@@ -1606,7 +1606,10 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) an
 {$ENDIF}
 z:= round(200/zoom);
 if not PlacingHogs and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) then
-    if (not autoCameraOn) or ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
+    if (not autoCameraOn) then
+        FollowGear:= nil
+    else        
+    if ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
         begin
         FollowGear:= nil;
         prevPoint:= CursorPoint;
@@ -1656,7 +1659,7 @@ else
     EdgesDist:= cGearScrEdgesDist;
 
 // this generates the border around the screen that moves the camera when cursor is near it
-if isCursorVisible or (FollowGear <> nil) then
+if isCursorVisible or ((FollowGear <> nil) and autoCameraOn) then
     begin
     if CursorPoint.X < - cScreenWidth div 2 + EdgesDist then
         begin
