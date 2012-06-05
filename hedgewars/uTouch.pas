@@ -62,8 +62,11 @@ implementation
 const
     clickTime = 200;
     nilFingerId = High(TSDL_FingerId);
+    baseRectSize = 96;
 
 var
+    rectSize, halfRectSize: LongInt;
+
     pointerCount : Longword;
     fingers: array of TTouch_Data;
     moveCursor : boolean;
@@ -551,8 +554,10 @@ begin
     x := 0;//avoid compiler hint
     y := 0;
     convertToFingerCoord(x, y, CrosshairX, CrosshairY);
-  isOnCrosshair:= sqrt(sqr(finger.x-x) + sqr(finger.y-y)) < 50;
-//    isOnCrosshair:= isOnRect(x-24, y-24, 48, 48, finger);
+    isOnCrosshair:= isOnRect((x-HalfRectSize), (y-HalfRectSize), RectSize, RectSize, finger);
+    printFinger(finger);
+    WriteLnToConsole(inttostr(finger.x) + '   ' + inttostr(x));
+    WriteLnToConsole(inttostr(x) + '  ' + inttostr(y) + '   ' + inttostr(round(Android_JNI_getDensity() * 10)));
 end;
 
 function isOnCurrentHog(finger: TTouch_Data): boolean;
@@ -562,7 +567,7 @@ begin
     x := 0;
     y := 0;
     convertToFingerCoord(x,y, hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y));
-    isOnCurrentHog := sqrt(sqr(finger.X-x) + sqr(finger.Y-y)) < 50;
+    isOnCurrentHog:= isOnRect((x-HalfRectSize), (y-HalfRectSize), RectSize, RectSize, finger);
 end;
 
 procedure convertToFingerCoord(var x,y : LongInt; oldX, oldY: LongInt);
@@ -627,12 +632,22 @@ procedure initModule;
 var
     index: Longword;
     //uRenderCoordScaleX, uRenderCoordScaleY: Longword;
+    density: Single;
 begin
     buttonsDown:= 0;
 
     setLength(fingers, 4);
     for index := 0 to High(fingers) do 
         fingers[index].id := nilFingerId;
+
+{$IFDEF ANDROID}
+    density:= Android_JNI_getDensity();
+{$ELSE}
+    density:= 1.0;
+{$ENDIF}
+
+    rectSize:= round(baseRectSize * density);
+    halfRectSize:= rectSize shl 1;
 end;
 
 begin
