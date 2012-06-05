@@ -239,11 +239,19 @@ SetDefaultBinds();
 end;
 
 procedure SetBinds(var binds: TBinds);
+{$IFNDEF MOBILE}
+var
+    t: LongInt;
+{$ENDIF}
 begin
 {$IFDEF MOBILE}
     binds:= binds; // avoid hint
     CurrentBinds:= DefaultBinds;
 {$ELSE}
+for t:= 0 to cKeyMaxIndex do
+    if (CurrentBinds[t] <> binds[t]) and tkbd[t] then
+        ProcessKey(t, False);
+
     CurrentBinds:= binds;
 {$ENDIF}
 end;
