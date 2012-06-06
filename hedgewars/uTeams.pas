@@ -552,22 +552,33 @@ CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
 end;
 
 procedure chBind(var id: shortstring);
-var s: shortstring;
+var KeyName, Modifier, tmp: shortstring;
     b: LongInt;
 begin
-s:= '';
+KeyName:= '';
+Modifier:= '';
+
 if CurrentTeam = nil then
     exit;
-SplitBySpace(id, s);
-if s[1]='"' then
-    Delete(s, 1, 1);
-if s[byte(s[0])]='"' then
-    Delete(s, byte(s[0]), 1);
-b:= KeyNameToCode(id);
+
+if(Pos('mod:', id) <> 0)then
+    begin
+    tmp:= '';
+    SplitBySpace(id, tmp);
+    Modifier:= id;
+    id:= tmp;
+    end;
+
+SplitBySpace(id, KeyName);
+if KeyName[1]='"' then
+    Delete(KeyName, 1, 1);
+if KeyName[byte(KeyName[0])]='"' then
+    Delete(KeyName, byte(KeyName[0]), 1);
+b:= KeyNameToCode(id, Modifier);
 if b = 0 then
     OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 else
-    CurrentTeam^.Binds[b]:= s
+    CurrentTeam^.Binds[b]:= KeyName;
 end;
 
 procedure chTeamGone(var s:shortstring);
