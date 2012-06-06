@@ -270,6 +270,19 @@ const
     AShift = 0;
 {$ENDIF}
 
+    KMOD_NONE   = $0000;
+    KMOD_LSHIFT = $0001;
+    KMOD_RSHIFT = $0002;
+    KMOD_LCTRL  = $0040;
+    KMOD_RCTRL  = $0080;
+    KMOD_LALT   = $0100;
+    KMOD_RALT   = $0200;
+    KMOD_LMETA  = $0400;
+    KMOD_RMETA  = $0800;
+    KMOD_NUM    = $1000;
+    KMOD_CAPS   = $2000;
+    KMOD_MODE   = $4000;
+
     {* SDL_mixer *}
     MIX_MAX_VOLUME = 128;
     MIX_INIT_FLAC  = $00000001;

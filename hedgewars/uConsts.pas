@@ -147,6 +147,7 @@ const
     cBlowTorchC    = 6;
 
     cKeyMaxIndex = 1023;
+    cKbdMaxIndex = 65536;//need more room for the modifier keys
 
     cHHFileName = 'Hedgehog';
     cCHFileName = 'Crosshair';
