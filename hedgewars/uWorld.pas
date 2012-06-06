@@ -1512,9 +1512,6 @@ if (RM = rmDefault) or (RM = rmRightEye) then
             DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
         end;
 
-    if CountTicks >= 1000 then
-        CountTicks:= 0;
-
     // lag warning (?)
     inc(SoundTimerTicks, Lag);
 end;
