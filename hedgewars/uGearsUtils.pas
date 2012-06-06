@@ -483,13 +483,13 @@ begin
     RecountTeamHealth(tempTeam);
 end;
 
-function CountNonZeroz(x, y, r, c: LongInt): LongInt;
+function CountNonZeroz(x, y, r, c: LongInt; mask: LongWord): LongInt;
 var i: LongInt;
     count: LongInt = 0;
 begin
     if (y and LAND_HEIGHT_MASK) = 0 then
         for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
-            if Land[y, i] <> 0 then
+            if Land[y, i] and mask <> 0 then
             begin
                 inc(count);
                 if count = c then
@@ -531,9 +531,10 @@ var x: LongInt;
     ar2: array[0..1023] of TPoint;
     cnt, cnt2: Longword;
     delta: LongInt;
-    reallySkip, tryAgain: boolean;
+    ignoreNearObjects, ignoreOverlap, tryAgain: boolean;
 begin
-reallySkip:= false; // try not skipping proximity at first
+ignoreNearObjects:= false; // try not skipping proximity at first
+ignoreOverlap:= false; // this not only skips proximity, but allows overlapping objects (barrels, mines, hogs, crates).  Saving it for a 3rd pass.  With this active, winning AI Survival goes back to virtual impossibility
 tryAgain:= true;
 while tryAgain do
     begin
@@ -549,23 +550,27 @@ while tryAgain do
                 begin
                 repeat
                     inc(y, 2);
-                until (y >= cWaterLine) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) = 0);
+                until (y >= cWaterLine) or
+                        (not ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) = 0)) or 
+                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FF00) = 0));
 
                 sy:= y;
 
                 repeat
                     inc(y);
-                until (y >= cWaterLine) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) <> 0);
+                until (y >= cWaterLine) or
+                        (not ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) <> 0)) or 
+                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FF00) <> 0)); 
 
                 if (y - sy > Gear^.Radius * 2)
                     and (((Gear^.Kind = gtExplosives)
                     and (y < cWaterLine)
-                    and (reallySkip or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
-                    and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius))
+                    and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
+                    and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF) > Gear^.Radius))
                 or
                     ((Gear^.Kind <> gtExplosives)
                     and (y < cWaterLine)
-                    and (reallySkip or NoGearsToAvoid(x, y - Gear^.Radius, 110, 110))
+                    and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 110, 110))
                     )) then
                     begin
                     ar[cnt].X:= x;
@@ -590,10 +595,12 @@ while tryAgain do
 
         dec(Delta, 60)
     until (cnt2 > 0) or (Delta < 70);
-    if (cnt2 = 0) and skipProximity and (not reallySkip) then
+    // if either of these has not been tried, do another pass
+    if (cnt2 = 0) and skipProximity and (not ignoreOverlap) then
         tryAgain:= true
     else tryAgain:= false;
-    reallySkip:= true;
+    if ignoreNearObjects then ignoreOverlap:= true;
+    ignoreNearObjects:= true;
     end;
 
 if cnt2 > 0 then
