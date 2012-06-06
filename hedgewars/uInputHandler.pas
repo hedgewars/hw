@@ -59,18 +59,13 @@ begin
     code:= cKeyMaxIndex;
     while (code > 0) and (KeyNames[code] <> name) do dec(code);
 
-
     MaskModifier(Modifier, code);
-    WriteLnToConsole(inttostr(code));
-
     KeyNameToCode:= code;
 end;
 
 procedure MaskModifier(var code: LongInt; Modifier: LongWord);
 begin
-    WriteLnToConsole(inttostr(code));
     code:= code or (modifier shl 10);
-    WriteLnToConsole(inttostr(code));
 end;
 
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
@@ -89,7 +84,6 @@ for i:= 0 to ModifierCount do
     begin 
     mod_:= '';
     SplitByChar(Modifier, mod_, ':');
-    WriteLnToConsole(Modifier + ' baaaaa' );
     if (Modifier = 'lshift')                    then code:= code or (KMOD_LSHIFT shl 10);
     if (Modifier = 'rshift')                    then code:= code or (KMOD_RSHIFT shl 10);
     if (Modifier = 'lalt')                      then code:= code or (KMOD_LALT   shl 10);
@@ -105,7 +99,6 @@ var
     Trusted: boolean;
     s      : string;
 begin
-WriteLnToConsole(inttostr(code) + ' KeyDown:' + inttostr(ord(keydown)) + CurrentBinds[code]) ; 
 if not(tkbd[code] xor KeyDown) then exit;
 tkbd[code]:= KeyDown;
 
