@@ -26,7 +26,8 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses SysUtils, uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions, uVideoRec;
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions
+     {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
 
@@ -532,10 +533,12 @@ end;
 procedure chRecord(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+{$IFDEF USE_VIDEO_RECORDING}
 if flagPrerecording then
-    StopPreRecording
+    StopPreRecording()
 else
-    BeginPreRecording(FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()));
+    BeginPreRecording();
+{$ENDIF}
 end;
 
 procedure chSetMap(var s: shortstring);

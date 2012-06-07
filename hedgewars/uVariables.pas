@@ -52,7 +52,17 @@ var
     cReadyDelay     : Longword    = 5000;
     cStereoMode     : TStereoMode = smNone;
     cOnlyStats      : boolean = False;
-    cRecPrefix      : shortstring = '';
+{$IFDEF USE_VIDEO_RECORDING}
+    cRecPrefix      : shortstring;
+    cAVFormat       : shortstring;
+    cVideoCodec     : shortstring;
+    cVideoFramerateNum : Int64;
+    cVideoFramerateDen : Int64;
+    cVideoQuality      : LongInt;
+    cVideoPreset    : shortstring;
+    cAudioCodec     : shortstring;
+    cAudioQuality   : LongInt;
+{$ENDIF}
 //////////////////////////
     cMapName        : shortstring = '';
 

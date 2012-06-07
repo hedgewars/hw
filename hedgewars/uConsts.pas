@@ -27,7 +27,12 @@ uses    SDLh, uFloat, GLunit;
 
 const
     sfMax = 1000;
+{$IFNDEF USE_VIDEO_RECORDING}
     cDefaultParamNum = 17;
+{$ELSE}
+    cDefaultParamNum = 19;
+    cVideorecParamNum = cDefaultParamNum + 7;
+{$ENDIF}
 
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';

@@ -36,7 +36,7 @@ function LoadNextCameraPosition: LongInt;
 procedure EncodeFrame;
 procedure StopVideoRecording;
 
-function BeginPreRecording(filePrefix: shortstring): Boolean;
+procedure BeginPreRecording;
 procedure StopPreRecording;
 procedure SaveCameraPosition;
 
@@ -53,11 +53,17 @@ const AVWrapperLibName = 'libavwrapper.dll';
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
 
 {$IFDEF WIN32}
-procedure AVWrapper_Init(AddLog: TAddFileLogRaw; filename, soundFile: PChar; width, height, framerate, frequency, channels: LongInt); cdecl; external AVWrapperLibName;
+procedure AVWrapper_Init(
+              AddLog: TAddFileLogRaw;
+              filename, soundFile, format, vcodec, acodec, preset: PChar;
+              width, height, framerateNum, framerateDen, frequency, channels, vquality, aquality: LongInt); cdecl; external AVWrapperLibName;
 procedure AVWrapper_Close; cdecl; external AVWrapperLibName;
 procedure AVWrapper_WriteFrame( pY, pCb, pCr: PByte ); cdecl; external AVWrapperLibName;
 {$ELSE}
-procedure AVWrapper_Init(AddLog: TAddFileLogRaw; filename, soundFile: PChar; width, height, framerate, frequency, channels: LongInt); cdecl; external;
+procedure AVWrapper_Init(
+              AddLog: TAddFileLogRaw;
+              filename, soundFile, format, vcodec, acodec, preset: PChar;
+              width, height, framerateNum, framerateDen, frequency, channels, vquality, aquality: LongInt); cdecl; external;
 procedure AVWrapper_Close; cdecl; external;
 procedure AVWrapper_WriteFrame( pY, pCb, pCr: PByte ); cdecl; external;
 {$ENDIF}
@@ -72,7 +78,6 @@ var YCbCr_Planes: array[0..2] of PByte;
     
     numPixels: LongInt;
 
-    framerate: Int64 = 30;
     firstTick, nframes: Int64;
     
     cameraFilePath, soundFilePath: shortstring;
@@ -98,9 +103,14 @@ begin
     ReadLn(cameraFile, frequency, channels);
 {$IOCHECKS ON}
 
-    filename:= UserPathPrefix + '/Videos/' + cRecPrefix + '.mp4' + #0;
+    filename:= UserPathPrefix + '/Videos/' + cRecPrefix + #0;
     soundFilePath:= UserPathPrefix + '/Videos/' + cRecPrefix + '.hwsound' + #0;
-    AVWrapper_Init(@AddFileLogRaw, @filename[1], @soundFilePath[1], cScreenWidth, cScreenHeight, framerate, frequency, channels);
+    cAVFormat+= #0;
+    cAudioCodec+= #0;
+    cVideoCodec+= #0;
+    cVideoPreset+= #0;
+    AVWrapper_Init(@AddFileLogRaw, @filename[1], @soundFilePath[1], @cAVFormat[1], @cVideoCodec[1], @cAudioCodec[1], @cVideoPreset[1],
+                   cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, frequency, channels, cAudioQuality, cVideoQuality);
 
     YCbCr_Planes[0]:= GetMem(numPixels);
     YCbCr_Planes[1]:= GetMem(numPixels div 4);
@@ -194,21 +204,23 @@ begin
 {$IOCHECKS ON}
 end;
 
-function BeginPreRecording(filePrefix: shortstring): Boolean;
+procedure BeginPreRecording;
 var format: word;
-    filename: shortstring;
+    filePrefix, filename: shortstring;
 begin
     AddFileLog('BeginPreRecording');
-
+    
     nframes:= 0;
     firstTick:= SDL_GetTicks();
+
+    filePrefix:= FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now());
 
     Mix_QuerySpec(@frequency, @format, @channels);
     if format <> $8010 then
     begin
         // TODO: support any audio format
         AddFileLog('Error: Unexpected audio format ' + IntToStr(format));
-        exit(false);
+        exit;
     end;
 
 {$IOCHECKS OFF}
@@ -218,7 +230,7 @@ begin
     if IOResult <> 0 then
     begin
         AddFileLog('Error: Could not write to ' + filename);
-        exit(false);
+        exit;
     end;
 
     filename:= UserPathPrefix + '/Videos/' + filePrefix + '.txtout';
@@ -227,7 +239,7 @@ begin
     if IOResult <> 0 then
     begin
         AddFileLog('Error: Could not write to ' + filename);
-        exit(false);
+        exit;
     end;
 {$IOCHECKS ON}
     WriteLn(cameraFile, inttostr(frequency) + ' ' + inttostr(channels));
@@ -236,7 +248,6 @@ begin
     Mix_SetPostMix(@RecordPostMix, nil);
 
     flagPrerecording:= true;
-    BeginPreRecording:= true;
 end;
 
 procedure StopPreRecording;
@@ -256,7 +267,7 @@ procedure SaveCameraPosition;
 var Ticks: LongInt;
 begin
     Ticks:= SDL_GetTicks();
-    while (Ticks - firstTick)*framerate > nframes*1000 do
+    while (Ticks - firstTick)*cVideoFramerateNum > nframes*cVideoFramerateDen*1000 do
     begin
         WriteLn(cameraFile, inttostr(GameTicks) + ' ' + inttostr(WorldDx) + ' ' + inttostr(WorldDy) + ' ' + inttostr(Round(zoom*10000)));
         inc(nframes);

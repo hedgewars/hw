@@ -31,7 +31,8 @@ program hwengine;
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
-     SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted, uVideoRec
+     SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
+     {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF};
 
 {$IFDEF HWLIBRARY}
@@ -101,8 +102,10 @@ begin
 
     SwapBuffers;
 
+{$IFDEF USE_VIDEO_RECORDING}
     if flagPrerecording then
         SaveCameraPosition;
+{$ENDIF}
 
     if flagMakeCapture then
         begin
@@ -264,7 +267,7 @@ begin
     end;
 end;
 
-////////////////
+{$IFDEF USE_VIDEO_RECORDING}
 procedure RecorderMainLoop;
 var CurrTime, PrevTime: LongInt;
 begin
@@ -289,6 +292,7 @@ begin
     end;
     StopVideoRecording();
 end;
+{$ENDIF}
 
 ///////////////
 procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
@@ -572,11 +576,14 @@ begin
     else
         if (ParamCount = 3) and ((ParamStr(3) = '--stats-only') or (ParamStr(3) = 'landpreview')) then
             internalSetGameTypeLandPreviewFromParameters()
+        else if ParamCount = cDefaultParamNum then
+            internalStartGameWithParameters()
+{$IFDEF USE_VIDEO_RECORDING}
+        else if ParamCount = cVideorecParamNum then
+            internalStartVideoRecordingWithParameters()
+{$ENDIF}
         else
-            if (ParamCount = cDefaultParamNum) or (ParamCount = cDefaultParamNum+1) then
-                internalStartGameWithParameters()
-            else
-                playReplayFileWithParameters();
+            playReplayFileWithParameters();
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

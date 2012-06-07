@@ -47,7 +47,7 @@ procedure SwapBuffers; inline;
 
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
-     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}, glut;
+     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF} {$IFDEF USE_VIDEO_RECORDING}, glut {$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -439,6 +439,7 @@ if not reload then
 IMG_Quit();
 end;
 
+{$IF NOT DEFINED(S3D_DISABLED) OR DEFINED(USE_VIDEO_RECORDING)}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint);
 begin
     glGenFramebuffersEXT(1, @frame);
@@ -461,6 +462,7 @@ begin
     glDeleteRenderbuffersEXT(1, @depth);
     glDeleteFramebuffersEXT(1, @frame);
 end;
+{$ENDIF}
 
 procedure StoreRelease(reload: boolean);
 var ii: TSprite;
@@ -535,8 +537,10 @@ for i:= Low(CountTexz) to High(CountTexz) do
                 end;
             end;
         end;
+{$IFDEF USE_VIDEO_RECORDING}
     if defaultFrame <> 0 then
         DeleteFramebuffer(defaultFrame, depthv, texv);
+{$ENDIF}
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
         begin
@@ -707,9 +711,10 @@ begin
     AddFileLog('  \----- Extensions: ');
     AddFileLogRaw(glGetString(GL_EXTENSIONS));
     AddFileLog('');
-    //TODO: don't have the Extensions line trimmed but slipt it into multiple lines
+    //TODO: slipt Extensions line into multiple lines
 
     defaultFrame:= 0;
+{$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
     begin  
         if AuxBufNum > 0 then
@@ -731,6 +736,7 @@ begin
             AddFileLog('Warning: off-screen rendering is not supported; using back buffer but it may not work.');
         end;
     end;
+{$ENDIF}
 
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
