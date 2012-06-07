@@ -10,6 +10,8 @@
 #include <stddef.h>
 #include <stdbool.h>
 
+#define IPCCONN_MAPMSG_BYTES 4097
+
 typedef enum {IPC_NOT_CONNECTED, IPC_LISTENING, IPC_CONNECTED} IpcConnState;
 
 struct _flib_ipcconn;
@@ -56,6 +58,14 @@ IpcConnState flib_ipcconn_state(flib_ipcconn ipc);
  */
 int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data);
 
+/**
+ * Try to receive 4097 bytes. This is the size of the reply the engine sends
+ * when successfully queried for map data. The first 4096 bytes are a bit-packed
+ * twocolor image of the map (256x128), the last byte is the number of hogs that
+ * fit on the map.
+ */
+int flib_ipcconn_recv_map(flib_ipcconn ipc, void *data);
+
 int flib_ipcconn_send_raw(flib_ipcconn ipc, void *data, size_t len);
 
 /**
@@ -75,33 +85,22 @@ int flib_ipcconn_send_messagestr(flib_ipcconn ipc, char *data);
 /**
  * Call regularly to allow background work to proceed
  */
-void flib_ipcconn_tick(flib_ipcconn ipc);
+void flib_ipcconn_accept(flib_ipcconn ipc);
 
 /**
- * Get a demo record of the connection. This should be called after
+ * Get a record of the connection. This should be called after
  * the connection is closed and all messages have been received.
  *
  * If demo recording was not enabled, or if the recording failed for some reason,
  * the buffer will be empty.
  *
- * The buffer is only valid until a call to flib_ipcconn_getsave(), since save
- * and demo records have some minor differences, and those are performed directly
- * on the buffer before returning it).
- */
-flib_constbuffer flib_ipcconn_getdemo(flib_ipcconn ipc);
-
-/**
- * Get a savegame record of the connection. This should be called after
- * the connection is closed and all messages have been received.
+ * If save=true is passed, the result will be a savegame, otherwise it will be a
+ * demo.
  *
- * If demo recording was not enabled, or if the recording failed for some reason,
- * the buffer will be empty.
- *
- * The buffer is only valid until a call to flib_ipcconn_getdemo(), since save
- * and demo records have some minor differences, and those are performed directly
- * on the buffer before returning it).
+ * The buffer is only valid until flib_ipcconn_getsave is called again or the ipcconn
+ * is destroyed.
  */
-flib_constbuffer flib_ipcconn_getsave(flib_ipcconn ipc);
+flib_constbuffer flib_ipcconn_getrecord(flib_ipcconn ipc, bool save);
 
 #endif /* IPCCONN_H_ */
 

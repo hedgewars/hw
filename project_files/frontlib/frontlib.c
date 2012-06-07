@@ -2,6 +2,7 @@
 #include "logging.h"
 #include "socket.h"
 #include "ipc.h"
+#include "model/cfg.h"
 
 #include <SDL.h>
 #include <SDL_net.h>
@@ -76,6 +77,15 @@ static void onGameEnd(void *context, int gameEndType) {
 int main(int argc, char *argv[]) {
 	flib_init(0);
 
+	flib_cfg_meta *meta = flib_cfg_meta_from_ini("basicsettings.ini", "gamemods.ini");
+	flib_cfg *cfg = flib_cfg_create(meta, "DefaultScheme");
+	flib_cfg_to_ini(meta, "defaulttest.ini", cfg);
+
+	flib_cfg_meta_destroy(meta);
+
+	flib_quit();
+	return 0;
+/*
 	flib_ipc ipc = flib_ipc_create(true, "Medo42");
 	assert(ipc);
 	flib_ipc_onConfigQuery(ipc, &onConfigQuery, ipc);
@@ -87,5 +97,5 @@ int main(int argc, char *argv[]) {
 	}
 	flib_log_i("Shutting down...");
 	flib_quit();
-	return 0;
+	return 0;*/
 }

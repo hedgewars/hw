@@ -1,16 +1,24 @@
 #include "ipcconn.h"
 #include "logging.h"
 #include "socket.h"
+#include "demo.h"
 
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+ * The receive buffer has to be able to hold any message that might be received. Normally
+ * the messages are at most 256 bytes, but the map preview contains 4097 bytes (4096 for a
+ * bitmap, 1 for the number of hogs which fit on the map).
+ *
+ * We don't need to worry about wasting a few kb though, and I like powers of two...
+ */
 typedef struct _flib_ipcconn {
+	uint8_t readBuffer[8192];
 	char playerName[256];
 
-	uint8_t readBuffer[256];
 	int readBufferSize;
 
 	flib_acceptor acceptor;
@@ -25,6 +33,7 @@ flib_ipcconn flib_ipcconn_create(bool recordDemo, const char *localPlayerName) {
 	flib_acceptor acceptor = flib_acceptor_create(0);
 
 	if(!result || !acceptor) {
+		flib_log_e("Can't create ipcconn.");
 		free(result);
 		flib_acceptor_close(&acceptor);
 		return NULL;
@@ -50,73 +59,44 @@ flib_ipcconn flib_ipcconn_create(bool recordDemo, const char *localPlayerName) {
 }
 
 uint16_t flib_ipcconn_port(flib_ipcconn ipc) {
+	if(!ipc) {
+		flib_log_e("Call to flib_ipcconn_port with ipc==null");
+		return 0;
+	}
 	return ipc->port;
 }
 
 void flib_ipcconn_destroy(flib_ipcconn *ipcptr) {
-	if(!ipcptr || !*ipcptr) {
-		return;
+	if(!ipcptr) {
+		flib_log_e("Call to flib_ipcconn_destroy with ipcptr==null");
+	} else if(*ipcptr) {
+		flib_ipcconn ipc = *ipcptr;
+		flib_acceptor_close(&ipc->acceptor);
+		flib_socket_close(&ipc->sock);
+		flib_vector_destroy(&ipc->demoBuffer);
+		free(ipc);
+		*ipcptr = NULL;
 	}
-	flib_ipcconn ipc = *ipcptr;
-	flib_acceptor_close(&ipc->acceptor);
-	flib_socket_close(&ipc->sock);
-	flib_vector_destroy(&ipc->demoBuffer);
-	free(ipc);
-	*ipcptr = NULL;
 }
 
 IpcConnState flib_ipcconn_state(flib_ipcconn ipc) {
-	if(ipc && ipc->sock) {
+	if(!ipc) {
+		flib_log_e("Call to flib_ipcconn_state with ipc==null");
+		return IPC_NOT_CONNECTED;
+	} else if(ipc->sock) {
 		return IPC_CONNECTED;
-	} else if(ipc && ipc->acceptor) {
+	} else if(ipc->acceptor) {
 		return IPC_LISTENING;
 	} else {
 		return IPC_NOT_CONNECTED;
 	}
 }
 
-static void demo_record(flib_ipcconn ipc, const void *data, size_t len) {
-	if(ipc->demoBuffer) {
-		if(flib_vector_append(ipc->demoBuffer, data, len) < len) {
-			// Out of memory, fail demo recording
-			flib_vector_destroy(&ipc->demoBuffer);
-		}
-	}
+static bool isMessageReady(flib_ipcconn ipc) {
+	return ipc->readBufferSize >= ipc->readBuffer[0]+1;
 }
 
-static void demo_record_from_engine(flib_ipcconn ipc, const uint8_t *message) {
-	if(!ipc->demoBuffer || message[0]==0) {
-		return;
-	}
-	if(strchr("?CEiQqHb", message[1])) {
-		// Those message types are not recorded in a demo.
-		return;
-	}
-
-	if(message[1] == 's') {
-		if(message[0] >= 3) {
-			// Chat messages get a special once-over to make them look as if they were received, not sent.
-			// Get the actual chat message as c string
-			char chatMsg[256];
-			memcpy(chatMsg, message+2, message[0]-3);
-			chatMsg[message[0]-3] = 0;
-
-			// If the message starts with /me, it will be displayed differently.
-			char converted[257];
-			bool memessage = message[0] >= 7 && !memcmp(message+2, "/me ", 4);
-			const char *template = memessage ? "s\x02* %s %s  " : "s\x01%s: %s  ";
-			int size = snprintf(converted+1, 256, template, ipc->playerName, chatMsg);
-			converted[0] = size>255 ? 255 : size;
-			demo_record(ipc, converted, converted[0]+1);
-		}
-	} else {
-		demo_record(ipc, message, message[0]+1);
-	}
-}
-
-int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data) {
-	flib_ipcconn_tick(ipc);
-
+static void receiveToBuffer(flib_ipcconn ipc) {
 	if(ipc->sock) {
 		int size = flib_socket_nbrecv(ipc->sock, ipc->readBuffer+ipc->readBufferSize, sizeof(ipc->readBuffer)-ipc->readBufferSize);
 		if(size>=0) {
@@ -125,16 +105,32 @@ int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data) {
 			flib_socket_close(&ipc->sock);
 		}
 	}
+}
 
-	int msgsize = ipc->readBuffer[0]+1;
-	if(ipc->readBufferSize >= msgsize) {
-		demo_record_from_engine(ipc, ipc->readBuffer);
+int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data) {
+	if(!ipc || !data) {
+		flib_log_e("Call to flib_ipcconn_recv_message with ipc==null or data==null");
+		return -1;
+	}
+
+	if(!isMessageReady(ipc)) {
+		receiveToBuffer(ipc);
+	}
+
+	if(isMessageReady(ipc)) {
+		if(ipc->demoBuffer) {
+			if(flib_demo_record_from_engine(ipc->demoBuffer, ipc->readBuffer, ipc->playerName) < 0) {
+				flib_log_w("Stopping demo recording due to an error.");
+				flib_vector_destroy(&ipc->demoBuffer);
+			}
+		}
+		int msgsize = ipc->readBuffer[0]+1;
 		memcpy(data, ipc->readBuffer, msgsize);
 		memmove(ipc->readBuffer, ipc->readBuffer+msgsize, ipc->readBufferSize-msgsize);
 		ipc->readBufferSize -= msgsize;
 		return msgsize;
 	} else if(!ipc->sock && ipc->readBufferSize>0) {
-		flib_log_w("Last message from engine data stream is incomplete (received %u of %u bytes)", ipc->readBufferSize, msgsize);
+		flib_log_w("Last message from engine data stream is incomplete (received %u of %u bytes)", ipc->readBufferSize, ipc->readBuffer[0]+1);
 		ipc->readBufferSize = 0;
 		return -1;
 	} else {
@@ -142,16 +138,40 @@ int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data) {
 	}
 }
 
-int flib_ipcconn_send_raw(flib_ipcconn ipc, void *data, size_t len) {
-	flib_ipcconn_tick(ipc);
+int flib_ipcconn_recv_map(flib_ipcconn ipc, void *data) {
+	if(!ipc || !data) {
+		flib_log_e("Call to flib_ipcconn_recv_map with ipc==null or data==null");
+		return -1;
+	}
 
+	receiveToBuffer(ipc);
+
+	if(ipc->readBufferSize >= IPCCONN_MAPMSG_BYTES) {
+		memcpy(data, ipc->readBuffer, IPCCONN_MAPMSG_BYTES);
+		memmove(ipc->readBuffer, ipc->readBuffer+IPCCONN_MAPMSG_BYTES, ipc->readBufferSize-IPCCONN_MAPMSG_BYTES);
+		return IPCCONN_MAPMSG_BYTES;
+	} else {
+		return -1;
+	}
+}
+
+int flib_ipcconn_send_raw(flib_ipcconn ipc, void *data, size_t len) {
+	if(!ipc || (!data && len>0)) {
+		flib_log_e("Call to flib_ipcconn_send_raw with ipc==null or data==null");
+		return -1;
+	}
 	if(!ipc->sock) {
-		flib_log_w("flib_ipcconn_send_message: Not connected.");
+		flib_log_w("flib_ipcconn_send_raw: Not connected.");
 		return -1;
 	}
 
 	if(flib_socket_send(ipc->sock, data, len) == len) {
-		demo_record(ipc, data, len);
+		if(ipc->demoBuffer) {
+			if(flib_demo_record_to_engine(ipc->demoBuffer, data, len) < 0) {
+				flib_log_w("Stopping demo recording due to an error.");
+				flib_vector_destroy(&ipc->demoBuffer);
+			}
+		}
 		return 0;
 	} else {
 		flib_log_w("Failed or incomplete ICP write: engine connection lost.");
@@ -161,8 +181,8 @@ int flib_ipcconn_send_raw(flib_ipcconn ipc, void *data, size_t len) {
 }
 
 int flib_ipcconn_send_message(flib_ipcconn ipc, void *data, size_t len) {
-	if(len>255) {
-		flib_log_e("Attempt to send too much data to the engine in a single message.");
+	if(!ipc || (!data && len>0) || len>255) {
+		flib_log_e("Call to flib_ipcconn_send_message with ipc==null or data==null or len>255");
 		return -1;
 	}
 
@@ -177,8 +197,10 @@ int flib_ipcconn_send_messagestr(flib_ipcconn ipc, char *data) {
 	return flib_ipcconn_send_message(ipc, data, strlen(data));
 }
 
-void flib_ipcconn_tick(flib_ipcconn ipc) {
-	if(!ipc->sock && ipc->acceptor) {
+void flib_ipcconn_accept(flib_ipcconn ipc) {
+	if(!ipc) {
+		flib_log_e("Call to flib_ipcconn_accept with ipc==null");
+	} else if(!ipc->sock && ipc->acceptor) {
 		ipc->sock = flib_socket_accept(ipc->acceptor, true);
 		if(ipc->sock) {
 			flib_acceptor_close(&ipc->acceptor);
@@ -186,31 +208,14 @@ void flib_ipcconn_tick(flib_ipcconn ipc) {
 	}
 }
 
-static void replace_gamemode(flib_buffer buf, char gamemode) {
-	size_t msgStart = 0;
-	char *data = (char*)buf.data;
-	while(msgStart+2 < buf.size) {
-		if(!memcmp(data+msgStart, "\x02T", 2)) {
-			data[msgStart+2] = gamemode;
-		}
-		msgStart += (uint8_t)data[msgStart]+1;
+flib_constbuffer flib_ipcconn_getrecord(flib_ipcconn ipc, bool save) {
+	if(!ipc) {
+		flib_log_e("Call to flib_ipcconn_getrecord with ipc==null");
 	}
-}
-
-flib_constbuffer flib_ipcconn_getdemo(flib_ipcconn ipc) {
-	if(!ipc->demoBuffer) {
+	if(!ipc || !ipc->demoBuffer) {
 		flib_constbuffer result = {NULL, 0};
 		return result;
 	}
-	replace_gamemode(flib_vector_as_buffer(ipc->demoBuffer), 'D');
-	return flib_vector_as_constbuffer(ipc->demoBuffer);
-}
-
-flib_constbuffer flib_ipcconn_getsave(flib_ipcconn ipc) {
-	if(!ipc->demoBuffer) {
-		flib_constbuffer result = {NULL, 0};
-		return result;
-	}
-	replace_gamemode(flib_vector_as_buffer(ipc->demoBuffer), 'S');
+	flib_demo_replace_gamemode(flib_vector_as_buffer(ipc->demoBuffer), save ? 'S' : 'D');
 	return flib_vector_as_constbuffer(ipc->demoBuffer);
 }
