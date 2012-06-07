@@ -24,6 +24,7 @@ interface
 uses uTypes, uFloat, GLunit;
 
 procedure SplitBySpace(var a, b: shortstring);
+procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByChar(var a, b: ansistring; c: char);
 
 {$IFNDEF PAS2C}
@@ -85,11 +86,16 @@ var f: textfile;
 {$ENDIF}
 var CharArray: array[byte] of Char;
 
+procedure SplitBySpace(var a,b: shortstring);
+begin
+SplitByChar(a,b,' ');
+end;
+
 // should this include "strtolower()" for the split string?
-procedure SplitBySpace(var a, b: shortstring);
+procedure SplitByChar(var a, b: shortstring; c : char);
 var i, t: LongInt;
 begin
-i:= Pos(' ', a);
+i:= Pos(c, a);
 if i > 0 then
     begin
     for t:= 1 to Pred(i) do

@@ -25,7 +25,9 @@ uses SDLh, uTypes;
 procedure initModule;
 procedure freeModule;
 
-function  KeyNameToCode(name: shortstring): word;
+function  KeyNameToCode(name: shortstring; Modifier: shortstring = ''): LongInt;
+procedure MaskModifier(var code: LongInt; modifier: LongWord);
+procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
@@ -45,18 +47,51 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 implementation
 uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
 
-var tkbd: array[0..cKeyMaxIndex] of boolean;
+var tkbd: array[0..cKbdMaxIndex] of boolean;
     quitKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
 
-function KeyNameToCode(name: shortstring): word;
-var code: Word;
+function KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
+var code: LongInt;
 begin
     name:= LowerCase(name);
     code:= cKeyMaxIndex;
     while (code > 0) and (KeyNames[code] <> name) do dec(code);
+
+    MaskModifier(Modifier, code);
     KeyNameToCode:= code;
+end;
+
+procedure MaskModifier(var code: LongInt; Modifier: LongWord);
+begin
+    code:= code or (modifier shl 10);
+end;
+
+procedure MaskModifier(Modifier: shortstring; var code: LongInt);
+var mod_ : shortstring;
+    ModifierCount, i: LongInt;
+    c : char;
+begin
+if Modifier = '' then exit;
+ModifierCount:= 0;
+for c in Modifier do
+    if(c = ':') then inc(ModifierCount);
+
+SplitByChar(Modifier, mod_, ':');//remove the first mod: part
+Modifier:= mod_;
+for i:= 0 to ModifierCount do
+    begin 
+    mod_:= '';
+    SplitByChar(Modifier, mod_, ':');
+    if (Modifier = 'lshift')                    then code:= code or (KMOD_LSHIFT shl 10);
+    if (Modifier = 'rshift')                    then code:= code or (KMOD_RSHIFT shl 10);
+    if (Modifier = 'lalt')                      then code:= code or (KMOD_LALT   shl 10);
+    if (Modifier = 'ralt')                      then code:= code or (KMOD_RALT   shl 10);
+    if (Modifier = 'lctrl') or (mod_ = 'lmeta') then code:= code or (KMOD_LCTRL  shl 10);
+    if (Modifier = 'rctrl') or (mod_ = 'rmeta') then code:= code or (KMOD_RCTRL  shl 10);
+    Modifier:= mod_;
+    end;
 end;
 
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
@@ -64,17 +99,13 @@ var
     Trusted: boolean;
     s      : string;
 begin
-
 if not(tkbd[code] xor KeyDown) then exit;
 tkbd[code]:= KeyDown;
-
 
 hideAmmoMenu:= false;
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
           and (CurrentHedgehog^.BotLevel = 0);
-
-
 
 // ctrl/cmd + q to close engine and frontend
 if(KeyDown and (code = quitKeyCode)) then
@@ -109,8 +140,12 @@ if CurrentBinds[code][0] <> #0 then
 end;
 
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
+var code: LongInt;
 begin
-    ProcessKey(event.keysym.sym, event.type_ = SDL_KEYDOWN);
+    code:= event.keysym.sym;
+    MaskModifier(code, event.keysym.modifier);
+    
+    ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
 
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
@@ -132,7 +167,7 @@ end;
 procedure ResetKbd;
 var t: LongInt;
 begin
-for t:= 0 to cKeyMaxIndex do
+for t:= 0 to cKbdMaxIndex do
     if tkbd[t] then
         ProcessKey(t, False);
 end;
@@ -240,11 +275,19 @@ SetDefaultBinds();
 end;
 
 procedure SetBinds(var binds: TBinds);
+{$IFNDEF MOBILE}
+var
+    t: LongInt;
+{$ENDIF}
 begin
 {$IFDEF MOBILE}
     binds:= binds; // avoid hint
     CurrentBinds:= DefaultBinds;
 {$ELSE}
+for t:= 0 to cKbdMaxIndex do
+    if (CurrentBinds[t] <> binds[t]) and tkbd[t] then
+        ProcessKey(t, False);
+
     CurrentBinds:= binds;
 {$ENDIF}
 end;

@@ -129,8 +129,10 @@ for i:= 0 to Pred(Targets.Count) do
         ThreadSwitch();
 {$ENDIF}       
         repeat
-        if (CanUseAmmo[a]) and
-            ((not isMoved) or ((AmmoTests[a].flags and amtest_OnTurn) = 0)) then
+        if (CanUseAmmo[a]) 
+            and ((not isMoved) or ((AmmoTests[a].flags and amtest_OnTurn) = 0)) 
+            and ((i = 0) or ((AmmoTests[a].flags and amtest_NoTarget) = 0)) 
+            then
             begin
 {$HINTS OFF}
             Score:= AmmoTests[a].proc(Me, Targets.ar[i].Point, BotLevel, ap);
@@ -181,8 +183,8 @@ for i:= 0 to Pred(Targets.Count) do
         if a = High(TAmmoType) then
             a:= Low(TAmmoType)
         else inc(a)
-        until (a = aa) or (CurrentHedgehog^.MultiShootAttacks > 0) or // shooting same weapon
-        StopThinking
+        until (a = aa) or (CurrentHedgehog^.MultiShootAttacks > 0) {shooting same weapon}
+            or StopThinking
         end
 end;
 
