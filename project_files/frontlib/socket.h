@@ -6,12 +6,7 @@
  * on a random unused port, if one can be found. To support this feature, you can also
  * query the local port that an acceptor is listening on.
  *
- * Further, we support nonblocking reads and writes here. The writes are buffered (TODO),
- * so that all data will be accepted, and you can configure a maximum buffer size
- * where the connection will be terminated.
- *
- * In order to ensure buffered data is actually sent out, you should regularly call
- * the tick function on your sockets.
+ * Further, we support nonblocking reads here.
  */
 
 #ifndef SOCKET_H_

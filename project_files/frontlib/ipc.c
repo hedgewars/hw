@@ -155,11 +155,12 @@ static void flib_ipc_wrappedtick(flib_ipc ipc) {
 		return;
 	}
 
-	flib_ipcconn_tick(ipc->connection);
-	IpcConnState newstate = flib_ipcconn_state(ipc->connection);
-	if(ipc->oldConnState == IPC_LISTENING && newstate == IPC_CONNECTED) {
-		ipc->oldConnState = newstate;
-		ipc->onConnectCb(ipc->onConnectCtx);
+	if(ipc->oldConnState == IPC_LISTENING) {
+		flib_ipcconn_accept(ipc->connection);
+		if(flib_ipcconn_state(ipc->connection) == IPC_CONNECTED) {
+			ipc->oldConnState = IPC_CONNECTED;
+			ipc->onConnectCb(ipc->onConnectCtx);
+		}
 	}
 
 	if(ipc->oldConnState == IPC_CONNECTED) {
@@ -216,10 +217,28 @@ static void flib_ipc_wrappedtick(flib_ipc ipc) {
 		}
 	}
 
-	newstate = flib_ipcconn_state(ipc->connection);
-	if(newstate == IPC_NOT_CONNECTED) {
-		ipc->oldConnState = newstate;
+	if(flib_ipcconn_state(ipc->connection) == IPC_NOT_CONNECTED) {
+		ipc->oldConnState = IPC_NOT_CONNECTED;
 		ipc->onDisconnectCb(ipc->onDisconnectCtx);
+	}
+}
+
+void flib_ipc_tick(flib_ipc ipc) {
+	if(!ipc) {
+		flib_log_w("Call to flib_ipc_tick with ipc==null");
+		return;
+	}
+	if(ipc->running) {
+		flib_log_w("Call to flib_ipc_tick from a callback");
+		return;
+	}
+
+	ipc->running = true;
+	flib_ipc_wrappedtick(ipc);
+	ipc->running = false;
+
+	if(ipc->destroyRequested) {
+		flib_ipc_destroy(&ipc);
 	}
 }
 
@@ -261,24 +280,5 @@ flib_constbuffer flib_ipc_getdemo(flib_ipc ipc) {
 		flib_constbuffer result = {NULL, 0};
 		return result;
 	}
-	return flib_ipcconn_getdemo(ipc->connection);
-}
-
-void flib_ipc_tick(flib_ipc ipc) {
-	if(!ipc) {
-		flib_log_w("Call to flib_ipc_tick with ipc==null");
-		return;
-	}
-	if(ipc->running) {
-		flib_log_w("Call to flib_ipc_tick from a callback");
-		return;
-	}
-
-	ipc->running = true;
-	flib_ipc_wrappedtick(ipc);
-	ipc->running = false;
-
-	if(ipc->destroyRequested) {
-		flib_ipc_destroy(&ipc);
-	}
+	return flib_ipcconn_getrecord(ipc->connection, false);
 }

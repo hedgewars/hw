@@ -31,6 +31,23 @@ int flib_ipc_send_raw(flib_ipc ipc, void *data, size_t len);
 int flib_ipc_send_message(flib_ipc ipc, void *data, size_t len);
 int flib_ipc_send_messagestr(flib_ipc ipc, char *data);
 
+// Configuration
+int flib_ipc_send_seed(flib_ipc ipc, const char *seed);
+int flib_ipc_send_script(flib_ipc ipc, const char *scriptpath);
+int flib_ipc_send_map_regular(flib_ipc ipc, const char *theme, int templateFilter);
+int flib_ipc_send_map_maze(flib_ipc ipc, const char *theme, int mazeType);
+int flib_ipc_send_map_drawn(flib_ipc ipc, const char *theme, void *drawnMapData, size_t drawnMapDataLen);
+int flib_ipc_send_map_named(flib_ipc ipc, const char *mappath);
+int flib_ipc_send_gamemods(flib_ipc ipc, uint32_t modflags);
+int flib_ipc_send_gamesetting(flib_ipc ipc, const char *settingname, int modflags);
+int flib_ipc_send_weapon_loadout(flib_ipc ipc, const char *weapsettings);
+int flib_ipc_send_weapon_delay(flib_ipc ipc, const char *weapsettings);
+int flib_ipc_send_weapon_cratechance(flib_ipc ipc, const char *weapsettings);
+int flib_ipc_send_weapon_crateammo(flib_ipc ipc, const char *weapsettings);
+
+int flib_ipc_send_conf_end(flib_ipc ipc);
+
+
 uint16_t flib_ipc_port(flib_ipc ipc);
 flib_constbuffer flib_ipc_getdemo(flib_ipc ipc);
 
