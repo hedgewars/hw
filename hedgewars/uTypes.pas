@@ -308,7 +308,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         TeamDamage : Longword;
         end;
 
-    TBinds = array[0..cKeyMaxIndex] of shortstring;
+    TBinds = array[0..cKbdMaxIndex] of shortstring;
     TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
     PVoicepack = ^TVoicepack;

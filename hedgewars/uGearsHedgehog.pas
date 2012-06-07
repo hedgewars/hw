@@ -707,12 +707,10 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     if (Gear^.Message and gmLeft  )<>0 then
         Gear^.dX:= -cLittle else
     if (Gear^.Message and gmRight )<>0 then
-        Gear^.dX:=  cLittle else exit;
+        Gear^.dX:=  cLittle 
+        else exit;
 
-    if (Gear^.Message and (gmLeft or gmRight)) <> 0 then
-        begin
-        StepSoundTimer:= cHHStepTicks;
-        end;
+    StepSoundTimer:= cHHStepTicks;
    
     GHStepTicks:= cHHStepTicks;
     if PrevdX <> hwSign(Gear^.dX) then
@@ -837,6 +835,7 @@ if isFalling then
     if (CurrentHedgehog^.Gear = Gear)
         and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then 
         begin
+        // TODO: why so aggressive at setting FollowGear when falling?
         FollowGear:= Gear;
         end;
     if isUnderwater then

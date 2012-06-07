@@ -21,7 +21,9 @@
 unit uAIAmmoTests;
 interface
 uses SDLh, uConsts, uFloat, uTypes;
-const amtest_OnTurn = $00000001;
+const 
+    amtest_OnTurn   = $00000001; // from one position
+    amtest_NoTarget = $00000002; // each pos, but no targetting
 
 var windSpeed: real;
 
@@ -68,9 +70,9 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amMine
             (proc: @TestDesertEagle; flags: 0), // amDEagle
             (proc: nil;              flags: 0), // amDynamite
-            (proc: @TestFirePunch;   flags: 0), // amFirePunch
-            (proc: @TestWhip;        flags: 0), // amWhip
-            (proc: @TestBaseballBat; flags: 0), // amBaseballBat
+            (proc: @TestFirePunch;   flags: amtest_NoTarget), // amFirePunch
+            (proc: @TestWhip;        flags: amtest_NoTarget), // amWhip
+            (proc: @TestBaseballBat; flags: amtest_NoTarget), // amBaseballBat
             (proc: nil;              flags: 0), // amParachute
             (proc: @TestAirAttack;   flags: amtest_OnTurn), // amAirAttack
             (proc: nil;              flags: 0), // amMineStrike
@@ -105,7 +107,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestShotgun;     flags: 0), // amSineGun
             (proc: nil;              flags: 0), // amFlamethrower
             (proc: @TestGrenade;     flags: 0), // amSMine
-            (proc: @TestHammer;      flags: 0), // amHammer
+            (proc: @TestHammer;      flags: amtest_NoTarget), // amHammer
             (proc: nil;              flags: 0), // amResurrector
             (proc: nil;              flags: 0), // amDrillStrike
             (proc: nil;              flags: 0), // amSnowball
@@ -640,7 +642,7 @@ TestBaseballBat:= BadTurn;
 ap.ExplR:= 0;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
-if (Level > 2) or (Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) > 25) then
+if (Level > 2) then
     exit(BadTurn);
 
 ap.Time:= 0;
@@ -710,8 +712,7 @@ else if (val2 > val1) and (val2 > 0) then
 else TestFirePunch:= BadTurn;
 end;
 
-// TODO: TestWhip, TestFirepunch and TestBaseballBat could be called only once at each position 
-// (now they're called for each possible target in each position)
+
 function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult, v1, v2: LongInt;
     x, y: real;
@@ -723,9 +724,6 @@ ap.Power:= 1;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 
-if(abs(Targ.X - x) > 50) or (abs(Targ.Y - y) > 30) then // we're way too far from our target
-    exit(BadTurn);
-    
 // check left direction
 {first RateShove checks fartherest of two whip's AmmoShove attacks 
 to encourage distant attacks (damaged hog is excluded from view of second 
@@ -775,10 +773,7 @@ ap.Time:= 0;
 ap.Power:= 1;
 ap.Angle:= 0;
          
-if (Abs(hwRound(Me^.X) + hwSign(Me^.dX) * 10 - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) > 20) then
-    rate:= 0
-else
-    rate:= RateHammer(Me);
+rate:= RateHammer(Me);
 if rate = 0 then
     rate:= BadTurn;
 TestHammer:= rate;

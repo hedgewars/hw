@@ -363,11 +363,11 @@ case step of
 
                 FreeActionsList; // could send -left, -right and similar commands, so should be called before /nextturn
 
+                ParseCommand('/nextturn', true);
                 SwitchHedgehog;
 
                 AfterSwitchHedgehog;
-                bBetweenTurns:= false;
-                ParseCommand('/nextturn', true)
+                bBetweenTurns:= false
                 end;
             step:= Low(step)
             end;
