@@ -47,6 +47,14 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 implementation
 uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
 
+const
+    LSHIFT = $0200;
+    RSHIFT = $0400;
+    LALT   = $0800;
+    RALT   = $1000;
+    LCTRL  = $2000;
+    RCTRL  = $4000; 
+
 var tkbd: array[0..cKbdMaxIndex] of boolean;
     quitKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
@@ -65,7 +73,12 @@ end;
 
 procedure MaskModifier(var code: LongInt; Modifier: LongWord);
 begin
-    code:= code or (modifier shl 10);
+    if(Modifier and KMOD_LSHIFT) <> 0 then code:= code or LSHIFT; 
+    if(Modifier and KMOD_RSHIFT) <> 0 then code:= code or LSHIFT; 
+    if(Modifier and KMOD_LALT) <> 0 then code:= code or LALT; 
+    if(Modifier and KMOD_RALT) <> 0 then code:= code or LALT; 
+    if(Modifier and KMOD_LCTRL) <> 0 then code:= code or LCTRL; 
+    if(Modifier and KMOD_RCTRL) <> 0 then code:= code or LCTRL; 
 end;
 
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
@@ -84,12 +97,12 @@ for i:= 0 to ModifierCount do
     begin 
     mod_:= '';
     SplitByChar(Modifier, mod_, ':');
-    if (Modifier = 'lshift')                    then code:= code or (KMOD_LSHIFT shl 10);
-    if (Modifier = 'rshift')                    then code:= code or (KMOD_RSHIFT shl 10);
-    if (Modifier = 'lalt')                      then code:= code or (KMOD_LALT   shl 10);
-    if (Modifier = 'ralt')                      then code:= code or (KMOD_RALT   shl 10);
-    if (Modifier = 'lctrl') or (mod_ = 'lmeta') then code:= code or (KMOD_LCTRL  shl 10);
-    if (Modifier = 'rctrl') or (mod_ = 'rmeta') then code:= code or (KMOD_RCTRL  shl 10);
+    if (Modifier = 'lshift')                    then code:= code or LSHIFT;
+    if (Modifier = 'rshift')                    then code:= code or RSHIFT;
+    if (Modifier = 'lalt')                      then code:= code or LALT;
+    if (Modifier = 'ralt')                      then code:= code or RALT;
+    if (Modifier = 'lctrl') or (mod_ = 'lmeta') then code:= code or LCTRL;
+    if (Modifier = 'rctrl') or (mod_ = 'rmeta') then code:= code or RCTRL;
     Modifier:= mod_;
     end;
 end;
@@ -144,7 +157,6 @@ var code: LongInt;
 begin
     code:= event.keysym.sym;
     MaskModifier(code, event.keysym.modifier);
-    
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
 

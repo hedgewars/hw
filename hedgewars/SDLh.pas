@@ -275,8 +275,8 @@ const
     KMOD_RSHIFT = $0002;
     KMOD_LCTRL  = $0040;
     KMOD_RCTRL  = $0080;
-    KMOD_LALT   = $0100;
-    KMOD_RALT   = $0200;
+    KMOD_LALT   = $0400;
+    KMOD_RALT   = $0800;
     KMOD_LMETA  = $0400;
     KMOD_RMETA  = $0800;
     KMOD_NUM    = $1000;
