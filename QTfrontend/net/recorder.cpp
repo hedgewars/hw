@@ -87,7 +87,15 @@ QStringList HWRecorder::getArguments()
     arguments << QString::number(config->translateQuality());
     arguments << QString::number(config->stereoMode());
     arguments << HWGame::tr("en.txt");
+    arguments << "30"; // framerate num
+    arguments << "1";  // framerate den
     arguments << prefix;
+    arguments << "mp4";
+    arguments << "mpeg4"; // arguments << "libx264";
+    arguments << "5"; // video quality
+    arguments << "medium";
+    arguments << "libmp3lame";
+    arguments << "5"; // audio quality
 
     return arguments;
 }

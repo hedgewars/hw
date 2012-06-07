@@ -1574,7 +1574,8 @@ if ScreenFade <> sfNone then
         end
     end;
 
-// rec
+{$IFDEF USE_VIDEO_RECORDING}
+// during video prerecording draw red blinking circle and text 'rec'
 if flagPrerecording then
     begin
     if recTexture = nil then
@@ -1598,6 +1599,7 @@ if flagPrerecording then
     Tint($FF, $FF, $FF, $FF);
     glEnable(GL_TEXTURE_2D);
     end;
+{$ENDIF}
 
 SetScale(zoom);
 
