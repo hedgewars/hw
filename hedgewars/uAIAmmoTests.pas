@@ -712,107 +712,108 @@ TestBaseballBat:= valueResult;
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var val1, val2, i, t: LongInt;
-    x, y: real;
+var valueResult, v1, v2, i: LongInt;
+    x, y: LongInt;
 begin
-Level:= Level; // avoid compiler hint
-TestFirePunch:= BadTurn;
-ap.ExplR:= 0;
-ap.Time:= 0;
-ap.Power:= 1;
-ap.Angle:= hwSign(Me^.dX);
-x:= hwFloat2Float(Me^.X);
-y:= hwFloat2Float(Me^.Y);
-{
-// this block is for digging with firepunch when blocked close to walls (notice TestColl check)
-if (Abs(trunc(x) - Targ.X) > 25)
-    or (Abs(trunc(y) + 50 - Targ.Y) > 50) then
-    begin
-    if TestColl(trunc(x), trunc(y) - 16, 6) and 
-       (RateShove(Me, trunc(x) + LongWord(10 * hwSign(Me^.dX)), 
-                      trunc(y) - 40, 30, 30, 40, hwSign(Me^.dX)*0.45, -0.9,  1) >= 0) then
-        val1:= Succ(BadTurn)
-    else
-        val1:= BadTurn;
-    exit(val1);
-    end;
-    }
-// and this is actual try to attack
-val1:= 0;
-for i:= 0 to 4 do
-    begin
-    t:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, hwSign(Me^.dX)*0.45, -0.9, afTrackFall);
-    if (val1 < 0) or (t < 0) then val1:= BadTurn
-    else if t > 0 then val1:= t;
-    end;
+    Level:= Level; // avoid compiler hint
+    ap.ExplR:= 0;
+    ap.Time:= 0;
+    ap.Power:= 1;
+    x:= hwRound(Me^.X);
+    y:= hwRound(Me^.Y);
 
-val2:= 0;
-for i:= 0 to 4 do
-    begin
-    t:= RateShove(Me, trunc(x) + 10 * hwSignf(Targ.X - x), trunc(y) - 20 * i - 5, 10, 30, 40, -hwSign(Me^.dX)*0.45, -0.9, afTrackFall);
-    if (val2 < 0) or (t < 0) then val2:= BadTurn
-    else if t > 0 then val2:= t;
-    end;
-if (val1 > val2) and (val1 > 0) then 
-    TestFirePunch:= val1
-else if (val2 > val1) and (val2 > 0) then
-    begin
-    ap.Angle:= -hwSign(Me^.dX);
-    TestFirePunch:= val2
-    end
-else TestFirePunch:= BadTurn;
+    v1:= 0;
+    for i:= 0 to 8 do
+        begin
+        v1:= v1 + RateShove(Me, x - 10, y - 10 * i
+                , 15, 30, 40
+                , -0.45, -0.9, afTrackFall or afSetSkip);
+        end;
+    v1:= v1 + RateShove(Me, x - 10, y - 90
+            , 15, 30, 40
+            , -0.45, -0.9, afTrackFall);
+
+
+    // now try opposite direction
+    v2:= 0;
+    for i:= 0 to 8 do
+        begin
+        v2:= v2 + RateShove(Me, x + 10, y - 10 * i
+                , 15, 30, 40
+                , 0.45, -0.9, afTrackFall or afSetSkip);
+        end;
+    v2:= v2 + RateShove(Me, x + 10, y - 90
+            , 15, 30, 40
+            , 0.45, -0.9, afTrackFall);
+
+    if (v2 > v1) 
+        or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
+        begin
+        ap.Angle:= 1;
+        valueResult:= v2
+        end
+    else 
+        begin
+        ap.Angle:= -1;
+        valueResult:= v1
+        end;
+    
+    if valueResult <= 0 then
+        valueResult:= BadTurn;
+
+    TestFirePunch:= valueResult;
 end;
 
 
 function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult, v1, v2: LongInt;
-    x, y: real;
+    x, y: LongInt;
 begin
-Level:= Level; // avoid compiler hint
-ap.ExplR:= 0;
-ap.Time:= 0;
-ap.Power:= 1;
-x:= hwFloat2Float(Me^.X);
-y:= hwFloat2Float(Me^.Y);
+    Level:= Level; // avoid compiler hint
+    ap.ExplR:= 0;
+    ap.Time:= 0;
+    ap.Power:= 1;
+    x:= hwRound(Me^.X);
+    y:= hwRound(Me^.Y);
 
-// check left direction
-{first RateShove checks fartherest of two whip's AmmoShove attacks 
-to encourage distant attacks (damaged hog is excluded from view of second 
-RateShove call)}
-v1:= RateShove(Me, trunc(x) - 15, trunc(y)
-        , 30, 30, 40
-        , -1, -0.8, afTrackFall or afSetSkip);
-v1:= v1 +
-    RateShove(Me, trunc(x), trunc(y)
-        , 30, 30, 40
-        , -1, -0.8, afTrackFall);
-// now try opposite direction
-v2:= RateShove(Me, trunc(x) + 15, trunc(y)
-        , 30, 30, 40
-        , 1, -0.8, afTrackFall or afSetSkip);
-v2:= v2 +
-    RateShove(Me, trunc(x), trunc(y)
-        , 30, 30, 40
-        , 1, -0.8, afTrackFall);
+    // check left direction
+    {first RateShove checks farthermost of two whip's AmmoShove attacks 
+    to encourage distant attacks (damaged hog is excluded from view of second 
+    RateShove call)}
+    v1:= RateShove(Me, x - 15, y
+            , 30, 30, 40
+            , -1, -0.8, afTrackFall or afSetSkip);
+    v1:= v1 +
+        RateShove(Me, x, y
+            , 30, 30, 40
+            , -1, -0.8, afTrackFall);
+    // now try opposite direction
+    v2:= RateShove(Me, x + 15, y
+            , 30, 30, 40
+            , 1, -0.8, afTrackFall or afSetSkip);
+    v2:= v2 +
+        RateShove(Me, x, y
+            , 30, 30, 40
+            , 1, -0.8, afTrackFall);
 
-if (v2 > v1) 
-    or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
-    begin
-    ap.Angle:= 1;
-    valueResult:= v2
-    end
-else 
-    begin
-    ap.Angle:= -1;
-    valueResult:= v1
-    end;
-   
-if valueResult <= 0 then
-    valueResult:= BadTurn
-else
-    inc(valueResult);
+    if (v2 > v1) 
+        or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
+        begin
+        ap.Angle:= 1;
+        valueResult:= v2
+        end
+    else 
+        begin
+        ap.Angle:= -1;
+        valueResult:= v1
+        end;
+    
+    if valueResult <= 0 then
+        valueResult:= BadTurn
+    else
+        inc(valueResult);
 
-TestWhip:= valueResult;
+    TestWhip:= valueResult;
 end;
 
 function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
