@@ -3438,7 +3438,7 @@ begin
         PlaySound(sndGun);
         end;
 
-    if (Gear^.Timer = 0) or (HHGear^.Damage <> 0) then
+    if (Gear^.Timer = 0) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
         DeleteGear(Gear);
         AfterAttack
