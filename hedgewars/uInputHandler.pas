@@ -156,7 +156,7 @@ procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 var code: LongInt;
 begin
     code:= event.keysym.sym;
-    MaskModifier(code, event.keysym.modifier);
+    //MaskModifier(code, event.keysym.modifier);
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
 
