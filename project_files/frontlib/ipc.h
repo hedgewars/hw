@@ -2,6 +2,7 @@
 #define IPC_H_
 
 #include "buffer.h"
+#include "model/weapon.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -40,10 +41,7 @@ int flib_ipc_send_map_drawn(flib_ipc ipc, const char *theme, void *drawnMapData,
 int flib_ipc_send_map_named(flib_ipc ipc, const char *mappath);
 int flib_ipc_send_gamemods(flib_ipc ipc, uint32_t modflags);
 int flib_ipc_send_gamesetting(flib_ipc ipc, const char *settingname, int modflags);
-int flib_ipc_send_weapon_loadout(flib_ipc ipc, const char *weapsettings);
-int flib_ipc_send_weapon_delay(flib_ipc ipc, const char *weapsettings);
-int flib_ipc_send_weapon_cratechance(flib_ipc ipc, const char *weapsettings);
-int flib_ipc_send_weapon_crateammo(flib_ipc ipc, const char *weapsettings);
+int flib_ipc_send_weaponset(flib_ipc ipc, flib_weaponset *set);
 
 int flib_ipc_send_conf_end(flib_ipc ipc);
 

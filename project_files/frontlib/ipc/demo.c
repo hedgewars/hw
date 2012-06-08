@@ -1,5 +1,5 @@
 #include "demo.h"
-#include "logging.h"
+#include "../logging.h"
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -37,8 +37,12 @@ int flib_demo_record_from_engine(flib_vector demoBuffer, const uint8_t *message,
 			bool memessage = message[0] >= 7 && !memcmp(message+2, "/me ", 4);
 			const char *template = memessage ? "s\x02* %s %s  " : "s\x01%s: %s  ";
 			int size = snprintf(converted+1, 256, template, playerName, chatMsg);
-			converted[0] = size>255 ? 255 : size;
-			return demo_record(demoBuffer, converted, converted[0]+1);
+			if(size>0) {
+				converted[0] = size>255 ? 255 : size;
+				return demo_record(demoBuffer, converted, converted[0]+1);
+			} else {
+				return 0;
+			}
 		} else {
 			return 0; // Malformed chat message is no reason to abort...
 		}

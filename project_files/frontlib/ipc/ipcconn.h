@@ -5,7 +5,7 @@
 #ifndef IPCCONN_H_
 #define IPCCONN_H_
 
-#include "buffer.h"
+#include "../buffer.h"
 
 #include <stddef.h>
 #include <stdbool.h>
@@ -66,7 +66,7 @@ int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data);
  */
 int flib_ipcconn_recv_map(flib_ipcconn ipc, void *data);
 
-int flib_ipcconn_send_raw(flib_ipcconn ipc, void *data, size_t len);
+int flib_ipcconn_send_raw(flib_ipcconn ipc, const void *data, size_t len);
 
 /**
  * Write a single message (up to 255 bytes) to the engine. This call blocks until the

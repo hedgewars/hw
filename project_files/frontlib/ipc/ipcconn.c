@@ -1,6 +1,6 @@
 #include "ipcconn.h"
-#include "logging.h"
-#include "socket.h"
+#include "../logging.h"
+#include "../socket.h"
 #include "demo.h"
 
 #include <string.h>
@@ -54,7 +54,7 @@ flib_ipcconn flib_ipcconn_create(bool recordDemo, const char *localPlayerName) {
 		result->demoBuffer = flib_vector_create();
 	}
 
-	flib_log_i("Started listening for IPC connections on port %u", result->port);
+	flib_log_i("Started listening for IPC connections on port %u", (unsigned)result->port);
 	return result;
 }
 
@@ -130,7 +130,7 @@ int flib_ipcconn_recv_message(flib_ipcconn ipc, void *data) {
 		ipc->readBufferSize -= msgsize;
 		return msgsize;
 	} else if(!ipc->sock && ipc->readBufferSize>0) {
-		flib_log_w("Last message from engine data stream is incomplete (received %u of %u bytes)", ipc->readBufferSize, ipc->readBuffer[0]+1);
+		flib_log_w("Last message from engine data stream is incomplete (received %u of %u bytes)", (unsigned)ipc->readBufferSize, (unsigned)(ipc->readBuffer[0])+1);
 		ipc->readBufferSize = 0;
 		return -1;
 	} else {
@@ -155,7 +155,7 @@ int flib_ipcconn_recv_map(flib_ipcconn ipc, void *data) {
 	}
 }
 
-int flib_ipcconn_send_raw(flib_ipcconn ipc, void *data, size_t len) {
+int flib_ipcconn_send_raw(flib_ipcconn ipc, const void *data, size_t len) {
 	if(!ipc || (!data && len>0)) {
 		flib_log_e("Call to flib_ipcconn_send_raw with ipc==null or data==null");
 		return -1;

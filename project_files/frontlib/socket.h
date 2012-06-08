@@ -62,6 +62,6 @@ void flib_socket_close(flib_tcpsocket *socket);
  */
 int flib_socket_nbrecv(flib_tcpsocket sock, void *data, int maxlen);
 
-int flib_socket_send(flib_tcpsocket sock, void *data, int len);
+int flib_socket_send(flib_tcpsocket sock, const void *data, int len);
 
 #endif /* SOCKET_H_ */

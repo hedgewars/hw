@@ -60,7 +60,7 @@ flib_acceptor flib_acceptor_create(uint16_t port) {
 		if(result->sock) {
 			return result;
 		} else {
-			flib_log_e("Unable to listen on port %u: %s", port, SDLNet_GetError());
+			flib_log_e("Unable to listen on port %u: %s", (unsigned)port, SDLNet_GetError());
 			free(result);
 			return NULL;
 		}
@@ -77,7 +77,7 @@ flib_acceptor flib_acceptor_create(uint16_t port) {
 			if(result->sock) {
 				return result;
 			} else {
-				flib_log_w("Unable to listen on port %u: %s", result->port, SDLNet_GetError());
+				flib_log_w("Unable to listen on port %u: %s", (unsigned)result->port, SDLNet_GetError());
 			}
 		}
 		flib_log_e("Unable to listen on a random unused port.");
@@ -155,7 +155,7 @@ int flib_socket_nbrecv(flib_tcpsocket sock, void *data, int maxlen) {
 	}
 }
 
-int flib_socket_send(flib_tcpsocket sock, void *data, int len) {
+int flib_socket_send(flib_tcpsocket sock, const void *data, int len) {
 	if(!sock || (len>0 && !data)) {
 		flib_log_e("Call to flib_socket_send with sock==null or data==null");
 		return -1;
