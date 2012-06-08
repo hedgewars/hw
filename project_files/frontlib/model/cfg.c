@@ -4,6 +4,7 @@
 #include "../iniparser/dictionary.h"
 #include "../ini/inihelper.h"
 #include "../logging.h"
+#include "../util.h"
 
 #include <stdio.h>
 
@@ -56,7 +57,7 @@ flib_cfg_meta *flib_cfg_meta_from_ini(const char *settingpath, const char *modpa
 		}
 
 		bool error = false;
-		result->settings[i].iniName = inihelper_strdupnull(sectionName);
+		result->settings[i].iniName = flib_strdupnull(sectionName);
 		result->settings[i].title = inihelper_getstringdup(settingfile, &error, sectionName, "title");
 		result->settings[i].engineCommand = inihelper_getstringdup(settingfile, &error, sectionName, "command");
 		result->settings[i].image = inihelper_getstringdup(settingfile, &error, sectionName, "image");
@@ -78,7 +79,7 @@ flib_cfg_meta *flib_cfg_meta_from_ini(const char *settingpath, const char *modpa
 		}
 
 		bool error = false;
-		result->mods[i].iniName = inihelper_strdupnull(sectionName);
+		result->mods[i].iniName = flib_strdupnull(sectionName);
 		result->mods[i].bitmaskIndex = inihelper_getint(modfile, &error, sectionName, "bitmaskIndex");
 		if(error) {
 			flib_log_e("Missing or malformed ini parameter in file %s, section %s", modpath, sectionName);
@@ -109,7 +110,7 @@ flib_cfg *flib_cfg_create(const flib_cfg_meta *meta, const char *schemeName) {
 
 	result->modCount = meta->modCount;
 	result->settingCount = meta->settingCount;
-	result->schemeName = inihelper_strdupnull(schemeName);
+	result->schemeName = flib_strdupnull(schemeName);
 	result->mods = calloc(meta->modCount, sizeof(*result->mods));
 	result->settings = calloc(meta->settingCount, sizeof(*result->settings));
 

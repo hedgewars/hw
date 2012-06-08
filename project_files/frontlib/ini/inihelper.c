@@ -1,5 +1,6 @@
 #include "inihelper.h"
 #include "../logging.h"
+#include "../util.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -7,25 +8,6 @@
 #include <limits.h>
 #include <errno.h>
 #include <stdarg.h>
-
-static char *flib_asprintf(const char *fmt, ...) {
-	va_list argp;
-	va_start(argp, fmt);
-	size_t requiredSize = vsnprintf(NULL, 0, fmt, argp)+1;
-	char *buf = malloc(requiredSize);
-	if(buf) {
-		vsnprintf(buf, requiredSize, fmt, argp);
-	}
-	va_end(argp);
-	return buf;
-}
-
-char *inihelper_strdupnull(const char *str) {
-	if(!str) {
-		return NULL;
-	}
-	return flib_asprintf("%s", str);
-}
 
 static bool keychar_needs_urlencoding(char c) {
 	return !isalnum(c);
@@ -50,7 +32,10 @@ char *inihelper_urlencode(const char *inbuf) {
         if(!keychar_needs_urlencoding(inbuf[inpos])) {
         	outbuf[outpos++] = inbuf[inpos++];
         } else {
-            sprintf(outbuf+outpos, "%%%02X", inbuf[inpos]);
+            if(snprintf(outbuf+outpos, 4, "%%%02X", (unsigned)((uint8_t*)inbuf)[inpos])<0) {
+            	free(outbuf);
+            	return NULL;
+            }
             inpos++;
             outpos += 3;
         }
@@ -106,7 +91,7 @@ char *inihelper_getstring(dictionary *inifile, bool *error, const char *sectionN
 }
 
 char *inihelper_getstringdup(dictionary *inifile, bool *error, const char *sectionName, const char *keyName) {
-	return inihelper_strdupnull(inihelper_getstring(inifile, error, sectionName, keyName));
+	return flib_strdupnull(inihelper_getstring(inifile, error, sectionName, keyName));
 }
 
 int inihelper_getint(dictionary *inifile, bool *error, const char *sectionName, const char *keyName) {

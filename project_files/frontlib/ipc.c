@@ -1,5 +1,5 @@
 #include "ipc.h"
-#include "ipcconn.h"
+#include "ipc/ipcconn.h"
 #include "logging.h"
 
 #include <stdbool.h>

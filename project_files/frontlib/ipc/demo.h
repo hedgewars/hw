@@ -5,7 +5,7 @@
 #ifndef DEMO_H_
 #define DEMO_H_
 
-#include "buffer.h"
+#include "../buffer.h"
 
 /**
  * Record a message sent from the engine to the frontend.

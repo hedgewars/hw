@@ -12,11 +12,6 @@
 /**
  * Returned buffer must be free()d
  */
-char *inihelper_strdupnull(const char *str);
-
-/**
- * Returned buffer must be free()d
- */
 char *inihelper_urlencode(const char *inbuf);
 
 /**

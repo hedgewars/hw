@@ -1,8 +1,8 @@
 #include "frontlib.h"
 #include "logging.h"
-#include "socket.h"
+#include "model/map.h"
+#include "ipc/mapconn.h"
 #include "ipc.h"
-#include "model/cfg.h"
 
 #include <SDL.h>
 #include <SDL_net.h>
@@ -46,7 +46,10 @@ static void onConfigQuery(void *context) {
 	flib_ipc ipc = (flib_ipc)context;
 	flib_ipc_send_messagestr(ipc, "TL");
 	flib_ipc_send_messagestr(ipc, "eseed loremipsum");
-	flib_ipc_send_messagestr(ipc, "escript Missions/Training/Basic_Training_-_Bazooka.lua");
+	flib_ipc_send_messagestr(ipc, "e$mapgen 0");
+	flib_ipc_send_messagestr(ipc, "e$template_filter 0");
+	flib_ipc_send_messagestr(ipc, "etheme Jungle");
+	flib_ipc_send_messagestr(ipc, "eaddteam 11111111111111111111111111111111 255 Medo42");
 }
 
 static void onDisconnect(void *context) {
@@ -59,7 +62,7 @@ static void onGameEnd(void *context, int gameEndType) {
 	case GAME_END_FINISHED:
 		flib_log_i("Game finished.");
 		flib_constbuffer demobuf = flib_ipc_getdemo(context);
-		flib_log_i("Writing demo (%u bytes)...", demobuf.size);
+		flib_log_i("Writing demo (%u bytes)...", (unsigned)demobuf.size);
 		FILE *file = fopen("testdemo.dem", "wb");
 		fwrite(demobuf.data, 1, demobuf.size, file);
 		fclose(file);
@@ -74,8 +77,36 @@ static void onGameEnd(void *context, int gameEndType) {
 	}
 }
 
+static void handleMapSuccess(void *context, const uint8_t *bitmap, int numHedgehogs) {
+	printf("Drawing map for %i brave little hogs...", numHedgehogs);
+	int pixelnum = 0;
+	for(int y=0; y<MAPIMAGE_HEIGHT; y++) {
+		for(int x=0; x<MAPIMAGE_WIDTH; x++) {
+			if(bitmap[pixelnum>>3] & (1<<(7-(pixelnum&7)))) {
+				printf("#");
+			} else {
+				printf(" ");
+			}
+			pixelnum++;
+		}
+		printf("\n");
+	}
+
+	flib_mapconn **connptr = context;
+	flib_mapconn_destroy(*connptr);
+	*connptr = NULL;
+}
+
+static void handleMapFailure(void *context, const char *errormessage) {
+	flib_log_e("Map rendering failed: %s", errormessage);
+
+	flib_mapconn **connptr = context;
+	flib_mapconn_destroy(*connptr);
+	*connptr = NULL;
+}
+
 int main(int argc, char *argv[]) {
-	flib_init(0);
+/*	flib_init(0);
 
 	flib_cfg_meta *meta = flib_cfg_meta_from_ini("basicsettings.ini", "gamemods.ini");
 	flib_cfg *cfg = flib_cfg_create(meta, "DefaultScheme");
@@ -84,18 +115,25 @@ int main(int argc, char *argv[]) {
 	flib_cfg_meta_destroy(meta);
 
 	flib_quit();
-	return 0;
-/*
-	flib_ipc ipc = flib_ipc_create(true, "Medo42");
-	assert(ipc);
-	flib_ipc_onConfigQuery(ipc, &onConfigQuery, ipc);
-	flib_ipc_onDisconnect(ipc, &onDisconnect, &ipc);
-	flib_ipc_onGameEnd(ipc, &onGameEnd, ipc);
+	return 0;*/
 
-	while(ipc) {
-		flib_ipc_tick(ipc);
+	flib_init(0);
+	flib_map *mapconf = flib_map_create_regular("Jungle", TEMPLATEFILTER_CAVERN);
+	assert(mapconf);
+
+	flib_mapconn *mapconn = flib_mapconn_create("foobart", mapconf);
+	assert(mapconn);
+
+	flib_map_destroy(mapconf);
+	mapconf = NULL;
+
+	flib_mapconn_onFailure(mapconn, &handleMapFailure, &mapconn);
+	flib_mapconn_onSuccess(mapconn, &handleMapSuccess, &mapconn);
+
+	while(mapconn) {
+		flib_mapconn_tick(mapconn);
 	}
 	flib_log_i("Shutting down...");
 	flib_quit();
-	return 0;*/
+	return 0;
 }

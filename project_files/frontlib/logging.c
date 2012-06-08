@@ -7,7 +7,7 @@
 
 char* flib_format_ip(uint32_t numip) {
 	static char ip[16];
-	snprintf(ip, 16, "%u.%u.%u.%u", numip>>24, (numip>>16)&0xff, (numip>>8)&0xff, numip&0xff);
+	snprintf(ip, 16, "%u.%u.%u.%u", (unsigned)(numip>>24), (unsigned)((numip>>16)&0xff), (unsigned)((numip>>8)&0xff), (unsigned)(numip&0xff));
 	return ip;
 }
 
