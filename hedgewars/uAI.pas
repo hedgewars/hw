@@ -178,6 +178,10 @@ for i:= 0 to Pred(Targets.Count) do
                         begin
                         AddAction(BestActions, aia_attack, aim_push, 350 + random(200), 0, 0);
                         AddAction(BestActions, aia_attack, aim_release, 1, 0, 0);
+                                                
+                        AddAction(BestActions, aia_Down, aim_push, 100 + random(150), 0, 0);
+                        AddAction(BestActions, aia_Down, aim_release, 32, 0, 0);
+                        
                         AddAction(BestActions, aia_waitAngle, ap.Angle, 250, 0, 0);
                         AddAction(BestActions, aia_attack, aim_push, 1, 0, 0);
                         AddAction(BestActions, aia_attack, aim_release, 1, 0, 0);
@@ -431,6 +435,8 @@ BeginThread(@Think, Me, ThinkThread);
 AddFileLog('Thread started');
 end;
 
+var scoreShown: boolean = false;
+
 procedure ProcessBot;
 const cStopThinkTime = 40;
 begin
@@ -447,13 +453,23 @@ with CurrentHedgehog^ do
                     StopMessages(Gear^.Message);
                     TryDo((Gear^.Message and gmAllStoppable) = 0, 'Engine bug: AI may break demos playing', true);
                     end;
+                    
                 if Gear^.Message <> 0 then
                     exit;
+                    
+                scoreShown:= false;   
                 StartThink(Gear);
                 StartTicks:= GameTicks
                 
-                end else
-                    ProcessAction(BestActions, Gear)
+            end else
+                begin
+                if not scoreShown then
+                    begin
+                    if BestActions.Score > 0 then ParseCommand('/say Expected score = ' + inttostr(BestActions.Score div 1024), true);
+                    scoreShown:= true
+                    end;
+                ProcessAction(BestActions, Gear)
+                end
         else if ((GameTicks - StartTicks) > cMaxAIThinkTime)
             or (TurnTimeLeft <= cStopThinkTime) then
                 StopThinking:= true

@@ -1025,7 +1025,9 @@ begin
         else
             AmmoShove(Gear, Gear^.Timer, 20);
         CheckGearDrowning(Gear);
-        dec(i) until (i = 0) or (Gear^.Damage > Gear^.Health) or ((Gear^.State and gstDrowning) <> 0);
+        dec(i) 
+    until (i = 0) or (Gear^.Damage > Gear^.Health) or ((Gear^.State and gstDrowning) <> 0);
+
     if Gear^.Damage > 0 then
         begin
         DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 82 - i, 1);
