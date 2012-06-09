@@ -2,6 +2,7 @@
 #define IPC_MAPCONN_H_
 
 #include "../model/map.h"
+
 #include <stdint.h>
 
 #define MAPIMAGE_WIDTH 256

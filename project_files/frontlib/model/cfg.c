@@ -2,9 +2,9 @@
 
 #include "../iniparser/iniparser.h"
 #include "../iniparser/dictionary.h"
-#include "../ini/inihelper.h"
-#include "../logging.h"
-#include "../util.h"
+#include "../util/inihelper.h"
+#include "../util/logging.h"
+#include "../util/util.h"
 
 #include <stdio.h>
 

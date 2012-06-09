@@ -5,7 +5,7 @@
 #ifndef IPCCONN_H_
 #define IPCCONN_H_
 
-#include "../buffer.h"
+#include "../util/buffer.h"
 
 #include <stddef.h>
 #include <stdbool.h>
@@ -18,6 +18,8 @@ struct _flib_ipcconn;
 typedef struct _flib_ipcconn *flib_ipcconn;
 
 /**
+ * TODO move demo recording up by one layer?
+ *
  * Start an engine connection by listening on a random port. The selected port can
  * be queried with flib_ipcconn_port and has to be passed to the engine.
  *

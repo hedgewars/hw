@@ -1,5 +1,5 @@
 #include "demo.h"
-#include "../logging.h"
+#include "../util/logging.h"
 
 #include <stdbool.h>
 #include <stdio.h>

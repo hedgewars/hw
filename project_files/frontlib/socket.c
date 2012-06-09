@@ -1,5 +1,5 @@
 #include "socket.h"
-#include "logging.h"
+#include "util/logging.h"
 #include <stdlib.h>
 #include <SDL_net.h>
 #include <time.h>

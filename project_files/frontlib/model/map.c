@@ -1,8 +1,8 @@
 #include "map.h"
 
-#include "../ini/inihelper.h"
-#include "../util.h"
-#include "../logging.h"
+#include "../util/inihelper.h"
+#include "../util/util.h"
+#include "../util/logging.h"
 
 #include <stdlib.h>
 
