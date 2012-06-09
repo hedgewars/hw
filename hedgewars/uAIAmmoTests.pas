@@ -685,30 +685,51 @@ end;
 
 
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var valueResult: LongInt;
-    x, y: real;
+var valueResult, a, v1, v2: LongInt;
+    x, y: LongInt;
+    dx, dy: real;
 begin
-Level:= Level; // avoid compiler hint
-TestBaseballBat:= BadTurn;
-ap.ExplR:= 0;
-x:= hwFloat2Float(Me^.X);
-y:= hwFloat2Float(Me^.Y);
-if (Level > 2) then
-    exit(BadTurn);
+    Level:= Level; // avoid compiler hint
+    ap.ExplR:= 0;
+    ap.Time:= 0;
+    ap.Power:= 1;
+    x:= hwRound(Me^.X);
+    y:= hwRound(Me^.Y);
 
-ap.Time:= 0;
-ap.Power:= 1;
-if (Targ.X) - trunc(x) >= 0 then
-    ap.Angle:=   cMaxAngle div 4
-else
-    ap.Angle:= - cMaxAngle div 4;
+    a:= 0;
+    valueResult:= 0;
 
-valueResult:= RateShove(Me, trunc(x) + LongWord(10*hwSignf(Targ.X - x)), trunc(y), 15, 30, 115, hwSign(Me^.dX)*0.353, -0.353, afTrackFall);
-if valueResult <= 0 then
-    valueResult:= BadTurn
-else
-    inc(valueResult);
-TestBaseballBat:= valueResult;
+    while a <= cMaxAngle div 2 do
+        begin
+        dx:= sin(a / cMaxAngle * pi) * 0.5;
+        dy:= cos(a / cMaxAngle * pi) * 0.5;
+
+        v1:= RateShove(Me, x - 10, y
+                , 33, 30, 115
+                , -dx, -dy, afTrackFall);
+        v2:= RateShove(Me, x + 10, y
+                , 33, 30, 115
+                , dx, -dy, afTrackFall);
+        if (v1 > valueResult) or (v2 > valueResult) then
+            if (v2 > v1) 
+                or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
+                begin
+                ap.Angle:= a;
+                valueResult:= v2
+                end
+            else 
+                begin
+                ap.Angle:= -a;
+                valueResult:= v1
+                end;
+
+        a:= a + 15 + random(cMaxAngle div 16)
+        end;
+   
+    if valueResult <= 0 then
+        valueResult:= BadTurn;
+
+    TestBaseballBat:= valueResult;
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
