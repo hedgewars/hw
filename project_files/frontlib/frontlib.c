@@ -1,8 +1,8 @@
 #include "frontlib.h"
-#include "logging.h"
+#include "util/logging.h"
 #include "model/map.h"
 #include "ipc/mapconn.h"
-#include "ipc.h"
+#include "ipc/gameconn.h"
 
 #include <SDL.h>
 #include <SDL_net.h>
@@ -41,97 +41,72 @@ void flib_quit() {
 	}
 }
 
-static void onConfigQuery(void *context) {
-	flib_log_i("Sending config...");
-	flib_ipc ipc = (flib_ipc)context;
-	flib_ipc_send_messagestr(ipc, "TL");
-	flib_ipc_send_messagestr(ipc, "eseed loremipsum");
-	flib_ipc_send_messagestr(ipc, "e$mapgen 0");
-	flib_ipc_send_messagestr(ipc, "e$template_filter 0");
-	flib_ipc_send_messagestr(ipc, "etheme Jungle");
-	flib_ipc_send_messagestr(ipc, "eaddteam 11111111111111111111111111111111 255 Medo42");
-}
-
-static void onDisconnect(void *context) {
-	flib_log_i("Connection closed.");
-	flib_ipc_destroy((flib_ipc*)context);
-}
-
-static void onGameEnd(void *context, int gameEndType) {
-	switch(gameEndType) {
-	case GAME_END_FINISHED:
-		flib_log_i("Game finished.");
-		flib_constbuffer demobuf = flib_ipc_getdemo(context);
-		flib_log_i("Writing demo (%u bytes)...", (unsigned)demobuf.size);
-		FILE *file = fopen("testdemo.dem", "wb");
-		fwrite(demobuf.data, 1, demobuf.size, file);
-		fclose(file);
-		file = NULL;
-		break;
-	case GAME_END_HALTED:
-		flib_log_i("Game halted.");
-		break;
-	case GAME_END_INTERRUPTED:
-		flib_log_i("Game iterrupted.");
-		break;
-	}
-}
-
-static void handleMapSuccess(void *context, const uint8_t *bitmap, int numHedgehogs) {
-	printf("Drawing map for %i brave little hogs...", numHedgehogs);
-	int pixelnum = 0;
-	for(int y=0; y<MAPIMAGE_HEIGHT; y++) {
-		for(int x=0; x<MAPIMAGE_WIDTH; x++) {
-			if(bitmap[pixelnum>>3] & (1<<(7-(pixelnum&7)))) {
-				printf("#");
-			} else {
-				printf(" ");
-			}
-			pixelnum++;
-		}
-		printf("\n");
-	}
-
-	flib_mapconn **connptr = context;
-	flib_mapconn_destroy(*connptr);
+static void onDisconnect(void *context, int reason) {
+	flib_log_i("Connection closed. Reason: %i", reason);
+	flib_gameconn **connptr = context;
+	flib_gameconn_destroy(*connptr);
 	*connptr = NULL;
 }
 
-static void handleMapFailure(void *context, const char *errormessage) {
-	flib_log_e("Map rendering failed: %s", errormessage);
-
-	flib_mapconn **connptr = context;
-	flib_mapconn_destroy(*connptr);
-	*connptr = NULL;
+static void onGameRecorded(void *context, const uint8_t *record, int size, bool isSavegame) {
+	flib_log_i("Writing %s (%i bytes)...", isSavegame ? "savegame" : "demo", size);
+	FILE *file = fopen(isSavegame ? "testsave.42.hws" : "testdemo.42.hwd", "wb");
+	fwrite(record, 1, size, file);
+	fclose(file);
 }
 
 int main(int argc, char *argv[]) {
-/*	flib_init(0);
-
-	flib_cfg_meta *meta = flib_cfg_meta_from_ini("basicsettings.ini", "gamemods.ini");
-	flib_cfg *cfg = flib_cfg_create(meta, "DefaultScheme");
-	flib_cfg_to_ini(meta, "defaulttest.ini", cfg);
-
-	flib_cfg_meta_destroy(meta);
-
-	flib_quit();
-	return 0;*/
-
 	flib_init(0);
-	flib_map *mapconf = flib_map_create_regular("Jungle", TEMPLATEFILTER_CAVERN);
-	assert(mapconf);
 
-	flib_mapconn *mapconn = flib_mapconn_create("foobart", mapconf);
-	assert(mapconn);
+	flib_cfg_meta *metaconf = flib_cfg_meta_from_ini("basicsettings.ini", "gamemods.ini");
+	assert(metaconf);
+	flib_gamesetup setup;
+	setup.gamescheme = flib_cfg_from_ini(metaconf, "scheme_shoppa.ini");
+	setup.map = flib_map_create_maze("Jungle", MAZE_SIZE_MEDIUM_TUNNELS);
+	setup.seed = "apsfooasdgnds";
+	setup.teamcount = 2;
+	setup.teams = calloc(2, sizeof(flib_team));
+	setup.teams[0].color = 0xffff0000;
+	setup.teams[0].flag = "australia";
+	setup.teams[0].fort = "Plane";
+	setup.teams[0].grave = "Bone";
+	setup.teams[0].hogsInGame = 2;
+	setup.teams[0].name = "Team Awesome";
+	setup.teams[0].voicepack = "British";
+	setup.teams[0].weaponset = flib_weaponset_create("Defaultweaps");
+	setup.teams[0].hogs[0].difficulty = 2;
+	setup.teams[0].hogs[0].hat = "NoHat";
+	setup.teams[0].hogs[0].initialHealth = 100;
+	setup.teams[0].hogs[0].name = "Harry 120";
+	setup.teams[0].hogs[1].difficulty = 2;
+	setup.teams[0].hogs[1].hat = "chef";
+	setup.teams[0].hogs[1].initialHealth = 100;
+	setup.teams[0].hogs[1].name = "Chefkoch";
+	setup.teams[1].color = 0xff0000ff;
+	setup.teams[1].flag = "germany";
+	setup.teams[1].fort = "Cake";
+	setup.teams[1].grave = "Cherry";
+	setup.teams[1].hogsInGame = 2;
+	setup.teams[1].name = "The Krauts";
+	setup.teams[1].voicepack = "Pirate";
+	setup.teams[1].weaponset = flib_weaponset_create("Defaultweaps");
+	setup.teams[1].hogs[0].difficulty = 0;
+	setup.teams[1].hogs[0].hat = "quotecap";
+	setup.teams[1].hogs[0].initialHealth = 100;
+	setup.teams[1].hogs[0].name = "Quote";
+	setup.teams[1].hogs[1].difficulty = 0;
+	setup.teams[1].hogs[1].hat = "chef";
+	setup.teams[1].hogs[1].initialHealth = 100;
+	setup.teams[1].hogs[1].name = "Chefkoch2";
 
-	flib_map_destroy(mapconf);
-	mapconf = NULL;
+	flib_gameconn *gameconn = flib_gameconn_create("Medo42", metaconf, &setup, false);
+	assert(gameconn);
 
-	flib_mapconn_onFailure(mapconn, &handleMapFailure, &mapconn);
-	flib_mapconn_onSuccess(mapconn, &handleMapSuccess, &mapconn);
+	flib_gameconn_onDisconnect(gameconn, &onDisconnect, &gameconn);
+	flib_gameconn_onGameRecorded(gameconn, &onGameRecorded, &gameconn);
 
-	while(mapconn) {
-		flib_mapconn_tick(mapconn);
+	while(gameconn) {
+		flib_gameconn_tick(gameconn);
 	}
 	flib_log_i("Shutting down...");
 	flib_quit();

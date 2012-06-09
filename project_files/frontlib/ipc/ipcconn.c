@@ -1,7 +1,7 @@
 #include "ipcconn.h"
-#include "../logging.h"
-#include "../socket.h"
 #include "demo.h"
+#include "../util/logging.h"
+#include "../socket.h"
 
 #include <string.h>
 #include <stdbool.h>

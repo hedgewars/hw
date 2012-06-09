@@ -1,9 +1,9 @@
 #include "weapon.h"
 
-#include "../ini/inihelper.h"
 #include "../iniparser/iniparser.h"
-#include "../logging.h"
-#include "../util.h"
+#include "../util/inihelper.h"
+#include "../util/logging.h"
+#include "../util/util.h"
 
 #include <stdlib.h>
 #include <ctype.h>

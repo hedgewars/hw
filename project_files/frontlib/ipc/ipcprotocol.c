@@ -1,10 +1,11 @@
 #include "ipcprotocol.h"
-#include "../util.h"
-#include "../logging.h"
+#include "../util/util.h"
+#include "../util/logging.h"
 
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <inttypes.h>
 
 int flib_ipc_append_message(flib_vector vec, const char *fmt, ...) {
 	int result = -1;
@@ -93,4 +94,88 @@ int flib_ipc_append_seed(flib_vector vec, const char *seed) {
 	} else {
 		return flib_ipc_append_message(vec, "eseed %s", seed);
 	}
+}
+
+int flib_ipc_append_gamescheme(flib_vector vec, flib_cfg *scheme, flib_cfg_meta *meta) {
+	int result = -1;
+	flib_vector tempvector = flib_vector_create();
+	if(!vec || !scheme || !meta) {
+		flib_log_e("null parameter in flib_ipc_append_gamescheme");
+	} else if(tempvector) {
+		bool error = false;
+		uint32_t gamemods = 0;
+		for(int i=0; i<meta->modCount; i++) {
+			if(scheme->mods[i]) {
+				gamemods |= (1<<meta->mods[i].bitmaskIndex);
+			}
+		}
+		error |= flib_ipc_append_message(tempvector, "e$gmflags %"PRIu32, gamemods);
+		for(int i=0; i<meta->settingCount; i++) {
+			int value = scheme->settings[i];
+			if(meta->settings[i].checkOverMax) {
+				value = value>meta->settings[i].max ? meta->settings[i].max : value;
+			}
+			if(meta->settings[i].times1000) {
+				value *= 1000;
+			}
+			error |= flib_ipc_append_message(tempvector, "%s %i", meta->settings[i].engineCommand, value);
+		}
+
+		if(!error) {
+			// Message created, now we can copy everything.
+			flib_constbuffer constbuf = flib_vector_as_constbuffer(tempvector);
+			if(flib_vector_append(vec, constbuf.data, constbuf.size) == constbuf.size) {
+				result = 0;
+			}
+		}
+	}
+	flib_vector_destroy(&tempvector);
+	return result;
+}
+
+// FIXME shared ammo will break per-team ammo
+int flib_ipc_append_addteam(flib_vector vec, flib_team *team, bool perHogAmmo, bool sharedAmmo) {
+	int result = -1;
+	flib_vector tempvector = flib_vector_create();
+	if(!vec || !team || !team->weaponset) {
+		flib_log_e("invalid parameter in flib_ipc_append_addteam");
+	} else if(tempvector) {
+		bool error = false;
+		error |= flib_ipc_append_message(tempvector, "eammloadt %s", team->weaponset->loadout);
+		error |= flib_ipc_append_message(tempvector, "eammprob %s", team->weaponset->crateprob);
+		error |= flib_ipc_append_message(tempvector, "eammdelay %s", team->weaponset->delay);
+		error |= flib_ipc_append_message(tempvector, "eammreinf %s", team->weaponset->crateammo);
+		if(!perHogAmmo) {
+			error |= flib_ipc_append_message(tempvector, "eammstore");
+		}
+
+		char *hash = team->hash ? team->hash : "00000000000000000000000000000000";
+		error |= flib_ipc_append_message(tempvector, "eaddteam %s %"PRIu32" %s", hash, team->color, team->name);
+
+		if(team->remoteDriven) {
+			error |= flib_ipc_append_message(tempvector, "erdriven");
+		}
+
+		error |= flib_ipc_append_message(tempvector, "egrave %s", team->grave);
+		error |= flib_ipc_append_message(tempvector, "efort %s", team->fort);
+		error |= flib_ipc_append_message(tempvector, "evoicepack %s", team->voicepack);
+		error |= flib_ipc_append_message(tempvector, "eflag %s", team->flag);
+
+		// TODO bindings
+
+		for(int i=0; i<team->hogsInGame; i++) {
+			error |= flib_ipc_append_message(tempvector, "eaddhh %i %i %s", team->hogs[i].difficulty, team->hogs[i].initialHealth, team->hogs[i].name);
+			error |= flib_ipc_append_message(tempvector, "ehat %s", team->hogs[i].hat);
+		}
+
+		if(!error) {
+			// Message created, now we can copy everything.
+			flib_constbuffer constbuf = flib_vector_as_constbuffer(tempvector);
+			if(flib_vector_append(vec, constbuf.data, constbuf.size) == constbuf.size) {
+				result = 0;
+			}
+		}
+	}
+	flib_vector_destroy(&tempvector);
+	return result;
 }

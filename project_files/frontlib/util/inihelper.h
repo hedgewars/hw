@@ -7,6 +7,7 @@
 #define INIHELPER_H_
 
 #include "../iniparser/iniparser.h"
+
 #include <stdbool.h>
 
 /**

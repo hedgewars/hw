@@ -2,8 +2,8 @@
 #include "ipcconn.h"
 #include "ipcprotocol.h"
 
-#include "../logging.h"
-#include "../buffer.h"
+#include "../util/logging.h"
+#include "../util/buffer.h"
 
 #include <stdlib.h>
 
@@ -11,14 +11,14 @@ typedef enum {
 	AWAIT_CONNECTION,
 	AWAIT_REPLY,
 	FINISHED
-} mapconn_progress;
+} mapconn_state;
 
 struct _flib_mapconn {
 	uint8_t mapBuffer[IPCCONN_MAPMSG_BYTES];
 	flib_ipcconn connection;
 	flib_vector configBuffer;
 
-	mapconn_progress progress;
+	mapconn_state progress;
 
 	void (*onSuccessCb)(void*, const uint8_t*, int);
 	void *onSuccessCtx;

@@ -1,8 +1,10 @@
 #ifndef IPCPROTOCOL_H_
 #define IPCPROTOCOL_H_
 
-#include "../buffer.h"
+#include "../util/buffer.h"
 #include "../model/map.h"
+#include "../model/team.h"
+#include "../model/cfg.h"
 
 #include <stdbool.h>
 
@@ -34,5 +36,15 @@ int flib_ipc_append_mapconf(flib_vector vec, flib_map *map, bool mappreview);
  * contents are unaffected.
  */
 int flib_ipc_append_seed(flib_vector vec, const char *seed);
+
+/**
+ * Append the game scheme to the buffer.
+ *
+ * Returns nonzero if something goes wrong. In that case the buffer
+ * contents are unaffected.
+ */
+int flib_ipc_append_gamescheme(flib_vector vec, flib_cfg *seed, flib_cfg_meta *meta);
+
+int flib_ipc_append_addteam(flib_vector vec, flib_team *team, bool perHogAmmo, bool sharedAmmo);
 
 #endif /* IPCPROTOCOL_H_ */

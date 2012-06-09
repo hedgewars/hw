@@ -1,6 +1,6 @@
 #include "inihelper.h"
-#include "../logging.h"
-#include "../util.h"
+#include "logging.h"
+#include "util.h"
 
 #include <string.h>
 #include <stdlib.h>
