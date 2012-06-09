@@ -81,7 +81,7 @@ var ThinkingHH: PGear;
         end;
 
 implementation
-uses uCollisions, uVariables, uUtils, uDebug;
+uses uCollisions, uVariables, uUtils, uDebug, uLandTexture;
 
 const KillScore = 200;
 
@@ -335,13 +335,22 @@ begin
 end;
 
 function TraceShoveFall(x, y, dX, dY: Real): LongInt;
-var dmg: LongInt;
+var dmg, v: LongInt;
 begin
+v:= random($FFFFFFFF);
     while true do
     begin
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
+
+        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[trunc(y), trunc(x)]:= v;
+            UpdateLandTexture(trunc(X), 1, trunc(Y), 1, true);
+            end;
+
+        // consider adding dX/dY calc here for fall damage
         if TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
         begin
             if 0.4 < dY then
@@ -420,8 +429,8 @@ var i, fallDmg, dmg, rate: LongInt;
     dX, dY, dmgMod: real;
 begin
 fallDmg:= 0;
-dX:= gdX * 0.005 * kick;
-dY:= gdY * 0.005 * kick;
+dX:= gdX * 0.01 * kick;
+dY:= gdY * 0.01 * kick;
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
@@ -432,10 +441,8 @@ for i:= 0 to Pred(Targets.Count) do
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < r then
-            begin
             dmg:= r - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
-            dmg:= trunc(dmg * dmgMod);
-            end;
+
         if dmg > 0 then
             begin
             if (Flags and afSetSkip <> 0) then skip:= true;
