@@ -343,12 +343,13 @@ v:= random($FFFFFFFF);
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
-
+(*
         if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
             begin
             LandPixels[trunc(y), trunc(x)]:= v;
             UpdateLandTexture(trunc(X), 1, trunc(Y), 1, true);
             end;
+*)
 
         // consider adding dX/dY calc here for fall damage
         if TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
@@ -446,7 +447,7 @@ for i:= 0 to Pred(Targets.Count) do
         if dmg > 0 then
             begin
             if (Flags and afSetSkip <> 0) then skip:= true;
-            if (Flags and afTrackFall <> 0) then 
+            if (Flags and afTrackFall <> 0) and (Score > 0) then 
                 fallDmg:= trunc(TraceShoveFall(Point.x, Point.y - 2, dX, dY) * dmgMod);
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
