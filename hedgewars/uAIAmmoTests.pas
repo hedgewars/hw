@@ -652,7 +652,7 @@ if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
 
 dmg:= sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
 t:= 1.5 / dmg;
-dmg:= dmg * 0.025; // div 40
+dmg:= dmg * 0.05; // div 40
 Vx:= (Targ.X - x) * t;
 Vy:= (Targ.Y - y) * t;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
