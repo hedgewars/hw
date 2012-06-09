@@ -726,11 +726,11 @@ begin
     for i:= 0 to 8 do
         begin
         v1:= v1 + RateShove(Me, x - 10, y - 10 * i
-                , 15, 30, 40
+                , 18, 30, 40
                 , -0.45, -0.9, afTrackFall or afSetSkip);
         end;
     v1:= v1 + RateShove(Me, x - 10, y - 90
-            , 15, 30, 40
+            , 18, 30, 40
             , -0.45, -0.9, afTrackFall);
 
 
@@ -739,11 +739,11 @@ begin
     for i:= 0 to 8 do
         begin
         v2:= v2 + RateShove(Me, x + 10, y - 10 * i
-                , 15, 30, 40
+                , 18, 30, 40
                 , 0.45, -0.9, afTrackFall or afSetSkip);
         end;
     v2:= v2 + RateShove(Me, x + 10, y - 90
-            , 15, 30, 40
+            , 18, 30, 40
             , 0.45, -0.9, afTrackFall);
 
     if (v2 > v1) 
@@ -781,19 +781,19 @@ begin
     to encourage distant attacks (damaged hog is excluded from view of second 
     RateShove call)}
     v1:= RateShove(Me, x - 15, y
-            , 30, 30, 40
+            , 30, 30, 25
             , -1, -0.8, afTrackFall or afSetSkip);
     v1:= v1 +
         RateShove(Me, x, y
-            , 30, 30, 40
+            , 30, 30, 25
             , -1, -0.8, afTrackFall);
     // now try opposite direction
     v2:= RateShove(Me, x + 15, y
-            , 30, 30, 40
+            , 30, 30, 25
             , 1, -0.8, afTrackFall or afSetSkip);
     v2:= v2 +
         RateShove(Me, x, y
-            , 30, 30, 40
+            , 30, 30, 25
             , 1, -0.8, afTrackFall);
 
     if (v2 > v1) 
