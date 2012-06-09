@@ -435,7 +435,7 @@ BeginThread(@Think, Me, ThinkThread);
 AddFileLog('Thread started');
 end;
 
-var scoreShown: boolean = false;
+//var scoreShown: boolean = false;
 
 procedure ProcessBot;
 const cStopThinkTime = 40;
@@ -457,17 +457,18 @@ with CurrentHedgehog^ do
                 if Gear^.Message <> 0 then
                     exit;
                     
-                scoreShown:= false;   
+                //scoreShown:= false;   
                 StartThink(Gear);
                 StartTicks:= GameTicks
                 
             end else
                 begin
+                (*
                 if not scoreShown then
                     begin
                     if BestActions.Score > 0 then ParseCommand('/say Expected score = ' + inttostr(BestActions.Score div 1024), true);
                     scoreShown:= true
-                    end;
+                    end;*)
                 ProcessAction(BestActions, Gear)
                 end
         else if ((GameTicks - StartTicks) > cMaxAIThinkTime)
