@@ -624,7 +624,7 @@ until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 5)
 
 if Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 5 then
     begin
-    fallDmg:= TraceShoveFall(Me, Targ.X, Targ.Y, vX * 0.00125 * 20, vY * 0.00125 * 20);
+    fallDmg:= TraceShoveFall(Targ.X, Targ.Y, vX * 0.00125 * 20, vY * 0.00125 * 20);
     if fallDmg < 0 then
         valueResult:= 204800
     else valueResult:= Max(0, (4 - d div 50) * trunc((7+fallDmg)*dmgMod) * 1024)
@@ -652,7 +652,7 @@ if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
 
 dmg:= sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
 t:= 1.5 / dmg;
-dmg:= dmg * 0.05; // div 40
+dmg:= dmg * 0.025; // div 40
 Vx:= (Targ.X - x) * t;
 Vy:= (Targ.Y - y) * t;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
@@ -673,7 +673,7 @@ until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4)
 
 if Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4 then
     begin
-    fallDmg:= TraceShoveFall(Me, Targ.X, Targ.Y, vX * 0.00166 * dmg, vY * 0.00166 * dmg);
+    fallDmg:= TraceShoveFall(Targ.X, Targ.Y, vX * 0.00166 * dmg, vY * 0.00166 * dmg);
     if fallDmg < 0 then
         TestSniperRifle:= BadTurn
     else 

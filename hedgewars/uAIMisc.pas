@@ -59,8 +59,9 @@ procedure AwareOfExplosion(x, y, r: LongInt); inline;
 
 function  RatePlace(Gear: PGear): LongInt;
 function  TestColl(x, y, r: LongInt): boolean; inline;
+function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
-function  TraceShoveFall(Me: PGear; x, y, dX, dY: Real): LongInt;
+function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
 
 function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
 function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
@@ -236,6 +237,28 @@ begin
     TestCollExcludingMe:= TestColl(x, y, r)
 end;
 
+function TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
+var b: boolean;
+begin
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    TestCollExcludingObjects:= false;
+end;
+
 function TestColl(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
@@ -311,7 +334,7 @@ begin
     end;
 end;
 
-function TraceShoveFall(Me: PGear; x, y, dX, dY: Real): LongInt;
+function TraceShoveFall(x, y, dX, dY: Real): LongInt;
 var dmg: LongInt;
 begin
     while true do
@@ -319,8 +342,7 @@ begin
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
-        // consider adding dX/dY calc here for fall damage
-        if TestCollExcludingMe(Me, trunc(x), trunc(y), cHHRadius) then
+        if TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
         begin
             if 0.4 < dY then
             begin
@@ -418,7 +440,7 @@ for i:= 0 to Pred(Targets.Count) do
             begin
             if (Flags and afSetSkip <> 0) then skip:= true;
             if (Flags and afTrackFall <> 0) then 
-                fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y - 2, dX, dY) * dmgMod);
+                fallDmg:= trunc(TraceShoveFall(Point.x, Point.y - 2, dX, dY) * dmgMod);
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
