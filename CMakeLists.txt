@@ -47,9 +47,6 @@ set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MI
 
 
 #set some safe values
-IF(NOT WITH_SERVER)
-    SET(WITH_SERVER 0)
-ENDIF(NOT WITH_SERVER)
 IF(NOT BUILD_ENGINE_LIBRARY)
     SET(BUILD_ENGINE_LIBRARY 0)
 ENDIF(NOT BUILD_ENGINE_LIBRARY)
@@ -183,7 +180,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 
-if(WITH_SERVER)
+if(NOT NOSERVER)
     if(GHC)
         set(ghc_executable ${GHC})
     else()
@@ -194,26 +191,32 @@ if(WITH_SERVER)
         set(HAVE_NETSERVER true)
         add_subdirectory(gameServer)
     else()
-        message(STATUS "No GHC executable found, server will *not* be built")
+        message(STATUS "No GHC executable found, server will not be built")
         set(HAVE_NETSERVER false)
     endif()
-else(WITH_SERVER)
+else()
+    message(STATUS "Server will not be built per user request")
     set(HAVE_NETSERVER false)
-endif(WITH_SERVER)
+endif()
 
 find_package(Lua)
-if(NOT ${LUA_FOUND})
-        message(STATUS "Lua library not found, building bundled dependency")
+if(${LUA_FOUND})
+    message(STATUS "Lua library is present on your system (${LUA_DEFAULT})")
+else()
+    message(STATUS "Lua library not found, building bundled dependency")
     add_subdirectory(misc/liblua)
-    #link with liblua.a (which requires system readline)
+    #linking with liblua.a requires system readline -- this works everywhere, right?
     set(pascal_flags "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_flags})
 endif()
+
 add_subdirectory(hedgewars)
+
 
 #run cmake -DANDROID=1 to enable this
 if(ANDROID)
     add_subdirectory(project_files/Android-build)
 endif()
+
 
 if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID))
     add_subdirectory(bin)
