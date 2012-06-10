@@ -463,7 +463,7 @@ tx:= Max(X - Radius - 1, 0);
 dx:= Min(X + Radius + 1, LAND_WIDTH) - tx;
 ty:= Max(Y - Radius - 1, 0);
 dy:= Min(Y + Radius + 1, LAND_HEIGHT) - ty;
-UpdateLandTexture(tx, dx, ty, dy);
+UpdateLandTexture(tx, dx, ty, dy, false);
 DrawExplosion:= cnt
 end;
 
@@ -515,7 +515,7 @@ for i:= 0 to Pred(Count) do
     end;
 
 
-UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT)
+UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false)
 end;
 
 //
@@ -665,7 +665,7 @@ ty:= Max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
 ddx:= Min(stX + HalfWidth * 2 + 4 + abs(hwRound(dX * ticks)), LAND_WIDTH) - tx;
 ddy:= Min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - ty;
 
-UpdateLandTexture(tx, ddx, ty, ddy)
+UpdateLandTexture(tx, ddx, ty, ddy, false)
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
@@ -753,7 +753,7 @@ x:= Max(cpX, leftX);
 w:= Min(cpX + Image^.w, LAND_WIDTH) - x;
 y:= Max(cpY, topY);
 h:= Min(cpY + Image^.h, LAND_HEIGHT) - y;
-UpdateLandTexture(x, w, y, h)
+UpdateLandTexture(x, w, y, h, true)
 end;
 
 function Despeckle(X, Y: LongInt): boolean;
@@ -955,7 +955,7 @@ while recheck do
                                 end;
                     end;
                 if updateBlock then
-                    UpdateLandTexture(tx, 32, ty, 32);
+                    UpdateLandTexture(tx, 32, ty, 32, false);
                 LandDirty[y, x]:= 2;
                 end;
             end;

@@ -702,14 +702,14 @@ if draw then
             //Land[py, px+1]:= lfBasic;
             
             if allpx then
-                UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w))
+                UpdateLandTexture(xx, Pred(s^.h), yy, Pred(s^.w), true)
             else
                 begin
                 UpdateLandTexture(
                     max(0, min(LAND_WIDTH, xx)),
                     min(LAND_WIDTH - xx, Pred(s^.w)),
                     max(0, min(LAND_WIDTH, yy)),
-                    min(LAND_HEIGHT - yy, Pred(s^.h))
+                    min(LAND_HEIGHT - yy, Pred(s^.h)), false // could this be true without unnecessarily creating blanks?
                 );
                 end;
 ////////////////////////////////// TODO - ASK UNC0RR FOR A GOOD HOME FOR THIS ////////////////////////////////////
@@ -1025,7 +1025,9 @@ begin
         else
             AmmoShove(Gear, Gear^.Timer, 20);
         CheckGearDrowning(Gear);
-        dec(i) until (i = 0) or (Gear^.Damage > Gear^.Health) or ((Gear^.State and gstDrowning) <> 0);
+        dec(i) 
+    until (i = 0) or (Gear^.Damage > Gear^.Health) or ((Gear^.State and gstDrowning) <> 0);
+
     if Gear^.Damage > 0 then
         begin
         DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 82 - i, 1);
@@ -2077,6 +2079,7 @@ var
     exBoom: boolean;
     dX, dY: HWFloat;
     hog: PHedgehog;
+    sparkles: PVisualGear;
 begin
     k := Gear^.Kind;
     exBoom := false;
@@ -2108,6 +2111,21 @@ begin
         Gear^.Damage := 0;
         if Gear^.Health <= 0 then
             exBoom := true;
+        end
+    else
+        begin 
+        if Gear^.Timer = 0 then
+        begin
+(* Can't make sparkles team coloured without working out what the next team is going to be. This should be solved, really, since it also screws up
+   voices. Reinforcements voices is heard for active team, not team-to-be.  Either that or change crate spawn from end of turn to start, although that
+   has its own complexities. *)
+        sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
+        if sparkles <> nil then
+            begin
+            sparkles^.Tint:= $FAB22CFF
+            end
+        end;
+        if (GameTicks and $1 = 0) and (Gear^.Timer < 255) then inc(Gear^.Timer)
         end;
 
     if (Gear^.Damage > 0) or exBoom then
@@ -3422,7 +3440,7 @@ begin
         PlaySound(sndGun);
         end;
 
-    if (Gear^.Timer = 0) or (HHGear^.Damage <> 0) then
+    if (Gear^.Timer = 0) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
         DeleteGear(Gear);
         AfterAttack

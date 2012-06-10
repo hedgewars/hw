@@ -436,7 +436,7 @@ begin
         end
     else
         TryDo(checksum = lastTurnChecksum, 'Desync detected', true);
-    AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
+    AddFileLog('Next turn: time '+inttostr(GameTicks));
 end;
 
 procedure chTimer(var s: shortstring);
@@ -763,7 +763,8 @@ end;
 
 procedure chGameFlags(var s: shortstring);
 begin
-GameFlags:= StrToInt(s)
+GameFlags:= StrToInt(s);
+if GameFlags and gfSharedAmmo <> 0 then GameFlags:= GameFlags and not gfPerHogAmmo
 end;
 
 procedure chHedgehogTurnTime(var s: shortstring);
