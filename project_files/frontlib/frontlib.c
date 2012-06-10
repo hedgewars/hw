@@ -64,6 +64,7 @@ int main(int argc, char *argv[]) {
 	setup.gamescheme = flib_cfg_from_ini(metaconf, "scheme_shoppa.ini");
 	setup.map = flib_map_create_maze("Jungle", MAZE_SIZE_MEDIUM_TUNNELS);
 	setup.seed = "apsfooasdgnds";
+	setup.script = NULL;
 	setup.teamcount = 2;
 	setup.teams = calloc(2, sizeof(flib_team));
 	setup.teams[0].color = 0xffff0000;
