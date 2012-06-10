@@ -1828,7 +1828,9 @@ var
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_NeedUpDown;
+            Ammo: (Propz: ammoprop_NeedUpDown or 
+                    ammoprop_OscAim or
+                    ammoprop_NoMoveAfter;
                 Count: 2;
                 NumPerTurn: 1;
                 Timer: 0;

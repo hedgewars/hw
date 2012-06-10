@@ -403,9 +403,9 @@ public class SDLActivity extends Activity {
 		}
 	}
 	
-	public static float getDensity(){
+	public static int getDensity(){
 		DisplayMetrics dm = SDLActivity.getContext().getResources().getDisplayMetrics();
-		return dm.density;
+		return dm.densityDpi;
 	}
 }
 
