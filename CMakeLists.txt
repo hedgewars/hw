@@ -158,7 +158,7 @@ set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
 separate_arguments(fpflags_full UNIX_COMMAND ${FPFLAGS})
-set(pascal_flags ${fpflags_full} "-B" "-FE../bin" "-Cs2000000" "-vewn" ${pascal_flags})
+set(pascal_flags ${fpflags_full} "-B" "-FE../bin" "-Cs2000000" "-vewn" "-dDEBUGFILE" ${pascal_flags})
 separate_arguments(ghflags_full UNIX_COMMAND ${GHFLAGS})
 set(haskell_flags "-O2" ${haskell_flags} ${ghflags_full})
 
@@ -167,7 +167,7 @@ if(Optz)
     set(pascal_flags "-Os" "-Ooregvar" "-Xs" "-Si" ${pascal_flags})
     set(haskell_flags "-w" "-fno-warn-unused-do-bind" ${haskell_flags})
 else(Optz)
-    set(pascal_flags "-O-" "-g" "-gl" "-gv" "-Ct" "-dDEBUGFILE" ${pascal_flags})
+    set(pascal_flags "-O-" "-g" "-gl" "-gv" "-Ct" ${pascal_flags})
     set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
 endif(Optz)
 
