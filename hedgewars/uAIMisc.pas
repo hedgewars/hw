@@ -59,8 +59,9 @@ procedure AwareOfExplosion(x, y, r: LongInt); inline;
 
 function  RatePlace(Gear: PGear): LongInt;
 function  TestColl(x, y, r: LongInt): boolean; inline;
+function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
-function  TraceShoveFall(Me: PGear; x, y, dX, dY: Real): LongInt;
+function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
 
 function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
 function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
@@ -80,7 +81,7 @@ var ThinkingHH: PGear;
         end;
 
 implementation
-uses uCollisions, uVariables, uUtils, uDebug;
+uses uCollisions, uVariables, uUtils, uDebug, uLandTexture;
 
 const KillScore = 200;
 
@@ -236,6 +237,28 @@ begin
     TestCollExcludingMe:= TestColl(x, y, r)
 end;
 
+function TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
+var b: boolean;
+begin
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    TestCollExcludingObjects:= false;
+end;
+
 function TestColl(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
@@ -311,16 +334,25 @@ begin
     end;
 end;
 
-function TraceShoveFall(Me: PGear; x, y, dX, dY: Real): LongInt;
-var dmg: LongInt;
+function TraceShoveFall(x, y, dX, dY: Real): LongInt;
+var dmg, v: LongInt;
 begin
+v:= random($FFFFFFFF);
     while true do
     begin
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
+(*
+        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[trunc(y), trunc(x)]:= v;
+            UpdateLandTexture(trunc(X), 1, trunc(Y), 1, true);
+            end;
+*)
+
         // consider adding dX/dY calc here for fall damage
-        if TestCollExcludingMe(Me, trunc(x), trunc(y), cHHRadius) then
+        if TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
         begin
             if 0.4 < dY then
             begin
@@ -398,8 +430,8 @@ var i, fallDmg, dmg, rate: LongInt;
     dX, dY, dmgMod: real;
 begin
 fallDmg:= 0;
-dX:= gdX * 0.005 * kick;
-dY:= gdY * 0.005 * kick;
+dX:= gdX * 0.01 * kick;
+dY:= gdY * 0.01 * kick;
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
@@ -410,15 +442,13 @@ for i:= 0 to Pred(Targets.Count) do
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < r then
-            begin
             dmg:= r - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
-            dmg:= trunc(dmg * dmgMod);
-            end;
+
         if dmg > 0 then
             begin
             if (Flags and afSetSkip <> 0) then skip:= true;
-            if (Flags and afTrackFall <> 0) then 
-                fallDmg:= trunc(TraceShoveFall(Me, Point.x, Point.y - 2, dX, dY) * dmgMod);
+            if (Flags and afTrackFall <> 0) and (Score > 0) then 
+                fallDmg:= trunc(TraceShoveFall(Point.x, Point.y - 2, dX, dY) * dmgMod);
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings

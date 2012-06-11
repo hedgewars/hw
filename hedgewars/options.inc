@@ -16,61 +16,54 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-{$IFDEF FPC}
-    {$WRITEABLECONST OFF}
-    {$IMPLICITEXCEPTIONS OFF}
-    {$VARSTRINGCHECKS ON}
-    {$MODE OBJFPC}
-{$ELSE}
-    {$ERROR Only Free Pascal supported!}
+{$IFNDEF FPC}
+    {$ERROR Only FreePascal Compiler is supported!}
 {$ENDIF}
 
 {$MACRO ON}
+{$MODE OBJFPC}
 {$DEFINE GLunit:=GL}
+{$WRITEABLECONST OFF}
+{$IMPLICITEXCEPTIONS OFF}
+{$VARSTRINGCHECKS ON}
+
+{$DEFINE USE_LUA_SCRIPT}
+
 
 {$IFDEF ANDROID}
-    {$DEFINE SDL13}
-    {$DEFINE HWLIBRARY}
-    {$DEFINE S3D_DISABLED}
-    {$DEFINE GLunit:=gles11}
     {$DEFINE MOBILE}
-    {$DEFINE Java_Prefix:= 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
     {$DEFINE USE_SDLTHREADS}
     {$DEFINE USE_CONTEXT_RESTORE}
-    {$DEFINE USE_LANDSCAPE_AMMOMENU}
-    {$DEFINE USE_TOUCH_INTERFACE}
+    {$DEFINE Java_Prefix:= 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
 {$ENDIF}
 
 {$IFDEF IPHONEOS}
+    {$DEFINE MOBILE}
+{$ENDIF}
+
+{$IFDEF MOBILE}
     {$DEFINE SDL13}
     {$DEFINE HWLIBRARY}
     {$DEFINE S3D_DISABLED}
     {$DEFINE GLunit:=gles11}
-    {$DEFINE MOBILE}
     {$DEFINE USE_LANDSCAPE_AMMOMENU}
     {$DEFINE USE_TOUCH_INTERFACE}
+{$ELSE}
+    {$DEFINE USE_AM_NUMCOLUMN}
 {$ENDIF}
+
 
 {$IFDEF WIN32}
     {$DEFINE USE_CONTEXT_RESTORE}
 {$ENDIF}
 
-{$IFNDEF IPHONEOS}
-    {$IFDEF DARWIN}
+{$IFDEF DARWIN}
+    {$IFNDEF IPHONEOS}
         {$DEFINE USE_CONTEXT_RESTORE}
     {$ENDIF}
-    // not needed on ios because DEBUGFILE is switched from command line
-    {$DEFINE DEBUGFILE}
-    //{$DEFINE TRACEAIACTIONS}
-    //{$DEFINE COUNTTICKS}
 {$ENDIF}
 
-{$IFNDEF MOBILE}
-    {$DEFINE USE_AM_NUMCOLUMN}
     {$DEFINE USE_VIDEO_RECORDING}
-{$ENDIF}
-
-{$DEFINE USE_LUA_SCRIPT}
 
 {$IFDEF PAS2C}
     {$DEFINE NOCONSOLE}
@@ -79,3 +72,7 @@
 
 {$DEFINE _S:=}
 {$DEFINE _P:=}
+
+//{$DEFINE TRACEAIACTIONS}
+//{$DEFINE COUNTTICKS}
+

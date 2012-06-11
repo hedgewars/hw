@@ -84,12 +84,12 @@ end;
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 var mod_ : shortstring;
     ModifierCount, i: LongInt;
-    c : char;
 begin
 if Modifier = '' then exit;
 ModifierCount:= 0;
-for c in Modifier do
-    if(c = ':') then inc(ModifierCount);
+
+for i:= 1 to Length(Modifier) do
+    if(Modifier[i] = ':') then inc(ModifierCount);
 
 SplitByChar(Modifier, mod_, ':');//remove the first mod: part
 Modifier:= mod_;
@@ -156,7 +156,7 @@ procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 var code: LongInt;
 begin
     code:= event.keysym.sym;
-    MaskModifier(code, event.keysym.modifier);
+    //MaskModifier(code, event.keysym.modifier);
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
 

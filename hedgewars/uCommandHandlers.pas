@@ -775,7 +775,8 @@ end;
 
 procedure chGameFlags(var s: shortstring);
 begin
-GameFlags:= StrToInt(s)
+GameFlags:= StrToInt(s);
+if GameFlags and gfSharedAmmo <> 0 then GameFlags:= GameFlags and not gfPerHogAmmo
 end;
 
 procedure chHedgehogTurnTime(var s: shortstring);
