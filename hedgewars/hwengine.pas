@@ -415,10 +415,12 @@ begin
     isDeveloperMode:= false;
     TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
     ParseCommand('rotmask', true);
-
+    
+{$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
         RecorderMainLoop()
     else
+{$ENDIF}
         MainLoop();
 
     // clean up all the memory allocated

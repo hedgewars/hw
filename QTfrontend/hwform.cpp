@@ -76,6 +76,7 @@
 #include "pagegamestats.h"
 #include "pageplayrecord.h"
 #include "pagedata.h"
+#include "pagevideos.h"
 #include "hwconsts.h"
 #include "newnetclient.h"
 #include "gamecfgwidget.h"
@@ -141,6 +142,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 
+    ui.pageVideos->config = config;
+
 #ifdef __APPLE__
     panel = new M3Panel;
 
@@ -198,6 +201,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageNetGame, SIGNAL(DLCClicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNetGame, ID_PAGE_DATADOWNLOAD);
+
+    connect(ui.pageMain->BtnVideos, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnVideos, ID_PAGE_VIDEOS);
 
     //connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     //connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
@@ -289,6 +295,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageConnecting, SIGNAL(cancelConnection()), this, SLOT(GoBack()));
 
+    connect(ui.pageVideos, SIGNAL(goBack()), config, SLOT(SaveVideosOptions()));
 
     ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
     ui.pageScheme->setModel(ammoSchemeModel);
@@ -602,6 +609,11 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if (id == ID_PAGE_SETUP)
     {
         config->reloadValues();
+    }
+
+    if (id == ID_PAGE_VIDEOS )
+    {
+        config->reloadVideosValues();
     }
 
     // load and save ignore/friends lists
@@ -1409,15 +1421,16 @@ void HWForm::GetRecord(RecordType type, const QByteArray & record)
         }
     }
 
-    QDir videosDir(cfgdir->absolutePath() + "/Videos/");
+    // encode videos
+    QDir videosDir(cfgdir->absolutePath() + "/VideoTemp/");
     QStringList files = videosDir.entryList(QStringList("*.txtout"), QDir::Files);
-    for (QStringList::iterator str = files.begin(); str != files.end(); str++)
+    foreach (const QString & str, files)
     {
-        str->chop(7); // remove ".txtout"
-        // need to rename this file to not open it twice
-        videosDir.rename(*str + ".txtout", *str + ".txtin");
+        QString prefix = str;
+        prefix.chop(7); // remove ".txtout"
+        videosDir.rename(prefix + ".txtout", prefix + ".txtin"); // rename this file to not open it twice
         HWRecorder* pRecorder = new HWRecorder(config);
-        pRecorder->EncodeVideo(record, *str);
+        pRecorder->EncodeVideo(record, prefix);
     }
 }
 
@@ -1459,6 +1472,7 @@ void HWForm::closeEvent(QCloseEvent *event)
     xfire_free();
 #endif
     config->SaveOptions();
+    config->SaveVideosOptions();
     event->accept();
 }
 

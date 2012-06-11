@@ -105,7 +105,9 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/widget/colorwidget.h \
     ../QTfrontend/model/HatModel.h \
     ../QTfrontend/model/GameStyleModel.h \
-    ../QTfrontend/recorder.h
+    ../QTfrontend/util/libav_iteraction.h \
+    ../QTfrontend/ui/page/pagevideos.h \
+    ../QTfrontend/net/recorder.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
@@ -188,7 +190,9 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/widget/colorwidget.cpp \
     ../QTfrontend/model/HatModel.cpp \
     ../QTfrontend/model/GameStyleModel.cpp \
-    ../QTfrontend/recorder.cpp
+    ../QTfrontend/util/libav_iteraction.cpp \
+    ../QTfrontend/ui/page/pagevideos.cpp \
+    ../QTfrontend/net/recorder.cpp
 
 win32 {
     SOURCES += ../QTfrontend/xfire.cpp

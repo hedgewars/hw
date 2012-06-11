@@ -85,9 +85,13 @@ QLayout * PageMain::footerLayoutDefinition()
     bottomLayout->setStretch(0,1);
 
     btnBack->setWhatsThis(tr("Exit game"));
-    
-    BtnSetup = addButton(":/res/Settings.png", bottomLayout, 1, true);
+
+    BtnVideos = addButton(":/res/Record.png", bottomLayout, 1, true);
+    BtnVideos->setWhatsThis(tr("Manage videos recorded from game"));
+
+    BtnSetup = addButton(":/res/Settings.png", bottomLayout, 2, true);
     BtnSetup->setWhatsThis(tr("Edit game preferences"));
+
     return bottomLayout;
 }
 

@@ -26,6 +26,8 @@ static FILE* g_pSoundFile;
 static int16_t* g_pSamples;
 static int g_NumSamples;
 
+static char g_Filename[1024];
+
 /*
 Initially I wrote code for latest ffmpeg, but on Linux (Ubuntu)
 only older version is available from repository. That's why you see here
@@ -82,7 +84,7 @@ static void Log(const char* pFmt, ...)
 
 static void AddAudioStream()
 {
-#if LIBAVCODEC_VERSION_MAJOR >= 54
+#if LIBAVFORMAT_VERSION_MAJOR >= 54
     g_pAStream = avformat_new_stream(g_pContainer, g_pACodec);
 #else
     g_pAStream = av_new_stream(g_pContainer, 1);
@@ -183,7 +185,7 @@ static int WriteAudioFrame()
 // add a video output stream
 static void AddVideoStream()
 {
-#if LIBAVCODEC_VERSION_MAJOR >= 54
+#if LIBAVFORMAT_VERSION_MAJOR >= 54
     g_pVStream = avformat_new_stream(g_pContainer, g_pVCodec);
 #else
     g_pVStream = av_new_stream(g_pContainer, 0);
@@ -192,7 +194,7 @@ static void AddVideoStream()
         FatalError("Could not allocate video stream");
 
     g_pVideo = g_pVStream->codec;
-    
+
     avcodec_get_context_defaults3(g_pVideo, g_pVCodec);
     g_pVideo->codec_id = g_pVCodec->id;
 
@@ -321,6 +323,7 @@ void AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
 void AVWrapper_Init(
          void (*pAddFileLogRaw)(const char*),
          const char* pFilename,
+         const char* pFinalFilename,
          const char* pSoundFile,
          const char* pFormatName,
          const char* pVCodecName,
@@ -360,10 +363,12 @@ void AVWrapper_Init(
     g_pContainer->oformat = g_pFormat;
 
     // append extesnion to filename
-    snprintf(g_pContainer->filename, sizeof(g_pContainer->filename),
-             "%s.%*s",
-             pFilename,
-             strcspn(g_pFormat->extensions, ","), g_pFormat->extensions);
+    char ext[16];
+    strncpy(ext, g_pFormat->extensions, 16);
+    ext[15] = 0;
+    ext[strcspn(ext,",")] = 0;
+    snprintf(g_pContainer->filename, sizeof(g_pContainer->filename), "%s.%s", pFilename, ext);
+    snprintf(g_Filename, sizeof(g_Filename), "%s.%s", pFinalFilename, ext);
 
     // find codecs
     g_pVCodec = avcodec_find_encoder_by_name(pVCodecName);
@@ -423,6 +428,9 @@ void AVWrapper_Close()
     // close the output file
     if (!(g_pFormat->flags & AVFMT_NOFILE))
         avio_close(g_pContainer->pb);
+        
+    // move file to destination
+    rename(g_pContainer->filename, g_Filename);
 
     // free everything
     if (g_pVStream)

@@ -37,7 +37,7 @@ HWRecorder::~HWRecorder()
 void HWRecorder::onClientDisconnect()
 {
 }
-     
+
 void HWRecorder::onClientRead()
 {
     quint8 msglen;
@@ -69,7 +69,7 @@ void HWRecorder::EncodeVideo( const QByteArray & record, const QString & prefix 
 QStringList HWRecorder::getArguments()
 {
     QStringList arguments;
-    QRect resolution = config->vid_Resolution();
+    QRect resolution = config->rec_Resolution();
     arguments << cfgdir->absolutePath();
     arguments << QString::number(resolution.width());
     arguments << QString::number(resolution.height());
@@ -87,14 +87,17 @@ QStringList HWRecorder::getArguments()
     arguments << QString::number(config->translateQuality());
     arguments << QString::number(config->stereoMode());
     arguments << HWGame::tr("en.txt");
-    arguments << "30"; // framerate num
+    arguments << QString::number(config->rec_Framerate()); // framerate num
     arguments << "1";  // framerate den
     arguments << prefix;
-    arguments << "mp4";
-    arguments << "mpeg4"; // arguments << "libx264";
+    arguments << config->AVFormat();
+    arguments << config->videoCodec();
     arguments << "5"; // video quality
     arguments << "medium";
-    arguments << "libmp3lame";
+    if (config->recordAudio())
+        arguments << config->audioCodec();
+    else
+        arguments << "no";
     arguments << "5"; // audio quality
 
     return arguments;

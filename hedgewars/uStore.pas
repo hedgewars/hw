@@ -40,7 +40,9 @@ procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
 procedure MakeCrossHairs;
+{$IFDEF USE_VIDEO_RECORDING}
 procedure InitOffscreenOpenGL;
+{$ENDIF}
 
 procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; inline;
@@ -1022,6 +1024,7 @@ FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
 end;
 
+{$IFDEF USE_VIDEO_RECORDING}
 procedure InitOffscreenOpenGL;
 var ArgCount: LongInt;
     PrgName: pchar;
@@ -1034,6 +1037,7 @@ begin
     glutHideWindow();
     SetupOpenGL();
 end;
+{$ENDIF}
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
