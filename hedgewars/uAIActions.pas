@@ -43,6 +43,7 @@ const MAXACTIONS     = 96;
     aia_Skip       = $8008;
     aia_Wait       = $8009;
     aia_Put        = $800A;
+    aia_waitAngle  = $800B;
     
     aim_push       = $8000;
     aim_release    = $8001;
@@ -70,7 +71,7 @@ uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uUtils, uDebug, uIO{$IFDEF TRA
 var PrevX: LongInt = 0;
     timedelta: Longword = 0;
 
-const ActionIdToStr: array[0..7] of string[16] = (
+const ActionIdToStr: array[0..8] of string[16] = (
 {aia_none}           '',
 {aia_Left}           'left',
 {aia_Right}          'right',
@@ -78,7 +79,8 @@ const ActionIdToStr: array[0..7] of string[16] = (
 {aia_attack}         'attack',
 {aia_Up}             'up',
 {aia_Down}           'down',
-{aia_Switch}         'switch'
+{aia_Switch}         'switch',
+{aia_waitAngle}      'waitAngle'
                      );
 
 {$IFDEF TRACEAIACTIONS}
@@ -150,6 +152,7 @@ var s: shortstring;
 begin
 repeat
 if Actions.Pos >= Actions.Count then exit;
+
 with Actions.actions[Actions.Pos] do
     begin
     if Time > GameTicks then
@@ -160,74 +163,77 @@ with Actions.actions[Actions.Pos] do
     if (Action and ai_specmask) <> 0 then
         case Action of
             aia_Weapon: 
-            SetWeapon(TAmmoType(Param));
+                SetWeapon(TAmmoType(Param));
             
             aia_WaitXL: 
-            if hwRound(Me^.X) = Param then
-                begin
-                Action:= aia_LookLeft;
-                Time:= GameTicks;
-                exit
-                end
-                else if hwRound(Me^.X) < Param then
+                if hwRound(Me^.X) = Param then
                     begin
-                    //OutError('AI: WaitXL assert (' + IntToStr(hwRound(Me^.X)) + ' < ' + IntToStr(Param) + ')', false);
-                    FreeActionsList;
+                    Action:= aia_LookLeft;
+                    Time:= GameTicks;
                     exit
                     end
-                else
-                    begin 
-                    CheckHang(Me);
-                    exit
-                    end;
+                    else if hwRound(Me^.X) < Param then
+                        begin
+                        //OutError('AI: WaitXL assert (' + IntToStr(hwRound(Me^.X)) + ' < ' + IntToStr(Param) + ')', false);
+                        FreeActionsList;
+                        exit
+                        end
+                    else
+                        begin 
+                        CheckHang(Me);
+                        exit
+                        end;
                             
             aia_WaitXR: 
-            if hwRound(Me^.X) = Param then
-                begin
-                Action:= aia_LookRight;
-                Time:= GameTicks;
-                exit
-                end
-                else if hwRound(Me^.X) > Param then
+                if hwRound(Me^.X) = Param then
                     begin
-                    //OutError('AI: WaitXR assert (' + IntToStr(hwRound(Me^.X)) + ' > ' + IntToStr(Param) + ')', false);
-                    FreeActionsList;
+                    Action:= aia_LookRight;
+                    Time:= GameTicks;
+                    exit
+                    end
+                    else if hwRound(Me^.X) > Param then
+                        begin
+                        //OutError('AI: WaitXR assert (' + IntToStr(hwRound(Me^.X)) + ' > ' + IntToStr(Param) + ')', false);
+                        FreeActionsList;
+                        exit
+                        end
+                    else
+                        begin 
+                        CheckHang(Me);
+                        exit
+                        end;
+            aia_LookLeft:
+                if not Me^.dX.isNegative then
+                    begin
+                    ParseCommand('+left', true);
                     exit
                     end
                 else
-                    begin 
-                    CheckHang(Me);
-                    exit
-                    end;
-            aia_LookLeft:
-            if not Me^.dX.isNegative then
-                begin
-                ParseCommand('+left', true);
-                exit
-                end
-            else
-                ParseCommand('-left', true);
+                    ParseCommand('-left', true);
             aia_LookRight:
-            if Me^.dX.isNegative then
-                begin
-                ParseCommand('+right', true);
-                exit
-                end
-            else ParseCommand('-right', true);
+                if Me^.dX.isNegative then
+                    begin
+                    ParseCommand('+right', true);
+                    exit
+                    end
+                else ParseCommand('-right', true);
             aia_AwareExpl:
-            AwareOfExplosion(X, Y, Param);
+                AwareOfExplosion(X, Y, Param);
             
             aia_HJump:
-            ParseCommand('hjump', true);
+                ParseCommand('hjump', true);
             
             aia_LJump:
-            ParseCommand('ljump', true);
+                ParseCommand('ljump', true);
             
             aia_Skip:
-            ParseCommand('skip', true);
+                ParseCommand('skip', true);
             
             aia_Put:
-            doPut(X, Y, true);
+                doPut(X, Y, true);
+                
+            aia_waitAngle:
+                if Me^.Angle <> Abs(Param) then exit;
             end
         else
             begin

@@ -90,10 +90,16 @@ with Gear^ do
             if round(X) > cRightScreenBorder then
                 X:= X - cScreenSpace;
             // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
-            if (Gear^.Layer = 2) and (round(Y) - 225 > LAND_HEIGHT) then
-                Y:= Y - (1024 + 300) // TODO - configure in theme (jellies for example could use limited range)
-            else if (Gear^.Layer <> 2) and (round(Y) + 50 > LAND_HEIGHT) then
-                Y:= Y - (1024 + 25);
+        if (Gear^.Layer = 2) and (round(Y) - 225 > LAND_HEIGHT) then
+            begin
+            X:= cLeftScreenBorder + random(cScreenSpace);
+            Y:= Y - (1024 + 250 + random(50)) // TODO - configure in theme (jellies for example could use limited range)
+            end
+        else if (Gear^.Layer <> 2) and (round(Y) + 50 > LAND_HEIGHT) then
+            begin
+            X:= cLeftScreenBorder + random(cScreenSpace);
+            Y:= Y - (1024 + random(25))
+            end;
         Timer:= 0;
         tdX:= 0;
         tdY:= 0

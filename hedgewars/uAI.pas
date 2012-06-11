@@ -111,7 +111,7 @@ end;
 procedure TestAmmos(var Actions: TActions; Me: PGear; isMoved: boolean);
 var BotLevel: Byte;
     ap: TAttackParams;
-    Score, i: LongInt;
+    Score, i, dAngle: LongInt;
     a, aa: TAmmoType;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
@@ -153,29 +153,45 @@ for i:= 0 to Pred(Targets.Count) do
                     
                     if (ap.Time <> 0) then
                         AddAction(BestActions, aia_Timer, ap.Time div 1000, 400, 0, 0);
+                        
                     if (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
                         begin
-                        ap.Angle:= LongInt(Me^.Angle) - Abs(ap.Angle);
-                        if ap.Angle > 0 then
+                        dAngle:= LongInt(Me^.Angle) - Abs(ap.Angle);
+                        if dAngle > 0 then
                             begin
                             AddAction(BestActions, aia_Up, aim_push, 300 + random(250), 0, 0);
-                            AddAction(BestActions, aia_Up, aim_release, ap.Angle, 0, 0)
+                            AddAction(BestActions, aia_Up, aim_release, dAngle, 0, 0)
                             end
-                        else if ap.Angle < 0 then
+                        else if dAngle < 0 then
                             begin
                             AddAction(BestActions, aia_Down, aim_push, 300 + random(250), 0, 0);
-                            AddAction(BestActions, aia_Down, aim_release, -ap.Angle, 0, 0)
+                            AddAction(BestActions, aia_Down, aim_release, -dAngle, 0, 0)
                             end
                         end;
+                        
                     if (Ammoz[a].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
                         begin
                         AddAction(BestActions, aia_Put, 0, 1, ap.AttackPutX, ap.AttackPutY)
                         end;
-                    if (Ammoz[a].Ammo.Propz and ammoprop_AttackingPut) = 0 then
+                        
+                    if (Ammoz[a].Ammo.Propz and ammoprop_OscAim) <> 0 then
                         begin
-                        AddAction(BestActions, aia_attack, aim_push, 650 + random(300), 0, 0);
-                        AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
-                        end;
+                        AddAction(BestActions, aia_attack, aim_push, 350 + random(200), 0, 0);
+                        AddAction(BestActions, aia_attack, aim_release, 1, 0, 0);
+                                                
+                        AddAction(BestActions, aia_Down, aim_push, 100 + random(150), 0, 0);
+                        AddAction(BestActions, aia_Down, aim_release, 32, 0, 0);
+                        
+                        AddAction(BestActions, aia_waitAngle, ap.Angle, 250, 0, 0);
+                        AddAction(BestActions, aia_attack, aim_push, 1, 0, 0);
+                        AddAction(BestActions, aia_attack, aim_release, 1, 0, 0);
+                        end else
+                        if (Ammoz[a].Ammo.Propz and ammoprop_AttackingPut) = 0 then
+                            begin
+                            AddAction(BestActions, aia_attack, aim_push, 650 + random(300), 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
+                            end;
+                            
                     if ap.ExplR > 0 then
                         AddAction(BestActions, aia_AwareExpl, ap.ExplR, 10, ap.ExplX, ap.ExplY);
                     end
@@ -218,81 +234,86 @@ if (Me^.State and gstAttacked) = 0 then
 BestRate:= RatePlace(Me);
 BaseRate:= Max(BestRate, 0);
 
+// switch to 'skip' if we can't move because of mouse cursor being shown
 if (Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
     AddAction(Actions, aia_Weapon, Longword(amSkip), 100 + random(200), 0, 0);
-
-tmp:= random(2) + 1;
-Push(0, Actions, Me^, tmp);
-Push(0, Actions, Me^, tmp xor 3);
     
-while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 0) do
+if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoMoveAfter) = 0)) 
+    and (GameFlags and gfArtillery = 0) then
     begin
-    Pop(ticks, Actions, Me^);
-
-    AddAction(Actions, Me^.Message, aim_push, 250, 0, 0);
-    if (Me^.Message and gmLeft) <> 0 then
-        AddAction(Actions, aia_WaitXL, hwRound(Me^.X), 0, 0, 0)
-    else
-        AddAction(Actions, aia_WaitXR, hwRound(Me^.X), 0, 0, 0);
+    tmp:= random(2) + 1;
+    Push(0, Actions, Me^, tmp);
+    Push(0, Actions, Me^, tmp xor 3);
     
-    steps:= 0;
-
-    while (not StopThinking) do
+    while (Stack.Count > 0) and (not StopThinking) do
         begin
-{$HINTS OFF}
-        CanGo:= HHGo(Me, @AltMe, GoInfo);
-{$HINTS ON}
-        inc(ticks, GoInfo.Ticks);
-        if ticks > maxticks then
-            break;
+        Pop(ticks, Actions, Me^);
 
-        if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
-            if Push(ticks, Actions, AltMe, Me^.Message) then
-                with Stack.States[Pred(Stack.Count)] do
-                    begin
-                    if Me^.dX.isNegative then
-                        AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0)
-                    else
-                        AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0);
-                        
-                    AddAction(MadeActions, aia_HJump, 0, 305 + random(50), 0, 0);
-                    AddAction(MadeActions, aia_HJump, 0, 350, 0, 0);
-                    
-                    if Me^.dX.isNegative then
-                        AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0)
-                    else
-                        AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
-                    end;
-        if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
-            if Push(ticks, Actions, AltMe, Me^.Message) then
-                with Stack.States[Pred(Stack.Count)] do
-                    AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
-
-        // 'not CanGO' means we can't go straight, possible jumps are checked above
-        if not CanGo then
-            break;
+        AddAction(Actions, Me^.Message, aim_push, 250, 0, 0);
+        if (Me^.Message and gmLeft) <> 0 then
+            AddAction(Actions, aia_WaitXL, hwRound(Me^.X), 0, 0, 0)
+        else
+            AddAction(Actions, aia_WaitXR, hwRound(Me^.X), 0, 0, 0);
         
-         inc(steps);
-         Actions.actions[Pred(Actions.Count)].Param:= hwRound(Me^.X);
-         Rate:= RatePlace(Me);
-         if Rate > BestRate then
-            begin
-            BestActions:= Actions;
-            BestActions.isWalkingToABetterPlace:= true;
-            BestRate:= Rate;
-            Me^.State:= Me^.State or gstAttacked // we have better place, go there and do not use ammo
-            end
-        else if Rate < BestRate then
-            break;
-        if ((Me^.State and gstAttacked) = 0) and ((steps mod 4) = 0) then
-            TestAmmos(Actions, Me, true);
-        if GoInfo.FallPix >= FallPixForBranching then
-            Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
-        end {while};
+        steps:= 0;
 
-    if BestRate > BaseRate then
-        exit
+        while (not StopThinking) do
+            begin
+    {$HINTS OFF}
+            CanGo:= HHGo(Me, @AltMe, GoInfo);
+    {$HINTS ON}
+            inc(ticks, GoInfo.Ticks);
+            if ticks > maxticks then
+                break;
+
+            if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
+                if Push(ticks, Actions, AltMe, Me^.Message) then
+                    with Stack.States[Pred(Stack.Count)] do
+                        begin
+                        if Me^.dX.isNegative then
+                            AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0)
+                        else
+                            AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0);
+                            
+                        AddAction(MadeActions, aia_HJump, 0, 305 + random(50), 0, 0);
+                        AddAction(MadeActions, aia_HJump, 0, 350, 0, 0);
+                        
+                        if Me^.dX.isNegative then
+                            AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0)
+                        else
+                            AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
+                        end;
+            if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
+                if Push(ticks, Actions, AltMe, Me^.Message) then
+                    with Stack.States[Pred(Stack.Count)] do
+                        AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
+
+            // 'not CanGO' means we can't go straight, possible jumps are checked above
+            if not CanGo then
+                break;
+            
+             inc(steps);
+             Actions.actions[Pred(Actions.Count)].Param:= hwRound(Me^.X);
+             Rate:= RatePlace(Me);
+             if Rate > BestRate then
+                begin
+                BestActions:= Actions;
+                BestActions.isWalkingToABetterPlace:= true;
+                BestRate:= Rate;
+                Me^.State:= Me^.State or gstAttacked // we have better place, go there and do not use ammo
+                end
+            else if Rate < BestRate then
+                break;
+            if ((Me^.State and gstAttacked) = 0) and ((steps mod 4) = 0) then
+                TestAmmos(Actions, Me, true);
+            if GoInfo.FallPix >= FallPixForBranching then
+                Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
+            end {while};
+
+        if BestRate > BaseRate then
+            exit
         end {while}
+    end {if}
 end;
 
 function Think(Me: Pointer): ptrint;
@@ -414,6 +435,8 @@ BeginThread(@Think, Me, ThinkThread);
 AddFileLog('Thread started');
 end;
 
+//var scoreShown: boolean = false;
+
 procedure ProcessBot;
 const cStopThinkTime = 40;
 begin
@@ -430,16 +453,27 @@ with CurrentHedgehog^ do
                     StopMessages(Gear^.Message);
                     TryDo((Gear^.Message and gmAllStoppable) = 0, 'Engine bug: AI may break demos playing', true);
                     end;
+                    
                 if Gear^.Message <> 0 then
                     exit;
+                    
+                //scoreShown:= false;   
                 StartThink(Gear);
                 StartTicks:= GameTicks
                 
-                end else
-                    ProcessAction(BestActions, Gear)
+            end else
+                begin
+                (*
+                if not scoreShown then
+                    begin
+                    if BestActions.Score > 0 then ParseCommand('/say Expected score = ' + inttostr(BestActions.Score div 1024), true);
+                    scoreShown:= true
+                    end;*)
+                ProcessAction(BestActions, Gear)
+                end
         else if ((GameTicks - StartTicks) > cMaxAIThinkTime)
-        or (TurnTimeLeft <= cStopThinkTime) then
-            StopThinking:= true
+            or (TurnTimeLeft <= cStopThinkTime) then
+                StopThinking:= true
 end;
 
 procedure initModule;
