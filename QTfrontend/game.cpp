@@ -333,7 +333,7 @@ QStringList HWGame::getArguments()
     arguments << QString::number(config->translateQuality());
     arguments << QString::number(config->stereoMode());
     arguments << tr("en.txt");
-    arguments << "30"; // framerate num
+    arguments << QString::number(config->rec_Framerate()); // framerate num
     arguments << "1";  // framerate den
 
     return arguments;

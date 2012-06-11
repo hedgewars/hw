@@ -78,7 +78,6 @@ begin
     cVideoQuality:= StrToInt(ParamStr(23));
     cVideoPreset:= ParamStr(24);
     cAudioCodec:= ParamStr(25);
-  // cRecordAudio:= cAudioCodec <> 'no';
     cAudioQuality:= StrToInt(ParamStr(26));
 end;
 {$ENDIF}

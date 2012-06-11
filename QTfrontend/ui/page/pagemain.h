@@ -34,6 +34,7 @@ class PageMain : public AbstractPage
         QPushButton * BtnFeedback;
         QPushButton * BtnInfo;
         QPushButton * BtnDataDownload;
+        QPushButton * BtnVideos;
         QLabel * mainNote;
 
     private:

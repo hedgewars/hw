@@ -55,14 +55,14 @@ type TAddFileLogRaw = procedure (s: pchar); cdecl;
 {$IFDEF WIN32}
 procedure AVWrapper_Init(
               AddLog: TAddFileLogRaw;
-              filename, soundFile, format, vcodec, acodec, preset: PChar;
+              filename, finalFilename, soundFile, format, vcodec, acodec, preset: PChar;
               width, height, framerateNum, framerateDen, frequency, channels, vquality, aquality: LongInt); cdecl; external AVWrapperLibName;
 procedure AVWrapper_Close; cdecl; external AVWrapperLibName;
 procedure AVWrapper_WriteFrame( pY, pCb, pCr: PByte ); cdecl; external AVWrapperLibName;
 {$ELSE}
 procedure AVWrapper_Init(
               AddLog: TAddFileLogRaw;
-              filename, soundFile, format, vcodec, acodec, preset: PChar;
+              filename, finalFilename, soundFile, format, vcodec, acodec, preset: PChar;
               width, height, framerateNum, framerateDen, frequency, channels, vquality, aquality: LongInt); cdecl; external;
 procedure AVWrapper_Close; cdecl; external;
 procedure AVWrapper_WriteFrame( pY, pCb, pCr: PByte ); cdecl; external;
@@ -75,15 +75,15 @@ var YCbCr_Planes: array[0..2] of PByte;
 
     cameraFile: TextFile;
     audioFile: File;
-    
+
     numPixels: LongInt;
 
     firstTick, nframes: Int64;
-    
+
     cameraFilePath, soundFilePath: shortstring;
 
 function BeginVideoRecording: Boolean;
-var filename: shortstring;
+var filename, finalFilename: shortstring;
 begin
     AddFileLog('BeginVideoRecording');
 
@@ -91,7 +91,7 @@ begin
 
 {$IOCHECKS OFF}
     // open file with prerecorded camera positions
-    cameraFilePath:= UserPathPrefix + '/Videos/' + cRecPrefix + '.txtin';
+    cameraFilePath:= UserPathPrefix + '/VideoTemp/' + cRecPrefix + '.txtin';
     Assign(cameraFile, cameraFilePath);
     Reset(cameraFile);
     if IOResult <> 0 then
@@ -103,13 +103,14 @@ begin
     ReadLn(cameraFile, frequency, channels);
 {$IOCHECKS ON}
 
-    filename:= UserPathPrefix + '/Videos/' + cRecPrefix + #0;
-    soundFilePath:= UserPathPrefix + '/Videos/' + cRecPrefix + '.hwsound' + #0;
+    filename:= UserPathPrefix + '/VideoTemp/' + cRecPrefix + #0;
+    finalFilename:= UserPathPrefix + '/Videos/' + cRecPrefix + #0;
+    soundFilePath:= UserPathPrefix + '/VideoTemp/' + cRecPrefix + '.sw' + #0;
     cAVFormat+= #0;
     cAudioCodec+= #0;
     cVideoCodec+= #0;
     cVideoPreset+= #0;
-    AVWrapper_Init(@AddFileLogRaw, @filename[1], @soundFilePath[1], @cAVFormat[1], @cVideoCodec[1], @cAudioCodec[1], @cVideoPreset[1],
+    AVWrapper_Init(@AddFileLogRaw, @filename[1], @finalFilename[1], @soundFilePath[1], @cAVFormat[1], @cVideoCodec[1], @cAudioCodec[1], @cVideoPreset[1],
                    cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, frequency, channels, cAudioQuality, cVideoQuality);
 
     YCbCr_Planes[0]:= GetMem(numPixels);
@@ -176,6 +177,7 @@ begin
     AVWrapper_WriteFrame(YCbCr_Planes[0], YCbCr_Planes[1], YCbCr_Planes[2]);
 end;
 
+// returns new game ticks
 function LoadNextCameraPosition: LongInt;
 var NextTime: LongInt;
     NextZoom: LongInt;
@@ -186,19 +188,18 @@ begin
         exit(-1);
     ReadLn(cameraFile, NextTime, NextWorldDx, NextWorldDy, NextZoom);
 {$IOCHECKS ON}
-    if NextTime = 0 then
-        exit(-1);
     WorldDx:= NextWorldDx;
-    WorldDy:= NextWorldDy;
-    zoom:= NextZoom/10000;
-    ZoomValue:= NextZoom/10000;
+    WorldDy:= NextWorldDy + cScreenHeight div 2;
+    zoom:= NextZoom/10000*cScreenWidth;
+    ZoomValue:= zoom;
     LoadNextCameraPosition:= NextTime;
 end;
 
-// this procedure may be called from different thread
+// Callback which records sound.
+// This procedure may be called from different thread.
 procedure RecordPostMix(udata: pointer; stream: PByte; len: LongInt); cdecl;
 begin
-    udata:= udata;
+    udata:= udata; // avoid warning
 {$IOCHECKS OFF}
     BlockWrite(audioFile, stream^, len);
 {$IOCHECKS ON}
@@ -209,7 +210,7 @@ var format: word;
     filePrefix, filename: shortstring;
 begin
     AddFileLog('BeginPreRecording');
-    
+
     nframes:= 0;
     firstTick:= SDL_GetTicks();
 
@@ -224,7 +225,8 @@ begin
     end;
 
 {$IOCHECKS OFF}
-    filename:= UserPathPrefix + '/Videos/' + filePrefix + '.hwsound';
+    // create sound file
+    filename:= UserPathPrefix + '/VideoTemp/' + filePrefix + '.sw';
     Assign(audioFile, filename);
     Rewrite(audioFile, 1);
     if IOResult <> 0 then
@@ -233,7 +235,8 @@ begin
         exit;
     end;
 
-    filename:= UserPathPrefix + '/Videos/' + filePrefix + '.txtout';
+    // create file with camera positions
+    filename:= UserPathPrefix + '/VideoTemp/' + filePrefix + '.txtout';
     Assign(cameraFile, filename);
     Rewrite(cameraFile);
     if IOResult <> 0 then
@@ -269,7 +272,7 @@ begin
     Ticks:= SDL_GetTicks();
     while (Ticks - firstTick)*cVideoFramerateNum > nframes*cVideoFramerateDen*1000 do
     begin
-        WriteLn(cameraFile, inttostr(GameTicks) + ' ' + inttostr(WorldDx) + ' ' + inttostr(WorldDy) + ' ' + inttostr(Round(zoom*10000)));
+        WriteLn(cameraFile, inttostr(GameTicks) + ' ' + inttostr(WorldDx) + ' ' + inttostr(WorldDy - cScreenHeight div 2) + ' ' + inttostr(Round(zoom*10000/cScreenWidth)));
         inc(nframes);
     end;
 end;
