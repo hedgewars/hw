@@ -45,4 +45,22 @@ void *flib_malloc(size_t size);
  */
 void *flib_calloc(size_t count, size_t elementsize);
 
+/**
+ * Replace all non-alphanumeric and non-ascii bytes with escape
+ * sequences in the form %XX. Does not modify the original string,
+ * but returns a newly allocated one that must be free()d. Returns
+ * null on failure or if null was passed as argument.
+ *
+ * This should work fine with all ASCII-based charsets including UTF-8.
+ */
+char *flib_urlencode(const char *str);
+
+/**
+ * Replace escape sequences of the form %XX with their byte values.
+ * Does not modify the original string, but returns a newly allocated
+ * one that must be free()d. Returns null on failure or if null was
+ * passed as argument.
+ */
+char *flib_urldecode(const char *str);
+
 #endif

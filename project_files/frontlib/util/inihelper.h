@@ -9,65 +9,152 @@
 #ifndef INIHELPER_H_
 #define INIHELPER_H_
 
-#include "../iniparser/iniparser.h"
-
 #include <stdbool.h>
 
+#define INI_ERROR_NOTFOUND -1
+#define INI_ERROR_FORMAT -2
+#define INI_ERROR_OTHER -100
+
 struct _flib_ini;
-typedef struct _flib_inihelper flib_ini;
+typedef struct _flib_ini flib_ini;
 
 /**
- * Returned buffer must be free()d
+ * Create a new ini data structure, pre-filled with the contents of
+ * the file "filename" if it exists. If filename is null, or the file
+ * is not found, an empty ini will be created. However, if an error
+ * occurs while reading the ini file (or any other error), null
+ * is returned.
+ *
+ * This behavior is useful for modifying an existing ini file without
+ * discarding unknown keys.
  */
-char *inihelper_urlencode(const char *inbuf);
+flib_ini *flib_ini_create(const char *filename);
 
 /**
- * Returned buffer must be free()d
+ * Similar to flib_ini_create, but fails if the file is not found
+ * or if filename is null.
  */
-char *inihelper_urldecode(const char *inbuf);
+flib_ini *flib_ini_load(const char *filename);
 
 /**
- * Create a key in the format "sectionName:keyName"
- * Returned buffer must be free()d
+ * Store the ini to the file "filename", overwriting
+ * the previous contents. Returns 0 on success.
  */
-char *inihelper_createDictKey(const char *sectionName, const char *keyName);
+int flib_ini_save(flib_ini *ini, const char *filename);
+
+void flib_ini_destroy(flib_ini *ini);
 
 /**
- * Returns an internal buffer, don't modify or free
- * Sets error to true if something goes wrong, leaves it unchanged otherwise.
+ * Enter the section with the specified name. Returns 0 on
+ * success, INI_ERROR_NOTFOUND if the section does not exist
+ * and a different value if another error occurs.
+ * If an error occurs, there is no current section.
+ *
+ * The section name should only consist of letters and
+ * numbers.
  */
-char *inihelper_getstring(dictionary *inifile, bool *error, const char *sectionName, const char *keyName);
+int flib_ini_enter_section(flib_ini *ini, const char *section);
 
 /**
- * Returned buffer must be free()d
- * Sets error to true if something goes wrong, leaves it unchanged otherwise.
+ * Creates and enters the section with the specified name. Simply
+ * enters the section if it exists already. Returns 0 on success
+ * and a different value if another error occurs.
+ * If an error occurs, there is no current section.
  */
-char *inihelper_getstringdup(dictionary *inifile, bool *error, const char *sectionName, const char *keyName);
+int flib_ini_create_section(flib_ini *ini, const char *section);
 
 /**
- * Sets error to true if something goes wrong, leaves it unchanged otherwise.
+ * Find a key in the current section and store the value in outVar
+ * as a newly allocated string. Returns 0 on success, INI_ERROR_NOTFOUND
+ * if the key was not found and a different value for other errors,
+ * e.g. if there is no current section.
  */
-int inihelper_getint(dictionary *inifile, bool *error, const char *sectionName, const char *keyName);
+int flib_ini_get_str(flib_ini *ini, char **outVar, const char *key);
 
 /**
- * Sets error to true if something goes wrong, leaves it unchanged otherwise.
+ * Find a key in the current section and store the value in outVar
+ * as a newly allocated string. If the key is not found, the default
+ * value will be used instead. Returns 0 on success.
  */
-bool inihelper_getbool(dictionary *inifile, bool *error, const char *sectionName, const char *keyName);
+int flib_ini_get_str_opt(flib_ini *ini, char **outVar, const char *key, const char *def);
 
 /**
- * Returns a nonzero value on error.
+ * Find a key in the current section and store the value in outVar
+ * as an int. Returns 0 on success, INI_ERROR_NOTFOUND
+ * if the key was not found, INI_ERROR_FORMAT if it was found but
+ * could not be converted to an int, and a different value for other
+ * errors, e.g. if there is no current section.
  */
-int inihelper_setstr(dictionary *dict, const char *sectionName, const char *keyName, const char *value);
+int flib_ini_get_int(flib_ini *ini, int *outVar, const char *key);
 
 /**
- * Returns a nonzero value on error.
+ * Find a key in the current section and store the value in outVar
+ * as an int. If the key is not found, the default value will be used instead.
+ * Returns 0 on success, INI_ERROR_FORMAT if the value was found but
+ * could not be converted to int, and another value otherwise.
  */
-int inihelper_setint(dictionary *dict, const char *sectionName, const char *keyName, int value);
+int flib_ini_get_int_opt(flib_ini *ini, int *outVar, const char *key, int def);
 
 /**
- * Set an ini setting to "true" or "false".
- * Returns a nonzero value on error.
+ * Find a key in the current section and store the value in outVar
+ * as a bool. Treats everything beginning with "Y", "T" or "1" as true,
+ * everything starting with "N", "F" or "1" as false.
+ *
+ * Returns 0 on success, INI_ERROR_NOTFOUND if the key was not found,
+ * INI_ERROR_FORMAT if the value could not be interpreted as boolean,
+ * and another value otherwise.
  */
-int inihelper_setbool(dictionary *dict, const char *sectionName, const char *keyName, bool value);
+int flib_ini_get_bool(flib_ini *ini, bool *outVar, const char *key);
+
+/**
+ * Find a key in the current section and store the value in outVar
+ * as a bool. If the key is not found, the default value will be
+ * used instead. Returns 0 on success, INI_ERROR_FORMAT if the
+ * value could not be interpreted as boolean, and another value otherwise.
+ */
+int flib_ini_get_bool_opt(flib_ini *ini, bool *outVar, const char *key, bool def);
+
+/**
+ * In the current section, associate key with value. Returns 0 on success.
+ */
+int flib_ini_set_str(flib_ini *ini, const char *key, const char *value);
+
+/**
+ * In the current section, associate key with value. Returns 0 on success.
+ */
+int flib_ini_set_int(flib_ini *ini, const char *key, int value);
+
+/**
+ * In the current section, associate key with value. Returns 0 on success.
+ */
+int flib_ini_set_bool(flib_ini *ini, const char *key, bool value);
+
+/**
+ * Returns the number of sections in the ini file, or a negative value on error.
+ */
+int flib_ini_get_sectioncount(flib_ini *ini);
+
+/**
+ * Returns the name of the section, or NULL on error. The returned string must
+ * be free()d.
+ *
+ * Note: There is no guarantee that the order of the sections
+ * will remain stable if the ini is modified.
+ */
+char *flib_ini_get_sectionname(flib_ini *ini, int number);
+
+/**
+ * Returns the number of keys in the current section, or -1 on error.
+ */
+int flib_ini_get_keycount(flib_ini *ini);
+
+/**
+ * Returns the name of the key in the current section, or NULL on error.
+ * The returned string must be free()d.
+ *
+ * Note: There is no guarantee that the order of the keys in a section
+ * will remain stable if the ini is modified.
+ */
+char *flib_ini_get_keyname(flib_ini *ini, int number);
 
 #endif /* INIHELPER_H_ */
