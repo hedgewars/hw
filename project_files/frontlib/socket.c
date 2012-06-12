@@ -1,5 +1,6 @@
 #include "socket.h"
 #include "util/logging.h"
+#include "util/util.h"
 #include <stdlib.h>
 #include <SDL_net.h>
 #include <time.h>
@@ -23,10 +24,9 @@ static bool connection_is_local(TCPsocket sock) {
 	return get_peer_ip(sock) == (uint32_t)((127UL<<24)+1); // 127.0.0.1
 }
 
-static flib_tcpsocket flib_socket_create(TCPsocket sdlsock) {
-	flib_tcpsocket result = malloc(sizeof(_flib_tcpsocket));
+static flib_tcpsocket *flib_socket_create(TCPsocket sdlsock) {
+	flib_tcpsocket *result = flib_calloc(1, sizeof(_flib_tcpsocket));
 	if(!result) {
-		flib_log_e("Can't allocate socket: Out of memory!");
 		return NULL;
 	}
 	result->sock = sdlsock;
@@ -43,10 +43,9 @@ static flib_tcpsocket flib_socket_create(TCPsocket sdlsock) {
 	return result;
 }
 
-flib_acceptor flib_acceptor_create(uint16_t port) {
-	flib_acceptor result = malloc(sizeof(_flib_acceptor));
+flib_acceptor *flib_acceptor_create(uint16_t port) {
+	flib_acceptor *result = flib_calloc(1, sizeof(_flib_acceptor));
 	if(!result) {
-		flib_log_e("Can't allocate acceptor: Out of memory!");
 		return NULL;
 	}
 
@@ -86,7 +85,7 @@ flib_acceptor flib_acceptor_create(uint16_t port) {
 	}
 }
 
-uint16_t flib_acceptor_listenport(flib_acceptor acceptor) {
+uint16_t flib_acceptor_listenport(flib_acceptor *acceptor) {
 	if(!acceptor) {
 		flib_log_e("Call to flib_acceptor_listenport with acceptor==null");
 		return 0;
@@ -94,22 +93,19 @@ uint16_t flib_acceptor_listenport(flib_acceptor acceptor) {
 	return acceptor->port;
 }
 
-void flib_acceptor_close(flib_acceptor *acceptorptr) {
-	if(!acceptorptr) {
-		flib_log_e("Call to flib_acceptor_close with acceptorptr==null");
-	} else if(*acceptorptr) {
-		SDLNet_TCP_Close((*acceptorptr)->sock);
-		free(*acceptorptr);
-		*acceptorptr = NULL;
+void flib_acceptor_close(flib_acceptor *acceptor) {
+	if(acceptor) {
+		SDLNet_TCP_Close(acceptor->sock);
+		free(acceptor);
 	}
 }
 
-flib_tcpsocket flib_socket_accept(flib_acceptor acceptor, bool localOnly) {
+flib_tcpsocket *flib_socket_accept(flib_acceptor *acceptor, bool localOnly) {
 	if(!acceptor) {
 		flib_log_e("Call to flib_socket_accept with acceptor==null");
 		return NULL;
 	}
-	flib_tcpsocket result = NULL;
+	flib_tcpsocket *result = NULL;
 	TCPsocket sock = NULL;
 	while(!result && (sock = SDLNet_TCP_Accept(acceptor->sock))) {
 		if(localOnly && !connection_is_local(sock)) {
@@ -125,20 +121,16 @@ flib_tcpsocket flib_socket_accept(flib_acceptor acceptor, bool localOnly) {
 	return result;
 }
 
-void flib_socket_close(flib_tcpsocket *sockptr) {
-	if(!sockptr) {
-		flib_log_e("Call to flib_socket_close with sockptr==null");
-	} else if(*sockptr) {
-		flib_tcpsocket sock = *sockptr;
+void flib_socket_close(flib_tcpsocket *sock) {
+	if(sock) {
 		SDLNet_DelSocket(sock->sockset, (SDLNet_GenericSocket)sock->sock);
 		SDLNet_TCP_Close(sock->sock);
 		SDLNet_FreeSocketSet(sock->sockset);
 		free(sock);
-		*sockptr = NULL;
 	}
 }
 
-int flib_socket_nbrecv(flib_tcpsocket sock, void *data, int maxlen) {
+int flib_socket_nbrecv(flib_tcpsocket *sock, void *data, int maxlen) {
 	if(!sock || (maxlen>0 && !data)) {
 		flib_log_e("Call to flib_socket_nbrecv with sock==null or data==null");
 		return -1;
@@ -155,7 +147,7 @@ int flib_socket_nbrecv(flib_tcpsocket sock, void *data, int maxlen) {
 	}
 }
 
-int flib_socket_send(flib_tcpsocket sock, const void *data, int len) {
+int flib_socket_send(flib_tcpsocket *sock, const void *data, int len) {
 	if(!sock || (len>0 && !data)) {
 		flib_log_e("Call to flib_socket_send with sock==null or data==null");
 		return -1;

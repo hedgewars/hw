@@ -85,3 +85,7 @@ void flib_log_setLevel(int level) {
 void flib_log_setFile(FILE *file) {
 	flib_logfile = file;
 }
+
+bool flib_log_isActive(int level) {
+	return level >= flib_log_getLevel();
+}

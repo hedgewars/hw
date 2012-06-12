@@ -1,6 +1,9 @@
 /**
- * Some helper functions for working with the iniparser functions - in particular,
- * for interoperability with the ini format used by the QtSettings class.
+ * Convenience interface for ini reading/writing.
+ *
+ * We currently use iniparser in the background, but using its interface directly is a bit verbose.
+ * This module is supposed to 1. make ini reading and writing a bit more convenient, and 2. hide
+ * the iniparser dependency so it can at need be easily replaced.
  */
 
 #ifndef INIHELPER_H_
@@ -9,6 +12,9 @@
 #include "../iniparser/iniparser.h"
 
 #include <stdbool.h>
+
+struct _flib_ini;
+typedef struct _flib_inihelper flib_ini;
 
 /**
  * Returned buffer must be free()d
@@ -48,7 +54,20 @@ int inihelper_getint(dictionary *inifile, bool *error, const char *sectionName, 
  */
 bool inihelper_getbool(dictionary *inifile, bool *error, const char *sectionName, const char *keyName);
 
+/**
+ * Returns a nonzero value on error.
+ */
 int inihelper_setstr(dictionary *dict, const char *sectionName, const char *keyName, const char *value);
+
+/**
+ * Returns a nonzero value on error.
+ */
 int inihelper_setint(dictionary *dict, const char *sectionName, const char *keyName, int value);
+
+/**
+ * Set an ini setting to "true" or "false".
+ * Returns a nonzero value on error.
+ */
 int inihelper_setbool(dictionary *dict, const char *sectionName, const char *keyName, bool value);
+
 #endif /* INIHELPER_H_ */

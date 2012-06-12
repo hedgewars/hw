@@ -4,6 +4,7 @@
 
 #include "../util/logging.h"
 #include "../util/buffer.h"
+#include "../util/util.h"
 
 #include <stdlib.h>
 
@@ -15,8 +16,8 @@ typedef enum {
 
 struct _flib_mapconn {
 	uint8_t mapBuffer[IPCCONN_MAPMSG_BYTES];
-	flib_ipcconn connection;
-	flib_vector configBuffer;
+	flib_ipcconn *connection;
+	flib_vector *configBuffer;
 
 	mapconn_state progress;
 
@@ -38,9 +39,9 @@ static void clearCallbacks(flib_mapconn *conn) {
 	conn->onFailureCb = &noop_handleFailure;
 }
 
-static flib_vector createConfigBuffer(char *seed, flib_map *mapdesc) {
-	flib_vector result = NULL;
-	flib_vector tempbuffer = flib_vector_create();
+static flib_vector *createConfigBuffer(char *seed, flib_map *mapdesc) {
+	flib_vector *result = NULL;
+	flib_vector *tempbuffer = flib_vector_create();
 	if(tempbuffer) {
 		bool error = false;
 		error |= flib_ipc_append_seed(tempbuffer, seed);
@@ -51,15 +52,15 @@ static flib_vector createConfigBuffer(char *seed, flib_map *mapdesc) {
 			tempbuffer = NULL;
 		}
 	}
-	flib_vector_destroy(&tempbuffer);
+	flib_vector_destroy(tempbuffer);
 	return result;
 }
 
 flib_mapconn *flib_mapconn_create(char *seed, flib_map *mapdesc) {
 	flib_mapconn *result = NULL;
-	flib_mapconn *tempConn = calloc(1, sizeof(flib_mapconn));
+	flib_mapconn *tempConn = flib_calloc(1, sizeof(flib_mapconn));
 	if(tempConn) {
-		tempConn->connection = flib_ipcconn_create(false, "Player");
+		tempConn->connection = flib_ipcconn_create();
 		tempConn->configBuffer = createConfigBuffer(seed, mapdesc);
 		if(tempConn->connection && tempConn->configBuffer) {
 			tempConn->progress = AWAIT_CONNECTION;
@@ -83,8 +84,8 @@ void flib_mapconn_destroy(flib_mapconn *conn) {
 			clearCallbacks(conn);
 			conn->destroyRequested = true;
 		} else {
-			flib_ipcconn_destroy(&conn->connection);
-			flib_vector_destroy(&conn->configBuffer);
+			flib_ipcconn_destroy(conn->connection);
+			flib_vector_destroy(conn->configBuffer);
 			free(conn);
 		}
 	}

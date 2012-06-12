@@ -16,10 +16,10 @@
 #include <stdint.h>
 
 struct _flib_tcpsocket;
-typedef struct _flib_tcpsocket *flib_tcpsocket;
+typedef struct _flib_tcpsocket flib_tcpsocket;
 
 struct _flib_acceptor;
-typedef struct _flib_acceptor *flib_acceptor;
+typedef struct _flib_acceptor flib_acceptor;
 
 /**
  * Create a new acceptor which will listen for incoming TCP connections
@@ -28,28 +28,28 @@ typedef struct _flib_acceptor *flib_acceptor;
  *
  * Can return NULL on error.
  */
-flib_acceptor flib_acceptor_create(uint16_t port);
+flib_acceptor *flib_acceptor_create(uint16_t port);
 
 /**
  * Return the port on which the acceptor is listening.
  */
-uint16_t flib_acceptor_listenport(flib_acceptor acceptor);
+uint16_t flib_acceptor_listenport(flib_acceptor *acceptor);
 
 /**
- * Close the acceptor, free its memory and set it to NULL.
+ * Close the acceptor and free its memory.
  * If the acceptor is already NULL, nothing happens.
  */
-void flib_acceptor_close(flib_acceptor *acceptorptr);
+void flib_acceptor_close(flib_acceptor *acceptor);
 
 /**
  * Try to accept a connection from an acceptor (listening socket).
  * if localOnly is true, this will only accept connections which came from 127.0.0.1
  * Returns NULL if nothing can be accepted.
  */
-flib_tcpsocket flib_socket_accept(flib_acceptor acceptor, bool localOnly);
+flib_tcpsocket *flib_socket_accept(flib_acceptor *acceptor, bool localOnly);
 
 /**
- * Close the socket, free its memory and set it to NULL.
+ * Close the socket and free its memory.
  * If the socket is already NULL, nothing happens.
  */
 void flib_socket_close(flib_tcpsocket *socket);
@@ -60,8 +60,8 @@ void flib_socket_close(flib_tcpsocket *socket);
  * Returns the ammount of data received, 0 if there was nothing to receive,
  * or a negative number if the connection was closed or an error occurred.
  */
-int flib_socket_nbrecv(flib_tcpsocket sock, void *data, int maxlen);
+int flib_socket_nbrecv(flib_tcpsocket *sock, void *data, int maxlen);
 
-int flib_socket_send(flib_tcpsocket sock, const void *data, int len);
+int flib_socket_send(flib_tcpsocket *sock, const void *data, int len);
 
 #endif /* SOCKET_H_ */

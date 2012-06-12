@@ -8,7 +8,78 @@
 
 #include <stdio.h>
 
-static void freeCfgMeta(flib_cfg_meta *cfg) {
+static flib_cfg_meta *flib_cfg_meta_from_ini_handleError(flib_cfg_meta *result, dictionary *settingfile, dictionary *modfile) {
+	flib_cfg_meta_destroy(result);
+	iniparser_freedict(settingfile);
+	iniparser_freedict(modfile);
+	return NULL;
+}
+
+flib_cfg_meta *flib_cfg_meta_from_ini(const char *settingpath, const char *modpath) {
+	if(!settingpath || !modpath) {
+		flib_log_e("null parameter in flib_cfg_meta_from_ini");
+		return NULL;
+	}
+	flib_cfg_meta *result = flib_calloc(1, sizeof(flib_cfg_meta));
+	dictionary *settingfile = iniparser_load(settingpath);
+	dictionary *modfile = iniparser_load(modpath);
+
+	if(!result || !settingfile || !modfile) {
+		return flib_cfg_meta_from_ini_handleError(result, settingfile, modfile);
+	}
+
+	result->settingCount = iniparser_getnsec(settingfile);
+	result->modCount = iniparser_getnsec(modfile);
+	result->settings = flib_calloc(result->settingCount, sizeof(flib_cfg_setting_meta));
+	result->mods = flib_calloc(result->modCount, sizeof(flib_cfg_mod_meta));
+
+	if(!result->settings || !result->mods) {
+		return flib_cfg_meta_from_ini_handleError(result, settingfile, modfile);
+	}
+
+	for(int i=0; i<result->settingCount; i++) {
+		char *sectionName = iniparser_getsecname(settingfile, i);
+		if(!sectionName) {
+			return flib_cfg_meta_from_ini_handleError(result, settingfile, modfile);
+		}
+
+		bool error = false;
+		result->settings[i].iniName = flib_strdupnull(sectionName);
+		result->settings[i].title = inihelper_getstringdup(settingfile, &error, sectionName, "title");
+		result->settings[i].engineCommand = inihelper_getstringdup(settingfile, &error, sectionName, "command");
+		result->settings[i].image = inihelper_getstringdup(settingfile, &error, sectionName, "image");
+		result->settings[i].checkOverMax = inihelper_getbool(settingfile, &error, sectionName, "checkOverMax");
+		result->settings[i].times1000 = inihelper_getbool(settingfile, &error, sectionName, "times1000");
+		result->settings[i].min = inihelper_getint(settingfile, &error, sectionName, "min");
+		result->settings[i].max = inihelper_getint(settingfile, &error, sectionName, "max");
+		result->settings[i].def = inihelper_getint(settingfile, &error, sectionName, "default");
+		if(error) {
+			flib_log_e("Missing or malformed ini parameter in file %s, section %s", settingpath, sectionName);
+			return flib_cfg_meta_from_ini_handleError(result, settingfile, modfile);
+		}
+	}
+
+	for(int i=0; i<result->modCount; i++) {
+		char *sectionName = iniparser_getsecname(modfile, i);
+		if(!sectionName) {
+			return flib_cfg_meta_from_ini_handleError(result, settingfile, modfile);
+		}
+
+		bool error = false;
+		result->mods[i].iniName = flib_strdupnull(sectionName);
+		result->mods[i].bitmaskIndex = inihelper_getint(modfile, &error, sectionName, "bitmaskIndex");
+		if(error) {
+			flib_log_e("Missing or malformed ini parameter in file %s, section %s", modpath, sectionName);
+			return flib_cfg_meta_from_ini_handleError(result, settingfile, modfile);
+		}
+	}
+
+	iniparser_freedict(settingfile);
+	iniparser_freedict(modfile);
+	return result;
+}
+
+void flib_cfg_meta_destroy(flib_cfg_meta *cfg) {
 	if(cfg) {
 		if(cfg->settings) {
 			for(int i=0; i<cfg->settingCount; i++) {
@@ -29,90 +100,18 @@ static void freeCfgMeta(flib_cfg_meta *cfg) {
 	}
 }
 
-flib_cfg_meta *flib_cfg_meta_from_ini(const char *settingpath, const char *modpath) {
-	if(!settingpath || !modpath) {
-		return NULL;
-	}
-	flib_cfg_meta *result = calloc(1, sizeof(flib_cfg_meta));
-	dictionary *settingfile = iniparser_load(settingpath);
-	dictionary *modfile = iniparser_load(modpath);
-
-	if(!result || !settingfile || !modfile) {
-		goto handleError;
-	}
-
-	result->settingCount = iniparser_getnsec(settingfile);
-	result->modCount = iniparser_getnsec(modfile);
-	result->settings = calloc(result->settingCount, sizeof(flib_cfg_setting_meta));
-	result->mods = calloc(result->modCount, sizeof(flib_cfg_mod_meta));
-
-	if(!result->settings || !result->mods) {
-		goto handleError;
-	}
-
-	for(int i=0; i<result->settingCount; i++) {
-		char *sectionName = iniparser_getsecname(settingfile, i);
-		if(!sectionName) {
-			goto handleError;
-		}
-
-		bool error = false;
-		result->settings[i].iniName = flib_strdupnull(sectionName);
-		result->settings[i].title = inihelper_getstringdup(settingfile, &error, sectionName, "title");
-		result->settings[i].engineCommand = inihelper_getstringdup(settingfile, &error, sectionName, "command");
-		result->settings[i].image = inihelper_getstringdup(settingfile, &error, sectionName, "image");
-		result->settings[i].checkOverMax = inihelper_getbool(settingfile, &error, sectionName, "checkOverMax");
-		result->settings[i].times1000 = inihelper_getbool(settingfile, &error, sectionName, "times1000");
-		result->settings[i].min = inihelper_getint(settingfile, &error, sectionName, "min");
-		result->settings[i].max = inihelper_getint(settingfile, &error, sectionName, "max");
-		result->settings[i].def = inihelper_getint(settingfile, &error, sectionName, "default");
-		if(error) {
-			flib_log_e("Missing or malformed ini parameter in file %s, section %s", settingpath, sectionName);
-			goto handleError;
-		}
-	}
-
-	for(int i=0; i<result->modCount; i++) {
-		char *sectionName = iniparser_getsecname(modfile, i);
-		if(!sectionName) {
-			goto handleError;
-		}
-
-		bool error = false;
-		result->mods[i].iniName = flib_strdupnull(sectionName);
-		result->mods[i].bitmaskIndex = inihelper_getint(modfile, &error, sectionName, "bitmaskIndex");
-		if(error) {
-			flib_log_e("Missing or malformed ini parameter in file %s, section %s", modpath, sectionName);
-			goto handleError;
-		}
-	}
-
-	iniparser_freedict(settingfile);
-	iniparser_freedict(modfile);
-	return result;
-
-	handleError:
-	freeCfgMeta(result);
-	iniparser_freedict(settingfile);
-	iniparser_freedict(modfile);
-	return NULL;
-}
-
-void flib_cfg_meta_destroy(flib_cfg_meta *metainfo) {
-	freeCfgMeta(metainfo);
-}
-
 flib_cfg *flib_cfg_create(const flib_cfg_meta *meta, const char *schemeName) {
-	flib_cfg *result = calloc(1, sizeof(flib_cfg));
+	flib_cfg *result = flib_calloc(1, sizeof(flib_cfg));
 	if(!meta || !result || !schemeName) {
+		flib_log_e("null parameter in flib_cfg_create");
 		return NULL;
 	}
 
 	result->modCount = meta->modCount;
 	result->settingCount = meta->settingCount;
 	result->schemeName = flib_strdupnull(schemeName);
-	result->mods = calloc(meta->modCount, sizeof(*result->mods));
-	result->settings = calloc(meta->settingCount, sizeof(*result->settings));
+	result->mods = flib_calloc(meta->modCount, sizeof(*result->mods));
+	result->settings = flib_calloc(meta->settingCount, sizeof(*result->settings));
 
 	if(!result->mods || !result->settings || !result->schemeName) {
 		flib_cfg_destroy(result);
@@ -133,6 +132,7 @@ flib_cfg *flib_cfg_from_ini_handleError(flib_cfg *result, dictionary *settingfil
 
 flib_cfg *flib_cfg_from_ini(const flib_cfg_meta *meta, const char *filename) {
 	if(!meta || !filename) {
+		flib_log_e("null parameter in flib_cfg_from_ini");
 		return NULL;
 	}
 	dictionary *settingfile = iniparser_load(filename);
@@ -170,8 +170,13 @@ flib_cfg *flib_cfg_from_ini(const flib_cfg_meta *meta, const char *filename) {
 
 int flib_cfg_to_ini(const flib_cfg_meta *meta, const char *filename, const flib_cfg *config) {
 	int result = -1;
-	if(meta && filename && config && config->modCount==meta->modCount && config->settingCount==meta->settingCount) {
-		dictionary *dict = dictionary_new(0);
+	if(!meta || !filename || !config || config->modCount!=meta->modCount || config->settingCount!=meta->settingCount) {
+		flib_log_e("Invalid parameter in flib_cfg_to_ini");
+	} else {
+		dictionary *dict = iniparser_load(filename);
+		if(!dict) {
+			dict = dictionary_new(0);
+		}
 		if(dict) {
 			bool error = false;
 			// Add the sections

@@ -7,7 +7,7 @@
 #include <string.h>
 #include <inttypes.h>
 
-int flib_ipc_append_message(flib_vector vec, const char *fmt, ...) {
+int flib_ipc_append_message(flib_vector *vec, const char *fmt, ...) {
 	int result = -1;
 	if(!vec || !fmt) {
 		flib_log_e("null parameter in flib_ipc_appendmessage");
@@ -38,9 +38,9 @@ int flib_ipc_append_message(flib_vector vec, const char *fmt, ...) {
 	return result;
 }
 
-int flib_ipc_append_mapconf(flib_vector vec, flib_map *map, bool mappreview) {
+int flib_ipc_append_mapconf(flib_vector *vec, flib_map *map, bool mappreview) {
 	int result = -1;
-	flib_vector tempvector = flib_vector_create();
+	flib_vector *tempvector = flib_vector_create();
 	if(!vec || !map) {
 		flib_log_e("null parameter in flib_ipc_append_mapconf");
 	} else if(tempvector) {
@@ -83,11 +83,11 @@ int flib_ipc_append_mapconf(flib_vector vec, flib_map *map, bool mappreview) {
 			}
 		}
 	}
-	flib_vector_destroy(&tempvector);
+	flib_vector_destroy(tempvector);
 	return result;
 }
 
-int flib_ipc_append_seed(flib_vector vec, const char *seed) {
+int flib_ipc_append_seed(flib_vector *vec, const char *seed) {
 	if(!vec || !seed) {
 		flib_log_e("null parameter in flib_ipc_append_seed");
 		return -1;
@@ -96,9 +96,9 @@ int flib_ipc_append_seed(flib_vector vec, const char *seed) {
 	}
 }
 
-int flib_ipc_append_gamescheme(flib_vector vec, flib_cfg *scheme, flib_cfg_meta *meta) {
+int flib_ipc_append_gamescheme(flib_vector *vec, flib_cfg *scheme, flib_cfg_meta *meta) {
 	int result = -1;
-	flib_vector tempvector = flib_vector_create();
+	flib_vector *tempvector = flib_vector_create();
 	if(!vec || !scheme || !meta) {
 		flib_log_e("null parameter in flib_ipc_append_gamescheme");
 	} else if(tempvector) {
@@ -129,14 +129,14 @@ int flib_ipc_append_gamescheme(flib_vector vec, flib_cfg *scheme, flib_cfg_meta 
 			}
 		}
 	}
-	flib_vector_destroy(&tempvector);
+	flib_vector_destroy(tempvector);
 	return result;
 }
 
 // FIXME shared ammo will break per-team ammo
-int flib_ipc_append_addteam(flib_vector vec, flib_team *team, bool perHogAmmo, bool sharedAmmo) {
+int flib_ipc_append_addteam(flib_vector *vec, flib_team *team, bool perHogAmmo, bool sharedAmmo) {
 	int result = -1;
-	flib_vector tempvector = flib_vector_create();
+	flib_vector *tempvector = flib_vector_create();
 	if(!vec || !team || !team->weaponset) {
 		flib_log_e("invalid parameter in flib_ipc_append_addteam");
 	} else if(tempvector) {
@@ -161,7 +161,9 @@ int flib_ipc_append_addteam(flib_vector vec, flib_team *team, bool perHogAmmo, b
 		error |= flib_ipc_append_message(tempvector, "evoicepack %s", team->voicepack);
 		error |= flib_ipc_append_message(tempvector, "eflag %s", team->flag);
 
-		// TODO bindings
+		for(int i=0; i<team->bindingCount; i++) {
+			error |= flib_ipc_append_message(tempvector, "ebind %s %s", team->bindings[i].binding, team->bindings[i].action);
+		}
 
 		for(int i=0; i<team->hogsInGame; i++) {
 			error |= flib_ipc_append_message(tempvector, "eaddhh %i %i %s", team->hogs[i].difficulty, team->hogs[i].initialHealth, team->hogs[i].name);
@@ -176,6 +178,6 @@ int flib_ipc_append_addteam(flib_vector vec, flib_team *team, bool perHogAmmo, b
 			}
 		}
 	}
-	flib_vector_destroy(&tempvector);
+	flib_vector_destroy(tempvector);
 	return result;
 }
