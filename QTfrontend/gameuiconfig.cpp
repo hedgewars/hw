@@ -444,6 +444,7 @@ QRect GameUIConfig::rec_Resolution()
     QRect res(0,0,0,0);
     res.setWidth(Form->ui.pageVideos->widthEdit->text().toUInt());
     res.setHeight(Form->ui.pageVideos->heightEdit->text().toUInt());
+    return res;
 }
 
 int GameUIConfig::rec_Framerate()
