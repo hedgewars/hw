@@ -104,7 +104,7 @@ void testGame() {
 	flib_gamesetup setup;
 	setup.gamescheme = flib_cfg_from_ini(metaconf, "scheme_shoppa.ini");
 	setup.map = flib_map_create_maze("Jungle", MAZE_SIZE_MEDIUM_TUNNELS);
-	setup.seed = "apsfooasdgnds";
+	setup.seed = "asparagus";
 	setup.script = NULL;
 	setup.teamcount = 2;
 	setup.teams = calloc(2, sizeof(flib_team*));
@@ -166,12 +166,37 @@ void testDemo() {
 	}
 }
 
+void testSave() {
+	FILE *demofile = fopen("testsave.42.hws", "rb");
+	assert(demofile);
+	flib_vector *vec = flib_vector_create();
+	uint8_t demobuf[512];
+	int len;
+	while((len=fread(demobuf, 1, 512, demofile))>0) {
+		flib_vector_append(vec, demobuf, len);
+	}
+	fclose(demofile);
+	flib_constbuffer constbuf = flib_vector_as_constbuffer(vec);
+	flib_gameconn *gameconn = flib_gameconn_create_loadgame("Medo42", constbuf.data, constbuf.size);
+	flib_vector_destroy(vec);
+	assert(gameconn);
+	flib_gameconn_onDisconnect(gameconn, &onDisconnect, &gameconn);
+	flib_gameconn_onGameRecorded(gameconn, &onGameRecorded, &gameconn);
+	startEngineGame(flib_gameconn_getport(gameconn));
+
+	while(gameconn) {
+		flib_gameconn_tick(gameconn);
+	}
+}
+
 int main(int argc, char *argv[]) {
 	flib_init(0);
 	flib_log_setLevel(FLIB_LOGLEVEL_ALL);
 
 	//testMapPreview();
-	testDemo();
+	//testDemo();
+	//testSave();
+	testGame();
 
 	flib_quit();
 	return 0;

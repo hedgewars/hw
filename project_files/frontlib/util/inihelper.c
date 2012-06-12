@@ -1,4 +1,7 @@
 #include "inihelper.h"
+#include "../iniparser/dictionary.h"
+#include "../iniparser/iniparser.h"
+
 #include "logging.h"
 #include "util.h"
 
@@ -9,167 +12,309 @@
 #include <errno.h>
 #include <stdarg.h>
 
-static bool keychar_needs_urlencoding(char c) {
-	return !isalnum(c);
-}
+struct _flib_ini {
+	dictionary *inidict;
+	char *currentSection;
+};
 
-char *inihelper_urlencode(const char *inbuf) {
-	if(!inbuf) {
-		return NULL;
-	}
-	size_t insize = strlen(inbuf);
-	if(insize > SIZE_MAX/4) {
-		return NULL;
-	}
-
-	char *outbuf = flib_malloc(insize*3+1);
-	if(!outbuf) {
-		return NULL;
-	}
-
-    size_t inpos = 0, outpos = 0;
-    while(inbuf[inpos]) {
-        if(!keychar_needs_urlencoding(inbuf[inpos])) {
-        	outbuf[outpos++] = inbuf[inpos++];
-        } else {
-            if(snprintf(outbuf+outpos, 4, "%%%02X", (unsigned)((uint8_t*)inbuf)[inpos])<0) {
-            	free(outbuf);
-            	return NULL;
-            }
-            inpos++;
-            outpos += 3;
-        }
-    }
-    outbuf[outpos] = 0;
-    char *shrunk = realloc(outbuf, outpos+1);
-    return shrunk ? shrunk : outbuf;
-}
-
-char *inihelper_urldecode(const char *inbuf) {
-	char *outbuf = flib_malloc(strlen(inbuf)+1);
-	if(!outbuf) {
-		return NULL;
-	}
-
-    size_t inpos = 0, outpos = 0;
-    while(inbuf[inpos]) {
-        if(inbuf[inpos] == '%' && isxdigit(inbuf[inpos+1]) && isxdigit(inbuf[inpos+2])) {
-            char temp[3] = {inbuf[inpos+1],inbuf[inpos+2],0};
-            outbuf[outpos++] = strtol(temp, NULL, 16);
-            inpos += 3;
-        } else {
-        	outbuf[outpos++] = inbuf[inpos++];
-        }
-    }
-    outbuf[outpos] = 0;
-    char *shrunk = realloc(outbuf, outpos+1);
-    return shrunk ? shrunk : outbuf;
-}
-
-char *inihelper_createDictKey(const char *sectionName, const char *keyName) {
-	if(!sectionName || !keyName) {
-		flib_log_e("null parameter in inihelper_createDictKey");
-		return NULL;
-	}
+static char *createDictKey(const char *sectionName, const char *keyName) {
 	return flib_asprintf("%s:%s", sectionName, keyName);
 }
 
-char *inihelper_getstring(dictionary *inifile, bool *error, const char *sectionName, const char *keyName) {
-	if(!inifile || !sectionName || !keyName) {
-		flib_log_e("null parameter in inihelper_getstring");
-		*error = true;
-		return NULL;
+/**
+ * Turns a string into a lowercase string, in-place.
+ */
+static void strToLower(char *str) {
+	if(str) {
+		while(*str) {
+			*str = tolower(*str);
+			str++;
+		}
 	}
-	char *extendedkey = inihelper_createDictKey(sectionName, keyName);
-	if(!extendedkey) {
-		*error = true;
-		return NULL;
+}
+
+flib_ini *flib_ini_create(const char *filename) {
+	flib_ini *result = NULL;
+	flib_ini *tmpIni = flib_calloc(1, sizeof(flib_ini));
+	if(tmpIni) {
+		if(filename) {
+			tmpIni->inidict = iniparser_load(filename);
+		}
+		if(!tmpIni->inidict) {
+			tmpIni->inidict = dictionary_new(0);
+		}
+		if(tmpIni->inidict) {
+			result = tmpIni;
+			tmpIni = NULL;
+		}
 	}
-	char *result = iniparser_getstring(inifile, extendedkey, NULL);
-	free(extendedkey);
-	if(!result) {
-		flib_log_d("Missing ini setting: %s/%s", sectionName, keyName);
-		*error = true;
+	flib_ini_destroy(tmpIni);
+	return result;
+}
+
+flib_ini *flib_ini_load(const char *filename) {
+	flib_ini *result = NULL;
+	if(!filename) {
+		flib_log_e("null parameter in flib_ini_load");
+	} else {
+		flib_ini *tmpIni = flib_calloc(1, sizeof(flib_ini));
+		if(tmpIni) {
+			tmpIni->inidict = iniparser_load(filename);
+			if(tmpIni->inidict) {
+				result = tmpIni;
+				tmpIni = NULL;
+			}
+		}
+		flib_ini_destroy(tmpIni);
 	}
 	return result;
 }
 
-char *inihelper_getstringdup(dictionary *inifile, bool *error, const char *sectionName, const char *keyName) {
-	return flib_strdupnull(inihelper_getstring(inifile, error, sectionName, keyName));
-}
-
-int inihelper_getint(dictionary *inifile, bool *error, const char *sectionName, const char *keyName) {
-	char *value = inihelper_getstring(inifile, error, sectionName, keyName);
-	if(!value) {
-		return 0;
+int flib_ini_save(flib_ini *ini, const char *filename) {
+	int result = INI_ERROR_OTHER;
+	if(!ini || !filename) {
+		flib_log_e("null parameter in flib_ini_save");
 	} else {
-		errno = 0;
-		long val = strtol(value, NULL, 10);
-		if(errno!=0) {
-			flib_log_w("Cannot parse ini setting %s/%s = \"%s\" as integer.", sectionName, keyName, value);
-			*error = true;
-			return 0;
-		}
-		if(val<INT_MIN || val>INT_MAX) {
-			flib_log_w("ini setting %s/%s = \"%s\" is too large or too small.", sectionName, keyName, value);
-			*error = true;
-			return 0;
-		}
-		return (int)val;
-	}
-}
-
-bool inihelper_getbool(dictionary *inifile, bool *error, const char *sectionName, const char *keyName) {
-	char *value = inihelper_getstring(inifile, error, sectionName, keyName);
-	if(!value) {
-		return false;
-	} else {
-		bool trueval = strchr("1tTyY", value[0]);
-		bool falseval = strchr("0fFnN", value[0]);
-		if(!trueval && !falseval) {
-			flib_log_w("ini setting %s/%s = \"%s\" is not a recognized truth value.", sectionName, keyName, value);
-			*error = true;
-			return false;
+		FILE *file = fopen(filename, "wb");
+		if(!file) {
+			flib_log_e("Error opening file \"%s\" for writing.", filename);
 		} else {
-			return trueval;
-		}
-	}
-}
-
-int inihelper_setstr(dictionary *dict, const char *sectionName, const char *keyName, const char *value) {
-	int result = -1;
-	if(!dict || !sectionName || !keyName || !value) {
-		flib_log_e("null parameter in inihelper_setstr");
-	} else {
-		char *extendedkey = inihelper_createDictKey(sectionName, keyName);
-		if(extendedkey) {
-			result = iniparser_set(dict, extendedkey, value);
-		}
-		free(extendedkey);
-	}
-	return result;
-}
-
-int inihelper_setint(dictionary *dict, const char *sectionName, const char *keyName, int value) {
-	int result = -1;
-	if(!dict || !sectionName || !keyName) {
-		flib_log_e("null parameter in inihelper_setint");
-	} else {
-		char *strvalue = flib_asprintf("%i", value);
-		if(strvalue) {
-			result = inihelper_setstr(dict, sectionName, keyName, strvalue);
-			free(strvalue);
+			iniparser_dump_ini(ini->inidict, file);
+			if(fclose(file)) {
+				flib_log_e("Write error on ini file \"%s\"", filename);
+			} else {
+				result = 0;
+			}
 		}
 	}
 	return result;
 }
 
-int inihelper_setbool(dictionary *dict, const char *sectionName, const char *keyName, bool value) {
-	int result = -1;
-	if(!dict || !sectionName || !keyName) {
-		flib_log_e("null parameter in inihelper_setbool");
+void flib_ini_destroy(flib_ini *ini) {
+	if(ini) {
+		if(ini->inidict) {
+			iniparser_freedict(ini->inidict);
+		}
+		free(ini->currentSection);
+		free(ini);
+	}
+}
+
+int flib_ini_enter_section(flib_ini *ini, const char *section) {
+	int result = INI_ERROR_OTHER;
+	if(ini) {
+		free(ini->currentSection);
+		ini->currentSection = NULL;
+	}
+	if(!ini || !section) {
+		flib_log_e("null parameter in flib_ini_enter_section");
 	} else {
-		result = inihelper_setstr(dict, sectionName, keyName, value ? "true" : "false");
+		if(!iniparser_find_entry(ini->inidict, section)) {
+			result = INI_ERROR_NOTFOUND;
+		} else {
+			ini->currentSection = flib_strdupnull(section);
+			if(ini->currentSection) {
+				// Usually iniparser ignores case, but some section-handling functions don't,
+				// so we set it to lowercase manually
+				strToLower(ini->currentSection);
+				result = 0;
+			}
+		}
+	}
+	return result;
+}
+
+int flib_ini_create_section(flib_ini *ini, const char *section) {
+	int result = INI_ERROR_OTHER;
+	if(!ini || !section) {
+		flib_log_e("null parameter in flib_ini_create_section");
+	} else {
+		result = flib_ini_enter_section(ini, section);
+		if(result == INI_ERROR_NOTFOUND) {
+			if(iniparser_set(ini->inidict, section, NULL)) {
+				result = INI_ERROR_OTHER;
+			} else {
+				result = flib_ini_enter_section(ini, section);
+			}
+		}
+	}
+	return result;
+}
+
+/**
+ * The result is an internal string of the iniparser, don't free it.
+ */
+static char *findValue(dictionary *dict, const char *section, const char *key) {
+	char *result = NULL;
+	char *dictKey = createDictKey(section, key);
+	if(dictKey) {
+		result = iniparser_getstring(dict, dictKey, NULL);
+	}
+	free(dictKey);
+	return result;
+}
+
+int flib_ini_get_str(flib_ini *ini, char **outVar, const char *key) {
+	char *tmpValue = NULL;
+	int result = flib_ini_get_str_opt(ini, &tmpValue, key, NULL);
+	if(result==0) {
+		if(tmpValue == NULL) {
+			result = INI_ERROR_NOTFOUND;
+		} else {
+			*outVar = tmpValue;
+			tmpValue = NULL;
+		}
+	}
+	free(tmpValue);
+	return result;
+}
+
+int flib_ini_get_str_opt(flib_ini *ini, char **outVar, const char *key, const char *def) {
+	int result = INI_ERROR_OTHER;
+	if(!ini || !outVar || !key || !ini->currentSection) {
+		flib_log_e("null parameter or no current section in flib_ini_get_str_opt");
+	} else {
+		const char *value = findValue(ini->inidict, ini->currentSection, key);
+		if(!value) {
+			value = def;
+		}
+		char *valueDup = flib_strdupnull(value);
+		if(valueDup) {
+			*outVar = valueDup;
+			result = 0;
+		}
+	}
+	return result;
+}
+
+int flib_ini_get_int(flib_ini *ini, int *outVar, const char *key) {
+	char *tmpValue = NULL;
+	int result = flib_ini_get_str(ini, &tmpValue, key);
+	if(result==0) {
+		errno = 0;
+		long val = strtol(tmpValue, NULL, 10);
+		if(errno!=0 || val<INT_MIN || val>INT_MAX) {
+			flib_log_w("Cannot parse ini setting %s/%s = \"%s\" as integer.", ini->currentSection, key, tmpValue);
+			result = INI_ERROR_FORMAT;
+		} else {
+			*outVar = val;
+		}
+	}
+	free(tmpValue);
+	return result;
+}
+
+int flib_ini_get_int_opt(flib_ini *ini, int *outVar, const char *key, int def) {
+	int tmpValue;
+	int result = flib_ini_get_int(ini, &tmpValue, key);
+	if(result == 0) {
+		*outVar = tmpValue;
+	} else if(result == INI_ERROR_NOTFOUND) {
+		*outVar = def;
+		result = 0;
+	}
+	return result;
+}
+
+int flib_ini_get_bool(flib_ini *ini, bool *outVar, const char *key) {
+	char *tmpValue = NULL;
+	int result = flib_ini_get_str(ini, &tmpValue, key);
+	if(result==0) {
+		bool trueval = strchr("1tTyY", tmpValue[0]);
+		bool falseval = strchr("0fFnN", tmpValue[0]);
+		if(!trueval && !falseval) {
+			flib_log_w("ini setting %s/%s = \"%s\" is not a recognized truth value.", ini->currentSection, key, tmpValue);
+			result = INI_ERROR_FORMAT;
+		} else {
+			*outVar = trueval;
+		}
+	}
+	free(tmpValue);
+	return result;
+}
+
+int flib_ini_get_bool_opt(flib_ini *ini, bool *outVar, const char *key, bool def) {
+	bool tmpValue;
+	int result = flib_ini_get_bool(ini, &tmpValue, key);
+	if(result == 0) {
+		*outVar = tmpValue;
+	} else if(result == INI_ERROR_NOTFOUND) {
+		*outVar = def;
+		result = 0;
+	}
+	return result;
+}
+
+int flib_ini_set_str(flib_ini *ini, const char *key, const char *value) {
+	int result = INI_ERROR_OTHER;
+	if(!ini || !key || !value || !ini->currentSection) {
+		flib_log_e("null parameter or no current section in flib_ini_set_str");
+	} else {
+		char *dictKey = createDictKey(ini->currentSection, key);
+		if(dictKey) {
+			result = iniparser_set(ini->inidict, dictKey, value);
+		}
+		free(dictKey);
+	}
+	return result;
+}
+
+int flib_ini_set_int(flib_ini *ini, const char *key, int value) {
+	int result = INI_ERROR_OTHER;
+	char *strvalue = flib_asprintf("%i", value);
+	if(strvalue) {
+		result = flib_ini_set_str(ini, key, strvalue);
+	}
+	free(strvalue);
+	return result;
+}
+
+int flib_ini_set_bool(flib_ini *ini, const char *key, bool value) {
+	return flib_ini_set_str(ini, key, value ? "true" : "false");
+}
+
+int flib_ini_get_sectioncount(flib_ini *ini) {
+	int result = INI_ERROR_OTHER;
+	if(!ini) {
+		flib_log_e("null parameter in flib_ini_get_sectioncount");
+	} else {
+		result = iniparser_getnsec(ini->inidict);
+	}
+	return result;
+}
+
+char *flib_ini_get_sectionname(flib_ini *ini, int number) {
+	char *result = NULL;
+	if(!ini || number<0) {
+		flib_log_e("bad parameter in flib_ini_get_sectionname");
+	} else {
+		result = flib_strdupnull(iniparser_getsecname(ini->inidict, number));
+	}
+	return result;
+}
+
+int flib_ini_get_keycount(flib_ini *ini) {
+	int result = INI_ERROR_OTHER;
+	if(!ini || !ini->currentSection) {
+		flib_log_e("null parameter or no current section in flib_ini_get_keycount");
+	} else {
+		result = iniparser_getsecnkeys(ini->inidict, ini->currentSection);
+	}
+	return result;
+}
+
+char *flib_ini_get_keyname(flib_ini *ini, int number) {
+	char *result = NULL;
+	if(!ini || number<0 || !ini->currentSection) {
+		flib_log_e("bad parameter or no current section in flib_ini_get_keyname");
+	} else {
+		int keyCount = iniparser_getsecnkeys(ini->inidict, ini->currentSection);
+		char **keys = iniparser_getseckeys(ini->inidict, ini->currentSection);
+		if(keys && keyCount>number) {
+			// The keys are in the format section:key, so we have to skip the section and colon.
+			result = flib_strdupnull(keys[number]+strlen(ini->currentSection)+1);
+		}
+		free(keys);
 	}
 	return result;
 }

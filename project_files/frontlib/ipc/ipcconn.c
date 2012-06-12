@@ -15,7 +15,7 @@
  *
  * We don't need to worry about wasting a few kb though, and I like powers of two...
  */
-typedef struct _flib_ipcconn {
+struct _flib_ipcconn {
 	uint8_t readBuffer[8192];
 	int readBufferSize;
 
@@ -23,10 +23,10 @@ typedef struct _flib_ipcconn {
 	uint16_t port;
 
 	flib_tcpsocket *sock;
-} _flib_ipcconn;
+};
 
 flib_ipcconn *flib_ipcconn_create() {
-	flib_ipcconn *result = flib_malloc(sizeof(_flib_ipcconn));
+	flib_ipcconn *result = flib_malloc(sizeof(flib_ipcconn));
 	flib_acceptor *acceptor = flib_acceptor_create(0);
 
 	if(!result || !acceptor) {

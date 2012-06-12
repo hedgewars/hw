@@ -79,6 +79,10 @@ flib_team *flib_team_from_ini(const char *filename);
  * that were already present. Note that not all fields of a team struct
  * are stored in the ini, some are only used intermittently to store
  * information about a team in the context of a game.
+ *
+ * The flib_team can handle "difficulty" on a per-hog basis, but it
+ * is only written per-team in the team file. The difficulty of the
+ * first hog is used for the entire team when writing.
  */
 int flib_team_to_ini(const char *filename, const flib_team *team);
 void flib_team_destroy(flib_team *team);

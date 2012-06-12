@@ -1,6 +1,5 @@
 #include "weapon.h"
 
-#include "../iniparser/iniparser.h"
 #include "../util/inihelper.h"
 #include "../util/logging.h"
 #include "../util/util.h"
@@ -75,23 +74,30 @@ flib_weaponset *flib_weaponset_from_ini(const char *filename) {
 	if(!filename) {
 		flib_log_e("null parameter in flib_weaponset_from_ini");
 	} else {
-		dictionary *settingfile = iniparser_load(filename);
-		if(!settingfile) {
+		flib_ini *ini = flib_ini_load(filename);
+		if(!ini) {
 			flib_log_e("Error loading weapon scheme file %s", filename);
-		} else {
+		} else if(!flib_ini_enter_section(ini, "weaponset")) {
 			bool error = false;
-			char *name = inihelper_getstring(settingfile, &error, "weaponset", "name");
-			char *loadout = inihelper_getstring(settingfile, &error, "weaponset", "loadout");
-			char *crateprob = inihelper_getstring(settingfile, &error, "weaponset", "crateprob");
-			char *crateammo = inihelper_getstring(settingfile, &error, "weaponset", "crateammo");
-			char *delay = inihelper_getstring(settingfile, &error, "weaponset", "delay");
+			char *name = NULL, *loadout = NULL, *crateprob = NULL, *crateammo = NULL, *delay = NULL;
+			error |= flib_ini_get_str(ini, &name, "name");
+			error |= flib_ini_get_str(ini, &loadout, "loadout");
+			error |= flib_ini_get_str(ini, &crateprob, "crateprob");
+			error |= flib_ini_get_str(ini, &crateammo, "crateammo");
+			error |= flib_ini_get_str(ini, &delay, "delay");
+
 			if(error) {
 				flib_log_e("Missing key in weapon scheme file %s", filename);
 			} else {
 				result = flib_weaponset_create_str(name, loadout, crateprob, crateammo, delay);
 			}
+			free(name);
+			free(loadout);
+			free(crateprob);
+			free(crateammo);
+			free(delay);
 		}
-		iniparser_freedict(settingfile);
+		flib_ini_destroy(ini);
 	}
 	return result;
 }
@@ -101,31 +107,19 @@ int flib_weaponset_to_ini(const char *filename, const flib_weaponset *set) {
 	if(!filename || !set) {
 		flib_log_e("null parameter in flib_weaponset_to_ini");
 	} else {
-		dictionary *dict = iniparser_load(filename);
-		if(!dict) {
-			dict = dictionary_new(0);
-		}
-		if(dict) {
+		flib_ini *ini = flib_ini_create(filename);
+		if(!flib_ini_create_section(ini, "weaponset")) {
 			bool error = false;
-			// Add the sections
-			error |= iniparser_set(dict, "weaponset", NULL);
-
-			// Add the values
-			error |= inihelper_setstr(dict, "weaponset", "name", set->name);
-			error |= inihelper_setstr(dict, "weaponset", "loadout", set->loadout);
-			error |= inihelper_setstr(dict, "weaponset", "crateprob", set->crateprob);
-			error |= inihelper_setstr(dict, "weaponset", "crateammo", set->crateammo);
-			error |= inihelper_setstr(dict, "weaponset", "delay", set->delay);
+			error |= flib_ini_set_str(ini, "name", set->name);
+			error |= flib_ini_set_str(ini, "loadout", set->loadout);
+			error |= flib_ini_set_str(ini, "crateprob", set->crateprob);
+			error |= flib_ini_set_str(ini, "crateammo", set->crateammo);
+			error |= flib_ini_set_str(ini, "delay", set->delay);
 			if(!error) {
-				FILE *inifile = fopen(filename, "wb");
-				if(inifile) {
-					iniparser_dump_ini(dict, inifile);
-					fclose(inifile);
-					result = 0;
-				}
+				result = flib_ini_save(ini, filename);
 			}
-			dictionary_del(dict);
 		}
+		flib_ini_destroy(ini);
 	}
 	return result;
 }

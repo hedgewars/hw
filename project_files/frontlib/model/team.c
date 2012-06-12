@@ -3,84 +3,189 @@
 #include "../util/inihelper.h"
 #include "../util/util.h"
 #include "../util/logging.h"
+#include <string.h>
+#include <stdlib.h>
 
-static flib_team *from_ini_handleError(flib_team *result, dictionary *settingfile, char **bindingKeys) {
-	if(settingfile) {
-		iniparser_freedict(settingfile);
-	}
+static flib_team *from_ini_handleError(flib_team *result, flib_ini *settingfile) {
+	flib_ini_destroy(settingfile);
 	flib_team_destroy(result);
-	free(bindingKeys);
 	return NULL;
 }
 
 flib_team *flib_team_from_ini(const char *filename) {
 	flib_team *result = flib_calloc(1, sizeof(flib_team));
-	dictionary *settingfile = NULL;
-	char **bindingKeys = NULL;
+	flib_ini *ini = NULL;
 
 	if(!filename) {
 		flib_log_e("null parameter in flib_team_from_ini");
-		return from_ini_handleError(result, settingfile, bindingKeys);
+		return from_ini_handleError(result, ini);
 	}
 
 	if(!result) {
-		return from_ini_handleError(result, settingfile, bindingKeys);
+		return from_ini_handleError(result, ini);
 	}
 
-	settingfile = iniparser_load(filename);
-	if(!settingfile) {
+	ini = flib_ini_load(filename);
+	if(!ini) {
 		flib_log_e("Error loading team file %s", filename);
-		return from_ini_handleError(result, settingfile, bindingKeys);
+		return from_ini_handleError(result, ini);
 	}
 
+	if(flib_ini_enter_section(ini, "team")) {
+		flib_log_e("Missing section \"Team\" in team file %s", filename);
+		return from_ini_handleError(result, ini);
+	}
 	bool error = false;
-	result->name = inihelper_getstringdup(settingfile, &error, "team", "name");
-	result->grave = inihelper_getstringdup(settingfile, &error, "team", "grave");
-	result->fort = inihelper_getstringdup(settingfile, &error, "team", "fort");
-	result->voicepack = inihelper_getstringdup(settingfile, &error, "team", "voicepack");
-	result->flag = inihelper_getstringdup(settingfile, &error, "team", "flag");
-	result->rounds = inihelper_getint(settingfile, &error, "team", "rounds");
-	result->wins = inihelper_getint(settingfile, &error, "team", "wins");
-	result->campaignProgress = inihelper_getint(settingfile, &error, "team", "campaignprogress");
-	int difficulty = inihelper_getint(settingfile, &error, "team", "difficulty");
+	error |= flib_ini_get_str(ini, &result->name, "name");
+	error |= flib_ini_get_str(ini, &result->grave, "grave");
+	error |= flib_ini_get_str(ini, &result->fort, "fort");
+	error |= flib_ini_get_str(ini, &result->voicepack, "voicepack");
+	error |= flib_ini_get_str(ini, &result->flag, "flag");
+	error |= flib_ini_get_int(ini, &result->rounds, "rounds");
+	error |= flib_ini_get_int(ini, &result->wins, "wins");
+	error |= flib_ini_get_int(ini, &result->campaignProgress, "campaignprogress");
 
-	char sectionName[10];
-	strcpy(sectionName, "hedgehog0");
+	int difficulty = 0;
+	error |= flib_ini_get_int(ini, &difficulty, "difficulty");
+
+	if(error) {
+		flib_log_e("Missing or malformed entry in section \"Team\" in file %s", filename);
+		return from_ini_handleError(result, ini);
+	}
+
 	for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
-		sectionName[8] = '0'+i;
-		result->hogs[i].name = inihelper_getstringdup(settingfile, &error, sectionName, "name");
-		result->hogs[i].hat = inihelper_getstringdup(settingfile, &error, sectionName, "hat");
-		result->hogs[i].rounds = inihelper_getint(settingfile, &error, sectionName, "rounds");
-		result->hogs[i].kills = inihelper_getint(settingfile, &error, sectionName, "kills");
-		result->hogs[i].deaths = inihelper_getint(settingfile, &error, sectionName, "deaths");
-		result->hogs[i].suicides = inihelper_getint(settingfile, &error, sectionName, "suicides");
+		char sectionName[32];
+		if(snprintf(sectionName, sizeof(sectionName), "hedgehog%i", i) <= 0) {
+			return from_ini_handleError(result, ini);
+		}
+		if(flib_ini_enter_section(ini, sectionName)) {
+			flib_log_e("Missing section \"%s\" in team file %s", sectionName, filename);
+			return from_ini_handleError(result, ini);
+		}
+		flib_hog *hog = &result->hogs[i];
+		error |= flib_ini_get_str(ini, &hog->name, "name");
+		error |= flib_ini_get_str(ini, &hog->hat, "hat");
+		error |= flib_ini_get_int(ini, &hog->rounds, "rounds");
+		error |= flib_ini_get_int(ini, &hog->kills, "kills");
+		error |= flib_ini_get_int(ini, &hog->deaths, "deaths");
+		error |= flib_ini_get_int(ini, &hog->suicides, "suicides");
 		result->hogs[i].difficulty = difficulty;
 		result->hogs[i].initialHealth = TEAM_DEFAULT_HEALTH;
+
+		if(error) {
+			flib_log_e("Missing or malformed entry in section \"%s\" in file %s", sectionName, filename);
+			return from_ini_handleError(result, ini);
+		}
 	}
 
-	result->bindingCount = iniparser_getsecnkeys(settingfile, "binds");
-	result->bindings = flib_calloc(result->bindingCount, sizeof(flib_binding));
-	bindingKeys = iniparser_getseckeys(settingfile, "binds");
-	if(!result->bindings || !bindingKeys) {
-		return from_ini_handleError(result, settingfile, bindingKeys);
-	}
-
-	for(int i=0; i<result->bindingCount; i++) {
-		result->bindings[i].binding = flib_strdupnull(iniparser_getstring(settingfile, bindingKeys[i], NULL));
-		// The key names all start with "binds:", so we skip that.
-		result->bindings[i].action = inihelper_urldecode(bindingKeys[i]+strlen("binds:"));
-		if(!result->bindings[i].action || !result->bindings[i].binding) {
-			error = true;
+	if(!flib_ini_enter_section(ini, "binds")) {
+		result->bindingCount = flib_ini_get_keycount(ini);
+		if(result->bindingCount<0) {
+			flib_log_e("Error reading bindings from file %s", filename);
+			result->bindingCount = 0;
+		}
+		result->bindings = flib_calloc(result->bindingCount, sizeof(flib_binding));
+		if(!result->bindings) {
+			return from_ini_handleError(result, ini);
+		}
+		for(int i=0; i<result->bindingCount; i++) {
+			char *keyname = flib_ini_get_keyname(ini, i);
+			if(!keyname) {
+				error = true;
+			} else {
+				result->bindings[i].action = flib_urldecode(keyname);
+				error |= !result->bindings[i].action;
+				error |= flib_ini_get_str(ini, &result->bindings[i].binding, keyname);
+			}
+			free(keyname);
 		}
 	}
 
 	if(error) {
 		flib_log_e("Error reading team file %s", filename);
-		return from_ini_handleError(result, settingfile, bindingKeys);
+		return from_ini_handleError(result, ini);
 	}
 
-	iniparser_freedict(settingfile);
-	free(bindingKeys);
+	flib_ini_destroy(ini);
+	return result;
+}
+
+static int writeTeamSection(const flib_team *team, flib_ini *ini) {
+	if(flib_ini_create_section(ini, "team")) {
+		return -1;
+	}
+	bool error = false;
+	error |= flib_ini_set_str(ini, "name",  team->name);
+	error |= flib_ini_set_str(ini, "grave", team->grave);
+	error |= flib_ini_set_str(ini, "fort", team->fort);
+	error |= flib_ini_set_str(ini, "voicepack", team->voicepack);
+	error |= flib_ini_set_str(ini, "flag", team->flag);
+	error |= flib_ini_set_int(ini, "rounds", team->rounds);
+	error |= flib_ini_set_int(ini, "wins", team->wins);
+	error |= flib_ini_set_int(ini, "campaignprogress", team->campaignProgress);
+	error |= flib_ini_set_int(ini, "difficulty", team->hogs[0].difficulty);
+	return error;
+}
+
+static int writeHogSections(const flib_team *team, flib_ini *ini) {
+	for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
+		const flib_hog *hog = &team->hogs[i];
+		char sectionName[32];
+		if(snprintf(sectionName, sizeof(sectionName), "hedgehog%i", i) <= 0) {
+			return -1;
+		}
+		if(flib_ini_create_section(ini, sectionName)) {
+			return -1;
+		}
+		bool error = false;
+		error |= flib_ini_set_str(ini, "name", hog->name);
+		error |= flib_ini_set_str(ini, "hat", hog->hat);
+		error |= flib_ini_set_int(ini, "rounds", hog->rounds);
+		error |= flib_ini_set_int(ini, "kills", hog->kills);
+		error |= flib_ini_set_int(ini, "deaths", hog->deaths);
+		error |= flib_ini_set_int(ini, "suicides", hog->suicides);
+		if(error) {
+			return error;
+		}
+	}
+	return 0;
+}
+
+static int writeBindingSection(const flib_team *team, flib_ini *ini) {
+	if(flib_ini_create_section(ini, "binds")) {
+		return -1;
+	}
+	for(int i=0; i<team->bindingCount; i++) {
+		bool error = false;
+		char *action = flib_urlencode(team->bindings[i].action);
+		if(action) {
+			error |= flib_ini_set_str(ini, action, team->bindings[i].binding);
+			free(action);
+		} else {
+			error = true;
+		}
+		if(error) {
+			return error;
+		}
+	}
+	return 0;
+}
+
+int flib_team_to_ini(const char *filename, const flib_team *team) {
+	int result = -1;
+	if(!filename || !team) {
+		flib_log_e("null parameter in flib_team_to_ini");
+	} else {
+		flib_ini *ini = flib_ini_create(filename);
+		bool error = false;
+		error |= writeTeamSection(team, ini);
+		error |= writeHogSections(team, ini);
+		error |= writeBindingSection(team, ini);
+		if(!error) {
+			result = flib_ini_save(ini, filename);
+		}
+		flib_ini_destroy(ini);
+	}
 	return result;
 }
 
