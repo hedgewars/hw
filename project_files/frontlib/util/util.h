@@ -13,7 +13,7 @@
 char *flib_asprintf(const char *fmt, ...);
 
 /**
- * Exactly as flib_asprintf, but accepts va_args.
+ * Exactly as flib_asprintf, but accepts a va_list.
  */
 char *flib_vasprintf(const char *fmt, va_list args);
 
@@ -32,5 +32,17 @@ char *flib_strdupnull(const char *str);
  * Returned buffer must be free()d
  */
 void *flib_bufdupnull(const void *buf, size_t size);
+
+/**
+ * Simple malloc wrapper that automatically logs an error if no memory
+ * is available. Otherwise behaves exactly like malloc.
+ */
+void *flib_malloc(size_t size);
+
+/**
+ * Simple calloc wrapper that automatically logs an error if no memory
+ * is available. Otherwise behaves exactly like calloc.
+ */
+void *flib_calloc(size_t count, size_t elementsize);
 
 #endif

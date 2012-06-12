@@ -1,9 +1,12 @@
 #include "buffer.h"
 #include "logging.h"
+#include "util.h"
 
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
+
+#define MIN_VECTOR_CAPACITY 16
 
 typedef struct _flib_vector {
 	void *data;
@@ -11,30 +14,30 @@ typedef struct _flib_vector {
 	size_t capacity;
 } _flib_vector;
 
-flib_vector flib_vector_create() {
-	flib_vector result = malloc(sizeof(_flib_vector));
-	if(result == NULL) {
-		return NULL;
+flib_vector *flib_vector_create() {
+	flib_vector *result = NULL;
+	flib_vector *tmpVector = flib_calloc(1, sizeof(_flib_vector));
+	if(tmpVector) {
+		tmpVector->data = flib_malloc(MIN_VECTOR_CAPACITY);
+		if(tmpVector->data) {
+			tmpVector->size = 0;
+			tmpVector->capacity = MIN_VECTOR_CAPACITY;
+			result = tmpVector;
+			tmpVector = NULL;
+		}
 	}
-	result->data = malloc(16);
-	if(result->data == NULL) {
-		free(result);
-		return NULL;
-	}
-	result->size = 0;
-	result->capacity = 16;
+	flib_vector_destroy(tmpVector);
 	return result;
 }
 
 void flib_vector_destroy(flib_vector *vec) {
-	if(vec && *vec) {
-		free((*vec)->data);
-		free(*vec);
-		*vec = NULL;
+	if(vec) {
+		free(vec->data);
+		free(vec);
 	}
 }
 
-static void try_realloc(flib_vector vec, size_t newCapacity) {
+static void try_realloc(flib_vector *vec, size_t newCapacity) {
 	void *newData = realloc(vec->data, newCapacity);
 	if(newData) {
 		vec->data = newData;
@@ -42,11 +45,16 @@ static void try_realloc(flib_vector vec, size_t newCapacity) {
 	}
 }
 
-static size_t getFreeCapacity(flib_vector vec) {
+static size_t getFreeCapacity(flib_vector *vec) {
 	return vec->capacity - vec->size;
 }
 
-int flib_vector_append(flib_vector vec, const void *data, size_t len) {
+int flib_vector_append(flib_vector *vec, const void *data, size_t len) {
+	if(!vec) {
+		flib_log_e("null parameter in flib_vector_append");
+		return 0;
+	}
+
 	if(getFreeCapacity(vec) < len) {
 		// Resize exponentially for constant amortized time,
 		// But at least by as much as we need of course,
@@ -63,7 +71,7 @@ int flib_vector_append(flib_vector vec, const void *data, size_t len) {
 		}
 
 		// Check if we were able to resize.
-		// If not, try to allocate at least what we need...
+		// If not, try to allocate at least what we need.
 		if(getFreeCapacity(vec) < len) {
 			try_realloc(vec, vec->capacity+minExtraCapacity);
 
@@ -74,17 +82,47 @@ int flib_vector_append(flib_vector vec, const void *data, size_t len) {
 		}
 	}
 
-	memmove(vec->data + vec->size, data, len);
+	memmove(((uint8_t*)vec->data) + vec->size, data, len);
 	vec->size += len;
 	return len;
 }
 
-flib_buffer flib_vector_as_buffer(flib_vector vec) {
-	flib_buffer result = {vec->data, vec->size};
-	return result;
+flib_buffer flib_vector_as_buffer(flib_vector *vec) {
+	if(!vec) {
+		flib_log_e("null parameter in flib_vector_as_buffer");
+		flib_buffer result = {NULL, 0};
+		return result;
+	} else {
+		flib_buffer result = {vec->data, vec->size};
+		return result;
+	}
 }
 
-flib_constbuffer flib_vector_as_constbuffer(flib_vector vec) {
-	flib_constbuffer result = {vec->data, vec->size};
-	return result;
+flib_constbuffer flib_vector_as_constbuffer(flib_vector *vec) {
+	if(!vec) {
+		flib_log_e("null parameter in flib_vector_as_constbuffer");
+		flib_constbuffer result = {NULL, 0};
+		return result;
+	} else {
+		flib_constbuffer result = {vec->data, vec->size};
+		return result;
+	}
+}
+
+void *flib_vector_data(flib_vector *vec) {
+	if(!vec) {
+		flib_log_e("null parameter in flib_vector_data");
+		return NULL;
+	} else {
+		return vec->data;
+	}
+}
+
+size_t flib_vector_size(flib_vector *vec) {
+	if(!vec) {
+		flib_log_e("null parameter in flib_vector_size");
+		return 0;
+	} else {
+		return vec->size;
+	}
 }

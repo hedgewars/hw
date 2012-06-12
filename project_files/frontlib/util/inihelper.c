@@ -22,7 +22,7 @@ char *inihelper_urlencode(const char *inbuf) {
 		return NULL;
 	}
 
-	char *outbuf = malloc(insize*3+1);
+	char *outbuf = flib_malloc(insize*3+1);
 	if(!outbuf) {
 		return NULL;
 	}
@@ -41,11 +41,12 @@ char *inihelper_urlencode(const char *inbuf) {
         }
     }
     outbuf[outpos] = 0;
-    return outbuf;
+    char *shrunk = realloc(outbuf, outpos+1);
+    return shrunk ? shrunk : outbuf;
 }
 
 char *inihelper_urldecode(const char *inbuf) {
-	char *outbuf = malloc(strlen(inbuf)+1);
+	char *outbuf = flib_malloc(strlen(inbuf)+1);
 	if(!outbuf) {
 		return NULL;
 	}
@@ -61,11 +62,13 @@ char *inihelper_urldecode(const char *inbuf) {
         }
     }
     outbuf[outpos] = 0;
-    return outbuf;
+    char *shrunk = realloc(outbuf, outpos+1);
+    return shrunk ? shrunk : outbuf;
 }
 
 char *inihelper_createDictKey(const char *sectionName, const char *keyName) {
 	if(!sectionName || !keyName) {
+		flib_log_e("null parameter in inihelper_createDictKey");
 		return NULL;
 	}
 	return flib_asprintf("%s:%s", sectionName, keyName);
@@ -73,6 +76,7 @@ char *inihelper_createDictKey(const char *sectionName, const char *keyName) {
 
 char *inihelper_getstring(dictionary *inifile, bool *error, const char *sectionName, const char *keyName) {
 	if(!inifile || !sectionName || !keyName) {
+		flib_log_e("null parameter in inihelper_getstring");
 		*error = true;
 		return NULL;
 	}
@@ -84,7 +88,7 @@ char *inihelper_getstring(dictionary *inifile, bool *error, const char *sectionN
 	char *result = iniparser_getstring(inifile, extendedkey, NULL);
 	free(extendedkey);
 	if(!result) {
-		flib_log_i("Missing ini setting: %s/%s", sectionName, keyName);
+		flib_log_d("Missing ini setting: %s/%s", sectionName, keyName);
 		*error = true;
 	}
 	return result;
@@ -102,10 +106,12 @@ int inihelper_getint(dictionary *inifile, bool *error, const char *sectionName, 
 		errno = 0;
 		long val = strtol(value, NULL, 10);
 		if(errno!=0) {
+			flib_log_w("Cannot parse ini setting %s/%s = \"%s\" as integer.", sectionName, keyName, value);
 			*error = true;
 			return 0;
 		}
 		if(val<INT_MIN || val>INT_MAX) {
+			flib_log_w("ini setting %s/%s = \"%s\" is too large or too small.", sectionName, keyName, value);
 			*error = true;
 			return 0;
 		}
@@ -121,6 +127,7 @@ bool inihelper_getbool(dictionary *inifile, bool *error, const char *sectionName
 		bool trueval = strchr("1tTyY", value[0]);
 		bool falseval = strchr("0fFnN", value[0]);
 		if(!trueval && !falseval) {
+			flib_log_w("ini setting %s/%s = \"%s\" is not a recognized truth value.", sectionName, keyName, value);
 			*error = true;
 			return false;
 		} else {
@@ -132,13 +139,13 @@ bool inihelper_getbool(dictionary *inifile, bool *error, const char *sectionName
 int inihelper_setstr(dictionary *dict, const char *sectionName, const char *keyName, const char *value) {
 	int result = -1;
 	if(!dict || !sectionName || !keyName || !value) {
-		flib_log_e("inihelper_setstr called with bad parameters");
+		flib_log_e("null parameter in inihelper_setstr");
 	} else {
 		char *extendedkey = inihelper_createDictKey(sectionName, keyName);
 		if(extendedkey) {
 			result = iniparser_set(dict, extendedkey, value);
-			free(extendedkey);
 		}
+		free(extendedkey);
 	}
 	return result;
 }
@@ -146,7 +153,7 @@ int inihelper_setstr(dictionary *dict, const char *sectionName, const char *keyN
 int inihelper_setint(dictionary *dict, const char *sectionName, const char *keyName, int value) {
 	int result = -1;
 	if(!dict || !sectionName || !keyName) {
-		flib_log_e("inihelper_setint called with bad parameters");
+		flib_log_e("null parameter in inihelper_setint");
 	} else {
 		char *strvalue = flib_asprintf("%i", value);
 		if(strvalue) {
@@ -160,7 +167,7 @@ int inihelper_setint(dictionary *dict, const char *sectionName, const char *keyN
 int inihelper_setbool(dictionary *dict, const char *sectionName, const char *keyName, bool value) {
 	int result = -1;
 	if(!dict || !sectionName || !keyName) {
-		flib_log_e("inihelper_setint called with bad parameters");
+		flib_log_e("null parameter in inihelper_setbool");
 	} else {
 		result = inihelper_setstr(dict, sectionName, keyName, value ? "true" : "false");
 	}

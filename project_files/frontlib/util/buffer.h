@@ -24,35 +24,50 @@ typedef struct {
 } flib_constbuffer;
 
 /**
- * Simple variable-capacity data structure (opaque type).
+ * Simple variable-capacity data structure that can be efficiently appended to.
  */
 struct _flib_vector;
-typedef struct _flib_vector *flib_vector;
+typedef struct _flib_vector flib_vector;
 
 /**
  * Create a new vector. Needs to be destroyed again later with flib_vector_destroy.
  * May return NULL if memory runs out.
  */
-flib_vector flib_vector_create();
+flib_vector *flib_vector_create();
 
 /**
- * Free the memory of this vector and set it to NULL.
+ * Free the memory of this vector
  */
 void flib_vector_destroy(flib_vector *vec);
 
 /**
  * Append the provided data to the end of the vector, enlarging it as required.
  * Returns the ammount of data appended, which is either len (success) or 0 (out of memory).
- * The vector remains unchanged if an out of memory situation occurs.
+ * The vector remains unchanged if appending fails.
  */
-int flib_vector_append(flib_vector vec, const void *data, size_t len);
+int flib_vector_append(flib_vector *vec, const void *data, size_t len);
 
 /**
- * Return a buffer or constbuffer pointing to the current contents of the vector.
+ * Return a pointer to the current data buffer of the vector. This pointer can
+ * become invalid if the vector size or capacity is changed.
+ */
+void *flib_vector_data(flib_vector *vec);
+
+/**
+ * Return the current size of the vector.
+ */
+size_t flib_vector_size(flib_vector *vec);
+
+/**
+ * Return a buffer pointing to the current contents of the vector.
  * These will become invalid if the vector size or capacity is changed.
  */
-flib_buffer flib_vector_as_buffer(flib_vector vec);
-flib_constbuffer flib_vector_as_constbuffer(flib_vector vec);
+flib_buffer flib_vector_as_buffer(flib_vector *vec);
 
+/**
+ * Return a constbuffer pointing to the current contents of the vector.
+ * These will become invalid if the vector size or capacity is changed.
+ */
+flib_constbuffer flib_vector_as_constbuffer(flib_vector *vec);
 
 #endif

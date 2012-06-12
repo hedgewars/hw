@@ -38,7 +38,7 @@ static flib_weaponset *flib_weaponset_create_str(const char *name, const char *l
 	if(!name || !loadoutStr || !crateProbStr || !crateAmmoStr || !delayStr) {
 		flib_log_e("null parameter in flib_weaponset_create_str");
 	} else {
-		flib_weaponset *newSet = calloc(1, sizeof(flib_weaponset));
+		flib_weaponset *newSet = flib_calloc(1, sizeof(flib_weaponset));
 		char *nameCopy = flib_strdupnull(name);
 		if(newSet && nameCopy) {
 			newSet->name = nameCopy;
@@ -101,7 +101,10 @@ int flib_weaponset_to_ini(const char *filename, const flib_weaponset *set) {
 	if(!filename || !set) {
 		flib_log_e("null parameter in flib_weaponset_to_ini");
 	} else {
-		dictionary *dict = dictionary_new(0);
+		dictionary *dict = iniparser_load(filename);
+		if(!dict) {
+			dict = dictionary_new(0);
+		}
 		if(dict) {
 			bool error = false;
 			// Add the sections

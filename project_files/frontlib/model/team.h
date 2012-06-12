@@ -12,6 +12,13 @@
 #define TEAM_DEFAULT_DIFFICULTY 0
 #define TEAM_DEFAULT_HEALTH 100
 
+// TODO default bindings?
+
+typedef struct {
+	char *action;
+	char *binding;
+} flib_binding;
+
 typedef struct {
 	char *name;
 	char *hat;
@@ -19,12 +26,13 @@ typedef struct {
 	// Statistics. They are irrelevant for the engine or server,
 	// but provided for ini reading/writing by the frontend.
 	int rounds;
-	int deaths;
 	int kills;
+	int deaths;
 	int suicides;
 
-	// These settings are sometimes used on a per-team basis.
 	int difficulty;
+
+	// Transient setting used in game setup
 	int initialHealth;
 } flib_hog;
 
@@ -36,16 +44,43 @@ typedef struct {
 	char *voicepack;
 	char *flag;
 
-	// TODO binds
+	flib_binding *bindings;
+	int bindingCount;
+
+	// Statistics. They are irrelevant for the engine or server,
+	// but provided for ini reading/writing by the frontend.
+	int rounds;
+	int wins;
+	int campaignProgress;
 
 	// Transient settings used in game setup
 	uint32_t color;
 	int hogsInGame;
 	bool remoteDriven;
-	char *hash;
+	char *hash; // TODO calculate
 
-	// This setting is sometimes used on a per-game basis.
 	flib_weaponset *weaponset;
 } flib_team;
+
+/**
+ * Returns a new team, or NULL on error. name must not be NULL.
+ *
+ * The new team is pre-filled with default settings (see hwconsts.h)
+ */
+flib_team *flib_team_create(const char *name);
+
+/**
+ * Loads a team, returns NULL on error.
+ */
+flib_team *flib_team_from_ini(const char *filename);
+
+/**
+ * Write the team to an ini file. Attempts to retain extra ini settings
+ * that were already present. Note that not all fields of a team struct
+ * are stored in the ini, some are only used intermittently to store
+ * information about a team in the context of a game.
+ */
+int flib_team_to_ini(const char *filename, const flib_team *team);
+void flib_team_destroy(flib_team *team);
 
 #endif /* TEAM_H_ */

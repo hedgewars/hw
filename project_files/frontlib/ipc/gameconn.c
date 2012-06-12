@@ -2,9 +2,11 @@
 #include "ipcconn.h"
 #include "ipcprotocol.h"
 #include "../util/logging.h"
+#include "../util/util.h"
 #include "../hwconsts.h"
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef enum {
 	AWAIT_CONNECTION,
@@ -13,8 +15,10 @@ typedef enum {
 } gameconn_state;
 
 struct _flib_gameconn {
-	flib_ipcconn connection;
-	flib_vector configBuffer;
+	flib_ipcconn *connection;
+	flib_vector *configBuffer;
+	flib_vector *demoBuffer;
+	char *playerName;
 
 	gameconn_state state;
 	bool netgame;
@@ -69,7 +73,7 @@ static bool getGameMod(flib_cfg_meta *meta, flib_cfg *conf, int maskbit) {
 	return false;
 }
 
-static int fillConfigBuffer(flib_vector configBuffer, const char *playerName, flib_cfg_meta *metaconf, flib_gamesetup *setup, bool netgame) {
+static int fillConfigBuffer(flib_vector *configBuffer, const char *playerName, flib_cfg_meta *metaconf, flib_gamesetup *setup, bool netgame) {
 	bool error = false;
 	bool perHogAmmo = false;
 	bool sharedAmmo = false;
@@ -89,7 +93,7 @@ static int fillConfigBuffer(flib_vector configBuffer, const char *playerName, fl
 	}
 	if(setup->teams) {
 		for(int i=0; i<setup->teamcount; i++) {
-			error |= flib_ipc_append_addteam(configBuffer, &setup->teams[i], perHogAmmo, sharedAmmo);
+			error |= flib_ipc_append_addteam(configBuffer, setup->teams[i], perHogAmmo, sharedAmmo);
 		}
 	}
 	error |= flib_ipc_append_message(configBuffer, "!");
@@ -98,11 +102,15 @@ static int fillConfigBuffer(flib_vector configBuffer, const char *playerName, fl
 
 static flib_gameconn *flib_gameconn_create_partial(bool record, const char *playerName, bool netGame) {
 	flib_gameconn *result = NULL;
-	flib_gameconn *tempConn = calloc(1, sizeof(flib_gameconn));
+	flib_gameconn *tempConn = flib_calloc(1, sizeof(flib_gameconn));
 	if(tempConn) {
-		tempConn->connection = flib_ipcconn_create(record, playerName);
+		tempConn->connection = flib_ipcconn_create();
 		tempConn->configBuffer = flib_vector_create();
-		if(tempConn->connection && tempConn->configBuffer) {
+		tempConn->playerName = flib_strdupnull(playerName);
+		if(tempConn->connection && tempConn->configBuffer && tempConn->playerName) {
+			if(record) {
+				tempConn->demoBuffer = flib_vector_create();
+			}
 			tempConn->state = AWAIT_CONNECTION;
 			tempConn->netgame = netGame;
 			clearCallbacks(tempConn);
@@ -164,8 +172,10 @@ void flib_gameconn_destroy(flib_gameconn *conn) {
 			clearCallbacks(conn);
 			conn->destroyRequested = true;
 		} else {
-			flib_ipcconn_destroy(&conn->connection);
-			flib_vector_destroy(&conn->configBuffer);
+			flib_ipcconn_destroy(conn->connection);
+			flib_vector_destroy(conn->configBuffer);
+			flib_vector_destroy(conn->demoBuffer);
+			free(conn->playerName);
 			free(conn);
 		}
 	}
@@ -178,6 +188,93 @@ int flib_gameconn_getport(flib_gameconn *conn) {
 	} else {
 		return flib_ipcconn_port(conn->connection);
 	}
+}
+
+static void demo_append(flib_gameconn *conn, const void *data, size_t len) {
+	if(conn->demoBuffer) {
+		if(flib_vector_append(conn->demoBuffer, data, len) < len) {
+			flib_log_e("Error recording demo: Out of memory.");
+			flib_vector_destroy(conn->demoBuffer);
+			conn->demoBuffer = NULL;
+		}
+	}
+}
+
+static int format_chatmessage(uint8_t buffer[257], const char *playerName, const char *message) {
+	size_t msglen = strlen(message);
+
+	// If the message starts with /me, it will be displayed differently.
+	bool meMessage = msglen >= 4 && !memcmp(message, "/me ", 4);
+	const char *template = meMessage ? "s\x02* %s %s  " : "s\x01%s: %s  ";
+	int size = snprintf((char*)buffer+1, 256, template, playerName, meMessage ? message+4 : message);
+	if(size>0) {
+		buffer[0] = size>255 ? 255 : size;
+		return 0;
+	} else {
+		return -1;
+	}
+}
+
+static void demo_append_chatmessage(flib_gameconn *conn, const char *message) {
+	// Chat messages are reformatted to make them look as if they were received, not sent.
+	uint8_t converted[257];
+	if(!format_chatmessage(converted, conn->playerName, message)) {
+		demo_append(conn, converted, converted[0]+1);
+	}
+}
+
+static void demo_replace_gamemode(flib_buffer buf, char gamemode) {
+	size_t msgStart = 0;
+	uint8_t *data = (uint8_t*)buf.data;
+	while(msgStart+2 < buf.size) {
+		if(!memcmp(data+msgStart, "\x02T", 2)) {
+			data[msgStart+2] = gamemode;
+		}
+		msgStart += (uint8_t)data[msgStart]+1;
+	}
+}
+
+int flib_gameconn_send_enginemsg(flib_gameconn *conn, uint8_t *data, int len) {
+	int result = -1;
+	if(!conn || (!data && len>0)) {
+		flib_log_e("null parameter in flib_gameconn_send_enginemsg");
+	} else if(!flib_ipcconn_send_raw(conn->connection, data, len)) {
+		demo_append(conn, data, len);
+		result = 0;
+	}
+	return result;
+}
+
+int flib_gameconn_send_textmsg(flib_gameconn *conn, int msgtype, const char *msg) {
+	int result = -1;
+	if(!conn || !msg) {
+		flib_log_e("null parameter in flib_gameconn_send_textmsg");
+	} else {
+		uint8_t converted[257];
+		int size = snprintf((char*)converted+1, 256, "s%c%s", (char)msgtype, msg);
+		if(size>0) {
+			converted[0] = size>255 ? 255 : size;
+			if(!flib_ipcconn_send_raw(conn->connection, converted, converted[0]+1)) {
+				demo_append(conn, converted, converted[0]+1);
+				result = 0;
+			}
+		}
+	}
+	return result;
+}
+
+int flib_gameconn_send_chatmsg(flib_gameconn *conn, const char *playername, const char *msg) {
+	int result = -1;
+	uint8_t converted[257];
+	if(!conn || !playername || !msg) {
+		flib_log_e("null parameter in flib_gameconn_send_chatmsg");
+	} else if(format_chatmessage(converted, playername, msg)) {
+		flib_log_e("Error formatting message in flib_gameconn_send_chatmsg");
+	} else if(!flib_ipcconn_send_raw(conn->connection, converted, converted[0]+1)) {
+		demo_append(conn, converted, converted[0]+1);
+		result = 0;
+	}
+	return result;
 }
 
 void flib_gameconn_onConnect(flib_gameconn *conn, void (*callback)(void* context), void* context) {
@@ -246,6 +343,7 @@ static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 					conn->onDisconnectCb(conn->onDisconnectCtx, GAME_END_ERROR);
 					return;
 				} else {
+					demo_append(conn, configBuffer.data, configBuffer.size);
 					conn->state = CONNECTED;
 					conn->onConnectCb(conn->onConnectCtx);
 					if(conn->destroyRequested) {
@@ -272,30 +370,31 @@ static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 				continue;
 			}
 			switch(msgbuffer[1]) {
-			case '?':
+			case '?':	// Ping
 				// The pong is already part of the config message
 				break;
-			case 'C':
+			case 'C':	// Config query
 				// And we already send the config message on connecting.
 				break;
-			case 'E':
+			case 'E':	// Error message
 				if(len>=3) {
 					msgbuffer[len-2] = 0;
 					conn->onErrorMessageCb(conn->onErrorMessageCtx, (char*)msgbuffer+2);
 				}
 				break;
-			case 'i':
+			case 'i':	// Statistics
 				// TODO stats
 				break;
-			case 'Q':
-			case 'H':
-			case 'q':
+			case 'Q':	// Game interrupted
+			case 'H':	// Game halted
+			case 'q':	// game finished
 				{
 					int reason = msgbuffer[1]=='Q' ? GAME_END_INTERRUPTED : msgbuffer[1]=='H' ? GAME_END_HALTED : GAME_END_FINISHED;
 					bool savegame = (reason != GAME_END_FINISHED) && !conn->netgame;
-					flib_constbuffer record = flib_ipcconn_getrecord(conn->connection, savegame);
-					if(record.size) {
-						conn->onGameRecordedCb(conn->onGameRecordedCtx, record.data, record.size, savegame);
+					if(conn->demoBuffer) {
+						flib_buffer demoBuffer = flib_vector_as_buffer(conn->demoBuffer);
+						demo_replace_gamemode(demoBuffer, savegame ? 'S' : 'D');
+						conn->onGameRecordedCb(conn->onGameRecordedCtx, demoBuffer.data, demoBuffer.size, savegame);
 						if(conn->destroyRequested) {
 							return;
 						}
@@ -304,19 +403,23 @@ static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 					conn->onDisconnectCb(conn->onDisconnectCtx, reason);
 					return;
 				}
-			case 's':
+			case 's':	// Chat message
 				if(len>=3) {
 					msgbuffer[len-2] = 0;
+					demo_append_chatmessage(conn, (char*)msgbuffer+2);
+
 					conn->onChatCb(conn->onChatCtx, (char*)msgbuffer+2, false);
 				}
 				break;
-			case 'b':
+			case 'b':	// Teamchat message
 				if(len>=3) {
 					msgbuffer[len-2] = 0;
 					conn->onChatCb(conn->onChatCtx, (char*)msgbuffer+2, true);
 				}
 				break;
-			default:
+			default:	// Engine message
+				demo_append(conn, msgbuffer, len);
+
 				conn->onNetMessageCb(conn->onNetMessageCtx, msgbuffer, len);
 				break;
 			}

@@ -18,7 +18,7 @@ typedef struct {
     char *script;					// optional
     flib_cfg *gamescheme;			// optional
     flib_map *map;					// optional
-	flib_team *teams;				// optional
+	flib_team **teams;				// optional
 	int teamcount;
 } flib_gamesetup;
 

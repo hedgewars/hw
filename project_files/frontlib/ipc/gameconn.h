@@ -33,12 +33,9 @@ int flib_gameconn_getport(flib_gameconn *conn);
  */
 void flib_gameconn_tick(flib_gameconn *conn);
 
-// TODO: Not needed yet, only for netgames
-/*
-flib_gameconn_send_enginemsg(flib_gameconn conn, uint8_t *data, int len);
-flib_gameconn_send_textmsg(flib_gameconn conn, int msgtype, const char *msg);
-flib_gameconn_send_chatmsg(flib_gameconn conn, const char *playername, const char *msg);
-*/
+int flib_gameconn_send_enginemsg(flib_gameconn *conn, uint8_t *data, int len);
+int flib_gameconn_send_textmsg(flib_gameconn *conn, int msgtype, const char *msg);
+int flib_gameconn_send_chatmsg(flib_gameconn *conn, const char *playername, const char *msg);
 
 /**
  * handleConnect(void *context)

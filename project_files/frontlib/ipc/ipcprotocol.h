@@ -15,7 +15,7 @@
  * Returns nonzero if something goes wrong. In that case the buffer
  * contents are unaffected.
  */
-int flib_ipc_append_message(flib_vector vec, const char *fmt, ...);
+int flib_ipc_append_message(flib_vector *vec, const char *fmt, ...);
 
 /**
  * Append IPC messages to the buffer that configure the engine for
@@ -27,7 +27,7 @@ int flib_ipc_append_message(flib_vector vec, const char *fmt, ...);
  * Returns nonzero if something goes wrong. In that case the buffer
  * contents are unaffected.
  */
-int flib_ipc_append_mapconf(flib_vector vec, flib_map *map, bool mappreview);
+int flib_ipc_append_mapconf(flib_vector *vec, flib_map *map, bool mappreview);
 
 /**
  * Append a seed message to the buffer.
@@ -35,7 +35,7 @@ int flib_ipc_append_mapconf(flib_vector vec, flib_map *map, bool mappreview);
  * Returns nonzero if something goes wrong. In that case the buffer
  * contents are unaffected.
  */
-int flib_ipc_append_seed(flib_vector vec, const char *seed);
+int flib_ipc_append_seed(flib_vector *vec, const char *seed);
 
 /**
  * Append the game scheme to the buffer.
@@ -43,8 +43,8 @@ int flib_ipc_append_seed(flib_vector vec, const char *seed);
  * Returns nonzero if something goes wrong. In that case the buffer
  * contents are unaffected.
  */
-int flib_ipc_append_gamescheme(flib_vector vec, flib_cfg *seed, flib_cfg_meta *meta);
+int flib_ipc_append_gamescheme(flib_vector *vec, flib_cfg *seed, flib_cfg_meta *meta);
 
-int flib_ipc_append_addteam(flib_vector vec, flib_team *team, bool perHogAmmo, bool sharedAmmo);
+int flib_ipc_append_addteam(flib_vector *vec, flib_team *team, bool perHogAmmo, bool sharedAmmo);
 
 #endif /* IPCPROTOCOL_H_ */
