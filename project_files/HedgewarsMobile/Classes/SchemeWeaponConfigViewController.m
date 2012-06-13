@@ -222,11 +222,11 @@
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
+-(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger) section {
     return IS_IPAD() ? 0 : 50;
 }
 
--(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
+-(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger) section {
     if (IS_IPAD())
         return nil;
     UIView *theView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
@@ -236,6 +236,32 @@
     [self.topControl addTarget:aTableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
     [theView addSubview:self.topControl];
     return [theView autorelease];
+}
+
+-(CGFloat) tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger) section {
+    return 40;
+}
+
+-(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger) section {
+    NSInteger height = 40;
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, height)];
+    footer.backgroundColor = [UIColor clearColor];
+    footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*80/100, height)];
+    label.center = CGPointMake(aTableView.frame.size.width/2, height/2);
+    label.textAlignment = UITextAlignmentCenter;
+    label.font = [UIFont italicSystemFontOfSize:12];
+    label.textColor = [UIColor whiteColor];
+    label.numberOfLines = 2;
+    label.backgroundColor = [UIColor clearColor];
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+
+    label.text = NSLocalizedString(@"Setting a Style might force a particular Scheme or Weapon configuration.",@"");
+
+    [footer addSubview:label];
+    [label release];
+    return [footer autorelease];
 }
 
 #pragma mark -
