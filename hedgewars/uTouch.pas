@@ -632,7 +632,6 @@ procedure initModule;
 var
     index: Longword;
     //uRenderCoordScaleX, uRenderCoordScaleY: Longword;
-    density: Single;
 begin
     buttonsDown:= 0;
 
@@ -640,13 +639,7 @@ begin
     for index := 0 to High(fingers) do 
         fingers[index].id := nilFingerId;
 
-{$IFDEF ANDROID}
-    density:= Android_JNI_getDensity();
-{$ELSE}
-    density:= 1.0;
-{$ENDIF}
-
-    rectSize:= round(baseRectSize * density);
+    rectSize:= round(baseRectSize * uMobile.getScreenDPI);
     halfRectSize:= rectSize shl 1;
 end;
 
