@@ -200,7 +200,7 @@ else()
 endif()
 
 find_package(Lua)
-if(${LUA_FOUND})
+if(LUA_FOUND)
     message(STATUS "Lua library is present on your system (${LUA_DEFAULT})")
 else()
     message(STATUS "Lua library not found, building bundled dependency")
