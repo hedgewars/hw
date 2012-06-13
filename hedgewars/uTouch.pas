@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses SysUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes, uCaptions, uAmmos, uWorld;
+uses SysUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes, uCaptions, uAmmos, uWorld, uMobile;
 
 
 procedure initModule;
@@ -557,7 +557,7 @@ begin
     isOnCrosshair:= isOnRect((x-HalfRectSize), (y-HalfRectSize), RectSize, RectSize, finger);
     printFinger(finger);
     WriteLnToConsole(inttostr(finger.x) + '   ' + inttostr(x));
-    WriteLnToConsole(inttostr(x) + '  ' + inttostr(y) + '   ' + inttostr(round(Android_JNI_getDensity() * 10)));
+    WriteLnToConsole(inttostr(x) + '  ' + inttostr(y) + '   ' + inttostr(round(uMobile.getScreenDPI * 10)));
 end;
 
 function isOnCurrentHog(finger: TTouch_Data): boolean;
