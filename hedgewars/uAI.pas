@@ -284,9 +284,15 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                             AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
                         end;
             if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
+                begin
+                // push current position so we proceed from it after checking jump opportunities
+                if CanGo then Push(ticks, Actions, Me^, Me^.Message);
+                // first check where we go after jump
                 if Push(ticks, Actions, AltMe, Me^.Message) then
                     with Stack.States[Pred(Stack.Count)] do
                         AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
+                break
+                end;
 
             // 'not CanGO' means we can't go straight, possible jumps are checked above
             if not CanGo then
