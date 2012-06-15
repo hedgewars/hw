@@ -3,6 +3,7 @@
 
 #include <stddef.h>
 #include <stdarg.h>
+#include <stdbool.h>
 
 /**
  * Prints a format string to a newly allocated buffer of the required size.
@@ -46,6 +47,12 @@ void *flib_malloc(size_t size);
 void *flib_calloc(size_t count, size_t elementsize);
 
 /**
+ * Simple realloc wrapper that automatically logs an error if no memory
+ * is available. Otherwise behaves exactly like realloc.
+ */
+void *flib_realloc(void *ptr, size_t size);
+
+/**
  * Replace all non-alphanumeric and non-ascii bytes with escape
  * sequences in the form %XX. Does not modify the original string,
  * but returns a newly allocated one that must be free()d. Returns
@@ -54,6 +61,17 @@ void *flib_calloc(size_t count, size_t elementsize);
  * This should work fine with all ASCII-based charsets including UTF-8.
  */
 char *flib_urlencode(const char *str);
+
+/**
+ * Replace some bytes with escape sequences in the form %XX.
+ * Does not modify the original string, but returns a newly allocated
+ * one that must be free()d.
+ *
+ * All bytes for which the predicate function returns true are escaped.
+ *
+ * Returns null on failure or if null was passed as argument.
+ */
+char *flib_urlencode_pred(const char *str, bool (*needsEscaping)(char c));
 
 /**
  * Replace escape sequences of the form %XX with their byte values.

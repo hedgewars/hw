@@ -56,7 +56,7 @@ void *flib_bufdupnull(const void *buf, size_t size) {
 
 void *flib_malloc(size_t size) {
 	void *result = malloc(size);
-	if(!result) {
+	if(!result && size>0) {
 		flib_log_e("Out of memory trying to malloc %zu bytes.", size);
 	}
 	return result;
@@ -64,8 +64,16 @@ void *flib_malloc(size_t size) {
 
 void *flib_calloc(size_t count, size_t elementsize) {
 	void *result = calloc(count, elementsize);
-	if(!result) {
+	if(!result && count>0 && elementsize>0) {
 		flib_log_e("Out of memory trying to calloc %zu objects of %zu bytes each.", count, elementsize);
+	}
+	return result;
+}
+
+void *flib_realloc(void *ptr, size_t size) {
+	void *result = realloc(ptr, size);
+	if(!result && size>0) {
+		flib_log_e("Out of memory trying to realloc %zu bytes.", size);
 	}
 	return result;
 }
@@ -75,6 +83,10 @@ static bool isAsciiAlnum(char c) {
 }
 
 char *flib_urlencode(const char *inbuf) {
+	return flib_urlencode_pred(inbuf, isAsciiAlnum);
+}
+
+char *flib_urlencode_pred(const char *inbuf, bool (*needsEscaping)(char c)) {
 	if(!inbuf) {
 		return NULL;
 	}
@@ -91,7 +103,7 @@ char *flib_urlencode(const char *inbuf) {
 
     size_t inpos = 0, outpos = 0;
     while(inbuf[inpos]) {
-        if(isAsciiAlnum(inbuf[inpos])) {
+        if(!needsEscaping(inbuf[inpos])) {
         	outbuf[outpos++] = inbuf[inpos++];
         } else {
             if(snprintf(outbuf+outpos, 4, "%%%02X", (unsigned)((uint8_t*)inbuf)[inpos])<0) {

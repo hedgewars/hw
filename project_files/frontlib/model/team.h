@@ -34,6 +34,7 @@ typedef struct {
 
 	// Transient setting used in game setup
 	int initialHealth;
+	flib_weaponset *weaponset;
 } flib_hog;
 
 typedef struct {
@@ -57,9 +58,7 @@ typedef struct {
 	uint32_t color;
 	int hogsInGame;
 	bool remoteDriven;
-	char *hash; // TODO calculate
-
-	flib_weaponset *weaponset;
+	char *hash; // TODO calculate at the appropriate time... i.e. before trying to send the config to the engine
 } flib_team;
 
 /**
@@ -85,6 +84,12 @@ flib_team *flib_team_from_ini(const char *filename);
  * first hog is used for the entire team when writing.
  */
 int flib_team_to_ini(const char *filename, const flib_team *team);
+
+/**
+ * Set the same weaponset for every hog in the team
+ */
+void flib_team_set_weaponset(flib_team *team, flib_weaponset *set);
+
 void flib_team_destroy(flib_team *team);
 
 #endif /* TEAM_H_ */

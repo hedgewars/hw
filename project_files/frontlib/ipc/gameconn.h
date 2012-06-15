@@ -16,7 +16,7 @@
 struct _flib_gameconn;
 typedef struct _flib_gameconn flib_gameconn;
 
-flib_gameconn *flib_gameconn_create(const char *playerName, flib_cfg_meta *metaconf, flib_gamesetup *setup, bool netgame);
+flib_gameconn *flib_gameconn_create(const char *playerName, flib_gamesetup *setup, bool netgame);
 flib_gameconn *flib_gameconn_create_playdemo(const uint8_t *demo, int size);
 flib_gameconn *flib_gameconn_create_loadgame(const char *playerName, const uint8_t *save, int size);
 void flib_gameconn_destroy(flib_gameconn *conn);
@@ -74,5 +74,7 @@ void flib_gameconn_onGameRecorded(flib_gameconn *conn, void (*callback)(void *co
  * handleEngineMessage(void *context, const uint8_t *em, int size)
  */
 void flib_gameconn_onNetMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, int size), void* context);
+
+// TODO efinish
 
 #endif

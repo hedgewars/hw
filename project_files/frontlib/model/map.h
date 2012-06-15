@@ -30,6 +30,7 @@
 #define MAZE_SIZE_LARGE_ISLANDS 5
 
 typedef struct {
+	int _referenceCount;
 	int mapgen;				// Always one of the MAPGEN_ constants
 	char *theme;			// Used for all except MAPGEN_NAMED
 	char *name;				// Used for MAPGEN_NAMED
@@ -79,9 +80,15 @@ flib_map *flib_map_create_named(const char *name);
 flib_map *flib_map_create_drawn(const char *theme, const uint8_t *drawData, int drawDataSize);
 
 /**
- * Free the memory taken up by the map. Passing NULL is allowed and does nothing.
+ * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
+ * Returns the parameter.
  */
-void flib_map_destroy(flib_map *map);
+flib_map *flib_map_retain(flib_map *map);
+
+/**
+ * Decrease the reference count of the object and free it if this was the last reference.
+ */
+void flib_map_release(flib_map *map);
 
 
 #endif

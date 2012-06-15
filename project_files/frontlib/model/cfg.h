@@ -1,9 +1,5 @@
 /**
  * Data structures for game scheme information.
- *
- * Important conventions:
- * - All data structures own what they point to.
- * - Strings are never null pointers.
  */
 
 #ifndef CFG_H_
@@ -11,66 +7,79 @@
 
 #include <stdbool.h>
 
+// TODO: cfg/config -> scheme
+
 typedef struct {
-    char *iniName;
-    char *title;
+    char *name;
     char *engineCommand;
-    char *image;
-    int netplayIndex;
-    bool checkOverMax;
+    bool maxMeansInfinity;
     bool times1000;
-    int def;
     int min;
     int max;
+    int def;
 } flib_cfg_setting_meta;
 
 typedef struct {
-    char *iniName;
+    char *name;
     int bitmaskIndex;
 } flib_cfg_mod_meta;
 
 typedef struct {
-    int settingCount;
-    int modCount;
+	int _referenceCount;
+	int settingCount;
+	int modCount;
     flib_cfg_setting_meta *settings;
     flib_cfg_mod_meta *mods;
 } flib_cfg_meta;
 
 typedef struct {
-    int settingCount;
-    int modCount;
+	int _referenceCount;
+    flib_cfg_meta *meta;
+
     char *schemeName;
     int *settings;
     bool *mods;
 } flib_cfg;
 
 /**
- * Read the meta-configuration from the relevant .ini files (e.g. which settings exist,
+ * Read the meta-configuration from a .ini file (e.g. which settings exist,
  * what are their defaults etc.)
  *
- * Returns the meta-configuration or NULL. Destroy the meta-configuration with
- * flib_cfg_meta_destroy.
+ * Returns the meta-configuration or NULL.
  */
-flib_cfg_meta *flib_cfg_meta_from_ini(const char *settingpath, const char *modpath);
-void flib_cfg_meta_destroy(flib_cfg_meta *metainfo);
+flib_cfg_meta *flib_cfg_meta_from_ini(const char *filename);
 
 /**
- * Create a new configuration with default settings.
- * Returns NULL on error.
+ * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
+ * Returns the parameter.
  */
-flib_cfg *flib_cfg_create(const flib_cfg_meta *meta, const char *schemeName);
+flib_cfg_meta *flib_cfg_meta_retain(flib_cfg_meta *metainfo);
 
 /**
- * Load a configuration from the ini file.
- * Returns NULL on error.
+ * Decrease the reference count of the object and free it if this was the last reference.
  */
-flib_cfg *flib_cfg_from_ini(const flib_cfg_meta *meta, const char *filename);
+void flib_cfg_meta_release(flib_cfg_meta *metainfo);
 
 /**
- * Store the configuration to an ini file.
+ * Create a new configuration with everything set to default or false
  * Returns NULL on error.
  */
-int flib_cfg_to_ini(const flib_cfg_meta *meta, const char *filename, const flib_cfg *config);
-void flib_cfg_destroy(flib_cfg* cfg);
+flib_cfg *flib_cfg_create(flib_cfg_meta *meta, const char *schemeName);
+
+/**
+ * Create a copy of the scheme. Returns NULL on error or if NULL was passed.
+ */
+flib_cfg *flib_cfg_copy(flib_cfg *cfg);
+
+/**
+ * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
+ * Returns the parameter.
+ */
+flib_cfg *flib_cfg_retain(flib_cfg *cfg);
+
+/**
+ * Decrease the reference count of the object and free it if this was the last reference.
+ */
+void flib_cfg_release(flib_cfg* cfg);
 
 #endif /* CFG_H_ */

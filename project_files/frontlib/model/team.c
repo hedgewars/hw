@@ -194,6 +194,7 @@ void flib_team_destroy(flib_team *team) {
 		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
 			free(team->hogs[i].name);
 			free(team->hogs[i].hat);
+			flib_weaponset_release(team->hogs[i].weaponset);
 		}
 		free(team->name);
 		free(team->grave);
@@ -208,7 +209,15 @@ void flib_team_destroy(flib_team *team) {
 		}
 		free(team->bindings);
 		free(team->hash);
-		flib_weaponset_destroy(team->weaponset);
 		free(team);
+	}
+}
+
+void flib_team_set_weaponset(flib_team *team, flib_weaponset *set) {
+	if(team) {
+		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
+			flib_weaponset_release(team->hogs[i].weaponset);
+			team->hogs[i].weaponset = flib_weaponset_retain(set);
+		}
 	}
 }

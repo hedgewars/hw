@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <inttypes.h>
+#include <stdlib.h>
 
 int flib_ipc_append_message(flib_vector *vec, const char *fmt, ...) {
 	int result = -1;
@@ -38,7 +39,7 @@ int flib_ipc_append_message(flib_vector *vec, const char *fmt, ...) {
 	return result;
 }
 
-int flib_ipc_append_mapconf(flib_vector *vec, flib_map *map, bool mappreview) {
+int flib_ipc_append_mapconf(flib_vector *vec, const flib_map *map, bool mappreview) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
 	if(!vec || !map) {
@@ -96,12 +97,13 @@ int flib_ipc_append_seed(flib_vector *vec, const char *seed) {
 	}
 }
 
-int flib_ipc_append_gamescheme(flib_vector *vec, flib_cfg *scheme, flib_cfg_meta *meta) {
+int flib_ipc_append_gamescheme(flib_vector *vec, const flib_cfg *scheme) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
-	if(!vec || !scheme || !meta) {
+	if(!vec || !scheme) {
 		flib_log_e("null parameter in flib_ipc_append_gamescheme");
 	} else if(tempvector) {
+		const flib_cfg_meta *meta = scheme->meta;
 		bool error = false;
 		uint32_t gamemods = 0;
 		for(int i=0; i<meta->modCount; i++) {
@@ -112,8 +114,8 @@ int flib_ipc_append_gamescheme(flib_vector *vec, flib_cfg *scheme, flib_cfg_meta
 		error |= flib_ipc_append_message(tempvector, "e$gmflags %"PRIu32, gamemods);
 		for(int i=0; i<meta->settingCount; i++) {
 			int value = scheme->settings[i];
-			if(meta->settings[i].checkOverMax) {
-				value = value>meta->settings[i].max ? meta->settings[i].max : value;
+			if(meta->settings[i].maxMeansInfinity) {
+				value = value>=meta->settings[i].max ? 9999 : value;
 			}
 			if(meta->settings[i].times1000) {
 				value *= 1000;
@@ -133,19 +135,23 @@ int flib_ipc_append_gamescheme(flib_vector *vec, flib_cfg *scheme, flib_cfg_meta
 	return result;
 }
 
-// FIXME shared ammo will break per-team ammo
-int flib_ipc_append_addteam(flib_vector *vec, flib_team *team, bool perHogAmmo, bool sharedAmmo) {
+static int appendWeaponSet(flib_vector *vec, flib_weaponset *set) {
+	return flib_ipc_append_message(vec, "eammloadt %s", set->loadout)
+		|| flib_ipc_append_message(vec, "eammprob %s", set->crateprob)
+		|| flib_ipc_append_message(vec, "eammdelay %s", set->delay)
+		|| flib_ipc_append_message(vec, "eammreinf %s", set->crateammo);
+}
+
+int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHogAmmo, bool noAmmoStore) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
-	if(!vec || !team || !team->weaponset) {
+	if(!vec || !team) {
 		flib_log_e("invalid parameter in flib_ipc_append_addteam");
 	} else if(tempvector) {
 		bool error = false;
-		error |= flib_ipc_append_message(tempvector, "eammloadt %s", team->weaponset->loadout);
-		error |= flib_ipc_append_message(tempvector, "eammprob %s", team->weaponset->crateprob);
-		error |= flib_ipc_append_message(tempvector, "eammdelay %s", team->weaponset->delay);
-		error |= flib_ipc_append_message(tempvector, "eammreinf %s", team->weaponset->crateammo);
-		if(!perHogAmmo) {
+
+		if(!perHogAmmo && !noAmmoStore) {
+			error |= appendWeaponSet(tempvector, team->hogs[0].weaponset);
 			error |= flib_ipc_append_message(tempvector, "eammstore");
 		}
 
@@ -166,6 +172,9 @@ int flib_ipc_append_addteam(flib_vector *vec, flib_team *team, bool perHogAmmo, 
 		}
 
 		for(int i=0; i<team->hogsInGame; i++) {
+			if(perHogAmmo && !noAmmoStore) {
+				error |= appendWeaponSet(tempvector, team->hogs[i].weaponset);
+			}
 			error |= flib_ipc_append_message(tempvector, "eaddhh %i %i %s", team->hogs[i].difficulty, team->hogs[i].initialHealth, team->hogs[i].name);
 			error |= flib_ipc_append_message(tempvector, "ehat %s", team->hogs[i].hat);
 		}
@@ -179,5 +188,82 @@ int flib_ipc_append_addteam(flib_vector *vec, flib_team *team, bool perHogAmmo, 
 		}
 	}
 	flib_vector_destroy(tempvector);
+	return result;
+}
+
+static bool getGameMod(const flib_cfg *conf, int maskbit) {
+	for(int i=0; i<conf->meta->modCount; i++) {
+		if(conf->meta->mods[i].bitmaskIndex == maskbit) {
+			return conf->mods[i];
+		}
+	}
+	flib_log_e("Unable to find game mod with mask bit %i", maskbit);
+	return false;
+}
+
+int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bool netgame) {
+	int result = -1;
+	flib_vector *tempvector = flib_vector_create();
+	if(!vec || !setup) {
+		flib_log_e("null parameter in flib_ipc_append_fullconfig");
+	} else if(tempvector) {
+		bool error = false;
+		bool perHogAmmo = false;
+		bool sharedAmmo = false;
+
+		error |= flib_ipc_append_message(vec, netgame ? "TN" : "TL");
+		error |= flib_ipc_append_seed(vec, setup->seed);
+		if(setup->map) {
+			error |= flib_ipc_append_mapconf(tempvector, setup->map, false);
+		}
+		if(setup->script) {
+			error |= flib_ipc_append_message(tempvector, "escript %s", setup->script);
+		}
+		if(setup->gamescheme) {
+			error |= flib_ipc_append_gamescheme(tempvector, setup->gamescheme);
+			sharedAmmo = getGameMod(setup->gamescheme, GAMEMOD_SHAREDAMMO_MASKBIT);
+			// Shared ammo has priority over per-hog ammo
+			perHogAmmo = !sharedAmmo && getGameMod(setup->gamescheme, GAMEMOD_PERHOGAMMO_MASKBIT);
+		}
+		if(setup->teams && setup->teamcount>0) {
+			uint32_t *clanColors = flib_calloc(setup->teamcount, sizeof(uint32_t));
+			if(!clanColors) {
+				error = true;
+			} else {
+				int clanCount = 0;
+				for(int i=0; i<setup->teamcount; i++) {
+					flib_team *team = setup->teams[i];
+					bool newClan = false;
+
+					// Find the clan index of this team (clans are identified by color).
+					// The upper 8 bits (alpha) are ignored in the engine as well.
+					uint32_t color = team->color&UINT32_C(0x00ffffff);
+					int clan = 0;
+					while(clan<clanCount && clanColors[clan] != color) {
+						clan++;
+					}
+					if(clan==clanCount) {
+						newClan = true;
+						clanCount++;
+						clanColors[clan] = color;
+					}
+
+					// If shared ammo is active, only add an ammo store for the first team in each clan.
+					bool noAmmoStore = sharedAmmo&&!newClan;
+					error |= flib_ipc_append_addteam(tempvector, setup->teams[i], perHogAmmo, noAmmoStore);
+				}
+			}
+			free(clanColors);
+		}
+		error |= flib_ipc_append_message(tempvector, "!");
+
+		if(!error) {
+			// Message created, now we can copy everything.
+			flib_constbuffer constbuf = flib_vector_as_constbuffer(tempvector);
+			if(flib_vector_append(vec, constbuf.data, constbuf.size) == constbuf.size) {
+				result = 0;
+			}
+		}
+	}
 	return result;
 }

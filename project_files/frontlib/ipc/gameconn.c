@@ -63,43 +63,6 @@ static void clearCallbacks(flib_gameconn *conn) {
 	conn->onNetMessageCb = &defaultCallback_onNetMessage;
 }
 
-static bool getGameMod(flib_cfg_meta *meta, flib_cfg *conf, int maskbit) {
-	for(int i=0; i<meta->modCount; i++) {
-		if(meta->mods[i].bitmaskIndex == maskbit) {
-			return conf->mods[i];
-		}
-	}
-	flib_log_e("Unable to find game mod with mask bit %i", maskbit);
-	return false;
-}
-
-static int fillConfigBuffer(flib_vector *configBuffer, const char *playerName, flib_cfg_meta *metaconf, flib_gamesetup *setup, bool netgame) {
-	bool error = false;
-	bool perHogAmmo = false;
-	bool sharedAmmo = false;
-
-	error |= flib_ipc_append_message(configBuffer, netgame ? "TN" : "TL");
-	error |= flib_ipc_append_seed(configBuffer, setup->seed);
-	if(setup->map) {
-		error |= flib_ipc_append_mapconf(configBuffer, setup->map, false);
-	}
-	if(setup->script) {
-		error |= flib_ipc_append_message(configBuffer, "escript %s", setup->script);
-	}
-	if(setup->gamescheme) {
-		error |= flib_ipc_append_gamescheme(configBuffer, setup->gamescheme, metaconf);
-		perHogAmmo = getGameMod(metaconf, setup->gamescheme, GAMEMOD_PERHOGAMMO_MASKBIT);
-		sharedAmmo = getGameMod(metaconf, setup->gamescheme, GAMEMOD_SHAREDAMMO_MASKBIT);
-	}
-	if(setup->teams) {
-		for(int i=0; i<setup->teamcount; i++) {
-			error |= flib_ipc_append_addteam(configBuffer, setup->teams[i], perHogAmmo, sharedAmmo);
-		}
-	}
-	error |= flib_ipc_append_message(configBuffer, "!");
-	return error ? -1 : 0;
-}
-
 static flib_gameconn *flib_gameconn_create_partial(bool record, const char *playerName, bool netGame) {
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_calloc(1, sizeof(flib_gameconn));
@@ -122,11 +85,11 @@ static flib_gameconn *flib_gameconn_create_partial(bool record, const char *play
 	return result;
 }
 
-flib_gameconn *flib_gameconn_create(const char *playerName, flib_cfg_meta *metaconf, flib_gamesetup *setup, bool netgame) {
+flib_gameconn *flib_gameconn_create(const char *playerName, flib_gamesetup *setup, bool netgame) {
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, netgame);
 	if(tempConn) {
-		if(fillConfigBuffer(tempConn->configBuffer, playerName, metaconf, setup, netgame) == 0) {
+		if(!flib_ipc_append_fullconfig(tempConn->configBuffer, setup, netgame)) {
 			result = tempConn;
 			tempConn = NULL;
 		}
