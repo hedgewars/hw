@@ -1,6 +1,8 @@
 #include "frontlib.h"
 #include "util/logging.h"
 #include "model/map.h"
+#include "model/weapon.h"
+#include "model/schemelist.h"
 #include "ipc/mapconn.h"
 #include "ipc/gameconn.h"
 
@@ -80,7 +82,7 @@ void testMapPreview() {
 	assert(mapConnection);
 
 	// We don't need the map description anymore
-	flib_map_destroy(map);
+	flib_map_release(map);
 	map = NULL;
 
 	// Register the callback functions
@@ -99,10 +101,13 @@ void testMapPreview() {
 }
 
 void testGame() {
-	flib_cfg_meta *metaconf = flib_cfg_meta_from_ini("basicsettings.ini", "gamemods.ini");
+	flib_cfg_meta *metaconf = flib_cfg_meta_from_ini("metasettings.ini");
 	assert(metaconf);
+	flib_weaponset *weapons = flib_weaponset_create("Defaultweaps");
+	flib_schemelist *schemelist = flib_schemelist_from_ini(metaconf, "schemes.ini");
+
 	flib_gamesetup setup;
-	setup.gamescheme = flib_cfg_from_ini(metaconf, "scheme_shoppa.ini");
+	setup.gamescheme = flib_schemelist_find(schemelist, "Default");
 	setup.map = flib_map_create_maze("Jungle", MAZE_SIZE_MEDIUM_TUNNELS);
 	setup.seed = "asparagus";
 	setup.script = NULL;
@@ -116,7 +121,6 @@ void testGame() {
 	setup.teams[0]->hogsInGame = 2;
 	setup.teams[0]->name = "Team Awesome";
 	setup.teams[0]->voicepack = "British";
-	setup.teams[0]->weaponset = flib_weaponset_create("Defaultweaps");
 	setup.teams[0]->hogs[0].difficulty = 2;
 	setup.teams[0]->hogs[0].hat = "NoHat";
 	setup.teams[0]->hogs[0].initialHealth = 100;
@@ -126,15 +130,17 @@ void testGame() {
 	setup.teams[0]->hogs[1].initialHealth = 100;
 	setup.teams[0]->hogs[1].name = "Chefkoch";
 	setup.teams[1] = flib_team_from_ini("Cave Dwellers.hwt");
-	setup.teams[1]->color = 0xff0000ff;
+	setup.teams[1]->color = 0xFF0000F0;
 	setup.teams[1]->hogsInGame = 8;
-	setup.teams[1]->weaponset = flib_weaponset_create("Defaultweaps");
+	flib_team_set_weaponset(setup.teams[0], weapons);
+	flib_team_set_weaponset(setup.teams[1], weapons);
+	flib_weaponset_release(weapons);
 
-	flib_gameconn *gameconn = flib_gameconn_create("Medo42", metaconf, &setup, false);
+	flib_gameconn *gameconn = flib_gameconn_create("Medo42", &setup, false);
 	assert(gameconn);
 
 	flib_gameconn_onDisconnect(gameconn, &onDisconnect, &gameconn);
-	flib_gameconn_onGameRecorded(gameconn, &onGameRecorded, &gameconn);
+	//flib_gameconn_onGameRecorded(gameconn, &onGameRecorded, &gameconn);
 
 	startEngineGame(flib_gameconn_getport(gameconn));
 
@@ -196,7 +202,20 @@ int main(int argc, char *argv[]) {
 	//testMapPreview();
 	//testDemo();
 	//testSave();
-	testGame();
+	//testGame();
+
+	flib_cfg_meta *meta = flib_cfg_meta_from_ini("metasettings.ini");
+	assert(meta);
+	flib_schemelist *schemelist = flib_schemelist_from_ini(meta, "schemes.ini");
+	assert(schemelist);
+
+	flib_schemelist_to_ini("Copy of Schemelist.ini", schemelist);
+	flib_schemelist_release(schemelist);
+	flib_cfg_meta_release(meta);
+
+	flib_weaponsetlist *weaponsets = flib_weaponsetlist_from_ini("weapons.ini");
+	assert(!flib_weaponsetlist_to_ini("copy of weapons.ini", weaponsets));
+	flib_weaponsetlist_release(weaponsets);
 
 	flib_quit();
 	return 0;

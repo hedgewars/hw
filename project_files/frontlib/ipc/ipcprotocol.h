@@ -5,6 +5,7 @@
 #include "../model/map.h"
 #include "../model/team.h"
 #include "../model/cfg.h"
+#include "../model/gamesetup.h"
 
 #include <stdbool.h>
 
@@ -27,7 +28,7 @@ int flib_ipc_append_message(flib_vector *vec, const char *fmt, ...);
  * Returns nonzero if something goes wrong. In that case the buffer
  * contents are unaffected.
  */
-int flib_ipc_append_mapconf(flib_vector *vec, flib_map *map, bool mappreview);
+int flib_ipc_append_mapconf(flib_vector *vec, const flib_map *map, bool mappreview);
 
 /**
  * Append a seed message to the buffer.
@@ -43,8 +44,10 @@ int flib_ipc_append_seed(flib_vector *vec, const char *seed);
  * Returns nonzero if something goes wrong. In that case the buffer
  * contents are unaffected.
  */
-int flib_ipc_append_gamescheme(flib_vector *vec, flib_cfg *seed, flib_cfg_meta *meta);
+int flib_ipc_append_gamescheme(flib_vector *vec, const flib_cfg *cfg);
 
-int flib_ipc_append_addteam(flib_vector *vec, flib_team *team, bool perHogAmmo, bool sharedAmmo);
+int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHogAmmo, bool noAmmoStore);
+
+int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bool netgame);
 
 #endif /* IPCPROTOCOL_H_ */

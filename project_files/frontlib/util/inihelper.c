@@ -179,7 +179,7 @@ int flib_ini_get_str_opt(flib_ini *ini, char **outVar, const char *key, const ch
 			value = def;
 		}
 		char *valueDup = flib_strdupnull(value);
-		if(valueDup) {
+		if(valueDup || !def) {
 			*outVar = valueDup;
 			result = 0;
 		}
@@ -209,7 +209,7 @@ int flib_ini_get_int_opt(flib_ini *ini, int *outVar, const char *key, int def) {
 	int result = flib_ini_get_int(ini, &tmpValue, key);
 	if(result == 0) {
 		*outVar = tmpValue;
-	} else if(result == INI_ERROR_NOTFOUND) {
+	} else if(result == INI_ERROR_NOTFOUND || result == INI_ERROR_FORMAT) {
 		*outVar = def;
 		result = 0;
 	}
@@ -238,7 +238,7 @@ int flib_ini_get_bool_opt(flib_ini *ini, bool *outVar, const char *key, bool def
 	int result = flib_ini_get_bool(ini, &tmpValue, key);
 	if(result == 0) {
 		*outVar = tmpValue;
-	} else if(result == INI_ERROR_NOTFOUND) {
+	} else if(result == INI_ERROR_NOTFOUND || result == INI_ERROR_FORMAT) {
 		*outVar = def;
 		result = 0;
 	}

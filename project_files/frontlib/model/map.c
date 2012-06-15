@@ -3,8 +3,18 @@
 #include "../util/inihelper.h"
 #include "../util/util.h"
 #include "../util/logging.h"
+#include "../util/refcounter.h"
 
 #include <stdlib.h>
+
+static void flib_map_destroy(flib_map *map) {
+	if(map) {
+		free(map->drawData);
+		free(map->name);
+		free(map->theme);
+		free(map);
+	}
+}
 
 flib_map *flib_map_create_regular(const char *theme, int templateFilter) {
 	flib_map *result = NULL;
@@ -13,6 +23,7 @@ flib_map *flib_map_create_regular(const char *theme, int templateFilter) {
 	} else {
 		flib_map *newmap = flib_calloc(1, sizeof(flib_map));
 		if(newmap) {
+			newmap->_referenceCount = 1;
 			newmap->mapgen = MAPGEN_REGULAR;
 			newmap->templateFilter = templateFilter;
 			newmap->theme = flib_strdupnull(theme);
@@ -33,6 +44,7 @@ flib_map *flib_map_create_maze(const char *theme, int mazeSize) {
 	} else {
 		flib_map *newmap = flib_calloc(1, sizeof(flib_map));
 		if(newmap) {
+			newmap->_referenceCount = 1;
 			newmap->mapgen = MAPGEN_MAZE;
 			newmap->mazeSize = mazeSize;
 			newmap->theme = flib_strdupnull(theme);
@@ -53,6 +65,7 @@ flib_map *flib_map_create_named(const char *name) {
 	} else {
 		flib_map *newmap = flib_calloc(1, sizeof(flib_map));
 		if(newmap) {
+			newmap->_referenceCount = 1;
 			newmap->mapgen = MAPGEN_NAMED;
 			newmap->name = flib_strdupnull(name);
 			if(newmap->name) {
@@ -72,6 +85,7 @@ flib_map *flib_map_create_drawn(const char *theme, const uint8_t *drawData, int 
 	} else {
 		flib_map *newmap = flib_calloc(1, sizeof(flib_map));
 		if(newmap) {
+			newmap->_referenceCount = 1;
 			newmap->mapgen = MAPGEN_DRAWN;
 			newmap->drawData = flib_bufdupnull(drawData, drawDataSize);
 			newmap->drawDataSize = drawDataSize;
@@ -85,11 +99,15 @@ flib_map *flib_map_create_drawn(const char *theme, const uint8_t *drawData, int 
 	return result;
 }
 
-void flib_map_destroy(flib_map *map) {
+flib_map *flib_map_retain(flib_map *map) {
 	if(map) {
-		free(map->drawData);
-		free(map->name);
-		free(map->theme);
-		free(map);
+		flib_retain(&map->_referenceCount, "flib_map");
+	}
+	return map;
+}
+
+void flib_map_release(flib_map *map) {
+	if(map && flib_release(&map->_referenceCount, "flib_map")) {
+		flib_map_destroy(map);
 	}
 }
