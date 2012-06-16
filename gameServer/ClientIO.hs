@@ -48,6 +48,7 @@ clientRecvLoop s chan clChan ci restore =
         listenLoop s chan ci >> return "Connection closed")
         `Exception.catch` (\(e :: Exception.IOException) -> return . B.pack . show $ e)
         `Exception.catch` (\(e :: ShutdownThreadException) -> return . B.pack . show $ e)
+        `Exception.catch` (\(e :: Exception.SomeException) -> return . B.pack . show $ e)
         >>= clientOff >> remove
     where
         clientOff msg = writeChan chan $ ClientMessage (ci, ["QUIT", msg])
