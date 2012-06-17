@@ -26,21 +26,13 @@
 
 #include <QDir>
 #include <QFile>
-
 #include <QStringList>
 
-#include "GameStyleModel.h"
-#include "HatModel.h"
-#include "MapModel.h"
-#include "ThemeModel.h"
-
-class QDir;
-class QFile;
-class QStringList;
 class GameStyleModel;
 class HatModel;
 class MapModel;
 class ThemeModel;
+class QStandardItemModel;
 
 /**
  * @brief Offers access to the data files of hedgewars.
@@ -135,6 +127,8 @@ class DataManager: public QObject
          */
         ThemeModel * themeModel();
 
+        QStandardItemModel * colorsModel();
+
     public slots:
         /// Reloads data from storage.
         void reload();
@@ -163,6 +157,7 @@ class DataManager: public QObject
         HatModel * m_hatModel; ///< hat model instance
         MapModel * m_mapModel; ///< map model instance
         ThemeModel * m_themeModel; ///< theme model instance
+        QStandardItemModel * m_colorsModel;
 };
 
 #endif // HEDGEWARS_DATAMANAGER_H

@@ -44,8 +44,7 @@ extern QString * cDefaultAmmoStore;
 extern int cAmmoNumber;
 extern QList< QPair<QString, QString> > cDefaultAmmos;
 
-//extern unsigned int colors[];
-extern QStandardItemModel * colorsModel;
+extern unsigned int colors[];
 
 extern QString * netHost;
 extern quint16 netPort;
@@ -59,8 +58,6 @@ extern int season;
 //with number of years past 2004 (foundation of hedgewars)
 //Could be used to implement a text/graphic like "This is the xxth birthday of hedgewars" or similar
 extern int years_since_foundation;
-
-void hwConstsInit();
 
 #endif
 

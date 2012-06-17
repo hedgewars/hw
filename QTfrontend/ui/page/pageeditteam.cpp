@@ -32,6 +32,7 @@
 #include "HWApplication.h"
 
 #include "DataManager.h"
+#include "HatModel.h"
 
 #include "pageeditteam.h"
 

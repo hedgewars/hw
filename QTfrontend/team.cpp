@@ -26,6 +26,7 @@
 
 #include "team.h"
 #include "hwform.h"
+#include "DataManager.h"
 
 HWTeam::HWTeam(const QString & teamname) :
     QObject(0)
@@ -351,12 +352,12 @@ int HWTeam::color() const
 
 QColor HWTeam::qcolor() const
 {
-    return colorsModel->item(m_color)->data().value<QColor>();
+    return DataManager::instance().colorsModel()->item(m_color)->data().value<QColor>();
 }
 
 void HWTeam::setColor(int color)
 {
-    m_color = color % colorsModel->rowCount();
+    m_color = color % DataManager::instance().colorsModel()->rowCount();
 }
 
 
