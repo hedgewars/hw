@@ -128,6 +128,7 @@ class DataManager: public QObject
         ThemeModel * themeModel();
 
         QStandardItemModel * colorsModel();
+        QStandardItemModel * bindsModel();
 
     public slots:
         /// Reloads data from storage.
@@ -158,6 +159,7 @@ class DataManager: public QObject
         MapModel * m_mapModel; ///< map model instance
         ThemeModel * m_themeModel; ///< theme model instance
         QStandardItemModel * m_colorsModel;
+        QStandardItemModel * m_bindsModel;
 };
 
 #endif // HEDGEWARS_DATAMANAGER_H
