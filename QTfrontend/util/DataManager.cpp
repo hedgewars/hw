@@ -23,13 +23,17 @@
 
 #include <QMap>
 #include <QStringList>
-
+#include <QStandardItemModel>
 #include <QFileInfo>
 
 #include "hwconsts.h"
 
 #include "DataManager.h"
 
+#include "GameStyleModel.h"
+#include "HatModel.h"
+#include "MapModel.h"
+#include "ThemeModel.h"
 
 DataManager::DataManager()
 {
@@ -42,6 +46,7 @@ DataManager::DataManager()
     m_hatModel = NULL;
     m_mapModel = NULL;
     m_themeModel = NULL;
+    m_colorsModel = NULL;
 }
 
 
@@ -152,6 +157,25 @@ ThemeModel * DataManager::themeModel()
         m_themeModel->loadThemes();
     }
     return m_themeModel;
+}
+
+QStandardItemModel * DataManager::colorsModel()
+{
+    if(m_colorsModel == NULL)
+    {
+        m_colorsModel = new QStandardItemModel();
+
+        int i = 0;
+        while(colors[i])
+        {
+            QStandardItem * item = new QStandardItem();
+            item->setData(QColor(colors[i]));
+            m_colorsModel->appendRow(item);
+            ++i;
+        }
+    }
+
+    return m_colorsModel;
 }
 
 void DataManager::reload()

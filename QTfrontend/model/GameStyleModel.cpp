@@ -21,6 +21,8 @@
  * @brief GameStyleModel class implementation
  */
 
+#include <QTextStream>
+
 #include "GameStyleModel.h"
 
 

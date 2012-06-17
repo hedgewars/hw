@@ -21,11 +21,12 @@
  * @brief RoomsListModel class implementation
  */
 
-#include "roomslistmodel.h"
-
 #include <QBrush>
 #include <QColor>
 #include <QIcon>
+
+#include "roomslistmodel.h"
+#include "MapModel.h"
 
 RoomsListModel::RoomsListModel(QObject *parent) :
     QAbstractTableModel(parent),

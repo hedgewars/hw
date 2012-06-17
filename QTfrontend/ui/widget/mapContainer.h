@@ -31,6 +31,7 @@
 
 #include "hwmap.h"
 #include "drawmapscene.h"
+#include "MapModel.h"
 
 class QPushButton;
 class IconedGroupBox;
