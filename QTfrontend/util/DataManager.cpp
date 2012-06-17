@@ -27,6 +27,8 @@
 #include <QFileInfo>
 
 #include "hwconsts.h"
+#include "HWApplication.h"
+#include "sdlkeys.h"
 
 #include "DataManager.h"
 
@@ -47,6 +49,7 @@ DataManager::DataManager()
     m_mapModel = NULL;
     m_themeModel = NULL;
     m_colorsModel = NULL;
+    m_bindsModel = NULL;
 }
 
 
@@ -176,6 +179,24 @@ QStandardItemModel * DataManager::colorsModel()
     }
 
     return m_colorsModel;
+}
+
+QStandardItemModel * DataManager::bindsModel()
+{
+    if(m_bindsModel == NULL)
+    {
+        m_bindsModel = new QStandardItemModel();
+
+        for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
+        {
+            QStandardItem * item = new QStandardItem();
+            item->setData(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), Qt::DisplayRole);
+            item->setData(sdlkeys[j][0], Qt::UserRole + 1);
+            m_bindsModel->appendRow(item);
+        }
+    }
+
+    return m_bindsModel;
 }
 
 void DataManager::reload()
