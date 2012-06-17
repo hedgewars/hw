@@ -52,17 +52,19 @@ IF(NOT BUILD_ENGINE_LIBRARY)
 ENDIF(NOT BUILD_ENGINE_LIBRARY)
 set(target_dir "bin")
 
-
 #bundle .app setup
-if(APPLE)
-    set(CMAKE_FIND_FRAMEWORK "FIRST")
-
+if(APPLE OR CROSSAPPLE)
     #paths for creating the bundle
     set(bundle_name Hedgewars.app)
     set(frameworks_dir ${bundle_name}/Contents/Frameworks/)
     set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/)
     set(DATA_INSTALL_DIR "../Resources/")
     set(target_dir ".")
+    set(minimum_macosx_version "10.6")
+endif()
+
+if(APPLE)
+    set(CMAKE_FIND_FRAMEWORK "FIRST")
 
     #what system are we building for
     set(minimum_macosx_version $ENV{MACOSX_DEPLOYMENT_TARGET})
