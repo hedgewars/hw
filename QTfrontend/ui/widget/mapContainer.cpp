@@ -36,6 +36,7 @@
 #include "mapContainer.h"
 #include "igbox.h"
 #include "HWApplication.h"
+#include "ThemeModel.h"
 
 HWMapContainer::HWMapContainer(QWidget * parent) :
     QWidget(parent),

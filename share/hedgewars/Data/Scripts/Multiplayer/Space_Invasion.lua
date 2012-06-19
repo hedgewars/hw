@@ -1608,7 +1608,7 @@ function CreateMeSomeCircles()
 
 		vType[i] = "generic"
 		vCounter[i] = 0
-		vCounterLim[i] = 3000
+		vCounterLim[i] = 150
 		vCircScore[i] = 0
 		vCircHealth[i] = 1
 
@@ -1801,7 +1801,7 @@ function SetUpCircle(i)
 			vType[i] = "drone"
 			vCircRadMin[i] = 50	*5
 			vCircRadMax[i] = 90	*5
-			vCounterLim[i] = 3000
+			vCounterLim[i] = 150
 			vCircScore[i] = 10
 			vCircHealth[i] = 1
 		--else
@@ -1826,7 +1826,7 @@ function SetUpCircle(i)
 			vCircRadMin[i] = 100*5
 			vCircRadMax[i] = 180*5
 			vCircWidth[i] = 1
-			vCounterLim[i] = 2000
+			vCounterLim[i] = 100
 			vCircScore[i] = 30
 			vCircHealth[i] = 3
 		else
@@ -1998,7 +1998,7 @@ function CheckVarious(gear)
 		end
 
 	-- if player is hit by circle bazooka
-	elseif (GetGearType(gear) == gtShell) then --or (GetGearType(gear) == gtBall) then
+	elseif (GetGearType(gear) == gtShell) and (CurrentHedgehog ~= nil) then --or (GetGearType(gear) == gtBall) then
 
 		dist = GetDistFromGearToGear(gear, CurrentHedgehog)
 
@@ -2387,17 +2387,19 @@ function ProjectileTrack(gear)
 		--WriteLnToConsole("I just got the velocity of the shell. It is dx: " .. dx .. "; dy: " .. dy)
 		--WriteLnToConsole("CurrentHedgehog is at X: " .. GetX(CurrentHedgehog) .. "; Y: " .. GetY(CurrentHedgehog) )
 
-		if GetX(gear) > GetX(CurrentHedgehog) then
-			dx = dx - turningSpeed--0.1
-		else
-			dx = dx + turningSpeed--0.1
-		end
+        if CurrentHedgehog ~= nil then
+            if GetX(gear) > GetX(CurrentHedgehog) then
+                dx = dx - turningSpeed--0.1
+            else
+                dx = dx + turningSpeed--0.1
+            end
 
-		if GetY(gear) > GetY(CurrentHedgehog) then
-			dy = dy - turningSpeed--0.1
-		else
-			dy = dy + turningSpeed--0.1
-		end
+            if GetY(gear) > GetY(CurrentHedgehog) then
+                dy = dy - turningSpeed--0.1
+            else
+                dy = dy + turningSpeed--0.1
+            end
+        end
 
 
 		if (GetGearType(gear) == gtShell) then

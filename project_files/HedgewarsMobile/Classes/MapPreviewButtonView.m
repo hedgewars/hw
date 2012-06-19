@@ -85,7 +85,7 @@
 
     // launch the preview here so that we're sure the tcp channel is open
     pthread_t thread_id;
-    pthread_create(&thread_id, NULL, (void *)GenLandPreview, (void *)port);
+    pthread_create(&thread_id, NULL, (void *(*)(void *))GenLandPreview, (void *)port);
     pthread_detach(thread_id);
 
     DLog(@"Waiting for a client on port %d", port);

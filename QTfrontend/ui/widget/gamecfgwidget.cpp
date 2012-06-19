@@ -32,6 +32,7 @@
 #include "hwconsts.h"
 #include "ammoSchemeModel.h"
 #include "proto.h"
+#include "GameStyleModel.h"
 
 GameCFGWidget::GameCFGWidget(QWidget* parent) :
     QGroupBox(parent)

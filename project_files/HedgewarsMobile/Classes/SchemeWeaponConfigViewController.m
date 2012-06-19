@@ -72,7 +72,8 @@
 
 -(NSArray *)listOfScripts {
     if (listOfScripts == nil)
-        self.listOfScripts = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL];
+        self.listOfScripts = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL]
+                              filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.lua'"]];
     return listOfScripts;
 }
 
@@ -202,11 +203,9 @@
             self.lastIndexPath_we = indexPath;
         }
     } else {
-        cell.textLabel.text = [[self.listOfScripts objectAtIndex:row] stringByDeletingPathExtension];
-        NSString *str = [NSString stringWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),[self.listOfScripts objectAtIndex:row]];
-        NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
-        cell.detailTextLabel.text = [dict objectForKey:@"description"];
-        [dict release];
+        cell.textLabel.text = [[[self.listOfScripts objectAtIndex:row] stringByDeletingPathExtension]
+                               stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        //cell.detailTextLabel.text = ;
         if ([[self.listOfScripts objectAtIndex:row] isEqualToString:self.selectedScript]) {
             UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
             cell.accessoryView = checkbox;
@@ -223,11 +222,11 @@
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
+-(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger) section {
     return IS_IPAD() ? 0 : 50;
 }
 
--(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
+-(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger) section {
     if (IS_IPAD())
         return nil;
     UIView *theView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
@@ -237,6 +236,32 @@
     [self.topControl addTarget:aTableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
     [theView addSubview:self.topControl];
     return [theView autorelease];
+}
+
+-(CGFloat) tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger) section {
+    return 40;
+}
+
+-(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger) section {
+    NSInteger height = 40;
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, height)];
+    footer.backgroundColor = [UIColor clearColor];
+    footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*80/100, height)];
+    label.center = CGPointMake(aTableView.frame.size.width/2, height/2);
+    label.textAlignment = UITextAlignmentCenter;
+    label.font = [UIFont italicSystemFontOfSize:12];
+    label.textColor = [UIColor whiteColor];
+    label.numberOfLines = 2;
+    label.backgroundColor = [UIColor clearColor];
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+
+    label.text = NSLocalizedString(@"Setting a Style might force a particular Scheme or Weapon configuration.",@"");
+
+    [footer addSubview:label];
+    [label release];
+    return [footer autorelease];
 }
 
 #pragma mark -
@@ -287,29 +312,30 @@
             self.selectedScript = [self.listOfScripts objectAtIndex:newRow];
 
             // some styles disable or force the choice of a particular scheme/weaponset
-            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),self.selectedScript];
-            NSDictionary *scriptDict = [[NSDictionary alloc] initWithContentsOfFile:path];
+            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@.cfg",SCRIPTS_DIRECTORY(),[self.selectedScript stringByDeletingPathExtension]];
+            NSString *configFile = [[NSString alloc] initWithContentsOfFile:path];
             [path release];
-            self.scriptCommand = [scriptDict objectForKey:@"command"];
-            NSString *scheme = [scriptDict objectForKey:@"scheme"];
-            if ([scheme isEqualToString:@""]) {
+            NSArray *scriptOptions = [configFile componentsSeparatedByString:@"\n"];
+            [configFile release];
+
+            self.scriptCommand = [NSString stringWithFormat:@"escript Scripts/Multiplayer/%@",self.selectedScript];
+            NSString *scheme = [scriptOptions objectAtIndex:0];
+            if ([scheme isEqualToString:@"locked"]) {
                 self.selectedScheme = @"Default.plist";
                 [self.topControl setEnabled:NO forSegmentAtIndex:0];
             } else {
-                self.selectedScheme = scheme;
+                self.selectedScheme = [NSString stringWithFormat:@"%@.plist",scheme];
                 [self.topControl setEnabled:YES forSegmentAtIndex:0];
             }
 
-            NSString *weapon = [scriptDict objectForKey:@"weapon"];
-            if ([weapon isEqualToString:@""]) {
+            NSString *weapon = [scriptOptions objectAtIndex:1];
+            if ([weapon isEqualToString:@"locked"]) {
                 self.selectedWeapon = @"Default.plist";
                 [self.topControl setEnabled:NO forSegmentAtIndex:1];
             } else {
-                self.selectedWeapon = weapon;
+                self.selectedWeapon = [NSString stringWithFormat:@"%@.plist",weapon];
                 [self.topControl setEnabled:YES forSegmentAtIndex:1];
             }
-
-            [scriptDict release];
         }
 
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
