@@ -1,7 +1,6 @@
 #ifndef GAMECONN_H_
 #define GAMECONN_H_
 
-#include "../util/buffer.h"
 #include "../model/gamesetup.h"
 
 #include <stddef.h>
@@ -73,7 +72,7 @@ void flib_gameconn_onGameRecorded(flib_gameconn *conn, void (*callback)(void *co
  * ...needs to be passed on to the server in a net game
  * handleEngineMessage(void *context, const uint8_t *em, int size)
  */
-void flib_gameconn_onNetMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, int size), void* context);
+void flib_gameconn_onEngineMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, int size), void* context);
 
 // TODO efinish
 

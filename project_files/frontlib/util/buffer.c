@@ -37,16 +37,61 @@ void flib_vector_destroy(flib_vector *vec) {
 	}
 }
 
-static void try_realloc(flib_vector *vec, size_t newCapacity) {
+static int setCapacity(flib_vector *vec, size_t newCapacity) {
+	if(newCapacity == vec->capacity) {
+		return 0;
+	}
 	void *newData = realloc(vec->data, newCapacity);
 	if(newData) {
 		vec->data = newData;
 		vec->capacity = newCapacity;
+		return 0;
+	} else {
+		return -1;
 	}
 }
 
-static size_t getFreeCapacity(flib_vector *vec) {
-	return vec->capacity - vec->size;
+static int allocateExtraCapacity(flib_vector *vec, size_t extraCapacity) {
+	if(extraCapacity <= SIZE_MAX - vec->capacity) {
+		return setCapacity(vec, vec->capacity + extraCapacity);
+	} else {
+		return -1;
+	}
+}
+
+int flib_vector_resize(flib_vector *vec, size_t newSize) {
+	if(!vec) {
+		flib_log_e("null parameter in flib_vector_resize");
+		return -1;
+	}
+
+	if(vec->capacity < newSize) {
+		// Resize exponentially for constant amortized time,
+		// But at least by as much as we need of course,
+		// and be extra careful with integer overflows...
+		size_t extraCapacity = (vec->capacity)/2;
+		size_t minExtraCapacity = newSize - vec->capacity;
+		if(extraCapacity < minExtraCapacity) {
+			extraCapacity = minExtraCapacity;
+		}
+
+		if(allocateExtraCapacity(vec, extraCapacity)) {
+			allocateExtraCapacity(vec, minExtraCapacity);
+		}
+	} else if(vec->capacity/2 > newSize) {
+		size_t newCapacity = newSize+newSize/4;
+		if(newCapacity < MIN_VECTOR_CAPACITY) {
+			newCapacity = MIN_VECTOR_CAPACITY;
+		}
+		setCapacity(vec, newCapacity);
+	}
+
+	if(vec->capacity >= newSize) {
+		vec->size = newSize;
+		return 0;
+	} else {
+		return -1;
+	}
 }
 
 int flib_vector_append(flib_vector *vec, const void *data, size_t len) {
@@ -55,35 +100,16 @@ int flib_vector_append(flib_vector *vec, const void *data, size_t len) {
 		return 0;
 	}
 
-	if(getFreeCapacity(vec) < len) {
-		// Resize exponentially for constant amortized time,
-		// But at least by as much as we need of course,
-		// and be extra careful with integer overflows...
-		size_t extraCapacity = (vec->capacity)/2;
-
-		size_t minExtraCapacity = len - getFreeCapacity(vec);
-		if(extraCapacity < minExtraCapacity) {
-			extraCapacity = minExtraCapacity;
-		}
-
-		if(extraCapacity <= SIZE_MAX - vec->capacity) {
-			try_realloc(vec, vec->capacity+extraCapacity);
-		}
-
-		// Check if we were able to resize.
-		// If not, try to allocate at least what we need.
-		if(getFreeCapacity(vec) < len) {
-			try_realloc(vec, vec->capacity+minExtraCapacity);
-
-			// Still not working? Then we fail.
-			if(getFreeCapacity(vec) < len) {
-				return 0;
-			}
-		}
+	if(len > SIZE_MAX-vec->size) {
+		return 0;
 	}
 
-	memmove(((uint8_t*)vec->data) + vec->size, data, len);
-	vec->size += len;
+	size_t oldSize = vec->size;
+	if(flib_vector_resize(vec, vec->size+len)) {
+		return 0;
+	}
+
+	memmove(((uint8_t*)vec->data) + oldSize, data, len);
 	return len;
 }
 

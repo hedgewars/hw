@@ -41,6 +41,13 @@ flib_vector *flib_vector_create();
 void flib_vector_destroy(flib_vector *vec);
 
 /**
+ * Resize the vector. This changes the size, and ensures the capacity is large enough to
+ * for the new size. Can also free memory if the new size is smaller. There is no guarantee
+ * about the contents of extra memory.
+ */
+int flib_vector_resize(flib_vector *vec, size_t newSize);
+
+/**
  * Append the provided data to the end of the vector, enlarging it as required.
  * Returns the ammount of data appended, which is either len (success) or 0 (out of memory).
  * The vector remains unchanged if appending fails.
