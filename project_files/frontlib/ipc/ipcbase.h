@@ -2,47 +2,42 @@
  * Low-level protocol support for the IPC connection to the engine.
  */
 
-#ifndef IPCCONN_H_
-#define IPCCONN_H_
-
-#include "../util/buffer.h"
+#ifndef IPCBASE_H_
+#define IPCBASE_H_
 
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdint.h>
 
-#define IPCCONN_MAPMSG_BYTES 4097
+#define IPCBASE_MAPMSG_BYTES 4097
 
-typedef enum {IPC_NOT_CONNECTED, IPC_LISTENING, IPC_CONNECTED} IpcConnState;
+typedef enum {IPC_NOT_CONNECTED, IPC_LISTENING, IPC_CONNECTED} IpcState;
 
-struct _flib_ipcconn;
-typedef struct _flib_ipcconn flib_ipcconn;
+struct _flib_ipcbase;
+typedef struct _flib_ipcbase flib_ipcbase;
 
 /**
  * Start an engine connection by listening on a random port. The selected port can
- * be queried with flib_ipcconn_port and has to be passed to the engine.
+ * be queried with flib_ipcbase_port and has to be passed to the engine.
  *
- * The parameter "recordDemo" can be used to control whether demo recording should
- * be enabled for this connection. The localPlayerName is needed for demo
- * recording purposes.
- *
- * Returns NULL on error. Destroy the created object with flib_ipcconn_destroy.
+ * Returns NULL on error. Destroy the created object with flib_ipcbase_destroy.
  *
  * We stop accepting new connections once a connection has been established, so you
- * need to create a new ipcconn in order to start a new connection.
+ * need to create a new ipcbase in order to start a new connection.
  */
-flib_ipcconn *flib_ipcconn_create();
+flib_ipcbase *flib_ipcbase_create();
 
-uint16_t flib_ipcconn_port(flib_ipcconn *ipc);
+uint16_t flib_ipcbase_port(flib_ipcbase *ipc);
 
 /**
  * Free resources and close sockets.
  */
-void flib_ipcconn_destroy(flib_ipcconn *ipc);
+void flib_ipcbase_destroy(flib_ipcbase *ipc);
 
 /**
  * Determine the current connection state
  */
-IpcConnState flib_ipcconn_state(flib_ipcconn *ipc);
+IpcState flib_ipcbase_state(flib_ipcbase *ipc);
 
 /**
  * Receive a single message (up to 256 bytes) and copy it into the data buffer.
@@ -56,7 +51,7 @@ IpcConnState flib_ipcconn_state(flib_ipcconn *ipc);
  * no further message is returned, to ensure you see all messages that were sent
  * before the connection closed.
  */
-int flib_ipcconn_recv_message(flib_ipcconn *ipc, void *data);
+int flib_ipcbase_recv_message(flib_ipcbase *ipc, void *data);
 
 /**
  * Try to receive 4097 bytes. This is the size of the reply the engine sends
@@ -64,9 +59,9 @@ int flib_ipcconn_recv_message(flib_ipcconn *ipc, void *data);
  * twocolor image of the map (256x128), the last byte is the number of hogs that
  * fit on the map.
  */
-int flib_ipcconn_recv_map(flib_ipcconn *ipc, void *data);
+int flib_ipcbase_recv_map(flib_ipcbase *ipc, void *data);
 
-int flib_ipcconn_send_raw(flib_ipcconn *ipc, const void *data, size_t len);
+int flib_ipcbase_send_raw(flib_ipcbase *ipc, const void *data, size_t len);
 
 /**
  * Write a single message (up to 255 bytes) to the engine. This call blocks until the
@@ -75,17 +70,17 @@ int flib_ipcconn_send_raw(flib_ipcconn *ipc, const void *data, size_t len);
  * Calling this function in a state other than IPC_CONNECTED will fail immediately.
  * Returns a negative value on failure.
  */
-int flib_ipcconn_send_message(flib_ipcconn *ipc, void *data, size_t len);
+int flib_ipcbase_send_message(flib_ipcbase *ipc, void *data, size_t len);
 
 /**
  * Convenience function for sending a 0-delimited string.
  */
-int flib_ipcconn_send_messagestr(flib_ipcconn *ipc, char *data);
+int flib_ipcbase_send_messagestr(flib_ipcbase *ipc, char *data);
 
 /**
- * Call regularly to allow background work to proceed
+ * Try to accept a connection. Only has an effect in state IPC_LISTENING.
  */
-void flib_ipcconn_accept(flib_ipcconn *ipc);
+void flib_ipcbase_accept(flib_ipcbase *ipc);
 
-#endif /* IPCCONN_H_ */
+#endif /* IPCBASE_H_ */
 

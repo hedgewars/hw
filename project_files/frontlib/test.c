@@ -1,14 +1,17 @@
 #include "frontlib.h"
 #include "util/logging.h"
+#include "util/buffer.h"
 #include "model/map.h"
 #include "model/weapon.h"
 #include "model/schemelist.h"
 #include "ipc/mapconn.h"
 #include "ipc/gameconn.h"
+#include "net/netbase.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
+#include <string.h>
 
 // Callback function that will be called when the map is rendered
 static void handleMapSuccess(void *context, const uint8_t *bitmap, int numHedgehogs) {
@@ -204,18 +207,37 @@ int main(int argc, char *argv[]) {
 	//testSave();
 	//testGame();
 
-	flib_cfg_meta *meta = flib_cfg_meta_from_ini("metasettings.ini");
-	assert(meta);
-	flib_schemelist *schemelist = flib_schemelist_from_ini(meta, "schemes.ini");
-	assert(schemelist);
+	flib_netbase *conn = flib_netbase_create("140.247.62.101", 46631);
 
-	flib_schemelist_to_ini("Copy of Schemelist.ini", schemelist);
-	flib_schemelist_release(schemelist);
-	flib_cfg_meta_release(meta);
-
-	flib_weaponsetlist *weaponsets = flib_weaponsetlist_from_ini("weapons.ini");
-	assert(!flib_weaponsetlist_to_ini("copy of weapons.ini", weaponsets));
-	flib_weaponsetlist_release(weaponsets);
+	while(flib_netbase_connected(conn)) {
+		flib_netmsg *msg = flib_netbase_recv_message(conn);
+		if(msg && msg->partCount>0) {
+			flib_log_i("[NET IN] %s", msg->parts[0]);
+			for(int i=1; i<msg->partCount; i++) {
+				flib_log_i("[NET IN][-] %s", msg->parts[i]);
+			}
+			if(!strcmp(msg->parts[0], "CONNECTED")) {
+				flib_netmsg *nickmsg = flib_netmsg_create();
+				flib_netmsg_append_part(nickmsg, "NICK", 4);
+				flib_netmsg_append_part(nickmsg, "Medo42_frontlib", 15);
+				flib_netmsg *protomsg = flib_netmsg_create();
+				flib_netmsg_append_part(protomsg, "PROTO", 5);
+				flib_netmsg_append_part(protomsg, "42", 2);
+				flib_netbase_send_message(conn, nickmsg);
+				flib_netbase_send_message(conn, protomsg);
+				flib_netmsg_destroy(nickmsg);
+				flib_netmsg_destroy(protomsg);
+			}
+			if(!strcmp(msg->parts[0], "SERVER_MESSAGE")) {
+				flib_netmsg *quitmsg = flib_netmsg_create();
+				flib_netmsg_append_part(quitmsg, "QUIT", 4);
+				flib_netmsg_append_part(quitmsg, "Just testing", 12);
+				flib_netbase_send_message(conn, quitmsg);
+				flib_netmsg_destroy(quitmsg);
+			}
+		}
+		flib_netmsg_destroy(msg);
+	}
 
 	flib_quit();
 	return 0;

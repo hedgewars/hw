@@ -121,6 +121,30 @@ flib_tcpsocket *flib_socket_accept(flib_acceptor *acceptor, bool localOnly) {
 	return result;
 }
 
+flib_tcpsocket *flib_socket_connect(const char *host, uint16_t port) {
+	flib_tcpsocket *result = NULL;
+	if(!host || port==0) {
+		flib_log_e("Invalid parameter in flib_socket_connect");
+	} else {
+		IPaddress ip;
+		if(SDLNet_ResolveHost(&ip,host,port)==-1) {
+		   flib_log_e("SDLNet_ResolveHost: %s\n", SDLNet_GetError());
+		} else {
+			TCPsocket sock=SDLNet_TCP_Open(&ip);
+			if(!sock) {
+				flib_log_e("SDLNet_TCP_Open: %s\n", SDLNet_GetError());
+			} else {
+				result = flib_socket_create(sock);
+				if(result) {
+					sock = NULL;
+				}
+			}
+			SDLNet_TCP_Close(sock);
+		}
+	}
+	return result;
+}
+
 void flib_socket_close(flib_tcpsocket *sock) {
 	if(sock) {
 		SDLNet_DelSocket(sock->sockset, (SDLNet_GenericSocket)sock->sock);

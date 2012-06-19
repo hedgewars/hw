@@ -49,6 +49,11 @@ void flib_acceptor_close(flib_acceptor *acceptor);
 flib_tcpsocket *flib_socket_accept(flib_acceptor *acceptor, bool localOnly);
 
 /**
+ * Try to connect to the server at the given address.
+ */
+flib_tcpsocket *flib_socket_connect(const char *host, uint16_t port);
+
+/**
  * Close the socket and free its memory.
  * If the socket is already NULL, nothing happens.
  */

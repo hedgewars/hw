@@ -1,5 +1,5 @@
 #include "gameconn.h"
-#include "ipcconn.h"
+#include "ipcbase.h"
 #include "ipcprotocol.h"
 #include "../util/logging.h"
 #include "../util/util.h"
@@ -15,7 +15,7 @@ typedef enum {
 } gameconn_state;
 
 struct _flib_gameconn {
-	flib_ipcconn *connection;
+	flib_ipcbase *ipcBase;
 	flib_vector *configBuffer;
 	flib_vector *demoBuffer;
 	char *playerName;
@@ -38,8 +38,8 @@ struct _flib_gameconn {
 	void (*onGameRecordedCb)(void *context, const uint8_t *record, int size, bool isSavegame);
 	void *onGameRecordedCtx;
 
-	void (*onNetMessageCb)(void *context, const uint8_t *em, int size);
-	void *onNetMessageCtx;
+	void (*onEngineMessageCb)(void *context, const uint8_t *em, int size);
+	void *onEngineMessageCtx;
 
 	bool running;
 	bool destroyRequested;
@@ -52,7 +52,7 @@ static void defaultCallback_onErrorMessage(void* context, const char *msg) {
 }
 static void defaultCallback_onChat(void* context, const char *msg, bool teamchat) {}
 static void defaultCallback_onGameRecorded(void *context, const uint8_t *record, int size, bool isSavegame) {}
-static void defaultCallback_onNetMessage(void *context, const uint8_t *em, int size) {}
+static void defaultCallback_onEngineMessage(void *context, const uint8_t *em, int size) {}
 
 static void clearCallbacks(flib_gameconn *conn) {
 	conn->onConnectCb = &defaultCallback_onConnect;
@@ -60,17 +60,17 @@ static void clearCallbacks(flib_gameconn *conn) {
 	conn->onErrorMessageCb = &defaultCallback_onErrorMessage;
 	conn->onChatCb = &defaultCallback_onChat;
 	conn->onGameRecordedCb = &defaultCallback_onGameRecorded;
-	conn->onNetMessageCb = &defaultCallback_onNetMessage;
+	conn->onEngineMessageCb = &defaultCallback_onEngineMessage;
 }
 
 static flib_gameconn *flib_gameconn_create_partial(bool record, const char *playerName, bool netGame) {
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_calloc(1, sizeof(flib_gameconn));
 	if(tempConn) {
-		tempConn->connection = flib_ipcconn_create();
+		tempConn->ipcBase = flib_ipcbase_create();
 		tempConn->configBuffer = flib_vector_create();
 		tempConn->playerName = flib_strdupnull(playerName);
-		if(tempConn->connection && tempConn->configBuffer && tempConn->playerName) {
+		if(tempConn->ipcBase && tempConn->configBuffer && tempConn->playerName) {
 			if(record) {
 				tempConn->demoBuffer = flib_vector_create();
 			}
@@ -135,7 +135,7 @@ void flib_gameconn_destroy(flib_gameconn *conn) {
 			clearCallbacks(conn);
 			conn->destroyRequested = true;
 		} else {
-			flib_ipcconn_destroy(conn->connection);
+			flib_ipcbase_destroy(conn->ipcBase);
 			flib_vector_destroy(conn->configBuffer);
 			flib_vector_destroy(conn->demoBuffer);
 			free(conn->playerName);
@@ -149,7 +149,7 @@ int flib_gameconn_getport(flib_gameconn *conn) {
 		flib_log_e("null parameter in flib_gameconn_getport");
 		return 0;
 	} else {
-		return flib_ipcconn_port(conn->connection);
+		return flib_ipcbase_port(conn->ipcBase);
 	}
 }
 
@@ -201,7 +201,7 @@ int flib_gameconn_send_enginemsg(flib_gameconn *conn, uint8_t *data, int len) {
 	int result = -1;
 	if(!conn || (!data && len>0)) {
 		flib_log_e("null parameter in flib_gameconn_send_enginemsg");
-	} else if(!flib_ipcconn_send_raw(conn->connection, data, len)) {
+	} else if(!flib_ipcbase_send_raw(conn->ipcBase, data, len)) {
 		demo_append(conn, data, len);
 		result = 0;
 	}
@@ -217,7 +217,7 @@ int flib_gameconn_send_textmsg(flib_gameconn *conn, int msgtype, const char *msg
 		int size = snprintf((char*)converted+1, 256, "s%c%s", (char)msgtype, msg);
 		if(size>0) {
 			converted[0] = size>255 ? 255 : size;
-			if(!flib_ipcconn_send_raw(conn->connection, converted, converted[0]+1)) {
+			if(!flib_ipcbase_send_raw(conn->ipcBase, converted, converted[0]+1)) {
 				demo_append(conn, converted, converted[0]+1);
 				result = 0;
 			}
@@ -233,7 +233,7 @@ int flib_gameconn_send_chatmsg(flib_gameconn *conn, const char *playername, cons
 		flib_log_e("null parameter in flib_gameconn_send_chatmsg");
 	} else if(format_chatmessage(converted, playername, msg)) {
 		flib_log_e("Error formatting message in flib_gameconn_send_chatmsg");
-	} else if(!flib_ipcconn_send_raw(conn->connection, converted, converted[0]+1)) {
+	} else if(!flib_ipcbase_send_raw(conn->ipcBase, converted, converted[0]+1)) {
 		demo_append(conn, converted, converted[0]+1);
 		result = 0;
 	}
@@ -285,23 +285,23 @@ void flib_gameconn_onGameRecorded(flib_gameconn *conn, void (*callback)(void *co
 	}
 }
 
-void flib_gameconn_onNetMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, int size), void* context) {
+void flib_gameconn_onEngineMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, int size), void* context) {
 	if(!conn) {
-		flib_log_e("null parameter in flib_gameconn_onNetMessage");
+		flib_log_e("null parameter in flib_gameconn_onEngineMessage");
 	} else {
-		conn->onNetMessageCb = callback ? callback : &defaultCallback_onNetMessage;
-		conn->onNetMessageCtx = context;
+		conn->onEngineMessageCb = callback ? callback : &defaultCallback_onEngineMessage;
+		conn->onEngineMessageCtx = context;
 	}
 }
 
 static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 	if(conn->state == AWAIT_CONNECTION) {
-		flib_ipcconn_accept(conn->connection);
-		switch(flib_ipcconn_state(conn->connection)) {
+		flib_ipcbase_accept(conn->ipcBase);
+		switch(flib_ipcbase_state(conn->ipcBase)) {
 		case IPC_CONNECTED:
 			{
 				flib_constbuffer configBuffer = flib_vector_as_constbuffer(conn->configBuffer);
-				if(flib_ipcconn_send_raw(conn->connection, configBuffer.data, configBuffer.size)) {
+				if(flib_ipcbase_send_raw(conn->ipcBase, configBuffer.data, configBuffer.size)) {
 					conn->state = FINISHED;
 					conn->onDisconnectCb(conn->onDisconnectCtx, GAME_END_ERROR);
 					return;
@@ -327,7 +327,7 @@ static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 	if(conn->state == CONNECTED) {
 		uint8_t msgbuffer[257];
 		int len;
-		while(!conn->destroyRequested && (len = flib_ipcconn_recv_message(conn->connection, msgbuffer))>=0) {
+		while(!conn->destroyRequested && (len = flib_ipcbase_recv_message(conn->ipcBase, msgbuffer))>=0) {
 			if(len<2) {
 				flib_log_w("Received short message from IPC (<2 bytes)");
 				continue;
@@ -383,13 +383,13 @@ static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 			default:	// Engine message
 				demo_append(conn, msgbuffer, len);
 
-				conn->onNetMessageCb(conn->onNetMessageCtx, msgbuffer, len);
+				conn->onEngineMessageCb(conn->onEngineMessageCtx, msgbuffer, len);
 				break;
 			}
 		}
 	}
 
-	if(flib_ipcconn_state(conn->connection) == IPC_NOT_CONNECTED) {
+	if(flib_ipcbase_state(conn->ipcBase) == IPC_NOT_CONNECTED) {
 		conn->state = FINISHED;
 		conn->onDisconnectCb(conn->onDisconnectCtx, GAME_END_ERROR);
 	}
