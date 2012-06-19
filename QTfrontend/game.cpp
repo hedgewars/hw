@@ -21,6 +21,7 @@
 #include <QUuid>
 #include <QColor>
 #include <QStringListModel>
+#include <QTextStream>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -28,8 +29,7 @@
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 #include "proto.h"
-
-#include <QTextStream>
+#include "ThemeModel.h"
 
 QString training, campaign; // TODO: Cleaner solution?
 

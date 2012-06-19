@@ -1,6 +1,6 @@
 add_subdirectory(hedgewars)
 
-IF(APPLE)
+IF(APPLE OR CROSSAPPLE)
 	#needed for CFBundleVersion and CFBundleShortVersionString
 	FIND_PROGRAM(HGCOMMAND hg)
 	IF (HGCOMMAND AND (EXISTS ${hedgewars_SOURCE_DIR}/.hg))
@@ -24,4 +24,4 @@ IF(APPLE)
 		DESTINATION ../Resources/)
 	install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/dsa_pub.pem"
 		DESTINATION ../Resources/)
-ENDIF(APPLE)
+ENDIF(APPLE OR CROSSAPPLE)
