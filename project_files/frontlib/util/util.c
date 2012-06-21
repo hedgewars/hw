@@ -36,6 +36,28 @@ char *flib_vasprintf(const char *fmt, va_list args) {
 	return result;
 }
 
+char *flib_join(char **parts, int partCount, const char *delimiter) {
+	size_t totalSize = 1;
+	size_t delimLen = strlen(delimiter);
+	for(int i=0; i<partCount; i++) {
+		totalSize += strlen(parts[i]) + delimLen;
+	}
+
+	char *result = flib_malloc(totalSize);
+	if(result) {
+		size_t outpos = 0;
+		for(int i=0; i<partCount; i++) {
+			if(i>0) {
+				strcpy(result+outpos, delimiter);
+				outpos += delimLen;
+			}
+			strcpy(result+outpos, parts[i]);
+			outpos += strlen(parts[i]);
+		}
+	}
+	return result;
+}
+
 char *flib_strdupnull(const char *str) {
 	if(!str) {
 		return NULL;

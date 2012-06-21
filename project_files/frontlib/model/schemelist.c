@@ -4,6 +4,7 @@
 #include "../util/logging.h"
 #include "../util/util.h"
 #include "../util/refcounter.h"
+#include "../util/list.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -192,38 +193,28 @@ flib_cfg *flib_schemelist_find(flib_schemelist *list, const char *name) {
 }
 
 int flib_schemelist_insert(flib_schemelist *list, flib_cfg *cfg, int pos) {
-	int result = -1;
-	if(!list || !cfg || pos < 0 || pos > list->schemeCount) {
-		flib_log_e("Invalid parameter in flib_schemelist_insert");
+	flib_cfg **changedList = flib_list_insert(list->schemes, &list->schemeCount, sizeof(*list->schemes), &cfg, pos);
+	if(changedList) {
+		list->schemes = changedList;
+		flib_cfg_retain(cfg);
+		return 0;
 	} else {
-		flib_cfg **newSchemes = flib_realloc(list->schemes, (list->schemeCount+1)*sizeof(*list->schemes));
-		if(newSchemes) {
-			list->schemes = newSchemes;
-			memmove(list->schemes+pos+1, list->schemes+pos, (list->schemeCount-pos)*sizeof(*list->schemes));
-			list->schemes[pos] = flib_cfg_retain(cfg);
-			list->schemeCount++;
-			result = 0;
-		}
+		return -1;
 	}
-	return result;
 }
 
 int flib_schemelist_delete(flib_schemelist *list, int pos) {
 	int result = -1;
-	if(!list || pos < 0 || pos >= list->schemeCount) {
+	if(!list || pos<0 || pos>=list->schemeCount) {
 		flib_log_e("Invalid parameter in flib_schemelist_delete");
 	} else {
-		flib_cfg_release(list->schemes[pos]);
-		memmove(list->schemes+pos, list->schemes+pos+1, (list->schemeCount-(pos+1))*sizeof(*list->schemes));
-		list->schemes[list->schemeCount-1] = NULL;
-		list->schemeCount--;
-
-		// If the realloc fails, just keep using the old buffer...
-		flib_cfg **newSchemes = flib_realloc(list->schemes, list->schemeCount*sizeof(*list->schemes));
-		if(newSchemes || list->schemeCount==1) {
-			list->schemes = newSchemes;
+		flib_cfg *elem = list->schemes[pos];
+		flib_cfg **changedList = flib_list_delete(list->schemes, &list->schemeCount, sizeof(*list->schemes), pos);
+		if(changedList || list->schemeCount==0) {
+			list->schemes = changedList;
+			flib_cfg_release(elem);
+			result = 0;
 		}
-		result = 0;
 	}
 	return result;
 }

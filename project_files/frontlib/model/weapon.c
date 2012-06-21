@@ -4,6 +4,7 @@
 #include "../util/logging.h"
 #include "../util/util.h"
 #include "../util/refcounter.h"
+#include "../util/list.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -187,39 +188,29 @@ flib_weaponsetlist *flib_weaponsetlist_create() {
 	return flib_weaponsetlist_retain(flib_calloc(1, sizeof(flib_weaponsetlist)));
 }
 
-int flib_weaponsetlist_insert(flib_weaponsetlist *list, flib_weaponset *weaponset, int pos) {
-	int result = -1;
-	if(!list || !weaponset || pos < 0 || pos > list->weaponsetCount) {
-		flib_log_e("Invalid parameter in flib_weaponsetlist_insert");
+int flib_weaponsetlist_insert(flib_weaponsetlist *list, flib_weaponset *set, int pos) {
+	flib_weaponset **changedList = flib_list_insert(list->weaponsets, &list->weaponsetCount, sizeof(*list->weaponsets), &set, pos);
+	if(changedList) {
+		list->weaponsets = changedList;
+		flib_weaponset_retain(set);
+		return 0;
 	} else {
-		flib_weaponset **newSets = flib_realloc(list->weaponsets, (list->weaponsetCount+1)*sizeof(*list->weaponsets));
-		if(newSets) {
-			list->weaponsets = newSets;
-			memmove(list->weaponsets+pos+1, list->weaponsets+pos, (list->weaponsetCount-pos)*sizeof(*list->weaponsets));
-			list->weaponsets[pos] = flib_weaponset_retain(weaponset);
-			list->weaponsetCount++;
-			result = 0;
-		}
+		return -1;
 	}
-	return result;
 }
 
 int flib_weaponsetlist_delete(flib_weaponsetlist *list, int pos) {
 	int result = -1;
-	if(!list || pos < 0 || pos >= list->weaponsetCount) {
+	if(!list || pos<0 || pos>=list->weaponsetCount) {
 		flib_log_e("Invalid parameter in flib_weaponsetlist_delete");
 	} else {
-		flib_weaponset_release(list->weaponsets[pos]);
-		memmove(list->weaponsets+pos, list->weaponsets+pos+1, (list->weaponsetCount-(pos+1))*sizeof(*list->weaponsets));
-		list->weaponsets[list->weaponsetCount-1] = NULL;
-		list->weaponsetCount--;
-
-		// If the realloc fails, just keep using the old buffer...
-		flib_weaponset **newSets = flib_realloc(list->weaponsets, list->weaponsetCount*sizeof(*list->weaponsets));
-		if(newSets || list->weaponsetCount==1) {
-			list->weaponsets = newSets;
+		flib_weaponset *elem = list->weaponsets[pos];
+		flib_weaponset **changedList = flib_list_delete(list->weaponsets, &list->weaponsetCount, sizeof(*list->weaponsets), pos);
+		if(changedList || list->weaponsetCount==0) {
+			list->weaponsets = changedList;
+			flib_weaponset_release(elem);
+			result = 0;
 		}
-		result = 0;
 	}
 	return result;
 }
