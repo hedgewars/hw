@@ -19,6 +19,12 @@ char *flib_asprintf(const char *fmt, ...);
 char *flib_vasprintf(const char *fmt, va_list args);
 
 /**
+ * Creates a new string (that must be freed) containing all parts
+ * joined together, with the specified delimiter between each.
+ */
+char *flib_join(char **parts, int partCount, const char *delimiter);
+
+/**
  * Return a duplicate of the provided string, or NULL if an error
  * occurs or if str is already NULL.
  *

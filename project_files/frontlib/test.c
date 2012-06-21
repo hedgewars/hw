@@ -1,12 +1,13 @@
 #include "frontlib.h"
 #include "util/logging.h"
 #include "util/buffer.h"
+#include "util/util.h"
 #include "model/map.h"
 #include "model/weapon.h"
 #include "model/schemelist.h"
 #include "ipc/mapconn.h"
 #include "ipc/gameconn.h"
-#include "net/netbase.h"
+#include "net/netconn.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -198,6 +199,65 @@ void testSave() {
 	}
 }
 
+void handleNetDisconnect(void *context, int reason, const char *message) {
+	flib_log_i("Disconnected: %s", message);
+	flib_netconn_destroy(*(flib_netconn**)context);
+	*(flib_netconn**)context = NULL;
+}
+
+void handleNetConnected(void *context) {
+	const flib_roomlist *roomlist = flib_netconn_get_roomlist(*(flib_netconn**)context);
+	flib_log_i("List of rooms:");
+	for(int i=0; i<roomlist->roomCount; i++) {
+		flib_roomlist_room *room = roomlist->rooms[i];
+		flib_log_i("%1s %20s %20s %2i %2i %20s %20s %20s", room->inProgress ? "X" : " ", room->name, room->owner, room->playerCount, room->teamCount, room->map, room->scheme, room->weapons);
+	}
+}
+
+void handleLobbyJoin(void *context, const char *nick) {
+	flib_log_i("%s joined", nick);
+}
+
+void handleChat(void *context, const char *nick, const char *msg) {
+	flib_log_i("%s: %s", nick, msg);
+	if(!memcmp("frontbot ", msg, strlen("frontbot "))) {
+		const char *command = msg+strlen("frontbot ");
+		if(!memcmp("quit", command, strlen("quit"))) {
+			flib_netconn_send_quit(*(flib_netconn**)context, "Yeth Mathter");
+		} else if(!memcmp("describe ", command, strlen("describe "))) {
+			const char *roomname = command+strlen("describe ");
+			const flib_roomlist *roomlist = flib_netconn_get_roomlist(*(flib_netconn**)context);
+			flib_roomlist_room *room = flib_roomlist_find((flib_roomlist*)roomlist, roomname);
+			if(!room) {
+				flib_netconn_send_chat(*(flib_netconn**)context, "Unknown room.");
+			} else {
+				char *text = flib_asprintf(
+						"%s is a room created by %s, where %i players (%i teams) are %s on %s%s, using the %s scheme and %s weaponset.",
+						room->name,
+						room->owner,
+						room->playerCount,
+						room->teamCount,
+						room->inProgress ? "fighting" : "preparing to fight",
+						room->map[0]=='+' ? "" : "the map ",
+						!strcmp("+rnd+", room->map) ? "a random map" :
+								!strcmp("+maze+", room->map) ? "a random maze" :
+								!strcmp("+drawn+", room->map) ? "a hand-drawn map" :
+								room->map,
+						room->scheme,
+						room->weapons);
+				if(text) {
+					flib_netconn_send_chat(*(flib_netconn**)context, text);
+				}
+				free(text);
+			}
+		}
+	}
+}
+
+void handleAskPass(void *context, const char *nick) {
+	flib_netconn_send_password((flib_netconn*)context, "Lorem");
+}
+
 int main(int argc, char *argv[]) {
 	flib_init(0);
 	flib_log_setLevel(FLIB_LOGLEVEL_ALL);
@@ -207,36 +267,20 @@ int main(int argc, char *argv[]) {
 	//testSave();
 	//testGame();
 
-	flib_netbase *conn = flib_netbase_create("140.247.62.101", 46631);
+	flib_cfg_meta *meta = flib_cfg_meta_from_ini("metasettings.ini");
+	assert(meta);
+	flib_netconn *conn = flib_netconn_create("Medo42", meta, "140.247.62.101", 46631);
+	assert(conn);
+	flib_cfg_meta_release(meta);
 
-	while(flib_netbase_connected(conn)) {
-		flib_netmsg *msg = flib_netbase_recv_message(conn);
-		if(msg && msg->partCount>0) {
-			flib_log_i("[NET IN] %s", msg->parts[0]);
-			for(int i=1; i<msg->partCount; i++) {
-				flib_log_i("[NET IN][-] %s", msg->parts[i]);
-			}
-			if(!strcmp(msg->parts[0], "CONNECTED")) {
-				flib_netmsg *nickmsg = flib_netmsg_create();
-				flib_netmsg_append_part(nickmsg, "NICK", 4);
-				flib_netmsg_append_part(nickmsg, "Medo42_frontlib", 15);
-				flib_netmsg *protomsg = flib_netmsg_create();
-				flib_netmsg_append_part(protomsg, "PROTO", 5);
-				flib_netmsg_append_part(protomsg, "42", 2);
-				flib_netbase_send_message(conn, nickmsg);
-				flib_netbase_send_message(conn, protomsg);
-				flib_netmsg_destroy(nickmsg);
-				flib_netmsg_destroy(protomsg);
-			}
-			if(!strcmp(msg->parts[0], "SERVER_MESSAGE")) {
-				flib_netmsg *quitmsg = flib_netmsg_create();
-				flib_netmsg_append_part(quitmsg, "QUIT", 4);
-				flib_netmsg_append_part(quitmsg, "Just testing", 12);
-				flib_netbase_send_message(conn, quitmsg);
-				flib_netmsg_destroy(quitmsg);
-			}
-		}
-		flib_netmsg_destroy(msg);
+	flib_netconn_onConnected(conn, handleNetConnected, &conn);
+	flib_netconn_onDisconnected(conn, handleNetDisconnect, &conn);
+	flib_netconn_onLobbyJoin(conn, handleLobbyJoin, &conn);
+	flib_netconn_onChat(conn, handleChat, &conn);
+	flib_netconn_onPasswordRequest(conn, handleAskPass, conn);
+
+	while(conn) {
+		flib_netconn_tick(conn);
 	}
 
 	flib_quit();

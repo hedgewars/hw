@@ -1,5 +1,16 @@
+/**
+ * This file defines a data structure for a hedgewars team.
+ *
+ * Teams are used in several different contexts in Hedgewars, and some of these require
+ * extra information about teams. For example, the weaponset is important
+ * to the engine, but not for ini reading/writing, and with the team statistics it is the
+ * other way around. To keep things simple, the data structure can hold all information
+ * used in any context. On the downside, tat means we can't use static typing to ensure
+ * that team information is "complete" for a particular purpose.
+ */
 #ifndef TEAM_H_
 #define TEAM_H_
+
 
 #include "weapon.h"
 #include "../hwconsts.h"
@@ -7,12 +18,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#define TEAM_DEFAULT_HOGNAME "Hog"
-#define TEAM_DEFAULT_HAT "NoHat"
-#define TEAM_DEFAULT_DIFFICULTY 0
 #define TEAM_DEFAULT_HEALTH 100
-
-// TODO default bindings?
 
 typedef struct {
 	char *action;
