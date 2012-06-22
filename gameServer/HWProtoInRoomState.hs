@@ -158,8 +158,8 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
     cl <- thisClient
     chans <- roomClientsChans
     return [
-        ModifyClient (\c -> c{isReady = not $ isReady cl}),
         ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
+        ModifyClient (\c -> c{isReady = not $ isReady cl}),
         AnswerClients chans $ if clientProto cl < 38 then
                 [if isReady cl then "NOT_READY" else "READY", nick cl]
                 else
