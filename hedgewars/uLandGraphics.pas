@@ -40,6 +40,7 @@ procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
+procedure DumpLandToLog(x, y, r: LongInt);
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
 
@@ -1155,6 +1156,30 @@ begin
         end;
     if (dx = dy) then
         DrawLines(x1, y1, x2, y2, dx, dy, color);
+end;
+
+
+procedure DumpLandToLog(x, y, r: LongInt);
+var xx, yy, dx: LongInt;
+    s: shortstring;
+begin
+    s[0]:= char(r * 2 + 1);
+    for yy:= y - r to y + r do
+        begin
+        for dx:= 0 to r*2 do
+            begin
+            xx:= dx - r + x;
+            if (xx = x) and (yy = y) then
+                s[dx + 1]:= 'X'
+            else if Land[yy, xx] > 255 then
+                s[dx + 1]:= 'O'
+            else if Land[yy, xx] > 0 then
+                s[dx + 1]:= '*'
+            else
+                s[dx + 1]:= '.'
+            end;
+        AddFileLog('Land dump: ' + s);
+        end;
 end;
 
 end.
