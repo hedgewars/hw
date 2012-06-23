@@ -3087,7 +3087,7 @@ begin
         begin
         Gear^.Tag := 0;
         Gear^.X := Gear^.X + int2hwFloat(xx);
-        if not TestCollisionY(Gear, yyn) then
+        if TestCollisionYwithGear(Gear, yyn) = 0 then
             begin
             Gear^.Y := Gear^.Y + int2hwFloat(yyn);
             NextAngle(Gear, dA)

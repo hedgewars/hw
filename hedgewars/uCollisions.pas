@@ -148,7 +148,8 @@ if Gear^.IntersectGear <> nil then
             end
         else
             TestWord:= 255
-    else TestWord:= 0;
+else 
+    TestWord:= 0;
 
 x:= hwRound(Gear^.X);
 if Dir < 0 then
@@ -193,6 +194,7 @@ if Dir < 0 then
     y:= y - Gear^.Radius
 else
     y:= y + Gear^.Radius;
+
 if (y and LAND_HEIGHT_MASK) = 0 then
     begin
     x:= hwRound(Gear^.X) - Gear^.Radius + 1;
