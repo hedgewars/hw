@@ -4753,7 +4753,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFlamethrowerWork(Gear: PGear);
 var 
-    HHGear: PGear;
+    HHGear, flame: PGear;
     rx, ry, speed: hwFloat;
     i, gX, gY: LongInt;
 begin
@@ -4791,14 +4791,18 @@ begin
             ry := rndSign(getRandomf * _0_1);
             speed := _0_5 * (_10 / Gear^.Tag);
     
-            AddGear(gx, gy, gtFlame, gstTmpFlag,
+            flame:= AddGear(gx, gy, gtFlame, gstTmpFlag,
                     SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
+            flame^.CollisionMask:= $FF7F;
             
             if (Gear^.Health mod 30) = 0 then
-                AddGear(gx, gy, gtFlame, 0,
+                begin
+                flame:= AddGear(gx, gy, gtFlame, 0,
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
+                flame^.CollisionMask:= $FF7F;
+                end
             end;
         Gear^.Timer:= Gear^.Tag
         end;
@@ -4834,7 +4838,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepLandGunWork(Gear: PGear);
 var 
-    HHGear: PGear;
+    HHGear, land: PGear;
     rx, ry, speed: hwFloat;
     i, gX, gY: LongInt;
 begin
@@ -4871,9 +4875,10 @@ begin
         ry := rndSign(getRandomf * _0_1);
         speed := (_3 / Gear^.Tag);
 
-        AddGear(gx, gy, gtFlake, gstTmpFlag, 
+        land:= AddGear(gx, gy, gtFlake, gstTmpFlag, 
                 SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx, 
                 AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
+        land^.CollisionMask:= $FF7F;
             
         Gear^.Timer:= Gear^.Tag
         end;
