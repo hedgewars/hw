@@ -100,15 +100,14 @@ gear^.nImpactSounds:= 0;
 gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
+gear^.CollisionMask:= $FFFF;
+
+if CurrentHedgehog <> nil then gear^.Hedgehog:= CurrentHedgehog;
+
 if Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then
     gear^.Z:= cHHZ+1
 else gear^.Z:= cUsualZ;
 
-if CurrentHedgehog <> nil then
-    begin
-    gear^.Hedgehog:= CurrentHedgehog;
-    gear^.IntersectGear:= CurrentHedgehog^.Gear
-    end;
     
 case Kind of
      gtGrenade,
@@ -483,9 +482,9 @@ Gear^.Tex:= nil;
 // make sure that portals have their link removed before deletion
 if (Gear^.Kind = gtPortal) then
     begin
-    if (Gear^.IntersectGear <> nil) then
-        if (Gear^.IntersectGear^.IntersectGear = Gear) then
-            Gear^.IntersectGear^.IntersectGear:= nil;
+    if (Gear^.LinkedGear <> nil) then
+        if (Gear^.LinkedGear^.LinkedGear = Gear) then
+            Gear^.LinkedGear^.LinkedGear:= nil;
     end
 else if Gear^.Kind = gtHedgehog then
     (*

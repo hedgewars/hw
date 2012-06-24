@@ -948,8 +948,8 @@ begin
        gtBall: DrawSpriteRotatedF(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
 
        gtPortal: if ((Gear^.Tag and 1) = 0) // still moving?
-                 or (Gear^.IntersectGear = nil) or (Gear^.IntersectGear^.IntersectGear <> Gear) // not linked&backlinked?
-                 or ((Gear^.IntersectGear^.Tag and 1) = 0) then // linked portal still moving?
+                 or (Gear^.LinkedGear = nil) or (Gear^.LinkedGear^.LinkedGear <> Gear) // not linked&backlinked?
+                 or ((Gear^.LinkedGear^.Tag and 1) = 0) then // linked portal still moving?
                       DrawSpriteRotatedF(sprPortal, x, y, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle)
                  else DrawSpriteRotatedF(sprPortal, x, y, 4 + Gear^.Tag div 2, hwSign(Gear^.dX), Gear^.DirAngle);
 
