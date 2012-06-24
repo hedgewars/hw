@@ -973,10 +973,9 @@ begin
             prevgear^.Z := cHHZ;
             RemoveGearFromList(prevgear);
             InsertGearToList(prevgear);
-
-            CurrentHedgehog := gear^.Hedgehog;
-// yes, this will muck up turn sequence
-            CurrentTeam := gear^.Hedgehog^.Team;
+            
+            SwitchCurrentHedgehog(gear^.Hedgehog);
+            CurrentTeam:= CurrentHedgehog^.Team;
 
             gear^.State:= gear^.State or gstHHDriven;
             gear^.Active := true;
