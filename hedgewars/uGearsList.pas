@@ -246,7 +246,7 @@ case Kind of
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_3;
-                gear^.Timer:= 0
+                gear^.Timer:= 500
                 end;
   gtExplosives: begin
                 gear^.ImpactSound:= sndGrenadeImpact;
