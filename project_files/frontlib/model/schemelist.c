@@ -125,7 +125,7 @@ static int writeSchemeToIni(flib_cfg *scheme, flib_ini *ini, int index) {
 	bool error = false;
 
 	char *key = makePrefixedName(index+1, "name");
-	error |= !key || flib_ini_set_str(ini, key, scheme->schemeName);
+	error |= !key || flib_ini_set_str(ini, key, scheme->name);
 	free(key);
 
 	for(int i=0; i<meta->modCount && !error; i++) {
@@ -184,7 +184,7 @@ void flib_schemelist_release(flib_schemelist *list) {
 flib_cfg *flib_schemelist_find(flib_schemelist *list, const char *name) {
 	if(list && name) {
 		for(int i=0; i<list->schemeCount; i++) {
-			if(!strcmp(name, list->schemes[i]->schemeName)) {
+			if(!strcmp(name, list->schemes[i]->name)) {
 				return list->schemes[i];
 			}
 		}

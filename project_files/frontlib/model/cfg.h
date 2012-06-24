@@ -24,6 +24,10 @@ typedef struct {
     int bitmaskIndex;
 } flib_cfg_mod_meta;
 
+/**
+ * The order of the meta information in the arrays is the same as the order
+ * of the mod/setting information in the net protocol messages.
+ */
 typedef struct {
 	int _referenceCount;
 	int settingCount;
@@ -36,7 +40,7 @@ typedef struct {
 	int _referenceCount;
     flib_cfg_meta *meta;
 
-    char *schemeName;
+    char *name;
     int *settings;
     bool *mods;
 } flib_cfg;

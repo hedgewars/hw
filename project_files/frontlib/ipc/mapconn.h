@@ -9,7 +9,6 @@
 #define MAPIMAGE_HEIGHT 128
 #define MAPIMAGE_BYTES (MAPIMAGE_WIDTH/8*MAPIMAGE_HEIGHT)
 
-struct _flib_mapconn;
 typedef struct _flib_mapconn flib_mapconn;
 
 /**
@@ -21,7 +20,7 @@ typedef struct _flib_mapconn flib_mapconn;
  * No NULL parameters allowed, returns NULL on failure.
  * Use flib_mapconn_destroy to free the returned object.
  */
-flib_mapconn *flib_mapconn_create(char *seed, flib_map *mapdesc);
+flib_mapconn *flib_mapconn_create(flib_map *mapdesc);
 
 /**
  * Destroy the mapconn object. Passing NULL is allowed and does nothing.

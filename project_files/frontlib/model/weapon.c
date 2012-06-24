@@ -81,30 +81,38 @@ static void flib_weaponsetlist_destroy(flib_weaponsetlist *list) {
 	}
 }
 
+flib_weaponset *flib_weaponset_from_ammostring(const char *name, const char *ammostring) {
+	flib_weaponset *result = NULL;
+	if(!name || !ammostring) {
+		flib_log_e("null parameter in flib_weaponset_from_ammostring");
+	} else {
+		result = flib_weaponset_create(name);
+		if(result) {
+			int fieldlen = strlen(ammostring)/4;
+			setField(result->loadout, ammostring, fieldlen, false);
+			setField(result->crateprob, ammostring + fieldlen, fieldlen, true);
+			setField(result->delay, ammostring + 2*fieldlen, fieldlen, true);
+			setField(result->crateammo, ammostring + 3*fieldlen, fieldlen, true);
+		}
+	}
+	return result;
+}
+
 static int fillWeaponsetFromIni(flib_weaponsetlist *list, flib_ini *ini, int index) {
 	int result = -1;
 	char *keyname = flib_ini_get_keyname(ini, index);
 	char *decodedKeyname = flib_urldecode(keyname);
-
-	if(decodedKeyname) {
-		flib_weaponset *set = flib_weaponset_create(decodedKeyname);
+	char *ammostring = NULL;
+	if(decodedKeyname && !flib_ini_get_str(ini, &ammostring, keyname)) {
+		flib_weaponset *set = flib_weaponset_from_ammostring(decodedKeyname, ammostring);
 		if(set) {
-			char *value = NULL;
-			if(!flib_ini_get_str(ini, &value, keyname)) {
-				int fieldlen = strlen(value)/4;
-				setField(set->loadout, value, fieldlen, false);
-				setField(set->crateprob, value+1*fieldlen, fieldlen, true);
-				setField(set->delay, value+2*fieldlen, fieldlen, true);
-				setField(set->crateammo, value+3*fieldlen, fieldlen, true);
-				result = flib_weaponsetlist_insert(list, set, list->weaponsetCount);
-			}
-			free(value);
+			result = flib_weaponsetlist_insert(list, set, list->weaponsetCount);
 		}
 		flib_weaponset_release(set);
 	}
-
-	free(keyname);
+	free(ammostring);
 	free(decodedKeyname);
+	free(keyname);
 	return result;
 }
 

@@ -2,6 +2,7 @@
 #include "util/logging.h"
 #include "util/buffer.h"
 #include "util/util.h"
+#include "util/list.h"
 #include "model/map.h"
 #include "model/weapon.h"
 #include "model/schemelist.h"
@@ -78,11 +79,11 @@ static void startEngineGame(int port) {
 
 void testMapPreview() {
 	// Create a map description and check that there was no error
-	flib_map *map = flib_map_create_maze("Jungle", MAZE_SIZE_SMALL_TUNNELS);
+	flib_map *map = flib_map_create_maze("This is the seed value", "Jungle", MAZE_SIZE_SMALL_TUNNELS);
 	assert(map);
 
 	// Create a new connection to the engine and check that there was no error
-	flib_mapconn *mapConnection = flib_mapconn_create("This is the seed value", map);
+	flib_mapconn *mapConnection = flib_mapconn_create(map);
 	assert(mapConnection);
 
 	// We don't need the map description anymore
@@ -112,10 +113,9 @@ void testGame() {
 
 	flib_gamesetup setup;
 	setup.gamescheme = flib_schemelist_find(schemelist, "Default");
-	setup.map = flib_map_create_maze("Jungle", MAZE_SIZE_MEDIUM_TUNNELS);
-	setup.seed = "asparagus";
+	setup.map = flib_map_create_maze("asparagus", "Jungle", MAZE_SIZE_MEDIUM_TUNNELS);
 	setup.script = NULL;
-	setup.teamcount = 2;
+	setup.teamCount = 2;
 	setup.teams = calloc(2, sizeof(flib_team*));
 	setup.teams[0] = calloc(1, sizeof(flib_team));
 	setup.teams[0]->color = 0xffff0000;
@@ -250,12 +250,54 @@ void handleChat(void *context, const char *nick, const char *msg) {
 				}
 				free(text);
 			}
+		} else if(!memcmp("join ", command, strlen("join "))) {
+			const char *roomname = command+strlen("join ");
+			flib_netconn_send_joinRoom(*(flib_netconn**)context, roomname);
+		} else if(!memcmp("ready", command, strlen("ready"))) {
+			flib_netconn_send_toggleReady(*(flib_netconn**)context);
 		}
 	}
 }
 
-void handleAskPass(void *context, const char *nick) {
-	flib_netconn_send_password((flib_netconn*)context, "Lorem");
+static flib_gamesetup gGamesetup = {0};
+static flib_weaponset *gWeaponset = NULL;
+
+void handleEnterRoom(void *context, bool isChief) {
+	flib_netconn_send_toggleReady(*(flib_netconn**)context);
+}
+
+void handleMap(void *context, const flib_map *map, int changeType) {
+	flib_map_release(gGamesetup.map);
+	gGamesetup.map = flib_map_copy(map);
+}
+
+void handleCfgScheme(void *context, flib_cfg *cfg) {
+	flib_cfg_release(gGamesetup.gamescheme);
+	gGamesetup.gamescheme = flib_cfg_retain(cfg);
+}
+
+void handleWeaponset(void *context, flib_weaponset *weaponset) {
+	flib_weaponset_release(gWeaponset);
+	gWeaponset = flib_weaponset_retain(weaponset);
+}
+
+void handleScript(void *context, const char *script) {
+	free(gGamesetup.script);
+	gGamesetup.script = flib_strdupnull(script);
+}
+
+void handleTeamAdd(void *context, flib_team *team) {
+	flib_team *teamptr = flib_team_retain(team);
+	gGamesetup.teams = flib_list_insert(gGamesetup.teams, &gGamesetup.teamCount, sizeof(*gGamesetup.teams), &teamptr, 0);
+}
+
+void handleTeamRemove(void *context, const char *team) {
+	for(int i=0; i<gGamesetup.teamCount; i++) {
+		if(!strcmp(team, gGamesetup.teams[i]->name)) {
+			flib_team_release(gGamesetup.teams[i]);
+			gGamesetup.teams = flib_list_delete(gGamesetup.teams, &gGamesetup.teamCount, sizeof(*gGamesetup.teams), i);
+		}
+	}
 }
 
 int main(int argc, char *argv[]) {
@@ -269,7 +311,7 @@ int main(int argc, char *argv[]) {
 
 	flib_cfg_meta *meta = flib_cfg_meta_from_ini("metasettings.ini");
 	assert(meta);
-	flib_netconn *conn = flib_netconn_create("Medo42", meta, "140.247.62.101", 46631);
+	flib_netconn *conn = flib_netconn_create("frontbot", meta, "140.247.62.101", 46631);
 	assert(conn);
 	flib_cfg_meta_release(meta);
 
@@ -277,7 +319,14 @@ int main(int argc, char *argv[]) {
 	flib_netconn_onDisconnected(conn, handleNetDisconnect, &conn);
 	flib_netconn_onLobbyJoin(conn, handleLobbyJoin, &conn);
 	flib_netconn_onChat(conn, handleChat, &conn);
-	flib_netconn_onPasswordRequest(conn, handleAskPass, conn);
+	flib_netconn_onMapChanged(conn, handleMap, conn);
+	flib_netconn_onEnterRoom(conn, handleEnterRoom, conn);
+	flib_netconn_onCfgScheme(conn, handleCfgScheme, conn);
+	flib_netconn_onWeaponsetChanged(conn, handleWeaponset, conn);
+	flib_netconn_onScriptChanged(conn, handleScript, conn);
+	flib_netconn_onTeamAdd(conn, handleTeamAdd, conn);
+	flib_netconn_onTeamRemove(conn, handleTeamRemove, conn);
+	flib_netconn_onHogCountChanged(conn, handleHogCountChanged, conn);
 
 	while(conn) {
 		flib_netconn_tick(conn);

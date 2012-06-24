@@ -85,7 +85,7 @@ static flib_gameconn *flib_gameconn_create_partial(bool record, const char *play
 	return result;
 }
 
-flib_gameconn *flib_gameconn_create(const char *playerName, flib_gamesetup *setup, bool netgame) {
+flib_gameconn *flib_gameconn_create(const char *playerName, const flib_gamesetup *setup, bool netgame) {
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, netgame);
 	if(tempConn) {
@@ -116,6 +116,22 @@ flib_gameconn *flib_gameconn_create_loadgame(const char *playerName, const uint8
 	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, false);
 	if(tempConn) {
 		if(flib_vector_append(tempConn->configBuffer, save, size) == size) {
+			result = tempConn;
+			tempConn = NULL;
+		}
+	}
+	flib_gameconn_destroy(tempConn);
+	return result;
+}
+
+flib_gameconn *flib_gameconn_create_campaign(const char *playerName, const char *seed, const char *script) {
+	flib_gameconn *result = NULL;
+	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, false);
+	if(tempConn) {
+		if(!flib_ipc_append_message(tempConn->configBuffer, "TL")
+				&& !flib_ipc_append_seed(tempConn->configBuffer, seed)
+				&& !flib_ipc_append_script(tempConn->configBuffer, script)
+				&& !flib_ipc_append_message(tempConn->configBuffer, "!")) {
 			result = tempConn;
 			tempConn = NULL;
 		}

@@ -39,6 +39,14 @@ int flib_ipc_append_mapconf(flib_vector *vec, const flib_map *map, bool mapprevi
 int flib_ipc_append_seed(flib_vector *vec, const char *seed);
 
 /**
+ * Append a script message to the buffer.
+ *
+ * Returns nonzero if something goes wrong. In that case the buffer
+ * contents are unaffected.
+ */
+int flib_ipc_append_script(flib_vector *vec, const char *script);
+
+/**
  * Append the game scheme to the buffer.
  *
  * Returns nonzero if something goes wrong. In that case the buffer

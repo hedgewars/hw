@@ -18,92 +18,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "netconn.h"
-#include "netbase.h"
+// TODO: Check the state transitions. Document with a diagram or something
+
+#include "netconn_internal.h"
 #include "netprotocol.h"
 #include "../util/logging.h"
 #include "../util/util.h"
 #include "../model/roomlist.h"
 #include "../md5/md5.h"
+#include "../base64/base64.h"
 
-#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
 #include <ctype.h>
-
-struct _flib_netconn {
-	flib_netbase *netBase;
-	char *playerName;
-	flib_cfg_meta *metaCfg;
-	flib_roomlist *roomList;
-
-	int netconnState;	// One of the NETCONN_STATE constants
-
-	bool isAdmin;			// Player is server administrator
-	bool isChief;			// Player can modify the current room
-
-
-	void (*onMessageCb)(void *context, int msgtype, const char *msg);
-	void *onMessageCtx;
-
-	void (*onConnectedCb)(void *context);
-	void *onConnectedCtx;
-
-	void (*onDisconnectedCb)(void *context, int reason, const char *message);
-	void *onDisconnectedCtx;
-
-	void (*onRoomAddCb)(void *context, const flib_roomlist_room *room);
-	void *onRoomAddCtx;
-
-	void (*onRoomDeleteCb)(void *context, const char *name);
-	void *onRoomDeleteCtx;
-
-	void (*onRoomUpdateCb)(void *context, const char *oldName, const flib_roomlist_room *room);
-	void *onRoomUpdateCtx;
-
-	void (*onChatCb)(void *context, const char *nick, const char *msg);
-	void *onChatCtx;
-
-	void (*onLobbyJoinCb)(void *context, const char *nick);
-	void *onLobbyJoinCtx;
-
-	void (*onLobbyLeaveCb)(void *context, const char *nick, const char *partMessage);
-	void *onLobbyLeaveCtx;
-
-	void (*onRoomJoinCb)(void *context, const char *nick);
-	void *onRoomJoinCtx;
-
-	void (*onRoomLeaveCb)(void *context, const char *nick, const char *partMessage);
-	void *onRoomLeaveCtx;
-
-	void (*onNickTakenCb)(void *context, const char *nick);
-	void *onNickTakenCtx;
-
-	void (*onNickAcceptCb)(void *context, const char *nick);
-	void *onNickAcceptCtx;
-
-	void (*onPasswordRequestCb)(void *context, const char *nick);
-	void *onPasswordRequestCtx;
-
-	void (*onRoomChiefStatusCb)(void *context, bool isChief);
-	void *onRoomChiefStatusCtx;
-
-	void (*onReadyStateCb)(void *context, const char *nick, bool ready);
-	void *onReadyStateCtx;
-
-	void (*onEnterRoomCb)(void *context, bool chief);
-	void *onEnterRoomCtx;
-
-	void (*onLeaveRoomCb)(void *context, int reason, const char *message);
-	void *onLeaveRoomCtx;
-
-	void (*onTeamAddCb)(void *context, flib_team *team);
-	void *onTeamAddCtx;
-
-	bool running;
-	bool destroyRequested;
-};
 
 static void defaultCallback_onMessage(void *context, int msgtype, const char *msg) {
 	flib_log_i("Net: [%i] %s", msgtype, msg);
@@ -115,6 +43,7 @@ static void defaultCallback_str(void *context, const char *str) {}
 static void defaultCallback_int_str(void *context, int i, const char *str) {}
 static void defaultCallback_str_str(void *context, const char *str1, const char *str2) {}
 static void defaultCallback_str_bool(void *context, const char *str, bool b) {}
+static void defaultCallback_str_int(void *context, const char *str, int i) {}
 
 static void defaultCallback_onRoomAdd(void *context, const flib_roomlist_room *room) {}
 static void defaultCallback_onRoomUpdate(void *context, const char *oldName, const flib_roomlist_room *room) {}
@@ -149,6 +78,10 @@ static void defaultCallback_onPasswordRequest(void *context, const char *request
 }
 
 static void defaultCallback_onTeamAdd(void *context, flib_team *team) {}
+static void defaultCallback_onTeamColorChanged(void *context, const char *teamName, uint32_t color) {}
+static void defaultCallback_onCfgScheme(void *context, flib_cfg *scheme) {}
+static void defaultCallback_onMapChanged(void *context, const flib_map *map, int changetype) {}
+static void defaultCallback_onWeaponsetChanged(void *context, flib_weaponset *weaponset) {}
 
 static void clearCallbacks(flib_netconn *conn) {
 	flib_netconn_onMessage(conn, NULL, NULL);
@@ -163,12 +96,24 @@ static void clearCallbacks(flib_netconn *conn) {
 	flib_netconn_onRoomJoin(conn, NULL, NULL);
 	flib_netconn_onRoomLeave(conn, NULL, NULL);
 	flib_netconn_onNickTaken(conn, NULL, NULL);
-	flib_netconn_onNickAccept(conn, NULL, NULL);
 	flib_netconn_onPasswordRequest(conn, NULL, NULL);
 	flib_netconn_onRoomChiefStatus(conn, NULL, NULL);
-	flib_netconn_onReadyStateCb(conn, NULL, NULL);
-	flib_netconn_onEnterRoomCb(conn, NULL, NULL);
-	flib_netconn_onTeamAddCb(conn, NULL, NULL);
+	flib_netconn_onReadyState(conn, NULL, NULL);
+	flib_netconn_onEnterRoom(conn, NULL, NULL);
+	flib_netconn_onLeaveRoom(conn, NULL, NULL);
+	flib_netconn_onTeamAdd(conn, NULL, NULL);
+	flib_netconn_onTeamDelete(conn, NULL, NULL);
+	flib_netconn_onRunGame(conn, NULL, NULL);
+	flib_netconn_onTeamAccepted(conn, NULL, NULL);
+	flib_netconn_onHogCountChanged(conn, NULL, NULL);
+	flib_netconn_onTeamColorChanged(conn, NULL, NULL);
+	flib_netconn_onEngineMessage(conn, NULL, NULL);
+	flib_netconn_onCfgScheme(conn, NULL, NULL);
+	flib_netconn_onMapChanged(conn, NULL, NULL);
+	flib_netconn_onScriptChanged(conn, NULL, NULL);
+	flib_netconn_onWeaponsetChanged(conn, NULL, NULL);
+	flib_netconn_onAdminAccess(conn, NULL, NULL);
+	flib_netconn_onServerVar(conn, NULL, NULL);
 }
 
 flib_netconn *flib_netconn_create(const char *playerName, flib_cfg_meta *metacfg, const char *host, uint16_t port) {
@@ -183,6 +128,7 @@ flib_netconn *flib_netconn_create(const char *playerName, flib_cfg_meta *metacfg
 			newConn->isChief = false;
 			newConn->metaCfg = flib_cfg_meta_retain(metacfg);
 			newConn->roomList = flib_roomlist_create();
+			newConn->map = flib_map_create_named("", "NoSuchMap");
 			newConn->running = false;
 			newConn->destroyRequested = false;
 			clearCallbacks(newConn);
@@ -212,6 +158,7 @@ void flib_netconn_destroy(flib_netconn *conn) {
 			flib_netbase_destroy(conn->netBase);
 			flib_cfg_meta_release(conn->metaCfg);
 			flib_roomlist_destroy(conn->roomList);
+			flib_map_release(conn->map);
 			free(conn->playerName);
 			free(conn);
 		}
@@ -234,65 +181,6 @@ bool flib_netconn_is_chief(flib_netconn *conn) {
 		flib_log_e("null parameter in flib_netconn_is_chief");
 	} else if(conn->netconnState == NETCONN_STATE_ROOM || conn->netconnState == NETCONN_STATE_INGAME) {
 		result = conn->isChief;
-	}
-	return result;
-}
-
-int flib_netconn_send_quit(flib_netconn *conn, const char *quitmsg) {
-	int result = -1;
-	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_send_quit");
-	} else {
-		result = flib_netbase_sendf(conn->netBase, "%s\n%s\n\n", "QUIT", quitmsg ? quitmsg : "User quit");
-	}
-	return result;
-}
-
-int flib_netconn_send_chat(flib_netconn *conn, const char *chat) {
-	int result = -1;
-	if(!conn || !chat) {
-		flib_log_e("null parameter in flib_netconn_send_chat");
-	} else {
-		result = flib_netbase_sendf(conn->netBase, "%s\n%s\n\n", "CHAT", chat);
-	}
-	return result;
-}
-
-int flib_netconn_send_nick(flib_netconn *conn, const char *nick) {
-	int result = -1;
-	if(!conn || !nick) {
-		flib_log_e("null parameter in flib_netconn_send_nick");
-	} else {
-		char *tmpName = flib_strdupnull(nick);
-		if(tmpName) {
-			if(!flib_netbase_sendf(conn->netBase, "%s\n%s\n\n", "NICK", nick)) {
-				free(conn->playerName);
-				conn->playerName = tmpName;
-				tmpName = NULL;
-				result = 0;
-			}
-		}
-		free(tmpName);
-	}
-	return result;
-}
-
-int flib_netconn_send_password(flib_netconn *conn, const char *latin1Passwd) {
-	int result = -1;
-	if(!conn || !latin1Passwd) {
-		flib_log_e("null parameter in flib_netconn_send_password");
-	} else {
-		md5_state_t md5state;
-		uint8_t md5bytes[16];
-		char md5hex[33];
-		md5_init(&md5state);
-		md5_append(&md5state, (unsigned char*)latin1Passwd, strlen(latin1Passwd));
-		md5_finish(&md5state, md5bytes);
-		for(int i=0;i<sizeof(md5bytes); i++) {
-			// Needs to be lowercase - server checks case sensitive
-			snprintf(md5hex+i*2, 3, "%02x", (unsigned)md5bytes[i]);
-		}
-		result = flib_netbase_sendf(conn->netBase, "%s\n%s\n\n", "PASSWORD", md5hex);
 	}
 	return result;
 }
@@ -412,15 +300,6 @@ void flib_netconn_onNickTaken(flib_netconn *conn, void (*callback)(void *context
 	}
 }
 
-void flib_netconn_onNickAccept(flib_netconn *conn, void (*callback)(void *context, const char *nick), void* context) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_onNickAccept");
-	} else {
-		conn->onNickAcceptCb = callback ? callback : &defaultCallback_str;
-		conn->onNickAcceptCtx = context;
-	}
-}
-
 void flib_netconn_onPasswordRequest(flib_netconn *conn, void (*callback)(void *context, const char *nick), void* context) {
 	if(!conn) {
 		flib_log_e("null parameter in flib_netconn_onPasswordRequest");
@@ -442,39 +321,159 @@ void flib_netconn_onRoomChiefStatus(flib_netconn *conn, void (*callback)(void *c
 	}
 }
 
-void flib_netconn_onReadyStateCb(flib_netconn *conn, void (*callback)(void *context, const char *nick, bool ready), void* context) {
+void flib_netconn_onReadyState(flib_netconn *conn, void (*callback)(void *context, const char *nick, bool ready), void* context) {
 	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_onReadyStateCb");
+		flib_log_e("null parameter in flib_netconn_onReadyState");
 	} else {
 		conn->onReadyStateCb = callback ? callback : &defaultCallback_str_bool;
 		conn->onReadyStateCtx = context;
 	}
 }
 
-void flib_netconn_onEnterRoomCb(flib_netconn *conn, void (*callback)(void *context, bool chief), void *context) {
+void flib_netconn_onEnterRoom(flib_netconn *conn, void (*callback)(void *context, bool chief), void *context) {
 	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_onEnterRoomCb");
+		flib_log_e("null parameter in flib_netconn_onEnterRoom");
 	} else {
 		conn->onEnterRoomCb = callback ? callback : &defaultCallback_bool;
 		conn->onEnterRoomCtx = context;
 	}
 }
 
-void flib_netconn_onLeaveRoomCb(flib_netconn *conn, void (*callback)(void *context, int reason, const char *message), void *context) {
+void flib_netconn_onLeaveRoom(flib_netconn *conn, void (*callback)(void *context, int reason, const char *message), void *context) {
 	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_onLeaveRoomCb");
+		flib_log_e("null parameter in flib_netconn_onLeaveRoom");
 	} else {
 		conn->onLeaveRoomCb = callback ? callback : &defaultCallback_int_str;
 		conn->onLeaveRoomCtx = context;
 	}
 }
 
-void flib_netconn_onTeamAddCb(flib_netconn *conn, void (*callback)(void *context, flib_team *team), void *context) {
+void flib_netconn_onTeamAdd(flib_netconn *conn, void (*callback)(void *context, flib_team *team), void *context) {
 	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_onTeamAddCb");
+		flib_log_e("null parameter in flib_netconn_onTeamAdd");
 	} else {
 		conn->onTeamAddCb = callback ? callback : &defaultCallback_onTeamAdd;
 		conn->onTeamAddCtx = context;
+	}
+}
+
+void flib_netconn_onTeamDelete(flib_netconn *conn, void (*callback)(void *context, const char *teamname), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onTeamDelete");
+	} else {
+		conn->onTeamDeleteCb = callback ? callback : &defaultCallback_str;
+		conn->onTeamDeleteCtx = context;
+	}
+}
+
+void flib_netconn_onRunGame(flib_netconn *conn, void (*callback)(void *context), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onRunGame");
+	} else {
+		conn->onRunGameCb = callback ? callback : &defaultCallback_void;
+		conn->onRunGameCtx = context;
+	}
+}
+
+void flib_netconn_onTeamAccepted(flib_netconn *conn, void (*callback)(void *context, const char *teamName), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onTeamAccepted");
+	} else {
+		conn->onTeamAcceptedCb = callback ? callback : &defaultCallback_str;
+		conn->onTeamAcceptedCtx = context;
+	}
+}
+
+void flib_netconn_onHogCountChanged(flib_netconn *conn, void (*callback)(void *context, const char *teamName, int hogs), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onHogCountChanged");
+	} else {
+		conn->onHogCountChangedCb = callback ? callback : &defaultCallback_str_int;
+		conn->onHogCountChangedCtx = context;
+	}
+}
+
+void flib_netconn_onTeamColorChanged(flib_netconn *conn, void (*callback)(void *context, const char *teamName, uint32_t colorARGB), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onTeamColorChanged");
+	} else {
+		conn->onTeamColorChangedCb = callback ? callback : &defaultCallback_onTeamColorChanged;
+		conn->onTeamColorChangedCtx = context;
+	}
+}
+
+void flib_netconn_onEngineMessage(flib_netconn *conn, void (*callback)(void *context, const char *message, int size), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onEngineMessage");
+	} else {
+		conn->onEngineMessageCb = callback ? callback : &defaultCallback_str_int;
+		conn->onEngineMessageCtx = context;
+	}
+}
+
+void flib_netconn_onCfgScheme(flib_netconn *conn, void (*callback)(void *context, flib_cfg *scheme), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onCfgScheme");
+	} else {
+		conn->onCfgSchemeCb = callback ? callback : &defaultCallback_onCfgScheme;
+		conn->onCfgSchemeCtx = context;
+	}
+}
+
+void flib_netconn_onMapChanged(flib_netconn *conn, void (*callback)(void *context, const flib_map *map, int changetype), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onMapChanged");
+	} else {
+		conn->onMapChangedCb = callback ? callback : &defaultCallback_onMapChanged;
+		conn->onMapChangedCtx = context;
+	}
+}
+
+void flib_netconn_onScriptChanged(flib_netconn *conn, void (*callback)(void *context, const char *script), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onScriptChanged");
+	} else {
+		conn->onScriptChangedCb = callback ? callback : &defaultCallback_str;
+		conn->onScriptChangedCtx = context;
+	}
+}
+
+void flib_netconn_onWeaponsetChanged(flib_netconn *conn, void (*callback)(void *context, flib_weaponset *weaponset), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onWeaponsetChanged");
+	} else {
+		conn->onWeaponsetChangedCb = callback ? callback : &defaultCallback_onWeaponsetChanged;
+		conn->onWeaponsetChangedCtx = context;
+	}
+}
+
+void flib_netconn_onAdminAccess(flib_netconn *conn, void (*callback)(void *context), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onAdminAccess");
+	} else {
+		conn->onAdminAccessCb = callback ? callback : &defaultCallback_void;
+		conn->onAdminAccessCtx = context;
+	}
+}
+
+void flib_netconn_onServerVar(flib_netconn *conn, void (*callback)(void *context, const char *name, const char *value), void *context) {
+	if(!conn) {
+		flib_log_e("null parameter in flib_netconn_onServerVar");
+	} else {
+		conn->onServerVarCb = callback ? callback : &defaultCallback_str_str;
+		conn->onServerVarCtx = context;
+	}
+}
+
+void leaveRoom(flib_netconn *conn) {
+	conn->netconnState = NETCONN_STATE_LOBBY;
+	conn->isChief = false;
+	flib_map *map = flib_map_create_named("", "NoSuchMap");
+	if(map) {
+		flib_map_release(conn->map);
+		conn->map = map;
+	} else {
+		flib_log_e("Error resetting netconn.map");
 	}
 }
 
@@ -503,14 +502,14 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	    	if(netmsg->partCount<2) {
 	    		flib_log_w("Net: Malformed NICK message");
 	    	} else {
-				free(conn->playerName);
-				conn->playerName = flib_strdupnull(netmsg->parts[1]);
-				if(!conn->playerName) {
+	    		char *nick = flib_strdupnull(netmsg->parts[1]);
+	    		if(nick) {
+					free(conn->playerName);
+					conn->playerName = nick;
+	    		} else {
 					conn->netconnState = NETCONN_STATE_DISCONNECTED;
 					conn->onDisconnectedCb(conn->onDisconnectedCtx, NETCONN_DISCONNECT_INTERNAL_ERROR, "Out of memory");
 					exit = true;
-				} else {
-					conn->onNickAcceptCb(conn->onNickAcceptCtx, conn->playerName);
 				}
 	    	}
 	    } else if (!strcmp(cmd, "PROTO")) {
@@ -583,18 +582,9 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	        	free(joined);
 	        }
 	    } else if(!strcmp(cmd, "SERVER_VARS")) {
-	    	// TODO
-//	        QStringList tmp = lst;
-//	        tmp.removeFirst();
-//	        while (tmp.size() >= 2)
-//	        {
-//	            if(tmp[0] == "MOTD_NEW") emit serverMessageNew(tmp[1]);
-//	            else if(tmp[0] == "MOTD_OLD") emit serverMessageOld(tmp[1]);
-//	            else if(tmp[0] == "LATEST_PROTO") emit latestProtocolVar(tmp[1].toInt());
-//
-//	            tmp.removeFirst();
-//	            tmp.removeFirst();
-//	        }
+	    	for(int offset=1; offset+2<netmsg->partCount; offset+=2) {
+	    		conn->onServerVarCb(conn->onServerVarCtx, netmsg->parts[offset], netmsg->parts[offset+1]);
+	    	}
 	    } else if (!strcmp(cmd, "CLIENT_FLAGS")) {
 	        if(netmsg->partCount < 3 || strlen(netmsg->parts[1]) < 2) {
 	        	flib_log_w("Net: Malformed CLIENT_FLAGS message");
@@ -606,12 +596,6 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 					switch(flags[i]) {
 					case 'r':
 						for(int j = 2; j < netmsg->partCount; ++j) {
-							if (!strcmp(conn->playerName, netmsg->parts[i])) {
-								// TODO what is the reason behind this (copied from QtFrontend)?
-								if (conn->isChief && !setFlag) {
-									flib_netbase_sendf(conn->netBase, "%s\n\n", "TOGGLE_READY");
-								}
-							}
 							conn->onReadyStateCb(conn->onReadyStateCtx, netmsg->parts[i], setFlag);
 						}
 						break;
@@ -631,21 +615,22 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 					conn->onDisconnectedCb(conn->onDisconnectedCtx, NETCONN_DISCONNECT_INTERNAL_ERROR, "Internal error");
 					exit = true;
 	        	} else {
+	        		team->remoteDriven = true;
 	        		conn->onTeamAddCb(conn->onTeamAddCtx, team);
 	        	}
+	        	flib_team_release(team);
 	        }
 	    } else if (!strcmp(cmd, "REMOVE_TEAM")) {
 	        if(netmsg->partCount != 2) {
 	            flib_log_w("Net: Bad REMOVETEAM message");
 	        } else {
-	        	// TODO
-	        	// emit RemoveNetTeam(HWTeam(lst[1]));
+	        	conn->onTeamDeleteCb(conn->onTeamDeleteCtx, netmsg->parts[1]);
 	        }
 	    } else if(!strcmp(cmd, "ROOMABANDONED")) {
-	        conn->netconnState = NETCONN_STATE_LOBBY;
+	    	leaveRoom(conn);
 	        conn->onLeaveRoomCb(conn->onLeaveRoomCtx, NETCONN_ROOMLEAVE_ABANDONED, "Room destroyed");
 	    } else if(!strcmp(cmd, "KICKED")) {
-	    	conn->netconnState = NETCONN_STATE_LOBBY;
+	    	leaveRoom(conn);
 	    	conn->onLeaveRoomCb(conn->onLeaveRoomCtx, NETCONN_ROOMLEAVE_KICKED, "You got kicked");
 	    } else if(!strcmp(cmd, "JOINED")) {
 	        if(netmsg->partCount < 2) {
@@ -718,8 +703,7 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	        }
 	    } else if (!strcmp(cmd, "RUN_GAME")) {
 	        conn->netconnState = NETCONN_STATE_INGAME;
-	        // TODO
-	        // emit AskForRunGame();
+	        conn->onRunGameCb(conn->onRunGameCtx);
 	    } else if (!strcmp(cmd, "ASKPASSWORD")) {
 	    	conn->onPasswordRequestCb(conn->onPasswordRequestCtx, conn->playerName);
 	    } else if (!strcmp(cmd, "NOTICE")) {
@@ -740,49 +724,128 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	        if (netmsg->partCount != 2) {
 	            flib_log_w("Net: Bad TEAM_ACCEPTED message");
 	        } else {
-	        	// TODO
-	        	// emit TeamAccepted(lst[1]);
+	        	conn->onTeamAcceptedCb(conn->onTeamAcceptedCtx, netmsg->parts[1]);
 	        }
 	    } else if (!strcmp(cmd, "CFG")) {
 	        if(netmsg->partCount < 3) {
 	            flib_log_w("Net: Bad CFG message");
 	        } else {
-	        	// TODO
-//				QStringList tmp = lst;
-//				tmp.removeFirst();
-//				tmp.removeFirst();
-//				if (lst[1] == "SCHEME")
-//					emit netSchemeConfig(tmp);
-//				else
-//					emit paramChanged(lst[1], tmp);
+	        	const char *subcmd = netmsg->parts[1];
+				if(!strcmp(subcmd, "SCHEME") && netmsg->partCount == conn->metaCfg->modCount + conn->metaCfg->settingCount + 3) {
+					flib_cfg *cfg = flib_netmsg_to_cfg(conn->metaCfg, netmsg->parts+2);
+					if(cfg) {
+						conn->onCfgSchemeCb(conn->onCfgSchemeCtx, cfg);
+					} else {
+						flib_log_e("Error processing CFG SCHEME message");
+					}
+					flib_cfg_release(cfg);
+				} else if(!strcmp(subcmd, "FULLMAPCONFIG") && netmsg->partCount == 7) {
+					flib_map *map = flib_netmsg_to_map(netmsg->parts+2);
+					if(map) {
+						flib_map_release(conn->map);
+						conn->map = map;
+						conn->onMapChangedCb(conn->onMapChangedCtx, conn->map, NETCONN_MAPCHANGE_FULL);
+					} else {
+						flib_log_e("Error processing CFG FULLMAPCONFIG message");
+					}
+				} else if(!strcmp(subcmd, "MAP") && netmsg->partCount == 3) {
+					char *mapname = flib_strdupnull(netmsg->parts[2]);
+					if(mapname) {
+						free(conn->map->name);
+						conn->map->name = mapname;
+						conn->onMapChangedCb(conn->onMapChangedCtx, conn->map, NETCONN_MAPCHANGE_MAP);
+					} else {
+						flib_log_e("Error processing CFG MAP message");
+					}
+				} else if(!strcmp(subcmd, "THEME") && netmsg->partCount == 3) {
+					char *themename = flib_strdupnull(netmsg->parts[2]);
+					if(themename) {
+						free(conn->map->theme);
+						conn->map->theme = themename;
+						conn->onMapChangedCb(conn->onMapChangedCtx, conn->map, NETCONN_MAPCHANGE_THEME);
+					} else {
+						flib_log_e("Error processing CFG THEME message");
+					}
+				} else if(!strcmp(subcmd, "SEED") && netmsg->partCount == 3) {
+					char *seed = flib_strdupnull(netmsg->parts[2]);
+					if(seed) {
+						free(conn->map->seed);
+						conn->map->seed = seed;
+						conn->onMapChangedCb(conn->onMapChangedCtx, conn->map, NETCONN_MAPCHANGE_SEED);
+					} else {
+						flib_log_e("Error processing CFG SEED message");
+					}
+				} else if(!strcmp(subcmd, "TEMPLATE") && netmsg->partCount == 3) {
+					conn->map->templateFilter = atoi(netmsg->parts[2]);
+					conn->onMapChangedCb(conn->onMapChangedCtx, conn->map, NETCONN_MAPCHANGE_TEMPLATE);
+				} else if(!strcmp(subcmd, "MAPGEN") && netmsg->partCount == 3) {
+					conn->map->mapgen = atoi(netmsg->parts[2]);
+					conn->onMapChangedCb(conn->onMapChangedCtx, conn->map, NETCONN_MAPCHANGE_MAPGEN);
+				} else if(!strcmp(subcmd, "MAZE_SIZE") && netmsg->partCount == 3) {
+					conn->map->mazeSize = atoi(netmsg->parts[2]);
+					conn->onMapChangedCb(conn->onMapChangedCtx, conn->map, NETCONN_MAPCHANGE_MAZE_SIZE);
+				} else if(!strcmp(subcmd, "DRAWNMAP") && netmsg->partCount == 3) {
+					size_t drawnMapSize = 0;
+					uint8_t *drawnMapData = flib_netmsg_to_drawnmapdata(&drawnMapSize, netmsg->parts[2]);
+					if(drawnMapData) {
+						free(conn->map->drawData);
+						conn->map->drawData = drawnMapData;
+						conn->map->drawDataSize = drawnMapSize;
+						conn->onMapChangedCb(conn->onMapChangedCtx, conn->map, NETCONN_MAPCHANGE_DRAWNMAP);
+					} else {
+						flib_log_e("Error processing CFG DRAWNMAP message");
+					}
+				} else if(!strcmp(subcmd, "SCRIPT") && netmsg->partCount == 3) {
+					conn->onScriptChangedCb(conn->onScriptChangedCtx, netmsg->parts[2]);
+				} else if(!strcmp(subcmd, "AMMO") && netmsg->partCount == 4) {
+					flib_weaponset *weapons = flib_weaponset_from_ammostring(netmsg->parts[2], netmsg->parts[3]);
+					if(weapons) {
+						conn->onWeaponsetChangedCb(conn->onWeaponsetChangedCtx, weapons);
+					} else {
+						flib_log_e("Error processing CFG AMMO message");
+					}
+					flib_weaponset_release(weapons);
+				} else {
+					flib_log_w("Net: Unknown or malformed CFG subcommand: %s", subcmd);
+				}
 	        }
 	    } else if (!strcmp(cmd, "HH_NUM")) {
 	        if (netmsg->partCount != 3) {
-	            flib_log_w("Net: Bad TEAM_ACCEPTED message");
+	            flib_log_w("Net: Bad HH_NUM message");
 	        } else {
-	        	// TODO
-//				HWTeam tmptm(lst[1]);
-//				tmptm.setNumHedgehogs(lst[2].toUInt());
-//				emit hhnumChanged(tmptm);
+	        	int hogs = atoi(netmsg->parts[2]);
+	        	if(hogs<=0 || hogs>HEDGEHOGS_PER_TEAM) {
+	        		flib_log_w("Net: Bad HH_NUM message: %s hogs", netmsg->parts[2]);
+	        	} else {
+	        		conn->onHogCountChangedCb(conn->onHogCountChangedCtx, netmsg->parts[1], hogs);
+	        	}
 	        }
 	    } else if (!strcmp(cmd, "TEAM_COLOR")) {
 	        if (netmsg->partCount != 3) {
 	            flib_log_w("Net: Bad TEAM_COLOR message");
 	        } else {
-	        	// TODO
-//				HWTeam tmptm(lst[1]);
-//				tmptm.setColor(lst[2].toInt());
-//				emit teamColorChanged(tmptm);
+	        	long color;
+	        	if(sscanf(netmsg->parts[2], "#%lx", &color)) {
+	        		conn->onTeamColorChangedCb(conn->onTeamColorChangedCtx, netmsg->parts[1], (uint32_t)color);
+	        	} else {
+	        		flib_log_w("Net: Bad TEAM_COLOR message: Color %s", netmsg->parts[2]);
+	        	}
 	        }
 	    } else if (!strcmp(cmd, "EM")) {
 	        if(netmsg->partCount < 2) {
 	            flib_log_w("Net: Bad EM message");
 	        } else {
-	        	// TODO
-//				for(int i = 1; i < netmsg->partCount; ++i) {
-//					QByteArray em = QByteArray::fromBase64(lst[i].toAscii());
-//					emit FromNet(em);
-//				}
+	        	for(int i = 1; i < netmsg->partCount; ++i) {
+					char *out = NULL;
+					size_t outlen;
+					bool ok = base64_decode_alloc(netmsg->parts[i], strlen(netmsg->parts[i]), &out, &outlen);
+					if(ok && outlen) {
+						conn->onEngineMessageCb(conn->onEngineMessageCtx, out, outlen);
+					} else {
+						flib_log_e("Net: Malformed engine message: %s", netmsg->parts[i]);
+					}
+					free(out);
+	        	}
 	        }
 	    } else if (!strcmp(cmd, "BYE")) {
 	        if (netmsg->partCount < 2) {
@@ -797,7 +860,7 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 				exit = true;
 	        }
 	    } else if (!strcmp(cmd, "ADMIN_ACCESS")) {
-	    	// TODO callback?
+	    	conn->onAdminAccessCb(conn->onAdminAccessCtx);
 	    	conn->isAdmin = true;
 	    } else if (!strcmp(cmd, "ROOM_CONTROL_ACCESS")) {
 	        if (netmsg->partCount < 2) {

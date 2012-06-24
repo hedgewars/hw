@@ -26,7 +26,6 @@ typedef struct {
 /**
  * Simple variable-capacity data structure that can be efficiently appended to.
  */
-struct _flib_vector;
 typedef struct _flib_vector flib_vector;
 
 /**
@@ -53,6 +52,12 @@ int flib_vector_resize(flib_vector *vec, size_t newSize);
  * The vector remains unchanged if appending fails.
  */
 int flib_vector_append(flib_vector *vec, const void *data, size_t len);
+
+/**
+ * Append data from a format string to the buffer (without trailing 0)
+ * Returns 0 on success.
+ */
+int flib_vector_appendf(flib_vector *vec, const char *template, ...);
 
 /**
  * Return a pointer to the current data buffer of the vector. This pointer can
