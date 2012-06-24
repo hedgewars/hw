@@ -28,6 +28,7 @@ unit uMobile;
 interface
 
 function  isPhone: Boolean; inline;
+function  getScreenDPI: Single; inline;
 procedure performRumble; inline;
 
 procedure GameLoading; inline;
@@ -47,6 +48,10 @@ function  isApplePhone: Boolean; cdecl; external;
 procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
 
+{$IFDEF ANDROID}
+function Android_JNI_getDensity(): Single; cdecl; external;
+{$ENDIF}
+
 // this function is just to determine whether we are running on a limited screen device
 function isPhone: Boolean; inline;
 begin
@@ -58,6 +63,15 @@ begin
     //nasty nasty hack. TODO: implement callback to java to have a unified way of determining if it is a tablet
     if (cScreenWidth < 1000) and (cScreenHeight < 500) then
         isPhone:= true;
+{$ENDIF}
+end;
+
+function getScreenDPI: Single; inline;
+begin
+{$IFDEF ANDROID}
+    getScreenDPI:= Android_JNI_getDensity();
+{$ELSE}
+    getScreenDPI:= 1;
 {$ENDIF}
 end;
 

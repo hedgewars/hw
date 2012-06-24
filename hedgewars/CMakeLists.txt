@@ -227,7 +227,7 @@ ENDIF()
 add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}")
 
 #when system Lua is not found we need to compile it before engine
-if(NOT ${LUA_FOUND})
+if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
 endif()
 

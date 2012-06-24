@@ -1,7 +1,9 @@
 set(QT_USE_QTCORE TRUE)
 
 find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
+if(NOT CROSSAPPLE)
+    include(${QT_USE_FILE})
+endif()
 
 
 file(GLOB SRCS "*.c" "*.cpp")

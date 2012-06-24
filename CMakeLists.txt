@@ -52,17 +52,19 @@ IF(NOT BUILD_ENGINE_LIBRARY)
 ENDIF(NOT BUILD_ENGINE_LIBRARY)
 set(target_dir "bin")
 
-
 #bundle .app setup
-if(APPLE)
-    set(CMAKE_FIND_FRAMEWORK "FIRST")
-
+if(APPLE OR CROSSAPPLE)
     #paths for creating the bundle
     set(bundle_name Hedgewars.app)
     set(frameworks_dir ${bundle_name}/Contents/Frameworks/)
     set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/)
     set(DATA_INSTALL_DIR "../Resources/")
     set(target_dir ".")
+    set(minimum_macosx_version "10.6")
+endif()
+
+if(APPLE)
+    set(CMAKE_FIND_FRAMEWORK "FIRST")
 
     #what system are we building for
     set(minimum_macosx_version $ENV{MACOSX_DEPLOYMENT_TARGET})
@@ -200,13 +202,17 @@ else()
 endif()
 
 find_package(Lua)
-if(${LUA_FOUND})
+if(LUA_FOUND)
     message(STATUS "Lua library is present on your system (${LUA_DEFAULT})")
 else()
     message(STATUS "Lua library not found, building bundled dependency")
     add_subdirectory(misc/liblua)
     #linking with liblua.a requires system readline -- this works everywhere, right?
-    set(pascal_flags "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_flags})
+    if(WIN32)
+        set(pascal_flags "-k${CMAKE_BINARY_DIR}/bin/liblua.dll.a" "-k-lreadline" ${pascal_flags})
+    else()
+        set(pascal_flags "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_flags})
+    endif()
 endif()
 
 add_subdirectory(hedgewars)

@@ -642,7 +642,7 @@ case Layer of
                   vgtSmoke: DrawTextureF(SpritesData[sprSmoke].Texture, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 7 - Gear^.Frame, 1, SpritesData[sprSmoke].Width, SpritesData[sprSmoke].Height);
                   vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                   vgtDust: if Gear^.State = 1 then
-                               DrawSprite(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame)
+                               DrawSpriteRotatedF(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame, 1, Gear^.Angle)
                            else
                                DrawSprite(sprDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                   vgtFire: if (Gear^.State and gstTmpFlag) = 0 then

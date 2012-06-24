@@ -28,6 +28,7 @@
 #include "hwconsts.h"
 #include "frameTeam.h"
 #include "colorwidget.h"
+#include "DataManager.h"
 
 void TeamLabel::teamButtonClicked()
 {
@@ -69,7 +70,7 @@ TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams *
     if(m_isPlaying)
     {
         // team color
-        colorWidget = new ColorWidget(colorsModel, this);
+        colorWidget = new ColorWidget(DataManager::instance().colorsModel(), this);
         colorWidget->setMinimumWidth(26);
         colorWidget->setMaximumWidth(26);
         colorWidget->setMinimumHeight(26);

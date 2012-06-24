@@ -11,7 +11,9 @@ set(QT_USE_QTOPENGL FALSE)
 set(QT_USE_QTMAIN TRUE)
 
 find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
+if (NOT CROSSAPPLE)
+    include(${QT_USE_FILE})
+endif()
 
 # Check if we need zlib
 check_library_exists("${QT_QTCORE_LIBRARY}" inflateInit2_ ${QT_LIBRARY_DIR} QT_PROVIDES_ZLIB_FUNCTIONS)
@@ -140,7 +142,7 @@ qt4_add_resources(hwfr_rez_src ${hwfr_rez})
 qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 
-if(APPLE)
+if(APPLE OR CROSSAPPLE)
     set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
     set(HW_LINK_LIBS IOKit ${HW_LINK_LIBS})
 
@@ -192,7 +194,11 @@ if(WIN32 AND NOT UNIX)
 endif()
 
 
-target_link_libraries(hedgewars ${HW_LINK_LIBS})
+if (CROSSAPPLE)
+    add_dependencies(hedgewars quazip)
+else()
+    target_link_libraries(hedgewars ${HW_LINK_LIBS})
+endif()
 
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
