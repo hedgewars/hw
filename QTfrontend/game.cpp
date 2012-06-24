@@ -65,6 +65,8 @@ void HWGame::onClientDisconnect()
                 emit HaveRecord(rtSave, demo);
             else if (gameState == gsFinished)
                 emit HaveRecord(rtDemo, demo);
+            else
+                emit HaveRecord(rtNeither, demo);
     }
     SetGameState(gsStopped);
 }

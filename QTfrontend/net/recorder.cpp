@@ -18,20 +18,26 @@
 
 #include <QString>
 #include <QByteArray>
+//#include <QMessageBox>
 
 #include "recorder.h"
 #include "gameuiconfig.h"
 #include "hwconsts.h"
 #include "game.h"
+#include "libav_iteraction.h"
 
-HWRecorder::HWRecorder(GameUIConfig * config) :
+HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
     TCPBase(false)
 {
     this->config = config;
+    this->prefix = prefix;
+    finished = false;
+    name = prefix + "." + LibavIteraction::instance().getExtension(config->AVFormat());
 }
 
 HWRecorder::~HWRecorder()
 {
+    emit encodingFinished(finished);
 }
 
 void HWRecorder::onClientDisconnect()
@@ -47,14 +53,25 @@ void HWRecorder::onClientRead()
     {
         QByteArray msg = readbuffer.left(msglen + 1);
         readbuffer.remove(0, msglen + 1);
-        if (msg.at(1) == '?')
+        switch (msg.at(1))
+        {
+        case '?':
             SendIPC("!");
+            break;
+        case 'p':
+            emit onProgress(float(++curFrame)/numFrames);
+            break;
+        case 'v':
+            finished = true;
+            break;
+        }
     }
 }
 
-void HWRecorder::EncodeVideo( const QByteArray & record, const QString & prefix )
+void HWRecorder::EncodeVideo(const QByteArray & record, int numFrames)
 {
-    this->prefix = prefix;
+    this->numFrames = numFrames;
+    curFrame = 0;
 
     toSendBuf = record;
     toSendBuf.replace(QByteArray("\x02TD"), QByteArray("\x02TV"));
@@ -73,7 +90,7 @@ QStringList HWRecorder::getArguments()
     arguments << cfgdir->absolutePath();
     arguments << QString::number(resolution.width());
     arguments << QString::number(resolution.height());
-    arguments << QString::number(config->bitDepth()); // bpp
+    arguments << "32"; // bpp
     arguments << QString("%1").arg(ipc_port);
     arguments << "0"; // fullscreen
     arguments << "0"; // sound
@@ -94,10 +111,7 @@ QStringList HWRecorder::getArguments()
     arguments << config->videoCodec();
     arguments << "5"; // video quality
     arguments << "medium";
-    if (config->recordAudio())
-        arguments << config->audioCodec();
-    else
-        arguments << "no";
+    arguments << (config->recordAudio()? config->audioCodec() : "no");
     arguments << "5"; // audio quality
 
     return arguments;

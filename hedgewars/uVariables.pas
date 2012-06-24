@@ -56,8 +56,8 @@ var
     cRecPrefix      : shortstring;
     cAVFormat       : shortstring;
     cVideoCodec     : shortstring;
-    cVideoFramerateNum : Int64;
-    cVideoFramerateDen : Int64;
+    cVideoFramerateNum : LongInt = 25;
+    cVideoFramerateDen : LongInt = 1;
     cVideoQuality      : LongInt;
     cVideoPreset    : shortstring;
     cAudioCodec     : shortstring;
