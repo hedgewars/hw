@@ -1779,8 +1779,10 @@ begin
 if (not cHasFocus) and (GameState <> gsConfirm) then
     ParseCommand('quit', true);
 
+{$IFDEF USE_VIDEO_RECORDING}
 // do not change volume during prerecording as it will affect sound in video file
 if not flagPrerecording then
+{$ENDIF}
     begin
     if not cHasFocus then DampenAudio()
     else UndampenAudio();

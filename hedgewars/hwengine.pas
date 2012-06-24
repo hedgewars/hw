@@ -360,9 +360,11 @@ begin
     SDLTry(TTF_Init() <> -1, true);
     WriteLnToConsole(msgOK);
 
+{$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
         InitOffscreenOpenGL()
     else
+{$ENDIF}
         begin            
         // show main window
         if cFullScreen then
@@ -415,7 +417,7 @@ begin
     isDeveloperMode:= false;
     TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
     ParseCommand('rotmask', true);
-    
+
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
         RecorderMainLoop()
@@ -504,7 +506,7 @@ begin
         //uAIAmmoTests does not need to be freed
         //uAIActions does not need to be freed
         uStore.freeModule;
-        uVideoRec.freeModule;
+{$IFDEF USE_VIDEO_RECORDING}uVideoRec.freeModule;{$ENDIF}
     end;
 
     uIO.freeModule;
