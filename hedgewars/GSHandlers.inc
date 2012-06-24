@@ -2114,18 +2114,32 @@ begin
         end
     else
         begin 
-        if Gear^.Timer = 0 then
-        begin
+        if Gear^.Timer = 500 then
+            begin
 (* Can't make sparkles team coloured without working out what the next team is going to be. This should be solved, really, since it also screws up
    voices. Reinforcements voices is heard for active team, not team-to-be.  Either that or change crate spawn from end of turn to start, although that
    has its own complexities. *)
-        sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
-        if sparkles <> nil then
+            // Abuse a couple of gear values to track origin
+            Gear^.Angle:= hwRound(Gear^.X);
+            Gear^.Power:= hwRound(Gear^.Y);
+            Gear^.Tag:= random(2);
+            inc(Gear^.Timer)
+            end;
+        if Gear^.Timer < 1833 then inc(Gear^.Timer);
+        if Gear^.Timer = 1000 then
             begin
-            sparkles^.Tint:= $FAB22CFF
-            end
-        end;
-        if (GameTicks and $1 = 0) and (Gear^.Timer < 255) then inc(Gear^.Timer)
+            sparkles:= AddVisualGear(Gear^.Angle, Gear^.Power, vgtDust, 1);
+            if sparkles <> nil then
+                begin
+                sparkles^.dX:= 0;
+                sparkles^.dY:= 0;
+                sparkles^.Angle:= 270;
+                if Gear^.Tag = 1 then 
+                    sparkles^.Tint:= $3744D7FF
+                else sparkles^.Tint:= $FAB22CFF
+                end;
+            end;
+        if Gear^.Timer < 1000 then exit;
         end;
 
     if (Gear^.Damage > 0) or exBoom then
