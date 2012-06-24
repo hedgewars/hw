@@ -948,8 +948,8 @@ begin
        gtBall: DrawSpriteRotatedF(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
 
        gtPortal: if ((Gear^.Tag and 1) = 0) // still moving?
-                 or (Gear^.IntersectGear = nil) or (Gear^.IntersectGear^.IntersectGear <> Gear) // not linked&backlinked?
-                 or ((Gear^.IntersectGear^.Tag and 1) = 0) then // linked portal still moving?
+                 or (Gear^.LinkedGear = nil) or (Gear^.LinkedGear^.LinkedGear <> Gear) // not linked&backlinked?
+                 or ((Gear^.LinkedGear^.Tag and 1) = 0) then // linked portal still moving?
                       DrawSpriteRotatedF(sprPortal, x, y, Gear^.Tag, hwSign(Gear^.dX), Gear^.DirAngle)
                  else DrawSpriteRotatedF(sprPortal, x, y, 4 + Gear^.Tag div 2, hwSign(Gear^.dX), Gear^.DirAngle);
 
@@ -990,30 +990,36 @@ begin
                        else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                        
             gtCase: begin
-                    if Gear^.Timer < 255 then Tint($FF, $FF, $FF, Gear^.Timer);
-                    if ((Gear^.Pos and posCaseAmmo) <> 0) then
+                    if Gear^.Timer > 1000 then
                         begin
-                        i:= (GameTicks shr 6) mod 64;
-                        if i > 18 then
-                            i:= 0;
-                        DrawSprite(sprCase, x - 24, y - 24, i);
-                        end
-                    else if ((Gear^.Pos and posCaseHealth) <> 0) then
-                        begin
-                        i:= ((GameTicks shr 6) + 38) mod 64;
-                        if i > 13 then
-                            i:= 0;
-                        DrawSprite(sprFAid, x - 24, y - 24, i);
-                        end
-                    else if ((Gear^.Pos and posCaseUtility) <> 0) then
-                        begin
-                        i:= (GameTicks shr 6) mod 70;
-                        if i > 23 then
-                            i:= 0;
-                        i:= i mod 12;
-                        DrawSprite(sprUtility, x - 24, y - 24, i);
+                        if ((Gear^.Pos and posCaseAmmo) <> 0) then
+                            begin
+                            i:= (GameTicks shr 6) mod 64;
+                            if i > 18 then
+                                i:= 0;
+                            DrawSprite(sprCase, x - 24, y - 24, i);
+                            end
+                        else if ((Gear^.Pos and posCaseHealth) <> 0) then
+                            begin
+                            i:= ((GameTicks shr 6) + 38) mod 64;
+                            if i > 13 then
+                                i:= 0;
+                            DrawSprite(sprFAid, x - 24, y - 24, i);
+                            end
+                        else if ((Gear^.Pos and posCaseUtility) <> 0) then
+                            begin
+                            i:= (GameTicks shr 6) mod 70;
+                            if i > 23 then
+                                i:= 0;
+                            i:= i mod 12;
+                            DrawSprite(sprUtility, x - 24, y - 24, i);
+                            end;
                         end;
-                    if Gear^.Timer < 255 then Tint($FF, $FF, $FF, $FF);
+                    if Gear^.Timer <= 1833 then
+                        begin
+                        DrawTextureRotatedF(SpritesData[sprPortal].texture, min(abs(1.25 - (Gear^.Timer mod 1333) / 400), 1.25), 0, 0,
+                                            Gear^.Angle+WorldDx, Gear^.Power+WorldDy-16, 4+Gear^.Tag, 1, 32, 32, 270);
+                        end
                     end;
       gtExplosives: begin
                     if ((Gear^.State and gstDrowning) <> 0) then

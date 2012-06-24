@@ -67,7 +67,7 @@
 #define MISSIONS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Maps/"]
 #define TRAININGS_DIRECTORY()   [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Training/"]
 #define LOCALE_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Locale/"]
-#define SCRIPTS_DIRECTORY()     [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Scripts/plist/"]
+#define SCRIPTS_DIRECTORY()     [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Scripts/Multiplayer/"]
 
 #define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
 #define MSG_DIDUNLOAD()         DLog(@"unloaded");

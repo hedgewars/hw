@@ -25,6 +25,7 @@
 #include "frameTeam.h"
 #include "teamselhelper.h"
 #include "hwconsts.h"
+#include "DataManager.h"
 
 FrameTeams::FrameTeams(QWidget* parent) :
     QFrame(parent), maxHedgehogsPerGame(48), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
@@ -54,12 +55,12 @@ void FrameTeams::setInteractivity(bool interactive)
 
 void FrameTeams::resetColors()
 {
-    currentColor = colorsModel->rowCount() - 1; // ensure next color is the first one
+    currentColor = DataManager::instance().colorsModel()->rowCount() - 1; // ensure next color is the first one
 }
 
 int FrameTeams::getNextColor()
 {
-    currentColor = (currentColor + 1) % colorsModel->rowCount();
+    currentColor = (currentColor + 1) % DataManager::instance().colorsModel()->rowCount();
     return currentColor;
 }
 

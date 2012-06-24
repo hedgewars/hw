@@ -36,10 +36,11 @@ function  DrawExplosion(X, Y, Radius: LongInt): Longword;
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
-procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
+procedure DumpLandToLog(x, y, r: LongInt);
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
 
@@ -98,46 +99,62 @@ if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
             Land[y - dx, i]:= Value;
 end;
 
-procedure ChangeCircleLines(x, y, dx, dy: LongInt; doSet: boolean);
+procedure ChangeCircleLines(x, y, dx, dy: LongInt; doSet, isCurrent: boolean);
 var i: LongInt;
 begin
 if not doSet then
     begin
     if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-            if (Land[y + dy, i] > 0) and (Land[y + dy, i] < 256) then
-                dec(Land[y + dy, i]); // check > 0 because explosion can erase collision data
+            if isCurrent then 
+                Land[y + dy, i]:= Land[y + dy, i] and $FF7F
+            else if Land[y + dy, i] and $007F > 0 then
+                Land[y + dy, i]:= (Land[y + dy, i] and $FF80) or ((Land[y + dy, i] and $7F) - 1);
     if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-            if (Land[y - dy, i] > 0) and (Land[y - dy, i] < 256) then
-                dec(Land[y - dy, i]);
+            if isCurrent then 
+                Land[y - dy, i]:= Land[y - dy, i] and $FF7F
+            else if Land[y - dy, i] and $007F > 0 then
+                Land[y - dy, i]:= (Land[y - dy, i] and $FF80) or ((Land[y - dy, i] and $7F) - 1);
     if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-            if (Land[y + dx, i] > 0) and (Land[y + dx, i] < 256) then
-                dec(Land[y + dx, i]);
+            if isCurrent then 
+                Land[y + dx, i]:= Land[y + dx, i] and $FF7F
+            else if Land[y + dx, i] and $007F > 0 then
+                Land[y + dx, i]:= (Land[y + dx, i] and $FF80) or ((Land[y + dx, i] and $7F) - 1);
     if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-            if (Land[y - dx, i] > 0) and (Land[y - dx, i] < 256) then
-                dec(Land[y - dx, i]);
+            if isCurrent then 
+                Land[y - dx, i]:= Land[y - dx, i] and $FF7F
+            else if Land[y - dx, i] and $007F > 0 then
+                Land[y - dx, i]:= (Land[y - dx, i] and $FF80) or ((Land[y - dx, i] and $7F) - 1)
     end
 else
     begin
     if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-            if (Land[y + dy, i] < 256) then
-                inc(Land[y + dy, i]);
-    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-            if (Land[y - dy, i] < 256) then
-                inc(Land[y - dy, i]);
-    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-            if (Land[y + dx, i] < 256) then
-                inc(Land[y + dx, i]);
-    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-            if (Land[y - dx, i] < 256) then
-                inc(Land[y - dx, i]);
+            if isCurrent then 
+                Land[y + dy, i]:= Land[y + dy, i] or $80
+            else if Land[y + dy, i] and $007F < 127 then
+                Land[y + dy, i]:= (Land[y + dy, i] and $FF80) or ((Land[y + dy, i] and $7F) + 1);
+    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then                                                   
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do                                  
+            if isCurrent then                                                                     
+                Land[y - dy, i]:= Land[y - dy, i] or $80                                          
+            else if Land[y - dy, i] and $007F < 127 then                                          
+                Land[y - dy, i]:= (Land[y - dy, i] and $FF80) or ((Land[y - dy, i] and $7F) + 1);
+    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then                                                   
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do                                  
+            if isCurrent then                                                                     
+                Land[y + dx, i]:= Land[y + dx, i] or $80                                          
+            else if Land[y + dx, i] and $007F < 127 then                                          
+                Land[y + dx, i]:= (Land[y + dx, i] and $FF80) or ((Land[y + dx, i] and $7F) + 1);
+    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then                                                   
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do                                  
+            if isCurrent then                                                                     
+                Land[y - dx, i]:= Land[y - dx, i] or $80                                          
+            else if Land[y - dx, i] and $007F < 127 then                                          
+                Land[y - dx, i]:= (Land[y - dx, i] and $FF80) or ((Land[y - dx, i] and $7F) + 1)
     end
 end;
 
@@ -163,7 +180,7 @@ if (dx = dy) then
     FillCircleLines(x, y, dx, dy, Value);
 end;
 
-procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 var dx, dy, d: LongInt;
 begin
 dx:= 0;
@@ -171,7 +188,7 @@ dy:= Radius;
 d:= 3 - 2 * Radius;
 while (dx < dy) do
     begin
-    ChangeCircleLines(x, y, dx, dy, doSet);
+    ChangeCircleLines(x, y, dx, dy, doSet, isCurrent);
     if (d < 0) then
         d:= d + 4 * dx + 6
     else
@@ -182,7 +199,7 @@ while (dx < dy) do
     inc(dx)
     end;
 if (dx = dy) then
-    ChangeCircleLines(x, y, dx, dy, doSet)
+    ChangeCircleLines(x, y, dx, dy, doSet, isCurrent)
 end;
 
 procedure FillLandCircleLines0(x, y, dx, dy: LongInt);
@@ -1155,6 +1172,30 @@ begin
         end;
     if (dx = dy) then
         DrawLines(x1, y1, x2, y2, dx, dy, color);
+end;
+
+
+procedure DumpLandToLog(x, y, r: LongInt);
+var xx, yy, dx: LongInt;
+    s: shortstring;
+begin
+    s[0]:= char(r * 2 + 1);
+    for yy:= y - r to y + r do
+        begin
+        for dx:= 0 to r*2 do
+            begin
+            xx:= dx - r + x;
+            if (xx = x) and (yy = y) then
+                s[dx + 1]:= 'X'
+            else if Land[yy, xx] > 255 then
+                s[dx + 1]:= 'O'
+            else if Land[yy, xx] > 0 then
+                s[dx + 1]:= '*'
+            else
+                s[dx + 1]:= '.'
+            end;
+        AddFileLog('Land dump: ' + s);
+        end;
 end;
 
 end.
