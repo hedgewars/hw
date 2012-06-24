@@ -82,7 +82,7 @@ with cinfos[Count] do
     X:= hwRound(Gear^.X);
     Y:= hwRound(Gear^.Y);
     Radius:= Gear^.Radius;
-    ChangeRoundInLand(X, Y, Radius - 1, true);
+    ChangeRoundInLand(X, Y, Radius - 1, true, Gear = CurrentHedgehog^.Gear);
     cGear:= Gear
     end;
 Gear^.CollisionIndex:= Count;
@@ -103,7 +103,7 @@ begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, false);
+        ChangeRoundInLand(X, Y, Radius - 1, false, Gear = CurrentHedgehog^.Gear);
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;

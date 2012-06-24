@@ -2768,7 +2768,7 @@ begin
             CurrentTeam^.CurrHedgehog := Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
         until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0);
 
-        CurrentHedgehog := @CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog];
+        SwitchCurrentHedgehog(@CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
         AmmoMenuInvalidated:= true; 
 
         HHGear := CurrentHedgehog^.Gear;
