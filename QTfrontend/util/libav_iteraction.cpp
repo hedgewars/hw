@@ -24,6 +24,7 @@ extern "C"
 #include <QVector>
 #include <QList>
 #include <QMessageBox>
+#include <QComboBox>
 
 #include "libav_iteraction.h"
 #include "HWApplication.h"
@@ -42,7 +43,7 @@ struct Format
     QString shortName;
     QString longName;
     bool isRecomended;
-  //  QString extension;
+    QString extension;
     QVector<Codec*> codecs;
 };
 
@@ -55,6 +56,7 @@ LibavIteraction & LibavIteraction::instance()
     return instance;
 }
 
+// test if given format supports given codec
 bool FormatQueryCodec(AVOutputFormat *ofmt, enum CodecID codec_id)
 {  
 #if LIBAVFORMAT_VERSION_MAJOR >= 54
@@ -89,13 +91,13 @@ LibavIteraction::LibavIteraction()
             continue;
 
         // this encoders seems to be buggy
-        if (strcmp(pCodec->name, "rv10") == 0 ||
-            strcmp(pCodec->name, "rv20") == 0)
+        if (strcmp(pCodec->name, "rv10") == 0 || strcmp(pCodec->name, "rv20") == 0)
             continue;
 
         // doesn't support stereo sound
         if (strcmp(pCodec->name, "real_144") == 0)
             continue;
+
 #if LIBAVCODEC_VERSION_MAJOR < 54
         // FIXME: theese doesn't work for some reason
         if (strcmp(pCodec->name, "libx264") == 0)
@@ -194,10 +196,11 @@ LibavIteraction::LibavIteraction()
         }
         if (!hasVideoCodec)
             continue;
-        format.shortName = pFormat->name;
 
         QString ext(pFormat->extensions);
         ext.truncate(strcspn(pFormat->extensions, ","));
+        format.extension = ext;
+        format.shortName = pFormat->name;
         format.longName = QString("%1 (*.%2)").arg(pFormat->long_name).arg(ext);
 
         // FIXME: remove next line
@@ -209,7 +212,7 @@ LibavIteraction::LibavIteraction()
     }
 }
 
-void LibavIteraction::FillFormats(QComboBox * pFormats)
+void LibavIteraction::fillFormats(QComboBox * pFormats)
 {
     // first insert recomended formats
     foreach(const Format & format, formats)
@@ -229,9 +232,9 @@ void LibavIteraction::FillFormats(QComboBox * pFormats)
         pFormats->insertSeparator(sep);
 }
 
-void LibavIteraction::FillCodecs(const QVariant & fmt, QComboBox * pVCodecs, QComboBox * pACodecs)
+void LibavIteraction::fillCodecs(const QString & fmt, QComboBox * pVCodecs, QComboBox * pACodecs)
 {
-    Format & format = formats[fmt.toString()];
+    Format & format = formats[fmt];
 
     // first insert recomended codecs
     foreach(Codec * codec, format.codecs)
@@ -266,4 +269,63 @@ void LibavIteraction::FillCodecs(const QVariant & fmt, QComboBox * pVCodecs, QCo
         pVCodecs->insertSeparator(vsep);
     if (asep != 0 && asep != pACodecs->count())
         pACodecs->insertSeparator(asep);
+}
+
+QString LibavIteraction::getExtension(const QString & format)
+{
+    return formats[format].extension;
+}
+
+QString tr(QString a)
+{
+    return a;
+}
+
+// get information abaout file (duration, resolution etc) in multiline string
+QString LibavIteraction::getFileInfo(const QString & filepath)
+{
+    AVFormatContext* pContext = NULL;
+    QByteArray utf8path = filepath.toUtf8();
+    if (avformat_open_input(&pContext, utf8path.data(), NULL, NULL) < 0)
+        return "";
+    if (avformat_find_stream_info(pContext, NULL) < 0)
+        return "";
+
+    int s = float(pContext->duration)/AV_TIME_BASE;
+    QString desc = QString(tr("Duration: %1m %2s\n")).arg(s/60).arg(s%60);
+    for (int i = 0; i < pContext->nb_streams; i++)
+    {
+        AVStream* pStream = pContext->streams[i];
+        if (!pStream)
+            continue;
+        AVCodecContext* pCodec = pContext->streams[i]->codec;
+        if (!pCodec)
+            continue;
+
+        if (pCodec->codec_type == AVMEDIA_TYPE_VIDEO)
+        {
+            desc += QString(tr("Video: %1x%2, ")).arg(pCodec->width).arg(pCodec->height);
+            if (pStream->avg_frame_rate.den)
+            {
+                float fps = float(pStream->avg_frame_rate.num)/pStream->avg_frame_rate.den;
+                desc += QString(tr("%1 fps, ")).arg(fps, 0, 'f', 2);
+            }
+        }
+        else if (pCodec->codec_type == AVMEDIA_TYPE_AUDIO)
+            desc += tr("Audio: ");
+        else
+            continue;
+        AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
+        desc += pDecoder? pDecoder->name : "unknown";
+        desc += "\n";
+    }
+    AVDictionaryEntry* pComment = av_dict_get(pContext->metadata, "comment", NULL, 0);
+    if (pComment)
+        desc += QString("\n") + pComment->value;
+#if LIBAVCODEC_VERSION_MAJOR < 54
+    av_close_input_file(pContext);
+#else
+    avformat_close_input(&pContext);
+#endif
+    return desc;
 }

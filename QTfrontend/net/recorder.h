@@ -25,28 +25,36 @@
 #include "tcpBase.h"
 
 class GameUIConfig;
+class VideoItem;
 
 class HWRecorder : public TCPBase
 {
         Q_OBJECT
     public:
-        HWRecorder(GameUIConfig * config);
+        HWRecorder(GameUIConfig * config, const QString & prefix);
         virtual ~HWRecorder();
 
-        void EncodeVideo(const QByteArray & record, const QString & prefix);
+        void EncodeVideo(const QByteArray & record, int numFrames);
+
+        VideoItem * item; // used by pagevideos
+        QString name;
+        QString prefix;
 
     protected:
+        // virtuals from TCPBase
         virtual QStringList getArguments();
         virtual void onClientRead();
         virtual void onClientDisconnect();
 
     signals:
-
-    public slots:
+        void onProgress(float progress); // 0 < progress < 1
+        void encodingFinished(bool success);
 
     private:
+        int curFrame;
+        int numFrames;
+        bool finished;
         GameUIConfig * config;
-        QString prefix;
 };
 
 #endif // RECORDER_H

@@ -127,8 +127,8 @@ void GameUIConfig::reloadVideosValues(void)
         Form->ui.pageVideos->widthEdit->setText(value("videorec/width","800").toString());
         Form->ui.pageVideos->heightEdit->setText(value("videorec/height","600").toString());
     }
-    Form->ui.pageVideos->CBUseGameRes->setChecked(useGameRes);
-    Form->ui.pageVideos->CBRecordAudio->setChecked(value("videorec/audio",true).toBool());
+    Form->ui.pageVideos->checkUseGameRes->setChecked(useGameRes);
+    Form->ui.pageVideos->checkRecordAudio->setChecked(value("videorec/audio",true).toBool());
     if (!Form->ui.pageVideos->tryCodecs(value("videorec/format","no").toString(),
                                         value("videorec/videocodec","no").toString(),
                                         value("videorec/audiocodec","no").toString()))
@@ -220,7 +220,7 @@ void GameUIConfig::SaveVideosOptions()
     setValue("videorec/fps", rec_Framerate());
     setValue("videorec/width", res.width());
     setValue("videorec/height", res.height());
-    setValue("videorec/usegameres", Form->ui.pageVideos->CBUseGameRes->isChecked());
+    setValue("videorec/usegameres", Form->ui.pageVideos->checkUseGameRes->isChecked());
     setValue("videorec/audio", recordAudio());
 
     Form->gameSettings->sync();
@@ -424,22 +424,22 @@ quint8 GameUIConfig::volume()
 
 QString GameUIConfig::AVFormat()
 {
-    return Form->ui.pageVideos->getFormat();
+    return Form->ui.pageVideos->format();
 }
 
 QString GameUIConfig::videoCodec()
 {
-    return Form->ui.pageVideos->getVideoCodec();
+    return Form->ui.pageVideos->videoCodec();
 }
 
 QString GameUIConfig::audioCodec()
 {
-    return Form->ui.pageVideos->getAudioCodec();
+    return Form->ui.pageVideos->audioCodec();
 }
 
 QRect GameUIConfig::rec_Resolution()
 {
-    if (Form->ui.pageVideos->CBUseGameRes->isChecked())
+    if (Form->ui.pageVideos->checkUseGameRes->isChecked())
         return vid_Resolution();
     QRect res(0,0,0,0);
     res.setWidth(Form->ui.pageVideos->widthEdit->text().toUInt());
@@ -454,5 +454,5 @@ int GameUIConfig::rec_Framerate()
 
 bool GameUIConfig::recordAudio()
 {
-    return Form->ui.pageVideos->CBRecordAudio->isChecked();
+    return Form->ui.pageVideos->checkRecordAudio->isChecked();
 }

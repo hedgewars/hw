@@ -34,8 +34,16 @@ public:
 
     static LibavIteraction & instance();
 
-    void FillFormats(QComboBox * pFormats);
-    void FillCodecs(const QVariant & format, QComboBox * pVCodecs, QComboBox * pACodecs);
+    // fill combo box with known file formats
+    void fillFormats(QComboBox * pFormats);
+
+    // fill combo boxes with known codecs for given formats
+    void fillCodecs(const QString & format, QComboBox * pVCodecs, QComboBox * pACodecs);
+
+    QString getExtension(const QString & format);
+
+    // get information about file (duration, resolution etc) in multiline string
+    QString getFileInfo(const QString & filepath);
 };
 
 #endif // LIBAV_ITERACTION

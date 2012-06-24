@@ -20,11 +20,12 @@
 #ifndef PAGE_VIDEOS_H
 #define PAGE_VIDEOS_H
 
-#include <QPushButton>
-#include <QTableWidget>
+#include <QPixmap>
 #include "AbstractPage.h"
 
 class GameUIConfig;
+class HWRecorder;
+class VideoItem;
 
 class PageVideos : public AbstractPage
 {
@@ -33,44 +34,77 @@ class PageVideos : public AbstractPage
     public:
         PageVideos(QWidget* parent = 0);
 
-        QComboBox *CBAVFormats;
-        QComboBox *CBVideoCodecs;
-        QComboBox *CBAudioCodecs;
         QSpinBox  *framerateBox;
         QLineEdit *widthEdit;
         QLineEdit *heightEdit;
-        QCheckBox *CBUseGameRes;
-        QCheckBox *CBRecordAudio;
-
-        QString getFormat()
-        { return CBAVFormats->itemData(CBAVFormats->currentIndex()).toString(); }
-
-        QString getVideoCodec()
-        { return CBVideoCodecs->itemData(CBVideoCodecs->currentIndex()).toString(); }
-
-        QString getAudioCodec()
-        { return CBAudioCodecs->itemData(CBAudioCodecs->currentIndex()).toString(); }
-
-        void setDefaultCodecs();
-        bool tryCodecs(const QString & format, const QString & vcodec, const QString & acodec);
+        QCheckBox *checkUseGameRes;
+        QCheckBox *checkRecordAudio;
 
         GameUIConfig * config;
 
-    signals:
+        QString format()
+        { return comboAVFormats->itemData(comboAVFormats->currentIndex()).toString(); }
+
+        QString videoCodec()
+        { return comboVideoCodecs->itemData(comboVideoCodecs->currentIndex()).toString(); }
+
+        QString audioCodec()
+        { return comboAudioCodecs->itemData(comboAudioCodecs->currentIndex()).toString(); }
+
+        void setDefaultCodecs();
+        bool tryCodecs(const QString & format, const QString & vcodec, const QString & acodec);
+        void addRecorder(HWRecorder* pRecorder);
 
     private:
+        // virtuals from AbstractPage
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
         void connectSignals();
 
-        QPushButton *BtnDefaults;
+        // virtual from QWidget
+        void keyPressEvent(QKeyEvent * pEvent);
+
+        void setName(VideoItem * item, const QString & newName);
+        void updateSize(int row);
+        int appendRow(const QString & name);
+        VideoItem* nameItem(int row);
+        void play(int row);
+        void updateDescription();
+
+        // options group
+        QComboBox *comboAVFormats;
+        QComboBox *comboVideoCodecs;
+        QComboBox *comboAudioCodecs;
+        QPushButton *btnDefaults;
+
+        // file list group
         QTableWidget *filesTable;
+        QPushButton *btnOpenDir;
+
+        // description group
+        QPushButton *btnPlay, *btnDelete;
+        QLabel *labelDesc;
+        QLabel *labelThumbnail;
+        QPixmap picThumbnail;
+
+        // this flag is used to distinguish if cell was changed from code or by user
+        // (in signal cellChanged)
+        bool nameChangedFromCode;
 
     private slots:
         void changeAVFormat(int index);
         void changeUseGameRes(int state);
         void changeRecordAudio(int state);
         void setDefaultOptions();
+        void encodingFinished(bool success);
+        void updateProgress(float value);
+        void cellDoubleClicked(int row, int column);
+        void cellChanged(int row, int column);
+        void currentCellChanged(int row, int column, int previousRow, int previousColumn);
+        void playSelectedFile();
+        void deleteSelectedFiles();
+        void openVideosDirectory();
+        void updateFileList(const QString & path);
 };
 
 #endif // PAGE_VIDEOS_H

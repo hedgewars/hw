@@ -1,6 +1,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdarg.h>
 #include "libavformat/avformat.h"
@@ -17,7 +18,7 @@ static AVCodecContext* g_pAudio;
 static AVCodecContext* g_pVideo;
 
 static int g_Width, g_Height;
-static int g_Frequency, g_Channels;
+static uint32_t g_Frequency, g_Channels;
 static int g_VQuality, g_AQuality;
 static AVRational g_Framerate;
 static const char* g_pPreset;
@@ -25,8 +26,6 @@ static const char* g_pPreset;
 static FILE* g_pSoundFile;
 static int16_t* g_pSamples;
 static int g_NumSamples;
-
-static char g_Filename[1024];
 
 /*
 Initially I wrote code for latest ffmpeg, but on Linux (Ubuntu)
@@ -90,7 +89,10 @@ static void AddAudioStream()
     g_pAStream = av_new_stream(g_pContainer, 1);
 #endif
     if(!g_pAStream)
-        FatalError("Could not allocate audio stream");
+    {
+        Log("Could not allocate audio stream");
+        return;
+    }
     g_pAStream->id = 1;
 
     g_pAudio = g_pAStream->codec;
@@ -118,7 +120,10 @@ static void AddAudioStream()
 
     // open it
     if (avcodec_open2(g_pAudio, g_pACodec, NULL) < 0)
-        FatalError("Could not open audio codec %s", g_pACodec->long_name);
+    {
+        Log("Could not open audio codec %s", g_pACodec->long_name);
+        return;
+    }
 
 #if LIBAVCODEC_VERSION_MAJOR >= 54
     if (g_pACodec->capabilities & CODEC_CAP_VARIABLE_FRAME_SIZE)
@@ -131,7 +136,10 @@ static void AddAudioStream()
     g_pSamples = (int16_t*)av_malloc(g_NumSamples*g_Channels*sizeof(int16_t));
     g_pAFrame = avcodec_alloc_frame();
     if (!g_pAFrame)
-        FatalError("Could not allocate frame");
+    {
+        Log("Could not allocate frame");
+        return;
+    }
 }
 
 // returns non-zero if there is more sound
@@ -242,7 +250,7 @@ static void AddVideoStream()
     g_pVFrame->linesize[3] = 0;
 }
 
-static int WriteFrame( AVFrame* pFrame )
+static int WriteFrame(AVFrame* pFrame)
 {
     double AudioTime, VideoTime;
 
@@ -323,7 +331,7 @@ void AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
 void AVWrapper_Init(
          void (*pAddFileLogRaw)(const char*),
          const char* pFilename,
-         const char* pFinalFilename,
+         const char* pDesc,
          const char* pSoundFile,
          const char* pFormatName,
          const char* pVCodecName,
@@ -331,18 +339,15 @@ void AVWrapper_Init(
          const char* pVPreset,
          int Width, int Height,
          int FramerateNum, int FramerateDen,
-         int Frequency, int Channels,
          int VQuality, int AQuality)
 {    
     AddFileLogRaw = pAddFileLogRaw;
     av_log_set_callback( &LogCallback );
 
-    g_Width = Width;
-    g_Height = Height;
+    g_Width  = Width  & ~1; // make even (dimensions should be even)
+    g_Height = Height & ~1; // make even
     g_Framerate.num = FramerateNum;
     g_Framerate.den = FramerateDen;
-    g_Frequency = Frequency;
-    g_Channels = Channels;
     g_VQuality = VQuality;
     g_AQuality = AQuality;
     g_pPreset = pVPreset;
@@ -362,13 +367,15 @@ void AVWrapper_Init(
 
     g_pContainer->oformat = g_pFormat;
 
+    // store description of file
+    av_dict_set(&g_pContainer->metadata, "comment", pDesc, 0);
+
     // append extesnion to filename
     char ext[16];
     strncpy(ext, g_pFormat->extensions, 16);
     ext[15] = 0;
     ext[strcspn(ext,",")] = 0;
     snprintf(g_pContainer->filename, sizeof(g_pContainer->filename), "%s.%s", pFilename, ext);
-    snprintf(g_Filename, sizeof(g_Filename), "%s.%s", pFinalFilename, ext);
 
     // find codecs
     g_pVCodec = avcodec_find_encoder_by_name(pVCodecName);
@@ -384,19 +391,22 @@ void AVWrapper_Init(
         Log("Video codec \"%s\" was not found; video will be ignored.\n", pVCodecName);
 
     if (g_pACodec)
-        AddAudioStream();
+    {
+        g_pSoundFile = fopen(pSoundFile, "rb");
+        if (g_pSoundFile)
+        {
+            fread(&g_Frequency, 4, 1, g_pSoundFile);
+            fread(&g_Channels, 4, 1, g_pSoundFile);
+            AddAudioStream();
+        }
+        else
+            Log("Could not open %s", pSoundFile);
+    }
     else
         Log("Audio codec \"%s\" was not found; audio will be ignored.\n", pACodecName);
 
     if (!g_pAStream && !g_pVStream)
         FatalError("No video, no audio, aborting...");
-
-    if (g_pAStream)
-    {
-        g_pSoundFile = fopen(pSoundFile, "rb");
-        if (!g_pSoundFile)
-            FatalError("Could not open %s", pSoundFile);
-    }
 
     // write format info to log
     av_dump_format(g_pContainer, 0, g_pContainer->filename, 1);
@@ -428,9 +438,6 @@ void AVWrapper_Close()
     // close the output file
     if (!(g_pFormat->flags & AVFMT_NOFILE))
         avio_close(g_pContainer->pb);
-        
-    // move file to destination
-    rename(g_pContainer->filename, g_Filename);
 
     // free everything
     if (g_pVStream)
