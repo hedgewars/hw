@@ -3165,8 +3165,7 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and (not gmAttack);
-    DeleteCI(HHGear);
-    Gear^.IntersectGear:= nil;
+    Gear^.CollisionMask:= $FF7F;
 
     FollowGear := Gear;
 
@@ -4026,12 +4025,12 @@ begin
         gear^.RenderTimer := true;
 
     // abort if there is no other portal connected to this one
-    if (Gear^.IntersectGear = nil) then
+    if (Gear^.LinkedGear = nil) then
         exit;
-    if ((Gear^.IntersectGear^.Tag and 1) = 0) then // or if it's still moving;
+    if ((Gear^.LinkedGear^.Tag and 1) = 0) then // or if it's still moving;
         exit;
 
-    conPortal := Gear^.IntersectGear;
+    conPortal := Gear^.LinkedGear;
 
     // check all gears for stuff to port through
     iterator := nil;
@@ -4414,8 +4413,8 @@ begin
         if not Gear^.dX.isNegative then
             Gear^.DirAngle := 180-Gear^.DirAngle;
 
-        if ((Gear^.IntersectGear = nil)
-        or (hwRound(Distance(Gear^.X - Gear^.IntersectGear^.X,Gear^.Y-Gear^.IntersectGear^.Y)) >=Gear^.Radius*2)) then
+        if ((Gear^.LinkedGear = nil)
+        or (hwRound(Distance(Gear^.X - Gear^.LinkedGear^.X,Gear^.Y-Gear^.LinkedGear^.Y)) >=Gear^.Radius*2)) then
             begin
             loadNewPortalBall(Gear, false);
             inc(Gear^.Tag);
@@ -4457,7 +4456,7 @@ begin
     newPortal^.dX := newPortal^.dX * s;
     newPortal^.dY := newPortal^.dY * s;
 
-    newPortal^.IntersectGear := nil;
+    newPortal^.LinkedGear := nil;
 
     if CurrentHedgehog <> nil then
         with CurrentHedgehog^ do
@@ -4486,8 +4485,8 @@ begin
                         else
                             begin
                             // link portals with each other
-                            newPortal^.IntersectGear := iterator;
-                            iterator^.IntersectGear := newPortal;
+                            newPortal^.LinkedGear := iterator;
+                            iterator^.LinkedGear := newPortal;
                             iterator^.Health := newPortal^.Health;
                             end;
                         end;
@@ -4940,7 +4939,7 @@ while i > 0 do
                 ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
             //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
             tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
-            tmp2^.IntersectGear:= tmp;
+            tmp2^.LinkedGear:= tmp;
             SetAllToActive
             end
         else
@@ -4959,7 +4958,7 @@ var
     HitGear: PGear;
 begin
     AllInactive := false;
-    HitGear := Gear^.IntersectGear;
+    HitGear := Gear^.LinkedGear;
     dec(Gear^.Timer);
     if (HitGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gmDestroy) <> 0) then
         begin
