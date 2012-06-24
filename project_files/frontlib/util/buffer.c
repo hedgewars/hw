@@ -8,15 +8,15 @@
 
 #define MIN_VECTOR_CAPACITY 16
 
-typedef struct _flib_vector {
+struct _flib_vector {
 	void *data;
 	size_t size;
 	size_t capacity;
-} _flib_vector;
+};
 
 flib_vector *flib_vector_create() {
 	flib_vector *result = NULL;
-	flib_vector *tmpVector = flib_calloc(1, sizeof(_flib_vector));
+	flib_vector *tmpVector = flib_calloc(1, sizeof(flib_vector));
 	if(tmpVector) {
 		tmpVector->data = flib_malloc(MIN_VECTOR_CAPACITY);
 		if(tmpVector->data) {
@@ -67,8 +67,7 @@ int flib_vector_resize(flib_vector *vec, size_t newSize) {
 
 	if(vec->capacity < newSize) {
 		// Resize exponentially for constant amortized time,
-		// But at least by as much as we need of course,
-		// and be extra careful with integer overflows...
+		// But at least by as much as we need of course
 		size_t extraCapacity = (vec->capacity)/2;
 		size_t minExtraCapacity = newSize - vec->capacity;
 		if(extraCapacity < minExtraCapacity) {
@@ -111,6 +110,27 @@ int flib_vector_append(flib_vector *vec, const void *data, size_t len) {
 
 	memmove(((uint8_t*)vec->data) + oldSize, data, len);
 	return len;
+}
+
+int flib_vector_appendf(flib_vector *vec, const char *fmt, ...) {
+	int result = -1;
+	if(!vec || !fmt) {
+		flib_log_e("null parameter in flib_vector_appendf");
+	} else {
+		va_list argp;
+		va_start(argp, fmt);
+		char *formatted = flib_vasprintf(fmt, argp);
+		va_end(argp);
+
+
+		if(formatted) {
+			size_t len = strlen(formatted);
+			if(flib_vector_append(vec, formatted, len) == len) {
+				result = 0;
+			}
+		}
+	}
+	return result;
 }
 
 flib_buffer flib_vector_as_buffer(flib_vector *vec) {

@@ -1,14 +1,17 @@
 /**
- * Data structure for defining a map. Note that most maps also depend on the
- * random seed passed to the engine, if you store that in addition to the
- * flib_map structure you have the whole recipe to exactly recreate a particular
- * map. For named maps, you also need the corresponding files.
+ * Data structure for defining a map. This contains the whole recipe to
+ * exactly recreate a particular map. For named maps, you also need the
+ * corresponding files.
+ *
+ * The required fields depend on the map generator, see the comments
+ * at the struct for details.
  */
 
 #ifndef MODEL_MAP_H_
 #define MODEL_MAP_H_
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define MAPGEN_REGULAR 0
 #define MAPGEN_MAZE 1
@@ -32,8 +35,9 @@
 typedef struct {
 	int _referenceCount;
 	int mapgen;				// Always one of the MAPGEN_ constants
+	char *name;				// The name of the map for MAPGEN_NAMED, otherwise one of "+rnd+", "+maze+" or "+drawn+".
+	char *seed;				// Used for all maps
 	char *theme;			// Used for all except MAPGEN_NAMED
-	char *name;				// Used for MAPGEN_NAMED
 	uint8_t *drawData;		// Used for MAPGEN_DRAWN
 	int drawDataSize;		// Used for MAPGEN_DRAWN
 	int templateFilter;		// Used for MAPGEN_REGULAR
@@ -49,7 +53,7 @@ typedef struct {
  * Use flib_map_destroy to free the returned object.
  * No NULL parameters allowed, returns NULL on failure.
  */
-flib_map *flib_map_create_regular(const char *theme, int templateFilter);
+flib_map *flib_map_create_regular(const char *seed, const char *theme, int templateFilter);
 
 /**
  * Create a generated maze-type map. theme should be the name of a
@@ -60,7 +64,7 @@ flib_map *flib_map_create_regular(const char *theme, int templateFilter);
  * Use flib_map_destroy to free the returned object.
  * No NULL parameters allowed, returns NULL on failure.
  */
-flib_map *flib_map_create_maze(const char *theme, int mazeSize);
+flib_map *flib_map_create_maze(const char *seed, const char *theme, int mazeSize);
 
 /**
  * Create a map from the Maps-Directory. name should be the name of a
@@ -71,13 +75,18 @@ flib_map *flib_map_create_maze(const char *theme, int mazeSize);
  * Use flib_map_destroy to free the returned object.
  * No NULL parameters allowed, returns NULL on failure.
  */
-flib_map *flib_map_create_named(const char *name);
+flib_map *flib_map_create_named(const char *seed, const char *name);
 
 /**
  * Create a hand-drawn map. Use flib_map_destroy to free the returned object.
  * No NULL parameters allowed, returns NULL on failure.
  */
-flib_map *flib_map_create_drawn(const char *theme, const uint8_t *drawData, int drawDataSize);
+flib_map *flib_map_create_drawn(const char *seed, const char *theme, const uint8_t *drawData, int drawDataSize);
+
+/**
+ * Create a deep copy of the map. Returns NULL on failure or if NULL was passed.
+ */
+flib_map *flib_map_copy(const flib_map *map);
 
 /**
  * Increase the reference count of the object. Call this if you store a pointer to it somewhere.

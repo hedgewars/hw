@@ -73,10 +73,6 @@ IpcState flib_ipcbase_state(flib_ipcbase *ipc) {
 	}
 }
 
-static bool isMessageReady(flib_ipcbase *ipc) {
-	return ipc->readBufferSize >= ipc->readBuffer[0]+1;
-}
-
 static void receiveToBuffer(flib_ipcbase *ipc) {
 	if(ipc->sock) {
 		int size = flib_socket_nbrecv(ipc->sock, ipc->readBuffer+ipc->readBufferSize, sizeof(ipc->readBuffer)-ipc->readBufferSize);
@@ -87,6 +83,10 @@ static void receiveToBuffer(flib_ipcbase *ipc) {
 			ipc->sock = NULL;
 		}
 	}
+}
+
+static bool isMessageReady(flib_ipcbase *ipc) {
+	return ipc->readBufferSize >= ipc->readBuffer[0]+1;
 }
 
 int flib_ipcbase_recv_message(flib_ipcbase *ipc, void *data) {
@@ -181,10 +181,6 @@ int flib_ipcbase_send_message(flib_ipcbase *ipc, void *data, size_t len) {
 	sendbuf[0] = len;
 	memcpy(sendbuf+1, data, len);
 	return flib_ipcbase_send_raw(ipc, sendbuf, len+1);
-}
-
-int flib_ipcbase_send_messagestr(flib_ipcbase *ipc, char *data) {
-	return flib_ipcbase_send_message(ipc, data, strlen(data));
 }
 
 void flib_ipcbase_accept(flib_ipcbase *ipc) {

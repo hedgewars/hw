@@ -15,10 +15,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-struct _flib_tcpsocket;
 typedef struct _flib_tcpsocket flib_tcpsocket;
-
-struct _flib_acceptor;
 typedef struct _flib_acceptor flib_acceptor;
 
 /**
@@ -26,7 +23,7 @@ typedef struct _flib_acceptor flib_acceptor;
  * on the given port. If port is 0, this will listen on a random
  * unused port which can then be queried with flib_acceptor_listenport.
  *
- * Can return NULL on error.
+ * Returns NULL on error.
  */
 flib_acceptor *flib_acceptor_create(uint16_t port);
 
@@ -36,8 +33,7 @@ flib_acceptor *flib_acceptor_create(uint16_t port);
 uint16_t flib_acceptor_listenport(flib_acceptor *acceptor);
 
 /**
- * Close the acceptor and free its memory.
- * If the acceptor is already NULL, nothing happens.
+ * Close the acceptor and free its memory. NULL-safe.
  */
 void flib_acceptor_close(flib_acceptor *acceptor);
 
@@ -54,8 +50,7 @@ flib_tcpsocket *flib_socket_accept(flib_acceptor *acceptor, bool localOnly);
 flib_tcpsocket *flib_socket_connect(const char *host, uint16_t port);
 
 /**
- * Close the socket and free its memory.
- * If the socket is already NULL, nothing happens.
+ * Close the socket and free its memory. NULL-safe.
  */
 void flib_socket_close(flib_tcpsocket *socket);
 
@@ -67,6 +62,11 @@ void flib_socket_close(flib_tcpsocket *socket);
  */
 int flib_socket_nbrecv(flib_tcpsocket *sock, void *data, int maxlen);
 
+/**
+ * Blocking send all the data in the data buffer. Returns the actual ammount
+ * of data sent, or a negative value on error. If the value returned here
+ * is less than len, either the connection closed or an error occurred.
+ */
 int flib_socket_send(flib_tcpsocket *sock, const void *data, int len);
 
 #endif /* SOCKET_H_ */

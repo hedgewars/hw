@@ -34,7 +34,7 @@ static void flib_cfg_destroy(flib_cfg* cfg) {
 		flib_cfg_meta_release(cfg->meta);
 		free(cfg->mods);
 		free(cfg->settings);
-		free(cfg->schemeName);
+		free(cfg->name);
 		free(cfg);
 	}
 }
@@ -155,11 +155,11 @@ flib_cfg *flib_cfg_create(flib_cfg_meta *meta, const char *schemeName) {
 	}
 
 	result->meta = flib_cfg_meta_retain(meta);
-	result->schemeName = flib_strdupnull(schemeName);
+	result->name = flib_strdupnull(schemeName);
 	result->mods = flib_calloc(meta->modCount, sizeof(*result->mods));
 	result->settings = flib_calloc(meta->settingCount, sizeof(*result->settings));
 
-	if(!result->mods || !result->settings || !result->schemeName) {
+	if(!result->mods || !result->settings || !result->name) {
 		flib_cfg_destroy(result);
 		return NULL;
 	}
@@ -173,7 +173,7 @@ flib_cfg *flib_cfg_create(flib_cfg_meta *meta, const char *schemeName) {
 flib_cfg *flib_cfg_copy(flib_cfg *cfg) {
 	flib_cfg *result = NULL;
 	if(cfg) {
-		result = flib_cfg_create(cfg->meta, cfg->schemeName);
+		result = flib_cfg_create(cfg->meta, cfg->name);
 		if(result) {
 			memcpy(result->mods, cfg->mods, cfg->meta->modCount * sizeof(*cfg->mods));
 			memcpy(result->settings, cfg->settings, cfg->meta->settingCount * sizeof(*cfg->settings));

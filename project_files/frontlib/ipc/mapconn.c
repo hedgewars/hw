@@ -39,12 +39,11 @@ static void clearCallbacks(flib_mapconn *conn) {
 	conn->onFailureCb = &noop_handleFailure;
 }
 
-static flib_vector *createConfigBuffer(char *seed, flib_map *mapdesc) {
+static flib_vector *createConfigBuffer(flib_map *mapdesc) {
 	flib_vector *result = NULL;
 	flib_vector *tempbuffer = flib_vector_create();
 	if(tempbuffer) {
 		bool error = false;
-		error |= flib_ipc_append_seed(tempbuffer, seed);
 		error |= flib_ipc_append_mapconf(tempbuffer, mapdesc, true);
 		error |= flib_ipc_append_message(tempbuffer, "!");
 		if(!error) {
@@ -56,12 +55,12 @@ static flib_vector *createConfigBuffer(char *seed, flib_map *mapdesc) {
 	return result;
 }
 
-flib_mapconn *flib_mapconn_create(char *seed, flib_map *mapdesc) {
+flib_mapconn *flib_mapconn_create(flib_map *mapdesc) {
 	flib_mapconn *result = NULL;
 	flib_mapconn *tempConn = flib_calloc(1, sizeof(flib_mapconn));
 	if(tempConn) {
 		tempConn->ipcBase = flib_ipcbase_create();
-		tempConn->configBuffer = createConfigBuffer(seed, mapdesc);
+		tempConn->configBuffer = createConfigBuffer(mapdesc);
 		if(tempConn->ipcBase && tempConn->configBuffer) {
 			tempConn->progress = AWAIT_CONNECTION;
 			clearCallbacks(tempConn);

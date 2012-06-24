@@ -3,17 +3,19 @@
 #include "../util/inihelper.h"
 #include "../util/util.h"
 #include "../util/logging.h"
+#include "../util/refcounter.h"
+
 #include <string.h>
 #include <stdlib.h>
 
 static flib_team *from_ini_handleError(flib_team *result, flib_ini *settingfile) {
 	flib_ini_destroy(settingfile);
-	flib_team_destroy(result);
+	flib_team_release(result);
 	return NULL;
 }
 
 flib_team *flib_team_from_ini(const char *filename) {
-	flib_team *result = flib_calloc(1, sizeof(flib_team));
+	flib_team *result = flib_team_retain(flib_calloc(1, sizeof(flib_team)));
 	flib_ini *ini = NULL;
 
 	if(!filename) {
@@ -189,8 +191,15 @@ int flib_team_to_ini(const char *filename, const flib_team *team) {
 	return result;
 }
 
-void flib_team_destroy(flib_team *team) {
+flib_team *flib_team_retain(flib_team *team) {
 	if(team) {
+		flib_retain(&team->_referenceCount, "flib_team");
+	}
+	return team;
+}
+
+void flib_team_release(flib_team *team) {
+	if(team && flib_release(&team->_referenceCount, "flib_team")) {
 		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
 			free(team->hogs[i].name);
 			free(team->hogs[i].hat);
@@ -208,7 +217,7 @@ void flib_team_destroy(flib_team *team) {
 			}
 		}
 		free(team->bindings);
-		free(team->hash);
+		free(team->ownerName);
 		free(team);
 	}
 }
@@ -220,4 +229,69 @@ void flib_team_set_weaponset(flib_team *team, flib_weaponset *set) {
 			team->hogs[i].weaponset = flib_weaponset_retain(set);
 		}
 	}
+}
+
+char *strdupWithError(const char *in, bool *error) {
+	char *out = flib_strdupnull(in);
+	if(in && !out) {
+		*error = true;
+	}
+	return out;
+}
+
+flib_team *flib_team_copy(flib_team *team) {
+	flib_team *result = NULL;
+	if(team) {
+		flib_team *tmpTeam = flib_team_retain(flib_calloc(1, sizeof(flib_team)));
+		if(tmpTeam) {
+			bool error = false;
+
+			for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
+				tmpTeam->hogs[i].name = strdupWithError(team->hogs[i].name, &error);
+				tmpTeam->hogs[i].hat = strdupWithError(team->hogs[i].hat, &error);
+				tmpTeam->hogs[i].rounds = team->hogs[i].rounds;
+				tmpTeam->hogs[i].kills = team->hogs[i].kills;
+				tmpTeam->hogs[i].deaths = team->hogs[i].deaths;
+				tmpTeam->hogs[i].suicides = team->hogs[i].suicides;
+				tmpTeam->hogs[i].difficulty = team->hogs[i].difficulty;
+				tmpTeam->hogs[i].initialHealth = team->hogs[i].initialHealth;
+				tmpTeam->hogs[i].weaponset = flib_weaponset_retain(team->hogs[i].weaponset);
+			}
+
+			tmpTeam->name = strdupWithError(team->name, &error);
+			tmpTeam->grave = strdupWithError(team->grave, &error);
+			tmpTeam->fort = strdupWithError(team->fort, &error);
+			tmpTeam->voicepack = strdupWithError(team->voicepack, &error);
+			tmpTeam->flag = strdupWithError(team->flag, &error);
+			tmpTeam->ownerName = strdupWithError(team->ownerName, &error);
+
+			tmpTeam->bindingCount = team->bindingCount;
+			if(team->bindings) {
+				tmpTeam->bindings = flib_calloc(team->bindingCount, sizeof(flib_binding));
+				if(tmpTeam->bindings) {
+					for(int i=0; i<tmpTeam->bindingCount; i++) {
+						tmpTeam->bindings[i].action = strdupWithError(team->bindings[i].action, &error);
+						tmpTeam->bindings[i].binding = strdupWithError(team->bindings[i].binding, &error);
+					}
+				} else {
+					error = true;
+				}
+			}
+
+			tmpTeam->rounds = team->rounds;
+			tmpTeam->wins = team->wins;
+			tmpTeam->campaignProgress = team->campaignProgress;
+
+			tmpTeam->color = team->color;
+			tmpTeam->hogsInGame = team->hogsInGame;
+			tmpTeam->remoteDriven = team->remoteDriven;
+
+			if(!error) {
+				result = tmpTeam;
+				tmpTeam = 0;
+			}
+		}
+		flib_team_release(tmpTeam);
+	}
+	return result;
 }

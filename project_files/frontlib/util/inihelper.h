@@ -15,7 +15,6 @@
 #define INI_ERROR_FORMAT -2
 #define INI_ERROR_OTHER -100
 
-struct _flib_ini;
 typedef struct _flib_ini flib_ini;
 
 /**

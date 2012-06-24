@@ -15,9 +15,11 @@
 struct _flib_gameconn;
 typedef struct _flib_gameconn flib_gameconn;
 
-flib_gameconn *flib_gameconn_create(const char *playerName, flib_gamesetup *setup, bool netgame);
+flib_gameconn *flib_gameconn_create(const char *playerName, const flib_gamesetup *setup, bool netgame);
 flib_gameconn *flib_gameconn_create_playdemo(const uint8_t *demo, int size);
 flib_gameconn *flib_gameconn_create_loadgame(const char *playerName, const uint8_t *save, int size);
+flib_gameconn *flib_gameconn_create_campaign(const char *playerName, const char *seed, const char *script);
+
 void flib_gameconn_destroy(flib_gameconn *conn);
 
 /**

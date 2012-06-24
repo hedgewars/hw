@@ -44,6 +44,7 @@ typedef struct {
 } flib_hog;
 
 typedef struct {
+	int _referenceCount;
 	flib_hog hogs[HEDGEHOGS_PER_TEAM];
 	char *name;
 	char *grave;
@@ -64,7 +65,7 @@ typedef struct {
 	uint32_t color;
 	int hogsInGame;
 	bool remoteDriven;
-	char *hash; // TODO calculate at the appropriate time... i.e. before trying to send the config to the engine
+	char *ownerName;
 } flib_team;
 
 /**
@@ -96,6 +97,22 @@ int flib_team_to_ini(const char *filename, const flib_team *team);
  */
 void flib_team_set_weaponset(flib_team *team, flib_weaponset *set);
 
-void flib_team_destroy(flib_team *team);
+/**
+ * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
+ * Returns the parameter.
+ */
+flib_team *flib_team_retain(flib_team *team);
+
+/**
+ * Decrease the reference count of the object and free it if this was the last reference.
+ */
+void flib_team_release(flib_team *team);
+
+/**
+ * Create a deep copy of a team. Returns NULL on failure.
+ * The referenced weaponsets are not copied, so the new
+ * team references the same weaponsets.
+ */
+flib_team *flib_team_copy(flib_team *team);
 
 #endif /* TEAM_H_ */

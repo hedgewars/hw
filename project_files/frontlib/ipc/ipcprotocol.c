@@ -48,11 +48,22 @@ int flib_ipc_append_mapconf(flib_vector *vec, const flib_map *map, bool mapprevi
 		bool error = false;
 
 		if(map->mapgen == MAPGEN_NAMED) {
-			error |= flib_ipc_append_message(tempvector, "emap %s", map->name);
+			if(map->name) {
+				error |= flib_ipc_append_message(tempvector, "emap %s", map->name);
+			} else {
+				flib_log_e("Missing map name");
+				error = true;
+			}
 		}
 		if(map->theme && !mappreview) {
-			error |= flib_ipc_append_message(tempvector, "etheme %s", map->theme);
+			if(map->theme) {
+				error |= flib_ipc_append_message(tempvector, "etheme %s", map->theme);
+			} else {
+				flib_log_e("Missing map theme");
+				error = true;
+			}
 		}
+		error |= flib_ipc_append_seed(tempvector, map->seed);
 		error |= flib_ipc_append_message(tempvector, "e$template_filter %i", map->templateFilter);
 		error |= flib_ipc_append_message(tempvector, "e$mapgen %i", map->mapgen);
 
@@ -94,6 +105,15 @@ int flib_ipc_append_seed(flib_vector *vec, const char *seed) {
 		return -1;
 	} else {
 		return flib_ipc_append_message(vec, "eseed %s", seed);
+	}
+}
+
+int flib_ipc_append_script(flib_vector *vec, const char *script) {
+	if(!vec || !script) {
+		flib_log_e("null parameter in flib_ipc_append_script");
+		return -1;
+	} else {
+		return flib_ipc_append_message(vec, "escript %s", script);
 	}
 }
 
@@ -155,7 +175,8 @@ int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHog
 			error |= flib_ipc_append_message(tempvector, "eammstore");
 		}
 
-		char *hash = team->hash ? team->hash : "00000000000000000000000000000000";
+		// TODO
+		char *hash = team->ownerName ? team->ownerName : "00000000000000000000000000000000";
 		error |= flib_ipc_append_message(tempvector, "eaddteam %s %"PRIu32" %s", hash, team->color, team->name);
 
 		if(team->remoteDriven) {
@@ -212,7 +233,6 @@ int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bo
 		bool sharedAmmo = false;
 
 		error |= flib_ipc_append_message(vec, netgame ? "TN" : "TL");
-		error |= flib_ipc_append_seed(vec, setup->seed);
 		if(setup->map) {
 			error |= flib_ipc_append_mapconf(tempvector, setup->map, false);
 		}
@@ -225,13 +245,13 @@ int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bo
 			// Shared ammo has priority over per-hog ammo
 			perHogAmmo = !sharedAmmo && getGameMod(setup->gamescheme, GAMEMOD_PERHOGAMMO_MASKBIT);
 		}
-		if(setup->teams && setup->teamcount>0) {
-			uint32_t *clanColors = flib_calloc(setup->teamcount, sizeof(uint32_t));
+		if(setup->teams && setup->teamCount>0) {
+			uint32_t *clanColors = flib_calloc(setup->teamCount, sizeof(uint32_t));
 			if(!clanColors) {
 				error = true;
 			} else {
 				int clanCount = 0;
-				for(int i=0; i<setup->teamcount; i++) {
+				for(int i=0; i<setup->teamCount; i++) {
 					flib_team *team = setup->teams[i];
 					bool newClan = false;
 

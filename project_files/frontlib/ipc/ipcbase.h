@@ -13,7 +13,6 @@
 
 typedef enum {IPC_NOT_CONNECTED, IPC_LISTENING, IPC_CONNECTED} IpcState;
 
-struct _flib_ipcbase;
 typedef struct _flib_ipcbase flib_ipcbase;
 
 /**
@@ -27,10 +26,13 @@ typedef struct _flib_ipcbase flib_ipcbase;
  */
 flib_ipcbase *flib_ipcbase_create();
 
+/**
+ * Return the listening port
+ */
 uint16_t flib_ipcbase_port(flib_ipcbase *ipc);
 
 /**
- * Free resources and close sockets.
+ * Free resources and close sockets. NULL safe.
  */
 void flib_ipcbase_destroy(flib_ipcbase *ipc);
 
@@ -61,6 +63,10 @@ int flib_ipcbase_recv_message(flib_ipcbase *ipc, void *data);
  */
 int flib_ipcbase_recv_map(flib_ipcbase *ipc, void *data);
 
+/**
+ * Blocking send bytes over the socket. No message framing will be added.
+ * Returns 0 on success.
+ */
 int flib_ipcbase_send_raw(flib_ipcbase *ipc, const void *data, size_t len);
 
 /**
@@ -68,14 +74,9 @@ int flib_ipcbase_send_raw(flib_ipcbase *ipc, const void *data, size_t len);
  * message is completely written or the connection is closed or an error occurs.
  *
  * Calling this function in a state other than IPC_CONNECTED will fail immediately.
- * Returns a negative value on failure.
+ * Returns 0 on success.
  */
 int flib_ipcbase_send_message(flib_ipcbase *ipc, void *data, size_t len);
-
-/**
- * Convenience function for sending a 0-delimited string.
- */
-int flib_ipcbase_send_messagestr(flib_ipcbase *ipc, char *data);
 
 /**
  * Try to accept a connection. Only has an effect in state IPC_LISTENING.
