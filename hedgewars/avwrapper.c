@@ -208,8 +208,8 @@ static void AddVideoStream()
 
     // put parameters
     // resolution must be a multiple of two
-    g_pVideo->width = g_Width;
-    g_pVideo->height = g_Height;
+    g_pVideo->width  = g_Width  & ~1; // make even (dimensions should be even)
+    g_pVideo->height = g_Height & ~1; // make even
     /* time base: this is the fundamental unit of time (in seconds) in terms
        of which frame timestamps are represented. for fixed-fps content,
        timebase should be 1/framerate and timestamp increments should be
@@ -344,8 +344,8 @@ void AVWrapper_Init(
     AddFileLogRaw = pAddFileLogRaw;
     av_log_set_callback( &LogCallback );
 
-    g_Width  = Width  & ~1; // make even (dimensions should be even)
-    g_Height = Height & ~1; // make even
+    g_Width  = Width;
+    g_Height = Height;
     g_Framerate.num = FramerateNum;
     g_Framerate.den = FramerateDen;
     g_VQuality = VQuality;
