@@ -49,12 +49,13 @@ begin
 end;
 
 procedure ComputeTexcoords(texture: PTexture; r: PSDL_Rect; tb: PVertexRect);
-var x0, y0, x1, y1: Real;
+var x0, y0, x1, y1, tmp: Real;
     w, h, aw, ah: LongInt;
 const texelOffset = 0.0;
 begin
 aw:=texture^.atlas^.w;
 ah:=texture^.atlas^.h;
+
 if texture^.isRotated then
     begin
     w:=r^.h;
@@ -66,19 +67,32 @@ else
     h:=r^.h;        
     end;
 
-x0:= (r^.x +     texelOffset)/aw;
-x1:= (r^.x + w - texelOffset)/aw;
-y0:= (r^.y +     texelOffset)/ah;
-y1:= (r^.y + h - texelOffset)/ah;
+x0:= (texture^.x + r^.x +     texelOffset)/aw;
+x1:= (texture^.x + r^.x + w - texelOffset)/aw;
+y0:= (texture^.y + r^.y +     texelOffset)/ah;
+y1:= (texture^.y + r^.y + h - texelOffset)/ah;
 
-tb^[0].X:= x0;
-tb^[0].Y:= y0;
-tb^[1].X:= x1;
-tb^[1].Y:= y0;
-tb^[2].X:= x1;
-tb^[2].Y:= y1;
-tb^[3].X:= x0;
-tb^[3].Y:= y1
+if (texture^.isRotated) then
+begin
+  tb^[0].X:= x0;
+  tb^[0].Y:= y0;
+  tb^[3].X:= x1;
+  tb^[3].Y:= y0;
+  tb^[2].X:= x1;
+  tb^[2].Y:= y1;
+  tb^[1].X:= x0;
+  tb^[1].Y:= y1
+end else
+begin
+  tb^[0].X:= x0;
+  tb^[0].Y:= y0;
+  tb^[1].X:= x1;
+  tb^[1].Y:= y0;
+  tb^[2].X:= x1;
+  tb^[2].Y:= y1;
+  tb^[3].X:= x0;
+  tb^[3].Y:= y1;
+end;
 end;
 
 procedure ResetVertexArrays(texture: PTexture);
@@ -126,6 +140,8 @@ NewTexture^.y:=0;
 NewTexture^.w:=width;
 NewTexture^.h:=height;
 NewTexture^.isRotated:=false;
+NewTexture^.shared:=false;
+NewTexture^.surface:=nil;
 
 ResetVertexArrays(NewTexture);
 
@@ -164,8 +180,12 @@ var tw, th, x, y: Longword;
     tmpp: pointer;
     fromP4, toP4: PLongWordArray;
 begin
-    if (surf^.w <= 128) and (surf^.h <= 128) then
-        Surface2Tex_(surf, enableClamp); // run the atlas side by side for debugging
+    if (surf^.w <= 256) and (surf^.h <= 256) then
+    begin
+        Surface2Atlas:= Surface2Tex_(surf, enableClamp); // run the atlas side by side for debugging
+        ResetVertexArrays(Surface2Atlas);
+        exit;
+    end;
 new(Surface2Atlas);
 Surface2Atlas^.PrevTexture:= nil;
 Surface2Atlas^.NextTexture:= nil;
@@ -185,6 +205,7 @@ Surface2Atlas^.x:=0;
 Surface2Atlas^.y:=0;
 Surface2Atlas^.isRotated:=false;
 Surface2Atlas^.surface:= surf;
+Surface2Atlas^.shared:= false;
 
 
 if (surf^.format^.BytesPerPixel <> 4) then
@@ -260,9 +281,15 @@ end;
 // if nil is passed nothing is done
 procedure FreeTexture(tex: PTexture);
 begin
-    FreeTexture_(tex); // run atlas side by side for debugging
 if tex <> nil then
     begin
+        if tex^.shared then
+        begin
+            FreeTexture_(tex); // run atlas side by side for debugging
+            SDL_FreeSurface(tex^.surface);
+            exit;
+        end;
+
     // Atlas cleanup happens here later on. For now we just free as each sprite has one atlas
     Dispose(tex^.atlas);
 
@@ -274,7 +301,8 @@ if tex <> nil then
         TextureList:= tex^.NextTexture;
     glDeleteTextures(1, @tex^.atlas^.id);
 
-    SDL_FreeSurface(tex^.surface);
+    if (tex^.surface <> nil) then
+        SDL_FreeSurface(tex^.surface);
     Dispose(tex);
     end
 end;

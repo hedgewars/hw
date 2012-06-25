@@ -475,7 +475,7 @@ for ii:= Low(TSprite) to High(TSprite) do
     SpritesData[ii].Texture:= nil;
     if (SpritesData[ii].Surface <> nil) and (not reload) then
         begin
-        SDL_FreeSurface(SpritesData[ii].Surface);
+        //SDL_FreeSurface(SpritesData[ii].Surface); released by FreeTexture
         SpritesData[ii].Surface:= nil
         end
     end;
