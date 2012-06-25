@@ -288,7 +288,6 @@ end;
 
 procedure initModule;
 begin
-uAtlas.initModule;
 TextureList:= nil;
 end;
 
