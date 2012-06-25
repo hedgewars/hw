@@ -272,9 +272,7 @@ begin
 
     TryDo(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-    RenderStringTexLim:= Surface2Tex(finalSurface, false);
-
-    SDL_FreeSurface(finalSurface);
+    RenderStringTexLim:= Surface2Atlas(finalSurface, false);
 end;
 
 
@@ -459,10 +457,9 @@ begin
         inc(pos);
         end;
 
-    RenderSpeechBubbleTex:= Surface2Tex(finalSurface, true);
+    RenderSpeechBubbleTex:= Surface2Atlas(finalSurface, true);
 
     SDL_FreeSurface(rotatedEdge);
-    SDL_FreeSurface(finalSurface);
 end;
 
 end.
