@@ -416,6 +416,10 @@ void HWGame::SetGameState(GameState state)
 {
     gameState = state;
     emit GameStateChanged(state);
+    if (gameType == gtCampaign)
+    {
+      emit CampStateChanged(1);
+    }
 }
 
 void HWGame::abort()

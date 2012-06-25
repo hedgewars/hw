@@ -72,6 +72,7 @@ class HWGame : public TCPBase
         void GameStats(char type, const QString & info);
         void HaveRecord(bool isDemo, const QByteArray & record);
         void ErrorMessage(const QString &);
+        void CampStateChanged(int);
 
     public slots:
         void FromNet(const QByteArray & msg);
