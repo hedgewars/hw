@@ -35,6 +35,7 @@ procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
 procedure TeamGoneEffect(var Team: TTeam);
+procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript,
@@ -184,7 +185,7 @@ repeat
         end
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
-CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+SwitchCurrentHedgehog(@(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]));
 {$IFDEF USE_TOUCH_INTERFACE}
 if (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
     begin
@@ -488,7 +489,7 @@ if (not isDeveloperMode) or (CurrentTeam = nil) then
 with CurrentTeam^ do
     begin
     SplitBySpace(id, s);
-    CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
+    SwitchCurrentHedgehog(@Hedgehogs[HedgehogsNumber]);
     val(id, CurrentHedgehog^.BotLevel, c);
     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
     SplitBySpace(s, id);
@@ -552,22 +553,33 @@ CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
 end;
 
 procedure chBind(var id: shortstring);
-var s: shortstring;
+var KeyName, Modifier, tmp: shortstring;
     b: LongInt;
 begin
-s:= '';
+KeyName:= '';
+Modifier:= '';
+
 if CurrentTeam = nil then
     exit;
-SplitBySpace(id, s);
-if s[1]='"' then
-    Delete(s, 1, 1);
-if s[byte(s[0])]='"' then
-    Delete(s, byte(s[0]), 1);
-b:= KeyNameToCode(id);
+
+if(Pos('mod:', id) <> 0)then
+    begin
+    tmp:= '';
+    SplitBySpace(id, tmp);
+    Modifier:= id;
+    id:= tmp;
+    end;
+
+SplitBySpace(id, KeyName);
+if KeyName[1]='"' then
+    Delete(KeyName, 1, 1);
+if KeyName[byte(KeyName[0])]='"' then
+    Delete(KeyName, byte(KeyName[0]), 1);
+b:= KeyNameToCode(id, Modifier);
 if b = 0 then
     OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 else
-    CurrentTeam^.Binds[b]:= s
+    CurrentTeam^.Binds[b]:= KeyName;
 end;
 
 procedure chTeamGone(var s:shortstring);
@@ -606,6 +618,21 @@ while (t < cMaxTeams) and (TeamsArray[t] <> nil) do
 AddChatString('** Good-bye!');
 RecountAllTeamsHealth();
 end;
+
+procedure SwitchCurrentHedgehog(newHog: PHedgehog);
+var oldCI, newCI: boolean;
+    oldHH: PHedgehog;
+begin
+    oldCI:= (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.CollisionIndex >= 0);
+    newCI:= (newHog^.Gear <> nil) and (newHog^.Gear^.CollisionIndex >= 0);
+    if oldCI then DeleteCI(CurrentHedgehog^.Gear);
+    if newCI then DeleteCI(newHog^.Gear);
+    oldHH:= CurrentHedgehog;
+    CurrentHedgehog:= newHog;
+    if oldCI then AddGearCI(oldHH^.Gear);
+    if newCI then AddGearCI(newHog^.Gear)
+end;
+
 
 procedure initModule;
 begin

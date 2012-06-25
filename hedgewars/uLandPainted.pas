@@ -27,7 +27,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uLandGraphics, uConsts, uUtils, SDLh, uCommands, uDebug;
+uses uLandGraphics, uConsts, uVariables, uUtils, SDLh, uCommands, uDebug;
 
 type PointRec = packed record
     X, Y: SmallInt;
@@ -57,6 +57,10 @@ begin
         rec:= prec^;
         rec.X:= SDLNet_Read16(@rec.X);
         rec.Y:= SDLNet_Read16(@rec.Y);
+        if rec.X < -323 then rec.X:= -323;
+        if rec.X > LAND_WIDTH+323 then rec.X:= LAND_WIDTH+323;
+        if rec.Y < -323 then rec.Y:= -323;
+        if rec.Y > LAND_HEIGHT+323 then rec.Y:= LAND_HEIGHT+323;
 
         new(pe);
         if pointsListLast = nil then

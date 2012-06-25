@@ -267,7 +267,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Tag: LongInt;
             Tex: PTexture;
             Z: Longword;
-            IntersectGear: PGear;
+            CollisionMask: Word;
+            LinkedGear: PGear;
             FlightTime: Longword;
             uid: Longword;
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
@@ -326,7 +327,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         TeamDamage : Longword;
         end;
 
-    TBinds = array[0..cKeyMaxIndex] of shortstring;
+    TBinds = array[0..cKbdMaxIndex] of shortstring;
     TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
     PVoicepack = ^TVoicepack;

@@ -25,7 +25,9 @@ uses SDLh, uTypes;
 procedure initModule;
 procedure freeModule;
 
-function  KeyNameToCode(name: shortstring): word;
+function  KeyNameToCode(name: shortstring; Modifier: shortstring = ''): LongInt;
+procedure MaskModifier(var code: LongInt; modifier: LongWord);
+procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
@@ -45,18 +47,64 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 implementation
 uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
 
-var tkbd: array[0..cKeyMaxIndex] of boolean;
+const
+    LSHIFT = $0200;
+    RSHIFT = $0400;
+    LALT   = $0800;
+    RALT   = $1000;
+    LCTRL  = $2000;
+    RCTRL  = $4000; 
+
+var tkbd: array[0..cKbdMaxIndex] of boolean;
     quitKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
 
-function KeyNameToCode(name: shortstring): word;
-var code: Word;
+function KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
+var code: LongInt;
 begin
     name:= LowerCase(name);
     code:= cKeyMaxIndex;
     while (code > 0) and (KeyNames[code] <> name) do dec(code);
+
+    MaskModifier(Modifier, code);
     KeyNameToCode:= code;
+end;
+
+procedure MaskModifier(var code: LongInt; Modifier: LongWord);
+begin
+    if(Modifier and KMOD_LSHIFT) <> 0 then code:= code or LSHIFT; 
+    if(Modifier and KMOD_RSHIFT) <> 0 then code:= code or LSHIFT; 
+    if(Modifier and KMOD_LALT) <> 0 then code:= code or LALT; 
+    if(Modifier and KMOD_RALT) <> 0 then code:= code or LALT; 
+    if(Modifier and KMOD_LCTRL) <> 0 then code:= code or LCTRL; 
+    if(Modifier and KMOD_RCTRL) <> 0 then code:= code or LCTRL; 
+end;
+
+procedure MaskModifier(Modifier: shortstring; var code: LongInt);
+var mod_ : shortstring;
+    ModifierCount, i: LongInt;
+begin
+if Modifier = '' then exit;
+ModifierCount:= 0;
+
+for i:= 1 to Length(Modifier) do
+    if(Modifier[i] = ':') then inc(ModifierCount);
+
+SplitByChar(Modifier, mod_, ':');//remove the first mod: part
+Modifier:= mod_;
+for i:= 0 to ModifierCount do
+    begin 
+    mod_:= '';
+    SplitByChar(Modifier, mod_, ':');
+    if (Modifier = 'lshift')                    then code:= code or LSHIFT;
+    if (Modifier = 'rshift')                    then code:= code or RSHIFT;
+    if (Modifier = 'lalt')                      then code:= code or LALT;
+    if (Modifier = 'ralt')                      then code:= code or RALT;
+    if (Modifier = 'lctrl') or (mod_ = 'lmeta') then code:= code or LCTRL;
+    if (Modifier = 'rctrl') or (mod_ = 'rmeta') then code:= code or RCTRL;
+    Modifier:= mod_;
+    end;
 end;
 
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
@@ -64,17 +112,13 @@ var
     Trusted: boolean;
     s      : string;
 begin
-
 if not(tkbd[code] xor KeyDown) then exit;
 tkbd[code]:= KeyDown;
-
 
 hideAmmoMenu:= false;
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
           and (CurrentHedgehog^.BotLevel = 0);
-
-
 
 // ctrl/cmd + q to close engine and frontend
 if(KeyDown and (code = quitKeyCode)) then
@@ -109,8 +153,11 @@ if CurrentBinds[code][0] <> #0 then
 end;
 
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
+var code: LongInt;
 begin
-    ProcessKey(event.keysym.sym, event.type_ = SDL_KEYDOWN);
+    code:= event.keysym.sym;
+    //MaskModifier(code, event.keysym.modifier);
+    ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
 
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
@@ -132,7 +179,7 @@ end;
 procedure ResetKbd;
 var t: LongInt;
 begin
-for t:= 0 to cKeyMaxIndex do
+for t:= 0 to cKbdMaxIndex do
     if tkbd[t] then
         ProcessKey(t, False);
 end;
@@ -248,7 +295,7 @@ begin
     binds:= binds; // avoid hint
     CurrentBinds:= DefaultBinds;
 {$ELSE}
-for t:= 0 to cKeyMaxIndex do
+for t:= 0 to cKbdMaxIndex do
     if (CurrentBinds[t] <> binds[t]) and tkbd[t] then
         ProcessKey(t, False);
 

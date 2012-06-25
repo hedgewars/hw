@@ -89,8 +89,8 @@ pas2C fn = do
     s <- flip execStateT initState $ f fn
     renderCFiles s
     where
-    printLn = liftIO . hPutStrLn stderr
-    print = liftIO . hPutStr stderr
+    printLn = liftIO . hPutStrLn stdout
+    print = liftIO . hPutStr stdout
     initState = Map.empty
     f :: String -> StateT (Map.Map String PascalUnit) IO ()
     f fileName = do
@@ -122,7 +122,7 @@ renderCFiles :: Map.Map String PascalUnit -> IO ()
 renderCFiles units = do
     let u = Map.toList units
     let nss = Map.map (toNamespace nss) units
-    hPutStrLn stderr $ "Units: " ++ (show . Map.keys . Map.filter (not . Map.null) $ nss)
+    --hPutStrLn stderr $ "Units: " ++ (show . Map.keys . Map.filter (not . Map.null) $ nss)
     --writeFile "pas2c.log" $ unlines . map (\t -> show (fst t) ++ "\n" ++ (unlines . map ((:) '\t' . show) . snd $ t)) . Map.toList $ nss
     mapM_ (toCFiles nss) u
     where
@@ -166,7 +166,7 @@ withRecordNamespace prefix recs = withState' f
 toCFiles :: Map.Map String Records -> (String, PascalUnit) -> IO ()
 toCFiles _ (_, System _) = return ()
 toCFiles ns p@(fn, pu) = do
-    hPutStrLn stderr $ "Rendering '" ++ fn ++ "'..."
+    hPutStrLn stdout $ "Rendering '" ++ fn ++ "'..."
     toCFiles' p
     where
     toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C initialState . pascal2C) p

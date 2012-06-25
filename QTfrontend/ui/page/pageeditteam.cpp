@@ -26,12 +26,13 @@
 #include <QGroupBox>
 #include <QToolBox>
 #include <QMessageBox>
-
-#include "sdlkeys.h"
+#include <QStandardItemModel>
+#include <QDebug>
 #include "SquareLabel.h"
 #include "HWApplication.h"
 
 #include "DataManager.h"
+#include "HatModel.h"
 
 #include "pageeditteam.h"
 
@@ -196,9 +197,9 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
         l->setText(HWApplication::translate("binds", cbinds[i].name));
         l->setAlignment(Qt::AlignRight);
         pagelayout->addWidget(l, num, 0);
+
         CBBind[i] = new QComboBox(curW);
-        for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
-            CBBind[i]->addItem(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), sdlkeys[j][0]);
+        CBBind[i]->setModel(DataManager::instance().bindsModel());
         pagelayout->addWidget(CBBind[i++], num++, 1);
     }
 
@@ -422,9 +423,15 @@ void PageEditTeam::loadTeam(const HWTeam & team)
     CBFort->setCurrentIndex(CBFort->findText(team.fort()));
     CBVoicepack->setCurrentIndex(CBVoicepack->findText(team.voicepack()));
 
+    QStandardItemModel * binds = DataManager::instance().bindsModel();
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
-        CBBind[i]->setCurrentIndex(CBBind[i]->findData(team.keyBind(i)));
+        QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, team.keyBind(i), 1, Qt::MatchExactly);
+
+        if(mdl.size() == 1)
+            CBBind[i]->setCurrentIndex(mdl[0].row());
+        else
+            qDebug() << "Binds: cannot find" << team.keyBind(i);
     }
 }
 
@@ -450,9 +457,10 @@ HWTeam PageEditTeam::data()
     team.setVoicepack(CBVoicepack->currentText());
     team.setFlag(CBFlag->itemData(CBFlag->currentIndex()).toString());
 
+    QStandardItemModel * binds = DataManager::instance().bindsModel();
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
-        team.bindKey(i,CBBind[i]->itemData(CBBind[i]->currentIndex()).toString());
+        team.bindKey(i, binds->index(CBBind[i]->currentIndex(), 0).data(Qt::UserRole + 1).toString());
     }
 
     return team;

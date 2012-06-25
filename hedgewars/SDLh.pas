@@ -270,6 +270,19 @@ const
     AShift = 0;
 {$ENDIF}
 
+    KMOD_NONE   = $0000;
+    KMOD_LSHIFT = $0001;
+    KMOD_RSHIFT = $0002;
+    KMOD_LCTRL  = $0040;
+    KMOD_RCTRL  = $0080;
+    KMOD_LALT   = $0400;
+    KMOD_RALT   = $0800;
+    KMOD_LMETA  = $0400;
+    KMOD_RMETA  = $0800;
+    KMOD_NUM    = $1000;
+    KMOD_CAPS   = $2000;
+    KMOD_MODE   = $4000;
+
     {* SDL_mixer *}
     MIX_MAX_VOLUME = 128;
     MIX_INIT_FLAC  = $00000001;
@@ -968,9 +981,6 @@ function SDL_putenv(const text: PChar): LongInt; cdecl; external SDLLibName;
 function SDL_getenv(const text: PChar): PChar; cdecl; external SDLLibName;
 {$ENDIF}
 
-{$IFDEF ANDROID}
-function Android_JNI_getDensity(): Single; cdecl; external SDLLibName;
-{$ENDIF}
 
 {* Compatibility between SDL-1.2 and SDL-1.3 *}
 procedure SDL_WarpMouse(x, y: Word); {$IFDEF SDL13}inline{$ELSE}cdecl; external SDLLibName{$ENDIF};
