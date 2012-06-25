@@ -221,6 +221,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             x, y: LongInt; // Offset in the texture atlas
             isRotated: boolean; // if true sprite is flipped in the atlas taking w pixels along the y and h pixels along the x axis
 
+            shared: boolean; // true if in an atlas, false if atlas points to a dedicated texture for this sprite
+
             surface: PSDL_Surface; // retained in memory surface
 
             // Cached values for texel coordinates and vertex coordinates            

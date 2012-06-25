@@ -60,7 +60,8 @@ uses
     uCaptions,
     uCursor,
     uCommands,
-    uMobile
+    uMobile,
+    uAtlas
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
@@ -956,7 +957,7 @@ begin
         begin
         glClear(GL_COLOR_BUFFER_BIT);
         DrawWorldStereo(Lag, rmDefault)
-        end
+        end;
 {$IFNDEF S3D_DISABLED}
     else if (cStereoMode = smAFR) then
         begin
@@ -1064,8 +1065,9 @@ begin
         else
             glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
         DrawWorldStereo(Lag, rmRightEye);
-        end
+        end;
 {$ENDIF}
+    DebugAtlas;
 end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);

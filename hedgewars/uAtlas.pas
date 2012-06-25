@@ -11,14 +11,15 @@ procedure initModule;
 
 function Surface2Tex_(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture_(sprite: PTexture);
+procedure DebugAtlas;
 
 implementation
 
-uses GLunit, uBinPacker, uDebug, png, sysutils;
+uses GLunit, uBinPacker, uDebug, png, sysutils, uTextures;
 
 const
-    MaxAtlases = 1;    // Maximum number of atlases (textures) to allocate
-    MaxTexSize = 4096; // Maximum atlas size in pixels
+    MaxAtlases = 4;    // Maximum number of atlases (textures) to allocate
+    MaxTexSize = 1024; // Maximum atlas size in pixels
     MinTexSize = 128;  // Minimum atlas size in pixels
     CompressionThreshold = 0.4; // Try to compact (half the size of) an atlas, when occupancy is less than this
 
@@ -35,6 +36,40 @@ var
 
 ////////////////////////////////////////////////////////////////////////////////
 // Debug routines
+
+procedure AssertCount(tex: PTexture; count: Integer);
+var
+    i, j: Integer;
+    found: Integer;
+begin
+    found:= 0;
+    for i:= 0 to pred(MaxAtlases) do
+    begin
+        if not Info[i].Allocated then
+            continue;
+        for j:=0 to pred(Info[i].PackerInfo.usedRectangles.count) do
+        begin
+            if Info[i].PackerInfo.usedRectangles.data[j].UserData = tex then
+                inc(found);
+        end;
+    end;
+    if found <> count then
+    begin
+        writeln('AssertCount(', IntToHex(Integer(tex), 8), ') failed, found ', found, ' times');
+
+        for i:= 0 to pred(MaxAtlases) do
+        begin
+            if not Info[i].Allocated then
+                continue;
+            for j:=0 to pred(Info[i].PackerInfo.usedRectangles.count) do
+            begin
+                if Info[i].PackerInfo.usedRectangles.data[j].UserData = tex then
+                    writeln(' found in atlas ', i, ' at slot ', j);
+            end;
+        end;
+        halt(-2);
+    end;
+end;
 
 var
     DumpID: Integer;
@@ -73,6 +108,57 @@ begin
    if (i < 100) then s:='0' + s;
 
    IntToStrPad:=s;
+end;
+
+// GL1 ATLAS DEBUG ONLY CODE!
+procedure DebugAtlas;
+var
+    vp: array[0..3] of GLint;
+    prog: GLint;
+    i: Integer;
+    x, y: Integer;
+const
+    SZ = 512;
+begin
+    x:= 0;
+    y:= 0;
+    for i:= 0 to pred(MaxAtlases) do
+    begin
+        if not Info[i].allocated then
+            continue;
+        glGetIntegerv(GL_VIEWPORT, @vp);
+        glGetIntegerv(GL_CURRENT_PROGRAM, @prog);
+
+        glUseProgram(0);
+        glPushMatrix;
+        glLoadIdentity;
+        glOrtho(0, vp[2], vp[3], 0, -1, 1);
+
+
+        glBindTexture(GL_TEXTURE_2D, Info[i].TextureInfo.id);
+        glBegin(GL_QUADS);
+        glTexCoord2f(0.0, 0.0);
+        glVertex2i(x * SZ, y * SZ);
+        glTexCoord2f(1.0, 0.0);
+        glVertex2i((x + 1) * SZ, y * SZ);
+        glTexCoord2f(1.0, 1.0);
+        glVertex2i((x + 1) * SZ, (y + 1) * SZ);
+        glTexCoord2f(0.0, 1.0);
+        glVertex2i(x * SZ, (y + 1) * SZ);
+        glEnd();
+
+        glPopMatrix;
+
+        inc(x);
+        if (x = 2) then
+        begin
+            x:=0;
+            inc(y);
+        end;
+     
+
+        glUseProgram(prog);
+    end;
 end;
 
 procedure DumpAtlas(var info: AtlasInfo);
@@ -146,6 +232,9 @@ begin
     createTexture.priority:= 0;
     glGenTextures(1, @createTexture.id);
     glBindTexture(GL_TEXTURE_2D, createTexture.id);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
     
@@ -275,6 +364,7 @@ var
     sp: PTexture;
     i, j, stride: Integer;
     scanline: PByte;
+    r: TSDL_Rect;
 begin
     writeln('Uploading sprite to ', sprite.x, ',', sprite.y, ',', sprite.width, ',', sprite.height);
     sp:= PTexture(sprite.UserData);
@@ -288,7 +378,7 @@ begin
 
     //if GrayScale then
     //    Surface2GrayScale(surf);
-    DebugColorize(surf);
+    //DebugColorize(surf);
 
     glBindTexture(GL_TEXTURE_2D, info.TextureInfo.id);
     if (sp^.isRotated) then
@@ -306,9 +396,15 @@ begin
 
     if SDL_MustLock(surf) then
         SDL_UnlockSurface(surf);
+
+    r.x:= 0;
+    r.y:= 0;
+    r.w:= sp^.w;
+    r.h:= sp^.h;
+    ComputeTexcoords(sp, @r, @sp^.tb);
 end;
 
-procedure Repack(var info: AtlasInfo; newAtlas: Atlas; newSprite: PTexture; surf: PSDL_Surface);
+procedure Repack(var info: AtlasInfo; newAtlas: Atlas);
 var
     base: PByte;
     oldSize: Integer;
@@ -373,8 +469,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 // Sprite allocation logic
 
-function TryRepack(var info: AtlasInfo; w, h: Integer; hasNewSprite: boolean; 
-                   newSprite: Size; surf: PSDL_Surface): boolean;
+function TryRepack(var info: AtlasInfo; w, h: Integer; hasNewSprite: boolean; newSprite: Size): boolean;
 var
     sizes: SizeList;
     repackedAtlas: Atlas;
@@ -402,16 +497,12 @@ begin
     if atlasInsertSet(repackedAtlas, sizes, rects) then
     begin
         TryRepack:= true;
-        if hasNewSprite then
-            sprite:= PTexture(newSprite.UserData)
-        else
-            sprite:= nil;
-        Repack(info, repackedAtlas, sprite, surf);
+        Repack(info, repackedAtlas);
         // repack assigns repackedAtlas to the current info and deletes the old one
         // thus we wont do atlasDelete(repackedAtlas); here 
         rectangleListClear(rects);
         sizeListClear(sizes);
-        DumpAtlas(info);
+        //DumpAtlas(info);
         exit;
     end;
 
@@ -431,7 +522,7 @@ begin
     begin
         // we succeeded adaptivley allocating the sprite to the i'th atlas.
         Upload(info, rect, surf);
-        DumpAtlas(info);
+        //DumpAtlas(info);
         TryInsert:= true;
     end;
 end;
@@ -460,6 +551,7 @@ begin
     sprite^.y:= 0;
     sprite^.isRotated:= false;
     sprite^.surface:= surf;
+    sprite^.shared:= true;
 
     sz:= SizeForSprite(sprite);
 
@@ -470,7 +562,7 @@ begin
         if not Info[i].Allocated then
             continue;
         if TryInsert(Info[i], sz, surf) then
-            exit; 
+            exit;
     end;
 
 
@@ -481,7 +573,7 @@ begin
         if not Info[i].Allocated then
             continue;
 
-        if TryRepack(Info[i], Info[i].PackerInfo.width, Info[i].PackerInfo.height, true, sz, surf) then
+        if TryRepack(Info[i], Info[i].PackerInfo.width, Info[i].PackerInfo.height, true, sz) then
             exit;
     end;
 
@@ -498,7 +590,7 @@ begin
         EnlargeSize(currentWidth, currentHeight);
         while (currentWidth <= MaxTexSize) and (currentHeight <= MaxTexSize) do
         begin
-            if TryRepack(Info[i], currentWidth, currentHeight, true, sz, surf) then
+            if TryRepack(Info[i], currentWidth, currentHeight, true, sz) then
                 exit;
             EnlargeSize(currentWidth, currentHeight);
         end;
@@ -555,6 +647,7 @@ begin
     if sprite = nil then
         exit;
 
+    deleteAt:= -1;
     for i:= 0 to pred(MaxAtlases) do
     begin
         if sprite^.atlas <> @Info[i].TextureInfo then
@@ -570,7 +663,7 @@ begin
                 inc(usedArea, r.width * r.height);
         end;
 
-        rectangleListRemoveAt(Info[i].PackerInfo.usedRectangles, j);
+        rectangleListRemoveAt(Info[i].PackerInfo.usedRectangles, deleteAt);
         dispose(sprite);
 
         while true do
@@ -586,8 +679,10 @@ begin
 
             CompactSize(atlasW, atlasH);
             unused:= unused;
-            TryRepack(Info[i], atlasW, atlasH, false, unused, nil);
+            TryRepack(Info[i], atlasW, atlasH, false, unused);
         end;
+
+        exit;
     end;
 end;
 
