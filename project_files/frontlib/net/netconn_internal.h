@@ -123,4 +123,6 @@ struct _flib_netconn {
 	bool destroyRequested;
 };
 
+void clearCallbacks(flib_netconn *conn);
+
 #endif
