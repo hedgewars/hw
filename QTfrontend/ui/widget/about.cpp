@@ -128,7 +128,7 @@ About::About(QWidget * parent) :
             "Greek: &lt;<a href=\"mailto:talos_kriti@yahoo.gr\">talos_kriti@yahoo.gr</a>&gt;<br>"
             "Italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;, Marco Bresciani<br>"
             "Japanese: ADAM Etienne &lt;<a href=\"mailto:etienne.adam@gmail.com\">etienne.adam@gmail.com</a>&gt;<br>"
-            "Korean: Anthony Bellew &lt;<a href=\"mailto:webmaster@anthonybellew.com\">webmaster@anthonybellew.com</a>&gt;<br>"
+            "Korean: Anthony Bellew &lt;<a href=\"mailto:anthonyreflected@gmail.com\">anthonyreflected@gmail.com</a>&gt;<br>"
             "Lithuanian: Lukas Urbonas &lt;<a href=\"mailto:lukasu08@gmail.com\">lukasu08@gmail.com</a>&gt;<br>"
             "Polish: Maciej Mroziński &lt;<a href=\"mailto:mynick2@o2.pl\">mynick2@o2.pl</a>&gt;, Wojciech Latkowski &lt;<a href=\"mailto:magik17l@gmail.com\">magik17l@gmail.com</a>&gt;, Piotr Mitana, Maciej Górny<br>"
             "Portuguese: Fábio Canário &lt;<a href=\"mailto:inufabie@gmail.com\">inufabie@gmail.com</a>&gt;<br>"

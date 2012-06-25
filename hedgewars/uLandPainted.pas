@@ -57,10 +57,10 @@ begin
         rec:= prec^;
         rec.X:= SDLNet_Read16(@rec.X);
         rec.Y:= SDLNet_Read16(@rec.Y);
-        if rec.X < -323 then rec.X:= -323;
-        if rec.X > LAND_WIDTH+323 then rec.X:= LAND_WIDTH+323;
-        if rec.Y < -323 then rec.Y:= -323;
-        if rec.Y > LAND_HEIGHT+323 then rec.Y:= LAND_HEIGHT+323;
+        if rec.X < -318 then rec.X:= -318;
+        if rec.X > LAND_WIDTH+318 then rec.X:= LAND_WIDTH+318;
+        if rec.Y < -318 then rec.Y:= -318;
+        if rec.Y > LAND_HEIGHT+318 then rec.Y:= LAND_HEIGHT+318;
 
         new(pe);
         if pointsListLast = nil then
