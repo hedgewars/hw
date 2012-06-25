@@ -746,17 +746,8 @@ end
 function DoDead()
   AddCaption("...and so the cyborgs took over the world...")
   stage = loseStage
-  if ramonHidden then
-    RestoreHog(ramon)
-  end
-  if spikyHidden then
-    RestoreHog(spiky)
-  end
-  SetHealth(dense, 0)
-  SetHealth(leaks, 0)
-  SetHealth(ramon, 0)
-  SetHealth(spiky, 0)
   TurnTimeLeft = 0
+  ParseCommand('teamgone Natives')
 end
 
 function CheckDenseDead()
