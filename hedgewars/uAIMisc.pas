@@ -543,7 +543,7 @@ for i:= 0 to Pred(Targets.Count) do
                 if Score > 0 then 
                     inc(rate, Score div 3)
                 else
-                    dec(rate, Score div 3 * friendlyfactor div 100)
+                    inc(rate, Score div 3 * friendlyfactor div 100)
             end;
 RateHammer:= rate * 1024;
 end;
