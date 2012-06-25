@@ -25,11 +25,11 @@ targets = {}
 crates = {}
 targXdif2 = {2755, 2638, 2921, 2664, 2973, 3162, 3268, 3067, 3588, 3759, 3062, 1300}
 targYdif2 = {1197, 1537, 1646, 1852, 1857, 1804, 1538, 1173, 984, 1290, 1167, 1183}
-targXdif1 = {2749, 2909, 2770, 2892, 2836, 3296, 3567, 3066, 1558, 1305}
-targYdif1 = {1179, 1313, 1734, 1603, 1441, 1522, 982, 1190, 1152, 1259}
+targXdif1 = {2749, 2909, 2770, 2892, 2836, 1558, 1305}
+targYdif1 = {1179, 1313, 1734, 1603, 1441, 1152, 1259}
 targetPosX = {{821, 866, 789}, {614, 656, 638}, {1238, 1237, 1200}, {1558, 1596, 1631}, {2190, 2396, 2457}}
 targetPosY = {{1342, 1347, 1326}, {1112, 1121, 1061}, {1152, 1111, 1111}, {1132, 1136, 1280}, {1291, 1379, 1317}}
-crateNum = {10, 12}
+crateNum = {7, 12}
 
 
 stage = 1
@@ -551,7 +551,7 @@ function onGameInit()
 	Theme = "Nature"
 
 
-	AddTeam("Natives", 1117585, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam("Natives", 2567585, "Bone", "Island", "HillBilly", "cm_birdy")
 	youngh = AddHog("Leaks A Lot", 0, 100, "Rambo")
   elderh = AddHog("White Raven", 0, 99, "IndianChief")
   princess = AddHog("Fell From Heaven", 0, 300, "tiara")
