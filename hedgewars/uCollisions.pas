@@ -82,7 +82,7 @@ with cinfos[Count] do
     X:= hwRound(Gear^.X);
     Y:= hwRound(Gear^.Y);
     Radius:= Gear^.Radius;
-    ChangeRoundInLand(X, Y, Radius - 1, true);
+    ChangeRoundInLand(X, Y, Radius - 1, true, Gear = CurrentHedgehog^.Gear);
     cGear:= Gear
     end;
 Gear^.CollisionIndex:= Count;
@@ -103,7 +103,7 @@ begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, false);
+        ChangeRoundInLand(X, Y, Radius - 1, false, Gear = CurrentHedgehog^.Gear);
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;
@@ -138,17 +138,11 @@ function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
     TestWord: LongWord;
 begin
-if Gear^.IntersectGear <> nil then
-    with Gear^ do
-        if (hwRound(IntersectGear^.X) + IntersectGear^.Radius < hwRound(X) - Radius)
-        or (hwRound(IntersectGear^.X) - IntersectGear^.Radius > hwRound(X) + Radius) then
-            begin
-            IntersectGear:= nil;
-            TestWord:= 0
-            end
-        else
-            TestWord:= 255
-    else TestWord:= 0;
+// Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
+if (Gear^.CollisionMask = $FF7F) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+    ((hwRound(Gear^.Hedgehog^.Gear^.X) + Gear^.Hedgehog^.Gear^.Radius + 4 < hwRound(Gear^.X) - Gear^.Radius) or
+     (hwRound(Gear^.Hedgehog^.Gear^.X) - Gear^.Hedgehog^.Gear^.Radius - 4 > hwRound(Gear^.X) + Gear^.Radius)) then
+    Gear^.CollisionMask:= $FFFF;
 
 x:= hwRound(Gear^.X);
 if Dir < 0 then
@@ -163,7 +157,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
     i:= y + Gear^.Radius * 2 - 2;
     repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
-            if Land[y, x] > TestWord then
+            if Land[y, x] and Gear^.CollisionMask <> 0 then
                 exit;
         inc(y)
     until (y > i);
@@ -175,36 +169,30 @@ function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 var x, y, i: LongInt;
     TestWord: LongWord;
 begin
-if Gear^.IntersectGear <> nil then
-    with Gear^ do
-        if (hwRound(IntersectGear^.Y) + IntersectGear^.Radius < hwRound(Y) - Radius) or
-            (hwRound(IntersectGear^.Y) - IntersectGear^.Radius > hwRound(Y) + Radius) then
-                begin
-                IntersectGear:= nil;
-                TestWord:= 0
-                end
-        else
-            TestWord:= 255
-else
-    TestWord:= 0;
+// Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
+if (Gear^.CollisionMask = $FF7F) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+    ((hwRound(Gear^.Hedgehog^.Gear^.Y) + Gear^.Hedgehog^.Gear^.Radius + 4 < hwRound(Gear^.Y) - Gear^.Radius) or
+     (hwRound(Gear^.Hedgehog^.Gear^.Y) - Gear^.Hedgehog^.Gear^.Radius - 4 > hwRound(Gear^.Y) + Gear^.Radius)) then
+    Gear^.CollisionMask:= $FFFF;
 
 y:= hwRound(Gear^.Y);
 if Dir < 0 then
     y:= y - Gear^.Radius
 else
     y:= y + Gear^.Radius;
+
 if (y and LAND_HEIGHT_MASK) = 0 then
     begin
     x:= hwRound(Gear^.X) - Gear^.Radius + 1;
     i:= x + Gear^.Radius * 2 - 2;
     repeat
         if (x and LAND_WIDTH_MASK) = 0 then
-            if Land[y, x] > TestWord then
-            begin
+            if Land[y, x] and Gear^.CollisionMask <> 0 then
+                begin
                 TestCollisionYwithGear:= Land[y, x];
                 exit;
-            end;
-     inc(x)
+                end;
+        inc(x)
     until (x > i);
     end;
 TestCollisionYwithGear:= 0

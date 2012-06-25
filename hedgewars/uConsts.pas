@@ -147,6 +147,7 @@ const
     cBlowTorchC    = 6;
 
     cKeyMaxIndex = 1023;
+    cKbdMaxIndex = 65536;//need more room for the modifier keys
 
     cHHFileName = 'Hedgehog';
     cCHFileName = 'Crosshair';
@@ -259,6 +260,8 @@ const
     ammoprop_Effect       = $00002000;
     ammoprop_SetBounce    = $00004000;
     ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets 
+    ammoprop_OscAim       = $00010000;
+    ammoprop_NoMoveAfter  = $00020000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;

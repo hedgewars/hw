@@ -171,13 +171,15 @@ if(NOT NOPNG)
     if(${PNG_FOUND})
         message(STATUS "PNG screenshots enabled (library found at ${PNG_LIBRARY})")
         set(pascal_flags "-dPNG_SCREENSHOTS" ${pascal_flags})
-        if(APPLE)  # need to explictly link with the static lib
+        if(APPLE)  # need to explictly link with the static lib -- maybe windows too?
             string(REGEX REPLACE "(.*)libpng.*" "\\1" PNG_LIBDIR "${PNG_LIBRARY}")
             set(pascal_flags "-k${PNG_LIBDIR}/libpng.a" ${pascal_flags})
         endif()
     else()
         message(STATUS "PNG library not found, switching to screenshots in BMP format")
     endif()
+else()
+    message(STATUS "PNG screenshots disabled per user request, using BMP format")
 endif()
 
 set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
@@ -215,7 +217,7 @@ ENDIF()
 add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}")
 
 #when system Lua is not found we need to compile it before engine
-if(NOT ${LUA_FOUND})
+if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
 endif()
 

@@ -1025,7 +1025,9 @@ begin
         else
             AmmoShove(Gear, Gear^.Timer, 20);
         CheckGearDrowning(Gear);
-        dec(i) until (i = 0) or (Gear^.Damage > Gear^.Health) or ((Gear^.State and gstDrowning) <> 0);
+        dec(i) 
+    until (i = 0) or (Gear^.Damage > Gear^.Health) or ((Gear^.State and gstDrowning) <> 0);
+
     if Gear^.Damage > 0 then
         begin
         DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 82 - i, 1);
@@ -2112,18 +2114,36 @@ begin
         end
     else
         begin 
-        if Gear^.Timer = 0 then
-        begin
+        if Gear^.Timer = 500 then
+            begin
 (* Can't make sparkles team coloured without working out what the next team is going to be. This should be solved, really, since it also screws up
    voices. Reinforcements voices is heard for active team, not team-to-be.  Either that or change crate spawn from end of turn to start, although that
    has its own complexities. *)
-        sparkles:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
-        if sparkles <> nil then
+            // Abuse a couple of gear values to track origin
+            Gear^.Angle:= hwRound(Gear^.X);
+            Gear^.Power:= hwRound(Gear^.Y);
+            Gear^.Tag:= random(2);
+            inc(Gear^.Timer)
+            end;
+        if Gear^.Timer < 1833 then inc(Gear^.Timer);
+        if Gear^.Timer = 1000 then
             begin
-            sparkles^.Tint:= $FAB22CFF
+            sparkles:= AddVisualGear(Gear^.Angle, Gear^.Power, vgtDust, 1);
+            if sparkles <> nil then
+                begin
+                sparkles^.dX:= 0;
+                sparkles^.dY:= 0;
+                sparkles^.Angle:= 270;
+                if Gear^.Tag = 1 then 
+                    sparkles^.Tint:= $3744D7FF
+                else sparkles^.Tint:= $FAB22CFF
+                end;
+            end;
+        if Gear^.Timer < 1000 then 
+            begin
+            AllInactive:= false;
+            exit
             end
-        end;
-        if (GameTicks and $1 = 0) and (Gear^.Timer < 255) then inc(Gear^.Timer)
         end;
 
     if (Gear^.Damage > 0) or exBoom then
@@ -2766,7 +2786,7 @@ begin
             CurrentTeam^.CurrHedgehog := Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
         until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0);
 
-        CurrentHedgehog := @CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog];
+        SwitchCurrentHedgehog(@CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
         AmmoMenuInvalidated:= true; 
 
         HHGear := CurrentHedgehog^.Gear;
@@ -3085,7 +3105,7 @@ begin
         begin
         Gear^.Tag := 0;
         Gear^.X := Gear^.X + int2hwFloat(xx);
-        if not TestCollisionY(Gear, yyn) then
+        if TestCollisionYwithGear(Gear, yyn) = 0 then
             begin
             Gear^.Y := Gear^.Y + int2hwFloat(yyn);
             NextAngle(Gear, dA)
@@ -3163,8 +3183,7 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and (not gmAttack);
-    DeleteCI(HHGear);
-    Gear^.IntersectGear:= nil;
+    Gear^.CollisionMask:= $FF7F;
 
     FollowGear := Gear;
 
@@ -3438,7 +3457,7 @@ begin
         PlaySound(sndGun);
         end;
 
-    if (Gear^.Timer = 0) or (HHGear^.Damage <> 0) then
+    if (Gear^.Timer = 0) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
         DeleteGear(Gear);
         AfterAttack
@@ -4024,12 +4043,12 @@ begin
         gear^.RenderTimer := true;
 
     // abort if there is no other portal connected to this one
-    if (Gear^.IntersectGear = nil) then
+    if (Gear^.LinkedGear = nil) then
         exit;
-    if ((Gear^.IntersectGear^.Tag and 1) = 0) then // or if it's still moving;
+    if ((Gear^.LinkedGear^.Tag and 1) = 0) then // or if it's still moving;
         exit;
 
-    conPortal := Gear^.IntersectGear;
+    conPortal := Gear^.LinkedGear;
 
     // check all gears for stuff to port through
     iterator := nil;
@@ -4412,8 +4431,8 @@ begin
         if not Gear^.dX.isNegative then
             Gear^.DirAngle := 180-Gear^.DirAngle;
 
-        if ((Gear^.IntersectGear = nil)
-        or (hwRound(Distance(Gear^.X - Gear^.IntersectGear^.X,Gear^.Y-Gear^.IntersectGear^.Y)) >=Gear^.Radius*2)) then
+        if ((Gear^.LinkedGear = nil)
+        or (hwRound(Distance(Gear^.X - Gear^.LinkedGear^.X,Gear^.Y-Gear^.LinkedGear^.Y)) >=Gear^.Radius*2)) then
             begin
             loadNewPortalBall(Gear, false);
             inc(Gear^.Tag);
@@ -4455,7 +4474,7 @@ begin
     newPortal^.dX := newPortal^.dX * s;
     newPortal^.dY := newPortal^.dY * s;
 
-    newPortal^.IntersectGear := nil;
+    newPortal^.LinkedGear := nil;
 
     if CurrentHedgehog <> nil then
         with CurrentHedgehog^ do
@@ -4484,8 +4503,8 @@ begin
                         else
                             begin
                             // link portals with each other
-                            newPortal^.IntersectGear := iterator;
-                            iterator^.IntersectGear := newPortal;
+                            newPortal^.LinkedGear := iterator;
+                            iterator^.LinkedGear := newPortal;
                             iterator^.Health := newPortal^.Health;
                             end;
                         end;
@@ -4738,7 +4757,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFlamethrowerWork(Gear: PGear);
 var 
-    HHGear: PGear;
+    HHGear, flame: PGear;
     rx, ry, speed: hwFloat;
     i, gX, gY: LongInt;
 begin
@@ -4776,14 +4795,18 @@ begin
             ry := rndSign(getRandomf * _0_1);
             speed := _0_5 * (_10 / Gear^.Tag);
     
-            AddGear(gx, gy, gtFlame, gstTmpFlag,
+            flame:= AddGear(gx, gy, gtFlame, gstTmpFlag,
                     SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
+            flame^.CollisionMask:= $FF7F;
             
             if (Gear^.Health mod 30) = 0 then
-                AddGear(gx, gy, gtFlame, 0,
+                begin
+                flame:= AddGear(gx, gy, gtFlame, 0,
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
+                flame^.CollisionMask:= $FF7F;
+                end
             end;
         Gear^.Timer:= Gear^.Tag
         end;
@@ -4819,7 +4842,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepLandGunWork(Gear: PGear);
 var 
-    HHGear: PGear;
+    HHGear, land: PGear;
     rx, ry, speed: hwFloat;
     i, gX, gY: LongInt;
 begin
@@ -4856,9 +4879,10 @@ begin
         ry := rndSign(getRandomf * _0_1);
         speed := (_3 / Gear^.Tag);
 
-        AddGear(gx, gy, gtFlake, gstTmpFlag, 
+        land:= AddGear(gx, gy, gtFlake, gstTmpFlag, 
                 SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx, 
                 AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
+        land^.CollisionMask:= $FF7F;
             
         Gear^.Timer:= Gear^.Tag
         end;
@@ -4938,7 +4962,7 @@ while i > 0 do
                 ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
             //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
             tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
-            tmp2^.IntersectGear:= tmp;
+            tmp2^.LinkedGear:= tmp;
             SetAllToActive
             end
         else
@@ -4957,7 +4981,7 @@ var
     HitGear: PGear;
 begin
     AllInactive := false;
-    HitGear := Gear^.IntersectGear;
+    HitGear := Gear^.LinkedGear;
     dec(Gear^.Timer);
     if (HitGear = nil) or (Gear^.Timer = 0) or ((Gear^.Message and gmDestroy) <> 0) then
         begin

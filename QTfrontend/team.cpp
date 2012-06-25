@@ -26,6 +26,7 @@
 
 #include "team.h"
 #include "hwform.h"
+#include "DataManager.h"
 
 HWTeam::HWTeam(const QString & teamname) :
     QObject(0)
@@ -150,9 +151,9 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
         m_fort = other.m_fort;
         m_flag = other.m_flag;
         m_voicepack = other.m_voicepack;
-//        m_hedgehogs = other.m_hedgehogs;
+        m_hedgehogs = other.m_hedgehogs;
         m_difficulty = other.m_difficulty;
-//        m_binds = other.m_binds;
+        m_binds = other.m_binds;
         m_numHedgehogs = other.m_numHedgehogs;
         m_color = other.m_color;
         m_isNetTeam = other.m_isNetTeam;
@@ -351,12 +352,12 @@ int HWTeam::color() const
 
 QColor HWTeam::qcolor() const
 {
-    return colorsModel->item(m_color)->data().value<QColor>();
+    return DataManager::instance().colorsModel()->item(m_color)->data().value<QColor>();
 }
 
 void HWTeam::setColor(int color)
 {
-    m_color = color % colorsModel->rowCount();
+    m_color = color % DataManager::instance().colorsModel()->rowCount();
 }
 
 
