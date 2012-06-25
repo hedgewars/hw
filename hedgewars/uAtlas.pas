@@ -308,12 +308,8 @@ begin
         SDL_UnlockSurface(surf);
 end;
 
-{$DEFINE HAS_PBO}
 procedure Repack(var info: AtlasInfo; newAtlas: Atlas; newSprite: PTexture; surf: PSDL_Surface);
 var
-{$IFDEF HAS_PBO}
-    pbo: GLuint;
-{$ENDIF}
     base: PByte;
     oldSize: Integer;
     oldWidth: Integer;
@@ -325,9 +321,6 @@ var
     newSpriteRect: Rectangle;
 begin
     writeln('Repacking atlas (', info.PackerInfo.width, 'x', info.PackerInfo.height, ')', ' -> (', newAtlas.width, 'x', newAtlas.height, ')');
-
-{$IFDEF RETAIN_SURFACES}
-    // we can simply re-upload from RAM
 
     // delete the old atlas
     glDeleteTextures(1, @info.TextureInfo.id);
@@ -347,98 +340,7 @@ begin
         Upload(info, r, sp^.surface);
     end;
 
-{$ELSE}
-    // as we dont have access to the original sprites in ram anymore,
-    // we need to copy from the existing atlas to an PBO, delete the original texture
-    // and finally copy from the PBO back to the new texture object
-
-    // allocate a PBO and copy from old atlas to it
-    oldSize:= info.TextureInfo.w * info.TextureInfo.h * 4;
-    oldWidth:= info.TextureInfo.w;
-
-    glBindTexture(GL_TEXTURE_2D, info.TextureInfo.id);
-
-{$IFDEF HAS_PBO}
-    base:= nil;
-    glGenBuffers(1, @pbo);
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
-    glBufferData(GL_PIXEL_PACK_BUFFER, oldSize, nil, GL_COPY);
-    //glGetTexImage( GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
-    
-    glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
-{$ELSE}
-    GetMem(base, oldSize);
-    glGetTexImage( GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, base);
-{$ENDIF}
-
-    // delete the old atlas
-    glDeleteTextures(1, @info.TextureInfo.id);
-
-    // create a new atlas with different size
-    info.TextureInfo:= createTexture(newAtlas.width, newAtlas.height);
-    glBindTexture(GL_TEXTURE_2D, info.TextureInfo.id);
-    
-    
-    // and process all sprites of the new atlas
-    for i:=0 to pred(newAtlas.usedRectangles.count) do
-    begin
-        r:= newAtlas.usedRectangles.data[i];
-        sp:= PTexture(r.UserData);
-        if sp = newSprite then // this is the to be added sprite
-        begin
-            // we need to do defer the upload till after this loop, 
-            // as we currently upload from the PBO to texture
-            newSpriteRect:= r;
-            continue;
-        end;
-
-        newIsRotated:= sp^.w <> r.width;
-        if newIsRotated <> sp^.isRotated then
-        begin
-            glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-            glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-            glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-            offset:= sp^.x + sp^.y * oldWidth;
-            for j:= 0 to pred(r.width) do
-            begin
-                glTexSubImage2D(GL_TEXTURE_2D, 0, r.x + j, r.y, 1, r.height, GL_RGBA, GL_UNSIGNED_BYTE, base + offset * 4);
-                inc(offset, oldWidth);
-            end;
-        end 
-        else
-        begin
-            glPixelStorei(GL_UNPACK_ROW_LENGTH, oldWidth);
-            glPixelStorei(GL_UNPACK_SKIP_PIXELS, sp^.x);
-            glPixelStorei(GL_UNPACK_SKIP_ROWS, sp^.y);
-            glTexSubImage2D(GL_TEXTURE_2D, 0, r.x, r.y, r.width, r.height, GL_RGBA, GL_UNSIGNED_BYTE, base);
-        end;
-
-        sp^.x:= r.x;
-        sp^.y:= r.y;
-        sp^.isRotated:= newIsRotated;
-        sp^.atlas:= @info.TextureInfo;
-    end;
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-
-    atlasDelete(info.PackerInfo);
-    info.PackerInfo:= newAtlas;
-
-{$IFDEF HAS_PBO}
-    glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
-    glDeleteBuffers(1, @pbo);
-{$ELSE}
-    FreeMem(base, oldSize);
-{$ENDIF}
-
-    // finally upload the new sprite (if any)
-    if newSprite <> nil then
-        Upload(info, newSpriteRect, surf);
-
     glBindTexture(GL_TEXTURE_2D, 0);
-{$ENDIF}
 end;
 
 

@@ -254,10 +254,6 @@ if SDL_MustLock(surf) then
     SDL_UnlockSurface(surf);
 
 SetTextureParameters(enableClamp);
-
-    {$IFNDEF RETAIN_SURFACES}
-    SDL_FreeSurface(surf);
-    {$ENDIF}
 end;
 
 // deletes texture and frees the memory allocated for it.
@@ -278,16 +274,14 @@ if tex <> nil then
         TextureList:= tex^.NextTexture;
     glDeleteTextures(1, @tex^.atlas^.id);
 
-    {$IFDEF RETAIN_SURFACES}
     SDL_FreeSurface(tex^.surface);
-    {$ENDIF}
-
     Dispose(tex);
     end
 end;
 
 procedure initModule;
 begin
+uAtlas.initModule;
 TextureList:= nil;
 end;
 
