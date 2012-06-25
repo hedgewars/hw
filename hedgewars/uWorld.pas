@@ -957,7 +957,7 @@ begin
         begin
         glClear(GL_COLOR_BUFFER_BIT);
         DrawWorldStereo(Lag, rmDefault)
-        end;
+        end
 {$IFNDEF S3D_DISABLED}
     else if (cStereoMode = smAFR) then
         begin
@@ -1066,6 +1066,8 @@ begin
             glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
         DrawWorldStereo(Lag, rmRightEye);
         end;
+{$ELSE}
+    ;
 {$ENDIF}
     DebugAtlas;
 end;

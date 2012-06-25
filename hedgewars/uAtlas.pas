@@ -127,13 +127,18 @@ begin
         if not Info[i].allocated then
             continue;
         glGetIntegerv(GL_VIEWPORT, @vp);
+{$IFDEF GL2}
         glGetIntegerv(GL_CURRENT_PROGRAM, @prog);
-
         glUseProgram(0);
+{$ENDIF}
+        glPushMatrix;
+        glLoadIdentity;
+        glMatrixMode(GL_PROJECTION);
         glPushMatrix;
         glLoadIdentity;
         glOrtho(0, vp[2], vp[3], 0, -1, 1);
 
+        glDisable(GL_CULL_FACE);
 
         glBindTexture(GL_TEXTURE_2D, Info[i].TextureInfo.id);
         glBegin(GL_QUADS);
@@ -148,6 +153,8 @@ begin
         glEnd();
 
         glPopMatrix;
+        glMatrixMode(GL_MODELVIEW);
+        glPopMatrix;
 
         inc(x);
         if (x = 2) then
@@ -156,8 +163,9 @@ begin
             inc(y);
         end;
      
-
+{$IFDEF GL2}
         glUseProgram(prog);
+{$ENDIF}
     end;
 end;
 
