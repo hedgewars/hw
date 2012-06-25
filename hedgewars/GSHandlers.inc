@@ -2139,7 +2139,11 @@ begin
                 else sparkles^.Tint:= $FAB22CFF
                 end;
             end;
-        if Gear^.Timer < 1000 then exit;
+        if Gear^.Timer < 1000 then 
+            begin
+            AllInactive:= false;
+            exit
+            end
         end;
 
     if (Gear^.Damage > 0) or exBoom then
