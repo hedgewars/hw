@@ -51,6 +51,7 @@
 #include "hwform.h"
 #include "game.h"
 #include "team.h"
+#include "campaign.h"
 #include "teamselect.h"
 #include "selectWeapon.h"
 #include "gameuiconfig.h"
@@ -162,6 +163,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #endif
 
     UpdateTeamsLists();
+    InitCampaignPage();
     UpdateCampaignPage(0);
     UpdateWeapons();
 
@@ -273,6 +275,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
     connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
+    connect(ui.pageCampaign->CBCampaign, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
 
 
     connect(ui.pageSelectWeapon->BtnDelete, SIGNAL(clicked()),
@@ -1418,7 +1421,13 @@ void HWForm::StartCampaign()
 {
     CreateGame(0, 0, 0);
 
-    game->StartCampaign(ui.pageCampaign->CBSelect->itemData(ui.pageCampaign->CBSelect->currentIndex()).toString());
+    QComboBox *combo = ui.pageCampaign->CBMission;
+    QString camp = ui.pageCampaign->CBCampaign->currentText();
+    unsigned int mNum = combo->count() - combo->currentIndex();
+    QString miss = getCampaignScript(camp, mNum);
+    QString campTeam = ui.pageCampaign->CBTeam->currentText();
+
+    game->StartCampaign(camp, miss, campTeam);
 }
 
 void HWForm::CreateNetGame()
@@ -1544,23 +1553,41 @@ void HWForm::resizeEvent(QResizeEvent * event)
     }
 }
 
+void HWForm::InitCampaignPage()
+{
+    ui.pageCampaign->CBCampaign->clear();
+    HWTeam team(ui.pageCampaign->CBTeam->currentText());
+
+    QStringList entries = DataManager::instance().entryList(
+                                  "Missions/Campaign",
+                                  QDir::Dirs,
+                                  QStringList("[^\\.]*")
+                              );
+
+    unsigned int n = entries.count();
+    for(unsigned int i = 0; i < n; i++)
+    {
+        ui.pageCampaign->CBCampaign->addItem(QString(entries[i]), QString(entries[i]));
+    }
+}
+
+
 void HWForm::UpdateCampaignPage(int index)
 {
     Q_UNUSED(index);
 
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
-    ui.pageCampaign->CBSelect->clear();
+    ui.pageCampaign->CBMission->clear();
 
-    QStringList entries = DataManager::instance().entryList(
-                              "Missions/Campaign",
-                              QDir::Files,
-                              QStringList("*#*.lua")
-                          );
+    QString campaignName = ui.pageCampaign->CBCampaign->currentText();
+    QStringList missionEntries = getCampMissionList(campaignName);
+    QString tName = team.name();
+    unsigned int n = missionEntries.count();
+    unsigned int m = getCampProgress(tName, campaignName);
 
-    unsigned int n = entries.count();
-    for(unsigned int i = 0; (i < n) && (i <= team.campaignProgress()); i++)
+    for (unsigned int i = min(m + 1, n); i > 0; i--)
     {
-        ui.pageCampaign->CBSelect->addItem(QString(entries[i]).replace(QRegExp("^(\\d+)#(.+)\\.lua"), QComboBox::tr("Mission") + " \\1: \\2").replace("_", " "), QString(entries[i]).replace(QRegExp("^(.*)\\.lua"), "\\1"));
+        ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(i) + QString(missionEntries[i-1]), QString(missionEntries[i-1]));
     }
 }
 

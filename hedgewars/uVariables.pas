@@ -64,6 +64,7 @@ var
     fastUntilLag    : boolean;
     autoCameraOn    : boolean;
 
+    CampaignVariable: shortstring;
     GameTicks       : LongWord;
     GameState       : TGameState;
     GameType        : TGameType;
@@ -179,6 +180,8 @@ var
     hiTicks: Word;
 
     LuaGoals        : shortstring;
+    hiddenHedgehogs : array [0..cMaxHHs] of PHedgehog;
+    hiddenHedgehogsNumber : longint;
 
     VoiceList : array[0..7] of TVoice =  (
                     ( snd: sndNone; voicepack: nil),
@@ -209,7 +212,7 @@ var
         '',                              // ptData
         'Graphics',                      // ptGraphics
         'Themes',                        // ptThemes
-        'Themes/avematan',               // ptCurrTheme
+        'Themes/Bamboo',                 // ptCurrTheme
         'Teams',                         // ptTeams
         'Maps',                          // ptMaps
         '',                              // ptMapCurrent
@@ -2614,6 +2617,7 @@ begin
     GrayScale:= false;
 
     LuaGoals:= '';
+    hiddenHedgehogsNumber:=0;
 end;
 
 procedure freeModule;

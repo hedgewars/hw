@@ -781,6 +781,11 @@ begin
 fastUntilLag:= StrToInt(s) <> 0
 end;
 
+procedure chCampVar(var s:shortstring);
+begin
+  CampaignVariable := s;
+end;
+
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
@@ -864,6 +869,7 @@ begin
     RegisterVariable('-cur_l'  , @chCurL_m       , true );
     RegisterVariable('+cur_r'  , @chCurR_p       , true );
     RegisterVariable('-cur_r'  , @chCurR_m       , true );
+    RegisterVariable('campvar' , @chCampVar      , true );
 end;
 
 procedure freeModule;
