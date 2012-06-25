@@ -24,7 +24,7 @@ uses SDLh, uTypes;
 
 function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 procedure Surface2GrayScale(surf: PSDL_Surface);
-function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
+function  Surface2Atlas(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
 procedure ComputeTexcoords(texture: PTexture; r: PSDL_Rect; tb: PVertexRect);
 
@@ -32,7 +32,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses GLunit, uUtils, uVariables, uConsts, uDebug, uConsole;
+uses GLunit, uUtils, uVariables, uConsts, uDebug, uConsole, uAtlas;
 
 var TextureList: PTexture;
 
@@ -159,42 +159,45 @@ for y:= 0 to Pred(Surf^.h) do
 end;
 
 
-function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
+function Surface2Atlas(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 var tw, th, x, y: Longword;
     tmpp: pointer;
     fromP4, toP4: PLongWordArray;
 begin
-new(Surface2Tex);
-Surface2Tex^.PrevTexture:= nil;
-Surface2Tex^.NextTexture:= nil;
+    if (surf^.w <= 128) and (surf^.h <= 128) then
+        Surface2Tex_(surf, enableClamp); // run the atlas side by side for debugging
+new(Surface2Atlas);
+Surface2Atlas^.PrevTexture:= nil;
+Surface2Atlas^.NextTexture:= nil;
 if TextureList <> nil then
     begin
-    TextureList^.PrevTexture:= Surface2Tex;
-    Surface2Tex^.NextTexture:= TextureList
+    TextureList^.PrevTexture:= Surface2Atlas;
+    Surface2Atlas^.NextTexture:= TextureList
     end;
-TextureList:= Surface2Tex;
+TextureList:= Surface2Atlas;
 
 // Atlas allocation happens here later on. For now we just allocate one exclusive atlas per sprite
-new(Surface2Tex^.atlas);
+new(Surface2Atlas^.atlas);
 
-Surface2Tex^.w:= surf^.w;
-Surface2Tex^.h:= surf^.h;
-Surface2Tex^.x:=0;
-Surface2Tex^.y:=0;
-Surface2Tex^.isRotated:=false;
+Surface2Atlas^.w:= surf^.w;
+Surface2Atlas^.h:= surf^.h;
+Surface2Atlas^.x:=0;
+Surface2Atlas^.y:=0;
+Surface2Atlas^.isRotated:=false;
+Surface2Atlas^.surface:= surf;
 
 
 if (surf^.format^.BytesPerPixel <> 4) then
     begin
     TryDo(false, 'Surface2Tex failed, expecting 32 bit surface', true);
-    Surface2Tex^.atlas^.id:= 0;
+    Surface2Atlas^.atlas^.id:= 0;
     exit
     end;
 
 
-glGenTextures(1, @Surface2Tex^.atlas^.id);
+glGenTextures(1, @Surface2Atlas^.atlas^.id);
 
-glBindTexture(GL_TEXTURE_2D, Surface2Tex^.atlas^.id);
+glBindTexture(GL_TEXTURE_2D, Surface2Atlas^.atlas^.id);
 
 if SDL_MustLock(surf) then
     SDLTry(SDL_LockSurface(surf) >= 0, true);
@@ -209,8 +212,8 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
     tw:= toPowerOf2(Surf^.w);
     th:= toPowerOf2(Surf^.h);
 
-    Surface2Tex^.atlas^.w:=tw;
-    Surface2Tex^.atlas^.h:=th;
+    Surface2Atlas^.atlas^.w:=tw;
+    Surface2Atlas^.atlas^.h:=th;
 
     tmpp:= GetMem(tw * th * surf^.format^.BytesPerPixel);
 
@@ -240,23 +243,28 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
     end
 else
     begin
-    Surface2Tex^.atlas^.w:=Surf^.w;
-    Surface2Tex^.atlas^.h:=Surf^.h;
+    Surface2Atlas^.atlas^.w:=Surf^.w;
+    Surface2Atlas^.atlas^.h:=Surf^.h;
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf^.w, surf^.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surf^.pixels);
     end;
 
-ResetVertexArrays(Surface2Tex);
+ResetVertexArrays(Surface2Atlas);
 
 if SDL_MustLock(surf) then
     SDL_UnlockSurface(surf);
 
 SetTextureParameters(enableClamp);
+
+    {$IFNDEF RETAIN_SURFACES}
+    SDL_FreeSurface(surf);
+    {$ENDIF}
 end;
 
 // deletes texture and frees the memory allocated for it.
 // if nil is passed nothing is done
 procedure FreeTexture(tex: PTexture);
 begin
+    FreeTexture_(tex); // run atlas side by side for debugging
 if tex <> nil then
     begin
     // Atlas cleanup happens here later on. For now we just free as each sprite has one atlas
@@ -269,12 +277,18 @@ if tex <> nil then
     else
         TextureList:= tex^.NextTexture;
     glDeleteTextures(1, @tex^.atlas^.id);
+
+    {$IFDEF RETAIN_SURFACES}
+    SDL_FreeSurface(tex^.surface);
+    {$ENDIF}
+
     Dispose(tex);
     end
 end;
 
 procedure initModule;
 begin
+uAtlas.initModule;
 TextureList:= nil;
 end;
 

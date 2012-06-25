@@ -494,8 +494,7 @@ DrawLine2Surf(amSurface, i, BORDERSIZE, i, AMRect.h + BORDERSIZE,160,160,160);//
 DrawLine2Surf(amSurface, AMRect.w+BORDERSIZE+i, BORDERSIZE, AMRect.w + BORDERSIZE+i, AMRect.h + BORDERSIZE, 160,160,160);//right
 end;
 
-GetAmmoMenuTexture:= Surface2Tex(amSurface, false);
-if amSurface <> nil then SDL_FreeSurface(amSurface);
+GetAmmoMenuTexture:= Surface2Atlas(amSurface, false);
 end;
 
 procedure ShowAmmoMenu;
@@ -1461,8 +1460,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
         tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
         tmpSurface:= doSurfaceConversion(tmpSurface);
         FreeTexture(timeTexture);
-        timeTexture:= Surface2Tex(tmpSurface, false);
-        SDL_FreeSurface(tmpSurface)
+        timeTexture:= Surface2Atlas(tmpSurface, false);
         end;
 
     if timeTexture <> nil then
@@ -1479,8 +1477,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
             tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
             tmpSurface:= doSurfaceConversion(tmpSurface);
             FreeTexture(fpsTexture);
-            fpsTexture:= Surface2Tex(tmpSurface, false);
-            SDL_FreeSurface(tmpSurface)
+            fpsTexture:= Surface2Atlas(tmpSurface, false);
             end;
         if fpsTexture <> nil then
             DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);

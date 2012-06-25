@@ -155,8 +155,7 @@ for t:= 0 to Pred(TeamsCount) do
         SDL_UnlockSurface(texsurf);
 
     FreeTexture(CrosshairTex);
-    CrosshairTex:= Surface2Tex(texsurf, false);
-    SDL_FreeSurface(texsurf)
+    CrosshairTex:= Surface2Atlas(texsurf, false);
     end;
 
 SDL_FreeSurface(tmpsurf)
@@ -189,8 +188,7 @@ for t:= 0 to Pred(TeamsCount) do
         rr:= r;
         inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
         DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
-        HealthTex:= Surface2Tex(texsurf, false);
-        SDL_FreeSurface(texsurf);
+        HealthTex:= Surface2Atlas(texsurf, false);
 
         r.x:= 0;
         r.y:= 0;
@@ -230,8 +228,7 @@ for t:= 0 to Pred(TeamsCount) do
         PLongwordArray(texsurf^.pixels)^[32 * 16 +  2]:= cNearBlackColor;
         PLongwordArray(texsurf^.pixels)^[32 * 16 + 23]:= cNearBlackColor;
 
-        FlagTex:= Surface2Tex(texsurf, false);
-        SDL_FreeSurface(texsurf);
+        FlagTex:= Surface2Atlas(texsurf, false);
         texsurf:= nil;
 
         AIKillsTex := RenderStringTex(inttostr(stats.AIKills), Clan^.Color, fnt16);
@@ -263,8 +260,7 @@ for t:= 0 to Pred(TeamsCount) do
         r.w:= 28;
         r.h:= 28;
         DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
-        ropeIconTex:= Surface2Tex(iconsurf, false);
-        SDL_FreeSurface(iconsurf);
+        ropeIconTex:= Surface2Atlas(iconsurf, false);
         iconsurf:= nil;
         end;
 end;
@@ -299,8 +295,7 @@ for t:= 0 to Pred(TeamsCount) do
                 texsurf:= LoadImage(UserPathz[ptGraves] + '/Statue', ifTransparent);
             if texsurf = nil then
                 texsurf:= LoadImage(Pathz[ptGraves] + '/Statue', ifCritical or ifTransparent);
-            GraveTex:= Surface2Tex(texsurf, false);
-            SDL_FreeSurface(texsurf)
+            GraveTex:= Surface2Atlas(texsurf, false);
             end
 end;
 
@@ -397,12 +392,12 @@ for ii:= Low(TSprite) to High(TSprite) do
                     end;
                 if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
                     begin
-                    Texture:= Surface2Tex(tmpsurf, true);
+                    Texture:= Surface2Atlas(tmpsurf, true);
                     Texture^.Scale:= 2
                     end
                 else
                     begin
-                    Texture:= Surface2Tex(tmpsurf, false);
+                    Texture:= Surface2Atlas(tmpsurf, false);
                     // HACK: We should include some sprite attribute to define the texture wrap directions
                     if ((ii = sprWater) or (ii = sprSDWater)) and ((cReducedQuality and (rq2DWater or rqClampLess)) = 0) then
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -416,8 +411,8 @@ for ii:= Low(TSprite) to High(TSprite) do
 {$ELSE}
                     if saveSurf then
                         Surface:= tmpsurf
-                    else
-                        SDL_FreeSurface(tmpsurf)
+                    //else
+                    //    SDL_FreeSurface(tmpsurf) released by FreeTexture
 {$ENDIF}
                     end
                 end
@@ -432,8 +427,7 @@ if not reload then
 if tmpsurf = nil then
     tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
     
-HHTexture:= Surface2Tex(tmpsurf, false);
-SDL_FreeSurface(tmpsurf);
+HHTexture:= Surface2Atlas(tmpsurf, false);
 
 InitHealth;
 
@@ -453,8 +447,7 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
         FreeTexture(NameTex);
-        NameTex:= Surface2Tex(tmpsurf, false);
-        SDL_FreeSurface(tmpsurf)
+        NameTex:= Surface2Atlas(tmpsurf, false);
         end;
 
 // number of weapons in ammo menu
@@ -463,8 +456,7 @@ for i:= Low(CountTexz) to High(CountTexz) do
     tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
     tmpsurf:= doSurfaceConversion(tmpsurf);
     FreeTexture(CountTexz[i]);
-    CountTexz[i]:= Surface2Tex(tmpsurf, false);
-    SDL_FreeSurface(tmpsurf)
+    CountTexz[i]:= Surface2Atlas(tmpsurf, false);
     end;
 
 if not reload then
@@ -616,10 +608,7 @@ texsurf:= LoadImage(UserPathz[ptHats] + '/' + newHat, ifNone);
         FreeTexture(HHGear^.Hedgehog^.HatTex);
 
         // assign new hat to hedgehog
-        HHGear^.Hedgehog^.HatTex:= Surface2Tex(texsurf, true);
-
-        // cleanup: free temporary surface mem
-        SDL_FreeSurface(texsurf)
+        HHGear^.Hedgehog^.HatTex:= Surface2Atlas(texsurf, true);
         end;
 end;
 
@@ -1052,11 +1041,10 @@ begin
         if texsurf = nil then
             texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
 
-        ProgrTex:= Surface2Tex(texsurf, false);
+        ProgrTex:= Surface2Atlas(texsurf, false);
 
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
-        SDL_FreeSurface(texsurf);
 
         uMobile.GameLoading();
         end;
@@ -1201,8 +1189,7 @@ r.h:= 32;
 SDL_FillRect(tmpsurf, @r, $ffffffff);
 SDL_UpperBlit(iconsurf, iconrect, tmpsurf, @r);
 
-RenderHelpWindow:=  Surface2Tex(tmpsurf, true);
-SDL_FreeSurface(tmpsurf)
+RenderHelpWindow:=  Surface2Atlas(tmpsurf, true);
 end;
 
 procedure RenderWeaponTooltip(atype: TAmmoType);

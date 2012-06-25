@@ -96,9 +96,7 @@ SDL_UpperBlit(strSurface, nil, resSurface, nil);
 SDL_FreeSurface(strSurface);
 
 cl.Time:= RealTicks + 12500;
-cl.Tex:= Surface2Tex(resSurface, false);
-
-SDL_FreeSurface(resSurface)
+cl.Tex:= Surface2Atlas(resSurface, false);
 end;
 
 // For uStore texture recreation
