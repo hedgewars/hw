@@ -1,0 +1,891 @@
+loadfile(GetDataPath() .. "Scripts/Animate.lua")()
+
+-----------------------------Constants---------------------------------
+startStage = 0
+spyStage = 1
+wave1Stage = 2
+wave2Stage = 3
+cyborgStage = 4
+ramonStage = 5
+aloneStage = 6
+duoStage = 7
+interSpyStage = 8
+interWeakStage = 9
+acceptedReturnStage = 10
+refusedReturnStage = 11
+attackedReturnStage = 12
+loseStage = 13
+
+ourTeam = 0
+weakTeam = 1
+strongTeam = 2
+cyborgTeam = 3
+
+leaksNr = 0
+denseNr = 1
+
+choiceAccept = 1
+choiceRefuse = 2
+choiceAttack = 3
+
+HogNames = {"Brainiac", "Corpsemonger", "Femur Lover", "Glark", "Bonely", "Rot Molester", "Bloodrocutor", "Muscle Dissolver", "Bloodsucker"}
+
+---POSITIONS---
+
+cannibalPos = {{3108, 1127}, 
+               {2559, 1080}, {3598, 1270}, {3293, 1177}, {2623, 1336}, 
+               {3418, 1336}, {3447, 1335}, {3481, 1340}, {3507, 1324}} 
+densePos = {2776, 1177}
+leaksPos = {2941, 1172}
+cyborgPos = {1113, 1818}
+
+---Animations
+
+startDialogue = {}
+weaklingsAnim = {}
+stronglingsAnim = {}
+acceptedAnim = {}
+acceptedSurvivedFinalAnim = {}
+acceptedDiedFinalAnim = {}
+refusedAnim = {}
+refusedFinalAnim = {}
+attackedAnim = {}
+attackedFinalAnim = {}
+
+-----------------------------Variables---------------------------------
+lastHogTeam = ourTeam
+lastOurHog = leaksNr
+lastEnemyHog = 0
+stage = 0
+choice = 0
+
+brainiacDead = false
+cyborgHidden = false
+leaksHidden = false
+denseHidden = false
+cyborgAttacked = false
+retryReturn = false
+shotgunTaken = false
+grenadeTaken = false
+spikyDead = false
+ramonDead = false
+denseDead = false
+leaksDead = false
+ramonHidden = false
+spikyHidden = false
+
+
+hogNr = {}
+cannibalDead = {}
+isHidden = {}
+
+
+--------------------------Anim skip functions--------------------------
+function AfterRefusedAnim()
+  SpawnUtilityCrate(2045, 1575, amSwitch)
+  SpawnUtilityCrate(2365, 1495, amShotgun)
+  SpawnUtilityCrate(2495, 1519, amGrenade)
+  SpawnUtilityCrate(2620, 1524, amRope)
+  ShowMission("The Shadow Falls", "The Showdown", "Save Leaks A Lot!|Hint: The Switch utility might be of help to you.", 1, 6000)
+  RemoveEventFunc(CheckDenseDead)
+  AddEvent(CheckStronglingsDead, {}, DoStronglingsDeadRefused, {}, 0)
+  AddAmmo(cannibals[6], amGrenade, 5)
+  stage = ramonStage
+  SwitchHog(cannibals[9])
+  FollowGear(ramon)
+  TurnTimeLeft = 0
+  SetGearMessage(ramon, 0)
+  HideHog(cyborg)
+  cyborgHidden = true
+  SetGearMessage(leaks, 0)
+end
+
+function SkipRefusedAnim()
+  RefusedStart()
+  SetGearPosition(dense, 2645, 1146)
+  SetGearPosition(ramon, 2218, 1675)
+  SetGearPosition(spiky, 2400, 1675)
+end
+
+function AfterStartDialogue()
+  stage = spyStage
+  ShowMission("The Shadow Falls", "Play with me!", "Defend yourself!|Hint: You can get tips on using weapons by moving your mouse over them in the weapon selection menu", 1, 6000)
+  TurnTimeLeft = TurnTime
+end
+
+
+function StartSkipFunc()
+  SetState(cannibals[1], 0)
+  AnimTurn(leaks, "Right")
+  AnimSwitchHog(leaks)
+  SetInputMask(0xFFFFFFFF)
+end
+
+function AfterWeaklingsAnim()
+  AddAmmo(cannibals[2], amShotgun, 4)
+  AddAmmo(cannibals[2], amGrenade, 3)
+  AddAmmo(leaks, amSkip, 4)
+  AddEvent(CheckWeaklingsKilled, {}, DoWeaklingsKilled, {}, 0)
+  SetHealth(SpawnHealthCrate(2757, 1030), 50)
+  SetHealth(SpawnHealthCrate(2899, 1009), 50)
+  stage = wave1Stage
+  SwitchHog(dense)
+  SetGearMessage(dense, 0)
+  SetGearMessage(leaks, 0)
+  TurnTimeLeft = TurnTime
+  ShowMission("The Shadow Falls", "Why do you not like me?", "Obliterate them!|Hint: You might want to take cover...", 1, 6000)
+end
+
+function SkipWeaklingsAnim()
+  for i = 2, 5 do
+    if isHidden[cannibals[i]] == true then
+      RestoreHog(cannibals[i])
+      isHidden[cannibals[i]] = false
+    end
+    SetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    SetState(cannibals[i], 0)
+  end
+  SetInputMask(0xFFFFFFFF)
+end
+
+function AfterStronglingsAnim()
+  stage = cyborgStage
+  TurnTimeLeft = 0
+  ShowMission("The Shadow Falls", "The Dilemma", "Choose your side! If you want to join the strange man, walk up to him.|Otherwise, walk away from him. If you decide to att...nevermind...", 1, 8000)
+  AddEvent(CheckChoice, {}, DoChoice, {}, 0)
+  AddEvent(CheckRefuse, {}, DoRefuse, {}, 0)
+  AddEvent(CheckAccept, {}, DoAccept, {}, 0)
+  AddEvent(CheckConfront, {}, DoConfront, {}, 0)
+  AddAmmo(dense, amSwitch, 0)
+  AddAmmo(dense, amSkip, 0)
+  SetHealth(SpawnHealthCrate(2557, 1030), 50)
+  SetHealth(SpawnHealthCrate(3599, 1009), 50)
+end
+
+function SkipStronglingsAnim()
+  for i = 6, 9 do
+    if isHidden[cannibals[i]] == true then
+      RestoreHog(cannibals[i])
+      isHidden[cannibals[i]] = false
+    end
+    SetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    SetState(cannibals[i], 0)
+  end
+  if cyborgHidden == true then
+    RestoreHog(cyborg)
+    cyborgHidden = false
+  end
+  SetState(cyborg, 0)
+  SetState(dense, 0)
+  SetGearPosition(dense, 1350, 1310)
+  FollowGear(dense)
+  HogTurnLeft(dense, true)
+  SetGearPosition(cyborg, 1250, 1310)
+  SwitchHog(dense)
+  SetInputMask(0xFFFFFFFF)
+end
+
+function RestartReturnAccepted()
+  retryReturn = false
+  SetGearPosition(dense, 1350, 1310)
+  AddAmmo(dense, amGirder, 2)
+  AddAmmo(dense, amParachute, 2)
+  ShowMission("The Shadow Falls", "The walk of Fame", "Return to Leaks A Lot! If you get stuck, press [Precise] to try again!", 1, 6000)
+  RemoveEventFunc(CheckNeedGirder)
+  RemoveEventFunc(CheckNeedWeapons)
+  AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
+  AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
+end
+
+
+function AfterAcceptedAnim()
+  stage = acceptedReturnStage
+  SpawnAmmoCrate(1300, 810, amGirder)
+  SpawnAmmoCrate(1300, 810 - 60, amParachute)
+  ShowMission("The Shadow Falls", "The walk of Fame", "Return to Leaks A Lot! If you get stuck, press [Precise] to try again!", 1, 6000)
+  HideHog(cyborg)
+  AddEvent(CheckTookWeapons, {}, DoTookWeapons, {}, 0)
+  AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
+  AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
+  AddEvent(CheckRestartReturnAccepted, {}, RestartReturnAccepted, {}, 1)
+  RemoveEventFunc(CheckDenseDead)
+end
+
+function SkipAcceptedAnim()
+  SetGearPosition(cyborg, unpack(cyborgPos))
+  SetState(cyborg, gstInvisible)
+  AnimSwitchHog(dense)
+  SetInputMask(0xFFFFFFFF)
+end
+
+function AfterAttackedAnim()
+  stage = aloneStage
+  HideHog(cyborg)
+  ShowMission("The Shadow Falls", "The Individualist", "Defeat the cannibals!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power", 1, 8000)
+  SpawnAmmoCrate(2551, 994, amGrenade)
+  SpawnAmmoCrate(3551, 994, amGrenade)
+  SpawnAmmoCrate(3392, 1101, amShotgun)
+  SpawnAmmoCrate(3192, 1101, amShotgun)
+  AddAmmo(cannibals[6], amGrenade, 5)
+  SetGearMessage(leaks, 0)
+  TurnTimeLeft = TurnTime
+  AddEvent(CheckStronglingsDead, {}, DoStronglingsDeadAttacked, {}, 0)
+end
+
+function SkipAttackedAnim()
+  if denseDead == false then
+    SetHealth(dense)
+  end
+  SetGearPosition(cyborg, unpack(cyborgPos))
+  SetState(cyborg, gstInvisible)
+  AnimSwitchHog(leaks)
+  SetInputMask(0xFFFFFFFF)
+end
+
+  
+-----------------------------Animations--------------------------------
+
+function EmitDenseClouds(anim, dir)
+  local dif
+  if dir == "left" then 
+    dif = 10
+  else
+    dif = -10
+  end
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) + dif, GetY(dense) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) + dif, GetY(dense) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) + dif, GetY(dense) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimWait, args = {dense, 800}})
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) + dif, GetY(dense) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) + dif, GetY(dense) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimWait, args = {dense, 800}})
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) + dif, GetY(dense) + dif, vgtSteam, 0, true}, swh = false})
+end
+
+function BlowDenseCloud()
+  AnimInsertStepNext({func = DeleteGear, args = {dense}, swh = false}) 
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense), GetY(dense), vgtBigExplosion, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimWait, args = {dense, 1200}})
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) + 20, GetY(dense), vgtExplosion, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimWait, args = {dense, 100}})
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) + 10, GetY(dense), vgtExplosion, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimWait, args = {dense, 100}})
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) - 10, GetY(dense), vgtExplosion, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimWait, args = {dense, 100}})
+  AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) - 20, GetY(dense), vgtExplosion, 0, true}, swh = false})
+end
+
+function AnimationSetup()
+  table.insert(startDialogue, {func = AnimWait, args = {dense, 4000}})
+  table.insert(startDialogue, {func = AnimCaption, args = {leaks, "After the shock caused by the enemy spy, Leaks A Lot and Dense Cloud went hunting to relax.", 6000}})
+  table.insert(startDialogue, {func = AnimCaption, args = {leaks, "Little did they know that this hunt will mark them forever...", 4000}})
+  table.insert(startDialogue, {func = AnimSay, args = {leaks, "I have no idea where that mole disappeared...Can you see it?", SAY_SAY, 9000}})
+  table.insert(startDialogue, {func = AnimSay, args = {dense, "Nope. It was one fast mole, that's for sure.", SAY_SAY, 5000}}) 
+  table.insert(startDialogue, {func = AnimCustomFunction, args = {dense, EmitDenseClouds, {startDialogue, "right"}}})
+  table.insert(startDialogue, {func = AnimWait, args = {dense, 2000}})
+  table.insert(startDialogue, {func = AnimSay, args = {leaks, "Please, stop releasing your \"smoke signals\"!", SAY_SAY, 5000}})
+  table.insert(startDialogue, {func = AnimSay, args = {leaks, "You're terrorizing the forest...We won't catch anything like this!", SAY_SAY, 6000}})
+  table.insert(startDialogue, {func = AnimSay, args = {leaks, "...", SAY_THINK, 1000}})
+  table.insert(startDialogue, {func = AnimGiveState, args = {cannibals[1], 0}, swh = false})
+  table.insert(startDialogue, {func = AnimOutOfNowhere, args = {cannibals[1], unpack(cannibalPos[1])}, swh = false})
+  table.insert(startDialogue, {func = AnimTurn, args = {leaks, "Right"}})
+  table.insert(startDialogue, {func = AnimTurn, args = {cannibals[1], "Right"}})
+  table.insert(startDialogue, {func = AnimWait, args = {cannibals[1], 1000}})
+  table.insert(startDialogue, {func = AnimTurn, args = {cannibals[1], "Left"}})
+  table.insert(startDialogue, {func = AnimWait, args = {cannibals[1], 1000}})
+  table.insert(startDialogue, {func = AnimTurn, args = {cannibals[1], "Right"}})
+  table.insert(startDialogue, {func = AnimSay, args = {cannibals[1], "I can't believe it worked!", SAY_THINK, 3500}})
+  table.insert(startDialogue, {func = AnimSay, args = {cannibals[1], "That shaman sure knows what he/she's doing!", SAY_THINK, 6000}})
+  table.insert(startDialogue, {func = AnimSay, args = {leaks, "It wants our brains!", SAY_SHOUT, 3000}})
+  table.insert(startDialogue, {func = AnimTurn, args = {cannibals[1], "Left"}})
+  table.insert(startDialogue, {func = AnimSay, args = {cannibals[1], "Not you again! My head still hurts from last time!", SAY_SHOUT, 6000}})
+  table.insert(startDialogue, {func = AnimSwitchHog, args = {leaks}})
+  AddSkipFunction(startDialogue, StartSkipFunc, {})
+
+  table.insert(weaklingsAnim, {func = AnimGearWait, args = {leaks, 1000}})
+  table.insert(weaklingsAnim, {func = AnimCustomFunction, args = {leaks, UnHideWeaklings, {}}})
+  table.insert(weaklingsAnim, {func = AnimCustomFunction, args = {leaks, CondNeedToTurn, {leaks, dense}}})
+  table.insert(weaklingsAnim, {func = AnimSay, args = {leaks, "Did you see him coming?", SAY_SAY, 3500}})
+  table.insert(weaklingsAnim, {func = AnimSay, args = {dense, "No. Where did he come from?", SAY_SAY, 3500}})
+  table.insert(weaklingsAnim, {func = AnimOutOfNowhere, args = {cannibals[2], unpack(cannibalPos[2])}})
+  table.insert(weaklingsAnim, {func = AnimGiveState, args = {cannibals[2], 0}})
+  table.insert(weaklingsAnim, {func = AnimWait, args = {leaks, 400}})
+  table.insert(weaklingsAnim, {func = AnimGiveState, args = {cannibals[3], 0}})
+  table.insert(weaklingsAnim, {func = AnimOutOfNowhere, args = {cannibals[3], unpack(cannibalPos[3])}})
+  table.insert(weaklingsAnim, {func = AnimWait, args = {leaks, 400}})
+  table.insert(weaklingsAnim, {func = AnimGiveState, args = {cannibals[4], 0}})
+  table.insert(weaklingsAnim, {func = AnimOutOfNowhere, args = {cannibals[4], unpack(cannibalPos[4])}})
+  table.insert(weaklingsAnim, {func = AnimWait, args = {leaks, 400}})
+  table.insert(weaklingsAnim, {func = AnimGiveState, args = {cannibals[5], 0}})
+  table.insert(weaklingsAnim, {func = AnimOutOfNowhere, args = {cannibals[5], unpack(cannibalPos[5])}})
+  table.insert(weaklingsAnim, {func = AnimWait, args = {leaks, 400}})
+  table.insert(weaklingsAnim, {func = AnimSay, args = {cannibals[3], "Are we there yet?", SAY_SAY, 4000}}) 
+  table.insert(weaklingsAnim, {func = AnimSay, args = {dense, "This must be some kind of sorcery!", SAY_SHOUT, 3500}})
+  table.insert(weaklingsAnim, {func = AnimSwitchHog, args = {leaks}})
+  AddSkipFunction(weaklingsAnim, SkipWeaklingsAnim, {})
+
+  table.insert(stronglingsAnim, {func = AnimGearWait, args = {leaks, 1000}})
+  table.insert(stronglingsAnim, {func = AnimCustomFunction, args = {leaks, UnHideStronglings, {}}})
+  table.insert(stronglingsAnim, {func = AnimCustomFunction, args = {leaks, CondNeedToTurn, {leaks, dense}}})
+  table.insert(stronglingsAnim, {func = AnimGiveState, args = {leaks, 0}})
+  table.insert(stronglingsAnim, {func = AnimGiveState, args = {dense, 0}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {leaks, "I thought their shaman died when he tried our medicine!", SAY_SAY, 7000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {dense, "I saw it with my own eyes!", SAY_SAY, 4000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {leaks, "Then how do they keep appearing?", SAY_SAY, 4000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {leaks, "It's impossible to communicate with the spirits without a shaman.", SAY_SAY, 7000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {dense, "We need to warn the village.", SAY_SAY, 3500}})
+  table.insert(stronglingsAnim, {func = AnimGiveState, args = {cannibals[6], 0}})
+  table.insert(stronglingsAnim, {func = AnimOutOfNowhere, args = {cannibals[6], unpack(cannibalPos[6])}})
+  table.insert(stronglingsAnim, {func = AnimWait, args = {leaks, 400}})
+  table.insert(stronglingsAnim, {func = AnimGiveState, args = {cannibals[7], 0}})
+  table.insert(stronglingsAnim, {func = AnimOutOfNowhere, args = {cannibals[7], unpack(cannibalPos[7])}})
+  table.insert(stronglingsAnim, {func = AnimWait, args = {leaks, 400}})
+  table.insert(stronglingsAnim, {func = AnimGiveState, args = {cannibals[8], 0}})
+  table.insert(stronglingsAnim, {func = AnimOutOfNowhere, args = {cannibals[8], unpack(cannibalPos[8])}})
+  table.insert(stronglingsAnim, {func = AnimWait, args = {leaks, 400}})
+  table.insert(stronglingsAnim, {func = AnimGiveState, args = {cannibals[9], 0}})
+  table.insert(stronglingsAnim, {func = AnimOutOfNowhere, args = {cannibals[9], unpack(cannibalPos[9])}})
+  table.insert(stronglingsAnim, {func = AnimWait, args = {leaks, 400}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {cannibals[7], "What a ride!", SAY_SHOUT, 2000}})
+  table.insert(stronglingsAnim, {func = AnimTurn, args = {leaks, "Right"}})
+  table.insert(stronglingsAnim, {func = AnimWait, args = {leaks, 700}})
+  table.insert(stronglingsAnim, {func = AnimTurn, args = {leaks, "Left"}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {leaks, "We can't defeat them!", SAY_THINK, 3000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {leaks, "I'll hold them up while you return to the village!", SAY_SAY, 6000}})
+  table.insert(stronglingsAnim, {func = AnimFollowGear, args = {cyborg}, swh = false})
+  table.insert(stronglingsAnim, {func = AnimWait, args = {cyborg, 1000}})
+  table.insert(stronglingsAnim, {func = AnimSetGearPosition, args = {dense, 1420, 1315}})
+  table.insert(stronglingsAnim, {func = AnimMove, args = {dense, "left", 1400, 0}})
+  table.insert(stronglingsAnim, {func = AnimCustomFunction, args = {dense, EmitDenseClouds, {stronglingsAnim, "left"}}})
+  table.insert(stronglingsAnim, {func = AnimMove, args = {dense, "left", 1350, 0}})
+  table.insert(stronglingsAnim, {func = AnimOutOfNowhere, args = {cyborg, 1250, 1320}})
+  table.insert(stronglingsAnim, {func = AnimRemoveState, args = {cyborg, gstInvisible}})
+  table.insert(stronglingsAnim, {func = AnimGearWait, args = {cyborg, 2000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {cyborg, "Greetings, cloudy one!", SAY_SAY, 3000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {cyborg, "I have come to make you an offering...", SAY_SAY, 6000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {cyborg, "You are given the chance to turn your life around...", SAY_SAY, 6000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {cyborg, "If you agree to provide the information we need, you will be spared!", SAY_SAY, 7000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {cyborg, "Have no illusions, your tribe is dead, indifferent of your choice.", SAY_SAY, 7000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {cyborg, "If you decide to help us, though, we will no longer need to find a new governor for the island.", SAY_SAY, 8000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {cyborg, "If you know what I mean...", SAY_SAY, 3000}})
+  table.insert(stronglingsAnim, {func = AnimSay, args = {cyborg, "So? What will it be?", SAY_SAY, 3000}})
+  table.insert(stronglingsAnim, {func = AnimSwitchHog, args = {dense}})
+  AddSkipFunction(stronglingsAnim, SkipStronglingsAnim, {})
+
+  table.insert(acceptedAnim, {func = AnimSay, args = {cyborg, "Great choice, Steve! Mind if I call you that?", SAY_SAY, 7000}})
+  table.insert(acceptedAnim, {func = AnimSay, args = {dense, "Whatever floats your boat...", SAY_SAY, 4500}})
+  table.insert(acceptedAnim, {func = AnimSay, args = {cyborg, "Great! You will be contacted soon for assistance.", SAY_SAY, 6000}})
+  table.insert(acceptedAnim, {func = AnimSay, args = {cyborg, "In the meantime, take these and return to your \"friend\"!", SAY_SAY, 6000}})
+  table.insert(acceptedAnim, {func = AnimGiveState, args = {cyborg, gstInvisible}})
+  table.insert(acceptedAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
+  table.insert(acceptedAnim, {func = AnimSwitchHog, args = {dense}})
+  AddSkipFunction(acceptedAnim, SkipAcceptedAnim, {}) 
+
+  table.insert(acceptedSurvivedFinalAnim, {func = AnimCustomFunction, args = {dense, CondNeedToTurn, {leaks, dense}}})
+  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {leaks, "Pfew! That was close!", SAY_SAY, 3000}})
+  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {leaks, "Where did you get the exploding apples and the magic bow that shoots many arrows?", SAY_SAY, 9000}})
+  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {dense, "Uhm...I met one of them and took his weapons.", SAY_SAY, 5000}})
+  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {dense, "We should head back to the village now.", SAY_SAY, 5000}})
+
+  table.insert(acceptedDiedFinalAnim, {func = AnimSay, args = {leaks, "Pfew! That was close!", SAY_THINK, 3000}})
+  table.insert(acceptedDiedFinalAnim, {func = AnimSay, args = {leaks, "Your death will not be in vain, Dense Cloud!", SAY_THINK, 5000}})
+  table.insert(acceptedDiedFinalAnim, {func = AnimSay, args = {dense, "You will be avenged!", SAY_SAY, 3000}})
+
+  table.insert(refusedAnim, {func = AnimSay, args = {cyborg, "I see...", SAY_SAY, 2000}})
+  table.insert(refusedAnim, {func = AnimSay, args = {cyborg, "Remember this, pathetic animal: when the day comes, you will regret your blind loyalty!", SAY_SAY, 8000}})
+  table.insert(refusedAnim, {func = AnimSay, args = {cyborg, "You just committed suicide...", SAY_SAY, 5000}})
+  table.insert(refusedAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
+  table.insert(refusedAnim, {func = AnimGiveState, args = {cyborg, gstInvisible}})
+  table.insert(refusedAnim, {func = AnimSay, args = {dense, "If you say so...", SAY_THINK, 3000}})
+  table.insert(refusedAnim, {func = AnimFollowGear, args = {cyborg}, swh = false})
+  table.insert(refusedAnim, {func = AnimWait, args = {cyborg, 700}})
+  table.insert(refusedAnim, {func = AnimCustomFunction, args = {dense, RefusedStart, {}}})
+  table.insert(refusedAnim, {func = AnimOutOfNowhere, args = {dense, 2645, 1146}})
+  table.insert(refusedAnim, {func = AnimOutOfNowhere, args = {ramon, 2218, 1675}})
+  table.insert(refusedAnim, {func = AnimOutOfNowhere, args = {spiky, 2400, 1675}})
+  table.insert(refusedAnim, {func = AnimTurn, args = {spiky, "left"}})
+  table.insert(refusedAnim, {func = AnimWait, args = {cyborg, 1700}})
+  table.insert(refusedAnim, {func = AnimTurn, args = {spiky, "right"}})
+  table.insert(refusedAnim, {func = AnimWait, args = {cyborg, 1700}})
+  table.insert(refusedAnim, {func = AnimTurn, args = {spiky, "left"}})
+  table.insert(refusedAnim, {func = AnimSay, args = {spiky, "Dude, we really need a new shaman...", SAY_SAY, 4000}})
+  AddSkipFunction(refusedAnim, SkipRefusedAnim, {})
+
+  table.insert(refusedFinalAnim, {func = AnimSay, args = {leaks, "It's over...", SAY_SAY, 2000}})
+  table.insert(refusedFinalAnim, {func = AnimSay, args = {leaks, "Let's head back to the village!", SAY_SAY, 4000}})
+
+  table.insert(attackedAnim, {func = AnimCustomFunction, args = {dense, CondNeedToTurn, {cyborg, dense}}})
+  table.insert(attackedAnim, {func = AnimCustomFunction, args = {cyborg, SetHealth, {cyborg, 200}}})
+  table.insert(attackedAnim, {func = AnimWait, args = {cyborg, 2000}})
+  table.insert(attackedAnim, {func = AnimSay, args = {cyborg, "Really?! You thought you could harm me with your little toys?", SAY_SAY, 7000}})
+  table.insert(attackedAnim, {func = AnimSay, args = {cyborg, "You're pathetic! You are not worthy of my attention...", SAY_SAY, 6000}})
+  table.insert(attackedAnim, {func = AnimSay, args = {cyborg, "Actually, you aren't worthy of life! Take this...", SAY_SAY, 5000}})
+  table.insert(attackedAnim, {func = AnimCustomFunction, args = {dense, BlowDenseCloud, {}}, swh = false})
+  table.insert(attackedAnim, {func = AnimWait, args = {cyborg, 2000}})
+  table.insert(attackedAnim, {func = AnimSay, args = {cyborg, "Incredible...", SAY_SAY, 3000}})
+  table.insert(attackedAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
+  table.insert(attackedAnim, {func = AnimGiveState, args = {cyborg, gstInvisible}})
+  table.insert(attackedAnim, {func = AnimSwitchHog, args = {leaks}})
+  table.insert(attackedAnim, {func = AnimSay, args = {leaks, "I wonder where Dense Cloud is...", SAY_THINK, 4000}})
+  table.insert(attackedAnim, {func = AnimSay, args = {leaks, "I can't wait any more, I have to save myself!", SAY_THINK, 5000}})
+  AddSkipFunction(attackedAnim, SkipAttackedAnim, {})
+  
+  table.insert(attackedFinalAnim, {func = AnimSay, args = {leaks, "I have to get back to the village!", SAY_THINK, 5000}})
+  table.insert(attackedFinalAnim, {func = AnimSay, args = {leaks, "Dense Cloud must have already told them everything...", SAY_THINK, 7000}})
+
+end
+
+
+-----------------------------Misc--------------------------------------
+
+
+function RefusedStart()
+  if ramonHidden == true then
+    RestoreHog(ramon)
+    ramonHidden = false
+  end
+  if spikyHidden == true then
+    RestoreHog(spiky)
+    spikyHidden = false
+  end
+  SetState(ramon, 0)
+  SetState(spiky, 0)
+  SetGearMessage(dense, 0)
+  SetGearMessage(ramon, 0)
+  SetGearMessage(spiky, 0)
+end
+
+function AddHogs()
+	AddTeam("Natives", 1117585, "Bone", "Island", "HillBilly", "cm_birdy")
+  ramon = AddHog("Ramon", 0, 100, "rasta")
+	leaks = AddHog("Leaks A Lot", 0, 100, "Rambo")
+  dense = AddHog("Dense Cloud", 0, 100, "RobinHood")
+  spiky = AddHog("Spiky Cheese", 0, 100, "hair_yellow")
+
+  AddTeam("Weaklings", 14483456, "Skull", "Island", "Pirate","cm_vampire")
+  cannibals = {}
+  cannibals[1] = AddHog("Brainiac", 5, 20, "Zombi")
+
+  for i = 2, 5 do
+    cannibals[i] = AddHog(HogNames[i], 1, 20, "Zombi")
+    hogNr[cannibals[i]] = i - 2
+  end
+
+  AddTeam("Stronglings", 14483456, "Skull", "Island", "Pirate","cm_vampire")
+
+  for i = 6, 9 do
+    cannibals[i] = AddHog(HogNames[i], 2, 30, "vampirichog")
+    hogNr[cannibals[i]] = i - 2
+  end
+
+  AddTeam("011101001", 14483456, "ring", "UFO", "Robot", "cm_star")
+  cyborg = AddHog("Y3K1337", 0, 200, "cyborg1")
+end
+
+function PlaceHogs()
+  HogTurnLeft(leaks, true)
+
+  for i = 2, 9 do
+    SetGearPosition(cannibals[i], unpack(cyborgPos))
+    AnimTurn(cannibals[i], "left")
+    cannibalDead[i] = false
+  end
+
+  SetGearPosition(cannibals[1], cannibalPos[1][1], cannibalPos[1][2])
+  AnimTurn(cannibals[1], "left")
+
+  SetGearPosition(cyborg, cyborgPos[1], cyborgPos[2])
+  SetGearPosition(ramon, 2218, 1675)
+  SetGearPosition(skiky, 2400, 1675)
+  SetGearPosition(dense, densePos[1], densePos[2])
+  SetGearPosition(leaks, leaksPos[1], leaksPos[2]) 
+end
+
+function VisiblizeHogs()
+  for i = 1, 9 do
+    SetState(cannibals[i], gstInvisible)
+  end
+  SetState(cyborg, gstInvisible)
+  SetState(ramon, gstInvisible)
+  SetState(spiky, gstInvisible)
+end
+
+function CondNeedToTurn(hog1, hog2)
+  xl, xd = GetX(hog1), GetX(hog2)
+  if xl > xd then
+    AnimInsertStepNext({func = AnimTurn, args = {hog1, "Left"}})
+    AnimInsertStepNext({func = AnimTurn, args = {hog2, "Right"}})
+  elseif xl < xd then
+    AnimInsertStepNext({func = AnimTurn, args = {hog2, "Left"}})
+    AnimInsertStepNext({func = AnimTurn, args = {hog1, "Right"}})
+  end
+end
+
+function HideHogs()
+  for i = 2, 9 do
+    HideHog(cannibals[i])
+    isHidden[cannibals[i]] = true
+  end
+  HideHog(cyborg)
+  cyborgHidden = true
+  HideHog(ramon)
+  HideHog(spiky)
+  ramonHidden = true
+  spikyHidden = true
+end
+
+function HideStronglings()
+  for i = 6, 9 do
+    HideHog(cannibals[i])
+    isHidden[cannibals[i]] = true
+  end
+end
+
+function UnHideWeaklings()
+  for i = 2, 5 do
+    RestoreHog(cannibals[i])
+    isHidden[cannibals[i]] = false
+    SetState(cannibals[i], gstInvisible)
+  end
+end
+
+function UnHideStronglings()
+  for i = 6, 9 do
+    RestoreHog(cannibals[i])
+    isHidden[cannibals[i]] = false
+    SetState(cannibals[i], gstInvisible)
+  end
+  RestoreHog(cyborg)
+  cyborgHidden = false
+  SetState(cyborg, gstInvisible)
+end
+
+function ChoiceTaken()
+  if choice == choiceAccept then
+    AddAnim(acceptedAnim)
+    AddFunction({func = AfterAcceptedAnim, args = {}})
+  elseif choice == choiceRefuse then
+    AddAnim(refusedAnim)
+    AddFunction({func = AfterRefusedAnim, args = {}})
+  else
+    AddAnim(attackedAnim)
+    AddFunction({func = AfterAttackedAnim, args = {}})
+  end
+end
+
+function KillCyborg()
+  RestoreHog(cyborg)
+  DeleteGear(cyborg)
+  TurnTimeLeft = 0
+end
+-----------------------------Events------------------------------------
+
+function CheckBrainiacDead()
+  return brainiacDead
+end
+
+function DoBrainiacDead()
+  TurnTimeLeft = 0
+  AddAnim(weaklingsAnim)
+  AddFunction({func = AfterWeaklingsAnim, args = {}})
+  stage = interSpyStage
+end
+  
+function CheckWeaklingsKilled()
+  for i = 2, 5 do
+    if cannibalDead[i] == false then
+      return false
+    end
+  end
+  return true
+end
+
+function DoWeaklingsKilled()
+  TurnTimeLeft = 0
+  AddAnim(stronglingsAnim)
+  AddFunction({func = AfterStronglingsAnim, args = {}})
+  stage = interWeakStage
+end
+
+function CheckRefuse()
+  return GetX(dense) > 1400 and StoppedGear(dense)
+end
+
+function DoRefuse()
+  choice = choiceRefuse
+end
+
+function CheckAccept()
+  return GetX(dense) < 1300 and StoppedGear(dense)
+end
+
+function DoAccept()
+  choice = choiceAccept
+end
+
+function CheckConfront()
+  return cyborgAttacked and StoppedGear(dense)
+end
+
+function DoConfront()
+  choice = choiceAttack
+end
+
+function CheckChoice()
+  return choice ~= 0
+end
+
+function DoChoice()
+  RemoveEventFunc(CheckConfront)
+  RemoveEventFunc(CheckAccept)
+  RemoveEventFunc(CheckRefuse)
+  ChoiceTaken()
+end
+
+function CheckNeedGirder()
+  return GetX(dense) > 1640 and StoppedGear(dense)
+end
+
+function DoNeedGirder()
+  ShowMission("The Shadow Falls", "Under Construction", "To place a girder, select it, use [Left] and [Right] to select angle and length, place with [Left Click]", 1, 6000)
+end
+
+function CheckNeedWeapons()
+  return GetX(dense) > 2522 and StoppedGear(dense)
+end
+
+function DoNeedWeapons()
+  grenadeCrate = SpawnAmmoCrate(2550, 600, amGrenade)
+  shotgunCrate = SpawnAmmoCrate(2550, 550, amShotgun)
+  AddCaption("A little gift from the cyborgs")
+end
+
+function CheckTookWeapons()
+  return shotgunTaken and grenadeTaken
+end
+
+function DoTookWeapons()
+  ShowMission("The Shadow Falls", "The guardian", "Protect yourselves!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power", 1, 8000)
+  AddAmmo(dense, amSkip, 100)
+  AddAmmo(dense, amSwitch, 100)
+  stage = duoStage
+  RemoveEventFunc(CheckNeedGirder)
+  RemoveEventFunc(CheckNeedWeapons)
+  RemoveEventFunc(CheckRestartReturnAccepted)
+  AddEvent(CheckStronglingsDead, {}, DoStronglingsDead, {}, 0)
+  AddAmmo(cannibals[6], amGrenade, 7)
+  AddAmmo(cannibals[6], amShotgun, 7)
+  SetGearMessage(leaks, 0)
+  SetGearMessage(dense, 0)
+  TurnTimeLeft = TurnTime
+end
+
+function DoStronglingsDead()
+  if denseDead == true then
+    AddAnim(acceptedDiedFinalAnim)
+    SaveCampaignVar("M2DenseDead", "1")
+  else
+    AddAnim(acceptedSurvivedFinalAnim)
+    SaveCampaignVar("M2DenseDead", "0")
+  end
+  SaveCampaignVar("M2RamonDead", "0")
+  SaveCampaignVar("M2SpikyDead", "0")
+  AddFunction({func = KillCyborg, args = {}})
+  SaveCampaignVar("Progress", "2")
+  SaveCampaignVar("M2Choice", "" .. choice)
+end
+
+function DoStronglingsDeadRefused()
+  if denseDead == true then
+    SaveCampaignVar("M2DenseDead", "1")
+  else
+    SaveCampaignVar("M2DenseDead", "0")
+  end
+  if ramonDead == true then
+    SaveCampaignVar("M2RamonDead", "1")
+  else
+    SaveCampaignVar("M2RamonDead", "0")
+  end
+  if spikyDead == true then
+    SaveCampaignVar("M2SpikyDead", "1")
+  else
+    SaveCampaignVar("M2SpikyDead", "0")
+  end
+  AddAnim(refusedFinalAnim)
+  AddFunction({func = KillCyborg, args = {}})
+  SaveCampaignVar("Progress", "2")
+  SaveCampaignVar("M2Choice", "" .. choice)
+end
+
+function DoStronglingsDeadAttacked()
+  SaveCampaignVar("M2DenseDead", "1")
+  SaveCampaignVar("M2RamonDead", "0")
+  SaveCampaignVar("M2SpikyDead", "0")
+  AddAnim(attackedFinalAnim)
+  AddFunction({func = KillCyborg, args = {}})
+  SaveCampaignVar("Progress", "2")
+  SaveCampaignVar("M2Choice", "" .. choice)
+end
+
+function CheckStronglingsDead()
+  if leaksDead == true then
+    return false
+  end
+  for i = 6, 9 do
+    if cannibalDead[i] == false then
+      return false
+    end
+  end
+  return true
+end
+
+function CheckLeaksDead()
+  return leaksDead
+end
+
+function DoDead()
+  AddCaption("...and so the cyborgs took over the world...")
+  stage = loseStage
+  if ramonHidden then
+    RestoreHog(ramon)
+  end
+  if spikyHidden then
+    RestoreHog(spiky)
+  end
+  SetHealth(dense, 0)
+  SetHealth(leaks, 0)
+  SetHealth(ramon, 0)
+  SetHealth(spiky, 0)
+  TurnTimeLeft = 0
+end
+
+function CheckDenseDead()
+  return denseDead and choice ~= choiceAttack 
+end
+
+function CheckRestartReturnAccepted()
+  return retryReturn
+end
+
+-----------------------------Main Functions----------------------------
+
+function onGameInit()
+	Seed = 334 
+  TemplateFilter = 3
+	GameFlags = gfSolidLand + gfDisableWind
+	TurnTime = 50000 
+	CaseFreq = 0
+	MinesNum = 0
+	MinesTime = 3000
+	Explosives = 0
+	Delay = 10 
+	MapGen = 0
+	Theme = "Nature"
+  SuddenDeathTurns = 3000
+
+  AddHogs()
+  PlaceHogs()
+  VisiblizeHogs()
+  
+  AnimInit()
+  AnimationSetup()
+end
+
+function onGameStart()
+  HideHogs()
+  AddAmmo(leaks, amSwitch, 100)
+  AddEvent(CheckLeaksDead, {}, DoDead, {}, 0)
+  AddEvent(CheckDenseDead, {}, DoDead, {}, 0)
+  AddAnim(startDialogue)
+  AddFunction({func = AfterStartDialogue, args = {}})
+  AddEvent(CheckBrainiacDead, {}, DoBrainiacDead, {}, 0)
+  ShowMission("The Shadow Falls", "The First Encounter", "Survive!|Hint: Cinematics can be skipped with the [Precise] key.", 1, 0)
+end
+
+function onGameTick()
+  AnimUnWait()
+  if ShowAnimation() == false then
+    return
+  end
+  ExecuteAfterAnimations()
+  CheckEvents()
+end
+
+function onGearDelete(gear)
+  if gear == cannibals[1] then
+    brainiacDead = true
+  elseif gear == grenadeCrate then
+    grenadeTaken = true
+  elseif gear == shotgunCrate then
+    shotgunTaken = true
+  elseif gear == dense then
+    denseDead = true
+  elseif gear == leaks then
+    leaksDead = true
+  elseif gear == ramon then
+    ramonDead = true
+  elseif gear == spiky then
+    spikyDead = true
+  else
+    for i = 2, 9 do
+      if gear == cannibals[i] then
+        cannibalDead[i] = true
+      end
+    end
+  end
+end
+
+function onGearAdd(gear)
+end
+
+function onAmmoStoreInit()
+  SetAmmo(amDEagle, 9, 0, 0, 0)
+  SetAmmo(amSniperRifle, 9, 0, 0, 0)
+  SetAmmo(amFirePunch, 9, 0, 0, 0)
+  SetAmmo(amWhip, 9, 0, 0, 0)
+  SetAmmo(amBaseballBat, 9, 0, 0, 0)
+  SetAmmo(amHammer, 9, 0, 0, 0)
+  SetAmmo(amLandGun, 9, 0, 0, 0)
+  SetAmmo(amSnowball, 9, 0, 0, 0)
+  SetAmmo(amGirder, 0, 0, 0, 2)
+  SetAmmo(amParachute, 0, 0, 0, 2)
+  SetAmmo(amGrenade, 0, 0, 0, 8)
+  SetAmmo(amShotgun, 0, 0, 0, 8)
+  SetAmmo(amSwitch, 0, 0, 0, 8)
+  SetAmmo(amRope, 0, 0, 0, 6)
+end
+
+function onNewTurn()
+  if AnimInProgress() then
+    TurnTimeLeft = -1
+--  elseif stage == interSpyStage and GetHogTeamName(CurrentHedgehog) ~= "Natives" then
+--    TurnTimeLeft = 0
+--    SetState(CurrentHedgehog, gstInvisible)
+  elseif stage == cyborgStage then
+    if CurrentHedgehog ~= dense then
+      TurnTimeLeft = 0
+    else
+      TurnTimeLeft = -1
+    end
+  elseif stage == acceptedReturnStage then
+    SwitchHog(dense)
+    FollowGear(dense)
+    TurnTimeLeft = -1
+  end
+end
+
+function onGearDamage(gear, damage)
+  if gear == cyborg and stage == cyborgStage then
+    cyborgAttacked = true
+  end
+end
+
+function onPrecise()
+  if GameTime > 2500 then
+    SetAnimSkip(true)
+  end
+  if stage == acceptedReturnStage then
+    retryReturn = true
+  end
+end
+
