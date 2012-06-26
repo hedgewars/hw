@@ -111,14 +111,18 @@ begin
         begin
         flagMakeCapture:= false;
         {$IFDEF PAS2C}
-        s:= 'hw';
+        s:= '/Screenshots/hw';
         {$ELSE}
-        s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+        s:= '/Screenshots/hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
         {$ENDIF}
 
+        // flash
         playSound(sndShutter);
-        
-        if MakeScreenshot(s) then
+        ScreenFade:= sfFromWhite;
+        ScreenFadeValue:= sfMax;
+        ScreenFadeSpeed:= 5;
+
+        if MakeScreenshot(s, 1) then
             WriteLnToConsole('Screenshot saved: ' + s)
         else
             begin

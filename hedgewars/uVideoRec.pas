@@ -51,7 +51,7 @@ procedure freeModule;
 
 implementation
 
-uses uVariables, uUtils, GLunit, SDLh, SysUtils, uIO;
+uses uVariables, uUtils, GLunit, SDLh, SysUtils, uIO, uMisc, uTypes;
 
 {$IFDEF WIN32}
 const AVWrapperLibName = 'libavwrapper.dll';
@@ -88,6 +88,7 @@ var YCbCr_Planes: array[0..2] of PByte;
     numPixels: LongWord;
     startTime, numFrames: LongWord;
     cameraFilePath, soundFilePath: shortstring;
+    thumbnailSaved : Boolean;
 
 function BeginVideoRecording: Boolean;
 var filename, desc: shortstring;
@@ -98,7 +99,7 @@ begin
 
 {$IOCHECKS OFF}
     // open file with prerecorded camera positions
-    cameraFilePath:= UserPathPrefix + '/VideoTemp/' + cRecPrefix + '.txtin';
+    cameraFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtin';
     Assign(cameraFile, cameraFilePath);
     Reset(cameraFile);
     if IOResult <> 0 then
@@ -117,10 +118,11 @@ begin
         desc+= 'Map: ' + cMapName + #10;
     if Theme <> '' then
         desc+= 'Theme: ' + Theme + #10;
+    desc+= 'prefix[' + RecPrefix + ']prefix';
     desc+= #0;
 
-    filename:= UserPathPrefix + '/VideoTemp/' + cRecPrefix + #0;
-    soundFilePath:= UserPathPrefix + '/VideoTemp/' + cRecPrefix + '.sw' + #0;
+    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + #0;
+    soundFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw' + #0;
     cAVFormat+= #0;
     cAudioCodec+= #0;
     cVideoCodec+= #0;
@@ -222,9 +224,25 @@ begin
 {$IOCHECKS ON}
 end;
 
+procedure SaveThumbnail;
+var thumbpath: shortstring;
+    k: LongInt;
+begin
+    thumbpath:= '/VideoTemp/' + RecPrefix;
+    AddFileLog('Saving thumbnail ' + thumbpath);
+    if cScreenWidth > cScreenHeight then
+        k:= cScreenWidth div 400  // here 400 is minimum size of thumbnail
+    else
+        k:= cScreenHeight div 400;
+    if k = 0 then
+        k:= 1;
+    MakeScreenshot(thumbpath, k);
+    thumbnailSaved:= true;
+end;
+
 procedure BeginPreRecording;
 var format: word;
-    filePrefix, filename: shortstring;
+    filename: shortstring;
     frequency, channels: LongInt;
 begin
     AddFileLog('BeginPreRecording');
@@ -232,7 +250,11 @@ begin
     numFrames:= 0;
     startTime:= SDL_GetTicks();
 
-    filePrefix:= FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now());
+    RecPrefix:= FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now());
+
+    thumbnailSaved:= false;
+    if (not (gameState in [gsLandGen, gsStart])) and (ScreenFade = sfNone) then
+        SaveThumbnail();
 
     Mix_QuerySpec(@frequency, @format, @channels);
     AddFileLog('sound: frequency = ' + IntToStr(frequency) + ', format = ' + IntToStr(format) + ', channels = ' + IntToStr(channels));
@@ -245,7 +267,7 @@ begin
 
 {$IOCHECKS OFF}
     // create sound file
-    filename:= UserPathPrefix + '/VideoTemp/' + filePrefix + '.sw';
+    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw';
     Assign(audioFile, filename);
     Rewrite(audioFile, 1);
     if IOResult <> 0 then
@@ -255,7 +277,7 @@ begin
     end;
 
     // create file with camera positions
-    filename:= UserPathPrefix + '/VideoTemp/' + filePrefix + '.txtout';
+    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtout';
     Assign(cameraFile, filename);
     Rewrite(cameraFile);
     if IOResult <> 0 then
@@ -285,12 +307,18 @@ begin
     Close(cameraFile);
     Mix_SetPostMix(nil, nil);
     SDL_UnlockAudio();
+
+    if (not thumbnailSaved) then
+        SaveThumbnail();
 end;
 
 procedure SaveCameraPosition;
 var curTime: LongInt;
     frame: TFrame;
 begin
+    if (not thumbnailSaved) and (ScreenFade = sfNone) then
+        SaveThumbnail();
+
     curTime:= SDL_GetTicks();
     while Int64(curTime - startTime)*cVideoFramerateNum > Int64(numFrames)*cVideoFramerateDen*1000 do
     begin

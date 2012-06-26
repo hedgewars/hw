@@ -72,7 +72,7 @@ procedure internalStartVideoRecordingWithParameters();
 begin
     internalStartGameWithParameters();
     GameType:= gmtRecord;
-    cRecPrefix:= ParamStr(20);
+    RecPrefix:= ParamStr(20);
     cAVFormat:= ParamStr(21);
     cVideoCodec:= ParamStr(22);
     cVideoQuality:= StrToInt(ParamStr(23));

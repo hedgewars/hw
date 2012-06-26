@@ -35,6 +35,7 @@
 #include <QHeaderView>
 #include <QKeyEvent>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QFileSystemWatcher>
 
 #include "hwconsts.h"
@@ -43,6 +44,8 @@
 #include "libav_iteraction.h"
 #include "gameuiconfig.h"
 #include "recorder.h"
+
+const int ThumbnailSize = 400;
 
 // columns in table with list of video files
 enum VideosColumns
@@ -90,12 +93,14 @@ QLayout * PageVideos::bodyLayoutDefinition()
 {
     QGridLayout * pPageLayout = new QGridLayout();
     pPageLayout->setColumnStretch(0, 1);
-    pPageLayout->setColumnStretch(1, 1);
+    pPageLayout->setColumnStretch(1, 2);
+    pPageLayout->setRowStretch(0, 1);
+    pPageLayout->setRowStretch(1, 1);
 
     {
         IconedGroupBox* pOptionsGroup = new IconedGroupBox(this);
         pOptionsGroup->setIcon(QIcon(":/res/graphicsicon.png"));
-        pOptionsGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        pOptionsGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         pOptionsGroup->setTitle(QGroupBox::tr("Video recording options"));
         QGridLayout * pOptLayout = new QGridLayout(pOptionsGroup);
 
@@ -199,7 +204,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         QStringList columns;
         columns << tr("Name");
         columns << tr("Size");
-        columns << tr("...");
+        columns << "";
 
         filesTable = new QTableWidget(pTableGroup);
         filesTable->setColumnCount(vcNumColumns);
@@ -209,11 +214,10 @@ QLayout * PageVideos::bodyLayoutDefinition()
         filesTable->verticalHeader()->hide();
 
         QHeaderView * header = filesTable->horizontalHeader();
-        int length = header->length(); // FIXME
-        // header->setResizeMode(QHeaderView::ResizeToContents);
-        header->resizeSection(vcName, length/2);
-        header->resizeSection(vcSize, length/4);
-        header->resizeSection(vcProgress, length/4);
+        header->setResizeMode(vcName, QHeaderView::ResizeToContents);
+        header->setResizeMode(vcSize, QHeaderView::Fixed);
+        header->resizeSection(vcSize, 100);
+        header->setStretchLastSection(true);
 
         btnOpenDir = new QPushButton(QPushButton::tr("Open videos directory"), pTableGroup);
 
@@ -228,21 +232,38 @@ QLayout * PageVideos::bodyLayoutDefinition()
         IconedGroupBox* pDescGroup = new IconedGroupBox(this);
         pDescGroup->setIcon(QIcon(":/res/graphicsicon.png"));
         pDescGroup->setTitle(QGroupBox::tr("Description"));
-        QGridLayout* pDescLayout = new QGridLayout(pDescGroup);
 
+        QVBoxLayout* pDescLayout = new QVBoxLayout(pDescGroup);
+        QHBoxLayout* pTopDescLayout = new QHBoxLayout(0);    // picture and text
+        QHBoxLayout* pBottomDescLayout = new QHBoxLayout(0); // buttons
+
+        // label with thumbnail picture
         labelThumbnail = new QLabel(pDescGroup);
-        pDescLayout->addWidget(labelThumbnail, 0, 0);
+        labelThumbnail->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        labelThumbnail->setStyleSheet(
+                    "QFrame {"
+                    "border: solid;"
+                    "border-width: 3px;"
+                    "border-color: #ffcc00;"
+                    "border-radius: 4px;"
+                    "}" );
+        pTopDescLayout->addWidget(labelThumbnail);
 
         // label with file description
         labelDesc = new QLabel(pDescGroup);
         labelDesc->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        pDescLayout->addWidget(labelDesc, 0, 1);
+        pTopDescLayout->addWidget(labelDesc);
 
         // buttons: play and delete
         btnPlay = new QPushButton(QPushButton::tr("Play"), pDescGroup);
-        pDescLayout->addWidget(btnPlay, 1, 0);
+        pBottomDescLayout->addWidget(btnPlay);
         btnDelete = new QPushButton(QPushButton::tr("Delete"), pDescGroup);
-        pDescLayout->addWidget(btnDelete, 1, 1);
+        pBottomDescLayout->addWidget(btnDelete);
+
+        pDescLayout->addStretch(1);
+        pDescLayout->addLayout(pTopDescLayout, 0);
+        pDescLayout->addStretch(1);
+        pDescLayout->addLayout(pBottomDescLayout, 0);
 
         pPageLayout->addWidget(pDescGroup, 0, 0);
     }
@@ -543,10 +564,19 @@ void PageVideos::cellChanged(int row, int column)
     VideoItem * item = nameItem(row);
     QString oldName = item->name;
     QString newName = item->text();
+    if (!newName.contains('.'))
+    {
+        // user forgot an extension
+        int pt = oldName.lastIndexOf('.');
+        if (pt != -1)
+            newName += oldName.right(oldName.length() - pt);
+    }
     item->name = newName;
     if (item->ready())
     {
-        if(!cfgdir->rename("Videos/" + oldName, "Videos/" + newName))
+        if(cfgdir->rename("Videos/" + oldName, "Videos/" + newName))
+            updateDescription();
+        else
         {
             // unable to rename for some reason (maybe user entered incorrect name),
             // therefore restore old name in cell
@@ -586,6 +616,8 @@ int PageVideos::appendRow(const QString & name)
     item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     filesTable->setItem(row, vcProgress, item);
 
+   // filesTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+
     return row;
 }
 
@@ -597,27 +629,65 @@ VideoItem* PageVideos::nameItem(int row)
 void PageVideos::updateDescription()
 {
     VideoItem * item = nameItem(filesTable->currentRow());
-    QString desc = "";
-    if (item)
+    if (!item)
     {
-        QString t = item->name;
-        desc += item->name + "\n";
-        // t.replace(".mp4", ".bmp");
-        // QMessageBox::information(this, "1", cfgdir->absoluteFilePath("Screenshots/" + t));
-       //  m_pic.load(cfgdir->absoluteFilePath("Screenshots/" + t));
-       //  m_pic = m_pic.scaledToWidth(400);
-        // m_thumbnail.setPixmap(m_pic);
+        labelDesc->clear();
+        labelThumbnail->clear();
+        return;
+    }
 
-        if (item->ready())
+    QString desc = "";
+    desc += item->name + "\n";
+
+    QString thumbName = "";
+
+    if (item->ready())
+    {
+        QString path = item->path();
+        desc += tr("\nSize: ") + FileSizeStr(path) + "\n";
+        if (item->desc == "")
+            item->desc = LibavIteraction::instance().getFileInfo(path);
+        desc += item->desc;
+
+        // extract thumbnail name fron description
+        int prefixBegin = desc.indexOf("prefix[");
+        int prefixEnd = desc.indexOf("]prefix");
+        if (prefixBegin != -1 && prefixEnd != -1)
         {
-            QString path = item->path();
-            desc += tr("\nSize: ") + FileSizeStr(path) + "\n";
-            if (item->desc == "")
-                item->desc = LibavIteraction::instance().getFileInfo(path);
-            desc += item->desc;
+            QString prefix = desc.mid(prefixBegin + 7, prefixEnd - (prefixBegin + 7));
+            desc.remove(prefixBegin, prefixEnd + 7 - prefixBegin);
+            thumbName = prefix;
+        }
+    }
+    else
+        desc += tr("(in progress...)");
+
+    if (thumbName.isEmpty())
+    {
+        if (item->ready())
+            thumbName = item->name;
+        else
+            thumbName = item->pRecorder->name;
+        // remove extension
+        int pt = thumbName.lastIndexOf('.');
+        if (pt != -1)
+            thumbName.truncate(pt);
+    }
+
+    if (!thumbName.isEmpty())
+    {
+        thumbName = cfgdir->absoluteFilePath("VideoTemp/" + thumbName);
+        if (picThumbnail.load(thumbName + ".png") || picThumbnail.load(thumbName + ".bmp"))
+        {
+            if (picThumbnail.width() > picThumbnail.height())
+                picThumbnail = picThumbnail.scaledToWidth(ThumbnailSize);
+            else
+                picThumbnail = picThumbnail.scaledToHeight(ThumbnailSize);
+            labelThumbnail->setMaximumSize(picThumbnail.size());
+            labelThumbnail->setPixmap(picThumbnail);
         }
         else
-            desc += tr("(in progress...)");
+            labelThumbnail->clear();
     }
     labelDesc->setText(desc);
 }
