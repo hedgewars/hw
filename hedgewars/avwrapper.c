@@ -90,7 +90,7 @@ static void AddAudioStream()
 #endif
     if(!g_pAStream)
     {
-        Log("Could not allocate audio stream");
+        Log("Could not allocate audio stream\n");
         return;
     }
     g_pAStream->id = 1;
@@ -121,7 +121,7 @@ static void AddAudioStream()
     // open it
     if (avcodec_open2(g_pAudio, g_pACodec, NULL) < 0)
     {
-        Log("Could not open audio codec %s", g_pACodec->long_name);
+        Log("Could not open audio codec %s\n", g_pACodec->long_name);
         return;
     }
 
@@ -137,7 +137,7 @@ static void AddAudioStream()
     g_pAFrame = avcodec_alloc_frame();
     if (!g_pAFrame)
     {
-        Log("Could not allocate frame");
+        Log("Could not allocate frame\n");
         return;
     }
 }
@@ -400,7 +400,7 @@ void AVWrapper_Init(
             AddAudioStream();
         }
         else
-            Log("Could not open %s", pSoundFile);
+            Log("Could not open %s\n", pSoundFile);
     }
     else
         Log("Audio codec \"%s\" was not found; audio will be ignored.\n", pACodecName);
@@ -415,7 +415,7 @@ void AVWrapper_Init(
     if (!(g_pFormat->flags & AVFMT_NOFILE))
     {
         if (avio_open(&g_pContainer->pb, g_pContainer->filename, AVIO_FLAG_WRITE) < 0)
-            FatalError("Could not open output file (%s)", pFilename);
+            FatalError("Could not open output file (%s)", g_pContainer->filename);
     }
 
     // write the stream header, if any

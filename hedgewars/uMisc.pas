@@ -28,7 +28,7 @@ procedure freeModule;
 
 procedure movecursor(dx, dy: LongInt);
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
-function  MakeScreenshot(filename: shortstring): boolean;
+function  MakeScreenshot(filename: shortstring; k: LongInt): boolean;
 function  GetTeamStatString(p: PTeam): shortstring;
 {$IFDEF SDL13}
 function  SDL_RectMake(x, y, width, height: LongInt): TSDL_Rect; inline;
@@ -186,19 +186,48 @@ end;
 
 {$ENDIF} // no PNG_SCREENSHOTS
 
+{$IFDEF USE_VIDEO_RECORDING}
+// make image k times smaller (useful for saving thumbnails)
+procedure ReduceImage(img: PByte; width, height, k: LongInt);
+var i, j, i0, j0, w, h, r, g, b: LongInt;
+begin
+    w:= width  div k;
+    h:= height div k;
+
+    // rescale inplace
+    if k <> 1 then
+    begin
+        for i:= 0 to h-1 do
+            for j:= 0 to w-1 do
+            begin
+                r:= 0;
+                g:= 0;
+                b:= 0;
+                for i0:= 0 to k-1 do
+                    for j0:= 0 to k-1 do
+                    begin
+                        r+= img[4*(width*(i*k+i0) + j*k+j0)+0];
+                        g+= img[4*(width*(i*k+i0) + j*k+j0)+1];
+                        b+= img[4*(width*(i*k+i0) + j*k+j0)+2];
+                    end;
+                img[4*(w*i + j)+0]:= r div (k*k);
+                img[4*(w*i + j)+1]:= g div (k*k);
+                img[4*(w*i + j)+2]:= b div (k*k);
+                img[4*(w*i + j)+3]:= 0;
+            end;
+    end;
+end;
+{$ENDIF}
+
 // captures and saves the screen. returns true on success.
-function MakeScreenshot(filename: shortstring): Boolean;
+// saved image will be k times smaller than original (useful for saving thumbnails).
+function MakeScreenshot(filename: shortstring; k: LongInt): Boolean;
 var p: Pointer;
     size: QWord;
     image: PScreenshot;
     format: GLenum;
     ext: string[4];
 begin
-// flash
-ScreenFade:= sfFromWhite;
-ScreenFadeValue:= sfMax;
-ScreenFadeSpeed:= 5;
-
 {$IFDEF PNG_SCREENSHOTS}
 format:= GL_RGBA;
 ext:= '.png';
@@ -218,14 +247,18 @@ begin
     exit;
 end;
 
-// read pixel from the front buffer
+// read pixels from the front buffer
 glReadPixels(0, 0, cScreenWidth, cScreenHeight, format, GL_UNSIGNED_BYTE, p);
+
+{$IFDEF USE_VIDEO_RECORDING}
+ReduceImage(p, cScreenWidth, cScreenHeight, k);
+{$ENDIF}
 
 // allocate and fill structure that will be passed to new thread
 New(image); // will be disposed in SaveScreenshot()
-image^.filename:= UserPathPrefix + '/Screenshots/' + filename + ext;
-image^.width:= cScreenWidth;
-image^.height:= cScreenHeight;
+image^.filename:= UserPathPrefix + filename + ext;
+image^.width:= cScreenWidth div k;
+image^.height:= cScreenHeight div k;
 image^.size:= size;
 image^.buffer:= p;
 

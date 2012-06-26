@@ -53,7 +53,7 @@ var
     cStereoMode     : TStereoMode = smNone;
     cOnlyStats      : boolean = False;
 {$IFDEF USE_VIDEO_RECORDING}
-    cRecPrefix      : shortstring;
+    RecPrefix      : shortstring;
     cAVFormat       : shortstring;
     cVideoCodec     : shortstring;
     cVideoFramerateNum : LongInt = 25;
