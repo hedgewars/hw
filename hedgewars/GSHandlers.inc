@@ -3437,7 +3437,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBallgunWork(Gear: PGear);
 var 
-    HHGear: PGear;
+    HHGear, ball: PGear;
     rx, ry: hwFloat;
     gX, gY: LongInt;
 begin
@@ -3452,7 +3452,8 @@ begin
         rx := rndSign(getRandomf * _0_1);
         ry := rndSign(getRandomf * _0_1);
 
-        AddGear(gx, gy, gtBall, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx, AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
+        ball:= AddGear(gx, gy, gtBall, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx, AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
+        ball^.CollisionMask:= $FF7F;
 
         PlaySound(sndGun);
         end;
@@ -4410,7 +4411,7 @@ begin
     ty := 0;
     // avoid compiler hints
 
-    if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > 255) then
+    if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] and ($FF00 and not lfBouncy) <> 0) then
         begin
         Gear^.State := Gear^.State or gstCollision;
         Gear^.State := Gear^.State and (not gstMoving);
