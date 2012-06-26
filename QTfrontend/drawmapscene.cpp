@@ -224,8 +224,11 @@ QByteArray DrawMapScene::encode()
             qint16 px = qToBigEndian((qint16)point.x());
             qint16 py = qToBigEndian((qint16)point.y());
             quint8 flags = 0;
-            if(!cnt) flags = 0x80 + params.width;
-            if(params.erasing) flags |= 0x40;
+            if(!cnt)
+            {
+                flags = 0x80 + params.width;
+                if(params.erasing) flags |= 0x40;
+            }
             b.append((const char *)&px, 2);
             b.append((const char *)&py, 2);
             b.append((const char *)&flags, 1);
