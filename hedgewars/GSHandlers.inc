@@ -4410,7 +4410,7 @@ begin
     ty := 0;
     // avoid compiler hints
 
-    if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > 255) then
+    if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] and ($FF00 and not lfBouncy) <> 0) then
         begin
         Gear^.State := Gear^.State or gstCollision;
         Gear^.State := Gear^.State and (not gstMoving);
