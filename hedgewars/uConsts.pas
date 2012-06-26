@@ -99,6 +99,7 @@ const
     lfObject         = $2000;  
     lfDamaged        = $1000;  //
     lfIce            = $0800;  // blue
+    lfBouncy         = $0400;  // green
 
     cMaxPower     = 1500;
     cMaxAngle     = 2048;
