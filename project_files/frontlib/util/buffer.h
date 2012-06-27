@@ -48,8 +48,8 @@ int flib_vector_resize(flib_vector *vec, size_t newSize);
 
 /**
  * Append the provided data to the end of the vector, enlarging it as required.
- * Returns the ammount of data appended, which is either len (success) or 0 (out of memory).
  * The vector remains unchanged if appending fails.
+ * Returns 0 on success.
  */
 int flib_vector_append(flib_vector *vec, const void *data, size_t len);
 

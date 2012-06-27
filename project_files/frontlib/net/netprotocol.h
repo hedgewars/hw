@@ -31,6 +31,6 @@ flib_map *flib_netmsg_to_map(char **parts);
  * is written to the variable pointed to by outlen.
  * Returns NULL on error.
  */
-uint8_t *flib_netmsg_to_drawnmapdata(size_t *outlen, char *netmsg);
+int flib_netmsg_to_drawnmapdata(char *netmsg, uint8_t **outbuf, size_t *outlen);
 
 #endif /* NETPROTOCOL_H_ */

@@ -80,8 +80,8 @@ flib_map *flib_netmsg_to_map(char **parts) {
 }
 
 // TODO: Test with empty map
-uint8_t *flib_netmsg_to_drawnmapdata(size_t *outlen, char *netmsg) {
-	uint8_t *result = NULL;
+int flib_netmsg_to_drawnmapdata(char *netmsg, uint8_t** outbuf, size_t *outlen) {
+	int result = -1;
 
 	// First step: base64 decoding
 	char *base64decout = NULL;
@@ -90,24 +90,32 @@ uint8_t *flib_netmsg_to_drawnmapdata(size_t *outlen, char *netmsg) {
 	if(ok && base64declen>3) {
 		// Second step: unzip with the QCompress header. That header is just a big-endian
 		// uint32 indicating the length of the uncompressed data.
+		uint8_t *ubyteBuf = (uint8_t*)base64decout;
 		uint32_t unzipLen =
-				(((uint32_t)base64decout[0])<<24)
-				+ (((uint32_t)base64decout[1])<<16)
-				+ (((uint32_t)base64decout[2])<<8)
-				+ base64decout[3];
-		uint8_t *out = flib_malloc(unzipLen);
-		if(out) {
-			uLongf actualUnzipLen = unzipLen;
-			int resultcode = uncompress(out, &actualUnzipLen, (Bytef*)(base64decout+4), base64declen-4);
-			if(resultcode == Z_OK) {
-				result = out;
-				*outlen = actualUnzipLen;
-				out = NULL;
-			} else {
-				flib_log_e("Uncompressing drawn map failed. Code: %i", resultcode);
+				(((uint32_t)ubyteBuf[0])<<24)
+				+ (((uint32_t)ubyteBuf[1])<<16)
+				+ (((uint32_t)ubyteBuf[2])<<8)
+				+ ubyteBuf[3];
+		if(unzipLen==0) {
+			*outbuf = NULL;
+			*outlen = 0;
+			result = 0;
+		} else {
+			uint8_t *out = flib_malloc(unzipLen);
+			if(out) {
+				uLongf actualUnzipLen = unzipLen;
+				int resultcode = uncompress(out, &actualUnzipLen, (Bytef*)(base64decout+4), base64declen-4);
+				if(resultcode == Z_OK) {
+					*outbuf = out;
+					*outlen = actualUnzipLen;
+					out = NULL;
+					result = 0;
+				} else {
+					flib_log_e("Uncompressing drawn map failed. Code: %i", resultcode);
+				}
 			}
+			free(out);
 		}
-		free(out);
 	} else {
 		flib_log_e("base64 decoding of drawn map failed.");
 	}

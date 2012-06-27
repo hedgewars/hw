@@ -41,7 +41,7 @@ static void defaultCallback_onPasswordRequest(void *context, const char *request
 	flib_netconn_send_quit((flib_netconn*)context, "Authentication failed");
 }
 
-void clearCallbacks(flib_netconn *conn) {
+void netconn_clearCallbacks(flib_netconn *conn) {
 	flib_netconn_onMessage(conn, NULL, NULL);
 	flib_netconn_onConnected(conn, NULL, NULL);
 	flib_netconn_onDisconnected(conn, NULL, NULL);
@@ -102,9 +102,9 @@ void clearCallbacks(flib_netconn *conn) {
 GENERATE_CB_SETTER(onMessage, (void *context, int msgtype, const char *msg), defaultCallback_onMessage);
 GENERATE_CB_SETTER_AND_DEFAULT(onConnected, (void *context));
 GENERATE_CB_SETTER_AND_DEFAULT(onDisconnected, (void *context, int reason, const char *message));
-GENERATE_CB_SETTER_AND_DEFAULT(onRoomAdd, (void *context, const flib_roomlist_room *room));
+GENERATE_CB_SETTER_AND_DEFAULT(onRoomAdd, (void *context, const flib_room *room));
 GENERATE_CB_SETTER_AND_DEFAULT(onRoomDelete, (void *context, const char *name));
-GENERATE_CB_SETTER_AND_DEFAULT(onRoomUpdate, (void *context, const char *oldName, const flib_roomlist_room *room));
+GENERATE_CB_SETTER_AND_DEFAULT(onRoomUpdate, (void *context, const char *oldName, const flib_room *room));
 GENERATE_CB_SETTER(onChat, (void *context, const char *nick, const char *msg), defaultCallback_onChat);
 GENERATE_CB_SETTER_AND_DEFAULT(onLobbyJoin, (void *context, const char *nick));
 GENERATE_CB_SETTER_AND_DEFAULT(onLobbyLeave, (void *context, const char *nick, const char *partMsg));
@@ -121,8 +121,8 @@ GENERATE_CB_SETTER_AND_DEFAULT(onTeamDelete, (void *context, const char *teamnam
 GENERATE_CB_SETTER_AND_DEFAULT(onRunGame, (void *context));
 GENERATE_CB_SETTER_AND_DEFAULT(onTeamAccepted, (void *context, const char *teamName));
 GENERATE_CB_SETTER_AND_DEFAULT(onHogCountChanged, (void *context, const char *teamName, int hogs));
-GENERATE_CB_SETTER_AND_DEFAULT(onTeamColorChanged, (void *context, const char *teamName, uint32_t colorRGB));
-GENERATE_CB_SETTER_AND_DEFAULT(onEngineMessage, (void *context, const char *message, int size));
+GENERATE_CB_SETTER_AND_DEFAULT(onTeamColorChanged, (void *context, const char *teamName, int colorIndex));
+GENERATE_CB_SETTER_AND_DEFAULT(onEngineMessage, (void *context, const uint8_t *message, size_t size));
 GENERATE_CB_SETTER_AND_DEFAULT(onCfgScheme, (void *context, flib_cfg *scheme));
 GENERATE_CB_SETTER_AND_DEFAULT(onMapChanged, (void *context, const flib_map *map, int changetype));
 GENERATE_CB_SETTER_AND_DEFAULT(onScriptChanged, (void *context, const char *script));

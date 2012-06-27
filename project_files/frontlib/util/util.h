@@ -87,4 +87,12 @@ char *flib_urlencode_pred(const char *str, bool (*needsEscaping)(char c));
  */
 char *flib_urldecode(const char *str);
 
+/**
+ * Figure out if the string contains / or \. Useful in routines that
+ * construct filenames.
+ */
+bool flib_contains_dir_separator(const char *str);
+
+int flib_gets(char *str, size_t strlen);
+
 #endif

@@ -10,50 +10,50 @@
 #include <string.h>
 #include <zlib.h>
 
-// TODO state changes
-
 // cmdname is always given as literal from functions in this file, so it is never null.
 static int sendVoid(flib_netconn *conn, const char *cmdname) {
-	if(!conn) {
-		flib_log_e("null parameter trying to send %s command.", cmdname);
+	if(log_e_if(!conn, "Invalid parameter sending %s command", cmdname)) {
 		return -1;
 	}
 	return flib_netbase_sendf(conn->netBase, "%s\n\n", cmdname);
 }
 
+// Testing for !*str prevents sending 0-length parameters (they trip up the protocol)
 static int sendStr(flib_netconn *conn, const char *cmdname, const char *str) {
-	if(!conn || !str) {
-		flib_log_e("null parameter trying to send %s command.", cmdname);
+	if(log_e_if(!conn || !str || !*str, "Invalid parameter sending %s command", cmdname)) {
 		return -1;
 	}
 	return flib_netbase_sendf(conn->netBase, "%s\n%s\n\n", cmdname, str);
 }
 
 static int sendInt(flib_netconn *conn, const char *cmdname, int param) {
-	if(!conn) {
-		flib_log_e("null parameter trying to send %s command.", cmdname);
+	if(log_e_if(!conn, "Invalid parameter sending %s command", cmdname)) {
 		return -1;
 	}
 	return flib_netbase_sendf(conn->netBase, "%s\n%i\n\n", cmdname, param);
 }
 
 int flib_netconn_send_quit(flib_netconn *conn, const char *quitmsg) {
-	return sendStr(conn, "QUIT", quitmsg ? quitmsg : "User quit");
+	return sendStr(conn, "QUIT", (quitmsg && *quitmsg) ? quitmsg : "User quit");
 }
 
 int flib_netconn_send_chat(flib_netconn *conn, const char *chat) {
-	return sendStr(conn, "CHAT", chat);
+	if(chat && *chat) {
+		return sendStr(conn, "CHAT", chat);
+	}
+	return 0;
 }
 
 int flib_netconn_send_teamchat(flib_netconn *conn, const char *chat) {
-	return sendStr(conn, "TEAMCHAT", chat);
+	if(chat && *chat) {
+		return sendStr(conn, "TEAMCHAT", chat);
+	}
+	return 0;
 }
 
 int flib_netconn_send_nick(flib_netconn *conn, const char *nick) {
 	int result = -1;
-	if(!conn || !nick) {
-		flib_log_e("null parameter in flib_netconn_send_nick");
-	} else {
+	if(!log_badparams_if(!conn || !nick || !*nick)) {
 		char *tmpName = flib_strdupnull(nick);
 		if(tmpName) {
 			if(!flib_netbase_sendf(conn->netBase, "%s\n%s\n\n", "NICK", nick)) {
@@ -70,9 +70,7 @@ int flib_netconn_send_nick(flib_netconn *conn, const char *nick) {
 
 int flib_netconn_send_password(flib_netconn *conn, const char *latin1Passwd) {
 	int result = -1;
-	if(!conn || !latin1Passwd) {
-		flib_log_e("null parameter in flib_netconn_send_password");
-	} else {
+	if(!log_badparams_if(!conn || !latin1Passwd)) {
 		md5_state_t md5state;
 		uint8_t md5bytes[16];
 		char md5hex[33];
@@ -89,11 +87,19 @@ int flib_netconn_send_password(flib_netconn *conn, const char *latin1Passwd) {
 }
 
 int flib_netconn_send_joinRoom(flib_netconn *conn, const char *room) {
-	return sendStr(conn, "JOIN_ROOM", room);
+	if(!sendStr(conn, "JOIN_ROOM", room)) {
+		conn->isChief = false;
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_createRoom(flib_netconn *conn, const char *room) {
-	return sendStr(conn, "CREATE_ROOM", room);
+	if(!sendStr(conn, "CREATE_ROOM", room)) {
+		conn->isChief = true;
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_renameRoom(flib_netconn *conn, const char *roomName) {
@@ -101,35 +107,50 @@ int flib_netconn_send_renameRoom(flib_netconn *conn, const char *roomName) {
 }
 
 int flib_netconn_send_leaveRoom(flib_netconn *conn) {
-	return sendVoid(conn, "PART");
+	if(flib_netconn_is_in_room_context(conn) && !sendVoid(conn, "PART")) {
+		netconn_leaveRoom(conn);
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_toggleReady(flib_netconn *conn) {
 	return sendVoid(conn, "TOGGLE_READY");
 }
 
+static void addTeamToPendingList(flib_netconn *conn, const flib_team *team) {
+	flib_team *teamcopy = flib_team_copy(team);
+	if(teamcopy) {
+		teamcopy->remoteDriven = false;
+		free(teamcopy->ownerName);
+		teamcopy->ownerName = flib_strdupnull(conn->playerName);
+		if(teamcopy->ownerName) {
+			flib_teamlist_delete(&conn->pendingTeamlist, team->name);
+			flib_teamlist_insert(&conn->pendingTeamlist, teamcopy, 0);
+		}
+	}
+	flib_team_release(teamcopy);
+}
+
 int flib_netconn_send_addTeam(flib_netconn *conn, const flib_team *team) {
 	int result = -1;
-	if(!conn || !team) {
-		flib_log_e("null parameter in flib_netconn_send_addTeam");
-	} else {
-		bool missingInfo = !team->name || !team->color || !team->grave || !team->fort || !team->voicepack || !team->flag;
+	if(!log_badparams_if(!conn || !team)) {
+		bool missingInfo = !team->name || !team->grave || !team->fort || !team->voicepack || !team->flag;
 		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
 			missingInfo |= !team->hogs[i].name || !team->hogs[i].hat;
 		}
-		if(missingInfo) {
-			flib_log_e("Incomplete team definition for flib_netconn_send_addTeam");
-		} else {
+		if(!log_e_if(missingInfo, "Incomplete team definition")) {
 			flib_vector *vec = flib_vector_create();
 			if(vec) {
 				bool error = false;
-				error |= flib_vector_appendf(vec, "ADD_TEAM\n%s\n%lu\n%s\n%s\n%s\n%s\n%i\n", team->name, (unsigned long)team->color, team->grave, team->fort, team->voicepack, team->flag, team->hogs[0].difficulty);
+				error |= flib_vector_appendf(vec, "ADD_TEAM\n%s\n%i\n%s\n%s\n%s\n%s\n%i\n", team->name, team->colorIndex, team->grave, team->fort, team->voicepack, team->flag, team->hogs[0].difficulty);
 				for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
 					error |= flib_vector_appendf(vec, "%s\n%s\n", team->hogs[i].name, team->hogs[i].hat);
 				}
 				error |= flib_vector_appendf(vec, "\n");
-				if(!error) {
-					result = flib_netbase_send_raw(conn->netBase, flib_vector_data(vec), flib_vector_size(vec));
+				if(!error && !flib_netbase_send_raw(conn->netBase, flib_vector_data(vec), flib_vector_size(vec))) {
+					addTeamToPendingList(conn, team);
+					result = 0;
 				}
 			}
 			flib_vector_destroy(vec);
@@ -139,14 +160,19 @@ int flib_netconn_send_addTeam(flib_netconn *conn, const flib_team *team) {
 }
 
 int flib_netconn_send_removeTeam(flib_netconn *conn, const char *teamname) {
-	return sendStr(conn, "REMOVE_TEAM", teamname);
+	if(!sendStr(conn, "REMOVE_TEAM", teamname)) {
+		flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
+		if(team && !team->remoteDriven) {
+			flib_teamlist_delete(&conn->teamlist, teamname);
+		}
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_engineMessage(flib_netconn *conn, const uint8_t *message, size_t size) {
 	int result = -1;
-	if(!conn || (!message && size>0)) {
-		flib_log_e("null parameter in flib_netconn_send_engineMessage");
-	} else {
+	if(!log_badparams_if(!conn || (!message && size>0))) {
 		char *base64encout = NULL;
 		base64_encode_alloc((const char*)message, size, &base64encout);
 		if(base64encout) {
@@ -158,38 +184,52 @@ int flib_netconn_send_engineMessage(flib_netconn *conn, const uint8_t *message, 
 }
 
 int flib_netconn_send_teamHogCount(flib_netconn *conn, const char *teamname, int hogcount) {
-	if(!conn || !teamname || hogcount<1 || hogcount>HEDGEHOGS_PER_TEAM) {
-		flib_log_e("invalid parameter in flib_netconn_send_teamHogCount");
-		return -1;
+	if(!log_badparams_if(!conn || !teamname || hogcount<1 || hogcount>HEDGEHOGS_PER_TEAM)
+			&& !flib_netbase_sendf(conn->netBase, "HH_NUM\n%s\n%i\n\n", teamname, hogcount)) {
+		if(conn->isChief) {
+			flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
+			if(team) {
+				team->hogsInGame = hogcount;
+			}
+		}
+		return 0;
 	}
-	return flib_netbase_sendf(conn->netBase, "HH_NUM\n%s\n%i\n\n", teamname, hogcount);
+	return -1;
 }
 
-int flib_netconn_send_teamColor(flib_netconn *conn, const char *teamname, uint32_t colorRGB) {
-	if(!conn || !teamname) {
-		flib_log_e("null parameter in flib_netconn_send_teamColor");
-		return -1;
+int flib_netconn_send_teamColor(flib_netconn *conn, const char *teamname, int colorIndex) {
+	if(!log_badparams_if(!conn || !teamname)
+			&& !flib_netbase_sendf(conn->netBase, "TEAM_COLOR\n%s\n%i\n\n", teamname, colorIndex)) {
+		if(conn->isChief) {
+			flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
+			if(team) {
+				team->colorIndex = colorIndex;
+			}
+		}
+		return 0;
 	}
-	return flib_netbase_sendf(conn->netBase, "TEAM_COLOR\n%s\n%lu\n\n", teamname, (unsigned long)colorRGB);
+	return -1;
 }
 
 int flib_netconn_send_weaponset(flib_netconn *conn, const flib_weaponset *weaponset) {
-	if(!conn || !weaponset) {
-		flib_log_e("null parameter in flib_netconn_send_weaponset");
-		return -1;
+	if(!log_badparams_if(!conn || !weaponset)) {
+		char ammostring[WEAPONS_COUNT*4+1];
+		strcpy(ammostring, weaponset->loadout);
+		strcat(ammostring, weaponset->crateprob);
+		strcat(ammostring, weaponset->delay);
+		strcat(ammostring, weaponset->crateammo);
+		if(!flib_netbase_sendf(conn->netBase, "CFG\nAMMO\n%s\n%s\n\n", weaponset->name, ammostring)) {
+			if(conn->isChief) {
+				netconn_setWeaponset(conn, weaponset);
+			}
+			return 0;
+		}
 	}
-
-	char ammostring[WEAPONS_COUNT*4+1];
-	strcpy(ammostring, weaponset->loadout);
-	strcat(ammostring, weaponset->crateprob);
-	strcat(ammostring, weaponset->delay);
-	strcat(ammostring, weaponset->crateammo);
-	return flib_netbase_sendf(conn->netBase, "CFG\nAMMO\n%s\n%s\n\n", weaponset->name, ammostring);
+	return -1;
 }
 
 int flib_netconn_send_map(flib_netconn *conn, const flib_map *map) {
-	if(!conn || !map) {
-		flib_log_e("null parameter in flib_netconn_send_map");
+	if(log_badparams_if(!conn || !map)) {
 		return -1;
 	}
 	bool error = false;
@@ -213,34 +253,80 @@ int flib_netconn_send_map(flib_netconn *conn, const flib_map *map) {
 }
 
 int flib_netconn_send_mapName(flib_netconn *conn, const char *mapName) {
-	return sendStr(conn, "CFG\nMAP", mapName);
+	if(!sendStr(conn, "CFG\nMAP", mapName)) {
+		if(conn->isChief) {
+			char *copy = flib_strdupnull(mapName);
+			if(copy) {
+				free(conn->map->name);
+				conn->map->name = copy;
+			}
+		}
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_mapGen(flib_netconn *conn, int mapGen) {
-	return sendInt(conn, "CFG\nMAPGEN", mapGen);
+	if(!sendInt(conn, "CFG\nMAPGEN", mapGen)) {
+		if(conn->isChief) {
+			conn->map->mapgen = mapGen;
+		}
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_mapTemplate(flib_netconn *conn, int templateFilter) {
-	return sendInt(conn, "CFG\nTEMPLATE", templateFilter);
+	if(!sendInt(conn, "CFG\nTEMPLATE", templateFilter)) {
+		if(conn->isChief) {
+			conn->map->templateFilter = templateFilter;
+		}
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_mapMazeSize(flib_netconn *conn, int mazeSize) {
-	return sendInt(conn, "CFG\nMAZE_SIZE", mazeSize);
+	if(!sendInt(conn, "CFG\nMAZE_SIZE", mazeSize)) {
+		if(conn->isChief) {
+			conn->map->mazeSize = mazeSize;
+		}
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_mapSeed(flib_netconn *conn, const char *seed) {
-	return sendStr(conn, "CFG\nSEED", seed);
+	if(!sendStr(conn, "CFG\nSEED", seed)) {
+		if(conn->isChief) {
+			char *copy = flib_strdupnull(seed);
+			if(copy) {
+				free(conn->map->seed);
+				conn->map->seed = copy;
+			}
+		}
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_mapTheme(flib_netconn *conn, const char *theme) {
-	return sendStr(conn, "CFG\nTHEME", theme);
+	if(!sendStr(conn, "CFG\nTHEME", theme)) {
+		if(conn->isChief) {
+			char *copy = flib_strdupnull(theme);
+			if(copy) {
+				free(conn->map->theme);
+				conn->map->theme = copy;
+			}
+		}
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_mapDrawdata(flib_netconn *conn, const uint8_t *drawData, size_t size) {
 	int result = -1;
-	if(!conn || (!drawData && size>0) || size>SIZE_MAX/2) {
-		flib_log_e("invalid parameter in flib_netconn_send_map");
-	} else {
+	if(!log_badparams_if(!conn || (!drawData && size>0) || size>SIZE_MAX/2)) {
 		uLongf zippedSize = compressBound(size);
 		uint8_t *zipped = flib_malloc(zippedSize+4); // 4 extra bytes for header
 		if(zipped) {
@@ -265,18 +351,31 @@ int flib_netconn_send_mapDrawdata(flib_netconn *conn, const uint8_t *drawData, s
 		}
 		free(zipped);
 	}
+
+	if(!result && conn->isChief) {
+		uint8_t *copy = flib_bufdupnull(drawData, size);
+		if(copy) {
+			free(conn->map->drawData);
+			conn->map->drawData = copy;
+			conn->map->drawDataSize = size;
+		}
+	}
 	return result;
 }
 
 int flib_netconn_send_script(flib_netconn *conn, const char *scriptName) {
-	return sendStr(conn, "CFG\nSCRIPT", scriptName);
+	if(!sendStr(conn, "CFG\nSCRIPT", scriptName)) {
+		if(conn->isChief) {
+			netconn_setScript(conn, scriptName);
+		}
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_scheme(flib_netconn *conn, const flib_cfg *scheme) {
 	int result = -1;
-	if(!conn || !scheme) {
-		flib_log_e("null parameter in flib_netconn_send_scheme");
-	} else {
+	if(!log_badparams_if(!conn || !scheme)) {
 		flib_vector *vec = flib_vector_create();
 		if(vec) {
 			bool error = false;
@@ -294,11 +393,21 @@ int flib_netconn_send_scheme(flib_netconn *conn, const flib_cfg *scheme) {
 		}
 		flib_vector_destroy(vec);
 	}
+
+	if(!result && conn->isChief) {
+		netconn_setScheme(conn, scheme);
+	}
 	return result;
 }
 
 int flib_netconn_send_roundfinished(flib_netconn *conn, bool withoutError) {
-	return sendInt(conn, "ROUNDFINISHED", withoutError ? 1 : 0);
+	if(!sendInt(conn, "ROUNDFINISHED", withoutError ? 1 : 0)) {
+		if(conn->netconnState == NETCONN_STATE_INGAME) {
+			conn->netconnState = NETCONN_STATE_ROOM;
+		}
+		return 0;
+	}
+	return -1;
 }
 
 int flib_netconn_send_ban(flib_netconn *conn, const char *playerName) {
@@ -334,8 +443,7 @@ int flib_netconn_send_clearAccountsCache(flib_netconn *conn) {
 }
 
 int flib_netconn_send_setServerVar(flib_netconn *conn, const char *name, const char *value) {
-	if(!conn || !name || !value) {
-		flib_log_e("null parameter trying to send SET_SERVER_VAR command.");
+	if(log_badparams_if(!conn || !name || !value)) {
 		return -1;
 	}
 	return flib_netbase_sendf(conn->netBase, "%s\n%s\n%s\n\n", "SET_SERVER_VAR", name, value);

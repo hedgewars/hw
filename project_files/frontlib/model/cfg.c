@@ -170,7 +170,7 @@ flib_cfg *flib_cfg_create(flib_cfg_meta *meta, const char *schemeName) {
 	return result;
 }
 
-flib_cfg *flib_cfg_copy(flib_cfg *cfg) {
+flib_cfg *flib_cfg_copy(const flib_cfg *cfg) {
 	flib_cfg *result = NULL;
 	if(cfg) {
 		result = flib_cfg_create(cfg->meta, cfg->name);

@@ -162,3 +162,27 @@ char *flib_urldecode(const char *inbuf) {
     char *shrunk = realloc(outbuf, outpos+1);
     return shrunk ? shrunk : outbuf;
 }
+
+bool flib_contains_dir_separator(const char *str) {
+	if(!log_badparams_if(!str)) {
+		for(;*str;str++) {
+			if(*str=='\\' || *str=='/') {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+int flib_gets(char *str, size_t strlen) {
+	if(fgets(str, strlen, stdin)) {
+		for(char *s=str; *s; s++) {
+			if(*s=='\r' || *s=='\n') {
+				*s = 0;
+				break;
+			}
+		}
+		return 0;
+	}
+	return -1;
+}

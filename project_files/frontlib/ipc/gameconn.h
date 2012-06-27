@@ -34,7 +34,7 @@ int flib_gameconn_getport(flib_gameconn *conn);
  */
 void flib_gameconn_tick(flib_gameconn *conn);
 
-int flib_gameconn_send_enginemsg(flib_gameconn *conn, uint8_t *data, int len);
+int flib_gameconn_send_enginemsg(flib_gameconn *conn, const uint8_t *data, size_t len);
 int flib_gameconn_send_textmsg(flib_gameconn *conn, int msgtype, const char *msg);
 int flib_gameconn_send_chatmsg(flib_gameconn *conn, const char *playername, const char *msg);
 
@@ -72,9 +72,9 @@ void flib_gameconn_onGameRecorded(flib_gameconn *conn, void (*callback)(void *co
 
 /**
  * ...needs to be passed on to the server in a net game
- * handleEngineMessage(void *context, const uint8_t *em, int size)
+ * handleEngineMessage(void *context, const uint8_t *em, size_t size)
  */
-void flib_gameconn_onEngineMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, int size), void* context);
+void flib_gameconn_onEngineMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, size_t size), void* context);
 
 // TODO efinish
 

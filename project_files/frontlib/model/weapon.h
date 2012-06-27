@@ -44,6 +44,8 @@ flib_weaponset *flib_weaponset_retain(flib_weaponset *weaponset);
  */
 void flib_weaponset_release(flib_weaponset *weaponset);
 
+flib_weaponset *flib_weaponset_copy(const flib_weaponset *weaponset);
+
 /**
  * Create a weaponset from an ammostring. This format is used both in the ini files
  * and in the net protocol.

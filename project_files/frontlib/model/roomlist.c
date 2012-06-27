@@ -11,7 +11,7 @@ flib_roomlist *flib_roomlist_create() {
 	return flib_calloc(1, sizeof(flib_roomlist));
 }
 
-static void flib_roomlist_room_destroy(flib_roomlist_room *room) {
+static void flib_roomlist_room_destroy(flib_room *room) {
 	if(room) {
 		free(room->map);
 		free(room->name);
@@ -27,13 +27,14 @@ void flib_roomlist_destroy(flib_roomlist *list) {
 		for(int i=0; i<list->roomCount; i++) {
 			flib_roomlist_room_destroy(list->rooms[i]);
 		}
+		free(list->rooms);
 		free(list);
 	}
 }
 
-static flib_roomlist_room *fillRoomFromParams(char **params) {
-	flib_roomlist_room *result = NULL;
-	flib_roomlist_room *tmpRoom = flib_calloc(1, sizeof(flib_roomlist_room));
+static flib_room *fillRoomFromParams(char **params) {
+	flib_room *result = NULL;
+	flib_room *tmpRoom = flib_calloc(1, sizeof(flib_room));
 	if(tmpRoom) {
 		tmpRoom->inProgress = !strcmp(params[0], "True");
 		tmpRoom->name = flib_strdupnull(params[1]);
@@ -52,16 +53,26 @@ static flib_roomlist_room *fillRoomFromParams(char **params) {
 	return result;
 }
 
+GENERATE_STATIC_LIST_INSERT(insertRoom, flib_room*)
+GENERATE_STATIC_LIST_DELETE(deleteRoom, flib_room*)
+
+static int findRoom(const flib_roomlist *list, const char *name) {
+	for(int i=0; i<list->roomCount; i++) {
+		if(!strcmp(name, list->rooms[i]->name)) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 int flib_roomlist_add(flib_roomlist *list, char **params) {
 	int result = -1;
 	if(!list || !params) {
 		flib_log_e("null parameter in flib_roomlist_add");
 	} else {
-		flib_roomlist_room *tmpRoom = fillRoomFromParams(params);
+		flib_room *tmpRoom = fillRoomFromParams(params);
 		if(tmpRoom) {
-			flib_roomlist_room **rooms = flib_list_insert(list->rooms, &list->roomCount, sizeof(*list->rooms), &tmpRoom, 0);
-			if(rooms) {
-				list->rooms = rooms;
+			if(!insertRoom(&list->rooms, &list->roomCount, tmpRoom, 0)) {
 				tmpRoom = NULL;
 				result = 0;
 			}
@@ -71,13 +82,23 @@ int flib_roomlist_add(flib_roomlist *list, char **params) {
 	return result;
 }
 
-static int findRoom(flib_roomlist *list, const char *name) {
-	for(int i=0; i<list->roomCount; i++) {
-		if(!strcmp(name, list->rooms[i]->name)) {
-			return i;
+int flib_roomlist_delete(flib_roomlist *list, const char *name) {
+	int result = -1;
+	if(!list || !name) {
+		flib_log_e("null parameter in flib_roomlist_delete");
+	} else {
+		int roomid = findRoom(list, name);
+		if(roomid<0) {
+			flib_log_w("Attempt to delete unknown room %s", name);
+		} else {
+			flib_room *room = list->rooms[roomid];
+			if(!deleteRoom(&list->rooms, &list->roomCount, roomid)) {
+				flib_roomlist_room_destroy(room);
+				result = 0;
+			}
 		}
 	}
-	return -1;
+	return result;
 }
 
 int flib_roomlist_update(flib_roomlist *list, const char *name, char **params) {
@@ -85,7 +106,7 @@ int flib_roomlist_update(flib_roomlist *list, const char *name, char **params) {
 	if(!list || !name || !params) {
 		flib_log_e("null parameter in flib_roomlist_update");
 	} else {
-		flib_roomlist_room *tmpRoom = fillRoomFromParams(params);
+		flib_room *tmpRoom = fillRoomFromParams(params);
 		int roomid = findRoom(list, name);
 		if(tmpRoom && roomid>=0) {
 			flib_roomlist_room_destroy(list->rooms[roomid]);
@@ -98,8 +119,8 @@ int flib_roomlist_update(flib_roomlist *list, const char *name, char **params) {
 	return result;
 }
 
-flib_roomlist_room *flib_roomlist_find(flib_roomlist *list, const char *name) {
-	flib_roomlist_room *result = NULL;
+flib_room *flib_roomlist_find(const flib_roomlist *list, const char *name) {
+	flib_room *result = NULL;
 	if(!list || !name) {
 		flib_log_e("null parameter in flib_roomlist_find");
 	} else {
@@ -122,25 +143,4 @@ void flib_roomlist_clear(flib_roomlist *list) {
 		list->rooms = NULL;
 		list->roomCount = 0;
 	}
-}
-
-int flib_roomlist_delete(flib_roomlist *list, const char *name) {
-	int result = -1;
-	if(!list || !name) {
-		flib_log_e("null parameter in flib_roomlist_delete");
-	} else {
-		int roomid = findRoom(list, name);
-		if(roomid<0) {
-			flib_log_w("Attempt to delete unknown room %s", name);
-		} else {
-			flib_roomlist_room *room = list->rooms[roomid];
-			flib_roomlist_room **rooms = flib_list_delete(list->rooms, &list->roomCount, sizeof(*list->rooms), roomid);
-			if(rooms || list->roomCount==0) {
-				list->rooms = rooms;
-				flib_roomlist_room_destroy(room);
-				result = 0;
-			}
-		}
-	}
-	return result;
 }

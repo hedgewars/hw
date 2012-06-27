@@ -16,6 +16,7 @@ static void flib_schemelist_destroy(flib_schemelist *list) {
 		for(int i=0; i<list->schemeCount; i++) {
 			flib_cfg_release(list->schemes[i]);
 		}
+		free(list->schemes);
 		free(list);
 	}
 }
@@ -192,29 +193,28 @@ flib_cfg *flib_schemelist_find(flib_schemelist *list, const char *name) {
 	return NULL;
 }
 
+GENERATE_STATIC_LIST_INSERT(insertScheme, flib_cfg*)
+GENERATE_STATIC_LIST_DELETE(deleteScheme, flib_cfg*)
+
 int flib_schemelist_insert(flib_schemelist *list, flib_cfg *cfg, int pos) {
-	flib_cfg **changedList = flib_list_insert(list->schemes, &list->schemeCount, sizeof(*list->schemes), &cfg, pos);
-	if(changedList) {
-		list->schemes = changedList;
+	if(!list) {
+		flib_log_e("Invalid parameter in flib_schemelist_insert");
+	} else if(!insertScheme(&list->schemes, &list->schemeCount, cfg, pos)) {
 		flib_cfg_retain(cfg);
 		return 0;
-	} else {
-		return -1;
 	}
+	return -1;
 }
 
 int flib_schemelist_delete(flib_schemelist *list, int pos) {
-	int result = -1;
-	if(!list || pos<0 || pos>=list->schemeCount) {
+	if(!list) {
 		flib_log_e("Invalid parameter in flib_schemelist_delete");
 	} else {
 		flib_cfg *elem = list->schemes[pos];
-		flib_cfg **changedList = flib_list_delete(list->schemes, &list->schemeCount, sizeof(*list->schemes), pos);
-		if(changedList || list->schemeCount==0) {
-			list->schemes = changedList;
+		if(!deleteScheme(&list->schemes, &list->schemeCount, pos)) {
 			flib_cfg_release(elem);
-			result = 0;
+			return 0;
 		}
 	}
-	return result;
+	return -1;
 }

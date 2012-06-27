@@ -9,14 +9,15 @@
 #include "cfg.h"
 #include "weapon.h"
 #include "map.h"
-#include "team.h"
+#include "teamlist.h"
 
 typedef struct {
     char *script;
     flib_cfg *gamescheme;
     flib_map *map;
-	int teamCount;
-	flib_team **teams;
+	flib_teamlist *teamlist;
 } flib_gamesetup;
+
+void flib_gamesetup_destroy(flib_gamesetup *gamesetup);
 
 #endif

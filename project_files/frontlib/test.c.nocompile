@@ -105,7 +105,7 @@ void testMapPreview() {
 	}
 }
 
-void testGame() {
+/*void testGame() {
 	flib_cfg_meta *metaconf = flib_cfg_meta_from_ini("metasettings.ini");
 	assert(metaconf);
 	flib_weaponset *weapons = flib_weaponset_create("Defaultweaps");
@@ -151,7 +151,7 @@ void testGame() {
 	while(gameconn) {
 		flib_gameconn_tick(gameconn);
 	}
-}
+}*/
 
 void testDemo() {
 	FILE *demofile = fopen("testdemo.42.hwd", "rb");
@@ -212,6 +212,7 @@ void handleNetConnected(void *context) {
 		flib_roomlist_room *room = roomlist->rooms[i];
 		flib_log_i("%1s %20s %20s %2i %2i %20s %20s %20s", room->inProgress ? "X" : " ", room->name, room->owner, room->playerCount, room->teamCount, room->map, room->scheme, room->weapons);
 	}
+	flib_netconn_send_joinRoom(*(flib_netconn**)context, "frontlib test");
 }
 
 void handleLobbyJoin(void *context, const char *nick) {
@@ -259,44 +260,27 @@ void handleChat(void *context, const char *nick, const char *msg) {
 	}
 }
 
-static flib_gamesetup gGamesetup = {0};
-static flib_weaponset *gWeaponset = NULL;
-
 void handleEnterRoom(void *context, bool isChief) {
 	flib_netconn_send_toggleReady(*(flib_netconn**)context);
 }
 
-void handleMap(void *context, const flib_map *map, int changeType) {
-	flib_map_release(gGamesetup.map);
-	gGamesetup.map = flib_map_copy(map);
+flib_gameconn *gameconn = NULL;
+
+void emFromNetHandler(void *context, const char *em, int size) {
+	flib_gameconn_send_enginemsg(gameconn, (const uint8_t*)em, size);
 }
 
-void handleCfgScheme(void *context, flib_cfg *cfg) {
-	flib_cfg_release(gGamesetup.gamescheme);
-	gGamesetup.gamescheme = flib_cfg_retain(cfg);
+void emFromEngineHandler(void *context, const uint8_t *em, int size) {
+	flib_netconn_send_engineMessage((flib_netconn*)context, em, size);
 }
 
-void handleWeaponset(void *context, flib_weaponset *weaponset) {
-	flib_weaponset_release(gWeaponset);
-	gWeaponset = flib_weaponset_retain(weaponset);
-}
-
-void handleScript(void *context, const char *script) {
-	free(gGamesetup.script);
-	gGamesetup.script = flib_strdupnull(script);
-}
-
-void handleTeamAdd(void *context, flib_team *team) {
-	flib_team *teamptr = flib_team_retain(team);
-	gGamesetup.teams = flib_list_insert(gGamesetup.teams, &gGamesetup.teamCount, sizeof(*gGamesetup.teams), &teamptr, 0);
-}
-
-void handleTeamRemove(void *context, const char *team) {
-	for(int i=0; i<gGamesetup.teamCount; i++) {
-		if(!strcmp(team, gGamesetup.teams[i]->name)) {
-			flib_team_release(gGamesetup.teams[i]);
-			gGamesetup.teams = flib_list_delete(gGamesetup.teams, &gGamesetup.teamCount, sizeof(*gGamesetup.teams), i);
-		}
+void handleRunGame(void *context) {
+	flib_gamesetup *gamesetup = flib_netconn_create_gameSetup((flib_netconn*)context);
+	if(gamesetup) {
+		gameconn = flib_gameconn_create("frontbot", gamesetup, true);
+		flib_gameconn_onEngineMessage(gameconn, emFromEngineHandler, context);
+		flib_gameconn_onDisconnect(gameconn, onDisconnect, &gameconn);
+		startEngineGame(flib_gameconn_getport(gameconn));
 	}
 }
 
@@ -319,17 +303,15 @@ int main(int argc, char *argv[]) {
 	flib_netconn_onDisconnected(conn, handleNetDisconnect, &conn);
 	flib_netconn_onLobbyJoin(conn, handleLobbyJoin, &conn);
 	flib_netconn_onChat(conn, handleChat, &conn);
-	flib_netconn_onMapChanged(conn, handleMap, conn);
 	flib_netconn_onEnterRoom(conn, handleEnterRoom, conn);
-	flib_netconn_onCfgScheme(conn, handleCfgScheme, conn);
-	flib_netconn_onWeaponsetChanged(conn, handleWeaponset, conn);
-	flib_netconn_onScriptChanged(conn, handleScript, conn);
-	flib_netconn_onTeamAdd(conn, handleTeamAdd, conn);
-	flib_netconn_onTeamRemove(conn, handleTeamRemove, conn);
-	flib_netconn_onHogCountChanged(conn, handleHogCountChanged, conn);
+	flib_netconn_onRunGame(conn, handleRunGame, conn);
+	flib_netconn_onEngineMessage(conn, emFromNetHandler, NULL);
 
 	while(conn) {
 		flib_netconn_tick(conn);
+		if(gameconn) {
+			flib_gameconn_tick(gameconn);
+		}
 	}
 
 	flib_quit();

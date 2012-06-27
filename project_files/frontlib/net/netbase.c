@@ -105,8 +105,7 @@ static int receiveToBuffer(flib_netbase *net) {
 		return 0;
 	} else {
 		int size = flib_socket_nbrecv(net->sock, buffer, sizeof(buffer));
-		if(size>=0) {
-			flib_vector_append(net->readBuffer, buffer, size);
+		if(size>=0 && !flib_vector_append(net->readBuffer, buffer, size)) {
 			return size;
 		} else {
 			flib_socket_close(net->sock);

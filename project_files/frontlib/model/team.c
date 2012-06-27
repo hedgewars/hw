@@ -231,6 +231,14 @@ void flib_team_set_weaponset(flib_team *team, flib_weaponset *set) {
 	}
 }
 
+void flib_team_set_health(flib_team *team, int health) {
+	if(team) {
+		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
+			team->hogs[i].initialHealth = health;
+		}
+	}
+}
+
 char *strdupWithError(const char *in, bool *error) {
 	char *out = flib_strdupnull(in);
 	if(in && !out) {
@@ -239,7 +247,7 @@ char *strdupWithError(const char *in, bool *error) {
 	return out;
 }
 
-flib_team *flib_team_copy(flib_team *team) {
+flib_team *flib_team_copy(const flib_team *team) {
 	flib_team *result = NULL;
 	if(team) {
 		flib_team *tmpTeam = flib_team_retain(flib_calloc(1, sizeof(flib_team)));
@@ -282,7 +290,7 @@ flib_team *flib_team_copy(flib_team *team) {
 			tmpTeam->wins = team->wins;
 			tmpTeam->campaignProgress = team->campaignProgress;
 
-			tmpTeam->color = team->color;
+			tmpTeam->colorIndex = team->colorIndex;
 			tmpTeam->hogsInGame = team->hogsInGame;
 			tmpTeam->remoteDriven = team->remoteDriven;
 

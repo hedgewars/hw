@@ -34,44 +34,47 @@ static void log_time() {
     fprintf(flib_log_getfile(), "%s", buffer);
 }
 
-static void flib_vflog(const char *prefix, int level, const char *fmt, va_list args) {
+static const char *getPrefix(int level) {
+	switch(level) {
+	case FLIB_LOGLEVEL_ERROR: return "E";
+	case FLIB_LOGLEVEL_WARNING: return "W";
+	case FLIB_LOGLEVEL_INFO: return "I";
+	case FLIB_LOGLEVEL_DEBUG: return "D";
+	default: return "?";
+	}
+}
+
+static void _flib_vflog(const char *func, int level, const char *fmt, va_list args) {
 	FILE *logfile = flib_log_getfile();
 	if(level >= flib_loglevel) {
-		fprintf(logfile, "%s ", prefix);
+		fprintf(logfile, "%s ", getPrefix(level));
 		log_time(logfile);
-		fprintf(logfile, "  ", prefix);
+		fprintf(logfile, " [%-30s] ", func);
 		vfprintf(logfile, fmt, args);
 		fprintf(logfile, "\n");
 		fflush(logfile);
 	}
 }
 
-void flib_log_e(const char *fmt, ...) {
+void _flib_flog(const char *func, int level, const char *fmt, ...) {
 	va_list argp;
 	va_start(argp, fmt);
-	flib_vflog("E", FLIB_LOGLEVEL_ERROR, fmt, argp);
+	_flib_vflog(func, level, fmt, argp);
 	va_end(argp);
 }
 
-void flib_log_w(const char *fmt, ...) {
-	va_list argp;
-	va_start(argp, fmt);
-	flib_vflog("W", FLIB_LOGLEVEL_WARNING, fmt, argp);
-	va_end(argp);
+bool _flib_fassert(const char *func, int level, bool cond, const char *fmt, ...) {
+	if(!cond) {
+		va_list argp;
+		va_start(argp, fmt);
+		_flib_vflog(func, level, fmt, argp);
+		va_end(argp);
+	}
+	return !cond;
 }
 
-void flib_log_i(const char *fmt, ...) {
-	va_list argp;
-	va_start(argp, fmt);
-	flib_vflog("I", FLIB_LOGLEVEL_INFO, fmt, argp);
-	va_end(argp);
-}
-
-void flib_log_d(const char *fmt, ...) {
-	va_list argp;
-	va_start(argp, fmt);
-	flib_vflog("D", FLIB_LOGLEVEL_DEBUG, fmt, argp);
-	va_end(argp);
+bool _flib_assert_params(const char *func, bool cond) {
+	return _flib_fassert(func, FLIB_LOGLEVEL_ERROR, cond, "Invalid parameter to function");
 }
 
 int flib_log_getLevel() {
