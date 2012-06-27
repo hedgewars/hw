@@ -136,7 +136,6 @@ end;
 
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
-    TestWord: LongWord;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
 if (Gear^.CollisionMask = $FF7F) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
@@ -167,7 +166,6 @@ end;
 
 function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 var x, y, i: LongInt;
-    TestWord: LongWord;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
 if (Gear^.CollisionMask = $FF7F) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and

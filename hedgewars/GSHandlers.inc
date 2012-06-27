@@ -5377,7 +5377,7 @@ if (Gear^.Pos = 3) and (Gear^.Power = 0) then
         end;
     Gear^.Pos:= 4;
     // This condition might need tweaking
-    Gear^.Timer:= GetRandom(cHedgehogTurnTime*TeamsCount)+cHedgehogTurnTime
+    Gear^.Timer:= GetRandom(cHedgehogTurnTime*TeamsCount*2)+cHedgehogTurnTime*2
     end;
 
 if (Gear^.Pos = 4) then
