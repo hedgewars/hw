@@ -262,19 +262,19 @@ end;
 function TestColl(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] <> 0);
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] and $FF7F <> 0);
     if b then
         exit(true);
     
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] <> 0);
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] and $FF7F <> 0);
     if b then
         exit(true);
     
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] <> 0);
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] and $FF7F <> 0);
     if b then
         exit(true);
     
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] <> 0);
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] and $FF7F <> 0);
     if b then
         exit(true);
     
@@ -534,17 +534,17 @@ rate:= 0;
 
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
-        begin
          // hammer hit radius is 8, shift is 10
         if abs(Point.x - x) + abs(Point.y - y) < 18 then
+            begin
             r:= trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
 
-        if r <= 18 then
-            if Score > 0 then 
-                inc(rate, Score div 3)
-            else 
-                inc(rate, Score div 3 * friendlyfactor div 100)
-        end;
+            if r <= 18 then
+                if Score > 0 then 
+                    inc(rate, Score div 3)
+                else
+                    inc(rate, Score div 3 * friendlyfactor div 100)
+            end;
 RateHammer:= rate * 1024;
 end;
 

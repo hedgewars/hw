@@ -184,10 +184,19 @@ begin
 end;
 
 function lc_parsecommand(L : Plua_State) : LongInt; Cdecl;
+var t: PChar;
+    i,c: LongWord;
+    s: shortstring;
 begin
     if lua_gettop(L) = 1 then
         begin
-        ParseCommand(lua_tostring(L ,1), true);
+        t:= lua_tolstring(L,1,@c);
+
+        for i:= 1 to c do s[i]:= t[i-1];
+        s[0]:= char(c);
+
+        ParseCommand(s, true);
+
         end
     else
         LuaError('Lua: Wrong number of parameters passed to ParseCommand!');
@@ -973,10 +982,9 @@ begin
             prevgear^.Z := cHHZ;
             RemoveGearFromList(prevgear);
             InsertGearToList(prevgear);
-
-            CurrentHedgehog := gear^.Hedgehog;
-// yes, this will muck up turn sequence
-            CurrentTeam := gear^.Hedgehog^.Team;
+            
+            SwitchCurrentHedgehog(gear^.Hedgehog);
+            CurrentTeam:= CurrentHedgehog^.Team;
 
             gear^.State:= gear^.State or gstHHDriven;
             gear^.Active := true;
