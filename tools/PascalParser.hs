@@ -72,12 +72,15 @@ varsParser m endsWithSemi = do
     return vs
 
 aVarDecl endsWithSemi = do
-    unless endsWithSemi $
-        optional $ choice [
-            try $ string "var"
-            , try $ string "const"
-            , try $ string "out"
-            ]
+    isVar <- liftM (== Just "var") $
+        if not endsWithSemi then
+            optionMaybe $ choice [
+                try $ string "var"
+                , try $ string "const"
+                , try $ string "out"
+                ]
+            else
+                return Nothing
     comments
     ids <- do
         i <- (commaSep1 pas) $ (try iD <?> "variable declaration")
@@ -92,7 +95,7 @@ aVarDecl endsWithSemi = do
         e <- initExpression
         comments
         return (Just e)
-    return $ VarDeclaration False (ids, t) init
+    return $ VarDeclaration isVar False (ids, t) init
 
 
 constsDecl = do
@@ -113,7 +116,7 @@ constsDecl = do
         comments
         e <- initExpression
         comments
-        return $ VarDeclaration (isNothing t) ([i], fromMaybe (DeriveType e) t) (Just e)
+        return $ VarDeclaration False (isNothing t) ([i], fromMaybe (DeriveType e) t) (Just e)
 
 typeDecl = choice [
     char '^' >> typeDecl >>= return . PointerTo

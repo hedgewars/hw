@@ -17,7 +17,7 @@ data Identifier = Identifier String BaseType
 data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
-    | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe InitExpression)
+    | VarDeclaration Bool Bool ([Identifier], TypeDecl) (Maybe InitExpression)
     | FunctionDeclaration Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     | OperatorDeclaration String Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     deriving Show

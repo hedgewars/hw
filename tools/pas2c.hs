@@ -324,7 +324,7 @@ resolveType (RecordType tv mtvs) = do
     return . BTRecord "" . concat $ tvs
     where
         f :: TypeVarDeclaration -> State RenderState [(String, BaseType)]
-        f (VarDeclaration _ (ids, td) _) = mapM (\(Identifier i _) -> liftM ((,) i) $ resolveType td) ids
+        f (VarDeclaration _ _ (ids, td) _) = mapM (\(Identifier i _) -> liftM ((,) i) $ resolveType td) ids
 resolveType (ArrayDecl (Just i) t) = do
     t' <- resolveType t
     return $ BTArray i BTInt t'
@@ -366,8 +366,14 @@ functionParams2C params = liftM (hcat . punctuate comma . concat) $ mapM (tvar2C
 numberOfDeclarations :: [TypeVarDeclaration] -> Int
 numberOfDeclarations = sum . map cnt
     where
-        cnt (VarDeclaration _ (ids, _) _) = length ids
+        cnt (VarDeclaration _ _ (ids, _) _) = length ids
         cnt _ = 1
+
+hasPassByReference :: [TypeVarDeclaration] -> Bool
+hasPassByReference = or . map isVar
+    where
+        isVar (VarDeclaration v _ (_, _) _) = v
+        isVar _ = error $ "hasPassByReference called not on function parameters"
 
 fun2C :: Bool -> String -> TypeVarDeclaration -> State RenderState [Doc]
 fun2C _ _ (FunctionDeclaration name returnType params Nothing) = do
@@ -419,7 +425,7 @@ tvar2C _ td@(TypeDeclaration i' t) = do
     tp <- type2C t
     return [text "typedef" <+> tp i]
 
-tvar2C _ (VarDeclaration isConst (ids, t) mInitExpr) = do
+tvar2C _ (VarDeclaration _ isConst (ids, t) mInitExpr) = do
     t' <- liftM (((if isConst then text "const" else empty) <+>) . ) $ type2C t
     ie <- initExpr mInitExpr
     lt <- gets lastType
@@ -462,7 +468,7 @@ op2CTyped op t = do
 extractTypes :: [TypeVarDeclaration] -> [TypeDecl]
 extractTypes = concatMap f
     where
-        f (VarDeclaration _ (ids, t) _) = replicate (length ids) t
+        f (VarDeclaration _ _ (ids, t) _) = replicate (length ids) t
         f a = error $ "extractTypes: can't extract from " ++ show a
 
 initExpr2C, initExpr2C' :: InitExpression -> State RenderState Doc
