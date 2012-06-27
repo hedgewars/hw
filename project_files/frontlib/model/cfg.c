@@ -1,3 +1,22 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 #include "cfg.h"
 
 #include "../util/inihelper.h"
@@ -193,4 +212,24 @@ void flib_cfg_release(flib_cfg *cfg) {
 	if(cfg && flib_release(&cfg->_referenceCount, "flib_cfg")) {
 		flib_cfg_destroy(cfg);
 	}
+}
+
+bool flib_cfg_get_mod(flib_cfg *cfg, const char *name) {
+	for(int i=0; i<cfg->meta->modCount; i++) {
+		if(!strcmp(cfg->meta->mods[i].name, name)) {
+			return cfg->mods[i];
+		}
+	}
+	flib_log_e("Unable to find game mod %s", name);
+	return false;
+}
+
+int flib_cfg_get_setting(flib_cfg *cfg, const char *name, int def) {
+	for(int i=0; i<cfg->meta->settingCount; i++) {
+		if(!strcmp(cfg->meta->settings[i].name, name)) {
+			return cfg->settings[i];
+		}
+	}
+	flib_log_e("Unable to find game setting %s", name);
+	return def;
 }

@@ -1,3 +1,22 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 #ifndef NETCONN_H_
 #define NETCONN_H_
 
@@ -75,9 +94,9 @@ bool flib_netconn_is_in_room_context(flib_netconn *conn);
  * Returns NULL if the room state does not contain enough information
  * for a complete game setup, or if an error occurs.
  *
- * The new gamesetup must be destroyed TODO function for that...
+ * The new gamesetup must be destroyed with flib_gamesetup_destroy().
  */
-flib_gamesetup *flib_netconn_create_gameSetup(flib_netconn *conn);
+flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn);
 
 /**
  * quitmsg may be null
@@ -87,15 +106,16 @@ int flib_netconn_send_chat(flib_netconn *conn, const char *chat);
 
 /**
  * Send a teamchat message, forwarded from the engine. Only makes sense ingame.
- * The server does not send a reply. TODO figure out details
+ * The server does not send a reply. In contrast to a Chat message, the server
+ * automatically converts this into an engine message and passes it on to the other
+ * clients.
  */
 int flib_netconn_send_teamchat(flib_netconn *conn, const char *msg);
 
 /**
- * Note: Most other functions in this lib accept UTF-8, but the password needs to be
- * sent as latin1
+ * Send the password in reply to a password request.
  */
-int flib_netconn_send_password(flib_netconn *conn, const char *latin1Passwd);
+int flib_netconn_send_password(flib_netconn *conn, const char *passwd);
 
 /**
  * Request a different nickname.
@@ -118,20 +138,21 @@ int flib_netconn_send_joinRoom(flib_netconn *conn, const char *room);
 int flib_netconn_send_createRoom(flib_netconn *conn, const char *room);
 
 /**
- * Rename the current room. Only makes sense in room state and if you are chief.
- * TODO: reply
+ * Rename the current room. Only makes sense in room state and if you are chief. If the action succeeds, you will
+ * receive an onRoomUpdate callback containing the change.
  */
 int flib_netconn_send_renameRoom(flib_netconn *conn, const char *roomName);
 
 /**
- * Leave the room for the lobby. Only makes sense in room state.
- * TODO: reply, TODO can you send a message?
+ * Leave the room for the lobby. Only makes sense in room state. msg can be NULL if you don't want to
+ * send a message. The server always accepts a part message, so once you send it off, you can just
+ * assume that you are back in the lobby.
  */
-int flib_netconn_send_leaveRoom(flib_netconn *conn);
+int flib_netconn_send_leaveRoom(flib_netconn *conn, const char *msg);
 
 /**
- * Change your "ready" status in the room. Only makes sense when in room state.
- * TODO: reply
+ * Change your "ready" status in the room. Only makes sense when in room state. If the action succeeds, you will
+ * receive an onReadyState callback containing the change.
  */
 int flib_netconn_send_toggleReady(flib_netconn *conn);
 
@@ -144,13 +165,14 @@ int flib_netconn_send_addTeam(flib_netconn *conn, const flib_team *team);
 
 /**
  * Remove the team with the name teamname. Only makes sense when in room state.
- * TODO: reply
+ * The server does not send a reply on success.
  */
 int flib_netconn_send_removeTeam(flib_netconn *conn, const char *teamname);
 
 /**
- * Send an engine message. Only makes sense when ingame.
- * TODO: reply
+ * Send an engine message. Only makes sense when ingame. In a networked game, you have to
+ * pass all the engine messages from the engine here, and they will be spread to all other
+ * clients in the game to keep the game in sync.
  */
 int flib_netconn_send_engineMessage(flib_netconn *conn, const uint8_t *message, size_t size);
 
@@ -233,7 +255,8 @@ int flib_netconn_send_script(flib_netconn *conn, const char *scriptName);
 int flib_netconn_send_scheme(flib_netconn *conn, const flib_cfg *scheme);
 
 /**
- * Inform the server that the round has ended. TODO: Figure out details
+ * Inform the server that the round has ended. Call this when the engine
+ * has disconnected, passing 1 if the round ended normally, 0 otherwise.
  */
 int flib_netconn_send_roundfinished(flib_netconn *conn, bool withoutError);
 
@@ -261,7 +284,7 @@ int flib_netconn_send_playerFollow(flib_netconn *conn, const char *playerName);
 
 /**
  * Signal that you want to start the game. Only makes sense in room state and if you are chief.
- * TODO figure out details
+ * TODO details
  */
 int flib_netconn_send_startGame(flib_netconn *conn);
 
@@ -366,7 +389,7 @@ void flib_netconn_onPasswordRequest(flib_netconn *conn, void (*callback)(void *c
 /**
  * You just left the lobby and entered a room.
  * If chief is true, you can and should send a full configuration for the room now.
- * This consists of TODO
+ * This consists of ammo, scheme, script and map, where map apparently has to come last.
  */
 void flib_netconn_onEnterRoom(flib_netconn *conn, void (*callback)(void *context, bool chief), void *context);
 
@@ -414,7 +437,7 @@ void flib_netconn_onRoomLeave(flib_netconn *conn, void (*callback)(void *context
 
 /**
  * The game is starting. Fire up the engine and join in!
- * TODO: How?
+ * You can let the netconn generate the right game setup using flib_netconn_create_gamesetup
  */
 void flib_netconn_onRunGame(flib_netconn *conn, void (*callback)(void *context), void *context);
 

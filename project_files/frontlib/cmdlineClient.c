@@ -1,3 +1,22 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 #include "frontlib.h"
 #include "util/logging.h"
 #include "util/buffer.h"
@@ -9,6 +28,7 @@
 #include "ipc/mapconn.h"
 #include "ipc/gameconn.h"
 #include "net/netconn.h"
+#include "base64/base64.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -42,7 +62,6 @@ static void handleMapGenerated(void *context, const uint8_t *bitmap, int numHedg
 		printf("\n");
 	}
 
-	// Destroy the connection object (this will end the "tick" loop below)
 	flib_mapconn_destroy(mapconn);
 	mapconn = NULL;
 }
@@ -51,13 +70,14 @@ static void onGameDisconnect(void *context, int reason) {
 	flib_log_i("Connection closed. Reason: %i", reason);
 	flib_gameconn_destroy(gameconn);
 	gameconn = NULL;
+	if(netconn) {
+		flib_netconn_send_roundfinished(netconn, reason==GAME_END_FINISHED);
+	}
 }
 
 // Callback function that will be called on error
 static void handleMapFailure(void *context, const char *errormessage) {
 	flib_log_e("Map rendering failed: %s", errormessage);
-
-	// Destroy the connection object (this will end the "tick" loop below)
 	flib_mapconn_destroy(mapconn);
 	mapconn = NULL;
 }
@@ -73,37 +93,11 @@ static void startEngineMap(int port) {
 static void startEngineGame(int port) {
 	char cmdbuffer[255];
 	char argbuffer[255];
+	char base64PlayerName[255];
+	base64_encode(nickname, strlen(nickname), base64PlayerName, sizeof(base64PlayerName));
 	snprintf(cmdbuffer, 255, "%shwengine.exe", ENGINE_DIR);
-	snprintf(argbuffer, 255, "%s 1024 768 32 %i 0 0 0 10 10 %s 0 0 TWVkbzQy 0 0 en.txt", CONFIG_DIR, port, DATA_DIR);
+	snprintf(argbuffer, 255, "%s 1024 768 32 %i 0 0 0 10 10 %s 0 0 %s 0 0 en.txt", CONFIG_DIR, port, DATA_DIR, base64PlayerName);
 	ShellExecute(NULL, NULL, cmdbuffer, argbuffer, NULL, SW_HIDE);
-}
-
-void testMapPreview() {
-	// Create a map description and check that there was no error
-	flib_map *map = flib_map_create_maze("This is the seed value", "Jungle", MAZE_SIZE_SMALL_TUNNELS);
-	assert(map);
-
-	// Create a new connection to the engine and check that there was no error
-	flib_mapconn *mapConnection = flib_mapconn_create(map);
-	assert(mapConnection);
-
-	// We don't need the map description anymore
-	flib_map_release(map);
-	map = NULL;
-
-	// Register the callback functions
-	flib_mapconn_onFailure(mapConnection, &handleMapFailure, &mapConnection);
-	flib_mapconn_onSuccess(mapConnection, &handleMapGenerated, &mapConnection);
-
-	// Start the engine process and tell it which port the frontlib is listening on
-	startEngineMap(flib_mapconn_getport(mapConnection));
-
-	// Usually, flib_mapconn_tick will be called in an event loop that runs several
-	// times per second. It handles I/O operations and progress, and calls
-	// callbacks when something interesting happens.
-	while(mapConnection) {
-		flib_mapconn_tick(mapConnection);
-	}
 }
 
 void handleNetDisconnect(void *context, int reason, const char *message) {
@@ -115,21 +109,25 @@ void handleNetDisconnect(void *context, int reason, const char *message) {
 void printRoomList() {
 	const flib_roomlist *roomlist = flib_netconn_get_roomlist(netconn);
 	if(roomlist) {
-		for(int i=0; i<roomlist->roomCount; i++) {
-			if(i>0) {
-				printf(", ");
+		if(roomlist->roomCount>0) {
+			for(int i=0; i<roomlist->roomCount; i++) {
+				if(i>0) {
+					printf(", ");
+				}
+				flib_room *room = roomlist->rooms[i];
+				printf("%s", room->name);
 			}
-			flib_room *room = roomlist->rooms[i];
-			printf("%s", room->name);
+		} else {
+			puts("Unfortunately, there are no rooms at the moment.");
 		}
-		puts("\n");
 	} else {
 		puts("Sorry, due to an error the room list is not available.");
 	}
+	puts("\n");
 }
 
 void printTeamList() {
-	flib_gamesetup *setup = flib_netconn_create_gameSetup(netconn);
+	flib_gamesetup *setup = flib_netconn_create_gamesetup(netconn);
 	if(setup) {
 		puts("The following teams are in this room:");
 		for(int i=0; i<setup->teamlist->teamCount; i++) {
@@ -146,7 +144,7 @@ void printTeamList() {
 }
 
 void handleNetConnected(void *context) {
-	printf("You enter a strange house inhabited by dozens of hedgehogs. There are many rooms in here:\n");
+	printf("You enter the lobby of a strange house inhabited by hedgehogs. Looking around, you see hallways branching off to these rooms:\n");
 	printRoomList();
 	printf("\n\nNow, you can chat by just entering text, or join a room with /join <roomname>.");
 	printf(" You can also /quit or let me /describe <roomname>. Once in a room, you can /add <teamname> and set yourself /ready. You can also /list the available rooms (in the lobby) or the teams (in a room).\n");
@@ -154,6 +152,9 @@ void handleNetConnected(void *context) {
 }
 
 void handleChat(void *context, const char *nick, const char *msg) {
+	if(gameconn) {
+		flib_gameconn_send_chatmsg(gameconn, nick, msg);
+	}
 	printf("%s: %s\n", nick, msg);
 }
 
@@ -212,8 +213,10 @@ void handleChatFromGame(void *context, const char *message, bool teamchat) {
 }
 
 void handleRunGame(void *context) {
-	flib_gamesetup *gamesetup = flib_netconn_create_gameSetup(netconn);
-	if(gamesetup) {
+	flib_gamesetup *gamesetup = flib_netconn_create_gamesetup(netconn);
+	if(gameconn) {
+		flib_log_e("Request to start game, but a game is already running.");
+	} else if(gamesetup) {
 		gameconn = flib_gameconn_create(nickname, gamesetup, true);
 		flib_gameconn_onEngineMessage(gameconn, handleEmFromEngine, NULL);
 		flib_gameconn_onDisconnect(gameconn, onGameDisconnect, NULL);
@@ -237,6 +240,9 @@ void handlePwRequest(void *context, const char *nick) {
 }
 
 void handleMessage(void *context, int type, const char *msg) {
+	if(gameconn) {
+		flib_gameconn_send_textmsg(gameconn, 1, msg);
+	}
 	printf("*** %s\n", msg);
 }
 
@@ -256,6 +262,8 @@ void handleMapChanged(void *context, const flib_map *map, int changetype) {
 			flib_mapconn_onFailure(mapconn, handleMapFailure, NULL);
 			startEngineMap(flib_mapconn_getport(mapconn));
 		}
+	} else if(map->mapgen == MAPGEN_NAMED) {
+		printf("The map %s has been selected.\n", map->name);
 	}
 }
 
