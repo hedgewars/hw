@@ -128,7 +128,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #endif
     gameSettings = new QSettings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
     frontendEffects = gameSettings->value("frontend/effects", true).toBool();
-    playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toLatin1(), QCryptographicHash::Md5).toHex());
+    playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toUtf8(), QCryptographicHash::Md5).toHex());
 
     this->setStyleSheet(styleSheet);
     ui.setupUi(this);
@@ -968,7 +968,7 @@ void HWForm::NetPassword(const QString & nick)
         }
 
         QString password = hpd->lePassword->text();
-        hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
+        hash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex();
 
         bool save = hpd->cbSave->isChecked();
         config->setValue("net/savepassword", save);
