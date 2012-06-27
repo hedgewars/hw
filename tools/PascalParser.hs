@@ -14,7 +14,7 @@ import Data.Char
 
 import PascalBasics
 import PascalUnitSyntaxTree
-    
+
 knownTypes = ["shortstring", "ansistring", "char", "byte"]
 
 pascalUnit = do
@@ -27,7 +27,7 @@ iD = do
     i <- liftM (flip Identifier BTUnknown) (identifier pas)
     comments
     return i
-        
+
 unit = do
     string "unit" >> comments
     name <- iD
@@ -38,7 +38,7 @@ unit = do
     comments
     return $ Unit name int impl Nothing Nothing
 
-    
+
 reference = buildExpressionParser table term <?> "reference"
     where
     term = comments >> choice [
@@ -48,9 +48,9 @@ reference = buildExpressionParser table term <?> "reference"
         , liftM SimpleReference iD >>= postfixes 
         ] <?> "simple reference"
 
-    table = [ 
+    table = [
         ]
-    
+
     postfixes r = many postfix >>= return . foldl (flip ($)) r
     postfix = choice [
             parens pas (option [] parameters) >>= return . FunCall
@@ -64,9 +64,8 @@ reference = buildExpressionParser table term <?> "reference"
         e <- parens pas expression
         comments
         return $ TypeCast (Identifier t BTUnknown) e
-        
-    
-varsDecl1 = varsParser sepEndBy1    
+
+varsDecl1 = varsParser sepEndBy1
 varsDecl = varsParser sepEndBy
 varsParser m endsWithSemi = do
     vs <- m (aVarDecl endsWithSemi) (semi pas)
@@ -115,7 +114,7 @@ constsDecl = do
         e <- initExpression
         comments
         return $ VarDeclaration (isNothing t) ([i], fromMaybe (DeriveType e) t) (Just e)
-        
+
 typeDecl = choice [
     char '^' >> typeDecl >>= return . PointerTo
     , try (string "shortstring") >> return (String 255)
@@ -211,7 +210,6 @@ typesDecl = many (aTypeDecl >>= \t -> comments >> return t)
         comments
         return $ TypeDeclaration i t
 
-        
 rangeDecl = choice [
     try $ rangeft
     , iD >>= return . Range
@@ -221,8 +219,8 @@ rangeDecl = choice [
     e1 <- initExpression
     string ".."
     e2 <- initExpression
-    return $ RangeFromTo e1 e2        
-    
+    return $ RangeFromTo e1 e2
+
 typeVarDeclaration isImpl = (liftM concat . many . choice) [
     varSection,
     constSection,
@@ -251,7 +249,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         t <- typesDecl <?> "type declaration"
         comments
         return t
-        
+
     operatorDecl = do
         try $ string "operator"
         comments
@@ -276,7 +274,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
                 return Nothing
         return $ [OperatorDeclaration i rid ret vs b]
 
-        
+
     funcDecl = do
         fp <- try (string "function") <|> try (string "procedure")
         comments
@@ -300,7 +298,7 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
                 else
                 return Nothing
         return $ [FunctionDeclaration i ret vs b]
-        
+
     functionDecorator = choice [
         try $ string "inline;"
         , try $ caseInsensitiveString "cdecl;"
@@ -309,8 +307,8 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         , try $ string "varargs;"
         , try (string "external") >> comments >> iD >> optional (string "name" >> comments >> stringLiteral pas)>> string ";"
         ] >> comments
-        
-        
+
+
 program = do
     string "program"
     comments
@@ -396,15 +394,15 @@ expression = buildExpressionParser table term <?> "expression"
           ]
         ]
     strOrChar [a] = CharCode . show . ord $ a
-    strOrChar a = StringLiteral a    
-    
+    strOrChar a = StringLiteral a
+
 phrasesBlock = do
     try $ string "begin"
     comments
     p <- manyTill phrase (try $ string "end" >> notFollowedBy alphaNum)
     comments
     return $ Phrases p
-    
+
 phrase = do
     o <- choice [
         phrasesBlock
@@ -459,7 +457,7 @@ withBlock = do
     comments
     o <- phrase
     return $ foldr WithBlock o rs
-    
+
 repeatCycle = do
     try $ string "repeat" >> space
     comments
@@ -488,7 +486,7 @@ forCycle = do
     p <- phrase
     comments
     return $ ForCycle i e1 e2 p
-    
+
 switchCase = do
     try $ string "case"
     comments
@@ -515,14 +513,14 @@ switchCase = do
         p <- phrase
         comments
         return (e, p)
-    
+
 procCall = do
     r <- reference
     p <- option [] $ (parens pas) parameters
     return $ ProcCall r p
 
 parameters = (commaSep pas) expression <?> "parameters"
-        
+
 functionBody = do
     tv <- typeVarDeclaration True
     comments
@@ -559,7 +557,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         , itypeCast
         , iD >>= return . InitReference
         ]
-        
+
     recField = do
         i <- iD
         spaces
@@ -569,7 +567,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         spaces
         return (i ,e)
 
-    table = [ 
+    table = [
           [
              Prefix (char '-' >> return (InitPrefixOp "-"))
           ]
@@ -603,7 +601,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         i <- parens pas initExpression
         comments
         return $ InitTypeCast (Identifier t BTUnknown) i
-        
+
 builtInFunction e = do
     name <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) builtin
     spaces

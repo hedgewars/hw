@@ -19,7 +19,7 @@ initDefines = Map.fromList [
     ("FPC", "")
     , ("PAS2C", "")
     ]
-        
+
 preprocess :: String -> IO String
 preprocess fn = do
     r <- runParserT (preprocessFile fn) (initDefines, [True]) "" ""
@@ -28,17 +28,17 @@ preprocess fn = do
              hPutStrLn stderr (show a)
              return ""
          (Right a) -> return a
-    
+
     where
     preprocessFile fn = do
         f <- liftIO (readFile fn)
         setInput f
         preprocessor
-        
+
     preprocessor, codeBlock, switch :: ParsecT String (Map.Map String String, [Bool]) IO String
-    
+
     preprocessor = chainr codeBlock (return (++)) ""
-    
+
     codeBlock = do
         s <- choice [
             switch
@@ -55,7 +55,7 @@ preprocess fn = do
         c <- letter <|> oneOf "_"
         s <- many (alphaNum <|> oneOf "_")
         return $ c:s
-            
+
     switch = do
         try $ string "{$"
         s <- choice [
@@ -68,7 +68,7 @@ preprocess fn = do
             , unknown
             ]
         return s
-        
+
     include = do
         try $ string "INCLUDE"
         spaces
@@ -85,26 +85,26 @@ preprocess fn = do
     ifdef = do
         s <- try (string "IFDEF") <|> try (string "IFNDEF")
         let f = if s == "IFNDEF" then not else id
-        
+
         spaces
         d <- identifier
         spaces
         char '}'
-        
+
         updateState $ \(m, b) ->
             (m, (f $ d `Map.member` m) : b)
-      
+
         return ""
 
     if' = do
         s <- try (string "IF" >> notFollowedBy alphaNum)
-        
+
         manyTill anyChar (char '}')
         --char '}'
-        
+
         updateState $ \(m, b) ->
             (m, False : b)
-      
+
         return ""
 
     elseSwitch = do
@@ -118,7 +118,7 @@ preprocess fn = do
     define = do
         try $ string "DEFINE"
         spaces
-        i <- identifier        
+        i <- identifier
         d <- ((string ":=" >> return ())<|> spaces) >> many (noneOf "}")
         char '}'
         updateState $ \(m, b) -> (if (and b) && (head i /= '_') then Map.insert i d m else m, b)
@@ -126,7 +126,7 @@ preprocess fn = do
     replace s = do
         (m, _) <- getState
         return $ Map.findWithDefault s s m
-        
+
     unknown = do
         fn <- many1 $ noneOf "}\n"
         char '}'
