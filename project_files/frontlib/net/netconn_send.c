@@ -1,3 +1,22 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 #include "netconn_internal.h"
 
 #include "../util/logging.h"
@@ -68,14 +87,14 @@ int flib_netconn_send_nick(flib_netconn *conn, const char *nick) {
 	return result;
 }
 
-int flib_netconn_send_password(flib_netconn *conn, const char *latin1Passwd) {
+int flib_netconn_send_password(flib_netconn *conn, const char *passwd) {
 	int result = -1;
-	if(!log_badparams_if(!conn || !latin1Passwd)) {
+	if(!log_badparams_if(!conn || !passwd)) {
 		md5_state_t md5state;
 		uint8_t md5bytes[16];
 		char md5hex[33];
 		md5_init(&md5state);
-		md5_append(&md5state, (unsigned char*)latin1Passwd, strlen(latin1Passwd));
+		md5_append(&md5state, (unsigned char*)passwd, strlen(passwd));
 		md5_finish(&md5state, md5bytes);
 		for(int i=0;i<sizeof(md5bytes); i++) {
 			// Needs to be lowercase - server checks case sensitive
@@ -106,12 +125,15 @@ int flib_netconn_send_renameRoom(flib_netconn *conn, const char *roomName) {
 	return sendStr(conn, "ROOM_NAME", roomName);
 }
 
-int flib_netconn_send_leaveRoom(flib_netconn *conn) {
-	if(flib_netconn_is_in_room_context(conn) && !sendVoid(conn, "PART")) {
-		netconn_leaveRoom(conn);
-		return 0;
+int flib_netconn_send_leaveRoom(flib_netconn *conn, const char *str) {
+	int result = -1;
+	if(flib_netconn_is_in_room_context(conn)) {
+		int result = (str && *str) ? sendStr(conn, "PART", str) : sendVoid(conn, "PART");
+		if(!result) {
+			netconn_leaveRoom(conn);
+		}
 	}
-	return -1;
+	return result;
 }
 
 int flib_netconn_send_toggleReady(flib_netconn *conn) {

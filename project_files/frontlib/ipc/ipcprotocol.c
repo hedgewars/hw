@@ -1,6 +1,26 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 #include "ipcprotocol.h"
 #include "../util/util.h"
 #include "../util/logging.h"
+#include "../md5/md5.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -161,6 +181,19 @@ static int appendWeaponSet(flib_vector *vec, flib_weaponset *set) {
 		|| flib_ipc_append_message(vec, "eammreinf %s", set->crateammo);
 }
 
+static void calculateMd5Hex(const char *in, char out[33]) {
+	if(!log_badparams_if(!in)) {
+		md5_state_t md5state;
+		uint8_t md5bytes[16];
+		md5_init(&md5state);
+		md5_append(&md5state, (unsigned char*)in, strlen(in));
+		md5_finish(&md5state, md5bytes);
+		for(int i=0;i<sizeof(md5bytes); i++) {
+			snprintf(out+i*2, 3, "%02x", (unsigned)md5bytes[i]);
+		}
+	}
+}
+
 int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHogAmmo, bool noAmmoStore) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
@@ -173,13 +206,13 @@ int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHog
 					|| flib_ipc_append_message(tempvector, "eammstore");
 		}
 
-		// TODO
-		char *hash = team->ownerName ? team->ownerName : "00000000000000000000000000000000";
+		char md5Hex[33];
+		calculateMd5Hex(team->ownerName ? team->ownerName : "", md5Hex);
 		if(team->colorIndex<0 || team->colorIndex>=flib_teamcolor_defaults_len) {
 			flib_log_e("Color index out of bounds for team %s: %i", team->name, team->colorIndex);
 			error = true;
 		} else {
-			error |= flib_ipc_append_message(tempvector, "eaddteam %s %"PRIu32" %s", hash, flib_teamcolor_defaults[team->colorIndex], team->name);
+			error |= flib_ipc_append_message(tempvector, "eaddteam %s %"PRIu32" %s", md5Hex, flib_teamcolor_defaults[team->colorIndex], team->name);
 		}
 
 		if(team->remoteDriven) {
@@ -215,16 +248,6 @@ int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHog
 	return result;
 }
 
-static bool getGameMod(const flib_cfg *conf, const char *name) {
-	for(int i=0; i<conf->meta->modCount; i++) {
-		if(!strcmp(conf->meta->mods[i].name, name)) {
-			return conf->mods[i];
-		}
-	}
-	flib_log_e("Unable to find game mod %s", name);
-	return false;
-}
-
 int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bool netgame) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
@@ -242,9 +265,9 @@ int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bo
 		}
 		if(setup->gamescheme) {
 			error |= flib_ipc_append_gamescheme(tempvector, setup->gamescheme);
-			sharedAmmo = getGameMod(setup->gamescheme, "sharedammo");
+			sharedAmmo = flib_cfg_get_mod(setup->gamescheme, "sharedammo");
 			// Shared ammo has priority over per-hog ammo
-			perHogAmmo = !sharedAmmo && getGameMod(setup->gamescheme, "perhogammo");
+			perHogAmmo = !sharedAmmo && flib_cfg_get_mod(setup->gamescheme, "perhogammo");
 		}
 		if(setup->teamlist->teams && setup->teamlist->teamCount>0) {
 			int *clanColors = flib_calloc(setup->teamlist->teamCount, sizeof(int));

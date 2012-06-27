@@ -1,3 +1,22 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 /**
  * Data structures for game scheme information.
  */
@@ -85,5 +104,15 @@ flib_cfg *flib_cfg_retain(flib_cfg *cfg);
  * Decrease the reference count of the object and free it if this was the last reference.
  */
 void flib_cfg_release(flib_cfg* cfg);
+
+/**
+ * Retrieve a mod setting by its name. If the mod is not found, logs an error and returns false.
+ */
+bool flib_cfg_get_mod(flib_cfg *cfg, const char *name);
+
+/**
+ * Retrieve a game setting by its name. If the setting is not found, logs an error and returns def.
+ */
+int flib_cfg_get_setting(flib_cfg *cfg, const char *name, int def);
 
 #endif /* CFG_H_ */

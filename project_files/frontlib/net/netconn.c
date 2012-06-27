@@ -175,7 +175,7 @@ void netconn_setScheme(flib_netconn *conn, const flib_cfg *scheme) {
 	}
 }
 
-flib_gamesetup *flib_netconn_create_gameSetup(flib_netconn *conn) {
+flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn) {
 	flib_gamesetup *result = NULL;
 	if(!conn) {
 		flib_log_e("null parameter in flib_netconn_create_gameSetup");
@@ -193,7 +193,7 @@ flib_gamesetup *flib_netconn_create_gameSetup(flib_netconn *conn) {
 					flib_team *copy = flib_team_copy(conn->teamlist.teams[i]);
 					if(copy) {
 						flib_team_set_weaponset(copy, conn->weaponset);
-						flib_team_set_health(copy, conn->scheme->settings[2]); // TODO by name
+						flib_team_set_health(copy, flib_cfg_get_setting(conn->scheme, "health", 100));
 						flib_teamlist_insert(result->teamlist, copy, result->teamlist->teamCount);
 					}
 					flib_team_release(copy);
