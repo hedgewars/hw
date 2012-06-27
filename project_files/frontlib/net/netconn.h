@@ -40,7 +40,11 @@
 // TODO: Order of functions, and match the order in netconn.c
 typedef struct _flib_netconn flib_netconn;
 
-flib_netconn *flib_netconn_create(const char *playerName, flib_cfg_meta *metacfg, const char *host, uint16_t port);
+/**
+ * Create a new netplay connection with these parameters.
+ * The path to the data directory must end with a path delimiter (e.g. C:\Games\Hedgewars\Data\)
+ */
+flib_netconn *flib_netconn_create(const char *playerName, flib_cfg_meta *metacfg, const char *dataDirPath, const char *host, uint16_t port);
 void flib_netconn_destroy(flib_netconn *conn);
 
 /**
@@ -60,6 +64,20 @@ const flib_roomlist *flib_netconn_get_roomlist(flib_netconn *conn);
  * NETCONN_STATE_ROOM and NETCONN_STATE_INGAME states.
  */
 bool flib_netconn_is_chief(flib_netconn *conn);
+
+/**
+ * Are you in the context of a room, i.e. either in room or ingame state?
+ */
+bool flib_netconn_is_in_room_context(flib_netconn *conn);
+
+/**
+ * Generate a game setup from the current room state.
+ * Returns NULL if the room state does not contain enough information
+ * for a complete game setup, or if an error occurs.
+ *
+ * The new gamesetup must be destroyed TODO function for that...
+ */
+flib_gamesetup *flib_netconn_create_gameSetup(flib_netconn *conn);
 
 /**
  * quitmsg may be null
@@ -146,7 +164,7 @@ int flib_netconn_send_teamHogCount(flib_netconn *conn, const char *teamname, int
  * Set the teamcolor of a team. Only makes sense in room state and if you are chief.
  * The server does not send a reply.
  */
-int flib_netconn_send_teamColor(flib_netconn *conn, const char *teamname, uint32_t colorRGB);
+int flib_netconn_send_teamColor(flib_netconn *conn, const char *teamname, int colorIndex);
 
 /**
  * Set the weaponset for the room. Only makes sense in room state and if you are chief.
@@ -318,9 +336,9 @@ void flib_netconn_onDisconnected(flib_netconn *conn, void (*callback)(void *cont
  * flib_netconn_get_roomlist() as soon as the onConnected callback is fired. These callbacks
  * provide notification about changes.
  */
-void flib_netconn_onRoomAdd(flib_netconn *conn, void (*callback)(void *context, const flib_roomlist_room *room), void* context);
+void flib_netconn_onRoomAdd(flib_netconn *conn, void (*callback)(void *context, const flib_room *room), void* context);
 void flib_netconn_onRoomDelete(flib_netconn *conn, void (*callback)(void *context, const char *name), void* context);
-void flib_netconn_onRoomUpdate(flib_netconn *conn, void (*callback)(void *context, const char *oldName, const flib_roomlist_room *room), void* context);
+void flib_netconn_onRoomUpdate(flib_netconn *conn, void (*callback)(void *context, const char *oldName, const flib_room *room), void* context);
 
 /**
  * Callbacks for players joining or leaving the lobby. If join is true it's a join, otherwise a leave.
@@ -417,9 +435,9 @@ void flib_netconn_onHogCountChanged(flib_netconn *conn, void (*callback)(void *c
  * The color of a team has been changed by the room chief. If you are the chief and change the color yourself,
  * you will not receive this callback!
  */
-void flib_netconn_onTeamColorChanged(flib_netconn *conn, void (*callback)(void *context, const char *teamName, uint32_t colorARGB), void *context);
+void flib_netconn_onTeamColorChanged(flib_netconn *conn, void (*callback)(void *context, const char *teamName, int colorIndex), void *context);
 
-void flib_netconn_onEngineMessage(flib_netconn *conn, void (*callback)(void *context, const char *message, int size), void *context);
+void flib_netconn_onEngineMessage(flib_netconn *conn, void (*callback)(void *context, const uint8_t *message, size_t size), void *context);
 
 void flib_netconn_onCfgScheme(flib_netconn *conn, void (*callback)(void *context, flib_cfg *scheme), void *context);
 

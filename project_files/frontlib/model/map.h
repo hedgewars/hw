@@ -1,12 +1,3 @@
-/**
- * Data structure for defining a map. This contains the whole recipe to
- * exactly recreate a particular map. For named maps, you also need the
- * corresponding files.
- *
- * The required fields depend on the map generator, see the comments
- * at the struct for details.
- */
-
 #ifndef MODEL_MAP_H_
 #define MODEL_MAP_H_
 
@@ -32,12 +23,20 @@
 #define MAZE_SIZE_MEDIUM_ISLANDS 4
 #define MAZE_SIZE_LARGE_ISLANDS 5
 
+/**
+ * Data structure for defining a map. This contains the whole recipe to
+ * exactly recreate a particular map. For named maps, you also need the
+ * corresponding files.
+ *
+ * The required fields depend on the map generator, see the comments
+ * at the struct for details.
+ */
 typedef struct {
 	int _referenceCount;
 	int mapgen;				// Always one of the MAPGEN_ constants
 	char *name;				// The name of the map for MAPGEN_NAMED, otherwise one of "+rnd+", "+maze+" or "+drawn+".
 	char *seed;				// Used for all maps
-	char *theme;			// Used for all except MAPGEN_NAMED
+	char *theme;			// Used for all maps
 	uint8_t *drawData;		// Used for MAPGEN_DRAWN
 	int drawDataSize;		// Used for MAPGEN_DRAWN
 	int templateFilter;		// Used for MAPGEN_REGULAR

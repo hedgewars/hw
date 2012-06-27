@@ -17,10 +17,14 @@ typedef struct _flib_mapconn flib_mapconn;
  * engine process. Once this connection is established, the required information
  * will be sent to the engine, and the reply is read.
  *
+ * The map must be a regular, maze or drawn map - for a preview of a named map,
+ * use the preview images in the map's directory, and for the hog count read the
+ * map information (flib_mapcfg_read).
+ *
  * No NULL parameters allowed, returns NULL on failure.
  * Use flib_mapconn_destroy to free the returned object.
  */
-flib_mapconn *flib_mapconn_create(flib_map *mapdesc);
+flib_mapconn *flib_mapconn_create(const flib_map *mapdesc);
 
 /**
  * Destroy the mapconn object. Passing NULL is allowed and does nothing.

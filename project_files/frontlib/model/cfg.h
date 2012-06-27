@@ -73,7 +73,7 @@ flib_cfg *flib_cfg_create(flib_cfg_meta *meta, const char *schemeName);
 /**
  * Create a copy of the scheme. Returns NULL on error or if NULL was passed.
  */
-flib_cfg *flib_cfg_copy(flib_cfg *cfg);
+flib_cfg *flib_cfg_copy(const flib_cfg *cfg);
 
 /**
  * Increase the reference count of the object. Call this if you store a pointer to it somewhere.

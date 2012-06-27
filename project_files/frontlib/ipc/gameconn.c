@@ -38,7 +38,7 @@ struct _flib_gameconn {
 	void (*onGameRecordedCb)(void *context, const uint8_t *record, int size, bool isSavegame);
 	void *onGameRecordedCtx;
 
-	void (*onEngineMessageCb)(void *context, const uint8_t *em, int size);
+	void (*onEngineMessageCb)(void *context, const uint8_t *em, size_t size);
 	void *onEngineMessageCtx;
 
 	bool running;
@@ -52,7 +52,7 @@ static void defaultCallback_onErrorMessage(void* context, const char *msg) {
 }
 static void defaultCallback_onChat(void* context, const char *msg, bool teamchat) {}
 static void defaultCallback_onGameRecorded(void *context, const uint8_t *record, int size, bool isSavegame) {}
-static void defaultCallback_onEngineMessage(void *context, const uint8_t *em, int size) {}
+static void defaultCallback_onEngineMessage(void *context, const uint8_t *em, size_t size) {}
 
 static void clearCallbacks(flib_gameconn *conn) {
 	conn->onConnectCb = &defaultCallback_onConnect;
@@ -65,23 +65,25 @@ static void clearCallbacks(flib_gameconn *conn) {
 
 static flib_gameconn *flib_gameconn_create_partial(bool record, const char *playerName, bool netGame) {
 	flib_gameconn *result = NULL;
-	flib_gameconn *tempConn = flib_calloc(1, sizeof(flib_gameconn));
-	if(tempConn) {
-		tempConn->ipcBase = flib_ipcbase_create();
-		tempConn->configBuffer = flib_vector_create();
-		tempConn->playerName = flib_strdupnull(playerName);
-		if(tempConn->ipcBase && tempConn->configBuffer && tempConn->playerName) {
-			if(record) {
-				tempConn->demoBuffer = flib_vector_create();
+	if(!log_badparams_if(!playerName)) {
+		flib_gameconn *tempConn = flib_calloc(1, sizeof(flib_gameconn));
+		if(tempConn) {
+			tempConn->ipcBase = flib_ipcbase_create();
+			tempConn->configBuffer = flib_vector_create();
+			tempConn->playerName = flib_strdupnull(playerName);
+			if(tempConn->ipcBase && tempConn->configBuffer && tempConn->playerName) {
+				if(record) {
+					tempConn->demoBuffer = flib_vector_create();
+				}
+				tempConn->state = AWAIT_CONNECTION;
+				tempConn->netgame = netGame;
+				clearCallbacks(tempConn);
+				result = tempConn;
+				tempConn = NULL;
 			}
-			tempConn->state = AWAIT_CONNECTION;
-			tempConn->netgame = netGame;
-			clearCallbacks(tempConn);
-			result = tempConn;
-			tempConn = NULL;
 		}
+		flib_gameconn_destroy(tempConn);
 	}
-	flib_gameconn_destroy(tempConn);
 	return result;
 }
 
@@ -89,7 +91,9 @@ flib_gameconn *flib_gameconn_create(const char *playerName, const flib_gamesetup
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, netgame);
 	if(tempConn) {
-		if(!flib_ipc_append_fullconfig(tempConn->configBuffer, setup, netgame)) {
+		if(flib_ipc_append_fullconfig(tempConn->configBuffer, setup, netgame)) {
+			flib_log_e("Error generating full game configuration for the engine.");
+		} else {
 			result = tempConn;
 			tempConn = NULL;
 		}
@@ -102,7 +106,7 @@ flib_gameconn *flib_gameconn_create_playdemo(const uint8_t *demo, int size) {
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(false, "Player", false);
 	if(tempConn) {
-		if(flib_vector_append(tempConn->configBuffer, demo, size) == size) {
+		if(!flib_vector_append(tempConn->configBuffer, demo, size)) {
 			result = tempConn;
 			tempConn = NULL;
 		}
@@ -115,7 +119,7 @@ flib_gameconn *flib_gameconn_create_loadgame(const char *playerName, const uint8
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, false);
 	if(tempConn) {
-		if(flib_vector_append(tempConn->configBuffer, save, size) == size) {
+		if(!flib_vector_append(tempConn->configBuffer, save, size)) {
 			result = tempConn;
 			tempConn = NULL;
 		}
@@ -161,17 +165,15 @@ void flib_gameconn_destroy(flib_gameconn *conn) {
 }
 
 int flib_gameconn_getport(flib_gameconn *conn) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_gameconn_getport");
-		return 0;
-	} else {
+	if(!log_badparams_if(!conn)) {
 		return flib_ipcbase_port(conn->ipcBase);
 	}
+	return 0;
 }
 
 static void demo_append(flib_gameconn *conn, const void *data, size_t len) {
 	if(conn->demoBuffer) {
-		if(flib_vector_append(conn->demoBuffer, data, len) < len) {
+		if(flib_vector_append(conn->demoBuffer, data, len)) {
 			flib_log_e("Error recording demo: Out of memory.");
 			flib_vector_destroy(conn->demoBuffer);
 			conn->demoBuffer = NULL;
@@ -213,11 +215,10 @@ static void demo_replace_gamemode(flib_buffer buf, char gamemode) {
 	}
 }
 
-int flib_gameconn_send_enginemsg(flib_gameconn *conn, uint8_t *data, int len) {
+int flib_gameconn_send_enginemsg(flib_gameconn *conn, const uint8_t *data, size_t len) {
 	int result = -1;
-	if(!conn || (!data && len>0)) {
-		flib_log_e("null parameter in flib_gameconn_send_enginemsg");
-	} else if(!flib_ipcbase_send_raw(conn->ipcBase, data, len)) {
+	if(!log_badparams_if(!conn || (!data && len>0))
+			&& !flib_ipcbase_send_raw(conn->ipcBase, data, len)) {
 		demo_append(conn, data, len);
 		result = 0;
 	}
@@ -301,7 +302,7 @@ void flib_gameconn_onGameRecorded(flib_gameconn *conn, void (*callback)(void *co
 	}
 }
 
-void flib_gameconn_onEngineMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, int size), void* context) {
+void flib_gameconn_onEngineMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, size_t size), void* context) {
 	if(!conn) {
 		flib_log_e("null parameter in flib_gameconn_onEngineMessage");
 	} else {

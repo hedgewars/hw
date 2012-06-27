@@ -16,11 +16,11 @@ typedef struct {
     char *map;			// This is either a map name, or one of +rnd+, +maze+ or +drawn+.
     char *scheme;
     char *weapons;
-} flib_roomlist_room;
+} flib_room;
 
 typedef struct {
 	int roomCount;
-	flib_roomlist_room **rooms;
+	flib_room **rooms;
 } flib_roomlist;
 
 flib_roomlist *flib_roomlist_create();
@@ -45,7 +45,7 @@ int flib_roomlist_update(flib_roomlist *list, const char *name, char **params);
 /**
  * Returns the room with the name [name] from the list if it exists, NULL otherwise
  */
-flib_roomlist_room *flib_roomlist_find(flib_roomlist *list, const char *name);
+flib_room *flib_roomlist_find(const flib_roomlist *list, const char *name);
 
 /**
  * Removes all rooms from the list

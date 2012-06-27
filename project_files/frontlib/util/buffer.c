@@ -94,29 +94,20 @@ int flib_vector_resize(flib_vector *vec, size_t newSize) {
 }
 
 int flib_vector_append(flib_vector *vec, const void *data, size_t len) {
-	if(!vec) {
-		flib_log_e("null parameter in flib_vector_append");
-		return 0;
+	if(!log_badparams_if(!vec || (!data && len>0))
+			&& !log_oom_if(len > SIZE_MAX-vec->size)) {
+		size_t oldSize = vec->size;
+		if(!log_oom_if(flib_vector_resize(vec, vec->size+len))) {
+			memmove(((uint8_t*)vec->data) + oldSize, data, len);
+			return 0;
+		}
 	}
-
-	if(len > SIZE_MAX-vec->size) {
-		return 0;
-	}
-
-	size_t oldSize = vec->size;
-	if(flib_vector_resize(vec, vec->size+len)) {
-		return 0;
-	}
-
-	memmove(((uint8_t*)vec->data) + oldSize, data, len);
-	return len;
+	return -1;
 }
 
 int flib_vector_appendf(flib_vector *vec, const char *fmt, ...) {
 	int result = -1;
-	if(!vec || !fmt) {
-		flib_log_e("null parameter in flib_vector_appendf");
-	} else {
+	if(!log_badparams_if(!vec || !fmt)) {
 		va_list argp;
 		va_start(argp, fmt);
 		char *formatted = flib_vasprintf(fmt, argp);
@@ -125,9 +116,7 @@ int flib_vector_appendf(flib_vector *vec, const char *fmt, ...) {
 
 		if(formatted) {
 			size_t len = strlen(formatted);
-			if(flib_vector_append(vec, formatted, len) == len) {
-				result = 0;
-			}
+			result = flib_vector_append(vec, formatted, len);
 		}
 	}
 	return result;

@@ -62,7 +62,7 @@ typedef struct {
 	int campaignProgress;
 
 	// Transient settings used in game setup
-	uint32_t color;
+	int colorIndex;		// Index into a color table
 	int hogsInGame;
 	bool remoteDriven;
 	char *ownerName;
@@ -98,6 +98,11 @@ int flib_team_to_ini(const char *filename, const flib_team *team);
 void flib_team_set_weaponset(flib_team *team, flib_weaponset *set);
 
 /**
+ * Set the same initial health for every hog.
+ */
+void flib_team_set_health(flib_team *team, int health);
+
+/**
  * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
  * Returns the parameter.
  */
@@ -113,6 +118,6 @@ void flib_team_release(flib_team *team);
  * The referenced weaponsets are not copied, so the new
  * team references the same weaponsets.
  */
-flib_team *flib_team_copy(flib_team *team);
+flib_team *flib_team_copy(const flib_team *team);
 
 #endif /* TEAM_H_ */
