@@ -4416,8 +4416,8 @@ begin
         Gear^.State := Gear^.State or gstCollision;
         Gear^.State := Gear^.State and (not gstMoving);
         
-        if not CalcSlopeTangent(Gear, x, y, tx, ty, 255)
-        or (Land[y, x] and lfBouncy <> 0)
+        if (Land[y, x] and lfBouncy <> 0)
+        or not CalcSlopeTangent(Gear, x, y, tx, ty, 255)
         or (DistanceI(tx,ty) < _12) then // reject shots at too irregular terrain
             begin
             loadNewPortalBall(Gear, true);
