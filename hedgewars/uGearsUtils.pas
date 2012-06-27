@@ -107,7 +107,7 @@ while Gear <> nil do
                         tdX:= Gear^.X-fX;
                         tdY:= Gear^.Y-fY;
                         if hwRound(hwAbs(tdX)+hwAbs(tdY)) < dmgBase then
-                            dmg:= dmgBase - max(hwRound(Distance(tdX, tdY)),Gear^.Radius);
+                            dmg:= dmgBase - hwRound(Distance(tdX, tdY));
                         if dmg > 1 then
                             begin
                             dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);

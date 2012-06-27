@@ -22,7 +22,6 @@
 #import <sys/sysctl.h>
 #import <netinet/in.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
-#import "SDL_uikitwindow.h"
 
 
 static NSString *cachedModel = nil;

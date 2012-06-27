@@ -78,6 +78,7 @@
 		615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76BB14E4421200FBA131 /* MGSplitViewController.m */; };
 		615FEAE212A2A6640098EE92 /* localplayButton~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEADF12A2A6640098EE92 /* localplayButton~ipad.png */; };
 		615FEAE312A2A6640098EE92 /* localplayButton~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEAE012A2A6640098EE92 /* localplayButton~iphone.png */; };
+		616065A8159A71FD00CFAEF4 /* hwclassic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 616065A7159A71FD00CFAEF4 /* hwclassic.mp3 */; };
 		616245D114E6160200CC97FB /* libFreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6162456714E6159C00CC97FB /* libFreetype.a */; };
 		6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */; };
 		6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E111CA9BA200D6E256 /* FlagsViewController.m */; };
@@ -182,7 +183,7 @@
 		619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619C5AF3124F7E3100D041AE /* LuaPas.pas */; };
 		619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
-		61A19AFC14D20170004B1E6D /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19AEA14D2010A004B1E6D /* libSDL.a */; };
+		61A19AFC14D20170004B1E6D /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19AEA14D2010A004B1E6D /* libSDL2.a */; };
 		61A19B7714D20B7A004B1E6D /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19B6614D20B6C004B1E6D /* libSDL_image.a */; };
 		61A19BC714D20CE7004B1E6D /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19BC614D20CDA004B1E6D /* libSDL_ttf.a */; };
 		61A19BFA14D20D95004B1E6D /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19BF914D20D83004B1E6D /* libSDL_net.a */; };
@@ -402,6 +403,7 @@
 		615FEADE12A2A6640098EE92 /* localplayButton@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "localplayButton@2x~iphone.png"; path = "Resources/Frontend/localplayButton@2x~iphone.png"; sourceTree = "<group>"; };
 		615FEADF12A2A6640098EE92 /* localplayButton~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "localplayButton~ipad.png"; path = "Resources/Frontend/localplayButton~ipad.png"; sourceTree = "<group>"; };
 		615FEAE012A2A6640098EE92 /* localplayButton~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "localplayButton~iphone.png"; path = "Resources/Frontend/localplayButton~iphone.png"; sourceTree = "<group>"; };
+		616065A7159A71FD00CFAEF4 /* hwclassic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = hwclassic.mp3; path = Resources/hwclassic.mp3; sourceTree = "<group>"; };
 		6163EE7C11CC2600001C0453 /* SingleWeaponViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleWeaponViewController.h; sourceTree = "<group>"; };
 		6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleWeaponViewController.m; sourceTree = "<group>"; };
 		61641FE31437CDAA006E049C /* DefinesAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DefinesAndMacros.h; path = Classes/DefinesAndMacros.h; sourceTree = "<group>"; };
@@ -641,7 +643,7 @@
 				616245D114E6160200CC97FB /* libFreetype.a in Frameworks */,
 				619599451364C83D00B429B6 /* libLua.a in Frameworks */,
 				6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */,
-				61A19AFC14D20170004B1E6D /* libSDL.a in Frameworks */,
+				61A19AFC14D20170004B1E6D /* libSDL2.a in Frameworks */,
 				61A19B7714D20B7A004B1E6D /* libSDL_image.a in Frameworks */,
 				61A19C2414D20F5A004B1E6D /* libSDL_mixer.a in Frameworks */,
 				61A19BFA14D20D95004B1E6D /* libSDL_net.a in Frameworks */,
@@ -808,6 +810,7 @@
 		612CABCA1391D3D1005E9596 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				616065A7159A71FD00CFAEF4 /* hwclassic.mp3 */,
 				611EE973122A9C4100DF6938 /* clickSound.caf */,
 				611EE9D7122AA10A00DF6938 /* backSound.caf */,
 				611EE9D8122AA10A00DF6938 /* selSound.caf */,
@@ -967,7 +970,7 @@
 		61A19AE414D2010A004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61A19AEA14D2010A004B1E6D /* libSDL.a */,
+				61A19AEA14D2010A004B1E6D /* libSDL2.a */,
 				61A19AEC14D2010A004B1E6D /* testsdl.app */,
 			);
 			name = Products;
@@ -1315,10 +1318,10 @@
 			remoteRef = 619599431364C82B00B429B6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61A19AEA14D2010A004B1E6D /* libSDL.a */ = {
+		61A19AEA14D2010A004B1E6D /* libSDL2.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libSDL.a;
+			path = libSDL2.a;
 			remoteRef = 61A19AE914D2010A004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1455,6 +1458,7 @@
 				61156521147F48B6006729A9 /* About.strings in Resources */,
 				61156523147F48B7006729A9 /* Localizable.strings in Resources */,
 				61156525147F48B8006729A9 /* Scheme.strings in Resources */,
+				616065A8159A71FD00CFAEF4 /* hwclassic.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1472,7 +1476,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\n\n#create config.inc\necho \"Updating config file...\"\nPROTO=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep HEDGEWARS_PROTO_VER | cut -d ' ' -f 2 | cut -d ')' -f 1`\nMAJN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MAJOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nMINN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MINOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nPATN=`cat ${PROJECT_DIR}/../../CMakeLists.txt | grep CPACK_PACKAGE_VERSION_PATCH | xargs | cut -d ' ' -f 2 |cut -d '$' -f 1`\nREVN=-`/usr/local/bin/hg id -n ${PROJECT_DIR}/../../`\necho \"const cNetProtoVersion = $PROTO; const cVersionString = '${MAJN}.${MINN}.${PATN}${REVN}'; const cLuaLibrary = '';\" > ${PROJECT_DIR}/config.inc\n\necho \"Copying Data...\"\ncp -R ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some files from QTfrontend/res\necho \"Fetching additional graphics from QTfrontend...\"\nmkdir ${PROJECT_DIR}/Data/Graphics/Icons\ncp    ${PROJECT_DIR}/../../QTfrontend/res/{btn*,icon*,StatsMedal*,ammopic*}.png  ${PROJECT_DIR}/Data/Graphics/Icons/\n\necho \"Removing text and dummy files...\"\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg* -delete\nfind ${PROJECT_DIR}/Data -name *.psd -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\nfind ${PROJECT_DIR}/Data -name *.ts -delete\n\n#delete dummy maps and hats, misc stuff\nrm -rf ${PROJECT_DIR}/Data/Maps/test*\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/{TeamCap,TeamHeadband,TeamHair}\nrm -rf ${PROJECT_DIR}/Data/misc/\n\n#delete forbidden maps and WIP themes (remember to check that no Map uses them)\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\nrm -rf ${PROJECT_DIR}/Data/Themes/{Beach,Digital}\n\n#delete all names, reserved hats and unused fonts\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\necho \"Handling audio files...\"\n#copy mono audio\ncp -R ${PROJECT_DIR}/../AudioMono/* ${PROJECT_DIR}/Data/\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n#delete the main theme file\nrm -rf ${PROJECT_DIR}/Data/Music/main_theme.ogg\n\n#remove unused voices\nfor i in {Amazing,Brilliant,Bugger,Bungee,Cutitout,Drat,Excellent,Fire,FlawlessPossibility,Gonnagetyou,Grenade,Hmm,Justyouwait,Leavemealone,Ohdear,Ouch,Perfect,Revenge,Runaway,Solong,Thisoneismine,VictoryPossibility,Watchthis,Whatthe,Whoopsee}; do find Data/Sounds/voices/ -name $i.ogg -delete; done\n\necho \"Tweaking Data contents...\"\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nfor i in `ls ${PROJECT_DIR}/Data/Maps/`;\ndo \n    if [[ `ls -f ${PROJECT_DIR}/Data/Maps/$i/map.lua 2> /dev/null` != '' ]];\n    then\n        mv ${PROJECT_DIR}/Data/Maps/$i ${PROJECT_DIR}/Data/Missions/Maps/;\n    fi;\ndone;\n\n#workaround for missing map in CTF_Blizzard\nln -s ../../../Maps/Blizzard/map.png ${PROJECT_DIR}/Data/Missions/Maps/CTF_Blizzard/map.png\n\n#reduce the number of flakes for City\nsed -i -e 's/1500/50/' ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\necho \"Done\"";
+			shellScript = "SOURCE_DIR=${PROJECT_DIR}/../../\n\n#copy new stuff over old stuff\nrm -rf ${PROJECT_DIR}/Data\n\n#create config.inc\necho \"Updating config file...\"\nPROTO=`cat ${SOURCE_DIR}/CMakeLists.txt | grep HEDGEWARS_PROTO_VER | cut -d ' ' -f 2 | cut -d ')' -f 1`\nMAJN=`cat ${SOURCE_DIR}/CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MAJOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nMINN=`cat ${SOURCE_DIR}/CMakeLists.txt | grep CPACK_PACKAGE_VERSION_MINOR | xargs | cut -d ' ' -f 2 |cut -d ')' -f 1`\nPATN=`cat ${SOURCE_DIR}/CMakeLists.txt | grep CPACK_PACKAGE_VERSION_PATCH | xargs | cut -d ' ' -f 2 |cut -d '$' -f 1`\nREVN=-`/usr/local/bin/hg id -n ${SOURCE_DIR}`\necho \"const cNetProtoVersion = $PROTO; const cVersionString = '${MAJN}.${MINN}.${PATN}${REVN}'; const cLuaLibrary = '';\" > ${PROJECT_DIR}/config.inc\n\necho \"Copying Data...\"\ncp -R ${SOURCE_DIR}/share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#copy some other files\necho \"Fetching additional graphics...\"\nmkdir -p ${PROJECT_DIR}/Data/Graphics/Icons\ncp    ${SOURCE_DIR}/QTfrontend/res/{btn*,icon*,StatsMedal*,ammopic*}.png ${PROJECT_DIR}/Data/Graphics/Icons/\ncp -R ${SOURCE_DIR}/project_files/Android-build/SDL-android-project/assets/Data/Graphics/Buttons ${PROJECT_DIR}/Data/Graphics/\n\necho \"Removing text and dummy files...\"\n#delete all CMakeLists.txt and image source files\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\nfind ${PROJECT_DIR}/Data -name *.svg* -delete\nfind ${PROJECT_DIR}/Data -name *.psd -delete\nfind ${PROJECT_DIR}/Data -name *.sifz -delete\nfind ${PROJECT_DIR}/Data -name *.xcf -delete\nfind ${PROJECT_DIR}/Data -name *.orig -delete\nfind ${PROJECT_DIR}/Data -name *.ts -delete\n\n#delete dummy maps and hats, misc stuff\nrm -rf ${PROJECT_DIR}/Data/Maps/test*\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/{TeamCap,TeamHeadband,TeamHair}\nrm -rf ${PROJECT_DIR}/Data/misc/\n\n#delete forbidden maps and WIP themes (remember to check that no Map uses them)\nrm -rf ${PROJECT_DIR}/Data/Maps/{Cheese,FlightJoust}\nrm -rf ${PROJECT_DIR}/Data/Themes/{Beach,Digital}\n\n#delete all names, reserved hats and unused fonts\nrm -rf ${PROJECT_DIR}/Data/Names/\nrm -rf ${PROJECT_DIR}/Data/Graphics/Hats/Reserved/\nrm -rf ${PROJECT_DIR}/Data/Fonts/{wqy-zenhei.ttc,DroidSansFallback.ttf}\n\necho \"Handling audio files...\"\n#copy mono audio\ncp -R ${SOURCE_DIR}/project_files/AudioMono/* ${PROJECT_DIR}/Data/\n#delete the Classic voice\nrm -rf ${PROJECT_DIR}/Data/Sounds/voices/Classic\n#delete the main theme file\nrm -rf ${PROJECT_DIR}/Data/Music/main_theme.ogg\n\n#remove unused voices\nfor i in {Amazing,Brilliant,Bugger,Bungee,Cutitout,Drat,Excellent,Fire,FlawlessPossibility,Gonnagetyou,Grenade,Hmm,Justyouwait,Leavemealone,Ohdear,Ouch,Perfect,Revenge,Runaway,Solong,Thisoneismine,VictoryPossibility,Watchthis,Whatthe,Whoopsee}; do find Data/Sounds/voices/ -name $i.ogg -delete; done\n\necho \"Tweaking Data contents...\"\n#move Lua maps in Missions\nmkdir ${PROJECT_DIR}/Data/Missions/Maps/\nfor i in `ls ${PROJECT_DIR}/Data/Maps/`;\ndo \n    if [[ `ls -f ${PROJECT_DIR}/Data/Maps/$i/map.lua 2> /dev/null` != '' ]];\n    then\n        mv ${PROJECT_DIR}/Data/Maps/$i ${PROJECT_DIR}/Data/Missions/Maps/;\n    fi;\ndone;\n\n#workaround for missing map in CTF_Blizzard\nln -s ../../../Maps/Blizzard/map.png ${PROJECT_DIR}/Data/Missions/Maps/CTF_Blizzard/map.png\n\n#reduce the number of flakes for City\nsed -i -e 's/1500/50/' ${PROJECT_DIR}/Data/Themes/City/theme.cfg\n\necho \"Done\"";
 			showEnvVarsInLog = 0;
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
@@ -1756,7 +1760,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../Library/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
@@ -1862,7 +1865,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../Library/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
@@ -2010,7 +2012,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../Library/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
@@ -2080,7 +2081,6 @@
 				GCC_WARN_UNUSED_VALUE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
-					"\"$(SRCROOT)/../../../Library/SDL/src/video\"/**",
 					"\"$(SRCROOT)/../../../Library/SDL/include/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_net/\"",
 					"\"$(SRCROOT)/../../../Library/SDL_mixer/\"",
