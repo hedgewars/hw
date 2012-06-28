@@ -79,10 +79,10 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         hhsList [_] = error "Hedgehogs list with odd elements number"
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
         newTeamHHNum r = min 4 (canAddNumber r)
-        maxTeams r 
+        maxTeams r
             | roomProto r < 38 = 6
             | otherwise = 8
-                
+
 
 handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         (ci, _) <- ask
@@ -171,7 +171,7 @@ handleCmd_inRoom ["START_GAME"] = do
     cl <- thisClient
     rm <- thisRoom
     chans <- roomClientsChans
-    
+
     let allPlayersRegistered = all ((<) 0 . B.length . webPassword . client rnc . teamownerId) $ teams rm
 
     if isMaster cl && playersIn rm == readyPlayers rm && not (isJust $ gameInfo rm) then
@@ -247,7 +247,7 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
     rs <- allRoomInfos
     rm <- thisRoom
     chans <- sameProtoChans
-    
+
     return $
         if not $ isMaster cl then
             [ProtocolError "Not room master"]

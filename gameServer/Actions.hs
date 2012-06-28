@@ -160,7 +160,7 @@ processAction (DeleteClient ci) = do
 
     s <- get
     put $! s{removedClients = ci `Set.delete` removedClients s}
-    
+
     sp <- gets (shutdownPending . serverInfo)
     cls <- allClientsS
     io $ when (sp && null cls) $ throwIO ShutdownException
@@ -251,7 +251,7 @@ processAction ChangeMaster = do
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
     processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo (nick newMaster) newRoom)
 
-    
+
 processAction (AddRoom roomName roomPassword) = do
     Just clId <- gets clientIndex
     rnc <- gets roomsClients
@@ -306,16 +306,16 @@ processAction UnreadyRoomClients = do
     where
         notReadyMessage p nicks = if p < 38 then "NOT_READY" : nicks else "CLIENT_FLAGS" : "-r" : nicks
 
-        
+
 processAction FinishGame = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
     clNick <- client's nick
-    answerRemovedTeams <- io $ 
+    answerRemovedTeams <- io $
          room'sM rnc (map (\t -> AnswerClients thisRoomChans ["REMOVE_TEAM", t]) . leftTeams . fromJust . gameInfo) ri
-         
-    mapM_ processAction $ 
+
+    mapM_ processAction $
         SaveReplay
         : ModifyRoom
             (\r -> r{
@@ -326,7 +326,7 @@ processAction FinishGame = do
         : UnreadyRoomClients
         : answerRemovedTeams
 
-        
+
 processAction (SendTeamRemovalMessage teamName) = do
     chans <- othersChans
     mapM_ processAction [
@@ -338,22 +338,22 @@ processAction (SendTeamRemovalMessage teamName) = do
                 }) $ gameInfo r
             })
         ]
-        
+
     rnc <- gets roomsClients
     ri <- clientRoomA
     gi <- io $ room'sM rnc gameInfo ri
     when (isJust gi && 0 == teamsInGameNumber (fromJust gi)) $
-        processAction FinishGame        
+        processAction FinishGame
     where
         rmTeamMsg = toEngineMsg $ 'F' `B.cons` teamName
-    
-    
+
+
 processAction (RemoveTeam teamName) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     inGame <- io $ room'sM rnc (isJust . gameInfo) ri
     chans <- othersChans
-    mapM_ processAction $ 
+    mapM_ processAction $
         ModifyRoom (\r -> r{
             teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r
             , gameInfo = liftM (\g -> g{leftTeams = teamName : leftTeams g}) $ gameInfo r
@@ -456,7 +456,7 @@ processAction BanList = do
     bans <- gets (bans . serverInfo)
     processAction $
         AnswerClients [ch] ["BANLIST", B.pack $ show bans]
-    
+
 
 
 processAction (KickRoomClient kickId) = do
@@ -536,7 +536,7 @@ processAction StatsAction = do
     where
           st irnc = (length $ allRooms irnc, length $ allClients irnc)
 
-processAction RestartServer = do 
+processAction RestartServer = do
     sp <- gets (shutdownPending . serverInfo)
     when (not sp) $ do
         sock <- gets (fromJust . serverSocket . serverInfo)
