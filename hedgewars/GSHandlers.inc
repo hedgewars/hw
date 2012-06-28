@@ -3331,10 +3331,10 @@ begin
         if (Gear^.Timer mod 30) = 0 then
             AddVisualGear(hwRound(Gear^.X + _20 * Gear^.dX), hwRound(Gear^.Y + _20 * Gear^.dY), vgtDust);
         if (CheckGearDrowning(Gear)) then
-           begin
+            begin
             StopSoundChan(Gear^.SoundChannel);
             exit
-    end
+        end
     end;
 
     if GameTicks > Gear^.FlightTime then
@@ -3425,8 +3425,9 @@ begin
         end
     else if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Tag <> 0) then
         begin
-        if Gear^.Timer > 0 then dec(Gear^.Timer);
-        if Gear^.Timer = 0 then
+        if Gear^.Timer > 0 then 
+            dec(Gear^.Timer)
+        else
             begin
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
             DeleteGear(Gear);
