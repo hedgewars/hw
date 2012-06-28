@@ -136,7 +136,6 @@ void DrawMapScene::wheelEvent(QGraphicsSceneWheelEvent * wheelEvent)
 
 void DrawMapScene::showCursor()
 {
-    qDebug() << "show cursor";
     if(!m_isCursorShown)
         addItem(m_cursor);
 
@@ -145,7 +144,6 @@ void DrawMapScene::showCursor()
 
 void DrawMapScene::hideCursor()
 {
-    qDebug() << "hide cursor";
     if(m_isCursorShown)
         removeItem(m_cursor);
 
