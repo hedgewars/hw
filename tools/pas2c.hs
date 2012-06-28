@@ -247,11 +247,12 @@ id2C IOInsert (Identifier i t) = do
     ns <- gets currentScope
     tom <- gets (Set.member n . toMangle)
     cu <- gets currentUnit
-    let i' = case (t, tom) of
-            (BTFunction p _, True) -> cu ++ i ++ ('_' : show p)
-            (BTFunction _ _, _) -> cu ++ i
-            _ -> i
-    modify (\s -> s{currentScope = Map.insertWith (++) n [(i', t)] (currentScope s), lastIdentifier = n})
+    let (i', t') = case (t, tom) of
+            (BTFunction p _, True) -> (cu ++ i ++ ('_' : show p), t)
+            (BTFunction _ _, _) -> (cu ++ i, t)
+            (BTVarParam t', _) -> ('(' : '*' : i ++ ")" , t')
+            _ -> (i, t)
+    modify (\s -> s{currentScope = Map.insertWith (++) n [(i', t')] (currentScope s), lastIdentifier = n})
     return $ text i'
     where
         n = map toLower i
@@ -344,6 +345,7 @@ resolveType VoidType = return BTVoid
 resolveType (Sequence ids) = return $ BTEnum $ map (\(Identifier i _) -> map toLower i) ids
 resolveType (RangeType _) = return $ BTVoid
 resolveType (Set t) = liftM BTSet $ resolveType t
+resolveType (VarParamType t) = liftM BTVarParam $ resolveType t
 
 
 resolve :: String -> BaseType -> State RenderState BaseType
@@ -375,19 +377,40 @@ hasPassByReference = or . map isVar
         isVar (VarDeclaration v _ (_, _) _) = v
         isVar _ = error $ "hasPassByReference called not on function parameters"
 
+toIsVarList :: [TypeVarDeclaration] -> [Bool]
+toIsVarList = concatMap isVar
+    where
+        isVar (VarDeclaration v _ (p, _) _) = replicate (length p) v
+        isVar _ = error $ "toIsVarList called not on function parameters"
+
+
+funWithVarsToDefine :: String -> [TypeVarDeclaration] -> Doc
+funWithVarsToDefine n params = text "#define" <+> text n <> parens abc <+> text (n ++ "__vars") <> parens cparams
+    where
+        abc = hcat . punctuate comma . map (char . fst) $ ps
+        cparams = hcat . punctuate comma . map (\(c, v) -> if v then char '&' <> parens (char c) else char c) $ ps
+        ps = zip ['a'..] (toIsVarList params)
+
 fun2C :: Bool -> String -> TypeVarDeclaration -> State RenderState [Doc]
 fun2C _ _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType
     t'<- gets lastType
     p <- withState' id $ functionParams2C params
-    n <- id2C IOInsert $ setBaseType (BTFunction (numberOfDeclarations params) t') name
-    return [t empty <+> n <> parens p]
+    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction (numberOfDeclarations params) t') name
+    if hasPassByReference params then
+        return [funWithVarsToDefine n params $+$ t empty <+> text (n ++ "__vars") <> parens p]
+        else
+        return [t empty <+> text n <> parens p]
 
-fun2C True rv (FunctionDeclaration name returnType params (Just (tvars, phrase))) = do
+
+fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just (tvars, phrase))) = do
     let res = docToLower $ text rv <> text "_result"
     t <- type2C returnType
     t'<- gets lastType
-    n <- id2C IOInsert $ setBaseType (BTFunction (numberOfDeclarations params) t') name
+
+    notDeclared <- liftM isNothing . gets $ Map.lookup (map toLower i) . currentScope
+
+    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction (numberOfDeclarations params) t') name
 
     let isVoid = case returnType of
             VoidType -> True
@@ -401,8 +424,8 @@ fun2C True rv (FunctionDeclaration name returnType params (Just (tvars, phrase))
 
     let phrasesBlock = if isVoid then ph else t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
 
-    return [
-        t empty <+> n <> parens p
+    return [(if notDeclared then funWithVarsToDefine n params else empty) $+$
+        t empty <+> text (if hasPassByReference params then n ++ "__vars" else n) <> parens p
         $+$
         text "{"
         $+$
@@ -424,6 +447,10 @@ tvar2C _ td@(TypeDeclaration i' t) = do
     i <- id2CTyped t i'
     tp <- type2C t
     return [text "typedef" <+> tp i]
+
+tvar2C _ (VarDeclaration True _ (ids, t) Nothing) = do
+    t' <- liftM ((empty <+>) . ) $ type2C t
+    liftM (map(\i -> t' i)) $ mapM (id2CTyped (VarParamType t)) ids
 
 tvar2C _ (VarDeclaration _ isConst (ids, t) mInitExpr) = do
     t' <- liftM (((if isConst then text "const" else empty) <+>) . ) $ type2C t

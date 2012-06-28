@@ -30,8 +30,9 @@ data TypeDecl = SimpleType Identifier
     | String Integer
     | Set TypeDecl
     | FunctionType TypeDecl [TypeVarDeclaration]
-    | DeriveType InitExpression 
+    | DeriveType InitExpression
     | VoidType
+    | VarParamType TypeDecl -- this is a hack
     deriving Show
 data Range = Range Identifier
            | RangeFromTo InitExpression InitExpression
@@ -113,4 +114,5 @@ data BaseType = BTUnknown
     | BTEnum [String]
     | BTVoid
     | BTUnit
+    | BTVarParam BaseType
     deriving Show
