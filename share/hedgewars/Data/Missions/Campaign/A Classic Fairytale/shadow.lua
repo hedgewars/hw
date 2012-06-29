@@ -73,6 +73,8 @@ denseDead = false
 leaksDead = false
 ramonHidden = false
 spikyHidden = false
+grenadeUsed = false
+shotgunUsed = false
 
 
 hogNr = {}
@@ -222,11 +224,9 @@ function AfterAttackedAnim()
   stage = aloneStage
   HideHog(cyborg)
   ShowMission("The Shadow Falls", "The Individualist", "Defeat the cannibals!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power", 1, 8000)
-  SpawnAmmoCrate(2551, 994, amGrenade)
-  SpawnAmmoCrate(3551, 994, amGrenade)
-  SpawnAmmoCrate(3392, 1101, amShotgun)
-  SpawnAmmoCrate(3192, 1101, amShotgun)
   AddAmmo(cannibals[6], amGrenade, 5)
+  AddAmmo(cannibals[6], amFirePunch, 0)
+  AddAmmo(cannibals[6], amBaseballBat, 0)
   SetGearMessage(leaks, 0)
   TurnTimeLeft = TurnTime
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDeadAttacked, {}, 0)
@@ -234,8 +234,12 @@ end
 
 function SkipAttackedAnim()
   if denseDead == false then
-    SetHealth(dense)
+    DeleteGear(dense)
   end
+  SpawnAmmoCrate(2551, 994, amGrenade)
+  SpawnAmmoCrate(3551, 994, amGrenade)
+  SpawnAmmoCrate(3392, 1101, amShotgun)
+  SpawnAmmoCrate(3192, 1101, amShotgun)
   SetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(leaks)
@@ -244,6 +248,14 @@ end
 
   
 -----------------------------Animations--------------------------------
+
+function SpawnCrates()
+  SpawnAmmoCrate(2551, 994, amGrenade)
+  SpawnAmmoCrate(3551, 994, amGrenade)
+  SpawnAmmoCrate(3392, 1101, amShotgun)
+  SpawnAmmoCrate(3192, 1101, amShotgun)
+  return true
+end
 
 function EmitDenseClouds(anim, dir)
   local dif
@@ -275,6 +287,25 @@ function BlowDenseCloud()
   AnimInsertStepNext({func = AnimVisualGear, args = {dense, GetX(dense) - 20, GetY(dense), vgtExplosion, 0, true}, swh = false})
 end
 
+function SetupAcceptedSurvivedFinalAnim()
+  table.insert(acceptedSurvivedFinalAnim, {func = AnimCustomFunction, args = {dense, CondNeedToTurn, {leaks, dense}}})
+  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {leaks, "Pfew! That was close!", SAY_SAY, 3000}})
+  if grenadeUsed and shotgunUsed then
+    table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {leaks, "Where did you get the exploding apples and the magic bow that shoots many arrows?", SAY_SAY, 9000}})
+  elseif grenadeUsed then
+    table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {leaks, "Where did you get the exploding apples?", SAY_SAY, 6000}})
+  elseif shotgunUsed then
+    table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {leaks, "Where did you get the magic bow that shoots many arrows?", SAY_SAY, 8000}})
+  else
+    table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {leaks, "Did you warn the village?", SAY_SAY, 4000}})
+    table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {dense, "No, I came back to help you out...", SAY_SAY, 5000}})
+  end
+  if grenadeUsed or shotgunUsed then
+    table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {dense, "Uhm...I met one of them and took his weapons.", SAY_SAY, 5000}})
+  end
+  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {dense, "We should head back to the village now.", SAY_SAY, 5000}})
+end
+
 function AnimationSetup()
   table.insert(startDialogue, {func = AnimWait, args = {dense, 4000}})
   table.insert(startDialogue, {func = AnimCaption, args = {leaks, "After the shock caused by the enemy spy, Leaks A Lot and Dense Cloud went hunting to relax.", 6000}})
@@ -303,10 +334,10 @@ function AnimationSetup()
   AddSkipFunction(startDialogue, StartSkipFunc, {})
 
   table.insert(weaklingsAnim, {func = AnimGearWait, args = {leaks, 1000}})
-  table.insert(weaklingsAnim, {func = AnimCustomFunction, args = {leaks, UnHideWeaklings, {}}})
   table.insert(weaklingsAnim, {func = AnimCustomFunction, args = {leaks, CondNeedToTurn, {leaks, dense}}})
   table.insert(weaklingsAnim, {func = AnimSay, args = {leaks, "Did you see him coming?", SAY_SAY, 3500}})
   table.insert(weaklingsAnim, {func = AnimSay, args = {dense, "No. Where did he come from?", SAY_SAY, 3500}})
+  table.insert(weaklingsAnim, {func = AnimCustomFunction, args = {leaks, UnHideWeaklings, {}}})
   table.insert(weaklingsAnim, {func = AnimOutOfNowhere, args = {cannibals[2], unpack(cannibalPos[2])}})
   table.insert(weaklingsAnim, {func = AnimGiveState, args = {cannibals[2], 0}})
   table.insert(weaklingsAnim, {func = AnimWait, args = {leaks, 400}})
@@ -353,7 +384,8 @@ function AnimationSetup()
   table.insert(stronglingsAnim, {func = AnimSay, args = {leaks, "We can't defeat them!", SAY_THINK, 3000}})
   table.insert(stronglingsAnim, {func = AnimSay, args = {leaks, "I'll hold them up while you return to the village!", SAY_SAY, 6000}})
   table.insert(stronglingsAnim, {func = AnimFollowGear, args = {cyborg}, swh = false})
-  table.insert(stronglingsAnim, {func = AnimWait, args = {cyborg, 1000}})
+  table.insert(stronglingsAnim, {func = AnimCaption, args = {cyborg, "30 minutes later..."}, swh = false})
+  table.insert(stronglingsAnim, {func = AnimWait, args = {cyborg, 2000}})
   table.insert(stronglingsAnim, {func = AnimSetGearPosition, args = {dense, 1420, 1315}})
   table.insert(stronglingsAnim, {func = AnimMove, args = {dense, "left", 1400, 0}})
   table.insert(stronglingsAnim, {func = AnimCustomFunction, args = {dense, EmitDenseClouds, {stronglingsAnim, "left"}}})
@@ -380,12 +412,6 @@ function AnimationSetup()
   table.insert(acceptedAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
   table.insert(acceptedAnim, {func = AnimSwitchHog, args = {dense}})
   AddSkipFunction(acceptedAnim, SkipAcceptedAnim, {}) 
-
-  table.insert(acceptedSurvivedFinalAnim, {func = AnimCustomFunction, args = {dense, CondNeedToTurn, {leaks, dense}}})
-  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {leaks, "Pfew! That was close!", SAY_SAY, 3000}})
-  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {leaks, "Where did you get the exploding apples and the magic bow that shoots many arrows?", SAY_SAY, 9000}})
-  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {dense, "Uhm...I met one of them and took his weapons.", SAY_SAY, 5000}})
-  table.insert(acceptedSurvivedFinalAnim, {func = AnimSay, args = {dense, "We should head back to the village now.", SAY_SAY, 5000}})
 
   table.insert(acceptedDiedFinalAnim, {func = AnimSay, args = {leaks, "Pfew! That was close!", SAY_THINK, 3000}})
   table.insert(acceptedDiedFinalAnim, {func = AnimSay, args = {leaks, "Your death will not be in vain, Dense Cloud!", SAY_THINK, 5000}})
@@ -428,8 +454,12 @@ function AnimationSetup()
   table.insert(attackedAnim, {func = AnimSwitchHog, args = {leaks}})
   table.insert(attackedAnim, {func = AnimSay, args = {leaks, "I wonder where Dense Cloud is...", SAY_THINK, 4000}})
   table.insert(attackedAnim, {func = AnimSay, args = {leaks, "I can't wait any more, I have to save myself!", SAY_THINK, 5000}})
+  table.insert(attackedAnim, {func = AnimCustomFunction, args = {leaks, SpawnCrates, {}}})
+  table.insert(attackedAnim, {func = AnimWait, args = {leaks, 1500}})
+  table.insert(attackedAnim, {func = AnimSay, args = {leaks, "Where are all these crates coming from?!", SAY_THINK, 5500}})
   AddSkipFunction(attackedAnim, SkipAttackedAnim, {})
   
+  table.insert(attackedFinalAnim, {func = AnimWait, args = {leaks, 2000}})
   table.insert(attackedFinalAnim, {func = AnimSay, args = {leaks, "I have to get back to the village!", SAY_THINK, 5000}})
   table.insert(attackedFinalAnim, {func = AnimSay, args = {leaks, "Dense Cloud must have already told them everything...", SAY_THINK, 7000}})
 
@@ -456,7 +486,7 @@ function RefusedStart()
 end
 
 function AddHogs()
-	AddTeam("Natives", 1117585, "Bone", "Island", "HillBilly", "cm_birdy")
+	AddTeam("Natives", 2567585, "Bone", "Island", "HillBilly", "cm_birdy")
   ramon = AddHog("Ramon", 0, 100, "rasta")
 	leaks = AddHog("Leaks A Lot", 0, 100, "Rambo")
   dense = AddHog("Dense Cloud", 0, 100, "RobinHood")
@@ -605,6 +635,7 @@ function DoWeaklingsKilled()
   AddAnim(stronglingsAnim)
   AddFunction({func = AfterStronglingsAnim, args = {}})
   stage = interWeakStage
+  ParseCommand("teamgone Weaklings")
 end
 
 function CheckRefuse()
@@ -685,6 +716,7 @@ function DoStronglingsDead()
     AddAnim(acceptedDiedFinalAnim)
     SaveCampaignVar("M2DenseDead", "1")
   else
+    SetupAcceptedSurvivedFinalAnim()
     AddAnim(acceptedSurvivedFinalAnim)
     SaveCampaignVar("M2DenseDead", "0")
   end
@@ -721,10 +753,10 @@ function DoStronglingsDeadAttacked()
   SaveCampaignVar("M2DenseDead", "1")
   SaveCampaignVar("M2RamonDead", "0")
   SaveCampaignVar("M2SpikyDead", "0")
-  AddAnim(attackedFinalAnim)
-  AddFunction({func = KillCyborg, args = {}})
   SaveCampaignVar("Progress", "2")
   SaveCampaignVar("M2Choice", "" .. choice)
+  AddAnim(attackedFinalAnim)
+  AddFunction({func = KillCyborg, args = {}})
 end
 
 function CheckStronglingsDead()
@@ -827,6 +859,11 @@ function onGearDelete(gear)
 end
 
 function onGearAdd(gear)
+  if GetGearType(gear) == gtGrenade and GetHogTeamName(CurrentHedgehog) == "Natives" then
+    grenadeUsed = true
+  elseif GetGearType(gear) == gtShotgunShot and GetHogTeamName(CurrentHedgehog) == "Natives" then
+    shotgunUsed = true
+  end
 end
 
 function onAmmoStoreInit()
