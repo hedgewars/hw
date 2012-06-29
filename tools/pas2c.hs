@@ -424,7 +424,7 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just
 
     let phrasesBlock = if isVoid then ph else t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
 
-    return [(if notDeclared then funWithVarsToDefine n params else empty) $+$
+    return [(if notDeclared && hasPassByReference params then funWithVarsToDefine n params else empty) $+$
         t empty <+> text (if hasPassByReference params then n ++ "__vars" else n) <> parens p
         $+$
         text "{"
