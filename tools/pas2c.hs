@@ -464,7 +464,7 @@ tvar2C _ (VarDeclaration _ isConst (ids, t) mInitExpr) = do
              i' <- id2CTyped t i
              ie <- initExpr2C e
              return [text "#define" <+> i' <+> parens ie <> text "\n"]
-         (_, BTFunction{}, _, Nothing) -> liftM (map(\i -> t' $ text "*" <+> i)) $ mapM (id2CTyped t) ids
+         (_, BTFunction{}, _, Nothing) -> liftM (map(\i -> t' i)) $ mapM (id2CTyped t) ids
          _ -> liftM (map(\i -> t' i <+> ie)) $ mapM (id2CTyped t) ids
     where
     initExpr Nothing = return $ empty
@@ -615,7 +615,7 @@ type2C t = do
     type2C' (FunctionType returnType params) = do
         t <- type2C returnType
         p <- withState' id $ functionParams2C params
-        return (\i -> t empty <+> i <> parens p)
+        return (\i -> (t empty <> (parens $ text "*" <> i) <> parens p))
     type2C' (DeriveType (InitBinOp _ _ i)) = type2C' (DeriveType i)
     type2C' (DeriveType (InitPrefixOp _ i)) = type2C' (DeriveType i)
     type2C' (DeriveType (InitNumber _)) = return (text "int" <+>)
