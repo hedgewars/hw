@@ -217,6 +217,9 @@ end
 
 function AnimCaption(gear, text, time)
   AddCaption(text)
+  if time == nil then
+    return true
+  end
   AnimWait(gear, time)
   return true
 end
