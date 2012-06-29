@@ -248,8 +248,8 @@ id2C IOInsert (Identifier i t) = do
     tom <- gets (Set.member n . toMangle)
     cu <- gets currentUnit
     let (i', t') = case (t, tom) of
-            (BTFunction p _, True) -> (cu ++ i ++ ('_' : show p), t)
-            (BTFunction _ _, _) -> (cu ++ i, t)
+            (BTFunction _ p _, True) -> (cu ++ i ++ ('_' : show p), t)
+            (BTFunction _ _ _, _) -> (cu ++ i, t)
             (BTVarParam t', _) -> ('(' : '*' : i ++ ")" , t')
             _ -> (i, t)
     modify (\s -> s{currentScope = Map.insertWith (++) n [(i', t')] (currentScope s), lastIdentifier = n})
@@ -268,7 +268,7 @@ id2C (IOLookupFunction params) (Identifier i t) = do
         let vv = fromMaybe (head $ fromJust v) . find checkParam $ fromJust v in
             modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
     where
-        checkParam (_, BTFunction p _) = p == params
+        checkParam (_, BTFunction _ p _) = p == params
         checkParam _ = False
 id2C IODeferred (Identifier i t) = do
     let i' = map toLower i
@@ -330,7 +330,7 @@ resolveType (ArrayDecl (Just i) t) = do
     t' <- resolveType t
     return $ BTArray i BTInt t'
 resolveType (ArrayDecl Nothing t) = liftM (BTArray RangeInfinite BTInt) $ resolveType t
-resolveType (FunctionType t a) = liftM (BTFunction (length a)) $ resolveType t
+resolveType (FunctionType t a) = liftM (BTFunction False (length a)) $ resolveType t
 resolveType (DeriveType (InitHexNumber _)) = return BTInt
 resolveType (DeriveType (InitNumber _)) = return BTInt
 resolveType (DeriveType (InitFloat _)) = return BTFloat
@@ -396,11 +396,13 @@ fun2C _ _ (FunctionDeclaration name returnType params Nothing) = do
     t <- type2C returnType
     t'<- gets lastType
     p <- withState' id $ functionParams2C params
-    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction (numberOfDeclarations params) t') name
-    if hasPassByReference params then
+    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction hasVars (numberOfDeclarations params) t') name
+    if hasVars then
         return [funWithVarsToDefine n params $+$ t empty <+> text (n ++ "__vars") <> parens p]
         else
         return [t empty <+> text n <> parens p]
+    where
+        hasVars = hasPassByReference params
 
 
 fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just (tvars, phrase))) = do
@@ -410,7 +412,7 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just
 
     notDeclared <- liftM isNothing . gets $ Map.lookup (map toLower i) . currentScope
 
-    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction (numberOfDeclarations params) t') name
+    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction hasVars (numberOfDeclarations params) t') name
 
     let isVoid = case returnType of
             VoidType -> True
@@ -424,8 +426,8 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just
 
     let phrasesBlock = if isVoid then ph else t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
 
-    return [(if notDeclared && hasPassByReference params then funWithVarsToDefine n params else empty) $+$
-        t empty <+> text (if hasPassByReference params then n ++ "__vars" else n) <> parens p
+    return [(if notDeclared && hasVars then funWithVarsToDefine n params else empty) $+$
+        t empty <+> text (if hasVars then n ++ "__vars" else n) <> parens p
         $+$
         text "{"
         $+$
@@ -436,6 +438,7 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just
     phrase2C' (Phrases p) = liftM vcat $ mapM phrase2C p
     phrase2C' p = phrase2C p
     un [a] b = a : b
+    hasVars = hasPassByReference params
 
 fun2C False _ (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
 fun2C _ tv _ = error $ "fun2C: I don't render " ++ show tv
@@ -502,7 +505,12 @@ initExpr2C, initExpr2C' :: InitExpression -> State RenderState Doc
 initExpr2C (InitArray values) = liftM (braces . vcat . punctuate comma) $ mapM initExpr2C values
 initExpr2C a = initExpr2C' a
 initExpr2C' InitNull = return $ text "NULL"
-initExpr2C' (InitAddress expr) = liftM ((<>) (text "&")) (initExpr2C' expr)
+initExpr2C' (InitAddress expr) = do
+    ie <- initExpr2C' expr
+    lt <- gets lastType
+    case lt of
+        BTFunction True _ _ -> return $ text "&" <> ie <> text "__vars"
+        _ -> return $ text "&" <> ie
 initExpr2C' (InitPrefixOp op expr) = liftM (text (op2C op) <>) (initExpr2C' expr)
 initExpr2C' (InitBinOp op expr1 expr2) = do
     e1 <- initExpr2C' expr1
@@ -749,13 +757,13 @@ expr2C b@(BinOp op expr1 expr2) = do
     e2 <- expr2C expr2
     t2 <- gets lastType
     case (op2C op, t1, t2) of
-        ("+", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction 2 BTString))
-        ("+", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappend" (BTFunction 2 BTString))
-        ("+", BTChar, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprepend" (BTFunction 2 BTString))
-        ("+", BTChar, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_chrconcat" (BTFunction 2 BTString))
-        ("==", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcomparec" (BTFunction 2 BTBool))
-        ("==", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction 2 BTBool))
-        ("!=", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction 2 BTBool))
+        ("+", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction False 2 BTString))
+        ("+", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappend" (BTFunction False 2 BTString))
+        ("+", BTChar, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprepend" (BTFunction False 2 BTString))
+        ("+", BTChar, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_chrconcat" (BTFunction False 2 BTString))
+        ("==", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcomparec" (BTFunction False 2 BTBool))
+        ("==", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction False 2 BTBool))
+        ("!=", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction False 2 BTBool))
         ("&", BTBool, _) -> return $ parens e1 <+> text "&&" <+> parens e2
         ("|", BTBool, _) -> return $ parens e1 <+> text "||" <+> parens e2
         (_, BTRecord t1 _, BTRecord t2 _) -> do
@@ -841,7 +849,7 @@ expr2C (BuiltInFunCall params ref) = do
     t <- gets lastType
     ps <- mapM expr2C params
     case t of
-        BTFunction _ t' -> do
+        BTFunction _ _ t' -> do
             modify (\s -> s{lastType = t'})
         _ -> error $ "BuiltInFunCall lastType: " ++ show t
     return $
@@ -853,7 +861,7 @@ ref2CF (SimpleReference name) = do
     i <- id2C IOLookup name
     t <- gets lastType
     case t of
-         BTFunction _ rt -> do
+         BTFunction _ _ rt -> do
              modify(\s -> s{lastType = rt})
              return $ i <> parens empty
          _ -> return $ i
@@ -861,7 +869,7 @@ ref2CF r@(RecordField (SimpleReference _) (SimpleReference _)) = do
     i <- ref2C r
     t <- gets lastType
     case t of
-         BTFunction _ rt -> do
+         BTFunction _ _ rt -> do
              modify(\s -> s{lastType = rt})
              return $ i <> parens empty
          _ -> return $ i
@@ -921,7 +929,7 @@ ref2C f@(FunCall params ref) = do
     r <- fref2C ref
     t <- gets lastType
     case t of
-        BTFunction _ t' -> do
+        BTFunction _ _ t' -> do
             ps <- liftM (parens . hsep . punctuate (char ',')) $ mapM expr2C params
             modify (\s -> s{lastType = t'})
             return $ r <> ps
@@ -934,7 +942,10 @@ ref2C f@(FunCall params ref) = do
 
 ref2C (Address ref) = do
     r <- ref2C ref
-    return $ text "&" <> parens r
+    lt <- gets lastType
+    case lt of
+        BTFunction True _ _ -> return $ text "&" <> parens (r <> text "__vars")
+        _ -> return $ text "&" <> parens r
 ref2C (TypeCast t'@(Identifier i _) expr) = do
     lt <- expr2C expr >> gets lastType
     case (map toLower i, lt) of
