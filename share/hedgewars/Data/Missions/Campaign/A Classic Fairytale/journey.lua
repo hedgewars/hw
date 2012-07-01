@@ -656,9 +656,6 @@ function SetupEventsAlone()
 end
 
 function StartMission()
-  m2Choice = 2
-  m2DenseDead = 1
-
   HideHog(cyborg)
   HideHog(princess)
   cyborgHidden = true
