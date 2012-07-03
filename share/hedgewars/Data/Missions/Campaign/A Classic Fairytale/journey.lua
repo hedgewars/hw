@@ -2,9 +2,9 @@ loadfile(GetDataPath() .. "Scripts/Animate.lua")()
 
 --///////////////////////////////CONSTANTS///////////////////////////
 
-choiceAccepted = 0
-choiceRefused = 1
-choiceAttacked = 2
+choiceAccepted = 1
+choiceRefused = 2
+choiceAttacked = 3
 
 endStage = 1
 
