@@ -260,6 +260,10 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             LastDamage: PHedgehog;
             end;
     TPGearArray = array of PGear;
+    PGearArrayS = record
+        size: LongWord;
+        ar: ^TPGearArray;
+        end;
 
     PVisualGear = ^TVisualGear;
     TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);

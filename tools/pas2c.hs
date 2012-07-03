@@ -842,7 +842,8 @@ expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "length" _))) = do
     modify (\s -> s{lastType = BTInt})
     case lt of
          BTString -> return $ text "Length" <> parens e'
-         BTArray {} -> return $ text "length_ar" <> parens e'
+         BTArray RangeInfinite _ _ -> error $ "length() called on variable size array " ++ show e'
+         BTArray (RangeFromTo _ n) _ _ -> initExpr2C (BuiltInFunction "succ" [n])
          _ -> error $ "length() called on " ++ show lt
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref

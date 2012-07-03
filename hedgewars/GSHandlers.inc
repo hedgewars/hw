@@ -3193,23 +3193,22 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSeductionWork(Gear: PGear);
 var i: LongInt;
-    hogs: TPGearArray;
+    hogs: PGearArrayS;
 begin
     AllInactive := false;
     hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
-    if Length(hogs) > 0 then
+    if hogs.size > 0 then
         begin
-        for i:= 0 to Length(hogs) - 1 do
-            begin
-            if hogs[i] <> CurrentHedgehog^.Gear then
+        for i:= 0 to hogs.size - 1 do
+            with hogs.ar^[i]^ do
                 begin
-                //d:= Distance(Gear^.X - hogs[i]^.X, Gear^.Y - hogs[i]^.Y);
-                hogs[i]^.dX:= _50 * cGravity * (Gear^.X - hogs[i]^.X) / _25;
-                //if Gear^.X < hogs[i]^.X then hogs[i]^.dX.isNegative:= true;
-                hogs[i]^.dY:= -_450 * cGravity;
-                hogs[i]^.Active:= true;
-                end
-            end;
+                if hogs.ar^[i] <> CurrentHedgehog^.Gear then
+                    begin
+                    dX:= _50 * cGravity * (Gear^.X - X) / _25;
+                    dY:= -_450 * cGravity;
+                    Active:= true;
+                    end
+                end;
         end ;
         AfterAttack;
         DeleteGear(Gear);
@@ -5062,7 +5061,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepResurrectorWork(Gear: PGear);
 var
-    graves: TPGearArray;
+    graves: PGearArrayS;
     resgear: PGear;
     hh: PHedgehog;
     i: LongInt;
@@ -5097,7 +5096,7 @@ begin
 
     graves := GearsNear(Gear^.X, Gear^.Y, gtGrave, Gear^.Radius);
 
-    if Length(graves) = 0 then
+    if graves.size = 0 then
         begin
         StopSoundChan(Gear^.SoundChannel);
         Gear^.Timer := 250;
@@ -5107,12 +5106,12 @@ begin
 
     if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) and (TurnTimeLeft > 0) then
         begin
-        if Length(graves) <= Gear^.Tag then Gear^.Tag:= 0;
+        if graves.size <= Gear^.Tag then Gear^.Tag:= 0;
         dec(hh^.Gear^.Health);
         if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
             hh^.Gear^.Damage:= 1;
         RenderHealth(hh^);
-        inc(graves[Gear^.Tag]^.Health);
+        inc(graves.ar^[Gear^.Tag]^.Health);
         inc(Gear^.Tag)
 {-for i:= 0 to High(graves) do begin
             if hh^.Gear^.Health > 0 then begin
@@ -5124,14 +5123,14 @@ begin
     else 
         begin
         // now really resurrect the hogs with the hp saved in the graves
-        for i:= 0 to Length(graves) - 1 do
-            if graves[i]^.Health > 0 then
+        for i:= 0 to graves.size - 1 do
+            if graves.ar^[i]^.Health > 0 then
                 begin
-                resgear := AddGear(hwRound(graves[i]^.X), hwRound(graves[i]^.Y), gtHedgehog, gstWait, _0, _0, 0);
-                resgear^.Hedgehog := graves[i]^.Hedgehog;
-                resgear^.Health := graves[i]^.Health;
-                PHedgehog(graves[i]^.Hedgehog)^.Gear := resgear;
-                DeleteGear(graves[i]);
+                resgear := AddGear(hwRound(graves.ar^[i]^.X), hwRound(graves.ar^[i]^.Y), gtHedgehog, gstWait, _0, _0, 0);
+                resgear^.Hedgehog := graves.ar^[i]^.Hedgehog;
+                resgear^.Health := graves.ar^[i]^.Health;
+                PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := resgear;
+                DeleteGear(graves.ar^[i]);
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;
@@ -5153,18 +5152,18 @@ end;
 
 procedure doStepResurrector(Gear: PGear);
 var
-    graves: TPGearArray;
+    graves: PGearArrayS;
     i: LongInt;
 begin
     AllInactive := false;
     graves := GearsNear(Gear^.X, Gear^.Y, gtGrave, Gear^.Radius);
 
-    if Length(graves) > 0 then
+    if graves.size > 0 then
         begin
-        for i:= 0 to Length(graves) - 1 do
+        for i:= 0 to graves.size - 1 do
             begin
-            PHedgehog(graves[i]^.Hedgehog)^.Gear := nil;
-            graves[i]^.Health := 0;
+            PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := nil;
+            graves.ar^[i]^.Health := 0;
             end;
         Gear^.doStep := @doStepResurrectorWork;
         end 
@@ -5483,7 +5482,7 @@ var
     HHGear, iter: PGear;
     ndX, ndY: hwFloat;
     i, t, gX, gY: LongInt;
-    hogs: TPGearArray;
+    hogs: PGearArrayS;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
     if (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
@@ -5547,9 +5546,9 @@ begin
 // freeze nearby hogs
                 if GameTicks mod 10 = 0 then dec(Gear^.Health);
                 hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
-                if Length(hogs) > 0 then
-                    for i:= 0 to Length(hogs) - 1 do
-                        if hogs[i] <> HHGear then
+                if hogs.size > 0 then
+                    for i:= 0 to hogs.size - 1 do
+                        if hogs.ar^[i] <> HHGear then
                             begin
                             //if Gear^.Hedgehog^.Effects[heFrozen]:= 0;
                             end;
