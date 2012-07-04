@@ -34,13 +34,12 @@ static flib_team *from_ini_handleError(flib_team *result, flib_ini *settingfile)
 }
 
 flib_team *flib_team_from_ini(const char *filename) {
+	if(log_badargs_if(filename==NULL)) {
+		return NULL;
+	}
+
 	flib_team *result = flib_team_retain(flib_calloc(1, sizeof(flib_team)));
 	flib_ini *ini = NULL;
-
-	if(!filename) {
-		flib_log_e("null parameter in flib_team_from_ini");
-		return from_ini_handleError(result, ini);
-	}
 
 	if(!result) {
 		return from_ini_handleError(result, ini);
@@ -194,9 +193,7 @@ static int writeBindingSection(const flib_team *team, flib_ini *ini) {
 
 int flib_team_to_ini(const char *filename, const flib_team *team) {
 	int result = -1;
-	if(!filename || !team) {
-		flib_log_e("null parameter in flib_team_to_ini");
-	} else {
+	if(!log_badargs_if2(filename==NULL, team==NULL)) {
 		flib_ini *ini = flib_ini_create(filename);
 		bool error = false;
 		error |= writeTeamSection(team, ini);
@@ -258,7 +255,7 @@ void flib_team_set_health(flib_team *team, int health) {
 	}
 }
 
-char *strdupWithError(const char *in, bool *error) {
+static char *strdupWithError(const char *in, bool *error) {
 	char *out = flib_strdupnull(in);
 	if(in && !out) {
 		*error = true;

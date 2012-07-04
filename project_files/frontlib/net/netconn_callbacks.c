@@ -102,9 +102,7 @@ void netconn_clearCallbacks(flib_netconn *conn) {
  */
 #define GENERATE_CB_SETTER(cbName, cbParameterTypes, defaultCb) \
 	void flib_netconn_##cbName(flib_netconn *conn, void (*callback)cbParameterTypes, void *context) { \
-		if(!conn) { \
-			flib_log_e("null parameter in flib_netconn_%s", #cbName); \
-		} else { \
+		if(!log_badargs_if(conn==NULL)) { \
 			conn->cbName##Cb = callback ? callback : &defaultCb; \
 			conn->cbName##Ctx = callback ? context : conn; \
 		} \

@@ -36,6 +36,10 @@ struct _flib_netbase {
 };
 
 flib_netbase *flib_netbase_create(const char *server, uint16_t port) {
+	if(log_badargs_if2(server==NULL, port==0)) {
+		return NULL;
+	}
+
 	flib_netbase *result = NULL;
 	flib_netbase *newNet =  flib_calloc(1, sizeof(flib_netbase));
 
@@ -62,14 +66,10 @@ void flib_netbase_destroy(flib_netbase *net) {
 }
 
 bool flib_netbase_connected(flib_netbase *net) {
-	if(!net) {
-		flib_log_e("null parameter in flib_netbase_connected");
-		return false;
-	} else if(net->sock) {
+	if(!log_badargs_if(net==NULL) && net->sock) {
 		return true;
-	} else {
-		return false;
 	}
+	return false;
 }
 
 /**
@@ -135,8 +135,7 @@ static int receiveToBuffer(flib_netbase *net) {
 }
 
 flib_netmsg *flib_netbase_recv_message(flib_netbase *net) {
-	if(!net) {
-		flib_log_e("null parameter in flib_netbase_recv_message");
+	if(log_badargs_if(net==NULL)) {
 		return NULL;
 	}
 
@@ -160,8 +159,7 @@ static void logSentMsg(const uint8_t *data, size_t len) {
 }
 
 int flib_netbase_send_raw(flib_netbase *net, const void *data, size_t len) {
-	if(!net || (!data && len>0)) {
-		flib_log_e("null parameter in flib_netbase_send_raw");
+	if(log_badargs_if2(net==NULL, data==NULL && len>0)) {
 		return -1;
 	}
 	if(!net->sock) {
@@ -181,8 +179,7 @@ int flib_netbase_send_raw(flib_netbase *net, const void *data, size_t len) {
 }
 
 int flib_netbase_send_message(flib_netbase *net, flib_netmsg *msg) {
-	if(!net || !msg) {
-		flib_log_e("null parameter in flib_netbase_send_message");
+	if(log_badargs_if2(net==NULL, msg==NULL)) {
 		return -1;
 	}
 
@@ -209,9 +206,7 @@ int flib_netbase_send_message(flib_netbase *net, flib_netmsg *msg) {
 
 int flib_netbase_sendf(flib_netbase *net, const char *format, ...) {
 	int result = -1;
-	if(!net || !format) {
-		flib_log_e("null parameter in flib_netbase_sendf");
-	} else {
+	if(!log_badargs_if2(net==NULL, format==NULL)) {
 		va_list argp;
 		va_start(argp, format);
 		char *buffer = flib_vasprintf(format, argp);
@@ -247,9 +242,7 @@ void flib_netmsg_destroy(flib_netmsg *msg) {
 
 int flib_netmsg_append_part(flib_netmsg *msg, const void *part, size_t partlen) {
 	int result = -1;
-	if(!msg) {
-		flib_log_e("null parameter in flib_netmsg_append_part");
-	} else {
+	if(!log_badargs_if2(msg==NULL, part==NULL && partlen>0)) {
 		char **newParts = realloc(msg->parts, (msg->partCount+1)*sizeof(*msg->parts));
 		if(newParts) {
 			msg->parts = newParts;

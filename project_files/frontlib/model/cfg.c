@@ -118,8 +118,7 @@ static int readMetaModSections(flib_ini *ini, flib_cfg_meta *result, int limit) 
 }
 
 flib_cfg_meta *flib_cfg_meta_from_ini(const char *filename) {
-	if(!filename) {
-		flib_log_e("null parameter in flib_cfg_meta_from_ini");
+	if(log_badargs_if(filename==NULL)) {
 		return NULL;
 	}
 	flib_cfg_meta *result = flib_cfg_meta_retain(flib_calloc(1, sizeof(flib_cfg_meta)));
@@ -168,8 +167,7 @@ void flib_cfg_meta_release(flib_cfg_meta *cfg) {
 
 flib_cfg *flib_cfg_create(flib_cfg_meta *meta, const char *schemeName) {
 	flib_cfg *result = flib_cfg_retain(flib_calloc(1, sizeof(flib_cfg)));
-	if(!meta || !result || !schemeName) {
-		flib_log_e("null parameter in flib_cfg_create");
+	if(log_badargs_if2(meta==NULL, schemeName==NULL) || result==NULL) {
 		return NULL;
 	}
 
@@ -215,21 +213,25 @@ void flib_cfg_release(flib_cfg *cfg) {
 }
 
 bool flib_cfg_get_mod(flib_cfg *cfg, const char *name) {
-	for(int i=0; i<cfg->meta->modCount; i++) {
-		if(!strcmp(cfg->meta->mods[i].name, name)) {
-			return cfg->mods[i];
+	if(!log_badargs_if2(cfg==NULL, name==NULL)) {
+		for(int i=0; i<cfg->meta->modCount; i++) {
+			if(!strcmp(cfg->meta->mods[i].name, name)) {
+				return cfg->mods[i];
+			}
 		}
+		flib_log_e("Unable to find game mod %s", name);
 	}
-	flib_log_e("Unable to find game mod %s", name);
 	return false;
 }
 
 int flib_cfg_get_setting(flib_cfg *cfg, const char *name, int def) {
-	for(int i=0; i<cfg->meta->settingCount; i++) {
-		if(!strcmp(cfg->meta->settings[i].name, name)) {
-			return cfg->settings[i];
+	if(!log_badargs_if2(cfg==NULL, name==NULL)) {
+		for(int i=0; i<cfg->meta->settingCount; i++) {
+			if(!strcmp(cfg->meta->settings[i].name, name)) {
+				return cfg->settings[i];
+			}
 		}
+		flib_log_e("Unable to find game setting %s", name);
 	}
-	flib_log_e("Unable to find game setting %s", name);
 	return def;
 }

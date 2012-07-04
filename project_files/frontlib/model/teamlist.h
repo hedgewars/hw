@@ -52,4 +52,10 @@ flib_team *flib_teamlist_find(const flib_teamlist *list, const char *name);
  */
 void flib_teamlist_clear(flib_teamlist *list);
 
+/**
+ * Create a copy of the list and all the teams it contains. Weaponsets are not copied, but
+ * kept as references
+ */
+flib_teamlist *flib_teamlist_copy(flib_teamlist *list);
+
 #endif

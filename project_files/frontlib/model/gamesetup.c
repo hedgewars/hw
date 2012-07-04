@@ -18,6 +18,7 @@
  */
 
 #include "gamesetup.h"
+#include "../util/util.h"
 
 #include <stdlib.h>
 
@@ -29,4 +30,26 @@ void flib_gamesetup_destroy(flib_gamesetup *gamesetup) {
 		flib_teamlist_destroy(gamesetup->teamlist);
 		free(gamesetup);
 	}
+}
+
+flib_gamesetup *flib_gamesetup_copy(flib_gamesetup *setup) {
+	if(!setup) {
+		return NULL;
+	}
+
+	flib_gamesetup *result = flib_calloc(1, sizeof(flib_gamesetup));
+	if(result) {
+		result->script = flib_strdupnull(setup->script);
+		result->gamescheme = flib_cfg_copy(setup->gamescheme);
+		result->map = flib_map_copy(setup->map);
+		result->teamlist = flib_teamlist_copy(setup->teamlist);
+		if((setup->script && !result->script)
+				|| (setup->gamescheme && !result->gamescheme)
+				|| (setup->map && !result->map)
+				|| (setup->teamlist && !result->teamlist)) {
+			flib_gamesetup_destroy(result);
+			result = NULL;
+		}
+	}
+	return result;
 }

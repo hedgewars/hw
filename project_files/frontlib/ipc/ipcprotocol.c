@@ -30,7 +30,7 @@
 
 int flib_ipc_append_message(flib_vector *vec, const char *fmt, ...) {
 	int result = -1;
-	if(!log_badparams_if(!vec || !fmt)) {
+	if(!log_badargs_if2(vec==NULL, fmt==NULL)) {
 		// 1 byte size prefix, 255 bytes max message length, 1 0-byte for vsnprintf
 		char msgbuffer[257];
 
@@ -55,7 +55,7 @@ int flib_ipc_append_message(flib_vector *vec, const char *fmt, ...) {
 int flib_ipc_append_mapconf(flib_vector *vec, const flib_map *map, bool mappreview) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
-	if(!log_badparams_if(!vec || !map)) {
+	if(!log_badargs_if2(vec==NULL, map==NULL)) {
 		bool error = false;
 
 		if(map->mapgen == MAPGEN_NAMED) {
@@ -103,16 +103,16 @@ int flib_ipc_append_mapconf(flib_vector *vec, const flib_map *map, bool mapprevi
 }
 
 int flib_ipc_append_seed(flib_vector *vec, const char *seed) {
-	if(!log_badparams_if(!vec || !seed)) {
-		return flib_ipc_append_message(vec, "eseed %s", seed);
+	if(log_badargs_if2(vec==NULL, seed==NULL)) {
+		return -1;
 	}
-	return -1;
+	return flib_ipc_append_message(vec, "eseed %s", seed);
 }
 
 int flib_ipc_append_script(flib_vector *vec, const char *script) {
 	int result = -1;
 	char *copy = flib_strdupnull(script);
-	if(!log_badparams_if(!vec) && copy) {
+	if(!log_badargs_if(vec==NULL) && copy) {
 		if(!strcmp("Normal", copy)) {
 			// "Normal" means no gametype script
 			result = 0;
@@ -131,7 +131,7 @@ int flib_ipc_append_script(flib_vector *vec, const char *script) {
 	return result;
 }
 
-uint32_t buildModFlags(const flib_cfg *scheme) {
+static uint32_t buildModFlags(const flib_cfg *scheme) {
 	uint32_t result = 0;
 	for(int i=0; i<scheme->meta->modCount; i++) {
 		if(scheme->mods[i]) {
@@ -145,7 +145,7 @@ uint32_t buildModFlags(const flib_cfg *scheme) {
 int flib_ipc_append_gamescheme(flib_vector *vec, const flib_cfg *scheme) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
-	if(!log_badparams_if(!vec || !scheme) && tempvector) {
+	if(!log_badargs_if2(vec==NULL, scheme==NULL) && tempvector) {
 		const flib_cfg_meta *meta = scheme->meta;
 		bool error = false;
 		error |= flib_ipc_append_message(tempvector, "e$gmflags %"PRIu32, buildModFlags(scheme));
@@ -182,22 +182,20 @@ static int appendWeaponSet(flib_vector *vec, flib_weaponset *set) {
 }
 
 static void calculateMd5Hex(const char *in, char out[33]) {
-	if(!log_badparams_if(!in)) {
-		md5_state_t md5state;
-		uint8_t md5bytes[16];
-		md5_init(&md5state);
-		md5_append(&md5state, (unsigned char*)in, strlen(in));
-		md5_finish(&md5state, md5bytes);
-		for(int i=0;i<sizeof(md5bytes); i++) {
-			snprintf(out+i*2, 3, "%02x", (unsigned)md5bytes[i]);
-		}
+	md5_state_t md5state;
+	uint8_t md5bytes[16];
+	md5_init(&md5state);
+	md5_append(&md5state, (unsigned char*)in, strlen(in));
+	md5_finish(&md5state, md5bytes);
+	for(int i=0;i<sizeof(md5bytes); i++) {
+		snprintf(out+i*2, 3, "%02x", (unsigned)md5bytes[i]);
 	}
 }
 
 int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHogAmmo, bool noAmmoStore) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
-	if(!log_badparams_if(!vec || !team) && tempvector) {
+	if(!log_badargs_if2(vec==NULL, team==NULL) && tempvector) {
 		bool error = false;
 
 		if(!perHogAmmo && !noAmmoStore) {
@@ -251,7 +249,7 @@ int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHog
 int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bool netgame) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
-	if(!log_badparams_if(!vec || !setup) && tempvector) {
+	if(!log_badargs_if2(vec==NULL, setup==NULL) && tempvector) {
 		bool error = false;
 		bool perHogAmmo = false;
 		bool sharedAmmo = false;

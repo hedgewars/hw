@@ -84,29 +84,30 @@ static void clearCallbacks(flib_gameconn *conn) {
 
 static flib_gameconn *flib_gameconn_create_partial(bool record, const char *playerName, bool netGame) {
 	flib_gameconn *result = NULL;
-	if(!log_badparams_if(!playerName)) {
-		flib_gameconn *tempConn = flib_calloc(1, sizeof(flib_gameconn));
-		if(tempConn) {
-			tempConn->ipcBase = flib_ipcbase_create();
-			tempConn->configBuffer = flib_vector_create();
-			tempConn->playerName = flib_strdupnull(playerName);
-			if(tempConn->ipcBase && tempConn->configBuffer && tempConn->playerName) {
-				if(record) {
-					tempConn->demoBuffer = flib_vector_create();
-				}
-				tempConn->state = AWAIT_CONNECTION;
-				tempConn->netgame = netGame;
-				clearCallbacks(tempConn);
-				result = tempConn;
-				tempConn = NULL;
+	flib_gameconn *tempConn = flib_calloc(1, sizeof(flib_gameconn));
+	if(tempConn) {
+		tempConn->ipcBase = flib_ipcbase_create();
+		tempConn->configBuffer = flib_vector_create();
+		tempConn->playerName = flib_strdupnull(playerName);
+		if(tempConn->ipcBase && tempConn->configBuffer && tempConn->playerName) {
+			if(record) {
+				tempConn->demoBuffer = flib_vector_create();
 			}
+			tempConn->state = AWAIT_CONNECTION;
+			tempConn->netgame = netGame;
+			clearCallbacks(tempConn);
+			result = tempConn;
+			tempConn = NULL;
 		}
-		flib_gameconn_destroy(tempConn);
 	}
+	flib_gameconn_destroy(tempConn);
 	return result;
 }
 
 flib_gameconn *flib_gameconn_create(const char *playerName, const flib_gamesetup *setup, bool netgame) {
+	if(log_badargs_if2(playerName==NULL, setup==NULL)) {
+		return NULL;
+	}
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, netgame);
 	if(tempConn) {
@@ -121,7 +122,10 @@ flib_gameconn *flib_gameconn_create(const char *playerName, const flib_gamesetup
 	return result;
 }
 
-flib_gameconn *flib_gameconn_create_playdemo(const uint8_t *demo, int size) {
+flib_gameconn *flib_gameconn_create_playdemo(const uint8_t *demo, size_t size) {
+	if(log_badargs_if(demo==NULL && size>0)) {
+		return NULL;
+	}
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(false, "Player", false);
 	if(tempConn) {
@@ -134,7 +138,10 @@ flib_gameconn *flib_gameconn_create_playdemo(const uint8_t *demo, int size) {
 	return result;
 }
 
-flib_gameconn *flib_gameconn_create_loadgame(const char *playerName, const uint8_t *save, int size) {
+flib_gameconn *flib_gameconn_create_loadgame(const char *playerName, const uint8_t *save, size_t size) {
+	if(log_badargs_if(save==NULL && size>0)) {
+		return NULL;
+	}
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, false);
 	if(tempConn) {
@@ -148,6 +155,9 @@ flib_gameconn *flib_gameconn_create_loadgame(const char *playerName, const uint8
 }
 
 flib_gameconn *flib_gameconn_create_campaign(const char *playerName, const char *seed, const char *script) {
+	if(log_badargs_if3(playerName==NULL, seed==NULL, script==NULL)) {
+		return NULL;
+	}
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, false);
 	if(tempConn) {
@@ -184,10 +194,10 @@ void flib_gameconn_destroy(flib_gameconn *conn) {
 }
 
 int flib_gameconn_getport(flib_gameconn *conn) {
-	if(!log_badparams_if(!conn)) {
-		return flib_ipcbase_port(conn->ipcBase);
+	if(log_badargs_if(conn==NULL)) {
+		return 0;
 	}
-	return 0;
+	return flib_ipcbase_port(conn->ipcBase);
 }
 
 static void demo_append(flib_gameconn *conn, const void *data, size_t len) {
@@ -207,11 +217,11 @@ static int format_chatmessage(uint8_t buffer[257], const char *playerName, const
 	bool meMessage = msglen >= 4 && !memcmp(message, "/me ", 4);
 	const char *template = meMessage ? "s\x02* %s %s  " : "s\x01%s: %s  ";
 	int size = snprintf((char*)buffer+1, 256, template, playerName, meMessage ? message+4 : message);
-	if(size>0) {
+	if(log_e_if(size<=0, "printf error")) {
+		return -1;
+	} else {
 		buffer[0] = size>255 ? 255 : size;
 		return 0;
-	} else {
-		return -1;
 	}
 }
 
@@ -235,100 +245,78 @@ static void demo_replace_gamemode(flib_buffer buf, char gamemode) {
 }
 
 int flib_gameconn_send_enginemsg(flib_gameconn *conn, const uint8_t *data, size_t len) {
-	int result = -1;
-	if(!log_badparams_if(!conn || (!data && len>0))
-			&& !flib_ipcbase_send_raw(conn->ipcBase, data, len)) {
+	if(log_badargs_if2(conn==NULL, data==NULL && len>0)) {
+		return -1;
+	}
+	int result = flib_ipcbase_send_raw(conn->ipcBase, data, len);
+	if(!result) {
 		demo_append(conn, data, len);
-		result = 0;
 	}
 	return result;
 }
 
 int flib_gameconn_send_textmsg(flib_gameconn *conn, int msgtype, const char *msg) {
+	if(log_badargs_if2(conn==NULL, msg==NULL)) {
+		return -1;
+	}
 	int result = -1;
-	if(!conn || !msg) {
-		flib_log_e("null parameter in flib_gameconn_send_textmsg");
-	} else {
-		uint8_t converted[257];
-		int size = snprintf((char*)converted+1, 256, "s%c%s", (char)msgtype, msg);
-		if(size>0) {
-			converted[0] = size>255 ? 255 : size;
-			if(!flib_ipcbase_send_raw(conn->ipcBase, converted, converted[0]+1)) {
-				demo_append(conn, converted, converted[0]+1);
-				result = 0;
-			}
+	uint8_t converted[257];
+	int size = snprintf((char*)converted+1, 256, "s%c%s", (char)msgtype, msg);
+	if(size>0) {
+		converted[0] = size>255 ? 255 : size;
+		if(!flib_ipcbase_send_raw(conn->ipcBase, converted, converted[0]+1)) {
+			demo_append(conn, converted, converted[0]+1);
+			result = 0;
 		}
 	}
 	return result;
 }
 
 int flib_gameconn_send_chatmsg(flib_gameconn *conn, const char *playername, const char *msg) {
-	int result = -1;
+	if(log_badargs_if3(conn==NULL, playername==NULL, msg==NULL)) {
+		return -1;
+	}
 	uint8_t converted[257];
-	if(!conn || !playername || !msg) {
-		flib_log_e("null parameter in flib_gameconn_send_chatmsg");
-	} else if(format_chatmessage(converted, playername, msg)) {
-		flib_log_e("Error formatting message in flib_gameconn_send_chatmsg");
-	} else if(!flib_ipcbase_send_raw(conn->ipcBase, converted, converted[0]+1)) {
+	if(!format_chatmessage(converted, playername, msg)
+			&& !flib_ipcbase_send_raw(conn->ipcBase, converted, converted[0]+1)) {
 		demo_append(conn, converted, converted[0]+1);
-		result = 0;
+		return 0;
 	}
-	return result;
+	return -1;
 }
 
-void flib_gameconn_onConnect(flib_gameconn *conn, void (*callback)(void* context), void* context) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_gameconn_onConnect");
-	} else {
-		conn->onConnectCb = callback ? callback : &defaultCallback_onConnect;
-		conn->onConnectCtx = context;
+/**
+ * This macro generates a callback setter function. It uses the name of the callback to
+ * automatically generate the function name and the fields to set, so a consistent naming
+ * convention needs to be enforced (not that that is a bad thing). If null is passed as
+ * callback to the generated function, the defaultCb will be set instead (with conn
+ * as the context).
+ */
+#define GENERATE_CB_SETTER(cbName, cbParameterTypes, defaultCb) \
+	void flib_gameconn_##cbName(flib_gameconn *conn, void (*callback)cbParameterTypes, void *context) { \
+		if(!log_badargs_if(conn==NULL)) { \
+			conn->cbName##Cb = callback ? callback : &defaultCb; \
+			conn->cbName##Ctx = callback ? context : conn; \
+		} \
 	}
-}
 
-void flib_gameconn_onDisconnect(flib_gameconn *conn, void (*callback)(void* context, int reason), void* context) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_gameconn_onDisconnect");
-	} else {
-		conn->onDisconnectCb = callback ? callback : &defaultCallback_onDisconnect;
-		conn->onDisconnectCtx = context;
-	}
-}
+/**
+ * Generate a callback setter function like GENERATE_CB_SETTER, and automatically generate a
+ * no-op callback function as well that is used as default.
+ */
+#define GENERATE_CB_SETTER_AND_DEFAULT(cbName, cbParameterTypes) \
+	static void _noop_callback_##cbName cbParameterTypes {} \
+	GENERATE_CB_SETTER(cbName, cbParameterTypes, _noop_callback_##cbName)
 
-void flib_gameconn_onErrorMessage(flib_gameconn *conn, void (*callback)(void* context, const char *msg), void* context) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_gameconn_onErrorMessage");
-	} else {
-		conn->onErrorMessageCb = callback ? callback : &defaultCallback_onErrorMessage;
-		conn->onErrorMessageCtx = context;
-	}
-}
+GENERATE_CB_SETTER_AND_DEFAULT(onConnect, (void *context));
+GENERATE_CB_SETTER_AND_DEFAULT(onDisconnect, (void* context, int reason));
+GENERATE_CB_SETTER(onErrorMessage, (void* context, const char *msg), defaultCallback_onErrorMessage);
+GENERATE_CB_SETTER_AND_DEFAULT(onChat, (void* context, const char *msg, bool teamchat));
+GENERATE_CB_SETTER_AND_DEFAULT(onGameRecorded, (void *context, const uint8_t *record, int size, bool isSavegame));
+GENERATE_CB_SETTER_AND_DEFAULT(onEngineMessage, (void *context, const uint8_t *em, size_t size));
 
-void flib_gameconn_onChat(flib_gameconn *conn, void (*callback)(void* context, const char *msg, bool teamchat), void* context) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_gameconn_onChat");
-	} else {
-		conn->onChatCb = callback ? callback : &defaultCallback_onChat;
-		conn->onChatCtx = context;
-	}
-}
-
-void flib_gameconn_onGameRecorded(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *record, int size, bool isSavegame), void* context) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_gameconn_onGameRecorded");
-	} else {
-		conn->onGameRecordedCb = callback ? callback : &defaultCallback_onGameRecorded;
-		conn->onGameRecordedCtx = context;
-	}
-}
-
-void flib_gameconn_onEngineMessage(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *em, size_t size), void* context) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_gameconn_onEngineMessage");
-	} else {
-		conn->onEngineMessageCb = callback ? callback : &defaultCallback_onEngineMessage;
-		conn->onEngineMessageCtx = context;
-	}
-}
+#undef GENERATE_CB_SETTER_AND_DEFAULT
+#undef GENERATE_CB_SETTER
 
 static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 	if(conn->state == AWAIT_CONNECTION) {
@@ -432,13 +420,9 @@ static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 }
 
 void flib_gameconn_tick(flib_gameconn *conn) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_gameconn_tick");
-	} else if(conn->running) {
-		flib_log_w("Call to flib_gameconn_tick from a callback");
-	} else if(conn->state == FINISHED) {
-		flib_log_w("Call to flib_gameconn_tick, but we are already done.");
-	} else {
+	if(!log_badargs_if(conn == NULL)
+			&& !log_w_if(conn->running, "Call to flib_gameconn_tick from a callback")
+			&& !log_w_if(conn->state == FINISHED, "We are already done.")) {
 		conn->running = true;
 		flib_gameconn_wrappedtick(conn);
 		conn->running = false;

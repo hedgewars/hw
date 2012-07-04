@@ -103,11 +103,11 @@ static flib_schemelist *fromIniHandleError(flib_schemelist *result, flib_ini *in
 }
 
 flib_schemelist *flib_schemelist_from_ini(flib_cfg_meta *meta, const char *filename) {
-	flib_schemelist *list = NULL;
-	if(!meta || !filename) {
-		flib_log_e("null parameter in flib_schemelist_from_ini");
+	if(log_badargs_if2(meta==NULL, filename==NULL)) {
 		return NULL;
 	}
+
+	flib_schemelist *list = NULL;
 	flib_ini *ini = flib_ini_load(filename);
 	if(!ini || flib_ini_enter_section(ini, "schemes")) {
 		flib_log_e("Missing file or missing section \"schemes\" in file %s.", filename);
@@ -164,9 +164,7 @@ static int writeSchemeToIni(flib_cfg *scheme, flib_ini *ini, int index) {
 
 int flib_schemelist_to_ini(const char *filename, const flib_schemelist *schemes) {
 	int result = -1;
-	if(!filename || !schemes) {
-		flib_log_e("null parameter in flib_schemelist_to_ini");
-	} else {
+	if(!log_badargs_if2(filename==NULL, schemes==NULL)) {
 		flib_ini *ini = flib_ini_create(NULL);
 		if(ini && !flib_ini_create_section(ini, "schemes")) {
 			bool error = false;
@@ -202,7 +200,7 @@ void flib_schemelist_release(flib_schemelist *list) {
 }
 
 flib_cfg *flib_schemelist_find(flib_schemelist *list, const char *name) {
-	if(list && name) {
+	if(!log_badargs_if2(list==NULL, name==NULL)) {
 		for(int i=0; i<list->schemeCount; i++) {
 			if(!strcmp(name, list->schemes[i]->name)) {
 				return list->schemes[i];
@@ -216,9 +214,8 @@ GENERATE_STATIC_LIST_INSERT(insertScheme, flib_cfg*)
 GENERATE_STATIC_LIST_DELETE(deleteScheme, flib_cfg*)
 
 int flib_schemelist_insert(flib_schemelist *list, flib_cfg *cfg, int pos) {
-	if(!list) {
-		flib_log_e("Invalid parameter in flib_schemelist_insert");
-	} else if(!insertScheme(&list->schemes, &list->schemeCount, cfg, pos)) {
+	if(!log_badargs_if2(list==NULL, cfg==NULL)
+			&& !insertScheme(&list->schemes, &list->schemeCount, cfg, pos)) {
 		flib_cfg_retain(cfg);
 		return 0;
 	}
@@ -226,9 +223,7 @@ int flib_schemelist_insert(flib_schemelist *list, flib_cfg *cfg, int pos) {
 }
 
 int flib_schemelist_delete(flib_schemelist *list, int pos) {
-	if(!list) {
-		flib_log_e("Invalid parameter in flib_schemelist_delete");
-	} else {
+	if(!log_badargs_if(list==NULL)) {
 		flib_cfg *elem = list->schemes[pos];
 		if(!deleteScheme(&list->schemes, &list->schemeCount, pos)) {
 			flib_cfg_release(elem);

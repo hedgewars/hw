@@ -36,9 +36,7 @@
 
 flib_netconn *flib_netconn_create(const char *playerName, flib_cfg_meta *metacfg, const char *dataDirPath, const char *host, uint16_t port) {
 	flib_netconn *result = NULL;
-	if(!playerName || !metacfg || !host) {
-		flib_log_e("null parameter in flib_netconn_create");
-	} else {
+	if(!log_badargs_if3(playerName==NULL, metacfg==NULL, host==NULL)) {
 		flib_netconn *newConn = flib_calloc(1, sizeof(flib_netconn));
 		if(newConn) {
 			newConn->netBase = flib_netbase_create(host, port);
@@ -105,23 +103,17 @@ void flib_netconn_destroy(flib_netconn *conn) {
 }
 
 const flib_roomlist *flib_netconn_get_roomlist(flib_netconn *conn) {
-	const flib_roomlist *result = NULL;
-	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_get_roomlist");
-	} else {
-		result = &conn->roomList;
+	if(!log_badargs_if(conn==NULL)) {
+		return &conn->roomList;
 	}
-	return result;
+	return NULL;
 }
 
 bool flib_netconn_is_chief(flib_netconn *conn) {
-	bool result = false;
-	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_is_chief");
-	} else if(conn->netconnState == NETCONN_STATE_ROOM || conn->netconnState == NETCONN_STATE_INGAME) {
-		result = conn->isChief;
+	if(!log_badargs_if(conn==NULL) && flib_netconn_is_in_room_context(conn)) {
+		return conn->isChief;
 	}
-	return result;
+	return false;
 }
 
 void netconn_leaveRoom(flib_netconn *conn) {
@@ -177,35 +169,30 @@ void netconn_setScheme(flib_netconn *conn, const flib_cfg *scheme) {
 
 flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn) {
 	flib_gamesetup *result = NULL;
-	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_create_gameSetup");
-	} else {
+	if(!log_badargs_if(conn==NULL)) {
 		if(conn->teamlist.teamCount==0 || !conn->scheme || !conn->weaponset) {
-			flib_log_e("Incomplete room state to create game setup.");
+			flib_log_e("Incomplete room state");
 		} else {
-			result = flib_calloc(1, sizeof(flib_gamesetup));
-			if(result) {
-				result->gamescheme = flib_cfg_copy(conn->scheme);
-				result->map = flib_map_copy(conn->map);
-				result->script = flib_strdupnull(conn->script);
-				result->teamlist = flib_teamlist_create();
-				for(int i=0; i<conn->teamlist.teamCount; i++) {
-					flib_team *copy = flib_team_copy(conn->teamlist.teams[i]);
-					if(copy) {
-						flib_team_set_weaponset(copy, conn->weaponset);
-						flib_team_set_health(copy, flib_cfg_get_setting(conn->scheme, "health", 100));
-						flib_teamlist_insert(result->teamlist, copy, result->teamlist->teamCount);
-					}
-					flib_team_release(copy);
+			flib_gamesetup stackSetup = {0};
+			stackSetup.gamescheme = conn->scheme;
+			stackSetup.map = conn->map;
+			stackSetup.script = conn->script;
+			stackSetup.teamlist = &conn->teamlist;
+			flib_gamesetup *tmpSetup = flib_gamesetup_copy(&stackSetup);
+			if(tmpSetup) {
+				for(int i=0; i<tmpSetup->teamlist->teamCount; i++) {
+					flib_team_set_weaponset(tmpSetup->teamlist->teams[i], conn->weaponset);
+					flib_team_set_health(tmpSetup->teamlist->teams[i], flib_cfg_get_setting(conn->scheme, "health", 100));
 				}
-				if(result->map->mapgen == MAPGEN_NAMED && result->map->name) {
+				if(tmpSetup->map->mapgen == MAPGEN_NAMED && tmpSetup->map->name) {
 					flib_mapcfg mapcfg;
-					if(!flib_mapcfg_read(conn->dataDirPath, result->map->name, &mapcfg)) {
-						free(result->map->theme);
-						result->map->theme = flib_strdupnull(mapcfg.theme);
+					if(!flib_mapcfg_read(conn->dataDirPath, tmpSetup->map->name, &mapcfg)) {
+						free(tmpSetup->map->theme);
+						tmpSetup->map->theme = flib_strdupnull(mapcfg.theme);
+					} else {
+						flib_log_e("Unable to read map config for map %s", tmpSetup->map->name);
 					}
 				}
-				// TODO handle errors
 			}
 		}
 	}
@@ -640,13 +627,9 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 }
 
 void flib_netconn_tick(flib_netconn *conn) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_netconn_tick");
-	} else if(conn->running) {
-		flib_log_w("Call to flib_netconn_tick from a callback");
-	} else if(conn->netconnState == NETCONN_STATE_DISCONNECTED) {
-		flib_log_w("Call to flib_netconn_tick, but we are already done.");
-	} else {
+	if(!log_badargs_if(conn==NULL)
+			&& !log_w_if(conn->running, "Call to flib_netconn_tick from a callback")
+			&& !log_w_if(conn->netconnState == NETCONN_STATE_DISCONNECTED, "We are already done.")) {
 		conn->running = true;
 		flib_netconn_wrappedtick(conn);
 		conn->running = false;

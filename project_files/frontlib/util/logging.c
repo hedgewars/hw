@@ -92,10 +92,6 @@ bool _flib_fassert(const char *func, int level, bool cond, const char *fmt, ...)
 	return !cond;
 }
 
-bool _flib_assert_params(const char *func, bool cond) {
-	return _flib_fassert(func, FLIB_LOGLEVEL_ERROR, cond, "Invalid parameter to function");
-}
-
 int flib_log_getLevel() {
 	return flib_loglevel;
 }

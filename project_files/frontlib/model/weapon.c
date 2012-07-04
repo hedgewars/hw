@@ -59,9 +59,7 @@ static void setField(char field[WEAPONS_COUNT+1], const char *line, int lineLen,
 
 flib_weaponset *flib_weaponset_create(const char *name) {
 	flib_weaponset *result = NULL;
-	if(!name) {
-		flib_log_e("null parameter in flib_weaponset_create_str");
-	} else {
+	if(!log_badargs_if(name==NULL)) {
 		flib_weaponset *newSet = flib_weaponset_retain(flib_calloc(1, sizeof(flib_weaponset)));
 		if(newSet) {
 			newSet->name = flib_strdupnull(name);
@@ -119,9 +117,7 @@ static void flib_weaponsetlist_destroy(flib_weaponsetlist *list) {
 
 flib_weaponset *flib_weaponset_from_ammostring(const char *name, const char *ammostring) {
 	flib_weaponset *result = NULL;
-	if(!name || !ammostring) {
-		flib_log_e("null parameter in flib_weaponset_from_ammostring");
-	} else {
+	if(!log_badargs_if2(name==NULL, ammostring==NULL)) {
 		result = flib_weaponset_create(name);
 		if(result) {
 			int fieldlen = strlen(ammostring)/4;
@@ -164,9 +160,7 @@ static int fillWeaponsetsFromIni(flib_weaponsetlist *list, flib_ini *ini) {
 
 flib_weaponsetlist *flib_weaponsetlist_from_ini(const char *filename) {
 	flib_weaponsetlist *result = NULL;
-	if(!filename) {
-		flib_log_e("null parameter in flib_weaponsetlist_from_ini");
-	} else {
+	if(!log_badargs_if(filename==NULL)) {
 		flib_ini *ini = flib_ini_load(filename);
 		if(!ini) {
 			flib_log_e("Missing file %s.", filename);
@@ -190,7 +184,6 @@ static bool needsEscape(char c) {
 	return !((c>='0' && c<='9') || (c>='a' && c <='z'));
 }
 
-
 static int writeWeaponsetToIni(flib_ini *ini, flib_weaponset *set) {
 	int result = -1;
 	char weaponstring[WEAPONS_COUNT*4+1];
@@ -209,9 +202,7 @@ static int writeWeaponsetToIni(flib_ini *ini, flib_weaponset *set) {
 
 int flib_weaponsetlist_to_ini(const char *filename, const flib_weaponsetlist *list) {
 	int result = -1;
-	if(!filename || !list) {
-		flib_log_e("null parameter in flib_weaponsetlist_to_ini");
-	} else {
+	if(!log_badargs_if2(filename==NULL, list==NULL)) {
 		flib_ini *ini = flib_ini_create(NULL);
 		if(ini && !flib_ini_create_section(ini, "General")) {
 			bool error = false;
@@ -236,9 +227,8 @@ GENERATE_STATIC_LIST_INSERT(insertWeaponset, flib_weaponset*)
 GENERATE_STATIC_LIST_DELETE(deleteWeaponset, flib_weaponset*)
 
 int flib_weaponsetlist_insert(flib_weaponsetlist *list, flib_weaponset *set, int pos) {
-	if(!list) {
-		flib_log_e("Invalid parameter in flib_weaponsetlist_insert");
-	} else if(!insertWeaponset(&list->weaponsets, &list->weaponsetCount, set, pos)) {
+	if(!log_badargs_if2(list==NULL, set==NULL)
+			&& !insertWeaponset(&list->weaponsets, &list->weaponsetCount, set, pos)) {
 		flib_weaponset_retain(set);
 		return 0;
 	}
@@ -246,9 +236,7 @@ int flib_weaponsetlist_insert(flib_weaponsetlist *list, flib_weaponset *set, int
 }
 
 int flib_weaponsetlist_delete(flib_weaponsetlist *list, int pos) {
-	if(!list) {
-		flib_log_e("Invalid parameter in flib_weaponsetlist_delete");
-	} else {
+	if(!log_badargs_if(list==NULL)) {
 		flib_weaponset *elem = list->weaponsets[pos];
 		if(!deleteWeaponset(&list->weaponsets, &list->weaponsetCount, pos)) {
 			flib_weaponset_release(elem);

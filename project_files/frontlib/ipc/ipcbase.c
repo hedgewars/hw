@@ -64,8 +64,7 @@ flib_ipcbase *flib_ipcbase_create() {
 }
 
 uint16_t flib_ipcbase_port(flib_ipcbase *ipc) {
-	if(!ipc) {
-		flib_log_e("null parameter in flib_ipcbase_port");
+	if(log_badargs_if(ipc==NULL)) {
 		return 0;
 	}
 	return ipc->port;
@@ -80,8 +79,7 @@ void flib_ipcbase_destroy(flib_ipcbase *ipc) {
 }
 
 IpcState flib_ipcbase_state(flib_ipcbase *ipc) {
-	if(!ipc) {
-		flib_log_e("null parameter in flib_ipcbase_state");
+	if(log_badargs_if(ipc==NULL)) {
 		return IPC_NOT_CONNECTED;
 	} else if(ipc->sock) {
 		return IPC_CONNECTED;
@@ -109,8 +107,7 @@ static bool isMessageReady(flib_ipcbase *ipc) {
 }
 
 int flib_ipcbase_recv_message(flib_ipcbase *ipc, void *data) {
-	if(!ipc || !data) {
-		flib_log_e("null parameter in flib_ipcbase_recv_message");
+	if(log_badargs_if2(ipc==NULL, data==NULL)) {
 		return -1;
 	}
 
@@ -134,8 +131,7 @@ int flib_ipcbase_recv_message(flib_ipcbase *ipc, void *data) {
 }
 
 int flib_ipcbase_recv_map(flib_ipcbase *ipc, void *data) {
-	if(!ipc || !data) {
-		flib_log_e("null parameter in flib_ipcbase_recv_map");
+	if(log_badargs_if2(ipc==NULL, data==NULL)) {
 		return -1;
 	}
 
@@ -167,15 +163,10 @@ static void logSentMsg(const uint8_t *data, size_t len) {
 }
 
 int flib_ipcbase_send_raw(flib_ipcbase *ipc, const void *data, size_t len) {
-	if(!ipc || (!data && len>0)) {
-		flib_log_e("null parameter in flib_ipcbase_send_raw");
+	if(log_badargs_if2(ipc==NULL, data==NULL && len>0)
+			|| log_w_if(!ipc->sock, "flib_ipcbase_send_raw: Not connected.")) {
 		return -1;
 	}
-	if(!ipc->sock) {
-		flib_log_w("flib_ipcbase_send_raw: Not connected.");
-		return -1;
-	}
-
 	if(flib_socket_send(ipc->sock, data, len) == len) {
 		logSentMsg(data, len);
 		return 0;
@@ -188,11 +179,7 @@ int flib_ipcbase_send_raw(flib_ipcbase *ipc, const void *data, size_t len) {
 }
 
 int flib_ipcbase_send_message(flib_ipcbase *ipc, void *data, size_t len) {
-	if(!ipc || (!data && len>0)) {
-		flib_log_e("null parameter in flib_ipcbase_send_message");
-		return -1;
-	} else if(len>255) {
-		flib_log_e("Overlong message (%zu bytes) in flib_ipcbase_send_message", len);
+	if(log_badargs_if3(ipc==NULL, data==NULL && len>0, len>255)) {
 		return -1;
 	}
 
@@ -203,9 +190,7 @@ int flib_ipcbase_send_message(flib_ipcbase *ipc, void *data, size_t len) {
 }
 
 void flib_ipcbase_accept(flib_ipcbase *ipc) {
-	if(!ipc) {
-		flib_log_e("null parameter in flib_ipcbase_accept");
-	} else if(!ipc->sock && ipc->acceptor) {
+	if(!log_badargs_if(ipc==NULL) && !ipc->sock && ipc->acceptor) {
 		ipc->sock = flib_socket_accept(ipc->acceptor, true);
 		if(ipc->sock) {
 			flib_acceptor_close(ipc->acceptor);

@@ -53,9 +53,8 @@ static int findTeam(const flib_teamlist *list, const char *name) {
 }
 
 int flib_teamlist_insert(flib_teamlist *list, flib_team *team, int pos) {
-	if(!list || !team) {
-		flib_log_e("null parameter in flib_teamlist_insert");
-	} else if(!insertTeam(&list->teams, &list->teamCount, team, pos)) {
+	if(!log_badargs_if2(list==NULL, team==NULL)
+			&& !insertTeam(&list->teams, &list->teamCount, team, pos)) {
 		flib_team_retain(team);
 		return 0;
 	}
@@ -64,9 +63,7 @@ int flib_teamlist_insert(flib_teamlist *list, flib_team *team, int pos) {
 
 int flib_teamlist_delete(flib_teamlist *list, const char *name) {
 	int result = -1;
-	if(!list || !name) {
-		flib_log_e("null parameter in flib_teamlist_delete");
-	} else {
+	if(!log_badargs_if2(list==NULL, name==NULL)) {
 		int itemid = findTeam(list, name);
 		if(itemid>=0) {
 			flib_team *team = list->teams[itemid];
@@ -81,9 +78,7 @@ int flib_teamlist_delete(flib_teamlist *list, const char *name) {
 
 flib_team *flib_teamlist_find(const flib_teamlist *list, const char *name) {
 	flib_team *result = NULL;
-	if(!list || !name) {
-		flib_log_e("null parameter in flib_teamlist_find");
-	} else {
+	if(!log_badargs_if2(list==NULL, name==NULL)) {
 		int itemid = findTeam(list, name);
 		if(itemid>=0) {
 			result = list->teams[itemid];
@@ -93,9 +88,7 @@ flib_team *flib_teamlist_find(const flib_teamlist *list, const char *name) {
 }
 
 void flib_teamlist_clear(flib_teamlist *list) {
-	if(!list) {
-		flib_log_e("null parameter in flib_teamlist_clear");
-	} else {
+	if(!log_badargs_if(list==NULL)) {
 		for(int i=0; i<list->teamCount; i++) {
 			flib_team_release(list->teams[i]);
 		}
@@ -103,4 +96,28 @@ void flib_teamlist_clear(flib_teamlist *list) {
 		list->teams = NULL;
 		list->teamCount = 0;
 	}
+}
+
+flib_teamlist *flib_teamlist_copy(flib_teamlist *list) {
+	if(!list) {
+		return NULL;
+	}
+	flib_teamlist *result = flib_teamlist_create();
+	if(result) {
+		bool error = false;
+		for(int i=0; !error && i<list->teamCount; i++) {
+			flib_team *teamcopy = flib_team_copy(list->teams[i]);
+			if(!teamcopy) {
+				error = true;
+			} else {
+				error |= flib_teamlist_insert(result, teamcopy, i);
+			}
+			flib_team_release(teamcopy);
+		}
+		if(error) {
+			flib_teamlist_destroy(result);
+			result = NULL;
+		}
+	}
+	return result;
 }

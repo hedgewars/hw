@@ -20,6 +20,7 @@
 #ifndef MODEL_MAP_H_
 #define MODEL_MAP_H_
 
+#include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -57,7 +58,7 @@ typedef struct {
 	char *seed;				// Used for all maps
 	char *theme;			// Used for all maps
 	uint8_t *drawData;		// Used for MAPGEN_DRAWN
-	int drawDataSize;		// Used for MAPGEN_DRAWN
+	int drawDataSize;		// Used for MAPGEN_DRAWN TODO size_t
 	int templateFilter;		// Used for MAPGEN_REGULAR
 	int mazeSize;			// Used for MAPGEN_MAZE
 } flib_map;
@@ -99,7 +100,7 @@ flib_map *flib_map_create_named(const char *seed, const char *name);
  * Create a hand-drawn map. Use flib_map_destroy to free the returned object.
  * No NULL parameters allowed, returns NULL on failure.
  */
-flib_map *flib_map_create_drawn(const char *seed, const char *theme, const uint8_t *drawData, int drawDataSize);
+flib_map *flib_map_create_drawn(const char *seed, const char *theme, const uint8_t *drawData, size_t drawDataSize);
 
 /**
  * Create a deep copy of the map. Returns NULL on failure or if NULL was passed.

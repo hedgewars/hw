@@ -79,8 +79,7 @@ static int allocateExtraCapacity(flib_vector *vec, size_t extraCapacity) {
 }
 
 int flib_vector_resize(flib_vector *vec, size_t newSize) {
-	if(!vec) {
-		flib_log_e("null parameter in flib_vector_resize");
+	if(log_badargs_if(vec==NULL)) {
 		return -1;
 	}
 
@@ -113,7 +112,7 @@ int flib_vector_resize(flib_vector *vec, size_t newSize) {
 }
 
 int flib_vector_append(flib_vector *vec, const void *data, size_t len) {
-	if(!log_badparams_if(!vec || (!data && len>0))
+	if(!log_badargs_if2(vec==NULL, data==NULL && len>0)
 			&& !log_oom_if(len > SIZE_MAX-vec->size)) {
 		size_t oldSize = vec->size;
 		if(!log_oom_if(flib_vector_resize(vec, vec->size+len))) {
@@ -126,7 +125,7 @@ int flib_vector_append(flib_vector *vec, const void *data, size_t len) {
 
 int flib_vector_appendf(flib_vector *vec, const char *fmt, ...) {
 	int result = -1;
-	if(!log_badparams_if(!vec || !fmt)) {
+	if(!log_badargs_if2(vec==NULL, fmt==NULL)) {
 		va_list argp;
 		va_start(argp, fmt);
 		char *formatted = flib_vasprintf(fmt, argp);
@@ -142,8 +141,7 @@ int flib_vector_appendf(flib_vector *vec, const char *fmt, ...) {
 }
 
 flib_buffer flib_vector_as_buffer(flib_vector *vec) {
-	if(!vec) {
-		flib_log_e("null parameter in flib_vector_as_buffer");
+	if(log_badargs_if(vec==NULL)) {
 		flib_buffer result = {NULL, 0};
 		return result;
 	} else {
@@ -153,8 +151,7 @@ flib_buffer flib_vector_as_buffer(flib_vector *vec) {
 }
 
 flib_constbuffer flib_vector_as_constbuffer(flib_vector *vec) {
-	if(!vec) {
-		flib_log_e("null parameter in flib_vector_as_constbuffer");
+	if(log_badargs_if(vec==NULL)) {
 		flib_constbuffer result = {NULL, 0};
 		return result;
 	} else {
@@ -164,8 +161,7 @@ flib_constbuffer flib_vector_as_constbuffer(flib_vector *vec) {
 }
 
 void *flib_vector_data(flib_vector *vec) {
-	if(!vec) {
-		flib_log_e("null parameter in flib_vector_data");
+	if(log_badargs_if(vec==NULL)) {
 		return NULL;
 	} else {
 		return vec->data;
@@ -173,8 +169,7 @@ void *flib_vector_data(flib_vector *vec) {
 }
 
 size_t flib_vector_size(flib_vector *vec) {
-	if(!vec) {
-		flib_log_e("null parameter in flib_vector_size");
+	if(log_badargs_if(vec==NULL)) {
 		return 0;
 	} else {
 		return vec->size;

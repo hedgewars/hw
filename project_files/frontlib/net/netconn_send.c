@@ -25,9 +25,11 @@
 #include "../md5/md5.h"
 #include "../base64/base64.h"
 
+#include <zlib.h>
+
 #include <stdlib.h>
 #include <string.h>
-#include <zlib.h>
+#include <limits.h>
 
 // cmdname is always given as literal from functions in this file, so it is never null.
 static int sendVoid(flib_netconn *conn, const char *cmdname) {
@@ -39,7 +41,7 @@ static int sendVoid(flib_netconn *conn, const char *cmdname) {
 
 // Testing for !*str prevents sending 0-length parameters (they trip up the protocol)
 static int sendStr(flib_netconn *conn, const char *cmdname, const char *str) {
-	if(log_e_if(!conn || !str || !*str, "Invalid parameter sending %s command", cmdname)) {
+	if(log_e_if(!conn || flib_strempty(str), "Invalid parameter sending %s command", cmdname)) {
 		return -1;
 	}
 	return flib_netbase_sendf(conn->netBase, "%s\n%s\n\n", cmdname, str);
@@ -57,14 +59,14 @@ int flib_netconn_send_quit(flib_netconn *conn, const char *quitmsg) {
 }
 
 int flib_netconn_send_chat(flib_netconn *conn, const char *chat) {
-	if(chat && *chat) {
+	if(!flib_strempty(chat)) {
 		return sendStr(conn, "CHAT", chat);
 	}
 	return 0;
 }
 
 int flib_netconn_send_teamchat(flib_netconn *conn, const char *chat) {
-	if(chat && *chat) {
+	if(!flib_strempty(chat)) {
 		return sendStr(conn, "TEAMCHAT", chat);
 	}
 	return 0;
@@ -72,7 +74,7 @@ int flib_netconn_send_teamchat(flib_netconn *conn, const char *chat) {
 
 int flib_netconn_send_nick(flib_netconn *conn, const char *nick) {
 	int result = -1;
-	if(!log_badparams_if(!conn || !nick || !*nick)) {
+	if(!log_badargs_if2(conn==NULL, flib_strempty(nick))) {
 		char *tmpName = flib_strdupnull(nick);
 		if(tmpName) {
 			if(!flib_netbase_sendf(conn->netBase, "%s\n%s\n\n", "NICK", nick)) {
@@ -89,7 +91,7 @@ int flib_netconn_send_nick(flib_netconn *conn, const char *nick) {
 
 int flib_netconn_send_password(flib_netconn *conn, const char *passwd) {
 	int result = -1;
-	if(!log_badparams_if(!conn || !passwd)) {
+	if(!log_badargs_if2(conn==NULL, passwd==NULL)) {
 		md5_state_t md5state;
 		uint8_t md5bytes[16];
 		char md5hex[33];
@@ -156,10 +158,10 @@ static void addTeamToPendingList(flib_netconn *conn, const flib_team *team) {
 
 int flib_netconn_send_addTeam(flib_netconn *conn, const flib_team *team) {
 	int result = -1;
-	if(!log_badparams_if(!conn || !team)) {
-		bool missingInfo = !team->name || !team->grave || !team->fort || !team->voicepack || !team->flag;
+	if(!log_badargs_if2(conn==NULL, team==NULL)) {
+		bool missingInfo = flib_strempty(team->name) || flib_strempty(team->grave) || flib_strempty(team->fort) || flib_strempty(team->voicepack) || flib_strempty(team->flag);
 		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
-			missingInfo |= !team->hogs[i].name || !team->hogs[i].hat;
+			missingInfo |= flib_strempty(team->hogs[i].name) || flib_strempty(team->hogs[i].hat);
 		}
 		if(!log_e_if(missingInfo, "Incomplete team definition")) {
 			flib_vector *vec = flib_vector_create();
@@ -194,7 +196,7 @@ int flib_netconn_send_removeTeam(flib_netconn *conn, const char *teamname) {
 
 int flib_netconn_send_engineMessage(flib_netconn *conn, const uint8_t *message, size_t size) {
 	int result = -1;
-	if(!log_badparams_if(!conn || (!message && size>0))) {
+	if(!log_badargs_if2(conn==NULL, message==NULL && size>0)) {
 		char *base64encout = NULL;
 		base64_encode_alloc((const char*)message, size, &base64encout);
 		if(base64encout) {
@@ -206,7 +208,7 @@ int flib_netconn_send_engineMessage(flib_netconn *conn, const uint8_t *message, 
 }
 
 int flib_netconn_send_teamHogCount(flib_netconn *conn, const char *teamname, int hogcount) {
-	if(!log_badparams_if(!conn || !teamname || hogcount<1 || hogcount>HEDGEHOGS_PER_TEAM)
+	if(!log_badargs_if4(conn==NULL, flib_strempty(teamname), hogcount<1, hogcount>HEDGEHOGS_PER_TEAM)
 			&& !flib_netbase_sendf(conn->netBase, "HH_NUM\n%s\n%i\n\n", teamname, hogcount)) {
 		if(conn->isChief) {
 			flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
@@ -220,7 +222,7 @@ int flib_netconn_send_teamHogCount(flib_netconn *conn, const char *teamname, int
 }
 
 int flib_netconn_send_teamColor(flib_netconn *conn, const char *teamname, int colorIndex) {
-	if(!log_badparams_if(!conn || !teamname)
+	if(!log_badargs_if2(conn==NULL, flib_strempty(teamname))
 			&& !flib_netbase_sendf(conn->netBase, "TEAM_COLOR\n%s\n%i\n\n", teamname, colorIndex)) {
 		if(conn->isChief) {
 			flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
@@ -234,7 +236,7 @@ int flib_netconn_send_teamColor(flib_netconn *conn, const char *teamname, int co
 }
 
 int flib_netconn_send_weaponset(flib_netconn *conn, const flib_weaponset *weaponset) {
-	if(!log_badparams_if(!conn || !weaponset)) {
+	if(!log_badargs_if3(conn==NULL, weaponset==NULL, flib_strempty(weaponset->name))) {
 		char ammostring[WEAPONS_COUNT*4+1];
 		strcpy(ammostring, weaponset->loadout);
 		strcat(ammostring, weaponset->crateprob);
@@ -251,7 +253,7 @@ int flib_netconn_send_weaponset(flib_netconn *conn, const flib_weaponset *weapon
 }
 
 int flib_netconn_send_map(flib_netconn *conn, const flib_map *map) {
-	if(log_badparams_if(!conn || !map)) {
+	if(log_badargs_if2(conn==NULL, map==NULL)) {
 		return -1;
 	}
 	bool error = false;
@@ -348,7 +350,7 @@ int flib_netconn_send_mapTheme(flib_netconn *conn, const char *theme) {
 
 int flib_netconn_send_mapDrawdata(flib_netconn *conn, const uint8_t *drawData, size_t size) {
 	int result = -1;
-	if(!log_badparams_if(!conn || (!drawData && size>0) || size>SIZE_MAX/2)) {
+	if(!log_badargs_if3(conn==NULL, drawData==NULL && size>0, size>SIZE_MAX/2)) {
 		uLongf zippedSize = compressBound(size);
 		uint8_t *zipped = flib_malloc(zippedSize+4); // 4 extra bytes for header
 		if(zipped) {
@@ -397,7 +399,7 @@ int flib_netconn_send_script(flib_netconn *conn, const char *scriptName) {
 
 int flib_netconn_send_scheme(flib_netconn *conn, const flib_cfg *scheme) {
 	int result = -1;
-	if(!log_badparams_if(!conn || !scheme)) {
+	if(!log_badargs_if3(conn==NULL, scheme==NULL, flib_strempty(scheme->name))) {
 		flib_vector *vec = flib_vector_create();
 		if(vec) {
 			bool error = false;
@@ -465,7 +467,7 @@ int flib_netconn_send_clearAccountsCache(flib_netconn *conn) {
 }
 
 int flib_netconn_send_setServerVar(flib_netconn *conn, const char *name, const char *value) {
-	if(log_badparams_if(!conn || !name || !value)) {
+	if(log_badargs_if3(conn==NULL, flib_strempty(name), flib_strempty(value))) {
 		return -1;
 	}
 	return flib_netbase_sendf(conn->netBase, "%s\n%s\n%s\n\n", "SET_SERVER_VAR", name, value);

@@ -112,6 +112,11 @@ char *flib_urldecode(const char *str);
  */
 bool flib_contains_dir_separator(const char *str);
 
+/**
+ * Returns true if str is either NULL or points to a 0-length string
+ */
+bool flib_strempty(const char *str);
+
 int flib_gets(char *str, size_t strlen);
 
 #endif

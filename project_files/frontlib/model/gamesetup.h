@@ -39,4 +39,10 @@ typedef struct {
 
 void flib_gamesetup_destroy(flib_gamesetup *gamesetup);
 
+/**
+ * Deep-copy of the flib_gamesetup. Copies everything except the weaponsets
+ * of the hogs; those are kept as references.
+ */
+flib_gamesetup *flib_gamesetup_copy(flib_gamesetup *gamesetup);
+
 #endif
