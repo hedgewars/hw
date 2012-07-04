@@ -1018,7 +1018,7 @@ begin
                     if Gear^.Timer < 1833 then
                         begin
                         DrawTextureRotatedF(SpritesData[sprPortal].texture, min(abs(1.25 - (Gear^.Timer mod 1333) / 400), 1.25), 0, 0,
-                                            Gear^.Angle+WorldDx, Gear^.Power+WorldDy-16, 4+Gear^.Tag, 1, 32, 32, 270);
+                                            x, Gear^.Angle+WorldDy-16, 4+Gear^.Tag, 1, 32, 32, 270);
                         end
                     end;
       gtExplosives: begin

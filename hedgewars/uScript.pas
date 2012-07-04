@@ -341,7 +341,7 @@ begin
         end
     else
         begin
-        if (lua_gettop(L) <> 3) then 
+        if (lua_gettop(L) = 3) then 
              gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), 0)
         else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
         if gear <> nil then
@@ -362,7 +362,7 @@ begin
         end
     else
         begin
-        if (lua_gettop(L) <> 3) then
+        if (lua_gettop(L) = 3) then
              gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), 0)
         else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
         if gear <> nil then
