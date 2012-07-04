@@ -101,6 +101,7 @@ gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= $FFFF;
+gear^.Power:= 0;
 
 if CurrentHedgehog <> nil then gear^.Hedgehog:= CurrentHedgehog;
 

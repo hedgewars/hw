@@ -37,7 +37,7 @@ uses SDLh, uConsts, uFloat, uTypes;
 
 procedure initModule;
 procedure freeModule;
-function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
+function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content, cnt: Longword): PGear;
 function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean ): PGear;
 function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
@@ -933,13 +933,15 @@ while t <> nil do
 CountGears:= count;
 end;
 
-function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword): PGear;
+function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content, cnt: Longword): PGear;
 begin
     FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
     cCaseFactor := 0;
 
     if (crate <> HealthCrate) and (content > ord(High(TAmmoType))) then
         content := ord(High(TAmmoType));
+
+    FollowGear^.Power:= cnt;
 
     case crate of
         HealthCrate:
