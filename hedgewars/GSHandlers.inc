@@ -2120,15 +2120,14 @@ begin
    voices. Reinforcements voices is heard for active team, not team-to-be.  Either that or change crate spawn from end of turn to start, although that
    has its own complexities. *)
             // Abuse a couple of gear values to track origin
-            Gear^.Angle:= hwRound(Gear^.X);
-            Gear^.Power:= hwRound(Gear^.Y);
+            Gear^.Angle:= hwRound(Gear^.Y);
             Gear^.Tag:= random(2);
             inc(Gear^.Timer)
             end;
         if Gear^.Timer < 1833 then inc(Gear^.Timer);
         if Gear^.Timer = 1000 then
             begin
-            sparkles:= AddVisualGear(Gear^.Angle, Gear^.Power, vgtDust, 1);
+            sparkles:= AddVisualGear(hwRound(Gear^.X), Gear^.Angle, vgtDust, 1);
             if sparkles <> nil then
                 begin
                 sparkles^.dX:= 0;
