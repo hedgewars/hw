@@ -596,7 +596,8 @@ case Gear^.Pos of
                         else
                             a:= GetAmmo(HH^.Hedgehog)
                         end;
-                    AddAmmo(HH^.Hedgehog^, a);
+                    if Gear^.Power <> 0 then AddAmmo(HH^.Hedgehog^, a, Gear^.Power)
+                    else AddAmmo(HH^.Hedgehog^, a);
 // Possibly needs to check shared clan ammo game flag once added.
 // On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
                     if (not (HH^.Hedgehog^.Team^.ExtDriven 

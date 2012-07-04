@@ -32,6 +32,7 @@ procedure SetAmmoDelay(var s: shortstring);
 procedure SetAmmoReinforcement(var s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
+procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; amt: LongWord);
 procedure SetAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): LongWord;
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
@@ -188,7 +189,7 @@ for t:= 0 to Pred(TeamsCount) do
         end
 end;
 
-procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
+procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; amt: LongWord);
 var cnt: LongWord;
     a: PAmmo;
 begin
@@ -199,9 +200,14 @@ else
     cnt:= 0;
 if (cnt <> AMMO_INFINITE) then
     begin
-    inc(cnt, Ammoz[ammo].NumberInCase);
+    inc(cnt, amt);
     SetAmmo(Hedgehog, ammo, cnt)
     end
+end;
+
+procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
+begin
+    AddAmmo(Hedgehog, ammo, Ammoz[ammo].NumberInCase);
 end;
 
 procedure SetAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
