@@ -75,6 +75,9 @@ static flib_vector *createConfigBuffer(const flib_map *mapdesc) {
 }
 
 flib_mapconn *flib_mapconn_create(const flib_map *mapdesc) {
+	if(log_badargs_if(mapdesc==NULL)) {
+		return NULL;
+	}
 	flib_mapconn *result = NULL;
 	flib_mapconn *tempConn = flib_calloc(1, sizeof(flib_mapconn));
 	if(tempConn) {
@@ -110,27 +113,21 @@ void flib_mapconn_destroy(flib_mapconn *conn) {
 }
 
 int flib_mapconn_getport(flib_mapconn *conn) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_mapconn_getport");
+	if(log_badargs_if(conn==NULL)) {
 		return 0;
-	} else {
-		return flib_ipcbase_port(conn->ipcBase);
 	}
+	return flib_ipcbase_port(conn->ipcBase);
 }
 
 void flib_mapconn_onSuccess(flib_mapconn *conn, void (*callback)(void* context, const uint8_t *bitmap, int numHedgehogs), void *context) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_mapconn_onSuccess");
-	} else {
+	if(!log_badargs_if(conn==NULL)) {
 		conn->onSuccessCb = callback ? callback : &noop_handleSuccess;
 		conn->onSuccessCtx = context;
 	}
 }
 
 void flib_mapconn_onFailure(flib_mapconn *conn, void (*callback)(void* context, const char *errormessage), void *context) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_mapconn_onError");
-	} else {
+	if(!log_badargs_if(conn==NULL)) {
 		conn->onFailureCb = callback ? callback : &noop_handleFailure;
 		conn->onFailureCtx = context;
 	}
@@ -175,13 +172,9 @@ static void flib_mapconn_wrappedtick(flib_mapconn *conn) {
 }
 
 void flib_mapconn_tick(flib_mapconn *conn) {
-	if(!conn) {
-		flib_log_e("null parameter in flib_mapconn_tick");
-	} else if(conn->running) {
-		flib_log_w("Call to flib_mapconn_tick from a callback");
-	} else if(conn->progress == FINISHED) {
-		flib_log_w("Call to flib_mapconn_tick, but we are already done. Best destroy your flib_mapconn object in the callbacks.");
-	} else {
+	if(!log_badargs_if(conn==NULL)
+			&& !log_w_if(conn->running, "Call to flib_mapconn_tick from a callback")
+			&& !log_w_if(conn->progress == FINISHED, "We are already done.")) {
 		conn->running = true;
 		flib_mapconn_wrappedtick(conn);
 		conn->running = false;

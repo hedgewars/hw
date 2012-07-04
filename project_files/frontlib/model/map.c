@@ -37,66 +37,54 @@ static void flib_map_destroy(flib_map *map) {
 }
 
 flib_map *flib_map_create_regular(const char *seed, const char *theme, int templateFilter) {
-	flib_map *result = NULL;
-	if(!seed || !theme) {
-		flib_log_e("null parameter in flib_map_create_regular");
-	} else {
-		flib_map newmap = {0};
-		newmap.mapgen = MAPGEN_REGULAR;
-		newmap.name = "+rnd+";
-		newmap.seed = (char*)seed;
-		newmap.theme = (char*)theme;
-		newmap.templateFilter = templateFilter;
-		result = flib_map_copy(&newmap);
+	if(log_badargs_if2(seed==NULL, theme==NULL)) {
+		return NULL;
 	}
-	return result;
+	flib_map newmap = {0};
+	newmap.mapgen = MAPGEN_REGULAR;
+	newmap.name = "+rnd+";
+	newmap.seed = (char*)seed;
+	newmap.theme = (char*)theme;
+	newmap.templateFilter = templateFilter;
+	return flib_map_copy(&newmap);
 }
 
 flib_map *flib_map_create_maze(const char *seed, const char *theme, int mazeSize) {
-	flib_map *result = NULL;
-	if(!seed || !theme) {
-		flib_log_e("null parameter in flib_map_create_maze");
-	} else {
-		flib_map newmap = {0};
-		newmap.mapgen = MAPGEN_MAZE;
-		newmap.name = "+maze+";
-		newmap.seed = (char*)seed;
-		newmap.theme = (char*)theme;
-		newmap.mazeSize = mazeSize;
-		result = flib_map_copy(&newmap);
+	if(log_badargs_if2(seed==NULL, theme==NULL)) {
+		return NULL;
 	}
-	return result;
+	flib_map newmap = {0};
+	newmap.mapgen = MAPGEN_MAZE;
+	newmap.name = "+maze+";
+	newmap.seed = (char*)seed;
+	newmap.theme = (char*)theme;
+	newmap.mazeSize = mazeSize;
+	return flib_map_copy(&newmap);
 }
 
 flib_map *flib_map_create_named(const char *seed, const char *name) {
-	flib_map *result = NULL;
-	if(!seed || !name) {
-		flib_log_e("null parameter in flib_map_create_named");
-	} else {
-		flib_map newmap = {0};
-		newmap.mapgen = MAPGEN_NAMED;
-		newmap.name = (char*)name;
-		newmap.seed = (char*)seed;
-		result = flib_map_copy(&newmap);
+	if(log_badargs_if2(seed==NULL, name==NULL)) {
+		return NULL;
 	}
-	return result;
+	flib_map newmap = {0};
+	newmap.mapgen = MAPGEN_NAMED;
+	newmap.name = (char*)name;
+	newmap.seed = (char*)seed;
+	return flib_map_copy(&newmap);
 }
 
-flib_map *flib_map_create_drawn(const char *seed, const char *theme, const uint8_t *drawData, int drawDataSize) {
-	flib_map *result = NULL;
-	if(!seed || !theme || (!drawData && drawDataSize)) {
-		flib_log_e("null parameter in flib_map_create_drawn");
-	} else {
-		flib_map newmap = {0};
-		newmap.mapgen = MAPGEN_DRAWN;
-		newmap.name = "+drawn+";
-		newmap.seed = (char*)seed;
-		newmap.theme = (char*)theme;
-		newmap.drawData = (uint8_t*) drawData;
-		newmap.drawDataSize = drawDataSize;
-		result = flib_map_copy(&newmap);
+flib_map *flib_map_create_drawn(const char *seed, const char *theme, const uint8_t *drawData, size_t drawDataSize) {
+	if(log_badargs_if3(seed==NULL, theme==NULL, drawData==NULL && drawDataSize>0)) {
+		return NULL;
 	}
-	return result;
+	flib_map newmap = {0};
+	newmap.mapgen = MAPGEN_DRAWN;
+	newmap.name = "+drawn+";
+	newmap.seed = (char*)seed;
+	newmap.theme = (char*)theme;
+	newmap.drawData = (uint8_t*) drawData;
+	newmap.drawDataSize = drawDataSize;
+	return flib_map_copy(&newmap);
 }
 
 flib_map *flib_map_copy(const flib_map *map) {

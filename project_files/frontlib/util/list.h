@@ -40,9 +40,7 @@
 #define GENERATE_STATIC_LIST_INSERT(fname, type) \
 	static int fname(type **listptr, int *listSizePtr, type element, int pos) { \
 		int result = -1; \
-		if(!listptr || !listSizePtr || pos < 0 || pos > *listSizePtr) { \
-			flib_log_e("Invalid parameter in "#fname); \
-		} else { \
+		if(!log_badargs_if4(listptr==NULL, listSizePtr==NULL, pos < 0, pos > *listSizePtr)) { \
 			type *newList = flib_realloc(*listptr, ((*listSizePtr)+1)*sizeof(type)); \
 			if(newList) { \
 				memmove(newList + (pos+1), newList + pos, ((*listSizePtr)-pos)*sizeof(type)); \
@@ -65,9 +63,7 @@
 #define GENERATE_STATIC_LIST_DELETE(fname, type) \
 	static int fname(type **listPtr, int *listSizePtr, int pos) { \
 		int result = -1; \
-		if(!listPtr || !listSizePtr || pos < 0 || pos >= *listSizePtr) { \
-			flib_log_e("Invalid parameter in "#fname); \
-		} else { \
+		if(!log_badargs_if4(listPtr==NULL, listSizePtr==NULL, pos < 0, pos >= *listSizePtr)) { \
 			memmove((*listPtr) + pos, (*listPtr) + (pos+1), ((*listSizePtr)-(pos+1))*sizeof(type)); \
 			(*listSizePtr)--; \
 			\

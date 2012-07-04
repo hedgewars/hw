@@ -1,6 +1,5 @@
 /* base64.c -- Encode binary data using printable characters.
-   Copyright (C) 1999, 2000, 2001, 2004, 2005, 2006 Free Software
-   Foundation, Inc.
+   Copyright (C) 1999-2001, 2004-2006, 2009-2012 Free Software Foundation, Inc.
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -13,14 +12,13 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software Foundation,
-   Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  */
+   along with this program; if not, see <http://www.gnu.org/licenses/>.  */
 
 /* Written by Simon Josefsson.  Partially adapted from GNU MailUtils
  * (mailbox/filter_trans.c, as of 2004-11-28).  Improved by review
  * from Paul Eggert, Bruno Haible, and Stepan Kasal.
  *
- * See also RFC 3548 <http://www.ietf.org/rfc/rfc3548.txt>.
+ * See also RFC 4648 <http://www.ietf.org/rfc/rfc4648.txt>.
  *
  * Be careful with error checking.  Here is how you would typically
  * use these functions:
@@ -50,6 +48,8 @@
 /* Get UCHAR_MAX. */
 #include <limits.h>
 
+#include <string.h>
+
 /* C89 compliant way to cast 'char' to 'unsigned char'. */
 static inline unsigned char
 to_uchar (char ch)
@@ -63,7 +63,7 @@ to_uchar (char ch)
    terminate the output buffer. */
 void
 base64_encode (const char *restrict in, size_t inlen,
-	       char *restrict out, size_t outlen)
+               char *restrict out, size_t outlen)
 {
   static const char b64str[64] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -72,27 +72,27 @@ base64_encode (const char *restrict in, size_t inlen,
     {
       *out++ = b64str[(to_uchar (in[0]) >> 2) & 0x3f];
       if (!--outlen)
-	break;
+        break;
       *out++ = b64str[((to_uchar (in[0]) << 4)
-		       + (--inlen ? to_uchar (in[1]) >> 4 : 0))
-		      & 0x3f];
+                       + (--inlen ? to_uchar (in[1]) >> 4 : 0))
+                      & 0x3f];
       if (!--outlen)
-	break;
+        break;
       *out++ =
-	(inlen
-	 ? b64str[((to_uchar (in[1]) << 2)
-		   + (--inlen ? to_uchar (in[2]) >> 6 : 0))
-		  & 0x3f]
-	 : '=');
+        (inlen
+         ? b64str[((to_uchar (in[1]) << 2)
+                   + (--inlen ? to_uchar (in[2]) >> 6 : 0))
+                  & 0x3f]
+         : '=');
       if (!--outlen)
-	break;
+        break;
       *out++ = inlen ? b64str[to_uchar (in[2]) & 0x3f] : '=';
       if (!--outlen)
-	break;
+        break;
       if (inlen)
-	inlen--;
+        inlen--;
       if (inlen)
-	in += 3;
+        in += 3;
     }
 
   if (outlen)
@@ -149,71 +149,71 @@ base64_encode_alloc (const char *in, size_t inlen, char **out)
 
    IBM C V6 for AIX mishandles "#define B64(x) ...'x'...", so use "_"
    as the formal parameter rather than "x".  */
-#define B64(_)					\
-  ((_) == 'A' ? 0				\
-   : (_) == 'B' ? 1				\
-   : (_) == 'C' ? 2				\
-   : (_) == 'D' ? 3				\
-   : (_) == 'E' ? 4				\
-   : (_) == 'F' ? 5				\
-   : (_) == 'G' ? 6				\
-   : (_) == 'H' ? 7				\
-   : (_) == 'I' ? 8				\
-   : (_) == 'J' ? 9				\
-   : (_) == 'K' ? 10				\
-   : (_) == 'L' ? 11				\
-   : (_) == 'M' ? 12				\
-   : (_) == 'N' ? 13				\
-   : (_) == 'O' ? 14				\
-   : (_) == 'P' ? 15				\
-   : (_) == 'Q' ? 16				\
-   : (_) == 'R' ? 17				\
-   : (_) == 'S' ? 18				\
-   : (_) == 'T' ? 19				\
-   : (_) == 'U' ? 20				\
-   : (_) == 'V' ? 21				\
-   : (_) == 'W' ? 22				\
-   : (_) == 'X' ? 23				\
-   : (_) == 'Y' ? 24				\
-   : (_) == 'Z' ? 25				\
-   : (_) == 'a' ? 26				\
-   : (_) == 'b' ? 27				\
-   : (_) == 'c' ? 28				\
-   : (_) == 'd' ? 29				\
-   : (_) == 'e' ? 30				\
-   : (_) == 'f' ? 31				\
-   : (_) == 'g' ? 32				\
-   : (_) == 'h' ? 33				\
-   : (_) == 'i' ? 34				\
-   : (_) == 'j' ? 35				\
-   : (_) == 'k' ? 36				\
-   : (_) == 'l' ? 37				\
-   : (_) == 'm' ? 38				\
-   : (_) == 'n' ? 39				\
-   : (_) == 'o' ? 40				\
-   : (_) == 'p' ? 41				\
-   : (_) == 'q' ? 42				\
-   : (_) == 'r' ? 43				\
-   : (_) == 's' ? 44				\
-   : (_) == 't' ? 45				\
-   : (_) == 'u' ? 46				\
-   : (_) == 'v' ? 47				\
-   : (_) == 'w' ? 48				\
-   : (_) == 'x' ? 49				\
-   : (_) == 'y' ? 50				\
-   : (_) == 'z' ? 51				\
-   : (_) == '0' ? 52				\
-   : (_) == '1' ? 53				\
-   : (_) == '2' ? 54				\
-   : (_) == '3' ? 55				\
-   : (_) == '4' ? 56				\
-   : (_) == '5' ? 57				\
-   : (_) == '6' ? 58				\
-   : (_) == '7' ? 59				\
-   : (_) == '8' ? 60				\
-   : (_) == '9' ? 61				\
-   : (_) == '+' ? 62				\
-   : (_) == '/' ? 63				\
+#define B64(_)                                  \
+  ((_) == 'A' ? 0                               \
+   : (_) == 'B' ? 1                             \
+   : (_) == 'C' ? 2                             \
+   : (_) == 'D' ? 3                             \
+   : (_) == 'E' ? 4                             \
+   : (_) == 'F' ? 5                             \
+   : (_) == 'G' ? 6                             \
+   : (_) == 'H' ? 7                             \
+   : (_) == 'I' ? 8                             \
+   : (_) == 'J' ? 9                             \
+   : (_) == 'K' ? 10                            \
+   : (_) == 'L' ? 11                            \
+   : (_) == 'M' ? 12                            \
+   : (_) == 'N' ? 13                            \
+   : (_) == 'O' ? 14                            \
+   : (_) == 'P' ? 15                            \
+   : (_) == 'Q' ? 16                            \
+   : (_) == 'R' ? 17                            \
+   : (_) == 'S' ? 18                            \
+   : (_) == 'T' ? 19                            \
+   : (_) == 'U' ? 20                            \
+   : (_) == 'V' ? 21                            \
+   : (_) == 'W' ? 22                            \
+   : (_) == 'X' ? 23                            \
+   : (_) == 'Y' ? 24                            \
+   : (_) == 'Z' ? 25                            \
+   : (_) == 'a' ? 26                            \
+   : (_) == 'b' ? 27                            \
+   : (_) == 'c' ? 28                            \
+   : (_) == 'd' ? 29                            \
+   : (_) == 'e' ? 30                            \
+   : (_) == 'f' ? 31                            \
+   : (_) == 'g' ? 32                            \
+   : (_) == 'h' ? 33                            \
+   : (_) == 'i' ? 34                            \
+   : (_) == 'j' ? 35                            \
+   : (_) == 'k' ? 36                            \
+   : (_) == 'l' ? 37                            \
+   : (_) == 'm' ? 38                            \
+   : (_) == 'n' ? 39                            \
+   : (_) == 'o' ? 40                            \
+   : (_) == 'p' ? 41                            \
+   : (_) == 'q' ? 42                            \
+   : (_) == 'r' ? 43                            \
+   : (_) == 's' ? 44                            \
+   : (_) == 't' ? 45                            \
+   : (_) == 'u' ? 46                            \
+   : (_) == 'v' ? 47                            \
+   : (_) == 'w' ? 48                            \
+   : (_) == 'x' ? 49                            \
+   : (_) == 'y' ? 50                            \
+   : (_) == 'z' ? 51                            \
+   : (_) == '0' ? 52                            \
+   : (_) == '1' ? 53                            \
+   : (_) == '2' ? 54                            \
+   : (_) == '3' ? 55                            \
+   : (_) == '4' ? 56                            \
+   : (_) == '5' ? 57                            \
+   : (_) == '6' ? 58                            \
+   : (_) == '7' ? 59                            \
+   : (_) == '8' ? 60                            \
+   : (_) == '9' ? 61                            \
+   : (_) == '+' ? 62                            \
+   : (_) == '/' ? 63                            \
    : -1)
 
 static const signed char b64[0x100] = {
@@ -298,89 +298,237 @@ isbase64 (char ch)
   return uchar_in_range (to_uchar (ch)) && 0 <= b64[to_uchar (ch)];
 }
 
-/* Decode base64 encoded input array IN of length INLEN to output
-   array OUT that can hold *OUTLEN bytes.  Return true if decoding was
-   successful, i.e. if the input was valid base64 data, false
-   otherwise.  If *OUTLEN is too small, as many bytes as possible will
-   be written to OUT.  On return, *OUTLEN holds the length of decoded
-   bytes in OUT.  Note that as soon as any non-alphabet characters are
-   encountered, decoding is stopped and false is returned.  This means
-   that, when applicable, you must remove any line terminators that is
-   part of the data stream before calling this function.  */
+/* Initialize decode-context buffer, CTX.  */
+void
+base64_decode_ctx_init (struct base64_decode_context *ctx)
+{
+  ctx->i = 0;
+}
+
+/* If CTX->i is 0 or 4, there are four or more bytes in [*IN..IN_END), and
+   none of those four is a newline, then return *IN.  Otherwise, copy up to
+   4 - CTX->i non-newline bytes from that range into CTX->buf, starting at
+   index CTX->i and setting CTX->i to reflect the number of bytes copied,
+   and return CTX->buf.  In either case, advance *IN to point to the byte
+   after the last one processed, and set *N_NON_NEWLINE to the number of
+   verified non-newline bytes accessible through the returned pointer.  */
+static inline char *
+get_4 (struct base64_decode_context *ctx,
+       char const *restrict *in, char const *restrict in_end,
+       size_t *n_non_newline)
+{
+  if (ctx->i == 4)
+    ctx->i = 0;
+
+  if (ctx->i == 0)
+    {
+      char const *t = *in;
+      if (4 <= in_end - *in && memchr (t, '\n', 4) == NULL)
+        {
+          /* This is the common case: no newline.  */
+          *in += 4;
+          *n_non_newline = 4;
+          return (char *) t;
+        }
+    }
+
+  {
+    /* Copy non-newline bytes into BUF.  */
+    char const *p = *in;
+    while (p < in_end)
+      {
+        char c = *p++;
+        if (c != '\n')
+          {
+            ctx->buf[ctx->i++] = c;
+            if (ctx->i == 4)
+              break;
+          }
+      }
+
+    *in = p;
+    *n_non_newline = ctx->i;
+    return ctx->buf;
+  }
+}
+
+#define return_false                            \
+  do                                            \
+    {                                           \
+      *outp = out;                              \
+      return false;                             \
+    }                                           \
+  while (false)
+
+/* Decode up to four bytes of base64-encoded data, IN, of length INLEN
+   into the output buffer, *OUT, of size *OUTLEN bytes.  Return true if
+   decoding is successful, false otherwise.  If *OUTLEN is too small,
+   as many bytes as possible are written to *OUT.  On return, advance
+   *OUT to point to the byte after the last one written, and decrement
+   *OUTLEN to reflect the number of bytes remaining in *OUT.  */
+static inline bool
+decode_4 (char const *restrict in, size_t inlen,
+          char *restrict *outp, size_t *outleft)
+{
+  char *out = *outp;
+  if (inlen < 2)
+    return false;
+
+  if (!isbase64 (in[0]) || !isbase64 (in[1]))
+    return false;
+
+  if (*outleft)
+    {
+      *out++ = ((b64[to_uchar (in[0])] << 2)
+                | (b64[to_uchar (in[1])] >> 4));
+      --*outleft;
+    }
+
+  if (inlen == 2)
+    return_false;
+
+  if (in[2] == '=')
+    {
+      if (inlen != 4)
+        return_false;
+
+      if (in[3] != '=')
+        return_false;
+    }
+  else
+    {
+      if (!isbase64 (in[2]))
+        return_false;
+
+      if (*outleft)
+        {
+          *out++ = (((b64[to_uchar (in[1])] << 4) & 0xf0)
+                    | (b64[to_uchar (in[2])] >> 2));
+          --*outleft;
+        }
+
+      if (inlen == 3)
+        return_false;
+
+      if (in[3] == '=')
+        {
+          if (inlen != 4)
+            return_false;
+        }
+      else
+        {
+          if (!isbase64 (in[3]))
+            return_false;
+
+          if (*outleft)
+            {
+              *out++ = (((b64[to_uchar (in[2])] << 6) & 0xc0)
+                        | b64[to_uchar (in[3])]);
+              --*outleft;
+            }
+        }
+    }
+
+  *outp = out;
+  return true;
+}
+
+/* Decode base64-encoded input array IN of length INLEN to output array
+   OUT that can hold *OUTLEN bytes.  The input data may be interspersed
+   with newlines.  Return true if decoding was successful, i.e. if the
+   input was valid base64 data, false otherwise.  If *OUTLEN is too
+   small, as many bytes as possible will be written to OUT.  On return,
+   *OUTLEN holds the length of decoded bytes in OUT.  Note that as soon
+   as any non-alphabet, non-newline character is encountered, decoding
+   is stopped and false is returned.  If INLEN is zero, then process
+   only whatever data is stored in CTX.
+
+   Initially, CTX must have been initialized via base64_decode_ctx_init.
+   Subsequent calls to this function must reuse whatever state is recorded
+   in that buffer.  It is necessary for when a quadruple of base64 input
+   bytes spans two input buffers.
+
+   If CTX is NULL then newlines are treated as garbage and the input
+   buffer is processed as a unit.  */
+
 bool
-base64_decode (const char *restrict in, size_t inlen,
-	       char *restrict out, size_t *outlen)
+base64_decode_ctx (struct base64_decode_context *ctx,
+                   const char *restrict in, size_t inlen,
+                   char *restrict out, size_t *outlen)
 {
   size_t outleft = *outlen;
+  bool ignore_newlines = ctx != NULL;
+  bool flush_ctx = false;
+  unsigned int ctx_i = 0;
 
-  while (inlen >= 2)
+  if (ignore_newlines)
     {
-      if (!isbase64 (in[0]) || !isbase64 (in[1]))
-	break;
+      ctx_i = ctx->i;
+      flush_ctx = inlen == 0;
+    }
 
-      if (outleft)
-	{
-	  *out++ = ((b64[to_uchar (in[0])] << 2)
-		    | (b64[to_uchar (in[1])] >> 4));
-	  outleft--;
-	}
 
-      if (inlen == 2)
-	break;
+  while (true)
+    {
+      size_t outleft_save = outleft;
+      if (ctx_i == 0 && !flush_ctx)
+        {
+          while (true)
+            {
+              /* Save a copy of outleft, in case we need to re-parse this
+                 block of four bytes.  */
+              outleft_save = outleft;
+              if (!decode_4 (in, inlen, &out, &outleft))
+                break;
 
-      if (in[2] == '=')
-	{
-	  if (inlen != 4)
-	    break;
+              in += 4;
+              inlen -= 4;
+            }
+        }
 
-	  if (in[3] != '=')
-	    break;
+      if (inlen == 0 && !flush_ctx)
+        break;
 
-	}
-      else
-	{
-	  if (!isbase64 (in[2]))
-	    break;
+      /* Handle the common case of 72-byte wrapped lines.
+         This also handles any other multiple-of-4-byte wrapping.  */
+      if (inlen && *in == '\n' && ignore_newlines)
+        {
+          ++in;
+          --inlen;
+          continue;
+        }
 
-	  if (outleft)
-	    {
-	      *out++ = (((b64[to_uchar (in[1])] << 4) & 0xf0)
-			| (b64[to_uchar (in[2])] >> 2));
-	      outleft--;
-	    }
+      /* Restore OUT and OUTLEFT.  */
+      out -= outleft_save - outleft;
+      outleft = outleft_save;
 
-	  if (inlen == 3)
-	    break;
+      {
+        char const *in_end = in + inlen;
+        char const *non_nl;
 
-	  if (in[3] == '=')
-	    {
-	      if (inlen != 4)
-		break;
-	    }
-	  else
-	    {
-	      if (!isbase64 (in[3]))
-		break;
+        if (ignore_newlines)
+          non_nl = get_4 (ctx, &in, in_end, &inlen);
+        else
+          non_nl = in;  /* Might have nl in this case. */
 
-	      if (outleft)
-		{
-		  *out++ = (((b64[to_uchar (in[2])] << 6) & 0xc0)
-			    | b64[to_uchar (in[3])]);
-		  outleft--;
-		}
-	    }
-	}
+        /* If the input is empty or consists solely of newlines (0 non-newlines),
+           then we're done.  Likewise if there are fewer than 4 bytes when not
+           flushing context and not treating newlines as garbage.  */
+        if (inlen == 0 || (inlen < 4 && !flush_ctx && ignore_newlines))
+          {
+            inlen = 0;
+            break;
+          }
+        if (!decode_4 (non_nl, inlen, &out, &outleft))
+          break;
 
-      in += 4;
-      inlen -= 4;
+        inlen = in_end - in;
+      }
     }
 
   *outlen -= outleft;
 
-  if (inlen != 0)
-    return false;
-
-  return true;
+  return inlen == 0;
 }
 
 /* Allocate an output buffer in *OUT, and decode the base64 encoded
@@ -395,21 +543,22 @@ base64_decode (const char *restrict in, size_t inlen,
    input was invalid, in which case *OUT is NULL and *OUTLEN is
    undefined. */
 bool
-base64_decode_alloc (const char *in, size_t inlen, char **out,
-		     size_t *outlen)
+base64_decode_alloc_ctx (struct base64_decode_context *ctx,
+                         const char *in, size_t inlen, char **out,
+                         size_t *outlen)
 {
-  /* This may allocate a few bytes too much, depending on input,
-     but it's not worth the extra CPU time to compute the exact amount.
-     The exact amount is 3 * inlen / 4, minus 1 if the input ends
-     with "=" and minus another 1 if the input ends with "==".
+  /* This may allocate a few bytes too many, depending on input,
+     but it's not worth the extra CPU time to compute the exact size.
+     The exact size is 3 * (inlen + (ctx ? ctx->i : 0)) / 4, minus 1 if the
+     input ends with "=" and minus another 1 if the input ends with "==".
      Dividing before multiplying avoids the possibility of overflow.  */
-  size_t needlen = 3 * (inlen / 4) + 2;
+  size_t needlen = 3 * (inlen / 4) + 3;
 
   *out = malloc (needlen);
   if (!*out)
     return true;
 
-  if (!base64_decode (in, inlen, *out, &needlen))
+  if (!base64_decode_ctx (ctx, in, inlen, *out, &needlen))
     {
       free (*out);
       *out = NULL;

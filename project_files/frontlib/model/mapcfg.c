@@ -38,8 +38,7 @@ void removeNewline(char *str) {
 
 int flib_mapcfg_read(const char *dataDirPath, const char *mapname, flib_mapcfg *out) {
 	int result = -1;
-	if(!log_badparams_if(!dataDirPath || !mapname || !out)
-			&& !log_e_if(flib_contains_dir_separator(mapname), "Illegal character in mapname %s", mapname)) {
+	if(!log_badargs_if4(dataDirPath==NULL, mapname==NULL, out==NULL, flib_contains_dir_separator(mapname))) {
 		char *path = flib_asprintf("%sMaps/%s/map.cfg", dataDirPath, mapname);
 		if(path) {
 			FILE *file = fopen(path, "rb");

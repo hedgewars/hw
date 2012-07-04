@@ -26,6 +26,10 @@
 #ifndef FRONTLIB_H_
 #define FRONTLIB_H_
 
+#include "ipc/gameconn.h"
+#include "ipc/mapconn.h"
+#include "net/netconn.h"
+
 #define FRONTLIB_SDL_ALREADY_INITIALIZED 1
 
 /**
