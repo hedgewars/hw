@@ -19,59 +19,85 @@
 
 package org.hedgewars.hedgeroid;
 
-import java.io.BufferedOutputStream;
+import java.io.Closeable;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
 public class Utils {
+	private static final String ROOT_DIR = "Data";
+	private static final String TAG = "org.hedgewars.hedgeroid";
 
-	private static final String ROOT_DIR = "Data/";
-
+	/**
+	 * @return true if the data path is currently available. However, it can vanish at any time so
+	 * normally you should just try to use it and rely on the exceptions.
+	 */
+	public static boolean isDataPathAvailable() {
+		return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+	}
+	
 	/**
 	 * get the path to which we should download all the data files
 	 * @param c context 
-	 * @return absolute path
+	 * @return The directory
+	 * @throws FileNotFoundException if external storage is not avaliable at the moment
 	 */
-	public static String getCachePath(Context c){
+	public static File getCachePath(Context c) throws FileNotFoundException {
+		File cachePath = null;
 		if(Build.VERSION.SDK_INT < 8){//8 == Build.VERSION_CODES.FROYO
-			return PreFroyoSDCardDir.getDownloadPath(c) + '/';
-		}else{
-			return FroyoSDCardDir.getDownloadPath(c) + '/';
+			cachePath = PreFroyoSDCardDir.getDownloadPath(c);
+		} else {
+			cachePath = FroyoSDCardDir.getDownloadPath(c);
+		}
+		if(cachePath==null) {
+			throw new FileNotFoundException("External storage is currently unavailable");
+		} else {
+			return cachePath;
 		}
 	}
 
-	public static String getDataPath(Context c){
-		return getCachePath(c) + ROOT_DIR;
+	public static File getDataPathFile(Context c) throws FileNotFoundException {
+		return new File(getCachePath(c), ROOT_DIR);
+	}
+	
+	// TODO Several callers are unaware that this may fail, so it throws an RTE now.
+	// Should be handled better though.
+	@Deprecated
+	public static String getDataPath(Context c) {
+		try {
+			return getDataPathFile(c).getAbsolutePath()+"/";
+		} catch(FileNotFoundException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@TargetApi(8)
-	static class FroyoSDCardDir{
-		public static String getDownloadPath(Context c){
-			File f =  c.getExternalCacheDir();
-			if(f != null){
-				return f.getAbsolutePath();
-			}else{
-				return null;
-			}	
+	private static class FroyoSDCardDir{
+		public static File getDownloadPath(Context c){
+			return c.getExternalCacheDir();
 		}
 	}
 
-	static class PreFroyoSDCardDir{
-		public static String getDownloadPath(Context c){
+	private static class PreFroyoSDCardDir{
+		public static File getDownloadPath(Context c){
 			if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
-				if(Environment.getExternalStorageDirectory() != null)
-					return Environment.getExternalStorageDirectory().getAbsolutePath() + "/Hedgewars/";				
+				File extStorageDir = Environment.getExternalStorageDirectory();
+				if(extStorageDir != null) {
+					return new File(extStorageDir, "Hedgewars");
+				}
 			}
 			return null;
 		}
@@ -166,58 +192,58 @@ public class Utils {
 	}
 
 	/**
+	 * Close a resource (possibly null), ignoring any IOException.
+	 */
+	public static void closeQuietly(Closeable c) {
+		if(c!=null) {
+			try {
+				c.close();
+			} catch(IOException e) {
+				Log.w(TAG, e);
+			}
+		}
+	}
+	
+	/**
+	 * Write all data from the input stream to the file, creating or overwriting it.
+	 * The input stream will be closed.
+	 * 
+	 * @throws IOException
+	 */
+	public static void writeStreamToFile(InputStream is, File file) throws IOException {
+		OutputStream os = null;
+		byte[] buffer = new byte[8192];
+		try {
+			os = new FileOutputStream(file);
+			int size;
+			while((size=is.read(buffer)) != -1) {
+				os.write(buffer, 0, size);
+			}
+			os.close(); // Important to close this non-quietly, in case of exceptions when flushing
+		} finally {
+			Utils.closeQuietly(is);
+			Utils.closeQuietly(os);
+		}
+	}
+	
+	/**
 	 * Moves resources pointed to by sourceResId (from @res/raw/) to the app's private data directory
 	 * @param c
 	 * @param sourceResId
 	 * @param directory
 	 */
-	public static void resRawToFilesDir(Context c, int sourceResId, String directory){
-		byte[] buffer = new byte[1024];
-		InputStream bis = null;
-		BufferedOutputStream bos = null;
-		File schemesDirFile = new File(c.getFilesDir().getAbsolutePath() + '/' + directory);
-		schemesDirFile.mkdirs();
-		String schemesDirPath = schemesDirFile.getAbsolutePath() + '/';
+	public static void resRawToFilesDir(Context c, int sourceResId, String directory) throws IOException {
+		File targetDir = new File(c.getFilesDir(), directory);
+		targetDir.mkdirs();
 
 		//Get an array with the resource files ID
-		TypedArray ta = c.getResources().obtainTypedArray(sourceResId);
-		int[] resIds = new int[ta.length()];
+		Resources resources = c.getResources();
+		TypedArray ta = resources.obtainTypedArray(sourceResId);
 		for(int i = 0; i < ta.length(); i++){
-			resIds[i] = ta.getResourceId(i, 0);
-		}
-
-		for(int id : resIds){
-			String fileName = c.getResources().getResourceEntryName(id);
-			File f = new File(schemesDirPath + fileName);
-			try {
-				if(!f.createNewFile()){
-					f.delete();
-					f.createNewFile();
-				}
-
-				bis = c.getResources().openRawResource(id);
-				bos = new BufferedOutputStream(new FileOutputStream(f), 1024);
-				int read = 0;
-				while((read = bis.read(buffer)) != -1){
-					bos.write(buffer, 0, read);
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}finally{
-				if(bis != null)
-					try { 
-						bis.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					if(bos != null)
-						try {
-							bos.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-			}
+			int resId =  ta.getResourceId(i, 0);
+			String fileName = resources.getResourceEntryName(resId);
+			File f = new File(targetDir, fileName);
+			writeStreamToFile(resources.openRawResource(resId), f);
 		}
 	}
 }
