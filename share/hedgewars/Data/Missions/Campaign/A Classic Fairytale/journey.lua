@@ -141,7 +141,7 @@ function AfterEndAnimAlone()
   TurnTimeLeft = -1
   ShowMission(loc("The Journey Back"), loc("Collateral Damage II"), loc("Save Fell From Heaven!"), 1, 4000)
   AddEvent(CheckLost, {}, DoLost, {}, 0)
-  AddEvent(CheckWon, {}, DoWon, 0)
+  AddEvent(CheckWon, {}, DoWon, {}, 0)
   RemoveEventFunc(CheckFailedCourse)
 end
 
@@ -634,6 +634,7 @@ function SetupPlaceAlone()
   SetGearPosition(leaks, 3781, 1583)
   --SetGearPosition(leaks, 1650, 1583)
   AddAmmo(cannibals[1], amShotgun, 100)
+  AddAmmo(leaks, amSwitch, 0)
 end
 
 function SetupPlaceDuo()
@@ -962,6 +963,8 @@ function onGameStart()
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m2RamonDead = tonumber(GetCampaignVar("M2RamonDead"))
   m2SpikyDead = tonumber(GetCampaignVar("M2SpikyDead"))
+  m2Choice = choiceAttacked
+  m2DenseDead = 1
   StartMission()
 end
 
