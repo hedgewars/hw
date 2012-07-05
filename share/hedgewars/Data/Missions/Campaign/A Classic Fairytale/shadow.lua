@@ -203,8 +203,8 @@ end
 
 function AfterAcceptedAnim()
   stage = acceptedReturnStage
-  SpawnAmmoCrate(1300, 810, amGirder)
-  SpawnAmmoCrate(1300, 810 - 60, amParachute)
+  SpawnAmmoCrate(1370, 810, amGirder)
+  SpawnAmmoCrate(1300, 810, amParachute)
   ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot! If you get stuck, press [Precise] to try again!"), 1, 6000)
   HideHog(cyborg)
   AddEvent(CheckTookWeapons, {}, DoTookWeapons, {}, 0)
@@ -687,8 +687,8 @@ function CheckNeedWeapons()
 end
 
 function DoNeedWeapons()
-  grenadeCrate = SpawnAmmoCrate(2550, 600, amGrenade)
-  shotgunCrate = SpawnAmmoCrate(2550, 550, amShotgun)
+  grenadeCrate = SpawnAmmoCrate(2550, 800, amGrenade)
+  shotgunCrate = SpawnAmmoCrate(2610, 850, amShotgun)
   AddCaption(loc("A little gift from the cyborgs"))
 end
 
