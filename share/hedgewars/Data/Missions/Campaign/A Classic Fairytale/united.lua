@@ -1,4 +1,4 @@
-
+loadfile(GetDataPath() .. "Scripts/Locale.lua")()
 loadfile(GetDataPath() .. "Scripts/Animate.lua")()
 
 -----------------------------Constants---------------------------------
@@ -14,8 +14,8 @@ chiefPos = {2538, 617}
 cannibalPos = {{2219, 1339}, {2322, 1357}, {805, 784}, {3876, 1048},
               {1101, 916}, {2854, 1408}, {1974, 486}, {1103, 961}}
 
-HogNames = {"Olive", "Brain Stu", "Brainila", "Salivaslurper",
-            "Spleenlover", "Tighlicker", "NomNom", "Mindy"}
+HogNames = {loc("Olive"), loc("Brain Stu"), loc("Brainila"), loc("Salivaslurper"),
+            loc("Spleenlover"), loc("Tighlicker"), loc("NomNom"), loc("Mindy")}
 
 natives = {}
 -----------------------------Variables---------------------------------
@@ -40,10 +40,10 @@ wave2Anim = {}
 finalAnim = {}
 --------------------------Anim skip functions--------------------------
 function AfterStartAnim()
-  local goal = "Defeat the cannibals!|"
-  local chiefgoal = "Try to protect the chief! Unlike your other hogs, he won't return on future missions if he dies."
+  local goal = loc("Defeat the cannibals!|")
+  local chiefgoal = loc("Try to protect the chief! Unlike your other hogs, he won't return on future missions if he dies.")
   TurnTimeLeft = TurnTime
-  ShowMission("United We Stand", "Invasion", goal .. chiefgoal, 1, 6000)
+  ShowMission(loc("United We Stand"), loc("Invasion"), goal .. chiefgoal, 1, 6000)
 end
 
 function SkipStartAnim()
@@ -84,7 +84,7 @@ function AfterFinalAnim()
     SaveCampaignVar("M4ChiefDead", "0")
   end
   SaveCampaignVar("Progress", "4")
-  ParseCommand("teamgone 011101001")
+  ParseCommand("teamgone " .. loc("011101001"))
   TurnTimeLeft = 0
 end
 -----------------------------Animations--------------------------------
@@ -108,31 +108,31 @@ end
 
 function AnimationSetup()
   table.insert(startAnim, {func = AnimWait, args = {leaks, 4000}})
-  table.insert(startAnim, {func = AnimCaption, args = {leaks, "Back in the village, after telling the villagers about the threat...", 5000}})
-  table.insert(startAnim, {func = AnimCaption, args = {leaks, "Their buildings were very primitive back then, even for an uncivilised island.", 7000}})
-  table.insert(startAnim, {func = AnimSay, args = {chief, "Young one, you are telling us that they can instantly change location without a shaman?", SAY_SAY, 8000}})
-  table.insert(startAnim, {func = AnimSay, args = {chief, "That is, indeed, very weird...", SAY_SAY, 3500}})
-  table.insert(startAnim, {func = AnimSay, args = {buffalo, "If they try coming here, they can have a taste of my delicious knuckles!", SAY_SHOUT, 8000}})
-  table.insert(startAnim, {func = AnimSay, args = {buffalo, "Haha!", SAY_SHOUT, 2000}})
+  table.insert(startAnim, {func = AnimCaption, args = {leaks, loc("Back in the village, after telling the villagers about the threat..."), 5000}})
+  table.insert(startAnim, {func = AnimCaption, args = {leaks, loc("Their buildings were very primitive back then, even for an uncivilised island."), 7000}})
+  table.insert(startAnim, {func = AnimSay, args = {chief, loc("Young one, you are telling us that they can instantly change location without a shaman?"), SAY_SAY, 8000}})
+  table.insert(startAnim, {func = AnimSay, args = {chief, loc("That is, indeed, very weird..."), SAY_SAY, 3500}})
+  table.insert(startAnim, {func = AnimSay, args = {buffalo, loc("If they try coming here, they can have a taste of my delicious knuckles!"), SAY_SHOUT, 8000}})
+  table.insert(startAnim, {func = AnimSay, args = {buffalo, loc("Haha!"), SAY_SHOUT, 2000}})
   if denseDead == false then
-    table.insert(startAnim, {func = AnimSay, args = {dense, "I'm not sure about that!", SAY_SAY, 3400}})
-    table.insert(startAnim, {func = AnimSay, args = {dense, "They have weapons we've never seen before!", SAY_SAY, 5000}})
-    table.insert(startAnim, {func = AnimSay, args = {dense, "Luckily, I've managed to snatch some of them.", SAY_SAY, 5000}})
+    table.insert(startAnim, {func = AnimSay, args = {dense, loc("I'm not sure about that!"), SAY_SAY, 3400}})
+    table.insert(startAnim, {func = AnimSay, args = {dense, loc("They have weapons we've never seen before!"), SAY_SAY, 5000}})
+    table.insert(startAnim, {func = AnimSay, args = {dense, loc("Luckily, I've managed to snatch some of them."), SAY_SAY, 5000}})
     table.insert(startAnim, {func = AnimCustomFunction, args = {dense, SpawnCrates, {1}}})
-    table.insert(startAnim, {func = AnimSay, args = {dense, "Oops...I dropped them.", SAY_SAY, 3000}})
+    table.insert(startAnim, {func = AnimSay, args = {dense, loc("Oops...I dropped them."), SAY_SAY, 3000}})
   else
-    table.insert(startAnim, {func = AnimSay, args = {leaks, "I'm not sure about that!", SAY_SAY, 3400}})
-    table.insert(startAnim, {func = AnimSay, args = {leaks, "They have weapons we've never seen before!", SAY_SAY, 5000}})
+    table.insert(startAnim, {func = AnimSay, args = {leaks, loc("I'm not sure about that!"), SAY_SAY, 3400}})
+    table.insert(startAnim, {func = AnimSay, args = {leaks, loc("They have weapons we've never seen before!"), SAY_SAY, 5000}})
     table.insert(startAnim, {func = AnimCustomFunction, args = {leaks, SpawnCrates, {1}}})
     table.insert(startAnim, {func = AnimWait, args = {leaks, 1000}})
-    table.insert(startAnim, {func = AnimSay, args = {leaks, "They keep appearing like this. It's weird!", SAY_SAY, 5000}})
+    table.insert(startAnim, {func = AnimSay, args = {leaks, loc("They keep appearing like this. It's weird!"), SAY_SAY, 5000}})
   end
-  table.insert(startAnim, {func = AnimSay, args = {chief, "Did anyone follow you?", SAY_SAY, 3000}})
-  table.insert(startAnim, {func = AnimSay, args = {leaks, "No, we made sure of that!", SAY_SAY, 3500}})
+  table.insert(startAnim, {func = AnimSay, args = {chief, loc("Did anyone follow you?"), SAY_SAY, 3000}})
+  table.insert(startAnim, {func = AnimSay, args = {leaks, loc("No, we made sure of that!"), SAY_SAY, 3500}})
   table.insert(startAnim, {func = AnimCustomFunction, args = {leaks, SpawnHealthCrates, {1}}})
   table.insert(startAnim, {func = AnimWait, args = {leaks, 1000}})
-  table.insert(startAnim, {func = AnimSay, args = {chief, "First aid kits?!", SAY_SAY, 3000}})
-  table.insert(startAnim, {func = AnimSay, args = {leaks, "I've seen this before. They just appear out of thin air.", SAY_SAY, 7000}})
+  table.insert(startAnim, {func = AnimSay, args = {chief, loc("First aid kits?!"), SAY_SAY, 3000}})
+  table.insert(startAnim, {func = AnimSay, args = {leaks, loc("I've seen this before. They just appear out of thin air."), SAY_SAY, 7000}})
   table.insert(startAnim, {func = AnimMove, args = {water, "left", 3000, 0}})
   table.insert(startAnim, {func = AnimJump, args = {water, "long"}})
   table.insert(startAnim, {func = AnimMove, args = {water, "left", 2655, 0}})
@@ -141,19 +141,19 @@ function AnimationSetup()
   table.insert(startAnim, {func = AnimJump, args = {water, "back"}})
   table.insert(startAnim, {func = AnimTurn, args = {water, "Left"}})
   table.insert(startAnim, {func = AnimMove, args = {water, "left", 2467, 754}})
-  table.insert(startAnim, {func = AnimSay, args = {water, "Hey guys!", SAY_SAY, 2500}})
+  table.insert(startAnim, {func = AnimSay, args = {water, loc("Hey guys!"), SAY_SAY, 2500}})
   table.insert(startAnim, {func = AnimTurn, args = {chief, "Right"}})
-  table.insert(startAnim, {func = AnimSay, args = {chief, "...", SAY_THINK, 1500}})
-  table.insert(startAnim, {func = AnimSay, args = {chief, "Where have you been?", SAY_SAY, 4000}})
-  table.insert(startAnim, {func = AnimSay, args = {water, "Just on a walk.", SAY_SAY, 3000}})
-  table.insert(startAnim, {func = AnimSay, args = {chief, "You have chosen the perfect moment to leave.", SAY_SAY, 6000}})
+  table.insert(startAnim, {func = AnimSay, args = {chief, loc("..."), SAY_THINK, 1500}})
+  table.insert(startAnim, {func = AnimSay, args = {chief, loc("Where have you been?"), SAY_SAY, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {water, loc("Just on a walk."), SAY_SAY, 3000}})
+  table.insert(startAnim, {func = AnimSay, args = {chief, loc("You have chosen the perfect moment to leave."), SAY_SAY, 6000}})
   table.insert(startAnim, {func = AnimCustomFunction, args = {chief, RestoreWave, {1}}})
   for i = 1, 4 do
     table.insert(startAnim, {func = AnimOutOfNowhere, args = {cannibals[i], unpack(cannibalPos[i])}})
   end
   table.insert(startAnim, {func = AnimWait, args = {chief, 1500}})
-  table.insert(startAnim, {func = AnimSay, args = {leaks, "HOW DO THEY KNOW WHERE WE ARE???", SAY_SHOUT, 5000}})
-  table.insert(startAnim, {func = AnimSay, args = {chief, "We have to protect the village!", SAY_SAY, 5000}})
+  table.insert(startAnim, {func = AnimSay, args = {leaks, loc("HOW DO THEY KNOW WHERE WE ARE???"), SAY_SHOUT, 5000}})
+  table.insert(startAnim, {func = AnimSay, args = {chief, loc("We have to protect the village!"), SAY_SAY, 5000}})
   table.insert(startAnim, {func = AnimSwitchHog, args = {leaks}})
   AddSkipFunction(startAnim, SkipStartAnim, {})
 
@@ -182,19 +182,19 @@ function SetupFinalAnim()
       hogs[2] = chief
     end
     table.insert(finalAnim, {func = AnimCustomFunction, args = {hogs[1], CondNeedToTurn, {hogs[1], hogs[2]}}})
-    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], "We can't hold them up much longer!", SAY_SAY, 5000}})
-    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], "We need to move!", SAY_SAY, 3000}})
-    table.insert(finalAnim, {func = AnimSay, args = {hogs[2], "But where can we go?", SAY_SAY, 3000}})
-    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], "To the caves...", SAY_SAY, 2500}})
-    table.insert(finalAnim, {func = AnimSay, args = {hogs[2], "Good idea, they'll never find us there!", SAY_SAY, 5000}})
+    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], loc("We can't hold them up much longer!"), SAY_SAY, 5000}})
+    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], loc("We need to move!"), SAY_SAY, 3000}})
+    table.insert(finalAnim, {func = AnimSay, args = {hogs[2], loc("But where can we go?"), SAY_SAY, 3000}})
+    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], loc("To the caves..."), SAY_SAY, 2500}})
+    table.insert(finalAnim, {func = AnimSay, args = {hogs[2], loc("Good idea, they'll never find us there!"), SAY_SAY, 5000}})
   else
     for i = 1, 5 do
       if nativesDead[i] ~= true then
         hogs[1] = natives[i]
       end
     end
-    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], "I need to move the tribe!", SAY_THINK, 4000}})
-    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], "The caves are well hidden, they won't find us there!", SAY_THINK, 7000}})
+    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], loc("I need to move the tribe!"), SAY_THINK, 4000}})
+    table.insert(finalAnim, {func = AnimSay, args = {hogs[1], loc("The caves are well hidden, they won't find us there!"), SAY_THINK, 7000}})
   end
 end
 -----------------------------Misc--------------------------------------
@@ -243,27 +243,27 @@ function SetupAmmo()
 end
 
 function AddHogs()
-	AddTeam("Natives", 2567585, "Bone", "Island", "HillBilly", "cm_birdy")
-	leaks = AddHog("Leaks A Lot", 0, 100, "Rambo")
-  dense = AddHog("Dense Cloud", 0, 100, "RobinHood")
-  water = AddHog("Fiery Water", 0, 100, "pirate_jack")
-  buffalo = AddHog("Raging Buffalo", 0, 100, "zoo_Bunny")
-  chief = AddHog("Righteous Beard", 0, 100, "IndianChief")
+	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
+	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
+  dense = AddHog(loc("Dense Cloud"), 0, 100, "RobinHood")
+  water = AddHog(loc("Fiery Water"), 0, 100, "pirate_jack")
+  buffalo = AddHog(loc("Raging Buffalo"), 0, 100, "zoo_Bunny")
+  chief = AddHog(loc("Righteous Beard"), 0, 100, "IndianChief")
   natives = {leaks, dense, water, buffalo, chief}
   nativesNum = 5
 
-  AddTeam("Light Cannfantry", 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Light Cannfantry"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 4 do
     cannibals[i] = AddHog(HogNames[i], 3, 70, "Zombi")
   end
 
-  AddTeam("Heavy Cannfantry", 14483456, "Skull", "Island", "Pirate", "cm_vampire")
+  AddTeam(loc("Heavy Cannfantry"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
   for i = 5, 8 do
     cannibals[i] = AddHog(HogNames[i], 2, 100, "vampirichog")
   end
 
-  AddTeam("011101001", 14483456, "ring", "UFO", "Robot", "cm_star")
-  cyborg = AddHog("Unit 334a$7%;.*", 0, 200, "cyborg1")
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   SetGearPosition(leaks,   unpack(leaksPos))
   SetGearPosition(dense,   unpack(densePos))
