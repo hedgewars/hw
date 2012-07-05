@@ -303,22 +303,23 @@ end;
 
 procedure ApplyAngleBounds(var Hedgehog: THedgehog; AmmoType: TAmmoType);
 begin
-with Hedgehog do
-    begin
-    CurMinAngle:= Ammoz[AmmoType].minAngle;
-    if Ammoz[AmmoType].maxAngle <> 0 then
-        CurMaxAngle:= Ammoz[AmmoType].maxAngle
-    else
-        CurMaxAngle:= cMaxAngle;
-
-    with Hedgehog.Gear^ do
+if Hedgehog.Gear <> nil then
+    with Hedgehog do
         begin
-        if Angle < CurMinAngle then
-            Angle:= CurMinAngle;
-        if Angle > CurMaxAngle then
-            Angle:= CurMaxAngle;
+        CurMinAngle:= Ammoz[AmmoType].minAngle;
+        if Ammoz[AmmoType].maxAngle <> 0 then
+            CurMaxAngle:= Ammoz[AmmoType].maxAngle
+        else
+            CurMaxAngle:= cMaxAngle;
+
+        with Hedgehog.Gear^ do
+            begin
+            if Angle < CurMinAngle then
+                Angle:= CurMinAngle;
+            if Angle > CurMaxAngle then
+                Angle:= CurMaxAngle;
+            end
         end
-    end
 end;
 
 procedure SwitchToFirstLegalAmmo(var Hedgehog: THedgehog);
@@ -380,12 +381,12 @@ with Hedgehog do
         AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
         if (Propz and ammoprop_NeedTarget) <> 0 then
             begin
-            Gear^.State:= Gear^.State or      gstHHChooseTarget;
+            if Gear <> nil then Gear^.State:= Gear^.State or      gstHHChooseTarget;
             isCursorVisible:= true
             end
         else
             begin
-            Gear^.State:= Gear^.State and not gstHHChooseTarget;
+            if Gear <> nil then Gear^.State:= Gear^.State and not gstHHChooseTarget;
             isCursorVisible:= false
             end;
         end

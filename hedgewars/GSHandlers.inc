@@ -2750,16 +2750,17 @@ end;
 procedure doStepSwitcherWork(Gear: PGear);
 var 
     HHGear: PGear;
+    hedgehog: PHedgehog;
     State: Longword;
 begin
     AllInactive := false;
 
     if ((Gear^.Message and (not gmSwitch)) <> 0) or (TurnTimeLeft = 0) then
         begin
-        HHGear := Gear^.Hedgehog^.Gear;
+        hedgehog := Gear^.Hedgehog;
         //Msg := Gear^.Message and (not gmSwitch);
         DeleteGear(Gear);
-        ApplyAmmoChanges(HHGear^.Hedgehog^);
+        ApplyAmmoChanges(hedgehog^);
 
         HHGear := CurrentHedgehog^.Gear;
         ApplyAmmoChanges(HHGear^.Hedgehog^);
