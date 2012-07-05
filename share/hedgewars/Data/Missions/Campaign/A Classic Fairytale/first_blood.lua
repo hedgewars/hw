@@ -355,7 +355,7 @@ function DoTookPunch()
   targets[2] = AddGear(2188, 1314, gtTarget, 0, 0, 0, 0)
   targets[3] = AddGear(1961, 1318, gtTarget, 0, 0, 0, 0)
   targets[4] = AddGear(1961, 1200, gtTarget, 0, 0, 0, 0)
-  targets[5] = AddGear(1961, 1100, gtTarget, 0, 0, 0, 0)
+  targets[5] = AddGear(1900, 1100, gtTarget, 0, 0, 0, 0)
   AddEvent(CheckTargDestroyed, {}, DoTargDestroyed, {}, 0)
 end
 

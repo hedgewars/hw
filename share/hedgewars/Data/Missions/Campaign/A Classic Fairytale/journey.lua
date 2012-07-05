@@ -187,11 +187,11 @@ function SkipStartAnim()
 end
 
 function PlaceCratesDuo()
-  SpawnAmmoCrate(3104, 827, amBaseballBat)
+  SpawnAmmoCrate(3090, 827, amBaseballBat)
   girderCrate1 = SpawnUtilityCrate(2466, 1814, amGirder)
   girderCrate2 = SpawnUtilityCrate(2630, 1278, amGirder)
   SpawnUtilityCrate(2422, 1810, amParachute)
-  SpawnUtilityCrate(3107, 1009, amLowGravity)
+  SpawnUtilityCrate(3157, 1009, amLowGravity)
   sniperCrate = SpawnAmmoCrate(784, 1715, amSniperRifle)
 end
 
@@ -332,8 +332,8 @@ function SetupCourseDuo()
   PlaceGirder(952, 650, 0)
 
   fireCrate = SpawnAmmoCrate(1846, 1100, amFirePunch)
-  SpawnUtilityCrate(1849, 1149, amPickHammer)
-  SpawnAmmoCrate(960, 674, amDynamite)
+  SpawnUtilityCrate(1900, 1149, amPickHammer)
+  SpawnAmmoCrate(950, 674, amDynamite)
   SpawnUtilityCrate(994, 825, amRope)
   SpawnUtilityCrate(570, 1357, amLowGravity)
 end
@@ -724,7 +724,7 @@ function SetupCourse()
   PlaceGirder(1135, 775, 1)
 
   ------ UTILITY CRATE LIST ------
-  SpawnUtilityCrate(1540, 628, amParachute)
+  SpawnUtilityCrate(1590, 628, amParachute)
   SpawnAmmoCrate(1540, 100, amDynamite)
   SpawnUtilityCrate(2175, 1815, amLowGravity)
   SpawnUtilityCrate(2210, 1499, amFirePunch)
@@ -805,7 +805,7 @@ end
 
 function DoLeaksDead()
   AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
-  ParseCommand("teamgone ", .. loc("Natives"))
+  ParseCommand("teamgone " .. loc("Natives"))
 end
 
 function CheckDenseDead()
@@ -814,7 +814,7 @@ end
 
 function DoDenseDead()
   AddCaption(loc("The village, unprepared, was destroyed by the cyborgs..."))
-  ParseCommand("teamgone ", .. loc("Natives"))
+  ParseCommand("teamgone " .. loc("Natives"))
 end
 
 function CheckTookBlowTorch()
