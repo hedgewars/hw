@@ -50,11 +50,9 @@ public class MainActivity extends FragmentActivity {
 		downloader.setOnClickListener(downloadClicker);
 		startGame.setOnClickListener(startGameClicker);
 
-
-		String cacheDir = Utils.getCachePath(this);
-		if(cacheDir == null){
+		if(!Utils.isDataPathAvailable()){
 			showDialog(0);
-		}else{
+		} else {
 			int versionCode = 0;
 			try {
 				versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
