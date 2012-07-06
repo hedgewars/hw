@@ -408,7 +408,7 @@ end
 
 function SetupAnimAcceptedDied()
   table.insert(startAnimAD, {func = AnimWait, args = {leaks, 3000}})
-  table.insert(startAnimAD, {func = AnimTurn, args = {leaks, "left"}})
+  table.insert(startAnimAD, {func = AnimTurn, args = {leaks, "Left"}})
   table.insert(startAnimAD, {func = AnimSay, args = {leaks, loc("I need to get to the other side of this island, fast!"), SAY_THINK, 5000}})
   table.insert(startAnimAD, {func = AnimSay, args = {leaks, loc("With Dense Cloud on the land of shadows, I'm the village's only hope..."), SAY_THINK, 7000}})
 

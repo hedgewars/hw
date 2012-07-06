@@ -79,9 +79,7 @@ function SkipWave2Anim()
 end
 
 function AfterWave2Anim()
-  SetGearMessage(CurrentHegdgehog, 0)
-  SetState(CurrentHedgehog, 0)
-  TurnTimeLeft = TurnTime
+  TurnTimeLeft = 0
 end
 
 function AfterFinalAnim()
@@ -104,7 +102,7 @@ function Wave2Reaction()
   gearr = natives[i]
   if denseDead ~= true and band(GetState(dense), gstDrowning) == 0 then
     AnimInsertStepNext({func = AnimSay, args = {dense, loc("I'm so scared!"), SAY_SAY, 3000}})
-    AnimInsertStepNext({func = AnimCustomFunction, args = {dense, EmitDenseClouds, {"left"}}})
+    AnimInsertStepNext({func = AnimCustomFunction, args = {dense, EmitDenseClouds, {"Left"}}})
     AnimInsertStepNext({func = AnimTurn, args = {dense, "Left"}})
   end
   AnimInsertStepNext({func = AnimSay, args = {gearr, loc("There's more of them? When did they become so hungry?"), SAY_SHOUT, 8000}}) 
@@ -112,7 +110,7 @@ end
 
 function EmitDenseClouds(dir)
   local dif
-  if dir == "left" then
+  if dir == "Left" then
     dif = 10
   else
     dif = -10
@@ -154,14 +152,14 @@ function AnimationSetup()
   table.insert(startAnim, {func = AnimWait, args = {leaks, 1000}})
   table.insert(startAnim, {func = AnimSay, args = {chief, loc("First aid kits?!"), SAY_SAY, 3000}})
   table.insert(startAnim, {func = AnimSay, args = {leaks, loc("I've seen this before. They just appear out of thin air."), SAY_SAY, 7000}})
-  table.insert(startAnim, {func = AnimMove, args = {water, "left", 3000, 0}})
+  table.insert(startAnim, {func = AnimMove, args = {water, "Left", 3000, 0}})
   table.insert(startAnim, {func = AnimJump, args = {water, "long"}})
-  table.insert(startAnim, {func = AnimMove, args = {water, "left", 2655, 0}})
+  table.insert(startAnim, {func = AnimMove, args = {water, "Left", 2655, 0}})
   table.insert(startAnim, {func = AnimTurn, args = {water, "Right"}})
   table.insert(startAnim, {func = AnimJump, args = {water, "back"}})
   table.insert(startAnim, {func = AnimJump, args = {water, "back"}})
   table.insert(startAnim, {func = AnimTurn, args = {water, "Left"}})
-  table.insert(startAnim, {func = AnimMove, args = {water, "left", 2467, 754}})
+  table.insert(startAnim, {func = AnimMove, args = {water, "Left", 2467, 754}})
   table.insert(startAnim, {func = AnimSay, args = {water, loc("Hey guys!"), SAY_SAY, 2500}})
   table.insert(startAnim, {func = AnimTurn, args = {chief, "Right"}})
   table.insert(startAnim, {func = AnimSay, args = {chief, loc("..."), SAY_THINK, 1500}})
@@ -185,6 +183,7 @@ function AnimationSetup()
   table.insert(wave2Anim, {func = AnimCustomFunction, args = {leaks, Wave2Reaction, {}}, swh = false})
   table.insert(wave2Anim, {func = AnimCustomFunction, args = {leaks, SpawnCrates, {2}}, swh = false})
   table.insert(wave2Anim, {func = AnimCustomFunction, args = {leaks, SpawnHealthCrates, {2}}, swh = false})
+  table.insert(wave2Anim, {func = AnimSwitchHog, args = {cannibals[5]}})
   AddSkipFunction(wave2Anim, SkipWave2Anim, {})
 end
 
@@ -377,7 +376,7 @@ end
 -----------------------------Main Functions----------------------------
 
 function onGameInit()
-	Seed = 0 
+	Seed = 1
 	GameFlags = 0
 	TurnTime = 60000 
 	CaseFreq = 0

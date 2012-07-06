@@ -260,7 +260,7 @@ end
 
 function EmitDenseClouds(anim, dir)
   local dif
-  if dir == "left" then 
+  if dir == "Left" then 
     dif = 10
   else
     dif = -10
@@ -313,7 +313,7 @@ function AnimationSetup()
   table.insert(startDialogue, {func = AnimCaption, args = {leaks, loc("Little did they know that this hunt will mark them forever..."), 4000}})
   table.insert(startDialogue, {func = AnimSay, args = {leaks, loc("I have no idea where that mole disappeared...Can you see it?"), SAY_SAY, 9000}})
   table.insert(startDialogue, {func = AnimSay, args = {dense, loc("Nope. It was one fast mole, that's for sure."), SAY_SAY, 5000}}) 
-  table.insert(startDialogue, {func = AnimCustomFunction, args = {dense, EmitDenseClouds, {startDialogue, "right"}}})
+  table.insert(startDialogue, {func = AnimCustomFunction, args = {dense, EmitDenseClouds, {startDialogue, "Right"}}})
   table.insert(startDialogue, {func = AnimWait, args = {dense, 2000}})
   table.insert(startDialogue, {func = AnimSay, args = {leaks, loc("Please, stop releasing your \"smoke signals\"!"), SAY_SAY, 5000}})
   table.insert(startDialogue, {func = AnimSay, args = {leaks, loc("You're terrorizing the forest...We won't catch anything like this!"), SAY_SAY, 6000}})
@@ -388,9 +388,9 @@ function AnimationSetup()
   table.insert(stronglingsAnim, {func = AnimCaption, args = {cyborg, loc("30 minutes later...")}, swh = false})
   table.insert(stronglingsAnim, {func = AnimWait, args = {cyborg, 2000}})
   table.insert(stronglingsAnim, {func = AnimSetGearPosition, args = {dense, 1420, 1315}})
-  table.insert(stronglingsAnim, {func = AnimMove, args = {dense, "left", 1400, 0}})
-  table.insert(stronglingsAnim, {func = AnimCustomFunction, args = {dense, EmitDenseClouds, {stronglingsAnim, "left"}}})
-  table.insert(stronglingsAnim, {func = AnimMove, args = {dense, "left", 1350, 0}})
+  table.insert(stronglingsAnim, {func = AnimMove, args = {dense, "Left", 1400, 0}})
+  table.insert(stronglingsAnim, {func = AnimCustomFunction, args = {dense, EmitDenseClouds, {stronglingsAnim, "Left"}}})
+  table.insert(stronglingsAnim, {func = AnimMove, args = {dense, "Left", 1350, 0}})
   table.insert(stronglingsAnim, {func = AnimOutOfNowhere, args = {cyborg, 1250, 1320}})
   table.insert(stronglingsAnim, {func = AnimRemoveState, args = {cyborg, gstInvisible}})
   table.insert(stronglingsAnim, {func = AnimGearWait, args = {cyborg, 2000}})
@@ -430,11 +430,11 @@ function AnimationSetup()
   table.insert(refusedAnim, {func = AnimOutOfNowhere, args = {dense, 2645, 1146}})
   table.insert(refusedAnim, {func = AnimOutOfNowhere, args = {ramon, 2218, 1675}})
   table.insert(refusedAnim, {func = AnimOutOfNowhere, args = {spiky, 2400, 1675}})
-  table.insert(refusedAnim, {func = AnimTurn, args = {spiky, "left"}})
+  table.insert(refusedAnim, {func = AnimTurn, args = {spiky, "Left"}})
   table.insert(refusedAnim, {func = AnimWait, args = {cyborg, 1700}})
-  table.insert(refusedAnim, {func = AnimTurn, args = {spiky, "right"}})
+  table.insert(refusedAnim, {func = AnimTurn, args = {spiky, "Right"}})
   table.insert(refusedAnim, {func = AnimWait, args = {cyborg, 1700}})
-  table.insert(refusedAnim, {func = AnimTurn, args = {spiky, "left"}})
+  table.insert(refusedAnim, {func = AnimTurn, args = {spiky, "Left"}})
   table.insert(refusedAnim, {func = AnimSay, args = {spiky, loc("Dude, we really need a new shaman..."), SAY_SAY, 4000}})
   AddSkipFunction(refusedAnim, SkipRefusedAnim, {})
 
@@ -518,12 +518,12 @@ function PlaceHogs()
 
   for i = 2, 9 do
     SetGearPosition(cannibals[i], unpack(cyborgPos))
-    AnimTurn(cannibals[i], "left")
+    AnimTurn(cannibals[i], "Left")
     cannibalDead[i] = false
   end
 
   SetGearPosition(cannibals[1], cannibalPos[1][1], cannibalPos[1][2])
-  AnimTurn(cannibals[1], "left")
+  AnimTurn(cannibals[1], "Left")
 
   SetGearPosition(cyborg, cyborgPos[1], cyborgPos[2])
   SetGearPosition(ramon, 2218, 1675)
