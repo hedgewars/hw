@@ -920,7 +920,7 @@ function onGameInit()
 	Seed = 0
   TemplateFilter = 3
 	GameFlags = gfSolidLand + gfDisableWind
-	TurnTime = 25000 
+	TurnTime = 40000 
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 3000
