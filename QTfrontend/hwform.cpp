@@ -520,6 +520,11 @@ void HWForm::GoToEditScheme()
     GoToPage(ID_PAGE_SCHEME);
 }
 
+void HWForm::GoToVideos()
+{
+    GoToPage(ID_PAGE_VIDEOS);
+}
+
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
 #ifdef USE_XFIRE
@@ -717,6 +722,8 @@ void HWForm::GoBack()
     int curid = ui.Pages->currentIndex();
     if (curid == ID_PAGE_MAIN)
     {
+        if (!ui.pageVideos->tryQuit(this))
+            return;
         stopAnim = true;
         exit();
     }

@@ -44,6 +44,7 @@
 #include "libav_iteraction.h"
 #include "gameuiconfig.h"
 #include "recorder.h"
+#include "ask_quit.h"
 
 const int ThumbnailSize = 400;
 
@@ -70,6 +71,7 @@ class VideoItem : public QTableWidgetItem
         HWRecorder * pRecorder; // non NULL if file is being encoded
         bool seen; // used when updating directory
         float lastSizeUpdate;
+        float progress;
 
         bool ready()
         { return !pRecorder; }
@@ -84,6 +86,7 @@ VideoItem::VideoItem(const QString& name)
     this->name = name;
     pRecorder = NULL;
     lastSizeUpdate = 0;
+    progress = 0;
 }
 
 VideoItem::~VideoItem()
@@ -300,6 +303,7 @@ PageVideos::PageVideos(QWidget* parent) : AbstractPage(parent),
     config(0)
 {
     nameChangedFromCode = false;
+    numRecorders = 0;
     initPage();
 }
 
@@ -496,6 +500,8 @@ void PageVideos::addRecorder(HWRecorder* pRecorder)
     connect(pRecorder, SIGNAL(onProgress(float)), this, SLOT(updateProgress(float)));
     connect(pRecorder, SIGNAL(encodingFinished(bool)), this, SLOT(encodingFinished(bool)));
     filesTable->setCellWidget(row, vcProgress, progressBar);
+
+    numRecorders++;
 }
 
 void PageVideos::updateProgress(float value)
@@ -515,10 +521,13 @@ void PageVideos::updateProgress(float value)
     QProgressBar * progressBar = (QProgressBar*)filesTable->cellWidget(row, vcProgress);
     progressBar->setValue(value*10000);
     progressBar->setFormat(QString("%1%").arg(value*100, 0, 'f', 2));
+    item->progress = value;
 }
 
 void PageVideos::encodingFinished(bool success)
 {
+    numRecorders--;
+
     HWRecorder * pRecorder = (HWRecorder*)sender();
     VideoItem * item = (VideoItem*)pRecorder->item;
     int row = filesTable->row(item);
@@ -583,6 +592,7 @@ void PageVideos::cellChanged(int row, int column)
             setName(item, oldName);
         }
     }
+    updateDescription();
 }
 
 void PageVideos::setName(VideoItem * item, const QString & newName)
@@ -615,8 +625,6 @@ int PageVideos::appendRow(const QString & name)
     item = new QTableWidgetItem();
     item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
     filesTable->setItem(row, vcProgress, item);
-
-   // filesTable->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 
     return row;
 }
@@ -762,4 +770,33 @@ void PageVideos::keyPressEvent(QKeyEvent * pEvent)
 void PageVideos::openVideosDirectory()
 {
     QDesktopServices::openUrl(QUrl("file:///"+cfgdir->absolutePath() + "/Videos"));
+}
+
+bool PageVideos::tryQuit(HWForm * form)
+{
+    if (numRecorders == 0)
+        return true;
+
+    // ask user what to do - abort or wait
+    HWAskQuitDialog * askd = new HWAskQuitDialog(this, form);
+    bool answer = askd->exec();
+    delete askd;
+    return answer;
+}
+
+// returns multi-line string with list of videos in progress
+QString PageVideos::getVideosInProgress()
+{
+    QString list = "";
+    int count = filesTable->rowCount();
+    for (int i = 0; i < count; i++)
+    {
+        VideoItem * item = nameItem(i);
+        float progress = 100*item->progress;
+        if (progress > 99.99)
+            progress = 99.99; // displaying 100% may be confusing
+        if (!item->ready())
+            list += item->name + " (" + QString::number(progress, 'f', 2) + "%)\n";
+    }
+    return list;
 }

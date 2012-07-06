@@ -170,7 +170,7 @@ LibavIteraction::LibavIteraction()
             codec.isRecomended = true;
 
         // FIXME: remove next line
-        codec.longName += QString(" (%1)").arg(codec.shortName);
+       // codec.longName += QString(" (%1)").arg(codec.shortName);
     }
 
     // get list of all formats
@@ -204,7 +204,7 @@ LibavIteraction::LibavIteraction()
         format.longName = QString("%1 (*.%2)").arg(pFormat->long_name).arg(ext);
 
         // FIXME: remove next line
-        format.longName += QString(" (%1)").arg(format.shortName);
+       // format.longName += QString(" (%1)").arg(format.shortName);
 
         format.isRecomended = strcmp(pFormat->name, "mp4") == 0 || strcmp(pFormat->name, "avi") == 0;
 
