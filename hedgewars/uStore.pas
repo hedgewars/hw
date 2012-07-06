@@ -49,7 +49,8 @@ procedure SwapBuffers; inline;
 
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
-     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF} {$IFDEF USE_VIDEO_RECORDING}, glut {$ENDIF};
+     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
+     {$IF NOT DEFINED(SDL13) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -1025,6 +1026,18 @@ WeaponTooltipTex:= nil
 end;
 
 {$IFDEF USE_VIDEO_RECORDING}
+{$IFDEF SDL13}
+procedure InitOffscreenOpenGL;
+begin
+    // create hidden window
+    SDLwindow:= SDL_CreateWindow('hedgewars (you don''t see this)',
+                                 SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK,
+                                 cScreenWidth, cScreenHeight,
+                                 SDL_WINDOW_HIDDEN or SDL_WINDOW_OPENGL);
+    SDLTry(SDLwindow <> nil, true);
+    SetupOpenGL();
+end;
+{$ELSE}
 procedure InitOffscreenOpenGL;
 var ArgCount: LongInt;
     PrgName: pchar;
@@ -1033,11 +1046,12 @@ begin
     PrgName:= 'hwengine';
     glutInit(@ArgCount, @PrgName);
     glutInitWindowSize(cScreenWidth, cScreenHeight);
-    glutCreateWindow('You don''t see this'); // we don't need a window, but if this function is not called then OpenGL will not be initialized
+    glutCreateWindow('hedgewars (you don''t see this)'); // we don't need a window, but if this function is not called then OpenGL will not be initialized
     glutHideWindow();
     SetupOpenGL();
 end;
-{$ENDIF}
+{$ENDIF} // SDL13
+{$ENDIF} // USE_VIDEO_RECORDING
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
