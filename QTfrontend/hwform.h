@@ -67,6 +67,7 @@ class HWForm : public QMainWindow
         void exit();
         void setButtonDescription(QString desc);
         void backDescription();
+        void GoToVideos();
 
     private slots:
         void GoToSaves();

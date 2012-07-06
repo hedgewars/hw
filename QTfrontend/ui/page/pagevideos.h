@@ -26,6 +26,7 @@
 class GameUIConfig;
 class HWRecorder;
 class VideoItem;
+class HWForm;
 
 class PageVideos : public AbstractPage
 {
@@ -54,6 +55,8 @@ class PageVideos : public AbstractPage
         void setDefaultCodecs();
         bool tryCodecs(const QString & format, const QString & vcodec, const QString & acodec);
         void addRecorder(HWRecorder* pRecorder);
+        bool tryQuit(HWForm *form);
+        QString getVideosInProgress(); // get multi-line string with list of videos in progress
 
     private:
         // virtuals from AbstractPage
@@ -90,6 +93,8 @@ class PageVideos : public AbstractPage
         // this flag is used to distinguish if cell was changed from code or by user
         // (in signal cellChanged)
         bool nameChangedFromCode;
+
+        int numRecorders;
 
     private slots:
         void changeAVFormat(int index);
