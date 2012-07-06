@@ -37,7 +37,7 @@ uses SDLh, uConsts, uFloat, uTypes;
 
 procedure initModule;
 procedure freeModule;
-function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
+function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content, cnt: Longword): PGear;
 function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean ): PGear;
 function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
@@ -65,7 +65,7 @@ var skipFlag: boolean;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
-function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray; forward;
+function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure doStepCase(Gear: PGear); forward;
@@ -871,25 +871,30 @@ if (GameFlags and gfDivideTeams) <> 0 then
     end
 end;
 
-function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray;
+var GearsNearArray : TPGearArray;
+function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
 var
     t: PGear;
-    l: Longword;
+    s: Longword;
 begin
     r:= r*r;
-    GearsNear := nil;
+    s:= 0;
+    SetLength(GearsNearArray, s);
     t := GearsList;
     while t <> nil do 
         begin
         if (t^.Kind = Kind) 
             and ((X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) < int2hwFloat(r)) then
             begin
-            l:= Length(GearsNear);
-            SetLength(GearsNear, l + 1);
-            GearsNear[l] := t;
+            inc(s);
+            SetLength(GearsNearArray, s);
+            GearsNearArray[s - 1] := t;
             end;
         t := t^.NextGear;
     end;
+
+    GearsNear.size:= s;
+    GearsNear.ar:= @GearsNearArray
 end;
 
 {procedure AmmoFlameWork(Ammo: PGear);
@@ -928,13 +933,15 @@ while t <> nil do
 CountGears:= count;
 end;
 
-function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword): PGear;
+function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content, cnt: Longword): PGear;
 begin
     FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
     cCaseFactor := 0;
 
     if (crate <> HealthCrate) and (content > ord(High(TAmmoType))) then
         content := ord(High(TAmmoType));
+
+    FollowGear^.Power:= cnt;
 
     case crate of
         HealthCrate:

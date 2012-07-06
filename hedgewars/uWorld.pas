@@ -1620,9 +1620,10 @@ if isCursorVisible then
 isFirstFrame:= false
 end;
 
+var PrevSentPointTime: LongWord = 0;
+
 procedure MoveCamera;
 var EdgesDist, wdy, shs,z: LongInt;
-    PrevSentPointTime: LongWord = 0;
 begin
 {$IFNDEF MOBILE}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) and cHasFocus and (GameState <> gsConfirm) then
@@ -1632,7 +1633,7 @@ z:= round(200/zoom);
 if not PlacingHogs and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) then
     if (not autoCameraOn) then
         FollowGear:= nil
-    else        
+    else
     if ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
         begin
         FollowGear:= nil;
@@ -1852,6 +1853,7 @@ begin
     Frames:= 0;
     WorldDx:= -512;
     WorldDy:= -256;
+    PrevSentPointTime:= 0;
 
     FPS:= 0;
     CountTicks:= 0;
