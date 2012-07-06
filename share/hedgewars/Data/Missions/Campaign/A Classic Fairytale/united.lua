@@ -39,6 +39,11 @@ startAnim = {}
 wave2Anim = {}
 finalAnim = {}
 --------------------------Anim skip functions--------------------------
+function AfterHogDeadAnim()
+  freshDead = nil
+  TurnTimeLeft = TurnTime
+end
+
 function AfterStartAnim()
   local goal = loc("Defeat the cannibals!|")
   local chiefgoal = loc("Try to protect the chief! Unlike your other hogs, he won't return on future missions if he dies.")
@@ -74,7 +79,9 @@ function SkipWave2Anim()
 end
 
 function AfterWave2Anim()
-  TurnTimeLeft = 0
+  SetGearMessage(CurrentHegdgehog, 0)
+  SetState(CurrentHedgehog, 0)
+  TurnTimeLeft = TurnTime
 end
 
 function AfterFinalAnim()
@@ -88,8 +95,22 @@ function AfterFinalAnim()
   TurnTimeLeft = 0
 end
 -----------------------------Animations--------------------------------
+function Wave2Reaction()
+  local i = 1
+  local gearr = nil
+  while nativesDead[i] == true do
+    i = i + 1
+  end
+  gearr = natives[i]
+  if denseDead ~= true and band(GetState(dense), gstDrowning) == 0 then
+    AnimInsertStepNext({func = AnimSay, args = {dense, loc("I'm so scared!"), SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimCustomFunction, args = {dense, EmitDenseClouds, {"left"}}})
+    AnimInsertStepNext({func = AnimTurn, args = {dense, "Left"}})
+  end
+  AnimInsertStepNext({func = AnimSay, args = {gearr, loc("There's more of them? When did they become so hungry?"), SAY_SHOUT, 8000}}) 
+end
 
-function EmitDenseClouds(anim, dir)
+function EmitDenseClouds(dir)
   local dif
   if dir == "left" then
     dif = 10
@@ -161,9 +182,22 @@ function AnimationSetup()
   for i = 5, 8 do
     table.insert(wave2Anim, {func = AnimOutOfNowhere, args = {cannibals[i], unpack(cannibalPos[i])}})
   end
+  table.insert(wave2Anim, {func = AnimCustomFunction, args = {leaks, Wave2Reaction, {}}, swh = false})
   table.insert(wave2Anim, {func = AnimCustomFunction, args = {leaks, SpawnCrates, {2}}, swh = false})
   table.insert(wave2Anim, {func = AnimCustomFunction, args = {leaks, SpawnHealthCrates, {2}}, swh = false})
   AddSkipFunction(wave2Anim, SkipWave2Anim, {})
+end
+
+function SetupHogDeadAnim(gear)
+  hogDeadAnim = {}
+  if nativesNum == 0 then
+    return
+  end
+  local hogDeadStrings = {"They killed " .. gear .."! You bastards!", 
+                          gear .. "! Why?!", 
+                          "That was just mean!", 
+                          "Oh no, not " .. gear .. "!"}
+  table.insert(hogDeadAnim, {func = AnimSay, args = {CurrentHedgehog, hogDeadStrings[nativesNum], SAY_SHOUT, 4000}})
 end
 
 function SetupFinalAnim()
@@ -259,7 +293,7 @@ function AddHogs()
 
   AddTeam(loc("Heavy Cannfantry"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
   for i = 5, 8 do
-    cannibals[i] = AddHog(HogNames[i], 2, 100, "vampirichog")
+    cannibals[i] = AddHog(HogNames[i], 2, 70, "vampirichog")
   end
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
@@ -383,22 +417,27 @@ function onGearDelete(gear)
     denseDead = true
     nativesNum = nativesNum - 1
     nativesDead[2] = true
+    freshDead = loc("Dense Cloud")
   elseif gear == leaks then
     leaksDead = true
     nativesNum = nativesNum - 1
     nativesDead[1] = true
+    freshDead = loc("Leaks A Lot")
   elseif gear == chief then
     chiefDead = true
     nativesNum = nativesNum - 1
     nativesDead[5] = true
+    freshDead = loc("Righteous Beard")
   elseif gear == water then
     waterDead = true
     nativesNum = nativesNum - 1
     nativesDead[3] = true
+    freshDead = loc("Fiery Water")
   elseif gear == buffalo then
     buffaloDead = true
     nativesNum = nativesNum - 1
     nativesDead[4] = true
+    freshDead = loc("Raging Buffalo")
   else
     for i = 1, 8 do
       if gear == cannibals[i] then
@@ -413,17 +452,17 @@ end
 
 function onAmmoStoreInit()
   SetAmmo(amDEagle, 9, 0, 0, 0)
-  SetAmmo(amSniperRifle, 9, 0, 0, 0)
+  SetAmmo(amSniperRifle, 4, 0, 0, 0)
   SetAmmo(amFirePunch, 9, 0, 0, 0)
   SetAmmo(amWhip, 9, 0, 0, 0)
   SetAmmo(amBaseballBat, 9, 0, 0, 0)
   SetAmmo(amHammer, 9, 0, 0, 0)
   SetAmmo(amLandGun, 9, 0, 0, 0)
-  SetAmmo(amSnowball, 9, 0, 0, 0)
+  SetAmmo(amSnowball, 8, 0, 0, 0)
   SetAmmo(amGirder, 4, 0, 0, 2)
   SetAmmo(amParachute, 4, 0, 0, 2)
   SetAmmo(amSwitch, 8, 0, 0, 2)
-  SetAmmo(amSkip, 9, 0, 0, 0)
+  SetAmmo(amSkip, 8, 0, 0, 0)
   SetAmmo(amRope, 5, 0, 0, 3)
   SetAmmo(amBlowTorch, 3, 0, 0, 3)
   SetAmmo(amPickHammer, 0, 0, 0, 3)
@@ -434,11 +473,20 @@ function onAmmoStoreInit()
   SetAmmo(amMine, 0, 0, 0, 2)
   SetAmmo(amMolotov, 0, 0, 0, 3)
   SetAmmo(amFlamethrower, 0, 0, 0, 3)
+  SetAmmo(amShotgun, 0, 0, 0, 3)
+  SetAmmo(amTeleport, 0, 0, 0, 2)
+  SetAmmo(amFlamethrower, 0, 0, 0, 3)
 end
 
 function onNewTurn()
   if AnimInProgress() then
     TurnTimeLeft = -1
+    return
+  end
+  if freshDead ~= nil and GetHogTeamName(CurrentHedgehog) == loc("Natives") then
+    SetupHogDeadAnim(freshDead)
+    AddAnim(hogDeadAnim)
+    AddFunction({func = AfterHogDeadAnim, args = {}})
   end
 end
 
