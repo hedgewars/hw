@@ -123,7 +123,11 @@ static void AddAudioStream()
         g_pAudio->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
     // open it
+#if LIBAVCODEC_VERSION_MAJOR >= 53
     if (avcodec_open2(g_pAudio, g_pACodec, NULL) < 0)
+#else
+    if (avcodec_open(g_pAudio, g_pACodec) < 0)
+#endif
     {
         Log("Could not open audio codec %s\n", g_pACodec->long_name);
         return;
@@ -232,16 +236,20 @@ static void AddVideoStream()
         g_pVideo->global_quality = g_VQuality*FF_QP2LAMBDA;
     }
 
-    AVDictionary* pDict = NULL;
-    if (strcmp(g_pVCodec->name, "libx264") == 0)
-        av_dict_set(&pDict, "preset", g_pPreset, 0);
-
     // some formats want stream headers to be separate
     if (g_pFormat->flags & AVFMT_GLOBALHEADER)
         g_pVideo->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
     // open the codec
+#if LIBAVCODEC_VERSION_MAJOR >= 53
+    AVDictionary* pDict = NULL;
+    if (strcmp(g_pVCodec->name, "libx264") == 0)
+        av_dict_set(&pDict, "preset", g_pPreset, 0);
+
     if (avcodec_open2(g_pVideo, g_pVCodec, &pDict) < 0)
+#else
+    if (avcodec_open(g_pVideo, g_pVCodec) < 0)
+#endif
         FatalError("Could not open video codec %s", g_pVCodec->long_name);
 
     g_pVFrame = avcodec_alloc_frame();
