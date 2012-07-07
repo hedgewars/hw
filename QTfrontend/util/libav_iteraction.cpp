@@ -288,7 +288,11 @@ QString LibavIteraction::getFileInfo(const QString & filepath)
     QByteArray utf8path = filepath.toUtf8();
     if (avformat_open_input(&pContext, utf8path.data(), NULL, NULL) < 0)
         return "";
+#if LIBAFORMAT_VERSION_MAJOR < 54
+    if (av_find_stream_info(pContext) < 0)
+#else
     if (avformat_find_stream_info(pContext, NULL) < 0)
+#endif
         return "";
 
     int s = float(pContext->duration)/AV_TIME_BASE;
@@ -322,7 +326,7 @@ QString LibavIteraction::getFileInfo(const QString & filepath)
     AVDictionaryEntry* pComment = av_dict_get(pContext->metadata, "comment", NULL, 0);
     if (pComment)
         desc += QString("\n") + pComment->value;
-#if LIBAVCODEC_VERSION_MAJOR < 54
+#if LIBAFORMAT_VERSION_MAJOR < 54
     av_close_input_file(pContext);
 #else
     avformat_close_input(&pContext);
