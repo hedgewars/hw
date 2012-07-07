@@ -6,6 +6,10 @@
 #include <stdarg.h>
 #include "libavformat/avformat.h"
 
+#ifndef AVIO_FLAG_WRITE
+#define AVIO_FLAG_WRITE AVIO_WRONLY
+#endif
+
 static AVFormatContext* g_pContainer;
 static AVOutputFormat* g_pFormat;
 static AVStream* g_pAStream;
