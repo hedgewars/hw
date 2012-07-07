@@ -213,7 +213,7 @@ begin
                 img[4*(w*i + j)+0]:= r div (k*k);
                 img[4*(w*i + j)+1]:= g div (k*k);
                 img[4*(w*i + j)+2]:= b div (k*k);
-                img[4*(w*i + j)+3]:= 0;
+                img[4*(w*i + j)+3]:= 255;
             end;
     end;
 end;
