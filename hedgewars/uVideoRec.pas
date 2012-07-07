@@ -253,8 +253,6 @@ begin
     RecPrefix:= FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now());
 
     thumbnailSaved:= false;
-    if (not (gameState in [gsLandGen, gsStart])) and (ScreenFade = sfNone) then
-        SaveThumbnail();
 
     Mix_QuerySpec(@frequency, @format, @channels);
     AddFileLog('sound: frequency = ' + IntToStr(frequency) + ', format = ' + IntToStr(format) + ', channels = ' + IntToStr(channels));
@@ -307,9 +305,6 @@ begin
     Close(cameraFile);
     Mix_SetPostMix(nil, nil);
     SDL_UnlockAudio();
-
-    if (not thumbnailSaved) then
-        SaveThumbnail();
 end;
 
 procedure SaveCameraPosition;
