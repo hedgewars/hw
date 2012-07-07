@@ -2611,7 +2611,6 @@ begin
     ExplosionBorderColor:= $FF808080;
     WaterOpacity:= $80;
     SDWaterOpacity:= $80;
-    GrayScale:= false;
 
     LuaGoals:= '';
 end;
@@ -2638,6 +2637,7 @@ begin
     cScriptName     := '';
     cReadyDelay     := 5000;
     cStereoMode     := smNone;
+    GrayScale       := false;
 end;
 
 end.
