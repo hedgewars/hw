@@ -248,11 +248,8 @@ begin
     AddFileLog('BeginPreRecording');
 
     numFrames:= 0;
-    startTime:= SDL_GetTicks();
-
-    RecPrefix:= FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now());
-
     thumbnailSaved:= false;
+    RecPrefix:= FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now());
 
     Mix_QuerySpec(@frequency, @format, @channels);
     AddFileLog('sound: frequency = ' + IntToStr(frequency) + ', format = ' + IntToStr(format) + ', channels = ' + IntToStr(channels));
@@ -284,6 +281,7 @@ begin
         exit;
     end;
 
+    // save audio parameters in sound file
     BlockWrite(audioFile, frequency, 4);
     BlockWrite(audioFile, channels, 4);
 {$IOCHECKS ON}
@@ -291,6 +289,7 @@ begin
     // register callback for actual audio recording
     Mix_SetPostMix(@RecordPostMix, nil);
 
+    startTime:= SDL_GetTicks();
     flagPrerecording:= true;
 end;
 
@@ -305,6 +304,9 @@ begin
     Close(cameraFile);
     Mix_SetPostMix(nil, nil);
     SDL_UnlockAudio();
+
+    if not thumbnailSaved then
+        SaveThumbnail();
 end;
 
 procedure SaveCameraPosition;
