@@ -3054,20 +3054,10 @@ begin
 end;
 
 
-procedure PrevAngle(Gear: PGear; dA: LongInt);
-begin
-    Gear^.Angle := (LongInt(Gear^.Angle) + 4 - dA) mod 4
-end;
-
-procedure NextAngle(Gear: PGear; dA: LongInt);
-begin
-    Gear^.Angle := (LongInt(Gear^.Angle) + 4 + dA) mod 4
-end;
-
 procedure doStepCakeWork(Gear: PGear);
 
 const dirs: array[0..3] of TPoint =   ((X: 0; Y: -1), (X: 1; Y: 0),(X: 0; Y: 1),(X: -1; Y: 0));
-var 
+var
     xx, yy, xxn, yyn: LongInt;
     dA: LongInt;
     tdx, tdy: hwFloat;
@@ -3078,39 +3068,7 @@ begin
     if Gear^.Tag < 7 then
         exit;
 
-    dA := hwSign(Gear^.dX);
-    xx := dirs[Gear^.Angle].x;
-    yy := dirs[Gear^.Angle].y;
-    xxn := dirs[(LongInt(Gear^.Angle) + 4 + dA) mod 4].x;
-    yyn := dirs[(LongInt(Gear^.Angle) + 4 + dA) mod 4].y;
-
-    if (xx = 0) then
-        if TestCollisionYwithGear(Gear, yy) <> 0 then
-            PrevAngle(Gear, dA)
-    else
-        begin
-        Gear^.Tag := 0;
-        Gear^.Y := Gear^.Y + int2hwFloat(yy);
-        if not TestCollisionXwithGear(Gear, xxn) then
-            begin
-            Gear^.X := Gear^.X + int2hwFloat(xxn);
-            NextAngle(Gear, dA)
-            end;
-        end;
-
-    if (yy = 0) then
-        if TestCollisionXwithGear(Gear, xx) then
-            PrevAngle(Gear, dA)
-    else
-        begin
-        Gear^.Tag := 0;
-        Gear^.X := Gear^.X + int2hwFloat(xx);
-        if TestCollisionYwithGear(Gear, yyn) = 0 then
-            begin
-            Gear^.Y := Gear^.Y + int2hwFloat(yyn);
-            NextAngle(Gear, dA)
-            end;
-        end;
+    cakeStep(Gear);
 
     if Gear^.Tag = 0 then
         begin
