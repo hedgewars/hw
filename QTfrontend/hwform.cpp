@@ -1357,7 +1357,7 @@ void HWForm::GameStateChanged(GameState gameState)
 void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo)
 {
     game = new HWGame(config, gamecfg, ammo, pTeamSelWidget);
-    connect(game, SIGNAL(CampStateChanged(int)), this, SLOT(UpdateCampaignPage(int)));
+    connect(game, SIGNAL(CampStateChanged(int)), this, SLOT(UpdateCampaignPageProgress(int)));
     connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
     connect(game, SIGNAL(GameStats(char, const QString &)), ui.pageGameStats, SLOT(GameStats(char, const QString &)));
     connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
@@ -1590,6 +1590,13 @@ void HWForm::UpdateCampaignPage(int index)
     {
         ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(i) + QString(missionEntries[i-1]), QString(missionEntries[i-1]));
     }
+}
+
+void HWForm::UpdatecampaignPageProgress(int index)
+{
+  int missionIndex = ui.pageCampaign->CBMission->currentIndex();
+  UpdateCampaignPage(0);
+  ui.pageCampaign->CBMission->setCurrentIndex(missionIndex);
 }
 
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]

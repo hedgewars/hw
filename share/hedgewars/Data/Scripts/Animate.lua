@@ -55,7 +55,7 @@ function AnimInit()
   lasty = 0
   jumpTypes = {long = gmLJump, high = gmHJump, back = gmHJump}
   jumpTimes = {long = 500, high = 500, back = 300, backback = 500} 
-  moveDirs = {right = gmRight, left = gmLeft}
+  moveDirs = {Right = gmRight, Left = gmLeft}
   jumpStarted = false
   backJumped = false
   jTimer = 0
@@ -182,6 +182,7 @@ function AnimDisappear(gear, destX, destY)
 	AddVisualGear(GetX(gear)+5, GetY(gear)+5, vgtSmoke, 0, false)
 	AddVisualGear(GetX(gear)-5, GetY(gear)+5, vgtSmoke, 0, false)
 	AddVisualGear(GetX(gear)+5, GetY(gear)-5, vgtSmoke, 0, false)
+  PlaySound(sndExplosion)
 	SetGearPosition(gear, destX, destY)
   return true
 end
@@ -189,6 +190,7 @@ end
 function AnimOutOfNowhere(gear, destX, destY)
   SetGearPosition(gear, destX, destY)
   AddVisualGear(destX, destY, vgtBigExplosion, 0, false)
+  PlaySound(sndExplosion)
   AnimGearWait(gear, 50)
   return true
 end
@@ -200,6 +202,7 @@ function AnimTeleportGear(gear, destX, destY)
 	AddVisualGear(GetX(gear)+5, GetY(gear)-5, vgtSmoke, 0, false)
 	SetGearPosition(gear, destX, destY)
 	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
+  PlaySound(sndExplosion)
   FollowGear(gear)
   AnimGearWait(gear, 50)
   return true
