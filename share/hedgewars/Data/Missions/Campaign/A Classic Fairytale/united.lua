@@ -46,7 +46,7 @@ end
 
 function AfterStartAnim()
   local goal = loc("Defeat the cannibals!|")
-  local chiefgoal = loc("Try to protect the chief! Unlike your other hogs, he won't return on future missions if he dies.")
+  local chiefgoal = loc("Try to protect the chief! You won't lose if he dies, but it is advised that he survives.")
   TurnTimeLeft = TurnTime
   ShowMission(loc("United We Stand"), loc("Invasion"), goal .. chiefgoal, 1, 6000)
 end
