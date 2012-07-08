@@ -210,7 +210,6 @@ processAction (MoveToLobby msg) = do
     ri <- clientRoomA
     rnc <- gets roomsClients
     (gameProgress, playersNum) <- io $ room'sM rnc ((isJust . gameInfo) &&& playersIn) ri
-    ready <- client's isReady
     master <- client's isMaster
 --    client <- client's id
     clNick <- client's nick
@@ -218,13 +217,14 @@ processAction (MoveToLobby msg) = do
 
     if master then
         if gameProgress && playersNum > 1 then
-            mapM_ processAction [ChangeMaster, AnswerClients chans ["LEFT", clNick, msg], NoticeMessage AdminLeft, RemoveClientTeams ci]
+            mapM_ processAction [ChangeMaster, NoticeMessage AdminLeft, RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
             else
             processAction RemoveRoom
         else
-        mapM_ processAction [AnswerClients chans ["LEFT", clNick, msg], RemoveClientTeams ci]
+        mapM_ processAction [RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
 
     -- when not removing room
+    ready <- client's isReady
     when (not master || (gameProgress && playersNum > 1)) . io $ do
         modifyRoom rnc (\r -> r{
                 playersIn = playersIn r - 1,

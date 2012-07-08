@@ -15,6 +15,7 @@ GenericName[ru]=Движок Hedgewars для проигрывания сохр�
 GenericName[sk]=Engine hry Hedgewars, pre prehrávanie uložených hier a demo súborov
 GenericName[cs]=Engine hry Hedgewars pro přehrávání uložených her a ukázkových souborů
 GenericName[sv]=Hedgewarsmotorn, för att öppna demo- och sparfiler
+GenericName[da]=Kæmpende Pindsvin
 Icon=hedgewars.png
 Exec=${CMAKE_INSTALL_PREFIX}/bin/hwengine ${HEDGEWARS_DATADIR}/hedgewars/Data %f
 Path=/tmp
