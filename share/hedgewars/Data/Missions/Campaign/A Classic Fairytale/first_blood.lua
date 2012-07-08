@@ -57,6 +57,8 @@ canKilled = false
 desertTaken = false
 challengeFailed = false
 difficultyChoice = false
+princessFace = "Left"
+elderFace = "Left"
 
 goals = {
   [startDialogue] = {loc("First Blood"), loc("First Steps"), loc("Press [Left] or [Right] to move around, [Enter] to jump"), 1, 4000},
@@ -77,6 +79,9 @@ function Skipanim(anim)
   AnimSwitchHog(youngh)
   if goals[anim] ~= nil then
     ShowMission(unpack(goals[anim]))
+  end
+  if anim == startDialogue then
+    HogTurnLeft(princess, false)
   end
 end
 
@@ -131,7 +136,6 @@ function AnimationSetup()
   table.insert(onShroomAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("A leap in a leap"), loc("Go on top of the flower"), 1, 4000}}) 
 
   AddSkipFunction(onFlowerAnim, Skipanim, {onFlowerAnim})
-  table.insert(onFlowerAnim, {func = AnimTurn, args = {elderh, "Right"}, skipFunc = Skipanim, skipArgs = onFlowerAnim})
   table.insert(onFlowerAnim, {func = AnimSay, args = {elderh, loc("See that crate farther on the right?"), SAY_SAY, 4000}})
   table.insert(onFlowerAnim, {func = AnimSay, args = {elderh, loc("Swing, Leaks A Lot, on the wings of the wind!"), SAY_SAY, 6000}})
   table.insert(onFlowerAnim, {func = AnimSay, args = {princess, loc("His arms are so strong!"), SAY_THINK, 4000}})
@@ -166,7 +170,6 @@ function AnimationSetup()
   table.insert(tookRope2Anim, {func = AnimSwitchHog, args = {youngh}})
 
   AddSkipFunction(tookPunchAnim, Skipanim, {tookPunchAnim})
-  table.insert(tookPunchAnim, {func = AnimTurn, args = {elderh, "Left"}, skipFunc = Skipanim, skipArgs = tookPunchAnim})
   table.insert(tookPunchAnim, {func = AnimSay, args = {elderh, loc("It is time to practice your fighting skills."), SAY_SAY, 4000}})
   table.insert(tookPunchAnim, {func = AnimSay, args = {elderh, loc("Imagine those targets are the wolves that killed your parents! Take your anger out on them!"), SAY_SAY, 5000}})
   table.insert(tookPunchAnim, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("The Slaughter"), loc("Destroy the targets!|Hint: Select the Shoryuken and hit [Space]|P.S. You can use it mid-air."), 1, 5000}}) 
@@ -216,6 +219,46 @@ function AnimationSetup()
   table.insert(cannKilledEarlyAnim, {func = AnimSay, args = {elderh, loc("What?! A cannibal? Here? There is no time to waste! Come, you are prepared."), SAY_SHOUT, 4000}})
 end
 -----------------------------Events------------------------------------
+function CheckNeedToTurn(gear)
+  if gear == princess then
+    if princessKilled ~= true then
+      if (GetX(princess) > GetX(youngh) and princessFace == "Right")
+        or (GetX(princess) < GetX(youngh) and princessFace == "Left") then
+      --if (GetX(princess) > GetX(youngh))
+       -- or (GetX(princess) < GetX(youngh)) then
+        return true
+      end
+    end
+  else
+    if elderKilled ~= true then
+      if (GetX(elderh) > GetX(youngh) and elderFace == "Right")
+        or (GetX(elderh) < GetX(youngh) and elderFace == "Left") then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+function DoNeedToTurn(gear)
+  if gear == princess then
+    if GetX(princess) > GetX(youngh) then
+      HogTurnLeft(princess, true)
+      princessFace = "Left"
+    elseif GetX(princess) < GetX(youngh) then
+      HogTurnLeft(princess, false)
+      princessFace = "Right"
+    end
+  else
+    if GetX(elderh) > GetX(youngh) then
+      HogTurnLeft(elderh, true)
+      elderFace = "Left"
+    elseif GetX(elderh) < GetX(youngh) then
+      HogTurnLeft(elderh, false)
+      elderFace = "Right"
+    end
+  end
+end
 
 function CheckDamage()
   return youngdamaged and StoppedGear(youngh) 
@@ -274,7 +317,7 @@ function DoMovedUntilJump()
 end
 
 function CheckOnShroom()
-  return GetX(youngh) >= 2461
+  return GetX(youngh) >= 2461 and StoppedGear(youngh)
 end
 
 function DoOnShroom()
@@ -284,7 +327,7 @@ function DoOnShroom()
 end
 
 function CheckOnFlower()
-  return rope1Taken
+  return rope1Taken and StoppedGear(youngh)
 end
 
 function DoOnFlower()
@@ -355,7 +398,7 @@ function DoTookPunch()
   targets[2] = AddGear(2188, 1314, gtTarget, 0, 0, 0, 0)
   targets[3] = AddGear(1961, 1318, gtTarget, 0, 0, 0, 0)
   targets[4] = AddGear(1961, 1200, gtTarget, 0, 0, 0, 0)
-  targets[5] = AddGear(1900, 1100, gtTarget, 0, 0, 0, 0)
+  targets[5] = AddGear(1800, 900, gtTarget, 0, 0, 0, 0)
   AddEvent(CheckTargDestroyed, {}, DoTargDestroyed, {}, 0)
 end
 
@@ -554,7 +597,7 @@ function onGameInit()
 
 	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
 	youngh = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
-  elderh = AddHog(loc("White Raven"), 0, 99, "IndianChief")
+  elderh = AddHog(loc("Righteous Beard"), 0, 99, "IndianChief")
   princess = AddHog(loc("Fell From Heaven"), 0, 300, "tiara")
   SetGearPosition(princess, 1911, 1361)
   HogTurnLeft(princess, true)
@@ -579,6 +622,9 @@ function onGameStart()
   SetState(cannibal, gstInvisible)
 
   AddAnim(startDialogue)
+  princessFace = "Right"
+  AddEvent(CheckNeedToTurn, {princess}, DoNeedToTurn, {princess}, 1)
+  AddEvent(CheckNeedToTurn, {elderh}, DoNeedToTurn, {elderh}, 1)
   AddEvent(CheckDamage, {}, DoOnDamage, {}, 1)
   AddEvent(CheckDeath, {}, DoDeath, {}, 0)
   AddEvent(CheckDamagedOthers, {}, DoOnDamagedOthers, {}, 1)

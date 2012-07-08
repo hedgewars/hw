@@ -149,6 +149,7 @@ function AfterEndAnimDuo()
   stage = endStage
   SwitchHog(leaks)
   SetGearMessage(leaks, 0)
+  SetGearMessage(dense, 0)
   TurnTimeLeft = -1
   ShowMission(loc("The Journey Back"), loc("Collateral Damage II"), loc("Save Fell From Heaven!"), 1, 4000)
   AddEvent(CheckLost, {}, DoLost, {}, 0)
@@ -280,6 +281,7 @@ end
 function RestoreCyborgOnly(x, y)
   RestoreHog(cyborg)
   cyborgHidden = false
+  SetState(cyborg, 0)
   AnimOutOfNowhere(cyborg, x, y)
   return true
 end
@@ -454,6 +456,7 @@ function SetupAnimAcceptedDied()
   
   table.insert(endFailAnim, {func = AnimCaption, args = {leaks, loc("Leaks A Lot, depressed for killing his loved one, failed to save the village..."), 3000}})
 
+  table.insert(winAnimAD, {func = AnimCustomFunction, args = {princess, CondNeedToTurn, {leaks, princess}}})
   table.insert(winAnimAD, {func = AnimSay, args = {princess, loc("Thank you, oh, thank you, Leaks A Lot!"), SAY_SAY, 5000}})
   table.insert(winAnimAD, {func = AnimSay, args = {princess, loc("How can I ever repay you for saving my life?"), SAY_SAY, 6000}})
   table.insert(winAnimAD, {func = AnimSay, args = {leaks, loc("There's nothing more satisfying for me than seeing you share your beauty with the world every morning, my princess!"), SAY_SAY, 10000}})
@@ -516,9 +519,11 @@ function SetupAnimAcceptedLived()
   
   table.insert(endFailAnim, {func = AnimCaption, args = {leaks, loc("Leaks A Lot, depressed for killing his loved one, failed to save the village..."), 3000}})
 
+  table.insert(winAnim, {func = AnimCustomFunction, args = {princess, CondNeedToTurn, {leaks, princess}}})
   table.insert(winAnim, {func = AnimSay, args = {princess, loc("Thank you, oh, thank you, my heroes!"), SAY_SAY, 5000}})
   table.insert(winAnim, {func = AnimSay, args = {princess, loc("How can I ever repay you for saving my life?"), SAY_SAY, 6000}})
-  table.insert(winAnim, {func = AnimSay, args = {leaks, loc("There's nothing more satisfying to us than seeing you share your beauty with the world every morning, my princess!"), SAY_SAY, 10000}})
+  table.insert(winAnim, {func = AnimSay, args = {leaks, loc("There's nothing more satisfying to us than seeing you share your beauty..."), SAY_SAY, 7000}})
+  table.insert(winAnim, {func = AnimSay, args = {leaks, loc("... share your beauty with the world every morning, my princess!"), SAY_SAY, 7000}})
   table.insert(winAnim, {func = AnimSay, args = {leaks, loc("Let's go home!"), SAY_SAY, 3000}})
   table.insert(winAnim, {func = AnimCaption, args = {leaks, loc("And so they discovered that cyborgs weren't invulnerable..."), 2000}})
 
@@ -576,6 +581,7 @@ function SetupAnimRefusedLived()
   
   table.insert(endFailAnim, {func = AnimCaption, args = {leaks, loc("Leaks A Lot, depressed for killing his loved one, failed to save the village..."), 3000}})
 
+  table.insert(winAnim, {func = AnimCustomFunction, args = {princess, CondNeedToTurn, {leaks, princess}}})
   table.insert(winAnim, {func = AnimSay, args = {princess, loc("Thank you, oh, thank you, my heroes!"), SAY_SAY, 5000}})
   table.insert(winAnim, {func = AnimSay, args = {princess, loc("How can I ever repay you for saving my life?"), SAY_SAY, 6000}})
   table.insert(winAnim, {func = AnimSay, args = {leaks, loc("There's nothing more satisfying to us than seeing you share your beauty with the world every morning, my princess!"), SAY_SAY, 10000}})
@@ -963,8 +969,6 @@ function onGameStart()
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m2RamonDead = tonumber(GetCampaignVar("M2RamonDead"))
   m2SpikyDead = tonumber(GetCampaignVar("M2SpikyDead"))
-  m2Choice = choiceAttacked
-  m2DenseDead = 1
   StartMission()
 end
 

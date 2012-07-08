@@ -161,7 +161,6 @@ function AnimationSetup()
   table.insert(startAnim, {func = AnimTurn, args = {water, "Left"}})
   table.insert(startAnim, {func = AnimMove, args = {water, "Left", 2467, 754}})
   table.insert(startAnim, {func = AnimSay, args = {water, loc("Hey guys!"), SAY_SAY, 2500}})
-  table.insert(startAnim, {func = AnimTurn, args = {chief, "Right"}})
   table.insert(startAnim, {func = AnimSay, args = {chief, loc("..."), SAY_THINK, 1500}})
   table.insert(startAnim, {func = AnimSay, args = {chief, loc("Where have you been?"), SAY_SAY, 4000}})
   table.insert(startAnim, {func = AnimSay, args = {water, loc("Just on a walk."), SAY_SAY, 3000}})
@@ -247,7 +246,7 @@ function GetVariables()
 end
 
 function SetupPlace()
-  if m2DenseDead == true then
+  if m2DenseDead == 1 then
     DeleteGear(dense)
   end
   for i = 1, 8 do
