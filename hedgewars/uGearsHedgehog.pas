@@ -957,11 +957,11 @@ if (Gear^.State and gstMoving) <> 0 then
             SetLittle(Gear^.dX);
 
 if (not isFalling)
-and (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
+  and (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
     begin
     Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
-    while TestCollisionYWithGear(Gear,1) = 0 do
+    while (TestCollisionYWithGear(Gear,1) = 0) and not CheckGearDrowning(Gear) do
         Gear^.Y:= Gear^.Y+_1;
     SetLittle(Gear^.dX);
     Gear^.dY:= _0
