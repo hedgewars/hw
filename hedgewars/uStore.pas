@@ -719,18 +719,18 @@ begin
     defaultFrame:= 0;
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
-    begin  
-        if AuxBufNum > 0 then
-        begin
-            glDrawBuffer(GL_AUX0);
-            glReadBuffer(GL_AUX0);
-            AddFileLog('Using auxilary buffer for video recording.');
-        end 
-        else if glLoadExtension('GL_EXT_framebuffer_object') then
+    begin
+        if glLoadExtension('GL_EXT_framebuffer_object') then
         begin
             CreateFramebuffer(defaultFrame, depthv, texv);
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame);
             AddFileLog('Using framebuffer for video recording.');
+        end
+        else if AuxBufNum > 0 then
+        begin
+            glDrawBuffer(GL_AUX0);
+            glReadBuffer(GL_AUX0);
+            AddFileLog('Using auxilary buffer for video recording.');
         end
         else
         begin
