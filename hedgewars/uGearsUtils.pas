@@ -446,6 +446,10 @@ var tempTeam : PTeam;
     sparkles: PVisualGear;
     gX, gY: LongInt;
 begin
+    if (Gear^.LastDamage <> nil) then
+        uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
+    else
+        uStats.HedgehogDamaged(Gear, CurrentHedgehog, 0, true);
     AttackBar:= 0;
     gear^.dX := _0;
     gear^.dY := _0;
