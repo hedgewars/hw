@@ -40,7 +40,7 @@ var tmp, ptmp: PGear;
 begin
     tmp:= GearsList;
     ptmp:= GearsList;
-    while (tmp <> nil) and (tmp^.Z <= Gear^.Z) do
+    while (tmp <> nil) and (tmp^.Z < Gear^.Z) do
         begin
         ptmp:= tmp;
         tmp:= tmp^.NextGear
