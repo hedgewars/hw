@@ -1369,6 +1369,19 @@ for t:= 0 to Pred(TeamsCount) do
             r.w:= TeamHealthBarWidth + 1;
             r.h:= HealthTex^.h - 4;
             DrawTextureFromRect(16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
+            if not hasGone and (TeamHealth > 1) then
+                begin
+                Tint(Clan^.Color shl 8 or $FF);
+                for i:= 0 to cMaxHHIndex do
+                    if Hedgehogs[i].Gear <> nil then
+                        begin
+                        inc(h,Hedgehogs[i].Gear^.Health);
+                        if h < TeamHealth then DrawTexture(15 + h*TeamHealthBarWidth div TeamHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
+                        end;
+                if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
+                    Tint($FF,$FF,$FF,$80)
+                else Tint($FF, $FF, $FF, $FF);
+                end;
             end;
         end;
 if smallScreenOffset <> 0 then
