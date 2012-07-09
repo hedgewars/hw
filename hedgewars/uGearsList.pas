@@ -40,7 +40,7 @@ var tmp, ptmp: PGear;
 begin
     tmp:= GearsList;
     ptmp:= GearsList;
-    while (tmp <> nil) and (tmp^.Z <= Gear^.Z) do
+    while (tmp <> nil) and (tmp^.Z < Gear^.Z) do
         begin
         ptmp:= tmp;
         tmp:= tmp^.NextGear
@@ -105,7 +105,7 @@ gear^.Power:= 0;
 
 if CurrentHedgehog <> nil then gear^.Hedgehog:= CurrentHedgehog;
 
-if Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0 then
+if (Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
     gear^.Z:= cHHZ+1
 else gear^.Z:= cUsualZ;
 
@@ -295,6 +295,7 @@ case Kind of
                 gear^.Radius:= 15;
                 gear^.Tag:= Y
                 end;
+   gtAirAttack: gear^.Z:= cHHZ+2;
      gtAirBomb: begin
                 gear^.Radius:= 5;
                 gear^.Density:= _2;
