@@ -213,7 +213,7 @@ var frame: TFrame;
 begin
     LoadNextCameraPosition:= GameTicks;
     // we need to skip or duplicate frames to match target framerate
-    while Int64(curTime)*cVideoFramerateNum < Int64(numFrames)*cVideoFramerateDen*1000 do
+    while Int64(curTime)*cVideoFramerateNum <= Int64(numFrames)*cVideoFramerateDen*1000 do
     begin
     {$IOCHECKS OFF}
         if eof(cameraFile) then
