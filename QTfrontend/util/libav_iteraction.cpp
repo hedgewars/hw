@@ -84,9 +84,6 @@ LibavIteraction::LibavIteraction()
 #endif
             continue;
 
-        if (pCodec->capabilities & CODEC_CAP_EXPERIMENTAL)
-            continue;
-
         if (pCodec->type != AVMEDIA_TYPE_VIDEO && pCodec->type != AVMEDIA_TYPE_AUDIO)
             continue;
 
@@ -97,14 +94,6 @@ LibavIteraction::LibavIteraction()
         // doesn't support stereo sound
         if (strcmp(pCodec->name, "real_144") == 0)
             continue;
-
-#if LIBAVCODEC_VERSION_MAJOR < 54
-        // FIXME: theese doesn't work for some reason
-        if (strcmp(pCodec->name, "libx264") == 0)
-            continue;
-        if (strcmp(pCodec->name, "libxvid") == 0)
-            continue;
-#endif
 
         if (pCodec->type == AVMEDIA_TYPE_VIDEO)
         {
@@ -170,7 +159,7 @@ LibavIteraction::LibavIteraction()
             codec.isRecomended = true;
 
         // FIXME: remove next line
-       // codec.longName += QString(" (%1)").arg(codec.shortName);
+        codec.longName += QString(" (%1)").arg(codec.shortName);
     }
 
     // get list of all formats
@@ -204,7 +193,7 @@ LibavIteraction::LibavIteraction()
         format.longName = QString("%1 (*.%2)").arg(pFormat->long_name).arg(ext);
 
         // FIXME: remove next line
-       // format.longName += QString(" (%1)").arg(format.shortName);
+        format.longName += QString(" (%1)").arg(format.shortName);
 
         format.isRecomended = strcmp(pFormat->name, "mp4") == 0 || strcmp(pFormat->name, "avi") == 0;
 

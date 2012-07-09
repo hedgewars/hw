@@ -34,7 +34,7 @@ class HWRecorder : public TCPBase
         HWRecorder(GameUIConfig * config, const QString & prefix);
         virtual ~HWRecorder();
 
-        void EncodeVideo(const QByteArray & record, int numFrames);
+        void EncodeVideo(const QByteArray & record);
 
         VideoItem * item; // used by pagevideos
         QString name;
@@ -51,8 +51,6 @@ class HWRecorder : public TCPBase
         void encodingFinished(bool success);
 
     private:
-        int curFrame;
-        int numFrames;
         bool finished;
         GameUIConfig * config;
 };

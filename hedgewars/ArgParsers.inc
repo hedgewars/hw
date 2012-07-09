@@ -61,10 +61,6 @@ begin
     else 
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-6)));
     cLocaleFName:= ParamStr(17);
-{$IFDEF USE_VIDEO_RECORDING}
-    cVideoFramerateNum:= StrToInt(ParamStr(18));
-    cVideoFramerateDen:= StrToInt(ParamStr(19));
-{$ENDIF}
 end;
 
 {$IFDEF USE_VIDEO_RECORDING}
@@ -72,13 +68,13 @@ procedure internalStartVideoRecordingWithParameters();
 begin
     internalStartGameWithParameters();
     GameType:= gmtRecord;
+    cVideoFramerateNum:= StrToInt(ParamStr(18));
+    cVideoFramerateDen:= StrToInt(ParamStr(19));
     RecPrefix:= ParamStr(20);
     cAVFormat:= ParamStr(21);
     cVideoCodec:= ParamStr(22);
     cVideoQuality:= StrToInt(ParamStr(23));
-    cVideoPreset:= ParamStr(24);
-    cAudioCodec:= ParamStr(25);
-    cAudioQuality:= StrToInt(ParamStr(26));
+    cAudioCodec:= ParamStr(24);
 end;
 {$ENDIF}
 

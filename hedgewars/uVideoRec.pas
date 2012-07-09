@@ -62,21 +62,22 @@ type TAddFileLogRaw = procedure (s: pchar); cdecl;
 {$IFDEF WIN32}
 procedure AVWrapper_Init(
               AddLog: TAddFileLogRaw;
-              filename, desc, soundFile, format, vcodec, acodec, preset: PChar;
-              width, height, framerateNum, framerateDen, vquality, aquality: LongInt); cdecl; external AVWrapperLibName;
+              filename, desc, soundFile, format, vcodec, acodec: PChar;
+              width, height, framerateNum, framerateDen, vquality: LongInt); cdecl; external AVWrapperLibName;
 procedure AVWrapper_Close; cdecl; external AVWrapperLibName;
 procedure AVWrapper_WriteFrame( pY, pCb, pCr: PByte ); cdecl; external AVWrapperLibName;
 {$ELSE}
 procedure AVWrapper_Init(
               AddLog: TAddFileLogRaw;
-              filename, desc, soundFile, format, vcodec, acodec, preset: PChar;
-              width, height, framerateNum, framerateDen, vquality, aquality: LongInt); cdecl; external;
+              filename, desc, soundFile, format, vcodec, acodec: PChar;
+              width, height, framerateNum, framerateDen, vquality: LongInt); cdecl; external;
 procedure AVWrapper_Close; cdecl; external;
 procedure AVWrapper_WriteFrame( pY, pCb, pCr: PByte ); cdecl; external;
 {$ENDIF}
 
 type TFrame = record
-                  ticks: LongWord;
+                  realTicks: LongWord;
+                  gameTicks: LongWord;
                   CamX, CamY: LongInt;
                   zoom: single;
               end;
@@ -86,7 +87,7 @@ var YCbCr_Planes: array[0..2] of PByte;
     cameraFile: File of TFrame;
     audioFile: File;
     numPixels: LongWord;
-    startTime, numFrames: LongWord;
+    startTime, numFrames, curTime, progress, maxProgress: LongWord;
     cameraFilePath, soundFilePath: shortstring;
     thumbnailSaved : Boolean;
 
@@ -95,13 +96,12 @@ var filename, desc: shortstring;
 begin
     AddFileLog('BeginVideoRecording');
 
-    numPixels:= cScreenWidth*cScreenHeight;
-
 {$IOCHECKS OFF}
     // open file with prerecorded camera positions
     cameraFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtin';
     Assign(cameraFile, cameraFilePath);
     Reset(cameraFile);
+    maxProgress:= FileSize(cameraFile);
     if IOResult <> 0 then
     begin
         AddFileLog('Error: Could not read from ' + cameraFilePath);
@@ -109,6 +109,7 @@ begin
     end;
 {$IOCHECKS ON}
 
+    // store some description in output file
     desc:= '';
     if UserNick <> '' then
         desc+= 'Player: ' + UserNick + #10;
@@ -126,10 +127,10 @@ begin
     cAVFormat+= #0;
     cAudioCodec+= #0;
     cVideoCodec+= #0;
-    cVideoPreset+= #0;
-    AVWrapper_Init(@AddFileLogRaw, @filename[1], @desc[1], @soundFilePath[1], @cAVFormat[1], @cVideoCodec[1], @cAudioCodec[1], @cVideoPreset[1],
-                   cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cAudioQuality, cVideoQuality);
+    AVWrapper_Init(@AddFileLogRaw, @filename[1], @desc[1], @soundFilePath[1], @cAVFormat[1], @cVideoCodec[1], @cAudioCodec[1],
+                   cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality);
 
+    numPixels:= cScreenWidth*cScreenHeight;
     YCbCr_Planes[0]:= GetMem(numPixels);
     YCbCr_Planes[1]:= GetMem(numPixels div 4);
     YCbCr_Planes[2]:= GetMem(numPixels div 4);
@@ -147,6 +148,9 @@ begin
         exit(false);
     end;
 
+    curTime:= 0;
+    numFrames:= 0;
+    progress:= 0;
     BeginVideoRecording:= true;
 end;
 
@@ -161,7 +165,7 @@ begin
     AVWrapper_Close();
     DeleteFile(cameraFilePath);
     DeleteFile(soundFilePath);
-    SendIPC(_S'v');
+    SendIPC(_S'v'); // inform frontend that we finished
 end;
 
 function pixel(x, y, color: LongInt): LongInt;
@@ -171,6 +175,7 @@ end;
 
 procedure EncodeFrame;
 var x, y, r, g, b: LongInt;
+    s: shortstring;
 begin
     // read pixels from OpenGL
     glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_RGBA, GL_UNSIGNED_BYTE, RGB_Buffer);
@@ -194,24 +199,35 @@ begin
 
     AVWrapper_WriteFrame(YCbCr_Planes[0], YCbCr_Planes[1], YCbCr_Planes[2]);
 
-    // inform frontend that we have encoded new frame (p for progress)
-    SendIPC(_S'p');
+    // inform frontend that we have encoded new frame
+    s[0]:= #3;
+    s[1]:= 'p'; // p for progress
+    SDLNet_Write16(progress*10000 div maxProgress, @s[2]);
+    SendIPC(s);
+    inc(numFrames);
 end;
 
 // returns new game ticks
 function LoadNextCameraPosition: LongInt;
 var frame: TFrame;
 begin
-{$IOCHECKS OFF}
-    if eof(cameraFile) then
-        exit(-1);
-    BlockRead(cameraFile, frame, 1);
-{$IOCHECKS ON}
-    WorldDx:= frame.CamX;
-    WorldDy:= frame.CamY + cScreenHeight div 2;
-    zoom:= frame.zoom*cScreenWidth;
-    ZoomValue:= zoom;
-    LoadNextCameraPosition:= frame.ticks;
+    LoadNextCameraPosition:= GameTicks;
+    // we need to skip or duplicate frames to match target framerate
+    while Int64(curTime)*cVideoFramerateNum < Int64(numFrames)*cVideoFramerateDen*1000 do
+    begin
+    {$IOCHECKS OFF}
+        if eof(cameraFile) then
+            exit(-1);
+        BlockRead(cameraFile, frame, 1);
+    {$IOCHECKS ON}
+        curTime:= frame.realTicks;
+        WorldDx:= frame.CamX;
+        WorldDy:= frame.CamY + cScreenHeight div 2;
+        zoom:= frame.zoom*cScreenWidth;
+        ZoomValue:= zoom;
+        inc(progress);
+        LoadNextCameraPosition:= frame.gameTicks;
+    end;
 end;
 
 // Callback which records sound.
@@ -247,9 +263,8 @@ var format: word;
 begin
     AddFileLog('BeginPreRecording');
 
-    numFrames:= 0;
     thumbnailSaved:= false;
-    RecPrefix:= FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now());
+    RecPrefix:= FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
 
     Mix_QuerySpec(@frequency, @format, @channels);
     AddFileLog('sound: frequency = ' + IntToStr(frequency) + ', format = ' + IntToStr(format) + ', channels = ' + IntToStr(channels));
@@ -310,22 +325,17 @@ begin
 end;
 
 procedure SaveCameraPosition;
-var curTime: LongInt;
-    frame: TFrame;
+var frame: TFrame;
 begin
     if (not thumbnailSaved) and (ScreenFade = sfNone) then
         SaveThumbnail();
 
-    curTime:= SDL_GetTicks();
-    while Int64(curTime - startTime)*cVideoFramerateNum > Int64(numFrames)*cVideoFramerateDen*1000 do
-    begin
-        frame.ticks:= GameTicks;
-        frame.CamX:= WorldDx;
-        frame.CamY:= WorldDy - cScreenHeight div 2;
-        frame.zoom:= zoom/cScreenWidth;
-        BlockWrite(cameraFile, frame, 1);
-        inc(numFrames);
-    end;
+    frame.realTicks:= SDL_GetTicks() - startTime;
+    frame.gameTicks:= GameTicks;
+    frame.CamX:= WorldDx;
+    frame.CamY:= WorldDy - cScreenHeight div 2;
+    frame.zoom:= zoom/cScreenWidth;
+    BlockWrite(cameraFile, frame, 1);
 end;
 
 procedure freeModule;
