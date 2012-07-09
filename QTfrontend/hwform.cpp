@@ -1438,8 +1438,7 @@ void HWForm::GetRecord(RecordType type, const QByteArray & record)
         videosDir.rename(prefix + ".txtout", prefix + ".txtin"); // rename this file to not open it twice
         HWRecorder* pRecorder = new HWRecorder(config, prefix);
         ui.pageVideos->addRecorder(pRecorder);
-        int numFrames = QFileInfo(videosDir.absoluteFilePath(prefix + ".txtin")).size()/16;
-        pRecorder->EncodeVideo(record, numFrames);
+        pRecorder->EncodeVideo(record);
     }
 }
 

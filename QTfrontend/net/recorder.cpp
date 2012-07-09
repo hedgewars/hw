@@ -59,7 +59,7 @@ void HWRecorder::onClientRead()
             SendIPC("!");
             break;
         case 'p':
-            emit onProgress(float(++curFrame)/numFrames);
+            emit onProgress((quint8(msg.at(2))*256.0 + quint8(msg.at(3)))*0.0001);
             break;
         case 'v':
             finished = true;
@@ -68,11 +68,8 @@ void HWRecorder::onClientRead()
     }
 }
 
-void HWRecorder::EncodeVideo(const QByteArray & record, int numFrames)
+void HWRecorder::EncodeVideo(const QByteArray & record)
 {
-    this->numFrames = numFrames;
-    curFrame = 0;
-
     toSendBuf = record;
     toSendBuf.replace(QByteArray("\x02TD"), QByteArray("\x02TV"));
     toSendBuf.replace(QByteArray("\x02TL"), QByteArray("\x02TV"));
@@ -104,15 +101,13 @@ QStringList HWRecorder::getArguments()
     arguments << QString::number(config->translateQuality());
     arguments << QString::number(config->stereoMode());
     arguments << HWGame::tr("en.txt");
-    arguments << QString::number(config->rec_Framerate()); // framerate num
-    arguments << "1";  // framerate den
+    arguments << QString::number(config->rec_Framerate()); // framerate numerator
+    arguments << "1";  // framerate denominator
     arguments << prefix;
     arguments << config->AVFormat();
     arguments << config->videoCodec();
     arguments << "5"; // video quality
-    arguments << "medium";
     arguments << (config->recordAudio()? config->audioCodec() : "no");
-    arguments << "5"; // audio quality
 
     return arguments;
 }

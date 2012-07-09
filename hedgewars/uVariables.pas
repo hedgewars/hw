@@ -56,12 +56,10 @@ var
     RecPrefix      : shortstring;
     cAVFormat       : shortstring;
     cVideoCodec     : shortstring;
-    cVideoFramerateNum : LongInt = 25;
-    cVideoFramerateDen : LongInt = 1;
+    cVideoFramerateNum : LongInt;
+    cVideoFramerateDen : LongInt;
     cVideoQuality      : LongInt;
-    cVideoPreset    : shortstring;
     cAudioCodec     : shortstring;
-    cAudioQuality   : LongInt;
 {$ENDIF}
 //////////////////////////
     cMapName        : shortstring = '';

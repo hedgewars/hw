@@ -23,9 +23,8 @@ static AVCodecContext* g_pVideo;
 
 static int g_Width, g_Height;
 static uint32_t g_Frequency, g_Channels;
-static int g_VQuality, g_AQuality;
+static int g_VQuality;
 static AVRational g_Framerate;
-static const char* g_pPreset;
 
 static FILE* g_pSoundFile;
 static int16_t* g_pSamples;
@@ -110,13 +109,11 @@ static void AddAudioStream()
     g_pAudio->channels = g_Channels;
 
     // set quality
-    if (g_AQuality > 100)
-        g_pAudio->bit_rate = g_AQuality;
-    else
-    {
-        g_pAudio->flags |= CODEC_FLAG_QSCALE;
-        g_pAudio->global_quality = g_AQuality*FF_QP2LAMBDA;
-    }
+    g_pAudio->bit_rate = 160000;
+
+    // for codecs that support variable bitrate use it, it should be better
+    g_pAudio->flags |= CODEC_FLAG_QSCALE;
+    g_pAudio->global_quality = 1*FF_QP2LAMBDA;
 
     // some formats want stream headers to be separate
     if (g_pFormat->flags & AVFMT_GLOBALHEADER)
@@ -240,11 +237,42 @@ static void AddVideoStream()
     if (g_pFormat->flags & AVFMT_GLOBALHEADER)
         g_pVideo->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
+#if LIBAVCODEC_VERSION_MAJOR < 54
+    // for some versions of ffmpeg x264 options must be set explicitly
+    if (strcmp(g_pVCodec->name, "libx264") == 0)
+    {
+        g_pVideo->coder_type = FF_CODER_TYPE_AC;
+        g_pVideo->flags |= CODEC_FLAG_LOOP_FILTER;
+        g_pVideo->crf = 23;
+        g_pVideo->thread_count = 3;
+        g_pVideo->me_cmp = FF_CMP_CHROMA;
+        g_pVideo->partitions = X264_PART_I8X8 | X264_PART_I4X4 | X264_PART_P8X8 | X264_PART_B8X8;
+        g_pVideo->me_method = ME_HEX;
+        g_pVideo->me_subpel_quality = 7;
+        g_pVideo->me_range = 16;
+        g_pVideo->gop_size = 250;
+        g_pVideo->keyint_min = 25;
+        g_pVideo->scenechange_threshold = 40;
+        g_pVideo->i_quant_factor = 0.71;
+        g_pVideo->b_frame_strategy = 1;
+        g_pVideo->qcompress = 0.6;
+        g_pVideo->qmin = 10;
+        g_pVideo->qmax = 51;
+        g_pVideo->max_qdiff = 4;
+        g_pVideo->max_b_frames = 3;
+        g_pVideo->refs = 3;
+        g_pVideo->directpred = 1;
+        g_pVideo->trellis = 1;
+        g_pVideo->flags2 = CODEC_FLAG2_BPYRAMID | CODEC_FLAG2_MIXED_REFS | CODEC_FLAG2_WPRED | CODEC_FLAG2_8X8DCT | CODEC_FLAG2_FASTPSKIP;
+        g_pVideo->weighted_p_pred = 2;
+    }
+#endif
+
     // open the codec
 #if LIBAVCODEC_VERSION_MAJOR >= 53
     AVDictionary* pDict = NULL;
     if (strcmp(g_pVCodec->name, "libx264") == 0)
-        av_dict_set(&pDict, "preset", g_pPreset, 0);
+        av_dict_set(&pDict, "preset", "medium", 0);
 
     if (avcodec_open2(g_pVideo, g_pVCodec, &pDict) < 0)
 #else
@@ -348,10 +376,9 @@ void AVWrapper_Init(
          const char* pFormatName,
          const char* pVCodecName,
          const char* pACodecName,
-         const char* pVPreset,
          int Width, int Height,
          int FramerateNum, int FramerateDen,
-         int VQuality, int AQuality)
+         int VQuality)
 {    
     AddFileLogRaw = pAddFileLogRaw;
     av_log_set_callback( &LogCallback );
@@ -361,8 +388,6 @@ void AVWrapper_Init(
     g_Framerate.num = FramerateNum;
     g_Framerate.den = FramerateDen;
     g_VQuality = VQuality;
-    g_AQuality = AQuality;
-    g_pPreset = pVPreset;
 
     // initialize libav and register all codecs and formats
     av_register_all();
