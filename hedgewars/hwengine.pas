@@ -82,15 +82,15 @@ begin
             end;
         gsConfirm, gsGame:
             begin
-            DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
             DoGameTick(Lag);
             ProcessVisualGears(Lag);
+            DrawWorld(Lag);
             end;
         gsChat:
             begin
-            DrawWorld(Lag);
             DoGameTick(Lag);
             ProcessVisualGears(Lag);
+            DrawWorld(Lag);
             end;
         gsExit:
             begin
