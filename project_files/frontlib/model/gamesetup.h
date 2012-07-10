@@ -25,14 +25,14 @@
 #ifndef MODEL_GAMESETUP_H_
 #define MODEL_GAMESETUP_H_
 
-#include "cfg.h"
+#include "scheme.h"
 #include "weapon.h"
 #include "map.h"
 #include "teamlist.h"
 
 typedef struct {
     char *script;
-    flib_cfg *gamescheme;
+    flib_scheme *gamescheme;
     flib_map *map;
 	flib_teamlist *teamlist;
 } flib_gamesetup;

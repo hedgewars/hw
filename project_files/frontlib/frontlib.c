@@ -21,7 +21,7 @@
 #include "util/logging.h"
 #include <SDL_net.h>
 
-int flib_init(int flags) {
+int flib_init() {
 	flib_log_d("Initializing frontlib");
 	if(SDLNet_Init()==-1) {
 		flib_log_e("Error in SDLNet_Init: %s", SDLNet_GetError());

@@ -131,7 +131,7 @@ int flib_ipc_append_script(flib_vector *vec, const char *script) {
 	return result;
 }
 
-static uint32_t buildModFlags(const flib_cfg *scheme) {
+static uint32_t buildModFlags(const flib_scheme *scheme) {
 	uint32_t result = 0;
 	for(int i=0; i<scheme->meta->modCount; i++) {
 		if(scheme->mods[i]) {
@@ -142,11 +142,11 @@ static uint32_t buildModFlags(const flib_cfg *scheme) {
 	return result;
 }
 
-int flib_ipc_append_gamescheme(flib_vector *vec, const flib_cfg *scheme) {
+int flib_ipc_append_gamescheme(flib_vector *vec, const flib_scheme *scheme) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
 	if(!log_badargs_if2(vec==NULL, scheme==NULL) && tempvector) {
-		const flib_cfg_meta *meta = scheme->meta;
+		const flib_metascheme *meta = scheme->meta;
 		bool error = false;
 		error |= flib_ipc_append_message(tempvector, "e$gmflags %"PRIu32, buildModFlags(scheme));
 		for(int i=0; i<meta->settingCount; i++) {
@@ -263,9 +263,9 @@ int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bo
 		}
 		if(setup->gamescheme) {
 			error |= flib_ipc_append_gamescheme(tempvector, setup->gamescheme);
-			sharedAmmo = flib_cfg_get_mod(setup->gamescheme, "sharedammo");
+			sharedAmmo = flib_scheme_get_mod(setup->gamescheme, "sharedammo");
 			// Shared ammo has priority over per-hog ammo
-			perHogAmmo = !sharedAmmo && flib_cfg_get_mod(setup->gamescheme, "perhogammo");
+			perHogAmmo = !sharedAmmo && flib_scheme_get_mod(setup->gamescheme, "perhogammo");
 		}
 		if(setup->teamlist->teams && setup->teamlist->teamCount>0) {
 			int *clanColors = flib_calloc(setup->teamlist->teamCount, sizeof(int));

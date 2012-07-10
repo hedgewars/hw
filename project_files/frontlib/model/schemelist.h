@@ -26,19 +26,19 @@
 #ifndef SCHEMELIST_H_
 #define SCHEMELIST_H_
 
-#include "cfg.h"
+#include "scheme.h"
 
 typedef struct {
 	int _referenceCount;
 	int schemeCount;
-	flib_cfg **schemes;
+	flib_scheme **schemes;
 } flib_schemelist;
 
 /**
  * Load a list of configurations from the ini file.
  * Returns NULL on error.
  */
-flib_schemelist *flib_schemelist_from_ini(flib_cfg_meta *meta, const char *filename);
+flib_schemelist *flib_schemelist_from_ini(flib_metascheme *meta, const char *filename);
 
 /**
  * Store the list of configurations to an ini file.
@@ -57,7 +57,7 @@ flib_schemelist *flib_schemelist_create();
  * The scheme is retained automatically.
  * Returns 0 on success.
  */
-int flib_schemelist_insert(flib_schemelist *list, flib_cfg *cfg, int pos);
+int flib_schemelist_insert(flib_schemelist *list, flib_scheme *cfg, int pos);
 
 /**
  * Delete a cfg from the list at position pos, moving down all higher schemes.
@@ -69,7 +69,7 @@ int flib_schemelist_delete(flib_schemelist *list, int pos);
 /**
  * Find the scheme with a specific name
  */
-flib_cfg *flib_schemelist_find(flib_schemelist *list, const char *name);
+flib_scheme *flib_schemelist_find(flib_schemelist *list, const char *name);
 
 /**
  * Increase the reference count of the object. Call this if you store a pointer to it somewhere.

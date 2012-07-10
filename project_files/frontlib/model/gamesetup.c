@@ -25,7 +25,7 @@
 void flib_gamesetup_destroy(flib_gamesetup *gamesetup) {
 	if(gamesetup) {
 		free(gamesetup->script);
-		flib_cfg_release(gamesetup->gamescheme);
+		flib_scheme_release(gamesetup->gamescheme);
 		flib_map_release(gamesetup->map);
 		flib_teamlist_destroy(gamesetup->teamlist);
 		free(gamesetup);
@@ -40,7 +40,7 @@ flib_gamesetup *flib_gamesetup_copy(flib_gamesetup *setup) {
 	flib_gamesetup *result = flib_calloc(1, sizeof(flib_gamesetup));
 	if(result) {
 		result->script = flib_strdupnull(setup->script);
-		result->gamescheme = flib_cfg_copy(setup->gamescheme);
+		result->gamescheme = flib_scheme_copy(setup->gamescheme);
 		result->map = flib_map_copy(setup->map);
 		result->teamlist = flib_teamlist_copy(setup->teamlist);
 		if((setup->script && !result->script)

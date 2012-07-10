@@ -150,10 +150,12 @@ static void addTeamToPendingList(flib_netconn *conn, const flib_team *team) {
 		teamcopy->ownerName = flib_strdupnull(conn->playerName);
 		if(teamcopy->ownerName) {
 			flib_teamlist_delete(&conn->pendingTeamlist, team->name);
-			flib_teamlist_insert(&conn->pendingTeamlist, teamcopy, 0);
+			if(!flib_teamlist_insert(&conn->pendingTeamlist, teamcopy, 0)) {
+				teamcopy = NULL;
+			}
 		}
 	}
-	flib_team_release(teamcopy);
+	flib_team_destroy(teamcopy);
 }
 
 int flib_netconn_send_addTeam(flib_netconn *conn, const flib_team *team) {
@@ -397,7 +399,7 @@ int flib_netconn_send_script(flib_netconn *conn, const char *scriptName) {
 	return -1;
 }
 
-int flib_netconn_send_scheme(flib_netconn *conn, const flib_cfg *scheme) {
+int flib_netconn_send_scheme(flib_netconn *conn, const flib_scheme *scheme) {
 	int result = -1;
 	if(!log_badargs_if3(conn==NULL, scheme==NULL, flib_strempty(scheme->name))) {
 		flib_vector *vec = flib_vector_create();

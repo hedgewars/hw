@@ -26,7 +26,6 @@
 
 #include "netconn.h"
 #include "netbase.h"
-#include "../model/cfg.h"
 #include "../model/roomlist.h"
 #include "../model/map.h"
 #include "../model/team.h"
@@ -44,14 +43,14 @@ struct _flib_netconn {
 	int netconnState;			// One of the NETCONN_STATE constants
 	bool isAdmin;				// Player is server administrator
 
-	flib_cfg_meta *metaCfg;
+	flib_metascheme *metaCfg;
 	flib_roomlist roomList;
 
 	bool isChief;				// Player can modify the current room
 	flib_map *map;
 	flib_teamlist pendingTeamlist;
 	flib_teamlist teamlist;
-	flib_cfg *scheme;
+	flib_scheme *scheme;
 	char *script;
 	flib_weaponset *weaponset;
 
@@ -106,7 +105,7 @@ struct _flib_netconn {
 	void (*onLeaveRoomCb)(void *context, int reason, const char *message);
 	void *onLeaveRoomCtx;
 
-	void (*onTeamAddCb)(void *context, flib_team *team);
+	void (*onTeamAddCb)(void *context, const flib_team *team);
 	void *onTeamAddCtx;
 
 	void (*onTeamDeleteCb)(void *context, const char *teamname);
@@ -127,7 +126,7 @@ struct _flib_netconn {
 	void (*onEngineMessageCb)(void *context, const uint8_t *message, size_t size);
 	void *onEngineMessageCtx;
 
-	void (*onCfgSchemeCb)(void *context, flib_cfg *scheme);
+	void (*onCfgSchemeCb)(void *context, const flib_scheme *scheme);
 	void *onCfgSchemeCtx;
 
 	void (*onMapChangedCb)(void *context, const flib_map *map, int changetype);
@@ -136,7 +135,7 @@ struct _flib_netconn {
 	void (*onScriptChangedCb)(void *context, const char *script);
 	void *onScriptChangedCtx;
 
-	void (*onWeaponsetChangedCb)(void *context, flib_weaponset *weaponset);
+	void (*onWeaponsetChangedCb)(void *context, const flib_weaponset *weaponset);
 	void *onWeaponsetChangedCtx;
 
 	void (*onAdminAccessCb)(void *context);
@@ -154,6 +153,6 @@ void netconn_leaveRoom(flib_netconn *conn);
 void netconn_setMap(flib_netconn *conn, const flib_map *map);
 void netconn_setWeaponset(flib_netconn *conn, const flib_weaponset *weaponset);
 void netconn_setScript(flib_netconn *conn, const char *script);
-void netconn_setScheme(flib_netconn *conn, const flib_cfg *scheme);
+void netconn_setScheme(flib_netconn *conn, const flib_scheme *scheme);
 
 #endif

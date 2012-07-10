@@ -29,7 +29,7 @@
 
 static flib_team *from_ini_handleError(flib_team *result, flib_ini *settingfile) {
 	flib_ini_destroy(settingfile);
-	flib_team_release(result);
+	flib_team_destroy(result);
 	return NULL;
 }
 
@@ -38,7 +38,7 @@ flib_team *flib_team_from_ini(const char *filename) {
 		return NULL;
 	}
 
-	flib_team *result = flib_team_retain(flib_calloc(1, sizeof(flib_team)));
+	flib_team *result = flib_calloc(1, sizeof(flib_team));
 	flib_ini *ini = NULL;
 
 	if(!result) {
@@ -130,6 +130,30 @@ flib_team *flib_team_from_ini(const char *filename) {
 	return result;
 }
 
+void flib_team_destroy(flib_team *team) {
+	if(team) {
+		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
+			free(team->hogs[i].name);
+			free(team->hogs[i].hat);
+			flib_weaponset_release(team->hogs[i].weaponset);
+		}
+		free(team->name);
+		free(team->grave);
+		free(team->fort);
+		free(team->voicepack);
+		free(team->flag);
+		if(team->bindings) {
+			for(int i=0; i<team->bindingCount; i++) {
+				free(team->bindings[i].action);
+				free(team->bindings[i].binding);
+			}
+		}
+		free(team->bindings);
+		free(team->ownerName);
+		free(team);
+	}
+}
+
 static int writeTeamSection(const flib_team *team, flib_ini *ini) {
 	if(flib_ini_create_section(ini, "team")) {
 		return -1;
@@ -207,37 +231,6 @@ int flib_team_to_ini(const char *filename, const flib_team *team) {
 	return result;
 }
 
-flib_team *flib_team_retain(flib_team *team) {
-	if(team) {
-		flib_retain(&team->_referenceCount, "flib_team");
-	}
-	return team;
-}
-
-void flib_team_release(flib_team *team) {
-	if(team && flib_release(&team->_referenceCount, "flib_team")) {
-		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
-			free(team->hogs[i].name);
-			free(team->hogs[i].hat);
-			flib_weaponset_release(team->hogs[i].weaponset);
-		}
-		free(team->name);
-		free(team->grave);
-		free(team->fort);
-		free(team->voicepack);
-		free(team->flag);
-		if(team->bindings) {
-			for(int i=0; i<team->bindingCount; i++) {
-				free(team->bindings[i].action);
-				free(team->bindings[i].binding);
-			}
-		}
-		free(team->bindings);
-		free(team->ownerName);
-		free(team);
-	}
-}
-
 void flib_team_set_weaponset(flib_team *team, flib_weaponset *set) {
 	if(team) {
 		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
@@ -266,7 +259,7 @@ static char *strdupWithError(const char *in, bool *error) {
 flib_team *flib_team_copy(const flib_team *team) {
 	flib_team *result = NULL;
 	if(team) {
-		flib_team *tmpTeam = flib_team_retain(flib_calloc(1, sizeof(flib_team)));
+		flib_team *tmpTeam = flib_calloc(1, sizeof(flib_team));
 		if(tmpTeam) {
 			bool error = false;
 
@@ -315,7 +308,7 @@ flib_team *flib_team_copy(const flib_team *team) {
 				tmpTeam = 0;
 			}
 		}
-		flib_team_release(tmpTeam);
+		flib_team_destroy(tmpTeam);
 	}
 	return result;
 }

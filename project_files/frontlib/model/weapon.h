@@ -38,7 +38,6 @@ typedef struct {
 } flib_weaponset;
 
 typedef struct {
-	int _referenceCount;
 	int weaponsetCount;
 	flib_weaponset **weaponsets;
 } flib_weaponsetlist;
@@ -89,6 +88,11 @@ int flib_weaponsetlist_to_ini(const char *filename, const flib_weaponsetlist *we
 flib_weaponsetlist *flib_weaponsetlist_create();
 
 /**
+ * Release all memory associated with the weaponsetlist and release all contained weaponsets
+ */
+void flib_weaponsetlist_destroy(flib_weaponsetlist *list);
+
+/**
  * Insert a new weaponset into the list at position pos, moving all higher weaponsets to make place.
  * pos must be at least 0 (insert at the start) and at most list->weaponsetCount (insert at the end).
  * The weaponset is retained automatically.
@@ -102,16 +106,5 @@ int flib_weaponsetlist_insert(flib_weaponsetlist *list, flib_weaponset *weaponse
  * Returns 0 on success.
  */
 int flib_weaponsetlist_delete(flib_weaponsetlist *list, int pos);
-
-/**
- * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
- * Returns the parameter.
- */
-flib_weaponsetlist *flib_weaponsetlist_retain(flib_weaponsetlist *list);
-
-/**
- * Decrease the reference count of the object and free it if this was the last reference.
- */
-void flib_weaponsetlist_release(flib_weaponsetlist *list);
 
 #endif

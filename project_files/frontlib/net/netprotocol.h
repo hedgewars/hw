@@ -21,7 +21,7 @@
 #define NETPROTOCOL_H_
 
 #include "../model/team.h"
-#include "../model/cfg.h"
+#include "../model/scheme.h"
 #include "../model/map.h"
 
 #include <stddef.h>
@@ -35,7 +35,7 @@ flib_team *flib_team_from_netmsg(char **parts);
  * Create a new scheme from this net message, which must have
  * meta->modCount+meta->settingCount+1 parts.
  */
-flib_cfg *flib_netmsg_to_cfg(flib_cfg_meta *meta, char **parts);
+flib_scheme *flib_netmsg_to_cfg(flib_metascheme *meta, char **parts);
 
 /**
  * Create a new map from this five-part netmsg

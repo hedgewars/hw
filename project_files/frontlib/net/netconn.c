@@ -34,9 +34,9 @@
 #include <errno.h>
 #include <ctype.h>
 
-flib_netconn *flib_netconn_create(const char *playerName, flib_cfg_meta *metacfg, const char *dataDirPath, const char *host, uint16_t port) {
+flib_netconn *flib_netconn_create(const char *playerName, flib_metascheme *metacfg, const char *dataDirPath, const char *host, int port) {
 	flib_netconn *result = NULL;
-	if(!log_badargs_if3(playerName==NULL, metacfg==NULL, host==NULL)) {
+	if(!log_badargs_if5(playerName==NULL, metacfg==NULL, host==NULL, port<1, port>65535)) {
 		flib_netconn *newConn = flib_calloc(1, sizeof(flib_netconn));
 		if(newConn) {
 			newConn->netBase = flib_netbase_create(host, port);
@@ -45,7 +45,7 @@ flib_netconn *flib_netconn_create(const char *playerName, flib_cfg_meta *metacfg
 
 			newConn->netconnState = NETCONN_STATE_CONNECTING;
 			newConn->isAdmin = false;
-			newConn->metaCfg = flib_cfg_meta_retain(metacfg);
+			newConn->metaCfg = flib_metascheme_retain(metacfg);
 			newConn->roomList.roomCount = 0;
 			newConn->roomList.rooms = NULL;
 
@@ -87,13 +87,13 @@ void flib_netconn_destroy(flib_netconn *conn) {
 			free(conn->playerName);
 			free(conn->dataDirPath);
 
-			flib_cfg_meta_release(conn->metaCfg);
+			flib_metascheme_release(conn->metaCfg);
 			flib_roomlist_clear(&conn->roomList);
 
 			flib_map_release(conn->map);
 			flib_teamlist_clear(&conn->pendingTeamlist);
 			flib_teamlist_clear(&conn->teamlist);
-			flib_cfg_release(conn->scheme);
+			flib_scheme_release(conn->scheme);
 			free(conn->script);
 			flib_weaponset_release(conn->weaponset);
 
@@ -123,7 +123,7 @@ void netconn_leaveRoom(flib_netconn *conn) {
 	conn->map = flib_map_create_named("", "NoSuchMap");
 	flib_teamlist_clear(&conn->pendingTeamlist);
 	flib_teamlist_clear(&conn->teamlist);
-	flib_cfg_release(conn->scheme);
+	flib_scheme_release(conn->scheme);
 	conn->scheme = NULL;
 	free(conn->script);
 	conn->script = NULL;
@@ -159,10 +159,10 @@ void netconn_setScript(flib_netconn *conn, const char *script) {
 	}
 }
 
-void netconn_setScheme(flib_netconn *conn, const flib_cfg *scheme) {
-	flib_cfg *copy = flib_cfg_copy(scheme);
+void netconn_setScheme(flib_netconn *conn, const flib_scheme *scheme) {
+	flib_scheme *copy = flib_scheme_copy(scheme);
 	if(copy) {
-		flib_cfg_release(conn->scheme);
+		flib_scheme_release(conn->scheme);
 		conn->scheme = copy;
 	}
 }
@@ -182,7 +182,7 @@ flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn) {
 			if(tmpSetup) {
 				for(int i=0; i<tmpSetup->teamlist->teamCount; i++) {
 					flib_team_set_weaponset(tmpSetup->teamlist->teams[i], conn->weaponset);
-					flib_team_set_health(tmpSetup->teamlist->teams[i], flib_cfg_get_setting(conn->scheme, "health", 100));
+					flib_team_set_health(tmpSetup->teamlist->teams[i], flib_scheme_get_setting(conn->scheme, "health", 100));
 				}
 				if(tmpSetup->map->mapgen == MAPGEN_NAMED && tmpSetup->map->name) {
 					flib_mapcfg mapcfg;
@@ -332,19 +332,15 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	            flib_log_w("Net: Bad ADD_TEAM message");
 	        } else {
 	        	flib_team *team = flib_team_from_netmsg(netmsg->parts+1);
-	        	flib_team *teamcopy = flib_team_from_netmsg(netmsg->parts+1);
-	        	if(!team || !teamcopy) {
+	        	if(!team || flib_teamlist_insert(&conn->teamlist, team, conn->teamlist.teamCount)) {
+					flib_team_destroy(team);
 					conn->netconnState = NETCONN_STATE_DISCONNECTED;
 					conn->onDisconnectedCb(conn->onDisconnectedCtx, NETCONN_DISCONNECT_INTERNAL_ERROR, "Internal error");
 					exit = true;
 	        	} else {
 	        		team->remoteDriven = true;
-	        		teamcopy->remoteDriven = true;
-	        		flib_teamlist_insert(&conn->teamlist, teamcopy, conn->teamlist.teamCount);
 	        		conn->onTeamAddCb(conn->onTeamAddCtx, team);
 	        	}
-	        	flib_team_release(team);
-	        	flib_team_release(teamcopy);
 	        }
 	    } else if (!strcmp(cmd, "REMOVE_TEAM")) {
 	        if(netmsg->partCount != 2 || !flib_netconn_is_in_room_context(conn)) {
@@ -467,14 +463,14 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	        } else {
 	        	const char *subcmd = netmsg->parts[1];
 				if(!strcmp(subcmd, "SCHEME") && netmsg->partCount == conn->metaCfg->modCount + conn->metaCfg->settingCount + 3) {
-					flib_cfg *cfg = flib_netmsg_to_cfg(conn->metaCfg, netmsg->parts+2);
+					flib_scheme *cfg = flib_netmsg_to_cfg(conn->metaCfg, netmsg->parts+2);
 					if(cfg) {
 						netconn_setScheme(conn, cfg);
 						conn->onCfgSchemeCb(conn->onCfgSchemeCtx, cfg);
 					} else {
 						flib_log_e("Error processing CFG SCHEME message");
 					}
-					flib_cfg_release(cfg);
+					flib_scheme_release(cfg);
 				} else if(!strcmp(subcmd, "FULLMAPCONFIG") && netmsg->partCount == 7) {
 					flib_map *map = flib_netmsg_to_map(netmsg->parts+2);
 					if(map) {
