@@ -84,6 +84,11 @@ function AfterWave2Anim()
 end
 
 function AfterFinalAnim()
+  if leaksDead == true then
+    SaveCampaignVar("M4LeaksDead", "1")
+  else
+    SaveCampaignVar("M4LeaksDead", "0")
+  end
   if chiefDead == true then
     SaveCampaignVar("M4ChiefDead", "1")
   else
@@ -283,12 +288,12 @@ function SetupAmmo()
   AddAmmo(cannibals[1], amBazooka, 4)
   AddAmmo(cannibals[1], amShotgun, 4)
   AddAmmo(cannibals[1], amMine, 2)
-  AddAmmo(cannibals[2], amGrenade, 4)
-  AddAmmo(cannibals[2], amBazooka, 4)
-  AddAmmo(cannibals[2], amShotgun, 4)
-  AddAmmo(cannibals[2], amMine, 2)
-  AddAmmo(cannibals[2], amMolotov, 2)
-  AddAmmo(cannibals[2], amFlamethrower, 3)
+  AddAmmo(cannibals[5], amGrenade, 4)
+  AddAmmo(cannibals[5], amBazooka, 4)
+  AddAmmo(cannibals[5], amShotgun, 4)
+  AddAmmo(cannibals[5], amMine, 2)
+  AddAmmo(cannibals[5], amMolotov, 2)
+  AddAmmo(cannibals[5], amFlamethrower, 3)
 end
 
 function AddHogs()
