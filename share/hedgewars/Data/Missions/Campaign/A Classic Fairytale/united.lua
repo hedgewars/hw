@@ -25,6 +25,7 @@ cannibalHidden = {}
 cratesSpawned = {}
 healthCratesSpawned = {}
 
+sdrmv = 0
 denseDead = false
 leaksDead = false
 waterDead = false
@@ -87,6 +88,21 @@ function AfterFinalAnim()
     SaveCampaignVar("M4ChiefDead", "1")
   else
     SaveCampaignVar("M4ChiefDead", "0")
+  end
+  if buffaloDead == true then
+    SaveCampaignVar("M4BuffaloDead", "1")
+  else
+    SaveCampaignVar("M4BuffaloDead", "0")
+  end
+  if waterDead == true then
+    SaveCampaignVar("M4WaterDead", "1")
+  else
+    SaveCampaignVar("M4WaterDead", "0")
+  end
+  if denseDead == true then
+    SaveCampaignVar("M4DenseDead", "1")
+  else
+    SaveCampaignVar("M4DenseDead", "0")
   end
   SaveCampaignVar("Progress", "4")
   ParseCommand("teamgone " .. loc("011101001"))
@@ -247,6 +263,7 @@ end
 
 function SetupPlace()
   if m2DenseDead == 1 then
+    sdrmv = 1
     DeleteGear(dense)
   end
   for i = 1, 8 do
@@ -286,12 +303,12 @@ function AddHogs()
 
   AddTeam(loc("Light Cannfantry"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 4 do
-    cannibals[i] = AddHog(HogNames[i], 3, 70, "Zombi")
+    cannibals[i] = AddHog(HogNames[i], 2, 40, "Zombi")
   end
 
   AddTeam(loc("Heavy Cannfantry"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
   for i = 5, 8 do
-    cannibals[i] = AddHog(HogNames[i], 2, 70, "vampirichog")
+    cannibals[i] = AddHog(HogNames[i], 2, 55, "vampirichog")
   end
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
@@ -415,7 +432,11 @@ function onGearDelete(gear)
     denseDead = true
     nativesNum = nativesNum - 1
     nativesDead[2] = true
-    freshDead = loc("Dense Cloud")
+    if sdrmv == 1 then
+      freshDead = nil
+    else
+      freshDead = loc("Dense Cloud")
+    end
   elseif gear == leaks then
     leaksDead = true
     nativesNum = nativesNum - 1
