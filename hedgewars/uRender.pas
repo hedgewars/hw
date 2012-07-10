@@ -122,14 +122,14 @@ end;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
 begin
-r.y:= r.y + Height * Position;
-r.h:= Height;
-DrawTextureFromRect(X, Y, @r, SpritesData[Sprite].Texture)
+    r.y:= r.y + Height * Position;
+    r.h:= Height;
+    DrawTextureFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
 procedure DrawTextureFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 begin
-DrawTextureFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
+    DrawTextureFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
 end;
 
 procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
@@ -174,7 +174,7 @@ begin
     SetVertexPointer(@VertexBuffer[0]);
     //SetTexCoordPointer(@TextureBuffer[0]);
     SetTexCoordPointer(@SourceTexture^.tb[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+    //glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture); inline;
@@ -184,17 +184,18 @@ end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 begin
-SetOffset(X, Y);
-ResetRotation;
-SetScale(Scale);
-UpdateModelview;
+    SetOffset(X, Y);
+    ResetRotation;
+    SetScale(Scale);
+    UpdateModelview;
 
-glBindTexture(GL_TEXTURE_2D, Texture^.atlas^.id);
+    glBindTexture(GL_TEXTURE_2D, Texture^.atlas^.id);
+    SetVertexPointer(@Texture^.vb);
+    SetTexCoordPointer(@Texture^.tb);
+    //glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+    glBindTexture(GL_TEXTURE_2D, 0); // DEBUG
 
-SetVertexPointer(@Texture^.vb);
-SetTexCoordPointer(@Texture^.tb);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
-ResetModelview;
+    ResetModelview;
 end;
 
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
@@ -218,53 +219,57 @@ begin
     if Texture = nil then
         exit;
 
-// do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
-    exit;
-if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
-    exit;
+    // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+    if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
+        exit;
+    if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
+        exit;
 
-SetOffset(X, Y);
-if Dir = 0 then Dir:= 1;
 
-SetRotation(Angle, Dir);
-AddOffset(Dir*OffsetX, OffsetY);
-AddScale(Scale);
-UpdateModelview;
+    SetOffset(X, Y);
+    if Dir = 0 then
+        Dir:= 1;
+
+    SetRotation(Angle, Dir);
+    AddOffset(Dir*OffsetX, OffsetY);
+    AddScale(Scale);
+    UpdateModelview;
 
 // Any reason for this call? And why only in t direction, not s?
 //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-hw:= w div (2 div Dir);
+    hw:= w div (2 div Dir);
 
-r.y:=0;
-r.x:=0;
-r.w:=w;
-r.h:=h;
-ComputeTexcoords(Texture, @r, @TextureBuffer);
+    r.y:=0;
+    r.x:=0;
+    r.w:=w;
+    r.h:=h;
+    ComputeTexcoords(Texture, @r, @TextureBuffer);
 
-glBindTexture(GL_TEXTURE_2D, Texture^.atlas^.id);
+    glBindTexture(GL_TEXTURE_2D, Texture^.atlas^.id);
 
-_l:= -hw + Texture^.cropInfo.l;
-_t:= w/-2 + Texture^.cropInfo.t;
-_r:= hw - Texture^.cropInfo.l - Texture^.cropInfo.r;
-_b:= w/2 - Texture^.cropInfo.t - Texture^.cropInfo.b;
+    _l:= -hw + Texture^.cropInfo.l;
+    _t:= w/-2 + Texture^.cropInfo.t;
+    _r:= hw - Texture^.cropInfo.l - Texture^.cropInfo.r;
+    _b:= w/2 - Texture^.cropInfo.t - Texture^.cropInfo.b;
 
-VertexBuffer[0].X:= _l;
-VertexBuffer[0].Y:= _t;
-VertexBuffer[1].X:= _r;
-VertexBuffer[1].Y:= _t;
-VertexBuffer[2].X:= _r;
-VertexBuffer[2].Y:= _b;
-VertexBuffer[3].X:= _l;
-VertexBuffer[3].Y:= _b;
+    VertexBuffer[0].X:= _l;
+    VertexBuffer[0].Y:= _t;
+    VertexBuffer[1].X:= _r;
+    VertexBuffer[1].Y:= _t;
+    VertexBuffer[2].X:= _r;
+    VertexBuffer[2].Y:= _b;
+    VertexBuffer[3].X:= _l;
+    VertexBuffer[3].Y:= _b;
 
-SetVertexPointer(@VertexBuffer[0]);
-//SetTexCoordPointer(@TextureBuffer[0]);
-SetTexCoordPointer(@Texture^.tb[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+    //SetVertexPointer(@VertexBuffer[0]);
+    //SetTexCoordPointer(@TextureBuffer[0]);
 
-ResetModelview;
+    SetVertexPointer(@Texture^.vb[0]);
+    SetTexCoordPointer(@Texture^.tb[0]);
+    //glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    ResetModelview;
 end;
 
 procedure DrawSpriteRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
@@ -273,22 +278,6 @@ begin
         SpritesData[Sprite].Width,
         SpritesData[Sprite].Height,
         X, Y, Dir, Angle)
-end;
-
-procedure DrawSpriteRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
-begin
-SetOffset(X, Y);
-if Dir < 0 then
-    SetRotation(Angle, -1.0)
-else
-    SetRotation(Angle, 1.0);
-if Dir < 0 then
-    AddScale(-1.0, 1.0);
-UpdateModelview;
-
-DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
-
-ResetModelview;
 end;
 
 procedure DrawTextureRotated(Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
@@ -330,14 +319,15 @@ VertexBuffer[3].Y:= _b;
 
 SetVertexPointer(@VertexBuffer[0]);
 SetTexCoordPointer(@Texture^.tb);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+//glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 ResetModelview;
 end;
 
-procedure DrawSprite(Sprite: TSprite; X, Y, Frame: LongInt);
-var 
-    r: TSDL_Rect;
+
+
+procedure DrawSpriteRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
+var
     tex: PTexture;
 begin
     if SpritesData[Sprite].imageHeight = 0 then
@@ -354,11 +344,31 @@ begin
     if (tex = nil) or (tex^.w = 0) or (tex^.h = 0) then
         exit;
 
-    r.x:= 0;
-    r.w:= SpritesData[Sprite].Width;
-    r.y:= 0;
-    r.h:= SpritesData[Sprite].Height;
-    DrawTextureFromRect(X, Y, @r, tex)
+    SetOffset(X, Y);
+
+    if Dir < 0 then
+    begin
+        SetRotation(Angle, -1.0);
+        AddScale(-1.0, 1.0);
+    end 
+    else
+        SetRotation(Angle, 1.0);
+        
+    UpdateModelview;
+
+    glBindTexture(GL_TEXTURE_2D, tex^.atlas^.id);
+    SetVertexPointer(@tex^.vb);
+    SetTexCoordPointer(@tex^.tb);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(tex^.vb));
+    glBindTexture(GL_TEXTURE_2D, 0); // DEBUG
+
+    ResetModelview;
+end;
+
+
+procedure DrawSprite(Sprite: TSprite; X, Y, Frame: LongInt);
+begin
+    DrawSpriteRotatedF(Sprite, X, Y, Frame, 1, 0.0);
 end;
 
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
@@ -413,7 +423,7 @@ begin
     VertexBuffer[1].Y:= Y1;
 
     SetVertexPointer(@VertexBuffer[0]);
-    glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
+    //glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
     Tint($FF, $FF, $FF, $FF);
     
     ResetModelview;
@@ -449,7 +459,7 @@ VertexBuffer[3].X:= r.x;
 VertexBuffer[3].Y:= r.y + r.h;
 
 SetVertexPointer(@VertexBuffer[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+//glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 Tint($FF, $FF, $FF, $FF);
 glEnable(GL_TEXTURE_2D);
@@ -480,7 +490,7 @@ begin
     UpdateModelview;
     glLineWidth(Width);
     SetVertexPointer(@CircleVertex[0]);
-    glDrawArrays(GL_LINE_LOOP, 0, 60);
+    //glDrawArrays(GL_LINE_LOOP, 0, 60);
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_LINE_SMOOTH);
     ResetModelview;
@@ -522,7 +532,7 @@ begin
     else
         SetVertexPointer(@VertexBuffers[0][0]);
     SetTexCoordPointer(@TextureBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+    //glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
     ResetModelview;
 end;

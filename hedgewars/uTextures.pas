@@ -209,7 +209,8 @@ var
     w, h, aw, ah: LongInt;
     p: PChar;
 const 
-    texelOffset = 0.0;
+    texelOffsetPos = 0.5;
+    texelOffsetNeg = 0.0;
 begin
     aw:=texture^.atlas^.w;
     ah:=texture^.atlas^.h;
@@ -224,10 +225,10 @@ begin
         h:=r^.h;        
     end;
 
-    x0:= (texture^.x + {r^.x} +     texelOffset)/aw;
-    x1:= (texture^.x + {r^.x} + w - texelOffset)/aw;
-    y0:= (texture^.y + {r^.y} +     texelOffset)/ah;
-    y1:= (texture^.y + {r^.y} + h - texelOffset)/ah;
+    x0:= (texture^.x + {r^.x} +     texelOffsetPos)/aw;
+    x1:= (texture^.x + {r^.x} + w + texelOffsetNeg)/aw;
+    y0:= (texture^.y + {r^.y} +     texelOffsetPos)/ah;
+    y1:= (texture^.y + {r^.y} + h + texelOffsetNeg)/ah;
 
     if (texture^.isRotated) then
     begin
@@ -253,25 +254,35 @@ begin
 end;
 
 procedure ResetVertexArrays(texture: PTexture);
-var r: TSDL_Rect;
+var 
+    rect: TSDL_Rect;
+    l, t, r, b: Real;
+const
+    halfTexelOffsetPos = 1.0;
+    halfTexelOffsetNeg = -0.0;
 begin
+    l:= texture^.cropInfo.l + halfTexelOffsetPos;
+    r:= texture^.cropInfo.l + texture^.w + halfTexelOffsetNeg;
+    t:= texture^.cropInfo.t + halfTexelOffsetPos;
+    b:= texture^.cropInfo.t + texture^.h + halfTexelOffsetNeg;
+
     with texture^ do
     begin
-        vb[0].X:= texture^.cropInfo.l;
-        vb[0].Y:= texture^.cropInfo.t;
-        vb[1].X:= texture^.cropInfo.l + w;
-        vb[1].Y:= texture^.cropInfo.t;
-        vb[2].X:= texture^.cropInfo.l + w;
-        vb[2].Y:= texture^.cropInfo.t + h;
-        vb[3].X:= texture^.cropInfo.l;
-        vb[3].Y:= texture^.cropInfo.t + h;
+        vb[0].X:= l;
+        vb[0].Y:= t;
+        vb[1].X:= r;
+        vb[1].Y:= t;
+        vb[2].X:= r;
+        vb[2].Y:= b;
+        vb[3].X:= l;
+        vb[3].Y:= b;
     end;
 
-    r.x:= 0;
-    r.y:= 0;
-    r.w:= texture^.w;
-    r.h:= texture^.h;
-    ComputeTexcoords(texture, @r, @texture^.tb);
+    rect.x:= 0;
+    rect.y:= 0;
+    rect.w:= texture^.w;
+    rect.h:= texture^.h;
+    ComputeTexcoords(texture, @rect, @texture^.tb);
 end;
 
 function NewTexture(width, height: Longword; buf: Pointer): PTexture;
@@ -403,7 +414,8 @@ begin
         exit;
     end;
 
-    if (surf^.w <= 512) and (surf^.h <= 512) then
+    //if (surf^.w <= 512) and (surf^.h <= 512) then
+    // nothing should use the old codepath anymore once we are done!
     begin
         Surface2Atlas:= Surface2Tex_(surf, enableClamp); // run the atlas side by side for debugging
         Surface2Atlas^.cropInfo:= cropInfo;
