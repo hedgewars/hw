@@ -17,7 +17,7 @@ data Identifier = Identifier String BaseType
 data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
-    | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe InitExpression)
+    | VarDeclaration Bool Bool ([Identifier], TypeDecl) (Maybe InitExpression)
     | FunctionDeclaration Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     | OperatorDeclaration String Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     deriving Show
@@ -30,8 +30,9 @@ data TypeDecl = SimpleType Identifier
     | String Integer
     | Set TypeDecl
     | FunctionType TypeDecl [TypeVarDeclaration]
-    | DeriveType InitExpression 
+    | DeriveType InitExpression
     | VoidType
+    | VarParamType TypeDecl -- this is a hack
     deriving Show
 data Range = Range Identifier
            | RangeFromTo InitExpression InitExpression
@@ -106,11 +107,12 @@ data BaseType = BTUnknown
     | BTFloat
     | BTRecord String [(String, BaseType)]
     | BTArray Range BaseType BaseType
-    | BTFunction Int BaseType
+    | BTFunction Bool Int BaseType
     | BTPointerTo BaseType
     | BTUnresolved String
     | BTSet BaseType
     | BTEnum [String]
     | BTVoid
     | BTUnit
+    | BTVarParam BaseType
     deriving Show

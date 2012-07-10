@@ -596,7 +596,8 @@ case Gear^.Pos of
                         else
                             a:= GetAmmo(HH^.Hedgehog)
                         end;
-                    AddAmmo(HH^.Hedgehog^, a);
+                    if Gear^.Power <> 0 then AddAmmo(HH^.Hedgehog^, a, Gear^.Power)
+                    else AddAmmo(HH^.Hedgehog^, a);
 // Possibly needs to check shared clan ammo game flag once added.
 // On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
                     if (not (HH^.Hedgehog^.Team^.ExtDriven 
@@ -604,7 +605,10 @@ case Gear^.Pos of
                     or (HH^.Hedgehog^.Team^.Clan^.ClanIndex = LocalClan)
                     or (GameType = gmtDemo)  then
                         begin
-                        s:= trammo[Ammoz[a].NameId] + ' (+' + IntToStr(Ammoz[a].NumberInCase) + ')';
+                        if Gear^.Power <> 0 then
+                            s:= trammo[Ammoz[a].NameId] + ' (+' + IntToStr(Gear^.Power) + ')'
+                        else
+                            s:= trammo[Ammoz[a].NameId] + ' (+' + IntToStr(Ammoz[a].NumberInCase) + ')';
                         AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
 
                         // show ammo icon
@@ -953,11 +957,11 @@ if (Gear^.State and gstMoving) <> 0 then
             SetLittle(Gear^.dX);
 
 if (not isFalling)
-and (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
+  and (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
     begin
     Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
-    while TestCollisionYWithGear(Gear,1) = 0 do
+    while (TestCollisionYWithGear(Gear,1) = 0) and not CheckGearDrowning(Gear) do
         Gear^.Y:= Gear^.Y+_1;
     SetLittle(Gear^.dX);
     Gear^.dY:= _0

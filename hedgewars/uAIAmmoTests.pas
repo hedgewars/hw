@@ -694,9 +694,11 @@ end;
 
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult, a, v1, v2: LongInt;
-    x, y: LongInt;
+    x, y, trackFall: LongInt;
     dx, dy: real;
 begin
+    if Me^.Hedgehog^.BotLevel < 3 then trackFall:= afTrackFall
+    else trackFall:= 0;
     Level:= Level; // avoid compiler hint
     ap.ExplR:= 0;
     ap.Time:= 0;
@@ -714,10 +716,10 @@ begin
 
         v1:= RateShove(Me, x - 10, y
                 , 33, 30, 115
-                , -dx, -dy, afTrackFall);
+                , -dx, -dy, trackFall);
         v2:= RateShove(Me, x + 10, y
                 , 33, 30, 115
-                , dx, -dy, afTrackFall);
+                , dx, -dy, trackFall);
         if (v1 > valueResult) or (v2 > valueResult) then
             if (v2 > v1) 
                 or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
@@ -742,8 +744,10 @@ end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult, v1, v2, i: LongInt;
-    x, y: LongInt;
+    x, y, trackFall: LongInt;
 begin
+    if Me^.Hedgehog^.BotLevel = 1 then trackFall:= afTrackFall
+    else trackFall:= 0;
     Level:= Level; // avoid compiler hint
     ap.ExplR:= 0;
     ap.Time:= 0;
@@ -756,11 +760,11 @@ begin
         begin
         v1:= v1 + RateShove(Me, x - 10, y - 10 * i
                 , 18, 30, 40
-                , -0.45, -0.9, afTrackFall or afSetSkip);
+                , -0.45, -0.9, trackFall or afSetSkip);
         end;
     v1:= v1 + RateShove(Me, x - 10, y - 90
             , 18, 30, 40
-            , -0.45, -0.9, afTrackFall);
+            , -0.45, -0.9, trackFall);
 
 
     // now try opposite direction
@@ -769,11 +773,11 @@ begin
         begin
         v2:= v2 + RateShove(Me, x + 10, y - 10 * i
                 , 18, 30, 40
-                , 0.45, -0.9, afTrackFall or afSetSkip);
+                , 0.45, -0.9, trackFall or afSetSkip);
         end;
     v2:= v2 + RateShove(Me, x + 10, y - 90
             , 18, 30, 40
-            , 0.45, -0.9, afTrackFall);
+            , 0.45, -0.9, trackFall);
 
     if (v2 > v1) 
         or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
@@ -796,8 +800,10 @@ end;
 
 function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult, v1, v2: LongInt;
-    x, y: LongInt;
+    x, y, trackFall: LongInt;
 begin
+    if Me^.Hedgehog^.BotLevel = 1 then trackFall:= afTrackFall
+    else trackFall:= 0;
     Level:= Level; // avoid compiler hint
     ap.ExplR:= 0;
     ap.Time:= 0;
@@ -811,19 +817,19 @@ begin
     RateShove call)}
     v1:= RateShove(Me, x - 15, y
             , 30, 30, 25
-            , -1, -0.8, afTrackFall or afSetSkip);
+            , -1, -0.8, trackFall or afSetSkip);
     v1:= v1 +
         RateShove(Me, x, y
             , 30, 30, 25
-            , -1, -0.8, afTrackFall);
+            , -1, -0.8, trackFall);
     // now try opposite direction
     v2:= RateShove(Me, x + 15, y
             , 30, 30, 25
-            , 1, -0.8, afTrackFall or afSetSkip);
+            , 1, -0.8, trackFall or afSetSkip);
     v2:= v2 +
         RateShove(Me, x, y
             , 30, 30, 25
-            , 1, -0.8, afTrackFall);
+            , 1, -0.8, trackFall);
 
     if (v2 > v1) 
         or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
