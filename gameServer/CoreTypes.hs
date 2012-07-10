@@ -62,7 +62,7 @@ data TeamInfo =
         hedgehogs :: [HedgehogInfo]
     }
     deriving (Show, Read)
-    
+
 data GameInfo =
     GameInfo
     {
@@ -74,9 +74,9 @@ data GameInfo =
         giMapParams :: Map.Map B.ByteString B.ByteString,
         giParams :: Map.Map B.ByteString [B.ByteString]
     } deriving (Show, Read)
-    
---newGameInfo ::  -> GameInfo 
-newGameInfo = 
+
+--newGameInfo ::  -> GameInfo
+newGameInfo =
     GameInfo
         Data.Sequence.empty
         []

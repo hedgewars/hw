@@ -259,7 +259,7 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
     QStringList sl;
     if (m_isNetTeam)
     {
-        sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toLatin1(), QCryptographicHash::Md5).toHex())));
+        sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toUtf8(), QCryptographicHash::Md5).toHex())));
         sl.push_back("erdriven");
     }
     else sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));

@@ -333,7 +333,7 @@ void GameUIConfig::updNetNick()
 
 QByteArray GameUIConfig::netPasswordHash()
 {
-    return QCryptographicHash::hash(Form->ui.pageOptions->editNetPassword->text().toLatin1(), QCryptographicHash::Md5).toHex();
+    return QCryptographicHash::hash(Form->ui.pageOptions->editNetPassword->text().toUtf8(), QCryptographicHash::Md5).toHex();
 }
 
 int GameUIConfig::netPasswordLength()

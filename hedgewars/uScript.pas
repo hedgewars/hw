@@ -184,10 +184,19 @@ begin
 end;
 
 function lc_parsecommand(L : Plua_State) : LongInt; Cdecl;
+var t: PChar;
+    i,c: LongWord;
+    s: shortstring;
 begin
     if lua_gettop(L) = 1 then
         begin
-        ParseCommand(lua_tostring(L ,1), true);
+        t:= lua_tolstring(L,1,@c);
+
+        for i:= 1 to c do s[i]:= t[i-1];
+        s[0]:= char(c);
+
+        ParseCommand(s, true);
+
         end
     else
         LuaError('Lua: Wrong number of parameters passed to ParseCommand!');
@@ -313,7 +322,7 @@ begin
             health:= lua_tointeger(L, 3)
         else
             health:= cHealthCaseAmount;
-        gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), HealthCrate, health);
+        gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), HealthCrate, health, 0);
         if gear <> nil then
             lua_pushinteger(L, gear^.uid)
         else
@@ -325,14 +334,16 @@ end;
 function lc_spawnammocrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
-    if lua_gettop(L) <> 3 then
+    if (lua_gettop(L) <> 3) and (lua_gettop(L) <> 4) then
         begin
         LuaError('Lua: Wrong number of parameters passed to SpawnAmmoCrate!');
         lua_pushnil(L);
         end
     else
         begin
-        gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3));
+        if (lua_gettop(L) = 3) then 
+             gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), 0)
+        else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
         if gear <> nil then
             lua_pushinteger(L, gear^.uid)
         else
@@ -344,15 +355,16 @@ end;
 function lc_spawnutilitycrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
-    if lua_gettop(L) <> 3 then
+    if (lua_gettop(L) <> 3) and (lua_gettop(L) <> 4) then
         begin
         LuaError('Lua: Wrong number of parameters passed to SpawnUtilityCrate!');
         lua_pushnil(L);
         end
     else
-        begin  
-        gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
-        UtilityCrate, lua_tointeger(L, 3));
+        begin
+        if (lua_gettop(L) = 3) then
+             gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), 0)
+        else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
         if gear <> nil then
             lua_pushinteger(L, gear^.uid)
         else

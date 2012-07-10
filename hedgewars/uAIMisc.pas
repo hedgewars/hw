@@ -404,7 +404,10 @@ for i:= 0 to Targets.Count do
                 begin
                 dX:= 0.005 * dmg + 0.01;
                 dY:= dX;
-                fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
+                if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and 
+                   (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                     fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, 0) * dmgMod)
+                else fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod)
                 end;
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
@@ -503,7 +506,10 @@ for i:= 0 to Targets.Count do
             dY:= gdY * dmg;
             if dX < 0 then dX:= dX - 0.01
             else dX:= dX + 0.01;
-            fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
+            if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and 
+               (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                 fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, 0) * dmgMod)
+            else fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings

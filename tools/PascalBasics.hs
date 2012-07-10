@@ -9,7 +9,7 @@ import Text.Parsec.Language
 import Data.Char
 
 builtin = ["succ", "pred", "low", "high", "ord", "inc", "dec", "exit", "break", "continue", "length"]
-    
+
 pascalLanguageDef
     = emptyDef
     { commentStart   = "(*"
@@ -27,8 +27,8 @@ pascalLanguageDef
             , "downto", "div", "mod", "record", "set", "nil"
             , "cdecl", "external", "if", "then", "else"
             ] -- ++ builtin
-    , reservedOpNames= [] 
-    , caseSensitive  = False   
+    , reservedOpNames= []
+    , caseSensitive  = False
     }
 
 preprocessorSwitch :: Stream s m Char => ParsecT s u m String
@@ -36,11 +36,11 @@ preprocessorSwitch = do
     try $ string "{$"
     s <- manyTill (noneOf "\n") $ char '}'
     return s
-        
+
 caseInsensitiveString s = do
     mapM_ (\a -> satisfy (\b -> toUpper a == toUpper b)) s <?> s
     return s
-    
+
 pas = patch $ makeTokenParser pascalLanguageDef
     where
     patch tp = tp {stringLiteral = stringL}
@@ -50,7 +50,7 @@ comment = choice [
         , (try $ string "(*") >> manyTill anyChar (try $ string "*)")
         , (try $ string "//") >> manyTill anyChar (try newline)
         ]
-    
+
 comments = do
     spaces
     skipMany $ do
@@ -66,5 +66,5 @@ stringL = do
         s' <- (many $ noneOf "'")
         (char '\'')
         return $ '\'' : s'
-    comments    
+    comments
     return $ concat (s:ss)

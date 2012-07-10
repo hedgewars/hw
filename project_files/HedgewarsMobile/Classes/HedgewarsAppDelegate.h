@@ -18,7 +18,7 @@
 
 
 #import <UIKit/UIKit.h>
-#import "SDL_uikitappdelegate.h"
+#import "../src/video/uikit/SDL_uikitappdelegate.h"
 
 
 @class MainMenuViewController;

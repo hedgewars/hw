@@ -71,7 +71,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let nicks = map nick jRoomClients
     let chans = map sendChan (cl : jRoomClients)
     return $
-        if isNothing maybeRI || not sameProto then 
+        if isNothing maybeRI || not sameProto then
             [Warning "No such room"]
             else if isRestrictedJoins jRoom then
             [Warning "Joining restricted"]
@@ -147,12 +147,12 @@ handleCmd_lobby ["BAN", banNick, reason] = do
     cl <- thisClient
     banId <- clientByNick banNick
     return [BanClient 60 reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
-    
+
 handleCmd_lobby ["BANIP", ip, reason, duration] = do
     (ci, _) <- ask
     cl <- thisClient
     return [BanIP ip (readInt_ duration) reason | isAdministrator cl]
-    
+
 handleCmd_lobby ["BANLIST"] = do
     (ci, _) <- ask
     cl <- thisClient
@@ -172,7 +172,7 @@ handleCmd_lobby ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] = do
     return [ModifyServerInfo (\si -> si{latestReleaseVersion = readNum}) | isAdministrator cl && readNum > 0]
     where
         readNum = readInt_ protoNum
- 
+
 handleCmd_lobby ["GET_SERVER_VAR"] = do
     cl <- thisClient
     return [SendServerVars | isAdministrator cl]
