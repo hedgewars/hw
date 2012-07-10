@@ -817,7 +817,7 @@ var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
     lw, waves: GLfloat;
     sprite: TSprite;
     r: TSDL_Rect;
-begin
+begin{
 if SuddenDeathDmg then
     sprite:= sprSDWater
 else
@@ -869,7 +869,7 @@ Tint($FF, $FF, $FF, $FF);
     DrawSprite(sprWater,
         i * cWaveWidth + ((WorldDx + (RealTicks shr 6) * Dir + dX) mod cWaveWidth) - (cScreenWidth div 2),
         cWaterLine + WorldDy + dY,
-        0)}
+        0)}}
 end;
 
 procedure DrawRepeated(spr, sprL, sprR: TSprite; Shift, OffsetY: LongInt);

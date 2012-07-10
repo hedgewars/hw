@@ -213,12 +213,19 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 
     PVertexRect = ^TVertexRect;
     TVertexRect = array[0..3] of TVertex2f;
+
+    TCropInformation = record
+        l, r, t, b: Integer; // cropped pixels for each side
+        x, y: Integer;       // pivot (center) of the sprite in the cropped image
+    end;
     
     TTexture = record
             atlas: PAtlas;
             w, h, scale: LongInt;
 
             x, y: LongInt; // Offset in the texture atlas
+            cropInfo: TCropInformation;
+
             isRotated: boolean; // if true sprite is flipped in the atlas taking w pixels along the y and h pixels along the x axis
 
             shared: boolean; // true if in an atlas, false if atlas points to a dedicated texture for this sprite
@@ -228,7 +235,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             // Cached values for texel coordinates and vertex coordinates            
             vb, tb: TVertexRect;
 
-            PrevTexture, NextTexture: PTexture;
+            nextFrame: PTexture;
             end;
 
     THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected, heFrozen);

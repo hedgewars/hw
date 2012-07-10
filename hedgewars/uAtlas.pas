@@ -12,6 +12,7 @@ procedure initModule;
 function Surface2Tex_(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture_(sprite: PTexture);
 procedure DebugAtlas;
+procedure DumpInfo(tex: PTexture);
 
 implementation
 
@@ -28,6 +29,7 @@ type
         PackerInfo: Atlas;     // Rectangle packer context
         TextureInfo: TAtlas;   // OpenGL texture information
         Allocated: boolean;    // indicates if this atlas is in use
+        DumpID: Integer;
     end;
 
 var
@@ -36,6 +38,48 @@ var
 
 ////////////////////////////////////////////////////////////////////////////////
 // Debug routines
+
+procedure DumpInfo(tex: PTexture);
+var
+    frame: Integer;
+    i, atlasID: Integer;
+    aw, ah: Integer;
+begin
+    if tex = nil then
+        exit;
+
+    frame:= 0;
+    writeln(stdout, 'Texture: ' + IntToHex(Integer(tex), 8));
+
+    while tex <> nil do
+    begin
+        atlasID:= -1;
+        for i:= 0 to Pred(MaxAtlases) do
+            if tex^.atlas = @Info[i].TextureInfo then
+                atlasID:=i;
+
+        aw:= tex^.atlas^.w;
+        ah:= tex^.atlas^.h;   
+ 
+        writeln(stdout, 'Frame   : ' + IntToStr(frame));
+        writeln(stdout, 'Size    : ' + IntToStr(tex^.w) + 'x' + IntToStr(tex^.h));
+        writeln(stdout, 'Atlas   : ' + IntToStr(atlasID));
+        writeln(stdout, 'Location: ' + IntToStr(tex^.x) + 'x' + IntToStr(tex^.y));
+        writeln(stdout, 'TB      : ' + '(' + FloatToStrF(tex^.tb[0].X, ffFixed, 15, 4) + ',' + FloatToStrF(tex^.tb[0].Y, ffFixed, 15, 4) + ') '
+                                     + '(' + FloatToStrF(tex^.tb[1].X, ffFixed, 15, 4) + ',' + FloatToStrF(tex^.tb[1].Y, ffFixed, 15, 4) + ') '
+                                     + '(' + FloatToStrF(tex^.tb[2].X, ffFixed, 15, 4) + ',' + FloatToStrF(tex^.tb[2].Y, ffFixed, 15, 4) + ') '
+                                     + '(' + FloatToStrF(tex^.tb[3].X, ffFixed, 15, 4) + ',' + FloatToStrF(tex^.tb[3].Y, ffFixed, 15, 4) + ')');
+
+        writeln(stdout, 'TB.ABS  : ' + '(' + FloatToStrF(tex^.tb[0].X * aw, ffFixed, 15, 4) + ',' + FloatToStrF(tex^.tb[0].Y * ah, ffFixed, 15, 4) + ') '
+                                     + '(' + FloatToStrF(tex^.tb[1].X * aw, ffFixed, 15, 4) + ',' + FloatToStrF(tex^.tb[1].Y * ah, ffFixed, 15, 4) + ') '
+                                     + '(' + FloatToStrF(tex^.tb[2].X * aw, ffFixed, 15, 4) + ',' + FloatToStrF(tex^.tb[2].Y * ah, ffFixed, 15, 4) + ') '
+                                     + '(' + FloatToStrF(tex^.tb[3].X * aw, ffFixed, 15, 4) + ',' + FloatToStrF(tex^.tb[3].Y * ah, ffFixed, 15, 4) + ')');
+
+        inc(frame);
+        tex:= tex^.nextFrame;
+    end;
+    halt(0);
+end;
 
 procedure AssertCount(tex: PTexture; count: Integer);
 var
@@ -72,7 +116,6 @@ begin
 end;
 
 var
-    DumpID: Integer;
     DumpFile: File of byte;
 
 const
@@ -106,12 +149,14 @@ begin
    s:= IntToStr(i);
    if (i < 10) then s:='0' + s;
    if (i < 100) then s:='0' + s;
+   if (i < 1000) then s:='0' + s;
 
    IntToStrPad:=s;
 end;
 
 // GL1 ATLAS DEBUG ONLY CODE!
 procedure DebugAtlas;
+{$IFDEF DEBUG_ATLAS}
 var
     vp: array[0..3] of GLint;
     prog: GLint;
@@ -168,8 +213,12 @@ begin
 {$ENDIF}
     end;
 end;
+{$ELSE}
+begin;
+end;
+{$ENDIF}
 
-procedure DumpAtlas(var info: AtlasInfo);
+procedure DumpAtlas(var dinfo: AtlasInfo);
 var
     png: png_structp;
     png_info: png_infop;
@@ -178,20 +227,26 @@ var
     rows: array of png_bytep;
     size: Integer;
     i, j: Integer;
+    idx: Integer;
     mem, p, pp: PByte;
 begin
-    filename:= '/home/wolfgangst/hedgewars/dump/atlas_' + IntToStrPad(DumpID) + '.png';
+    idx:= -1;
+    for i:= 0 to Pred(MaxAtlases) do
+        if @dinfo = @Info[i] then
+            idx:=i;
+
+    filename:= '/home/wolfgangst/hedgewars/dump/atlas_' + IntToStr(idx) + '_' + IntToStrPad(dinfo.DumpID) + '.png';
     Assign(DumpFile, filename);
-    inc(DumpID);
+    inc(dinfo.DumpID);
     Rewrite(DumpFile);
 
-    w:= info.TextureInfo.w;
-    h:= info.TextureInfo.h;
+    w:= dinfo.TextureInfo.w;
+    h:= dinfo.TextureInfo.h;
     size:= w * h * 4;
     SetLength(rows, h);
     GetMem(mem, size);
 
-    glBindTexture(GL_TEXTURE_2D, info.TextureInfo.id);
+    glBindTexture(GL_TEXTURE_2D, dinfo.TextureInfo.id);
 
     glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, mem);
 
@@ -374,7 +429,7 @@ var
     scanline: PByte;
     r: TSDL_Rect;
 begin
-    writeln('Uploading sprite to ', sprite.x, ',', sprite.y, ',', sprite.width, ',', sprite.height);
+    //writeln('Uploading sprite to ', sprite.x, ',', sprite.y, ',', sprite.width, ',', sprite.height);
     sp:= PTexture(sprite.UserData);
     sp^.x:= sprite.x;
     sp^.y:= sprite.y;
@@ -560,6 +615,7 @@ begin
     sprite^.isRotated:= false;
     sprite^.surface:= surf;
     sprite^.shared:= true;
+    sprite^.nextFrame:= nil;
 
     sz:= SizeForSprite(sprite);
 
@@ -698,9 +754,11 @@ procedure initModule;
 var
     i: Integer;
 begin
-    DumpID:=0;
     for i:= 0 to pred(MaxAtlases) do
+    begin
         Info[i].Allocated:= false;
+        Info[i].DumpID:=0;
+    end;
 end;
 
 end.

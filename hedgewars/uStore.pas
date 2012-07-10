@@ -59,7 +59,7 @@ procedure EndWater;
 
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
-     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}, uMatrix;
+     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}, uMatrix, uAtlas;
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -295,7 +295,7 @@ for t:= 0 to Pred(TeamsCount) do
                 texsurf:= LoadImage(UserPathz[ptGraves] + '/Statue', ifTransparent);
             if texsurf = nil then
                 texsurf:= LoadImage(Pathz[ptGraves] + '/Statue', ifCritical or ifTransparent);
-            GraveTex:= Surface2Atlas(texsurf, false);
+            GraveTex:= SurfaceSheet2Atlas(texsurf, 32, 32);
             end
 end;
 
@@ -306,6 +306,7 @@ var s: shortstring;
     ai: TAmmoType;
     tmpsurf: PSDL_Surface;
     i: LongInt;
+    sw, sh: LongInt;
 begin
 AddFileLog('StoreLoad()');
 
@@ -397,7 +398,24 @@ for ii:= Low(TSprite) to High(TSprite) do
                     end
                 else
                     begin
-                    Texture:= Surface2Atlas(tmpsurf, false);
+                    sw:=Trunc(Width*scale);
+                    sh:=Trunc(Height*scale);
+                    if (sw > imageWidth) or (sh > imageHeight) then
+                    begin
+                        if not (ii in [sprPHammer, sprBalls, sprSnow]) then
+                        begin
+                            writeln(stdout, 'Dimension error in ' + FileName + ' [' + IntToStr(Integer(ii)) + ']');
+                            halt(-1);
+                        end;
+                    end;
+ 
+                    if (imageWidth > sw) or (imageHeight > sh) then
+                    begin
+                        writeln(stdout, 'Animation sheet?: ' + FileName + ' : ' + IntToStr(Round(imageWidth/sw)) + 'x' + IntToStr(Round(imageHeight/sh)));
+                        Texture:= SurfaceSheet2Atlas(tmpsurf, Width, Height);
+                    end
+                    else Texture:= Surface2Atlas(tmpsurf, false);
+
                     // HACK: We should include some sprite attribute to define the texture wrap directions
                     if ((ii = sprWater) or (ii = sprSDWater)) and ((cReducedQuality and (rq2DWater or rqClampLess)) = 0) then
                         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -427,7 +445,7 @@ if not reload then
 if tmpsurf = nil then
     tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
     
-HHTexture:= Surface2Atlas(tmpsurf, false);
+HHTexture:= SurfaceSheet2Atlas(tmpsurf, 32, 32);
 
 InitHealth;
 
@@ -468,16 +486,14 @@ procedure StoreRelease(reload: boolean);
 var ii: TSprite;
     ai: TAmmoType;
     i, t: LongInt;
+    nf: ^PTexture;
 begin
 for ii:= Low(TSprite) to High(TSprite) do
     begin
+    nf:= @SpritesData[ii].Texture;
+    writeln(stdout, 'Releasing ' + IntToStr(Integer(ii)) + ' tex: ' + IntToHex(Integer(nf), 8));
     FreeTexture(SpritesData[ii].Texture);
     SpritesData[ii].Texture:= nil;
-    if (SpritesData[ii].Surface <> nil) and (not reload) then
-        begin
-        //SDL_FreeSurface(SpritesData[ii].Surface); released by FreeTexture
-        SpritesData[ii].Surface:= nil
-        end
     end;
 SDL_FreeSurface(MissionIcons);
 
@@ -608,7 +624,7 @@ texsurf:= LoadImage(UserPathz[ptHats] + '/' + newHat, ifNone);
         FreeTexture(HHGear^.Hedgehog^.HatTex);
 
         // assign new hat to hedgehog
-        HHGear^.Hedgehog^.HatTex:= Surface2Atlas(texsurf, true);
+        HHGear^.Hedgehog^.HatTex:= SurfaceSheet2Atlas(texsurf, 32, 32)
         end;
 end;
 
@@ -1041,10 +1057,10 @@ begin
         if texsurf = nil then
             texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
 
-        ProgrTex:= Surface2Atlas(texsurf, false);
-
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
+
+        ProgrTex:= Surface2Atlas(texsurf, false);
 
         uMobile.GameLoading();
         end;
