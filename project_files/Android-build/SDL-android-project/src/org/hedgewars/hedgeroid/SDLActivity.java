@@ -443,7 +443,6 @@ class SDLMain implements Runnable {
 			e.printStackTrace();
 		}
 		Log.v("SDL", "SDL thread terminated");
-		//Log.v("SDL", "SDL thread terminated");
 	}
 }
 
