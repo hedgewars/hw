@@ -20,6 +20,7 @@ package org.hedgewars.hedgeroid;
 
 import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
+import org.hedgewars.hedgeroid.netplay.LobbyActivity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -36,7 +37,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
-
 	private Button downloader, startGame;
 	private ProgressDialog assetsDialog;
 
@@ -46,9 +46,15 @@ public class MainActivity extends FragmentActivity {
 
 		downloader = (Button)findViewById(R.id.downloader);
 		startGame = (Button)findViewById(R.id.startGame);
+		Button joinLobby = (Button)findViewById(R.id.joinLobby);
 
 		downloader.setOnClickListener(downloadClicker);
 		startGame.setOnClickListener(startGameClicker);
+		joinLobby.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				startActivity(new Intent(getApplicationContext(), LobbyActivity.class));
+			}
+		});
 
 		if(!Utils.isDataPathAvailable()){
 			showDialog(0);

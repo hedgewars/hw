@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Hedgewars</string>
-    
     <string name="select">Select</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="saved">Saved succesfully</string>
-    
+
     <!-- SDCARD -->
     <string name="sdcard_not_mounted_title">Sorry! Could not find the SDCard</string>
     <string name="sdcard_not_mounted">There\'s been an error when accessing the SDcard. Please check if there is an SDcard present in the device (internal or external) and if the SDcard is not mounted (via usb to your computer for example). Hedgewars for Android will now quit</string>
-        
+
     <!-- Notification -->
     <string name="notification_title">Downloading hedgewars files...</string>
     <string name="notification_done">Successfully downloaded: </string>
-    
+
     <!-- Download Activity -->
     <string name="download_background">Continue in background</string>
     <string name="download_cancel">Cancel</string>
@@ -23,24 +23,20 @@
     <string name="download_tryagain">Try again</string>
     <string name="download_failed">The download has failed because of: </string>
     <string name="download_userexplain">Before starting the game we must download some extra files...</string>
-    
     <string name="download_areyousure">Are you sure you want to download this package?</string>
     <string name="download_alreadydownloaded">You\'ve already downloaded this package, are you sure you want to download it again?</string>
     <string name="download_downloadnow">Download now!</string>
-    
     <string name="download_queued">This download has been queued</string>
-    
+
     <!-- start game -->
-    
+
     <string name="start_gameplay">Style</string>
     <string name="start_gamescheme">Game scheme</string>
     <string name="start_weapons">Weapons</string>
     <string name="start_map">Map</string>
     <string name="start_filter">Filter</string>
     <string name="start_themes">Themes</string>
-    
-    
-    
+
     <!-- Teams -->
     <string name="not_enough_teams">Not enough teams</string>
     <string name="teams_info_template">Selected teams = %d</string>
@@ -52,7 +48,7 @@
     <string name="flag">Flag</string>
     <string name="voice">Voice</string>
     <string name="fort">Fort</string>
-    
+
     <!-- Difficulty levels -->
     <string name="human">Human</string>
     <string name="bot5">Level 5</string>
@@ -60,5 +56,6 @@
     <string name="bot3">Level 3</string>
     <string name="bot2">Level 2</string>
     <string name="bot1">Level 1</string>
-    
+
+    <string name="title_activity_lobby">LobbyActivity</string>
 </resources>
