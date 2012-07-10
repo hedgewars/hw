@@ -128,18 +128,8 @@ const
 
 
 procedure writefunc(png: png_structp; buffer: png_bytep; size: QWord); cdecl;
-var
-    p: Pbyte;
-    i: Integer;
 begin
-  //TStream(png_get_io_ptr(png)).Write(buffer^, size);
     BlockWrite(DumpFile, buffer^, size);
-{    p:= PByte(buffer^);
-    for i:=0 to pred(size) do
-    begin
-        Write(DumpFile, p^);
-        inc(p);
-    end;}
 end;
 
 function IntToStrPad(i: Integer): string;
@@ -397,9 +387,6 @@ var
 begin
     sz:= surf^.w * surf^.h;
     p:= surf^.pixels;
-    //randr:=Random;
-    //randg:=Random;
-    //randb:=1 - min(randr, randg);
     randh:=Random;
     HSVToRGB(randh, 1.0, 1.0, randr, randg, randb);
     for i:=0 to pred(sz) do
@@ -422,6 +409,50 @@ begin
     end;
 end;
 
+procedure DebugChecker(surf: PSDL_Surface);
+var
+    sz: Integer;
+    p, q: PByte;
+    randr, randg, randb: Single;
+    randrb, randgb, randbb: Byte;
+    randh: Single;
+    x, y: Integer;
+begin
+    sz:= surf^.w * surf^.h;
+    p:= surf^.pixels;
+    randh:=Random;
+    HSVToRGB(randh, 1.0, 1.0, randr, randg, randb);
+    randrb:= Trunc(255*randr);
+    randgb:= Trunc(255*randg);
+    randbb:= Trunc(255*randb);
+
+    p:= surf^.pixels;
+    for y:=0 to Pred(surf^.h) do
+    begin
+        q:= p;
+        for x:=0 to Pred(surf^.w) do
+        begin
+            if ((x xor y) and 1) = 1 then
+            begin
+                q[0]:= randrb;
+                q[1]:= randgb;
+                q[2]:= randbb;
+                q[3]:= 255;
+            end else
+            begin
+                q[0]:= 0;
+                q[1]:= 0;
+                q[2]:= 0;
+                q[3]:= 255;
+            end;
+            inc(q, 4);
+        end;
+        inc(p, surf^.pitch);
+    end;
+    
+end;
+
+
 procedure Upload(var info: AtlasInfo; sprite: Rectangle; surf: PSDL_Surface);
 var
     sp: PTexture;
@@ -442,6 +473,7 @@ begin
     //if GrayScale then
     //    Surface2GrayScale(surf);
     //DebugColorize(surf);
+    DebugChecker(surf);
 
     glBindTexture(GL_TEXTURE_2D, info.TextureInfo.id);
     if (sp^.isRotated) then
