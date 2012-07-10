@@ -63,7 +63,6 @@ typedef struct {
 } flib_hog;
 
 typedef struct {
-	int _referenceCount;
 	flib_hog hogs[HEDGEHOGS_PER_TEAM];
 	char *name;
 	char *grave;
@@ -95,6 +94,11 @@ typedef struct {
 flib_team *flib_team_create(const char *name);
 
 /**
+ * Free all memory associated with the team
+ */
+void flib_team_destroy(flib_team *team);
+
+/**
  * Loads a team, returns NULL on error.
  */
 flib_team *flib_team_from_ini(const char *filename);
@@ -120,17 +124,6 @@ void flib_team_set_weaponset(flib_team *team, flib_weaponset *set);
  * Set the same initial health for every hog.
  */
 void flib_team_set_health(flib_team *team, int health);
-
-/**
- * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
- * Returns the parameter.
- */
-flib_team *flib_team_retain(flib_team *team);
-
-/**
- * Decrease the reference count of the object and free it if this was the last reference.
- */
-void flib_team_release(flib_team *team);
 
 /**
  * Create a deep copy of a team. Returns NULL on failure.

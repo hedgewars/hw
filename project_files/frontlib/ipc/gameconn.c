@@ -54,7 +54,7 @@ struct _flib_gameconn {
 	void (*onChatCb)(void* context, const char *msg, bool teamchat);
 	void *onChatCtx;
 
-	void (*onGameRecordedCb)(void *context, const uint8_t *record, int size, bool isSavegame);
+	void (*onGameRecordedCb)(void *context, const uint8_t *record, size_t size, bool isSavegame);
 	void *onGameRecordedCtx;
 
 	void (*onEngineMessageCb)(void *context, const uint8_t *em, size_t size);
@@ -64,22 +64,17 @@ struct _flib_gameconn {
 	bool destroyRequested;
 };
 
-static void defaultCallback_onConnect(void* context) {}
-static void defaultCallback_onDisconnect(void* context, int reason) {}
 static void defaultCallback_onErrorMessage(void* context, const char *msg) {
 	flib_log_w("Error from engine (no callback set): %s", msg);
 }
-static void defaultCallback_onChat(void* context, const char *msg, bool teamchat) {}
-static void defaultCallback_onGameRecorded(void *context, const uint8_t *record, int size, bool isSavegame) {}
-static void defaultCallback_onEngineMessage(void *context, const uint8_t *em, size_t size) {}
 
 static void clearCallbacks(flib_gameconn *conn) {
-	conn->onConnectCb = &defaultCallback_onConnect;
-	conn->onDisconnectCb = &defaultCallback_onDisconnect;
-	conn->onErrorMessageCb = &defaultCallback_onErrorMessage;
-	conn->onChatCb = &defaultCallback_onChat;
-	conn->onGameRecordedCb = &defaultCallback_onGameRecorded;
-	conn->onEngineMessageCb = &defaultCallback_onEngineMessage;
+	flib_gameconn_onConnect(conn, NULL, NULL);
+	flib_gameconn_onDisconnect(conn, NULL, NULL);
+	flib_gameconn_onErrorMessage(conn, NULL, NULL);
+	flib_gameconn_onChat(conn, NULL, NULL);
+	flib_gameconn_onGameRecorded(conn, NULL, NULL);
+	flib_gameconn_onEngineMessage(conn, NULL, NULL);
 }
 
 static flib_gameconn *flib_gameconn_create_partial(bool record, const char *playerName, bool netGame) {
@@ -312,7 +307,7 @@ GENERATE_CB_SETTER_AND_DEFAULT(onConnect, (void *context));
 GENERATE_CB_SETTER_AND_DEFAULT(onDisconnect, (void* context, int reason));
 GENERATE_CB_SETTER(onErrorMessage, (void* context, const char *msg), defaultCallback_onErrorMessage);
 GENERATE_CB_SETTER_AND_DEFAULT(onChat, (void* context, const char *msg, bool teamchat));
-GENERATE_CB_SETTER_AND_DEFAULT(onGameRecorded, (void *context, const uint8_t *record, int size, bool isSavegame));
+GENERATE_CB_SETTER_AND_DEFAULT(onGameRecorded, (void *context, const uint8_t *record, size_t size, bool isSavegame));
 GENERATE_CB_SETTER_AND_DEFAULT(onEngineMessage, (void *context, const uint8_t *em, size_t size));
 
 #undef GENERATE_CB_SETTER_AND_DEFAULT

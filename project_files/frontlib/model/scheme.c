@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "cfg.h"
+#include "scheme.h"
 
 #include "../util/inihelper.h"
 #include "../util/logging.h"
@@ -29,49 +29,49 @@
 #include <limits.h>
 #include <string.h>
 
-static void flib_cfg_meta_destroy(flib_cfg_meta *cfg) {
-	if(cfg) {
-		if(cfg->settings) {
-			for(int i=0; i<cfg->settingCount; i++) {
-				free(cfg->settings[i].name);
-				free(cfg->settings[i].engineCommand);
+static void flib_metascheme_destroy(flib_metascheme *meta) {
+	if(meta) {
+		if(meta->settings) {
+			for(int i=0; i<meta->settingCount; i++) {
+				free(meta->settings[i].name);
+				free(meta->settings[i].engineCommand);
 			}
-			free(cfg->settings);
+			free(meta->settings);
 		}
-		if(cfg->mods) {
-			for(int i=0; i<cfg->modCount; i++) {
-				free(cfg->mods[i].name);
+		if(meta->mods) {
+			for(int i=0; i<meta->modCount; i++) {
+				free(meta->mods[i].name);
 			}
-			free(cfg->mods);
+			free(meta->mods);
 		}
-		free(cfg);
+		free(meta);
 	}
 }
 
-static void flib_cfg_destroy(flib_cfg* cfg) {
-	if(cfg) {
-		flib_cfg_meta_release(cfg->meta);
-		free(cfg->mods);
-		free(cfg->settings);
-		free(cfg->name);
-		free(cfg);
+static void flib_scheme_destroy(flib_scheme* scheme) {
+	if(scheme) {
+		flib_metascheme_release(scheme->meta);
+		free(scheme->mods);
+		free(scheme->settings);
+		free(scheme->name);
+		free(scheme);
 	}
 }
 
-static flib_cfg_meta *flib_cfg_meta_from_ini_handleError(flib_cfg_meta *result, flib_ini *ini) {
-	flib_cfg_meta_destroy(result);
+static flib_metascheme *flib_metascheme_from_ini_handleError(flib_metascheme *result, flib_ini *ini) {
+	flib_metascheme_destroy(result);
 	flib_ini_destroy(ini);
 	return NULL;
 }
 
-static int readMetaSettingSections(flib_ini *ini, flib_cfg_meta *result, int limit) {
+static int readMetaSettingSections(flib_ini *ini, flib_metascheme *result, int limit) {
 	while(result->settingCount<limit) {
 		char sectionName[32];
 		if(snprintf(sectionName, sizeof(sectionName), "setting%i", result->settingCount) <= 0) {
 			return -1;
 		}
 		if(!flib_ini_enter_section(ini, sectionName)) {
-			flib_cfg_setting_meta *metasetting = &result->settings[result->settingCount];
+			flib_metascheme_setting *metasetting = &result->settings[result->settingCount];
 			result->settingCount++;
 
 			bool error = false;
@@ -93,14 +93,14 @@ static int readMetaSettingSections(flib_ini *ini, flib_cfg_meta *result, int lim
 	return 0;
 }
 
-static int readMetaModSections(flib_ini *ini, flib_cfg_meta *result, int limit) {
+static int readMetaModSections(flib_ini *ini, flib_metascheme *result, int limit) {
 	while(result->modCount<limit) {
 		char sectionName[32];
 		if(snprintf(sectionName, sizeof(sectionName), "mod%i", result->modCount) <= 0) {
 			return -1;
 		}
 		if(!flib_ini_enter_section(ini, sectionName)) {
-			flib_cfg_mod_meta *metamod = &result->mods[result->modCount];
+			flib_metascheme_mod *metamod = &result->mods[result->modCount];
 			result->modCount++;
 
 			bool error = false;
@@ -117,67 +117,67 @@ static int readMetaModSections(flib_ini *ini, flib_cfg_meta *result, int limit) 
 	return 0;
 }
 
-flib_cfg_meta *flib_cfg_meta_from_ini(const char *filename) {
+flib_metascheme *flib_metascheme_from_ini(const char *filename) {
 	if(log_badargs_if(filename==NULL)) {
 		return NULL;
 	}
-	flib_cfg_meta *result = flib_cfg_meta_retain(flib_calloc(1, sizeof(flib_cfg_meta)));
+	flib_metascheme *result = flib_metascheme_retain(flib_calloc(1, sizeof(flib_metascheme)));
 	flib_ini *ini = flib_ini_load(filename);
 
 	if(!result || !ini) {
-		return flib_cfg_meta_from_ini_handleError(result, ini);
+		return flib_metascheme_from_ini_handleError(result, ini);
 	}
 
 	// We're overallocating here for simplicity
 	int sectionCount = flib_ini_get_sectioncount(ini);
 	result->settingCount = 0;
 	result->modCount = 0;
-	result->settings = flib_calloc(sectionCount, sizeof(flib_cfg_setting_meta));
-	result->mods = flib_calloc(sectionCount, sizeof(flib_cfg_mod_meta));
+	result->settings = flib_calloc(sectionCount, sizeof(flib_metascheme_setting));
+	result->mods = flib_calloc(sectionCount, sizeof(flib_metascheme_mod));
 
 	if(!result->settings || !result->mods) {
-		return flib_cfg_meta_from_ini_handleError(result, ini);
+		return flib_metascheme_from_ini_handleError(result, ini);
 	}
 
 	if(readMetaSettingSections(ini, result, sectionCount) || readMetaModSections(ini, result, sectionCount)) {
-		return flib_cfg_meta_from_ini_handleError(result, ini);
+		return flib_metascheme_from_ini_handleError(result, ini);
 	}
 
 	if(result->settingCount+result->modCount != sectionCount) {
 		flib_log_e("Unknown or non-contiguous sections headers in metaconfig.");
-		return flib_cfg_meta_from_ini_handleError(result, ini);
+		return flib_metascheme_from_ini_handleError(result, ini);
 	}
 
 	flib_ini_destroy(ini);
 	return result;
 }
 
-flib_cfg_meta *flib_cfg_meta_retain(flib_cfg_meta *metainfo) {
+flib_metascheme *flib_metascheme_retain(flib_metascheme *metainfo) {
 	if(metainfo) {
-		flib_retain(&metainfo->_referenceCount, "flib_cfg_meta");
+		flib_retain(&metainfo->_referenceCount, "flib_metascheme");
 	}
 	return metainfo;
 }
 
-void flib_cfg_meta_release(flib_cfg_meta *cfg) {
-	if(cfg && flib_release(&cfg->_referenceCount, "flib_cfg_meta")) {
-		flib_cfg_meta_destroy(cfg);
+void flib_metascheme_release(flib_metascheme *meta) {
+	if(meta && flib_release(&meta->_referenceCount, "flib_metascheme")) {
+		flib_metascheme_destroy(meta);
 	}
 }
 
-flib_cfg *flib_cfg_create(flib_cfg_meta *meta, const char *schemeName) {
-	flib_cfg *result = flib_cfg_retain(flib_calloc(1, sizeof(flib_cfg)));
+flib_scheme *flib_scheme_create(flib_metascheme *meta, const char *schemeName) {
+	flib_scheme *result = flib_scheme_retain(flib_calloc(1, sizeof(flib_scheme)));
 	if(log_badargs_if2(meta==NULL, schemeName==NULL) || result==NULL) {
 		return NULL;
 	}
 
-	result->meta = flib_cfg_meta_retain(meta);
+	result->meta = flib_metascheme_retain(meta);
 	result->name = flib_strdupnull(schemeName);
 	result->mods = flib_calloc(meta->modCount, sizeof(*result->mods));
 	result->settings = flib_calloc(meta->settingCount, sizeof(*result->settings));
 
 	if(!result->mods || !result->settings || !result->name) {
-		flib_cfg_destroy(result);
+		flib_scheme_destroy(result);
 		return NULL;
 	}
 
@@ -187,36 +187,36 @@ flib_cfg *flib_cfg_create(flib_cfg_meta *meta, const char *schemeName) {
 	return result;
 }
 
-flib_cfg *flib_cfg_copy(const flib_cfg *cfg) {
-	flib_cfg *result = NULL;
-	if(cfg) {
-		result = flib_cfg_create(cfg->meta, cfg->name);
+flib_scheme *flib_scheme_copy(const flib_scheme *scheme) {
+	flib_scheme *result = NULL;
+	if(scheme) {
+		result = flib_scheme_create(scheme->meta, scheme->name);
 		if(result) {
-			memcpy(result->mods, cfg->mods, cfg->meta->modCount * sizeof(*cfg->mods));
-			memcpy(result->settings, cfg->settings, cfg->meta->settingCount * sizeof(*cfg->settings));
+			memcpy(result->mods, scheme->mods, scheme->meta->modCount * sizeof(*scheme->mods));
+			memcpy(result->settings, scheme->settings, scheme->meta->settingCount * sizeof(*scheme->settings));
 		}
 	}
 	return result;
 }
 
-flib_cfg *flib_cfg_retain(flib_cfg *cfg) {
-	if(cfg) {
-		flib_retain(&cfg->_referenceCount, "flib_cfg");
+flib_scheme *flib_scheme_retain(flib_scheme *scheme) {
+	if(scheme) {
+		flib_retain(&scheme->_referenceCount, "flib_scheme");
 	}
-	return cfg;
+	return scheme;
 }
 
-void flib_cfg_release(flib_cfg *cfg) {
-	if(cfg && flib_release(&cfg->_referenceCount, "flib_cfg")) {
-		flib_cfg_destroy(cfg);
+void flib_scheme_release(flib_scheme *scheme) {
+	if(scheme && flib_release(&scheme->_referenceCount, "flib_scheme")) {
+		flib_scheme_destroy(scheme);
 	}
 }
 
-bool flib_cfg_get_mod(flib_cfg *cfg, const char *name) {
-	if(!log_badargs_if2(cfg==NULL, name==NULL)) {
-		for(int i=0; i<cfg->meta->modCount; i++) {
-			if(!strcmp(cfg->meta->mods[i].name, name)) {
-				return cfg->mods[i];
+bool flib_scheme_get_mod(flib_scheme *scheme, const char *name) {
+	if(!log_badargs_if2(scheme==NULL, name==NULL)) {
+		for(int i=0; i<scheme->meta->modCount; i++) {
+			if(!strcmp(scheme->meta->mods[i].name, name)) {
+				return scheme->mods[i];
 			}
 		}
 		flib_log_e("Unable to find game mod %s", name);
@@ -224,11 +224,11 @@ bool flib_cfg_get_mod(flib_cfg *cfg, const char *name) {
 	return false;
 }
 
-int flib_cfg_get_setting(flib_cfg *cfg, const char *name, int def) {
-	if(!log_badargs_if2(cfg==NULL, name==NULL)) {
-		for(int i=0; i<cfg->meta->settingCount; i++) {
-			if(!strcmp(cfg->meta->settings[i].name, name)) {
-				return cfg->settings[i];
+int flib_scheme_get_setting(flib_scheme *scheme, const char *name, int def) {
+	if(!log_badargs_if2(scheme==NULL, name==NULL)) {
+		for(int i=0; i<scheme->meta->settingCount; i++) {
+			if(!strcmp(scheme->meta->settings[i].name, name)) {
+				return scheme->settings[i];
 			}
 		}
 		flib_log_e("Unable to find game setting %s", name);

@@ -33,7 +33,7 @@
 static void flib_schemelist_destroy(flib_schemelist *list) {
 	if(list) {
 		for(int i=0; i<list->schemeCount; i++) {
-			flib_cfg_release(list->schemes[i]);
+			flib_scheme_release(list->schemes[i]);
 		}
 		free(list->schemes);
 		free(list);
@@ -44,8 +44,8 @@ static char *makePrefixedName(int schemeIndex, const char *settingName) {
 	return flib_asprintf("%i\\%s", schemeIndex, settingName);
 }
 
-static int readSettingsFromIni(flib_ini *ini, flib_cfg *scheme, int index) {
-	flib_cfg_meta *meta = scheme->meta;
+static int readSettingsFromIni(flib_ini *ini, flib_scheme *scheme, int index) {
+	flib_metascheme *meta = scheme->meta;
 	bool error = false;
 	for(int i=0; i<meta->settingCount && !error; i++) {
 		char *key = makePrefixedName(index, meta->settings[i].name);
@@ -60,8 +60,8 @@ static int readSettingsFromIni(flib_ini *ini, flib_cfg *scheme, int index) {
 	return error;
 }
 
-static int readModsFromIni(flib_ini *ini, flib_cfg *scheme, int index) {
-	flib_cfg_meta *meta = scheme->meta;
+static int readModsFromIni(flib_ini *ini, flib_scheme *scheme, int index) {
+	flib_metascheme *meta = scheme->meta;
 	bool error = false;
 	for(int i=0; i<meta->modCount && !error; i++) {
 		char *key = makePrefixedName(index, meta->mods[i].name);
@@ -76,19 +76,19 @@ static int readModsFromIni(flib_ini *ini, flib_cfg *scheme, int index) {
 	return error;
 }
 
-static flib_cfg *readSchemeFromIni(flib_cfg_meta *meta, flib_ini *ini, int index) {
-	flib_cfg *result = NULL;
+static flib_scheme *readSchemeFromIni(flib_metascheme *meta, flib_ini *ini, int index) {
+	flib_scheme *result = NULL;
 	char *schemeNameKey = makePrefixedName(index+1, "name");
 	if(schemeNameKey) {
 		char *schemeName = NULL;
 		if(!flib_ini_get_str_opt(ini, &schemeName, schemeNameKey, "Unnamed")) {
-			flib_cfg *scheme = flib_cfg_create(meta, schemeName);
+			flib_scheme *scheme = flib_scheme_create(meta, schemeName);
 			if(scheme) {
 				if(!readSettingsFromIni(ini, scheme, index) && !readModsFromIni(ini, scheme, index)) {
-					result = flib_cfg_retain(scheme);
+					result = flib_scheme_retain(scheme);
 				}
 			}
-			flib_cfg_release(scheme);
+			flib_scheme_release(scheme);
 		}
 		free(schemeName);
 	}
@@ -102,7 +102,7 @@ static flib_schemelist *fromIniHandleError(flib_schemelist *result, flib_ini *in
 	return NULL;
 }
 
-flib_schemelist *flib_schemelist_from_ini(flib_cfg_meta *meta, const char *filename) {
+flib_schemelist *flib_schemelist_from_ini(flib_metascheme *meta, const char *filename) {
 	if(log_badargs_if2(meta==NULL, filename==NULL)) {
 		return NULL;
 	}
@@ -126,13 +126,13 @@ flib_schemelist *flib_schemelist_from_ini(flib_cfg_meta *meta, const char *filen
 	}
 
 	for(int i=0; i<schemeCount; i++) {
-		flib_cfg *scheme = readSchemeFromIni(meta, ini, i);
+		flib_scheme *scheme = readSchemeFromIni(meta, ini, i);
 		if(!scheme || flib_schemelist_insert(list, scheme, i)) {
-			flib_cfg_release(scheme);
+			flib_scheme_release(scheme);
 			flib_log_e("Error reading scheme %i from config file %s.", i, filename);
 			return fromIniHandleError(list, ini);
 		}
-		flib_cfg_release(scheme);
+		flib_scheme_release(scheme);
 	}
 
 
@@ -140,8 +140,8 @@ flib_schemelist *flib_schemelist_from_ini(flib_cfg_meta *meta, const char *filen
 	return list;
 }
 
-static int writeSchemeToIni(flib_cfg *scheme, flib_ini *ini, int index) {
-	flib_cfg_meta *meta = scheme->meta;
+static int writeSchemeToIni(flib_scheme *scheme, flib_ini *ini, int index) {
+	flib_metascheme *meta = scheme->meta;
 	bool error = false;
 
 	char *key = makePrefixedName(index+1, "name");
@@ -199,7 +199,7 @@ void flib_schemelist_release(flib_schemelist *list) {
 	}
 }
 
-flib_cfg *flib_schemelist_find(flib_schemelist *list, const char *name) {
+flib_scheme *flib_schemelist_find(flib_schemelist *list, const char *name) {
 	if(!log_badargs_if2(list==NULL, name==NULL)) {
 		for(int i=0; i<list->schemeCount; i++) {
 			if(!strcmp(name, list->schemes[i]->name)) {
@@ -210,13 +210,13 @@ flib_cfg *flib_schemelist_find(flib_schemelist *list, const char *name) {
 	return NULL;
 }
 
-GENERATE_STATIC_LIST_INSERT(insertScheme, flib_cfg*)
-GENERATE_STATIC_LIST_DELETE(deleteScheme, flib_cfg*)
+GENERATE_STATIC_LIST_INSERT(insertScheme, flib_scheme*)
+GENERATE_STATIC_LIST_DELETE(deleteScheme, flib_scheme*)
 
-int flib_schemelist_insert(flib_schemelist *list, flib_cfg *cfg, int pos) {
+int flib_schemelist_insert(flib_schemelist *list, flib_scheme *cfg, int pos) {
 	if(!log_badargs_if2(list==NULL, cfg==NULL)
 			&& !insertScheme(&list->schemes, &list->schemeCount, cfg, pos)) {
-		flib_cfg_retain(cfg);
+		flib_scheme_retain(cfg);
 		return 0;
 	}
 	return -1;
@@ -224,9 +224,9 @@ int flib_schemelist_insert(flib_schemelist *list, flib_cfg *cfg, int pos) {
 
 int flib_schemelist_delete(flib_schemelist *list, int pos) {
 	if(!log_badargs_if(list==NULL)) {
-		flib_cfg *elem = list->schemes[pos];
+		flib_scheme *elem = list->schemes[pos];
 		if(!deleteScheme(&list->schemes, &list->schemeCount, pos)) {
-			flib_cfg_release(elem);
+			flib_scheme_release(elem);
 			return 0;
 		}
 	}

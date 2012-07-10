@@ -116,6 +116,7 @@ void netconn_clearCallbacks(flib_netconn *conn) {
 	static void _noop_callback_##cbName cbParameterTypes {} \
 	GENERATE_CB_SETTER(cbName, cbParameterTypes, _noop_callback_##cbName)
 
+// TODO Disallow transfer of ownership?
 GENERATE_CB_SETTER(onMessage, (void *context, int msgtype, const char *msg), defaultCallback_onMessage);
 GENERATE_CB_SETTER_AND_DEFAULT(onConnected, (void *context));
 GENERATE_CB_SETTER_AND_DEFAULT(onDisconnected, (void *context, int reason, const char *message));
@@ -133,17 +134,17 @@ GENERATE_CB_SETTER_AND_DEFAULT(onRoomChiefStatus, (void *context, bool chief));
 GENERATE_CB_SETTER_AND_DEFAULT(onReadyState, (void *context, const char *nick, bool ready));
 GENERATE_CB_SETTER_AND_DEFAULT(onEnterRoom, (void *context, bool chief));
 GENERATE_CB_SETTER_AND_DEFAULT(onLeaveRoom, (void *context, int reason, const char *message));
-GENERATE_CB_SETTER_AND_DEFAULT(onTeamAdd, (void *context, flib_team *team));
+GENERATE_CB_SETTER_AND_DEFAULT(onTeamAdd, (void *context, const flib_team *team));
 GENERATE_CB_SETTER_AND_DEFAULT(onTeamDelete, (void *context, const char *teamname));
 GENERATE_CB_SETTER_AND_DEFAULT(onRunGame, (void *context));
 GENERATE_CB_SETTER_AND_DEFAULT(onTeamAccepted, (void *context, const char *teamName));
 GENERATE_CB_SETTER_AND_DEFAULT(onHogCountChanged, (void *context, const char *teamName, int hogs));
 GENERATE_CB_SETTER_AND_DEFAULT(onTeamColorChanged, (void *context, const char *teamName, int colorIndex));
 GENERATE_CB_SETTER_AND_DEFAULT(onEngineMessage, (void *context, const uint8_t *message, size_t size));
-GENERATE_CB_SETTER_AND_DEFAULT(onCfgScheme, (void *context, flib_cfg *scheme));
+GENERATE_CB_SETTER_AND_DEFAULT(onCfgScheme, (void *context, const flib_scheme *scheme));
 GENERATE_CB_SETTER_AND_DEFAULT(onMapChanged, (void *context, const flib_map *map, int changetype));
 GENERATE_CB_SETTER_AND_DEFAULT(onScriptChanged, (void *context, const char *script));
-GENERATE_CB_SETTER_AND_DEFAULT(onWeaponsetChanged, (void *context, flib_weaponset *weaponset));
+GENERATE_CB_SETTER_AND_DEFAULT(onWeaponsetChanged, (void *context, const flib_weaponset *weaponset));
 GENERATE_CB_SETTER_AND_DEFAULT(onAdminAccess, (void *context));
 GENERATE_CB_SETTER_AND_DEFAULT(onServerVar, (void *context, const char *name, const char *value));
 

@@ -33,7 +33,7 @@ flib_teamlist *flib_teamlist_create() {
 void flib_teamlist_destroy(flib_teamlist *list) {
 	if(list) {
 		for(int i=0; i<list->teamCount; i++) {
-			flib_team_release(list->teams[i]);
+			flib_team_destroy(list->teams[i]);
 		}
 		free(list->teams);
 		free(list);
@@ -55,7 +55,6 @@ static int findTeam(const flib_teamlist *list, const char *name) {
 int flib_teamlist_insert(flib_teamlist *list, flib_team *team, int pos) {
 	if(!log_badargs_if2(list==NULL, team==NULL)
 			&& !insertTeam(&list->teams, &list->teamCount, team, pos)) {
-		flib_team_retain(team);
 		return 0;
 	}
 	return -1;
@@ -68,7 +67,7 @@ int flib_teamlist_delete(flib_teamlist *list, const char *name) {
 		if(itemid>=0) {
 			flib_team *team = list->teams[itemid];
 			if(!deleteTeam(&list->teams, &list->teamCount, itemid)) {
-				flib_team_release(team);
+				flib_team_destroy(team);
 				result = 0;
 			}
 		}
@@ -90,7 +89,7 @@ flib_team *flib_teamlist_find(const flib_teamlist *list, const char *name) {
 void flib_teamlist_clear(flib_teamlist *list) {
 	if(!log_badargs_if(list==NULL)) {
 		for(int i=0; i<list->teamCount; i++) {
-			flib_team_release(list->teams[i]);
+			flib_team_destroy(list->teams[i]);
 		}
 		free(list->teams);
 		list->teams = NULL;
@@ -107,12 +106,10 @@ flib_teamlist *flib_teamlist_copy(flib_teamlist *list) {
 		bool error = false;
 		for(int i=0; !error && i<list->teamCount; i++) {
 			flib_team *teamcopy = flib_team_copy(list->teams[i]);
-			if(!teamcopy) {
+			if(!teamcopy || flib_teamlist_insert(result, teamcopy, i)) {
+				flib_team_destroy(teamcopy);
 				error = true;
-			} else {
-				error |= flib_teamlist_insert(result, teamcopy, i);
 			}
-			flib_team_release(teamcopy);
 		}
 		if(error) {
 			flib_teamlist_destroy(result);

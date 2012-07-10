@@ -105,7 +105,7 @@ flib_weaponset *flib_weaponset_copy(const flib_weaponset *weaponset) {
 	return result;
 }
 
-static void flib_weaponsetlist_destroy(flib_weaponsetlist *list) {
+void flib_weaponsetlist_destroy(flib_weaponsetlist *list) {
 	if(list) {
 		for(int i=0; i<list->weaponsetCount; i++) {
 			flib_weaponset_release(list->weaponsets[i]);
@@ -167,13 +167,12 @@ flib_weaponsetlist *flib_weaponsetlist_from_ini(const char *filename) {
 		} else if(flib_ini_enter_section(ini, "General")) {
 			flib_log_e("Missing section \"General\" in file %s.", filename);
 		} else {
-			flib_weaponsetlist *list = flib_weaponsetlist_create();
-			if(list) {
-				if(!fillWeaponsetsFromIni(list, ini)) {
-					result = flib_weaponsetlist_retain(list);
-				}
+			flib_weaponsetlist *tmpList = flib_weaponsetlist_create();
+			if(tmpList && !fillWeaponsetsFromIni(tmpList, ini)) {
+				result = tmpList;
+				tmpList = NULL;
 			}
-			flib_weaponsetlist_release(list);
+			flib_weaponsetlist_destroy(tmpList);
 		}
 		flib_ini_destroy(ini);
 	}
@@ -220,7 +219,7 @@ int flib_weaponsetlist_to_ini(const char *filename, const flib_weaponsetlist *li
 }
 
 flib_weaponsetlist *flib_weaponsetlist_create() {
-	return flib_weaponsetlist_retain(flib_calloc(1, sizeof(flib_weaponsetlist)));
+	return flib_calloc(1, sizeof(flib_weaponsetlist));
 }
 
 GENERATE_STATIC_LIST_INSERT(insertWeaponset, flib_weaponset*)
@@ -244,17 +243,4 @@ int flib_weaponsetlist_delete(flib_weaponsetlist *list, int pos) {
 		}
 	}
 	return -1;
-}
-
-flib_weaponsetlist *flib_weaponsetlist_retain(flib_weaponsetlist *list) {
-	if(list) {
-		flib_retain(&list->_referenceCount, "flib_weaponsetlist");
-	}
-	return list;
-}
-
-void flib_weaponsetlist_release(flib_weaponsetlist *list) {
-	if(list && flib_release(&list->_referenceCount, "flib_weaponsetlist")) {
-		flib_weaponsetlist_destroy(list);
-	}
 }

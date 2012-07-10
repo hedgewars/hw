@@ -62,7 +62,7 @@ static int fillTeamFromMsg(flib_team *team, char **parts) {
 
 flib_team *flib_team_from_netmsg(char **parts) {
 	flib_team *result = NULL;
-	flib_team *tmpTeam = flib_team_retain(flib_calloc(1, sizeof(flib_team)));
+	flib_team *tmpTeam = flib_calloc(1, sizeof(flib_team));
 	if(tmpTeam) {
 		if(!fillTeamFromMsg(tmpTeam, parts)) {
 			result = tmpTeam;
@@ -71,12 +71,12 @@ flib_team *flib_team_from_netmsg(char **parts) {
 			flib_log_e("Error parsing team from net.");
 		}
 	}
-	flib_team_release(tmpTeam);
+	flib_team_destroy(tmpTeam);
 	return result;
 }
 
-flib_cfg *flib_netmsg_to_cfg(flib_cfg_meta *meta, char **parts) {
-	flib_cfg *result = flib_cfg_create(meta, parts[0]);
+flib_scheme *flib_netmsg_to_cfg(flib_metascheme *meta, char **parts) {
+	flib_scheme *result = flib_scheme_create(meta, parts[0]);
 	if(result) {
 		for(int i=0; i<meta->modCount; i++) {
 			result->mods[i] = !strcmp(parts[i+1], "true");

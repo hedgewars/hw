@@ -21,12 +21,10 @@
  * Data structures for game scheme information.
  */
 
-#ifndef CFG_H_
-#define CFG_H_
+#ifndef SCHEME_H_
+#define SCHEME_H_
 
 #include <stdbool.h>
-
-// TODO: cfg/config -> scheme
 
 typedef struct {
     char *name;
@@ -36,12 +34,12 @@ typedef struct {
     int min;
     int max;
     int def;
-} flib_cfg_setting_meta;
+} flib_metascheme_setting;
 
 typedef struct {
     char *name;
     int bitmaskIndex;
-} flib_cfg_mod_meta;
+} flib_metascheme_mod;
 
 /**
  * The order of the meta information in the arrays is the same as the order
@@ -51,18 +49,18 @@ typedef struct {
 	int _referenceCount;
 	int settingCount;
 	int modCount;
-    flib_cfg_setting_meta *settings;
-    flib_cfg_mod_meta *mods;
-} flib_cfg_meta;
+	flib_metascheme_setting *settings;
+	flib_metascheme_mod *mods;
+} flib_metascheme;
 
 typedef struct {
 	int _referenceCount;
-    flib_cfg_meta *meta;
+	flib_metascheme *meta;
 
     char *name;
     int *settings;
     bool *mods;
-} flib_cfg;
+} flib_scheme;
 
 /**
  * Read the meta-configuration from a .ini file (e.g. which settings exist,
@@ -70,49 +68,49 @@ typedef struct {
  *
  * Returns the meta-configuration or NULL.
  */
-flib_cfg_meta *flib_cfg_meta_from_ini(const char *filename);
+flib_metascheme *flib_metascheme_from_ini(const char *filename);
 
 /**
  * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
  * Returns the parameter.
  */
-flib_cfg_meta *flib_cfg_meta_retain(flib_cfg_meta *metainfo);
+flib_metascheme *flib_metascheme_retain(flib_metascheme *metainfo);
 
 /**
  * Decrease the reference count of the object and free it if this was the last reference.
  */
-void flib_cfg_meta_release(flib_cfg_meta *metainfo);
+void flib_metascheme_release(flib_metascheme *metainfo);
 
 /**
  * Create a new configuration with everything set to default or false
  * Returns NULL on error.
  */
-flib_cfg *flib_cfg_create(flib_cfg_meta *meta, const char *schemeName);
+flib_scheme *flib_scheme_create(flib_metascheme *meta, const char *schemeName);
 
 /**
  * Create a copy of the scheme. Returns NULL on error or if NULL was passed.
  */
-flib_cfg *flib_cfg_copy(const flib_cfg *cfg);
+flib_scheme *flib_scheme_copy(const flib_scheme *scheme);
 
 /**
  * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
  * Returns the parameter.
  */
-flib_cfg *flib_cfg_retain(flib_cfg *cfg);
+flib_scheme *flib_scheme_retain(flib_scheme *scheme);
 
 /**
  * Decrease the reference count of the object and free it if this was the last reference.
  */
-void flib_cfg_release(flib_cfg* cfg);
+void flib_scheme_release(flib_scheme* scheme);
 
 /**
  * Retrieve a mod setting by its name. If the mod is not found, logs an error and returns false.
  */
-bool flib_cfg_get_mod(flib_cfg *cfg, const char *name);
+bool flib_scheme_get_mod(flib_scheme *scheme, const char *name);
 
 /**
  * Retrieve a game setting by its name. If the setting is not found, logs an error and returns def.
  */
-int flib_cfg_get_setting(flib_cfg *cfg, const char *name, int def);
+int flib_scheme_get_setting(flib_scheme *scheme, const char *name, int def);
 
-#endif /* CFG_H_ */
+#endif /* SCHEME_H_ */

@@ -21,7 +21,7 @@
 #define NETCONN_H_
 
 #include "../model/gamesetup.h"
-#include "../model/cfg.h"
+#include "../model/scheme.h"
 #include "../model/roomlist.h"
 
 #include <stddef.h>
@@ -63,7 +63,7 @@ typedef struct _flib_netconn flib_netconn;
  * Create a new netplay connection with these parameters.
  * The path to the data directory must end with a path delimiter (e.g. C:\Games\Hedgewars\Data\)
  */
-flib_netconn *flib_netconn_create(const char *playerName, flib_cfg_meta *metacfg, const char *dataDirPath, const char *host, uint16_t port);
+flib_netconn *flib_netconn_create(const char *playerName, flib_metascheme *metacfg, const char *dataDirPath, const char *host, int port);
 void flib_netconn_destroy(flib_netconn *conn);
 
 /**
@@ -252,7 +252,7 @@ int flib_netconn_send_script(flib_netconn *conn, const char *scriptName);
  * Set the scheme. Only makes sense in room state and if you are chief.
  * The server does not send a reply.
  */
-int flib_netconn_send_scheme(flib_netconn *conn, const flib_cfg *scheme);
+int flib_netconn_send_scheme(flib_netconn *conn, const flib_scheme *scheme);
 
 /**
  * Inform the server that the round has ended. Call this when the engine
@@ -425,7 +425,7 @@ void flib_netconn_onLeaveRoom(flib_netconn *conn, void (*callback)(void *context
  * A new team was added to the room. The person who adds a team does NOT receive this callback (he gets onTeamAccepted instead).
  * The team does not contain bindings, stats, weaponset, color or the number of hogs.
  */
-void flib_netconn_onTeamAdd(flib_netconn *conn, void (*callback)(void *context, flib_team *team), void *context);
+void flib_netconn_onTeamAdd(flib_netconn *conn, void (*callback)(void *context, const flib_team *team), void *context);
 
 /**
  * A team was removed from the room.
@@ -462,7 +462,7 @@ void flib_netconn_onTeamColorChanged(flib_netconn *conn, void (*callback)(void *
 
 void flib_netconn_onEngineMessage(flib_netconn *conn, void (*callback)(void *context, const uint8_t *message, size_t size), void *context);
 
-void flib_netconn_onCfgScheme(flib_netconn *conn, void (*callback)(void *context, flib_cfg *scheme), void *context);
+void flib_netconn_onCfgScheme(flib_netconn *conn, void (*callback)(void *context, const flib_scheme *scheme), void *context);
 
 /**
  * This is called when the map configuration in a room is changed (or first received). Only non-chiefs receive these messages.
@@ -486,7 +486,7 @@ void flib_netconn_onScriptChanged(flib_netconn *conn, void (*callback)(void *con
  * The weaponset has been changed by the room chief. If you are the chief and change the weaponset yourself,
  * you will not receive this callback!
  */
-void flib_netconn_onWeaponsetChanged(flib_netconn *conn, void (*callback)(void *context, flib_weaponset *weaponset), void *context);
+void flib_netconn_onWeaponsetChanged(flib_netconn *conn, void (*callback)(void *context, const flib_weaponset *weaponset), void *context);
 
 /**
  * This callback is called if the server informs us that we have admin rights.

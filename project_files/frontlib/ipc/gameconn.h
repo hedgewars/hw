@@ -81,7 +81,7 @@ void flib_gameconn_onChat(flib_gameconn *conn, void (*callback)(void* context, c
  * Called when the game ends
  * handleGameRecorded(void *context, const uint8_t *record, int size, bool isSavegame)
  */
-void flib_gameconn_onGameRecorded(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *record, int size, bool isSavegame), void* context);
+void flib_gameconn_onGameRecorded(flib_gameconn *conn, void (*callback)(void *context, const uint8_t *record, size_t size, bool isSavegame), void* context);
 
 /**
  * Called when the game ends

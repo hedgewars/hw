@@ -29,20 +29,13 @@
 #include "ipc/gameconn.h"
 #include "ipc/mapconn.h"
 #include "net/netconn.h"
-
-#define FRONTLIB_SDL_ALREADY_INITIALIZED 1
+#include "util/logging.h"
 
 /**
  * Call this function before anything else in this library.
- *
- * If the calling program uses SDL, it needs to call SDL_Init before initializing
- * this library and then pass FRONTLIB_SDL_ALREADY_INITIALIZED as flag to this function.
- *
- * Otherwise, pass 0 to let this library handle SDL_Init an SDL_Quit itself.
- *
  * Returns 0 on success, -1 on error.
  */
-int flib_init(int flags);
+int flib_init();
 
 /**
  * Free resources associated with the library. Call this function once

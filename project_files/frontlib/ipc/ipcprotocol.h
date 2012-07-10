@@ -23,7 +23,7 @@
 #include "../util/buffer.h"
 #include "../model/map.h"
 #include "../model/team.h"
-#include "../model/cfg.h"
+#include "../model/scheme.h"
 #include "../model/gamesetup.h"
 
 #include <stdbool.h>
@@ -71,7 +71,7 @@ int flib_ipc_append_script(flib_vector *vec, const char *script);
  * Returns nonzero if something goes wrong. In that case the buffer
  * contents are unaffected.
  */
-int flib_ipc_append_gamescheme(flib_vector *vec, const flib_cfg *cfg);
+int flib_ipc_append_gamescheme(flib_vector *vec, const flib_scheme *cfg);
 
 int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHogAmmo, bool noAmmoStore);
 
