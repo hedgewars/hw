@@ -291,7 +291,8 @@ begin
         CurrTime:= LoadNextCameraPosition();
         if CurrTime = -1 then
             break;
-        DoTimer(CurrTime - PrevTime);
+        if DoTimer(CurrTime - PrevTime) then
+            break;
         IPCCheckSock();
     end;
     StopVideoRecording();

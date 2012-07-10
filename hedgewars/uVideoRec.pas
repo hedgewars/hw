@@ -246,12 +246,7 @@ var thumbpath: shortstring;
 begin
     thumbpath:= '/VideoTemp/' + RecPrefix;
     AddFileLog('Saving thumbnail ' + thumbpath);
-    if cScreenWidth > cScreenHeight then
-        k:= cScreenWidth div 400  // here 400 is minimum size of thumbnail
-    else
-        k:= cScreenHeight div 400;
-    if k = 0 then
-        k:= 1;
+    k:= max(max(cScreenWidth, cScreenHeight) div 400, 1); // here 400 is minimum size of thumbnail
     MakeScreenshot(thumbpath, k);
     thumbnailSaved:= true;
 end;
@@ -264,7 +259,7 @@ begin
     AddFileLog('BeginPreRecording');
 
     thumbnailSaved:= false;
-    RecPrefix:= FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+    RecPrefix:= 'hw-' + FormatDateTime('YYYY-MM-DD_HH-mm-ss-z', Now());
 
     Mix_QuerySpec(@frequency, @format, @channels);
     AddFileLog('sound: frequency = ' + IntToStr(frequency) + ', format = ' + IntToStr(format) + ', channels = ' + IntToStr(channels));
