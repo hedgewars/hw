@@ -620,6 +620,11 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	    }
 		flib_netmsg_destroy(netmsg);
 	}
+
+	if(!exit && !conn->destroyRequested && !flib_netbase_connected(net)) {
+		conn->netconnState = NETCONN_STATE_DISCONNECTED;
+		conn->onDisconnectedCb(conn->onDisconnectedCtx, NETCONN_DISCONNECT_CONNLOST, "Connection lost");
+	}
 }
 
 void flib_netconn_tick(flib_netconn *conn) {
