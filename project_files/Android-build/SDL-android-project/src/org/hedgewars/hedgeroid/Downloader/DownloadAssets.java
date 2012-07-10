@@ -2,10 +2,7 @@ package org.hedgewars.hedgeroid.Downloader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.hedgewars.hedgeroid.MainActivity;
 import org.hedgewars.hedgeroid.R;
@@ -27,7 +24,7 @@ public class DownloadAssets extends AsyncTask<Object, Long, Long>{
 	
 	private static void copyFileOrDir(AssetManager assetManager, File target, String assetPath) throws IOException {
 		try {
-			copyFile(assetManager, target, assetPath);
+			Utils.writeStreamToFile(assetManager.open(assetPath), target);
 		} catch(FileNotFoundException e) {
 			/*
 			 * I can't find a better way to figure out whether an asset entry is
@@ -40,24 +37,6 @@ public class DownloadAssets extends AsyncTask<Object, Long, Long>{
 			for (String asset : assetManager.list(assetPath)) {
 				DownloadAssets.copyFileOrDir(assetManager, new File(target, asset), assetPath + "/" + asset);
 			}
-		}
-	}
-	
-	private static void copyFile(AssetManager assetManager, File target, String assetPath) throws IOException {
-		InputStream is = null;
-		OutputStream os = null;
-		byte[] buffer = new byte[8192];
-		try {
-			is = assetManager.open(assetPath);
-			os = new FileOutputStream(target);
-			int size;
-			while((size=is.read(buffer)) != -1) {
-				os.write(buffer, 0, size);
-			}
-			os.close(); // Important to close this non-quietly, in case of exceptions when flushing
-		} finally {
-			Utils.closeQuietly(is);
-			Utils.closeQuietly(os);
 		}
 	}
 	
