@@ -73,6 +73,8 @@ class PageVideos : public AbstractPage
         VideoItem* nameItem(int row);
         void play(int row);
         void updateDescription();
+        void clearTemp();
+        void clearThumbnail();
 
         // options group
         QComboBox *comboAVFormats;
@@ -88,7 +90,6 @@ class PageVideos : public AbstractPage
         QPushButton *btnPlay, *btnDelete;
         QLabel *labelDesc;
         QLabel *labelThumbnail;
-        QPixmap picThumbnail;
 
         // this flag is used to distinguish if cell was changed from code or by user
         // (in signal cellChanged)

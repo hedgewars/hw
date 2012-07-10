@@ -74,7 +74,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         break;
                         end;
-                gmtDemo: begin
+                gmtDemo, gmtRecord: begin
                         GameState:= gsExit;
                         exit
                         end;

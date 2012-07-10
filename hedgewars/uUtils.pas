@@ -421,7 +421,12 @@ var logfileBase: shortstring;
 begin
 {$IFDEF DEBUGFILE}
     if isGame then
-        logfileBase:= 'game'
+    begin
+        if GameType = gmtRecord then
+            logfileBase:= 'rec'
+        else
+            logfileBase:= 'game';
+    end
     else
         logfileBase:= 'preview';
 {$IFDEF USE_VIDEO_RECORDING}
