@@ -403,34 +403,41 @@ begin
             begin
             splash:= AddVisualGear(X, cWaterLine, vgtSplash);
             if splash <> nil then 
+                with splash^ do
                 begin
-                splash^.Scale:= hwFloat2Float(Gear^.Density / _3 * Gear^.dY);
-                if splash^.Scale > 1 then splash^.Scale:= power(splash^.Scale,0.3333)
-                else splash^.Scale:= splash^.Scale + ((1-splash^.Scale) / 2);
+                Scale:= hwFloat2Float(Gear^.Density / _3 * Gear^.dY);
+                if Scale > 1 then Scale:= power(Scale,0.3333)
+                else Scale:= Scale + ((1-Scale) / 2);
+                if Scale > 1 then Timer:= round(max(Scale,3))
+                else Timer:= 1;
+                // Low Gravity
+                Timer:=round(0.0005/cGravityf);
+                FrameTicks:= FrameTicks*Timer;
                 end;
 
             maxDrops := (hwRound(Gear^.Density) * 3) div 2 + round(vdX * hwRound(Gear^.Density) * 6) + round(vdY * hwRound(Gear^.Density) * 6);
             for i:= max(maxDrops div 3, min(32, Random(maxDrops))) downto 0 do
                 begin
-                particle := AddVisualGear(X - 3 + Random(6), cWaterLine, vgtDroplet);
+                particle := AddVisualGear(X - 3 + Random(7), cWaterLine, vgtDroplet);
                 if particle <> nil then
-                    begin
-                    particle^.dX := particle^.dX - vdX / 10;
-                    particle^.dY := particle^.dY - vdY / 5;
-                    if splash <> nil then
+                    with particle^ do
                         begin
-                        if splash^.Scale > 1 then 
+                        dX := dX - vdX / 10;
+                        dY := dY - vdY / 5;
+                        if splash <> nil then
                             begin
-                            particle^.dX:= particle^.dX * power(splash^.Scale,0.3333); // tone down the droplet height further
-                            particle^.dY:= particle^.dY * power(splash^.Scale, 0.3333)
-                            end
-                        else 
-                            begin
-                            particle^.dX:= particle^.dX * splash^.Scale;
-                            particle^.dY:= particle^.dY * splash^.Scale
+                            if splash^.Scale > 1 then 
+                                begin
+                                dX:= dX * power(splash^.Scale,0.3333); // tone down the droplet height further
+                                dY:= dY * power(splash^.Scale, 0.3333)
+                                end
+                            else 
+                                begin
+                                dX:= dX * splash^.Scale;
+                                dY:= dY * splash^.Scale
+                                end
                             end
                         end
-                    end
                 end
             end;
         if isSubmersible and (CurAmmoGear^.Pos = 0) then
