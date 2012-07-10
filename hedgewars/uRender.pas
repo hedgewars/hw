@@ -25,7 +25,6 @@ interface
 uses SDLh, uTypes, GLunit, uConsts, uTextures, math;
 
 procedure DrawSprite            (Sprite: TSprite; X, Y, Frame: LongInt);
-procedure DrawSprite            (Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
 procedure DrawSpriteClipped     (Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 procedure DrawSpriteRotated     (Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
@@ -134,39 +133,48 @@ DrawTextureFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
 end;
 
 procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-var rr: TSDL_Rect;
+var 
+    rr: TSDL_Rect;
     VertexBuffer, TextureBuffer: TVertexRect;
+    _l, _r, _t, _b: GLfloat;
 begin
-if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then
-    exit;
+    if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then
+        exit;
 
-// do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
-    exit;
-if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
-    exit;
+    // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+    if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
+        exit;
+    if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
+        exit;
 
-rr.x:= X;
-rr.y:= Y;
-rr.w:= W;
-rr.h:= H;
+    rr.x:= X;
+    rr.y:= Y;
+    rr.w:= W;
+    rr.h:= H;
 
-glBindTexture(GL_TEXTURE_2D, SourceTexture^.atlas^.id);
+    glBindTexture(GL_TEXTURE_2D, SourceTexture^.atlas^.id);
 
-ComputeTexcoords(SourceTexture, r, @TextureBuffer);
+    ComputeTexcoords(SourceTexture, r, @TextureBuffer);
 
-VertexBuffer[0].X:= X;
-VertexBuffer[0].Y:= Y;
-VertexBuffer[1].X:= rr.w + X;
-VertexBuffer[1].Y:= Y;
-VertexBuffer[2].X:= rr.w + X;
-VertexBuffer[2].Y:= rr.h + Y;
-VertexBuffer[3].X:= X;
-VertexBuffer[3].Y:= rr.h + Y;
+    _l:= X + SourceTexture^.cropInfo.l;
+    _r:= X + rr.w - SourceTexture^.cropInfo.l - SourceTexture^.cropInfo.r;
+    _t:= Y + SourceTexture^.cropInfo.t;
+    _b:= Y + rr.h - SourceTexture^.cropInfo.t - SourceTexture^.cropInfo.b;
 
-SetVertexPointer(@VertexBuffer[0]);
-SetTexCoordPointer(@TextureBuffer[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    VertexBuffer[0].X:= _l;
+    VertexBuffer[0].Y:= _t;
+    VertexBuffer[1].X:= _r;
+    VertexBuffer[1].Y:= _t;
+    VertexBuffer[2].X:= _r;
+    VertexBuffer[2].Y:= _b;
+    VertexBuffer[3].X:= _l;
+    VertexBuffer[3].Y:= _b;
+
+    SetVertexPointer(@VertexBuffer[0]);
+    //SetTexCoordPointer(@TextureBuffer[0]);
+    SetTexCoordPointer(@SourceTexture^.tb[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture); inline;
@@ -198,7 +206,18 @@ procedure DrawTextureRotatedF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloa
 var hw, nx, ny: LongInt;
     r: TSDL_Rect;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
+    _l, _r, _t, _b: GLfloat;
 begin
+
+    while (Frame > 0) and (Texture <> nil) do
+    begin
+        Texture:= Texture^.nextFrame;
+        dec(Frame);
+    end;
+
+    if Texture = nil then
+        exit;
+
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
     exit;
@@ -218,28 +237,31 @@ UpdateModelview;
 
 hw:= w div (2 div Dir);
 
-nx:= round(Texture^.w / w); // number of horizontal frames
-ny:= round(Texture^.h / h); // number of vertical frames
-
-r.y:=(Frame mod ny) * h;
-r.x:=(Frame div ny) * w;
+r.y:=0;
+r.x:=0;
 r.w:=w;
 r.h:=h;
 ComputeTexcoords(Texture, @r, @TextureBuffer);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.atlas^.id);
 
-VertexBuffer[0].X:= -hw;
-VertexBuffer[0].Y:= w / -2;
-VertexBuffer[1].X:= hw;
-VertexBuffer[1].Y:= w / -2;
-VertexBuffer[2].X:= hw;
-VertexBuffer[2].Y:= w / 2;
-VertexBuffer[3].X:= -hw;
-VertexBuffer[3].Y:= w / 2;
+_l:= -hw + Texture^.cropInfo.l;
+_t:= w/-2 + Texture^.cropInfo.t;
+_r:= hw - Texture^.cropInfo.l - Texture^.cropInfo.r;
+_b:= w/2 - Texture^.cropInfo.t - Texture^.cropInfo.b;
+
+VertexBuffer[0].X:= _l;
+VertexBuffer[0].Y:= _t;
+VertexBuffer[1].X:= _r;
+VertexBuffer[1].Y:= _t;
+VertexBuffer[2].X:= _r;
+VertexBuffer[2].Y:= _b;
+VertexBuffer[3].X:= _l;
+VertexBuffer[3].Y:= _b;
 
 SetVertexPointer(@VertexBuffer[0]);
-SetTexCoordPointer(@TextureBuffer[0]);
+//SetTexCoordPointer(@TextureBuffer[0]);
+SetTexCoordPointer(@Texture^.tb[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 ResetModelview;
@@ -271,6 +293,7 @@ end;
 
 procedure DrawTextureRotated(Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 var VertexBuffer: array [0..3] of TVertex2f;
+    _l, _r, _t, _b: GLfloat;
 begin
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(X) > 2 * hw) and ((abs(X) - hw) > cScreenWidth / cScaleFactor) then
@@ -291,14 +314,19 @@ UpdateModelview;
 
 glBindTexture(GL_TEXTURE_2D, Texture^.atlas^.id);
 
-VertexBuffer[0].X:= -hw;
-VertexBuffer[0].Y:= -hh;
-VertexBuffer[1].X:= hw;
-VertexBuffer[1].Y:= -hh;
-VertexBuffer[2].X:= hw;
-VertexBuffer[2].Y:= hh;
-VertexBuffer[3].X:= -hw;
-VertexBuffer[3].Y:= hh;
+_l:= -hw + Texture^.cropInfo.l;
+_t:= -hh + Texture^.cropInfo.t;
+_r:= hw - Texture^.cropInfo.l - Texture^.cropInfo.r;
+_b:= hh - Texture^.cropInfo.t - Texture^.cropInfo.b;
+
+VertexBuffer[0].X:= _l;
+VertexBuffer[0].Y:= _t;
+VertexBuffer[1].X:= _r;
+VertexBuffer[1].Y:= _t;
+VertexBuffer[2].X:= _r;
+VertexBuffer[2].Y:= _b;
+VertexBuffer[3].X:= _l;
+VertexBuffer[3].Y:= _b;
 
 SetVertexPointer(@VertexBuffer[0]);
 SetTexCoordPointer(@Texture^.tb);
@@ -308,24 +336,29 @@ ResetModelview;
 end;
 
 procedure DrawSprite(Sprite: TSprite; X, Y, Frame: LongInt);
-var row, col, numFramesFirstCol: LongInt;
+var 
+    r: TSDL_Rect;
+    tex: PTexture;
 begin
     if SpritesData[Sprite].imageHeight = 0 then
         exit;
-    numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
-    row:= Frame mod numFramesFirstCol;
-    col:= Frame div numFramesFirstCol;
-    DrawSprite(Sprite, X, Y, col, row);
-end;
 
-procedure DrawSprite(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
-var r: TSDL_Rect;
-begin
-    r.x:= FrameX * SpritesData[Sprite].Width;
+    tex:= SpritesData[Sprite].Texture;
+
+    while (Frame > 0) and (tex <> nil) do
+    begin
+        tex:= tex^.nextFrame;
+        dec(Frame);
+    end;
+
+    if (tex = nil) or (tex^.w = 0) or (tex^.h = 0) then
+        exit;
+
+    r.x:= 0;
     r.w:= SpritesData[Sprite].Width;
-    r.y:= FrameY * SpritesData[Sprite].Height;
+    r.y:= 0;
     r.h:= SpritesData[Sprite].Height;
-    DrawTextureFromRect(X, Y, @r, SpritesData[Sprite].Texture)
+    DrawTextureFromRect(X, Y, @r, tex)
 end;
 
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);

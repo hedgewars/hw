@@ -31,7 +31,7 @@ program hwengine;
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
-     SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
+     SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted, uTextures
      {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF};
 
 {$IFDEF HWLIBRARY}
@@ -412,6 +412,7 @@ begin
         //uLandGraphics does not need initialization
         //uLandObjects does not need initialization
         //uLandTemplates does not need initialization
+        uTextures.initModule;
         uLandTexture.initModule;
         //uLocale does not need initialization
         uRandom.initModule;
@@ -461,6 +462,7 @@ begin
     uIO.freeModule;
     uLand.freeModule;
     uLandPainted.freeModule;
+    uTextures.freeModule;
 
     uCommandHandlers.freeModule;
     uCommands.freeModule;
