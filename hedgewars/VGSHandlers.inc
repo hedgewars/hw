@@ -27,6 +27,7 @@
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
+    moved: boolean;
 begin
 if vobCount = 0 then exit;
 
@@ -84,21 +85,37 @@ with Gear^ do
         end
     else
         begin
+        moved:= false;
         if round(X) < cLeftScreenBorder then
-            X:= X + cScreenSpace
+            begin
+            X:= X + cScreenSpace;
+            moved:= true
+            end
         else
             if round(X) > cRightScreenBorder then
+                begin
                 X:= X - cScreenSpace;
+                moved:= true
+                end;
             // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
         if (Gear^.Layer = 2) and (round(Y) - 225 > LAND_HEIGHT) then
             begin
             X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y - (1024 + 250 + random(50)) // TODO - configure in theme (jellies for example could use limited range)
+            Y:= Y - (1024 + 250 + random(50)); // TODO - configure in theme (jellies for example could use limited range)
+            moved:= true
             end
         else if (Gear^.Layer <> 2) and (round(Y) + 50 > LAND_HEIGHT) then
             begin
             X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y - (1024 + random(25))
+            Y:= Y - (1024 + random(25));
+            moved:= true
+            end;
+        if moved then
+            begin
+            Angle:= random(360);
+            dx:= 0.0000038654705 * random(10000);
+            dy:= 0.000003506096 * random(7000);
+            if random(2) = 0 then dx := -dx
             end;
         Timer:= 0;
         tdX:= 0;

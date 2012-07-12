@@ -54,6 +54,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure FillTargets;
+procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
 procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
 
@@ -78,6 +79,11 @@ var ThinkingHH: PGear;
     bonuses: record
         Count: Longword;
         ar: array[0..Pred(MAXBONUS)] of TBonus;
+        end;
+
+    walkbonuses: record
+        Count: Longword;
+        ar: array[0..Pred(MAXBONUS div 4)] of TBonus;  // don't use too many
         end;
 
 implementation
@@ -140,9 +146,22 @@ if(bonuses.Count < MAXBONUS) then
     end;
 end;
 
+procedure AddWalkBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
+begin
+if(walkbonuses.Count < MAXBONUS div 4) then
+    begin
+    walkbonuses.ar[walkbonuses.Count].x:= x;
+    walkbonuses.ar[walkbonuses.Count].y:= y;
+    walkbonuses.ar[walkbonuses.Count].Radius:= r;
+    walkbonuses.ar[walkbonuses.Count].Score:= s;
+    inc(walkbonuses.Count);
+    end;
+end;
+
 procedure FillBonuses(isAfterAttack: boolean);
 var Gear: PGear;
     MyClan: PClan;
+    i: Longint;
 begin
 bonuses.Count:= 0;
 MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
@@ -190,6 +209,11 @@ while Gear <> nil do
 if isAfterAttack and (KnownExplosion.Radius > 0) then
     with KnownExplosion do
         AddBonus(X, Y, Radius + 10, -Radius);
+if isAfterAttack then
+    for i:= 0 to Pred(walkbonuses.Count) do
+        with walkbonuses.ar[i] do
+            AddBonus(X, Y, Radius, Score);
+walkbonuses.Count:= 0
 end;
 
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
@@ -642,7 +666,7 @@ until false
 end;
 
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-var pX, pY: LongInt;
+var pX, pY, tY: LongInt;
 begin
 HHGo:= false;
 AltGear^:= Gear^;
@@ -650,12 +674,16 @@ AltGear^:= Gear^;
 GoInfo.Ticks:= 0;
 GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
-
+tY:= hwRound(Gear^.Y);
 repeat
     pX:= hwRound(Gear^.X);
     pY:= hwRound(Gear^.Y);
     if pY + cHHRadius >= cWaterLine then
-        exit(false);
+        begin
+        if AltGear^.Hedgehog^.BotLevel < 4 then
+            AddWalkBonus(pX, tY, 250, -40);
+        exit(false)
+        end;
         
     // hog is falling    
     if (Gear^.State and gstMoving) <> 0 then
@@ -667,6 +695,8 @@ repeat
             Goinfo.FallPix:= 0;
             // try ljump instead of fall with damage
             HHJump(AltGear, jmpLJump, GoInfo); 
+            if AltGear^.Hedgehog^.BotLevel < 4 then
+                AddWalkBonus(pX, tY, 175, -20);
             exit(false)
             end;
         Gear^.Y:= Gear^.Y + Gear^.dY;

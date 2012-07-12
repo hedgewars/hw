@@ -336,7 +336,9 @@ itHedgehog:= currHedgehogIndex;
 switchesNum:= 0;
 
 switchImmediatelyAvailable:= (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtSwitcher);
-switchCount:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch);
+if PGear(Me)^.Hedgehog^.BotLevel <> 5 then
+    switchCount:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch)
+else switchCount:= 0;
 
 if (PGear(Me)^.State and gstAttacked) = 0 then
     if Targets.Count > 0 then
@@ -390,6 +392,11 @@ else
     BackMe:= PGear(Me)^;
     while (not StopThinking) and (BestActions.Count = 0) do
         begin
+(*
+        // Maybe this would get a bit of movement out of them? Hopefully not *toward* water. Need to check how often he'd choose that strategy
+        if SuddenDeathDmg and ((hwRound(BackMe.Y)+cWaterRise*2) > cWaterLine) then
+            AddBonus(hwRound(BackMe.X), hwRound(BackMe.Y), 250, -40);
+*)
         FillBonuses(true);
         WalkMe:= BackMe;
         Actions.Count:= 0;
