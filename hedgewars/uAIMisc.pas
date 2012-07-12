@@ -197,7 +197,9 @@ while Gear <> nil do
                 if Gear^.Damage >= Gear^.Health then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
                 else
-                    if isAfterAttack and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog) then
+                    if isAfterAttack
+                      and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog)
+                      and ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_1) then
                         if (ClansCount > 2) or (MyClan = Gear^.Hedgehog^.Team^.Clan) then
                             AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
                         else
