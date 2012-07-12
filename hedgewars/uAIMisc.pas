@@ -83,7 +83,7 @@ var ThinkingHH: PGear;
 
     walkbonuses: record
         Count: Longword;
-        ar: array[0..Pred(MAXBONUS div 4)] of TBonus;  // don't use too many
+        ar: array[0..Pred(MAXBONUS div 8)] of TBonus;  // don't use too many
         end;
 
 implementation
@@ -148,7 +148,7 @@ end;
 
 procedure AddWalkBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
 begin
-if(walkbonuses.Count < MAXBONUS div 4) then
+if(walkbonuses.Count < MAXBONUS div 8) then
     begin
     walkbonuses.ar[walkbonuses.Count].x:= x;
     walkbonuses.ar[walkbonuses.Count].y:= y;
@@ -210,10 +210,12 @@ if isAfterAttack and (KnownExplosion.Radius > 0) then
     with KnownExplosion do
         AddBonus(X, Y, Radius + 10, -Radius);
 if isAfterAttack then
+    begin
     for i:= 0 to Pred(walkbonuses.Count) do
         with walkbonuses.ar[i] do
             AddBonus(X, Y, Radius, Score);
-walkbonuses.Count:= 0
+    walkbonuses.Count:= 0
+    end;
 end;
 
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
