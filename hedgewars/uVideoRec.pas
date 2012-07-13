@@ -39,7 +39,7 @@ interface
 var flagPrerecording: boolean = false;
 
 function BeginVideoRecording: Boolean;
-function LoadNextCameraPosition: LongInt;
+function LoadNextCameraPosition(var newRealTicks, newGameTicks: LongInt): Boolean;
 procedure EncodeFrame;
 procedure StopVideoRecording;
 
@@ -88,7 +88,7 @@ var YCbCr_Planes: array[0..2] of PByte;
     audioFile: File;
     numPixels: LongWord;
     startTime, numFrames, curTime, progress, maxProgress: LongWord;
-    cameraFilePath, soundFilePath: shortstring;
+    soundFilePath: shortstring;
     thumbnailSaved : Boolean;
 
 function BeginVideoRecording: Boolean;
@@ -98,13 +98,13 @@ begin
 
 {$IOCHECKS OFF}
     // open file with prerecorded camera positions
-    cameraFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtin';
-    Assign(cameraFile, cameraFilePath);
+    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.txtin';
+    Assign(cameraFile, filename);
     Reset(cameraFile);
     maxProgress:= FileSize(cameraFile);
     if IOResult <> 0 then
     begin
-        AddFileLog('Error: Could not read from ' + cameraFilePath);
+        AddFileLog('Error: Could not read from ' + filename);
         exit(false);
     end;
 {$IOCHECKS ON}
@@ -163,7 +163,7 @@ begin
     FreeMem(RGB_Buffer, 4*numPixels);
     Close(cameraFile);
     AVWrapper_Close();
-    DeleteFile(cameraFilePath);
+    Erase(cameraFile);
     DeleteFile(soundFilePath);
     SendIPC(_S'v'); // inform frontend that we finished
 end;
@@ -207,17 +207,15 @@ begin
     inc(numFrames);
 end;
 
-// returns new game ticks
-function LoadNextCameraPosition: LongInt;
+function LoadNextCameraPosition(var newRealTicks, newGameTicks: LongInt): Boolean;
 var frame: TFrame;
 begin
-    LoadNextCameraPosition:= GameTicks;
     // we need to skip or duplicate frames to match target framerate
     while Int64(curTime)*cVideoFramerateNum <= Int64(numFrames)*cVideoFramerateDen*1000 do
     begin
     {$IOCHECKS OFF}
         if eof(cameraFile) then
-            exit(-1);
+            exit(false);
         BlockRead(cameraFile, frame, 1);
     {$IOCHECKS ON}
         curTime:= frame.realTicks;
@@ -226,8 +224,10 @@ begin
         zoom:= frame.zoom*cScreenWidth;
         ZoomValue:= zoom;
         inc(progress);
-        LoadNextCameraPosition:= frame.gameTicks;
+        newRealTicks:= frame.realTicks;
+        newGameTicks:= frame.gameTicks;
     end;
+    LoadNextCameraPosition:= true;
 end;
 
 // Callback which records sound.
@@ -251,6 +251,38 @@ begin
     thumbnailSaved:= true;
 end;
 
+// copy file (free pascal doesn't have copy file function)
+procedure CopyFile(src, dest: shortstring);
+var inF, outF: file;
+    buffer: array[0..1023] of byte;
+    result: LongInt;
+begin
+{$IOCHECKS OFF}
+    result:= 0; // avoid compiler hint
+
+    Assign(inF, src);
+    Reset(inF, 1);
+    if IOResult <> 0 then
+    begin
+        AddFileLog('Error: Could not read from ' + src);
+        exit;
+    end;
+
+    Assign(outF, dest);
+    Rewrite(outF, 1);
+    if IOResult <> 0 then
+    begin
+        AddFileLog('Error: Could not write to ' + dest);
+        exit;
+    end;
+
+    repeat
+        BlockRead(inF, buffer, 1024, result);
+        BlockWrite(outF, buffer, result);
+    until result < 1024;
+{$IOCHECKS ON}
+end;
+
 procedure BeginPreRecording;
 var format: word;
     filename: shortstring;
@@ -260,6 +292,15 @@ begin
 
     thumbnailSaved:= false;
     RecPrefix:= 'hw-' + FormatDateTime('YYYY-MM-DD_HH-mm-ss-z', Now());
+
+    // If this video is recorded from demo executed directly (without frontend)
+    // then we need to copy demo so that frontend will be able to find it later.
+    if recordFileName <> '' then
+    begin
+        if GameType <> gmtDemo then // this is save and game demo is not recording, abort
+            exit;
+        CopyFile(recordFileName, UserPathPrefix + '/VideoTemp/' + RecPrefix + '.hwd');
+    end;
 
     Mix_QuerySpec(@frequency, @format, @channels);
     AddFileLog('sound: frequency = ' + IntToStr(frequency) + ', format = ' + IntToStr(format) + ', channels = ' + IntToStr(channels));

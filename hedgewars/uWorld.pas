@@ -1392,7 +1392,7 @@ if smallScreenOffset <> 0 then
     end;
 
 // Lag alert
-if isInLag and (GameType <> gmtRecord) then
+if isInLag then
     DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
 
 // Wind bar

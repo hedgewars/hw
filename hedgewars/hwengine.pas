@@ -82,15 +82,15 @@ begin
             end;
         gsConfirm, gsGame:
             begin
+            DrawWorld(Lag);
             DoGameTick(Lag);
             ProcessVisualGears(Lag);
-            DrawWorld(Lag);
             end;
         gsChat:
             begin
+            DrawWorld(Lag);
             DoGameTick(Lag);
             ProcessVisualGears(Lag);
-            DrawWorld(Lag);
             end;
         gsExit:
             begin
@@ -273,27 +273,32 @@ end;
 
 {$IFDEF USE_VIDEO_RECORDING}
 procedure RecorderMainLoop;
-var CurrTime, PrevTime: LongInt;
+var oldGameTicks, oldRealTicks, newGameTicks, newRealTicks: LongInt;
 begin
     if not BeginVideoRecording() then
         exit;
     DoTimer(0); // gsLandGen -> gsStart
     DoTimer(0); // gsStart -> gsGame
 
-    CurrTime:= LoadNextCameraPosition();
+    if not LoadNextCameraPosition(newRealTicks, newGameTicks) then
+        exit;
     fastScrolling:= true;
-    DoTimer(CurrTime);
+    DoGameTick(newGameTicks);
     fastScrolling:= false;
-    while true do
+    oldRealTicks:= 0;
+    oldGameTicks:= newGameTicks;
+
+    while LoadNextCameraPosition(newRealTicks, newGameTicks) do
     begin
-        EncodeFrame();
-        PrevTime:= CurrTime;
-        CurrTime:= LoadNextCameraPosition();
-        if CurrTime = -1 then
-            break;
-        if DoTimer(CurrTime - PrevTime) then
-            break;
         IPCCheckSock();
+        DoGameTick(newGameTicks - oldGameTicks);
+        if GameState = gsExit then
+            break;
+        ProcessVisualGears(newRealTicks - oldRealTicks);
+        DrawWorld(newRealTicks - oldRealTicks);
+        EncodeFrame();
+        oldRealTicks:= newRealTicks;
+        oldGameTicks:= newGameTicks;
     end;
     StopVideoRecording();
 end;
