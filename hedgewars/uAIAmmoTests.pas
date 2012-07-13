@@ -599,6 +599,7 @@ var Vx, Vy, x, y, t, dmgMod: real;
     d: Longword;
     fallDmg, valueResult: LongInt;
 begin
+if Me^.Hedgehog^.BotLevel > 3 then exit(BadTurn);
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
@@ -648,6 +649,7 @@ var Vx, Vy, x, y, t, dmg, dmgMod: real;
     d: Longword;
     fallDmg, valueResult: LongInt;
 begin
+if Me^.Hedgehog^.BotLevel > 3 then exit(BadTurn);
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
