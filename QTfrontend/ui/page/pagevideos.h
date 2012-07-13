@@ -41,7 +41,6 @@ class PageVideos : public AbstractPage
         QCheckBox *checkUseGameRes;
         QCheckBox *checkRecordAudio;
 
-        GameUIConfig * config;
 
         QString format()
         { return comboAVFormats->itemData(comboAVFormats->currentIndex()).toString(); }
@@ -57,6 +56,8 @@ class PageVideos : public AbstractPage
         void addRecorder(HWRecorder* pRecorder);
         bool tryQuit(HWForm *form);
         QString getVideosInProgress(); // get multi-line string with list of videos in progress
+        void startEncoding(const QByteArray & record = QByteArray());
+        void init(GameUIConfig * config);
 
     private:
         // virtuals from AbstractPage
@@ -75,6 +76,8 @@ class PageVideos : public AbstractPage
         void updateDescription();
         void clearTemp();
         void clearThumbnail();
+
+        GameUIConfig * config;
 
         // options group
         QComboBox *comboAVFormats;

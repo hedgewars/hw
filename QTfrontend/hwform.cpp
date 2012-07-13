@@ -142,7 +142,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 
-    ui.pageVideos->config = config;
+    ui.pageVideos->init(config);
 
 #ifdef __APPLE__
     panel = new M3Panel;
@@ -1428,18 +1428,7 @@ void HWForm::GetRecord(RecordType type, const QByteArray & record)
         }
     }
 
-    // encode videos
-    QDir videosDir(cfgdir->absolutePath() + "/VideoTemp/");
-    QStringList files = videosDir.entryList(QStringList("*.txtout"), QDir::Files);
-    foreach (const QString & str, files)
-    {
-        QString prefix = str;
-        prefix.chop(7); // remove ".txtout"
-        videosDir.rename(prefix + ".txtout", prefix + ".txtin"); // rename this file to not open it twice
-        HWRecorder* pRecorder = new HWRecorder(config, prefix);
-        ui.pageVideos->addRecorder(pRecorder);
-        pRecorder->EncodeVideo(record);
-    }
+    ui.pageVideos->startEncoding(record);
 }
 
 void HWForm::startTraining(const QString & scriptName)

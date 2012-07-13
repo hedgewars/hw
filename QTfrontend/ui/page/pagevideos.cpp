@@ -301,13 +301,7 @@ void PageVideos::connectSignals()
     connect(btnPlay,   SIGNAL(clicked()), this, SLOT(playSelectedFile()));
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(deleteSelectedFiles()));
     connect(btnOpenDir, SIGNAL(clicked()), this, SLOT(openVideosDirectory()));
-
-    QString path = cfgdir->absolutePath() + "/Videos";
-    QFileSystemWatcher * pWatcher = new QFileSystemWatcher(this);
-    pWatcher->addPath(path);
-    connect(pWatcher, SIGNAL(directoryChanged(const QString &)), this, SLOT(updateFileList(const QString &)));
-    updateFileList(path);
-}
+ }
 
 PageVideos::PageVideos(QWidget* parent) : AbstractPage(parent),
     config(0)
@@ -315,6 +309,19 @@ PageVideos::PageVideos(QWidget* parent) : AbstractPage(parent),
     nameChangedFromCode = false;
     numRecorders = 0;
     initPage();
+}
+
+void PageVideos::init(GameUIConfig * config)
+{
+    this->config = config;
+
+    QString path = cfgdir->absolutePath() + "/Videos";
+    QFileSystemWatcher * pWatcher = new QFileSystemWatcher(this);
+    pWatcher->addPath(path);
+    connect(pWatcher, SIGNAL(directoryChanged(const QString &)), this, SLOT(updateFileList(const QString &)));
+    updateFileList(path);
+
+    startEncoding(); // this is for videos recorded from demos which were executed directly (without frontend)
 }
 
 // user changed file format, we need to update list of codecs
@@ -843,4 +850,33 @@ QString PageVideos::getVideosInProgress()
             list += item->name + " (" + QString::number(progress, 'f', 2) + "%)\n";
     }
     return list;
+}
+
+void PageVideos::startEncoding(const QByteArray & record)
+{
+    QDir videoTempDir(cfgdir->absolutePath() + "/VideoTemp/");
+    QStringList files = videoTempDir.entryList(QStringList("*.txtout"), QDir::Files);
+    foreach (const QString & str, files)
+    {
+        QString prefix = str;
+        prefix.chop(7); // remove ".txtout"
+        videoTempDir.rename(prefix + ".txtout", prefix + ".txtin"); // rename this file to not open it twice
+
+        HWRecorder* pRecorder = new HWRecorder(config, prefix);
+
+        if (!record.isEmpty())
+            pRecorder->EncodeVideo(record);
+        else
+        {
+            // this is for videos recorded from demos which were executed directly (without frontend)
+            QFile demofile(videoTempDir.absoluteFilePath(prefix + ".hwd"));
+            if (!demofile.open(QIODevice::ReadOnly))
+                continue;
+            QByteArray demo = demofile.readAll();
+            if (demo.isEmpty())
+                continue;
+            pRecorder->EncodeVideo(demo);
+        }
+        addRecorder(pRecorder);
+    }
 }
