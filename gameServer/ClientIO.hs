@@ -66,12 +66,11 @@ clientSendLoop s tId chan ci = do
         killReciever . B.unpack $ quitMessage answer
 
     Exception.handle
-        (\(e :: Exception.IOException) -> unless (isQuit answer) . killReciever $ show e) $
+        (\(e :: Exception.SomeException) -> unless (isQuit answer) . killReciever $ show e) $
             sendAll s $ B.unlines answer `B.snoc` '\n'
 
     if isQuit answer then
-        do
-        Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
+        sClose s
         else
         clientSendLoop s tId chan ci
 
