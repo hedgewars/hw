@@ -4655,11 +4655,13 @@ begin
 
                     // add some fire to the tunnel
                     if getRandom(6) = 0 then
-                        AddGear(x - Gear^.Radius + LongInt(getRandom(2 * Gear^.Radius)), y -
-                        getRandom(Gear^.Radius + 1), gtFlame, gsttmpFlag, _0, _0, 0);
+                        begin
+                        tmp:= GetRandom(2 * Gear^.Radius);
+                        AddGear(x - Gear^.Radius + tmp, y - GetRandom(Gear^.Radius + 1), gtFlame, gsttmpFlag, _0, _0, 0)
+                        end
                     end;
 
-                if getRandom(100) = 0 then
+                if random(100) = 0 then
                     AddVisualGear(x, y, vgtSmokeTrace); 
                 end
                 else dec(Gear^.Health, 5); // if underwater get additional damage

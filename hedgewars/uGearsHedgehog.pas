@@ -596,7 +596,8 @@ end;
 procedure PickUp(HH, Gear: PGear);
 var s: shortstring;
     a: TAmmoType;
-    i: LongInt;
+    i, rx, ry: LongInt;
+    rdx, rdy: hwFloat;
     vga: PVisualGear;
     ag: PGear;
 begin
@@ -620,9 +621,15 @@ case Gear^.Pos of
                         begin
 // Add spawning here...
                         AddRandomness(CheckSum xor GameTicks);
+
                         for i:= 0 to GetRandom(50)+50 do
-                            AddGear(GetRandom(rightX-leftX)+leftX, GetRandom(LAND_HEIGHT-topY)+topY, gtGenericFaller,
-                                    gstInvisible, _90-(GetRandomf*_360), _90-(GetRandomf*_360), GetRandom(500));
+                            begin
+                            rx:= GetRandom(rightX-leftX)+leftX;
+                            ry:= GetRandom(LAND_HEIGHT-topY)+topY;
+                            rdx:= _90-(GetRandomf*_360);
+                            rdy:= _90-(GetRandomf*_360);
+                            AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, GetRandom(500));
+                            end;
                         ag:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAddAmmo, gstInvisible, _0, _0, GetRandom(200)+100);
                         ag^.Pos:= Gear^.Pos;
                         ag^.Power:= Gear^.Power

@@ -287,7 +287,6 @@ begin
             dy:= -Cos(Gear^.Angle * pi / cMaxAngle);
             if cLaserSighting then
                 begin
-                GetRandom(2); // no, this does not prevent it, just makes things harder
                 lx:= GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle);
                 ly:= GetLaunchY(HH^.CurAmmoType, Gear^.Angle);
 
