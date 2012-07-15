@@ -102,7 +102,7 @@ type
             gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 44
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
-            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis, gtIceGun); // 62
+            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis, gtIceGun, gtAddAmmo, gtGenericFaller); // 62
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -340,6 +340,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             HatTex: PTexture;
             Ammo: PHHAmmo;
             CurAmmoType: TAmmoType;
+            PickUpType: LongWord;
+            PickUpDelay: LongInt;
             AmmoStore: Longword;
             Team: PTeam;
             MultiShootAttacks: Longword;

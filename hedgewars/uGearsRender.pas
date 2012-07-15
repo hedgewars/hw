@@ -21,7 +21,7 @@
 unit uGearsRender;
 
 interface
-uses uTypes, uConsts, GLunit, uFloat, SDLh;
+uses uTypes, uConsts, GLunit, uFloat, SDLh, uRandom;
 
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 
@@ -287,6 +287,7 @@ begin
             dy:= -Cos(Gear^.Angle * pi / cMaxAngle);
             if cLaserSighting then
                 begin
+                GetRandom(2); // no, this does not prevent it, just makes things harder
                 lx:= GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle);
                 ly:= GetLaunchY(HH^.CurAmmoType, Gear^.Angle);
 
@@ -1213,9 +1214,8 @@ begin
                                 else DrawLine(hwRound(HHGear^.X), hwRound(HHGear^.Y), hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, i, i, $FF, $40);
                                 end
                           end
-                      end
-
-
+                      end;
+            gtGenericFaller: DrawCircle(x, y, 3, 3, $FF, $00, $00, $FF);  // debug
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then
           DrawTextureCentered(x + 8, y + 8, Gear^.Tex);

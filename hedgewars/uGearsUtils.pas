@@ -343,6 +343,11 @@ begin
     Y:= hwRound(Gear^.Y);
     if cWaterLine < Y + Gear^.Radius then
         begin
+        if Gear^.State and gstInvisible <> 0 then
+            begin
+            DeleteGear(Gear);
+            exit
+            end;
         isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
         skipSpeed := _0_25;
         skipAngle := _1_9;
