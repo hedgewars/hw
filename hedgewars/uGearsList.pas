@@ -460,6 +460,13 @@ gtFlamethrower: begin
                 gear^.Pos:= 1;
                 end;
       gtIceGun: gear^.Health:= 1000;
+gtGenericFaller:begin
+                gear^.AdvBounce:= 1;
+                gear^.Radius:= 1;
+                gear^.Elasticity:= _0_9;
+                gear^.Friction:= _0_995;
+                gear^.Density:= _1;
+                end;
     end;
 
 InsertGearToList(gear);
@@ -557,8 +564,10 @@ else if Gear^.Kind = gtHedgehog then
                 end
         end;
 with Gear^ do
+    begin
     AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
-
+    AddRandomness(X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac)
+    end;
 if CurAmmoGear = Gear then
     CurAmmoGear:= nil;
 if FollowGear = Gear then

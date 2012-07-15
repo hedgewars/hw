@@ -64,6 +64,7 @@ var
     fastUntilLag    : boolean;
     autoCameraOn    : boolean;
 
+    CheckSum        : LongWord;
     GameTicks       : LongWord;
     GameState       : TGameState;
     GameType        : TGameType;
@@ -2368,6 +2369,8 @@ const
 (*        gtLandGun *) , amLandGun
 (*         gtTardis *) , amTardis
 (*         gtIceGun *) , amIceGun
+(*        gtAddAmmo *) , amNothing
+(*  gtGenericFaller *) , amNothing
     );
 
 var
@@ -2530,6 +2533,7 @@ begin
     CursorMovementX     := 0;
     CursorMovementY     := 0;
     GameTicks           := 0;
+    CheckSum            := 0;
     cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;
 

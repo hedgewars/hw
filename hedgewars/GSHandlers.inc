@@ -5532,3 +5532,37 @@ begin
         end
     end;
 end;
+
+procedure doStepAddAmmo(Gear: PGear);
+var a: TAmmoType;
+    gi: PGear;
+begin
+if Gear^.Timer > 0 then dec(Gear^.Timer)
+else
+    begin
+    if Gear^.Pos = posCaseUtility then
+        a:= GetUtility(Gear^.Hedgehog)
+    else
+        a:= GetAmmo(Gear^.Hedgehog);
+    CheckSum:= CheckSum xor GameTicks;
+    gi := GearsList;
+    while gi <> nil do
+        begin
+        with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
+        AddRandomness(CheckSum);
+        gi := gi^.NextGear
+        end;
+    AddPickup(Gear^.Hedgehog^, a, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));
+    DeleteGear(Gear)
+    end;
+end;
+
+procedure doStepGenericFaller(Gear: PGear);
+begin
+if Gear^.Timer > 0 then 
+    begin
+    doStepFallingGear(Gear);
+    dec(Gear^.Timer)
+    end
+else DeleteGear(Gear)
+end;
