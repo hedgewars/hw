@@ -733,6 +733,11 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepGrave(Gear: PGear);
 begin
+    if Gear^.Timer = 0 then
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
     AllInactive := false;
     if Gear^.dY.isNegative then
         if TestCollisionY(Gear, -1) then
@@ -5090,7 +5095,7 @@ begin
                 resgear^.Hedgehog := graves.ar^[i]^.Hedgehog;
                 resgear^.Health := graves.ar^[i]^.Health;
                 PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := resgear;
-                DeleteGear(graves.ar^[i]);
+                graves.ar^[i]^.Timer:= 0;
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;

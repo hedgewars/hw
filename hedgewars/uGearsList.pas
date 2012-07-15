@@ -92,16 +92,13 @@ gear^.dY:= dY;
 gear^.doStep:= doStepHandlers[Kind];
 gear^.CollisionIndex:= -1;
 gear^.Timer:= Timer;
-gear^.FlightTime:= 0;
 gear^.uid:= GCounter;
 gear^.SoundChannel:= -1;
 gear^.ImpactSound:= sndNone;
-gear^.nImpactSounds:= 0;
 gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= $FFFF;
-gear^.Power:= 0;
 
 if CurrentHedgehog <> nil then gear^.Hedgehog:= CurrentHedgehog;
 
@@ -191,6 +188,7 @@ case Kind of
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_6;
+                gear^.Timer:= 1;
                 end;
          gtBee: begin
                 gear^.Radius:= 5;
