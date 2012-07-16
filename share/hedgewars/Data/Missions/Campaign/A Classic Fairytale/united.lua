@@ -383,6 +383,8 @@ function CheckWaveDead(index)
 end
 
 function DoWaveDead(index)
+  SetGearMessage(CurrentHedgehog, 0)
+  SetState(CurrentHedgehog, 0)
   if index == 1 then
     AddAnim(wave2Anim)
     AddFunction({func = AfterWave2Anim, args = {}})
