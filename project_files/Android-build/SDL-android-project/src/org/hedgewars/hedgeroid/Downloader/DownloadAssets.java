@@ -15,14 +15,14 @@ import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class DownloadAssets extends AsyncTask<Object, Long, Long>{
+public class DownloadAssets extends AsyncTask<Object, Long, Boolean> {
 	private final MainActivity act;
 	
-	public DownloadAssets(MainActivity _act){
-		act = _act;
+	public DownloadAssets(MainActivity act){
+		this.act = act;
 	}
 	
-	private static void copyFileOrDir(AssetManager assetManager, File target, String assetPath) throws IOException {
+	private void copyFileOrDir(AssetManager assetManager, File target, String assetPath) throws IOException {
 		try {
 			Utils.writeStreamToFile(assetManager.open(assetPath), target);
 		} catch(FileNotFoundException e) {
@@ -35,27 +35,27 @@ public class DownloadAssets extends AsyncTask<Object, Long, Long>{
 				throw new IOException("Unable to create directory "+target);
 			}
 			for (String asset : assetManager.list(assetPath)) {
-				DownloadAssets.copyFileOrDir(assetManager, new File(target, asset), assetPath + "/" + asset);
+				copyFileOrDir(assetManager, new File(target, asset), assetPath + "/" + asset);
 			}
 		}
 	}
 	
 	@Override
-	protected Long doInBackground(Object... params) {
+	protected Boolean doInBackground(Object... params) {
 		try {
 			Utils.resRawToFilesDir(act, R.array.schemes, Scheme.DIRECTORY_SCHEME);
 			Utils.resRawToFilesDir(act, R.array.weapons, Weapon.DIRECTORY_WEAPON);
 			Utils.resRawToFilesDir(act, R.array.teams, Team.DIRECTORY_TEAMS);
-			DownloadAssets.copyFileOrDir(act.getAssets(), Utils.getDataPathFile(act), "Data");
-			return 0l;
+			copyFileOrDir(act.getAssets(), Utils.getDataPathFile(act), "Data");
+			return Boolean.TRUE;
 		} catch(IOException e) {
-			Log.e("org.hedgewars.hedgeroid", e.getMessage(), e);
-			return 1l;
+			Log.e("DownloadAssets", e.getMessage(), e);
+			return Boolean.FALSE;
 		}
 	}
 	
 	@Override
-	protected void onPostExecute(Long result){
-		act.onAssetsDownloaded(result == 0);
+	protected void onPostExecute(Boolean result){
+		act.onAssetsDownloaded(result);
 	}
 }

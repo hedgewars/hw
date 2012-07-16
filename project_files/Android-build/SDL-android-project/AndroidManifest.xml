@@ -68,7 +68,7 @@
             android:windowSoftInputMode="stateUnchanged" >
         </activity>
         <activity
-            android:name=".netplay.LobbyActivity"
+            android:name=".netplay.TestActivity"
             android:label="@string/title_activity_lobby" >
         </activity>
     </application>

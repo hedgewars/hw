@@ -58,4 +58,11 @@
     <string name="bot1">Level 1</string>
 
     <string name="title_activity_lobby">LobbyActivity</string>
+    <string name="chat_hint">Type here to chat</string>
+    
+    <!-- Room list -->
+    <string name="no_rooms_in_list">No rooms</string>
+    
+    <!-- Player list -->
+    <string name="no_players_in_list">No players</string>
 </resources>

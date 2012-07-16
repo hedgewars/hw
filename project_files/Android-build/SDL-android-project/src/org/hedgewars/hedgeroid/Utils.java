@@ -246,4 +246,13 @@ public class Utils {
 			writeStreamToFile(resources.openRawResource(resId), f);
 		}
 	}
+	
+	/**
+	 * Crashing - at least it's better than ignoring errors.
+	 */
+	public static void assertZero(int value, String text) {
+		if(value != 0) {
+			throw new RuntimeException("Result is not zero: " + text);
+		}
+	}
 }
