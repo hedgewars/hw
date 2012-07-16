@@ -733,12 +733,14 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepGrave(Gear: PGear);
 begin
-    if Gear^.Timer = 0 then
+    if (Gear^.Message and gmDestroy) <> 0 then
         begin
         DeleteGear(Gear);
         exit
         end;
+
     AllInactive := false;
+
     if Gear^.dY.isNegative then
         if TestCollisionY(Gear, -1) then
             Gear^.dY := _0;
@@ -5095,12 +5097,12 @@ begin
                 resgear^.Hedgehog := graves.ar^[i]^.Hedgehog;
                 resgear^.Health := graves.ar^[i]^.Health;
                 PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := resgear;
-                graves.ar^[i]^.Timer:= 0;
+                graves.ar^[i]^.Message:= graves.ar^[i]^.Message or gmDestroy;
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;
                 // only make hat-less hedgehogs look like zombies, preserve existing hats
-                
+
                 if resgear^.Hedgehog^.Hat = 'NoHat' then
                     LoadHedgehogHat(resgear, 'Reserved/Zombie');
                 end;
