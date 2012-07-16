@@ -2947,7 +2947,7 @@ begin
                         end
                 end;
         AfterAttack;
-        DeleteGear(HHGear);
+        HHGear^.Message:= HHGear^.Message or gmDestroy;
         DeleteGear(Gear);
     end
     else
