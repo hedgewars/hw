@@ -72,9 +72,10 @@ function AnimInit()
 end
 
 function AnimSwitchHog(gear)
+  --SetGearMessage(gear, 0)
+  --SetState(gear, 0)
   SwitchHog(gear)
   FollowGear(gear)
-  SetGearMessage(gear, 0)
   return true
 end
 
@@ -213,8 +214,11 @@ function AnimSetGearPosition(gear, x, y)
   return true
 end
 
-function AnimVisualGear(gear, x, y, vgType, state, critical)
-  AddVisualGear(x, y, vgType, state, critical)
+function AnimVisualGear(gear, x, y, vgType, state, critical, follow)
+  local vgear = AddVisualGear(x, y, vgType, state, critical)
+  if follow == true then 
+    FollowGear(vgear)
+  end
   return true
 end
 
