@@ -182,7 +182,7 @@ begin
 end;
 
 procedure ProcessGears;
-var Gear, t: PGear;
+var t: PGear;
     i, AliveCount: LongInt;
     s: shortstring;
 begin
@@ -203,21 +203,22 @@ if StepSoundTimer > 0 then
 t:= GearsList;
 while t <> nil do
     begin
-    Gear:= t;
-    t:= Gear^.NextGear;
+    curHandledGear:= t;
+    t:= curHandledGear^.NextGear;
 
-    if Gear^.Active then
+    if curHandledGear^.Active then
         begin
-        if Gear^.RenderTimer and (Gear^.Timer > 500) and ((Gear^.Timer mod 1000) = 0) then
+        if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then
             begin
-            FreeTexture(Gear^.Tex);
-            Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), cWhiteColor, fntSmall);
+            FreeTexture(curHandledGear^.Tex);
+            curHandledGear^.Tex:= RenderStringTex(inttostr(curHandledGear^.Timer div 1000), cWhiteColor, fntSmall);
             end;
-        Gear^.doStep(Gear);
+        curHandledGear^.doStep(curHandledGear);
         // might be useful later
         //ScriptCall('onGearStep', Gear^.uid);
         end
     end;
+curHandledGear:= nil;
 
 if AllInactive then
 case step of
@@ -1323,6 +1324,8 @@ begin
 
     CurAmmoGear:= nil;
     GearsList:= nil;
+    curHandledGear:= nil;
+
     KilledHHs:= 0;
     SuddenDeath:= false;
     SuddenDeathDmg:= false;

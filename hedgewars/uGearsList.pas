@@ -27,11 +27,13 @@ procedure DeleteGear(Gear: PGear);
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 
+var curHandledGear: PGear;
+
 implementation
 
 uses uRandom, uUtils, uConsts, uVariables, uAmmos, uTeams, uStats,
     uTextures, uScript, uRenderUtils, uAI, uCollisions,
-    uGearsRender, uGearsUtils;
+    uGearsRender, uGearsUtils, uDebug;
 
 var GCounter: LongWord = 0; // this does not get re-initialized, but should be harmless
 
@@ -63,8 +65,11 @@ begin
         end;
 end;
 
+
 procedure RemoveGearFromList(Gear: PGear);
 begin
+TryDo((curHandledGear = nil) or (Gear = curHandledGear), 'You''re doing it wrong', true);
+
 if Gear^.NextGear <> nil then
     Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
 if Gear^.PrevGear <> nil then
@@ -72,7 +77,8 @@ if Gear^.PrevGear <> nil then
 else
     GearsList:= Gear^.NextGear
 end;
-    
+
+
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 var gear: PGear;
 begin
