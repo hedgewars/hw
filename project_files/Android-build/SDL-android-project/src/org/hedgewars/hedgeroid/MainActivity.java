@@ -21,6 +21,7 @@ package org.hedgewars.hedgeroid;
 import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
 import org.hedgewars.hedgeroid.netplay.LobbyActivity;
+import org.hedgewars.hedgeroid.netplay.TestActivity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -52,7 +53,7 @@ public class MainActivity extends FragmentActivity {
 		startGame.setOnClickListener(startGameClicker);
 		joinLobby.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				startActivity(new Intent(getApplicationContext(), LobbyActivity.class));
+				startActivity(new Intent(getApplicationContext(), TestActivity.class));
 			}
 		});
 
@@ -69,8 +70,8 @@ public class MainActivity extends FragmentActivity {
 
 			if(!assetsCopied){
 				DownloadAssets assetsAsyncTask = new DownloadAssets(this);
-				assetsDialog = ProgressDialog.show(this, "Please wait a moment", "Moving assets...");
-				assetsAsyncTask.execute((Object[])null);
+				assetsDialog = ProgressDialog.show(this, "Please wait a moment", "Moving assets to SD card...");
+				assetsAsyncTask.execute();
 			}
 		}
 	}

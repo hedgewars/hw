@@ -15,6 +15,8 @@ import com.sun.jna.Pointer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,7 +27,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class LobbyActivity extends Activity {
+public class LobbyActivity extends FragmentActivity {
 	static {
 		System.loadLibrary("SDL_net");
 	}
@@ -33,7 +35,6 @@ public class LobbyActivity extends Activity {
 	
 	TextView textView;
 	EditText editText;
-	Button button;
 	
 	boolean disconnected;
 	JnaFrontlib.NetconnPtr netconn;
@@ -43,7 +44,7 @@ public class LobbyActivity extends Activity {
 		if(!disconnected && netconn!=null) {
 			String text = editText.getText().toString();
 			editText.setText("");
-			textView.append("AndroidChatter: " + text + "\n");
+			textView.append(Html.fromHtml("<b>AndroidChatter</b>: " + text + "<br/>"));
 			FRONTLIB.flib_netconn_send_chat(netconn, text);
 		}
 	}
@@ -53,15 +54,19 @@ public class LobbyActivity extends Activity {
         super.onCreate(savedInstanceState);
         disconnected = false;
         setContentView(R.layout.activity_lobby);
-        textView = (TextView)findViewById(R.id.textbox);
-        editText = (EditText)findViewById(R.id.editText);
-        button = (Button)findViewById(R.id.lobbySendButton);
+        textView = (TextView)findViewById(R.id.lobbyConsole);
+        editText = (EditText)findViewById(R.id.lobbyChatInput);
         
-        button.setOnClickListener(new OnClickListener() {
-        	public void onClick(View v) {
-        		commitText();
-        	}
-        });
+        editText.setOnEditorActionListener(new OnEditorActionListener() {
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				boolean handled = false;
+				if(actionId == EditorInfo.IME_ACTION_SEND) {
+					commitText();
+					handled = true;
+				}
+				return handled;
+			}
+		});
         
     	FRONTLIB.flib_init();
     	try {
@@ -122,7 +127,7 @@ public class LobbyActivity extends Activity {
 	
     private JnaFrontlib.IntStrCallback handleMessage = new JnaFrontlib.IntStrCallback() {
 		public void callback(Pointer context, int arg1, String arg2) {
-			textView.append(arg2+"\n");
+			textView.append(Html.fromHtml(arg2+"<br/>"));
 		}
 	};
 }
