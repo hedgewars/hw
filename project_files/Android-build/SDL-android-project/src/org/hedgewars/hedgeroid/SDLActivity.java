@@ -580,7 +580,7 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 	// Touch events
 	public boolean onTouch(View v, MotionEvent event) {
 		final int action = event.getAction() & MotionEvent.ACTION_MASK;
-		final int actionPointerIndex = event.getAction() & MotionEvent.ACTION_POINTER_ID_MASK;		
+		final int actionPointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;		
 
 		if (action == MotionEvent.ACTION_MOVE) {
 			// TODO send motion to every pointer if its position has
