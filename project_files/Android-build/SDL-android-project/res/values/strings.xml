@@ -65,4 +65,9 @@
     
     <!-- Player list -->
     <string name="no_players_in_list">No players</string>
+    
+    <!-- Chatlog messages -->
+    <string name="log_player_join">%1$s has joined.</string>
+    <string name="log_player_leave">%1$s has left.</string>
+    <string name="log_player_leave_with_msg">%1$s has left (%2$s).</string>
 </resources>
