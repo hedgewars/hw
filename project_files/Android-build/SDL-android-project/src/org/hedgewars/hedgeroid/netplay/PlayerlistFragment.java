@@ -5,23 +5,30 @@ import java.util.List;
 import java.util.Random;
 
 import org.hedgewars.hedgeroid.R;
+import org.hedgewars.hedgeroid.netplay.NetplayService.NetplayBinder;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class PlayerlistFragment extends ListFragment {
-	List<Player> playerList;
-	Random random = new Random();
-
+	private Netconn netconn;
+	private PlayerListAdapter playerListAdapter;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		playerList = new ArrayList<Player>();
-		PlayerListAdapter playerListAdapter = new PlayerListAdapter(getActivity());
-		playerListAdapter.setPlayerList(playerList);
+		getActivity().bindService(new Intent(getActivity(), NetplayService.class), serviceConnection,
+	            Context.BIND_AUTO_CREATE);
+		playerListAdapter = new PlayerListAdapter(getActivity());
 		setListAdapter(playerListAdapter);
 	}
 
@@ -30,4 +37,18 @@ public class PlayerlistFragment extends ListFragment {
 			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.lobby_players_fragment, container, false);
 	}
+	
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder binder) {
+        	netconn = ((NetplayBinder) binder).getNetconn();
+        	playerListAdapter.setPlayerList(netconn.playerList.getList());
+        	netconn.playerList.observePlayerList(playerListAdapter);
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+        	// TODO navigate away
+        	netconn.playerList.unobservePlayerList(playerListAdapter);
+        	netconn = null;
+        }
+    };
 }

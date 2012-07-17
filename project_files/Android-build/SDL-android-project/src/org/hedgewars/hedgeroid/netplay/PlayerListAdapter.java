@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hedgewars.hedgeroid.R;
+import org.hedgewars.hedgeroid.netplay.PlayerList.Observer;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class PlayerListAdapter extends BaseAdapter {
+public class PlayerListAdapter extends BaseAdapter implements Observer {
 	private List<Player> players = new ArrayList<Player>();
 	private Context context;
 	
@@ -38,6 +39,14 @@ public class PlayerListAdapter extends BaseAdapter {
 		return true;
 	}
 
+	public void itemAdded(List<Player> newList, Player added) {
+		setPlayerList(newList);
+	}
+	
+	public void itemDeleted(List<Player> newList, Player deleted) {
+		setPlayerList(newList);
+	}
+	
 	public void setPlayerList(Collection<Player> players) {
 		this.players = new ArrayList<Player>(players);
 		Collections.sort(this.players, Player.nameComparator);

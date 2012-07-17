@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;

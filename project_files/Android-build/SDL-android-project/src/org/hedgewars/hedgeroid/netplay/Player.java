@@ -7,15 +7,10 @@ public class Player {
 
 	public final String name;
 	public final long playerId;
-	public final boolean friend;
-	public final boolean ignored;
 	
-	public Player(String name, long playerId, boolean friend, boolean ignored) {
-		super();
+	public Player(String name, long playerId) {
 		this.name = name;
 		this.playerId = playerId;
-		this.friend = friend;
-		this.ignored = ignored;
 	}
 	
 	private static class ByNameComparator implements Comparator<Player> {

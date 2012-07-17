@@ -1,12 +1,21 @@
 package org.hedgewars.hedgeroid.netplay;
 import java.nio.Buffer;
+import java.util.Collections;
 
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
+import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
+import com.sun.jna.Structure;
 
+class Flib {
+	static {
+		System.loadLibrary("SDL_net");
+	}
+	public static final JnaFrontlib INSTANCE = (JnaFrontlib)Native.loadLibrary("frontlib", JnaFrontlib.class, Collections.singletonMap(Library.OPTION_TYPE_MAPPER, FrontlibTypeMapper.INSTANCE));
+}
 
 public interface JnaFrontlib extends Library {
 	static final int NETCONN_STATE_CONNECTING = 0;
