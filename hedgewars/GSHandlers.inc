@@ -2081,10 +2081,10 @@ end;
 
 procedure doStepCase(Gear: PGear);
 var 
-    i, x, y: LongInt;
+    i, x, y, rx, ry: LongInt;
     k: TGearType;
     exBoom: boolean;
-    dX, dY: HWFloat;
+    dX, dY, rdx, rdy: HWFloat;
     hog: PHedgehog;
     sparkles: PVisualGear;
 begin
@@ -2121,6 +2121,18 @@ begin
         end
     else
         begin 
+        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $3FF = 0) then
+            begin
+            for i:= 0 to GetRandom(3) do
+                begin
+                rx:= GetRandom(rightX-leftX)+leftX;
+                ry:= GetRandom(LAND_HEIGHT-topY)+topY;
+                rdx:= _90-(GetRandomf*_360);
+                rdy:= _90-(GetRandomf*_360);
+                AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, GetRandom(1000)+1000)
+                end;
+            end;
+
         if Gear^.Timer = 500 then
             begin
 (* Can't make sparkles team coloured without working out what the next team is going to be. This should be solved, really, since it also screws up
