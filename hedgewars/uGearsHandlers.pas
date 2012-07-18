@@ -29,6 +29,8 @@ implementation
 
 uses SDLh, uFloat, uCollisions;
 
+
+
 const dirs: array[0..3] of TPoint =   ((X: 0; Y: -1), (X: 1; Y: 0),(X: 0; Y: 1),(X: -1; Y: 0));
 
 procedure PrevAngle(Gear: PGear; dA: LongInt); inline;
@@ -38,7 +40,7 @@ end;
 
 procedure NextAngle(Gear: PGear; dA: LongInt); inline;
 begin
-    Gear^.Angle := (LongInt(Gear^.Angle) + 4 + dA) mod 4
+    Gear^.Angle := (LongInt(Gear^.Angle)     + dA) mod 4
 end;
 
 procedure cakeStep(Gear: PGear);

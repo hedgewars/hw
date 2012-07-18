@@ -50,6 +50,7 @@ function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestCake(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
     TAmmoTest = record
@@ -84,7 +85,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amSwitch
             (proc: @TestMortar;      flags: 0), // amMortar
             (proc: nil;              flags: 0), // amKamikaze
-            (proc: nil;              flags: 0), // amCake
+            (proc: @TestCake;        flags: 0), // amCake
             (proc: nil;              flags: 0), // amSeduction
             (proc: @TestWatermelon;  flags: 0), // amWatermelon
             (proc: nil;              flags: 0), // amHellishBomb
@@ -979,6 +980,55 @@ begin
             TestTeleport := 0;
             end;
         end;
+end;
+
+
+function checkCakeWalk(Gear: PGear): LongInt;
+begin
+checkCakeWalk:= BadTurn
+end;
+
+function TestCake(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+var valueResult, v1, v2: LongInt;
+    x, y, trackFall: LongInt;
+    cake: TGear;
+begin
+    Level:= Level; // avoid compiler hint
+    ap.ExplR:= 0;
+    ap.Time:= 0;
+    ap.Power:= 1;
+
+    cake.Radius:= 7;
+
+    // check left direction
+    cake.Angle:= 3;
+    cake.dX.isNegative:= true;
+    cake.X:= Me^.X - _3;
+    cake.Y:= Me^.Y;
+    v1:= checkCakeWalk(@cake);
+
+    // now try opposite direction
+    cake.Angle:= 1;
+    cake.dX.isNegative:= false;
+    cake.X:= Me^.X + _3;
+    cake.Y:= Me^.Y;
+    v2:= checkCakeWalk(@cake);
+
+    if (v2 > v1) then
+        begin
+        ap.Angle:= 1;
+        valueResult:= v2
+        end
+    else
+        begin
+        ap.Angle:= -1;
+        valueResult:= v1
+        end;
+
+    if valueResult <= 0 then
+        valueResult:= BadTurn;
+
+    TestCake:= valueResult;
 end;
 
 end.
