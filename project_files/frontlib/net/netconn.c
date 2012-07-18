@@ -404,10 +404,11 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	    			conn->onRoomAddCb(conn->onRoomAddCtx, conn->roomList.rooms[0]);
 	    		}
 			} else if(!strcmp(subcmd, "UPD") && netmsg->partCount == 11) {
+				char *newName = netmsg->parts[4];
 	    		if(flib_roomlist_update(&conn->roomList, netmsg->parts[2], netmsg->parts+3)) {
 	    			flib_log_e("Error updating room in list");
 	    		} else {
-	    			conn->onRoomUpdateCb(conn->onRoomUpdateCtx, netmsg->parts[2], flib_roomlist_find(&conn->roomList, netmsg->parts[2]));
+	    			conn->onRoomUpdateCb(conn->onRoomUpdateCtx, netmsg->parts[2], flib_roomlist_find(&conn->roomList, newName));
 	    		}
 			} else if(!strcmp(subcmd, "DEL") && netmsg->partCount == 3) {
 	    		if(flib_roomlist_delete(&conn->roomList, netmsg->parts[2])) {
