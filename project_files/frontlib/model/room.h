@@ -18,11 +18,11 @@
  */
 
 /**
- * Models the list of rooms on a server for netplay.
+ * Models the room information for the lobby roomlist.
  */
 
-#ifndef ROOMLIST_H_
-#define ROOMLIST_H_
+#ifndef ROOM_H_
+#define ROOM_H_
 
 #include <stdbool.h>
 
@@ -37,44 +37,6 @@ typedef struct {
     char *weapons;
 } flib_room;
 
-typedef struct {
-	int roomCount;
-	flib_room **rooms;
-} flib_roomlist;
-
-flib_roomlist *flib_roomlist_create();
-
-void flib_roomlist_destroy(flib_roomlist *list);
-
-/**
- * Insert a new room at the start of the list. The room is defined by the params-array,
- * which must consist of 8 non-null strings, as sent by the server in netplay.
- *
- * Returns 0 on success.
- */
-int flib_roomlist_add(flib_roomlist *list, char **params);
-
-/**
- * Update the room with the name [name] with parameters sent by the server.
- *
- * Returns 0 on success.
- */
-int flib_roomlist_update(flib_roomlist *list, const char *name, char **params);
-
-/**
- * Returns the room with the name [name] from the list if it exists, NULL otherwise
- */
-flib_room *flib_roomlist_find(const flib_roomlist *list, const char *name);
-
-/**
- * Removes all rooms from the list
- */
-void flib_roomlist_clear(flib_roomlist *list);
-
-/**
- * Delete the room with the name [name] from the room list.
- * Returns 0 on success.
- */
-int flib_roomlist_delete(flib_roomlist *list, const char *name);
+void flib_room_destroy();
 
 #endif

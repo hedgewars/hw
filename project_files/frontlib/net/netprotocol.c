@@ -140,3 +140,48 @@ int flib_netmsg_to_drawnmapdata(char *netmsg, uint8_t** outbuf, size_t *outlen) 
 	free(base64decout);
 	return result;
 }
+
+flib_room *flib_room_from_netmsg(char **params) {
+	flib_room *result = NULL;
+	flib_room *tmpRoom = flib_calloc(1, sizeof(flib_room));
+	if(tmpRoom) {
+		tmpRoom->inProgress = !strcmp(params[0], "True");
+		tmpRoom->name = flib_strdupnull(params[1]);
+		tmpRoom->playerCount = atoi(params[2]);
+		tmpRoom->teamCount = atoi(params[3]);
+		tmpRoom->owner = flib_strdupnull(params[4]);
+		tmpRoom->map = flib_strdupnull(params[5]);
+		tmpRoom->scheme = flib_strdupnull(params[6]);
+		tmpRoom->weapons = flib_strdupnull(params[7]);
+		if(tmpRoom->name && tmpRoom->owner && tmpRoom->map && tmpRoom->scheme && tmpRoom->weapons) {
+			result = tmpRoom;
+			tmpRoom = NULL;
+		}
+	}
+	flib_room_destroy(tmpRoom);
+	return result;
+}
+
+int fillRoomArray(flib_room **array, char **params, int count) {
+	for(int i=0; i<count; i++) {
+		array[i] = flib_room_from_netmsg(params + 8*i);
+		if(!array[i]) {
+			return -1;
+		}
+	}
+	return 0;
+}
+
+flib_room **flib_room_array_from_netmsg(char **params, int count) {
+	flib_room **result = flib_calloc(count, sizeof(flib_room*));
+	if(result) {
+		if(fillRoomArray(result, params, count)) {
+			for(int i=0; i<count; i++) {
+				flib_room_destroy(result[i]);
+			}
+			free(result);
+			result = NULL;
+		}
+	}
+	return result;
+}

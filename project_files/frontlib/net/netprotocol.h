@@ -23,8 +23,11 @@
 #include "../model/team.h"
 #include "../model/scheme.h"
 #include "../model/map.h"
+#include "../model/room.h"
 
 #include <stddef.h>
+
+// TODO unify naming
 
 /**
  * Create a new team from this 23-part net message
@@ -51,5 +54,15 @@ flib_map *flib_netmsg_to_map(char **parts);
  * Returns NULL on error.
  */
 int flib_netmsg_to_drawnmapdata(char *netmsg, uint8_t **outbuf, size_t *outlen);
+
+/**
+ * Create a new room from this 8-part net message
+ */
+flib_room *flib_room_from_netmsg(char **params);
+
+/**
+ * Create an array of count rooms from count*8 netmessage parts
+ */
+flib_room **flib_room_array_from_netmsg(char **params, int count);
 
 #endif /* NETPROTOCOL_H_ */

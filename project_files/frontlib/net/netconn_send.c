@@ -107,6 +107,10 @@ int flib_netconn_send_password(flib_netconn *conn, const char *passwd) {
 	return result;
 }
 
+int flib_netconn_send_request_roomlist(flib_netconn *conn) {
+	return sendVoid(conn, "LIST");
+}
+
 int flib_netconn_send_joinRoom(flib_netconn *conn, const char *room) {
 	if(!sendStr(conn, "JOIN_ROOM", room)) {
 		conn->isChief = false;

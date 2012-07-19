@@ -64,6 +64,7 @@ void netconn_clearCallbacks(flib_netconn *conn) {
 	flib_netconn_onMessage(conn, NULL, NULL);
 	flib_netconn_onConnected(conn, NULL, NULL);
 	flib_netconn_onDisconnected(conn, NULL, NULL);
+	flib_netconn_onRoomlist(conn, NULL, NULL);
 	flib_netconn_onRoomAdd(conn, NULL, NULL);
 	flib_netconn_onRoomDelete(conn, NULL, NULL);
 	flib_netconn_onRoomUpdate(conn, NULL, NULL);
@@ -120,6 +121,7 @@ void netconn_clearCallbacks(flib_netconn *conn) {
 GENERATE_CB_SETTER(onMessage, (void *context, int msgtype, const char *msg), defaultCallback_onMessage);
 GENERATE_CB_SETTER_AND_DEFAULT(onConnected, (void *context));
 GENERATE_CB_SETTER_AND_DEFAULT(onDisconnected, (void *context, int reason, const char *message));
+GENERATE_CB_SETTER_AND_DEFAULT(onRoomlist, (void *context, const flib_room **rooms, int roomCount));
 GENERATE_CB_SETTER_AND_DEFAULT(onRoomAdd, (void *context, const flib_room *room));
 GENERATE_CB_SETTER_AND_DEFAULT(onRoomDelete, (void *context, const char *name));
 GENERATE_CB_SETTER_AND_DEFAULT(onRoomUpdate, (void *context, const char *oldName, const flib_room *room));

@@ -26,6 +26,7 @@
 
 static int flib_loglevel = FLIB_LOGLEVEL_INFO;
 static FILE *flib_logfile = NULL;
+void (*flib_logCallback)(int level, const char *msg) = NULL;
 
 char* flib_format_ip(uint32_t numip) {
 	static char ip[16];
@@ -41,37 +42,66 @@ static inline FILE *flib_log_getfile() {
 	}
 }
 
-static void log_time() {
+static int log_time(char *buffer) {
     time_t timer;
-    char buffer[25];
     struct tm* tm_info;
 
     time(&timer);
     tm_info = localtime(&timer);
 
-    strftime(buffer, 25, "%Y-%m-%d %H:%M:%S", tm_info);
-    fprintf(flib_log_getfile(), "%s", buffer);
+    return strftime(buffer, 25, "%Y-%m-%d %H:%M:%S", tm_info);
 }
 
-static const char *getPrefix(int level) {
+static char getPrefix(int level) {
 	switch(level) {
-	case FLIB_LOGLEVEL_ERROR: return "E";
-	case FLIB_LOGLEVEL_WARNING: return "W";
-	case FLIB_LOGLEVEL_INFO: return "I";
-	case FLIB_LOGLEVEL_DEBUG: return "D";
-	default: return "?";
+	case FLIB_LOGLEVEL_ERROR: return 'E';
+	case FLIB_LOGLEVEL_WARNING: return 'W';
+	case FLIB_LOGLEVEL_INFO: return 'I';
+	case FLIB_LOGLEVEL_DEBUG: return 'D';
+	default: return '?';
 	}
 }
 
 static void _flib_vflog(const char *func, int level, const char *fmt, va_list args) {
-	FILE *logfile = flib_log_getfile();
 	if(level >= flib_loglevel) {
-		fprintf(logfile, "%s ", getPrefix(level));
-		log_time(logfile);
-		fprintf(logfile, " [%-30s] ", func);
-		vfprintf(logfile, fmt, args);
-		fprintf(logfile, "\n");
-		fflush(logfile);
+		char logbuffer[1024];
+		logbuffer[0] = getPrefix(level);
+		logbuffer[1] = ' ';
+
+		int pos = 2;
+
+		int len = log_time(logbuffer+pos);
+		if(len>=0) {
+			pos += len;
+			if(pos>sizeof(logbuffer)-1) pos = sizeof(logbuffer)-1;
+		} else {
+			return;
+		}
+
+		len = snprintf(logbuffer+pos, sizeof(logbuffer)-pos, " [%-30s] ", func);
+		if(len>=0) {
+			pos += len;
+			if(pos>sizeof(logbuffer)-1) pos = sizeof(logbuffer)-1;
+		} else {
+			return;
+		}
+
+		len = vsnprintf(logbuffer+pos, sizeof(logbuffer)-pos, fmt, args);
+		if(len>=0) {
+			pos += len;
+			if(pos>sizeof(logbuffer)-1) pos = sizeof(logbuffer)-1;
+		} else {
+			return;
+		}
+
+		if(flib_logCallback != NULL) {
+			flib_logCallback(level, logbuffer);
+		} else {
+			FILE *logfile = flib_log_getfile();
+			fputs(logbuffer, logfile);
+			fputc('\n', logfile);
+			fflush(logfile);
+		}
 	}
 }
 
@@ -102,8 +132,14 @@ void flib_log_setLevel(int level) {
 
 void flib_log_setFile(FILE *file) {
 	flib_logfile = file;
+	flib_logCallback = NULL;
 }
 
 bool flib_log_isActive(int level) {
 	return level >= flib_log_getLevel();
+}
+
+void flib_log_setCallback(void (*logCallback)(int level, const char *msg)) {
+	flib_logCallback = logCallback;
+	flib_logfile = NULL;
 }

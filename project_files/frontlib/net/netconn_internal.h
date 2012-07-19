@@ -26,10 +26,10 @@
 
 #include "netconn.h"
 #include "netbase.h"
-#include "../model/roomlist.h"
 #include "../model/map.h"
 #include "../model/team.h"
 #include "../model/weapon.h"
+#include "../model/room.h"
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -44,7 +44,6 @@ struct _flib_netconn {
 	bool isAdmin;				// Player is server administrator
 
 	flib_metascheme *metaCfg;
-	flib_roomlist roomList;
 
 	bool isChief;				// Player can modify the current room
 	flib_map *map;
@@ -62,6 +61,9 @@ struct _flib_netconn {
 
 	void (*onDisconnectedCb)(void *context, int reason, const char *message);
 	void *onDisconnectedCtx;
+
+	void (*onRoomlistCb)(void *context, const flib_room **rooms, int roomCount);
+	void *onRoomlistCtx;
 
 	void (*onRoomAddCb)(void *context, const flib_room *room);
 	void *onRoomAddCtx;

@@ -24,7 +24,6 @@
 #include "netprotocol.h"
 #include "../util/logging.h"
 #include "../util/util.h"
-#include "../model/roomlist.h"
 #include "../md5/md5.h"
 #include "../base64/base64.h"
 #include "../model/mapcfg.h"
@@ -46,8 +45,6 @@ flib_netconn *flib_netconn_create(const char *playerName, flib_metascheme *metac
 			newConn->netconnState = NETCONN_STATE_CONNECTING;
 			newConn->isAdmin = false;
 			newConn->metaCfg = flib_metascheme_retain(metacfg);
-			newConn->roomList.roomCount = 0;
-			newConn->roomList.rooms = NULL;
 
 			newConn->isChief = false;
 			newConn->map = flib_map_create_named("", "NoSuchMap");
@@ -88,7 +85,6 @@ void flib_netconn_destroy(flib_netconn *conn) {
 			free(conn->dataDirPath);
 
 			flib_metascheme_release(conn->metaCfg);
-			flib_roomlist_clear(&conn->roomList);
 
 			flib_map_release(conn->map);
 			flib_teamlist_clear(&conn->pendingTeamlist);
@@ -102,18 +98,18 @@ void flib_netconn_destroy(flib_netconn *conn) {
 	}
 }
 
-const flib_roomlist *flib_netconn_get_roomlist(flib_netconn *conn) {
-	if(!log_badargs_if(conn==NULL)) {
-		return &conn->roomList;
-	}
-	return NULL;
-}
-
 bool flib_netconn_is_chief(flib_netconn *conn) {
 	if(!log_badargs_if(conn==NULL) && flib_netconn_is_in_room_context(conn)) {
 		return conn->isChief;
 	}
 	return false;
+}
+
+const char *flib_netconn_get_playername(flib_netconn *conn) {
+	if(!log_badargs_if(conn==NULL)) {
+		return conn->playerName;
+	}
+	return NULL;
 }
 
 void netconn_leaveRoom(flib_netconn *conn) {
@@ -269,16 +265,14 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	        if(netmsg->partCount % 8 != 1) {
 	        	flib_log_w("Net: Malformed ROOMS message");
 	        } else {
-	        	flib_roomlist_clear(&conn->roomList);
-	        	for(int i=1; i<netmsg->partCount; i+=8) {
-	        		if(flib_roomlist_add(&conn->roomList, netmsg->parts+i)) {
-	        			flib_log_e("Error adding room to list in ROOMS message");
+	        	int roomCount = netmsg->partCount/8;
+	        	flib_room **rooms = flib_room_array_from_netmsg(netmsg->parts+1, roomCount);
+	        	if(rooms) {
+	        		conn->onRoomlistCb(conn->onRoomlistCtx, (const flib_room**)rooms, roomCount);
+	        		for(int i=0; i<roomCount; i++) {
+	        			flib_room_destroy(rooms[i]);
 	        		}
-	        	}
-	        	if(conn->netconnState == NETCONN_STATE_CONNECTING) {
-	        		// We delay the "connected" callback until now to ensure the room list is avaliable.
-	        		conn->onConnectedCb(conn->onConnectedCtx);
-					conn->netconnState = NETCONN_STATE_LOBBY;
+	        		free(rooms);
 	        	}
 	        }
 	    } else if (!strcmp(cmd, "SERVER_MESSAGE")) {
@@ -377,14 +371,9 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 				for(int i = 1; i < netmsg->partCount; ++i)
 				{
 					bool isMe = !strcmp(conn->playerName, netmsg->parts[i]);
-					if (isMe) {
-						if(flib_netbase_sendf(conn->netBase, "%s\n\n", "LIST")) {
-							// If sending this fails, the protocol breaks (we'd be waiting infinitely for the room list)
-							flib_netbase_sendf(net, "%s\n%s\n\n", "QUIT", "Client error");
-							conn->netconnState = NETCONN_STATE_DISCONNECTED;
-							conn->onDisconnectedCb(conn->onDisconnectedCtx, NETCONN_DISCONNECT_INTERNAL_ERROR, "Failed to send a critical message.");
-							exit = true;
-						}
+					if (isMe && conn->netconnState == NETCONN_STATE_CONNECTING) {
+						conn->onConnectedCb(conn->onConnectedCtx);
+						conn->netconnState = NETCONN_STATE_LOBBY;
 					}
 					conn->onLobbyJoinCb(conn->onLobbyJoinCtx, netmsg->parts[i]);
 				}
@@ -398,24 +387,19 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	    } else if(!strcmp(cmd, "ROOM") && netmsg->partCount >= 2) {
 	    	const char *subcmd = netmsg->parts[1];
 	    	if(!strcmp(subcmd, "ADD") && netmsg->partCount == 10) {
-	    		if(flib_roomlist_add(&conn->roomList, netmsg->parts+2)) {
-	    			flib_log_e("Error adding new room to list");
-	    		} else {
-	    			conn->onRoomAddCb(conn->onRoomAddCtx, conn->roomList.rooms[0]);
+	    		flib_room *room = flib_room_from_netmsg(netmsg->parts+2);
+	    		if(room) {
+	    			conn->onRoomAddCb(conn->onRoomAddCtx, room);
 	    		}
+	    		flib_room_destroy(room);
 			} else if(!strcmp(subcmd, "UPD") && netmsg->partCount == 11) {
-				char *newName = netmsg->parts[4];
-	    		if(flib_roomlist_update(&conn->roomList, netmsg->parts[2], netmsg->parts+3)) {
-	    			flib_log_e("Error updating room in list");
-	    		} else {
-	    			conn->onRoomUpdateCb(conn->onRoomUpdateCtx, netmsg->parts[2], flib_roomlist_find(&conn->roomList, newName));
+				flib_room *room = flib_room_from_netmsg(netmsg->parts+3);
+				if(room) {
+	    			conn->onRoomUpdateCb(conn->onRoomUpdateCtx, netmsg->parts[2], room);
 	    		}
+				flib_room_destroy(room);
 			} else if(!strcmp(subcmd, "DEL") && netmsg->partCount == 3) {
-	    		if(flib_roomlist_delete(&conn->roomList, netmsg->parts[2])) {
-	    			flib_log_e("Error deleting room from list");
-	    		} else {
-	    			conn->onRoomDeleteCb(conn->onRoomDeleteCtx, netmsg->parts[2]);
-	    		}
+				conn->onRoomDeleteCb(conn->onRoomDeleteCtx, netmsg->parts[2]);
 			} else {
 				flib_log_w("Net: Unknown or malformed ROOM subcommand: %s", subcmd);
 			}

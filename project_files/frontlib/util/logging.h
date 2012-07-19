@@ -84,4 +84,10 @@ void flib_log_setLevel(int level);
 void flib_log_setFile(FILE *logfile);
 bool flib_log_isActive(int level);
 
+/**
+ * Allows logging through an arbitrary callback function. Useful for integrating into an
+ * existing logging system. This overrides setFile and vice versa.
+ */
+void flib_log_setCallback(void (*logCallback)(int level, const char *msg));
+
 #endif /* LOGGING_H_ */
