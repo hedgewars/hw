@@ -5090,6 +5090,7 @@ begin
         if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
             hh^.Gear^.Damage:= 1;
         RenderHealth(hh^);
+        RecountTeamHealth(hh^.Team);
         inc(graves.ar^[Gear^.Tag]^.Health);
         inc(Gear^.Tag)
 {-for i:= 0 to High(graves) do begin
@@ -5110,6 +5111,7 @@ begin
                 resgear^.Health := graves.ar^[i]^.Health;
                 PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := resgear;
                 graves.ar^[i]^.Message:= graves.ar^[i]^.Message or gmDestroy;
+                graves.ar^[i]^.Active:= true;
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;
