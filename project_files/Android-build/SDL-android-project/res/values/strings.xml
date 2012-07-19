@@ -66,6 +66,15 @@
     <!-- Player list -->
     <string name="no_players_in_list">No players</string>
     
+    <!-- Roomlist -->
+    <string name="roomlist_owner">by %1$s</string>
+    <string name="roomlist_map">map: %1$s</string>
+    <string name="roomlist_scheme">scheme: %1$s</string>
+    <string name="roomlist_weapons">weapons: %1$s</string>
+    <string name="map_regular">Random map</string>
+    <string name="map_maze">Random maze</string>
+    <string name="map_drawn">Drawn map</string>
+    
     <!-- Chatlog messages -->
     <string name="log_player_join">%1$s has joined.</string>
     <string name="log_player_leave">%1$s has left.</string>
