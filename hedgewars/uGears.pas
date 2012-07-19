@@ -206,6 +206,13 @@ while t <> nil do
     curHandledGear:= t;
     t:= curHandledGear^.NextGear;
 
+    if curHandledGear^.Message and gmRemoveFromList <> 0 then 
+        begin
+        RemoveGearFromList(curHandledGear);
+        // since I can't think of any good reason this would ever be separate from a remove from list, going to keep it inside this block
+        if curHandledGear^.Message and gmAddToList <> 0 then InsertGearToList(curHandledGear);
+        curHandledGear^.Message:= curHandledGear^.Message and not (gmRemoveFromList or gmAddToList)
+        end;
     if curHandledGear^.Active then
         begin
         if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then

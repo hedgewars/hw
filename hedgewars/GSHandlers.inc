@@ -116,12 +116,12 @@ begin
         
     if lastGearByUID = HH^.Gear then
         lastGearByUID := nil;
-        
-    RemoveGearFromList(HH^.Gear);
+    
+    HH^.Gear^.Message:= HH^.Gear^.Message or gmRemoveFromList;
     with HH^.Gear^ do
         begin
         Z := cHHZ;
-        Active := false;
+        HH^.Gear^.Active:= false;
         State:= State and (not (gstHHDriven or gstAttacking or gstAttacked));
         Message := Message and (not gmAttack);
     end;
@@ -2794,10 +2794,9 @@ begin
         Gear^.Message := Gear^.Message and (not gmSwitch);
         State := HHGear^.State;
         HHGear^.State := 0;
-        HHGear^.Active := false;
         HHGear^.Z := cHHZ;
-        RemoveGearFromList(HHGear);
-        InsertGearToList(HHGear);
+        HHGear^.Active := false;
+        HHGear^.Message:= HHGear^.Message or gmRemoveFromList or gmAddToList;
 
         PlaySound(sndSwitchHog);
 
@@ -2813,8 +2812,7 @@ begin
         HHGear^.Active := true;
         FollowGear := HHGear;
         HHGear^.Z := cCurrHHZ;
-        RemoveGearFromList(HHGear);
-        InsertGearToList(HHGear);
+        HHGear^.Message:= HHGear^.Message or gmRemoveFromList or gmAddToList;
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y
         end;
