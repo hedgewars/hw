@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:drawSelectorOnTop="false"
-        tools:listitem="@android:layout/simple_list_item_1" />
+        android:animateLayoutChanges="true"
+        tools:listitem="@android:layout/simple_list_item_2" />
 
     <TextView
         android:id="@id/android:empty"

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.netplay.PlayerList.Observer;
@@ -32,19 +33,24 @@ public class PlayerListAdapter extends BaseAdapter implements Observer {
 	}
 
 	public long getItemId(int position) {
-		return players.get(position).playerId;
+		return players.get(position).id;
 	}
 
 	public boolean hasStableIds() {
 		return true;
 	}
 
-	public void itemAdded(List<Player> newList, Player added) {
-		setPlayerList(newList);
+	public void itemAdded(Map<String, Player> map, String key, Player value) {
+		setPlayerList(map.values());
 	}
-	
-	public void itemDeleted(List<Player> newList, Player deleted) {
-		setPlayerList(newList);
+
+	public void itemRemoved(Map<String, Player> map, String key, Player oldValue) {
+		setPlayerList(map.values());
+	}
+
+	public void itemReplaced(Map<String, Player> map, String key,
+			Player oldValue, Player newValue) {
+		setPlayerList(map.values());
 	}
 	
 	public void setPlayerList(Collection<Player> players) {

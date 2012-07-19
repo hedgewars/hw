@@ -6,11 +6,11 @@ public class Player {
 	public static final ByNameComparator nameComparator = new ByNameComparator(); 
 
 	public final String name;
-	public final long playerId;
+	public final long id; // for ListView
 	
-	public Player(String name, long playerId) {
+	public Player(String name, long id) {
 		this.name = name;
-		this.playerId = playerId;
+		this.id = id;
 	}
 	
 	private static class ByNameComparator implements Comparator<Player> {

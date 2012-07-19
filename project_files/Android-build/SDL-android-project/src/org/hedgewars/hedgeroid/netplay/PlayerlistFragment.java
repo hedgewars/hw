@@ -1,9 +1,5 @@
 package org.hedgewars.hedgeroid.netplay;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.netplay.NetplayService.NetplayBinder;
 
@@ -14,7 +10,6 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,13 +36,13 @@ public class PlayerlistFragment extends ListFragment {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
         	netconn = ((NetplayBinder) binder).getNetconn();
-        	playerListAdapter.setPlayerList(netconn.playerList.getList());
-        	netconn.playerList.observePlayerList(playerListAdapter);
+        	playerListAdapter.setPlayerList(netconn.playerList.getValues());
+        	netconn.playerList.observe(playerListAdapter);
         }
 
         public void onServiceDisconnected(ComponentName className) {
         	// TODO navigate away
-        	netconn.playerList.unobservePlayerList(playerListAdapter);
+        	netconn.playerList.unobserve(playerListAdapter);
         	netconn = null;
         }
     };

@@ -7,8 +7,14 @@ import org.hedgewars.hedgeroid.Utils;
 import org.hedgewars.hedgeroid.netplay.JnaFrontlib.IntStrCallback;
 import org.hedgewars.hedgeroid.netplay.JnaFrontlib.MetaschemePtr;
 import org.hedgewars.hedgeroid.netplay.JnaFrontlib.NetconnPtr;
+import org.hedgewars.hedgeroid.netplay.JnaFrontlib.RoomArrayPtr;
+import org.hedgewars.hedgeroid.netplay.JnaFrontlib.RoomCallback;
+import org.hedgewars.hedgeroid.netplay.JnaFrontlib.RoomListCallback;
+import org.hedgewars.hedgeroid.netplay.JnaFrontlib.RoomPtr;
 import org.hedgewars.hedgeroid.netplay.JnaFrontlib.StrCallback;
+import org.hedgewars.hedgeroid.netplay.JnaFrontlib.StrRoomCallback;
 import org.hedgewars.hedgeroid.netplay.JnaFrontlib.StrStrCallback;
+import org.hedgewars.hedgeroid.netplay.JnaFrontlib.VoidCallback;
 
 import com.sun.jna.Pointer;
 
@@ -29,19 +35,20 @@ public class Netconn {
 	private String playerName;
 	
 	public final PlayerList playerList = new PlayerList();
+	public final RoomList roomList = new RoomList();
 	public final MessageLog lobbyLog;
 	public final MessageLog roomLog;
 	
 	private StrCallback lobbyJoinCb = new StrCallback() {
 		public void callback(Pointer context, String arg1) {
-			playerList.addPlayer(arg1);
+			playerList.addPlayerWithNewId(arg1);
 			lobbyLog.appendPlayerJoin(arg1);
 		}
 	};
 	
 	private StrStrCallback lobbyLeaveCb = new StrStrCallback() {
 		public void callback(Pointer context, String name, String msg) {
-			playerList.removePlayer(name);
+			playerList.remove(name);
 			lobbyLog.appendPlayerLeave(name, msg);
 		}
 	};
@@ -55,6 +62,40 @@ public class Netconn {
 	private IntStrCallback messageCb = new IntStrCallback() {
 		public void callback(Pointer context, int type, String msg) {
 			getCurrentLog().appendMessage(type, msg);
+		}
+	};
+	
+	private RoomCallback roomAddCb = new RoomCallback() {
+		public void callback(Pointer context, RoomPtr roomPtr) {
+			roomList.addRoomWithNewId(roomPtr);
+		}
+	};
+	
+	private StrRoomCallback roomUpdateCb = new StrRoomCallback() {
+		public void callback(Pointer context, String name, RoomPtr roomPtr) {
+			roomList.updateRoom(name, roomPtr);
+		}
+	};
+	
+	private StrCallback roomDeleteCb = new StrCallback() {
+		public void callback(Pointer context, String name) {
+			roomList.remove(name);
+		}
+	};
+	
+	private VoidCallback connectedCb = new VoidCallback() {
+		public void callback(Pointer context) {
+			// TODO I guess more needs to happen here...
+			FLIB.flib_netconn_send_request_roomlist(conn);
+		}
+	};
+	
+	private RoomListCallback roomlistCb = new RoomListCallback() {
+		public void callback(Pointer context, RoomArrayPtr arg1, int count) {
+			roomList.clear();
+			for(RoomPtr roomPtr : arg1.getRooms(count)) {
+				roomList.addRoomWithNewId(roomPtr);
+			}
 		}
 	};
 	
@@ -96,6 +137,11 @@ public class Netconn {
 			FLIB.flib_netconn_onLobbyLeave(conn, lobbyLeaveCb, null);
 			FLIB.flib_netconn_onChat(conn, chatCb, null);
 			FLIB.flib_netconn_onMessage(conn, messageCb, null);
+			FLIB.flib_netconn_onRoomAdd(conn, roomAddCb, null);
+			FLIB.flib_netconn_onRoomUpdate(conn, roomUpdateCb, null);
+			FLIB.flib_netconn_onRoomDelete(conn, roomDeleteCb, null);
+			FLIB.flib_netconn_onConnected(conn, connectedCb, null);
+			FLIB.flib_netconn_onRoomlist(conn, roomlistCb, null);
 		} finally {
 			FLIB.flib_metascheme_release(meta);
 		}
@@ -133,6 +179,7 @@ public class Netconn {
 	public void sendNick(String nick) { FLIB.flib_netconn_send_nick(conn, nick); }
 	public void sendPassword(String password) { FLIB.flib_netconn_send_password(conn, password); }
 	public void sendQuit(String message) { FLIB.flib_netconn_send_quit(conn, message); }
+	public void sendRoomlistRequest() { FLIB.flib_netconn_send_request_roomlist(conn); }
 	
 	public boolean isConnected() {
 		return conn != null;
