@@ -28,6 +28,12 @@ public class PlayerlistFragment extends ListFragment {
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		getActivity().unbindService(serviceConnection);
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.lobby_players_fragment, container, false);

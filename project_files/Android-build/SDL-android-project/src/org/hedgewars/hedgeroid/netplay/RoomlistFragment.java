@@ -48,18 +48,24 @@ public class RoomlistFragment extends ListFragment {
 	}
 	
 	@Override
-	public void onPause() {
-		super.onPause();
-		autoRefreshTimer.cancel();
-	}
-	
-	@Override
 	public void onResume() {
 		super.onResume();
 		if(netconn != null) {
 			netconn.sendRoomlistRequest();
 			autoRefreshTimer.start();
 		}
+	}
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		autoRefreshTimer.cancel();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		getActivity().unbindService(serviceConnection);
 	}
 	
     private ServiceConnection serviceConnection = new ServiceConnection() {

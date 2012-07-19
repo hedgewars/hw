@@ -27,7 +27,7 @@ public class NetplayService extends Service {
 			netconn = new Netconn(getApplicationContext(), "AndroidTester");
 		} catch (IOException e) {
 			// TODO better handling
-			throw new RuntimeException("Unable to start frontlib");
+			throw new RuntimeException("Unable to start frontlib", e);
 		}
     	timer = new CountDownTimer(Long.MAX_VALUE, 50) {
 			@Override
@@ -46,6 +46,7 @@ public class NetplayService extends Service {
 	
 	@Override
 	public void onDestroy() {
+		timer.cancel();
 		netconn.disconnect();
 		Flib.INSTANCE.flib_quit();
 	}
