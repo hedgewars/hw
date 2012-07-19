@@ -5,23 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-	<ScrollView
-        android:id="@+id/lobbyConsoleScroll"
+    <ListView 
+        android:id="@+id/lobbyConsole"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:requiresFadingEdge="vertical"
-        android:scrollbars="vertical" >
-
-        <TextView
-            android:id="@+id/lobbyConsole"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="none"
-            android:freezesText="true"
-            android:text=""
-            tools:context=".LobbyActivity" />
-    </ScrollView>
+        android:layout_weight="1" 
+        android:clickable="false"
+        android:transcriptMode="normal"
+        android:stackFromBottom="true"
+        />
 
 	<EditText
         android:id="@+id/lobbyChatInput"

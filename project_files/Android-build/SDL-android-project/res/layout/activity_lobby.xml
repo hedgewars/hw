@@ -1,61 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="5dp" >
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+  	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<include layout="@layout/background"/>
 
-    <FrameLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="0.3"
-        android:background="@drawable/box" >
-
-        <fragment
-            android:id="@+id/roomListFragment"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            class="org.hedgewars.hedgeroid.netplay.RoomlistFragment"
-            tools:layout="@layout/lobby_rooms_fragment" />
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.7"
-        android:baselineAligned="false"
-        android:orientation="horizontal" >
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_marginRight="10dp"
-            android:layout_weight="0.7"
-            android:background="@drawable/box" >
-
-            <fragment
-                android:id="@+id/chatFragment"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                class="org.hedgewars.hedgeroid.netplay.LobbyChatFragment"
-                tools:layout="@layout/lobby_chat_fragment" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="0.3"
-            android:background="@drawable/box" >
-
-            <fragment
-                android:id="@+id/playerListFragment"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                class="org.hedgewars.hedgeroid.netplay.PlayerlistFragment"
-                tools:layout="@layout/lobby_players_fragment" />
-        </FrameLayout>
-    </LinearLayout>
-
-</LinearLayout>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:tools="http://schemas.android.com/tools"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation="vertical"
+	    android:padding="5dp" >
+	
+	    <FrameLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	        android:layout_marginBottom="10dp"
+	        android:layout_weight="0.3"
+	        android:background="@drawable/box" >
+	
+	        <fragment
+	            android:id="@+id/roomListFragment"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            class="org.hedgewars.hedgeroid.netplay.RoomlistFragment"
+	            tools:layout="@layout/lobby_rooms_fragment" />
+	    </FrameLayout>
+	
+	    <LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="0.7"
+	        android:baselineAligned="false"
+	        android:orientation="horizontal" >
+	
+	        <FrameLayout
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:layout_marginRight="10dp"
+	            android:layout_weight="0.7"
+	            android:background="@drawable/box" >
+	
+	            <fragment
+	                android:id="@+id/chatFragment"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                class="org.hedgewars.hedgeroid.netplay.LobbyChatFragment"
+	                tools:layout="@layout/lobby_chat_fragment" />
+	        </FrameLayout>
+	
+	        <FrameLayout
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:layout_weight="0.3"
+	            android:background="@drawable/box" >
+	
+	            <fragment
+	                android:id="@+id/playerListFragment"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                class="org.hedgewars.hedgeroid.netplay.PlayerlistFragment"
+	                tools:layout="@layout/lobby_players_fragment" />
+	        </FrameLayout>
+	    </LinearLayout>
+	
+	</LinearLayout>
+</FrameLayout>

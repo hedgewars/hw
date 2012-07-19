@@ -1,5 +1,7 @@
 package org.hedgewars.hedgeroid.netplay;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +24,7 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 
 public class MessageLog {
-	private static final int BACKLOG_CHARS = 10000;
+	private static final int BACKLOG_LINES = 200;
 	
 	private static final int INFO_COLOR = Color.GRAY;
 	private static final int CHAT_COLOR = Color.GREEN;
@@ -32,9 +34,7 @@ public class MessageLog {
 	
 	private final Context context;
 	private List<Observer> observers = new LinkedList<Observer>();
-	
-	private SpannableStringBuilder log = new SpannableStringBuilder();
-	private List<Integer> lineLengths = new LinkedList<Integer>();
+	private List<CharSequence> log = new LinkedList<CharSequence>();
 	
 	public MessageLog(Context context) {
 		this.context = context;
@@ -61,18 +61,20 @@ public class MessageLog {
 	
 	private void append(CharSequence msg) {
 		SpannableStringBuilder ssb = new SpannableStringBuilder();
-		ssb.append(makeLogTime()).append(msg).append("\n");
+		ssb.append(makeLogTime()).append(msg);
 		appendRaw(ssb);
 	}
 	
 	private void appendRaw(CharSequence msg) {
-		lineLengths.add(msg.length());
-		log.append(msg);
-		while(log.length() > BACKLOG_CHARS) {
-			log.delete(0, lineLengths.remove(0));
+		if(log.size() > BACKLOG_LINES) {
+			log.remove(0);
+			for(Observer o : observers) {
+				o.lineRemoved();
+			}
 		}
+		log.add(msg);
 		for(Observer o : observers) {
-			o.textChanged(log);
+			o.lineAdded(msg);
 		}
 	}
 	
@@ -113,7 +115,7 @@ public class MessageLog {
 			append(msg);
 			break;
 		case JnaFrontlib.NETCONN_MSG_TYPE_SERVERMESSAGE:
-			appendRaw(span(TextUtils.concat("\n", Html.fromHtml(msg), "\n\n"), new RelativeSizeSpan(1.5f)));
+			appendRaw(span(TextUtils.concat("\n", Html.fromHtml(msg), "\n"), new RelativeSizeSpan(1.5f)));
 			break;
 		default:
 			Log.e("MessageLog", "Unknown messagetype "+type);
@@ -121,19 +123,27 @@ public class MessageLog {
 	}
 	
 	void clear() {
+		for(Observer o : observers) {
+			o.clear();
+		}
 		log.clear();
-		lineLengths.clear();
 	}
 	
-	public void observe(Observer o) {
+	public void registerObserver(Observer o) {
 		observers.add(o);
 	}
 	
-	public void unobserve(Observer o) {
+	public void unregisterObserver(Observer o) {
 		observers.remove(o);
 	}
 	
 	public static interface Observer {
-		void textChanged(Spanned text);
+		void lineAdded(CharSequence text);
+		void lineRemoved();
+		void clear();
+	}
+
+	public Collection<CharSequence> getLog() {
+		return Collections.unmodifiableList(log);
 	}
 }

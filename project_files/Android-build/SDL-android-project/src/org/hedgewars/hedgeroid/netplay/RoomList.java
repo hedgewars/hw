@@ -9,7 +9,6 @@ public class RoomList extends ObservableLinkedHashMap<String, Room> {
 	
 	public void addRoomWithNewId(RoomPtr roomPtr) {
 		JnaFrontlib.Room r = roomPtr.deref();
-		Log.d("RoomList", "Adding room "+r.name);
 		long id = nextId++;
 		put(r.name, new Room(r.name, r.map, r.scheme, r.weapons, r.owner, r.playerCount, r.teamCount, r.inProgress, id));
 	}
