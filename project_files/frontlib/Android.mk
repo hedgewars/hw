@@ -9,7 +9,7 @@ LOCAL_CFLAGS := -I$(LOCAL_PATH)/../SDL_net -std=c99 -DWITHOUT_SDL
 LOCAL_SRC_FILES := base64/base64.c iniparser/iniparser.c \
 	iniparser/dictionary.c ipc/gameconn.c ipc/ipcbase.c \
 	ipc/ipcprotocol.c ipc/mapconn.c md5/md5.c model/scheme.c \
-	model/gamesetup.c model/map.c model/mapcfg.c model/roomlist.c \
+	model/gamesetup.c model/map.c model/mapcfg.c model/room.c \
 	model/schemelist.c model/team.c model/teamlist.c model/weapon.c \
 	net/netbase.c net/netconn_callbacks.c net/netconn_send.c \
 	net/netconn.c net/netprotocol.c util/buffer.c util/inihelper.c \

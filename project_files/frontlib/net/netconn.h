@@ -22,7 +22,7 @@
 
 #include "../model/gamesetup.h"
 #include "../model/scheme.h"
-#include "../model/roomlist.h"
+#include "../model/room.h"
 
 #include <stddef.h>
 #include <stdint.h>
@@ -73,12 +73,6 @@ void flib_netconn_destroy(flib_netconn *conn);
  */
 void flib_netconn_tick(flib_netconn *conn);
 
-
-/**
- * Return the current roomlist. Don't free or modify.
- */
-const flib_roomlist *flib_netconn_get_roomlist(flib_netconn *conn);
-
 /**
  * Are you currently the owner of this room? The return value only makes sense in
  * NETCONN_STATE_ROOM and NETCONN_STATE_INGAME states.
@@ -89,6 +83,13 @@ bool flib_netconn_is_chief(flib_netconn *conn);
  * Are you in the context of a room, i.e. either in room or ingame state?
  */
 bool flib_netconn_is_in_room_context(flib_netconn *conn);
+
+/**
+ * Returns the playername. This is *probably* the one provided on creation, but
+ * if that name was already taken, a different one could have been set by the
+ * onNickTaken callback or its default implementation.
+ */
+const char *flib_netconn_get_playername(flib_netconn *conn);
 
 /**
  * Generate a game setup from the current room state.
@@ -125,6 +126,12 @@ int flib_netconn_send_password(flib_netconn *conn, const char *passwd);
  * be changed.
  */
 int flib_netconn_send_nick(flib_netconn *conn, const char *nick);
+
+/**
+ * Request an update of the room list. Only makes sense when in lobby state.
+ * If the action succeeds, you will receive an onRoomlist callback containing the current room data.
+ */
+int flib_netconn_send_request_roomlist(flib_netconn *conn);
 
 /**
  * Join a room as guest (not chief). Only makes sense when in lobby state. If the action succeeds, you will
@@ -356,10 +363,13 @@ void flib_netconn_onConnected(flib_netconn *conn, void (*callback)(void *context
 void flib_netconn_onDisconnected(flib_netconn *conn, void (*callback)(void *context, int reason, const char *message), void* context);
 
 /**
- * Callbacks for room list updates. The room list is managed automatically and can be queried with
- * flib_netconn_get_roomlist() as soon as the onConnected callback is fired. These callbacks
- * provide notification about changes.
+ * Callbacks for room list updates. The roomlist can be queried with flib_netconn_send_request_roomlist(), which will
+ * trigger flib_netconn_onRoomlist once the server replies. Additionally, the roomAdd/delete/update callbacks will fire
+ * whenever the server informs about these events, which can happen *before* the roomlist is first received - so be sure
+ * not to blindly reference your room list in these callbacks. The server currently only sends updates when a room changes
+ * its name, so in order to update other room information you need to query the roomlist again.
  */
+void flib_netconn_onRoomlist(flib_netconn *conn, void (*callback)(void *context, const flib_room **rooms, int roomCount), void* context);
 void flib_netconn_onRoomAdd(flib_netconn *conn, void (*callback)(void *context, const flib_room *room), void* context);
 void flib_netconn_onRoomDelete(flib_netconn *conn, void (*callback)(void *context, const char *name), void* context);
 void flib_netconn_onRoomUpdate(flib_netconn *conn, void (*callback)(void *context, const char *oldName, const flib_room *room), void* context);
