@@ -18,6 +18,10 @@
 
 package org.hedgewars.hedgeroid;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
 import org.hedgewars.hedgeroid.netplay.LobbyActivity;
@@ -32,6 +36,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -60,15 +65,20 @@ public class MainActivity extends FragmentActivity {
 		if(!Utils.isDataPathAvailable()){
 			showDialog(0);
 		} else {
-			int versionCode = 0;
+			String existingVersion = "";
 			try {
-				versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
-			} catch (NameNotFoundException e) {
-
+				File versionFile = new File(Utils.getCachePath(this), "assetsversion.txt");
+				existingVersion = Utils.readToString(new FileInputStream(versionFile));
+			} catch(IOException e) {
 			}
-			boolean assetsCopied = PreferenceManager.getDefaultSharedPreferences(this).getInt("latestAssets", 0) >= versionCode;
-
-			if(!assetsCopied){
+			
+			String newVersion = "";
+			try {
+				newVersion = Utils.readToString(getAssets().open("assetsversion.txt"));
+			} catch(IOException e) {
+			}
+			
+			if(!existingVersion.equals(newVersion)) {
 				DownloadAssets assetsAsyncTask = new DownloadAssets(this);
 				assetsDialog = ProgressDialog.show(this, "Please wait a moment", "Moving assets to SD card...");
 				assetsAsyncTask.execute();
@@ -90,21 +100,14 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public void onAssetsDownloaded(boolean result){
-		if(result){
-			try {
-				int versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
-				PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("latestAssets", versionCode).commit();
-			} catch (NameNotFoundException e) {}
-			
-		}else{
-			Toast.makeText(this, R.string.download_failed, Toast.LENGTH_LONG);
+		if(!result){
+			Toast.makeText(this, R.string.download_failed, Toast.LENGTH_LONG).show();
 		}
 		assetsDialog.dismiss();
 	}
 
 	private OnClickListener downloadClicker = new OnClickListener(){
 		public void onClick(View v){
-			//startActivityForResult(new Intent(getApplicationContext(), DownloadActivity.class), 0);
 			startActivityForResult(new Intent(getApplicationContext(), DownloadListActivity.class), 0);
 		}
 	};

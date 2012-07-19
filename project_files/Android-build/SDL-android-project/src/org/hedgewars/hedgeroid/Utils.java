@@ -19,6 +19,7 @@
 
 package org.hedgewars.hedgeroid;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.annotation.TargetApi;
-import android.app.Application;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -254,6 +254,20 @@ public class Utils {
 	public static void assertZero(int value, String text) {
 		if(value != 0) {
 			throw new RuntimeException("Result is not zero: " + text);
+		}
+	}
+
+	public static String readToString(InputStream is) throws IOException {
+		try {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			byte[] buffer = new byte[8192];
+			int size;
+			while((size=is.read(buffer)) != -1) {
+				os.write(buffer, 0, size);
+			}
+			return new String(os.toByteArray());
+		} finally {
+			closeQuietly(is);
 		}
 	}
 }

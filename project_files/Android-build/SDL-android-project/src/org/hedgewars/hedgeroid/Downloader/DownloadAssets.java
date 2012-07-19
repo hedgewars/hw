@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class DownloadAssets extends AsyncTask<Object, Long, Boolean> {
+	private static final String VERSION_FILENAME = "assetsversion.txt";
 	private final MainActivity act;
 	
 	public DownloadAssets(MainActivity act){
@@ -47,6 +48,7 @@ public class DownloadAssets extends AsyncTask<Object, Long, Boolean> {
 			Utils.resRawToFilesDir(act, R.array.weapons, Weapon.DIRECTORY_WEAPON);
 			Utils.resRawToFilesDir(act, R.array.teams, Team.DIRECTORY_TEAMS);
 			copyFileOrDir(act.getAssets(), Utils.getDataPathFile(act), "Data");
+			copyFileOrDir(act.getAssets(), new File(Utils.getCachePath(act), VERSION_FILENAME), VERSION_FILENAME);
 			return Boolean.TRUE;
 		} catch(IOException e) {
 			Log.e("DownloadAssets", e.getMessage(), e);
