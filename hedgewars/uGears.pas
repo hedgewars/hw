@@ -587,7 +587,8 @@ begin
 end;
 
 procedure AddMiscGears;
-var i: Longword;
+var i,rx, ry: Longword;
+    rdx, rdy: hwFloat;
     Gear: PGear;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
@@ -632,6 +633,14 @@ if (GameFlags and gfLaserSight) <> 0 then
 
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
+
+for i:= 0 to GetRandom(10)+30 do
+    begin                                                                                                                                       rx:= GetRandom(rightX-leftX)+leftX;
+    ry:= GetRandom(LAND_HEIGHT-topY)+topY;
+    rdx:= _90-(GetRandomf*_360);
+    rdy:= _90-(GetRandomf*_360);
+    AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
+    end;
 
 if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
     for i:= 0 to Pred(vobCount*2) do

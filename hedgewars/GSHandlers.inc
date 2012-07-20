@@ -2081,12 +2081,13 @@ end;
 
 procedure doStepCase(Gear: PGear);
 var 
-    i, x, y, rx, ry: LongInt;
+    i, x, y: LongInt;
     k: TGearType;
     exBoom: boolean;
-    dX, dY, rdx, rdy: HWFloat;
+    dX, dY: HWFloat;
     hog: PHedgehog;
     sparkles: PVisualGear;
+    gi: PGear;
 begin
     k := Gear^.Kind;
     exBoom := false;
@@ -2121,16 +2122,21 @@ begin
         end
     else
         begin 
-        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $3FF = 0) then
+        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $3FF = 0) then // stir it up every second or so
             begin
-            for i:= 0 to GetRandom(3) do
+            gi := GearsList;
+            while gi <> nil do
                 begin
-                rx:= GetRandom(rightX-leftX)+leftX;
-                ry:= GetRandom(LAND_HEIGHT-topY)+topY;
-                rdx:= _90-(GetRandomf*_360);
-                rdy:= _90-(GetRandomf*_360);
-                AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, GetRandom(1000)+1000)
-                end;
+                if gi^.Kind = gtGenericFaller then
+                    begin
+                    gi^.Active:= true;
+                    gi^.X:=  int2hwFloat(GetRandom(rightX-leftX)+leftX);
+                    gi^.Y:=  int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+                    gi^.dX:= _90-(GetRandomf*_360);
+                    gi^.dY:= _90-(GetRandomf*_360)
+                    end;
+                gi := gi^.NextGear
+                end
             end;
 
         if Gear^.Timer = 500 then
@@ -5580,10 +5586,14 @@ end;
 
 procedure doStepGenericFaller(Gear: PGear);
 begin
-if Gear^.Timer > 0 then 
-    begin
-    doStepFallingGear(Gear);
-    dec(Gear^.Timer)
-    end
-else DeleteGear(Gear)
+if Gear^.Timer < $FFFFFFFF then
+    if Gear^.Timer > 0 then
+        dec(Gear^.Timer)
+    else
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
+    
+doStepFallingGear(Gear);
 end;
