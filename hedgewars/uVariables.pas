@@ -99,6 +99,7 @@ var
 
     cWaterLine       : Word;
     cGearScrEdgesDist: LongInt;
+	isAudioMuted     : boolean;
 
     // originally typed consts
     ExplosionBorderColor: LongWord;

@@ -1114,6 +1114,7 @@ var i, t, h: LongInt;
     highlight: Boolean;
     smallScreenOffset, offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
+	volume: LongInt;
 begin
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
@@ -1526,14 +1527,18 @@ if (RM = rmDefault) or (RM = rmRightEye) then
 end;
 
 if SoundTimerTicks >= 50 then
-   begin
-   SoundTimerTicks:= 0;
-   if cVolumeDelta <> 0 then
-      begin
-      str(ChangeVolume(cVolumeDelta), s);
-      AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
-      end
-   end;
+begin
+    SoundTimerTicks:= 0;
+    if cVolumeDelta <> 0 then
+    begin
+        str(ChangeVolume(cVolumeDelta), s);
+        AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume);
+    end;
+	if isAudioMuted then
+		AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
+	else
+        FreeTexture(Captions[capgrpVolume].Tex)
+end;
 
 if GameState = gsConfirm then
     DrawTextureCentered(0, (cScreenHeight shr 1), ConfirmTexture);

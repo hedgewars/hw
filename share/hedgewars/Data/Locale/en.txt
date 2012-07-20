@@ -79,6 +79,7 @@
 01:18=High
 01:19=Extreme
 01:20=%1 Bounce
+01:21=Audio Muted
 
 ; Event messages
 ; Hog (%1) died

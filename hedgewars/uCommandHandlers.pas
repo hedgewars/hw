@@ -856,7 +856,7 @@ begin
     RegisterVariable('-volup'  , @chVol_m        , true );
     RegisterVariable('+voldown', @chVol_m        , true );
     RegisterVariable('-voldown', @chVol_p        , true );
-    RegisterVariable('findhh'  , @chFindhh       , true );
+	RegisterVariable('findhh'  , @chFindhh       , true );
     RegisterVariable('pause'   , @chPause        , true );
     RegisterVariable('+cur_u'  , @chCurU_p       , true );
     RegisterVariable('-cur_u'  , @chCurU_m       , true );
