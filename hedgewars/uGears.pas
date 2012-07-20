@@ -556,7 +556,7 @@ begin
 Gear:= GearsList;
 while Gear <> nil do
     begin
-    if Gear^.State and gstInvisible = 0 then
+    if (Gear^.State and gstInvisible = 0) and (Gear^.Message and gmRemoveFromList = 0) then
         begin
         x:= hwRound(Gear^.X) + WorldDx;
         y:= hwRound(Gear^.Y) + WorldDy;
