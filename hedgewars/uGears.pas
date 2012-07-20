@@ -461,7 +461,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
     if (not CurrentTeam^.ExtDriven) or CurrentTeam^.hasGone then
         inc(hiTicks) // we do not recieve a message for this
     end;
-AddRandomness(CheckSum);
+//AddRandomness(CheckSum);
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 inc(GameTicks)
