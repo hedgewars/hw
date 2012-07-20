@@ -47,7 +47,7 @@ procedure SetSound(enabled: boolean);           // Enable/disable sound-system a
 
 // Obvious music commands for music track
 procedure SetMusic(enabled: boolean);           // Enable/disable music.
-procedure SetMusicName(musicname: shortstring);     // Enable/disable music and set name of musicfile to play.
+procedure SetMusicName(musicname: shortstring); // Enable/disable music and set name of the file to play.
 procedure PlayMusic;                            // Play music from the start.
 procedure PauseMusic;                           // Pause music.
 procedure ResumeMusic;                          // Resume music from pause point.
@@ -82,6 +82,16 @@ procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 procedure PlayNextVoice;
 
 
+// GLOBAL FUNCTIONS
+
+// Drastically lower the volume when we lose focus (and restore the previous value).
+procedure DampenAudio;
+procedure UndampenAudio;
+
+// Mute/Unmute audio
+procedure MuteAudio;
+
+
 // MISC
 
 // Set the initial volume
@@ -93,25 +103,22 @@ function  ChangeVolume(voldelta: LongInt): LongInt;
 // Returns a pointer to the voicepack with the given name.
 function  AskForVoicepack(name: shortstring): Pointer;
 
-// Drastically lower the volume when we lose focus (and restore the previous value).
-procedure DampenAudio;
-procedure UndampenAudio;
 
 implementation
 uses uVariables, uConsole, uUtils, uCommands, uDebug;
 
 const chanTPU = 32;
 var Volume: LongInt;
+    cInitVolume: LongInt;
+    previousVolume: LongInt; // cached volume value
     lastChan: array [TSound] of LongInt;
     voicepacks: array[0..cMaxTeams] of TVoicepack;
     defVoicepack: PVoicepack;
-    Mus: PMixMusic = nil;
+    Mus: PMixMusic = nil; // music pointer
     MusicFN: shortstring; // music file name
-    previousVolume: LongInt; // cached volume value
     isMusicEnabled: boolean;
     isSoundEnabled: boolean;
     isSEBackup: boolean;
-    cInitVolume: LongInt;
 
 
 function  AskForVoicepack(name: shortstring): Pointer;
@@ -180,7 +187,7 @@ begin
     WriteLnToConsole(msgOK);
 
     Mix_AllocateChannels(Succ(chanTPU));
-    ChangeVolume(cInitVolume);
+    ChangeVolume(cInitVolume);	
 end;
 
 procedure ResetSound;
@@ -446,7 +453,7 @@ end;
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
     ChangeVolume:= 0;
-    if not isSoundEnabled then
+    if (not isSoundEnabled) or (voldelta = 0) then
         exit;
 
     inc(Volume, voldelta);
@@ -458,18 +465,50 @@ begin
     Volume:= Mix_Volume(-1, -1);
     if isMusicEnabled then
         Mix_VolumeMusic(Volume * 4 div 8);
-    ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
+    ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME;
+
+	if (isMusicEnabled) then
+		if (Volume = 0) then
+			PauseMusic
+		else
+			ResumeMusic;
+
+	isAudioMuted:= (Volume = 0);
 end;
 
 procedure DampenAudio;
 begin
+	if (isAudioMuted) then
+		exit;
     previousVolume:= Volume;
     ChangeVolume(-Volume * 7 div 9);
 end;
 
 procedure UndampenAudio;
 begin
+	if (isAudioMuted) then
+		exit;
     ChangeVolume(previousVolume - Volume);
+end;
+
+procedure MuteAudio;
+begin
+    if (not isSoundEnabled) then
+        exit;
+	
+	if (isAudioMuted) then
+	begin
+		ResumeMusic;
+		ChangeVolume(previousVolume);
+	end
+	else
+	begin
+		PauseMusic;
+		previousVolume:= Volume;
+		ChangeVolume(-Volume);
+	end;
+	
+	// isAudioMuted is updated in ChangeVolume
 end;
 
 procedure SetMusic(enabled: boolean);
@@ -534,15 +573,23 @@ begin
     CurrentTeam^.voicepack:= AskForVoicepack(s)
 end;
 
+procedure chMute(var s: shortstring);
+begin
+	s:= s; // avoid compiler hint
+	MuteAudio;
+end;
+
 procedure initModule;
 var t: LongInt;
     i: TSound;
 begin
     RegisterVariable('voicepack', @chVoicepack, false);
+	RegisterVariable('mute'     , @chMute     , true );
 
     MusicFN:='';
     isMusicEnabled:= true;
     isSoundEnabled:= true;
+	isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;
     cInitVolume:= 100;
     Volume:= 0;

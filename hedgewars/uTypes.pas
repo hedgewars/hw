@@ -408,12 +408,13 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack,
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower,
             sidSMine, sidHammer, sidResurrector, sidDrillStrike, sidSnowball, sidNothing, sidTardis, 
-	    sidStructure, sidLandGun, sidIceGun);
+	        sidStructure, sidLandGun, sidIceGun);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady, 
-            sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce);
+            sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
+			sidMute);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
@@ -423,7 +424,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
             gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
             gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
-            gidDamageModifier, gidResetHealth, gidAISurvival, gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
+            gidDamageModifier, gidResetHealth, gidAISurvival, gidInfAttack, gidResetWeps,
+			gidPerHogAmmo, gidTagTeam);
 
     TLandArray = packed array of array of LongWord;
     TCollisionArray = packed array of array of Word;

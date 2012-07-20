@@ -248,6 +248,7 @@ DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
 
 DefaultBinds[KeyNameToCode(_S'0')]:= '+volup';
 DefaultBinds[KeyNameToCode(_S'9')]:= '+voldown';
+DefaultBinds[KeyNameToCode(_S'8')]:= 'mute';
 DefaultBinds[KeyNameToCode(_S'c')]:= 'capture';
 DefaultBinds[KeyNameToCode(_S'h')]:= 'findhh';
 DefaultBinds[KeyNameToCode(_S'p')]:= 'pause';
