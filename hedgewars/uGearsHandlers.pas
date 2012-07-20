@@ -40,7 +40,7 @@ end;
 
 procedure NextAngle(Gear: PGear; dA: LongInt); inline;
 begin
-    Gear^.Angle := (LongInt(Gear^.Angle)     + dA) mod 4
+    Gear^.Angle := (LongInt(Gear^.Angle) + 4 + dA) mod 4
 end;
 
 procedure cakeStep(Gear: PGear);
