@@ -786,23 +786,23 @@ end;
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
-    RegisterVariable('+right'  , @chRight_p      , false, true);
-    RegisterVariable('-right'  , @chRight_m      , false, true);
-    RegisterVariable('+up'     , @chUp_p         , false, true);
-    RegisterVariable('-up'     , @chUp_m         , false, true);
-    RegisterVariable('+left'   , @chLeft_p       , false, true);
-    RegisterVariable('-left'   , @chLeft_m       , false, true);
-    RegisterVariable('+attack' , @chAttack_p     , false, false); // WTF?
-    RegisterVariable('+down'   , @chDown_p       , false, true);
-    RegisterVariable('-down'   , @chDown_m       , false, true);
-    RegisterVariable('hjump'   , @chHJump        , false, true);
-    RegisterVariable('ljump'   , @chLJump        , false, true);
-    RegisterVariable('nextturn', @chNextTurn     , false, true);
+    RegisterVariable('+right'  , @chRight_p      , false, false);
+    RegisterVariable('-right'  , @chRight_m      , false, false);
+    RegisterVariable('+up'     , @chUp_p         , false, false);
+    RegisterVariable('-up'     , @chUp_m         , false, false);
+    RegisterVariable('+left'   , @chLeft_p       , false, false);
+    RegisterVariable('-left'   , @chLeft_m       , false, false);
+    RegisterVariable('+attack' , @chAttack_p     , false, false);
+    RegisterVariable('+down'   , @chDown_p       , false, false);
+    RegisterVariable('-down'   , @chDown_m       , false, false);
+    RegisterVariable('hjump'   , @chHJump        , false, false);
+    RegisterVariable('ljump'   , @chLJump        , false, false);
+    RegisterVariable('nextturn', @chNextTurn     , false, false);
     RegisterVariable('-attack' , @chAttack_m     , false, false);
-    RegisterVariable('slot'    , @chSlot         , false, true);
-    RegisterVariable('setweap' , @chSetWeapon    , false, true);
+    RegisterVariable('slot'    , @chSlot         , false, false);
+    RegisterVariable('setweap' , @chSetWeapon    , false, false);
 //////// End top by freq analysis
-    RegisterVariable('gencmd'  , @chGenCmd       , false, true);
+    RegisterVariable('gencmd'  , @chGenCmd       , false, false);
     RegisterVariable('flag'    , @chFlag         , false);
     RegisterVariable('script'  , @chScript       , false);
     RegisterVariable('proto'   , @chCheckProto   , true );
