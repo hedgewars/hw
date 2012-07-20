@@ -27,26 +27,31 @@ type TCommandHandler = procedure (var params: shortstring);
 
 procedure initModule;
 procedure freeModule;
+procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean; Synced: boolean);
 procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 procedure ParseTeamCommand(s: shortstring);
 procedure StopMessages(Message: Longword);
 
 implementation
-uses uConsts, uVariables, uConsole, uUtils, uDebug;
+uses uConsts, uVariables, uConsole, uUtils, uDebug, SDLh;
 
 type  PVariable = ^TVariable;
     TVariable = record
         Next: PVariable;
         Name: string[15];
         Handler: TCommandHandler;
-        Trusted: boolean;
+        Trusted, Synced: boolean;
         end;
 
 var
     Variables: PVariable;
 
 procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean);
+begin
+RegisterVariable(Name, p, Trusted, false);
+end;
+procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean; Synced: boolean);
 var
     value: PVariable;
 begin
@@ -56,6 +61,7 @@ FillChar(value^, sizeof(TVariable), 0);
 value^.Name:= Name;
 value^.Handler:= p;
 value^.Trusted:= Trusted;
+value^.Synced:= Synced;
 
 if Variables = nil then
     Variables:= value
@@ -81,11 +87,13 @@ if (c = '/') or (c = '$') then
 s:= '';
 SplitBySpace(CmdStr, s);
 AddFileLog('[Cmd] ' + CmdStr + ' (' + inttostr(length(s)) + ')');
+
 t:= Variables;
 while t <> nil do
     begin
     if t^.Name = CmdStr then
         begin
+        if t^.Synced then CheckSum:= CheckSum xor LongWord(SDLNet_Read32(@CmdStr)) xor LongWord(s[0]) xor GameTicks;
         if TrustedSource or t^.Trusted then
             t^.Handler(s);
         exit
