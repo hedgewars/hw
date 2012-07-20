@@ -140,8 +140,8 @@ function SaySafe()
     end
     i = i + 1
   end
-  AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], "We are indeed.", SAY_SAY, 2500}})
-  AnimInsertStepNext({func = AnimSay, args = {gearr, "I think we are safe here.", SAY_SAY, 4000}})
+  AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("We are indeed."), SAY_SAY, 2500}})
+  AnimInsertStepNext({func = AnimSay, args = {gearr, loc("I think we are safe here."), SAY_SAY, 4000}})
 end
 
 function ReviveNatives()
@@ -157,19 +157,19 @@ end
 
 function WonderAlive()
   if nativeRevived[waterNum] == true then
-    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], "I'm...alive? How? Why?", SAY_THINK, 3500}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("I'm...alive? How? Why?"), SAY_THINK, 3500}})
     AnimInsertStepNext({func = AnimWait, args = {natives[waterNum], 800}})
     AnimInsertStepNext({func = AnimTurn, args = {natives[waterNum], "Left"}})
     AnimInsertStepNext({func = AnimWait, args = {natives[waterNum], 800}})
     AnimInsertStepNext({func = AnimTurn, args = {natives[waterNum], "Right"}})
   end
   if nativeRevived[leaksNum] == true and nativeRevived[denseNum] == true then
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "But why would they help us?", SAY_SAY, 4000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "It must be the aliens!", SAY_SAY, 3500}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], "You just appeared out of thin air!", SAY_SAY, 5000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "But...we died!", SAY_SAY, 2500}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "This must be the caves!", SAY_SAY, 3500}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], "Dude, where are we?", SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("But why would they help us?"), SAY_SAY, 4000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("It must be the aliens!"), SAY_SAY, 3500}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], loc("You just appeared out of thin air!"), SAY_SAY, 5000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("But...we died!"), SAY_SAY, 2500}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("This must be the caves!"), SAY_SAY, 3500}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("Dude, where are we?"), SAY_SAY, 3000}})
     AnimInsertStepNext({func = AnimWait, args = {natives[leaksNum], 800}})
     AnimInsertStepNext({func = AnimTurn, args = {natives[leaksNum], "Right"}})
     AnimInsertStepNext({func = AnimTurn, args = {natives[denseNum], "Left"}})
@@ -187,27 +187,27 @@ function WonderAlive()
       AnimInsertStepNext({func = AnimTurn, args = {natives[chiefNum], "Right"}})
     end
   elseif nativeRevived[leaksNum] == true then
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "Why would they do this?", SAY_SAY, 6000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], "It must be the aliens' deed.", SAY_SAY, 5000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], "Do not laugh, inexperienced one, for he speaks the truth!", SAY_SAY, 10000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "Yeah, sure! I died. Hillarious!", SAY_SAY, 6000}})
-    AnimInsertStepNext({func = AnimSay, args = {gearr, "You're...alive!? But we saw you die!", SAY_SAY, 6000}})
-    AnimInsertStepNext({func = AnimSay, args = {gearr, "???", SAY_SAY, 2000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "Wow, what a dream!", SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Why would they do this?"), SAY_SAY, 6000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("It must be the aliens' deed."), SAY_SAY, 5000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("Do not laugh, inexperienced one, for he speaks the truth!"), SAY_SAY, 10000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Yeah, sure! I died. Hillarious!"), SAY_SAY, 6000}})
+    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("You're...alive!? But we saw you die!"), SAY_SAY, 6000}})
+    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("???"), SAY_SAY, 2000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Wow, what a dream!"), SAY_SAY, 3000}})
     if nativeDead[chiefNum] ~= true then
       AnimInsertStepNext({func = AnimTurn, args = {natives[chiefNum], "Right"}})
     end
     AnimInsertStepNext({func = AnimCustomFunction, swh = false, args = {natives[leaksNum], CondNeedToTurn, {natives[leaksNum], natives[wiseNum]}}})
     AnimInsertStepNext({func = AnimCustomFunction, swh = false, args = {natives[leaksNum], CondNeedToTurn, {natives[leaksNum], gearr}}})
   elseif nativeRevived[denseNum] == true then
-    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], "Dude, that's so cool!", SAY_SAY, 3000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], "It must be the aliens' deed.", SAY_SAY, 5000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], "But that's impossible!", SAY_SAY, 3000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], "It was not a dream, unwise one!", SAY_SAY, 5000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], "Exactly, man! That was my dream.", SAY_SAY, 5000}})
-    AnimInsertStepNext({func = AnimSay, args = {gearr, "You're...alive!? But we saw you die!", SAY_SAY,  6000}})
-    AnimInsertStepNext({func = AnimSay, args = {gearr, "???", SAY_SAY, 2000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], "Dude, wow! I just had the weirdest high!", SAY_SAY, 6000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("Dude, that's so cool!"), SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("It must be the aliens' deed."), SAY_SAY, 5000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("But that's impossible!"), SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("It was not a dream, unwise one!"), SAY_SAY, 5000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("Exactly, man! That was my dream."), SAY_SAY, 5000}})
+    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("You're...alive!? But we saw you die!"), SAY_SAY,  6000}})
+    AnimInsertStepNext({func = AnimSay, args = {gearr, loc("???"), SAY_SAY, 2000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("Dude, wow! I just had the weirdest high!"), SAY_SAY, 6000}})
     if nativeDead[chiefNum] ~= true then
       AnimInsertStepNext({func = AnimTurn, args = {natives[chiefNum], "Right"}})
     end
@@ -222,46 +222,46 @@ function ExplainAlive()
     SetGearPosition(cyborg, unpack(cyborgPos))
     AnimInsertStepNext({func = AnimCustomFunction, args = {water, HideCyborg, {}}})
     AnimInsertStepNext({func = AnimSwitchHog, args = {water}})
-    AnimInsertStepNext({func = AnimSay, args = {cyborg, "The answer is...entertaintment. You'll see what I mean.", SAY_SAY, 8000}})
-    AnimInsertStepNext({func = AnimSay, args = {cyborg, "You're probably wondering why I bought you back...", SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("The answer is...entertaintment. You'll see what I mean."), SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("You're probably wondering why I bought you back..."), SAY_SAY, 8000}})
   end
 end
 
 function SpyDebate()
   if m2Choice == choiceAccepted then
     spyHog = natives[denseNum]
-    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], "What shall we do with the traitor?", SAY_SAY, 6000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("What shall we do with the traitor?"), SAY_SAY, 6000}})
     AnimInsertStepNext({func = SetHealth, swh = false, args = {natives[denseNum], 26}})
     AnimInsertStepNext({func = AnimVisualGear, args = {GetGearPosition(natives[denseNum]), vgtExplosion, 0, true}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], "Here, let me help you!", SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("Here, let me help you!"), SAY_SAY, 3000}})
     if nativeDead[chiefNum] == true then
-      AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], "You killed my father, you monster!", SAY_SAY, 5000}})
+      AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], loc("You killed my father, you monster!"), SAY_SAY, 5000}})
     end
-    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], "Look, I had no choice!", SAY_SAY, 3000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "You have been giving us out to the enemy, haven't you!", SAY_SAY, 7000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "You're a pathetic liar!", SAY_SAY, 3000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "Interesting! Last time you said you killed a cannibal!", SAY_SAY, 7000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], "I told you, I just found them.", SAY_SAY, 4500}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("Look, I had no choice!"), SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("You have been giving us out to the enemy, haven't you!"), SAY_SAY, 7000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("You're a pathetic liar!"), SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Interesting! Last time you said you killed a cannibal!"), SAY_SAY, 7000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[denseNum], loc("I told you, I just found them."), SAY_SAY, 4500}})
     AnimInsertStepNext({func = AnimCustomFunction, args = {natives[denseNum], EmitDenseClouds, {"Left"}}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "Where did you get the weapons in the forest, Dense Cloud?", SAY_SAY, 8000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "Not now, Fiery Water!", SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Where did you get the weapons in the forest, Dense Cloud?"), SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Not now, Fiery Water!"), SAY_SAY, 3000}})
   else
     spyHog = natives[waterNum]
-    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], "What shall we do with the traitor?", SAY_SAY, 5000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("What shall we do with the traitor?"), SAY_SAY, 5000}})
     AnimInsertStepNext({func = SetHealth, swh = false, args = {natives[waterNum], 26}})
     AnimInsertStepNext({func = AnimVisualGear, args = {nativePos[denseNum][1] + 50, nativePos[denseNum][2], vgtExplosion, 0, true}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], "I can't believe what I'm hearing!", SAY_SAY, 5500}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], "You know what? I don't even regret anything!", SAY_SAY, 7000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], "In fact, you are the only one that's been acting strangely.", SAY_SAY, 8000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], "Are you accusing me of something?", SAY_SAY, 3500}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "Seems like every time you take a \"walk\", the enemy find us!", SAY_SAY, 8000}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], "You know...taking a stroll.", SAY_SAY, 3500}})
-    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "Where have you been?!", SAY_SAY, 3000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], loc("I can't believe what I'm hearing!"), SAY_SAY, 5500}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("You know what? I don't even regret anything!"), SAY_SAY, 7000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], loc("In fact, you are the only one that's been acting strangely."), SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("Are you accusing me of something?"), SAY_SAY, 3500}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Seems like every time you take a \"walk\", the enemy find us!"), SAY_SAY, 8000}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("You know...taking a stroll."), SAY_SAY, 3500}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("Where have you been?!"), SAY_SAY, 3000}})
   end
   if nativeRevived[waterNum] == true then
-    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], "You won't believe what happened to me!", SAY_SAY, 5500}})
+    AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("You won't believe what happened to me!"), SAY_SAY, 5500}})
   end
-  AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], "Hey, guys!", SAY_SAY, 2000}})
+  AnimInsertStepNext({func = AnimSay, args = {natives[waterNum], loc("Hey, guys!"), SAY_SAY, 2000}})
   AnimInsertStepNext({func = AnimMove, args = {natives[waterNum], "Left", nativePos[denseNum][1] + 50, nativePos[denseNum][2]}})
   AnimInsertStepNext({func = AnimJump, args = {natives[waterNum], "back"}})
   AnimInsertStepNext({func = AnimTurn, args = {natives[waterNum], "Right"}})
@@ -270,9 +270,9 @@ function SpyDebate()
   AnimInsertStepNext({func = AnimJump, args = {natives[waterNum], "long"}})
   AnimInsertStepNext({func = AnimJump, args = {natives[waterNum], "long"}})
   AnimInsertStepNext({func = AnimTurn, args = {natives[waterNum], "Left"}})
-  AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], "There must be a spy among us!", SAY_SAY, 4000}})
-  AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], "We made sure noone followed us!", SAY_SAY, 4000}})
-  AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], "What? Here? How did they find us?!", SAY_SAY, 5000}})
+  AnimInsertStepNext({func = AnimSay, args = {natives[wiseNum], loc("There must be a spy among us!"), SAY_SAY, 4000}})
+  AnimInsertStepNext({func = AnimSay, args = {natives[princessNum], loc("We made sure noone followed us!"), SAY_SAY, 4000}})
+  AnimInsertStepNext({func = AnimSay, args = {natives[leaksNum], loc("What? Here? How did they find us?!"), SAY_SAY, 5000}})
 end
 
 function AnimationSetup()
@@ -301,7 +301,7 @@ function SetupWave2Anim()
   table.insert(wave2Anim, {func = AnimOutOfNowhere, args = {cannibals[4], unpack(cannibalPos[4])}})
   table.insert(wave2Anim, {func = AnimOutOfNowhere, args = {cannibals[5], unpack(cannibalPos[5])}})
   table.insert(wave2Anim, {func = AnimOutOfNowhere, args = {cannibals[6], unpack(cannibalPos[6])}})
-  table.insert(wave2Anim, {func = AnimSay, args = {speakerHog, "Look out! There's more of them!", SAY_SHOUT, 5000}})
+  table.insert(wave2Anim, {func = AnimSay, args = {speakerHog, loc("Look out! There's more of them!"), SAY_SHOUT, 5000}})
   AddSkipFunction(wave2Anim, SkipWave2Anim, {})
 end
 
@@ -314,34 +314,34 @@ function SetupWave2DeadAnim()
   if nativeDead[wiseNum] ~= true and band(GetState(natives[wiseNum]), gstDrowning) == 0 then
     if nativesNum > 1 then
       table.insert(wave2DeadAnim, {func = AnimWait, args = {natives[wiseNum], 1500}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "What a strange feeling!", SAY_THINK, 3000}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "I need to warn the others.", SAY_THINK, 3000}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "If only I had a way...", SAY_THINK, 3000}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "Oh, silly me! I forgot that I'm the shaman.", SAY_THINK, 6000}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("What a strange feeling!"), SAY_THINK, 3000}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I need to warn the others."), SAY_THINK, 3000}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("If only I had a way..."), SAY_THINK, 3000}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("Oh, silly me! I forgot that I'm the shaman."), SAY_THINK, 6000}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], TeleportNatives, {}}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], TurnNatives, {natives[wiseNum]}}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], CondNeedToTurn, {natives[wiseNum], deployedHog}}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "I sense another wave of cannibals heading our way!", SAY_SAY, 6500}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "We need to prevent their arrival!", SAY_SAY, 4500}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "Go, quick!", SAY_SAY, 2500}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I sense another wave of cannibals heading our way!"), SAY_SAY, 6500}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("We need to prevent their arrival!"), SAY_SAY, 4500}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("Go, quick!"), SAY_SAY, 2500}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], DeployHog, {}}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], RestoreCyborg, {}}})
       table.insert(wave2DeadAnim, {func = AnimOutOfNowhere, swh = false, args = {cyborg, cyborgPos2[1], cyborgPos2[2]}})
       table.insert(wave2DeadAnim, {func = AnimTurn, args = {cyborg, "Left"}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, IsolateNatives, {}}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, PutCGI, {}}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, "I want to see how it handles this!", SAY_SAY, 6000}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I want to see how it handles this!"), SAY_SAY, 6000}})
       table.insert(wave2DeadAnim, {func = AnimSwitchHog, args = {deployedHog}})
       table.insert(wave2DeadAnim, {func = AnimDisappear, args = {cyborg, 0, 0}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, DeployHog, {}}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, swh = false, args = {cyborg, HideCyborg, {}}})
     else
       table.insert(wave2DeadAnim, {func = AnimWait, args = {natives[wiseNum], 1500}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "What a strange feeling!", SAY_THINK, 3000}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "I sense another wave of cannibals heading my way!", SAY_THINK, 6500}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "I need to prevent their arrival!", SAY_THINK, 4500}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "If only I had a way...", SAY_THINK, 3000}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], "Oh, silly me! I forgot that I'm the shaman.", SAY_THINK, 6000}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("What a strange feeling!"), SAY_THINK, 3000}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I sense another wave of cannibals heading my way!"), SAY_THINK, 6500}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I need to prevent their arrival!"), SAY_THINK, 4500}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("If only I had a way..."), SAY_THINK, 3000}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("Oh, silly me! I forgot that I'm the shaman."), SAY_THINK, 6000}})
     end
   else
     table.insert(wave2DeadAnim, {func = AnimWait, args = {cyborg, 1500}})
@@ -349,16 +349,16 @@ function SetupWave2DeadAnim()
     table.insert(wave2DeadAnim, {func = AnimOutOfNowhere, args = {cyborg, cyborgPos2[1], cyborgPos2[2]}})
     table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, TeleportNatives, {}}})
     table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, TurnNatives, {cyborg}}})
-    table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, "Oh, my! This is even more entertaining than I've expected!", SAY_SAY, 7500}})
-    table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, "You might want to find a way to instantly kill arriving cannibals!", SAY_SAY, 8000}})
-    table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, "I believe there's more of them.", SAY_SAY, 4000}})
+    table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("Oh, my! This is even more entertaining than I've expected!"), SAY_SAY, 7500}})
+    table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("You might want to find a way to instantly kill arriving cannibals!"), SAY_SAY, 8000}})
+    table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I believe there's more of them."), SAY_SAY, 4000}})
     if nativesNum > 1 then
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], RestoreCyborg, {}}})
       table.insert(wave2DeadAnim, {func = AnimOutOfNowhere, swh = false, args = {cyborg, cyborgPos2[1], cyborgPos2[2]}})
       table.insert(wave2DeadAnim, {func = AnimTurn, args = {cyborg, "Left"}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, IsolateNatives, {}}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, PutCGI, {}}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, "I want to see how it handles this!", SAY_SAY, 6000}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I want to see how it handles this!"), SAY_SAY, 6000}})
     end
     table.insert(wave2DeadAnim, {func = AnimSwitchHog, args = {deployedHog}})
     table.insert(wave2DeadAnim, {func = AnimDisappear, swh = false, args = {cyborg, 0, 0}})
@@ -441,7 +441,7 @@ function DeployHog()
   AnimSwitchHog(deployedHog)
   AnimTeleportGear(deployedHog, unpack(deployedPos))
   if deployedHog ~= natives[wiseNum] then
-    AnimSay(deployedHog, "Why me?!", SAY_THINK, 2000)
+    AnimSay(deployedHog, loc("Why me?!"), SAY_THINK, 2000)
   end
 end
 
@@ -455,21 +455,21 @@ function SetupAfterChoiceAnim()
   end
   if choice == choiceEliminate then
     table.insert(afterChoiceAnim, {func = AnimWait, args = {speakerHog, 1500}})
-    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, "He won't be selling us out anymore!", SAY_SAY, 6000}})
+    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, loc("He won't be selling us out anymore!"), SAY_SAY, 6000}})
     if nativeDead[princessNum] ~= true and m4ChiefDead == 1 then
-      table.insert(afterChoiceAnim, {func = AnimSay, args = {natives[princessNum], "That's for my father!", SAY_SAY, 3500}})
+      table.insert(afterChoiceAnim, {func = AnimSay, args = {natives[princessNum], loc("That's for my father!"), SAY_SAY, 3500}})
     end
-    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, "Let's show those cannibals what we're made of!", SAY_SAY, 7000}})
+    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, loc("Let's show those cannibals what we're made of!"), SAY_SAY, 7000}})
   else
     table.insert(afterChoiceAnim, {func = AnimCustomFunction, swh = false, args = {natives[leaksNum], CondNeedToTurn, {speakerHog, spyHog}}})
-    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, "We'll spare your life for now!", SAY_SAY, 4500}})
-    table.insert(afterChoiceAnim, {func = AnimSay, args = {spyHog, "May the spirits aid you in all your quests!", SAY_SAY, 7000}})
-    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, "I just don't want to sink to your level.", SAY_SAY, 6000}})
-    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, "Let's show those cannibals what we're made of!", SAY_SAY, 7000}})
+    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, loc("We'll spare your life for now!"), SAY_SAY, 4500}})
+    table.insert(afterChoiceAnim, {func = AnimSay, args = {spyHog, loc("May the spirits aid you in all your quests!"), SAY_SAY, 7000}})
+    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, loc("I just don't want to sink to your level."), SAY_SAY, 6000}})
+    table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, loc("Let's show those cannibals what we're made of!"), SAY_SAY, 7000}})
   end
-  table.insert(afterChoiceAnim, {func = AnimSay, args = {natives[8], "Let us help, too!", SAY_SAY, 3000}})
+  table.insert(afterChoiceAnim, {func = AnimSay, args = {natives[8], loc("Let us help, too!"), SAY_SAY, 3000}})
   table.insert(afterChoiceAnim, {func = AnimTurn, args = {speakerHog, "Left", SAY_SAY, 7000}})
-  table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, "No. You and the rest of the tribe are safer there!", SAY_SAY, 7000}})
+  table.insert(afterChoiceAnim, {func = AnimSay, args = {speakerHog, loc("No. You and the rest of the tribe are safer there!"), SAY_SAY, 7000}})
   AddSkipFunction(afterChoiceAnim, SkipAfterChoiceAnim, {})
 end
 
@@ -501,7 +501,7 @@ function AfterAfterChoiceAnim()
   SetGearMessage(speakerHog, 0)
   SetState(speakerHog, 0)
   TurnTimeLeft = -1
-  ShowMission("Backstab", "The food bites back", "Defeat the cannibals", 1, 4000)
+  ShowMission(loc("Backstab"), loc("The food bites back"), loc("Defeat the cannibals"), 1, 4000)
   SpawnCrates()
 end
 
@@ -541,7 +541,7 @@ function AfterWave2DeadAnim()
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
   TurnTimeLeft = 0
-  ShowMission("Backstab", "Drills", "You have 12 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: you might want to use some mines...", 1, 12000)
+  ShowMission(loc("Backstab"), loc("Drills"), loc("You have 12 turns until the next wave arrives.|Make sure the arriving cannibals are greeted appropriately!|If the hog dies, the cause is lost.|Hint: you might want to use some mines..."), 1, 12000)
 end
 
 function DoTurnsOver()
@@ -574,7 +574,7 @@ function AfterStartAnim()
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckKilledOther, {}, DoKilledOther, {}, 0)
   AddEvent(CheckChoiceRefuse, {}, DoChoiceRefuse, {}, 0)
-  ShowMission("Backstab", "Judas", "Kill the traitor...or spare his life!|Kill him or press [Precise]!", 1, 8000)
+  ShowMission(loc("Backstab"), loc("Judas"), loc("Kill the traitor...or spare his life!|Kill him or press [Precise]!"), 1, 8000)
   ----------------------
   SetHealth(natives[leaksNum], 1)
 end
@@ -589,7 +589,7 @@ function CheckDeployedDead()
 end
 
 function DoDeployedDead()
-  ShowMission("Backstab", "Brutus", "You have failed to save the tribe!", 0, 6000)
+  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have failed to save the tribe!"), 0, 6000)
   ParseCommand("teamgone " .. loc("Natives"))
   ParseCommand("teamgone " .. loc("Tribe"))
   TurnTimeLeft = 0
@@ -632,7 +632,7 @@ function CheckKilledOther()
 end
 
 function DoKilledOther()
-  ShowMission("Backstab", "Brutus", "You have killed an innocent hedgehog!", 0, 6000)
+  ShowMission(loc("Backstab"), loc("Brutus"), loc("You have killed an innocent hedgehog!"), 0, 6000)
   ParseCommand("teamgone " .. loc("Natives"))
   ParseCommand("teamgone " .. loc("Tribe"))
   TurnTimeLeft = 0
@@ -679,18 +679,18 @@ end
 
 function SetupWave3DeadAnim()
   table.insert(wave3DeadAnim, {func = AnimTurn, args = {deployedHog, "Left"}})
-  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, "That ought to show them!", SAY_SAY, 4000}})
-  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, "Guys, do you think there's more of them?", SAY_SHOUT, 7000}})
+  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("That ought to show them!"), SAY_SAY, 4000}})
+  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("Guys, do you think there's more of them?"), SAY_SHOUT, 7000}})
   table.insert(wave3DeadAnim, {func = AnimVisualGear, args = {deployedHog, unpack(nativePos[wiseNum]), vgtFeather, 0, true, true}})
   table.insert(wave3DeadAnim, {func = AnimWait, args = {deployedHog, 1000}})
-  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, "Where are they?!", SAY_THINK, 3000}})
+  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("Where are they?!"), SAY_THINK, 3000}})
   table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, RestoreCyborg, {}}})
   table.insert(wave3DeadAnim, {func = AnimOutOfNowhere, args = {cyborg, 4040, 782}})
-  table.insert(wave3DeadAnim, {func = AnimSay, args = {cyborg, "These primitive people are so funny!", SAY_THINK, 6500}})
+  table.insert(wave3DeadAnim, {func = AnimSay, args = {cyborg, loc("These primitive people are so funny!"), SAY_THINK, 6500}})
   table.insert(wave3DeadAnim, {func = AnimMove, args = {cyborg, "Right", 4060, 0}})
   table.insert(wave3DeadAnim, {func = AnimCustomFunction, args = {deployedHog, HideCyborg, {}}})
-  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, "I need to find the others!", SAY_THINK, 4500}})
-  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, "I have to follow that alien.", SAY_THINK, 4500}})
+  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("I need to find the others!"), SAY_THINK, 4500}})
+  table.insert(wave3DeadAnim, {func = AnimSay, args = {deployedHog, loc("I have to follow that alien."), SAY_THINK, 4500}})
 end
 
 function SkipWave3DeadAnim()
