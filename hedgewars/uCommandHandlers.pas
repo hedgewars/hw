@@ -792,13 +792,13 @@ begin
     RegisterVariable('-up'     , @chUp_m         , false, true);
     RegisterVariable('+left'   , @chLeft_p       , false, true);
     RegisterVariable('-left'   , @chLeft_m       , false, true);
-    RegisterVariable('+attack' , @chAttack_p     , false, true);
+    RegisterVariable('+attack' , @chAttack_p     , false, false); // WTF?
     RegisterVariable('+down'   , @chDown_p       , false, true);
     RegisterVariable('-down'   , @chDown_m       , false, true);
     RegisterVariable('hjump'   , @chHJump        , false, true);
     RegisterVariable('ljump'   , @chLJump        , false, true);
     RegisterVariable('nextturn', @chNextTurn     , false, true);
-    RegisterVariable('-attack' , @chAttack_m     , false, true);
+    RegisterVariable('-attack' , @chAttack_m     , false, false);
     RegisterVariable('slot'    , @chSlot         , false, true);
     RegisterVariable('setweap' , @chSetWeapon    , false, true);
 //////// End top by freq analysis

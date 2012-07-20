@@ -619,7 +619,7 @@ case Gear^.Pos of
                     else
                         begin
 // Add spawning here...
-                        AddRandomness(CheckSum xor GameTicks);
+                        AddRandomness(GameTicks);
                         
                         gi := GearsList;
                         while gi <> nil do
