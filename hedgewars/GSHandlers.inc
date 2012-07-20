@@ -4319,7 +4319,7 @@ begin
         and (CurAmmoGear^.Kind =gtRope) then
                CurAmmoGear^.PortalCounter:= 1;
 
-        if not isbullet
+        if not isbullet and (iterator^.State and gstInvisible = 0) 
         and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
 
