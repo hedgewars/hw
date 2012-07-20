@@ -467,48 +467,48 @@ begin
         Mix_VolumeMusic(Volume * 4 div 8);
     ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME;
 
-	if (isMusicEnabled) then
-		if (Volume = 0) then
-			PauseMusic
-		else
-			ResumeMusic;
+    if (isMusicEnabled) then
+        if (Volume = 0) then
+            PauseMusic
+            else
+            ResumeMusic;
 
-	isAudioMuted:= (Volume = 0);
+    isAudioMuted:= (Volume = 0);
 end;
 
 procedure DampenAudio;
 begin
-	if (isAudioMuted) then
-		exit;
+    if (isAudioMuted) then
+        exit;
     previousVolume:= Volume;
     ChangeVolume(-Volume * 7 div 9);
 end;
 
 procedure UndampenAudio;
 begin
-	if (isAudioMuted) then
-		exit;
+     if (isAudioMuted) then
+        exit;
     ChangeVolume(previousVolume - Volume);
 end;
 
 procedure MuteAudio;
 begin
     if (not isSoundEnabled) then
-        exit;
-	
-	if (isAudioMuted) then
-	begin
-		ResumeMusic;
-		ChangeVolume(previousVolume);
-	end
-	else
-	begin
-		PauseMusic;
-		previousVolume:= Volume;
-		ChangeVolume(-Volume);
-	end;
-	
-	// isAudioMuted is updated in ChangeVolume
+    exit;
+
+    if (isAudioMuted) then
+    begin
+        ResumeMusic;
+        ChangeVolume(previousVolume);
+    end
+    else
+    begin
+        PauseMusic;
+        previousVolume:= Volume;
+        ChangeVolume(-Volume);
+    end;
+
+    // isAudioMuted is updated in ChangeVolume
 end;
 
 procedure SetMusic(enabled: boolean);
@@ -575,8 +575,8 @@ end;
 
 procedure chMute(var s: shortstring);
 begin
-	s:= s; // avoid compiler hint
-	MuteAudio;
+    s:= s; // avoid compiler hint
+    MuteAudio;
 end;
 
 procedure initModule;
@@ -584,12 +584,12 @@ var t: LongInt;
     i: TSound;
 begin
     RegisterVariable('voicepack', @chVoicepack, false);
-	RegisterVariable('mute'     , @chMute     , true );
+    RegisterVariable('mute'     , @chMute     , true );
 
     MusicFN:='';
     isMusicEnabled:= true;
     isSoundEnabled:= true;
-	isAudioMuted:= false;
+    isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;
     cInitVolume:= 100;
     Volume:= 0;
