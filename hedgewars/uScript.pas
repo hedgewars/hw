@@ -983,8 +983,7 @@ begin
             prevgear^.Active := false;
             prevgear^.State:= prevgear^.State and not gstHHDriven;
             prevgear^.Z := cHHZ;
-            RemoveGearFromList(prevgear);
-            InsertGearToList(prevgear);
+            prevgear^.Message:= prevgear^.Message or gmRemoveFromList or gmAddToList;
             
             SwitchCurrentHedgehog(gear^.Hedgehog);
             CurrentTeam:= CurrentHedgehog^.Team;
@@ -992,8 +991,7 @@ begin
             gear^.State:= gear^.State or gstHHDriven;
             gear^.Active := true;
             gear^.Z := cCurrHHZ;
-            RemoveGearFromList(gear);
-            InsertGearToList(gear);
+            gear^.Message:= gear^.Message or gmRemoveFromList or gmAddToList;
             end
         end;
     lc_switchhog:= 0
