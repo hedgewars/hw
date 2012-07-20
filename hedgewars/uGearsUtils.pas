@@ -345,7 +345,14 @@ begin
         begin
         if Gear^.State and gstInvisible <> 0 then
             begin
-            DeleteGear(Gear);
+            if Gear^.Kind = gtGenericFaller then
+                begin
+                Gear^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
+                Gear^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+                Gear^.dX:= _90-(GetRandomf*_360);
+                Gear^.dY:= _90-(GetRandomf*_360)
+                end
+            else DeleteGear(Gear);
             exit
             end;
         isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);

@@ -596,10 +596,9 @@ end;
 procedure PickUp(HH, Gear: PGear);
 var s: shortstring;
     a: TAmmoType;
-    i, rx, ry: LongInt;
-    rdx, rdy: hwFloat;
+    i: LongInt;
     vga: PVisualGear;
-    ag: PGear;
+    ag, gi: PGear;
 begin
 Gear^.Message:= gmDestroy;
 if (Gear^.Pos and posCaseExplode) <> 0 then
@@ -621,14 +620,19 @@ case Gear^.Pos of
                         begin
 // Add spawning here...
                         AddRandomness(CheckSum xor GameTicks);
-
-                        for i:= 0 to GetRandom(50)+50 do
+                        
+                        gi := GearsList;
+                        while gi <> nil do
                             begin
-                            rx:= GetRandom(rightX-leftX)+leftX;
-                            ry:= GetRandom(LAND_HEIGHT-topY)+topY;
-                            rdx:= _90-(GetRandomf*_360);
-                            rdy:= _90-(GetRandomf*_360);
-                            AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, GetRandom(500));
+                            if gi^.Kind = gtGenericFaller then
+                                begin
+                                gi^.Active:= true;
+                                gi^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
+                                gi^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+                                gi^.dX:= _90-(GetRandomf*_360);
+                                gi^.dY:= _90-(GetRandomf*_360)
+                                end;
+                            gi := gi^.NextGear
                             end;
                         ag:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAddAmmo, gstInvisible, _0, _0, GetRandom(200)+100);
                         ag^.Pos:= Gear^.Pos;
