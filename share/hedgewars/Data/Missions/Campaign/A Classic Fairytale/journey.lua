@@ -664,14 +664,6 @@ function SetupEventsAlone()
 end
 
 function StartMission()
-  HideHog(cyborg)
-  HideHog(princess)
-  cyborgHidden = true
-  princessHidden = true
-  for i = 5, 8 do
-    HideHog(cannibals[i])
-  end
-
   if m2DenseDead == 1 then
     DeleteGear(dense)
     if m2Choice == choiceAccepted then
@@ -696,6 +688,14 @@ function StartMission()
     AddAnim(startAnim)
     AddFunction({func = AfterStartAnim, args = {}})
   end
+  HideHog(cyborg)
+  HideHog(princess)
+  cyborgHidden = true
+  princessHidden = true
+  for i = 5, 8 do
+    HideHog(cannibals[i])
+  end
+
 end
   
 function SetupCourse()
