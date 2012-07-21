@@ -93,9 +93,12 @@ while t <> nil do
     begin
     if t^.Name = CmdStr then
         begin
-        if t^.Rand then CheckSum:= CheckSum xor LongWord(SDLNet_Read32(@CmdStr)) xor LongWord(s[0]) xor GameTicks;
         if TrustedSource or t^.Trusted then
+            begin
+            if t^.Rand and not CheckNoTeamOrHH then 
+                CheckSum:= CheckSum xor LongWord(SDLNet_Read32(@CmdStr)) xor LongWord(s[0]) xor GameTicks;
             t^.Handler(s);
+            end;
         exit
         end
     else
