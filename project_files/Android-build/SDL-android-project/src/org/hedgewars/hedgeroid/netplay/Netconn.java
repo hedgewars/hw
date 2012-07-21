@@ -99,6 +99,13 @@ public class Netconn {
 		}
 	};
 	
+	private IntStrCallback disconnectCb = new IntStrCallback() {
+		public void callback(Pointer context, int arg1, String arg2) {
+			FLIB.flib_netconn_destroy(conn);
+			conn = null;
+		}
+	};
+	
 	/**
 	 * Connect to the official Hedgewars server.
 	 * 
@@ -142,6 +149,7 @@ public class Netconn {
 			FLIB.flib_netconn_onRoomDelete(conn, roomDeleteCb, null);
 			FLIB.flib_netconn_onConnected(conn, connectedCb, null);
 			FLIB.flib_netconn_onRoomlist(conn, roomlistCb, null);
+			FLIB.flib_netconn_onDisconnected(conn, disconnectCb, null);
 		} finally {
 			FLIB.flib_metascheme_release(meta);
 		}

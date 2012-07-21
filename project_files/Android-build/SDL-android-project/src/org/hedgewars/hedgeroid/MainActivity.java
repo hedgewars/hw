@@ -25,18 +25,14 @@ import java.io.IOException;
 import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
 import org.hedgewars.hedgeroid.netplay.LobbyActivity;
-import org.hedgewars.hedgeroid.netplay.TestActivity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -58,7 +54,7 @@ public class MainActivity extends FragmentActivity {
 		startGame.setOnClickListener(startGameClicker);
 		joinLobby.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				startActivity(new Intent(getApplicationContext(), TestActivity.class));
+				startActivity(new Intent(getApplicationContext(), LobbyActivity.class));
 			}
 		});
 

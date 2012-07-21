@@ -1,133 +1,185 @@
 package org.hedgewars.hedgeroid.netplay;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Collections;
+import java.util.ArrayList;
 
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.Utils;
-import org.hedgewars.hedgeroid.R.layout;
 
-import com.sun.jna.Library;
-import com.sun.jna.Native;
-import com.sun.jna.Pointer;
-
+import android.content.Context;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.text.Html;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
+import android.view.ViewGroup;
+import android.widget.TabHost;
+import android.widget.TabWidget;
 
 public class LobbyActivity extends FragmentActivity {
-	static {
-		System.loadLibrary("SDL_net");
-	}
-	static final JnaFrontlib FRONTLIB = (JnaFrontlib)Native.loadLibrary("frontlib", JnaFrontlib.class, Collections.singletonMap(Library.OPTION_TYPE_MAPPER, FrontlibTypeMapper.INSTANCE));
-	
-	TextView textView;
-	EditText editText;
-	
-	boolean disconnected;
-	JnaFrontlib.NetconnPtr netconn;
-	CountDownTimer timer;
-	
-	private void commitText() {
-		if(!disconnected && netconn!=null) {
-			String text = editText.getText().toString();
-			editText.setText("");
-			textView.append(Html.fromHtml("<b>AndroidChatter</b>: " + text + "<br/>"));
-			FRONTLIB.flib_netconn_send_chat(netconn, text);
-		}
-	}
+    TabHost mTabHost;
+    ViewPager  mViewPager;
+    TabsAdapter mTabsAdapter;
 	
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        disconnected = false;
-        setContentView(R.layout.activity_lobby);
-        textView = (TextView)findViewById(R.id.lobbyConsole);
-        editText = (EditText)findViewById(R.id.lobbyChatInput);
-        
-        editText.setOnEditorActionListener(new OnEditorActionListener() {
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				boolean handled = false;
-				if(actionId == EditorInfo.IME_ACTION_SEND) {
-					commitText();
-					handled = true;
-				}
-				return handled;
-			}
-		});
-        
-    	FRONTLIB.flib_init();
-    	try {
-    		JnaFrontlib.MetaschemePtr scheme = FRONTLIB.flib_metascheme_from_ini(new File(Utils.getDataPathFile(this), "metasettings.ini").getAbsolutePath());
-			netconn = FRONTLIB.flib_netconn_create("AndroidChatter", scheme, Utils.getDataPathFile(this).getAbsolutePath(), "140.247.62.101", 46631);
-			Log.d("Netconn", "netconn is "+netconn);
-			FRONTLIB.flib_metascheme_release(scheme);
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-        
-    	FRONTLIB.flib_netconn_onConnected(netconn, handleNetConnected, null);
-    	FRONTLIB.flib_netconn_onDisconnected(netconn, handleNetDisconnect, null);
-    	FRONTLIB.flib_netconn_onChat(netconn, handleChat, null);
-    	FRONTLIB.flib_netconn_onMessage(netconn, handleMessage, null);
-    	timer = new CountDownTimer(100000000, 100) {
-			@Override
-			public void onTick(long millisUntilFinished) {
-				if(!disconnected) {
-					FRONTLIB.flib_netconn_tick(netconn);
-				}
-			}
-			
-			@Override
-			public void onFinish() {
-			}
-		};
-		timer.start();
-    }
 
-    @Override
-    protected void onPause() {
-    	super.onPause();
-    	FRONTLIB.flib_netconn_send_quit(netconn, "Activity paused");
+        setContentView(R.layout.activity_lobby);
+        mTabHost = (TabHost)findViewById(android.R.id.tabhost);
+        if(mTabHost != null) {
+	        mTabHost.setup();
+	
+	        mViewPager = (ViewPager)findViewById(R.id.pager);
+	
+	        mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
+	
+	        mTabsAdapter.addTab(mTabHost.newTabSpec("roomlist").setIndicator("Rooms"),
+	        		RoomlistFragment.class, null);
+	        mTabsAdapter.addTab(mTabHost.newTabSpec("chat").setIndicator("Chat"),
+	        		LobbyChatFragment.class, null);
+	        mTabsAdapter.addTab(mTabHost.newTabSpec("players").setIndicator("Players"),
+	        		PlayerlistFragment.class, null);
+	
+	        if (savedInstanceState != null) {
+	            mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+	        }
+        }
     }
     
-    private JnaFrontlib.VoidCallback handleNetConnected = new JnaFrontlib.VoidCallback() {
-		public void callback(Pointer context) {
-			textView.append("Connected. You can chat now.\n");
+	/*@Override
+	protected void onCreate(Bundle arg0) {
+		super.onCreate(arg0);
+		setContentView(R.layout.activity_lobby);
+		ViewPager pager = (ViewPager)findViewById(R.id.pager);
+		if(pager != null) {
+			pager.setAdapter(new Adapter(getSupportFragmentManager()));
 		}
-	};
+	}
 	
-    private JnaFrontlib.IntStrCallback handleNetDisconnect = new JnaFrontlib.IntStrCallback() {
-		public void callback(Pointer context, int arg1, String arg2) {
-			disconnected = true;
-			timer.cancel();
-			FRONTLIB.flib_netconn_destroy(netconn);
-			netconn.setPointer(Pointer.NULL);
-			textView.append("You have been disconnected.");
+	private static class Adapter extends FragmentPagerAdapter {
+		public Adapter(FragmentManager mgr) {
+			super(mgr);
 		}
-	};
+		
+		@Override
+		public int getCount() {
+			return 3;
+		}
+		
+		@Override
+		public Fragment getItem(int arg0) {
+			switch(arg0) {
+			case 0: return new RoomlistFragment();
+			case 1: return new LobbyChatFragment();
+			case 2: return new PlayerlistFragment();
+			default: throw new IndexOutOfBoundsException();
+			}
+		}
+	}*/
 	
-    private JnaFrontlib.StrStrCallback handleChat = new JnaFrontlib.StrStrCallback() {
-		public void callback(Pointer context, String arg1, String arg2) {
-			textView.append(arg1+": "+arg2+"\n");
-		}
-	};
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mTabHost != null) {
+        	outState.putString("tab", mTabHost.getCurrentTabTag());
+        }
+    }
 	
-    private JnaFrontlib.IntStrCallback handleMessage = new JnaFrontlib.IntStrCallback() {
-		public void callback(Pointer context, int arg1, String arg2) {
-			textView.append(Html.fromHtml(arg2+"<br/>"));
-		}
-	};
+    /**
+     * This is a helper class that implements the management of tabs and all
+     * details of connecting a ViewPager with associated TabHost.  It relies on a
+     * trick.  Normally a tab host has a simple API for supplying a View or
+     * Intent that each tab will show.  This is not sufficient for switching
+     * between pages.  So instead we make the content part of the tab host
+     * 0dp high (it is not shown) and the TabsAdapter supplies its own dummy
+     * view to show as the tab content.  It listens to changes in tabs, and takes
+     * care of switch to the correct paged in the ViewPager whenever the selected
+     * tab changes.
+     */
+    public static class TabsAdapter extends FragmentPagerAdapter
+            implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
+        private final Context mContext;
+        private final TabHost mTabHost;
+        private final ViewPager mViewPager;
+        private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+
+        static final class TabInfo {
+            private final Class<?> clss;
+            private final Bundle args;
+
+            TabInfo(Class<?> _class, Bundle _args) {
+                clss = _class;
+                args = _args;
+            }
+        }
+
+        static class DummyTabFactory implements TabHost.TabContentFactory {
+            private final Context mContext;
+
+            public DummyTabFactory(Context context) {
+                mContext = context;
+            }
+
+            public View createTabContent(String tag) {
+                View v = new View(mContext);
+                v.setMinimumWidth(0);
+                v.setMinimumHeight(0);
+                return v;
+            }
+        }
+
+        public TabsAdapter(FragmentActivity activity, TabHost tabHost, ViewPager pager) {
+            super(activity.getSupportFragmentManager());
+            mContext = activity;
+            mTabHost = tabHost;
+            mViewPager = pager;
+            mTabHost.setOnTabChangedListener(this);
+            mViewPager.setAdapter(this);
+            mViewPager.setOnPageChangeListener(this);
+        }
+
+        public void addTab(TabHost.TabSpec tabSpec, Class<?> clss, Bundle args) {
+            tabSpec.setContent(new DummyTabFactory(mContext));
+
+            TabInfo info = new TabInfo(clss, args);
+            mTabs.add(info);
+            mTabHost.addTab(tabSpec);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getCount() {
+            return mTabs.size();
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            TabInfo info = mTabs.get(position);
+            return Fragment.instantiate(mContext, info.clss.getName(), info.args);
+        }
+
+        public void onTabChanged(String tabId) {
+            int position = mTabHost.getCurrentTab();
+            mViewPager.setCurrentItem(position);
+        }
+
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        public void onPageSelected(int position) {
+            // Unfortunately when TabHost changes the current tab, it kindly
+            // also takes care of putting focus on it when not in touch mode.
+            // The jerk.
+            // This hack tries to prevent this from pulling focus out of our
+            // ViewPager.
+            TabWidget widget = mTabHost.getTabWidget();
+            int oldFocusability = widget.getDescendantFocusability();
+            widget.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+            mTabHost.setCurrentTab(position);
+            widget.setDescendantFocusability(oldFocusability);
+        }
+
+        public void onPageScrollStateChanged(int state) {
+        }
+    }
 }

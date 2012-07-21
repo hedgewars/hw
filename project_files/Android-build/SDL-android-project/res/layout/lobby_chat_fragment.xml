@@ -11,7 +11,11 @@
         android:layout_height="0dp"
         android:layout_weight="1" 
         android:clickable="false"
+        android:cacheColorHint="@android:color/transparent"
         android:transcriptMode="normal"
+        android:focusableInTouchMode="false"
+        android:focusable="false"
+        android:longClickable="false"
         android:stackFromBottom="true"
         />
 

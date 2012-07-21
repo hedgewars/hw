@@ -24,7 +24,6 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -69,7 +68,7 @@
             android:windowSoftInputMode="stateUnchanged" >
         </activity>
         <activity
-            android:name=".netplay.TestActivity"
+            android:name=".netplay.LobbyActivity"
             android:label="@string/title_activity_lobby" >
         </activity>
     </application>
