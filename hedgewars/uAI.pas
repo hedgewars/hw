@@ -191,7 +191,14 @@ for i:= 0 to Pred(Targets.Count) do
                             AddAction(BestActions, aia_attack, aim_push, 650 + random(300), 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
                             end;
-                            
+
+                    if (Ammoz[a].Ammo.Propz and ammoprop_Track) <> 0 then
+                        begin
+                        AddAction(BestActions, aia_waitAmmoXY, 0, 12, ap.ExplX, ap.ExplY);
+                        AddAction(BestActions, aia_attack, aim_push, 1, 0, 0);
+                        AddAction(BestActions, aia_attack, aim_release, 7, 0, 0);
+                        end;
+
                     if ap.ExplR > 0 then
                         AddAction(BestActions, aia_AwareExpl, ap.ExplR, 10, ap.ExplX, ap.ExplY);
                     end
@@ -476,12 +483,11 @@ with CurrentHedgehog^ do
                 
             end else
                 begin
-                (*
-                if not scoreShown then
+                {if not scoreShown then
                     begin
                     if BestActions.Score > 0 then ParseCommand('/say Expected score = ' + inttostr(BestActions.Score div 1024), true);
                     scoreShown:= true
-                    end;*)
+                    end;}
                 ProcessAction(BestActions, Gear)
                 end
         else if ((GameTicks - StartTicks) > cMaxAIThinkTime)

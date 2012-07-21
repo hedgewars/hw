@@ -85,7 +85,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amSwitch
             (proc: @TestMortar;      flags: 0), // amMortar
             (proc: nil;              flags: 0), // amKamikaze
-            (proc: @TestCake;        flags: 0), // amCake
+            (proc: @TestCake;        flags: amtest_OnTurn or amtest_NoTarget), // amCake
             (proc: nil;              flags: 0), // amSeduction
             (proc: @TestWatermelon;  flags: 0), // amWatermelon
             (proc: nil;              flags: 0), // amHellishBomb
@@ -122,7 +122,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
 const BadTurn = Low(LongInt) div 4;
 
 implementation
-uses uAIMisc, uVariables, uUtils;
+uses uAIMisc, uVariables, uUtils, uGearsHandlers, uCollisions;
 
 function Metric(x1, y1, x2, y2: LongInt): LongInt; inline;
 begin
@@ -983,9 +983,24 @@ begin
 end;
 
 
-function checkCakeWalk(Gear: PGear): LongInt;
+procedure checkCakeWalk(Me, Gear: PGear; var ap: TAttackParams);
+var i: Longword;
+    v: LongInt;
 begin
-checkCakeWalk:= BadTurn
+while (not TestColl(hwRound(Gear^.X), hwRound(Gear^.Y), 6)) and (Gear^.Y.Round < LAND_HEIGHT) do
+    Gear^.Y:= Gear^.Y + _1;
+
+for i:= 0 to 2040 do
+    begin
+    cakeStep(Gear);
+    v:= RateExplosion(Me, hwRound(Gear^.X), hwRound(Gear^.Y), cakeDmg * 2, afTrackFall);
+    if v > ap.Power then 
+        begin
+        ap.ExplX:= hwRound(Gear^.X);
+        ap.ExplY:= hwRound(Gear^.Y);
+        ap.Power:= v
+        end
+    end;
 end;
 
 function TestCake(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -996,23 +1011,29 @@ begin
     Level:= Level; // avoid compiler hint
     ap.ExplR:= 0;
     ap.Time:= 0;
-    ap.Power:= 1;
+    ap.Power:= BadTurn; // use it as max score value in checkCakeWalk
 
+    FillChar(cake, sizeof(cake), 0);
     cake.Radius:= 7;
+    cake.CollisionMask:= $FF7F;
 
     // check left direction
     cake.Angle:= 3;
     cake.dX.isNegative:= true;
     cake.X:= Me^.X - _3;
     cake.Y:= Me^.Y;
-    v1:= checkCakeWalk(@cake);
+    checkCakeWalk(Me, @cake, ap);
+    v1:= ap.Power;
 
     // now try opposite direction
     cake.Angle:= 1;
     cake.dX.isNegative:= false;
     cake.X:= Me^.X + _3;
     cake.Y:= Me^.Y;
-    v2:= checkCakeWalk(@cake);
+    checkCakeWalk(Me, @cake, ap);
+    v2:= ap.Power;
+
+    ap.Power:= 1;
 
     if (v2 > v1) then
         begin

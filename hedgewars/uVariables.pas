@@ -1446,7 +1446,8 @@ var
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or 
                           ammoprop_NoCrosshair or 
-                          ammoprop_DontHold;
+                          ammoprop_DontHold or
+                          ammoprop_Track;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;

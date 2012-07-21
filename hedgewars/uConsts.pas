@@ -146,6 +146,7 @@ const
     cBarrelHealth = 60;
     cShotgunRadius = 22;
     cBlowTorchC    = 6;
+    cakeDmg =   75;
 
     cKeyMaxIndex = 1023;
     cKbdMaxIndex = 65536;//need more room for the modifier keys
@@ -266,6 +267,7 @@ const
     ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets 
     ammoprop_OscAim       = $00010000;
     ammoprop_NoMoveAfter  = $00020000;
+    ammoprop_Track        = $00040000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
