@@ -57,7 +57,7 @@
     <string name="bot2">Level 2</string>
     <string name="bot1">Level 1</string>
 
-    <string name="title_activity_lobby">LobbyActivity</string>
+    <string name="title_activity_lobby">Hedgewars Server Lobby</string>
     <string name="chat_hint">Type here to chat</string>
     
     <!-- Room list -->
@@ -67,10 +67,17 @@
     <string name="no_players_in_list">No players</string>
     
     <!-- Roomlist -->
+    <string name="roomlist_header_roomname">Room Name</string>
+    <string name="roomlist_header_clients">C</string>
+    <string name="roomlist_header_teams">T</string>
+    <string name="roomlist_header_owner">Owner</string>
+    <string name="roomlist_header_map">Map</string>
+    <string name="roomlist_header_scheme">Rules</string>
+    <string name="roomlist_header_weapons">Ammo</string>
+    
     <string name="roomlist_owner">by %1$s</string>
-    <string name="roomlist_map">map: %1$s</string>
-    <string name="roomlist_scheme">scheme: %1$s</string>
-    <string name="roomlist_weapons">weapons: %1$s</string>
+    <string name="roomlist_map">Map: %1$s</string>
+    <string name="roomlist_scheme">Scheme: %1$s</string>
     <string name="map_regular">Random map</string>
     <string name="map_maze">Random maze</string>
     <string name="map_drawn">Drawn map</string>

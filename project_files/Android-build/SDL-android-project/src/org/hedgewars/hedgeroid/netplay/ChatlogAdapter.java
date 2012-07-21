@@ -8,7 +8,6 @@ import org.hedgewars.hedgeroid.netplay.MessageLog.Observer;
 
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.LayoutParams;
@@ -16,11 +15,15 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 /**
- * A simple TextView that remembers its contents to avoid having to
- * re-layout them.
+ * Optimization: ListView is smart enough to try re-using the same view for an item
+ * with the same ID, but it still calls getView for those items when the list changes.
+ * Since lines with a given ID never change in our chatlog, we can avoid the effort
+ * of TextView.setText in many cases by checking if the view is already set up for the
+ * line with the right ID - but to do that, the view needs to remember the ID it's
+ * holding the text for. That's what the LoglineView does. 
  */
 class LoglineView extends TextView {
-	CharSequence chatlogAdapterText;
+	long chatlogId = -1;
 	
 	public LoglineView(Context context) {
 		super(context);
@@ -77,15 +80,15 @@ public class ChatlogAdapter extends BaseAdapter implements Observer {
 	
 	public View getView(int position, View convertView, ViewGroup parent) {
 		LoglineView v = (LoglineView)convertView;
-		CharSequence line = log.get(position);
 		if (v == null) {
 			v = new LoglineView(context);
 			v.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 			v.setMovementMethod(LinkMovementMethod.getInstance());
 		}
-		if(line != v.chatlogAdapterText) {
-			v.setText(line);
-			v.chatlogAdapterText = line;
+		long id = getItemId(position);
+		if(id != v.chatlogId) {
+			v.setText(log.get(position));
+			v.chatlogId = id;
 		}
 		return v;
 	}
