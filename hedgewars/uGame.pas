@@ -26,7 +26,7 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
     implementation
 ////////////////////
-uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uMobile, uVisualGears, uTypes, uVariables{$IFDEF SDL13}, uTouch{$ENDIF};
+uses Math, uInputHandler, uTeams, uIO, uAI, uGears, uSound, uMobile, uVisualGears, uTypes, uVariables{$IFDEF SDL13}, uTouch{$ENDIF};
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;
@@ -46,7 +46,7 @@ else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
 
 if (GameType = gmtDemo) then 
     if isSpeed then
-        Lag:= Lag * 10
+        Lag:= Lag * max(min(round(((GameTicks-SpeedStart)+100)/5000),100),5)
     else
         if cOnlyStats then
             Lag:= High(LongInt);

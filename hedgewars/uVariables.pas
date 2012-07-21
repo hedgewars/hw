@@ -60,6 +60,7 @@ var
     isPaused        : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
+    SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
     autoCameraOn    : boolean;
@@ -2583,6 +2584,7 @@ begin
     isPaused        := false;
     isInMultiShoot  := false;
     isSpeed         := false;
+    SpeedStart      := 0;
     fastUntilLag    := false;
     autoCameraOn    := true;
     cScriptName     := '';
