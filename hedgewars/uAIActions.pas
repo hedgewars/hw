@@ -44,6 +44,7 @@ const MAXACTIONS     = 96;
     aia_Wait       = $8009;
     aia_Put        = $800A;
     aia_waitAngle  = $800B;
+    aia_waitAmmoXY = $800C;
     
     aim_push       = $8000;
     aim_release    = $8001;
@@ -234,6 +235,10 @@ with Actions.actions[Actions.Pos] do
                 
             aia_waitAngle:
                 if Me^.Angle <> Abs(Param) then exit;
+
+            aia_waitAmmoXY:
+                if (CurAmmoGear <> nil) and ((hwRound(CurAmmoGear^.X) <> X) or (hwRound(CurAmmoGear^.Y) <> Y)) then exit;
+
             end
         else
             begin

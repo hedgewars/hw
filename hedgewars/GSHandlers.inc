@@ -3007,7 +3007,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 const cakeh =   27;
-    cakeDmg =   75;
 var 
     CakePoints: array[0..Pred(cakeh)] of record
         x, y: hwFloat;
@@ -3091,6 +3090,19 @@ begin
     if Gear^.Tag < 7 then
         exit;
 
+    dec(Gear^.Health);
+    Gear^.Timer := Gear^.Health*10;
+    if Gear^.Health mod 100 = 0 then
+        Gear^.PortalCounter:= 0;
+    // This is not seconds, but at least it is *some* feedback
+    if (Gear^.Health = 0) or ((Gear^.Message and gmAttack) <> 0) then
+        begin
+        FollowGear := Gear;
+        Gear^.RenderTimer := false;
+        Gear^.doStep := @doStepCakeDown;
+        exit
+        end;
+
     cakeStep(Gear);
 
     if Gear^.Tag = 0 then
@@ -3102,18 +3114,6 @@ begin
         CakePoints[CakeI].y := Gear^.Y;
         Gear^.DirAngle := DxDy2Angle(tdx, tdy);
         end;
-
-    dec(Gear^.Health);
-    Gear^.Timer := Gear^.Health*10;
-    if Gear^.Health mod 100 = 0 then
-        Gear^.PortalCounter:= 0;
-    // This is not seconds, but at least it is *some* feedback
-    if (Gear^.Health = 0) or ((Gear^.Message and gmAttack) <> 0) then
-        begin
-        FollowGear := Gear;
-        Gear^.RenderTimer := false;
-        Gear^.doStep := @doStepCakeDown
-        end
 end;
 
 procedure doStepCakeUp(Gear: PGear);
