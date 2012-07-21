@@ -653,7 +653,7 @@ end;
 procedure chSpeedup_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-SpeedStart:= GameTicks;
+SpeedStart:= RealTicks;
 isSpeed:= true
 end;
 
