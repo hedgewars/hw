@@ -33,23 +33,24 @@ public class Netconn {
 	
 	private NetconnPtr conn;
 	private String playerName;
+	private boolean joined; // True once we have been admitted to the lobby
 	
 	public final PlayerList playerList = new PlayerList();
 	public final RoomList roomList = new RoomList();
-	public final MessageLog lobbyLog;
-	public final MessageLog roomLog;
+	public final MessageLog lobbyChatlog;
+	public final MessageLog roomChatlog;
 	
 	private StrCallback lobbyJoinCb = new StrCallback() {
 		public void callback(Pointer context, String arg1) {
 			playerList.addPlayerWithNewId(arg1);
-			lobbyLog.appendPlayerJoin(arg1);
+			lobbyChatlog.appendPlayerJoin(arg1);
 		}
 	};
 	
 	private StrStrCallback lobbyLeaveCb = new StrStrCallback() {
 		public void callback(Pointer context, String name, String msg) {
-			playerList.remove(name);
-			lobbyLog.appendPlayerLeave(name, msg);
+			playerList.removePlayer(name);
+			lobbyChatlog.appendPlayerLeave(name, msg);
 		}
 	};
 	
@@ -79,23 +80,21 @@ public class Netconn {
 	
 	private StrCallback roomDeleteCb = new StrCallback() {
 		public void callback(Pointer context, String name) {
-			roomList.remove(name);
+			roomList.removeRoom(name);
 		}
 	};
 	
 	private VoidCallback connectedCb = new VoidCallback() {
 		public void callback(Pointer context) {
 			// TODO I guess more needs to happen here...
+			joined = true;
 			FLIB.flib_netconn_send_request_roomlist(conn);
 		}
 	};
 	
 	private RoomListCallback roomlistCb = new RoomListCallback() {
 		public void callback(Pointer context, RoomArrayPtr arg1, int count) {
-			roomList.clear();
-			for(RoomPtr roomPtr : arg1.getRooms(count)) {
-				roomList.addRoomWithNewId(roomPtr);
-			}
+			roomList.updateList(arg1.getRooms(count));
 		}
 	};
 	
@@ -125,8 +124,8 @@ public class Netconn {
 			playerName = "Player";
 		}
 		this.playerName = playerName;
-		this.lobbyLog = new MessageLog(context);
-		this.roomLog = new MessageLog(context);
+		this.lobbyChatlog = new MessageLog(context);
+		this.roomChatlog = new MessageLog(context);
 		
 		MetaschemePtr meta = null;
 		File dataPath = Utils.getDataPathFile(context);
@@ -170,24 +169,25 @@ public class Netconn {
 	public void sendChat(String s) {
 		FLIB.flib_netconn_send_chat(conn, s);
 		if(FLIB.flib_netconn_is_in_room_context(conn)) {
-			roomLog.appendChat(playerName, s);
+			roomChatlog.appendChat(playerName, s);
 		} else {
-			lobbyLog.appendChat(playerName, s);
+			lobbyChatlog.appendChat(playerName, s);
 		}
 	}
 	
 	private MessageLog getCurrentLog() {
 		if(FLIB.flib_netconn_is_in_room_context(conn)) {
-			return roomLog;
+			return roomChatlog;
 		} else {
-			return lobbyLog;
+			return lobbyChatlog;
 		}
 	}
 	
 	public void sendNick(String nick) { FLIB.flib_netconn_send_nick(conn, nick); }
 	public void sendPassword(String password) { FLIB.flib_netconn_send_password(conn, password); }
 	public void sendQuit(String message) { FLIB.flib_netconn_send_quit(conn, message); }
-	public void sendRoomlistRequest() { FLIB.flib_netconn_send_request_roomlist(conn); }
+	public void sendRoomlistRequest() { if(joined) FLIB.flib_netconn_send_request_roomlist(conn); }
+	public void sendPlayerInfoQuery(String name) { FLIB.flib_netconn_send_playerInfo(conn, name); }
 	
 	public boolean isConnected() {
 		return conn != null;
@@ -200,4 +200,5 @@ public class Netconn {
 			Log.e("Netconn", "Leaked Netconn object");
 		}
 	}
+
 }

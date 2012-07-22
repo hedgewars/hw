@@ -85,13 +85,13 @@ public class LobbyChatFragment extends Fragment {
         public void onServiceConnected(ComponentName className, IBinder binder) {
         	Log.d("LobbyChatFragment", "netconn received");
         	netconn = ((NetplayBinder) binder).getNetconn();
-        	adapter.setLog(netconn.lobbyLog.getLog());
-        	netconn.lobbyLog.registerObserver(adapter);
+        	adapter.setLog(netconn.lobbyChatlog.getLog());
+        	netconn.lobbyChatlog.registerObserver(adapter);
         }
 
         public void onServiceDisconnected(ComponentName className) {
         	// TODO navigate away
-        	netconn.lobbyLog.unregisterObserver(adapter);
+        	netconn.lobbyChatlog.unregisterObserver(adapter);
         	netconn = null;
         }
     };

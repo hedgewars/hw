@@ -2,7 +2,9 @@
 <TwoLineListItem xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:mode="twoLine">
+    android:mode="twoLine"
+    android:paddingTop="4dp"
+	android:paddingBottom="4dp">
 
     <TextView
         android:id="@android:id/text1"

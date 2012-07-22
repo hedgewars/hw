@@ -73,7 +73,7 @@
     <string name="roomlist_header_owner">Owner</string>
     <string name="roomlist_header_map">Map</string>
     <string name="roomlist_header_scheme">Rules</string>
-    <string name="roomlist_header_weapons">Ammo</string>
+    <string name="roomlist_header_weapons">Weapons</string>
     
     <string name="roomlist_owner">by %1$s</string>
     <string name="roomlist_map">Map: %1$s</string>
@@ -86,4 +86,16 @@
     <string name="log_player_join">%1$s has joined.</string>
     <string name="log_player_leave">%1$s has left.</string>
     <string name="log_player_leave_with_msg">%1$s has left (%2$s).</string>
+    
+    <!-- Start netgame dialog -->
+    <string name="start_netgame_dialog_title">Connect</string>
+    <string name="start_netgame_dialog_message">Please select a username.</string>
+    <string name="start_netgame_dialog_playername_hint">Enter a username here</string>
+    
+    <string name="lobby_playerlist_contextmenu_info">Info (shown in chat)</string>
+    <string name="lobby_playerlist_contextmenu_follow">Follow</string>
+    <string name="lobby_roomlistmenu_create">Create room</string>
+    <string name="lobby_roomlistmenu_refresh">Refresh</string>
+    
+    <string name="not_implemented_yet">Sorry, not implemented yet. :(</string>
 </resources>

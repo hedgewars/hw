@@ -1,24 +1,35 @@
 package org.hedgewars.hedgeroid.netplay;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.netplay.PlayerList.Observer;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class PlayerListAdapter extends BaseAdapter implements Observer {
+public class PlayerListAdapter extends BaseAdapter {
 	private List<Player> players = new ArrayList<Player>();
 	private Context context;
+	private PlayerList playerList;
+	
+	private DataSetObserver observer = new DataSetObserver() {
+		@Override
+		public void onChanged() {
+			reloadFromList(playerList);
+		}
+		
+		@Override
+		public void onInvalidated() {
+			invalidate();
+		}
+	};
 	
 	public PlayerListAdapter(Context context) {
 		this.context = context;
@@ -28,7 +39,7 @@ public class PlayerListAdapter extends BaseAdapter implements Observer {
 		return players.size();
 	}
 
-	public Object getItem(int position) {
+	public Player getItem(int position) {
 		return players.get(position);
 	}
 
@@ -39,23 +50,28 @@ public class PlayerListAdapter extends BaseAdapter implements Observer {
 	public boolean hasStableIds() {
 		return true;
 	}
-
-	public void itemAdded(Map<String, Player> map, String key, Player value) {
-		setPlayerList(map.values());
-	}
-
-	public void itemRemoved(Map<String, Player> map, String key, Player oldValue) {
-		setPlayerList(map.values());
-	}
-
-	public void itemReplaced(Map<String, Player> map, String key,
-			Player oldValue, Player newValue) {
-		setPlayerList(map.values());
+	
+	public void setList(PlayerList playerList) {
+		if(this.playerList != null) {
+			this.playerList.unregisterObserver(observer);
+		}
+		this.playerList = playerList;
+		this.playerList.registerObserver(observer);
+		reloadFromList(playerList);
 	}
 	
-	public void setPlayerList(Collection<Player> players) {
-		this.players = new ArrayList<Player>(players);
-		Collections.sort(this.players, Player.nameComparator);
+	public void invalidate() {
+		players = new ArrayList<Player>();
+		if(playerList != null) {
+			playerList.unregisterObserver(observer);
+		}
+		playerList = null;
+		notifyDataSetInvalidated();
+	}
+	
+	private void reloadFromList(PlayerList list) {
+		players = new ArrayList<Player>(list.getMap().values());
+		Collections.sort(players, Player.NAME_COMPARATOR);
 		notifyDataSetChanged();
 	}
 	
