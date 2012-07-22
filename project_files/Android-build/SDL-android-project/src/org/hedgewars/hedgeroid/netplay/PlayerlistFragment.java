@@ -10,9 +10,15 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ListFragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class PlayerlistFragment extends ListFragment {
 	private Netconn netconn;
@@ -28,6 +34,38 @@ public class PlayerlistFragment extends ListFragment {
 	}
 
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		registerForContextMenu(getListView());
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getActivity().getMenuInflater();
+		inflater.inflate(R.menu.lobby_playerlist_context, menu);
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+		switch(item.getItemId()) {
+		case R.id.player_info:
+			Player p = playerListAdapter.getItem(info.position);
+			if(netconn != null) {
+				netconn.sendPlayerInfoQuery(p.name);
+			}
+			return true;
+		case R.id.player_follow:
+			Toast.makeText(getActivity(), R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+	
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 		getActivity().unbindService(serviceConnection);
@@ -42,13 +80,12 @@ public class PlayerlistFragment extends ListFragment {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
         	netconn = ((NetplayBinder) binder).getNetconn();
-        	playerListAdapter.setPlayerList(netconn.playerList.getValues());
-        	netconn.playerList.observe(playerListAdapter);
+        	playerListAdapter.setList(netconn.playerList);
         }
 
         public void onServiceDisconnected(ComponentName className) {
         	// TODO navigate away
-        	netconn.playerList.unobserve(playerListAdapter);
+        	playerListAdapter.invalidate();
         	netconn = null;
         }
     };

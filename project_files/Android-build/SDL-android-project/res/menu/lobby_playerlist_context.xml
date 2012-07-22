@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/player_info"
+        android:title="@string/lobby_playerlist_contextmenu_info">
+    </item>
+    <item
+        android:id="@+id/player_follow"
+        android:title="@string/lobby_playerlist_contextmenu_follow">
+    </item>
+</menu>

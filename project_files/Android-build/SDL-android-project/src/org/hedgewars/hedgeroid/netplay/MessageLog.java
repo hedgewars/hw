@@ -27,6 +27,7 @@ public class MessageLog {
 	private static final int BACKLOG_LINES = 200;
 	
 	private static final int INFO_COLOR = Color.GRAY;
+	private static final int PLAYERINFO_COLOR = Color.GREEN;
 	private static final int CHAT_COLOR = Color.GREEN;
 	private static final int MECHAT_COLOR = Color.CYAN;
 	private static final int WARN_COLOR = Color.RED;
@@ -111,8 +112,8 @@ public class MessageLog {
 			append(withColor("***"+msg, WARN_COLOR));
 			break;
 		case JnaFrontlib.NETCONN_MSG_TYPE_PLAYERINFO:
-			// TODO better formatting or different way to display
-			append(msg);
+			// TODO Display in popup?
+			append(withColor(msg.replace("\n", " "), PLAYERINFO_COLOR));
 			break;
 		case JnaFrontlib.NETCONN_MSG_TYPE_SERVERMESSAGE:
 			appendRaw(span(TextUtils.concat("\n", Html.fromHtml(msg), "\n"), new RelativeSizeSpan(1.5f)));

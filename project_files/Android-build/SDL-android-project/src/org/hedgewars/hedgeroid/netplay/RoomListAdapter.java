@@ -1,25 +1,36 @@
 package org.hedgewars.hedgeroid.netplay;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.netplay.RoomList.Observer;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.DataSetObserver;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class RoomListAdapter extends BaseAdapter implements Observer {
+public class RoomListAdapter extends BaseAdapter {
 	private List<Room> rooms = new ArrayList<Room>();
 	private Context context;
+	private RoomList roomList;
+	
+	private DataSetObserver observer = new DataSetObserver() {
+		@Override
+		public void onChanged() {
+			reloadFromList(roomList);
+		}
+		
+		@Override
+		public void onInvalidated() {
+			invalidate();
+		}
+	};
 	
 	public RoomListAdapter(Context context) {
 		this.context = context;
@@ -29,7 +40,7 @@ public class RoomListAdapter extends BaseAdapter implements Observer {
 		return rooms.size();
 	}
 
-	public Object getItem(int position) {
+	public Room getItem(int position) {
 		return rooms.get(position);
 	}
 
@@ -41,9 +52,27 @@ public class RoomListAdapter extends BaseAdapter implements Observer {
 		return true;
 	}
 
-	public void setList(Collection<Room> rooms) {
-		this.rooms = new ArrayList<Room>(rooms);
-		Collections.reverse(this.rooms); // We want to show the newest rooms first
+	public void setList(RoomList roomList) {
+		if(this.roomList != null) {
+			this.roomList.unregisterObserver(observer);
+		}
+		this.roomList = roomList;
+		this.roomList.registerObserver(observer);
+		reloadFromList(roomList);
+	}
+	
+	public void invalidate() {
+		rooms = new ArrayList<Room>();
+		if(roomList != null) {
+			roomList.unregisterObserver(observer);
+		}
+		roomList = null;
+		notifyDataSetInvalidated();
+	}
+	
+	private void reloadFromList(RoomList list) {
+		rooms = new ArrayList<Room>(roomList.getMap().values());
+		Collections.sort(rooms, Collections.reverseOrder(Room.ID_COMPARATOR));
 		notifyDataSetChanged();
 	}
 	
@@ -98,18 +127,5 @@ public class RoomListAdapter extends BaseAdapter implements Observer {
 		}
 		
 		return v;
-	}
-
-	public void itemAdded(Map<String, Room> map, String key, Room value) {
-		setList(map.values());
-	}
-
-	public void itemRemoved(Map<String, Room> map, String key, Room oldValue) {
-		setList(map.values());
-	}
-
-	public void itemReplaced(Map<String, Room> map, String key, Room oldValue,
-			Room newValue) {
-		setList(map.values());
 	}
 }

@@ -31,14 +31,23 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
+	private static final int DIALOG_NO_SDCARD = 0;
+	private static final int DIALOG_START_NETGAME = 1;
+	
+	private static final String PREF_PLAYERNAME = "playerName";
+	
 	private Button downloader, startGame;
 	private ProgressDialog assetsDialog;
 
@@ -54,12 +63,12 @@ public class MainActivity extends FragmentActivity {
 		startGame.setOnClickListener(startGameClicker);
 		joinLobby.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				startActivity(new Intent(getApplicationContext(), LobbyActivity.class));
+				showDialog(DIALOG_START_NETGAME);
 			}
 		});
 
 		if(!Utils.isDataPathAvailable()){
-			showDialog(0);
+			showDialog(DIALOG_NO_SDCARD);
 		} else {
 			String existingVersion = "";
 			try {
@@ -83,6 +92,17 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	public Dialog onCreateDialog(int id, Bundle args){
+		switch(id) {
+		case DIALOG_NO_SDCARD:
+			return createNoSdcardDialog();
+		case DIALOG_START_NETGAME:
+			return createStartNetgameDialog();
+		default:
+			throw new IndexOutOfBoundsException();
+		}
+	}
+
+	private Dialog createNoSdcardDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.sdcard_not_mounted_title);
 		builder.setMessage(R.string.sdcard_not_mounted);
@@ -95,6 +115,43 @@ public class MainActivity extends FragmentActivity {
 		return builder.create();
 	}
 
+	private Dialog createStartNetgameDialog() {
+		final SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+		final String playerName = prefs.getString(PREF_PLAYERNAME, "Player");
+		final EditText editText = new EditText(this);
+		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		editText.setText(playerName);
+		editText.setHint(R.string.start_netgame_dialog_playername_hint);
+		editText.setId(android.R.id.text1);
+
+		builder.setTitle(R.string.start_netgame_dialog_title);
+		builder.setMessage(R.string.start_netgame_dialog_message);
+		builder.setView(editText);
+		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				editText.setText(playerName);
+			}
+		});
+		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				String playerName = editText.getText().toString();
+				if(playerName.length() > 0) {
+					Editor edit = prefs.edit();
+					edit.putString(PREF_PLAYERNAME, playerName);
+					edit.commit();
+					
+					// TODO actually use that name
+					Intent netplayIntent = new Intent(getApplicationContext(), LobbyActivity.class);
+					netplayIntent.putExtra("playerName", playerName);
+					startActivity(netplayIntent);
+				}
+			}
+		});
+
+		return builder.create();
+	}
+	
 	public void onAssetsDownloaded(boolean result){
 		if(!result){
 			Toast.makeText(this, R.string.download_failed, Toast.LENGTH_LONG).show();

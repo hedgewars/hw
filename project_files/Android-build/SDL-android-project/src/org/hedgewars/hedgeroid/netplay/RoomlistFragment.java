@@ -12,12 +12,17 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
-public class RoomlistFragment extends ListFragment {
-	private static final int AUTO_REFRESH_INTERVAL_MS = 10000;
+public class RoomlistFragment extends ListFragment implements OnItemClickListener {
+	private static final int AUTO_REFRESH_INTERVAL_MS = 15000;
 	
 	private Netconn netconn;
 	private RoomListAdapter adapter;
@@ -40,6 +45,7 @@ public class RoomlistFragment extends ListFragment {
 	            Context.BIND_AUTO_CREATE);
 		adapter = new RoomListAdapter(getActivity());
 		setListAdapter(adapter);
+		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -47,6 +53,12 @@ public class RoomlistFragment extends ListFragment {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.lobby_rooms_fragment, container, false);
 		return v;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		getListView().setOnItemClickListener(this);
 	}
 	
 	@Override
@@ -70,16 +82,39 @@ public class RoomlistFragment extends ListFragment {
 		getActivity().unbindService(serviceConnection);
 	}
 	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.lobby_roomlist_options, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
+		case R.id.roomlist_refresh:
+			if(netconn != null) {
+				netconn.sendRoomlistRequest();
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Toast.makeText(getActivity(), R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
+	}
+	
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
         	netconn = ((NetplayBinder) binder).getNetconn();
-        	adapter.setList(netconn.roomList.getValues());
-        	netconn.roomList.observe(adapter);
+        	adapter.setList(netconn.roomList);
+        	autoRefreshTimer.start();
         }
 
         public void onServiceDisconnected(ComponentName className) {
         	// TODO navigate away
-        	netconn.roomList.unobserve(adapter);
+        	adapter.invalidate();
         	netconn = null;
         }
     };

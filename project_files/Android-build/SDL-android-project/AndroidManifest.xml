@@ -69,7 +69,10 @@
         </activity>
         <activity
             android:name=".netplay.LobbyActivity"
-            android:label="@string/title_activity_lobby" >
+            android:label="@string/title_activity_lobby"
+            android:screenOrientation="landscape"
+
+            android:windowSoftInputMode="adjustResize" >
         </activity>
     </application>
 </manifest>
