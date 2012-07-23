@@ -802,7 +802,7 @@ begin
     RegisterVariable('-down'   , @chDown_m       , false, true);
     RegisterVariable('hjump'   , @chHJump        , false, true);
     RegisterVariable('ljump'   , @chLJump        , false, true);
-    RegisterVariable('nextturn', @chNextTurn     , false, true);
+    RegisterVariable('nextturn', @chNextTurn     , false, false);
     RegisterVariable('-attack' , @chAttack_m     , false, false);
     RegisterVariable('slot'    , @chSlot         , false, true);
     RegisterVariable('setweap' , @chSetWeapon    , false, true);
