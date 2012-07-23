@@ -11,7 +11,7 @@ function AddSkipFunction(anim, func, args)
   skipFuncList[anim] = {sfunc = func, sargs = args}
 end
 
-function RemoveSkipFunctin(anim)
+function RemoveSkipFunction(anim)
   skipFuncList[anim] = nil
 end
 
@@ -321,6 +321,18 @@ function AddEvent(condFunc, condArgs, doFunc, doArgs, evType)
   stageEvents[seNum].dFunc = doFunc
   stageEvents[seNum].dArgs = doArgs
   stageEvents[seNum].evType = evType
+end
+
+function AddNewEvent(condFunc, condArgs, doFunc, doArgs, evType)
+  local i
+  for i = 1, seNum do
+    if stageEvents[i].cFunc == condFunc and stageEvents[i].cArgs == condArgs and
+       stageEvents[i].dFunc == doFunc and stageEvents[i].dArgs == doArgs and 
+       stageEvents[seNum].evType == evType then
+       return
+    end
+  end
+  AddEvent(condFunc, condArgs, doFunc, doArgs, evType)
 end
 
 function RemoveEvent(evNum)
