@@ -4,7 +4,6 @@ import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.netplay.NetplayService.NetplayBinder;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
@@ -21,14 +20,13 @@ import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class PlayerlistFragment extends ListFragment {
-	private Netconn netconn;
+	private NetplayService netplayService;
 	private PlayerListAdapter playerListAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getActivity().bindService(new Intent(getActivity(), NetplayService.class), serviceConnection,
-	            Context.BIND_AUTO_CREATE);
+		getActivity().bindService(new Intent(getActivity(), NetplayService.class), serviceConnection, 0);
 		playerListAdapter = new PlayerListAdapter(getActivity());
 		setListAdapter(playerListAdapter);
 	}
@@ -53,8 +51,8 @@ public class PlayerlistFragment extends ListFragment {
 		switch(item.getItemId()) {
 		case R.id.player_info:
 			Player p = playerListAdapter.getItem(info.position);
-			if(netconn != null) {
-				netconn.sendPlayerInfoQuery(p.name);
+			if(netplayService != null) {
+				netplayService.sendPlayerInfoQuery(p.name);
 			}
 			return true;
 		case R.id.player_follow:
@@ -79,14 +77,14 @@ public class PlayerlistFragment extends ListFragment {
 	
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
-        	netconn = ((NetplayBinder) binder).getNetconn();
-        	playerListAdapter.setList(netconn.playerList);
+        	netplayService = ((NetplayBinder) binder).getService();
+        	playerListAdapter.setList(netplayService.playerList);
         }
 
         public void onServiceDisconnected(ComponentName className) {
         	// TODO navigate away
         	playerListAdapter.invalidate();
-        	netconn = null;
+        	netplayService = null;
         }
     };
 }

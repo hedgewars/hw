@@ -24,13 +24,13 @@ import android.widget.Toast;
 public class RoomlistFragment extends ListFragment implements OnItemClickListener {
 	private static final int AUTO_REFRESH_INTERVAL_MS = 15000;
 	
-	private Netconn netconn;
+	private NetplayService service;
 	private RoomListAdapter adapter;
 	private CountDownTimer autoRefreshTimer = new CountDownTimer(Long.MAX_VALUE, AUTO_REFRESH_INTERVAL_MS) {
 		@Override
 		public void onTick(long millisUntilFinished) {
-			if(netconn != null && netconn.isConnected()) {
-				netconn.sendRoomlistRequest();
+			if(service != null && service.isConnected()) {
+				service.sendRoomlistRequest();
 			}
 		}
 		
@@ -64,8 +64,8 @@ public class RoomlistFragment extends ListFragment implements OnItemClickListene
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(netconn != null) {
-			netconn.sendRoomlistRequest();
+		if(service != null) {
+			service.sendRoomlistRequest();
 			autoRefreshTimer.start();
 		}
 	}
@@ -92,8 +92,8 @@ public class RoomlistFragment extends ListFragment implements OnItemClickListene
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.roomlist_refresh:
-			if(netconn != null) {
-				netconn.sendRoomlistRequest();
+			if(service != null && service.isConnected()) {
+				service.sendRoomlistRequest();
 			}
 			return true;
 		default:
@@ -107,15 +107,15 @@ public class RoomlistFragment extends ListFragment implements OnItemClickListene
 	
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
-        	netconn = ((NetplayBinder) binder).getNetconn();
-        	adapter.setList(netconn.roomList);
+        	service = ((NetplayBinder) binder).getService();
+        	adapter.setList(service.roomList);
         	autoRefreshTimer.start();
         }
 
         public void onServiceDisconnected(ComponentName className) {
         	// TODO navigate away
         	adapter.invalidate();
-        	netconn = null;
+        	service = null;
         }
     };
 }

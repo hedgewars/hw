@@ -26,13 +26,13 @@ public class LobbyChatFragment extends Fragment {
 	private EditText editText;
 	private ListView listView;
 	private ChatlogAdapter adapter;
-	private Netconn netconn;
+	private NetplayService service;
 	
 	private void commitText() {
 		String text = editText.getText().toString();
-		if(netconn != null && netconn.isConnected() && text.length()>0) {
+		if(service != null && service.isConnected() && text.length()>0) {
 			editText.setText("");
-			netconn.sendChat(text);
+			service.sendChat(text);
 		}
 	}
 	
@@ -84,15 +84,15 @@ public class LobbyChatFragment extends Fragment {
     private ServiceConnection serviceConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder binder) {
         	Log.d("LobbyChatFragment", "netconn received");
-        	netconn = ((NetplayBinder) binder).getNetconn();
-        	adapter.setLog(netconn.lobbyChatlog.getLog());
-        	netconn.lobbyChatlog.registerObserver(adapter);
+        	service = ((NetplayBinder) binder).getService();
+        	adapter.setLog(service.lobbyChatlog.getLog());
+        	service.lobbyChatlog.registerObserver(adapter);
         }
 
         public void onServiceDisconnected(ComponentName className) {
         	// TODO navigate away
-        	netconn.lobbyChatlog.unregisterObserver(adapter);
-        	netconn = null;
+        	service.lobbyChatlog.unregisterObserver(adapter);
+        	service = null;
         }
     };
 }

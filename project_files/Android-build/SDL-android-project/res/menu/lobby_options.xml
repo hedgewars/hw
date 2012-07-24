@@ -3,4 +3,8 @@
         android:id="@+id/room_create"
         android:title="@string/lobby_roomlistmenu_create"
         android:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/disconnect"
+        android:title="@string/lobby_menu_disconnect"
+        android:showAsAction="ifRoom" />
 </menu>

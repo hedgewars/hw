@@ -54,6 +54,13 @@ public class RoomList extends DataSetObservable {
 		}
 	}
 	
+	public void clear() {
+		if(!rooms.isEmpty()) {
+			rooms.clear();
+			notifyChanged();
+		}
+	}
+	
 	public Map<String, Room> getMap() {
 		return Collections.unmodifiableMap(rooms);
 	}
