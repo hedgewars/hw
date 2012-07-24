@@ -464,21 +464,6 @@ function RestoreHedge(hedge)
 end
 
 function GetVariables()
-  m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
-  m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))
-  m5DenseDead = tonumber(GetCampaignVar("M5DenseDead"))
-  m4LeaksDead = tonumber(GetCampaignVar("M4LeaksDead"))
-  m5LeaksDead = tonumber(GetCampaignVar("M5LeaksDead"))
-  m4BuffaloDead = tonumber(GetCampaignVar("M4BuffaloDead"))
-  m5BuffaloDead = tonumber(GetCampaignVar("M4BuffaloDead"))
-  m4WaterDead = tonumber(GetCampaignVar("M4WaterDead"))
-  m5WaterDead = tonumber(GetCampaignVar("M5WaterDead"))
-  m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead"))
-  m5ChiefDead = tonumber(GetCampaignVar("M5ChiefDead"))
-  m5WiseDead = tonumber(GetCampaignVar("M5WiseDead"))
-  m5GirlDead = tonumber(GetCampaignVar("M5GirlDead"))
-  m2Choice = tonumber(GetCampaignVar("M2Choice"))
-  m5Choice = tonumber(GetCampaignVar("M5Choice"))
   m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
 end
 
