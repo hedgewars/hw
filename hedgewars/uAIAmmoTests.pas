@@ -709,10 +709,10 @@ begin
     x:= hwRound(Me^.X);
     y:= hwRound(Me^.Y);
 
-    a:= 0;
+    a:= cMaxAngle div 2;
     valueResult:= 0;
 
-    while a <= cMaxAngle div 2 do
+    while a >= 0 do
         begin
         dx:= sin(a / cMaxAngle * pi) * 0.5;
         dy:= cos(a / cMaxAngle * pi) * 0.5;
@@ -736,7 +736,7 @@ begin
                 valueResult:= v1
                 end;
 
-        a:= a + 15 + random(cMaxAngle div 16)
+        a:= a - 15 - random(cMaxAngle div 16)
         end;
    
     if valueResult <= 0 then
