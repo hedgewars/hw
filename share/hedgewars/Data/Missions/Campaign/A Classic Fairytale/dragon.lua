@@ -120,7 +120,7 @@ girlNum = 6
 wiseNum = 7
 
 nativeNames = {loc("Leaks A Lot"), loc("Dense Cloud"), loc("Fiery Water"), 
-               loc("Raging Buffalo"), loc("Righteous Beard"), loc("Fell From Heaven"),
+               loc("Raging Buffalo"), loc("Righteous Beard"), loc("Fell From Grace"),
                loc("Wise Oak")}
 
 nativeUnNames = {loc("Zork"), loc("Steve"), loc("Jack"),
