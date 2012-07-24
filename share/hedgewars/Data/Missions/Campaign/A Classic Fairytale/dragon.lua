@@ -132,7 +132,7 @@ nativeHats = {"Rambo", "RobinHood", "pirate_jack", "zoo_Bunny", "IndianChief",
 
 nativePos = {257, 1950}
 
-cyborgNames = {"Syntax Errol", "Segmentation Paul", "Unexpected Igor", "Jeremiah"}
+cyborgNames = {loc("Syntax Errol"), loc("Segmentation Paul"), loc("Unexpected Igor"), loc("Jeremiah")}
 cyborgPos = {745, 1847}
 cyborgsPos = {{2937, 831}, {2945, 1264}, {2335, 1701}, {448, 484}}
 cyborgsDir = {"Left", "Left", "Left", "Right"}
@@ -148,7 +148,7 @@ cratePos = {
             {1139, 451, amSnowball, 3}, {1207, 468, amShotgun, 3},
             {1024, 393, amSniperRifle, 2}, {998, 391, amDynamite, 2}
            }
-reactions = {"Yeah, take that!", "Bullseye", "Die, die, die!"}
+reactions = {loc("Yeah, take that!"), loc("Bullseye"), loc("Die, die, die!")}
 
 secondPos = {{1010, 510}, {1067, 510}}
 -----------------------------Variables---------------------------------
@@ -193,8 +193,8 @@ function AnimationSetup()
   startAnim = {}
   local m = m5DeployedNum
   table.insert(startAnim, {func = AnimWait, args = {native, 3000}})
-  table.insert(startAnim, {func = AnimCaption, args = {native, "With the rest of the tribe gone, it was up to " .. nativeNames[m5DeployedNum] .. " to save the village.", 5000}})
-  table.insert(startAnim, {func = AnimCaption, args = {native, "But it proved to be no easy task!", 2000}})
+  table.insert(startAnim, {func = AnimCaption, args = {native, loc("With the rest of the tribe gone, it was up to ") .. nativeNames[m5DeployedNum] .. loc(" to save the village."), 5000}})
+  table.insert(startAnim, {func = AnimCaption, args = {native, loc("But it proved to be no easy task!"), 2000}})
   for i = 1, 4 do
     table.insert(startAnim, {func = FollowGear, swh = false, args = {cyborgs[i]}})
     table.insert(startAnim, {func = AnimWait, args = {native, 1000}})
@@ -202,64 +202,64 @@ function AnimationSetup()
   table.insert(startAnim, {func = FollowGear, swh = false, args = {native}})
   if m == leaksNum then
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 50, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "What a strange cave!", SAY_THINK, 0}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("What a strange cave!"), SAY_THINK, 0}})
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 200, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "Now how do I get on the other side?!", SAY_THINK, 5500}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("Now how do I get on the other side?!"), SAY_THINK, 5500}})
   elseif m == denseNum then
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 50, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "Dude, what's this place?!", SAY_THINK, 0}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("Dude, what's this place?!"), SAY_THINK, 0}})
     table.insert(startAnim, {func = AnimCustomFunction, args = {native, EmitDenseClouds, {"Right"}}})
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 200, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "And where's all the weed?", SAY_THINK, 4000}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("And where's all the weed?"), SAY_THINK, 4000}})
   elseif m == waterNum then
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 50, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "Is this place in my head?", SAY_THINK, 0}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("Is this place in my head?"), SAY_THINK, 0}})
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 200, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "I shouldn't have drunk that last pint.", SAY_THINK, 6000}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("I shouldn't have drunk that last pint."), SAY_THINK, 6000}})
   elseif m == buffaloNum then
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 50, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "Where did that alien run?", SAY_THINK, 0}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("Where did that alien run?"), SAY_THINK, 0}})
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 200, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "When I find it...", SAY_THINK, 3000}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("When I find it..."), SAY_THINK, 3000}})
   elseif m == princessNum then
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 50, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "A woman shouldn't do this kind of thing!", SAY_THINK, 0}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("A woman shouldn't do this kind of thing!"), SAY_THINK, 0}})
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 200, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "I could be eating snails right now.", SAY_THINK, 5500}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("I could be eating snails right now."), SAY_THINK, 5500}})
   elseif m == chiefNum then
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 50, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "What is this place?", SAY_THINK, 0}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("What is this place?"), SAY_THINK, 0}})
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 200, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "It doesn't matter. I won't let that alien hurt my daughter!", SAY_THINK, 8500}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("It doesn't matter. I won't let that alien hurt my daughter!"), SAY_THINK, 8500}})
   elseif m == wiseNum then
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 50, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "Every single time!", SAY_THINK, 0}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("Every single time!"), SAY_THINK, 0}})
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 200, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, "How come in a village full of warriors, it's up to me to save it?", SAY_THINK, 8500}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("How come in a village full of warriors, it's up to me to save it?"), SAY_THINK, 8500}})
   end
 
   table.insert(startAnim, {func = AnimCustomFunction, args = {native, RestoreHedge, {cyborg, unpack(cyborgPos)}}})
   table.insert(startAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(cyborgPos)}})
   table.insert(startAnim, {func = AnimTurn, args = {cyborg, "Left"}})
-  table.insert(startAnim, {func = AnimSay, args = {cyborg, "Greetings, " .. nativeUnNames[m] .. "!", SAY_SAY, 2500}})
-  table.insert(startAnim, {func = AnimSay, args = {cyborg, "As you can see, there is no way to get on the other side!", SAY_SAY, 7000}})
-  table.insert(startAnim, {func = AnimSay, args = {cyborg, "I wish to help you, " .. nativeUnNames[m] .. "!", SAY_SAY, 4000}})
-  table.insert(startAnim, {func = AnimSay, args = {cyborg, "Beware, though! If you are slow, you die!", SAY_SAY, 7000}})
+  table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("Greetings, ") .. nativeUnNames[m] .. "!", SAY_SAY, 2500}})
+  table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("As you can see, there is no way to get on the other side!"), SAY_SAY, 7000}})
+  table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("I wish to help you, ") .. nativeUnNames[m] .. "!", SAY_SAY, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {cyborg, loc("Beware, though! If you are slow, you die!"), SAY_SAY, 7000}})
   table.insert(startAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
   table.insert(startAnim, {func = AnimSwitchHog, args = {native}})
   table.insert(startAnim, {func = AnimCustomFunction, args = {native, HideHedge, {cyborg}}})
-  table.insert(startAnim, {func = AnimSay, args = {native, "Talk about mixed signals...", SAY_SAY, 4000}})
+  table.insert(startAnim, {func = AnimSay, args = {native, loc("Talk about mixed signals..."), SAY_SAY, 4000}})
   AddSkipFunction(startAnim, SkipStartAnim, {})
 end
 
 function SetupKillAnim()
-  table.insert(killAnim, {func = AnimSay, args = {native, "Well, that was a waste of time.", SAY_THINK, 5000}})
+  table.insert(killAnim, {func = AnimSay, args = {native, loc("Well, that was a waste of time."), SAY_THINK, 5000}})
   table.insert(killAnim, {func = AnimCustomFunction, args = {native, RestoreHedge, {cyborg, unpack(cyborgPos)}}})
   table.insert(killAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(cyborgPos)}})
   table.insert(killAnim, {func = AnimCustomFunction, args = {cyborg, CondNeedToTurn, {cyborg, native}}})
-  table.insert(killAnim, {func = AnimSay, args = {cyborg, "You bear impressive skills, " .. nativeUnNames[m5DeployedNum] .. "!", SAY_SHOUT, 4000}})
-  table.insert(killAnim, {func = AnimSay, args = {cyborg, "However, my mates don't agree with me on leting you go...", SAY_SHOUT, 7000}})
-  table.insert(killAnim, {func = AnimSay, args = {cyborg, "I guess you'll have to kill them.", SAY_SHOUT, 4000}})
+  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("You bear impressive skills, ") .. nativeUnNames[m5DeployedNum] .. "!", SAY_SHOUT, 4000}})
+  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("However, my mates don't agree with me on leting you go..."), SAY_SHOUT, 7000}})
+  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("I guess you'll have to kill them."), SAY_SHOUT, 4000}})
   table.insert(killAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
   table.insert(killAnim, {func = AnimSwitchHog, args = {native}})
   table.insert(killAnim, {func = AnimWait, args = {native, 1}})
@@ -272,9 +272,9 @@ function SetupKilledAnim()
   table.insert(killedAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(secondPos[2])}})
   table.insert(killedAnim, {func = AnimOutOfNowhere, args = {native, unpack(secondPos[1])}})
   table.insert(killedAnim, {func = AnimCustomFunction, args = {cyborg, CondNeedToTurn, {cyborg, native}}})
-  table.insert(killedAnim, {func = AnimSay, args = {cyborg, "Nice work, " .. nativeUnNames[m5DeployedNum] .. "!", SAY_SHOUT, 4000}})
-  table.insert(killedAnim, {func = AnimSay, args = {cyborg, "As a reward for your performance, here's some new technology!", SAY_SHOUT, 8000}})
-  table.insert(killedAnim, {func = AnimSay, args = {cyborg, "Use it wisely!", SAY_SHOUT, 8000}})
+  table.insert(killedAnim, {func = AnimSay, args = {cyborg, loc("Nice work, ") .. nativeUnNames[m5DeployedNum] .. "!", SAY_SHOUT, 4000}})
+  table.insert(killedAnim, {func = AnimSay, args = {cyborg, loc("As a reward for your performance, here's some new technology!"), SAY_SHOUT, 8000}})
+  table.insert(killedAnim, {func = AnimSay, args = {cyborg, loc("Use it wisely!"), SAY_SHOUT, 8000}})
   table.insert(killedAnim, {func = AnimDisappear, args = {cyborg, unpack(secondPos[2])}})
   table.insert(killedAnim, {func = AnimSwitchHog, args = {native}})
   AddSkipFunction(killedAnim, SkipKilledAnim, {})
@@ -296,11 +296,11 @@ function AfterStartAnim()
   FollowGear(native)
   AddNewEvent(CheckGearsDead, {{crates[1], crates[2]}}, PutCrates, {2}, 0) 
   TurnTimeLeft = TurnTime
-  ShowMission("Dragon's Lair", "Obstacle course", "In order to get to the other side, you need to collect the crates first.|" ..
-                                                  "As the ammo is sparse, you might want to reuse ropes while mid-air.|" ..
-                                                  "If you wish to restart the course, press [Precise]!|" ..
-                                                  "The enemy can't move but it might be a good idea to stay out of sight!|" ..
-                                                  "You have " .. SuddenDeathTurns .. " turns until Sudden Death! Better hurry!", 1, 20000)
+  ShowMission(loc("Dragon's Lair"), loc("Obstacle course"), loc("In order to get to the other side, you need to collect the crates first.|") ..
+                                                  loc("As the ammo is sparse, you might want to reuse ropes while mid-air.|") ..
+                                                  loc("If you wish to restart the course, press [Precise]!|") ..
+                                                  loc("The enemy can't move but it might be a good idea to stay out of sight!|") ..
+                                                  loc("You have ") .. SuddenDeathTurns .. loc(" turns until Sudden Death! Better hurry!"), 1, 20000)
 end
 
 function SkipKillAnim()
@@ -313,7 +313,7 @@ function AfterKillAnim()
   PutWeaponCrates()
   TurnTimeLeft = TurnTime
   AddEvent(CheckCyborgsDead, {}, DoCyborgsDead, {}, 0)
-  ShowMission("Dragon's Lair", "The Slaughter", "Kill the aliens!", 1, 2000)
+  ShowMission(loc("Dragon's Lair"), loc("The Slaughter"), loc("Kill the aliens!"), 1, 2000)
 end
 
 function SkipKilledAnim()
@@ -328,9 +328,9 @@ function AfterKilledAnim()
   AddAmmo(native, amPortalGun, 100)
   SpawnUtilityCrate(2259, 755, amTeleport, 2)
   SpawnHealthCrate(secondPos[1][1] + 30, secondPos[1][2])
-  ShowMission("Dragon's Lair", "The what?!", "Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|"..
-                                             "Portal hint: one goes to the destination, and one is the entrance.|"..
-                                             "Teleport hint: just use the mouse to select the destination!", 1, 0)
+  ShowMission(loc("Dragon's Lair"), loc("The what?!"), loc("Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|")..
+                                             loc("Portal hint: one goes to the destination, and one is the entrance.|")..
+                                             loc("Teleport hint: just use the mouse to select the destination!"), 1, 0)
 end
 -----------------------------Events------------------------------------
 
@@ -388,7 +388,7 @@ function PutCrates(index)
     AddEvent(StoppedGear, {native}, DoCratesTaken, {}, 0)
   end
   if index == 4 then
-    AnimSay(native, "I'm a ninja.", SAY_THINK, 0)
+    AnimSay(native, loc("I'm a ninja."), SAY_THINK, 0)
   end
 end
 
@@ -397,7 +397,7 @@ function CheckMissionFinished()
 end
 
 function DoMissionFinished()
-  AddCaption("Salvation was one step closer now...")
+  AddCaption(loc("Salvation was one step closer now..."))
   SaveCampaignVar("Progress", "6")
   ParseCommand("teamgone " .. loc("011101001"))
   TurnTimeLeft = 0
@@ -580,7 +580,7 @@ function onGameStart()
   SetupEvents()
   AddAnim(startAnim)
   AddFunction({func = AfterStartAnim, args = {}})
-  ShowMission("Dragon's lair", "Y Chwiliad", "Find your tribe!|Cross the lake!", 1, 0)
+  ShowMission(loc("Dragon's Lair"), loc("Y Chwiliad"), loc("Find your tribe!|Cross the lake!"), 1, 0)
 end
 
 function onGameTick()
@@ -634,7 +634,7 @@ function onNewTurn()
     TurnTimeLeft = 0
   else
     SetInputMask(0xFFFFFFFF)
-    AddCaption("Turns until Sudden Death: " .. SuddenDeathTurns - TotalRounds)
+    AddCaption(loc("Turns until Sudden Death: ") .. SuddenDeathTurns - TotalRounds)
     if retry == true then
       DoRetry()
     end
