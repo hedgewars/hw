@@ -420,10 +420,9 @@ begin
                 Scale:= hwFloat2Float(Gear^.Density / _3 * Gear^.dY);
                 if Scale > 1 then Scale:= power(Scale,0.3333)
                 else Scale:= Scale + ((1-Scale) / 2);
-                if Scale > 1 then Timer:= round(max(Scale,3))
+                if Scale > 1 then Timer:= round(min(Scale*0.0005/cGravityf,4))
                 else Timer:= 1;
                 // Low Gravity
-                Timer:=round(0.0005/cGravityf);
                 FrameTicks:= FrameTicks*Timer;
                 end;
 
