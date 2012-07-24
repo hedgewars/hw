@@ -295,6 +295,8 @@ with gear^ do
                 dy:= 0;
                 FrameTicks:= 740;
                 Frame:= 19;
+                Scale:= 0.75;
+                Timer:= 1;
                 end;
     vgtDroplet:
                 begin
