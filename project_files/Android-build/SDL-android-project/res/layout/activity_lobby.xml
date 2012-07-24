@@ -1,36 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-  	android:layout_width="fill_parent"
-	android:layout_height="fill_parent">
-	<include layout="@layout/background"/>
-	<TabHost
-	    android:id="@android:id/tabhost"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-    <LinearLayout
-        android:orientation="vertical"
+    <include layout="@layout/background" />
+
+    <TabHost
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
-        <TabWidget
-            android:id="@android:id/tabs"
-            android:orientation="horizontal"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
 
-        <FrameLayout
-            android:id="@android:id/tabcontent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"/>
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0" />
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
 
-    </LinearLayout>
-</TabHost>
+                <fragment
+                    android:id="@+id/roomListFragment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    class="org.hedgewars.hedgeroid.netplay.RoomlistFragment"
+                    tools:layout="@layout/lobby_rooms_fragment" />
+
+                <fragment
+                    android:id="@+id/chatFragment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    class="org.hedgewars.hedgeroid.netplay.LobbyChatFragment"
+                    tools:layout="@layout/lobby_chat_fragment" />
+
+                <fragment
+                    android:id="@+id/playerListFragment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    class="org.hedgewars.hedgeroid.netplay.PlayerlistFragment"
+                    tools:layout="@layout/lobby_players_fragment" />
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
 </FrameLayout>

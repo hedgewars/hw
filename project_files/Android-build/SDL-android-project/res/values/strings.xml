@@ -96,6 +96,15 @@
     <string name="lobby_playerlist_contextmenu_follow">Follow</string>
     <string name="lobby_roomlistmenu_create">Create room</string>
     <string name="lobby_roomlistmenu_refresh">Refresh</string>
+    <string name="lobby_menu_disconnect">Disconnect</string>
     
     <string name="not_implemented_yet">Sorry, not implemented yet. :(</string>
+    
+    <!-- Errors -->
+    <string name="error_connection_failed">Unable to connect to the server.</string>
+    <string name="error_unexpected">An unexpected error has occurred: %1$s</string>
+    <string name="error_server_too_old">The server you tried to connect to is using an incompatible protocol.</string>
+    <string name="error_auth_failed">Unable to authenticate for your username.</string>
+    <string name="error_connection_lost">The connection to the server was lost.</string>
+    
 </resources>

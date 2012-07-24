@@ -22,6 +22,13 @@ public class PlayerList extends DataSetObservable {
 		}
 	}
 
+	public void clear() {
+		if(!players.isEmpty()) {
+			players.clear();
+			notifyChanged();
+		}
+	}
+
 	public Map<String, Player> getMap() {
 		return Collections.unmodifiableMap(players);
 	}
