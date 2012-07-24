@@ -116,7 +116,7 @@ denseNum = 2
 waterNum = 3
 buffaloNum = 4
 chiefNum = 5
-princessNum = 6
+girlNum = 6
 wiseNum = 7
 
 nativeNames = {loc("Leaks A Lot"), loc("Dense Cloud"), loc("Fiery Water"), 
@@ -221,11 +221,11 @@ function AnimationSetup()
     table.insert(startAnim, {func = AnimSay, args = {native, loc("Where did that alien run?"), SAY_THINK, 0}})
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 200, 0}})
     table.insert(startAnim, {func = AnimSay, args = {native, loc("When I find it..."), SAY_THINK, 3000}})
-  elseif m == princessNum then
+  elseif m == girlNum then
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 50, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, loc("A woman shouldn't do this kind of thing!"), SAY_THINK, 0}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("This is typical!"), SAY_THINK, 0}})
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 200, 0}})
-    table.insert(startAnim, {func = AnimSay, args = {native, loc("I could be eating snails right now."), SAY_THINK, 5500}})
+    table.insert(startAnim, {func = AnimSay, args = {native, loc("It's always up to women to clear up the mess men created!"), SAY_THINK, 8500}})
   elseif m == chiefNum then
     table.insert(startAnim, {func = AnimMove, args = {native, "Right", nativePos[1] + 50, 0}})
     table.insert(startAnim, {func = AnimSay, args = {native, loc("What is this place?"), SAY_THINK, 0}})
@@ -476,7 +476,7 @@ function GetVariables()
   m4ChiefDead = tonumber(GetCampaignVar("M4ChiefDead"))
   m5ChiefDead = tonumber(GetCampaignVar("M5ChiefDead"))
   m5WiseDead = tonumber(GetCampaignVar("M5WiseDead"))
-  m5PrincessDead = tonumber(GetCampaignVar("M5PrincessDead"))
+  m5GirlDead = tonumber(GetCampaignVar("M5GirlDead"))
   m2Choice = tonumber(GetCampaignVar("M2Choice"))
   m5Choice = tonumber(GetCampaignVar("M5Choice"))
   m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
