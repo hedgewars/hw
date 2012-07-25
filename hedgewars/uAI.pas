@@ -415,7 +415,7 @@ else
         end
     end;
 
-PGear(Me)^.State:= PGear(Me)^.State and not gstHHThinking;
+PGear(Me)^.State:= PGear(Me)^.State and (not gstHHThinking);
 Think:= 0;
 InterlockedDecrement(hasThread)
 end;

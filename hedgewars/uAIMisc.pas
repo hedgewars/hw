@@ -645,7 +645,7 @@ repeat
         Gear^.Y:= Gear^.Y + Gear^.dY;
         if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
-            Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
+            Gear^.State:= Gear^.State and (not (gstMoving or gstHHJumping));
             Gear^.dY:= _0;
             case JumpType of
                 jmpHJump:
@@ -709,7 +709,7 @@ repeat
         if TestCollisionYwithGear(Gear, 1) <> 0 then
             begin
             inc(GoInfo.Ticks, 410);
-            Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
+            Gear^.State:= Gear^.State and (not (gstMoving or gstHHJumping));
             Gear^.dY:= _0;
             // try ljump instead of fall
             HHJump(AltGear, jmpLJump, GoInfo);
