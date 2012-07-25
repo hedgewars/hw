@@ -116,19 +116,19 @@ end;
 
 procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; TimeDelta: Longword; X, Y: LongInt);
 begin
-with Actions do
-    begin
-    actions[Count].Action:= Action;
-    actions[Count].Param:= Param;
-    actions[Count].X:= X;
-    actions[Count].Y:= Y;
-    if Count > 0 then
-        actions[Count].Time:= TimeDelta
-    else
-        actions[Count].Time:= GameTicks + TimeDelta;
-    inc(Count);
-    TryDo(Count < MAXACTIONS, 'AI: actions overflow', true);
-    end
+if Actions.Count < MAXACTIONS then
+    with Actions do
+        begin
+        actions[Count].Action:= Action;
+        actions[Count].Param:= Param;
+        actions[Count].X:= X;
+        actions[Count].Y:= Y;
+        if Count > 0 then
+            actions[Count].Time:= TimeDelta
+        else
+            actions[Count].Time:= GameTicks + TimeDelta;
+        inc(Count);
+        end
 end;
 
 procedure CheckHang(Me: PGear);
