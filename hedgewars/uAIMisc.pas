@@ -371,13 +371,13 @@ v:= random($FFFFFFFF);
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
-(*
-        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
+
+{        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
             begin
             LandPixels[trunc(y), trunc(x)]:= v;
             UpdateLandTexture(trunc(X), 1, trunc(Y), 1, true);
-            end;
-*)
+            end;}
+
 
         // consider adding dX/dY calc here for fall damage
         if TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
@@ -624,6 +624,12 @@ case JumpType of
 end;
 
 repeat
+        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= Gear^.Hedgehog^.Team^.Clan^.Color;
+            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
+            end;}
+            
     if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then
         exit(false);
     if (Gear^.State and gstMoving) <> 0 then
@@ -681,6 +687,12 @@ GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
 tY:= hwRound(Gear^.Y);
 repeat
+        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= random($FFFFFFFF);//Gear^.Hedgehog^.Team^.Clan^.Color;
+            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
+            end;}
+
     pX:= hwRound(Gear^.X);
     pY:= hwRound(Gear^.Y);
     if pY + cHHRadius >= cWaterLine then
