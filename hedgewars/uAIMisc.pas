@@ -170,7 +170,7 @@ while Gear <> nil do
     begin
         case Gear^.Kind of
             gtCase:
-            AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 33, 28);
             gtFlame:
                 if (Gear^.State and gsttmpFlag) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
@@ -673,6 +673,7 @@ function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 var pX, pY, tY: LongInt;
 begin
 HHGo:= false;
+Gear^.CollisionMask:= $FF7F;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;
