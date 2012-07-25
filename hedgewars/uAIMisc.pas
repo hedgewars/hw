@@ -439,21 +439,21 @@ for i:= 0 to Targets.Count do
                 end;
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
-                    inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
+                    inc(rate, (KillScore + Score div 10) * 1024)   // Add a bit of a bonus for bigger hog drownings
                 else
-                    dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
+                    dec(rate, (KillScore * friendlyfactor div 100 - Score div 10) * 1024) // and more of a punishment for drowning bigger friendly hogs
             else if (dmg+fallDmg) >= abs(Score) then
                 if Score > 0 then
-                    inc(rate, KillScore)
+                    inc(rate, KillScore * 1024 + (dmg + fallDmg)) // tiny bonus for dealing more damage than needed to kill
                 else
-                    dec(rate, KillScore * friendlyfactor div 100)
+                    dec(rate, KillScore * friendlyfactor div 100 * 1024)
             else
                 if Score > 0 then
-                    inc(rate, dmg+fallDmg)
-                else dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
+                    inc(rate, (dmg + fallDmg) * 1024)
+                else dec(rate, (dmg + fallDmg) * friendlyfactor div 100 * 1024)
             end;
         end;
-RateExplosion:= rate * 1024;
+RateExplosion:= rate;
 end;
 
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
