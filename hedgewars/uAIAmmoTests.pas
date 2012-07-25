@@ -717,11 +717,11 @@ begin
         dx:= sin(a / cMaxAngle * pi) * 0.5;
         dy:= cos(a / cMaxAngle * pi) * 0.5;
 
-        v1:= RateShove(Me, x - 10, y
-                , 33, 30, 115
+        v1:= RateShove(Me, x - 10, y + 2
+                , 32, 30, 115
                 , -dx, -dy, trackFall);
-        v2:= RateShove(Me, x + 10, y
-                , 33, 30, 115
+        v2:= RateShove(Me, x + 10, y + 2
+                , 32, 30, 115
                 , dx, -dy, trackFall);
         if (v1 > valueResult) or (v2 > valueResult) then
             if (v2 > v1) 
@@ -756,17 +756,17 @@ begin
     ap.Time:= 0;
     ap.Power:= 1;
     x:= hwRound(Me^.X);
-    y:= hwRound(Me^.Y);
+    y:= hwRound(Me^.Y) + 4;
 
     v1:= 0;
     for i:= 0 to 8 do
         begin
-        v1:= v1 + RateShove(Me, x - 10, y - 10 * i
-                , 18, 30, 40
+        v1:= v1 + RateShove(Me, x - 5, y - 10 * i
+                , 19, 30, 40
                 , -0.45, -0.9, trackFall or afSetSkip);
         end;
-    v1:= v1 + RateShove(Me, x - 10, y - 90
-            , 18, 30, 40
+    v1:= v1 + RateShove(Me, x - 5, y - 90
+            , 19, 30, 40
             , -0.45, -0.9, trackFall);
 
 
@@ -774,12 +774,12 @@ begin
     v2:= 0;
     for i:= 0 to 8 do
         begin
-        v2:= v2 + RateShove(Me, x + 10, y - 10 * i
-                , 18, 30, 40
+        v2:= v2 + RateShove(Me, x + 5, y - 10 * i
+                , 19, 30, 40
                 , 0.45, -0.9, trackFall or afSetSkip);
         end;
-    v2:= v2 + RateShove(Me, x + 10, y - 90
-            , 18, 30, 40
+    v2:= v2 + RateShove(Me, x + 5, y - 90
+            , 19, 30, 40
             , 0.45, -0.9, trackFall);
 
     if (v2 > v1) 
