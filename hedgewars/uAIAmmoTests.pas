@@ -709,19 +709,19 @@ begin
     x:= hwRound(Me^.X);
     y:= hwRound(Me^.Y);
 
-    a:= 0;
+    a:= cMaxAngle div 2;
     valueResult:= 0;
 
-    while a <= cMaxAngle div 2 do
+    while a >= 0 do
         begin
         dx:= sin(a / cMaxAngle * pi) * 0.5;
         dy:= cos(a / cMaxAngle * pi) * 0.5;
 
-        v1:= RateShove(Me, x - 10, y
-                , 33, 30, 115
+        v1:= RateShove(Me, x - 10, y + 2
+                , 32, 30, 115
                 , -dx, -dy, trackFall);
-        v2:= RateShove(Me, x + 10, y
-                , 33, 30, 115
+        v2:= RateShove(Me, x + 10, y + 2
+                , 32, 30, 115
                 , dx, -dy, trackFall);
         if (v1 > valueResult) or (v2 > valueResult) then
             if (v2 > v1) 
@@ -736,7 +736,7 @@ begin
                 valueResult:= v1
                 end;
 
-        a:= a + 15 + random(cMaxAngle div 16)
+        a:= a - 15 - random(cMaxAngle div 16)
         end;
    
     if valueResult <= 0 then
@@ -756,17 +756,17 @@ begin
     ap.Time:= 0;
     ap.Power:= 1;
     x:= hwRound(Me^.X);
-    y:= hwRound(Me^.Y);
+    y:= hwRound(Me^.Y) + 4;
 
     v1:= 0;
     for i:= 0 to 8 do
         begin
-        v1:= v1 + RateShove(Me, x - 10, y - 10 * i
-                , 18, 30, 40
+        v1:= v1 + RateShove(Me, x - 5, y - 10 * i
+                , 19, 30, 40
                 , -0.45, -0.9, trackFall or afSetSkip);
         end;
-    v1:= v1 + RateShove(Me, x - 10, y - 90
-            , 18, 30, 40
+    v1:= v1 + RateShove(Me, x - 5, y - 90
+            , 19, 30, 40
             , -0.45, -0.9, trackFall);
 
 
@@ -774,12 +774,12 @@ begin
     v2:= 0;
     for i:= 0 to 8 do
         begin
-        v2:= v2 + RateShove(Me, x + 10, y - 10 * i
-                , 18, 30, 40
+        v2:= v2 + RateShove(Me, x + 5, y - 10 * i
+                , 19, 30, 40
                 , 0.45, -0.9, trackFall or afSetSkip);
         end;
-    v2:= v2 + RateShove(Me, x + 10, y - 90
-            , 18, 30, 40
+    v2:= v2 + RateShove(Me, x + 5, y - 90
+            , 19, 30, 40
             , 0.45, -0.9, trackFall);
 
     if (v2 > v1) 
@@ -818,7 +818,7 @@ begin
     {first RateShove checks farthermost of two whip's AmmoShove attacks 
     to encourage distant attacks (damaged hog is excluded from view of second 
     RateShove call)}
-    v1:= RateShove(Me, x - 15, y
+    v1:= RateShove(Me, x - 13, y
             , 30, 30, 25
             , -1, -0.8, trackFall or afSetSkip);
     v1:= v1 +
@@ -826,7 +826,7 @@ begin
             , 30, 30, 25
             , -1, -0.8, trackFall);
     // now try opposite direction
-    v2:= RateShove(Me, x + 15, y
+    v2:= RateShove(Me, x + 13, y
             , 30, 30, 25
             , 1, -0.8, trackFall or afSetSkip);
     v2:= v2 +
