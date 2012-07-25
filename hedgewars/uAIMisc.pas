@@ -170,7 +170,7 @@ while Gear <> nil do
     begin
         case Gear^.Kind of
             gtCase:
-                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 33, 28);
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
             gtFlame:
                 if (Gear^.State and gsttmpFlag) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
@@ -697,7 +697,7 @@ repeat
         Gear^.dY:= Gear^.dY + cGravity;
         if Gear^.dY > _0_4 then
             begin
-            Goinfo.FallPix:= 0;
+            GoInfo.FallPix:= 0;
             // try ljump instead of fall with damage
             HHJump(AltGear, jmpLJump, GoInfo); 
             if AltGear^.Hedgehog^.BotLevel < 4 then

@@ -818,7 +818,7 @@ begin
     {first RateShove checks farthermost of two whip's AmmoShove attacks 
     to encourage distant attacks (damaged hog is excluded from view of second 
     RateShove call)}
-    v1:= RateShove(Me, x - 15, y
+    v1:= RateShove(Me, x - 13, y
             , 30, 30, 25
             , -1, -0.8, trackFall or afSetSkip);
     v1:= v1 +
@@ -826,7 +826,7 @@ begin
             , 30, 30, 25
             , -1, -0.8, trackFall);
     // now try opposite direction
-    v2:= RateShove(Me, x + 15, y
+    v2:= RateShove(Me, x + 13, y
             , 30, 30, 25
             , 1, -0.8, trackFall or afSetSkip);
     v2:= v2 +
