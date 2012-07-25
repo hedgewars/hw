@@ -7,6 +7,7 @@ data PascalUnit =
     Program Identifier Implementation Phrase
     | Unit Identifier Interface Implementation (Maybe Initialize) (Maybe Finalize)
     | System [TypeVarDeclaration]
+    | Redo [TypeVarDeclaration]
     deriving Show
 data Interface = Interface Uses TypesAndVars
     deriving Show
@@ -48,7 +49,7 @@ data Phrase = ProcCall Reference [Expression]
         | IfThenElse Expression Phrase (Maybe Phrase)
         | WhileCycle Expression Phrase
         | RepeatCycle Expression [Phrase]
-        | ForCycle Identifier Expression Expression Phrase
+        | ForCycle Identifier Expression Expression Phrase Bool -- The last Boolean indicates wether it's up or down counting
         | WithBlock Reference Phrase
         | Phrases [Phrase]
         | SwitchCase Expression [([InitExpression], Phrase)] (Maybe [Phrase])
