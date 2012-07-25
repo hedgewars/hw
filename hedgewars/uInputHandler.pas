@@ -25,8 +25,9 @@ uses SDLh, uTypes;
 procedure initModule;
 procedure freeModule;
 
-function  KeyNameToCode(name: shortstring; Modifier: shortstring = ''): LongInt;
-procedure MaskModifier(var code: LongInt; modifier: LongWord);
+function  KeyNameToCode(name: shortstring): LongInt; inline;
+function  KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
+//procedure MaskModifier(var code: LongInt; modifier: LongWord);
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
@@ -60,6 +61,11 @@ var tkbd: array[0..cKbdMaxIndex] of boolean;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
 
+function  KeyNameToCode(name: shortstring): LongInt; inline;
+begin
+    KeyNameToCode:= KeyNameToCode(name, '');
+end;
+
 function KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
 var code: LongInt;
 begin
@@ -70,7 +76,7 @@ begin
     MaskModifier(Modifier, code);
     KeyNameToCode:= code;
 end;
-
+(*
 procedure MaskModifier(var code: LongInt; Modifier: LongWord);
 begin
     if(Modifier and KMOD_LSHIFT) <> 0 then code:= code or LSHIFT; 
@@ -80,7 +86,7 @@ begin
     if(Modifier and KMOD_LCTRL) <> 0 then code:= code or LCTRL; 
     if(Modifier and KMOD_RCTRL) <> 0 then code:= code or LCTRL; 
 end;
-
+*)
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 var mod_ : shortstring;
     ModifierCount, i: LongInt;
@@ -133,7 +139,7 @@ if(KeyDown and (code = quitKeyCode)) then
 
 if CurrentBinds[code][0] <> #0 then
     begin
-    if (code > 3) and KeyDown and not ((CurrentBinds[code] = 'put') or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
+    if (code > 3) and KeyDown and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
 
     if KeyDown then
         begin

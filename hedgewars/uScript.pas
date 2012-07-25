@@ -981,7 +981,7 @@ begin
             begin
             prevgear := CurrentHedgehog^.Gear;
             prevgear^.Active := false;
-            prevgear^.State:= prevgear^.State and not gstHHDriven;
+            prevgear^.State:= prevgear^.State and (not gstHHDriven);
             prevgear^.Z := cHHZ;
             prevgear^.Message:= prevgear^.Message or gmRemoveFromList or gmAddToList;
             

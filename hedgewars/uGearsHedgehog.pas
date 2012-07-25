@@ -853,7 +853,7 @@ if Gear^.Hedgehog^.Unplaced then
     Gear^.State:= Gear^.State and (not gstMoving);
     exit
     end;
-isFalling:= (Gear^.dY.isNegative) or not TestCollisionYKick(Gear, 1);
+isFalling:= (Gear^.dY.isNegative) or (not TestCollisionYKick(Gear, 1));
 if isFalling then
     begin
     if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then
@@ -983,7 +983,7 @@ if (not isFalling)
     begin
     Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
-    while (TestCollisionYWithGear(Gear,1) = 0) and not CheckGearDrowning(Gear) do
+    while (TestCollisionYWithGear(Gear,1) = 0) and (not CheckGearDrowning(Gear)) do
         Gear^.Y:= Gear^.Y+_1;
     SetLittle(Gear^.dX);
     Gear^.dY:= _0

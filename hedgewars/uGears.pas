@@ -211,7 +211,7 @@ while t <> nil do
         RemoveGearFromList(curHandledGear);
         // since I can't think of any good reason this would ever be separate from a remove from list, going to keep it inside this block
         if curHandledGear^.Message and gmAddToList <> 0 then InsertGearToList(curHandledGear);
-        curHandledGear^.Message:= curHandledGear^.Message and not (gmRemoveFromList or gmAddToList)
+        curHandledGear^.Message:= curHandledGear^.Message and (not (gmRemoveFromList or gmAddToList))
         end;
     if curHandledGear^.Active then
         begin
@@ -634,8 +634,7 @@ if (GameFlags and gfLaserSight) <> 0 then
 
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
-
-for i:= 0 to GetRandom(10)+30 do
+for i:= GetRandom(10)+30 downto 0 do
     begin                                                                                                                                       rx:= GetRandom(rightX-leftX)+leftX;
     ry:= GetRandom(LAND_HEIGHT-topY)+topY;
     rdx:= _90-(GetRandomf*_360);

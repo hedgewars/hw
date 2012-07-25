@@ -2406,7 +2406,7 @@ begin
                 //DrawExplosion(gX, gY, 4);
                 
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
-                    for i:= 1 to Random(2)+1 do
+                    for i:= Random(2) downto 0 do
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
                         
                 if Gear^.Health > 0 then
@@ -2420,7 +2420,7 @@ begin
                     begin
                     DrawExplosion(gX, gY, 4);
 
-                    for i:= 0 to Random(3) do
+                    for i:= Random(3) downto 0 do
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
                     end;
 
@@ -2438,20 +2438,12 @@ begin
         if not sticky then
             begin
             if ((GameTicks and $3) = 0) and (Random(1) = 0) then
-                begin
-                for i:= 1 to Random(2)+1 do
-                    begin
+                for i:= Random(2) downto 0 do
                     AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
-                    end;
-                end;
             end
         else
-            begin
-            for i:= 0 to Random(3) do
-                begin
+            for i:= Random(3) downto 0 do
                 AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
-                end;
-            end;
 
         DeleteGear(Gear)
         end;
@@ -4398,7 +4390,7 @@ begin
         Gear^.State := Gear^.State and (not gstMoving);
         
         if (Land[y, x] and lfBouncy <> 0)
-        or not CalcSlopeTangent(Gear, x, y, tx, ty, 255)
+        or (not CalcSlopeTangent(Gear, x, y, tx, ty, 255))
         or (DistanceI(tx,ty) < _12) then // reject shots at too irregular terrain
             begin
             loadNewPortalBall(Gear, true);
