@@ -46,7 +46,14 @@ else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
 
 if (GameType = gmtDemo) then 
     if isSpeed then
-        Lag:= Lag * 10
+        begin
+            i:= RealTicks-SpeedStart;
+            if i < 2000 then Lag:= Lag*5
+            else if i < 4000 then Lag:= Lag*10
+            else if i < 6000 then Lag:= Lag*20
+            else if i < 8000 then Lag:= Lag*40
+            else Lag:= Lag*80;
+        end
     else
         if cOnlyStats then
             Lag:= High(LongInt);

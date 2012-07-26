@@ -37,7 +37,7 @@ uses SDLh, uConsts, uFloat, uTypes;
 
 procedure initModule;
 procedure freeModule;
-function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword ): PGear;
+function  SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content, cnt: Longword): PGear;
 function  SpawnFakeCrateAt(x, y: LongInt; crate: TCrateType; explode: boolean; poison: boolean ): PGear;
 function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
@@ -59,13 +59,13 @@ implementation
 uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
     uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
-    uGearsHedgehog, uGearsUtils, uGearsList;
+    uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers;
 
 var skipFlag: boolean;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
-function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray; forward;
+function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure doStepCase(Gear: PGear); forward;
@@ -182,7 +182,7 @@ begin
 end;
 
 procedure ProcessGears;
-var Gear, t: PGear;
+var t: PGear;
     i, AliveCount: LongInt;
     s: shortstring;
 begin
@@ -203,21 +203,29 @@ if StepSoundTimer > 0 then
 t:= GearsList;
 while t <> nil do
     begin
-    Gear:= t;
-    t:= Gear^.NextGear;
+    curHandledGear:= t;
+    t:= curHandledGear^.NextGear;
 
-    if Gear^.Active then
+    if curHandledGear^.Message and gmRemoveFromList <> 0 then 
         begin
-        if Gear^.RenderTimer and (Gear^.Timer > 500) and ((Gear^.Timer mod 1000) = 0) then
+        RemoveGearFromList(curHandledGear);
+        // since I can't think of any good reason this would ever be separate from a remove from list, going to keep it inside this block
+        if curHandledGear^.Message and gmAddToList <> 0 then InsertGearToList(curHandledGear);
+        curHandledGear^.Message:= curHandledGear^.Message and (not (gmRemoveFromList or gmAddToList))
+        end;
+    if curHandledGear^.Active then
+        begin
+        if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then
             begin
-            FreeTexture(Gear^.Tex);
-            Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), cWhiteColor, fntSmall);
+            FreeTexture(curHandledGear^.Tex);
+            curHandledGear^.Tex:= RenderStringTex(inttostr(curHandledGear^.Timer div 1000), cWhiteColor, fntSmall);
             end;
-        Gear^.doStep(Gear);
+        curHandledGear^.doStep(curHandledGear);
         // might be useful later
         //ScriptCall('onGearStep', Gear^.uid);
         end
     end;
+curHandledGear:= nil;
 
 if AllInactive then
 case step of
@@ -453,7 +461,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
     if (not CurrentTeam^.ExtDriven) or CurrentTeam^.hasGone then
         inc(hiTicks) // we do not recieve a message for this
     end;
-
+AddRandomness(CheckSum);
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 inc(GameTicks)
@@ -580,7 +588,8 @@ begin
 end;
 
 procedure AddMiscGears;
-var i: Longword;
+var i,rx, ry: Longword;
+    rdx, rdy: hwFloat;
     Gear: PGear;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
@@ -625,6 +634,13 @@ if (GameFlags and gfLaserSight) <> 0 then
 
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
+for i:= GetRandom(10)+30 downto 0 do
+    begin                                                                                                                                       rx:= GetRandom(rightX-leftX)+leftX;
+    ry:= GetRandom(LAND_HEIGHT-topY)+topY;
+    rdx:= _90-(GetRandomf*_360);
+    rdy:= _90-(GetRandomf*_360);
+    AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
+    end;
 
 if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
     for i:= 0 to Pred(vobCount*2) do
@@ -871,25 +887,30 @@ if (GameFlags and gfDivideTeams) <> 0 then
     end
 end;
 
-function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): TPGearArray;
+var GearsNearArray : TPGearArray;
+function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
 var
     t: PGear;
-    l: Longword;
+    s: Longword;
 begin
     r:= r*r;
-    GearsNear := nil;
+    s:= 0;
+    SetLength(GearsNearArray, s);
     t := GearsList;
     while t <> nil do 
         begin
         if (t^.Kind = Kind) 
             and ((X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) < int2hwFloat(r)) then
             begin
-            l:= Length(GearsNear);
-            SetLength(GearsNear, l + 1);
-            GearsNear[l] := t;
+            inc(s);
+            SetLength(GearsNearArray, s);
+            GearsNearArray[s - 1] := t;
             end;
         t := t^.NextGear;
     end;
+
+    GearsNear.size:= s;
+    GearsNear.ar:= @GearsNearArray
 end;
 
 {procedure AmmoFlameWork(Ammo: PGear);
@@ -928,13 +949,15 @@ while t <> nil do
 CountGears:= count;
 end;
 
-function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content: Longword): PGear;
+function SpawnCustomCrateAt(x, y: LongInt; crate: TCrateType; content, cnt: Longword): PGear;
 begin
     FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
     cCaseFactor := 0;
 
     if (crate <> HealthCrate) and (content > ord(High(TAmmoType))) then
         content := ord(High(TAmmoType));
+
+    FollowGear^.Power:= cnt;
 
     case crate of
         HealthCrate:
@@ -1306,7 +1329,9 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepStructure,
             @doStepLandGun,
             @doStepTardis,
-            @doStepIceGun);
+            @doStepIceGun,
+            @doStepAddAmmo,
+            @doStepGenericFaller);
 begin
     doStepHandlers:= handlers;
 
@@ -1315,6 +1340,8 @@ begin
 
     CurAmmoGear:= nil;
     GearsList:= nil;
+    curHandledGear:= nil;
+
     KilledHHs:= 0;
     SuddenDeath:= false;
     SuddenDeathDmg:= false;

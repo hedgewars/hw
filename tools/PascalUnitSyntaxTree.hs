@@ -7,6 +7,7 @@ data PascalUnit =
     Program Identifier Implementation Phrase
     | Unit Identifier Interface Implementation (Maybe Initialize) (Maybe Finalize)
     | System [TypeVarDeclaration]
+    | Redo [TypeVarDeclaration]
     deriving Show
 data Interface = Interface Uses TypesAndVars
     deriving Show
@@ -17,7 +18,7 @@ data Identifier = Identifier String BaseType
 data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
-    | VarDeclaration Bool ([Identifier], TypeDecl) (Maybe InitExpression)
+    | VarDeclaration Bool Bool ([Identifier], TypeDecl) (Maybe InitExpression)
     | FunctionDeclaration Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     | OperatorDeclaration String Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     deriving Show
@@ -30,8 +31,9 @@ data TypeDecl = SimpleType Identifier
     | String Integer
     | Set TypeDecl
     | FunctionType TypeDecl [TypeVarDeclaration]
-    | DeriveType InitExpression 
+    | DeriveType InitExpression
     | VoidType
+    | VarParamType TypeDecl -- this is a hack
     deriving Show
 data Range = Range Identifier
            | RangeFromTo InitExpression InitExpression
@@ -47,7 +49,7 @@ data Phrase = ProcCall Reference [Expression]
         | IfThenElse Expression Phrase (Maybe Phrase)
         | WhileCycle Expression Phrase
         | RepeatCycle Expression [Phrase]
-        | ForCycle Identifier Expression Expression Phrase
+        | ForCycle Identifier Expression Expression Phrase Bool -- The last Boolean indicates wether it's up or down counting
         | WithBlock Reference Phrase
         | Phrases [Phrase]
         | SwitchCase Expression [([InitExpression], Phrase)] (Maybe [Phrase])
@@ -106,11 +108,12 @@ data BaseType = BTUnknown
     | BTFloat
     | BTRecord String [(String, BaseType)]
     | BTArray Range BaseType BaseType
-    | BTFunction Int BaseType
+    | BTFunction Bool Int BaseType
     | BTPointerTo BaseType
     | BTUnresolved String
     | BTSet BaseType
     | BTEnum [String]
     | BTVoid
     | BTUnit
+    | BTVarParam BaseType
     deriving Show

@@ -169,7 +169,11 @@ void PagePlayDemo::removeRecord()
     if(!ok)
         QMessageBox::critical(this, tr("Error"), tr("Cannot delete file"));
     else
-        FillFromDir(recType);
+    {
+        int i = DemosList->row(curritem);
+        delete curritem;
+        DemosList->setCurrentRow(i < DemosList->count() ? i : DemosList->count() - 1);
+    }
 }
 
 bool PagePlayDemo::isSave()

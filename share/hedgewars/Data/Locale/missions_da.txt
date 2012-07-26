@@ -1,0 +1,32 @@
+Basic_Training_-_Bazooka.name=Grundliggende Træning med Bazooka
+Basic_Training_-_Bazooka.desc="Nøglen er et bruge vinden til din fordel!"
+
+Basic_Training_-_Grenade.name=Grundliggende Træning med Granater
+Basic_Training_-_Grenade.desc="Husk, FØRST hiver du splitten ud OG SÅ kaster du!"
+
+Basic_Training_-_Shotgun.name=Grundliggende Træning med Haglgevær
+Basic_Training_-_Shotgun.desc="Skyd først, spørg bagefter!"
+
+Basic_Training_-_Sniper_Rifle.name=Grundliggende Træning med Sniperriffel
+Basic_Training_-_Sniper_Rifle.desc="Bum, Lige i Hovedet!"
+
+User_Mission_-_Dangerous_Ducklings.name=Mission: Farlige Ællinger
+User_Mission_-_Dangerous_Ducklings.desc="Udmærket, rekrut! Nu skal vi se om du kan huske hvad du har lært!"
+
+User_Mission_-_Diver.name=Mission: Dykker
+User_Mission_-_Diver.desc="Det der 'amfibieangreb' er sværere end det ser ud..."
+
+User_Mission_-_Teamwork.name=Mission: Samarbejde
+User_Mission_-_Teamwork.desc="Kærlighed gør ondt en gang imellem."
+
+User_Mission_-_Spooky_Tree.name=Mission: Uhyggeligt Træ
+User_Mission_-_Spooky_Tree.desc="Der er masser af kasser derude. Men jeg håber virkelig ikke den fugl er sulten."
+
+User_Mission_-_Bamboo_Thicket.name=Mission: Bambusbuskads
+User_Mission_-_Bamboo_Thicket.desc="Døden kommer oppefra."
+
+User_Mission_-_That_Sinking_Feeling.name=Mission: Følelsen af at Synke
+User_Mission_-_That_Sinking_Feeling.desc="Vandet stiger hurtigt og tiden er knap. Mange har prøvet, men få sejret. Kan du redde dem alle sammen?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Mission: Newton og Hængekøjen
+User_Mission_-_Newton_and_the_Hammock.desc="Husk, grislinger: Et legemes hastighed forbliver uændret med mindre legemet bliver påvirket af krafter udefra."
