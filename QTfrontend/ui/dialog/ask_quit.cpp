@@ -35,7 +35,7 @@ HWAskQuitDialog::HWAskQuitDialog(QWidget* parent, HWForm * form) : QDialog(paren
     QVBoxLayout * layout = new QVBoxLayout(this);
 
     QLabel * lbLabel = new QLabel(this);
-    lbLabel->setText(QLabel::tr("There are videos that are currently being encoded.\n"
+    lbLabel->setText(QLabel::tr("There are videos that are currently being processed.\n"
                                 "Exiting now will abort them.\n"
                                 "Do yot really want to quit?"));
     layout->addWidget(lbLabel);

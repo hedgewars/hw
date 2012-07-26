@@ -617,7 +617,6 @@ case Gear^.Pos of
                         AddPickup(HH^.Hedgehog^, Gear^.AmmoType, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));
                         end
                     else
-                    or (GameType = gmtDemo)  then
                         begin
 // Add spawning here...
                         AddRandomness(GameTicks);

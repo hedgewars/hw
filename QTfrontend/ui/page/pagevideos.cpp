@@ -39,6 +39,9 @@
 #include <QFileSystemWatcher>
 #include <QDateTime>
 #include <QRegExp>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 #include "hwconsts.h"
 #include "pagevideos.h"
@@ -47,8 +50,9 @@
 #include "gameuiconfig.h"
 #include "recorder.h"
 #include "ask_quit.h"
+#include "upload_video.h"
 
-const QSize ThumbnailSize(350, 350*3/5);
+static const QSize ThumbnailSize(350, 350*3/5);
 
 // columns in table with list of video files
 enum VideosColumns
@@ -70,7 +74,9 @@ class VideoItem : public QTableWidgetItem
 
         QString name;
         QString desc; // description
+        QString uploadReply;
         HWRecorder * pRecorder; // non NULL if file is being encoded
+        QNetworkReply * pUploading; // non NULL if file is being uploaded
         bool seen; // used when updating directory
         float lastSizeUpdate;
         float progress;
@@ -87,6 +93,7 @@ VideoItem::VideoItem(const QString& name)
 {
     this->name = name;
     pRecorder = NULL;
+    pUploading = NULL;
     lastSizeUpdate = 0;
     progress = 0;
 }
@@ -217,6 +224,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         filesTable->setColumnCount(vcNumColumns);
         filesTable->setHorizontalHeaderLabels(columns);
         filesTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+        filesTable->setSelectionMode(QAbstractItemView::SingleSelection);
         filesTable->setEditTriggers(QAbstractItemView::SelectedClicked);
         filesTable->verticalHeader()->hide();
         filesTable->setMinimumWidth(400);
@@ -272,6 +280,9 @@ QLayout * PageVideos::bodyLayoutDefinition()
         btnDelete = new QPushButton(QPushButton::tr("Delete"), pDescGroup);
         btnDelete->setEnabled(false);
         pBottomDescLayout->addWidget(btnDelete);
+        btnToYouTube = new QPushButton(QPushButton::tr("Upload to YouTube"), pDescGroup);
+        btnToYouTube->setEnabled(false);
+        pBottomDescLayout->addWidget(btnToYouTube);
 
         pDescLayout->addStretch(1);
         pDescLayout->addLayout(pTopDescLayout, 0);
@@ -300,14 +311,16 @@ void PageVideos::connectSignals()
     connect(filesTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(currentCellChanged(int,int,int,int)));
     connect(btnPlay,   SIGNAL(clicked()), this, SLOT(playSelectedFile()));
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(deleteSelectedFiles()));
+    connect(btnToYouTube, SIGNAL(clicked()), this, SLOT(uploadToYouTube()));
     connect(btnOpenDir, SIGNAL(clicked()), this, SLOT(openVideosDirectory()));
  }
 
 PageVideos::PageVideos(QWidget* parent) : AbstractPage(parent),
-    config(0)
+    config(0), netManager(0)
 {
     nameChangedFromCode = false;
     numRecorders = 0;
+    numUploads = 0;
     initPage();
 }
 
@@ -521,6 +534,14 @@ void PageVideos::addRecorder(HWRecorder* pRecorder)
     numRecorders++;
 }
 
+void PageVideos::setProgress(int row, VideoItem* item, float value)
+{
+    QProgressBar * progressBar = (QProgressBar*)filesTable->cellWidget(row, vcProgress);
+    progressBar->setValue(value*10000);
+    progressBar->setFormat(QString("%1%").arg(value*100, 0, 'f', 2));
+    item->progress = value;
+}
+
 void PageVideos::updateProgress(float value)
 {
     HWRecorder * pRecorder = (HWRecorder*)sender();
@@ -534,11 +555,7 @@ void PageVideos::updateProgress(float value)
         item->lastSizeUpdate = value;
     }
 
-    // update progress bar
-    QProgressBar * progressBar = (QProgressBar*)filesTable->cellWidget(row, vcProgress);
-    progressBar->setValue(value*10000);
-    progressBar->setFormat(QString("%1%").arg(value*100, 0, 'f', 2));
-    item->progress = value;
+    setProgress(row, item, value);
 }
 
 void PageVideos::encodingFinished(bool success)
@@ -674,11 +691,13 @@ void PageVideos::updateDescription()
         clearThumbnail();
         btnPlay->setEnabled(false);
         btnDelete->setEnabled(false);
+        btnToYouTube->setEnabled(false);
         return;
     }
 
     btnPlay->setEnabled(item->ready());
     btnDelete->setEnabled(true);
+    btnToYouTube->setEnabled(item->ready());
 
     QString desc = item->name + "\n\n";
     QString thumbName = "";
@@ -701,6 +720,8 @@ void PageVideos::updateDescription()
             desc.remove(prefixBegin, prefixEnd + 7 - prefixBegin);
             thumbName = prefix;
         }
+
+        desc += item->uploadReply;
     }
     else
         desc += tr("(in progress...)");
@@ -823,12 +844,12 @@ void PageVideos::clearTemp()
 bool PageVideos::tryQuit(HWForm * form)
 {
     bool quit = true;
-    if (numRecorders != 0)
+    if (numRecorders != 0 || numUploads != 0)
     {
         // ask user what to do - abort or wait
         HWAskQuitDialog * askd = new HWAskQuitDialog(this, form);
+        askd->deleteLater();
         quit = askd->exec();
-        delete askd;
     }
     if (quit)
         clearTemp();
@@ -836,6 +857,10 @@ bool PageVideos::tryQuit(HWForm * form)
 }
 
 // returns multi-line string with list of videos in progress
+/* it will look like this:
+foo.avi (15.21% - encoding)
+bar.avi (18.21% - uploading)
+*/
 QString PageVideos::getVideosInProgress()
 {
     QString list = "";
@@ -843,11 +868,17 @@ QString PageVideos::getVideosInProgress()
     for (int i = 0; i < count; i++)
     {
         VideoItem * item = nameItem(i);
+        QString process;
+        if (!item->ready())
+            process = tr("encoding");
+        else if (item->pUploading)
+            process = tr("uploading");
+        else
+            continue;
         float progress = 100*item->progress;
         if (progress > 99.99)
             progress = 99.99; // displaying 100% may be confusing
-        if (!item->ready())
-            list += item->name + " (" + QString::number(progress, 'f', 2) + "%)\n";
+        list += item->name + " (" + QString::number(progress, 'f', 2) + "% - " + process + ")\n";
     }
     return list;
 }
@@ -879,4 +910,88 @@ void PageVideos::startEncoding(const QByteArray & record)
         }
         addRecorder(pRecorder);
     }
+}
+
+void PageVideos::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
+{
+    QNetworkReply* reply = (QNetworkReply*)sender();
+
+    VideoItem * item = NULL;
+    int row;
+    int count = filesTable->rowCount();
+    // find corresponding item (maybe there is a better wat to implement this?)
+    for (int i = 0; i < count; i++)
+    {
+        item = nameItem(i);
+        if (item->pUploading == reply)
+        {
+            row = i;
+            break;
+        }
+    }
+    Q_ASSERT(item);
+
+    setProgress(row, item, bytesSent*1.0/bytesTotal);
+}
+
+void PageVideos::uploadFinished()
+{
+    QNetworkReply* reply = (QNetworkReply*)sender();
+
+    VideoItem * item = NULL;
+    int row;
+    int count = filesTable->rowCount();
+    for (int i = 0; i < count; i++)
+    {
+        item = nameItem(i);
+        if (item->pUploading == reply)
+        {
+            row = i;
+            break;
+        }
+    }
+    Q_ASSERT(item);
+
+    item->pUploading = NULL;
+    QByteArray answer = reply->readAll();
+    item->uploadReply = QString::fromUtf8(answer.data());
+   // QMessageBox::information(this,"",item->uploadReply,0);
+    filesTable->setCellWidget(row, vcProgress, NULL); // remove progress bar
+    numUploads--;
+}
+
+void PageVideos::uploadToYouTube()
+{
+    int row = filesTable->currentRow();
+    VideoItem * item = nameItem(row);
+
+    if (!netManager)
+        netManager = new QNetworkAccessManager(this);
+
+    HWUploadVideoDialog* dlg = new HWUploadVideoDialog(this, item->name, netManager);
+    dlg->deleteLater();
+    if (!dlg->exec())
+        return;
+
+    QNetworkRequest request(QUrl(dlg->location));
+    request.setRawHeader("Content-Type", "application/octet-stream");
+
+    QFile * file = new QFile(item->path(), this);
+    if (!file->open(QIODevice::ReadOnly))
+        return;
+
+    // add progress bar
+    QProgressBar * progressBar = new QProgressBar(filesTable);
+    progressBar->setMinimum(0);
+    progressBar->setMaximum(10000);
+    progressBar->setValue(0);
+    // make it different from encoding progress-bar
+    progressBar->setStyleSheet("* {color: #00ccff; selection-background-color: #00ccff;}" );
+    filesTable->setCellWidget(row, vcProgress, progressBar);
+
+    QNetworkReply* reply = netManager->put(request, file);
+    item->pUploading = reply;
+    connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64, qint64)));
+    connect(reply, SIGNAL(finished()), this, SLOT(uploadFinished()));
+    numUploads++;
 }
