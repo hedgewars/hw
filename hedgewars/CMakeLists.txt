@@ -32,6 +32,7 @@ set(engine_sources
     uFloat.pas
     uGame.pas
     uGears.pas
+    uGearsHandlers.pas
     uGearsRender.pas
     uIO.pas
     uInputHandler.pas

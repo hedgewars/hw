@@ -1329,7 +1329,7 @@ for t:= 0 to Pred(TeamsCount) do
         r.w:= 3;
         DrawTextureFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
-        if not highlight and not hasGone and (TeamHealth > 1) then
+        if not highlight and (not hasGone) and (TeamHealth > 1) then
             for i:= 0 to cMaxHHIndex do
                 if Hedgehogs[i].Gear <> nil then
                     begin
@@ -1365,6 +1365,19 @@ for t:= 0 to Pred(TeamsCount) do
             r.w:= TeamHealthBarWidth + 1;
             r.h:= HealthTex^.h - 4;
             DrawTextureFromRect(16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
+            if not hasGone and (TeamHealth > 1) then
+                begin
+                Tint(Clan^.Color shl 8 or $FF);
+                for i:= 0 to cMaxHHIndex do
+                    if Hedgehogs[i].Gear <> nil then
+                        begin
+                        inc(h,Hedgehogs[i].Gear^.Health);
+                        if h < TeamHealth then DrawTexture(15 + h*TeamHealthBarWidth div TeamHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
+                        end;
+                if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
+                    Tint($FF,$FF,$FF,$80)
+                else Tint($FF, $FF, $FF, $FF);
+                end;
             end;
         end;
 if smallScreenOffset <> 0 then
@@ -1513,14 +1526,16 @@ if (RM = rmDefault) or (RM = rmRightEye) then
 end;
 
 if SoundTimerTicks >= 50 then
-   begin
-   SoundTimerTicks:= 0;
-   if cVolumeDelta <> 0 then
-      begin
-      str(ChangeVolume(cVolumeDelta), s);
-      AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
-      end
-   end;
+begin
+    SoundTimerTicks:= 0;
+    if cVolumeDelta <> 0 then
+    begin
+        str(ChangeVolume(cVolumeDelta), s);
+        AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume);
+    end;
+    if isAudioMuted then
+        AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
+end;
 
 if GameState = gsConfirm then
     DrawTextureCentered(0, (cScreenHeight shr 1), ConfirmTexture);
@@ -1589,9 +1604,10 @@ if isCursorVisible then
 isFirstFrame:= false
 end;
 
+var PrevSentPointTime: LongWord = 0;
+
 procedure MoveCamera;
 var EdgesDist, wdy, shs,z: LongInt;
-    PrevSentPointTime: LongWord = 0;
 begin
 {$IFNDEF MOBILE}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) and cHasFocus and (GameState <> gsConfirm) then
@@ -1601,7 +1617,7 @@ z:= round(200/zoom);
 if not PlacingHogs and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) then
     if (not autoCameraOn) then
         FollowGear:= nil
-    else        
+    else
     if ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
         begin
         FollowGear:= nil;
@@ -1814,6 +1830,7 @@ begin
     Frames:= 0;
     WorldDx:= -512;
     WorldDy:= -256;
+    PrevSentPointTime:= 0;
 
     FPS:= 0;
     CountTicks:= 0;

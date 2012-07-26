@@ -402,7 +402,7 @@ with CurrentHedgehog^.Gear^,
             TargetPoint.Y:= putY
             end;
         AddFileLog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));
-        State:= State and not gstHHChooseTarget;
+        State:= State and (not gstHHChooseTarget);
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);
         end

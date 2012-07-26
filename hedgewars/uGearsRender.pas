@@ -21,7 +21,7 @@
 unit uGearsRender;
 
 interface
-uses uTypes, uConsts, GLunit, uFloat, SDLh;
+uses uTypes, uConsts, GLunit, uFloat, SDLh, uRandom;
 
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 
@@ -1015,10 +1015,10 @@ begin
                             DrawSprite(sprUtility, x - 24, y - 24, i);
                             end;
                         end;
-                    if Gear^.Timer <= 1833 then
+                    if Gear^.Timer < 1833 then
                         begin
                         DrawTextureRotatedF(SpritesData[sprPortal].texture, min(abs(1.25 - (Gear^.Timer mod 1333) / 400), 1.25), 0, 0,
-                                            Gear^.Angle+WorldDx, Gear^.Power+WorldDy-16, 4+Gear^.Tag, 1, 32, 32, 270);
+                                            x, Gear^.Angle+WorldDy-16, 4+Gear^.Tag, 1, 32, 32, 270);
                         end
                     end;
       gtExplosives: begin
@@ -1213,9 +1213,8 @@ begin
                                 else DrawLine(hwRound(HHGear^.X), hwRound(HHGear^.Y), hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, i, i, $FF, $40);
                                 end
                           end
-                      end
-
-
+                      end;
+            gtGenericFaller: DrawCircle(x, y, 3, 3, $FF, $00, $00, $FF);  // debug
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then
           DrawTextureCentered(x + 8, y + 8, Gear^.Tex);

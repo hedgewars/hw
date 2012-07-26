@@ -50,6 +50,7 @@ function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestCake(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
     TAmmoTest = record
@@ -84,7 +85,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amSwitch
             (proc: @TestMortar;      flags: 0), // amMortar
             (proc: nil;              flags: 0), // amKamikaze
-            (proc: nil;              flags: 0), // amCake
+            (proc: @TestCake;        flags: amtest_OnTurn or amtest_NoTarget), // amCake
             (proc: nil;              flags: 0), // amSeduction
             (proc: @TestWatermelon;  flags: 0), // amWatermelon
             (proc: nil;              flags: 0), // amHellishBomb
@@ -121,7 +122,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
 const BadTurn = Low(LongInt) div 4;
 
 implementation
-uses uAIMisc, uVariables, uUtils;
+uses uAIMisc, uVariables, uUtils, uGearsHandlers, uCollisions;
 
 function Metric(x1, y1, x2, y2: LongInt): LongInt; inline;
 begin
@@ -599,6 +600,7 @@ var Vx, Vy, x, y, t, dmgMod: real;
     d: Longword;
     fallDmg, valueResult: LongInt;
 begin
+if Me^.Hedgehog^.BotLevel > 3 then exit(BadTurn);
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
@@ -648,6 +650,7 @@ var Vx, Vy, x, y, t, dmg, dmgMod: real;
     d: Longword;
     fallDmg, valueResult: LongInt;
 begin
+if Me^.Hedgehog^.BotLevel > 3 then exit(BadTurn);
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
@@ -694,9 +697,11 @@ end;
 
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult, a, v1, v2: LongInt;
-    x, y: LongInt;
+    x, y, trackFall: LongInt;
     dx, dy: real;
 begin
+    if Me^.Hedgehog^.BotLevel < 3 then trackFall:= afTrackFall
+    else trackFall:= 0;
     Level:= Level; // avoid compiler hint
     ap.ExplR:= 0;
     ap.Time:= 0;
@@ -704,20 +709,20 @@ begin
     x:= hwRound(Me^.X);
     y:= hwRound(Me^.Y);
 
-    a:= 0;
+    a:= cMaxAngle div 2;
     valueResult:= 0;
 
-    while a <= cMaxAngle div 2 do
+    while a >= 0 do
         begin
         dx:= sin(a / cMaxAngle * pi) * 0.5;
         dy:= cos(a / cMaxAngle * pi) * 0.5;
 
-        v1:= RateShove(Me, x - 10, y
-                , 33, 30, 115
-                , -dx, -dy, afTrackFall);
-        v2:= RateShove(Me, x + 10, y
-                , 33, 30, 115
-                , dx, -dy, afTrackFall);
+        v1:= RateShove(Me, x - 10, y + 2
+                , 32, 30, 115
+                , -dx, -dy, trackFall);
+        v2:= RateShove(Me, x + 10, y + 2
+                , 32, 30, 115
+                , dx, -dy, trackFall);
         if (v1 > valueResult) or (v2 > valueResult) then
             if (v2 > v1) 
                 or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
@@ -731,7 +736,7 @@ begin
                 valueResult:= v1
                 end;
 
-        a:= a + 15 + random(cMaxAngle div 16)
+        a:= a - 15 - random(cMaxAngle div 16)
         end;
    
     if valueResult <= 0 then
@@ -742,38 +747,40 @@ end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult, v1, v2, i: LongInt;
-    x, y: LongInt;
+    x, y, trackFall: LongInt;
 begin
+    if Me^.Hedgehog^.BotLevel = 1 then trackFall:= afTrackFall
+    else trackFall:= 0;
     Level:= Level; // avoid compiler hint
     ap.ExplR:= 0;
     ap.Time:= 0;
     ap.Power:= 1;
     x:= hwRound(Me^.X);
-    y:= hwRound(Me^.Y);
+    y:= hwRound(Me^.Y) + 4;
 
     v1:= 0;
     for i:= 0 to 8 do
         begin
-        v1:= v1 + RateShove(Me, x - 10, y - 10 * i
-                , 18, 30, 40
-                , -0.45, -0.9, afTrackFall or afSetSkip);
+        v1:= v1 + RateShove(Me, x - 5, y - 10 * i
+                , 19, 30, 40
+                , -0.45, -0.9, trackFall or afSetSkip);
         end;
-    v1:= v1 + RateShove(Me, x - 10, y - 90
-            , 18, 30, 40
-            , -0.45, -0.9, afTrackFall);
+    v1:= v1 + RateShove(Me, x - 5, y - 90
+            , 19, 30, 40
+            , -0.45, -0.9, trackFall);
 
 
     // now try opposite direction
     v2:= 0;
     for i:= 0 to 8 do
         begin
-        v2:= v2 + RateShove(Me, x + 10, y - 10 * i
-                , 18, 30, 40
-                , 0.45, -0.9, afTrackFall or afSetSkip);
+        v2:= v2 + RateShove(Me, x + 5, y - 10 * i
+                , 19, 30, 40
+                , 0.45, -0.9, trackFall or afSetSkip);
         end;
-    v2:= v2 + RateShove(Me, x + 10, y - 90
-            , 18, 30, 40
-            , 0.45, -0.9, afTrackFall);
+    v2:= v2 + RateShove(Me, x + 5, y - 90
+            , 19, 30, 40
+            , 0.45, -0.9, trackFall);
 
     if (v2 > v1) 
         or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
@@ -796,8 +803,10 @@ end;
 
 function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult, v1, v2: LongInt;
-    x, y: LongInt;
+    x, y, trackFall: LongInt;
 begin
+    if Me^.Hedgehog^.BotLevel = 1 then trackFall:= afTrackFall
+    else trackFall:= 0;
     Level:= Level; // avoid compiler hint
     ap.ExplR:= 0;
     ap.Time:= 0;
@@ -809,21 +818,21 @@ begin
     {first RateShove checks farthermost of two whip's AmmoShove attacks 
     to encourage distant attacks (damaged hog is excluded from view of second 
     RateShove call)}
-    v1:= RateShove(Me, x - 15, y
+    v1:= RateShove(Me, x - 13, y
             , 30, 30, 25
-            , -1, -0.8, afTrackFall or afSetSkip);
+            , -1, -0.8, trackFall or afSetSkip);
     v1:= v1 +
         RateShove(Me, x, y
             , 30, 30, 25
-            , -1, -0.8, afTrackFall);
+            , -1, -0.8, trackFall);
     // now try opposite direction
-    v2:= RateShove(Me, x + 15, y
+    v2:= RateShove(Me, x + 13, y
             , 30, 30, 25
-            , 1, -0.8, afTrackFall or afSetSkip);
+            , 1, -0.8, trackFall or afSetSkip);
     v2:= v2 +
         RateShove(Me, x, y
             , 30, 30, 25
-            , 1, -0.8, afTrackFall);
+            , 1, -0.8, trackFall);
 
     if (v2 > v1) 
         or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
@@ -971,6 +980,76 @@ begin
             TestTeleport := 0;
             end;
         end;
+end;
+
+
+procedure checkCakeWalk(Me, Gear: PGear; var ap: TAttackParams);
+var i: Longword;
+    v: LongInt;
+begin
+while (not TestColl(hwRound(Gear^.X), hwRound(Gear^.Y), 6)) and (Gear^.Y.Round < LAND_HEIGHT) do
+    Gear^.Y:= Gear^.Y + _1;
+
+for i:= 0 to 2040 do
+    begin
+    cakeStep(Gear);
+    v:= RateExplosion(Me, hwRound(Gear^.X), hwRound(Gear^.Y), cakeDmg * 2, afTrackFall);
+    if v > ap.Power then 
+        begin
+        ap.ExplX:= hwRound(Gear^.X);
+        ap.ExplY:= hwRound(Gear^.Y);
+        ap.Power:= v
+        end
+    end;
+end;
+
+function TestCake(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+var valueResult, v1, v2: LongInt;
+    x, y, trackFall: LongInt;
+    cake: TGear;
+begin
+    Level:= Level; // avoid compiler hint
+    ap.ExplR:= 0;
+    ap.Time:= 0;
+    ap.Power:= BadTurn; // use it as max score value in checkCakeWalk
+
+    FillChar(cake, sizeof(cake), 0);
+    cake.Radius:= 7;
+    cake.CollisionMask:= $FF7F;
+
+    // check left direction
+    cake.Angle:= 3;
+    cake.dX.isNegative:= true;
+    cake.X:= Me^.X - _3;
+    cake.Y:= Me^.Y;
+    checkCakeWalk(Me, @cake, ap);
+    v1:= ap.Power;
+
+    // now try opposite direction
+    cake.Angle:= 1;
+    cake.dX.isNegative:= false;
+    cake.X:= Me^.X + _3;
+    cake.Y:= Me^.Y;
+    checkCakeWalk(Me, @cake, ap);
+    v2:= ap.Power;
+
+    ap.Power:= 1;
+
+    if (v2 > v1) then
+        begin
+        ap.Angle:= 1;
+        valueResult:= v2
+        end
+    else
+        begin
+        ap.Angle:= -1;
+        valueResult:= v1
+        end;
+
+    if valueResult <= 0 then
+        valueResult:= BadTurn;
+
+    TestCake:= valueResult;
 end;
 
 end.

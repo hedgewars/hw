@@ -47,8 +47,8 @@ class AmmoSchemeModel : public QAbstractTableModel
     public slots:
         void Save();
 
-    signals:
-        void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
+//    signals:
+//        void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
 
     protected:
         QList< QList<QVariant> > schemes;

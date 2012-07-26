@@ -54,6 +54,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure FillTargets;
+procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
 procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
 
@@ -78,6 +79,11 @@ var ThinkingHH: PGear;
     bonuses: record
         Count: Longword;
         ar: array[0..Pred(MAXBONUS)] of TBonus;
+        end;
+
+    walkbonuses: record
+        Count: Longword;
+        ar: array[0..Pred(MAXBONUS div 8)] of TBonus;  // don't use too many
         end;
 
 implementation
@@ -140,9 +146,22 @@ if(bonuses.Count < MAXBONUS) then
     end;
 end;
 
+procedure AddWalkBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
+begin
+if(walkbonuses.Count < MAXBONUS div 8) then
+    begin
+    walkbonuses.ar[walkbonuses.Count].x:= x;
+    walkbonuses.ar[walkbonuses.Count].y:= y;
+    walkbonuses.ar[walkbonuses.Count].Radius:= r;
+    walkbonuses.ar[walkbonuses.Count].Score:= s;
+    inc(walkbonuses.Count);
+    end;
+end;
+
 procedure FillBonuses(isAfterAttack: boolean);
 var Gear: PGear;
     MyClan: PClan;
+    i: Longint;
 begin
 bonuses.Count:= 0;
 MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
@@ -151,7 +170,7 @@ while Gear <> nil do
     begin
         case Gear^.Kind of
             gtCase:
-            AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
             gtFlame:
                 if (Gear^.State and gsttmpFlag) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
@@ -178,7 +197,9 @@ while Gear <> nil do
                 if Gear^.Damage >= Gear^.Health then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
                 else
-                    if isAfterAttack and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog) then
+                    if isAfterAttack
+                      and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog)
+                      and ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_1) then
                         if (ClansCount > 2) or (MyClan = Gear^.Hedgehog^.Team^.Clan) then
                             AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
                         else
@@ -190,6 +211,13 @@ while Gear <> nil do
 if isAfterAttack and (KnownExplosion.Radius > 0) then
     with KnownExplosion do
         AddBonus(X, Y, Radius + 10, -Radius);
+if isAfterAttack then
+    begin
+    for i:= 0 to Pred(walkbonuses.Count) do
+        with walkbonuses.ar[i] do
+            AddBonus(X, Y, Radius, Score);
+    walkbonuses.Count:= 0
+    end;
 end;
 
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
@@ -343,13 +371,13 @@ v:= random($FFFFFFFF);
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
-(*
-        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
+
+{        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
             begin
             LandPixels[trunc(y), trunc(x)]:= v;
             UpdateLandTexture(trunc(X), 1, trunc(Y), 1, true);
-            end;
-*)
+            end;}
+
 
         // consider adding dX/dY calc here for fall damage
         if TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
@@ -404,25 +432,28 @@ for i:= 0 to Targets.Count do
                 begin
                 dX:= 0.005 * dmg + 0.01;
                 dY:= dX;
-                fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
+                if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and 
+                   (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                     fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, 0) * dmgMod)
+                else fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod)
                 end;
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
-                    inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
+                    inc(rate, (KillScore + Score div 10) * 1024)   // Add a bit of a bonus for bigger hog drownings
                 else
-                    dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
+                    dec(rate, (KillScore * friendlyfactor div 100 - Score div 10) * 1024) // and more of a punishment for drowning bigger friendly hogs
             else if (dmg+fallDmg) >= abs(Score) then
                 if Score > 0 then
-                    inc(rate, KillScore)
+                    inc(rate, KillScore * 1024 + (dmg + fallDmg)) // tiny bonus for dealing more damage than needed to kill
                 else
-                    dec(rate, KillScore * friendlyfactor div 100)
+                    dec(rate, KillScore * friendlyfactor div 100 * 1024)
             else
                 if Score > 0 then
-                    inc(rate, dmg+fallDmg)
-                else dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
+                    inc(rate, (dmg + fallDmg) * 1024)
+                else dec(rate, (dmg + fallDmg) * friendlyfactor div 100 * 1024)
             end;
         end;
-RateExplosion:= rate * 1024;
+RateExplosion:= rate;
 end;
 
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
@@ -503,7 +534,10 @@ for i:= 0 to Targets.Count do
             dY:= gdY * dmg;
             if dX < 0 then dX:= dX - 0.01
             else dX:= dX + 0.01;
-            fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
+            if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and 
+               (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                 fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, 0) * dmgMod)
+            else fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
                     inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
@@ -590,6 +624,12 @@ case JumpType of
 end;
 
 repeat
+        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= Gear^.Hedgehog^.Team^.Clan^.Color;
+            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
+            end;}
+            
     if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then
         exit(false);
     if (Gear^.State and gstMoving) <> 0 then
@@ -611,7 +651,7 @@ repeat
         Gear^.Y:= Gear^.Y + Gear^.dY;
         if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
-            Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
+            Gear^.State:= Gear^.State and (not (gstMoving or gstHHJumping));
             Gear^.dY:= _0;
             case JumpType of
                 jmpHJump:
@@ -636,20 +676,31 @@ until false
 end;
 
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-var pX, pY: LongInt;
+var pX, pY, tY: LongInt;
 begin
 HHGo:= false;
+Gear^.CollisionMask:= $FF7F;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;
 GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
-
+tY:= hwRound(Gear^.Y);
 repeat
+        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= random($FFFFFFFF);//Gear^.Hedgehog^.Team^.Clan^.Color;
+            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
+            end;}
+
     pX:= hwRound(Gear^.X);
     pY:= hwRound(Gear^.Y);
     if pY + cHHRadius >= cWaterLine then
-        exit(false);
+        begin
+        if AltGear^.Hedgehog^.BotLevel < 4 then
+            AddWalkBonus(pX, tY, 250, -40);
+        exit(false)
+        end;
         
     // hog is falling    
     if (Gear^.State and gstMoving) <> 0 then
@@ -658,9 +709,11 @@ repeat
         Gear^.dY:= Gear^.dY + cGravity;
         if Gear^.dY > _0_4 then
             begin
-            Goinfo.FallPix:= 0;
+            GoInfo.FallPix:= 0;
             // try ljump instead of fall with damage
             HHJump(AltGear, jmpLJump, GoInfo); 
+            if AltGear^.Hedgehog^.BotLevel < 4 then
+                AddWalkBonus(pX, tY, 175, -20);
             exit(false)
             end;
         Gear^.Y:= Gear^.Y + Gear^.dY;
@@ -669,7 +722,7 @@ repeat
         if TestCollisionYwithGear(Gear, 1) <> 0 then
             begin
             inc(GoInfo.Ticks, 410);
-            Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
+            Gear^.State:= Gear^.State and (not (gstMoving or gstHHJumping));
             Gear^.dY:= _0;
             // try ljump instead of fall
             HHJump(AltGear, jmpLJump, GoInfo);

@@ -159,10 +159,19 @@ set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
-separate_arguments(fpflags_full UNIX_COMMAND ${FPFLAGS})
+#parse additional parameters
+if(FPFLAGS OR GHFLAGS)
+    math(EXPR cmake_version "${CMAKE_MAJOR_VERSION}*10000 + ${CMAKE_MINOR_VERSION}*100 + ${CMAKE_PATCH_VERSION}")
+    if(cmake_version LESS "020800")
+        message(STATUS "FPFLAGS and GHFLAGS are available only from Cmake 2.8, ignoring...")
+    else()
+        separate_arguments(fpflags_full UNIX_COMMAND ${FPFLAGS})
+        separate_arguments(ghflags_full UNIX_COMMAND ${GHFLAGS})
+    endif()
+endif()
+
 set(pascal_flags ${fpflags_full} "-B" "-FE../bin" "-Cs2000000" "-vewn" "-dDEBUGFILE" ${pascal_flags})
-separate_arguments(ghflags_full UNIX_COMMAND ${GHFLAGS})
-set(haskell_flags "-O2" ${haskell_flags} ${ghflags_full})
+set(haskell_flags "-O2" ${ghflags_full} ${haskell_flags})
 
 if(Optz)
 #    set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})

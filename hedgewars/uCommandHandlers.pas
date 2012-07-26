@@ -412,18 +412,19 @@ with CurrentHedgehog^.Gear^ do
 end;
 
 procedure chNextTurn(var s: shortstring);
-var checksum: Longword;
+var i: Longword;
     gi: PGear;
 begin
     s:= s; // avoid compiler hint
 
     TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
-    checksum:= GameTicks;
+    CheckSum:= CheckSum xor GameTicks;
     gi := GearsList;
     while gi <> nil do
         begin
-        with gi^ do checksum:= checksum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
+        with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
+        AddRandomness(CheckSum);
         gi := gi^.NextGear
         end;
 
@@ -431,11 +432,11 @@ begin
         begin
         s[0]:= #5;
         s[1]:= 'N';
-        SDLNet_Write32(checksum, @s[2]);
+        SDLNet_Write32(CheckSum, @s[2]);
         SendIPC(s)
         end
     else
-        TryDo(checksum = lastTurnChecksum, 'Desync detected', true);
+        TryDo(CheckSum = lastTurnChecksum, 'Desync detected', true);
     AddFileLog('Next turn: time '+inttostr(GameTicks));
 end;
 
@@ -652,6 +653,7 @@ end;
 procedure chSpeedup_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+SpeedStart:= RealTicks;
 isSpeed:= true
 end;
 
@@ -764,7 +766,7 @@ end;
 procedure chGameFlags(var s: shortstring);
 begin
 GameFlags:= StrToInt(s);
-if GameFlags and gfSharedAmmo <> 0 then GameFlags:= GameFlags and not gfPerHogAmmo
+if GameFlags and gfSharedAmmo <> 0 then GameFlags:= GameFlags and (not gfPerHogAmmo)
 end;
 
 procedure chHedgehogTurnTime(var s: shortstring);
@@ -785,21 +787,21 @@ end;
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
-    RegisterVariable('+right'  , @chRight_p      , false);
-    RegisterVariable('-right'  , @chRight_m      , false);
-    RegisterVariable('+up'     , @chUp_p         , false);
-    RegisterVariable('-up'     , @chUp_m         , false);
-    RegisterVariable('+left'   , @chLeft_p       , false);
-    RegisterVariable('-left'   , @chLeft_m       , false);
+    RegisterVariable('+right'  , @chRight_p      , false, true);
+    RegisterVariable('-right'  , @chRight_m      , false, true);
+    RegisterVariable('+up'     , @chUp_p         , false, true);
+    RegisterVariable('-up'     , @chUp_m         , false, true);
+    RegisterVariable('+left'   , @chLeft_p       , false, true);
+    RegisterVariable('-left'   , @chLeft_m       , false, true);
     RegisterVariable('+attack' , @chAttack_p     , false);
-    RegisterVariable('+down'   , @chDown_p       , false);
-    RegisterVariable('-down'   , @chDown_m       , false);
-    RegisterVariable('hjump'   , @chHJump        , false);
-    RegisterVariable('ljump'   , @chLJump        , false);
+    RegisterVariable('+down'   , @chDown_p       , false, true);
+    RegisterVariable('-down'   , @chDown_m       , false, true);
+    RegisterVariable('hjump'   , @chHJump        , false, true);
+    RegisterVariable('ljump'   , @chLJump        , false, true);
     RegisterVariable('nextturn', @chNextTurn     , false);
     RegisterVariable('-attack' , @chAttack_m     , false);
     RegisterVariable('slot'    , @chSlot         , false);
-    RegisterVariable('setweap' , @chSetWeapon    , false);
+    RegisterVariable('setweap' , @chSetWeapon    , false, true);
 //////// End top by freq analysis
     RegisterVariable('gencmd'  , @chGenCmd       , false);
     RegisterVariable('flag'    , @chFlag         , false);
@@ -845,10 +847,10 @@ begin
     RegisterVariable('zoomout' , @chZoomOut      , true );
     RegisterVariable('zoomreset',@chZoomReset    , true );
     RegisterVariable('ammomenu', @chAmmoMenu     , true);
-    RegisterVariable('+precise', @chPrecise_p    , false);
-    RegisterVariable('-precise', @chPrecise_m    , false);
+    RegisterVariable('+precise', @chPrecise_p    , false, true);
+    RegisterVariable('-precise', @chPrecise_m    , false, true);
     RegisterVariable('switch'  , @chSwitch       , false);
-    RegisterVariable('timer'   , @chTimer        , false);
+    RegisterVariable('timer'   , @chTimer        , false, true);
     RegisterVariable('taunt'   , @chTaunt        , false);
     RegisterVariable('put'     , @chPut          , false);
     RegisterVariable('+volup'  , @chVol_p        , true );
