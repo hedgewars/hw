@@ -2,6 +2,7 @@ package org.hedgewars.hedgeroid.netplay;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.hedgewars.hedgeroid.R;
@@ -9,6 +10,7 @@ import org.hedgewars.hedgeroid.R;
 import android.content.Context;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class RoomListAdapter extends BaseAdapter {
-	private List<Room> rooms = new ArrayList<Room>();
+	private List<Pair<Room, Long>> rooms = new ArrayList<Pair<Room, Long>>();
 	private Context context;
 	private RoomList roomList;
 	
@@ -41,11 +43,11 @@ public class RoomListAdapter extends BaseAdapter {
 	}
 
 	public Room getItem(int position) {
-		return rooms.get(position);
+		return rooms.get(position).first;
 	}
 
 	public long getItemId(int position) {
-		return rooms.get(position).id;
+		return rooms.get(position).second;
 	}
 
 	public boolean hasStableIds() {
@@ -62,7 +64,6 @@ public class RoomListAdapter extends BaseAdapter {
 	}
 	
 	public void invalidate() {
-		rooms = new ArrayList<Room>();
 		if(roomList != null) {
 			roomList.unregisterObserver(observer);
 		}
@@ -71,8 +72,8 @@ public class RoomListAdapter extends BaseAdapter {
 	}
 	
 	private void reloadFromList(RoomList list) {
-		rooms = new ArrayList<Room>(roomList.getMap().values());
-		Collections.sort(rooms, Collections.reverseOrder(Room.ID_COMPARATOR));
+		rooms = new ArrayList<Pair<Room, Long>>(roomList.getMap().values());
+		Collections.sort(rooms, RoomAgeComparator.INSTANCE);
 		notifyDataSetChanged();
 	}
 	
@@ -91,7 +92,7 @@ public class RoomListAdapter extends BaseAdapter {
 			v = vi.inflate(R.layout.listview_room, null);
 		}
 		
-		Room room = rooms.get(position);
+		Room room = rooms.get(position).first;
 		int iconRes = room.inProgress ? R.drawable.roomlist_ingame : R.drawable.roomlist_preparing;
 		
 		if(v.findViewById(android.R.id.text1) == null) {
@@ -127,5 +128,12 @@ public class RoomListAdapter extends BaseAdapter {
 		}
 		
 		return v;
+	}
+	
+	private static final class RoomAgeComparator implements Comparator<Pair<Room, Long>> {
+		public static final RoomAgeComparator INSTANCE = new RoomAgeComparator();
+		public int compare(Pair<Room, Long> lhs, Pair<Room, Long> rhs) {
+			return rhs.second.compareTo(lhs.second);
+		}
 	}
 }

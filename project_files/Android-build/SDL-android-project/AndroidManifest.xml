@@ -46,7 +46,6 @@
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <service android:name=".Downloader.DownloadService" />
-		<service android:name=".netplay.NetplayService" />
 		
         <activity
             android:name="StartGameActivity"
