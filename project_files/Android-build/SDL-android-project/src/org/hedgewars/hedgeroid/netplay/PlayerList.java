@@ -5,14 +5,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import android.database.DataSetObservable;
+import android.util.Pair;
 
 public class PlayerList extends DataSetObservable {
 	private long nextId = 1;
-	private Map<String, Player> players = new TreeMap<String, Player>();
+	private Map<String, Pair<Player, Long>> players = new TreeMap<String, Pair<Player, Long>>();
 	
 	public void addPlayerWithNewId(String name) {
-		Player p = new Player(name, nextId++);
-		players.put(name, p);
+		players.put(name, Pair.create(new Player(name), nextId++));
 		notifyChanged();
 	}
 	
@@ -29,7 +29,7 @@ public class PlayerList extends DataSetObservable {
 		}
 	}
 
-	public Map<String, Player> getMap() {
+	public Map<String, Pair<Player, Long>> getMap() {
 		return Collections.unmodifiableMap(players);
 	}
 }

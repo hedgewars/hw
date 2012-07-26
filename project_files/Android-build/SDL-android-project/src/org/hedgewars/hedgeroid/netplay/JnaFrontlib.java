@@ -82,17 +82,17 @@ public interface JnaFrontlib extends Library {
 		/**
 		 * Returns the (native-owned) rooms in this list
 		 */
-		public RoomPtr[] getRooms(int count) {
+		public Room[] getRooms(int count) {
 			Pointer ptr = getPointer();
 			if(ptr == null) {
-				return new RoomPtr[0];
+				return new Room[0];
 			}
 			Pointer[] untypedPtrs = ptr.getPointerArray(0, count);
-			RoomPtr[] typedPtrs = new RoomPtr[count];
+			Room[] result = new Room[count];
 			for(int i=0; i<count; i++) {
-				typedPtrs[i] = new RoomPtr(untypedPtrs[i]);
+				result[i] = RoomPtr.deref(untypedPtrs[i]);
 			}
-			return typedPtrs;
+			return result;
 		}
 	}
 	
@@ -101,9 +101,13 @@ public interface JnaFrontlib extends Library {
 		public RoomPtr(Pointer ptr) { super(ptr); }
 		
 		public Room deref() {
-			Room result = new Room(getPointer());
-			result.read();
-			return result;
+			return deref(getPointer());
+		}
+		
+		public static Room deref(Pointer p) {
+			RoomStruct r = new RoomStruct(p);
+			r.read();
+			return new Room(r.name, r.map, r.scheme, r.weapons, r.owner, r.playerCount, r.teamCount, r.inProgress);
 		}
 	}
 	
@@ -113,13 +117,13 @@ public interface JnaFrontlib extends Library {
 	static class SchemePtr extends PointerType { }
 	static class GameSetupPtr extends PointerType { }
 	
-	static class Room extends Structure {
-		public static class byVal extends Room implements Structure.ByValue {}
-		public static class byRef extends Room implements Structure.ByReference {}
+	static class RoomStruct extends Structure {
+		public static class byVal extends RoomStruct implements Structure.ByValue {}
+		public static class byRef extends RoomStruct implements Structure.ByReference {}
 		private static String[] FIELD_ORDER = new String[] {"inProgress", "name", "playerCount", "teamCount", "owner", "map", "scheme", "weapons"};
 		
-		public Room() { super(); setFieldOrder(FIELD_ORDER); }
-		public Room(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public RoomStruct() { super(); setFieldOrder(FIELD_ORDER); }
+		public RoomStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 		
 	    public boolean inProgress;
 	    public String name;

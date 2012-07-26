@@ -2,16 +2,9 @@ package org.hedgewars.hedgeroid.netplay;
 
 
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.netplay.NetplayService.NetplayBinder;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,54 +16,36 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 public class LobbyChatFragment extends Fragment {
-	private EditText editText;
-	private ListView listView;
 	private ChatlogAdapter adapter;
-	private NetplayService service;
-	
-	private void commitText() {
-		String text = editText.getText().toString();
-		if(service != null && service.isConnected() && text.length()>0) {
-			editText.setText("");
-			service.sendChat(text);
-		}
-	}
+	private Netplay netconn;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		netconn = Netplay.getAppInstance(getActivity().getApplicationContext());
 		adapter = new ChatlogAdapter(getActivity());
+    	adapter.setLog(netconn.lobbyChatlog.getLog());
+    	netconn.lobbyChatlog.registerObserver(adapter);
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		getActivity().bindService(new Intent(getActivity(), NetplayService.class), serviceConnection,
-	            Context.BIND_AUTO_CREATE);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.lobby_chat_fragment, container, false);
-		editText = (EditText) view.findViewById(R.id.lobbyChatInput);
-		listView = (ListView) view.findViewById(R.id.lobbyConsole);
 		
+		ListView listView = (ListView) view.findViewById(R.id.lobbyConsole);
 		listView.setAdapter(adapter);
 		listView.setDivider(null);
 		listView.setDividerHeight(0);
 		listView.setVerticalFadingEdgeEnabled(true);
 		
-        editText.setOnEditorActionListener(new OnEditorActionListener() {
-			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-				boolean handled = false;
-				if(actionId == EditorInfo.IME_ACTION_SEND) {
-					commitText();
-					handled = true;
-				}
-				return handled;
-			}
-		});
+		EditText editText = (EditText) view.findViewById(R.id.lobbyChatInput);
+        editText.setOnEditorActionListener(new ChatSendListener());
         
 		return view;
 	}
@@ -78,21 +53,21 @@ public class LobbyChatFragment extends Fragment {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		getActivity().unbindService(serviceConnection);
+		netconn.lobbyChatlog.unregisterObserver(adapter);
 	}
 
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder binder) {
-        	Log.d("LobbyChatFragment", "netconn received");
-        	service = ((NetplayBinder) binder).getService();
-        	adapter.setLog(service.lobbyChatlog.getLog());
-        	service.lobbyChatlog.registerObserver(adapter);
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-        	// TODO navigate away
-        	service.lobbyChatlog.unregisterObserver(adapter);
-        	service = null;
-        }
-    };
+	private final class ChatSendListener implements OnEditorActionListener {
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			boolean handled = false;
+			if(actionId == EditorInfo.IME_ACTION_SEND) {
+				String text = v.getText().toString();
+				if(text.length()>0) {
+					v.setText("");
+					netconn.sendChat(text);
+					handled = true;
+				}
+			}
+			return handled;
+		}
+	}
 }

@@ -2,12 +2,14 @@ package org.hedgewars.hedgeroid.netplay;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.hedgewars.hedgeroid.R;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 public class PlayerListAdapter extends BaseAdapter {
-	private List<Player> players = new ArrayList<Player>();
+	private List<Pair<Player, Long>> players = new ArrayList<Pair<Player, Long>>();
 	private Context context;
 	private PlayerList playerList;
 	
@@ -40,11 +42,11 @@ public class PlayerListAdapter extends BaseAdapter {
 	}
 
 	public Player getItem(int position) {
-		return players.get(position);
+		return players.get(position).first;
 	}
 
 	public long getItemId(int position) {
-		return players.get(position).id;
+		return players.get(position).second;
 	}
 
 	public boolean hasStableIds() {
@@ -61,7 +63,6 @@ public class PlayerListAdapter extends BaseAdapter {
 	}
 	
 	public void invalidate() {
-		players = new ArrayList<Player>();
 		if(playerList != null) {
 			playerList.unregisterObserver(observer);
 		}
@@ -70,8 +71,8 @@ public class PlayerListAdapter extends BaseAdapter {
 	}
 	
 	private void reloadFromList(PlayerList list) {
-		players = new ArrayList<Player>(list.getMap().values());
-		Collections.sort(players, Player.NAME_COMPARATOR);
+		players = new ArrayList<Pair<Player, Long>>(list.getMap().values());
+		Collections.sort(players, AlphabeticalOrderComparator.INSTANCE);
 		notifyDataSetChanged();
 	}
 	
@@ -85,9 +86,16 @@ public class PlayerListAdapter extends BaseAdapter {
 			tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.human, 0, 0, 0);
 		}
 
-		String player = players.get(position).name;
+		String player = players.get(position).first.name;
 		TextView username = (TextView) v.findViewById(android.R.id.text1);
 		username.setText(player);
 		return v;
+	}
+	
+	private static final class AlphabeticalOrderComparator implements Comparator<Pair<Player, Long>> {
+		public static final AlphabeticalOrderComparator INSTANCE = new AlphabeticalOrderComparator();
+		public int compare(Pair<Player, Long> lhs, Pair<Player, Long> rhs) {
+			return lhs.first.name.compareToIgnoreCase(rhs.first.name);
+		};
 	}
 }

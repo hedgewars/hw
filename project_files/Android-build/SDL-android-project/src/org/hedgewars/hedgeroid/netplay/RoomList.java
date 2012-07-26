@@ -4,46 +4,43 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.RoomPtr;
-
 import android.database.DataSetObservable;
 import android.util.Log;
+import android.util.Pair;
 
 public class RoomList extends DataSetObservable {
 	private long nextId = 1;
-	private Map<String, Room> rooms = new TreeMap<String, Room>();
+	private Map<String, Pair<Room, Long>> rooms = new TreeMap<String, Pair<Room, Long>>();
 	
-	public void updateList(RoomPtr[] roomPtrs) {
-		Map<String, Room> newMap = new TreeMap<String, Room>();
-		for(RoomPtr roomPtr : roomPtrs) {
-			JnaFrontlib.Room room = roomPtr.deref();
-			Room oldEntry = rooms.get(room.name);
+	public void updateList(Room[] newRooms) {
+		Map<String, Pair<Room, Long>> newMap = new TreeMap<String, Pair<Room, Long>>();
+		for(Room room : newRooms) {
+			Pair<Room, Long> oldEntry = rooms.get(room.name);
 			if(oldEntry == null) {
-				newMap.put(room.name, buildRoom(room, nextId++));
+				newMap.put(room.name, Pair.create(room, nextId++));
 			} else {
-				newMap.put(room.name, buildRoom(room, oldEntry.id));
+				newMap.put(room.name, Pair.create(room, oldEntry.second));
 			}
 		}
 		rooms = newMap;
 		notifyChanged();
 	}
 	
-	public void addRoomWithNewId(RoomPtr roomPtr) {
-		putRoom(roomPtr.deref(), nextId++);
+	public void addRoomWithNewId(Room room) {
+		rooms.put(room.name, Pair.create(room, nextId++));
 		notifyChanged();
 	}
 	
-	public void updateRoom(String name, RoomPtr roomPtr) {
-		JnaFrontlib.Room room = roomPtr.deref();
-		Room oldEntry = rooms.get(name);
+	public void updateRoom(String name, Room room) {
+		Pair<Room, Long> oldEntry = rooms.get(name);
 		if(oldEntry == null) {
 			Log.e("RoomList", "Received update for unknown room: "+name);
-			putRoom(room, nextId++);
+			rooms.put(room.name, Pair.create(room, nextId++));
 		} else {
 			if(!name.equals(room.name)) {
 				rooms.remove(name);
 			}
-			putRoom(room, oldEntry.id);
+			rooms.put(room.name, Pair.create(room, oldEntry.second));
 		}
 		notifyChanged();
 	}
@@ -61,15 +58,7 @@ public class RoomList extends DataSetObservable {
 		}
 	}
 	
-	public Map<String, Room> getMap() {
+	public Map<String, Pair<Room, Long>> getMap() {
 		return Collections.unmodifiableMap(rooms);
-	}
-	
-	private void putRoom(JnaFrontlib.Room r, long id) {
-		rooms.put(r.name, buildRoom(r, id));
-	}
-	
-	private Room buildRoom(JnaFrontlib.Room r, long id) {
-		return new Room(r.name, r.map, r.scheme, r.weapons, r.owner, r.playerCount, r.teamCount, r.inProgress, id);
 	}
 }

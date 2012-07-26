@@ -1,17 +1,13 @@
 package org.hedgewars.hedgeroid.netplay;
 
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.netplay.NetplayService.NetplayBinder;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -26,13 +22,16 @@ import android.widget.Toast;
 
 public class LobbyActivity extends FragmentActivity {
     private TabHost tabHost;
-    private NetplayService service;
+    private Netplay netconn;
+    private boolean isInForeground;
     
     private final BroadcastReceiver disconnectReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String message = intent.getStringExtra(NetplayService.EXTRA_MESSAGE);
-			Toast.makeText(getApplicationContext(), "Disconnected: "+message, Toast.LENGTH_LONG).show();
+			if(isInForeground && intent.getBooleanExtra(Netplay.EXTRA_HAS_ERROR, true)) {
+				String message = intent.getStringExtra(Netplay.EXTRA_MESSAGE);
+				Toast.makeText(getApplicationContext(), "Disconnected: "+message, Toast.LENGTH_LONG).show();
+			}
 			finish();
 		}
 	};
@@ -40,9 +39,9 @@ public class LobbyActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(disconnectReceiver, new IntentFilter(NetplayService.ACTION_DISCONNECTED));
-		bindService(new Intent(this, NetplayService.class), serviceConnection, 0);
-
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(disconnectReceiver, new IntentFilter(Netplay.ACTION_DISCONNECTED));
+        netconn = Netplay.getAppInstance(getApplicationContext());
+        
         setContentView(R.layout.activity_lobby);
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
         if(tabHost != null) {
@@ -63,7 +62,6 @@ public class LobbyActivity extends FragmentActivity {
     protected void onDestroy() {
     	super.onDestroy();
     	LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(disconnectReceiver);
-    	unbindService(serviceConnection);
     }
     
     private View createIndicatorView(TabHost tabHost, CharSequence label, Drawable icon) {
@@ -84,6 +82,19 @@ public class LobbyActivity extends FragmentActivity {
         return tabIndicator;
     }
 
+    @Override
+    protected void onStart() {
+    	super.onStart();
+    	isInForeground = true;
+    	Netplay.getAppInstance(getApplicationContext()).requestFastTicks();
+    }
+    
+    @Override
+    protected void onStop() {
+    	super.onStop();
+    	isInForeground = false;
+    	Netplay.getAppInstance(getApplicationContext()).unrequestFastTicks();
+    }
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,13 +110,17 @@ public class LobbyActivity extends FragmentActivity {
 			Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.disconnect:
-			if(service != null && service.isConnected()) {
-				service.disconnect();
-			}
+			netconn.disconnect();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		netconn.disconnect();
+		super.onBackPressed();
 	}
     
 	/*@Override
@@ -146,14 +161,4 @@ public class LobbyActivity extends FragmentActivity {
         	icicle.putString("currentTab", tabHost.getCurrentTabTag());
         }
     }
-    
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder binder) {
-        	service = ((NetplayBinder) binder).getService();
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-        	service = null;
-        }
-    };
 }
