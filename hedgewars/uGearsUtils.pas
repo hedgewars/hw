@@ -343,6 +343,18 @@ begin
     Y:= hwRound(Gear^.Y);
     if cWaterLine < Y + Gear^.Radius then
         begin
+        if Gear^.State and gstInvisible <> 0 then
+            begin
+            if Gear^.Kind = gtGenericFaller then
+                begin
+                Gear^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
+                Gear^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+                Gear^.dX:= _90-(GetRandomf*_360);
+                Gear^.dY:= _90-(GetRandomf*_360)
+                end
+            else DeleteGear(Gear);
+            exit
+            end;
         isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
         skipSpeed := _0_25;
         skipAngle := _1_9;
@@ -408,10 +420,9 @@ begin
                 Scale:= hwFloat2Float(Gear^.Density / _3 * Gear^.dY);
                 if Scale > 1 then Scale:= power(Scale,0.3333)
                 else Scale:= Scale + ((1-Scale) / 2);
-                if Scale > 1 then Timer:= round(max(Scale,3))
+                if Scale > 1 then Timer:= round(min(Scale*0.0005/cGravityf,4))
                 else Timer:= 1;
                 // Low Gravity
-                Timer:=round(0.0005/cGravityf);
                 FrameTicks:= FrameTicks*Timer;
                 end;
 

@@ -374,7 +374,7 @@ with Hedgehog do
     with CurWeapon^ do
         begin
         s:= trammo[Ammoz[AmmoType].NameId];
-        if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
+        if (Count <> AMMO_INFINITE) and (not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0))) then
             s:= s + ' (' + IntToStr(Count) + ')';
         if (Propz and ammoprop_Timerable) <> 0 then
             s:= s + ', ' + IntToStr(Timer div 1000) + ' ' + trammo[sidSeconds];
@@ -386,7 +386,7 @@ with Hedgehog do
             end
         else
             begin
-            if Gear <> nil then Gear^.State:= Gear^.State and not gstHHChooseTarget;
+            if Gear <> nil then Gear^.State:= Gear^.State and (not gstHHChooseTarget);
             isCursorVisible:= false
             end;
         end

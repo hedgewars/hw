@@ -147,6 +147,7 @@ const
     cBarrelHealth = 60;
     cShotgunRadius = 22;
     cBlowTorchC    = 6;
+    cakeDmg =   75;
 
     cKeyMaxIndex = 1023;
     cKbdMaxIndex = 65536;//need more room for the modifier keys
@@ -228,20 +229,23 @@ const
     gstHHGone         = $00100000;
     gstInvisible      = $00200000;
 
-    gmLeft   = $00000001;
-    gmRight  = $00000002;
-    gmUp     = $00000004;
-    gmDown   = $00000008;
-    gmSwitch = $00000010;
-    gmAttack = $00000020;
-    gmLJump  = $00000040;
-    gmHJump  = $00000080;
-    gmDestroy= $00000100;
-    gmSlot   = $00000200; // with param
-    gmWeapon = $00000400; // with param
-    gmTimer  = $00000800; // with param
-    gmAnimate= $00001000; // with param
-    gmPrecise= $00002000;
+    gmLeft           = $00000001;
+    gmRight          = $00000002;
+    gmUp             = $00000004;
+    gmDown           = $00000008;
+    gmSwitch         = $00000010;
+    gmAttack         = $00000020;
+    gmLJump          = $00000040;
+    gmHJump          = $00000080;
+    gmDestroy        = $00000100;
+    gmSlot           = $00000200; // with param
+    gmWeapon         = $00000400; // with param
+    gmTimer          = $00000800; // with param
+    gmAnimate        = $00001000; // with param
+    gmPrecise        = $00002000;
+
+    gmRemoveFromList = $00004000;
+    gmAddToList      = $00008000;
     gmAllStoppable = gmLeft or gmRight or gmUp or gmDown or gmAttack or gmPrecise;
 
     cMaxSlotIndex       = 9;
@@ -264,6 +268,7 @@ const
     ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets 
     ammoprop_OscAim       = $00010000;
     ammoprop_NoMoveAfter  = $00020000;
+    ammoprop_Track        = $00040000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;

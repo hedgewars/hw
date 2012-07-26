@@ -31,7 +31,7 @@ procedure FreeActionsList;
 implementation
 uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
     uAmmos, SysUtils{$IFNDEF USE_SDLTHREADS} {$IFDEF UNIX}, cthreads{$ENDIF} {$ENDIF}, uTypes,
-    uVariables, uCommands, uUtils, uDebug;
+    uVariables, uCommands, uUtils, uDebug, uAILandMarks;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
@@ -191,7 +191,14 @@ for i:= 0 to Pred(Targets.Count) do
                             AddAction(BestActions, aia_attack, aim_push, 650 + random(300), 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
                             end;
-                            
+
+                    if (Ammoz[a].Ammo.Propz and ammoprop_Track) <> 0 then
+                        begin
+                        AddAction(BestActions, aia_waitAmmoXY, 0, 12, ap.ExplX, ap.ExplY);
+                        AddAction(BestActions, aia_attack, aim_push, 1, 0, 0);
+                        AddAction(BestActions, aia_attack, aim_release, 7, 0, 0);
+                        end;
+
                     if ap.ExplR > 0 then
                         AddAction(BestActions, aia_AwareExpl, ap.ExplR, 10, ap.ExplX, ap.ExplY);
                     end
@@ -205,7 +212,7 @@ for i:= 0 to Pred(Targets.Count) do
 end;
 
 procedure Walk(Me: PGear; var Actions: TActions);
-const FallPixForBranching = cHHRadius * 2 + 8;
+const FallPixForBranching = cHHRadius;
 var
     ticks, maxticks, steps, tmp: Longword;
     BaseRate, BestRate, Rate: integer;
@@ -268,6 +275,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
 
             if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
                 if Push(ticks, Actions, AltMe, Me^.Message) then
+                    begin
                     with Stack.States[Pred(Stack.Count)] do
                         begin
                         if Me^.dX.isNegative then
@@ -283,11 +291,21 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                         else
                             AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
                         end;
+                    
+                    // check if we could go backwards and maybe ljump over a gap after this hjump
+                    Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message xor 3)
+                    end;
             if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
                 begin
-                // push current position so we proceed from it after checking jump opportunities
+                // at final check where we go after jump walking backward
+                if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
+                    with Stack.States[Pred(Stack.Count)] do
+                        AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
+
+                // push current position so we proceed from it after checking jump+forward walk opportunities
                 if CanGo then Push(ticks, Actions, Me^, Me^.Message);
-                // first check where we go after jump
+                
+                // first check where we go after jump walking forward
                 if Push(ticks, Actions, AltMe, Me^.Message) then
                     with Stack.States[Pred(Stack.Count)] do
                         AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
@@ -310,8 +328,16 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 end
             else if Rate < BestRate then
                 break;
+                
             if ((Me^.State and gstAttacked) = 0) and ((steps mod 4) = 0) then
+                begin
+                if (steps > 4) and checkMark(hwRound(Me^.X), hwRound(Me^.Y), markWasHere) then
+                    break;                    
+                addMark(hwRound(Me^.X), hwRound(Me^.Y), markWasHere);
+                
                 TestAmmos(Actions, Me, true);
+                end;
+                
             if GoInfo.FallPix >= FallPixForBranching then
                 Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
             end {while};
@@ -408,7 +434,7 @@ else
         end
     end;
 
-PGear(Me)^.State:= PGear(Me)^.State and not gstHHThinking;
+PGear(Me)^.State:= PGear(Me)^.State and (not gstHHThinking);
 Think:= 0;
 InterlockedDecrement(hasThread)
 end;
@@ -419,7 +445,9 @@ if ((Me^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0)
 or isInMultiShoot then
     exit;
 
-//DeleteCI(Me); // this might break demo
+//DeleteCI(Me); // this will break demo/netplay
+clearAllMarks;
+
 Me^.State:= Me^.State or gstHHThinking;
 Me^.Message:= 0;
 
@@ -476,12 +504,11 @@ with CurrentHedgehog^ do
                 
             end else
                 begin
-                (*
-                if not scoreShown then
+                {if not scoreShown then
                     begin
                     if BestActions.Score > 0 then ParseCommand('/say Expected score = ' + inttostr(BestActions.Score div 1024), true);
                     scoreShown:= true
-                    end;*)
+                    end;}
                 ProcessAction(BestActions, Gear)
                 end
         else if ((GameTicks - StartTicks) > cMaxAIThinkTime)

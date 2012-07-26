@@ -116,12 +116,12 @@ begin
         
     if lastGearByUID = HH^.Gear then
         lastGearByUID := nil;
-        
-    RemoveGearFromList(HH^.Gear);
+    
+    HH^.Gear^.Message:= HH^.Gear^.Message or gmRemoveFromList;
     with HH^.Gear^ do
         begin
         Z := cHHZ;
-        Active := false;
+        HH^.Gear^.Active:= false;
         State:= State and (not (gstHHDriven or gstAttacking or gstAttacked));
         Message := Message and (not gmAttack);
     end;
@@ -733,7 +733,14 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepGrave(Gear: PGear);
 begin
+    if (Gear^.Message and gmDestroy) <> 0 then
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
+
     AllInactive := false;
+
     if Gear^.dY.isNegative then
         if TestCollisionY(Gear, -1) then
             Gear^.dY := _0;
@@ -2080,6 +2087,7 @@ var
     dX, dY: HWFloat;
     hog: PHedgehog;
     sparkles: PVisualGear;
+    gi: PGear;
 begin
     k := Gear^.Kind;
     exBoom := false;
@@ -2114,6 +2122,23 @@ begin
         end
     else
         begin 
+        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $3FF = 0) then // stir it up every second or so
+            begin
+            gi := GearsList;
+            while gi <> nil do
+                begin
+                if gi^.Kind = gtGenericFaller then
+                    begin
+                    gi^.Active:= true;
+                    gi^.X:=  int2hwFloat(GetRandom(rightX-leftX)+leftX);
+                    gi^.Y:=  int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+                    gi^.dX:= _90-(GetRandomf*_360);
+                    gi^.dY:= _90-(GetRandomf*_360)
+                    end;
+                gi := gi^.NextGear
+                end
+            end;
+
         if Gear^.Timer = 500 then
             begin
 (* Can't make sparkles team coloured without working out what the next team is going to be. This should be solved, really, since it also screws up
@@ -2381,7 +2406,7 @@ begin
                 //DrawExplosion(gX, gY, 4);
                 
                 if ((GameTicks and $7) = 0) and (Random(2) = 0) then
-                    for i:= 1 to Random(2)+1 do
+                    for i:= Random(2) downto 0 do
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
                         
                 if Gear^.Health > 0 then
@@ -2395,7 +2420,7 @@ begin
                     begin
                     DrawExplosion(gX, gY, 4);
 
-                    for i:= 0 to Random(3) do
+                    for i:= Random(3) downto 0 do
                         AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
                     end;
 
@@ -2413,20 +2438,12 @@ begin
         if not sticky then
             begin
             if ((GameTicks and $3) = 0) and (Random(1) = 0) then
-                begin
-                for i:= 1 to Random(2)+1 do
-                    begin
+                for i:= Random(2) downto 0 do
                     AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
-                    end;
-                end;
             end
         else
-            begin
-            for i:= 0 to Random(3) do
-                begin
+            for i:= Random(3) downto 0 do
                 AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSmoke);
-                end;
-            end;
 
         DeleteGear(Gear)
         end;
@@ -2775,10 +2792,9 @@ begin
         Gear^.Message := Gear^.Message and (not gmSwitch);
         State := HHGear^.State;
         HHGear^.State := 0;
-        HHGear^.Active := false;
         HHGear^.Z := cHHZ;
-        RemoveGearFromList(HHGear);
-        InsertGearToList(HHGear);
+        HHGear^.Active := false;
+        HHGear^.Message:= HHGear^.Message or gmRemoveFromList or gmAddToList;
 
         PlaySound(sndSwitchHog);
 
@@ -2794,8 +2810,7 @@ begin
         HHGear^.Active := true;
         FollowGear := HHGear;
         HHGear^.Z := cCurrHHZ;
-        RemoveGearFromList(HHGear);
-        InsertGearToList(HHGear);
+        HHGear^.Message:= HHGear^.Message or gmRemoveFromList or gmAddToList;
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y
         end;
@@ -2940,7 +2955,7 @@ begin
                         end
                 end;
         AfterAttack;
-        DeleteGear(HHGear);
+        HHGear^.Message:= HHGear^.Message or gmDestroy;
         DeleteGear(Gear);
     end
     else
@@ -2984,7 +2999,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 const cakeh =   27;
-    cakeDmg =   75;
 var 
     CakePoints: array[0..Pred(cakeh)] of record
         x, y: hwFloat;
@@ -3068,6 +3082,19 @@ begin
     if Gear^.Tag < 7 then
         exit;
 
+    dec(Gear^.Health);
+    Gear^.Timer := Gear^.Health*10;
+    if Gear^.Health mod 100 = 0 then
+        Gear^.PortalCounter:= 0;
+    // This is not seconds, but at least it is *some* feedback
+    if (Gear^.Health = 0) or ((Gear^.Message and gmAttack) <> 0) then
+        begin
+        FollowGear := Gear;
+        Gear^.RenderTimer := false;
+        Gear^.doStep := @doStepCakeDown;
+        exit
+        end;
+
     cakeStep(Gear);
 
     if Gear^.Tag = 0 then
@@ -3079,18 +3106,6 @@ begin
         CakePoints[CakeI].y := Gear^.Y;
         Gear^.DirAngle := DxDy2Angle(tdx, tdy);
         end;
-
-    dec(Gear^.Health);
-    Gear^.Timer := Gear^.Health*10;
-    if Gear^.Health mod 100 = 0 then
-        Gear^.PortalCounter:= 0;
-    // This is not seconds, but at least it is *some* feedback
-    if (Gear^.Health = 0) or ((Gear^.Message and gmAttack) <> 0) then
-        begin
-        FollowGear := Gear;
-        Gear^.RenderTimer := false;
-        Gear^.doStep := @doStepCakeDown
-        end
 end;
 
 procedure doStepCakeUp(Gear: PGear);
@@ -4296,7 +4311,7 @@ begin
         and (CurAmmoGear^.Kind =gtRope) then
                CurAmmoGear^.PortalCounter:= 1;
 
-        if not isbullet
+        if not isbullet and (iterator^.State and gstInvisible = 0) 
         and (iterator^.Kind <> gtFlake) then
             FollowGear := iterator;
 
@@ -4375,7 +4390,7 @@ begin
         Gear^.State := Gear^.State and (not gstMoving);
         
         if (Land[y, x] and lfBouncy <> 0)
-        or not CalcSlopeTangent(Gear, x, y, tx, ty, 255)
+        or (not CalcSlopeTangent(Gear, x, y, tx, ty, 255))
         or (DistanceI(tx,ty) < _12) then // reject shots at too irregular terrain
             begin
             loadNewPortalBall(Gear, true);
@@ -4655,11 +4670,13 @@ begin
 
                     // add some fire to the tunnel
                     if getRandom(6) = 0 then
-                        AddGear(x - Gear^.Radius + LongInt(getRandom(2 * Gear^.Radius)), y -
-                        getRandom(Gear^.Radius + 1), gtFlame, gsttmpFlag, _0, _0, 0);
+                        begin
+                        tmp:= GetRandom(2 * Gear^.Radius);
+                        AddGear(x - Gear^.Radius + tmp, y - GetRandom(Gear^.Radius + 1), gtFlame, gsttmpFlag, _0, _0, 0)
+                        end
                     end;
 
-                if getRandom(100) = 0 then
+                if random(100) = 0 then
                     AddVisualGear(x, y, vgtSmokeTrace); 
                 end
                 else dec(Gear^.Health, 5); // if underwater get additional damage
@@ -5069,6 +5086,7 @@ begin
         if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
             hh^.Gear^.Damage:= 1;
         RenderHealth(hh^);
+        RecountTeamHealth(hh^.Team);
         inc(graves.ar^[Gear^.Tag]^.Health);
         inc(Gear^.Tag)
 {-for i:= 0 to High(graves) do begin
@@ -5088,12 +5106,13 @@ begin
                 resgear^.Hedgehog := graves.ar^[i]^.Hedgehog;
                 resgear^.Health := graves.ar^[i]^.Health;
                 PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := resgear;
-                DeleteGear(graves.ar^[i]);
+                graves.ar^[i]^.Message:= graves.ar^[i]^.Message or gmDestroy;
+                graves.ar^[i]^.Active:= true;
                 RenderHealth(resgear^.Hedgehog^);
                 RecountTeamHealth(resgear^.Hedgehog^.Team);
                 resgear^.Hedgehog^.Effects[heResurrected]:= 1;
                 // only make hat-less hedgehogs look like zombies, preserve existing hats
-                
+
                 if resgear^.Hedgehog^.Hat = 'NoHat' then
                     LoadHedgehogHat(resgear, 'Reserved/Zombie');
                 end;
@@ -5531,4 +5550,42 @@ begin
                 end
         end
     end;
+end;
+
+procedure doStepAddAmmo(Gear: PGear);
+var a: TAmmoType;
+    gi: PGear;
+begin
+if Gear^.Timer > 0 then dec(Gear^.Timer)
+else
+    begin
+    if Gear^.Pos = posCaseUtility then
+        a:= GetUtility(Gear^.Hedgehog)
+    else
+        a:= GetAmmo(Gear^.Hedgehog);
+    CheckSum:= CheckSum xor GameTicks;
+    gi := GearsList;
+    while gi <> nil do
+        begin
+        with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
+        AddRandomness(CheckSum);
+        gi := gi^.NextGear
+        end;
+    AddPickup(Gear^.Hedgehog^, a, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));
+    DeleteGear(Gear)
+    end;
+end;
+
+procedure doStepGenericFaller(Gear: PGear);
+begin
+if Gear^.Timer < $FFFFFFFF then
+    if Gear^.Timer > 0 then
+        dec(Gear^.Timer)
+    else
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
+    
+doStepFallingGear(Gear);
 end;

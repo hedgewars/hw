@@ -32,8 +32,6 @@ program hwengine;
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
      SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
-     {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
-     {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF};
 
 {$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
@@ -461,6 +459,7 @@ begin
         uAI.initModule;
         //uAIActions does not need initialization
         //uAIAmmoTests does not need initialization
+        uAILandMarks.initModule;
         uAIMisc.initModule;
         uAmmos.initModule;
         uChat.initModule;
@@ -492,6 +491,7 @@ begin
     begin
         WriteLnToConsole('Freeing resources...');
         uAI.freeModule;
+        uAILandMarks.freeModule;
         uAIMisc.freeModule;         //stub
         uCaptions.freeModule;
         uWorld.freeModule;
