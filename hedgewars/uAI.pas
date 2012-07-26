@@ -274,7 +274,8 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 break;
 
             if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
-                if Push(ticks, Actions, AltMe, Me^.Message) then
+                // check if we could go backwards and maybe ljump over a gap after this hjump
+                if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
                     begin
                     with Stack.States[Pred(Stack.Count)] do
                         begin
@@ -291,9 +292,8 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                         else
                             AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
                         end;
-                    
-                    // check if we could go backwards and maybe ljump over a gap after this hjump
-                    Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message xor 3)
+                    // but first check walking forward
+                    Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message)
                     end;
             if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
                 begin
