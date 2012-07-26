@@ -69,11 +69,13 @@ var
     isPaused        : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
+    SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
     fastScrolling   : boolean;
     autoCameraOn    : boolean;
 
+    CheckSum        : LongWord;
     GameTicks       : LongWord;
     GameState       : TGameState;
     GameType        : TGameType;
@@ -108,6 +110,7 @@ var
 
     cWaterLine       : Word;
     cGearScrEdgesDist: LongInt;
+	isAudioMuted     : boolean;
 
     // originally typed consts
     ExplosionBorderColor: LongWord;
@@ -1453,7 +1456,8 @@ var
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or 
                           ammoprop_NoCrosshair or 
-                          ammoprop_DontHold;
+                          ammoprop_DontHold or
+                          ammoprop_Track;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2378,6 +2382,8 @@ const
 (*        gtLandGun *) , amLandGun
 (*         gtTardis *) , amTardis
 (*         gtIceGun *) , amIceGun
+(*        gtAddAmmo *) , amNothing
+(*  gtGenericFaller *) , amNothing
     );
 
 var
@@ -2544,6 +2550,7 @@ begin
     CursorMovementX     := 0;
     CursorMovementY     := 0;
     GameTicks           := 0;
+    CheckSum            := 0;
     cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;
 
@@ -2592,6 +2599,7 @@ begin
     isPaused        := false;
     isInMultiShoot  := false;
     isSpeed         := false;
+    SpeedStart      := 0;
     fastUntilLag    := false;
     fastScrolling   := false;
     autoCameraOn    := true;

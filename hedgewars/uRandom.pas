@@ -35,15 +35,23 @@ procedure freeModule;
 
 procedure SetRandomSeed(Seed: shortstring); // Sets the seed that should be used for generating pseudo-random values.
 function  GetRandomf: hwFloat; overload; // Returns a pseudo-random hwFloat.
-function  GetRandom(m: LongWord): LongWord; overload; // Returns a positive pseudo-random integer smaller than m.
+function  GetRandom(m: LongWord): LongWord; overload; inline; // Returns a positive pseudo-random integer smaller than m.
+procedure AddRandomness(r: LongWord); inline;
 function  rndSign(num: hwFloat): hwFloat; // Returns num with a random chance of having a inverted sign.
+
 
 implementation
 
 var cirbuf: array[0..63] of Longword;
     n: byte;
 
-function GetNext: Longword;
+procedure AddRandomness(r: LongWord); inline;
+begin
+n:= (n + 1) and $3F;
+cirbuf[n]:= cirbuf[n] xor r
+end;
+
+function GetNext: Longword; inline;
 begin
 n:= (n + 1) and $3F;
 cirbuf[n]:=
@@ -79,7 +87,7 @@ GetRandomf.isNegative:= false;
 GetRandomf.QWordValue:= GetNext
 end;
 
-function GetRandom(m: LongWord): LongWord;
+function GetRandom(m: LongWord): LongWord; inline;
 begin
 GetNext;
 GetRandom:= GetNext mod m

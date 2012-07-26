@@ -27,11 +27,13 @@ procedure DeleteGear(Gear: PGear);
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 
+var curHandledGear: PGear;
+
 implementation
 
 uses uRandom, uUtils, uConsts, uVariables, uAmmos, uTeams, uStats,
     uTextures, uScript, uRenderUtils, uAI, uCollisions,
-    uGearsRender, uGearsUtils;
+    uGearsRender, uGearsUtils, uDebug;
 
 var GCounter: LongWord = 0; // this does not get re-initialized, but should be harmless
 
@@ -63,8 +65,11 @@ begin
         end;
 end;
 
+
 procedure RemoveGearFromList(Gear: PGear);
 begin
+TryDo((curHandledGear = nil) or (Gear = curHandledGear), 'You''re doing it wrong', true);
+
 if Gear^.NextGear <> nil then
     Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
 if Gear^.PrevGear <> nil then
@@ -72,7 +77,8 @@ if Gear^.PrevGear <> nil then
 else
     GearsList:= Gear^.NextGear
 end;
-    
+
+
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 var gear: PGear;
 begin
@@ -92,16 +98,13 @@ gear^.dY:= dY;
 gear^.doStep:= doStepHandlers[Kind];
 gear^.CollisionIndex:= -1;
 gear^.Timer:= Timer;
-gear^.FlightTime:= 0;
 gear^.uid:= GCounter;
 gear^.SoundChannel:= -1;
 gear^.ImpactSound:= sndNone;
-gear^.nImpactSounds:= 0;
 gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= $FFFF;
-gear^.Power:= 0;
 
 if CurrentHedgehog <> nil then gear^.Hedgehog:= CurrentHedgehog;
 
@@ -460,6 +463,13 @@ gtFlamethrower: begin
                 gear^.Pos:= 1;
                 end;
       gtIceGun: gear^.Health:= 1000;
+gtGenericFaller:begin
+                gear^.AdvBounce:= 1;
+                gear^.Radius:= 1;
+                gear^.Elasticity:= _0_9;
+                gear^.Friction:= _0_995;
+                gear^.Density:= _1;
+                end;
     end;
 
 InsertGearToList(gear);
@@ -557,8 +567,10 @@ else if Gear^.Kind = gtHedgehog then
                 end
         end;
 with Gear^ do
+    begin
     AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
-
+    AddRandomness(X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac)
+    end;
 if CurAmmoGear = Gear then
     CurAmmoGear:= nil;
 if FollowGear = Gear then

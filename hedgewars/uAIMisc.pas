@@ -170,7 +170,7 @@ while Gear <> nil do
     begin
         case Gear^.Kind of
             gtCase:
-            AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
             gtFlame:
                 if (Gear^.State and gsttmpFlag) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
@@ -371,13 +371,13 @@ v:= random($FFFFFFFF);
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
-(*
-        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
+
+{        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
             begin
             LandPixels[trunc(y), trunc(x)]:= v;
             UpdateLandTexture(trunc(X), 1, trunc(Y), 1, true);
-            end;
-*)
+            end;}
+
 
         // consider adding dX/dY calc here for fall damage
         if TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
@@ -439,21 +439,21 @@ for i:= 0 to Targets.Count do
                 end;
             if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
                 if Score > 0 then
-                    inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
+                    inc(rate, (KillScore + Score div 10) * 1024)   // Add a bit of a bonus for bigger hog drownings
                 else
-                    dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
+                    dec(rate, (KillScore * friendlyfactor div 100 - Score div 10) * 1024) // and more of a punishment for drowning bigger friendly hogs
             else if (dmg+fallDmg) >= abs(Score) then
                 if Score > 0 then
-                    inc(rate, KillScore)
+                    inc(rate, KillScore * 1024 + (dmg + fallDmg)) // tiny bonus for dealing more damage than needed to kill
                 else
-                    dec(rate, KillScore * friendlyfactor div 100)
+                    dec(rate, KillScore * friendlyfactor div 100 * 1024)
             else
                 if Score > 0 then
-                    inc(rate, dmg+fallDmg)
-                else dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
+                    inc(rate, (dmg + fallDmg) * 1024)
+                else dec(rate, (dmg + fallDmg) * friendlyfactor div 100 * 1024)
             end;
         end;
-RateExplosion:= rate * 1024;
+RateExplosion:= rate;
 end;
 
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
@@ -624,6 +624,12 @@ case JumpType of
 end;
 
 repeat
+        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= Gear^.Hedgehog^.Team^.Clan^.Color;
+            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
+            end;}
+            
     if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then
         exit(false);
     if (Gear^.State and gstMoving) <> 0 then
@@ -645,7 +651,7 @@ repeat
         Gear^.Y:= Gear^.Y + Gear^.dY;
         if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
-            Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
+            Gear^.State:= Gear^.State and (not (gstMoving or gstHHJumping));
             Gear^.dY:= _0;
             case JumpType of
                 jmpHJump:
@@ -673,6 +679,7 @@ function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 var pX, pY, tY: LongInt;
 begin
 HHGo:= false;
+Gear^.CollisionMask:= $FF7F;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;
@@ -680,6 +687,12 @@ GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
 tY:= hwRound(Gear^.Y);
 repeat
+        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= random($FFFFFFFF);//Gear^.Hedgehog^.Team^.Clan^.Color;
+            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
+            end;}
+
     pX:= hwRound(Gear^.X);
     pY:= hwRound(Gear^.Y);
     if pY + cHHRadius >= cWaterLine then
@@ -696,7 +709,7 @@ repeat
         Gear^.dY:= Gear^.dY + cGravity;
         if Gear^.dY > _0_4 then
             begin
-            Goinfo.FallPix:= 0;
+            GoInfo.FallPix:= 0;
             // try ljump instead of fall with damage
             HHJump(AltGear, jmpLJump, GoInfo); 
             if AltGear^.Hedgehog^.BotLevel < 4 then
@@ -709,7 +722,7 @@ repeat
         if TestCollisionYwithGear(Gear, 1) <> 0 then
             begin
             inc(GoInfo.Ticks, 410);
-            Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
+            Gear^.State:= Gear^.State and (not (gstMoving or gstHHJumping));
             Gear^.dY:= _0;
             // try ljump instead of fall
             HHJump(AltGear, jmpLJump, GoInfo);

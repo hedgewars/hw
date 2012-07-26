@@ -28,6 +28,7 @@ procedure HedgehogStep(Gear: PGear);
 procedure doStepHedgehogMoving(Gear: PGear); 
 procedure HedgehogChAngle(HHGear: PGear); 
 procedure PickUp(HH, Gear: PGear);
+procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
 
 implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions, 
@@ -565,15 +566,41 @@ else // Gear^.Timer = 0
     end
 end;
 
+procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
+var s: shortstring;
+    vga: PVisualGear;
+begin
+    PlaySound(sndShotgunReload);
+    if cnt <> 0 then AddAmmo(HH, ammo, cnt)
+    else AddAmmo(HH, ammo);
+
+    if (not (HH.Team^.ExtDriven 
+    or (HH.BotLevel > 0)))
+    or (HH.Team^.Clan^.ClanIndex = LocalClan)
+    or (GameType = gmtDemo)  then
+        begin
+        if cnt <> 0 then
+            s:= trammo[Ammoz[ammo].NameId] + ' (+' + IntToStr(cnt) + ')'
+        else
+            s:= trammo[Ammoz[ammo].NameId] + ' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')';
+        AddCaption(s, HH.Team^.Clan^.Color, capgrpAmmoinfo);
+
+        // show ammo icon
+        vga:= AddVisualGear(X, Y, vgtAmmo);
+        if vga <> nil then
+            vga^.Frame:= Longword(ammo);
+        end;
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure PickUp(HH, Gear: PGear);
 var s: shortstring;
     a: TAmmoType;
     i: LongInt;
     vga: PVisualGear;
+    ag, gi: PGear;
 begin
 Gear^.Message:= gmDestroy;
-PlaySound(sndShotgunReload);
 if (Gear^.Pos and posCaseExplode) <> 0 then
     if (Gear^.Pos and posCasePoison) <> 0 then
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, HH^.Hedgehog, EXPLAutoSound + EXPLPoisoned)
@@ -585,39 +612,36 @@ else
 case Gear^.Pos of
        posCaseUtility,
        posCaseAmmo: begin
-                    if Gear^.AmmoType <> amNothing then a:= Gear^.AmmoType 
+                    if Gear^.AmmoType <> amNothing then 
+                        begin
+                        AddPickup(HH^.Hedgehog^, Gear^.AmmoType, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));
+                        end
                     else
+                    or (GameType = gmtDemo)  then
                         begin
-                        for i:= 0 to GameTicks and $7F do
-                            GetRandom(2); // Burn some random numbers
-                        if Gear^.Pos = posCaseUtility then
-                            a:= GetUtility(HH^.Hedgehog)
-                        else
-                            a:= GetAmmo(HH^.Hedgehog)
+// Add spawning here...
+                        AddRandomness(GameTicks);
+                        
+                        gi := GearsList;
+                        while gi <> nil do
+                            begin
+                            if gi^.Kind = gtGenericFaller then
+                                begin
+                                gi^.Active:= true;
+                                gi^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
+                                gi^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+                                gi^.dX:= _90-(GetRandomf*_360);
+                                gi^.dY:= _90-(GetRandomf*_360)
+                                end;
+                            gi := gi^.NextGear
+                            end;
+                        ag:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAddAmmo, gstInvisible, _0, _0, GetRandom(200)+100);
+                        ag^.Pos:= Gear^.Pos;
+                        ag^.Power:= Gear^.Power
                         end;
-                    if Gear^.Power <> 0 then AddAmmo(HH^.Hedgehog^, a, Gear^.Power)
-                    else AddAmmo(HH^.Hedgehog^, a);
-// Possibly needs to check shared clan ammo game flag once added.
-// On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
-                    if (not (HH^.Hedgehog^.Team^.ExtDriven 
-                    or (HH^.Hedgehog^.BotLevel > 0)))
-                    or (HH^.Hedgehog^.Team^.Clan^.ClanIndex = LocalClan)
-                    or (GameType in [gmtDemo, gmtRecord])  then
-                        begin
-                        if Gear^.Power <> 0 then
-                            s:= trammo[Ammoz[a].NameId] + ' (+' + IntToStr(Gear^.Power) + ')'
-                        else
-                            s:= trammo[Ammoz[a].NameId] + ' (+' + IntToStr(Ammoz[a].NumberInCase) + ')';
-                        AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
-
-                        // show ammo icon
-                        vga:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtAmmo);
-                        if vga <> nil then
-                            vga^.Frame:= Longword(a);
-                        end;
-
                     end;
      posCaseHealth: begin
+                    PlaySound(sndShotgunReload);
                     inc(HH^.Health, Gear^.Health);
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
                     str(Gear^.Health, s);
@@ -830,7 +854,7 @@ if Gear^.Hedgehog^.Unplaced then
     Gear^.State:= Gear^.State and (not gstMoving);
     exit
     end;
-isFalling:= (Gear^.dY.isNegative) or not TestCollisionYKick(Gear, 1);
+isFalling:= (Gear^.dY.isNegative) or (not TestCollisionYKick(Gear, 1));
 if isFalling then
     begin
     if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then
@@ -960,7 +984,7 @@ if (not isFalling)
     begin
     Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
-    while (TestCollisionYWithGear(Gear,1) = 0) and not CheckGearDrowning(Gear) do
+    while (TestCollisionYWithGear(Gear,1) = 0) and (not CheckGearDrowning(Gear)) do
         Gear^.Y:= Gear^.Y+_1;
     SetLittle(Gear^.dX);
     Gear^.dY:= _0
@@ -1224,6 +1248,7 @@ var x,y,tx,ty: LongInt;
     land: Word; *)
 var slope: hwFloat; 
 begin
+CheckSum:= CheckSum xor Gear^.Hedgehog^.BotLevel;
 if (Gear^.Message and gmDestroy) <> 0 then
     begin
     DeleteGear(Gear);

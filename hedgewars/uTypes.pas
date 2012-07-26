@@ -102,7 +102,7 @@ type
             gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 44
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
-            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis, gtIceGun); // 62
+            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis, gtIceGun, gtAddAmmo, gtGenericFaller); // 62
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -340,6 +340,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             HatTex: PTexture;
             Ammo: PHHAmmo;
             CurAmmoType: TAmmoType;
+            PickUpType: LongWord;
+            PickUpDelay: LongInt;
             AmmoStore: Longword;
             Team: PTeam;
             MultiShootAttacks: Longword;
@@ -404,24 +406,27 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane,
             sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack,
-            sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower,
-            sidSMine, sidHammer, sidResurrector, sidDrillStrike, sidSnowball, sidNothing, sidTardis, 
-	    sidStructure, sidLandGun, sidIceGun);
+            sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb,
+            sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
+            sidDrillStrike, sidSnowball, sidNothing, sidTardis,
+            sidStructure, sidLandGun, sidIceGun);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady, 
-            sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce);
+            sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
+            sidMute);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
-            eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
-            eidHomerun, eidGone);
+            eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped,
+            eidHurtSelf, eidHomerun, eidGone);
 
     TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
             gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
-            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
-            gidDamageModifier, gidResetHealth, gidAISurvival, gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
+            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, 
+            gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival, 
+            gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
 
     TLandArray = packed array of array of LongWord;
     TCollisionArray = packed array of array of Word;

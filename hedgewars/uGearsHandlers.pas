@@ -29,16 +29,18 @@ implementation
 
 uses SDLh, uFloat, uCollisions;
 
+
+
 const dirs: array[0..3] of TPoint =   ((X: 0; Y: -1), (X: 1; Y: 0),(X: 0; Y: 1),(X: -1; Y: 0));
 
 procedure PrevAngle(Gear: PGear; dA: LongInt); inline;
 begin
-    Gear^.Angle := (LongInt(Gear^.Angle) + 4 - dA) mod 4
+    Gear^.Angle := (Gear^.Angle - dA) and 3
 end;
 
 procedure NextAngle(Gear: PGear; dA: LongInt); inline;
 begin
-    Gear^.Angle := (LongInt(Gear^.Angle) + 4 + dA) mod 4
+    Gear^.Angle := (Gear^.Angle + dA) and 3
 end;
 
 procedure cakeStep(Gear: PGear);
@@ -50,8 +52,8 @@ begin
     dA := hwSign(Gear^.dX);
     xx := dirs[Gear^.Angle].x;
     yy := dirs[Gear^.Angle].y;
-    xxn := dirs[(LongInt(Gear^.Angle) + 4 + dA) mod 4].x;
-    yyn := dirs[(LongInt(Gear^.Angle) + 4 + dA) mod 4].y;
+    xxn := dirs[(Gear^.Angle + dA) and 3].x;
+    yyn := dirs[(Gear^.Angle + dA) and 3].y;
 
     if (xx = 0) then
         if TestCollisionYwithGear(Gear, yy) <> 0 then

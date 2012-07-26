@@ -182,7 +182,7 @@ begin
 end;
 
 procedure ProcessGears;
-var Gear, t: PGear;
+var t: PGear;
     i, AliveCount: LongInt;
     s: shortstring;
 begin
@@ -203,21 +203,29 @@ if StepSoundTimer > 0 then
 t:= GearsList;
 while t <> nil do
     begin
-    Gear:= t;
-    t:= Gear^.NextGear;
+    curHandledGear:= t;
+    t:= curHandledGear^.NextGear;
 
-    if Gear^.Active then
+    if curHandledGear^.Message and gmRemoveFromList <> 0 then 
         begin
-        if Gear^.RenderTimer and (Gear^.Timer > 500) and ((Gear^.Timer mod 1000) = 0) then
+        RemoveGearFromList(curHandledGear);
+        // since I can't think of any good reason this would ever be separate from a remove from list, going to keep it inside this block
+        if curHandledGear^.Message and gmAddToList <> 0 then InsertGearToList(curHandledGear);
+        curHandledGear^.Message:= curHandledGear^.Message and (not (gmRemoveFromList or gmAddToList))
+        end;
+    if curHandledGear^.Active then
+        begin
+        if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then
             begin
-            FreeTexture(Gear^.Tex);
-            Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), cWhiteColor, fntSmall);
+            FreeTexture(curHandledGear^.Tex);
+            curHandledGear^.Tex:= RenderStringTex(inttostr(curHandledGear^.Timer div 1000), cWhiteColor, fntSmall);
             end;
-        Gear^.doStep(Gear);
+        curHandledGear^.doStep(curHandledGear);
         // might be useful later
         //ScriptCall('onGearStep', Gear^.uid);
         end
     end;
+curHandledGear:= nil;
 
 if AllInactive then
 case step of
@@ -453,7 +461,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
     if (not CurrentTeam^.ExtDriven) or CurrentTeam^.hasGone then
         inc(hiTicks) // we do not recieve a message for this
     end;
-
+AddRandomness(CheckSum);
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 inc(GameTicks)
@@ -580,7 +588,8 @@ begin
 end;
 
 procedure AddMiscGears;
-var i: Longword;
+var i,rx, ry: Longword;
+    rdx, rdy: hwFloat;
     Gear: PGear;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
@@ -625,6 +634,13 @@ if (GameFlags and gfLaserSight) <> 0 then
 
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
+for i:= GetRandom(10)+30 downto 0 do
+    begin                                                                                                                                       rx:= GetRandom(rightX-leftX)+leftX;
+    ry:= GetRandom(LAND_HEIGHT-topY)+topY;
+    rdx:= _90-(GetRandomf*_360);
+    rdy:= _90-(GetRandomf*_360);
+    AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
+    end;
 
 if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
     for i:= 0 to Pred(vobCount*2) do
@@ -1313,7 +1329,9 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepStructure,
             @doStepLandGun,
             @doStepTardis,
-            @doStepIceGun);
+            @doStepIceGun,
+            @doStepAddAmmo,
+            @doStepGenericFaller);
 begin
     doStepHandlers:= handlers;
 
@@ -1322,6 +1340,8 @@ begin
 
     CurAmmoGear:= nil;
     GearsList:= nil;
+    curHandledGear:= nil;
+
     KilledHHs:= 0;
     SuddenDeath:= false;
     SuddenDeathDmg:= false;

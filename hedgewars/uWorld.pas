@@ -1333,7 +1333,7 @@ for t:= 0 to Pred(TeamsCount) do
         r.w:= 3;
         DrawTextureFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
-        if not highlight and not hasGone and (TeamHealth > 1) then
+        if not highlight and (not hasGone) and (TeamHealth > 1) then
             for i:= 0 to cMaxHHIndex do
                 if Hedgehogs[i].Gear <> nil then
                     begin
@@ -1530,14 +1530,16 @@ if (RM = rmDefault) or (RM = rmRightEye) then
 end;
 
 if SoundTimerTicks >= 50 then
-   begin
-   SoundTimerTicks:= 0;
-   if cVolumeDelta <> 0 then
-      begin
-      str(ChangeVolume(cVolumeDelta), s);
-      AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
-      end
-   end;
+begin
+    SoundTimerTicks:= 0;
+    if cVolumeDelta <> 0 then
+    begin
+        str(ChangeVolume(cVolumeDelta), s);
+        AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume);
+    end;
+    if isAudioMuted then
+        AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
+end;
 
 if GameState = gsConfirm then
     DrawTextureCentered(0, (cScreenHeight shr 1), ConfirmTexture);
