@@ -1,6 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item
-        android:id="@+id/roomlist_refresh"
-        android:title="@string/lobby_roomlistmenu_refresh"
-        android:showAsAction="ifRoom" />
-</menu>

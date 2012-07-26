@@ -28,8 +28,13 @@
     <string name="download_downloadnow">Download now!</string>
     <string name="download_queued">This download has been queued</string>
 
+    <!-- main activity -->
+    <string name="main_button_localplay">Local Game</string>
+    <string name="main_button_netplay">Network Game</string>
+    <string name="main_menu_downloader">Downloader</string>
+    <string name="main_menu_preferences">Preferences</string>
+    
     <!-- start game -->
-
     <string name="start_gameplay">Style</string>
     <string name="start_gamescheme">Game scheme</string>
     <string name="start_weapons">Weapons</string>
@@ -97,6 +102,9 @@
     <string name="lobby_roomlistmenu_create">Create room</string>
     <string name="lobby_roomlistmenu_refresh">Refresh</string>
     <string name="lobby_menu_disconnect">Disconnect</string>
+    <string name="lobby_tab_rooms">Rooms</string>
+    <string name="lobby_tab_chat">Chat</string>
+    <string name="lobby_tab_players">Users</string>
     
     <string name="not_implemented_yet">Sorry, not implemented yet. :(</string>
     
@@ -113,5 +121,5 @@
     <string name="dialog_password_title">Password required</string>
     <string name="dialog_password_message">The server has requested a password to connect as "%1$s".</string>
     <string name="dialog_password_hint">Password</string>
-    
+    <string name="dialog_password_remember">remember password</string>
 </resources>
