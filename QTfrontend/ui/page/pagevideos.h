@@ -20,9 +20,9 @@
 #ifndef PAGE_VIDEOS_H
 #define PAGE_VIDEOS_H
 
-#include <QPixmap>
 #include "AbstractPage.h"
 
+class QNetworkAccessManager;
 class GameUIConfig;
 class HWRecorder;
 class VideoItem;
@@ -40,7 +40,6 @@ class PageVideos : public AbstractPage
         QLineEdit *heightEdit;
         QCheckBox *checkUseGameRes;
         QCheckBox *checkRecordAudio;
-
 
         QString format()
         { return comboAVFormats->itemData(comboAVFormats->currentIndex()).toString(); }
@@ -76,8 +75,10 @@ class PageVideos : public AbstractPage
         void updateDescription();
         void clearTemp();
         void clearThumbnail();
+        void setProgress(int row, VideoItem* item, float value);
 
         GameUIConfig * config;
+        QNetworkAccessManager* netManager;
 
         // options group
         QComboBox *comboAVFormats;
@@ -90,7 +91,7 @@ class PageVideos : public AbstractPage
         QPushButton *btnOpenDir;
 
         // description group
-        QPushButton *btnPlay, *btnDelete;
+        QPushButton *btnPlay, *btnDelete, *btnToYouTube;
         QLabel *labelDesc;
         QLabel *labelThumbnail;
 
@@ -98,7 +99,7 @@ class PageVideos : public AbstractPage
         // (in signal cellChanged)
         bool nameChangedFromCode;
 
-        int numRecorders;
+        int numRecorders, numUploads;
 
     private slots:
         void changeAVFormat(int index);
@@ -114,6 +115,9 @@ class PageVideos : public AbstractPage
         void deleteSelectedFiles();
         void openVideosDirectory();
         void updateFileList(const QString & path);
+        void uploadToYouTube();
+        void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
+        void uploadFinished();
 };
 
 #endif // PAGE_VIDEOS_H

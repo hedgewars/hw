@@ -108,7 +108,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/util/libav_iteraction.h \
     ../QTfrontend/ui/page/pagevideos.h \
     ../QTfrontend/net/recorder.h \
-    ../QTfrontend/ui/dialog/ask_quit.h
+    ../QTfrontend/ui/dialog/ask_quit.h \
+    ../QTfrontend/ui/dialog/upload_video.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
@@ -194,7 +195,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/util/libav_iteraction.cpp \
     ../QTfrontend/ui/page/pagevideos.cpp \
     ../QTfrontend/net/recorder.cpp \
-    ../QTfrontend/ui/dialog/ask_quit.cpp
+    ../QTfrontend/ui/dialog/ask_quit.cpp \
+    ../QTfrontend/ui/dialog/upload_video.cpp
 
 win32 {
     SOURCES += ../QTfrontend/xfire.cpp

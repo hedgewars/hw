@@ -48,7 +48,7 @@ if GameType <> gmtRecord then
 
     if (GameType = gmtDemo) then 
         if isSpeed then
-        Lag:= Lag * 10
+        begin
             i:= RealTicks-SpeedStart;
             if i < 2000 then Lag:= Lag*5
             else if i < 4000 then Lag:= Lag*10
