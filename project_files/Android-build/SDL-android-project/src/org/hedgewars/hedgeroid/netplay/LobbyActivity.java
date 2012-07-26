@@ -48,9 +48,9 @@ public class LobbyActivity extends FragmentActivity {
 	        tabHost.setup();
 	        tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
 
-	        tabHost.addTab(tabHost.newTabSpec("rooms").setIndicator(createIndicatorView(tabHost, "Rooms", null)).setContent(R.id.roomListFragment));
-	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(createIndicatorView(tabHost, "Chat", null)).setContent(R.id.chatFragment));
-	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(createIndicatorView(tabHost, "Players", null)).setContent(R.id.playerListFragment));
+	        tabHost.addTab(tabHost.newTabSpec("rooms").setIndicator(createIndicatorView(tabHost, R.string.lobby_tab_rooms, getResources().getDrawable(R.drawable.roomlist_ingame))).setContent(R.id.roomListFragment));
+	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(createIndicatorView(tabHost, R.string.lobby_tab_chat, getResources().getDrawable(R.drawable.edit))).setContent(R.id.chatFragment));
+	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(createIndicatorView(tabHost, R.string.lobby_tab_players, getResources().getDrawable(R.drawable.human))).setContent(R.id.playerListFragment));
 	
 	        if (icicle != null) {
 	            tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
@@ -64,7 +64,7 @@ public class LobbyActivity extends FragmentActivity {
     	LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(disconnectReceiver);
     }
     
-    private View createIndicatorView(TabHost tabHost, CharSequence label, Drawable icon) {
+    private View createIndicatorView(TabHost tabHost, int label, Drawable icon) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View tabIndicator = inflater.inflate(R.layout.tab_indicator,
@@ -122,37 +122,6 @@ public class LobbyActivity extends FragmentActivity {
 		netconn.disconnect();
 		super.onBackPressed();
 	}
-    
-	/*@Override
-	protected void onCreate(Bundle arg0) {
-		super.onCreate(arg0);
-		setContentView(R.layout.activity_lobby);
-		ViewPager pager = (ViewPager)findViewById(R.id.pager);
-		if(pager != null) {
-			pager.setAdapter(new Adapter(getSupportFragmentManager()));
-		}
-	}
-	
-	private static class Adapter extends FragmentPagerAdapter {
-		public Adapter(FragmentManager mgr) {
-			super(mgr);
-		}
-		
-		@Override
-		public int getCount() {
-			return 3;
-		}
-		
-		@Override
-		public Fragment getItem(int arg0) {
-			switch(arg0) {
-			case 0: return new RoomlistFragment();
-			case 1: return new LobbyChatFragment();
-			case 2: return new PlayerlistFragment();
-			default: throw new IndexOutOfBoundsException();
-			}
-		}
-	}*/
 	
     @Override
     protected void onSaveInstanceState(Bundle icicle) {

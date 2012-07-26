@@ -95,7 +95,7 @@ public class MessageLog {
 	
 	void appendChat(String playerName, String msg) {
 		if(msg.startsWith("/me ")) {
-			append(withColor("*"+playerName+" "+msg, MECHAT_COLOR));
+			append(withColor("*"+playerName+" "+msg.substring(4), MECHAT_COLOR));
 		} else {
 			Spanned name = bold(playerName+": ");
 			Spanned fullMessage = withColor(TextUtils.concat(name, msg), CHAT_COLOR);

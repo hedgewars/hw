@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,7 +34,6 @@ public class RoomlistFragment extends ListFragment implements OnItemClickListene
 		adapter = new RoomListAdapter(getActivity());
 		adapter.setList(netconn.roomList);
 		setListAdapter(adapter);
-		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -68,23 +64,6 @@ public class RoomlistFragment extends ListFragment implements OnItemClickListene
 	public void onDestroy() {
 		super.onDestroy();
 		adapter.invalidate();
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.lobby_roomlist_options, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()) {
-		case R.id.roomlist_refresh:
-			netconn.sendRoomlistRequest();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
 	}
 	
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

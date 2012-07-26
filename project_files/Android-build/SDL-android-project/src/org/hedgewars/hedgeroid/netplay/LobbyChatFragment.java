@@ -58,16 +58,12 @@ public class LobbyChatFragment extends Fragment {
 
 	private final class ChatSendListener implements OnEditorActionListener {
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-			boolean handled = false;
-			if(actionId == EditorInfo.IME_ACTION_SEND) {
-				String text = v.getText().toString();
-				if(text.length()>0) {
-					v.setText("");
-					netconn.sendChat(text);
-					handled = true;
-				}
+			String text = v.getText().toString();
+			if(text.length()>0) {
+				v.setText("");
+				netconn.sendChat(text);
 			}
-			return handled;
+			return true;
 		}
 	}
 }
