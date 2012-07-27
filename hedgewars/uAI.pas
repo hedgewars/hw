@@ -178,9 +178,12 @@ for i:= 0 to Pred(Targets.Count) do
                         begin
                         AddAction(BestActions, aia_attack, aim_push, 350 + random(200), 0, 0);
                         AddAction(BestActions, aia_attack, aim_release, 1, 0, 0);
-                                                
-                        AddAction(BestActions, aia_Down, aim_push, 100 + random(150), 0, 0);
-                        AddAction(BestActions, aia_Down, aim_release, 32, 0, 0);
+                         
+                        if ap.Angle > 32 then
+                           begin
+                           AddAction(BestActions, aia_Down, aim_push, 100 + random(150), 0, 0);
+                           AddAction(BestActions, aia_Down, aim_release, 32, 0, 0);
+                           end;
                         
                         AddAction(BestActions, aia_waitAngle, ap.Angle, 250, 0, 0);
                         AddAction(BestActions, aia_attack, aim_push, 1, 0, 0);
