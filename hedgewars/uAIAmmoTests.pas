@@ -361,12 +361,12 @@ var Vx, Vy, r: real;
     t: LongInt;
 begin
 valueResult:= BadTurn;
-TestTime:= 0;
+TestTime:= 500;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
 repeat
-    inc(TestTime, 1000);
+    inc(TestTime, 900);
     // Try to overshoot slightly, seems to pay slightly better dividends in terms of hitting cluster
     if meX<Targ.X then
         Vx:= ((Targ.X+10) - meX) / (TestTime + tDelta)
@@ -398,14 +398,14 @@ repeat
         begin
         ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
-        ap.Time:= TestTime;
+        ap.Time:= TestTime div 1000 * 1000;
         ap.ExplR:= 90;
         ap.ExplX:= EX;
         ap.ExplY:= EY;
         valueResult:= Score
         end;
      end
-until (TestTime = 4000);
+until (TestTime = 4100);
 TestClusterBomb:= valueResult
 end;
 
@@ -418,12 +418,12 @@ var Vx, Vy, r: real;
     t: LongInt;
 begin
 valueResult:= BadTurn;
-TestTime:= 0;
+TestTime:= 500;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
 repeat
-    inc(TestTime, 1000);
+    inc(TestTime, 900);
     Vx:= (Targ.X - meX) / (TestTime + tDelta);
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
@@ -452,14 +452,14 @@ repeat
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
             ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
-            ap.Time:= TestTime;
+            ap.Time:= TestTime div 1000 * 1000;
             ap.ExplR:= 300;
             ap.ExplX:= EX;
             ap.ExplY:= EY;
             valueResult:= Score
             end;
         end
-until (TestTime = 4000);
+until (TestTime = 4100);
 TestWatermelon:= valueResult
 end;
 
@@ -822,7 +822,7 @@ begin
             , 30, 30, 25
             , -1, -0.8, trackFall or afSetSkip);
     v1:= v1 +
-        RateShove(Me, x, y
+        RateShove(Me, x - 2, y
             , 30, 30, 25
             , -1, -0.8, trackFall);
     // now try opposite direction
@@ -830,7 +830,7 @@ begin
             , 30, 30, 25
             , 1, -0.8, trackFall or afSetSkip);
     v2:= v2 +
-        RateShove(Me, x, y
+        RateShove(Me, x + 2, y
             , 30, 30, 25
             , 1, -0.8, trackFall);
 
