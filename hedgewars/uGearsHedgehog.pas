@@ -487,7 +487,7 @@ with CurrentHedgehog^ do
                 TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
                 end;
             if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and (HHGear <> nil) then 
-                HHGear^.State:= HHGear^.State and (not gstAttacked);
+                HHGear^.State:= HHGear^.State or gstAttacked;
             if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then
                 ApplyAmmoChanges(CurrentHedgehog^)
             end;
