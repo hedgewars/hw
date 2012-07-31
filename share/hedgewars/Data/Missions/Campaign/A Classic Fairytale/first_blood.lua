@@ -356,7 +356,7 @@ end
 function CheckPastMoleHead()
   x = GetX(youngh)
   y = GetY(youngh)
-  return x < 3005 and y > StoppedGear(youngh) 
+  return x < 3005 and y > 1500 and StoppedGear(youngh) 
 end
 
 function DoPastMoleHead()
