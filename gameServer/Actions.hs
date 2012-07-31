@@ -146,8 +146,13 @@ processAction (ByeClient msg) = do
     io $
         infoM "Clients" (show ci ++ " quits: " ++ B.unpack msg)
 
-    processAction $ AnswerClients [chan] ["BYE", msg]
     when loggedIn $ processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
+
+    mapM processAction
+        [
+        AnswerClients [chan] ["BYE", msg]
+        , ModifyClient (\c -> c{logonPassed = False}) -- this will effectively hide client from others while he isn't deleted from list
+        ]
 
     s <- get
     put $! s{removedClients = ci `Set.insert` removedClients s}
@@ -522,9 +527,11 @@ processAction PingAll = do
     where
         kickTimeouted rnc ci = do
             pq <- io $ client'sM rnc pingsQueue ci
-            when (pq > 0) $
+            when (pq > 0) $ do
                 withStateT (\as -> as{clientIndex = Just ci}) $
                     processAction (ByeClient "Ping timeout")
+                when (pq > 1) $
+                    processAction $ DeleteClient ci -- smth went wrong with client io threads, issue DeleteClient here
 
 
 processAction StatsAction = do
