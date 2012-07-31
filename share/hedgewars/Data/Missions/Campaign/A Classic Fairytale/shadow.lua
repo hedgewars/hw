@@ -796,7 +796,7 @@ end
 function onGameInit()
 	Seed = 334 
   TemplateFilter = 3
-	GameFlags = gfSolidLand + gfDisableWind
+	GameFlags = gfSolidLand + gfDisableWind + gfPerHogAmmo
 	TurnTime = 50000 
 	CaseFreq = 0
 	MinesNum = 0
