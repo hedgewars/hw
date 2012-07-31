@@ -141,12 +141,13 @@ cratePos = {
             {788, 1919, amGirder, 2}, {412, 1615, amGirder, 1},
             {209, 1474, amSniperRifle, 1}, {1178, 637, amDEagle, 1},
             {633, 268, amDEagle, 1}, {3016, 1545, amDEagle, 1},
-            {249, 1377, amRope, 2}, {330, 1018, amGirder, 1},
-            {888, 647, amRope, 2}, {2116, 337, amRope, 2},
-            {1779, 948, amRope, 2}, {3090, 1066, amRope, 2},
+            {249, 1377, amRope, 3}, {330, 1018, amGirder, 1},
+            {888, 647, amRope, 3}, {2116, 337, amRope, 3},
+            {1779, 948, amRope, 3}, {3090, 1066, amRope, 3},
             {947, 480, amBazooka, 3}, {1097, 480, amMortar, 3},
             {1139, 451, amSnowball, 3}, {1207, 468, amShotgun, 3},
             {1024, 393, amSniperRifle, 2}, {998, 391, amDynamite, 2}
+            {1024, 343, amRope, 2}, {998, 341, amRope, 2}
            }
 reactions = {loc("Yeah, take that!"), loc("Bullseye"), loc("Die, die, die!")}
 
@@ -258,7 +259,7 @@ function SetupKillAnim()
   table.insert(killAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(cyborgPos)}})
   table.insert(killAnim, {func = AnimCustomFunction, args = {cyborg, CondNeedToTurn, {cyborg, native}}})
   table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("You bear impressive skills, ") .. nativeUnNames[m5DeployedNum] .. "!", SAY_SHOUT, 4000}})
-  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("However, my mates don't agree with me on leting you go..."), SAY_SHOUT, 7000}})
+  table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("However, my mates don't agree with me on letting you go..."), SAY_SHOUT, 7000}})
   table.insert(killAnim, {func = AnimSay, args = {cyborg, loc("I guess you'll have to kill them."), SAY_SHOUT, 4000}})
   table.insert(killAnim, {func = AnimDisappear, args = {cyborg, unpack(cyborgPos)}})
   table.insert(killAnim, {func = AnimSwitchHog, args = {native}})
@@ -268,7 +269,7 @@ function SetupKillAnim()
 end
 
 function SetupKilledAnim()
-  table.insert(killedAnim, {func = AnimWait, args = {cyborg, 3000}})
+  table.insert(killedAnim, {func = AnimWait, args = {cyborg, 500}})
   table.insert(killedAnim, {func = AnimOutOfNowhere, args = {cyborg, unpack(secondPos[2])}})
   table.insert(killedAnim, {func = AnimOutOfNowhere, args = {native, unpack(secondPos[1])}})
   table.insert(killedAnim, {func = AnimCustomFunction, args = {cyborg, CondNeedToTurn, {cyborg, native}}})
@@ -300,7 +301,7 @@ function AfterStartAnim()
                                                   loc("As the ammo is sparse, you might want to reuse ropes while mid-air.|") ..
                                                   loc("If you wish to restart the course, press [Precise]!|") ..
                                                   loc("The enemy can't move but it might be a good idea to stay out of sight!|") ..
-                                                  loc("You have ") .. SuddenDeathTurns .. loc(" turns until Sudden Death! Better hurry!"), 1, 20000)
+                                                  loc("You have ") .. SuddenDeathTurns .. loc(" turns until Sudden Death! Better hurry!"), 1, 0)
 end
 
 function SkipKillAnim()
@@ -317,6 +318,7 @@ function AfterKillAnim()
 end
 
 function SkipKilledAnim()
+  SetGearPosition(native, unpack(secondPos[1]))
   AnimSwitchHog(native)
   AnimWait(native, 1)
 end
@@ -356,8 +358,6 @@ end
 function DoCyborgsDead()
   NullifyAmmo()
   RestoreHedge(cyborg)
-  SetGearPosition(cyborg, unpack(secondPos[2]))
-  SetGearPosition(native, unpack(secondPos[1]))
   SetupKilledAnim()
   AddAnim(killedAnim)
   AddFunction({func = AfterKilledAnim, args = {}})
@@ -365,7 +365,7 @@ end
 
 
 function PutWeaponCrates()
-  for i = 1, 6 do
+  for i = 1, 8 do
     cratesNum = cratesNum + 1
     crates[cratesNum] = SpawnAmmoCrate(unpack(cratePos[cratesNum]))
   end
@@ -495,7 +495,7 @@ end
 function AddHogs()
 	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
   for i = 1, 7 do
-    natives[i] = AddHog(nativeNames[i], 0, 100, nativeHats[i])
+    natives[i] = AddHog(nativeNames[i], 0, 200, nativeHats[i])
     gearDead[natives[i]] = false
   end
 
