@@ -3685,10 +3685,6 @@ begin
 
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y;
-    // For some reason I need to reapply followgear here, something else grabs it otherwise.
-    // This is probably not needed anymore
-    if not CurrentTeam^.ExtDriven then
-        FollowGear := HHGear;
 
     if not isUnderWater and hasBorder and ((HHGear^.X < _0)
     or (hwRound(HHGear^.X) > LAND_WIDTH)) then
