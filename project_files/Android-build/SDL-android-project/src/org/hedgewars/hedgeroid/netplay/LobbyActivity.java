@@ -5,7 +5,6 @@ import org.hedgewars.hedgeroid.R;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
@@ -27,8 +26,8 @@ public class LobbyActivity extends FragmentActivity {
         super.onCreate(icicle);
         
         setContentView(R.layout.activity_lobby);
-        Fragment chatFragment = getSupportFragmentManager().findFragmentById(R.id.chatFragment);
-        chatFragment.getArguments().putBoolean(ChatFragment.ARGUMENT_INROOM, false);
+        ChatFragment chatFragment = (ChatFragment)getSupportFragmentManager().findFragmentById(R.id.chatFragment);
+        chatFragment.setInRoom(false);
         
         FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
         trans.add(new NetplayStateFragment(), "netplayFragment");

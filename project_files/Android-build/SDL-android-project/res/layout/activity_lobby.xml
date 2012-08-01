@@ -40,7 +40,7 @@
                     android:id="@+id/chatFragment"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    class="org.hedgewars.hedgeroid.netplay.LobbyChatFragment"
+                    class="org.hedgewars.hedgeroid.netplay.ChatFragment"
                     tools:layout="@layout/fragment_chat" />
 
                 <fragment
