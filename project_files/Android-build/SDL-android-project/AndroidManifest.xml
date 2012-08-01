@@ -70,7 +70,7 @@
             android:name=".netplay.LobbyActivity"
             android:label="@string/title_activity_lobby"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustPan" >
         </activity>
     </application>
 </manifest>

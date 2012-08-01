@@ -36,7 +36,7 @@
 	
 	        <FrameLayout
 	            android:id="@+id/playerFrame"
-	            android:layout_width="200dp"
+	            android:layout_width="250dp"
 	            android:layout_height="fill_parent"
 	            android:layout_alignParentRight="true"
 	            android:background="@drawable/box" >
@@ -61,8 +61,8 @@
 	                android:id="@+id/chatFragment"
 	                android:layout_width="fill_parent"
 	                android:layout_height="fill_parent"
-	                class="org.hedgewars.hedgeroid.netplay.LobbyChatFragment"
-	                tools:layout="@layout/lobby_chat_fragment" />
+	                class="org.hedgewars.hedgeroid.netplay.ChatFragment"
+	                tools:layout="@layout/fragment_chat" />
 	        </FrameLayout>
 	    </RelativeLayout>
 	

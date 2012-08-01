@@ -19,22 +19,31 @@ public class ChatFragment extends Fragment {
 	private ChatlogAdapter adapter;
 	private Netplay netconn;
 	private MessageLog messageLog;
+	private boolean inRoom;
+	
+	public void setInRoom(boolean inRoom) {
+		this.inRoom = inRoom;
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		Bundle bundle = getArguments();
 		netconn = Netplay.getAppInstance(getActivity().getApplicationContext());
 		adapter = new ChatlogAdapter(getActivity());
-		messageLog = bundle.getBoolean(ARGUMENT_INROOM) ? netconn.roomChatlog : netconn.lobbyChatlog;
-    	adapter.setLog(messageLog.getLog());
-    	messageLog.registerObserver(adapter);
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
+		messageLog = inRoom ? netconn.roomChatlog : netconn.lobbyChatlog;
+    	adapter.setLog(messageLog.getLog());
+    	messageLog.registerObserver(adapter);
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		messageLog.unregisterObserver(adapter);
 	}
 	
 	@Override
@@ -54,12 +63,6 @@ public class ChatFragment extends Fragment {
 		return view;
 	}
 	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		messageLog.unregisterObserver(adapter);
-	}
-
 	private final class ChatSendListener implements OnEditorActionListener {
 		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 			String text = v.getText().toString();
