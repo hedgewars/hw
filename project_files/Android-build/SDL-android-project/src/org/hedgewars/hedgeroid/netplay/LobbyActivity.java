@@ -2,14 +2,12 @@ package org.hedgewars.hedgeroid.netplay;
 
 import org.hedgewars.hedgeroid.R;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,27 +20,22 @@ import android.widget.Toast;
 
 public class LobbyActivity extends FragmentActivity {
     private TabHost tabHost;
-    private Netplay netconn;
-    private boolean isInForeground;
-    
-    private final BroadcastReceiver disconnectReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			if(isInForeground && intent.getBooleanExtra(Netplay.EXTRA_HAS_ERROR, true)) {
-				String message = intent.getStringExtra(Netplay.EXTRA_MESSAGE);
-				Toast.makeText(getApplicationContext(), "Disconnected: "+message, Toast.LENGTH_LONG).show();
-			}
-			finish();
-		}
-	};
+    private Netplay netplay;
     
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(disconnectReceiver, new IntentFilter(Netplay.ACTION_DISCONNECTED));
-        netconn = Netplay.getAppInstance(getApplicationContext());
         
         setContentView(R.layout.activity_lobby);
+        Fragment chatFragment = getSupportFragmentManager().findFragmentById(R.id.chatFragment);
+        chatFragment.getArguments().putBoolean(ChatFragment.ARGUMENT_INROOM, false);
+        
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        trans.add(new NetplayStateFragment(), "netplayFragment");
+        trans.commit();
+        
+        netplay = Netplay.getAppInstance(getApplicationContext());
+        
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
         if(tabHost != null) {
 	        tabHost.setup();
@@ -56,12 +49,6 @@ public class LobbyActivity extends FragmentActivity {
 	            tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
 	        }
         }
-    }
-    
-    @Override
-    protected void onDestroy() {
-    	super.onDestroy();
-    	LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(disconnectReceiver);
     }
     
     private View createIndicatorView(TabHost tabHost, int label, Drawable icon) {
@@ -81,20 +68,6 @@ public class LobbyActivity extends FragmentActivity {
         
         return tabIndicator;
     }
-
-    @Override
-    protected void onStart() {
-    	super.onStart();
-    	isInForeground = true;
-    	Netplay.getAppInstance(getApplicationContext()).requestFastTicks();
-    }
-    
-    @Override
-    protected void onStop() {
-    	super.onStop();
-    	isInForeground = false;
-    	Netplay.getAppInstance(getApplicationContext()).unrequestFastTicks();
-    }
     
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,7 +83,7 @@ public class LobbyActivity extends FragmentActivity {
 			Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.disconnect:
-			netconn.disconnect();
+			netplay.disconnect();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -119,8 +92,8 @@ public class LobbyActivity extends FragmentActivity {
 	
 	@Override
 	public void onBackPressed() {
-		netconn.disconnect();
 		super.onBackPressed();
+		netplay.disconnect();
 	}
 	
     @Override

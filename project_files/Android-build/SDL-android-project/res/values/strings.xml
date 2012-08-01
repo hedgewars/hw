@@ -40,7 +40,6 @@
     <string name="start_weapons">Weapons</string>
     <string name="start_map">Map</string>
     <string name="start_filter">Filter</string>
-    <string name="start_themes">Themes</string>
 
     <!-- Teams -->
     <string name="not_enough_teams">Not enough teams</string>
@@ -64,12 +63,17 @@
 
     <string name="title_activity_lobby">Hedgewars Server Lobby</string>
     <string name="chat_hint">Type here to chat</string>
-    
-    <!-- Room list -->
-    <string name="no_rooms_in_list">No rooms</string>
+
+    <!-- Map settings -->
+    <string name="map_map">Map</string>
+    <string name="map_type">Type</string>
+    <string name="map_seed">Change seed</string>
     
     <!-- Player list -->
     <string name="no_players_in_list">No players</string>
+    
+    <!-- Teamlist -->
+    <string name="teamlist_addteam">Add team</string>
     
     <!-- Roomlist -->
     <string name="roomlist_header_roomname">Room Name</string>
@@ -79,6 +83,7 @@
     <string name="roomlist_header_map">Map</string>
     <string name="roomlist_header_scheme">Rules</string>
     <string name="roomlist_header_weapons">Weapons</string>
+    <string name="no_rooms_in_list">No rooms</string>
     
     <string name="roomlist_owner">by %1$s</string>
     <string name="roomlist_map">Map: %1$s</string>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="3dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="3dp"
+    android:paddingTop="3dp" >
+
+    <ImageView
+        android:id="@+id/mapPreview"
+        android:layout_width="256dip"
+        android:layout_height="128dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dip"
+        android:background="@drawable/box"
+        android:scaleType="fitXY"
+        android:src="@drawable/backbutton" />
+
+    <TableLayout
+        android:id="@+id/gameOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mapPreview"
+        android:stretchColumns="1" >
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/txtMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_map" />
+
+            <Spinner
+                android:id="@+id/spinMaps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dropdown" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/txtType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_type" />
+
+            <Spinner
+                android:id="@+id/spinType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dropdown" />
+        </TableRow>
+    </TableLayout>
+
+</RelativeLayout>

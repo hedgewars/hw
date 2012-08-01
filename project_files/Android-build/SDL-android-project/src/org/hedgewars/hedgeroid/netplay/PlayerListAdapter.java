@@ -80,10 +80,7 @@ public class PlayerListAdapter extends BaseAdapter {
 		View v = convertView;
 		if (v == null) {
 			LayoutInflater vi = LayoutInflater.from(context);
-			v = vi.inflate(android.R.layout.simple_list_item_1, null);
-			TextView tv = (TextView)v.findViewById(android.R.id.text1);
-			tv.setCompoundDrawablePadding(5);
-			tv.setCompoundDrawablesWithIntrinsicBounds(R.drawable.human, 0, 0, 0);
+			v = vi.inflate(R.layout.listview_player, null);
 		}
 
 		String player = players.get(position).first.name;

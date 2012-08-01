@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="3dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="3dp"
+    android:paddingTop="3dp" >
+
+    <TableLayout
+        android:id="@+id/gameOptions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1" >
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/txtGameplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_gameplay" />
+
+            <Spinner
+                android:id="@+id/spinGameplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dropdown" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/txtGamescheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_gamescheme" />
+
+            <Spinner
+                android:id="@+id/spinGamescheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dropdown" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/txtweapons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_weapons" />
+
+            <Spinner
+                android:id="@+id/spinweapons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dropdown" />
+        </TableRow>
+    </TableLayout>
+
+    <ImageView
+        android:id="@+id/imgTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/spinTheme"
+        android:layout_alignLeft="@id/gameOptions"
+        android:layout_alignTop="@id/spinTheme"
+        android:adjustViewBounds="true" />
+
+    <Spinner
+        android:id="@id/spinTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/gameOptions"
+        android:layout_toRightOf="@+id/imgTheme"
+        android:background="@drawable/dropdown" />
+
+</RelativeLayout>

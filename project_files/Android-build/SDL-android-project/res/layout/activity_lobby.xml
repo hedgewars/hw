@@ -41,7 +41,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     class="org.hedgewars.hedgeroid.netplay.LobbyChatFragment"
-                    tools:layout="@layout/lobby_chat_fragment" />
+                    tools:layout="@layout/fragment_chat" />
 
                 <fragment
                     android:id="@+id/playerListFragment"

@@ -27,7 +27,7 @@
 	            tools:layout="@layout/lobby_rooms_fragment" />
 	    </FrameLayout>
 	
-	    <LinearLayout
+	    <RelativeLayout
 	        android:layout_width="fill_parent"
 	        android:layout_height="0dp"
 	        android:layout_weight="0.6"
@@ -35,24 +35,10 @@
 	        android:orientation="horizontal" >
 	
 	        <FrameLayout
-	            android:layout_width="0dp"
+	            android:id="@+id/playerFrame"
+	            android:layout_width="200dp"
 	            android:layout_height="fill_parent"
-	            android:layout_marginRight="10dp"
-	            android:layout_weight="0.7"
-	            android:background="@drawable/box" >
-	
-	            <fragment
-	                android:id="@+id/chatFragment"
-	                android:layout_width="fill_parent"
-	                android:layout_height="fill_parent"
-	                class="org.hedgewars.hedgeroid.netplay.LobbyChatFragment"
-	                tools:layout="@layout/lobby_chat_fragment" />
-	        </FrameLayout>
-	
-	        <FrameLayout
-	            android:layout_width="0dp"
-	            android:layout_height="fill_parent"
-	            android:layout_weight="0.3"
+	            android:layout_alignParentRight="true"
 	            android:background="@drawable/box" >
 	
 	            <fragment
@@ -62,7 +48,23 @@
 	                class="org.hedgewars.hedgeroid.netplay.PlayerlistFragment"
 	                tools:layout="@layout/lobby_players_fragment" />
 	        </FrameLayout>
-	    </LinearLayout>
+	        
+	        <FrameLayout
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:layout_alignParentLeft="true"
+	            android:layout_toLeftOf="@id/playerFrame"
+	            android:layout_marginRight="10dp"
+	            android:background="@drawable/box" >
+	
+	            <fragment
+	                android:id="@+id/chatFragment"
+	                android:layout_width="fill_parent"
+	                android:layout_height="fill_parent"
+	                class="org.hedgewars.hedgeroid.netplay.LobbyChatFragment"
+	                tools:layout="@layout/lobby_chat_fragment" />
+	        </FrameLayout>
+	    </RelativeLayout>
 	
 	</LinearLayout>
 </FrameLayout>

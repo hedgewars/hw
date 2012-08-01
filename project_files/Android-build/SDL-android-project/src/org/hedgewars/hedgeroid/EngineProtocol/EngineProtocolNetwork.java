@@ -26,7 +26,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class EngineProtocolNetwork extends Thread{
+public class EngineProtocolNetwork extends Thread {
 
 	public static final String GAMEMODE_LOCAL = "TL";
 	public static final String GAMEMODE_DEMO = "TD";

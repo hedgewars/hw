@@ -1,6 +1,5 @@
 package org.hedgewars.hedgeroid.netplay;
 
-
 import org.hedgewars.hedgeroid.R;
 
 import android.os.Bundle;
@@ -9,23 +8,28 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-public class LobbyChatFragment extends Fragment {
+public class ChatFragment extends Fragment {
+	public static final String ARGUMENT_INROOM = "inRoom";
+	
 	private ChatlogAdapter adapter;
 	private Netplay netconn;
+	private MessageLog messageLog;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Bundle bundle = getArguments();
 		netconn = Netplay.getAppInstance(getActivity().getApplicationContext());
 		adapter = new ChatlogAdapter(getActivity());
-    	adapter.setLog(netconn.lobbyChatlog.getLog());
-    	netconn.lobbyChatlog.registerObserver(adapter);
+		messageLog = bundle.getBoolean(ARGUMENT_INROOM) ? netconn.roomChatlog : netconn.lobbyChatlog;
+    	adapter.setLog(messageLog.getLog());
+    	messageLog.registerObserver(adapter);
 	}
 	
 	@Override
@@ -36,15 +40,15 @@ public class LobbyChatFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.lobby_chat_fragment, container, false);
+		View view = inflater.inflate(R.layout.fragment_chat, container, false);
 		
-		ListView listView = (ListView) view.findViewById(R.id.lobbyConsole);
+		ListView listView = (ListView) view.findViewById(R.id.chatConsole);
 		listView.setAdapter(adapter);
 		listView.setDivider(null);
 		listView.setDividerHeight(0);
 		listView.setVerticalFadingEdgeEnabled(true);
 		
-		EditText editText = (EditText) view.findViewById(R.id.lobbyChatInput);
+		EditText editText = (EditText) view.findViewById(R.id.chatInput);
         editText.setOnEditorActionListener(new ChatSendListener());
         
 		return view;
@@ -53,7 +57,7 @@ public class LobbyChatFragment extends Fragment {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		netconn.lobbyChatlog.unregisterObserver(adapter);
+		messageLog.unregisterObserver(adapter);
 	}
 
 	private final class ChatSendListener implements OnEditorActionListener {
