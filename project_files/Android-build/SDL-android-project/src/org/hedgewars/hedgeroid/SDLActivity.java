@@ -414,8 +414,8 @@ public class SDLActivity extends Activity {
  */
 class SDLMain implements Runnable {
 
-	private int surfaceWidth, surfaceHeight;
-	private GameConfig config;
+	private final int surfaceWidth, surfaceHeight;
+	private final GameConfig config;
 
 	public SDLMain(int width, int height, GameConfig _config) {
 		config = _config;
