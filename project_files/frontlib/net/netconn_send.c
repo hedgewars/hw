@@ -134,7 +134,7 @@ int flib_netconn_send_renameRoom(flib_netconn *conn, const char *roomName) {
 int flib_netconn_send_leaveRoom(flib_netconn *conn, const char *str) {
 	int result = -1;
 	if(flib_netconn_is_in_room_context(conn)) {
-		int result = (str && *str) ? sendStr(conn, "PART", str) : sendVoid(conn, "PART");
+		result = (str && *str) ? sendStr(conn, "PART", str) : sendVoid(conn, "PART");
 		if(!result) {
 			netconn_leaveRoom(conn);
 		}
