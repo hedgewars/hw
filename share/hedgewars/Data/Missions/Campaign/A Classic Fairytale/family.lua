@@ -315,7 +315,7 @@ end
 
 
 function CheckGearDead(gear)
-  return gearDead[gear] and retry == false
+  return gearDead[gear]
 end
 
 function EndMission()
@@ -418,7 +418,7 @@ end
 
 function onGameInit()
 	Seed = 0
-	GameFlags = gfOneClanMode + gfSolidLand + gfDisableLandObjects + gfDisableGirders
+	GameFlags = gfSolidLand + gfDisableLandObjects + gfDisableGirders
 	TurnTime = 60000 
 	CaseFreq = 0
 	MinesNum = 0
@@ -502,5 +502,6 @@ end
 function onPrecise()
   if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
+    return
   end
 end
