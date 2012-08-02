@@ -2,29 +2,38 @@ package org.hedgewars.hedgeroid.netplay;
 
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.netplay.JnaFrontlib.NetconnPtr;
+import org.hedgewars.hedgeroid.netplay.Netplay.State;
+import org.hedgewars.hedgeroid.netplay.NetplayStateFragment.NetplayStateListener;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
+import android.widget.Toast;
 
-public class RoomActivity extends FragmentActivity {
+public class RoomActivity extends FragmentActivity implements NetplayStateListener {
 	private TabHost tabHost;
-	private Netplay netconn;
+	private Netplay netplay;
 	
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        netconn = Netplay.getAppInstance(getApplicationContext());
+        netplay = Netplay.getAppInstance(getApplicationContext());
         
-        setContentView(R.layout.activity_lobby);
-        Fragment chatFragment = getSupportFragmentManager().findFragmentById(R.id.chatFragment);
-        chatFragment.getArguments().putBoolean(ChatFragment.ARGUMENT_INROOM, true);
+        setContentView(R.layout.activity_netroom);
+        ChatFragment chatFragment = (ChatFragment)getSupportFragmentManager().findFragmentById(R.id.chatFragment);
+        chatFragment.setInRoom(true);
         
-        tabHost = (TabHost)findViewById(android.R.id.tabhost);
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        trans.add(new NetplayStateFragment(), "netplayFragment");
+        trans.commit();
+        
+        /*tabHost = (TabHost)findViewById(android.R.id.tabhost);
         if(tabHost != null) {
 	        tabHost.setup();
 	        tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
@@ -35,14 +44,38 @@ public class RoomActivity extends FragmentActivity {
 	        if (icicle != null) {
 	            tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
 	        }
-        }
+        }*/
     }
 
+	@Override
+	public void onBackPressed() {
+		netplay.sendLeaveRoom(null);
+	}
+    
     @Override
     protected void onSaveInstanceState(Bundle icicle) {
         super.onSaveInstanceState(icicle);
         if(tabHost != null) {
         	icicle.putString("currentTab", tabHost.getCurrentTabTag());
         }
+    }
+    
+    public void onNetplayStateChanged(State newState) {
+    	switch(newState) {
+    	case NOT_CONNECTED:
+    	case CONNECTING:
+    	case LOBBY:
+    		finish();
+    		break;
+    	case ROOM:
+    		// Do nothing
+    		break;
+    	case INGAME:
+    		//startActivity(new Intent(getApplicationContext(), RoomActivity.class));
+    		Toast.makeText(getApplicationContext(), R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
+    		break;
+		default:
+			throw new IllegalStateException("Unknown connection state: "+newState);
+    	}
     }
 }

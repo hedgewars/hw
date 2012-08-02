@@ -17,15 +17,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class RoomListAdapter extends BaseAdapter {
+public class RoomlistAdapter extends BaseAdapter {
 	private List<Pair<Room, Long>> rooms = new ArrayList<Pair<Room, Long>>();
 	private Context context;
-	private RoomList roomList;
+	private Roomlist roomlist;
 	
 	private DataSetObserver observer = new DataSetObserver() {
 		@Override
 		public void onChanged() {
-			reloadFromList(roomList);
+			reloadFromList(roomlist);
 		}
 		
 		@Override
@@ -34,7 +34,7 @@ public class RoomListAdapter extends BaseAdapter {
 		}
 	};
 	
-	public RoomListAdapter(Context context) {
+	public RoomlistAdapter(Context context) {
 		this.context = context;
 	}
 	
@@ -54,25 +54,25 @@ public class RoomListAdapter extends BaseAdapter {
 		return true;
 	}
 
-	public void setList(RoomList roomList) {
-		if(this.roomList != null) {
-			this.roomList.unregisterObserver(observer);
+	public void setList(Roomlist roomlist) {
+		if(this.roomlist != null) {
+			this.roomlist.unregisterObserver(observer);
 		}
-		this.roomList = roomList;
-		this.roomList.registerObserver(observer);
-		reloadFromList(roomList);
+		this.roomlist = roomlist;
+		this.roomlist.registerObserver(observer);
+		reloadFromList(roomlist);
 	}
 	
 	public void invalidate() {
-		if(roomList != null) {
-			roomList.unregisterObserver(observer);
+		if(roomlist != null) {
+			roomlist.unregisterObserver(observer);
 		}
-		roomList = null;
+		roomlist = null;
 		notifyDataSetInvalidated();
 	}
 	
-	private void reloadFromList(RoomList list) {
-		rooms = new ArrayList<Pair<Room, Long>>(roomList.getMap().values());
+	private void reloadFromList(Roomlist list) {
+		rooms = new ArrayList<Pair<Room, Long>>(roomlist.getMap().values());
 		Collections.sort(rooms, RoomAgeComparator.INSTANCE);
 		notifyDataSetChanged();
 	}

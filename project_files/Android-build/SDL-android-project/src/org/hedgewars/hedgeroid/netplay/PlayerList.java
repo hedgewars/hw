@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import android.database.DataSetObservable;
 import android.util.Pair;
 
-public class PlayerList extends DataSetObservable {
+public class Playerlist extends DataSetObservable {
 	private long nextId = 1;
 	private Map<String, Pair<Player, Long>> players = new TreeMap<String, Pair<Player, Long>>();
 	

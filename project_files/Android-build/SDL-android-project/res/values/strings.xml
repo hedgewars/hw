@@ -62,6 +62,8 @@
     <string name="bot1">Level 1</string>
 
     <string name="title_activity_lobby">Hedgewars Server Lobby</string>
+    <string name="title_activity_room">Room</string>
+    
     <string name="chat_hint">Type here to chat</string>
 
     <!-- Map settings -->
@@ -118,7 +120,7 @@
     <string name="error_unexpected">An unexpected error has occurred: %1$s</string>
     <string name="error_server_too_old">The server you tried to connect to is using an incompatible protocol.</string>
     <string name="error_auth_failed">Unable to authenticate for your username.</string>
-    <string name="error_connection_lost">The connection to the server was lost: %1$s</string>
+    <string name="error_connection_lost">The connection to the server was lost.</string>
     
     <!-- Dialogs -->
     <string name="dialog_connecting_title">Please wait</string>
@@ -127,4 +129,10 @@
     <string name="dialog_password_message">The server has requested a password to connect as "%1$s".</string>
     <string name="dialog_password_hint">Password</string>
     <string name="dialog_password_remember">remember password</string>
+    <string name="dialog_create_room_hint">Room name</string>
+    <string name="dialog_create_room_title">Create new room</string>
+    
+    <string name="toast_disconnected">Disconnected: %1$s</string>
+    <string name="toast_room_abandoned">The room was closed because the owner left.</string>
+    <string name="toast_kicked">You were kicked from the room.</string>
 </resources>

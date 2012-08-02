@@ -16,15 +16,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class PlayerListAdapter extends BaseAdapter {
+public class PlayerlistAdapter extends BaseAdapter {
 	private List<Pair<Player, Long>> players = new ArrayList<Pair<Player, Long>>();
 	private Context context;
-	private PlayerList playerList;
+	private Playerlist playerlist;
 	
 	private DataSetObserver observer = new DataSetObserver() {
 		@Override
 		public void onChanged() {
-			reloadFromList(playerList);
+			reloadFromList(playerlist);
 		}
 		
 		@Override
@@ -33,7 +33,7 @@ public class PlayerListAdapter extends BaseAdapter {
 		}
 	};
 	
-	public PlayerListAdapter(Context context) {
+	public PlayerlistAdapter(Context context) {
 		this.context = context;
 	}
 	
@@ -53,24 +53,24 @@ public class PlayerListAdapter extends BaseAdapter {
 		return true;
 	}
 	
-	public void setList(PlayerList playerList) {
-		if(this.playerList != null) {
-			this.playerList.unregisterObserver(observer);
+	public void setList(Playerlist playerlist) {
+		if(this.playerlist != null) {
+			this.playerlist.unregisterObserver(observer);
 		}
-		this.playerList = playerList;
-		this.playerList.registerObserver(observer);
-		reloadFromList(playerList);
+		this.playerlist = playerlist;
+		this.playerlist.registerObserver(observer);
+		reloadFromList(playerlist);
 	}
 	
 	public void invalidate() {
-		if(playerList != null) {
-			playerList.unregisterObserver(observer);
+		if(playerlist != null) {
+			playerlist.unregisterObserver(observer);
 		}
-		playerList = null;
+		playerlist = null;
 		notifyDataSetInvalidated();
 	}
 	
-	private void reloadFromList(PlayerList list) {
+	private void reloadFromList(Playerlist list) {
 		players = new ArrayList<Pair<Player, Long>>(list.getMap().values());
 		Collections.sort(players, AlphabeticalOrderComparator.INSTANCE);
 		notifyDataSetChanged();

@@ -10,17 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
 
 public class RoomlistFragment extends ListFragment implements OnItemClickListener {
 	private static final int AUTO_REFRESH_INTERVAL_MS = 15000;
 	
-	private Netplay netconn;
-	private RoomListAdapter adapter;
+	private Netplay netplay;
+	private RoomlistAdapter adapter;
 	private CountDownTimer autoRefreshTimer = new CountDownTimer(Long.MAX_VALUE, AUTO_REFRESH_INTERVAL_MS) {
 		@Override
 		public void onTick(long millisUntilFinished) {
-			netconn.sendRoomlistRequest();
+			netplay.sendRoomlistRequest();
 		}
 		
 		@Override
@@ -30,9 +29,9 @@ public class RoomlistFragment extends ListFragment implements OnItemClickListene
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		netconn = Netplay.getAppInstance(getActivity().getApplicationContext());
-		adapter = new RoomListAdapter(getActivity());
-		adapter.setList(netconn.roomList);
+		netplay = Netplay.getAppInstance(getActivity().getApplicationContext());
+		adapter = new RoomlistAdapter(getActivity());
+		adapter.setList(netplay.roomList);
 		setListAdapter(adapter);
 	}
 
@@ -67,6 +66,6 @@ public class RoomlistFragment extends ListFragment implements OnItemClickListene
 	}
 	
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		Toast.makeText(getActivity(), R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
+		netplay.sendJoinRoom(adapter.getItem(position).name);
 	}
 }
