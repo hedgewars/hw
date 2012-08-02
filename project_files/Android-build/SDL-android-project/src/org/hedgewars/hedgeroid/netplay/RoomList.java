@@ -8,7 +8,7 @@ import android.database.DataSetObservable;
 import android.util.Log;
 import android.util.Pair;
 
-public class RoomList extends DataSetObservable {
+public class Roomlist extends DataSetObservable {
 	private long nextId = 1;
 	private Map<String, Pair<Room, Long>> rooms = new TreeMap<String, Pair<Room, Long>>();
 	

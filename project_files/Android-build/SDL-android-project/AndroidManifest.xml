@@ -72,5 +72,11 @@
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" >
         </activity>
+        <activity
+            android:name=".netplay.RoomActivity"
+            android:label="@string/title_activity_room"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
     </application>
 </manifest>

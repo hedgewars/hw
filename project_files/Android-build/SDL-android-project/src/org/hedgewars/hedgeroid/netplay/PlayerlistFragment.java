@@ -12,17 +12,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.Toast;
 
 public class PlayerlistFragment extends ListFragment {
 	private Netplay netconn;
-	private PlayerListAdapter playerListAdapter;
+	private PlayerlistAdapter playerListAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		netconn = Netplay.getAppInstance(getActivity().getApplicationContext());
-		playerListAdapter = new PlayerListAdapter(getActivity());
+		playerListAdapter = new PlayerlistAdapter(getActivity());
 		playerListAdapter.setList(Netplay.getAppInstance(getActivity().getApplicationContext()).playerList);
 		setListAdapter(playerListAdapter);
 	}
@@ -53,13 +52,13 @@ public class PlayerlistFragment extends ListFragment {
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+		Player player = playerListAdapter.getItem(info.position);
 		switch(item.getItemId()) {
 		case R.id.player_info:
-			Player p = playerListAdapter.getItem(info.position);
-			netconn.sendPlayerInfoQuery(p.name);
+			netconn.sendPlayerInfoQuery(player.name);
 			return true;
 		case R.id.player_follow:
-			Toast.makeText(getActivity(), R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
+			netconn.sendFollowPlayer(player.name);
 			return true;
 		default:
 			return super.onContextItemSelected(item);

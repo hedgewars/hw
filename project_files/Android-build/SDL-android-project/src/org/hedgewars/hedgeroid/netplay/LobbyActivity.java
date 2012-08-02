@@ -1,8 +1,13 @@
 package org.hedgewars.hedgeroid.netplay;
 
 import org.hedgewars.hedgeroid.R;
+import org.hedgewars.hedgeroid.StartGameActivity;
+import org.hedgewars.hedgeroid.netplay.Netplay.State;
+import org.hedgewars.hedgeroid.netplay.NetplayStateFragment.NetplayStateListener;
+import org.hedgewars.hedgeroid.netplay.TextInputDialog.TextInputDialogListener;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -15,9 +20,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class LobbyActivity extends FragmentActivity {
+public class LobbyActivity extends FragmentActivity implements TextInputDialogListener, NetplayStateListener {
+	private static final int DIALOG_CREATE_ROOM = 0;
+	
     private TabHost tabHost;
     private Netplay netplay;
     
@@ -79,7 +85,8 @@ public class LobbyActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.room_create:
-			Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
+	        TextInputDialog dialog = new TextInputDialog(DIALOG_CREATE_ROOM, R.string.dialog_create_room_title, 0, R.string.dialog_create_room_hint);
+	        dialog.show(getSupportFragmentManager(), "create_room_dialog");
 			return true;
 		case R.id.disconnect:
 			netplay.disconnect();
@@ -101,5 +108,32 @@ public class LobbyActivity extends FragmentActivity {
         if(tabHost != null) {
         	icicle.putString("currentTab", tabHost.getCurrentTabTag());
         }
+    }
+    
+    public void onTextInputDialogSubmitted(int dialogId, String text) {
+    	if(text != null && text.length()>0) {
+    		netplay.sendCreateRoom(text);
+    	}
+    }
+    
+    public void onTextInputDialogCancelled(int dialogId) {
+    }
+    
+    public void onNetplayStateChanged(State newState) {
+    	switch(newState) {
+    	case CONNECTING:
+    	case NOT_CONNECTED:
+    		finish();
+    		break;
+    	case ROOM:
+    	case INGAME:
+    		startActivity(new Intent(getApplicationContext(), RoomActivity.class));
+    		break;
+    	case LOBBY:
+    		// Do nothing
+    		break;
+		default:
+			throw new IllegalStateException("Unknown connection state: "+newState);
+    	}
     }
 }
