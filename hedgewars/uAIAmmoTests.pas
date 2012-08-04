@@ -860,7 +860,7 @@ end;
 
 function TestKamikaze(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 const step = 8;
-var valueResult, i, v: LongInt;
+var valueResult, i, v, tx: LongInt;
     trackFall: LongInt;
     t, d, x, y, dx, dy, cx: real;
 begin
@@ -879,13 +879,21 @@ begin
 
     x:= hwFloat2Float(Me^.X);
     y:= hwFloat2Float(Me^.Y);
-    
     d:= sqrt(sqr(Targ.X - x) + sqr(Targ.Y - y));
-    t:= step / d;
-    dx:= (Targ.X - x) * t;
-    dy:= (Targ.Y - y) * t;
+    if d = 0 then
+        begin
+        dx:= 0;
+        dy:= 8;
+        ap.Angle:= 2048
+        end
+    else
+        begin
+        t:= step / d;
+        dx:= (Targ.X - x) * t;
+        dy:= (Targ.Y - y) * t;
 
-    ap.Angle:= DxDy2AttackAnglef(dx, -dy);
+        ap.Angle:= DxDy2AttackAnglef(dx, -dy)
+        end;
     
     if dx >= 0 then cx:= 0.45 else cx:= -0.45;
 
@@ -898,6 +906,29 @@ begin
                 
         x:= x + dx;
         y:= y + dy;
+        end;
+    if dx = 0 then
+        begin
+        v:= 0;
+        x:= hwFloat2Float(Me^.X);
+        y:= hwFloat2Float(Me^.Y);
+        tx:= trunc(x);
+        RateShove(Me, tx, trunc(y)
+            , 30, 30, 25
+            , -cx, -0.9, trackFall);
+        for i:= 1 to 512 div step - 2 do
+            begin
+            y:= y + dy;
+            v:= v + 
+                RateShove(Me, tx, trunc(y)
+                    , 30, 30, 25
+                    , -cx, -0.9, trackFall or afSetSkip);
+            end
+        end;
+    if v > valueResult then
+        begin
+        ap.Angle:= -2048;
+        valueResult:= v
         end;
         
     v:= RateShove(Me, trunc(x), trunc(y)
