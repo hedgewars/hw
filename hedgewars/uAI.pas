@@ -178,9 +178,12 @@ for i:= 0 to Pred(Targets.Count) do
                         begin
                         AddAction(BestActions, aia_attack, aim_push, 350 + random(200), 0, 0);
                         AddAction(BestActions, aia_attack, aim_release, 1, 0, 0);
-                                                
-                        AddAction(BestActions, aia_Down, aim_push, 100 + random(150), 0, 0);
-                        AddAction(BestActions, aia_Down, aim_release, 32, 0, 0);
+                         
+                        if abs(ap.Angle) > 32 then
+                           begin
+                           AddAction(BestActions, aia_Down, aim_push, 100 + random(150), 0, 0);
+                           AddAction(BestActions, aia_Down, aim_release, 32, 0, 0);
+                           end;
                         
                         AddAction(BestActions, aia_waitAngle, ap.Angle, 250, 0, 0);
                         AddAction(BestActions, aia_attack, aim_push, 1, 0, 0);
@@ -274,7 +277,8 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 break;
 
             if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
-                if Push(ticks, Actions, AltMe, Me^.Message) then
+                // check if we could go backwards and maybe ljump over a gap after this hjump
+                if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
                     begin
                     with Stack.States[Pred(Stack.Count)] do
                         begin
@@ -291,9 +295,8 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                         else
                             AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
                         end;
-                    
-                    // check if we could go backwards and maybe ljump over a gap after this hjump
-                    Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message xor 3)
+                    // but first check walking forward
+                    Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message)
                     end;
             if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
                 begin

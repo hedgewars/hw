@@ -610,11 +610,10 @@ else if GameTicks and $7 = 0 then
     // move back to cloud layer
         if yy > cWaterLine then
             move:= true
-        else if ((yy and LAND_HEIGHT_MASK) <> 0)
-        or (xx > LAND_WIDTH + 512) or (xx < -512) then
+        else if (xx > snowRight) or (xx < snowLeft) then
             move:=true
         // Solid pixel encountered
-        else if ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
+        else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
             begin
             lf:= Land[yy, xx] and (lfObject or lfBasic or lfIndestructible);
             // If there's room below keep falling
@@ -724,8 +723,8 @@ if move then
         exit
         end;
     Gear^.Pos:= 0;
-    Gear^.X:= int2hwFloat(GetRandom(LAND_WIDTH+1024)-512);
-    Gear^.Y:= int2hwFloat(750+(GetRandom(50)-25));
+    Gear^.X:= int2hwFloat(GetRandom(snowRight-snowLeft)+snowLeft);
+    Gear^.Y:= int2hwFloat(LAND_HEIGHT-1300+(GetRandom(50)-25));
     Gear^.State:= Gear^.State or gstInvisible;
     end
 end;
@@ -3685,10 +3684,6 @@ begin
 
     Gear^.X := HHGear^.X;
     Gear^.Y := HHGear^.Y;
-    // For some reason I need to reapply followgear here, something else grabs it otherwise.
-    // This is probably not needed anymore
-    if not CurrentTeam^.ExtDriven then
-        FollowGear := HHGear;
 
     if not isUnderWater and hasBorder and ((HHGear^.X < _0)
     or (hwRound(HHGear^.X) > LAND_WIDTH)) then

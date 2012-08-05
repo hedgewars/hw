@@ -455,11 +455,13 @@ end;
 procedure AfterAttack;
 var s: shortstring;
     a: TAmmoType;
+    HHGear: PGear;
 begin
-with CurrentHedgehog^.Gear^, CurrentHedgehog^ do
+with CurrentHedgehog^ do
     begin
+    HHGear:= Gear;
     a:= CurAmmoType;
-    State:= State and (not gstAttacking);
+    if HHGear <> nil then HHGear^.State:= HHGear^.State and (not gstAttacking);
     if (Ammoz[a].Ammo.Propz and ammoprop_Effect) = 0 then
         begin
         Inc(MultiShootAttacks);
@@ -484,8 +486,8 @@ with CurrentHedgehog^.Gear^, CurrentHedgehog^ do
                     TagTurnTimeLeft:= TurnTimeLeft;
                 TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
                 end;
-            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) then
-                State:= State or gstAttacked;
+            if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and (HHGear <> nil) then 
+                HHGear^.State:= HHGear^.State or gstAttacked;
             if (Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then
                 ApplyAmmoChanges(CurrentHedgehog^)
             end;
