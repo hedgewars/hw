@@ -77,6 +77,7 @@ var delay: LongWord;
     stAfterDelay, stChWin, stWater, stChWin2, stHealth,
     stSpawn, stNTurn);
     upd: Longword;
+    snowLeft,snowRight: LongInt;
     //SDMusic: shortstring;
 
 // For better maintainability the step handlers of gears are stored in
@@ -642,9 +643,12 @@ for i:= GetRandom(10)+30 downto 0 do
     AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
     end;
 
+snowRight:= max(LAND_WIDTH,4096)+512;
+snowLeft:= -(snowRight-LAND_WIDTH);
+
 if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
-    for i:= 0 to Pred(vobCount*2) do
-        AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(LAND_HEIGHT div 2), gtFlake, 0, _0, _0, 0);
+    for i:= vobCount * max(LAND_WIDTH,4096) div 2048 downto 1 do
+        AddGear(GetRandom(snowRight-snowLeft)+snowLeft, LAND_HEIGHT-1300+GetRandom(750), gtFlake, 0, _0, _0, 0);
 end;
 
 
