@@ -510,7 +510,7 @@ var i: LongInt;
     count: LongInt = 0;
 begin
     if (y and LAND_HEIGHT_MASK) = 0 then
-        for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
+        for i:= min(x + r, LAND_WIDTH - 4) downto max(x - r, 0) do 
             if Land[y, i] and mask <> 0 then
             begin
                 inc(count);
