@@ -42,6 +42,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QXmlStreamReader>
 
 #include "hwconsts.h"
 #include "pagevideos.h"
@@ -59,11 +60,12 @@ enum VideosColumns
 {
     vcName,
     vcSize,
-    vcProgress,
+    vcProgress, // either encoding or uploading
 
     vcNumColumns,
 };
 
+// this class is used for items in first column in file-table
 class VideoItem : public QTableWidgetItem
 {
     // note: QTableWidgetItem is not Q_OBJECT
@@ -73,9 +75,10 @@ class VideoItem : public QTableWidgetItem
         ~VideoItem();
 
         QString name;
-        QString desc; // description
-        QString uploadReply;
-        HWRecorder * pRecorder; // non NULL if file is being encoded
+        QString prefix; // original filename without extension
+        QString desc;   // description (duration, resolution, etc...)
+        QString uploadUrl; // http://youtu.be/???????
+        HWRecorder    * pRecorder; // non NULL if file is being encoded
         QNetworkReply * pUploading; // non NULL if file is being uploaded
         bool seen; // used when updating directory
         float lastSizeUpdate;
@@ -112,7 +115,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
     // options
     {
         IconedGroupBox* pOptionsGroup = new IconedGroupBox(this);
-        pOptionsGroup->setIcon(QIcon(":/res/Settings.png"));
+        pOptionsGroup->setIcon(QIcon(":/res/Settings.png")); // FIXME
         pOptionsGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         pOptionsGroup->setTitle(QGroupBox::tr("Video recording options"));
         QGridLayout * pOptLayout = new QGridLayout(pOptionsGroup);
@@ -211,7 +214,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
     // list of videos
     {
         IconedGroupBox* pTableGroup = new IconedGroupBox(this);
-        pTableGroup->setIcon(QIcon(":/res/graphicsicon.png"));
+        pTableGroup->setIcon(QIcon(":/res/graphicsicon.png")); // FIXME
         pTableGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         pTableGroup->setTitle(QGroupBox::tr("Videos"));
 
@@ -247,7 +250,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
     // description
     {
         IconedGroupBox* pDescGroup = new IconedGroupBox(this);
-        pDescGroup->setIcon(QIcon(":/res/graphicsicon.png"));
+        pDescGroup->setIcon(QIcon(":/res/graphicsicon.png")); // FIXME
         pDescGroup->setTitle(QGroupBox::tr("Description"));
 
         QVBoxLayout* pDescLayout = new QVBoxLayout(pDescGroup);
@@ -271,6 +274,11 @@ QLayout * PageVideos::bodyLayoutDefinition()
         // label with file description
         labelDesc = new QLabel(pDescGroup);
         labelDesc->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+        labelDesc->setTextInteractionFlags(Qt::TextSelectableByMouse |
+                                           Qt::TextSelectableByKeyboard	|
+                                           Qt::LinksAccessibleByMouse |
+                                           Qt::LinksAccessibleByKeyboard);
+        labelDesc->setTextFormat(Qt::RichText);
         pTopDescLayout->addWidget(labelDesc, 1);
 
         // buttons: play and delete
@@ -313,6 +321,7 @@ void PageVideos::connectSignals()
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(deleteSelectedFiles()));
     connect(btnToYouTube, SIGNAL(clicked()), this, SLOT(uploadToYouTube()));
     connect(btnOpenDir, SIGNAL(clicked()), this, SLOT(openVideosDirectory()));
+    connect(labelDesc, SIGNAL(linkActivated(const QString&)), this, SLOT(linkActivated(const QString&)));
  }
 
 PageVideos::PageVideos(QWidget* parent) : AbstractPage(parent),
@@ -435,6 +444,7 @@ bool PageVideos::tryCodecs(const QString & format, const QString & vcodec, const
     if (iFormat == -1)
         return false;
     comboAVFormats->setCurrentIndex(iFormat);
+    // format was changed, so lists of codecs were automatically updated to codecs supported by this format
 
     // try to find video codec
     int iVCodec = comboVideoCodecs->findData(vcodec);
@@ -453,7 +463,7 @@ bool PageVideos::tryCodecs(const QString & format, const QString & vcodec, const
 }
 
 // get file size as string
-QString FileSizeStr(const QString & path)
+static QString FileSizeStr(const QString & path)
 {
     quint64 size = QFileInfo(path).size();
 
@@ -478,6 +488,8 @@ void PageVideos::updateSize(int row)
     filesTable->item(row, vcSize)->setText(FileSizeStr(path));
 }
 
+// There is a button 'Open videos dir', so it is possible that user will open
+// this dir and rename/delete some files there, so we should handle this.
 void PageVideos::updateFileList(const QString & path)
 {
     // mark all files as non seen
@@ -545,7 +557,7 @@ void PageVideos::setProgress(int row, VideoItem* item, float value)
 void PageVideos::updateProgress(float value)
 {
     HWRecorder * pRecorder = (HWRecorder*)sender();
-    VideoItem * item = (VideoItem*)pRecorder->item;
+    VideoItem * item = pRecorder->item;
     int row = filesTable->row(item);
 
     // update file size every percent
@@ -609,6 +621,7 @@ void PageVideos::cellChanged(int row, int column)
     QString newName = item->text();
     if (!newName.contains('.')) // user forgot an extension
     {
+        // restore old extension
         int pt = oldName.lastIndexOf('.');
         if (pt != -1)
         {
@@ -676,7 +689,7 @@ VideoItem* PageVideos::nameItem(int row)
 
 void PageVideos::clearThumbnail()
 {
-    // add empty image for proper sizing
+    // add empty (transparent) image for proper sizing
     QPixmap pic(ThumbnailSize);
     pic.fill(QColor(0,0,0,0));
     labelThumbnail->setPixmap(pic);
@@ -687,6 +700,7 @@ void PageVideos::updateDescription()
     VideoItem * item = nameItem(filesTable->currentRow());
     if (!item)
     {
+        // nothing is selected => clear description and return
         labelDesc->clear();
         clearThumbnail();
         btnPlay->setEnabled(false);
@@ -696,51 +710,75 @@ void PageVideos::updateDescription()
     }
 
     btnPlay->setEnabled(item->ready());
-    btnDelete->setEnabled(true);
     btnToYouTube->setEnabled(item->ready());
+    btnDelete->setEnabled(true);
+    btnDelete->setText(item->ready()? QPushButton::tr("Delete") :  QPushButton::tr("Cancel"));
+    btnToYouTube->setText(item->pUploading? QPushButton::tr("Cancel uploading") :  QPushButton::tr("Upload to YouTube"));
 
+    // construct string with desctiption of this file to display it
     QString desc = item->name + "\n\n";
-    QString thumbName = "";
 
-    if (item->ready())
+    if (!item->ready())
+        desc += tr("(in progress...)");
+    else
     {
         QString path = item->path();
-        desc += tr("Date: ") + QFileInfo(path).created().toString(Qt::DefaultLocaleLongDate) + "\n";
-        desc += tr("Size: ") + FileSizeStr(path) + "\n";
-        if (item->desc == "")
-            item->desc = LibavIteraction::instance().getFileInfo(path);
-        desc += item->desc;
-
-        // extract thumbnail name fron description
-        int prefixBegin = desc.indexOf("prefix[");
-        int prefixEnd = desc.indexOf("]prefix");
-        if (prefixBegin != -1 && prefixEnd != -1)
+        desc += tr("Date: ") + QFileInfo(path).created().toString(Qt::DefaultLocaleLongDate) + '\n';
+        desc += tr("Size: ") + FileSizeStr(path) + '\n';
+        if (item->desc.isEmpty())
         {
-            QString prefix = desc.mid(prefixBegin + 7, prefixEnd - (prefixBegin + 7));
-            desc.remove(prefixBegin, prefixEnd + 7 - prefixBegin);
-            thumbName = prefix;
+            // Extract description from file;
+            // It will contain duration, resolution, etc and also comment added by hwengine.
+            item->desc = LibavIteraction::instance().getFileInfo(path);
+
+            // extract prefix (original name) from description (it is enclosed in prefix[???]prefix)
+            int prefixBegin = item->desc.indexOf("prefix[");
+            int prefixEnd   = item->desc.indexOf("]prefix");
+            if (prefixBegin != -1 && prefixEnd != -1)
+            {
+                item->prefix = desc.mid(prefixBegin + 7, prefixEnd - (prefixBegin + 7));
+                item->desc.remove(prefixBegin, prefixEnd + 7 - prefixBegin);
+            }
         }
-
-        desc += item->uploadReply;
+        desc += item->desc + '\n';
     }
-    else
-        desc += tr("(in progress...)");
 
-    if (thumbName.isEmpty())
+    if (item->prefix.isEmpty())
     {
+        // try to extract prefix from file name instead
         if (item->ready())
-            thumbName = item->name;
+            item->prefix = item->name;
         else
-            thumbName = item->pRecorder->name;
+            item->prefix = item->pRecorder->name;
+
         // remove extension
-        int pt = thumbName.lastIndexOf('.');
+        int pt = item->prefix.lastIndexOf('.');
         if (pt != -1)
-            thumbName.truncate(pt);
+            item->prefix.truncate(pt);
     }
 
-    if (!thumbName.isEmpty())
+    if (item->ready() && item->uploadUrl.isEmpty())
     {
-        thumbName = cfgdir->absoluteFilePath("VideoTemp/" + thumbName);
+        // try to load url from file
+        QFile * file = new QFile(cfgdir->absoluteFilePath("VideoTemp/" + item->prefix + "-url.txt"), this);
+        if (!file->open(QIODevice::ReadOnly))
+            item->uploadUrl = "no";
+        else
+        {
+            QByteArray data = file->readAll();
+            file->close();
+            item->uploadUrl = QString::fromUtf8(data.data());
+        }
+    }
+    if (item->uploadUrl != "no")
+        desc += QString("<a href=\"%1\">%1</a>").arg(item->uploadUrl);
+    desc.replace("\n", "<br/>");
+
+    labelDesc->setText(desc);
+
+    if (!item->prefix.isEmpty())
+    {
+        QString thumbName = cfgdir->absoluteFilePath("VideoTemp/" + item->prefix);
         QPixmap pic;
         if (pic.load(thumbName + ".png") || pic.load(thumbName + ".bmp"))
         {
@@ -753,7 +791,6 @@ void PageVideos::updateDescription()
         else
             clearThumbnail();
     }
-    labelDesc->setText(desc);
 }
 
 // user selected another cell, so we should change description
@@ -766,8 +803,13 @@ void PageVideos::currentCellChanged(int row, int column, int previousRow, int pr
 void PageVideos::play(int row)
 {
     VideoItem * item = nameItem(row);
-    if (item->ready())
+    if (item && item->ready())
         QDesktopServices::openUrl(QUrl("file:///" + QDir::toNativeSeparators(item->path())));
+}
+
+void PageVideos::linkActivated(const QString & link)
+{
+    QDesktopServices::openUrl(QUrl(link));
 }
 
 void PageVideos::playSelectedFile()
@@ -779,6 +821,30 @@ void PageVideos::playSelectedFile()
 
 void PageVideos::deleteSelectedFiles()
 {
+    int index = filesTable->currentRow();
+    if (index == -1)
+        return;
+
+    VideoItem * item = nameItem(index);
+    if (!item)
+        return;
+
+    // ask user if (s)he is serious
+    if (QMessageBox::question(this,
+                              tr("Are you sure?"),
+                              tr("Do you really want do remove %1?").arg(item->name),
+                              QMessageBox::Yes | QMessageBox::No)
+            != QMessageBox::Yes)
+        return;
+
+    // remove
+    if (!item->ready())
+        item->pRecorder->deleteLater();
+    else
+        cfgdir->remove("Videos/" + item->name);
+
+// this code is for removing several files when multiple selection is enabled
+#if 0
     QList<QTableWidgetItem*> items = filesTable->selectedItems();
     int num = items.size() / vcNumColumns;
     if (num == 0)
@@ -803,6 +869,7 @@ void PageVideos::deleteSelectedFiles()
         else
             cfgdir->remove("Videos/" + item->name);
     }
+#endif
 }
 
 void PageVideos::keyPressEvent(QKeyEvent * pEvent)
@@ -829,14 +896,14 @@ void PageVideos::openVideosDirectory()
     QDesktopServices::openUrl(QUrl("file:///" + path));
 }
 
-// clear VideoTemp directory (except for thumbnails)
+// clear VideoTemp directory (except for thumbnails and upload links)
 void PageVideos::clearTemp()
 {
     QDir temp(cfgdir->absolutePath() + "/VideoTemp");
     QStringList files = temp.entryList(QDir::Files);
     foreach (const QString& file, files)
     {
-        if (!file.endsWith(".bmp") && !file.endsWith(".png"))
+        if (!file.endsWith(".bmp") && !file.endsWith(".png") && !file.endsWith("-url.txt"))
             temp.remove(file);
     }
 }
@@ -912,14 +979,11 @@ void PageVideos::startEncoding(const QByteArray & record)
     }
 }
 
-void PageVideos::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
+VideoItem * PageVideos::itemFromReply(QNetworkReply* reply, int & row)
 {
-    QNetworkReply* reply = (QNetworkReply*)sender();
-
     VideoItem * item = NULL;
-    int row;
     int count = filesTable->rowCount();
-    // find corresponding item (maybe there is a better wat to implement this?)
+    // find corresponding item (maybe there is a better way to implement this?)
     for (int i = 0; i < count; i++)
     {
         item = nameItem(i);
@@ -929,35 +993,76 @@ void PageVideos::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
             break;
         }
     }
-    Q_ASSERT(item);
+    return item;
+}
 
+void PageVideos::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
+{
+    QNetworkReply* reply = (QNetworkReply*)sender();
+    int row;
+    VideoItem * item = itemFromReply(reply, row);
     setProgress(row, item, bytesSent*1.0/bytesTotal);
 }
 
 void PageVideos::uploadFinished()
 {
     QNetworkReply* reply = (QNetworkReply*)sender();
+    reply->deleteLater();
 
-    VideoItem * item = NULL;
     int row;
-    int count = filesTable->rowCount();
-    for (int i = 0; i < count; i++)
+    VideoItem * item = itemFromReply(reply, row);
+    if (!item)
+        return;
+
+    item->pUploading = NULL;
+
+    // extract video id from reply
+    QString videoid;
+    QXmlStreamReader xml(reply);
+    while (!xml.atEnd())
     {
-        item = nameItem(i);
-        if (item->pUploading == reply)
+        xml.readNext();
+        if (xml.qualifiedName() == "yt:videoid")
         {
-            row = i;
+            videoid = xml.readElementText();
             break;
         }
     }
-    Q_ASSERT(item);
 
-    item->pUploading = NULL;
-    QByteArray answer = reply->readAll();
-    item->uploadReply = QString::fromUtf8(answer.data());
-   // QMessageBox::information(this,"",item->uploadReply,0);
+    if (!videoid.isEmpty())
+    {
+        item->uploadUrl = "http://youtu.be/" + videoid;
+        updateDescription();
+
+        // save url in file
+        QFile * file = new QFile(cfgdir->absoluteFilePath("VideoTemp/" + item->prefix + "-url.txt"), this);
+        if (file->open(QIODevice::WriteOnly))
+        {
+            file->write(item->uploadUrl.toUtf8());
+            file->close();
+        }
+    }
+
     filesTable->setCellWidget(row, vcProgress, NULL); // remove progress bar
     numUploads--;
+}
+
+// this will protect saved youtube password from those who cannot read source code
+static QString protectPass(QString str)
+{
+    QByteArray array = str.toUtf8();
+    for (int i = 0; i < array.size(); i++)
+        array[i] = array[i] ^ 0xC4 ^ i;
+    array = array.toBase64();
+    return QString::fromAscii(array.data());
+}
+
+static QString unprotectPass(QString str)
+{
+    QByteArray array = QByteArray::fromBase64(str.toAscii());
+    for (int i = 0; i < array.size(); i++)
+        array[i] = array[i] ^ 0xC4 ^ i;
+    return QString::fromUtf8(array);
 }
 
 void PageVideos::uploadToYouTube()
@@ -965,12 +1070,48 @@ void PageVideos::uploadToYouTube()
     int row = filesTable->currentRow();
     VideoItem * item = nameItem(row);
 
+    if (item->pUploading)
+    {
+        if (QMessageBox::question(this,
+                                  tr("Are you sure?"),
+                                  tr("Do you really want do cancel uploading %1?").arg(item->name),
+                                  QMessageBox::Yes | QMessageBox::No)
+                != QMessageBox::Yes)
+            return;
+        item->pUploading->deleteLater();
+        filesTable->setCellWidget(row, vcProgress, NULL); // remove progress bar
+        numUploads--;
+        return;
+    }
+
     if (!netManager)
         netManager = new QNetworkAccessManager(this);
 
     HWUploadVideoDialog* dlg = new HWUploadVideoDialog(this, item->name, netManager);
     dlg->deleteLater();
-    if (!dlg->exec())
+    if (config->value("youtube/save").toBool())
+    {
+        dlg->cbSave->setChecked(true);
+        dlg->leAccount->setText(config->value("youtube/name").toString());
+        dlg->lePassword->setText(unprotectPass(config->value("youtube/pswd").toString()));
+    }
+
+    bool result = dlg->exec();
+
+    if (dlg->cbSave->isChecked())
+    {
+        config->setValue("youtube/save", true);
+        config->setValue("youtube/name", dlg->leAccount->text());
+        config->setValue("youtube/pswd", protectPass(dlg->lePassword->text()));
+    }
+    else
+    {
+        config->setValue("youtube/save", false);
+        config->setValue("youtube/name", "");
+        config->setValue("youtube/pswd", "");
+    }
+
+    if (!result)
         return;
 
     QNetworkRequest request(QUrl(dlg->location));
@@ -985,7 +1126,7 @@ void PageVideos::uploadToYouTube()
     progressBar->setMinimum(0);
     progressBar->setMaximum(10000);
     progressBar->setValue(0);
-    // make it different from encoding progress-bar
+    // make it different from progress-bar used during encoding (use blue color)
     progressBar->setStyleSheet("* {color: #00ccff; selection-background-color: #00ccff;}" );
     filesTable->setCellWidget(row, vcProgress, progressBar);
 
@@ -994,4 +1135,6 @@ void PageVideos::uploadToYouTube()
     connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64, qint64)));
     connect(reply, SIGNAL(finished()), this, SLOT(uploadFinished()));
     numUploads++;
+
+    updateDescription();
 }

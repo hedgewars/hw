@@ -39,10 +39,10 @@ class HWUploadVideoDialog : public QDialog
 
         QLineEdit* leTitle;
         QPlainTextEdit* teDescription;
+        QLineEdit* leTags;
+        QCheckBox* cbPrivate;
 
         QPushButton* btnUpload;
-
-        QLabel* labelLog;
 
         QString location;
 
@@ -50,7 +50,6 @@ class HWUploadVideoDialog : public QDialog
         QNetworkAccessManager* netManager;
         QString filename;
 
-        void log(const QString& text);
         void setEditable(bool editable);
 
     private slots:
