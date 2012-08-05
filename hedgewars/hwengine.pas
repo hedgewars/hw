@@ -59,6 +59,9 @@ begin
         gsLandGen:
             begin
             GenMap;
+            uLandTexture.initModule;
+            UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false); 
+            uAILandMarks.initModule;
             ParseCommand('sendlanddigest', true);
             GameState:= gsStart;
             end;
@@ -462,7 +465,6 @@ begin
         uAI.initModule;
         //uAIActions does not need initialization
         //uAIAmmoTests does not need initialization
-        uAILandMarks.initModule;
         uAIMisc.initModule;
         uAmmos.initModule;
         uChat.initModule;
@@ -474,7 +476,6 @@ begin
         //uLandGraphics does not need initialization
         //uLandObjects does not need initialization
         //uLandTemplates does not need initialization
-        uLandTexture.initModule;
         //uLocale does not need initialization
         uRandom.initModule;
         uScript.initModule;

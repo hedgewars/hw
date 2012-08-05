@@ -1645,10 +1645,7 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) an
     uCursor.updatePosition();
 {$ENDIF}
 z:= round(200/zoom);
-if not PlacingHogs and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) then
-    if (not autoCameraOn) then
-        FollowGear:= nil
-    else
+if not PlacingHogs and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) and autoCameraOn then
     if ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
         begin
         FollowGear:= nil;

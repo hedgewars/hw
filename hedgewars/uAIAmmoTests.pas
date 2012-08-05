@@ -47,6 +47,7 @@ function TestSniperRifle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttac
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestKamikaze(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestTeleport(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -84,7 +85,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             //(proc: @TestTeleport;    flags: amtest_OnTurn), // amTeleport
             (proc: nil;              flags: 0), // amSwitch
             (proc: @TestMortar;      flags: 0), // amMortar
-            (proc: nil;              flags: 0), // amKamikaze
+            (proc: @TestKamikaze;    flags: 0), // amKamikaze
             (proc: @TestCake;        flags: amtest_OnTurn or amtest_NoTarget), // amCake
             (proc: nil;              flags: 0), // amSeduction
             (proc: @TestWatermelon;  flags: 0), // amWatermelon
@@ -167,7 +168,7 @@ repeat
         
         EX:= trunc(x);
         EY:= trunc(y);
-        if Me^.Hedgehog^.BotLevel = 1 then
+        if Level = 1 then
             value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
         else value:= RateExplosion(Me, EX, EY, 101);
         if value = 0 then
@@ -330,7 +331,7 @@ repeat
     EX:= trunc(x);
     EY:= trunc(y);
     if t < 50 then 
-        if Me^.Hedgehog^.BotLevel = 1 then
+        if Level = 1 then
             Score:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
         else Score:= RateExplosion(Me, EX, EY, 101)
     else 
@@ -361,12 +362,12 @@ var Vx, Vy, r: real;
     t: LongInt;
 begin
 valueResult:= BadTurn;
-TestTime:= 0;
+TestTime:= 500;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
 repeat
-    inc(TestTime, 1000);
+    inc(TestTime, 900);
     // Try to overshoot slightly, seems to pay slightly better dividends in terms of hitting cluster
     if meX<Targ.X then
         Vx:= ((Targ.X+10) - meX) / (TestTime + tDelta)
@@ -398,14 +399,14 @@ repeat
         begin
         ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
-        ap.Time:= TestTime;
+        ap.Time:= TestTime div 1000 * 1000;
         ap.ExplR:= 90;
         ap.ExplX:= EX;
         ap.ExplY:= EY;
         valueResult:= Score
         end;
      end
-until (TestTime = 4000);
+until (TestTime = 4100);
 TestClusterBomb:= valueResult
 end;
 
@@ -418,12 +419,12 @@ var Vx, Vy, r: real;
     t: LongInt;
 begin
 valueResult:= BadTurn;
-TestTime:= 0;
+TestTime:= 500;
 ap.ExplR:= 0;
 meX:= hwFloat2Float(Me^.X);
 meY:= hwFloat2Float(Me^.Y);
 repeat
-    inc(TestTime, 1000);
+    inc(TestTime, 900);
     Vx:= (Targ.X - meX) / (TestTime + tDelta);
     Vy:= cGravityf * ((TestTime + tDelta) div 2) - ((Targ.Y-50) - meY) / (TestTime + tDelta);
     r:= sqr(Vx)+sqr(Vy);
@@ -452,14 +453,14 @@ repeat
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
             ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
-            ap.Time:= TestTime;
+            ap.Time:= TestTime div 1000 * 1000;
             ap.ExplR:= 300;
             ap.ExplX:= EX;
             ap.ExplY:= EY;
             valueResult:= Score
             end;
         end
-until (TestTime = 4000);
+until (TestTime = 4100);
 TestWatermelon:= valueResult
 end;
 
@@ -600,19 +601,22 @@ var Vx, Vy, x, y, t, dmgMod: real;
     d: Longword;
     fallDmg, valueResult: LongInt;
 begin
-if Me^.Hedgehog^.BotLevel > 3 then exit(BadTurn);
+if Level > 3 then exit(BadTurn);
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
+
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
+
 if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
     begin
     TestDesertEagle:= BadTurn;
     exit(BadTurn);
     end;
+
 t:= 2 / sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
 Vx:= (Targ.X - x) * t;
 Vy:= (Targ.Y - y) * t;
@@ -650,7 +654,7 @@ var Vx, Vy, x, y, t, dmg, dmgMod: real;
     d: Longword;
     fallDmg, valueResult: LongInt;
 begin
-if Me^.Hedgehog^.BotLevel > 3 then exit(BadTurn);
+if Level > 3 then exit(BadTurn);
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
@@ -700,9 +704,9 @@ var valueResult, a, v1, v2: LongInt;
     x, y, trackFall: LongInt;
     dx, dy: real;
 begin
-    if Me^.Hedgehog^.BotLevel < 3 then trackFall:= afTrackFall
+    if Level < 3 then trackFall:= afTrackFall
     else trackFall:= 0;
-    Level:= Level; // avoid compiler hint
+
     ap.ExplR:= 0;
     ap.Time:= 0;
     ap.Power:= 1;
@@ -749,9 +753,9 @@ function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackP
 var valueResult, v1, v2, i: LongInt;
     x, y, trackFall: LongInt;
 begin
-    if Me^.Hedgehog^.BotLevel = 1 then trackFall:= afTrackFall
+    if Level = 1 then trackFall:= afTrackFall
     else trackFall:= 0;
-    Level:= Level; // avoid compiler hint
+
     ap.ExplR:= 0;
     ap.Time:= 0;
     ap.Power:= 1;
@@ -805,9 +809,9 @@ function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams
 var valueResult, v1, v2: LongInt;
     x, y, trackFall: LongInt;
 begin
-    if Me^.Hedgehog^.BotLevel = 1 then trackFall:= afTrackFall
+    if Level = 1 then trackFall:= afTrackFall
     else trackFall:= 0;
-    Level:= Level; // avoid compiler hint
+
     ap.ExplR:= 0;
     ap.Time:= 0;
     ap.Power:= 1;
@@ -822,7 +826,7 @@ begin
             , 30, 30, 25
             , -1, -0.8, trackFall or afSetSkip);
     v1:= v1 +
-        RateShove(Me, x, y
+        RateShove(Me, x - 2, y
             , 30, 30, 25
             , -1, -0.8, trackFall);
     // now try opposite direction
@@ -830,7 +834,7 @@ begin
             , 30, 30, 25
             , 1, -0.8, trackFall or afSetSkip);
     v2:= v2 +
-        RateShove(Me, x, y
+        RateShove(Me, x + 2, y
             , 30, 30, 25
             , 1, -0.8, trackFall);
 
@@ -852,6 +856,90 @@ begin
         inc(valueResult);
 
     TestWhip:= valueResult;
+end;
+
+function TestKamikaze(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+const step = 8;
+var valueResult, i, v, tx: LongInt;
+    trackFall: LongInt;
+    t, d, x, y, dx, dy, cx: real;
+begin
+    ap.ExplR:= 0;
+    ap.Time:= 0;
+    ap.Power:= 1;
+
+    if Level = 1 then 
+        trackFall:= afTrackFall
+    else if Level = 2 then
+        trackFall:= 0
+    else
+        exit(BadTurn);
+        
+    valueResult:= 0;
+    v:= 0;
+
+    x:= hwFloat2Float(Me^.X);
+    y:= hwFloat2Float(Me^.Y);
+    d:= sqrt(sqr(Targ.X - x) + sqr(Targ.Y - y));
+    if d < 10 then
+        begin
+        dx:= 0;
+        dy:= 8;
+        ap.Angle:= 2048
+        end
+    else
+        begin
+        t:= step / d;
+        dx:= (Targ.X - x) * t;
+        dy:= (Targ.Y - y) * t;
+
+        ap.Angle:= DxDy2AttackAnglef(dx, -dy)
+        end;
+    
+    if dx >= 0 then cx:= 0.45 else cx:= -0.45;
+
+    for i:= 0 to 512 div step - 2 do
+        begin
+        valueResult:= valueResult + 
+            RateShove(Me, trunc(x), trunc(y)
+                , 30, 30, 25
+                , cx, -0.9, trackFall or afSetSkip);
+                
+        x:= x + dx;
+        y:= y + dy;
+        end;
+    if dx = 0 then
+        begin
+        x:= hwFloat2Float(Me^.X);
+        y:= hwFloat2Float(Me^.Y);
+        tx:= trunc(x);
+        v:= RateShove(Me, tx, trunc(y)
+                , 30, 30, 25
+                , -cx, -0.9, trackFall);
+        for i:= 1 to 512 div step - 2 do
+            begin
+            y:= y + dy;
+            v:= v + 
+                RateShove(Me, tx, trunc(y)
+                    , 30, 30, 25
+                    , -cx, -0.9, trackFall or afSetSkip);
+            end
+        end;
+    if v > valueResult then
+        begin
+        ap.Angle:= -2048;
+        valueResult:= v
+        end;
+        
+    v:= RateShove(Me, trunc(x), trunc(y)
+            , 30, 30, 25
+            , cx, -0.9, trackFall);
+    valueResult:= valueResult + v - KillScore * friendlyfactor div 100 * 1024;
+    
+    if v < 65536 then
+        inc(valueResult, RateExplosion(Me, trunc(x), trunc(y), 30));
+
+    TestKamikaze:= valueResult;
 end;
 
 function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;

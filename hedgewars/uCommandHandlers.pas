@@ -626,13 +626,14 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 
-if FollowGear <> nil then
+if autoCameraOn then
     begin
+    FollowGear:= nil;
     AddCaption('Auto Camera Off', $CCCCCC, capgrpVolume);
     autoCameraOn:= false
     end
-    else
-        begin
+else
+    begin
     AddCaption('Auto Camera On', $CCCCCC, capgrpVolume);
     bShowFinger:= true;
     if not CurrentHedgehog^.Unplaced then

@@ -86,12 +86,13 @@ var ThinkingHH: PGear;
         ar: array[0..Pred(MAXBONUS div 8)] of TBonus;  // don't use too many
         end;
 
+const KillScore = 200;
+var friendlyfactor: LongInt = 300;
+       
 implementation
 uses uCollisions, uVariables, uUtils, uDebug, uLandTexture;
 
-const KillScore = 200;
-
-var friendlyfactor: LongInt = 300;
+var 
     KnownExplosion: record
         X, Y, Radius: LongInt
         end = (X: 0; Y: 0; Radius: 0);
