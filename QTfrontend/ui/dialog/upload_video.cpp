@@ -29,6 +29,10 @@
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QMessageBox>
+#include <QRegExp>
+#include <QRegExpValidator>
+#include <QMessageBox>
 
 #include "upload_video.h"
 #include "hwconsts.h"
@@ -50,84 +54,105 @@ HWUploadVideoDialog::HWUploadVideoDialog(QWidget* parent, const QString &filenam
 
     // Google requires us to display this, see https://developers.google.com/youtube/terms
     QString GoogleNotice =
-        "By clicking 'upload,' you certify that you own all rights to the content or that\n"
-        "you are authorized by the owner to make the content publicly available on YouTube,\n"
-        "and that it otherwise complies with the YouTube Terms of Service located at\n"
+        "By clicking 'upload,' you certify that you own all rights to the content or that "
+        "you are authorized by the owner to make the content publicly available on YouTube, "
+        "and that it otherwise complies with the YouTube Terms of Service located at "
         "http://www.youtube.com/t/terms.";
+
+    // youtube doesn't understand this characters, even when they are properly escaped
+    // (either with CDATA or with &lt or &gt)
+    QRegExp rx("[^<>]*");
+
+    int row = 0;
 
     QGridLayout * layout = new QGridLayout(this);
 
     QLabel * lbLabel = new QLabel(this);
+    lbLabel->setWordWrap(true);
     lbLabel->setText(QLabel::tr(
-                         "Please provide either the YouTube account name\n"
+                         "Please provide either the YouTube account name "
                          "or the email address associated with the Google Account."));
-    layout->addWidget(lbLabel, 0, 0, 1, 2);
+    layout->addWidget(lbLabel, row++, 0, 1, 2);
 
     lbLabel = new QLabel(this);
     lbLabel->setText(QLabel::tr("Account name (or email): "));
-    layout->addWidget(lbLabel, 1, 0);
+    layout->addWidget(lbLabel, row, 0);
 
     leAccount = new QLineEdit(this);
-    layout->addWidget(leAccount, 1, 1);
+    layout->addWidget(leAccount, row++, 1);
 
     lbLabel = new QLabel(this);
     lbLabel->setText(QLabel::tr("Password: "));
-    layout->addWidget(lbLabel, 2, 0);
+    layout->addWidget(lbLabel, row, 0);
 
     lePassword = new QLineEdit(this);
     lePassword->setEchoMode(QLineEdit::Password);
-    layout->addWidget(lePassword, 2, 1);
+    layout->addWidget(lePassword, row++, 1);
 
     cbSave = new QCheckBox(this);
     cbSave->setText(QCheckBox::tr("Save account name and password"));
-    layout->addWidget(cbSave, 3, 0, 1, 2);
+    layout->addWidget(cbSave, row++, 0, 1, 2);
 
     QFrame * hr = new QFrame(this);
     hr->setFrameStyle(QFrame::HLine);
     hr->setLineWidth(3);
     hr->setFixedHeight(10);
-    layout->addWidget(hr, 4, 0, 1, 2);
+    layout->addWidget(hr, row++, 0, 1, 2);
 
     lbLabel = new QLabel(this);
     lbLabel->setText(QLabel::tr("Video title: "));
-    layout->addWidget(lbLabel, 5, 0);
+    layout->addWidget(lbLabel, row, 0);
 
     leTitle = new QLineEdit(this);
     leTitle->setText(filename);
-    layout->addWidget(leTitle, 5, 1);
+    leTitle->setValidator(new QRegExpValidator(rx));
+    layout->addWidget(leTitle, row++, 1);
 
     lbLabel = new QLabel(this);
     lbLabel->setText(QLabel::tr("Video description: "));
-    layout->addWidget(lbLabel, 6, 0, 1, 2);
+    layout->addWidget(lbLabel, row++, 0, 1, 2);
 
     teDescription = new QPlainTextEdit(this);
-    layout->addWidget(teDescription, 7, 0, 1, 2);
+    layout->addWidget(teDescription, row++, 0, 1, 2);
+
+    lbLabel = new QLabel(this);
+    lbLabel->setText(QLabel::tr("Tags (comma separated): "));
+    layout->addWidget(lbLabel, row, 0);
+
+    leTags = new QLineEdit(this);
+    leTags->setText("hedgewars");
+    leTags->setMaxLength(500);
+    leTags->setValidator(new QRegExpValidator(rx));
+    layout->addWidget(leTags, row++, 1);
+
+    cbPrivate = new QCheckBox(this);
+    cbPrivate->setText(QCheckBox::tr("Video is private"));
+    layout->addWidget(cbPrivate, row++, 0, 1, 2);
 
     hr = new QFrame(this);
         hr->setFrameStyle(QFrame::HLine);
         hr->setLineWidth(3);
         hr->setFixedHeight(10);
-        layout->addWidget(hr, 8, 0, 1, 2);
+        layout->addWidget(hr, row++, 0, 1, 2);
 
     lbLabel = new QLabel(this);
+    lbLabel->setWordWrap(true);
     lbLabel->setText(GoogleNotice);
-    layout->addWidget(lbLabel, 9, 0, 1, 2);
-
-    labelLog = new QLabel(this);
-    layout->addWidget(labelLog, 10, 0, 1, 2);
+    layout->addWidget(lbLabel, row++, 0, 1, 2);
 
     QDialogButtonBox* dbbButtons = new QDialogButtonBox(this);
     btnUpload = dbbButtons->addButton(tr("Upload"), QDialogButtonBox::ActionRole);
     QPushButton * pbCancel = dbbButtons->addButton(QDialogButtonBox::Cancel);
-    layout->addWidget(dbbButtons, 11, 0, 1, 2);
+    layout->addWidget(dbbButtons, row++, 0, 1, 2);
+
+   /* hr = new QFrame(this);
+        hr->setFrameStyle(QFrame::HLine);
+        hr->setLineWidth(3);
+        hr->setFixedHeight(10);
+        layout->addWidget(hr, row++, 0, 1, 2);*/
 
     connect(btnUpload, SIGNAL(clicked()), this, SLOT(upload()));
     connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
-}
-
-void HWUploadVideoDialog::log(const QString& text)
-{
-    labelLog->setText(labelLog->text() + text);
 }
 
 void HWUploadVideoDialog::setEditable(bool editable)
@@ -141,9 +166,6 @@ void HWUploadVideoDialog::setEditable(bool editable)
 void HWUploadVideoDialog::upload()
 {
     setEditable(false);
-
-    labelLog->clear();
-    log(tr("Authenticating at www.google.com... "));
 
     // Documentation is at https://developers.google.com/youtube/2.0/developers_guide_protocol_clientlogin#ClientLogin_Authentication
     QNetworkRequest request;
@@ -159,9 +181,12 @@ void HWUploadVideoDialog::upload()
     connect(reply, SIGNAL(finished()), this, SLOT(authFinished()));
 }
 
-QString XmlEscape(const QString& str)
+static QString XmlEscape(const QString& str)
 {
     QString str2 = str;
+    // youtube doesn't understand this characters, even when they are properly escaped
+    // (either with CDATA or with &lt; &gt;)
+    str2.replace('<', ' ').replace('>', ' ');
     return "<![CDATA[" + str2.replace("]]>", "]]]]><![CDATA[>") + "]]>";
 }
 
@@ -169,6 +194,8 @@ void HWUploadVideoDialog::authFinished()
 {
     QNetworkReply *reply = (QNetworkReply*)sender();
     reply->deleteLater();
+
+    int HttpCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
     QByteArray answer = reply->readAll();
     QString authToken = "";
@@ -184,14 +211,15 @@ void HWUploadVideoDialog::authFinished()
     }
     if (authToken.isEmpty())
     {
-        log(tr("failed\n"));
-        log(reply->errorString() + "\n");
+        QString errorStr = QMessageBox::tr("Error while authenticating at google.com:\n");
+        if (HttpCode == 403)
+            errorStr += QMessageBox::tr("Login or password is incorrect");
+        else
+            errorStr += reply->errorString();
+        QMessageBox::warning(this, QMessageBox::tr("Error"), errorStr);
         setEditable(true);
         return;
     }
-    log(tr("Ok\n"));
-
-    log(tr("Sending metadata... "));
 
     QByteArray auth = ("GoogleLogin auth=" + authToken).toAscii();
 
@@ -203,13 +231,20 @@ void HWUploadVideoDialog::authFinished()
                 "xmlns:media=\"http://search.yahoo.com/mrss/\" "
                 "xmlns:yt=\"http://gdata.youtube.com/schemas/2007\">"
                 "<media:group>"
-                    "<yt:incomplete/>"
+                  //  "<yt:incomplete/>"
                     "<media:category "
                         "scheme=\"http://gdata.youtube.com/schemas/2007/categories.cat\">Games"
                     "</media:category>"
                     "<media:title type=\"plain\">"
                         + XmlEscape(leTitle->text()).toUtf8() +
                     "</media:title>"
+                    "<media:description type=\"plain\">"
+                        + XmlEscape(teDescription->toPlainText()).toUtf8() +
+                    "</media:description>"
+                    "<media:keywords type=\"plain\">"
+                        + XmlEscape(leTags->text()).toUtf8() +
+                    "</media:keywords>"
+                    + (cbPrivate->isChecked()? "<yt:private/>" : "") +
                 "</media:group>"
             "</entry>";
 
@@ -234,12 +269,12 @@ void HWUploadVideoDialog::startUpload()
     location = QString::fromAscii(reply->rawHeader("Location"));
     if (location.isEmpty())
     {
-        log(tr("failed\n"));
-        log(reply->errorString() + "\n");
+        QString errorStr = QMessageBox::tr("Error while sending metadata to youtube.com:\n");
+        errorStr += reply->errorString();
+        QMessageBox::warning(this, QMessageBox::tr("Error"), errorStr);
         setEditable(true);
         return;
     }
 
-    log(tr("Ok\n"));
     accept();
 }

@@ -23,6 +23,7 @@
 #include "AbstractPage.h"
 
 class QNetworkAccessManager;
+class QNetworkReply;
 class GameUIConfig;
 class HWRecorder;
 class VideoItem;
@@ -76,6 +77,7 @@ class PageVideos : public AbstractPage
         void clearTemp();
         void clearThumbnail();
         void setProgress(int row, VideoItem* item, float value);
+        VideoItem * itemFromReply(QNetworkReply* reply, int & row);
 
         GameUIConfig * config;
         QNetworkAccessManager* netManager;
@@ -118,6 +120,7 @@ class PageVideos : public AbstractPage
         void uploadToYouTube();
         void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
         void uploadFinished();
+        void linkActivated(const QString & link);
 };
 
 #endif // PAGE_VIDEOS_H

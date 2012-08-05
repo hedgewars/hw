@@ -26,6 +26,13 @@
 #include "game.h"
 #include "libav_iteraction.h"
 
+// Encoding is memory expensive process, so we need to limit maximum number
+// of simultaneous encoders.
+static const int maxRecorders = 3;
+static int numRecorders = 0;
+
+static QList<HWRecorder*> queue;
+
 HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
     TCPBase(false)
 {
@@ -38,6 +45,10 @@ HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
 HWRecorder::~HWRecorder()
 {
     emit encodingFinished(finished);
+    if (queue.empty())
+        numRecorders--;
+    else
+        queue.takeFirst()->Start();
 }
 
 void HWRecorder::onClientDisconnect()
@@ -76,8 +87,13 @@ void HWRecorder::EncodeVideo(const QByteArray & record)
     toSendBuf.replace(QByteArray("\x02TN"), QByteArray("\x02TV"));
     toSendBuf.replace(QByteArray("\x02TS"), QByteArray("\x02TV"));
 
-    // run engine
-    Start();
+    if (numRecorders < maxRecorders)
+    {
+        numRecorders++;
+        Start(); // run engine
+    }
+    else
+        queue.push_back(this);
 }
 
 QStringList HWRecorder::getArguments()
