@@ -20,7 +20,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, uConsts, GLunit, uTypes;
+uses SDLh, uLandTemplates, uFloat, uConsts, GLunit, uTypes, uAILandMarks;
 
 procedure initModule;
 procedure freeModule;
@@ -54,7 +54,6 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
 
     SetLength(Land, LAND_HEIGHT, LAND_WIDTH);
     SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
-    uLandTexture.initModule;
     end;
 end;
 
@@ -704,8 +703,6 @@ if GrayScale then
                 LandPixels[y,x]:= w or (LandPixels[y div 2, x div 2] and AMask)
                 end
     end;
-
-UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
 end;
 
 procedure GenPreview(out Preview: TPreview);
