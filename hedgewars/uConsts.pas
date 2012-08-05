@@ -165,7 +165,7 @@ const
     cMinZoomLevel = 3.5;
     cZoomDelta = 0.20;
 {$ELSE}
-    cMaxZoomLevel = 1.0;
+    cMaxZoomLevel = 0.25;
     cMinZoomLevel = 3.0;
     cZoomDelta = 0.25;
 {$ENDIF}

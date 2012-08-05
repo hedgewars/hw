@@ -131,10 +131,11 @@ end;
 
 procedure WriteNames(Font: THWFont);
 var t: LongInt;
-    i: LongInt;
+    i, maxLevel: LongInt;
     r, rr: TSDL_Rect;
     drY: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
+    foundBot: boolean;
 begin
 r.x:= 0;
 r.y:= 0;
@@ -172,11 +173,28 @@ for t:= 0 to Pred(TeamsCount) do
         DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
 
         // overwrite flag for cpu teams and keep players from using it
-        if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
-            if Flag = 'hedgewars' then
-                Flag:= 'cpu'
-        else if Flag = 'cpu' then
-            Flag:= 'hedgewars';
+        foundBot:= false;
+        maxLevel:= -1;
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i] do
+                if (Gear <> nil) and (BotLevel > 0) then
+                    begin
+                    foundBot:= true;
+                    // initially was going to do the highest botlevel of the team, but for now, just apply if entire team has same bot level
+                    if maxLevel = -1 then maxLevel:= BotLevel
+                    else if (maxLevel > 0) and (maxLevel <> BotLevel) then maxLevel:= 0; 
+                    //if (maxLevel > 0) and (BotLevel < maxLevel) then maxLevel:= BotLevel
+                    end
+                else if Gear <> nil then  maxLevel:= 0;
+
+        if foundBot then
+            begin
+            // disabled the plain flag - I think it looks ok even w/ full bars obscuring CPU
+            //if (maxLevel > 0) and (maxLevel < 3) then Flag:= 'cpu_plain' else 
+            Flag:= 'cpu'
+            end
+        else if (Flag = 'cpu') or (Flag = 'cpu_plain') then
+                Flag:= 'hedgewars';
 
         flagsurf:= LoadImage(UserPathz[ptFlags] + '/' + Flag, ifNone);
         if flagsurf = nil then
@@ -186,15 +204,26 @@ for t:= 0 to Pred(TeamsCount) do
         if flagsurf = nil then
             flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
         TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
+
+        case maxLevel of
+            1: copyToXY(SpritesData[sprBotlevels].Surface, flagsurf, 0, 0); 
+            2: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 5, 2, 17, 13, 5, 2); 
+            3: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 9, 5, 13, 10, 9, 5); 
+            4: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 13, 9, 9, 6, 13, 9); 
+            5: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 17, 11, 5, 4, 17, 11)
+            end;
+
         copyToXY(flagsurf, texsurf, 2, 2);
         SDL_FreeSurface(flagsurf);
         flagsurf:= nil;
+
 
         // restore black border pixels inside the flag
         PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
         PLongwordArray(texsurf^.pixels)^[32 * 2 + 23]:= cNearBlackColor;
         PLongwordArray(texsurf^.pixels)^[32 * 16 +  2]:= cNearBlackColor;
         PLongwordArray(texsurf^.pixels)^[32 * 16 + 23]:= cNearBlackColor;
+
 
         FlagTex:= Surface2Tex(texsurf, false);
         SDL_FreeSurface(texsurf);
@@ -204,7 +233,7 @@ for t:= 0 to Pred(TeamsCount) do
 
         dec(drY, r.h + 2);
         DrawHealthY:= drY;
-        for i:= 0 to 7 do
+        for i:= 0 to cMaxHHIndex do
             with Hedgehogs[i] do
                 if Gear <> nil then
                     begin
@@ -294,7 +323,6 @@ if not reload then
             WriteLnToConsole(msgOK)
             end;
 
-WriteNames(fnt16);
 MakeCrossHairs;
 LoadGraves;
 if not reload then
@@ -390,6 +418,8 @@ for ii:= Low(TSprite) to High(TSprite) do
             else
                 Surface:= nil
         end;
+
+WriteNames(fnt16);
 
 if not reload then
     AddProgress;
