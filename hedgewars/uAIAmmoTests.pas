@@ -876,11 +876,12 @@ begin
         exit(BadTurn);
         
     valueResult:= 0;
+    v:= 0;
 
     x:= hwFloat2Float(Me^.X);
     y:= hwFloat2Float(Me^.Y);
     d:= sqrt(sqr(Targ.X - x) + sqr(Targ.Y - y));
-    if d = 0 then
+    if d < 10 then
         begin
         dx:= 0;
         dy:= 8;
@@ -909,13 +910,12 @@ begin
         end;
     if dx = 0 then
         begin
-        v:= 0;
         x:= hwFloat2Float(Me^.X);
         y:= hwFloat2Float(Me^.Y);
         tx:= trunc(x);
-        RateShove(Me, tx, trunc(y)
-            , 30, 30, 25
-            , -cx, -0.9, trackFall);
+        v:= RateShove(Me, tx, trunc(y)
+                , 30, 30, 25
+                , -cx, -0.9, trackFall);
         for i:= 1 to 512 div step - 2 do
             begin
             y:= y + dy;
