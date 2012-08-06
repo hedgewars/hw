@@ -87,19 +87,13 @@ typedef struct {
 } flib_team;
 
 /**
- * Returns a new team, or NULL on error. name must not be NULL.
- *
- * The new team is pre-filled with default settings (see hwconsts.h)
- */
-flib_team *flib_team_create(const char *name);
-
-/**
  * Free all memory associated with the team
  */
 void flib_team_destroy(flib_team *team);
 
 /**
- * Loads a team, returns NULL on error.
+ * Loads a team, returns NULL on error. Destroy this team using flib_team_destroy.
+ * This will not fill in the fields marked as "transient" in the structs above.
  */
 flib_team *flib_team_from_ini(const char *filename);
 

@@ -196,6 +196,9 @@ static int writeHogSections(const flib_team *team, flib_ini *ini) {
 }
 
 static int writeBindingSection(const flib_team *team, flib_ini *ini) {
+	if(team->bindingCount == 0) {
+		return 0;
+	}
 	if(flib_ini_create_section(ini, "binds")) {
 		return -1;
 	}
