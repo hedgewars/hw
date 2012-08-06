@@ -6,9 +6,12 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-import org.hedgewars.hedgeroid.EngineProtocol.EngineProtocolNetwork;
 import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
 import org.hedgewars.hedgeroid.EngineProtocol.PascalExports;
+import org.hedgewars.hedgeroid.frontlib.Flib;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.GameSetupPtr;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.GameconnPtr;
+import org.hedgewars.hedgeroid.netplay.TickHandler;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +26,7 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -37,13 +41,19 @@ import android.view.View;
     SDL Activity
  */
 public class SDLActivity extends Activity {
-
+	/**
+	 * Set startConfig to the desired config when starting this activity. This avoids having to parcel all
+	 * the config objects into the Intent. Not particularly elegant, but it's actually a recommended
+	 * way to do this (http://developer.android.com/guide/faq/framework.html#3)
+	 */
+	public static volatile GameConfig startConfig;
+	
 	// Main components
 	public static SDLActivity mSingleton;
 	private static SDLSurface mSurface;
 
 	// This is what SDL runs in. It invokes SDL_main(), eventually
-	private static Thread mSDLThread;
+	private static Thread mSDLThread; // Guarded by SDLActivity.class
 
 	// Audio
 	private static Thread mAudioThread;
@@ -74,11 +84,8 @@ public class SDLActivity extends Activity {
 		mSingleton = this;
 
 		// Set up the surface
-		GameConfig config = getIntent().getParcelableExtra("config");
-
-		mSurface = new SDLSurface(getApplication(), config);
+		mSurface = new SDLSurface(getApplication(), startConfig);
 		setContentView(mSurface);
-		SurfaceHolder holder = mSurface.getHolder();
 	}
 
 	// Events
@@ -108,15 +115,15 @@ public class SDLActivity extends Activity {
 		SDLActivity.nativeQuit();
 
 		// Now wait for the SDL thread to quit
-		if (mSDLThread != null) {
-			try {
-				mSDLThread.join();
-			} catch(Exception e) {
-				Log.v("SDL", "Problem stopping thread: " + e);
+		synchronized(SDLActivity.class) {
+			if (mSDLThread != null) {
+				try {
+					mSDLThread.join();
+				} catch(Exception e) {
+					Log.w("SDL", "Problem stopping thread: " + e);
+				}
+				mSDLThread = null;
 			}
-			mSDLThread = null;
-
-			//Log.v("SDL", "Finished waiting for SDL thread");
 		}
 	}
 
@@ -175,13 +182,14 @@ public class SDLActivity extends Activity {
 	}
 
 	public static void startApp(int width, int height, GameConfig config) {
-		// Start up the C app thread
-		if (mSDLThread == null) {
-			mSDLThread = new Thread(new SDLMain(width, height, config), "SDLThread");
-			mSDLThread.start();
-		}
-		else {
-			SDLActivity.nativeResume();
+		synchronized(SDLActivity.class) {
+			// Start up the C app thread
+			if (mSDLThread == null) {
+				mSDLThread = new Thread(new SDLMain(width, height, config), "SDLThread");
+				mSDLThread.start();
+			} else {
+				SDLActivity.nativeResume();
+			}
 		}
 	}
 
@@ -425,23 +433,34 @@ class SDLMain implements Runnable {
 
 	public void run() {
 		//Set up the IPC socket server to communicate with the engine
-		EngineProtocolNetwork ipc = new EngineProtocolNetwork(config);
+		HandlerThread thread = new HandlerThread("IPC thread");
+		thread.start(); // TODO ensure it gets stopped
+		final GameconnPtr conn = Flib.INSTANCE.flib_gameconn_create("Xeli", GameSetupPtr.createJavaOwned(config), false);
+		if(conn == null) {
+			throw new AssertionError();
+		}
+		int port = Flib.INSTANCE.flib_gameconn_getport(conn);
 
 		String path = Utils.getDataPath(SDLActivity.mSingleton);//This represents the data directory
 		path = path.substring(0, path.length()-1);//remove the trailing '/'
 
-
 		// Runs SDL_main() with added parameters
-		SDLActivity.nativeInit(new String[] { String.valueOf(ipc.port),
+		SDLActivity.nativeInit(new String[] { String.valueOf(port),
 				String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
 				"0", "en.txt", "xeli", "1", "1", "1", path, ""  });
 
+		new TickHandler(thread.getLooper(), 50, new Runnable() {
+			public void run() {
+				Flib.INSTANCE.flib_gameconn_tick(conn);
+			}
+		});
 		try {
-			ipc.quitIPC();
-			ipc.join();
+			thread.quit();
+			thread.join();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			throw new AssertionError();
 		}
+		Flib.INSTANCE.flib_gameconn_destroy(conn);
 		Log.v("SDL", "SDL thread terminated");
 	}
 }

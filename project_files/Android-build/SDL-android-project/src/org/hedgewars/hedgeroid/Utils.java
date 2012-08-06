@@ -270,4 +270,24 @@ public class Utils {
 			closeQuietly(is);
 		}
 	}
+	
+	private static final char[] badFilenameChars = new char[] { '/', '\\', ':', '*', '?', '\"', '<', '>', '|', '.', '\0' };
+	
+	/**
+	 * Modify the given String so that it can be used as part of a filename
+	 * without causing problems from illegal/special characters.
+	 * 
+	 * The result should be similar to the input, but isn't necessarily
+	 * reversible.
+	 */
+	public static String replaceBadChars(String name) {
+		if (name == null || name.trim().length()==0) {
+			return "_";
+		}
+		name = name.trim();
+		for (char badChar : badFilenameChars) {
+			name = name.replace(badChar, '_');
+		}
+		return name;
+	}
 }

@@ -20,14 +20,14 @@
 package org.hedgewars.hedgeroid;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
+import org.hedgewars.hedgeroid.Datastructures.Hog;
 import org.hedgewars.hedgeroid.Datastructures.Team;
 
 import android.app.Activity;
@@ -247,22 +247,12 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 
 	private OnClickListener saveClicker = new OnClickListener() {
 		public void onClick(View v) {
-			Toast.makeText(TeamCreatorActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
-			saved = true;
-			Team team = new Team();
-			team.name = name.getText().toString();
-			HashMap<String, Object> hashmap = (HashMap<String, Object>) flag.getSelectedItem();
-
-			team.flag = (String) hashmap.get("txt");
-			team.fort = fort.getSelectedItem().toString();
-			hashmap = (HashMap<String, Object>) grave.getSelectedItem();
-			team.grave = hashmap.get("txt").toString();
-			team.hash = "0";
-			team.voice = voice.getSelectedItem().toString();
-			team.file = fileName;
-
-			hashmap = ((HashMap<String, Object>) difficulty.getSelectedItem());
-			String levelString = hashmap.get("txt").toString();
+			String teamName = name.getText().toString();
+			String teamFlag = (String)((Map<String, Object>) flag.getSelectedItem()).get("txt");
+			String teamFort = fort.getSelectedItem().toString();
+			String teamGrave = (String)((Map<String, Object>) grave.getSelectedItem()).get("txt");
+			String teamVoice = voice.getSelectedItem().toString();
+			String levelString = (String)((Map<String, Object>) difficulty.getSelectedItem()).get("txt");
 			int levelInt;
 			if (levelString.equals(getString(R.string.human))) {
 				levelInt = 0;
@@ -277,28 +267,39 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 			} else {
 				levelInt = 5;
 			}
-
+			
+			List<Hog> hogs = new ArrayList<Hog>();
 			for (int i = 0; i < hogName.size(); i++) {
-				team.hogNames[i] = hogName.get(i).getText().toString();
-				hashmap = (HashMap<String, Object>) hogHat.get(i).getSelectedItem();
-				team.hats[i] = hashmap.get("txt").toString();
-				team.levels[i] = levelInt;
+				String name = hogName.get(i).getText().toString();
+				String hat = ((Map<String, Object>) hogHat.get(i).getSelectedItem()).get("txt").toString();
+				hogs.add(new Hog(name, hat, levelInt));
+			}
+			
+			Team team = new Team(teamName, teamGrave, teamFlag, teamVoice, teamFort, hogs);
+			File teamsDir = new File(getFilesDir(), Team.DIRECTORY_TEAMS);
+			if (!teamsDir.exists()) teamsDir.mkdir();
+			if(fileName == null){
+				fileName = createNewFilename(Utils.replaceBadChars(team.name));
 			}
 			try {
-				File teamsDir = new File(getFilesDir().getAbsolutePath() + '/' + Team.DIRECTORY_TEAMS);
-				if (!teamsDir.exists()) teamsDir.mkdir();
-				if(team.file == null){
-					team.setFileName(TeamCreatorActivity.this);
-				}
-				FileOutputStream fos = new FileOutputStream(String.format("%s/%s", teamsDir.getAbsolutePath(), team.file));
-				team.writeToXml(fos);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				team.save(new File(teamsDir, fileName));
+				Toast.makeText(TeamCreatorActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+				saved = true;
+			} catch(IOException e) {
+				Toast.makeText(getApplicationContext(), R.string.error_save_failed, Toast.LENGTH_SHORT).show();
 			}
 		}
-
 	};
 
+	private String createNewFilename(String suggestedName){
+		File f = new File(getFilesDir(), suggestedName);
+		if(f.exists()){
+			return createNewFilename(suggestedName + (int)(Math.random()*10));
+		} else {
+			return suggestedName + (int)(Math.random()*10);
+		}
+	}
+	
 	private OnItemSelectedListener fortSelector = new OnItemSelectedListener() {
 		public void onItemSelected(AdapterView<?> arg0, View arg1,
 				int position, long arg3) {
@@ -362,7 +363,7 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 
 			position = 0;
 			for (HashMap<String, ?> hashmap : typesData) {
-				if (hashmap.get("txt").equals(t.levels[0])) {
+				if (t.hogs.get(0) != null && hashmap.get("txt").equals(t.hogs.get(0).level)) {
 					difficulty.setSelection(position);
 					break;
 				}
@@ -387,14 +388,14 @@ public class TeamCreatorActivity extends Activity implements Runnable{
 			for (int i = 0; i < Team.maxNumberOfHogs; i++) {
 				position = 0;
 				for (HashMap<String, ?> hashmap : hatsData) {
-					if (hashmap.get("txt").equals(t.hats[i])) {
+					if (hashmap.get("txt").equals(t.hogs.get(i).hat)) {
 						hogHat.get(i).setSelection(position);
 					}
 				}
 
-				hogName.get(i).setText(t.hogNames[i]);
+				hogName.get(i).setText(t.hogs.get(i).name);
 			}
-			this.fileName = t.file;
+			//this.fileName = t.file;
 		}
 	}
 

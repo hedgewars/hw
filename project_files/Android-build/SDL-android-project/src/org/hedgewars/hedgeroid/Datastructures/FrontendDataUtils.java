@@ -26,13 +26,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.hedgewars.hedgeroid.R;
+import org.hedgewars.hedgeroid.StartGameActivity;
 import org.hedgewars.hedgeroid.Utils;
 import org.hedgewars.hedgeroid.Datastructures.Map.MapType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import java.nio.ByteBuffer;
 
 public class FrontendDataUtils {
 
@@ -73,16 +73,11 @@ public class FrontendDataUtils {
 		return list;
 	}
 
-	public static List<Scheme> getSchemes(Context c){
-		List<Scheme> list = Scheme.getSchemes(c);
-		Collections.sort(list);
-		return list;
-	}
-
 	public static List<Weapon> getWeapons(Context c){
-		List<Weapon> list = Weapon.getWeapons(c);
-		Collections.sort(list);
-		return list;
+		// TODO stub, re-implement
+		/*List<Weapon> list = Weapon.getWeapons(c);
+		Collections.sort(list);*/
+		return Collections.emptyList();
 	}
 
 	public static ArrayList<HashMap<String, ?>> getGraves(Context c){
@@ -171,50 +166,24 @@ public class FrontendDataUtils {
 		return data;
 	}
 
-	public static List<HashMap<String, Object>> getTeams(Context c){
-		List<HashMap<String, Object>> ret = new ArrayList<HashMap<String, Object>>();
-
-		File teamsDir = new File(c.getFilesDir().getAbsolutePath() + '/' + Team.DIRECTORY_TEAMS);
+	public static List<TeamFile> getTeamFiles(Context c) {
+		List<TeamFile> ret = new ArrayList<TeamFile>();
+		
+		File teamsDir = new File(c.getFilesDir(), Team.DIRECTORY_TEAMS);
 		File[] teamFileNames = teamsDir.listFiles();
 		if(teamFileNames != null){
-			for(File s : teamFileNames){
-				Team t = Team.getTeamFromXml(s.getAbsolutePath());
-				if(t != null){
-					t.file = s.getName();
-					ret.add(teamToMap(t));
+			for(File file : teamFileNames){
+				Team team = Team.load(file);
+				if(team != null){
+					ret.add(new TeamFile(team, file));
 				}
 			}
 		}
 		return ret;
 	}
 
-	public static HashMap<String, Object> teamToMap(Team t){
-		HashMap<String, Object> hashmap = new HashMap<String, Object>();
-		hashmap.put("team", t);
-		hashmap.put("txt", t.name);
-		hashmap.put("color", t.color);
-		hashmap.put("count", t.hogCount);
-		switch(t.levels[0]){
-		case 0:
-			hashmap.put("img", R.drawable.human);
-			break;
-		case 1:
-			hashmap.put("img", R.drawable.bot5);
-			break;
-		case 2:
-			hashmap.put("img", R.drawable.bot4);
-			break;
-		case 3:
-			hashmap.put("img", R.drawable.bot3);
-			break;
-		case 4:
-			hashmap.put("img", R.drawable.bot2);
-			break;
-		default:
-		case 5:
-			hashmap.put("img", R.drawable.bot1);
-			break;
-		}
-		return hashmap;
+	public static Scheme[] getSchemes(StartGameActivity startGameActivity) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

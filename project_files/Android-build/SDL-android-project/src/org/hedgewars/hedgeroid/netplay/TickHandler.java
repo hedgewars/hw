@@ -12,7 +12,7 @@ import android.os.Message;
  * The interval can be changed at any time, which will cause
  * an immediate execution of the runnable again.
  */
-class TickHandler extends Handler {
+public class TickHandler extends Handler {
 	private final Runnable callback;
 	private int messageId;
 	private long interval;

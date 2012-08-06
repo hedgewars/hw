@@ -1,64 +1,39 @@
 package org.hedgewars.hedgeroid.netplay;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-import android.database.DataSetObservable;
-import android.util.Log;
+import org.hedgewars.hedgeroid.Datastructures.RoomlistRoom;
+
 import android.util.Pair;
 
-public class Roomlist extends DataSetObservable {
+public class Roomlist extends ObservableTreeMap<String, Pair<RoomlistRoom, Long>> {
 	private long nextId = 1;
-	private Map<String, Pair<Room, Long>> rooms = new TreeMap<String, Pair<Room, Long>>();
 	
-	public void updateList(Room[] newRooms) {
-		Map<String, Pair<Room, Long>> newMap = new TreeMap<String, Pair<Room, Long>>();
-		for(Room room : newRooms) {
-			Pair<Room, Long> oldEntry = rooms.get(room.name);
+	public void updateList(RoomlistRoom[] newRooms) {
+		Map<String, Pair<RoomlistRoom, Long>> newMap = new TreeMap<String, Pair<RoomlistRoom, Long>>();
+		for(RoomlistRoom room : newRooms) {
+			Pair<RoomlistRoom, Long> oldEntry = get(room.name);
 			if(oldEntry == null) {
 				newMap.put(room.name, Pair.create(room, nextId++));
 			} else {
 				newMap.put(room.name, Pair.create(room, oldEntry.second));
 			}
 		}
-		rooms = newMap;
-		notifyChanged();
+		replaceContent(newMap);
 	}
 	
-	public void addRoomWithNewId(Room room) {
-		rooms.put(room.name, Pair.create(room, nextId++));
-		notifyChanged();
+	public void addRoomWithNewId(RoomlistRoom room) {
+		put(room.name, Pair.create(room, nextId++));
 	}
 	
-	public void updateRoom(String name, Room room) {
-		Pair<Room, Long> oldEntry = rooms.get(name);
+	public void updateRoom(String name, RoomlistRoom room) {
+		Pair<RoomlistRoom, Long> oldEntry = get(name);
 		if(oldEntry == null) {
-			Log.e("RoomList", "Received update for unknown room: "+name);
-			rooms.put(room.name, Pair.create(room, nextId++));
+			addRoomWithNewId(room);
 		} else {
-			if(!name.equals(room.name)) {
-				rooms.remove(name);
-			}
-			rooms.put(room.name, Pair.create(room, oldEntry.second));
+			remove(name);
+			put(room.name, Pair.create(room, oldEntry.second));
 		}
-		notifyChanged();
-	}
-	
-	public void removeRoom(String name) {
-		if(rooms.remove(name) != null) {
-			notifyChanged();
-		}
-	}
-	
-	public void clear() {
-		if(!rooms.isEmpty()) {
-			rooms.clear();
-			notifyChanged();
-		}
-	}
-	
-	public Map<String, Pair<Room, Long>> getMap() {
-		return Collections.unmodifiableMap(rooms);
 	}
 }

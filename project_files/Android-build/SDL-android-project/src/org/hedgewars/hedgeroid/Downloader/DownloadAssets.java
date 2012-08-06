@@ -8,6 +8,7 @@ import org.hedgewars.hedgeroid.MainActivity;
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Utils;
 import org.hedgewars.hedgeroid.Datastructures.Scheme;
+import org.hedgewars.hedgeroid.Datastructures.Schemes;
 import org.hedgewars.hedgeroid.Datastructures.Team;
 import org.hedgewars.hedgeroid.Datastructures.Weapon;
 
@@ -44,7 +45,7 @@ public class DownloadAssets extends AsyncTask<Object, Long, Boolean> {
 	@Override
 	protected Boolean doInBackground(Object... params) {
 		try {
-			Utils.resRawToFilesDir(act, R.array.schemes, Scheme.DIRECTORY_SCHEME);
+			Utils.writeStreamToFile(act.getResources().openRawResource(R.raw.schemes_builtin), Schemes.getBuiltinSchemesFile(act));
 			Utils.resRawToFilesDir(act, R.array.weapons, Weapon.DIRECTORY_WEAPON);
 			Utils.resRawToFilesDir(act, R.array.teams, Team.DIRECTORY_TEAMS);
 			copyFileOrDir(act.getAssets(), Utils.getDataPathFile(act), "Data");

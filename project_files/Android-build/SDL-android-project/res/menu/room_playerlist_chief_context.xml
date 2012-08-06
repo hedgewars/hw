@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/player_kick"
+        android:title="@string/playerlist_contextmenu_kick">
+    </item>
+</menu>

@@ -1,18 +1,12 @@
 package org.hedgewars.hedgeroid.netplay;
 
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.NetconnPtr;
 import org.hedgewars.hedgeroid.netplay.Netplay.State;
 import org.hedgewars.hedgeroid.netplay.NetplayStateFragment.NetplayStateListener;
 
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.Toast;
 

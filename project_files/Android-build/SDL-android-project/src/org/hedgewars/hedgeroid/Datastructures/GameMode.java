@@ -20,5 +20,5 @@
 package org.hedgewars.hedgeroid.Datastructures;
 
 public enum GameMode {
-		MODE_LOCAL, MODE_DEMO, MODE_NET, MODE_SAVE
+	MODE_LOCAL, MODE_DEMO, MODE_NET, MODE_SAVE
 }

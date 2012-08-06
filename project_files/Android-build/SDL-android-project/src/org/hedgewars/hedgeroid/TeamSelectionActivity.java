@@ -26,11 +26,16 @@ import java.util.List;
 
 import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
 import org.hedgewars.hedgeroid.Datastructures.Team;
+import org.hedgewars.hedgeroid.Datastructures.TeamFile;
+import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
+import org.hedgewars.hedgeroid.Datastructures.TeamIngameAttributes;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,8 +52,10 @@ import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
 public class TeamSelectionActivity extends Activity implements Runnable{
-
 	private static final int ACTIVITY_TEAMCREATION = 0;
+	
+	private static volatile List<Pair<TeamFile, TeamIngameAttributes>> activityParams;
+	private static volatile List<Pair<TeamFile, TeamIngameAttributes>> activityReturn;
 
 	private ImageButton addTeam, back;
 	private ListView availableTeams, selectedTeams;
@@ -86,14 +93,14 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 	}
 
 	public void run(){
-		List<HashMap<String, Object>> teamsList = FrontendDataUtils.getTeams(this);//teams from xml
-		ArrayList<Team> teamsStartGame = getIntent().getParcelableArrayListExtra("teams");//possible selected teams
+		List<HashMap<String, Object>> teamsList = getTeams(this);//teams from xml
+		ArrayList<String> teamsStartGame = getIntent().getStringArrayListExtra("selectedTeamNames");
 
 		for(HashMap<String, Object> hashmap : teamsList){
 			boolean added = false;
-			for(Team t : teamsStartGame){
-				if(((Team)hashmap.get("team")).equals(t)){//add to available or add to selected
-					selectedTeamsList.add(FrontendDataUtils.teamToMap(t));//create a new hashmap to ensure all variables are entered into the map
+			for(String teamName : teamsStartGame){
+				if(((Team)hashmap.get("team")).name.equals(teamName)){ // add to available or add to selected
+					selectedTeamsList.add(hashmap);
 					added = true;
 					break;
 				}
@@ -139,7 +146,7 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 	 */
 	private void updateListViews(){
 		unregisterForContextMenu(availableTeams);
-		availableTeamsList = FrontendDataUtils.getTeams(this);
+		availableTeamsList = getTeams(this);
 		ArrayList<HashMap<String, Object>> toBeRemoved = new ArrayList<HashMap<String, Object>>();
 		for(HashMap<String, Object> hashmap : selectedTeamsList){
 			String name = (String)hashmap.get("txt");
@@ -253,21 +260,19 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 	public boolean onContextItemSelected(MenuItem item){
 		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
 		int position = menuInfo.position;
+		TeamFile teamfile = (TeamFile)availableTeamsList.get(position).get("teamfile");
 		switch(item.getItemId()){
 		case 0://select
 			selectAvailableTeamsItem(position);
 			return true;
 		case 1://delete
-			Team team = (Team)availableTeamsList.get(position).get("team");
-			File f = new File(String.format("%s/%s/%s", TeamSelectionActivity.this.getFilesDir(), Team.DIRECTORY_TEAMS, team.file));
-			f.delete();
+			teamfile.file.delete();
 			availableTeamsList.remove(position);
 			((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 			return true;
 		case 2://edit
 			Intent i = new Intent(TeamSelectionActivity.this, TeamCreatorActivity.class);
-			Team t = (Team)availableTeamsList.get(position).get("team");
-			i.putExtra("team", t);
+			i.putExtra("teamfile", teamfile.file);
 			startActivityForResult(i, ACTIVITY_TEAMCREATION);
 			return true;
 		}
@@ -303,5 +308,37 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 		i.putExtra("teams", teams);
 		setResult(Activity.RESULT_OK, i);
 
+	}
+	
+	private static List<HashMap<String, Object>> getTeams(Context c){
+		List<HashMap<String, Object>> ret = new ArrayList<HashMap<String, Object>>();
+		List<TeamFile> teamfiles = FrontendDataUtils.getTeamFiles(c);
+		for(TeamFile tf : teamfiles) {
+			ret.add(teamfileToMap(tf));
+		}
+		return ret;
+	}
+	
+	private static final int[] botlevelDrawables = new int[] {
+		R.drawable.human, R.drawable.bot5, R.drawable.bot4, R.drawable.bot3, R.drawable.bot2, R.drawable.bot1
+	};
+	
+	private static HashMap<String, Object> teamfileToMap(TeamFile tf){
+		HashMap<String, Object> hashmap = new HashMap<String, Object>();
+		Team t = tf.team;
+		hashmap.put("team", t);
+		hashmap.put("teamfile", tf);
+		hashmap.put("txt", t.name);
+		hashmap.put("color", t.color);
+		hashmap.put("count", t.hogCount);
+		
+		int botlevel = t.hogs.get(0).level;
+		if(botlevel<0 || botlevel>=botlevelDrawables.length) {
+			hashmap.put("img", R.drawable.bot1);
+		} else {
+			hashmap.put("img", botlevelDrawables[botlevel]);
+		}
+		return hashmap;
+		return null;
 	}
 }

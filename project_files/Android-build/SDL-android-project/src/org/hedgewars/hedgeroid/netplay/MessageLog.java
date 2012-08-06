@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.hedgewars.hedgeroid.R;
+import org.hedgewars.hedgeroid.frontlib.Frontlib;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -105,17 +106,17 @@ public class MessageLog {
 	
 	void appendMessage(int type, String msg) {
 		switch(type) {
-		case JnaFrontlib.NETCONN_MSG_TYPE_ERROR:
+		case Frontlib.NETCONN_MSG_TYPE_ERROR:
 			append(withColor("***"+msg, ERROR_COLOR));
 			break;
-		case JnaFrontlib.NETCONN_MSG_TYPE_WARNING:
+		case Frontlib.NETCONN_MSG_TYPE_WARNING:
 			append(withColor("***"+msg, WARN_COLOR));
 			break;
-		case JnaFrontlib.NETCONN_MSG_TYPE_PLAYERINFO:
+		case Frontlib.NETCONN_MSG_TYPE_PLAYERINFO:
 			// TODO Display in popup?
 			append(withColor(msg.replace("\n", " "), PLAYERINFO_COLOR));
 			break;
-		case JnaFrontlib.NETCONN_MSG_TYPE_SERVERMESSAGE:
+		case Frontlib.NETCONN_MSG_TYPE_SERVERMESSAGE:
 			appendRaw(span(TextUtils.concat("\n", Html.fromHtml(msg), "\n"), new RelativeSizeSpan(1.5f)));
 			break;
 		default:

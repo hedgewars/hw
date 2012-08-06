@@ -19,18 +19,17 @@
 
 package org.hedgewars.hedgeroid.Datastructures;
 
-public class Grave{
-
+public final class Grave{
 	public final String name;
 	public final String path;
 	
-	public Grave(String _name, String _path) {
-		name = _name;
-		path = _path;
+	public Grave(String name, String path) {
+		this.name = name;
+		this.path = path;
 	}
 
-	public String toString(){
-		return name;
+	@Override
+	public String toString() {
+		return "Grave [name=" + name + ", path=" + path + "]";
 	}
-	
 }

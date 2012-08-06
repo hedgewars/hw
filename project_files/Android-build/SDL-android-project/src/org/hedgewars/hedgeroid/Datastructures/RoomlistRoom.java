@@ -1,10 +1,10 @@
-package org.hedgewars.hedgeroid.netplay;
+package org.hedgewars.hedgeroid.Datastructures;
 
 import org.hedgewars.hedgeroid.R;
 
 import android.content.res.Resources;
 
-public class Room {
+public final class RoomlistRoom {
 	public static final String MAP_REGULAR = "+rnd+";
 	public static final String MAP_MAZE = "+maze+";
 	public static final String MAP_DRAWN = "+drawn+";
@@ -13,7 +13,7 @@ public class Room {
 	public final int playerCount, teamCount;
 	public final boolean inProgress;
 	
-	public Room(String name, String map, String scheme, String weapons,
+	public RoomlistRoom(String name, String map, String scheme, String weapons,
 			String owner, int playerCount, int teamCount, boolean inProgress) {
 		this.name = name;
 		this.map = map;
@@ -24,7 +24,7 @@ public class Room {
 		this.teamCount = teamCount;
 		this.inProgress = inProgress;
 	}
-
+	
 	public static String formatMapName(Resources res, String map) {
 		if(map.charAt(0)=='+') {
 			if(map.equals(MAP_REGULAR)) {
@@ -36,5 +36,17 @@ public class Room {
 			}
 		}
 		return map;
+	}
+	
+	public String formatMapName(Resources res) {
+		return formatMapName(res, map);
+	}
+
+	@Override
+	public String toString() {
+		return "RoomlistRoom [name=" + name + ", map=" + map + ", scheme="
+				+ scheme + ", weapons=" + weapons + ", owner=" + owner
+				+ ", playerCount=" + playerCount + ", teamCount=" + teamCount
+				+ ", inProgress=" + inProgress + "]";
 	}
 }
