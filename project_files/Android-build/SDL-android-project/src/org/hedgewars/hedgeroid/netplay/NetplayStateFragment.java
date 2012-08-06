@@ -1,6 +1,7 @@
 package org.hedgewars.hedgeroid.netplay;
 
 import org.hedgewars.hedgeroid.R;
+import org.hedgewars.hedgeroid.frontlib.Frontlib;
 import org.hedgewars.hedgeroid.netplay.Netplay.State;
 
 import android.app.Activity;
@@ -101,9 +102,9 @@ public class NetplayStateFragment extends Fragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			int reason = intent.getIntExtra(Netplay.EXTRA_REASON, -1);
-			if(reason == JnaFrontlib.NETCONN_ROOMLEAVE_ABANDONED) {
+			if(reason == Frontlib.NETCONN_ROOMLEAVE_ABANDONED) {
 				Toast.makeText(appContext, R.string.toast_room_abandoned, Toast.LENGTH_LONG).show();
-			} else if(reason == JnaFrontlib.NETCONN_ROOMLEAVE_KICKED) {
+			} else if(reason == Frontlib.NETCONN_ROOMLEAVE_KICKED) {
 				Toast.makeText(appContext, R.string.toast_kicked, Toast.LENGTH_LONG).show();
 			}
 		}

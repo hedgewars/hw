@@ -19,17 +19,11 @@
 package org.hedgewars.hedgeroid.Datastructures;
 
 import java.io.File;
-import java.io.IOException;
-
-import org.hedgewars.hedgeroid.EngineProtocol.EngineProtocolNetwork;
-
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Parcel;
-import android.os.Parcelable;
 
-public class Map implements Comparable<Map>, Parcelable{
+public class Map implements Comparable<Map> {
 
 	private static final String MISSION_PREFIX = "Mission: ";
 
@@ -60,10 +54,6 @@ public class Map implements Comparable<Map>, Parcelable{
 
 		
 	}
-	
-	public Map(Parcel in){
-		readFromParcel(in);
-	}
 
 	public String toString(){
 		switch(type){
@@ -75,10 +65,6 @@ public class Map implements Comparable<Map>, Parcelable{
 		case TYPE_MISSION:
 			return MISSION_PREFIX + name;
 		}
-	}
-	
-	public void sendToEngine(EngineProtocolNetwork epn) throws IOException{
-		epn.sendToEngine(String.format("emap %s",name));
 	}
 	
 	public MapType getType(){
@@ -133,31 +119,4 @@ public class Map implements Comparable<Map>, Parcelable{
 	public enum MapType{
 		TYPE_DEFAULT, TYPE_MISSION, TYPE_GENERATED
 	}
-
-	public int describeContents() {
-		return 0;
-	}
-	
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(name);
-		dest.writeString(path);
-		dest.writeString(previewPath);
-		dest.writeString(type.name());
-	}
-	
-	private void readFromParcel(Parcel src){
-		name = src.readString();
-		path = src.readString();
-		previewPath = src.readString();
-		type = MapType.valueOf(src.readString());
-	}
-	public static final Parcelable.Creator<Map> CREATOR = new Parcelable.Creator<Map>() {
-		public Map createFromParcel(Parcel source) {
-			return new Map(source);
-		}
-		public Map[] newArray(int size) {
-			return new Map[size];
-		}
-		
-	};
 }

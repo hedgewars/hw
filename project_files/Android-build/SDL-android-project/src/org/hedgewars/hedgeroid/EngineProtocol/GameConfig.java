@@ -18,9 +18,7 @@
 
 package org.hedgewars.hedgeroid.EngineProtocol;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.UUID;
 
 import org.hedgewars.hedgeroid.Datastructures.GameMode;
 import org.hedgewars.hedgeroid.Datastructures.Map;
@@ -28,12 +26,7 @@ import org.hedgewars.hedgeroid.Datastructures.Scheme;
 import org.hedgewars.hedgeroid.Datastructures.Team;
 import org.hedgewars.hedgeroid.Datastructures.Weapon;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
-
-public class GameConfig implements Parcelable{
-	
+public class GameConfig {
 	public GameMode mode = GameMode.MODE_LOCAL;
 	public Map map = null;
 	public String theme = null;
@@ -49,79 +42,4 @@ public class GameConfig implements Parcelable{
 	public GameConfig(){
 		
 	}
-	
-	public GameConfig(Parcel in){
-		readFromParcel(in);	
-	}
-	
-
-	
-	public void sendToEngine(EngineProtocolNetwork epn) throws IOException{
-		Log.d("HW_Frontend", "Sending Gameconfig...");
-		int teamCount = 4;
-		epn.sendToEngine("TL"); //Write game mode
-		if(training != null) epn.sendToEngine(String.format("escript Scripts/Training/%s.lua", training));
-		else if(style != null) epn.sendToEngine(String.format("escript Scripts/Multiplayer/%s.lua", style));
-		
-		//seed info
-		epn.sendToEngine(String.format("eseed {%s}", UUID.randomUUID().toString()));
-		
-		map.sendToEngine(epn);
-		//dimensions of the map
-		//templatefilter_command
-		//mapgen_command
-		//mazesize_command
-		
-		epn.sendToEngine(String.format("etheme %s", theme));
-		
-		scheme.sendToEngine(epn);
-		
-		weapon.sendToEngine(epn, teamCount);
-		
-		for(Team t : teams){
-			if(t != null)t.sendToEngine(epn, teamCount, scheme.getHealth());
-		}
-	}
-	
-	public int describeContents() {
-		return 0;
-	}
-
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(mode.name());
-		dest.writeParcelable(map, flags);
-		dest.writeString(theme);
-		dest.writeParcelable(scheme, flags);
-		dest.writeParcelable(weapon, flags);
-		dest.writeString(style);
-		dest.writeString(training);
-		dest.writeString(seed);
-		dest.writeParcelableArray((Team[])teams.toArray(new Team[1]), 0);
-	}
-	
-	private void readFromParcel(Parcel src){
-		mode = GameMode.valueOf(src.readString());
-		map = src.readParcelable(Map.class.getClassLoader());
-		theme = src.readString();
-		scheme = src.readParcelable(Scheme.class.getClassLoader());
-		weapon = src.readParcelable(Weapon.class.getClassLoader());
-		style = src.readString();
-		training = src.readString();
-		seed = src.readString();
-		Parcelable[] parcelables = src.readParcelableArray(Team[].class.getClassLoader());
-		for(Parcelable team : parcelables){
-			teams.add((Team)team);
-		}
-		
-	}
-	
-	public static final Parcelable.Creator<GameConfig> CREATOR = new Parcelable.Creator<GameConfig>() {
-		public GameConfig createFromParcel(Parcel source) {
-			return new GameConfig(source);
-		}
-		public GameConfig[] newArray(int size) {
-			return new GameConfig[size];
-		}
-	};
-	
 }

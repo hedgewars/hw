@@ -45,8 +45,8 @@
 	                android:id="@+id/playerListFragment"
 	                android:layout_width="fill_parent"
 	                android:layout_height="fill_parent"
-	                class="org.hedgewars.hedgeroid.netplay.PlayerlistFragment"
-	                tools:layout="@layout/lobby_players_fragment" />
+	                class="org.hedgewars.hedgeroid.netplay.LobbyPlayerlistFragment"
+	                tools:layout="@layout/fragment_playerlist" />
 	        </FrameLayout>
 	        
 	        <FrameLayout

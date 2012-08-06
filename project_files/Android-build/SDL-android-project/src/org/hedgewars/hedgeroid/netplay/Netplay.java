@@ -5,19 +5,29 @@ import java.io.FileNotFoundException;
 
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Utils;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.BoolCallback;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.IntStrCallback;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.MetaschemePtr;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.NetconnPtr;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.RoomArrayPtr;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.RoomCallback;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.RoomListCallback;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.RoomPtr;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.StrCallback;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.StrRoomCallback;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.StrStrCallback;
-import org.hedgewars.hedgeroid.netplay.JnaFrontlib.VoidCallback;
+import org.hedgewars.hedgeroid.Datastructures.RoomlistRoom;
+import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
+import org.hedgewars.hedgeroid.Datastructures.TeamIngameAttributes;
+import org.hedgewars.hedgeroid.frontlib.Flib;
+import org.hedgewars.hedgeroid.frontlib.Frontlib;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.BoolCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.IntStrCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.MetaschemePtr;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.NetconnPtr;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.RoomArrayPtr;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.RoomCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.RoomListCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.RoomPtr;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.StrBoolCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.StrCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.StrIntCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.StrRoomCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.StrStrCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.TeamCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.TeamPtr;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.VoidCallback;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -58,31 +68,32 @@ public class Netplay {
 	private final LocalBroadcastManager broadcastManager;
 	private final FromNetHandler fromNetHandler = new FromNetHandler();
 	
-	private State state;
+	private State state = State.NOT_CONNECTED;
 	private int foregroundUsers = 0;	// Reference counter of clients requesting foreground tick speed (fast ticks)
 	private boolean chief;				// Do we control the current room?
+	private String playerName;
 	
 	// null if there is no running connection (==state is NOT_CONNECTED)
 	private ThreadedNetConnection connection;
 	
-	public final Playerlist playerList = new Playerlist();
+	public final LobbyPlayerlist lobbyPlayerlist = new LobbyPlayerlist();
+	public final RoomPlayerlist roomPlayerlist = new RoomPlayerlist();
 	public final Roomlist roomList = new Roomlist();
 	public final MessageLog lobbyChatlog;
 	public final MessageLog roomChatlog;
+	public final Teamlist roomTeamlist = new Teamlist();
 	
 	public Netplay(Context appContext) {
 		this.appContext = appContext;
 		broadcastManager = LocalBroadcastManager.getInstance(appContext);
 		lobbyChatlog = new MessageLog(appContext);
 		roomChatlog = new MessageLog(appContext);
-		state = State.NOT_CONNECTED;
 	}
 	
 	private void clearState() {
-		playerList.clear();
+		lobbyPlayerlist.clear();
 		roomList.clear();
 		lobbyChatlog.clear();
-		roomChatlog.clear();
 	}
 	
 	public void connectToDefaultServer(String playerName) {
@@ -97,6 +108,7 @@ public class Netplay {
 	 * will change back to NOT_CONNECTED and an ACTION_DISCONNECTED broadcast is sent.
 	 */
 	public void connect(String name, String host, int port) {
+		playerName = name;
 		if(state != State.NOT_CONNECTED) {
 			throw new IllegalStateException("Attempt to start a new connection while the old one was still running.");
 		}
@@ -107,7 +119,10 @@ public class Netplay {
 		connection.setFastTickRate(foregroundUsers > 0);
 	}
 	
-	public void sendNick(String nick) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_NICK, nick); }
+	public void sendNick(String nick) {
+		playerName = nick;
+		sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_NICK, nick);
+	}
 	public void sendPassword(String password) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_PASSWORD, password); }
 	public void sendQuit(String message) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_QUIT, message); }
 	public void sendRoomlistRequest() { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_ROOMLIST_REQUEST); }
@@ -117,6 +132,7 @@ public class Netplay {
 	public void sendJoinRoom(String name) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_JOIN_ROOM, name); }
 	public void sendCreateRoom(String name) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_CREATE_ROOM, name); }
 	public void sendLeaveRoom(String message) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_LEAVE_ROOM, message); }
+	public void sendKick(String player) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_KICK, player); }
 	
 	public void disconnect() { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_DISCONNECT, "User Quit"); }
 	
@@ -153,6 +169,10 @@ public class Netplay {
 	
 	public boolean isChief() {
 		return chief;
+	}
+	
+	public String getPlayerName() {
+		return playerName;
 	}
 	
 	/**
@@ -210,6 +230,7 @@ public class Netplay {
 	/**
 	 * Processes messages from the networking system. Always runs on the main thread.
 	 */
+	@SuppressLint("HandlerLeak")
 	final class FromNetHandler extends Handler {
 		public static final int MSG_LOBBY_JOIN = 0;
 		public static final int MSG_LOBBY_LEAVE = 1;
@@ -226,6 +247,12 @@ public class Netplay {
 		public static final int MSG_PASSWORD_REQUEST = 12;
 		public static final int MSG_ENTER_ROOM_FROM_LOBBY = 13;
 		public static final int MSG_LEAVE_ROOM = 14;
+		public static final int MSG_READYSTATE = 15;
+		public static final int MSG_TEAM_ADDED = 16;
+		public static final int MSG_TEAM_DELETED = 17;
+		public static final int MSG_TEAM_ACCEPTED = 18;
+		public static final int MSG_TEAM_COLOR_CHANGED = 19;
+		public static final int MSG_HOG_COUNT_CHANGED = 20;
 		
 		public FromNetHandler() {
 			super(Looper.getMainLooper());
@@ -237,25 +264,25 @@ public class Netplay {
 			switch(msg.what) {
 			case MSG_LOBBY_JOIN: {
 				String name = (String)msg.obj;
-				playerList.addPlayerWithNewId(name);
+				lobbyPlayerlist.addPlayerWithNewId(name);
 				lobbyChatlog.appendPlayerJoin(name);
 				break;
 			}
 			case MSG_LOBBY_LEAVE: {
 				Pair<String, String> args = (Pair<String, String>)msg.obj;
-				playerList.removePlayer(args.first);
+				lobbyPlayerlist.remove(args.first);
 				lobbyChatlog.appendPlayerLeave(args.first, args.second);
 				break;
 			}
 			case MSG_ROOM_JOIN: {
 				String name = (String)msg.obj;
-				// TODO roomPlayerList.addPlayerWithNewId(name);
+				roomPlayerlist.addPlayerWithNewId(name);
 				roomChatlog.appendPlayerJoin(name);
 				break;
 			}
 			case MSG_ROOM_LEAVE: {
 				Pair<String, String> args = (Pair<String, String>)msg.obj;
-				// TODO roomPlayerList.removePlayer(args.first);
+				roomPlayerlist.remove(args.first);
 				roomChatlog.appendPlayerLeave(args.first, args.second);
 				break;
 			}
@@ -269,23 +296,24 @@ public class Netplay {
 				break;
 			}
 			case MSG_ROOM_ADD: {
-				roomList.addRoomWithNewId((Room)msg.obj);
+				roomList.addRoomWithNewId((RoomlistRoom)msg.obj);
 				break;
 			}
 			case MSG_ROOM_UPDATE: {
-				Pair<String, Room> args = (Pair<String, Room>)msg.obj;
+				Pair<String, RoomlistRoom> args = (Pair<String, RoomlistRoom>)msg.obj;
 				roomList.updateRoom(args.first, args.second);
 				break;
 			}
 			case MSG_ROOM_DELETE: {
-				roomList.removeRoom((String)msg.obj);
+				roomList.remove((String)msg.obj);
 				break;
 			}
 			case MSG_ROOMLIST: {
-				roomList.updateList((Room[])msg.obj);
+				roomList.updateList((RoomlistRoom[])msg.obj);
 				break;
 			}
 			case MSG_CONNECTED: {
+				playerName = (String)msg.obj;
 				changeState(State.LOBBY);
 				broadcastManager.sendBroadcast(new Intent(ACTION_CONNECTED));
 				break;
@@ -308,6 +336,8 @@ public class Netplay {
 			}
 			case MSG_ENTER_ROOM_FROM_LOBBY: {
 				roomChatlog.clear();
+				roomPlayerlist.clear();
+				roomTeamlist.clear();
 				changeState(State.ROOM);
 				chief = (Boolean)msg.obj;
 				Intent intent = new Intent(ACTION_ENTERED_ROOM_FROM_LOBBY);
@@ -320,6 +350,45 @@ public class Netplay {
 				intent.putExtra(EXTRA_MESSAGE, (String)msg.obj);
 				intent.putExtra(EXTRA_REASON, msg.arg1);
 				broadcastManager.sendBroadcastSync(intent);
+				break;
+			}
+			case MSG_READYSTATE: {
+				Pair<String, Boolean> args = (Pair<String, Boolean>)msg.obj;
+				roomPlayerlist.setReady(args.first, args.second);
+				break;
+			}
+			case MSG_TEAM_ADDED: {
+				roomTeamlist.addTeamWithNewId((TeamInGame)msg.obj);
+				break;
+			}
+			case MSG_TEAM_DELETED: {
+				roomTeamlist.remove((String)msg.obj);
+				break;
+			}
+			case MSG_TEAM_ACCEPTED: {
+				// TODO depends: adding teams
+				break;
+			}
+			case MSG_TEAM_COLOR_CHANGED: {
+				Pair<TeamInGame, Long> oldEntry = roomTeamlist.get((String)msg.obj);
+				if(oldEntry != null) {
+					TeamInGame tig = oldEntry.first;
+					TeamIngameAttributes tiga = tig.ingameAttribs.withColorIndex(msg.arg1);
+					roomTeamlist.put(tig.team.name, Pair.create(tig.withAttribs(tiga), oldEntry.second));
+				} else {
+					Log.e("Netplay", "Color update for unknown team "+msg.obj);
+				}
+				break;
+			}
+			case MSG_HOG_COUNT_CHANGED: {
+				Pair<TeamInGame, Long> oldEntry = roomTeamlist.get((String)msg.obj);
+				if(oldEntry != null) {
+					TeamInGame tig = oldEntry.first;
+					TeamIngameAttributes tiga = tig.ingameAttribs.withHogCount(msg.arg1);
+					roomTeamlist.put(tig.team.name, Pair.create(tig.withAttribs(tiga), oldEntry.second));
+				} else {
+					Log.e("Netplay", "Hog count update for unknown team "+msg.obj);
+				}
 				break;
 			}
 			default: {
@@ -336,7 +405,7 @@ public class Netplay {
 	private static class ThreadedNetConnection {
 		private static final long TICK_INTERVAL_FAST = 100;
 		private static final long TICK_INTERVAL_SLOW = 5000;
-		private static final JnaFrontlib FLIB = Flib.INSTANCE;
+		private static final Frontlib FLIB = Flib.INSTANCE;
 		
 		public final ToNetHandler toNetHandler;
 		
@@ -399,6 +468,12 @@ public class Netplay {
 					FLIB.flib_netconn_onPasswordRequest(conn, passwordRequestCb, null);
 					FLIB.flib_netconn_onEnterRoom(conn, enterRoomCb, null);
 					FLIB.flib_netconn_onLeaveRoom(conn, leaveRoomCb, null);
+					FLIB.flib_netconn_onReadyState(conn, readyStateCb, null);
+					FLIB.flib_netconn_onTeamAdd(conn, teamAddedCb, null);
+					FLIB.flib_netconn_onTeamDelete(conn, teamDeletedCb, null);
+					FLIB.flib_netconn_onTeamAccepted(conn, teamAcceptedCb, null);
+					FLIB.flib_netconn_onTeamColorChanged(conn, teamColorChangedCb, null);
+					FLIB.flib_netconn_onHogCountChanged(conn, hogCountChangedCb, null);
 					
 					FLIB.flib_metascheme_release(meta);
 					tickHandler.start();
@@ -496,13 +571,49 @@ public class Netplay {
 		
 		private final BoolCallback enterRoomCb = new BoolCallback() {
 			public void callback(Pointer context, boolean isChief) {
-				sendFromNet(FromNetHandler.MSG_ENTER_ROOM_FROM_LOBBY, Boolean.TRUE);
+				sendFromNet(FromNetHandler.MSG_ENTER_ROOM_FROM_LOBBY, isChief);
 			}
 		};
 		
 		private final IntStrCallback leaveRoomCb = new IntStrCallback() {
 			public void callback(Pointer context, int reason, String message) {
 				sendFromNet(FromNetHandler.MSG_LEAVE_ROOM, reason, message);
+			}
+		};
+		
+		private final StrBoolCallback readyStateCb = new StrBoolCallback() {
+			public void callback(Pointer context, String player, boolean ready) {
+				sendFromNet(FromNetHandler.MSG_READYSTATE, Pair.create(player, ready));
+			}
+		};
+		
+		private final TeamCallback teamAddedCb = new TeamCallback() {
+			public void callback(Pointer context, TeamPtr team) {
+				sendFromNet(FromNetHandler.MSG_TEAM_ADDED, team.deref());
+			}
+		};
+		
+		private final StrCallback teamDeletedCb = new StrCallback() {
+			public void callback(Pointer context, String teamName) {
+				sendFromNet(FromNetHandler.MSG_TEAM_DELETED, teamName);
+			}
+		};
+		
+		private final StrCallback teamAcceptedCb = new StrCallback() {
+			public void callback(Pointer context, String teamName) {
+				sendFromNet(FromNetHandler.MSG_TEAM_ACCEPTED, teamName);
+			}
+		};
+		
+		private final StrIntCallback teamColorChangedCb = new StrIntCallback() {
+			public void callback(Pointer context, String teamName, int colorIndex) {
+				sendFromNet(FromNetHandler.MSG_TEAM_COLOR_CHANGED, colorIndex, teamName);
+			}
+		};
+		
+		private final StrIntCallback hogCountChangedCb = new StrIntCallback() {
+			public void callback(Pointer context, String teamName, int hogCount) {
+				sendFromNet(FromNetHandler.MSG_HOG_COUNT_CHANGED, hogCount, teamName);
 			}
 		};
 		
@@ -518,7 +629,7 @@ public class Netplay {
 		
 		private final IntStrCallback disconnectCb = new IntStrCallback() {
 			public void callback(Pointer context, int reason, String message) {
-				Boolean error = reason != JnaFrontlib.NETCONN_DISCONNECT_NORMAL;
+				Boolean error = reason != Frontlib.NETCONN_DISCONNECT_NORMAL;
 				String messageForUser = createDisconnectUserMessage(appContext.getResources(), reason, message);
 				shutdown(error, messageForUser);
 			}
@@ -526,13 +637,13 @@ public class Netplay {
 		
 		private static String createDisconnectUserMessage(Resources res, int reason, String message) {
 			switch(reason) {
-			case JnaFrontlib.NETCONN_DISCONNECT_AUTH_FAILED:
+			case Frontlib.NETCONN_DISCONNECT_AUTH_FAILED:
 				return res.getString(R.string.error_auth_failed);
-			case JnaFrontlib.NETCONN_DISCONNECT_CONNLOST:
+			case Frontlib.NETCONN_DISCONNECT_CONNLOST:
 				return res.getString(R.string.error_connection_lost);
-			case JnaFrontlib.NETCONN_DISCONNECT_INTERNAL_ERROR:
+			case Frontlib.NETCONN_DISCONNECT_INTERNAL_ERROR:
 				return res.getString(R.string.error_unexpected, message);
-			case JnaFrontlib.NETCONN_DISCONNECT_SERVER_TOO_OLD:
+			case Frontlib.NETCONN_DISCONNECT_SERVER_TOO_OLD:
 				return res.getString(R.string.error_server_too_old);
 			default:
 				return message;
@@ -550,6 +661,7 @@ public class Netplay {
 		/**
 		 * Processes messages to the networking system. Runs on a non-main thread.
 		 */
+		@SuppressLint("HandlerLeak")
 		public final class ToNetHandler extends Handler {
 			public static final int MSG_SEND_NICK = 0;
 			public static final int MSG_SEND_PASSWORD = 1;
@@ -561,8 +673,9 @@ public class Netplay {
 			public static final int MSG_SEND_JOIN_ROOM = 7;
 			public static final int MSG_SEND_CREATE_ROOM = 8;
 			public static final int MSG_SEND_LEAVE_ROOM = 9;
+			public static final int MSG_SEND_KICK = 10;
 			
-			public static final int MSG_DISCONNECT = 10;
+			public static final int MSG_DISCONNECT = 11;
 			
 			public ToNetHandler(Looper looper) {
 				super(looper);
@@ -613,6 +726,10 @@ public class Netplay {
 					if(FLIB.flib_netconn_send_leaveRoom(conn, (String)msg.obj) == 0) {
 						sendFromNet(FromNetHandler.MSG_LEAVE_ROOM, -1, "");
 					}
+					break;
+				}
+				case MSG_SEND_KICK: {
+					FLIB.flib_netconn_send_kick(conn, (String)msg.obj);
 					break;
 				}
 				case MSG_DISCONNECT: {

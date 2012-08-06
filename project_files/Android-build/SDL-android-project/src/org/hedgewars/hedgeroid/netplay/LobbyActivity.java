@@ -1,7 +1,6 @@
 package org.hedgewars.hedgeroid.netplay;
 
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.StartGameActivity;
 import org.hedgewars.hedgeroid.netplay.Netplay.State;
 import org.hedgewars.hedgeroid.netplay.NetplayStateFragment.NetplayStateListener;
 import org.hedgewars.hedgeroid.netplay.TextInputDialog.TextInputDialogListener;

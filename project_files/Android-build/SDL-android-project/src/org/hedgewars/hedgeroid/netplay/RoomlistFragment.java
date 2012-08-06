@@ -31,7 +31,7 @@ public class RoomlistFragment extends ListFragment implements OnItemClickListene
 		super.onCreate(savedInstanceState);
 		netplay = Netplay.getAppInstance(getActivity().getApplicationContext());
 		adapter = new RoomlistAdapter(getActivity());
-		adapter.setList(netplay.roomList);
+		adapter.setSource(netplay.roomList);
 		setListAdapter(adapter);
 	}
 

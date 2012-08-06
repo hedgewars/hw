@@ -45,7 +45,7 @@ import android.widget.Toast;
 public class StartGameActivity extends Activity {
 
 	public static final int ACTIVITY_TEAM_SELECTOR = 0;
-
+	
 	private GameConfig config = null;
 	private ImageButton start, back, team;
 	private Spinner maps, gameplay, gamescheme, weapons, themes;
@@ -53,8 +53,6 @@ public class StartGameActivity extends Activity {
 
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-
-		Scheme.parseConfiguration(this);
 		config = new GameConfig();
 
 		setContentView(R.layout.starting_game);
@@ -132,7 +130,7 @@ public class StartGameActivity extends Activity {
 
 	private void startTeamsActivity(){
 		Intent i = new Intent(StartGameActivity.this, TeamSelectionActivity.class);
-		i.putParcelableArrayListExtra("teams", config.teams);
+		// TODO i.putParcelableArrayListExtra("teams", config.teams);
 		startActivityForResult(i, ACTIVITY_TEAM_SELECTOR);
 	}
 
@@ -143,7 +141,7 @@ public class StartGameActivity extends Activity {
 				Parcelable[] parcelables = (Parcelable[])data.getParcelableArrayExtra("teams");
 				config.teams.clear();
 				for(Parcelable t : parcelables){
-					config.teams.add((Team)t);
+					// TODO config.teams.add((Team)t);
 				}
 				teamCount.getDrawable().setLevel(config.teams.size());
 			}
@@ -209,11 +207,11 @@ public class StartGameActivity extends Activity {
 			if(config.teams.size() < 2){
 				Toast.makeText(StartGameActivity.this, R.string.not_enough_teams, Toast.LENGTH_LONG).show();
 				startTeamsActivity();
-			}
-			else{
+			} else {
+				SDLActivity.startConfig = config;
 				Intent i = new Intent(StartGameActivity.this, SDLActivity.class);
-				i.putExtra("config", config);
-				startActivity(i);}
+				startActivity(i);
+			}
 		}
 	};
 
