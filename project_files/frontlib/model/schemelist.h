@@ -29,7 +29,6 @@
 #include "scheme.h"
 
 typedef struct {
-	int _referenceCount;
 	int schemeCount;
 	flib_scheme **schemes;
 } flib_schemelist;
@@ -60,7 +59,7 @@ flib_schemelist *flib_schemelist_create();
 int flib_schemelist_insert(flib_schemelist *list, flib_scheme *cfg, int pos);
 
 /**
- * Delete a cfg from the list at position pos, moving down all higher schemes.
+ * Delete a scheme from the list at position pos, moving down all higher schemes.
  * The scheme is released automatically.
  * Returns 0 on success.
  */
@@ -72,15 +71,9 @@ int flib_schemelist_delete(flib_schemelist *list, int pos);
 flib_scheme *flib_schemelist_find(flib_schemelist *list, const char *name);
 
 /**
- * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
- * Returns the parameter.
+ * Free this schemelist.
  */
-flib_schemelist *flib_schemelist_retain(flib_schemelist *list);
-
-/**
- * Decrease the reference count of the object and free it if this was the last reference.
- */
-void flib_schemelist_release(flib_schemelist *list);
+void flib_schemelist_destroy(flib_schemelist *list);
 
 
 #endif /* SCHEMELIST_H_ */

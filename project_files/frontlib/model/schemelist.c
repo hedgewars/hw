@@ -30,16 +30,6 @@
 #include <limits.h>
 #include <string.h>
 
-static void flib_schemelist_destroy(flib_schemelist *list) {
-	if(list) {
-		for(int i=0; i<list->schemeCount; i++) {
-			flib_scheme_release(list->schemes[i]);
-		}
-		free(list->schemes);
-		free(list);
-	}
-}
-
 static char *makePrefixedName(int schemeIndex, const char *settingName) {
 	return flib_asprintf("%i\\%s", schemeIndex, settingName);
 }
@@ -183,19 +173,16 @@ int flib_schemelist_to_ini(const char *filename, const flib_schemelist *schemes)
 }
 
 flib_schemelist *flib_schemelist_create() {
-	return flib_schemelist_retain(flib_calloc(1, sizeof(flib_schemelist)));
+	return flib_calloc(1, sizeof(flib_schemelist));
 }
 
-flib_schemelist *flib_schemelist_retain(flib_schemelist *list) {
+void flib_schemelist_destroy(flib_schemelist *list) {
 	if(list) {
-		flib_retain(&list->_referenceCount, "flib_schemelist");
-	}
-	return list;
-}
-
-void flib_schemelist_release(flib_schemelist *list) {
-	if(list && flib_release(&list->_referenceCount, "flib_schemelist")) {
-		flib_schemelist_destroy(list);
+		for(int i=0; i<list->schemeCount; i++) {
+			flib_scheme_release(list->schemes[i]);
+		}
+		free(list->schemes);
+		free(list);
 	}
 }
 
