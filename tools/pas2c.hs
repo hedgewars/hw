@@ -17,24 +17,32 @@ import qualified Data.Set as Set
 import Data.List (find)
 import Numeric
 
-import PascalParser
+import PascalParser(pascalUnit)
 import PascalUnitSyntaxTree
 
 
 data InsertOption =
     IOInsert
+    | IOInsertWithType Doc
     | IOLookup
     | IOLookupLast
     | IOLookupFunction Int
     | IODeferred
 
-type Record = (String, BaseType)
+data Record = Record
+    {
+        lcaseId :: String,
+        baseType :: BaseType,
+        typeDecl :: Doc
+    }
+    deriving Show
 type Records = Map.Map String [Record]
 data RenderState = RenderState
     {
         currentScope :: Records,
         lastIdentifier :: String,
         lastType :: BaseType,
+        lastIdTypeDecl :: Doc,
         stringConsts :: [(String, String)],
         uniqCounter :: Int,
         toMangle :: Set.Set String,
@@ -43,7 +51,9 @@ data RenderState = RenderState
         namespaces :: Map.Map String Records
     }
 
-emptyState = RenderState Map.empty "" BTUnknown [] 0 Set.empty "" ""
+rec2Records = map (\(a, b) -> Record a b empty)
+
+emptyState = RenderState Map.empty "" BTUnknown empty [] 0 Set.empty "" ""
 
 getUniq :: State RenderState Int
 getUniq = do
@@ -161,12 +171,12 @@ withLastIdNamespace f = do
     nss <- gets namespaces
     withState' (\st -> st{currentScope = fromMaybe Map.empty $ Map.lookup li (namespaces st)}) f
 
-withRecordNamespace :: String -> [(String, BaseType)] -> State RenderState Doc -> State RenderState Doc
+withRecordNamespace :: String -> [Record] -> State RenderState Doc -> State RenderState Doc
 withRecordNamespace _ [] = error "withRecordNamespace: empty record"
 withRecordNamespace prefix recs = withState' f
     where
         f st = st{currentScope = Map.unionWith un records (currentScope st), currentUnit = ""}
-        records = Map.fromList $ map (\(a, b) -> (map toLower a, [(prefix ++ a, b)])) recs
+        records = Map.fromList $ map (\(Record a b d) -> (map toLower a, [Record (prefix ++ a) b d])) recs
         un [a] b = a : b
 
 toCFiles :: Map.Map String Records -> (String, PascalUnit) -> IO ()
@@ -261,8 +271,11 @@ uses2List :: Uses -> [String]
 uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
 
+setLastIdValues vv = (\s -> s{lastType = baseType vv, lastIdentifier = lcaseId vv, lastIdTypeDecl = typeDecl vv})
+
 id2C :: InsertOption -> Identifier -> State RenderState Doc
-id2C IOInsert (Identifier i t) = do
+id2C IOInsert i = id2C (IOInsertWithType empty) i
+id2C (IOInsertWithType d) (Identifier i t) = do
     ns <- gets currentScope
     tom <- gets (Set.member n . toMangle)
     cu <- gets currentUnit
@@ -271,7 +284,7 @@ id2C IOInsert (Identifier i t) = do
             (BTFunction _ _ _, _) -> (cu ++ i, t)
             (BTVarParam t', _) -> ('(' : '*' : i ++ ")" , t')
             _ -> (i, t)
-    modify (\s -> s{currentScope = Map.insertWith (++) n [(i', t')] (currentScope s), lastIdentifier = n})
+    modify (\s -> s{currentScope = Map.insertWith (++) n [Record i' t' d] (currentScope s), lastIdentifier = n})
     return $ text i'
     where
         n = map toLower i
@@ -286,9 +299,9 @@ id2C (IOLookupFunction params) (Identifier i t) = do
         error $ "Not defined: '" ++ i' ++ "'\n" ++ show lt ++ "\nwith num of params = " ++ show params ++ "\n" ++ show v
         else
         let vv = fromMaybe (head $ fromJust v) . find checkParam $ fromJust v in
-            modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+            modify (setLastIdValues vv) >> (return . text . lcaseId $ vv)
     where
-        checkParam (_, BTFunction _ p _) = p == params
+        checkParam (Record _ (BTFunction _ p _) _) = p == params
         checkParam _ = False
 id2C IODeferred (Identifier i t) = do
     let i' = map toLower i
@@ -296,7 +309,7 @@ id2C IODeferred (Identifier i t) = do
     if (isNothing v) then
         modify (\s -> s{lastType = BTUnknown, lastIdentifier = i}) >> return (text i)
         else
-        let vv = head $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+        let vv = head $ fromJust v in modify (setLastIdValues vv) >> (return . text . lcaseId $ vv)
 
 id2CLookup :: ([Record] -> Record) -> Identifier -> State RenderState Doc
 id2CLookup f (Identifier i t) = do
@@ -306,30 +319,34 @@ id2CLookup f (Identifier i t) = do
     if isNothing v then
         error $ "Not defined: '" ++ i' ++ "'\n" ++ show lt
         else
-        let vv = f $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+        let vv = f $ fromJust v in modify (setLastIdValues vv) >> (return . text . lcaseId $ vv)
 
 
 id2CTyped :: TypeDecl -> Identifier -> State RenderState Doc
-id2CTyped t (Identifier i _) = do
+id2CTyped = id2CTyped2 Nothing
+
+id2CTyped2 :: Maybe Doc -> TypeDecl -> Identifier -> State RenderState Doc
+id2CTyped2 md t (Identifier i _) = do
     tb <- resolveType t
     case (t, tb) of
         (_, BTUnknown) -> do
             error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\ntype: " ++ show t
         (SimpleType {}, BTRecord _ r) -> do
             ts <- type2C t
-            id2C IOInsert (Identifier i (BTRecord (render $ ts empty) r))
+            id2C (IOInsertWithType $ ts empty) (Identifier i (BTRecord (render $ ts empty) r))
         (_, BTRecord _ r) -> do
             ts <- type2C t
-            id2C IOInsert (Identifier i (BTRecord i r))
-        _ -> id2C IOInsert (Identifier i tb)
-
+            id2C (IOInsertWithType $ ts empty) (Identifier i (BTRecord i r))
+        _ -> case md of
+                Nothing -> id2C IOInsert (Identifier i tb)
+                Just ts -> id2C (IOInsertWithType ts) (Identifier i tb)
 
 
 resolveType :: TypeDecl -> State RenderState BaseType
 resolveType st@(SimpleType (Identifier i _)) = do
     let i' = map toLower i
     v <- gets $ Map.lookup i' . currentScope
-    if isJust v then return . snd . head $ fromJust v else return $ f i'
+    if isJust v then return . baseType . head $ fromJust v else return $ f i'
     where
     f "integer" = BTInt
     f "pointer" = BTPointerTo BTVoid
@@ -372,7 +389,7 @@ resolve :: String -> BaseType -> State RenderState BaseType
 resolve s (BTUnresolved t) = do
     v <- gets $ Map.lookup t . currentScope
     if isJust v then
-        resolve s . snd . head . fromJust $ v
+        resolve s . baseType . head . fromJust $ v
         else
         error $ "Unknown type " ++ show t ++ "\n" ++ s
 resolve _ t = return t
@@ -438,7 +455,7 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just
             VoidType -> True
             _ -> False
 
-    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [(render res, t')] $ currentScope st
+    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [Record (render res) t' empty] $ currentScope st
             , currentFunctionResult = if isVoid then [] else render res}) $ do
         p <- functionParams2C params
         ph <- liftM2 ($+$) (typesAndVars2C False False True tvars) (phrase2C' phrase)
@@ -480,7 +497,7 @@ tvar2C _ _ includeType _ td@(TypeDeclaration i' t) = do
 
 tvar2C _ _ _ _ (VarDeclaration True _ (ids, t) Nothing) = do
     t' <- liftM ((empty <+>) . ) $ type2C t
-    liftM (map(\i -> t' i)) $ mapM (id2CTyped (VarParamType t)) ids
+    liftM (map(\i -> t' i)) $ mapM (id2CTyped2 (Just $ t' empty) (VarParamType t)) ids
 
 tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mInitExpr) = do
     t' <- liftM (((if isConst then text "static const" else if externVar 
@@ -515,7 +532,7 @@ tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mIn
                     
                 (_, _) -> return result
             
-         _ -> liftM (map(\i -> varDeclDecision isConst includeType (t' i) ie)) $ mapM (id2CTyped t) ids
+         _ -> liftM (map(\i -> varDeclDecision isConst includeType (t' i) ie)) $ mapM (id2CTyped2 (Just $ t' empty) t) ids
     where
     initExpr Nothing = return $ empty
     initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
@@ -780,20 +797,26 @@ phrase2C wb@(WithBlock ref p) = do
     r <- ref2C ref
     t <- gets lastType
     case t of
-        (BTRecord _ rs) -> withRecordNamespace (render r ++ ".") rs $ phrase2C $ wrapPhrase p
+        (BTRecord _ rs) -> withRecordNamespace (render r ++ ".") (rec2Records rs) $ phrase2C $ wrapPhrase p
         a -> do
             error $ "'with' block referencing non-record type " ++ show a ++ "\n" ++ show wb
 phrase2C (ForCycle i' e1' e2' p up) = do
     i <- id2C IOLookup i'
+    iType <- gets lastIdTypeDecl
     e1 <- expr2C e1'
     e2 <- expr2C e2'
-    ph <- phrase2C (wrapPhrase p)
-    cmp <- return $ if up == True then "<=" else ">="
-    inc <- return $ if up == True then "++" else "--"
-    return $
-        text "for" <> (parens . hsep . punctuate (char ';') $ [i <+> text "=" <+> parens e1, i <+> text cmp <+> parens e2, text inc <> i])
+    let inc = if up then "inc" else "dec"
+    let add = if up then "+ 1" else "- 1"
+    ph <- phrase2C . appendPhrase (BuiltInFunctionCall [Reference $ SimpleReference i'] (SimpleReference (Identifier inc BTUnknown))) $ wrapPhrase p
+    return . braces $
+        i <+> text "=" <+> e1 <> semi
         $$
-        ph
+        iType <+> i <> text "__end__" <+> text "=" <+> e2 <+> text add <> semi
+        $$ 
+        text "do" <+> ph <+>
+        text "while" <> parens (i <+> text "!=" <+> i <> text "__end__") <> semi
+    where
+        appendPhrase p (Phrases ps) = Phrases $ ps ++ [p]
 phrase2C (RepeatCycle e' p') = do
     e <- expr2C e'
     p <- phrase2C (Phrases p')
@@ -992,7 +1015,7 @@ ref2C rf@(RecordField (Dereference ref1) ref2) = do
     r1 <- ref2C ref1
     t <- fromPointer (show ref1) =<< gets lastType
     r2 <- case t of
-        BTRecord _ rs -> withRecordNamespace "" rs $ ref2C ref2
+        BTRecord _ rs -> withRecordNamespace "" (rec2Records rs) $ ref2C ref2
         BTUnit -> error "What??"
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
     return $
@@ -1002,7 +1025,7 @@ ref2C rf@(RecordField ref1 ref2) = do
     t <- gets lastType
     case t of
         BTRecord _ rs -> do
-            r2 <- withRecordNamespace "" rs $ ref2C ref2
+            r2 <- withRecordNamespace "" (rec2Records rs) $ ref2C ref2
             return $ r1 <> text "." <> r2
         BTUnit -> withLastIdNamespace $ ref2C ref2
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
