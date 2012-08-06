@@ -123,6 +123,7 @@ int flib_ini_enter_section(flib_ini *ini, const char *section) {
 	}
 	if(!log_badargs_if2(ini==NULL, section==NULL)) {
 		if(!iniparser_find_entry(ini->inidict, section)) {
+			flib_log_d("Ini section %s not found", section);
 			result = INI_ERROR_NOTFOUND;
 		} else {
 			ini->currentSection = flib_strdupnull(section);
@@ -143,6 +144,7 @@ int flib_ini_create_section(flib_ini *ini, const char *section) {
 		result = flib_ini_enter_section(ini, section);
 		if(result == INI_ERROR_NOTFOUND) {
 			if(iniparser_set(ini->inidict, section, NULL)) {
+				flib_log_e("Error creating ini section %s", section);
 				result = INI_ERROR_OTHER;
 			} else {
 				result = flib_ini_enter_section(ini, section);
@@ -256,10 +258,13 @@ int flib_ini_get_bool_opt(flib_ini *ini, bool *outVar, const char *key, bool def
 
 int flib_ini_set_str(flib_ini *ini, const char *key, const char *value) {
 	int result = INI_ERROR_OTHER;
-	if(log_badargs_if4(ini==NULL, ini->currentSection==NULL, key==NULL, value==NULL)) {
+	if(!log_badargs_if4(ini==NULL, ini->currentSection==NULL, key==NULL, value==NULL)) {
 		char *dictKey = createDictKey(ini->currentSection, key);
 		if(dictKey) {
 			result = iniparser_set(ini->inidict, dictKey, value);
+			if(result) {
+				flib_log_e("Error setting ini entry %s to %s", dictKey, value);
+			}
 		}
 		free(dictKey);
 	}
