@@ -21,6 +21,7 @@
 #include <util/logging.h>
 #include <util/util.h>
 #include <base64/base64.h>
+#include <model/schemelist.h>
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -37,7 +38,7 @@ static flib_netconn *netconn;
 static flib_gameconn *gameconn;
 static flib_mapconn *mapconn;
 static char nickname[128];
-static flib_cfg_meta *metacfg;
+static flib_metascheme *metacfg;
 static bool netConnected = false;
 
 // Callback function that will be called when the map is rendered
@@ -98,7 +99,7 @@ void handleNetDisconnect(void *context, int reason, const char *message) {
 	netconn = NULL;
 }
 
-void printRoomList() {
+/*void printRoomList() {
 	const flib_roomlist *roomlist = flib_netconn_get_roomlist(netconn);
 	if(roomlist) {
 		if(roomlist->roomCount>0) {
@@ -116,7 +117,7 @@ void printRoomList() {
 		puts("Sorry, due to an error the room list is not available.");
 	}
 	puts("\n");
-}
+}*/
 
 void printTeamList() {
 	flib_gamesetup *setup = flib_netconn_create_gamesetup(netconn);
@@ -137,7 +138,7 @@ void printTeamList() {
 
 void handleNetConnected(void *context) {
 	printf("You enter the lobby of a strange house inhabited by hedgehogs. Looking around, you see hallways branching off to these rooms:\n");
-	printRoomList();
+	//printRoomList();
 	printf("\n\nNow, you can chat by just entering text, or join a room with /join <roomname>.");
 	printf(" You can also /quit or let me /describe <roomname>. Once in a room, you can /add <teamname> and set yourself /ready. You can also /list the available rooms (in the lobby) or the teams (in a room).\n");
 	netConnected = true;
@@ -271,11 +272,11 @@ void handleLeaveRoom(void *context, int reason, const char *msg) {
 	puts(" You are back in the lobby.");
 }
 
-void handleSchemeChanged(void *context, flib_cfg *scheme) {
+void handleSchemeChanged(void *context, const flib_scheme *scheme) {
 	printf("Game scheme: %s.\n", scheme->name);
 }
 
-void handleWeaponsetChanged(void *context, flib_weaponset *weaponset) {
+void handleWeaponsetChanged(void *context, const flib_weaponset *weaponset) {
 	printf("Weaponset: %s.\n", weaponset->name);
 }
 
@@ -295,7 +296,7 @@ void handleScriptChanged(void *context, const char *script) {
 	printf("Game Type: %s\n", script);
 }
 
-void handleTeamAdd(void *context, flib_team *team) {
+void handleTeamAdd(void *context, const flib_team *team) {
 	printf("%s puts the team %s to the planning board.\n", team->ownerName, team->name);
 }
 
@@ -336,7 +337,7 @@ static int init() {
 		flib_log_setLevel(FLIB_LOGLEVEL_WARNING);
 		freopen( "CON", "w", stdout );
 		freopen( "CON", "w", stderr );
-		metacfg = flib_cfg_meta_from_ini("metasettings.ini");
+		metacfg = flib_metascheme_from_ini("metasettings.ini");
 		if(!metacfg) {
 			flib_quit();
 			return -1;
@@ -403,7 +404,7 @@ int main(int argc, char *argv[]) {
 							flib_netconn_send_quit(netconn, "Player quit.");
 						} else if(!memcmp("/describe ", input, strlen("/describe "))) {
 							const char *roomname = input+strlen("/describe ");
-							const flib_roomlist *roomlist = flib_netconn_get_roomlist(netconn);
+							/*const flib_roomlist *roomlist = flib_netconn_get_roomlist(netconn);
 							flib_room *room = flib_roomlist_find(roomlist, roomname);
 							if(!room) {
 								puts("Unknown room.");
@@ -426,7 +427,7 @@ int main(int argc, char *argv[]) {
 									puts(text);
 								}
 								free(text);
-							}
+							}*/
 						} else if(!memcmp("/join ", input, strlen("/join "))) {
 							const char *roomname = input+strlen("/join ");
 							flib_netconn_send_joinRoom(netconn, roomname);
@@ -440,7 +441,7 @@ int main(int argc, char *argv[]) {
 								printTeamList();
 							} else {
 								puts("From this big and expansive lobby, hallways branch off to these rooms:");
-								printRoomList();
+								//printRoomList();
 							}
 						} else if(!memcmp("/addteam ", input, strlen("/addteam "))) {
 							const char *teamname = input+strlen("/addteam ");
@@ -453,7 +454,7 @@ int main(int argc, char *argv[]) {
 									} else {
 										printf("Teamfile %s not found.\n", teamfilename);
 									}
-									flib_team_release(team);
+									flib_team_destroy(team);
 								}
 								free(teamfilename);
 							}
@@ -469,6 +470,6 @@ int main(int argc, char *argv[]) {
 	}
 
 
-	flib_cfg_meta_release(metacfg);
+	flib_metascheme_release(metacfg);
 	return 0;
 }
