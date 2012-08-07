@@ -369,7 +369,7 @@ end;
 function hwPow(const t: hwFloat;p: LongWord): hwFloat;
 begin
 hwPow:= t;
-if p mod 2 = 0 then hwPow.isNegative:= t.isNegative;
+if p mod 2 = 0 then hwPow.isNegative:= false;
 
 while p > 0 do
     begin
