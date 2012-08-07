@@ -210,7 +210,7 @@ pascal2C (Unit _ interface implementation init fin) =
 
 pascal2C (Program _ implementation mainFunction) = do
     impl <- implementation2C implementation
-    [main] <- tvar2C True False True True (FunctionDeclaration (Identifier "main" BTInt) (SimpleType $ Identifier "int" BTInt) [VarDeclaration False False ([Identifier "argc" BTInt], SimpleType (Identifier "Integer" BTInt)) Nothing, VarDeclaration False False ([Identifier "argv" BTUnknown], SimpleType (Identifier "PPChar" BTUnknown)) Nothing] (Just (TypesAndVars [], mainFunction)))
+    [main] <- tvar2C True False True True (FunctionDeclaration (Identifier "main" BTInt) False (SimpleType $ Identifier "int" BTInt) [VarDeclaration False False ([Identifier "argc" BTInt], SimpleType (Identifier "Integer" BTInt)) Nothing, VarDeclaration False False ([Identifier "argv" BTUnknown], SimpleType (Identifier "PPChar" BTUnknown)) Nothing] (Just (TypesAndVars [], mainFunction)))
     return $ impl $+$ main
 
 
@@ -241,7 +241,7 @@ checkDuplicateFunDecls tvs =
     where
         initMap = Map.empty
         --initMap = Map.fromList [("reset", 2)]
-        ins (FunctionDeclaration (Identifier i _) _ _ _) m = Map.insertWith (+) (map toLower i) 1 m
+        ins (FunctionDeclaration (Identifier i _) _ _ _ _) m = Map.insertWith (+) (map toLower i) 1 m
         ins _ m = m
 
 -- the second bool indicates whether declare variable as extern or not
@@ -429,20 +429,21 @@ funWithVarsToDefine n params = text "#define" <+> text n <> parens abc <+> text 
         ps = zip ['a'..] (toIsVarList params)
 
 fun2C :: Bool -> String -> TypeVarDeclaration -> State RenderState [Doc]
-fun2C _ _ (FunctionDeclaration name returnType params Nothing) = do
+fun2C _ _ (FunctionDeclaration name inline returnType params Nothing) = do
     t <- type2C returnType
     t'<- gets lastType
     p <- withState' id $ functionParams2C params
     n <- liftM render . id2C IOInsert $ setBaseType (BTFunction hasVars (numberOfDeclarations params) t') name
+    let decor = if inline then text "inline" else empty
     if hasVars then
-        return [funWithVarsToDefine n params $+$ t empty <+> text (n ++ "__vars") <> parens p]
+        return [funWithVarsToDefine n params $+$ decor <+> t empty <+> text (n ++ "__vars") <> parens p]
         else
-        return [t empty <+> text n <> parens p]
+        return [decor <+> t empty <+> text n <> parens p]
     where
         hasVars = hasPassByReference params
 
 
-fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just (tvars, phrase))) = do
+fun2C True rv (FunctionDeclaration name@(Identifier i _) inline returnType params (Just (tvars, phrase))) = do
     let res = docToLower $ text rv <> text "_result"
     t <- type2C returnType
     t'<- gets lastType
@@ -463,11 +464,12 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just
 
     let phrasesBlock = if isVoid then ph else t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
     let define = if hasVars then text "#ifndef" <+> text n $+$ funWithVarsToDefine n params $+$ text "#endif" else empty
+    let decor = if inline then text "inline" else empty
     return [
         define
         $+$
         --(if notDeclared && hasVars then funWithVarsToDefine n params else empty) $+$
-        t empty <+> text (if hasVars then n ++ "__vars" else n) <> parens p
+        decor <+> t empty <+> text (if hasVars then n ++ "__vars" else n) <> parens p
         $+$
         text "{"
         $+$
@@ -480,14 +482,14 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just
     un [a] b = a : b
     hasVars = hasPassByReference params
 
-fun2C False _ (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
+fun2C False _ (FunctionDeclaration (Identifier name _) _ _ _ _) = error $ "nested functions not allowed: " ++ name
 fun2C _ tv _ = error $ "fun2C: I don't render " ++ show tv
 
 -- the second bool indicates whether declare variable as extern or not
 -- the third bool indicates whether include types or not
 -- the fourth bool indicates whether ignore initialization or not (basically for dynamic arrays since we cannot do initialization in function params)
 tvar2C :: Bool -> Bool -> Bool -> Bool -> TypeVarDeclaration -> State RenderState [Doc]
-tvar2C b _ includeType _ f@(FunctionDeclaration (Identifier name _) _ _ _) = do
+tvar2C b _ includeType _ f@(FunctionDeclaration (Identifier name _) _ _ _ _) = do
     t <- fun2C b name f
     if includeType then return t else return []
 tvar2C _ _ includeType _ td@(TypeDeclaration i' t) = do
@@ -545,9 +547,9 @@ tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mIn
         ArrayDecl _ _ -> error "Mixed dynamic array and static array are not supported."
         _ -> 0
 
-tvar2C f _ _ _ (OperatorDeclaration op (Identifier i _) ret params body) = do
+tvar2C f _ _ _ (OperatorDeclaration op (Identifier i _) inline ret params body) = do
     r <- op2CTyped op (extractTypes params)
-    fun2C f i (FunctionDeclaration r ret params body)
+    fun2C f i (FunctionDeclaration r inline ret params body)
 
 
 op2CTyped :: String -> [TypeDecl] -> State RenderState Identifier
