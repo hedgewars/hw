@@ -221,7 +221,7 @@ processAction (MoveToLobby msg) = do
     chans <- othersChans
 
     if master then
-        if gameProgress && playersNum > 1 then
+        if playersNum > 1 then
             mapM_ processAction [ChangeMaster, NoticeMessage AdminLeft, RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
             else
             processAction RemoveRoom
@@ -230,7 +230,7 @@ processAction (MoveToLobby msg) = do
 
     -- when not removing room
     ready <- client's isReady
-    when (not master || (gameProgress && playersNum > 1)) . io $ do
+    when (not master || playersNum > 1) . io $ do
         modifyRoom rnc (\r -> r{
                 playersIn = playersIn r - 1,
                 readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r

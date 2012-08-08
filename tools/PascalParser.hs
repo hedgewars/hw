@@ -270,12 +270,12 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         char ';'
         comments
         forward <- liftM isJust $ optionMaybe (try (string "forward;") >> comments)
-        many functionDecorator
+        inline <- liftM (any (== "inline;")) $ many functionDecorator
         b <- if isImpl && (not forward) then
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ [OperatorDeclaration i rid ret vs b]
+        return $ [OperatorDeclaration i rid inline ret vs b]
 
 
     funcDecl = do
@@ -295,21 +295,24 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         char ';'
         comments
         forward <- liftM isJust $ optionMaybe (try (string "forward;") >> comments)
-        many functionDecorator
+        inline <- liftM (any (== "inline;")) $ many functionDecorator
         b <- if isImpl && (not forward) then
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ [FunctionDeclaration i ret vs b]
+        return $ [FunctionDeclaration i inline ret vs b]
 
-    functionDecorator = choice [
-        try $ string "inline;"
-        , try $ caseInsensitiveString "cdecl;"
-        , try $ string "overload;"
-        , try $ string "export;"
-        , try $ string "varargs;"
-        , try (string "external") >> comments >> iD >> optional (string "name" >> comments >> stringLiteral pas)>> string ";"
-        ] >> comments
+    functionDecorator = do
+        d <- choice [
+            try $ string "inline;"
+            , try $ caseInsensitiveString "cdecl;"
+            , try $ string "overload;"
+            , try $ string "export;"
+            , try $ string "varargs;"
+            , try (string "external") >> comments >> iD >> optional (string "name" >> comments >> stringLiteral pas)>> string ";"
+            ]
+        comments
+        return d
 
 
 program = do

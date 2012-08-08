@@ -166,7 +166,7 @@ const
     cMinZoomLevel = 3.5;
     cZoomDelta = 0.20;
 {$ELSE}
-    cMaxZoomLevel = 0.25;
+    cMaxZoomLevel = 1.0;
     cMinZoomLevel = 3.0;
     cZoomDelta = 0.25;
 {$ENDIF}
@@ -246,6 +246,7 @@ const
 
     gmRemoveFromList = $00004000;
     gmAddToList      = $00008000;
+    gmDelete         = $00010000;
     gmAllStoppable = gmLeft or gmRight or gmUp or gmDown or gmAttack or gmPrecise;
 
     cMaxSlotIndex       = 9;

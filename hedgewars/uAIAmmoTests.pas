@@ -1096,7 +1096,8 @@ var valueResult, v1, v2: LongInt;
     x, y, trackFall: LongInt;
     cake: TGear;
 begin
-    Level:= Level; // avoid compiler hint
+    if (Level > 2) then
+        exit(BadTurn);
     ap.ExplR:= 0;
     ap.Time:= 0;
     ap.Power:= BadTurn; // use it as max score value in checkCakeWalk

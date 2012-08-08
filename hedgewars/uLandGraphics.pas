@@ -82,19 +82,19 @@ procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if (Land[y + dy, i] and lfIndestructible) = 0 then
             Land[y + dy, i]:= Value;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if (Land[y - dy, i] and lfIndestructible) = 0 then
             Land[y - dy, i]:= Value;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if (Land[y + dx, i] and lfIndestructible) = 0 then
             Land[y + dx, i]:= Value;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if (Land[y - dx, i] and lfIndestructible) = 0 then
             Land[y - dx, i]:= Value;
 end;
@@ -105,25 +105,25 @@ begin
 if not doSet then
     begin
     if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
                 Land[y + dy, i]:= Land[y + dy, i] and $FF7F
             else if Land[y + dy, i] and $007F > 0 then
                 Land[y + dy, i]:= (Land[y + dy, i] and $FF80) or ((Land[y + dy, i] and $7F) - 1);
     if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
                 Land[y - dy, i]:= Land[y - dy, i] and $FF7F
             else if Land[y - dy, i] and $007F > 0 then
                 Land[y - dy, i]:= (Land[y - dy, i] and $FF80) or ((Land[y - dy, i] and $7F) - 1);
     if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
                 Land[y + dx, i]:= Land[y + dx, i] and $FF7F
             else if Land[y + dx, i] and $007F > 0 then
                 Land[y + dx, i]:= (Land[y + dx, i] and $FF80) or ((Land[y + dx, i] and $7F) - 1);
     if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
                 Land[y - dx, i]:= Land[y - dx, i] and $FF7F
             else if Land[y - dx, i] and $007F > 0 then
@@ -132,25 +132,25 @@ if not doSet then
 else
     begin
     if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
                 Land[y + dy, i]:= Land[y + dy, i] or $80
             else if Land[y + dy, i] and $007F < 127 then
                 Land[y + dy, i]:= (Land[y + dy, i] and $FF80) or ((Land[y + dy, i] and $7F) + 1);
     if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
                 Land[y - dy, i]:= Land[y - dy, i] or $80
             else if Land[y - dy, i] and $007F < 127 then
                 Land[y - dy, i]:= (Land[y - dy, i] and $FF80) or ((Land[y - dy, i] and $7F) + 1);
     if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
                 Land[y + dx, i]:= Land[y + dx, i] or $80
             else if Land[y + dx, i] and $007F < 127 then
                 Land[y + dx, i]:= (Land[y + dx, i] and $FF80) or ((Land[y + dx, i] and $7F) + 1);
     if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-        for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do 
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
                 Land[y - dx, i]:= Land[y - dx, i] or $80
             else if Land[y - dx, i] and $007F < 127 then
@@ -207,7 +207,7 @@ var i, t: LongInt;
 begin
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do 
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
@@ -216,7 +216,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do 
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
@@ -225,7 +225,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do 
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
@@ -234,7 +234,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do 
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
@@ -250,7 +250,7 @@ begin
 cnt:= 0;
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do 
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if (Land[t, i] and lfIndestructible) = 0 then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -272,7 +272,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do 
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if (Land[t, i] and lfIndestructible) = 0 then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -294,7 +294,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do 
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if (Land[t, i] and lfIndestructible) = 0 then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -315,7 +315,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
             end;
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do 
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if (Land[t, i] and lfIndestructible) = 0 then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -342,7 +342,7 @@ var i, t: LongInt;
 begin
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do 
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -357,7 +357,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dx, LAND_WIDTH - 1) downto Max(x - dx, 0) do 
+    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
         if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -371,7 +371,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do 
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -386,7 +386,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
-    for i:= Min(x + dy, LAND_WIDTH - 1) downto Max(x - dy, 0) do 
+    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
         if ((Land[t, i] and lfBasic) <> 0) or ((Land[t, i] and lfObject) <> 0) then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -489,8 +489,8 @@ var tx, ty, by, bx,  i: LongInt;
 begin
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= Min(y + Radius, LAND_HEIGHT) downto Max(y - Radius, 0) do 
-        for tx:= Min(LAND_WIDTH, ar^[i].Right + Radius) downto Max(0, ar^[i].Left - Radius) do 
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
+        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
             begin
             if (Land[ty, tx] and lfIndestructible) = 0 then
                 begin
@@ -516,8 +516,8 @@ dec(y, Count * dY);
 
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= Min(y + Radius, LAND_HEIGHT) downto Max(y - Radius, 0) do 
-        for tx:= Min(LAND_WIDTH, ar^[i].Right + Radius) downto Max(0, ar^[i].Left - Radius) do 
+    for ty:= Max(y - Radius, 0) to Min(y + Radius, LAND_HEIGHT) do
+        for tx:= Max(0, ar^[i].Left - Radius) to Min(LAND_WIDTH, ar^[i].Right + Radius) do
             if ((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0) then
                 begin
                  if (cReducedQuality and rqBlurryLand) = 0 then
