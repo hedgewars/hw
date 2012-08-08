@@ -55,10 +55,10 @@ HWUploadVideoDialog::HWUploadVideoDialog(QWidget* parent, const QString &filenam
 
     // Google requires us to display this, see https://developers.google.com/youtube/terms
     QString GoogleNotice =
-        "By clicking 'upload,' you certify that you own all rights to the content or that "
+        "<p>By clicking 'upload,' you certify that you own all rights to the content or that "
         "you are authorized by the owner to make the content publicly available on YouTube, "
         "and that it otherwise complies with the YouTube Terms of Service located at "
-        "http://www.youtube.com/t/terms.";
+        "<a href=\"http://www.youtube.com/t/terms\" style=\"color: white;\">http://www.youtube.com/t/terms</a>.</p>";
 
     // youtube doesn't understand this characters, even when they are properly escaped
     // (either with CDATA or with &lt or &gt)
@@ -67,6 +67,8 @@ HWUploadVideoDialog::HWUploadVideoDialog(QWidget* parent, const QString &filenam
     int row = 0;
 
     QGridLayout * layout = new QGridLayout(this);
+    layout->setColumnStretch(0, 1);
+    layout->setColumnStretch(1, 2);
 
     QLabel * lbLabel = new QLabel(this);
     lbLabel->setWordWrap(true);
@@ -138,6 +140,9 @@ HWUploadVideoDialog::HWUploadVideoDialog(QWidget* parent, const QString &filenam
 
     lbLabel = new QLabel(this);
     lbLabel->setWordWrap(true);
+    lbLabel->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    lbLabel->setTextFormat(Qt::RichText);
+    lbLabel->setOpenExternalLinks(true);
     lbLabel->setText(GoogleNotice);
     layout->addWidget(lbLabel, row++, 0, 1, 2);
 
@@ -154,6 +159,17 @@ HWUploadVideoDialog::HWUploadVideoDialog(QWidget* parent, const QString &filenam
 
     connect(btnUpload, SIGNAL(clicked()), this, SLOT(upload()));
     connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
+}
+
+void HWUploadVideoDialog::showEvent(QShowEvent * event)
+{
+    QDialog::showEvent(event);
+
+    // set width to the same value as height (otherwise dialog has too small width)
+    QSize s = size();
+    QPoint p = pos();
+    resize(s.height(), s.height());
+    move(p.x() - (s.height() - s.width())/2, p.y());
 }
 
 void HWUploadVideoDialog::setEditable(bool editable)
