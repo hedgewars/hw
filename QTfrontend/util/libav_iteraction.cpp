@@ -286,7 +286,7 @@ QString LibavIteraction::getFileInfo(const QString & filepath)
 
     int s = float(pContext->duration)/AV_TIME_BASE;
     QString desc = QString(tr("Duration: %1m %2s\n")).arg(s/60).arg(s%60);
-    for (int i = 0; i < pContext->nb_streams; i++)
+    for (int i = 0; i < (int)pContext->nb_streams; i++)
     {
         AVStream* pStream = pContext->streams[i];
         if (!pStream)

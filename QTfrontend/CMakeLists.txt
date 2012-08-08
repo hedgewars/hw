@@ -28,6 +28,7 @@ endif()
 # Configure for SDL
 find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
+find_package(FFMPEG REQUIRED)
 
 include_directories(.)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
@@ -39,6 +40,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
+include_directories(${FFMPEG_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
@@ -156,9 +158,6 @@ if(APPLE OR CROSSAPPLE)
     endif()
 endif()
 
-IF (WIN32)
-    link_directories(${CMAKE_SOURCE_DIR}/misc/winutils/lib)
-ENDIF()
 
 add_executable(hedgewars WIN32
     ${hwfr_src}
@@ -170,12 +169,10 @@ add_executable(hedgewars WIN32
 
 set(HW_LINK_LIBS
     quazip
-    avformat
-    avcodec
-    avutil
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
+    ${FFMPEG_LIBRARIES}
     ${HW_LINK_LIBS}
     )
 

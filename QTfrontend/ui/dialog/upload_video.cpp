@@ -38,7 +38,8 @@
 #include "hwconsts.h"
 
 // User-agent string used in http requests.
-static const QByteArray UserAgent = ("Hedgewars-QtFrontend/" + *cVersionString).toAscii();
+// Don't make it a global varibale - crash on linux because of cVersionString
+#define USER_AGENT ("Hedgewars-QtFrontend/" + *cVersionString).toAscii()
 
 // This is developer key obtained from http://code.google.com/apis/youtube/dashboard/
 // If you are reusing this code outside Hedgewars, don't use this developer key,
@@ -105,7 +106,7 @@ HWUploadVideoDialog::HWUploadVideoDialog(QWidget* parent, const QString &filenam
 
     leTitle = new QLineEdit(this);
     leTitle->setText(filename);
-    leTitle->setValidator(new QRegExpValidator(rx));
+    leTitle->setValidator(new QRegExpValidator(rx, leTitle));
     layout->addWidget(leTitle, row++, 1);
 
     lbLabel = new QLabel(this);
@@ -122,7 +123,7 @@ HWUploadVideoDialog::HWUploadVideoDialog(QWidget* parent, const QString &filenam
     leTags = new QLineEdit(this);
     leTags->setText("hedgewars");
     leTags->setMaxLength(500);
-    leTags->setValidator(new QRegExpValidator(rx));
+    leTags->setValidator(new QRegExpValidator(rx, leTags));
     layout->addWidget(leTags, row++, 1);
 
     cbPrivate = new QCheckBox(this);
@@ -170,7 +171,7 @@ void HWUploadVideoDialog::upload()
     // Documentation is at https://developers.google.com/youtube/2.0/developers_guide_protocol_clientlogin#ClientLogin_Authentication
     QNetworkRequest request;
     request.setUrl(QUrl("https://www.google.com/accounts/ClientLogin"));
-    request.setRawHeader("User-Agent", UserAgent);
+    request.setRawHeader("User-Agent", USER_AGENT);
     request.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
 
     QString account(QUrl::toPercentEncoding(leAccount->text()));
@@ -250,7 +251,7 @@ void HWUploadVideoDialog::authFinished()
 
     QNetworkRequest request;
     request.setUrl(QUrl("http://uploads.gdata.youtube.com/resumable/feeds/api/users/default/uploads"));
-    request.setRawHeader("User-Agent", UserAgent);
+    request.setRawHeader("User-Agent", USER_AGENT);
     request.setRawHeader("Authorization", auth);
     request.setRawHeader("GData-Version", "2");
     request.setRawHeader("X-GData-Key", "key=" + devKey);
