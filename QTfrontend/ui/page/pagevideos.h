@@ -120,7 +120,6 @@ class PageVideos : public AbstractPage
         void uploadToYouTube();
         void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
         void uploadFinished();
-        void linkActivated(const QString & link);
 };
 
 #endif // PAGE_VIDEOS_H

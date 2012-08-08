@@ -279,6 +279,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
                                            Qt::LinksAccessibleByMouse |
                                            Qt::LinksAccessibleByKeyboard);
         labelDesc->setTextFormat(Qt::RichText);
+        labelDesc->setOpenExternalLinks(true);
         pTopDescLayout->addWidget(labelDesc, 1);
 
         // buttons: play and delete
@@ -321,8 +322,7 @@ void PageVideos::connectSignals()
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(deleteSelectedFiles()));
     connect(btnToYouTube, SIGNAL(clicked()), this, SLOT(uploadToYouTube()));
     connect(btnOpenDir, SIGNAL(clicked()), this, SLOT(openVideosDirectory()));
-    connect(labelDesc, SIGNAL(linkActivated(const QString&)), this, SLOT(linkActivated(const QString&)));
- }
+}
 
 PageVideos::PageVideos(QWidget* parent) : AbstractPage(parent),
     config(0), netManager(0)
@@ -736,7 +736,7 @@ void PageVideos::updateDescription()
             int prefixEnd   = item->desc.indexOf("]prefix");
             if (prefixBegin != -1 && prefixEnd != -1)
             {
-                item->prefix = desc.mid(prefixBegin + 7, prefixEnd - (prefixBegin + 7));
+                item->prefix = item->desc.mid(prefixBegin + 7, prefixEnd - (prefixBegin + 7));
                 item->desc.remove(prefixBegin, prefixEnd + 7 - prefixBegin);
             }
         }
@@ -771,7 +771,7 @@ void PageVideos::updateDescription()
         }
     }
     if (item->uploadUrl != "no")
-        desc += QString("<a href=\"%1\">%1</a>").arg(item->uploadUrl);
+        desc += QString("<a href=\"%1\" style=\"color: white;\">%1</a>").arg(item->uploadUrl);
     desc.replace("\n", "<br/>");
 
     labelDesc->setText(desc);
@@ -805,11 +805,6 @@ void PageVideos::play(int row)
     VideoItem * item = nameItem(row);
     if (item && item->ready())
         QDesktopServices::openUrl(QUrl("file:///" + QDir::toNativeSeparators(item->path())));
-}
-
-void PageVideos::linkActivated(const QString & link)
-{
-    QDesktopServices::openUrl(QUrl(link));
 }
 
 void PageVideos::playSelectedFile()
@@ -1131,6 +1126,7 @@ void PageVideos::uploadToYouTube()
     filesTable->setCellWidget(row, vcProgress, progressBar);
 
     QNetworkReply* reply = netManager->put(request, file);
+    file->setParent(reply); // automatically close file when needed
     item->pUploading = reply;
     connect(reply, SIGNAL(uploadProgress(qint64, qint64)), this, SLOT(uploadProgress(qint64, qint64)));
     connect(reply, SIGNAL(finished()), this, SLOT(uploadFinished()));

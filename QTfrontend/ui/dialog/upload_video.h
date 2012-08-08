@@ -52,6 +52,10 @@ class HWUploadVideoDialog : public QDialog
 
         void setEditable(bool editable);
 
+    protected:
+        // virtual from QWidget
+        void showEvent(QShowEvent * event);
+
     private slots:
         void upload();
         void authFinished();
