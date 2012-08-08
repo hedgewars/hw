@@ -412,7 +412,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            DeleteGear(gear);
+            gear^.Message:= gear^.Message or gmDelete;
         end;
     lc_deletegear:= 0
 end;
