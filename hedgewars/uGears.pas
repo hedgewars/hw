@@ -207,6 +207,8 @@ while t <> nil do
     curHandledGear:= t;
     t:= curHandledGear^.NextGear;
 
+    if curHandledGear^.Message and gmDelete <> 0 then
+        DeleteGear(curHandledGear);
     if curHandledGear^.Message and gmRemoveFromList <> 0 then 
         begin
         RemoveGearFromList(curHandledGear);
