@@ -809,14 +809,15 @@ phrase2C (ForCycle i' e1' e2' p up) = do
     e2 <- expr2C e2'
     let inc = if up then "inc" else "dec"
     let add = if up then "+ 1" else "- 1"
+    let iEnd = i <> text "__end__"
     ph <- phrase2C . appendPhrase (BuiltInFunctionCall [Reference $ SimpleReference i'] (SimpleReference (Identifier inc BTUnknown))) $ wrapPhrase p
     return . braces $
         i <+> text "=" <+> e1 <> semi
         $$
-        iType <+> i <> text "__end__" <+> text "=" <+> e2 <+> text add <> semi
+        iType <+> iEnd <+> text "=" <+> e2 <> semi
         $$ 
-        text "do" <+> ph <+>
-        text "while" <> parens (i <+> text "!=" <+> i <> text "__end__") <> semi
+        text "if" <+> (parens $ i <+> text "<=" <+> iEnd) <+> text "do" <+> ph <+>
+        text "while" <> parens (i <+> text "!=" <+> iEnd <+> text add) <> semi
     where
         appendPhrase p (Phrases ps) = Phrases $ ps ++ [p]
 phrase2C (RepeatCycle e' p') = do
