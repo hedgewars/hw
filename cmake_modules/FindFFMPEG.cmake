@@ -1,10 +1,9 @@
-# - Try to find libxml++-2.6
+# - Try to find ffmpeg libraries (libavcodec, libavformat and libavutil)
 # Once done this will define
 #
-#  FFMPEG_FOUND - system has libxml++
-#  FFMPEG_INCLUDE_DIRS - the libxml++ include directory
-#  FFMPEG_LIBRARIES - Link these to use libxml++
-#  FFMPEG_DEFINITIONS - Compiler switches required for using libxml++
+#  FFMPEG_FOUND - system has ffmpeg
+#  FFMPEG_INCLUDE_DIR - the ffmpeg include directory
+#  FFMPEG_LIBRARIES - Link these to use ffmpeg
 #
 #  Copyright (c) 2008 Andreas Schneider <mail@cynapses.org>
 #  Modified for other libraries by Lasse Kärkkäinen <tronic>
@@ -14,10 +13,10 @@
 #  BSD license.
 #
 
-if (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
+if (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
   # in cache already
   set(FFMPEG_FOUND TRUE)
-else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
+else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
   find_package(PkgConfig)
@@ -28,15 +27,9 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
   endif (PKG_CONFIG_FOUND)
 
   find_path(FFMPEG_AVCODEC_INCLUDE_DIR
-    NAMES avcodec.h
+    NAMES libavcodec/avcodec.h
     PATHS ${_FFMPEG_AVCODEC_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include /sw/include
-    PATH_SUFFIXES ffmpeg libavcodec
-  )
-
-  find_path(FFMPEG_AVFORMAT_INCLUDE_DIR
-    NAMES avformat.h
-    PATHS ${_FFMPEG_AVFORMAT_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include /sw/include
-    PATH_SUFFIXES ffmpeg libavformat
+    PATH_SUFFIXES ffmpeg libav
   )
 
   find_library(FFMPEG_AVCODEC_LIBRARY
@@ -59,11 +52,7 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
   endif (FFMPEG_AVCODEC_LIBRARY AND FFMPEG_AVFORMAT_LIBRARY)
 
   if (FFMPEG_FOUND)
-
-    set(FFMPEG_INCLUDE_DIR
-      ${FFMPEG_AVCODEC_INCLUDE_DIR}
-      ${FFMPEG_AVFORMAT_INCLUDE_DIR}
-    )
+    set(FFMPEG_INCLUDE_DIR ${FFMPEG_AVCODEC_INCLUDE_DIR}/..)
 
     set(FFMPEG_LIBRARIES
       ${FFMPEG_AVCODEC_LIBRARY}
@@ -75,7 +64,7 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
 
   if (FFMPEG_FOUND)
     if (NOT FFMPEG_FIND_QUIETLY)
-      message(STATUS "Found FFMPEG: ${FFMPEG_LIBRARIES}")
+      message(STATUS "Found FFMPEG: ${FFMPEG_LIBRARIES} ${FFMPEG_INCLUDE_DIR}")
     endif (NOT FFMPEG_FIND_QUIETLY)
   else (FFMPEG_FOUND)
     if (FFMPEG_FIND_REQUIRED)
@@ -83,5 +72,5 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
     endif (FFMPEG_FIND_REQUIRED)
   endif (FFMPEG_FOUND)
 
-endif (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
+endif (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
 
