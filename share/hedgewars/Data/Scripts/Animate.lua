@@ -1,5 +1,6 @@
 local animPos, lastx, lasty, jumpTypes, jumpTimes, moveDirs, jumpStarted
-local backJumped, jTimer, awTime, globalWait, stageEvents, seNum
+local backJumped, jTimer, awTime, globalWait, stageEvents, seNum, curEvent
+local needtoDecrease
 local AnimList, AnimListNum
 local FunctionList, FunctionListNum
 local skipFuncList
@@ -63,6 +64,8 @@ function AnimInit()
   globalWait = 0
   stageEvents = {}
   seNum = 0
+  curEvent = 0
+  needToDecrease = 0
   AnimList = {}
   AnimListNum = 0
   FunctionList = {}
@@ -339,13 +342,19 @@ function RemoveEvent(evNum)
   if stageEvents[evNum] ~= nil then
     seNum = seNum - 1
     table.remove(stageEvents, evNum)
+    if evNum < curEvent then
+      return true
+    end
+  end
+  if evNum < curEvent then
+    needToDecrease = needToDecrease + 1
   end
 end
 
-function RemoveEventFunc(cFunc)
+function RemoveEventFunc(cFunc, cArgs)
   local i = 1
   while i <= seNum do
-    if stageEvents[i].cFunc == cFunc then
+    if stageEvents[i].cFunc == cFunc and (cArgs == nil or cArgs == stageEvents[i].cArgs) then
       RemoveEvent(i)
       i = i - 1
     end
@@ -357,8 +366,13 @@ end
 function CheckEvents()
   local i = 1
   while i <= seNum do
+    curEvent = i
     if stageEvents[i].cFunc(unpack(stageEvents[i].cArgs)) then
       stageEvents[i].dFunc(unpack(stageEvents[i].dArgs))
+      if needToDecrease > 0 then
+        i = i - needToDecrease
+        needToDecrease = 0
+      end
       if stageEvents[i].evType ~= 1 then 
         RemoveEvent(i)
         i = i - 1
@@ -366,6 +380,7 @@ function CheckEvents()
     end
     i = i + 1
   end
+  curEvent = 0
 end
 
 -------------------------------------Misc---------------------------------
