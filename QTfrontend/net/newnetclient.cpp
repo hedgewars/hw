@@ -384,68 +384,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "ADD_TEAM")
-    {
-        if(lst.size() != 24)
-        {
-            qWarning("Net: Bad ADDTEAM message");
-            return;
-        }
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        emit AddNetTeam(tmp);
-        return;
-    }
-
-    if (lst[0] == "REMOVE_TEAM")
-    {
-        if(lst.size() != 2)
-        {
-            qWarning("Net: Bad REMOVETEAM message");
-            return;
-        }
-        emit RemoveNetTeam(HWTeam(lst[1]));
-        return;
-    }
-
-    if(lst[0] == "ROOMABANDONED")
-    {
-        netClientState = InLobby;
-        askRoomsList();
-        emit LeftRoom(tr("Room destroyed"));
-        return;
-    }
-
     if(lst[0] == "KICKED")
     {
         netClientState = InLobby;
         askRoomsList();
         emit LeftRoom(tr("You got kicked"));
-        return;
-    }
-
-    if(lst[0] == "JOINED")
-    {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad JOINED message");
-            return;
-        }
-
-        for(int i = 1; i < lst.size(); ++i)
-        {
-            if (lst[i] == mynick)
-            {
-                netClientState = InRoom;
-                emit EnteredGame();
-                emit roomMaster(isChief);
-                if (isChief)
-                    emit configAsked();
-            }
-
-            emit nickAdded(lst[i], isChief && (lst[i] != mynick));
-            emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
-        }
         return;
     }
 
@@ -469,21 +412,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             emit nickAddedLobby(lst[i], false);
             emit chatStringLobby(lst[i], tr("%1 *** %2 has joined").arg('\x03').arg("|nick|"));
         }
-        return;
-    }
-
-    if(lst[0] == "LEFT")
-    {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad LEFT message");
-            return;
-        }
-        emit nickRemoved(lst[1]);
-        if (lst.size() < 3)
-            emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
-        else
-            emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
         return;
     }
 
@@ -529,13 +457,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "RUN_GAME")
-    {
-        netClientState = InGame;
-        emit AskForRunGame();
-        return;
-    }
-
     if (lst[0] == "ASKPASSWORD")
     {
         emit AskForPassword(mynick);
@@ -563,76 +484,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "TEAM_ACCEPTED")
-    {
-        if (lst.size() != 2)
-        {
-            qWarning("Net: Bad TEAM_ACCEPTED message");
-            return;
-        }
-        emit TeamAccepted(lst[1]);
-        return;
-    }
-
-
-    if (lst[0] == "CFG")
-    {
-        if(lst.size() < 3)
-        {
-            qWarning("Net: Bad CFG message");
-            return;
-        }
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        tmp.removeFirst();
-        if (lst[1] == "SCHEME")
-            emit netSchemeConfig(tmp);
-        else
-            emit paramChanged(lst[1], tmp);
-        return;
-    }
-
-    if (lst[0] == "HH_NUM")
-    {
-        if (lst.size() != 3)
-        {
-            qWarning("Net: Bad TEAM_ACCEPTED message");
-            return;
-        }
-        HWTeam tmptm(lst[1]);
-        tmptm.setNumHedgehogs(lst[2].toUInt());
-        emit hhnumChanged(tmptm);
-        return;
-    }
-
-    if (lst[0] == "TEAM_COLOR")
-    {
-        if (lst.size() != 3)
-        {
-            qWarning("Net: Bad TEAM_COLOR message");
-            return;
-        }
-        HWTeam tmptm(lst[1]);
-        tmptm.setColor(lst[2].toInt());
-        emit teamColorChanged(tmptm);
-        return;
-    }
-
-    if (lst[0] == "EM")
-    {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad EM message");
-            return;
-        }
-        for(int i = 1; i < lst.size(); ++i)
-        {
-            QByteArray em = QByteArray::fromBase64(lst[i].toAscii());
-            emit FromNet(em);
-        }
-        return;
-    }
-
     if (lst[0] == "BYE")
     {
         if (lst.size() < 2)
@@ -650,26 +501,177 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-
     if (lst[0] == "ADMIN_ACCESS")
     {
         emit adminAccess(true);
         return;
     }
 
-    if (lst[0] == "ROOM_CONTROL_ACCESS")
+
+    if(netClientState == InRoom)
     {
-        if (lst.size() < 2)
+        if (lst[0] == "EM")
         {
-            qWarning("Net: Bad ROOM_CONTROL_ACCESS message");
+            if(lst.size() < 2)
+            {
+                qWarning("Net: Bad EM message");
+                return;
+            }
+            for(int i = 1; i < lst.size(); ++i)
+            {
+                QByteArray em = QByteArray::fromBase64(lst[i].toAscii());
+                emit FromNet(em);
+            }
             return;
         }
-        isChief = (lst[1] != "0");
-        emit roomMaster(isChief);
-        return;
+
+        if (lst[0] == "ADD_TEAM")
+        {
+            if(lst.size() != 24)
+            {
+                qWarning("Net: Bad ADDTEAM message");
+                return;
+            }
+            QStringList tmp = lst;
+            tmp.removeFirst();
+            emit AddNetTeam(tmp);
+            return;
+        }
+
+        if (lst[0] == "REMOVE_TEAM")
+        {
+            if(lst.size() != 2)
+            {
+                qWarning("Net: Bad REMOVETEAM message");
+                return;
+            }
+            emit RemoveNetTeam(HWTeam(lst[1]));
+            return;
+        }
+
+        if(lst[0] == "ROOMABANDONED")
+        {
+            netClientState = InLobby;
+            askRoomsList();
+            emit LeftRoom(tr("Room destroyed"));
+            return;
+        }
+
+        if (lst[0] == "RUN_GAME")
+        {
+            netClientState = InGame;
+            emit AskForRunGame();
+            return;
+        }
+
+        if (lst[0] == "TEAM_ACCEPTED")
+        {
+            if (lst.size() != 2)
+            {
+                qWarning("Net: Bad TEAM_ACCEPTED message");
+                return;
+            }
+            emit TeamAccepted(lst[1]);
+            return;
+        }
+
+        if (lst[0] == "CFG")
+        {
+            if(lst.size() < 3)
+            {
+                qWarning("Net: Bad CFG message");
+                return;
+            }
+            QStringList tmp = lst;
+            tmp.removeFirst();
+            tmp.removeFirst();
+            if (lst[1] == "SCHEME")
+                emit netSchemeConfig(tmp);
+            else
+                emit paramChanged(lst[1], tmp);
+            return;
+        }
+
+        if (lst[0] == "HH_NUM")
+        {
+            if (lst.size() != 3)
+            {
+                qWarning("Net: Bad TEAM_ACCEPTED message");
+                return;
+            }
+            HWTeam tmptm(lst[1]);
+            tmptm.setNumHedgehogs(lst[2].toUInt());
+            emit hhnumChanged(tmptm);
+            return;
+        }
+
+        if (lst[0] == "TEAM_COLOR")
+        {
+            if (lst.size() != 3)
+            {
+                qWarning("Net: Bad TEAM_COLOR message");
+                return;
+            }
+            HWTeam tmptm(lst[1]);
+            tmptm.setColor(lst[2].toInt());
+            emit teamColorChanged(tmptm);
+            return;
+        }
+
+        if(lst[0] == "JOINED")
+        {
+            if(lst.size() < 2)
+            {
+                qWarning("Net: Bad JOINED message");
+                return;
+            }
+
+            for(int i = 1; i < lst.size(); ++i)
+            {
+                if (lst[i] == mynick)
+                {
+                    netClientState = InRoom;
+                    emit EnteredGame();
+                    emit roomMaster(isChief);
+                    if (isChief)
+                        emit configAsked();
+                }
+
+                emit nickAdded(lst[i], isChief && (lst[i] != mynick));
+                emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
+            }
+            return;
+        }
+
+        if(lst[0] == "LEFT")
+        {
+            if(lst.size() < 2)
+            {
+                qWarning("Net: Bad LEFT message");
+                return;
+            }
+            emit nickRemoved(lst[1]);
+            if (lst.size() < 3)
+                emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
+            else
+                emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
+            return;
+        }
+
+        if (lst[0] == "ROOM_CONTROL_ACCESS")
+        {
+            if (lst.size() < 2)
+            {
+                qWarning("Net: Bad ROOM_CONTROL_ACCESS message");
+                return;
+            }
+            isChief = (lst[1] != "0");
+            emit roomMaster(isChief);
+            return;
+        }
     }
 
-    qWarning() << "Net: Unknown message:" << lst;
+    qWarning() << "Net: Unknown message or wrong state:" << lst;
 }
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
