@@ -71,6 +71,7 @@ spyHog = nil
 deployedHog = nil
 
 cyborgHidden = false
+needToAct = 0
 
 m2Choice = 0
 m2DenseDead = 0
@@ -95,6 +96,7 @@ wave2Anim = {}
 wave2DeadAnim = {}
 wave3DeadAnim = {}
 
+vCircs = {}
 -----------------------------Animations--------------------------------
 function Wave2Reaction()
   local i = 1
@@ -217,7 +219,7 @@ end
 function ExplainAlive()
   if needRevival == true and m4WaterDead == 1 then
     RestoreCyborg()
-    SetGearPosition(cyborg, unpack(cyborgPos))
+    AnimSetGearPosition(cyborg, unpack(cyborgPos))
     AnimInsertStepNext({func = AnimCustomFunction, args = {water, HideCyborg, {}}})
     AnimInsertStepNext({func = AnimSwitchHog, args = {water}})
     AnimInsertStepNext({func = AnimSay, args = {cyborg, loc("The answer is...entertaintment. You'll see what I mean."), SAY_SAY, 8000}})
@@ -304,6 +306,19 @@ function SetupWave2Anim()
   AddSkipFunction(wave2Anim, SkipWave2Anim, {})
 end
 
+function PutCircles()
+  if circlesPut then
+    return
+  end
+  vCircs[1] = AddVisualGear(0,0,vgtCircle,0,true)
+  vCircs[2] = AddVisualGear(0,0,vgtCircle,0,true)
+  vCircs[3] = AddVisualGear(0,0,vgtCircle,0,true)
+  SetVisualGearValues(vCircs[1], cannibalPos[7][1], cannibalPos[7][2], 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
+  SetVisualGearValues(vCircs[2], cannibalPos[8][1], cannibalPos[8][2], 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
+  SetVisualGearValues(vCircs[3], cannibalPos[9][1], cannibalPos[9][2], 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
+  circlesPut = true
+end
+
 function SetupWave2DeadAnim()
   for i = 7, 1, -1 do
     if nativeDead[i] ~= true then
@@ -321,10 +336,10 @@ function SetupWave2DeadAnim()
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], TurnNatives, {natives[wiseNum]}}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], CondNeedToTurn, {natives[wiseNum], deployedHog}}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I sense another wave of cannibals heading our way!"), SAY_SAY, 6500}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I feel something...a place! They will arrive near the graves!"), SAY_SAY, 7500}})
-      table.insert(wave2DeadAnim, {func = AddGear, swh = false, args = {cannibalPos[7][1], cannibalPos[7][2], gtGrave, 0, 0, 0, 0}})
-      table.insert(wave2DeadAnim, {func = AddGear, swh = false, args = {cannibalPos[8][1], cannibalPos[8][2], gtGrave, 0, 0, 0, 0}})
-      table.insert(wave2DeadAnim, {func = AddGear, swh = false, args = {cannibalPos[9][1], cannibalPos[9][2], gtGrave, 0, 0, 0, 0}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I feel something...a place! They will arrive near the circles!"), SAY_SAY, 7500}})
+      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], PutCircles, {}}})
+      table.insert(wave2DeadAnim, {func = AnimFollowGear, swh = false, args = {vCircs[1]}})
+      table.insert(wave2DeadAnim, {func = AnimWait, args = {natives[wiseNum], 1500}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("We need to prevent their arrival!"), SAY_SAY, 4500}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("Go, quick!"), SAY_SAY, 2500}})
       table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], DeployHog, {}}})
@@ -342,10 +357,9 @@ function SetupWave2DeadAnim()
       table.insert(wave2DeadAnim, {func = AnimWait, args = {natives[wiseNum], 1500}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("What a strange feeling!"), SAY_THINK, 3000}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I sense another wave of cannibals heading my way!"), SAY_THINK, 6500}})
-      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I feel something...a place! They will arrive near the graves!"), SAY_SAY, 7500}})
-      table.insert(wave2DeadAnim, {func = AddGear, swh = false, args = {cannibalPos[7][1], cannibalPos[7][2], gtGrave, 0, 0, 0, 0}})
-      table.insert(wave2DeadAnim, {func = AddGear, swh = false, args = {cannibalPos[8][1], cannibalPos[8][2], gtGrave, 0, 0, 0, 0}})
-      table.insert(wave2DeadAnim, {func = AddGear, swh = false, args = {cannibalPos[9][1], cannibalPos[9][2], gtGrave, 0, 0, 0, 0}})
+      table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I feel something...a place! They will arrive near the circles!"), SAY_SAY, 7500}})
+      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], PutCircles, {}}})
+      table.insert(wave2DeadAnim, {func = AnimFollowGear, swh = false, args = {vCircs[1]}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("I need to prevent their arrival!"), SAY_THINK, 4500}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("If only I had a way..."), SAY_THINK, 3000}})
       table.insert(wave2DeadAnim, {func = AnimSay, args = {natives[wiseNum], loc("Oh, silly me! I forgot that I'm the shaman."), SAY_THINK, 6000}})
@@ -354,15 +368,15 @@ function SetupWave2DeadAnim()
     table.insert(wave2DeadAnim, {func = AnimWait, args = {cyborg, 1500}})
     table.insert(wave2DeadAnim, {func = AnimCustomFunction, swh = false, args = {cyborg, RestoreCyborg, {}}})
     table.insert(wave2DeadAnim, {func = AnimOutOfNowhere, args = {cyborg, cyborgPos2[1], cyborgPos2[2]}})
+    table.insert(wave2DeadAnim, {func = AnimTurn, args = {cyborg, "Left"}})
     table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, TeleportNatives, {}}})
     table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {cyborg, TurnNatives, {cyborg}}})
     table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("Oh, my! This is even more entertaining than I've expected!"), SAY_SAY, 7500}})
     table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("You might want to find a way to instantly kill arriving cannibals!"), SAY_SAY, 8000}})
     table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I believe there's more of them."), SAY_SAY, 4000}})
     table.insert(wave2DeadAnim, {func = AnimSay, args = {cyborg, loc("I marked the place of their arrival. You're welcome!"), SAY_SAY, 6000}})
-    table.insert(wave2DeadAnim, {func = AddGear, swh = false, args = {cannibalPos[7][1], cannibalPos[7][2], gtGrave, 0, 0, 0, 0}})
-    table.insert(wave2DeadAnim, {func = AddGear, swh = false, args = {cannibalPos[8][1], cannibalPos[8][2], gtGrave, 0, 0, 0, 0}})
-    table.insert(wave2DeadAnim, {func = AddGear, swh = false, args = {cannibalPos[9][1], cannibalPos[9][2], gtGrave, 0, 0, 0, 0}})
+    table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], PutCircles, {}}})
+    table.insert(wave2DeadAnim, {func = AnimFollowGear, swh = false, args = {vCircs[1]}})
     table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {deployedHog, DeployHog, {}}})
     if nativesNum > 1 then
 --      table.insert(wave2DeadAnim, {func = AnimCustomFunction, args = {natives[wiseNum], RestoreCyborg, {}}})
@@ -534,9 +548,7 @@ function SkipWave2DeadAnim()
   IsolateNatives()
   DeployHog()
   HideCyborg()
-  AddGear(cannibalPos[7][1], cannibalPos[7][2], gtGrave, 0, 0, 0, 0)
-  AddGear(cannibalPos[8][1], cannibalPos[8][2], gtGrave, 0, 0, 0, 0)
-  AddGear(cannibalPos[9][1], cannibalPos[9][2], gtGrave, 0, 0, 0, 0)
+  PutCircles()
 end
 
 function SpawnPlatformCrates()
@@ -569,7 +581,7 @@ function SkipWave2Anim()
 end
 
 function SkipStartAnim()
-  SetGearPosition(natives[waterNum], nativePos[denseNum][1] + 50, nativePos[denseNum][2])
+  AnimSetGearPosition(natives[waterNum], nativePos[denseNum][1] + 50, nativePos[denseNum][2])
   RestoreWave(1)
   ReviveNatives()
   SetGearMessage(CurrentHedgehog, 0)
@@ -623,6 +635,7 @@ end
 
 function DoChoice()
   RemoveEventFunc(CheckChoiceRefuse)
+  SetGearMessage(CurrentHedgehog, 0)
   SetupAfterChoiceAnim()
   AddAnim(afterChoiceAnim)
   AddFunction({func = AfterAfterChoiceAnim, args = {}})
@@ -662,19 +675,7 @@ end
 
 function DoWaveDead(index)
   TurnTimeLeft = 0
-  if index == 1 then
-    RestoreWave(2)
-    SetupWave2Anim()
-    AddAnim(wave2Anim)
-    AddFunction({func = AfterWave2Anim, args = {}})
-  elseif index == 2 then
-    SetupWave2DeadAnim()
-    AddAnim(wave2DeadAnim)
-    AddFunction({func = AfterWave2DeadAnim, args = {}})
-  elseif index == 3 then
-    AnimSwitchHog(deployedHog)
-    AddFunction({func = AddWave3DeadAnim, args = {}})
-  end
+  needToAct = index
 end
 
 function AddWave3DeadAnim()
@@ -859,7 +860,7 @@ function SetupPlace()
   end
   if m4ChiefDead == 1 then
     DeleteGear(natives[chiefNum])
-    SetGearPosition(natives[girlNum], unpack(nativePos[buffaloNum]))
+    AnimSetGearPosition(natives[girlNum], unpack(nativePos[buffaloNum]))
     nativePos[girlNum] = nativePos[buffaloNum]
   end
   if m4BuffaloDead == 1 then
@@ -897,26 +898,28 @@ function AddHogs()
 
   AddTeam(loc("Assault Team"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 6 do
-    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
+--    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
+    cannibals[i] = AddHog(cannibalNames[i], 1, 5, "vampirichog")
   end
 
   AddTeam(loc("Reinforcements"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
   for i = 7, 9 do
-    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
+--    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
+    cannibals[i] = AddHog(cannibalNames[i], 1, 5, "vampirichog")
   end
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
   for i = 1, 9 do
-    SetGearPosition(natives[i], unpack(nativePos[i]))
+    AnimSetGearPosition(natives[i], unpack(nativePos[i]))
     AnimTurn(natives[i], nativeDir[i])
   end
 
-  SetGearPosition(cyborg, 0, 0)
+  AnimSetGearPosition(cyborg, 0, 0)
 
   for i = 1, 9 do
-    SetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
     AnimTurn(cannibals[i], cannibalDir[i])
   end
 end
@@ -1059,6 +1062,22 @@ function onNewTurn()
       AddAnim(hogDeadAnim)
       AddFunction({func = AfterHogDeadAnim, args = {}})
     end
+  end
+  if needToAct > 0 then
+    if needToAct == 1 then
+      RestoreWave(2)
+      SetupWave2Anim()
+      AddAnim(wave2Anim)
+      AddFunction({func = AfterWave2Anim, args = {}})
+    elseif needToAct == 2 then
+      SetupWave2DeadAnim()
+      AddAnim(wave2DeadAnim)
+      AddFunction({func = AfterWave2DeadAnim, args = {}})
+    elseif needToAct == 3 then
+      AnimSwitchHog(deployedHog)
+      AddFunction({func = AddWave3DeadAnim, args = {}})
+    end
+    needToAct = 0
   end
 end
 

@@ -181,18 +181,26 @@ function AnimJump(gear, jumpType)
   return false
 end
 
+function AnimSetGearPosition(gear, destX, destY, fall)
+  SetGearPosition(gear, destX, destY)
+  if fall ~= false then
+    SetGearVelocity(gear, 0, 10)
+  end
+  return true
+end
+
 function AnimDisappear(gear, destX, destY)
 	AddVisualGear(GetX(gear)-5, GetY(gear)-5, vgtSmoke, 0, false)
 	AddVisualGear(GetX(gear)+5, GetY(gear)+5, vgtSmoke, 0, false)
 	AddVisualGear(GetX(gear)-5, GetY(gear)+5, vgtSmoke, 0, false)
 	AddVisualGear(GetX(gear)+5, GetY(gear)-5, vgtSmoke, 0, false)
   PlaySound(sndExplosion)
-	SetGearPosition(gear, destX, destY)
+	AnimSetGearPosition(gear, destX, destY)
   return true
 end
 
 function AnimOutOfNowhere(gear, destX, destY)
-  SetGearPosition(gear, destX, destY)
+  AnimSetGearPosition(gear, destX, destY)
   AddVisualGear(destX, destY, vgtBigExplosion, 0, false)
   PlaySound(sndExplosion)
   AnimGearWait(gear, 50)
@@ -204,16 +212,11 @@ function AnimTeleportGear(gear, destX, destY)
 	AddVisualGear(GetX(gear)+5, GetY(gear)+5, vgtSmoke, 0, false)
 	AddVisualGear(GetX(gear)-5, GetY(gear)+5, vgtSmoke, 0, false)
 	AddVisualGear(GetX(gear)+5, GetY(gear)-5, vgtSmoke, 0, false)
-	SetGearPosition(gear, destX, destY)
+	AnimSetGearPosition(gear, destX, destY)
 	AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
   PlaySound(sndExplosion)
   FollowGear(gear)
   AnimGearWait(gear, 50)
-  return true
-end
-
-function AnimSetGearPosition(gear, x, y)
-  SetGearPosition(gear, x, y)
   return true
 end
 

@@ -92,7 +92,7 @@ end
 
 function SkipOnShroom()
   Skipanim(onShroomAnim)
-  SetGearPosition(elderh, 2700, 1278)
+  AnimSetGearPosition(elderh, 2700, 1278)
 end
 
 function AnimationSetup()
@@ -322,6 +322,7 @@ end
 
 function DoOnShroom()
   ropeCrate1 = SpawnUtilityCrate(2751, 1194, amRope)
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(onShroomAnim)
   AddEvent(CheckOnFlower, {}, DoOnFlower, {}, 0)
 end
@@ -333,6 +334,7 @@ end
 function DoOnFlower()
   AddAmmo(youngh, amRope, 100)
   paraCrate = SpawnUtilityCrate(3245, 1758, amParachute)
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(onFlowerAnim)
   AddEvent(CheckTookParaCrate, {}, DoTookParaCrate, {}, 0)
 end
@@ -343,6 +345,7 @@ end
 
 function DoTookParaCrate()
   AddAmmo(youngh, amParachute, 100)
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(tookParaAnim)
   AddEvent(CheckOnMoleHead, {}, DoOnMoleHead, {}, 0)
   AddEvent(CheckPastMoleHead, {}, DoPastMoleHead, {}, 0)
@@ -363,6 +366,7 @@ function DoPastMoleHead()
   RemoveEventFunc(CheckOnMoleHead)
   ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope)
   AddAmmo(youngh, amRope, 0)
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(pastMoleHeadAnim)
   AddEvent(CheckTookRope2, {}, DoTookRope2, {}, 0)
 end
@@ -371,6 +375,7 @@ function DoOnMoleHead()
   RemoveEventFunc(CheckPastMoleHead)
   ropeCrate2 = SpawnUtilityCrate(2782, 1720, amRope)
   AddAmmo(youngh, amRope, 0)
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(onMoleHeadAnim)
   AddEvent(CheckTookRope2, {}, DoTookRope2, {}, 0)
 end
@@ -381,6 +386,7 @@ end
 
 function DoTookRope2()
   AddAmmo(youngh, amRope, 100)
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(tookRope2Anim)
   punchCrate = SpawnAmmoCrate(2460, 1321, amFirePunch)
   AddEvent(CheckTookPunch, {}, DoTookPunch, {})
@@ -393,6 +399,7 @@ end
 function DoTookPunch()
   AddAmmo(youngh, amFirePunch, 100)
   AddAmmo(youngh, amRope, 0)
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(tookPunchAnim)
   targets[1] = AddGear(1594, 1185, gtTarget, 0, 0, 0, 0)
   targets[2] = AddGear(2188, 1314, gtTarget, 0, 0, 0, 0)
@@ -407,6 +414,7 @@ function CheckTargDestroyed()
 end
 
 function DoTargDestroyed()
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(challengeAnim)
   targetsDestroyed = 0
   AddFunction({func = SetChoice, args = {}})
@@ -443,6 +451,7 @@ end
 
 function DoChallengeWon()
   desertCrate = SpawnAmmoCrate(1240, 1212, amDEagle)
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(challengeCompletedAnim)
   AddEvent(CheckDesertColled, {}, DoDesertColled, {}, 0)
 end
@@ -469,6 +478,7 @@ end
 
 function DoChallengeFailed()
   challengeFailed = false
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(challengeFailedAnim)
   chalTries = chalTries + 1
   difficulty = 0
@@ -498,6 +508,7 @@ function DoTargetsKilled()
     RemoveEventFunc(CheckTargetsKilled)
     SetState(cannibal, gstVisible)
     cannibalVisible = true
+    SetGearMessage(CurrentHedgehog, 0)
     AddAnim(beforeKillAnim)
     AddEvent(CheckCloseToCannibal, {}, DoCloseToCannibal, {}, 0)
     AddEvent(CheckCannibalKilled, {}, DoCannibalKilled, {}, 0)
@@ -514,6 +525,7 @@ function CheckCloseToCannibal()
 end
 
 function DoCloseToCannibal()
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(closeCannim)
   AddFunction({func = SpawnAmmoCrate, args = {targetPosX[1][1], targetPosY[1][1], amWhip}})
   AddFunction({func = SpawnAmmoCrate, args = {targetPosX[1][2], targetPosY[1][2], amBaseballBat}})
@@ -599,16 +611,16 @@ function onGameInit()
 	youngh = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
   elderh = AddHog(loc("Righteous Beard"), 0, 99, "IndianChief")
   princess = AddHog(loc("Fell From Heaven"), 0, 300, "tiara")
-  SetGearPosition(princess, 1911, 1361)
+  AnimSetGearPosition(princess, 1911, 1361)
   HogTurnLeft(princess, true)
-  SetGearPosition(elderh, 2667, 1208)
+  AnimSetGearPosition(elderh, 2667, 1208)
   HogTurnLeft(elderh, true)
-  SetGearPosition(youngh, 1862, 1362)
+  AnimSetGearPosition(youngh, 1862, 1362)
   HogTurnLeft(youngh, false)
 
   AddTeam(loc("Cannibals"), 14483456, "Skull", "Island", "Pirate","cm_vampire")
   cannibal = AddHog(loc("Brainiac"), 0, 5, "Zombi")
-  SetGearPosition(cannibal, 525, 1256)
+  AnimSetGearPosition(cannibal, 525, 1256)
   HogTurnLeft(cannibal, false)
   
   AnimInit()

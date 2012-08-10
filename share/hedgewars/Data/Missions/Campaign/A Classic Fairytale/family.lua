@@ -281,6 +281,7 @@ function CheckCyborgsDead()
 end
 
 function DoCyborgsDead()
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(midAnim)
   AddFunction({func = AfterMidAnim, args = {}})
 end
@@ -391,14 +392,14 @@ function AddHogs()
   cyborgsLeft = cyborgsNum
 
   for i = 1, 3 do
-    SetGearPosition(natives[i], unpack(nativePos[i]))
+    AnimSetGearPosition(natives[i], unpack(nativePos[i]))
   end
 
-  SetGearPosition(cyborg, unpack(cyborgPos))
-  SetGearPosition(princess, unpack(princessPos))
+  AnimSetGearPosition(cyborg, unpack(cyborgPos))
+  AnimSetGearPosition(princess, unpack(princessPos))
 
   for i = 1, cyborgsNum do
-    SetGearPosition(cyborgs[i], unpack(cyborgsPos[i]))
+    AnimSetGearPosition(cyborgs[i], unpack(cyborgsPos[i]))
     AnimTurn(cyborgs[i], cyborgsDir[i])
   end
 end

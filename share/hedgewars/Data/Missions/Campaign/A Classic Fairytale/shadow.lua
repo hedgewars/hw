@@ -105,9 +105,9 @@ end
 
 function SkipRefusedAnim()
   RefusedStart()
-  SetGearPosition(dense, 2645, 1146)
-  SetGearPosition(ramon, 2218, 1675)
-  SetGearPosition(spiky, 2400, 1675)
+  AnimSetGearPosition(dense, 2645, 1146)
+  AnimSetGearPosition(ramon, 2218, 1675)
+  AnimSetGearPosition(spiky, 2400, 1675)
 end
 
 function AfterStartDialogue()
@@ -145,7 +145,7 @@ function SkipWeaklingsAnim()
       RestoreHog(cannibals[i])
       isHidden[cannibals[i]] = false
     end
-    SetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
     SetState(cannibals[i], 0)
   end
   SetInputMask(0xFFFFFFFF)
@@ -171,7 +171,7 @@ function SkipStronglingsAnim()
       RestoreHog(cannibals[i])
       isHidden[cannibals[i]] = false
     end
-    SetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
     SetState(cannibals[i], 0)
   end
   if cyborgHidden == true then
@@ -180,17 +180,17 @@ function SkipStronglingsAnim()
   end
   SetState(cyborg, 0)
   SetState(dense, 0)
-  SetGearPosition(dense, 1350, 1310)
+  AnimSetGearPosition(dense, 1350, 1310)
   FollowGear(dense)
   HogTurnLeft(dense, true)
-  SetGearPosition(cyborg, 1250, 1310)
+  AnimSetGearPosition(cyborg, 1250, 1310)
   SwitchHog(dense)
   SetInputMask(0xFFFFFFFF)
 end
 
 function RestartReturnAccepted()
   retryReturn = false
-  SetGearPosition(dense, 1350, 1310)
+  AnimSetGearPosition(dense, 1350, 1310)
   AddAmmo(dense, amGirder, 2)
   AddAmmo(dense, amParachute, 2)
   ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot! If you get stuck, press [Precise] to try again!"), 1, 6000)
@@ -215,7 +215,7 @@ function AfterAcceptedAnim()
 end
 
 function SkipAcceptedAnim()
-  SetGearPosition(cyborg, unpack(cyborgPos))
+  AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(dense)
   SetInputMask(0xFFFFFFFF)
@@ -241,7 +241,7 @@ function SkipAttackedAnim()
   SpawnAmmoCrate(3551, 994, amGrenade)
   SpawnAmmoCrate(3392, 1101, amShotgun)
   SpawnAmmoCrate(3192, 1101, amShotgun)
-  SetGearPosition(cyborg, unpack(cyborgPos))
+  AnimSetGearPosition(cyborg, unpack(cyborgPos))
   SetState(cyborg, gstInvisible)
   AnimSwitchHog(leaks)
   SetInputMask(0xFFFFFFFF)
@@ -517,19 +517,19 @@ function PlaceHogs()
   HogTurnLeft(leaks, true)
 
   for i = 2, 9 do
-    SetGearPosition(cannibals[i], unpack(cyborgPos))
+    AnimSetGearPosition(cannibals[i], unpack(cyborgPos))
     AnimTurn(cannibals[i], "Left")
     cannibalDead[i] = false
   end
 
-  SetGearPosition(cannibals[1], cannibalPos[1][1], cannibalPos[1][2])
+  AnimSetGearPosition(cannibals[1], cannibalPos[1][1], cannibalPos[1][2])
   AnimTurn(cannibals[1], "Left")
 
-  SetGearPosition(cyborg, cyborgPos[1], cyborgPos[2])
-  SetGearPosition(ramon, 2218, 1675)
-  SetGearPosition(skiky, 2400, 1675)
-  SetGearPosition(dense, densePos[1], densePos[2])
-  SetGearPosition(leaks, leaksPos[1], leaksPos[2]) 
+  AnimSetGearPosition(cyborg, cyborgPos[1], cyborgPos[2])
+  AnimSetGearPosition(ramon, 2218, 1675)
+  AnimSetGearPosition(skiky, 2400, 1675)
+  AnimSetGearPosition(dense, densePos[1], densePos[2])
+  AnimSetGearPosition(leaks, leaksPos[1], leaksPos[2]) 
 end
 
 function VisiblizeHogs()
@@ -592,6 +592,7 @@ function UnHideStronglings()
 end
 
 function ChoiceTaken()
+  SetGearMessage(CurrentHedgehog, 0)
   if choice == choiceAccept then
     AddAnim(acceptedAnim)
     AddFunction({func = AfterAcceptedAnim, args = {}})
@@ -617,6 +618,7 @@ end
 
 function DoBrainiacDead()
   TurnTimeLeft = 0
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(weaklingsAnim)
   AddFunction({func = AfterWeaklingsAnim, args = {}})
   stage = interSpyStage
@@ -633,6 +635,7 @@ end
 
 function DoWeaklingsKilled()
   TurnTimeLeft = 0
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(stronglingsAnim)
   AddFunction({func = AfterStronglingsAnim, args = {}})
   stage = interWeakStage
@@ -713,6 +716,7 @@ function DoTookWeapons()
 end
 
 function DoStronglingsDead()
+  SetGearMessage(CurrentHedgehog, 0)
   if denseDead == true then
     AddAnim(acceptedDiedFinalAnim)
     SaveCampaignVar("M2DenseDead", "1")
