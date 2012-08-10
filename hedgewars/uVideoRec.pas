@@ -27,7 +27,7 @@ implementation
 end.
 {$ELSE}
 
-{$IFDEF UNIX}
+{$IFNDEF WIN32}
     {$LINKLIB avwrapper}
     {$LINKLIB avutil}
     {$LINKLIB avcodec}
@@ -53,27 +53,16 @@ implementation
 
 uses uVariables, uUtils, GLunit, SDLh, SysUtils, uIO, uMisc, uTypes;
 
-{$IFDEF WIN32}
-const AVWrapperLibName = 'libavwrapper.dll';
-{$ENDIF}
+const AVWrapperLibName = {$IFDEF WIN32}'libavwrapper.dll'{$ELSE}''{$ENDIF};
 
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
 
-{$IFDEF WIN32}
 procedure AVWrapper_Init(
               AddLog: TAddFileLogRaw;
               filename, desc, soundFile, format, vcodec, acodec: PChar;
               width, height, framerateNum, framerateDen, vquality: LongInt); cdecl; external AVWrapperLibName;
 procedure AVWrapper_Close; cdecl; external AVWrapperLibName;
 procedure AVWrapper_WriteFrame( pY, pCb, pCr: PByte ); cdecl; external AVWrapperLibName;
-{$ELSE}
-procedure AVWrapper_Init(
-              AddLog: TAddFileLogRaw;
-              filename, desc, soundFile, format, vcodec, acodec: PChar;
-              width, height, framerateNum, framerateDen, vquality: LongInt); cdecl; external;
-procedure AVWrapper_Close; cdecl; external;
-procedure AVWrapper_WriteFrame( pY, pCb, pCr: PByte ); cdecl; external;
-{$ENDIF}
 
 type TFrame = record
                   realTicks: LongWord;
