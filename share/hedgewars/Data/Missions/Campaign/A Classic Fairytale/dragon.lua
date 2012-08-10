@@ -318,7 +318,7 @@ function AfterKillAnim()
 end
 
 function SkipKilledAnim()
-  SetGearPosition(native, unpack(secondPos[1]))
+  AnimSetGearPosition(native, unpack(secondPos[1]))
   AnimSwitchHog(native)
   AnimWait(native, 1)
 end
@@ -359,6 +359,7 @@ function DoCyborgsDead()
   NullifyAmmo()
   RestoreHedge(cyborg)
   SetupKilledAnim()
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(killedAnim)
   AddFunction({func = AfterKilledAnim, args = {}})
 end
@@ -374,6 +375,7 @@ end
 
 function DoCratesTaken()
   SetupKillAnim()
+  SetGearMessage(CurrentHedgehog, 0)
   AddAnim(killAnim)
   AddFunction({func = AfterKillAnim, args = {}})
 end
@@ -404,7 +406,7 @@ function DoMissionFinished()
 end
 
 function DoRetry()
-  SetGearPosition(native, unpack(nativePos))
+  AnimSetGearPosition(native, unpack(nativePos))
   for i = 1, cratesNum do
     if gearDead[crates[i]] ~= true then
       DeleteGear(crates[i])
@@ -511,13 +513,13 @@ function AddHogs()
   cyborgsLeft = 4
 
   for i = 1, 7 do
-    SetGearPosition(natives[i], unpack(nativePos))
+    AnimSetGearPosition(natives[i], unpack(nativePos))
   end
 
-  SetGearPosition(cyborg, unpack(cyborgPos))
+  AnimSetGearPosition(cyborg, unpack(cyborgPos))
 
   for i = 1, 4 do
-    SetGearPosition(cyborgs[i], unpack(cyborgsPos[i]))
+    AnimSetGearPosition(cyborgs[i], unpack(cyborgsPos[i]))
     AnimTurn(cyborgs[i], cyborgsDir[i])
   end
 

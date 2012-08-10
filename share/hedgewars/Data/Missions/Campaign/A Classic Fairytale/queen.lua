@@ -618,7 +618,7 @@ function SetupPlace()
   end
   for i = 1, 4 do 
     if GetHogName(natives[i]) == GetHogName(enemy) then
-      SetGearPosition(enemy, GetGearPosition(natives[i]))
+      AnimSetGearPosition(enemy, GetGearPosition(natives[i]))
       DeleteGear(natives[i])
       DeleteGear(cyborgs[cyborgsLeft])
     end
@@ -679,14 +679,14 @@ function AddHogs()
   enemy = AddHog(loc("Name"), 2, 200, "cyborg1")
 
   for i = 1, nativesNum do
-    SetGearPosition(natives[i], unpack(nativePos[i]))
+    AnimSetGearPosition(natives[i], unpack(nativePos[i]))
   end
 
-  SetGearPosition(enemy, unpack(enemyPos))
+  AnimSetGearPosition(enemy, unpack(enemyPos))
   AnimTurn(enemy, "Left")
 
   for i = 1, cyborgsNum do
-    SetGearPosition(cyborgs[i], unpack(cyborgsPos[i]))
+    AnimSetGearPosition(cyborgs[i], unpack(cyborgsPos[i]))
     AnimTurn(cyborgs[i], cyborgsDir[i])
   end
 end

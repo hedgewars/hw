@@ -53,7 +53,7 @@ function AfterStartAnim()
 end
 
 function SkipStartAnim()
-  SetGearPosition(water, 2467, 754)
+  AnimSetGearPosition(water, 2467, 754)
   if cratesSpawned[1] ~= true then
     SpawnCrates(1)
   end
@@ -319,17 +319,17 @@ function AddHogs()
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
 
-  SetGearPosition(leaks,   unpack(leaksPos))
-  SetGearPosition(dense,   unpack(densePos))
-  SetGearPosition(water,   unpack(waterPos))
+  AnimSetGearPosition(leaks,   unpack(leaksPos))
+  AnimSetGearPosition(dense,   unpack(densePos))
+  AnimSetGearPosition(water,   unpack(waterPos))
   HogTurnLeft(water, true)
-  SetGearPosition(buffalo, unpack(buffaloPos))
+  AnimSetGearPosition(buffalo, unpack(buffaloPos))
   HogTurnLeft(buffalo, true)
-  SetGearPosition(chief,   unpack(chiefPos))
+  AnimSetGearPosition(chief,   unpack(chiefPos))
   HogTurnLeft(chief, true)
-  SetGearPosition(cyborg, 0, 0)
+  AnimSetGearPosition(cyborg, 0, 0)
   for i = 1, 8 do
-    SetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
   end
 end
 

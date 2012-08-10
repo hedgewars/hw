@@ -87,7 +87,7 @@ function AfterMidAnimAlone()
   SetupCourse()
   for i = 5, 8 do
     RestoreHog(cannibals[i])
-    SetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
   end
 
   AddAmmo(cannibals[5], amDEagle, 0)
@@ -101,7 +101,7 @@ function AfterMidAnimAlone()
   TurnTimeLeft = TurnTime
   ShowMission(loc("The Journey Back"), loc("Collateral Damage"), loc("Save the princess by collecting the crate in under 12 turns!"), 0, 6000)
   -----------------------///////////////------------
-  --SetGearPosition(leaks, 417, 1800)
+  --AnimSetGearPosition(leaks, 417, 1800)
 end
 
 function SkipEndAnimAlone()
@@ -113,8 +113,8 @@ function SkipEndAnimAlone()
     RestoreHog(princess)
     princessHidden = false
   end
-  SetGearPosition(cyborg, 437, 1700)
-  SetGearPosition(princess, 519, 1722)
+  AnimSetGearPosition(cyborg, 437, 1700)
+  AnimSetGearPosition(princess, 519, 1722)
 end
 
 function SkipEndAnimDuo()
@@ -126,10 +126,10 @@ function SkipEndAnimDuo()
     RestoreHog(princess)
     princessHidden = false
   end
-  SetGearPosition(cyborg, 437, 1700)
-  SetGearPosition(princess, 519, 1722)
-  SetGearPosition(leaks, 763, 1760)
-  SetGearPosition(dense, 835, 1519)
+  AnimSetGearPosition(cyborg, 437, 1700)
+  AnimSetGearPosition(princess, 519, 1722)
+  AnimSetGearPosition(leaks, 763, 1760)
+  AnimSetGearPosition(dense, 835, 1519)
   HogTurnLeft(leaks, true)
   HogTurnLeft(dense, true)
 end
@@ -157,7 +157,7 @@ function AfterEndAnimDuo()
 end
 
 function SkipMidAnimAlone()
-  SetGearPosition(leaks, 2656, 1842)
+  AnimSetGearPosition(leaks, 2656, 1842)
   AnimSwitchHog(leaks)
   SetInputMask(0xFFFFFFFF)
   if princessHidden == false then
@@ -238,7 +238,7 @@ function AfterPastFlowerAnim()
 end
 
 function SkipPastFlowerAnim()
-  SetGearPosition(dense, 2656, 1842)
+  AnimSetGearPosition(dense, 2656, 1842)
   AnimSwitchHog(dense)
   if cyborgHidden == false then
     HideHog(cyborg)
@@ -259,7 +259,7 @@ function AfterOutPitAnim()
 end
 
 function SkipOutPitAnim()
-  SetGearPosition(dense, unpack(midDensePosDuo))
+  AnimSetGearPosition(dense, unpack(midDensePosDuo))
   AnimSwitchHog(dense)
   if cyborgHidden == false then
     HideHog(cyborg)
@@ -637,16 +637,16 @@ function SetupPlaceAlone()
   SetTimer(AddGear(2201, 1321, gtMine, 0, 0, 0, 0), 3000)
   SetTimer(AddGear(2239, 1295, gtMine, 0, 0, 0, 0), 3000)
 
-  SetGearPosition(leaks, 3781, 1583)
-  --SetGearPosition(leaks, 1650, 1583)
+  AnimSetGearPosition(leaks, 3781, 1583)
+  --AnimSetGearPosition(leaks, 1650, 1583)
   AddAmmo(cannibals[1], amShotgun, 100)
   AddAmmo(leaks, amSwitch, 0)
 end
 
 function SetupPlaceDuo()
   PlaceCratesDuo()
-  SetGearPosition(leaks, unpack(startLeaksPosDuo))
-  SetGearPosition(dense, unpack(startDensePosDuo))
+  AnimSetGearPosition(leaks, unpack(startLeaksPosDuo))
+  AnimSetGearPosition(dense, unpack(startDensePosDuo))
 end
 
 function SetupEventsDuo()
@@ -944,22 +944,22 @@ function onGameInit()
   cannibals = {}
   for i = 1, 4 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")
-    SetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
   end
 
   for i = 5, 8 do
     cannibals[i] = AddHog(cannibalNames[i], 3, 40, "Zombi")
-    SetGearPosition(cannibals[i], 0, 0)
+    AnimSetGearPosition(cannibals[i], 0, 0)
   end
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
   cyborg = AddHog(loc("Y3K1337"), 0, 200, "cyborg1")
   princess = AddHog(loc("Fell From Heaven"), 0, 200, "tiara")
 
-  SetGearPosition(dense, 0, 0)
-  SetGearPosition(leaks, 0, 0)
-  SetGearPosition(cyborg, 0, 0)
-  SetGearPosition(princess, 0, 0)
+  AnimSetGearPosition(dense, 0, 0)
+  AnimSetGearPosition(leaks, 0, 0)
+  AnimSetGearPosition(cyborg, 0, 0)
+  AnimSetGearPosition(princess, 0, 0)
   
   AnimInit()
 end
