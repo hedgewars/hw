@@ -4,6 +4,9 @@
 #  FFMPEG_FOUND - system has ffmpeg
 #  FFMPEG_INCLUDE_DIR - the ffmpeg include directory
 #  FFMPEG_LIBRARIES - Link these to use ffmpeg
+#  FFMPEG_LIBAVCODEC
+#  FFMPEG_LIBAVFORMAT
+#  FFMPEG_LIBAVUTIL
 #
 #  Copyright (c) 2008 Andreas Schneider <mail@cynapses.org>
 #  Modified for other libraries by Lasse Kärkkäinen <tronic>
@@ -32,32 +35,32 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
     PATH_SUFFIXES ffmpeg libav
   )
 
-  find_library(FFMPEG_AVCODEC_LIBRARY
+  find_library(FFMPEG_LIBAVCODEC
     NAMES avcodec
     PATHS ${_FFMPEG_AVCODEC_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib
   )
 
-  find_library(FFMPEG_AVFORMAT_LIBRARY
+  find_library(FFMPEG_LIBAVFORMAT
     NAMES avformat
     PATHS ${_FFMPEG_AVFORMAT_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib
   )
 
-  find_library(FFMPEG_AVUTIL_LIBRARY
+  find_library(FFMPEG_LIBAVUTIL
     NAMES avutil
     PATHS ${_FFMPEG_AVUTIL_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib
   )
 
-  if (FFMPEG_AVCODEC_LIBRARY AND FFMPEG_AVFORMAT_LIBRARY)
+  if (FFMPEG_LIBAVCODEC AND FFMPEG_LIBAVFORMAT)
     set(FFMPEG_FOUND TRUE)
-  endif (FFMPEG_AVCODEC_LIBRARY AND FFMPEG_AVFORMAT_LIBRARY)
+  endif()
 
   if (FFMPEG_FOUND)
     set(FFMPEG_INCLUDE_DIR ${FFMPEG_AVCODEC_INCLUDE_DIR}/..)
 
     set(FFMPEG_LIBRARIES
-      ${FFMPEG_AVCODEC_LIBRARY}
-      ${FFMPEG_AVFORMAT_LIBRARY}
-      ${FFMPEG_AVUTIL_LIBRARY}
+      ${FFMPEG_LIBAVCODEC}
+      ${FFMPEG_LIBAVFORMAT}
+      ${FFMPEG_LIBAVUTIL}
     )
 
   endif (FFMPEG_FOUND)
@@ -68,7 +71,7 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
     endif (NOT FFMPEG_FIND_QUIETLY)
   else (FFMPEG_FOUND)
     if (FFMPEG_FIND_REQUIRED)
-      message(FATAL_ERROR "Could not find FFMPEG libavcodec, libavformat or libswscale")
+      message(FATAL_ERROR "Could not find FFMPEG libavcodec or libavformat or libavutil")
     endif (FFMPEG_FIND_REQUIRED)
   endif (FFMPEG_FOUND)
 
