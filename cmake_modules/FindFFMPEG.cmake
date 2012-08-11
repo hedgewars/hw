@@ -1,7 +1,7 @@
 # - Try to find ffmpeg libraries (libavcodec, libavformat and libavutil)
 # Once done this will define
 #
-#  FFMPEG_FOUND - system has ffmpeg
+#  FFMPEG_FOUND - system has ffmpeg or libav
 #  FFMPEG_INCLUDE_DIR - the ffmpeg include directory
 #  FFMPEG_LIBRARIES - Link these to use ffmpeg
 #  FFMPEG_LIBAVCODEC
@@ -67,11 +67,11 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
 
   if (FFMPEG_FOUND)
     if (NOT FFMPEG_FIND_QUIETLY)
-      message(STATUS "Found FFMPEG: ${FFMPEG_LIBRARIES} ${FFMPEG_INCLUDE_DIR}")
+      message(STATUS "Found FFMPEG or Libav: ${FFMPEG_LIBRARIES}, ${FFMPEG_INCLUDE_DIR}")
     endif (NOT FFMPEG_FIND_QUIETLY)
   else (FFMPEG_FOUND)
     if (FFMPEG_FIND_REQUIRED)
-      message(FATAL_ERROR "Could not find FFMPEG libavcodec or libavformat or libavutil")
+      message(FATAL_ERROR "Could not find libavcodec or libavformat or libavutil")
     endif (FFMPEG_FIND_REQUIRED)
   endif (FFMPEG_FOUND)
 
