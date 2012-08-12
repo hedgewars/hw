@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := frontlib
 
-LOCAL_CFLAGS := -I$(LOCAL_PATH)/../SDL_net -std=c99 -DWITHOUT_SDL
+LOCAL_CFLAGS := -I$(LOCAL_PATH)/../Android-build/SDL-android-project/jni/SDL_net -std=c99 -DWITHOUT_SDL
 
 LOCAL_SRC_FILES := base64/base64.c iniparser/iniparser.c \
 	iniparser/dictionary.c ipc/gameconn.c ipc/ipcbase.c \
