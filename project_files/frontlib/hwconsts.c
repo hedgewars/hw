@@ -19,5 +19,26 @@
 
 #include "hwconsts.h"
 
-const uint32_t flib_teamcolor_defaults[] = HW_TEAMCOLOR_ARRAY;
-const size_t flib_teamcolor_defaults_len = sizeof(flib_teamcolor_defaults)/sizeof(uint32_t)-1;
+const uint32_t flib_teamcolors[] = HW_TEAMCOLOR_ARRAY;
+const size_t flib_teamcolor_count = sizeof(flib_teamcolors)/sizeof(uint32_t)-1;
+
+
+uint32_t flib_get_teamcolor(int colorIndex) {
+	if(colorIndex>=0 && colorIndex < flib_teamcolor_count) {
+		return flib_teamcolors[colorIndex];
+	} else {
+		return 0;
+	}
+}
+
+int flib_get_teamcolor_count() {
+	return flib_teamcolor_count;
+}
+
+int flib_get_hedgehogs_per_team() {
+	return HEDGEHOGS_PER_TEAM;
+}
+
+int flib_get_weapons_count() {
+	return WEAPONS_COUNT;
+}
