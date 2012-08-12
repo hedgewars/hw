@@ -6,5 +6,6 @@ include $(call all-subdir-makefiles)
 
 include $(CLEAR_VARS)
 include $(JNI_DIR)/../../../../misc/Android.mk
+include $(JNI_DIR)/../../../frontlib/Android.mk
 
 
