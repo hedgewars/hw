@@ -185,7 +185,7 @@ void handleReady(void *context, const char *nick, bool ready) {
 
 void handleEmFromNet(void *context, const uint8_t *em, size_t size) {
 	if(gameconn) {
-		flib_gameconn_send_enginemsg(gameconn, (const uint8_t*)em, size);
+		flib_gameconn_send_enginemsg(gameconn, em, size);
 	}
 }
 
