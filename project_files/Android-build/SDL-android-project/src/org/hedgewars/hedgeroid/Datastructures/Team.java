@@ -22,26 +22,28 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.hedgewars.hedgeroid.Utils;
 import org.hedgewars.hedgeroid.EngineProtocol.PascalExports;
 import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.TeamPtr;
 
-import android.util.Log;
+import android.content.Context;
 
 public final class Team {
 	public static final String DIRECTORY_TEAMS = "teams";
 
-	public static final int maxNumberOfHogs = PascalExports.HWgetMaxNumberOfHogs();
+	public static final int HEDGEHOGS_PER_TEAM = Flib.INSTANCE.flib_get_hedgehogs_per_team();
 	public static final int maxNumberOfTeams = PascalExports.HWgetMaxNumberOfTeams();
 
 	public final String name, grave, flag, voice, fort;
 	public final List<Hog> hogs;
 
 	public Team(String name, String grave, String flag, String voice, String fort, List<Hog> hogs) {
-		if(hogs.size() != maxNumberOfHogs) {
-			throw new IllegalArgumentException("A team must consist of "+maxNumberOfHogs+" hogs.");
+		if(hogs.size() != HEDGEHOGS_PER_TEAM) {
+			throw new IllegalArgumentException("A team must consist of "+HEDGEHOGS_PER_TEAM+" hogs.");
 		}
 		this.name = name;
 		this.grave = grave;
@@ -52,7 +54,6 @@ public final class Team {
 	}
 
 	public void save(File f) throws IOException {
-		Log.d("Team", "saving to "+f.getAbsolutePath());
 		TeamPtr teamPtr = TeamPtr.createJavaOwned(this);
 		if(Flib.INSTANCE.flib_team_to_ini(f.getAbsolutePath(), teamPtr) != 0) {
 			throw new IOException("Error saving team "+name);
@@ -69,11 +70,21 @@ public final class Team {
 			return null;
 		}
 	}
-
+	
+	public static File getTeamfileByName(Context c, String teamName) {
+		return new File(new File(c.getFilesDir(), DIRECTORY_TEAMS), Utils.replaceBadChars(teamName)+".hwt");
+	}
+	
 	@Override
 	public String toString() {
 		return "Team [name=" + name + ", grave=" + grave + ", flag=" + flag
 				+ ", voice=" + voice + ", fort=" + fort + ", hogs=" + hogs
 				+ "]";
 	}
+	
+	public static Comparator<Team> NAME_ORDER = new Comparator<Team>() {
+		public int compare(Team lhs, Team rhs) {
+			return lhs.name.compareToIgnoreCase(rhs.name);
+		}
+	};
 }

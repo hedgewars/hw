@@ -1,4 +1,5 @@
 package org.hedgewars.hedgeroid.frontlib;
+import java.io.UnsupportedEncodingException;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,15 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.hedgewars.hedgeroid.Datastructures.Hog;
+import org.hedgewars.hedgeroid.Datastructures.MapRecipe;
 import org.hedgewars.hedgeroid.Datastructures.MetaScheme;
 import org.hedgewars.hedgeroid.Datastructures.MetaScheme.Mod;
 import org.hedgewars.hedgeroid.Datastructures.MetaScheme.Setting;
+import org.hedgewars.hedgeroid.Datastructures.GameConfig;
 import org.hedgewars.hedgeroid.Datastructures.RoomlistRoom;
 import org.hedgewars.hedgeroid.Datastructures.Scheme;
 import org.hedgewars.hedgeroid.Datastructures.Team;
 import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.Datastructures.TeamIngameAttributes;
-import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
+import org.hedgewars.hedgeroid.Datastructures.Weaponset;
 
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
@@ -23,56 +26,126 @@ import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
 import com.sun.jna.Structure;
+import com.sun.jna.ptr.IntByReference;
 
+/**
+ * Here is an introduction to the most important aspects of the JNA code.
+ * 
+ * This interface permits access to the Hedgewars frontend library (frontlib)
+ * from Java. Each function directly contained in the Frontlib interface
+ * represents a mapped C function. The Structure classes (ending in -Struct) are
+ * mappings of C structs, and the PointerType classes (ending in -Ptr) represent
+ * pointers to structs.
+ * 
+ * Quick notes for USING these classes from outside this package:
+ * 
+ * Usage should be fairly straightforward, but there are a few surprising
+ * gotchas. First, when you implement callbacks, YOU are responsible for
+ * ensuring that the callback objects are not garbage-collected while they might
+ * still be called! So make sure you keep them in member variables or similar,
+ * because Java will not know if there are still native references to them.
+ * 
+ * When using Frontlib from outside its package, you only interact with structs
+ * via the PointerType classes. They allow you to get at the data of the struct
+ * with a function called deref(), which creates a plain normal Java object
+ * representing the data (e.g. SchemePtr.deref() will give you a Scheme object).
+ * 
+ * Remember that you usually have to destroy structs that you receive from the
+ * library, because they are owned by the native code, not Java. For example, if
+ * you obtain a {@link MetaschemePtr} metaPtr using flib_metascheme_from_ini,
+ * you have to call flib_metascheme_release(metaPtr) after you are done using
+ * it. The recommended pattern for most cases is to call deref() on the pointer
+ * to get a Java object (that you can keep as long as you like), and then
+ * immediately destroy the struct if it needs destroying. To find out whether
+ * and how the struct needs to be destroyed, see the library's documentation of
+ * the function that you got the struct from.
+ * 
+ * To pass new structs to the library, you can use the static createJavaOwned()
+ * function in each PointerType, which creates a new struct from the Java object
+ * you provide, and returns a pointer to that struct that you can pass to
+ * library functions. This new structure's memory is owned and managed by Java
+ * code, so do not destroy it with frontlib functions!
+ * 
+ * There is a slight mismatch between the data model for the game setup. The
+ * frontlib supports setting initial health and weaponset per-hog, because the
+ * engine allows for that, but currently neither the networking protocol nor the
+ * PC frontend support this feature, so the Android version does not take
+ * advantage of it either and treats both as per-game settings. The initial
+ * health is contained in the game scheme, the weaponset is explicitly part of
+ * the GameConfig. When converting GameConfig to a native flib_gamesetup, both
+ * are automatically copied to all hogs in the game, and for the reverse
+ * conversion the weaponset of the first hog of the first team is used as the
+ * GameConfig weaponset. This means that GameConfig.weaponset will be null if
+ * there are no teams in the game.
+ * 
+ * When starting a network game, you only need to query the GameSetupPtr from
+ * the netconn and use it to create the gameconn - this is preferable to using
+ * your own recreation of the game setup, because that way the same piece of
+ * code is used to determine the game setup on all platforms.
+ * 
+ * The "context" parameter of the callbacks is never needed here because JNA
+ * generates function code for each callback object. Don't worry about it, just
+ * pass null for context and ignore the context parameter in the callbacks.
+ * 
+ * Finally, the library functions are documented in the actual library, not
+ * here, so check the docs there to find out what exactly each function does!
+ * 
+ * Notes about the structure of this class (for the next one who has to touch
+ * this...):
+ * 
+ * Java/C interop is quite fiddly and error-prone, so as long as things work,
+ * try to stick to the established patterns.
+ * 
+ * Structure types should always be hidden from the outside world, because they
+ * can be misused too easily. For example, if you get a Structure from the
+ * library, change a String value in there and pass it back, JNA will re-write
+ * that string using Java-owned memory without freeing the old native-owned
+ * string, which causes a memory leak and possibly a double-free or other Bad
+ * Things (tm). To avoid problems like this, Structure types are only used
+ * internally, to map existing structures to Java types (without modifying them)
+ * or to create brand-new, Java-owned structures. Both operations are exposed to
+ * the outside through the PointerType classes corresponding to the structures
+ * in question.
+ * 
+ * Since all of the struct mapping happens in Java, it is never checked against
+ * the actual struct declarations in the library. That means strange things can
+ * start happening at runtime if the frontlib structs are modified without
+ * changing the mappings here to match. This also applies to the function
+ * signatures: JNA checks whether the functions actually exist when loading the
+ * library, but it has no way of knowing whether the signatures are correct. If
+ * the signatures here deviate from those in the frontlib, you might get stack
+ * corruption.
+ * 
+ * In order to check at least the function signatures, take a look at the file
+ * extra/jnacontrol.c in the frontlib sources. You can validate whether the
+ * function signatures are still correct by copy-pasting them into jnaControl.c
+ * and compiling it against the frontlib headers. The typedefs and #defines in
+ * that file will make the compiler see the Java method signatures as C function
+ * declarations. Since the same functions are already declared in the frontlib
+ * headers, the compiler will give you errors if the signatures don't match.
+ */
 public interface Frontlib extends Library {
 	static final int NATIVE_INT_SIZE = 4;
 	static final int NATIVE_BOOL_SIZE = 1;
 	
-	static final int NETCONN_STATE_CONNECTING = 0;
-	static final int NETCONN_STATE_LOBBY = 1;
-	static final int NETCONN_STATE_ROOM = 2;
-	static final int NETCONN_STATE_INGAME = 3;
-	static final int NETCONN_STATE_DISCONNECTED = 10;
-	
-	static final int NETCONN_DISCONNECT_NORMAL = 0;
-	static final int NETCONN_DISCONNECT_SERVER_TOO_OLD = 1;
-	static final int NETCONN_DISCONNECT_AUTH_FAILED = 2;
-	static final int NETCONN_DISCONNECT_CONNLOST = 3;
-	static final int NETCONN_DISCONNECT_INTERNAL_ERROR = 100;
-	
-	static final int NETCONN_ROOMLEAVE_ABANDONED = 0;
-	static final int NETCONN_ROOMLEAVE_KICKED = 1;
-	
-	static final int NETCONN_MSG_TYPE_PLAYERINFO = 0;
-	static final int NETCONN_MSG_TYPE_SERVERMESSAGE = 1;
-	static final int NETCONN_MSG_TYPE_WARNING = 2;
-	static final int NETCONN_MSG_TYPE_ERROR = 3;
-	
-	static final int NETCONN_MAPCHANGE_FULL = 0;
-	static final int NETCONN_MAPCHANGE_MAP = 1;
-	static final int NETCONN_MAPCHANGE_MAPGEN = 2;
-	static final int NETCONN_MAPCHANGE_DRAWNMAP = 3;
-	static final int NETCONN_MAPCHANGE_MAZE_SIZE = 4;
-	static final int NETCONN_MAPCHANGE_TEMPLATE = 5;
-	static final int NETCONN_MAPCHANGE_THEME = 6;
-	static final int NETCONN_MAPCHANGE_SEED = 7;
-	
-	static final int GAME_END_FINISHED = 0;
-	static final int GAME_END_INTERRUPTED = 1;
-	static final int GAME_END_HALTED = 2;
-	static final int GAME_END_ERROR = 3;
-	
-	static final int HEDGEHOGS_PER_TEAM = 8;
-	
 	public static class NetconnPtr extends PointerType { }
 	public static class MapconnPtr extends PointerType { }
 	public static class GameconnPtr extends PointerType { }
-	public static class MetaschemePtr extends PointerType { }
+	
+	// TODO avoid code duplication in the pointer types
+	public static class MetaschemePtr extends PointerType {
+		public MetaScheme deref() {
+			return deref(getPointer());
+		}
+		
+		public static MetaScheme deref(Pointer p) {
+			MetaschemeStruct struct = new MetaschemeStruct(p);
+			struct.read();
+			return struct.toMetaScheme();
+		}
+	}
 	
 	public static class RoomArrayPtr extends PointerType { 
-		/**
-		 * Returns the (native-owned) rooms in this list
-		 */
 		public RoomlistRoom[] getRooms(int count) {
 			Pointer ptr = getPointer();
 			if(ptr == null) {
@@ -88,65 +161,123 @@ public interface Frontlib extends Library {
 	}
 	
 	public static class RoomPtr extends PointerType {
-		public RoomPtr() { super(); }
-		public RoomPtr(Pointer ptr) { super(ptr); }
-		
 		public RoomlistRoom deref() {
 			return deref(getPointer());
 		}
 		
 		public static RoomlistRoom deref(Pointer p) {
-			RoomStruct r = new RoomStruct(p);
-			r.read();
-			return new RoomlistRoom(r.name, r.map, r.scheme, r.weapons, r.owner, r.playerCount, r.teamCount, r.inProgress);
+			RoomStruct struct = new RoomStruct(p);
+			struct.read();
+			return struct.toRoomlistRoom();
 		}
 	}
 	
 	public static class TeamPtr extends PointerType {
+		private TeamStruct javaOwnedInstance; 
+		
 		public TeamInGame deref() {
-			return deref(getPointer());
+			TeamStruct struct = new TeamStruct(getPointer());
+			struct.read();
+			return struct.toTeamInGame();
 		}
 		
-		public static TeamInGame deref(Pointer p) {
-			TeamStruct ts = new TeamStruct(p);
-			ts.read();
-			List<Hog> hogs = new ArrayList<Hog>();
-			for(int i=0; i<ts.hogs.length; i++) {
-				HogStruct hog = ts.hogs[i];
-				hogs.add(new Hog(hog.name, hog.hat, hog.difficulty));
-			}
-			Team team = new Team(ts.name, ts.grave, ts.flag, ts.voicepack, ts.fort, hogs);
-			TeamIngameAttributes attrs = new TeamIngameAttributes(ts.ownerName, ts.colorIndex, ts.hogsInGame, ts.remoteDriven);
-			return new TeamInGame(team, attrs);
-		}
-
 		public static TeamPtr createJavaOwned(Team t) {
 			return createJavaOwned(new TeamInGame(t, null));
 		}
 		
 		public static TeamPtr createJavaOwned(TeamInGame ingameTeam) {
-			TeamStruct ts = TeamStruct.from(ingameTeam.team, ingameTeam.ingameAttribs);
-			ts.write();
 			TeamPtr result = new TeamPtr();
-			result.setPointer(ts.getPointer());
+			result.javaOwnedInstance = new TeamStruct();
+			result.javaOwnedInstance.fillFrom(ingameTeam.team, ingameTeam.ingameAttribs);
+			result.javaOwnedInstance.autoWrite();
+			result.setPointer(result.javaOwnedInstance.getPointer());
 			return result;
 		}
 	}
 	
-	public static class WeaponsetPtr extends PointerType { }
-	public static class MapRecipePtr extends PointerType { }
-	public static class SchemePtr extends PointerType { }
+	public static class WeaponsetPtr extends PointerType {
+		private WeaponsetStruct javaOwnedInstance; 
+		
+		public Weaponset deref() {
+			WeaponsetStruct struct = new WeaponsetStruct(getPointer());
+			struct.read();
+			return struct.toWeaponset();
+		}
+		
+		public static WeaponsetPtr createJavaOwned(Weaponset weaponset) {
+			WeaponsetPtr result = new WeaponsetPtr();
+			result.javaOwnedInstance = new WeaponsetStruct();
+			result.javaOwnedInstance.fillFrom(weaponset);
+			result.javaOwnedInstance.autoWrite();
+			result.setPointer(result.javaOwnedInstance.getPointer());
+			return result;
+		}
+	}
+	
+	public static class WeaponsetListPtr extends PointerType {
+		private WeaponsetListStruct javaOwnedInstance;
+		
+		public List<Weaponset> deref() {
+			WeaponsetListStruct struct = new WeaponsetListStruct(getPointer());
+			struct.read();
+			return struct.toWeaponsetList();
+		}
+		
+		public static WeaponsetListPtr createJavaOwned(List<Weaponset> list) {
+			WeaponsetListPtr result = new WeaponsetListPtr();
+			result.javaOwnedInstance = new WeaponsetListStruct();
+			result.javaOwnedInstance.fillFrom(list);
+			result.javaOwnedInstance.autoWrite();
+			result.setPointer(result.javaOwnedInstance.getPointer());
+			return result;
+		}
+	}
+	
+	public static class MapRecipePtr extends PointerType {
+		private MapRecipeStruct javaOwnedInstance;
+		
+		public MapRecipe deref() {
+			MapRecipeStruct struct = new MapRecipeStruct(getPointer());
+			struct.read();
+			return struct.toMapRecipe();
+		}
+		
+		public static MapRecipePtr createJavaOwned(MapRecipe recipe) {
+			MapRecipePtr result = new MapRecipePtr();
+			result.javaOwnedInstance = new MapRecipeStruct();
+			result.javaOwnedInstance.fillFrom(recipe);
+			result.javaOwnedInstance.autoWrite();
+			result.setPointer(result.javaOwnedInstance.getPointer());
+			return result;
+		}
+	}
+	
+	public static class SchemePtr extends PointerType {
+		private SchemeStruct javaOwnedInstance;
+		
+		public Scheme deref() {
+			SchemeStruct struct = new SchemeStruct(getPointer());
+			struct.read();
+			return struct.toScheme();
+		}
+		
+		public static SchemePtr createJavaOwned(Scheme scheme) {
+			SchemePtr result = new SchemePtr();
+			result.javaOwnedInstance = new SchemeStruct();
+			result.javaOwnedInstance.fillFrom(scheme);
+			result.javaOwnedInstance.autoWrite();
+			result.setPointer(result.javaOwnedInstance.getPointer());
+			return result;
+		}
+	}
+	
 	public static class SchemelistPtr extends PointerType {
 		private SchemelistStruct javaOwnedInstance;
 		
 		public List<Scheme> deref() {
-			return deref(getPointer());
-		}
-		
-		public static List<Scheme> deref(Pointer p) {
-			SchemelistStruct sls = new SchemelistStruct(p);
-			sls.read();
-			return sls.toSchemeList();
+			SchemelistStruct struct = new SchemelistStruct(getPointer());
+			struct.read();
+			return struct.toSchemeList();
 		}
 		
 		public static SchemelistPtr createJavaOwned(List<Scheme> schemes) {
@@ -160,11 +291,20 @@ public interface Frontlib extends Library {
 	}
 	
 	public static class GameSetupPtr extends PointerType {
+		private GameSetupStruct javaOwnedInstance;
+		
+		public GameConfig deref() {
+			GameSetupStruct struct = new GameSetupStruct(getPointer());
+			struct.read();
+			return struct.toGameConfig();
+		}
+		
 		public static GameSetupPtr createJavaOwned(GameConfig conf) {
-			GameSetupStruct gss = GameSetupStruct.from(conf);
-			gss.write();
 			GameSetupPtr result = new GameSetupPtr();
-			result.setPointer(gss.getPointer());
+			result.javaOwnedInstance = new GameSetupStruct();
+			result.javaOwnedInstance.fillFrom(conf);
+			result.javaOwnedInstance.autoWrite();
+			result.setPointer(result.javaOwnedInstance.getPointer());
 			return result;
 		}
 	}
@@ -177,14 +317,14 @@ public interface Frontlib extends Library {
 		public HogStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public HogStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 		
-		public static HogStruct from(Hog hog) {
-			HogStruct hs = new HogStruct();
-			hs.difficulty = hog.level;
-			hs.hat = hog.hat;
-			hs.name = hog.name;
-			// TODO weaponset
-			// TODO initialHealth
-			return hs;
+		public void fillFrom(Hog hog) {
+			difficulty = hog.level;
+			hat = hog.hat;
+			name = hog.name;
+		}
+		
+		public Hog toHog() {
+			return new Hog(name, hat, difficulty);
 		}
 		
 		public String name;
@@ -198,7 +338,7 @@ public interface Frontlib extends Library {
 		public int difficulty;
 		
 		public int initialHealth;
-		public WeaponsetPtr weaponset;
+		public WeaponsetStruct.ByRef weaponset;
 	}
 	
 	static class TeamStruct extends Structure {
@@ -209,32 +349,55 @@ public interface Frontlib extends Library {
 		public TeamStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public TeamStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 		
-		public static TeamStruct from(Team team, TeamIngameAttributes attrs) {
-			TeamStruct ts = new TeamStruct();
+		public void fillFrom(Team team, TeamIngameAttributes attrs) {
 			if(team != null) {
-				ts.name = team.name;
-				ts.grave = team.grave;
-				ts.flag = team.flag;
-				ts.voicepack = team.voice;
-				ts.fort = team.fort;
-				if(team.hogs.size() != HEDGEHOGS_PER_TEAM) {
+				name = team.name;
+				grave = team.grave;
+				flag = team.flag;
+				voicepack = team.voice;
+				fort = team.fort;
+				if(team.hogs.size() != Team.HEDGEHOGS_PER_TEAM) {
 					throw new IllegalArgumentException();
 				}
-				for(int i=0; i<ts.hogs.length; i++) {
-					ts.hogs[i] = HogStruct.from(team.hogs.get(i));
+				for(int i=0; i<hogs.length; i++) {
+					hogs[i] = new HogStruct();
+					hogs[i].fillFrom(team.hogs.get(i));
 				}
 			}
 			
 			if(attrs != null) {
-				ts.hogsInGame = attrs.hogCount;
-				ts.ownerName = attrs.ownerName;
-				ts.colorIndex = attrs.colorIndex;
-				ts.remoteDriven = attrs.remoteDriven;
+				hogsInGame = attrs.hogCount;
+				ownerName = attrs.ownerName;
+				colorIndex = attrs.colorIndex;
+				remoteDriven = attrs.remoteDriven;
 			}
-			return ts;
 		}
 		
-		public HogStruct[] hogs = new HogStruct[HEDGEHOGS_PER_TEAM];
+		public void fillFrom(TeamInGame team, WeaponsetStruct.ByRef weaponset, int initialHealth) {
+			fillFrom(team.team, team.ingameAttribs);
+			for(int i=0; i<hogs.length; i++) {
+				hogs[i].initialHealth = initialHealth;
+				hogs[i].weaponset = weaponset;
+			}
+		}
+		
+		public Team toTeam() {
+			List<Hog> hogList = new ArrayList<Hog>();
+			for(int i=0; i<hogs.length; i++) {
+				hogList.add(hogs[i].toHog());
+			}
+			return new Team(name, grave, flag, voicepack, fort, hogList);
+		}
+		
+		public TeamIngameAttributes toTeamIngameAttributes() {
+			return new TeamIngameAttributes(ownerName, colorIndex, hogsInGame, remoteDriven);
+		}
+		
+		public TeamInGame toTeamInGame() {
+			return new TeamInGame(toTeam(), toTeamIngameAttributes());
+		}
+		
+		public HogStruct[] hogs = new HogStruct[Team.HEDGEHOGS_PER_TEAM];
 		public String name;
 		public String grave;
 		public String fort;
@@ -254,6 +417,106 @@ public interface Frontlib extends Library {
 		public String ownerName;
 	}
 	
+	static class WeaponsetStruct extends Structure {
+		public static class ByVal extends WeaponsetStruct implements Structure.ByValue {}
+		public static class ByRef extends WeaponsetStruct implements Structure.ByReference {}
+		private static String[] FIELD_ORDER = new String[] {"_referenceCount", "loadout", "crateprob", "crateammo", "delay", "name"};
+		
+		public WeaponsetStruct() { super(); setFieldOrder(FIELD_ORDER); }
+		public WeaponsetStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		
+		public void fillFrom(Weaponset weaponset) {
+			_referenceCount = 0;
+			fillWeaponInfo(loadout, weaponset.loadout);
+			fillWeaponInfo(crateprob, weaponset.crateProb);
+			fillWeaponInfo(crateammo, weaponset.crateAmmo);
+			fillWeaponInfo(delay, weaponset.delay);
+			name = weaponset.name;
+		}
+		
+		private static void fillWeaponInfo(byte[] array, String str) {
+			for(int i=0; i<array.length-1; i++) {
+				array[i] = (byte) (i<str.length() ? str.charAt(i) : '0');
+			}
+			array[array.length-1] = (byte)0;
+		}
+		
+		public Weaponset toWeaponset() {
+			return new Weaponset(name, weaponInfoToString(loadout), weaponInfoToString(crateprob), weaponInfoToString(crateammo), weaponInfoToString(delay));
+		}
+		
+		private static String weaponInfoToString(byte[] array) {
+			try {
+				return new String(array, 0, array.length-1, "ASCII");
+			} catch (UnsupportedEncodingException e) {
+				throw new AssertionError();
+			}
+		}
+		
+		public int _referenceCount;
+		public byte[] loadout = new byte[Weaponset.WEAPONS_COUNT+1];
+		public byte[] crateprob = new byte[Weaponset.WEAPONS_COUNT+1];
+		public byte[] crateammo = new byte[Weaponset.WEAPONS_COUNT+1];
+		public byte[] delay = new byte[Weaponset.WEAPONS_COUNT+1];
+		public String name;
+	}
+	
+	/**
+	 * Represents a flib_weaponset*, for use as part of a flib_weaponset**
+	 */
+	static class WeaponsetPointerByReference extends Structure implements Structure.ByReference {
+		private static String[] FIELD_ORDER = new String[] {"weaponset"};
+		
+		public WeaponsetPointerByReference() { super(); setFieldOrder(FIELD_ORDER); }
+		public WeaponsetPointerByReference(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		
+		public WeaponsetStruct.ByRef weaponset;
+	}
+	
+	static class WeaponsetListStruct extends Structure {
+		public static class ByVal extends WeaponsetListStruct implements Structure.ByValue {}
+		public static class ByRef extends WeaponsetListStruct implements Structure.ByReference {}
+		private static String[] FIELD_ORDER = new String[] {"weaponsetCount", "weaponsets"};
+		
+		public WeaponsetListStruct() { super(); setFieldOrder(FIELD_ORDER); }
+		public WeaponsetListStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		
+		public void fillFrom(List<Weaponset> list) {
+			weaponsetCount = list.size();
+			weaponsets = new WeaponsetPointerByReference();
+			Structure[] structs = weaponsets.toArray(weaponsetCount);
+			
+			for(int i=0; i<weaponsetCount; i++) {
+				WeaponsetPointerByReference pstruct = (WeaponsetPointerByReference)structs[i];
+				pstruct.weaponset = new WeaponsetStruct.ByRef();
+				pstruct.weaponset.fillFrom(list.get(i));
+			}
+		}
+		
+		/**
+		 * Only use on native-owned structs!
+		 * Calling this method on a Java-owned struct could cause garbage collection of referenced
+		 * structures.
+		 */
+		public List<Weaponset> toWeaponsetList() {
+			if(weaponsetCount<=0) {
+				return new ArrayList<Weaponset>();
+			} else {
+				List<Weaponset> list = new ArrayList<Weaponset>(weaponsetCount);
+				Structure[] structs = weaponsets.toArray(weaponsetCount);
+				
+				for(int i=0; i<weaponsetCount; i++) {
+					WeaponsetPointerByReference pstruct = (WeaponsetPointerByReference)structs[i];
+					list.add(pstruct.weaponset.toWeaponset());
+				}
+				return list;
+			}
+		}
+		
+		public int weaponsetCount;
+		public WeaponsetPointerByReference weaponsets;
+	}
+	
 	static class RoomStruct extends Structure {
 		public static class ByVal extends RoomStruct implements Structure.ByValue {}
 		public static class ByRef extends RoomStruct implements Structure.ByReference {}
@@ -261,6 +524,10 @@ public interface Frontlib extends Library {
 		
 		public RoomStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public RoomStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+
+		public RoomlistRoom toRoomlistRoom() {
+			return new RoomlistRoom(name, map, scheme, weapons, owner, playerCount, teamCount, inProgress);
+		}
 		
 	    public boolean inProgress;
 	    public String name;
@@ -275,18 +542,44 @@ public interface Frontlib extends Library {
 	static class MapRecipeStruct extends Structure {
 		public static class ByVal extends MapRecipeStruct implements Structure.ByValue {}
 		public static class ByRef extends MapRecipeStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"_referenceCount", "mapgen", "name", "seed", "theme", "drawData", "drawDataSize", "templateFilter", "mazeSize"};
+		private static String[] FIELD_ORDER = new String[] {"mapgen", "name", "seed", "theme", "drawData", "drawDataSize", "templateFilter", "mazeSize"};
 		
 		public MapRecipeStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public MapRecipeStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 		
-		public int _referenceCount;
+		public void fillFrom(MapRecipe map) {
+			mapgen = map.mapgen;
+			name = map.name;
+			seed = map.seed;
+			theme = map.theme;
+			byte[] buf = map.getDrawData();
+			if(buf != null) {
+				drawData = new Memory(buf.length);
+				drawData.write(0, buf, 0, buf.length);
+				drawDataSize = new NativeLong(buf.length);
+			} else {
+				drawData = null;
+				drawDataSize = new NativeLong(0);
+			}
+			templateFilter = map.templateFilter;
+			mazeSize = map.mazeSize;
+		}
+		
+		public MapRecipe toMapRecipe() {
+			byte[] buf = null;
+			if(drawData != null && drawDataSize.intValue()>0) {
+				buf = new byte[drawDataSize.intValue()];
+				drawData.read(0, buf, 0, drawDataSize.intValue());
+			}
+			return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, buf);
+		}
+		
 		public int mapgen;
 		public String name;
 		public String seed;
 		public String theme;
 		public Pointer drawData;
-		public int drawDataSize;
+		public NativeLong drawDataSize;
 		public int templateFilter;
 		public int mazeSize;
 	}
@@ -408,7 +701,7 @@ public interface Frontlib extends Library {
 	static class SchemeStruct extends Structure {
 		public static class ByVal extends SchemeStruct implements Structure.ByValue {}
 		public static class ByRef extends SchemeStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"_referenceCount", "meta", "name", "settings", "mod"};
+		private static String[] FIELD_ORDER = new String[] {"meta", "name", "settings", "mod"};
 		
 		public SchemeStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public SchemeStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
@@ -442,7 +735,6 @@ public interface Frontlib extends Library {
 			return new Scheme(metaScheme, name, settingsMap, modsMap);
 		}
 		
-		public int _referenceCount;
 		public MetaschemeStruct.ByRef meta;
 		public String name;
 		public Pointer settings;
@@ -469,6 +761,18 @@ public interface Frontlib extends Library {
 		public SchemelistStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public SchemelistStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 		
+		public void fillFrom(List<Scheme> schemeList) {
+			schemeCount = schemeList.size();
+			schemes = new SchemePointerByReference();
+			Structure[] schemePtrStructs = schemes.toArray(schemeCount);
+			
+			for(int i=0; i<this.schemeCount; i++) {
+				SchemePointerByReference spbr = (SchemePointerByReference)schemePtrStructs[i];
+				spbr.scheme = new SchemeStruct.ByRef();
+				spbr.scheme.fillFrom(schemeList.get(i));
+			}
+		}
+
 		/**
 		 * Only use on native-owned structs!
 		 * Calling this method on a Java-owned struct could cause garbage collection of referenced
@@ -490,32 +794,60 @@ public interface Frontlib extends Library {
 			}
 		}
 		
-		public void fillFrom(List<Scheme> schemeList) {
-			schemeCount = schemeList.size();
-			schemes = new SchemePointerByReference();
-			Structure[] schemePtrStructs = schemes.toArray(schemeCount);
-			
-			for(int i=0; i<this.schemeCount; i++) {
-				SchemePointerByReference spbr = (SchemePointerByReference)schemePtrStructs[i];
-				spbr.scheme = new SchemeStruct.ByRef();
-				spbr.scheme.fillFrom(schemeList.get(i));
-			}
-		}
-		
 		public int schemeCount;
 		public SchemePointerByReference schemes;
+	}
+	
+	/**
+	 * Represents a flib_team*, for use as part of a flib_team**
+	 */
+	static class TeamPointerByReference extends Structure implements Structure.ByReference {
+		private static String[] FIELD_ORDER = new String[] {"team"};
+		
+		public TeamPointerByReference() { super(); setFieldOrder(FIELD_ORDER); }
+		public TeamPointerByReference(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		
+		public TeamStruct.ByRef team;
 	}
 	
 	static class TeamlistStruct extends Structure {
 		public static class ByVal extends TeamlistStruct implements Structure.ByValue {}
 		public static class ByRef extends TeamlistStruct implements Structure.ByReference {}
+
 		private static String[] FIELD_ORDER = new String[] {"teamCount", "teams"};
 		
 		public TeamlistStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public TeamlistStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 		
+		public void fillFrom(List<TeamInGame> teamList, WeaponsetStruct.ByRef weaponset, int initialHealth) {
+			teamCount = teamList.size();
+			teams = new TeamPointerByReference();
+			Structure[] teamPtrStructs = teams.toArray(teamCount);
+			
+			for(int i=0; i<this.teamCount; i++) {
+				TeamPointerByReference tpbr = (TeamPointerByReference)teamPtrStructs[i];
+				tpbr.team = new TeamStruct.ByRef();
+				tpbr.team.fillFrom(teamList.get(i), weaponset, initialHealth);
+			}
+		}
+
+		public List<TeamInGame> toTeamInGameList() {
+			if(teamCount<=0) {
+				return new ArrayList<TeamInGame>();
+			} else {
+				List<TeamInGame> result = new ArrayList<TeamInGame>(teamCount);
+				Structure[] structs = teams.toArray(teamCount);
+				
+				for(int i=0; i<teamCount; i++) {
+					TeamPointerByReference struct = (TeamPointerByReference)structs[i];
+					result.add(struct.team.toTeamInGame());
+				}
+				return result;
+			}
+		}
+		
 		public int teamCount;
-		public Pointer teams;
+		public TeamPointerByReference teams;
 	}
 	
 	static class GameSetupStruct extends Structure {
@@ -526,16 +858,35 @@ public interface Frontlib extends Library {
 		public GameSetupStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public GameSetupStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 		
-		public static GameSetupStruct from(GameConfig conf) {
-			GameSetupStruct gss = new GameSetupStruct();
-			gss.gamescheme = new SchemeStruct.ByRef();
-			gss.gamescheme.fillFrom(conf.scheme);
-			gss.map = new MapRecipeStruct.ByRef();
-			// TODO gss.map.fillFrom(conf.map, conf.seed, conf.theme);
-			gss.script = conf.style;
-			gss.teamlist = new TeamlistStruct.ByRef();
-			// TODO gss.teamlist.fillFrom(conf.teams, conf.weapon);
-			return gss;
+		public void fillFrom(GameConfig conf) {
+			script = conf.style;
+			gamescheme = new SchemeStruct.ByRef();
+			gamescheme.fillFrom(conf.scheme);
+			map = new MapRecipeStruct.ByRef();
+			map.fillFrom(conf.map);
+			
+			/*
+			 * At this point we deviate from the usual copying pattern because the frontlib
+			 * expects per-hog weapons and initial health, but the UI models them as per-
+			 * game, so we extract them from the config here and pass them on to be included
+			 * in each hog.
+			 */
+			WeaponsetStruct.ByRef wss = new WeaponsetStruct.ByRef();
+			wss.fillFrom(conf.weaponset);
+			int initialHealth = conf.scheme.getHealth();
+			
+			teamlist = new TeamlistStruct.ByRef();
+			teamlist.fillFrom(conf.teams, wss, initialHealth);
+		}
+		
+		public GameConfig toGameConfig() {
+			Scheme scheme = gamescheme != null ? gamescheme.toScheme() : null;
+			MapRecipe mapRecipe = map != null ? map.toMapRecipe() : null;
+			List<TeamInGame> teams = teamlist != null ? teamlist.toTeamInGameList() : null;
+			
+			WeaponsetStruct weaponsetStruct = teamlist != null && teamlist.teamCount>0 ? teamlist.teams.team.hogs[0].weaponset : null;
+			Weaponset weaponset = weaponsetStruct != null ? weaponsetStruct.toWeaponset() : null;
+			return new GameConfig(script, scheme, mapRecipe, teams, weaponset);
 		}
 
 		public String script;
@@ -544,6 +895,12 @@ public interface Frontlib extends Library {
 		public TeamlistStruct.ByRef teamlist;
 	}
 	
+	/*
+	 * Callback interfaces. The context parameter is never needed here and
+	 * should always be ignored. Be sure to keep a reference to each callback
+	 * for as long as they might be called by native code, to avoid premature
+	 * garbage collection.
+	 */
 	public static interface VoidCallback extends Callback {
 		void callback(Pointer context);
 	}
@@ -620,15 +977,50 @@ public interface Frontlib extends Library {
 		void callback(int level, String logMessage);
 	}
 	
+	// frontlib.h
     int flib_init();
     void flib_quit();
 	
+    // hwconsts.h
+    int flib_get_teamcolor(int colorIndex);
+    int flib_get_teamcolor_count();
+    int flib_get_hedgehogs_per_team();
+    int flib_get_weapons_count();
+    
+    // net/netconn.h
+	static final int NETCONN_STATE_CONNECTING = 0;
+	static final int NETCONN_STATE_LOBBY = 1;
+	static final int NETCONN_STATE_ROOM = 2;
+	static final int NETCONN_STATE_DISCONNECTED = 10;
+	
+	static final int NETCONN_DISCONNECT_NORMAL = 0;
+	static final int NETCONN_DISCONNECT_SERVER_TOO_OLD = 1;
+	static final int NETCONN_DISCONNECT_AUTH_FAILED = 2;
+	static final int NETCONN_DISCONNECT_CONNLOST = 3;
+	static final int NETCONN_DISCONNECT_INTERNAL_ERROR = 100;
+	
+	static final int NETCONN_ROOMLEAVE_ABANDONED = 0;
+	static final int NETCONN_ROOMLEAVE_KICKED = 1;
+	
+	static final int NETCONN_MSG_TYPE_PLAYERINFO = 0;
+	static final int NETCONN_MSG_TYPE_SERVERMESSAGE = 1;
+	static final int NETCONN_MSG_TYPE_WARNING = 2;
+	static final int NETCONN_MSG_TYPE_ERROR = 3;
+	
+	static final int NETCONN_MAPCHANGE_FULL = 0;
+	static final int NETCONN_MAPCHANGE_MAP = 1;
+	static final int NETCONN_MAPCHANGE_MAPGEN = 2;
+	static final int NETCONN_MAPCHANGE_DRAWNMAP = 3;
+	static final int NETCONN_MAPCHANGE_MAZE_SIZE = 4;
+	static final int NETCONN_MAPCHANGE_TEMPLATE = 5;
+	static final int NETCONN_MAPCHANGE_THEME = 6;
+	static final int NETCONN_MAPCHANGE_SEED = 7;
+    
 	NetconnPtr flib_netconn_create(String playerName, MetaschemePtr meta, String dataDirPath, String host, int port);
 	void flib_netconn_destroy(NetconnPtr conn);
 
 	void flib_netconn_tick(NetconnPtr conn);
 	boolean flib_netconn_is_chief(NetconnPtr conn);
-	boolean flib_netconn_is_in_room_context(NetconnPtr conn);
 	String flib_netconn_get_playername(NetconnPtr conn);
 	GameSetupPtr flib_netconn_create_gamesetup(NetconnPtr conn);
 	int flib_netconn_send_quit(NetconnPtr conn, String quitmsg);
@@ -644,7 +1036,7 @@ public interface Frontlib extends Library {
 	int flib_netconn_send_toggleReady(NetconnPtr conn);
 	int flib_netconn_send_addTeam(NetconnPtr conn, TeamPtr team);
 	int flib_netconn_send_removeTeam(NetconnPtr conn, String teamname);
-	int flib_netconn_send_engineMessage(NetconnPtr conn, Buffer message, NativeLong size); // TODO check if NativeLong==size_t
+	int flib_netconn_send_engineMessage(NetconnPtr conn, Buffer message, NativeLong size);
 	int flib_netconn_send_teamHogCount(NetconnPtr conn, String teamname, int hogcount);
 	int flib_netconn_send_teamColor(NetconnPtr conn, String teamname, int colorIndex);
 	int flib_netconn_send_weaponset(NetconnPtr conn, WeaponsetPtr weaponset);
@@ -702,7 +1094,12 @@ public interface Frontlib extends Library {
 	void flib_netconn_onAdminAccess(NetconnPtr conn, VoidCallback callback, Pointer context);
 	void flib_netconn_onServerVar(NetconnPtr conn, StrStrCallback callback, Pointer context);
 
-	// Gameconn
+	// ipc/gameconn.h
+	static final int GAME_END_FINISHED = 0;
+	static final int GAME_END_INTERRUPTED = 1;
+	static final int GAME_END_HALTED = 2;
+	static final int GAME_END_ERROR = 3;
+	
 	GameconnPtr flib_gameconn_create(String playerName, GameSetupPtr setup, boolean netgame);
 	GameconnPtr flib_gameconn_create_playdemo(Buffer demo, NativeLong size);
 	GameconnPtr flib_gameconn_create_loadgame(String playerName, Buffer save, NativeLong size);
@@ -715,6 +1112,7 @@ public interface Frontlib extends Library {
 	int flib_gameconn_send_enginemsg(GameconnPtr conn, Buffer data, NativeLong len);
 	int flib_gameconn_send_textmsg(GameconnPtr conn, int msgtype, String msg);
 	int flib_gameconn_send_chatmsg(GameconnPtr conn, String playername, String msg);
+	int flib_gameconn_send_quit(GameconnPtr conn);
 	
 	void flib_gameconn_onConnect(GameconnPtr conn, VoidCallback callback, Pointer context);
 	void flib_gameconn_onDisconnect(GameconnPtr conn, IntCallback callback, Pointer context);
@@ -723,7 +1121,7 @@ public interface Frontlib extends Library {
 	void flib_gameconn_onGameRecorded(GameconnPtr conn, BytesBoolCallback callback, Pointer context);
 	void flib_gameconn_onEngineMessage(GameconnPtr conn, BytesCallback callback, Pointer context);
 	
-	// MapConn
+	// ipc/mapconn.h
 	MapconnPtr flib_mapconn_create(MapRecipePtr mapdesc);
 	void flib_mapconn_destroy(MapconnPtr conn);
 	int flib_mapconn_getport(MapconnPtr conn);
@@ -731,11 +1129,7 @@ public interface Frontlib extends Library {
 	void flib_mapconn_onFailure(MapconnPtr conn, StrCallback callback, Pointer context);
 	void flib_mapconn_tick(MapconnPtr conn);
 	
-	// GameSetup
-	void flib_gamesetup_destroy(GameSetupPtr gamesetup);
-	GameSetupPtr flib_gamesetup_copy(GameSetupPtr gamesetup);
-	
-	// MapRecipe
+	// model/map.h
 	public static final int MAPGEN_REGULAR = 0;
 	public static final int MAPGEN_MAZE = 1;
 	public static final int MAPGEN_DRAWN = 2;
@@ -754,33 +1148,28 @@ public interface Frontlib extends Library {
 	public static final int MAZE_SIZE_SMALL_ISLANDS = 3;
 	public static final int MAZE_SIZE_MEDIUM_ISLANDS = 4;
 	public static final int MAZE_SIZE_LARGE_ISLANDS = 5;
-	
-	MapRecipePtr flib_map_create_regular(String seed, String theme, int templateFilter);
-	MapRecipePtr flib_map_create_maze(String seed, String theme, int mazeSize);
-	MapRecipePtr flib_map_create_named(String seed, String name);
-	MapRecipePtr flib_map_create_drawn(String seed, String theme, Buffer drawData, NativeLong drawDataSize);
-	MapRecipePtr flib_map_copy(MapRecipePtr map);
-	MapRecipePtr flib_map_retain(MapRecipePtr map);
-	void flib_map_release(MapRecipePtr map);
-	
-	// Metascheme
+		
+	// model/scheme.h
 	MetaschemePtr flib_metascheme_from_ini(String filename);
 	MetaschemePtr flib_metascheme_retain(MetaschemePtr metainfo);
 	void flib_metascheme_release(MetaschemePtr metainfo);
 
-	// Scheme lists
+	// model/schemelist.h
 	SchemelistPtr flib_schemelist_from_ini(MetaschemePtr meta, String filename);
 	int flib_schemelist_to_ini(String filename, SchemelistPtr list);
 	void flib_schemelist_destroy(SchemelistPtr list);
 	
-	// Team
-	void flib_team_destroy(TeamPtr team);
+	// model/team.h
 	TeamPtr flib_team_from_ini(String filename);
 	int flib_team_to_ini(String filename, TeamPtr team);
-	void flib_team_set_weaponset(TeamPtr team, WeaponsetPtr set);
-	void flib_team_set_health(TeamPtr team, int health);
+	void flib_team_destroy(TeamPtr team);
 	
-	// Logging
+	// model/weapon.h
+	WeaponsetListPtr flib_weaponsetlist_from_ini(String filename);
+	int flib_weaponsetlist_to_ini(String filename, WeaponsetListPtr weaponsets);
+	void flib_weaponsetlist_destroy(WeaponsetListPtr list);
+	
+	// util/logging.h
 	public static final int FLIB_LOGLEVEL_ALL = -100;
 	public static final int FLIB_LOGLEVEL_DEBUG = -1;
 	public static final int FLIB_LOGLEVEL_INFO = 0;

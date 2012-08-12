@@ -5,8 +5,6 @@
   android:layout_height="fill_parent">
   
   <include layout="@layout/background"/>
- 
-  <include layout="@layout/backbutton"/>
 
   <ImageButton
    	android:id="@+id/btnAdd"

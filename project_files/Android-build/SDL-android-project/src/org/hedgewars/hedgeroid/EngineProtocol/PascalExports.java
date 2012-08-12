@@ -31,10 +31,6 @@ public class PascalExports {
 		System.loadLibrary("hwengine");
 	}
 	
-	public static native int HWversionInfoNetProto();
-	public static native String HWversionInfoVersion();
-	public static native int HWgetNumberOfWeapons();
 	public static native int HWgetMaxNumberOfTeams();
-	public static native int HWgetMaxNumberOfHogs();
     public static native int HWterminate(boolean b);	
 }

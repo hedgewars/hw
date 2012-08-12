@@ -123,7 +123,8 @@
     <string name="error_auth_failed">Unable to authenticate for your username.</string>
     <string name="error_connection_lost">The connection to the server was lost.</string>
     <string name="error_save_failed">Saving has failed.</string>
-    
+    <string name="error_missing_sdcard_or_files">Error: Either the sdcard is not available, or files are missing from the Data directory.</string>
+    <string name="error_team_attribute_not_found">Error: This team uses assets which we do not have. Try downloading the big data package from the main menu.</string>
     
     <!-- Dialogs -->
     <string name="dialog_connecting_title">Please wait</string>
@@ -134,6 +135,7 @@
     <string name="dialog_password_remember">remember password</string>
     <string name="dialog_create_room_hint">Room name</string>
     <string name="dialog_create_room_title">Create new room</string>
+    <string name="dialog_addteam_title">Add team</string>
     
     <string name="toast_disconnected">Disconnected: %1$s</string>
     <string name="toast_room_abandoned">The room was closed because the owner left.</string>

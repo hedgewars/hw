@@ -2,10 +2,13 @@ package org.hedgewars.hedgeroid.netplay;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Utils;
 import org.hedgewars.hedgeroid.Datastructures.RoomlistRoom;
+import org.hedgewars.hedgeroid.Datastructures.Team;
 import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.Datastructures.TeamIngameAttributes;
 import org.hedgewars.hedgeroid.frontlib.Flib;
@@ -82,6 +85,7 @@ public class Netplay {
 	public final MessageLog lobbyChatlog;
 	public final MessageLog roomChatlog;
 	public final Teamlist roomTeamlist = new Teamlist();
+	private final Map<String, Team> roomRequestedTeams = new TreeMap<String, Team>();
 	
 	public Netplay(Context appContext) {
 		this.appContext = appContext;
@@ -133,6 +137,13 @@ public class Netplay {
 	public void sendCreateRoom(String name) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_CREATE_ROOM, name); }
 	public void sendLeaveRoom(String message) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_LEAVE_ROOM, message); }
 	public void sendKick(String player) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_KICK, player); }
+	public void sendAddTeam(Team newTeam) {
+		roomRequestedTeams.put(newTeam.name, newTeam);
+		sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_ADD_TEAM, newTeam);
+	}
+	public void sendRemoveTeam(String teamName) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_REMOVE_TEAM, teamName); }
+	public void sendTeamColorIndex(String teamName, int colorIndex) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_TEAM_COLOR_INDEX, colorIndex, teamName); }
+	public void sendTeamHogCount(String teamName, int hogCount) { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_SEND_TEAM_HOG_COUNT, hogCount, teamName); }
 	
 	public void disconnect() { sendToNet(ThreadedNetConnection.ToNetHandler.MSG_DISCONNECT, "User Quit"); }
 	
@@ -202,18 +213,17 @@ public class Netplay {
 	}
 	
 	private boolean sendToNet(int what) {
-		if(connection != null) {
-			Handler handler = connection.toNetHandler;
-			return handler.sendMessage(handler.obtainMessage(what));
-		} else {
-			return false;
-		}
+		return sendToNet(what, 0, null);
 	}
 	
 	private boolean sendToNet(int what, Object obj) {
+		return sendToNet(what, 0, obj);
+	}
+	
+	private boolean sendToNet(int what, int arg1, Object obj) {
 		if(connection != null) {
 			Handler handler = connection.toNetHandler;
-			return handler.sendMessage(handler.obtainMessage(what, obj));
+			return handler.sendMessage(handler.obtainMessage(what, arg1, 0, obj));
 		} else {
 			return false;
 		}
@@ -338,6 +348,7 @@ public class Netplay {
 				roomChatlog.clear();
 				roomPlayerlist.clear();
 				roomTeamlist.clear();
+				roomRequestedTeams.clear();
 				changeState(State.ROOM);
 				chief = (Boolean)msg.obj;
 				Intent intent = new Intent(ACTION_ENTERED_ROOM_FROM_LOBBY);
@@ -358,7 +369,14 @@ public class Netplay {
 				break;
 			}
 			case MSG_TEAM_ADDED: {
-				roomTeamlist.addTeamWithNewId((TeamInGame)msg.obj);
+				Team newTeam = (Team)msg.obj;
+				TeamIngameAttributes attrs = new TeamIngameAttributes(playerName, roomTeamlist.getUnusedOrRandomColorIndex(), TeamIngameAttributes.DEFAULT_HOG_COUNT, false);
+				TeamInGame tig = new TeamInGame(newTeam, attrs);
+				roomTeamlist.addTeamWithNewId(tig);
+				if(chief) {
+					sendTeamColorIndex(newTeam.name, attrs.colorIndex);
+					sendTeamHogCount(newTeam.name, attrs.hogCount);
+				}
 				break;
 			}
 			case MSG_TEAM_DELETED: {
@@ -366,7 +384,18 @@ public class Netplay {
 				break;
 			}
 			case MSG_TEAM_ACCEPTED: {
-				// TODO depends: adding teams
+				Team requestedTeam = roomRequestedTeams.remove(msg.obj);
+				if(requestedTeam!=null) {
+					TeamIngameAttributes attrs = new TeamIngameAttributes(playerName, roomTeamlist.getUnusedOrRandomColorIndex(), TeamIngameAttributes.DEFAULT_HOG_COUNT, false);
+					TeamInGame tig = new TeamInGame(requestedTeam, attrs);
+					roomTeamlist.addTeamWithNewId(tig);
+					if(chief) {
+						sendTeamColorIndex(requestedTeam.name, attrs.colorIndex);
+						sendTeamHogCount(requestedTeam.name, attrs.hogCount);
+					}
+				} else {
+					Log.e("Netplay", "Got accepted message for team that was never requested.");
+				}
 				break;
 			}
 			case MSG_TEAM_COLOR_CHANGED: {
@@ -412,7 +441,7 @@ public class Netplay {
 		private final Context appContext;
 		private final FromNetHandler fromNetHandler;
 		private final TickHandler tickHandler;
-		
+
 		/**
 		 * conn can only be null while connecting (the first thing in the thread), and directly after disconnecting,
 		 * in the same message (the looper is shut down on disconnect, so there will be no messages after that).
@@ -589,7 +618,7 @@ public class Netplay {
 		
 		private final TeamCallback teamAddedCb = new TeamCallback() {
 			public void callback(Pointer context, TeamPtr team) {
-				sendFromNet(FromNetHandler.MSG_TEAM_ADDED, team.deref());
+				sendFromNet(FromNetHandler.MSG_TEAM_ADDED, team.deref().team);
 			}
 		};
 		
@@ -674,8 +703,11 @@ public class Netplay {
 			public static final int MSG_SEND_CREATE_ROOM = 8;
 			public static final int MSG_SEND_LEAVE_ROOM = 9;
 			public static final int MSG_SEND_KICK = 10;
-			
-			public static final int MSG_DISCONNECT = 11;
+			public static final int MSG_SEND_ADD_TEAM = 11;
+			public static final int MSG_SEND_REMOVE_TEAM = 12;
+			public static final int MSG_DISCONNECT = 13;
+			public static final int MSG_SEND_TEAM_COLOR_INDEX = 14;
+			public static final int MSG_SEND_TEAM_HOG_COUNT = 15;
 			
 			public ToNetHandler(Looper looper) {
 				super(looper);
@@ -697,7 +729,7 @@ public class Netplay {
 					break;
 				}
 				case MSG_SEND_ROOMLIST_REQUEST: {
-					FLIB.flib_netconn_send_request_roomlist(conn); // TODO restrict to lobby state?
+					FLIB.flib_netconn_send_request_roomlist(conn);
 					break;
 				}
 				case MSG_SEND_PLAYER_INFO_REQUEST: {
@@ -732,9 +764,31 @@ public class Netplay {
 					FLIB.flib_netconn_send_kick(conn, (String)msg.obj);
 					break;
 				}
+				case MSG_SEND_ADD_TEAM: {
+					FLIB.flib_netconn_send_addTeam(conn, TeamPtr.createJavaOwned((Team)msg.obj));
+					break;
+				}
+				case MSG_SEND_REMOVE_TEAM: {
+					if(FLIB.flib_netconn_send_removeTeam(conn, (String)msg.obj)==0) {
+						sendFromNet(FromNetHandler.MSG_TEAM_DELETED, msg.obj);
+					}
+					break;
+				}
 				case MSG_DISCONNECT: {
 					FLIB.flib_netconn_send_quit(conn, (String)msg.obj);
 					shutdown(false, "User quit");
+					break;
+				}
+				case MSG_SEND_TEAM_COLOR_INDEX: {
+					if(FLIB.flib_netconn_send_teamColor(conn, (String)msg.obj, msg.arg1)==0) {
+						sendFromNet(FromNetHandler.MSG_TEAM_COLOR_CHANGED, msg.arg1, msg.obj);
+					}
+					break;
+				}
+				case MSG_SEND_TEAM_HOG_COUNT: {
+					if(FLIB.flib_netconn_send_teamHogCount(conn, (String)msg.obj, msg.arg1)==0) {
+						sendFromNet(FromNetHandler.MSG_HOG_COUNT_CHANGED, msg.arg1, msg.obj);
+					}
 					break;
 				}
 				default: {

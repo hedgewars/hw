@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-<array name="weapons">
-    <item>@raw/weapon_default</item>
-    <item>@raw/weapon_clean</item>
-    <item>@raw/weapon_crazy</item>
-    <item>@raw/weapon_mines</item>
-    <item>@raw/weapon_portals</item>
-    <item>@raw/weapon_promode</item>
-    <item>@raw/weapon_shoppa</item>
-</array>
-
 <array name="teams">
 	<item>@raw/team_one</item>
 	<item>@raw/team_two</item>

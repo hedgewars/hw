@@ -20,15 +20,14 @@
 package org.hedgewars.hedgeroid.Datastructures;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.StartGameActivity;
 import org.hedgewars.hedgeroid.Utils;
-import org.hedgewars.hedgeroid.Datastructures.Map.MapType;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -36,59 +35,75 @@ import android.graphics.BitmapFactory;
 
 public class FrontendDataUtils {
 
-
-	public static ArrayList<Map> getMaps(Context c){
+	/**
+	 * @throws FileNotFoundException if the sdcard isn't available or the Maps directory doesn't exist
+	 */
+	public static ArrayList<MapFile> getMaps(Context c) throws FileNotFoundException {
 		File[] files = Utils.getFilesFromRelativeDir(c,"Maps");
-		ArrayList<Map> ret = new ArrayList<Map>();
+		ArrayList<MapFile> ret = new ArrayList<MapFile>();
 
-		for(File f : files){
-			if(Utils.hasFileWithSuffix(f, ".lua")){
-				ret.add(new Map(f,MapType.TYPE_MISSION, c));
-			}else{
-				ret.add(new Map(f, MapType.TYPE_DEFAULT,c));
-			}
+		for(File f : files) {
+			boolean isMission = Utils.hasFileWithSuffix(f, ".lua");
+			ret.add(new MapFile(f.getName(), isMission));
 		}
-		Collections.sort(ret);
+		Collections.sort(ret, MapFile.MISSIONS_FIRST_NAME_ORDER);
 
 		return ret;
 	}
 
-	public static List<String> getGameplay(Context c){
-		String[] files = Utils.getFileNamesFromRelativeDir(c, "Scripts/Multiplayer");
+	/**
+	 * Returns a list of all multiplayer scripts (game styles)
+	 * @throws FileNotFoundException if the sdcard isn't available or the Scripts/Multiplayer directory doesn't exist
+	 */
+	public static List<String> getGameStyles(Context c) throws FileNotFoundException {
+		File[] files = Utils.getFilesFromRelativeDir(c, "Scripts/Multiplayer");
 		ArrayList<String> ret = new ArrayList<String>();
-		
-		for(int i = 0; i < files.length; i++){
-			if(files[i].endsWith(".lua")){
-				ret.add(files[i].replace('_', ' ').substring(0, files[i].length()-4)); //replace _ by a space and removed the last four characters (.lua)
+		/*
+		 * Caution: It is important that the "empty" style has this exact name, because
+		 * it will be interpreted as "don't load a script" by the frontlib, and also by
+		 * the QtFrontend in a netgame. This should probably be improved some time
+		 * (maybe TODO add a dummy script called "Normal" to the MP scripts?) 
+		 */
+		ret.add("Normal");
+		for(int i = 0; i < files.length; i++) {
+			String name = files[i].getName();
+			if(name.endsWith(".lua")){
+				//replace _ by a space and removed the last four characters (.lua)
+				ret.add(name.replace('_', ' ').substring(0, name.length()-4));
 			}
 		}
-		ret.add(0,"None");
-		Collections.sort(ret);
-		return ret;	
+		Collections.sort(ret, String.CASE_INSENSITIVE_ORDER);
+		return ret;
 	}
 
-	public static List<String> getThemes(Context c){
+	/**
+	 * @throws FileNotFoundException if the sdcard isn't available or the Themes directory doesn't exist
+	 */
+	public static List<String> getThemes(Context c) throws FileNotFoundException {
 		List<String> list = Utils.getDirsWithFileSuffix(c, "Themes", "icon.png");
-		Collections.sort(list);
+		Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
 		return list;
 	}
 
-	public static List<Weapon> getWeapons(Context c){
+	public static List<Weaponset> getWeaponsets(Context c) {
 		// TODO stub, re-implement
 		/*List<Weapon> list = Weapon.getWeapons(c);
 		Collections.sort(list);*/
 		return Collections.emptyList();
 	}
 
-	public static ArrayList<HashMap<String, ?>> getGraves(Context c){
-		String pathPrefix = Utils.getDataPath(c) + "Graphics/Graves/";
-		ArrayList<String> names = Utils.getFilesFromDirWithSuffix(c,"Graphics/Graves", ".png", true);
+	/**
+	 * @throws FileNotFoundException if the sdcard isn't available or the Graphics/Graves directory doesn't exist
+	 */
+	public static ArrayList<HashMap<String, ?>> getGraves(Context c) throws FileNotFoundException {
+		File gravePath = new File(new File(Utils.getDataPathFile(c), "Graphics"), "Graves");
+		ArrayList<String> names = Utils.getFileNamesFromDirWithSuffix(c,"Graphics/Graves", ".png", true);
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(names.size());
 
 		for(String s : names){
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("txt", s);
-			Bitmap b = BitmapFactory.decodeFile(pathPrefix + s + ".png");//create a full path - decode to to a bitmap
+			Bitmap b = BitmapFactory.decodeFile(new File(gravePath, s + ".png").getAbsolutePath());
 			int width = b.getWidth();
 			if(b.getHeight() > width){//some pictures contain more 'frames' underneath each other, if so we only use the first frame
                                 Bitmap tmp = Bitmap.createBitmap(width, width, b.getConfig());
@@ -104,22 +119,28 @@ public class FrontendDataUtils {
 		return data;
 	}
 
-	public static ArrayList<HashMap<String, ?>> getFlags(Context c){
-		String pathPrefix = Utils.getDataPath(c) + "Graphics/Flags/";
-		ArrayList<String> names = Utils.getFilesFromDirWithSuffix(c, "Graphics/Flags", ".png", true);
+	/**
+	 * @throws FileNotFoundException if the sdcard isn't available or the Graphics/Graves directory doesn't exist
+	 */
+	public static ArrayList<HashMap<String, ?>> getFlags(Context c) throws FileNotFoundException {
+		File flagsPath = new File(new File(Utils.getDataPathFile(c), "Graphics"), "Flags");
+		ArrayList<String> names = Utils.getFileNamesFromDirWithSuffix(c, "Graphics/Flags", ".png", true);
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(names.size());
 
 		for(String s : names){
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("txt", s);
-			Bitmap b = BitmapFactory.decodeFile(pathPrefix + s + ".png");//create a full path - decode to to a bitmap
+			Bitmap b = BitmapFactory.decodeFile(new File(flagsPath, s + ".png").getAbsolutePath());
 			map.put("img", b);
 			data.add(map);
 		}
 		return data;
 	}
 
-	public static ArrayList<String> getVoices(Context c){
+	/**
+	 * @throws FileNotFoundException if the sdcard isn't available or the Sounds/voices directory doesn't exist
+	 */
+	public static ArrayList<String> getVoices(Context c) throws FileNotFoundException {
 		File[] files = Utils.getFilesFromRelativeDir(c, "Sounds/voices");
 		ArrayList<String> ret = new ArrayList<String>();
 
@@ -129,9 +150,14 @@ public class FrontendDataUtils {
 		return ret;
 	}
 
-	public static ArrayList<String> getForts(Context c){
-		return Utils.getFilesFromDirWithSuffix(c,"Forts", "L.png", true);
+	/**
+	 * @throws FileNotFoundException if the sdcard isn't available or the Forts directory doesn't exist
+	 */
+	public static ArrayList<String> getForts(Context c) throws FileNotFoundException {
+		return Utils.getFileNamesFromDirWithSuffix(c,"Forts", "L.png", true);
 	}
+	
+	// TODO wat
 	public static ArrayList<HashMap<String, ?>> getTypes(Context c){
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(6);
 		String[] levels = {c.getString(R.string.human), c.getString(R.string.bot5), c.getString(R.string.bot4), c.getString(R.string.bot3), c.getString(R.string.bot2), c.getString(R.string.bot1)};
@@ -147,9 +173,12 @@ public class FrontendDataUtils {
 		return data;
 	}
 
-	public static ArrayList<HashMap<String, ?>> getHats(Context c){
-		ArrayList<String> files = Utils.getFilesFromDirWithSuffix(c,"Graphics/Hats", ".png", true);
-		String pathPrefix = Utils.getDataPath(c) + "Graphics/Hats/";
+	/**
+	 * @throws FileNotFoundException if the sdcard isn't available or the Graphics/Hats directory doesn't exist
+	 */
+	public static ArrayList<HashMap<String, ?>> getHats(Context c) throws FileNotFoundException {
+		ArrayList<String> files = Utils.getFileNamesFromDirWithSuffix(c,"Graphics/Hats", ".png", true);
+		File hatsPath = new File(new File(Utils.getDataPathFile(c), "Graphics"), "Hats");
 		int size = files.size();
 		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(size);
 
@@ -157,7 +186,7 @@ public class FrontendDataUtils {
 		for(String s : files){
 			hashmap = new HashMap<String, Object>();
 			hashmap.put("txt", s);
-			Bitmap b = BitmapFactory.decodeFile(pathPrefix + s + ".png");//create a full path - decode to to a bitmap
+			Bitmap b = BitmapFactory.decodeFile(new File(hatsPath, s + ".png").getAbsolutePath());
 			b = Bitmap.createBitmap(b, 0,0,b.getWidth()/2, b.getWidth()/2);
 			hashmap.put("img", b);
 			data.add(hashmap);
@@ -166,8 +195,8 @@ public class FrontendDataUtils {
 		return data;
 	}
 
-	public static List<TeamFile> getTeamFiles(Context c) {
-		List<TeamFile> ret = new ArrayList<TeamFile>();
+	public static List<Team> getTeams(Context c) {
+		List<Team> ret = new ArrayList<Team>();
 		
 		File teamsDir = new File(c.getFilesDir(), Team.DIRECTORY_TEAMS);
 		File[] teamFileNames = teamsDir.listFiles();
@@ -175,15 +204,10 @@ public class FrontendDataUtils {
 			for(File file : teamFileNames){
 				Team team = Team.load(file);
 				if(team != null){
-					ret.add(new TeamFile(team, file));
+					ret.add(team);
 				}
 			}
 		}
 		return ret;
-	}
-
-	public static Scheme[] getSchemes(StartGameActivity startGameActivity) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
