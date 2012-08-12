@@ -54,7 +54,7 @@ public class Utils {
 	 * get the path to which we should download all the data files
 	 * @param c context 
 	 * @return The directory
-	 * @throws FileNotFoundException if external storage is not avaliable at the moment
+	 * @throws FileNotFoundException if external storage is not available at the moment
 	 */
 	public static File getCachePath(Context c) throws FileNotFoundException {
 		File cachePath = null;
@@ -105,37 +105,19 @@ public class Utils {
 	}
 
 	/**
-	 * Get files from dirName, dir name is relative to {@link getDownloadPath}
-	 * @param dirName
-	 * @param c context
-	 * @return string of files
-	 */
-	public static String[] getFileNamesFromRelativeDir(Context c, String dirName){
-		String prefix = getDataPath(c);
-		File f = new File(prefix + dirName);
-
-		if(f.exists() && f.isDirectory()) return f.list();
-		else{
-
-			Log.e("Utils::", "Couldn't find dir: " + dirName);
-			return new String[0];
-		}
-	}
-
-	/**
 	 * Return a File array with all the files from dirName
 	 * @param c
 	 * @param dirName
 	 * @return
+	 * @throws FileNotFoundException If the sdcard is not available or the subdirectory "dirName" does not exist
 	 */
-	public static File[] getFilesFromRelativeDir(Context c, String dirName){
-		String prefix = getDataPath(c);
-		File f = new File(prefix + dirName);
+	public static File[] getFilesFromRelativeDir(Context c, String dirName) throws FileNotFoundException {
+		File f = new File(getDataPathFile(c), dirName);
 
-		if(f.exists() && f.isDirectory()) return f.listFiles();
-		else {
-			Log.e("Utils::", "Dir not found: " + dirName);
-			return new File[0];
+		if(f.isDirectory()) {
+			return f.listFiles();
+		} else {
+			throw new FileNotFoundException("Directory "+dirName+" does not exist.");
 		}
 	}
 
@@ -161,8 +143,9 @@ public class Utils {
 	 * @param path
 	 * @param fileSuffix
 	 * @return
+	 * @throws FileNotFoundException If the sdcard is not available or the subdirectory "path" does not exist
 	 */
-	public static List<String> getDirsWithFileSuffix(Context c, String path, String fileSuffix){
+	public static List<String> getDirsWithFileSuffix(Context c, String path, String fileSuffix) throws FileNotFoundException{
 		File[] files = getFilesFromRelativeDir(c,path);
 		ArrayList<String> ret = new ArrayList<String>();
 
@@ -174,16 +157,13 @@ public class Utils {
 
 	/**
 	 * Get all files from directory dir which have the given suffix
-	 * @param c
-	 * @param dir
-	 * @param suffix
-	 * @param removeSuffix
-	 * @return
+	 * @throws FileNotFoundException If the sdcard is not available or the subdirectory "dir" does not exist
 	 */
-	public static ArrayList<String> getFilesFromDirWithSuffix(Context c, String dir, String suffix, boolean removeSuffix){
-		String[] files = Utils.getFileNamesFromRelativeDir(c, dir);
+	public static ArrayList<String> getFileNamesFromDirWithSuffix(Context c, String dir, String suffix, boolean removeSuffix) throws FileNotFoundException{
+		File[] files = Utils.getFilesFromRelativeDir(c, dir);
 		ArrayList<String> ret = new ArrayList<String>();
-		for(String s : files){
+		for(File file : files){
+			String s = file.getName();
 			if(s.endsWith(suffix)){
 				if(removeSuffix) ret.add(s.substring(0, s.length()-suffix.length()));
 				else ret.add(s);

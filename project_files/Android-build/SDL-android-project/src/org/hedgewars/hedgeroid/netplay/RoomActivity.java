@@ -1,6 +1,7 @@
 package org.hedgewars.hedgeroid.netplay;
 
 import org.hedgewars.hedgeroid.R;
+import org.hedgewars.hedgeroid.Datastructures.Team;
 import org.hedgewars.hedgeroid.netplay.Netplay.State;
 import org.hedgewars.hedgeroid.netplay.NetplayStateFragment.NetplayStateListener;
 
@@ -10,7 +11,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.widget.TabHost;
 import android.widget.Toast;
 
-public class RoomActivity extends FragmentActivity implements NetplayStateListener {
+public class RoomActivity extends FragmentActivity implements NetplayStateListener, TeamAddDialog.Listener {
 	private TabHost tabHost;
 	private Netplay netplay;
 	
@@ -72,4 +73,8 @@ public class RoomActivity extends FragmentActivity implements NetplayStateListen
 			throw new IllegalStateException("Unknown connection state: "+newState);
     	}
     }
+    
+	public void onTeamAddDialogSubmitted(Team newTeam) {
+		netplay.sendAddTeam(newTeam);
+	}
 }

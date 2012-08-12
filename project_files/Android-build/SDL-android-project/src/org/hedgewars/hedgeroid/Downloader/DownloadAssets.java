@@ -7,10 +7,9 @@ import java.io.IOException;
 import org.hedgewars.hedgeroid.MainActivity;
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Utils;
-import org.hedgewars.hedgeroid.Datastructures.Scheme;
 import org.hedgewars.hedgeroid.Datastructures.Schemes;
 import org.hedgewars.hedgeroid.Datastructures.Team;
-import org.hedgewars.hedgeroid.Datastructures.Weapon;
+import org.hedgewars.hedgeroid.Datastructures.Weaponsets;
 
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
@@ -46,7 +45,7 @@ public class DownloadAssets extends AsyncTask<Object, Long, Boolean> {
 	protected Boolean doInBackground(Object... params) {
 		try {
 			Utils.writeStreamToFile(act.getResources().openRawResource(R.raw.schemes_builtin), Schemes.getBuiltinSchemesFile(act));
-			Utils.resRawToFilesDir(act, R.array.weapons, Weapon.DIRECTORY_WEAPON);
+			Utils.writeStreamToFile(act.getResources().openRawResource(R.raw.weapons_builtin), Weaponsets.getBuiltinWeaponsetsFile(act));
 			Utils.resRawToFilesDir(act, R.array.teams, Team.DIRECTORY_TEAMS);
 			copyFileOrDir(act.getAssets(), Utils.getDataPathFile(act), "Data");
 			copyFileOrDir(act.getAssets(), new File(Utils.getCachePath(act), VERSION_FILENAME), VERSION_FILENAME);

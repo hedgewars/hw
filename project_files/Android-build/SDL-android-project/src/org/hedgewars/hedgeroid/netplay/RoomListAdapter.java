@@ -39,7 +39,7 @@ public class RoomlistAdapter extends ObservableTreeMapAdapter<String, Pair<Rooml
 	
 	private static CharSequence formatExtra(Resources res, RoomlistRoom room) {
 		String ownermsg = res.getString(R.string.roomlist_owner, room.owner);
-		String mapmsg = res.getString(R.string.roomlist_map, RoomlistRoom.formatMapName(res, room.map));
+		String mapmsg = res.getString(R.string.roomlist_map, room.formatMapName(res));
 		String scheme = room.scheme.equals(room.weapons) ? room.scheme : room.scheme + " / " + room.weapons;
 		String schememsg = res.getString(R.string.roomlist_scheme, scheme);
 		return ownermsg + ". " + mapmsg + ", " + schememsg;
@@ -74,7 +74,7 @@ public class RoomlistAdapter extends ObservableTreeMapAdapter<String, Pair<Rooml
 				teamCountView.setText(String.valueOf(room.teamCount));
 			}
 			ownerView.setText(room.owner);
-			mapView.setText(RoomlistRoom.formatMapName(context.getResources(), room.map));
+			mapView.setText(room.formatMapName(context.getResources()));
 			schemeView.setText(room.scheme);
 			weaponView.setText(room.weapons);
 		} else {

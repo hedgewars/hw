@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
+import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.netplay.LobbyActivity;
 import org.hedgewars.hedgeroid.netplay.Netplay;
 import org.hedgewars.hedgeroid.netplay.Netplay.State;

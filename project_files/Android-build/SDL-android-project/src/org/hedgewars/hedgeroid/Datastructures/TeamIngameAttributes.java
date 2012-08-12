@@ -3,19 +3,19 @@ package org.hedgewars.hedgeroid.Datastructures;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.hedgewars.hedgeroid.frontlib.Flib;
+
 public final class TeamIngameAttributes {
-	public static final int[] TEAM_COLORS = {
-		0xd12b42, /* red    */ 
-		0x4980c1, /* blue   */ 
-		0x6ab530, /* green  */ 
-		0xbc64c4, /* purple */ 
-		0xe76d14, /* orange */ 
-		0x3fb6e6, /* cyan   */ 
-		0xe3e90c, /* yellow */ 
-		0x61d4ac, /* mint   */ 
-		0xf1c3e1, /* pink   */ 
-		/* add new colors here */
-	};
+	public static final int DEFAULT_HOG_COUNT = 4;
+	public static final int[] TEAM_COLORS;
+	
+	static {
+		int[] teamColors = new int[Flib.INSTANCE.flib_get_teamcolor_count()];
+		for(int i=0; i<teamColors.length; i++) {
+			teamColors[i] = Flib.INSTANCE.flib_get_teamcolor(i);
+		}
+		TEAM_COLORS = teamColors;
+	}
 	
 	public final String ownerName;
 	public final int colorIndex, hogCount;

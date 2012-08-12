@@ -6,12 +6,15 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
+import org.hedgewars.hedgeroid.Datastructures.GameConfig;
 import org.hedgewars.hedgeroid.EngineProtocol.PascalExports;
 import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.GameSetupPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.GameconnPtr;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.IntCallback;
 import org.hedgewars.hedgeroid.netplay.TickHandler;
+
+import com.sun.jna.Pointer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -424,7 +427,18 @@ class SDLMain implements Runnable {
 
 	private final int surfaceWidth, surfaceHeight;
 	private final GameConfig config;
-
+	private GameconnPtr conn;
+	HandlerThread thread = new HandlerThread("IPC thread");
+	
+	private final IntCallback dccb = new IntCallback() {
+		public void callback(Pointer context, int arg1) {
+			Log.d("SDLMain", "Disconnected: "+arg1);
+			Flib.INSTANCE.flib_gameconn_destroy(conn);
+			conn = null;
+			thread.quit();
+		}
+	};
+	
 	public SDLMain(int width, int height, GameConfig _config) {
 		config = _config;
 		surfaceWidth = width;
@@ -433,35 +447,40 @@ class SDLMain implements Runnable {
 
 	public void run() {
 		//Set up the IPC socket server to communicate with the engine
-		HandlerThread thread = new HandlerThread("IPC thread");
-		thread.start(); // TODO ensure it gets stopped
+		
 		final GameconnPtr conn = Flib.INSTANCE.flib_gameconn_create("Xeli", GameSetupPtr.createJavaOwned(config), false);
 		if(conn == null) {
 			throw new AssertionError();
 		}
+		Flib.INSTANCE.flib_gameconn_onDisconnect(conn, dccb, null);
 		int port = Flib.INSTANCE.flib_gameconn_getport(conn);
 
 		String path = Utils.getDataPath(SDLActivity.mSingleton);//This represents the data directory
 		path = path.substring(0, path.length()-1);//remove the trailing '/'
 
+		thread.start(); // TODO ensure it gets stopped
+		new TickHandler(thread.getLooper(), 500, new Runnable() {
+			public void run() {
+				Log.d("SDLMain", "pre-tick");
+				Flib.INSTANCE.flib_gameconn_tick(conn);
+				Log.d("SDLMain", "post-tick");
+			}
+		}).start();
+		
+		Log.d("SDLMain", "Starting engine");
 		// Runs SDL_main() with added parameters
 		SDLActivity.nativeInit(new String[] { String.valueOf(port),
 				String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
 				"0", "en.txt", "xeli", "1", "1", "1", path, ""  });
-
-		new TickHandler(thread.getLooper(), 50, new Runnable() {
-			public void run() {
-				Flib.INSTANCE.flib_gameconn_tick(conn);
-			}
-		});
+		Log.d("SDLMain", "Engine stopped");
 		try {
-			thread.quit();
 			thread.join();
 		} catch (InterruptedException e) {
 			throw new AssertionError();
 		}
+		Log.v("SDLMain", "thread joined");
 		Flib.INSTANCE.flib_gameconn_destroy(conn);
-		Log.v("SDL", "SDL thread terminated");
+		Log.v("SDLMain", "SDL thread terminated");
 	}
 }
 

@@ -32,6 +32,12 @@ public final class Schemes {
 		return new File(c.getFilesDir(), "schemes_builtin.ini");
 	}
 	
+	public static Map<String, Scheme> loadAllSchemes(Context c) throws IOException {
+		Map<String, Scheme> result = loadUserSchemes(c);
+		result.putAll(loadBuiltinSchemes(c));
+		return result;
+	}
+	
 	public static Map<String, Scheme> loadUserSchemes(Context c) throws IOException {
 		return loadSchemes(c, getUserSchemesFile(c));
 	}

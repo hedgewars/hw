@@ -19,19 +19,29 @@
 
 package org.hedgewars.hedgeroid;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
 import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
-import org.hedgewars.hedgeroid.Datastructures.Map;
-import org.hedgewars.hedgeroid.Datastructures.Map.MapType;
+import org.hedgewars.hedgeroid.Datastructures.GameConfig;
+import org.hedgewars.hedgeroid.Datastructures.MapFile;
+import org.hedgewars.hedgeroid.Datastructures.MapRecipe;
 import org.hedgewars.hedgeroid.Datastructures.Scheme;
-import org.hedgewars.hedgeroid.Datastructures.Team;
-import org.hedgewars.hedgeroid.Datastructures.Weapon;
-import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
+import org.hedgewars.hedgeroid.Datastructures.Schemes;
+import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
+import org.hedgewars.hedgeroid.Datastructures.Weaponset;
+import org.hedgewars.hedgeroid.Datastructures.Weaponsets;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -43,17 +53,16 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class StartGameActivity extends Activity {
-
 	public static final int ACTIVITY_TEAM_SELECTOR = 0;
 	
-	private GameConfig config = null;
 	private ImageButton start, back, team;
 	private Spinner maps, gameplay, gamescheme, weapons, themes;
 	private ImageView themeIcon, mapPreview, teamCount;
+	
+	private List<TeamInGame> teams = new ArrayList<TeamInGame>();
 
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		config = new GameConfig();
 
 		setContentView(R.layout.starting_game);
 
@@ -75,22 +84,35 @@ public class StartGameActivity extends Activity {
 		back.setOnClickListener(backClicker);
 		team.setOnClickListener(teamClicker);
 
-		ArrayAdapter<?> adapter = new ArrayAdapter<Map>(this, R.layout.listview_item, FrontendDataUtils.getMaps(this));
+		List<MapFile> mapFiles;
+		try {
+			mapFiles = FrontendDataUtils.getMaps(this);
+		} catch (FileNotFoundException e) {
+			Log.e("StartGameActivity", e.getMessage(), e);
+			mapFiles = Collections.emptyList();
+		}
+		ArrayAdapter<?> adapter = new ArrayAdapter<MapFile>(this, R.layout.listview_item, mapFiles);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		maps.setAdapter(adapter);
 		maps.setOnItemSelectedListener(mapsClicker);
-		//set to first nonmap
+		//set to first nonmission
 		for(int i = 0; i < adapter.getCount(); i++){
-			if(((Map)adapter.getItem(i)).getType() == MapType.TYPE_DEFAULT){
+			if(!((MapFile)adapter.getItem(i)).isMission){
 				maps.setSelection(i, false);
 				break;
 			}
 		}
 
-		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, FrontendDataUtils.getGameplay(this));
+		List<String> gameStyles;
+		try {
+			gameStyles = FrontendDataUtils.getGameStyles(this);
+		} catch (FileNotFoundException e) {
+			Log.e("StartGameActivity", e.getMessage(), e);
+			gameStyles = Collections.emptyList();
+		}
+		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, gameStyles);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		gameplay.setAdapter(adapter);
-		gameplay.setOnItemSelectedListener(gameplayClicker);
 		//set to first nonmap
 		for(int i = 0; i < adapter.getCount(); i++){
 			if(((String)adapter.getItem(i)).equals("None")){
@@ -99,30 +121,48 @@ public class StartGameActivity extends Activity {
 			}
 		}
 
-		adapter = new ArrayAdapter<Scheme>(this, R.layout.listview_item, FrontendDataUtils.getSchemes(this));
+		List<Scheme> schemes;
+		try {
+			schemes = new ArrayList<Scheme>(Schemes.loadAllSchemes(this).values());
+		} catch (IOException e) {
+			Log.e("StartGameActivity", e.getMessage(), e);
+			schemes = Collections.emptyList();
+		} 
+		adapter = new ArrayAdapter<Scheme>(this, R.layout.listview_item, schemes);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		gamescheme.setAdapter(adapter);
-		gamescheme.setOnItemSelectedListener(schemeClicker);
-		//set to first nonmap
 		for(int i = 0; i < adapter.getCount(); i++){
-			if(((Scheme)adapter.getItem(i)).toString().equals("Default")){
+			if(((Scheme)adapter.getItem(i)).name.equals("Default")){
 				gamescheme.setSelection(i, false);
 				break;
 			}
 		}
 		
-		
-		adapter = new ArrayAdapter<Weapon>(this, R.layout.listview_item, FrontendDataUtils.getWeapons(this));
+		List<Weaponset> weaponsets;
+		try {
+			weaponsets = Weaponsets.loadAllWeaponsets(this);
+		} catch(IOException e) {
+			Log.e("StartGameActivity", e.getMessage(), e);
+			weaponsets = Collections.emptyList();
+		}
+		adapter = new ArrayAdapter<Weaponset>(this, R.layout.listview_item, weaponsets);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		weapons.setAdapter(adapter);
-		weapons.setOnItemSelectedListener(weaponClicker);
 		for(int i = 0; i < adapter.getCount(); i++){
-			if(((Weapon)adapter.getItem(i)).toString().equals("Crazy")){
+			if(((Weaponset)adapter.getItem(i)).name.equals("Crazy")){
 				weapons.setSelection(i, false);
 				break;
 			}
 		}
-		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, FrontendDataUtils.getThemes(this));
+		
+		List<String> themeList;
+		try {
+			themeList = FrontendDataUtils.getThemes(this);
+		} catch(FileNotFoundException e) {
+			Log.e("StartGameActivity", e.getMessage(), e);
+			themeList = Collections.emptyList();
+		}
+		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, themeList);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		themes.setAdapter(adapter);
 		themes.setOnItemSelectedListener(themesClicker);
@@ -130,7 +170,7 @@ public class StartGameActivity extends Activity {
 
 	private void startTeamsActivity(){
 		Intent i = new Intent(StartGameActivity.this, TeamSelectionActivity.class);
-		// TODO i.putParcelableArrayListExtra("teams", config.teams);
+		TeamSelectionActivity.activityParams = new ArrayList<TeamInGame>(teams);
 		startActivityForResult(i, ACTIVITY_TEAM_SELECTOR);
 	}
 
@@ -138,12 +178,9 @@ public class StartGameActivity extends Activity {
 		switch(requestCode){
 		case ACTIVITY_TEAM_SELECTOR:
 			if(resultCode == Activity.RESULT_OK){
-				Parcelable[] parcelables = (Parcelable[])data.getParcelableArrayExtra("teams");
-				config.teams.clear();
-				for(Parcelable t : parcelables){
-					// TODO config.teams.add((Team)t);
-				}
-				teamCount.getDrawable().setLevel(config.teams.size());
+				teams = new ArrayList<TeamInGame>(TeamSelectionActivity.activityReturn);
+				TeamSelectionActivity.activityReturn = Collections.emptyList();
+				teamCount.getDrawable().setLevel(teams.size());
 			}
 			break;
 		}
@@ -156,7 +193,6 @@ public class StartGameActivity extends Activity {
 			String themeName = (String) arg0.getAdapter().getItem(position);
 			Drawable themeIconDrawable = Drawable.createFromPath(Utils.getDataPath(StartGameActivity.this) + "Themes/" + themeName + "/icon@2X.png");
 			themeIcon.setImageDrawable(themeIconDrawable);
-			config.theme = themeName;
 		}
 
 		public void onNothingSelected(AdapterView<?> arg0) {
@@ -167,48 +203,33 @@ public class StartGameActivity extends Activity {
 	private OnItemSelectedListener mapsClicker = new OnItemSelectedListener(){
 
 		public void onItemSelected(AdapterView<?> arg0, View view, int position,long rowId) {
-			Map map = (Map)arg0.getAdapter().getItem(position);
-			mapPreview.setImageDrawable(map.getDrawable());
-			config.map = map;
+			MapFile map = (MapFile)arg0.getAdapter().getItem(position);
+			try {
+				File previewFile = map.getPreviewFile(getApplicationContext());
+				mapPreview.setImageDrawable(Drawable.createFromPath(previewFile.getAbsolutePath()));
+			} catch (FileNotFoundException e) {
+				mapPreview.setImageDrawable(null);
+			}
 		}
 
 		public void onNothingSelected(AdapterView<?> arg0) {
 		}
 
-	};
-
-	private OnItemSelectedListener weaponClicker = new OnItemSelectedListener(){
-		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-			config.weapon = (Weapon)arg0.getAdapter().getItem(arg2);
-		}
-		public void onNothingSelected(AdapterView<?> arg0) {
-
-		}
-	};
-	private OnItemSelectedListener schemeClicker = new OnItemSelectedListener(){
-		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-			config.scheme = (Scheme)arg0.getAdapter().getItem(arg2);
-		}
-		public void onNothingSelected(AdapterView<?> arg0) {
-
-		}
-	};
-	private OnItemSelectedListener gameplayClicker = new OnItemSelectedListener(){
-		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-			//config = ()arg0.getAdapter().getItem(arg2);
-		}
-		public void onNothingSelected(AdapterView<?> arg0) {
-
-		}
 	};
 
 	private OnClickListener startClicker = new OnClickListener(){
 		public void onClick(View v) {
-			if(config.teams.size() < 2){
-				Toast.makeText(StartGameActivity.this, R.string.not_enough_teams, Toast.LENGTH_LONG).show();
+			if(teams.size() < 2) {
+				Toast.makeText(getApplicationContext(), R.string.not_enough_teams, Toast.LENGTH_LONG).show();
 				startTeamsActivity();
 			} else {
-				SDLActivity.startConfig = config;
+				String style = (String)gameplay.getSelectedItem();
+				Scheme scheme = (Scheme)gamescheme.getSelectedItem();
+				String mapName = ((MapFile)maps.getSelectedItem()).name;
+				String theme = (String)themes.getSelectedItem();
+				MapRecipe map = MapRecipe.makeMap(mapName, UUID.randomUUID().toString(), theme);
+				Weaponset weaponset = (Weaponset)weapons.getSelectedItem();
+				SDLActivity.startConfig = new GameConfig(style, scheme, map, teams, weaponset);
 				Intent i = new Intent(StartGameActivity.this, SDLActivity.class);
 				startActivity(i);
 			}

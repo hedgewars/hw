@@ -38,13 +38,19 @@ public final class Scheme {
 	}
 	
 	public int getHealth() {
-		return settings.get("health");
+		Integer health = settings.get("health");
+		return health==null ? 100 : health.intValue();
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "Scheme [metascheme=" + metascheme + ", name=" + name
 				+ ", settings=" + settings + ", mods=" + mods + "]";
+	}*/
+	
+	@Override
+	public String toString() {
+		return name; // TODO change back once StartGameActivity does not need this anymore
 	}
 	
 	public static final Comparator<Scheme> caseInsensitiveNameComparator = new Comparator<Scheme>() {

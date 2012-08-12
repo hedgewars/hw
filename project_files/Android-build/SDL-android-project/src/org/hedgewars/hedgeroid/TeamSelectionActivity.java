@@ -19,23 +19,18 @@
 
 package org.hedgewars.hedgeroid;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
 import org.hedgewars.hedgeroid.Datastructures.Team;
-import org.hedgewars.hedgeroid.Datastructures.TeamFile;
 import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.Datastructures.TeamIngameAttributes;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Pair;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +41,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
@@ -54,10 +48,10 @@ import android.widget.TextView;
 public class TeamSelectionActivity extends Activity implements Runnable{
 	private static final int ACTIVITY_TEAMCREATION = 0;
 	
-	private static volatile List<Pair<TeamFile, TeamIngameAttributes>> activityParams;
-	private static volatile List<Pair<TeamFile, TeamIngameAttributes>> activityReturn;
+	public static volatile List<TeamInGame> activityParams;
+	public static volatile List<TeamInGame> activityReturn;
 
-	private ImageButton addTeam, back;
+	private ImageButton addTeam;
 	private ListView availableTeams, selectedTeams;
 	private List<HashMap<String, Object>> availableTeamsList, selectedTeamsList;
 	private TextView txtInfo;
@@ -68,12 +62,10 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 		setContentView(R.layout.team_selector);
 
 		addTeam = (ImageButton) findViewById(R.id.btnAdd);
-		back = (ImageButton) findViewById(R.id.btnBack);
 		txtInfo = (TextView) findViewById(R.id.txtInfo);
 		selectedTeams = (ListView) findViewById(R.id.selectedTeams);
 		availableTeams = (ListView) findViewById(R.id.availableTeams);
 		addTeam.setOnClickListener(addTeamClicker);
-		back.setOnClickListener(backClicker);
 
 		availableTeamsList = new ArrayList<HashMap<String, Object>>();
 		SimpleAdapter adapter = new SimpleAdapter(this, availableTeamsList, R.layout.team_selection_entry_simple, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
@@ -93,23 +85,33 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 	}
 
 	public void run(){
-		List<HashMap<String, Object>> teamsList = getTeams(this);//teams from xml
-		ArrayList<String> teamsStartGame = getIntent().getStringArrayListExtra("selectedTeamNames");
-
-		for(HashMap<String, Object> hashmap : teamsList){
+		List<Team> teams = FrontendDataUtils.getTeams(this);
+		List<TeamInGame> existingTeams = activityParams;
+		final List<TeamInGame> newSelectedList = new ArrayList<TeamInGame>();
+		final List<Team> newAvailableList = new ArrayList<Team>();
+		
+		for(Team team : teams){
 			boolean added = false;
-			for(String teamName : teamsStartGame){
-				if(((Team)hashmap.get("team")).name.equals(teamName)){ // add to available or add to selected
-					selectedTeamsList.add(hashmap);
+			for(TeamInGame existingTeam : existingTeams){
+				if(team.name.equals(existingTeam.team.name)){ // add to available or add to selected
+					newSelectedList.add(new TeamInGame(team, existingTeam.ingameAttribs));
 					added = true;
 					break;
 				}
 			}
-			if(!added) availableTeamsList.add(hashmap);
+			if(!added) newAvailableList.add(team);
 		}
 
 		this.runOnUiThread(new Runnable(){
 			public void run() {
+				availableTeamsList.clear();
+				selectedTeamsList.clear();
+				for(TeamInGame t : newSelectedList) {
+					selectedTeamsList.add(toMap(t));
+				}
+				for(Team t : newAvailableList) {
+					availableTeamsList.add(toMap(t));
+				}
 				((SimpleAdapter)selectedTeams.getAdapter()).notifyDataSetChanged();
 				((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();		
 			}
@@ -145,39 +147,36 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 	 * Updates the list view when TeamCreationActivity is shutdown and the user returns to this point
 	 */
 	private void updateListViews(){
-		unregisterForContextMenu(availableTeams);
-		availableTeamsList = getTeams(this);
+		List<Team> teams = FrontendDataUtils.getTeams(this);
+		availableTeamsList.clear();
+		for(Team team : teams) {
+			availableTeamsList.add(toMap(team));
+		}
+		
 		ArrayList<HashMap<String, Object>> toBeRemoved = new ArrayList<HashMap<String, Object>>();
+		ArrayList<HashMap<String, Object>> toBeRemovedFromSelected = new ArrayList<HashMap<String, Object>>();
 		for(HashMap<String, Object> hashmap : selectedTeamsList){
 			String name = (String)hashmap.get("txt");
-
+			boolean exists = false;
 			for(HashMap<String, Object> hash : availableTeamsList){
 				if(name.equals((String)hash.get("txt"))){
 					toBeRemoved.add(hash);
+					exists = true;
+					break;
 				}
+			}
+			if(!exists) {
+				toBeRemovedFromSelected.add(hashmap);
 			}
 		}
 		for(HashMap<String, Object> hash: toBeRemoved) availableTeamsList.remove(hash);
-
-		SimpleAdapter adapter = new SimpleAdapter(this, availableTeamsList, R.layout.team_selection_entry, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
-		availableTeams.setAdapter(adapter);
-		registerForContextMenu(availableTeams);
-		availableTeams.setOnItemClickListener(availableClicker);
-
-
+		for(HashMap<String, Object> hash: toBeRemovedFromSelected) selectedTeamsList.remove(hash);
+		((SimpleAdapter)selectedTeams.getAdapter()).notifyDataSetChanged();
+		((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 	}
 
-	private void setTeamColor(int position, int color){
-		View iv = ((RelativeLayout)selectedTeams.getChildAt(position)).findViewById(R.id.teamCount);
-		setTeamColor(iv, color);
-	}
-	private void setTeamColor(View iv, int color){
-		iv.setBackgroundColor(0xFF000000 + color);
-	}
-
-	private void setTeamHogCount(int position, int count){
-		ImageView iv = (ImageView)((RelativeLayout)selectedTeams.getChildAt(position)).findViewById(R.id.teamCount);
-		setTeamHogCount(iv, count);
+	private void setTeamColor(View iv, int colorIndex){
+		iv.setBackgroundColor(0xFF000000 + TeamIngameAttributes.TEAM_COLORS[colorIndex]);
 	}
 
 	private void setTeamHogCount(ImageView iv, int count){
@@ -227,13 +226,6 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 		}
 	};
 
-	private OnClickListener backClicker = new OnClickListener(){
-		public void onClick(View v){
-			returnTeams();
-			finish();
-		}
-	};
-
 	private OnItemClickListener availableClicker = new OnItemClickListener(){
 		public void onItemClick(AdapterView<?> arg0, View arg1, int position,long arg3) {
 			selectAvailableTeamsItem(position);
@@ -260,19 +252,19 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 	public boolean onContextItemSelected(MenuItem item){
 		AdapterView.AdapterContextMenuInfo menuInfo = (AdapterContextMenuInfo) item.getMenuInfo();
 		int position = menuInfo.position;
-		TeamFile teamfile = (TeamFile)availableTeamsList.get(position).get("teamfile");
+		Team team = (Team)availableTeamsList.get(position).get("team");
 		switch(item.getItemId()){
 		case 0://select
 			selectAvailableTeamsItem(position);
 			return true;
 		case 1://delete
-			teamfile.file.delete();
+			Team.getTeamfileByName(getApplicationContext(), team.name).delete();
 			availableTeamsList.remove(position);
 			((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();
 			return true;
 		case 2://edit
 			Intent i = new Intent(TeamSelectionActivity.this, TeamCreatorActivity.class);
-			i.putExtra("teamfile", teamfile.file);
+			i.putExtra(TeamCreatorActivity.PARAMETER_EXISTING_TEAMNAME, team.name);
 			startActivityForResult(i, ACTIVITY_TEAMCREATION);
 			return true;
 		}
@@ -281,14 +273,12 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 
 	private void selectAvailableTeamsItem(int position){
 		HashMap<String, Object> hash = (HashMap<String, Object>) availableTeamsList.get(position);
-		Team t = (Team)hash.get("team");
 		int[] illegalcolors = new int[selectedTeamsList.size()];
 		for(int i = 0; i < selectedTeamsList.size(); i++){
-			illegalcolors[i] = ((Team)selectedTeamsList.get(i).get("team")).color;
+			illegalcolors[i] = (Integer)selectedTeamsList.get(i).get("color");
 		}
-		t.setRandomColor(illegalcolors);
-		hash.put("color", t.color);
-		hash.put("count", t.hogCount);
+		hash.put("color", TeamIngameAttributes.randomColorIndex(illegalcolors));
+		hash.put("count", TeamIngameAttributes.DEFAULT_HOG_COUNT);
 
 		selectedTeamsList.add(hash);
 		availableTeamsList.remove(position);
@@ -298,47 +288,36 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 		txtInfo.setText(String.format(getResources().getString(R.string.teams_info_template), selectedTeamsList.size()));
 	}
 
-	private void returnTeams(){
-		int teamsCount = selectedTeamsList.size();
-		Intent i = new Intent();
-		Parcelable[] teams = new Parcelable[teamsCount];
-		for(int x = 0 ; x < teamsCount; x++){
-			teams[x] = (Team)selectedTeamsList.get(x).get("team");
+	private void returnTeams() {
+		List<TeamInGame> result = new ArrayList<TeamInGame>();
+		for(HashMap<String, Object> item : selectedTeamsList) {
+			result.add(new TeamInGame((Team)item.get("team"), new TeamIngameAttributes("Player", (Integer)item.get("color"), (Integer)item.get("count"), false)));
 		}
-		i.putExtra("teams", teams);
-		setResult(Activity.RESULT_OK, i);
-
-	}
-	
-	private static List<HashMap<String, Object>> getTeams(Context c){
-		List<HashMap<String, Object>> ret = new ArrayList<HashMap<String, Object>>();
-		List<TeamFile> teamfiles = FrontendDataUtils.getTeamFiles(c);
-		for(TeamFile tf : teamfiles) {
-			ret.add(teamfileToMap(tf));
-		}
-		return ret;
+		activityReturn = result;
+		setResult(Activity.RESULT_OK);
 	}
 	
 	private static final int[] botlevelDrawables = new int[] {
 		R.drawable.human, R.drawable.bot5, R.drawable.bot4, R.drawable.bot3, R.drawable.bot2, R.drawable.bot1
 	};
-	
-	private static HashMap<String, Object> teamfileToMap(TeamFile tf){
-		HashMap<String, Object> hashmap = new HashMap<String, Object>();
-		Team t = tf.team;
-		hashmap.put("team", t);
-		hashmap.put("teamfile", tf);
-		hashmap.put("txt", t.name);
-		hashmap.put("color", t.color);
-		hashmap.put("count", t.hogCount);
 		
+	private static HashMap<String, Object> toMap(Team t) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("team", t);
+		map.put("txt", t.name);
 		int botlevel = t.hogs.get(0).level;
 		if(botlevel<0 || botlevel>=botlevelDrawables.length) {
-			hashmap.put("img", R.drawable.bot1);
+			map.put("img", R.drawable.bot1);
 		} else {
-			hashmap.put("img", botlevelDrawables[botlevel]);
-		}
-		return hashmap;
-		return null;
+			map.put("img", botlevelDrawables[botlevel]);
+		}	
+		return map;
+	}
+	
+	private static HashMap<String, Object> toMap(TeamInGame t) {
+		HashMap<String, Object> map = toMap(t.team);
+		map.put("color", t.ingameAttribs.colorIndex);
+		map.put("count", t.ingameAttribs.hogCount);
+		return map;
 	}
 }
