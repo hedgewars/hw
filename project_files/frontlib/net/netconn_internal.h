@@ -50,7 +50,7 @@ struct _flib_netconn {
 	flib_teamlist pendingTeamlist;
 	flib_teamlist teamlist;
 	flib_scheme *scheme;
-	char *script;
+	char *style;
 	flib_weaponset *weaponset;
 
 	void (*onMessageCb)(void *context, int msgtype, const char *msg);

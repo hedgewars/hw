@@ -19,7 +19,7 @@
 
 /**
  * Functions for managing a list of schemes.
- * This is in here because the scheme config file of the QtFrontend (which we are staying compatble with) contains
+ * This is in here because the scheme config file of the QtFrontend (which we are staying compatible with) contains
  * all the schemes at once, so we need functions to work with a list like that.
  */
 
@@ -53,14 +53,14 @@ flib_schemelist *flib_schemelist_create();
 /**
  * Insert a new scheme into the list at position pos, moving all higher schemes to make place.
  * pos must be at least 0 (insert at the start) and at most list->schemeCount (insert at the end).
- * The scheme is retained automatically.
+ * Ownership of the scheme is transferred to the list.
  * Returns 0 on success.
  */
 int flib_schemelist_insert(flib_schemelist *list, flib_scheme *cfg, int pos);
 
 /**
  * Delete a scheme from the list at position pos, moving down all higher schemes.
- * The scheme is released automatically.
+ * The scheme is destroyed.
  * Returns 0 on success.
  */
 int flib_schemelist_delete(flib_schemelist *list, int pos);
@@ -71,7 +71,7 @@ int flib_schemelist_delete(flib_schemelist *list, int pos);
 flib_scheme *flib_schemelist_find(flib_schemelist *list, const char *name);
 
 /**
- * Free this schemelist.
+ * Free this schemelist and all contained schemes
  */
 void flib_schemelist_destroy(flib_schemelist *list);
 

@@ -17,6 +17,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+/**
+ * Functions for querying a map preview from the engine, which includes both a two-color image
+ * and the number of hogs this map is suitable for.
+ *
+ * The general usage is to first create a mapconn object by calling flib_mapconn_create.
+ * That will cause the frontlib to listen on a random port which can be queried using
+ * flib_mapconn_getport(). You should also register your callback functions right at the start
+ * to ensure you don't miss any callbacks.
+ *
+ * Next, start the engine (that part is up to you) with the appropriate command line arguments
+ * for a map preview request.
+ *
+ * In order to allow the mapconn to run, you should regularly call flib_mapconn_tick(), which
+ * performs network I/O and calls your callbacks if the map has been generated or an error
+ * has occurred. Once either the onSuccess or onFailure callback is called, you should destroy
+ * the mapconn and stop calling tick().
+ */
+
 #ifndef IPC_MAPCONN_H_
 #define IPC_MAPCONN_H_
 
@@ -38,7 +56,7 @@ typedef struct _flib_mapconn flib_mapconn;
  *
  * The map must be a regular, maze or drawn map - for a preview of a named map,
  * use the preview images in the map's directory, and for the hog count read the
- * map information (flib_mapcfg_read).
+ * map information (e.g. using flib_mapcfg_read).
  *
  * No NULL parameters allowed, returns NULL on failure.
  * Use flib_mapconn_destroy to free the returned object.
@@ -59,7 +77,6 @@ int flib_mapconn_getport(flib_mapconn *conn);
 
 /**
  * Set a callback which will receive the rendered map if the rendering succeeds.
- * You can pass callback=NULL to unset a callback.
  *
  * Expected callback signature:
  * void handleSuccess(void *context, const uint8_t *bitmap, int numHedgehogs)
@@ -77,7 +94,6 @@ void flib_mapconn_onSuccess(flib_mapconn *conn, void (*callback)(void* context, 
 
 /**
  * Set a callback which will receive an error message if rendering fails.
- * You can pass callback=NULL to unset a callback.
  *
  * Expected callback signature:
  * void handleFailure(void *context, const char *errormessage)

@@ -117,14 +117,14 @@ flib_gameconn *flib_gameconn_create(const char *playerName, const flib_gamesetup
 	return result;
 }
 
-flib_gameconn *flib_gameconn_create_playdemo(const uint8_t *demo, size_t size) {
-	if(log_badargs_if(demo==NULL && size>0)) {
+flib_gameconn *flib_gameconn_create_playdemo(const uint8_t *demoFileContent, size_t size) {
+	if(log_badargs_if(demoFileContent==NULL && size>0)) {
 		return NULL;
 	}
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(false, "Player", false);
 	if(tempConn) {
-		if(!flib_vector_append(tempConn->configBuffer, demo, size)) {
+		if(!flib_vector_append(tempConn->configBuffer, demoFileContent, size)) {
 			result = tempConn;
 			tempConn = NULL;
 		}
@@ -133,14 +133,14 @@ flib_gameconn *flib_gameconn_create_playdemo(const uint8_t *demo, size_t size) {
 	return result;
 }
 
-flib_gameconn *flib_gameconn_create_loadgame(const char *playerName, const uint8_t *save, size_t size) {
-	if(log_badargs_if(save==NULL && size>0)) {
+flib_gameconn *flib_gameconn_create_loadgame(const char *playerName, const uint8_t *saveFileContent, size_t size) {
+	if(log_badargs_if(saveFileContent==NULL && size>0)) {
 		return NULL;
 	}
 	flib_gameconn *result = NULL;
 	flib_gameconn *tempConn = flib_gameconn_create_partial(true, playerName, false);
 	if(tempConn) {
-		if(!flib_vector_append(tempConn->configBuffer, save, size)) {
+		if(!flib_vector_append(tempConn->configBuffer, saveFileContent, size)) {
 			result = tempConn;
 			tempConn = NULL;
 		}
@@ -275,6 +275,18 @@ int flib_gameconn_send_chatmsg(flib_gameconn *conn, const char *playername, cons
 	if(!format_chatmessage(converted, playername, msg)
 			&& !flib_ipcbase_send_raw(conn->ipcBase, converted, converted[0]+1)) {
 		demo_append(conn, converted, converted[0]+1);
+		return 0;
+	}
+	return -1;
+}
+
+int flib_gameconn_send_quit(flib_gameconn *conn) {
+	if(log_badargs_if(conn==NULL)) {
+		return -1;
+	}
+	const char *msg = "\x07""efinish";
+	if(!flib_ipcbase_send_raw(conn->ipcBase, msg, msg[0]+1)) {
+		demo_append(conn, msg, msg[0]+1);
 		return 0;
 	}
 	return -1;

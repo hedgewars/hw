@@ -133,7 +133,7 @@ int flib_netconn_send_renameRoom(flib_netconn *conn, const char *roomName) {
 
 int flib_netconn_send_leaveRoom(flib_netconn *conn, const char *str) {
 	int result = -1;
-	if(flib_netconn_is_in_room_context(conn)) {
+	if(conn->netconnState==NETCONN_STATE_ROOM) {
 		result = (str && *str) ? sendStr(conn, "PART", str) : sendVoid(conn, "PART");
 		if(!result) {
 			netconn_leaveRoom(conn);
@@ -190,11 +190,9 @@ int flib_netconn_send_addTeam(flib_netconn *conn, const flib_team *team) {
 }
 
 int flib_netconn_send_removeTeam(flib_netconn *conn, const char *teamname) {
-	if(!sendStr(conn, "REMOVE_TEAM", teamname)) {
-		flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
-		if(team && !team->remoteDriven) {
-			flib_teamlist_delete(&conn->teamlist, teamname);
-		}
+	flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
+	if(team && !team->remoteDriven && !sendStr(conn, "REMOVE_TEAM", teamname)) {
+		flib_teamlist_delete(&conn->teamlist, teamname);
 		return 0;
 	}
 	return -1;
@@ -214,13 +212,11 @@ int flib_netconn_send_engineMessage(flib_netconn *conn, const uint8_t *message, 
 }
 
 int flib_netconn_send_teamHogCount(flib_netconn *conn, const char *teamname, int hogcount) {
-	if(!log_badargs_if4(conn==NULL, flib_strempty(teamname), hogcount<1, hogcount>HEDGEHOGS_PER_TEAM)
+	if(!log_badargs_if5(conn==NULL, flib_strempty(teamname), hogcount<1, hogcount>HEDGEHOGS_PER_TEAM, !conn->isChief)
 			&& !flib_netbase_sendf(conn->netBase, "HH_NUM\n%s\n%i\n\n", teamname, hogcount)) {
-		if(conn->isChief) {
-			flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
-			if(team) {
-				team->hogsInGame = hogcount;
-			}
+		flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
+		if(team) {
+			team->hogsInGame = hogcount;
 		}
 		return 0;
 	}
@@ -228,13 +224,11 @@ int flib_netconn_send_teamHogCount(flib_netconn *conn, const char *teamname, int
 }
 
 int flib_netconn_send_teamColor(flib_netconn *conn, const char *teamname, int colorIndex) {
-	if(!log_badargs_if2(conn==NULL, flib_strempty(teamname))
+	if(!log_badargs_if3(conn==NULL, flib_strempty(teamname), !conn->isChief)
 			&& !flib_netbase_sendf(conn->netBase, "TEAM_COLOR\n%s\n%i\n\n", teamname, colorIndex)) {
-		if(conn->isChief) {
-			flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
-			if(team) {
-				team->colorIndex = colorIndex;
-			}
+		flib_team *team = flib_teamlist_find(&conn->teamlist, teamname);
+		if(team) {
+			team->colorIndex = colorIndex;
 		}
 		return 0;
 	}
@@ -431,13 +425,7 @@ int flib_netconn_send_scheme(flib_netconn *conn, const flib_scheme *scheme) {
 }
 
 int flib_netconn_send_roundfinished(flib_netconn *conn, bool withoutError) {
-	if(!sendInt(conn, "ROUNDFINISHED", withoutError ? 1 : 0)) {
-		if(conn->netconnState == NETCONN_STATE_INGAME) {
-			conn->netconnState = NETCONN_STATE_ROOM;
-		}
-		return 0;
-	}
-	return -1;
+	return sendInt(conn, "ROUNDFINISHED", withoutError ? 1 : 0);
 }
 
 int flib_netconn_send_ban(flib_netconn *conn, const char *playerName) {

@@ -58,7 +58,7 @@ int flib_ipc_append_mapconf(flib_vector *vec, const flib_map *map, bool mapprevi
 int flib_ipc_append_seed(flib_vector *vec, const char *seed);
 
 /**
- * Append a script message to the buffer.
+ * Append a script to the buffer (e.g. "Missions/Training/Basic_Training_-_Bazooka.lua")
  *
  * Returns nonzero if something goes wrong. In that case the buffer
  * contents are unaffected.
@@ -66,15 +66,28 @@ int flib_ipc_append_seed(flib_vector *vec, const char *seed);
 int flib_ipc_append_script(flib_vector *vec, const char *script);
 
 /**
+ * Append a game style to the buffer. (e.g. "Capture the Flag")
+ *
+ * Returns nonzero if something goes wrong. In that case the buffer
+ * contents are unaffected.
+ */
+int flib_ipc_append_style(flib_vector *vec, const char *style);
+
+/**
  * Append the game scheme to the buffer.
  *
  * Returns nonzero if something goes wrong. In that case the buffer
  * contents are unaffected.
  */
-int flib_ipc_append_gamescheme(flib_vector *vec, const flib_scheme *cfg);
+int flib_ipc_append_gamescheme(flib_vector *vec, const flib_scheme *scheme);
 
-int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHogAmmo, bool noAmmoStore);
-
+/**
+ * Append the entire game config to the buffer (including the final "!" that marks the
+ * end of configuration data for the engine)
+ *
+ * Returns nonzero if something goes wrong. In that case the buffer
+ * contents are unaffected.
+ */
 int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bool netgame);
 
 #endif /* IPCPROTOCOL_H_ */

@@ -23,10 +23,12 @@
 #include "../hwconsts.h"
 
 /**
- * These values are all in the range 0..9
+ * These values are all ASCII characters in the range '0'..'9'
+ * The fields are zero-terminated so they can easily be used as strings.
  *
  * For loadout, 9 means inifinite ammo.
  * For the other setting, 9 is invalid.
+ * TODO stop reference counting, it complects everything
  */
 typedef struct {
 	int _referenceCount;

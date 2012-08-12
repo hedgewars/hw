@@ -72,13 +72,14 @@ static flib_scheme *readSchemeFromIni(flib_metascheme *meta, flib_ini *ini, int 
 	if(schemeNameKey) {
 		char *schemeName = NULL;
 		if(!flib_ini_get_str_opt(ini, &schemeName, schemeNameKey, "Unnamed")) {
-			flib_scheme *scheme = flib_scheme_create(meta, schemeName);
-			if(scheme) {
-				if(!readSettingsFromIni(ini, scheme, index) && !readModsFromIni(ini, scheme, index)) {
-					result = flib_scheme_retain(scheme);
+			flib_scheme *tmpScheme = flib_scheme_create(meta, schemeName);
+			if(tmpScheme) {
+				if(!readSettingsFromIni(ini, tmpScheme, index) && !readModsFromIni(ini, tmpScheme, index)) {
+					result = tmpScheme;
+					tmpScheme = NULL;
 				}
 			}
-			flib_scheme_release(scheme);
+			flib_scheme_destroy(tmpScheme);
 		}
 		free(schemeName);
 	}
@@ -118,11 +119,10 @@ flib_schemelist *flib_schemelist_from_ini(flib_metascheme *meta, const char *fil
 	for(int i=0; i<schemeCount; i++) {
 		flib_scheme *scheme = readSchemeFromIni(meta, ini, i);
 		if(!scheme || flib_schemelist_insert(list, scheme, i)) {
-			flib_scheme_release(scheme);
+			flib_scheme_destroy(scheme);
 			flib_log_e("Error reading scheme %i from config file %s.", i, filename);
 			return fromIniHandleError(list, ini);
 		}
-		flib_scheme_release(scheme);
 	}
 
 
@@ -130,7 +130,7 @@ flib_schemelist *flib_schemelist_from_ini(flib_metascheme *meta, const char *fil
 	return list;
 }
 
-static int writeSchemeToIni(flib_scheme *scheme, flib_ini *ini, int index) {
+static int writeSchemeToIni(const flib_scheme *scheme, flib_ini *ini, int index) {
 	flib_metascheme *meta = scheme->meta;
 	bool error = false;
 
@@ -179,7 +179,7 @@ flib_schemelist *flib_schemelist_create() {
 void flib_schemelist_destroy(flib_schemelist *list) {
 	if(list) {
 		for(int i=0; i<list->schemeCount; i++) {
-			flib_scheme_release(list->schemes[i]);
+			flib_scheme_destroy(list->schemes[i]);
 		}
 		free(list->schemes);
 		free(list);
@@ -203,7 +203,6 @@ GENERATE_STATIC_LIST_DELETE(deleteScheme, flib_scheme*)
 int flib_schemelist_insert(flib_schemelist *list, flib_scheme *cfg, int pos) {
 	if(!log_badargs_if2(list==NULL, cfg==NULL)
 			&& !insertScheme(&list->schemes, &list->schemeCount, cfg, pos)) {
-		flib_scheme_retain(cfg);
 		return 0;
 	}
 	return -1;
@@ -213,7 +212,7 @@ int flib_schemelist_delete(flib_schemelist *list, int pos) {
 	if(!log_badargs_if(list==NULL)) {
 		flib_scheme *elem = list->schemes[pos];
 		if(!deleteScheme(&list->schemes, &list->schemeCount, pos)) {
-			flib_scheme_release(elem);
+			flib_scheme_destroy(elem);
 			return 0;
 		}
 	}

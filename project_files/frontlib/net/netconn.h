@@ -17,6 +17,42 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+/**
+ * This file contains functions for communicating with a Hedgewars server to chat, prepare
+ * and play rounds of Hedgewars.
+ *
+ * To use this, first create a netconn object by calling flib_netconn_create. This will
+ * start the connection to the game server (which might fail right away, the function
+ * returns null then). You should also register your callback functions right at the start
+ * to ensure you don't miss any callbacks.
+ *
+ * In order to allow the netconn to run, you should regularly call flib_netconn_tick(), which
+ * performs network I/O and calls your callbacks on interesting events.
+ *
+ * When the connection is closed, you will receive the onDisconnect callback. This is the
+ * signal to destroy the netconn and stop calling tick().
+ *
+ * The connection process lasts from the time you create the netconn until you receive the
+ * onConnected callback (or onDisconnected in case something goes wrong). During that time,
+ * you might receive the onNickTaken and onPasswordRequest callbacks; see their description
+ * for more information on how to handle them. You could also receive other callbacks during
+ * connecting (e.g. about the room list), but it should be safe to ignore them.
+ *
+ * Once you are connected, you are in the lobby, and you can enter rooms and leave them again.
+ * The room and lobby states have different protocols, so many commands only work in either
+ * one or the other. If you are in a room you might also be in a game, but that does not
+ * change the protocol. The functions below are grouped by the states in which they make
+ * sense, or (for the callbacks) the states in which you would typically receive them.
+ *
+ * The state changes from lobby to room when the server tells you that you just entered one,
+ * which will also trigger the onEnterRoom callback. This usually happens in reply to either
+ * a joinRoom, createRoom or playerFollow command.
+ *
+ * The state changes back to lobby when the room is dissolved, when you are kicked from the
+ * room, or when you actively leave the room using flib_netconn_send_leaveRoom. The first
+ * two events will trigger the onLeaveRoom callback.
+ */
+
 #ifndef NETCONN_H_
 #define NETCONN_H_
 
@@ -31,22 +67,21 @@
 #define NETCONN_STATE_CONNECTING 0
 #define NETCONN_STATE_LOBBY 1
 #define NETCONN_STATE_ROOM 2
-#define NETCONN_STATE_INGAME 3
 #define NETCONN_STATE_DISCONNECTED 10
 
-#define NETCONN_DISCONNECT_NORMAL 0
-#define NETCONN_DISCONNECT_SERVER_TOO_OLD 1
-#define NETCONN_DISCONNECT_AUTH_FAILED 2 // TODO can you retry instead?
-#define NETCONN_DISCONNECT_CONNLOST 3
-#define NETCONN_DISCONNECT_INTERNAL_ERROR 100
+#define NETCONN_DISCONNECT_NORMAL 0				// The connection was closed normally
+#define NETCONN_DISCONNECT_SERVER_TOO_OLD 1		// The server has a lower protocol version than we do
+#define NETCONN_DISCONNECT_AUTH_FAILED 2		// You sent a password with flib_netconn_send_password that was not accepted
+#define NETCONN_DISCONNECT_CONNLOST 3			// The network connection was lost
+#define NETCONN_DISCONNECT_INTERNAL_ERROR 100	// Something went wrong in frontlib itself
 
-#define NETCONN_ROOMLEAVE_ABANDONED 0
-#define NETCONN_ROOMLEAVE_KICKED 1
+#define NETCONN_ROOMLEAVE_ABANDONED 0			// The room was closed because the chief left
+#define NETCONN_ROOMLEAVE_KICKED 1				// You have been kicked from the room
 
-#define NETCONN_MSG_TYPE_PLAYERINFO 0
-#define NETCONN_MSG_TYPE_SERVERMESSAGE 1
-#define NETCONN_MSG_TYPE_WARNING 2
-#define NETCONN_MSG_TYPE_ERROR 3
+#define NETCONN_MSG_TYPE_PLAYERINFO 0			// A response to flib_netconn_send_playerInfo
+#define NETCONN_MSG_TYPE_SERVERMESSAGE 1		// The welcome message when connecting to the lobby
+#define NETCONN_MSG_TYPE_WARNING 2				// A general warning message
+#define NETCONN_MSG_TYPE_ERROR 3				// A general error message
 
 #define NETCONN_MAPCHANGE_FULL 0
 #define NETCONN_MAPCHANGE_MAP 1
@@ -80,11 +115,6 @@ void flib_netconn_tick(flib_netconn *conn);
 bool flib_netconn_is_chief(flib_netconn *conn);
 
 /**
- * Are you in the context of a room, i.e. either in room or ingame state?
- */
-bool flib_netconn_is_in_room_context(flib_netconn *conn);
-
-/**
  * Returns the playername. This is *probably* the one provided on creation, but
  * if that name was already taken, a different one could have been set by the
  * onNickTaken callback or its default implementation.
@@ -116,6 +146,7 @@ int flib_netconn_send_teamchat(flib_netconn *conn, const char *msg);
 
 /**
  * Send the password in reply to a password request.
+ * If the server does not accept the password, you will be disconnected (NETCONN_DISCONNECT_AUTH_FAILED)
  */
 int flib_netconn_send_password(flib_netconn *conn, const char *passwd);
 
@@ -165,9 +196,9 @@ int flib_netconn_send_leaveRoom(flib_netconn *conn, const char *msg);
 int flib_netconn_send_toggleReady(flib_netconn *conn);
 
 /**
- * Add a team to the current room. The message includes the team color, but not
- * the number of hogs. Only makes sense when in room state. If the action succeeds, you will
- * receive an onTeamAccepted callback with the name of the team.
+ * Add a team to the current room. Apart from the "fixed" team information, this also includes
+ * the color, but not the number of hogs. Only makes sense when in room state. If the action
+ * succeeds, you will receive an onTeamAccepted callback with the name of the team.
  */
 int flib_netconn_send_addTeam(flib_netconn *conn, const flib_team *team);
 
@@ -269,12 +300,14 @@ int flib_netconn_send_scheme(flib_netconn *conn, const flib_scheme *scheme);
 int flib_netconn_send_roundfinished(flib_netconn *conn, bool withoutError);
 
 /**
- * Ban a player. TODO: Figure out details
+ * Ban a player. You need to be in the lobby and a server admin for this to work.
  */
 int flib_netconn_send_ban(flib_netconn *conn, const char *playerName);
 
 /**
- * Kick a player. TODO: Figure out details
+ * Kick a player. This has different meanings in the lobby and in a room;
+ * In the lobby, it will kick the player from the server, and you need to be a server admin to do it.
+ * In a room, it will kick the player from the room, and you need to be room chief.
  */
 int flib_netconn_send_kick(flib_netconn *conn, const char *playerName);
 
@@ -286,13 +319,17 @@ int flib_netconn_send_kick(flib_netconn *conn, const char *playerName);
 int flib_netconn_send_playerInfo(flib_netconn *conn, const char *playerName);
 
 /**
- * Follow a player. TODO figure out details
+ * Follow a player. Only valid in the lobby. If the player is in a room (or in a game),
+ * this command is analogous to calling flib_netconn_send_joinRoom with that room.
  */
 int flib_netconn_send_playerFollow(flib_netconn *conn, const char *playerName);
 
 /**
  * Signal that you want to start the game. Only makes sense in room state and if you are chief.
- * TODO details
+ * The server will check whether all players are ready and whether it believes the setup makes
+ * sense (e.g. more than one clan). If the server is satisfied, you will receive an onRunGame
+ * callback (all other clients in the room are notified the same way). Otherwise the server
+ * might answer with a warning, or might not answer at all.
  */
 int flib_netconn_send_startGame(flib_netconn *conn);
 
@@ -309,19 +346,19 @@ int flib_netconn_send_toggleRestrictJoins(flib_netconn *conn);
 int flib_netconn_send_toggleRestrictTeams(flib_netconn *conn);
 
 /**
- * Probably does something administrator-y.
+ * Does something administrator-y. At any rate you need to be an administrator and in the lobby
+ * to use this command.
  */
 int flib_netconn_send_clearAccountsCache(flib_netconn *conn);
 
 /**
  * Sets a server variable to the indicated value. Only makes sense if you are server admin.
  * Known variables are MOTD_NEW, MOTD_OLD and LATEST_PROTO.
- * TODO reply?
  */
 int flib_netconn_send_setServerVar(flib_netconn *conn, const char *name, const char *value);
 
 /**
- * Queries all server variables. Only makes sense if you are server admin. (TODO: try)
+ * Queries all server variables. Only makes sense if you are server admin.
  * If the action succeeds, you will receive several onServerVar callbacks with the
  * current values of all server variables.
  */
@@ -435,6 +472,9 @@ void flib_netconn_onLeaveRoom(flib_netconn *conn, void (*callback)(void *context
 /**
  * A new team was added to the room. The person who adds a team does NOT receive this callback (he gets onTeamAccepted instead).
  * The team does not contain bindings, stats, weaponset, color or the number of hogs.
+ *
+ * If you receive this message and you are the room chief, you are expected to provide a color and hog count for this team using
+ * flib_netconn_send_teamHogCount / teamColor.
  */
 void flib_netconn_onTeamAdd(flib_netconn *conn, void (*callback)(void *context, const flib_team *team), void *context);
 
@@ -456,8 +496,12 @@ void flib_netconn_onRunGame(flib_netconn *conn, void (*callback)(void *context),
  * When you ask for a team to be added, the server might reject it for several reasons, e.g. because it has the same name
  * as an existing team, or because the room chief restricted adding new teams. If the team is accepted by the server,
  * this callback is fired.
+ *
+ * If you are the room chief, you are expected to provide the hog count for your own team now using flib_netconn_send_teamHogCount.
+ * The color of the team is already set to the one you provided in addTeam, but the QtFrontend apparently always uses 0 there and
+ * instead sets the color after the team is accepted.
  */
-void flib_netconn_onTeamAccepted(flib_netconn *conn, void (*callback)(void *context, const char *teamName), void *context);
+void flib_netconn_onTeamAccepted(flib_netconn *conn, void (*callback)(void *context, const char *team), void *context);
 
 /**
  * The number of hogs in a team has been changed by the room chief. If you are the chief and change the number of hogs yourself,
@@ -505,7 +549,7 @@ void flib_netconn_onWeaponsetChanged(flib_netconn *conn, void (*callback)(void *
 void flib_netconn_onAdminAccess(flib_netconn *conn, void (*callback)(void *context), void *context);
 
 /**
- * When you query the server vars with GET_SERVER_VAR (TODO probably only works as admin), the server
+ * When you query the server vars with flib_netconn_send_getServerVars (only works as admin), the server
  * replies with a list of them. This callback is called for each entry in that list.
  */
 void flib_netconn_onServerVar(flib_netconn *conn, void (*callback)(void *context, const char *name, const char *value), void *context);

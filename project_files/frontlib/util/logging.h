@@ -39,6 +39,7 @@ char* flib_format_ip(uint32_t numip);
 /**
  * Evaluates the expression cond. If it is true, a formatted error will be logged.
  * Returns true if an error is logged, false otherwise (i.e. the boolean value of the argument)
+ * Usage: log_e_if(errorHasHappened, "Format string", formatArg, ...);
  */
 #define log_e_if(cond, ...) _flib_fassert(__func__, FLIB_LOGLEVEL_ERROR, !(bool)(cond), __VA_ARGS__)
 #define log_w_if(cond, ...) _flib_fassert(__func__, FLIB_LOGLEVEL_WARNING, !(bool)(cond), __VA_ARGS__)
@@ -79,9 +80,21 @@ char* flib_format_ip(uint32_t numip);
 bool _flib_fassert(const char *func, int level, bool cond, const char *fmt, ...);
 void _flib_flog(const char *func, int level, const char *fmt, ...);
 
-int flib_log_getLevel();
+/**
+ * Only log messages that are at least the indicated level
+ */
 void flib_log_setLevel(int level);
+int flib_log_getLevel();
+
+/**
+ * Log to the indicated file. You can pass NULL to log to stdout.
+ * This overrides setCallback and vice versa.
+ */
 void flib_log_setFile(FILE *logfile);
+
+/**
+ * Returns whether messages of this level are logged at the moment.
+ */
 bool flib_log_isActive(int level);
 
 /**

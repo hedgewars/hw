@@ -18,7 +18,7 @@
  */
 
 /**
- * A complete game configuration that contains all settings for a
+ * A complete game configuration that contains all settings the engine needs to start a
  * local or networked game.
  */
 
@@ -31,7 +31,7 @@
 #include "teamlist.h"
 
 typedef struct {
-    char *script;
+    char *style;				// e.g. "Capture the Flag"
     flib_scheme *gamescheme;
     flib_map *map;
 	flib_teamlist *teamlist;
