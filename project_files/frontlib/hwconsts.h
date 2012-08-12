@@ -20,6 +20,10 @@
 /**
  * This file contains important constants which might need to be changed to adapt to
  * changes in the engine or protocols.
+ *
+ * It also contains getter functions for some constants (in particular for constants
+ * that are important for the layout of data structures), so that client code can
+ * query the constants that the library was built with.
  */
 
 #ifndef HWCONSTS_H_
@@ -49,10 +53,29 @@
                               UINT32_C(0xff5f3605), /* brown  */ \
                               UINT32_C(0xffffff01), /* yellow */ \
                               /* add new colors here */ \
-                              0 } /* Keep this 0 at the end or the length will be calculated wrong */
+                              0 } /* Keep this 0 at the end */
 
-// TODO allow setting alternative color lists?
-extern const size_t flib_teamcolor_defaults_len;
-extern const uint32_t flib_teamcolor_defaults[];
+extern const size_t flib_teamcolor_count;
+extern const uint32_t flib_teamcolors[];
+
+/**
+ * Returns the team color (ARGB) corresponding to the color index (0 if index out of bounds)
+ */
+uint32_t flib_get_teamcolor(int colorIndex);
+
+/**
+ * Returns the number of team colors (i.e. the length of the flib_teamcolors array)
+ */
+int flib_get_teamcolor_count();
+
+/**
+ * Returns the HEDGEHOGS_PER_TEAM constant
+ */
+int flib_get_hedgehogs_per_team();
+
+/**
+ * Returns the WEAPONS_COUNT constant
+ */
+int flib_get_weapons_count();
 
 #endif
