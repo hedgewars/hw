@@ -75,7 +75,7 @@ flib_team *flib_team_from_netmsg(char **parts) {
 	return result;
 }
 
-flib_scheme *flib_netmsg_to_cfg(flib_metascheme *meta, char **parts) {
+flib_scheme *flib_scheme_from_netmsg(flib_metascheme *meta, char **parts) {
 	flib_scheme *result = flib_scheme_create(meta, parts[0]);
 	if(result) {
 		for(int i=0; i<meta->modCount; i++) {
@@ -88,7 +88,7 @@ flib_scheme *flib_netmsg_to_cfg(flib_metascheme *meta, char **parts) {
 	return result;
 }
 
-flib_map *flib_netmsg_to_map(char **parts) {
+flib_map *flib_map_from_netmsg(char **parts) {
 	flib_map *result = flib_map_create_named(parts[3], parts[0]);
 	if(result) {
 		result->mapgen = atoi(parts[1]);
@@ -98,7 +98,7 @@ flib_map *flib_netmsg_to_map(char **parts) {
 	return result;
 }
 
-int flib_netmsg_to_drawnmapdata(char *netmsg, uint8_t** outbuf, size_t *outlen) {
+int flib_drawnmapdata_from_netmsg(char *netmsg, uint8_t** outbuf, size_t *outlen) {
 	int result = -1;
 
 	// First step: base64 decoding

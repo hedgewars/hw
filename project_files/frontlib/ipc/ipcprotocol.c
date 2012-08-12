@@ -80,8 +80,8 @@ int flib_ipc_append_mapconf(flib_vector *vec, const flib_map *map, bool mapprevi
 			 */
 			const char *edraw = "edraw ";
 			int edrawlen = strlen(edraw);
-			for(int offset=0; offset<map->drawDataSize; offset+=200) {
-				int bytesRemaining = map->drawDataSize-offset;
+			for(size_t offset=0; offset<map->drawDataSize; offset+=200) {
+				size_t bytesRemaining = map->drawDataSize-offset;
 				int fragmentsize = bytesRemaining < 200 ? bytesRemaining : 200;
 				uint8_t messagesize = edrawlen + fragmentsize;
 				error |= flib_vector_append(tempvector, &messagesize, 1);
@@ -111,10 +111,19 @@ int flib_ipc_append_seed(flib_vector *vec, const char *seed) {
 
 int flib_ipc_append_script(flib_vector *vec, const char *script) {
 	int result = -1;
-	char *copy = flib_strdupnull(script);
+	if(!log_badargs_if2(vec==NULL, script==NULL)) {
+		result = flib_ipc_append_message(vec, "escript %s", script);
+	}
+	return result;
+}
+
+int flib_ipc_append_style(flib_vector *vec, const char *style) {
+	int result = -1;
+	char *copy = flib_strdupnull(style);
 	if(!log_badargs_if(vec==NULL) && copy) {
 		if(!strcmp("Normal", copy)) {
 			// "Normal" means no gametype script
+			// TODO if an empty script called "Normal" is added to the scripts directory this can be removed
 			result = 0;
 		} else {
 			size_t len = strlen(copy);
@@ -192,7 +201,7 @@ static void calculateMd5Hex(const char *in, char out[33]) {
 	}
 }
 
-int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHogAmmo, bool noAmmoStore) {
+static int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHogAmmo, bool noAmmoStore) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
 	if(!log_badargs_if2(vec==NULL, team==NULL) && tempvector) {
@@ -206,11 +215,11 @@ int flib_ipc_append_addteam(flib_vector *vec, const flib_team *team, bool perHog
 
 		char md5Hex[33];
 		calculateMd5Hex(team->ownerName ? team->ownerName : "", md5Hex);
-		if(team->colorIndex<0 || team->colorIndex>=flib_teamcolor_defaults_len) {
+		if(team->colorIndex<0 || team->colorIndex>=flib_teamcolor_count) {
 			flib_log_e("Color index out of bounds for team %s: %i", team->name, team->colorIndex);
 			error = true;
 		} else {
-			error |= flib_ipc_append_message(tempvector, "eaddteam %s %"PRIu32" %s", md5Hex, flib_teamcolor_defaults[team->colorIndex], team->name);
+			error |= flib_ipc_append_message(tempvector, "eaddteam %s %"PRIu32" %s", md5Hex, flib_teamcolors[team->colorIndex], team->name);
 		}
 
 		if(team->remoteDriven) {
@@ -258,8 +267,8 @@ int flib_ipc_append_fullconfig(flib_vector *vec, const flib_gamesetup *setup, bo
 		if(setup->map) {
 			error |= flib_ipc_append_mapconf(tempvector, setup->map, false);
 		}
-		if(setup->script) {
-			error |= flib_ipc_append_script(tempvector, setup->script);
+		if(setup->style) {
+			error |= flib_ipc_append_style(tempvector, setup->style);
 		}
 		if(setup->gamescheme) {
 			error |= flib_ipc_append_gamescheme(tempvector, setup->gamescheme);

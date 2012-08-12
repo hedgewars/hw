@@ -19,6 +19,10 @@
 
 /**
  * Data structures for game scheme information.
+ *
+ * The scheme consists of settings (integers) and mods (booleans). These are not fixed, but
+ * described in a "metascheme" file, which describes how each setting and mod is sent to the
+ * engine, and in which order they appear in the network protocol.
  */
 
 #ifndef SCHEME_H_
@@ -27,18 +31,19 @@
 #include <stdbool.h>
 
 typedef struct {
-    char *name;
-    char *engineCommand;
-    bool maxMeansInfinity;
-    bool times1000;
-    int min;
-    int max;
-    int def;
+    char *name;				// A name identifying this setting (used as key in the schemes file)
+    char *engineCommand;	// The command needed to send the setting to the engine. May be null if the setting is not sent to the engine (for the "health" setting)
+    bool maxMeansInfinity;	// If true, send a very high number to the engine if the setting is equal to its maximum
+    bool times1000;			// If true (for time-based settings), multiply the setting by 1000 before sending it to the engine.
+    int min;				// The smallest allowed value
+    int max;				// The highest allowed value
+    int def;				// The default value
 } flib_metascheme_setting;
 
 typedef struct {
-    char *name;
-    int bitmaskIndex;
+    char *name;				// A name identifying this mod (used as key in the schemes file)
+    int bitmaskIndex;		// Mods are sent to the engine in a single integer, this field describes which bit of that integer is used
+    						// for this particular mod.
 } flib_metascheme_mod;
 
 /**
@@ -53,8 +58,11 @@ typedef struct {
 	flib_metascheme_mod *mods;
 } flib_metascheme;
 
+/**
+ * The settings and mods arrays have the same number and order of elements
+ * as the corresponding arrays in the metascheme.
+ */
 typedef struct {
-	int _referenceCount;
 	flib_metascheme *meta;
 
     char *name;
@@ -93,15 +101,9 @@ flib_scheme *flib_scheme_create(flib_metascheme *meta, const char *schemeName);
 flib_scheme *flib_scheme_copy(const flib_scheme *scheme);
 
 /**
- * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
- * Returns the parameter.
- */
-flib_scheme *flib_scheme_retain(flib_scheme *scheme);
-
-/**
  * Decrease the reference count of the object and free it if this was the last reference.
  */
-void flib_scheme_release(flib_scheme* scheme);
+void flib_scheme_destroy(flib_scheme* scheme);
 
 /**
  * Retrieve a mod setting by its name. If the mod is not found, logs an error and returns false.

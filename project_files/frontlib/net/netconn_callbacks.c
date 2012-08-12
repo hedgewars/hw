@@ -117,7 +117,6 @@ void netconn_clearCallbacks(flib_netconn *conn) {
 	static void _noop_callback_##cbName cbParameterTypes {} \
 	GENERATE_CB_SETTER(cbName, cbParameterTypes, _noop_callback_##cbName)
 
-// TODO Disallow transfer of ownership?
 GENERATE_CB_SETTER(onMessage, (void *context, int msgtype, const char *msg), defaultCallback_onMessage);
 GENERATE_CB_SETTER_AND_DEFAULT(onConnected, (void *context));
 GENERATE_CB_SETTER_AND_DEFAULT(onDisconnected, (void *context, int reason, const char *message));

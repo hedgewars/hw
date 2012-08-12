@@ -26,16 +26,6 @@
 
 #include <stdlib.h>
 
-static void flib_map_destroy(flib_map *map) {
-	if(map) {
-		free(map->seed);
-		free(map->drawData);
-		free(map->name);
-		free(map->theme);
-		free(map);
-	}
-}
-
 flib_map *flib_map_create_regular(const char *seed, const char *theme, int templateFilter) {
 	if(log_badargs_if2(seed==NULL, theme==NULL)) {
 		return NULL;
@@ -74,7 +64,7 @@ flib_map *flib_map_create_named(const char *seed, const char *name) {
 }
 
 flib_map *flib_map_create_drawn(const char *seed, const char *theme, const uint8_t *drawData, size_t drawDataSize) {
-	if(log_badargs_if3(seed==NULL, theme==NULL, drawData==NULL && drawDataSize>0)) {
+	if(log_badargs_if3(seed==NULL, theme==NULL, drawData==NULL)) {
 		return NULL;
 	}
 	flib_map newmap = {0};
@@ -90,7 +80,7 @@ flib_map *flib_map_create_drawn(const char *seed, const char *theme, const uint8
 flib_map *flib_map_copy(const flib_map *map) {
 	flib_map *result = NULL;
 	if(map) {
-		flib_map *newmap = flib_map_retain(flib_calloc(1, sizeof(flib_map)));
+		flib_map *newmap = flib_calloc(1, sizeof(flib_map));
 		if(newmap) {
 			newmap->mapgen = map->mapgen;
 			newmap->drawDataSize = map->drawDataSize;
@@ -105,20 +95,17 @@ flib_map *flib_map_copy(const flib_map *map) {
 				newmap = NULL;
 			}
 		}
-		flib_map_release(newmap);
+		flib_map_destroy(newmap);
 	}
 	return result;
 }
 
-flib_map *flib_map_retain(flib_map *map) {
+void flib_map_destroy(flib_map *map) {
 	if(map) {
-		flib_retain(&map->_referenceCount, "flib_map");
-	}
-	return map;
-}
-
-void flib_map_release(flib_map *map) {
-	if(map && flib_release(&map->_referenceCount, "flib_map")) {
-		flib_map_destroy(map);
+		free(map->seed);
+		free(map->drawData);
+		free(map->name);
+		free(map->theme);
+		free(map);
 	}
 }

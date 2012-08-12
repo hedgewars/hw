@@ -30,6 +30,7 @@
 #include "ipc/mapconn.h"
 #include "net/netconn.h"
 #include "util/logging.h"
+#include "model/schemelist.h"
 
 /**
  * Call this function before anything else in this library.

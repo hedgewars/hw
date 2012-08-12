@@ -45,22 +45,20 @@
 
 /**
  * Data structure for defining a map. This contains the whole recipe to
- * exactly recreate a particular map. For named maps, you also need the
- * corresponding files.
+ * exactly recreate a particular map.
  *
  * The required fields depend on the map generator, see the comments
  * at the struct for details.
  */
 typedef struct {
-	int _referenceCount;
 	int mapgen;				// Always one of the MAPGEN_ constants
-	char *name;				// The name of the map for MAPGEN_NAMED, otherwise one of "+rnd+", "+maze+" or "+drawn+".
-	char *seed;				// Used for all maps
-	char *theme;			// Used for all maps
+	char *name;				// The name of the map for MAPGEN_NAMED (e.g. "Cogs"), otherwise one of "+rnd+", "+maze+" or "+drawn+".
+	char *seed;				// Used for all maps. This is a random seed for all (non-AI) entropy in the round. Typically a random UUID, but can be any string.
+	char *theme;			// Used for all maps. This is the name of a directory in Data/Themes (e.g. "Beach")
 	uint8_t *drawData;		// Used for MAPGEN_DRAWN
-	int drawDataSize;		// Used for MAPGEN_DRAWN TODO size_t
-	int templateFilter;		// Used for MAPGEN_REGULAR
-	int mazeSize;			// Used for MAPGEN_MAZE
+	size_t drawDataSize;	// Used for MAPGEN_DRAWN
+	int templateFilter;		// Used for MAPGEN_REGULAR. One of the TEMPLATEFILTER_xxx constants.
+	int mazeSize;			// Used for MAPGEN_MAZE. One of the MAZE_SIZE_xxx constants.
 } flib_map;
 
 /**
@@ -108,15 +106,9 @@ flib_map *flib_map_create_drawn(const char *seed, const char *theme, const uint8
 flib_map *flib_map_copy(const flib_map *map);
 
 /**
- * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
- * Returns the parameter.
- */
-flib_map *flib_map_retain(flib_map *map);
-
-/**
  * Decrease the reference count of the object and free it if this was the last reference.
  */
-void flib_map_release(flib_map *map);
+void flib_map_destroy(flib_map *map);
 
 
 #endif

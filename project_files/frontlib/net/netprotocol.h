@@ -27,8 +27,6 @@
 
 #include <stddef.h>
 
-// TODO unify naming
-
 /**
  * Create a new team from this 23-part net message
  */
@@ -38,12 +36,12 @@ flib_team *flib_team_from_netmsg(char **parts);
  * Create a new scheme from this net message, which must have
  * meta->modCount+meta->settingCount+1 parts.
  */
-flib_scheme *flib_netmsg_to_cfg(flib_metascheme *meta, char **parts);
+flib_scheme *flib_scheme_from_netmsg(flib_metascheme *meta, char **parts);
 
 /**
  * Create a new map from this five-part netmsg
  */
-flib_map *flib_netmsg_to_map(char **parts);
+flib_map *flib_map_from_netmsg(char **parts);
 
 /**
  * Decode the drawn map data from this netmessage line.
@@ -53,7 +51,7 @@ flib_map *flib_netmsg_to_map(char **parts);
  * is written to the variable pointed to by outlen.
  * Returns NULL on error.
  */
-int flib_netmsg_to_drawnmapdata(char *netmsg, uint8_t **outbuf, size_t *outlen);
+int flib_drawnmapdata_from_netmsg(char *netmsg, uint8_t **outbuf, size_t *outlen);
 
 /**
  * Create a new room from this 8-part net message

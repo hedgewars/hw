@@ -18,8 +18,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-// TODO: Check the state transitions. Document with a diagram or something
-
 #include "netconn_internal.h"
 #include "netprotocol.h"
 #include "../util/logging.h"
@@ -53,7 +51,7 @@ flib_netconn *flib_netconn_create(const char *playerName, flib_metascheme *metac
 			newConn->teamlist.teamCount = 0;
 			newConn->teamlist.teams = NULL;
 			newConn->scheme = NULL;
-			newConn->script = NULL;
+			newConn->style = NULL;
 			newConn->weaponset = NULL;
 
 			newConn->running = false;
@@ -86,11 +84,11 @@ void flib_netconn_destroy(flib_netconn *conn) {
 
 			flib_metascheme_release(conn->metaCfg);
 
-			flib_map_release(conn->map);
+			flib_map_destroy(conn->map);
 			flib_teamlist_clear(&conn->pendingTeamlist);
 			flib_teamlist_clear(&conn->teamlist);
-			flib_scheme_release(conn->scheme);
-			free(conn->script);
+			flib_scheme_destroy(conn->scheme);
+			free(conn->style);
 			flib_weaponset_release(conn->weaponset);
 
 			free(conn);
@@ -99,7 +97,7 @@ void flib_netconn_destroy(flib_netconn *conn) {
 }
 
 bool flib_netconn_is_chief(flib_netconn *conn) {
-	if(!log_badargs_if(conn==NULL) && flib_netconn_is_in_room_context(conn)) {
+	if(!log_badargs_if(conn==NULL) && conn->netconnState==NETCONN_STATE_ROOM) {
 		return conn->isChief;
 	}
 	return false;
@@ -115,26 +113,22 @@ const char *flib_netconn_get_playername(flib_netconn *conn) {
 void netconn_leaveRoom(flib_netconn *conn) {
 	conn->netconnState = NETCONN_STATE_LOBBY;
 	conn->isChief = false;
-	flib_map_release(conn->map);
+	flib_map_destroy(conn->map);
 	conn->map = flib_map_create_named("", "NoSuchMap");
 	flib_teamlist_clear(&conn->pendingTeamlist);
 	flib_teamlist_clear(&conn->teamlist);
-	flib_scheme_release(conn->scheme);
+	flib_scheme_destroy(conn->scheme);
 	conn->scheme = NULL;
-	free(conn->script);
-	conn->script = NULL;
+	free(conn->style);
+	conn->style = NULL;
 	flib_weaponset_release(conn->weaponset);
 	conn->weaponset = NULL;
-}
-
-bool flib_netconn_is_in_room_context(flib_netconn *conn) {
-	return conn && (conn->netconnState == NETCONN_STATE_ROOM || conn->netconnState == NETCONN_STATE_INGAME);
 }
 
 void netconn_setMap(flib_netconn *conn, const flib_map *map) {
 	flib_map *copy = flib_map_copy(map);
 	if(copy) {
-		flib_map_release(conn->map);
+		flib_map_destroy(conn->map);
 		conn->map = copy;
 	}
 }
@@ -150,15 +144,15 @@ void netconn_setWeaponset(flib_netconn *conn, const flib_weaponset *weaponset) {
 void netconn_setScript(flib_netconn *conn, const char *script) {
 	char *copy = flib_strdupnull(script);
 	if(copy) {
-		free(conn->script);
-		conn->script = copy;
+		free(conn->style);
+		conn->style = copy;
 	}
 }
 
 void netconn_setScheme(flib_netconn *conn, const flib_scheme *scheme) {
 	flib_scheme *copy = flib_scheme_copy(scheme);
 	if(copy) {
-		flib_scheme_release(conn->scheme);
+		flib_scheme_destroy(conn->scheme);
 		conn->scheme = copy;
 	}
 }
@@ -172,7 +166,7 @@ flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn) {
 			flib_gamesetup stackSetup = {0};
 			stackSetup.gamescheme = conn->scheme;
 			stackSetup.map = conn->map;
-			stackSetup.script = conn->script;
+			stackSetup.style = conn->style;
 			stackSetup.teamlist = &conn->teamlist;
 			flib_gamesetup *tmpSetup = flib_gamesetup_copy(&stackSetup);
 			if(tmpSetup) {
@@ -322,7 +316,7 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 				}
 	        }
 	    } else if (!strcmp(cmd, "ADD_TEAM")) {
-	        if(netmsg->partCount != 24 || !flib_netconn_is_in_room_context(conn)) {
+	        if(netmsg->partCount != 24 || conn->netconnState!=NETCONN_STATE_ROOM) {
 	            flib_log_w("Net: Bad ADD_TEAM message");
 	        } else {
 	        	flib_team *team = flib_team_from_netmsg(netmsg->parts+1);
@@ -337,7 +331,7 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	        	}
 	        }
 	    } else if (!strcmp(cmd, "REMOVE_TEAM")) {
-	        if(netmsg->partCount != 2 || !flib_netconn_is_in_room_context(conn)) {
+	        if(netmsg->partCount != 2 || conn->netconnState!=NETCONN_STATE_ROOM) {
 	            flib_log_w("Net: Bad REMOVETEAM message");
 	        } else {
 	        	flib_teamlist_delete(&conn->teamlist, netmsg->parts[1]);
@@ -410,8 +404,6 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	        	conn->onLobbyLeaveCb(conn->onLobbyLeaveCtx, netmsg->parts[1], netmsg->partCount>2 ? netmsg->parts[2] : NULL);
 	        }
 	    } else if (!strcmp(cmd, "RUN_GAME")) {
-	        conn->netconnState = NETCONN_STATE_INGAME;
-	        // TODO send along the config
 	        conn->onRunGameCb(conn->onRunGameCtx);
 	    } else if (!strcmp(cmd, "ASKPASSWORD")) {
 	    	conn->onPasswordRequestCb(conn->onPasswordRequestCtx, conn->playerName);
@@ -430,10 +422,10 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 				}
 	        }
 	    } else if (!strcmp(cmd, "TEAM_ACCEPTED")) {
-	        if (netmsg->partCount != 2 || !flib_netconn_is_in_room_context(conn)) {
+	        if (netmsg->partCount != 2 || conn->netconnState!=NETCONN_STATE_ROOM) {
 	            flib_log_w("Net: Bad TEAM_ACCEPTED message");
 	        } else {
-	        	flib_team *team = flib_teamlist_find(&conn->pendingTeamlist, netmsg->parts[1]);
+	        	flib_team *team = flib_team_copy(flib_teamlist_find(&conn->pendingTeamlist, netmsg->parts[1]));
 	        	if(team) {
 	        		flib_teamlist_insert(&conn->teamlist, team, conn->teamlist.teamCount);
 	        		flib_teamlist_delete(&conn->pendingTeamlist, netmsg->parts[1]);
@@ -443,28 +435,28 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	        	conn->onTeamAcceptedCb(conn->onTeamAcceptedCtx, netmsg->parts[1]);
 	        }
 	    } else if (!strcmp(cmd, "CFG")) {
-	        if(netmsg->partCount < 3 || !flib_netconn_is_in_room_context(conn)) {
+	        if(netmsg->partCount < 3 || conn->netconnState!=NETCONN_STATE_ROOM) {
 	            flib_log_w("Net: Bad CFG message");
 	        } else {
 	        	const char *subcmd = netmsg->parts[1];
 				if(!strcmp(subcmd, "SCHEME") && netmsg->partCount == conn->metaCfg->modCount + conn->metaCfg->settingCount + 3) {
-					flib_scheme *cfg = flib_netmsg_to_cfg(conn->metaCfg, netmsg->parts+2);
+					flib_scheme *cfg = flib_scheme_from_netmsg(conn->metaCfg, netmsg->parts+2);
 					if(cfg) {
-						netconn_setScheme(conn, cfg);
+						flib_scheme_destroy(conn->scheme);
+						conn->scheme = cfg;
 						conn->onCfgSchemeCb(conn->onCfgSchemeCtx, cfg);
 					} else {
 						flib_log_e("Error processing CFG SCHEME message");
 					}
-					flib_scheme_release(cfg);
 				} else if(!strcmp(subcmd, "FULLMAPCONFIG") && netmsg->partCount == 7) {
-					flib_map *map = flib_netmsg_to_map(netmsg->parts+2);
+					flib_map *map = flib_map_from_netmsg(netmsg->parts+2);
 					if(map) {
-						netconn_setMap(conn, map);
+						flib_map_destroy(conn->map);
+						conn->map = map;
 						conn->onMapChangedCb(conn->onMapChangedCtx, conn->map, NETCONN_MAPCHANGE_FULL);
 					} else {
 						flib_log_e("Error processing CFG FULLMAPCONFIG message");
 					}
-					flib_map_release(map);
 				} else if(!strcmp(subcmd, "MAP") && netmsg->partCount == 3) {
 					char *mapname = flib_strdupnull(netmsg->parts[2]);
 					if(mapname) {
@@ -504,7 +496,7 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 				} else if(!strcmp(subcmd, "DRAWNMAP") && netmsg->partCount == 3) {
 					size_t drawnMapSize = 0;
 					uint8_t *drawnMapData = NULL;
-					if(!flib_netmsg_to_drawnmapdata(netmsg->parts[2], &drawnMapData, &drawnMapSize)) {
+					if(!flib_drawnmapdata_from_netmsg(netmsg->parts[2], &drawnMapData, &drawnMapSize)) {
 						free(conn->map->drawData);
 						conn->map->drawData = drawnMapData;
 						conn->map->drawDataSize = drawnMapSize;
@@ -529,7 +521,7 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 				}
 	        }
 	    } else if (!strcmp(cmd, "HH_NUM")) {
-	        if (netmsg->partCount != 3 || !flib_netconn_is_in_room_context(conn)) {
+	        if (netmsg->partCount != 3 || conn->netconnState!=NETCONN_STATE_ROOM) {
 	            flib_log_w("Net: Bad HH_NUM message");
 	        } else {
 	        	int hogs = atoi(netmsg->parts[2]);
@@ -546,11 +538,11 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	        	}
 	        }
 	    } else if (!strcmp(cmd, "TEAM_COLOR")) {
-	        if (netmsg->partCount != 3 || !flib_netconn_is_in_room_context(conn)) {
+	        if (netmsg->partCount != 3 || conn->netconnState!=NETCONN_STATE_ROOM) {
 	            flib_log_w("Net: Bad TEAM_COLOR message");
 	        } else {
 	        	long color;
-	        	if(sscanf(netmsg->parts[2], "%lu", &color) && color>=0 && color<flib_teamcolor_defaults_len) {
+	        	if(sscanf(netmsg->parts[2], "%lu", &color) && color>=0 && color<flib_teamcolor_count) {
 	        		flib_team *team = flib_teamlist_find(&conn->teamlist, netmsg->parts[1]);
 	        		if(team) {
 	        			team->colorIndex = color;

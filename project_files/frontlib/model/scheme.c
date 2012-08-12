@@ -48,16 +48,6 @@ static void flib_metascheme_destroy(flib_metascheme *meta) {
 	}
 }
 
-static void flib_scheme_destroy(flib_scheme* scheme) {
-	if(scheme) {
-		flib_metascheme_release(scheme->meta);
-		free(scheme->mods);
-		free(scheme->settings);
-		free(scheme->name);
-		free(scheme);
-	}
-}
-
 static flib_metascheme *flib_metascheme_from_ini_handleError(flib_metascheme *result, flib_ini *ini) {
 	flib_metascheme_destroy(result);
 	flib_ini_destroy(ini);
@@ -166,7 +156,7 @@ void flib_metascheme_release(flib_metascheme *meta) {
 }
 
 flib_scheme *flib_scheme_create(flib_metascheme *meta, const char *schemeName) {
-	flib_scheme *result = flib_scheme_retain(flib_calloc(1, sizeof(flib_scheme)));
+	flib_scheme *result = flib_calloc(1, sizeof(flib_scheme));
 	if(log_badargs_if2(meta==NULL, schemeName==NULL) || result==NULL) {
 		return NULL;
 	}
@@ -199,16 +189,13 @@ flib_scheme *flib_scheme_copy(const flib_scheme *scheme) {
 	return result;
 }
 
-flib_scheme *flib_scheme_retain(flib_scheme *scheme) {
+void flib_scheme_destroy(flib_scheme* scheme) {
 	if(scheme) {
-		flib_retain(&scheme->_referenceCount, "flib_scheme");
-	}
-	return scheme;
-}
-
-void flib_scheme_release(flib_scheme *scheme) {
-	if(scheme && flib_release(&scheme->_referenceCount, "flib_scheme")) {
-		flib_scheme_destroy(scheme);
+		flib_metascheme_release(scheme->meta);
+		free(scheme->mods);
+		free(scheme->settings);
+		free(scheme->name);
+		free(scheme);
 	}
 }
 

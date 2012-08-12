@@ -14,7 +14,7 @@ LOCAL_SRC_FILES := base64/base64.c iniparser/iniparser.c \
 	net/netbase.c net/netconn_callbacks.c net/netconn_send.c \
 	net/netconn.c net/netprotocol.c util/buffer.c util/inihelper.c \
 	util/logging.c util/refcounter.c util/util.c frontlib.c \
-	hwconsts.c socket.c
+	hwconsts.c socket.c extra/jnacontrol.c
 
 LOCAL_SHARED_LIBRARIES += SDL_net
 LOCAL_LDLIBS += -lz
