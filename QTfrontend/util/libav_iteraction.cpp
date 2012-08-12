@@ -95,6 +95,9 @@ LibavIteraction::LibavIteraction()
         if (strcmp(pCodec->name, "real_144") == 0)
             continue;
 
+        if (!pCodec->long_name || strlen(pCodec->long_name) == 0)
+            continue;
+
         if (pCodec->type == AVMEDIA_TYPE_VIDEO)
         {
             if (pCodec->supported_framerates != NULL)
@@ -120,7 +123,7 @@ LibavIteraction::LibavIteraction()
                 continue;
             bool s16Supported = false;
             for (const AVSampleFormat* pfmt = pCodec->sample_fmts; *pfmt != -1; pfmt++)
-                if (*pfmt == AV_SAMPLE_FMT_S16/* || *pfmt == AV_SAMPLE_FMT_FLT*/)
+                if (*pfmt == AV_SAMPLE_FMT_S16)
                 {
                     s16Supported = true;
                     break;
@@ -159,7 +162,7 @@ LibavIteraction::LibavIteraction()
             codec.isRecomended = true;
 
         // FIXME: remove next line
-        codec.longName += QString(" (%1)").arg(codec.shortName);
+        //codec.longName += QString(" (%1)").arg(codec.shortName);
     }
 
     // get list of all formats
@@ -193,7 +196,7 @@ LibavIteraction::LibavIteraction()
         format.longName = QString("%1 (*.%2)").arg(pFormat->long_name).arg(ext);
 
         // FIXME: remove next line
-        format.longName += QString(" (%1)").arg(format.shortName);
+        //format.longName += QString(" (%1)").arg(format.shortName);
 
         format.isRecomended = strcmp(pFormat->name, "mp4") == 0 || strcmp(pFormat->name, "avi") == 0;
 
