@@ -469,9 +469,9 @@ processAction (BanIP ip seconds reason) = do
 
 processAction BanList = do
     ch <- client's sendChan
-    bans <- gets (bans . serverInfo)
+    bans <- gets (B.pack . unlines . map show . bans . serverInfo)
     processAction $
-        AnswerClients [ch] ["BANLIST", B.pack $ show bans]
+        AnswerClients [ch] ["BANLIST", bans]
 
 
 
