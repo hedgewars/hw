@@ -507,6 +507,30 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
+    if(netClientState == InLobby && lst[0] == "JOINED")
+    {
+        if(lst.size() < 2 || lst[1] != mynick)
+        {
+            qWarning("Net: Bad JOINED message");
+            return;
+        }
+
+        for(int i = 1; i < lst.size(); ++i)
+        {
+            if (lst[i] == mynick)
+            {
+                netClientState = InRoom;
+                emit EnteredGame();
+                emit roomMaster(isChief);
+                if (isChief)
+                    emit configAsked();
+            }
+
+            emit nickAdded(lst[i], isChief && (lst[i] != mynick));
+            emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
+        }
+        return;
+    }
 
     if(netClientState == InRoom)
     {
@@ -628,15 +652,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             for(int i = 1; i < lst.size(); ++i)
             {
-                if (lst[i] == mynick)
-                {
-                    netClientState = InRoom;
-                    emit EnteredGame();
-                    emit roomMaster(isChief);
-                    if (isChief)
-                        emit configAsked();
-                }
-
                 emit nickAdded(lst[i], isChief && (lst[i] != mynick));
                 emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
             }
