@@ -92,14 +92,14 @@
 #define NETCONN_MAPCHANGE_THEME 6
 #define NETCONN_MAPCHANGE_SEED 7
 
-// TODO: Order of functions, and match the order in netconn.c
+// TODO: Order these functions, and match the order in netconn.c
 typedef struct _flib_netconn flib_netconn;
 
 /**
  * Create a new netplay connection with these parameters.
  * The path to the data directory must end with a path delimiter (e.g. C:\Games\Hedgewars\Data\)
  */
-flib_netconn *flib_netconn_create(const char *playerName, flib_metascheme *metacfg, const char *dataDirPath, const char *host, int port);
+flib_netconn *flib_netconn_create(const char *playerName, const char *dataDirPath, const char *host, int port);
 void flib_netconn_destroy(flib_netconn *conn);
 
 /**

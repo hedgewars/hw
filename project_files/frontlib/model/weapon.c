@@ -22,19 +22,11 @@
 #include "../util/inihelper.h"
 #include "../util/logging.h"
 #include "../util/util.h"
-#include "../util/refcounter.h"
 #include "../util/list.h"
 
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-
-static void flib_weaponset_destroy(flib_weaponset *cfg) {
-	if(cfg) {
-		free(cfg->name);
-		free(cfg);
-	}
-}
 
 static void setField(char field[WEAPONS_COUNT+1], const char *line, int lineLen, bool no9) {
 	if(lineLen>WEAPONS_COUNT) {
@@ -60,7 +52,7 @@ static void setField(char field[WEAPONS_COUNT+1], const char *line, int lineLen,
 flib_weaponset *flib_weaponset_create(const char *name) {
 	flib_weaponset *result = NULL;
 	if(!log_badargs_if(name==NULL)) {
-		flib_weaponset *newSet = flib_weaponset_retain(flib_calloc(1, sizeof(flib_weaponset)));
+		flib_weaponset *newSet = flib_calloc(1, sizeof(flib_weaponset));
 		if(newSet) {
 			newSet->name = flib_strdupnull(name);
 			if(newSet->name) {
@@ -68,24 +60,19 @@ flib_weaponset *flib_weaponset_create(const char *name) {
 				setField(newSet->crateprob, "", 0, false);
 				setField(newSet->crateammo, "", 0, false);
 				setField(newSet->delay, "", 0, false);
-				result = flib_weaponset_retain(newSet);
+				result = newSet;
+				newSet = NULL;
 			}
 		}
-		flib_weaponset_release(newSet);
+		flib_weaponset_destroy(newSet);
 	}
 	return result;
 }
 
-flib_weaponset *flib_weaponset_retain(flib_weaponset *weaponset) {
-	if(weaponset) {
-		flib_retain(&weaponset->_referenceCount, "flib_weaponset");
-	}
-	return weaponset;
-}
-
-void flib_weaponset_release(flib_weaponset *weaponset) {
-	if(weaponset && flib_release(&weaponset->_referenceCount, "flib_weaponset")) {
-		flib_weaponset_destroy(weaponset);
+void flib_weaponset_destroy(flib_weaponset *cfg) {
+	if(cfg) {
+		free(cfg->name);
+		free(cfg);
 	}
 }
 
@@ -108,7 +95,7 @@ flib_weaponset *flib_weaponset_copy(const flib_weaponset *weaponset) {
 void flib_weaponsetlist_destroy(flib_weaponsetlist *list) {
 	if(list) {
 		for(int i=0; i<list->weaponsetCount; i++) {
-			flib_weaponset_release(list->weaponsets[i]);
+			flib_weaponset_destroy(list->weaponsets[i]);
 		}
 		free(list->weaponsets);
 		free(list);
@@ -139,8 +126,10 @@ static int fillWeaponsetFromIni(flib_weaponsetlist *list, flib_ini *ini, int ind
 		flib_weaponset *set = flib_weaponset_from_ammostring(decodedKeyname, ammostring);
 		if(set) {
 			result = flib_weaponsetlist_insert(list, set, list->weaponsetCount);
+			if(result) {
+				flib_weaponset_destroy(set);
+			}
 		}
-		flib_weaponset_release(set);
 	}
 	free(ammostring);
 	free(decodedKeyname);
@@ -228,7 +217,6 @@ GENERATE_STATIC_LIST_DELETE(deleteWeaponset, flib_weaponset*)
 int flib_weaponsetlist_insert(flib_weaponsetlist *list, flib_weaponset *set, int pos) {
 	if(!log_badargs_if2(list==NULL, set==NULL)
 			&& !insertWeaponset(&list->weaponsets, &list->weaponsetCount, set, pos)) {
-		flib_weaponset_retain(set);
 		return 0;
 	}
 	return -1;
@@ -238,7 +226,7 @@ int flib_weaponsetlist_delete(flib_weaponsetlist *list, int pos) {
 	if(!log_badargs_if(list==NULL)) {
 		flib_weaponset *elem = list->weaponsets[pos];
 		if(!deleteWeaponset(&list->weaponsets, &list->weaponsetCount, pos)) {
-			flib_weaponset_release(elem);
+			flib_weaponset_destroy(elem);
 			return 0;
 		}
 	}

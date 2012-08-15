@@ -28,10 +28,8 @@
  *
  * For loadout, 9 means inifinite ammo.
  * For the other setting, 9 is invalid.
- * TODO stop reference counting, it complects everything
  */
 typedef struct {
-	int _referenceCount;
 	char loadout[WEAPONS_COUNT+1];
 	char crateprob[WEAPONS_COUNT+1];
 	char crateammo[WEAPONS_COUNT+1];
@@ -54,15 +52,9 @@ typedef struct {
 flib_weaponset *flib_weaponset_create(const char *name);
 
 /**
- * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
- * Returns the parameter.
+ * Free the memory used by this weaponset
  */
-flib_weaponset *flib_weaponset_retain(flib_weaponset *weaponset);
-
-/**
- * Decrease the reference count of the object and free it if this was the last reference.
- */
-void flib_weaponset_release(flib_weaponset *weaponset);
+void flib_weaponset_destroy(flib_weaponset *weaponset);
 
 flib_weaponset *flib_weaponset_copy(const flib_weaponset *weaponset);
 
@@ -97,14 +89,14 @@ void flib_weaponsetlist_destroy(flib_weaponsetlist *list);
 /**
  * Insert a new weaponset into the list at position pos, moving all higher weaponsets to make place.
  * pos must be at least 0 (insert at the start) and at most list->weaponsetCount (insert at the end).
- * The weaponset is retained automatically.
+ * Ownership of the weaponset is transferred to the list.
  * Returns 0 on success.
  */
 int flib_weaponsetlist_insert(flib_weaponsetlist *list, flib_weaponset *weaponset, int pos);
 
 /**
  * Delete a weaponset from the list at position pos, moving down all higher weaponsets.
- * The weaponset is released automatically.
+ * The weaponset is destroyed.
  * Returns 0 on success.
  */
 int flib_weaponsetlist_delete(flib_weaponsetlist *list, int pos);

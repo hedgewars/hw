@@ -36,7 +36,7 @@ flib_team *flib_team_from_netmsg(char **parts);
  * Create a new scheme from this net message, which must have
  * meta->modCount+meta->settingCount+1 parts.
  */
-flib_scheme *flib_scheme_from_netmsg(flib_metascheme *meta, char **parts);
+flib_scheme *flib_scheme_from_netmsg(char **parts);
 
 /**
  * Create a new map from this five-part netmsg

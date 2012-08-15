@@ -43,8 +43,6 @@ struct _flib_netconn {
 	int netconnState;			// One of the NETCONN_STATE constants
 	bool isAdmin;				// Player is server administrator
 
-	flib_metascheme *metaCfg;
-
 	bool isChief;				// Player can modify the current room
 	flib_map *map;
 	flib_teamlist pendingTeamlist;

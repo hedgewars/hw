@@ -22,7 +22,6 @@
 #include "../util/inihelper.h"
 #include "../util/util.h"
 #include "../util/logging.h"
-#include "../util/refcounter.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -135,7 +134,7 @@ void flib_team_destroy(flib_team *team) {
 		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
 			free(team->hogs[i].name);
 			free(team->hogs[i].hat);
-			flib_weaponset_release(team->hogs[i].weaponset);
+			flib_weaponset_destroy(team->hogs[i].weaponset);
 		}
 		free(team->name);
 		free(team->grave);
@@ -234,13 +233,17 @@ int flib_team_to_ini(const char *filename, const flib_team *team) {
 	return result;
 }
 
-void flib_team_set_weaponset(flib_team *team, flib_weaponset *set) {
+int flib_team_set_weaponset(flib_team *team, const flib_weaponset *set) {
 	if(team) {
 		for(int i=0; i<HEDGEHOGS_PER_TEAM; i++) {
-			flib_weaponset_release(team->hogs[i].weaponset);
-			team->hogs[i].weaponset = flib_weaponset_retain(set);
+			flib_weaponset_destroy(team->hogs[i].weaponset);
+			team->hogs[i].weaponset = flib_weaponset_copy(set);
+			if(set && !team->hogs[i].weaponset) {
+				return -1;
+			}
 		}
 	}
+	return 0;
 }
 
 void flib_team_set_health(flib_team *team, int health) {
@@ -275,7 +278,10 @@ flib_team *flib_team_copy(const flib_team *team) {
 				tmpTeam->hogs[i].suicides = team->hogs[i].suicides;
 				tmpTeam->hogs[i].difficulty = team->hogs[i].difficulty;
 				tmpTeam->hogs[i].initialHealth = team->hogs[i].initialHealth;
-				tmpTeam->hogs[i].weaponset = flib_weaponset_retain(team->hogs[i].weaponset);
+				tmpTeam->hogs[i].weaponset = flib_weaponset_copy(team->hogs[i].weaponset);
+				if(team->hogs[i].weaponset && !tmpTeam->hogs[i].weaponset) {
+					error = true;
+				}
 			}
 
 			tmpTeam->name = strdupWithError(team->name, &error);

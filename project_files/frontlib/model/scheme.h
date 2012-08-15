@@ -21,79 +21,33 @@
  * Data structures for game scheme information.
  *
  * The scheme consists of settings (integers) and mods (booleans). These are not fixed, but
- * described in a "metascheme" file, which describes how each setting and mod is sent to the
- * engine, and in which order they appear in the network protocol.
+ * described in a "metascheme", which describes how each setting and mod is sent to the
+ * engine, and in which order they appear in the network protocol. The metascheme is defined
+ * in hwconsts.h
  */
 
 #ifndef SCHEME_H_
 #define SCHEME_H_
 
 #include <stdbool.h>
-
-typedef struct {
-    char *name;				// A name identifying this setting (used as key in the schemes file)
-    char *engineCommand;	// The command needed to send the setting to the engine. May be null if the setting is not sent to the engine (for the "health" setting)
-    bool maxMeansInfinity;	// If true, send a very high number to the engine if the setting is equal to its maximum
-    bool times1000;			// If true (for time-based settings), multiply the setting by 1000 before sending it to the engine.
-    int min;				// The smallest allowed value
-    int max;				// The highest allowed value
-    int def;				// The default value
-} flib_metascheme_setting;
-
-typedef struct {
-    char *name;				// A name identifying this mod (used as key in the schemes file)
-    int bitmaskIndex;		// Mods are sent to the engine in a single integer, this field describes which bit of that integer is used
-    						// for this particular mod.
-} flib_metascheme_mod;
-
-/**
- * The order of the meta information in the arrays is the same as the order
- * of the mod/setting information in the net protocol messages.
- */
-typedef struct {
-	int _referenceCount;
-	int settingCount;
-	int modCount;
-	flib_metascheme_setting *settings;
-	flib_metascheme_mod *mods;
-} flib_metascheme;
+#include <stddef.h>
+#include "../hwconsts.h"
 
 /**
  * The settings and mods arrays have the same number and order of elements
  * as the corresponding arrays in the metascheme.
  */
 typedef struct {
-	flib_metascheme *meta;
-
     char *name;
     int *settings;
     bool *mods;
 } flib_scheme;
 
 /**
- * Read the meta-configuration from a .ini file (e.g. which settings exist,
- * what are their defaults etc.)
- *
- * Returns the meta-configuration or NULL.
- */
-flib_metascheme *flib_metascheme_from_ini(const char *filename);
-
-/**
- * Increase the reference count of the object. Call this if you store a pointer to it somewhere.
- * Returns the parameter.
- */
-flib_metascheme *flib_metascheme_retain(flib_metascheme *metainfo);
-
-/**
- * Decrease the reference count of the object and free it if this was the last reference.
- */
-void flib_metascheme_release(flib_metascheme *metainfo);
-
-/**
  * Create a new configuration with everything set to default or false
  * Returns NULL on error.
  */
-flib_scheme *flib_scheme_create(flib_metascheme *meta, const char *schemeName);
+flib_scheme *flib_scheme_create(const char *schemeName);
 
 /**
  * Create a copy of the scheme. Returns NULL on error or if NULL was passed.
@@ -108,11 +62,11 @@ void flib_scheme_destroy(flib_scheme* scheme);
 /**
  * Retrieve a mod setting by its name. If the mod is not found, logs an error and returns false.
  */
-bool flib_scheme_get_mod(flib_scheme *scheme, const char *name);
+bool flib_scheme_get_mod(const flib_scheme *scheme, const char *name);
 
 /**
  * Retrieve a game setting by its name. If the setting is not found, logs an error and returns def.
  */
-int flib_scheme_get_setting(flib_scheme *scheme, const char *name, int def);
+int flib_scheme_get_setting(const flib_scheme *scheme, const char *name, int def);
 
 #endif /* SCHEME_H_ */

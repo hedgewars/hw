@@ -22,7 +22,6 @@
 #include "../util/inihelper.h"
 #include "../util/util.h"
 #include "../util/logging.h"
-#include "../util/refcounter.h"
 
 #include <stdlib.h>
 

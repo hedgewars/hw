@@ -31,9 +31,9 @@
 #include <errno.h>
 #include <ctype.h>
 
-flib_netconn *flib_netconn_create(const char *playerName, flib_metascheme *metacfg, const char *dataDirPath, const char *host, int port) {
+flib_netconn *flib_netconn_create(const char *playerName, const char *dataDirPath, const char *host, int port) {
 	flib_netconn *result = NULL;
-	if(!log_badargs_if5(playerName==NULL, metacfg==NULL, host==NULL, port<1, port>65535)) {
+	if(!log_badargs_if4(playerName==NULL, host==NULL, port<1, port>65535)) {
 		flib_netconn *newConn = flib_calloc(1, sizeof(flib_netconn));
 		if(newConn) {
 			newConn->netBase = flib_netbase_create(host, port);
@@ -42,7 +42,6 @@ flib_netconn *flib_netconn_create(const char *playerName, flib_metascheme *metac
 
 			newConn->netconnState = NETCONN_STATE_CONNECTING;
 			newConn->isAdmin = false;
-			newConn->metaCfg = flib_metascheme_retain(metacfg);
 
 			newConn->isChief = false;
 			newConn->map = flib_map_create_named("", "NoSuchMap");
@@ -82,14 +81,12 @@ void flib_netconn_destroy(flib_netconn *conn) {
 			free(conn->playerName);
 			free(conn->dataDirPath);
 
-			flib_metascheme_release(conn->metaCfg);
-
 			flib_map_destroy(conn->map);
 			flib_teamlist_clear(&conn->pendingTeamlist);
 			flib_teamlist_clear(&conn->teamlist);
 			flib_scheme_destroy(conn->scheme);
 			free(conn->style);
-			flib_weaponset_release(conn->weaponset);
+			flib_weaponset_destroy(conn->weaponset);
 
 			free(conn);
 		}
@@ -121,7 +118,7 @@ void netconn_leaveRoom(flib_netconn *conn) {
 	conn->scheme = NULL;
 	free(conn->style);
 	conn->style = NULL;
-	flib_weaponset_release(conn->weaponset);
+	flib_weaponset_destroy(conn->weaponset);
 	conn->weaponset = NULL;
 }
 
@@ -136,7 +133,7 @@ void netconn_setMap(flib_netconn *conn, const flib_map *map) {
 void netconn_setWeaponset(flib_netconn *conn, const flib_weaponset *weaponset) {
 	flib_weaponset *copy = flib_weaponset_copy(weaponset);
 	if(copy) {
-		flib_weaponset_release(conn->weaponset);
+		flib_weaponset_destroy(conn->weaponset);
 		conn->weaponset = copy;
 	}
 }
@@ -168,20 +165,30 @@ flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn) {
 			stackSetup.map = conn->map;
 			stackSetup.style = conn->style;
 			stackSetup.teamlist = &conn->teamlist;
-			flib_gamesetup *tmpSetup = flib_gamesetup_copy(&stackSetup);
-			if(tmpSetup) {
-				for(int i=0; i<tmpSetup->teamlist->teamCount; i++) {
-					flib_team_set_weaponset(tmpSetup->teamlist->teams[i], conn->weaponset);
-					flib_team_set_health(tmpSetup->teamlist->teams[i], flib_scheme_get_setting(conn->scheme, "health", 100));
-				}
-				if(tmpSetup->map->mapgen == MAPGEN_NAMED && tmpSetup->map->name) {
-					flib_mapcfg mapcfg;
-					if(!flib_mapcfg_read(conn->dataDirPath, tmpSetup->map->name, &mapcfg)) {
-						free(tmpSetup->map->theme);
-						tmpSetup->map->theme = flib_strdupnull(mapcfg.theme);
-					} else {
-						flib_log_e("Unable to read map config for map %s", tmpSetup->map->name);
+			result = flib_gamesetup_copy(&stackSetup);
+			if(result) {
+				bool error = false;
+				for(int i=0; i<result->teamlist->teamCount; i++) {
+					if(flib_team_set_weaponset(result->teamlist->teams[i], conn->weaponset)) {
+						error = true;
 					}
+					flib_team_set_health(result->teamlist->teams[i], flib_scheme_get_setting(conn->scheme, "health", 100));
+				}
+				if(result->map->mapgen == MAPGEN_NAMED && result->map->name) {
+					flib_mapcfg mapcfg;
+					if(!flib_mapcfg_read(conn->dataDirPath, result->map->name, &mapcfg)) {
+						free(result->map->theme);
+						result->map->theme = flib_strdupnull(mapcfg.theme);
+						if(!result->map->theme) {
+							error = true;
+						}
+					} else {
+						flib_log_e("Unable to read map config for map %s", result->map->name);
+					}
+				}
+				if(error) {
+					flib_gamesetup_destroy(result);
+					result = NULL;
 				}
 			}
 		}
@@ -439,8 +446,8 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 	            flib_log_w("Net: Bad CFG message");
 	        } else {
 	        	const char *subcmd = netmsg->parts[1];
-				if(!strcmp(subcmd, "SCHEME") && netmsg->partCount == conn->metaCfg->modCount + conn->metaCfg->settingCount + 3) {
-					flib_scheme *cfg = flib_scheme_from_netmsg(conn->metaCfg, netmsg->parts+2);
+				if(!strcmp(subcmd, "SCHEME") && netmsg->partCount == flib_meta.modCount + flib_meta.settingCount + 3) {
+					flib_scheme *cfg = flib_scheme_from_netmsg(netmsg->parts+2);
 					if(cfg) {
 						flib_scheme_destroy(conn->scheme);
 						conn->scheme = cfg;
@@ -510,12 +517,12 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 				} else if(!strcmp(subcmd, "AMMO") && netmsg->partCount == 4) {
 					flib_weaponset *weapons = flib_weaponset_from_ammostring(netmsg->parts[2], netmsg->parts[3]);
 					if(weapons) {
-						netconn_setWeaponset(conn, weapons);
+						flib_weaponset_destroy(conn->weaponset);
+						conn->weaponset = weapons;
 						conn->onWeaponsetChangedCb(conn->onWeaponsetChangedCtx, weapons);
 					} else {
 						flib_log_e("Error processing CFG AMMO message");
 					}
-					flib_weaponset_release(weapons);
 				} else {
 					flib_log_w("Net: Unknown or malformed CFG subcommand: %s", subcmd);
 				}

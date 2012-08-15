@@ -22,7 +22,6 @@
 #include "../util/inihelper.h"
 #include "../util/logging.h"
 #include "../util/util.h"
-#include "../util/refcounter.h"
 #include "../util/list.h"
 
 #include <stdio.h>
@@ -35,13 +34,12 @@ static char *makePrefixedName(int schemeIndex, const char *settingName) {
 }
 
 static int readSettingsFromIni(flib_ini *ini, flib_scheme *scheme, int index) {
-	flib_metascheme *meta = scheme->meta;
 	bool error = false;
-	for(int i=0; i<meta->settingCount && !error; i++) {
-		char *key = makePrefixedName(index, meta->settings[i].name);
+	for(int i=0; i<flib_meta.settingCount && !error; i++) {
+		char *key = makePrefixedName(index, flib_meta.settings[i].name);
 		if(!key) {
 			error = true;
-		} else if(flib_ini_get_int_opt(ini, &scheme->settings[i], key, meta->settings[i].def)) {
+		} else if(flib_ini_get_int_opt(ini, &scheme->settings[i], key, flib_meta.settings[i].def)) {
 			flib_log_e("Error reading setting %s in schemes file.", key);
 			error = true;
 		}
@@ -51,10 +49,9 @@ static int readSettingsFromIni(flib_ini *ini, flib_scheme *scheme, int index) {
 }
 
 static int readModsFromIni(flib_ini *ini, flib_scheme *scheme, int index) {
-	flib_metascheme *meta = scheme->meta;
 	bool error = false;
-	for(int i=0; i<meta->modCount && !error; i++) {
-		char *key = makePrefixedName(index, meta->mods[i].name);
+	for(int i=0; i<flib_meta.modCount && !error; i++) {
+		char *key = makePrefixedName(index, flib_meta.mods[i].name);
 		if(!key) {
 			error = true;
 		} else if(flib_ini_get_bool_opt(ini, &scheme->mods[i], key, false)) {
@@ -66,13 +63,13 @@ static int readModsFromIni(flib_ini *ini, flib_scheme *scheme, int index) {
 	return error;
 }
 
-static flib_scheme *readSchemeFromIni(flib_metascheme *meta, flib_ini *ini, int index) {
+static flib_scheme *readSchemeFromIni(flib_ini *ini, int index) {
 	flib_scheme *result = NULL;
 	char *schemeNameKey = makePrefixedName(index+1, "name");
 	if(schemeNameKey) {
 		char *schemeName = NULL;
 		if(!flib_ini_get_str_opt(ini, &schemeName, schemeNameKey, "Unnamed")) {
-			flib_scheme *tmpScheme = flib_scheme_create(meta, schemeName);
+			flib_scheme *tmpScheme = flib_scheme_create(schemeName);
 			if(tmpScheme) {
 				if(!readSettingsFromIni(ini, tmpScheme, index) && !readModsFromIni(ini, tmpScheme, index)) {
 					result = tmpScheme;
@@ -93,8 +90,8 @@ static flib_schemelist *fromIniHandleError(flib_schemelist *result, flib_ini *in
 	return NULL;
 }
 
-flib_schemelist *flib_schemelist_from_ini(flib_metascheme *meta, const char *filename) {
-	if(log_badargs_if2(meta==NULL, filename==NULL)) {
+flib_schemelist *flib_schemelist_from_ini(const char *filename) {
+	if(log_badargs_if(filename==NULL)) {
 		return NULL;
 	}
 
@@ -117,7 +114,7 @@ flib_schemelist *flib_schemelist_from_ini(flib_metascheme *meta, const char *fil
 	}
 
 	for(int i=0; i<schemeCount; i++) {
-		flib_scheme *scheme = readSchemeFromIni(meta, ini, i);
+		flib_scheme *scheme = readSchemeFromIni(ini, i);
 		if(!scheme || flib_schemelist_insert(list, scheme, i)) {
 			flib_scheme_destroy(scheme);
 			flib_log_e("Error reading scheme %i from config file %s.", i, filename);
@@ -131,21 +128,20 @@ flib_schemelist *flib_schemelist_from_ini(flib_metascheme *meta, const char *fil
 }
 
 static int writeSchemeToIni(const flib_scheme *scheme, flib_ini *ini, int index) {
-	flib_metascheme *meta = scheme->meta;
 	bool error = false;
 
 	char *key = makePrefixedName(index+1, "name");
 	error |= !key || flib_ini_set_str(ini, key, scheme->name);
 	free(key);
 
-	for(int i=0; i<meta->modCount && !error; i++) {
-		char *key = makePrefixedName(index+1, meta->mods[i].name);
+	for(int i=0; i<flib_meta.modCount && !error; i++) {
+		char *key = makePrefixedName(index+1, flib_meta.mods[i].name);
 		error |= !key || flib_ini_set_bool(ini, key, scheme->mods[i]);
 		free(key);
 	}
 
-	for(int i=0; i<meta->settingCount && !error; i++) {
-		char *key = makePrefixedName(index+1, meta->settings[i].name);
+	for(int i=0; i<flib_meta.settingCount && !error; i++) {
+		char *key = makePrefixedName(index+1, flib_meta.settings[i].name);
 		error |= !key || flib_ini_set_int(ini, key, scheme->settings[i]);
 		free(key);
 	}

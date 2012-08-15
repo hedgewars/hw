@@ -31,6 +31,7 @@
 
 #include <inttypes.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 #define HEDGEHOGS_PER_TEAM 8
 #define NETGAME_DEFAULT_PORT 46631
@@ -77,5 +78,37 @@ int flib_get_hedgehogs_per_team();
  * Returns the WEAPONS_COUNT constant
  */
 int flib_get_weapons_count();
+
+/*
+ * These structs define the meaning of values in the flib_scheme struct, i.e. their correspondence to
+ * ini settings, engine commands and positions in the network protocol (the last is encoded in the
+ * order of settings/mods).
+ */
+typedef struct {
+    const char *name;				// A name identifying this setting (used as key in the schemes file)
+    const char *engineCommand;		// The command needed to send the setting to the engine. May be null if the setting is not sent to the engine (for the "health" setting)
+    const bool maxMeansInfinity;	// If true, send a very high number to the engine if the setting is equal to its maximum
+    const bool times1000;			// If true (for time-based settings), multiply the setting by 1000 before sending it to the engine.
+    const int min;					// The smallest allowed value
+    const int max;					// The highest allowed value
+    const int def;					// The default value
+} flib_metascheme_setting;
+
+typedef struct {
+    const char *name;				// A name identifying this mod (used as key in the schemes file)
+    const int bitmaskIndex;			// Mods are sent to the engine in a single integer, this field describes which bit of that integer is used
+    								// for this particular mod.
+} flib_metascheme_mod;
+
+typedef struct {
+	const int settingCount;
+	const int modCount;
+	const flib_metascheme_setting *settings;
+	const flib_metascheme_mod *mods;
+} flib_metascheme;
+
+extern const flib_metascheme flib_meta;
+
+const flib_metascheme *flib_get_metascheme();
 
 #endif

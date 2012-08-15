@@ -37,7 +37,7 @@ typedef struct {
  * Load a list of configurations from the ini file.
  * Returns NULL on error.
  */
-flib_schemelist *flib_schemelist_from_ini(flib_metascheme *meta, const char *filename);
+flib_schemelist *flib_schemelist_from_ini(const char *filename);
 
 /**
  * Store the list of configurations to an ini file.

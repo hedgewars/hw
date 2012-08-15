@@ -32,7 +32,7 @@ void flib_gamesetup_destroy(flib_gamesetup *gamesetup) {
 	}
 }
 
-flib_gamesetup *flib_gamesetup_copy(flib_gamesetup *setup) {
+flib_gamesetup *flib_gamesetup_copy(const flib_gamesetup *setup) {
 	if(!setup) {
 		return NULL;
 	}

@@ -178,7 +178,7 @@ int flib_netbase_send_raw(flib_netbase *net, const void *data, size_t len) {
 	}
 }
 
-int flib_netbase_send_message(flib_netbase *net, flib_netmsg *msg) {
+int flib_netbase_send_message(flib_netbase *net, const flib_netmsg *msg) {
 	if(log_badargs_if2(net==NULL, msg==NULL)) {
 		return -1;
 	}
