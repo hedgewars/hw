@@ -554,7 +554,7 @@ while not eof(f) do
         SetMusicName(Trim(s))
     else if key = 'clouds' then
         begin
-        cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH;
+        cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div 4096;
         cSDCloudsNumber:= cCloudsNumber
         end
     else if key = 'object' then
@@ -700,7 +700,7 @@ while not eof(f) do
     else if key = 'sd-water-opacity' then
         SDWaterOpacity:= StrToInt(Trim(s))
     else if key = 'sd-clouds' then
-        cSDCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div LAND_WIDTH
+        cSDCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div 4096
     else if key = 'sd-flakes' then
         begin
         i:= Pos(',', s);
