@@ -1816,7 +1816,7 @@ begin
                 Message := Message and (not gmAttack)
                 end;
         DeleteGear(Gear);
-	exit;
+        exit;
         end;
     if CheckGearDrowning(HHGear) then DeleteGear(Gear)
 end;
@@ -4783,7 +4783,7 @@ begin
         Gear^.Timer:= Gear^.Tag
         end;
 
-    if (Gear^.Health = 0) or (HHGear^.Damage <> 0) then
+    if (Gear^.Health = 0) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
         DeleteGear(Gear);
         AfterAttack
@@ -4859,7 +4859,7 @@ begin
         Gear^.Timer:= Gear^.Tag
         end;
 
-    if (Gear^.Health = 0) or (HHGear^.Damage <> 0) or ((HHGear^.Message and gmAttack) <> 0) then
+    if (Gear^.Health = 0) or ((HHGear^.State and gstHHDriven) = 0) or ((HHGear^.Message and gmAttack) <> 0) then
         begin
         HHGear^.Message:= HHGear^.Message and (not gmAttack);
         DeleteGear(Gear);
