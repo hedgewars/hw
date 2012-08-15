@@ -75,14 +75,14 @@ flib_team *flib_team_from_netmsg(char **parts) {
 	return result;
 }
 
-flib_scheme *flib_scheme_from_netmsg(flib_metascheme *meta, char **parts) {
-	flib_scheme *result = flib_scheme_create(meta, parts[0]);
+flib_scheme *flib_scheme_from_netmsg(char **parts) {
+	flib_scheme *result = flib_scheme_create(parts[0]);
 	if(result) {
-		for(int i=0; i<meta->modCount; i++) {
+		for(int i=0; i<flib_meta.modCount; i++) {
 			result->mods[i] = !strcmp(parts[i+1], "true");
 		}
-		for(int i=0; i<meta->settingCount; i++) {
-			result->settings[i] = atoi(parts[i+meta->modCount+1]);
+		for(int i=0; i<flib_meta.settingCount; i++) {
+			result->settings[i] = atoi(parts[i+flib_meta.modCount+1]);
 		}
 	}
 	return result;

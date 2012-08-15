@@ -115,7 +115,7 @@ int flib_team_to_ini(const char *filename, const flib_team *team);
 /**
  * Set the same weaponset for every hog in the team
  */
-void flib_team_set_weaponset(flib_team *team, flib_weaponset *set);
+int flib_team_set_weaponset(flib_team *team, const flib_weaponset *set);
 
 /**
  * Set the same initial health for every hog.
@@ -124,8 +124,6 @@ void flib_team_set_health(flib_team *team, int health);
 
 /**
  * Create a deep copy of a team. Returns NULL on failure.
- * The referenced weaponsets are not copied, so the new
- * team references the same weaponsets.
  */
 flib_team *flib_team_copy(const flib_team *team);
 

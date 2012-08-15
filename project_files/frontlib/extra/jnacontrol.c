@@ -101,8 +101,13 @@ typedef void (*LogCallback)(int arg1, String arg2);
 int flib_init();
 void flib_quit();
 
+// hwconsts.h
+int flib_get_teamcolor_count();
+int flib_get_hedgehogs_per_team();
+int flib_get_weapons_count();
+
 // net/netconn.h
-NetconnPtr flib_netconn_create(String playerName, MetaschemePtr meta, String dataDirPath, String host, int port);
+NetconnPtr flib_netconn_create(String playerName, String dataDirPath, String host, int port);
 void flib_netconn_destroy(NetconnPtr conn);
 
 void flib_netconn_tick(NetconnPtr conn);
@@ -122,7 +127,6 @@ int flib_netconn_send_leaveRoom(NetconnPtr conn, String msg);
 int flib_netconn_send_toggleReady(NetconnPtr conn);
 int flib_netconn_send_addTeam(NetconnPtr conn, TeamPtr team);
 int flib_netconn_send_removeTeam(NetconnPtr conn, String teamname);
-int flib_netconn_send_engineMessage(NetconnPtr conn, Buffer message, NativeLong size);
 int flib_netconn_send_teamHogCount(NetconnPtr conn, String teamname, int hogcount);
 int flib_netconn_send_teamColor(NetconnPtr conn, String teamname, int colorIndex);
 int flib_netconn_send_weaponset(NetconnPtr conn, WeaponsetPtr weaponset);
@@ -133,7 +137,6 @@ int flib_netconn_send_mapTemplate(NetconnPtr conn, int templateFilter);
 int flib_netconn_send_mapMazeSize(NetconnPtr conn, int mazeSize);
 int flib_netconn_send_mapSeed(NetconnPtr conn, String seed);
 int flib_netconn_send_mapTheme(NetconnPtr conn, String theme);
-int flib_netconn_send_mapDrawdata(NetconnPtr conn, Buffer drawData, NativeLong size);
 int flib_netconn_send_script(NetconnPtr conn, String scriptName);
 int flib_netconn_send_scheme(NetconnPtr conn, SchemePtr scheme);
 int flib_netconn_send_roundfinished(NetconnPtr conn, boolean withoutError);
@@ -190,7 +193,6 @@ void flib_gameconn_destroy(GameconnPtr conn);
 int flib_gameconn_getport(GameconnPtr conn);
 void flib_gameconn_tick(GameconnPtr conn);
 
-int flib_gameconn_send_enginemsg(GameconnPtr conn, Buffer data, NativeLong len);
 int flib_gameconn_send_textmsg(GameconnPtr conn, int msgtype, String msg);
 int flib_gameconn_send_chatmsg(GameconnPtr conn, String playername, String msg);
 int flib_gameconn_send_quit(GameconnPtr conn);
@@ -210,13 +212,10 @@ void flib_mapconn_onSuccess(MapconnPtr conn, MapimageCallback callback, Pointer 
 void flib_mapconn_onFailure(MapconnPtr conn, StrCallback callback, Pointer context);
 void flib_mapconn_tick(MapconnPtr conn);
 
-// model/scheme.h
-MetaschemePtr flib_metascheme_from_ini(String filename);
-MetaschemePtr flib_metascheme_retain(MetaschemePtr metainfo);
-void flib_metascheme_release(MetaschemePtr metainfo);
+MetaschemePtr flib_get_metascheme();
 
 // model/schemelist.h
-SchemelistPtr flib_schemelist_from_ini(MetaschemePtr meta, String filename);
+SchemelistPtr flib_schemelist_from_ini(String filename);
 int flib_schemelist_to_ini(String filename, SchemelistPtr list);
 void flib_schemelist_destroy(SchemelistPtr list);
 
@@ -229,6 +228,9 @@ void flib_team_destroy(TeamPtr team);
 WeaponsetListPtr flib_weaponsetlist_from_ini(String filename);
 int flib_weaponsetlist_to_ini(String filename, WeaponsetListPtr weaponsets);
 void flib_weaponsetlist_destroy(WeaponsetListPtr list);
+
+// model/gamesetup.h
+void flib_gamesetup_destroy(GameSetupPtr gamesetup);
 
 // util/logging.h
 void flib_log_setLevel(int level);

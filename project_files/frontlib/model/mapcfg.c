@@ -46,11 +46,13 @@ int flib_mapcfg_read(const char *dataDirPath, const char *mapname, flib_mapcfg *
 				if(!log_e_if(!fgets(out->theme, sizeof(out->theme), file), "Error reading theme from %s", path)) {
 					removeNewline(out->theme);
 					char buf[64];
-					if(!log_e_if(!fgets(buf, sizeof(buf), file), "Error reading hoglimit from %s", path)) {
+					if(fgets(buf, sizeof(buf), file)) {
 						removeNewline(buf);
 						errno = 0;
 						out->hogLimit = strtol(buf, NULL, 10);
 						result = !log_e_if(errno, "Invalid hoglimit in %s: %i", path, buf);
+					} else {
+						result = 0;
 					}
 				}
 				fclose(file);

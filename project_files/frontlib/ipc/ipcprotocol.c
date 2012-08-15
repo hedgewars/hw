@@ -142,9 +142,9 @@ int flib_ipc_append_style(flib_vector *vec, const char *style) {
 
 static uint32_t buildModFlags(const flib_scheme *scheme) {
 	uint32_t result = 0;
-	for(int i=0; i<scheme->meta->modCount; i++) {
+	for(int i=0; i<flib_meta.modCount; i++) {
 		if(scheme->mods[i]) {
-			int bitmaskIndex = scheme->meta->mods[i].bitmaskIndex;
+			int bitmaskIndex = flib_meta.mods[i].bitmaskIndex;
 			result |= (UINT32_C(1) << bitmaskIndex);
 		}
 	}
@@ -155,19 +155,18 @@ int flib_ipc_append_gamescheme(flib_vector *vec, const flib_scheme *scheme) {
 	int result = -1;
 	flib_vector *tempvector = flib_vector_create();
 	if(!log_badargs_if2(vec==NULL, scheme==NULL) && tempvector) {
-		const flib_metascheme *meta = scheme->meta;
 		bool error = false;
 		error |= flib_ipc_append_message(tempvector, "e$gmflags %"PRIu32, buildModFlags(scheme));
-		for(int i=0; i<meta->settingCount; i++) {
-			if(meta->settings[i].engineCommand) {
+		for(int i=0; i<flib_meta.settingCount; i++) {
+			if(flib_meta.settings[i].engineCommand) {
 				int value = scheme->settings[i];
-				if(meta->settings[i].maxMeansInfinity) {
-					value = value>=meta->settings[i].max ? 9999 : value;
+				if(flib_meta.settings[i].maxMeansInfinity) {
+					value = value>=flib_meta.settings[i].max ? 9999 : value;
 				}
-				if(meta->settings[i].times1000) {
+				if(flib_meta.settings[i].times1000) {
 					value *= 1000;
 				}
-				error |= flib_ipc_append_message(tempvector, "%s %i", meta->settings[i].engineCommand, value);
+				error |= flib_ipc_append_message(tempvector, "%s %i", flib_meta.settings[i].engineCommand, value);
 			}
 		}
 

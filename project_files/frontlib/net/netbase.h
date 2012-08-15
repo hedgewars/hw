@@ -73,7 +73,7 @@ int flib_netbase_send_raw(flib_netbase *net, const void *data, size_t len);
  *
  * Returns a negative value on failure.
  */
-int flib_netbase_send_message(flib_netbase *net, flib_netmsg *msg);
+int flib_netbase_send_message(flib_netbase *net, const flib_netmsg *msg);
 
 /**
  * Send a message printf-style.

@@ -242,11 +242,11 @@ int flib_netconn_send_weaponset(flib_netconn *conn, const flib_weaponset *weapon
 		strcat(ammostring, weaponset->crateprob);
 		strcat(ammostring, weaponset->delay);
 		strcat(ammostring, weaponset->crateammo);
-		if(!flib_netbase_sendf(conn->netBase, "CFG\nAMMO\n%s\n%s\n\n", weaponset->name, ammostring)) {
-			if(conn->isChief) {
+		if(conn->isChief) {
+			if(!flib_netbase_sendf(conn->netBase, "CFG\nAMMO\n%s\n%s\n\n", weaponset->name, ammostring)) {
 				netconn_setWeaponset(conn, weaponset);
+				return 0;
 			}
-			return 0;
 		}
 	}
 	return -1;
@@ -277,80 +277,98 @@ int flib_netconn_send_map(flib_netconn *conn, const flib_map *map) {
 }
 
 int flib_netconn_send_mapName(flib_netconn *conn, const char *mapName) {
-	if(!sendStr(conn, "CFG\nMAP", mapName)) {
-		if(conn->isChief) {
+	if(log_badargs_if2(conn==NULL, mapName==NULL)) {
+		return -1;
+	}
+	if(conn->isChief) {
+		if(!sendStr(conn, "CFG\nMAP", mapName)) {
 			char *copy = flib_strdupnull(mapName);
 			if(copy) {
 				free(conn->map->name);
 				conn->map->name = copy;
+				return 0;
 			}
 		}
-		return 0;
 	}
 	return -1;
 }
 
 int flib_netconn_send_mapGen(flib_netconn *conn, int mapGen) {
-	if(!sendInt(conn, "CFG\nMAPGEN", mapGen)) {
-		if(conn->isChief) {
+	if(log_badargs_if(conn==NULL)) {
+		return -1;
+	}
+	if(conn->isChief) {
+		if(!sendInt(conn, "CFG\nMAPGEN", mapGen)) {
 			conn->map->mapgen = mapGen;
+			return 0;
 		}
-		return 0;
 	}
 	return -1;
 }
 
 int flib_netconn_send_mapTemplate(flib_netconn *conn, int templateFilter) {
-	if(!sendInt(conn, "CFG\nTEMPLATE", templateFilter)) {
-		if(conn->isChief) {
+	if(log_badargs_if(conn==NULL)) {
+		return -1;
+	}
+	if(conn->isChief) {
+		if(!sendInt(conn, "CFG\nTEMPLATE", templateFilter)) {
 			conn->map->templateFilter = templateFilter;
+			return 0;
 		}
-		return 0;
 	}
 	return -1;
 }
 
 int flib_netconn_send_mapMazeSize(flib_netconn *conn, int mazeSize) {
-	if(!sendInt(conn, "CFG\nMAZE_SIZE", mazeSize)) {
-		if(conn->isChief) {
+	if(log_badargs_if(conn==NULL)) {
+		return -1;
+	}
+	if(conn->isChief) {
+		if(!sendInt(conn, "CFG\nMAZE_SIZE", mazeSize)) {
 			conn->map->mazeSize = mazeSize;
+			return 0;
 		}
-		return 0;
 	}
 	return -1;
 }
 
 int flib_netconn_send_mapSeed(flib_netconn *conn, const char *seed) {
-	if(!sendStr(conn, "CFG\nSEED", seed)) {
-		if(conn->isChief) {
+	if(log_badargs_if2(conn==NULL, seed==NULL)) {
+		return -1;
+	}
+	if(conn->isChief) {
+		if(!sendStr(conn, "CFG\nSEED", seed)) {
 			char *copy = flib_strdupnull(seed);
 			if(copy) {
 				free(conn->map->seed);
 				conn->map->seed = copy;
+				return 0;
 			}
 		}
-		return 0;
 	}
 	return -1;
 }
 
 int flib_netconn_send_mapTheme(flib_netconn *conn, const char *theme) {
-	if(!sendStr(conn, "CFG\nTHEME", theme)) {
-		if(conn->isChief) {
+	if(log_badargs_if2(conn==NULL, theme==NULL)) {
+		return -1;
+	}
+	if(conn->isChief) {
+		if(!sendStr(conn, "CFG\nTHEME", theme)) {
 			char *copy = flib_strdupnull(theme);
 			if(copy) {
 				free(conn->map->theme);
 				conn->map->theme = copy;
+				return 0;
 			}
 		}
-		return 0;
 	}
 	return -1;
 }
 
 int flib_netconn_send_mapDrawdata(flib_netconn *conn, const uint8_t *drawData, size_t size) {
 	int result = -1;
-	if(!log_badargs_if3(conn==NULL, drawData==NULL && size>0, size>SIZE_MAX/2)) {
+	if(!log_badargs_if3(conn==NULL, drawData==NULL && size>0, size>SIZE_MAX/2) && conn->isChief) {
 		uLongf zippedSize = compressBound(size);
 		uint8_t *zipped = flib_malloc(zippedSize+4); // 4 extra bytes for header
 		if(zipped) {
@@ -376,7 +394,7 @@ int flib_netconn_send_mapDrawdata(flib_netconn *conn, const uint8_t *drawData, s
 		free(zipped);
 	}
 
-	if(!result && conn->isChief) {
+	if(!result) {
 		uint8_t *copy = flib_bufdupnull(drawData, size);
 		if(copy) {
 			free(conn->map->drawData);
@@ -388,26 +406,29 @@ int flib_netconn_send_mapDrawdata(flib_netconn *conn, const uint8_t *drawData, s
 }
 
 int flib_netconn_send_script(flib_netconn *conn, const char *scriptName) {
-	if(!sendStr(conn, "CFG\nSCRIPT", scriptName)) {
-		if(conn->isChief) {
+	if(log_badargs_if2(conn==NULL, scriptName==NULL)) {
+		return -1;
+	}
+	if(conn->isChief) {
+		if(!sendStr(conn, "CFG\nSCRIPT", scriptName)) {
 			netconn_setScript(conn, scriptName);
+			return 0;
 		}
-		return 0;
 	}
 	return -1;
 }
 
 int flib_netconn_send_scheme(flib_netconn *conn, const flib_scheme *scheme) {
 	int result = -1;
-	if(!log_badargs_if3(conn==NULL, scheme==NULL, flib_strempty(scheme->name))) {
+	if(!log_badargs_if3(conn==NULL, scheme==NULL, flib_strempty(scheme->name)) && conn->isChief) {
 		flib_vector *vec = flib_vector_create();
 		if(vec) {
 			bool error = false;
 			error |= flib_vector_appendf(vec, "CFG\nSCHEME\n%s\n", scheme->name);
-			for(int i=0; i<scheme->meta->modCount; i++) {
+			for(int i=0; i<flib_meta.modCount; i++) {
 				error |= flib_vector_appendf(vec, "%s\n", scheme->mods[i] ? "true" : "false");
 			}
-			for(int i=0; i<scheme->meta->settingCount; i++) {
+			for(int i=0; i<flib_meta.settingCount; i++) {
 				error |= flib_vector_appendf(vec, "%i\n", scheme->settings[i]);
 			}
 			error |= flib_vector_appendf(vec, "\n");
@@ -418,7 +439,7 @@ int flib_netconn_send_scheme(flib_netconn *conn, const flib_scheme *scheme) {
 		flib_vector_destroy(vec);
 	}
 
-	if(!result && conn->isChief) {
+	if(!result) {
 		netconn_setScheme(conn, scheme);
 	}
 	return result;
