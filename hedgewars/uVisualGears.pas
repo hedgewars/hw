@@ -958,10 +958,10 @@ if (cReducedQuality and rqKillFlakes) <> 0 then
     exit;
 
 if hasBorder or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
-    for i:= 0 to Pred(vobCount * cScreenSpace div LAND_WIDTH) do
+    for i:= 0 to Pred(vobCount * cScreenSpace div 4096) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
 else
-    for i:= 0 to Pred((vobCount * cScreenSpace div LAND_WIDTH) div 3) do
+    for i:= 0 to Pred((vobCount * cScreenSpace div 4096) div 3) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 end;
 
