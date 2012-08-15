@@ -22,6 +22,7 @@
 #include <QDesktopWidget>
 #include <QInputDialog>
 #include <QCryptographicHash>
+#include <QStandardItemModel>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -30,6 +31,7 @@
 #include "hwconsts.h"
 #include "fpsedit.h"
 #include "HWApplication.h"
+#include "DataManager.h"
 
 GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     : QSettings(fileName, QSettings::IniFormat)
@@ -108,6 +110,12 @@ void GameUIConfig::reloadValues(void)
     depth = HWApplication::desktop()->depth();
     if (depth < 16) depth = 16;
     else if (depth > 16) depth = 32;
+
+    { // load colors
+        QStandardItemModel * model = DataManager::instance().colorsModel();
+        for(int i = model->rowCount() - 1; i >= 0; --i)
+            model->item(i)->setData(QColor(value(QString("colors/color%1").arg(i), model->item(i)->data().value<QColor>()).value<QColor>()));
+    }
 }
 
 QStringList GameUIConfig::GetTeamsList()
@@ -182,6 +190,13 @@ void GameUIConfig::SaveOptions()
 #ifdef SPARKLE_ENABLED
     setValue("misc/autoUpdate", isAutoUpdateEnabled());
 #endif
+
+    { // save colors
+        QStandardItemModel * model = DataManager::instance().colorsModel();
+        for(int i = model->rowCount() - 1; i >= 0; --i)
+            setValue(QString("colors/color%1").arg(i), model->item(i)->data());
+    }
+
     Form->gameSettings->sync();
 }
 
