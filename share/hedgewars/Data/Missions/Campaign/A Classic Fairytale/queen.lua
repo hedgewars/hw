@@ -151,9 +151,9 @@ function AnimationSetup()
     SetupCyborgAnim()
   end
 
-  AddSkipFunction(startAnim, SkipAnim, {})
-  AddSkipFunction(fleeAnim, SkipAnim, {})
-  AddSkipFunction(leaderDeadAnim, SkipAnim, {})
+  AddSkipFunction(startAnim, SkipAnim, {startAnim})
+  AddSkipFunction(fleeAnim, SkipAnim, {fleeAnim})
+  AddSkipFunction(leaderDeadAnim, SkipAnim, {leaderDeadAnim})
 end
 
 function SetupLeaderDeadAnim()
@@ -430,14 +430,21 @@ function SetupFinalAnim()
   end
   if found == 0 then
     return
-  end
-  if found == 1 then
-    table.insert(finalAnim, {func = AnimTurn, args = {gears[1], "Right"}})
-    table.insert(finalAnim, {func = AnimSay, args = {gears[1], "Pfew...that was close!", SAY_SAY, 0}})
-  elseif found == 1 then
-    table.insert(finalAnim, {func = AnimCustomFunction, args = {gears[1], CondNeedToTurn, {gears[1], gears[2]}}})
-    table.insert(finalAnim, {func = AnimSay, args = {gears[1], "Pfew...that was close!", SAY_SAY, 0}})
-    table.insert(finalAnim, {func = AnimSay, args = {gears[2], "Come, we need to hurry!", SAY_SAY, 0}})
+  else
+    for i = 1, found do
+      table.insert(finalAnim, {func = AnimCustomFunction, args = {gears[1], CondNeedToTurn, {cyborg, gears[i]}}})
+    end
+    table.insert(finalAnim, {func = AnimSay, args = {cyborg, "Nice work, blood needers!", SAY_SAY, 3000}})
+    table.insert(finalAnim, {func = AnimSay, args = {cyborg, "You're on your way to freeing your tribe!", SAY_SAY, 5500}})
+    table.insert(finalAnim, {func = AnimSay, args = {gears[1], "Do you know where they are?", SAY_SAY, 4000}})
+    table.insert(finalAnim, {func = AnimSay, args = {gears[found], "We need to hurry!", SAY_SAY, 3000}})
+    table.insert(finalAnim, {func = AnimSay, args = {cyborg, "Haha! Come!", SAY_SAY, 2000}})
+    table.insert(finalAnim, {func = AnimJump, args = {cyborg, "high"}})
+    table.insert(finalAnim, {func = AnimDisappear, args = {cyborg, GetGearPosition(cyborg)}})
+    for i = 1, found do
+      table.insert(finalAnim, {func = HideHedge, swh = false, args = {gears[i]}})
+    end
+    table.insert(finalAnim, {func = SetState, swh = false, args = {cyborg, gstInvisible}})
   end
 end
 
@@ -453,7 +460,10 @@ function AfterStartAnim()
   TurnTimeLeft = TurnTime
 end
 
-function SkipAnim()
+function SkipAnim(anim)
+  if anim == startAnim then
+    SetGearPosition(enemy, unpack(enemyPos))
+  end
   if GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
     TurnTimeLeft = 0
   end
@@ -505,16 +515,25 @@ function DoNativesDead()
 end
 
 function CheckCyborgsDead()
-  return cyborgsLeft == 0
+  return (cyborgsLeft == 0 and (gearDead[enemy] == true or enemyFled == "1"))
+end
+
+function KillEnemy()
+  if enemyFled == "1" then
+    ParseCommand("teamgone " .. loc("Leaderbot"))
+  end
+  ParseCommand("teamgone " .. loc("011101001"))
+  TurnTimeLeft = 0
 end
 
 function DoCyborgsDead()
   SaveCampaignVariables()
+  RestoreHedge(cyborg)
+  PlaceGirder(3292, 922, 4)
+  SetGearPosition(cyborg, 3290, 902)
   SetupFinalAnim()
   AddAnim(finalAnim)
-  if enemyFled == "1" then
-    ParseCommand("teamgone " .. loc("Leaderbot"))
-  end
+  AddFunction({func = KillEnemy, args = {}})
 end
 
 function DoLeaderDead()
@@ -590,6 +609,7 @@ function SaveCampaignVariables()
 end
 
 function SetupPlace()
+  HideHedge(cyborg)
   SetHogHat(natives[1], nativeHats[m5DeployedNum])
   SetHogName(natives[1], nativeNames[m5DeployedNum])
 
@@ -678,6 +698,11 @@ function AddHogs()
 
   AddTeam(loc("Leaderbot"), 14483456, "ring", "UFO", "Robot", "cm_star")
   enemy = AddHog(loc("Name"), 2, 200, "cyborg1")
+
+  AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
+  cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
+
+  SetGearPosition(cyborg, 0, 0)
 
   for i = 1, nativesNum do
     AnimSetGearPosition(natives[i], unpack(nativePos[i]))
@@ -795,5 +820,11 @@ end
 function onPrecise()
   if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
+--  else
+--    DeleteGear(cyborgs[1])
+--    table.remove(cyborgs, 1)
+--    if cyborgsLeft == 0 then
+--      DeleteGear(enemy)
+--    end
   end
 end
