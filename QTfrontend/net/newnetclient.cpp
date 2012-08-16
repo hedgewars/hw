@@ -532,7 +532,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if(netClientState == InRoom)
+    if(netClientState == InRoom || netClientState == InGame)
     {
         if (lst[0] == "EM")
         {
