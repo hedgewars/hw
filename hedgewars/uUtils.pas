@@ -185,12 +185,8 @@ end;
 function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
 var dY, dX: Extended;
 begin
-dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then
-    dY:= - dY;
-dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then
-    dX:= - dX;
+dY:= hwFloat2Float(_dY);
+dX:= hwFloat2Float(_dX);
 DxDy2Angle:= arctan2(dY, dX) * 180 / pi
 end;
 
@@ -198,12 +194,8 @@ function DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 const _16divPI: Extended = 16/pi;
 var dY, dX: Extended;
 begin
-dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then
-    dY:= - dY;
-dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then
-    dX:= - dX;
+dY:= hwFloat2Float(_dY);
+dX:= hwFloat2Float(_dX);
 DxDy2Angle32:= trunc(arctan2(dY, dX) * _16divPI) and $1f
 end;
 
@@ -211,12 +203,8 @@ function DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 const MaxAngleDivPI: Extended = cMaxAngle/pi;
 var dY, dX: Extended;
 begin
-dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then
-    dY:= - dY;
-dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then
-    dX:= - dX;
+dY:= hwFloat2Float(_dY);
+dX:= hwFloat2Float(_dX);
 DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
 end;
 
