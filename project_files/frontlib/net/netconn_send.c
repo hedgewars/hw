@@ -267,11 +267,13 @@ int flib_netconn_send_map(flib_netconn *conn, const flib_map *map) {
 	}
 	error |= flib_netconn_send_mapGen(conn, map->mapgen);
 	error |= flib_netconn_send_mapMazeSize(conn, map->mazeSize);
-	if(map->name) {
-		error |= flib_netconn_send_mapName(conn, map->name);
-	}
 	if(map->drawData && map->drawDataSize>0) {
 		error |= flib_netconn_send_mapDrawdata(conn, map->drawData, map->drawDataSize);
+	}
+	// Name is sent last, because the QtFrontend uses this to update its preview, and to show/hide
+	// certain fields
+	if(map->name) {
+		error |= flib_netconn_send_mapName(conn, map->name);
 	}
 	return error;
 }
