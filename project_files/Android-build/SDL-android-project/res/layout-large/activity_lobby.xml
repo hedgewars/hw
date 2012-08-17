@@ -23,7 +23,7 @@
 	            android:id="@+id/roomListFragment"
 	            android:layout_width="fill_parent"
 	            android:layout_height="fill_parent"
-	            class="org.hedgewars.hedgeroid.netplay.RoomlistFragment"
+	            class="org.hedgewars.hedgeroid.RoomlistFragment"
 	            tools:layout="@layout/lobby_rooms_fragment" />
 	    </FrameLayout>
 	
@@ -45,7 +45,7 @@
 	                android:id="@+id/playerListFragment"
 	                android:layout_width="fill_parent"
 	                android:layout_height="fill_parent"
-	                class="org.hedgewars.hedgeroid.netplay.LobbyPlayerlistFragment"
+	                class="org.hedgewars.hedgeroid.LobbyPlayerlistFragment"
 	                tools:layout="@layout/fragment_playerlist" />
 	        </FrameLayout>
 	        
@@ -61,7 +61,7 @@
 	                android:id="@+id/chatFragment"
 	                android:layout_width="fill_parent"
 	                android:layout_height="fill_parent"
-	                class="org.hedgewars.hedgeroid.netplay.ChatFragment"
+	                class="org.hedgewars.hedgeroid.ChatFragment"
 	                tools:layout="@layout/fragment_chat" />
 	        </FrameLayout>
 	    </RelativeLayout>
