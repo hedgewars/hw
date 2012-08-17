@@ -12,7 +12,7 @@ import org.hedgewars.hedgeroid.Datastructures.MetaScheme;
 import org.hedgewars.hedgeroid.Datastructures.MetaScheme.Mod;
 import org.hedgewars.hedgeroid.Datastructures.MetaScheme.Setting;
 import org.hedgewars.hedgeroid.Datastructures.GameConfig;
-import org.hedgewars.hedgeroid.Datastructures.RoomlistRoom;
+import org.hedgewars.hedgeroid.Datastructures.Room;
 import org.hedgewars.hedgeroid.Datastructures.Scheme;
 import org.hedgewars.hedgeroid.Datastructures.Team;
 import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
@@ -26,7 +26,6 @@ import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
 import com.sun.jna.Structure;
-import com.sun.jna.ptr.IntByReference;
 
 /**
  * Here is an introduction to the most important aspects of the JNA code.
@@ -51,14 +50,12 @@ import com.sun.jna.ptr.IntByReference;
  * representing the data (e.g. SchemePtr.deref() will give you a Scheme object).
  * 
  * Remember that you usually have to destroy structs that you receive from the
- * library, because they are owned by the native code, not Java. For example, if
- * you obtain a {@link MetaschemePtr} metaPtr using flib_metascheme_from_ini,
- * you have to call flib_metascheme_release(metaPtr) after you are done using
- * it. The recommended pattern for most cases is to call deref() on the pointer
- * to get a Java object (that you can keep as long as you like), and then
- * immediately destroy the struct if it needs destroying. To find out whether
- * and how the struct needs to be destroyed, see the library's documentation of
- * the function that you got the struct from.
+ * library, because they are owned by the native code, not Java. The recommended
+ * pattern for most cases is to call deref() on the pointer to get a Java object
+ * (that you can keep as long as you like), and then immediately destroy the
+ * struct if it needs destroying. To find out whether and how the struct needs
+ * to be destroyed, see the library's documentation of the function that you got
+ * the struct from.
  * 
  * To pass new structs to the library, you can use the static createJavaOwned()
  * function in each PointerType, which creates a new struct from the Java object
@@ -146,13 +143,13 @@ public interface Frontlib extends Library {
 	}
 	
 	public static class RoomArrayPtr extends PointerType { 
-		public RoomlistRoom[] getRooms(int count) {
+		public Room[] getRooms(int count) {
 			Pointer ptr = getPointer();
 			if(ptr == null) {
-				return new RoomlistRoom[0];
+				return new Room[0];
 			}
 			Pointer[] untypedPtrs = ptr.getPointerArray(0, count);
-			RoomlistRoom[] result = new RoomlistRoom[count];
+			Room[] result = new Room[count];
 			for(int i=0; i<count; i++) {
 				result[i] = RoomPtr.deref(untypedPtrs[i]);
 			}
@@ -161,11 +158,11 @@ public interface Frontlib extends Library {
 	}
 	
 	public static class RoomPtr extends PointerType {
-		public RoomlistRoom deref() {
+		public Room deref() {
 			return deref(getPointer());
 		}
 		
-		public static RoomlistRoom deref(Pointer p) {
+		public static Room deref(Pointer p) {
 			RoomStruct struct = new RoomStruct(p);
 			struct.read();
 			return struct.toRoomlistRoom();
@@ -420,13 +417,12 @@ public interface Frontlib extends Library {
 	static class WeaponsetStruct extends Structure {
 		public static class ByVal extends WeaponsetStruct implements Structure.ByValue {}
 		public static class ByRef extends WeaponsetStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"_referenceCount", "loadout", "crateprob", "crateammo", "delay", "name"};
+		private static String[] FIELD_ORDER = new String[] {"loadout", "crateprob", "crateammo", "delay", "name"};
 		
 		public WeaponsetStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public WeaponsetStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 		
 		public void fillFrom(Weaponset weaponset) {
-			_referenceCount = 0;
 			fillWeaponInfo(loadout, weaponset.loadout);
 			fillWeaponInfo(crateprob, weaponset.crateProb);
 			fillWeaponInfo(crateammo, weaponset.crateAmmo);
@@ -453,7 +449,6 @@ public interface Frontlib extends Library {
 			}
 		}
 		
-		public int _referenceCount;
 		public byte[] loadout = new byte[Weaponset.WEAPONS_COUNT+1];
 		public byte[] crateprob = new byte[Weaponset.WEAPONS_COUNT+1];
 		public byte[] crateammo = new byte[Weaponset.WEAPONS_COUNT+1];
@@ -483,13 +478,17 @@ public interface Frontlib extends Library {
 		
 		public void fillFrom(List<Weaponset> list) {
 			weaponsetCount = list.size();
-			weaponsets = new WeaponsetPointerByReference();
-			Structure[] structs = weaponsets.toArray(weaponsetCount);
-			
-			for(int i=0; i<weaponsetCount; i++) {
-				WeaponsetPointerByReference pstruct = (WeaponsetPointerByReference)structs[i];
-				pstruct.weaponset = new WeaponsetStruct.ByRef();
-				pstruct.weaponset.fillFrom(list.get(i));
+			if(weaponsetCount<=0) {
+				weaponsets = null;
+			} else {
+				weaponsets = new WeaponsetPointerByReference();
+				Structure[] structs = weaponsets.toArray(weaponsetCount);
+				
+				for(int i=0; i<weaponsetCount; i++) {
+					WeaponsetPointerByReference pstruct = (WeaponsetPointerByReference)structs[i];
+					pstruct.weaponset = new WeaponsetStruct.ByRef();
+					pstruct.weaponset.fillFrom(list.get(i));
+				}
 			}
 		}
 		
@@ -525,8 +524,8 @@ public interface Frontlib extends Library {
 		public RoomStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public RoomStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 
-		public RoomlistRoom toRoomlistRoom() {
-			return new RoomlistRoom(name, map, scheme, weapons, owner, playerCount, teamCount, inProgress);
+		public Room toRoomlistRoom() {
+			return new Room(name, map, scheme, weapons, owner, playerCount, teamCount, inProgress);
 		}
 		
 	    public boolean inProgress;
@@ -641,30 +640,10 @@ public interface Frontlib extends Library {
 		public static class ByVal extends MetaschemeStruct implements Structure.ByValue {}
 		public static class ByRef extends MetaschemeStruct implements Structure.ByReference {}
 
-		private static String[] FIELD_ORDER = new String[] {"_referenceCount", "settingCount", "modCount", "settings", "mods"};
+		private static String[] FIELD_ORDER = new String[] {"settingCount", "modCount", "settings", "mods"};
 		
 		public MetaschemeStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public MetaschemeStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
-		
-		public void fillFrom(MetaScheme metascheme) {
-			settingCount = metascheme.settings.size();
-			modCount = metascheme.mods.size();
-			
-			settings = new MetaschemeSettingStruct.ByRef();
-			Structure[] settingStructs = settings.toArray(settingCount);
-			mods = new MetaschemeModStruct.ByRef();
-			Structure[] modStructs = mods.toArray(modCount);
-			
-			for(int i=0; i<settingCount; i++) {
-				MetaschemeSettingStruct mss = (MetaschemeSettingStruct)settingStructs[i];
-				mss.fillFrom(metascheme.settings.get(i));
-			}
-			
-			for(int i=0; i<modCount; i++) {
-				MetaschemeModStruct mms = (MetaschemeModStruct)modStructs[i];
-				mms.fillFrom(metascheme.mods.get(i));
-			}
-		}
 		
 		/**
 		 * Only use on native-owned structs!
@@ -691,7 +670,6 @@ public interface Frontlib extends Library {
 			return new MetaScheme(modList, settingList);
 		}
 		
-		public int _referenceCount;
 		public int settingCount;
 		public int modCount;
 		public MetaschemeSettingStruct.ByRef settings;
@@ -701,41 +679,39 @@ public interface Frontlib extends Library {
 	static class SchemeStruct extends Structure {
 		public static class ByVal extends SchemeStruct implements Structure.ByValue {}
 		public static class ByRef extends SchemeStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"meta", "name", "settings", "mod"};
+		private static String[] FIELD_ORDER = new String[] {"name", "settings", "mod"};
 		
 		public SchemeStruct() { super(); setFieldOrder(FIELD_ORDER); }
 		public SchemeStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
 		
 		public void fillFrom(Scheme scheme) {
-			meta = new MetaschemeStruct.ByRef();
-			meta.fillFrom(scheme.metascheme);
+			MetaScheme meta = MetaScheme.INSTANCE;
 			name = scheme.name;
-			settings = new Memory(NATIVE_INT_SIZE * scheme.metascheme.settings.size());
-			for(int i=0; i<scheme.metascheme.settings.size(); i++) {
-				Integer value = scheme.settings.get(scheme.metascheme.settings.get(i).name);
+			settings = new Memory(NATIVE_INT_SIZE * meta.settings.size());
+			for(int i=0; i<meta.settings.size(); i++) {
+				Integer value = scheme.settings.get(meta.settings.get(i).name);
 				settings.setInt(NATIVE_INT_SIZE*i, value);
 			}
-			mods = new Memory(NATIVE_BOOL_SIZE * scheme.metascheme.mods.size());
-			for(int i=0; i<scheme.metascheme.mods.size(); i++) {
-				Boolean value = scheme.mods.get(scheme.metascheme.mods.get(i).name);
+			mods = new Memory(NATIVE_BOOL_SIZE * meta.mods.size());
+			for(int i=0; i<meta.mods.size(); i++) {
+				Boolean value = scheme.mods.get(meta.mods.get(i).name);
 				mods.setByte(NATIVE_BOOL_SIZE*i, (byte)(value ? 1 : 0));
 			}
 		}
 
 		public Scheme toScheme() {
-			MetaScheme metaScheme = meta.toMetaScheme();
 			Map<String, Integer> settingsMap = new HashMap<String, Integer>();
-			for(int i=0; i<metaScheme.settings.size(); i++) {
-				settingsMap.put(metaScheme.settings.get(i).name, settings.getInt(NATIVE_INT_SIZE*i));
+			MetaScheme meta = MetaScheme.INSTANCE;
+			for(int i=0; i<meta.settings.size(); i++) {
+				settingsMap.put(meta.settings.get(i).name, settings.getInt(NATIVE_INT_SIZE*i));
 			}
 			Map<String, Boolean> modsMap = new HashMap<String, Boolean>();
-			for(int i=0; i<metaScheme.mods.size(); i++) {
-				modsMap.put(metaScheme.mods.get(i).name, mods.getByte(i) != 0 ? Boolean.TRUE : Boolean.FALSE);
+			for(int i=0; i<meta.mods.size(); i++) {
+				modsMap.put(meta.mods.get(i).name, mods.getByte(i) != 0 ? Boolean.TRUE : Boolean.FALSE);
 			}
-			return new Scheme(metaScheme, name, settingsMap, modsMap);
+			return new Scheme(name, settingsMap, modsMap);
 		}
 		
-		public MetaschemeStruct.ByRef meta;
 		public String name;
 		public Pointer settings;
 		public Pointer mods;
@@ -763,13 +739,17 @@ public interface Frontlib extends Library {
 		
 		public void fillFrom(List<Scheme> schemeList) {
 			schemeCount = schemeList.size();
-			schemes = new SchemePointerByReference();
-			Structure[] schemePtrStructs = schemes.toArray(schemeCount);
-			
-			for(int i=0; i<this.schemeCount; i++) {
-				SchemePointerByReference spbr = (SchemePointerByReference)schemePtrStructs[i];
-				spbr.scheme = new SchemeStruct.ByRef();
-				spbr.scheme.fillFrom(schemeList.get(i));
+			if(schemeCount<=0) {
+				schemes = null;
+			} else {
+				schemes = new SchemePointerByReference();
+				Structure[] schemePtrStructs = schemes.toArray(schemeCount);
+				
+				for(int i=0; i<this.schemeCount; i++) {
+					SchemePointerByReference spbr = (SchemePointerByReference)schemePtrStructs[i];
+					spbr.scheme = new SchemeStruct.ByRef();
+					spbr.scheme.fillFrom(schemeList.get(i));
+				}
 			}
 		}
 
@@ -821,13 +801,17 @@ public interface Frontlib extends Library {
 		
 		public void fillFrom(List<TeamInGame> teamList, WeaponsetStruct.ByRef weaponset, int initialHealth) {
 			teamCount = teamList.size();
-			teams = new TeamPointerByReference();
-			Structure[] teamPtrStructs = teams.toArray(teamCount);
-			
-			for(int i=0; i<this.teamCount; i++) {
-				TeamPointerByReference tpbr = (TeamPointerByReference)teamPtrStructs[i];
-				tpbr.team = new TeamStruct.ByRef();
-				tpbr.team.fillFrom(teamList.get(i), weaponset, initialHealth);
+			if(teamCount <= 0) {
+				teams = null;
+			} else {
+				teams = new TeamPointerByReference();
+				Structure[] teamPtrStructs = teams.toArray(teamCount);
+				
+				for(int i=0; i<this.teamCount; i++) {
+					TeamPointerByReference tpbr = (TeamPointerByReference)teamPtrStructs[i];
+					tpbr.team = new TeamStruct.ByRef();
+					tpbr.team.fillFrom(teamList.get(i), weaponset, initialHealth);
+				}
 			}
 		}
 
@@ -986,7 +970,8 @@ public interface Frontlib extends Library {
     int flib_get_teamcolor_count();
     int flib_get_hedgehogs_per_team();
     int flib_get_weapons_count();
-    
+	MetaschemePtr flib_get_metascheme();
+	
     // net/netconn.h
 	static final int NETCONN_STATE_CONNECTING = 0;
 	static final int NETCONN_STATE_LOBBY = 1;
@@ -1016,7 +1001,7 @@ public interface Frontlib extends Library {
 	static final int NETCONN_MAPCHANGE_THEME = 6;
 	static final int NETCONN_MAPCHANGE_SEED = 7;
     
-	NetconnPtr flib_netconn_create(String playerName, MetaschemePtr meta, String dataDirPath, String host, int port);
+	NetconnPtr flib_netconn_create(String playerName, String dataDirPath, String host, int port);
 	void flib_netconn_destroy(NetconnPtr conn);
 
 	void flib_netconn_tick(NetconnPtr conn);
@@ -1036,7 +1021,7 @@ public interface Frontlib extends Library {
 	int flib_netconn_send_toggleReady(NetconnPtr conn);
 	int flib_netconn_send_addTeam(NetconnPtr conn, TeamPtr team);
 	int flib_netconn_send_removeTeam(NetconnPtr conn, String teamname);
-	int flib_netconn_send_engineMessage(NetconnPtr conn, Buffer message, NativeLong size);
+	int flib_netconn_send_engineMessage(NetconnPtr conn, Pointer message, NativeLong size);
 	int flib_netconn_send_teamHogCount(NetconnPtr conn, String teamname, int hogcount);
 	int flib_netconn_send_teamColor(NetconnPtr conn, String teamname, int colorIndex);
 	int flib_netconn_send_weaponset(NetconnPtr conn, WeaponsetPtr weaponset);
@@ -1047,7 +1032,7 @@ public interface Frontlib extends Library {
 	int flib_netconn_send_mapMazeSize(NetconnPtr conn, int mazeSize);
 	int flib_netconn_send_mapSeed(NetconnPtr conn, String seed);
 	int flib_netconn_send_mapTheme(NetconnPtr conn, String theme);
-	int flib_netconn_send_mapDrawdata(NetconnPtr conn, Buffer drawData, NativeLong size);
+	int flib_netconn_send_mapDrawdata(NetconnPtr conn, Pointer drawData, NativeLong size);
 	int flib_netconn_send_script(NetconnPtr conn, String scriptName);
 	int flib_netconn_send_scheme(NetconnPtr conn, SchemePtr scheme);
 	int flib_netconn_send_roundfinished(NetconnPtr conn, boolean withoutError);
@@ -1109,7 +1094,7 @@ public interface Frontlib extends Library {
 	int flib_gameconn_getport(GameconnPtr conn);
 	void flib_gameconn_tick(GameconnPtr conn);
 
-	int flib_gameconn_send_enginemsg(GameconnPtr conn, Buffer data, NativeLong len);
+	int flib_gameconn_send_enginemsg(GameconnPtr conn, Pointer data, NativeLong len);
 	int flib_gameconn_send_textmsg(GameconnPtr conn, int msgtype, String msg);
 	int flib_gameconn_send_chatmsg(GameconnPtr conn, String playername, String msg);
 	int flib_gameconn_send_quit(GameconnPtr conn);
@@ -1122,6 +1107,10 @@ public interface Frontlib extends Library {
 	void flib_gameconn_onEngineMessage(GameconnPtr conn, BytesCallback callback, Pointer context);
 	
 	// ipc/mapconn.h
+	public static final int MAPIMAGE_WIDTH = 256;
+	public static final int MAPIMAGE_HEIGHT = 128;
+	public static final int MAPIMAGE_BYTES = (MAPIMAGE_WIDTH/8*MAPIMAGE_HEIGHT);
+	
 	MapconnPtr flib_mapconn_create(MapRecipePtr mapdesc);
 	void flib_mapconn_destroy(MapconnPtr conn);
 	int flib_mapconn_getport(MapconnPtr conn);
@@ -1149,13 +1138,8 @@ public interface Frontlib extends Library {
 	public static final int MAZE_SIZE_MEDIUM_ISLANDS = 4;
 	public static final int MAZE_SIZE_LARGE_ISLANDS = 5;
 		
-	// model/scheme.h
-	MetaschemePtr flib_metascheme_from_ini(String filename);
-	MetaschemePtr flib_metascheme_retain(MetaschemePtr metainfo);
-	void flib_metascheme_release(MetaschemePtr metainfo);
-
 	// model/schemelist.h
-	SchemelistPtr flib_schemelist_from_ini(MetaschemePtr meta, String filename);
+	SchemelistPtr flib_schemelist_from_ini(String filename);
 	int flib_schemelist_to_ini(String filename, SchemelistPtr list);
 	void flib_schemelist_destroy(SchemelistPtr list);
 	
@@ -1168,6 +1152,9 @@ public interface Frontlib extends Library {
 	WeaponsetListPtr flib_weaponsetlist_from_ini(String filename);
 	int flib_weaponsetlist_to_ini(String filename, WeaponsetListPtr weaponsets);
 	void flib_weaponsetlist_destroy(WeaponsetListPtr list);
+	
+	// model/gamesetup.h
+	void flib_gamesetup_destroy(GameSetupPtr gamesetup);
 	
 	// util/logging.h
 	public static final int FLIB_LOGLEVEL_ALL = -100;

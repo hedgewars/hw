@@ -18,6 +18,9 @@
 
 package org.hedgewars.hedgeroid.Datastructures;
 
+import java.util.Arrays;
+import java.util.UUID;
+
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.frontlib.Frontlib;
 
@@ -65,6 +68,34 @@ public final class MapRecipe {
 		return drawData==null ? null : drawData.clone();
 	}
 	
+	public MapRecipe withMapgen(int mapgen) {
+		return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, drawData);
+	}
+	
+	public MapRecipe withTemplateFilter(int templateFilter) {
+		return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, drawData);
+	}
+	
+	public MapRecipe withMazeSize(int mazeSize) {
+		return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, drawData);
+	}
+	
+	public MapRecipe withName(String name) {
+		return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, drawData);
+	}
+	
+	public MapRecipe withSeed(String seed) {
+		return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, drawData);
+	}
+	
+	public MapRecipe withTheme(String theme) {
+		return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, drawData);
+	}
+	
+	public MapRecipe withDrawData(byte[] drawData) {
+		return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, drawData);
+	}
+	
 	public static String formatMapName(Resources res, String map) {
 		if(map.charAt(0)=='+') {
 			if(map.equals(MAPNAME_REGULAR)) {
@@ -76,5 +107,96 @@ public final class MapRecipe {
 			}
 		}
 		return map;
+	}
+
+	/**
+	 * Returns the mapname corresponding to the map generator (e.g. "+rnd+" for regular maps)
+	 * If the mapgen does not have a unique name (MAPGEN_NAMED) or is not known, the def
+	 * value is returned.
+	 */
+	public static String mapnameForGenerator(int mapgen, String def) {
+		switch(mapgen) {
+		case Frontlib.MAPGEN_REGULAR: return MAPNAME_REGULAR;
+		case Frontlib.MAPGEN_MAZE: return MAPNAME_MAZE;
+		case Frontlib.MAPGEN_DRAWN: return MAPNAME_DRAWN;
+		default: return def;
+		}
+	}
+	
+	/**
+	 * In a sense this is the inverse of mapnameForGenerator. Returns the mapgen that uses
+	 * mapName as special identifier, or MAPGEN_NAMED if there is none.
+	 */
+	public static int generatorForMapname(String mapName) {
+		if(MapRecipe.MAPNAME_REGULAR.equals(mapName)) {
+			return Frontlib.MAPGEN_REGULAR;
+		} else if(MapRecipe.MAPNAME_MAZE.equals(mapName)) {
+			return Frontlib.MAPGEN_MAZE;
+		} else if(MapRecipe.MAPNAME_DRAWN.equals(mapName)) {
+			return Frontlib.MAPGEN_DRAWN;
+		} else {
+			return Frontlib.MAPGEN_NAMED;
+		}
+	}
+	
+	@Override
+	public String toString() {
+		return "MapRecipe [mapgen=" + mapgen + ", templateFilter="
+				+ templateFilter + ", mazeSize=" + mazeSize + ", name=" + name
+				+ ", seed=" + seed + ", theme=" + theme + ", drawData="
+				+ Arrays.toString(drawData) + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(drawData);
+		result = prime * result + mapgen;
+		result = prime * result + mazeSize;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((seed == null) ? 0 : seed.hashCode());
+		result = prime * result + templateFilter;
+		result = prime * result + ((theme == null) ? 0 : theme.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MapRecipe other = (MapRecipe) obj;
+		if (!Arrays.equals(drawData, other.drawData))
+			return false;
+		if (mapgen != other.mapgen)
+			return false;
+		if (mazeSize != other.mazeSize)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (seed == null) {
+			if (other.seed != null)
+				return false;
+		} else if (!seed.equals(other.seed))
+			return false;
+		if (templateFilter != other.templateFilter)
+			return false;
+		if (theme == null) {
+			if (other.theme != null)
+				return false;
+		} else if (!theme.equals(other.theme))
+			return false;
+		return true;
+	}
+
+	public static String makeRandomSeed() {
+		return "{"+UUID.randomUUID().toString()+"}";
 	}
 }

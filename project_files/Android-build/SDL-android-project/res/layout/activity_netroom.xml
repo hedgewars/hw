@@ -21,7 +21,7 @@
             android:layout_marginBottom="10dp"
             android:baselineAligned="false"
             android:minHeight="200dp" >
-
+            
             <FrameLayout
                 android:id="@+id/mapFrame"
                 android:layout_width="0dp"
@@ -30,14 +30,12 @@
                 android:layout_weight="1"
                 android:background="@drawable/box" >
 
-                <!--
-                     <fragment
+                <fragment
                     android:id="@+id/mapFragment"
-                                    android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
                     class="org.hedgewars.hedgeroid.netplay.MapFragment"
                     tools:layout="@layout/fragment_map" />
-                -->
             </FrameLayout>
 
             <FrameLayout
@@ -48,14 +46,12 @@
                 android:layout_weight="1"
                 android:background="@drawable/box" >
 
-                <!--
-                    <fragment
+                <fragment
                     android:id="@+id/settingsFragment"
-                                    android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
                     class="org.hedgewars.hedgeroid.netplay.SettingsFragment"
                     tools:layout="@layout/fragment_settings" />
-                -->
             </FrameLayout>
 
             <FrameLayout

@@ -1,0 +1,103 @@
+package org.hedgewars.hedgeroid;
+
+import org.hedgewars.hedgeroid.R;
+import org.hedgewars.hedgeroid.Datastructures.GameConfig;
+import org.hedgewars.hedgeroid.Datastructures.Player;
+import org.hedgewars.hedgeroid.Datastructures.PlayerInRoom;
+import org.hedgewars.hedgeroid.netplay.Netplay;
+import org.hedgewars.hedgeroid.netplay.RunGameListener;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AdapterView.OnItemClickListener;
+
+public class RoomPlayerlistFragment extends ListFragment implements OnItemClickListener, RunGameListener {
+	private Netplay netplay;
+	private RoomPlayerlistAdapter adapter;
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		netplay = Netplay.getAppInstance(getActivity().getApplicationContext());
+		netplay.registerRunGameListener(this);
+		adapter = new RoomPlayerlistAdapter();
+		adapter.setSource(netplay.roomPlayerlist);
+		setListAdapter(adapter);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		adapter.invalidate();
+		netplay.unregisterRunGameListener(this);
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		registerForContextMenu(getListView());
+		getListView().setOnItemClickListener(this);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)menuInfo;
+		String playerName = adapter.getItem(info.position).player.name;
+		
+		MenuInflater inflater = getActivity().getMenuInflater();
+		inflater.inflate(R.menu.room_playerlist_context, menu);
+		if(netplay.isChief() && !playerName.equals(netplay.getPlayerName())) {
+			inflater.inflate(R.menu.room_playerlist_chief_context, menu);
+		}
+		menu.setHeaderIcon(R.drawable.human);
+		menu.setHeaderTitle(playerName);
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+		PlayerInRoom player = adapter.getItem(info.position);
+		switch(item.getItemId()) {
+		case R.id.player_info:
+			netplay.sendPlayerInfoQuery(player.player.name);
+			return true;
+		case R.id.player_kick:
+			netplay.sendKick(player.player.name);
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_playerlist, container, false);
+	}
+	
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Player player = adapter.getItem(position).player;
+		if(player.name.equals(netplay.getPlayerName())) {
+			netplay.sendToggleReady();
+		}
+	}
+	
+	// TODO this is really the wrong place for this...
+	public void runGame(GameConfig config) {
+		SDLActivity.startConfig = config;
+		SDLActivity.startNetgame = true;
+		startActivity(new Intent(getActivity().getApplicationContext(), SDLActivity.class));
+	}
+}

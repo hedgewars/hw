@@ -20,7 +20,7 @@ package org.hedgewars.hedgeroid.Downloader;
 
 import java.io.IOException;
 
-import org.hedgewars.hedgeroid.Utils;
+import org.hedgewars.hedgeroid.util.FileUtils;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -136,7 +136,7 @@ public class DownloadPackage implements Parcelable{
 							version = -1;
 						}
 					}else if(name.equals("path")){
-						path = Utils.getDataPath(c) + text;
+						path = FileUtils.getDataPath(c) + text;
 					}else if(name.equals("representation")){
 						representation = text;
 					}else if(name.equals("description")){

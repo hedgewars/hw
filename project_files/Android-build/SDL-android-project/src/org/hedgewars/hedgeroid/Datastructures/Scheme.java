@@ -23,15 +23,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public final class Scheme {
-	public final MetaScheme metascheme;
 	public final String name;
 	public final Map<String, Integer> settings;
 	public final Map<String, Boolean> mods;
 		
-	public Scheme(MetaScheme metascheme, String name, Map<String, Integer> settings, Map<String, Boolean> mods) {
-		this.metascheme = metascheme;
+	public Scheme(String name, Map<String, Integer> settings, Map<String, Boolean> mods) {
 		this.name = name;
 		this.settings = Collections.unmodifiableMap(new HashMap<String, Integer>(settings));
 		this.mods = Collections.unmodifiableMap(new HashMap<String, Boolean>(mods));
@@ -42,20 +41,66 @@ public final class Scheme {
 		return health==null ? 100 : health.intValue();
 	}
 
-	/*@Override
-	public String toString() {
-		return "Scheme [metascheme=" + metascheme + ", name=" + name
-				+ ", settings=" + settings + ", mods=" + mods + "]";
-	}*/
+	public static Scheme createDefaultScheme(MetaScheme meta) {
+		String name = GameConfig.DEFAULT_SCHEME;
+		Map<String, Integer> settings = new TreeMap<String, Integer>();
+		Map<String, Boolean> mods = new TreeMap<String, Boolean>();
+		for(MetaScheme.Setting setting : meta.settings) {
+			settings.put(setting.name, setting.def);
+		}
+		for(MetaScheme.Mod mod : meta.mods) {
+			mods.put(mod.name, Boolean.FALSE);
+		}
+		return new Scheme(name, settings, mods);
+	}
 	
 	@Override
 	public String toString() {
-		return name; // TODO change back once StartGameActivity does not need this anymore
+		return "Scheme [name=" + name + ", settings=" + settings + ", mods="
+				+ mods + "]";
 	}
 	
-	public static final Comparator<Scheme> caseInsensitiveNameComparator = new Comparator<Scheme>() {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((mods == null) ? 0 : mods.hashCode());
+		result = prime * result
+				+ ((settings == null) ? 0 : settings.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Scheme other = (Scheme) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (mods == null) {
+			if (other.mods != null)
+				return false;
+		} else if (!mods.equals(other.mods))
+			return false;
+		if (settings == null) {
+			if (other.settings != null)
+				return false;
+		} else if (!settings.equals(other.settings))
+			return false;
+		return true;
+	}
+
+	public static final Comparator<Scheme> NAME_ORDER = new Comparator<Scheme>() {
 		public int compare(Scheme lhs, Scheme rhs) {
-			return lhs.name.compareToIgnoreCase(rhs.name);
+			return String.CASE_INSENSITIVE_ORDER.compare(lhs.name, rhs.name);
 		}
 	};
 }

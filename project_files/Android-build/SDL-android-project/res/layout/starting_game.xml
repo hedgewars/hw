@@ -147,7 +147,7 @@
     	android:adjustViewBounds="true"
     	android:scaleType="centerInside"
     	android:background="@android:color/transparent"
-    	android:src="@drawable/teamcount"/>
+    	android:src="@drawable/teams_number"/>
         
     </LinearLayout>
 

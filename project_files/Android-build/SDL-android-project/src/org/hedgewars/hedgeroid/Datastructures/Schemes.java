@@ -3,14 +3,9 @@ package org.hedgewars.hedgeroid.Datastructures;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
-import org.hedgewars.hedgeroid.Utils;
 import org.hedgewars.hedgeroid.frontlib.Flib;
-import org.hedgewars.hedgeroid.frontlib.Frontlib.MetaschemePtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.SchemelistPtr;
 
 import android.content.Context;
@@ -32,57 +27,49 @@ public final class Schemes {
 		return new File(c.getFilesDir(), "schemes_builtin.ini");
 	}
 	
-	public static Map<String, Scheme> loadAllSchemes(Context c) throws IOException {
-		Map<String, Scheme> result = loadUserSchemes(c);
-		result.putAll(loadBuiltinSchemes(c));
+	public static List<Scheme> loadAllSchemes(Context c) throws IOException {
+		List<Scheme> result = loadBuiltinSchemes(c);
+		result.addAll(loadUserSchemes(c));
 		return result;
 	}
 	
-	public static Map<String, Scheme> loadUserSchemes(Context c) throws IOException {
+	public static List<Scheme> loadUserSchemes(Context c) throws IOException {
 		return loadSchemes(c, getUserSchemesFile(c));
 	}
 	
-	public static Map<String, Scheme> loadBuiltinSchemes(Context c) throws IOException {
+	public static List<Scheme> loadBuiltinSchemes(Context c) throws IOException {
 		return loadSchemes(c, getBuiltinSchemesFile(c));
 	}
 	
-	public static Map<String, Scheme> loadSchemes(Context c, File schemeFile) throws IOException {
-		Map<String, Scheme> result = new TreeMap<String, Scheme>();
-		String metaschemePath = new File(Utils.getDataPathFile(c), "metasettings.ini").getAbsolutePath();
+	public static List<Scheme> loadSchemes(Context c, File schemeFile) throws IOException {
 		if(!schemeFile.isFile()) {
 			// No schemes file == no schemes, no error
-			return new TreeMap<String, Scheme>();
+			return new ArrayList<Scheme>();
 		}
-		MetaschemePtr meta = null;
 		SchemelistPtr schemeListPtr = null;
 		try {
-			meta = Flib.INSTANCE.flib_metascheme_from_ini(metaschemePath);
-			if(meta==null) {
-				throw new IOException("Unable to read metascheme");
-			}
-			schemeListPtr = Flib.INSTANCE.flib_schemelist_from_ini(meta, schemeFile.getAbsolutePath());
+			schemeListPtr = Flib.INSTANCE.flib_schemelist_from_ini(schemeFile.getAbsolutePath());
 			if(schemeListPtr == null) {
 				throw new IOException("Unable to read schemelist");
 			}
-			List<Scheme> schemeList = schemeListPtr.deref();
-			for(Scheme scheme : schemeList) {
-				result.put(scheme.name, scheme);
-			}
-			return result;
+			return schemeListPtr.deref();
 		} finally {
 			if(schemeListPtr != null) {
 				Flib.INSTANCE.flib_schemelist_destroy(schemeListPtr);
 			}
-			if(meta != null) {
-				Flib.INSTANCE.flib_metascheme_release(meta);
-			}
 		}
 	}
 	
-	public static void saveUserSchemes(Context c, Map<String, Scheme> schemes) throws IOException {
-		List<Scheme> schemeList = new ArrayList<Scheme>(schemes.values());
-		Collections.sort(schemeList, Scheme.caseInsensitiveNameComparator);
-		SchemelistPtr ptr = SchemelistPtr.createJavaOwned(schemeList);
+	public static void saveUserSchemes(Context c, List<Scheme> schemes) throws IOException {
+		SchemelistPtr ptr = SchemelistPtr.createJavaOwned(schemes);
 		Flib.INSTANCE.flib_schemelist_to_ini(getUserSchemesFile(c).getAbsolutePath(), ptr);
+	}
+	
+	public static List<String> toNameList(List<Scheme> schemes) {
+		List<String> result = new ArrayList<String>();
+		for(Scheme scheme : schemes) {
+			result.add(scheme.name);
+		}
+		return result;
 	}
 }

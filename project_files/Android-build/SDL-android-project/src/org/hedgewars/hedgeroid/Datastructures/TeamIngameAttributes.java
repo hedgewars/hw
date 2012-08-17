@@ -28,7 +28,7 @@ public final class TeamIngameAttributes {
 		this.remoteDriven = remoteDriven;
 	}
 	
-	public static int randomColorIndex(int[] illegalColors){
+	public static int randomColorIndex(int[] illegalColors) {
 		Random rnd = new Random();
 		ArrayList<Integer> legalcolors = new ArrayList<Integer>();
 		for(int i=0; i<TEAM_COLORS.length; i++) {

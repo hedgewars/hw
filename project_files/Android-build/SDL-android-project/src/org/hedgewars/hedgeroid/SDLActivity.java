@@ -1,5 +1,8 @@
 package org.hedgewars.hedgeroid;
 
+import java.io.UnsupportedEncodingException;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
@@ -12,7 +15,9 @@ import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.GameSetupPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.GameconnPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.IntCallback;
-import org.hedgewars.hedgeroid.netplay.TickHandler;
+import org.hedgewars.hedgeroid.netplay.Netplay;
+import org.hedgewars.hedgeroid.util.FileUtils;
+import org.hedgewars.hedgeroid.util.TickHandler;
 
 import com.sun.jna.Pointer;
 
@@ -31,6 +36,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -50,6 +56,7 @@ public class SDLActivity extends Activity {
 	 * way to do this (http://developer.android.com/guide/faq/framework.html#3)
 	 */
 	public static volatile GameConfig startConfig;
+	public static volatile boolean startNetgame;
 	
 	// Main components
 	public static SDLActivity mSingleton;
@@ -87,7 +94,7 @@ public class SDLActivity extends Activity {
 		mSingleton = this;
 
 		// Set up the surface
-		mSurface = new SDLSurface(getApplication(), startConfig);
+		mSurface = new SDLSurface(getApplication(), startConfig, startNetgame);
 		setContentView(mSurface);
 	}
 
@@ -150,8 +157,14 @@ public class SDLActivity extends Activity {
 		commandHandler.sendMessage(msg);
 	}
 
+	public static void synchronizedNativeInit(String...args) {
+		synchronized(PascalExports.engineMutex) {
+			nativeInit(args);
+		}
+	}
+	
 	// C functions we call
-	public static native void nativeInit(String...args);
+	private static native void nativeInit(String...args);
 	public static native void nativeQuit();
 	public static native void nativePause();
 	public static native void nativeResume();
@@ -184,12 +197,29 @@ public class SDLActivity extends Activity {
 		return mSingleton;
 	}
 
-	public static void startApp(int width, int height, GameConfig config) {
+	public static void startApp(final int width, final int height, GameConfig config, boolean netgame) {
 		synchronized(SDLActivity.class) {
-			// Start up the C app thread
+			// Start up the C app thread TODO this is silly code
 			if (mSDLThread == null) {
-				mSDLThread = new Thread(new SDLMain(width, height, config), "SDLThread");
-				mSDLThread.start();
+				final AtomicBoolean gameconnStartDone = new AtomicBoolean(false);
+				GameConnection.Listener listener = new GameConnection.Listener() {
+					public void gameConnectionReady(int port) {
+						mSDLThread = new Thread(new SDLMain(width, height, port, "Medo"));
+						mSDLThread.start();
+						gameconnStartDone.set(true);
+					}
+					
+					public void gameConnectionDisconnected(int reason) {
+						Log.e("startApp", "disconnected: "+reason);
+						gameconnStartDone.set(true);
+					}
+				};
+				if(netgame) {
+					Netplay netplay = Netplay.getAppInstance(mSingleton.getApplicationContext());
+					GameConnection.forNetgame(config, netplay, listener);
+				} else {
+					GameConnection.forLocalGame(config, listener);
+				}
 			} else {
 				SDLActivity.nativeResume();
 			}
@@ -426,61 +456,32 @@ public class SDLActivity extends Activity {
 class SDLMain implements Runnable {
 
 	private final int surfaceWidth, surfaceHeight;
-	private final GameConfig config;
-	private GameconnPtr conn;
+	private final int port;
+	private final String playerName;
 	HandlerThread thread = new HandlerThread("IPC thread");
 	
-	private final IntCallback dccb = new IntCallback() {
-		public void callback(Pointer context, int arg1) {
-			Log.d("SDLMain", "Disconnected: "+arg1);
-			Flib.INSTANCE.flib_gameconn_destroy(conn);
-			conn = null;
-			thread.quit();
-		}
-	};
-	
-	public SDLMain(int width, int height, GameConfig _config) {
-		config = _config;
+	public SDLMain(int width, int height, int port, String playerName) {
 		surfaceWidth = width;
 		surfaceHeight = height;
+		this.port = port;
+		this.playerName = playerName;
 	}
 
 	public void run() {
 		//Set up the IPC socket server to communicate with the engine
-		
-		final GameconnPtr conn = Flib.INSTANCE.flib_gameconn_create("Xeli", GameSetupPtr.createJavaOwned(config), false);
-		if(conn == null) {
-			throw new AssertionError();
-		}
-		Flib.INSTANCE.flib_gameconn_onDisconnect(conn, dccb, null);
-		int port = Flib.INSTANCE.flib_gameconn_getport(conn);
-
-		String path = Utils.getDataPath(SDLActivity.mSingleton);//This represents the data directory
+		String path = FileUtils.getDataPath(SDLActivity.mSingleton);//This represents the data directory
 		path = path.substring(0, path.length()-1);//remove the trailing '/'
 
-		thread.start(); // TODO ensure it gets stopped
-		new TickHandler(thread.getLooper(), 500, new Runnable() {
-			public void run() {
-				Log.d("SDLMain", "pre-tick");
-				Flib.INSTANCE.flib_gameconn_tick(conn);
-				Log.d("SDLMain", "post-tick");
-			}
-		}).start();
-		
 		Log.d("SDLMain", "Starting engine");
 		// Runs SDL_main() with added parameters
-		SDLActivity.nativeInit(new String[] { String.valueOf(port),
-				String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
-				"0", "en.txt", "xeli", "1", "1", "1", path, ""  });
-		Log.d("SDLMain", "Engine stopped");
 		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			throw new AssertionError();
+			SDLActivity.synchronizedNativeInit(new String[] { String.valueOf(port),
+					String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
+					"0", "en.txt", Base64.encodeToString(playerName.getBytes("UTF-8"), 0), "1", "1", "1", path, ""  });
+		} catch (UnsupportedEncodingException e) {
+			throw new AssertionError(e); // never happens
 		}
-		Log.v("SDLMain", "thread joined");
-		Flib.INSTANCE.flib_gameconn_destroy(conn);
-		Log.v("SDLMain", "SDL thread terminated");
+		Log.d("SDLMain", "Engine stopped");
 	}
 }
 
@@ -495,12 +496,13 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 
 	private GameConfig config;
-
+	private boolean netgame;
+	
 	// Sensors
 	private static SensorManager mSensorManager;
 
 	// Startup    
-	public SDLSurface(Context context, GameConfig _config) {
+	public SDLSurface(Context context, GameConfig _config, boolean netgame) {
 		super(context);
 		getHolder().addCallback(this); 
 
@@ -512,6 +514,7 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 
 		mSensorManager = (SensorManager)context.getSystemService("sensor");
 		config = _config;
+		this.netgame = netgame;
 	}
 
 	// Called when we have a valid drawing surface
@@ -581,7 +584,7 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 		SDLActivity.onNativeResize(width, height, sdlFormat);
 		Log.v("SDL", "Window size:" + width + "x"+height);
 
-		SDLActivity.startApp(width, height, config);
+		SDLActivity.startApp(width, height, config, netgame);
 	}
 
 	// unused

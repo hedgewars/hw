@@ -31,6 +31,7 @@ import java.util.NoSuchElementException;
 import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
 import org.hedgewars.hedgeroid.Datastructures.Hog;
 import org.hedgewars.hedgeroid.Datastructures.Team;
+import org.hedgewars.hedgeroid.util.FileUtils;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -253,41 +254,13 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 		super.onBackPressed();
 	}
 
-	private int getDifficultyLevelFromText(String text) {
-		if (text.equals(getString(R.string.human))) {
-			return 0;
-		} else if (text.equals(getString(R.string.bot5))) {
-			return 1;
-		} else if (text.equals(getString(R.string.bot4))) {
-			return 2;
-		} else if (text.equals(getString(R.string.bot3))) {
-			return 3;
-		} else if (text.equals(getString(R.string.bot2))) {
-			return 4;
-		} else {
-			return 5;
-		}
-	}
-	
-	private String getTxtFromDifficulty(int level) {
-		switch(level) {
-		case 0: return getString(R.string.human);
-		case 1: return getString(R.string.bot5);
-		case 2: return getString(R.string.bot4);
-		case 3: return getString(R.string.bot3);
-		case 4: return getString(R.string.bot2);
-		default: return getString(R.string.bot1);
-		}
-	}
-	
 	private void saveTeam() {
 		String teamName = name.getText().toString();
 		String teamFlag = (String)((Map<String, Object>) flag.getSelectedItem()).get("txt");
 		String teamFort = fort.getSelectedItem().toString();
 		String teamGrave = (String)((Map<String, Object>) grave.getSelectedItem()).get("txt");
 		String teamVoice = voice.getSelectedItem().toString();
-		String levelString = (String)((Map<String, Object>) difficulty.getSelectedItem()).get("txt");
-		int levelInt = getDifficultyLevelFromText(levelString);
+		int levelInt = (Integer)((Map<String, Object>) difficulty.getSelectedItem()).get("level");
 		
 		List<Hog> hogs = new ArrayList<Hog>();
 		for (int i = 0; i < hogName.size(); i++) {
@@ -307,7 +280,6 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 		}
 		try {
 			team.save(newFile);
-			Toast.makeText(TeamCreatorActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
 			// If the team was renamed, delete the old file.
 			if(oldFile != null && oldFile.isFile() && !oldFile.equals(newFile)) {
 				oldFile.delete();
@@ -322,7 +294,7 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 		public void onItemSelected(AdapterView<?> arg0, View arg1,
 				int position, long arg3) {
 			String fortName = (String) arg0.getAdapter().getItem(position);
-			Drawable fortIconDrawable = Drawable.createFromPath(Utils
+			Drawable fortIconDrawable = Drawable.createFromPath(FileUtils
 					.getDataPath(TeamCreatorActivity.this)
 					+ "Forts/"
 					+ fortName + "L.png");
@@ -343,7 +315,7 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 		public void onClick(View v) {
 			try {
 				File dir = new File(String.format("%sSounds/voices/%s",
-						Utils.getDataPath(TeamCreatorActivity.this),
+						FileUtils.getDataPath(TeamCreatorActivity.this),
 						voice.getSelectedItem()));
 				String file = "";
 				File[] dirs = dir.listFiles();
@@ -378,12 +350,12 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 			name.setText(t.name);
 			voice.setSelection(findPosition((ArrayAdapter<String>) voice.getAdapter(), t.voice));
 			fort.setSelection(findPosition((ArrayAdapter<String>) fort.getAdapter(), t.fort));
-			difficulty.setSelection(findPosition(typesData, getTxtFromDifficulty(t.hogs.get(0).level))); // TODO store actual difficulty int in typesData
-			grave.setSelection(findPosition(gravesData, t.grave));
-			flag.setSelection(findPosition(flagsData, t.flag));
+			difficulty.setSelection(findPosition(typesData, "level", Integer.valueOf(t.hogs.get(0).level)));
+			grave.setSelection(findPosition(gravesData, "txt", t.grave));
+			flag.setSelection(findPosition(flagsData, "txt", t.flag));
 	
 			for (int i = 0; i < Team.HEDGEHOGS_PER_TEAM; i++) {
-				hogHat.get(i).setSelection(findPosition(hatsData, t.hogs.get(i).hat));
+				hogHat.get(i).setSelection(findPosition(hatsData, "txt", t.hogs.get(i).hat));
 				hogName.get(i).setText(t.hogs.get(i).name);
 			}
 		} catch(NoSuchElementException e) {
@@ -392,18 +364,18 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 		}
 	}
 
-	int findPosition(ArrayAdapter<String> adapter, String key) throws NoSuchElementException {
-		int position = adapter.getPosition(key);
+	int findPosition(ArrayAdapter<String> adapter, String value) throws NoSuchElementException {
+		int position = adapter.getPosition(value);
 		if(position<0) {
 			throw new NoSuchElementException();
 		}
 		return position;
 	}
 	
-	int findPosition(List<? extends Map<String, ?>> data, String txtValue) throws NoSuchElementException {
+	int findPosition(List<? extends Map<String, ?>> data, String key, Object value) throws NoSuchElementException {
 		int position = 0;
 		for (Map<String, ?> map : data) {
-			if (map.get("txt").equals(txtValue)) {
+			if (map.get(key).equals(value)) {
 				return position;
 			}
 			position++;

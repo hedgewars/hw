@@ -67,14 +67,38 @@
             android:windowSoftInputMode="stateUnchanged" >
         </activity>
         <activity
-            android:name=".netplay.LobbyActivity"
+            android:name=".LobbyActivity"
             android:label="@string/title_activity_lobby"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name=".netplay.RoomActivity"
+            android:name=".RoomActivity"
             android:label="@string/title_activity_room"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".WeaponsetListActivity"
+            android:label="@string/title_activity_weaponset_list"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".WeaponsetCreatorActivity"
+            android:label="@string/title_activity_weaponset_creator"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SchemeListActivity"
+            android:label="@string/title_activity_scheme_list"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".SchemeCreatorActivity"
+            android:label="@string/title_activity_scheme_creator"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustPan" >
         </activity>
