@@ -19,8 +19,8 @@ data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
     | VarDeclaration Bool Bool ([Identifier], TypeDecl) (Maybe InitExpression)
-    | FunctionDeclaration Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
-    | OperatorDeclaration String Identifier TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
+    | FunctionDeclaration Identifier Bool TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
+    | OperatorDeclaration String Identifier Bool TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     deriving Show
 data TypeDecl = SimpleType Identifier
     | RangeType Range

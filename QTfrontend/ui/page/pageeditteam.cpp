@@ -289,6 +289,9 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
     int idx = list.indexOf("cpu.png");
     if (idx >= 0)
         list.removeAt(idx);
+    idx = list.indexOf("cpu_plain.png");
+    if (idx >= 0)
+        list.removeAt(idx);
     idx = list.indexOf("hedgewars.png");
     if (idx >= 0)
         list.removeAt(idx);

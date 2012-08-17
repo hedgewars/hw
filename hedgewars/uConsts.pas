@@ -245,6 +245,7 @@ const
 
     gmRemoveFromList = $00004000;
     gmAddToList      = $00008000;
+    gmDelete         = $00010000;
     gmAllStoppable = gmLeft or gmRight or gmUp or gmDown or gmAttack or gmPrecise;
 
     cMaxSlotIndex       = 9;
