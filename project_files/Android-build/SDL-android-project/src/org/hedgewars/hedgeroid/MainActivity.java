@@ -25,9 +25,9 @@ import java.io.IOException;
 import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
 import org.hedgewars.hedgeroid.frontlib.Flib;
-import org.hedgewars.hedgeroid.netplay.LobbyActivity;
 import org.hedgewars.hedgeroid.netplay.Netplay;
 import org.hedgewars.hedgeroid.netplay.Netplay.State;
+import org.hedgewars.hedgeroid.util.FileUtils;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -65,19 +65,19 @@ public class MainActivity extends FragmentActivity {
 		startLocalGame.setOnClickListener(startGameListener);
 		startNetGame.setOnClickListener(startNetGameListener);
 
-		if(!Utils.isDataPathAvailable()){
+		if(!FileUtils.isDataPathAvailable()){
 			showDialog(DIALOG_NO_SDCARD);
 		} else {
 			String existingVersion = "";
 			try {
-				File versionFile = new File(Utils.getCachePath(this), "assetsversion.txt");
-				existingVersion = Utils.readToString(new FileInputStream(versionFile));
+				File versionFile = new File(FileUtils.getCachePath(this), "assetsversion.txt");
+				existingVersion = FileUtils.readToString(new FileInputStream(versionFile));
 			} catch(IOException e) {
 			}
 			
 			String newVersion = "";
 			try {
-				newVersion = Utils.readToString(getAssets().open("assetsversion.txt"));
+				newVersion = FileUtils.readToString(getAssets().open("assetsversion.txt"));
 			} catch(IOException e) {
 			}
 			
@@ -125,21 +125,12 @@ public class MainActivity extends FragmentActivity {
 		case R.id.preferences:
 			Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
 			return true;
+		case R.id.edit_weaponsets:
+			startActivity(new Intent(getApplicationContext(), WeaponsetListActivity.class));
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
-		Netplay.getAppInstance(getApplicationContext()).requestFastTicks();
-	}
-	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		Netplay.getAppInstance(getApplicationContext()).unrequestFastTicks();
 	}
 	
 	public Dialog onCreateDialog(int id, Bundle args){

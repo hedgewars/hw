@@ -6,10 +6,10 @@ import java.io.IOException;
 
 import org.hedgewars.hedgeroid.MainActivity;
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.Utils;
 import org.hedgewars.hedgeroid.Datastructures.Schemes;
 import org.hedgewars.hedgeroid.Datastructures.Team;
 import org.hedgewars.hedgeroid.Datastructures.Weaponsets;
+import org.hedgewars.hedgeroid.util.FileUtils;
 
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
@@ -25,7 +25,7 @@ public class DownloadAssets extends AsyncTask<Object, Long, Boolean> {
 	
 	private void copyFileOrDir(AssetManager assetManager, File target, String assetPath) throws IOException {
 		try {
-			Utils.writeStreamToFile(assetManager.open(assetPath), target);
+			FileUtils.writeStreamToFile(assetManager.open(assetPath), target);
 		} catch(FileNotFoundException e) {
 			/*
 			 * I can't find a better way to figure out whether an asset entry is
@@ -44,11 +44,11 @@ public class DownloadAssets extends AsyncTask<Object, Long, Boolean> {
 	@Override
 	protected Boolean doInBackground(Object... params) {
 		try {
-			Utils.writeStreamToFile(act.getResources().openRawResource(R.raw.schemes_builtin), Schemes.getBuiltinSchemesFile(act));
-			Utils.writeStreamToFile(act.getResources().openRawResource(R.raw.weapons_builtin), Weaponsets.getBuiltinWeaponsetsFile(act));
-			Utils.resRawToFilesDir(act, R.array.teams, Team.DIRECTORY_TEAMS);
-			copyFileOrDir(act.getAssets(), Utils.getDataPathFile(act), "Data");
-			copyFileOrDir(act.getAssets(), new File(Utils.getCachePath(act), VERSION_FILENAME), VERSION_FILENAME);
+			FileUtils.writeStreamToFile(act.getResources().openRawResource(R.raw.schemes_builtin), Schemes.getBuiltinSchemesFile(act));
+			FileUtils.writeStreamToFile(act.getResources().openRawResource(R.raw.weapons_builtin), Weaponsets.getBuiltinWeaponsetsFile(act));
+			FileUtils.resRawToFilesDir(act, R.array.teams, R.array.teamFilenames, Team.DIRECTORY_TEAMS);
+			copyFileOrDir(act.getAssets(), FileUtils.getDataPathFile(act), "Data");
+			copyFileOrDir(act.getAssets(), new File(FileUtils.getCachePath(act), VERSION_FILENAME), VERSION_FILENAME);
 			return Boolean.TRUE;
 		} catch(IOException e) {
 			Log.e("DownloadAssets", e.getMessage(), e);

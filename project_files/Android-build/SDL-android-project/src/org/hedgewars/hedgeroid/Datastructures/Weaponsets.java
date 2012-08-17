@@ -3,6 +3,7 @@ package org.hedgewars.hedgeroid.Datastructures;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hedgewars.hedgeroid.frontlib.Flib;
@@ -59,5 +60,25 @@ public final class Weaponsets {
 	public static void saveUserWeaponsets(Context c, List<Weaponset> weaponsets) throws IOException {
 		WeaponsetListPtr ptr = WeaponsetListPtr.createJavaOwned(weaponsets);
 		Flib.INSTANCE.flib_weaponsetlist_to_ini(getUserWeaponsetsFile(c).getAbsolutePath(), ptr);
+	}
+	
+	public static void deleteUserWeaponset(Context c, String setToDelete) throws IOException {
+		List<Weaponset> userWeaponsets = loadUserWeaponsets(c);
+		for(Iterator<Weaponset> iter = userWeaponsets.iterator(); iter.hasNext();) {
+			Weaponset set = iter.next();
+			if(set.name.equals(setToDelete)) {
+				iter.remove();
+				break;
+			}
+		}
+		saveUserWeaponsets(c, userWeaponsets);
+	}
+	
+	public static List<String> toNameList(List<Weaponset> weaponsets) {
+		List<String> result = new ArrayList<String>();
+		for(Weaponset weaponset : weaponsets) {
+			result.add(weaponset.name);
+		}
+		return result;
 	}
 }

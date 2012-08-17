@@ -37,6 +37,7 @@ public final class GameConfig {
 	public static final String DEFAULT_STYLE = "Normal";
 	public static final String DEFAULT_SCHEME = "Default";
 	public static final String DEFAULT_WEAPONSET = "Default";
+	public static final String DEFAULT_THEME = "Bamboo";
 	
 	public final String style;
 	public final Scheme scheme;
@@ -50,5 +51,11 @@ public final class GameConfig {
 		this.map = map;
 		this.teams = Collections.unmodifiableList(new ArrayList<TeamInGame>(teams));
 		this.weaponset = weaponset;
+	}
+
+	@Override
+	public String toString() {
+		return "GameConfig [style=" + style + ", scheme=" + scheme + ", map="
+				+ map + ", teams=" + teams + ", weaponset=" + weaponset + "]";
 	}
 }

@@ -31,7 +31,7 @@
   	android:layout_alignBottom="@id/imgDifficulty"
   	android:adjustViewBounds="true"
   	android:scaleType="centerInside"
-  	android:src="@drawable/teamcount7"/>
+  	android:src="@drawable/hogcount"/>
   <TextView
   	android:id="@+id/txtName"
   	android:layout_height="fill_parent"

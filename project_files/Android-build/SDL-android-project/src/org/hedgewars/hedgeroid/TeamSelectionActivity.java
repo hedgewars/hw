@@ -125,7 +125,7 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 				setTeamColor(view, (Integer)data);
 				return true;
 			case R.id.teamCount:
-				setTeamHogCount((ImageView)view, (Integer)data);
+				((ImageView)view).getDrawable().setLevel((Integer)data);
 				return true;
 			default:
 				return false;
@@ -177,42 +177,6 @@ public class TeamSelectionActivity extends Activity implements Runnable{
 
 	private void setTeamColor(View iv, int colorIndex){
 		iv.setBackgroundColor(0xFF000000 + TeamIngameAttributes.TEAM_COLORS[colorIndex]);
-	}
-
-	private void setTeamHogCount(ImageView iv, int count){
-
-		switch(count){
-		case 0:
-			iv.setImageResource(R.drawable.teamcount0);
-			break;
-		case 1:
-			iv.setImageResource(R.drawable.teamcount1);
-			break;
-		case 2:
-			iv.setImageResource(R.drawable.teamcount2);
-			break;
-		case 3:
-			iv.setImageResource(R.drawable.teamcount3);
-			break;
-		case 4:
-			iv.setImageResource(R.drawable.teamcount4);
-			break;
-		case 5:
-			iv.setImageResource(R.drawable.teamcount5);
-			break;
-		case 6:
-			iv.setImageResource(R.drawable.teamcount6);
-			break;
-		case 7:
-			iv.setImageResource(R.drawable.teamcount7);
-			break;
-		case 8:
-			iv.setImageResource(R.drawable.teamcount8);
-			break;
-		case 9:
-			iv.setImageResource(R.drawable.teamcount9);
-			break;
-		}
 	}
 
 	public void onBackPressed(){

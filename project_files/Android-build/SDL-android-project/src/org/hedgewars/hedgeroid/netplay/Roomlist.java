@@ -3,37 +3,37 @@ package org.hedgewars.hedgeroid.netplay;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.hedgewars.hedgeroid.Datastructures.RoomlistRoom;
+import org.hedgewars.hedgeroid.Datastructures.Room;
+import org.hedgewars.hedgeroid.Datastructures.RoomWithId;
+import org.hedgewars.hedgeroid.util.ObservableTreeMap;
 
-import android.util.Pair;
-
-public class Roomlist extends ObservableTreeMap<String, Pair<RoomlistRoom, Long>> {
+public class Roomlist extends ObservableTreeMap<String, RoomWithId> {
 	private long nextId = 1;
 	
-	public void updateList(RoomlistRoom[] newRooms) {
-		Map<String, Pair<RoomlistRoom, Long>> newMap = new TreeMap<String, Pair<RoomlistRoom, Long>>();
-		for(RoomlistRoom room : newRooms) {
-			Pair<RoomlistRoom, Long> oldEntry = get(room.name);
+	public void updateList(Room[] newRooms) {
+		Map<String, RoomWithId> newMap = new TreeMap<String, RoomWithId>();
+		for(Room room : newRooms) {
+			RoomWithId oldEntry = get(room.name);
 			if(oldEntry == null) {
-				newMap.put(room.name, Pair.create(room, nextId++));
+				newMap.put(room.name, new RoomWithId(room, nextId++));
 			} else {
-				newMap.put(room.name, Pair.create(room, oldEntry.second));
+				newMap.put(room.name, new RoomWithId(room, oldEntry.id));
 			}
 		}
 		replaceContent(newMap);
 	}
 	
-	public void addRoomWithNewId(RoomlistRoom room) {
-		put(room.name, Pair.create(room, nextId++));
+	public void addRoomWithNewId(Room room) {
+		put(room.name, new RoomWithId(room, nextId++));
 	}
 	
-	public void updateRoom(String name, RoomlistRoom room) {
-		Pair<RoomlistRoom, Long> oldEntry = get(name);
+	public void updateRoom(String name, Room room) {
+		RoomWithId oldEntry = get(name);
 		if(oldEntry == null) {
 			addRoomWithNewId(room);
 		} else {
 			remove(name);
-			put(room.name, Pair.create(room, oldEntry.second));
+			put(room.name, new RoomWithId(room, oldEntry.id));
 		}
 	}
 }

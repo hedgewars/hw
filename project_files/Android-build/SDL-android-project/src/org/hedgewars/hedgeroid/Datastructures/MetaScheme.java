@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.hedgewars.hedgeroid.frontlib.Flib;
+
 public final class MetaScheme {
+	public static final MetaScheme INSTANCE = Flib.INSTANCE.flib_get_metascheme().deref();
+	
 	public static final class Mod {
 		public final String name;
 		public final int bitmaskIndex;

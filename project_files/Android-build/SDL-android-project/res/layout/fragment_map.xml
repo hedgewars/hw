@@ -17,8 +17,8 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="5dip"
         android:background="@drawable/box"
-        android:scaleType="fitXY"
-        android:src="@drawable/backbutton" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/roomlist_preparing" />
 
     <TableLayout
         android:id="@+id/gameOptions"
@@ -30,32 +30,56 @@
         <TableRow>
 
             <TextView
-                android:id="@+id/txtMap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/map_map" />
+                android:text="@string/map_gen" />
 
             <Spinner
-                android:id="@+id/spinMaps"
+                android:id="@+id/spinMapType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/dropdown" />
         </TableRow>
 
-        <TableRow>
-
+        <TableRow android:id="@+id/rowMapName">
             <TextView
-                android:id="@+id/txtType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/map_type" />
+                android:layout_gravity="center_vertical"
+                android:text="@string/map_name" />
 
             <Spinner
-                android:id="@+id/spinType"
-                android:layout_width="wrap_content"
+                android:id="@+id/spinMapName"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/dropdown" />
         </TableRow>
+		<TableRow android:id="@+id/rowTemplateFilter">
+		    <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/map_template" />
+		    
+            <Spinner
+                android:id="@+id/spinTemplateFilter"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dropdown" />
+		</TableRow>
+		<TableRow android:id="@+id/rowMazeSize">
+		    <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/map_maze_size" />
+		    
+            <Spinner
+                android:id="@+id/spinMazeSize"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/dropdown" />
+		</TableRow>
     </TableLayout>
 
 </RelativeLayout>

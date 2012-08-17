@@ -25,10 +25,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.hedgewars.hedgeroid.Utils;
 import org.hedgewars.hedgeroid.EngineProtocol.PascalExports;
 import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.TeamPtr;
+import org.hedgewars.hedgeroid.util.FileUtils;
 
 import android.content.Context;
 
@@ -72,7 +72,7 @@ public final class Team {
 	}
 	
 	public static File getTeamfileByName(Context c, String teamName) {
-		return new File(new File(c.getFilesDir(), DIRECTORY_TEAMS), Utils.replaceBadChars(teamName)+".hwt");
+		return new File(new File(c.getFilesDir(), DIRECTORY_TEAMS), FileUtils.replaceBadChars(teamName)+".hwt");
 	}
 	
 	@Override

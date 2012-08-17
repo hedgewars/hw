@@ -32,5 +32,8 @@ public class PascalExports {
 	}
 	
 	public static native int HWgetMaxNumberOfTeams();
-    public static native int HWterminate(boolean b);	
+    public static native int HWterminate(boolean b);
+    public static native int HWGenLandPreview(int port);
+    
+    public static Object engineMutex = new Object();
 }
