@@ -146,8 +146,13 @@ processAction (ByeClient msg) = do
     io $
         infoM "Clients" (show ci ++ " quits: " ++ B.unpack msg)
 
-    processAction $ AnswerClients [chan] ["BYE", msg]
     when loggedIn $ processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
+
+    mapM processAction
+        [
+        AnswerClients [chan] ["BYE", msg]
+        , ModifyClient (\c -> c{logonPassed = False}) -- this will effectively hide client from others while he isn't deleted from list
+        ]
 
     s <- get
     put $! s{removedClients = ci `Set.insert` removedClients s}
@@ -216,7 +221,7 @@ processAction (MoveToLobby msg) = do
     chans <- othersChans
 
     if master then
-        if gameProgress && playersNum > 1 then
+        if playersNum > 1 then
             mapM_ processAction [ChangeMaster, NoticeMessage AdminLeft, RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
             else
             processAction RemoveRoom
@@ -225,7 +230,7 @@ processAction (MoveToLobby msg) = do
 
     -- when not removing room
     ready <- client's isReady
-    when (not master || (gameProgress && playersNum > 1)) . io $ do
+    when (not master || playersNum > 1) . io $ do
         modifyRoom rnc (\r -> r{
                 playersIn = playersIn r - 1,
                 readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
@@ -418,11 +423,22 @@ processAction (ProcessAccountInfo info) =
 processAction JoinLobby = do
     chan <- client's sendChan
     clientNick <- client's nick
-    (lobbyNicks, clientsChans) <- liftM (unzip . Prelude.map (nick &&& sendChan) . Prelude.filter logonPassed) $! allClientsS
-    mapM_ processAction $
-        AnswerClients clientsChans ["LOBBY:JOINED", clientNick]
-        : AnswerClients [chan] ("LOBBY:JOINED" : clientNick : lobbyNicks)
-        : [ModifyClient (\cl -> cl{logonPassed = True}), SendServerMessage]
+    isAuthenticated <- liftM (not . B.null) $ client's webPassword
+    isAdmin <- client's isAdministrator
+    loggedInClients <- liftM (Prelude.filter logonPassed) $! allClientsS
+    let (lobbyNicks, clientsChans) = unzip . L.map (nick &&& sendChan) $ loggedInClients
+    let authenticatedNicks = L.map nick . L.filter (not . B.null . webPassword) $ loggedInClients
+    let adminsNicks = L.map nick . L.filter isAdministrator $ loggedInClients
+    let clFlags = B.concat . L.concat $ [["u" | isAuthenticated], ["a" | isAdmin]]
+    mapM_ processAction . concat $ [
+        [AnswerClients clientsChans ["LOBBY:JOINED", clientNick]]
+        , [AnswerClients [chan] ("LOBBY:JOINED" : clientNick : lobbyNicks)]
+        , [AnswerClients [chan] ("CLIENT_FLAGS" : "+u" : authenticatedNicks) | not $ null authenticatedNicks]
+        , [AnswerClients [chan] ("CLIENT_FLAGS" : "+a" : adminsNicks) | not $ null adminsNicks]
+        , [AnswerClients (chan : clientsChans) ["CLIENT_FLAGS",  B.concat["+" , clFlags], clientNick] | not $ B.null clFlags]
+        , [ModifyClient (\cl -> cl{logonPassed = True})]
+        , [SendServerMessage]
+        ]
 
 
 processAction (KickClient kickId) = do
@@ -453,9 +469,9 @@ processAction (BanIP ip seconds reason) = do
 
 processAction BanList = do
     ch <- client's sendChan
-    bans <- gets (bans . serverInfo)
+    bans <- gets (B.pack . unlines . map show . bans . serverInfo)
     processAction $
-        AnswerClients [ch] ["BANLIST", B.pack $ show bans]
+        AnswerClients [ch] ["BANLIST", bans]
 
 
 
@@ -522,9 +538,11 @@ processAction PingAll = do
     where
         kickTimeouted rnc ci = do
             pq <- io $ client'sM rnc pingsQueue ci
-            when (pq > 0) $
+            when (pq > 0) $ do
                 withStateT (\as -> as{clientIndex = Just ci}) $
                     processAction (ByeClient "Ping timeout")
+                when (pq > 1) $
+                    processAction $ DeleteClient ci -- smth went wrong with client io threads, issue DeleteClient here
 
 
 processAction StatsAction = do

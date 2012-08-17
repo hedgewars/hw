@@ -135,6 +135,11 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
             curPlayingTeams.erase(itPlay);
             break;
         }
+        else
+        {
+            qWarning() << QString("removeNetTeam: team '%1' was actually a local team!").arg(team.name());
+            break;
+        }
     }
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }

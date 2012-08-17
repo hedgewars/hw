@@ -376,26 +376,26 @@ begin
                         hAngle:= 0;
                         i:= -1
                         end;
-                if ((Gear^.State and gstWinner) = 0) then
-                    begin
-                    DrawHedgehog(ox, oy,
-                            i,
-                            1,
-                            0,
-                            DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
-                    with HH^ do
-                        if (HatTex <> nil) then
-                            begin
-                            DrawTextureRotatedF(HatTex, 1.0, -1.0, -6.0, ox, oy, 0, i, 32, 32,
-                                i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
-                            if HatTex^.w > 64 then
+                    if ((Gear^.State and gstWinner) = 0) then
+                        begin
+                        DrawHedgehog(ox, oy,
+                                i,
+                                1,
+                                0,
+                                DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
+                        with HH^ do
+                            if (HatTex <> nil) then
                                 begin
-                                Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
-                                DrawTextureRotatedF(HatTex, 1.0, -1.0, -6.0, ox, oy, 32, i, 32, 32,
+                                DrawTextureRotatedF(HatTex, 1.0, -1.0, -6.0, ox, oy, 0, i, 32, 32,
                                     i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
-                                Tint($FF, $FF, $FF, $FF)
+                                if HatTex^.w > 64 then
+                                    begin
+                                    Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
+                                    DrawTextureRotatedF(HatTex, 1.0, -1.0, -6.0, ox, oy, 32, i, 32, 32,
+                                        i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
+                                    Tint($FF, $FF, $FF, $FF)
+                                    end
                                 end
-                            end
                     end;
                     DrawAltWeapon(Gear, ox, oy);
                     defaultPos:= false

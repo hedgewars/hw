@@ -20,7 +20,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, uConsts, GLunit, uTypes;
+uses SDLh, uLandTemplates, uFloat, uConsts, GLunit, uTypes, uAILandMarks;
 
 procedure initModule;
 procedure freeModule;
@@ -34,6 +34,28 @@ uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uLandGenMaze, uLandOutline;
 
 var digest: shortstring;
+
+procedure ResizeLand(width, height: LongWord);
+var potW, potH: LongWord;
+begin 
+potW:= toPowerOf2(width);
+potH:= toPowerOf2(height);
+if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
+    begin
+    LAND_WIDTH:= potW;
+    LAND_HEIGHT:= potH;
+    LAND_WIDTH_MASK:= not(LAND_WIDTH-1);
+    LAND_HEIGHT_MASK:= not(LAND_HEIGHT-1);
+    cWaterLine:= LAND_HEIGHT;
+    if (cReducedQuality and rqBlurryLand) = 0 then
+        SetLength(LandPixels, LAND_HEIGHT, LAND_WIDTH)
+    else
+        SetLength(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2);
+
+    SetLength(Land, LAND_HEIGHT, LAND_WIDTH);
+    SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
+    end;
+end;
 
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
@@ -181,6 +203,7 @@ var pa: TPixAr;
     i: Longword;
     y, x: Longword;
 begin
+    ResizeLand(Template.TemplateWidth, Template.TemplateHeight);
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
             Land[y, x]:= lfBasic;
@@ -237,6 +260,7 @@ end;
 
 procedure GenDrawnMap;
 begin
+    ResizeLand(4096, 2048);
     uLandPainted.Draw;
 
     MaxHedgehogs:= 48;
@@ -299,7 +323,7 @@ begin
     WriteLnToConsole('Generating land...');
     case cMapGen of
         0: GenBlank(EdgeTemplates[SelectTemplate]);
-        1: GenMaze;
+        1: begin ResizeLand(4096,2048); GenMaze; end;
         2: GenDrawnMap;
     else
         OutError('Unknown mapgen', true);
@@ -489,7 +513,10 @@ if tmpsurf = nil then
     if tmpsurf = nil then
         tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
     end;
-TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
+// (bare) Sanity check. Considering possible LongInt comparisons as well as just how much system memoery it would take
+TryDo((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (tmpsurf^.w * tmpsurf^.h < 6*1024*1024*1024), 'Map dimensions too big!', true);
+
+ResizeLand(tmpsurf^.w, tmpsurf^.h);
 
 // unC0Rr - should this be passed from the GUI? I am not sure which layer does what
 s:= UserPathz[ptMapCurrent] + '/map.cfg';
@@ -676,12 +703,10 @@ if GrayScale then
                 LandPixels[y,x]:= w or (LandPixels[y div 2, x div 2] and AMask)
                 end
     end;
-
-UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
 end;
 
 procedure GenPreview(out Preview: TPreview);
-var x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
+var rh, rw, ox, oy, x, y, xx, yy, t, bit, cbit, lh, lw: LongInt;
 begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
@@ -692,8 +717,21 @@ begin
         OutError('Unknown mapgen', true);
     end;
 
-    lh:= LAND_HEIGHT div 128;
-    lw:= LAND_WIDTH div 32;
+    // strict scaling needed here since preview assumes a rectangle
+    rh:= max(LAND_HEIGHT,2048);
+    rw:= max(LAND_WIDTH,4096);
+    ox:= 0;
+    if rw < rh*2 then
+        begin
+        rw:= rh*2;
+        end;
+    if rh < rw div 2 then rh:= rw * 2;
+    
+    ox:= (rw-LAND_WIDTH) div 2;
+    oy:= rh-LAND_HEIGHT;
+
+    lh:= rh div 128;
+    lw:= rw div 32;
     for y:= 0 to 127 do
         for x:= 0 to 31 do
         begin
@@ -704,7 +742,8 @@ begin
                 cbit:= bit * 8;
                 for yy:= y * lh to y * lh + 7 do
                     for xx:= x * lw + cbit to x * lw + cbit + 7 do
-                        if Land[yy, xx] <> 0 then
+                        if ((yy-oy) and LAND_HEIGHT_MASK = 0) and ((xx-ox) and LAND_WIDTH_MASK = 0) 
+                           and (Land[yy-oy, xx-ox] <> 0) then
                             inc(t);
                 if t > 8 then
                     Preview[y, x]:= Preview[y, x] or ($80 shr bit);
