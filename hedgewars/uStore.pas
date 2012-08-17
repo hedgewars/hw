@@ -152,7 +152,7 @@ for t:= 0 to Pred(TeamsCount) do
         TryDo(texsurf <> nil, errmsgCreateSurface, true);
         TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-        DrawRoundRect(@r, cWhiteColor, cNearBlackColorChannels.value, texsurf, true);
+        DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
         rr:= r;
         inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
         DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
