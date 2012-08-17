@@ -43,7 +43,7 @@ function  IntToStr(n: LongInt): shortstring;
 function  StrToInt(s: shortstring): LongInt;
 function  FloatToStr(n: hwFloat): shortstring;
 
-function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
+function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat; inline;
 function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAnglef(const _dY, _dX: extended): LongInt;
@@ -182,7 +182,7 @@ FloatToStr:= cstr(n) + '_' + inttostr(Lo(n.QWordValue))
 end;
 
 
-function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
+function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat; inline;
 var dY, dX: Extended;
 begin
 dY:= hwFloat2Float(_dY);
