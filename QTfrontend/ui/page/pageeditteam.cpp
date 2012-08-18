@@ -472,5 +472,4 @@ HWTeam PageEditTeam::data()
 void PageEditTeam::saveTeam()
 {
     data().saveToFile();
-    emit teamEdited();
 }

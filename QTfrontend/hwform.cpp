@@ -203,7 +203,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageFeedback->BtnSend, SIGNAL(clicked()), this, SLOT(SendFeedback()));
 
-    connect(ui.pageEditTeam, SIGNAL(teamEdited()), this, SLOT(AfterTeamEdit()));
+    connect(ui.pageEditTeam, SIGNAL(goBack()), this, SLOT(AfterTeamEdit()));
 
     connect(ui.pageMultiplayer->BtnStartMPGame, SIGNAL(clicked()), this, SLOT(StartMPGame()));
     connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
