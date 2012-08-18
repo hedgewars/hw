@@ -39,7 +39,7 @@ nativeDir = {"Right", "Left", "Left",
              "Left", "Right", "Right"}
 
 cannibalNames = {loc("Brain Teaser"), loc("Bone Jackson"), loc("Gimme Bones"), 
-                 loc("Hedgibal Letter"), loc("Bloodpie"), loc("Scalp Muncher"),
+                 loc("Hedgibal Lecter"), loc("Bloodpie"), loc("Scalp Muncher"),
                  loc("Back Breaker"), loc("Dahmer"), loc("Meiwes"),
                  loc("Ear Sniffer"), loc("Regurgitator"), loc("Muriel")}
 
@@ -69,6 +69,7 @@ cannibalHidden = {}
 speakerHog = nil
 spyHog = nil
 deployedHog = nil
+deployedDead = false
 
 cyborgHidden = false
 needToAct = 0
@@ -564,6 +565,7 @@ function AfterWave2DeadAnim()
   TurnsLeft = 7
   stage = platformStage
   SpawnPlatformCrates()
+  SetGearMessage(CurrentHedgehog, 0)
   AddEvent(CheckTurnsOver, {}, DoTurnsOver, {3}, 0)
   AddEvent(CheckWaveDead, {3}, DoWaveDead, {3}, 0)
   AddEvent(CheckDeployedDead, {}, DoDeployedDead, {}, 0)
@@ -617,6 +619,7 @@ function DoDeployedDead()
   ShowMission(loc("Backstab"), loc("Brutus"), loc("You have failed to save the tribe!"), 0, 6000)
   ParseCommand("teamgone " .. loc("Natives"))
   ParseCommand("teamgone " .. loc("Tribe"))
+  ParseCommand("teamgone " .. loc("011101001"))
   TurnTimeLeft = 0
 end
 
@@ -679,10 +682,12 @@ function DoWaveDead(index)
 end
 
 function AddWave3DeadAnim()
-  HideNatives()
-  SetupWave3DeadAnim()
-  AddAnim(wave3DeadAnim)
-  AddFunction({func = AfterWave3DeadAnim, args = {}})
+  AnimSwitchHog(deployedHog)
+  AnimWait(deployedHog, 1)
+  AddFunction({func = HideNatives, args = {}})
+  AddFunction({func = SetupWave3DeadAnim, args = {}})
+  AddFunction({func = AddAnim, args = {wave3DeadAnim}})
+  AddFunction({func = AddFunction, args = {{func = AfterWave3DeadAnim, args = {}}}})
 end
 
 function HideNatives()
@@ -898,14 +903,12 @@ function AddHogs()
 
   AddTeam(loc("Assault Team"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
   for i = 1, 6 do
---    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
-    cannibals[i] = AddHog(cannibalNames[i], 1, 5, "vampirichog")
+    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
   end
 
   AddTeam(loc("Reinforcements"), 14483456, "Skull", "Island", "Pirate", "cm_vampire")
   for i = 7, 9 do
---    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
-    cannibals[i] = AddHog(cannibalNames[i], 1, 5, "vampirichog")
+    cannibals[i] = AddHog(cannibalNames[i], 1, 50, "vampirichog")
   end
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
@@ -994,6 +997,10 @@ function onGearDelete(gear)
     freshDead = nil
     choice = choiceEliminate
     tmpVar = 1
+  end
+
+  if gear == deployedHog then
+    deployedDead = true
   end
 end
 
