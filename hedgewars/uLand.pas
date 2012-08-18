@@ -202,9 +202,9 @@ procedure GenBlank(var Template: TEdgeTemplate);
 var pa: TPixAr;
     i: Longword;
     y, x: Longword;
-	fps: TPointArray;
+    fps: TPointArray;
 begin
-	fps:=Template.FillPoints^;
+    fps:=Template.FillPoints^;
     ResizeLand(Template.TemplateWidth, Template.TemplateHeight);
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do

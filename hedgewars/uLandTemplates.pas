@@ -26,7 +26,7 @@ const NTPX = Low(SmallInt);
 
 type TRectArray = array[0..64] of TSDL_Rect;
      PRectArray = ^TRectArray;
-	 TPointArray = array[0..64] of TPoint;
+     TPointArray = array[0..64] of TPoint;
      PPointArray = ^TPointArray;
      TEdgeTemplate = record
                      BasePoints: PRectArray;
