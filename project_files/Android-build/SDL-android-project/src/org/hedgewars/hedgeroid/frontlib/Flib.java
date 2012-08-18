@@ -12,7 +12,7 @@ public class Flib {
 		System.loadLibrary("SDL_net");
 		System.setProperty("jna.encoding", "UTF8"); // Ugly global setting, but it seems JNA doesn't allow setting this per-library... 
 	}
-	public static final Frontlib INSTANCE = (Frontlib)Native.loadLibrary("frontlib", Frontlib.class, Collections.singletonMap(Library.OPTION_TYPE_MAPPER, FrontlibTypeMapper.INSTANCE));
+	public static final Frontlib INSTANCE = (Frontlib)Native.loadLibrary("frontlib", Frontlib.class, Collections.singletonMap(Library.OPTION_TYPE_MAPPER, AndroidTypeMapper.INSTANCE));
 	
 	// Hook frontlib logging into Android logging
 	private static final Frontlib.LogCallback logCb = new Frontlib.LogCallback() {

@@ -38,6 +38,7 @@ import org.hedgewars.hedgeroid.frontlib.Frontlib.TeamPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.VoidCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.WeaponsetCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.WeaponsetPtr;
+import org.hedgewars.hedgeroid.frontlib.NativeSizeT;
 import org.hedgewars.hedgeroid.netplay.Netplay.FromNetHandler;
 import org.hedgewars.hedgeroid.netplay.Netplay.FromNetMsgType;
 import org.hedgewars.hedgeroid.util.FileUtils;
@@ -54,7 +55,6 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.sun.jna.Memory;
-import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 
 /**
@@ -312,7 +312,7 @@ class ThreadedNetConnection {
 	};
 	
 	private final BytesCallback engineMessageCb = new BytesCallback() {
-		public void callback(Pointer context, Pointer buffer, NativeLong size) {
+		public void callback(Pointer context, Pointer buffer, NativeSizeT size) {
 			sendFromNet(MSG_ENGINE_MESSAGE, buffer.getByteArray(0, size.intValue()));
 		}
 	};
@@ -498,7 +498,7 @@ class ThreadedNetConnection {
 				byte[] message = (byte[])msg.obj;
 				Memory mem = new Memory(message.length);
 				mem.write(0, message, 0, message.length);
-				FLIB.flib_netconn_send_engineMessage(conn, mem, new NativeLong(message.length));
+				FLIB.flib_netconn_send_engineMessage(conn, mem, NativeSizeT.valueOf(message.length));
 				break;
 			}
 			case MSG_SEND_ROUND_FINISHED: {
@@ -545,7 +545,7 @@ class ThreadedNetConnection {
 				byte[] message = (byte[])msg.obj;
 				Memory mem = new Memory(message.length);
 				mem.write(0, message, 0, message.length);
-				FLIB.flib_netconn_send_mapDrawdata(conn, mem, new NativeLong(message.length));
+				FLIB.flib_netconn_send_mapDrawdata(conn, mem, NativeSizeT.valueOf(message.length));
 				break;
 			}
 			case MSG_SEND_GAMESTYLE: {

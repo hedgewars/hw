@@ -30,6 +30,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class SettingsFragment extends Fragment implements RoomStateManager.Observer {
+	private static final String TAG = SettingsFragment.class.getSimpleName();
+	
 	private Spinner styleSpinner, schemeSpinner, weaponsetSpinner, themeSpinner;
 	private ImageView themeIcon;
 	
