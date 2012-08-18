@@ -146,7 +146,7 @@ cratePos = {
             {1779, 948, amRope, 3}, {3090, 1066, amRope, 3},
             {947, 480, amBazooka, 3}, {1097, 480, amMortar, 3},
             {1139, 451, amSnowball, 3}, {1207, 468, amShotgun, 3},
-            {1024, 393, amSniperRifle, 2}, {998, 391, amDynamite, 2}
+            {1024, 393, amSniperRifle, 2}, {998, 391, amDynamite, 2},
             {1024, 343, amRope, 2}, {998, 341, amRope, 2}
            }
 reactions = {loc("Yeah, take that!"), loc("Bullseye"), loc("Die, die, die!")}
