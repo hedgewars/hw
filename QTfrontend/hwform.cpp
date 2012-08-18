@@ -878,7 +878,7 @@ void HWForm::EditTeam(const QString & teamName)
 void HWForm::AfterTeamEdit()
 {
     UpdateTeamsLists();
-    GoBack();
+    //GoBack();
 }
 
 
