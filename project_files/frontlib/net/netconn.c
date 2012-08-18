@@ -333,7 +333,6 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 					conn->onDisconnectedCb(conn->onDisconnectedCtx, NETCONN_DISCONNECT_INTERNAL_ERROR, "Internal error");
 					exit = true;
 	        	} else {
-	        		team->remoteDriven = true;
 	        		conn->onTeamAddCb(conn->onTeamAddCtx, team);
 	        	}
 	        }
