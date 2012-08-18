@@ -11,7 +11,7 @@ import java.util.List;
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Datastructures.MapRecipe;
 import org.hedgewars.hedgeroid.Datastructures.Scheme;
-import org.hedgewars.hedgeroid.Datastructures.Team;
+import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.Datastructures.Weaponset;
 import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.frontlib.Frontlib;
@@ -283,7 +283,7 @@ class ThreadedNetConnection {
 	
 	private final TeamCallback teamAddedCb = new TeamCallback() {
 		public void callback(Pointer context, TeamPtr team) {
-			sendFromNet(MSG_TEAM_ADDED, team.deref().team);
+			sendFromNet(MSG_TEAM_ADDED, team.deref());
 		}
 	};
 	
@@ -468,7 +468,7 @@ class ThreadedNetConnection {
 				break;
 			}
 			case MSG_SEND_ADD_TEAM: {
-				FLIB.flib_netconn_send_addTeam(conn, TeamPtr.createJavaOwned((Team)msg.obj));
+				FLIB.flib_netconn_send_addTeam(conn, TeamPtr.createJavaOwned((TeamInGame)msg.obj));
 				break;
 			}
 			case MSG_SEND_REMOVE_TEAM: {
@@ -483,15 +483,11 @@ class ThreadedNetConnection {
 				break;
 			}
 			case MSG_SEND_TEAM_COLOR_INDEX: {
-				if(FLIB.flib_netconn_send_teamColor(conn, (String)msg.obj, msg.arg1)==0) {
-					sendFromNet(MSG_TEAM_COLOR_CHANGED, msg.arg1, msg.obj);
-				}
+				FLIB.flib_netconn_send_teamColor(conn, (String)msg.obj, msg.arg1);
 				break;
 			}
 			case MSG_SEND_TEAM_HOG_COUNT: {
-				if(FLIB.flib_netconn_send_teamHogCount(conn, (String)msg.obj, msg.arg1)==0) {
-					sendFromNet(MSG_HOG_COUNT_CHANGED, msg.arg1, msg.obj);
-				}
+				FLIB.flib_netconn_send_teamHogCount(conn, (String)msg.obj, msg.arg1);
 				break;
 			}
 			case MSG_SEND_ENGINE_MESSAGE: {

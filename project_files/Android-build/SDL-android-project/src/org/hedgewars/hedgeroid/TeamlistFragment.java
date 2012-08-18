@@ -96,7 +96,7 @@ public class TeamlistFragment extends ListFragment implements TeamlistAdapter.Li
 	}
 	
 	public void onColorClicked(TeamInGame team) {
-		netplay.sendTeamColorIndex(team.team.name, (team.ingameAttribs.colorIndex+1)%TeamIngameAttributes.TEAM_COLORS.length);
+		netplay.changeTeamColorIndex(team.team.name, (team.ingameAttribs.colorIndex+1)%TeamIngameAttributes.TEAM_COLORS.length);
 	}
 	
 	public void onHogcountClicked(TeamInGame team) {
@@ -104,7 +104,7 @@ public class TeamlistFragment extends ListFragment implements TeamlistAdapter.Li
 		if(newHogCount>Team.HEDGEHOGS_PER_TEAM) {
 			newHogCount = 1;
 		}
-		netplay.sendTeamHogCount(team.team.name, newHogCount);
+		netplay.changeTeamHogCount(team.team.name, newHogCount);
 	}
 	
 	public void onTeamClicked(TeamInGame team) {

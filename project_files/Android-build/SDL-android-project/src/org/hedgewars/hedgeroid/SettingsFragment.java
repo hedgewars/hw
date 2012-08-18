@@ -56,6 +56,7 @@ public class SettingsFragment extends Fragment implements RoomStateManager.Obser
 		} catch (IOException e) {
 			Toast.makeText(getActivity().getApplicationContext(), R.string.error_missing_sdcard_or_files, Toast.LENGTH_LONG).show();
 			getActivity().finish();
+			return null;
 		}
 		
 		Collections.sort(styles, String.CASE_INSENSITIVE_ORDER);
