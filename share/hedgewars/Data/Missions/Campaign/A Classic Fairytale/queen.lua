@@ -169,6 +169,7 @@ function SetupLeaderDeadAnim()
   if gear == nil then
     return
   end
+  table.insert(leaderDeadAnim, {func = AnimFollowGear, args = {gear}})
   table.insert(leaderDeadAnim, {func = AnimSay, args = {gear, "That traitor won't be killing us anymore!", SAY_THINK, 6000}})
 end
 
