@@ -806,6 +806,7 @@ function RestoreWave(index)
   for i = (index - 1) * 3 + 1, index * 3 do
     if cannibalHidden[i] == true then
       RestoreHog(cannibals[i])
+      AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
       FollowGear(cannibals[i])
       cannibalHidden[i] = false
     end
@@ -922,7 +923,7 @@ function AddHogs()
   AnimSetGearPosition(cyborg, 0, 0)
 
   for i = 1, 9 do
-    AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
+    AnimSetGearPosition(cannibals[i], cannibalPos[i][1], cannibalPos[i][2] + 40)
     AnimTurn(cannibals[i], cannibalDir[i])
   end
 end
