@@ -2,6 +2,7 @@ package org.hedgewars.hedgeroid;
 
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Datastructures.Team;
+import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.NetplayStateFragment.NetplayStateListener;
 import org.hedgewars.hedgeroid.netplay.Netplay;
 import org.hedgewars.hedgeroid.netplay.Netplay.State;
@@ -76,7 +77,7 @@ public class RoomActivity extends FragmentActivity implements NetplayStateListen
     }
     
 	public void onTeamAddDialogSubmitted(Team newTeam) {
-		netplay.sendAddTeam(newTeam);
+		netplay.sendAddTeam(newTeam, TeamInGame.getUnusedOrRandomColorIndex(netplay.roomTeamlist.getMap().values()));
 	}
 	
 	public RoomStateManager getRoomStateManager() {

@@ -80,7 +80,7 @@ public class Netplay {
 	public final MessageLog lobbyChatlog;
 	public final MessageLog roomChatlog;
 	public final ObservableTreeMap<String, TeamInGame> roomTeamlist = new ObservableTreeMap<String, TeamInGame>();
-	private final Map<String, Team> roomRequestedTeams = new TreeMap<String, Team>();
+	private final Map<String, TeamInGame> roomRequestedTeams = new TreeMap<String, TeamInGame>();
 	
 	private final List<GameMessageListener> gameMessageListeners = new LinkedList<GameMessageListener>();
 	private final List<RunGameListener> runGameListeners = new LinkedList<RunGameListener>();
@@ -176,13 +176,27 @@ public class Netplay {
 	public void sendCreateRoom(String name) { sendToNet(MSG_SEND_CREATE_ROOM, name); }
 	public void sendLeaveRoom(String message) { sendToNet(MSG_SEND_LEAVE_ROOM, message); }
 	public void sendKick(String player) { sendToNet(MSG_SEND_KICK, player); }
-	public void sendAddTeam(Team newTeam) {
-		roomRequestedTeams.put(newTeam.name, newTeam);
-		sendToNet(MSG_SEND_ADD_TEAM, newTeam);
+	public void sendAddTeam(Team newTeam, int colorIndex) {
+		TeamIngameAttributes tia = new TeamIngameAttributes(playerName, colorIndex, TeamIngameAttributes.DEFAULT_HOG_COUNT, false);
+		TeamInGame newTeamInGame = new TeamInGame(newTeam, tia);
+		roomRequestedTeams.put(newTeam.name, newTeamInGame);
+		sendToNet(MSG_SEND_ADD_TEAM, newTeamInGame);
 	}
 	public void sendRemoveTeam(String teamName) { sendToNet(MSG_SEND_REMOVE_TEAM, teamName); }
-	public void sendTeamColorIndex(String teamName, int colorIndex) { sendToNet(MSG_SEND_TEAM_COLOR_INDEX, colorIndex, teamName); }
-	public void sendTeamHogCount(String teamName, int hogCount) { sendToNet(MSG_SEND_TEAM_HOG_COUNT, hogCount, teamName); }
+	public void changeTeamColorIndex(String teamName, int colorIndex) {
+		if(isChief()) {
+			sendToNet(MSG_SEND_TEAM_COLOR_INDEX, colorIndex, teamName);
+			TeamInGame team = roomTeamlist.get(teamName);
+			roomTeamlist.put(teamName, team.withAttribs(team.ingameAttribs.withColorIndex(colorIndex)));
+		}
+	}
+	public void changeTeamHogCount(String teamName, int hogCount) {
+		if(isChief()) {
+			sendToNet(MSG_SEND_TEAM_HOG_COUNT, hogCount, teamName);
+			TeamInGame team = roomTeamlist.get(teamName);
+			roomTeamlist.put(teamName, team.withAttribs(team.ingameAttribs.withHogCount(hogCount)));
+		}
+	}
 	public void sendEngineMessage(byte[] engineMessage) { sendToNet(MSG_SEND_ENGINE_MESSAGE, engineMessage); }
 	public void sendRoundFinished(boolean withoutError) { sendToNet(MSG_SEND_ROUND_FINISHED, Boolean.valueOf(withoutError)); }
 	public void sendToggleReady() { sendToNet(MSG_SEND_TOGGLE_READY); }
@@ -419,15 +433,14 @@ public class Netplay {
 				break;
 			}
 			case MSG_TEAM_ADDED: {
-				Team newTeam = (Team)msg.obj;
-				int colorIndex = TeamInGame.getUnusedOrRandomColorIndex(roomTeamlist.getMap().values());
-				TeamIngameAttributes attrs = new TeamIngameAttributes(playerName, colorIndex, TeamIngameAttributes.DEFAULT_HOG_COUNT, true);
-				TeamInGame tig = new TeamInGame(newTeam, attrs);
-				roomTeamlist.put(newTeam.name, tig);
+				TeamInGame newTeam = (TeamInGame)msg.obj;
 				if(isChief()) {
-					sendTeamColorIndex(newTeam.name, attrs.colorIndex);
-					sendTeamHogCount(newTeam.name, attrs.hogCount);
+					int freeColor = TeamInGame.getUnusedOrRandomColorIndex(roomTeamlist.getMap().values());
+					sendToNet(MSG_SEND_TEAM_HOG_COUNT, newTeam.ingameAttribs.hogCount, newTeam.team.name);
+					sendToNet(MSG_SEND_TEAM_COLOR_INDEX, freeColor, newTeam.team.name);
+					newTeam = newTeam.withAttribs(newTeam.ingameAttribs.withColorIndex(freeColor));
 				}
+				roomTeamlist.put(newTeam.team.name, newTeam);
 				break;
 			}
 			case MSG_TEAM_DELETED: {
@@ -435,15 +448,12 @@ public class Netplay {
 				break;
 			}
 			case MSG_TEAM_ACCEPTED: {
-				Team requestedTeam = roomRequestedTeams.remove(msg.obj);
+				TeamInGame requestedTeam = roomRequestedTeams.remove(msg.obj);
 				if(requestedTeam!=null) {
-					int colorIndex = TeamInGame.getUnusedOrRandomColorIndex(roomTeamlist.getMap().values());
-					TeamIngameAttributes attrs = new TeamIngameAttributes(playerName, colorIndex, TeamIngameAttributes.DEFAULT_HOG_COUNT, false);
-					TeamInGame tig = new TeamInGame(requestedTeam, attrs);
-					roomTeamlist.put(requestedTeam.name, tig);
+					roomTeamlist.put(requestedTeam.team.name, requestedTeam);
 					if(isChief()) {
-						sendTeamColorIndex(requestedTeam.name, attrs.colorIndex);
-						sendTeamHogCount(requestedTeam.name, attrs.hogCount);
+						// Not strictly necessary, but QtFrontend does it...
+						sendToNet(MSG_SEND_TEAM_HOG_COUNT, requestedTeam.ingameAttribs.hogCount, requestedTeam.team.name);
 					}
 				} else {
 					Log.e("Netplay", "Got accepted message for team that was never requested.");
@@ -453,8 +463,16 @@ public class Netplay {
 			case MSG_TEAM_COLOR_CHANGED: {
 				TeamInGame oldEntry = roomTeamlist.get((String)msg.obj);
 				if(oldEntry != null) {
-					TeamIngameAttributes newAttribs = oldEntry.ingameAttribs.withColorIndex(msg.arg1);
-					roomTeamlist.put(oldEntry.team.name, oldEntry.withAttribs(newAttribs));
+					/*
+					 * If we are chief, we ignore colors from the outside. They only come from the server
+					 * when someone adds a team then, and we override that choice anyway.
+					 * Worse, that color message arrives *after* we have overridden the color, so it would
+					 * re-override it right back.
+					 */
+					if(!isChief()) {
+						TeamIngameAttributes newAttribs = oldEntry.ingameAttribs.withColorIndex(msg.arg1);
+						roomTeamlist.put(oldEntry.team.name, oldEntry.withAttribs(newAttribs));
+					}
 				} else {
 					Log.e("Netplay", "Color update for unknown team "+msg.obj);
 				}

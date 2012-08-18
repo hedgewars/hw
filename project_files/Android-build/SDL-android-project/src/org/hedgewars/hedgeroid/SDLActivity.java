@@ -477,7 +477,7 @@ class SDLMain implements Runnable {
 		try {
 			SDLActivity.synchronizedNativeInit(new String[] { String.valueOf(port),
 					String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
-					"0", "en.txt", Base64.encodeToString(playerName.getBytes("UTF-8"), 0), "1", "1", "1", path, ""  });
+					Integer.toString(0x40+0x10+0x100+0x2), "en.txt", Base64.encodeToString(playerName.getBytes("UTF-8"), 0), "1", "1", "1", path, ""  });
 		} catch (UnsupportedEncodingException e) {
 			throw new AssertionError(e); // never happens
 		}
