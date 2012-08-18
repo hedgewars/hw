@@ -57,6 +57,11 @@ static int fillTeamFromMsg(flib_team *team, char **parts) {
 			return -1;
 		}
 	}
+
+	// Set some default assumptions as well
+	team->colorIndex = DEFAULT_COLOR_INDEX;
+	team->hogsInGame = DEFAULT_HEDGEHOG_COUNT;
+	team->remoteDriven = true;
 	return 0;
 }
 
