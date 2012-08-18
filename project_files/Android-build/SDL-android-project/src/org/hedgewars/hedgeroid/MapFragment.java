@@ -81,6 +81,7 @@ public class MapFragment extends Fragment implements RoomStateManager.Observer {
 		} catch (IOException e) {
 			Toast.makeText(getActivity().getApplicationContext(), R.string.error_missing_sdcard_or_files, Toast.LENGTH_LONG).show();
 			getActivity().finish();
+			return null;
 		}
 		Collections.sort(mapFiles, MapFile.MISSIONS_FIRST_NAME_ORDER);
 		
@@ -200,16 +201,8 @@ public class MapFragment extends Fragment implements RoomStateManager.Observer {
 	private final OnClickListener mapClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			stateManager.changeMapSeed(MapRecipe.makeRandomSeed());
-			switch(mapTypeSpinner.getSelectedItemPosition()) {
-			case Frontlib.MAPGEN_NAMED:
+			if(mapTypeSpinner.getSelectedItemPosition() == Frontlib.MAPGEN_NAMED) {
 				mapNameSpinner.setSelection(random.nextInt(mapNameSpinner.getCount()));
-				break;
-			case Frontlib.MAPGEN_REGULAR:
-				templateSpinner.setSelection(Frontlib.TEMPLATEFILTER_ALL);
-				break;
-			case Frontlib.MAPGEN_MAZE:
-				mazeSizeSpinner.setSelection(random.nextInt(mazeSizeSpinner.getCount()));
-				break;
 			}
 		}
 	};
