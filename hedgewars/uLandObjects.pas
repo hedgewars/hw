@@ -501,7 +501,7 @@ while not eof(f) do
             c2.g:= t;
             c2.b:= t
             end;
-        ExplosionBorderColor:= c2.r shl 24 or c2.g shl 16 or c2.b shl 8 or $FF; 
+        ExplosionBorderColor:= (c2.r shl RShift) or (c2.g shl GShift) or (c2.b shl BShift) or AMask; 
         end
     else if key = 'water-top' then
         begin
