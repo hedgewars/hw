@@ -780,7 +780,9 @@ begin
 
     LandBackSurface:= nil;
     digest:= '';
-
+    LAND_WIDTH:= 0;
+    LAND_HEIGHT:= 0;
+(*
     if (cReducedQuality and rqBlurryLand) = 0 then
         SetLength(LandPixels, LAND_HEIGHT, LAND_WIDTH)
     else
@@ -788,6 +790,7 @@ begin
 
     SetLength(Land, LAND_HEIGHT, LAND_WIDTH);
     SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
+*)
 end;
 
 procedure freeModule;
