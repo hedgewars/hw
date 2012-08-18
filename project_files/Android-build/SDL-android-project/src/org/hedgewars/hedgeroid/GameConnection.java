@@ -10,6 +10,7 @@ import org.hedgewars.hedgeroid.frontlib.Frontlib.IntCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.StrBoolCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.StrCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.VoidCallback;
+import org.hedgewars.hedgeroid.frontlib.NativeSizeT;
 import org.hedgewars.hedgeroid.netplay.GameMessageListener;
 import org.hedgewars.hedgeroid.netplay.Netplay;
 import org.hedgewars.hedgeroid.util.TickHandler;
@@ -20,7 +21,6 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.sun.jna.Memory;
-import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 
 public final class GameConnection {
@@ -162,7 +162,7 @@ public final class GameConnection {
 	
 	// runs on the IPCThread
 	private final BytesCallback engineMessageCb = new BytesCallback() {
-		public void callback(Pointer context, Pointer buffer, NativeLong size) {
+		public void callback(Pointer context, Pointer buffer, NativeSizeT size) {
 			netplay.sendEngineMessage(buffer.getByteArray(0, size.intValue()));
 		}
 	};
@@ -197,10 +197,9 @@ public final class GameConnection {
 				public void run() {
 					Memory mem = new Memory(em.length);
 					mem.write(0, em, 0, em.length);
-					Flib.INSTANCE.flib_gameconn_send_enginemsg(conn, mem, new NativeLong(em.length));
+					Flib.INSTANCE.flib_gameconn_send_enginemsg(conn, mem, NativeSizeT.valueOf(em.length));
 				}
 			});
-			
 		}
 		
 		public void onChatMessage(final String nick, final String message) {

@@ -22,7 +22,6 @@ import org.hedgewars.hedgeroid.Datastructures.Weaponset;
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
 import com.sun.jna.Memory;
-import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
 import com.sun.jna.Structure;
@@ -122,14 +121,10 @@ import com.sun.jna.Structure;
  * headers, the compiler will give you errors if the signatures don't match.
  */
 public interface Frontlib extends Library {
-	static final int NATIVE_INT_SIZE = 4;
-	static final int NATIVE_BOOL_SIZE = 1;
-	
 	public static class NetconnPtr extends PointerType { }
 	public static class MapconnPtr extends PointerType { }
 	public static class GameconnPtr extends PointerType { }
 	
-	// TODO avoid code duplication in the pointer types
 	public static class MetaschemePtr extends PointerType {
 		public MetaScheme deref() {
 			return deref(getPointer());
@@ -555,10 +550,10 @@ public interface Frontlib extends Library {
 			if(buf != null) {
 				drawData = new Memory(buf.length);
 				drawData.write(0, buf, 0, buf.length);
-				drawDataSize = new NativeLong(buf.length);
+				drawDataSize = NativeSizeT.valueOf(buf.length);
 			} else {
 				drawData = null;
-				drawDataSize = new NativeLong(0);
+				drawDataSize = NativeSizeT.valueOf(0);
 			}
 			templateFilter = map.templateFilter;
 			mazeSize = map.mazeSize;
@@ -578,7 +573,7 @@ public interface Frontlib extends Library {
 		public String seed;
 		public String theme;
 		public Pointer drawData;
-		public NativeLong drawDataSize;
+		public NativeSizeT drawDataSize;
 		public int templateFilter;
 		public int mazeSize;
 	}
@@ -687,15 +682,15 @@ public interface Frontlib extends Library {
 		public void fillFrom(Scheme scheme) {
 			MetaScheme meta = MetaScheme.INSTANCE;
 			name = scheme.name;
-			settings = new Memory(NATIVE_INT_SIZE * meta.settings.size());
+			settings = new Memory(AndroidTypeMapper.NATIVE_INT_SIZE * meta.settings.size());
 			for(int i=0; i<meta.settings.size(); i++) {
 				Integer value = scheme.settings.get(meta.settings.get(i).name);
-				settings.setInt(NATIVE_INT_SIZE*i, value);
+				settings.setInt(AndroidTypeMapper.NATIVE_INT_SIZE*i, value);
 			}
-			mods = new Memory(NATIVE_BOOL_SIZE * meta.mods.size());
+			mods = new Memory(AndroidTypeMapper.NATIVE_BOOL_SIZE * meta.mods.size());
 			for(int i=0; i<meta.mods.size(); i++) {
 				Boolean value = scheme.mods.get(meta.mods.get(i).name);
-				mods.setByte(NATIVE_BOOL_SIZE*i, (byte)(value ? 1 : 0));
+				mods.setByte(AndroidTypeMapper.NATIVE_BOOL_SIZE*i, (byte)(value ? 1 : 0));
 			}
 		}
 
@@ -703,7 +698,7 @@ public interface Frontlib extends Library {
 			Map<String, Integer> settingsMap = new HashMap<String, Integer>();
 			MetaScheme meta = MetaScheme.INSTANCE;
 			for(int i=0; i<meta.settings.size(); i++) {
-				settingsMap.put(meta.settings.get(i).name, settings.getInt(NATIVE_INT_SIZE*i));
+				settingsMap.put(meta.settings.get(i).name, settings.getInt(AndroidTypeMapper.NATIVE_INT_SIZE*i));
 			}
 			Map<String, Boolean> modsMap = new HashMap<String, Boolean>();
 			for(int i=0; i<meta.mods.size(); i++) {
@@ -934,11 +929,11 @@ public interface Frontlib extends Library {
 	}
 	
 	public static interface BytesCallback extends Callback {
-		void callback(Pointer context, Pointer buffer, NativeLong size);
+		void callback(Pointer context, Pointer buffer, NativeSizeT size);
 	}
 	
 	public static interface BytesBoolCallback extends Callback {
-		void callback(Pointer context, Pointer buffer, NativeLong size, boolean arg3);
+		void callback(Pointer context, Pointer buffer, NativeSizeT size, boolean arg3);
 	}
 	
 	public static interface SchemeCallback extends Callback {
@@ -1021,7 +1016,7 @@ public interface Frontlib extends Library {
 	int flib_netconn_send_toggleReady(NetconnPtr conn);
 	int flib_netconn_send_addTeam(NetconnPtr conn, TeamPtr team);
 	int flib_netconn_send_removeTeam(NetconnPtr conn, String teamname);
-	int flib_netconn_send_engineMessage(NetconnPtr conn, Pointer message, NativeLong size);
+	int flib_netconn_send_engineMessage(NetconnPtr conn, Pointer message, NativeSizeT size);
 	int flib_netconn_send_teamHogCount(NetconnPtr conn, String teamname, int hogcount);
 	int flib_netconn_send_teamColor(NetconnPtr conn, String teamname, int colorIndex);
 	int flib_netconn_send_weaponset(NetconnPtr conn, WeaponsetPtr weaponset);
@@ -1032,7 +1027,7 @@ public interface Frontlib extends Library {
 	int flib_netconn_send_mapMazeSize(NetconnPtr conn, int mazeSize);
 	int flib_netconn_send_mapSeed(NetconnPtr conn, String seed);
 	int flib_netconn_send_mapTheme(NetconnPtr conn, String theme);
-	int flib_netconn_send_mapDrawdata(NetconnPtr conn, Pointer drawData, NativeLong size);
+	int flib_netconn_send_mapDrawdata(NetconnPtr conn, Pointer drawData, NativeSizeT size);
 	int flib_netconn_send_script(NetconnPtr conn, String scriptName);
 	int flib_netconn_send_scheme(NetconnPtr conn, SchemePtr scheme);
 	int flib_netconn_send_roundfinished(NetconnPtr conn, boolean withoutError);
@@ -1086,15 +1081,15 @@ public interface Frontlib extends Library {
 	static final int GAME_END_ERROR = 3;
 	
 	GameconnPtr flib_gameconn_create(String playerName, GameSetupPtr setup, boolean netgame);
-	GameconnPtr flib_gameconn_create_playdemo(Buffer demo, NativeLong size);
-	GameconnPtr flib_gameconn_create_loadgame(String playerName, Buffer save, NativeLong size);
+	GameconnPtr flib_gameconn_create_playdemo(Buffer demo, NativeSizeT size);
+	GameconnPtr flib_gameconn_create_loadgame(String playerName, Buffer save, NativeSizeT size);
 	GameconnPtr flib_gameconn_create_campaign(String playerName, String seed, String script);
 
 	void flib_gameconn_destroy(GameconnPtr conn);
 	int flib_gameconn_getport(GameconnPtr conn);
 	void flib_gameconn_tick(GameconnPtr conn);
 
-	int flib_gameconn_send_enginemsg(GameconnPtr conn, Pointer data, NativeLong len);
+	int flib_gameconn_send_enginemsg(GameconnPtr conn, Pointer data, NativeSizeT len);
 	int flib_gameconn_send_textmsg(GameconnPtr conn, int msgtype, String msg);
 	int flib_gameconn_send_chatmsg(GameconnPtr conn, String playername, String msg);
 	int flib_gameconn_send_quit(GameconnPtr conn);
