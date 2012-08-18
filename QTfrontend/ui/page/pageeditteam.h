@@ -40,9 +40,6 @@ class PageEditTeam : public AbstractPage
         void editTeam(const QString & name, const QString & playerHash);
         void deleteTeam(const QString & name);
 
-    signals:
-        void teamEdited();
-
     public slots:
         void CBFort_activated(const QString & gravename);
 
