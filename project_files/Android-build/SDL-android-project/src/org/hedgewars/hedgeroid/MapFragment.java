@@ -50,6 +50,7 @@ public class MapFragment extends Fragment implements RoomStateManager.Observer {
 	 */
 	private boolean previewGenerationInProgress;
 	private MapRecipe newPreviewRequest;
+	private MapRecipe currentMap; // kept for reference on every change to find out what changed
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,9 +91,9 @@ public class MapFragment extends Fragment implements RoomStateManager.Observer {
 		mazeSizeSpinner = prepareSpinner(v, R.id.spinMazeSize, Arrays.asList(getResources().getStringArray(R.array.map_maze_sizes)), mazeSizeSelectedListener);
 
 		stateManager.registerObserver(this);
-		MapRecipe map = stateManager.getMapRecipe();
-		if(map != null) {
-			updateDisplay(map);
+		currentMap = stateManager.getMapRecipe();
+		if(currentMap != null) {
+			updateDisplay(currentMap);
 		}
 		setChiefState(stateManager.getChiefStatus());
 		mapPreviewHandler.activity();
@@ -218,8 +219,17 @@ public class MapFragment extends Fragment implements RoomStateManager.Observer {
 	}
 	
 	public void onMapChanged(MapRecipe recipe) {
+		if(currentMap==null
+				|| currentMap.mapgen != recipe.mapgen
+				|| currentMap.mazeSize != recipe.mazeSize
+				|| !currentMap.name.equals(recipe.name)
+				|| !currentMap.seed.equals(recipe.seed)
+				|| currentMap.templateFilter != recipe.templateFilter
+				|| !Arrays.equals(currentMap.getDrawData(), recipe.getDrawData())) {
+			mapPreviewHandler.activity();
+		}
 		updateDisplay(recipe);
-		mapPreviewHandler.activity();
+		currentMap = recipe;
 	}
 	
 	public void onGameStyleChanged(String gameStyle) { }
