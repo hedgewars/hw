@@ -185,7 +185,7 @@ function AfterMidAnim()
   SetupPlace3()
   SetGearMessage(natives[1], 0)
   AddNewEvent(CheckPrincessFreed, {}, DoPrincessFreed, {}, 0)
-  TurnTimeLeft = TurnTime
+  TurnTimeLeft = 0
   ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything."), 1, 7000)
 end
   
@@ -235,8 +235,10 @@ function AfterStartAnim()
   for i = 1, cyborgsNum do
     AddNewEvent(CheckGearDead, {cyborgs[i]}, DoCyborgDead, {i}, 0)
   end
+  AddNewEvent(CheckOutOfCluster, {}, DoOutOfCluster, {}, 1)
+  AddNewEvent(CheckOutOfGrenade, {}, DoOutOfGrenade, {}, 1)
   TurnTimeLeft = TurnTime
-  ShowMission(loc("Family Reunion"), loc("Hostage Situation"), loc("Save the princess! All your hogs must survive!|Hint: Kill the cyborgs first! Use the ammo very carefully!"), 1, 7000)
+  ShowMission(loc("Family Reunion"), loc("Hostage Situation"), loc("Save the princess! All your hogs must survive!|Hint: Kill the cyborgs first! Use the ammo very carefully!|Hint: You might want to spare a girder for cover!"), 1, 7000)
 end
 
 function SetupPlace2()
@@ -251,11 +253,11 @@ function SetupPlace2()
   PlaceGirder(2110, 980, 0)
 
 	SpawnAmmoCrate(814, 407, amBazooka, 8)
-	SpawnAmmoCrate(862, 494, amClusterBomb, 8)
+	clusterCrate = SpawnAmmoCrate(862, 494, amClusterBomb, 8)
 	SpawnAmmoCrate(855, 486, amBee, 5)
-	SpawnAmmoCrate(849, 459, amGrenade, 8)
+	grenadeCrate1 = SpawnAmmoCrate(849, 459, amGrenade, 8)
 	SpawnAmmoCrate(2077, 847, amWatermelon, 3)
-	SpawnAmmoCrate(2122, 847, amGrenade, 8)
+	grenadeCrate2 = SpawnAmmoCrate(2122, 847, amGrenade, 8)
 
 	SpawnUtilityCrate(747, 1577, amPickHammer, 1)
 	SpawnUtilityCrate(496, 1757, amGirder, 2)
@@ -326,6 +328,32 @@ function EndMission()
   TurnTimeLeft = 0
 end
 
+function CheckOutOfCluster()
+  return CheckGearDead(clusterCrate) and GetAmmoCount(natives[1], amClusterBomb) == 0
+end
+
+function CheckOutOfGrenade()
+  return CheckGearDead(grenadeCrate1) and CheckGearDead(grenadeCrate2) and GetAmmoCount(natives[1], amGrenade) == 0
+end
+
+function DoOutOfCluster()
+  clusterCrate = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amClusterBomb)
+end
+
+function DoOutOfGrenade()
+  grenadeCrate2 = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amGrenade)
+end
+
+function CheckNeedToHide()
+  if gearDead[princess] == true then
+    return false
+  end
+  return TurnTimeLeft == 0
+end
+
+function DoNeedToHide()
+  HideHedge(princess)
+end
 -----------------------------Misc--------------------------------------
 function HideHedge(hedge)
   if hedgeHidden[hedge] ~= true then
@@ -355,10 +383,10 @@ function SetupPlace()
     cyborgsNum = cyborgsNum - 1
   end
   HideHedge(cyborg)
-  AddGear(princessPos[1], princessPos[2], gtCase, 0, 0, 0, 0)
 end
 
 function SetupEvents()
+  AddNewEvent(CheckNeedToHide, {}, DoNeedToHide, {}, 1)
 end
 
 function SetupAmmo()
@@ -380,11 +408,11 @@ function AddHogs()
 
   AddTeam(loc("011101001"), 14483456, "ring", "UFO", "Robot", "cm_star")
   cyborg = AddHog(loc("Unit 334a$7%;.*"), 0, 200, "cyborg1")
-  princess = AddHog(loc("Fell From Heaven"), 0, 133, "tiara")
+  princess = AddHog(loc("Fell From Heaven"), 0, 333, "tiara")
   gearDead[cyborg] = false
   gearDead[princess] = false
 
-  AddTeam(loc("Biomechanic Team"), 14483457, "ring", "UFO", "Robot", "cm_star")
+  AddTeam(loc("Biomechanic Team"), 14483456, "ring", "UFO", "Robot", "cm_star")
   for i = 1, cyborgsNum do
     cyborgs[i] = AddHog(cyborgNames[i], cyborgsDif[i], cyborgsHealth[i], "cyborg2")
     gearDead[cyborgs[i]] = false
@@ -397,6 +425,7 @@ function AddHogs()
 
   AnimSetGearPosition(cyborg, unpack(cyborgPos))
   AnimSetGearPosition(princess, unpack(princessPos))
+  AnimTurn(princess, "Left")
 
   for i = 1, cyborgsNum do
     AnimSetGearPosition(cyborgs[i], unpack(cyborgsPos[i]))
@@ -428,7 +457,7 @@ function onGameInit()
 	Delay = 10 
   MapGen = 2
 	Theme = "Hell"
-  SuddenDeathTurns = 25
+  SuddenDeathTurns = 35
 
 	for i = 1, #map do
 		ParseCommand('draw ' .. map[i])
@@ -490,10 +519,9 @@ function onNewTurn()
   end
   if GetHogTeamName(CurrentHedgehog) == loc("011101001") then
     TurnTimeLeft = 0
-  elseif GetHogTeamName(CurrentHedgehog) == loc("Biomechanic Team") then
-    HideHedge(princess)
   else
-    RestoreHedge(princess)
+    AnimWait(princess, 10)
+    AddFunction({func = RestoreHedge, args = {princess}})
   end
 end
 
