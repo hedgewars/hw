@@ -713,7 +713,7 @@ begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
         0: GenBlank(EdgeTemplates[SelectTemplate]);
-        1: GenMaze;
+        1: begin ResizeLand(4096,2048); GenMaze; end;
         2: GenDrawnMap;
     else
         OutError('Unknown mapgen', true);
