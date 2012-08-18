@@ -28,7 +28,7 @@ unit uMobile;
 interface
 
 function  isPhone: Boolean; inline;
-function  getScreenDPI: Single; inline;
+function  getScreenDPI: Double; inline;
 procedure performRumble; inline;
 
 procedure GameLoading; inline;
@@ -36,7 +36,7 @@ procedure GameLoaded; inline;
 procedure SaveLoadingEnded; inline;
 
 implementation
-uses uVariables, uConsole;
+uses uVariables, uConsole, SDLh;
 
 // add here any external call that you need
 {$IFDEF IPHONEOS}
@@ -46,10 +46,6 @@ procedure stopLoadingIndicator; cdecl; external;
 procedure saveFinishedSynching; cdecl; external;
 function  isApplePhone: Boolean; cdecl; external;
 procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
-{$ENDIF}
-
-{$IFDEF ANDROID}
-function Android_JNI_getDensity(): Single; cdecl; external;
 {$ENDIF}
 
 // this function is just to determine whether we are running on a limited screen device
@@ -66,10 +62,11 @@ begin
 {$ENDIF}
 end;
 
-function getScreenDPI: Single; inline;
+function getScreenDPI: Double; inline;
 begin
 {$IFDEF ANDROID}
-    getScreenDPI:= Android_JNI_getDensity();
+//    getScreenDPI:= Android_JNI_getDensity();
+    getScreenDPI:= 1;
 {$ELSE}
     getScreenDPI:= 1;
 {$ENDIF}
