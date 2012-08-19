@@ -70,11 +70,14 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let jRoomClients = map (client irnc) $ roomClients irnc jRI
     let nicks = map nick jRoomClients
     let chans = map sendChan (cl : jRoomClients)
+    let isBanned = host cl `elem` roomBansList jRoom
     return $
         if isNothing maybeRI || not sameProto then
             [Warning "No such room"]
             else if isRestrictedJoins jRoom then
             [Warning "Joining restricted"]
+            else if isBanned then
+            [Warning "You are banned in this room"]
             else if roomPassword /= password jRoom then
             [NoticeMessage WrongPassword]
             else
@@ -183,7 +186,7 @@ handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = do
 
 handleCmd_lobby ["RESTART_SERVER"] = do
     cl <- thisClient
-    return [RestartServer]
+    return [RestartServer | isAdministrator cl]
 
 
 handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]

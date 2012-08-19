@@ -92,7 +92,7 @@ begin
     textRect.y:= Y;
     textRect.w:= w;
     textRect.h:= h;
-    DrawRoundRect(@finalRect, cWhiteColor, endian(cNearBlackColorChannels.value), Surface, true);
+    DrawRoundRect(@finalRect, cWhiteColor, cNearBlackColor, Surface, true);
     clr.r:= (Color shr 16) and $FF;
     clr.g:= (Color shr 8) and $FF;
     clr.b:= Color and $FF;

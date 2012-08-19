@@ -410,12 +410,10 @@ type
 
     PSDL_Color = ^TSDL_Color;
     TSDL_Color = record
-        case Byte of
-            0: ( r: Byte;
-                 g: Byte;
-                 b: Byte;
-                 unused: Byte; );
-            1: ( value: LongWord; );
+            r: Byte;
+            g: Byte;
+            b: Byte;
+            unused: Byte;
         end;
 
 

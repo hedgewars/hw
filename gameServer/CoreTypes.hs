@@ -94,6 +94,7 @@ data RoomInfo =
         readyPlayers :: !Int,
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
+        roomBansList :: [B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
     }
@@ -111,6 +112,7 @@ newRoom =
         0
         False
         False
+        []
         (
             Map.fromList $ Prelude.zipWith (,)
                 ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
