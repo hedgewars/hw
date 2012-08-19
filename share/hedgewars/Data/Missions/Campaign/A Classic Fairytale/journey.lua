@@ -19,7 +19,7 @@ startLeaksPosDuo = {3572, 1426}
 startEventXDuo = 3300
 startDensePosDuo = {3454, 1471}
 startCyborgPosDuo = {3202, 1307}
-midDensePosDuo = {1464, 1408}
+midDensePosDuo = {1464, 1410}
 midCyborgPosDuo = {1264, 1390}
 
 --///////////////////////////////VARIABLES///////////////////////////
@@ -234,7 +234,7 @@ end
 
 function AfterOutPitAnim()
   SetupCourseDuo()
-  RestoreHog(cannibals[5])
+  RestoreHedge(cannibals[5])
   AddAmmo(cannibals[5], amDEagle, 0)
   HideHedge(cannibals[5])
   AddEvent(CheckTookFire, {}, DoTookFire, {}, 0)
@@ -306,7 +306,7 @@ function SetupCourseDuo()
   PlaceGirder(952, 650, 0)
 
   fireCrate = SpawnAmmoCrate(1846, 1100, amFirePunch)
-  SpawnUtilityCrate(1900, 1149, amPickHammer)
+  SpawnUtilityCrate(1900, 1100, amPickHammer)
   SpawnAmmoCrate(950, 674, amDynamite)
   SpawnUtilityCrate(994, 825, amRope)
   SpawnUtilityCrate(570, 1357, amLowGravity)
@@ -469,6 +469,7 @@ function SetupAnimAcceptedLived()
   table.insert(outPitAnimAL, {func = AnimCustomFunction, args = {dense, RestoreCyborgOnly, {unpack(midCyborgPosDuo)}}, swh = false})
   table.insert(outPitAnimAL, {func = AnimTurn, args = {cyborg, "Right"}})
   table.insert(outPitAnimAL, {func = AnimTeleportGear, args = {dense, unpack(midDensePosDuo)}})
+  table.insert(outPitAnimAL, {func = AnimTurn, args = {dense, "Left"}})
   table.insert(outPitAnimAL, {func = AnimSay, args = {dense, loc("OH, COME ON!"), SAY_SHOUT, 3000}})
   table.insert(outPitAnimAL, {func = AnimSay, args = {cyborg, loc("Let's see what your comrade does now!"), SAY_SAY, 5000}})
   table.insert(outPitAnimAL, {func = AnimSwitchHog, args = {dense}})
@@ -531,6 +532,7 @@ function SetupAnimRefusedLived()
   table.insert(outPitAnimRL, {func = AnimCustomFunction, args = {dense, RestoreCyborgOnly, {unpack(midCyborgPosDuo)}}, swh = false})
   table.insert(outPitAnimRL, {func = AnimTurn, args = {cyborg, "Right"}})
   table.insert(outPitAnimRL, {func = AnimTeleportGear, args = {dense, unpack(midDensePosDuo)}})
+  table.insert(outPitAnimRL, {func = AnimTurn, args = {dense, "Left"}})
   table.insert(outPitAnimRL, {func = AnimSay, args = {dense, loc("OH, COME ON!"), SAY_SHOUT, 3000}})
   table.insert(outPitAnimRL, {func = AnimSay, args = {cyborg, loc("Let's see what your comrade does now!"), SAY_SAY, 5000}})
   table.insert(outPitAnimRL, {func = AnimSwitchHog, args = {dense}})
@@ -1034,6 +1036,7 @@ function onNewTurn()
       end
     end
     SetInputMask(band(0xFFFFFFFF, bnot(gmLeft + gmRight + gmLJump + gmHJump)))
+    TurnTimeLeft = 20000
   else
     SetInputMask(0xFFFFFFFF)
     TurnsLeft = TurnsLeft - 1
