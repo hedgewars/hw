@@ -30,6 +30,7 @@
 typedef enum {
 	AWAIT_CONNECTION,
 	AWAIT_REPLY,
+	AWAIT_CLOSE,
 	FINISHED
 } mapconn_state;
 
@@ -160,12 +161,21 @@ static void flib_mapconn_wrappedtick(flib_mapconn *conn) {
 
 	if(conn->progress == AWAIT_REPLY) {
 		if(flib_ipcbase_recv_map(conn->ipcBase, conn->mapBuffer) >= 0) {
-			conn->progress = FINISHED;
-			conn->onSuccessCb(conn->onSuccessCtx, conn->mapBuffer, conn->mapBuffer[IPCBASE_MAPMSG_BYTES-1]);
-			return;
+			conn->progress = AWAIT_CLOSE;
 		} else if(flib_ipcbase_state(conn->ipcBase) != IPC_CONNECTED) {
 			conn->progress = FINISHED;
 			conn->onFailureCb(conn->onSuccessCtx, "Engine connection closed unexpectedly.");
+			return;
+		}
+	}
+
+	if(conn->progress == AWAIT_CLOSE) {
+		// Just do throwaway reads so we find out when the engine disconnects
+		uint8_t buf[256];
+		flib_ipcbase_recv_message(conn->ipcBase, buf);
+		if(flib_ipcbase_state(conn->ipcBase) != IPC_CONNECTED) {
+			conn->progress = FINISHED;
+			conn->onSuccessCb(conn->onSuccessCtx, conn->mapBuffer, conn->mapBuffer[IPCBASE_MAPMSG_BYTES-1]);
 			return;
 		}
 	}

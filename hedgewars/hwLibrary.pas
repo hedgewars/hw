@@ -104,11 +104,6 @@ begin
 	GenLandPreview(port);
 end;
 
-procedure JNI_HW_Terminate(env: PJNIEnv; c: JClass); cdecl;
-begin
-	HW_terminate(false);
-end;
-
 exports
     JNI_HW_versionInfoNet name Java_Prefix+'HWversionInfoNetProto', 
     JNI_HW_versionInfoVersion name Java_Prefix+'HWversionInfoVersion', 
@@ -116,7 +111,6 @@ exports
     HW_getNumberOfweapons name Java_Prefix + 'HWgetNumberOfWeapons',
     HW_getMaxNumberOfHogs name Java_Prefix + 'HWgetMaxNumberOfHogs',
     HW_getMaxNumberOfTeams name Java_Prefix + 'HWgetMaxNumberOfTeams',
-    JNI_HW_Terminate name Java_Prefix + 'HWterminate',
     Game;
 {$ELSE}
 exports

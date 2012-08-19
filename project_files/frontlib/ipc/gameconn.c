@@ -41,6 +41,7 @@ struct _flib_gameconn {
 
 	gameconn_state state;
 	bool netgame;
+	int disconnectReason;
 
 	void (*onConnectCb)(void* context);
 	void *onConnectCtx;
@@ -90,6 +91,7 @@ static flib_gameconn *flib_gameconn_create_partial(bool record, const char *play
 			}
 			tempConn->state = AWAIT_CONNECTION;
 			tempConn->netgame = netGame;
+			tempConn->disconnectReason = GAME_END_ERROR;
 			clearCallbacks(tempConn);
 			result = tempConn;
 			tempConn = NULL;
@@ -281,15 +283,25 @@ int flib_gameconn_send_chatmsg(flib_gameconn *conn, const char *playername, cons
 }
 
 int flib_gameconn_send_quit(flib_gameconn *conn) {
-	if(log_badargs_if(conn==NULL)) {
+	return flib_gameconn_send_cmd(conn, "efinish");
+}
+
+int flib_gameconn_send_cmd(flib_gameconn *conn, const char *cmdString) {
+	if(log_badargs_if2(conn==NULL, cmdString==NULL)) {
 		return -1;
 	}
-	const char *msg = "\x07""efinish";
-	if(!flib_ipcbase_send_raw(conn->ipcBase, msg, msg[0]+1)) {
-		demo_append(conn, msg, msg[0]+1);
-		return 0;
+	int result = -1;
+	uint8_t converted[256];
+	size_t msglen = strlen(cmdString);
+	if(!log_e_if(msglen>255, "Message too long: %s", cmdString)) {
+		strcpy(converted+1, cmdString);
+		converted[0] = msglen;
+		if(!flib_ipcbase_send_raw(conn->ipcBase, converted, msglen+1)) {
+			demo_append(conn, converted, msglen+1);
+			result = 0;
+		}
 	}
-	return -1;
+	return result;
 }
 
 /**
@@ -384,6 +396,7 @@ static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 			case 'q':	// game finished
 				{
 					int reason = msgbuffer[1]=='Q' ? GAME_END_INTERRUPTED : msgbuffer[1]=='H' ? GAME_END_HALTED : GAME_END_FINISHED;
+					conn->disconnectReason = reason;
 					bool savegame = (reason != GAME_END_FINISHED) && !conn->netgame;
 					if(conn->demoBuffer) {
 						flib_buffer demoBuffer = flib_vector_as_buffer(conn->demoBuffer);
@@ -393,8 +406,6 @@ static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 							return;
 						}
 					}
-					conn->state = FINISHED;
-					conn->onDisconnectCb(conn->onDisconnectCtx, reason);
 					return;
 				}
 			case 's':	// Chat message
@@ -422,7 +433,7 @@ static void flib_gameconn_wrappedtick(flib_gameconn *conn) {
 
 	if(flib_ipcbase_state(conn->ipcBase) == IPC_NOT_CONNECTED) {
 		conn->state = FINISHED;
-		conn->onDisconnectCb(conn->onDisconnectCtx, GAME_END_ERROR);
+		conn->onDisconnectCb(conn->onDisconnectCtx, conn->disconnectReason);
 	}
 }
 
