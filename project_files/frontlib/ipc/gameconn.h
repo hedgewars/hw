@@ -123,10 +123,17 @@ int flib_gameconn_send_textmsg(flib_gameconn *conn, int msgtype, const char *msg
 int flib_gameconn_send_chatmsg(flib_gameconn *conn, const char *playername, const char *msg);
 
 /**
- * Request the engine to stop the game.
+ * Request the engine to stop the game (efinish).
  * You can use this to shut down a game early without directly killing the engine process.
  */
 int flib_gameconn_send_quit(flib_gameconn *conn);
+
+/**
+ * Send an arbitrary command to the engine, e.g. "eforcequit" to shut down the engine
+ * quickly. Commands prefixed with "e" will be processed by the engine's ProcessCommand
+ * method (with the e removed, so e.g. efinish will be parsed as finish).
+ */
+int flib_gameconn_send_cmd(flib_gameconn *conn, const char *cmdString);
 
 /**
  * Expected callback signature: void handleConnect(void *context)

@@ -185,10 +185,12 @@ procedure hedgehogFlight(Gear: PGear; time: Longword);
 begin
 if time > 4000 then
     begin
+	{$IFNDEF MOBILE}
     writeln(stdout, 'FLIGHT');
     writeln(stdout, Gear^.Hedgehog^.Team^.TeamName);
     writeln(stdout, inttostr(time));
     writeln(stdout, '');
+	{$ENDIF}
     end
 end;
 
@@ -290,6 +292,7 @@ if maxTeamDamage > 30 then
 if KilledHHs > 0 then
     SendStat(siKilledHHs, IntToStr(KilledHHs));
 
+{$IFNDEF MOBILE}
 // now to console
 if winnersClan <> nil then 
     begin
@@ -301,6 +304,7 @@ else
     writeln(stdout, 'DRAW');
 
 writeln(stdout, '');
+{$ENDIF}
 end;
 
 procedure initModule;
