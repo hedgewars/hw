@@ -121,7 +121,7 @@ class HWForm : public QMainWindow
         void onFrontendEffects(bool value);
         void Music(bool checked);
         void UpdateCampaignPage(int index);
-        void UpdatecampaignPageProgress(int index);
+        void UpdateCampaignPageProgress(int index);
         void InitCampaignPage();
         //Starts the transmission process for the feedback
         void SendFeedback();
