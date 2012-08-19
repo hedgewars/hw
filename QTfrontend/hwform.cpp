@@ -1592,7 +1592,7 @@ void HWForm::UpdateCampaignPage(int index)
     }
 }
 
-void HWForm::UpdatecampaignPageProgress(int index)
+void HWForm::UpdateCampaignPageProgress(int index)
 {
   int missionIndex = ui.pageCampaign->CBMission->currentIndex();
   UpdateCampaignPage(0);
