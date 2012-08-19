@@ -32,8 +32,8 @@ m2SpikyDead = 0
 TurnsLeft = 0
 stage = 0
 
-cyborgHidden = false
-princessHidden = false
+--cyborgHidden = false
+--princessHidden = false
 blowTaken = false
 fireTaken = false
 gravityTaken = false
@@ -46,6 +46,7 @@ denseDead = false
 princessDead = false
 cyborgDead = false
 cannibalDead = {}
+hedgeHidden = {}
 
 startAnim = {}
 startAnimAD = {}
@@ -86,7 +87,7 @@ end
 function AfterMidAnimAlone()
   SetupCourse()
   for i = 5, 8 do
-    RestoreHog(cannibals[i])
+    RestoreHedge(cannibals[i])
     AnimSetGearPosition(cannibals[i], unpack(cannibalPos[i]))
   end
 
@@ -105,23 +106,15 @@ function AfterMidAnimAlone()
 end
 
 function SkipEndAnimAlone()
-  if cyborgHidden then
-    RestoreHog(cyborg)
-    cyborgHidden = false
-  end
-  if princessHidden then
-    RestoreHog(princess)
-    princessHidden = false
-  end
+  RestoreHedge(cyborg)
+  RestoreHedge(princess)
   AnimSetGearPosition(cyborg, 437, 1700)
   AnimSetGearPosition(princess, 519, 1722)
 end
 
 function SkipEndAnimDuo()
-  if cyborgHidden then
-    RestoreHog(cyborg)
-    cyborgHidden = false
-  end
+  RestoreHedge(cyborg)
+  RestoreHedge(princess)
   if princessHidden then
     RestoreHog(princess)
     princessHidden = false
@@ -160,14 +153,9 @@ function SkipMidAnimAlone()
   AnimSetGearPosition(leaks, 2656, 1842)
   AnimSwitchHog(leaks)
   SetInputMask(0xFFFFFFFF)
-  if princessHidden == false then
-    HideHog(princess)
-    princessHidden = true
-  end
-  if cyborgHidden == false then
-    HideHog(cyborg)
-    cyborgHidden = true
-  end
+  AnimWait(dense, 1)
+  AddFunction({func = HideHedge, args = {princess}})
+  AddFunction({func = HideHedge, args = {cyborg}})
 end
 
 function AfterStartAnim()
@@ -240,17 +228,15 @@ end
 function SkipPastFlowerAnim()
   AnimSetGearPosition(dense, 2656, 1842)
   AnimSwitchHog(dense)
-  if cyborgHidden == false then
-    HideHog(cyborg)
-    cyborgHidden = true
-  end
+  AnimWait(dense, 1)
+  AddFunction({func = HideHedge, args = {cyborg}})
 end
 
 function AfterOutPitAnim()
   SetupCourseDuo()
   RestoreHog(cannibals[5])
   AddAmmo(cannibals[5], amDEagle, 0)
-  HideHog(cannibals[5])
+  HideHedge(cannibals[5])
   AddEvent(CheckTookFire, {}, DoTookFire, {}, 0)
   SetGearMessage(leaks, 0)
   SetGearMessage(dense, 0)
@@ -261,17 +247,13 @@ end
 function SkipOutPitAnim()
   AnimSetGearPosition(dense, unpack(midDensePosDuo))
   AnimSwitchHog(dense)
-  if cyborgHidden == false then
-    HideHog(cyborg)
-    cyborgHidden = true
-  end
+  AnimWait(dense, 1)
+  AddFunction({func = HideHedge, args = {cyborg}})
 end
 
 function RestoreCyborg(x, y, xx, yy)
-  RestoreHog(cyborg)
-  RestoreHog(princess)
-  cyborgHidden = false
-  princessHidden = false
+  RestoreHedge(cyborg)
+  RestoreHedge(princess)
   AnimOutOfNowhere(cyborg, x, y)
   AnimOutOfNowhere(princess, xx, yy)
   HogTurnLeft(princess, false)
@@ -279,8 +261,7 @@ function RestoreCyborg(x, y, xx, yy)
 end
 
 function RestoreCyborgOnly(x, y)
-  RestoreHog(cyborg)
-  cyborgHidden = false
+  RestoreHedge(cyborg)
   SetState(cyborg, 0)
   AnimOutOfNowhere(cyborg, x, y)
   return true
@@ -293,21 +274,12 @@ function TargetPrincess()
 end
 
 function HideCyborg()
-  if cyborgHidden == false then
-    HideHog(cyborg)
-    cyborgHidden = true
-  end
-  if princessHidden == false then
-    HideHog(princess)
-    princessHidden = true
-  end
+  HideHedge(cyborg)
+  HideHedge(princess)
 end
 
 function HideCyborgOnly()
-  if cyborgHidden == false then
-    HideHog(cyborg)
-    cyborgHidden = true
-  end
+  HideHedge(cyborg)
 end
 
 function SetupKillRoom()
@@ -599,6 +571,20 @@ function KillPrincess()
 end
 --/////////////////////////////Misc Functions////////////////////////
 
+function HideHedge(hedge)
+  if hedgeHidden[hedge] ~= true then
+    HideHog(hedge)
+    hedgeHidden[hedge] = true
+  end
+end
+
+function RestoreHedge(hedge)
+  if hedgeHidden[hedge] == true then
+    RestoreHog(hedge)
+    hedgeHidden[hedge] = false
+  end
+end
+
 function CondNeedToTurn(hog1, hog2)
   xl, xd = GetX(hog1), GetX(hog2)
   if xl > xd then
@@ -688,12 +674,10 @@ function StartMission()
     AddAnim(startAnim)
     AddFunction({func = AfterStartAnim, args = {}})
   end
-  HideHog(cyborg)
-  HideHog(princess)
-  cyborgHidden = true
-  princessHidden = true
+  HideHedge(cyborg)
+  HideHedge(princess)
   for i = 5, 8 do
-    HideHog(cannibals[i])
+    HideHedge(cannibals[i])
   end
 
 end

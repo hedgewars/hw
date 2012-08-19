@@ -98,9 +98,9 @@ function AfterRefusedAnim()
   FollowGear(ramon)
   TurnTimeLeft = 0
   SetGearMessage(ramon, 0)
-  HideHog(cyborg)
-  cyborgHidden = true
   SetGearMessage(leaks, 0)
+  AnimWait(ramon, 1)
+  AddFunction({func = HideHog, args = {cyborg}})
 end
 
 function SkipRefusedAnim()
@@ -206,12 +206,14 @@ function AfterAcceptedAnim()
   SpawnAmmoCrate(1370, 810, amGirder)
   SpawnAmmoCrate(1300, 810, amParachute)
   ShowMission(loc("The Shadow Falls"), loc("The walk of Fame"), loc("Return to Leaks A Lot! If you get stuck, press [Precise] to try again!"), 1, 6000)
-  HideHog(cyborg)
   AddEvent(CheckTookWeapons, {}, DoTookWeapons, {}, 0)
   AddEvent(CheckNeedGirder, {}, DoNeedGirder, {}, 0)
   AddEvent(CheckNeedWeapons, {}, DoNeedWeapons, {}, 0)
   AddEvent(CheckRestartReturnAccepted, {}, RestartReturnAccepted, {}, 1)
   RemoveEventFunc(CheckDenseDead)
+  SwitchHog(dense)
+  AnimWait(dense, 1)
+  AddFunction({func = HideHog, args = {cyborg}})
 end
 
 function SkipAcceptedAnim()
@@ -223,7 +225,6 @@ end
 
 function AfterAttackedAnim()
   stage = aloneStage
-  HideHog(cyborg)
   ShowMission(loc("The Shadow Falls"), loc("The Individualist"), loc("Defeat the cannibals!|Grenade hint: set the timer with [1-5], aim with [Up]/[Down] and hold [Space] to set power"), 1, 8000)
   AddAmmo(cannibals[6], amGrenade, 5)
   AddAmmo(cannibals[6], amFirePunch, 0)
@@ -231,6 +232,9 @@ function AfterAttackedAnim()
   SetGearMessage(leaks, 0)
   TurnTimeLeft = TurnTime
   AddEvent(CheckStronglingsDead, {}, DoStronglingsDeadAttacked, {}, 0)
+  SwitchHog(leaks)
+  AnimWait(dense, 1)
+  AddFunction({func = HideHog, args = {cyborg}})
 end
 
 function SkipAttackedAnim()
@@ -914,11 +918,16 @@ function onGearDamage(gear, damage)
 end
 
 function onPrecise()
-  if GameTime > 2500 then
+  if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
+    return
   end
   if stage == acceptedReturnStage then
     retryReturn = true
+--  else
+--    for i = 1, 9 do
+--      DeleteGear(cannibals[i])
+--    end
   end
 end
 
