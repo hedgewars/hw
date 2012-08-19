@@ -1047,8 +1047,11 @@ function onGearDamage(gear, damage)
 end
 
 function onPrecise()
-  if GameTime > 2500 then
+  if GameTime > 2500 and AnimInProgress() then
     SetAnimSkip(true)
+    return
   end
+--  RemoveEventFunc(CheckPastFlower)
+--  DeleteGear(sniperCrate)
 end
 
