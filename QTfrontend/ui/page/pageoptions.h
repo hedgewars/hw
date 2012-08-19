@@ -23,6 +23,7 @@
 
 class FPSEdit;
 class IconedGroupBox;
+class QSignalMapper;
 
 class PageOptions : public AbstractPage
 {
@@ -91,6 +92,7 @@ class PageOptions : public AbstractPage
         QPushButton *BtnNewTeam;
         QPushButton *BtnEditTeam;
         QPushButton *BtnDeleteTeam;
+        QList<QPushButton *> m_colorButtons;
 
     private slots:
         void forceFullscreen(int index);
@@ -101,6 +103,8 @@ class PageOptions : public AbstractPage
         void requestEditSelectedTeam();
         void requestDeleteSelectedTeam();
         void savePwdChanged(int state);
+        void colorButtonClicked(int i);
+        void onColorModelDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
 };
 
 #endif
