@@ -186,7 +186,9 @@ function AfterMidAnim()
   SetGearMessage(natives[1], 0)
   AddNewEvent(CheckPrincessFreed, {}, DoPrincessFreed, {}, 0)
   TurnTimeLeft = 0
-  ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything."), 1, 7000)
+  ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!"), 1, 7000)
+  vCirc = AddVisualGear(0,0,vgtCircle,0,true)
+  SetVisualGearValues(vCirc, 2625, 1500, 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
 end
   
 function SkipMidAnim()
@@ -273,7 +275,7 @@ end
 
 -----------------------------Events------------------------------------
 function CheckPrincessFreed()
-  return math.abs(GetX(natives[1]) - GetX(princess)) <= 10 and math.abs(GetX(natives[1]) - GetX(princess)) <= 10 and StoppedGear(natives[1]) 
+  return math.abs(GetX(natives[1]) - GetX(princess)) <= 10 and math.abs(GetY(natives[1]) - GetY(princess)) <= 10 and StoppedGear(natives[1]) 
         and GetY(natives[2]) < 1500 and GetY(natives[3]) < 1500 and StoppedGear(natives[2]) and StoppedGear(natives[3])
 end
 
@@ -551,9 +553,9 @@ function onPrecise()
     SetAnimSkip(true)
     return
   end
---  HideHedge(princess)
---  for i = 1, 5 do
---    DeleteGear(cyborgs[i])
---  end
---  AddAmmo(natives[1], amTeleport, 100)
+  HideHedge(princess)
+  for i = 1, 5 do
+    DeleteGear(cyborgs[i])
+  end
+  AddAmmo(natives[1], amTeleport, 100)
 end
