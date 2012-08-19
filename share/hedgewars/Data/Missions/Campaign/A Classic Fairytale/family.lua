@@ -553,9 +553,9 @@ function onPrecise()
     SetAnimSkip(true)
     return
   end
-  HideHedge(princess)
-  for i = 1, 5 do
-    DeleteGear(cyborgs[i])
-  end
-  AddAmmo(natives[1], amTeleport, 100)
+--  HideHedge(princess)
+--  for i = 1, 5 do
+--    DeleteGear(cyborgs[i])
+--  end
+--  AddAmmo(natives[1], amTeleport, 100)
 end
