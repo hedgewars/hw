@@ -54,24 +54,6 @@ static int sendInt(flib_netconn *conn, const char *cmdname, int param) {
 	return flib_netbase_sendf(conn->netBase, "%s\n%i\n\n", cmdname, param);
 }
 
-int flib_netconn_send_quit(flib_netconn *conn, const char *quitmsg) {
-	return sendStr(conn, "QUIT", (quitmsg && *quitmsg) ? quitmsg : "User quit");
-}
-
-int flib_netconn_send_chat(flib_netconn *conn, const char *chat) {
-	if(!flib_strempty(chat)) {
-		return sendStr(conn, "CHAT", chat);
-	}
-	return 0;
-}
-
-int flib_netconn_send_teamchat(flib_netconn *conn, const char *chat) {
-	if(!flib_strempty(chat)) {
-		return sendStr(conn, "TEAMCHAT", chat);
-	}
-	return 0;
-}
-
 int flib_netconn_send_nick(flib_netconn *conn, const char *nick) {
 	int result = -1;
 	if(!log_badargs_if2(conn==NULL, flib_strempty(nick))) {
@@ -107,6 +89,25 @@ int flib_netconn_send_password(flib_netconn *conn, const char *passwd) {
 	return result;
 }
 
+int flib_netconn_send_quit(flib_netconn *conn, const char *quitmsg) {
+	return sendStr(conn, "QUIT", (quitmsg && *quitmsg) ? quitmsg : "User quit");
+}
+
+int flib_netconn_send_chat(flib_netconn *conn, const char *chat) {
+	if(!flib_strempty(chat)) {
+		return sendStr(conn, "CHAT", chat);
+	}
+	return 0;
+}
+
+int flib_netconn_send_kick(flib_netconn *conn, const char *playerName) {
+	return sendStr(conn, "KICK", playerName);
+}
+
+int flib_netconn_send_playerInfo(flib_netconn *conn, const char *playerName) {
+	return sendStr(conn, "INFO", playerName);
+}
+
 int flib_netconn_send_request_roomlist(flib_netconn *conn) {
 	return sendVoid(conn, "LIST");
 }
@@ -119,6 +120,10 @@ int flib_netconn_send_joinRoom(flib_netconn *conn, const char *room) {
 	return -1;
 }
 
+int flib_netconn_send_playerFollow(flib_netconn *conn, const char *playerName) {
+	return sendStr(conn, "FOLLOW", playerName);
+}
+
 int flib_netconn_send_createRoom(flib_netconn *conn, const char *room) {
 	if(!sendStr(conn, "CREATE_ROOM", room)) {
 		conn->isChief = true;
@@ -127,10 +132,24 @@ int flib_netconn_send_createRoom(flib_netconn *conn, const char *room) {
 	return -1;
 }
 
-int flib_netconn_send_renameRoom(flib_netconn *conn, const char *roomName) {
-	return sendStr(conn, "ROOM_NAME", roomName);
+int flib_netconn_send_ban(flib_netconn *conn, const char *playerName) {
+	return sendStr(conn, "BAN", playerName);
 }
 
+int flib_netconn_send_clearAccountsCache(flib_netconn *conn) {
+	return sendVoid(conn, "CLEAR_ACCOUNTS_CACHE");
+}
+
+int flib_netconn_send_setServerVar(flib_netconn *conn, const char *name, const char *value) {
+	if(log_badargs_if3(conn==NULL, flib_strempty(name), flib_strempty(value))) {
+		return -1;
+	}
+	return flib_netbase_sendf(conn->netBase, "%s\n%s\n%s\n\n", "SET_SERVER_VAR", name, value);
+}
+
+int flib_netconn_send_getServerVars(flib_netconn *conn) {
+	return sendVoid(conn, "GET_SERVER_VAR");
+}
 int flib_netconn_send_leaveRoom(flib_netconn *conn, const char *str) {
 	int result = -1;
 	if(conn->netconnState==NETCONN_STATE_ROOM) {
@@ -198,17 +217,8 @@ int flib_netconn_send_removeTeam(flib_netconn *conn, const char *teamname) {
 	return -1;
 }
 
-int flib_netconn_send_engineMessage(flib_netconn *conn, const uint8_t *message, size_t size) {
-	int result = -1;
-	if(!log_badargs_if2(conn==NULL, message==NULL && size>0)) {
-		char *base64encout = NULL;
-		base64_encode_alloc((const char*)message, size, &base64encout);
-		if(base64encout) {
-			result = flib_netbase_sendf(conn->netBase, "EM\n%s\n\n", base64encout);
-		}
-		free(base64encout);
-	}
-	return result;
+int flib_netconn_send_renameRoom(flib_netconn *conn, const char *roomName) {
+	return sendStr(conn, "ROOM_NAME", roomName);
 }
 
 int flib_netconn_send_teamHogCount(flib_netconn *conn, const char *teamname, int hogcount) {
@@ -447,26 +457,6 @@ int flib_netconn_send_scheme(flib_netconn *conn, const flib_scheme *scheme) {
 	return result;
 }
 
-int flib_netconn_send_roundfinished(flib_netconn *conn, bool withoutError) {
-	return sendInt(conn, "ROUNDFINISHED", withoutError ? 1 : 0);
-}
-
-int flib_netconn_send_ban(flib_netconn *conn, const char *playerName) {
-	return sendStr(conn, "BAN", playerName);
-}
-
-int flib_netconn_send_kick(flib_netconn *conn, const char *playerName) {
-	return sendStr(conn, "KICK", playerName);
-}
-
-int flib_netconn_send_playerInfo(flib_netconn *conn, const char *playerName) {
-	return sendStr(conn, "INFO", playerName);
-}
-
-int flib_netconn_send_playerFollow(flib_netconn *conn, const char *playerName) {
-	return sendStr(conn, "FOLLOW", playerName);
-}
-
 int flib_netconn_send_startGame(flib_netconn *conn) {
 	return sendVoid(conn, "START_GAME");
 }
@@ -479,17 +469,27 @@ int flib_netconn_send_toggleRestrictTeams(flib_netconn *conn) {
 	return sendVoid(conn, "TOGGLE_RESTRICT_TEAMS");
 }
 
-int flib_netconn_send_clearAccountsCache(flib_netconn *conn) {
-	return sendVoid(conn, "CLEAR_ACCOUNTS_CACHE");
-}
-
-int flib_netconn_send_setServerVar(flib_netconn *conn, const char *name, const char *value) {
-	if(log_badargs_if3(conn==NULL, flib_strempty(name), flib_strempty(value))) {
-		return -1;
+int flib_netconn_send_teamchat(flib_netconn *conn, const char *chat) {
+	if(!flib_strempty(chat)) {
+		return sendStr(conn, "TEAMCHAT", chat);
 	}
-	return flib_netbase_sendf(conn->netBase, "%s\n%s\n%s\n\n", "SET_SERVER_VAR", name, value);
+	return 0;
 }
 
-int flib_netconn_send_getServerVars(flib_netconn *conn) {
-	return sendVoid(conn, "GET_SERVER_VAR");
+int flib_netconn_send_engineMessage(flib_netconn *conn, const uint8_t *message, size_t size) {
+	int result = -1;
+	if(!log_badargs_if2(conn==NULL, message==NULL && size>0)) {
+		char *base64encout = NULL;
+		base64_encode_alloc((const char*)message, size, &base64encout);
+		if(base64encout) {
+			result = flib_netbase_sendf(conn->netBase, "EM\n%s\n\n", base64encout);
+		}
+		free(base64encout);
+	}
+	return result;
 }
+
+int flib_netconn_send_roundfinished(flib_netconn *conn, bool withoutError) {
+	return sendInt(conn, "ROUNDFINISHED", withoutError ? 1 : 0);
+}
+

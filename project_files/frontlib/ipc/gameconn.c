@@ -294,7 +294,7 @@ int flib_gameconn_send_cmd(flib_gameconn *conn, const char *cmdString) {
 	uint8_t converted[256];
 	size_t msglen = strlen(cmdString);
 	if(!log_e_if(msglen>255, "Message too long: %s", cmdString)) {
-		strcpy(converted+1, cmdString);
+		strcpy((char*)converted+1, cmdString);
 		converted[0] = msglen;
 		if(!flib_ipcbase_send_raw(conn->ipcBase, converted, msglen+1)) {
 			demo_append(conn, converted, msglen+1);
