@@ -1,5 +1,5 @@
 /*
- * Hedgewars, a free turn based strategy game
+ * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
  * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
  *
  * This program is free software; you can redistribute it and/or
