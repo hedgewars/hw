@@ -27,10 +27,11 @@
                 android:id="@+id/spinGameplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
                 android:background="@drawable/dropdown" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:layout_marginTop="5dip" >
 
             <TextView
                 android:id="@+id/txtGamescheme"
@@ -42,10 +43,11 @@
                 android:id="@+id/spinGamescheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
                 android:background="@drawable/dropdown" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:layout_marginTop="5dip" >
 
             <TextView
                 android:id="@+id/txtweapons"
@@ -57,6 +59,7 @@
                 android:id="@+id/spinweapons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
                 android:background="@drawable/dropdown" />
         </TableRow>
     </TableLayout>
@@ -76,6 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/gameOptions"
+        android:layout_marginTop="5dip"
         android:layout_toRightOf="@+id/imgTheme"
         android:background="@drawable/dropdown" />
 

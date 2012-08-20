@@ -24,7 +24,7 @@
 	            android:layout_width="fill_parent"
 	            android:layout_height="fill_parent"
 	            class="org.hedgewars.hedgeroid.RoomlistFragment"
-	            tools:layout="@layout/lobby_rooms_fragment" />
+	            tools:layout="@layout/fragment_roomlist" />
 	    </FrameLayout>
 	
 	    <RelativeLayout

@@ -5,12 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
 import org.hedgewars.hedgeroid.Datastructures.MapRecipe;
 import org.hedgewars.hedgeroid.Datastructures.Scheme;
 import org.hedgewars.hedgeroid.Datastructures.Schemes;
+import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.Datastructures.Weaponset;
 import org.hedgewars.hedgeroid.Datastructures.Weaponsets;
 import org.hedgewars.hedgeroid.util.FileUtils;
@@ -29,9 +31,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class SettingsFragment extends Fragment implements RoomStateManager.Observer {
-	private static final String TAG = SettingsFragment.class.getSimpleName();
-	
+public class SettingsFragment extends Fragment {
 	private Spinner styleSpinner, schemeSpinner, weaponsetSpinner, themeSpinner;
 	private ImageView themeIcon;
 	
@@ -69,7 +69,7 @@ public class SettingsFragment extends Fragment implements RoomStateManager.Obser
 		weaponsetSpinner = prepareSpinner(v, R.id.spinweapons, Weaponsets.toNameList(weaponsets), weaponsetSelectedListener);
 		themeSpinner = prepareSpinner(v, R.id.spinTheme, themes, themeSelectedListener);
 		
-		stateManager.registerObserver(this);
+		stateManager.addListener(roomStateChangeListener);
 
 		if(stateManager.getGameStyle() != null) {
 			styleSpinner.setSelection(styles.indexOf(stateManager.getGameStyle()), false);
@@ -111,7 +111,7 @@ public class SettingsFragment extends Fragment implements RoomStateManager.Obser
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		stateManager.unregisterObserver(this);
+		stateManager.removeListener(roomStateChangeListener);
 	}
 	
 	private static int getSchemePosition(List<Scheme> schemes, String scheme) {
@@ -182,23 +182,27 @@ public class SettingsFragment extends Fragment implements RoomStateManager.Obser
 		public void onNothingSelected(AdapterView<?> arg0) {};
 	};
 	
-	public void onChiefStatusChanged(boolean isChief) {
-		setChiefState(isChief);
-	}
-	
-	public void onGameStyleChanged(String gameStyle) {
-		styleSpinner.setSelection(styles.indexOf(gameStyle));
-	}
-	
-	public void onMapChanged(MapRecipe recipe) {
-		themeSpinner.setSelection(themes.indexOf(recipe.theme));
-	}
-	
-	public void onSchemeChanged(Scheme scheme) {
-		schemeSpinner.setSelection(getSchemePosition(schemes, scheme.name));
-	}
-	
-	public void onWeaponsetChanged(Weaponset weaponset) {
-		weaponsetSpinner.setSelection(getWeaponsetPosition(weaponsets, weaponset.name));
-	}
+	private final RoomStateManager.Listener roomStateChangeListener = new RoomStateManager.Listener() {
+		public void onWeaponsetChanged(Weaponset weaponset) {
+			weaponsetSpinner.setSelection(getWeaponsetPosition(weaponsets, weaponset.name));
+		}
+		
+		public void onTeamsChanged(Map<String, TeamInGame> teams) {}
+		
+		public void onSchemeChanged(Scheme scheme) {
+			schemeSpinner.setSelection(getSchemePosition(schemes, scheme.name));
+		}
+		
+		public void onMapChanged(MapRecipe recipe) {
+			themeSpinner.setSelection(themes.indexOf(recipe.theme));
+		}
+		
+		public void onGameStyleChanged(String gameStyle) {
+			styleSpinner.setSelection(styles.indexOf(gameStyle));
+		}
+		
+		public void onChiefStatusChanged(boolean isChief) {
+			setChiefState(isChief);
+		}
+	};
 }

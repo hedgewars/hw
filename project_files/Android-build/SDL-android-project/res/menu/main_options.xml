@@ -10,6 +10,10 @@
         android:icon="@android:drawable/ic_menu_preferences"
         android:showAsAction="ifRoom|withText" />
     <item
+        android:id="@+id/edit_teams"
+        android:title="@string/edit_teams_menu"
+        android:showAsAction="ifRoom|withText" />
+    <item
         android:id="@+id/edit_weaponsets"
         android:title="@string/edit_weaponsets_menu"
         android:showAsAction="ifRoom|withText" />

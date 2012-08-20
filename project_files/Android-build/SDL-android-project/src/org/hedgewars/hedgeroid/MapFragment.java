@@ -10,8 +10,6 @@ import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
 import org.hedgewars.hedgeroid.Datastructures.MapFile;
 import org.hedgewars.hedgeroid.Datastructures.MapRecipe;
-import org.hedgewars.hedgeroid.Datastructures.Scheme;
-import org.hedgewars.hedgeroid.Datastructures.Weaponset;
 import org.hedgewars.hedgeroid.frontlib.Frontlib;
 
 import android.content.Context;
@@ -33,7 +31,7 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.Toast;
 
-public class MapFragment extends Fragment implements RoomStateManager.Observer {
+public class MapFragment extends Fragment {
 	private Spinner mapTypeSpinner, mapNameSpinner, templateSpinner, mazeSizeSpinner;
 	private TableRow nameRow, templateRow, mazeSizeRow;
 	private ImageView mapPreview;
@@ -91,7 +89,7 @@ public class MapFragment extends Fragment implements RoomStateManager.Observer {
 		templateSpinner = prepareSpinner(v, R.id.spinTemplateFilter, Arrays.asList(getResources().getStringArray(R.array.map_templates)), mapTemplateSelectedListener);
 		mazeSizeSpinner = prepareSpinner(v, R.id.spinMazeSize, Arrays.asList(getResources().getStringArray(R.array.map_maze_sizes)), mazeSizeSelectedListener);
 
-		stateManager.registerObserver(this);
+		stateManager.addListener(roomStateChangeListener);
 		currentMap = stateManager.getMapRecipe();
 		if(currentMap != null) {
 			updateDisplay(currentMap);
@@ -124,7 +122,7 @@ public class MapFragment extends Fragment implements RoomStateManager.Observer {
 	public void onDestroy() {
 		super.onDestroy();
 		mapPreviewHandler.stop();
-		stateManager.unregisterObserver(this);
+		stateManager.removeListener(roomStateChangeListener);
 	}
 	
 	private void setChiefState(boolean chiefState) {
@@ -207,27 +205,27 @@ public class MapFragment extends Fragment implements RoomStateManager.Observer {
 		}
 	};
 	
-	public void onChiefStatusChanged(boolean isChief) {
-		setChiefState(isChief);
-	}
-	
-	public void onMapChanged(MapRecipe recipe) {
-		if(currentMap==null
-				|| currentMap.mapgen != recipe.mapgen
-				|| currentMap.mazeSize != recipe.mazeSize
-				|| !currentMap.name.equals(recipe.name)
-				|| !currentMap.seed.equals(recipe.seed)
-				|| currentMap.templateFilter != recipe.templateFilter
-				|| !Arrays.equals(currentMap.getDrawData(), recipe.getDrawData())) {
-			mapPreviewHandler.activity();
-		}
-		updateDisplay(recipe);
-		currentMap = recipe;
-	}
-	
-	public void onGameStyleChanged(String gameStyle) { }
-	public void onSchemeChanged(Scheme scheme) { }
-	public void onWeaponsetChanged(Weaponset weaponset) { }
+	private final RoomStateManager.Listener roomStateChangeListener = new RoomStateManager.ListenerAdapter() {
+		@Override
+		public void onChiefStatusChanged(boolean isChief) {
+			setChiefState(isChief);
+		};
+		
+		@Override
+		public void onMapChanged(MapRecipe recipe) {
+			if(currentMap==null
+					|| currentMap.mapgen != recipe.mapgen
+					|| currentMap.mazeSize != recipe.mazeSize
+					|| !currentMap.name.equals(recipe.name)
+					|| !currentMap.seed.equals(recipe.seed)
+					|| currentMap.templateFilter != recipe.templateFilter
+					|| !Arrays.equals(currentMap.getDrawData(), recipe.getDrawData())) {
+				mapPreviewHandler.activity();
+			}
+			updateDisplay(recipe);
+			currentMap = recipe;
+		};
+	};
 	
 	private MapPreviewGenerator.Listener mapPreviewListener = new MapPreviewGenerator.Listener() {
 		public void onMapPreviewResult(Drawable preview) {

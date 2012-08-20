@@ -1,27 +1,46 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 package org.hedgewars.hedgeroid;
 
-import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.NetplayStateFragment.NetplayStateListener;
 import org.hedgewars.hedgeroid.netplay.Netplay;
 import org.hedgewars.hedgeroid.netplay.Netplay.State;
 import org.hedgewars.hedgeroid.util.TextInputDialog;
 import org.hedgewars.hedgeroid.util.TextInputDialog.TextInputDialogListener;
+import org.hedgewars.hedgeroid.util.UiUtils;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
-import android.widget.TextView;
 
+/**
+ * Activity for the server lobby of a hedgewars server. Allows you to chat, join
+ * and create rooms and interact with a list of players.
+ * 
+ * Most of the functionality is handled by various fragments.
+ */
 public class LobbyActivity extends FragmentActivity implements TextInputDialogListener, NetplayStateListener {
 	private static final int DIALOG_CREATE_ROOM = 0;
 	
@@ -42,37 +61,20 @@ public class LobbyActivity extends FragmentActivity implements TextInputDialogLi
         
         netplay = Netplay.getAppInstance(getApplicationContext());
         
+        // Set up a tabbed UI for medium and small screens
         tabHost = (TabHost)findViewById(android.R.id.tabhost);
         if(tabHost != null) {
 	        tabHost.setup();
 	        tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
 
-	        tabHost.addTab(tabHost.newTabSpec("rooms").setIndicator(createIndicatorView(tabHost, R.string.lobby_tab_rooms, getResources().getDrawable(R.drawable.roomlist_ingame))).setContent(R.id.roomListFragment));
-	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(createIndicatorView(tabHost, R.string.lobby_tab_chat, getResources().getDrawable(R.drawable.edit))).setContent(R.id.chatFragment));
-	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(createIndicatorView(tabHost, R.string.lobby_tab_players, getResources().getDrawable(R.drawable.human))).setContent(R.id.playerListFragment));
+	        tabHost.addTab(tabHost.newTabSpec("rooms").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.lobby_tab_rooms, R.drawable.roomlist_ingame)).setContent(R.id.roomListFragment));
+	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.lobby_tab_chat, R.drawable.edit)).setContent(R.id.chatFragment));
+	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.lobby_tab_players, R.drawable.human)).setContent(R.id.playerListFragment));
 	
 	        if (icicle != null) {
 	            tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
 	        }
         }
-    }
-    
-    private View createIndicatorView(TabHost tabHost, int label, Drawable icon) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View tabIndicator = inflater.inflate(R.layout.tab_indicator,
-                tabHost.getTabWidget(), // tab widget is the parent
-                false); // no inflate params
-
-        final TextView tv = (TextView) tabIndicator.findViewById(R.id.title);
-        tv.setText(label);
-        
-        if(icon != null) {
-	        final ImageView iconView = (ImageView) tabIndicator.findViewById(R.id.icon);
-	        iconView.setImageDrawable(icon);
-        }
-        
-        return tabIndicator;
     }
     
 	@Override
@@ -99,7 +101,6 @@ public class LobbyActivity extends FragmentActivity implements TextInputDialogLi
 	
 	@Override
 	public void onBackPressed() {
-		super.onBackPressed();
 		netplay.disconnect();
 	}
 	
@@ -127,8 +128,7 @@ public class LobbyActivity extends FragmentActivity implements TextInputDialogLi
     		finish();
     		break;
     	case ROOM:
-    	case INGAME:
-    		startActivity(new Intent(getApplicationContext(), RoomActivity.class));
+    		startActivity(new Intent(getApplicationContext(), NetRoomActivity.class));
     		break;
     	case LOBBY:
     		// Do nothing

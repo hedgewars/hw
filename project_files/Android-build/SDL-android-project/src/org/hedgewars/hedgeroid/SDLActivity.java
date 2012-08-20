@@ -1,7 +1,10 @@
 package org.hedgewars.hedgeroid;
-
+/*
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ */
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.net.ConnectException;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -11,15 +14,8 @@ import javax.microedition.khronos.egl.EGLSurface;
 
 import org.hedgewars.hedgeroid.Datastructures.GameConfig;
 import org.hedgewars.hedgeroid.EngineProtocol.PascalExports;
-import org.hedgewars.hedgeroid.frontlib.Flib;
-import org.hedgewars.hedgeroid.frontlib.Frontlib.GameSetupPtr;
-import org.hedgewars.hedgeroid.frontlib.Frontlib.GameconnPtr;
-import org.hedgewars.hedgeroid.frontlib.Frontlib.IntCallback;
 import org.hedgewars.hedgeroid.netplay.Netplay;
 import org.hedgewars.hedgeroid.util.FileUtils;
-import org.hedgewars.hedgeroid.util.TickHandler;
-
-import com.sun.jna.Pointer;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,9 +29,6 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Message;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -61,9 +54,7 @@ public class SDLActivity extends Activity {
 	// Main components
 	public static SDLActivity mSingleton;
 	private static SDLSurface mSurface;
-
-	// This is what SDL runs in. It invokes SDL_main(), eventually
-	private static Thread mSDLThread; // Guarded by SDLActivity.class
+	private static Thread mSDLThread;
 
 	// Audio
 	private static Thread mAudioThread;
@@ -79,15 +70,11 @@ public class SDLActivity extends Activity {
 	// Load the .so
 	static {
 		System.loadLibrary("SDL");
-		//System.loadLibrary("SDL_image");
-		//System.loadLibrary("SDL_mixer");
-		//System.loadLibrary("SDL_ttf");
 		System.loadLibrary("main");
 	}
 
 	// Setup
 	protected void onCreate(Bundle savedInstanceState) {
-		//Log.v("SDL", "onCreate()");
 		super.onCreate(savedInstanceState);
 
 		// So we can call stuff from static callbacks
@@ -95,6 +82,7 @@ public class SDLActivity extends Activity {
 
 		// Set up the surface
 		mSurface = new SDLSurface(getApplication(), startConfig, startNetgame);
+		startConfig = null;
 		setContentView(mSurface);
 	}
 
@@ -123,40 +111,18 @@ public class SDLActivity extends Activity {
 		Log.v("SDL", "onDestroy()");
 		// Send a quit message to the application
 		SDLActivity.nativeQuit();
-
 		// Now wait for the SDL thread to quit
-		synchronized(SDLActivity.class) {
-			if (mSDLThread != null) {
-				try {
-					mSDLThread.join();
-				} catch(Exception e) {
-					Log.w("SDL", "Problem stopping thread: " + e);
-				}
-				mSDLThread = null;
+		if (mSDLThread != null) {
+			try {
+				mSDLThread.join();
+			} catch(Exception e) {
+				Log.w("SDL", "Problem stopping thread: " + e);
 			}
+			mSDLThread = null;
 		}
+		mSingleton = null;
 	}
-
-	// Messages from the SDLMain thread
-	static int COMMAND_CHANGE_TITLE = 1;
-
-	// Handler for the messages
-	Handler commandHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			if (msg.arg1 == COMMAND_CHANGE_TITLE) {
-				setTitle((String)msg.obj);
-			}
-		}
-	};
-
-	// Send a message from the SDLMain thread
-	void sendCommand(int command, Object data) {
-		Message msg = commandHandler.obtainMessage();
-		msg.arg1 = command;
-		msg.obj = data;
-		commandHandler.sendMessage(msg);
-	}
-
+	
 	public static void synchronizedNativeInit(String...args) {
 		synchronized(PascalExports.engineMutex) {
 			nativeInit(args);
@@ -188,9 +154,13 @@ public class SDLActivity extends Activity {
 		flipEGL();
 	}
 
-	public static void setActivityTitle(String title) {
+	public static void setActivityTitle(final String title) {
 		// Called from SDLMain() thread and can't directly affect the view
-		mSingleton.sendCommand(COMMAND_CHANGE_TITLE, title);
+		mSingleton.runOnUiThread(new Runnable() {
+			public void run() {
+				mSingleton.setTitle(title);
+			}
+		});
 	}
 
 	public static Context getContext() {
@@ -198,39 +168,18 @@ public class SDLActivity extends Activity {
 	}
 
 	public static void startApp(final int width, final int height, GameConfig config, boolean netgame) {
-		synchronized(SDLActivity.class) {
-			// Start up the C app thread TODO this is silly code
-			if (mSDLThread == null) {
-				final AtomicBoolean gameconnStartDone = new AtomicBoolean(false);
-				GameConnection.Listener listener = new GameConnection.Listener() {
-					public void gameConnectionReady(int port) {
-						mSDLThread = new Thread(new SDLMain(width, height, port, "Medo"));
-						mSDLThread.start();
-						gameconnStartDone.set(true);
-					}
-					
-					public void gameConnectionDisconnected(int reason) {
-						Log.e("startApp", "disconnected: "+reason);
-						gameconnStartDone.set(true);
-					}
-				};
-				if(netgame) {
-					Netplay netplay = Netplay.getAppInstance(mSingleton.getApplicationContext());
-					GameConnection.forNetgame(config, netplay, listener);
-				} else {
-					GameConnection.forLocalGame(config, listener);
-				}
-			} else {
-				SDLActivity.nativeResume();
-			}
+		// Start up the C app thread
+		if (mSDLThread == null) {
+			mSDLThread = new Thread(new SDLMain(width, height, config, netgame));
+			mSDLThread.start();
+		} else {
+			SDLActivity.nativeResume();
 		}
 	}
 
 	// EGL functions
 	public static boolean initEGL(int majorVersion, int minorVersion) {
 		if (SDLActivity.mEGLDisplay == null) {
-			//Log.v("SDL", "Starting up OpenGL ES " + majorVersion + "." + minorVersion);
-
 			try {
 				EGL10 egl = (EGL10)EGLContext.getEGL();
 
@@ -248,7 +197,6 @@ public class SDLActivity extends Activity {
 					renderableType = EGL_OPENGL_ES_BIT;
 				}
 				int[] configSpec = {
-						//EGL10.EGL_DEPTH_SIZE,   16,
 						EGL10.EGL_RENDERABLE_TYPE, renderableType,
 						EGL10.EGL_NONE
 				};
@@ -260,15 +208,6 @@ public class SDLActivity extends Activity {
 				}
 				EGLConfig config = configs[0];
 
-				/*int EGL_CONTEXT_CLIENT_VERSION=0x3098;
-                int contextAttrs[] = new int[] { EGL_CONTEXT_CLIENT_VERSION, majorVersion, EGL10.EGL_NONE };
-                EGLContext ctx = egl.eglCreateContext(dpy, config, EGL10.EGL_NO_CONTEXT, contextAttrs);
-
-                if (ctx == EGL10.EGL_NO_CONTEXT) {
-                    Log.e("SDL", "Couldn't create context");
-                    return false;
-                }
-                SDLActivity.mEGLContext = ctx;*/
 				SDLActivity.mEGLDisplay = dpy;
 				SDLActivity.mEGLConfig = config;
 				SDLActivity.mGLMajor = majorVersion;
@@ -454,34 +393,74 @@ public class SDLActivity extends Activity {
     Simple nativeInit() runnable
  */
 class SDLMain implements Runnable {
-
-	private final int surfaceWidth, surfaceHeight;
-	private final int port;
-	private final String playerName;
-	HandlerThread thread = new HandlerThread("IPC thread");
+	public static final String TAG = "SDLMain";
 	
-	public SDLMain(int width, int height, int port, String playerName) {
+    public static final int RQ_LOWRES            = 0x00000001; // use half land array
+    public static final int RQ_BLURRY_LAND       = 0x00000002; // downscaled terrain
+    public static final int RQ_NO_BACKGROUND     = 0x00000004; // don't draw background
+    public static final int RQ_SIMPLE_ROPE       = 0x00000008; // avoid drawing rope
+    public static final int RQ_2D_WATER          = 0x00000010; // disabe 3D water effect
+    public static final int RQ_SIMPLE_EXPLOSIONS = 0x00000020; // no fancy explosion effects
+    public static final int RQ_NO_FLAKES         = 0x00000040; // no flakes
+    public static final int RQ_NO_MENU_ANIM      = 0x00000080; // ammomenu appears with no animation
+    public static final int RQ_NO_DROPLETS       = 0x00000100; // no droplets
+    public static final int RQ_NO_CLAMPING       = 0x00000200; // don't clamp textures
+    public static final int RQ_NO_TOOLTIPS       = 0x00000400; // tooltips are not drawn
+    public static final int RQ_NO_VSYNC          = 0x00000800; // don't sync on vblank
+	
+	private final int surfaceWidth, surfaceHeight;
+	private final String playerName;
+	private final GameConfig config;
+	private final boolean netgame;
+	
+	public SDLMain(int width, int height, GameConfig config, boolean netgame) {
 		surfaceWidth = width;
 		surfaceHeight = height;
-		this.port = port;
-		this.playerName = playerName;
+		if(netgame) {
+			playerName = Netplay.getAppInstance(SDLActivity.getContext().getApplicationContext()).getPlayerName();
+		} else {
+			playerName = "Player";
+		}
+		this.config = config;
+		this.netgame = netgame;
 	}
 
 	public void run() {
 		//Set up the IPC socket server to communicate with the engine
-		String path = FileUtils.getDataPath(SDLActivity.mSingleton);//This represents the data directory
-		path = path.substring(0, path.length()-1);//remove the trailing '/'
-
-		Log.d("SDLMain", "Starting engine");
-		// Runs SDL_main() with added parameters
+		GameConnection gameConn;
+		String path;
 		try {
-			SDLActivity.synchronizedNativeInit(new String[] { String.valueOf(port),
-					String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
-					Integer.toString(0x40+0x10+0x100+0x2), "en.txt", Base64.encodeToString(playerName.getBytes("UTF-8"), 0), "1", "1", "1", path, ""  });
-		} catch (UnsupportedEncodingException e) {
-			throw new AssertionError(e); // never happens
+			if(netgame) {
+				Netplay netplay = Netplay.getAppInstance(SDLActivity.mSingleton.getApplicationContext());
+				gameConn = GameConnection.forNetgame(config, netplay);
+			} else {
+				gameConn = GameConnection.forLocalGame(config);
+			}
+			
+			path = FileUtils.getDataPathFile(SDLActivity.mSingleton).getAbsolutePath();
+			Log.d(TAG, "Starting engine");
+			// Runs SDL_main() with added parameters
+			try {
+				String pPort = String.valueOf(gameConn.port);
+				String pWidth = String.valueOf(surfaceWidth);
+				String pHeight = String.valueOf(surfaceHeight);
+				String pQuality = Integer.toString(RQ_NO_FLAKES|RQ_NO_DROPLETS|RQ_SIMPLE_EXPLOSIONS);
+				String pPlayerName = Base64.encodeToString(playerName.getBytes("UTF-8"), 0);
+				SDLActivity.synchronizedNativeInit(new String[] { pPort, pWidth, pHeight, pQuality, "en.txt", pPlayerName, "1", "1", "1", path, ""  });
+			} catch (UnsupportedEncodingException e) {
+				throw new AssertionError(e); // never happens
+			}
+			Log.d(TAG, "Engine stopped");
+		} catch(ConnectException e) {
+			Log.e(TAG, "Error starting IPC connection");
+		} catch (IOException e) {
+			Log.e(TAG, "Missing SDCard");
 		}
-		Log.d("SDLMain", "Engine stopped");
+		SDLActivity.mSingleton.runOnUiThread(new Runnable() { public void run() {
+			if(SDLActivity.mSingleton != null) {
+				SDLActivity.mSingleton.finish();
+			}
+		}});
 	}
 }
 
@@ -597,8 +576,9 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 	public boolean onKey(View  v, int keyCode, KeyEvent event) {
 		switch(keyCode){
 		case KeyEvent.KEYCODE_BACK:
-		        PascalExports.HWterminate(true);
-                        return true;
+			Log.d("SDL", "KEYCODE_BACK");
+			SDLActivity.nativeQuit();
+            return true;
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 		case KeyEvent.KEYCODE_VOLUME_UP:
 		case KeyEvent.KEYCODE_VOLUME_MUTE:

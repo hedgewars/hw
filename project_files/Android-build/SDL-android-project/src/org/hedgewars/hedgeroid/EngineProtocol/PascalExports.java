@@ -19,6 +19,7 @@
 package org.hedgewars.hedgeroid.EngineProtocol;
 
 public class PascalExports {
+	public static Object engineMutex = new Object();
 
 	static{
 		System.loadLibrary("SDL");
@@ -32,8 +33,12 @@ public class PascalExports {
 	}
 	
 	public static native int HWgetMaxNumberOfTeams();
-    public static native int HWterminate(boolean b);
-    public static native int HWGenLandPreview(int port);
+    private static native void HWGenLandPreview(int port);
+
+    public static void synchronizedGenLandPreview(int port) {
+    	synchronized(engineMutex) {
+    		HWGenLandPreview(port);
+    	}
+    }
     
-    public static Object engineMutex = new Object();
 }

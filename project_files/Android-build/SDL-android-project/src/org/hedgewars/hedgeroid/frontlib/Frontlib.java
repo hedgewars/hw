@@ -1,6 +1,5 @@
 package org.hedgewars.hedgeroid.frontlib;
 import java.io.UnsupportedEncodingException;
-import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -1067,7 +1066,7 @@ public interface Frontlib extends Library {
 	void flib_netconn_onHogCountChanged(NetconnPtr conn, StrIntCallback callback, Pointer context);
 	void flib_netconn_onTeamColorChanged(NetconnPtr conn, StrIntCallback callback, Pointer context);
 	void flib_netconn_onEngineMessage(NetconnPtr conn, BytesCallback callback, Pointer context);
-	void flib_netconn_onCfgScheme(NetconnPtr conn, SchemeCallback callback, Pointer context);
+	void flib_netconn_onSchemeChanged(NetconnPtr conn, SchemeCallback callback, Pointer context);
 	void flib_netconn_onMapChanged(NetconnPtr conn, MapIntCallback callback, Pointer context);
 	void flib_netconn_onScriptChanged(NetconnPtr conn, StrCallback callback, Pointer context);
 	void flib_netconn_onWeaponsetChanged(NetconnPtr conn, WeaponsetCallback callback, Pointer context);
@@ -1081,8 +1080,8 @@ public interface Frontlib extends Library {
 	static final int GAME_END_ERROR = 3;
 	
 	GameconnPtr flib_gameconn_create(String playerName, GameSetupPtr setup, boolean netgame);
-	GameconnPtr flib_gameconn_create_playdemo(Buffer demo, NativeSizeT size);
-	GameconnPtr flib_gameconn_create_loadgame(String playerName, Buffer save, NativeSizeT size);
+	GameconnPtr flib_gameconn_create_playdemo(Pointer demo, NativeSizeT size);
+	GameconnPtr flib_gameconn_create_loadgame(String playerName, Pointer save, NativeSizeT size);
 	GameconnPtr flib_gameconn_create_campaign(String playerName, String seed, String script);
 
 	void flib_gameconn_destroy(GameconnPtr conn);
@@ -1093,6 +1092,7 @@ public interface Frontlib extends Library {
 	int flib_gameconn_send_textmsg(GameconnPtr conn, int msgtype, String msg);
 	int flib_gameconn_send_chatmsg(GameconnPtr conn, String playername, String msg);
 	int flib_gameconn_send_quit(GameconnPtr conn);
+	int flib_gameconn_send_cmd(GameconnPtr conn, String cmdString);
 	
 	void flib_gameconn_onConnect(GameconnPtr conn, VoidCallback callback, Pointer context);
 	void flib_gameconn_onDisconnect(GameconnPtr conn, IntCallback callback, Pointer context);
