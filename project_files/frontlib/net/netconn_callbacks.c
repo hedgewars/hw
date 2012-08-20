@@ -86,7 +86,7 @@ void netconn_clearCallbacks(flib_netconn *conn) {
 	flib_netconn_onHogCountChanged(conn, NULL, NULL);
 	flib_netconn_onTeamColorChanged(conn, NULL, NULL);
 	flib_netconn_onEngineMessage(conn, NULL, NULL);
-	flib_netconn_onCfgScheme(conn, NULL, NULL);
+	flib_netconn_onSchemeChanged(conn, NULL, NULL);
 	flib_netconn_onMapChanged(conn, NULL, NULL);
 	flib_netconn_onScriptChanged(conn, NULL, NULL);
 	flib_netconn_onWeaponsetChanged(conn, NULL, NULL);
@@ -142,7 +142,7 @@ GENERATE_CB_SETTER_AND_DEFAULT(onTeamAccepted, (void *context, const char *teamN
 GENERATE_CB_SETTER_AND_DEFAULT(onHogCountChanged, (void *context, const char *teamName, int hogs));
 GENERATE_CB_SETTER_AND_DEFAULT(onTeamColorChanged, (void *context, const char *teamName, int colorIndex));
 GENERATE_CB_SETTER_AND_DEFAULT(onEngineMessage, (void *context, const uint8_t *message, size_t size));
-GENERATE_CB_SETTER_AND_DEFAULT(onCfgScheme, (void *context, const flib_scheme *scheme));
+GENERATE_CB_SETTER_AND_DEFAULT(onSchemeChanged, (void *context, const flib_scheme *scheme));
 GENERATE_CB_SETTER_AND_DEFAULT(onMapChanged, (void *context, const flib_map *map, int changetype));
 GENERATE_CB_SETTER_AND_DEFAULT(onScriptChanged, (void *context, const char *script));
 GENERATE_CB_SETTER_AND_DEFAULT(onWeaponsetChanged, (void *context, const flib_weaponset *weaponset));

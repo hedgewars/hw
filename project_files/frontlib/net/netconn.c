@@ -450,7 +450,7 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 					if(cfg) {
 						flib_scheme_destroy(conn->scheme);
 						conn->scheme = cfg;
-						conn->onCfgSchemeCb(conn->onCfgSchemeCtx, cfg);
+						conn->onSchemeChangedCb(conn->onSchemeChangedCtx, cfg);
 					} else {
 						flib_log_e("Error processing CFG SCHEME message");
 					}

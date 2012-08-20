@@ -126,8 +126,8 @@ struct _flib_netconn {
 	void (*onEngineMessageCb)(void *context, const uint8_t *message, size_t size);
 	void *onEngineMessageCtx;
 
-	void (*onCfgSchemeCb)(void *context, const flib_scheme *scheme);
-	void *onCfgSchemeCtx;
+	void (*onSchemeChangedCb)(void *context, const flib_scheme *scheme);
+	void *onSchemeChangedCtx;
 
 	void (*onMapChangedCb)(void *context, const flib_map *map, int changetype);
 	void *onMapChangedCtx;
