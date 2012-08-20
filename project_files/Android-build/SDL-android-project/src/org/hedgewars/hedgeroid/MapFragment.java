@@ -1,3 +1,22 @@
+/*
+ * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 package org.hedgewars.hedgeroid;
 
 import java.io.IOException;
@@ -11,13 +30,11 @@ import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
 import org.hedgewars.hedgeroid.Datastructures.MapFile;
 import org.hedgewars.hedgeroid.Datastructures.MapRecipe;
 import org.hedgewars.hedgeroid.frontlib.Frontlib;
+import org.hedgewars.hedgeroid.util.CalmDownHandler;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +48,17 @@ import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+/**
+ * Display a map preview, and configuration options for the map.
+ * 
+ * Mostly for layout reasons, this does not include the theme setting, which
+ * (arguably) is more a map setting than a general game setting.
+ */
 public class MapFragment extends Fragment {
 	private Spinner mapTypeSpinner, mapNameSpinner, templateSpinner, mazeSizeSpinner;
 	private TableRow nameRow, templateRow, mazeSizeRow;
 	private ImageView mapPreview;
+	
 	private List<MapFile> mapFiles;
 	private RoomStateManager stateManager;
 	private Random random = new Random();
@@ -53,8 +77,12 @@ public class MapFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_map, container, false);
-
 		final Context appContext = getActivity().getApplicationContext();
+
+		/*
+		 * This handler will start the map preview after none of the map settings
+		 * have been updated for a short time.
+		 */
 		mapPreviewHandler = new CalmDownHandler(getActivity().getMainLooper(), new Runnable() {
 			public void run() {
 				if(!previewGenerationInProgress) {
@@ -122,6 +150,8 @@ public class MapFragment extends Fragment {
 	public void onDestroy() {
 		super.onDestroy();
 		mapPreviewHandler.stop();
+		newPreviewRequest = null;
+		
 		stateManager.removeListener(roomStateChangeListener);
 	}
 	
@@ -213,6 +243,7 @@ public class MapFragment extends Fragment {
 		
 		@Override
 		public void onMapChanged(MapRecipe recipe) {
+			// Only trigger a preview update if a relevant field changed (not theme)
 			if(currentMap==null
 					|| currentMap.mapgen != recipe.mapgen
 					|| currentMap.mazeSize != recipe.mazeSize
@@ -240,41 +271,4 @@ public class MapFragment extends Fragment {
 			}
 		}
 	};
-	
-	/**
-	 * This class allows you to define a runnable that is called when there has been no activity
-	 * for a set amount of time, where activity is determined by calls to the activity() method
-	 * of the handler. It is used here to update the map preview when there have been no updates
-	 * to the relevant map information for a time, to prevent triggering several updates at once
-	 * when different parts of the information change.
-	 */
-	private static final class CalmDownHandler extends Handler {
-		int runningMessagesCounter = 0;
-		final Runnable inactivityRunnable;
-		final long inactivityMs;
-		boolean stopped;
-
-		public CalmDownHandler(Looper looper, Runnable runnable, long inactivityMs) {
-			super(looper);
-			this.inactivityRunnable = runnable;
-			this.inactivityMs = inactivityMs;
-		}
-		
-		public void activity() {
-			runningMessagesCounter++;
-			sendMessageDelayed(obtainMessage(), inactivityMs);
-		}
-		
-		@Override
-		public void handleMessage(Message msg) {
-			runningMessagesCounter--;
-			if(runningMessagesCounter==0 && !stopped) {
-				inactivityRunnable.run();
-			}
-		}
-		
-		public void stop() {
-			stopped = true;
-		}
-	}
 }

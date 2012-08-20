@@ -1,3 +1,22 @@
+/*
+ * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 package org.hedgewars.hedgeroid;
 
 import java.io.File;
@@ -30,11 +49,13 @@ import com.sun.jna.Pointer;
  * A class that asynchronously generates a map preview from a MapRecipe.
  * 
  * For named maps, this will load the preview image from the filesystem. For others,
- * it will call the engine to generate a preview image.
+ * it will call the Hedgewars engine to generate a preview image. The result is sent
+ * back to a listener on the UI thread.
  */
 public final class MapPreviewGenerator implements Runnable {
 	private static final String TAG = MapPreviewGenerator.class.getSimpleName();
 	private static final Handler mainHandler = new Handler(Looper.getMainLooper());
+	private static final long TIMEOUT_NS = 20l * 1000 * 1000 * 1000;
 
 	private final Context appContext;
 	private final MapRecipe map;
@@ -89,11 +110,11 @@ public final class MapPreviewGenerator implements Runnable {
 					} catch (InterruptedException e) {
 						// ignore
 					}
-					if(System.nanoTime()-startTime > 15000000000l) {
+					if(System.nanoTime()-startTime > TIMEOUT_NS) {
 						Log.w(TAG, "Error generating map preview: timeout");
 						resultAvailable = true;
 					}
-				} while(!resultAvailable); // 15 seconds timeout
+				} while(!resultAvailable); 
 			} finally {
 				Flib.INSTANCE.flib_mapconn_destroy(conn);
 				postToListener(result);
