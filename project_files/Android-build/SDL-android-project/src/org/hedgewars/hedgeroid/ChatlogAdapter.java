@@ -1,10 +1,29 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 package org.hedgewars.hedgeroid;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.hedgewars.hedgeroid.netplay.MessageLog.Observer;
+import org.hedgewars.hedgeroid.netplay.MessageLog;
 
 import android.content.Context;
 import android.text.method.LinkMovementMethod;
@@ -30,7 +49,14 @@ class LoglineView extends TextView {
 	}
 }
 
-public class ChatlogAdapter extends BaseAdapter implements Observer {
+/**
+ * For performance reasons, the chatlog is implemented as ListView instead of a
+ * single TextView (although I later learned that TextView might also have
+ * facilities for efficient appending with limited backlog... oh well, this
+ * works). Every chat line is a line in the ListView, and this adapter prepares
+ * the textviews from a messagelog in an efficient way.
+ */
+public class ChatlogAdapter extends BaseAdapter implements MessageLog.Listener {
 	long idOffset = 0;
 	private List<CharSequence> log = new ArrayList<CharSequence>();
 	private Context context;

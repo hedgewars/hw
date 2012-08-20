@@ -1,11 +1,13 @@
 package org.hedgewars.hedgeroid;
 
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.Datastructures.TeamIngameAttributes;
-import org.hedgewars.hedgeroid.util.ObservableTreeMapAdapter;
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,18 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class TeamlistAdapter extends ObservableTreeMapAdapter<String, TeamInGame> {
+public class TeamlistAdapter extends BaseAdapter {
 	private boolean colorHogcountEnabled = false;
 	private Listener listener;
+	private List<TeamInGame> teams = new ArrayList<TeamInGame>();
 	
-	@Override
-	protected Comparator<TeamInGame> getEntryOrder() {
-		return TeamInGame.NAME_ORDER;
-	}
-
 	public void setColorHogcountEnabled(boolean colorHogcountEnabled) {
 		this.colorHogcountEnabled = colorHogcountEnabled;
 		notifyDataSetChanged();
@@ -32,6 +31,30 @@ public class TeamlistAdapter extends ObservableTreeMapAdapter<String, TeamInGame
 	
 	public void setListener(Listener listener) {
 		this.listener = listener;
+	}
+	
+	public int getCount() {
+		return teams.size();
+	}
+	
+	public TeamInGame getItem(int position) {
+		return teams.get(position);
+	}
+	
+	public long getItemId(int position) {
+		return position;
+	}
+	
+	@Override
+	public boolean hasStableIds() {
+		return false;
+	}
+	
+	public void updateTeamlist(Collection<TeamInGame> newTeams) {
+		teams.clear();
+		teams.addAll(newTeams);
+		Collections.sort(teams, TeamInGame.NAME_ORDER);
+		notifyDataSetChanged();
 	}
 	
 	public View getView(int position, View convertView, ViewGroup parent) {

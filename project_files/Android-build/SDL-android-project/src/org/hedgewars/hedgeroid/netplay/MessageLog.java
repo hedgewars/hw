@@ -35,7 +35,7 @@ public class MessageLog {
 	private static final int ERROR_COLOR = Color.RED;
 	
 	private final Context context;
-	private List<Observer> observers = new LinkedList<Observer>();
+	private List<Listener> observers = new LinkedList<Listener>();
 	private List<CharSequence> log = new LinkedList<CharSequence>();
 	
 	public MessageLog(Context context) {
@@ -70,12 +70,12 @@ public class MessageLog {
 	private void appendRaw(CharSequence msg) {
 		if(log.size() > BACKLOG_LINES) {
 			log.remove(0);
-			for(Observer o : observers) {
+			for(Listener o : observers) {
 				o.lineRemoved();
 			}
 		}
 		log.add(msg);
-		for(Observer o : observers) {
+		for(Listener o : observers) {
 			o.lineAdded(msg);
 		}
 	}
@@ -113,7 +113,6 @@ public class MessageLog {
 			append(withColor("***"+msg, WARN_COLOR));
 			break;
 		case Frontlib.NETCONN_MSG_TYPE_PLAYERINFO:
-			// TODO Display in popup?
 			append(withColor(msg.replace("\n", " "), PLAYERINFO_COLOR));
 			break;
 		case Frontlib.NETCONN_MSG_TYPE_SERVERMESSAGE:
@@ -125,21 +124,21 @@ public class MessageLog {
 	}
 	
 	void clear() {
-		for(Observer o : observers) {
+		for(Listener o : observers) {
 			o.clear();
 		}
 		log.clear();
 	}
 	
-	public void registerObserver(Observer o) {
+	public void addListener(Listener o) {
 		observers.add(o);
 	}
 	
-	public void unregisterObserver(Observer o) {
+	public void removeListener(Listener o) {
 		observers.remove(o);
 	}
 	
-	public static interface Observer {
+	public static interface Listener {
 		void lineAdded(CharSequence text);
 		void lineRemoved();
 		void clear();

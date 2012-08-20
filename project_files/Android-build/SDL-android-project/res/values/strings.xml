@@ -36,14 +36,17 @@
     
     <!-- start game -->
     <string name="start_gameplay">Style</string>
-    <string name="start_gamescheme">Game scheme</string>
+    <string name="start_gamescheme">Scheme</string>
     <string name="start_weapons">Weapons</string>
     <string name="start_map">Map</string>
     <string name="start_filter">Filter</string>
 
     <!-- Teams -->
-    <string name="not_enough_teams">Not enough teams</string>
-    <string name="teams_info_template">Selected teams = %d</string>
+    <string name="not_enough_teams">You need at least two teams.</string>
+    <string name="not_enough_clans">You need at least two different team colors (clans).</string>
+    <string name="teamlist_empty">No teams</string>
+    <string name="teamlist_add_content_description">New team</string>
+    
     <!-- Settings -->
     <string name="name">Name</string>
     <string name="name_default">Unnamed</string>
@@ -76,6 +79,7 @@
     <string name="map_template">Type</string>
     <string name="map_maze_size">Type</string>
     <string name="map_mission_prefix">Mission: </string>
+    <string name="map_button_editdrawnmap">Edit drawn map</string>
     <string-array name="map_types">
         <item>Generated map</item>
         <item>Generated maze</item>
@@ -106,6 +110,8 @@
     <string name="teamlist_addteam">Add team</string>
     <string name="teamlist_color_button_description">Team color</string>
     <string name="teamlist_hogcount_button_description">Hog count</string>
+    <string name="no_teams_in_list">No teams</string>
+    <string name="edit_teams_menu">Edit Teams</string>
     
     <!-- Roomlist -->
     <string name="roomlist_header_roomname">Room Name</string>
@@ -177,4 +183,11 @@
     <string name="edit_weaponsets_menu">Edit Weaponsets</string>
     
     <string name="schemelist_add_button_text">New Scheme</string>
+    
+    <!-- Room activity tabs -->
+    <string name="room_tab_map">Map</string>
+    <string name="room_tab_settings">Game</string>
+    <string name="room_tab_teams">Teams</string>
+    <string name="room_tab_chat">Chat</string>
+    <string name="room_tab_players">Users</string>
 </resources>

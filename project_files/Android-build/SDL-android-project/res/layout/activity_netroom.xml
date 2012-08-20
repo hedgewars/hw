@@ -6,29 +6,27 @@
 
     <include layout="@layout/background" />
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="5dp" >
+    <TabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
         <LinearLayout
-            android:id="@+id/upperFrame"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="10dp"
-            android:baselineAligned="false"
-            android:minHeight="200dp" >
-            
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0" />
+
             <FrameLayout
-                android:id="@+id/mapFrame"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/box" >
+                android:id="@android:id/tabcontent"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
 
                 <fragment
                     android:id="@+id/mapFragment"
@@ -36,15 +34,6 @@
                     android:layout_height="fill_parent"
                     class="org.hedgewars.hedgeroid.MapFragment"
                     tools:layout="@layout/fragment_map" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/settingsFrame"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/box" >
 
                 <fragment
                     android:id="@+id/settingsFragment"
@@ -52,58 +41,45 @@
                     android:layout_height="fill_parent"
                     class="org.hedgewars.hedgeroid.SettingsFragment"
                     tools:layout="@layout/fragment_settings" />
-            </FrameLayout>
-
-            <FrameLayout
-                android:id="@+id/teamsFrame"
-                android:layout_width="0dp"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:background="@drawable/box" >
 
                 <fragment
-                    android:id="@+id/teamsFragment"
+                    android:id="@+id/teamlistFragment"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     class="org.hedgewars.hedgeroid.TeamlistFragment"
                     tools:layout="@layout/fragment_teamlist" />
+
+                <fragment
+                    android:id="@+id/chatFragment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    class="org.hedgewars.hedgeroid.ChatFragment"
+                    tools:layout="@layout/fragment_chat" />
+
+                <LinearLayout
+                    android:id="@+id/playerListContainer"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical" >
+
+                    <fragment
+                        android:id="@+id/playerListFragment"
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        class="org.hedgewars.hedgeroid.RoomPlayerlistFragment"
+                        tools:layout="@layout/fragment_playerlist" />
+
+                    <Button
+                        android:id="@+id/startGame"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/startgamebutton" />
+                </LinearLayout>
             </FrameLayout>
         </LinearLayout>
-
-        <FrameLayout
-            android:id="@+id/playerFrame"
-            android:layout_width="200dp"
-            android:layout_height="fill_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/upperFrame"
-            android:background="@drawable/box" >
-
-            <fragment
-                android:id="@+id/playerListFragment"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                class="org.hedgewars.hedgeroid.RoomPlayerlistFragment"
-                tools:layout="@layout/fragment_playerlist" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/upperFrame"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/playerFrame"
-            android:background="@drawable/box" >
-
-            <fragment
-                android:id="@+id/chatFragment"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                class="org.hedgewars.hedgeroid.ChatFragment"
-                tools:layout="@layout/fragment_chat" />
-        </FrameLayout>
-    </RelativeLayout>
+    </TabHost>
 
 </FrameLayout>

@@ -1,13 +1,10 @@
 package org.hedgewars.hedgeroid;
 
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.Datastructures.GameConfig;
 import org.hedgewars.hedgeroid.Datastructures.Player;
 import org.hedgewars.hedgeroid.Datastructures.PlayerInRoom;
 import org.hedgewars.hedgeroid.netplay.Netplay;
-import org.hedgewars.hedgeroid.netplay.RunGameListener;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.ContextMenu;
@@ -21,7 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class RoomPlayerlistFragment extends ListFragment implements OnItemClickListener, RunGameListener {
+public class RoomPlayerlistFragment extends ListFragment implements OnItemClickListener {
 	private Netplay netplay;
 	private RoomPlayerlistAdapter adapter;
 	
@@ -29,7 +26,6 @@ public class RoomPlayerlistFragment extends ListFragment implements OnItemClickL
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		netplay = Netplay.getAppInstance(getActivity().getApplicationContext());
-		netplay.registerRunGameListener(this);
 		adapter = new RoomPlayerlistAdapter();
 		adapter.setSource(netplay.roomPlayerlist);
 		setListAdapter(adapter);
@@ -39,7 +35,6 @@ public class RoomPlayerlistFragment extends ListFragment implements OnItemClickL
 	public void onDestroy() {
 		super.onDestroy();
 		adapter.invalidate();
-		netplay.unregisterRunGameListener(this);
 	}
 	
 	@Override
@@ -92,12 +87,5 @@ public class RoomPlayerlistFragment extends ListFragment implements OnItemClickL
 		if(player.name.equals(netplay.getPlayerName())) {
 			netplay.sendToggleReady();
 		}
-	}
-	
-	// TODO this is really the wrong place for this...
-	public void runGame(GameConfig config) {
-		SDLActivity.startConfig = config;
-		SDLActivity.startNetgame = true;
-		startActivity(new Intent(getActivity().getApplicationContext(), SDLActivity.class));
 	}
 }

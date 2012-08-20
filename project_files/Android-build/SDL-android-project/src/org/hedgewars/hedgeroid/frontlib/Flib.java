@@ -29,7 +29,7 @@ public class Flib {
 		}
 	};
 	static {
-		INSTANCE.flib_log_setLevel(Frontlib.FLIB_LOGLEVEL_ALL);
+		INSTANCE.flib_log_setLevel(Frontlib.FLIB_LOGLEVEL_INFO);
 		INSTANCE.flib_log_setCallback(logCb);
 	}
 }

@@ -24,7 +24,6 @@ import java.io.IOException;
 
 import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
-import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.netplay.Netplay;
 import org.hedgewars.hedgeroid.netplay.Netplay.State;
 import org.hedgewars.hedgeroid.util.FileUtils;
@@ -56,7 +55,7 @@ public class MainActivity extends FragmentActivity {
 
 	public void onCreate(Bundle sis){
 		super.onCreate(sis);
-		setContentView(R.layout.main);
+		setContentView(R.layout.activity_main);
 
 		broadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
 		Button startLocalGame = (Button)findViewById(R.id.startGame);
@@ -120,13 +119,16 @@ public class MainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch(item.getItemId()) {
 		case R.id.download:
-			startActivityForResult(new Intent(getApplicationContext(), DownloadListActivity.class), 0);
+			startActivityForResult(new Intent(this, DownloadListActivity.class), 0);
 			return true;
 		case R.id.preferences:
 			Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.edit_weaponsets:
-			startActivity(new Intent(getApplicationContext(), WeaponsetListActivity.class));
+			startActivity(new Intent(this, WeaponsetListActivity.class));
+			return true;
+		case R.id.edit_teams:
+			startActivity(new Intent(this, TeamListActivity.class));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -164,7 +166,7 @@ public class MainActivity extends FragmentActivity {
 
 	private final OnClickListener startGameListener = new OnClickListener(){
 		public void onClick(View v){
-			startActivity(new Intent(getApplicationContext(), StartGameActivity.class));
+			startActivity(new Intent(getApplicationContext(), LocalRoomActivity.class));
 		}
 	};
 	

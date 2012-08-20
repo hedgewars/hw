@@ -3,17 +3,12 @@ package org.hedgewars.hedgeroid;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.Datastructures.MapRecipe;
-import org.hedgewars.hedgeroid.Datastructures.Scheme;
 import org.hedgewars.hedgeroid.Datastructures.Team;
 import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.Datastructures.TeamIngameAttributes;
-import org.hedgewars.hedgeroid.Datastructures.Weaponset;
-import org.hedgewars.hedgeroid.netplay.Netplay;
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -22,15 +17,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-/**
- *  TODO use an interface for querying and manipulating the team list, to allow re-using this fragment
- *  in local play
- */
-public class TeamlistFragment extends ListFragment implements TeamlistAdapter.Listener, RoomStateManager.Observer {
-	private Netplay netplay;
+public class TeamlistFragment extends ListFragment implements TeamlistAdapter.Listener {
 	private TeamlistAdapter adapter;
 	private Button addTeamButton;
-	private DataSetObserver teamlistObserver;
 	private RoomStateManager stateManager;
 	
 	@Override
@@ -41,13 +30,12 @@ public class TeamlistFragment extends ListFragment implements TeamlistAdapter.Li
 		} catch(ClassCastException e) {
 			throw new RuntimeException("Hosting activity must implement RoomStateManager.Provider.", e);
 		}
-		netplay = Netplay.getAppInstance(getActivity().getApplicationContext());
 		adapter = new TeamlistAdapter();
-		adapter.setSource(netplay.roomTeamlist);
+		adapter.updateTeamlist(stateManager.getTeams().values());
 		adapter.setColorHogcountEnabled(stateManager.getChiefStatus());
 		adapter.setListener(this);
 		setListAdapter(adapter);
-		stateManager.registerObserver(this);
+		stateManager.addListener(roomStateChangeListener);
 	}
 
 	@Override
@@ -61,14 +49,7 @@ public class TeamlistFragment extends ListFragment implements TeamlistAdapter.Li
 			}
 		});
 		
-		teamlistObserver = new DataSetObserver() {
-			@Override
-			public void onChanged() {
-				addTeamButton.setEnabled(netplay.roomTeamlist.getMap().size() < Team.maxNumberOfTeams);
-			}
-		};
-		netplay.roomTeamlist.registerObserver(teamlistObserver);
-		teamlistObserver.onChanged();
+		addTeamButton.setEnabled(stateManager.getTeams().size() < Team.maxNumberOfTeams);
 		
 		return v;
 	}
@@ -76,27 +57,20 @@ public class TeamlistFragment extends ListFragment implements TeamlistAdapter.Li
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		adapter.invalidate();
 		adapter.setListener(null);
-		netplay.roomTeamlist.unregisterObserver(teamlistObserver);
-		stateManager.unregisterObserver(this);
+		stateManager.removeListener(roomStateChangeListener);
 	}
 
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-	}
-	
 	private Collection<String> getCurrentTeamNames() {
 		List<String> names = new ArrayList<String>();
-		for(TeamInGame team : netplay.roomTeamlist.getMap().values()) {
+		for(TeamInGame team : stateManager.getTeams().values()) {
 			names.add(team.team.name);
 		}
 		return names;
 	}
 	
 	public void onColorClicked(TeamInGame team) {
-		netplay.changeTeamColorIndex(team.team.name, (team.ingameAttribs.colorIndex+1)%TeamIngameAttributes.TEAM_COLORS.length);
+		stateManager.changeTeamColorIndex(team.team.name, (team.ingameAttribs.colorIndex+1)%TeamIngameAttributes.TEAM_COLORS.length);
 	}
 	
 	public void onHogcountClicked(TeamInGame team) {
@@ -104,19 +78,23 @@ public class TeamlistFragment extends ListFragment implements TeamlistAdapter.Li
 		if(newHogCount>Team.HEDGEHOGS_PER_TEAM) {
 			newHogCount = 1;
 		}
-		netplay.changeTeamHogCount(team.team.name, newHogCount);
+		stateManager.changeTeamHogCount(team.team.name, newHogCount);
 	}
 	
 	public void onTeamClicked(TeamInGame team) {
-		netplay.sendRemoveTeam(team.team.name);
+		stateManager.requestRemoveTeam(team.team.name);
 	}
 	
-	public void onChiefStatusChanged(boolean isChief) {
-		adapter.setColorHogcountEnabled(isChief);
-	}
-	
-	public void onGameStyleChanged(String gameStyle) { }
-	public void onMapChanged(MapRecipe recipe) { }
-	public void onSchemeChanged(Scheme scheme) { }
-	public void onWeaponsetChanged(Weaponset weaponset) { }
+	private final RoomStateManager.Listener roomStateChangeListener = new RoomStateManager.ListenerAdapter() {
+		@Override
+		public void onChiefStatusChanged(boolean isChief) {
+			adapter.setColorHogcountEnabled(isChief);
+		};
+		
+		@Override
+		public void onTeamsChanged(Map<String, TeamInGame> teams) {
+			adapter.updateTeamlist(teams.values());
+			addTeamButton.setEnabled(teams.size() < Team.maxNumberOfTeams);
+		};
+	};
 }

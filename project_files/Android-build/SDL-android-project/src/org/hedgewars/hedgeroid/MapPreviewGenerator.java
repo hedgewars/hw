@@ -89,7 +89,11 @@ public final class MapPreviewGenerator implements Runnable {
 					} catch (InterruptedException e) {
 						// ignore
 					}
-				} while(!resultAvailable && System.nanoTime()-startTime < 15000000000l); // 15 seconds timeout
+					if(System.nanoTime()-startTime > 15000000000l) {
+						Log.w(TAG, "Error generating map preview: timeout");
+						resultAvailable = true;
+					}
+				} while(!resultAvailable); // 15 seconds timeout
 			} finally {
 				Flib.INSTANCE.flib_mapconn_destroy(conn);
 				postToListener(result);
@@ -117,9 +121,7 @@ public final class MapPreviewGenerator implements Runnable {
 		new Thread(new Runnable() {
 			public void run() {
 				Log.d(TAG, "Starting engine "+port);
-				synchronized(PascalExports.engineMutex) {
-					PascalExports.HWGenLandPreview(port);
-				}
+				PascalExports.synchronizedGenLandPreview(port);
 				Log.d(TAG, "Engine finished");
 			}
 		}).start();
@@ -139,7 +141,6 @@ public final class MapPreviewGenerator implements Runnable {
 	 */
 	private final MapimageCallback successCb = new MapimageCallback() {
 		public void callback(Pointer context, Pointer buffer, int hedgehogCount) {
-			Log.d(TAG, "Running success handler");
 			byte[] mapdata = buffer.getByteArray(0, Frontlib.MAPIMAGE_BYTES);
 			
 			int leftmostPixel = Frontlib.MAPIMAGE_WIDTH;
@@ -192,7 +193,7 @@ public final class MapPreviewGenerator implements Runnable {
 	
 	private final StrCallback failureCb = new StrCallback() {
 		public void callback(Pointer context, String reason) {
-			Log.e(TAG, "Error generating map preview: "+reason);
+			Log.w(TAG, "Error generating map preview: "+reason);
 			result = null;
 			resultAvailable = true;
 		}

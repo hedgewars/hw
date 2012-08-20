@@ -110,7 +110,7 @@ class ThreadedNetConnection {
 				}
 
 				//FLIB.flib_netconn_onAdminAccess(conn, adminAccessCb, null)
-				FLIB.flib_netconn_onCfgScheme(conn, cfgSchemeCb, null);
+				FLIB.flib_netconn_onSchemeChanged(conn, cfgSchemeCb, null);
 				FLIB.flib_netconn_onChat(conn, chatCb, null);
 				FLIB.flib_netconn_onConnected(conn, connectedCb, null);
 				FLIB.flib_netconn_onDisconnected(conn, disconnectCb, null);
@@ -387,6 +387,7 @@ class ThreadedNetConnection {
 		MSG_SEND_ENGINE_MESSAGE,
 		MSG_SEND_ROUND_FINISHED,
 		MSG_SEND_TOGGLE_READY,
+		MSG_SEND_START_GAME,
 		MSG_SEND_WEAPONSET,
 		MSG_SEND_MAP,
 		MSG_SEND_MAP_NAME,
@@ -503,6 +504,10 @@ class ThreadedNetConnection {
 			}
 			case MSG_SEND_TOGGLE_READY: {
 				FLIB.flib_netconn_send_toggleReady(conn);
+				break;
+			}
+			case MSG_SEND_START_GAME: {
+				FLIB.flib_netconn_send_startGame(conn);
 				break;
 			}
 			case MSG_SEND_WEAPONSET: {

@@ -1,3 +1,22 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 package org.hedgewars.hedgeroid;
 
 import org.hedgewars.hedgeroid.R;
@@ -15,11 +34,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+/**
+ * This fragment displays a chatlog and text input field for chatting in either
+ * the lobby or a room.
+ */
 public class ChatFragment extends Fragment {
-	public static final String ARGUMENT_INROOM = "inRoom";
-	
 	private ChatlogAdapter adapter;
-	private Netplay netconn;
+	private Netplay netplay;
 	private MessageLog messageLog;
 	private boolean inRoom;
 	
@@ -30,22 +51,22 @@ public class ChatFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		netconn = Netplay.getAppInstance(getActivity().getApplicationContext());
+		netplay = Netplay.getAppInstance(getActivity().getApplicationContext());
 		adapter = new ChatlogAdapter(getActivity());
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		messageLog = inRoom ? netconn.roomChatlog : netconn.lobbyChatlog;
+		messageLog = inRoom ? netplay.roomChatlog : netplay.lobbyChatlog;
     	adapter.setLog(messageLog.getLog());
-    	messageLog.registerObserver(adapter);
+    	messageLog.addListener(adapter);
 	}
 	
 	@Override
 	public void onStop() {
 		super.onStop();
-		messageLog.unregisterObserver(adapter);
+		messageLog.removeListener(adapter);
 	}
 	
 	@Override
@@ -70,7 +91,7 @@ public class ChatFragment extends Fragment {
 			String text = v.getText().toString();
 			if(text.length()>0) {
 				v.setText("");
-				netconn.sendChat(text);
+				netplay.sendChat(text);
 			}
 			return true;
 		}

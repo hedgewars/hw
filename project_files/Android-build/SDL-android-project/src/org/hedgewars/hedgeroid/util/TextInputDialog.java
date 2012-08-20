@@ -98,6 +98,7 @@ public class TextInputDialog extends DialogFragment {
 		editText.setOnEditorActionListener(new OnEditorActionListener() {
 			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 				listener.onTextInputDialogSubmitted(dialogId, v.getText().toString());
+				dismiss();
 				return true;
 			}
 		});

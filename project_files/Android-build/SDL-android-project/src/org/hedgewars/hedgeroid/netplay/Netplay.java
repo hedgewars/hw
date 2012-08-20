@@ -7,8 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 import org.hedgewars.hedgeroid.RoomStateManager;
 import org.hedgewars.hedgeroid.Datastructures.GameConfig;
@@ -18,7 +16,6 @@ import org.hedgewars.hedgeroid.Datastructures.PlayerInRoom;
 import org.hedgewars.hedgeroid.Datastructures.Room;
 import org.hedgewars.hedgeroid.Datastructures.Scheme;
 import org.hedgewars.hedgeroid.Datastructures.Schemes;
-import org.hedgewars.hedgeroid.Datastructures.Team;
 import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.Datastructures.TeamIngameAttributes;
 import org.hedgewars.hedgeroid.Datastructures.Weaponset;
@@ -42,7 +39,7 @@ import android.util.Pair;
  * This class manages the application's networking state.
  */
 public class Netplay {
-	public static enum State { NOT_CONNECTED, CONNECTING, LOBBY, ROOM, INGAME }
+	public static enum State { NOT_CONNECTED, CONNECTING, LOBBY, ROOM }
 	
 	// Extras in broadcasts
 	public static final String EXTRA_PLAYERNAME = "playerName";
@@ -64,6 +61,8 @@ public class Netplay {
 	private final Context appContext;
 	private final LocalBroadcastManager broadcastManager;
 	private final FromNetHandler fromNetHandler = new FromNetHandler();
+	public final Scheme defaultScheme;
+	public final Weaponset defaultWeaponset;
 	
 	private State state = State.NOT_CONNECTED;
 	private String playerName;
@@ -79,17 +78,17 @@ public class Netplay {
 	public final Roomlist roomList = new Roomlist();
 	public final MessageLog lobbyChatlog;
 	public final MessageLog roomChatlog;
-	public final ObservableTreeMap<String, TeamInGame> roomTeamlist = new ObservableTreeMap<String, TeamInGame>();
-	private final Map<String, TeamInGame> roomRequestedTeams = new TreeMap<String, TeamInGame>();
 	
 	private final List<GameMessageListener> gameMessageListeners = new LinkedList<GameMessageListener>();
 	private final List<RunGameListener> runGameListeners = new LinkedList<RunGameListener>();
 	
-	public Netplay(Context appContext) {
+	public Netplay(Context appContext, Scheme defaultScheme, Weaponset defaultWeaponset) {
 		this.appContext = appContext;
 		broadcastManager = LocalBroadcastManager.getInstance(appContext);
 		lobbyChatlog = new MessageLog(appContext);
 		roomChatlog = new MessageLog(appContext);
+		this.defaultScheme = defaultScheme;
+		this.defaultWeaponset = defaultWeaponset;
 	}
 	
 	public RoomStateManager getRoomStateManager() {
@@ -105,21 +104,7 @@ public class Netplay {
 	private void initRoomState(boolean chief) {
 		roomChatlog.clear();
 		roomPlayerlist.clear();
-		roomTeamlist.clear();
-		roomRequestedTeams.clear();
-		
-		try {
-			netRoomState.setChief(chief);
-			netRoomState.setGameStyle(GameConfig.DEFAULT_STYLE);
-			List<Scheme> schemes = Schemes.loadBuiltinSchemes(appContext);
-			netRoomState.setScheme(schemes.get(Schemes.toNameList(schemes).indexOf(GameConfig.DEFAULT_SCHEME)));
-			netRoomState.setMapRecipe(MapRecipe.makeRandomMap(0, MapRecipe.makeRandomSeed(), GameConfig.DEFAULT_THEME));
-			List<Weaponset> weaponsets = Weaponsets.loadBuiltinWeaponsets(appContext);
-			netRoomState.setWeaponset(weaponsets.get(Weaponsets.toNameList(weaponsets).indexOf(GameConfig.DEFAULT_WEAPONSET)));
-			netRoomState.sendFullConfig();
-		} catch(IOException e) {
-			throw new RuntimeException(e);
-		}
+		netRoomState.initRoomState(chief);
 	}
 	
 	public void registerGameMessageListener(GameMessageListener listener) {
@@ -176,30 +161,10 @@ public class Netplay {
 	public void sendCreateRoom(String name) { sendToNet(MSG_SEND_CREATE_ROOM, name); }
 	public void sendLeaveRoom(String message) { sendToNet(MSG_SEND_LEAVE_ROOM, message); }
 	public void sendKick(String player) { sendToNet(MSG_SEND_KICK, player); }
-	public void sendAddTeam(Team newTeam, int colorIndex) {
-		TeamIngameAttributes tia = new TeamIngameAttributes(playerName, colorIndex, TeamIngameAttributes.DEFAULT_HOG_COUNT, false);
-		TeamInGame newTeamInGame = new TeamInGame(newTeam, tia);
-		roomRequestedTeams.put(newTeam.name, newTeamInGame);
-		sendToNet(MSG_SEND_ADD_TEAM, newTeamInGame);
-	}
-	public void sendRemoveTeam(String teamName) { sendToNet(MSG_SEND_REMOVE_TEAM, teamName); }
-	public void changeTeamColorIndex(String teamName, int colorIndex) {
-		if(isChief()) {
-			sendToNet(MSG_SEND_TEAM_COLOR_INDEX, colorIndex, teamName);
-			TeamInGame team = roomTeamlist.get(teamName);
-			roomTeamlist.put(teamName, team.withAttribs(team.ingameAttribs.withColorIndex(colorIndex)));
-		}
-	}
-	public void changeTeamHogCount(String teamName, int hogCount) {
-		if(isChief()) {
-			sendToNet(MSG_SEND_TEAM_HOG_COUNT, hogCount, teamName);
-			TeamInGame team = roomTeamlist.get(teamName);
-			roomTeamlist.put(teamName, team.withAttribs(team.ingameAttribs.withHogCount(hogCount)));
-		}
-	}
 	public void sendEngineMessage(byte[] engineMessage) { sendToNet(MSG_SEND_ENGINE_MESSAGE, engineMessage); }
 	public void sendRoundFinished(boolean withoutError) { sendToNet(MSG_SEND_ROUND_FINISHED, Boolean.valueOf(withoutError)); }
 	public void sendToggleReady() { sendToNet(MSG_SEND_TOGGLE_READY); }
+	public void sendStartGame() { sendToNet(MSG_SEND_START_GAME); }
 	
 	public void disconnect() { sendToNet(MSG_DISCONNECT, "User Quit"); }
 	
@@ -218,7 +183,32 @@ public class Netplay {
 			if(Flib.INSTANCE.flib_init() != 0) {
 				throw new RuntimeException("Unable to start frontlib");
 			}
-			instance = new Netplay(applicationContext);
+			
+			// We will need some default values for rooms, best load them here
+			Scheme defaultScheme = null;
+			Weaponset defaultWeaponset = null;
+			try {
+				List<Scheme> schemes = Schemes.loadBuiltinSchemes(applicationContext);
+				for(Scheme scheme : schemes) {
+					if(scheme.name.equals(GameConfig.DEFAULT_SCHEME)) {
+						defaultScheme = scheme;
+					}
+				}
+				List<Weaponset> weaponsets = Weaponsets.loadBuiltinWeaponsets(applicationContext);
+				for(Weaponset weaponset : weaponsets) {
+					if(weaponset.name.equals(GameConfig.DEFAULT_WEAPONSET)) {
+						defaultWeaponset = weaponset;
+					}
+				}
+			} catch(IOException e) {
+				throw new RuntimeException(e);
+			}
+			
+			if(defaultScheme==null || defaultWeaponset==null) {
+				throw new RuntimeException("Unable to load default scheme or weaponset");
+			}
+			
+			instance = new Netplay(applicationContext, defaultScheme, defaultWeaponset);
 		}
 		return instance;
 	}
@@ -236,7 +226,7 @@ public class Netplay {
 	
 	public boolean isChief() {
 		if(netRoomState != null) {
-			return netRoomState.chief;
+			return netRoomState.getChiefStatus();
 		} else {
 			return false;
 		}
@@ -264,7 +254,7 @@ public class Netplay {
 	}
 	
 	private MessageLog getCurrentLog() {
-		if(state == State.ROOM || state == State.INGAME) {
+		if(state == State.ROOM) {
 			return roomChatlog;
 		} else {
 			return lobbyChatlog;
@@ -435,22 +425,22 @@ public class Netplay {
 			case MSG_TEAM_ADDED: {
 				TeamInGame newTeam = (TeamInGame)msg.obj;
 				if(isChief()) {
-					int freeColor = TeamInGame.getUnusedOrRandomColorIndex(roomTeamlist.getMap().values());
+					int freeColor = TeamInGame.getUnusedOrRandomColorIndex(netRoomState.getTeams().values());
 					sendToNet(MSG_SEND_TEAM_HOG_COUNT, newTeam.ingameAttribs.hogCount, newTeam.team.name);
 					sendToNet(MSG_SEND_TEAM_COLOR_INDEX, freeColor, newTeam.team.name);
 					newTeam = newTeam.withAttribs(newTeam.ingameAttribs.withColorIndex(freeColor));
 				}
-				roomTeamlist.put(newTeam.team.name, newTeam);
+				netRoomState.putTeam(newTeam);
 				break;
 			}
 			case MSG_TEAM_DELETED: {
-				roomTeamlist.remove((String)msg.obj);
+				netRoomState.removeTeam((String)msg.obj);
 				break;
 			}
 			case MSG_TEAM_ACCEPTED: {
-				TeamInGame requestedTeam = roomRequestedTeams.remove(msg.obj);
+				TeamInGame requestedTeam = netRoomState.requestedTeams.remove(msg.obj);
 				if(requestedTeam!=null) {
-					roomTeamlist.put(requestedTeam.team.name, requestedTeam);
+					netRoomState.putTeam(requestedTeam);
 					if(isChief()) {
 						// Not strictly necessary, but QtFrontend does it...
 						sendToNet(MSG_SEND_TEAM_HOG_COUNT, requestedTeam.ingameAttribs.hogCount, requestedTeam.team.name);
@@ -461,7 +451,7 @@ public class Netplay {
 				break;
 			}
 			case MSG_TEAM_COLOR_CHANGED: {
-				TeamInGame oldEntry = roomTeamlist.get((String)msg.obj);
+				TeamInGame oldEntry = netRoomState.getTeams().get((String)msg.obj);
 				if(oldEntry != null) {
 					/*
 					 * If we are chief, we ignore colors from the outside. They only come from the server
@@ -471,7 +461,7 @@ public class Netplay {
 					 */
 					if(!isChief()) {
 						TeamIngameAttributes newAttribs = oldEntry.ingameAttribs.withColorIndex(msg.arg1);
-						roomTeamlist.put(oldEntry.team.name, oldEntry.withAttribs(newAttribs));
+						netRoomState.putTeam(oldEntry.withAttribs(newAttribs));
 					}
 				} else {
 					Log.e("Netplay", "Color update for unknown team "+msg.obj);
@@ -479,10 +469,10 @@ public class Netplay {
 				break;
 			}
 			case MSG_HOG_COUNT_CHANGED: {
-				TeamInGame oldEntry = roomTeamlist.get((String)msg.obj);
+				TeamInGame oldEntry = netRoomState.getTeams().get((String)msg.obj);
 				if(oldEntry != null) {
 					TeamIngameAttributes newAttribs = oldEntry.ingameAttribs.withHogCount(msg.arg1);
-					roomTeamlist.put(oldEntry.team.name, oldEntry.withAttribs(newAttribs));
+					netRoomState.putTeam(oldEntry.withAttribs(newAttribs));
 				} else {
 					Log.e("Netplay", "Hog count update for unknown team "+msg.obj);
 				}
