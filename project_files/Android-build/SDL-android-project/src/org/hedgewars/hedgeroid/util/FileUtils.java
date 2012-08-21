@@ -71,21 +71,14 @@ public class FileUtils {
 		}
 	}
 
-	public static File getDataPathFile(Context c) throws FileNotFoundException {
-		return new File(getCachePath(c), ROOT_DIR);
+	public static File getDataPathFile(Context c, String...subpath) throws FileNotFoundException {
+		File file = new File(getCachePath(c), ROOT_DIR);
+		for(String pathcomponent : subpath) {
+			file = new File(file, pathcomponent);
+		}
+		return file;
 	}
 	
-	// TODO Several callers are unaware that this may fail, so it throws an RTE now.
-	// Should be handled better though.
-	@Deprecated
-	public static String getDataPath(Context c) {
-		try {
-			return getDataPathFile(c).getAbsolutePath()+"/";
-		} catch(FileNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@TargetApi(8)
 	private static class FroyoSDCardDir{
 		public static File getDownloadPath(Context c){
@@ -113,7 +106,7 @@ public class FileUtils {
 	 * @throws FileNotFoundException If the sdcard is not available or the subdirectory "dirName" does not exist
 	 */
 	public static File[] getFilesFromRelativeDir(Context c, String dirName) throws FileNotFoundException {
-		File f = new File(getDataPathFile(c), dirName);
+		File f = getDataPathFile(c, dirName);
 
 		if(f.isDirectory()) {
 			return f.listFiles();
@@ -160,9 +153,9 @@ public class FileUtils {
 	 * Get all files from directory dir which have the given suffix
 	 * @throws FileNotFoundException If the sdcard is not available or the subdirectory "dir" does not exist
 	 */
-	public static ArrayList<String> getFileNamesFromDirWithSuffix(Context c, String dir, String suffix, boolean removeSuffix) throws FileNotFoundException{
+	public static List<String> getFileNamesFromDirWithSuffix(Context c, String dir, String suffix, boolean removeSuffix) throws FileNotFoundException{
 		File[] files = FileUtils.getFilesFromRelativeDir(c, dir);
-		ArrayList<String> ret = new ArrayList<String>();
+		List<String> ret = new ArrayList<String>();
 		for(File file : files){
 			String s = file.getName();
 			if(s.endsWith(suffix)){

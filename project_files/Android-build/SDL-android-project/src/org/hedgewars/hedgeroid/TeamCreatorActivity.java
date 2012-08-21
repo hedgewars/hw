@@ -24,7 +24,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -39,6 +38,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -62,6 +62,7 @@ import android.widget.Toast;
  */
 public class TeamCreatorActivity extends Activity implements Runnable {
 	public static final String PARAMETER_EXISTING_TEAMNAME = "existingTeamName";
+	private static final String TAG = TeamCreatorActivity.class.getSimpleName();
 	
 	private TextView name;
 	private Spinner difficulty, grave, flag, voice, fort;
@@ -76,10 +77,10 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 	
 	private String existingTeamName = null;
 
-	private final List<HashMap<String, ?>> flagsData = new ArrayList<HashMap<String, ?>>();
-	private final List<HashMap<String, ?>> typesData = new ArrayList<HashMap<String, ?>>();
-	private final List<HashMap<String, ?>> gravesData = new ArrayList<HashMap<String, ?>>();
-	private final List<HashMap<String, ?>> hatsData = new ArrayList<HashMap<String, ?>>();
+	private final List<Map<String, ?>> flagsData = new ArrayList<Map<String, ?>>();
+	private final List<Map<String, ?>> typesData = new ArrayList<Map<String, ?>>();
+	private final List<Map<String, ?>> gravesData = new ArrayList<Map<String, ?>>();
+	private final List<Map<String, ?>> hatsData = new ArrayList<Map<String, ?>>();
 	private final List<String> voicesData = new ArrayList<String>();
 	private final List<String> fortsData = new ArrayList<String>();
 
@@ -158,7 +159,7 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 	
 	public void run(){
 		try {
-			final ArrayList<HashMap<String, ?>> gravesDataNew = FrontendDataUtils.getGraves(this);
+			final List<Map<String, ?>> gravesDataNew = FrontendDataUtils.getGraves(this);
 			runOnUiThread(new Runnable(){
 				public void run() {
 					gravesData.addAll(gravesDataNew);
@@ -166,7 +167,7 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 				}
 			});
 			
-			final ArrayList<HashMap<String, ?>> flagsDataNew = FrontendDataUtils.getFlags(this);
+			final List<Map<String, ?>> flagsDataNew = FrontendDataUtils.getFlags(this);
 			runOnUiThread(new Runnable(){
 				public void run() {
 					flagsData.addAll(flagsDataNew);
@@ -174,7 +175,7 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 				}
 			});
 			
-			final ArrayList<HashMap<String, ?>> typesDataNew = FrontendDataUtils.getTypes(this);
+			final List<Map<String, ?>> typesDataNew = FrontendDataUtils.getTypes(this);
 			runOnUiThread(new Runnable(){
 				public void run() {
 					typesData.addAll(typesDataNew);
@@ -182,7 +183,7 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 				}
 			});
 			
-			final ArrayList<HashMap<String, ?>> hatsDataNew = FrontendDataUtils.getHats(this);
+			final List<Map<String, ?>> hatsDataNew = FrontendDataUtils.getHats(this);
 			runOnUiThread(new Runnable(){
 				public void run() {
 					hatsData.addAll(hatsDataNew);
@@ -190,7 +191,7 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 				}
 			});
 			
-			final ArrayList<String> voicesDataNew = FrontendDataUtils.getVoices(this);
+			final List<String> voicesDataNew = FrontendDataUtils.getVoices(this);
 			runOnUiThread(new Runnable(){
 				public void run() {
 					voicesData.addAll(voicesDataNew);
@@ -198,7 +199,7 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 				}
 			});
 			
-			final ArrayList<String> fortsDataNew = FrontendDataUtils.getForts(this);
+			final List<String> fortsDataNew = FrontendDataUtils.getForts(this);
 			runOnUiThread(new Runnable(){
 				public void run() {
 					fortsData.addAll(fortsDataNew);
@@ -295,11 +296,13 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 		public void onItemSelected(AdapterView<?> arg0, View arg1,
 				int position, long arg3) {
 			String fortName = (String) arg0.getAdapter().getItem(position);
-			Drawable fortIconDrawable = Drawable.createFromPath(FileUtils
-					.getDataPath(TeamCreatorActivity.this)
-					+ "Forts/"
-					+ fortName + "L.png");
-			imgFort.setImageDrawable(fortIconDrawable);
+			try {
+				File fortImage = FileUtils.getDataPathFile(TeamCreatorActivity.this, "Forts", fortName, "L.png");
+				Drawable fortIconDrawable = Drawable.createFromPath(fortImage.getAbsolutePath());
+				imgFort.setImageDrawable(fortIconDrawable);
+			} catch(IOException e) {
+				Log.e(TAG, "Unable to show fort image", e);
+			}
 			scroller.fullScroll(ScrollView.FOCUS_DOWN);// Scroll the scrollview
 			// to the bottom, work
 			// around for scrollview
@@ -315,9 +318,7 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 	private OnClickListener voiceClicker = new OnClickListener() {
 		public void onClick(View v) {
 			try {
-				File dir = new File(String.format("%sSounds/voices/%s",
-						FileUtils.getDataPath(TeamCreatorActivity.this),
-						voice.getSelectedItem()));
+				File dir = FileUtils.getDataPathFile(TeamCreatorActivity.this, "Sounds", "voices", (String)voice.getSelectedItem());
 				String file = "";
 				File[] dirs = dir.listFiles();
 				File f = dirs[(int) Math.round(Math.random() * dirs.length)];
@@ -332,11 +333,11 @@ public class TeamCreatorActivity extends Activity implements Runnable {
 				mp.prepare();
 				mp.start();
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				Log.e(TAG, "Unable to play voice sample", e);
 			} catch (IllegalStateException e) {
-				e.printStackTrace();
+				Log.e(TAG, "Unable to play voice sample", e);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Log.e(TAG, "Unable to play voice sample", e);
 			}
 		}
 	};

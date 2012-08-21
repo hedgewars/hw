@@ -25,6 +25,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.util.FileUtils;
@@ -38,9 +39,9 @@ public class FrontendDataUtils {
 	/**
 	 * @throws FileNotFoundException if the sdcard isn't available or the Maps directory doesn't exist
 	 */
-	public static ArrayList<MapFile> getMaps(Context c) throws FileNotFoundException {
+	public static List<MapFile> getMaps(Context c) throws FileNotFoundException {
 		File[] files = FileUtils.getFilesFromRelativeDir(c,"Maps");
-		ArrayList<MapFile> ret = new ArrayList<MapFile>();
+		List<MapFile> ret = new ArrayList<MapFile>();
 
 		for(File f : files) {
 			boolean isMission = FileUtils.hasFileWithSuffix(f, ".lua");
@@ -56,7 +57,7 @@ public class FrontendDataUtils {
 	 */
 	public static List<String> getGameStyles(Context c) throws FileNotFoundException {
 		File[] files = FileUtils.getFilesFromRelativeDir(c, "Scripts/Multiplayer");
-		ArrayList<String> ret = new ArrayList<String>();
+		List<String> ret = new ArrayList<String>();
 		/*
 		 * Caution: It is important that the "empty" style has this exact name, because
 		 * it will be interpreted as "don't load a script" by the frontlib, and also by
@@ -84,23 +85,19 @@ public class FrontendDataUtils {
 	/**
 	 * @throws FileNotFoundException if the sdcard isn't available or the Graphics/Graves directory doesn't exist
 	 */
-	public static ArrayList<HashMap<String, ?>> getGraves(Context c) throws FileNotFoundException {
-		File gravePath = new File(new File(FileUtils.getDataPathFile(c), "Graphics"), "Graves");
-		ArrayList<String> names = FileUtils.getFileNamesFromDirWithSuffix(c,"Graphics/Graves", ".png", true);
-		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(names.size());
+	public static List<Map<String, ?>> getGraves(Context c) throws FileNotFoundException {
+		File gravePath = FileUtils.getDataPathFile(c, "Graphics", "Graves");
+		List<String> names = FileUtils.getFileNamesFromDirWithSuffix(c,"Graphics/Graves", ".png", true);
+		List<Map<String, ?>> data = new ArrayList<Map<String, ?>>(names.size());
 
 		for(String s : names){
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("txt", s);
 			Bitmap b = BitmapFactory.decodeFile(new File(gravePath, s + ".png").getAbsolutePath());
 			int width = b.getWidth();
-			if(b.getHeight() > width){//some pictures contain more 'frames' underneath each other, if so we only use the first frame
-                                Bitmap tmp = Bitmap.createBitmap(width, width, b.getConfig());
-                                int[] pixels = new int[width * width];
-                                b.getPixels(pixels, 0,width,0,0,width,width);
-				tmp.setPixels(pixels,0,width,0,0,width,width);
-                                b.recycle();
-				b = tmp;
+			if(b.getHeight() > width){
+				// some pictures contain more 'frames' underneath each other, if so we only use the first frame
+				b = Bitmap.createBitmap(b, 0, 0, width, width);
 			}
 			map.put("img", b);
 			data.add(map);
@@ -111,13 +108,13 @@ public class FrontendDataUtils {
 	/**
 	 * @throws FileNotFoundException if the sdcard isn't available or the Graphics/Graves directory doesn't exist
 	 */
-	public static ArrayList<HashMap<String, ?>> getFlags(Context c) throws FileNotFoundException {
-		File flagsPath = new File(new File(FileUtils.getDataPathFile(c), "Graphics"), "Flags");
-		ArrayList<String> names = FileUtils.getFileNamesFromDirWithSuffix(c, "Graphics/Flags", ".png", true);
-		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(names.size());
+	public static List<Map<String, ?>> getFlags(Context c) throws FileNotFoundException {
+		File flagsPath = FileUtils.getDataPathFile(c, "Graphics", "Flags");
+		List<String> names = FileUtils.getFileNamesFromDirWithSuffix(c, "Graphics/Flags", ".png", true);
+		List<Map<String, ?>> data = new ArrayList<Map<String, ?>>(names.size());
 
 		for(String s : names){
-			HashMap<String, Object> map = new HashMap<String, Object>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("txt", s);
 			Bitmap b = BitmapFactory.decodeFile(new File(flagsPath, s + ".png").getAbsolutePath());
 			map.put("img", b);
@@ -129,9 +126,9 @@ public class FrontendDataUtils {
 	/**
 	 * @throws FileNotFoundException if the sdcard isn't available or the Sounds/voices directory doesn't exist
 	 */
-	public static ArrayList<String> getVoices(Context c) throws FileNotFoundException {
+	public static List<String> getVoices(Context c) throws FileNotFoundException {
 		File[] files = FileUtils.getFilesFromRelativeDir(c, "Sounds/voices");
-		ArrayList<String> ret = new ArrayList<String>();
+		List<String> ret = new ArrayList<String>();
 
 		for(File f : files){
 			if(f.isDirectory()) ret.add(f.getName());
@@ -142,17 +139,17 @@ public class FrontendDataUtils {
 	/**
 	 * @throws FileNotFoundException if the sdcard isn't available or the Forts directory doesn't exist
 	 */
-	public static ArrayList<String> getForts(Context c) throws FileNotFoundException {
+	public static List<String> getForts(Context c) throws FileNotFoundException {
 		return FileUtils.getFileNamesFromDirWithSuffix(c,"Forts", "L.png", true);
 	}
 	
-	public static ArrayList<HashMap<String, ?>> getTypes(Context c){
-		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(6);
+	public static List<Map<String, ?>> getTypes(Context c){
+		List<Map<String, ?>> data = new ArrayList<Map<String, ?>>(6);
 		String[] levels = {c.getString(R.string.human), c.getString(R.string.bot5), c.getString(R.string.bot4), c.getString(R.string.bot3), c.getString(R.string.bot2), c.getString(R.string.bot1)};
 		int[] images = {R.drawable.human, R.drawable.bot5, R.drawable.bot4, R.drawable.bot3, R.drawable.bot2, R.drawable.bot1};
 
 		for(int i = 0; i < levels.length; i++){
-			HashMap<String, Object> map = new HashMap<String, Object>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("txt", levels[i]);
 			map.put("img", images[i]);
 			map.put("level", i);
@@ -166,15 +163,14 @@ public class FrontendDataUtils {
 	/**
 	 * @throws FileNotFoundException if the sdcard isn't available or the Graphics/Hats directory doesn't exist
 	 */
-	public static ArrayList<HashMap<String, ?>> getHats(Context c) throws FileNotFoundException {
-		ArrayList<String> files = FileUtils.getFileNamesFromDirWithSuffix(c,"Graphics/Hats", ".png", true);
-		File hatsPath = new File(new File(FileUtils.getDataPathFile(c), "Graphics"), "Hats");
+	public static List<Map<String, ?>> getHats(Context c) throws FileNotFoundException {
+		List<String> files = FileUtils.getFileNamesFromDirWithSuffix(c,"Graphics/Hats", ".png", true);
+		File hatsPath = FileUtils.getDataPathFile(c, "Graphics", "Hats");
 		int size = files.size();
-		ArrayList<HashMap<String, ?>> data = new ArrayList<HashMap<String, ?>>(size);
+		List<Map<String, ?>> data = new ArrayList<Map<String, ?>>(size);
 
-		HashMap<String, Object> hashmap; 
 		for(String s : files){
-			hashmap = new HashMap<String, Object>();
+			Map<String, Object> hashmap = new HashMap<String, Object>();
 			hashmap.put("txt", s);
 			Bitmap b = BitmapFactory.decodeFile(new File(hatsPath, s + ".png").getAbsolutePath());
 			b = Bitmap.createBitmap(b, 0,0,b.getWidth()/2, b.getWidth()/2);

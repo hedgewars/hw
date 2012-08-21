@@ -75,11 +75,11 @@ public class NetRoomActivity extends FragmentActivity implements NetplayStateLis
 	        tabHost.setup();
 	        tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
 
-	        tabHost.addTab(tabHost.newTabSpec("map").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.room_tab_map, 0)).setContent(R.id.mapFragment));
-	        tabHost.addTab(tabHost.newTabSpec("settings").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.room_tab_settings, 0)).setContent(R.id.settingsFragment));
-	        tabHost.addTab(tabHost.newTabSpec("teams").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.room_tab_teams, 0)).setContent(R.id.teamlistFragment));
-	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.room_tab_chat, 0)).setContent(R.id.chatFragment));
-	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.room_tab_players, 0)).setContent(R.id.playerListContainer));
+	        tabHost.addTab(tabHost.newTabSpec("map").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_map, 0)).setContent(R.id.mapFragment));
+	        tabHost.addTab(tabHost.newTabSpec("settings").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_settings, 0)).setContent(R.id.settingsFragment));
+	        tabHost.addTab(tabHost.newTabSpec("teams").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_teams, 0)).setContent(R.id.teamlistFragment));
+	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_chat, 0)).setContent(R.id.chatFragment));
+	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.room_tab_players, 0)).setContent(R.id.playerListContainer));
 	        
 	        if (icicle != null) {
 	            tabHost.setCurrentTabByTag(icicle.getString("currentTab"));

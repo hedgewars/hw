@@ -67,9 +67,9 @@ public class LobbyActivity extends FragmentActivity implements TextInputDialogLi
 	        tabHost.setup();
 	        tabHost.getTabWidget().setOrientation(LinearLayout.VERTICAL);
 
-	        tabHost.addTab(tabHost.newTabSpec("rooms").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.lobby_tab_rooms, R.drawable.roomlist_ingame)).setContent(R.id.roomListFragment));
-	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.lobby_tab_chat, R.drawable.edit)).setContent(R.id.chatFragment));
-	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(UiUtils.createTabIndicator(tabHost, R.string.lobby_tab_players, R.drawable.human)).setContent(R.id.playerListFragment));
+	        tabHost.addTab(tabHost.newTabSpec("rooms").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.lobby_tab_rooms, R.drawable.roomlist_ingame)).setContent(R.id.roomListFragment));
+	        tabHost.addTab(tabHost.newTabSpec("chat").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.lobby_tab_chat, R.drawable.edit)).setContent(R.id.chatFragment));
+	        tabHost.addTab(tabHost.newTabSpec("players").setIndicator(UiUtils.createVerticalTabIndicator(tabHost, R.string.lobby_tab_players, R.drawable.human)).setContent(R.id.playerListFragment));
 	
 	        if (icicle != null) {
 	            tabHost.setCurrentTabByTag(icicle.getString("currentTab"));
