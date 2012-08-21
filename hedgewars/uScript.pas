@@ -1745,6 +1745,7 @@ ScriptSetInteger('BorderColor', ExplosionBorderColor);
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
+ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
 ScriptSetInteger('MapGen', cMapGen);
 ScriptSetInteger('ScreenHeight', cScreenHeight);
 ScriptSetInteger('ScreenWidth', cScreenWidth);
@@ -1773,6 +1774,7 @@ ScriptCall('onGameInit');
 // pop game variables
 ParseCommand('seed ' + ScriptGetString('Seed'), true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
+LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
 cMapGen          := ScriptGetInteger('MapGen');
 GameFlags        := ScriptGetInteger('GameFlags');
 cHedgehogTurnTime:= ScriptGetInteger('TurnTime');
