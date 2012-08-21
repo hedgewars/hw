@@ -923,7 +923,13 @@ begin
             Gear^.State := Gear^.State or gstAnimation
             end;
             exit
-        end
+        end else
+        if(Gear^.Hedgehog^.Gear = nil) or ((Gear^.Hedgehog^.Gear^.State and gstMoving) <> 0) then
+            begin
+            DeleteGear(Gear);
+            AfterAttack;
+            exit
+            end
     else
         inc(Gear^.Timer);
 
