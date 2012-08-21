@@ -284,6 +284,8 @@ begin
         3: SelectTemplate:= LargeTemplates[getrandom(Succ(High(LargeTemplates)))];
         4: SelectTemplate:= CavernTemplates[getrandom(Succ(High(CavernTemplates)))];
         5: SelectTemplate:= WackyTemplates[getrandom(Succ(High(WackyTemplates)))];
+// For lua only!
+        6: SelectTemplate:= LuaTemplateNumber;
     end;
 
     WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
