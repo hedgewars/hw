@@ -33,7 +33,7 @@ public final class UiUtils {
 		throw new AssertionError("This class is not meant to be instantiated");
 	}
 
-	public static View createTabIndicator(TabHost tabHost, int label, int icon) {
+	public static View createVerticalTabIndicator(TabHost tabHost, int label, int icon) {
 		LayoutInflater inflater = (LayoutInflater) tabHost.getContext()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

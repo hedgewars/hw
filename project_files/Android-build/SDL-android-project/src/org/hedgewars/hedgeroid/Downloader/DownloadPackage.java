@@ -137,7 +137,7 @@ public class DownloadPackage implements Parcelable{
 							version = -1;
 						}
 					}else if(name.equals("path")){
-						path = FileUtils.getDataPath(c) + text;
+						path = FileUtils.getDataPathFile(c, text).getAbsolutePath();
 					}else if(name.equals("representation")){
 						representation = text;
 					}else if(name.equals("description")){

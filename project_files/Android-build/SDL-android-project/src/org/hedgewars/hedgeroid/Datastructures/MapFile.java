@@ -49,7 +49,7 @@ public final class MapFile {
 	 * @throws FileNotFoundException if the sdcard is not available. Does NOT throw if the requested map file does not exist.
 	 */
 	public static File getFileForMapname(Context ctx, String mapname) throws FileNotFoundException {
-		return new File(new File(FileUtils.getDataPathFile(ctx), MAP_DIRECTORY), mapname);
+		return FileUtils.getDataPathFile(ctx, MAP_DIRECTORY, mapname);
 	}
 	
 	public static final Comparator<MapFile> MISSIONS_FIRST_NAME_ORDER = new Comparator<MapFile>() {
@@ -72,7 +72,7 @@ public final class MapFile {
 	}
 	
 	public static File getPreviewFile(Context c, String mapName) throws FileNotFoundException {
-		return new File(FileUtils.getDataPathFile(c), MAP_DIRECTORY + "/" + mapName + "/" + "preview.png");
+		return FileUtils.getDataPathFile(c, MAP_DIRECTORY, mapName, "preview.png");
 	}
 	
 	public static List<String> toDisplayNameList(List<MapFile> mapFiles, Resources res) {

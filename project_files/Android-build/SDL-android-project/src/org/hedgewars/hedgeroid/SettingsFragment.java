@@ -191,7 +191,7 @@ public class SettingsFragment extends Fragment {
 			stateManager.changeMapTheme(themes.get(position));
 			String theme = themes.get(position);
 			try {
-				File iconFile = new File(FileUtils.getDataPathFile(getActivity()), "Themes/" + theme + "/icon@2X.png");
+				File iconFile = FileUtils.getDataPathFile(getActivity(), "Themes", theme, "icon@2X.png");
 				Drawable themeIconDrawable = Drawable.createFromPath(iconFile.getAbsolutePath());
 				themeIcon.setImageDrawable(themeIconDrawable);
 			} catch (FileNotFoundException e) {
