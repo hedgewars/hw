@@ -803,7 +803,6 @@ end
 
 function onGameInit()
 	Seed = 334 
-  TemplateFilter = 3
 	GameFlags = gfSolidLand + gfDisableWind + gfPerHogAmmo
 	TurnTime = 50000 
 	CaseFreq = 0
@@ -812,6 +811,8 @@ function onGameInit()
 	Explosives = 0
 	Delay = 10 
 	MapGen = 0
+  TemplateFilter = 6
+  TemplateNumber = 22
 	Theme = "Nature"
   SuddenDeathTurns = 3000
 

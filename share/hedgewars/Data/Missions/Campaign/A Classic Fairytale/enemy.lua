@@ -620,9 +620,6 @@ function onGearDelete(gear)
   end
 end
 
-function onGearAdd(gear)
-end
-
 function onAmmoStoreInit()
   SetAmmo(amSkip, 9, 0, 0, 0)
   SetAmmo(amSwitch, 9, 0, 0, 0)
@@ -657,9 +654,6 @@ function onNewTurn()
     AnimSay(CurrentHedgehog, loc("Your deaths will be avenged, cannibals!"), SAY_SHOUT, 0)
     cannibalsDeadFresh = false
   end
-end
-
-function onGearDamage(gear, damage)
 end
 
 function onPrecise()

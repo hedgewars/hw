@@ -604,6 +604,8 @@ function onGameInit()
 	Explosives = 0
 	Delay = 10 
 	MapGen = 0
+  TemplateFilter = 6
+  TemplateNumber = 33
 	Theme = "Nature"
 
 
@@ -686,9 +688,6 @@ function onGearDelete(gear)
   elseif gear == youngh then
     youngKilled = true
   end
-end
-
-function onGearAdd(gear)
 end
 
 function onAmmoStoreInit()

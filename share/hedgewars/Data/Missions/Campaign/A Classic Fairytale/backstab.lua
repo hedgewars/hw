@@ -882,9 +882,6 @@ function SetupPlace()
   startNativesNum = nativesNum
 end
 
-function SetupEvents()
-end
-
 function SetupAmmo()
   AddAmmo(natives[girlNum], amSwitch, 0)
 end
@@ -963,7 +960,6 @@ function onGameStart()
   SetupAmmo()
   SetupPlace()
   AnimationSetup()
-  SetupEvents()
   AddAnim(startAnim)
   AddFunction({func = AfterStartAnim, args = {}})
 end
@@ -1003,9 +999,6 @@ function onGearDelete(gear)
   if gear == deployedHog then
     deployedDead = true
   end
-end
-
-function onGearAdd(gear)
 end
 
 function onAmmoStoreInit()
@@ -1087,9 +1080,6 @@ function onNewTurn()
     end
     needToAct = 0
   end
-end
-
-function onGearDamage(gear, damage)
 end
 
 function onPrecise()

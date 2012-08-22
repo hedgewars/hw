@@ -396,9 +396,6 @@ function SetupPlace()
   HideHedge(cyborg)
 end
 
-function SetupEvents()
-end
-
 function SetupAmmo()
   AddAmmo(cyborgs[1], amBazooka, 100)
   AddAmmo(cyborgs[1], amGrenade, 100)
@@ -482,7 +479,6 @@ function onGameStart()
   SetupAmmo()
   SetupPlace()
   AnimationSetup()
-  SetupEvents()
   AddAnim(startAnim)
   AddFunction({func = AfterStartAnim, args = {}})
 end
@@ -503,9 +499,6 @@ function onGearDelete(gear)
       cyborgsLeft = cyborgsLeft - 1
     end
   end
-end
-
-function onGearAdd(gear)
 end
 
 function onAmmoStoreInit()
@@ -543,9 +536,6 @@ function onNewTurn()
       end
     end
   end
-end
-
-function onGearDamage(gear, damage)
 end
 
 function onPrecise()
