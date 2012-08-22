@@ -377,9 +377,6 @@ function onGearDelete(gear)
   gearDead[gear] = true
 end
 
-function onGearAdd(gear)
-end
-
 function onAmmoStoreInit()
   SetAmmo(amAirStrike, 9, 0, 0, 0)
   SetAmmo(amBaseballBat, 9, 0, 0, 0)
@@ -427,9 +424,6 @@ function onNewTurn()
   else
     TurnTimeLeft = -1
   end
-end
-
-function onGearDamage(gear, damage)
 end
 
 function onPrecise()

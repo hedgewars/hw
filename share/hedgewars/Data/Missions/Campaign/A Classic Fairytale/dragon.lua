@@ -589,9 +589,6 @@ function onGearDelete(gear)
   end
 end
 
-function onGearAdd(gear)
-end
-
 function onAmmoStoreInit()
   SetAmmo(amFirePunch, 3, 0, 0, 0)
   SetAmmo(amBaseballBat, 2, 0, 0, 0)
@@ -626,9 +623,6 @@ function onNewTurn()
       DoRetry()
     end
   end
-end
-
-function onGearDamage(gear, damage)
 end
 
 function onPrecise()

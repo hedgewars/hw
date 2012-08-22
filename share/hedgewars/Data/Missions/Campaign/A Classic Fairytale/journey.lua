@@ -910,7 +910,6 @@ end
 
 function onGameInit()
 	Seed = 0
-  TemplateFilter = 3
 	GameFlags = gfSolidLand + gfDisableWind
 	TurnTime = 40000 
 	CaseFreq = 0
@@ -919,6 +918,8 @@ function onGameInit()
 	Explosives = 0
 	Delay = 5
 	MapGen = 0
+  TemplateFilter = 6
+  TemplateNumber = 27
 	Theme = "Nature"
   SuddenDeathTurns = 3000
 
@@ -999,9 +1000,6 @@ function onGearDelete(gear)
   end
 end
 
-function onGearAdd(gear)
-end
-
 function onAmmoStoreInit()
   SetAmmo(amBlowTorch, 0, 0, 0, 1)
   SetAmmo(amParachute, 0, 0, 0, 1)
@@ -1041,9 +1039,6 @@ function onNewTurn()
     SetInputMask(0xFFFFFFFF)
     TurnsLeft = TurnsLeft - 1
   end
-end
-
-function onGearDamage(gear, damage)
 end
 
 function onPrecise()

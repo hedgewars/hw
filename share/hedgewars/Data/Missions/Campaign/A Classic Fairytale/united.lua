@@ -473,9 +473,6 @@ function onGearDelete(gear)
   end
 end
 
-function onGearAdd(gear)
-end
-
 function onAmmoStoreInit()
   SetAmmo(amDEagle, 9, 0, 0, 0)
   SetAmmo(amSniperRifle, 4, 0, 0, 0)
@@ -514,9 +511,6 @@ function onNewTurn()
     AddAnim(hogDeadAnim)
     AddFunction({func = AfterHogDeadAnim, args = {}})
   end
-end
-
-function onGearDamage(gear, damage)
 end
 
 function onPrecise()
