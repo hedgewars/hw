@@ -416,7 +416,6 @@ begin
         //uLandObjects does not need initialization
         //uLandTemplates does not need initialization
         //uLocale does not need initialization
-        uRandom.initModule;
         uScript.initModule;
         uSound.initModule;
         uStats.initModule;
@@ -444,7 +443,7 @@ begin
         uStats.freeModule;          //stub
         uSound.freeModule;
         uScript.freeModule;
-        uRandom.freeModule;         //stub
+        //uRandom does not need to be freed
         //uLocale does not need to be freed
         //uLandTemplates does not need to be freed
         uLandTexture.freeModule;
