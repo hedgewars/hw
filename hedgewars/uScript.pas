@@ -980,10 +980,13 @@ begin
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) and (CurrentHedgehog <> nil) then
             begin
             prevgear := CurrentHedgehog^.Gear;
-            prevgear^.Active := false;
-            prevgear^.State:= prevgear^.State and (not gstHHDriven);
-            prevgear^.Z := cHHZ;
-            prevgear^.Message:= prevgear^.Message or gmRemoveFromList or gmAddToList;
+            if prevgear <> nil then
+                begin
+                prevgear^.Active := false;
+                prevgear^.State:= prevgear^.State and (not gstHHDriven);
+                prevgear^.Z := cHHZ;
+                prevgear^.Message:= prevgear^.Message or gmRemoveFromList or gmAddToList;
+                end;
             
             SwitchCurrentHedgehog(gear^.Hedgehog);
             CurrentTeam:= CurrentHedgehog^.Team;
