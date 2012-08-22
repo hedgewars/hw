@@ -285,7 +285,10 @@ begin
         4: SelectTemplate:= CavernTemplates[getrandom(Succ(High(CavernTemplates)))];
         5: SelectTemplate:= WackyTemplates[getrandom(Succ(High(WackyTemplates)))];
 // For lua only!
-        6: SelectTemplate:= min(max(LuaTemplateNumber,0),High(EdgeTemplates));
+        6: begin
+           SelectTemplate:= min(max(LuaTemplateNumber,0),High(EdgeTemplates));
+           GetRandom(2) // burn 1
+           end;
     end;
 
     WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));

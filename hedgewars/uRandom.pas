@@ -65,7 +65,7 @@ end;
 procedure SetRandomSeed(Seed: shortstring);
 var i: Longword;
 begin
-n:= 54;
+initModule;
 
 if Length(Seed) > 54 then
     Seed:= copy(Seed, 1, 54); // not 55 to ensure we have odd numbers in cirbuf
