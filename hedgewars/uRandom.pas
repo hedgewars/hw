@@ -65,7 +65,7 @@ end;
 procedure SetRandomSeed(Seed: shortstring);
 var i: Longword;
 begin
-initModule;
+n:= 54;
 
 if Length(Seed) > 54 then
     Seed:= copy(Seed, 1, 54); // not 55 to ensure we have odd numbers in cirbuf
@@ -97,17 +97,6 @@ function rndSign(num: hwFloat): hwFloat;
 begin
 num.isNegative:= odd(GetNext);
 rndSign:= num
-end;
-
-procedure initModule;
-begin
-    n:= 54;
-    FillChar(cirbuf, 64*sizeof(Longword), 0);
-end;
-
-procedure freeModule;
-begin
-
 end;
 
 end.
