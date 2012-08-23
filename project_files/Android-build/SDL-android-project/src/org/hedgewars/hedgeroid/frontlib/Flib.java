@@ -33,6 +33,13 @@ public class Flib {
 	}
 	public static final Frontlib INSTANCE = (Frontlib)Native.loadLibrary("frontlib", Frontlib.class, Collections.singletonMap(Library.OPTION_TYPE_MAPPER, AndroidTypeMapper.INSTANCE));
 	
+	static {
+		// We'll just do it here and never quit it again...
+		if(Flib.INSTANCE.flib_init() != 0) {
+			throw new RuntimeException("Unable to initialize frontlib");
+		}
+	}
+	
 	// Hook frontlib logging into Android logging
 	private static final Frontlib.LogCallback logCb = new Frontlib.LogCallback() {
 		public void callback(int level, String message) {

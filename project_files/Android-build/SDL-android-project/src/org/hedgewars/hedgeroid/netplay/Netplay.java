@@ -39,7 +39,6 @@ import org.hedgewars.hedgeroid.Datastructures.TeamInGame;
 import org.hedgewars.hedgeroid.Datastructures.TeamIngameAttributes;
 import org.hedgewars.hedgeroid.Datastructures.Weaponset;
 import org.hedgewars.hedgeroid.Datastructures.Weaponsets;
-import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.netplay.ThreadedNetConnection.ToNetMsgType;
 import org.hedgewars.hedgeroid.util.ObservableTreeMap;
 
@@ -198,11 +197,6 @@ public class Netplay {
 	 */
 	public static Netplay getAppInstance(Context applicationContext) {
 		if(instance == null) {
-			// We'll just do it here and never quit it again...
-			if(Flib.INSTANCE.flib_init() != 0) {
-				throw new RuntimeException("Unable to start frontlib");
-			}
-			
 			// We will need some default values for rooms, best load them here
 			Scheme defaultScheme = null;
 			Weaponset defaultWeaponset = null;

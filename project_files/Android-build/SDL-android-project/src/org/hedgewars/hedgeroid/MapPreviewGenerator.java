@@ -27,6 +27,7 @@ import org.hedgewars.hedgeroid.Datastructures.MapRecipe;
 import org.hedgewars.hedgeroid.EngineProtocol.PascalExports;
 import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.frontlib.Frontlib;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.ByteArrayPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.MapRecipePtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.MapconnPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.MapimageCallback;
@@ -161,8 +162,8 @@ public final class MapPreviewGenerator implements Runnable {
 	 * Since the image is present in bytes, we can save some effort by checking entire byte-columns first.
 	 */
 	private final MapimageCallback successCb = new MapimageCallback() {
-		public void callback(Pointer context, Pointer buffer, int hedgehogCount) {
-			byte[] mapdata = buffer.getByteArray(0, Frontlib.MAPIMAGE_BYTES);
+		public void callback(Pointer context, ByteArrayPtr buffer, int hedgehogCount) {
+			byte[] mapdata = buffer.deref(Frontlib.MAPIMAGE_BYTES);
 			
 			int leftmostPixel = Frontlib.MAPIMAGE_WIDTH;
 			int rightmostPixel = -1;

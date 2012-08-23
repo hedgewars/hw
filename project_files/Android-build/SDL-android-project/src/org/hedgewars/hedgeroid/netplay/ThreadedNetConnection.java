@@ -35,6 +35,7 @@ import org.hedgewars.hedgeroid.Datastructures.Weaponset;
 import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.frontlib.Frontlib;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.BoolCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.ByteArrayPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.BytesCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.GameSetupPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.IntStrCallback;
@@ -73,7 +74,6 @@ import android.os.Message;
 import android.util.Log;
 import android.util.Pair;
 
-import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 
 /**
@@ -128,7 +128,7 @@ class ThreadedNetConnection {
 					return;
 				}
 
-				//FLIB.flib_netconn_onAdminAccess(conn, adminAccessCb, null)
+				// FLIB.flib_netconn_onAdminAccess(conn, adminAccessCb, null)
 				FLIB.flib_netconn_onSchemeChanged(conn, cfgSchemeCb, null);
 				FLIB.flib_netconn_onChat(conn, chatCb, null);
 				FLIB.flib_netconn_onConnected(conn, connectedCb, null);
@@ -331,8 +331,8 @@ class ThreadedNetConnection {
 	};
 	
 	private final BytesCallback engineMessageCb = new BytesCallback() {
-		public void callback(Pointer context, Pointer buffer, NativeSizeT size) {
-			sendFromNet(MSG_ENGINE_MESSAGE, buffer.getByteArray(0, size.intValue()));
+		public void callback(Pointer context, ByteArrayPtr buffer, NativeSizeT size) {
+			sendFromNet(MSG_ENGINE_MESSAGE, buffer.deref(size.intValue()));
 		}
 	};
 	
@@ -512,9 +512,8 @@ class ThreadedNetConnection {
 			}
 			case MSG_SEND_ENGINE_MESSAGE: {
 				byte[] message = (byte[])msg.obj;
-				Memory mem = new Memory(message.length);
-				mem.write(0, message, 0, message.length);
-				FLIB.flib_netconn_send_engineMessage(conn, mem, NativeSizeT.valueOf(message.length));
+				ByteArrayPtr ptr = ByteArrayPtr.createJavaOwned(message);
+				FLIB.flib_netconn_send_engineMessage(conn, ptr, NativeSizeT.valueOf(message.length));
 				break;
 			}
 			case MSG_SEND_ROUND_FINISHED: {
@@ -563,9 +562,8 @@ class ThreadedNetConnection {
 			}
 			case MSG_SEND_MAP_DRAWDATA: {
 				byte[] message = (byte[])msg.obj;
-				Memory mem = new Memory(message.length);
-				mem.write(0, message, 0, message.length);
-				FLIB.flib_netconn_send_mapDrawdata(conn, mem, NativeSizeT.valueOf(message.length));
+				ByteArrayPtr ptr = ByteArrayPtr.createJavaOwned(message);
+				FLIB.flib_netconn_send_mapDrawdata(conn, ptr, NativeSizeT.valueOf(message.length));
 				break;
 			}
 			case MSG_SEND_GAMESTYLE: {
