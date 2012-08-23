@@ -334,7 +334,7 @@ public interface Frontlib extends Library {
 		}
 		
 		public static ByteArrayPtr createJavaOwned(byte[] buffer) {
-			if(buffer == null) {
+			if(buffer == null || buffer.length == 0) {
 				return null;
 			}
 			// no need for javaOwnedInstance here because PointerType
@@ -593,14 +593,24 @@ public interface Frontlib extends Library {
 			seed = map.seed;
 			theme = map.theme;
 			byte[] buf = map.getDrawData();
-			drawData = ByteArrayPtr.createJavaOwned(buf);
+			if(buf==null || buf.length==0) {
+				drawData = null;
+			} else {
+				drawData = ByteArrayPtr.createJavaOwned(buf).getPointer();
+			}
 			drawDataSize = NativeSizeT.valueOf(buf==null ? 0 : buf.length);
 			templateFilter = map.templateFilter;
 			mazeSize = map.mazeSize;
 		}
 		
 		public MapRecipe toMapRecipe() {
-			byte[] buf = ByteArrayPtr.deref(drawData, drawDataSize.intValue());
+			byte[] buf;
+			int size = drawDataSize.intValue();
+			if(size>0) {
+				buf = drawData.getByteArray(0, size);
+			} else {
+				buf = null;
+			}
 			return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, buf);
 		}
 		
@@ -608,7 +618,7 @@ public interface Frontlib extends Library {
 		public String name;
 		public String seed;
 		public String theme;
-		public ByteArrayPtr drawData;
+		public Pointer drawData;			// We can't use ByteArrayPtr in a struct because JNA will overwrite the value with NULL - probably a bug.
 		public NativeSizeT drawDataSize;
 		public int templateFilter;
 		public int mazeSize;
