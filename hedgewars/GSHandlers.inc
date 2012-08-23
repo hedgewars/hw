@@ -4323,23 +4323,6 @@ begin
             iterator^.Friction  := iterator^.Y;
             end;
 
-        // This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
-        iterator:= GearsList;
-        while iterator <> nil do
-            begin
-            if (iterator^.Kind <> gtPortal) and ((iterator^.Hedgehog <> CurrentHedgehog)
-            or ((iterator^.Message and gmAllStoppable) = 0)) then
-                    begin
-                    iterator^.Active:= true;
-                    if iterator^.dY.QWordValue = _0.QWordValue then
-                        iterator^.dY.isNegative:= false;
-                    iterator^.State:= iterator^.State or gstMoving;
-                    DeleteCI(iterator);
-                //inc(iterator^.dY.QWordValue,10);
-                    end;
-            iterator:= iterator^.NextGear
-            end;
-
         if Gear^.Health > 1 then
             dec(Gear^.Health);
     end;
@@ -4468,7 +4451,7 @@ begin
 
             iterator := GearsList;
             while iterator <> nil do
-            begin
+                begin
                 if (iterator^.Kind = gtPortal) then
                     if (iterator <> newPortal) and (iterator^.Timer > 0) and (iterator^.Hedgehog = CurrentHedgehog) then
                         begin
@@ -4486,7 +4469,27 @@ begin
                         end;
                 iterator^.PortalCounter:= 0;
                 iterator := iterator^.NextGear
-            end;
+                end;
+
+            if newPortal^.LinkedGear <> nil then
+                begin
+                // This jiggles gears, to ensure a portal connection just placed under a gear takes effect.
+                iterator:= GearsList;
+                while iterator <> nil do
+                    begin
+                    if not (iterator^.Kind in [gtPortal, gtAirAttack]) and ((iterator^.Hedgehog <> CurrentHedgehog)
+                    or ((iterator^.Message and gmAllStoppable) = 0)) then
+                            begin
+                            iterator^.Active:= true;
+                            if iterator^.dY.QWordValue = _0.QWordValue then
+                                iterator^.dY.isNegative:= false;
+                            iterator^.State:= iterator^.State or gstMoving;
+                            DeleteCI(iterator);
+                        //inc(iterator^.dY.QWordValue,10);
+                            end;
+                    iterator:= iterator^.NextGear
+                    end
+                end
             end;
     newPortal^.State := newPortal^.State and (not gstCollision);
     newPortal^.State := newPortal^.State or gstMoving;
