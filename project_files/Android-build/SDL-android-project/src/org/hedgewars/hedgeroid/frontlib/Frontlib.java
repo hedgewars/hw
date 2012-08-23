@@ -320,6 +320,33 @@ public interface Frontlib extends Library {
 		}
 	}
 	
+	public static class ByteArrayPtr extends PointerType {
+		public byte[] deref(int size) {
+			return getPointer().getByteArray(0, size);
+		}
+		
+		public static byte[] deref(ByteArrayPtr ptr, int size) {
+			if(ptr==null && size==0) {
+				return null;
+			} else {
+				return ptr.deref(size);
+			}
+		}
+		
+		public static ByteArrayPtr createJavaOwned(byte[] buffer) {
+			if(buffer == null) {
+				return null;
+			}
+			// no need for javaOwnedInstance here because PointerType
+			// remembers the memory as its Pointer
+			Pointer ptr = new Memory(buffer.length);
+			ptr.write(0, buffer, 0, buffer.length);
+			ByteArrayPtr result = new ByteArrayPtr();
+			result.setPointer(ptr);
+			return result;
+		}
+	}
+	
 	static class HogStruct extends Structure {
 		public static class ByVal extends HogStruct implements Structure.ByValue {}
 		public static class ByRef extends HogStruct implements Structure.ByReference {}
@@ -566,24 +593,14 @@ public interface Frontlib extends Library {
 			seed = map.seed;
 			theme = map.theme;
 			byte[] buf = map.getDrawData();
-			if(buf != null) {
-				drawData = new Memory(buf.length);
-				drawData.write(0, buf, 0, buf.length);
-				drawDataSize = NativeSizeT.valueOf(buf.length);
-			} else {
-				drawData = null;
-				drawDataSize = NativeSizeT.valueOf(0);
-			}
+			drawData = ByteArrayPtr.createJavaOwned(buf);
+			drawDataSize = NativeSizeT.valueOf(buf==null ? 0 : buf.length);
 			templateFilter = map.templateFilter;
 			mazeSize = map.mazeSize;
 		}
 		
 		public MapRecipe toMapRecipe() {
-			byte[] buf = null;
-			if(drawData != null && drawDataSize.intValue()>0) {
-				buf = new byte[drawDataSize.intValue()];
-				drawData.read(0, buf, 0, drawDataSize.intValue());
-			}
+			byte[] buf = ByteArrayPtr.deref(drawData, drawDataSize.intValue());
 			return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, buf);
 		}
 		
@@ -591,7 +608,7 @@ public interface Frontlib extends Library {
 		public String name;
 		public String seed;
 		public String theme;
-		public Pointer drawData;
+		public ByteArrayPtr drawData;
 		public NativeSizeT drawDataSize;
 		public int templateFilter;
 		public int mazeSize;
@@ -948,11 +965,11 @@ public interface Frontlib extends Library {
 	}
 	
 	public static interface BytesCallback extends Callback {
-		void callback(Pointer context, Pointer buffer, NativeSizeT size);
+		void callback(Pointer context, ByteArrayPtr buffer, NativeSizeT size);
 	}
 	
 	public static interface BytesBoolCallback extends Callback {
-		void callback(Pointer context, Pointer buffer, NativeSizeT size, boolean arg3);
+		void callback(Pointer context, ByteArrayPtr buffer, NativeSizeT size, boolean arg3);
 	}
 	
 	public static interface SchemeCallback extends Callback {
@@ -968,7 +985,7 @@ public interface Frontlib extends Library {
 	}
 	
 	public static interface MapimageCallback extends Callback {
-		void callback(Pointer context, Pointer buffer, int hedgehogCount);
+		void callback(Pointer context, ByteArrayPtr buffer, int hedgehogCount);
 	}
 	
 	public static interface LogCallback extends Callback {
@@ -1035,7 +1052,7 @@ public interface Frontlib extends Library {
 	int flib_netconn_send_toggleReady(NetconnPtr conn);
 	int flib_netconn_send_addTeam(NetconnPtr conn, TeamPtr team);
 	int flib_netconn_send_removeTeam(NetconnPtr conn, String teamname);
-	int flib_netconn_send_engineMessage(NetconnPtr conn, Pointer message, NativeSizeT size);
+	int flib_netconn_send_engineMessage(NetconnPtr conn, ByteArrayPtr message, NativeSizeT size);
 	int flib_netconn_send_teamHogCount(NetconnPtr conn, String teamname, int hogcount);
 	int flib_netconn_send_teamColor(NetconnPtr conn, String teamname, int colorIndex);
 	int flib_netconn_send_weaponset(NetconnPtr conn, WeaponsetPtr weaponset);
@@ -1046,7 +1063,7 @@ public interface Frontlib extends Library {
 	int flib_netconn_send_mapMazeSize(NetconnPtr conn, int mazeSize);
 	int flib_netconn_send_mapSeed(NetconnPtr conn, String seed);
 	int flib_netconn_send_mapTheme(NetconnPtr conn, String theme);
-	int flib_netconn_send_mapDrawdata(NetconnPtr conn, Pointer drawData, NativeSizeT size);
+	int flib_netconn_send_mapDrawdata(NetconnPtr conn, ByteArrayPtr drawData, NativeSizeT size);
 	int flib_netconn_send_script(NetconnPtr conn, String scriptName);
 	int flib_netconn_send_scheme(NetconnPtr conn, SchemePtr scheme);
 	int flib_netconn_send_roundfinished(NetconnPtr conn, boolean withoutError);
@@ -1100,15 +1117,15 @@ public interface Frontlib extends Library {
 	static final int GAME_END_ERROR = 3;
 	
 	GameconnPtr flib_gameconn_create(String playerName, GameSetupPtr setup, boolean netgame);
-	GameconnPtr flib_gameconn_create_playdemo(Pointer demo, NativeSizeT size);
-	GameconnPtr flib_gameconn_create_loadgame(String playerName, Pointer save, NativeSizeT size);
+	GameconnPtr flib_gameconn_create_playdemo(ByteArrayPtr demo, NativeSizeT size);
+	GameconnPtr flib_gameconn_create_loadgame(String playerName, ByteArrayPtr save, NativeSizeT size);
 	GameconnPtr flib_gameconn_create_campaign(String playerName, String seed, String script);
 
 	void flib_gameconn_destroy(GameconnPtr conn);
 	int flib_gameconn_getport(GameconnPtr conn);
 	void flib_gameconn_tick(GameconnPtr conn);
 
-	int flib_gameconn_send_enginemsg(GameconnPtr conn, Pointer data, NativeSizeT len);
+	int flib_gameconn_send_enginemsg(GameconnPtr conn, ByteArrayPtr data, NativeSizeT len);
 	int flib_gameconn_send_textmsg(GameconnPtr conn, int msgtype, String msg);
 	int flib_gameconn_send_chatmsg(GameconnPtr conn, String playername, String msg);
 	int flib_gameconn_send_quit(GameconnPtr conn);

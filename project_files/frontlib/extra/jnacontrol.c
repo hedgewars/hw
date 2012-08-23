@@ -67,6 +67,7 @@ typedef flib_gamesetup *GameSetupPtr;
 typedef bool boolean;
 typedef size_t NativeSizeT;
 typedef void *Pointer;
+typedef uint8_t *ByteArrayPtr;
 typedef char *String;
 
 /*
@@ -96,7 +97,7 @@ typedef void (*LogCallback)(int arg1, String arg2);
  * Below here are the copypasted method declarations from the JNA bindings
  */
 
-// frontlib.h
+	// frontlib.h
     int flib_init();
     void flib_quit();
 
@@ -127,6 +128,7 @@ typedef void (*LogCallback)(int arg1, String arg2);
 	int flib_netconn_send_toggleReady(NetconnPtr conn);
 	int flib_netconn_send_addTeam(NetconnPtr conn, TeamPtr team);
 	int flib_netconn_send_removeTeam(NetconnPtr conn, String teamname);
+	int flib_netconn_send_engineMessage(NetconnPtr conn, ByteArrayPtr message, NativeSizeT size);
 	int flib_netconn_send_teamHogCount(NetconnPtr conn, String teamname, int hogcount);
 	int flib_netconn_send_teamColor(NetconnPtr conn, String teamname, int colorIndex);
 	int flib_netconn_send_weaponset(NetconnPtr conn, WeaponsetPtr weaponset);
@@ -137,6 +139,7 @@ typedef void (*LogCallback)(int arg1, String arg2);
 	int flib_netconn_send_mapMazeSize(NetconnPtr conn, int mazeSize);
 	int flib_netconn_send_mapSeed(NetconnPtr conn, String seed);
 	int flib_netconn_send_mapTheme(NetconnPtr conn, String theme);
+	int flib_netconn_send_mapDrawdata(NetconnPtr conn, ByteArrayPtr drawData, NativeSizeT size);
 	int flib_netconn_send_script(NetconnPtr conn, String scriptName);
 	int flib_netconn_send_scheme(NetconnPtr conn, SchemePtr scheme);
 	int flib_netconn_send_roundfinished(NetconnPtr conn, boolean withoutError);
@@ -184,13 +187,17 @@ typedef void (*LogCallback)(int arg1, String arg2);
 	void flib_netconn_onServerVar(NetconnPtr conn, StrStrCallback callback, Pointer context);
 
 	// ipc/gameconn.h
+
 	GameconnPtr flib_gameconn_create(String playerName, GameSetupPtr setup, boolean netgame);
+	GameconnPtr flib_gameconn_create_playdemo(ByteArrayPtr demo, NativeSizeT size);
+	GameconnPtr flib_gameconn_create_loadgame(String playerName, ByteArrayPtr save, NativeSizeT size);
 	GameconnPtr flib_gameconn_create_campaign(String playerName, String seed, String script);
 
 	void flib_gameconn_destroy(GameconnPtr conn);
 	int flib_gameconn_getport(GameconnPtr conn);
 	void flib_gameconn_tick(GameconnPtr conn);
 
+	int flib_gameconn_send_enginemsg(GameconnPtr conn, ByteArrayPtr data, NativeSizeT len);
 	int flib_gameconn_send_textmsg(GameconnPtr conn, int msgtype, String msg);
 	int flib_gameconn_send_chatmsg(GameconnPtr conn, String playername, String msg);
 	int flib_gameconn_send_quit(GameconnPtr conn);
@@ -229,5 +236,6 @@ typedef void (*LogCallback)(int arg1, String arg2);
 	// model/gamesetup.h
 	void flib_gamesetup_destroy(GameSetupPtr gamesetup);
 
+	// util/logging.h
     void flib_log_setLevel(int level);
     void flib_log_setCallback(LogCallback callback);

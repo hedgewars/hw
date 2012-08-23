@@ -24,6 +24,7 @@ import java.net.ConnectException;
 import org.hedgewars.hedgeroid.Datastructures.GameConfig;
 import org.hedgewars.hedgeroid.frontlib.Flib;
 import org.hedgewars.hedgeroid.frontlib.Frontlib;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.ByteArrayPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.BytesCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.GameSetupPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.GameconnPtr;
@@ -41,7 +42,6 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.util.Log;
 
-import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 
 /**
@@ -172,8 +172,8 @@ public final class GameConnection {
 	
 	// runs on the IPCThread
 	private final BytesCallback engineMessageCb = new BytesCallback() {
-		public void callback(Pointer context, Pointer buffer, NativeSizeT size) {
-			netplay.sendEngineMessage(buffer.getByteArray(0, size.intValue()));
+		public void callback(Pointer context, ByteArrayPtr buffer, NativeSizeT size) {
+			netplay.sendEngineMessage(buffer.deref(size.intValue()));
 		}
 	};
 	
@@ -205,9 +205,8 @@ public final class GameConnection {
 		public void onEngineMessage(final byte[] em) {
 			handler.post(new Runnable() {
 				public void run() {
-					Memory mem = new Memory(em.length);
-					mem.write(0, em, 0, em.length);
-					Flib.INSTANCE.flib_gameconn_send_enginemsg(conn, mem, NativeSizeT.valueOf(em.length));
+					ByteArrayPtr ptr = ByteArrayPtr.createJavaOwned(em);
+					Flib.INSTANCE.flib_gameconn_send_enginemsg(conn, ptr, NativeSizeT.valueOf(em.length));
 				}
 			});
 		}
