@@ -4041,7 +4041,7 @@ begin
             break;
 
         // don't port portals or other gear that wouldn't make sense
-        if (iterator^.Kind in [gtPortal, gtRope])
+        if (iterator^.Kind in [gtPortal, gtRope, gtAirAttack])
         or (iterator^.PortalCounter > 32) then
             continue;
 
