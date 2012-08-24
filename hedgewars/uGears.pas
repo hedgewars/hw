@@ -59,7 +59,7 @@ implementation
 uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
     uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
-    uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers;
+    uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers, uGearsHandlersRope;
 
 var skipFlag: boolean;
 
