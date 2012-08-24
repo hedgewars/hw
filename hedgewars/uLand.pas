@@ -286,7 +286,7 @@ begin
         5: SelectTemplate:= WackyTemplates[getrandom(Succ(High(WackyTemplates)))];
 // For lua only!
         6: begin
-           SelectTemplate:= min(max(LuaTemplateNumber,0),High(EdgeTemplates));
+           SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
            GetRandom(2) // burn 1
            end;
     end;

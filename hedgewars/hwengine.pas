@@ -30,7 +30,7 @@ program hwengine;
 {$ENDIF}
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
-     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
+     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uLandTexture, uCollisions,
      SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
      {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF}, uAILandMarks;
 
