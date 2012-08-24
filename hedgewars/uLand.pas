@@ -613,7 +613,7 @@ else
             if Land[y, x] <> 0 then
                 begin
                 inc(c);
-                if c > 200 then // avoid accidental triggering
+                if c > 1000 then // avoid accidental triggering
                     begin
                     hasBorder:= true;
                     break;
