@@ -104,6 +104,8 @@ var
     haveDivided: boolean;
 
 begin
+    if GameTicks mod 8 <> 0 then exit;
+
     HHGear := Gear^.Hedgehog^.Gear;
 
     if ((HHGear^.State and gstHHDriven) = 0)
@@ -115,10 +117,10 @@ begin
         end;
 
     if (Gear^.Message and gmLeft  <> 0) and (not TestCollisionXwithGear(HHGear, -1)) then
-        HHGear^.dX := HHGear^.dX - _0_0002;
+        HHGear^.dX := HHGear^.dX - _0_0128;
 
     if (Gear^.Message and gmRight <> 0) and (not TestCollisionXwithGear(HHGear,  1)) then
-        HHGear^.dX := HHGear^.dX + _0_0002;
+        HHGear^.dX := HHGear^.dX + _0_0128;
 
     // vector between hedgehog and rope attaching point
     ropeDx := HHGear^.X - Gear^.X;
@@ -136,12 +138,12 @@ begin
 
         // apply gravity if there is no obstacle
         if not TestCollisionXwithGear(HHGear, cd) then
-            HHGear^.dY := HHGear^.dY + cGravity;
+            HHGear^.dY := HHGear^.dY + cGravity * 64;
 
         if (GameFlags and gfMoreWind) <> 0 then
             // apply wind if there's no obstacle
             if not TestCollisionXwithGear(HHGear, hwSign(cWindSpeed)) then
-                HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
+                HHGear^.dX := HHGear^.dX + cWindSpeed * 64 / HHGear^.Density;
         end;
 
     mdX := ropeDx + HHGear^.dX;
@@ -162,12 +164,12 @@ begin
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
         if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
         or (TestCollisionYwithGear(HHGear, hwSign(ropeDy)) <> 0)) then
-            Gear^.Elasticity := Gear^.Elasticity + _0_3;
+            Gear^.Elasticity := Gear^.Elasticity + _2_4;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
         if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
         or (TestCollisionYwithGear(HHGear, -hwSign(ropeDy)) <> 0)) then
-            Gear^.Elasticity := Gear^.Elasticity - _0_3;
+            Gear^.Elasticity := Gear^.Elasticity - _2_4;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
     HHGear^.Y := Gear^.Y + mdY * Gear^.Elasticity;
@@ -183,8 +185,8 @@ begin
     len := Gear^.Elasticity - _5;
     nx := Gear^.X + mdX * len;
     ny := Gear^.Y + mdY * len;
-    tx := mdX * _0_3; // should be the same as increase step
-    ty := mdY * _0_3;
+    tx := mdX * _2_4; // should be the same as increase step
+    ty := mdY * _2_4;
 
     while len > _3 do
         begin
@@ -225,8 +227,8 @@ begin
         nx := nx - tx;
         ny := ny - ty;
 
-        // len := len - _0_3 // should be the same as increase step
-        len.QWordValue := len.QWordValue - _0_3.QWordValue;
+        // len := len - _2_4 // should be the same as increase step
+        len.QWordValue := len.QWordValue - _2_4.QWordValue;
         end;
 
     if not haveDivided then
@@ -268,14 +270,14 @@ begin
 
     if haveCollision and (Gear^.Message and (gmLeft or gmRight) <> 0) and (Gear^.Message and (gmUp or gmDown) <> 0) then
         begin
-        HHGear^.dX := SignAs(hwAbs(HHGear^.dX) + _0_2, HHGear^.dX);
-        HHGear^.dY := SignAs(hwAbs(HHGear^.dY) + _0_2, HHGear^.dY)
+        HHGear^.dX := SignAs(hwAbs(HHGear^.dX) + _1_6, HHGear^.dX);
+        HHGear^.dY := SignAs(hwAbs(HHGear^.dY) + _1_6, HHGear^.dY)
         end;
 
     len := hwSqr(HHGear^.dX) + hwSqr(HHGear^.dY);
-    if len > _0_64 then
+    if len > _49 then
         begin
-        len := _0_8 / hwSqrt(len);
+        len := _7 / hwSqrt(len);
         HHGear^.dX := HHGear^.dX * len;
         HHGear^.dY := HHGear^.dY * len;
         end;
@@ -321,6 +323,9 @@ begin
         begin
         if (Gear^.State and gsttmpFlag) <> 0 then
             begin
+            HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 3;
+            HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 3;
+            
             PlaySound(sndRopeRelease);
             if Gear^.Hedgehog^.CurAmmoType <> amParachute then
                 RopeWaitCollision(Gear, HHGear)
@@ -394,6 +399,8 @@ begin
                 PlaySound(sndRopeAttach);
                 with HHGear^ do
                     begin
+                    dX.QWordValue:= dX.QWordValue shl 3;
+                    dY.QWordValue:= dY.QWordValue shl 3;
                     State := State and (not (gstAttacking or gstHHJumping or gstHHHJump));
                     Message := Message and (not gmAttack)
                     end;
@@ -420,6 +427,8 @@ begin
         PlaySound(sndRopeAttach);
         with HHGear^ do
             begin
+            dX.QWordValue:= dX.QWordValue shl 3;
+            dY.QWordValue:= dY.QWordValue shl 3;
             State := State and (not (gstAttacking or gstHHJumping or gstHHHJump));
             Message := Message and (not gmAttack)
             end;
