@@ -75,6 +75,9 @@ end;
 
 procedure RopeDeleteMe(Gear, HHGear: PGear);
 begin
+    PlaySound(sndRopeRelease);
+    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 3;
+    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 3;
     with HHGear^ do
         begin
         Message := Message and (not gmAttack);
@@ -85,6 +88,9 @@ end;
 
 procedure RopeWaitCollision(Gear, HHGear: PGear);
 begin
+    PlaySound(sndRopeRelease);
+    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 3;
+    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 3;
     with HHGear^ do
         begin
         Message := Message and (not gmAttack);
@@ -111,7 +117,6 @@ begin
     if ((HHGear^.State and gstHHDriven) = 0)
        or (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
         begin
-        PlaySound(sndRopeRelease);
         RopeDeleteMe(Gear, HHGear);
         exit
         end;
@@ -323,10 +328,6 @@ begin
         begin
         if (Gear^.State and gsttmpFlag) <> 0 then
             begin
-            HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 3;
-            HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 3;
-            
-            PlaySound(sndRopeRelease);
             if Gear^.Hedgehog^.CurAmmoType <> amParachute then
                 RopeWaitCollision(Gear, HHGear)
             else

@@ -183,7 +183,7 @@ var
 
     LuaGoals        : shortstring;
 
-    LuaTemplateNumber : LongInt;
+    LuaTemplateNumber : LongWord;
 
     VoiceList : array[0..7] of TVoice =  (
                     ( snd: sndNone; voicepack: nil),
