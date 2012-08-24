@@ -33,7 +33,9 @@ set(engine_sources
     uGame.pas
     uGears.pas
     uGearsHandlers.pas
+    uGearsHandlersRope.pas
     uGearsRender.pas
+    uGearsUtils.pas
     uIO.pas
     uInputHandler.pas
     uLand.pas
