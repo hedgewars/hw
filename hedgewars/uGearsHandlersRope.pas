@@ -104,8 +104,8 @@ end;
 procedure doStepRopeWork(Gear: PGear);
 var 
     HHGear: PGear;
-    len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
-    lx, ly, cd: LongInt;
+    len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY, t: hwFloat;
+    lx, ly, cd, i: LongInt;
     haveCollision,
     haveDivided: boolean;
 
@@ -113,6 +113,15 @@ begin
     if GameTicks mod 8 <> 0 then exit;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    haveCollision:= false;
+    if (Gear^.Message and gmLeft  <> 0) and (not TestCollisionXwithGear(HHGear, -1)) then
+        HHGear^.dX := HHGear^.dX - _0_0128
+    else haveCollision:= true;
+
+    if (Gear^.Message and gmRight <> 0) and (not TestCollisionXwithGear(HHGear,  1)) then
+        HHGear^.dX := HHGear^.dX + _0_0128
+    else haveCollision:= true;
+
 
     if ((HHGear^.State and gstHHDriven) = 0)
        or (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
@@ -120,12 +129,6 @@ begin
         RopeDeleteMe(Gear, HHGear);
         exit
         end;
-
-    if (Gear^.Message and gmLeft  <> 0) and (not TestCollisionXwithGear(HHGear, -1)) then
-        HHGear^.dX := HHGear^.dX - _0_0128;
-
-    if (Gear^.Message and gmRight <> 0) and (not TestCollisionXwithGear(HHGear,  1)) then
-        HHGear^.dX := HHGear^.dX + _0_0128;
 
     // vector between hedgehog and rope attaching point
     ropeDx := HHGear^.X - Gear^.X;
@@ -149,6 +152,27 @@ begin
             // apply wind if there's no obstacle
             if not TestCollisionXwithGear(HHGear, hwSign(cWindSpeed)) then
                 HHGear^.dX := HHGear^.dX + cWindSpeed * 64 / HHGear^.Density;
+        end
+    else haveCollision:= true;
+
+    if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
+        if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
+        or (TestCollisionYwithGear(HHGear, hwSign(ropeDy)) <> 0)) then
+            Gear^.Elasticity := Gear^.Elasticity + _2_4
+    else haveCollision:= true;
+
+    if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
+        if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
+        or (TestCollisionYwithGear(HHGear, -hwSign(ropeDy)) <> 0)) then
+            Gear^.Elasticity := Gear^.Elasticity - _2_4
+    else haveCollision:= true;
+
+    if haveCollision then
+        begin
+        if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) and not TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+            HHGear^.dX.isNegative:= not HHGear^.dX.isNegative;
+        if (TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0) and (TestCollisionYwithGear(HHGear, -hwSign(HHGear^.dY)) = 0) then
+            HHGear^.dY.isNegative:= not HHGear^.dX.isNegative;
         end;
 
     mdX := ropeDx + HHGear^.dX;
@@ -165,16 +189,6 @@ begin
     /////
     tx := HHGear^.X;
     ty := HHGear^.Y;
-
-    if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
-        if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
-        or (TestCollisionYwithGear(HHGear, hwSign(ropeDy)) <> 0)) then
-            Gear^.Elasticity := Gear^.Elasticity + _2_4;
-
-    if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
-        if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
-        or (TestCollisionYwithGear(HHGear, -hwSign(ropeDy)) <> 0)) then
-            Gear^.Elasticity := Gear^.Elasticity - _2_4;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
     HHGear^.Y := Gear^.Y + mdY * Gear^.Elasticity;
