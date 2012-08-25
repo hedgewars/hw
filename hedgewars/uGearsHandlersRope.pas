@@ -76,8 +76,8 @@ end;
 procedure RopeDeleteMe(Gear, HHGear: PGear);
 begin
     PlaySound(sndRopeRelease);
-    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 3;
-    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 3;
+    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue div Gear^.stepFreq;
+    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue div Gear^.stepFreq;
     with HHGear^ do
         begin
         Message := Message and (not gmAttack);
@@ -89,8 +89,6 @@ end;
 procedure RopeWaitCollision(Gear, HHGear: PGear);
 begin
     PlaySound(sndRopeRelease);
-    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 3;
-    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 3;
     with HHGear^ do
         begin
         Message := Message and (not gmAttack);
@@ -98,7 +96,10 @@ begin
         end;
     RopePoints.Count := 0;
     Gear^.Elasticity := _0;
-    Gear^.doStep := @doStepRopeAfterAttack
+    Gear^.doStep := @doStepRopeAfterAttack;
+    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue div Gear^.stepFreq;
+    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue div Gear^.stepFreq;
+    Gear^.stepFreq := 1
 end;
 
 procedure doStepRopeWork(Gear: PGear);
@@ -411,6 +412,7 @@ begin
                 Gear^.Y := Gear^.Y + ty;
                 Gear^.Elasticity := tt;
                 Gear^.doStep := @doStepRopeWork;
+                Gear^.stepFreq:= 8;
                 PlaySound(sndRopeAttach);
                 with HHGear^ do
                     begin
@@ -441,6 +443,7 @@ begin
     else
         begin
         Gear^.doStep := @doStepRopeWork;
+        Gear^.stepFreq:= 8;
         PlaySound(sndRopeAttach);
         with HHGear^ do
             begin
