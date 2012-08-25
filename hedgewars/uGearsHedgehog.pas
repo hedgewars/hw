@@ -234,9 +234,9 @@ with Gear^,
         and ((Gear^.Message and gmLJump) <> 0)
         and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
             begin
-            newDx:= dX / _2; 
-            newDy:= dY / _2;
-            altUse:= true;
+            newDx:= dX / CurAmmoGear^.stepFreq; 
+            newDy:= dY / CurAmmoGear^.stepFreq;
+            altUse:= true
             end
         else
             begin
@@ -260,10 +260,7 @@ with Gear^,
                    amPickHammer: newGear:= AddGear(hwRound(lx), hwRound(ly) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
                          amSkip: ParseCommand('/skip', true);
                          amRope: newGear:= AddGear(hwRound(lx), hwRound(ly), gtRope, 0, xx, yy, 0);
-                         amMine: if altUse then
-                                     newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, newDx, newDy, 3000)
-                                 else
-                                     newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
+                         amMine: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
                         amSMine: newGear:= AddGear(hwRound(lx), hwRound(ly), gtSMine,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                        amDEagle: newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
                       amSineGun: newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSineGunShot, 0, xx * _0_5, yy * _0_5, 0);
@@ -360,6 +357,11 @@ with Gear^,
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
                        amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
              end;
+             if altUse then
+                begin
+                newGear^.dX:= newDx / newGear^.Density;
+                newGear^.dY:= newDY / newGear^.Density
+                end;
              
              case CurAmmoType of
                       amGrenade, amMolotov, 

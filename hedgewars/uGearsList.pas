@@ -105,6 +105,7 @@ gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= $FFFF;
+gear^.stepFreq:= 1;
 
 if CurrentHedgehog <> nil then gear^.Hedgehog:= CurrentHedgehog;
 
@@ -230,7 +231,7 @@ case Kind of
                 gear^.Radius:= 2;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
-                gear^.Density:= _0_9;
+                gear^.Density:= _1;
                 if cMinesTime < 0 then
                     gear^.Timer:= getrandom(51)*100
                 else
@@ -242,7 +243,7 @@ case Kind of
                 gear^.Radius:= 2;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
-                gear^.Density:= _0_9;
+                gear^.Density:= _1_6;
                 gear^.Timer:= 500;
                 end;
         gtCase: begin
