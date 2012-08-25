@@ -153,7 +153,6 @@ end
 
 function AfterStronglingsAnim()
   stage = cyborgStage
-  TurnTimeLeft = 0
   ShowMission(loc("The Shadow Falls"), loc("The Dilemma"), loc("Choose your side! If you want to join the strange man, walk up to him.|Otherwise, walk away from him. If you decide to att...nevermind..."), 1, 8000)
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckRefuse, {}, DoRefuse, {}, 0)
@@ -163,6 +162,7 @@ function AfterStronglingsAnim()
   AddAmmo(dense, amSkip, 0)
   SetHealth(SpawnHealthCrate(2557, 1030), 50)
   SetHealth(SpawnHealthCrate(3599, 1009), 50)
+  TurnTimeLeft = 0
 end
 
 function SkipStronglingsAnim()
@@ -639,7 +639,6 @@ function CheckWeaklingsKilled()
 end
 
 function DoWeaklingsKilled()
-  TurnTimeLeft = 0
   SetGearMessage(CurrentHedgehog, 0)
   AddAnim(stronglingsAnim)
   AddFunction({func = AfterStronglingsAnim, args = {}})
