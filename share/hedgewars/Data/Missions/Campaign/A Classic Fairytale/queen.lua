@@ -402,7 +402,7 @@ function SetupCyborgAnim()
   table.insert(startAnim, {func = AnimSay, args = {enemy, "It was fun to watch...", SAY_SHOUT, 3500}})
   table.insert(startAnim, {func = AnimSay, args = {enemy, "The way you handled your little inside conflicts...", SAY_SHOUT, 6500}})
   table.insert(startAnim, {func = AnimSay, args = {enemy, "Did you really think that we needed the help of one of you?", SAY_SHOUT, 7500}})
-  table.insert(startAnim, {func = AnimSay, args = {enemy, "You should have known that we don't rely on 'blood needers'!", SAY_SHOUT, 7500}})
+  table.insert(startAnim, {func = AnimSay, args = {enemy, "You should have known that we don't rely on meatbags!", SAY_SHOUT, 7500}})
   table.insert(startAnim, {func = AnimSay, args = {enemy, "It was fun to watch though...", SAY_SHOUT, 3500}})
   if m5Choice == choiceEliminate then
     table.insert(startAnim, {func = AnimSay, args = {enemy, "Heck, you even executed one of you!", SAY_SHOUT, 6000}})
@@ -435,7 +435,7 @@ function SetupFinalAnim()
     for i = 1, found do
       table.insert(finalAnim, {func = AnimCustomFunction, args = {gears[1], CondNeedToTurn, {cyborg, gears[i]}}})
     end
-    table.insert(finalAnim, {func = AnimSay, args = {cyborg, "Nice work, blood needers!", SAY_SAY, 3000}})
+    table.insert(finalAnim, {func = AnimSay, args = {cyborg, "Nice work, meatbags!", SAY_SAY, 3000}})
     table.insert(finalAnim, {func = AnimSay, args = {cyborg, "You're on your way to freeing your tribe!", SAY_SAY, 5500}})
     table.insert(finalAnim, {func = AnimSay, args = {gears[1], "Do you know where they are?", SAY_SAY, 4000}})
     table.insert(finalAnim, {func = AnimSay, args = {gears[found], "We need to hurry!", SAY_SAY, 3000}})

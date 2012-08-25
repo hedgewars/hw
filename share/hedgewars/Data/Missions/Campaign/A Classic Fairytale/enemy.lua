@@ -233,7 +233,7 @@ function SetupEnemyStartAnim()
   table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[4], gear}}})
   table.insert(startAnim, {func = AnimCustomFunction, args = {players[1], CondNeedToTurn, {players[1], gear}}})
   table.insert(startAnim, {func = AnimSay, args = {gear, loc("You have finally figured it out!"), SAY_SHOUT, 4500}})
-  table.insert(startAnim, {func = AnimSay, args = {gear, loc("You blood needers are pretty slow, you know!"), SAY_SHOUT, 5500}})
+  table.insert(startAnim, {func = AnimSay, args = {gear, loc("You meatbags are pretty slow, you know!"), SAY_SHOUT, 5500}})
   table.insert(startAnim, {func = AnimSay, args = {players[1], loc("Why do you want to take over our island?"), SAY_SHOUT, 5500}})
   table.insert(startAnim, {func = AnimSay, args = {gear, loc("Do you have any idea how valuable grass is?"), SAY_SHOUT, 5500}})
   table.insert(startAnim, {func = AnimSay, args = {gear, loc("This island is the only place left on Earth with grass on it!"), SAY_SHOUT, 7000}})
@@ -248,7 +248,7 @@ end
 function SetupFinalAnim()
   finalAnim = {
     {func = AnimGearWait, args = {cyborg, 1000}},
-    {func = AnimSay, args = {cyborg, loc("Nicely done, blood needer!"), SAY_SAY, 3000}},
+    {func = AnimSay, args = {cyborg, loc("Nicely done, meatbag!"), SAY_SAY, 3000}},
     {func = AnimSay, args = {cyborg, loc("You have won the game by proving true cooperative skills!"), SAY_SAY, 7000}},
     {func = AnimSay, args = {cyborg, loc("You have proven yourselves worthy!"), SAY_SAY, 4000}},
     {func = AnimSay, args = {players[1], loc("Game? Was this a game to you?!"), SAY_SAY, 4000}},
