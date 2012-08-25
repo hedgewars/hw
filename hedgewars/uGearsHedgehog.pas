@@ -572,7 +572,6 @@ procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
 var s: shortstring;
     vga: PVisualGear;
 begin
-    PlaySound(sndShotgunReload);
     if cnt <> 0 then AddAmmo(HH, ammo, cnt)
     else AddAmmo(HH, ammo);
 
@@ -614,6 +613,7 @@ else
 case Gear^.Pos of
        posCaseUtility,
        posCaseAmmo: begin
+                    PlaySound(sndShotgunReload);
                     if Gear^.AmmoType <> amNothing then 
                         begin
                         AddPickup(HH^.Hedgehog^, Gear^.AmmoType, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));
@@ -636,7 +636,7 @@ case Gear^.Pos of
                                 end;
                             gi := gi^.NextGear
                             end;
-                        ag:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAddAmmo, gstInvisible, _0, _0, GetRandom(200)+100);
+                        ag:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAddAmmo, gstInvisible, _0, _0, GetRandom(100)+10);
                         ag^.Pos:= Gear^.Pos;
                         ag^.Power:= Gear^.Power
                         end;
