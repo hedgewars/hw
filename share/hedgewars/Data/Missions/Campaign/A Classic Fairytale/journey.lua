@@ -774,8 +774,11 @@ function CheckDensePit()
 end
 
 function DoDensePit()
-  AddAnim(outPitAnim)
-  AddFunction({func = AfterOutPitAnim, args = {}})
+  TurnTimeLeft = 0
+  RestoreHedge(cyborg)
+  AnimWait(cyborg, 1)
+  AddFunction({func = AddAnim, args = {outPitAnim}})
+  AddFunction({func = AddFunction, args = {{func = AfterOutPitAnim, args = {}}}})
 end
 
 function CheckPastFlower()
@@ -787,8 +790,11 @@ function CheckPastFlower()
 end
 
 function DoPastFlower()
-  AddAnim(pastFlowerAnim)
-  AddFunction({func = AfterPastFlowerAnim, args = {}})
+  TurnTimeLeft = 0
+  RestoreHedge(cyborg)
+  AnimWait(cyborg, 1)
+  AddFunction({func = AddAnim, args = {pastFlowerAnim}})
+  AddFunction({func = AddFunction, args = {{func = AfterPastFlowerAnim, args = {}}}})
 end
 
 
@@ -831,8 +837,12 @@ function CheckOnBridge()
 end
 
 function DoOnBridge()
-  AddAnim(midAnim)
-  AddFunction({func = AfterMidAnimAlone, args = {}})
+  TurnTimeLeft = 0
+  RestoreHedge(cyborg)
+  RestoreHedge(princess)
+  AnimWait(cyborg, 1)
+  AddFunction({func = AddAnim, args = {midAnim}})
+  AddFunction({func = AddFunction, args = {{func = AfterMidAnimAlone, args = {}}}})
 end
 
 function CheckGirderTaken()
@@ -858,8 +868,12 @@ function CheckTookSniper()
 end
 
 function DoTookSniper()
-  AddAnim(endAnim)
-  AddFunction({func = AfterEndAnimAlone, args = {}})
+  TurnTimeLeft = 0
+  RestoreHedge(cyborg)
+  RestoreHedge(princess)
+  AnimWait(cyborg, 1)
+  AddFunction({func = AddAnim, args = {endAnim}})
+  AddFunction({func = AddFunction, args = {{func = AfterEndAnimAlone, args = {}}}})
 end
 
 function CheckTookSniper2()
@@ -867,8 +881,12 @@ function CheckTookSniper2()
 end
 
 function DoTookSniper2()
-  AddAnim(endAnim)
-  AddFunction({func = AfterEndAnimDuo, args = {}})
+  TurnTimeLeft = 0
+  RestoreHedge(cyborg)
+  RestoreHedge(princess)
+  AnimWait(cyborg, 1)
+  AddFunction({func = AddAnim, args = {endAnim}})
+  AddFunction({func = AddFunction, args = {{func = AfterEndAnimDuo, args = {}}}})
 end
 
 function CheckLost()
@@ -902,8 +920,12 @@ function CheckFailedCourse()
 end
 
 function DoFailedCourse()
-  AddAnim(failAnim)
-  AddFunction({func = AfterMidFailAnim, args = {}})
+  TurnTimeLeft = 0
+  RestoreHedge(cyborg)
+  RestoreHedge(princess)
+  AnimWait(cyborg, 1)
+  AddFunction({func = AddAnim, args = {failAnim}})
+  AddFunction({func = AddFunction, args = {{func = AfterMidFailAnim, args = {}}}})
 end
 
 --////////////////////////////Main Functions/////////////////////////
@@ -1046,6 +1068,7 @@ function onPrecise()
     SetAnimSkip(true)
     return
   end
+--  AddAmmo(leaks, amRope, 100)
 --  RemoveEventFunc(CheckPastFlower)
 --  DeleteGear(sniperCrate)
 end
