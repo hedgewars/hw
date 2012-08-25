@@ -108,14 +108,14 @@ function EmitDenseClouds(dir)
   else
     dif = -10
   end
-  AnimInsertStepNext({func = AnimVisualGear, args = {native, GetX(native) + dif, GetY(native) + dif, vgtSteam, 0, true}, swh = false})
-  AnimInsertStepNext({func = AnimVisualGear, args = {native, GetX(native) + dif, GetY(native) + dif, vgtSteam, 0, true}, swh = false})
-  AnimInsertStepNext({func = AnimVisualGear, args = {native, GetX(native) + dif, GetY(native) + dif, vgtSteam, 0, true}, swh = false})
-  AnimInsertStepNext({func = AnimWait, args = {native, 800}})
-  AnimInsertStepNext({func = AnimVisualGear, args = {native, GetX(native) + dif, GetY(native) + dif, vgtSteam, 0, true}, swh = false})
-  AnimInsertStepNext({func = AnimVisualGear, args = {native, GetX(native) + dif, GetY(native) + dif, vgtSteam, 0, true}, swh = false})
-  AnimInsertStepNext({func = AnimWait, args = {native, 800}})
-  AnimInsertStepNext({func = AnimVisualGear, args = {native, GetX(native) + dif, GetY(native) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimVisualGear, args = {natives[1], GetX(natives[1]) + dif, GetY(natives[1]) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimVisualGear, args = {natives[1], GetX(natives[1]) + dif, GetY(natives[1]) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimVisualGear, args = {natives[1], GetX(natives[1]) + dif, GetY(natives[1]) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimWait, args = {natives[1], 800}})
+  AnimInsertStepNext({func = AnimVisualGear, args = {natives[1], GetX(natives[1]) + dif, GetY(natives[1]) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimVisualGear, args = {natives[1], GetX(natives[1]) + dif, GetY(natives[1]) + dif, vgtSteam, 0, true}, swh = false})
+  AnimInsertStepNext({func = AnimWait, args = {natives[1], 800}})
+  AnimInsertStepNext({func = AnimVisualGear, args = {natives[1], GetX(natives[1]) + dif, GetY(natives[1]) + dif, vgtSteam, 0, true}, swh = false})
 end
 
 function AnimationSetup()
@@ -275,7 +275,7 @@ end
 
 -----------------------------Events------------------------------------
 function CheckPrincessFreed()
-  return math.abs(GetX(natives[1]) - GetX(princess)) <= 10 and math.abs(GetY(natives[1]) - GetY(princess)) <= 10 and StoppedGear(natives[1]) 
+  return math.abs(GetX(natives[1]) - GetX(princess)) <= 15 and math.abs(GetY(natives[1]) - GetY(princess)) <= 15 and StoppedGear(natives[1]) 
         and GetY(natives[2]) < 1500 and GetY(natives[3]) < 1500 and StoppedGear(natives[2]) and StoppedGear(natives[3])
 end
 
