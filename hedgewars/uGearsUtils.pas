@@ -569,7 +569,9 @@ while tryAgain do
         repeat
             inc(x, Delta);
             cnt:= 0;
-            y:= min(1024, topY) - 2 * Gear^.Radius;
+            if hasBorder then
+                 y:= min(1024, topY+4)
+            else y:= min(1024, topY) - 2 * Gear^.Radius;
             while y < cWaterLine do
                 begin
                 repeat
