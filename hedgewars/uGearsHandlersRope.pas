@@ -172,7 +172,7 @@ begin
         if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) and not TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
             HHGear^.dX.isNegative:= not HHGear^.dX.isNegative;
         if (TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0) and (TestCollisionYwithGear(HHGear, -hwSign(HHGear^.dY)) = 0) then
-            HHGear^.dY.isNegative:= not HHGear^.dX.isNegative;
+            HHGear^.dY.isNegative:= not HHGear^.dY.isNegative;
         end;
 
     mdX := ropeDx + HHGear^.dX;
