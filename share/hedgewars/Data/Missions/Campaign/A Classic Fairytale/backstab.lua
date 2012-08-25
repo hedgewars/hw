@@ -278,7 +278,7 @@ function SpyDebate()
 end
 
 function AnimationSetup()
-  table.insert(startAnim, {func = AnimWait, args = {natives[leaksNum], 3000}})
+  table.insert(startAnim, {func = AnimWait, swh = false, args = {natives[leaksNum], 3000}})
   table.insert(startAnim, {func = AnimCustomFunction, swh = false, args = {natives[leaksNum], SaySafe, {}}})
   if needRevival == true then
     table.insert(startAnim, {func = AnimCustomFunction, swh = false, args = {cyborg, ReviveNatives, {}}})
@@ -598,7 +598,7 @@ end
 
 function AfterStartAnim()
   AnimSwitchHog(natives[leaksNum])
-  TurnTimeLeft = -1
+  TurnTimeLeft = 0
   stage = spyKillStage
   AddEvent(CheckChoice, {}, DoChoice, {}, 0)
   AddEvent(CheckKilledOther, {}, DoKilledOther, {}, 0)
@@ -838,7 +838,7 @@ function RestoreCyborg()
 end
 
 function SetupPlace()
-  startElimination = 1
+  startNativesNum = nativesNum
   HideHog(cyborg)
   cyborgHidden = true
   for i = 1, 9 do
@@ -853,6 +853,8 @@ function SetupPlace()
   if m4DenseDead == 1 then
     if m2Choice ~= choiceAccepted then
       DeleteGear(natives[denseNum])
+      startNativesNum = startNativesNum - 1
+      nativeDead[denseNum] = true
     else
       HideHog(natives[denseNum])
       nativeHidden[denseNum] = true
@@ -866,20 +868,22 @@ function SetupPlace()
   end
   if m4ChiefDead == 1 then
     DeleteGear(natives[chiefNum])
+    startNativesNum = startNativesNum - 1
+    nativeDead[chiefNum] = true
     AnimSetGearPosition(natives[girlNum], unpack(nativePos[buffaloNum]))
     nativePos[girlNum] = nativePos[buffaloNum]
   end
   if m4BuffaloDead == 1 then
+    startNativesNum = startNativesNum - 1
+    nativeDead[buffaloNum] = true
     DeleteGear(natives[buffaloNum])
   end
-  startElimination = 0
   PlaceGirder(3568, 1461, 1)
   PlaceGirder(440, 523, 5)
   PlaceGirder(350, 441, 1)
   PlaceGirder(405, 553, 5)
   PlaceGirder(316, 468, 1)
   PlaceGirder(1319, 168, 0)
-  startNativesNum = nativesNum
 end
 
 function SetupAmmo()
@@ -976,11 +980,11 @@ end
 function onGearDelete(gear)
   for i = 1, 7 do
     if gear == natives[i] then
-      nativeDead[i] = true
-      nativesNum = nativesNum - 1
-      if startElimination == 0 then
+      if nativeDead[i] ~= true then
         freshDead = nativeNames[i]
       end
+      nativeDead[i] = true
+      nativesNum = nativesNum - 1
     end
   end
 
@@ -1055,6 +1059,7 @@ function onNewTurn()
       TurnTimeLeft = 0
     else
       SetGearMessage(CurrentHedgehog, 0)
+      --AnimSwitchHog(natives[leaksNum])
       TurnTimeLeft = -1
     end
   else
