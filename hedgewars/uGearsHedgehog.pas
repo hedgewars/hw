@@ -636,7 +636,7 @@ case Gear^.Pos of
                                 end;
                             gi := gi^.NextGear
                             end;
-                        ag:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAddAmmo, gstInvisible, _0, _0, GetRandom(100)+10);
+                        ag:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAddAmmo, gstInvisible, _0, _0, GetRandom(125)+25);
                         ag^.Pos:= Gear^.Pos;
                         ag^.Power:= Gear^.Power
                         end;
