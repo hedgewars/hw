@@ -83,13 +83,17 @@ begin
         repeat
             begin
             inc(i);
-            stuck:= TestCollisionYwithGear(HHGear, i) <> 0
+            stuck:= TestCollisionYwithGear(HHGear, 1) <> 0;
+            if stuck then HHGear^.Y:= HHGear^.Y-_1
             end
         until (i = 8) or not stuck;
-        HHGear^.Y:= HHGear^.Y-int2hwFloat(pred(i));
         // experiment in simulating something the shoppa players apparently expect
         if Gear^.Message and gmDown <> 0 then
-            HHGear^.dY:= HHGear^.dY / 8;
+            begin
+            //HHGear^.dY:= HHGear^.dY / 16;
+            HHGear^.dY:= _0;
+            HHGear^.dX:= HHGear^.dX * 2
+            end;
         if Gear^.Message and gmRight <> 0 then
             HHGear^.dX.isNegative:= false
         else if Gear^.Message and gmLeft <> 0 then
@@ -97,20 +101,24 @@ begin
         end
     else if (TestCollisionYwithGear(HHGear, -1) <> 0) and (TestCollisionYwithGear(HHGear, 1) = 0) then
         begin
-        i:= -1;
+        i:= 1;
         repeat
             begin
-            dec(i);
-            stuck:= TestCollisionYwithGear(HHGear, i) <> 0
+            inc(i);
+            stuck:= TestCollisionYwithGear(HHGear, -1) <> 0;
+            if stuck then HHGear^.Y:= HHGear^.Y+_1
             end
-        until (i = -8) or not stuck;
-        HHGear^.Y:= HHGear^.Y-int2hwFloat(succ(i));
+        until (i = 8) or not stuck;
         if Gear^.Message and gmDown <> 0 then
-            HHGear^.dY:= HHGear^.dY / 8;
+            begin
+            //HHGear^.dY:= HHGear^.dY / 16;
+            HHGear^.dY.QWordValue:= 0;
+            HHGear^.dX:= HHGear^.dX * 2
+            end;
         if Gear^.Message and gmRight <> 0 then
-            HHGear^.dX.isNegative:= false
-        else if Gear^.Message and gmLeft <> 0 then
             HHGear^.dX.isNegative:= true
+        else if Gear^.Message and gmLeft <> 0 then
+            HHGear^.dX.isNegative:= false
         end;
     if TestCollisionXwithGear(HHGear, 1) and not TestCollisionXwithGear(HHGear, -1) then
         begin
@@ -118,25 +126,41 @@ begin
         repeat
             begin
             inc(i);
-            stuck:= TestCollisionXwithGear(HHGear, i)
+            stuck:= TestCollisionXwithGear(HHGear, 1);
+            if stuck then HHGear^.X:= HHGear^.X-_1
             end
         until (i = 8) or not stuck;
-        HHGear^.X:= HHGear^.X-int2hwFloat(pred(i));
         if Gear^.Message and gmDown <> 0 then
-            HHGear^.dX.QWordValue:= 0
+            begin
+            //HHGear^.dX:= HHGear^.dX / 16;
+            HHGear^.dX.QWordValue:= 0;
+            HHGear^.dY:= HHGear^.dY * 2
+            end;
+        if Gear^.Message and gmRight <> 0 then
+            HHGear^.dX.isNegative:= true
+        else if Gear^.Message and gmLeft <> 0 then
+            HHGear^.dX.isNegative:= false
         end
     else if TestCollisionXwithGear(HHGear, -1) and not TestCollisionXwithGear(HHGear, 1) then
         begin
-        i:= -1;
+        i:= 1;
         repeat
             begin
-            dec(i);
-            stuck:= TestCollisionXwithGear(HHGear, i)
+            inc(i);
+            stuck:= TestCollisionXwithGear(HHGear, -1);
+            if stuck then HHGear^.X:= HHGear^.X+_1
             end
-        until (i = -8) or not stuck;
-        HHGear^.X:= HHGear^.X-int2hwFloat(succ(i));
+        until (i = 8) or not stuck;
         if Gear^.Message and gmDown <> 0 then
-            HHGear^.dX.QWordValue:= 0
+            begin
+            //HHGear^.dX:= HHGear^.dX / 16;
+            HHGear^.dX.QWordValue:= 0;
+            HHGear^.dY:= HHGear^.dY * 2
+            end;
+        if Gear^.Message and gmRight <> 0 then
+            HHGear^.dX.isNegative:= false
+        else if Gear^.Message and gmLeft <> 0 then
+            HHGear^.dX.isNegative:= true
         end
 end;
 
