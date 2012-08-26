@@ -89,7 +89,11 @@ begin
         HHGear^.Y:= HHGear^.Y-int2hwFloat(pred(i));
         // experiment in simulating something the shoppa players apparently expect
         if Gear^.Message and gmDown <> 0 then
-            HHGear^.dY.QWordValue:= 0
+            HHGear^.dY.QWordValue:= 0;
+        if Gear^.Message and gmRight <> 0 then
+            HHGear^.dX.isNegative:= false
+        else if Gear^.Message and gmLeft <> 0 then
+            HHGear^.dX.isNegative:= true
         end
     else if (TestCollisionYwithGear(HHGear, -1) <> 0) and (TestCollisionYwithGear(HHGear, 1) = 0) then
         begin
@@ -102,7 +106,11 @@ begin
         until (i = -8) or not stuck;
         HHGear^.Y:= HHGear^.Y-int2hwFloat(succ(i));
         if Gear^.Message and gmDown <> 0 then
-            HHGear^.dY.QWordValue:= 0
+            HHGear^.dY.QWordValue:= 0;
+        if Gear^.Message and gmRight <> 0 then
+            HHGear^.dX.isNegative:= false
+        else if Gear^.Message and gmLeft <> 0 then
+            HHGear^.dX.isNegative:= true
         end;
     if TestCollisionXwithGear(HHGear, 1) and not TestCollisionXwithGear(HHGear, -1) then
         begin
