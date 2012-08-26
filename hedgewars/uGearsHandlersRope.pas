@@ -87,12 +87,25 @@ begin
 end;
 
 procedure RopeWaitCollision(Gear, HHGear: PGear);
+var i: LongInt;
+    stuck: Boolean;
 begin
     PlaySound(sndRopeRelease);
     with HHGear^ do
         begin
         Message := Message and (not gmAttack);
         State := State or gstMoving;
+        end;
+    if (TestCollisionYwithGear(HHGear, 1) <> 0) and (TestCollisionYwithGear(HHGear, -1) = 0) then
+        begin
+        i:= 1;
+        repeat
+            begin
+            inc(i);
+            stuck:= TestCollisionYwithGear(HHGear, i) <> 0
+            end
+        until (i = 8) or not stuck;
+        HHGear^.Y:= HHGear^.Y-int2hwFloat(pred(i))
         end;
     RopePoints.Count := 0;
     Gear^.Elasticity := _0;
@@ -168,6 +181,8 @@ begin
             Gear^.Elasticity := Gear^.Elasticity - _2_4
     else haveCollision:= true;
 
+(*
+I am not so sure this is useful. Disabling
     if haveCollision then
         begin
         if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) and not TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
@@ -175,6 +190,7 @@ begin
         if (TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0) and (TestCollisionYwithGear(HHGear, -hwSign(HHGear^.dY)) = 0) then
             HHGear^.dY.isNegative:= not HHGear^.dY.isNegative;
         end;
+*)
 
     mdX := ropeDx + HHGear^.dX;
     mdY := ropeDy + HHGear^.dY;
