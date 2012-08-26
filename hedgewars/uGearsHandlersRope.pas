@@ -89,7 +89,7 @@ begin
         HHGear^.Y:= HHGear^.Y-int2hwFloat(pred(i));
         // experiment in simulating something the shoppa players apparently expect
         if Gear^.Message and gmDown <> 0 then
-            HHGear^.dY.QWordValue:= 0;
+            HHGear^.dY.QWordValue:= _0_0002.QWordValue;
         if Gear^.Message and gmRight <> 0 then
             HHGear^.dX.isNegative:= false
         else if Gear^.Message and gmLeft <> 0 then
@@ -106,7 +106,7 @@ begin
         until (i = -8) or not stuck;
         HHGear^.Y:= HHGear^.Y-int2hwFloat(succ(i));
         if Gear^.Message and gmDown <> 0 then
-            HHGear^.dY.QWordValue:= 0;
+            HHGear^.dY.QWordValue:= _0_0002.QWordValue;
         if Gear^.Message and gmRight <> 0 then
             HHGear^.dX.isNegative:= false
         else if Gear^.Message and gmLeft <> 0 then
