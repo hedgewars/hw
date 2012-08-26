@@ -73,6 +73,65 @@ begin
         end
 end;
 
+procedure unstickHog(Gear, HHGear: PGear);
+var i: LongInt;
+    stuck: Boolean;
+begin
+    if (TestCollisionYwithGear(HHGear, 1) <> 0) and (TestCollisionYwithGear(HHGear, -1) = 0) then
+        begin
+        i:= 1;
+        repeat
+            begin
+            inc(i);
+            stuck:= TestCollisionYwithGear(HHGear, i) <> 0
+            end
+        until (i = 8) or not stuck;
+        HHGear^.Y:= HHGear^.Y-int2hwFloat(pred(i));
+        // experiment in simulating something the shoppa players apparently expect
+        if Gear^.Message and gmDown <> 0 then
+            HHGear^.dY.QWordValue:= 0
+        end
+    else if (TestCollisionYwithGear(HHGear, -1) <> 0) and (TestCollisionYwithGear(HHGear, 1) = 0) then
+        begin
+        i:= -1;
+        repeat
+            begin
+            dec(i);
+            stuck:= TestCollisionYwithGear(HHGear, i) <> 0
+            end
+        until (i = -8) or not stuck;
+        HHGear^.Y:= HHGear^.Y-int2hwFloat(succ(i));
+        if Gear^.Message and gmDown <> 0 then
+            HHGear^.dY.QWordValue:= 0
+        end;
+    if TestCollisionXwithGear(HHGear, 1) and not TestCollisionXwithGear(HHGear, -1) then
+        begin
+        i:= 1;
+        repeat
+            begin
+            inc(i);
+            stuck:= TestCollisionXwithGear(HHGear, i)
+            end
+        until (i = 8) or not stuck;
+        HHGear^.X:= HHGear^.X-int2hwFloat(pred(i));
+        if Gear^.Message and gmDown <> 0 then
+            HHGear^.dX.QWordValue:= 0
+        end
+    else if TestCollisionXwithGear(HHGear, -1) and not TestCollisionXwithGear(HHGear, 1) then
+        begin
+        i:= -1;
+        repeat
+            begin
+            dec(i);
+            stuck:= TestCollisionXwithGear(HHGear, i)
+            end
+        until (i = -8) or not stuck;
+        HHGear^.X:= HHGear^.X-int2hwFloat(succ(i));
+        if Gear^.Message and gmDown <> 0 then
+            HHGear^.dX.QWordValue:= 0
+        end
+end;
+
 procedure RopeDeleteMe(Gear, HHGear: PGear);
 begin
     PlaySound(sndRopeRelease);
@@ -83,12 +142,11 @@ begin
         Message := Message and (not gmAttack);
         State := (State or gstMoving) and (not gstWinner);
         end;
+    unstickHog(Gear, HHGear);
     DeleteGear(Gear)
 end;
 
 procedure RopeWaitCollision(Gear, HHGear: PGear);
-var i: LongInt;
-    stuck: Boolean;
 begin
     PlaySound(sndRopeRelease);
     with HHGear^ do
@@ -96,17 +154,7 @@ begin
         Message := Message and (not gmAttack);
         State := State or gstMoving;
         end;
-    if (TestCollisionYwithGear(HHGear, 1) <> 0) and (TestCollisionYwithGear(HHGear, -1) = 0) then
-        begin
-        i:= 1;
-        repeat
-            begin
-            inc(i);
-            stuck:= TestCollisionYwithGear(HHGear, i) <> 0
-            end
-        until (i = 8) or not stuck;
-        HHGear^.Y:= HHGear^.Y-int2hwFloat(pred(i))
-        end;
+    unstickHog(Gear, HHGear);
     RopePoints.Count := 0;
     Gear^.Elasticity := _0;
     Gear^.doStep := @doStepRopeAfterAttack;
