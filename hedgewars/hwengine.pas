@@ -30,7 +30,7 @@ program hwengine;
 {$ENDIF}
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
-     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uRandom, uLandTexture, uCollisions,
+     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uLandTexture, uCollisions,
      SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
      {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF}, uAILandMarks;
 
@@ -416,7 +416,6 @@ begin
         //uLandObjects does not need initialization
         //uLandTemplates does not need initialization
         //uLocale does not need initialization
-        uRandom.initModule;
         uScript.initModule;
         uSound.initModule;
         uStats.initModule;
@@ -444,7 +443,7 @@ begin
         uStats.freeModule;          //stub
         uSound.freeModule;
         uScript.freeModule;
-        uRandom.freeModule;         //stub
+        //uRandom does not need to be freed
         //uLocale does not need to be freed
         //uLandTemplates does not need to be freed
         uLandTexture.freeModule;

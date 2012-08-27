@@ -286,6 +286,11 @@ begin
         3: SelectTemplate:= LargeTemplates[getrandom(Succ(High(LargeTemplates)))];
         4: SelectTemplate:= CavernTemplates[getrandom(Succ(High(CavernTemplates)))];
         5: SelectTemplate:= WackyTemplates[getrandom(Succ(High(WackyTemplates)))];
+// For lua only!
+        6: begin
+           SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
+           GetRandom(2) // burn 1
+           end;
     end;
 
     WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
@@ -610,7 +615,7 @@ else
             if Land[y, x] <> 0 then
                 begin
                 inc(c);
-                if c > 200 then // avoid accidental triggering
+                if c > 1000 then // avoid accidental triggering
                     begin
                     hasBorder:= true;
                     break;

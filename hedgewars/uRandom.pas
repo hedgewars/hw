@@ -30,9 +30,6 @@ unit uRandom;
 interface
 uses uFloat;
 
-procedure initModule;
-procedure freeModule;
-
 procedure SetRandomSeed(Seed: shortstring); // Sets the seed that should be used for generating pseudo-random values.
 function  GetRandomf: hwFloat; overload; // Returns a pseudo-random hwFloat.
 function  GetRandom(m: LongWord): LongWord; overload; inline; // Returns a positive pseudo-random integer smaller than m.
@@ -97,17 +94,6 @@ function rndSign(num: hwFloat): hwFloat;
 begin
 num.isNegative:= odd(GetNext);
 rndSign:= num
-end;
-
-procedure initModule;
-begin
-    n:= 54;
-    FillChar(cirbuf, 64*sizeof(Longword), 0);
-end;
-
-procedure freeModule;
-begin
-
 end;
 
 end.

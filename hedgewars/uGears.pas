@@ -59,7 +59,7 @@ implementation
 uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
     uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
-    uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers;
+    uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers, uGearsHandlersRope;
 
 var skipFlag: boolean;
 
@@ -641,7 +641,8 @@ if (GameFlags and gfLaserSight) <> 0 then
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
 for i:= GetRandom(10)+30 downto 0 do
-    begin                                                                                                                                       rx:= GetRandom(rightX-leftX)+leftX;
+    begin
+    rx:= GetRandom(rightX-leftX)+leftX;
     ry:= GetRandom(LAND_HEIGHT-topY)+topY;
     rdx:= _90-(GetRandomf*_360);
     rdy:= _90-(GetRandomf*_360);

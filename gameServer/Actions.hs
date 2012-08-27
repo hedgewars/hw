@@ -541,8 +541,8 @@ processAction PingAll = do
             when (pq > 0) $ do
                 withStateT (\as -> as{clientIndex = Just ci}) $
                     processAction (ByeClient "Ping timeout")
-                when (pq > 1) $
-                    processAction $ DeleteClient ci -- smth went wrong with client io threads, issue DeleteClient here
+--                when (pq > 1) $
+--                    processAction $ DeleteClient ci -- smth went wrong with client io threads, issue DeleteClient here
 
 
 processAction StatsAction = do
