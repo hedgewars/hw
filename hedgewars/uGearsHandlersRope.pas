@@ -137,9 +137,9 @@ begin
             HHGear^.dY:= HHGear^.dY * 2
             end;
         if Gear^.Message and gmRight <> 0 then
-            HHGear^.dX.isNegative:= true
+            HHGear^.dY.isNegative:= true
         else if Gear^.Message and gmLeft <> 0 then
-            HHGear^.dX.isNegative:= false
+            HHGear^.dY.isNegative:= false
         end
     else if TestCollisionXwithGear(HHGear, -1) and not TestCollisionXwithGear(HHGear, 1) then
         begin
@@ -158,9 +158,9 @@ begin
             HHGear^.dY:= HHGear^.dY * 2
             end;
         if Gear^.Message and gmRight <> 0 then
-            HHGear^.dX.isNegative:= false
+            HHGear^.dY.isNegative:= false
         else if Gear^.Message and gmLeft <> 0 then
-            HHGear^.dX.isNegative:= true
+            HHGear^.dY.isNegative:= true
         end
 end;
 
