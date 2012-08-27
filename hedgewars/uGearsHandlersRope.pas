@@ -86,7 +86,7 @@ begin
             stuck:= TestCollisionYwithGear(HHGear, 1) <> 0;
             if stuck then HHGear^.Y:= HHGear^.Y-_1
             end
-        until (i = 8) or not stuck;
+        until (i = 8) or (not stuck);
         HHGear^.Y:= HHGear^.Y+_1;
         // experiment in simulating something the shoppa players apparently expect
         if Gear^.Message and gmDown <> 0 then
@@ -110,7 +110,7 @@ begin
             stuck:= TestCollisionYwithGear(HHGear, -1) <> 0;
             if stuck then HHGear^.Y:= HHGear^.Y+_1
             end
-        until (i = 8) or not stuck;
+        until (i = 8) or (not stuck);
         HHGear^.Y:= HHGear^.Y-_1;
         if Gear^.Message and gmDown <> 0 then
             begin
@@ -124,7 +124,7 @@ begin
         else if Gear^.Message and gmLeft <> 0 then
             HHGear^.dX.isNegative:= false
         end;
-    if TestCollisionXwithGear(HHGear, 1) and not TestCollisionXwithGear(HHGear, -1) then
+    if TestCollisionXwithGear(HHGear, 1) and (not TestCollisionXwithGear(HHGear, -1)) then
         begin
         i:= 1;
         repeat
@@ -133,7 +133,7 @@ begin
             stuck:= TestCollisionXwithGear(HHGear, 1);
             if stuck then HHGear^.X:= HHGear^.X-_1
             end
-        until (i = 8) or not stuck;
+        until (i = 8) or (not stuck);
         HHGear^.X:= HHGear^.X+_1;
         if Gear^.Message and gmDown <> 0 then
             begin
@@ -147,7 +147,7 @@ begin
         else if Gear^.Message and gmLeft <> 0 then
             HHGear^.dY.isNegative:= false
         end
-    else if TestCollisionXwithGear(HHGear, -1) and not TestCollisionXwithGear(HHGear, 1) then
+    else if TestCollisionXwithGear(HHGear, -1) and (not TestCollisionXwithGear(HHGear, 1)) then
         begin
         i:= 1;
         repeat
@@ -156,7 +156,7 @@ begin
             stuck:= TestCollisionXwithGear(HHGear, -1);
             if stuck then HHGear^.X:= HHGear^.X+_1
             end
-        until (i = 8) or not stuck;
+        until (i = 8) or (not stuck);
         HHGear^.X:= HHGear^.X-_1;
         if Gear^.Message and gmDown <> 0 then
             begin
