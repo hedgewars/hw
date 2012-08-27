@@ -321,7 +321,8 @@ procedure CalcRotationDirAngle(Gear: PGear);
 var 
     dAngle: real;
 begin
-    dAngle := (Gear^.dX.QWordValue + Gear^.dY.QWordValue) / $80000000;
+// Frac/Round to be kind to JS as of 2012-08-27 where there is yet no int64/uint64
+    dAngle := (Gear^.dX.Round + Gear^.dY.Round) / 2 + (Gear^.dX.Frac+Gear^.dY.Frac) / $80000000;
     if not Gear^.dX.isNegative then
         Gear^.DirAngle := Gear^.DirAngle + dAngle
     else

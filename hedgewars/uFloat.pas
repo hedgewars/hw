@@ -212,11 +212,12 @@ end;
 
 function hwFloat2Float (const i: hwFloat) : extended;
 begin
-hwFloat2Float:= i.QWordValue / $100000000;
+hwFloat2Float:= i.Frac / $100000000 + i.Round;
 if i.isNegative then
     hwFloat2Float:= -hwFloat2Float;
 end;
 
+{$IFNDEF WEB}
 operator = (const z1, z2: hwFloat) z : boolean; inline;
 begin
     z:= (z1.isNegative = z2.isNegative) and (z1.QWordValue = z2.QWordValue);
@@ -268,6 +269,81 @@ else
     z.QWordValue:= z1.QWordValue + z2.QWordValue
     end
 end;
+{$ENDIF}
+{$IFDEF WEB}
+(*
+    Mostly to be kind to JS as of 2012-08-27 where there is no int64/uint64.  This may change though.
+*)
+operator = (const z1, z2: hwFloat) z : boolean; inline;
+begin
+    z:= (z1.isNegative = z2.isNegative) and (z1.Frac = z2.Frac) and (z1.Round = z2.Round);
+end;
+
+operator <> (const z1, z2: hwFloat) z : boolean; inline;
+begin
+    z:= (z1.isNegative <> z2.isNegative) or (z1.Frac <> z2.Frac) or (z1.Round <> z2.Round);
+end;
+
+operator + (const z1, z2: hwFloat) z : hwFloat;
+begin
+if z1.isNegative = z2.isNegative then
+    begin
+//  z.QWordValue:= z1.QWordValue + z2.QWordValue
+    z:= z1;
+    z.Frac:= z.Frac + z2.Frac;
+    z.Round:= z.Round + z2.Round;
+    if z.Frac<z1.Frac then inc(z.Round)
+    end
+else
+//  if z1.QWordValue > z2.QWordValue then
+    if (z1.Round > z2.Round) or ((z1.Round = z2.Round) and (z1.Frac > z2.Frac)) then
+        begin
+        z.isNegative:= z1.isNegative;
+//      z.QWordValue:= z1.QWordValue - z2.QWordValue
+        z.Round:= z1.Round - z2.Round;
+        z.Frac:= z1.Frac - z2.Frac;
+        if z2.Frac > z1.Frac then dec(z.Round)
+        end
+    else
+        begin
+        z.isNegative:= z2.isNegative;
+//      z.QWordValue:= z2.QWordValue - z1.QWordValue
+        z.Round:= z2.Round - z1.Round;
+        z.Frac:= z2.Frac-z1.Frac;
+        if z2.Frac < z1.Frac then dec(z.Round)
+        end
+end;
+
+operator - (const z1, z2: hwFloat) z : hwFloat;
+begin
+if z1.isNegative = z2.isNegative then
+//  if z1.QWordValue > z2.QWordValue then
+    if (z1.Round > z2.Round) or ((z1.Round = z2.Round) and (z1.Frac > z2.Frac)) then
+        begin
+        z.isNegative:= z1.isNegative;
+//      z.QWordValue:= z1.QWordValue - z2.QWordValue
+        z.Round:= z1.Round - z2.Round;
+        z.Frac:= z1.Frac-z2.Frac;
+        if z2.Frac > z1.Frac then dec(z.Round)
+        end
+    else
+        begin
+        z.isNegative:= not z2.isNegative;
+//      z.QWordValue:= z2.QWordValue - z1.QWordValue
+        z.Round:= z2.Round - z1.Round;
+        z.Frac:= z2.Frac-z1.Frac;
+        if z2.Frac < z1.Frac then dec(z.Round)
+        end
+else
+    begin
+//  z.QWordValue:= z1.QWordValue + z2.QWordValue
+    z:= z1;
+    z.Frac:= z.Frac + z2.Frac;
+    z.Round:= z.Round + z2.Round;
+    if z.Frac<z1.Frac then inc(z.Round)
+    end
+end;
+{$ENDIF}
 
 operator - (const z1: hwFloat) z : hwFloat;
 begin
