@@ -235,6 +235,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Kind: TGearType;
             Pos: Longword;
             doStep: TGearStepProcedure;
+            stepFreq: Longword;
             Radius: LongInt;
             Angle, Power : Longword;
             DirAngle: real;

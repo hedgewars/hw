@@ -284,8 +284,9 @@ with gear^ do
                 begin
                 dx:= 0.005 * (random(15) + 10);
                 dy:= 0.001 * (random(40) + 20);
-                if random(2) = 0 then
-                    dx := -dx;
+                if random(2) = 0 then dx := -dx;
+                if random(2) = 0 then Tag:= 1
+                else Tag:= -1;
                 Frame:= 7 - random(2);
                 FrameTicks:= random(20) + 15;
                 end;
@@ -642,9 +643,9 @@ case Layer of
                   vgtSmoke: DrawTextureF(SpritesData[sprSmoke].Texture, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 7 - Gear^.Frame, 1, SpritesData[sprSmoke].Width, SpritesData[sprSmoke].Height);
                   vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                   vgtDust: if Gear^.State = 1 then
-                               DrawSpriteRotatedF(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame, 1, Gear^.Angle)
+                               DrawSpriteRotatedF(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame, Gear^.Tag, Gear^.Angle)
                            else
-                               DrawSprite(sprDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                               DrawSpriteRotatedF(sprDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame, Gear^.Tag, Gear^.Angle);
                   vgtFire: if (Gear^.State and gstTmpFlag) = 0 then
                                DrawSprite(sprFlame, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy, (RealTicks shr 6 + Gear^.Frame) mod 8)
                            else

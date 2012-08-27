@@ -183,6 +183,8 @@ var
 
     LuaGoals        : shortstring;
 
+    LuaTemplateNumber : LongWord;
+
     VoiceList : array[0..7] of TVoice =  (
                     ( snd: sndNone; voicepack: nil),
                     ( snd: sndNone; voicepack: nil),
@@ -2623,6 +2625,8 @@ begin
     SDWaterOpacity:= $80;
 
     LuaGoals:= '';
+
+    LuaTemplateNumber:= 0;
 end;
 
 procedure freeModule;

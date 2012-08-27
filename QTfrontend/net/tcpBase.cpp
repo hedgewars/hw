@@ -107,6 +107,8 @@ void TCPBase::StartProcessError(QProcess::ProcessError error)
     QMessageBox::critical(0, tr("Error"),
                           tr("Unable to run engine: %1 (")
                           .arg(error) + bindir->absolutePath() + "/hwengine)");
+
+    ClientDisconnect();
 }
 
 void TCPBase::tcpServerReady()
