@@ -87,12 +87,14 @@ begin
             if stuck then HHGear^.Y:= HHGear^.Y-_1
             end
         until (i = 8) or not stuck;
+        HHGear^.Y:= HHGear^.Y+_1;
         // experiment in simulating something the shoppa players apparently expect
         if Gear^.Message and gmDown <> 0 then
             begin
             //HHGear^.dY:= HHGear^.dY / 16;
-            HHGear^.dY:= _0;
-            HHGear^.dX:= HHGear^.dX * 2
+            //HHGear^.dY.QWordValue:= 0;
+            HHGear^.dY:= -_0_1;
+            HHGear^.dX:= HHGear^.dX * _1_5;
             end;
         if Gear^.Message and gmRight <> 0 then
             HHGear^.dX.isNegative:= false
@@ -109,11 +111,13 @@ begin
             if stuck then HHGear^.Y:= HHGear^.Y+_1
             end
         until (i = 8) or not stuck;
+        HHGear^.Y:= HHGear^.Y-_1;
         if Gear^.Message and gmDown <> 0 then
             begin
             //HHGear^.dY:= HHGear^.dY / 16;
-            HHGear^.dY.QWordValue:= 0;
-            HHGear^.dX:= HHGear^.dX * 2
+            //HHGear^.dY.QWordValue:= 0;
+            HHGear^.dY:= _0_1;
+            HHGear^.dX:= HHGear^.dX * _1_5;
             end;
         if Gear^.Message and gmRight <> 0 then
             HHGear^.dX.isNegative:= true
@@ -130,11 +134,13 @@ begin
             if stuck then HHGear^.X:= HHGear^.X-_1
             end
         until (i = 8) or not stuck;
+        HHGear^.X:= HHGear^.X+_1;
         if Gear^.Message and gmDown <> 0 then
             begin
             //HHGear^.dX:= HHGear^.dX / 16;
-            HHGear^.dX.QWordValue:= 0;
-            HHGear^.dY:= HHGear^.dY * 2
+            //HHGear^.dX.QWordValue:= 0;
+            HHGear^.dX:= -_0_1;
+            HHGear^.dY:= HHGear^.dY * _1_5;
             end;
         if Gear^.Message and gmRight <> 0 then
             HHGear^.dY.isNegative:= true
@@ -151,11 +157,13 @@ begin
             if stuck then HHGear^.X:= HHGear^.X+_1
             end
         until (i = 8) or not stuck;
+        HHGear^.X:= HHGear^.X-_1;
         if Gear^.Message and gmDown <> 0 then
             begin
             //HHGear^.dX:= HHGear^.dX / 16;
-            HHGear^.dX.QWordValue:= 0;
-            HHGear^.dY:= HHGear^.dY * 2
+            //HHGear^.dX.QWordValue:= 0;
+            HHGear^.dX:= _0_1;
+            HHGear^.dY:= HHGear^.dY * _1_5;
             end;
         if Gear^.Message and gmRight <> 0 then
             HHGear^.dY.isNegative:= false
