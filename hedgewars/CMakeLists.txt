@@ -3,6 +3,7 @@ find_package(SDL_image)
 find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
+find_package(FFMPEG)
 
 include(${CMAKE_MODULE_PATH}/FindSDL_Extras.cmake)
 
@@ -62,6 +63,7 @@ set(engine_sources
     uTypes.pas
     uUtils.pas
     uVariables.pas
+    uVideoRec.pas
     uVisualGears.pas
     uWorld.pas
     GSHandlers.inc
@@ -185,8 +187,29 @@ else()
     message(STATUS "PNG screenshots disabled per user request, using BMP format")
 endif()
 
-set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
+if(NOT NO_VIDEOREC)
+    if(${FFMPEG_FOUND})
+        message(STATUS "Compiling with video recording")
+        include_directories(${FFMPEG_INCLUDE_DIR})
+        set(pascal_flags "-dUSE_VIDEO_RECORDING" ${pascal_flags})
+        set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
+        IF (WIN32)
+            # there are some problems with linking our avwrapper as static lib, so link it as shared
+            add_library(avwrapper SHARED avwrapper.c)
+            target_link_libraries(avwrapper ${FFMPEG_LIBRARIES})
+        ELSE()
+            add_library(avwrapper STATIC avwrapper.c)
+            set(pascal_flags "-k${FFMPEG_LIBAVCODEC} ${FFMPEG_LIBAVFORMAT} ${FFMPEG_LIBAVUTIL}" ${pascal_flags})
+         #   set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/${CMAKE_STATIC_LIBRARY_PREFIX}avwrapper${CMAKE_STATIC_LIBRARY_SUFFIX}" ${pascal_flags})
+        ENDIF()
+    else()
+        message(STATUS "FFMPEG library not found, video recording will be disabled")
+    endif()
+else()
+    message(STATUS "Video recording disabled by user")
+endif()
 
+set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
 
 IF(NOT APPLE)
     #here is the command for standard executables or for shared library
@@ -227,10 +250,12 @@ endif()
 #this command is a workaround to some inlining issues present in older
 # FreePascal versions and fixed in 2.6, That version is mandatory on OSX,
 # hence the command is not needed there
-if(NOT APPLE)
-    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
-    add_dependencies(${engine_output_name} ENGINECLEAN)
-endif()
+# if(NOT APPLE)
+#    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
+#    add_dependencies(${engine_output_name} ENGINECLEAN)
+# endif()
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
-
+IF (WIN32)
+    install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_dir})
+ENDIF()

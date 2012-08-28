@@ -27,6 +27,7 @@
 #include "gameuiconfig.h"
 #include "hwform.h"
 #include "pageoptions.h"
+#include "pagevideos.h"
 #include "pagenetserver.h"
 #include "hwconsts.h"
 #include "fpsedit.h"
@@ -44,6 +45,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     resizeToConfigValues();
 
     reloadValues();
+    reloadVideosValues();
 }
 
 void GameUIConfig::reloadValues(void)
@@ -116,6 +118,29 @@ void GameUIConfig::reloadValues(void)
         for(int i = model->rowCount() - 1; i >= 0; --i)
             model->item(i)->setData(QColor(value(QString("colors/color%1").arg(i), model->item(i)->data().value<QColor>()).value<QColor>()));
     }
+}
+
+void GameUIConfig::reloadVideosValues(void)
+{
+    Form->ui.pageVideos->framerateBox->setValue(value("videorec/fps",25).toUInt());
+    bool useGameRes = value("videorec/usegameres",true).toBool();
+    if (useGameRes)
+    {
+        QRect res = vid_Resolution();
+        Form->ui.pageVideos->widthEdit->setText(QString::number(res.width()));
+        Form->ui.pageVideos->heightEdit->setText(QString::number(res.height()));
+    }
+    else
+    {
+        Form->ui.pageVideos->widthEdit->setText(value("videorec/width","800").toString());
+        Form->ui.pageVideos->heightEdit->setText(value("videorec/height","600").toString());
+    }
+    Form->ui.pageVideos->checkUseGameRes->setChecked(useGameRes);
+    Form->ui.pageVideos->checkRecordAudio->setChecked(value("videorec/audio",true).toBool());
+    if (!Form->ui.pageVideos->tryCodecs(value("videorec/format","no").toString(),
+                                        value("videorec/videocodec","no").toString(),
+                                        value("videorec/audiocodec","no").toString()))
+        Form->ui.pageVideos->setDefaultCodecs();
 }
 
 QStringList GameUIConfig::GetTeamsList()
@@ -196,6 +221,21 @@ void GameUIConfig::SaveOptions()
         for(int i = model->rowCount() - 1; i >= 0; --i)
             setValue(QString("colors/color%1").arg(i), model->item(i)->data());
     }
+
+    Form->gameSettings->sync();
+}
+
+void GameUIConfig::SaveVideosOptions()
+{
+    QRect res = rec_Resolution();
+    setValue("videorec/format", AVFormat());
+    setValue("videorec/videocodec", videoCodec());
+    setValue("videorec/audiocodec", audioCodec());
+    setValue("videorec/fps", rec_Framerate());
+    setValue("videorec/width", res.width());
+    setValue("videorec/height", res.height());
+    setValue("videorec/usegameres", Form->ui.pageVideos->checkUseGameRes->isChecked());
+    setValue("videorec/audio", recordAudio());
 
     Form->gameSettings->sync();
 }
@@ -394,4 +434,39 @@ void GameUIConfig::setNetPasswordLength(int passwordLength)
 quint8 GameUIConfig::volume()
 {
     return Form->ui.pageOptions->volumeBox->value() * 128 / 100;
+}
+
+QString GameUIConfig::AVFormat()
+{
+    return Form->ui.pageVideos->format();
+}
+
+QString GameUIConfig::videoCodec()
+{
+    return Form->ui.pageVideos->videoCodec();
+}
+
+QString GameUIConfig::audioCodec()
+{
+    return Form->ui.pageVideos->audioCodec();
+}
+
+QRect GameUIConfig::rec_Resolution()
+{
+    if (Form->ui.pageVideos->checkUseGameRes->isChecked())
+        return vid_Resolution();
+    QRect res(0,0,0,0);
+    res.setWidth(Form->ui.pageVideos->widthEdit->text().toUInt());
+    res.setHeight(Form->ui.pageVideos->heightEdit->text().toUInt());
+    return res;
+}
+
+int GameUIConfig::rec_Framerate()
+{
+    return Form->ui.pageVideos->framerateBox->value();
+}
+
+bool GameUIConfig::recordAudio()
+{
+    return Form->ui.pageVideos->checkRecordAudio->isChecked();
 }

@@ -39,13 +39,15 @@ if (not CurrentTeam^.ExtDriven) then
     isInLag:= false;
     SendKeepAliveMessage(Lag)
     end;
-if Lag > 100 then
-    Lag:= 100
-else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
-    Lag:= 2500;
+if GameType <> gmtRecord then
+    begin
+    if Lag > 100 then
+        Lag:= 100
+    else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
+        Lag:= 2500;
 
-if (GameType = gmtDemo) then 
-    if isSpeed then
+    if (GameType = gmtDemo) then 
+        if isSpeed then
         begin
             i:= RealTicks-SpeedStart;
             if i < 2000 then Lag:= Lag*5
@@ -54,9 +56,10 @@ if (GameType = gmtDemo) then
             else if i < 8000 then Lag:= Lag*40
             else Lag:= Lag*80;
         end
-    else
-        if cOnlyStats then
-            Lag:= High(LongInt);
+        else
+            if cOnlyStats then
+                Lag:= High(LongInt);
+    end;
 PlayNextVoice;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do
@@ -78,7 +81,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         break;
                         end;
-                gmtDemo: begin
+                gmtDemo, gmtRecord: begin
                         GameState:= gsExit;
                         exit
                         end;

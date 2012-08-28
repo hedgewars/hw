@@ -46,6 +46,7 @@
 #include "pagegamestats.h"
 #include "pageplayrecord.h"
 #include "pagedata.h"
+#include "pagevideos.h"
 #include "hwconsts.h"
 
 void Ui_HWForm::setupUi(HWForm *HWForm)
@@ -145,4 +146,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 
     pageFeedback = new PageFeedback();
     Pages->addWidget(pageFeedback);
+
+    pageVideos = new PageVideos();
+    Pages->addWidget(pageVideos);
 }
