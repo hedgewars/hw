@@ -86,8 +86,10 @@ QLayout * PageMain::footerLayoutDefinition()
 
     btnBack->setWhatsThis(tr("Exit game"));
 
+#ifdef VIDEOREC
     BtnVideos = addButton(":/res/Record.png", bottomLayout, 1, true);
-    BtnVideos->setWhatsThis(tr("Manage videos recorded from game"));
+    BtnVideos->setWhatsThis(tr("Manage videos recorded from game"));    
+#endif
 
     BtnSetup = addButton(":/res/Settings.png", bottomLayout, 2, true);
     BtnSetup->setWhatsThis(tr("Edit game preferences"));

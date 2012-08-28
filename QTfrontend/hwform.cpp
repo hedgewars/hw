@@ -202,8 +202,10 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageNetGame, SIGNAL(DLCClicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNetGame, ID_PAGE_DATADOWNLOAD);
 
+#ifdef VIDEOREC
     connect(ui.pageMain->BtnVideos, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnVideos, ID_PAGE_VIDEOS);
+#endif
 
     //connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     //connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
