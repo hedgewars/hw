@@ -16,34 +16,43 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef PAGE_MAIN_H
-#define PAGE_MAIN_H
+#ifndef RECORDER_H
+#define RECORDER_H
 
-#include "AbstractPage.h"
+#include <QString>
+#include <QByteArray>
 
-class PageMain : public AbstractPage
+#include "tcpBase.h"
+
+class GameUIConfig;
+class VideoItem;
+
+class HWRecorder : public TCPBase
 {
         Q_OBJECT
-
     public:
-        PageMain(QWidget * parent = 0);
+        HWRecorder(GameUIConfig * config, const QString & prefix);
+        virtual ~HWRecorder();
 
-        QPushButton * BtnSinglePlayer;
-        QPushButton * BtnNet;
-        QPushButton * BtnSetup;
-        QPushButton * BtnFeedback;
-        QPushButton * BtnInfo;
-        QPushButton * BtnDataDownload;
-        QPushButton * BtnVideos;
-        QLabel * mainNote;
+        void EncodeVideo(const QByteArray & record);
+
+        VideoItem * item; // used by pagevideos
+        QString name;
+        QString prefix;
+
+    protected:
+        // virtuals from TCPBase
+        virtual QStringList getArguments();
+        virtual void onClientRead();
+        virtual void onClientDisconnect();
+
+    signals:
+        void onProgress(float progress); // 0 < progress < 1
+        void encodingFinished(bool success);
 
     private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        void connectSignals();
-
-        QString randomTip() const;
+        bool finished;
+        GameUIConfig * config;
 };
 
-#endif
-
+#endif // RECORDER_H

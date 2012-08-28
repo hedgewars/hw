@@ -76,6 +76,7 @@
 #include "pagegamestats.h"
 #include "pageplayrecord.h"
 #include "pagedata.h"
+#include "pagevideos.h"
 #include "hwconsts.h"
 #include "newnetclient.h"
 #include "gamecfgwidget.h"
@@ -90,6 +91,7 @@
 #include "drawmapwidget.h"
 #include "mouseoverfilter.h"
 #include "roomslistmodel.h"
+#include "recorder.h"
 
 #include "DataManager.h"
 
@@ -139,6 +141,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageOptions->CBResolution->addItems(SDLInteraction::instance().getResolutions());
 
     config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
+
+    ui.pageVideos->init(config);
 
 #ifdef __APPLE__
     panel = new M3Panel;
@@ -197,6 +201,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageNetGame, SIGNAL(DLCClicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageNetGame, ID_PAGE_DATADOWNLOAD);
+
+    connect(ui.pageMain->BtnVideos, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
+    pageSwitchMapper->setMapping(ui.pageMain->BtnVideos, ID_PAGE_VIDEOS);
 
     //connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     //connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
@@ -288,6 +295,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     connect(ui.pageConnecting, SIGNAL(cancelConnection()), this, SLOT(GoBack()));
 
+    connect(ui.pageVideos, SIGNAL(goBack()), config, SLOT(SaveVideosOptions()));
 
     ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
     ui.pageScheme->setModel(ammoSchemeModel);
@@ -512,6 +520,11 @@ void HWForm::GoToEditScheme()
     GoToPage(ID_PAGE_SCHEME);
 }
 
+void HWForm::GoToVideos()
+{
+    GoToPage(ID_PAGE_VIDEOS);
+}
+
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
 #ifdef USE_XFIRE
@@ -601,6 +614,11 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if (id == ID_PAGE_SETUP)
     {
         config->reloadValues();
+    }
+
+    if (id == ID_PAGE_VIDEOS )
+    {
+        config->reloadVideosValues();
     }
 
     // load and save ignore/friends lists
@@ -704,6 +722,8 @@ void HWForm::GoBack()
     int curid = ui.Pages->currentIndex();
     if (curid == ID_PAGE_MAIN)
     {
+        if (!ui.pageVideos->tryQuit(this))
+            return;
         stopAnim = true;
         exit();
     }
@@ -1357,7 +1377,7 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, 
     connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
     connect(game, SIGNAL(GameStats(char, const QString &)), ui.pageGameStats, SLOT(GameStats(char, const QString &)));
     connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
-    connect(game, SIGNAL(HaveRecord(bool, const QByteArray &)), this, SLOT(GetRecord(bool, const QByteArray &)));
+    connect(game, SIGNAL(HaveRecord(RecordType, const QByteArray &)), this, SLOT(GetRecord(RecordType, const QByteArray &)));
     m_lastDemo = QByteArray();
 }
 
@@ -1368,43 +1388,47 @@ void HWForm::ShowErrorMessage(const QString & msg)
                          msg);
 }
 
-void HWForm::GetRecord(bool isDemo, const QByteArray & record)
+void HWForm::GetRecord(RecordType type, const QByteArray & record)
 {
-    QString filename;
-    QByteArray demo = record;
-    QString recordFileName =
-        config->appendDateTimeToRecordName() ?
-        QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm") :
-        "LastRound";
-
-    QStringList versionParts = cVersionString->split('-');
-    if ( (versionParts.size() == 2) && (!versionParts[1].isEmpty()) && (versionParts[1].contains(':')) )
-        recordFileName = recordFileName + "_" + versionParts[1].replace(':','-');
-
-    if (isDemo)
+    if (type != rtNeither)
     {
-        demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
-        demo.replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
-        demo.replace(QByteArray("\x02TS"), QByteArray("\x02TD"));
-        filename = cfgdir->absolutePath() + "/Demos/" + recordFileName + "." + *cProtoVer + ".hwd";
-        m_lastDemo = demo;
-    }
-    else
-    {
-        demo.replace(QByteArray("\x02TL"), QByteArray("\x02TS"));
-        demo.replace(QByteArray("\x02TN"), QByteArray("\x02TS"));
-        filename = cfgdir->absolutePath() + "/Saves/" + recordFileName + "." + *cProtoVer + ".hws";
+        QString filename;
+        QByteArray demo = record;
+        QString recordFileName =
+            config->appendDateTimeToRecordName() ?
+            QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm") :
+            "LastRound";
+
+        QStringList versionParts = cVersionString->split('-');
+        if ( (versionParts.size() == 2) && (!versionParts[1].isEmpty()) && (versionParts[1].contains(':')) )
+            recordFileName = recordFileName + "_" + versionParts[1].replace(':','-');
+
+        if (type == rtDemo)
+        {
+            demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
+            demo.replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
+            demo.replace(QByteArray("\x02TS"), QByteArray("\x02TD"));
+            filename = cfgdir->absolutePath() + "/Demos/" + recordFileName + "." + *cProtoVer + ".hwd";
+            m_lastDemo = demo;
+        }
+        else
+        {
+            demo.replace(QByteArray("\x02TL"), QByteArray("\x02TS"));
+            demo.replace(QByteArray("\x02TN"), QByteArray("\x02TS"));
+            filename = cfgdir->absolutePath() + "/Saves/" + recordFileName + "." + *cProtoVer + ".hws";
+        }
+
+        QFile demofile(filename);
+        if (!demofile.open(QIODevice::WriteOnly))
+            ShowErrorMessage(tr("Cannot save record to file %1").arg(filename));
+        else
+        {
+            demofile.write(demo);
+            demofile.close();
+        }
     }
 
-
-    QFile demofile(filename);
-    if (!demofile.open(QIODevice::WriteOnly))
-    {
-        ShowErrorMessage(tr("Cannot save record to file %1").arg(filename));
-        return ;
-    }
-    demofile.write(demo);
-    demofile.close();
+    ui.pageVideos->startEncoding(record);
 }
 
 void HWForm::startTraining(const QString & scriptName)
@@ -1445,6 +1469,7 @@ void HWForm::closeEvent(QCloseEvent *event)
     xfire_free();
 #endif
     config->SaveOptions();
+    config->SaveVideosOptions();
     event->accept();
 }
 

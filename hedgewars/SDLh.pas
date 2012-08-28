@@ -827,6 +827,8 @@ type
     TMixMusic = record
                 end;
 
+    TPostMix = procedure(udata: pointer; stream: PByte; len: LongInt); cdecl;
+
     {* SDL_net *}
     TIPAddress = record
                 host: LongWord;
@@ -957,6 +959,9 @@ function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibNam
 function  SDL_GL_SetAttribute(attr: TSDL_GLattr; value: LongInt): LongInt; cdecl; external SDLLibName;
 procedure SDL_GL_SwapBuffers; cdecl; external SDLLibName;
 
+procedure SDL_LockAudio; cdecl; external SDLLibName;
+procedure SDL_UnlockAudio; cdecl; external SDLLibName;
+
 function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
 function  SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;
 function  SDL_JoystickOpen(idx: LongInt): PSDL_Joystick; cdecl; external SDLLibName;
@@ -1008,6 +1013,7 @@ procedure Mix_Quit; {$IFDEF SDL_MIXER_NEWER}cdecl; external SDL_MixerLibName;{$E
 
 function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
+function  Mix_QuerySpec(frequency: PLongInt; format: PWord; channels: PLongInt): LongInt; cdecl; external SDL_MixerLibName;
 
 function  Mix_Volume(channel: LongInt; volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_SetDistance(channel: LongInt; distance: Byte): LongInt; cdecl; external SDL_MixerLibName;
@@ -1034,6 +1040,8 @@ function  Mix_HaltMusic: LongInt; cdecl; external SDL_MixerLibName;
 
 function  Mix_FadeInChannelTimed(channel: LongInt; chunk: PMixChunk; loops: LongInt; fadems: LongInt; ticks: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_FadeOutChannel(channel: LongInt; fadems: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+
+procedure Mix_SetPostMix( mix_func: TPostMix; arg: pointer); cdecl; external SDL_MixerLibName;
 
 (*  SDL_image  *)
 function  IMG_Init(flags: LongInt): LongInt; {$IFDEF SDL_IMAGE_NEWER}cdecl; external SDL_ImageLibName;{$ENDIF}
