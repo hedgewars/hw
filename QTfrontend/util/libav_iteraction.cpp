@@ -16,17 +16,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include "libav_iteraction.h"
+
+#if VIDEOREC
 #define __STDC_CONSTANT_MACROS
 extern "C"
 {
 #include "libavformat/avformat.h"
 }
+
 #include <QVector>
 #include <QList>
 #include <QMessageBox>
 #include <QComboBox>
 
-#include "libav_iteraction.h"
 #include "HWApplication.h"
 
 struct Codec
@@ -49,12 +52,6 @@ struct Format
 
 QList<Codec> codecs;
 QMap<QString,Format> formats;
-
-LibavIteraction & LibavIteraction::instance()
-{
-    static LibavIteraction instance;
-    return instance;
-}
 
 // test if given format supports given codec
 bool FormatQueryCodec(AVOutputFormat *ofmt, enum CodecID codec_id)
@@ -324,4 +321,43 @@ QString LibavIteraction::getFileInfo(const QString & filepath)
     avformat_close_input(&pContext);
 #endif
     return desc;
+}
+
+#else
+LibavIteraction::LibavIteraction()
+{
+
+}
+
+void LibavIteraction::fillFormats(QComboBox * pFormats)
+{
+    Q_UNUSED(pFormats);
+}
+
+void LibavIteraction::fillCodecs(const QString & format, QComboBox * pVCodecs, QComboBox * pACodecs)
+{
+    Q_UNUSED(format);
+    Q_UNUSED(pVCodecs);
+    Q_UNUSED(pACodecs);
+}
+
+QString LibavIteraction::getExtension(const QString & format)
+{
+    Q_UNUSED(format);
+
+    return QString();
+}
+
+QString LibavIteraction::getFileInfo(const QString & filepath)
+{
+    Q_UNUSED(filepath);
+
+    return QString();
+}
+#endif
+
+LibavIteraction & LibavIteraction::instance()
+{
+    static LibavIteraction instance;
+    return instance;
 }

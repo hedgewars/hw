@@ -28,7 +28,7 @@ endif()
 # Configure for SDL
 find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
-find_package(FFMPEG REQUIRED)
+find_package(FFMPEG)
 
 include_directories(.)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
@@ -72,6 +72,10 @@ file(GLOB NetCpp net/*.cpp)
 file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
+
+if((NOT NO_VIDEOREC) AND ${FFMPEG_FOUND})
+    add_definitions(-DVIDEOREC)
+endif()
 
 set(hwfr_src
     ${ModelCpp}
