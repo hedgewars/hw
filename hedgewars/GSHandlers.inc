@@ -1483,7 +1483,7 @@ begin
     or TestCollisionXwithGear(Gear, -2) 
     or (TestCollisionYwithGear(Gear, 2) <> 0) then
         begin
-        if (hwAbs(Gear^.dX) > _0) or (hwAbs(Gear^.dY) > _0) then
+        if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
             begin
             PlaySound(sndRopeAttach);
             Gear^.dX:= _0;
