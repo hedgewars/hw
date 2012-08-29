@@ -1014,8 +1014,8 @@ if (Gear^.State and gstMoving) <> 0 then
         if (CurrentHedgehog^.Gear = Gear) then
             isCursorVisible:= false
     end;
-
-if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
+// IMO this should trigger homerun based on leftX/rightX + someval instead - that is 'knocking it out of the park'
+if (not isZero(Gear^.dY)) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
     begin
     inc(Gear^.FlightTime);
     if Gear^.FlightTime = 3000 then

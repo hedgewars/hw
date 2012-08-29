@@ -269,6 +269,11 @@ else
     z.QWordValue:= z1.QWordValue + z2.QWordValue
     end
 end;
+
+function isZero(const z: hwFloat): boolean; inline; 
+begin
+isZero := z.QWordValue = 0;
+end;
 {$ENDIF}
 {$IFDEF WEB}
 (*
@@ -342,6 +347,11 @@ else
     z.Round:= z.Round + z2.Round;
     if z.Frac<z1.Frac then inc(z.Round)
     end
+end;
+
+function isZero(const z: hwFloat): boolean; inline; 
+begin
+isZero := z.Round = 0 and z.Frac = 0;
 end;
 {$ENDIF}
 
@@ -543,11 +553,6 @@ if Angle < 1024 then
     AngleCos.QWordValue:= SinTable[1024 - Angle]
 else
     AngleCos.QWordValue:= SinTable[Angle - 1024]
-end;
-
-function isZero(const z: hwFloat): boolean; inline; 
-begin
-isZero := z.QWordValue = 0;
 end;
 {$ENDIF}
 
