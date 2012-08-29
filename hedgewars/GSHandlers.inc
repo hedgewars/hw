@@ -519,7 +519,7 @@ begin
         kick:= hwRound((hwAbs(Gear^.dX)+hwAbs(Gear^.dY)) * _20);
         Gear^.dY.isNegative:= not Gear^.dY.isNegative;
         Gear^.dX.isNegative:= not Gear^.dX.isNegative;
-        AmmoShove(Gear, 1, kick);
+        AmmoShove(Gear, 0, kick);
         for i:= 15 + kick div 10 downto 0 do
             begin
             particle := AddVisualGear(hwRound(Gear^.X) + Random(25), hwRound(Gear^.Y) + Random(25), vgtDust);
