@@ -73,7 +73,7 @@ file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
 
-if((NOT NO_VIDEOREC) AND ${FFMPEG_FOUND})
+if((NOT NO_VIDEOREC) AND "${FFMPEG_FOUND}")
     add_definitions(-DVIDEOREC)
 endif()
 
