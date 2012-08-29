@@ -612,10 +612,7 @@ x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 
 if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
-    begin
-    TestDesertEagle:= BadTurn;
     exit(BadTurn);
-    end;
 
 t:= 2 / sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
 Vx:= (Targ.X - x) * t;

@@ -55,7 +55,7 @@ QMap<QString,Format> formats;
 
 // test if given format supports given codec
 bool FormatQueryCodec(AVOutputFormat *ofmt, enum CodecID codec_id)
-{  
+{
 #if LIBAVFORMAT_VERSION_MAJOR >= 54
     return avformat_query_codec(ofmt, codec_id, FF_COMPLIANCE_NORMAL) == 1;
 #else
