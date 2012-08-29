@@ -108,7 +108,7 @@ while Gear <> nil do
 // Run the calcs only once we know we have a type that will need damage
                         tdX:= Gear^.X-fX;
                         tdY:= Gear^.Y-fY;
-                        if hwRound(hwAbs(tdX)+hwAbs(tdY)) < dmgBase then
+                        if (tdX.Round + tdY.Round + 2) < dmgBase then
                             dmg:= dmgBase - hwRound(Distance(tdX, tdY));
                         if dmg > 1 then
                             begin
