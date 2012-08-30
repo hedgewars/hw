@@ -65,6 +65,7 @@ var
     autoCameraOn    : boolean;
 
     CheckSum        : LongWord;
+    CampaignVariable: shortstring;
     GameTicks       : LongWord;
     GameState       : TGameState;
     GameType        : TGameType;
@@ -181,6 +182,8 @@ var
     hiTicks: Word;
 
     LuaGoals        : shortstring;
+    hiddenHedgehogs : array [0..cMaxHHs] of PHedgehog;
+    hiddenHedgehogsNumber : longint;
 
     VoiceList : array[0..7] of TVoice =  (
                     ( snd: sndNone; voicepack: nil),

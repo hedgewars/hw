@@ -48,7 +48,7 @@ QLayout * PageSinglePlayer::bodyLayoutDefinition()
     BtnCampaignPage = addButton(":/res/Campaign.png", middleLine, 0, true);
     BtnCampaignPage->setToolTip(tr("Campaign Mode"));
     BtnCampaignPage->setWhatsThis(tr("Campaign Mode"));
-    BtnCampaignPage->setVisible(false);
+    BtnCampaignPage->setVisible(true);
 
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
     BtnTrainPage->setToolTip(tr("Training Mode"));

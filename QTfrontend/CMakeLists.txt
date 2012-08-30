@@ -85,6 +85,7 @@ set(hwfr_src
     hwform.cpp
     main.cpp
     team.cpp
+    campaign.cpp
     ui_hwform.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
     )
@@ -121,6 +122,7 @@ set(hwfr_moc_hdrs
     HWApplication.h
     hwform.h
     team.h
+    campaign.h
     util/DataManager.h
     )
 
