@@ -21,6 +21,8 @@
 #include <QUuid>
 #include <QColor>
 #include <QStringListModel>
+#include <QMessageBox>
+#include <QTextStream>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -29,10 +31,12 @@
 #include "teamselect.h"
 #include "KB.h"
 #include "proto.h"
+#include "campaign.h"
 
 #include <QTextStream>
+#include "ThemeModel.h"
 
-QString training, campaign; // TODO: Cleaner solution?
+QString training, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
     TCPBase(true),
@@ -98,7 +102,7 @@ void HWGame::commonConfig()
             HWProto::addStringToBuffer(buf, QString("eammprob %1").arg(ammostr.mid(cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammdelay %1").arg(ammostr.mid(2 * cAmmoNumber, cAmmoNumber)));
             HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
-            if(!gamecfg->schemeData(21).toBool()) HWProto::addStringToBuffer(buf, QString("eammstore"));
+            if(gamecfg->schemeData(15).toBool() || !gamecfg->schemeData(21).toBool()) HWProto::addStringToBuffer(buf, QString("eammstore"));
             HWProto::addStringListToBuffer(buf,
                                            team.teamGameConfig(gamecfg->getInitHealth()));
             ;
@@ -165,7 +169,7 @@ void HWGame::SendCampaignConfig()
     HWProto::addStringToBuffer(campaigncfg, "TL");
     HWProto::addStringToBuffer(campaigncfg, "eseed " + QUuid::createUuid().toString());
 
-    HWProto::addStringToBuffer(campaigncfg, "escript " + campaign);
+    HWProto::addStringToBuffer(campaigncfg, "escript " + campaignScript);
 
     RawSendIPC(campaigncfg);
 }
@@ -275,6 +279,14 @@ void HWGame::ParseMessage(const QByteArray & msg)
             int size = msg.size();
             QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
             emit SendTeamMessage(msgbody);
+            break;
+        }
+        case 'V':
+        {
+            if (msg.at(2) == '?')
+                sendCampaignVar(msg.right(msg.size() - 3));
+            else if (msg.at(2) == '!')
+                writeCampaignVar(msg.right(msg.size() - 3));
             break;
         }
         default:
@@ -391,10 +403,12 @@ void HWGame::StartTraining(const QString & file)
     SetGameState(gsStarted);
 }
 
-void HWGame::StartCampaign(const QString & file)
+void HWGame::StartCampaign(const QString & camp, const QString & campScript, const QString & campTeam)
 {
     gameType = gtCampaign;
-    campaign = "Missions/Campaign/" + file + ".lua";
+    campaign = camp;
+    campaignScript = "Missions/Campaign/" + camp + "/" + campScript;
+    campaignTeam = campTeam;
     demo.clear();
     Start();
     SetGameState(gsStarted);
@@ -404,6 +418,10 @@ void HWGame::SetGameState(GameState state)
 {
     gameState = state;
     emit GameStateChanged(state);
+    if (gameType == gtCampaign)
+    {
+      emit CampStateChanged(1);
+    }
 }
 
 void HWGame::abort()
@@ -412,3 +430,37 @@ void HWGame::abort()
     HWProto::addStringToBuffer(buf, QString("efinish"));
     RawSendIPC(buf);
 }
+
+void HWGame::sendCampaignVar(QByteArray varToSend)
+{
+    QString varToFind(varToSend);
+    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + campaignTeam + ".hwt", QSettings::IniFormat, 0);
+    teamfile.setIniCodec("UTF-8");
+    QString varValue = teamfile.value("Campaign " + campaign + "/" + varToFind, "").toString();
+    QByteArray command;
+    HWProto::addStringToBuffer(command, "V." + varValue);
+    RawSendIPC(command);
+}
+
+void HWGame::writeCampaignVar(QByteArray varVal)
+{
+    QString varToWrite("");
+    QString varValue("");
+    unsigned int i = 0;
+    while (i < varVal.size() && varVal.at(i) != ' ')
+    {
+      varToWrite.append(varVal.at(i));
+      i++;
+    }
+    i++;
+    while (i < varVal.size() && varVal.at(i) != '\0')
+    {
+      varValue.append(varVal.at(i));
+      i++;
+    }
+
+    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + campaignTeam + ".hwt", QSettings::IniFormat, 0);
+    teamfile.setIniCodec("UTF-8");
+    teamfile.setValue("Campaign " + campaign + "/" + varToWrite, varValue);
+}
+

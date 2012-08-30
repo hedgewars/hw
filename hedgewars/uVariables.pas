@@ -227,7 +227,7 @@ var
         '',                              // ptData
         'Graphics',                      // ptGraphics
         'Themes',                        // ptThemes
-        'Themes/avematan',               // ptCurrTheme
+        'Themes/Bamboo',                 // ptCurrTheme
         'Teams',                         // ptTeams
         'Maps',                          // ptMaps
         '',                              // ptMapCurrent
@@ -2645,6 +2645,7 @@ begin
     LuaGoals:= '';
 
     LuaTemplateNumber:= 0;
+    hiddenHedgehogsNumber:=0;
 end;
 
 procedure freeModule;

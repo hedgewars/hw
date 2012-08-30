@@ -26,7 +26,8 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions;
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions
+     {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
 
@@ -530,6 +531,17 @@ s:= s; // avoid compiler hint
 flagMakeCapture:= true
 end;
 
+procedure chRecord(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+{$IFDEF USE_VIDEO_RECORDING}
+if flagPrerecording then
+    StopPreRecording()
+else
+    BeginPreRecording();
+{$ENDIF}
+end;
+
 procedure chSetMap(var s: shortstring);
 begin
 if isDeveloperMode then
@@ -614,13 +626,14 @@ s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
 
-if FollowGear <> nil then
+if autoCameraOn then
     begin
+    FollowGear:= nil;
     AddCaption('Auto Camera Off', $CCCCCC, capgrpVolume);
     autoCameraOn:= false
     end
-    else
-        begin
+else
+    begin
     AddCaption('Auto Camera On', $CCCCCC, capgrpVolume);
     bShowFinger:= true;
     if not CurrentHedgehog^.Unplaced then
@@ -653,6 +666,7 @@ end;
 procedure chSpeedup_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+SpeedStart:= RealTicks;
 isSpeed:= true
 end;
 
@@ -765,7 +779,7 @@ end;
 procedure chGameFlags(var s: shortstring);
 begin
 GameFlags:= StrToInt(s);
-if GameFlags and gfSharedAmmo <> 0 then GameFlags:= GameFlags and not gfPerHogAmmo
+if GameFlags and gfSharedAmmo <> 0 then GameFlags:= GameFlags and (not gfPerHogAmmo)
 end;
 
 procedure chHedgehogTurnTime(var s: shortstring);
@@ -797,17 +811,17 @@ begin
     RegisterVariable('-up'     , @chUp_m         , false, true);
     RegisterVariable('+left'   , @chLeft_p       , false, true);
     RegisterVariable('-left'   , @chLeft_m       , false, true);
-    RegisterVariable('+attack' , @chAttack_p     , false, false); // WTF?
+    RegisterVariable('+attack' , @chAttack_p     , false);
     RegisterVariable('+down'   , @chDown_p       , false, true);
     RegisterVariable('-down'   , @chDown_m       , false, true);
     RegisterVariable('hjump'   , @chHJump        , false, true);
     RegisterVariable('ljump'   , @chLJump        , false, true);
-    RegisterVariable('nextturn', @chNextTurn     , false, false);
-    RegisterVariable('-attack' , @chAttack_m     , false, false);
-    RegisterVariable('slot'    , @chSlot         , false, true);
+    RegisterVariable('nextturn', @chNextTurn     , false);
+    RegisterVariable('-attack' , @chAttack_m     , false);
+    RegisterVariable('slot'    , @chSlot         , false);
     RegisterVariable('setweap' , @chSetWeapon    , false, true);
 //////// End top by freq analysis
-    RegisterVariable('gencmd'  , @chGenCmd       , false, true);
+    RegisterVariable('gencmd'  , @chGenCmd       , false);
     RegisterVariable('flag'    , @chFlag         , false);
     RegisterVariable('script'  , @chScript       , false);
     RegisterVariable('proto'   , @chCheckProto   , true );
@@ -851,10 +865,10 @@ begin
     RegisterVariable('zoomout' , @chZoomOut      , true );
     RegisterVariable('zoomreset',@chZoomReset    , true );
     RegisterVariable('ammomenu', @chAmmoMenu     , true);
-    RegisterVariable('+precise', @chPrecise_p    , false);
-    RegisterVariable('-precise', @chPrecise_m    , false);
+    RegisterVariable('+precise', @chPrecise_p    , false, true);
+    RegisterVariable('-precise', @chPrecise_m    , false, true);
     RegisterVariable('switch'  , @chSwitch       , false);
-    RegisterVariable('timer'   , @chTimer        , false);
+    RegisterVariable('timer'   , @chTimer        , false, true);
     RegisterVariable('taunt'   , @chTaunt        , false);
     RegisterVariable('put'     , @chPut          , false);
     RegisterVariable('+volup'  , @chVol_p        , true );
@@ -872,6 +886,7 @@ begin
     RegisterVariable('+cur_r'  , @chCurR_p       , true );
     RegisterVariable('-cur_r'  , @chCurR_m       , true );
     RegisterVariable('campvar' , @chCampVar      , true );
+    RegisterVariable('record'  , @chRecord       , true );
 end;
 
 procedure freeModule;
