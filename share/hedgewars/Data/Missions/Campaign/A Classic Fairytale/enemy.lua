@@ -248,7 +248,7 @@ end
 function SetupFinalAnim()
   finalAnim = {
     {func = AnimGearWait, args = {cyborg, 1000}},
-    {func = AnimSay, args = {cyborg, loc("Nicely done, meatbag!"), SAY_SAY, 3000}},
+    {func = AnimSay, args = {cyborg, loc("Nicely done, meatbags!"), SAY_SAY, 3000}},
     {func = AnimSay, args = {cyborg, loc("You have won the game by proving true cooperative skills!"), SAY_SAY, 7000}},
     {func = AnimSay, args = {cyborg, loc("You have proven yourselves worthy!"), SAY_SAY, 4000}},
     {func = AnimSay, args = {players[1], loc("Game? Was this a game to you?!"), SAY_SAY, 4000}},

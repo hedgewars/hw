@@ -299,7 +299,7 @@ function AfterStartAnim()
   TurnTimeLeft = TurnTime
   ShowMission(loc("Dragon's Lair"), loc("Obstacle course"), loc("In order to get to the other side, you need to collect the crates first.|") ..
                                                   loc("As the ammo is sparse, you might want to reuse ropes while mid-air.|") ..
-                                                  loc("If you wish to restart the course, press [Precise]!|") ..
+                                                  loc("If you wish to restart the course, hold [Precise] while your turn ends (e.g with Skip)!|") ..
                                                   loc("The enemy can't move but it might be a good idea to stay out of sight!|") ..
                                                   loc("You have ") .. SuddenDeathTurns .. loc(" turns until Sudden Death! Better hurry!"), 1, 0)
 end
@@ -632,4 +632,8 @@ function onPrecise()
   if AnimInProgress() == false then
     retry = true
   end
+end
+
+function onPreciseUp()
+  retry = false
 end
