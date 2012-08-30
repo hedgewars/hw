@@ -16,25 +16,27 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef PAGE_CAMPAIGN_H
-#define PAGE_CAMPAIGN_H
+#ifndef CAMPAIGN_H
+#define CAMPAIGN_H
 
-#include "AbstractPage.h"
+#include <QMainWindow>
+#include <QStack>
+#include <QTime>
+#include <QPointer>
+#include <QPropertyAnimation>
+#include <QUrl>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QNetworkAccessManager>
 
-class PageCampaign : public AbstractPage
-{
-        Q_OBJECT
+#include "netserver.h"
+#include "game.h"
+#include "ui_hwform.h"
+#include "SDLInteraction.h"
+#include "bgwidget.h"
 
-    public:
-        PageCampaign(QWidget* parent = 0);
-
-        QPushButton *BtnStartCampaign;
-        QComboBox   *CBMission;
-        QComboBox   *CBCampaign;
-        QComboBox   *CBTeam;
-
-    protected:
-        QLayout * bodyLayoutDefinition();
-};
+QStringList getCampMissionList(QString & campaign);
+unsigned int getCampProgress(QString & teamName, QString & campName);
+QString getCampaignScript(QString campaign, unsigned int mNum);
 
 #endif

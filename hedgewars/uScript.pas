@@ -80,7 +80,8 @@ uses LuaPas,
     uTextures,
     uLandGraphics,
     SDLh,
-    SysUtils; 
+    SysUtils, 
+    uIO;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -1658,6 +1659,68 @@ begin
     lc_getcurammotype := 1;
 end;
 
+function lc_savecampaignvar(L : Plua_State): LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 2 then
+        LuaError('Lua: Wrong number of parameters passed to SaveCampaignVar!')
+    else begin
+        SendIPC('V!' + lua_tostring(L, 1) + ' ' + lua_tostring(L, 2) + #0);
+    end;
+    lc_savecampaignvar := 0;
+end;
+
+function lc_getcampaignvar(L : Plua_State): LongInt; Cdecl;
+begin
+    if (lua_gettop(L) <> 1) then
+        LuaError('Lua: Wrong number of parameters passed to GetCampaignVar!')
+    else
+        SendIPCAndWaitReply('V?' + lua_tostring(L, 1));
+    lua_pushstring(L, str2pchar(CampaignVariable));
+    lc_getcampaignvar := 1;
+end;
+
+function lc_hidehog(L: Plua_State): LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to HideHog!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        hiddenHedgehogs[hiddenHedgehogsNumber]:=gear^.hedgehog;
+        inc(hiddenHedgehogsNumber);
+        HideHog(gear^.hedgehog);
+        end;
+    lc_hidehog := 0;
+end;
+
+function lc_restorehog(L: Plua_State): LongInt; Cdecl;
+var hog: PHedgehog;
+    i, j: LongInt;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaError('Lua: Wrong number of parameters passed to RestoreHog!')
+    else
+        begin
+          i := 0;
+          while (i < hiddenHedgehogsNumber) do
+            begin
+            if hiddenHedgehogs[i]^.gearHidden^.uid = lua_tointeger(L, 1) then
+              begin
+                hog := hiddenHedgehogs[i];
+                RestoreHog(hog);
+                dec(hiddenHedgehogsNumber);
+                for j := i to hiddenHedgehogsNumber - 1 do
+                  hiddenHedgehogs[j] := hiddenHedgehogs[j + 1];
+                lc_restorehog := 0;
+                exit;
+              end;
+            inc(i);
+            end;
+        end;
+    lc_restorehog := 0;
+end;
+
 // boolean TestRectForObstacle(x1, y1, x2, y2, landOnly)
 function lc_testrectforobstacle(L : Plua_State) : LongInt; Cdecl;
 var rtn: Boolean;
@@ -2177,6 +2240,10 @@ ScriptSetInteger('gstHHGone'         ,$00100000);
 ScriptSetInteger('gstInvisible'      ,$00200000);
 
 // register functions
+lua_register(luaState, _P'HideHog', @lc_hidehog);
+lua_register(luaState, _P'RestoreHog', @lc_restorehog);
+lua_register(luaState, _P'SaveCampaignVar', @lc_savecampaignvar);
+lua_register(luaState, _P'GetCampaignVar', @lc_getcampaignvar);
 lua_register(luaState, _P'band', @lc_band);
 lua_register(luaState, _P'bor', @lc_bor);
 lua_register(luaState, _P'bnot', @lc_bnot);
