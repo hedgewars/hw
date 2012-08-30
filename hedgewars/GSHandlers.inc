@@ -169,11 +169,24 @@ var
     collV, collH: LongInt;
     land: word;
 begin
-    // clip velocity at 1.9 - over 1 per pixel, but really shouldn't cause many actual problems.
-    if Gear^.dX.QWordValue > 8160437862 then
-        Gear^.dX.QWordValue:= 8160437862;
-    if Gear^.dY.QWordValue > 8160437862 then
-        Gear^.dY.QWordValue:= 8160437862;
+    // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
+{$IFNDEF WEB}
+    if Gear^.dX.Round > 2 then
+        Gear^.dX.QWordValue:= 8589934592;
+    if Gear^.dY.Round > 2 then
+        Gear^.dY.QWordValue:= 8589934592;
+{$ELSE}
+    if Gear^.dX.Round > 2 then
+        begin
+        Gear^.dX.Round:= 2;
+        Gear^.dX.Frac:= 0
+        end;
+    if Gear^.dY.QWordValue > 2 then
+        begin
+        Gear^.dY.Round:= 2;
+        Gear^.dY.Frac:= 0
+        end;
+{$ENDIF}
     Gear^.State := Gear^.State and (not gstCollision);
     collV := 0;
     collH := 0;
@@ -3704,7 +3717,7 @@ begin
         // calc gear offset in portal normal vector direction
         noffs:= (nx * ox + ny * oy);
 
-        if isBullet and (hwRound(hwAbs(noffs)) >= Gear^.Radius) then
+        if isBullet and (noffs.Round >= Gear^.Radius) then
             continue;
 
         // avoid gravity related loops of not really moving gear
@@ -5140,4 +5153,85 @@ if Gear^.Timer < $FFFFFFFF then
         end;
     
 doStepFallingGear(Gear);
+end;
+
+procedure doStepCreeper(Gear: PGear);
+var hogs: PGearArrayS;
+    HHGear: PGear;
+    tdX: hwFloat;
+    dir: LongInt;
+begin
+doStepFallingGear(Gear);
+if Gear^.Timer > 0 then dec(Gear^.Timer);
+// creeper sleep phase
+if (Gear^.Hedgehog = nil) and (Gear^.Timer > 0) then exit;
+
+if Gear^.Hedgehog <> nil then HHGear:= Gear^.Hedgehog^.Gear
+else HHGear:= nil;
+
+// creeper boom phase
+if (Gear^.State and gstTmpFlag <> 0) then
+    begin
+    if (Gear^.Timer = 0) then
+        begin
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 300, CurrentHedgehog, EXPLAutoSound);
+        DeleteGear(Gear)
+        end;
+    // ssssss he essssscaped
+    if (Gear^.Timer > 250) and ((HHGear = nil) or 
+            (((abs(HHGear^.X.Round-Gear^.X.Round) + abs(HHGear^.Y.Round-Gear^.Y.Round) + 2) >  180) and
+            (Distance(HHGear^.X-Gear^.X,HHGear^.Y-Gear^.Y) > _180))) then
+        begin
+        Gear^.State:= Gear^.State and (not gstTmpFlag);
+        Gear^.Timer:= 0
+        end;
+    exit
+    end;
+
+// Search out a new target, as target seek time has expired, target is dead, target is out of range, or we didn't have a target
+if (HHGear = nil) or (Gear^.Timer = 0) or 
+   (((abs(HHGear^.X.Round-Gear^.X.Round) + abs(HHGear^.Y.Round-Gear^.Y.Round) + 2) >  Gear^.Angle) and
+        (Distance(HHGear^.X-Gear^.X,HHGear^.Y-Gear^.Y) > int2hwFloat(Gear^.Angle)))
+    then
+    begin
+    hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Angle);
+    if hogs.size > 1 then
+        Gear^.Hedgehog:= hogs.ar^[GetRandom(hogs.size)]^.Hedgehog
+    else if hogs.size = 1 then Gear^.Hedgehog:= hogs.ar^[0]^.Hedgehog
+    else Gear^.Hedgehog:= nil;
+    if Gear^.Hedgehog <> nil then Gear^.Timer:= 5000;
+    exit
+    end;
+
+// we have a target. move the creeper.
+if HHGear <> nil then
+    begin
+    // GOTCHA
+    if ((abs(HHGear^.X.Round-Gear^.X.Round) + abs(HHGear^.Y.Round-Gear^.Y.Round) + 2) <  50) and
+         (Distance(HHGear^.X-Gear^.X,HHGear^.Y-Gear^.Y) < _50) then
+        begin
+        // hisssssssssss
+        Gear^.State:= Gear^.State or gstTmpFlag;
+        Gear^.Timer:= 1500;
+        exit
+        end;
+    if (Gear^.State and gstMoving <> 0) then
+        begin
+        Gear^.dY:= _0;
+        Gear^.dX:= _0;
+        end
+    else if (GameTicks and $FF = 0) then
+        begin
+        tdX:= HHGear^.X-Gear^.X;
+        dir:= hwSign(tdX);
+        if not TestCollisionX(Gear, dir) then
+            Gear^.X:= Gear^.X + signAs(_1,tdX);
+        if TestCollisionXwithXYShift(Gear, signAs(_10,tdX), 0, dir) then
+            begin
+            Gear^.dX:= SignAs(_0_15, tdX);
+            Gear^.dY:= -_0_3;
+            Gear^.State:= Gear^.State or gstMoving
+            end
+        end;
+    end;
 end;
