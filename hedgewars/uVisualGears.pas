@@ -135,7 +135,7 @@ var gear: PVisualGear;
     sp: real;
 begin
 AddVisualGear:= nil;
-if ((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet))) and // we are scrolling now
+if ((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) or fastScrolling) and // we are scrolling now
    ((Kind <> vgtCloud) and (not Critical)) then
        exit;
 
@@ -284,8 +284,9 @@ with gear^ do
                 begin
                 dx:= 0.005 * (random(15) + 10);
                 dy:= 0.001 * (random(40) + 20);
-                if random(2) = 0 then
-                    dx := -dx;
+                if random(2) = 0 then dx := -dx;
+                if random(2) = 0 then Tag:= 1
+                else Tag:= -1;
                 Frame:= 7 - random(2);
                 FrameTicks:= random(20) + 15;
                 end;
@@ -295,6 +296,8 @@ with gear^ do
                 dy:= 0;
                 FrameTicks:= 740;
                 Frame:= 19;
+                Scale:= 0.75;
+                Timer:= 1;
                 end;
     vgtDroplet:
                 begin
@@ -640,9 +643,9 @@ case Layer of
                   vgtSmoke: DrawTextureF(SpritesData[sprSmoke].Texture, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 7 - Gear^.Frame, 1, SpritesData[sprSmoke].Width, SpritesData[sprSmoke].Height);
                   vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                   vgtDust: if Gear^.State = 1 then
-                               DrawSpriteRotatedF(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame, 1, Gear^.Angle)
+                               DrawSpriteRotatedF(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame, Gear^.Tag, Gear^.Angle)
                            else
-                               DrawSprite(sprDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+                               DrawSpriteRotatedF(sprDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame, Gear^.Tag, Gear^.Angle);
                   vgtFire: if (Gear^.State and gstTmpFlag) = 0 then
                                DrawSprite(sprFlame, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy, (RealTicks shr 6 + Gear^.Frame) mod 8)
                            else
@@ -956,10 +959,10 @@ if (cReducedQuality and rqKillFlakes) <> 0 then
     exit;
 
 if hasBorder or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
-    for i:= 0 to Pred(vobCount * cScreenSpace div LAND_WIDTH) do
+    for i:= 0 to Pred(vobCount * cScreenSpace div 4096) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
 else
-    for i:= 0 to Pred((vobCount * cScreenSpace div LAND_WIDTH) div 3) do
+    for i:= 0 to Pred((vobCount * cScreenSpace div 4096) div 3) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake);
 end;
 

@@ -52,6 +52,15 @@ var
     cReadyDelay     : Longword    = 5000;
     cStereoMode     : TStereoMode = smNone;
     cOnlyStats      : boolean = False;
+{$IFDEF USE_VIDEO_RECORDING}
+    RecPrefix      : shortstring;
+    cAVFormat       : shortstring;
+    cVideoCodec     : shortstring;
+    cVideoFramerateNum : LongInt;
+    cVideoFramerateDen : LongInt;
+    cVideoQuality      : LongInt;
+    cAudioCodec     : shortstring;
+{$ENDIF}
 //////////////////////////
     cMapName        : shortstring = '';
 
@@ -60,8 +69,10 @@ var
     isPaused        : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
+    SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
+    fastScrolling   : boolean;
     autoCameraOn    : boolean;
 
     CheckSum        : LongWord;
@@ -184,6 +195,8 @@ var
     LuaGoals        : shortstring;
     hiddenHedgehogs : array [0..cMaxHHs] of PHedgehog;
     hiddenHedgehogsNumber : longint;
+
+    LuaTemplateNumber : LongWord;
 
     VoiceList : array[0..7] of TVoice =  (
                     ( snd: sndNone; voicepack: nil),
@@ -646,7 +659,9 @@ var
             (FileName:  'TARDIS'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  48; Height: 79; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprTardis
             (FileName:  'slider'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 3; Height: 17; imageWidth: 3; imageHeight: 17; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprSlider
+            Width: 3; Height: 17; imageWidth: 3; imageHeight: 17; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprSlider
+            (FileName:  'botlevels'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 22; Height: 15; imageWidth: 22; imageHeight: 15; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprBotlevels
             );
 
 const
@@ -1448,7 +1463,8 @@ var
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or 
                           ammoprop_NoCrosshair or 
-                          ammoprop_DontHold;
+                          ammoprop_DontHold or
+                          ammoprop_Track;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2446,6 +2462,10 @@ var
     framel, framer, depthl, depthr: GLuint;
     texl, texr: GLuint;
 
+    // video recorder framebuffer and texture
+    defaultFrame, depthv: GLuint;
+    texv: GLuint;
+
     VisualGearLayers: array[0..6] of PVisualGear;
     lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
@@ -2571,7 +2591,7 @@ begin
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
-    GameType        := gmtLocal;
+//    GameType        := gmtLocal;
     zoom            := cDefaultZoomLevel;
     ZoomValue       := cDefaultZoomLevel;
     WeaponTooltipTex:= nil;
@@ -2586,7 +2606,9 @@ begin
     isPaused        := false;
     isInMultiShoot  := false;
     isSpeed         := false;
+    SpeedStart      := 0;
     fastUntilLag    := false;
+    fastScrolling   := false;
     autoCameraOn    := true;
     cScriptName     := '';
     cSeed           := '';
@@ -2621,6 +2643,8 @@ begin
     SDWaterOpacity:= $80;
 
     LuaGoals:= '';
+
+    LuaTemplateNumber:= 0;
 end;
 
 procedure freeModule;

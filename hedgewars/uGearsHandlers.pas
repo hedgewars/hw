@@ -52,8 +52,8 @@ begin
     dA := hwSign(Gear^.dX);
     xx := dirs[Gear^.Angle].x;
     yy := dirs[Gear^.Angle].y;
-    xxn := dirs[(LongInt(Gear^.Angle) + 4 + dA) mod 4].x;
-    yyn := dirs[(LongInt(Gear^.Angle) + 4 + dA) mod 4].y;
+    xxn := dirs[(Gear^.Angle + dA) and 3].x;
+    yyn := dirs[(Gear^.Angle + dA) and 3].y;
 
     if (xx = 0) then
         if TestCollisionYwithGear(Gear, yy) <> 0 then

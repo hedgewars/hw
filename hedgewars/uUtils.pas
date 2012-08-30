@@ -43,7 +43,7 @@ function  IntToStr(n: LongInt): shortstring;
 function  StrToInt(s: shortstring): LongInt;
 function  FloatToStr(n: hwFloat): shortstring;
 
-function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
+function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat; inline;
 function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAnglef(const _dY, _dX: extended): LongInt;
@@ -61,6 +61,7 @@ function  endian(independent: LongWord): LongWord; inline;
 function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
 
 procedure AddFileLog(s: shortstring);
+procedure AddFileLogRaw(s: pchar); cdecl;
 
 function  CheckNoTeamOrHH: boolean; inline;
 
@@ -81,6 +82,9 @@ uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils;
 
 {$IFDEF DEBUGFILE}
 var f: textfile;
+{$IFDEF USE_VIDEO_RECORDING}
+    logMutex: TRTLCriticalSection; // mutex for debug file
+{$ENDIF}
 {$ENDIF}
 var CharArray: array[byte] of Char;
 
@@ -182,15 +186,11 @@ FloatToStr:= cstr(n) + '_' + inttostr(Lo(n.QWordValue))
 end;
 
 
-function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
+function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat; inline;
 var dY, dX: Extended;
 begin
-dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then
-    dY:= - dY;
-dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then
-    dX:= - dX;
+dY:= hwFloat2Float(_dY);
+dX:= hwFloat2Float(_dX);
 DxDy2Angle:= arctan2(dY, dX) * 180 / pi
 end;
 
@@ -198,12 +198,8 @@ function DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 const _16divPI: Extended = 16/pi;
 var dY, dX: Extended;
 begin
-dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then
-    dY:= - dY;
-dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then
-    dX:= - dX;
+dY:= hwFloat2Float(_dY);
+dX:= hwFloat2Float(_dX);
 DxDy2Angle32:= trunc(arctan2(dY, dX) * _16divPI) and $1f
 end;
 
@@ -211,12 +207,8 @@ function DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 const MaxAngleDivPI: Extended = cMaxAngle/pi;
 var dY, dX: Extended;
 begin
-dY:= _dY.QWordValue / $100000000;
-if _dY.isNegative then
-    dY:= - dY;
-dX:= _dX.QWordValue / $100000000;
-if _dX.isNegative then
-    dX:= - dX;
+dY:= hwFloat2Float(_dY);
+dX:= hwFloat2Float(_dX);
 DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
 end;
 
@@ -303,11 +295,31 @@ procedure AddFileLog(s: shortstring);
 begin
 s:= s;
 {$IFDEF DEBUGFILE}
+{$IFDEF USE_VIDEO_RECORDING}
+EnterCriticalSection(logMutex);
+{$ENDIF}
 writeln(f, inttostr(GameTicks)  + ': ' + s);
-flush(f)
+flush(f);
+{$IFDEF USE_VIDEO_RECORDING}
+LeaveCriticalSection(logMutex);
+{$ENDIF}
 {$ENDIF}
 end;
 
+procedure AddFileLogRaw(s: pchar); cdecl;
+begin
+s:= s;
+{$IFDEF DEBUGFILE}
+{$IFDEF USE_VIDEO_RECORDING}
+EnterCriticalSection(logMutex);
+{$ENDIF}
+write(f, s);
+flush(f);
+{$IFDEF USE_VIDEO_RECORDING}
+LeaveCriticalSection(logMutex);
+{$ENDIF}
+{$ENDIF}
+end;
 
 function CheckCJKFont(s: ansistring; font: THWFont): THWFont;
 var l, i : LongInt;
@@ -397,9 +409,17 @@ var logfileBase: shortstring;
 begin
 {$IFDEF DEBUGFILE}
     if isGame then
-        logfileBase:= 'game'
+    begin
+        if GameType = gmtRecord then
+            logfileBase:= 'rec'
+        else
+            logfileBase:= 'game';
+    end
     else
         logfileBase:= 'preview';
+{$IFDEF USE_VIDEO_RECORDING}
+    InitCriticalSection(logMutex);
+{$ENDIF}
 {$I-}
 {$IFDEF MOBILE}
     {$IFDEF IPHONEOS} Assign(f,'../Documents/hw-' + logfileBase + '.log'); {$ENDIF}
@@ -436,6 +456,9 @@ recordFileName:= '';
     writeln(f, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
     flush(f);
     close(f);
+{$IFDEF USE_VIDEO_RECORDING}
+    DoneCriticalSection(logMutex);
+{$ENDIF}
 {$ENDIF}
 end;
 

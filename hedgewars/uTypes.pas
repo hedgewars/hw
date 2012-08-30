@@ -39,7 +39,7 @@ type
     TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit, gsSuspend);
 
     // Game types that help determining what the engine is actually supposed to do
-    TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax);
+    TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax, gmtRecord);
 
     // Different files are stored in different folders, this enumeration is used to tell which folder to use
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
@@ -86,7 +86,7 @@ type
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
-            sprSlider
+            sprSlider, sprBotlevels
             );
 
     // Gears that interact with other Gears and/or Land
@@ -235,6 +235,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Kind: TGearType;
             Pos: Longword;
             doStep: TGearStepProcedure;
+            stepFreq: Longword;
             Radius: LongInt;
             Angle, Power : Longword;
             DirAngle: real;

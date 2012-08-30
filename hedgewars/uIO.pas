@@ -126,6 +126,7 @@ case s[1] of
                'D': GameType:= gmtDemo;
                'N': GameType:= gmtNet;
                'S': GameType:= gmtSave;
+               'V': GameType:= gmtRecord;
                else OutError(errmsgIncorrectUse + ' IPC "T" :' + s[2], true) end;
      'V': begin
               if s[2] = '.' then
@@ -406,7 +407,7 @@ with CurrentHedgehog^.Gear^,
             TargetPoint.Y:= putY
             end;
         AddFileLog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));
-        State:= State and not gstHHChooseTarget;
+        State:= State and (not gstHHChooseTarget);
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);
         end

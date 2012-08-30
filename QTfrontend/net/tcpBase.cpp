@@ -31,6 +31,8 @@ QPointer<QTcpServer> TCPBase::IPCServer(0);
 
 TCPBase::~TCPBase()
 {
+    if (IPCSocket)
+        IPCSocket->deleteLater();
 }
 
 TCPBase::TCPBase(bool demoMode) :
@@ -65,6 +67,9 @@ void TCPBase::NewConnection()
     connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
     connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     SendToClientFirst();
+
+    if(srvsList.size()==1) srvsList.pop_front();
+    emit isReadyNow();
 }
 
 void TCPBase::RealStart()
@@ -88,8 +93,8 @@ void TCPBase::ClientDisconnect()
     disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     onClientDisconnect();
 
-    if(srvsList.size()==1) srvsList.pop_front();
-    emit isReadyNow();
+ /*   if(srvsList.size()==1) srvsList.pop_front();
+    emit isReadyNow();*/
     IPCSocket->deleteLater();
     deleteLater();
 }
@@ -107,6 +112,8 @@ void TCPBase::StartProcessError(QProcess::ProcessError error)
     QMessageBox::critical(0, tr("Error"),
                           tr("Unable to run engine: %1 (")
                           .arg(error) + bindir->absolutePath() + "/hwengine)");
+
+    ClientDisconnect();
 }
 
 void TCPBase::tcpServerReady()

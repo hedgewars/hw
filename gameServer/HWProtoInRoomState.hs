@@ -278,6 +278,14 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     where
         engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "(team): ", msg, "\x20\x20"]
 
+handleCmd_inRoom ["BAN", banNick] = do
+    (_, rnc) <- ask
+    maybeClientId <- clientByNick banNick
+    let banId = fromJust maybeClientId
+    master <- liftM isMaster thisClient
+    return [ModifyRoom (\r -> r{roomBansList = (host $ rnc `client` banId) : roomBansList r}) | master && isJust maybeClientId]
+
+
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 
 handleCmd_inRoom (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: in room)"]

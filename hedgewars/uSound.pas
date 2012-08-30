@@ -587,11 +587,8 @@ begin
     RegisterVariable('mute'     , @chMute     , true );
 
     MusicFN:='';
-    isMusicEnabled:= true;
-    isSoundEnabled:= true;
     isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;
-    cInitVolume:= 100;
     Volume:= 0;
     defVoicepack:= AskForVoicepack('Default');
 
@@ -615,6 +612,11 @@ procedure freeModule;
 begin
     if isSoundEnabled then
         ReleaseSound(true);
+    // koda still needs to fix this properly.  when he rearranged things, he made these variables get
+    // reset after argparsers picks them up
+    isMusicEnabled:= true;
+    isSoundEnabled:= true;
+    cInitVolume:= 100;
 end;
 
 end.
