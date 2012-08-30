@@ -40,13 +40,17 @@ procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
 procedure MakeCrossHairs;
+{$IFDEF USE_VIDEO_RECORDING}
+procedure InitOffscreenOpenGL;
+{$ENDIF}
 
 procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; inline;
 
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
-     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
+     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
+     {$IF NOT DEFINED(SDL13) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -131,10 +135,11 @@ end;
 
 procedure WriteNames(Font: THWFont);
 var t: LongInt;
-    i: LongInt;
+    i, maxLevel: LongInt;
     r, rr: TSDL_Rect;
     drY: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
+    foundBot: boolean;
 begin
 r.x:= 0;
 r.y:= 0;
@@ -151,7 +156,7 @@ for t:= 0 to Pred(TeamsCount) do
         TryDo(texsurf <> nil, errmsgCreateSurface, true);
         TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-        DrawRoundRect(@r, cWhiteColor, cNearBlackColorChannels.value, texsurf, true);
+        DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
         rr:= r;
         inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
         DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
@@ -172,11 +177,28 @@ for t:= 0 to Pred(TeamsCount) do
         DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
 
         // overwrite flag for cpu teams and keep players from using it
-        if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
-            if Flag = 'hedgewars' then
-                Flag:= 'cpu'
-        else if Flag = 'cpu' then
-            Flag:= 'hedgewars';
+        foundBot:= false;
+        maxLevel:= -1;
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i] do
+                if (Gear <> nil) and (BotLevel > 0) then
+                    begin
+                    foundBot:= true;
+                    // initially was going to do the highest botlevel of the team, but for now, just apply if entire team has same bot level
+                    if maxLevel = -1 then maxLevel:= BotLevel
+                    else if (maxLevel > 0) and (maxLevel <> BotLevel) then maxLevel:= 0; 
+                    //if (maxLevel > 0) and (BotLevel < maxLevel) then maxLevel:= BotLevel
+                    end
+                else if Gear <> nil then  maxLevel:= 0;
+
+        if foundBot then
+            begin
+            // disabled the plain flag - I think it looks ok even w/ full bars obscuring CPU
+            //if (maxLevel > 0) and (maxLevel < 3) then Flag:= 'cpu_plain' else 
+            Flag:= 'cpu'
+            end
+        else if (Flag = 'cpu') or (Flag = 'cpu_plain') then
+                Flag:= 'hedgewars';
 
         flagsurf:= LoadImage(UserPathz[ptFlags] + '/' + Flag, ifNone);
         if flagsurf = nil then
@@ -186,15 +208,26 @@ for t:= 0 to Pred(TeamsCount) do
         if flagsurf = nil then
             flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
         TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
+
+        case maxLevel of
+            1: copyToXY(SpritesData[sprBotlevels].Surface, flagsurf, 0, 0); 
+            2: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 5, 2, 17, 13, 5, 2); 
+            3: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 9, 5, 13, 10, 9, 5); 
+            4: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 13, 9, 9, 6, 13, 9); 
+            5: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 17, 11, 5, 4, 17, 11)
+            end;
+
         copyToXY(flagsurf, texsurf, 2, 2);
         SDL_FreeSurface(flagsurf);
         flagsurf:= nil;
+
 
         // restore black border pixels inside the flag
         PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
         PLongwordArray(texsurf^.pixels)^[32 * 2 + 23]:= cNearBlackColor;
         PLongwordArray(texsurf^.pixels)^[32 * 16 +  2]:= cNearBlackColor;
         PLongwordArray(texsurf^.pixels)^[32 * 16 + 23]:= cNearBlackColor;
+
 
         FlagTex:= Surface2Tex(texsurf, false);
         SDL_FreeSurface(texsurf);
@@ -204,7 +237,7 @@ for t:= 0 to Pred(TeamsCount) do
 
         dec(drY, r.h + 2);
         DrawHealthY:= drY;
-        for i:= 0 to 7 do
+        for i:= 0 to cMaxHHIndex do
             with Hedgehogs[i] do
                 if Gear <> nil then
                     begin
@@ -294,7 +327,6 @@ if not reload then
             WriteLnToConsole(msgOK)
             end;
 
-WriteNames(fnt16);
 MakeCrossHairs;
 LoadGraves;
 if not reload then
@@ -391,6 +423,8 @@ for ii:= Low(TSprite) to High(TSprite) do
                 Surface:= nil
         end;
 
+WriteNames(fnt16);
+
 if not reload then
     AddProgress;
 
@@ -437,6 +471,31 @@ if not reload then
     AddProgress;
 IMG_Quit();
 end;
+
+{$IF NOT DEFINED(S3D_DISABLED) OR DEFINED(USE_VIDEO_RECORDING)}
+procedure CreateFramebuffer(var frame, depth, tex: GLuint);
+begin
+    glGenFramebuffersEXT(1, @frame);
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frame);
+    glGenRenderbuffersEXT(1, @depth);
+    glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depth);
+    glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
+    glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depth);
+    glGenTextures(1, @tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, tex, 0);
+end;
+
+procedure DeleteFramebuffer(var frame, depth, tex: GLuint);
+begin
+    glDeleteTextures(1, @tex);
+    glDeleteRenderbuffersEXT(1, @depth);
+    glDeleteFramebuffersEXT(1, @frame);
+end;
+{$ENDIF}
 
 procedure StoreRelease(reload: boolean);
 var ii: TSprite;
@@ -511,15 +570,15 @@ for i:= Low(CountTexz) to High(CountTexz) do
                 end;
             end;
         end;
+{$IFDEF USE_VIDEO_RECORDING}
+    if defaultFrame <> 0 then
+        DeleteFramebuffer(defaultFrame, depthv, texv);
+{$ENDIF}
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
         begin
-        glDeleteTextures(1, @texl);
-        glDeleteRenderbuffersEXT(1, @depthl);
-        glDeleteFramebuffersEXT(1, @framel);
-        glDeleteTextures(1, @texr);
-        glDeleteRenderbuffersEXT(1, @depthr);
-        glDeleteFramebuffersEXT(1, @framer)
+        DeleteFramebuffer(framel, depthl, texl);
+        DeleteFramebuffer(framer, depthr, texr);
         end
 {$ENDIF}
 end;
@@ -628,6 +687,7 @@ end;
 procedure SetupOpenGL;
 //var vendor: shortstring = '';
 var buf: array[byte] of char;
+    AuxBufNum: LongInt;
 begin
     buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
@@ -673,14 +733,43 @@ begin
 {$ENDIF}
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
 *)
+    glGetIntegerv(GL_AUX_BUFFERS, @AuxBufNum);
 
     // everyone love debugging
     AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
     AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
     AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
     AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
-    AddFileLog('  \----- Extensions: ' + shortstring(pchar(glGetString(GL_EXTENSIONS))));
-    //TODO: don't have the Extensions line trimmed but slipt it into multiple lines
+    AddFileLog('  |----- Number of auxilary buffers: ' + inttostr(AuxBufNum));
+    AddFileLog('  \----- Extensions: ');
+    AddFileLogRaw(glGetString(GL_EXTENSIONS));
+    AddFileLog('');
+    //TODO: slipt Extensions line into multiple lines
+
+    defaultFrame:= 0;
+{$IFDEF USE_VIDEO_RECORDING}
+    if GameType = gmtRecord then
+    begin
+        if glLoadExtension('GL_EXT_framebuffer_object') then
+        begin
+            CreateFramebuffer(defaultFrame, depthv, texv);
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame);
+            AddFileLog('Using framebuffer for video recording.');
+        end
+        else if AuxBufNum > 0 then
+        begin
+            glDrawBuffer(GL_AUX0);
+            glReadBuffer(GL_AUX0);
+            AddFileLog('Using auxilary buffer for video recording.');
+        end
+        else
+        begin
+            glDrawBuffer(GL_BACK);
+            glReadBuffer(GL_BACK);
+            AddFileLog('Warning: off-screen rendering is not supported; using back buffer but it may not work.');
+        end;
+    end;
+{$ENDIF}
 
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
@@ -688,36 +777,11 @@ begin
         // prepare left and right frame buffers and associated textures
         if glLoadExtension('GL_EXT_framebuffer_object') then
             begin
-            // left
-            glGenFramebuffersEXT(1, @framel);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
-            glGenRenderbuffersEXT(1, @depthl);
-            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthl);
-            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthl);
-            glGenTextures(1, @texl);
-            glBindTexture(GL_TEXTURE_2D, texl);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texl, 0);
-
-            // right
-            glGenFramebuffersEXT(1, @framer);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
-            glGenRenderbuffersEXT(1, @depthr);
-            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthr);
-            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthr);
-            glGenTextures(1, @texr);
-            glBindTexture(GL_TEXTURE_2D, texr);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texr, 0);
+            CreateFramebuffer(framel, depthl, texl);
+            CreateFramebuffer(framer, depthr, texr);
 
             // reset
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame)
             end
         else
             cStereoMode:= smNone;
@@ -991,6 +1055,34 @@ FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
 end;
 
+{$IFDEF USE_VIDEO_RECORDING}
+{$IFDEF SDL13}
+procedure InitOffscreenOpenGL;
+begin
+    // create hidden window
+    SDLwindow:= SDL_CreateWindow('hedgewars (you don''t see this)',
+                                 SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK,
+                                 cScreenWidth, cScreenHeight,
+                                 SDL_WINDOW_HIDDEN or SDL_WINDOW_OPENGL);
+    SDLTry(SDLwindow <> nil, true);
+    SetupOpenGL();
+end;
+{$ELSE}
+procedure InitOffscreenOpenGL;
+var ArgCount: LongInt;
+    PrgName: pchar;
+begin
+    ArgCount:= 1;
+    PrgName:= 'hwengine';
+    glutInit(@ArgCount, @PrgName);
+    glutInitWindowSize(cScreenWidth, cScreenHeight);
+    glutCreateWindow('hedgewars (you don''t see this)'); // we don't need a window, but if this function is not called then OpenGL will not be initialized
+    glutHideWindow();
+    SetupOpenGL();
+end;
+{$ENDIF} // SDL13
+{$ENDIF} // USE_VIDEO_RECORDING
+
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     reinit: boolean = false;
@@ -1171,6 +1263,8 @@ end;
 
 procedure SwapBuffers; inline;
 begin
+    if GameType = gmtRecord then
+        exit;
 {$IFDEF SDL13}
     SDL_GL_SwapWindow(SDLwindow);
 {$ELSE}

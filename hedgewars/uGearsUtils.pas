@@ -38,6 +38,8 @@ procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; sk
 
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
 function  CheckGearDrowning(Gear: PGear): boolean;
+procedure CheckCollision(Gear: PGear); inline;
+procedure CheckCollisionWithLand(Gear: PGear); inline;
 
 var doStepHandlers: array[TGearType] of TGearStepProcedure;
 
@@ -106,7 +108,7 @@ while Gear <> nil do
 // Run the calcs only once we know we have a type that will need damage
                         tdX:= Gear^.X-fX;
                         tdY:= Gear^.Y-fY;
-                        if hwRound(hwAbs(tdX)+hwAbs(tdY)) < dmgBase then
+                        if (tdX.Round + tdY.Round + 2) < dmgBase then
                             dmg:= dmgBase - hwRound(Distance(tdX, tdY));
                         if dmg > 1 then
                             begin
@@ -140,7 +142,7 @@ while Gear <> nil do
 // Run the calcs only once we know we have a type that will need damage
                         tdX:= Gear^.X-fX;
                         tdY:= Gear^.Y-fY;
-                        if hwRound(hwAbs(tdX)+hwAbs(tdY)) < dmgBase then
+                        if (tdX.Round + tdY.Round + 2) < dmgBase then
                             dmg:= dmgBase - hwRound(Distance(tdX, tdY));
                         if dmg > 1 then
                             begin
@@ -239,9 +241,7 @@ begin
         end;
     end
     else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
-        begin
         Gear^.Hedgehog:= AttackerHog;
-        end;
     inc(Gear^.Damage, Damage);
     
     ScriptCall('onGearDamage', Gear^.UID, Damage);
@@ -319,7 +319,8 @@ procedure CalcRotationDirAngle(Gear: PGear);
 var 
     dAngle: real;
 begin
-    dAngle := (Gear^.dX.QWordValue + Gear^.dY.QWordValue) / $80000000;
+// Frac/Round to be kind to JS as of 2012-08-27 where there is yet no int64/uint64
+    dAngle := (Gear^.dX.Round + Gear^.dY.Round) / 2 + (Gear^.dX.Frac+Gear^.dY.Frac) / $80000000;
     if not Gear^.dX.isNegative then
         Gear^.DirAngle := Gear^.DirAngle + dAngle
     else
@@ -420,10 +421,9 @@ begin
                 Scale:= hwFloat2Float(Gear^.Density / _3 * Gear^.dY);
                 if Scale > 1 then Scale:= power(Scale,0.3333)
                 else Scale:= Scale + ((1-Scale) / 2);
-                if Scale > 1 then Timer:= round(max(Scale,3))
+                if Scale > 1 then Timer:= round(min(Scale*0.0005/cGravityf,4))
                 else Timer:= 1;
                 // Low Gravity
-                Timer:=round(0.0005/cGravityf);
                 FrameTicks:= FrameTicks*Timer;
                 end;
 
@@ -604,7 +604,7 @@ while tryAgain do
                     inc(cnt)
                     end;
 
-                inc(y, 45)
+                inc(y, 10)
                 end;
 
             if cnt > 0 then
@@ -662,6 +662,24 @@ while t <> nil do
     end;
 
 CheckGearNear:= nil
+end;
+
+procedure CheckCollision(Gear: PGear); inline;
+begin
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
+    or (TestCollisionYwithGear(Gear, hwSign(Gear^.dY)) <> 0) then
+        Gear^.State := Gear^.State or gstCollision
+    else
+        Gear^.State := Gear^.State and (not gstCollision)
+end;
+
+procedure CheckCollisionWithLand(Gear: PGear); inline;
+begin
+    if TestCollisionX(Gear, hwSign(Gear^.dX))
+    or TestCollisionY(Gear, hwSign(Gear^.dY)) then
+        Gear^.State := Gear^.State or gstCollision
+    else 
+        Gear^.State := Gear^.State and (not gstCollision)
 end;
 
 end.

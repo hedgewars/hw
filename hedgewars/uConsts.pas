@@ -28,6 +28,7 @@ uses    SDLh, uFloat, GLunit;
 const
     sfMax = 1000;
     cDefaultParamNum = 17;
+    cVideorecParamNum = cDefaultParamNum + 7;
 
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';
@@ -146,6 +147,7 @@ const
     cBarrelHealth = 60;
     cShotgunRadius = 22;
     cBlowTorchC    = 6;
+    cakeDmg =   75;
 
     cKeyMaxIndex = 1023;
     cKbdMaxIndex = 65536;//need more room for the modifier keys
@@ -244,6 +246,7 @@ const
 
     gmRemoveFromList = $00004000;
     gmAddToList      = $00008000;
+    gmDelete         = $00010000;
     gmAllStoppable = gmLeft or gmRight or gmUp or gmDown or gmAttack or gmPrecise;
 
     cMaxSlotIndex       = 9;
@@ -266,6 +269,7 @@ const
     ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets 
     ammoprop_OscAim       = $00010000;
     ammoprop_NoMoveAfter  = $00020000;
+    ammoprop_Track        = $00040000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;

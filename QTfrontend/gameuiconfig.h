@@ -59,18 +59,27 @@ class GameUIConfig : public QSettings
         void resizeToConfigValues();
         quint32 stereoMode() const;
 
+        QString AVFormat();
+        QString videoCodec();
+        QString audioCodec();
+        QRect rec_Resolution();
+        int rec_Framerate();
+        bool recordAudio();
+
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED
         bool isAutoUpdateEnabled();
 #endif
 #endif
-        void reloadValues(void);
+        void reloadValues();
+        void reloadVideosValues();
 
     signals:
         void frontendFullscreen(bool value);
 
     public slots:
         void SaveOptions();
+        void SaveVideosOptions();
         void updNetNick();
     private:
         bool netPasswordIsValid();

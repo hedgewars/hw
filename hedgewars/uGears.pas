@@ -59,7 +59,7 @@ implementation
 uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
     uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
-    uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers;
+    uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers, uGearsHandlersRope;
 
 var skipFlag: boolean;
 
@@ -77,6 +77,7 @@ var delay: LongWord;
     stAfterDelay, stChWin, stWater, stChWin2, stHealth,
     stSpawn, stNTurn);
     upd: Longword;
+    snowLeft,snowRight: LongInt;
     //SDMusic: shortstring;
 
 // For better maintainability the step handlers of gears are stored in
@@ -206,23 +207,28 @@ while t <> nil do
     curHandledGear:= t;
     t:= curHandledGear^.NextGear;
 
-    if curHandledGear^.Message and gmRemoveFromList <> 0 then 
+    if curHandledGear^.Message and gmDelete <> 0 then
+        DeleteGear(curHandledGear)
+    else
         begin
-        RemoveGearFromList(curHandledGear);
-        // since I can't think of any good reason this would ever be separate from a remove from list, going to keep it inside this block
-        if curHandledGear^.Message and gmAddToList <> 0 then InsertGearToList(curHandledGear);
-        curHandledGear^.Message:= curHandledGear^.Message and not (gmRemoveFromList or gmAddToList)
-        end;
-    if curHandledGear^.Active then
-        begin
-        if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then
+        if curHandledGear^.Message and gmRemoveFromList <> 0 then 
             begin
-            FreeTexture(curHandledGear^.Tex);
-            curHandledGear^.Tex:= RenderStringTex(inttostr(curHandledGear^.Timer div 1000), cWhiteColor, fntSmall);
+            RemoveGearFromList(curHandledGear);
+            // since I can't think of any good reason this would ever be separate from a remove from list, going to keep it inside this block
+            if curHandledGear^.Message and gmAddToList <> 0 then InsertGearToList(curHandledGear);
+            curHandledGear^.Message:= curHandledGear^.Message and (not (gmRemoveFromList or gmAddToList))
             end;
-        curHandledGear^.doStep(curHandledGear);
-        // might be useful later
-        //ScriptCall('onGearStep', Gear^.uid);
+        if curHandledGear^.Active then
+            begin
+            if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then
+                begin
+                FreeTexture(curHandledGear^.Tex);
+                curHandledGear^.Tex:= RenderStringTex(inttostr(curHandledGear^.Timer div 1000), cWhiteColor, fntSmall);
+                end;
+            curHandledGear^.doStep(curHandledGear);
+            // might be useful later
+            //ScriptCall('onGearStep', Gear^.uid);
+            end
         end
     end;
 curHandledGear:= nil;
@@ -634,18 +640,21 @@ if (GameFlags and gfLaserSight) <> 0 then
 
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
-
-for i:= 0 to GetRandom(10)+30 do
-    begin                                                                                                                                       rx:= GetRandom(rightX-leftX)+leftX;
+for i:= GetRandom(10)+30 downto 0 do
+    begin
+    rx:= GetRandom(rightX-leftX)+leftX;
     ry:= GetRandom(LAND_HEIGHT-topY)+topY;
     rdx:= _90-(GetRandomf*_360);
     rdy:= _90-(GetRandomf*_360);
     AddGear(rx, ry, gtGenericFaller, gstInvisible, rdx, rdy, $FFFFFFFF);
     end;
 
+snowRight:= max(LAND_WIDTH,4096)+512;
+snowLeft:= -(snowRight-LAND_WIDTH);
+
 if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
-    for i:= 0 to Pred(vobCount*2) do
-        AddGear(GetRandom(LAND_WIDTH+1024)-512, LAND_HEIGHT - GetRandom(LAND_HEIGHT div 2), gtFlake, 0, _0, _0, 0);
+    for i:= vobCount * max(LAND_WIDTH,4096) div 2048 downto 1 do
+        AddGear(GetRandom(snowRight-snowLeft)+snowLeft, LAND_HEIGHT-1300+GetRandom(750), gtFlake, 0, _0, _0, 0);
 end;
 
 

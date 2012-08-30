@@ -28,6 +28,7 @@ endif()
 # Configure for SDL
 find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
+find_package(FFMPEG)
 
 include_directories(.)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
@@ -39,6 +40,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
+include_directories(${FFMPEG_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
@@ -70,6 +72,10 @@ file(GLOB NetCpp net/*.cpp)
 file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
+
+if((NOT NO_VIDEOREC) AND "${FFMPEG_FOUND}")
+    add_definitions(-DVIDEOREC)
+endif()
 
 set(hwfr_src
     ${ModelCpp}
@@ -172,6 +178,7 @@ set(HW_LINK_LIBS
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
+    ${FFMPEG_LIBRARIES}
     ${HW_LINK_LIBS}
     )
 

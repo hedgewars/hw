@@ -82,7 +82,7 @@ with cinfos[Count] do
     X:= hwRound(Gear^.X);
     Y:= hwRound(Gear^.Y);
     Radius:= Gear^.Radius;
-    ChangeRoundInLand(X, Y, Radius - 1, true, Gear = CurrentHedgehog^.Gear);
+    ChangeRoundInLand(X, Y, Radius - 1, true, (Gear = CurrentHedgehog^.Gear) or (Gear^.Kind = gtCase));
     cGear:= Gear
     end;
 Gear^.CollisionIndex:= Count;
@@ -103,7 +103,7 @@ begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, false, Gear = CurrentHedgehog^.Gear);
+        ChangeRoundInLand(X, Y, Radius - 1, false, (Gear = CurrentHedgehog^.Gear) or (Gear^.Kind = gtCase));
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;
@@ -138,7 +138,7 @@ function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
-if (Gear^.CollisionMask = $FF7F) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+if (Gear^.CollisionMask = $FF7F) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
     ((hwRound(Gear^.Hedgehog^.Gear^.X) + Gear^.Hedgehog^.Gear^.Radius + 4 < hwRound(Gear^.X) - Gear^.Radius) or
      (hwRound(Gear^.Hedgehog^.Gear^.X) - Gear^.Hedgehog^.Gear^.Radius - 4 > hwRound(Gear^.X) + Gear^.Radius)) then
     Gear^.CollisionMask:= $FFFF;
@@ -168,7 +168,7 @@ function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 var x, y, i: LongInt;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
-if (Gear^.CollisionMask = $FF7F) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+if (Gear^.CollisionMask = $FF7F) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
     ((hwRound(Gear^.Hedgehog^.Gear^.Y) + Gear^.Hedgehog^.Gear^.Radius + 4 < hwRound(Gear^.Y) - Gear^.Radius) or
      (hwRound(Gear^.Hedgehog^.Gear^.Y) - Gear^.Hedgehog^.Gear^.Radius - 4 > hwRound(Gear^.Y) + Gear^.Radius)) then
     Gear^.CollisionMask:= $FFFF;

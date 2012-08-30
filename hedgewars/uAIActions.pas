@@ -44,6 +44,7 @@ const MAXACTIONS     = 96;
     aia_Wait       = $8009;
     aia_Put        = $800A;
     aia_waitAngle  = $800B;
+    aia_waitAmmoXY = $800C;
     
     aim_push       = $8000;
     aim_release    = $8001;
@@ -115,19 +116,19 @@ end;
 
 procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; TimeDelta: Longword; X, Y: LongInt);
 begin
-with Actions do
-    begin
-    actions[Count].Action:= Action;
-    actions[Count].Param:= Param;
-    actions[Count].X:= X;
-    actions[Count].Y:= Y;
-    if Count > 0 then
-        actions[Count].Time:= TimeDelta
-    else
-        actions[Count].Time:= GameTicks + TimeDelta;
-    inc(Count);
-    TryDo(Count < MAXACTIONS, 'AI: actions overflow', true);
-    end
+if Actions.Count < MAXACTIONS then
+    with Actions do
+        begin
+        actions[Count].Action:= Action;
+        actions[Count].Param:= Param;
+        actions[Count].X:= X;
+        actions[Count].Y:= Y;
+        if Count > 0 then
+            actions[Count].Time:= TimeDelta
+        else
+            actions[Count].Time:= GameTicks + TimeDelta;
+        inc(Count);
+        end
 end;
 
 procedure CheckHang(Me: PGear);
@@ -234,6 +235,10 @@ with Actions.actions[Actions.Pos] do
                 
             aia_waitAngle:
                 if Me^.Angle <> Abs(Param) then exit;
+
+            aia_waitAmmoXY:
+                if (CurAmmoGear <> nil) and ((hwRound(CurAmmoGear^.X) <> X) or (hwRound(CurAmmoGear^.Y) <> Y)) then exit;
+
             end
         else
             begin

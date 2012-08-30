@@ -17,24 +17,32 @@ import qualified Data.Set as Set
 import Data.List (find)
 import Numeric
 
-import PascalParser
+import PascalParser(pascalUnit)
 import PascalUnitSyntaxTree
 
 
 data InsertOption =
     IOInsert
+    | IOInsertWithType Doc
     | IOLookup
     | IOLookupLast
     | IOLookupFunction Int
     | IODeferred
 
-type Record = (String, BaseType)
+data Record = Record
+    {
+        lcaseId :: String,
+        baseType :: BaseType,
+        typeDecl :: Doc
+    }
+    deriving Show
 type Records = Map.Map String [Record]
 data RenderState = RenderState
     {
         currentScope :: Records,
         lastIdentifier :: String,
         lastType :: BaseType,
+        lastIdTypeDecl :: Doc,
         stringConsts :: [(String, String)],
         uniqCounter :: Int,
         toMangle :: Set.Set String,
@@ -43,7 +51,9 @@ data RenderState = RenderState
         namespaces :: Map.Map String Records
     }
 
-emptyState = RenderState Map.empty "" BTUnknown [] 0 Set.empty "" ""
+rec2Records = map (\(a, b) -> Record a b empty)
+
+emptyState = RenderState Map.empty "" BTUnknown empty [] 0 Set.empty "" ""
 
 getUniq :: State RenderState Int
 getUniq = do
@@ -71,13 +81,14 @@ escapeStr = foldr escapeChar []
 
 escapeChar :: Char -> ShowS
 escapeChar '"' s = "\\\"" ++ s
+escapeChar '\\' s = "\\\\" ++ s
 escapeChar a s = a : s
 
 strInit :: String -> Doc
 strInit a = text "STRINIT" <> parens (doubleQuotes (text $ escapeStr a))
 
 renderStringConsts :: State RenderState Doc
-renderStringConsts = liftM (vcat . map (\(a, b) -> text "const string255" <+> (text a) <+> text "=" <+> strInit b <> semi))
+renderStringConsts = liftM (vcat . map (\(a, b) -> text "static const string255" <+> (text a) <+> text "=" <+> strInit b <> semi))
     $ gets stringConsts
 
 docToLower :: Doc -> Doc
@@ -132,10 +143,16 @@ renderCFiles units = do
         where
         f = do
             checkDuplicateFunDecls tvs
-            mapM_ (tvar2C True) tvs
+            mapM_ (tvar2C True False True False) tvs
+    toNamespace nss (Redo tvs) = -- functions that are re-implemented, add prefix to all of them
+        currentScope $ execState f (emptyState nss){currentUnit = "fpcrtl_"}
+        where
+        f = do
+            checkDuplicateFunDecls tvs
+            mapM_ (tvar2C True False True False) tvs
     toNamespace _ (Program {}) = Map.empty
     toNamespace nss (Unit (Identifier i _) interface _ _ _) =
-        currentScope $ execState (interface2C interface) (emptyState nss){currentUnit = map toLower i ++ "_"}
+        currentScope $ execState (interface2C interface True) (emptyState nss){currentUnit = map toLower i ++ "_"}
 
 
 withState' :: (RenderState -> RenderState) -> State RenderState a -> State RenderState a
@@ -149,65 +166,72 @@ withState' f sf = do
         })
     return a
 
-withLastIdNamespace :: State RenderState Doc -> State RenderState Doc
 withLastIdNamespace f = do
     li <- gets lastIdentifier
     nss <- gets namespaces
     withState' (\st -> st{currentScope = fromMaybe Map.empty $ Map.lookup li (namespaces st)}) f
 
-withRecordNamespace :: String -> [(String, BaseType)] -> State RenderState Doc -> State RenderState Doc
+withRecordNamespace :: String -> [Record] -> State RenderState Doc -> State RenderState Doc
 withRecordNamespace _ [] = error "withRecordNamespace: empty record"
 withRecordNamespace prefix recs = withState' f
     where
         f st = st{currentScope = Map.unionWith un records (currentScope st), currentUnit = ""}
-        records = Map.fromList $ map (\(a, b) -> (map toLower a, [(prefix ++ a, b)])) recs
+        records = Map.fromList $ map (\(Record a b d) -> (map toLower a, [Record (prefix ++ a) b d])) recs
         un [a] b = a : b
 
 toCFiles :: Map.Map String Records -> (String, PascalUnit) -> IO ()
 toCFiles _ (_, System _) = return ()
+toCFiles _ (_, Redo _) = return ()
 toCFiles ns p@(fn, pu) = do
     hPutStrLn stdout $ "Rendering '" ++ fn ++ "'..."
     toCFiles' p
     where
-    toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ (render2C initialState . pascal2C) p
+    toCFiles' (fn, p@(Program {})) = writeFile (fn ++ ".c") $ "#include \"fpcrtl.h\"\n" ++ (render2C initialState . pascal2C) p
     toCFiles' (fn, (Unit unitId@(Identifier i _) interface implementation _ _)) = do
-        let (a, s) = runState (id2C IOInsert (setBaseType BTUnit unitId) >> interface2C interface) initialState{currentUnit = map toLower i ++ "_"}
+        let (a, s) = runState (id2C IOInsert (setBaseType BTUnit unitId) >> interface2C interface True) initialState{currentUnit = map toLower i ++ "_"}
+            (a', s') = runState (id2C IOInsert (setBaseType BTUnit unitId) >> interface2C interface False) initialState{currentUnit = map toLower i ++ "_"}
         writeFile (fn ++ ".h") $ "#pragma once\n\n#include \"pas2c.h\"\n\n" ++ (render (a $+$ text ""))
-        writeFile (fn ++ ".c") $ "#include \"" ++ fn ++ ".h\"\n" ++ (render2C s . implementation2C) implementation
+        writeFile (fn ++ ".c") $ "#include \"fpcrtl.h\"\n\n#include \"" ++ fn ++ ".h\"\n" ++ render (a' $+$ text "") ++ (render2C s . implementation2C) implementation
     initialState = emptyState ns
 
     render2C :: RenderState -> State RenderState Doc -> String
     render2C a = render . ($+$ empty) . flip evalState a
 
-usesFiles :: PascalUnit -> [String]
-usesFiles (Program _ (Implementation uses _) _) = "pas2cSystem" : uses2List uses
-usesFiles (Unit _ (Interface uses1 _) (Implementation uses2 _) _ _) = "pas2cSystem" : uses2List uses1 ++ uses2List uses2
-usesFiles (System {}) = []
 
+usesFiles :: PascalUnit -> [String]
+usesFiles (Program _ (Implementation uses _) _) = ["pas2cSystem", "pas2cRedo"] ++ uses2List uses
+usesFiles (Unit _ (Interface uses1 _) (Implementation uses2 _) _ _) = ["pas2cSystem", "pas2cRedo"] ++ uses2List uses1 ++ uses2List uses2
+usesFiles (System {}) = []
+usesFiles (Redo {}) = []
 
 pascal2C :: PascalUnit -> State RenderState Doc
 pascal2C (Unit _ interface implementation init fin) =
-    liftM2 ($+$) (interface2C interface) (implementation2C implementation)
+    liftM2 ($+$) (interface2C interface True) (implementation2C implementation)
 
 pascal2C (Program _ implementation mainFunction) = do
     impl <- implementation2C implementation
-    [main] <- tvar2C True
-        (FunctionDeclaration (Identifier "main" BTInt) (SimpleType $ Identifier "int" BTInt) [] (Just (TypesAndVars [], mainFunction)))
+    [main] <- tvar2C True False True True (FunctionDeclaration (Identifier "main" BTInt) False (SimpleType $ Identifier "int" BTInt) [VarDeclaration False False ([Identifier "argc" BTInt], SimpleType (Identifier "Integer" BTInt)) Nothing, VarDeclaration False False ([Identifier "argv" BTUnknown], SimpleType (Identifier "PPChar" BTUnknown)) Nothing] (Just (TypesAndVars [], mainFunction)))
     return $ impl $+$ main
 
 
-
-interface2C :: Interface -> State RenderState Doc
-interface2C (Interface uses tvars) = do
+-- the second bool indicates whether do normal interface translation or generate variable declarations
+-- that will be inserted into implementation files
+interface2C :: Interface -> Bool -> State RenderState Doc
+interface2C (Interface uses tvars) True = do
     u <- uses2C uses
-    tv <- typesAndVars2C True tvars
+    tv <- typesAndVars2C True True True tvars
     r <- renderStringConsts
     return (u $+$ r $+$ tv)
+interface2C (Interface uses tvars) False = do
+    u <- uses2C uses
+    tv <- typesAndVars2C True False False tvars
+    r <- renderStringConsts
+    return tv
 
 implementation2C :: Implementation -> State RenderState Doc
 implementation2C (Implementation uses tvars) = do
     u <- uses2C uses
-    tv <- typesAndVars2C True tvars
+    tv <- typesAndVars2C True False True tvars
     r <- renderStringConsts
     return (u $+$ r $+$ tv)
 
@@ -217,20 +241,25 @@ checkDuplicateFunDecls tvs =
     where
         initMap = Map.empty
         --initMap = Map.fromList [("reset", 2)]
-        ins (FunctionDeclaration (Identifier i _) _ _ _) m = Map.insertWith (+) (map toLower i) 1 m
+        ins (FunctionDeclaration (Identifier i _) _ _ _ _) m = Map.insertWith (+) (map toLower i) 1 m
         ins _ m = m
 
-typesAndVars2C :: Bool -> TypesAndVars -> State RenderState Doc
-typesAndVars2C b (TypesAndVars ts) = do
+-- the second bool indicates whether declare variable as extern or not
+-- the third bool indicates whether include types or not
+
+typesAndVars2C :: Bool -> Bool -> Bool -> TypesAndVars -> State RenderState Doc
+typesAndVars2C b externVar includeType(TypesAndVars ts) = do
     checkDuplicateFunDecls ts
-    liftM (vcat . map (<> semi) . concat) $ mapM (tvar2C b) ts
+    liftM (vcat . map (<> semi) . concat) $ mapM (tvar2C b externVar includeType False) ts
 
 setBaseType :: BaseType -> Identifier -> Identifier
 setBaseType bt (Identifier i _) = Identifier i bt
 
 uses2C :: Uses -> State RenderState Doc
 uses2C uses@(Uses unitIds) = do
+
     mapM_ injectNamespace (Identifier "pas2cSystem" undefined : unitIds)
+    mapM_ injectNamespace (Identifier "pas2cRedo" undefined : unitIds)
     mapM_ (id2C IOInsert . setBaseType BTUnit) unitIds
     return $ vcat . map (\i -> text $ "#include \"" ++ i ++ ".h\"") $ uses2List uses
     where
@@ -242,8 +271,11 @@ uses2List :: Uses -> [String]
 uses2List (Uses ids) = map (\(Identifier i _) -> i) ids
 
 
+setLastIdValues vv = (\s -> s{lastType = baseType vv, lastIdentifier = lcaseId vv, lastIdTypeDecl = typeDecl vv})
+
 id2C :: InsertOption -> Identifier -> State RenderState Doc
-id2C IOInsert (Identifier i t) = do
+id2C IOInsert i = id2C (IOInsertWithType empty) i
+id2C (IOInsertWithType d) (Identifier i t) = do
     ns <- gets currentScope
     tom <- gets (Set.member n . toMangle)
     cu <- gets currentUnit
@@ -252,10 +284,11 @@ id2C IOInsert (Identifier i t) = do
             (BTFunction _ _ _, _) -> (cu ++ i, t)
             (BTVarParam t', _) -> ('(' : '*' : i ++ ")" , t')
             _ -> (i, t)
-    modify (\s -> s{currentScope = Map.insertWith (++) n [(i', t')] (currentScope s), lastIdentifier = n})
+    modify (\s -> s{currentScope = Map.insertWith (++) n [Record i' t' d] (currentScope s), lastIdentifier = n})
     return $ text i'
     where
         n = map toLower i
+
 id2C IOLookup i = id2CLookup head i
 id2C IOLookupLast i = id2CLookup last i
 id2C (IOLookupFunction params) (Identifier i t) = do
@@ -266,9 +299,9 @@ id2C (IOLookupFunction params) (Identifier i t) = do
         error $ "Not defined: '" ++ i' ++ "'\n" ++ show lt ++ "\nwith num of params = " ++ show params ++ "\n" ++ show v
         else
         let vv = fromMaybe (head $ fromJust v) . find checkParam $ fromJust v in
-            modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+            modify (setLastIdValues vv) >> (return . text . lcaseId $ vv)
     where
-        checkParam (_, BTFunction _ p _) = p == params
+        checkParam (Record _ (BTFunction _ p _) _) = p == params
         checkParam _ = False
 id2C IODeferred (Identifier i t) = do
     let i' = map toLower i
@@ -276,40 +309,44 @@ id2C IODeferred (Identifier i t) = do
     if (isNothing v) then
         modify (\s -> s{lastType = BTUnknown, lastIdentifier = i}) >> return (text i)
         else
-        let vv = head $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+        let vv = head $ fromJust v in modify (setLastIdValues vv) >> (return . text . lcaseId $ vv)
 
 id2CLookup :: ([Record] -> Record) -> Identifier -> State RenderState Doc
-id2CLookup f (Identifier i _) = do
+id2CLookup f (Identifier i t) = do
     let i' = map toLower i
     v <- gets $ Map.lookup i' . currentScope
     lt <- gets lastType
     if isNothing v then
         error $ "Not defined: '" ++ i' ++ "'\n" ++ show lt
         else
-        let vv = f $ fromJust v in modify (\s -> s{lastType = snd vv, lastIdentifier = fst vv}) >> (return . text . fst $ vv)
+        let vv = f $ fromJust v in modify (setLastIdValues vv) >> (return . text . lcaseId $ vv)
 
 
 id2CTyped :: TypeDecl -> Identifier -> State RenderState Doc
-id2CTyped t (Identifier i _) = do
+id2CTyped = id2CTyped2 Nothing
+
+id2CTyped2 :: Maybe Doc -> TypeDecl -> Identifier -> State RenderState Doc
+id2CTyped2 md t (Identifier i _) = do
     tb <- resolveType t
     case (t, tb) of
         (_, BTUnknown) -> do
             error $ "id2CTyped: type BTUnknown for " ++ show i ++ "\ntype: " ++ show t
         (SimpleType {}, BTRecord _ r) -> do
             ts <- type2C t
-            id2C IOInsert (Identifier i (BTRecord (render $ ts empty) r))
+            id2C (IOInsertWithType $ ts empty) (Identifier i (BTRecord (render $ ts empty) r))
         (_, BTRecord _ r) -> do
             ts <- type2C t
-            id2C IOInsert (Identifier i (BTRecord i r))
-        _ -> id2C IOInsert (Identifier i tb)
-
+            id2C (IOInsertWithType $ ts empty) (Identifier i (BTRecord i r))
+        _ -> case md of
+                Nothing -> id2C IOInsert (Identifier i tb)
+                Just ts -> id2C (IOInsertWithType ts) (Identifier i tb)
 
 
 resolveType :: TypeDecl -> State RenderState BaseType
 resolveType st@(SimpleType (Identifier i _)) = do
     let i' = map toLower i
     v <- gets $ Map.lookup i' . currentScope
-    if isJust v then return . snd . head $ fromJust v else return $ f i'
+    if isJust v then return . baseType . head $ fromJust v else return $ f i'
     where
     f "integer" = BTInt
     f "pointer" = BTPointerTo BTVoid
@@ -352,7 +389,7 @@ resolve :: String -> BaseType -> State RenderState BaseType
 resolve s (BTUnresolved t) = do
     v <- gets $ Map.lookup t . currentScope
     if isJust v then
-        resolve s . snd . head . fromJust $ v
+        resolve s . baseType . head . fromJust $ v
         else
         error $ "Unknown type " ++ show t ++ "\n" ++ s
 resolve _ t = return t
@@ -363,7 +400,7 @@ fromPointer s t = do
     error $ "Dereferencing from non-pointer type " ++ show t ++ "\n" ++ s
 
 
-functionParams2C params = liftM (hcat . punctuate comma . concat) $ mapM (tvar2C False) params
+functionParams2C params = liftM (hcat . punctuate comma . concat) $ mapM (tvar2C False False True True) params
 
 numberOfDeclarations :: [TypeVarDeclaration] -> Int
 numberOfDeclarations = sum . map cnt
@@ -392,20 +429,21 @@ funWithVarsToDefine n params = text "#define" <+> text n <> parens abc <+> text 
         ps = zip ['a'..] (toIsVarList params)
 
 fun2C :: Bool -> String -> TypeVarDeclaration -> State RenderState [Doc]
-fun2C _ _ (FunctionDeclaration name returnType params Nothing) = do
+fun2C _ _ (FunctionDeclaration name inline returnType params Nothing) = do
     t <- type2C returnType
     t'<- gets lastType
     p <- withState' id $ functionParams2C params
     n <- liftM render . id2C IOInsert $ setBaseType (BTFunction hasVars (numberOfDeclarations params) t') name
+    let decor = if inline then text "inline" else empty
     if hasVars then
-        return [funWithVarsToDefine n params $+$ t empty <+> text (n ++ "__vars") <> parens p]
+        return [funWithVarsToDefine n params $+$ decor <+> t empty <+> text (n ++ "__vars") <> parens p]
         else
-        return [t empty <+> text n <> parens p]
+        return [decor <+> t empty <+> text n <> parens p]
     where
         hasVars = hasPassByReference params
 
 
-fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just (tvars, phrase))) = do
+fun2C True rv (FunctionDeclaration name@(Identifier i _) inline returnType params (Just (tvars, phrase))) = do
     let res = docToLower $ text rv <> text "_result"
     t <- type2C returnType
     t'<- gets lastType
@@ -418,16 +456,20 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just
             VoidType -> True
             _ -> False
 
-    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [(render res, t')] $ currentScope st
+    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [Record (render res) t' empty] $ currentScope st
             , currentFunctionResult = if isVoid then [] else render res}) $ do
         p <- functionParams2C params
-        ph <- liftM2 ($+$) (typesAndVars2C False tvars) (phrase2C' phrase)
+        ph <- liftM2 ($+$) (typesAndVars2C False False True tvars) (phrase2C' phrase)
         return (p, ph)
 
     let phrasesBlock = if isVoid then ph else t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
-
-    return [(if notDeclared && hasVars then funWithVarsToDefine n params else empty) $+$
-        t empty <+> text (if hasVars then n ++ "__vars" else n) <> parens p
+    let define = if hasVars then text "#ifndef" <+> text n $+$ funWithVarsToDefine n params $+$ text "#endif" else empty
+    let decor = if inline then text "inline" else empty
+    return [
+        define
+        $+$
+        --(if notDeclared && hasVars then funWithVarsToDefine n params else empty) $+$
+        decor <+> t empty <+> text (if hasVars then n ++ "__vars" else n) <> parens p
         $+$
         text "{"
         $+$
@@ -440,42 +482,74 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) returnType params (Just
     un [a] b = a : b
     hasVars = hasPassByReference params
 
-fun2C False _ (FunctionDeclaration (Identifier name _) _ _ _) = error $ "nested functions not allowed: " ++ name
+fun2C False _ (FunctionDeclaration (Identifier name _) _ _ _ _) = error $ "nested functions not allowed: " ++ name
 fun2C _ tv _ = error $ "fun2C: I don't render " ++ show tv
 
-tvar2C :: Bool -> TypeVarDeclaration -> State RenderState [Doc]
-tvar2C b f@(FunctionDeclaration (Identifier name _) _ _ _) =
-    fun2C b name f
-tvar2C _ td@(TypeDeclaration i' t) = do
+-- the second bool indicates whether declare variable as extern or not
+-- the third bool indicates whether include types or not
+-- the fourth bool indicates whether ignore initialization or not (basically for dynamic arrays since we cannot do initialization in function params)
+tvar2C :: Bool -> Bool -> Bool -> Bool -> TypeVarDeclaration -> State RenderState [Doc]
+tvar2C b _ includeType _ f@(FunctionDeclaration (Identifier name _) _ _ _ _) = do
+    t <- fun2C b name f
+    if includeType then return t else return []
+tvar2C _ _ includeType _ td@(TypeDeclaration i' t) = do
     i <- id2CTyped t i'
     tp <- type2C t
-    return [text "typedef" <+> tp i]
+    return $ if includeType then [text "typedef" <+> tp i] else []
 
-tvar2C _ (VarDeclaration True _ (ids, t) Nothing) = do
+tvar2C _ _ _ _ (VarDeclaration True _ (ids, t) Nothing) = do
     t' <- liftM ((empty <+>) . ) $ type2C t
-    liftM (map(\i -> t' i)) $ mapM (id2CTyped (VarParamType t)) ids
+    liftM (map(\i -> t' i)) $ mapM (id2CTyped2 (Just $ t' empty) (VarParamType t)) ids
 
-tvar2C _ (VarDeclaration _ isConst (ids, t) mInitExpr) = do
-    t' <- liftM (((if isConst then text "const" else empty) <+>) . ) $ type2C t
+tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mInitExpr) = do
+    t' <- liftM (((if isConst then text "static const" else if externVar 
+                                                                then text "extern"
+                                                                else empty)
+                   <+>) . ) $ type2C t
     ie <- initExpr mInitExpr
     lt <- gets lastType
     case (isConst, lt, ids, mInitExpr) of
          (True, BTInt, [i], Just _) -> do
              i' <- id2CTyped t i
-             return [text "enum" <> braces (i' <+> ie)]
+             return $ if includeType then [text "enum" <> braces (i' <+> ie)] else []
          (True, BTFloat, [i], Just e) -> do
              i' <- id2CTyped t i
              ie <- initExpr2C e
-             return [text "#define" <+> i' <+> parens ie <> text "\n"]
+             return $ if includeType then [text "#define" <+> i' <+> parens ie <> text "\n"] else []
          (_, BTFunction{}, _, Nothing) -> liftM (map(\i -> t' i)) $ mapM (id2CTyped t) ids
-         _ -> liftM (map(\i -> t' i <+> ie)) $ mapM (id2CTyped t) ids
+         (_, BTArray r _ _, [i], _) -> do
+            i' <- id2CTyped t i
+            ie' <- return $ case (r, mInitExpr, ignoreInit) of
+                (RangeInfinite, Nothing, False) -> text "= NULL" -- force dynamic array to be initialized as NULL if not initialized at all
+                (_, _, _) -> ie
+            result <- liftM (map(\i -> varDeclDecision isConst includeType (t' i) ie')) $ mapM (id2CTyped t) ids           
+            case (r, ignoreInit) of
+                (RangeInfinite, False) -> 
+                    -- if the array is dynamic, add dimension info to it
+                    return $ [dimDecl] ++ result
+                    where 
+                        arrayDimStr = show $ arrayDimension t
+                        arrayDimInitExp = text ("={" ++ ".dim = " ++ arrayDimStr ++ ", .a = {0, 0, 0, 0}}")
+                        dimDecl = varDeclDecision isConst includeType (text "fpcrtl_dimension_t" <+>  i' <> text "_dimension_info") arrayDimInitExp
+                    
+                (_, _) -> return result
+            
+         _ -> liftM (map(\i -> varDeclDecision isConst includeType (t' i) ie)) $ mapM (id2CTyped2 (Just $ t' empty) t) ids
     where
     initExpr Nothing = return $ empty
     initExpr (Just e) = liftM (text "=" <+>) (initExpr2C e)
+    varDeclDecision True True varStr expStr = varStr <+> expStr
+    varDeclDecision False True varStr expStr = if externVar then varStr else varStr <+> expStr
+    varDeclDecision False False varStr expStr = varStr <+> expStr
+    varDeclDecision True False varStr expStr = empty
+    arrayDimension a = case a of
+        ArrayDecl Nothing t -> let a = arrayDimension t in if a > 3 then error "Dynamic array with dimension > 4 is not supported." else 1 + arrayDimension t
+        ArrayDecl _ _ -> error "Mixed dynamic array and static array are not supported."
+        _ -> 0
 
-tvar2C f (OperatorDeclaration op (Identifier i _) ret params body) = do
+tvar2C f _ _ _ (OperatorDeclaration op (Identifier i _) inline ret params body) = do
     r <- op2CTyped op (extractTypes params)
-    fun2C f i (FunctionDeclaration r ret params body)
+    fun2C f i (FunctionDeclaration r inline ret params body)
 
 
 op2CTyped :: String -> [TypeDecl] -> State RenderState Identifier
@@ -489,6 +563,7 @@ op2CTyped op t = do
                     "-" -> "sub"
                     "*" -> "mul"
                     "/" -> "div"
+                    "/(float)" -> "div"
                     "=" -> "eq"
                     "<" -> "lt"
                     ">" -> "gt"
@@ -591,7 +666,7 @@ type2C t = do
              _ -> return $ \a -> i' <+> text "*" <+> a
     type2C' (PointerTo t) = liftM (\t a -> t (parens $ text "*" <> a)) $ type2C t
     type2C' (RecordType tvs union) = do
-        t <- withState' f $ mapM (tvar2C False) tvs
+        t <- withState' f $ mapM (tvar2C False False True False) tvs
         u <- unions
         return $ \i -> text "struct __" <> i <+> lbrace $+$ nest 4 ((vcat . map (<> semi) . concat $ t) $$ u) $+$ rbrace <+> i
         where
@@ -602,7 +677,7 @@ type2C t = do
                          structs <- mapM struct2C a
                          return $ text "union" $+$ braces (nest 4 $ vcat structs) <> semi
             struct2C tvs = do
-                t <- withState' f $ mapM (tvar2C False) tvs
+                t <- withState' f $ mapM (tvar2C False False True False) tvs
                 return $ text "struct" $+$ braces (nest 4 (vcat . map (<> semi) . concat $ t)) <> semi
     type2C' (RangeType r) = return (text "int" <+>)
     type2C' (Sequence ids) = do
@@ -615,7 +690,7 @@ type2C t = do
         t' <- type2C t
         lt <- gets lastType
         ft <- case lt of
-                BTFunction {} -> type2C (PointerTo t)
+                -- BTFunction {} -> type2C (PointerTo t)
                 _ -> return t'
         r' <- initExpr2C (InitRange r)
         return $ \i -> ft i <> brackets r'
@@ -675,15 +750,26 @@ phrase2C (Assignment ref expr) = do
                     e <- expr2C expr
                     return $ r <+> text "=" <+> e <> semi
                 _ -> error $ "Assignment to string from " ++ show lt
-        (BTArray _ _ _, _) -> phrase2C $
-            ProcCall (FunCall
-                [
-                Reference $ Address ref
-                , Reference $ Address $ RefExpression expr
-                , Reference $ FunCall [expr] (SimpleReference (Identifier "sizeof" BTUnknown))
-                ]
-                (SimpleReference (Identifier "memcpy" BTUnknown))
-                ) []
+        (BTArray _ _ _, _) -> do
+            case expr of
+                Reference er -> do
+                    exprRef <- ref2C er
+                    exprT <- gets lastType
+                    case exprT of
+                        BTArray RangeInfinite _ _ ->
+                            return $ text "FIXME: assign a dynamic array to an array"
+                        BTArray _ _ _ -> phrase2C $
+                                ProcCall (FunCall
+                                    [
+                                    Reference $ ref
+                                    , Reference $ RefExpression expr
+                                    , Reference $ FunCall [expr] (SimpleReference (Identifier "sizeof" BTUnknown))
+                                    ]
+                                    (SimpleReference (Identifier "memcpy" BTUnknown))
+                                    ) []
+                        _ -> return $ text "FIXME: assign a non-specific value to an array"
+
+                _ -> return $ text "FIXME: dynamic array assignment 2"
         _ -> do
             e <- expr2C expr
             return $ r <+> text "=" <+> e <> semi
@@ -704,7 +790,7 @@ phrase2C (SwitchCase expr cases mphrase) = do
         ph <- phrase2C p
         return $
              vcat (map (\i -> text "case" <+> i <> colon) . concat $ ies) <> nest 4 (ph $+$ text "break;")
-    dflt | isNothing mphrase = return []
+    dflt | isNothing mphrase = return [text "default: break;"] -- avoid compiler warning
          | otherwise = do
              ph <- mapM phrase2C $ fromJust mphrase
              return [text "default:" <+> nest 4 (vcat ph)]
@@ -713,18 +799,27 @@ phrase2C wb@(WithBlock ref p) = do
     r <- ref2C ref
     t <- gets lastType
     case t of
-        (BTRecord _ rs) -> withRecordNamespace (render r ++ ".") rs $ phrase2C $ wrapPhrase p
+        (BTRecord _ rs) -> withRecordNamespace (render r ++ ".") (rec2Records rs) $ phrase2C $ wrapPhrase p
         a -> do
             error $ "'with' block referencing non-record type " ++ show a ++ "\n" ++ show wb
-phrase2C (ForCycle i' e1' e2' p) = do
+phrase2C (ForCycle i' e1' e2' p up) = do
     i <- id2C IOLookup i'
+    iType <- gets lastIdTypeDecl
     e1 <- expr2C e1'
     e2 <- expr2C e2'
-    ph <- phrase2C (wrapPhrase p)
-    return $
-        text "for" <> (parens . hsep . punctuate (char ';') $ [i <+> text "=" <+> e1, i <+> text "<=" <+> e2, text "++" <> i])
+    let inc = if up then "inc" else "dec"
+    let add = if up then "+ 1" else "- 1"
+    let iEnd = i <> text "__end__"
+    ph <- phrase2C . appendPhrase (BuiltInFunctionCall [Reference $ SimpleReference i'] (SimpleReference (Identifier inc BTUnknown))) $ wrapPhrase p
+    return . braces $
+        i <+> text "=" <+> e1 <> semi
         $$
-        ph
+        iType <+> iEnd <+> text "=" <+> e2 <> semi
+        $$ 
+        text "if" <+> (parens $ i <+> text "<=" <+> iEnd) <+> text "do" <+> ph <+>
+        text "while" <> parens (i <+> text "!=" <+> iEnd <+> text add) <> semi
+    where
+        appendPhrase p (Phrases ps) = Phrases $ ps ++ [p]
 phrase2C (RepeatCycle e' p') = do
     e <- expr2C e'
     p <- phrase2C (Phrases p')
@@ -777,12 +872,23 @@ expr2C b@(BinOp op expr1 expr2) = do
             case expr2 of
                  SetExpression set -> do
                      ids <- mapM (id2C IOLookup) set
+                     modify(\s -> s{lastType = BTBool})
                      return . parens . hcat . punctuate (text " || ") . map (\i -> parens $ e1 <+> text "==" <+> i) $ ids
                  _ -> error "'in' against not set expression"
         (o, _, _) | o `elem` boolOps -> do
                         modify(\s -> s{lastType = BTBool})
                         return $ parens e1 <+> text o <+> parens e2
-                  | otherwise -> return $ parens e1 <+> text o <+> parens e2
+                  | otherwise -> do
+                        o' <- return $ case o of
+                            "/(float)" -> text "/(float)" -- pascal returns real value
+                            _ -> text o
+                        e1' <- return $ case (o, t1, t2) of
+                                ("-", BTInt, BTInt) -> parens $ text "(int64_t)" <+> parens e1
+                                _ -> parens e1
+                        e2' <- return $ case (o, t1, t2) of
+                                ("-", BTInt, BTInt) -> parens $ text "(int64_t)" <+> parens e2
+                                _ -> parens e2
+                        return $ e1' <+> o' <+> e2'
     where
         boolOps = ["==", "!=", "<", ">", "<=", ">="]
 expr2C (NumberLiteral s) = do
@@ -806,7 +912,12 @@ expr2C (PrefixOp op expr) = do
         BTRecord t _ -> do
             i <- op2CTyped op [SimpleType (Identifier t undefined)]
             ref2C $ FunCall [expr] (SimpleReference i)
-        _ -> return $ text (op2C op) <> e
+        BTBool -> do
+            o <- return $ case op of
+                     "not" -> text "!"
+                     _ -> text (op2C op)
+            return $ o <> parens e
+        _ -> return $ text (op2C op) <> parens e
 expr2C Null = return $ text "NULL"
 expr2C (CharCode a) = do
     modify(\s -> s{lastType = BTChar})
@@ -835,13 +946,13 @@ expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "high" _))) = do
          _ -> error $ "BuiltInFunCall 'high' from " ++ show e ++ "\ntype: " ++ show lt
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "ord" _))) = liftM parens $ expr2C e
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "succ" _))) = liftM (<> text " + 1") $ expr2C e
-expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "pred" _))) = liftM (<> text " - 1") $ expr2C e
+expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "pred" _))) = liftM (<> text " - (int64_t)1") $ expr2C e
 expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "length" _))) = do
     e' <- expr2C e
     lt <- gets lastType
     modify (\s -> s{lastType = BTInt})
     case lt of
-         BTString -> return $ text "Length" <> parens e'
+         BTString -> return $ text "fpcrtl_Length" <> parens e'
          BTArray RangeInfinite _ _ -> error $ "length() called on variable size array " ++ show e'
          BTArray (RangeFromTo _ n) _ _ -> initExpr2C (BuiltInFunction "succ" [n])
          _ -> error $ "length() called on " ++ show lt
@@ -864,7 +975,7 @@ ref2CF (SimpleReference name) = do
     case t of
          BTFunction _ _ rt -> do
              modify(\s -> s{lastType = rt})
-             return $ i <> parens empty
+             return $ i <> parens empty --xymeng: removed parens
          _ -> return $ i
 ref2CF r@(RecordField (SimpleReference _) (SimpleReference _)) = do
     i <- ref2C r
@@ -907,7 +1018,7 @@ ref2C rf@(RecordField (Dereference ref1) ref2) = do
     r1 <- ref2C ref1
     t <- fromPointer (show ref1) =<< gets lastType
     r2 <- case t of
-        BTRecord _ rs -> withRecordNamespace "" rs $ ref2C ref2
+        BTRecord _ rs -> withRecordNamespace "" (rec2Records rs) $ ref2C ref2
         BTUnit -> error "What??"
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
     return $
@@ -917,7 +1028,7 @@ ref2C rf@(RecordField ref1 ref2) = do
     t <- gets lastType
     case t of
         BTRecord _ rs -> do
-            r2 <- withRecordNamespace "" rs $ ref2C ref2
+            r2 <- withRecordNamespace "" (rec2Records rs) $ ref2C ref2
             return $ r1 <> text "." <> r2
         BTUnit -> withLastIdNamespace $ ref2C ref2
         a -> error $ "dereferencing from " ++ show a ++ "\n" ++ show rf
@@ -962,7 +1073,7 @@ ref2C (RefExpression expr) = expr2C expr
 op2C :: String -> String
 op2C "or" = "|"
 op2C "and" = "&"
-op2C "not" = "!"
+op2C "not" = "~"
 op2C "xor" = "^"
 op2C "div" = "/"
 op2C "mod" = "%"
@@ -970,5 +1081,6 @@ op2C "shl" = "<<"
 op2C "shr" = ">>"
 op2C "<>" = "!="
 op2C "=" = "=="
+op2C "/" = "/(float)"
 op2C a = a
 

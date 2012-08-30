@@ -19,7 +19,7 @@ knownTypes = ["shortstring", "ansistring", "char", "byte"]
 
 pascalUnit = do
     comments
-    u <- choice [program, unit, systemUnit]
+    u <- choice [program, unit, systemUnit, redoUnit]
     comments
     return u
 
@@ -270,12 +270,12 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         char ';'
         comments
         forward <- liftM isJust $ optionMaybe (try (string "forward;") >> comments)
-        many functionDecorator
+        inline <- liftM (any (== "inline;")) $ many functionDecorator
         b <- if isImpl && (not forward) then
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ [OperatorDeclaration i rid ret vs b]
+        return $ [OperatorDeclaration i rid inline ret vs b]
 
 
     funcDecl = do
@@ -295,21 +295,24 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         char ';'
         comments
         forward <- liftM isJust $ optionMaybe (try (string "forward;") >> comments)
-        many functionDecorator
+        inline <- liftM (any (== "inline;")) $ many functionDecorator
         b <- if isImpl && (not forward) then
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ [FunctionDeclaration i ret vs b]
+        return $ [FunctionDeclaration i inline ret vs b]
 
-    functionDecorator = choice [
-        try $ string "inline;"
-        , try $ caseInsensitiveString "cdecl;"
-        , try $ string "overload;"
-        , try $ string "export;"
-        , try $ string "varargs;"
-        , try (string "external") >> comments >> iD >> optional (string "name" >> comments >> stringLiteral pas)>> string ";"
-        ] >> comments
+    functionDecorator = do
+        d <- choice [
+            try $ string "inline;"
+            , try $ caseInsensitiveString "cdecl;"
+            , try $ string "overload;"
+            , try $ string "export;"
+            , try $ string "varargs;"
+            , try (string "external") >> comments >> iD >> optional (string "name" >> comments >> stringLiteral pas)>> string ";"
+            ]
+        comments
+        return d
 
 
 program = do
@@ -348,36 +351,46 @@ implementation = do
     comments
     return $ Implementation u (TypesAndVars tv)
 
-expression = buildExpressionParser table term <?> "expression"
+expression = do
+    buildExpressionParser table term <?> "expression"
     where
     term = comments >> choice [
         builtInFunction expression >>= \(n, e) -> return $ BuiltInFunCall e (SimpleReference (Identifier n BTUnknown))
         , try (parens pas $ expression >>= \e -> notFollowedBy (comments >> char '.') >> return e)
         , brackets pas (commaSep pas iD) >>= return . SetExpression
-        , try $ natural pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
+        , try $ integer pas >>= \i -> notFollowedBy (char '.') >> (return . NumberLiteral . show) i
         , float pas >>= return . FloatLiteral . show
-        , natural pas >>= return . NumberLiteral . show
+        , try $ integer pas >>= return . NumberLiteral . show
         , try (string "_S" >> stringLiteral pas) >>= return . StringLiteral
         , try (string "_P" >> stringLiteral pas) >>= return . PCharLiteral
         , stringLiteral pas >>= return . strOrChar
         , try (string "#$") >> many hexDigit >>= \c -> comments >> return (HexCharCode c)
         , char '#' >> many digit >>= \c -> comments >> return (CharCode c)
         , char '$' >> many hexDigit >>=  \h -> comments >> return (HexNumber h)
-        , char '-' >> expression >>= return . PrefixOp "-"
+        --, char '-' >> expression >>= return . PrefixOp "-"
+        , char '-' >> reference >>= return . PrefixOp "-" . Reference
+        , try $ string "not" >> error "unexpected not in term"
         , try $ string "nil" >> return Null
-        , try $ string "not" >> expression >>= return . PrefixOp "not"
         , reference >>= return . Reference
         ] <?> "simple expression"
 
-    table = [ 
+    table = [
+          [  Prefix (try (string "not") >> return (PrefixOp "not"))
+           , Prefix (try (char '-') >> return (PrefixOp "-"))]
+        ,
           [  Infix (char '*' >> return (BinOp "*")) AssocLeft
            , Infix (char '/' >> return (BinOp "/")) AssocLeft
            , Infix (try (string "div") >> return (BinOp "div")) AssocLeft
            , Infix (try (string "mod") >> return (BinOp "mod")) AssocLeft
            , Infix (try (string "in") >> return (BinOp "in")) AssocNone
+           , Infix (try $ string "and" >> return (BinOp "and")) AssocLeft
+           , Infix (try $ string "shl" >> return (BinOp "shl")) AssocLeft
+           , Infix (try $ string "shr" >> return (BinOp "shr")) AssocLeft
           ]
         , [  Infix (char '+' >> return (BinOp "+")) AssocLeft
            , Infix (char '-' >> return (BinOp "-")) AssocLeft
+           , Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
+           , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
           ]
         , [  Infix (try (string "<>") >> return (BinOp "<>")) AssocNone
            , Infix (try (string "<=") >> return (BinOp "<=")) AssocNone
@@ -385,13 +398,13 @@ expression = buildExpressionParser table term <?> "expression"
            , Infix (char '<' >> return (BinOp "<")) AssocNone
            , Infix (char '>' >> return (BinOp ">")) AssocNone
           ]
-        , [  Infix (try $ string "shl" >> return (BinOp "shl")) AssocNone
-           , Infix (try $ string "shr" >> return (BinOp "shr")) AssocNone
+        {-, [  Infix (try $ string "shl" >> return (BinOp "shl")) AssocNone
+             , Infix (try $ string "shr" >> return (BinOp "shr")) AssocNone
           ]
-        , [  Infix (try $ string "and" >> return (BinOp "and")) AssocLeft
-           , Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
+        , [ 
+             Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
-          ]
+          ]-}
         , [
              Infix (char '=' >> return (BinOp "=")) AssocNone
           ]
@@ -415,7 +428,7 @@ phrase = do
         , switchCase
         , withBlock
         , forCycle
-        , (try $ reference >>= \r -> string ":=" >> return r) >>= \r -> expression >>= return . Assignment r
+        , (try $ reference >>= \r -> string ":=" >> return r) >>= \r -> comments >> expression >>= return . Assignment r
         , builtInFunction expression >>= \(n, e) -> return $ BuiltInFunctionCall e (SimpleReference (Identifier n BTUnknown))
         , procCall
         , char ';' >> comments >> return NOP
@@ -480,7 +493,12 @@ forCycle = do
     comments
     e1 <- expression
     comments
-    choice [string "to", string "downto"]
+    up <- liftM (== Just "to") $
+            optionMaybe $ choice [
+                try $ string "to"
+                , try $ string "downto"
+                ]   
+    --choice [string "to", string "downto"]
     comments
     e2 <- expression
     comments
@@ -488,7 +506,7 @@ forCycle = do
     comments
     p <- phrase
     comments
-    return $ ForCycle i e1 e2 p
+    return $ ForCycle i e1 e2 p up
 
 switchCase = do
     try $ string "case"
@@ -573,14 +591,20 @@ initExpression = buildExpressionParser table term <?> "initialization expression
     table = [
           [
              Prefix (char '-' >> return (InitPrefixOp "-"))
+            ,Prefix (try (string "not") >> return (InitPrefixOp "not"))
           ]
         , [  Infix (char '*' >> return (InitBinOp "*")) AssocLeft
            , Infix (char '/' >> return (InitBinOp "/")) AssocLeft
            , Infix (try (string "div") >> return (InitBinOp "div")) AssocLeft
            , Infix (try (string "mod") >> return (InitBinOp "mod")) AssocLeft
+           , Infix (try $ string "and" >> return (InitBinOp "and")) AssocLeft
+           , Infix (try $ string "shl" >> return (InitBinOp "shl")) AssocNone
+           , Infix (try $ string "shr" >> return (InitBinOp "shr")) AssocNone
           ]
         , [  Infix (char '+' >> return (InitBinOp "+")) AssocLeft
            , Infix (char '-' >> return (InitBinOp "-")) AssocLeft
+           , Infix (try $ string "or" >> return (InitBinOp "or")) AssocLeft
+           , Infix (try $ string "xor" >> return (InitBinOp "xor")) AssocLeft
           ]
         , [  Infix (try (string "<>") >> return (InitBinOp "<>")) AssocNone
            , Infix (try (string "<=") >> return (InitBinOp "<=")) AssocNone
@@ -589,14 +613,14 @@ initExpression = buildExpressionParser table term <?> "initialization expression
            , Infix (char '>' >> return (InitBinOp ">")) AssocNone
            , Infix (char '=' >> return (InitBinOp "=")) AssocNone
           ]
-        , [  Infix (try $ string "and" >> return (InitBinOp "and")) AssocLeft
+        {--, [  Infix (try $ string "and" >> return (InitBinOp "and")) AssocLeft
            , Infix (try $ string "or" >> return (InitBinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (InitBinOp "xor")) AssocLeft
           ]
         , [  Infix (try $ string "shl" >> return (InitBinOp "shl")) AssocNone
            , Infix (try $ string "shr" >> return (InitBinOp "shr")) AssocNone
-          ]
-        , [Prefix (try (string "not") >> return (InitPrefixOp "not"))]
+          ]--}
+        --, [Prefix (try (string "not") >> return (InitPrefixOp "not"))]
         ]
 
     itypeCast = do
@@ -621,3 +645,14 @@ systemUnit = do
     string "var"
     v <- varsDecl True
     return $ System (t ++ v)
+
+redoUnit = do
+    string "redo;"
+    comments
+    string "type"
+    comments
+    t <- typesDecl
+    string "var"
+    v <- varsDecl True
+    return $ Redo (t ++ v)
+

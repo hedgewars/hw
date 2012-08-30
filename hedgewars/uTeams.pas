@@ -473,7 +473,7 @@ with Team do
                 begin
                 Gear^.Invulnerable:= false;
                 Gear^.Damage:= Gear^.Health;
-                Gear^.State:= (Gear^.State or gstHHGone) and not gstHHDriven
+                Gear^.State:= (Gear^.State or gstHHGone) and (not gstHHDriven)
                 end
             end
 end;
@@ -531,7 +531,7 @@ if isDeveloperMode then
     AddTeam(Color);
     CurrentTeam^.TeamName:= ts;
     CurrentTeam^.PlayerHash:= s;
-    if GameType in [gmtDemo, gmtSave] then
+    if GameType in [gmtDemo, gmtSave, gmtRecord] then
         CurrentTeam^.ExtDriven:= true;
 
     CurrentTeam^.voicepack:= AskForVoicepack('Default')

@@ -59,7 +59,7 @@ begin
         begin
         addBgColor:= NewColor;
         exit
-        end; 
+        end;
     // Get colors
     oRed   := (OldColor shr RShift);
     oGreen := (OldColor shr GShift);
@@ -72,7 +72,7 @@ begin
     // Mix colors
     nRed   := min(255,((nRed*nAlpha) div 255) + ((oRed*oAlpha*byte(255-nAlpha)) div 65025));
     nGreen := min(255,((nGreen*nAlpha) div 255) + ((oGreen*oAlpha*byte(255-nAlpha)) div 65025));
-    nBlue  := min(255,((nBlue*nAlpha) div 255) + ((oBlue*oAlpha*byte(255-nAlpha)) div 65025)); 
+    nBlue  := min(255,((nBlue*nAlpha) div 255) + ((oBlue*oAlpha*byte(255-nAlpha)) div 65025));
     nAlpha := min(255, oAlpha + nAlpha);
 
     addBgColor := (nAlpha shl AShift) or (nRed shl RShift) or (nGreen shl GShift) or (nBlue shl BShift);
@@ -106,25 +106,25 @@ if not doSet then
     begin
     if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-            if isCurrent then 
+            if isCurrent then
                 Land[y + dy, i]:= Land[y + dy, i] and $FF7F
             else if Land[y + dy, i] and $007F > 0 then
                 Land[y + dy, i]:= (Land[y + dy, i] and $FF80) or ((Land[y + dy, i] and $7F) - 1);
     if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-            if isCurrent then 
+            if isCurrent then
                 Land[y - dy, i]:= Land[y - dy, i] and $FF7F
             else if Land[y - dy, i] and $007F > 0 then
                 Land[y - dy, i]:= (Land[y - dy, i] and $FF80) or ((Land[y - dy, i] and $7F) - 1);
     if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-            if isCurrent then 
+            if isCurrent then
                 Land[y + dx, i]:= Land[y + dx, i] and $FF7F
             else if Land[y + dx, i] and $007F > 0 then
                 Land[y + dx, i]:= (Land[y + dx, i] and $FF80) or ((Land[y + dx, i] and $7F) - 1);
     if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-            if isCurrent then 
+            if isCurrent then
                 Land[y - dx, i]:= Land[y - dx, i] and $FF7F
             else if Land[y - dx, i] and $007F > 0 then
                 Land[y - dx, i]:= (Land[y - dx, i] and $FF80) or ((Land[y - dx, i] and $7F) - 1)
@@ -133,27 +133,27 @@ else
     begin
     if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-            if isCurrent then 
+            if isCurrent then
                 Land[y + dy, i]:= Land[y + dy, i] or $80
             else if Land[y + dy, i] and $007F < 127 then
                 Land[y + dy, i]:= (Land[y + dy, i] and $FF80) or ((Land[y + dy, i] and $7F) + 1);
-    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then                                                   
-        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do                                  
-            if isCurrent then                                                                     
-                Land[y - dy, i]:= Land[y - dy, i] or $80                                          
-            else if Land[y - dy, i] and $007F < 127 then                                          
+    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+            if isCurrent then
+                Land[y - dy, i]:= Land[y - dy, i] or $80
+            else if Land[y - dy, i] and $007F < 127 then
                 Land[y - dy, i]:= (Land[y - dy, i] and $FF80) or ((Land[y - dy, i] and $7F) + 1);
-    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then                                                   
-        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do                                  
-            if isCurrent then                                                                     
-                Land[y + dx, i]:= Land[y + dx, i] or $80                                          
-            else if Land[y + dx, i] and $007F < 127 then                                          
+    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+            if isCurrent then
+                Land[y + dx, i]:= Land[y + dx, i] or $80
+            else if Land[y + dx, i] and $007F < 127 then
                 Land[y + dx, i]:= (Land[y + dx, i] and $FF80) or ((Land[y + dx, i] and $7F) + 1);
-    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then                                                   
-        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do                                  
-            if isCurrent then                                                                     
-                Land[y - dx, i]:= Land[y - dx, i] or $80                                          
-            else if Land[y - dx, i] and $007F < 127 then                                          
+    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+            if isCurrent then
+                Land[y - dx, i]:= Land[y - dx, i] or $80
+            else if Land[y - dx, i] and $007F < 127 then
                 Land[y - dx, i]:= (Land[y - dx, i] and $FF80) or ((Land[y - dx, i] and $7F) + 1)
     end
 end;
@@ -266,7 +266,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                 inc(cnt);
                 LandPixels[by, bx]:= LandBackPixel(i, t)
                 end
-            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
+            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
                 LandPixels[by, bx]:= 0
             end;
 
@@ -288,7 +288,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                 inc(cnt);
                 LandPixels[by, bx]:= LandBackPixel(i, t)
                 end
-            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
+            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
                 LandPixels[by, bx]:= 0
             end;
 
@@ -310,7 +310,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                 inc(cnt);
                 LandPixels[by, bx]:= LandBackPixel(i, t)
                 end
-            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
+            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
                 LandPixels[by, bx]:= 0
             end;
 t:= y - dx;
@@ -331,7 +331,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                 inc(cnt);
                 LandPixels[by, bx]:= LandBackPixel(i, t)
                 end
-            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
+            else if ((Land[t, i] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
                 LandPixels[by, bx]:= 0
             end;
 FillLandCircleLinesBG:= cnt;
@@ -504,7 +504,7 @@ for i:= 0 to Pred(Count) do
                     end;
                 if ((Land[ty, tx] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
                     LandPixels[by, bx]:= LandBackPixel(tx, ty)
-                else if ((Land[ty, tx] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then 
+                else if ((Land[ty, tx] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
                     LandPixels[by, bx]:= 0
                 end
             end;
@@ -567,7 +567,7 @@ for i:= 0 to 7 do
     and ((tx and LAND_WIDTH_MASK) = 0)
     and (((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
-        if despeckle then 
+        if despeckle then
             begin
             Land[ty, tx]:= Land[ty, tx] or lfDamaged;
             LandDirty[ty div 32, tx div 32]:= 1
@@ -837,7 +837,7 @@ end;
 procedure Smooth(X, Y: LongInt);
 begin
 // a bit of AA for explosions
-if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and 
+if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
     (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
     begin
     if ((((Land[y, x-1] and lfDamaged) <> 0) and (((Land[y+1,x] and lfDamaged) <> 0)) or ((Land[y-1,x] and lfDamaged) <> 0))

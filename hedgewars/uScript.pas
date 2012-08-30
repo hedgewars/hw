@@ -413,7 +413,7 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
-            DeleteGear(gear);
+            gear^.Message:= gear^.Message or gmDelete;
         end;
     lc_deletegear:= 0
 end;
@@ -745,7 +745,7 @@ begin
             TryDo(texsurf <> nil, errmsgCreateSurface, true);
             TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-            DrawRoundRect(@r, cWhiteColor, cNearBlackColorChannels.value, texsurf, true);
+            DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
             rr:= r;
             inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
             DrawRoundRect(@rr, clan^.Color, clan^.Color, texsurf, false);
@@ -981,10 +981,13 @@ begin
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) and (CurrentHedgehog <> nil) then
             begin
             prevgear := CurrentHedgehog^.Gear;
-            prevgear^.Active := false;
-            prevgear^.State:= prevgear^.State and not gstHHDriven;
-            prevgear^.Z := cHHZ;
-            prevgear^.Message:= prevgear^.Message or gmRemoveFromList or gmAddToList;
+            if prevgear <> nil then
+                begin
+                prevgear^.Active := false;
+                prevgear^.State:= prevgear^.State and (not gstHHDriven);
+                prevgear^.Z := cHHZ;
+                prevgear^.Message:= prevgear^.Message or gmRemoveFromList or gmAddToList;
+                end;
             
             SwitchCurrentHedgehog(gear^.Hedgehog);
             CurrentTeam:= CurrentHedgehog^.Team;
@@ -1808,6 +1811,7 @@ ScriptSetInteger('BorderColor', ExplosionBorderColor);
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
+ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
 ScriptSetInteger('MapGen', cMapGen);
 ScriptSetInteger('ScreenHeight', cScreenHeight);
 ScriptSetInteger('ScreenWidth', cScreenWidth);
@@ -1836,6 +1840,7 @@ ScriptCall('onGameInit');
 // pop game variables
 ParseCommand('seed ' + ScriptGetString('Seed'), true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
+LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
 cMapGen          := ScriptGetInteger('MapGen');
 GameFlags        := ScriptGetInteger('GameFlags');
 cHedgehogTurnTime:= ScriptGetInteger('TurnTime');

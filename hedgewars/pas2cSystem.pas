@@ -38,6 +38,7 @@ type
     PPChar = ^Pchar;
     
     PByte = ^Byte;
+    PWord = ^Word;
     PLongInt = ^LongInt;
     PLongWord = ^LongWord;
     PInteger = ^Integer;
