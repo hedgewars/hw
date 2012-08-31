@@ -32,6 +32,14 @@ procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+
+// loads an image from the game's data files
+function  LoadDataImage(const path: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+// like LoadDataImage but uses altPath as fallback-path if file not found/loadable in path
+function  LoadDataImageAltPath(const path, altPath: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+// like LoadDataImage but uses altFile as fallback-filename if file cannot be loaded
+function  LoadDataImageAltFile(const path: TPathType; const filename, altFile: shortstring; imageFlags: LongInt): PSDL_Surface;
+
 procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
@@ -95,9 +103,7 @@ var t: LongInt;
     Color, i: Longword;
     s: shortstring;
 begin
-s:= UserPathz[ptGraphics] + '/' + cCHFileName;
-if not FileExists(s+'.png') then s:= Pathz[ptGraphics] + '/' + cCHFileName;
-tmpsurf:= LoadImage(s, ifAlpha or ifCritical);
+tmpsurf:= LoadDataImage(ptGraphics, cCHFileName, ifAlpha or ifCritical);
 
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
@@ -200,13 +206,7 @@ for t:= 0 to Pred(TeamsCount) do
         else if (Flag = 'cpu') or (Flag = 'cpu_plain') then
                 Flag:= 'hedgewars';
 
-        flagsurf:= LoadImage(UserPathz[ptFlags] + '/' + Flag, ifNone);
-        if flagsurf = nil then
-            flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
-        if flagsurf = nil then
-            flagsurf:= LoadImage(UserPathz[ptFlags] + '/hedgewars', ifNone);
-        if flagsurf = nil then
-            flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
+        flagsurf:= LoadDataImageAltFile(ptFlags, Flag, 'hedgewars', ifNone);
         TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
 
         case maxLevel of
@@ -251,9 +251,7 @@ for t:= 0 to Pred(TeamsCount) do
                         end
                     end;
         end;
-    MissionIcons:= LoadImage(UserPathz[ptGraphics] + '/missions', ifNone);
-    if MissionIcons = nil then
-        MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
+    MissionIcons:= LoadDataImage(ptGraphics, 'missions', ifCritical);
     iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
     if iconsurf <> nil then
         begin
@@ -291,13 +289,7 @@ for t:= 0 to Pred(TeamsCount) do
             begin
             if GraveName = '' then
                 GraveName:= 'Statue';
-            texsurf:= LoadImage(UserPathz[ptGraves] + '/' + GraveName, ifTransparent);
-            if texsurf = nil then
-                texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifTransparent);
-            if texsurf = nil then
-                texsurf:= LoadImage(UserPathz[ptGraves] + '/Statue', ifTransparent);
-            if texsurf = nil then
-                texsurf:= LoadImage(Pathz[ptGraves] + '/Statue', ifCritical or ifTransparent);
+            texsurf:= LoadDataImageAltFile(ptGraves, GraveName, 'Statue', ifCritical or ifTransparent);
             GraveTex:= Surface2Tex(texsurf, false);
             SDL_FreeSurface(texsurf)
             end
@@ -309,7 +301,7 @@ var s: shortstring;
     fi: THWFont;
     ai: TAmmoType;
     tmpsurf: PSDL_Surface;
-    i: LongInt;
+    i, imflags: LongInt;
 begin
 AddFileLog('StoreLoad()');
 
@@ -342,43 +334,18 @@ for ii:= Low(TSprite) to High(TSprite) do
            ((cCloudsNumber > 0) or (ii <> sprCloud)) and
            ((vobCount > 0) or (ii <> sprFlake)) then
             begin
-            if AltPath = ptNone then
-                if ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk] then // FIXME: hack
-                    begin
-                    if not reload then
-                        begin
-                        tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                        if tmpsurf = nil then
-                           tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
-                        end
-                    else
-                           tmpsurf:= Surface
-                    end
-                else
-                    begin
-                    if not reload then
-                        begin
-                           tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                        if tmpsurf = nil then
-                           tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
-                        end
-                    else
-                           tmpsurf:= Surface
-                    end
+            if reload then
+                tmpsurf:= Surface
             else
                 begin
-                if not reload then
-                    begin
-                    tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then
-                        tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then
-                        tmpsurf:= LoadImage(UserPathz[AltPath] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then
-                        tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent)
-                    end
-                else
-                        tmpsurf:= Surface
+                imflags := (ifAlpha or ifTransparent);
+
+                // these sprites are optional
+                if not (ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk]) then // FIXME: hack
+                    imflags := (imflags or ifCritical);
+
+                // load the image
+                tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags)
                 end;
 
             if tmpsurf <> nil then
@@ -428,10 +395,8 @@ WriteNames(fnt16);
 if not reload then
     AddProgress;
 
-    tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifTransparent);
-if tmpsurf = nil then
-    tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
-    
+tmpsurf:= LoadDataImage(ptGraphics, cHHFileName, ifAlpha or ifCritical or ifTransparent);
+
 HHTexture:= Surface2Tex(tmpsurf, false);
 SDL_FreeSurface(tmpsurf);
 
@@ -627,12 +592,59 @@ begin
     LoadImage:= tmpsurf //Result
 end;
 
+
+function LoadDataImage(const path: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+var tmpsurf: PSDL_Surface;
+begin
+    // check for file in user dir (never critical)
+    tmpsurf:= LoadImage(UserPathz[path] + '/' + filename, imageFlags and (not ifCritical));
+
+    // if unsuccessful check data dir
+    if (tmpsurf = nil) then
+        tmpsurf:= LoadImage(Pathz[path] + '/' + filename, imageFlags);
+
+    LoadDataImage:= tmpsurf;
+end;
+
+
+function LoadDataImageAltPath(const path, altPath: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+var tmpsurf: PSDL_Surface;
+begin
+    // if there is no alternative path, just forward and return result
+    if (altPath = ptNone) then
+        exit(LoadDataImage(path, filename, imageFlags));
+
+    // since we have a fallback path this search isn't critical yet
+    tmpsurf:= LoadDataImage(path, filename, imageFlags and (not ifCritical));
+
+    // if image still not found try alternative path
+    if (tmpsurf = nil) then
+        tmpsurf:= LoadDataImage(altPath, filename, imageFlags);
+
+    LoadDataImageAltPath:= tmpsurf;
+end;
+
+function LoadDataImageAltFile(const path: TPathType; const filename, altFile: shortstring; imageFlags: LongInt): PSDL_Surface;
+var tmpsurf: PSDL_Surface;
+begin
+    // if there is no alternative filename, just forward and return result
+    if (altFile = '') then
+        exit(LoadDataImage(path, filename, imageFlags));
+
+    // since we have a fallback filename this search isn't critical yet
+    tmpsurf:= LoadDataImage(path, filename, imageFlags and (not ifCritical));
+
+    // if image still not found try alternative filename
+    if (tmpsurf = nil) then
+        tmpsurf:= LoadDataImage(path, altFile, imageFlags);
+
+    LoadDataImageAltFile:= tmpsurf;
+end;
+
 procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
 var texsurf: PSDL_Surface;
 begin
-texsurf:= LoadImage(UserPathz[ptHats] + '/' + newHat, ifNone);
-    if texsurf = nil then
-        texsurf:= LoadImage(Pathz[ptHats] + '/' + newHat, ifNone);
+    texsurf:= LoadDataImage(ptHats, newHat, ifNone);
 
     // only do something if the hat could be loaded
     if texsurf <> nil then
@@ -864,9 +876,7 @@ begin
     if Step = 0 then
     begin
         WriteToConsole(msgLoading + 'progress sprite: ');
-        texsurf:= LoadImage(UserPathz[ptGraphics] + '/Progress', ifTransparent);
-        if texsurf = nil then
-            texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
+        texsurf:= LoadDataImage(ptGraphics, 'Progress', ifCritical or ifTransparent);
 
         ProgrTex:= Surface2Tex(texsurf, false);
 
@@ -1135,9 +1145,7 @@ begin
         WriteLnToConsole(msgOK);
         // load engine icon
     {$IFNDEF DARWIN}
-        ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
-        if ico = nil then
-            ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+        ico:= LoadDataImage(ptGraphics, 'hwengine', ifIgnoreCaps);
         if ico <> nil then
             begin
             SDL_WM_SetIcon(ico, 0);
