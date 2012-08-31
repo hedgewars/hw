@@ -62,8 +62,7 @@ var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
 begin
-    tmpsurf:= LoadImage(UserPathz[ptCurrTheme] + '/LandTex', ifIgnoreCaps);
-    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', ifCritical or ifIgnoreCaps);
+    tmpsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
     r.y:= 0;
     while r.y < LAND_HEIGHT do
     begin
@@ -78,12 +77,10 @@ begin
     SDL_FreeSurface(tmpsurf);
 
     // freed in freeModule() below
-    LandBackSurface:= LoadImage(UserPathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
-    if LandBackSurface = nil then LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
     if (LandBackSurface <> nil) and GrayScale then Surface2GrayScale(LandBackSurface);
 
-    tmpsurf:= LoadImage(UserPathz[ptCurrTheme] + '/Border', ifIgnoreCaps or ifTransparent);
-    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
+    tmpsurf:= LoadDataImage(ptCurrTheme, 'Border', ifCritical or ifIgnoreCaps or ifTransparent);
     for x:= 0 to LAND_WIDTH - 1 do
     begin
         yd:= LAND_HEIGHT - 1;
@@ -418,15 +415,11 @@ topY:= LAND_HEIGHT - playHeight;
 
 WriteLnToConsole('Generating forts land...');
 
-tmpsurf:= LoadImage(UserPathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifTransparent or ifIgnoreCaps);
-if tmpsurf = nil then
-    tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadDataImage(ptForts, ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 BlitImageAndGenerateCollisionInfo(leftX+150, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= LoadImage(UserPathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
-if tmpsurf = nil then
-    tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadDataImage(ptForts, ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 end;
@@ -437,15 +430,11 @@ var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
     x, y, cpX, cpY: Longword;
 begin
-tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-if tmpsurf = nil then
-    tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadDataImage(ptMapCurrent, 'mask', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(Pathz[ptMapCurrent]);
-    tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-    if tmpsurf = nil then
-        tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
     end;
 
 
@@ -488,9 +477,7 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
     if not disableLandBack then
         begin
         // freed in freeModule() below
-        LandBackSurface:= LoadImage(UserPathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
-        if LandBackSurface = nil then
-            LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+        LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
         if (LandBackSurface <> nil) and GrayScale then
             Surface2GrayScale(LandBackSurface)
         end;
@@ -508,15 +495,11 @@ var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-tmpsurf:= LoadImage(UserPathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
-if tmpsurf = nil then
-    tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
+tmpsurf:= LoadDataImage(ptMapCurrent, 'map', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
     mapName:= ExtractFileName(Pathz[ptMapCurrent]);
-    tmpsurf:= LoadImage(UserPathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifTransparent or ifIgnoreCaps);
-    if tmpsurf = nil then
-        tmpsurf:= LoadImage(Pathz[ptMissionMaps] + '/' + mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+    tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
     end;
 // (bare) Sanity check. Considering possible LongInt comparisons as well as just how much system memoery it would take
 TryDo((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (tmpsurf^.w * tmpsurf^.h < 6*1024*1024*1024), 'Map dimensions too big!', true);
