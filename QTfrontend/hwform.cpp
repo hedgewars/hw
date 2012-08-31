@@ -1613,7 +1613,7 @@ void HWForm::UpdateCampaignPage(int index)
     unsigned int n = missionEntries.count();
     unsigned int m = getCampProgress(tName, campaignName);
 
-    for (unsigned int i = min(m + 1, n); i > 0; i--)
+    for (unsigned int i = qMin(m + 1, n); i > 0; i--)
     {
         ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(i) + QString(missionEntries[i-1]), QString(missionEntries[i-1]));
     }
