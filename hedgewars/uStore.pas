@@ -687,7 +687,9 @@ end;
 procedure SetupOpenGL;
 //var vendor: shortstring = '';
 var buf: array[byte] of char;
+{$IFDEF USE_VIDEO_RECORDING}
     AuxBufNum: LongInt;
+{$ENDIF}
     tmpstr: AnsiString;
     tmpint: LongInt;
     tmpn: LongInt;
@@ -736,14 +738,16 @@ begin
 {$ENDIF}
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
 *)
-    glGetIntegerv(GL_AUX_BUFFERS, @AuxBufNum);
 
     // everyone love debugging
     AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
     AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
     AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
     AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
-    AddFileLog('  |----- Number of auxilary buffers: ' + inttostr(AuxBufNum));
+{$IFDEF USE_VIDEO_RECORDING}
+    glGetIntegerv(GL_AUX_BUFFERS, @AuxBufNum);
+    AddFileLog('  |----- Number of auxiliary buffers: ' + inttostr(AuxBufNum));
+{$ENDIF}
     AddFileLog('  \----- Extensions: ');
     // fetch extentions and store them in string
     tmpstr := StrPas(PChar(glGetString(GL_EXTENSIONS)));
@@ -780,7 +784,7 @@ begin
         begin
             glDrawBuffer(GL_AUX0);
             glReadBuffer(GL_AUX0);
-            AddFileLog('Using auxilary buffer for video recording.');
+            AddFileLog('Using auxiliary buffer for video recording.');
         end
         else
         begin
