@@ -123,6 +123,7 @@ void GameUIConfig::reloadValues(void)
 void GameUIConfig::reloadVideosValues(void)
 {
     Form->ui.pageVideos->framerateBox->setValue(value("videorec/fps",25).toUInt());
+    Form->ui.pageVideos->bitrateBox->setValue(value("videorec/bitrate",400).toUInt());
     bool useGameRes = value("videorec/usegameres",true).toBool();
     if (useGameRes)
     {
@@ -232,6 +233,7 @@ void GameUIConfig::SaveVideosOptions()
     setValue("videorec/videocodec", videoCodec());
     setValue("videorec/audiocodec", audioCodec());
     setValue("videorec/fps", rec_Framerate());
+    setValue("videorec/bitrate", rec_Bitrate());
     setValue("videorec/width", res.width());
     setValue("videorec/height", res.height());
     setValue("videorec/usegameres", Form->ui.pageVideos->checkUseGameRes->isChecked());
@@ -464,6 +466,11 @@ QRect GameUIConfig::rec_Resolution()
 int GameUIConfig::rec_Framerate()
 {
     return Form->ui.pageVideos->framerateBox->value();
+}
+
+int GameUIConfig::rec_Bitrate()
+{
+    return Form->ui.pageVideos->bitrateBox->value();
 }
 
 bool GameUIConfig::recordAudio()

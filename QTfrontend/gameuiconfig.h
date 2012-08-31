@@ -64,6 +64,7 @@ class GameUIConfig : public QSettings
         QString audioCodec();
         QRect rec_Resolution();
         int rec_Framerate();
+        int rec_Bitrate();
         bool recordAudio();
 
 #ifdef __APPLE__

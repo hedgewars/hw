@@ -37,6 +37,7 @@ class PageVideos : public AbstractPage
         PageVideos(QWidget* parent = 0);
 
         QSpinBox  *framerateBox;
+        QSpinBox  *bitrateBox;
         QLineEdit *widthEdit;
         QLineEdit *heightEdit;
         QCheckBox *checkUseGameRes;
