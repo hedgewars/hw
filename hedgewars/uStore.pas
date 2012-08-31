@@ -21,7 +21,7 @@
 
 unit uStore;
 interface
-uses StrUtils, SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
+uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -749,6 +749,7 @@ begin
     AddFileLog('  |----- Number of auxiliary buffers: ' + inttostr(AuxBufNum));
 {$ENDIF}
     AddFileLog('  \----- Extensions: ');
+{$IFNDEF PAS2C}
     // fetch extentions and store them in string
     tmpstr := StrPas(PChar(glGetString(GL_EXTENSIONS)));
     tmpn := WordCount(tmpstr, [' ']);
@@ -766,8 +767,10 @@ begin
         tmpint := tmpint + 3;
     end;
     until (tmpint > tmpn);
-    // doesn't seem to print >256 chars, also missing explicit PChar cast
-    // AddFileLogRaw(glGetString(GL_EXTENSIONS));
+{$ELSE}
+    // doesn't seem to print >256 chars
+    AddFileLogRaw(PChar(glGetString(GL_EXTENSIONS)));
+{$ENDIF}
     AddFileLog('');
 
     defaultFrame:= 0;
