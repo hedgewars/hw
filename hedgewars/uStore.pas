@@ -21,7 +21,7 @@
 
 unit uStore;
 interface
-uses SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
+uses StrUtils, SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -688,6 +688,9 @@ procedure SetupOpenGL;
 //var vendor: shortstring = '';
 var buf: array[byte] of char;
     AuxBufNum: LongInt;
+    tmpstr: AnsiString;
+    tmpint: LongInt;
+    tmpn: LongInt;
 begin
     buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
@@ -742,9 +745,26 @@ begin
     AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
     AddFileLog('  |----- Number of auxilary buffers: ' + inttostr(AuxBufNum));
     AddFileLog('  \----- Extensions: ');
-    AddFileLogRaw(glGetString(GL_EXTENSIONS));
+    // fetch extentions and store them in string
+    tmpstr := StrPas(PChar(glGetString(GL_EXTENSIONS)));
+    tmpn := WordCount(tmpstr, [' ']);
+    tmpint := 1;
+
+    repeat
+    begin
+        // print up to 3 extentions per row
+        // ExtractWord will return empty string if index out of range
+        AddFileLog(TrimRight(
+            ExtractWord(tmpint, tmpstr, [' ']) + ' ' +
+            ExtractWord(tmpint+1, tmpstr, [' ']) + ' ' +
+            ExtractWord(tmpint+2, tmpstr, [' '])
+        ));
+        tmpint := tmpint + 3;
+    end;
+    until (tmpint > tmpn);
+    // doesn't seem to print >256 chars, also missing explicit PChar cast
+    // AddFileLogRaw(glGetString(GL_EXTENSIONS));
     AddFileLog('');
-    //TODO: slipt Extensions line into multiple lines
 
     defaultFrame:= 0;
 {$IFDEF USE_VIDEO_RECORDING}
