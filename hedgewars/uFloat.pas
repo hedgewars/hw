@@ -389,7 +389,7 @@ end;
 
 function isZero(const z: hwFloat): boolean; inline; 
 begin
-isZero := z.Round = 0 and z.Frac = 0;
+isZero := (z.Round = 0) and (z.Frac = 0);
 end;
 {$ENDIF}
 
