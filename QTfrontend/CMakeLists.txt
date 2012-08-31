@@ -128,7 +128,6 @@ set(hwfr_moc_hdrs
     HWApplication.h
     hwform.h
     team.h
-    campaign.h
     util/DataManager.h
     )
 
@@ -141,6 +140,7 @@ set(hwfr_hdrs
     KB.h
     hwconsts.h
     sdlkeys.h
+    campaign.h
     )
 
 set(hwfr_rez hedgewars.qrc)
