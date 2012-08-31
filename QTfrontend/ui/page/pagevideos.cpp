@@ -203,6 +203,17 @@ QLayout * PageVideos::bodyLayoutDefinition()
         framerateBox->setSingleStep(1);
         pOptLayout->addWidget(framerateBox, 6, 1);
 
+        // label for Bitrate
+        QLabel *labelBitrate = new QLabel(pOptionsGroup);
+        labelBitrate->setText(QLabel::tr("Bitrate (Kbps)"));
+        pOptLayout->addWidget(labelBitrate, 6, 2);
+
+        // bitrate
+        bitrateBox = new QSpinBox(pOptionsGroup);
+        bitrateBox->setRange(100, 5000);
+        bitrateBox->setSingleStep(100);
+        pOptLayout->addWidget(bitrateBox, 6, 3);
+
         // button 'set default options'
         btnDefaults = new QPushButton(pOptionsGroup);
         btnDefaults->setText(QPushButton::tr("Set default options"));
@@ -432,6 +443,7 @@ void PageVideos::setDefaultCodecs()
 void PageVideos::setDefaultOptions()
 {
     framerateBox->setValue(25);
+    bitrateBox->setValue(400);
     checkRecordAudio->setChecked(true);
     checkUseGameRes->setChecked(true);
     setDefaultCodecs();
