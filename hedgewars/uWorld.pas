@@ -1330,11 +1330,10 @@ for t:= 0 to Pred(TeamsCount) do
 
         // draw health bars right border
         inc(r.x, cTeamHealthWidth + 2);
-        if TeamHealth = 0 then inc(r.x);
         r.w:= 3;
         DrawTextureFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
-        if not highlight and (not hasGone) and (TeamHealth > 1) then
+        if not highlight and (not hasGone) then
             for i:= 0 to cMaxHHIndex do
                 if Hedgehogs[i].Gear <> nil then
                     begin
