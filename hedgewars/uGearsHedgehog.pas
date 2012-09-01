@@ -234,8 +234,8 @@ with Gear^,
         and ((Gear^.Message and gmLJump) <> 0)
         and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
             begin
-            newDx:= dX / CurAmmoGear^.stepFreq; 
-            newDy:= dY / CurAmmoGear^.stepFreq;
+            newDx:= dX; 
+            newDy:= dY;
             altUse:= true
             end
         else
