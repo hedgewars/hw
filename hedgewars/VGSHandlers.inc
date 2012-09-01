@@ -434,7 +434,7 @@ var thexchar: array[0..cMaxTeams] of
 procedure doStepTeamHealthSorterWork(Gear: PVisualGear; Steps: Longword);
 var i, t: LongInt;
 begin
-for t:= 1 to Steps do
+for t:= 1 to min(Steps, Gear^.Timer) do
     begin
     dec(Gear^.Timer);
     if (Gear^.Timer and 15) = 0 then
@@ -442,18 +442,18 @@ for t:= 1 to Steps do
             with thexchar[i] do
                 begin
                 {$WARNINGS OFF}
-                team^.DrawHealthY:= ny + dy * LongInt(Gear^.Timer) div 640;
+                team^.DrawHealthY:= ny + dy * LongInt(Gear^.Timer) div cSorterWorkTime;
                 team^.TeamHealthBarWidth:= team^.NewTeamHealthBarWidth + dw * LongInt(Gear^.Timer) div cSorterWorkTime;
                 {$WARNINGS ON}
                 end;
+    end;
 
-    if (Gear^.Timer = 0) or (currsorter <> Gear) then
-        begin
-        if currsorter = Gear then
-            currsorter:= nil;
-        DeleteVisualGear(Gear);
-        exit
-        end
+if (Gear^.Timer = 0) or (currsorter <> Gear) then
+    begin
+    if currsorter = Gear then
+        currsorter:= nil;
+    DeleteVisualGear(Gear);
+    exit
     end
 end;
 
@@ -463,15 +463,21 @@ var i: Longword;
     t: LongInt;
 begin
 Steps:= Steps; // avoid compiler hint
+
 for t:= 0 to Pred(TeamsCount) do
     with thexchar[t] do
         begin
-        dy:= TeamsArray[t]^.DrawHealthY;
-        dw:= TeamsArray[t]^.TeamHealthBarWidth - TeamsArray[t]^.NewTeamHealthBarWidth;
         team:= TeamsArray[t];
-        SortFactor:= TeamsArray[t]^.Clan^.ClanHealth;
-        SortFactor:= (SortFactor shl  3) + TeamsArray[t]^.Clan^.ClanIndex;
-        SortFactor:= (SortFactor shl 30) + TeamsArray[t]^.TeamHealth;
+        dy:= team^.DrawHealthY;
+        dw:= team^.TeamHealthBarWidth - team^.NewTeamHealthBarWidth;
+        if team^.TeamHealth > 0 then
+            begin
+            SortFactor:= team^.Clan^.ClanHealth;
+            SortFactor:= (SortFactor shl  3) + team^.Clan^.ClanIndex;
+            SortFactor:= (SortFactor shl 30) + team^.TeamHealth;
+            end
+        else
+            SortFactor:= 0;
         end;
 
 if TeamsCount > 1 then
@@ -489,12 +495,13 @@ if TeamsCount > 1 then
 
 t:= - 4;
 for i:= 0 to Pred(TeamsCount) do
-    with thexchar[i] do
-        begin
-        dec(t, team^.HealthTex^.h + 2);
-        ny:= t;
-        dy:= dy - ny
-        end;
+        with thexchar[i] do
+          if team^.TeamHealth > 0 then
+            begin
+            dec(t, team^.HealthTex^.h + 2);
+            ny:= t;
+            dy:= dy - ny
+            end;
 
 Gear^.Timer:= cSorterWorkTime;
 Gear^.doStep:= @doStepTeamHealthSorterWork;

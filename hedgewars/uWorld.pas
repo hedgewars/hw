@@ -1307,6 +1307,7 @@ if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen 
 else smallScreenOffset:= 0;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
+      if TeamHealth > 0 then
         begin
         h:= 0;
         highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
