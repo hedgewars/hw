@@ -438,7 +438,7 @@ phrase = do
     return o
 
 ifBlock = do
-    try $ string "if" >> notFollowedBy alphaNum
+    try $ string "if" >> notFollowedBy (alphaNum <|> char '_')
     comments
     e <- expression
     comments
