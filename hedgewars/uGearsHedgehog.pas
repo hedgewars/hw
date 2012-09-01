@@ -357,7 +357,7 @@ with Gear^,
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
                        amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
              end;
-             if altUse then
+             if altUse and (newGear <> nil) then
                 begin
                 newGear^.dX:= newDx / newGear^.Density;
                 newGear^.dY:= newDY / newGear^.Density
