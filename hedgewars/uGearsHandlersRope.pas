@@ -73,141 +73,33 @@ begin
         end
 end;
 
-procedure unstickHog(Gear, HHGear: PGear);
-var i: LongInt;
-    stuck: Boolean;
-begin
-    if (TestCollisionYwithGear(HHGear, 1) <> 0) and (TestCollisionYwithGear(HHGear, -1) = 0) then
-        begin
-        i:= 1;
-        repeat
-            begin
-            inc(i);
-            stuck:= TestCollisionYwithGear(HHGear, 1) <> 0;
-            if stuck then HHGear^.Y:= HHGear^.Y-_1
-            end
-        until (i = 8) or (not stuck);
-        HHGear^.Y:= HHGear^.Y+_1;
-        // experiment in simulating something the shoppa players apparently expect
-        if Gear^.Message and gmDown <> 0 then
-            begin
-            //HHGear^.dY:= HHGear^.dY / 16;
-            //HHGear^.dY.QWordValue:= 0;
-            HHGear^.dY:= -_0_1;
-            HHGear^.dX:= HHGear^.dX * _1_5;
-            end;
-        if Gear^.Message and gmRight <> 0 then
-            HHGear^.dX.isNegative:= false
-        else if Gear^.Message and gmLeft <> 0 then
-            HHGear^.dX.isNegative:= true
-        end
-    else if (TestCollisionYwithGear(HHGear, -1) <> 0) and (TestCollisionYwithGear(HHGear, 1) = 0) then
-        begin
-        i:= 1;
-        repeat
-            begin
-            inc(i);
-            stuck:= TestCollisionYwithGear(HHGear, -1) <> 0;
-            if stuck then HHGear^.Y:= HHGear^.Y+_1
-            end
-        until (i = 8) or (not stuck);
-        HHGear^.Y:= HHGear^.Y-_1;
-        if Gear^.Message and gmDown <> 0 then
-            begin
-            //HHGear^.dY:= HHGear^.dY / 16;
-            //HHGear^.dY.QWordValue:= 0;
-            HHGear^.dY:= _0_1;
-            HHGear^.dX:= HHGear^.dX * _1_5;
-            end;
-        if Gear^.Message and gmRight <> 0 then
-            HHGear^.dX.isNegative:= true
-        else if Gear^.Message and gmLeft <> 0 then
-            HHGear^.dX.isNegative:= false
-        end;
-    if TestCollisionXwithGear(HHGear, 1) and (not TestCollisionXwithGear(HHGear, -1)) then
-        begin
-        i:= 1;
-        repeat
-            begin
-            inc(i);
-            stuck:= TestCollisionXwithGear(HHGear, 1);
-            if stuck then HHGear^.X:= HHGear^.X-_1
-            end
-        until (i = 8) or (not stuck);
-        HHGear^.X:= HHGear^.X+_1;
-        if Gear^.Message and gmDown <> 0 then
-            begin
-            //HHGear^.dX:= HHGear^.dX / 16;
-            //HHGear^.dX.QWordValue:= 0;
-            HHGear^.dX:= -_0_1;
-            HHGear^.dY:= HHGear^.dY * _1_5;
-            end;
-        if Gear^.Message and gmRight <> 0 then
-            HHGear^.dY.isNegative:= true
-        else if Gear^.Message and gmLeft <> 0 then
-            HHGear^.dY.isNegative:= false
-        end
-    else if TestCollisionXwithGear(HHGear, -1) and (not TestCollisionXwithGear(HHGear, 1)) then
-        begin
-        i:= 1;
-        repeat
-            begin
-            inc(i);
-            stuck:= TestCollisionXwithGear(HHGear, -1);
-            if stuck then HHGear^.X:= HHGear^.X+_1
-            end
-        until (i = 8) or (not stuck);
-        HHGear^.X:= HHGear^.X-_1;
-        if Gear^.Message and gmDown <> 0 then
-            begin
-            //HHGear^.dX:= HHGear^.dX / 16;
-            //HHGear^.dX.QWordValue:= 0;
-            HHGear^.dX:= _0_1;
-            HHGear^.dY:= HHGear^.dY * _1_5;
-            end;
-        if Gear^.Message and gmRight <> 0 then
-            HHGear^.dY.isNegative:= false
-        else if Gear^.Message and gmLeft <> 0 then
-            HHGear^.dY.isNegative:= true
-        end
-end;
-
 procedure RopeDeleteMe(Gear, HHGear: PGear);
 begin
-    PlaySound(sndRopeRelease);
-    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue div Gear^.stepFreq;
-    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue div Gear^.stepFreq;
     with HHGear^ do
         begin
         Message := Message and (not gmAttack);
         State := (State or gstMoving) and (not gstWinner);
         end;
-    unstickHog(Gear, HHGear);
     DeleteGear(Gear)
 end;
 
 procedure RopeWaitCollision(Gear, HHGear: PGear);
 begin
-    PlaySound(sndRopeRelease);
     with HHGear^ do
         begin
         Message := Message and (not gmAttack);
         State := State or gstMoving;
         end;
-    unstickHog(Gear, HHGear);
     RopePoints.Count := 0;
     Gear^.Elasticity := _0;
-    Gear^.doStep := @doStepRopeAfterAttack;
-    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue div Gear^.stepFreq;
-    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue div Gear^.stepFreq;
-    Gear^.stepFreq := 1
+    Gear^.doStep := @doStepRopeAfterAttack
 end;
 
 procedure doStepRopeWork(Gear: PGear);
 var 
     HHGear: PGear;
-    len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY, t: hwFloat;
-    lx, ly, cd, i: LongInt;
+    len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY, sDx, sDy: hwFloat;
+    i, lx, ly, cd: LongInt;
     haveCollision,
     haveDivided: boolean;
 
@@ -215,22 +107,23 @@ begin
     if GameTicks mod 8 <> 0 then exit;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    haveCollision:= false;
-    if (Gear^.Message and gmLeft  <> 0) and (not TestCollisionXwithGear(HHGear, -1)) then
-        HHGear^.dX := HHGear^.dX - _0_0128
-    else haveCollision:= true;
 
-    if (Gear^.Message and gmRight <> 0) and (not TestCollisionXwithGear(HHGear,  1)) then
-        HHGear^.dX := HHGear^.dX + _0_0128
-    else haveCollision:= true;
-
+    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shl 3;
+    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shl 3;
 
     if ((HHGear^.State and gstHHDriven) = 0)
        or (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
         begin
+        PlaySound(sndRopeRelease);
         RopeDeleteMe(Gear, HHGear);
         exit
         end;
+
+    if (Gear^.Message and gmLeft  <> 0) and (not TestCollisionXwithGear(HHGear, -1)) then
+        HHGear^.dX := HHGear^.dX - _0_0128;
+
+    if (Gear^.Message and gmRight <> 0) and (not TestCollisionXwithGear(HHGear,  1)) then
+        HHGear^.dX := HHGear^.dX + _0_0128;
 
     // vector between hedgehog and rope attaching point
     ropeDx := HHGear^.X - Gear^.X;
@@ -254,31 +147,7 @@ begin
             // apply wind if there's no obstacle
             if not TestCollisionXwithGear(HHGear, hwSign(cWindSpeed)) then
                 HHGear^.dX := HHGear^.dX + cWindSpeed * 64 / HHGear^.Density;
-        end
-    else haveCollision:= true;
-
-    if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
-        if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
-        or (TestCollisionYwithGear(HHGear, hwSign(ropeDy)) <> 0)) then
-            Gear^.Elasticity := Gear^.Elasticity + _2_4
-    else haveCollision:= true;
-
-    if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
-        if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
-        or (TestCollisionYwithGear(HHGear, -hwSign(ropeDy)) <> 0)) then
-            Gear^.Elasticity := Gear^.Elasticity - _2_4
-    else haveCollision:= true;
-
-(*
-I am not so sure this is useful. Disabling
-    if haveCollision then
-        begin
-        if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) and not TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
-            HHGear^.dX.isNegative:= not HHGear^.dX.isNegative;
-        if (TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0) and (TestCollisionYwithGear(HHGear, -hwSign(HHGear^.dY)) = 0) then
-            HHGear^.dY.isNegative:= not HHGear^.dY.isNegative;
         end;
-*)
 
     mdX := ropeDx + HHGear^.dX;
     mdY := ropeDy + HHGear^.dY;
@@ -295,11 +164,37 @@ I am not so sure this is useful. Disabling
     tx := HHGear^.X;
     ty := HHGear^.Y;
 
+    if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
+        if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
+        or (TestCollisionYwithGear(HHGear, hwSign(ropeDy)) <> 0)) then
+            Gear^.Elasticity := Gear^.Elasticity + _2_4;
+
+    if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
+        if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
+        or (TestCollisionYwithGear(HHGear, -hwSign(ropeDy)) <> 0)) then
+            Gear^.Elasticity := Gear^.Elasticity - _2_4;
+
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
     HHGear^.Y := Gear^.Y + mdY * Gear^.Elasticity;
 
-    HHGear^.dX := HHGear^.X - tx;
-    HHGear^.dY := HHGear^.Y - ty;
+    HHGear^.dX := Gear^.X + mdX * Gear^.Elasticity - tx;
+    HHGear^.dY := Gear^.Y + mdY * Gear^.Elasticity - ty;
+
+    sDx:= HHGear^.dX / 8;
+    sDy:= HHGear^.dY / 8;
+
+    HHGear^.X:= tx;
+    HHGear^.Y:= ty;
+
+    i:= 0;
+    while not ((i = 8)
+        or TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX))
+        or (TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0)) do
+        begin
+        inc(i);
+        HHGear^.X:= HHGear^.X + sDx;
+        HHGear^.Y:= HHGear^.Y + sDy;
+        end;
     ////
 
 
@@ -447,6 +342,7 @@ I am not so sure this is useful. Disabling
         begin
         if (Gear^.State and gsttmpFlag) <> 0 then
             begin
+            PlaySound(sndRopeRelease);
             if Gear^.Hedgehog^.CurAmmoType <> amParachute then
                 RopeWaitCollision(Gear, HHGear)
             else
@@ -456,6 +352,9 @@ I am not so sure this is useful. Disabling
     else
         if (Gear^.State and gsttmpFlag) = 0 then
             Gear^.State := Gear^.State or gsttmpFlag;
+
+    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 3;
+    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 3;
 end;
 
 procedure RopeRemoveFromAmmo(Gear, HHGear: PGear);
@@ -516,12 +415,9 @@ begin
                 Gear^.Y := Gear^.Y + ty;
                 Gear^.Elasticity := tt;
                 Gear^.doStep := @doStepRopeWork;
-                Gear^.stepFreq:= 8;
                 PlaySound(sndRopeAttach);
                 with HHGear^ do
                     begin
-                    dX.QWordValue:= dX.QWordValue shl 3;
-                    dY.QWordValue:= dY.QWordValue shl 3;
                     State := State and (not (gstAttacking or gstHHJumping or gstHHHJump));
                     Message := Message and (not gmAttack)
                     end;
@@ -537,8 +433,6 @@ begin
             end;
         end;
 
-    if Gear^.Elasticity < _20 then Gear^.CollisionMask:= $FF00
-    else Gear^.CollisionMask:= $FF7F;
     CheckCollision(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then
@@ -547,12 +441,9 @@ begin
     else
         begin
         Gear^.doStep := @doStepRopeWork;
-        Gear^.stepFreq:= 8;
         PlaySound(sndRopeAttach);
         with HHGear^ do
             begin
-            dX.QWordValue:= dX.QWordValue shl 3;
-            dY.QWordValue:= dY.QWordValue shl 3;
             State := State and (not (gstAttacking or gstHHJumping or gstHHHJump));
             Message := Message and (not gmAttack)
             end;
