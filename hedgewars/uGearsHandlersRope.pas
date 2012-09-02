@@ -108,9 +108,6 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
 
-    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shl 3;
-    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shl 3;
-
     if ((HHGear^.State and gstHHDriven) = 0)
        or (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
         begin
@@ -118,6 +115,9 @@ begin
         RopeDeleteMe(Gear, HHGear);
         exit
         end;
+
+    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shl 3;
+    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shl 3;
 
     if (Gear^.Message and gmLeft  <> 0) and (not TestCollisionXwithGear(HHGear, -1)) then
         HHGear^.dX := HHGear^.dX - _0_0128;
