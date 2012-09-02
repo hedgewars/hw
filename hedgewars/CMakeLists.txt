@@ -253,7 +253,7 @@ endif()
 # hence the command is not needed there
 if(NOT APPLE)
     add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
-    if(NO_VIDEOREC)
+    if(NO_VIDEOREC OR NOT ${FFMPEG_FOUND})
         add_dependencies(${engine_output_name} ENGINECLEAN)
     else()
         add_dependencies(avwrapper ENGINECLEAN)
