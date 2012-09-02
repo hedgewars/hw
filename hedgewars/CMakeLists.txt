@@ -251,9 +251,13 @@ endif()
 #this command is a workaround to some inlining issues present in older
 # FreePascal versions and fixed in 2.6, That version is mandatory on OSX,
 # hence the command is not needed there
-# if(NOT APPLE)
-#    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
-#    add_dependencies(${engine_output_name} ENGINECLEAN)
-# endif()
+if(NOT APPLE)
+    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
+    if(NO_VIDEOREC)
+        add_dependencies(${engine_output_name} ENGINECLEAN)
+    else()
+        add_dependencies(avwrapper ENGINECLEAN)
+    endif()
+endif()
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
