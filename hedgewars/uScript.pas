@@ -1950,9 +1950,14 @@ ScriptSetInteger('GameTime', GameTicks);
 ScriptSetInteger('RealTime', RealTicks);
 ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
-ScriptSetInteger('LeftX', leftX);
-ScriptSetInteger('RightX', rightX);
-ScriptSetInteger('TopY', topY);
+if GameTicks = 0 then
+    begin
+    ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
+    ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
+    ScriptSetInteger('LeftX', leftX);
+    ScriptSetInteger('RightX', rightX);
+    ScriptSetInteger('TopY', topY)
+    end;
 if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
     ScriptSetInteger('CurrentHedgehog', CurrentHedgehog^.Gear^.UID)
 else
@@ -2149,8 +2154,6 @@ luaopen_math(luaState);
 luaopen_table(luaState);
 
 // import some variables
-ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
-ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
 ScriptSetString(_S'L', cLocale);
 
 // import game flags
