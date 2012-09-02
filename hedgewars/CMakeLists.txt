@@ -187,6 +187,16 @@ else()
     message(STATUS "PNG screenshots disabled per user request, using BMP format")
 endif()
 
+
+
+#this command is a workaround to some inlining issues present in older
+# FreePascal versions and fixed in 2.6, That version is mandatory on OSX,
+# hence the command is not needed there
+if(NOT APPLE)
+    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
+endif()
+
+
 if(NOT NO_VIDEOREC)
     if(${FFMPEG_FOUND})
         message(STATUS "Compiling with video recording")
@@ -203,6 +213,9 @@ if(NOT NO_VIDEOREC)
             set(pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}" ${pascal_flags})
          #   set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/${CMAKE_STATIC_LIBRARY_PREFIX}avwrapper${CMAKE_STATIC_LIBRARY_SUFFIX}" ${pascal_flags})
         ENDIF()
+        if(NOT APPLE)
+            add_dependencies(avwrapper ENGINECLEAN)
+        endif()
     else()
         message(STATUS "FFMPEG library not found, video recording will be disabled")
     endif()
@@ -248,15 +261,9 @@ if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
 endif()
 
-#this command is a workaround to some inlining issues present in older
-# FreePascal versions and fixed in 2.6, That version is mandatory on OSX,
-# hence the command is not needed there
 if(NOT APPLE)
-    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
     if(NO_VIDEOREC OR NOT ${FFMPEG_FOUND})
         add_dependencies(${engine_output_name} ENGINECLEAN)
-    else()
-        add_dependencies(avwrapper ENGINECLEAN)
     endif()
 endif()
 
