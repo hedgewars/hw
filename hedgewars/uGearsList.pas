@@ -177,16 +177,16 @@ case Kind of
                     if State and gstTmpFlag = 0 then
                         begin
                         dx.isNegative:= GetRandom(2) = 0;
-                        dx.QWordValue:= GetRandom(100000000);
+                        dx.QWordValue:= $40DA*GetRandom(10000)*8;
                         dy.isNegative:= false;
-                        dy.QWordValue:= GetRandom(70000000);
+                        dy.QWordValue:= $3AD3*GetRandom(7000)*8;
                         if GetRandom(2) = 0 then
                             dx := -dx
                         end;
                     State:= State or gstInvisible;
                     Health:= random(vobFrameTicks);
                     Timer:= random(vobFramesCount);
-                    Angle:= (random(2) * 2 - 1) * (1 + random(10000)) * vobVelocity
+                    Damage:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) * 8;
                     end
                 end;
        gtGrave: begin

@@ -583,13 +583,14 @@ else if GameTicks and $7 = 0 then
         yy:= hwRound(Y);
         if vobVelocity <> 0 then
             begin
-            DirAngle := DirAngle + (Angle / 1250000000);
+            DirAngle := DirAngle + (Damage / 1000);
             if DirAngle < 0 then
                 DirAngle := DirAngle + 360
             else if 360 < DirAngle then
                 DirAngle := DirAngle - 360;
             end;
-
+(*
+We aren't using frametick right now, so just a waste of cycles.
         inc(Health, 8);
         if longword(Health) > vobFrameTicks then
             begin
@@ -598,6 +599,7 @@ else if GameTicks and $7 = 0 then
             if Timer = vobFramesCount then
                 Timer:= 0
             end;
+*)
     // move back to cloud layer
         if yy > cWaterLine then
             move:= true
