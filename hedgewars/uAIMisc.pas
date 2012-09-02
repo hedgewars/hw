@@ -429,7 +429,7 @@ for i:= 0 to Targets.Count do
 
         if dmg > 0 then
             begin
-            if Flags and afTrackFall <> 0 then
+            if (Flags and afTrackFall <> 0) and (dmg < abs(Score)) then
                 begin
                 dX:= 0.005 * dmg + 0.01;
                 dY:= dX;
