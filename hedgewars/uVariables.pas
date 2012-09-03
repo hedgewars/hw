@@ -2328,7 +2328,7 @@ const
     GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (    
 (*          gtFlame *)   amNothing
 (*       gtHedgehog *) , amNothing
-(*           gtMine *) , amNothing
+(*           gtMine *) , amMine
 (*           gtCase *) , amNothing
 (*     gtExplosives *) , amNothing
 (*        gtGrenade *) , amGrenade
