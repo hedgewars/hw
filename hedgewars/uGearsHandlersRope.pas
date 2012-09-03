@@ -415,6 +415,8 @@ begin
             end;
         end;
 
+    if Gear^.Elasticity < _20 then Gear^.CollisionMask:= $FF00
+    else Gear^.CollisionMask:= $FF7F;
     CheckCollision(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then
