@@ -3840,6 +3840,7 @@ begin
         else
             begin
             inc(iterator^.PortalCounter);
+            iterator^.Active:= true;
             iterator^.State:= iterator^.State and (not gstHHHJump)
             end;
 
