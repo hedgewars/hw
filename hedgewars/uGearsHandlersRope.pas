@@ -111,13 +111,13 @@ begin
     if ((HHGear^.State and gstHHDriven) = 0)
        or (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
         begin
-        HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 2;
-        HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 2;
         PlaySound(sndRopeRelease);
         RopeDeleteMe(Gear, HHGear);
         exit
         end;
 
+    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shl 2;
+    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shl 2;
     if (Gear^.Message and gmLeft  <> 0) and (not TestCollisionXwithGear(HHGear, -1)) then
         HHGear^.dX := HHGear^.dX - _0_0032;
 
@@ -321,13 +321,12 @@ begin
     if (Gear^.Message and gmAttack) <> 0 then
         haveCollision:= false;
 
+    HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 2;
+    HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 2;
     if not haveCollision then
         begin
         if (Gear^.State and gsttmpFlag) <> 0 then
             begin
-            HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 2;
-            HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 2;
-            
             PlaySound(sndRopeRelease);
             if Gear^.Hedgehog^.CurAmmoType <> amParachute then
                 RopeWaitCollision(Gear, HHGear)
@@ -401,8 +400,6 @@ begin
                 PlaySound(sndRopeAttach);
                 with HHGear^ do
                     begin
-                    dX.QWordValue:= dX.QWordValue shl 2;
-                    dY.QWordValue:= dY.QWordValue shl 2;
                     State := State and (not (gstAttacking or gstHHJumping or gstHHHJump));
                     Message := Message and (not gmAttack)
                     end;
@@ -429,8 +426,6 @@ begin
         PlaySound(sndRopeAttach);
         with HHGear^ do
             begin
-            dX.QWordValue:= dX.QWordValue shl 2;
-            dY.QWordValue:= dY.QWordValue shl 2;
             State := State and (not (gstAttacking or gstHHJumping or gstHHHJump));
             Message := Message and (not gmAttack)
             end;
