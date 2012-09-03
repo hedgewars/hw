@@ -2267,14 +2267,13 @@ procedure doStepTeleportAfter(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    Gear^.Hedgehog^.Unplaced := false;
     HHGear := Gear^.Hedgehog^.Gear;
-    HHGear^.Y := HHGear^.Y + HHGear^.dY;
-    HHGear^.X := HHGear^.X + HHGear^.dX;
-    // hedgehog falling to collect cases
-    HHGear^.dY := HHGear^.dY + cGravity;
-    if (TestCollisionYwithGear(HHGear, 1) <> 0)
-    or CheckGearDrowning(HHGear) then
+    doStepHedgehogMoving(HHGear);
+    // if not infattack mode wait for hedgehog finish falling to collect cases
+    if ((GameFlags and gfInfAttack) <> 0)
+    or ((HHGear^.State and gstMoving) = 0)
+    or (Gear^.Hedgehog^.Gear^.Damage > 0)
+    or ((HHGear^.State and gstDrowning) = 1) then
         begin
         DeleteGear(Gear);
         AfterAttack
@@ -2283,6 +2282,11 @@ end;
 
 procedure doStepTeleportAnim(Gear: PGear);
 begin
+    if (Gear^.Hedgehog^.Gear^.Damage > 0) then
+        begin
+        DeleteGear(Gear);
+        AfterAttack;
+        end;
     inc(Gear^.Timer);
     if Gear^.Timer = 65 then
         begin
@@ -2326,6 +2330,8 @@ begin
         HHGear^.X := int2hwFloat(Gear^.Target.X);
         HHGear^.Y := int2hwFloat(Gear^.Target.Y);
         HHGear^.State := HHGear^.State or gstMoving;
+        Gear^.Hedgehog^.Unplaced := false;
+        isCursorVisible := false;
         playSound(sndWarp)
         end;
     Gear^.Target.X:= NoPointX
