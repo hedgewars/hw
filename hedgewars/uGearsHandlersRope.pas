@@ -101,7 +101,7 @@ var
     len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY, sDx, sDy: hwFloat;
     i, lx, ly, cd: LongInt;
     haveCollision,
-    haveDivided, bx, by: boolean;
+    haveDivided: boolean;
 
 begin
     if GameTicks mod 8 <> 0 then exit;
@@ -180,29 +180,23 @@ begin
     HHGear^.dX := Gear^.X + mdX * Gear^.Elasticity - tx;
     HHGear^.dY := Gear^.Y + mdY * Gear^.Elasticity - ty;
 
-    sDx:= HHGear^.dX / 4;
-    sDy:= HHGear^.dY / 4;
+    sDx:= HHGear^.dX / 8;
+    sDy:= HHGear^.dY / 8;
 
     HHGear^.X:= tx;
     HHGear^.Y:= ty;
 
     i:= 0;
-    bx:= TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX));
-    by:= TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0;
-    while not ((i = 4)
-        or bx
-        or by) do
+    while not ((i = 8)
+        or TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX))
+        or (TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0)) do
         begin
         inc(i);
         HHGear^.X:= HHGear^.X + sDx;
         HHGear^.Y:= HHGear^.Y + sDy;
-        bx:= TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX));
-        by:= TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0;
         end;
     ////
 
-    if not bx then HHGear^.dX:= HHGear^.X - tx;
-    if not by then HHGear^.dY:= HHGear^.Y - ty;
 
     haveDivided := false;
     // check whether rope needs dividing
