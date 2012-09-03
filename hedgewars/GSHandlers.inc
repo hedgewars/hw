@@ -1771,14 +1771,17 @@ begin
     or (TestCollisionYwithGear(Gear, 1) = 0) then
         begin
         AllInactive := false;
+
         Gear^.dY := Gear^.dY + cGravity;
-        Gear^.Y := Gear^.Y + Gear^.dY;
-        if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then
-            SetAllHHToActive;
-            
+
         if (Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, -1) <> 0) then
             Gear^.dY := _0;
-            
+
+        Gear^.Y := Gear^.Y + Gear^.dY;
+
+        if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then
+            SetAllHHToActive;
+
         if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
             if (Gear^.dY > _0_2) and (k = gtExplosives) then
