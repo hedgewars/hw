@@ -246,7 +246,7 @@ processAction ChangeMaster = do
     oldRoomName <- io $ room'sM rnc name ri
     let newRoomName = nick newMaster
     mapM_ processAction [
-        ModifyRoom (\r -> r{masterID = newMasterId, name = newRoomName}),
+        ModifyRoom (\r -> r{masterID = newMasterId, name = newRoomName, isRestrictedJoins = False, isRestrictedTeams = False}),
         ModifyClient2 newMasterId (\c -> c{isMaster = True}),
         AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
         ]
