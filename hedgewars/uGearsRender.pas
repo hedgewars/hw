@@ -21,7 +21,7 @@
 unit uGearsRender;
 
 interface
-uses uTypes, uConsts, GLunit, uFloat, SDLh, uRandom;
+uses uTypes, uConsts, GLunit, uFloat, SDLh;
 
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 
