@@ -431,7 +431,7 @@ void HWGame::abort()
     RawSendIPC(buf);
 }
 
-void HWGame::sendCampaignVar(QByteArray varToSend)
+void HWGame::sendCampaignVar(const QByteArray &varToSend)
 {
     QString varToFind(varToSend);
     QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + campaignTeam + ".hwt", QSettings::IniFormat, 0);
@@ -442,22 +442,14 @@ void HWGame::sendCampaignVar(QByteArray varToSend)
     RawSendIPC(command);
 }
 
-void HWGame::writeCampaignVar(QByteArray varVal)
+void HWGame::writeCampaignVar(const QByteArray & varVal)
 {
-    QString varToWrite("");
-    QString varValue("");
-    unsigned int i = 0;
-    while (i < varVal.size() && varVal.at(i) != ' ')
-    {
-      varToWrite.append(varVal.at(i));
-      i++;
-    }
-    i++;
-    while (i < varVal.size() && varVal.at(i) != '\0')
-    {
-      varValue.append(varVal.at(i));
-      i++;
-    }
+    int i = varVal.indexOf(" ");
+    if(i < 0)
+        return;
+
+    QString varToWrite = QString::fromUtf8(varVal.left(i));
+    QString varValue = QString::fromUtf8(varVal.mid(i + 1));
 
     QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + campaignTeam + ".hwt", QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");

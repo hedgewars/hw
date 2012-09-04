@@ -111,8 +111,8 @@ class HWGame : public TCPBase
         void SendCampaignConfig();
         void ParseMessage(const QByteArray & msg);
         void SetGameState(GameState state);
-        void sendCampaignVar(QByteArray varToSend);
-        void writeCampaignVar(QByteArray varVal);
+        void sendCampaignVar(const QByteArray & varToSend);
+        void writeCampaignVar(const QByteArray &varVal);
 };
 
 #endif
