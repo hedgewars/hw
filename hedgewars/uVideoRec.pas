@@ -36,7 +36,7 @@ interface
 var flagPrerecording: boolean = false;
 
 function BeginVideoRecording: Boolean;
-function LoadNextCameraPosition(var newRealTicks, newGameTicks: LongInt): Boolean;
+function LoadNextCameraPosition(out newRealTicks, newGameTicks: LongInt): Boolean;
 procedure EncodeFrame;
 procedure StopVideoRecording;
 
@@ -191,7 +191,7 @@ begin
     inc(numFrames);
 end;
 
-function LoadNextCameraPosition(var newRealTicks, newGameTicks: LongInt): Boolean;
+function LoadNextCameraPosition(out newRealTicks, newGameTicks: LongInt): Boolean;
 var frame: TFrame;
 begin
     // we need to skip or duplicate frames to match target framerate

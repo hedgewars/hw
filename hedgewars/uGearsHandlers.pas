@@ -47,7 +47,6 @@ procedure cakeStep(Gear: PGear);
 var
     xx, yy, xxn, yyn: LongInt;
     dA: LongInt;
-    tdx, tdy: hwFloat;
 begin
     dA := hwSign(Gear^.dX);
     xx := dirs[Gear^.Angle].x;

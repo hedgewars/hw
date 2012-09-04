@@ -598,7 +598,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure PickUp(HH, Gear: PGear);
 var s: shortstring;
-    a: TAmmoType;
     i: LongInt;
     vga: PVisualGear;
     ag, gi: PGear;

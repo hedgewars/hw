@@ -413,8 +413,7 @@ with CurrentHedgehog^.Gear^ do
 end;
 
 procedure chNextTurn(var s: shortstring);
-var i: Longword;
-    gi: PGear;
+var gi: PGear;
 begin
     s:= s; // avoid compiler hint
 
