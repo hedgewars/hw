@@ -26,7 +26,9 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
     implementation
 ////////////////////
-uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uMobile, uVisualGears, uTypes, uVariables{$IFDEF SDL13}, uTouch{$ENDIF};
+uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uMobile, 
+    uVisualGears, uTypes, uVariables, uCommands, uConsts
+    {$IFDEF SDL13}, uTouch{$ENDIF};
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;
@@ -88,7 +90,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                 gmtSave: begin
                         RestoreTeamsFromSave;
                         SetBinds(CurrentTeam^.Binds);
-                        //CurrentHedgehog^.Gear^.Message:= 0; <- produces bugs with further save restoring and demos
+                        StopMessages(gmLeft or gmRight or gmUp or gmDown);
                         ResetSound;   // restore previous sound state
                         PlayMusic;
                         GameType:= gmtLocal;
