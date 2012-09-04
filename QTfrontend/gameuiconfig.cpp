@@ -68,7 +68,7 @@ void GameUIConfig::reloadValues(void)
 
     Form->ui.pageOptions->SLQuality->setValue(value("video/quality", 5).toUInt());
     Form->ui.pageOptions->CBStereoMode->setCurrentIndex(value("video/stereo", 0).toUInt());
-    Form->ui.pageOptions->CBFrontendEffects->setChecked(frontendEffects);
+    Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/effects", true).toBool());
     Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
     Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/sound", true).toBool());
     Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
