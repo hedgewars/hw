@@ -6,6 +6,7 @@ import qualified Data.Foldable as Foldable
 import Data.Maybe
 import Data.List
 import Control.Monad.Reader
+import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
@@ -69,6 +70,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let sameProto = clientProto cl == roomProto jRoom
     let jRoomClients = map (client irnc) $ roomClients irnc jRI
     let nicks = map nick jRoomClients
+    let owner = fromJust $ find isMaster jRoomClients
     let chans = map sendChan (cl : jRoomClients)
     let isBanned = host cl `elem` roomBansList jRoom
     return $
@@ -84,7 +86,8 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             [
                 MoveToRoom jRI,
                 AnswerClients [sendChan cl] $ "JOINED" : nicks,
-                AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
+                AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl],
+                AnswerClients [sendChan cl] $ ["WARNING", "Room owner is " `B.append` nick owner]
             ]
             ++ map (readynessMessage cl) jRoomClients
             ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
