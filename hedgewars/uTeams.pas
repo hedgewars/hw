@@ -64,6 +64,11 @@ CheckForWin:= true;
 
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
+
+// if the game ends during a multishot, do last TurnReaction
+if (not bBetweenTurns) and isInMultiShoot then
+    TurnReaction();
+
 if not GameOver then
     begin
     if AliveCount = 0 then
