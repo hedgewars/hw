@@ -299,8 +299,8 @@ case step of
             AddGear(0, 0, gtWaterUp, 0, _0, _0, 0)^.Tag:= cWaterRise;
         inc(step)
         end
-    else
-        inc(step);
+    else // since we are not raising the water, a second win-check isn't needed
+        inc(step,2);
     stChWin2:
         begin
         CheckForWin;
