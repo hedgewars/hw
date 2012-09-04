@@ -244,11 +244,13 @@ processAction ChangeMaster = do
     newMasterId <- liftM (head . filter (/= ci)) . io $ roomClientsIndicesM rnc ri
     newMaster <- io $ client'sM rnc id newMasterId
     oldRoomName <- io $ room'sM rnc name ri
+    thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
     let newRoomName = nick newMaster
     mapM_ processAction [
         ModifyRoom (\r -> r{masterID = newMasterId, name = newRoomName, isRestrictedJoins = False, isRestrictedTeams = False}),
         ModifyClient2 newMasterId (\c -> c{isMaster = True}),
-        AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
+        AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"],
+        AnswerClients thisRoomChans ["WARNING", "New room admin is " `B.append` nick newMaster]
         ]
 
     proto <- client's clientProto
