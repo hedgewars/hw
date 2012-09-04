@@ -284,7 +284,10 @@ case step of
             end;
     stChWin:
         begin
-        CheckForWin;
+        if CheckForWin() then
+            // if the game ends during a multishot, do last TurnReaction
+            if (not bBetweenTurns) and isInMultiShoot then
+                TurnReaction();
         inc(step)
         end;
     stWater:
