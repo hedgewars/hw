@@ -96,6 +96,10 @@ void TCPBase::ClientDisconnect()
  /*   if(srvsList.size()==1) srvsList.pop_front();
     emit isReadyNow();*/
     IPCSocket->deleteLater();
+
+    // make sure this object is not in the server list anymore
+    srvsList.removeOne(this);
+
     deleteLater();
 }
 
