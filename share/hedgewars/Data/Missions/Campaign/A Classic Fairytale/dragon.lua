@@ -168,7 +168,6 @@ killAnim = {}
 killedAnim = {}
 
 freshDead = nil
-retry = false
 crates = {}
 cratesNum = 0
 jetCrate = nil
@@ -405,20 +404,6 @@ function DoMissionFinished()
   TurnTimeLeft = 0
 end
 
-function DoRetry()
-  AnimSetGearPosition(native, unpack(nativePos))
-  for i = 1, cratesNum do
-    if gearDead[crates[i]] ~= true then
-      DeleteGear(crates[i])
-      gearDead[crates[i]] = false
-    end
-  end
-  SetupEvents()
-  AddFunction({func = AfterStartAnim, args = {}})
-  retry = false
-end
-
-
 function CheckGearsDead(gearList)
   for i = 1, # gearList do
     if gearDead[gearList[i]] ~= true then
@@ -430,7 +415,7 @@ end
 
 
 function CheckGearDead(gear)
-  return gearDead[gear] and retry == false
+  return gearDead[gear]
 end
 
 function EndMission()
@@ -479,6 +464,31 @@ function SetupPlace()
   end
   HideHedge(cyborg)
   jetCrate = SpawnUtilityCrate(3915, 1723, amJetpack)
+
+  SetTimer(AddGear(1071, 1913, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1098, 1919, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1136, 1923, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1170, 1930, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1203, 1924, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1228, 1939, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1264, 1931, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1309, 1938, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1352, 1936, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1386, 1939, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1432, 1942, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1483, 1950, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1530, 1954, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1579, 1959, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(1000, 1903, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(957, 1903, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(909, 1910, gtMine, 0, 0, 0, 0), 5000)
+  SetTimer(AddGear(889, 1917, gtMine, 0, 0, 0, 0), 5000)
+  ------ STICKY MINE LIST ------
+  tempG = AddGear(1199, 733, gtSMine, 0, 0, 0, 0)
+  tempG = AddGear(1195, 793, gtSMine, 0, 0, 0, 0)
+  tempG = AddGear(1201, 861, gtSMine, 0, 0, 0, 0)
+  tempG = AddGear(682, 878, gtSMine, 0, 0, 0, 0)
+  tempG = AddGear(789, 876, gtSMine, 0, 0, 0, 0)
 end
 
 function SetupEvents()
@@ -613,15 +623,16 @@ function onNewTurn()
         end
       end
     end
+    if TotalRounds % 6 == 0 then
+      AddAmmo(CurrentHedgehog, amSniperRifle, 1)
+      AddAmmo(CurrentHedgehog, amDEagle, 1)
+    end
     TurnTimeLeft = 30000
   elseif GetHogTeamName(CurrentHedgehog) == loc("011101001") then
     TurnTimeLeft = 0
   else
     SetInputMask(0xFFFFFFFF)
     AddCaption(loc("Turns until Sudden Death: ") .. SuddenDeathTurns - TotalRounds)
-    if retry == true then
-      DoRetry()
-    end
   end
 end
 
@@ -630,10 +641,8 @@ function onPrecise()
     SetAnimSkip(true)
   end
   if AnimInProgress() == false then
-    retry = true
   end
 end
 
 function onPreciseUp()
-  retry = false
 end
