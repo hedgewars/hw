@@ -323,9 +323,8 @@ begin
 
     HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shr 2;
     HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shr 2;
-    if not haveCollision then
+    if (not haveCollision) and ((Gear^.State and gsttmpFlag) <> 0) then
         begin
-        if (Gear^.State and gsttmpFlag) <> 0 then
             begin
             PlaySound(sndRopeRelease);
             if Gear^.Hedgehog^.CurAmmoType <> amParachute then
