@@ -15,7 +15,7 @@ cannibalPos = {{2219, 1339}, {2322, 1357}, {805, 784}, {3876, 1048},
               {1101, 916}, {2854, 1408}, {1974, 486}, {1103, 961}}
 
 HogNames = {loc("Olive"), loc("Brain Stu"), loc("Brainila"), loc("Salivaslurper"),
-            loc("Spleenlover"), loc("Tighlicker"), loc("NomNom"), loc("Mindy")}
+            loc("Spleenlover"), loc("Thighlicker"), loc("NomNom"), loc("Mindy")}
 
 natives = {}
 -----------------------------Variables---------------------------------
