@@ -186,7 +186,7 @@ function AfterMidAnim()
   SetGearMessage(natives[1], 0)
   AddNewEvent(CheckPrincessFreed, {}, DoPrincessFreed, {}, 0)
   TurnTimeLeft = 0
-  ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!"), 1, 7000)
+  ShowMission(loc("Family Reunion"), loc("Salvation"), loc("Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: It might be a good idea to place a girder before starting to drill. Just saying.|Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!"), 1, 7000)
   vCirc = AddVisualGear(0,0,vgtCircle,0,true)
   SetVisualGearValues(vCirc, 2625, 1500, 100, 255, 1, 10, 0, 120, 3, 0xff00ffff)
 end
@@ -199,8 +199,8 @@ end
 function SetupPlace3()
   SpawnUtilityCrate(2086, 1887, amRope, 1)
   SpawnUtilityCrate(2147, 728, amBlowTorch, 2)
-  SpawnUtilityCrate(2778, 1372, amPickHammer, 2)
-  SpawnUtilityCrate(2579, 1886, amPickHammer, 2)
+  SpawnUtilityCrate(2778, 1372, amPickHammer, 3)
+  SpawnUtilityCrate(2579, 1886, amPickHammer, 3)
   SpawnUtilityCrate(2622, 1893, amGirder, 1)
   SpawnUtilityCrate(2671, 1883, amPortalGun, 3)
   SpawnUtilityCrate(2831, 1384, amGirder, 3)
@@ -275,6 +275,9 @@ end
 
 -----------------------------Events------------------------------------
 function CheckPrincessFreed()
+  if GetX(natives[1]) == nil or GetX(natives[2]) == nil or GetX(natives[3]) == nil or GetX(princess) == nil then
+    return false
+  end
   return math.abs(GetX(natives[1]) - GetX(princess)) <= 15 and math.abs(GetY(natives[1]) - GetY(princess)) <= 15 and StoppedGear(natives[1]) 
         and GetY(natives[2]) < 1500 and GetY(natives[3]) < 1500 and StoppedGear(natives[2]) and StoppedGear(natives[3])
 end
@@ -348,10 +351,16 @@ function CheckOutOfGrenade()
 end
 
 function DoOutOfCluster()
+  if (GetX(natives[1]) == nil) then
+    return
+  end
   clusterCrate = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amClusterBomb, 3)
 end
 
 function DoOutOfGrenade()
+  if (GetX(natives[1]) == nil) then
+    return
+  end
   grenadeCrate2 = SpawnAmmoCrate(GetX(natives[1]) - 50, GetY(natives[1]) - 50, amGrenade, 3)
 end
 
@@ -404,6 +413,9 @@ function SetupAmmo()
   AddAmmo(cyborgs[1], amDynamite, 100)
   AddAmmo(cyborgs[1], amBaseballBat, 100)
   AddAmmo(cyborgs[1], amMolotov, 100)
+  AddAmmo(cyborgs[1], amWatermelon, 1)
+  AddAmmo(cyborgs[1], amAirStrike, 2)
+  AddAmmo(cyborgs[1], amDrillStrike, 1)
 end
 
 function AddHogs()
@@ -442,6 +454,9 @@ end
 
 function CondNeedToTurn(hog1, hog2)
   xl, xd = GetX(hog1), GetX(hog2)
+  if xl == nil or xd == nil then
+    return
+  end
   if xl > xd then
     AnimInsertStepNext({func = AnimTurn, args = {hog1, "Left"}})
     AnimInsertStepNext({func = AnimTurn, args = {hog2, "Right"}})
