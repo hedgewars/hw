@@ -87,7 +87,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 MoveToRoom jRI,
                 AnswerClients [sendChan cl] $ "JOINED" : nicks,
                 AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl],
-                AnswerClients [sendChan cl] $ ["WARNING", "Room owner is " `B.append` nick owner]
+                AnswerClients [sendChan cl] $ ["WARNING", "Room admin is " `B.append` nick owner]
             ]
             ++ map (readynessMessage cl) jRoomClients
             ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
