@@ -1051,11 +1051,11 @@ Välj ett annat smeknamn:</translation>
         <translation>Officiell server</translation>
     </message>
     <message>
-        <source>Hoin or host your own game server in a Local Area Network.</source>
+        <source>Join hundreds of players online!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Join hundreds of players online!</source>
+        <source>Join or host your own game server in a Local Area Network.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1120,6 +1120,10 @@ Välj ett annat smeknamn:</translation>
     <message>
         <source>Advanced</source>
         <translation type="unfinished">Avancerat</translation>
+    </message>
+    <message>
+        <source>Reset to default colors</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1529,9 +1533,12 @@ Vill du fortfarande gå med i rummet?</translation>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(in progress...)</source>
@@ -1553,9 +1560,12 @@ Vill du fortfarande gå med i rummet?</translation>
         <source>Do you really want do remove %1?</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>Do you really want do remove %1 file(s)?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>encoding</source>

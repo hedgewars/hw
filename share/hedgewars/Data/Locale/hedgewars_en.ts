@@ -617,13 +617,11 @@ or pick another nickname in game config:</translation>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -1005,11 +1003,11 @@ or pick another nickname in game config:</translation>
         <translation>Official server</translation>
     </message>
     <message>
-        <source>Hoin or host your own game server in a Local Area Network.</source>
+        <source>Join hundreds of players online!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Join hundreds of players online!</source>
+        <source>Join or host your own game server in a Local Area Network.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1074,6 +1072,10 @@ or pick another nickname in game config:</translation>
     <message>
         <source>Advanced</source>
         <translation type="unfinished">Advanced</translation>
+    </message>
+    <message>
+        <source>Reset to default colors</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1220,7 +1222,6 @@ Do you still want to join the room?</translation>
     <message numerus="yes">
         <source>%1 players online</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -1471,9 +1472,12 @@ Do you still want to join the room?</translation>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>%1 byte</numerusform>
+            <numerusform>%1 bytes</numerusform>
+        </translation>
     </message>
     <message>
         <source>(in progress...)</source>
@@ -1495,9 +1499,12 @@ Do you still want to join the room?</translation>
         <source>Do you really want do remove %1?</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>Do you really want do remove %1 file(s)?</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>Do you really want do remove %1 file?</numerusform>
+            <numerusform>Do you really want do remove %1 files?</numerusform>
+        </translation>
     </message>
     <message>
         <source>encoding</source>

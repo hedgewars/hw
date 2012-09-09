@@ -399,6 +399,10 @@ QLayout * PageOptions::bodyLayoutDefinition()
             }
 
             connect(mapper, SIGNAL(mapped(int)), this, SLOT(colorButtonClicked(int)));
+
+            QPushButton * btn = new QPushButton(this);
+            gbCLayout->addWidget(btn, (model->rowCount() - 1) / 3 + 1, 0, 1, 3);
+            btn->setText(tr("Reset to default colors"));
         }
 
         {
