@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="sv">
 <context>
+    <name>AbstractPage</name>
+    <message>
+        <source>Go back</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
@@ -69,6 +76,13 @@
     </message>
 </context>
 <context>
+    <name>HWAskQuitDialog</name>
+    <message>
+        <source>Do yot really want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
@@ -130,10 +144,6 @@
         <source>%1 is not a valid command!</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Kicking %1 ...</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -189,7 +199,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Lösenord</translation>
+        <translation type="obsolete">Lösenord</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -405,12 +415,58 @@ Välj ett annat smeknamn:</translation>
         <source>User quit</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Remote host has closed connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The server is too old. Disconnecting now.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWPasswordDialog</name>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Lösenord</translation>
+    </message>
+</context>
+<context>
+    <name>HWUploadVideoDialog</name>
+    <message>
+        <source>Upload video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>Fel uppstod då SDL_ttf skulle rendera text. Det beror högst troligen på felet i freetype2. Du rekommenderas att uppdatera ditt freetype-bibliotek.</translation>
+    </message>
+</context>
+<context>
+    <name>LibavIteraction</name>
+    <message>
+        <source>Duration: %1m %2s
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 fps, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -500,6 +556,10 @@ Välj ett annat smeknamn:</translation>
     <message>
         <source>All files</source>
         <translation>Alla filer</translation>
+    </message>
+    <message>
+        <source>Eraser</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -604,14 +664,21 @@ Välj ett annat smeknamn:</translation>
     </message>
 </context>
 <context>
+    <name>PageInfo</name>
+    <message>
+        <source>Open the snapshot folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation>Lokalt spel (Spela en omgång på en enskild dator)</translation>
+        <translation type="obsolete">Lokalt spel (Spela en omgång på en enskild dator)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation>Nätverkspel (Spela en omgång över ett nätverk)</translation>
+        <translation type="obsolete">Nätverkspel (Spela en omgång över ett nätverk)</translation>
     </message>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
@@ -887,6 +954,46 @@ Välj ett annat smeknamn:</translation>
         <source>Downloadable Content</source>
         <translation>Nedladdningsbart innehåll</translation>
     </message>
+    <message>
+        <source>Local Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game on a single computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game across a network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read about who is behind the Hedgewars Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access the user created content downloadable from our website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manage videos recorded from game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit game preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -924,6 +1031,14 @@ Välj ett annat smeknamn:</translation>
         <source>OK</source>
         <translation>OK</translation>
     </message>
+    <message>
+        <source>DLC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished">Nedladdningsbart innehåll</translation>
+    </message>
 </context>
 <context>
     <name>PageNetType</name>
@@ -934,6 +1049,14 @@ Välj ett annat smeknamn:</translation>
     <message>
         <source>Official server</source>
         <translation>Officiell server</translation>
+    </message>
+    <message>
+        <source>Hoin or host your own game server in a Local Area Network.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Join hundreds of players online!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -989,6 +1112,14 @@ Välj ett annat smeknamn:</translation>
     <message>
         <source>Delete weapon set</source>
         <translation>Ta bort vapenset</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">Allmänt</translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation type="unfinished">Avancerat</translation>
     </message>
 </context>
 <context>
@@ -1055,45 +1186,45 @@ Välj ett annat smeknamn:</translation>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation>Detta spel är i lobby.
+        <translation type="obsolete">Detta spel är i lobby.
 Du kan gå med och börja spela när spelet börjar.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation>Detta spel pågår.
+        <translation type="obsolete">Detta spel pågår.
 Du kan gå med och se på men du måste vänta tills spelet är slut för att kunna börja spela.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation>%1 är ägaren. Han kan ändra inställningar och starta spelet.</translation>
+        <translation type="obsolete">%1 är ägaren. Han kan ändra inställningar och starta spelet.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation>Slumpad karta</translation>
+        <translation type="obsolete">Slumpad karta</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation>Spel kan spelas på färdiga eller slumpade kartor.</translation>
+        <translation type="obsolete">Spel kan spelas på färdiga eller slumpade kartor.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation>Spelschemat anger allmäna inställningar som tid per person, Sudden Death eller Vampyrism.</translation>
+        <translation type="obsolete">Spelschemat anger allmäna inställningar som tid per person, Sudden Death eller Vampyrism.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation>Vapenschemat anger tillgängliga vapen och deras ammunitionsantal.</translation>
+        <translation type="obsolete">Vapenschemat anger tillgängliga vapen och deras ammunitionsantal.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Det är %1 klient uppkopplad till detta rum.</numerusform>
             <numerusform>Det är %1 klienter uppkopplade till detta rum.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Det är %1 deltagande lag i detta rum.</numerusform>
             <numerusform>Det är %1 deltagande lag i detta rum.</numerusform>
         </translation>
@@ -1108,7 +1239,7 @@ Du kan gå med och se på men du måste vänta tills spelet är slut för att ku
     </message>
     <message>
         <source>Random Maze</source>
-        <translation>Slumpad labyrint</translation>
+        <translation type="obsolete">Slumpad labyrint</translation>
     </message>
     <message>
         <source>State:</source>
@@ -1302,11 +1433,11 @@ Vill du fortfarande gå med i rummet?</translation>
     <name>PageSinglePlayer</name>
     <message>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation>Enkelt spel (en snabbomgång mot datorn, inställningar väljs åt dig)</translation>
+        <translation type="obsolete">Enkelt spel (en snabbomgång mot datorn, inställningar väljs åt dig)</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation>Flera spelare (spela en hotseat-omgång mot dina vänner eller AI-lag)</translation>
+        <translation type="obsolete">Flera spelare (spela en hotseat-omgång mot dina vänner eller AI-lag)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
@@ -1314,22 +1445,58 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
-        <translation>Demos (se inspelade demos)</translation>
+        <translation type="obsolete">Demos (se inspelade demos)</translation>
     </message>
     <message>
         <source>Load (Load a previously saved game)</source>
-        <translation>Ladda (ladda ett tidigare sparat spel)</translation>
+        <translation type="obsolete">Ladda (ladda ett tidigare sparat spel)</translation>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
         <translation type="obsolete">Kampanjläge (...). UNDER UTVECKLING</translation>
     </message>
     <message>
-        <source>Campaign Mode (...)</source>
+        <source>Simple Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <source>Play a quick game against the computer with random settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiplayer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a hotseat game against your friends, or AI teams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Practice your skills in a range of training missions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Watch recorded demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Läs in</translation>
+    </message>
+    <message>
+        <source>Load a previously saved game</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1341,6 +1508,65 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Select a mission!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the mission or training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start fighting</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageVideos</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Namn</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(in progress...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do remove %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do remove %1 file(s)?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do cancel uploading %1?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1448,6 +1674,26 @@ Vill du fortfarande gå med i rummet?</translation>
     <message>
         <source>Frontend effects</source>
         <translation>Effekter i spelmenyn</translation>
+    </message>
+    <message>
+        <source>Save password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save account name and password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video is private</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use game resolution</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1651,6 +1897,26 @@ Vill du fortfarande gå med i rummet?</translation>
         <source>Schemes and Weapons</source>
         <translation>Scheman och vapen</translation>
     </message>
+    <message>
+        <source>Custom colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video recording options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLabel</name>
@@ -1696,7 +1962,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Net nick</source>
-        <translation>Internetnamn</translation>
+        <translation type="obsolete">Internetnamn</translation>
     </message>
     <message>
         <source>Server name:</source>
@@ -1784,7 +2050,7 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation>Starta om spelet för att verkställa</translation>
+        <translation type="obsolete">Starta om spelet för att verkställa</translation>
     </message>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
@@ -1850,7 +2116,7 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
     </message>
     <message>
         <source>Password</source>
-        <translation>Lösenord</translation>
+        <translation type="obsolete">Lösenord</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
@@ -1858,6 +2124,68 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There are videos that are currently being processed.
+Exiting now will abort them.
+Do yot really want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Account name (or email): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video title: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video description: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags (comma separated): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Summary   </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Smeknamn</translation>
+    </message>
+    <message>
+        <source>Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Framerate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bitrate (Kbps)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1870,6 +2198,10 @@ Det kan finnas trasiga eller ofullständiga funktioner. Använd på egen risk!</
     <message>
         <source>hedgehog %1</source>
         <translation>igelkott %1</translation>
+    </message>
+    <message>
+        <source>anonymous</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1952,6 +2284,44 @@ Var god kontrollera din installation</translation>
     <message>
         <source>Can not delete default weapon set &apos;%1&apos;!</source>
         <translation>Kan inte ta bort standardvapenset &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>Fields required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please fill out all fields</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully posted the issue on code.google.com!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error during authentication with www.google.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error creating the issue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while authenticating at google.com:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login or password is incorrect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while sending metadata to youtube.com:
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2055,36 +2425,107 @@ Var god kontrollera din installation</translation>
         <source>more</source>
         <translation>mer</translation>
     </message>
+    <message>
+        <source>More info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set default options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open videos directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload to YouTube</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation>Rumnamn</translation>
+        <translation type="obsolete">Rumnamn</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>A</translation>
+        <translation type="obsolete">A</translation>
     </message>
     <message>
         <source>T</source>
-        <translation>L</translation>
+        <translation type="obsolete">L</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation>Ägare</translation>
+        <translation type="obsolete">Ägare</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation>Karta</translation>
+        <translation type="obsolete">Karta</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation>Regler</translation>
+        <translation type="obsolete">Regler</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Vapen</translation>
+        <translation type="obsolete">Vapen</translation>
+    </message>
+</context>
+<context>
+    <name>RoomsListModel</name>
+    <message>
+        <source>In progress</source>
+        <translation type="unfinished">Pågår</translation>
+    </message>
+    <message>
+        <source>Room Name</source>
+        <translation type="unfinished">Rumnamn</translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="unfinished">A</translation>
+    </message>
+    <message>
+        <source>T</source>
+        <translation type="unfinished">L</translation>
+    </message>
+    <message>
+        <source>Owner</source>
+        <translation type="unfinished">Ägare</translation>
+    </message>
+    <message>
+        <source>Map</source>
+        <translation type="unfinished">Karta</translation>
+    </message>
+    <message>
+        <source>Rules</source>
+        <translation type="unfinished">Regler</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation type="unfinished">Vapen</translation>
+    </message>
+    <message>
+        <source>Random Map</source>
+        <translation type="unfinished">Slumpad karta</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished">Slumpad labyrint</translation>
+    </message>
+    <message>
+        <source>Hand-drawn</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2399,6 +2840,14 @@ info</source>
         <source>slot 10</source>
         <translation>fack 10</translation>
     </message>
+    <message>
+        <source>mute audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>record</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -2484,6 +2933,10 @@ info</source>
     <message>
         <source>Toggle labels above hedgehogs:</source>
         <translation>Visa etiketter över igelkottar:</translation>
+    </message>
+    <message>
+        <source>Record video:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

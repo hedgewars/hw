@@ -1621,9 +1621,11 @@ void HWForm::UpdateCampaignPage(int index)
 
 void HWForm::UpdateCampaignPageProgress(int index)
 {
-  int missionIndex = ui.pageCampaign->CBMission->currentIndex();
-  UpdateCampaignPage(0);
-  ui.pageCampaign->CBMission->setCurrentIndex(missionIndex);
+    Q_UNUSED(index);
+
+    int missionIndex = ui.pageCampaign->CBMission->currentIndex();
+    UpdateCampaignPage(0);
+    ui.pageCampaign->CBMission->setCurrentIndex(missionIndex);
 }
 
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]
