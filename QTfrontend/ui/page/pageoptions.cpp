@@ -178,7 +178,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         {
             IconedGroupBox* groupMisc = new IconedGroupBox(this);
             //groupMisc->setContentTopPadding(0);
-            groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+            //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
             groupMisc->setIcon(QIcon(":/res/miscicon.png"));
             //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             groupMisc->setTitle(QGroupBox::tr("Misc"));
@@ -367,6 +367,9 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             page1Layout->addWidget(AGGroupBox, 0, 1, 3, 1);
         }
+
+        page1Layout->addWidget(new QWidget(this), 3, 0);
+
     }
 
     { // page 2
@@ -374,7 +377,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
         {
             IconedGroupBox * gbColors = new IconedGroupBox(this);
-            //gbColors->setIcon(QIcon(":/res/teamicon.png"));
+            gbColors->setIcon(QIcon(":/res/lightbulb_on.png"));
             gbColors->setTitle(QGroupBox::tr("Custom colors"));
             page2Layout->addWidget(gbColors, 0, 0);
             QGridLayout * gbCLayout = new QGridLayout(gbColors);
@@ -400,6 +403,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
         {
             IconedGroupBox * gbMisc = new IconedGroupBox(this);
+            gbMisc->setIcon(QIcon(":/res/Settings.png"));
             gbMisc->setTitle(QGroupBox::tr("Miscellaneous"));
             page2Layout->addWidget(gbMisc, 0, 1);
             QVBoxLayout * gbCLayout = new QVBoxLayout(gbMisc);
