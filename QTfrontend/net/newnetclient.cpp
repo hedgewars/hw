@@ -366,6 +366,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             switch(c)
             {
+                // flag indicating if a player is ready to start a game
                 case 'r':
                         foreach (const QString & nick, nicks)
                         {
@@ -378,6 +379,26 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                         }
                         break;
 
+                // flag indicating if a player is a registered user
+                case 'u':
+                        emit setRegisteredStatus(nicks, setFlag);
+                        break;
+
+                // flag indicating if a player is the host/master of the room
+                case 'h':
+                        foreach (const QString & nick, nicks)
+                        {
+                            if (nick == mynick)
+                            {
+                                isChief = setFlag;
+                                emit roomMaster(isChief);
+                            }
+
+                            emit setRoomMasterStatus(nick, setFlag);
+                        }
+                        break;
+
+                // flag indicating if a player is admin (if so -> worship them!)
                 case 'a':
                         foreach (const QString & nick, nicks)
                         {
@@ -685,6 +706,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
 
+        // obsolete
         if (lst[0] == "ROOM_CONTROL_ACCESS")
         {
             if (lst.size() < 2)
@@ -692,8 +714,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 qWarning("Net: Bad ROOM_CONTROL_ACCESS message");
                 return;
             }
-            isChief = (lst[1] != "0");
-            emit roomMaster(isChief);
             return;
         }
     }
