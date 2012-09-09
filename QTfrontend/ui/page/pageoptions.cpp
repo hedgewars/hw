@@ -403,6 +403,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             QPushButton * btn = new QPushButton(this);
             gbCLayout->addWidget(btn, (model->rowCount() - 1) / 3 + 1, 0, 1, 3);
             btn->setText(tr("Reset to default colors"));
+            connect(btn, SIGNAL(clicked()), &DataManager::instance(), SLOT(resetColors()));
         }
 
         {

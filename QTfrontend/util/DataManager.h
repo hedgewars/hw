@@ -133,6 +133,7 @@ class DataManager: public QObject
     public slots:
         /// Reloads data from storage.
         void reload();
+        void resetColors();
 
 
     signals:
