@@ -977,11 +977,11 @@ or pick another nickname in game config:</source>
         <translation>Официален сървър</translation>
     </message>
     <message>
-        <source>Hoin or host your own game server in a Local Area Network.</source>
+        <source>Join hundreds of players online!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Join hundreds of players online!</source>
+        <source>Join or host your own game server in a Local Area Network.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1034,6 +1034,10 @@ or pick another nickname in game config:</source>
     <message>
         <source>Advanced</source>
         <translation type="unfinished">За напреднали</translation>
+    </message>
+    <message>
+        <source>Reset to default colors</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1421,9 +1425,12 @@ Do you still want to join the room?</source>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(in progress...)</source>
@@ -1445,9 +1452,12 @@ Do you still want to join the room?</source>
         <source>Do you really want do remove %1?</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>Do you really want do remove %1 file(s)?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>encoding</source>

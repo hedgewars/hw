@@ -1112,7 +1112,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pagenettype.cpp" line="36"/>
-        <source>Hoin or host your own game server in a Local Area Network.</source>
+        <source>Join or host your own game server in a Local Area Network.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1186,6 +1186,11 @@ Please pick another nickname:</source>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="169"/>
         <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="405"/>
+        <source>Reset to default colors</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1592,10 +1597,14 @@ Do you still want to join the room?</source>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="492"/>
         <source>%1 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="736"/>
@@ -1624,10 +1633,14 @@ Do you still want to join the room?</source>
         <source>Do you really want do remove %1?</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="865"/>
         <source>Do you really want do remove %1 file(s)?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pagevideos.cpp" line="949"/>
@@ -1713,7 +1726,7 @@ Do you still want to join the room?</source>
 <context>
     <name>QCheckBox</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="426"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="430"/>
         <source>Show ammo menu tooltips</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1723,7 +1736,7 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="431"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="435"/>
         <source>Append date and time to record file name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1768,7 +1781,7 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="419"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="423"/>
         <source>Show FPS</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1992,7 +2005,7 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="407"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="411"/>
         <source>Miscellaneous</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2172,7 +2185,7 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="413"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="417"/>
         <source>FPS limit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2594,7 +2607,7 @@ Please check your installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="435"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="439"/>
         <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>

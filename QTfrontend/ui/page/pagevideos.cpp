@@ -489,7 +489,7 @@ static QString FileSizeStr(const QString & path)
         return QString("%1 MiB").arg(QString::number(float(size)/MiB, 'f', 2));
      if (size >= KiB)
         return QString("%1 KiB").arg(QString::number(float(size)/KiB, 'f', 2));
-    return PageVideos::tr("%1 bytes").arg(QString::number(size));
+    return PageVideos::tr("%1 bytes", "", size).arg(QString::number(size));
 }
 
 // set file size in file list in specified row
@@ -862,7 +862,7 @@ void PageVideos::deleteSelectedFiles()
     // ask user if (s)he is serious
     if (QMessageBox::question(this,
                               tr("Are you sure?"),
-                              tr("Do you really want do remove %1 file(s)?").arg(num),
+                              tr("Do you really want do remove %1 file(s)?", "", num).arg(num),
                               QMessageBox::Yes | QMessageBox::No)
             != QMessageBox::Yes)
         return;
