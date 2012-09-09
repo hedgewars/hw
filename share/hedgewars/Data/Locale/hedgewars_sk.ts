@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="sk">
 <context>
+    <name>AbstractPage</name>
+    <message>
+        <source>Go back</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
@@ -74,6 +81,13 @@
     </message>
 </context>
 <context>
+    <name>HWAskQuitDialog</name>
+    <message>
+        <source>Do yot really want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
@@ -137,7 +151,7 @@
     </message>
     <message>
         <source>Kicking %1 ...</source>
-        <translation>Vyhadzujem %1...</translation>
+        <translation type="obsolete">Vyhadzujem %1...</translation>
     </message>
 </context>
 <context>
@@ -194,7 +208,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation>Heslo</translation>
+        <translation type="obsolete">Heslo</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -414,12 +428,58 @@ Prosím vyberte si inú prezývku:</translation>
         <source>User quit</source>
         <translation>Užívateľ odišiel</translation>
     </message>
+    <message>
+        <source>Remote host has closed connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The server is too old. Disconnecting now.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWPasswordDialog</name>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Heslo</translation>
+    </message>
+</context>
+<context>
+    <name>HWUploadVideoDialog</name>
+    <message>
+        <source>Upload video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf vrátil chybu počas renderovania textu, s najväčšou pravdepodobnosťou sa jedná o chybu vo freetype2. Doporučujeme aktualizovať vašu knižnicu freetype.</translation>
+    </message>
+</context>
+<context>
+    <name>LibavIteraction</name>
+    <message>
+        <source>Duration: %1m %2s
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 fps, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -509,6 +569,10 @@ Prosím vyberte si inú prezývku:</translation>
     <message>
         <source>All files</source>
         <translation>Všetky súbory</translation>
+    </message>
+    <message>
+        <source>Eraser</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -621,14 +685,21 @@ Prosím vyberte si inú prezývku:</translation>
     </message>
 </context>
 <context>
+    <name>PageInfo</name>
+    <message>
+        <source>Open the snapshot folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation>Miestna hra (Hrať hru proti počítaču)</translation>
+        <translation type="obsolete">Miestna hra (Hrať hru proti počítaču)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation>Sieťová hra (Hrať hru proti súperom na sieti)</translation>
+        <translation type="obsolete">Sieťová hra (Hrať hru proti súperom na sieti)</translation>
     </message>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
@@ -914,6 +985,46 @@ Prosím vyberte si inú prezývku:</translation>
         <source>Downloadable Content</source>
         <translation>Stiahnuteľný obsah</translation>
     </message>
+    <message>
+        <source>Local Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game on a single computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game across a network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read about who is behind the Hedgewars Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access the user created content downloadable from our website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manage videos recorded from game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit game preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -951,6 +1062,14 @@ Prosím vyberte si inú prezývku:</translation>
         <source>OK</source>
         <translation>OK</translation>
     </message>
+    <message>
+        <source>DLC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished">Stiahnuteľný obsah</translation>
+    </message>
 </context>
 <context>
     <name>PageNetType</name>
@@ -961,6 +1080,14 @@ Prosím vyberte si inú prezývku:</translation>
     <message>
         <source>Official server</source>
         <translation>Oficiálny server</translation>
+    </message>
+    <message>
+        <source>Hoin or host your own game server in a Local Area Network.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Join hundreds of players online!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1016,6 +1143,14 @@ Prosím vyberte si inú prezývku:</translation>
     <message>
         <source>Delete weapon set</source>
         <translation>Vymazať sadu zbraní</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">Všeobecné</translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation type="unfinished">Pokročilé</translation>
     </message>
 </context>
 <context>
@@ -1082,38 +1217,38 @@ Prosím vyberte si inú prezývku:</translation>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation>Táto hra je v lobby.
+        <translation type="obsolete">Táto hra je v lobby.
 Môžete sa pridať a začať hru akonáhle hra skončí.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation>Táto hra práve prebieha.
+        <translation type="obsolete">Táto hra práve prebieha.
 Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať na koniec hry.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation>%1 je hostiteľom. Može meniť nastavenia a spúšťať hru.</translation>
+        <translation type="obsolete">%1 je hostiteľom. Može meniť nastavenia a spúšťať hru.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation>Náhodná mapa</translation>
+        <translation type="obsolete">Náhodná mapa</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation>Hry môžu byť hrané na predvytvorených alebo náhodných mapách.</translation>
+        <translation type="obsolete">Hry môžu byť hrané na predvytvorených alebo náhodných mapách.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation>Schéma hry určuje všeobecné voľby ako napríklad Dĺžka kola, Režim rýchlej smrti alebo Vampírizmus.</translation>
+        <translation type="obsolete">Schéma hry určuje všeobecné voľby ako napríklad Dĺžka kola, Režim rýchlej smrti alebo Vampírizmus.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation>Schémy hry určuje dostupné zbrane a množstvo výzbroje.</translation>
+        <translation type="obsolete">Schémy hry určuje dostupné zbrane a množstvo výzbroje.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>K tejto miestnosti je pripojený jeden klient.</numerusform>
             <numerusform>K tejto miestnosti sú pripojení %1 klienti.</numerusform>
             <numerusform>K tejto miestnosti je pripojených %1 klientov.</numerusform>
@@ -1121,7 +1256,7 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>V tejto miestnosti je jeden hrajúci tím.</numerusform>
             <numerusform>V tejto miestnosti sú %1 hrajúce tímy.</numerusform>
             <numerusform>V tejto miestnosti je %1 hrajúcich tímov.</numerusform>
@@ -1137,7 +1272,7 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     </message>
     <message>
         <source>Random Maze</source>
-        <translation>Náhodné bludisko</translation>
+        <translation type="obsolete">Náhodné bludisko</translation>
     </message>
     <message>
         <source>State:</source>
@@ -1332,11 +1467,11 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <name>PageSinglePlayer</name>
     <message>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation>Jednoduchá hra (rýchla hra proti počítaču, s preddefinovanými nastaveniami)</translation>
+        <translation type="obsolete">Jednoduchá hra (rýchla hra proti počítaču, s preddefinovanými nastaveniami)</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation>Multiplayer (hrať hru, pri ktorej sa striedate s hráčmi pri počítači alebo proti počítačovým tímom)</translation>
+        <translation type="obsolete">Multiplayer (hrať hru, pri ktorej sa striedate s hráčmi pri počítači alebo proti počítačovým tímom)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
@@ -1344,11 +1479,11 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
-        <translation>Demá (prehrávanie natočených demonahrávok)</translation>
+        <translation type="obsolete">Demá (prehrávanie natočených demonahrávok)</translation>
     </message>
     <message>
         <source>Load (Load a previously saved game)</source>
-        <translation>Načítať (načíta v minulosti uloženú hru)</translation>
+        <translation type="obsolete">Načítať (načíta v minulosti uloženú hru)</translation>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
@@ -1356,11 +1491,55 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Campaign Mode (...)</source>
-        <translation>Režim kampane (...)</translation>
+        <translation type="obsolete">Režim kampane (...)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions)</source>
-        <translation>Tréningový režim (Vycvičte sa v rade tréningových misií)</translation>
+        <translation type="obsolete">Tréningový režim (Vycvičte sa v rade tréningových misií)</translation>
+    </message>
+    <message>
+        <source>Simple Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a quick game against the computer with random settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiplayer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a hotseat game against your friends, or AI teams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Practice your skills in a range of training missions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Watch recorded demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Načítať</translation>
+    </message>
+    <message>
+        <source>Load a previously saved game</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1372,6 +1551,65 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Select a mission!</source>
         <translation>Vyberte misiu!</translation>
+    </message>
+    <message>
+        <source>Pick the mission or training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start fighting</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageVideos</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Meno</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(in progress...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do remove %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do remove %1 file(s)?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do cancel uploading %1?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1478,6 +1716,26 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     <message>
         <source>Frontend effects</source>
         <translation>Efekty vo frontende</translation>
+    </message>
+    <message>
+        <source>Save password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save account name and password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video is private</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use game resolution</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1681,6 +1939,26 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
         <source>Schemes and Weapons</source>
         <translation>Schémy a zbrane</translation>
     </message>
+    <message>
+        <source>Custom colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video recording options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLabel</name>
@@ -1734,7 +2012,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Net nick</source>
-        <translation>Sieťový nick</translation>
+        <translation type="obsolete">Sieťový nick</translation>
     </message>
     <message>
         <source>Server name:</source>
@@ -1814,7 +2092,7 @@ Aj napriek tomu chcete vojsť do miestnosti?</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation>Vyžaduje reštart hry</translation>
+        <translation type="obsolete">Vyžaduje reštart hry</translation>
     </message>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
@@ -1885,7 +2163,7 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     </message>
     <message>
         <source>Password</source>
-        <translation>Heslo</translation>
+        <translation type="obsolete">Heslo</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
@@ -1894,6 +2172,68 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
         <translation>Tento program je distribuovaný pod licenciou GNU General Public License v2</translation>
+    </message>
+    <message>
+        <source>There are videos that are currently being processed.
+Exiting now will abort them.
+Do yot really want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Account name (or email): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video title: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video description: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags (comma separated): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Summary   </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Prezývka</translation>
+    </message>
+    <message>
+        <source>Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Framerate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bitrate (Kbps)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1905,6 +2245,10 @@ Niektoré vlastnosti nemusia fungovať alebo nemusia byť dokončené. Používa
     <message>
         <source>hedgehog %1</source>
         <translation>ježko %1</translation>
+    </message>
+    <message>
+        <source>anonymous</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1987,6 +2331,44 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>Can not delete default weapon set &apos;%1&apos;!</source>
         <translation>Nie je možné vymazať východziu sadu zbraní &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>Fields required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please fill out all fields</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully posted the issue on code.google.com!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error during authentication with www.google.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error creating the issue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while authenticating at google.com:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login or password is incorrect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while sending metadata to youtube.com:
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2090,36 +2472,107 @@ Skontrolujte si vašu inštaláciu</translation>
         <source>more</source>
         <translation>viac</translation>
     </message>
+    <message>
+        <source>More info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set default options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open videos directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload to YouTube</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation>Názov miestnosti</translation>
+        <translation type="obsolete">Názov miestnosti</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C</translation>
+        <translation type="obsolete">C</translation>
     </message>
     <message>
         <source>T</source>
-        <translation>T</translation>
+        <translation type="obsolete">T</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation>Majiteľ</translation>
+        <translation type="obsolete">Majiteľ</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation>Mapa</translation>
+        <translation type="obsolete">Mapa</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation>Pravidlá</translation>
+        <translation type="obsolete">Pravidlá</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Zbrane</translation>
+        <translation type="obsolete">Zbrane</translation>
+    </message>
+</context>
+<context>
+    <name>RoomsListModel</name>
+    <message>
+        <source>In progress</source>
+        <translation type="unfinished">Prebieha</translation>
+    </message>
+    <message>
+        <source>Room Name</source>
+        <translation type="unfinished">Názov miestnosti</translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="unfinished">C</translation>
+    </message>
+    <message>
+        <source>T</source>
+        <translation type="unfinished">T</translation>
+    </message>
+    <message>
+        <source>Owner</source>
+        <translation type="unfinished">Majiteľ</translation>
+    </message>
+    <message>
+        <source>Map</source>
+        <translation type="unfinished">Mapa</translation>
+    </message>
+    <message>
+        <source>Rules</source>
+        <translation type="unfinished">Pravidlá</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random Map</source>
+        <translation type="unfinished">Náhodná mapa</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished">Náhodné bludisko</translation>
+    </message>
+    <message>
+        <source>Hand-drawn</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2435,6 +2888,14 @@ ježkov</translation>
         <source>slot 10</source>
         <translation>slot 10</translation>
     </message>
+    <message>
+        <source>mute audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>record</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -2520,6 +2981,10 @@ ježkov</translation>
     <message>
         <source>Toggle labels above hedgehogs:</source>
         <translation>Prepnúť nápisy nad ježkami:</translation>
+    </message>
+    <message>
+        <source>Record video:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="hu">
 <context>
+    <name>AbstractPage</name>
+    <message>
+        <source>Go back</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
@@ -68,6 +75,13 @@
     </message>
 </context>
 <context>
+    <name>HWAskQuitDialog</name>
+    <message>
+        <source>Do yot really want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
@@ -129,10 +143,6 @@
         <source>%1 is not a valid command!</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Kicking %1 ...</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -188,7 +198,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">JElszó</translation>
+        <translation type="obsolete">JElszó</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -378,12 +388,58 @@ vagy válassz másik nevet:</translation>
         <source>User quit</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Remote host has closed connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The server is too old. Disconnecting now.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWPasswordDialog</name>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">JElszó</translation>
+    </message>
+</context>
+<context>
+    <name>HWUploadVideoDialog</name>
+    <message>
+        <source>Upload video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf hibát dobott a szöveg kiírásakor, ezt valószínűleg a freetype2 egy hibája okozza. Ajánlott a freetype lib frissítése.</translation>
+    </message>
+</context>
+<context>
+    <name>LibavIteraction</name>
+    <message>
+        <source>Duration: %1m %2s
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 fps, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -468,6 +524,10 @@ vagy válassz másik nevet:</translation>
     </message>
     <message>
         <source>All files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eraser</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -561,14 +621,21 @@ vagy válassz másik nevet:</translation>
     </message>
 </context>
 <context>
+    <name>PageInfo</name>
+    <message>
+        <source>Open the snapshot folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation>Helyi játék (Játssz egyetlen számítógépen)</translation>
+        <translation type="obsolete">Helyi játék (Játssz egyetlen számítógépen)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation>Hálózati játék (Játék hálózaton keresztül)</translation>
+        <translation type="obsolete">Hálózati játék (Játék hálózaton keresztül)</translation>
     </message>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
@@ -819,6 +886,46 @@ vagy válassz másik nevet:</translation>
         <source>Downloadable Content</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Local Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game on a single computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game across a network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read about who is behind the Hedgewars Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access the user created content downloadable from our website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manage videos recorded from game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit game preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -856,6 +963,14 @@ vagy válassz másik nevet:</translation>
         <source>OK</source>
         <translation type="unfinished">OK</translation>
     </message>
+    <message>
+        <source>DLC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageNetType</name>
@@ -866,6 +981,14 @@ vagy válassz másik nevet:</translation>
     <message>
         <source>Official server</source>
         <translation>Hivatalos szerver</translation>
+    </message>
+    <message>
+        <source>Hoin or host your own game server in a Local Area Network.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Join hundreds of players online!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -921,6 +1044,14 @@ vagy válassz másik nevet:</translation>
     <message>
         <source>Delete weapon set</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">Általános</translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation type="unfinished">Haladó</translation>
     </message>
 </context>
 <context>
@@ -987,44 +1118,44 @@ vagy válassz másik nevet:</translation>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation>Ez a játék elérhető.
+        <translation type="obsolete">Ez a játék elérhető.
 Csatlakozz és játssz, amikor a játék elkezdődik.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation>Ez a játék folyamatban van.
+        <translation type="obsolete">Ez a játék folyamatban van.
 Csatlakozhatsz mint megfigyelő, de a játszáshoz meg kell várnod a jelenlegi meccs befejeződését.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation>%1 a host. Ő kezeli a beállításokat és a játék indítását.</translation>
+        <translation type="obsolete">%1 a host. Ő kezeli a beállításokat és a játék indítását.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation>Véletlen pálya</translation>
+        <translation type="obsolete">Véletlen pálya</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation>A játékok előkészített vagy véletlen pályákon játszódnak.</translation>
+        <translation type="obsolete">A játékok előkészített vagy véletlen pályákon játszódnak.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation>A játék sémája az általános beállításokat határozza meg. illetve egyéb dolgokat, mint egy kör ideje, Hirtelen halál vagy Vámpírizmus.</translation>
+        <translation type="obsolete">A játék sémája az általános beállításokat határozza meg. illetve egyéb dolgokat, mint egy kör ideje, Hirtelen halál vagy Vámpírizmus.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation>A fegyverséma az elérhető fegyverek és a lőszer mennyiségét határozza meg.</translation>
+        <translation type="obsolete">A fegyverséma az elérhető fegyverek és a lőszer mennyiségét határozza meg.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Összesen %1 kliens csatlakozott a szobához.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Összesen %1 csapat van a szobában.</numerusform>
         </translation>
     </message>
@@ -1038,7 +1169,7 @@ Csatlakozhatsz mint megfigyelő, de a játszáshoz meg kell várnod a jelenlegi 
     </message>
     <message>
         <source>Random Maze</source>
-        <translation>Véletlen labirintus</translation>
+        <translation type="obsolete">Véletlen labirintus</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1226,11 +1357,11 @@ Do you still want to join the room?</source>
     <name>PageSinglePlayer</name>
     <message>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation>Egyszerű játék (gyors játék a gép ellen, a beállításokat már kiválasztottuk neked)</translation>
+        <translation type="obsolete">Egyszerű játék (gyors játék a gép ellen, a beállításokat már kiválasztottuk neked)</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation>Többjátékos (hotseat játék a barátaid vagy a gép csapatai ellen)</translation>
+        <translation type="obsolete">Többjátékos (hotseat játék a barátaid vagy a gép csapatai ellen)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
@@ -1238,18 +1369,54 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
-        <translation>Demók (felvett demók megtekintése)</translation>
+        <translation type="obsolete">Demók (felvett demók megtekintése)</translation>
     </message>
     <message>
         <source>Load (Load a previously saved game)</source>
-        <translation>Betöltés (korábbi mentett állás visszatöltése)</translation>
+        <translation type="obsolete">Betöltés (korábbi mentett állás visszatöltése)</translation>
     </message>
     <message>
-        <source>Campaign Mode (...)</source>
+        <source>Simple Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <source>Play a quick game against the computer with random settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiplayer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a hotseat game against your friends, or AI teams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Practice your skills in a range of training missions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Watch recorded demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Betöltés</translation>
+    </message>
+    <message>
+        <source>Load a previously saved game</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1261,6 +1428,65 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Select a mission!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the mission or training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start fighting</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageVideos</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Név</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(in progress...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do remove %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do remove %1 file(s)?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do cancel uploading %1?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1368,6 +1594,26 @@ Do you still want to join the room?</source>
     <message>
         <source>Frontend effects</source>
         <translation>Frontend effektusok</translation>
+    </message>
+    <message>
+        <source>Save password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save account name and password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video is private</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use game resolution</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1539,6 +1785,26 @@ Do you still want to join the room?</source>
         <source>Schemes and Weapons</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Custom colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video recording options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLabel</name>
@@ -1592,7 +1858,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Net nick</source>
-        <translation>Becenév a neten</translation>
+        <translation type="obsolete">Becenév a neten</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1672,7 +1938,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation>Újraindításkor lép érvénybe</translation>
+        <translation type="obsolete">Újraindításkor lép érvénybe</translation>
     </message>
     <message>
         <source>Explosives</source>
@@ -1730,7 +1996,7 @@ Néhány részlet esetleg nem működik vagy nincs készen. Csak saját felelős
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">JElszó</translation>
+        <translation type="obsolete">JElszó</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
@@ -1738,6 +2004,68 @@ Néhány részlet esetleg nem működik vagy nincs készen. Csak saját felelős
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There are videos that are currently being processed.
+Exiting now will abort them.
+Do yot really want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Account name (or email): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video title: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video description: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags (comma separated): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Summary   </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Becenév</translation>
+    </message>
+    <message>
+        <source>Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Framerate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bitrate (Kbps)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1749,6 +2077,10 @@ Néhány részlet esetleg nem működik vagy nincs készen. Csak saját felelős
     </message>
     <message>
         <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>anonymous</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1831,6 +2163,44 @@ Kérlek, ellenőrizd a telepítésed</translation>
     </message>
     <message>
         <source>Can not delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fields required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please fill out all fields</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully posted the issue on code.google.com!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error during authentication with www.google.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error creating the issue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while authenticating at google.com:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login or password is incorrect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while sending metadata to youtube.com:
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1931,36 +2301,107 @@ Kérlek, ellenőrizd a telepítésed</translation>
         <source>more</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>More info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set default options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open videos directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload to YouTube</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation>Szoba neve</translation>
+        <translation type="obsolete">Szoba neve</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C</translation>
+        <translation type="obsolete">C</translation>
     </message>
     <message>
         <source>T</source>
-        <translation>T</translation>
+        <translation type="obsolete">T</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation>Tulajdonos</translation>
+        <translation type="obsolete">Tulajdonos</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation>Pálya</translation>
+        <translation type="obsolete">Pálya</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation>Szabályok</translation>
+        <translation type="obsolete">Szabályok</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Fegyverek</translation>
+        <translation type="obsolete">Fegyverek</translation>
+    </message>
+</context>
+<context>
+    <name>RoomsListModel</name>
+    <message>
+        <source>In progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room Name</source>
+        <translation type="unfinished">Szoba neve</translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="unfinished">C</translation>
+    </message>
+    <message>
+        <source>T</source>
+        <translation type="unfinished">T</translation>
+    </message>
+    <message>
+        <source>Owner</source>
+        <translation type="unfinished">Tulajdonos</translation>
+    </message>
+    <message>
+        <source>Map</source>
+        <translation type="unfinished">Pálya</translation>
+    </message>
+    <message>
+        <source>Rules</source>
+        <translation type="unfinished">Szabályok</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation type="unfinished">Fegyverek</translation>
+    </message>
+    <message>
+        <source>Random Map</source>
+        <translation type="unfinished">Véletlen pálya</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished">Véletlen labirintus</translation>
+    </message>
+    <message>
+        <source>Hand-drawn</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2276,6 +2717,14 @@ info</translation>
         <source>slot 10</source>
         <translation type="unfinished">slot 10</translation>
     </message>
+    <message>
+        <source>mute audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>record</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -2361,6 +2810,10 @@ info</translation>
     <message>
         <source>Toggle labels above hedgehogs:</source>
         <translation>Sünik feletti címkék beállítása:</translation>
+    </message>
+    <message>
+        <source>Record video:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

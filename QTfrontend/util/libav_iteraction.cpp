@@ -65,7 +65,7 @@ bool FormatQueryCodec(AVOutputFormat *ofmt, enum CodecID codec_id)
 #endif
 }
 
-LibavIteraction::LibavIteraction()
+LibavIteraction::LibavIteraction() : QObject()
 {
     // initialize libav and register all codecs and formats
     av_register_all();
@@ -265,11 +265,6 @@ QString LibavIteraction::getExtension(const QString & format)
     return formats[format].extension;
 }
 
-QString tr(QString a)
-{
-    return a;
-}
-
 // get information abaout file (duration, resolution etc) in multiline string
 QString LibavIteraction::getFileInfo(const QString & filepath)
 {
@@ -324,7 +319,7 @@ QString LibavIteraction::getFileInfo(const QString & filepath)
 }
 
 #else
-LibavIteraction::LibavIteraction()
+LibavIteraction::LibavIteraction() : QObject()
 {
 
 }

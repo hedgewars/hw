@@ -113,7 +113,7 @@ class PageVideos : public AbstractPage
         void updateProgress(float value);
         void cellDoubleClicked(int row, int column);
         void cellChanged(int row, int column);
-        void currentCellChanged(int row, int column, int previousRow, int previousColumn);
+        void currentCellChanged();
         void playSelectedFile();
         void deleteSelectedFiles();
         void openVideosDirectory();

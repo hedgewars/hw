@@ -26,8 +26,10 @@
  *
  * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
  */
-class LibavIteraction
+class LibavIteraction : public QObject
 {
+    Q_OBJECT;
+
     LibavIteraction();
 
 public:

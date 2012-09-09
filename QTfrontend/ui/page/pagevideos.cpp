@@ -328,7 +328,7 @@ void PageVideos::connectSignals()
     connect(btnDefaults, SIGNAL(clicked()), this, SLOT(setDefaultOptions()));
     connect(filesTable, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellDoubleClicked(int, int)));
     connect(filesTable, SIGNAL(cellChanged(int,int)), this, SLOT(cellChanged(int, int)));
-    connect(filesTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(currentCellChanged(int,int,int,int)));
+    connect(filesTable, SIGNAL(currentCellChanged(int,int,int,int)), this, SLOT(currentCellChanged()));
     connect(btnPlay,   SIGNAL(clicked()), this, SLOT(playSelectedFile()));
     connect(btnDelete, SIGNAL(clicked()), this, SLOT(deleteSelectedFiles()));
     connect(btnToYouTube, SIGNAL(clicked()), this, SLOT(uploadToYouTube()));
@@ -618,6 +618,8 @@ void PageVideos::encodingFinished(bool success)
 
 void PageVideos::cellDoubleClicked(int row, int column)
 {
+    Q_UNUSED(column);
+
     play(row);
 }
 
@@ -806,7 +808,7 @@ void PageVideos::updateDescription()
 }
 
 // user selected another cell, so we should change description
-void PageVideos::currentCellChanged(int row, int column, int previousRow, int previousColumn)
+void PageVideos::currentCellChanged()
 {
     updateDescription();
 }

@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru">
 <context>
+    <name>AbstractPage</name>
+    <message>
+        <source>Go back</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
@@ -74,6 +81,13 @@
     </message>
 </context>
 <context>
+    <name>HWAskQuitDialog</name>
+    <message>
+        <source>Do yot really want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
@@ -135,10 +149,6 @@
         <source>%1 is not a valid command!</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Kicking %1 ...</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -194,7 +204,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Пароль</translation>
+        <translation type="obsolete">Пароль</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -410,12 +420,58 @@ Please pick another nickname:</source>
         <source>User quit</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Remote host has closed connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The server is too old. Disconnecting now.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWPasswordDialog</name>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Пароль</translation>
+    </message>
+</context>
+<context>
+    <name>HWUploadVideoDialog</name>
+    <message>
+        <source>Upload video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf возвратил ошибку при выводе текста, наиболее вероятно это вызвано багом в библиотеке freetype2. Рекомендуется обновить библиотеку.</translation>
+    </message>
+</context>
+<context>
+    <name>LibavIteraction</name>
+    <message>
+        <source>Duration: %1m %2s
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 fps, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -504,6 +560,10 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>All files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eraser</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -613,14 +673,21 @@ Please pick another nickname:</source>
     </message>
 </context>
 <context>
+    <name>PageInfo</name>
+    <message>
+        <source>Open the snapshot folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation>Локальная игра (игра на одном компьютере)</translation>
+        <translation type="obsolete">Локальная игра (игра на одном компьютере)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation>Сетевая игра</translation>
+        <translation type="obsolete">Сетевая игра</translation>
     </message>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
@@ -871,6 +938,46 @@ Please pick another nickname:</source>
         <source>Downloadable Content</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Local Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game on a single computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game across a network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read about who is behind the Hedgewars Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access the user created content downloadable from our website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manage videos recorded from game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit game preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -908,6 +1015,14 @@ Please pick another nickname:</source>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
+    <message>
+        <source>DLC</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageNetType</name>
@@ -918,6 +1033,14 @@ Please pick another nickname:</source>
     <message>
         <source>Official server</source>
         <translation>Официальный сервер</translation>
+    </message>
+    <message>
+        <source>Hoin or host your own game server in a Local Area Network.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Join hundreds of players online!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -973,6 +1096,14 @@ Please pick another nickname:</source>
     <message>
         <source>Delete weapon set</source>
         <translation>Удалить набор оружия</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">Основные настройки</translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation type="unfinished">Дополнительно</translation>
     </message>
 </context>
 <context>
@@ -1039,38 +1170,38 @@ Please pick another nickname:</source>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation>В этой комнате игра ещё не запущена.
+        <translation type="obsolete">В этой комнате игра ещё не запущена.
 Вы можете зайти и присоединиться к игре.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation>В этой комнате происходит игра.
+        <translation type="obsolete">В этой комнате происходит игра.
 Вы можете зайти и наблюдать. Чтобы играть, придётся подождать окончания текущей игры.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation>%1 управляет комнатой. Он может изменять настройки и запускать игру.</translation>
+        <translation type="obsolete">%1 управляет комнатой. Он может изменять настройки и запускать игру.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation>Случайная карта</translation>
+        <translation type="obsolete">Случайная карта</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation>Можно играть на нарисованных или сгенерированных картах.</translation>
+        <translation type="obsolete">Можно играть на нарисованных или сгенерированных картах.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation>Схема игры определяет общие настройки, такие как время хода или вампиризм.</translation>
+        <translation type="obsolete">Схема игры определяет общие настройки, такие как время хода или вампиризм.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation>Схема оружия определяет доступное оружие и число снарядов.</translation>
+        <translation type="obsolete">Схема оружия определяет доступное оружие и число снарядов.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Всего %1 игрок находится в этой комнате.</numerusform>
             <numerusform>Всего %1 игрока находятся в этой комнате.</numerusform>
             <numerusform>Всего %1 игроков находятся в этой комнате.</numerusform>
@@ -1078,7 +1209,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation>
+        <translation type="obsolete">
             <numerusform>Всего %1 команда участвует в игре в этой комнате.</numerusform>
             <numerusform>Всего %1 команды участвуют в игре в этой комнате.</numerusform>
             <numerusform>Всего %1 команд участвуют в игре в этой комнате.</numerusform>
@@ -1094,7 +1225,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Random Maze</source>
-        <translation>Случайный лабиринт</translation>
+        <translation type="obsolete">Случайный лабиринт</translation>
     </message>
     <message>
         <source>State:</source>
@@ -1289,11 +1420,11 @@ Do you still want to join the room?</source>
     <name>PageSinglePlayer</name>
     <message>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation>Быстрый старт (быстрый запуск игры против компьютера на случайной карте)</translation>
+        <translation type="obsolete">Быстрый старт (быстрый запуск игры против компьютера на случайной карте)</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation>Схватка (игра с друзьями за одним компьютером или против ботов)</translation>
+        <translation type="obsolete">Схватка (игра с друзьями за одним компьютером или против ботов)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
@@ -1301,22 +1432,58 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
-        <translation>Демки (просмотр записанных демок)</translation>
+        <translation type="obsolete">Демки (просмотр записанных демок)</translation>
     </message>
     <message>
         <source>Load (Load a previously saved game)</source>
-        <translation>Загрузить (загрузить сохранённую игру)</translation>
+        <translation type="obsolete">Загрузить (загрузить сохранённую игру)</translation>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
         <translation type="obsolete">Режим прохождения кампании. В РАЗРАБОТКЕ</translation>
     </message>
     <message>
-        <source>Campaign Mode (...)</source>
+        <source>Simple Game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Training Mode (Practice your skills in a range of training missions)</source>
+        <source>Play a quick game against the computer with random settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiplayer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a hotseat game against your friends, or AI teams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Practice your skills in a range of training missions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Watch recorded demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Загрузить</translation>
+    </message>
+    <message>
+        <source>Load a previously saved game</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1328,6 +1495,65 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Select a mission!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pick the mission or training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start fighting</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageVideos</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Название</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 bytes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(in progress...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do remove %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do remove %1 file(s)?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want do cancel uploading %1?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1435,6 +1661,26 @@ Do you still want to join the room?</source>
     <message>
         <source>Frontend effects</source>
         <translation>Эффекты в меню</translation>
+    </message>
+    <message>
+        <source>Save password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save account name and password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video is private</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use game resolution</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1606,6 +1852,26 @@ Do you still want to join the room?</source>
         <source>Schemes and Weapons</source>
         <translation>Схемы игры и наборы оружия</translation>
     </message>
+    <message>
+        <source>Custom colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video recording options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLabel</name>
@@ -1619,7 +1885,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Net nick</source>
-        <translation>Имя игрока</translation>
+        <translation type="obsolete">Имя игрока</translation>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
@@ -1739,7 +2005,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation>Перезапустите игру для применения</translation>
+        <translation type="obsolete">Перезапустите игру для применения</translation>
     </message>
     <message>
         <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
@@ -1805,7 +2071,7 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>Password</source>
-        <translation>Пароль</translation>
+        <translation type="obsolete">Пароль</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
@@ -1813,6 +2079,68 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There are videos that are currently being processed.
+Exiting now will abort them.
+Do yot really want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Account name (or email): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video title: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video description: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags (comma separated): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Summary   </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Псевдоним</translation>
+    </message>
+    <message>
+        <source>Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Framerate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bitrate (Kbps)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1824,6 +2152,10 @@ Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>anonymous</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1907,6 +2239,44 @@ Please check your installation</source>
     <message>
         <source>Can not delete default weapon set &apos;%1&apos;!</source>
         <translation>Не могу удлить встроенный набор оружия &apos;%1&apos;!</translation>
+    </message>
+    <message>
+        <source>Fields required</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please fill out all fields</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully posted the issue on code.google.com!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error during authentication with www.google.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error creating the issue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while authenticating at google.com:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login or password is incorrect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while sending metadata to youtube.com:
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2006,36 +2376,107 @@ Please check your installation</source>
         <source>more</source>
         <translation>ещё</translation>
     </message>
+    <message>
+        <source>More info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set default options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open videos directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload to YouTube</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation>Название</translation>
+        <translation type="obsolete">Название</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>И</translation>
+        <translation type="obsolete">И</translation>
     </message>
     <message>
         <source>T</source>
-        <translation>К</translation>
+        <translation type="obsolete">К</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation>Главный</translation>
+        <translation type="obsolete">Главный</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation>Карта</translation>
+        <translation type="obsolete">Карта</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation>Правила</translation>
+        <translation type="obsolete">Правила</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Оружие</translation>
+        <translation type="obsolete">Оружие</translation>
+    </message>
+</context>
+<context>
+    <name>RoomsListModel</name>
+    <message>
+        <source>In progress</source>
+        <translation type="unfinished">В игре</translation>
+    </message>
+    <message>
+        <source>Room Name</source>
+        <translation type="unfinished">Название</translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="unfinished">И</translation>
+    </message>
+    <message>
+        <source>T</source>
+        <translation type="unfinished">К</translation>
+    </message>
+    <message>
+        <source>Owner</source>
+        <translation type="unfinished">Главный</translation>
+    </message>
+    <message>
+        <source>Map</source>
+        <translation type="unfinished">Карта</translation>
+    </message>
+    <message>
+        <source>Rules</source>
+        <translation type="unfinished">Правила</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation type="unfinished">Оружие</translation>
+    </message>
+    <message>
+        <source>Random Map</source>
+        <translation type="unfinished">Случайная карта</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished">Случайный лабиринт</translation>
+    </message>
+    <message>
+        <source>Hand-drawn</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2351,6 +2792,14 @@ info</source>
         <source>slot 10</source>
         <translation>слот 10</translation>
     </message>
+    <message>
+        <source>mute audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>record</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -2436,6 +2885,10 @@ info</source>
     <message>
         <source>Toggle labels above hedgehogs:</source>
         <translation>Переключение меток над ежами:</translation>
+    </message>
+    <message>
+        <source>Record video:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

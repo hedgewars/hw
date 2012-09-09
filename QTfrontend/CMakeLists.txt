@@ -129,6 +129,7 @@ set(hwfr_moc_hdrs
     hwform.h
     team.h
     util/DataManager.h
+    util/libav_iteraction.h
     )
 
 set(hwfr_hdrs
