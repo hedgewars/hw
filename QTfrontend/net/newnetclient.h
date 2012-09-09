@@ -139,6 +139,7 @@ class HWNewNet : public QObject
 
         void setReadyStatus(const QString & nick, bool isReady);
         void setMyReadyStatus(bool isReady);
+        void setAdminStatus(const QString & nick, bool isReady);
 
     public slots:
         void ToggleReady();

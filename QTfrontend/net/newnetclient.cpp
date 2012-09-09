@@ -357,6 +357,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         QString flags = lst[1];
         bool setFlag = flags[0] == '+';
+        const QStringList nicks = lst.mid(2);
 
         while(flags.size() > 1)
         {
@@ -366,18 +367,29 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             switch(c)
             {
                 case 'r':
-                {
-                    for(int i = 2; i < lst.size(); ++i)
-                    {
-                        if (lst[i] == mynick)
+                        foreach (const QString & nick, nicks)
                         {
-                            if (isChief && !setFlag) ToggleReady();
-                            else emit setMyReadyStatus(setFlag);
+                            if (nick == mynick)
+                            {
+                                if (isChief && !setFlag) ToggleReady();
+                                else emit setMyReadyStatus(setFlag);
+                            }
+                            emit setReadyStatus(nick, setFlag);
                         }
+                        break;
 
-                        emit setReadyStatus(lst[i], setFlag);
-                    }
-                }
+                case 'a':
+                        foreach (const QString & nick, nicks)
+                        {
+                            if (nick == mynick)
+                                emit adminAccess(setFlag);
+
+                            emit setAdminStatus(nick, setFlag);
+                        }
+                        break;
+
+                default:
+                        qWarning() << "Net: Unknown client-flag: " << c;
             }
         }
 
@@ -503,7 +515,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ADMIN_ACCESS")
     {
-        emit adminAccess(true);
+        // obsolete, see +a client flag
         return;
     }
 
