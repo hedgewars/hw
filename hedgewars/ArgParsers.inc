@@ -63,6 +63,21 @@ begin
     cLocaleFName:= ParamStr(17);
 end;
 
+{$IFDEF USE_VIDEO_RECORDING}
+procedure internalStartVideoRecordingWithParameters();
+begin
+    internalStartGameWithParameters();
+    GameType:= gmtRecord;
+    cVideoFramerateNum:= StrToInt(ParamStr(18));
+    cVideoFramerateDen:= StrToInt(ParamStr(19));
+    RecPrefix:= ParamStr(20);
+    cAVFormat:= ParamStr(21);
+    cVideoCodec:= ParamStr(22);
+    cVideoQuality:= StrToInt(ParamStr(23));
+    cAudioCodec:= ParamStr(24);
+end;
+{$ENDIF}
+
 procedure setVideo(screenWidth: LongInt; screenHeight: LongInt; bitsStr: LongInt);
 begin
     cScreenWidth:= screenWidth;

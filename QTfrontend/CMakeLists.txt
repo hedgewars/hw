@@ -28,6 +28,7 @@ endif()
 # Configure for SDL
 find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
+find_package(FFMPEG)
 
 include_directories(.)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
@@ -39,6 +40,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
+include_directories(${FFMPEG_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
@@ -71,6 +73,10 @@ file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
 
+if((NOT NO_VIDEOREC) AND "${FFMPEG_FOUND}")
+    add_definitions(-DVIDEOREC)
+endif()
+
 set(hwfr_src
     ${ModelCpp}
     ${NetCpp}
@@ -85,6 +91,7 @@ set(hwfr_src
     hwform.cpp
     main.cpp
     team.cpp
+    campaign.cpp
     ui_hwform.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
     )
@@ -122,6 +129,7 @@ set(hwfr_moc_hdrs
     hwform.h
     team.h
     util/DataManager.h
+    util/libav_iteraction.h
     )
 
 set(hwfr_hdrs
@@ -132,6 +140,7 @@ set(hwfr_hdrs
     ui_hwform.h
     hwconsts.h
     sdlkeys.h
+    campaign.h
     )
 
 set(hwfr_rez hedgewars.qrc)
@@ -169,6 +178,7 @@ set(HW_LINK_LIBS
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
+    ${FFMPEG_LIBRARIES}
     ${HW_LINK_LIBS}
     )
 

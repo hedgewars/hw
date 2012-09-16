@@ -32,7 +32,9 @@ program hwengine;
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
      uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uLandTexture, uCollisions,
      SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
+     {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF}, uAILandMarks;
+
 
 {$IFDEF HWLIBRARY}
 procedure initEverything(complete:boolean);
@@ -84,7 +86,7 @@ begin
             end;
         gsConfirm, gsGame:
             begin
-            DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
+            DrawWorld(Lag);
             DoGameTick(Lag);
             ProcessVisualGears(Lag);
             end;
@@ -104,18 +106,27 @@ begin
 
     SwapBuffers;
 
+{$IFDEF USE_VIDEO_RECORDING}
+    if flagPrerecording then
+        SaveCameraPosition;
+{$ENDIF}
+
     if flagMakeCapture then
         begin
         flagMakeCapture:= false;
         {$IFDEF PAS2C}
-        s:= 'hw';
+        s:= '/Screenshots/hw';
         {$ELSE}
-        s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+        s:= '/Screenshots/hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
         {$ENDIF}
 
+        // flash
         playSound(sndShutter);
-        
-        if MakeScreenshot(s) then
+        ScreenFade:= sfFromWhite;
+        ScreenFadeValue:= sfMax;
+        ScreenFadeSpeed:= 5;
+
+        if MakeScreenshot(s, 1) then
             WriteLnToConsole('Screenshot saved: ' + s)
         else
             begin
@@ -264,6 +275,39 @@ begin
     end;
 end;
 
+{$IFDEF USE_VIDEO_RECORDING}
+procedure RecorderMainLoop;
+var oldGameTicks, oldRealTicks, newGameTicks, newRealTicks: LongInt;
+begin
+    if not BeginVideoRecording() then
+        exit;
+    DoTimer(0); // gsLandGen -> gsStart
+    DoTimer(0); // gsStart -> gsGame
+
+    if not LoadNextCameraPosition(newRealTicks, newGameTicks) then
+        exit;
+    fastScrolling:= true;
+    DoGameTick(newGameTicks);
+    fastScrolling:= false;
+    oldRealTicks:= 0;
+    oldGameTicks:= newGameTicks;
+
+    while LoadNextCameraPosition(newRealTicks, newGameTicks) do
+    begin
+        IPCCheckSock();
+        DoGameTick(newGameTicks - oldGameTicks);
+        if GameState = gsExit then
+            break;
+        ProcessVisualGears(newRealTicks - oldRealTicks);
+        DrawWorld(newRealTicks - oldRealTicks);
+        EncodeFrame();
+        oldRealTicks:= newRealTicks;
+        oldGameTicks:= newGameTicks;
+    end;
+    StopVideoRecording();
+end;
+{$ENDIF}
+
 ///////////////
 procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
 var p: TPathType;
@@ -330,11 +374,18 @@ begin
     SDLTry(TTF_Init() <> -1, true);
     WriteLnToConsole(msgOK);
 
-    // show main window
-    if cFullScreen then
-        ParseCommand('fullscr 1', true)
+{$IFDEF USE_VIDEO_RECORDING}
+    if GameType = gmtRecord then
+        InitOffscreenOpenGL()
     else
-        ParseCommand('fullscr 0', true);
+{$ENDIF}
+        begin            
+        // show main window
+        if cFullScreen then
+            ParseCommand('fullscr 1', true)
+        else
+            ParseCommand('fullscr 0', true);
+        end;
 
     ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
@@ -371,12 +422,22 @@ begin
 
     InitTeams();
     AssignStores();
+
+    if GameType = gmtRecord then
+        SetSound(false);
+
     InitSound();
 
     isDeveloperMode:= false;
     TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
     ParseCommand('rotmask', true);
-    MainLoop();
+
+{$IFDEF USE_VIDEO_RECORDING}
+    if GameType = gmtRecord then
+        RecorderMainLoop()
+    else
+{$ENDIF}
+        MainLoop();
 
     // clean up all the memory allocated
     freeEverything(true);
@@ -458,6 +519,7 @@ begin
         //uAIAmmoTests does not need to be freed
         //uAIActions does not need to be freed
         uStore.freeModule;
+{$IFDEF USE_VIDEO_RECORDING}uVideoRec.freeModule;{$ENDIF}
     end;
 
     uIO.freeModule;
@@ -531,11 +593,14 @@ begin
     else
         if (ParamCount = 3) and ((ParamStr(3) = '--stats-only') or (ParamStr(3) = 'landpreview')) then
             internalSetGameTypeLandPreviewFromParameters()
+        else if ParamCount = cDefaultParamNum then
+            internalStartGameWithParameters()
+{$IFDEF USE_VIDEO_RECORDING}
+        else if ParamCount = cVideorecParamNum then
+            internalStartVideoRecordingWithParameters()
+{$ENDIF}
         else
-            if (ParamCount = cDefaultParamNum) then
-                internalStartGameWithParameters()
-            else
-                playReplayFileWithParameters();
+            playReplayFileWithParameters();
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -284,7 +284,7 @@ case step of
             end;
     stChWin:
         begin
-        CheckForWin;
+        CheckForWin();
         inc(step)
         end;
     stWater:
@@ -296,8 +296,8 @@ case step of
             AddGear(0, 0, gtWaterUp, 0, _0, _0, 0)^.Tag:= cWaterRise;
         inc(step)
         end
-    else
-        inc(step);
+    else // since we are not raising the water, a second win-check isn't needed
+        inc(step,2);
     stChWin2:
         begin
         CheckForWin;
@@ -570,7 +570,7 @@ begin
 Gear:= GearsList;
 while Gear <> nil do
     begin
-    if Gear^.State and gstInvisible = 0 then
+    if (Gear^.State and gstInvisible = 0) and (Gear^.Message and gmRemoveFromList = 0) then
         begin
         x:= hwRound(Gear^.X) + WorldDx;
         y:= hwRound(Gear^.Y) + WorldDy;

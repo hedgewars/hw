@@ -56,6 +56,7 @@
 00:53=Macchina Spazio-Temporale
 00:54=Attrezzi da Costruzione
 00:55=Land Spray
+00:56=Congelatore
 
 01:00=Combattiamo!
 01:01=Round in parità
@@ -78,6 +79,7 @@
 01:18=Massimo
 01:19=Estremo
 01:20=Rimbalzo %1
+01:21=Audio disattivato
 
 ; Event messages
 ; Hog (%1) died
@@ -132,12 +134,14 @@
 02:00=%1 è caduto per l'onore della sua squadra!
 02:00=%1 non ama questo gioco
 02:00=Non c'è speranza per %1
-02:00=%1 è morto eroicamente per la patria.
+02:00=%1 è morto eroicamente per la patria
 02:00=%1 ti consiglio vivamente il Tetris
 02:00=%1 ha giocato la sua prima e ultima partita!
-02:00=%1 non è morto invano...(forse)
+02:00=%1 non è morto invano... (forse)
 02:00=L'inferno ti attende, %1
 02:00=%1 vivrà per sempre nei nostri cuori
+02:00=%1 è stato accolto dal nero falciatore
+02:00=Ade ora ha un nuovo schiavo
 
 ; Hog (%1) drowned
 02:01=%1 gioca a fare il sottomarino!
@@ -182,7 +186,6 @@
 02:01=%1 ha perso il battello
 02:01=%1 va a visitare la Fossa delle Marianne
 02:01=%1 è cibo per i pesci
-02:01=Ooops! %1 non può nuotare senza pinne!
 02:01=%1 pare amare l'acqua più di ogni altra cosa
 02:01=%1 avrebbe dovuto fare qualche lezione di nuoto
 02:01=E' abbastanza salata l'acqua, %1?
@@ -191,7 +194,10 @@
 02:01=%1 si trova a 20000 leghe sotto i mari
 02:01=%1 è il nuovo amichetto di SpongeBob
 02:01=%1 vuole incontrare il capitano Nemo!
-02:01=Pazzia...QUESTA E' SPARTAAAAAAAAAAAAAAAAAAAAAAAAA!!
+02:01=Pazzia...QUESTA E' SPARTAAAAAAAAAAAAAAAAAAAAAAAAA!
+02:01=%1 aveva moooolta sete...
+; Reference to the game Chip's Challenge. Please do not translate into italian.
+02:01=Ooops! %1 can't swim without flippers!
 
 ; Round starts
 02:02=Combattiamo!
@@ -225,6 +231,7 @@
 02:02=Nessuna paura!
 02:02=Che la festa abbia inizio!
 02:02=Preparatevi alla gloria!
+02:02=Forza e coraggio, che la vita è un passaggio!
 
 ; Round ends (win; unused atm)
 02:03=...
@@ -330,7 +337,7 @@
 02:08=Se ci fosse stato Chuck Norris dietro di te, ti avrebbe preso a calci volanti
 02:08=%1 si è appena ricordato che deve ancora fare i compiti!
 02:08=%1 desidera lasciare che il nemico lo sconfigga
-02:08=%1 Domande, dubbi, perplessità?
+02:08=%1, domande, dubbi, perplessità?
 
 ; Hog (%1) hurts himself only
 02:09=%1 dovrebbe migliorare la sua mira!

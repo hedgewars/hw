@@ -43,6 +43,7 @@ class PageScheme;
 class PageAdmin;
 class PageNetType;
 class PageDrawMap;
+class PageVideos;
 class QStackedLayout;
 class QFont;
 class QWidget;
@@ -78,6 +79,7 @@ class Ui_HWForm
         PageNetType *pageNetType;
         PageCampaign *pageCampaign;
         PageDrawMap *pageDrawMap;
+        PageVideos *pageVideos;
 
         QStackedLayout *Pages;
         QFont *font14;

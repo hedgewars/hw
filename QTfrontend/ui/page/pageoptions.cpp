@@ -172,17 +172,13 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponDelete->setMaximumWidth(pmDelete.width() + 6);
             WeaponsLayout->addWidget(WeaponDelete, 2, 4);
 
-            WeaponTooltip = new QCheckBox(this);
-            WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
-            WeaponsLayout->addWidget(WeaponTooltip, 3, 0, 1, 4);
-
             page1Layout->addWidget(groupWeapons, 1, 0);
         }
 
         {
             IconedGroupBox* groupMisc = new IconedGroupBox(this);
             //groupMisc->setContentTopPadding(0);
-            groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+            //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
             groupMisc->setIcon(QIcon(":/res/miscicon.png"));
             //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             groupMisc->setTitle(QGroupBox::tr("Misc"));
@@ -238,15 +234,6 @@ QLayout * PageOptions::bodyLayoutDefinition()
             editNetPassword = new QLineEdit(groupMisc);
             editNetPassword->setEchoMode(QLineEdit::Password);
             MiscLayout->addWidget(editNetPassword, 2, 1);
-
-            CBNameWithDate = new QCheckBox(groupMisc);
-            CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-            MiscLayout->addWidget(CBNameWithDate, 5, 0, 1, 2);
-
-            BtnAssociateFiles = new QPushButton(groupMisc);
-            BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
-            BtnAssociateFiles->setVisible(!custom_data && !custom_config);
-            MiscLayout->addWidget(BtnAssociateFiles, 6, 0, 1, 2);
 
     #ifdef __APPLE__
     #ifdef SPARKLE_ENABLED
@@ -342,18 +329,6 @@ QLayout * PageOptions::bodyLayoutDefinition()
             GBAstereolayout->addWidget(CBStereoMode);
             GBAlayout->addLayout(GBAstereolayout);
 
-            QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
-            QLabel * maxfps = new QLabel(AGGroupBox);
-            maxfps->setText(QLabel::tr("FPS limit"));
-            GBAfpslayout->addWidget(maxfps);
-            GBAlayout->addLayout(GBAfpslayout);
-            fpsedit = new FPSEdit(AGGroupBox);
-            GBAfpslayout->addWidget(fpsedit);
-
-            CBShowFPS = new QCheckBox(AGGroupBox);
-            CBShowFPS->setText(QCheckBox::tr("Show FPS"));
-            GBAfpslayout->addWidget(CBShowFPS);
-
             hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
             hr->setLineWidth(3);
@@ -392,33 +367,82 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             page1Layout->addWidget(AGGroupBox, 0, 1, 3, 1);
         }
+
+        page1Layout->addWidget(new QWidget(this), 3, 0);
+
     }
 
     { // page 2
         QGridLayout * page2Layout = new QGridLayout(page2);
 
-        IconedGroupBox * gbColors = new IconedGroupBox(this);
-        //gbColors->setIcon(QIcon(":/res/teamicon.png"));
-        gbColors->setTitle(QGroupBox::tr("Custom colors"));
-        page2Layout->addWidget(gbColors, 0, 0, 1, 3);
-        QVBoxLayout * gbCLayout = new QVBoxLayout(gbColors);
-
-        QSignalMapper * mapper = new QSignalMapper(this);
-
-        QStandardItemModel * model = DataManager::instance().colorsModel();
-
-        connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(onColorModelDataChanged(QModelIndex,QModelIndex)));
-        for(int i = 0; i < model->rowCount(); ++i)
         {
+            IconedGroupBox * gbColors = new IconedGroupBox(this);
+            gbColors->setIcon(QIcon(":/res/lightbulb_on.png"));
+            gbColors->setTitle(QGroupBox::tr("Custom colors"));
+            page2Layout->addWidget(gbColors, 0, 0);
+            QGridLayout * gbCLayout = new QGridLayout(gbColors);
+
+            QSignalMapper * mapper = new QSignalMapper(this);
+
+            QStandardItemModel * model = DataManager::instance().colorsModel();
+
+            connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(onColorModelDataChanged(QModelIndex,QModelIndex)));
+            for(int i = 0; i < model->rowCount(); ++i)
+            {
+                QPushButton * btn = new QPushButton(this);
+                btn->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+                gbCLayout->addWidget(btn, i / 3, i % 3);
+                btn->setStyleSheet(QString("background: %1").arg(model->item(i)->data().value<QColor>().name()));
+                m_colorButtons.append(btn);
+                connect(btn, SIGNAL(clicked()), mapper, SLOT(map()));
+                mapper->setMapping(btn, i);
+            }
+
+            connect(mapper, SIGNAL(mapped(int)), this, SLOT(colorButtonClicked(int)));
+
             QPushButton * btn = new QPushButton(this);
-            gbCLayout->addWidget(btn);
-            btn->setStyleSheet(QString("background: %1").arg(model->item(i)->data().value<QColor>().name()));
-            m_colorButtons.append(btn);
-            connect(btn, SIGNAL(clicked()), mapper, SLOT(map()));
-            mapper->setMapping(btn, i);
+            gbCLayout->addWidget(btn, (model->rowCount() - 1) / 3 + 1, 0, 1, 3);
+            btn->setText(tr("Reset to default colors"));
+            connect(btn, SIGNAL(clicked()), &DataManager::instance(), SLOT(resetColors()));
         }
 
-        connect(mapper, SIGNAL(mapped(int)), this, SLOT(colorButtonClicked(int)));
+        {
+            IconedGroupBox * gbMisc = new IconedGroupBox(this);
+            gbMisc->setIcon(QIcon(":/res/Settings.png"));
+            gbMisc->setTitle(QGroupBox::tr("Miscellaneous"));
+            page2Layout->addWidget(gbMisc, 0, 1);
+            QVBoxLayout * gbCLayout = new QVBoxLayout(gbMisc);
+
+            QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
+            QLabel * maxfps = new QLabel(AGGroupBox);
+            maxfps->setText(QLabel::tr("FPS limit"));
+            GBAfpslayout->addWidget(maxfps);
+            fpsedit = new FPSEdit(AGGroupBox);
+            GBAfpslayout->addWidget(fpsedit);
+
+            CBShowFPS = new QCheckBox(AGGroupBox);
+            CBShowFPS->setText(QCheckBox::tr("Show FPS"));
+            GBAfpslayout->addWidget(CBShowFPS);
+
+            gbCLayout->addLayout(GBAfpslayout);
+
+
+            WeaponTooltip = new QCheckBox(this);
+            WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
+            gbCLayout->addWidget(WeaponTooltip);
+
+
+            CBNameWithDate = new QCheckBox(this);
+            CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
+            gbCLayout->addWidget(CBNameWithDate);
+
+            BtnAssociateFiles = new QPushButton(this);
+            BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
+            BtnAssociateFiles->setVisible(!custom_data && !custom_config);
+            gbCLayout->addWidget(BtnAssociateFiles);
+        }
+
+        page2Layout->addWidget(new QWidget(this), 1, 0);
     }
 
     previousQuality = this->SLQuality->value();
@@ -546,6 +570,8 @@ void PageOptions::colorButtonClicked(int i)
 
 void PageOptions::onColorModelDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
 {
+    Q_UNUSED(bottomRight);
+
     QStandardItemModel * model = DataManager::instance().colorsModel();
 
     m_colorButtons[topLeft.row()]->setStyleSheet(QString("background: %1").arg(model->item(topLeft.row())->data().value<QColor>().name()));

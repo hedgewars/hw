@@ -26,7 +26,8 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions;
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions
+     {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
 
@@ -412,8 +413,7 @@ with CurrentHedgehog^.Gear^ do
 end;
 
 procedure chNextTurn(var s: shortstring);
-var i: Longword;
-    gi: PGear;
+var gi: PGear;
 begin
     s:= s; // avoid compiler hint
 
@@ -528,6 +528,17 @@ procedure chCapture(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 flagMakeCapture:= true
+end;
+
+procedure chRecord(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+{$IFDEF USE_VIDEO_RECORDING}
+if flagPrerecording then
+    StopPreRecording()
+else
+    BeginPreRecording();
+{$ENDIF}
 end;
 
 procedure chSetMap(var s: shortstring);
@@ -785,6 +796,11 @@ begin
 fastUntilLag:= StrToInt(s) <> 0
 end;
 
+procedure chCampVar(var s:shortstring);
+begin
+  CampaignVariable := s;
+end;
+
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
@@ -868,6 +884,8 @@ begin
     RegisterVariable('-cur_l'  , @chCurL_m       , true );
     RegisterVariable('+cur_r'  , @chCurR_p       , true );
     RegisterVariable('-cur_r'  , @chCurR_m       , true );
+    RegisterVariable('campvar' , @chCampVar      , true );
+    RegisterVariable('record'  , @chRecord       , true );
 end;
 
 procedure freeModule;

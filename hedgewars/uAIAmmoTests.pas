@@ -123,7 +123,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
 const BadTurn = Low(LongInt) div 4;
 
 implementation
-uses uAIMisc, uVariables, uUtils, uGearsHandlers, uCollisions;
+uses uAIMisc, uVariables, uUtils, uGearsHandlers;
 
 function Metric(x1, y1, x2, y2: LongInt): LongInt; inline;
 begin
@@ -612,10 +612,7 @@ x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 
 if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
-    begin
-    TestDesertEagle:= BadTurn;
     exit(BadTurn);
-    end;
 
 t:= 2 / sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
 Vx:= (Targ.X - x) * t;

@@ -31,11 +31,13 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     pageLayout->setRowStretch(0, 1);
     pageLayout->setRowStretch(3, 1);
 
-    CBSelect = new QComboBox(this);
     CBTeam = new QComboBox(this);
+    CBMission = new QComboBox(this);
+    CBCampaign = new QComboBox(this);
 
     pageLayout->addWidget(CBTeam, 1, 1);
-    pageLayout->addWidget(CBSelect, 2, 1);
+    pageLayout->addWidget(CBCampaign, 2, 1);
+    pageLayout->addWidget(CBMission, 3, 1);
 
     BtnStartCampaign = new QPushButton(this);
     BtnStartCampaign->setFont(*font14);

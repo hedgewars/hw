@@ -33,7 +33,7 @@ QLayout * PageNetType::bodyLayoutDefinition()
     pageLayout->setColumnStretch(3, 10);
 
     BtnLAN = addButton(tr("LAN game"), pageLayout, 1, 2);
-    BtnLAN->setWhatsThis(tr("Hoin or host your own game server in a Local Area Network."));
+    BtnLAN->setWhatsThis(tr("Join or host your own game server in a Local Area Network."));
     BtnOfficialServer = addButton(tr("Official server"), pageLayout, 2, 2);
     BtnOfficialServer->setWhatsThis(tr("Join hundreds of players online!"));
 

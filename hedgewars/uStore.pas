@@ -21,7 +21,7 @@
 
 unit uStore;
 interface
-uses SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
+uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -32,6 +32,14 @@ procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+
+// loads an image from the game's data files
+function  LoadDataImage(const path: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+// like LoadDataImage but uses altPath as fallback-path if file not found/loadable in path
+function  LoadDataImageAltPath(const path, altPath: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+// like LoadDataImage but uses altFile as fallback-filename if file cannot be loaded
+function  LoadDataImageAltFile(const path: TPathType; const filename, altFile: shortstring; imageFlags: LongInt): PSDL_Surface;
+
 procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
@@ -40,13 +48,17 @@ procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
 procedure MakeCrossHairs;
+{$IFDEF USE_VIDEO_RECORDING}
+procedure InitOffscreenOpenGL;
+{$ENDIF}
 
 procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; inline;
 
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
-     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF};
+     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
+     {$IF NOT DEFINED(SDL13) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -91,9 +103,7 @@ var t: LongInt;
     Color, i: Longword;
     s: shortstring;
 begin
-s:= UserPathz[ptGraphics] + '/' + cCHFileName;
-if not FileExists(s+'.png') then s:= Pathz[ptGraphics] + '/' + cCHFileName;
-tmpsurf:= LoadImage(s, ifAlpha or ifCritical);
+tmpsurf:= LoadDataImage(ptGraphics, cCHFileName, ifAlpha or ifCritical);
 
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
@@ -196,13 +206,7 @@ for t:= 0 to Pred(TeamsCount) do
         else if (Flag = 'cpu') or (Flag = 'cpu_plain') then
                 Flag:= 'hedgewars';
 
-        flagsurf:= LoadImage(UserPathz[ptFlags] + '/' + Flag, ifNone);
-        if flagsurf = nil then
-            flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
-        if flagsurf = nil then
-            flagsurf:= LoadImage(UserPathz[ptFlags] + '/hedgewars', ifNone);
-        if flagsurf = nil then
-            flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
+        flagsurf:= LoadDataImageAltFile(ptFlags, Flag, 'hedgewars', ifNone);
         TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
 
         case maxLevel of
@@ -247,9 +251,7 @@ for t:= 0 to Pred(TeamsCount) do
                         end
                     end;
         end;
-    MissionIcons:= LoadImage(UserPathz[ptGraphics] + '/missions', ifNone);
-    if MissionIcons = nil then
-        MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
+    MissionIcons:= LoadDataImage(ptGraphics, 'missions', ifCritical);
     iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
     if iconsurf <> nil then
         begin
@@ -287,13 +289,7 @@ for t:= 0 to Pred(TeamsCount) do
             begin
             if GraveName = '' then
                 GraveName:= 'Statue';
-            texsurf:= LoadImage(UserPathz[ptGraves] + '/' + GraveName, ifTransparent);
-            if texsurf = nil then
-                texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifTransparent);
-            if texsurf = nil then
-                texsurf:= LoadImage(UserPathz[ptGraves] + '/Statue', ifTransparent);
-            if texsurf = nil then
-                texsurf:= LoadImage(Pathz[ptGraves] + '/Statue', ifCritical or ifTransparent);
+            texsurf:= LoadDataImageAltFile(ptGraves, GraveName, 'Statue', ifCritical or ifTransparent);
             GraveTex:= Surface2Tex(texsurf, false);
             SDL_FreeSurface(texsurf)
             end
@@ -305,7 +301,7 @@ var s: shortstring;
     fi: THWFont;
     ai: TAmmoType;
     tmpsurf: PSDL_Surface;
-    i: LongInt;
+    i, imflags: LongInt;
 begin
 AddFileLog('StoreLoad()');
 
@@ -338,43 +334,18 @@ for ii:= Low(TSprite) to High(TSprite) do
            ((cCloudsNumber > 0) or (ii <> sprCloud)) and
            ((vobCount > 0) or (ii <> sprFlake)) then
             begin
-            if AltPath = ptNone then
-                if ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk] then // FIXME: hack
-                    begin
-                    if not reload then
-                        begin
-                        tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                        if tmpsurf = nil then
-                           tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
-                        end
-                    else
-                           tmpsurf:= Surface
-                    end
-                else
-                    begin
-                    if not reload then
-                        begin
-                           tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                        if tmpsurf = nil then
-                           tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical)
-                        end
-                    else
-                           tmpsurf:= Surface
-                    end
+            if reload then
+                tmpsurf:= Surface
             else
                 begin
-                if not reload then
-                    begin
-                    tmpsurf:= LoadImage(UserPathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then
-                        tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then
-                        tmpsurf:= LoadImage(UserPathz[AltPath] + '/' + FileName, ifAlpha or ifTransparent);
-                    if tmpsurf = nil then
-                        tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent)
-                    end
-                else
-                        tmpsurf:= Surface
+                imflags := (ifAlpha or ifTransparent);
+
+                // these sprites are optional
+                if not (ii in [sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR, sprChunk]) then // FIXME: hack
+                    imflags := (imflags or ifCritical);
+
+                // load the image
+                tmpsurf := LoadDataImageAltPath(Path, AltPath, FileName, imflags)
                 end;
 
             if tmpsurf <> nil then
@@ -424,10 +395,8 @@ WriteNames(fnt16);
 if not reload then
     AddProgress;
 
-    tmpsurf:= LoadImage(UserPathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifTransparent);
-if tmpsurf = nil then
-    tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
-    
+tmpsurf:= LoadDataImage(ptGraphics, cHHFileName, ifAlpha or ifCritical or ifTransparent);
+
 HHTexture:= Surface2Tex(tmpsurf, false);
 SDL_FreeSurface(tmpsurf);
 
@@ -467,6 +436,31 @@ if not reload then
     AddProgress;
 IMG_Quit();
 end;
+
+{$IF NOT DEFINED(S3D_DISABLED) OR DEFINED(USE_VIDEO_RECORDING)}
+procedure CreateFramebuffer(var frame, depth, tex: GLuint);
+begin
+    glGenFramebuffersEXT(1, @frame);
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frame);
+    glGenRenderbuffersEXT(1, @depth);
+    glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depth);
+    glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
+    glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depth);
+    glGenTextures(1, @tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, tex, 0);
+end;
+
+procedure DeleteFramebuffer(var frame, depth, tex: GLuint);
+begin
+    glDeleteTextures(1, @tex);
+    glDeleteRenderbuffersEXT(1, @depth);
+    glDeleteFramebuffersEXT(1, @frame);
+end;
+{$ENDIF}
 
 procedure StoreRelease(reload: boolean);
 var ii: TSprite;
@@ -541,15 +535,15 @@ for i:= Low(CountTexz) to High(CountTexz) do
                 end;
             end;
         end;
+{$IFDEF USE_VIDEO_RECORDING}
+    if defaultFrame <> 0 then
+        DeleteFramebuffer(defaultFrame, depthv, texv);
+{$ENDIF}
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
         begin
-        glDeleteTextures(1, @texl);
-        glDeleteRenderbuffersEXT(1, @depthl);
-        glDeleteFramebuffersEXT(1, @framel);
-        glDeleteTextures(1, @texr);
-        glDeleteRenderbuffersEXT(1, @depthr);
-        glDeleteFramebuffersEXT(1, @framer)
+        DeleteFramebuffer(framel, depthl, texl);
+        DeleteFramebuffer(framer, depthr, texr);
         end
 {$ENDIF}
 end;
@@ -598,12 +592,59 @@ begin
     LoadImage:= tmpsurf //Result
 end;
 
+
+function LoadDataImage(const path: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+var tmpsurf: PSDL_Surface;
+begin
+    // check for file in user dir (never critical)
+    tmpsurf:= LoadImage(UserPathz[path] + '/' + filename, imageFlags and (not ifCritical));
+
+    // if unsuccessful check data dir
+    if (tmpsurf = nil) then
+        tmpsurf:= LoadImage(Pathz[path] + '/' + filename, imageFlags);
+
+    LoadDataImage:= tmpsurf;
+end;
+
+
+function LoadDataImageAltPath(const path, altPath: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
+var tmpsurf: PSDL_Surface;
+begin
+    // if there is no alternative path, just forward and return result
+    if (altPath = ptNone) then
+        exit(LoadDataImage(path, filename, imageFlags));
+
+    // since we have a fallback path this search isn't critical yet
+    tmpsurf:= LoadDataImage(path, filename, imageFlags and (not ifCritical));
+
+    // if image still not found try alternative path
+    if (tmpsurf = nil) then
+        tmpsurf:= LoadDataImage(altPath, filename, imageFlags);
+
+    LoadDataImageAltPath:= tmpsurf;
+end;
+
+function LoadDataImageAltFile(const path: TPathType; const filename, altFile: shortstring; imageFlags: LongInt): PSDL_Surface;
+var tmpsurf: PSDL_Surface;
+begin
+    // if there is no alternative filename, just forward and return result
+    if (altFile = '') then
+        exit(LoadDataImage(path, filename, imageFlags));
+
+    // since we have a fallback filename this search isn't critical yet
+    tmpsurf:= LoadDataImage(path, filename, imageFlags and (not ifCritical));
+
+    // if image still not found try alternative filename
+    if (tmpsurf = nil) then
+        tmpsurf:= LoadDataImage(path, altFile, imageFlags);
+
+    LoadDataImageAltFile:= tmpsurf;
+end;
+
 procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
 var texsurf: PSDL_Surface;
 begin
-texsurf:= LoadImage(UserPathz[ptHats] + '/' + newHat, ifNone);
-    if texsurf = nil then
-        texsurf:= LoadImage(Pathz[ptHats] + '/' + newHat, ifNone);
+    texsurf:= LoadDataImage(ptHats, newHat, ifNone);
 
     // only do something if the hat could be loaded
     if texsurf <> nil then
@@ -658,6 +699,12 @@ end;
 procedure SetupOpenGL;
 //var vendor: shortstring = '';
 var buf: array[byte] of char;
+{$IFDEF USE_VIDEO_RECORDING}
+    AuxBufNum: LongInt;
+{$ENDIF}
+    tmpstr: AnsiString;
+    tmpint: LongInt;
+    tmpn: LongInt;
 begin
     buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
@@ -709,8 +756,59 @@ begin
     AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
     AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
     AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
-    AddFileLog('  \----- Extensions: ' + shortstring(pchar(glGetString(GL_EXTENSIONS))));
-    //TODO: don't have the Extensions line trimmed but slipt it into multiple lines
+{$IFDEF USE_VIDEO_RECORDING}
+    glGetIntegerv(GL_AUX_BUFFERS, @AuxBufNum);
+    AddFileLog('  |----- Number of auxiliary buffers: ' + inttostr(AuxBufNum));
+{$ENDIF}
+    AddFileLog('  \----- Extensions: ');
+{$IFNDEF PAS2C}
+    // fetch extentions and store them in string
+    tmpstr := StrPas(PChar(glGetString(GL_EXTENSIONS)));
+    tmpn := WordCount(tmpstr, [' ']);
+    tmpint := 1;
+
+    repeat
+    begin
+        // print up to 3 extentions per row
+        // ExtractWord will return empty string if index out of range
+        AddFileLog(TrimRight(
+            ExtractWord(tmpint, tmpstr, [' ']) + ' ' +
+            ExtractWord(tmpint+1, tmpstr, [' ']) + ' ' +
+            ExtractWord(tmpint+2, tmpstr, [' '])
+        ));
+        tmpint := tmpint + 3;
+    end;
+    until (tmpint > tmpn);
+{$ELSE}
+    // doesn't seem to print >256 chars
+    AddFileLogRaw(PChar(glGetString(GL_EXTENSIONS)));
+{$ENDIF}
+    AddFileLog('');
+
+    defaultFrame:= 0;
+{$IFDEF USE_VIDEO_RECORDING}
+    if GameType = gmtRecord then
+    begin
+        if glLoadExtension('GL_EXT_framebuffer_object') then
+        begin
+            CreateFramebuffer(defaultFrame, depthv, texv);
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame);
+            AddFileLog('Using framebuffer for video recording.');
+        end
+        else if AuxBufNum > 0 then
+        begin
+            glDrawBuffer(GL_AUX0);
+            glReadBuffer(GL_AUX0);
+            AddFileLog('Using auxiliary buffer for video recording.');
+        end
+        else
+        begin
+            glDrawBuffer(GL_BACK);
+            glReadBuffer(GL_BACK);
+            AddFileLog('Warning: off-screen rendering is not supported; using back buffer but it may not work.');
+        end;
+    end;
+{$ENDIF}
 
 {$IFNDEF S3D_DISABLED}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
@@ -718,36 +816,11 @@ begin
         // prepare left and right frame buffers and associated textures
         if glLoadExtension('GL_EXT_framebuffer_object') then
             begin
-            // left
-            glGenFramebuffersEXT(1, @framel);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
-            glGenRenderbuffersEXT(1, @depthl);
-            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthl);
-            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthl);
-            glGenTextures(1, @texl);
-            glBindTexture(GL_TEXTURE_2D, texl);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texl, 0);
-
-            // right
-            glGenFramebuffersEXT(1, @framer);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
-            glGenRenderbuffersEXT(1, @depthr);
-            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depthr);
-            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthr);
-            glGenTextures(1, @texr);
-            glBindTexture(GL_TEXTURE_2D, texr);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texr, 0);
+            CreateFramebuffer(framel, depthl, texl);
+            CreateFramebuffer(framer, depthr, texr);
 
             // reset
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame)
             end
         else
             cStereoMode:= smNone;
@@ -803,9 +876,7 @@ begin
     if Step = 0 then
     begin
         WriteToConsole(msgLoading + 'progress sprite: ');
-        texsurf:= LoadImage(UserPathz[ptGraphics] + '/Progress', ifTransparent);
-        if texsurf = nil then
-            texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
+        texsurf:= LoadDataImage(ptGraphics, 'Progress', ifCritical or ifTransparent);
 
         ProgrTex:= Surface2Tex(texsurf, false);
 
@@ -1021,6 +1092,34 @@ FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
 end;
 
+{$IFDEF USE_VIDEO_RECORDING}
+{$IFDEF SDL13}
+procedure InitOffscreenOpenGL;
+begin
+    // create hidden window
+    SDLwindow:= SDL_CreateWindow('hedgewars (you don''t see this)',
+                                 SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK,
+                                 cScreenWidth, cScreenHeight,
+                                 SDL_WINDOW_HIDDEN or SDL_WINDOW_OPENGL);
+    SDLTry(SDLwindow <> nil, true);
+    SetupOpenGL();
+end;
+{$ELSE}
+procedure InitOffscreenOpenGL;
+var ArgCount: LongInt;
+    PrgName: pchar;
+begin
+    ArgCount:= 1;
+    PrgName:= 'hwengine';
+    glutInit(@ArgCount, @PrgName);
+    glutInitWindowSize(cScreenWidth, cScreenHeight);
+    glutCreateWindow('hedgewars (you don''t see this)'); // we don't need a window, but if this function is not called then OpenGL will not be initialized
+    glutHideWindow();
+    SetupOpenGL();
+end;
+{$ENDIF} // SDL13
+{$ENDIF} // USE_VIDEO_RECORDING
+
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     reinit: boolean = false;
@@ -1046,9 +1145,7 @@ begin
         WriteLnToConsole(msgOK);
         // load engine icon
     {$IFNDEF DARWIN}
-        ico:= LoadImage(UserPathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
-        if ico = nil then
-            ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+        ico:= LoadDataImage(ptGraphics, 'hwengine', ifIgnoreCaps);
         if ico <> nil then
             begin
             SDL_WM_SetIcon(ico, 0);
@@ -1201,6 +1298,8 @@ end;
 
 procedure SwapBuffers; inline;
 begin
+    if GameType = gmtRecord then
+        exit;
 {$IFDEF SDL13}
     SDL_GL_SwapWindow(SDLwindow);
 {$ELSE}
