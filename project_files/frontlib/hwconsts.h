@@ -46,6 +46,7 @@
 
 #define WEAPONS_COUNT 55
 
+// TODO allow frontend to override these?
 /* A merge of mikade/bugq colours w/ a bit of channel feedback */
 #define HW_TEAMCOLOR_ARRAY  { UINT32_C(0xffff0204), /* red    */ \
                               UINT32_C(0xff4980c1), /* blue   */ \
