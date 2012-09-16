@@ -205,7 +205,9 @@ flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn);
 	int flib_netconn_send_createRoom(flib_netconn *conn, const char *room);
 
 	/**
-	 * Ban a player. You need to be in the lobby and a server admin for this to work.
+	 * Ban a player. The scope of this ban depends on whether you are in a room or in the lobby.
+	 * In a room, you need to be the room chief, and the ban will apply to the room only. In the
+	 * lobby, you need to be server admin to ban someone, and the ban applies to the entire server.
 	 */
 	int flib_netconn_send_ban(flib_netconn *conn, const char *playerName);
 
