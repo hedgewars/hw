@@ -68,6 +68,7 @@ void netconn_clearCallbacks(flib_netconn *conn) {
 	flib_netconn_onRoomAdd(conn, NULL, NULL);
 	flib_netconn_onRoomDelete(conn, NULL, NULL);
 	flib_netconn_onRoomUpdate(conn, NULL, NULL);
+	flib_netconn_onClientFlags(conn, NULL, NULL);
 	flib_netconn_onChat(conn, NULL, NULL);
 	flib_netconn_onLobbyJoin(conn, NULL, NULL);
 	flib_netconn_onLobbyLeave(conn, NULL, NULL);
@@ -75,8 +76,6 @@ void netconn_clearCallbacks(flib_netconn *conn) {
 	flib_netconn_onRoomLeave(conn, NULL, NULL);
 	flib_netconn_onNickTaken(conn, NULL, NULL);
 	flib_netconn_onPasswordRequest(conn, NULL, NULL);
-	flib_netconn_onRoomChiefStatus(conn, NULL, NULL);
-	flib_netconn_onReadyState(conn, NULL, NULL);
 	flib_netconn_onEnterRoom(conn, NULL, NULL);
 	flib_netconn_onLeaveRoom(conn, NULL, NULL);
 	flib_netconn_onTeamAdd(conn, NULL, NULL);
@@ -90,7 +89,6 @@ void netconn_clearCallbacks(flib_netconn *conn) {
 	flib_netconn_onMapChanged(conn, NULL, NULL);
 	flib_netconn_onScriptChanged(conn, NULL, NULL);
 	flib_netconn_onWeaponsetChanged(conn, NULL, NULL);
-	flib_netconn_onAdminAccess(conn, NULL, NULL);
 	flib_netconn_onServerVar(conn, NULL, NULL);
 }
 
@@ -124,6 +122,7 @@ GENERATE_CB_SETTER_AND_DEFAULT(onRoomlist, (void *context, const flib_room **roo
 GENERATE_CB_SETTER_AND_DEFAULT(onRoomAdd, (void *context, const flib_room *room));
 GENERATE_CB_SETTER_AND_DEFAULT(onRoomDelete, (void *context, const char *name));
 GENERATE_CB_SETTER_AND_DEFAULT(onRoomUpdate, (void *context, const char *oldName, const flib_room *room));
+GENERATE_CB_SETTER_AND_DEFAULT(onClientFlags, (void *context, const char *nick, const char *flags, bool newFlagState));
 GENERATE_CB_SETTER(onChat, (void *context, const char *nick, const char *msg), defaultCallback_onChat);
 GENERATE_CB_SETTER_AND_DEFAULT(onLobbyJoin, (void *context, const char *nick));
 GENERATE_CB_SETTER_AND_DEFAULT(onLobbyLeave, (void *context, const char *nick, const char *partMsg));
@@ -131,8 +130,6 @@ GENERATE_CB_SETTER_AND_DEFAULT(onRoomJoin, (void *context, const char *nick));
 GENERATE_CB_SETTER_AND_DEFAULT(onRoomLeave, (void *context, const char *nick, const char *partMessage));
 GENERATE_CB_SETTER(onNickTaken, (void *context, const char *nick), defaultCallback_onNickTaken);
 GENERATE_CB_SETTER(onPasswordRequest, (void *context, const char *nick), defaultCallback_onPasswordRequest);
-GENERATE_CB_SETTER_AND_DEFAULT(onRoomChiefStatus, (void *context, bool chief));
-GENERATE_CB_SETTER_AND_DEFAULT(onReadyState, (void *context, const char *nick, bool ready));
 GENERATE_CB_SETTER_AND_DEFAULT(onEnterRoom, (void *context, bool chief));
 GENERATE_CB_SETTER_AND_DEFAULT(onLeaveRoom, (void *context, int reason, const char *message));
 GENERATE_CB_SETTER_AND_DEFAULT(onTeamAdd, (void *context, const flib_team *team));
@@ -146,7 +143,6 @@ GENERATE_CB_SETTER_AND_DEFAULT(onSchemeChanged, (void *context, const flib_schem
 GENERATE_CB_SETTER_AND_DEFAULT(onMapChanged, (void *context, const flib_map *map, int changetype));
 GENERATE_CB_SETTER_AND_DEFAULT(onScriptChanged, (void *context, const char *script));
 GENERATE_CB_SETTER_AND_DEFAULT(onWeaponsetChanged, (void *context, const flib_weaponset *weaponset));
-GENERATE_CB_SETTER_AND_DEFAULT(onAdminAccess, (void *context));
 GENERATE_CB_SETTER_AND_DEFAULT(onServerVar, (void *context, const char *name, const char *value));
 
 #undef GENERATE_CB_SETTER_AND_DEFAULT

@@ -41,7 +41,6 @@ flib_netconn *flib_netconn_create(const char *playerName, const char *dataDirPat
 			newConn->dataDirPath = flib_strdupnull(dataDirPath);
 
 			newConn->netconnState = NETCONN_STATE_CONNECTING;
-			newConn->isAdmin = false;
 
 			newConn->isChief = false;
 			newConn->map = flib_map_create_named("", "NoSuchMap");
@@ -309,17 +308,12 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 				const char *flags = netmsg->parts[1];
 				bool setFlag = flags[0] == '+';
 
-				for(int i=1; flags[i]; i++) {
-					switch(flags[i]) {
-					case 'r':
-						for(int j = 2; j < netmsg->partCount; ++j) {
-							conn->onReadyStateCb(conn->onReadyStateCtx, netmsg->parts[j], setFlag);
-						}
-						break;
-					default:
-						flib_log_w("Net: Unknown flag %c in CLIENT_FLAGS message", flags[i]);
-						break;
+				for(int j = 2; j < netmsg->partCount; ++j) {
+					bool isSelf = !strcmp(conn->playerName, netmsg->parts[j]);
+					if(isSelf && strchr(flags, 'h')) {
+						conn->isChief = setFlag;
 					}
+					conn->onClientFlagsCb(conn->onClientFlagsCtx, netmsg->parts[j], flags+1, setFlag);
 				}
 	        }
 	    } else if (!strcmp(cmd, "ADD_TEAM")) {
@@ -589,15 +583,9 @@ static void flib_netconn_wrappedtick(flib_netconn *conn) {
 				exit = true;
 	        }
 	    } else if (!strcmp(cmd, "ADMIN_ACCESS")) {
-	    	conn->onAdminAccessCb(conn->onAdminAccessCtx);
-	    	conn->isAdmin = true;
+	    	// deprecated
 	    } else if (!strcmp(cmd, "ROOM_CONTROL_ACCESS")) {
-	        if (netmsg->partCount < 2) {
-	            flib_log_w("Net: Bad ROOM_CONTROL_ACCESS message");
-	        } else {
-	        	conn->isChief = strcmp("0", netmsg->parts[1]);
-	        	conn->onRoomChiefStatusCb(conn->onRoomChiefStatusCtx, conn->isChief);
-	        }
+	    	// deprecated
 	    } else {
 	    	flib_log_w("Unknown server command: %s", cmd);
 	    }

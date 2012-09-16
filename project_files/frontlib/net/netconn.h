@@ -188,7 +188,8 @@ flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn);
 
 	/**
 	 * Join a room as guest (not chief). Only makes sense when in lobby state. If the action
-	 * succeeds, you will receive an onEnterRoom callback with chief=false.
+	 * succeeds, you will receive an onEnterRoom callback with chief=false followed by other
+	 * callbacks with current room information.
 	 */
 	int flib_netconn_send_joinRoom(flib_netconn *conn, const char *room);
 
@@ -236,14 +237,14 @@ flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn);
 
 	/**
 	 * Leave the room for the lobby. Only makes sense in room state. msg can be NULL if you don't
-	 * want to send a message. The server always accepts a part message, so once you send it off,
+	 * want to send a message. The server always accepts a part command, so once you send it off,
 	 * you can just assume that you are back in the lobby.
 	 */
 	int flib_netconn_send_leaveRoom(flib_netconn *conn, const char *msg);
 
 	/**
 	 * Change your "ready" status in the room. Only makes sense when in room state. If the action
-	 * succeeds, you will receive an onReadyState callback containing the change.
+	 * succeeds, you will receive an onClientFlags callback containing the change.
 	 */
 	int flib_netconn_send_toggleReady(flib_netconn *conn);
 
@@ -479,6 +480,36 @@ flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn);
 	void flib_netconn_onLobbyJoin(flib_netconn *conn, void (*callback)(void *context, const char *nick), void* context);
 	void flib_netconn_onLobbyLeave(flib_netconn *conn, void (*callback)(void *context, const char *nick, const char *partMessage), void* context);
 
+	/**
+	 * This is called when the server informs us that one or more flags associated with a
+	 * player/client have changed.
+	 *
+	 * nick is the name of the player, flags is a string containing one character for each modified
+	 * flag (see below), and newFlagState signals whether the flags should be set to true or false.
+	 *
+	 * Some of these flags are important for protocol purposes (especially if they are set for you)
+	 * while others are just informational. Also, some flags are only relevant for players who are
+	 * in the same room as you, and the server will not inform you if they change for others.
+	 *
+	 * These are the currently known/used flags:
+	 * a: Server admin. Always updated.
+	 * h: Room chief. Updated when in the same room.
+	 * r: Ready to play. Updated when in the same room.
+	 * u: Registered user. Always updated.
+	 *
+	 * The server tells us the 'a' and 'u' flags for all players when we first join the lobby, and
+	 * also tells us the 'r' and 'h' flags when we join or create a room. It assumes that all flags
+	 * are initially false, so it will typically only tell you to set certain flags to true when
+	 * transmitting the initial states. Reset the 'h' and 'r' flags to false when leaving a room,
+	 * or when entering room state, to arrive at the right state for each player.
+	 *
+	 * The room chief state of yourself is particularly important because it determines whether you
+	 * can modify settings of the current room. Generally, when you create a room you start out
+	 * being room chief, and when you join an existing room you are not. However, if the original
+	 * chief leaves a room, the server can choose a new chief, and if that happens the chief flag
+	 * will be transferred to someone else.
+	 */
+	void flib_netconn_onClientFlags(flib_netconn *conn, void (*callback)(void *context, const char *nick, const char *flags, bool newFlagState), void *context);
 
 // Callbacks that happen only in response to specific requests
 
@@ -518,23 +549,6 @@ flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn);
 
 
 // Callbacks that are only relevant in a room
-
-	/**
-	 * This callback informs about changes to your room chief status, i.e. whether you are allowed
-	 * to modify the current room. Generally when you create a room you start out being room chief,
-	 * and when you join an existing room you are not. However, if the original chief leaves a room,
-	 * the server can choose a new chief, and if that happens this callback is called with the new
-	 * status.
-	 *
-	 * Note: This callback does not automatically fire when joining a room. You can always query the
-	 * current chief status using flib_netconn_is_chief().
-	 */
-	void flib_netconn_onRoomChiefStatus(flib_netconn *conn, void (*callback)(void *context, bool chief), void* context);
-
-	/**
-	 * One of the players in the room (possibly you) changed their ready state.
-	 */
-	void flib_netconn_onReadyState(flib_netconn *conn, void (*callback)(void *context, const char *nick, bool ready), void* context);
 
 	/**
 	 * You just left a room and entered the lobby again.
@@ -636,13 +650,5 @@ flib_gamesetup *flib_netconn_create_gamesetup(flib_netconn *conn);
 	 * flib_gameconn_send_enginemsg.
 	 */
 	void flib_netconn_onEngineMessage(flib_netconn *conn, void (*callback)(void *context, const uint8_t *message, size_t size), void *context);
-
-
-// Callbacks only needed for admin stuffs
-
-	/**
-	 * This callback is called if the server informs us that we have admin rights.
-	 */
-	void flib_netconn_onAdminAccess(flib_netconn *conn, void (*callback)(void *context), void *context);
 
 #endif

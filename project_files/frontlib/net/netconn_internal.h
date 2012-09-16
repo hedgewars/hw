@@ -41,7 +41,6 @@ struct _flib_netconn {
 	char *dataDirPath;
 
 	int netconnState;			// One of the NETCONN_STATE constants
-	bool isAdmin;				// Player is server administrator
 
 	bool isChief;				// Player can modify the current room
 	flib_map *map;
@@ -72,6 +71,9 @@ struct _flib_netconn {
 	void (*onRoomUpdateCb)(void *context, const char *oldName, const flib_room *room);
 	void *onRoomUpdateCtx;
 
+	void (*onClientFlagsCb)(void *context, const char *nick, const char *flags, bool newFlagState);
+	void *onClientFlagsCtx;
+
 	void (*onChatCb)(void *context, const char *nick, const char *msg);
 	void *onChatCtx;
 
@@ -92,12 +94,6 @@ struct _flib_netconn {
 
 	void (*onPasswordRequestCb)(void *context, const char *nick);
 	void *onPasswordRequestCtx;
-
-	void (*onRoomChiefStatusCb)(void *context, bool isChief);
-	void *onRoomChiefStatusCtx;
-
-	void (*onReadyStateCb)(void *context, const char *nick, bool ready);
-	void *onReadyStateCtx;
 
 	void (*onEnterRoomCb)(void *context, bool chief);
 	void *onEnterRoomCtx;
@@ -137,9 +133,6 @@ struct _flib_netconn {
 
 	void (*onWeaponsetChangedCb)(void *context, const flib_weaponset *weaponset);
 	void *onWeaponsetChangedCtx;
-
-	void (*onAdminAccessCb)(void *context);
-	void *onAdminAccessCtx;
 
 	void (*onServerVarCb)(void *context, const char *name, const char *value);
 	void *onServerVarCtx;

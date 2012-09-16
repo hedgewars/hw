@@ -279,6 +279,7 @@ public class Netplay {
 		MSG_LOBBY_LEAVE,
 		MSG_ROOM_JOIN,
 		MSG_ROOM_LEAVE,
+		MSG_CLIENT_FLAGS,
 		MSG_CHAT,
 		MSG_MESSAGE,
 		MSG_ROOM_ADD,
@@ -290,7 +291,6 @@ public class Netplay {
 		MSG_PASSWORD_REQUEST,
 		MSG_ENTER_ROOM_FROM_LOBBY,
 		MSG_LEAVE_ROOM,
-		MSG_READYSTATE,
 		MSG_TEAM_ADDED,
 		MSG_TEAM_DELETED,
 		MSG_TEAM_ACCEPTED,
@@ -300,7 +300,6 @@ public class Netplay {
 		MSG_RUN_GAME,
 		MSG_SCHEME_CHANGED,
 		MSG_MAP_CHANGED,
-		MSG_ROOM_CHIEF_STATUS_CHANGED,
 		MSG_SCRIPT_CHANGED,
 		MSG_WEAPONSET_CHANGED;
 		
@@ -339,7 +338,7 @@ public class Netplay {
 					Log.w("Netplay", "Unknown player joined room: "+name);
 					p = new Player(name, false, false);
 				}
-				roomPlayerlist.put(name, new PlayerInRoom(p, false));
+				roomPlayerlist.put(name, new PlayerInRoom(p, false, false));
 				roomChatlog.appendPlayerJoin(name);
 				break;
 			}
@@ -347,6 +346,23 @@ public class Netplay {
 				Pair<String, String> args = (Pair<String, String>)msg.obj;
 				roomPlayerlist.remove(args.first);
 				roomChatlog.appendPlayerLeave(args.first, args.second);
+				break;
+			}
+			case MSG_CLIENT_FLAGS: {
+				ClientFlagsUpdate upd = (ClientFlagsUpdate)msg.obj;
+				PlayerInRoom pir = roomPlayerlist.get(upd.nick);
+				if(pir != null) {
+					roomPlayerlist.put(upd.nick, upd.applyTo(pir));
+				}
+				Player p = lobbyPlayerlist.get(upd.nick);
+				if(p != null) {
+					lobbyPlayerlist.put(upd.nick, upd.applyTo(p));
+				} else {
+					Log.w("Netplay", "Received client flags for unknown player "+upd.nick);
+				}
+				if(playerName.equals(upd.nick) && upd.appliesTo(ClientFlagsUpdate.FLAG_CHIEF)) {
+					netRoomState.setChief(upd.newFlagState);
+				}
 				break;
 			}
 			case MSG_CHAT: {
@@ -423,18 +439,6 @@ public class Netplay {
 				broadcastManager.sendBroadcastSync(intent);
 				break;
 			}
-			case MSG_READYSTATE: {
-				Pair<String, Boolean> args = (Pair<String, Boolean>)msg.obj;
-				String name = args.first;
-				Boolean newReadyState = args.second;
-				PlayerInRoom oldEntry = roomPlayerlist.get(name);
-				if(oldEntry==null) {
-					Log.e("Netplay", "Setting readystate for unknown player "+name);
-				} else {
-					roomPlayerlist.put(name, new PlayerInRoom(oldEntry.player, newReadyState));
-				}
-				break;
-			}
 			case MSG_TEAM_ADDED: {
 				TeamInGame newTeam = (TeamInGame)msg.obj;
 				if(isChief()) {
@@ -507,10 +511,6 @@ public class Netplay {
 			}
 			case MSG_MAP_CHANGED: {
 				netRoomState.setMapRecipe((MapRecipe)msg.obj);
-				break;
-			}
-			case MSG_ROOM_CHIEF_STATUS_CHANGED: {
-				netRoomState.setChief((Boolean)msg.obj);
 				break;
 			}
 			case MSG_SCHEME_CHANGED: {
