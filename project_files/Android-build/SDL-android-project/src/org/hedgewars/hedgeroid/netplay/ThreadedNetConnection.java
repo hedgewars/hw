@@ -48,10 +48,10 @@ import org.hedgewars.hedgeroid.frontlib.Frontlib.RoomListCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.RoomPtr;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.SchemeCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.SchemePtr;
-import org.hedgewars.hedgeroid.frontlib.Frontlib.StrBoolCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.StrCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.StrIntCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.StrRoomCallback;
+import org.hedgewars.hedgeroid.frontlib.Frontlib.StrStrBoolCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.StrStrCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.TeamCallback;
 import org.hedgewars.hedgeroid.frontlib.Frontlib.TeamPtr;
@@ -128,8 +128,8 @@ class ThreadedNetConnection {
 					return;
 				}
 
-				// FLIB.flib_netconn_onAdminAccess(conn, adminAccessCb, null)
 				FLIB.flib_netconn_onSchemeChanged(conn, cfgSchemeCb, null);
+				FLIB.flib_netconn_onClientFlags(conn, clientFlagsCb, null);
 				FLIB.flib_netconn_onChat(conn, chatCb, null);
 				FLIB.flib_netconn_onConnected(conn, connectedCb, null);
 				FLIB.flib_netconn_onDisconnected(conn, disconnectCb, null);
@@ -142,9 +142,7 @@ class ThreadedNetConnection {
 				FLIB.flib_netconn_onMapChanged(conn, mapChangedCb, null);
 				FLIB.flib_netconn_onMessage(conn, messageCb, null);
 				FLIB.flib_netconn_onPasswordRequest(conn, passwordRequestCb, null);
-				FLIB.flib_netconn_onReadyState(conn, readyStateCb, null);
 				FLIB.flib_netconn_onRoomAdd(conn, roomAddCb, null);
-				FLIB.flib_netconn_onRoomChiefStatus(conn, roomChiefStatusCb, null);
 				FLIB.flib_netconn_onRoomDelete(conn, roomDeleteCb, null);
 				FLIB.flib_netconn_onRoomJoin(conn, roomJoinCb, null);
 				FLIB.flib_netconn_onRoomLeave(conn, roomLeaveCb, null);
@@ -192,12 +190,6 @@ class ThreadedNetConnection {
 		}
 	};
 	
-	private final BoolCallback roomChiefStatusCb = new BoolCallback() {
-		public void callback(Pointer context, boolean chief) {
-			sendFromNet(MSG_ROOM_CHIEF_STATUS_CHANGED, chief);
-		}
-	};
-	
 	private final StrCallback scriptChangedCb = new StrCallback() {
 		public void callback(Pointer context, String script) {
 			sendFromNet(MSG_SCRIPT_CHANGED, script);
@@ -227,11 +219,19 @@ class ThreadedNetConnection {
 			sendFromNet(MSG_ROOM_JOIN, name);
 		}
 	};
+	
 	private final StrStrCallback roomLeaveCb = new StrStrCallback() {
 		public void callback(Pointer context, String name, String message) {
 			sendFromNet(MSG_ROOM_LEAVE, Pair.create(name, message));
 		}
 	};
+	
+	private final StrStrBoolCallback clientFlagsCb = new StrStrBoolCallback() {
+		public void callback(Pointer context, String nick, String flags, boolean newFlagsState) {
+			sendFromNet(MSG_CLIENT_FLAGS, new ClientFlagsUpdate(nick, flags, newFlagsState));
+		}
+	};
+	
 	private final StrStrCallback chatCb = new StrStrCallback() {
 		public void callback(Pointer context, String name, String msg) {
 			sendFromNet(MSG_CHAT, Pair.create(name, msg));
@@ -291,12 +291,6 @@ class ThreadedNetConnection {
 	private final IntStrCallback leaveRoomCb = new IntStrCallback() {
 		public void callback(Pointer context, int reason, String message) {
 			sendFromNet(MSG_LEAVE_ROOM, reason, message);
-		}
-	};
-	
-	private final StrBoolCallback readyStateCb = new StrBoolCallback() {
-		public void callback(Pointer context, String player, boolean ready) {
-			sendFromNet(MSG_READYSTATE, Pair.create(player, ready));
 		}
 	};
 	

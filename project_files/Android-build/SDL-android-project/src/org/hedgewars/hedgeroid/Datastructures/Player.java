@@ -40,9 +40,13 @@ public final class Player {
 				+ ", admin=" + admin + "]";
 	}
 
-	public static Comparator<Player> NAME_ORDER = new Comparator<Player>() {
+	public static Comparator<Player> ADMIN_NAME_ORDER = new Comparator<Player>() {
 		public int compare(Player lhs, Player rhs) {
-			return lhs.name.compareToIgnoreCase(rhs.name);
+			if(lhs.admin != rhs.admin) {
+				return lhs.admin ? -1 : 1;
+			} else {
+				return lhs.name.compareToIgnoreCase(rhs.name);
+			}
 		}
 	};
 }

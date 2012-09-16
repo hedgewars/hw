@@ -950,6 +950,10 @@ public interface Frontlib extends Library {
 		void callback(Pointer context, String arg1, String arg2);
 	}
 	
+	public static interface StrStrBoolCallback extends Callback {
+		void callback(Pointer context, String arg1, String arg2, boolean arg3);
+	}
+	
 	public static interface RoomCallback extends Callback {
 		void callback(Pointer context, RoomPtr arg1);
 	}
@@ -1089,6 +1093,7 @@ public interface Frontlib extends Library {
 	int flib_netconn_send_getServerVars(NetconnPtr conn);
 	
 	void flib_netconn_onMessage(NetconnPtr conn, IntStrCallback callback, Pointer context);
+	void flib_netconn_onClientFlags(NetconnPtr conn, StrStrBoolCallback callback, Pointer context);
 	void flib_netconn_onChat(NetconnPtr conn, StrStrCallback callback, Pointer context);
 	void flib_netconn_onConnected(NetconnPtr conn, VoidCallback callback, Pointer context);
 	void flib_netconn_onDisconnected(NetconnPtr conn, IntStrCallback callback, Pointer context);
@@ -1101,8 +1106,6 @@ public interface Frontlib extends Library {
 	void flib_netconn_onNickTaken(NetconnPtr conn, StrCallback callback, Pointer context);
 	void flib_netconn_onPasswordRequest(NetconnPtr conn, StrCallback callback, Pointer context);
 	void flib_netconn_onEnterRoom(NetconnPtr conn, BoolCallback callback, Pointer context);
-	void flib_netconn_onRoomChiefStatus(NetconnPtr conn, BoolCallback callback, Pointer context);
-	void flib_netconn_onReadyState(NetconnPtr conn, StrBoolCallback callback, Pointer context);
 	void flib_netconn_onLeaveRoom(NetconnPtr conn, IntStrCallback callback, Pointer context);
 	void flib_netconn_onTeamAdd(NetconnPtr conn, TeamCallback callback, Pointer context);
 	void flib_netconn_onTeamDelete(NetconnPtr conn, StrCallback callback, Pointer context);
@@ -1117,7 +1120,6 @@ public interface Frontlib extends Library {
 	void flib_netconn_onMapChanged(NetconnPtr conn, MapIntCallback callback, Pointer context);
 	void flib_netconn_onScriptChanged(NetconnPtr conn, StrCallback callback, Pointer context);
 	void flib_netconn_onWeaponsetChanged(NetconnPtr conn, WeaponsetCallback callback, Pointer context);
-	void flib_netconn_onAdminAccess(NetconnPtr conn, VoidCallback callback, Pointer context);
 	void flib_netconn_onServerVar(NetconnPtr conn, StrStrCallback callback, Pointer context);
 
 	// ipc/gameconn.h

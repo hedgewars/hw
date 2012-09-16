@@ -21,15 +21,17 @@ package org.hedgewars.hedgeroid.Datastructures;
 
 public final class PlayerInRoom {
 	public final Player player;
-	public final boolean ready;
+	public final boolean ready, roomChief;
 	
-	public PlayerInRoom(Player player, boolean ready) {
+	public PlayerInRoom(Player player, boolean ready, boolean roomChief) {
 		this.player = player;
 		this.ready = ready;
+		this.roomChief = roomChief;
 	}
 
 	@Override
 	public String toString() {
-		return "PlayerInRoom [player=" + player + ", ready=" + ready + "]";
+		return "PlayerInRoom [player=" + player + ", ready=" + ready
+				+ ", roomChief=" + roomChief + "]";
 	}
 }

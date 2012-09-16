@@ -25,6 +25,13 @@ import org.hedgewars.hedgeroid.R;
 import org.hedgewars.hedgeroid.Datastructures.Player;
 import org.hedgewars.hedgeroid.util.ObservableTreeMapAdapter;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +43,7 @@ import android.widget.TextView;
 public class LobbyPlayerlistAdapter extends ObservableTreeMapAdapter<String, Player> {
 	@Override
 	protected Comparator<Player> getEntryOrder() {
-		return Player.NAME_ORDER;
+		return Player.ADMIN_NAME_ORDER;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -46,9 +53,16 @@ public class LobbyPlayerlistAdapter extends ObservableTreeMapAdapter<String, Pla
 			v = vi.inflate(R.layout.listview_player, null);
 		}
 
-		String player = getItem(position).name;
+		Player player = getItem(position);
 		TextView username = (TextView) v.findViewById(android.R.id.text1);
-		username.setText(player);
+		Spannable spannable = new SpannableString(player.name);
+		if(player.registered) {
+			spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		}
+		if(player.admin) {
+			spannable.setSpan(new ForegroundColorSpan(Color.YELLOW), 0, spannable.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		}
+		username.setText(spannable);
 		return v;
 	}
 }
