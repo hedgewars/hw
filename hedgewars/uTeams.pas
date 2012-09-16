@@ -64,6 +64,11 @@ CheckForWin:= true;
 
 TurnTimeLeft:= 0;
 ReadyTimeLeft:= 0;
+
+// if the game ends during a multishot, do last TurnReaction
+if (not bBetweenTurns) and isInMultiShoot then
+    TurnReaction();
+
 if not GameOver then
     begin
     if AliveCount = 0 then
@@ -531,7 +536,7 @@ if isDeveloperMode then
     AddTeam(Color);
     CurrentTeam^.TeamName:= ts;
     CurrentTeam^.PlayerHash:= s;
-    if GameType in [gmtDemo, gmtSave] then
+    if GameType in [gmtDemo, gmtSave, gmtRecord] then
         CurrentTeam^.ExtDriven:= true;
 
     CurrentTeam^.voicepack:= AskForVoicepack('Default')

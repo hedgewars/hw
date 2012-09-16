@@ -207,3 +207,11 @@ void DataManager::reload()
     m_themeModel->loadThemes();
     emit updated();
 }
+
+void DataManager::resetColors()
+{
+    for(int i = colorsModel()->rowCount() - 1; i >= 0; --i)
+    {
+        m_colorsModel->item(i)->setData(QColor(colors[i]));
+    }
+}

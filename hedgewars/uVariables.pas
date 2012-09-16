@@ -52,6 +52,15 @@ var
     cReadyDelay     : Longword    = 5000;
     cStereoMode     : TStereoMode = smNone;
     cOnlyStats      : boolean = False;
+{$IFDEF USE_VIDEO_RECORDING}
+    RecPrefix      : shortstring;
+    cAVFormat       : shortstring;
+    cVideoCodec     : shortstring;
+    cVideoFramerateNum : LongInt;
+    cVideoFramerateDen : LongInt;
+    cVideoQuality      : LongInt;
+    cAudioCodec     : shortstring;
+{$ENDIF}
 //////////////////////////
     cMapName        : shortstring = '';
 
@@ -63,9 +72,11 @@ var
     SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
+    fastScrolling   : boolean;
     autoCameraOn    : boolean;
 
     CheckSum        : LongWord;
+    CampaignVariable: shortstring;
     GameTicks       : LongWord;
     GameState       : TGameState;
     GameType        : TGameType;
@@ -182,6 +193,8 @@ var
     hiTicks: Word;
 
     LuaGoals        : shortstring;
+    hiddenHedgehogs : array [0..cMaxHHs] of PHedgehog;
+    hiddenHedgehogsNumber : longint;
 
     LuaTemplateNumber : LongWord;
 
@@ -214,7 +227,7 @@ var
         '',                              // ptData
         'Graphics',                      // ptGraphics
         'Themes',                        // ptThemes
-        'Themes/avematan',               // ptCurrTheme
+        'Themes/Bamboo',                 // ptCurrTheme
         'Teams',                         // ptTeams
         'Maps',                          // ptMaps
         '',                              // ptMapCurrent
@@ -2315,7 +2328,7 @@ const
     GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (    
 (*          gtFlame *)   amNothing
 (*       gtHedgehog *) , amNothing
-(*           gtMine *) , amNothing
+(*           gtMine *) , amMine
 (*           gtCase *) , amNothing
 (*     gtExplosives *) , amNothing
 (*        gtGrenade *) , amGrenade
@@ -2449,6 +2462,10 @@ var
     framel, framer, depthl, depthr: GLuint;
     texl, texr: GLuint;
 
+    // video recorder framebuffer and texture
+    defaultFrame, depthv: GLuint;
+    texv: GLuint;
+
     VisualGearLayers: array[0..6] of PVisualGear;
     lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
@@ -2574,7 +2591,7 @@ begin
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
-    GameType        := gmtLocal;
+//    GameType        := gmtLocal;
     zoom            := cDefaultZoomLevel;
     ZoomValue       := cDefaultZoomLevel;
     WeaponTooltipTex:= nil;
@@ -2591,6 +2608,7 @@ begin
     isSpeed         := false;
     SpeedStart      := 0;
     fastUntilLag    := false;
+    fastScrolling   := false;
     autoCameraOn    := true;
     cScriptName     := '';
     cSeed           := '';
@@ -2627,6 +2645,7 @@ begin
     LuaGoals:= '';
 
     LuaTemplateNumber:= 0;
+    hiddenHedgehogsNumber:=0;
 end;
 
 procedure freeModule;

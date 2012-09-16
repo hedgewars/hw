@@ -169,11 +169,24 @@ var
     collV, collH: LongInt;
     land: word;
 begin
-    // clip velocity at 1.9 - over 1 per pixel, but really shouldn't cause many actual problems.
-    if Gear^.dX.QWordValue > 8160437862 then
-        Gear^.dX.QWordValue:= 8160437862;
-    if Gear^.dY.QWordValue > 8160437862 then
-        Gear^.dY.QWordValue:= 8160437862;
+    // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
+{$IFNDEF WEB}
+    if Gear^.dX.Round > 2 then
+        Gear^.dX.QWordValue:= 8589934592;
+    if Gear^.dY.Round > 2 then
+        Gear^.dY.QWordValue:= 8589934592;
+{$ELSE}
+    if Gear^.dX.Round > 2 then
+        begin
+        Gear^.dX.Round:= 2;
+        Gear^.dX.Frac:= 0
+        end;
+    if Gear^.dY.QWordValue > 2 then
+        begin
+        Gear^.dY.Round:= 2;
+        Gear^.dY.Frac:= 0
+        end;
+{$ENDIF}
     Gear^.State := Gear^.State and (not gstCollision);
     collV := 0;
     collH := 0;
@@ -519,7 +532,7 @@ begin
         kick:= hwRound((hwAbs(Gear^.dX)+hwAbs(Gear^.dY)) * _20);
         Gear^.dY.isNegative:= not Gear^.dY.isNegative;
         Gear^.dX.isNegative:= not Gear^.dX.isNegative;
-        AmmoShove(Gear, 1, kick);
+        AmmoShove(Gear, 0, kick);
         for i:= 15 + kick div 10 downto 0 do
             begin
             particle := AddVisualGear(hwRound(Gear^.X) + Random(25), hwRound(Gear^.Y) + Random(25), vgtDust);
@@ -570,13 +583,14 @@ else if GameTicks and $7 = 0 then
         yy:= hwRound(Y);
         if vobVelocity <> 0 then
             begin
-            DirAngle := DirAngle + (Angle / 1250000000);
+            DirAngle := DirAngle + (Damage / 1000);
             if DirAngle < 0 then
                 DirAngle := DirAngle + 360
             else if 360 < DirAngle then
                 DirAngle := DirAngle - 360;
             end;
-
+(*
+We aren't using frametick right now, so just a waste of cycles.
         inc(Health, 8);
         if longword(Health) > vobFrameTicks then
             begin
@@ -585,6 +599,7 @@ else if GameTicks and $7 = 0 then
             if Timer = vobFramesCount then
                 Timer:= 0
             end;
+*)
     // move back to cloud layer
         if yy > cWaterLine then
             move:= true
@@ -1483,7 +1498,7 @@ begin
     or TestCollisionXwithGear(Gear, -2) 
     or (TestCollisionYwithGear(Gear, 2) <> 0) then
         begin
-        if (hwAbs(Gear^.dX) > _0) or (hwAbs(Gear^.dY) > _0) then
+        if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
             begin
             PlaySound(sndRopeAttach);
             Gear^.dX:= _0;
@@ -1756,14 +1771,17 @@ begin
     or (TestCollisionYwithGear(Gear, 1) = 0) then
         begin
         AllInactive := false;
+
         Gear^.dY := Gear^.dY + cGravity;
-        Gear^.Y := Gear^.Y + Gear^.dY;
-        if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then
-            SetAllHHToActive;
-            
+
         if (Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, -1) <> 0) then
             Gear^.dY := _0;
-            
+
+        Gear^.Y := Gear^.Y + Gear^.dY;
+
+        if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then
+            SetAllHHToActive;
+
         if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
             if (Gear^.dY > _0_2) and (k = gtExplosives) then
@@ -2252,14 +2270,13 @@ procedure doStepTeleportAfter(Gear: PGear);
 var 
     HHGear: PGear;
 begin
-    Gear^.Hedgehog^.Unplaced := false;
     HHGear := Gear^.Hedgehog^.Gear;
-    HHGear^.Y := HHGear^.Y + HHGear^.dY;
-    HHGear^.X := HHGear^.X + HHGear^.dX;
-    // hedgehog falling to collect cases
-    HHGear^.dY := HHGear^.dY + cGravity;
-    if (TestCollisionYwithGear(HHGear, 1) <> 0)
-    or CheckGearDrowning(HHGear) then
+    doStepHedgehogMoving(HHGear);
+    // if not infattack mode wait for hedgehog finish falling to collect cases
+    if ((GameFlags and gfInfAttack) <> 0)
+    or ((HHGear^.State and gstMoving) = 0)
+    or (Gear^.Hedgehog^.Gear^.Damage > 0)
+    or ((HHGear^.State and gstDrowning) = 1) then
         begin
         DeleteGear(Gear);
         AfterAttack
@@ -2268,6 +2285,11 @@ end;
 
 procedure doStepTeleportAnim(Gear: PGear);
 begin
+    if (Gear^.Hedgehog^.Gear^.Damage > 0) then
+        begin
+        DeleteGear(Gear);
+        AfterAttack;
+        end;
     inc(Gear^.Timer);
     if Gear^.Timer = 65 then
         begin
@@ -2311,6 +2333,8 @@ begin
         HHGear^.X := int2hwFloat(Gear^.Target.X);
         HHGear^.Y := int2hwFloat(Gear^.Target.Y);
         HHGear^.State := HHGear^.State or gstMoving;
+        Gear^.Hedgehog^.Unplaced := false;
+        isCursorVisible := false;
         playSound(sndWarp)
         end;
     Gear^.Target.X:= NoPointX
@@ -3704,7 +3728,7 @@ begin
         // calc gear offset in portal normal vector direction
         noffs:= (nx * ox + ny * oy);
 
-        if isBullet and (hwRound(hwAbs(noffs)) >= Gear^.Radius) then
+        if isBullet and (noffs.Round >= Gear^.Radius) then
             continue;
 
         // avoid gravity related loops of not really moving gear
@@ -3825,6 +3849,7 @@ begin
         else
             begin
             inc(iterator^.PortalCounter);
+            iterator^.Active:= true;
             iterator^.State:= iterator^.State and (not gstHHHJump)
             end;
 
@@ -5140,4 +5165,85 @@ if Gear^.Timer < $FFFFFFFF then
         end;
     
 doStepFallingGear(Gear);
+end;
+
+procedure doStepCreeper(Gear: PGear);
+var hogs: PGearArrayS;
+    HHGear: PGear;
+    tdX: hwFloat;
+    dir: LongInt;
+begin
+doStepFallingGear(Gear);
+if Gear^.Timer > 0 then dec(Gear^.Timer);
+// creeper sleep phase
+if (Gear^.Hedgehog = nil) and (Gear^.Timer > 0) then exit;
+
+if Gear^.Hedgehog <> nil then HHGear:= Gear^.Hedgehog^.Gear
+else HHGear:= nil;
+
+// creeper boom phase
+if (Gear^.State and gstTmpFlag <> 0) then
+    begin
+    if (Gear^.Timer = 0) then
+        begin
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 300, CurrentHedgehog, EXPLAutoSound);
+        DeleteGear(Gear)
+        end;
+    // ssssss he essssscaped
+    if (Gear^.Timer > 250) and ((HHGear = nil) or 
+            (((abs(HHGear^.X.Round-Gear^.X.Round) + abs(HHGear^.Y.Round-Gear^.Y.Round) + 2) >  180) and
+            (Distance(HHGear^.X-Gear^.X,HHGear^.Y-Gear^.Y) > _180))) then
+        begin
+        Gear^.State:= Gear^.State and (not gstTmpFlag);
+        Gear^.Timer:= 0
+        end;
+    exit
+    end;
+
+// Search out a new target, as target seek time has expired, target is dead, target is out of range, or we didn't have a target
+if (HHGear = nil) or (Gear^.Timer = 0) or 
+   (((abs(HHGear^.X.Round-Gear^.X.Round) + abs(HHGear^.Y.Round-Gear^.Y.Round) + 2) >  Gear^.Angle) and
+        (Distance(HHGear^.X-Gear^.X,HHGear^.Y-Gear^.Y) > int2hwFloat(Gear^.Angle)))
+    then
+    begin
+    hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Angle);
+    if hogs.size > 1 then
+        Gear^.Hedgehog:= hogs.ar^[GetRandom(hogs.size)]^.Hedgehog
+    else if hogs.size = 1 then Gear^.Hedgehog:= hogs.ar^[0]^.Hedgehog
+    else Gear^.Hedgehog:= nil;
+    if Gear^.Hedgehog <> nil then Gear^.Timer:= 5000;
+    exit
+    end;
+
+// we have a target. move the creeper.
+if HHGear <> nil then
+    begin
+    // GOTCHA
+    if ((abs(HHGear^.X.Round-Gear^.X.Round) + abs(HHGear^.Y.Round-Gear^.Y.Round) + 2) <  50) and
+         (Distance(HHGear^.X-Gear^.X,HHGear^.Y-Gear^.Y) < _50) then
+        begin
+        // hisssssssssss
+        Gear^.State:= Gear^.State or gstTmpFlag;
+        Gear^.Timer:= 1500;
+        exit
+        end;
+    if (Gear^.State and gstMoving <> 0) then
+        begin
+        Gear^.dY:= _0;
+        Gear^.dX:= _0;
+        end
+    else if (GameTicks and $FF = 0) then
+        begin
+        tdX:= HHGear^.X-Gear^.X;
+        dir:= hwSign(tdX);
+        if not TestCollisionX(Gear, dir) then
+            Gear^.X:= Gear^.X + signAs(_1,tdX);
+        if TestCollisionXwithXYShift(Gear, signAs(_10,tdX), 0, dir) then
+            begin
+            Gear^.dX:= SignAs(_0_15, tdX);
+            Gear^.dY:= -_0_3;
+            Gear^.State:= Gear^.State or gstMoving
+            end
+        end;
+    end;
 end;

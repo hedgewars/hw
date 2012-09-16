@@ -29,7 +29,8 @@ class PageCampaign : public AbstractPage
         PageCampaign(QWidget* parent = 0);
 
         QPushButton *BtnStartCampaign;
-        QComboBox   *CBSelect;
+        QComboBox   *CBMission;
+        QComboBox   *CBCampaign;
         QComboBox   *CBTeam;
 
     protected:

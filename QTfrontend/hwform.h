@@ -67,6 +67,7 @@ class HWForm : public QMainWindow
         void exit();
         void setButtonDescription(QString desc);
         void backDescription();
+        void GoToVideos();
 
     private slots:
         void GoToSaves();
@@ -114,13 +115,15 @@ class HWForm : public QMainWindow
         void GameStateChanged(GameState gameState);
         void ForcedDisconnect(const QString & reason);
         void ShowErrorMessage(const QString &);
-        void GetRecord(bool isDemo, const QByteArray & record);
+        void GetRecord(RecordType type, const QByteArray & record);
         void CreateNetGame();
         void UpdateWeapons();
         void onFrontendFullscreen(bool value);
         void onFrontendEffects(bool value);
         void Music(bool checked);
         void UpdateCampaignPage(int index);
+        void UpdateCampaignPageProgress(int index);
+        void InitCampaignPage();
         //Starts the transmission process for the feedback
         void SendFeedback();
         //Make a xml representation of the issue to be created
@@ -175,6 +178,7 @@ class HWForm : public QMainWindow
             ID_PAGE_DRAWMAP        ,
             ID_PAGE_DATADOWNLOAD   ,
             ID_PAGE_FEEDBACK	   ,
+            ID_PAGE_VIDEOS,
 	    MAX_PAGE
         };
         QPointer<HWGame> game;

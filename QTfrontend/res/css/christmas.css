@@ -33,7 +33,7 @@ selection-color: #00351d;
 a { color:#c8c8ff; }
 
 QLineEdit, QListWidget, QTableView, QTextBrowser, QSpinBox, QComboBox,
-QComboBox QAbstractItemView, QMenu::item {
+QComboBox QAbstractItemView, QPlainTextEdit, QMenu::item {
 background-color: rgba(13, 5, 68, 70%);
 }
 
@@ -42,7 +42,7 @@ border: solid; border-width: 3px; border-color: #ffcc00;
 }
 
 QPushButton, QListWidget, QTableView, QLineEdit, QHeaderView,
-QTextBrowser, QSpinBox, QToolBox, QComboBox,
+QTextBrowser, QSpinBox, QToolBox, QComboBox, QPlainTextEdit,
 QComboBox QAbstractItemView, IconedGroupBox,
 .QGroupBox, GameCFGWidget, TeamSelWidget, SelWeaponWidget,
 QTabWidget::pane, QTabBar::tab {
@@ -57,14 +57,14 @@ border-color: yellow;
 }
 
 QLineEdit, QListWidget,QTableView, QTextBrowser,
-QSpinBox, QToolBox {
+QSpinBox, QToolBox, QPlainTextEdit {
 border-radius: 10px;
 }
 
 QLineEdit, QLabel, QHeaderView, QListWidget, QTableView,
 QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView,
 IconedGroupBox, .QGroupBox, GameCFGWidget, TeamSelWidget,
-SelWeaponWidget, QCheckBox, QRadioButton, QPushButton {
+SelWeaponWidget, QCheckBox, QRadioButton, QPushButton, QPlainTextEdit {
 font: bold 13px;
 }
 SelWeaponWidget QTabWidget::pane, SelWeaponWidget QTabBar::tab:selected {

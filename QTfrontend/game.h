@@ -40,6 +40,13 @@ enum GameState
     gsHalted = 6
 };
 
+enum RecordType
+{
+    rtDemo,
+    rtSave,
+    rtNeither,
+};
+
 bool checkForDir(const QString & dir);
 
 class HWGame : public TCPBase
@@ -54,7 +61,7 @@ class HWGame : public TCPBase
         void StartQuick();
         void StartNet();
         void StartTraining(const QString & file);
-        void StartCampaign(const QString & file);
+        void StartCampaign(const QString & camp, const QString & campScript, const QString & campTeam);
         void abort();
         GameState gameState;
         bool netSuspend;
@@ -70,8 +77,9 @@ class HWGame : public TCPBase
         void SendTeamMessage(const QString & msg);
         void GameStateChanged(GameState gameState);
         void GameStats(char type, const QString & info);
-        void HaveRecord(bool isDemo, const QByteArray & record);
+        void HaveRecord(RecordType type, const QByteArray & record);
         void ErrorMessage(const QString &);
+        void CampStateChanged(int);
 
     public slots:
         void FromNet(const QByteArray & msg);
@@ -103,6 +111,8 @@ class HWGame : public TCPBase
         void SendCampaignConfig();
         void ParseMessage(const QByteArray & msg);
         void SetGameState(GameState state);
+        void sendCampaignVar(const QByteArray & varToSend);
+        void writeCampaignVar(const QByteArray &varVal);
 };
 
 #endif

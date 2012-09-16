@@ -234,8 +234,8 @@ with Gear^,
         and ((Gear^.Message and gmLJump) <> 0)
         and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
             begin
-            newDx:= dX / CurAmmoGear^.stepFreq; 
-            newDy:= dY / CurAmmoGear^.stepFreq;
+            newDx:= dX; 
+            newDy:= dY;
             altUse:= true
             end
         else
@@ -357,7 +357,7 @@ with Gear^,
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
                        amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
              end;
-             if altUse then
+             if altUse and (newGear <> nil) then
                 begin
                 newGear^.dX:= newDx / newGear^.Density;
                 newGear^.dY:= newDY / newGear^.Density
@@ -598,7 +598,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure PickUp(HH, Gear: PGear);
 var s: shortstring;
-    a: TAmmoType;
     i: LongInt;
     vga: PVisualGear;
     ag, gi: PGear;
@@ -1014,8 +1013,8 @@ if (Gear^.State and gstMoving) <> 0 then
         if (CurrentHedgehog^.Gear = Gear) then
             isCursorVisible:= false
     end;
-
-if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
+// IMO this should trigger homerun based on leftX/rightX + someval instead - that is 'knocking it out of the park'
+if (not isZero(Gear^.dY)) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
     begin
     inc(Gear^.FlightTime);
     if Gear^.FlightTime = 3000 then

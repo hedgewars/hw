@@ -28,6 +28,7 @@ uses    SDLh, uFloat, GLunit;
 const
     sfMax = 1000;
     cDefaultParamNum = 17;
+    cVideorecParamNum = cDefaultParamNum + 7;
 
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';

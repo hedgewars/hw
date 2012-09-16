@@ -256,6 +256,7 @@ DefaultBinds[KeyNameToCode(_S'0')]:= '+volup';
 DefaultBinds[KeyNameToCode(_S'9')]:= '+voldown';
 DefaultBinds[KeyNameToCode(_S'8')]:= 'mute';
 DefaultBinds[KeyNameToCode(_S'c')]:= 'capture';
+DefaultBinds[KeyNameToCode(_S'r')]:= 'record';
 DefaultBinds[KeyNameToCode(_S'h')]:= 'findhh';
 DefaultBinds[KeyNameToCode(_S'p')]:= 'pause';
 DefaultBinds[KeyNameToCode(_S's')]:= '+speedup';
