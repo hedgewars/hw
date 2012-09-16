@@ -491,6 +491,9 @@ while p > 0 do
 end;
 
 function hwSqrt(const t: hwFloat): hwFloat;
+const pwr = 8; // even value, feel free to adjust
+      rThreshold = 1 shl (pwr + 32);
+      lThreshold = 1 shl (pwr div 2 + 32);
 var l, r: QWord;
     c: hwFloat;
 begin
@@ -503,14 +506,24 @@ if t.Round = 0 then
     end
 else
     begin
-    l:= $100000000;
-    r:= t.QWordValue div 2 + $80000000; // r:= t / 2 + 0.5
-    if r > $FFFFFFFFFFFF then
-        r:= $FFFFFFFFFFFF
+    if t.QWordValue > $FFFFFFFFFFFF then // t.Round > 65535.9999
+        begin
+        l:= $10000000000; // 256
+        r:= $FFFFFFFFFFFF; // 65535.9999
+        end else
+        if t.QWordValue >= rThreshold then
+            begin
+            l:= lThreshold;
+            r:= $10000000000; // 256
+            end else
+            begin
+            l:= $100000000;
+            r:= lThreshold;
+            end;
     end;
 
 repeat
-    c.QWordValue:= (l + r) div 2;
+    c.QWordValue:= (l + r) shr 1;
     if hwSqr(c).QWordValue > t.QWordValue then
         r:= c.QWordValue
     else
