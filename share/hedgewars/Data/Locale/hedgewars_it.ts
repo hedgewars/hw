@@ -5,7 +5,7 @@
     <name>AbstractPage</name>
     <message>
         <source>Go back</source>
-        <translation type="unfinished"></translation>
+        <translation>Indietro</translation>
     </message>
 </context>
 <context>
@@ -79,7 +79,7 @@
     <name>HWAskQuitDialog</name>
     <message>
         <source>Do yot really want to quit?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi veramente uscire?</translation>
     </message>
 </context>
 <context>
@@ -421,33 +421,33 @@ Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>User quit</source>
-        <translation type="unfinished">Uscita dell&apos;utente</translation>
+        <translation>Esci</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
-        <translation type="unfinished"></translation>
+        <translation>L'host remoto ha terminato la connessione.</translation>
     </message>
     <message>
         <source>The server is too old. Disconnecting now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il server è troppo datato. Si verrà immediatamente disconessi.</translation>
     </message>
 </context>
 <context>
     <name>HWPasswordDialog</name>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Password</translation>
+        <translation>Password</translation>
     </message>
 </context>
 <context>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica video</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica</translation>
     </message>
 </context>
 <context>
@@ -462,19 +462,19 @@ Per favore scegli un altro nickname:</translation>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Durata: %1m %2s</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation type="unfinished"></translation>
+        <translation>Video: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation type="unfinished"></translation>
+        <translation>%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
-        <translation type="unfinished"></translation>
+        <translation>Audio:</translation>
     </message>
 </context>
 <context>
@@ -567,7 +567,7 @@ Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Eraser</source>
-        <translation type="unfinished"></translation>
+        <translation>Gomma</translation>
     </message>
 </context>
 <context>
@@ -671,7 +671,7 @@ Per favore scegli un altro nickname:</translation>
     <name>PageInfo</name>
     <message>
         <source>Open the snapshot folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri cartella schermate</translation>
     </message>
 </context>
 <context>
@@ -940,43 +940,43 @@ Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Local Game</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioco in locale</translation>
     </message>
     <message>
         <source>Play a game on a single computer</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioca una partita offline</translation>
     </message>
     <message>
         <source>Network Game</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioco in rete</translation>
     </message>
     <message>
         <source>Play a game across a network</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioca una partita attraverso una rete</translation>
     </message>
     <message>
         <source>Read about who is behind the Hedgewars Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Leggi chi c'è dietro allo sviluppo di Hedgewars</translation>
     </message>
     <message>
         <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>Lascia un feedback segnalando problemi, suggerendo nuove funzionalità o solamente indicando il tuo livello di gradimento del gioco.</translation>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
-        <translation type="unfinished"></translation>
+        <translation>Accedi al download di contenuti creati dalla comunità dal nostro sito web</translation>
     </message>
     <message>
         <source>Exit game</source>
-        <translation type="unfinished"></translation>
+        <translation>Esci dal gioco</translation>
     </message>
     <message>
         <source>Manage videos recorded from game</source>
-        <translation type="unfinished"></translation>
+        <translation>Organizza i video registrati tramite il gioco</translation>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica preferenze</translation>
     </message>
 </context>
 <context>
@@ -1017,11 +1017,11 @@ Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>DLC</source>
-        <translation type="unfinished"></translation>
+        <translation>DLC</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation type="unfinished">Contenuti Scaricabili</translation>
+        <translation>Contenuti Scaricabili</translation>
     </message>
 </context>
 <context>
@@ -1036,11 +1036,11 @@ Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Join hundreds of players online!</source>
-        <translation type="unfinished"></translation>
+        <translation>Incontra centinaia di giocatori online!</translation>
     </message>
     <message>
         <source>Join or host your own game server in a Local Area Network.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unisciti ad un server o creane uno nuovo per il gioco online in una rete LAN.</translation>
     </message>
 </context>
 <context>
@@ -1099,15 +1099,15 @@ Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">Generale</translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished">Avanzato</translation>
+        <translation>Avanzate</translation>
     </message>
     <message>
         <source>Reset to default colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Ripristina colori originali</translation>
     </message>
 </context>
 <context>
@@ -1453,47 +1453,47 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Simple Game</source>
-        <translation type="unfinished"></translation>
+        <translation>Partita Semplice</translation>
     </message>
     <message>
         <source>Play a quick game against the computer with random settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioca una partita rapida contro il computer con impostazioni casuali</translation>
     </message>
     <message>
         <source>Multiplayer</source>
-        <translation type="unfinished"></translation>
+        <translation>Multiplayer</translation>
     </message>
     <message>
         <source>Play a hotseat game against your friends, or AI teams</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioca una partira controlo un amico oppure contro il computer</translation>
     </message>
     <message>
         <source>Campaign Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità Campagna</translation>
     </message>
     <message>
         <source>Training Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità allenamento</translation>
     </message>
     <message>
         <source>Practice your skills in a range of training missions</source>
-        <translation type="unfinished"></translation>
+        <translation>Metti alla prova le tue capacità in una vasta gamma di missioni di addestramento</translation>
     </message>
     <message>
         <source>Demos</source>
-        <translation type="unfinished"></translation>
+        <translation>Demo</translation>
     </message>
     <message>
         <source>Watch recorded demos</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza demo registrate</translation>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">Carica</translation>
+        <translation>Carica</translation>
     </message>
     <message>
         <source>Load a previously saved game</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica un gioco salvato in precedenza</translation>
     </message>
 </context>
 <context>
@@ -1508,68 +1508,68 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation type="unfinished"></translation>
+        <translation>Scegli la missione, sfida o addestramento da intraprendere</translation>
     </message>
     <message>
         <source>Start fighting</source>
-        <translation type="unfinished"></translation>
+        <translation>Inizia combattimento</translation>
     </message>
 </context>
 <context>
     <name>PageVideos</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nome</translation>
+        <translation>Nome</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione</translation>
     </message>
     <message numerus="yes">
         <source>%1 bytes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 bytes</numerusform>
+            <numerusform>%1 bytes</numerusform>
         </translation>
     </message>
     <message>
         <source>(in progress...)</source>
-        <translation type="unfinished"></translation>
+        <translation>(in corso...)</translation>
     </message>
     <message>
         <source>Date: </source>
-        <translation type="unfinished"></translation>
+        <translation>Data: </translation>
     </message>
     <message>
         <source>Size: </source>
-        <translation type="unfinished"></translation>
+        <translation>Dimensione: </translation>
     </message>
     <message>
         <source>Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sei sicuro?</translation>
     </message>
     <message>
         <source>Do you really want do remove %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi veramente cancellare %1?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want do remove %1 file(s)?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Vuoi veramente cancellare %1 file(s)?</numerusform>
+            <numerusform>Vuoi veramente cancellare %1 file(s)?</numerusform>
         </translation>
     </message>
     <message>
         <source>encoding</source>
-        <translation type="unfinished"></translation>
+        <translation>encoding</translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation type="unfinished"></translation>
+        <translation>caricamento</translation>
     </message>
     <message>
         <source>Do you really want do cancel uploading %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi veramente sospendere il carimento del file %1?</translation>
     </message>
 </context>
 <context>
@@ -1679,23 +1679,23 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva password</translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation type="unfinished"></translation>
+        <translation>Salva nome utente e password</translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation type="unfinished"></translation>
+        <translation>Il video è privato</translation>
     </message>
     <message>
         <source>Record audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Registra audio</translation>
     </message>
     <message>
         <source>Use game resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa la risoluzione del gioco</translation>
     </message>
 </context>
 <context>
@@ -1869,23 +1869,23 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Custom colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Colori personalizzati</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished"></translation>
+        <translation>Varie</translation>
     </message>
     <message>
         <source>Video recording options</source>
-        <translation type="unfinished"></translation>
+        <translation>Opzioni di registrazione video</translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished"></translation>
+        <translation>Video</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrizione</translation>
     </message>
 </context>
 <context>
@@ -2094,69 +2094,71 @@ Alcune opzioni potrebbero essere incomplete o non funzionanti. Usatela a vostro 
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
-        <translation type="unfinished">Questo programma è distribuito con licenza GNU General Public License v2</translation>
+        <translation>Questo programma è distribuito con licenza GNU General Public License v2</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
 Do yot really want to quit?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ci sono video che stanno ancora venendo elaborati.
+Uscire ora annullerà questo processo e conseguentemente i video non verrano salvati.
+Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire il nome utente YouTube o l'indirizzo e-mail associato all'account Google.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation type="unfinished"></translation>
+        <translation>Nome utente (o e-mail): </translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation type="unfinished"></translation>
+        <translation>Password: </translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation type="unfinished"></translation>
+        <translation>Titolo del video: </translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation type="unfinished"></translation>
+        <translation>Descrizione del video:</translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation type="unfinished"></translation>
+        <translation>Tag (separate da una virgola): </translation>
     </message>
     <message>
         <source>Summary   </source>
-        <translation type="unfinished"></translation>
+        <translation>Riassunto   </translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Descrizione</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Nickname</translation>
+        <translation>Nickname</translation>
     </message>
     <message>
         <source>Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Formato</translation>
     </message>
     <message>
         <source>Audio codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec audio</translation>
     </message>
     <message>
         <source>Video codec</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec video</translation>
     </message>
     <message>
         <source>Framerate</source>
-        <translation type="unfinished"></translation>
+        <translation>Framerate</translation>
     </message>
     <message>
         <source>Bitrate (Kbps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitrate (Kbps)</translation>
     </message>
 </context>
 <context>
@@ -2171,7 +2173,7 @@ Do yot really want to quit?</source>
     </message>
     <message>
         <source>anonymous</source>
-        <translation type="unfinished"></translation>
+        <translation>anonimo</translation>
     </message>
 </context>
 <context>
@@ -2257,41 +2259,41 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Fields required</source>
-        <translation type="unfinished"></translation>
+        <translation>Campi richiesti</translation>
     </message>
     <message>
         <source>Please fill out all fields</source>
-        <translation type="unfinished"></translation>
+        <translation>E' necessario compilare tutti i campi</translation>
     </message>
     <message>
         <source>Success</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvenuto con successo</translation>
     </message>
     <message>
         <source>Successfully posted the issue on code.google.com!</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore segnalato con successo su code.google.com!</translation>
     </message>
     <message>
         <source>Error during authentication with www.google.com</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore durante l'autenticazione con il server www.google.com</translation>
     </message>
     <message>
         <source>Error creating the issue</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore nella segnalazione dell'errore</translation>
     </message>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Errore durante l'autenticazione su google.com:</translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome utente e password non riconosciuti</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Errore nell'invio dei dati a youtube.com:</translation>
     </message>
 </context>
 <context>
@@ -2393,27 +2395,27 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>More info</source>
-        <translation type="unfinished"></translation>
+        <translation>Più informazioni</translation>
     </message>
     <message>
         <source>Set default options</source>
-        <translation type="unfinished"></translation>
+        <translation>Imposta opzioni predefinite</translation>
     </message>
     <message>
         <source>Open videos directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri cartella video</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation>Riproduci</translation>
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica su YouTube</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation type="unfinished"></translation>
+        <translation>Sospendi caricamento</translation>
     </message>
 </context>
 <context>
@@ -2451,47 +2453,47 @@ Controllare la propria installazione</translation>
     <name>RoomsListModel</name>
     <message>
         <source>In progress</source>
-        <translation type="unfinished">In corso</translation>
+        <translation>In corso</translation>
     </message>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished">Nome della Stanza</translation>
+        <translation>Nome della Stanza</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished">C</translation>
+        <translation>C</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished">T</translation>
+        <translation>T</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished">Proprietario</translation>
+        <translation>Proprietario</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Mappa</translation>
+        <translation>Mappa</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished">Regole</translation>
+        <translation>Regole</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Armi</translation>
+        <translation>Armi</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished">Mappa casuale</translation>
+        <translation>Mappa casuale</translation>
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished">Labirinto Casuale</translation>
+        <translation>Labirinto Casuale</translation>
     </message>
     <message>
         <source>Hand-drawn</source>
-        <translation type="unfinished"></translation>
+        <translation>Disegnata a mano</translation>
     </message>
 </context>
 <context>
@@ -2809,11 +2811,11 @@ ricci</translation>
     </message>
     <message>
         <source>mute audio</source>
-        <translation type="unfinished"></translation>
+        <translation>disattiva audio</translation>
     </message>
     <message>
         <source>record</source>
-        <translation type="unfinished"></translation>
+        <translation>registra</translation>
     </message>
 </context>
 <context>
@@ -2903,7 +2905,7 @@ ricci</translation>
     </message>
     <message>
         <source>Record video:</source>
-        <translation type="unfinished"></translation>
+        <translation>Registra video:</translation>
     </message>
 </context>
 <context>
