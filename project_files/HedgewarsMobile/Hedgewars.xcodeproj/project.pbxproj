@@ -174,6 +174,10 @@
 		61889985129995B500D55FD6 /* title~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61889984129995B500D55FD6 /* title~ipad.png */; };
 		61915D5B143A4E2C00299991 /* MissionTrainingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61915D59143A4E2C00299991 /* MissionTrainingViewController.m */; };
 		61915D5C143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib */; };
+		619349C8160BAF3E00A08518 /* uAILandMarks.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349C5160BAF3E00A08518 /* uAILandMarks.pas */; };
+		619349C9160BAF3E00A08518 /* uGearsHandlers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349C6160BAF3E00A08518 /* uGearsHandlers.pas */; };
+		619349CA160BAF3E00A08518 /* uGearsHandlersRope.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349C7160BAF3E00A08518 /* uGearsHandlersRope.pas */; };
+		619349CE160BAF6E00A08518 /* uVideoRec.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349CD160BAF6E00A08518 /* uVideoRec.pas */; };
 		6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6195981D1364BCD200B429B6 /* libTremor.a */; };
 		619599451364C83D00B429B6 /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599441364C82B00B429B6 /* libLua.a */; };
 		6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81512463EA800DADF8C /* CFNetwork.framework */; };
@@ -545,6 +549,10 @@
 		61915D58143A4E2C00299991 /* MissionTrainingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissionTrainingViewController.h; sourceTree = "<group>"; };
 		61915D59143A4E2C00299991 /* MissionTrainingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MissionTrainingViewController.m; sourceTree = "<group>"; };
 		61915D5A143A4E2C00299991 /* MissionTrainingViewController-iPhone.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "MissionTrainingViewController-iPhone.xib"; sourceTree = "<group>"; };
+		619349C5160BAF3E00A08518 /* uAILandMarks.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAILandMarks.pas; path = ../../hedgewars/uAILandMarks.pas; sourceTree = SOURCE_ROOT; };
+		619349C6160BAF3E00A08518 /* uGearsHandlers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHandlers.pas; path = ../../hedgewars/uGearsHandlers.pas; sourceTree = SOURCE_ROOT; };
+		619349C7160BAF3E00A08518 /* uGearsHandlersRope.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHandlersRope.pas; path = ../../hedgewars/uGearsHandlersRope.pas; sourceTree = SOURCE_ROOT; };
+		619349CD160BAF6E00A08518 /* uVideoRec.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVideoRec.pas; path = ../../hedgewars/uVideoRec.pas; sourceTree = SOURCE_ROOT; };
 		619598181364BCD200B429B6 /* Tremor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tremor.xcodeproj; path = ../../misc/libtremor/Xcode/Tremor.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6195993F1364C82B00B429B6 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../misc/liblua/Xcode/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
 		619599BA1364E65900B429B6 /* Freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Freetype.xcodeproj; path = "../../misc/libfreetype/Xcode-iOS/Freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
@@ -1127,6 +1135,10 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				619349CD160BAF6E00A08518 /* uVideoRec.pas */,
+				619349C5160BAF3E00A08518 /* uAILandMarks.pas */,
+				619349C6160BAF3E00A08518 /* uGearsHandlers.pas */,
+				619349C7160BAF3E00A08518 /* uGearsHandlersRope.pas */,
 				615BE3D3155C5DDF003CA34D /* uInputHandler.pas */,
 				61798892114AA56300BA94A9 /* inc */,
 				61D08D7114AEA7FE0007C078 /* uGearsHedgehog.pas */,
@@ -1620,6 +1632,10 @@
 				615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */,
 				615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */,
 				615BE3D4155C5DDF003CA34D /* uInputHandler.pas in Sources */,
+				619349C8160BAF3E00A08518 /* uAILandMarks.pas in Sources */,
+				619349C9160BAF3E00A08518 /* uGearsHandlers.pas in Sources */,
+				619349CA160BAF3E00A08518 /* uGearsHandlersRope.pas in Sources */,
+				619349CE160BAF6E00A08518 /* uVideoRec.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
