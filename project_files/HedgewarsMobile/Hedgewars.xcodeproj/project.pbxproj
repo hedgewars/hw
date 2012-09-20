@@ -188,10 +188,10 @@
 		619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */ = {isa = PBXBuildFile; fileRef = 619C5BA1124FA59000D041AE /* MapPreviewButtonView.m */; };
 		61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A117FE1168322700359010 /* CoreGraphics.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		61A19AFC14D20170004B1E6D /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19AEA14D2010A004B1E6D /* libSDL2.a */; };
-		61A19B7714D20B7A004B1E6D /* libSDL_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19B6614D20B6C004B1E6D /* libSDL_image.a */; };
-		61A19BC714D20CE7004B1E6D /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19BC614D20CDA004B1E6D /* libSDL_ttf.a */; };
-		61A19BFA14D20D95004B1E6D /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19BF914D20D83004B1E6D /* libSDL_net.a */; };
-		61A19C2414D20F5A004B1E6D /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19C2314D20F51004B1E6D /* libSDL_mixer.a */; };
+		61A19B7714D20B7A004B1E6D /* libSDL2_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19B6614D20B6C004B1E6D /* libSDL2_image.a */; };
+		61A19BC714D20CE7004B1E6D /* libSDL2_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19BC614D20CDA004B1E6D /* libSDL2_ttf.a */; };
+		61A19BFA14D20D95004B1E6D /* libSDL2_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19BF914D20D83004B1E6D /* libSDL2_net.a */; };
+		61A19C2414D20F5A004B1E6D /* libSDL2_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61A19C2314D20F51004B1E6D /* libSDL2_mixer.a */; };
 		61A4A39412A5CCC2004D81E6 /* uCommandHandlers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38912A5CCC2004D81E6 /* uCommandHandlers.pas */; };
 		61A4A39512A5CCC2004D81E6 /* uCommands.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38A12A5CCC2004D81E6 /* uCommands.pas */; };
 		61A4A39612A5CCC2004D81E6 /* uDebug.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A4A38B12A5CCC2004D81E6 /* uDebug.pas */; };
@@ -652,10 +652,10 @@
 				619599451364C83D00B429B6 /* libLua.a in Frameworks */,
 				6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */,
 				61A19AFC14D20170004B1E6D /* libSDL2.a in Frameworks */,
-				61A19B7714D20B7A004B1E6D /* libSDL_image.a in Frameworks */,
-				61A19C2414D20F5A004B1E6D /* libSDL_mixer.a in Frameworks */,
-				61A19BFA14D20D95004B1E6D /* libSDL_net.a in Frameworks */,
-				61A19BC714D20CE7004B1E6D /* libSDL_ttf.a in Frameworks */,
+				61A19B7714D20B7A004B1E6D /* libSDL2_image.a in Frameworks */,
+				61A19C2414D20F5A004B1E6D /* libSDL2_mixer.a in Frameworks */,
+				61A19BFA14D20D95004B1E6D /* libSDL2_net.a in Frameworks */,
+				61A19BC714D20CE7004B1E6D /* libSDL2_ttf.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				61A1188511683A8C00359010 /* CoreGraphics.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -987,7 +987,7 @@
 		61A19B6214D20B6C004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61A19B6614D20B6C004B1E6D /* libSDL_image.a */,
+				61A19B6614D20B6C004B1E6D /* libSDL2_image.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -995,7 +995,7 @@
 		61A19BC214D20CDA004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61A19BC614D20CDA004B1E6D /* libSDL_ttf.a */,
+				61A19BC614D20CDA004B1E6D /* libSDL2_ttf.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1003,7 +1003,7 @@
 		61A19BF514D20D83004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61A19BF914D20D83004B1E6D /* libSDL_net.a */,
+				61A19BF914D20D83004B1E6D /* libSDL2_net.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1011,7 +1011,7 @@
 		61A19C1F14D20F51004B1E6D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				61A19C2314D20F51004B1E6D /* libSDL_mixer.a */,
+				61A19C2314D20F51004B1E6D /* libSDL2_mixer.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1344,31 +1344,31 @@
 			remoteRef = 61A19AEB14D2010A004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61A19B6614D20B6C004B1E6D /* libSDL_image.a */ = {
+		61A19B6614D20B6C004B1E6D /* libSDL2_image.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libSDL_image.a;
+			path = libSDL2_image.a;
 			remoteRef = 61A19B6514D20B6C004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61A19BC614D20CDA004B1E6D /* libSDL_ttf.a */ = {
+		61A19BC614D20CDA004B1E6D /* libSDL2_ttf.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libSDL_ttf.a;
+			path = libSDL2_ttf.a;
 			remoteRef = 61A19BC514D20CDA004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61A19BF914D20D83004B1E6D /* libSDL_net.a */ = {
+		61A19BF914D20D83004B1E6D /* libSDL2_net.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libSDL_net.a;
+			path = libSDL2_net.a;
 			remoteRef = 61A19BF814D20D83004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		61A19C2314D20F51004B1E6D /* libSDL_mixer.a */ = {
+		61A19C2314D20F51004B1E6D /* libSDL2_mixer.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libSDL_mixer.a;
+			path = libSDL2_mixer.a;
 			remoteRef = 61A19C2214D20F51004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
