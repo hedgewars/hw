@@ -156,19 +156,11 @@ static void ogg_buffer_mark(ogg_reference *or){
 }
 
 /* duplicate a reference (pointing to the same actual buffer memory)
-   and increment buffer refcount.  If the desired segment begins out
-   of range, NULL is returned; if the desired segment is simply zero
-   length, a zero length ref is returned.  Partial range overlap
-   returns the overlap of the ranges */
-static ogg_reference *ogg_buffer_sub(ogg_reference *or,long begin,long length){
+   and increment buffer refcount.  If the desired segment is zero
+   length, a zero length ref is returned. */
+static ogg_reference *ogg_buffer_sub(ogg_reference *or,long length){
   ogg_reference *ret=0,*head=0;
-
-  /* walk past any preceeding fragments we don't want */
-  while(or && begin>=or->length){
-    begin-=or->length;
-    or=or->next;
-  }
-
+  
   /* duplicate the reference chain; increment refcounts */
   while(or && length){
     ogg_reference *temp=_fetch_ref(or->buffer->ptr.owner);
@@ -178,12 +170,11 @@ static ogg_reference *ogg_buffer_sub(ogg_reference *or,long begin,long length){
       ret=temp;
     head=temp;
     head->buffer=or->buffer;    
-    head->begin=or->begin+begin;
+    head->begin=or->begin;
     head->length=length;
-    if(head->length>or->length-begin)
-      head->length=or->length-begin;
+    if(head->length>or->length)
+      head->length=or->length;
     
-    begin=0;
     length-=head->length;
     or=or->next;
   }
@@ -427,43 +418,43 @@ static ogg_int64_t oggbyte_read8(oggbyte_buffer *b,int pos){
 
 int ogg_page_version(ogg_page *og){
   oggbyte_buffer ob;
-  oggbyte_init(&ob,og->header);
+  if(oggbyte_init(&ob,og->header))return -1;
   return oggbyte_read1(&ob,4);
 }
 
 int ogg_page_continued(ogg_page *og){
   oggbyte_buffer ob;
-  oggbyte_init(&ob,og->header);
+  if(oggbyte_init(&ob,og->header))return -1;
   return oggbyte_read1(&ob,5)&0x01;
 }
 
 int ogg_page_bos(ogg_page *og){
   oggbyte_buffer ob;
-  oggbyte_init(&ob,og->header);
+  if(oggbyte_init(&ob,og->header))return -1;
   return oggbyte_read1(&ob,5)&0x02;
 }
 
 int ogg_page_eos(ogg_page *og){
   oggbyte_buffer ob;
-  oggbyte_init(&ob,og->header);
+  if(oggbyte_init(&ob,og->header))return -1;
   return oggbyte_read1(&ob,5)&0x04;
 }
 
 ogg_int64_t ogg_page_granulepos(ogg_page *og){
   oggbyte_buffer ob;
-  oggbyte_init(&ob,og->header);
+  if(oggbyte_init(&ob,og->header))return -1;
   return oggbyte_read8(&ob,6);
 }
 
 ogg_uint32_t ogg_page_serialno(ogg_page *og){
   oggbyte_buffer ob;
-  oggbyte_init(&ob,og->header);
+  if(oggbyte_init(&ob,og->header)) return 0xffffffffUL;
   return oggbyte_read4(&ob,14);
 }
  
 ogg_uint32_t ogg_page_pageno(ogg_page *og){
   oggbyte_buffer ob;
-  oggbyte_init(&ob,og->header);
+  if(oggbyte_init(&ob,og->header))return 0xffffffffUL;
   return oggbyte_read4(&ob,18);
 }
 
@@ -1079,7 +1070,7 @@ static int _packetout(ogg_stream_state *os,ogg_packet *op,int adv){
     _next_lace(&ob,os);
   }else{
     if(op){
-      op->packet=ogg_buffer_sub(os->body_tail,0,os->body_fill&FINMASK);
+      op->packet=ogg_buffer_sub(os->body_tail,os->body_fill&FINMASK);
       op->bytes=os->body_fill&FINMASK;
     }
   }

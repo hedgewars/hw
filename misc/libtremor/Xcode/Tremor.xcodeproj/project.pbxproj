@@ -8,10 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		61DB1809148BA9A9004A67B8 /* asm_arm.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB17E7148BA9A9004A67B8 /* asm_arm.h */; };
-		61DB180A148BA9A9004A67B8 /* backends.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB17E8148BA9A9004A67B8 /* backends.h */; };
 		61DB180B148BA9A9004A67B8 /* bitwise.c in Sources */ = {isa = PBXBuildFile; fileRef = 61DB17E9148BA9A9004A67B8 /* bitwise.c */; };
-		61DB180C148BA9A9004A67B8 /* block.c in Sources */ = {isa = PBXBuildFile; fileRef = 61DB17EA148BA9A9004A67B8 /* block.c */; };
-		61DB180D148BA9A9004A67B8 /* block.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB17EB148BA9A9004A67B8 /* block.h */; };
 		61DB180E148BA9A9004A67B8 /* codebook.c in Sources */ = {isa = PBXBuildFile; fileRef = 61DB17EC148BA9A9004A67B8 /* codebook.c */; };
 		61DB180F148BA9A9004A67B8 /* codebook.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB17ED148BA9A9004A67B8 /* codebook.h */; };
 		61DB1810148BA9A9004A67B8 /* codec_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB17EE148BA9A9004A67B8 /* codec_internal.h */; };
@@ -31,25 +28,19 @@
 		61DB181F148BA9A9004A67B8 /* ogg.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB17FD148BA9A9004A67B8 /* ogg.h */; };
 		61DB1820148BA9A9004A67B8 /* os_types.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB17FE148BA9A9004A67B8 /* os_types.h */; };
 		61DB1821148BA9A9004A67B8 /* os.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB17FF148BA9A9004A67B8 /* os.h */; };
-		61DB1822148BA9A9004A67B8 /* registry.c in Sources */ = {isa = PBXBuildFile; fileRef = 61DB1800148BA9A9004A67B8 /* registry.c */; };
-		61DB1823148BA9A9004A67B8 /* registry.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB1801148BA9A9004A67B8 /* registry.h */; };
 		61DB1824148BA9A9004A67B8 /* res012.c in Sources */ = {isa = PBXBuildFile; fileRef = 61DB1802148BA9A9004A67B8 /* res012.c */; };
-		61DB1825148BA9A9004A67B8 /* sharedbook.c in Sources */ = {isa = PBXBuildFile; fileRef = 61DB1803148BA9A9004A67B8 /* sharedbook.c */; };
-		61DB1826148BA9A9004A67B8 /* synthesis.c in Sources */ = {isa = PBXBuildFile; fileRef = 61DB1804148BA9A9004A67B8 /* synthesis.c */; };
 		61DB1827148BA9A9004A67B8 /* vorbisfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 61DB1805148BA9A9004A67B8 /* vorbisfile.c */; };
 		61DB1828148BA9A9004A67B8 /* window_lookup.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB1806148BA9A9004A67B8 /* window_lookup.h */; };
-		61DB1829148BA9A9004A67B8 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 61DB1807148BA9A9004A67B8 /* window.c */; };
-		61DB182A148BA9A9004A67B8 /* window.h in Headers */ = {isa = PBXBuildFile; fileRef = 61DB1808148BA9A9004A67B8 /* window.h */; };
+		61E1A173160BCA4F002370D0 /* dsp.c in Sources */ = {isa = PBXBuildFile; fileRef = 61E1A170160BCA4F002370D0 /* dsp.c */; };
+		61E1A174160BCA4F002370D0 /* floor_lookup.c in Sources */ = {isa = PBXBuildFile; fileRef = 61E1A171160BCA4F002370D0 /* floor_lookup.c */; };
+		61E1A175160BCA4F002370D0 /* misc.c in Sources */ = {isa = PBXBuildFile; fileRef = 61E1A172160BCA4F002370D0 /* misc.c */; };
 		AA747D9F0F9514B9006C5449 /* Tremor_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* Tremor_Prefix.pch */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		61DB17E7148BA9A9004A67B8 /* asm_arm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = asm_arm.h; path = ../tremor/asm_arm.h; sourceTree = SOURCE_ROOT; };
-		61DB17E8148BA9A9004A67B8 /* backends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = backends.h; path = ../tremor/backends.h; sourceTree = SOURCE_ROOT; };
 		61DB17E9148BA9A9004A67B8 /* bitwise.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = bitwise.c; path = ../tremor/bitwise.c; sourceTree = SOURCE_ROOT; };
-		61DB17EA148BA9A9004A67B8 /* block.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = block.c; path = ../tremor/block.c; sourceTree = SOURCE_ROOT; };
-		61DB17EB148BA9A9004A67B8 /* block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = block.h; path = ../tremor/block.h; sourceTree = SOURCE_ROOT; };
 		61DB17EC148BA9A9004A67B8 /* codebook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = codebook.c; path = ../tremor/codebook.c; sourceTree = SOURCE_ROOT; };
 		61DB17ED148BA9A9004A67B8 /* codebook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codebook.h; path = ../tremor/codebook.h; sourceTree = SOURCE_ROOT; };
 		61DB17EE148BA9A9004A67B8 /* codec_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codec_internal.h; path = ../tremor/codec_internal.h; sourceTree = SOURCE_ROOT; };
@@ -69,15 +60,12 @@
 		61DB17FD148BA9A9004A67B8 /* ogg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ogg.h; path = ../tremor/ogg.h; sourceTree = SOURCE_ROOT; };
 		61DB17FE148BA9A9004A67B8 /* os_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = os_types.h; path = ../tremor/os_types.h; sourceTree = SOURCE_ROOT; };
 		61DB17FF148BA9A9004A67B8 /* os.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = os.h; path = ../tremor/os.h; sourceTree = SOURCE_ROOT; };
-		61DB1800148BA9A9004A67B8 /* registry.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = registry.c; path = ../tremor/registry.c; sourceTree = SOURCE_ROOT; };
-		61DB1801148BA9A9004A67B8 /* registry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = registry.h; path = ../tremor/registry.h; sourceTree = SOURCE_ROOT; };
 		61DB1802148BA9A9004A67B8 /* res012.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = res012.c; path = ../tremor/res012.c; sourceTree = SOURCE_ROOT; };
-		61DB1803148BA9A9004A67B8 /* sharedbook.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sharedbook.c; path = ../tremor/sharedbook.c; sourceTree = SOURCE_ROOT; };
-		61DB1804148BA9A9004A67B8 /* synthesis.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = synthesis.c; path = ../tremor/synthesis.c; sourceTree = SOURCE_ROOT; };
 		61DB1805148BA9A9004A67B8 /* vorbisfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = vorbisfile.c; path = ../tremor/vorbisfile.c; sourceTree = SOURCE_ROOT; };
 		61DB1806148BA9A9004A67B8 /* window_lookup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = window_lookup.h; path = ../tremor/window_lookup.h; sourceTree = SOURCE_ROOT; };
-		61DB1807148BA9A9004A67B8 /* window.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = window.c; path = ../tremor/window.c; sourceTree = SOURCE_ROOT; };
-		61DB1808148BA9A9004A67B8 /* window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = window.h; path = ../tremor/window.h; sourceTree = SOURCE_ROOT; };
+		61E1A170160BCA4F002370D0 /* dsp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dsp.c; path = ../tremor/dsp.c; sourceTree = SOURCE_ROOT; };
+		61E1A171160BCA4F002370D0 /* floor_lookup.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = floor_lookup.c; path = ../tremor/floor_lookup.c; sourceTree = SOURCE_ROOT; };
+		61E1A172160BCA4F002370D0 /* misc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = misc.c; path = ../tremor/misc.c; sourceTree = SOURCE_ROOT; };
 		AA747D9E0F9514B9006C5449 /* Tremor_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tremor_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D2AAC07E0554694100DB518D /* libTremor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libTremor.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -125,11 +113,11 @@
 		08FB77AEFE84172EC02AAC07 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61E1A170160BCA4F002370D0 /* dsp.c */,
+				61E1A171160BCA4F002370D0 /* floor_lookup.c */,
+				61E1A172160BCA4F002370D0 /* misc.c */,
 				61DB17E7148BA9A9004A67B8 /* asm_arm.h */,
-				61DB17E8148BA9A9004A67B8 /* backends.h */,
 				61DB17E9148BA9A9004A67B8 /* bitwise.c */,
-				61DB17EA148BA9A9004A67B8 /* block.c */,
-				61DB17EB148BA9A9004A67B8 /* block.h */,
 				61DB17EC148BA9A9004A67B8 /* codebook.c */,
 				61DB17ED148BA9A9004A67B8 /* codebook.h */,
 				61DB17EE148BA9A9004A67B8 /* codec_internal.h */,
@@ -149,15 +137,9 @@
 				61DB17FD148BA9A9004A67B8 /* ogg.h */,
 				61DB17FE148BA9A9004A67B8 /* os_types.h */,
 				61DB17FF148BA9A9004A67B8 /* os.h */,
-				61DB1800148BA9A9004A67B8 /* registry.c */,
-				61DB1801148BA9A9004A67B8 /* registry.h */,
 				61DB1802148BA9A9004A67B8 /* res012.c */,
-				61DB1803148BA9A9004A67B8 /* sharedbook.c */,
-				61DB1804148BA9A9004A67B8 /* synthesis.c */,
 				61DB1805148BA9A9004A67B8 /* vorbisfile.c */,
 				61DB1806148BA9A9004A67B8 /* window_lookup.h */,
-				61DB1807148BA9A9004A67B8 /* window.c */,
-				61DB1808148BA9A9004A67B8 /* window.h */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -179,8 +161,6 @@
 			files = (
 				AA747D9F0F9514B9006C5449 /* Tremor_Prefix.pch in Headers */,
 				61DB1809148BA9A9004A67B8 /* asm_arm.h in Headers */,
-				61DB180A148BA9A9004A67B8 /* backends.h in Headers */,
-				61DB180D148BA9A9004A67B8 /* block.h in Headers */,
 				61DB180F148BA9A9004A67B8 /* codebook.h in Headers */,
 				61DB1810148BA9A9004A67B8 /* codec_internal.h in Headers */,
 				61DB1811148BA9A9004A67B8 /* config_types.h in Headers */,
@@ -193,9 +173,7 @@
 				61DB181F148BA9A9004A67B8 /* ogg.h in Headers */,
 				61DB1820148BA9A9004A67B8 /* os_types.h in Headers */,
 				61DB1821148BA9A9004A67B8 /* os.h in Headers */,
-				61DB1823148BA9A9004A67B8 /* registry.h in Headers */,
 				61DB1828148BA9A9004A67B8 /* window_lookup.h in Headers */,
-				61DB182A148BA9A9004A67B8 /* window.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,7 +228,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				61DB180B148BA9A9004A67B8 /* bitwise.c in Sources */,
-				61DB180C148BA9A9004A67B8 /* block.c in Sources */,
 				61DB180E148BA9A9004A67B8 /* codebook.c in Sources */,
 				61DB1812148BA9A9004A67B8 /* floor0.c in Sources */,
 				61DB1813148BA9A9004A67B8 /* floor1.c in Sources */,
@@ -258,12 +235,11 @@
 				61DB1815148BA9A9004A67B8 /* info.c in Sources */,
 				61DB181A148BA9A9004A67B8 /* mapping0.c in Sources */,
 				61DB181C148BA9A9004A67B8 /* mdct.c in Sources */,
-				61DB1822148BA9A9004A67B8 /* registry.c in Sources */,
 				61DB1824148BA9A9004A67B8 /* res012.c in Sources */,
-				61DB1825148BA9A9004A67B8 /* sharedbook.c in Sources */,
-				61DB1826148BA9A9004A67B8 /* synthesis.c in Sources */,
 				61DB1827148BA9A9004A67B8 /* vorbisfile.c in Sources */,
-				61DB1829148BA9A9004A67B8 /* window.c in Sources */,
+				61E1A173160BCA4F002370D0 /* dsp.c in Sources */,
+				61E1A174160BCA4F002370D0 /* floor_lookup.c in Sources */,
+				61E1A175160BCA4F002370D0 /* misc.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
