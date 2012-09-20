@@ -261,7 +261,8 @@ if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
 endif()
 
-if(NOT APPLE)
+#fpc < 2.6 has a few bugs in updating inline functions, so we have to compile all engine every time as workaround
+if(fpc_version LESS "020600")
     if(NO_VIDEOREC OR NOT ${FFMPEG_FOUND})
         add_dependencies(${engine_output_name} ENGINECLEAN)
     endif()
