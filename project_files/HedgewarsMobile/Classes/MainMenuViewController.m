@@ -18,6 +18,7 @@
 
 
 #import "MainMenuViewController.h"
+#import <QuartzCore/QuartzCore.h>
 #import "GameConfigViewController.h"
 #import "SettingsContainerViewController.h"
 #import "AboutViewController.h"
@@ -125,13 +126,29 @@
             scroll.text = debugStr;
             [debugStr release];
             scroll.editable = NO;
+            scroll.alpha = 0;
 
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             [btn addTarget:scroll action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
+            [btn addTarget:btn action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
+            btn.frame = CGRectMake(self.view.frame.size.height-58, -6, 64, 64);
             btn.backgroundColor = [UIColor blackColor];
-            btn.frame = CGRectMake(self.view.frame.size.height-70, 0, 70, 70);
-            [scroll addSubview:btn];
+            btn.titleLabel.textColor = [UIColor whiteColor];
+            btn.titleLabel.textAlignment = UITextAlignmentCenter;
+            btn.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+            [btn setTitle:@"Close" forState:UIControlStateNormal];
+            btn.alpha = 0;
+            [btn.layer setCornerRadius:10.0f];
+            [btn.layer setMasksToBounds:YES];
+
             [self.view addSubview:scroll];
+            [self.view addSubview:btn];
+
+            [UIView beginAnimations:@"fadein" context:NULL];
+            [UIView setAnimationDuration:0.25f];
+            btn.alpha = 1;
+            scroll.alpha = 1;
+            [UIView commitAnimations];
             [scroll release];
 #else
             debugStr = debugStr; // prevent compiler warning
