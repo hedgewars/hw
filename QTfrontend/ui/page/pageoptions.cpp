@@ -486,6 +486,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
 
             connect(cbProxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged()));
+            onProxyTypeChanged();
         }
 
         page2Layout->addWidget(new QWidget(this), 2, 0);
