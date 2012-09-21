@@ -425,7 +425,7 @@ Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
-        <translation>L'host remoto ha terminato la connessione.</translation>
+        <translation>L&apos;host remoto ha terminato la connessione.</translation>
     </message>
     <message>
         <source>The server is too old. Disconnecting now.</source>
@@ -956,7 +956,7 @@ Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Read about who is behind the Hedgewars Project</source>
-        <translation>Leggi chi c'è dietro allo sviluppo di Hedgewars</translation>
+        <translation>Leggi chi c&apos;è dietro allo sviluppo di Hedgewars</translation>
     </message>
     <message>
         <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
@@ -1108,6 +1108,34 @@ Per favore scegli un altro nickname:</translation>
     <message>
         <source>Reset to default colors</source>
         <translation>Ripristina colori originali</translation>
+    </message>
+    <message>
+        <source>Proxy host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Socks5 proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HTTP proxy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1887,6 +1915,10 @@ Voui comunque entrare nella stanza?</translation>
         <source>Description</source>
         <translation>Descrizione</translation>
     </message>
+    <message>
+        <source>Proxy settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLabel</name>
@@ -2106,7 +2138,7 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Inserire il nome utente YouTube o l'indirizzo e-mail associato all'account Google.</translation>
+        <translation>Inserire il nome utente YouTube o l&apos;indirizzo e-mail associato all&apos;account Google.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
@@ -2263,7 +2295,7 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Please fill out all fields</source>
-        <translation>E' necessario compilare tutti i campi</translation>
+        <translation>E&apos; necessario compilare tutti i campi</translation>
     </message>
     <message>
         <source>Success</source>
@@ -2275,16 +2307,16 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Error during authentication with www.google.com</source>
-        <translation>Errore durante l'autenticazione con il server www.google.com</translation>
+        <translation>Errore durante l&apos;autenticazione con il server www.google.com</translation>
     </message>
     <message>
         <source>Error creating the issue</source>
-        <translation>Errore nella segnalazione dell'errore</translation>
+        <translation>Errore nella segnalazione dell&apos;errore</translation>
     </message>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Errore durante l'autenticazione su google.com:</translation>
+        <translation>Errore durante l&apos;autenticazione su google.com:</translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
@@ -2293,7 +2325,7 @@ Controllare la propria installazione</translation>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Errore nell'invio dei dati a youtube.com:</translation>
+        <translation>Errore nell&apos;invio dei dati a youtube.com:</translation>
     </message>
 </context>
 <context>

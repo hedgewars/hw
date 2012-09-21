@@ -442,7 +442,53 @@ QLayout * PageOptions::bodyLayoutDefinition()
             gbCLayout->addWidget(BtnAssociateFiles);
         }
 
-        page2Layout->addWidget(new QWidget(this), 1, 0);
+        {
+            IconedGroupBox * gbProxy = new IconedGroupBox(this);
+            gbProxy->setIcon(QIcon(":/res/Settings.png"));
+            gbProxy->setTitle(QGroupBox::tr("Proxy settings"));
+            page2Layout->addWidget(gbProxy, 1, 0);
+            QGridLayout * gbLayout = new QGridLayout(gbProxy);
+
+            QStringList sl;
+            sl
+                    << tr("Proxy host")
+                    << tr("Proxy port")
+                    << tr("Proxy login")
+                    << tr("Proxy password")
+                       ;
+            for(int i = 0; i < sl.size(); ++i)
+            {
+                QLabel * l = new QLabel(gbProxy);
+                l->setText(sl[i]);
+                gbLayout->addWidget(l, i + 1, 0);
+            }
+
+            cbProxyType = new QComboBox(gbProxy);
+            cbProxyType->addItems(QStringList()
+                                  << tr("No proxy")
+                                  << tr("Socks5 proxy")
+                                  << tr("HTTP proxy"));
+            gbLayout->addWidget(cbProxyType, 0, 1);
+
+            leProxy = new QLineEdit(gbProxy);
+            gbLayout->addWidget(leProxy, 1, 1);
+
+            sbProxyPort = new QSpinBox(gbProxy);
+            sbProxyPort->setMaximum(65535);
+            gbLayout->addWidget(sbProxyPort, 2, 1);
+
+            leProxyLogin = new QLineEdit(gbProxy);
+            gbLayout->addWidget(leProxyLogin, 3, 1);
+
+            leProxyPassword = new QLineEdit(gbProxy);
+            leProxyPassword->setEchoMode(QLineEdit::Password);
+            gbLayout->addWidget(leProxyPassword, 4, 1);
+
+
+            connect(cbProxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged()));
+        }
+
+        page2Layout->addWidget(new QWidget(this), 2, 0);
     }
 
     previousQuality = this->SLQuality->value();
@@ -575,4 +621,14 @@ void PageOptions::onColorModelDataChanged(const QModelIndex & topLeft, const QMo
     QStandardItemModel * model = DataManager::instance().colorsModel();
 
     m_colorButtons[topLeft.row()]->setStyleSheet(QString("background: %1").arg(model->item(topLeft.row())->data().value<QColor>().name()));
+}
+
+void PageOptions::onProxyTypeChanged()
+{
+    bool b = cbProxyType->currentIndex() > 0;
+
+    sbProxyPort->setEnabled(b);
+    leProxy->setEnabled(b);
+    leProxyLogin->setEnabled(b);
+    leProxyPassword->setEnabled(b);
 }
