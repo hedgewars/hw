@@ -491,25 +491,25 @@ Please pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="413"/>
+        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="446"/>
         <source>%1 *** %2 has joined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="454"/>
-        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="670"/>
+        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="487"/>
+        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="703"/>
         <source>%1 *** %2 has left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="456"/>
-        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="672"/>
+        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="489"/>
+        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="705"/>
         <source>%1 *** %2 has left (%3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="530"/>
-        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="656"/>
+        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="563"/>
+        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="689"/>
         <source>%1 *** %2 has joined the room</source>
         <translation type="unfinished"></translation>
     </message>
@@ -531,12 +531,12 @@ Please pick another nickname:</source>
         <translation>退出原因：</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="580"/>
+        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="613"/>
         <source>Room destroyed</source>
         <translation>房间损坏</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="391"/>
+        <location filename="../../../../QTfrontend/net/newnetclient.cpp" line="424"/>
         <source>You got kicked</source>
         <translation>被踢出</translation>
     </message>
@@ -1377,6 +1377,41 @@ Please pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="454"/>
+        <source>Proxy host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="455"/>
+        <source>Proxy port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="456"/>
+        <source>Proxy login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="457"/>
+        <source>Proxy password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="468"/>
+        <source>No proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="469"/>
+        <source>Socks5 proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="470"/>
+        <source>HTTP proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Save</source>
         <translation type="obsolete">保存</translation>
     </message>
@@ -1992,7 +2027,7 @@ Do you still want to join the room?</source>
         <translation type="obsolete">城堡模式</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="423"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="424"/>
         <source>Show FPS</source>
         <translation>显示帧率 (FPS)</translation>
     </message>
@@ -2027,7 +2062,7 @@ Do you still want to join the room?</source>
         <translation>开启音乐</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="430"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="431"/>
         <source>Show ammo menu tooltips</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2041,7 +2076,7 @@ Do you still want to join the room?</source>
         <translation type="obsolete">分组</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="435"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="436"/>
         <source>Append date and time to record file name</source>
         <translation>记录名称中包含具体时间日期</translation>
     </message>
@@ -2292,8 +2327,13 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="411"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="412"/>
         <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="448"/>
+        <source>Proxy settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2465,7 +2505,7 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="417"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="418"/>
         <source>FPS limit</source>
         <translation>FPS 上限</translation>
     </message>
@@ -3140,7 +3180,7 @@ Please check your installation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="439"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="440"/>
         <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>

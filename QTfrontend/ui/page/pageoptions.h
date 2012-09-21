@@ -44,7 +44,7 @@ class PageOptions : public AbstractPage
 
         QComboBox *CBLanguage;
 
-        IconedGroupBox *teamsBox;;
+        IconedGroupBox *teamsBox;
         QPushButton *BtnAssociateFiles;
         QComboBox *CBTeamName;
         IconedGroupBox *AGGroupBox;
@@ -71,6 +71,11 @@ class PageOptions : public AbstractPage
         QLineEdit *editNetPassword;
         QSlider *SLQuality;
         QCheckBox *CBFrontendEffects;
+        QComboBox * cbProxyType;
+        QSpinBox * sbProxyPort;
+        QLineEdit * leProxy;
+        QLineEdit * leProxyLogin;
+        QLineEdit * leProxyPassword;
 
         void setTeamOptionsEnabled(bool enabled);
 
@@ -105,6 +110,7 @@ class PageOptions : public AbstractPage
         void savePwdChanged(int state);
         void colorButtonClicked(int i);
         void onColorModelDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
+        void onProxyTypeChanged();
 };
 
 #endif

@@ -23,6 +23,7 @@
 #include <QInputDialog>
 #include <QCryptographicHash>
 #include <QStandardItemModel>
+#include <QNetworkProxy>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -108,6 +109,12 @@ void GameUIConfig::reloadValues(void)
 #endif
 
     Form->ui.pageOptions->CBLanguage->setCurrentIndex(Form->ui.pageOptions->CBLanguage->findData(value("misc/locale", "").toString()));
+
+    Form->ui.pageOptions->cbProxyType->setCurrentIndex(value("proxy/type", 0).toInt());
+    Form->ui.pageOptions->leProxy->setText(value("proxy/host", "").toString());
+    Form->ui.pageOptions->sbProxyPort->setValue(value("proxy/port", "8080").toInt());
+    Form->ui.pageOptions->leProxyLogin->setText(value("proxy/login", "").toString());
+    Form->ui.pageOptions->leProxyPassword->setText(value("proxy/password", "").toString());
 
     depth = HWApplication::desktop()->depth();
     if (depth < 16) depth = 16;
@@ -216,6 +223,31 @@ void GameUIConfig::SaveOptions()
 #ifdef SPARKLE_ENABLED
     setValue("misc/autoUpdate", isAutoUpdateEnabled());
 #endif
+
+    int proxyType = Form->ui.pageOptions->cbProxyType->currentIndex();
+    setValue("proxy/type", proxyType);
+
+    if(proxyType > 0)
+    {
+        setValue("proxy/host", Form->ui.pageOptions->leProxy->text());
+        setValue("proxy/port", Form->ui.pageOptions->sbProxyPort->value());
+        setValue("proxy/login", Form->ui.pageOptions->leProxyLogin->text());
+        setValue("proxy/password", Form->ui.pageOptions->leProxyPassword->text());
+    }
+
+    const QNetworkProxy::ProxyType proxyTypesMap[] = {
+        QNetworkProxy::NoProxy
+        , QNetworkProxy::Socks5Proxy
+        , QNetworkProxy::HttpProxy};
+
+    QNetworkProxy proxy;
+    proxy.setType(proxyTypesMap[proxyType]);
+    proxy.setHostName(Form->ui.pageOptions->leProxy->text());
+    proxy.setPort(Form->ui.pageOptions->sbProxyPort->value());
+    proxy.setUser(Form->ui.pageOptions->leProxyLogin->text());
+    proxy.setPassword(Form->ui.pageOptions->leProxyPassword->text());
+    QNetworkProxy::setApplicationProxy(proxy);
+
 
     { // save colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
