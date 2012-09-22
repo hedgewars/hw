@@ -466,6 +466,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             cbProxyType = new QComboBox(gbProxy);
             cbProxyType->addItems(QStringList()
                                   << tr("No proxy")
+                                  << tr("System proxy settings")
                                   << tr("Socks5 proxy")
                                   << tr("HTTP proxy"));
             gbLayout->addWidget(cbProxyType, 0, 1);
@@ -626,7 +627,7 @@ void PageOptions::onColorModelDataChanged(const QModelIndex & topLeft, const QMo
 
 void PageOptions::onProxyTypeChanged()
 {
-    bool b = cbProxyType->currentIndex() > 0;
+    bool b = cbProxyType->currentIndex() > 1;
 
     sbProxyPort->setEnabled(b);
     leProxy->setEnabled(b);

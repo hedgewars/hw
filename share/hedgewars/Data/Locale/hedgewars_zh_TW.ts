@@ -1057,6 +1057,10 @@ or pick another nickname:</source>
         <source>HTTP proxy</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>System proxy settings</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PagePlayDemo</name>
