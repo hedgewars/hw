@@ -24,6 +24,7 @@
 #include <QCryptographicHash>
 #include <QStandardItemModel>
 #include <QNetworkProxy>
+#include <QNetworkProxyFactory>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -224,30 +225,41 @@ void GameUIConfig::SaveOptions()
     setValue("misc/autoUpdate", isAutoUpdateEnabled());
 #endif
 
-    int proxyType = Form->ui.pageOptions->cbProxyType->currentIndex();
-    setValue("proxy/type", proxyType);
+    { // setup proxy
+        int proxyType = Form->ui.pageOptions->cbProxyType->currentIndex();
+        setValue("proxy/type", proxyType);
 
-    if(proxyType > 0)
-    {
-        setValue("proxy/host", Form->ui.pageOptions->leProxy->text());
-        setValue("proxy/port", Form->ui.pageOptions->sbProxyPort->value());
-        setValue("proxy/login", Form->ui.pageOptions->leProxyLogin->text());
-        setValue("proxy/password", Form->ui.pageOptions->leProxyPassword->text());
+        if(proxyType > 1)
+        {
+            setValue("proxy/host", Form->ui.pageOptions->leProxy->text());
+            setValue("proxy/port", Form->ui.pageOptions->sbProxyPort->value());
+            setValue("proxy/login", Form->ui.pageOptions->leProxyLogin->text());
+            setValue("proxy/password", Form->ui.pageOptions->leProxyPassword->text());
+        }
+
+        QNetworkProxy proxy;
+
+        if(proxyType == 1)
+        {
+            // use system proxy settings
+            proxy = QNetworkProxyFactory::systemProxyForQuery().at(0);
+        } else
+        {
+            const QNetworkProxy::ProxyType proxyTypesMap[] = {
+                QNetworkProxy::NoProxy
+                , QNetworkProxy::NoProxy // dummy value
+                , QNetworkProxy::Socks5Proxy
+                , QNetworkProxy::HttpProxy};
+
+            proxy.setType(proxyTypesMap[proxyType]);
+            proxy.setHostName(Form->ui.pageOptions->leProxy->text());
+            proxy.setPort(Form->ui.pageOptions->sbProxyPort->value());
+            proxy.setUser(Form->ui.pageOptions->leProxyLogin->text());
+            proxy.setPassword(Form->ui.pageOptions->leProxyPassword->text());
+        }
+
+        QNetworkProxy::setApplicationProxy(proxy);
     }
-
-    const QNetworkProxy::ProxyType proxyTypesMap[] = {
-        QNetworkProxy::NoProxy
-        , QNetworkProxy::Socks5Proxy
-        , QNetworkProxy::HttpProxy};
-
-    QNetworkProxy proxy;
-    proxy.setType(proxyTypesMap[proxyType]);
-    proxy.setHostName(Form->ui.pageOptions->leProxy->text());
-    proxy.setPort(Form->ui.pageOptions->sbProxyPort->value());
-    proxy.setUser(Form->ui.pageOptions->leProxyLogin->text());
-    proxy.setPassword(Form->ui.pageOptions->leProxyPassword->text());
-    QNetworkProxy::setApplicationProxy(proxy);
-
 
     { // save colors
         QStandardItemModel * model = DataManager::instance().colorsModel();

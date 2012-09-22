@@ -1403,11 +1403,16 @@ Please pick another nickname:</source>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="469"/>
-        <source>Socks5 proxy</source>
+        <source>System proxy settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="470"/>
+        <source>Socks5 proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="471"/>
         <source>HTTP proxy</source>
         <translation type="unfinished"></translation>
     </message>

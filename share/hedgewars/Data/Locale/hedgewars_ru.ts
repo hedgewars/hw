@@ -1137,6 +1137,10 @@ Please pick another nickname:</source>
         <source>HTTP proxy</source>
         <translation>HTTP прокси</translation>
     </message>
+    <message>
+        <source>System proxy settings</source>
+        <translation>Системные настройки</translation>
+    </message>
 </context>
 <context>
     <name>PagePlayDemo</name>
@@ -1914,7 +1918,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Proxy settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки прокси</translation>
     </message>
 </context>
 <context>
@@ -2171,7 +2175,7 @@ Do yot really want to quit?</source>
     </message>
     <message>
         <source>Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Формат</translation>
     </message>
     <message>
         <source>Audio codec</source>
