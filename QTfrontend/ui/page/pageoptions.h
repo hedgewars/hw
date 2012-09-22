@@ -30,6 +30,13 @@ class PageOptions : public AbstractPage
         Q_OBJECT
 
     public:
+        enum ProxyTypes {
+            NoProxy      = 0,
+            SystemProxy  = 1,
+            Socks5Proxy  = 2,
+            HTTPProxy    = 3
+        };
+
         PageOptions(QWidget* parent = 0);
 
         QCheckBox *WeaponTooltip;

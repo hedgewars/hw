@@ -627,7 +627,7 @@ void PageOptions::onColorModelDataChanged(const QModelIndex & topLeft, const QMo
 
 void PageOptions::onProxyTypeChanged()
 {
-    bool b = cbProxyType->currentIndex() > 1;
+    bool b = cbProxyType->currentIndex() != NoProxy && cbProxyType->currentIndex() != SystemProxy ;
 
     sbProxyPort->setEnabled(b);
     leProxy->setEnabled(b);

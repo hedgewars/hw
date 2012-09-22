@@ -36,6 +36,14 @@
 #include "HWApplication.h"
 #include "DataManager.h"
 
+
+const QNetworkProxy::ProxyType proxyTypesMap[] = {
+    QNetworkProxy::NoProxy
+    , QNetworkProxy::NoProxy // dummy value
+    , QNetworkProxy::Socks5Proxy
+    , QNetworkProxy::HttpProxy};
+
+
 GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     : QSettings(fileName, QSettings::IniFormat)
 {
@@ -229,7 +237,7 @@ void GameUIConfig::SaveOptions()
         int proxyType = Form->ui.pageOptions->cbProxyType->currentIndex();
         setValue("proxy/type", proxyType);
 
-        if(proxyType > 1)
+        if(proxyType == PageOptions::Socks5Proxy || proxyType == PageOptions::HTTPProxy)
         {
             setValue("proxy/host", Form->ui.pageOptions->leProxy->text());
             setValue("proxy/port", Form->ui.pageOptions->sbProxyPort->value());
@@ -239,18 +247,12 @@ void GameUIConfig::SaveOptions()
 
         QNetworkProxy proxy;
 
-        if(proxyType == 1)
+        if(proxyType == PageOptions::SystemProxy)
         {
             // use system proxy settings
             proxy = QNetworkProxyFactory::systemProxyForQuery().at(0);
         } else
         {
-            const QNetworkProxy::ProxyType proxyTypesMap[] = {
-                QNetworkProxy::NoProxy
-                , QNetworkProxy::NoProxy // dummy value
-                , QNetworkProxy::Socks5Proxy
-                , QNetworkProxy::HttpProxy};
-
             proxy.setType(proxyTypesMap[proxyType]);
             proxy.setHostName(Form->ui.pageOptions->leProxy->text());
             proxy.setPort(Form->ui.pageOptions->sbProxyPort->value());
