@@ -217,11 +217,7 @@ else()
     message(STATUS "Lua library not found, building bundled dependency")
     add_subdirectory(misc/liblua)
     #linking with liblua.a requires system readline -- this works everywhere, right?
-    if(WIN32)
-        set(pascal_flags "-k${CMAKE_BINARY_DIR}/bin/liblua.dll.a" "-k-lreadline" ${pascal_flags})
-    else()
-        set(pascal_flags "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_flags})
-    endif()
+    set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})
 endif()
 
 add_subdirectory(hedgewars)
