@@ -14,6 +14,7 @@ if(WIN32)
 else(WIN32)
     add_definitions(-DLUA_USE_LINUX)
     add_library(lua STATIC ${lua_src})
+    set(LUA_LIBRARY lua)
 endif(WIN32)
 
 
