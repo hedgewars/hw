@@ -189,10 +189,8 @@ endif()
 
 
 
-#this command is a workaround to some inlining issues present in older
-# FreePascal versions and fixed in 2.6, That version is mandatory on OSX,
-# hence the command is not needed there
-if(NOT APPLE)
+#this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
+if(fpc_version LESS "020600")
     add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
 endif()
 
@@ -213,7 +211,7 @@ if(NOT NO_VIDEOREC)
             set(pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}" ${pascal_flags})
          #   set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/${CMAKE_STATIC_LIBRARY_PREFIX}avwrapper${CMAKE_STATIC_LIBRARY_SUFFIX}" ${pascal_flags})
         ENDIF()
-        if(NOT APPLE)
+        if(fpc_version LESS "020600")
             add_dependencies(avwrapper ENGINECLEAN)
         endif()
     else()
@@ -261,7 +259,7 @@ if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
 endif()
 
-#fpc < 2.6 has a few bugs in updating inline functions, so we have to compile all engine every time as workaround
+#this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
 if(fpc_version LESS "020600")
     if(NO_VIDEOREC OR NOT ${FFMPEG_FOUND})
         add_dependencies(${engine_output_name} ENGINECLEAN)
