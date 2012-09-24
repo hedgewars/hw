@@ -137,18 +137,15 @@ if(APPLE)
 endif(APPLE)
 
 
-#build Debug only when explicitally set
+#when build type is not specified, assume Debug/Release according to build version information
 if (NOT CMAKE_BUILD_TYPE)
-    set (CMAKE_BUILD_TYPE RELEASE CACHE STRING "Choose the type of build, options are: Debug Release." FORCE)
+    if(HW_DEV)
+        set (build_type "DEBUG")
+    else()
+        set (build_type "RELEASE")
+    endif()
+    set (CMAKE_BUILD_TYPE ${build_type} CACHE STRING "Choose the type of build, options are: Debug Release." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
-
-if(CMAKE_BUILD_TYPE MATCHES DEBUG OR CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "debug")
-    message(STATUS "Building Debug")
-    set(Optz false)
-else()
-    message(STATUS "Building Release")
-    set(Optz true)
-endif()
 
 
 #set default flags values for all projects
@@ -163,26 +160,30 @@ set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 if(FPFLAGS OR GHFLAGS)
     math(EXPR cmake_version "${CMAKE_MAJOR_VERSION}*10000 + ${CMAKE_MINOR_VERSION}*100 + ${CMAKE_PATCH_VERSION}")
     if(cmake_version LESS "020800")
-        message(STATUS "FPFLAGS and GHFLAGS are available only from Cmake 2.8, ignoring...")
+        message(STATUS "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
     else()
-        separate_arguments(fpflags_full UNIX_COMMAND ${FPFLAGS})
-        separate_arguments(ghflags_full UNIX_COMMAND ${GHFLAGS})
+        separate_arguments(fpflags_parsed UNIX_COMMAND ${FPFLAGS})
+        separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     endif()
 endif()
 
-set(pascal_flags ${fpflags_full} "-B" "-FE../bin" "-Cs2000000" "-vewn" "-dDEBUGFILE" ${pascal_flags})
-set(haskell_flags "-O2" ${ghflags_full} ${haskell_flags})
+set(pascal_flags ${fpflags_parsed} "-B" "-FE../bin" "-Cs2000000" "-vewn" "-dDEBUGFILE" ${pascal_flags})
+set(haskell_flags "-O2" ${ghflags_parsed} ${haskell_flags})
 
-if(Optz)
+#get BUILD_TYPE and enable/disable optimisation
+if(CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "debug")
+    message(STATUS "Building Debug")
+    set(pascal_flags "-O-" "-g" "-gl" "-gv" "-Ct" ${pascal_flags})
+    set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
+else()
+    message(STATUS "Building Release")
 #    set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
     set(pascal_flags "-Os" "-Ooregvar" "-Xs" "-Si" ${pascal_flags})
     set(haskell_flags "-w" "-fno-warn-unused-do-bind" ${haskell_flags})
-else(Optz)
-    set(pascal_flags "-O-" "-g" "-gl" "-gv" "-Ct" ${pascal_flags})
-    set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
-endif(Optz)
+endif()
 
 
+#finish setting paths
 if(DEFINED DATA_INSTALL_DIR)
     set(SHAREPATH ${DATA_INSTALL_DIR}/hedgewars/)
 else()
@@ -191,6 +192,7 @@ endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 
+#server discovery
 if(NOT NOSERVER)
     if(GHC)
         set(ghc_executable ${GHC})
@@ -210,6 +212,8 @@ else()
     set(HAVE_NETSERVER false)
 endif()
 
+
+#lua discovery
 find_package(Lua)
 if(LUA_FOUND)
     message(STATUS "Lua library is present on your system (${LUA_DEFAULT})")
@@ -220,15 +224,17 @@ else()
     set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})
 endif()
 
+
+#main engine
 add_subdirectory(hedgewars)
 
-
-#run cmake -DANDROID=1 to enable this
+#Android related build scripts
 if(ANDROID)
+    #run cmake -DANDROID=1 to enable this
     add_subdirectory(project_files/Android-build)
 endif()
 
-
+#TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
 if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID))
     add_subdirectory(bin)
     add_subdirectory(misc/quazip)
