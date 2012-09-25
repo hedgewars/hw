@@ -16,7 +16,8 @@ set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
 set(HGCHANGED "")
 IF(version_suffix MATCHES "-dev")
     set(HW_DEV true)
-    IF (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.hg)
+    set(default_build_type "DEBUG")
+    IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.hg)
         FIND_PROGRAM(HGCOMMAND hg)
         IF(HGCOMMAND)
             exec_program(${HGCOMMAND}
@@ -35,6 +36,7 @@ IF(version_suffix MATCHES "-dev")
     ENDIF()
 ELSE()
     set(HW_DEV false)
+    set(default_build_type "RELEASE")
 ENDIF()
 
 
@@ -138,14 +140,15 @@ endif(APPLE)
 
 
 #when build type is not specified, assume Debug/Release according to build version information
-if (NOT CMAKE_BUILD_TYPE)
-    if(HW_DEV)
-        set (build_type "DEBUG")
-    else()
-        set (build_type "RELEASE")
-    endif()
-    set (CMAKE_BUILD_TYPE ${build_type} CACHE STRING "Choose the type of build, options are: Debug Release." FORCE)
-endif (NOT CMAKE_BUILD_TYPE)
+if (CMAKE_BUILD_TYPE)
+    string (TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+    if ( NOT( (CMAKE_BUILD_TYPE MATCHES "RELEASE") OR (CMAKE_BUILD_TYPE MATCHES "DEBUG") ) )
+        set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Only 'Debug' or 'Release' options are allowed." FORCE)
+        message (STATUS "Unknown build type, using default (${default_build_type})")
+    endif ()
+else (CMAKE_BUILD_TYPE)
+    set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Choose the build type, options are: Debug Release." FORCE)
+endif (CMAKE_BUILD_TYPE)
 
 
 #set default flags values for all projects
@@ -171,12 +174,12 @@ set(pascal_flags ${fpflags_parsed} "-B" "-FE../bin" "-Cs2000000" "-vewn" "-dDEBU
 set(haskell_flags "-O2" ${ghflags_parsed} ${haskell_flags})
 
 #get BUILD_TYPE and enable/disable optimisation
-if(CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "debug")
-    message(STATUS "Building Debug")
+if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+    message(STATUS "Building Debug flavour")
     set(pascal_flags "-O-" "-g" "-gl" "-gv" "-Ct" ${pascal_flags})
     set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
 else()
-    message(STATUS "Building Release")
+    message(STATUS "Building Release flavour")
 #    set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
     set(pascal_flags "-Os" "-Ooregvar" "-Xs" "-Si" ${pascal_flags})
     set(haskell_flags "-w" "-fno-warn-unused-do-bind" ${haskell_flags})
