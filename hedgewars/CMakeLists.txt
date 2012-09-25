@@ -127,9 +127,9 @@ if(APPLE)
         set(powerpc_build "powerpc")
     endif()
 
-    #on OSX we need to provide the main() function when building as executable
+    #on OSX we need to provide the SDL_main() function when building as executable
     if(NOT BUILD_ENGINE_LIBRARY)
-        #let's look for the bundled sdlmain, if not found build our own
+        #let's look for the installed sdlmain file; if it is not found, let's build our own
         find_package(SDL REQUIRED)
         #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
         string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
@@ -137,12 +137,12 @@ if(APPLE)
         find_file(SDLMAIN_LIB libSDLMain.a PATHS ${sdl_dir}/Resources/)
 
         if(SDLMAIN_LIB MATCHES "SDLMAIN_LIB-NOTFOUND")
-            set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+            set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
             include_directories(${SDL_INCLUDE_DIR})
             add_library (SDLmain STATIC SDLMain.m)
             #add a dependency to the hwengine target
             set(engine_sources ${engine_sources} SDLmain)
-            set(SDLMAIN_LIB "${CMAKE_BINARY_DIR}/bin/libSDLmain.a")
+            set(SDLMAIN_LIB "${LIBRARY_OUTPUT_PATH}/libSDLmain.a")
         endif()
 
         set(pascal_flags "-k${SDLMAIN_LIB}" ${pascal_flags})
