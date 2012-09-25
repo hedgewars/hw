@@ -237,8 +237,10 @@ processAction (MoveToLobby msg) = do
                 }) ri
         moveClientToLobby rnc ci
 
+
 processAction ChangeMaster = do
     (Just ci) <- gets clientIndex
+    proto <- client's clientProto
     ri <- clientRoomA
     rnc <- gets roomsClients
     newMasterId <- liftM (head . filter (/= ci)) . io $ roomClientsIndicesM rnc ri
@@ -246,7 +248,7 @@ processAction ChangeMaster = do
     oldRoomName <- io $ room'sM rnc name ri
     oldMaster <- client's nick
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
-    let newRoomName = nick newMaster
+    let newRoomName = if proto < 42 then nick newMaster else oldRoomName
     mapM_ processAction [
         ModifyRoom (\r -> r{masterID = newMasterId, name = newRoomName, isRestrictedJoins = False, isRestrictedTeams = False})
         , ModifyClient2 newMasterId (\c -> c{isMaster = True})
@@ -259,7 +261,7 @@ processAction ChangeMaster = do
     proto <- client's clientProto
     newRoom <- io $ room'sM rnc id ri
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo (nick newMaster) newRoom)
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo newRoomName newRoom)
 
 
 processAction (AddRoom roomName roomPassword) = do

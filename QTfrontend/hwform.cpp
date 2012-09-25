@@ -1518,10 +1518,12 @@ void HWForm::NetGameMaster()
         // disconnect connections first to ensure their inexistance and not to connect twice
         ui.pageNetGame->BtnStart->disconnect(hwnet);
         ui.pageNetGame->BtnUpdate->disconnect(hwnet);
-        ui.pageNetGame->setRoomName(hwnet->getRoom());
         ui.pageNetGame->restrictJoins->disconnect(hwnet);
         ui.pageNetGame->restrictTeamAdds->disconnect(hwnet);
         ui.pageNetGame->disconnect(hwnet, SLOT(updateRoomName(const QString&)));
+
+        ui.pageNetGame->setRoomName(hwnet->getRoom());
+
         connect(ui.pageNetGame->BtnStart, SIGNAL(clicked()), hwnet, SLOT(startGame()));
         connect(ui.pageNetGame, SIGNAL(askForUpdateRoomName(const QString &)), hwnet, SLOT(updateRoomName(const QString &)));
         connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));

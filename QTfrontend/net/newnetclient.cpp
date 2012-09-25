@@ -466,6 +466,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         QString roomName = tmp.takeFirst();
         m_roomsListModel->updateRoom(roomName, tmp);
+
+        // keep track of room name so correct name is displayed when you become room admin
+        if(myroom == roomName)
+            myroom = roomName;
+
         return;
     }
 
