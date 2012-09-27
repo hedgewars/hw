@@ -469,7 +469,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         // keep track of room name so correct name is displayed when you become room admin
         if(myroom == roomName)
-            myroom = roomName;
+            myroom = tmp[1];
 
         return;
     }
