@@ -91,6 +91,7 @@ function Distance(const dx, dy: hwFloat): hwFloat; // Returns the distance betwe
 function DistanceI(const dx, dy: LongInt): hwFloat; // Same as above for integer parameters.
 function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
+function vector2Angle(const x, y: hwFloat): LongInt;
 function SignAs(const num, signum: hwFloat): hwFloat; inline; // Returns an hwFloat with the value of parameter num and the sign of signum.
 function hwSign(r: hwFloat): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
 function hwSignf(r: real): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
@@ -586,6 +587,38 @@ if Angle < 1024 then
 else
     AngleCos.QWordValue:= SinTable[Angle - 1024]
 end;
+
+function vector2Angle(const x, y: hwFloat): LongInt;
+var d: hwFloat;
+    l, r, c, oc: Longword;
+    n: QWord;
+begin
+    d:= _1 / Distance(x, y);
+
+    n:= (y * d).QWordValue;
+
+    l:= 0;
+    r:= 1024;
+    c:= 0;
+
+    repeat
+        oc:= c;
+
+        c:= (l + r) shr 1;
+
+        if n >= SinTable[c] then
+            l:= c
+        else
+            r:= c;
+
+    until (oc = c);
+
+    if x.isNegative then c:= 2048 - c;
+    if y.isNegative then c:= - c;
+
+    vector2Angle:= c
+end;
+
 {$ENDIF}
 
 end.
