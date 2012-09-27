@@ -66,7 +66,7 @@ function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
 
 function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
 function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
-function  RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
+function  RateShove(x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 function  RateHammer(Me: PGear): LongInt;
 
@@ -88,9 +88,9 @@ var ThinkingHH: PGear;
 
 const KillScore = 200;
 var friendlyfactor: LongInt = 300;
-       
+
 implementation
-uses uCollisions, uVariables, uUtils, uDebug, uLandTexture;
+uses uCollisions, uVariables, uUtils, uLandTexture;
 
 var 
     KnownExplosion: record
@@ -364,9 +364,9 @@ begin
 end;
 
 function TraceShoveFall(x, y, dX, dY: Real): LongInt;
-var dmg, v: LongInt;
+var dmg: LongInt;
 begin
-v:= random($FFFFFFFF);
+//v:= random($FFFFFFFF);
     while true do
     begin
         x:= x + dX;
@@ -457,7 +457,7 @@ for i:= 0 to Targets.Count do
 RateExplosion:= rate;
 end;
 
-function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
+function RateShove(x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, rate: LongInt;
     dX, dY, dmgMod: real;
 begin

@@ -2646,11 +2646,7 @@ end;
 
 
 procedure doStepCakeWork(Gear: PGear);
-
-const dirs: array[0..3] of TPoint =   ((X: 0; Y: -1), (X: 1; Y: 0),(X: 0; Y: 1),(X: -1; Y: 0));
 var
-    xx, yy, xxn, yyn: LongInt;
-    dA: LongInt;
     tdx, tdy: hwFloat;
 begin
     AllInactive := false;
@@ -5032,8 +5028,8 @@ A frozen hog will animate differently.  To be decided, but possibly in a similar
 A frozen hog stays frozen for a certain number of turns. Each turn the frozen overlay becomes fainter, until it fades and the hog animates normally again.
 *)
 procedure doStepIceGun(Gear: PGear);
-var 
-    HHGear, iter: PGear;
+var
+    HHGear: PGear;
     ndX, ndY: hwFloat;
     i, t, gX, gY: LongInt;
     hogs: PGearArrayS;
