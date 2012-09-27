@@ -101,7 +101,6 @@ procedure MakeCrossHairs;
 var t: LongInt;
     tmpsurf, texsurf: PSDL_Surface;
     Color, i: Longword;
-    s: shortstring;
 begin
 tmpsurf:= LoadDataImage(ptGraphics, cCHFileName, ifAlpha or ifCritical);
 

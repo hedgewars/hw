@@ -227,7 +227,7 @@ repeat
         EX:= trunc(x);
         EY:= trunc(y);
 
-        value:= RateShove(Me, trunc(x), trunc(y), 5, 1, trunc((abs(dX)+abs(dY))*20), -dX, -dY, afTrackFall);
+        value:= RateShove(trunc(x), trunc(y), 5, 1, trunc((abs(dX)+abs(dY))*20), -dX, -dY, afTrackFall);
         if value = 0 then
             value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
 
@@ -649,7 +649,7 @@ end;
 function TestSniperRifle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, x, y, t, dmg, dmgMod: real;
     d: Longword;
-    fallDmg, valueResult: LongInt;
+    fallDmg: LongInt;
 begin
 if Level > 3 then exit(BadTurn);
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
@@ -701,6 +701,8 @@ var valueResult, a, v1, v2: LongInt;
     x, y, trackFall: LongInt;
     dx, dy: real;
 begin
+    Targ:= Targ; // avoid compiler hint
+
     if Level < 3 then trackFall:= afTrackFall
     else trackFall:= 0;
 
@@ -718,10 +720,10 @@ begin
         dx:= sin(a / cMaxAngle * pi) * 0.5;
         dy:= cos(a / cMaxAngle * pi) * 0.5;
 
-        v1:= RateShove(Me, x - 10, y + 2
+        v1:= RateShove(x - 10, y + 2
                 , 32, 30, 115
                 , -dx, -dy, trackFall);
-        v2:= RateShove(Me, x + 10, y + 2
+        v2:= RateShove(x + 10, y + 2
                 , 32, 30, 115
                 , dx, -dy, trackFall);
         if (v1 > valueResult) or (v2 > valueResult) then
@@ -750,6 +752,8 @@ function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackP
 var valueResult, v1, v2, i: LongInt;
     x, y, trackFall: LongInt;
 begin
+    Targ:= Targ; // avoid compiler hint
+
     if Level = 1 then trackFall:= afTrackFall
     else trackFall:= 0;
 
@@ -762,11 +766,11 @@ begin
     v1:= 0;
     for i:= 0 to 8 do
         begin
-        v1:= v1 + RateShove(Me, x - 5, y - 10 * i
+        v1:= v1 + RateShove(x - 5, y - 10 * i
                 , 19, 30, 40
                 , -0.45, -0.9, trackFall or afSetSkip);
         end;
-    v1:= v1 + RateShove(Me, x - 5, y - 90
+    v1:= v1 + RateShove(x - 5, y - 90
             , 19, 30, 40
             , -0.45, -0.9, trackFall);
 
@@ -775,11 +779,11 @@ begin
     v2:= 0;
     for i:= 0 to 8 do
         begin
-        v2:= v2 + RateShove(Me, x + 5, y - 10 * i
+        v2:= v2 + RateShove(x + 5, y - 10 * i
                 , 19, 30, 40
                 , 0.45, -0.9, trackFall or afSetSkip);
         end;
-    v2:= v2 + RateShove(Me, x + 5, y - 90
+    v2:= v2 + RateShove(x + 5, y - 90
             , 19, 30, 40
             , 0.45, -0.9, trackFall);
 
@@ -806,6 +810,8 @@ function TestWhip(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams
 var valueResult, v1, v2: LongInt;
     x, y, trackFall: LongInt;
 begin
+    Targ:= Targ; // avoid compiler hint
+
     if Level = 1 then trackFall:= afTrackFall
     else trackFall:= 0;
 
@@ -819,19 +825,19 @@ begin
     {first RateShove checks farthermost of two whip's AmmoShove attacks 
     to encourage distant attacks (damaged hog is excluded from view of second 
     RateShove call)}
-    v1:= RateShove(Me, x - 13, y
+    v1:= RateShove(x - 13, y
             , 30, 30, 25
             , -1, -0.8, trackFall or afSetSkip);
     v1:= v1 +
-        RateShove(Me, x - 2, y
+        RateShove(x - 2, y
             , 30, 30, 25
             , -1, -0.8, trackFall);
     // now try opposite direction
-    v2:= RateShove(Me, x + 13, y
+    v2:= RateShove(x + 13, y
             , 30, 30, 25
             , 1, -0.8, trackFall or afSetSkip);
     v2:= v2 +
-        RateShove(Me, x + 2, y
+        RateShove(x + 2, y
             , 30, 30, 25
             , 1, -0.8, trackFall);
 
@@ -898,7 +904,7 @@ begin
     for i:= 0 to 512 div step - 2 do
         begin
         valueResult:= valueResult + 
-            RateShove(Me, trunc(x), trunc(y)
+            RateShove(trunc(x), trunc(y)
                 , 30, 30, 25
                 , cx, -0.9, trackFall or afSetSkip);
                 
@@ -910,14 +916,14 @@ begin
         x:= hwFloat2Float(Me^.X);
         y:= hwFloat2Float(Me^.Y);
         tx:= trunc(x);
-        v:= RateShove(Me, tx, trunc(y)
+        v:= RateShove(tx, trunc(y)
                 , 30, 30, 25
                 , -cx, -0.9, trackFall);
         for i:= 1 to 512 div step - 2 do
             begin
             y:= y + dy;
             v:= v + 
-                RateShove(Me, tx, trunc(y)
+                RateShove(tx, trunc(y)
                     , 30, 30, 25
                     , -cx, -0.9, trackFall or afSetSkip);
             end
@@ -927,12 +933,12 @@ begin
         ap.Angle:= -2048;
         valueResult:= v
         end;
-        
-    v:= RateShove(Me, trunc(x), trunc(y)
+
+    v:= RateShove(trunc(x), trunc(y)
             , 30, 30, 25
             , cx, -0.9, trackFall);
     valueResult:= valueResult + v - KillScore * friendlyfactor div 100 * 1024;
-    
+
     if v < 65536 then
         inc(valueResult, RateExplosion(Me, trunc(x), trunc(y), 30));
 
@@ -943,6 +949,8 @@ function TestHammer(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackPara
 var rate: LongInt;
 begin
 Level:= Level; // avoid compiler hint
+Targ:= Targ;
+
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
@@ -1090,11 +1098,13 @@ end;
 
 function TestCake(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var valueResult, v1, v2: LongInt;
-    x, y, trackFall: LongInt;
     cake: TGear;
 begin
+    Targ:= Targ; // avoid compiler hint
+
     if (Level > 2) then
         exit(BadTurn);
+
     ap.ExplR:= 0;
     ap.Time:= 0;
     ap.Power:= BadTurn; // use it as max score value in checkCakeWalk
