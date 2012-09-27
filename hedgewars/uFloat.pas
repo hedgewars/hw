@@ -589,13 +589,14 @@ else
 end;
 
 function vector2Angle(const x, y: hwFloat): LongInt;
-var d: hwFloat;
+var d, nf: hwFloat;
     l, r, c, oc: Longword;
     n: QWord;
 begin
     d:= _1 / Distance(x, y);
 
-    n:= (y * d).QWordValue;
+    nf:= y * d;
+    n:= nf.QWordValue;
 
     l:= 0;
     r:= 1024;
