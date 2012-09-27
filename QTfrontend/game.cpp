@@ -126,6 +126,8 @@ void HWGame::SendQuickConfig()
                                .arg((themeModel->rowCount() > 0) ? themeModel->index(rand() % themeModel->rowCount()).data().toString() : "steel"));
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
+    HWProto::addStringToBuffer(teamscfg, "e$template_filter 2");
+
     HWTeam team1;
     team1.setDifficulty(0);
     team1.setColor(0);
