@@ -48,11 +48,15 @@ set(HEDGEWARS_PROTO_VER 42)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 
-#set some safe values
-IF(NOT BUILD_ENGINE_LIBRARY)
-    SET(BUILD_ENGINE_LIBRARY 0)
-ENDIF(NOT BUILD_ENGINE_LIBRARY)
-set(target_dir "bin")
+#set some default values
+option(NOSERVER "Disable gameServer build [default: auto]" OFF)
+option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
+option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
+
+option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
+option(ANDROID "Enable Android build [default: off]" OFF)
+option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
+
 
 #bundle .app setup
 if(APPLE OR CROSSAPPLE)
@@ -63,6 +67,8 @@ if(APPLE OR CROSSAPPLE)
     set(DATA_INSTALL_DIR "../Resources/")
     set(target_dir ".")
     set(minimum_macosx_version "10.6")
+else()
+    set(target_dir "bin")
 endif()
 
 if(APPLE)
@@ -193,6 +199,7 @@ else()
     set(SHAREPATH share/hedgewars/)
 endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 
 #server discovery
@@ -206,8 +213,9 @@ if(NOT NOSERVER)
     if(ghc_executable)
         set(HAVE_NETSERVER true)
         add_subdirectory(gameServer)
+        message(STATUS "Found GHC: ${ghc_executable}")
     else()
-        message(STATUS "No GHC executable found, server will not be built")
+        message(STATUS "Could NOT find GHC, server will not be built")
         set(HAVE_NETSERVER false)
     endif()
 else()
@@ -219,9 +227,9 @@ endif()
 #lua discovery
 find_package(Lua)
 if(LUA_FOUND)
-    message(STATUS "Lua library is present on your system (${LUA_DEFAULT})")
+    message(STATUS "LUA found: ${LUA_DEFAULT}")
 else()
-    message(STATUS "Lua library not found, building bundled dependency")
+    message(STATUS "Cound NOT find LUA, building bundled dependency")
     add_subdirectory(misc/liblua)
     #linking with liblua.a requires system readline -- this works everywhere, right?
     set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})
