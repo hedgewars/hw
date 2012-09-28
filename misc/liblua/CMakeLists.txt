@@ -1,7 +1,6 @@
 #this file is included only when system Lua library is not found
 
 file(GLOB lua_src *.c *.h)
-set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 if(WIN32)
     add_definitions(-DLUA_BUILD_AS_DLL)
