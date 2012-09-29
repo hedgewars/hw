@@ -741,7 +741,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         else exit;
 
     StepSoundTimer:= cHHStepTicks;
-   
+
     GHStepTicks:= cHHStepTicks;
     if PrevdX <> hwSign(Gear^.dX) then
         begin
@@ -752,69 +752,10 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
 
     Gear^.Hedgehog^.visStepPos:= (Gear^.Hedgehog^.visStepPos + 1) and 7;
 
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-        begin
-        Gear^.Y:= Gear^.Y - _1;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
-            Gear^.Y:= Gear^.Y + _6
-        end else Gear^.Y:= Gear^.Y + _5 else
-        end else Gear^.Y:= Gear^.Y + _4 else
-        end else Gear^.Y:= Gear^.Y + _3 else
-        end else Gear^.Y:= Gear^.Y + _2 else
-        end else Gear^.Y:= Gear^.Y + _1
-        end;
+    if (not cArtillery) and ((Gear^.Message and gmPrecise) = 0) then
+        MakeHedgehogsStep(Gear);
 
-    if (not cArtillery) and ((Gear^.Message and gmPrecise) = 0) and (not TestCollisionXwithGear(Gear, hwSign(Gear^.dX))) then
-        Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
-
-   SetAllHHToActive;
-
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y + _1;
-    if TestCollisionYwithGear(Gear, 1) = 0 then
-        begin
-        Gear^.Y:= Gear^.Y - _6;
-        Gear^.dY:= _0;
-        Gear^.State:= Gear^.State or gstMoving;
-        exit
-        end;
-        end
-        end
-        end
-        end
-        end
-        end;
+    SetAllHHToActive;
     AddGearCI(Gear)
     end
 end;
