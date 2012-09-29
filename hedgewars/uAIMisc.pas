@@ -90,7 +90,7 @@ const KillScore = 200;
 var friendlyfactor: LongInt = 300;
 
 implementation
-uses uCollisions, uVariables, uUtils, uLandTexture;
+uses uCollisions, uVariables, uUtils, uLandTexture, uGearsUtils;
 
 var 
     KnownExplosion: record
@@ -731,7 +731,7 @@ repeat
             end;
         continue
         end;
-        
+
         // usual walk
         if (Gear^.Message and gmLeft) <> 0 then
             Gear^.dX:= -cLittle
@@ -740,77 +740,10 @@ repeat
                 Gear^.dX:=  cLittle
             else
                 exit(false);
-                
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-            begin
-            Gear^.Y:= Gear^.Y - _1;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-            begin
-            Gear^.Y:= Gear^.Y - _1;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-            begin
-            Gear^.Y:= Gear^.Y - _1;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-            begin
-            Gear^.Y:= Gear^.Y - _1;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-            begin
-            Gear^.Y:= Gear^.Y - _1;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
-            begin
-            Gear^.Y:= Gear^.Y - _1;
-            if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
-                Gear^.Y:= Gear^.Y + _6
-            end else Gear^.Y:= Gear^.Y + _5 else
-            end else Gear^.Y:= Gear^.Y + _4 else
-            end else Gear^.Y:= Gear^.Y + _3 else
-            end else Gear^.Y:= Gear^.Y + _2 else
-            end else Gear^.Y:= Gear^.Y + _1
-            end;
 
-        if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
-        begin
-            Gear^.X:= Gear^.X + int2hwFloat(hwSign(Gear^.dX));
-            inc(GoInfo.Ticks, cHHStepTicks)
-        end;
+        if MakeHedgehogsStep(Gear) then
+            inc(GoInfo.Ticks, cHHStepTicks);
 
-        // too scared to reformat this part
-        if TestCollisionYwithGear(Gear, 1) = 0 then
-            begin
-            Gear^.Y:= Gear^.Y + _1;
-            
-        if TestCollisionYwithGear(Gear, 1) = 0 then
-            begin
-            Gear^.Y:= Gear^.Y + _1;
-            
-        if TestCollisionYwithGear(Gear, 1) = 0 then
-            begin
-            Gear^.Y:= Gear^.Y + _1;
-
-        if TestCollisionYwithGear(Gear, 1) = 0 then
-            begin
-            Gear^.Y:= Gear^.Y + _1;
-
-        if TestCollisionYwithGear(Gear, 1) = 0 then
-            begin
-            Gear^.Y:= Gear^.Y + _1;
-
-        if TestCollisionYwithGear(Gear, 1) = 0 then
-            begin
-            Gear^.Y:= Gear^.Y + _1;
-
-        if TestCollisionYwithGear(Gear, 1) = 0 then
-            begin
-            Gear^.Y:= Gear^.Y - _6;
-            Gear^.dY:= _0;
-            Gear^.State:= Gear^.State or gstMoving
-            end
-        end
-        end
-        end
-        end
-        end
-        end;
         // we have moved for 1 px
         if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
             exit(true)

@@ -41,6 +41,8 @@ function  CheckGearDrowning(Gear: PGear): boolean;
 procedure CheckCollision(Gear: PGear); inline;
 procedure CheckCollisionWithLand(Gear: PGear); inline;
 
+function MakeHedgehogsStep(Gear: PGear) : boolean;
+
 var doStepHandlers: array[TGearType] of TGearStepProcedure;
 
 
@@ -680,6 +682,75 @@ begin
         Gear^.State := Gear^.State or gstCollision
     else 
         Gear^.State := Gear^.State and (not gstCollision)
+end;
+
+function MakeHedgehogsStep(Gear: PGear) : boolean;
+begin
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+        begin
+        Gear^.Y:= Gear^.Y - _1;
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+            Gear^.Y:= Gear^.Y + _6
+        end else Gear^.Y:= Gear^.Y + _5 else
+        end else Gear^.Y:= Gear^.Y + _4 else
+        end else Gear^.Y:= Gear^.Y + _3 else
+        end else Gear^.Y:= Gear^.Y + _2 else
+        end else Gear^.Y:= Gear^.Y + _1
+        end;
+
+    if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+        begin
+        Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
+        MakeHedgehogsStep:= true
+        end else
+        MakeHedgehogsStep:= false;
+
+    if TestCollisionYwithGear(Gear, 1) = 0 then
+        begin
+        Gear^.Y:= Gear^.Y + _1;
+    if TestCollisionYwithGear(Gear, 1) = 0 then
+        begin
+        Gear^.Y:= Gear^.Y + _1;
+    if TestCollisionYwithGear(Gear, 1) = 0 then
+        begin
+        Gear^.Y:= Gear^.Y + _1;
+    if TestCollisionYwithGear(Gear, 1) = 0 then
+        begin
+        Gear^.Y:= Gear^.Y + _1;
+    if TestCollisionYwithGear(Gear, 1) = 0 then
+        begin
+        Gear^.Y:= Gear^.Y + _1;
+    if TestCollisionYwithGear(Gear, 1) = 0 then
+        begin
+        Gear^.Y:= Gear^.Y + _1;
+    if TestCollisionYwithGear(Gear, 1) = 0 then
+        begin
+        Gear^.Y:= Gear^.Y - _6;
+        Gear^.dY:= _0;
+        Gear^.State:= Gear^.State or gstMoving;
+        exit
+        end;
+        end
+        end
+        end
+        end
+        end
+        end;
 end;
 
 end.
