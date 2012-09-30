@@ -27,6 +27,7 @@
 #include <QList>
 #include <QPair>
 #include <QRegExp>
+#include <QHash>
 
 #include "SDLInteraction.h"
 
@@ -42,16 +43,22 @@ class QSettings;
 class ListWidgetNickItem : public QListWidgetItem
 {
     public:
-        ListWidgetNickItem(const QString& nick, bool isFriend, bool isIgnored);
-        bool operator<(const QListWidgetItem & other) const;
-        void setFriend(bool isFriend);
-        void setIgnored(bool isIgnored);
-        bool isFriend();
-        bool ignored();
+        enum StateFlag {
+            Ready       = Qt::UserRole,
+            ServerAdmin = Qt::UserRole + 1,
+            RoomAdmin   = Qt::UserRole + 2,
+            Registered  = Qt::UserRole + 3,
+            Friend      = Qt::UserRole + 4,
+            Ignore      = Qt::UserRole + 5
+        };
+
+        ListWidgetNickItem(const QString & nick, bool isFriend, bool isIgnored);
+        void setData(StateFlag role, const QVariant &value);
+        bool operator<(const QListWidgetItem & other) const;        
 
     private:
-        bool aFriend;
-        bool isIgnored;
+        QHash<quint32, QIcon> & m_icons();
+        void updateIcon();
 };
 
 
@@ -73,7 +80,6 @@ class HWChatWidget : public QWidget
         void loadLists(const QString & nick);
         void saveLists(const QString & nick);
         void setIgnoreListKick(bool enabled); ///< automatically kick people on ignore list (if possible)
-        void setShowReady(bool s);
         void setShowFollow(bool enabled);
         QStringList ignoreList, friendsList;
         static const QString & styleSheet();
@@ -113,6 +119,9 @@ class HWChatWidget : public QWidget
         void nickRemoved(const QString& nick);
         void clear();
         void setReadyStatus(const QString & nick, bool isReady);
+        void setAdminStatus(const QString & nick, bool isAdmin);
+        void setRoomMasterStatus(const QString & nick, bool isAdmin);
+        void setRegisteredStatus(const QStringList & nicks, bool isRegistered);
         void adminAccess(bool);
 
     signals:
@@ -143,8 +152,9 @@ class HWChatWidget : public QWidget
         QString m_clickedNick;
         QList<QRegExp> m_highlights; ///< regular expressions used for highlighting
         bool notify;
-        bool showReady;
         bool m_autoKickEnabled;
+
+        void setStatus(const QString & nick, ListWidgetNickItem::StateFlag flag, bool status);
 
     private slots:
         void returnPressed();

@@ -1121,6 +1121,17 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
             ui.pageNetGame->pChatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(setReadyStatus(const QString &, bool)),
             ui.pageNetGame->pChatWidget, SLOT(setReadyStatus(const QString &, bool)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(setAdminStatus(const QString &, bool)),
+            ui.pageNetGame->pChatWidget, SLOT(setAdminStatus(const QString &, bool)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(setAdminStatus(const QString &, bool)),
+            ui.pageRoomsList->chatWidget, SLOT(setAdminStatus(const QString &, bool)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(setRoomMasterStatus(const QString &, bool)),
+            ui.pageNetGame->pChatWidget, SLOT(setRoomMasterStatus(const QString &, bool)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(setRegisteredStatus(const QStringList &, bool)),
+            ui.pageNetGame->pChatWidget, SLOT(setRegisteredStatus(const QStringList &, bool)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(setRegisteredStatus(const QStringList &, bool)),
+            ui.pageRoomsList->chatWidget, SLOT(setRegisteredStatus(const QStringList &, bool)), Qt::QueuedConnection);
+
     connect(hwnet, SIGNAL(chatStringFromMe(const QString&)),
             ui.pageNetGame->pChatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(roomMaster(bool)),

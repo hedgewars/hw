@@ -38,7 +38,6 @@ QLayout * PageNetGame::bodyLayoutDefinition()
 
     // chatwidget
     pChatWidget = new HWChatWidget(this, m_gameSettings, true);
-    pChatWidget->setShowReady(true); // show status bulbs by default
     pChatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     pChatWidget->setIgnoreListKick(true); // kick ignored players automatically
     pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
