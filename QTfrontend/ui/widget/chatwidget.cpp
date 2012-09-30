@@ -33,6 +33,7 @@
 #include <QStringList>
 #include <QDateTime>
 #include <QTime>
+#include <QPainter>
 
 #include <QMessageBox>
 
@@ -43,30 +44,18 @@
 
 #include "chatwidget.h"
 
+
 ListWidgetNickItem::ListWidgetNickItem(const QString& nick, bool isFriend, bool isIgnored) : QListWidgetItem(nick)
 {
-    this->aFriend = isFriend;
-    this->isIgnored = isIgnored;
+    setData(Friend, isFriend);
+    setData(Ignore, isIgnored);
 }
 
-void ListWidgetNickItem::setFriend(bool isFriend)
+void ListWidgetNickItem::setData(StateFlag role, const QVariant &value)
 {
-    this->aFriend = isFriend;
-}
+    QListWidgetItem::setData(role, value);
 
-void ListWidgetNickItem::setIgnored(bool isIgnored)
-{
-    this->isIgnored = isIgnored;
-}
-
-bool ListWidgetNickItem::isFriend()
-{
-    return aFriend;
-}
-
-bool ListWidgetNickItem::ignored()
-{
-    return isIgnored;
+    updateIcon();
 }
 
 bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
@@ -77,12 +66,12 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
     ListWidgetNickItem otherNick = const_cast<ListWidgetNickItem &>(dynamic_cast<const ListWidgetNickItem &>(other));
 
     // ignored always down
-    if (isIgnored != otherNick.ignored())
-        return !isIgnored;
+    if (data(Ignore).toBool() != otherNick.data(Ignore).toBool())
+        return !data(Ignore).toBool();
 
     // friends always up
-    if (aFriend != otherNick.isFriend())
-        return aFriend;
+    if (data(Friend).toBool() != otherNick.data(Friend).toBool())
+        return data(Friend).toBool();
 
     QString txt1 = text().toLower();
     QString txt2 = other.text().toLower();
@@ -100,6 +89,82 @@ bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
     }
 
     return firstIsShorter;
+}
+
+void ListWidgetNickItem::updateIcon()
+{
+    quint32 iconNum = 0;
+
+    QList<bool> flags;
+    flags
+        << data(Ready).toBool()
+        << data(ServerAdmin).toBool()
+        << data(RoomAdmin).toBool()
+        << data(Registered).toBool()
+        << data(Friend).toBool()
+        << data(Ignore).toBool()
+        ;
+
+    for(int i = flags.size() - 1; i >= 0; --i)
+        if(flags[i])
+            iconNum |= 1 << i;
+
+    if(m_icons().contains(iconNum))
+    {
+        setIcon(m_icons().value(iconNum));
+    }
+    else
+    {
+        QPixmap result(24, 16);
+        result.fill(Qt::transparent);
+
+        QPainter painter(&result);
+
+        if(data(Ready).toBool())
+            painter.drawPixmap(8, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
+
+        QString mainIconName(":/res/chat/");
+
+        if(data(RoomAdmin).toBool())
+            mainIconName += "roomadmin";
+        else if(data(ServerAdmin).toBool())
+            mainIconName += "serveradmin";
+        else
+            mainIconName += "hedgehog";
+
+        if(!data(Registered).toBool())
+            mainIconName += "_gray";
+
+        painter.drawPixmap(0, 0, 16, 16, QPixmap(mainIconName + ".png"));
+
+        if(data(Ignore).toBool())
+            painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/ignore.png"));
+        else
+        if(data(Friend).toBool())
+            painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/friend.png"));
+
+        painter.end();
+
+        QIcon icon(result);
+
+        setIcon(icon);
+        m_icons().insert(iconNum, icon);
+    }
+
+    if(data(Ignore).toBool())
+        setForeground(Qt::gray);
+    else
+    if(data(Friend).toBool())
+        setForeground(Qt::green);
+    else
+        setForeground(QBrush(QColor(0xff, 0xcc, 0x00)));
+}
+
+QHash<quint32, QIcon> & ListWidgetNickItem::m_icons()
+{
+    static QHash<quint32, QIcon> iconsCache;
+
+    return iconsCache;
 }
 
 QString * HWChatWidget::s_styleSheet = NULL;
@@ -290,6 +355,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     mainLayout.addWidget(chatText, 0, 0, 2, 1);
 
     chatNicks = new QListWidget(this);
+    chatNicks->setIconSize(QSize(24, 16));
     chatNicks->setMinimumHeight(10);
     chatNicks->setMinimumWidth(10);
     chatNicks->setSortingEnabled(true);
@@ -333,7 +399,6 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     chatNicks->insertAction(0, acInfo);
     chatNicks->insertAction(0, acIgnore);
 
-    showReady = false;
     setShowFollow(true);
 
     setAcceptDrops(true);
@@ -460,24 +525,8 @@ void HWChatWidget::updateNickItem(QListWidgetItem *nickItem)
     QString nick = nickItem->text();
     ListWidgetNickItem * item = dynamic_cast<ListWidgetNickItem*>(nickItem);
 
-    item->setFriend(friendsList.contains(nick, Qt::CaseInsensitive));
-    item->setIgnored(ignoreList.contains(nick, Qt::CaseInsensitive));
-
-    if(item->ignored())
-    {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_ignore_on.png" : ":/res/chat_ignore_off.png") : ":/res/chat_ignore.png"));
-        item->setForeground(Qt::gray);
-    }
-    else if(item->isFriend())
-    {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_friend_on.png" : ":/res/chat_friend_off.png") : ":/res/chat_friend.png"));
-        item->setForeground(Qt::green);
-    }
-    else
-    {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_default_on.png" : ":/res/chat_default_off.png") : ":/res/chat_default.png"));
-        item->setForeground(QBrush(QColor(0xff, 0xcc, 0x00)));
-    }
+    item->setData(ListWidgetNickItem::Friend, QVariant(friendsList.contains(nick, Qt::CaseInsensitive)));
+    item->setData(ListWidgetNickItem::Ignore, QVariant(ignoreList.contains(nick, Qt::CaseInsensitive)));
 }
 
 void HWChatWidget::updateNickItems()
@@ -891,25 +940,36 @@ void HWChatWidget::chatNickSelected(int index)
     }
 }
 
-void HWChatWidget::setShowReady(bool s)
+void HWChatWidget::setStatus(const QString & nick, ListWidgetNickItem::StateFlag flag, bool status)
 {
-    showReady = s;
+    QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
+
+    if (items.size() == 1)
+    {
+        items[0]->setData(flag, status);
+        updateNickItem(items[0]);
+    }
 }
 
 void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)
 {
-    QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
-    if (items.size() != 1)
-    {
-        qWarning("Bug: cannot find user in chat");
-        return;
-    }
+    setStatus(nick, ListWidgetNickItem::Ready, isReady);
+}
 
-    items[0]->setData(Qt::UserRole, isReady); // bulb status
-    updateNickItem(items[0]);
+void HWChatWidget::setAdminStatus(const QString & nick, bool isAdmin)
+{
+    setStatus(nick, ListWidgetNickItem::ServerAdmin, isAdmin);
+}
 
-    // ensure we're still showing the status bulbs
-    showReady = true;
+void HWChatWidget::setRoomMasterStatus(const QString & nick, bool isAdmin)
+{
+    setStatus(nick, ListWidgetNickItem::RoomAdmin, isAdmin);
+}
+
+void HWChatWidget::setRegisteredStatus(const QStringList & nicks, bool isRegistered)
+{
+    foreach(const QString & nick, nicks)
+        setStatus(nick, ListWidgetNickItem::Registered, isRegistered);
 }
 
 void HWChatWidget::adminAccess(bool b)
