@@ -716,8 +716,8 @@ if move then
         exit
         end;
     Gear^.Pos:= 0;
-    Gear^.X:= int2hwFloat(GetRandom(snowRight-snowLeft)+snowLeft);
-    Gear^.Y:= int2hwFloat(LAND_HEIGHT-1300+(GetRandom(50)-25));
+    Gear^.X:= int2hwFloat(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft);
+    Gear^.Y:= int2hwFloat(LongInt(LAND_HEIGHT + GetRandom(50)) - 1325);
     Gear^.State:= Gear^.State or gstInvisible;
     end
 end;
@@ -3724,7 +3724,7 @@ begin
         // calc gear offset in portal normal vector direction
         noffs:= (nx * ox + ny * oy);
 
-        if isBullet and (noffs.Round >= Gear^.Radius) then
+        if isBullet and (noffs.Round >= Longword(Gear^.Radius)) then
             continue;
 
         // avoid gravity related loops of not really moving gear
@@ -4654,7 +4654,7 @@ begin
 
     if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) and (TurnTimeLeft > 0) then
         begin
-        if graves.size <= Gear^.Tag then Gear^.Tag:= 0;
+        if LongInt(graves.size) <= Gear^.Tag then Gear^.Tag:= 0;
         dec(hh^.Gear^.Health);
         if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
             hh^.Gear^.Damage:= 1;

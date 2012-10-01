@@ -1109,7 +1109,7 @@ begin
     ap.Time:= 0;
     ap.Power:= BadTurn; // use it as max score value in checkCakeWalk
 
-    FillChar(cake, sizeof(cake), 0);
+    //FillChar(cake, sizeof(cake), 0);
     cake.Radius:= 7;
     cake.CollisionMask:= $FF7F;
 

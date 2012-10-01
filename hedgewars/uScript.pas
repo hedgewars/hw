@@ -1708,7 +1708,7 @@ begin
           i := 0;
           while (i < hiddenHedgehogsNumber) do
             begin
-            if hiddenHedgehogs[i]^.gearHidden^.uid = lua_tointeger(L, 1) then
+            if hiddenHedgehogs[i]^.gearHidden^.uid = LongWord(lua_tointeger(L, 1)) then
               begin
                 hog := hiddenHedgehogs[i];
                 RestoreHog(hog);
