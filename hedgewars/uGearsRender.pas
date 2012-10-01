@@ -1018,7 +1018,7 @@ begin
                     if Gear^.Timer < 1833 then
                         begin
                         DrawTextureRotatedF(SpritesData[sprPortal].texture, min(abs(1.25 - (Gear^.Timer mod 1333) / 400), 1.25), 0, 0,
-                                            x, Gear^.Angle+WorldDy-16, 4+Gear^.Tag, 1, 32, 32, 270);
+                                            x, LongInt(Gear^.Angle) + WorldDy - 16, 4 + Gear^.Tag, 1, 32, 32, 270);
                         end
                     end;
       gtExplosives: begin
@@ -1192,17 +1192,17 @@ begin
                       HHGear := Gear^.Hedgehog^.Gear;
                       if HHGear <> nil then
                           begin
-                          i:= hwRound(hwSqr(Gear^.X-HHGear^.X)+hwSqr(Gear^.Y-HHGear^.Y));
-                          if RealTicks mod max(1,50-(round(sqrt(i)) div 4)) = 0 then // experiment in "intensifying" might not get used
+                          i:= hwRound(hwSqr(Gear^.X - HHGear^.X) + hwSqr(Gear^.Y - HHGear^.Y));
+                          if RealTicks mod max(1,50 - (round(sqrt(i)) div 4)) = 0 then // experiment in "intensifying" might not get used
                             begin
                             vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtDust, 1);
                             if vg <> nil then
                                 begin
-                                i:= random(100)+155;
-                                vg^.Tint:= i shl 24 or i shl 16 or $FF shl 8 or ((random(200)+55));
+                                i:= random(100) + 155;
+                                vg^.Tint:= i shl 24 or i shl 16 or $FF shl 8 or Longword(random(200) + 55);
                                 vg^.Angle:= random(360);
-                                vg^.dx:= 0.001 * (random(80));
-                                vg^.dy:= 0.001 * (random(80))
+                                vg^.dx:= 0.001 * random(80);
+                                vg^.dy:= 0.001 * random(80)
                                 end
                             end;
                           if RealTicks mod 2 = 0 then

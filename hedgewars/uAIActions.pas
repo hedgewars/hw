@@ -234,7 +234,7 @@ with Actions.actions[Actions.Pos] do
                 doPut(X, Y, true);
                 
             aia_waitAngle:
-                if Me^.Angle <> Abs(Param) then exit;
+                if LongInt(Me^.Angle) <> Abs(Param) then exit;
 
             aia_waitAmmoXY:
                 if (CurAmmoGear <> nil) and ((hwRound(CurAmmoGear^.X) <> X) or (hwRound(CurAmmoGear^.Y) <> Y)) then exit;

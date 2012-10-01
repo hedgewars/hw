@@ -43,25 +43,27 @@ procedure onFocusStateChanged;
 
 implementation
 uses
-    uStore,
-    uMisc,
-    uIO,
-    uLocale,
-    uSound,
-    uAmmos,
-    uVisualGears,
-    uChat,
-    uLandTexture,
-    GLunit,
-    uVariables,
-    uUtils,
-    uTextures,
-    uRender,
-    uCaptions,
-    uCursor,
-    uCommands,
-    uMobile,
-    uVideoRec
+    uStore
+    , uMisc
+    , uIO
+    , uLocale
+    , uSound
+    , uAmmos
+    , uVisualGears
+    , uChat
+    , uLandTexture
+    , GLunit
+    , uVariables
+    , uUtils
+    , uTextures
+    , uRender
+    , uCaptions
+    , uCursor
+    , uCommands
+    , uMobile
+{$IFDEF USE_VIDEO_RECORDING}    
+    , uVideoRec
+{$ENDIF}    
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;

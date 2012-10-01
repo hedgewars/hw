@@ -176,7 +176,7 @@ if(FPFLAGS OR GHFLAGS)
     endif()
 endif()
 
-set(pascal_flags ${fpflags_parsed} "-B" "-FE../bin" "-Cs2000000" "-vewn" "-dDEBUGFILE" ${pascal_flags})
+set(pascal_flags ${fpflags_parsed} "-vq" "-vm4079,4080,4081" "-B" "-FE../bin" "-Cs2000000" "-vewn" "-dDEBUGFILE" ${pascal_flags})
 set(haskell_flags "-O2" ${ghflags_parsed} ${haskell_flags})
 
 #get BUILD_TYPE and enable/disable optimisation
