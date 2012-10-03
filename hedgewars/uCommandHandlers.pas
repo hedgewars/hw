@@ -71,12 +71,12 @@ procedure chConfirm(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     if GameState = gsConfirm then
-    begin
+        begin
         SendIPC(_S'Q');
         GameState:= gsExit
-    end
-else
-    ParseCommand('chat team', true);
+        end
+    else
+        ParseCommand('chat team', true);
 end;
 
 procedure chHalt (var s: shortstring);
