@@ -376,6 +376,7 @@ begin
     else
         begin
         // err, does anyone have any documentation on this sequence?
+        // ^^ isn't it obvious? 27 is esc, 32 is space, inbetween is "/team"
         KeyPressChat(27);
         KeyPressChat(47);
         KeyPressChat(116);
