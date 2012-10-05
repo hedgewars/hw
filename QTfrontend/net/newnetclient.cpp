@@ -26,6 +26,7 @@
 #include "proto.h"
 #include "game.h"
 #include "roomslistmodel.h"
+#include "playerslistmodel.h"
 
 char delimeter='\n';
 
@@ -36,6 +37,8 @@ HWNewNet::HWNewNet() :
     netClientState(Disconnected)
 {
     m_roomsListModel = new RoomsListModel(this);
+    m_lobbyPlayersModel = new PlayersListModel(this);
+    m_roomPlayersModel = new PlayersListModel(this);
 // socket stuff
     connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
@@ -444,6 +447,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             emit nickAddedLobby(lst[i], false);
             emit chatStringLobby(lst[i], tr("%1 *** %2 has joined").arg('\x03').arg("|nick|"));
+            m_lobbyPlayersModel->addPlayer(lst[i]);
         }
         return;
     }
@@ -919,4 +923,14 @@ void HWNewNet::handleNotice(int n)
 RoomsListModel * HWNewNet::roomsListModel()
 {
     return m_roomsListModel;
+}
+
+PlayersListModel * HWNewNet::lobbyPlayersModel()
+{
+    return m_lobbyPlayersModel;
+}
+
+PlayersListModel * HWNewNet::roomPlayersModel()
+{
+    return m_roomPlayersModel;
 }

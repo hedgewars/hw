@@ -93,6 +93,7 @@
 #include "mouseoverfilter.h"
 #include "roomslistmodel.h"
 #include "recorder.h"
+#include "playerslistmodel.h"
 
 #include "DataManager.h"
 
@@ -1090,6 +1091,9 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(AuthFailed()), this, SLOT(NetAuthFailed()), Qt::QueuedConnection);
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
+
+    ui.pageRoomsList->chatWidget->setUsersModel(hwnet->lobbyPlayersModel());
+    ui.pageNetGame->pChatWidget->setUsersModel(hwnet->roomPlayersModel());
 
 // rooms list page stuff
     ui.pageRoomsList->setModel(hwnet->roomsListModel());
