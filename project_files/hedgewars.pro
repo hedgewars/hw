@@ -110,7 +110,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/net/recorder.h \
     ../QTfrontend/ui/dialog/ask_quit.h \
     ../QTfrontend/ui/dialog/upload_video.h \
-    ../QTfrontend/campaign.h
+    ../QTfrontend/campaign.h \
+    ../QTfrontend/model/playerslistmodel.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
@@ -198,7 +199,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/net/recorder.cpp \
     ../QTfrontend/ui/dialog/ask_quit.cpp \
     ../QTfrontend/ui/dialog/upload_video.cpp \
-    ../QTfrontend/campaign.cpp
+    ../QTfrontend/campaign.cpp \
+    ../QTfrontend/model/playerslistmodel.cpp
 
 
 win32 {

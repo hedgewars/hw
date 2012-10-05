@@ -34,6 +34,7 @@
 #include <QDateTime>
 #include <QTime>
 #include <QPainter>
+#include <QListView>
 
 #include <QMessageBox>
 
@@ -121,7 +122,7 @@ void ListWidgetNickItem::updateIcon()
         QPainter painter(&result);
 
         if(data(Ready).toBool())
-            painter.drawPixmap(8, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
+            painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
 
         QString mainIconName(":/res/chat/");
 
@@ -135,13 +136,13 @@ void ListWidgetNickItem::updateIcon()
         if(!data(Registered).toBool())
             mainIconName += "_gray";
 
-        painter.drawPixmap(0, 0, 16, 16, QPixmap(mainIconName + ".png"));
+        painter.drawPixmap(8, 0, 16, 16, QPixmap(mainIconName + ".png"));
 
         if(data(Ignore).toBool())
-            painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/ignore.png"));
+            painter.drawPixmap(8, 0, 16, 16, QPixmap(":/res/chat/ignore.png"));
         else
         if(data(Friend).toBool())
-            painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/friend.png"));
+            painter.drawPixmap(8, 0, 16, 16, QPixmap(":/res/chat/friend.png"));
 
         painter.end();
 
@@ -354,11 +355,11 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
             this, SLOT(linkClicked(const QUrl&)));
     mainLayout.addWidget(chatText, 0, 0, 2, 1);
 
-    chatNicks = new QListWidget(this);
+    chatNicks = new QListView(this);
     chatNicks->setIconSize(QSize(24, 16));
     chatNicks->setMinimumHeight(10);
     chatNicks->setMinimumWidth(10);
-    chatNicks->setSortingEnabled(true);
+    //chatNicks->setSortingEnabled(true);
     chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
     connect(chatNicks, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
@@ -414,7 +415,7 @@ void HWChatWidget::linkClicked(const QUrl & link)
     {
         // decode nick
         QString nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
-        QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
+        /*QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
 
         bool isOffline = (items.size() < 1);
 
@@ -447,7 +448,7 @@ void HWChatWidget::linkClicked(const QUrl & link)
         }
 
         // display menu popup at mouse cursor position
-        popup->popup(QCursor::pos());
+        popup->popup(QCursor::pos());*/
     }
 }
 
@@ -531,10 +532,10 @@ void HWChatWidget::updateNickItem(QListWidgetItem *nickItem)
 
 void HWChatWidget::updateNickItems()
 {
-    for(int i = 0; i < chatNicks->count(); i++)
+    /*for(int i = 0; i < chatNicks->count(); i++)
         updateNickItem(chatNicks->item(i));
 
-    chatNicks->sortItems();
+    chatNicks->sortItems();*/
 }
 
 void HWChatWidget::loadLists(const QString & nick)
@@ -700,12 +701,12 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
     QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), isIgnored);
     updateNickItem(item);
-    chatNicks->addItem(item);
+    /*chatNicks->addItem(item);*/
 
     if ((!isIgnored) && (nick != m_userNick)) // don't auto-complete own name
         chatEditLine->addNickname(nick);
 
-    emit nickCountUpdate(chatNicks->count());
+    //emit nickCountUpdate(chatNicks->count());
 
     if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool())
     {
@@ -718,10 +719,10 @@ void HWChatWidget::nickRemoved(const QString& nick)
 {
     chatEditLine->removeNickname(nick);
 
-    foreach(QListWidgetItem * item, chatNicks->findItems(nick, Qt::MatchExactly))
-    chatNicks->takeItem(chatNicks->row(item));
+    /*foreach(QListWidgetItem * item, chatNicks->findItems(nick, Qt::MatchExactly))
+        chatNicks->takeItem(chatNicks->row(item));*/
 
-    emit nickCountUpdate(chatNicks->count());
+    //emit nickCountUpdate(chatNicks->count());
 }
 
 void HWChatWidget::clear()
@@ -735,7 +736,7 @@ void HWChatWidget::clear()
 
     chatText->clear();
     chatStrings.clear();
-    chatNicks->clear();
+    //chatNicks->clear();
 
     // clear and re compile regexp for highlighting
     m_highlights.clear();
@@ -782,35 +783,35 @@ void HWChatWidget::clear()
 
 void HWChatWidget::onKick()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
+    /*QListWidgetItem * curritem = chatNicks->currentItem();
     if (curritem)
-        emit kick(curritem->text());
+        emit kick(curritem->text());*/
 }
 
 void HWChatWidget::onBan()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
+    /*QListWidgetItem * curritem = chatNicks->currentItem();
     if (curritem)
-        emit ban(curritem->text());
+        emit ban(curritem->text());*/
 }
 
 void HWChatWidget::onInfo()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
+    /*QListWidgetItem * curritem = chatNicks->currentItem();
     if (curritem)
-        emit info(curritem->text());
+        emit info(curritem->text());*/
 }
 
 void HWChatWidget::onFollow()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
+    /*QListWidgetItem * curritem = chatNicks->currentItem();
     if (curritem)
-        emit follow(curritem->text());
+        emit follow(curritem->text());*/
 }
 
 void HWChatWidget::onIgnore()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
+    /*QListWidgetItem * curritem = chatNicks->currentItem();
     QString nick = "";
     if(curritem != NULL)
         nick = curritem->text();
@@ -843,12 +844,12 @@ void HWChatWidget::onIgnore()
         updateNickItem(curritem); // update icon/sort order/etc
         chatNicks->sortItems();
         chatNickSelected(0); // update context menu
-    }
+    }*/
 }
 
 void HWChatWidget::onFriend()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
+    /*QListWidgetItem * curritem = chatNicks->currentItem();
     QString nick = "";
     if(curritem != NULL)
         nick = curritem->text();
@@ -879,7 +880,7 @@ void HWChatWidget::onFriend()
         updateNickItem(curritem); // update icon/sort order/etc
         chatNicks->sortItems();
         chatNickSelected(0); // update context menu
-    }
+    }*/
 }
 
 void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
@@ -896,7 +897,7 @@ void HWChatWidget::chatNickSelected(int index)
 {
     Q_UNUSED(index);
 
-    QListWidgetItem* item = chatNicks->currentItem();
+    /*QListWidgetItem* item = chatNicks->currentItem();
     QString nick = "";
     if (item != NULL)
         nick = item->text();
@@ -937,18 +938,18 @@ void HWChatWidget::chatNickSelected(int index)
     {
         acKick->setVisible(!isSelf);
         acBan->setVisible(!isSelf);
-    }
+    }*/
 }
 
 void HWChatWidget::setStatus(const QString & nick, ListWidgetNickItem::StateFlag flag, bool status)
 {
-    QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
+    /*QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
 
     if (items.size() == 1)
     {
         items[0]->setData(flag, status);
         updateNickItem(items[0]);
-    }
+    }*/
 }
 
 void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)
@@ -1102,4 +1103,11 @@ void HWChatWidget::setUser(const QString & nickname)
     m_userNick = nickname;
     nickRemoved(nickname);
     clear();
+}
+
+
+void HWChatWidget::setUsersModel(QAbstractListModel * model)
+{
+    chatNicks->setModel(model);
+    chatNicks->setModelColumn(0);
 }

@@ -21,23 +21,23 @@
 #define _CHAT_WIDGET_INCLUDED
 
 #include <QWidget>
-#include <QListWidget>
 #include <QString>
 #include <QGridLayout>
 #include <QList>
 #include <QPair>
 #include <QRegExp>
 #include <QHash>
+#include <QListWidgetItem>
 
 #include "SDLInteraction.h"
 
 #include "SmartLineEdit.h"
 
-class ListWidgetNickItem;
 class QTextBrowser;
 class QLineEdit;
-class QListWidget;
+class QListView;
 class QSettings;
+class QAbstractListModel;
 
 /// Class for custom nickname sorting
 class ListWidgetNickItem : public QListWidgetItem
@@ -87,6 +87,7 @@ class HWChatWidget : public QWidget
         void displayNotice(const QString & message);
         void displayWarning(const QString & message);
         void setUser(const QString & nickname);
+        void setUsersModel(QAbstractListModel * model);
 
     protected:
         virtual void dragEnterEvent(QDragEnterEvent * event);
@@ -137,7 +138,7 @@ class HWChatWidget : public QWidget
         QGridLayout mainLayout;
         QTextBrowser* chatText;
         QStringList chatStrings;
-        QListWidget* chatNicks;
+        QListView* chatNicks;
         SmartLineEdit* chatEditLine;
         QAction * acInfo;
         QAction * acKick;
