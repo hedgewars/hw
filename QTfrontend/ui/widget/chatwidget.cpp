@@ -357,9 +357,10 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 
     chatNicks = new QListView(this);
     chatNicks->setIconSize(QSize(24, 16));
+    chatNicks->setSelectionMode(QAbstractItemView::SingleSelection);
+    chatNicks->setEditTriggers(QAbstractItemView::NoEditTriggers);
     chatNicks->setMinimumHeight(10);
     chatNicks->setMinimumWidth(10);
-    //chatNicks->setSortingEnabled(true);
     chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
     connect(chatNicks, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
@@ -1106,7 +1107,7 @@ void HWChatWidget::setUser(const QString & nickname)
 }
 
 
-void HWChatWidget::setUsersModel(QAbstractListModel * model)
+void HWChatWidget::setUsersModel(QAbstractItemModel *model)
 {
     chatNicks->setModel(model);
     chatNicks->setModelColumn(0);

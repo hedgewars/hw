@@ -37,7 +37,7 @@ class QTextBrowser;
 class QLineEdit;
 class QListView;
 class QSettings;
-class QAbstractListModel;
+class QAbstractItemModel;
 
 /// Class for custom nickname sorting
 class ListWidgetNickItem : public QListWidgetItem
@@ -87,7 +87,7 @@ class HWChatWidget : public QWidget
         void displayNotice(const QString & message);
         void displayWarning(const QString & message);
         void setUser(const QString & nickname);
-        void setUsersModel(QAbstractListModel * model);
+        void setUsersModel(QAbstractItemModel * model);
 
     protected:
         virtual void dragEnterEvent(QDragEnterEvent * event);
