@@ -272,18 +272,10 @@ int main(int argc, char *argv[])
 
     QFile resFile(":/res/css/" + fname);
 
-    QFile & file = (extFile.exists()?extFile:resFile);
+    QFile & file = (extFile.exists() ? extFile : resFile);
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QTextStream in(&file);
-        while (!in.atEnd())
-        {
-            QString line = in.readLine();
-            if(!line.isEmpty())
-                style.append(line);
-        }
-    }
+        style.append(file.readAll());
 
     app.form = new HWForm(NULL, style);
     app.form->show();
