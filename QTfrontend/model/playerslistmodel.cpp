@@ -1,6 +1,7 @@
 #include <QModelIndexList>
 #include <QModelIndex>
 #include <QPainter>
+#include <QDebug>
 
 #include "playerslistmodel.h"
 
@@ -22,7 +23,7 @@ int PlayersListModel::rowCount(const QModelIndex &parent) const
 
 QVariant PlayersListModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid())
+    if(!index.isValid() || index.row() < 0 || index.row() >= rowCount() || index.column() != 0)
         return QVariant(QVariant::Invalid);
 
     return m_data.at(index.row()).value(role);
@@ -92,7 +93,7 @@ void PlayersListModel::addPlayer(const QString & nickname)
 
 void PlayersListModel::removePlayer(const QString & nickname)
 {
-    QModelIndexList mil = match(index(0, 0), Qt::DisplayRole, nickname);
+    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
 
     if(mil.size())
         removeRow(mil[0].row());
@@ -105,7 +106,7 @@ void PlayersListModel::setFlag(const QString &nickname, StateFlag flagType, bool
 
     if(mil.size())
     {
-        setData(mil[0], flagType, isSet);
+        setData(mil[0], isSet, flagType);
         updateIcon(mil[0]);
     }
 }
@@ -132,7 +133,6 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
     if(m_icons().contains(iconNum))
     {
         setData(index, m_icons().value(iconNum), Qt::DecorationRole);
-        qDebug("cached");
     }
     else
     {
