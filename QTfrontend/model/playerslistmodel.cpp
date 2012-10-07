@@ -85,9 +85,11 @@ void PlayersListModel::addPlayer(const QString & nickname)
 {
     insertRow(rowCount());
 
-    setData(index(rowCount() - 1), nickname);
+    QModelIndex mi = index(rowCount() - 1);
+    setData(mi, nickname);
 
-    updateIcon(index(rowCount() - 1));
+    updateSortData(mi);
+    updateIcon(mi);
 }
 
 
@@ -107,6 +109,11 @@ void PlayersListModel::setFlag(const QString &nickname, StateFlag flagType, bool
     if(mil.size())
     {
         setData(mil[0], isSet, flagType);
+
+        if(flagType == Friend || flagType == ServerAdmin
+                || flagType == Ignore || flagType == RoomAdmin)
+            updateSortData(mil[0]);
+
         updateIcon(mil[0]);
     }
 }
@@ -187,4 +194,17 @@ QHash<quint32, QIcon> & PlayersListModel::m_icons()
     static QHash<quint32, QIcon> iconsCache;
 
     return iconsCache;
+}
+
+void PlayersListModel::updateSortData(const QModelIndex & index)
+{
+    QString result = QString("%1%2%3%4%5")
+            .arg(1 - index.data(RoomAdmin).toInt())
+            .arg(1 - index.data(ServerAdmin).toInt())
+            .arg(1 - index.data(Friend).toInt())
+            .arg(index.data(Ignore).toInt())
+            .arg(index.data(Qt::DisplayRole).toString().toLower())
+            ;
+
+    setData(index, result, SortRole);
 }
