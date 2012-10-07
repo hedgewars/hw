@@ -5243,3 +5243,46 @@ if HHGear <> nil then
         end;
     end;
 end;
+
+/* Yay. More incomplete code.
+This is the set of postions for the knife.
+Using FlipSurface and copyToXY the knife can be written to the Land at 32 positions.
+0deg
+2,5   (x,y offset)
+25,5  (wXh of clip area)
+2,7   (tip x,y)
+
+11.25deg
+2,15
+24,8
+2,22
+
+22.5deg
+2,27
+23,12
+2,38
+
+33.75deg
+2,43
+21,15
+2,57
+
+45deg
+29,8
+19,19
+29,26
+
+56.25deg
+29,32
+15,21
+29,52
+
+67.5deg
+51,3
+11,23
+51,25
+
+78.75deg
+51,34
+7,24
+51,57    */
