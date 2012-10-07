@@ -20,6 +20,10 @@ public:
         Ignore      = Qt::UserRole + 5
     };
 
+    enum SpecialRoles {
+        SortRole = Qt::UserRole + 100
+    };
+
     explicit PlayersListModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -41,6 +45,7 @@ private:
     typedef QHash<int, QVariant> DataEntry;
     QList<DataEntry> m_data;
     void updateIcon(const QModelIndex & index);
+    void updateSortData(const QModelIndex & index);
 };
 
 #endif // PLAYERSLISTMODEL_H

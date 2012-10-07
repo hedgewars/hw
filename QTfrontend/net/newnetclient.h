@@ -33,7 +33,8 @@ class GameCFGWidget;
 class TeamSelWidget;
 class RoomsListModel;
 class PlayersListModel;
-class QSortFilterModel;
+class QSortFilterProxyModel;
+class QAbstractItemModel;
 
 extern char delimeter;
 
@@ -57,8 +58,8 @@ class HWNewNet : public QObject
         QString getRoom();
         QString getHost();
         RoomsListModel * roomsListModel();
-        PlayersListModel * lobbyPlayersModel();
-        PlayersListModel * roomPlayersModel();
+        QAbstractItemModel * lobbyPlayersModel();
+        QAbstractItemModel * roomPlayersModel();
 
     private:
         bool isChief;
@@ -69,8 +70,9 @@ class HWNewNet : public QObject
         QString seed;
         bool m_game_connected;
         RoomsListModel * m_roomsListModel;
-        PlayersListModel * m_lobbyPlayersModel;
-        PlayersListModel * m_roomPlayersModel;
+        PlayersListModel * m_playersModel;
+        QSortFilterProxyModel * m_lobbyPlayersModel;
+        QSortFilterProxyModel * m_roomPlayersModel;
 
         template <typename T>
         void SendCfgStrNet(T a)

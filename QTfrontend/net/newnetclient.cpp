@@ -20,6 +20,7 @@
 #include <QDebug>
 #include <QInputDialog>
 #include <QCryptographicHash>
+#include <QSortFilterProxyModel>
 
 #include "hwconsts.h"
 #include "newnetclient.h"
@@ -37,9 +38,22 @@ HWNewNet::HWNewNet() :
     netClientState(Disconnected)
 {
     m_roomsListModel = new RoomsListModel(this);
-    m_lobbyPlayersModel = new PlayersListModel(this);
-    m_roomPlayersModel = new PlayersListModel(this);
-// socket stuff
+
+    m_playersModel = new PlayersListModel(this);
+
+    m_lobbyPlayersModel = new QSortFilterProxyModel(this);
+    m_lobbyPlayersModel->setSourceModel(m_playersModel);
+    m_lobbyPlayersModel->setSortRole(PlayersListModel::SortRole);
+    m_lobbyPlayersModel->setDynamicSortFilter(true);
+    m_lobbyPlayersModel->sort(0);
+
+    m_roomPlayersModel = new QSortFilterProxyModel(this);
+    m_roomPlayersModel->setSourceModel(m_playersModel);
+    m_roomPlayersModel->setSortRole(PlayersListModel::SortRole);
+    m_roomPlayersModel->setDynamicSortFilter(true);
+    m_roomPlayersModel->sort(0);
+
+    // socket stuff
     connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
     connect(&NetSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnect()));
@@ -379,7 +393,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                                 else emit setMyReadyStatus(setFlag);
                             }
                             emit setReadyStatus(nick, setFlag);
-                            m_lobbyPlayersModel->setFlag(nick, PlayersListModel::Ready, setFlag);
+                            m_playersModel->setFlag(nick, PlayersListModel::Ready, setFlag);
                         }
                         break;
 
@@ -387,7 +401,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 case 'u':
                         emit setRegisteredStatus(nicks, setFlag);
                         foreach(const QString & nick, nicks)
-                            m_lobbyPlayersModel->setFlag(nick, PlayersListModel::Registered, setFlag);
+                            m_playersModel->setFlag(nick, PlayersListModel::Registered, setFlag);
                         break;
 
                 // flag indicating if a player is the host/master of the room
@@ -401,7 +415,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                             }
 
                             emit setRoomMasterStatus(nick, setFlag);
-                            m_lobbyPlayersModel->setFlag(nick, PlayersListModel::RoomAdmin, setFlag);
+                            m_playersModel->setFlag(nick, PlayersListModel::RoomAdmin, setFlag);
                         }
                         break;
 
@@ -413,7 +427,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                                 emit adminAccess(setFlag);
 
                             emit setAdminStatus(nick, setFlag);
-                            m_lobbyPlayersModel->setFlag(nick, PlayersListModel::ServerAdmin, setFlag);
+                            m_playersModel->setFlag(nick, PlayersListModel::ServerAdmin, setFlag);
                         }
                         break;
 
@@ -452,7 +466,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             emit nickAddedLobby(lst[i], false);
             emit chatStringLobby(lst[i], tr("%1 *** %2 has joined").arg('\x03').arg("|nick|"));
-            m_lobbyPlayersModel->addPlayer(lst[i]);
+            m_playersModel->addPlayer(lst[i]);
         }
         return;
     }
@@ -502,7 +516,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         else
             emit chatStringLobby(lst[1], tr("%1 *** %2 has left (%3)").arg('\x03').arg("|nick|", lst[2]));
 
-        m_lobbyPlayersModel->removePlayer(lst[1]);
+        m_playersModel->removePlayer(lst[1]);
 
         return;
     }
@@ -933,12 +947,12 @@ RoomsListModel * HWNewNet::roomsListModel()
     return m_roomsListModel;
 }
 
-PlayersListModel * HWNewNet::lobbyPlayersModel()
+QAbstractItemModel *HWNewNet::lobbyPlayersModel()
 {
     return m_lobbyPlayersModel;
 }
 
-PlayersListModel * HWNewNet::roomPlayersModel()
+QAbstractItemModel *HWNewNet::roomPlayersModel()
 {
     return m_roomPlayersModel;
 }
