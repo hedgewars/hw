@@ -647,6 +647,39 @@ begin
     lc_setgearpos:= 0
 end;
 
+function lc_getgearcollisionmask(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to GetGearCollisionMask!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, gear^.CollisionMask)
+        else
+            lua_pushnil(L);
+        end;
+    lc_getgearcollisionmask:= 1
+end;
+
+function lc_setgearcollisionmask(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        LuaError('Lua: Wrong number of parameters passed to SetGearCollisionMask!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            gear^.CollisionMask:= lua_tointeger(L, 2);
+        end;
+    lc_setgearcollisionmask:= 0
+end;
+
 function lc_gethoglevel(L : Plua_State): LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -2327,6 +2360,8 @@ lua_register(luaState, _P'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, _P'SetGearMessage', @lc_setgearmessage);
 lua_register(luaState, _P'GetGearPos', @lc_getgearpos);
 lua_register(luaState, _P'SetGearPos', @lc_setgearpos);
+lua_register(luaState, _P'GetGearCollisionMask', @lc_getgearcollisionmask);
+lua_register(luaState, _P'SetGearCollisionMask', @lc_setgearcollisionmask);
 lua_register(luaState, _P'GetRandom', @lc_getrandom);
 lua_register(luaState, _P'SetWind', @lc_setwind);
 lua_register(luaState, _P'GetDataPath', @lc_getdatapath);

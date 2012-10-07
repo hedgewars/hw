@@ -104,9 +104,14 @@ gear^.ImpactSound:= sndNone;
 gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
-gear^.CollisionMask:= $FFFF;
 
-if CurrentHedgehog <> nil then gear^.Hedgehog:= CurrentHedgehog;
+if CurrentHedgehog <> nil then 
+    begin
+    gear^.Hedgehog:= CurrentHedgehog;
+    if (CurrentHedgehog^.Gear <> nil) and (hwRound(CurrentHedgehog^.Gear^.X) = X) and (hwRound(CurrentHedgehog^.Gear^.Y) = Y) then
+        gear^.CollisionMask:= $FF7F;
+    end
+else gear^.CollisionMask:= $FFFF;
 
 if (Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
     gear^.Z:= cHHZ+1

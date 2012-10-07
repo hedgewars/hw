@@ -315,14 +315,14 @@ begin
         CheckCollision(Gear);
         if (Gear^.State and gstCollision) <> 0 then
             doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx);
-    end;
+        end;
 
     if (Gear^.Kind = gtGasBomb) and ((GameTicks mod 200) = 0) then
         begin
         vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeWhite);
         if vg <> nil then
             vg^.Tint:= $FFC0C000;
-    end;
+        end;
 
     if Gear^.Timer = 0 then
         begin
@@ -386,10 +386,10 @@ begin
                     FollowGear:= AddGear(hwRound(Gear^.X) - 30 + x, hwRound(Gear^.Y) - 20 + y, gtPoisonCloud, 0, _0, _0, 0);
                     end
                 end;
+            end;
+        DeleteGear(Gear);
+        exit
         end;
-    DeleteGear(Gear);
-    exit
-    end;
 
     CalcRotationDirAngle(Gear);
 
