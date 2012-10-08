@@ -52,6 +52,8 @@ HWNewNet::HWNewNet() :
     m_roomPlayersModel->setSortRole(PlayersListModel::SortRole);
     m_roomPlayersModel->setDynamicSortFilter(true);
     m_roomPlayersModel->sort(0);
+    m_roomPlayersModel->setFilterRole(PlayersListModel::RoomFilterRole);
+    m_roomPlayersModel->setFilterFixedString("1");
 
     // socket stuff
     connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
@@ -592,6 +594,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             emit nickAdded(lst[i], isChief && (lst[i] != mynick));
             emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
+            m_playersModel->playerJoinedRoom(lst[i]);
         }
         return;
     }
@@ -718,6 +721,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             {
                 emit nickAdded(lst[i], isChief && (lst[i] != mynick));
                 emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
+                m_playersModel->playerJoinedRoom(lst[i]);
             }
             return;
         }
@@ -734,6 +738,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
             else
                 emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
+            m_playersModel->playerLeftRoom(lst[1]);
             return;
         }
 

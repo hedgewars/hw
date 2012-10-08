@@ -21,7 +21,8 @@ public:
     };
 
     enum SpecialRoles {
-        SortRole = Qt::UserRole + 100
+        SortRole       = Qt::UserRole + 100,
+        RoomFilterRole = Qt::UserRole + 101
     };
 
     explicit PlayersListModel(QObject *parent = 0);
@@ -38,7 +39,10 @@ public:
 public slots:
     void addPlayer(const QString & nickname);
     void removePlayer(const QString & nickname);
+    void playerJoinedRoom(const QString & nickname);
+    void playerLeftRoom(const QString & nickname);
     void setFlag(const QString & nickname, StateFlag flagType, bool isSet);
+    void resetRoomFlags();
 
 private:
     QHash<quint32, QIcon> & m_icons();

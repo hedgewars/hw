@@ -102,6 +102,24 @@ void PlayersListModel::removePlayer(const QString & nickname)
 }
 
 
+void PlayersListModel::playerJoinedRoom(const QString & nickname)
+{
+    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
+
+    if(mil.size())
+        setData(mil[0], "1", RoomFilterRole);
+}
+
+
+void PlayersListModel::playerLeftRoom(const QString & nickname)
+{
+    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
+
+    if(mil.size())
+        setData(mil[0], "0", RoomFilterRole);
+}
+
+
 void PlayersListModel::setFlag(const QString &nickname, StateFlag flagType, bool isSet)
 {
     QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
@@ -118,6 +136,21 @@ void PlayersListModel::setFlag(const QString &nickname, StateFlag flagType, bool
     }
 }
 
+
+void PlayersListModel::resetRoomFlags()
+{
+    for(int i = rowCount() - 1; i >= 0; --i)
+    {
+        QModelIndex mi = index(i);
+
+        if(mi.data(RoomFilterRole).toString() == "1")
+        {
+            setData(mi, "0", RoomFilterRole);
+            setData(mi, false, RoomAdmin);
+            setData(mi, false, Ready);
+        }
+    }
+}
 
 void PlayersListModel::updateIcon(const QModelIndex & index)
 {
