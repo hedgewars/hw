@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QIcon>
 #include <QModelIndex>
+#include <QSet>
 
 class PlayersListModel : public QAbstractListModel
 {
@@ -43,13 +44,20 @@ public slots:
     void playerLeftRoom(const QString & nickname);
     void setFlag(const QString & nickname, StateFlag flagType, bool isSet);
     void resetRoomFlags();
+    void setNickname(const QString & nickname);
 
 private:
     QHash<quint32, QIcon> & m_icons();
     typedef QHash<int, QVariant> DataEntry;
     QList<DataEntry> m_data;
+    QSet<QString> m_friendsSet, m_ignoredSet;
+    QString m_nickname;
+
     void updateIcon(const QModelIndex & index);
     void updateSortData(const QModelIndex & index);
+    void loadSet(QSet<QString> & set, const QString & suffix);
+    void saveSet(const QSet<QString> & set, const QString & suffix);
+    void checkFriendIgnore(const QModelIndex & mi);
 };
 
 #endif // PLAYERSLISTMODEL_H
