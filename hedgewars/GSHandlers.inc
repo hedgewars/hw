@@ -5196,7 +5196,7 @@ if (Gear^.State and gstTmpFlag <> 0) then
     exit
     end;
 
-// Search out a new target, as target seek time has expired, target is dead, target is out of range, or we didn't have a target
+// Search out a new target, as target seek time has expired, target is dead, target is out of range, or we did not have a target
 if (HHGear = nil) or (Gear^.Timer = 0) or 
    (((abs(HHGear^.X.Round-Gear^.X.Round) + abs(HHGear^.Y.Round-Gear^.Y.Round) + 2) >  Gear^.Angle) and
         (Distance(HHGear^.X-Gear^.X,HHGear^.Y-Gear^.Y) > int2hwFloat(Gear^.Angle)))
@@ -5244,45 +5244,87 @@ if HHGear <> nil then
     end;
 end;
 
-/* Yay. More incomplete code.
+////////////////////////////////////////////////////////////////////////////////
+// Make the knife initial angle based on the hog attack angle, or is that too hard?
+procedure doStepKnife(Gear: PGear);
+var t, ox, oy, w, h, cx, cy, tx, ty, hx, hy : LongInt;
+begin
+    doStepFallingGear(Gear);
+    with Gear^ do
+        begin
+        if State and gstCollision <> 0 then
+            begin
+(* Yay. More incomplete code.
 This is the set of postions for the knife.
-Using FlipSurface and copyToXY the knife can be written to the Land at 32 positions.
+Using FlipSurface and copyToXY the knife can be written to the LandPixels at 32 positions, and an appropriate line drawn in Land.
 0deg
 2,5   (x,y offset)
 25,5  (wXh of clip area)
-2,7   (tip x,y)
+13,2  (centre of mass, relative to the clip)
+-13,0 (tip relative to centre of mass)
+11,0  (handle relative to centre of mass)
 
 11.25deg
 2,15
 24,8
-2,22
+13,4
+-13,3
+10,-3
 
 22.5deg
 2,27
 23,12
-2,38
+12,6
+-12,5
+10,-5
 
 33.75deg
 2,43
 21,15
-2,57
+11,7
+-11,7
+9,-6
 
 45deg
 29,8
 19,19
-29,26
+9,9
+-9,8
+8,-9
 
 56.25deg
 29,32
 15,21
-29,52
+7,10
+-7,10
+7,-10
 
 67.5deg
 51,3
 11,23
-51,25
+5,11
+-5,11
+5,-11
 
 78.75deg
 51,34
 7,24
-51,57    */
+2,11
+-2,12
+4,-11
+*)
+            DeleteGear(Gear);
+            exit
+            end
+        else
+            begin
+            t := hwRound((dX + dY) * _10);
+            if not dX.isNegative then inc(Angle, t)
+            else dec(Angle,t);
+
+            if Angle < -2048 then inc(Angle, 4096)
+            else if 2048 < Angle then dec(Angle, 4096);
+            DirAngle:= (Angle+2048) / 4096 * 360;
+            end
+        end;
+end;

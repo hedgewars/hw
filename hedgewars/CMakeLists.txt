@@ -15,10 +15,12 @@ set(engine_output_name "hwengine")
 
 set(engine_sources
     ${hwengine_project}
-    SDLh.pas
+    LuaPas.pas
     PNGh.pas
+    SDLh.pas
     uAI.pas
     uAIActions.pas
+    uAILandMarks.pas
     uAIAmmoTests.pas
     uAIMisc.pas
     uAmmos.pas
@@ -29,12 +31,15 @@ set(engine_sources
     uCommandHandlers.pas
     uConsole.pas
     uConsts.pas
+    uCursor.pas
     uDebug.pas
     uFloat.pas
     uGame.pas
     uGears.pas
     uGearsHandlers.pas
     uGearsHandlersRope.pas
+    uGearsHedgehog.pas
+    uGearsList.pas
     uGearsRender.pas
     uGearsUtils.pas
     uIO.pas
@@ -60,6 +65,7 @@ set(engine_sources
     uStore.pas
     uTeams.pas
     uTextures.pas
+    uTouch.pas
     uTypes.pas
     uUtils.pas
     uVariables.pas

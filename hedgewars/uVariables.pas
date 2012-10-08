@@ -661,7 +661,11 @@ var
             (FileName:  'slider'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 3; Height: 17; imageWidth: 3; imageHeight: 17; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprSlider
             (FileName:  'botlevels'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 22; Height: 15; imageWidth: 22; imageHeight: 15; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprBotlevels
+            Width: 22; Height: 15; imageWidth: 22; imageHeight: 15; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprBotlevels
+            (FileName:  'amKnife'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandKnife
+            (FileName:  'knife'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 29; Height: 14; imageWidth: 64; imageHeight: 64; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprKnife
             );
 
 const
@@ -2321,7 +2325,31 @@ var
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -3)
+            ejectY: -3),
+// Knife
+            (NameId: sidKnife;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_Power or
+                          ammoprop_NeedUpDown; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
+                Count: 1;
+                NumPerTurn: 3;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amKnife;
+                AttackVoice: sndNone;
+                Bounciness: 1000);
+            Slot: 6;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0)
         );
 
 const
@@ -2391,6 +2419,7 @@ const
 (*         gtIceGun *) , amIceGun
 (*        gtAddAmmo *) , amNothing
 (*  gtGenericFaller *) , amNothing
+(*          gtKnife *) , amKnife
     );
 
 var
