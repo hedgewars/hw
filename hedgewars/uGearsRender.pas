@@ -628,6 +628,7 @@ begin
                 amGasBomb: DrawSpriteRotated(sprHandCheese, hx, hy, sign, aangle);
                 amMine: DrawSpriteRotated(sprHandMine, hx, hy, sign, aangle);
                 amSMine: DrawSpriteRotated(sprHandSMine, hx, hy, sign, aangle);
+                amKnife: DrawSpriteRotatedF(sprHandKnife, hx, hy, 0, sign, aangle);
                 amSeduction: begin
                              DrawSpriteRotated(sprHandSeduction, hx, hy, sign, aangle);
                              DrawCircle(ox, oy, 248, 4, $FF, $00, $00, $AA); 
@@ -988,6 +989,7 @@ begin
                        else if Gear^.Health <> 0 then
                            DrawSpriteRotated(sprSMineOn, x, y, 0, Gear^.DirAngle)
                        else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
+           gtKnife: DrawSpriteRotatedF(sprKnife, x, y, 0, hwSign(Gear^.dX), Gear^.DirAngle);
                        
             gtCase: begin
                     if Gear^.Timer > 1000 then

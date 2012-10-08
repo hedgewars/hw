@@ -57,6 +57,7 @@
 00:54=Structure
 00:55=Land Spray
 00:56=Freezer
+00:57=Knife
 
 01:00=Let's fight!
 01:01=Round draw
