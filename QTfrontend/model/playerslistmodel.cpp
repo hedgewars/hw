@@ -1,9 +1,12 @@
 #include <QModelIndexList>
 #include <QModelIndex>
 #include <QPainter>
+#include <QFile>
+#include <QTextStream>
 #include <QDebug>
 
 #include "playerslistmodel.h"
+#include "hwconsts.h"
 
 PlayersListModel::PlayersListModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -89,7 +92,7 @@ void PlayersListModel::addPlayer(const QString & nickname)
     setData(mi, nickname);
 
     updateSortData(mi);
-    updateIcon(mi);
+    checkFriendIgnore(mi);
 }
 
 
@@ -229,6 +232,7 @@ QHash<quint32, QIcon> & PlayersListModel::m_icons()
     return iconsCache;
 }
 
+
 void PlayersListModel::updateSortData(const QModelIndex & index)
 {
     QString result = QString("%1%2%3%4%5")
@@ -240,4 +244,84 @@ void PlayersListModel::updateSortData(const QModelIndex & index)
             ;
 
     setData(index, result, SortRole);
+}
+
+
+void PlayersListModel::setNickname(const QString &nickname)
+{
+    m_nickname = nickname;
+
+    loadSet(m_friendsSet, "friends");
+    loadSet(m_ignoredSet, "ignore");
+
+    for(int i = rowCount() - 1; i >= 0; --i)
+        checkFriendIgnore(index(i));
+}
+
+
+void PlayersListModel::checkFriendIgnore(const QModelIndex &mi)
+{
+    setData(mi, m_friendsSet.contains(mi.data().toString().toLower()), Friend);
+    setData(mi, m_ignoredSet.contains(mi.data().toString().toLower()), Ignore);
+
+    updateIcon(mi);
+}
+
+void PlayersListModel::loadSet(QSet<QString> & set, const QString & suffix)
+{
+    set.clear();
+
+    QString fileName = QString("%1/%2_%3.txt").arg(cfgdir->absolutePath(), m_nickname.toLower(), suffix);
+
+    QFile txt(fileName);
+    if(!txt.open(QIODevice::ReadOnly))
+        return;
+
+    QTextStream stream(&txt);
+    stream.setCodec("UTF-8");
+
+    while(!stream.atEnd())
+    {
+        QString str = stream.readLine();
+        if(str.startsWith(";") || str.isEmpty())
+            continue;
+
+        set.insert(str.trimmed());
+    }
+
+    txt.close();
+}
+
+void PlayersListModel::saveSet(const QSet<QString> & set, const QString & suffix)
+{
+    QString fileName = QString("%1/%2_%3.txt").arg(cfgdir->absolutePath(), m_nickname.toLower(), suffix);
+
+    QFile txt(fileName);
+
+    // list empty? => rather have no file for the list than an empty one
+    if (set.isEmpty())
+    {
+        if (txt.exists())
+        {
+            // try to remove file, if successful we're done here.
+            if (txt.remove())
+                return;
+        }
+        else
+            // there is no file
+            return;
+    }
+
+    if(!txt.open(QIODevice::WriteOnly | QIODevice::Truncate))
+        return;
+
+    QTextStream stream(&txt);
+    stream.setCodec("UTF-8");
+
+    stream << "; this list is used by Hedgewars - do not edit it unless you know what you're doing!" << endl;
+
+    foreach(const QString & nick, set.values())
+        stream << nick << endl;
+
+    txt.close();
 }

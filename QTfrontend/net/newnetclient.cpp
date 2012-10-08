@@ -243,6 +243,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "NICK")
     {
         mynick = lst[1];
+        m_playersModel->setNickname(mynick);
         return ;
     }
 
@@ -446,6 +447,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         netClientState = InLobby;
         askRoomsList();
         emit LeftRoom(tr("You got kicked"));
+        m_playersModel->resetRoomFlags();
+
         return;
     }
 
@@ -462,6 +465,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             if (lst[i] == mynick)
             {
                 netClientState = InLobby;
+                m_playersModel->resetRoomFlags();
                 RawSendNet(QString("LIST"));
                 emit connected();
             }
@@ -644,6 +648,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             netClientState = InLobby;
             askRoomsList();
+            m_playersModel->resetRoomFlags();
             emit LeftRoom(tr("Room destroyed"));
             return;
         }
@@ -906,6 +911,7 @@ void HWNewNet::clearAccountsCache()
 void HWNewNet::partRoom()
 {
     netClientState = InLobby;
+    m_playersModel->resetRoomFlags();
     RawSendNet(QString("PART"));
     askRoomsList();
 }
