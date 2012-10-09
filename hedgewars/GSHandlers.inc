@@ -5336,31 +5336,33 @@ begin
                 begin
                 la:= vector2Angle(int2hwFloat(lx), int2hwFloat(ly));
                 ga:= vector2Angle(dX, dY);
+                AddFileLog('la: '+inttostr(la)+' ga: '+inttostr(ga)+' Angle: '+inttostr(Angle));
                 // change  to 0 to 4096 forced by LongWord in Gear
                 if la < 0 then la:= 4096+la;
                 if ga < 0 then ga:= 4096+ga;
-                if ((Angle < ga) and (Angle < la)) or ((Angle > ga) and (Angle > la)) then
+                if ((Angle > ga) and (Angle < la)) or ((Angle < ga) and (Angle > la)) then
                     begin
                     if Angle >= 2048 then dec(Angle, 2048)
                     else if Angle < 2048 then inc(Angle, 2048)
-                    end
+                    end;
+                AddFileLog('la: '+inttostr(la)+' ga: '+inttostr(ga)+' Angle: '+inttostr(Angle))
                 end;
             case Angle div 1024 of
                 0:  begin 
                     flipSurface(surf, true);
                     flipSurface(surf, true);
-                    BlitImageAndGenerateCollisionInfo(hwRound(X)-(w-tx), hwRound(Y)+(w-ty), w, surf)
+                    BlitImageAndGenerateCollisionInfo(gx-(w-tx), gy+(w-ty), w, surf)
                     end;
                 1:  begin
                     flipSurface(surf, false);
-                    BlitImageAndGenerateCollisionInfo(hwRound(X)-(w-tx), hwRound(Y)-ty, w, surf)
+                    BlitImageAndGenerateCollisionInfo(gx-(w-tx), gy-ty, w, surf)
                     end;
                 2:  begin // knife was actually drawn facing this way...
-                    BlitImageAndGenerateCollisionInfo(hwRound(X)-tx, hwRound(Y)-ty, w, surf)
+                    BlitImageAndGenerateCollisionInfo(gx-tx, gy-ty, w, surf)
                     end;
                 3:  begin
                     flipSurface(surf, true);
-                    BlitImageAndGenerateCollisionInfo(hwRound(X)-tx, hwRound(Y)+(w-ty), w, surf)
+                    BlitImageAndGenerateCollisionInfo(gx-tx, gy+(w-ty), w, surf)
                     end
                 end;
             SDL_FreeSurface(surf);
