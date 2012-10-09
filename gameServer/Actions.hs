@@ -151,7 +151,7 @@ processAction (ByeClient msg) = do
     mapM processAction
         [
         AnswerClients [chan] ["BYE", msg]
-        , ModifyClient (\c -> c{logonPassed = False}) -- this will effectively hide client from others while he isn't deleted from list
+        , ModifyClient (\c -> c{nick = "", logonPassed = False}) -- this will effectively hide client from others while he isn't deleted from list
         ]
 
     s <- get
