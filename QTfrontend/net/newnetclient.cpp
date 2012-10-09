@@ -466,7 +466,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             {
                 netClientState = InLobby;
                 m_playersModel->resetRoomFlags();
-                RawSendNet(QString("LIST"));
                 emit connected();
             }
 
@@ -647,7 +646,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         if(lst[0] == "ROOMABANDONED")
         {
             netClientState = InLobby;
-            askRoomsList();
             m_playersModel->resetRoomFlags();
             emit LeftRoom(tr("Room destroyed"));
             return;
@@ -913,7 +911,6 @@ void HWNewNet::partRoom()
     netClientState = InLobby;
     m_playersModel->resetRoomFlags();
     RawSendNet(QString("PART"));
-    askRoomsList();
 }
 
 bool HWNewNet::isInRoom()
