@@ -35,13 +35,15 @@
 #include <QTime>
 #include <QPainter>
 #include <QListView>
-
 #include <QMessageBox>
-
+#include <QModelIndexList>
+#include <QDebug>
+#include <QSortFilterProxyModel>
 
 #include "DataManager.h"
 #include "hwconsts.h"
 #include "gameuiconfig.h"
+#include "playerslistmodel.h"
 
 #include "chatwidget.h"
 
@@ -784,104 +786,119 @@ void HWChatWidget::clear()
 
 void HWChatWidget::onKick()
 {
-    /*QListWidgetItem * curritem = chatNicks->currentItem();
-    if (curritem)
-        emit kick(curritem->text());*/
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit kick(mil[0].data().toString());
 }
 
 void HWChatWidget::onBan()
 {
-    /*QListWidgetItem * curritem = chatNicks->currentItem();
-    if (curritem)
-        emit ban(curritem->text());*/
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit ban(mil[0].data().toString());
 }
 
 void HWChatWidget::onInfo()
 {
-    /*QListWidgetItem * curritem = chatNicks->currentItem();
-    if (curritem)
-        emit info(curritem->text());*/
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit info(mil[0].data().toString());
 }
 
 void HWChatWidget::onFollow()
 {
-    /*QListWidgetItem * curritem = chatNicks->currentItem();
-    if (curritem)
-        emit follow(curritem->text());*/
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit follow(mil[0].data().toString());
 }
 
 void HWChatWidget::onIgnore()
 {
-    /*QListWidgetItem * curritem = chatNicks->currentItem();
-    QString nick = "";
-    if(curritem != NULL)
-        nick = curritem->text();
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    QString nick;
+    if(mil.size())
+        nick = mil[0].data().toString();
     else
         nick = m_clickedNick;
 
-    if(ignoreList.contains(nick, Qt::CaseInsensitive)) // already on list - remove him
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
+
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
+
+    if(players->isFlagSet(nick, PlayersListModel::Ignore))
     {
-        ignoreList.removeAll(nick.toLower());
+        players->setFlag(nick, PlayersListModel::Ignore, false);
         chatEditLine->addNickname(nick);
         displayNotice(tr("%1 has been removed from your ignore list").arg(linkedNick(nick)));
     }
     else // not on list - add
     {
         // don't consider ignored people friends
-        if(friendsList.contains(nick, Qt::CaseInsensitive))
+        if(players->isFlagSet(nick, PlayersListModel::Friend))
             emit onFriend();
 
-        // scroll down on first ignore added so that people see where that nick went to
-        if (ignoreList.isEmpty())
-            chatNicks->scrollToBottom();
-
-        ignoreList << nick.toLower();
+        players->setFlag(nick, PlayersListModel::Ignore, true);
         chatEditLine->removeNickname(nick);
         displayNotice(tr("%1 has been added to your ignore list").arg(linkedNick(nick)));
     }
 
-    if(curritem != NULL)
+    if(mil.size())
     {
-        updateNickItem(curritem); // update icon/sort order/etc
-        chatNicks->sortItems();
+        chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
         chatNickSelected(0); // update context menu
-    }*/
+    }
 }
 
 void HWChatWidget::onFriend()
 {
-    /*QListWidgetItem * curritem = chatNicks->currentItem();
-    QString nick = "";
-    if(curritem != NULL)
-        nick = curritem->text();
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    QString nick;
+    if(mil.size())
+        nick = mil[0].data().toString();
     else
         nick = m_clickedNick;
 
-    if(friendsList.contains(nick, Qt::CaseInsensitive)) // already on list - remove him
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
+
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
+
+    if(players->isFlagSet(nick, PlayersListModel::Friend))
     {
-        friendsList.removeAll(nick.toLower());
+        players->setFlag(nick, PlayersListModel::Friend, false);
+        chatEditLine->removeNickname(nick);
         displayNotice(tr("%1 has been removed from your friends list").arg(linkedNick(nick)));
     }
     else // not on list - add
     {
-        // don't ignore the new friend
-        if(ignoreList.contains(nick, Qt::CaseInsensitive))
+        if(players->isFlagSet(nick, PlayersListModel::Ignore))
             emit onIgnore();
 
-        // scroll up on first friend added so that people see where that nick went to
-        if (friendsList.isEmpty())
-            chatNicks->scrollToTop();
-
-        friendsList << nick.toLower();
+        players->setFlag(nick, PlayersListModel::Friend, true);
+        chatEditLine->addNickname(nick);
         displayNotice(tr("%1 has been added to your friends list").arg(linkedNick(nick)));
     }
 
-    if(curritem != NULL)
+    if(mil.size())
     {
-        updateNickItem(curritem); // update icon/sort order/etc
-        chatNicks->sortItems();
+        chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
         chatNickSelected(0); // update context menu
-    }*/
+    }
 }
 
 void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)

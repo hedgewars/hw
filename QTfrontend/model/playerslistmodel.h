@@ -32,6 +32,8 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::DisplayRole);
+    void setFlag(const QString & nickname, StateFlag flagType, bool isSet);
+    bool isFlagSet(const QString & nickname, StateFlag flagType);
 
     bool insertRow(int row, const QModelIndex &parent = QModelIndex());
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
@@ -42,7 +44,6 @@ public slots:
     void removePlayer(const QString & nickname);
     void playerJoinedRoom(const QString & nickname);
     void playerLeftRoom(const QString & nickname);
-    void setFlag(const QString & nickname, StateFlag flagType, bool isSet);
     void resetRoomFlags();
     void setNickname(const QString & nickname);
 
