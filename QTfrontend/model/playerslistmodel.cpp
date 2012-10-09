@@ -135,10 +135,40 @@ void PlayersListModel::setFlag(const QString &nickname, StateFlag flagType, bool
                 || flagType == Ignore || flagType == RoomAdmin)
             updateSortData(mil[0]);
 
+        if(flagType == Friend)
+        {
+            if(isSet)
+                m_friendsSet.insert(nickname.toLower());
+            else
+                m_friendsSet.remove(nickname.toLower());
+
+            saveSet(m_friendsSet, "friends");
+        }
+
+        if(flagType == Ignore)
+        {
+            if(isSet)
+                m_ignoredSet.insert(nickname.toLower());
+            else
+                m_ignoredSet.remove(nickname.toLower());
+
+            saveSet(m_ignoredSet, "ignore");
+        }
+
         updateIcon(mil[0]);
     }
 }
 
+
+bool PlayersListModel::isFlagSet(const QString & nickname, StateFlag flagType)
+{
+    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
+
+    if(mil.size())
+        return mil[0].data(flagType).toBool();
+    else
+        return false;
+}
 
 void PlayersListModel::resetRoomFlags()
 {
@@ -151,6 +181,9 @@ void PlayersListModel::resetRoomFlags()
             setData(mi, "0", RoomFilterRole);
             setData(mi, false, RoomAdmin);
             setData(mi, false, Ready);
+
+            updateSortData(mi);
+            updateIcon(mi);
         }
     }
 }
@@ -294,6 +327,8 @@ void PlayersListModel::loadSet(QSet<QString> & set, const QString & suffix)
 
 void PlayersListModel::saveSet(const QSet<QString> & set, const QString & suffix)
 {
+    qDebug("saving set");
+
     QString fileName = QString("%1/%2_%3.txt").arg(cfgdir->absolutePath(), m_nickname.toLower(), suffix);
 
     QFile txt(fileName);
