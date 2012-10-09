@@ -5247,84 +5247,128 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 // Make the knife initial angle based on the hog attack angle, or is that too hard?
 procedure doStepKnife(Gear: PGear);
-var t, ox, oy, w, h, cx, cy, tx, ty, hx, hy : LongInt;
+var t, 
+    gx, gy, ga,  // gear x,y,angle
+    lx, ly, la, // land x,y,angle
+    ox, oy, // x,y offset
+    w, h,   // wXh of clip area
+    tx, ty  // tip position in sprite
+    : LongInt;
+    surf: PSDL_Surface;
+    s: hwFloat;
+
 begin
-    doStepFallingGear(Gear);
+    Gear^.dY := Gear^.dY + cGravity;
+    if (GameFlags and gfMoreWind) <> 0 then
+        Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density;
+    Gear^.X := Gear^.X + Gear^.dX;
+    Gear^.Y := Gear^.Y + Gear^.dY;
+    CheckGearDrowning(Gear);
+    gx:= hwRound(Gear^.X);
+    gy:= hwRound(Gear^.Y);
+    if Gear^.State and gstDrowning <> 0 then exit;
     with Gear^ do
         begin
-        if State and gstCollision <> 0 then
+        if CheckLandValue(gx, gy, $FF00) then
             begin
-(* Yay. More incomplete code.
-This is the set of postions for the knife.
-Using FlipSurface and copyToXY the knife can be written to the LandPixels at 32 positions, and an appropriate line drawn in Land.
-0deg
-2,5   (x,y offset)
-25,5  (wXh of clip area)
-13,2  (centre of mass, relative to the clip)
--13,0 (tip relative to centre of mass)
-11,0  (handle relative to centre of mass)
+            t:= Angle + hwRound((hwAbs(dX)+hwAbs(dY)) * _10); 
 
-11.25deg
-2,15
-24,8
-13,4
--13,3
-10,-3
+            if t < 0 then inc(t, 4096)
+            else if 4095 < t then dec(t, 4096);
+            Angle:= t;
 
-22.5deg
-2,27
-23,12
-12,6
--12,5
-10,-5
-
-33.75deg
-2,43
-21,15
-11,7
--11,7
-9,-6
-
-45deg
-29,8
-19,19
-9,9
--9,8
-8,-9
-
-56.25deg
-29,32
-15,21
-7,10
--7,10
-7,-10
-
-67.5deg
-51,3
-11,23
-5,11
--5,11
-5,-11
-
-78.75deg
-51,34
-7,24
-2,11
--2,12
-4,-11
-*)
-            DeleteGear(Gear);
-            exit
+            DirAngle:= Angle / 4096 * 360
             end
         else
             begin
-            t := hwRound((dX + dY) * _10);
-            if not dX.isNegative then inc(Angle, t)
-            else dec(Angle,t);
-
-            if Angle < -2048 then inc(Angle, 4096)
-            else if 2048 < Angle then dec(Angle, 4096);
-            DirAngle:= (Angle+2048) / 4096 * 360;
+//This is the set of postions for the knife.
+//Using FlipSurface and copyToXY the knife can be written to the LandPixels at 32 positions, and an appropriate line drawn in Land.
+            t:= Angle mod 1024;
+            case t div 128 of
+                0:  begin
+                    ox:=   2; oy:= 5;
+                    w :=  25;  h:= 5;
+                    tx:=   0; ty:= 2
+                    end;
+                1:  begin
+                    ox:=   2; oy:= 15;
+                     w:=  24;  h:=  8;
+                    tx:=   0; ty:=  7
+                    end;
+                2:  begin
+                    ox:=   2; oy:= 27;
+                     w:=  23;  h:= 12;
+                    tx:= -12; ty:= -5
+                    end;
+                3:  begin
+                    ox:=   2; oy:= 43;
+                     w:=  21;  h:= 15;
+                    tx:=   0; ty:= 14
+                    end;
+                4:  begin
+                    ox:= 29; oy:=  8;
+                     w:= 19;  h:= 19;
+                    tx:=  0; ty:= 17 
+                    end;
+                5:  begin
+                    ox:= 29; oy:=  32;
+                     w:= 15;  h:=  21;
+                    tx:=  0; ty:=  20
+                    end;
+                6:  begin
+                    ox:= 51; oy:=   3;
+                     w:= 11;  h:=  23;
+                    tx:=  0; ty:=  22 
+                    end;
+                7:  begin
+                    ox:= 51; oy:=  34;
+                     w:=  7;  h:=  24;
+                    tx:=  0; ty:=  23
+                    end
+                end;
+                
+            surf:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
+            copyToXYFromRect(SpritesData[sprKnife].Surface, surf, ox, oy, w, h, 0, 0);
+            // try to make the knife hit point first
+            lx := 0;
+            ly := 0;
+            if CalcSlopeTangent(Gear, gx, gy, lx, ly, 255) then
+                begin
+                la:= vector2Angle(int2hwFloat(lx), int2hwFloat(ly));
+                ga:= vector2Angle(dX, dY);
+                // change  to 0 to 4096 forced by LongWord in Gear
+                if la < 0 then la:= 4096+la;
+                if ga < 0 then ga:= 4096+ga;
+                if ((Angle < ga) and (Angle < la)) or ((Angle > ga) and (Angle > la)) then
+                    begin
+                    if Angle >= 2048 then dec(Angle, 2048)
+                    else if Angle < 2048 then inc(Angle, 2048)
+                    end
+                end;
+            case Angle div 1024 of
+                0:  begin 
+                    flipSurface(surf, true);
+                    flipSurface(surf, true);
+                    BlitImageAndGenerateCollisionInfo(hwRound(X)-(w-tx), hwRound(Y)+(w-ty), w, surf)
+                    end;
+                1:  begin
+                    flipSurface(surf, false);
+                    BlitImageAndGenerateCollisionInfo(hwRound(X)-(w-tx), hwRound(Y)-ty, w, surf)
+                    end;
+                2:  begin // knife was actually drawn facing this way...
+                    BlitImageAndGenerateCollisionInfo(hwRound(X)-tx, hwRound(Y)-ty, w, surf)
+                    end;
+                3:  begin
+                    flipSurface(surf, true);
+                    BlitImageAndGenerateCollisionInfo(hwRound(X)-tx, hwRound(Y)+(w-ty), w, surf)
+                    end
+                end;
+            SDL_FreeSurface(surf);
+            // this needs to calculate actual width/height + land clipping since update texture doesn't.
+            // i.e. this will crash if you fire near sides of map, but until I get the blit right, not going to put real values
+            UpdateLandTexture(hwRound(X)-32, 64, hwRound(Y)-32, 64, true);
+            DeleteGear(Gear);
+            exit
             end
         end;
 end;
