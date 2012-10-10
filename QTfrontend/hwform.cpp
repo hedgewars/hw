@@ -626,19 +626,6 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     {
         config->reloadVideosValues();
     }
-
-    // load and save ignore/friends lists
-    if (lastid == ID_PAGE_NETGAME) // leaving a room
-        ui.pageNetGame->pChatWidget->saveLists(ui.pageOptions->editNetNick->text());
-    else if(lastid == ID_PAGE_ROOMSLIST) // leaving the lobby
-        ui.pageRoomsList->chatWidget->saveLists(ui.pageOptions->editNetNick->text());
-
-    if (id == ID_PAGE_NETGAME) // joining a room
-        ui.pageNetGame->pChatWidget->loadLists(ui.pageOptions->editNetNick->text());
-// joining the lobby
-    else if (id == ID_PAGE_ROOMSLIST)
-        ui.pageRoomsList->chatWidget->loadLists(ui.pageOptions->editNetNick->text());
-
 }
 
 void HWForm::GoToPage(int id)
