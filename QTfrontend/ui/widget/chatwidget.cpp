@@ -828,9 +828,6 @@ void HWChatWidget::setUsersModel(QAbstractItemModel *model)
 
     chatNicks->setModel(model);
     chatNicks->setModelColumn(0);
-
-    connect(chatNicks->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-            this, SLOT(chatNickSelected()));
 }
 
 void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
