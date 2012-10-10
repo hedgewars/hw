@@ -39,6 +39,7 @@
 #include <QModelIndexList>
 #include <QDebug>
 #include <QSortFilterProxyModel>
+#include <QMenu>
 
 #include "DataManager.h"
 #include "hwconsts.h"
@@ -364,11 +365,12 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     chatNicks->setMinimumHeight(10);
     chatNicks->setMinimumWidth(10);
     chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
+    chatNicks->setContextMenuPolicy(Qt::CustomContextMenu);
+
     connect(chatNicks, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
             this, SLOT(chatNickDoubleClicked(QListWidgetItem *)));
-    connect(chatNicks, SIGNAL(currentRowChanged(int)),
-            this, SLOT(chatNickSelected(int)));
+
+    connect(chatNicks, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(nicksContextMenuRequested(QPoint)));
 
     mainLayout.addWidget(chatNicks, 0, 1, 3, 1);
 
@@ -406,6 +408,9 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     setShowFollow(true);
 
     setAcceptDrops(true);
+
+    m_nicksMenu = new QMenu(this);
+
     clear();
 }
 
@@ -709,7 +714,7 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
     if ((!isIgnored) && (nick != m_userNick)) // don't auto-complete own name
         chatEditLine->addNickname(nick);
 
-    //emit nickCountUpdate(chatNicks->count());
+    emit nickCountUpdate(chatNicks->model()->rowCount());
 
     if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool())
     {
@@ -855,7 +860,7 @@ void HWChatWidget::onIgnore()
     if(mil.size())
     {
         chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
-        chatNickSelected(0); // update context menu
+        chatNickSelected(); // update context menu
     }
 }
 
@@ -897,7 +902,7 @@ void HWChatWidget::onFriend()
     if(mil.size())
     {
         chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
-        chatNickSelected(0); // update context menu
+        chatNickSelected(); // update context menu
     }
 }
 
@@ -911,52 +916,8 @@ void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
     actions.first()->activate(QAction::Trigger);
 }
 
-void HWChatWidget::chatNickSelected(int index)
+void HWChatWidget::chatNickSelected()
 {
-    Q_UNUSED(index);
-
-    /*QListWidgetItem* item = chatNicks->currentItem();
-    QString nick = "";
-    if (item != NULL)
-        nick = item->text();
-    else
-        nick = m_clickedNick;
-
-    // don't display all actions for own nick
-    bool isSelf = (nick == m_userNick);
-
-    acFollow->setVisible(!isSelf);
-
-    // update context menu labels according to possible action
-    if(ignoreList.contains(nick, Qt::CaseInsensitive))
-    {
-        acIgnore->setText(QAction::tr("Unignore"));
-        acIgnore->setIcon(QIcon(":/res/unignore.png"));
-    }
-    else
-    {
-        acIgnore->setText(QAction::tr("Ignore"));
-        acIgnore->setIcon(QIcon(":/res/ignore.png"));
-        acIgnore->setVisible(!isSelf);
-    }
-
-    if(friendsList.contains(nick, Qt::CaseInsensitive))
-    {
-        acFriend->setText(QAction::tr("Remove friend"));
-        acFriend->setIcon(QIcon(":/res/remfriend.png"));
-    }
-    else
-    {
-        acFriend->setText(QAction::tr("Add friend"));
-        acFriend->setIcon(QIcon(":/res/addfriend.png"));
-        acFriend->setVisible(!isSelf);
-    }
-
-    if (m_isAdmin)
-    {
-        acKick->setVisible(!isSelf);
-        acBan->setVisible(!isSelf);
-    }*/
 }
 
 void HWChatWidget::setStatus(const QString & nick, ListWidgetNickItem::StateFlag flag, bool status)
@@ -1126,6 +1087,74 @@ void HWChatWidget::setUser(const QString & nickname)
 
 void HWChatWidget::setUsersModel(QAbstractItemModel *model)
 {
+    chatNicks->selectionModel()->deleteLater();
+
     chatNicks->setModel(model);
     chatNicks->setModelColumn(0);
+
+    connect(chatNicks->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
+            this, SLOT(chatNickSelected()));
+}
+
+void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
+{
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    QString nick;
+
+    if(mil.size())
+        nick = mil[0].data().toString();
+    else
+        nick = m_clickedNick;
+
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
+
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
+
+    bool isSelf = (nick == m_userNick);
+
+    acFollow->setVisible(!isSelf);
+
+    // update context menu labels according to possible action
+    if(players->isFlagSet(nick, PlayersListModel::Ignore))
+    {
+        acIgnore->setText(QAction::tr("Unignore"));
+        acIgnore->setIcon(QIcon(":/res/unignore.png"));
+    }
+    else
+    {
+        acIgnore->setText(QAction::tr("Ignore"));
+        acIgnore->setIcon(QIcon(":/res/ignore.png"));
+        acIgnore->setVisible(!isSelf);
+    }
+
+    if(players->isFlagSet(nick, PlayersListModel::Friend))
+    {
+        acFriend->setText(QAction::tr("Remove friend"));
+        acFriend->setIcon(QIcon(":/res/remfriend.png"));
+    }
+    else
+    {
+        acFriend->setText(QAction::tr("Add friend"));
+        acFriend->setIcon(QIcon(":/res/addfriend.png"));
+        acFriend->setVisible(!isSelf);
+    }
+
+    if (m_isAdmin)
+    {
+        acKick->setVisible(!isSelf);
+        acBan->setVisible(!isSelf);
+    }
+
+    m_nicksMenu->clear();
+
+    foreach(QAction * action, chatNicks->actions())
+        m_nicksMenu->addAction(action);
+
+    m_nicksMenu->popup(chatNicks->mapToGlobal(pos));
 }

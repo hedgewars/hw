@@ -38,6 +38,7 @@ class QLineEdit;
 class QListView;
 class QSettings;
 class QAbstractItemModel;
+class QMenu;
 
 /// Class for custom nickname sorting
 class ListWidgetNickItem : public QListWidgetItem
@@ -147,6 +148,7 @@ class HWChatWidget : public QWidget
         QAction * acIgnore;
         QAction * acFriend;
         QSettings * gameSettings;
+        QMenu * m_nicksMenu;
         QStringList m_helloSounds;
         QString m_hilightSound;
         QString m_userNick;
@@ -166,8 +168,9 @@ class HWChatWidget : public QWidget
         void onIgnore();
         void onFriend();
         void chatNickDoubleClicked(QListWidgetItem * item);
-        void chatNickSelected(int index);
+        void chatNickSelected();
         void linkClicked(const QUrl & link);
+        void nicksContextMenuRequested(const QPoint & pos);
 };
 
 #endif // _CHAT_WIDGET_INCLUDED
