@@ -5351,7 +5351,7 @@ begin
                 0:  begin 
                     flipSurface(surf, true);
                     flipSurface(surf, true);
-                    BlitImageAndGenerateCollisionInfo(gx-(w-tx), gy+(w-ty), w, surf)
+                    BlitImageAndGenerateCollisionInfo(gx-(w-tx), gy-(h-ty), w, surf)
                     end;
                 1:  begin
                     flipSurface(surf, false);
@@ -5362,7 +5362,7 @@ begin
                     end;
                 3:  begin
                     flipSurface(surf, true);
-                    BlitImageAndGenerateCollisionInfo(gx-tx, gy+(w-ty), w, surf)
+                    BlitImageAndGenerateCollisionInfo(gx-tx, gy-(h-ty), w, surf)
                     end
                 end;
             SDL_FreeSurface(surf);
