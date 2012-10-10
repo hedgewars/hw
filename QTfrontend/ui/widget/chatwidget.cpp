@@ -19,25 +19,16 @@
 
 #include <QDesktopServices>
 #include <QTextBrowser>
-#include <QLineEdit>
 #include <QAction>
-#include <QTextDocument>
 #include <QFile>
-#include <QList>
-#include <QSettings>
 #include <QTextStream>
 #include <QMenu>
 #include <QCursor>
-#include <QScrollBar>
 #include <QItemSelectionModel>
-#include <QStringList>
 #include <QDateTime>
 #include <QTime>
-#include <QPainter>
 #include <QListView>
-#include <QMessageBox>
 #include <QModelIndexList>
-#include <QDebug>
 #include <QSortFilterProxyModel>
 #include <QMenu>
 
@@ -245,8 +236,8 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatNicks->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(chatNicks, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-            this, SLOT(chatNickDoubleClicked(QListWidgetItem *)));
+    connect(chatNicks, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(chatNickDoubleClicked(QModelIndex)));
 
     connect(chatNicks, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(nicksContextMenuRequested(QPoint)));
 
@@ -301,40 +292,21 @@ void HWChatWidget::linkClicked(const QUrl & link)
     {
         // decode nick
         QString nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
-        /*QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
+        QModelIndexList mil = chatNicks->model()->match(chatNicks->model()->index(0, 0), Qt::DisplayRole, nick);
 
-        bool isOffline = (items.size() < 1);
-
-        QMenu * popup = new QMenu(this);
+        bool isOffline = (mil.size() < 1);
 
         if (isOffline)
         {
             m_clickedNick = nick;
-            chatNickSelected(0); // update friend and ignore entry
-            chatNicks->setCurrentItem(NULL, QItemSelectionModel::Clear);
+            chatNicks->selectionModel()->clearSelection();
         }
         else
         {
-            // selecting an item will automatically scroll there, so let's save old position
-            QScrollBar * scrollBar = chatNicks->verticalScrollBar();
-            int oldScrollPos = scrollBar->sliderPosition();
-            // select the nick which we want to see the actions for
-            chatNicks->setCurrentItem(items[0], QItemSelectionModel::Clear);
-            // selecting an item will automatically scroll there, so let's save old position
-            scrollBar->setSliderPosition(oldScrollPos);
+            chatNicks->selectionModel()->select(mil[0], QItemSelectionModel::ClearAndSelect);
         }
 
-        // load actions
-        QList<QAction *> actions = chatNicks->actions();
-
-        foreach(QAction * action, actions)
-        {
-            if ((!isOffline) || (action->data().toBool()))
-                popup->addAction(action);
-        }
-
-        // display menu popup at mouse cursor position
-        popup->popup(QCursor::pos());*/
+        nicksContextMenuRequested(chatNicks->mapFromGlobal(QCursor::pos()));
     }
 }
 
@@ -707,17 +679,15 @@ void HWChatWidget::onFriend()
     if(mil.size())
         chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
 }
-/*
-void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
+
+void HWChatWidget::chatNickDoubleClicked(const QModelIndex &index)
 {
-    if (item != NULL)
-        m_clickedNick = item->text();
-    else
-        m_clickedNick = "";
+    m_clickedNick = index.data().toString();
+
     QList<QAction *> actions = chatNicks->actions();
     actions.first()->activate(QAction::Trigger);
 }
-*/
+
 
 void HWChatWidget::adminAccess(bool b)
 {

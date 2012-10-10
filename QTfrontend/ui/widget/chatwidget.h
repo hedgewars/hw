@@ -131,6 +131,7 @@ class HWChatWidget : public QWidget
         void onFollow();
         void onIgnore();
         void onFriend();
+        void chatNickDoubleClicked(const QModelIndex & index);
         void linkClicked(const QUrl & link);
         void nicksContextMenuRequested(const QPoint & pos);
 };
