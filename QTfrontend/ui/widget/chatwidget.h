@@ -40,29 +40,6 @@ class QSettings;
 class QAbstractItemModel;
 class QMenu;
 
-/// Class for custom nickname sorting
-class ListWidgetNickItem : public QListWidgetItem
-{
-    public:
-        enum StateFlag {
-            Ready       = Qt::UserRole,
-            ServerAdmin = Qt::UserRole + 1,
-            RoomAdmin   = Qt::UserRole + 2,
-            Registered  = Qt::UserRole + 3,
-            Friend      = Qt::UserRole + 4,
-            Ignore      = Qt::UserRole + 5
-        };
-
-        ListWidgetNickItem(const QString & nick, bool isFriend, bool isIgnored);
-        void setData(StateFlag role, const QVariant &value);
-        bool operator<(const QListWidgetItem & other) const;        
-
-    private:
-        QHash<quint32, QIcon> & m_icons();
-        void updateIcon();
-};
-
-
 /**
  * @brief Chat widget.
  *
@@ -78,11 +55,8 @@ class HWChatWidget : public QWidget
 
     public:
         HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify);
-        void loadLists(const QString & nick);
-        void saveLists(const QString & nick);
         void setIgnoreListKick(bool enabled); ///< automatically kick people on ignore list (if possible)
         void setShowFollow(bool enabled);
-        QStringList ignoreList, friendsList;
         static const QString & styleSheet();
         void displayError(const QString & message);
         void displayNotice(const QString & message);
@@ -103,10 +77,6 @@ class HWChatWidget : public QWidget
 
         static void setStyleSheet(const QString & styleSheet = "");
 
-        void loadList(QStringList & list, const QString & file);
-        void saveList(QStringList & list, const QString & file);
-        void updateNickItem(QListWidgetItem *item);
-        void updateNickItems();
         void addLine(const QString & cssClass, QString line, bool isHighlight = false);
         bool parseCommand(const QString & line);
         void discardStyleSheet();
@@ -120,10 +90,6 @@ class HWChatWidget : public QWidget
         void nickAdded(const QString& nick, bool notifyNick);
         void nickRemoved(const QString& nick);
         void clear();
-        void setReadyStatus(const QString & nick, bool isReady);
-        void setAdminStatus(const QString & nick, bool isAdmin);
-        void setRoomMasterStatus(const QString & nick, bool isAdmin);
-        void setRegisteredStatus(const QStringList & nicks, bool isRegistered);
         void adminAccess(bool);
 
     signals:
@@ -157,8 +123,6 @@ class HWChatWidget : public QWidget
         bool notify;
         bool m_autoKickEnabled;
 
-        void setStatus(const QString & nick, ListWidgetNickItem::StateFlag flag, bool status);
-
     private slots:
         void returnPressed();
         void onBan();
@@ -167,8 +131,6 @@ class HWChatWidget : public QWidget
         void onFollow();
         void onIgnore();
         void onFriend();
-        void chatNickDoubleClicked(QListWidgetItem * item);
-        void chatNickSelected();
         void linkClicked(const QUrl & link);
         void nicksContextMenuRequested(const QPoint & pos);
 };

@@ -49,128 +49,6 @@
 #include "chatwidget.h"
 
 
-ListWidgetNickItem::ListWidgetNickItem(const QString& nick, bool isFriend, bool isIgnored) : QListWidgetItem(nick)
-{
-    setData(Friend, isFriend);
-    setData(Ignore, isIgnored);
-}
-
-void ListWidgetNickItem::setData(StateFlag role, const QVariant &value)
-{
-    QListWidgetItem::setData(role, value);
-
-    updateIcon();
-}
-
-bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
-{
-    // case in-sensitive comparison of the associated strings
-    // chars that are no letters are sorted at the end of the list
-
-    ListWidgetNickItem otherNick = const_cast<ListWidgetNickItem &>(dynamic_cast<const ListWidgetNickItem &>(other));
-
-    // ignored always down
-    if (data(Ignore).toBool() != otherNick.data(Ignore).toBool())
-        return !data(Ignore).toBool();
-
-    // friends always up
-    if (data(Friend).toBool() != otherNick.data(Friend).toBool())
-        return data(Friend).toBool();
-
-    QString txt1 = text().toLower();
-    QString txt2 = other.text().toLower();
-
-    bool firstIsShorter = (txt1.size() < txt2.size());
-    int len = firstIsShorter?txt1.size():txt2.size();
-
-    for (int i = 0; i < len; i++)
-    {
-        if (txt1[i] == txt2[i])
-            continue;
-        if (txt1[i].isLetter() != txt2[i].isLetter())
-            return txt1[i].isLetter();
-        return (txt1[i] < txt2[i]);
-    }
-
-    return firstIsShorter;
-}
-
-void ListWidgetNickItem::updateIcon()
-{
-    quint32 iconNum = 0;
-
-    QList<bool> flags;
-    flags
-        << data(Ready).toBool()
-        << data(ServerAdmin).toBool()
-        << data(RoomAdmin).toBool()
-        << data(Registered).toBool()
-        << data(Friend).toBool()
-        << data(Ignore).toBool()
-        ;
-
-    for(int i = flags.size() - 1; i >= 0; --i)
-        if(flags[i])
-            iconNum |= 1 << i;
-
-    if(m_icons().contains(iconNum))
-    {
-        setIcon(m_icons().value(iconNum));
-    }
-    else
-    {
-        QPixmap result(24, 16);
-        result.fill(Qt::transparent);
-
-        QPainter painter(&result);
-
-        if(data(Ready).toBool())
-            painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
-
-        QString mainIconName(":/res/chat/");
-
-        if(data(RoomAdmin).toBool())
-            mainIconName += "roomadmin";
-        else if(data(ServerAdmin).toBool())
-            mainIconName += "serveradmin";
-        else
-            mainIconName += "hedgehog";
-
-        if(!data(Registered).toBool())
-            mainIconName += "_gray";
-
-        painter.drawPixmap(8, 0, 16, 16, QPixmap(mainIconName + ".png"));
-
-        if(data(Ignore).toBool())
-            painter.drawPixmap(8, 0, 16, 16, QPixmap(":/res/chat/ignore.png"));
-        else
-        if(data(Friend).toBool())
-            painter.drawPixmap(8, 0, 16, 16, QPixmap(":/res/chat/friend.png"));
-
-        painter.end();
-
-        QIcon icon(result);
-
-        setIcon(icon);
-        m_icons().insert(iconNum, icon);
-    }
-
-    if(data(Ignore).toBool())
-        setForeground(Qt::gray);
-    else
-    if(data(Friend).toBool())
-        setForeground(Qt::green);
-    else
-        setForeground(QBrush(QColor(0xff, 0xcc, 0x00)));
-}
-
-QHash<quint32, QIcon> & ListWidgetNickItem::m_icons()
-{
-    static QHash<quint32, QIcon> iconsCache;
-
-    return iconsCache;
-}
-
 QString * HWChatWidget::s_styleSheet = NULL;
 QStringList * HWChatWidget::s_displayNone = NULL;
 bool HWChatWidget::s_isTimeStamped = true;
@@ -479,86 +357,6 @@ void HWChatWidget::setIgnoreListKick(bool enabled)
     m_autoKickEnabled = enabled;
 }
 
-void HWChatWidget::loadList(QStringList & list, const QString & file)
-{
-    list.clear();
-    QFile txt(cfgdir->absolutePath() + "/" + file);
-    if(!txt.open(QIODevice::ReadOnly))
-        return;
-    QTextStream stream(&txt);
-    stream.setCodec("UTF-8");
-
-    while(!stream.atEnd())
-    {
-        QString str = stream.readLine();
-        if(str.startsWith(";") || str.length() == 0)
-            continue;
-        list << str.trimmed();
-    }
-    //readd once we require newer Qt than 4.4
-    //list.removeDuplicates();
-    txt.close();
-}
-
-void HWChatWidget::saveList(QStringList & list, const QString & file)
-{
-    QFile txt(cfgdir->absolutePath() + "/" + file);
-
-    // list empty? => rather have no file for the list than an empty one
-    if (list.isEmpty())
-    {
-        if (txt.exists())
-        {
-            // try to remove file, if successful we're done here.
-            if (txt.remove())
-                return;
-        }
-        else
-            // there is no file
-            return;
-    }
-
-    if(!txt.open(QIODevice::WriteOnly | QIODevice::Truncate))
-        return;
-    QTextStream stream(&txt);
-    stream.setCodec("UTF-8");
-
-    stream << "; this list is used by Hedgewars - do not edit it unless you know what you're doing!" << endl;
-    for(int i = 0; i < list.size(); i++)
-        stream << list[i] << endl;
-    txt.close();
-}
-
-void HWChatWidget::updateNickItem(QListWidgetItem *nickItem)
-{
-    QString nick = nickItem->text();
-    ListWidgetNickItem * item = dynamic_cast<ListWidgetNickItem*>(nickItem);
-
-    item->setData(ListWidgetNickItem::Friend, QVariant(friendsList.contains(nick, Qt::CaseInsensitive)));
-    item->setData(ListWidgetNickItem::Ignore, QVariant(ignoreList.contains(nick, Qt::CaseInsensitive)));
-}
-
-void HWChatWidget::updateNickItems()
-{
-    /*for(int i = 0; i < chatNicks->count(); i++)
-        updateNickItem(chatNicks->item(i));
-
-    chatNicks->sortItems();*/
-}
-
-void HWChatWidget::loadLists(const QString & nick)
-{
-    loadList(ignoreList, nick.toLower() + "_ignore.txt");
-    loadList(friendsList, nick.toLower() + "_friends.txt");
-    updateNickItems();
-}
-
-void HWChatWidget::saveLists(const QString & nick)
-{
-    saveList(ignoreList, nick.toLower() + "_ignore.txt");
-    saveList(friendsList, nick.toLower() + "_friends.txt");
-}
-
 
 void HWChatWidget::returnPressed()
 {
@@ -599,16 +397,23 @@ const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http://)?(www\\.)?(hedgewars\\
 
 void HWChatWidget::onChatString(const QString& nick, const QString& str)
 {
-    bool isFriend = false;
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
+
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
 
     if (!nick.isEmpty())
     {
         // don't show chat lines that are from ignored nicks
-        if (ignoreList.contains(nick, Qt::CaseInsensitive))
+        if (players->isFlagSet(nick, PlayersListModel::Ignore))
             return;
-        // friends will get special treatment, of course
-        isFriend = friendsList.contains(nick, Qt::CaseInsensitive);
     }
+
+    bool isFriend = (!nick.isEmpty()) && players->isFlagSet(nick, PlayersListModel::Friend);
 
     QString formattedStr = Qt::escape(str.mid(1));
     // make hedgewars.org urls actual links
@@ -697,19 +502,25 @@ void HWChatWidget::onServerMessage(const QString& str)
     chatText->moveCursor(QTextCursor::End);
 }
 
+
 void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 {
-    bool isIgnored = ignoreList.contains(nick, Qt::CaseInsensitive);
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
+
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
+
+    bool isIgnored = players->isFlagSet(nick, PlayersListModel::Ignore);
 
     if (isIgnored && m_isAdmin && m_autoKickEnabled)
     {
         emit kick(nick);
         return;
     }
-
-    QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), isIgnored);
-    updateNickItem(item);
-    /*chatNicks->addItem(item);*/
 
     if ((!isIgnored) && (nick != m_userNick)) // don't auto-complete own name
         chatEditLine->addNickname(nick);
@@ -727,10 +538,7 @@ void HWChatWidget::nickRemoved(const QString& nick)
 {
     chatEditLine->removeNickname(nick);
 
-    /*foreach(QListWidgetItem * item, chatNicks->findItems(nick, Qt::MatchExactly))
-        chatNicks->takeItem(chatNicks->row(item));*/
-
-    //emit nickCountUpdate(chatNicks->count());
+    emit nickCountUpdate(chatNicks->model()->rowCount());
 }
 
 void HWChatWidget::clear()
@@ -858,10 +666,7 @@ void HWChatWidget::onIgnore()
     }
 
     if(mil.size())
-    {
         chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
-        chatNickSelected(); // update context menu
-    }
 }
 
 void HWChatWidget::onFriend()
@@ -900,12 +705,9 @@ void HWChatWidget::onFriend()
     }
 
     if(mil.size())
-    {
         chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
-        chatNickSelected(); // update context menu
-    }
 }
-
+/*
 void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
 {
     if (item != NULL)
@@ -915,42 +717,7 @@ void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
     QList<QAction *> actions = chatNicks->actions();
     actions.first()->activate(QAction::Trigger);
 }
-
-void HWChatWidget::chatNickSelected()
-{
-}
-
-void HWChatWidget::setStatus(const QString & nick, ListWidgetNickItem::StateFlag flag, bool status)
-{
-    /*QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
-
-    if (items.size() == 1)
-    {
-        items[0]->setData(flag, status);
-        updateNickItem(items[0]);
-    }*/
-}
-
-void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)
-{
-    setStatus(nick, ListWidgetNickItem::Ready, isReady);
-}
-
-void HWChatWidget::setAdminStatus(const QString & nick, bool isAdmin)
-{
-    setStatus(nick, ListWidgetNickItem::ServerAdmin, isAdmin);
-}
-
-void HWChatWidget::setRoomMasterStatus(const QString & nick, bool isAdmin)
-{
-    setStatus(nick, ListWidgetNickItem::RoomAdmin, isAdmin);
-}
-
-void HWChatWidget::setRegisteredStatus(const QStringList & nicks, bool isRegistered)
-{
-    foreach(const QString & nick, nicks)
-        setStatus(nick, ListWidgetNickItem::Registered, isRegistered);
-}
+*/
 
 void HWChatWidget::adminAccess(bool b)
 {
