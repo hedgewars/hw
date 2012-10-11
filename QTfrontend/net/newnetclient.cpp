@@ -465,7 +465,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             if (lst[i] == mynick)
             {
                 netClientState = InLobby;
-                m_playersModel->resetRoomFlags();
+                RawSendNet(QString("LIST"));
                 emit connected();
             }
 

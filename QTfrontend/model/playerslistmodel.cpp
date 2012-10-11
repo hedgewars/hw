@@ -91,7 +91,6 @@ void PlayersListModel::addPlayer(const QString & nickname)
     QModelIndex mi = index(rowCount() - 1);
     setData(mi, nickname);
 
-    updateSortData(mi);
     checkFriendIgnore(mi);
 }
 
@@ -268,11 +267,17 @@ QHash<quint32, QIcon> & PlayersListModel::m_icons()
 
 void PlayersListModel::updateSortData(const QModelIndex & index)
 {
-    QString result = QString("%1%2%3%4%5")
+    QString result = QString("%1%2%3%4%5%6")
+            // room admins go first, then server admins, then friends
             .arg(1 - index.data(RoomAdmin).toInt())
             .arg(1 - index.data(ServerAdmin).toInt())
             .arg(1 - index.data(Friend).toInt())
+            // ignored at bottom
             .arg(index.data(Ignore).toInt())
+            // keep nicknames starting from non-letter character at bottom within group
+            // assume there are no empty nicks in list
+            .arg(index.data(Qt::DisplayRole).toString().at(0).isLetter() ? 0 : 1)
+            // sort ignoring case
             .arg(index.data(Qt::DisplayRole).toString().toLower())
             ;
 
@@ -298,6 +303,7 @@ void PlayersListModel::checkFriendIgnore(const QModelIndex &mi)
     setData(mi, m_ignoredSet.contains(mi.data().toString().toLower()), Ignore);
 
     updateIcon(mi);
+    updateSortData(mi);
 }
 
 void PlayersListModel::loadSet(QSet<QString> & set, const QString & suffix)
