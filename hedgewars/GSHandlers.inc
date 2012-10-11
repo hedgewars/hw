@@ -4176,7 +4176,7 @@ begin
         sdY := -sdY;
 
     // initial angle depends on current GameTicks
-    t := GameTicks mod 4096;
+    t := getRandom(4096);
 
 
     // used for a work-around detection of area that is within land array, but outside borders
@@ -4285,7 +4285,7 @@ begin
 end;
 
 procedure doStepSineGunShot(Gear: PGear);
-var 
+var
     HHGear: PGear;
 begin
     PlaySound(sndSineGun); 
