@@ -166,6 +166,12 @@ handleCmd_lobby ["BANLIST"] = do
     return [BanList | isAdministrator cl]
 
 
+handleCmd_lobby ["UNBAN", entry] = do
+    (ci, _) <- ask
+    cl <- thisClient
+    return [Unban entry | isAdministrator cl]
+
+
 handleCmd_lobby ["SET_SERVER_VAR", "MOTD_NEW", newMessage] = do
     cl <- thisClient
     return [ModifyServerInfo (\si -> si{serverMessage = newMessage}) | isAdministrator cl]

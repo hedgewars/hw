@@ -50,6 +50,7 @@ data Action =
     | BanClient NominalDiffTime B.ByteString ClientIndex
     | BanIP B.ByteString NominalDiffTime B.ByteString
     | BanList
+    | Unban B.ByteString
     | ChangeMaster
     | RemoveClientTeams ClientIndex
     | ModifyClient (ClientInfo -> ClientInfo)
@@ -482,7 +483,11 @@ processAction BanList = do
     processAction $
         AnswerClients [ch] ["BANLIST", bans]
 
-
+processAction (Unban entry) = do
+    processAction $ ModifyServerInfo (\s -> s{bans = filter f $ bans s})
+    where
+        f (BanByIP bip _ _) = bip == entry
+        f (BanByNick bn _ _) = bn == entry
 
 processAction (KickRoomClient kickId) = do
     modify (\s -> s{clientIndex = Just kickId})
