@@ -1,7 +1,7 @@
 #ifndef COLORWIDGET_H
 #define COLORWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 #include <QModelIndex>
 
 namespace Ui {
@@ -10,7 +10,7 @@ class ColorWidget;
 
 class QStandardItemModel;
 
-class ColorWidget : public QWidget
+class ColorWidget : public QFrame
 {
     Q_OBJECT
     
