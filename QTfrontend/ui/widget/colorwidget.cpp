@@ -56,10 +56,10 @@ void ColorWidget::mousePressEvent(QMouseEvent * event)
     switch(event->button())
     {
         case Qt::LeftButton:
-            setColor((m_color + 1) % m_colorsModel->rowCount());
+            nextColor();
             break;
         case Qt::RightButton:
-            setColor((m_color + m_colorsModel->rowCount() - 1) % m_colorsModel->rowCount());
+            previousColor();
             break;
         default:;
     }
@@ -68,7 +68,17 @@ void ColorWidget::mousePressEvent(QMouseEvent * event)
 void ColorWidget::wheelEvent(QWheelEvent *event)
 {
     if(event->delta() > 0)
-        setColor((m_color + 1) % m_colorsModel->rowCount());
+        previousColor();
     else
-        setColor((m_color + m_colorsModel->rowCount() - 1) % m_colorsModel->rowCount());
+        nextColor();
+}
+
+void ColorWidget::nextColor()
+{
+    setColor((m_color + 1) % m_colorsModel->rowCount());
+}
+
+void ColorWidget::previousColor()
+{
+    setColor((m_color + m_colorsModel->rowCount() - 1) % m_colorsModel->rowCount());
 }
