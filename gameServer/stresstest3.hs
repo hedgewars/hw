@@ -47,7 +47,7 @@ emulateSession = do
     waitPacket "CONNECTED"
     sendPacket ["NICK", "test" ++ show n]
     waitPacket "NICK"
-    sendPacket ["PROTO", "31"]
+    sendPacket ["PROTO", "41"]
     waitPacket "PROTO"
     b <- waitPacket "LOBBY:JOINED"
     --io $ print b
