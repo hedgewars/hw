@@ -1754,8 +1754,60 @@ const Template43Points: array[0..173] of TSDL_Rect =
        (X: 4095; Y:    0)
       );
 
+// 3 large caverns
+const Template44Points: array[0..14] of TSDL_Rect =
+      (
+       (x:    0; y: 100; w:   1; h:  50),
+       (x: 4096; y: 100; w:   1; h:  50),
+       (x: 4096; y: 400; w:   1; h:  50),
+       (x:    0; y: 360; w:   1; h:  50),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x:    0; y: 750; w:   1; h:  50),
+       (x: 4096; y: 750; w:   1; h:  50),
+       (x: 4096; y:1100; w:   1; h:  50),
+       (x:    0; y:1100; w:   1; h:  50),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x:    0; y:1300; w:   1; h: 250),
+       (x: 4096; y:1300; w:   1; h: 250),
+       (x: 4096; y:1800; w:   1; h: 200),
+       (x:    0; y:1800; w:   1; h: 200),
+       (x: NTPX; y:   0; w:   1; h:   1)
+      );
+      Template44FPoints: array[0..5] of TSDL_Rect =
+      (
+       (X:   1; Y:  90; w:   0; h:   0),
+       (X:   1; Y: 500; w:   0; h:   0),
+       (X:4096; Y: 500; w:   0; h:   0),
+       (X:   1; Y:1200; w:   0; h:   0),
+       (X:4096; Y:1200; w:   0; h:   0),
+       (X:   1; Y:2010; w:   0; h:   0)
+      );
+
+// large caverns with an island
+const Template45Points: array[0..11] of TSDL_Rect =
+      (
+       (x:  500; y: 100; w:   1; h: 300),
+       (x: 3700; y: 100; w:   1; h: 300),
+       (x: 3700; y: 900; w: 200; h: 300),
+       (x: 3700; y:1700; w:   1; h: 250),
+       (x:  500; y:1700; w:   1; h: 250),
+       (x:  300; y: 900; w: 200; h: 250),
+       (x: NTPX; y:   0; w:   1; h:   1),
+       (x: 1000; y: 800; w:   1; h:   1),
+       (x: 2700; y: 800; w: 600; h: 100),
+       (x: 2700; y:1200; w: 600; h: 200),
+       (x: 1000; y:1200; w: 200; h: 200),
+       (x: NTPX; y:   0; w:   1; h:   1)
+      );
+      Template45FPoints: array[0..2] of TSDL_Rect =
+      (
+       (X:   1; Y:   1; w:   0; h:   0),
+       (X:   1; Y:2047; w:   0; h:   0),
+       (X:1005; Y: 805; w:   0; h:   0)
+      );
+
 ////////////////////////////////////////////////////////////////////////
-var EdgeTemplates: array[0..43] of TEdgeTemplate =
+var EdgeTemplates: array[0..45] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -2240,6 +2292,28 @@ var EdgeTemplates: array[0..43] of TEdgeTemplate =
         canMirror: true; canFlip: true; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 48;
+       ),
+       (BasePoints: @Template44Points;
+        BasePointsCount: Succ(High(Template44Points));
+        FillPoints: @Template44FPoints;
+        FillPointsCount: Succ(High(Template44FPoints));
+        BezierizeCount: 5;
+        RandPassesCount: 3;
+        TemplateHeight: 2048; TemplateWidth: 4096;
+        canMirror: false; canFlip: false; isNegative: true; canInvert: false;
+        hasGirders: false;
+        MaxHedgeHogs: 48;
+       ),
+       (BasePoints: @Template45Points;
+        BasePointsCount: Succ(High(Template45Points));
+        FillPoints: @Template45FPoints;
+        FillPointsCount: Succ(High(Template45FPoints));
+        BezierizeCount: 5;
+        RandPassesCount: 7;
+        TemplateHeight: 2048; TemplateWidth: 4096;
+        canMirror: false; canFlip: false; isNegative: true; canInvert: false;
+        hasGirders: false;
+        MaxHedgeHogs: 48;
        )
       );
 const SmallTemplates: array[0..2] of Longword = ( 39, 40, 42 );
@@ -2250,9 +2324,9 @@ const LargeTemplates: array[0..20] of Longword =
         18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
         28, 29, 30, 31, 32, 33, 34, 35, 37, 38, 43
       );
-const CavernTemplates: array[0..4] of Longword = (36, 2, 3, 21, 29);
+const CavernTemplates: array[0..5] of Longword = (36, 2, 3, 21, 29, 45);
 //const WackyTemplates: array[0..4] of Longword = (37, 38, 39, 40, 41);
-const WackyTemplates: array[0..3] of Longword = (37, 38, 41, 43);
+const WackyTemplates: array[0..4] of Longword = (37, 38, 41, 43, 44);
 
 implementation
 
