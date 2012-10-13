@@ -18,9 +18,9 @@ module Store(
     indices
     ) where
 
-import qualified Data.Array.IArray as IA
-import qualified Data.Array.IO as IOA
 import qualified Data.IntSet as IntSet
+import qualified Data.Vector as V
+import qualified Data.Vector.Mutable as MV
 import Data.IORef
 import Control.Monad
 import Control.DeepSeq
@@ -28,8 +28,8 @@ import Control.DeepSeq
 
 newtype ElemIndex = ElemIndex Int
     deriving (Eq, Show, Read, Ord, NFData)
-newtype MStore e = MStore (IORef (IntSet.IntSet, IntSet.IntSet, IOA.IOArray Int e))
-newtype IStore e = IStore (IntSet.IntSet, IA.Array Int e)
+newtype MStore e = MStore (IORef (IntSet.IntSet, IntSet.IntSet, MV.IOVector e))
+newtype IStore e = IStore (IntSet.IntSet, V.Vector e)
 
 
 firstIndex :: ElemIndex
@@ -50,7 +50,7 @@ truncFunc a | a > growFunc initialSize = (a `div` 2)
 
 newStore :: IO (MStore e)
 newStore = do
-    newar <- IOA.newArray_ (0, initialSize - 1)
+    newar <- MV.new initialSize
     new <- newIORef (IntSet.empty, IntSet.fromAscList [0..initialSize - 1], newar)
     return (MStore new)
 
@@ -58,11 +58,10 @@ newStore = do
 growStore :: MStore e -> IO ()
 growStore (MStore ref) = do
     (busyElems, freeElems, arr) <- readIORef ref
-    (_, m') <- IOA.getBounds arr
-    let newM' = growFunc (m' + 1) - 1
-    newArr <- IOA.newArray_ (0, newM')
-    sequence_ [IOA.readArray arr i >>= IOA.writeArray newArr i | i <- [0..m']]
-    writeIORef ref (busyElems, freeElems `IntSet.union` IntSet.fromAscList [m'+1..newM'], newArr)
+    let oldSize = MV.length arr
+    let newSize = growFunc oldSize
+    newArr <- MV.grow arr (newSize - oldSize)
+    writeIORef ref (busyElems, freeElems `IntSet.union` IntSet.fromAscList [oldSize .. newSize-1], newArr)
 
 
 growIfNeeded :: MStore e -> IO ()
@@ -74,12 +73,10 @@ growIfNeeded m@(MStore ref) = do
 truncateIfNeeded :: MStore e -> IO ()
 truncateIfNeeded (MStore ref) = do
     (busyElems, _, arr) <- readIORef ref
-    (_, m') <- IOA.getBounds arr
-    let newM' = truncFunc (m' + 1) - 1
-    when (newM' < m' && (not $ IntSet.null busyElems) && IntSet.findMax busyElems <= newM') $ do
-        newArr <- IOA.newArray_ (0, newM')
-        sequence_ [IOA.readArray arr i >>= IOA.writeArray newArr i | i <- IntSet.toList busyElems]
-        writeIORef ref (busyElems, IntSet.fromAscList [0..newM'] `IntSet.difference` busyElems, newArr)
+    let oldSize = MV.length arr
+    let newSize = truncFunc oldSize
+    when (newSize < oldSize && (not $ IntSet.null busyElems) && IntSet.findMax busyElems < newSize) $ do
+        writeIORef ref (busyElems, IntSet.fromAscList [0..newSize - 1] `IntSet.difference` busyElems, MV.take newSize arr)
 
 
 addElem :: MStore e -> e -> IO ElemIndex
@@ -87,7 +84,7 @@ addElem m@(MStore ref) element = do
     growIfNeeded m
     (busyElems, freeElems, arr) <- readIORef ref
     let (!n, freeElems') = IntSet.deleteFindMin freeElems
-    IOA.writeArray arr n element
+    MV.write arr n element
     writeIORef ref (IntSet.insert n busyElems, freeElems', arr)
     return $ ElemIndex n
 
@@ -95,23 +92,23 @@ addElem m@(MStore ref) element = do
 removeElem :: MStore e -> ElemIndex -> IO ()
 removeElem m@(MStore ref) (ElemIndex n) = do
     (busyElems, freeElems, arr) <- readIORef ref
-    IOA.writeArray arr n (error $ "Store: no element " ++ show n)
+    MV.write arr n (error $ "Store: no element " ++ show n)
     writeIORef ref (IntSet.delete n busyElems, IntSet.insert n freeElems, arr)
     truncateIfNeeded m
 
 
 readElem :: MStore e -> ElemIndex -> IO e
-readElem (MStore ref) (ElemIndex n) = readIORef ref >>= \(_, _, arr) -> IOA.readArray arr n
+readElem (MStore ref) (ElemIndex n) = readIORef ref >>= \(_, _, arr) -> MV.read arr n
 
 
 writeElem :: MStore e -> ElemIndex -> e -> IO ()
-writeElem (MStore ref) (ElemIndex n) el = readIORef ref >>= \(_, _, arr) -> IOA.writeArray arr n el
+writeElem (MStore ref) (ElemIndex n) el = readIORef ref >>= \(_, _, arr) -> MV.write arr n el
 
 
 modifyElem :: MStore e -> (e -> e) -> ElemIndex -> IO ()
 modifyElem (MStore ref) f (ElemIndex n) = do
     (_, _, arr) <- readIORef ref
-    IOA.readArray arr n >>= IOA.writeArray arr n . f
+    MV.read arr n >>= MV.write arr n . f
 
 elemExists :: MStore e -> ElemIndex -> IO Bool
 elemExists (MStore ref) (ElemIndex n) = do
@@ -128,13 +125,13 @@ indicesM (MStore ref) = do
 m2i :: MStore e -> IO (IStore e)
 m2i (MStore ref) = do
     (a, _, c') <- readIORef ref
-    c <- IOA.unsafeFreeze c'
+    c <- V.unsafeFreeze c'
     return $ IStore (a, c)
 
 i2m :: MStore e -> IStore e -> IO ()
 i2m (MStore ref) (IStore (_, arr)) = do
     (b, e, _) <- readIORef ref
-    a <- IOA.unsafeThaw arr
+    a <- V.unsafeThaw arr
     writeIORef ref (b, e, a)
 
 withIStore :: MStore e -> (IStore e -> a) -> IO a
@@ -157,7 +154,7 @@ withIStore2 m1 m2 f = do
 
 -- IStore code
 (!) :: IStore e -> ElemIndex -> e
-(!) (IStore (_, arr)) (ElemIndex i) = (IA.!) arr i
+(!) (IStore (_, arr)) (ElemIndex i) = (V.!) arr i
 
 indices :: IStore e -> [ElemIndex]
 indices (IStore (busy, _)) = map ElemIndex $ IntSet.toList busy

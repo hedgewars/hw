@@ -18,7 +18,7 @@ Executable hedgewars-server
     base >= 4.3,
     unix,
     containers,
-    array,
+    vector,
     bytestring,
     bytestring-show,
     network >= 2.3,
