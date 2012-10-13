@@ -1113,6 +1113,7 @@ begin
     //FillChar(cake, sizeof(cake), 0);
     cake.Radius:= 7;
     cake.CollisionMask:= $FF7F;
+    cake.Hedgehog:= Me^.Hedgehog;
 
     // check left direction
     cake.Angle:= 3;
