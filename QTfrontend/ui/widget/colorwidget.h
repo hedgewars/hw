@@ -35,6 +35,8 @@ private slots:
 protected:
     void mousePressEvent(QMouseEvent * event);
     void wheelEvent(QWheelEvent * event);
+    void nextColor();
+    void previousColor();
 };
 
 #endif // COLORWIDGET_H
