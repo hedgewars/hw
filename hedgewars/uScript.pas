@@ -1669,7 +1669,7 @@ begin
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             hat:= lua_tostring(L, 2);
             gear^.Hedgehog^.Hat:= hat;
-            LoadHedgehogHat(gear, hat);
+            LoadHedgehogHat(gear^.Hedgehog^, hat);
         end;
     lc_sethoghat:= 0;
 end;

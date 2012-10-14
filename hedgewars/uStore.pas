@@ -40,7 +40,7 @@ function  LoadDataImageAltPath(const path, altPath: TPathType; const filename: s
 // like LoadDataImage but uses altFile as fallback-filename if file cannot be loaded
 function  LoadDataImageAltFile(const path: TPathType; const filename, altFile: shortstring; imageFlags: LongInt): PSDL_Surface;
 
-procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
+procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
 function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
@@ -244,9 +244,9 @@ for t:= 0 to Pred(TeamsCount) do
                     if Hat <> 'NoHat' then
                         begin
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
-                            LoadHedgehogHat(Gear, 'Reserved/' + Copy(Hat,9,Length(Hat)-8))
+                            LoadHedgehogHat(Hedgehogs[i], 'Reserved/' + Copy(Hat,9,Length(Hat)-8))
                         else
-                            LoadHedgehogHat(Gear, Hat);
+                            LoadHedgehogHat(Hedgehogs[i], Hat);
                         end
                     end;
         end;
@@ -640,19 +640,20 @@ begin
     LoadDataImageAltFile:= tmpsurf;
 end;
 
-procedure LoadHedgehogHat(HHGear: PGear; newHat: shortstring);
+procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 var texsurf: PSDL_Surface;
 begin
     texsurf:= LoadDataImage(ptHats, newHat, ifNone);
-
+AddFileLog('Hat => '+newHat);
     // only do something if the hat could be loaded
     if texsurf <> nil then
         begin
+AddFileLog('Got Hat');
         // free the mem of any previously assigned texture
-        FreeTexture(HHGear^.Hedgehog^.HatTex);
+        FreeTexture(HH.HatTex);
 
         // assign new hat to hedgehog
-        HHGear^.Hedgehog^.HatTex:= Surface2Tex(texsurf, true);
+        HH.HatTex:= Surface2Tex(texsurf, true);
 
         // cleanup: free temporary surface mem
         SDL_FreeSurface(texsurf)
