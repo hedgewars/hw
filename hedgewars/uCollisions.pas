@@ -56,6 +56,7 @@ function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): 
 
 // returns: negative sign if going downhill to left, value is steepness (noslope/error = _0, 45° = _0_5)
 function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
+function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
@@ -139,8 +140,8 @@ var x, y, i: LongInt;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
 if (Gear^.CollisionMask = $FF7F) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
-    ((hwRound(Gear^.Hedgehog^.Gear^.X) + Gear^.Hedgehog^.Gear^.Radius + 4 < hwRound(Gear^.X) - Gear^.Radius) or
-     (hwRound(Gear^.Hedgehog^.Gear^.X) - Gear^.Hedgehog^.Gear^.Radius - 4 > hwRound(Gear^.X) + Gear^.Radius)) then
+    ((hwRound(Gear^.Hedgehog^.Gear^.X) + Gear^.Hedgehog^.Gear^.Radius + 16 < hwRound(Gear^.X) - Gear^.Radius) or
+     (hwRound(Gear^.Hedgehog^.Gear^.X) - Gear^.Hedgehog^.Gear^.Radius - 16 > hwRound(Gear^.X) + Gear^.Radius)) then
     Gear^.CollisionMask:= $FFFF;
 
 x:= hwRound(Gear^.X);
@@ -169,8 +170,8 @@ var x, y, i: LongInt;
 begin
 // Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
 if (Gear^.CollisionMask = $FF7F) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
-    ((hwRound(Gear^.Hedgehog^.Gear^.Y) + Gear^.Hedgehog^.Gear^.Radius + 4 < hwRound(Gear^.Y) - Gear^.Radius) or
-     (hwRound(Gear^.Hedgehog^.Gear^.Y) - Gear^.Hedgehog^.Gear^.Radius - 4 > hwRound(Gear^.Y) + Gear^.Radius)) then
+    ((hwRound(Gear^.Hedgehog^.Gear^.Y) + Gear^.Hedgehog^.Gear^.Radius + 16 < hwRound(Gear^.Y) - Gear^.Radius) or
+     (hwRound(Gear^.Hedgehog^.Gear^.Y) - Gear^.Hedgehog^.Gear^.Radius - 16 > hwRound(Gear^.Y) + Gear^.Radius)) then
     Gear^.CollisionMask:= $FFFF;
 
 y:= hwRound(Gear^.Y);
@@ -238,7 +239,7 @@ if flag then
         with cinfos[i] do
             if (Gear <> cGear) and (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2))
             and ((mx > x) xor (Dir > 0)) then
-                if ((cGear^.Kind in [gtHedgehog, gtMine]) and ((Gear^.State and gstNotKickable) = 0)) or
+                if ((cGear^.Kind in [gtHedgehog, gtMine, gtKnife]) and ((Gear^.State and gstNotKickable) = 0)) or
                 // only apply X kick if the barrel is knocked over
                 ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0)) then
                     begin
@@ -247,6 +248,7 @@ if flag then
                         dX:= Gear^.dX;
                         dY:= Gear^.dY * _0_5;
                         State:= State or gstMoving;
+                        if Kind = gtKnife then State:= State and not gstCollision;
                         Active:= true
                         end;
                     DeleteCI(cGear);
@@ -298,7 +300,7 @@ if flag then
         with cinfos[i] do
             if (Gear <> cGear) and (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2))
             and ((my > y) xor (Dir > 0)) then
-                if (cGear^.Kind in [gtHedgehog, gtMine, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
+                if (cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
                     begin
                     with cGear^ do
                         begin
@@ -306,6 +308,7 @@ if flag then
                             dX:= Gear^.dX * _0_5;
                         dY:= Gear^.dY;
                         State:= State or gstMoving;
+                        if Kind = gtKnife then State:= State and not gstCollision;
                         Active:= true
                         end;
                     DeleteCI(cGear);
@@ -574,6 +577,99 @@ begin
 outDeltaX:= ldx;
 outDeltaY:= ldy;
 CalcSlopeTangent:= true;
+end;
+
+function CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
+var dx, dy: hwFloat;
+    collX, collY, i, y, x, gx, gy, sdx, sdy: LongInt;
+    isColl, bSucc: Boolean;
+begin
+
+if dirY <> 0 then 
+    begin
+    y:= hwRound(Gear^.Y) + Gear^.Radius * dirY;
+    gx:= hwRound(Gear^.X);
+    collX := gx;
+    isColl:= false;
+
+    if (y and LAND_HEIGHT_MASK) = 0 then
+        begin
+        x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+        i:= x + Gear^.Radius * 2 - 2;
+        repeat
+        if (x and LAND_WIDTH_MASK) = 0 then
+            if Land[y, x] <> 0 then
+                if not isColl or (abs(x-gx) < abs(collX-gx)) then
+                    begin
+                    isColl:= true;
+                    collX := x;
+                    end;
+        inc(x)
+        until (x > i);
+        end;
+    end
+else
+    begin
+    x:= hwRound(Gear^.X) + Gear^.Radius * dirX;
+    gy:= hwRound(Gear^.Y);
+    collY := gy;
+    isColl:= false;
+
+    if (x and LAND_WIDTH_MASK) = 0 then
+        begin
+        y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+        i:= y + Gear^.Radius * 2 - 2;
+        repeat
+        if (y and LAND_HEIGHT_MASK) = 0 then
+            if Land[y, x] <> 0 then
+                if not isColl or (abs(y-gy) < abs(collY-gy)) then
+                    begin
+                    isColl:= true;
+                    collY := y;
+                    end;
+        inc(y)
+        until (y > i);
+        end;
+    end;
+
+if isColl then
+    begin
+    // save original dx/dy
+    dx := Gear^.dX;
+    dy := Gear^.dY;
+
+    if dirY <> 0 then
+        begin
+        Gear^.dX.QWordValue:= 0;
+        Gear^.dX.isNegative:= (collX >= gx);
+        Gear^.dY:= _1*dirY
+        end
+    else
+        begin
+        Gear^.dY.QWordValue:= 0;
+        Gear^.dY.isNegative:= (collY >= gy);
+        Gear^.dX:= _1*dirX
+        end;
+
+    sdx:= 0;
+    sdy:= 0;
+    if dirY <> 0 then
+         bSucc := CalcSlopeTangent(Gear, collX, y, sdx, sdy, 0)
+    else bSucc := CalcSlopeTangent(Gear, x, collY, sdx, sdy, 0);
+
+    // restore original dx/dy
+    Gear^.dX := dx;
+    Gear^.dY := dy;
+
+    if bSucc and ((sdx <> 0) or (sdy <> 0)) then
+        begin
+        dx := int2hwFloat(sdy) / (abs(sdx) + abs(sdy));
+        dx.isNegative := (sdx * sdy) < 0;
+        exit (dx);
+        end
+    end;
+
+CalcSlopeNearGear := _0;
 end;
 
 function CalcSlopeBelowGear(Gear: PGear): hwFloat;

@@ -42,6 +42,7 @@ var GHStepTicks: LongWord = 0;
 function ChangeAmmo(HHGear: PGear): boolean;
 var slot, i: Longword;
     ammoidx: LongInt;
+    prevAmmo: TAmmoType;
 begin
 ChangeAmmo:= false;
 slot:= HHGear^.MsgParam;
@@ -49,6 +50,7 @@ slot:= HHGear^.MsgParam;
 with HHGear^.Hedgehog^ do
     begin
     HHGear^.Message:= HHGear^.Message and (not gmSlot);
+    prevAmmo:= CurAmmoType;
     ammoidx:= 0;
     if ((HHGear^.State and (gstAttacking or gstAttacked)) <> 0)
     or ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0))
@@ -95,6 +97,13 @@ with HHGear^.Hedgehog^ do
         end;
         if ammoidx >= 0 then
             CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
+    if (prevAmmo <> CurAmmoType) then
+        begin
+        if CurAmmoType = amKnife then
+            LoadHedgehogHat(HHGear^.Hedgehog^, 'Reserved/chef')
+        else if prevAmmo = amKnife then
+            LoadHedgehogHat(HHGear^.Hedgehog^, Hat);
+        end
     end
 end;
 
@@ -262,7 +271,11 @@ with Gear^,
                          amRope: newGear:= AddGear(hwRound(lx), hwRound(ly), gtRope, 0, xx, yy, 0);
                          amMine: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtMine, gstWait, SignAs(_0_02, dX), _0, 3000);
                         amSMine: newGear:= AddGear(hwRound(lx), hwRound(ly), gtSMine,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                        amKnife: newGear:= AddGear(hwRound(lx), hwRound(ly), gtKnife,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                        amKnife: begin 
+                                 newGear:= AddGear(hwRound(lx), hwRound(ly), gtKnife,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                                 newGear^.State:= newGear^.State or gstMoving; 
+                                 newGear^.Radius:= 6 // temporarily shrink so it doesn't instantly embed in the ground
+                                 end;
                        amDEagle: newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
                       amSineGun: newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSineGunShot, 0, xx * _0_5, yy * _0_5, 0);
                     amPortalGun: begin

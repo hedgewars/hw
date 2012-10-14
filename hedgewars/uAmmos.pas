@@ -20,7 +20,7 @@
 
 unit uAmmos;
 interface
-uses uConsts, uTypes;
+uses uConsts, uTypes, uStore;
 
 procedure initModule;
 procedure freeModule;
@@ -277,6 +277,7 @@ with Hedgehog do
                 begin
                 PackAmmo(Ammo, Ammoz[AmmoType].Slot);
                 //SwitchNotHeldAmmo(Hedgehog);
+                if CurAmmoType = amKnife then LoadHedgehogHat(Hedgehog, Hedgehog.Hat);
                 CurAmmoType:= amNothing
                 end
             end
@@ -347,6 +348,7 @@ with Hedgehog do
         end;
     TryDo(slot <= cMaxSlotIndex, 'Ammo slot index overflow', true);
     CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
+    if CurAmmoType = amKnife then LoadHedgehogHat(Hedgehog, 'Reserved/chef')
     end
 end;
 

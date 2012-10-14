@@ -730,7 +730,7 @@ end;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
 var t: PGearArray;
     Gear: PGear;
-    i, tmpDmg: LongInt;
+    i, j, tmpDmg: LongInt;
     VGear: PVisualGear;
 begin
 t:= CheckGearsCollision(Ammo);
@@ -769,6 +769,7 @@ while i > 0 do
             gtHedgehog,
             gtMine,
             gtSMine,
+            gtKnife,
             gtTarget,
             gtCase,
             gtExplosives,
@@ -780,7 +781,28 @@ while i > 0 do
                 exit;
                 end;
             if (not Gear^.Invulnerable) then
+                begin
+                if (Ammo^.Kind = gtKnife) and (tmpDmg > 0) then
+                    for j:= 1 to max(1,min(3,tmpDmg div 5)) do
+                        begin
+                        VGear:= AddVisualGear(hwRound(Ammo^.X-((Ammo^.X-Gear^.X)/_2)), hwRound(Ammo^.Y-((Ammo^.Y-Gear^.Y)/_2)), vgtStraightShot);
+                        if VGear <> nil then
+                            with VGear^ do
+                                begin
+                                Tint:= $FFCC00FF;
+                                Angle:= random(360);
+                                dx:= 0.0005 * (random(100));
+                                dy:= 0.0005 * (random(100));
+                                if random(2) = 0 then
+                                    dx := -dx;
+                                if random(2) = 0 then
+                                    dy := -dy;
+                                FrameTicks:= 600+random(200);
+                                State:= ord(sprStar)
+                                end
+                        end;
                 ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg, dsShove)
+                end
             else
                 Gear^.State:= Gear^.State or gstWinner;
             if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then 
@@ -790,34 +812,38 @@ while i > 0 do
                 ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
                 end;
 
-            DeleteCI(Gear);
             if (Gear^.Kind = gtHedgehog) and Gear^.Hedgehog^.King then
                 begin
                 Gear^.dX:= Ammo^.dX * Power * _0_005;
                 Gear^.dY:= Ammo^.dY * Power * _0_005
                 end
-            else
+            else if (Ammo^.Kind <> gtFlame) or (Gear^.Kind = gtHedgehog) then
                 begin
                 Gear^.dX:= Ammo^.dX * Power * _0_01;
                 Gear^.dY:= Ammo^.dY * Power * _0_01
                 end;
 
-            Gear^.Active:= true;
-            Gear^.State:= Gear^.State or gstMoving;
-
-            // move the gear upwards a bit to throw it over tiny obstacles at start
-            if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+            if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
                 begin
-                if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-                or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-                    Gear^.Y:= Gear^.Y - _1;
-                if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-                or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-                    Gear^.Y:= Gear^.Y - _1;
-                if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-                or (TestCollisionYwithGear(Gear, -1) <> 0)) then
-                    Gear^.Y:= Gear^.Y - _1;
+                Gear^.Active:= true;
+                DeleteCI(Gear);
+                Gear^.State:= Gear^.State or gstMoving;
+                if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and not gstCollision;
+                // move the gear upwards a bit to throw it over tiny obstacles at start
+                if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+                    begin
+                    if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
+                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                        Gear^.Y:= Gear^.Y - _1;
+                    if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
+                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                        Gear^.Y:= Gear^.Y - _1;
+                    if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
+                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                        Gear^.Y:= Gear^.Y - _1;
+                    end
                 end;
+
 
             if (Ammo^.Kind <> gtFlame) or ((Ammo^.State and gsttmpFlag) = 0) then
                 FollowGear:= Gear

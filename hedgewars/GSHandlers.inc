@@ -1414,30 +1414,26 @@ begin
             end;
         CalcRotationDirAngle(Gear);
         AllInactive := false
-    end
-    else
-        if ((GameTicks and $3F) = 25) then
-            doStepFallingGear(Gear);
+        end
+    else if (GameTicks and $3F) = 25 then
+        doStepFallingGear(Gear);
     if (Gear^.Health = 0) then
         begin
-            if not Gear^.dY.isNegative and (Gear^.dY > _0_2) and (TestCollisionYwithGear(Gear, 1) <> 0) then
-                inc(Gear^.Damage, hwRound(Gear^.dY * _70))
-                
-            else if not Gear^.dX.isNegative and (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1) then
-                inc(Gear^.Damage, hwRound(Gear^.dX * _70))
-                
-            else if Gear^.dY.isNegative and (Gear^.dY < -_0_2) and (TestCollisionYwithGear(Gear, -1) <> 0) then
-                inc(Gear^.Damage, hwRound(Gear^.dY * -_70))
-                
-            else if Gear^.dX.isNegative and (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
-                inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
+        if not Gear^.dY.isNegative and (Gear^.dY > _0_2) and (TestCollisionYwithGear(Gear, 1) <> 0) then
+            inc(Gear^.Damage, hwRound(Gear^.dY * _70))
+        else if not Gear^.dX.isNegative and (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1) then
+            inc(Gear^.Damage, hwRound(Gear^.dX * _70))
+        else if Gear^.dY.isNegative and (Gear^.dY < -_0_2) and (TestCollisionYwithGear(Gear, -1) <> 0) then
+            inc(Gear^.Damage, hwRound(Gear^.dY * -_70))
+        else if Gear^.dX.isNegative and (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
+            inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
         
         if ((GameTicks and $FF) = 0) and (Gear^.Damage > random(30)) then
-                begin
-                vg:= AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
-                if vg <> nil then
-                    vg^.Scale:= 0.5
-                end;
+            begin
+            vg:= AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
+            if vg <> nil then
+                vg^.Scale:= 0.5
+            end;
 
         if (Gear^.Damage > 35) then
             begin
@@ -4687,7 +4683,7 @@ begin
                 // only make hat-less hedgehogs look like zombies, preserve existing hats
 
                 if resgear^.Hedgehog^.Hat = 'NoHat' then
-                    LoadHedgehogHat(resgear, 'Reserved/Zombie');
+                    LoadHedgehogHat(resgear^.Hedgehog^, 'Reserved/Zombie');
                 end;
 
         hh^.Gear^.dY := _0;
@@ -5245,6 +5241,59 @@ if HHGear <> nil then
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepKnife(Gear: PGear);
+var ox, oy: LongInt;
+    la: hwFloat;
+begin
+    // Gear is shrunk so it can actually escape the hog without carving into the terrain
+    if (Gear^.Radius = 6) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 16;
+    if (Gear^.State and gstMoving <> 0) and (Gear^.State and gstCollision = 0) then
+        begin
+        DeleteCI(Gear);
+        // used for damage and impact calc. needs balancing I think
+        Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*_4));
+        doStepFallingGear(Gear);
+        AllInactive := false;
+        CalcRotationDirAngle(Gear)
+        end
+    else if Gear^.CollisionIndex = -1 then
+        begin
+        ox:= 0; oy:= 0;
+        if      TestCollisionYwithGear(Gear, -1) <> 0 then oy:= -1
+        else if TestCollisionXwithGear(Gear, 1)       then ox:=  1
+        else if TestCollisionXwithGear(Gear, -1)      then ox:= -1
+        else if TestCollisionYwithGear(Gear, 1) <> 0  then oy:=  1;
+        if Gear^.Health > 0 then
+            PlaySound(sndRopeAttach);
+        la:= _0;
+        if (ox <> 0) or (oy <> 0) then
+            la:= CalcSlopeNearGear(Gear, ox, oy);
+        if la = _0 then
+            begin
+            // debug for when we couldn't get an angle
+            //AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeWhite);
+            Gear^.DirAngle:= DxDy2Angle(Gear^.dX, Gear^.dY)*hwSign(Gear^.dX) + (random(20)-10)
+            end
+        else Gear^.DirAngle:= hwFloat2Float(la)*90; // sheepluva's comment claims 45deg = 0.5 - yet orientation doesn't seem consistent?
+        Gear^.dX:= _0;
+        Gear^.dY:= _0;
+        Gear^.State:= Gear^.State and (not gstMoving) or gstCollision;
+        Gear^.Radius:= 20;
+        if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
+        Gear^.Radius:= 16;
+        Gear^.Health:= 0;
+        AddGearCI(Gear)
+        end
+    else if GameTicks and $3F = 0 then
+        begin
+        if  (TestCollisionYwithGear(Gear, -1) = 0)
+        and not TestCollisionXwithGear(Gear, 1)
+        and not TestCollisionXwithGear(Gear, -1)
+        and (TestCollisionYwithGear(Gear, 1) = 0) then Gear^.State:= Gear^.State and (not gstCollision) or gstMoving;
+        end
+end;
+(*
+ This didn't end up getting used, but, who knows, might be reasonable for javellin or something
 // Make the knife initial angle based on the hog attack angle, or is that too hard?
 procedure doStepKnife(Gear: PGear);
 var t, 
@@ -5374,3 +5423,4 @@ begin
             end
         end;
 end;
+*)

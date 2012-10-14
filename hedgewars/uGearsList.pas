@@ -251,9 +251,8 @@ case Kind of
                 gear^.Timer:= 500;
                 end;
        gtKnife: begin
-                gear^.Density:= _0_5;
-                gear^.Radius:= 1;
-                gear^.CollisionMask:= $FF00;
+                gear^.Density:= _4;
+                gear^.Radius:= 16
                 end;
         gtCase: begin
                 gear^.ImpactSound:= sndGraveImpact;
