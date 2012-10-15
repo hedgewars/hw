@@ -671,6 +671,7 @@ while t <> nil do
         gtHedgehog,
             gtMine,
             gtSMine,
+            gtKnife,
             gtCase,
             gtTarget,
             gtExplosives,
@@ -698,6 +699,7 @@ while t <> nil do
                         t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
                         t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
                         t^.State:= t^.State or gstMoving;
+                        if t^.Kind = gtKnife then t^.State:= t^.State and not gstCollision;
                         t^.Active:= true;
                         FollowGear:= t
                         end
