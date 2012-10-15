@@ -20,7 +20,7 @@
 
 unit uTeams;
 interface
-uses uConsts, uInputHandler, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound,
+uses uConsts, uInputHandler, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uStore,
      uTypes{$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
 
 procedure initModule;
@@ -628,12 +628,16 @@ procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 var oldCI, newCI: boolean;
     oldHH: PHedgehog;
 begin
+   if (CurrentHedgehog <> nil) and (CurrentHedgehog^.CurAmmoType = amKnife) then
+       LoadHedgehogHat(CurrentHedgehog^, CurrentHedgehog^.Hat);
     oldCI:= (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.CollisionIndex >= 0);
     newCI:= (newHog^.Gear <> nil) and (newHog^.Gear^.CollisionIndex >= 0);
     if oldCI then DeleteCI(CurrentHedgehog^.Gear);
     if newCI then DeleteCI(newHog^.Gear);
     oldHH:= CurrentHedgehog;
     CurrentHedgehog:= newHog;
+   if (CurrentHedgehog <> nil) and (CurrentHedgehog^.CurAmmoType = amKnife) then
+       LoadHedgehogHat(CurrentHedgehog^, 'Reserved/chef');
     if oldCI then AddGearCI(oldHH^.Gear);
     if newCI then AddGearCI(newHog^.Gear)
 end;
