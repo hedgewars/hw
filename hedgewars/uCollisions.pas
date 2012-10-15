@@ -238,10 +238,11 @@ if flag then
     for i:= 0 to Pred(Count) do
         with cinfos[i] do
             if (Gear <> cGear) and (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2))
-            and ((mx > x) xor (Dir > 0)) then
-                if ((cGear^.Kind in [gtHedgehog, gtMine, gtKnife]) and ((Gear^.State and gstNotKickable) = 0)) or
+            and ((mx > x) xor (Dir > 0)) and
+                (
+                  ((cGear^.Kind in [gtHedgehog, gtMine, gtKnife]) and ((Gear^.State and gstNotKickable) = 0)) or
                 // only apply X kick if the barrel is knocked over
-                ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0)) then
+                ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0))) then
                     begin
                     with cGear^ do
                         begin
@@ -259,7 +260,7 @@ if flag then
 end;
 
 function TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
-var x, y, mx, my, i: LongInt;
+var x, y, mx, my,  myr, i: LongInt;
     flag: boolean;
 begin
 flag:= false;
@@ -295,12 +296,15 @@ if flag then
 
     mx:= hwRound(Gear^.X);
     my:= hwRound(Gear^.Y);
+    myr:= my+Gear^.Radius;
 
     for i:= 0 to Pred(Count) do
         with cinfos[i] do
             if (Gear <> cGear) and (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2))
-            and ((my > y) xor (Dir > 0)) then
-                if (cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
+            and ((myr > y) xor (Dir > 0)) and
+                (
+                 (cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives]) and 
+                 ((Gear^.State and gstNotKickable) = 0)) then
                     begin
                     with cGear^ do
                         begin
