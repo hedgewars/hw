@@ -55,6 +55,7 @@ data Action =
     | RemoveClientTeams ClientIndex
     | ModifyClient (ClientInfo -> ClientInfo)
     | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
+    | ModifyRoomClients (ClientInfo -> ClientInfo)
     | ModifyRoom (RoomInfo -> RoomInfo)
     | ModifyServerInfo (ServerInfo -> ServerInfo)
     | AddRoom B.ByteString B.ByteString
@@ -181,6 +182,12 @@ processAction (ModifyClient2 ci f) = do
     rnc <- gets roomsClients
     io $ modifyClient rnc f ci
     return ()
+
+processAction (ModifyRoomClients f) = do
+    rnc <- gets roomsClients
+    ri <- clientRoomA
+    roomClIDs <- io $ roomClientsIndicesM rnc ri
+    io $ mapM_ (modifyClient rnc f) roomClIDs
 
 
 processAction (ModifyRoom f) = do
@@ -315,9 +322,11 @@ processAction UnreadyRoomClients = do
     roomPlayers <- roomClientsS ri
     roomClIDs <- io $ roomClientsIndicesM rnc ri
     pr <- client's clientProto
-    processAction $ AnswerClients (map sendChan roomPlayers) $ notReadyMessage pr (map nick roomPlayers)
-    io $ mapM_ (modifyClient rnc (\cl -> cl{isReady = False})) roomClIDs
-    processAction $ ModifyRoom (\r -> r{readyPlayers = 0})
+    mapM_ processAction [
+        AnswerClients (map sendChan roomPlayers) $ notReadyMessage pr (map nick roomPlayers)
+        , ModifyRoomClients (\cl -> cl{isReady = False})
+        , ModifyRoom (\r -> r{readyPlayers = 0})
+        ]
     where
         notReadyMessage p nicks = if p < 38 then "NOT_READY" : nicks else "CLIENT_FLAGS" : "-r" : nicks
 
