@@ -34,6 +34,7 @@ data ClientInfo =
         pingsQueue :: !Word,
         isMaster :: Bool,
         isReady :: !Bool,
+        isInGame :: Bool,
         isAdministrator :: Bool,
         clientClan :: Maybe B.ByteString,
         teamsInGame :: Word

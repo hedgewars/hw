@@ -181,8 +181,9 @@ handleCmd_inRoom ["START_GAME"] = do
                     (\r -> r{
                         gameInfo = Just $ newGameInfo (teams rm) (length $ teams rm) allPlayersRegistered (mapParams rm) (params rm)
                         }
-                    ),
-                AnswerClients chans ["RUN_GAME"]
+                    )
+                , AnswerClients chans ["RUN_GAME"]
+                , ModifyRoomClients (\c -> c{isInGame = True})
                 ]
             else
             return [Warning "Less than two clans!"]
@@ -206,17 +207,20 @@ handleCmd_inRoom ["EM", msg] = do
 
 
 handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
-    clId <- asks fst
     cl <- thisClient
     rm <- thisRoom
     let clTeams = map teamname . filter (\t -> teamowner t == nick cl) . teams $ rm
 
-    if isJust $ gameInfo rm then
-        if (isMaster cl && isCorrect) then
-            return [FinishGame]
-            else return $ map SendTeamRemovalMessage clTeams
+    if isInGame cl then
+        if isJust $ gameInfo rm then
+            if (isMaster cl && isCorrect) then
+                return [ModifyClient (\c -> c{isInGame = False}), FinishGame]
+                else
+                return $ (ModifyClient (\c -> c{isInGame = False})) : map SendTeamRemovalMessage clTeams
+            else
+            return [ModifyClient (\c -> c{isInGame = False})]
         else
-        return []
+        return [] -- don't accept this message twice
     where
         isCorrect = correctly == "1"
 
