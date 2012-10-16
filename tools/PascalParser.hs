@@ -369,7 +369,7 @@ expression = do
         , char '$' >> many hexDigit >>=  \h -> comments >> return (HexNumber h)
         --, char '-' >> expression >>= return . PrefixOp "-"
         , char '-' >> reference >>= return . PrefixOp "-" . Reference
-        , try $ string "not" >> error "unexpected not in term"
+        , (try $ string "not" >> notFollowedBy comments) >> unexpected "'not'"
         , try $ string "nil" >> return Null
         , reference >>= return . Reference
         ] <?> "simple expression"
