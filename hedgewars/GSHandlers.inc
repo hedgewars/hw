@@ -5247,6 +5247,7 @@ var ox, oy: LongInt;
 begin
     // Gear is shrunk so it can actually escape the hog without carving into the terrain
     if (Gear^.Radius = 6) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 16;
+    if Gear^.Timer > 0 then dec(Gear^.Timer);
     if (Gear^.State and gstMoving <> 0) and (Gear^.State and gstCollision = 0) then
         begin
         DeleteCI(Gear);
@@ -5256,7 +5257,7 @@ begin
         AllInactive := false;
         CalcRotationDirAngle(Gear)
         end
-    else if Gear^.CollisionIndex = -1 then
+    else if (Gear^.CollisionIndex = -1) and (Gear^.Timer = 0) then
         begin
         ox:= 0; oy:= 0;
         if TestCollisionYwithGear(Gear, -1) <> 0 then oy:= -1;
@@ -5287,6 +5288,7 @@ begin
         if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
         Gear^.Radius:= 16;
         Gear^.Health:= 0;
+        Gear^.Timer:= 500;
         AddGearCI(Gear)
         end
     else if GameTicks and $3F = 0 then
