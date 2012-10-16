@@ -2322,7 +2322,7 @@ var
                 AmmoType: amIceGun;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 6;
+            Slot: 9;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
