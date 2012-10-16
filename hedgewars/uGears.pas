@@ -819,7 +819,7 @@ while i > 0 do
                 Gear^.dX:= Ammo^.dX * Power * _0_005;
                 Gear^.dY:= Ammo^.dY * Power * _0_005
                 end
-            else if (Ammo^.Kind <> gtFlame) or (Gear^.Kind = gtHedgehog) then
+            else if ((Ammo^.Kind <> gtFlame) or (Gear^.Kind = gtHedgehog)) and (Power <> 0) then
                 begin
                 Gear^.dX:= Ammo^.dX * Power * _0_01;
                 Gear^.dY:= Ammo^.dY * Power * _0_01
