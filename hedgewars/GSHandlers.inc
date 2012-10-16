@@ -5259,22 +5259,27 @@ begin
     else if Gear^.CollisionIndex = -1 then
         begin
         ox:= 0; oy:= 0;
-        if      TestCollisionYwithGear(Gear, -1) <> 0 then oy:= -1
-        else if TestCollisionXwithGear(Gear, 1)       then ox:=  1
-        else if TestCollisionXwithGear(Gear, -1)      then ox:= -1
-        else if TestCollisionYwithGear(Gear, 1) <> 0  then oy:=  1;
+        if TestCollisionYwithGear(Gear, -1) <> 0 then oy:= -1;
+        if TestCollisionXwithGear(Gear, 1)       then ox:=  1;
+        if TestCollisionXwithGear(Gear, -1)      then ox:= -1;
+        if TestCollisionYwithGear(Gear, 1) <> 0  then oy:=  1;
         if Gear^.Health > 0 then
             PlaySound(sndRopeAttach);
-        la:= _0;
+(*
+        la:= _10000;
         if (ox <> 0) or (oy <> 0) then
             la:= CalcSlopeNearGear(Gear, ox, oy);
-        if la = _0 then
+        if la = _10000 then
             begin
             // debug for when we couldn't get an angle
             //AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeWhite);
-            Gear^.DirAngle:= DxDy2Angle(Gear^.dX, Gear^.dY)*hwSign(Gear^.dX) + (random(20)-10)
-            end
-        else Gear^.DirAngle:= hwFloat2Float(la)*90; // sheepluva's comment claims 45deg = 0.5 - yet orientation doesn't seem consistent?
+*)
+            Gear^.DirAngle:= DxDy2Angle(Gear^.dX, Gear^.dY) + (random(20)-10);
+            if (Gear^.dX.isNegative and Gear^.dY.isNegative) or
+             ((not Gear^.dX.isNegative) and (not Gear^.dY.isNegative)) then Gear^.DirAngle:= Gear^.DirAngle-90;
+ //           end
+ //       else Gear^.DirAngle:= hwFloat2Float(la)*90; // sheepluva's comment claims 45deg = 0.5 - yet orientation doesn't seem consistent?
+ //       AddFileLog('la: '+floattostr(la)+' DirAngle: '+inttostr(round(Gear^.DirAngle)));
         Gear^.dX:= _0;
         Gear^.dY:= _0;
         Gear^.State:= Gear^.State and (not gstMoving) or gstCollision;
