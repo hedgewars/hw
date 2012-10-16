@@ -121,7 +121,7 @@ preprocess fn = do
         try $ string "DEFINE"
         spaces
         i <- identifier
-        d <- ((string ":=" >> return ())<|> spaces) >> many (noneOf "}")
+        d <- ((string ":=" >> return ()) <|> spaces) >> many (noneOf "}")
         char '}'
         updateState $ \(m, b) -> (if (and b) && (head i /= '_') then Map.insert i d m else m, b)
         return ""
