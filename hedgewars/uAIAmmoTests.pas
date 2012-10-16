@@ -602,7 +602,7 @@ var Vx, Vy, x, y, t, dmgMod: real;
     d: Longword;
     fallDmg, valueResult: LongInt;
 begin
-if Level > 3 then exit(BadTurn);
+if Level > 4 then exit(BadTurn);
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
@@ -612,7 +612,7 @@ ap.Power:= 1;
 x:= hwFloat2Float(Me^.X);
 y:= hwFloat2Float(Me^.Y);
 
-if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 40 then
+if Abs(trunc(x) - Targ.X) + Abs(trunc(y) - Targ.Y) < 20 then
     exit(BadTurn);
 
 t:= 2 / sqrt(sqr(Targ.X - x)+sqr(Targ.Y-y));
@@ -632,14 +632,14 @@ until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 5)
     or (y < 0)
     or (trunc(x) > LAND_WIDTH)
     or (trunc(y) > LAND_HEIGHT)
-    or (d > 50);
+    or (d > 48);
 
 if Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 5 then
     begin
     fallDmg:= TraceShoveFall(Targ.X, Targ.Y, vX * 0.00125 * 20, vY * 0.00125 * 20);
     if fallDmg < 0 then
         valueResult:= 204800
-    else valueResult:= Max(0, (4 - d div 50) * trunc((7+fallDmg)*dmgMod) * 1024)
+    else valueResult:= Max(0, (4 - d div 12) * trunc((7 + fallDmg) * dmgMod) * 1024)
     end
 else
     valueResult:= BadTurn;
