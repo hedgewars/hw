@@ -97,7 +97,7 @@ void PlayersListModel::addPlayer(const QString & nickname)
 
 void PlayersListModel::removePlayer(const QString & nickname)
 {
-    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
+    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname, 1, Qt::MatchExactly);
 
     if(mil.size())
         removeRow(mil[0].row());
@@ -106,25 +106,31 @@ void PlayersListModel::removePlayer(const QString & nickname)
 
 void PlayersListModel::playerJoinedRoom(const QString & nickname)
 {
-    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
+    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname, 1, Qt::MatchExactly);
 
     if(mil.size())
+    {
         setData(mil[0], "1", RoomFilterRole);
+        updateIcon(mil[0]);
+    }
 }
 
 
 void PlayersListModel::playerLeftRoom(const QString & nickname)
 {
-    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
+    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname, 1, Qt::MatchExactly);
 
     if(mil.size())
+    {
         setData(mil[0], "0", RoomFilterRole);
+        updateIcon(mil[0]);
+    }
 }
 
 
 void PlayersListModel::setFlag(const QString &nickname, StateFlag flagType, bool isSet)
 {
-    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
+    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname, 1, Qt::MatchExactly);
 
     if(mil.size())
     {
@@ -161,7 +167,7 @@ void PlayersListModel::setFlag(const QString &nickname, StateFlag flagType, bool
 
 bool PlayersListModel::isFlagSet(const QString & nickname, StateFlag flagType)
 {
-    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname);
+    QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname, 1, Qt::MatchExactly);
 
     if(mil.size())
         return mil[0].data(flagType).toBool();
@@ -199,6 +205,7 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
         << index.data(Registered).toBool()
         << index.data(Friend).toBool()
         << index.data(Ignore).toBool()
+        << (index.data(RoomFilterRole).toString() == "1")
         ;
 
     for(int i = flags.size() - 1; i >= 0; --i)
@@ -216,8 +223,11 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
 
         QPainter painter(&result);
 
-        if(index.data(Ready).toBool())
-            painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
+        if(index.data(RoomFilterRole).toString() == "1")
+            if(index.data(Ready).toBool())
+                painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
+            else
+                painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp_off.png"));
 
         QString mainIconName(":/res/chat/");
 
