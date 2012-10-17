@@ -407,6 +407,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                             m_playersModel->setFlag(nick, PlayersListModel::Registered, setFlag);
                         break;
 
+                case 'g':
+                        foreach(const QString & nick, nicks)
+                            m_playersModel->setFlag(nick, PlayersListModel::InGame, setFlag);
+                        break;
+
                 // flag indicating if a player is the host/master of the room
                 case 'h':
                         foreach (const QString & nick, nicks)

@@ -144,5 +144,6 @@
         <file>res/chat/serveradmin.png</file>
         <file>res/chat/serveradmin_gray.png</file>
         <file>res/chat/lamp_off.png</file>
+        <file>res/chat/ingame.png</file>
     </qresource>
 </RCC>

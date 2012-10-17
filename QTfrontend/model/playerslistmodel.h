@@ -18,7 +18,8 @@ public:
         RoomAdmin   = Qt::UserRole + 2,
         Registered  = Qt::UserRole + 3,
         Friend      = Qt::UserRole + 4,
-        Ignore      = Qt::UserRole + 5
+        Ignore      = Qt::UserRole + 5,
+        InGame      = Qt::UserRole + 6
     };
 
     enum SpecialRoles {
