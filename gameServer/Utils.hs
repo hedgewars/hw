@@ -4,19 +4,16 @@ module Utils where
 import Data.Char
 import Data.Word
 import qualified Data.Map as Map
-import qualified Data.Set as Set
 import qualified Data.Char as Char
 import Numeric
 import Network.Socket
 import System.IO
 import qualified Data.List as List
 import Control.Monad
-import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Lazy as BL
 import qualified Text.Show.ByteString as BS
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.UTF8 as UTF8
-import qualified Data.ByteString as BW
 import Data.Maybe
 -------------------------------------------------
 import CoreTypes
@@ -123,6 +120,8 @@ caseInsensitiveCompare a b = f a == f b
     where
         f = map Char.toUpper . UTF8.toString
 
+
+roomInfo :: B.ByteString -> RoomInfo -> [B.ByteString]
 roomInfo n r = [
         showB $ isJust $ gameInfo r,
         name r,

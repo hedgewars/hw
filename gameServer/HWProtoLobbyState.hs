@@ -131,7 +131,6 @@ handleCmd_lobby ["JOIN_ROOM", roomName] =
 handleCmd_lobby ["FOLLOW", asknick] = do
     (_, rnc) <- ask
     ci <- clientByNick asknick
-    cl <- thisClient
     let ri = clientRoom rnc $ fromJust ci
     let clRoom = room rnc ri
     if isNothing ci || ri == lobbyId then
@@ -156,18 +155,15 @@ handleCmd_lobby ["BAN", banNick, reason] = do
     return [BanClient 60 reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
 
 handleCmd_lobby ["BANIP", ip, reason, duration] = do
-    (ci, _) <- ask
     cl <- thisClient
     return [BanIP ip (readInt_ duration) reason | isAdministrator cl]
 
 handleCmd_lobby ["BANLIST"] = do
-    (ci, _) <- ask
     cl <- thisClient
     return [BanList | isAdministrator cl]
 
 
 handleCmd_lobby ["UNBAN", entry] = do
-    (ci, _) <- ask
     cl <- thisClient
     return [Unban entry | isAdministrator cl]
 

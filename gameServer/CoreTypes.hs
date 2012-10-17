@@ -76,7 +76,12 @@ data GameInfo =
         giParams :: Map.Map B.ByteString [B.ByteString]
     } deriving (Show, Read)
 
---newGameInfo ::  -> GameInfo
+newGameInfo :: [TeamInfo]
+                -> Int
+                -> Bool
+                -> Map.Map ByteString ByteString
+                -> Map.Map ByteString [ByteString]
+                -> GameInfo
 newGameInfo =
     GameInfo
         Data.Sequence.empty

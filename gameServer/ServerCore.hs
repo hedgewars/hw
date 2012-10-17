@@ -1,6 +1,5 @@
 module ServerCore where
 
-import Network
 import Control.Concurrent
 import Control.Monad
 import System.Log.Logger

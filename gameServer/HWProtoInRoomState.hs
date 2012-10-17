@@ -2,7 +2,7 @@
 module HWProtoInRoomState where
 
 import qualified Data.Map as Map
-import Data.Sequence((|>), empty)
+import Data.Sequence((|>))
 import Data.List
 import Data.Maybe
 import qualified Data.ByteString.Char8 as B
