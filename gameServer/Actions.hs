@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP, OverloadedStrings #-}
+{-# OPTIONS_GHC -fno-warn-orphans #-}
 module Actions where
 
 import Control.Concurrent
@@ -20,7 +21,9 @@ import Control.Exception
 import System.Process
 import Network.Socket
 -----------------------------
+#if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
+#endif
 import CoreTypes
 import Utils
 import ClientIO
@@ -222,7 +225,7 @@ processAction (MoveToLobby msg) = do
     (Just ci) <- gets clientIndex
     ri <- clientRoomA
     rnc <- gets roomsClients
-    (gameProgress, playersNum) <- io $ room'sM rnc ((isJust . gameInfo) &&& playersIn) ri
+    playersNum <- io $ room'sM rnc playersIn ri
     master <- client's isMaster
 --    client <- client's id
     clNick <- client's nick
@@ -266,10 +269,9 @@ processAction ChangeMaster = do
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick newMaster]
         ]
 
-    proto <- client's clientProto
-    newRoom <- io $ room'sM rnc id ri
+    newRoom' <- io $ room'sM rnc id ri
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo newRoomName newRoom)
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo newRoomName newRoom')
 
 
 processAction (AddRoom roomName roomPassword) = do
@@ -317,10 +319,8 @@ processAction RemoveRoom = do
 
 
 processAction UnreadyRoomClients = do
-    rnc <- gets roomsClients
     ri <- clientRoomA
     roomPlayers <- roomClientsS ri
-    roomClIDs <- io $ roomClientsIndicesM rnc ri
     pr <- client's clientProto
     mapM_ processAction [
         AnswerClients (map sendChan roomPlayers) $ notReadyMessage pr (map nick roomPlayers)
@@ -335,7 +335,6 @@ processAction FinishGame = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
-    clNick <- client's nick
     answerRemovedTeams <- io $
          room'sM rnc (map (\t -> AnswerClients thisRoomChans ["REMOVE_TEAM", t]) . leftTeams . fromJust . gameInfo) ri
 
@@ -488,9 +487,9 @@ processAction (BanIP ip seconds reason) = do
 
 processAction BanList = do
     ch <- client's sendChan
-    bans <- gets (B.pack . unlines . map show . bans . serverInfo)
+    b <- gets (B.pack . unlines . map show . bans . serverInfo)
     processAction $
-        AnswerClients [ch] ["BANLIST", bans]
+        AnswerClients [ch] ["BANLIST", b]
 
 processAction (Unban entry) = do
     processAction $ ModifyServerInfo (\s -> s{bans = filter f $ bans s})
