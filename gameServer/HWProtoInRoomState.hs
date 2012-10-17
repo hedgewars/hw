@@ -172,6 +172,7 @@ handleCmd_inRoom ["START_GAME"] = do
     rm <- thisRoom
     chans <- roomClientsChans
 
+    let nicks = map (nick . client rnc) . roomClients rnc $ clientRoom rnc ci
     let allPlayersRegistered = all ((<) 0 . B.length . webPassword . client rnc . teamownerId) $ teams rm
 
     if isMaster cl && playersIn rm == readyPlayers rm && not (isJust $ gameInfo rm) then
@@ -183,6 +184,7 @@ handleCmd_inRoom ["START_GAME"] = do
                         }
                     )
                 , AnswerClients chans ["RUN_GAME"]
+                , AnswerClients chans $ "CLIENT_FLAGS" : "+g" : nicks
                 , ModifyRoomClients (\c -> c{isInGame = True})
                 ]
             else
@@ -209,16 +211,19 @@ handleCmd_inRoom ["EM", msg] = do
 handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
     cl <- thisClient
     rm <- thisRoom
+    chans <- roomClientsChans
+
     let clTeams = map teamname . filter (\t -> teamowner t == nick cl) . teams $ rm
+    let unsetInGameState = [AnswerClients chans ["CLIENT_FLAGS", "-g", nick cl], ModifyClient (\c -> c{isInGame = False})]
 
     if isInGame cl then
         if isJust $ gameInfo rm then
             if (isMaster cl && isCorrect) then
-                return [ModifyClient (\c -> c{isInGame = False}), FinishGame]
+                return $ FinishGame : unsetInGameState
                 else
-                return $ (ModifyClient (\c -> c{isInGame = False})) : map SendTeamRemovalMessage clTeams
+                return $ unsetInGameState ++ map SendTeamRemovalMessage clTeams
             else
-            return [ModifyClient (\c -> c{isInGame = False})]
+            return unsetInGameState
         else
         return [] -- don't accept this message twice
     where

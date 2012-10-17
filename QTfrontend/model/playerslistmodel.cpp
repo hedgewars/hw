@@ -186,6 +186,7 @@ void PlayersListModel::resetRoomFlags()
             setData(mi, "0", RoomFilterRole);
             setData(mi, false, RoomAdmin);
             setData(mi, false, Ready);
+            setData(mi, false, InGame);
 
             updateSortData(mi);
             updateIcon(mi);
@@ -205,6 +206,7 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
         << index.data(Registered).toBool()
         << index.data(Friend).toBool()
         << index.data(Ignore).toBool()
+        << index.data(InGame).toBool()
         << (index.data(RoomFilterRole).toString() == "1")
         ;
 
@@ -224,10 +226,13 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
         QPainter painter(&result);
 
         if(index.data(RoomFilterRole).toString() == "1")
-            if(index.data(Ready).toBool())
-                painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
+            if(index.data(InGame).toBool())
+                painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/ingame.png"));
             else
-                painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp_off.png"));
+                if(index.data(Ready).toBool())
+                    painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
+                else
+                    painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp_off.png"));
 
         QString mainIconName(":/res/chat/");
 
