@@ -652,7 +652,7 @@ for i:= GetRandom(10)+30 downto 0 do
 snowRight:= max(LAND_WIDTH,4096)+512;
 snowLeft:= -(snowRight-LAND_WIDTH);
 
-if not hasBorder and ((Theme = 'Snow') or (Theme = 'Christmas')) then
+if (not hasBorder) and ((Theme = 'Snow') or (Theme = 'Christmas')) then
     for i:= vobCount * Longword(max(LAND_WIDTH,4096)) div 2048 downto 1 do
         AddGear(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft, LongInt(LAND_HEIGHT + GetRandom(750)) - 1300, gtFlake, 0, _0, _0, 0);
 end;
@@ -699,7 +699,7 @@ while t <> nil do
                         t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
                         t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
                         t^.State:= t^.State or gstMoving;
-                        if t^.Kind = gtKnife then t^.State:= t^.State and not gstCollision;
+                        if t^.Kind = gtKnife then t^.State:= t^.State and (not gstCollision);
                         t^.Active:= true;
                         FollowGear:= t
                         end
@@ -830,7 +830,7 @@ while i > 0 do
                 Gear^.Active:= true;
                 DeleteCI(Gear);
                 Gear^.State:= Gear^.State or gstMoving;
-                if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and not gstCollision;
+                if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and (not gstCollision);
                 // move the gear upwards a bit to throw it over tiny obstacles at start
                 if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
                     begin

@@ -5294,8 +5294,8 @@ begin
     else if GameTicks and $3F = 0 then
         begin
         if  (TestCollisionYwithGear(Gear, -1) = 0)
-        and not TestCollisionXwithGear(Gear, 1)
-        and not TestCollisionXwithGear(Gear, -1)
+        and (not TestCollisionXwithGear(Gear, 1))
+        and (not TestCollisionXwithGear(Gear, -1))
         and (TestCollisionYwithGear(Gear, 1) = 0) then Gear^.State:= Gear^.State and (not gstCollision) or gstMoving;
         end
 end;
