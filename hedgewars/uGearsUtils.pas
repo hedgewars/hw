@@ -131,7 +131,7 @@ while Gear <> nil do
                                 Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, tdY)/(Gear^.Density/_3);
 
                                 Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
-                                if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and not gstCollision;
+                                if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and (not gstCollision);
                                 if not Gear^.Invulnerable then
                                     Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
                                 Gear^.Active:= true;

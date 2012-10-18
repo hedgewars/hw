@@ -249,7 +249,7 @@ if flag then
                         dX:= Gear^.dX;
                         dY:= Gear^.dY * _0_5;
                         State:= State or gstMoving;
-                        if Kind = gtKnife then State:= State and not gstCollision;
+                        if Kind = gtKnife then State:= State and (not gstCollision);
                         Active:= true
                         end;
                     DeleteCI(cGear);
@@ -312,7 +312,7 @@ if flag then
                             dX:= Gear^.dX * _0_5;
                         dY:= Gear^.dY;
                         State:= State or gstMoving;
-                        if Kind = gtKnife then State:= State and not gstCollision;
+                        if Kind = gtKnife then State:= State and (not gstCollision);
                         Active:= true
                         end;
                     DeleteCI(cGear);
@@ -603,7 +603,7 @@ if dirY <> 0 then
         repeat
         if (x and LAND_WIDTH_MASK) = 0 then
             if Land[y, x] <> 0 then
-                if not isColl or (abs(x-gx) < abs(collX-gx)) then
+                if (not isColl) or (abs(x-gx) < abs(collX-gx)) then
                     begin
                     isColl:= true;
                     collX := x;
@@ -626,7 +626,7 @@ else
         repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
             if Land[y, x] <> 0 then
-                if not isColl or (abs(y-gy) < abs(collY-gy)) then
+                if (not isColl) or (abs(y-gy) < abs(collY-gy)) then
                     begin
                     isColl:= true;
                     collY := y;
@@ -695,7 +695,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     repeat
     if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 255 then
-            if not isColl or (abs(x-gx) < abs(collX-gx)) then
+            if (not isColl) or (abs(x-gx) < abs(collX-gx)) then
                 begin
                 isColl:= true;
                 collX := x;
