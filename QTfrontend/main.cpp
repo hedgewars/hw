@@ -31,8 +31,10 @@
 #include "hwform.h"
 #include "hwconsts.h"
 #include "newnetclient.h"
+#include "physfs.h"
 
 #include "DataManager.h"
+#include "FileEngine.h"
 
 #ifdef _WIN32
 #include <Shlobj.h>
@@ -103,6 +105,10 @@ bool checkForDir(const QString & dir)
 int main(int argc, char *argv[])
 {
     HWApplication app(argc, argv);
+
+    PHYSFS_init(argv[0]);
+
+    FileEngineHandler engine;
 
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
