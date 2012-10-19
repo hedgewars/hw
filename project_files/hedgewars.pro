@@ -12,6 +12,7 @@ INCLUDEPATH += ../QTfrontend/util
 INCLUDEPATH += /usr/local/include/SDL
 INCLUDEPATH += /usr/include/SDL
 INCLUDEPATH += ../misc/quazip/
+INCLUDEPATH += ../misc/physfs/src/
 
 DESTDIR = .
 
@@ -111,7 +112,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/dialog/ask_quit.h \
     ../QTfrontend/ui/dialog/upload_video.h \
     ../QTfrontend/campaign.h \
-    ../QTfrontend/model/playerslistmodel.h
+    ../QTfrontend/model/playerslistmodel.h \
+    ../QTfrontend/util/FileEngine.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
@@ -200,7 +202,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/dialog/ask_quit.cpp \
     ../QTfrontend/ui/dialog/upload_video.cpp \
     ../QTfrontend/campaign.cpp \
-    ../QTfrontend/model/playerslistmodel.cpp
+    ../QTfrontend/model/playerslistmodel.cpp \
+    ../QTfrontend/util/FileEngine.cpp
 
 
 win32 {
@@ -234,7 +237,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
-LIBS += -L../misc/quazip -lquazip
+LIBS += -L../bin -lquazip -lphysfs
 
 !macx {
     LIBS += -lSDL -lSDL_mixer
