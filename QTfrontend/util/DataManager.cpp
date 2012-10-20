@@ -39,12 +39,6 @@
 
 DataManager::DataManager()
 {
-    m_userData = new QDir(cfgdir->absolutePath());
-    if (!m_userData->cd("Data"))
-        m_userData = NULL;
-
-    m_defaultData = new QDir(datadir->absolutePath());
-
     m_hatModel = NULL;
     m_mapModel = NULL;
     m_themeModel = NULL;
@@ -66,20 +60,8 @@ QStringList DataManager::entryList(
     const QStringList & nameFilters
 ) const
 {
-    QStringList result;
-
-    if (m_userData != NULL)
-    {
-        QDir tmpDir(*m_userData);
-        if (tmpDir.cd(subDirectory))
-            result.append(tmpDir.entryList(nameFilters, filters));
-    }
-
-    QDir tmpDir(*m_defaultData);
-    if (tmpDir.cd(subDirectory))
-        result.append(tmpDir.entryList(nameFilters, filters));
-
-    result.removeDuplicates();
+    QDir tmpDir(QString("physfs://%1").arg(subDirectory));
+    QStringList result = tmpDir.entryList(nameFilters, filters);
 
     // sort case-insensitive
     QMap<QString, QString> sortedFileNames;
@@ -96,34 +78,22 @@ QStringList DataManager::entryList(
 QString DataManager::findFileForRead(
     const QString & relativeDataFilePath) const
 {
-    QString path;
+    QString path("physfs://%1");
 
-    if (m_userData != NULL)
-        path = m_userData->absolutePath()+"/"+relativeDataFilePath;
-
-    if ((!path.isEmpty()) && (!QFile::exists(path)))
-        path = m_defaultData->absolutePath()+"/"+relativeDataFilePath;
-
-    return path;
+    return path.arg(relativeDataFilePath);
 }
 
 
 QString DataManager::findFileForWrite(
     const QString & relativeDataFilePath) const
 {
-    if (m_userData != NULL)
-    {
-        QString path = m_userData->absolutePath()+"/"+relativeDataFilePath;
+    QString path("physfs://%1");
 
-        // create folders if needed
-        QDir tmp;
-        tmp.mkpath(QFileInfo(path).absolutePath());
+    // create folders if needed
+    QDir tmp;
+    tmp.mkpath(QFileInfo(path.arg(relativeDataFilePath)).absolutePath());
 
-        return path;
-    }
-
-
-    return "";
+    return path;
 }
 
 GameStyleModel * DataManager::gameStyleModel()
