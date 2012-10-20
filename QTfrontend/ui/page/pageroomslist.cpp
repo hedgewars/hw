@@ -101,7 +101,6 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
     BtnCreate = addButton(tr("Create"), pageLayout, 0, 2);
     BtnJoin = addButton(tr("Join"), pageLayout, 1, 2);
-    BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 2);
     BtnClear = addButton(tr("Clear"), pageLayout, 4, 2);
 
     // strech all but the buttons column
@@ -143,7 +142,6 @@ void PageRoomsList::connectSignals()
 
     connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
     connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
-    connect(BtnRefresh, SIGNAL(clicked()), this, SLOT(onRefreshClick()));
     connect(BtnClear, SIGNAL(clicked()), this, SLOT(onClearClick()));
     connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
     connect(CBState, SIGNAL(currentIndexChanged (int)), this, SLOT(onFilterChanged()));
