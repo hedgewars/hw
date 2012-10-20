@@ -255,7 +255,7 @@ IF(PHYSFS_ARCHIVE_ISO9660)
 ENDIF(PHYSFS_ARCHIVE_ISO9660)
 
 
-OPTION(PHYSFS_BUILD_STATIC "Build static library" FALSE)
+OPTION(PHYSFS_BUILD_STATIC "Build static library" TRUE)
 IF(PHYSFS_BUILD_STATIC)
     ADD_LIBRARY(physfs-static STATIC ${PHYSFS_SRCS})
     SET_TARGET_PROPERTIES(physfs-static PROPERTIES OUTPUT_NAME "physfs")
@@ -263,7 +263,7 @@ IF(PHYSFS_BUILD_STATIC)
     SET(PHYSFS_INSTALL_TARGETS ${PHYSFS_INSTALL_TARGETS} ";physfs-static")
 ENDIF(PHYSFS_BUILD_STATIC)
 
-OPTION(PHYSFS_BUILD_SHARED "Build shared library" TRUE)
+OPTION(PHYSFS_BUILD_SHARED "Build shared library" FALSE)
 IF(PHYSFS_BUILD_SHARED)
     ADD_LIBRARY(physfs SHARED ${PHYSFS_SRCS})
     SET_TARGET_PROPERTIES(physfs PROPERTIES VERSION ${PHYSFS_VERSION})
@@ -310,7 +310,7 @@ ENDIF(PHYSFS_BUILD_TEST)
 #CMake's SWIG support is basically useless.
 #FIND_PACKAGE(SWIG)
 
-OPTION(PHYSFS_BUILD_SWIG "Build ${_LANG} bindings." TRUE)
+OPTION(PHYSFS_BUILD_SWIG "Build ${_LANG} bindings." FALSE)
 MARK_AS_ADVANCED(PHYSFS_BUILD_SWIG)
 
 FIND_PROGRAM(SWIG swig DOC "Path to swig command line app: http://swig.org/")
@@ -507,12 +507,12 @@ IF(UNIX)
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
         COMMENT "Building source tarball '${PHYSFS_TARBALL}'..."
     )
-    ADD_CUSTOM_TARGET(
-        uninstall
-        "${CMAKE_CURRENT_SOURCE_DIR}/extras/uninstall.sh"
-        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMENT "Uninstall the project..."
-    )
+#    ADD_CUSTOM_TARGET(
+#        uninstall
+#        "${CMAKE_CURRENT_SOURCE_DIR}/extras/uninstall.sh"
+#        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+#        COMMENT "Uninstall the project..."
+#    )
 ENDIF(UNIX)
 
 MACRO(MESSAGE_BOOL_OPTION _NAME _VALUE)
