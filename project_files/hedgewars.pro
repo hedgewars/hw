@@ -234,7 +234,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
-LIBS += -L../misc/quazip -lquazip
+LIBS += -L../bin -lquazip
 
 !macx {
     LIBS += -lSDL -lSDL_mixer

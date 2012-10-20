@@ -42,7 +42,6 @@ class PageRoomsList : public AbstractPage
         QTableView * roomsList;
         QPushButton * BtnCreate;
         QPushButton * BtnJoin;
-        QPushButton * BtnRefresh;
         QPushButton * BtnAdmin;
         QPushButton * BtnClear;
         QComboBox * CBState;
