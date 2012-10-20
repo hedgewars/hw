@@ -4,6 +4,9 @@
 
 #include "FileEngine.h"
 
+
+const QString FileEngineHandler::scheme = "physfs:/";
+
 FileEngine::FileEngine(const QString& filename)
 : _handler(NULL)
 , _flags(0)
@@ -78,7 +81,7 @@ bool FileEngine::seek(qint64 pos)
 
 bool FileEngine::isSequential() const
 {
-    return true;
+    return false;
 }
 
 bool FileEngine::remove()
@@ -108,22 +111,29 @@ bool FileEngine::isRelativePath() const
     return true;
 }
 
+QAbstractFileEngineIterator * FileEngine::beginEntryList(QDir::Filters filters, const QStringList &filterNames)
+{
+    return new FileEngineIterator(filters, filterNames, entryList(filters, filterNames));
+}
+
 QStringList FileEngine::entryList(QDir::Filters filters, const QStringList &filterNames) const
 {
     Q_UNUSED(filters);
 
     QString file;
     QStringList result;
-    char **files = PHYSFS_enumerateFiles("");
+    char **files = PHYSFS_enumerateFiles(_filename.toUtf8().constData());
 
     for (char **i = files; *i != NULL; i++) {
-        file = QString::fromAscii(*i);
-        if (QDir::match(filterNames, file)) {
+        file = QString::fromUtf8(*i);
+
+        if (filterNames.isEmpty() || QDir::match(filterNames, file)) {
             result << file;
         }
     }
 
     PHYSFS_freeList(files);
+
     return result;
 }
 
@@ -153,7 +163,10 @@ QDateTime FileEngine::fileTime(FileTime time) const
 
 void FileEngine::setFileName(const QString &file)
 {
-    _filename = file;
+    if(file.startsWith(FileEngineHandler::scheme))
+        _filename = file.mid(FileEngineHandler::scheme.size());
+    else
+        _filename = file;
     PHYSFS_Stat stat;
     if (PHYSFS_stat(_filename.toUtf8().constData(), &stat) != 0) {
         _size = stat.filesize;
@@ -187,14 +200,6 @@ qint64 FileEngine::read(char *data, qint64 maxlen)
     return PHYSFS_readBytes(_handler, data, maxlen);
 }
 
-qint64 FileEngine::readLine(char *data, qint64 maxlen)
-{
-    Q_UNUSED(data);
-    Q_UNUSED(maxlen);
-    // TODO
-    return 0;
-}
-
 qint64 FileEngine::write(const char *data, qint64 len)
 {
     return PHYSFS_writeBytes(_handler, data, len);
@@ -220,7 +225,67 @@ bool FileEngine::supportsExtension(Extension extension) const
     return extension == QAbstractFileEngine::AtEndExtension;
 }
 
+
+
+FileEngineHandler::FileEngineHandler(char *argv0)
+{
+    PHYSFS_init(argv0);
+}
+
+FileEngineHandler::~FileEngineHandler()
+{
+    PHYSFS_deinit();
+}
+
 QAbstractFileEngine* FileEngineHandler::create(const QString &filename) const
 {
-    return new FileEngine(filename);
+    if (filename.startsWith(scheme))
+        return new FileEngine(filename.mid(scheme.size()));
+    else
+        return NULL;
+}
+
+void FileEngineHandler::mount(const QString &path)
+{
+    PHYSFS_mount(path.toUtf8().constData(), NULL, 1);
+}
+
+void FileEngineHandler::setWriteDir(const QString &path)
+{
+    PHYSFS_setWriteDir(path.toUtf8().constData());
+}
+
+
+
+FileEngineIterator::FileEngineIterator(QDir::Filters filters, const QStringList &nameFilters, const QStringList &entries)
+    : QAbstractFileEngineIterator(filters, nameFilters)
+{
+    m_entries = entries;
+
+    /* heck.. docs are unclear on this
+     * QDirIterator puts iterator before first entry
+     * but QAbstractFileEngineIterator example puts iterator on first entry
+     * though QDirIterator approach seems to be the right one
+     */
+
+    m_index = -1;
+}
+
+bool FileEngineIterator::hasNext() const
+{
+    return m_index < m_entries.size() - 1;
+}
+
+QString FileEngineIterator::next()
+{
+   if (!hasNext())
+       return QString();
+
+   ++m_index;
+   return currentFilePath();
+}
+
+QString FileEngineIterator::currentFileName() const
+{
+    return m_entries.at(m_index);
 }
