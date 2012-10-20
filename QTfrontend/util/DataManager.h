@@ -152,9 +152,6 @@ class DataManager: public QObject
          */
         DataManager();
 
-        QDir * m_defaultData; ///< directory of the installed data
-        QDir * m_userData;    ///< directory of custom data in the user's directory
-
         GameStyleModel * m_gameStyleModel; ///< game style model instance
         HatModel * m_hatModel; ///< hat model instance
         MapModel * m_mapModel; ///< map model instance
