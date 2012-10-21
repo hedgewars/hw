@@ -25,8 +25,9 @@
 #include <QLabel>
 #include <QSize>
 #include <QFontMetricsF>
-#include <qpushbuttonwithsound.h>
 #include <QMessageBox>
+
+#include "qpushbuttonwithsound.h"
 
 AbstractPage::AbstractPage(QWidget* parent)
 {
