@@ -134,7 +134,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     CBVoicepack = new QComboBox(GBoxTeam);
 
     hbox->addWidget(CBVoicepack, 100);
-    btnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
+    btnTestSound = addSoundlessButton(":/res/PlaySound.png", hbox, 1, true);
     hbox->setStretchFactor(btnTestSound, 1);
 
     GBTLayout->addLayout(hbox, 4, 1);
