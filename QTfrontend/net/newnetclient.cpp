@@ -395,14 +395,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                                 if (isChief && !setFlag) ToggleReady();
                                 else emit setMyReadyStatus(setFlag);
                             }
-                            emit setReadyStatus(nick, setFlag);
                             m_playersModel->setFlag(nick, PlayersListModel::Ready, setFlag);
                         }
                         break;
 
                 // flag indicating if a player is a registered user
                 case 'u':
-                        emit setRegisteredStatus(nicks, setFlag);
                         foreach(const QString & nick, nicks)
                             m_playersModel->setFlag(nick, PlayersListModel::Registered, setFlag);
                         break;
@@ -422,7 +420,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                                 emit roomMaster(isChief);
                             }
 
-                            emit setRoomMasterStatus(nick, setFlag);
                             m_playersModel->setFlag(nick, PlayersListModel::RoomAdmin, setFlag);
                         }
                         break;
@@ -434,7 +431,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                             if (nick == mynick)
                                 emit adminAccess(setFlag);
 
-                            emit setAdminStatus(nick, setFlag);
                             m_playersModel->setFlag(nick, PlayersListModel::ServerAdmin, setFlag);
                         }
                         break;
