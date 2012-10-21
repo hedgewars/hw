@@ -2105,7 +2105,8 @@ var
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or
-                          ammoprop_NeedUpDown; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -2338,7 +2339,8 @@ var
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or
-                          ammoprop_NeedUpDown; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 1;
                 Timer: 0;
