@@ -94,6 +94,27 @@ QPushButtonWithSound * AbstractPage::formattedButton(const QString & name, bool 
     }
     return btn;
 }
+QPushButton* AbstractPage::formattedSoundlessButton(const QString & name, bool hasIcon)
+{
+    QPushButton* btn = new QPushButton(this);
+
+    if (hasIcon)
+    {
+        const QIcon& lp=QIcon(name);
+        QSize sz = lp.actualSize(QSize(65535, 65535));
+        btn->setIcon(lp);
+        btn->setFixedSize(sz);
+        btn->setIconSize(sz);
+        btn->setFlat(true);
+        btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    }
+    else
+    {
+        btn->setFont(*font14);
+        btn->setText(name);
+    }
+    return btn;
+}
 
 QPushButtonWithSound * AbstractPage::addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan, int columnSpan, bool hasIcon)
 {
@@ -105,6 +126,13 @@ QPushButtonWithSound * AbstractPage::addButton(const QString & name, QGridLayout
 QPushButtonWithSound * AbstractPage::addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon)
 {
     QPushButtonWithSound * btn = formattedButton(name, hasIcon);
+    box->addWidget(btn, where);
+    return btn;
+}
+
+QPushButton* AbstractPage::addSoundlessButton(const QString & name, QBoxLayout * box, int where, bool hasIcon)
+{
+    QPushButton* btn = formattedSoundlessButton(name, hasIcon);
     box->addWidget(btn, where);
     return btn;
 }
