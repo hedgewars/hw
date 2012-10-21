@@ -282,10 +282,12 @@ begin
     else
         Gear^.State := Gear^.State or gstMoving;
 
-    if (Gear^.nImpactSounds > 0) and (((Gear^.Kind <> gtMine) and (Gear^.Damage <> 0))
-    or ((Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving))) and(((Gear^.Radius < 3) and (Gear^.dY < -_0_1))
-    or ((Gear^.Radius >= 3) and ((Gear^.dX.QWordValue > _0_1.QWordValue)
-    or (Gear^.dY.QWordValue > _0_1.QWordValue)))) then
+    if (Gear^.nImpactSounds > 0) and 
+        (Gear^.State and gstCollision <> 0) and
+        (((Gear^.Kind <> gtMine) and (Gear^.Damage <> 0)) or (Gear^.State and gstMoving <> 0)) and
+        (((Gear^.Radius < 3) and (Gear^.dY < -_0_1)) or
+            ((Gear^.Radius >= 3) and 
+                ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)))) then
         PlaySound(TSound(ord(Gear^.ImpactSound) + LongInt(GetRandom(Gear^.nImpactSounds))), true);
 end;
 
