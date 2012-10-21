@@ -51,8 +51,10 @@ handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
             [Warning "Room exists"]
             else
             [
-                AddRoom rName roomPassword,
-                AnswerClients [sendChan cl] ["CLIENT_FLAGS", "-r", nick cl]
+                AddRoom rName roomPassword
+                , AnswerClients [sendChan cl] ["CLIENT_FLAGS", "+hr", nick cl]
+                , ModifyClient (\cl -> cl{isMaster = True, isReady = True})
+                , ModifyRoom (\r -> r{readyPlayers = 1})
             ]
 
 

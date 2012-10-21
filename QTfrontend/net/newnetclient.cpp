@@ -102,9 +102,6 @@ void HWNewNet::CreateRoom(const QString & room)
 
     RawSendNet(QString("CREATE_ROOM%1%2").arg(delimeter).arg(room));
     isChief = true;
-
-    //set our ready status to be true
-    RawSendNet(QString("TOGGLE_READY"));
 }
 
 void HWNewNet::JoinRoom(const QString & room)
