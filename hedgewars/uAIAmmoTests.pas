@@ -287,7 +287,6 @@ repeat
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
             ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
-            ap.Time:= TestTime;
             ap.ExplR:= 100;
             ap.ExplX:= EX;
             ap.ExplY:= EY;
@@ -496,6 +495,7 @@ var Vx, Vy: real;
 begin
     TestMortar:= BadTurn;
     ap.ExplR:= 0;
+
     meX:= hwFloat2Float(Me^.X);
     meY:= hwFloat2Float(Me^.Y);
 
