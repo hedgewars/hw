@@ -4044,7 +4044,7 @@ begin
                 iterator:= GearsList;
                 while iterator <> nil do
                     begin
-                    if not (iterator^.Kind in [gtPortal, gtAirAttack]) and ((iterator^.Hedgehog <> CurrentHedgehog)
+                    if not (iterator^.Kind in [gtPortal, gtAirAttack, gtKnife]) and ((iterator^.Hedgehog <> CurrentHedgehog)
                     or ((iterator^.Message and gmAllStoppable) = 0)) then
                             begin
                             iterator^.Active:= true;
@@ -5277,7 +5277,7 @@ begin
             // debug for when we couldn't get an angle
             //AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeWhite);
 *)
-            Gear^.DirAngle:= DxDy2Angle(Gear^.dX, Gear^.dY) + (random(20)-10);
+            Gear^.DirAngle:= DxDy2Angle(Gear^.dX, Gear^.dY) + (random(30)-15);
             if (Gear^.dX.isNegative and Gear^.dY.isNegative) or
              ((not Gear^.dX.isNegative) and (not Gear^.dY.isNegative)) then Gear^.DirAngle:= Gear^.DirAngle-90;
  //           end
