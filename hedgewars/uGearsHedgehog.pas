@@ -992,12 +992,12 @@ var t: PGear;
     Hedgehog: PHedgehog;
 begin
 Hedgehog:= HHGear^.Hedgehog;
-(*
-if isInMultiShoot then HHGear^.Message:= 0;
+if isInMultiShoot then
+    HHGear^.Message:= 0;
 
 if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0) and isInMultiShoot then 
     AllInactive:= true
-else if not isInMultiShoot then*)
+else if not isInMultiShoot then
     AllInactive:= false;
 
 if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
@@ -1079,7 +1079,7 @@ if CurAmmoGear <> nil then
     exit
     end;
 
-//if not isInMultiShoot then
+if not isInMultiShoot then
     HedgehogChAngle(HHGear);
 
 if (HHGear^.State and gstMoving) <> 0 then
@@ -1115,8 +1115,7 @@ if (HHGear^.State and gstMoving) <> 0 then
     exit
     end;
 
-    //if not isInMultiShoot and (Hedgehog^.Gear <> nil) then
-    if Hedgehog^.Gear <> nil then
+    if not isInMultiShoot and (Hedgehog^.Gear <> nil) then
         begin
         if GHStepTicks > 0 then
             dec(GHStepTicks);
