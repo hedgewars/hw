@@ -108,7 +108,7 @@ end;
 
 
 
-procedure TestAmmos(var Actions: TActions; Me: PGear; isMoved: boolean);
+procedure TestAmmos(var Actions: TActions; Me: PGear; rareChecks: boolean);
 var BotLevel: Byte;
     ap: TAttackParams;
     Score, i, dAngle: LongInt;
@@ -130,7 +130,7 @@ for i:= 0 to Pred(Targets.Count) do
 {$ENDIF}       
         repeat
         if (CanUseAmmo[a]) 
-            and ((not isMoved) or ((AmmoTests[a].flags and amtest_OnTurn) = 0)) 
+            and ((not rareChecks) or ((AmmoTests[a].flags and amtest_Rare) = 0)) 
             and ((i = 0) or ((AmmoTests[a].flags and amtest_NoTarget) = 0)) 
             then
             begin
@@ -217,7 +217,7 @@ end;
 procedure Walk(Me: PGear; var Actions: TActions);
 const FallPixForBranching = cHHRadius;
 var
-    ticks, maxticks, steps, tmp: Longword;
+    ticks, maxticks, oldticks, steps, tmp: Longword;
     BaseRate, BestRate, Rate: integer;
     GoInfo: TGoInfo;
     CanGo: boolean;
@@ -225,7 +225,8 @@ var
     BotLevel: Byte;
     a: TAmmoType;
 begin
-ticks:= 0; // avoid compiler hint
+ticks:= 0;
+oldticks:= 0; // avoid compiler hint
 Stack.Count:= 0;
 
 clearAllMarks;
@@ -274,6 +275,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
     {$HINTS OFF}
             CanGo:= HHGo(Me, @AltMe, GoInfo);
     {$HINTS ON}
+            oldticks:= ticks;
             inc(ticks, GoInfo.Ticks);
             if ticks > maxticks then
                 break;
@@ -349,8 +351,8 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 if (steps > 4) and checkMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere) then
                     break;                    
                 addMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere);
-                
-                TestAmmos(Actions, Me, true);
+
+                TestAmmos(Actions, Me, ticks shr 12 = oldticks shr 12);
                 end;
                 
             if GoInfo.FallPix >= FallPixForBranching then
