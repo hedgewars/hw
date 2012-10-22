@@ -442,8 +442,10 @@ end;
 
 procedure chTimer(var s: shortstring);
 begin
-if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or CheckNoTeamOrHH then
+if CheckNoTeamOrHH then
     exit;
+
+TryDo((s[0] = #1) and (s[1] >= '1') and (s[1] <= '5'), 'Malformed /timer', true);
 
 if not CurrentTeam^.ExtDriven then
     SendIPC(s);
@@ -482,11 +484,10 @@ end;
 
 procedure chSetWeapon(var s: shortstring);
 begin
-    if (s[0] <> #1) or CheckNoTeamOrHH then
+    if CheckNoTeamOrHH then
         exit;
 
-    if TAmmoType(s[1]) > High(TAmmoType) then
-        exit;
+    TryDo((s[0] = #1) and (s[1] <= char(High(TAmmoType))), 'Malformed /setweap', true);
 
     if not CurrentTeam^.ExtDriven then
         SendIPC('w' + s);
