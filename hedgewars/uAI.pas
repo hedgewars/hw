@@ -228,6 +228,8 @@ begin
 ticks:= 0; // avoid compiler hint
 Stack.Count:= 0;
 
+clearAllMarks;
+
 for a:= Low(TAmmoType) to High(TAmmoType) do
     CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and (HHHasAmmo(Me^.Hedgehog^, a) > 0);
 
@@ -276,8 +278,13 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
             if ticks > maxticks then
                 break;
 
-            if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
+            if (BotLevel < 5) 
+                and (GoInfo.JumpType = jmpHJump) 
+                and (not checkMark(hwRound(Me^.X), hwRound(Me^.Y), markHJumped))
+                then // hjump support
+                begin
                 // check if we could go backwards and maybe ljump over a gap after this hjump
+                addMark(hwRound(Me^.X), hwRound(Me^.Y), markHJumped);
                 if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
                     begin
                     with Stack.States[Pred(Stack.Count)] do
@@ -298,8 +305,13 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                     // but first check walking forward
                     Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message)
                     end;
-            if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
+                end;
+            if (BotLevel < 3) 
+                and (GoInfo.JumpType = jmpLJump) 
+                and (not checkMark(hwRound(Me^.X), hwRound(Me^.Y), markLJumped))
+                then // ljump support
                 begin
+                addMark(hwRound(Me^.X), hwRound(Me^.Y), markLJumped);
                 // at final check where we go after jump walking backward
                 if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
                     with Stack.States[Pred(Stack.Count)] do
@@ -334,9 +346,9 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 
             if ((Me^.State and gstAttacked) = 0) and ((steps mod 4) = 0) then
                 begin
-                if (steps > 4) and checkMark(hwRound(Me^.X), hwRound(Me^.Y), markWasHere) then
+                if (steps > 4) and checkMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere) then
                     break;                    
-                addMark(hwRound(Me^.X), hwRound(Me^.Y), markWasHere);
+                addMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere);
                 
                 TestAmmos(Actions, Me, true);
                 end;
@@ -449,7 +461,6 @@ or isInMultiShoot then
     exit;
 
 //DeleteCI(Me); // this will break demo/netplay
-clearAllMarks;
 
 Me^.State:= Me^.State or gstHHThinking;
 Me^.Message:= 0;

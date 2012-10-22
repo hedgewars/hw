@@ -1,7 +1,10 @@
 unit uAILandMarks;
 
 interface
-const markWasHere = $01;
+const 
+    markWalkedHere = $01;
+    markHJumped    = $02;
+    markLJumped    = $04;
 
 procedure addMark(X, Y: LongInt; mark: byte);
 function  checkMark(X, Y: LongInt; mark: byte) : boolean;
