@@ -1286,7 +1286,7 @@ void HWForm::ForcedDisconnect(const QString & reason)
         ShowErrorMessage(errorStr);
     }
     if (ui.Pages->currentIndex() != ID_PAGE_NET)
-        GoBack();
+        GoToPage(ID_PAGE_NET);
 }
 
 void HWForm::NetConnected()
