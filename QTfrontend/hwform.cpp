@@ -1286,7 +1286,11 @@ void HWForm::ForcedDisconnect(const QString & reason)
         ShowErrorMessage(errorStr);
     }
     if (ui.Pages->currentIndex() != ID_PAGE_NET)
+    {
+        while (!PagesStack.isEmpty()) PagesStack.pop();
+        PagesStack.push(ID_PAGE_MAIN);
         GoToPage(ID_PAGE_NET);
+    }
 }
 
 void HWForm::NetConnected()
