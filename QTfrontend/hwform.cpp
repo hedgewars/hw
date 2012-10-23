@@ -897,10 +897,18 @@ void HWForm::AfterTeamEdit()
 
 void HWForm::DeleteTeam(const QString & teamName)
 {
-    ui.pageEditTeam->deleteTeam(teamName);
-    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Teams"), QMessageBox::tr("Really delete this team?"), QMessageBox::Ok | QMessageBox::Cancel);
+    QMessageBox reallyDeleteMsg(this);
+    reallyDeleteMsg.setIcon(QMessageBox::Question);
+    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Teams - Are you sure?"));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the team '%1'?").arg(teamName));
+    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
-    UpdateTeamsLists();
+    if (reallyDeleteMsg.exec() == QMessageBox::Ok)
+    {
+        ui.pageEditTeam->deleteTeam(teamName);
+        UpdateTeamsLists();
+    }
 }
 
 void HWForm::DeleteScheme()
@@ -908,7 +916,7 @@ void HWForm::DeleteScheme()
     ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
     if (ui.pageOptions->SchemesName->currentIndex() < ammoSchemeModel->numberOfDefaultSchemes)
     {
-        QMessageBox::warning(0, QMessageBox::tr("Schemes"), QMessageBox::tr("Cannot delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()));
+        ShowErrorMessage(QMessageBox::tr("Cannot delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()));
     }
     else
     {
@@ -934,10 +942,7 @@ void HWForm::PlayDemo()
     QListWidgetItem * curritem = ui.pagePlayDemo->DemosList->currentItem();
     if (!curritem)
     {
-        QMessageBox::critical(this,
-                              tr("Error"),
-                              tr("Please select record from the list above"),
-                              tr("OK"));
+        ShowErrorMessage(QMessageBox::tr("Please select a record from the list"));
         return;
     }
     CreateGame(0, 0, 0);
@@ -1229,10 +1234,10 @@ void HWForm::NetStartServer()
     config->SaveOptions();
 
     pnetserver = new HWNetServer;
-    if(!pnetserver->StartServer(ui.pageNetServer->sbPort->value()))
+    if (!pnetserver->StartServer(ui.pageNetServer->sbPort->value()))
     {
-        QMessageBox::critical(0, tr("Error"),
-                              tr("Unable to start the server"));
+        ShowErrorMessage(QMessageBox::tr("Unable to start the server"));
+
         delete pnetserver;
         pnetserver = 0;
         return;
@@ -1271,14 +1276,15 @@ void HWForm::NetDisconnect()
 
 void HWForm::ForcedDisconnect(const QString & reason)
 {
-    if(pnetserver) return; // we have server - let it care of all things
+    if (pnetserver)
+        return; // we have server - let it care of all things
     if (hwnet)
     {
-        QMessageBox::warning(this, QMessageBox::tr("Network"),
-                             QMessageBox::tr("Connection to server is lost") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Quit reason: ") + '"' + reason +'"')));
-
+        QString errorStr = QMessageBox::tr("Connection to server is lost") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Quit reason: ") + '"' + reason +'"'));
+        ShowErrorMessage(errorStr);
     }
-    if (ui.Pages->currentIndex() != ID_PAGE_NET) GoBack();
+    if (ui.Pages->currentIndex() != ID_PAGE_NET)
+        GoBack();
 }
 
 void HWForm::NetConnected()
@@ -1379,9 +1385,12 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, 
 
 void HWForm::ShowErrorMessage(const QString & msg)
 {
-    QMessageBox::warning(this,
-                         "Hedgewars",
-                         msg);
+    QMessageBox msgMsg(this);
+    msgMsg.setIcon(QMessageBox::Warning);
+    msgMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Error"));
+    msgMsg.setText(msg);
+    msgMsg.setWindowModality(Qt::WindowModal);
+    msgMsg.exec();
 }
 
 void HWForm::GetRecord(RecordType type, const QByteArray & record)
@@ -1674,8 +1683,17 @@ void HWForm::AssociateFiles()
     // hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home.  This assumes no spaces in the data dir path
     if (success) success = system(("sed -i 's/^\\(Exec=.*\\) \\([^ ]* %f\\)/\\1 "+cfgdir->absolutePath().replace(" ","\\\\ ").replace("/","\\/")+" \\2 --set-everything "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
 #endif
-    if (success) QMessageBox::information(0, "", QMessageBox::tr("All file associations have been set."));
-    else QMessageBox::information(0, "", QMessageBox::tr("File association failed."));
+    if (success)
+    {
+        QMessageBox infoMsg(this);
+        infoMsg.setIcon(QMessageBox::Information);
+        infoMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Success"));
+        infoMsg.setText(QMessageBox::tr("All file associations have been set"));
+        infoMsg.setWindowModality(Qt::WindowModal);
+        infoMsg.exec();
+    }
+    else
+        ShowErrorMessage(QMessageBox::tr("File association failed."));
 }
 
 void HWForm::saveDemoWithCustomName()
@@ -1711,8 +1729,7 @@ void HWForm::SendFeedback()
     //Create Xml representation of google code issue first
     if (!CreateIssueXml())
     {
-        QMessageBox::warning(this, QMessageBox::tr("Fields required"),
-                             QMessageBox::tr("Please fill out all fields"));
+        ShowErrorMessage(QMessageBox::tr("Please fill out all fields"));
         return;
     }
 
@@ -1758,18 +1775,23 @@ void HWForm::finishedSlot(QNetworkReply* reply)
 
         if (authToken.length() != 0)
         {
-            QMessageBox::information(this, QMessageBox::tr("Success"),
-                                     QMessageBox::tr("Successfully posted the issue on code.google.com!"));
+
+            QMessageBox infoMsg(this);
+            infoMsg.setIcon(QMessageBox::Information);
+            infoMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Success"));
+            infoMsg.setText(QMessageBox::tr("Successfully posted the issue on hedgewars.googlecode.com"));
+            infoMsg.setWindowModality(Qt::WindowModal);
+            infoMsg.exec();
+
             ui.pageFeedback->summary->clear();
             ui.pageFeedback->description->clear();
             authToken = "";
             return;
         }
 
-        if(!getAuthToken(str))
+        if (!getAuthToken(str))
         {
-            QMessageBox::warning(this, QMessageBox::tr("Network"),
-                                 QMessageBox::tr("Error during authentication with www.google.com"));
+            ShowErrorMessage(QMessageBox::tr("Error during authentication at google.com"));
             return;
         }
 
@@ -1782,12 +1804,10 @@ void HWForm::finishedSlot(QNetworkReply* reply)
 
     }
     else if (authToken.length() == 0)
-        QMessageBox::warning(this, QMessageBox::tr("Network"),
-                             QMessageBox::tr("Error during authentication with www.google.com"));
+        ShowErrorMessage(QMessageBox::tr("Error during authentication at google.com"));
     else
     {
-        QMessageBox::warning(this, QMessageBox::tr("Network"),
-                             QMessageBox::tr("Error creating the issue"));
+        ShowErrorMessage(QMessageBox::tr("Error reporting the issue, please try again later (or visit hedgewars.googlecode.come directly)"));
         authToken = "";
     }
 

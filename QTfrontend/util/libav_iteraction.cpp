@@ -27,7 +27,6 @@ extern "C"
 
 #include <QVector>
 #include <QList>
-#include <QMessageBox>
 #include <QComboBox>
 
 #include "HWApplication.h"

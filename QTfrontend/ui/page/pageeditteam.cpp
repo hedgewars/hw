@@ -383,9 +383,14 @@ void PageEditTeam::editTeam(const QString & name, const QString & playerHash)
 
 void PageEditTeam::deleteTeam(const QString & name)
 {
-    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Teams"), QMessageBox::tr("Really delete this team?"), QMessageBox::Ok | QMessageBox::Cancel, this);
+    QMessageBox reallyDeleteMsg(this);
+    reallyDeleteMsg.setIcon(QMessageBox::Question);
+    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Teams - Are you sure?"));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the team '%1'?").arg(name));
+    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
-    if (reallyDelete.exec() == QMessageBox::Ok)
+    if (reallyDeleteMsg.exec() == QMessageBox::Ok)
         HWTeam(name).deleteFile();
 }
 
