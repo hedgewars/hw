@@ -20,21 +20,6 @@
     </message>
 </context>
 <context>
-    <name>DrawMapWidget</name>
-    <message>
-        <source>File error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -52,14 +37,6 @@
     <message>
         <source>Edit weapons</source>
         <translation>Fegyverek beállítása</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>Hiba</translation>
-    </message>
-    <message>
-        <source>Illegal ammo scheme</source>
-        <translation>Szabálytalan lőszerséma</translation>
     </message>
     <message>
         <source>Edit schemes</source>
@@ -83,22 +60,6 @@
 </context>
 <context>
     <name>HWChatWidget</name>
-    <message>
-        <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="obsolete">%1 *** %2 eltávolítva a figyelmen kívül hagyottak listájáról</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="obsolete">%1 *** %2 hozzáadva a figyelmen kívül hagyottak listájához</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="obsolete">%1 *** %2 eltávolítva a barátlistáról</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="obsolete">%1 *** %2 hozzáadva a barátlistádhoz</translation>
-    </message>
     <message>
         <source>%1 has been removed from your ignore list</source>
         <translation type="unfinished"></translation>
@@ -147,28 +108,8 @@
 <context>
     <name>HWForm</name>
     <message>
-        <source>new</source>
-        <translation type="obsolete">új</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>Hiba</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <source>Unable to start the server</source>
-        <translation>A szervert nem sikerült elindítani</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>Nem sikerült menteni a %1 fájlba</translation>
-    </message>
-    <message>
-        <source>Please select record from the list above</source>
-        <translation>Kérlek válassz a fentebbi listából</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
@@ -197,10 +138,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">JElszó</translation>
-    </message>
-    <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password below
@@ -216,14 +153,12 @@ or pick another nickname in game config:</source>
         <translation type="unfinished">Becenév</translation>
     </message>
     <message>
-        <source>Some one already uses
- your nickname %1
-on the server.
-Please pick another nickname:</source>
+        <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No nickname supplied.</source>
+        <source>Someone already uses your nickname %1 on the server.
+Please pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -351,20 +286,6 @@ Please pick another nickname:</source>
         <translation>Kirúgtak</translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">JElszó</translation>
-    </message>
-    <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password
-or pick another nickname:</source>
-        <translation type="obsolete">A %1 név már
-regisztrálva van a Hedgewars.org-on
-Írd be a jelszavad
-vagy válassz másik nevet:</translation>
-    </message>
-    <message>
         <source>%1 *** %2 has joined the room</source>
         <translation>%1 *** %2 belépett a szobába</translation>
     </message>
@@ -379,10 +300,6 @@ vagy válassz másik nevet:</translation>
     <message>
         <source>%1 *** %2 has left</source>
         <translation>%1 *** %2 távozott</translation>
-    </message>
-    <message>
-        <source>Nickname</source>
-        <translation type="obsolete">Becenév</translation>
     </message>
     <message>
         <source>User quit</source>
@@ -445,14 +362,6 @@ vagy válassz másik nevet:</translation>
 <context>
     <name>PageAdmin</name>
     <message>
-        <source>Server message:</source>
-        <translation type="obsolete">Server message:</translation>
-    </message>
-    <message>
-        <source>Set message</source>
-        <translation type="obsolete">Set message</translation>
-    </message>
-    <message>
         <source>Clear Accounts Cache</source>
         <translation>Accounts Cache kiürítése</translation>
     </message>
@@ -486,10 +395,6 @@ vagy válassz másik nevet:</translation>
     <message>
         <source>Connecting...</source>
         <translation>Csatlakozás...</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Mégse</translation>
     </message>
 </context>
 <context>
@@ -544,22 +449,6 @@ vagy válassz másik nevet:</translation>
 </context>
 <context>
     <name>PageGameStats</name>
-    <message>
-        <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;A legjobb lövés díját &lt;b&gt;%1&lt;/b&gt; nyerte &lt;b&gt;%2&lt;/b&gt; ponttal.&lt;/p&gt;</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="obsolete">
-            <numerusform>&lt;p&gt;A legjobb gyilkos &lt;b&gt;%1&lt;/b&gt; volt, &lt;b&gt;%2&lt;/b&gt; áldozattal egy körben.&lt;/p&gt;</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="obsolete">
-            <numerusform>&lt;p&gt;Összesen &lt;b&gt;%1&lt;/b&gt; süni pusztult el ebben a játékban.&lt;/p&gt;</numerusform>
-        </translation>
-    </message>
     <message>
         <source>Details</source>
         <translation type="unfinished"></translation>
@@ -629,14 +518,6 @@ vagy válassz másik nevet:</translation>
 </context>
 <context>
     <name>PageMain</name>
-    <message>
-        <source>Local Game (Play a game on a single computer)</source>
-        <translation type="obsolete">Helyi játék (Játssz egyetlen számítógépen)</translation>
-    </message>
-    <message>
-        <source>Network Game (Play a game across a network)</source>
-        <translation type="obsolete">Hálózati játék (Játék hálózaton keresztül)</translation>
-    </message>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
@@ -935,33 +816,10 @@ vagy válassz másik nevet:</translation>
     </message>
 </context>
 <context>
-    <name>PageNet</name>
-    <message>
-        <source>Error</source>
-        <translation>Hiba</translation>
-    </message>
-    <message>
-        <source>Please select server from the list above</source>
-        <translation>Kérlek, válassz szervert a fenti listából</translation>
-    </message>
-</context>
-<context>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
         <translation>Irányítás</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="unfinished">Hiba</translation>
-    </message>
-    <message>
-        <source>Please enter room name</source>
-        <translation type="unfinished">Add meg a szoba nevét</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>DLC</source>
@@ -1004,18 +862,6 @@ vagy válassz másik nevet:</translation>
     <message>
         <source>Delete team</source>
         <translation>Csapat törlése</translation>
-    </message>
-    <message>
-        <source>New weapon scheme</source>
-        <translation type="obsolete">Új fegyverséma</translation>
-    </message>
-    <message>
-        <source>Edit weapon scheme</source>
-        <translation type="obsolete">Fegyverséma szerkesztése</translation>
-    </message>
-    <message>
-        <source>Delete weapon scheme</source>
-        <translation type="obsolete">Fegyverséma törlése</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
@@ -1093,32 +939,12 @@ vagy válassz másik nevet:</translation>
 <context>
     <name>PagePlayDemo</name>
     <message>
-        <source>Error</source>
-        <translation>Hiba</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
         <source>Rename dialog</source>
         <translation>Párbeszéd átnevezése</translation>
     </message>
     <message>
         <source>Enter new file name:</source>
         <translation>Add meg az új fájl nevét:</translation>
-    </message>
-    <message>
-        <source>Cannot rename to</source>
-        <translation>Nem nevezhető át erre -</translation>
-    </message>
-    <message>
-        <source>Cannot delete file</source>
-        <translation>Fájl nem törölhető</translation>
-    </message>
-    <message>
-        <source>Please select record from the list</source>
-        <translation>Kérlek, válassz a listából</translation>
     </message>
 </context>
 <context>
@@ -1132,80 +958,12 @@ vagy válassz másik nevet:</translation>
         <translation>Csatlakozás</translation>
     </message>
     <message>
-        <source>Refresh</source>
-        <translation>Frissítés</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>Hiba</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation>Adminisztráció</translation>
     </message>
     <message>
         <source>Room Name:</source>
         <translation>Szoba neve:</translation>
-    </message>
-    <message>
-        <source>This game is in lobby.
-You may join and start playing once the game starts.</source>
-        <translation type="obsolete">Ez a játék elérhető.
-Csatlakozz és játssz, amikor a játék elkezdődik.</translation>
-    </message>
-    <message>
-        <source>This game is in progress.
-You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="obsolete">Ez a játék folyamatban van.
-Csatlakozhatsz mint megfigyelő, de a játszáshoz meg kell várnod a jelenlegi meccs befejeződését.</translation>
-    </message>
-    <message>
-        <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="obsolete">%1 a host. Ő kezeli a beállításokat és a játék indítását.</translation>
-    </message>
-    <message>
-        <source>Random Map</source>
-        <translation type="obsolete">Véletlen pálya</translation>
-    </message>
-    <message>
-        <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="obsolete">A játékok előkészített vagy véletlen pályákon játszódnak.</translation>
-    </message>
-    <message>
-        <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="obsolete">A játék sémája az általános beállításokat határozza meg. illetve egyéb dolgokat, mint egy kör ideje, Hirtelen halál vagy Vámpírizmus.</translation>
-    </message>
-    <message>
-        <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="obsolete">A fegyverséma az elérhető fegyverek és a lőszer mennyiségét határozza meg.</translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="obsolete">
-            <numerusform>Összesen %1 kliens csatlakozott a szobához.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="obsolete">
-            <numerusform>Összesen %1 csapat van a szobában.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Please enter room name</source>
-        <translation>Add meg a szoba nevét</translation>
-    </message>
-    <message>
-        <source>Please select room from the list</source>
-        <translation>Válassz egy szobát a listából</translation>
-    </message>
-    <message>
-        <source>Random Maze</source>
-        <translation type="obsolete">Véletlen labirintus</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1222,15 +980,6 @@ Csatlakozhatsz mint megfigyelő, de a játszáshoz meg kell várnod a jelenlegi 
     <message>
         <source>Clear</source>
         <translation type="unfinished">Törlés</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The game you are trying to join has started.
-Do you still want to join the room?</source>
-        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
@@ -1254,10 +1003,6 @@ Do you still want to join the room?</source>
         <translation>A talajt nem lehet elpusztítani!</translation>
     </message>
     <message>
-        <source>Add an indestructable border around the terrain</source>
-        <translation type="obsolete">A pálya köré egy elpusztíthatatlan keret felhúzása</translation>
-    </message>
-    <message>
         <source>Lower gravity</source>
         <translation>Gyengébb gravitáció</translation>
     </message>
@@ -1268,10 +1013,6 @@ Do you still want to join the room?</source>
     <message>
         <source>All hogs have a personal forcefield</source>
         <translation>Minden süninek saját erőtere van</translation>
-    </message>
-    <message>
-        <source>Enable random mines</source>
-        <translation type="obsolete">Véletlen aknaidőzítés engedélyezése</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -1392,26 +1133,6 @@ Do you still want to join the room?</source>
 <context>
     <name>PageSinglePlayer</name>
     <message>
-        <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="obsolete">Egyszerű játék (gyors játék a gép ellen, a beállításokat már kiválasztottuk neked)</translation>
-    </message>
-    <message>
-        <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="obsolete">Többjátékos (hotseat játék a barátaid vagy a gép csapatai ellen)</translation>
-    </message>
-    <message>
-        <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="obsolete">Gyakorlás (fejleszd magad a gyakorlóküldetéseken keresztül). FEJLESZTÉS ALATT</translation>
-    </message>
-    <message>
-        <source>Demos (Watch recorded demos)</source>
-        <translation type="obsolete">Demók (felvett demók megtekintése)</translation>
-    </message>
-    <message>
-        <source>Load (Load a previously saved game)</source>
-        <translation type="obsolete">Betöltés (korábbi mentett állás visszatöltése)</translation>
-    </message>
-    <message>
         <source>Simple Game</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1504,29 +1225,11 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Are you sure?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want do remove %1?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>Do you really want do remove %1 file(s)?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
         <source>encoding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want do cancel uploading %1?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1616,10 +1319,6 @@ Do you still want to join the room?</source>
         <translation>Dátum és idő hozzáadása a tároló fájl nevéhez</translation>
     </message>
     <message>
-        <source>Reduced quality</source>
-        <translation type="obsolete">Csökkentett minőség</translation>
-    </message>
-    <message>
         <source>Show ammo menu tooltips</source>
         <translation>Lőszer menü tippjeinek mutatása</translation>
     </message>
@@ -1697,10 +1396,6 @@ Do you still want to join the room?</source>
     <message>
         <source>In progress</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Default</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
@@ -1790,10 +1485,6 @@ Do you still want to join the room?</source>
         <translation>Csapatok</translation>
     </message>
     <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Fegyverek</translation>
-    </message>
-    <message>
         <source>Audio/Graphic options</source>
         <translation>Hang- és képi beállítások</translation>
     </message>
@@ -1865,10 +1556,6 @@ Do you still want to join the room?</source>
         <translation>Verzió</translation>
     </message>
     <message>
-        <source>This program is distributed under the GNU General Public License</source>
-        <translation type="obsolete">Ez a program a GNU General Public License alatt terjesztett</translation>
-    </message>
-    <message>
         <source>Developers:</source>
         <translation>Fejlesztők:</translation>
     </message>
@@ -1899,10 +1586,6 @@ Do you still want to join the room?</source>
     <message>
         <source>Port:</source>
         <translation>Port:</translation>
-    </message>
-    <message>
-        <source>Net nick</source>
-        <translation type="obsolete">Becenév a neten</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1981,18 +1664,8 @@ Do you still want to join the room?</source>
         <translation>Nyelv</translation>
     </message>
     <message>
-        <source>Restart game to apply</source>
-        <translation type="obsolete">Újraindításkor lép érvénybe</translation>
-    </message>
-    <message>
         <source>Explosives</source>
         <translation>Robbanótöltetek</translation>
-    </message>
-    <message>
-        <source>This SVN build is &apos;work in progress&apos; and may not be compatible with other versions of the game.
-Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="obsolete">Ez az SVN build még fejlesztés alatt áll és esetlegesen nem kompatibilis a játék más verzióival.
-Néhány részlet esetleg nem működik vagy nincs készen. Csak saját felelősségre használd!</translation>
     </message>
     <message>
         <source>Tip: </source>
@@ -2037,10 +1710,6 @@ Néhány részlet esetleg nem működik vagy nincs készen. Csak saját felelős
     <message>
         <source>Scheme</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">JElszó</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
@@ -2138,10 +1807,6 @@ Do yot really want to quit?</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <source>Network</source>
-        <translation>Hálózat</translation>
-    </message>
-    <message>
         <source>Connection to server is lost</source>
         <translation>A kapcsolat a szerverrel megszakadt</translation>
     </message>
@@ -2150,87 +1815,11 @@ Do yot really want to quit?</source>
         <translation>Hiba</translation>
     </message>
     <message>
-        <source>Failed to open data directory:
-%1
-Please check your installation</source>
-        <translation>Nem sikerült megnyitni az alábbi könyvtárat:
- %1
-Kérlek, ellenőrizd a telepítésed</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation>Fegyverek</translation>
-    </message>
-    <message>
-        <source>Can not edit default weapon set</source>
-        <translation type="obsolete">Az alap fegverkészlet nem szerkeszthető</translation>
-    </message>
-    <message>
-        <source>Can not delete default weapon set</source>
-        <translation type="obsolete">Az alap fegyverkeszléet nem törölhető</translation>
-    </message>
-    <message>
-        <source>Really delete this weapon set?</source>
-        <translation>Valóban törlöd ezt a fegyverkészletet?</translation>
-    </message>
-    <message>
-        <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>File association failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation type="unfinished">Csapatok</translation>
-    </message>
-    <message>
-        <source>Really delete this team?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Schemes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can not delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Really delete this game scheme?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can not delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fields required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Please fill out all fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Success</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Successfully posted the issue on code.google.com!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error during authentication with www.google.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error creating the issue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2247,21 +1836,199 @@ Kérlek, ellenőrizd a telepítésed</translation>
 </source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>Error</source>
-        <translation>Hiba</translation>
+        <source>Teams - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the team &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a record from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All file associations have been set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully posted the issue on hedgewars.googlecode.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error during authentication at google.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.come directly)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main - Error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Nem sikerült létrehozni %1</translation>
+        <translation type="unfinished">Nem sikerült létrehozni %1</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>OK</translation>
+        <source>Failed to open data directory:
+%1
+
+Please check your installation!</source>
+        <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>TCP - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start the server: %1.</source>
+        <translation type="unfinished">Nem sikerült a szerverhez csatlakozni: %1.</translation>
+    </message>
+    <message>
+        <source>Unable to run engine at </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error code: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video upload - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netgame - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a server from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">Add meg a szoba nevét</translation>
+    </message>
+    <message>
+        <source>Record Play - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select record from the list</source>
+        <translation type="unfinished">Kérlek, válassz a listából</translation>
+    </message>
+    <message>
+        <source>Cannot rename to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room Name - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select room from the list</source>
+        <translation type="unfinished">Válassz egy szobát a listából</translation>
+    </message>
+    <message>
+        <source>Room Name - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The game you are trying to join has started.
+Do you still want to join the room?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the video &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>Do you really want to remove %1 file(s)?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Do you really want to cancel uploading %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot use the ammo &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
     <message>
         <source>Nickname</source>
         <translation>Becenév</translation>
@@ -2371,37 +2138,6 @@ Kérlek, ellenőrizd a telepítésed</translation>
     </message>
 </context>
 <context>
-    <name>QTableWidget</name>
-    <message>
-        <source>Room Name</source>
-        <translation type="obsolete">Szoba neve</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>T</source>
-        <translation type="obsolete">T</translation>
-    </message>
-    <message>
-        <source>Owner</source>
-        <translation type="obsolete">Tulajdonos</translation>
-    </message>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">Pálya</translation>
-    </message>
-    <message>
-        <source>Rules</source>
-        <translation type="obsolete">Szabályok</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Fegyverek</translation>
-    </message>
-</context>
-<context>
     <name>RoomsListModel</name>
     <message>
         <source>In progress</source>
@@ -2476,21 +2212,6 @@ Kérlek, ellenőrizd a telepítésed</translation>
     </message>
 </context>
 <context>
-    <name>TCPBase</name>
-    <message>
-        <source>Error</source>
-        <translation>Hiba</translation>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation>Nem sikerült a szerverhez csatlakozni: %1.</translation>
-    </message>
-    <message>
-        <source>Unable to run engine: %1 (</source>
-        <translation>Nem sikerült a játékot futtatni: %1 (</translation>
-    </message>
-</context>
-<context>
     <name>ToggleButtonWidget</name>
     <message>
         <source>Vampirism</source>
@@ -2531,10 +2252,6 @@ Kérlek, ellenőrizd a telepítésed</translation>
     <message>
         <source>Invulnerable</source>
         <translation>Sérthetetlenség</translation>
-    </message>
-    <message>
-        <source>Add Mines</source>
-        <translation type="obsolete">Aknák hozzáadása</translation>
     </message>
     <message>
         <source>Random Order</source>
