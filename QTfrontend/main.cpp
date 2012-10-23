@@ -91,10 +91,12 @@ bool checkForDir(const QString & dir)
     if (!tmpdir.exists(dir))
         if (!tmpdir.mkdir(dir))
         {
-            QMessageBox::critical(0,
-                                  QObject::tr("Error"),
-                                  QObject::tr("Cannot create directory %1").arg(dir),
-                                  QObject::tr("OK"));
+            QMessageBox directoryMsg(QApplication::activeWindow());
+            directoryMsg.setIcon(QMessageBox::Warning);
+            directoryMsg.setWindowTitle(QMessageBox::tr("Main - Error"));
+            directoryMsg.setText(QMessageBox::tr("Cannot create directory %1").arg(dir));
+            directoryMsg.setWindowModality(Qt::WindowModal);
+            directoryMsg.exec();
             return false;
         }
     return true;
@@ -205,10 +207,14 @@ int main(int argc, char *argv[])
     datadir->cd(*cDataDir);
     if(!datadir->cd("hedgewars/Data"))
     {
-        QMessageBox::critical(0, QMessageBox::tr("Error"),
-                              QMessageBox::tr("Failed to open data directory:\n%1\n"
-                                              "Please check your installation").
-                              arg(datadir->absolutePath()+"/hedgewars/Data"));
+        QMessageBox missingMsg(QApplication::activeWindow());
+        missingMsg.setIcon(QMessageBox::Critical);
+        missingMsg.setWindowTitle(QMessageBox::tr("Main - Error"));
+        missingMsg.setText(QMessageBox::tr("Failed to open data directory:\n%1\n\n"
+                                           "Please check your installation!").
+                                            arg(datadir->absolutePath()+"/hedgewars/Data"));
+        missingMsg.setWindowModality(Qt::WindowModal);
+        missingMsg.exec();
         return 1;
     }
 

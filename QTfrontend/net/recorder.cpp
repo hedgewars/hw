@@ -18,7 +18,6 @@
 
 #include <QString>
 #include <QByteArray>
-//#include <QMessageBox>
 
 #include "recorder.h"
 #include "gameuiconfig.h"

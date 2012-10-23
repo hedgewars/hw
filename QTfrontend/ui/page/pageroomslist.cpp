@@ -424,10 +424,14 @@ void PageRoomsList::onCreateClick()
     if (roomName->text().size())
         emit askForCreateRoom(roomName->text());
     else
-        QMessageBox::critical(this,
-                              tr("Error"),
-                              tr("Please enter room name"),
-                              tr("OK"));
+    {
+        QMessageBox roomNameMsg(this);
+        roomNameMsg.setIcon(QMessageBox::Warning);
+        roomNameMsg.setWindowTitle(QMessageBox::tr("Room Name - Error"));
+        roomNameMsg.setText(QMessageBox::tr("Please enter room name"));
+        roomNameMsg.setWindowModality(Qt::WindowModal);
+        roomNameMsg.exec();
+    }
 }
 
 void PageRoomsList::onJoinClick()
@@ -436,10 +440,12 @@ void PageRoomsList::onJoinClick()
 
     if(mdl.size() != 1)
     {
-        QMessageBox::critical(this,
-                              tr("Error"),
-                              tr("Please select room from the list"),
-                              tr("OK"));
+        QMessageBox roomNameMsg(this);
+        roomNameMsg.setIcon(QMessageBox::Warning);
+        roomNameMsg.setWindowTitle(QMessageBox::tr("Room Name - Error"));
+        roomNameMsg.setText(QMessageBox::tr("Please select room from the list"));
+        roomNameMsg.setWindowModality(Qt::WindowModal);
+        roomNameMsg.exec();
         return;
     }
 
@@ -467,10 +473,15 @@ void PageRoomsList::onClearClick()
 
 void PageRoomsList::onJoinConfirmation(const QString & room)
 {
-    if (QMessageBox::warning(this,
-                             tr("Warning"),
-                             tr("The game you are trying to join has started.\nDo you still want to join the room?"),
-                             QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+
+    QMessageBox reallyJoinMsg(this);
+    reallyJoinMsg.setIcon(QMessageBox::Question);
+    reallyJoinMsg.setWindowTitle(QMessageBox::tr("Room Name - Are you sure?"));
+    reallyJoinMsg.setText(QMessageBox::tr("The game you are trying to join has started.\nDo you still want to join the room?"));
+    reallyJoinMsg.setWindowModality(Qt::WindowModal);
+    reallyJoinMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (reallyJoinMsg.exec() == QMessageBox::Ok)
     {
         emit askForJoinRoom(room);
     }

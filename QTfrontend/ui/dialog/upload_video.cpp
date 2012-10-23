@@ -32,7 +32,6 @@
 #include <QMessageBox>
 #include <QRegExp>
 #include <QRegExpValidator>
-#include <QMessageBox>
 
 #include "upload_video.h"
 #include "hwconsts.h"
@@ -233,7 +232,14 @@ void HWUploadVideoDialog::authFinished()
             errorStr += QMessageBox::tr("Login or password is incorrect");
         else
             errorStr += reply->errorString();
-        QMessageBox::warning(this, QMessageBox::tr("Error"), errorStr);
+
+        QMessageBox deniedMsg(this);
+        deniedMsg.setIcon(QMessageBox::Warning);
+        deniedMsg.setWindowTitle(QMessageBox::tr("Video upload - Error"));
+        deniedMsg.setText(errorStr);
+        deniedMsg.setWindowModality(Qt::WindowModal);
+        deniedMsg.exec();
+
         setEditable(true);
         return;
     }
@@ -288,7 +294,14 @@ void HWUploadVideoDialog::startUpload()
     {
         QString errorStr = QMessageBox::tr("Error while sending metadata to youtube.com:\n");
         errorStr += reply->errorString();
-        QMessageBox::warning(this, QMessageBox::tr("Error"), errorStr);
+
+        QMessageBox deniedMsg(this);
+        deniedMsg.setIcon(QMessageBox::Warning);
+        deniedMsg.setWindowTitle(QMessageBox::tr("Video upload - Error"));
+        deniedMsg.setText(errorStr);
+        deniedMsg.setWindowModality(Qt::WindowModal);
+        deniedMsg.exec();
+
         setEditable(true);
         return;
     }

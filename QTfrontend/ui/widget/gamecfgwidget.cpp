@@ -270,7 +270,14 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 {
     bool illegal = ammo.size() != cDefaultAmmoStore->size();
     if (illegal)
-        QMessageBox::critical(this, tr("Error"), tr("Illegal ammo scheme"));
+    {
+        QMessageBox illegalMsg(this);
+        illegalMsg.setIcon(QMessageBox::Warning);
+        illegalMsg.setWindowTitle(QMessageBox::tr("Error"));
+        illegalMsg.setText(QMessageBox::tr("Cannot use the ammo '%1'!").arg(name));
+        illegalMsg.setWindowModality(Qt::WindowModal);
+        illegalMsg.exec();
+    }
 
     int pos = WeaponsName->findText(name);
     if ((pos == -1) || illegal)   // prevent from overriding schemes with bad ones

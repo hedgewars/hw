@@ -157,10 +157,12 @@ void PageNetGame::onUpdateClick()
     else
     {
         leRoomName->clear();
-        QMessageBox::critical(this,
-                              tr("Error"),
-                              tr("Please enter room name"),
-                              tr("OK"));
+        QMessageBox roomMsg(this);
+        roomMsg.setIcon(QMessageBox::Warning);
+        roomMsg.setWindowTitle(QMessageBox::tr("Netgame - Error"));
+        roomMsg.setText(QMessageBox::tr("Please enter room name"));
+        roomMsg.setWindowModality(Qt::WindowModal);
+        roomMsg.exec();
     }
 }
 

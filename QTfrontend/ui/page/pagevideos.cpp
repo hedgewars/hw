@@ -839,11 +839,14 @@ void PageVideos::deleteSelectedFiles()
         return;
 
     // ask user if (s)he is serious
-    if (QMessageBox::question(this,
-                              tr("Are you sure?"),
-                              tr("Do you really want do remove %1?").arg(item->name),
-                              QMessageBox::Yes | QMessageBox::No)
-            != QMessageBox::Yes)
+    QMessageBox reallyDeleteMsg(this);
+    reallyDeleteMsg.setIcon(QMessageBox::Question);
+    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Videos - Are you sure?"));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the video '%1'?").arg(item->name));
+    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (reallyDeleteMsg.exec() != QMessageBox::Ok)
         return;
 
     // remove
@@ -860,11 +863,14 @@ void PageVideos::deleteSelectedFiles()
         return;
 
     // ask user if (s)he is serious
-    if (QMessageBox::question(this,
-                              tr("Are you sure?"),
-                              tr("Do you really want do remove %1 file(s)?", "", num).arg(num),
-                              QMessageBox::Yes | QMessageBox::No)
-            != QMessageBox::Yes)
+    QMessageBox reallyDeleteMsg(this);
+    reallyDeleteMsg.setIcon(QMessageBox::Question);
+    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Videos - Are you sure?"));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to remove %1 file(s)?", "", num).arg(num));
+    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (reallyDeleteMsg.exec() != QMessageBox::Ok)
         return;
 
     // remove
@@ -1081,11 +1087,15 @@ void PageVideos::uploadToYouTube()
 
     if (item->pUploading)
     {
-        if (QMessageBox::question(this,
-                                  tr("Are you sure?"),
-                                  tr("Do you really want do cancel uploading %1?").arg(item->name),
-                                  QMessageBox::Yes | QMessageBox::No)
-                != QMessageBox::Yes)
+        // ask user if (s)he is serious
+        QMessageBox reallyStopMsg(this);
+        reallyStopMsg.setIcon(QMessageBox::Question);
+        reallyStopMsg.setWindowTitle(QMessageBox::tr("Videos - Are you sure?"));
+        reallyStopMsg.setText(QMessageBox::tr("Do you really want to cancel uploading %1?").arg(item->name));
+        reallyStopMsg.setWindowModality(Qt::WindowModal);
+        reallyStopMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+        if (reallyStopMsg.exec() != QMessageBox::Ok)
             return;
         item->pUploading->deleteLater();
         filesTable->setCellWidget(row, vcProgress, NULL); // remove progress bar
