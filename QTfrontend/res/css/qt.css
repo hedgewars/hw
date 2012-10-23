@@ -122,13 +122,12 @@ border-radius: 0;
 border-top-left-radius: 6px;
 border-top-right-radius: 6px;
 padding: 3px;
-border-bottom-color: #0d0544;
-}
-QTabBar::tab:!selected {
-color: #0d0544;
 background-color: #00351d;
 color: #ffcc00;
-border-bottom-color: #ffcc00;
+}
+QTabBar::tab:selected {
+border-bottom-color: #0d0544;
+border-bottom-width: 0;
 }
 QSpinBox::up-button{
 background: transparent;
