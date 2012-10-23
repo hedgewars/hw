@@ -194,7 +194,12 @@ void SelWeaponWidget::save()
     for(int i = 0; i < cDefaultAmmos.size(); i++)
         if (!cDefaultAmmos[i].first.compare(m_name->text()))
         {
-            QMessageBox::warning(0, QMessageBox::tr("Weapons"), QMessageBox::tr("Can not overwrite default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            QMessageBox deniedMsg(this);
+            deniedMsg.setIcon(QMessageBox::Warning);
+            deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
+            deniedMsg.setText(QMessageBox::tr("Cannot overwrite default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            deniedMsg.setWindowModality(Qt::WindowModal);
+            deniedMsg.exec();
             return;
         }
 
@@ -244,13 +249,23 @@ void SelWeaponWidget::deleteWeaponsName()
     for(int i = 0; i < cDefaultAmmos.size(); i++)
         if (!cDefaultAmmos[i].first.compare(m_name->text()))
         {
-            QMessageBox::warning(0, QMessageBox::tr("Weapons"), QMessageBox::tr("Can not delete default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            QMessageBox deniedMsg(this);
+            deniedMsg.setIcon(QMessageBox::Warning);
+            deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
+            deniedMsg.setText(QMessageBox::tr("Cannot delete default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            deniedMsg.setWindowModality(Qt::WindowModal);
+            deniedMsg.exec();
             return;
         }
 
-    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Weapons"), QMessageBox::tr("Really delete this weapon set?"), QMessageBox::Ok | QMessageBox::Cancel);
+    QMessageBox reallyDeleteMsg(this);
+    reallyDeleteMsg.setIcon(QMessageBox::Question);
+    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Weapons - Are you sure?"));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the weapon set '%1'?").arg(curWeaponsName));
+    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
-    if (reallyDelete.exec() == QMessageBox::Ok)
+    if (reallyDeleteMsg.exec() == QMessageBox::Ok)
     {
         wconf->remove(curWeaponsName);
         emit weaponsDeleted();
