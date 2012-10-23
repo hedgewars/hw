@@ -37,7 +37,7 @@ case s[1] of
     'R': if ReadyTimeLeft > 1 then 
         begin
         ReadyTimeLeft:= 1;
-        if not CurrentTeam^.ExtDriven then
+        if not isExternalSource then
             SendIPC('c'+s);
         end
     end
@@ -218,7 +218,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'L');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -231,7 +231,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'l');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmLeft and InputMask));
@@ -243,7 +243,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'R');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -256,7 +256,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'r');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmRight and InputMask));
@@ -268,7 +268,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'U');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -281,7 +281,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'u');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmUp and InputMask));
@@ -293,7 +293,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'D');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -306,7 +306,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'd');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmDown and InputMask));
@@ -318,7 +318,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'Z');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -331,7 +331,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'z');
 with CurrentHedgehog^.Gear^ do
     Message:= Message and (not (gmPrecise and InputMask));
@@ -343,7 +343,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'j');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -356,7 +356,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'J');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -376,7 +376,7 @@ with CurrentHedgehog^.Gear^ do
     if ((State and gstHHDriven) <> 0) then
         begin
         FollowGear:= CurrentHedgehog^.Gear;
-        if not CurrentTeam^.ExtDriven then
+        if not isExternalSource then
             SendIPC(_S'A');
         Message:= Message or (gmAttack and InputMask);
         ScriptCall('onAttack');
@@ -391,7 +391,7 @@ if CheckNoTeamOrHH then
     exit;
 with CurrentHedgehog^.Gear^ do
     begin
-    if not CurrentTeam^.ExtDriven and
+    if not isExternalSource and
         ((Message and gmAttack) <> 0) then
             SendIPC(_S'a');
     Message:= Message and (not (gmAttack and InputMask));
@@ -404,7 +404,7 @@ begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH or isPaused then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S'S');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -428,7 +428,7 @@ begin
         gi := gi^.NextGear
         end;
 
-    if not CurrentTeam^.ExtDriven then
+    if not isExternalSource then
         begin
         s[0]:= #5;
         s[1]:= 'N';
@@ -447,7 +447,7 @@ if CheckNoTeamOrHH then
 
 TryDo((s[0] = #1) and (s[1] >= '1') and (s[1] <= '5'), 'Malformed /timer', true);
 
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(s);
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -467,7 +467,7 @@ if (s[0] <> #1) or CheckNoTeamOrHH then
 slot:= byte(s[1]) - 49;
 if slot > cMaxSlotIndex then
     exit;
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     begin
     ss[0]:= #1;
     ss[1]:= char(byte(s[1]) + 79);
@@ -489,7 +489,7 @@ begin
 
     TryDo((s[0] = #1) and (s[1] <= char(High(TAmmoType))), 'Malformed /setweap', true);
 
-    if not CurrentTeam^.ExtDriven then
+    if not isExternalSource then
         SendIPC('w' + s);
 
     with CurrentHedgehog^.Gear^ do
@@ -508,7 +508,7 @@ if (s[0] <> #1) or CheckNoTeamOrHH then
 if TWave(s[1]) > High(TWave) then
     exit;
 
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC('t' + s);
 
 with CurrentHedgehog^.Gear^ do
