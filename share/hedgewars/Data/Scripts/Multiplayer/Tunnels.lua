@@ -31,44 +31,48 @@ function onGameInit()
         AddPoint(4000,i)
     end
 
-        side = 0
-    for i = 0,GetRandom(15)+30 do
-        size = GetRandom(15)+3
+    side = 0
+    for i = 0,GetRandom(15)+25 do
+        if side > 3 then 
+            size = GetRandom(4)+4
+        else
+            size = GetRandom(12)+4
+        end
         --side = GetRandom(4)
         dx = div(size,4)
         maxshift = dx
         dy = dx
         if side == 0 then
             x = 0
-            y = GetRandom(2048)
+            y = GetRandom(2048-size*4)+size*2
             dy = 0
         elseif side == 1 then
-            x = GetRandom(4096)
+            x = GetRandom(4096-size*4)+size*2
             y = 0
             dx = 0
         elseif side == 2 then
             x = 4096
-            y = GetRandom(2048)
+            y = GetRandom(2048-size*4)+size*2
             dx = -dx
             dy = 0
         elseif side == 3 then
-            x = GetRandom(4096)
+            x = GetRandom(4096-size*4)+size*2
             y = 2048
             dx = 0
             dy = -dy
-        elseif side == 4 then
+        elseif side > 3 then
             x = GetRandom(2500)+500
             y = GetRandom(1250)+250
             dx = GetRandom(maxshift*2)-maxshift
             dy = GetRandom(maxshift*2)-maxshift
         end
-        length = GetRandom(500)+500
+        length = GetRandom(500-size*25)+600
         while (length > 0) and (x > -300) and (y > -300) and (x < 4400) and (y < 2400) do
             length = length - 1
             AddPoint(x,y,size,true)
             x = x + dx
             y = y + dy
-            if GetRandom(4) == 0 then
+            if GetRandom(8) == 0 then
                 shift = GetRandom(10)-5
                 if (shift > 0) and (dx < maxshift) then
                     dx = dx + shift
@@ -83,7 +87,7 @@ function onGameInit()
                 end
             end
         end
-        if side < 5 then
+        if side < 6 then
             side = side + 1
         else 
             side = 0
