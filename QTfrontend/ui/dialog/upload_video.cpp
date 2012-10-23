@@ -158,6 +158,8 @@ HWUploadVideoDialog::HWUploadVideoDialog(QWidget* parent, const QString &filenam
 
     connect(btnUpload, SIGNAL(clicked()), this, SLOT(upload()));
     connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
+
+    this->setWindowModality(Qt::WindowModal);
 }
 
 void HWUploadVideoDialog::showEvent(QShowEvent * event)

@@ -50,4 +50,6 @@ HWPasswordDialog::HWPasswordDialog(QWidget* parent, const QString & label) : QDi
 
     connect(pbOK, SIGNAL(clicked()), this, SLOT(accept()));
     connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
+
+    this->setWindowModality(Qt::WindowModal);
 }
