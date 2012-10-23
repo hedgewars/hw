@@ -23,13 +23,15 @@ unit uCommands;
 interface
 
 var isDeveloperMode: boolean;
+var isExternalSource: boolean;
 type TCommandHandler = procedure (var params: shortstring);
 
 procedure initModule;
 procedure freeModule;
 procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean; Rand: boolean);
 procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean);
-procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
+procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean); inline;
+procedure ParseCommand(CmdStr: shortstring; TrustedSource, ExternalSource: boolean);
 procedure ParseTeamCommand(s: shortstring);
 procedure StopMessages(Message: Longword);
 
@@ -73,11 +75,17 @@ else
 end;
 
 
-procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
+procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean); inline;
+begin
+    ParseCommand(CmdStr, TrustedSource, false)
+end;
+
+procedure ParseCommand(CmdStr: shortstring; TrustedSource, ExternalSource: boolean);
 var s: shortstring;
     t: PVariable;
     c: char;
 begin
+isExternalSource:= ExternalSource or CurrentTeam^.ExtDriven;
 //WriteLnToConsole(CmdStr);
 if CmdStr[0]=#0 then
     exit;

@@ -1223,7 +1223,7 @@ end;
 procedure chSkip(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if not CurrentTeam^.ExtDriven then
+if not isExternalSource then
     SendIPC(_S',');
 uStats.Skipped;
 skipFlag:= true
