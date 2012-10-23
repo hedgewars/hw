@@ -9,15 +9,9 @@ INCLUDEPATH += ../QTfrontend/ui/page
 INCLUDEPATH += ../QTfrontend/ui/dialog
 INCLUDEPATH += ../QTfrontend/net
 INCLUDEPATH += ../QTfrontend/util
-INCLUDEPATH += /usr/local/include/SDL
-INCLUDEPATH += /usr/include/SDL
 INCLUDEPATH += ../misc/quazip/
 
-DESTDIR = .
-
-win32 {
-    RC_FILE = ../QTfrontend/hedgewars.rc
-}
+DESTDIR = ../bin
 
 QT += network
 QT += webkit
@@ -203,42 +197,36 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/playerslistmodel.cpp
 
 
-win32 {
-    SOURCES += ../QTfrontend/xfire.cpp
-}
-
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_bg.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_cs.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_de.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_en.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_es.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_fi.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_fr.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_hu.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_it.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ja.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ko.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_lt.ts
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_nl.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_pl.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_pt_BR.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_pt_PT.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ru.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_sk.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_sv.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_tr_TR.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_uk.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_CN.ts 	 
-TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
+TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_bg.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_cs.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_de.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_en.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_es.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_fi.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_fr.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_hu.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_it.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_ja.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_ko.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_lt.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_nl.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_pl.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_pt_BR.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_pt_PT.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_ru.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_sk.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_sv.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_tr_TR.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_uk.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_zh_CN.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
 LIBS += -L../bin -lquazip
 
-!macx {
-    LIBS += -lSDL -lSDL_mixer
-} else {
+macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
     QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
 
@@ -254,6 +242,20 @@ LIBS += -L../bin -lquazip
     INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers /Library/Frameworks/SDL_Mixer.framework/Headers
     CONFIG += warn_on x86
     #CONFIG += x86 ppc x86_64 ppc64
+}
+
+win32 {
+    RC_FILE = ../QTfrontend/hedgewars.rc
+    SOURCES += ../QTfrontend/xfire.cpp
+    INCLUDEPATH += ../misc/winutils/include
+    LIBS += -L../misc/winutils/lib
+}
+
+!macx {
+    LIBS += -lSDL -lSDL_mixer
+    !win32 {
+        INCLUDEPATH += /usr/local/include/SDL /usr/include/SDL
+    }
 }
 
 FORMS +=
