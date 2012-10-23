@@ -1006,7 +1006,7 @@ void HWForm::NetPassword(const QString & nick)
 void HWForm::NetNickTaken(const QString & nick)
 {
     bool ok = false;
-    QString newNick = QInputDialog::getText(this, tr("Nickname"), tr("Some one already uses\n your nickname %1\non the server.\nPlease pick another nickname:").arg(nick), QLineEdit::Normal, nick, &ok);
+    QString newNick = QInputDialog::getText(this, tr("Nickname"), tr("Someone already uses your nickname %1 on the server.\nPlease pick another nickname:").arg(nick), QLineEdit::Normal, nick, &ok);
 
     if (!ok || newNick.isEmpty())
     {
@@ -1236,7 +1236,7 @@ void HWForm::NetStartServer()
     pnetserver = new HWNetServer;
     if (!pnetserver->StartServer(ui.pageNetServer->sbPort->value()))
     {
-        ShowErrorMessage(QMessageBox::tr("Unable to start the server"));
+        ShowErrorMessage(QMessageBox::tr("Unable to start server"));
 
         delete pnetserver;
         pnetserver = 0;

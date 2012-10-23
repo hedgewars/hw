@@ -58,6 +58,8 @@ HWAskQuitDialog::HWAskQuitDialog(QWidget* parent, HWForm * form) : QDialog(paren
     QTimer * timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateList()));
     timer->start(200);
+
+    this->setWindowModality(Qt::WindowModal);
 }
 
 void HWAskQuitDialog::goToPageVideos()
