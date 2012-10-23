@@ -20,21 +20,6 @@
     </message>
 </context>
 <context>
-    <name>DrawMapWidget</name>
-    <message>
-        <source>File error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -52,14 +37,6 @@
     <message>
         <source>Edit weapons</source>
         <translation>武器を編集</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>エラー</translation>
-    </message>
-    <message>
-        <source>Illegal ammo scheme</source>
-        <translation>弾薬配分は不規則</translation>
     </message>
     <message>
         <source>Edit schemes</source>
@@ -83,22 +60,6 @@
 </context>
 <context>
     <name>HWChatWidget</name>
-    <message>
-        <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="obsolete">%1 *** %2 さんは無視リストから削除されています</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="obsolete">%1 *** %2 さんは無視リストに追加されています</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="obsolete">%1 *** %2 さんは友達リストから削除されています</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="obsolete">%1 *** %2 さんは友達リストに追加されています</translation>
-    </message>
     <message>
         <source>%1 has been removed from your ignore list</source>
         <translation type="unfinished"></translation>
@@ -147,28 +108,8 @@
 <context>
     <name>HWForm</name>
     <message>
-        <source>new</source>
-        <translation type="obsolete">作成</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>エラー</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <source>Unable to start the server</source>
-        <translation>サーバーのスタートが不可能</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>ファイル%1に保存することができません</translation>
-    </message>
-    <message>
-        <source>Please select record from the list above</source>
-        <translation>上方のリストからレコードを選んで下さい</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
@@ -197,10 +138,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">パスワード</translation>
-    </message>
-    <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password below
@@ -220,14 +157,12 @@ Hedgewars.orgに登録されました。
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Some one already uses
- your nickname %1
-on the server.
-Please pick another nickname:</source>
+        <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No nickname supplied.</source>
+        <source>Someone already uses your nickname %1 on the server.
+Please pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -355,10 +290,6 @@ Please pick another nickname:</source>
         <translation>けとばされました</translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">パスワード</translation>
-    </message>
-    <message>
         <source>%1 *** %2 has joined the room</source>
         <translation>%1 *** %2 さんはルームに参加しています</translation>
     </message>
@@ -373,17 +304,6 @@ Please pick another nickname:</source>
     <message>
         <source>%1 *** %2 has left</source>
         <translation>%1 *** %2 さんは退室</translation>
-    </message>
-    <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password below
-or pick another nickname in game config:</source>
-        <translation type="obsolete">あなたの「%1」というニック名は
-Hedgewars.orgに登録されました。
-下にパスワードを入力して、または
-ゲーム構成に別の名を選択してください：
-</translation>
     </message>
     <message>
         <source>User quit</source>
@@ -480,10 +400,6 @@ Hedgewars.orgに登録されました。
         <source>Connecting...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">キャンセル</translation>
-    </message>
 </context>
 <context>
     <name>PageDrawMap</name>
@@ -537,10 +453,6 @@ Hedgewars.orgに登録されました。
 </context>
 <context>
     <name>PageGameStats</name>
-    <message>
-        <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt; &lt;b&gt;%2&lt;/b&gt; で　&lt;b&gt;%1&lt;/b&gt; が一番良いショットの賞をもらった　&lt;/p&gt;</translation>
-    </message>
     <message>
         <source>Details</source>
         <translation type="unfinished"></translation>
@@ -610,14 +522,6 @@ Hedgewars.orgに登録されました。
 </context>
 <context>
     <name>PageMain</name>
-    <message>
-        <source>Local Game (Play a game on a single computer)</source>
-        <translation type="obsolete">ロカール　ゲーム (一台のパソコンゲーム)</translation>
-    </message>
-    <message>
-        <source>Network Game (Play a game across a network)</source>
-        <translation type="obsolete">ネットワーク ゲーム</translation>
-    </message>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
@@ -916,33 +820,10 @@ Hedgewars.orgに登録されました。
     </message>
 </context>
 <context>
-    <name>PageNet</name>
-    <message>
-        <source>Error</source>
-        <translation>エラー</translation>
-    </message>
-    <message>
-        <source>Please select server from the list above</source>
-        <translation>下のリストの中でサーバーを選択下さい</translation>
-    </message>
-</context>
-<context>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
         <translation>コントロール</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="unfinished">エラー</translation>
-    </message>
-    <message>
-        <source>Please enter room name</source>
-        <translation type="unfinished">ルーム名を入力してください</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>DLC</source>
@@ -1062,32 +943,12 @@ Hedgewars.orgに登録されました。
 <context>
     <name>PagePlayDemo</name>
     <message>
-        <source>Error</source>
-        <translation>エラー</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>ＯＫ</translation>
-    </message>
-    <message>
         <source>Rename dialog</source>
         <translation>Rename dialog</translation>
     </message>
     <message>
         <source>Enter new file name:</source>
         <translation>新しいファイル名:</translation>
-    </message>
-    <message>
-        <source>Cannot rename to</source>
-        <translation>Cannot rename to</translation>
-    </message>
-    <message>
-        <source>Cannot delete file</source>
-        <translation>ファイル削除は不可能</translation>
-    </message>
-    <message>
-        <source>Please select record from the list</source>
-        <translation>録画を選択下さい</translation>
     </message>
 </context>
 <context>
@@ -1101,37 +962,12 @@ Hedgewars.orgに登録されました。
         <translation>接続</translation>
     </message>
     <message>
-        <source>Refresh</source>
-        <translation>更新</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>エラー</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>ＯＫ</translation>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation type="unfinished">アドミン機能</translation>
     </message>
     <message>
         <source>Room Name:</source>
         <translation type="unfinished">ルーム名：</translation>
-    </message>
-    <message>
-        <source>This game is in lobby.
-You may join and start playing once the game starts.</source>
-        <translation type="obsolete">このゲームはロビー中。</translation>
-    </message>
-    <message>
-        <source>Please enter room name</source>
-        <translation>ルーム名を入力してください</translation>
-    </message>
-    <message>
-        <source>Please select room from the list</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1147,15 +983,6 @@ You may join and start playing once the game starts.</source>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The game you are trying to join has started.
-Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
@@ -1310,26 +1137,6 @@ Do you still want to join the room?</source>
 <context>
     <name>PageSinglePlayer</name>
     <message>
-        <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="obsolete">簡単ゲーム (パソコンとのゲーム、自動設定)</translation>
-    </message>
-    <message>
-        <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="obsolete">マルチプレイヤー (パソコンまたは友達との戦い)</translation>
-    </message>
-    <message>
-        <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="obsolete">訓練モード (訓練任務で上達) 開発中</translation>
-    </message>
-    <message>
-        <source>Demos (Watch recorded demos)</source>
-        <translation type="obsolete">デモ (録画されたデモを見る)</translation>
-    </message>
-    <message>
-        <source>Load (Load a previously saved game)</source>
-        <translation type="obsolete">ロード (その前保存したゲームをやる)</translation>
-    </message>
-    <message>
         <source>Simple Game</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1422,29 +1229,11 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Are you sure?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want do remove %1?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>Do you really want do remove %1 file(s)?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
         <source>encoding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want do cancel uploading %1?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1613,10 +1402,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="obsolete">デフォールト</translation>
-    </message>
-    <message>
         <source>hand drawn map...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1704,10 +1489,6 @@ Do you still want to join the room?</source>
         <translation>チーム</translation>
     </message>
     <message>
-        <source>Weapons</source>
-        <translation type="obsolete">武器</translation>
-    </message>
-    <message>
         <source>Audio/Graphic options</source>
         <translation>オディオ/画面 設定</translation>
     </message>
@@ -1779,10 +1560,6 @@ Do you still want to join the room?</source>
         <translation>バーション</translation>
     </message>
     <message>
-        <source>This program is distributed under the GNU General Public License</source>
-        <translation type="obsolete">This program is distributed under the GNU General Public License</translation>
-    </message>
-    <message>
         <source>Developers:</source>
         <translation>開発者:</translation>
     </message>
@@ -1813,10 +1590,6 @@ Do you still want to join the room?</source>
     <message>
         <source>Port:</source>
         <translation>Port:</translation>
-    </message>
-    <message>
-        <source>Net nick</source>
-        <translation type="obsolete">ネット別名</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1943,10 +1716,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">パスワード</translation>
-    </message>
-    <message>
         <source>% Get Away Time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2042,10 +1811,6 @@ Do yot really want to quit?</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <source>Network</source>
-        <translation>ネットワーク</translation>
-    </message>
-    <message>
         <source>Connection to server is lost</source>
         <translation>サーバーの接続は切断された</translation>
     </message>
@@ -2054,87 +1819,11 @@ Do yot really want to quit?</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <source>Failed to open data directory:
-%1
-Please check your installation</source>
-        <translation>フォルダー
- %1　は開かれなかった
-インストールをチェックしてください</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation>武器</translation>
-    </message>
-    <message>
-        <source>Can not edit default weapon set</source>
-        <translation type="obsolete">デフォールトセットの編集は不可能</translation>
-    </message>
-    <message>
-        <source>Can not delete default weapon set</source>
-        <translation type="obsolete">デフォールトセットの削除は不可能</translation>
-    </message>
-    <message>
-        <source>Really delete this weapon set?</source>
-        <translation>本当にこのデフォールトセットを削除する？</translation>
-    </message>
-    <message>
-        <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>File association failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Teams</source>
-        <translation type="unfinished">チーム</translation>
-    </message>
-    <message>
-        <source>Really delete this team?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Schemes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can not delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Really delete this game scheme?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can not delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fields required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Please fill out all fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Success</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Successfully posted the issue on code.google.com!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error during authentication with www.google.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error creating the issue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2151,21 +1840,199 @@ Please check your installation</source>
 </source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>Error</source>
-        <translation>エラー</translation>
+        <source>Teams - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the team &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a record from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All file associations have been set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully posted the issue on hedgewars.googlecode.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error during authentication at google.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.come directly)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main - Error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>フォルダー%1作成拒否</translation>
+        <translation type="unfinished">フォルダー%1作成拒否</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>オケ</translation>
+        <source>Failed to open data directory:
+%1
+
+Please check your installation!</source>
+        <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>TCP - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start the server: %1.</source>
+        <translation type="unfinished">サーバー%1の起動は出来なかった</translation>
+    </message>
+    <message>
+        <source>Unable to run engine at </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error code: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video upload - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netgame - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a server from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">ルーム名を入力してください</translation>
+    </message>
+    <message>
+        <source>Record Play - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select record from the list</source>
+        <translation type="unfinished">録画を選択下さい</translation>
+    </message>
+    <message>
+        <source>Cannot rename to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room Name - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select room from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room Name - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The game you are trying to join has started.
+Do you still want to join the room?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the video &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>Do you really want to remove %1 file(s)?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Do you really want to cancel uploading %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot use the ammo &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
     <message>
         <source>Nickname</source>
         <translation type="unfinished"></translation>
@@ -2275,17 +2142,6 @@ Please check your installation</source>
     </message>
 </context>
 <context>
-    <name>QTableWidget</name>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">地図</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">武器</translation>
-    </message>
-</context>
-<context>
     <name>RoomsListModel</name>
     <message>
         <source>In progress</source>
@@ -2357,21 +2213,6 @@ Please check your installation</source>
     <message>
         <source>copy of</source>
         <translation type="unfinished">模写</translation>
-    </message>
-</context>
-<context>
-    <name>TCPBase</name>
-    <message>
-        <source>Error</source>
-        <translation>エラー</translation>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation>サーバー%1の起動は出来なかった</translation>
-    </message>
-    <message>
-        <source>Unable to run engine: %1 (</source>
-        <translation>エンジン%1の起動は出来なかった</translation>
     </message>
 </context>
 <context>
