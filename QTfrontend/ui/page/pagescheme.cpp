@@ -516,12 +516,20 @@ void PageScheme::copyRow()
 
 void PageScheme::deleteRow()
 {
-    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Schemes"), QMessageBox::tr("Really delete this game scheme?"), QMessageBox::Ok | QMessageBox::Cancel);
-
-    if (reallyDelete.exec() == QMessageBox::Ok)
+    int numberOfDefaultSchemes = ((AmmoSchemeModel*)mapper->model())->numberOfDefaultSchemes;
+    if (selectScheme->currentIndex() < numberOfDefaultSchemes)
     {
-        QAbstractItemModel * model = mapper->model();
-        model->removeRow(selectScheme->currentIndex());
+        QMessageBox::warning(0, QMessageBox::tr("Schemes"), QMessageBox::tr("Cannot delete default scheme '%1'!").arg(selectScheme->currentText()));
+    }
+    else
+    {
+       QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Schemes"), QMessageBox::tr("Really delete this game scheme?"), QMessageBox::Ok | QMessageBox::Cancel);
+
+        if (reallyDelete.exec() == QMessageBox::Ok)
+        {
+            QAbstractItemModel * model = mapper->model();
+            model->removeRow(selectScheme->currentIndex());
+        }
     }
 }
 

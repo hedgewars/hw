@@ -908,7 +908,7 @@ void HWForm::DeleteScheme()
     ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
     if (ui.pageOptions->SchemesName->currentIndex() < ammoSchemeModel->numberOfDefaultSchemes)
     {
-        QMessageBox::warning(0, QMessageBox::tr("Schemes"), QMessageBox::tr("Can not delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()));
+        QMessageBox::warning(0, QMessageBox::tr("Schemes"), QMessageBox::tr("Cannot delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()));
     }
     else
     {
