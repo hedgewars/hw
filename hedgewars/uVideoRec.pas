@@ -96,23 +96,26 @@ begin
     // store some description in output file
     desc:= '';
     if UserNick <> '' then
-        desc+= 'Player: ' + UserNick + #10;
+        desc:= desc + 'Player: ' + UserNick + #10;
     if recordFileName <> '' then
-        desc+= 'Record: ' + recordFileName + #10;
+        desc:= desc + 'Record: ' + recordFileName + #10;
     if cMapName <> '' then
-        desc+= 'Map: ' + cMapName + #10;
+        desc:= desc + 'Map: ' + cMapName + #10;
     if Theme <> '' then
-        desc+= 'Theme: ' + Theme + #10;
-    desc+= 'prefix[' + RecPrefix + ']prefix';
-    desc+= #0;
+        desc:= desc + 'Theme: ' + Theme + #10;
+    desc:= desc + 'prefix[' + RecPrefix + ']prefix';
 
-    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix + #0;
-    soundFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw' + #0;
-    cAVFormat+= #0;
-    cAudioCodec+= #0;
-    cVideoCodec+= #0;
-    AVWrapper_Init(@AddFileLogRaw, @filename[1], @desc[1], @soundFilePath[1], @cAVFormat[1], @cVideoCodec[1], @cAudioCodec[1],
-                   cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality);
+    filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix;
+    soundFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw';
+
+    AVWrapper_Init(@AddFileLogRaw
+        , PChar(ansistring(filename))
+        , PChar(ansistring(desc))
+        , PChar(ansistring(soundFilePath))
+        , PChar(ansistring(cAVFormat))
+        , PChar(ansistring(cVideoCodec))
+        , PChar(ansistring(cAudioCodec))
+        , cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality);
 
     numPixels:= cScreenWidth*cScreenHeight;
     YCbCr_Planes[0]:= GetMem(numPixels);

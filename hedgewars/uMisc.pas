@@ -206,9 +206,9 @@ begin
                 for i0:= 0 to k-1 do
                     for j0:= 0 to k-1 do
                     begin
-                        r+= img[4*(width*(i*k+i0) + j*k+j0)+0];
-                        g+= img[4*(width*(i*k+i0) + j*k+j0)+1];
-                        b+= img[4*(width*(i*k+i0) + j*k+j0)+2];
+                        inc(r, img[4*(width*(i*k+i0) + j*k+j0)+0]);
+                        inc(g, img[4*(width*(i*k+i0) + j*k+j0)+1]);
+                        inc(b, img[4*(width*(i*k+i0) + j*k+j0)+2]);
                     end;
                 img[4*(w*i + j)+0]:= r div (k*k);
                 img[4*(w*i + j)+1]:= g div (k*k);
