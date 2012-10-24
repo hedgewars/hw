@@ -157,10 +157,12 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepExpl(Gear: PVisualGear; Steps: Longword);
+var s: LongInt;
 begin
-Gear^.X:= Gear^.X + Gear^.dX * Steps;
+s:= min(Steps, cExplFrameTicks);
 
-Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.X:= Gear^.X + Gear^.dX * s;
+Gear^.Y:= Gear^.Y + Gear^.dY * s;
 //Gear^.dY:= Gear^.dY + cGravityf;
 
 if Gear^.FrameTicks <= Steps then
