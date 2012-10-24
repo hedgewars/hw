@@ -30,6 +30,11 @@ end.
 {$IFNDEF WIN32}
     {$LINKLIB ../bin/libavwrapper.a}
 {$ENDIF}
+{$IFDEF DARWIN}
+    {$LINKLIB bz2}
+    {$LINKFRAMEWORK CoreVideo}
+    {$LINKFRAMEWORK VideoDecodeAcceleration}
+{$ENDIF}
 
 interface
 
