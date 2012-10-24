@@ -85,7 +85,7 @@ var s: shortstring;
     t: PVariable;
     c: char;
 begin
-isExternalSource:= ExternalSource or CurrentTeam^.ExtDriven;
+isExternalSource:= ExternalSource or ((CurrentTeam <> nil) and CurrentTeam^.ExtDriven);
 //WriteLnToConsole(CmdStr);
 if CmdStr[0]=#0 then
     exit;
