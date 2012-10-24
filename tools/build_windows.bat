@@ -3,14 +3,18 @@
 set PASCAL=C:\FPC\2.4.4\bin\i386-win32\
 set QTDIR=C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin
 set PATH=%PATH%;%PASCAL%
+set BUILD_TYPE="Debug"
 
 :setup
 set CURRDIR="%CD%"
 cd ..
 
 echo Fetching all DLLs...
+if %BUILD_TYPE%=="Debug" (
+    for %%G in (QtCored4 QtGuid4 QtNetworkd4) do xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
+)
 for %%G in (QtCore4 QtGui4 QtNetwork4 libgcc_s_dw2-1 mingwm10) do (
-    xcopy /d/y/l %QTDIR%\%%G.dll bin\
+    xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
 )
 
 if not exist %CD%\misc\winutils\bin\ mkdir %CD%\misc\winutils\bin\
@@ -22,19 +26,20 @@ if not exist %CD%\misc\winutils\bin\SDL_ttf.dll cscript %CD%\tools\w32DownloadUn
 
 ::for video recording
 if not exist %CD%\misc\winutils\bin\avformat-54.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://hedgewars.googlecode.com/files/libav-win32-20121022-dll.zip %CD%\misc\winutils\bin
+if not exist %CD%\misc\winutils\bin\glut32.dll cscript %CD%\tools\w32DownloadUnzip.vbs https://user.xmission.com/~nate/glut/glut-3.7.6-bin.zip %CD%\misc\winutils\bin
+copy /y %CD%\misc\winutils\bin\glut-3.7.6-bin\glut32.dll %CD%\misc\winutils\bin\glut32.dll
 
 ::this is needed because fpc png unit hardcodes libpng-1.2.12
 if not exist %CD%\misc\winutils\bin\libpng13.dll copy /y %CD%\misc\winutils\bin\libpng15-15.dll %CD%\misc\winutils\bin\libpng13.dll
 
-xcopy /d/y %CD%\misc\winutils\bin\*.dll bin
-xcopy /d/y %CD%\misc\winutils\bin\*.txt bin
+xcopy /d/y %CD%\misc\winutils\bin\*.dll %CD%\bin\
 
 ::setting up the environment...
 call %QTDIR%\qtenv2.bat
 
 echo Running cmake...
 set ERRORLEVEL=
-cmake -G "MinGW Makefiles" -DCMAKE_INCLUDE_PATH="%CD%\misc\winutils\include" -DCMAKE_LIBRARY_PATH="%CD%\misc\winutils\lib" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" .
+cmake -G "MinGW Makefiles" -DCMAKE_INCLUDE_PATH="%CD%\misc\winutils\include" -DCMAKE_LIBRARY_PATH="%CD%\misc\winutils\lib" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" . -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
 
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 
