@@ -10,7 +10,7 @@ cd ..
 
 echo Fetching all DLLs...
 for %%G in (QtCore4 QtGui4 QtNetwork4 libgcc_s_dw2-1 mingwm10) do (
-    xcopy /d/y %QTDIR%\%%G.dll bin\
+    xcopy /d/y/l %QTDIR%\%%G.dll bin\
 )
 
 if not exist %CD%\misc\winutils\bin\ mkdir %CD%\misc\winutils\bin\
@@ -20,6 +20,9 @@ if not exist %CD%\misc\winutils\bin\SDL_net.dll cscript %CD%\tools\w32DownloadUn
 if not exist %CD%\misc\winutils\bin\SDL_mixer.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12-win32.zip %CD%\misc\winutils\bin
 if not exist %CD%\misc\winutils\bin\SDL_ttf.dll cscript %CD%\tools\w32DownloadUnzip.vbs  http://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-2.0.11-win32.zip %CD%\misc\winutils\bin
 
+::this is needed because fpc png unit hardcodes libpng-1.2.12
+if not exist %CD%\misc\winutils\bin\libpng13.dll copy /y %CD%\misc\winutils\bin\libpng15-15.dll %CD%\misc\winutils\bin\libpng13.dll
+
 xcopy /d/y %CD%\misc\winutils\bin\*.dll bin
 xcopy /d/y %CD%\misc\winutils\bin\*.txt bin
 
@@ -28,7 +31,7 @@ call %QTDIR%\qtenv2.bat
 
 echo Running cmake...
 set ERRORLEVEL=
-cmake -G "MinGW Makefiles" -DCMAKE_INCLUDE_PATH="%CD%\misc\winutils\include" -DCMAKE_LIBRARY_PATH="%CD%\misc\winutils\lib" .
+cmake -G "MinGW Makefiles" -DCMAKE_INCLUDE_PATH="%CD%\misc\winutils\include" -DCMAKE_LIBRARY_PATH="%CD%\misc\winutils\lib" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" .
 
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 
@@ -43,7 +46,7 @@ mingw32-make install > nul
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 
 echo Creating commodity shortcut...
-COPY /y %CD%\misc\winutils\Hedgewars.lnk C:%HOMEPATH%\Desktop\Hedgewars.lnk
+copy /y %CD%\misc\winutils\Hedgewars.lnk C:%HOMEPATH%\Desktop\Hedgewars.lnk
 
 echo ALL DONE, Hedgewars has been successfully compiled and installed
 

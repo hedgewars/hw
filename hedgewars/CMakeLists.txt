@@ -179,9 +179,8 @@ endif()
 if(NOT NOPNG)
     find_package(PNG)
     if(${PNG_FOUND})
-        message(STATUS "Found libpng: ${PNG_LIBRARY}")
         set(pascal_flags "-dPNG_SCREENSHOTS" ${pascal_flags})
-        if(APPLE)  # need to explictly link with the static lib -- maybe windows too?
+        if(APPLE)  # easier to explictly link with the static lib
             string(REGEX REPLACE "(.*)libpng.*" "\\1" PNG_LIBDIR "${PNG_LIBRARY}")
             set(pascal_flags "-k${PNG_LIBDIR}/libpng.a" ${pascal_flags})
         endif()
