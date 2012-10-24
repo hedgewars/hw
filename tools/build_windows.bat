@@ -20,6 +20,9 @@ if not exist %CD%\misc\winutils\bin\SDL_net.dll cscript %CD%\tools\w32DownloadUn
 if not exist %CD%\misc\winutils\bin\SDL_mixer.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12-win32.zip %CD%\misc\winutils\bin
 if not exist %CD%\misc\winutils\bin\SDL_ttf.dll cscript %CD%\tools\w32DownloadUnzip.vbs  http://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-2.0.11-win32.zip %CD%\misc\winutils\bin
 
+::for video recording
+if not exist %CD%\misc\winutils\bin\avformat-54.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://hedgewars.googlecode.com/files/libav-win32-20121022-dll.zip %CD%\misc\winutils\bin
+
 ::this is needed because fpc png unit hardcodes libpng-1.2.12
 if not exist %CD%\misc\winutils\bin\libpng13.dll copy /y %CD%\misc\winutils\bin\libpng15-15.dll %CD%\misc\winutils\bin\libpng13.dll
 

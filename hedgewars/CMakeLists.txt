@@ -201,7 +201,6 @@ endif()
 
 if(NOT NOVIDEOREC)
     if(${FFMPEG_FOUND})
-        message(STATUS "Found FFMPEG: ${FFMPEG_LIBRARIES}")
         include_directories(${FFMPEG_INCLUDE_DIR})
         set(pascal_flags "-dUSE_VIDEO_RECORDING" ${pascal_flags})
         IF (WIN32)

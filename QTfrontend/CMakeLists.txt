@@ -74,7 +74,7 @@ file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
 
 if((NOT NOVIDEOREC) AND "${FFMPEG_FOUND}")
-    add_definitions(-DVIDEOREC)
+    add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
 endif()
 
 set(hwfr_src

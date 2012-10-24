@@ -26,12 +26,12 @@ End if
 strHDLocation = "C:\Windows\Temp\temp.zip"
 
 ' Fetch the file
+WScript.Echo ( "Trying to download from " & strFileURL)
 Set objXMLHTTP = CreateObject("MSXML2.XMLHTTP")
 objXMLHTTP.open "GET", strFileURL, false
 objXMLHTTP.send()
 
 If objXMLHTTP.Status = 200 Then
-    WScript.Echo ( "Downloading file from " & strFileURL)
     Set objADOStream = CreateObject("ADODB.Stream")
     objADOStream.Open
     objADOStream.Type = 1 'adTypeBinary
@@ -60,5 +60,5 @@ Set objTarget = objShell.NameSpace(strOutputPath)
 intOptions = 16 'no user prompt
 objTarget.CopyHere objSource, intOptions
 
-WScript.Echo ( "Extraction successful" )
+WScript.Echo ( "Success!" )
 Set objShell = Nothing
