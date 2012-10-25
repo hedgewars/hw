@@ -227,9 +227,9 @@ endif()
 #lua discovery
 find_package(Lua)
 if(LUA_FOUND)
-    message(STATUS "LUA found: ${LUA_DEFAULT}")
+    message(STATUS "Found LUA: ${LUA_DEFAULT}")
 else()
-    message(STATUS "Cound NOT find LUA, building bundled dependency")
+    message(STATUS "LUA will be provided by the bundled sources")
     add_subdirectory(misc/liblua)
     #linking with liblua.a requires system readline -- this works everywhere, right?
     set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})
