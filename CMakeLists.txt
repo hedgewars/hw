@@ -182,9 +182,7 @@ set(haskell_flags "-O2" ${ghflags_parsed} ${haskell_flags})
 #get BUILD_TYPE and enable/disable optimisation
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
     message(STATUS "Building Debug flavour")
-    # for no obvious reason, -gv was causing broken behaviour
-    #set(pascal_flags "-O-" "-g" "-gl" "-gv" ${pascal_flags})
-    set(pascal_flags "-O-" "-g" "-gl" ${pascal_flags})
+    set(pascal_flags "-O-" "-g" "-gl" "-gv" ${pascal_flags})
     set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
 else()
     message(STATUS "Building Release flavour")
