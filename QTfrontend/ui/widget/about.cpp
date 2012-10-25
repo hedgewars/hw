@@ -85,6 +85,10 @@ About::About(QWidget * parent) :
         "Lua game modes and missions: John Lambert &lt;<a href=\"mailto:redgrinner@gmail.com\">redgrinner@gmail.com</a>&gt;<br>"
         "Frontend improvements: Mayur Pawashe &lt;<a href=\"mailto:zorgiepoo@gmail.com\">zorgiepoo@gmail.com</a>&gt;<br>"
         "Android port: Richard Deurwaarder &lt;<a href=\"mailto:xeli@xelification.com\">xeli@xelification.com</a>&gt;<br>"
+        "Android netplay, portability abstraction: Simeon Maxein &lt;<a href=\"mailto:smaxein@googlemail.com\">smaxein@googlemail.com</a>&gt;<br>"
+        "WebGL port, some pas2c and GLES2 work: Meng Xiangyun &lt;<a href=\"mailto:xymengxy@gmail.com\">xymengxy@gmail.com</a>&gt;<br>"
+        "Video recording: Stepan Podoskin &lt;<a href=\"mailto:stepik-777@mail.ru\">stepik-777@mail.ru</a>&gt;<br>"
+        "Campaign support, first campaign: Szabolcs Orbàn &lt;<a href=\"mailto:szabibibi@gmail.com\">szabibibi@gmail.com</a>&gt;<br>"
         "</p><h2>" +
 
         QLabel::tr("Art:") + "</h2>"
@@ -123,7 +127,7 @@ About::About(QWidget * parent) :
             "Chinese: Jie Luo &lt;<a href=\"mailto:lililjlj@gmail.com\">lililjlj@gmail.com</a>&gt;<br>"
             "English: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
             "Finnish: Nina Kuisma &lt;<a href=\"mailto:ninnnu@gmail.com\">ninnnu@gmail.com</a>&gt;<br>"
-            "French: Antoine Turmel &lt;<a href=\"mailto:geekshadow@gmail.com\">geekshadow@gmail.com</a>&gt;<br>"
+            "French: Antoine Turmel &lt;<a href=\"mailto:geekshadow@gmail.com\">geekshadow@gmail.com</a>&gt;, Clement Woitrain &lt;<a href=\"mailto:sphrixclement@gmail.com\">sphrixclement@gmail.com</a>&gt;<br>"
             "German: Peter Hüwe &lt;<a href=\"mailto:PeterHuewe@gmx.de\">PeterHuewe@gmx.de</a>&gt;, Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@gmail.com\">mario.liebisch@gmail.com</a>&gt;, Richard Karolyi &lt;<a href=\"mailto:sheepluva@" "ercatec.net\">sheepluva@" "ercatec.net</a>&gt;<br>"
             "Greek: &lt;<a href=\"mailto:talos_kriti@yahoo.gr\">talos_kriti@yahoo.gr</a>&gt;<br>"
             "Italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;, Marco Bresciani<br>"
