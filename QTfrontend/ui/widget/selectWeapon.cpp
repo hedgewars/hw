@@ -191,24 +191,15 @@ void SelWeaponWidget::setDefault()
 
 void SelWeaponWidget::save()
 {
-    for(int i = 0; i < cDefaultAmmos.size(); i++)
-        if (!cDefaultAmmos[i].first.compare(m_name->text()))
-        {
-            QMessageBox deniedMsg(this);
-            deniedMsg.setIcon(QMessageBox::Warning);
-            deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
-            deniedMsg.setText(QMessageBox::tr("Cannot overwrite default weapon set '%1'!").arg(cDefaultAmmos[i].first));
-            deniedMsg.setWindowModality(Qt::WindowModal);
-            deniedMsg.exec();
-            return;
-        }
-
+    // TODO make this return if success or not, so that the page can react
+    // properly and not goBack if saving failed
     if (m_name->text() == "") return;
 
     QString state1;
     QString state2;
     QString state3;
     QString state4;
+    QString stateFull;
 
     for(int i = 0; i < m_numItems; ++i)
     {
@@ -222,12 +213,33 @@ void SelWeaponWidget::save()
         int am = it == weaponItems.end() ? 0 : it.value()[3]->getItemsNum();
         state4.append(QString::number(am));
     }
+
+    stateFull = state1 + state2 + state3 + state4;
+
+    for(int i = 0; i < cDefaultAmmos.size(); i++)
+    {
+        if (cDefaultAmmos[i].first.compare(m_name->text()) == 0)
+        {
+            // don't show warning if no change
+            if (cDefaultAmmos[i].second.compare(stateFull) == 0)
+                return;
+
+            QMessageBox deniedMsg(this);
+            deniedMsg.setIcon(QMessageBox::Warning);
+            deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
+            deniedMsg.setText(QMessageBox::tr("Cannot overwrite default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            deniedMsg.setWindowModality(Qt::WindowModal);
+            deniedMsg.exec();
+            return;
+        }
+    }
+
     if (curWeaponsName != "")
     {
         // remove old entry
         wconf->remove(curWeaponsName);
     }
-    wconf->setValue(m_name->text(), state1 + state2 + state3 + state4);
+    wconf->setValue(m_name->text(), stateFull);
     emit weaponsChanged();
 }
 
