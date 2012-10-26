@@ -163,8 +163,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     // ctrl+q closes frontend for consistency
     QShortcut * closeFrontend = new QShortcut(QKeySequence("Ctrl+Q"), this);
     connect (closeFrontend, SIGNAL(activated()), this, SLOT(close()));
-    QShortcut * updateData = new QShortcut(QKeySequence("F5"), this);
-    connect (updateData, SIGNAL(activated()), &DataManager::instance(), SLOT(reload()));
+    //QShortcut * updateData = new QShortcut(QKeySequence("F5"), this);
+    //connect (updateData, SIGNAL(activated()), &DataManager::instance(), SLOT(reload()));
 #endif
 
     UpdateTeamsLists();
