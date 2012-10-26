@@ -53,7 +53,7 @@ HWNewNet::HWNewNet() :
     m_roomPlayersModel->setDynamicSortFilter(true);
     m_roomPlayersModel->sort(0);
     m_roomPlayersModel->setFilterRole(PlayersListModel::RoomFilterRole);
-    m_roomPlayersModel->setFilterFixedString("1");
+    m_roomPlayersModel->setFilterFixedString("true");
 
     // socket stuff
     connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
