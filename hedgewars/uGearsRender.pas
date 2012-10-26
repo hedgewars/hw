@@ -321,8 +321,8 @@ begin
                 // reached edge of land. assume infinite beam. Extend it way out past camera
                 if ((ty and LAND_HEIGHT_MASK) <> 0) or ((tx and LAND_WIDTH_MASK) <> 0) then
                     begin
-                    tx:= round(lx + ax * (LAND_WIDTH div 2));
-                    ty:= round(ly + ay * (LAND_WIDTH div 2));
+                    tx:= round(lx + ax * (max(LAND_WIDTH,4096) div 2));
+                    ty:= round(ly + ay * (max(LAND_WIDTH,4096) div 2));
                     end;
 
                 //if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
@@ -1086,9 +1086,9 @@ begin
                             endX:= x - WorldDx;
                             endY:= y - WorldDy;
                             if Gear^.Tag < 0 then
-                                startX:= max(LAND_WIDTH + 1024, endX + 2048)
+                                startX:= max(max(LAND_WIDTH,4096) + 1024, endX + 2048)
                             else
-                                startX:= max(-LAND_WIDTH - 1024, endX - 2048);
+                                startX:= max(-max(LAND_WIDTH,4096) - 1024, endX - 2048);
                             startY:= endY - 256;
                             DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1))), startY + WorldDy + LongInt(round((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2)))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end
@@ -1097,9 +1097,9 @@ begin
                             startX:= x - WorldDx;
                             startY:= y - WorldDy;
                             if Gear^.Tag > 0 then
-                                endX:= max(LAND_WIDTH + 1024, startX + 2048)
+                                endX:= max(max(LAND_WIDTH,4096) + 1024, startX + 2048)
                             else
-                                endX:= max(-LAND_WIDTH - 1024, startX - 2048);
+                                endX:= max(-max(LAND_WIDTH,4096) - 1024, startX - 2048);
                             endY:= startY + 256;
                             DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1)))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + LongInt(round((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY))) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end;
