@@ -212,10 +212,10 @@ function SetupHogDeadAnim(gear)
   if nativesNum == 0 then
     return
   end
-  local hogDeadStrings = {"They killed " .. gear .."! You bastards!", 
-                          gear .. "! Why?!", 
-                          "That was just mean!", 
-                          "Oh no, not " .. gear .. "!"}
+  local hogDeadStrings = {loc("They killed ") .. gear ..loc("! You bastards!"), 
+                          gear .. loc("! Why?!"), 
+                          loc("That was just mean!"), 
+                          loc("Oh no, not ") .. gear .. "!"}
   table.insert(hogDeadAnim, {func = AnimSay, args = {CurrentHedgehog, hogDeadStrings[nativesNum], SAY_SHOUT, 4000}})
 end
 
