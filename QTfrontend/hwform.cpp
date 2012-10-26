@@ -700,9 +700,10 @@ void HWForm::GoToPage(int id)
         group->addAnimation(animationOldOpacity);
         group->addAnimation(animationNewOpacity);
 #endif
-        group->start();
 
         connect(animationOldSlide, SIGNAL(finished()), ui.Pages->widget(lastid), SLOT(hide()));
+        group->start();
+
     	/* this is for the situation when the animation below is interrupted by a new animation.  For some reason, finished is not being fired */ 	
     	for(int i=0;i<MAX_PAGE;i++) if (i!=id && i!=lastid) ui.Pages->widget(i)->hide();
     }
@@ -813,11 +814,18 @@ void HWForm::GoBack()
         group->addAnimation(animationOldOpacity);
         group->addAnimation(animationNewOpacity);
 #endif
-        group->start();
 
         connect(animationNewSlide, SIGNAL(finished()), ui.Pages->widget(curid), SLOT(hide()));
+        group->start();
     }
 #endif
+
+    if (stopAnim)
+        ui.Pages->widget(curid)->hide();
+
+// TODO the whole pages shown and effects stuff should be moved
+// out of hwform.cpp and into a subclass of QStackedLayout
+
 }
 
 void HWForm::OpenSnapshotFolder()
