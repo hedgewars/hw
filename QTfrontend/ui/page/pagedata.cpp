@@ -245,6 +245,6 @@ void PageDataDownload::onPageLeave()
     if (m_contentDownloaded)
     {
         m_contentDownloaded = false;
-        DataManager::instance().reload();
+        //DataManager::instance().reload();
     }
 }
