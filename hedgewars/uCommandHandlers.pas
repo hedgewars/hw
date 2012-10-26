@@ -436,7 +436,8 @@ begin
         SendIPC(s)
         end
     else
-        TryDo(CheckSum = lastTurnChecksum, 'Desync detected', true);
+        TryDo((lastTurnChecksum = 0) or (CheckSum = lastTurnChecksum), 'Desync detected', true);
+    lastTurnChecksum:= 0;
     AddFileLog('Next turn: time '+inttostr(GameTicks));
 end;
 

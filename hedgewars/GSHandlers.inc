@@ -93,7 +93,10 @@ begin
                 else
                     begin
                     if (gi^.State and gstMoving) = 0 then
+                        begin
+                        gi^.dX.isNegative:= X<gi^.X;
                         gi^.State := gi^.State or gstLoser;
+                        end;
                         
                     if d > r div 2 then
                         PlaySoundV(sndNooo, gi^.Hedgehog^.Team^.voicepack) 
@@ -195,8 +198,8 @@ begin
 
 
 // might need some testing/adjustments - just to avoid projectiles to fly forever (accelerated by wind/skips)
-    if (hwRound(Gear^.X) < LAND_WIDTH div -2)
-    or (hwRound(Gear^.X) > LAND_WIDTH * 3 div 2) then
+    if (hwRound(Gear^.X) < min(LAND_WIDTH div -2, -2048))
+    or (hwRound(Gear^.X) > max(LAND_WIDTH * 3 div 2, 6144)) then
         Gear^.State := Gear^.State or gstCollision;
 
     if Gear^.dY.isNegative then
@@ -986,8 +989,8 @@ begin
                     // only extend if not under water
                     if hwRound(Bullet^.Y) < cWaterLine then
                         begin
-                        VGear^.dX := VGear^.dX + LAND_WIDTH * (VGear^.dX - VGear^.X);
-                        VGear^.dY := VGear^.dY + LAND_WIDTH * (VGear^.dY - VGear^.Y);
+                        VGear^.dX := VGear^.dX + max(LAND_WIDTH,4096) * (VGear^.dX - VGear^.X);
+                        VGear^.dY := VGear^.dY + max(LAND_WIDTH,4096) * (VGear^.dY - VGear^.Y);
                         end;
 
             VGear^.Timer := 200;
@@ -2170,7 +2173,7 @@ begin
     if (GameTicks and $3F) = 0 then
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
-    if (hwRound(Gear^.X) > (LAND_WIDTH+2048)) or (hwRound(Gear^.X) < -2048) then
+    if (hwRound(Gear^.X) > (max(LAND_WIDTH,4096)+2048)) or (hwRound(Gear^.X) < -2048) then
         begin
         // avoid to play forever (is this necessary?)
         StopSoundChan(Gear^.SoundChannel);
@@ -2190,7 +2193,7 @@ begin
     else
         begin
         Gear^.Tag := -1;
-        Gear^.X := int2hwFloat(LAND_WIDTH + 2048);
+        Gear^.X := int2hwFloat(max(LAND_WIDTH,4096) + 2048);
         end;
 
     Gear^.Y := int2hwFloat(topY-300);
@@ -3969,9 +3972,9 @@ begin
     end
     
     else if (y > cWaterLine)
-    or (y < -LAND_WIDTH)
-    or (x > 2*LAND_WIDTH)
-    or (x < -LAND_WIDTH) then
+    or (y < -max(LAND_WIDTH,4096))
+    or (x > 2*max(LAND_WIDTH,4096))
+    or (x < -max(LAND_WIDTH,4096)) then
         loadNewPortalBall(Gear, true);
 end;
 
@@ -5111,10 +5114,10 @@ begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
                 end;
-            if (gX > LAND_WIDTH*2) or
-                    (gX < -LAND_WIDTH) or
-                    (gY < -LAND_HEIGHT) or
-                    (gY > LAND_HEIGHT+512) then
+            if (gX > max(LAND_WIDTH,4096)*2) or
+                    (gX < -max(LAND_WIDTH,4096)) or
+                    (gY < -max(LAND_HEIGHT,4096)) or
+                    (gY > max(LAND_HEIGHT,4096)+512) then
                 begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
