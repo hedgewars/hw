@@ -283,9 +283,9 @@ void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
     addTeam(team);
 }
 
-bool TeamSelWidget::isPlaying(HWTeam team) const
+bool TeamSelWidget::isPlaying(const HWTeam &team) const
 {
-    return std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team)!=curPlayingTeams.end();
+    return curPlayingTeams.contains(team);
 }
 
 QList<HWTeam> TeamSelWidget::getPlayingTeams() const
@@ -298,7 +298,7 @@ QList<HWTeam> TeamSelWidget::getNotPlayingTeams() const
     return m_curNotPlayingTeams;
 }
 
-void TeamSelWidget::pre_changeTeamStatus(HWTeam team)
+void TeamSelWidget::pre_changeTeamStatus(const HWTeam & team)
 {
     //team.setColor(framePlaying->getNextColor());
     emit acceptRequested(team);

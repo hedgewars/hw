@@ -247,6 +247,7 @@ with CurrentHedgehog^ do
         Z:= cCurrHHZ;
         State:= gstHHDriven;
         Active:= true;
+        Power:= 0;
         LastDamage:= nil
         end;
     RemoveGearFromList(Gear);
