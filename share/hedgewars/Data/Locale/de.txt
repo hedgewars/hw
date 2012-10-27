@@ -56,6 +56,8 @@
 00:53=ZeitBox
 00:54=Bauwerk
 00:55=Landkanone
+00:56=Gefrierer
+00:57=Hackbeil
 
 
 01:00=Auf in die Schlacht!
@@ -81,6 +83,7 @@
 01:18=Hohe
 01:19=Extreme
 01:20=%1 Sprungkraft
+01:21=Audio Stumm
 
 ; Event messages
 ; Hog (%1) died
