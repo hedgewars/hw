@@ -681,8 +681,8 @@ c:= 0;
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
                     if (CursorPoint.Y <= (cScreenHeight - AmmoRect.y) - ( c    * (AMSlotSize+1))) and
-                       (CursorPoint.Y >= (cScreenHeight - AmmoRect.y) - ((c+1) * (AMSlotSize+1))) and
-                       (CursorPoint.X >= AmmoRect.x                   + ( g    * (AMSlotSize+1))) and 
+                       (CursorPoint.Y >  (cScreenHeight - AmmoRect.y) - ((c+1) * (AMSlotSize+1))) and
+                       (CursorPoint.X >  AmmoRect.x                   + ( g    * (AMSlotSize+1))) and 
                        (CursorPoint.X <= AmmoRect.x                   + ((g+1) * (AMSlotSize+1))) then
                         begin
                         Slot:= i;
@@ -1672,8 +1672,8 @@ if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then
 
 if (AMState = AMShowingUp) or (AMState = AMShowing) then
 begin
-    if CursorPoint.X < AmmoRect.x then//check left 
-        CursorPoint.X:= AmmoRect.x;
+    if CursorPoint.X < AmmoRect.x + AMSlotSize then//check left
+        CursorPoint.X:= AmmoRect.x + AMSlotSize;
     if CursorPoint.X > AmmoRect.x + AmmoRect.w then//check right
         CursorPoint.X:= AmmoRect.x + AmmoRect.w;
     if CursorPoint.Y > cScreenHeight - AmmoRect.y then//check top
