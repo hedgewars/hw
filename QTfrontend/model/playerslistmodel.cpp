@@ -230,13 +230,19 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
         QPainter painter(&result);
 
         if(index.data(RoomFilterRole).toBool())
+        {
             if(index.data(InGame).toBool())
+            {
                 painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/ingame.png"));
+            }
             else
+            {
                 if(index.data(Ready).toBool())
                     painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
                 else
                     painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp_off.png"));
+            }
+        }
 
         QString mainIconName(":/res/chat/");
 

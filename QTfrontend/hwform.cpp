@@ -1291,11 +1291,12 @@ void HWForm::ForcedDisconnect(const QString & reason)
         QString errorStr = QMessageBox::tr("Connection to server is lost") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Quit reason: ") + '"' + reason +'"'));
         ShowErrorMessage(errorStr);
     }
-    if (ui.Pages->currentIndex() != ID_PAGE_NET)
+
+    while (ui.Pages->currentIndex() != ID_PAGE_NET
+        && ui.Pages->currentIndex() != ID_PAGE_NETTYPE
+        && ui.Pages->currentIndex() != ID_PAGE_MAIN)
     {
-        while (!PagesStack.isEmpty()) PagesStack.pop();
-        PagesStack.push(ID_PAGE_MAIN);
-        GoToPage(ID_PAGE_NET);
+        GoBack();
     }
 }
 
