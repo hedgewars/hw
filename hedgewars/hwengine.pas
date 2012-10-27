@@ -29,11 +29,13 @@ interface
 program hwengine;
 {$ENDIF}
 
-uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
-     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uLandTexture, uCollisions,
+uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler,
+     uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions,
      SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
-     {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF}, uAILandMarks;
+     {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
+     {$IFDEF ANDROID}, GLUnit{$ENDIF}
+     ;
 
 
 {$IFDEF HWLIBRARY}
@@ -461,7 +463,7 @@ begin
     if complete then
     begin
 {$IFDEF ANDROID}GLUnit.init;{$ENDIF}
-{$IFDEF SDL13}uTouch.initModule;{$ENDIF}
+{$IFDEF USE_TOUCH_INTERFACE}uTouch.initModule;{$ENDIF}
         uAI.initModule;
         //uAIActions does not need initialization
         //uAIAmmoTests does not need initialization
