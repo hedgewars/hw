@@ -112,7 +112,7 @@ function onGameInit() -- Called when the game loads
 	Player = AddHog( loc( "Hunter" ), 0, 1, "StrawHat" ) -- Add a hog for it, and name it "Hunter"
 	SetGearPosition( Player, 420, 1750 ) -- Set player position
 
-	SetEffect( Player, heResurrectable, true ) -- By Suggestion :)
+	SetEffect( Player, heResurrectable, 1 ) -- By Suggestion :)
 end
 
 function onGameStart() -- Called when the game starts
@@ -134,7 +134,7 @@ function onGameTick20()
 		Info(loc("Aiming Practice"), loc("You did not make it in time, try again!"), -amSkip )
 		SetHealth( Player, 0 ) -- Kill the player so he can't keep moving!
 
-		SetEffect( Player, heResurrectable, false )
+		SetEffect( Player, heResurrectable, 0 )
 
 	end
 
@@ -146,7 +146,7 @@ function onGameTick20()
 			ParseCommand("teamgone " .. loc( "Rope Team" ))
 
 			--SetHealth( Player, 0 ) -- Kill the player so he can't keep moving!
-			--SetEffect( Player, heResurrectable, false )
+			--SetEffect( Player, heResurrectable, 0 )
 			TurnTimeLeft = 1
 
 			WaitTime = -1
