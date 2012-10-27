@@ -629,11 +629,7 @@ if ((AMState = AMHiding) or (AMState = AMShowingUp)) and ((AMAnimType and AMType
 Pos:= -1;
 Slot:= -1;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
-    {$IFDEF USE_AM_NUMCOLUMN}
-c:= 0;
-    {$ELSE}
 c:= -1;
-    {$ENDIF}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
@@ -647,8 +643,8 @@ c:= -1;
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
                     if (CursorPoint.Y <= (cScreenHeight - AmmoRect.y) - ( g    * (AMSlotSize+1))) and
-                       (CursorPoint.Y >= (cScreenHeight - AmmoRect.y) - ((g+1) * (AMSlotSize+1))) and
-                       (CursorPoint.X >= AmmoRect.x                   + ( c    * (AMSlotSize+1))) and 
+                       (CursorPoint.Y >  (cScreenHeight - AmmoRect.y) - ((g+1) * (AMSlotSize+1))) and
+                       (CursorPoint.X >  AmmoRect.x                   + ( c    * (AMSlotSize+1))) and 
                        (CursorPoint.X <= AmmoRect.x                   + ((c+1) * (AMSlotSize+1))) then
                         begin
                         Slot:= i;
@@ -663,11 +659,7 @@ c:= -1;
                    end;
             end;
 {$ELSE}
-    {$IFDEF USE_AM_NUMCOLUMN}
 c:= -1;
-    {$ELSE}
-c:= 0;
-    {$ENDIF}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
@@ -1640,7 +1632,7 @@ end;
 var PrevSentPointTime: LongWord = 0;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs,z: LongInt;
+var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY: LongInt;
 begin
 {$IFNDEF MOBILE}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) and cHasFocus and (GameState <> gsConfirm) then
@@ -1672,14 +1664,30 @@ if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then
 
 if (AMState = AMShowingUp) or (AMState = AMShowing) then
 begin
-    if CursorPoint.X < AmmoRect.x + AMSlotSize then//check left
-        CursorPoint.X:= AmmoRect.x + AMSlotSize;
-    if CursorPoint.X > AmmoRect.x + AmmoRect.w then//check right
-        CursorPoint.X:= AmmoRect.x + AmmoRect.w;
-    if CursorPoint.Y > cScreenHeight - AmmoRect.y then//check top
-        CursorPoint.Y:= cScreenHeight - AmmoRect.y;
-    if CursorPoint.Y < cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 2) then//check bottom
-        CursorPoint.Y:= cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 2);
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
+    amNumOffsetX:= 0;
+    {$IFDEF USE_AM_NUMCOLUMN}
+    amNumOffsetY:= AMSlotSize;
+    {$ELSE}
+    amNumOffsetY:= 0;
+    {$ENDIF}
+{$ELSE}
+    amNumOffsetY:= 0;
+    {$IFDEF USE_AM_NUMCOLUMN}
+    amNumOffsetX:= AMSlotSize;
+    {$ELSE}
+    amNumOffsetX:= 0;
+    {$ENDIF}
+
+{$ENDIF}
+    if CursorPoint.X < AmmoRect.x + amNumOffsetX + 3 then//check left 
+        CursorPoint.X:= AmmoRect.x + amNumOffsetX + 3;
+    if CursorPoint.X > AmmoRect.x + AmmoRect.w - 3 then//check right
+        CursorPoint.X:= AmmoRect.x + AmmoRect.w - 3;
+    if CursorPoint.Y > cScreenHeight - AmmoRect.y -amNumOffsetY - 1 then//check top
+        CursorPoint.Y:= cScreenHeight - AmmoRect.y - amNumOffsetY - 1;
+    if CursorPoint.Y < cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5) then//check bottom
+        CursorPoint.Y:= cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5);
     prevPoint:= CursorPoint;
     //if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
     exit
