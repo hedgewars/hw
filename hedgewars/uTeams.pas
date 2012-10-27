@@ -20,8 +20,10 @@
 
 unit uTeams;
 interface
-uses uConsts, uInputHandler, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit, uSound, uStore,
-     uTypes{$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
+uses uConsts, uInputHandler, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit,
+     uSound, uStore, uTypes
+     {$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
+
 
 procedure initModule;
 procedure freeModule;
@@ -39,7 +41,8 @@ procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript,
-    uGearsUtils, uGearsList{$IFDEF SDL13}, uTouch{$ENDIF};
+    uGearsUtils, uGearsList
+    {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 var MaxTeamHealth: LongInt;
     GameOver: boolean;
