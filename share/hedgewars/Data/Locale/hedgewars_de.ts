@@ -1171,7 +1171,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Practice your skills in a range of training missions</source>
-        <translation>Verbessere deine Fähigkeiten in verschidenen Trainingsmissionen</translation>
+        <translation>Verbessere deine Fähigkeiten in verschiedenen Trainingsmissionen</translation>
     </message>
     <message>
         <source>Demos</source>
