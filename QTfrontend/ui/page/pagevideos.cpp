@@ -92,7 +92,7 @@ class VideoItem : public QTableWidgetItem
 };
 
 VideoItem::VideoItem(const QString& name)
-    : QTableWidgetItem(name, UserType)
+: QTableWidgetItem(name, UserType)
 {
     this->name = name;
     pRecorder = NULL;
@@ -411,13 +411,14 @@ void PageVideos::changeRecordAudio(int state)
 
 void PageVideos::setDefaultCodecs()
 {
-    if (tryCodecs("mp4", "libx264", "libmp3lame"))
+    // VLC should be able to handle any of these configurations
+    // Quicktime X only opens the first one
+    // Windows Media Player TODO
+    if (tryCodecs("mp4", "libx264", "aac"))
         return;
     if (tryCodecs("mp4", "libx264", "libfaac"))
         return;
-    if (tryCodecs("mp4", "libx264", "libvo_aacenc"))
-        return;
-    if (tryCodecs("mp4", "libx264", "aac"))
+    if (tryCodecs("mp4", "libx264", "libmp3lame"))
         return;
     if (tryCodecs("mp4", "libx264", "mp2"))
         return;
@@ -442,8 +443,8 @@ void PageVideos::setDefaultCodecs()
 
 void PageVideos::setDefaultOptions()
 {
-    framerateBox->setValue(25);
-    bitrateBox->setValue(400);
+    framerateBox->setValue(30);
+    bitrateBox->setValue(1000);
     checkRecordAudio->setChecked(true);
     checkUseGameRes->setChecked(true);
     setDefaultCodecs();
