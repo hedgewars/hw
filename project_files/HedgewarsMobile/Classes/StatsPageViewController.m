@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 30/12/2010.
  */
 
 
 #import "StatsPageViewController.h"
-#import <QuartzCore/QuartzCore.h>
+
 
 @implementation StatsPageViewController
 @synthesize statsArray;
@@ -30,26 +28,25 @@
 }
 
 -(void) viewDidLoad {
-    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)])
-        self.tableView.backgroundView = nil;
+    UITableView *aTableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
 
-    NSString *imgName;
-    if (IS_IPAD())
-        imgName = @"mediumBackground~ipad.png";
-    else
-        imgName = @"smallerBackground~iphone.png";
+    NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
+    UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
+    UIImageView *background = [[UIImageView alloc] initWithImage:img];
+    [img release];
+    background.frame = self.view.frame;
+    background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.view insertSubview:background atIndex:0];
+    [background release];
 
-    if ([self.tableView respondsToSelector:@selector(setBackgroundView:)]) {
-        UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:imgName];
-        UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
-        [backgroundImage release];
-        [self.tableView setBackgroundView:background];
-        [background release];
-    } else
-        self.view.backgroundColor = [UIColor blackColor];
+    aTableView.separatorColor = [UIColor darkYellowColor];
+    aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    aTableView.delegate = self;
+    aTableView.dataSource = self;
 
-    self.tableView.separatorColor = [UIColor darkYellowColor];
-    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    [self.view addSubview:aTableView];
+    [aTableView release];
 
     [super viewDidLoad];
 }
@@ -60,7 +57,7 @@
     return 3;
 }
 
--(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+-(NSInteger) tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
         return 1;
     else if (section == 1)
@@ -118,17 +115,20 @@
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+-(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
     return 160;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+-(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 160)];
+        UIView *header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, 160)];
+        header.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
         UIImage *img = [[UIImage alloc] initWithContentsOfFile:@"smallerTitle.png"];
         UIImageView *imgView = [[UIImageView alloc] initWithImage:img];
         [img release];
-        imgView.center = CGPointMake(self.tableView.frame.size.height/2, 160/2);
+        imgView.center = CGPointMake(aTableView.frame.size.width/2, 160/2);
+        imgView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [header addSubview:imgView];
         [imgView release];
 
@@ -137,28 +137,18 @@
         return nil;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return self.tableView.rowHeight + 30;
+-(CGFloat) tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger)section {
+    return aTableView.rowHeight + 30;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+-(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger)section {
     if (section == 2) {
-
-        UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height * 70 / 100, self.tableView.rowHeight)];
+        UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width * 70 / 100, aTableView.rowHeight)];
         footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
-        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 17, self.view.frame.size.height * 70 / 100, self.tableView.rowHeight)];
+        UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0, 17, self.view.frame.size.width * 70 / 100, aTableView.rowHeight)
+                                                  andTitle:NSLocalizedString(@"Done",@"")];
         button.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
-        [button setTitle:NSLocalizedString(@"Done",@"") forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
-
-        button.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
-        button.backgroundColor = [UIColor blackColorTransparent];
-        [button.layer setBorderWidth:1];
-        [button.layer setBorderColor:[[UIColor darkYellowColor] CGColor]];
-        [button.layer setCornerRadius:9.0f];
-        [button.layer setMasksToBounds:YES];
         [button addTarget:self action:@selector(dismissView) forControlEvents:UIControlEventTouchUpInside];
         [footer addSubview:button];
         [button release];
@@ -171,7 +161,7 @@
 #pragma mark -
 #pragma mark button delegate
 -(void) dismissView {
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
     [self dismissModalViewControllerAnimated:YES];
 }
 

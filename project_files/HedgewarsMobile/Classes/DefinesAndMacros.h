@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 01/10/2011.
  */
 
 
@@ -38,10 +36,10 @@
 
 
 #define ZAssert(condition, ...) do { if (!(condition)) { ALog(__VA_ARGS__); }} while(0)
-#define rotationManager(x) (x == UIInterfaceOrientationLandscapeRight) || (x == UIInterfaceOrientationLandscapeLeft)
+#define rotationManager(x) (IS_IPAD() ? YES : (x == UIInterfaceOrientationLandscapeRight) || (x == UIInterfaceOrientationLandscapeLeft))
 
-#define START_TIMER NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
-#define END_TIMER(msg) 	NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; CMLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
+#define START_TIMER()   NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
+#define END_TIMER(msg) 	NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; DLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
 
 
 #define DOCUMENTS_FOLDER()      [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
@@ -69,13 +67,13 @@
 #define MISSIONS_DIRECTORY()    [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Maps/"]
 #define TRAININGS_DIRECTORY()   [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Missions/Training/"]
 #define LOCALE_DIRECTORY()      [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Locale/"]
-#define SCRIPTS_DIRECTORY()     [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Scripts/plist/"]
+#define SCRIPTS_DIRECTORY()     [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/Data/Scripts/Multiplayer/"]
 
 #define MSG_MEMCLEAN()          DLog(@"has cleaned up some memory");
 #define MSG_DIDUNLOAD()         DLog(@"unloaded");
 
-#define IS_DUALHEAD()           ([[UIScreen class] respondsToSelector:@selector(screens)] && [[UIScreen screens] count] > 1)
 #define IS_IPAD()               (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+#define IS_ON_PORTRAIT()        (IS_IPAD() && UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]))
 #define IS_NOT_POWERFUL(x)      ([x hasPrefix:@"iPhone1"] || [x hasPrefix:@"iPod1,1"] || [x hasPrefix:@"iPod2,1"])
 #define IS_NOT_VERY_POWERFUL(x) ([x hasPrefix:@"iPad1"] || [x hasPrefix:@"iPhone2"] || [x hasPrefix:@"iPod3"] || [x hasPrefix:@"iPod4"])
 #define IS_VERY_POWERFUL(x)     (IS_NOT_POWERFUL(x) == NO && IS_NOT_VERY_POWERFUL(x) == NO)

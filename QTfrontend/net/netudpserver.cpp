@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2008-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,30 +22,32 @@
 #include "netudpserver.h"
 
 HWNetUdpServer::HWNetUdpServer(QObject *parent, const QString & descr, quint16 port) :
-  HWNetRegisterServer(parent, descr, port),
-  m_descr(descr)
+    HWNetRegisterServer(parent, descr, port),
+    m_descr(descr)
 {
-  pUdpSocket = new QUdpSocket(this);
-  pUdpSocket->bind(46631);
-  connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
+    pUdpSocket = new QUdpSocket(this);
+    pUdpSocket->bind(46631);
+    connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
 }
 
 void HWNetUdpServer::onClientRead()
 {
-  while (pUdpSocket->hasPendingDatagrams()) {
-    QByteArray datagram;
-    datagram.resize(pUdpSocket->pendingDatagramSize());
-    QHostAddress clientAddr;
-    quint16 clientPort;
-    pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
-    if(datagram.startsWith("hedgewars client")) {
-      // send answer to client
-      pUdpSocket->writeDatagram(QString("hedgewars server\n%1").arg(m_descr).toUtf8(), clientAddr, clientPort);
+    while (pUdpSocket->hasPendingDatagrams())
+    {
+        QByteArray datagram;
+        datagram.resize(pUdpSocket->pendingDatagramSize());
+        QHostAddress clientAddr;
+        quint16 clientPort;
+        pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
+        if(datagram.startsWith("hedgewars client"))
+        {
+            // send answer to client
+            pUdpSocket->writeDatagram(QString("hedgewars server\n%1").arg(m_descr).toUtf8(), clientAddr, clientPort);
+        }
     }
-  }
 }
 
 void HWNetUdpServer::unregister()
 {
-  deleteLater();
+    deleteLater();
 }

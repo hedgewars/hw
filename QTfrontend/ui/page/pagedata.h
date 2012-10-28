@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,31 +29,35 @@ class QVBoxLayout;
 
 class PageDataDownload : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageDataDownload(QWidget* parent = 0);
+    public:
+        PageDataDownload(QWidget* parent = 0);
 
-public slots:
-    void fetchList();
+    public slots:
+        void fetchList();
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        void connectSignals();
 
-private:
-    DataBrowser *web;
-    QHash<QNetworkReply*, QProgressBar *> progressBars;
-    QVBoxLayout *progressBarsLayout;
+    private:
+        DataBrowser *web;
+        QHash<QNetworkReply*, QProgressBar *> progressBars;
+        QVBoxLayout *progressBarsLayout;
 
-    bool extractDataPack(QByteArray * buf);
+        bool m_contentDownloaded; ///< true if something was downloaded since last page leave
 
-private slots:
-    void request(const QUrl &url);
+        bool extractDataPack(QByteArray * buf);
 
-    void pageDownloaded();
-    void fileDownloaded();
-    void downloadProgress(qint64, qint64);
+    private slots:
+        void request(const QUrl &url);
+
+        void pageDownloaded();
+        void fileDownloaded();
+        void downloadProgress(qint64, qint64);
+
+        void onPageLeave();
 };
 
 #endif

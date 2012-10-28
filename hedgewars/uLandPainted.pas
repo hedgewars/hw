@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uLandGraphics, uConsts, uUtils, SDLh, uCommands, uDebug;
+uses uLandGraphics, uConsts, uVariables, uUtils, SDLh, uCommands, uDebug;
 
 type PointRec = packed record
     X, Y: SmallInt;
@@ -43,69 +43,6 @@ type
 
 var pointsListHead, pointsListLast: PPointEntry;
 
-procedure DrawLineOnLand(X1, Y1, X2, Y2: LongInt);
-var  eX, eY, dX, dY: LongInt;
-    i, sX, sY, x, y, d: LongInt;
-    b: boolean;
-    len: LongWord;
-begin
-    len:= 0;
-    if (X1 = X2) and (Y1 = Y2) then
-        begin
-        exit
-        end;
-    eX:= 0;
-    eY:= 0;
-    dX:= X2 - X1;
-    dY:= Y2 - Y1;
-
-    if (dX > 0) then sX:= 1
-    else
-    if (dX < 0) then
-        begin
-        sX:= -1;
-        dX:= -dX
-        end else sX:= dX;
-
-    if (dY > 0) then sY:= 1
-    else
-    if (dY < 0) then
-        begin
-        sY:= -1;
-        dY:= -dY
-        end else sY:= dY;
-
-        if (dX > dY) then d:= dX
-                    else d:= dY;
-
-        x:= X1;
-        y:= Y1;
-
-        for i:= 0 to d do
-            begin
-            inc(eX, dX);
-            inc(eY, dY);
-            b:= false;
-            if (eX > d) then
-                begin
-                dec(eX, d);
-                inc(x, sX);
-                b:= true
-                end;
-            if (eY > d) then
-                begin
-                dec(eY, d);
-                inc(y, sY);
-                b:= true
-                end;
-            if b then
-                begin
-                inc(len);
-                if (len mod 4) = 0 then FillRoundInLand(X, Y, 34, lfBasic)
-                end
-        end
-end;
-
 procedure chDraw(var s: shortstring);
 var rec: PointRec;
     prec: ^PointRec;
@@ -120,8 +57,12 @@ begin
         rec:= prec^;
         rec.X:= SDLNet_Read16(@rec.X);
         rec.Y:= SDLNet_Read16(@rec.Y);
+        if rec.X < -318 then rec.X:= -318;
+        if rec.X > 4096+318 then rec.X:= 4096+318;
+        if rec.Y < -318 then rec.Y:= -318;
+        if rec.Y > 2048+318 then rec.Y:= 2048+318;
 
-        pe:= new(PPointEntry);
+        new(pe);
         if pointsListLast = nil then
             pointsListHead:= pe
         else
@@ -138,10 +79,13 @@ end;
 procedure Draw;
 var pe: PPointEntry;
     prevPoint: PointRec;
+    radius: LongInt;
+    color: Longword;
 begin
     // shutup compiler
     prevPoint.X:= 0;
     prevPoint.Y:= 0;
+    radius:= 0;
 
     pe:= pointsListHead;
     TryDo((pe = nil) or (pe^.point.flags and $80 <> 0), 'Corrupted draw data', true);
@@ -150,13 +94,19 @@ begin
         begin
         if (pe^.point.flags and $80 <> 0) then
             begin
-            AddFileLog('[DRAW] Move to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
-            FillRoundInLand(pe^.point.X, pe^.point.Y, 34, lfBasic)
+            if (pe^.point.flags and $40 <> 0) then
+                color:= 0
+                else
+                color:= lfBasic;
+            radius:= (pe^.point.flags and $3F) * 5 + 3;
+            AddFileLog('[DRAW] Move to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+'), radius = '+inttostr(radius));
+            FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color)
             end
             else
             begin
-            AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+')');
-            DrawLineOnLand(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y);
+            AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+'), radius = '+inttostr(radius));
+            DrawThickLine(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y, radius, color);
+            FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color)
             end;
 
         prevPoint:= pe^.point;
@@ -169,7 +119,7 @@ begin
     pointsListHead:= nil;
     pointsListLast:= nil;
 
-    RegisterVariable('draw', vtCommand, @chDraw, false);
+    RegisterVariable('draw', @chDraw, false);
 end;
 
 procedure freeModule;

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,63 +23,71 @@
 
 class HWChatWidget;
 class AmmoSchemeModel;
+class QTableView;
+class RoomsListModel;
+class QSortFilterProxyModel;
 
 class PageRoomsList : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageRoomsList(QWidget* parent, QSettings * config);
-    void displayError(const QString & message);
-    void displayNotice(const QString & message);
-    void displayWarning(const QString & message);
+    public:
+        PageRoomsList(QWidget* parent, QSettings * config);
+        void displayError(const QString & message);
+        void displayNotice(const QString & message);
+        void displayWarning(const QString & message);
 
-    QLineEdit * roomName;
-    QLineEdit * searchText;
-    QTableWidget * roomsList;
-    QPushButton * BtnCreate;
-    QPushButton * BtnJoin;
-    QPushButton * BtnRefresh;
-    QPushButton * BtnAdmin;
-    QPushButton * BtnClear;
-    QComboBox * CBState;
-    QComboBox * CBRules;
-    QComboBox * CBWeapons;
-    HWChatWidget * chatWidget;
-    QLabel * lblCount;
+        QLineEdit * roomName;
+        QLineEdit * searchText;
+        QTableView * roomsList;
+        QPushButton * BtnCreate;
+        QPushButton * BtnJoin;
+        QPushButton * BtnAdmin;
+        QPushButton * BtnClear;
+        QComboBox * CBState;
+        QComboBox * CBRules;
+        QComboBox * CBWeapons;
+        HWChatWidget * chatWidget;
+        QLabel * lblCount;
 
-public slots:
-    void setAdmin(bool);
-    void setRoomsList(const QStringList & list);
-    void setUser(const QString & nickname);
-    void updateNickCounter(int cnt);
+        void setModel(RoomsListModel * model);
 
-signals:
-    void askForCreateRoom(const QString &);
-    void askForJoinRoom(const QString &);
-    void askForRoomList();
-    void askJoinConfirmation(const QString &);
+    public slots:
+        void setAdmin(bool);
+        void setUser(const QString & nickname);
+        void updateNickCounter(int cnt);
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    signals:
+        void askForCreateRoom(const QString &);
+        void askForJoinRoom(const QString &);
+        void askForRoomList();
+        void askJoinConfirmation(const QString &);
 
-private slots:
-    void onCreateClick();
-    void onJoinClick();
-    void onRefreshClick();
-    void onClearClick();
-    void onJoinConfirmation(const QString &);
+    protected:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-private:
-    QSettings * m_gameSettings;
+    private slots:
+        void onCreateClick();
+        void onJoinClick();
+        void onRefreshClick();
+        void onClearClick();
+        void onJoinConfirmation(const QString &);
+        void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
+        void onFilterChanged();
+        void saveHeaderState();
 
-    bool gameInLobby;
-    QString gameInLobbyName;
-    QStringList listFromServer;
-    AmmoSchemeModel * ammoSchemeModel;
+    private:
+        QSettings * m_gameSettings;
+        QSortFilterProxyModel * roomsModel;
+        QSortFilterProxyModel * stateFilteredModel;
+        QSortFilterProxyModel * schemeFilteredModel;
+        QSortFilterProxyModel * weaponsFilteredModel;
 
+        AmmoSchemeModel * ammoSchemeModel;
+
+        bool restoreHeaderState();
 };
 
 #endif

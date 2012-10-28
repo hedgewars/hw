@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,13 +71,15 @@ if killed then
     inc(Kills);
     inc(KillsTotal);
     inc(Attacker^.Team^.stats.Kills);
-    if (Attacker^.Team^.TeamName =
-            Gear^.Hedgehog^.Team^.TeamName) then begin
+    if (Attacker^.Team^.TeamName = Gear^.Hedgehog^.Team^.TeamName) then
+        begin
         inc(Attacker^.Team^.stats.TeamKills);
         inc(Attacker^.Team^.stats.TeamDamage, Gear^.Damage);
     end;
-    if Gear = Attacker^.Gear then inc(Attacker^.Team^.stats.Suicides);
-    if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then inc(KillsClan);
+    if Gear = Attacker^.Gear then
+        inc(Attacker^.Team^.stats.Suicides);
+    if Attacker^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan then
+        inc(KillsClan);
     end;
 
 inc(DamageTotal, Damage)
@@ -130,7 +132,7 @@ if FinishedTurnsTotal <> 0 then
     else if AmmoDamagingUsed then
         AddVoice(sndMissed, PreviousTeam^.voicepack)
     else if (AmmoUsedCount > 0) and (not isTurnSkipped) then
-        // nothing ?
+        begin end// nothing ?
     else if isTurnSkipped then
         begin
         AddVoice(sndBoring, PreviousTeam^.voicepack);
@@ -148,9 +150,12 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 begin
                 inc(DamageRecv, StepDamageRecv);
                 inc(DamageGiven, StepDamageGiven);
-                if StepDamageRecv > MaxStepDamageRecv then MaxStepDamageRecv:= StepDamageRecv;
-                if StepDamageGiven > MaxStepDamageGiven then MaxStepDamageGiven:= StepDamageGiven;
-                if StepKills > MaxStepKills then MaxStepKills:= StepKills;
+                if StepDamageRecv > MaxStepDamageRecv then
+                    MaxStepDamageRecv:= StepDamageRecv;
+                if StepDamageGiven > MaxStepDamageGiven then
+                    MaxStepDamageGiven:= StepDamageGiven;
+                if StepKills > MaxStepKills then
+                    MaxStepKills:= StepKills;
                 StepKills:= 0;
                 StepDamageRecv:= 0;
                 StepDamageGiven:= 0
@@ -180,10 +185,10 @@ procedure hedgehogFlight(Gear: PGear; time: Longword);
 begin
 if time > 4000 then
     begin
-    writeln('FLIGHT');
-    writeln(Gear^.Hedgehog^.Team^.TeamName);
-    writeln(time);
-    writeln;
+    writeln(stdout, 'FLIGHT');
+    writeln(stdout, Gear^.Hedgehog^.Team^.TeamName);
+    writeln(stdout, inttostr(time));
+    writeln(stdout, '');
     end
 end;
 
@@ -212,7 +217,8 @@ for t:= 0 to Pred(TeamsCount) do
     begin
         if not ExtDriven then
             SendStat(siTeamStats, GetTeamStatString(TeamsArray[t]));
-        for i:= 0 to cMaxHHIndex do begin
+        for i:= 0 to cMaxHHIndex do
+            begin
             if Hedgehogs[i].stats.MaxStepDamageGiven > msd then
                 begin
                 msdhh:= @Hedgehogs[i];
@@ -230,22 +236,26 @@ for t:= 0 to Pred(TeamsCount) do
         end;
 
         { send player stats for winner teams }
-        if Clan^.ClanHealth > 0 then begin
+        if Clan^.ClanHealth > 0 then
+            begin
             winnersClan:= Clan;
             SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
                 IntToStr(stats.Kills) + ' ' + TeamName);
         end;
 
         { determine maximum values of TeamKills, TurnSkips, TeamDamage }
-        if stats.TeamKills > maxTeamKills then begin
+        if stats.TeamKills > maxTeamKills then
+            begin
             maxTeamKills := stats.TeamKills;
             maxTeamKillsName := TeamName;
         end;
-        if stats.TurnSkips > maxTurnSkips then begin
+        if stats.TurnSkips > maxTurnSkips then
+            begin
             maxTurnSkips := stats.TurnSkips;
             maxTurnSkipsName := TeamName;
         end;
-        if stats.TeamDamage > maxTeamDamage then begin
+        if stats.TeamDamage > maxTeamDamage then
+            begin
             maxTeamDamage := stats.TeamDamage;
             maxTeamDamageName := TeamName;
         end;
@@ -253,9 +263,12 @@ for t:= 0 to Pred(TeamsCount) do
     end;
 
 { now send player stats for loser teams }
-for t:= 0 to Pred(TeamsCount) do begin
-    with TeamsArray[t]^ do begin
-        if Clan^.ClanHealth = 0 then begin
+for t:= 0 to Pred(TeamsCount) do
+    begin
+    with TeamsArray[t]^ do
+        begin
+        if Clan^.ClanHealth = 0 then
+            begin
             SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
                 IntToStr(stats.Kills) + ' ' + TeamName);
         end;
@@ -274,18 +287,20 @@ if maxTurnSkips > 2 then
 if maxTeamDamage > 30 then
     SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
 
-if KilledHHs > 0 then SendStat(siKilledHHs, IntToStr(KilledHHs));
+if KilledHHs > 0 then
+    SendStat(siKilledHHs, IntToStr(KilledHHs));
 
 // now to console
 if winnersClan <> nil then 
     begin
-    writeln('WINNERS');
+    writeln(stdout, 'WINNERS');
     for t:= 0 to winnersClan^.TeamsNumber - 1 do
-        writeln(winnersClan^.Teams[t]^.TeamName);
-    end else
-    writeln('DRAW');
+        writeln(stdout, winnersClan^.Teams[t]^.TeamName);
+    end
+else
+    writeln(stdout, 'DRAW');
 
-writeln;
+writeln(stdout, '');
 end;
 
 procedure initModule;
@@ -296,7 +311,6 @@ end;
 
 procedure freeModule;
 begin
-
 end;
 
 end.

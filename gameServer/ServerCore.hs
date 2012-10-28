@@ -1,6 +1,5 @@
 module ServerCore where
 
-import Network
 import Control.Concurrent
 import Control.Monad
 import System.Log.Logger
@@ -43,7 +42,7 @@ mainLoop = forever $ do
 
         ClientMessage (ci, cmd) -> do
             liftIO $ debugM "Clients" $ show ci ++ ": " ++ show cmd
-            
+
             removed <- gets removedClients
             unless (ci `Set.member` removed) $ do
                 modify (\s -> s{clientIndex = Just ci})
@@ -74,8 +73,6 @@ startServer si = do
         acceptLoop
             (fromJust $ serverSocket si)
             (coreChan si)
-
-    return ()
 
     _ <- forkIO $ timerLoop 0 $ coreChan si
 

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 #include "pagetraining.h"
 #include "pagenetserver.h"
 #include "pageoptions.h"
+#include "pagefeedback.h"
 #include "pageingame.h"
 #include "pagescheme.h"
 #include "pagenettype.h"
@@ -45,6 +46,7 @@
 #include "pagegamestats.h"
 #include "pageplayrecord.h"
 #include "pagedata.h"
+#include "pagevideos.h"
 #include "hwconsts.h"
 
 void Ui_HWForm::setupUi(HWForm *HWForm)
@@ -141,4 +143,10 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 
     pageDataDownload = new PageDataDownload();
     Pages->addWidget(pageDataDownload);
+
+    pageFeedback = new PageFeedback();
+    Pages->addWidget(pageFeedback);
+
+    pageVideos = new PageVideos();
+    Pages->addWidget(pageVideos);
 }

@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,12 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 03/07/2010.
  */
 
 
 #import <UIKit/UIKit.h>
+
 
 @protocol EditableCellViewDelegate <NSObject>
 
@@ -31,8 +30,8 @@
     id<EditableCellViewDelegate> delegate;
     UITextField *textField;
     UILabel *titleLabel;
-    NSInteger minimumCharacters;
-    NSInteger maximumCharacters;
+    NSUInteger minimumCharacters;
+    NSUInteger maximumCharacters;
     BOOL respectEditing;
 
 @private
@@ -42,8 +41,8 @@
 @property (nonatomic,assign) id<EditableCellViewDelegate> delegate;
 @property (nonatomic,retain,readonly) UITextField *textField;
 @property (nonatomic,retain,readonly) UILabel *titleLabel;
-@property (nonatomic,assign) NSInteger minimumCharacters;
-@property (nonatomic,assign) NSInteger maximumCharacters;
+@property (nonatomic,assign) NSUInteger minimumCharacters;
+@property (nonatomic,assign) NSUInteger maximumCharacters;
 @property (nonatomic,assign) BOOL respectEditing;
 @property (nonatomic,retain) NSString *oldValue;
 

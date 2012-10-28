@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,41 +21,61 @@
 
 #include <QGraphicsScene>
 #include <QPainterPath>
+#include <QGraphicsEllipseItem>
 
 class QGraphicsPathItem;
 
-typedef QList<QList<QPoint> > Paths;
+struct PathParams
+{
+    quint8 width;
+    bool erasing;
+    QList<QPoint> points;
+};
+
+typedef QList<PathParams> Paths;
 
 class DrawMapScene : public QGraphicsScene
 {
-Q_OBJECT
-public:
-    explicit DrawMapScene(QObject *parent = 0);
+        Q_OBJECT
+    public:
+        explicit DrawMapScene(QObject *parent = 0);
 
-    QByteArray encode();
-    void decode(QByteArray data);
+        QByteArray encode();
+        void decode(QByteArray data);
+        int pointsCount();
 
-signals:
-    void pathChanged();
+    signals:
+        void pathChanged();
 
-public slots:
-    void undo();
-    void clearMap();
-    void simplifyLast();
+    public slots:
+        void undo();
+        void clearMap();
+        void simplifyLast();
+        void setErasing(bool erasing);
+        void showCursor();
+        void hideCursor();
 
-private:
-    QPen m_pen;
-    QBrush m_brush;
-    QGraphicsPathItem  * m_currPath;
-    Paths paths;
-    Paths oldPaths;
-    QList<QGraphicsItem *> oldItems;
+    private:
+        QPen m_pen;
+        QBrush m_eraser;
+        QBrush m_brush;
+        QGraphicsPathItem  * m_currPath;
+        Paths paths;
+        Paths oldPaths;
+        bool m_isErasing;
+        QList<QGraphicsItem *> oldItems;
+        QGraphicsEllipseItem * m_cursor;
+        bool m_isCursorShown;
 
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
+        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
+        virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
+        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
+        virtual void wheelEvent(QGraphicsSceneWheelEvent *);
 
-    QPainterPath pointsToPath(const QList<QPoint> points);
+        QPainterPath pointsToPath(const QList<QPoint> points);
+
+        quint8 serializePenWidth(int width);
+        int deserializePenWidth(quint8 width);
 };
 
 #endif // DRAWMAPSCENE_H

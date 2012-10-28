@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@
 #include "HistoryLineEdit.h"
 
 HistoryLineEdit::HistoryLineEdit(QWidget * parent, int maxHistorySize)
-: QLineEdit(parent)
+    : QLineEdit(parent)
 {
     m_curHistEntryIdx = 0;
     m_maxHistorySize = maxHistorySize;
@@ -80,10 +80,10 @@ void HistoryLineEdit::navigateHistory(bool isGoingUp)
 {
     // save possible changes to new entry
     if ((m_curHistEntryIdx >= m_history->size() ||
-        (text() != m_history->at(m_curHistEntryIdx))))
-        {
-            rememberCurrentText();
-        }
+            (text() != m_history->at(m_curHistEntryIdx))))
+    {
+        rememberCurrentText();
+    }
 
     if (isGoingUp)
         m_curHistEntryIdx--;

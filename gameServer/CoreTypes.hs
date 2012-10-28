@@ -34,6 +34,7 @@ data ClientInfo =
         pingsQueue :: !Word,
         isMaster :: Bool,
         isReady :: !Bool,
+        isInGame :: Bool,
         isAdministrator :: Bool,
         clientClan :: Maybe B.ByteString,
         teamsInGame :: Word
@@ -62,23 +63,28 @@ data TeamInfo =
         hedgehogs :: [HedgehogInfo]
     }
     deriving (Show, Read)
-    
+
 data GameInfo =
     GameInfo
     {
         roundMsgs :: Seq B.ByteString,
         leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
+        teamsInGameNumber :: Int,
         allPlayersHaveRegisteredAccounts :: Bool,
         giMapParams :: Map.Map B.ByteString B.ByteString,
         giParams :: Map.Map B.ByteString [B.ByteString]
     } deriving (Show, Read)
-    
---newGameInfo ::  -> GameInfo 
-newGameInfo = 
+
+newGameInfo :: [TeamInfo]
+                -> Int
+                -> Bool
+                -> Map.Map ByteString ByteString
+                -> Map.Map ByteString [ByteString]
+                -> GameInfo
+newGameInfo =
     GameInfo
         Data.Sequence.empty
-        []
         []
 
 data RoomInfo =
@@ -94,6 +100,7 @@ data RoomInfo =
         readyPlayers :: !Int,
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
+        roomBansList :: [B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
     }
@@ -111,6 +118,7 @@ newRoom =
         0
         False
         False
+        []
         (
             Map.fromList $ Prelude.zipWith (,)
                 ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
@@ -134,7 +142,7 @@ data ServerInfo =
         latestReleaseVersion :: Word16,
         earliestCompatibleVersion :: Word16,
         listenPort :: PortNumber,
-        nextRoomID :: Int,
+        --nextRoomID :: Int,
         dbHost :: B.ByteString,
         dbName :: B.ByteString,
         dbLogin :: B.ByteString,
@@ -154,11 +162,11 @@ newServerInfo =
     ServerInfo
         True
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-        "<font color=yellow><h3 align=center>Hedgewars 0.9.16 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        39
-        31 -- 0.9.13
+        "<font color=yellow><h3 align=center>Hedgewars 0.9.17 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
+        41
+        43 -- 0.9.18
         46631
-        0
+        --0
         ""
         ""
         ""
@@ -192,6 +200,7 @@ type IRnC = IRoomsAndClients RoomInfo ClientInfo
 data Notice =
     NickAlreadyInUse
     | AdminLeft
+    | WrongPassword
     deriving Enum
 
 data ShutdownException =

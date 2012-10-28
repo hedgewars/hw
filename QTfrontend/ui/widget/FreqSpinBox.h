@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,23 +35,23 @@
  */
 class FreqSpinBox : public QSpinBox
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    /**
-     * @brief Class constructor.
-     * @param parent parent widget.
-     */
-    FreqSpinBox(QWidget * parent);
+    public:
+        /**
+         * @brief Class constructor.
+         * @param parent parent widget.
+         */
+        FreqSpinBox(QWidget * parent);
 
-protected:
-    /**
-     * Returns it's value as localized frequency.
-     * 'Never', 'Every Turn', 'Every 2 Turns', etc.
-     * @param value integer value to be representing as string.
-     * @return the turn frequence-like string representation.
-     */
-    QString textFromValue(int value) const;
+    protected:
+        /**
+         * Returns it's value as localized frequency.
+         * 'Never', 'Every Turn', 'Every 2 Turns', etc.
+         * @param value integer value to be representing as string.
+         * @return the turn frequence-like string representation.
+         */
+        QString textFromValue(int value) const;
 };
 
 

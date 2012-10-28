@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 25/10/2011.
  */
 
 
@@ -25,6 +23,7 @@
 @interface UIScreen (safe)
 
 -(CGFloat) safeScale;
+-(CGRect) safeBounds;
 
 @end
 
@@ -47,12 +46,19 @@
 @end
 
 
+@interface UIButton (quickStyle)
+
+-(id) initWithFrame:(CGRect) frame andTitle:(NSString *)title;
+
+@end
+
+
 @interface UILabel (quickStyle)
 
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title;
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth;
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth
-          withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor;
+-(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title;
+-(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth;
+-(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth
+    withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor;
 
 @end
 

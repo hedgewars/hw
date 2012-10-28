@@ -107,7 +107,6 @@ local teamScore = {}
 --------
 
 local cGear = nil
-local gTimer = 0
 
 local bestClan = nil
 local bestTime = nil
@@ -116,7 +115,6 @@ local gameBegun = false
 local gameOver = false
 local racerActive = false
 local trackTime = 0
-local wpCheckCounter = 0
 
 local wpCirc = {}
 local wpX = {}
@@ -353,7 +351,7 @@ function onNewRound()
 	if roundNumber == roundLimit then
 		for i = 0, (numhhs-1) do
 			if GetHogClan(hhs[i]) ~= bestClan then
-				SetEffect(hhs[i], heResurrectable, false)
+				SetEffect(hhs[i], heResurrectable, 0)
 				SetHealth(hhs[i],0)
 			end
 		end
@@ -374,7 +372,7 @@ function CheckForNewRound()
 		if turnN == 2 then
 			for i = 0, (numhhs-1) do
 				if hhs[i] ~= nil then
-					SetEffect(hhs[i], heResurrectable, false)
+					SetEffect(hhs[i], heResurrectable, 0)
 					SetHealth(hhs[i],0)
 				end
 			end
@@ -536,6 +534,7 @@ function onNewTurn()
 			loc("NOT ENOUGH WAYPOINTS"),
 			loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
 			AddAmmo(CurrentHedgehog, amAirAttack, 4000)
+            ParseCommand("setweap " .. string.char(amAirAttack))
 		end
 	end
 
@@ -552,28 +551,32 @@ function onNewTurn()
 
 end
 
-function onGameTick()
+function onGameTick20()
 
 	-- airstrike detected, convert this into a potential waypoint spot
 	if cGear ~= nil then
-		x,y = GetGearTarget(cGear)
+		x,y = GetGearPosition(cGear)
+        if x > -9000 then
+            x,y = GetGearTarget(cGear)
 
-		DeleteGear(cGear)
 
-		if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-			AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
-			PlaySound(sndDenied)
-		elseif (y > WaterLine-50) then
-			AddCaption(loc("Please place the way-point further from the waterline."))
-			PlaySound(sndDenied)
-		else
-			PlaceWayPoint(x, y)
-			if wpCount == wpLimit then
-				AddCaption(loc("Race complexity limit reached."))
-				DisableTumbler()
-			end
-		end
-
+            if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
+                AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
+                PlaySound(sndDenied)
+            elseif (y > WaterLine-50) then
+                AddCaption(loc("Please place the way-point further from the waterline."))
+                PlaySound(sndDenied)
+            else
+                PlaceWayPoint(x, y)
+                if wpCount == wpLimit then
+                    AddCaption(loc("Race complexity limit reached."))
+                    DisableTumbler()
+                end
+            end
+        else
+            DeleteGear(cGear)
+        end
+        SetGearPosition(cGear, -10000, 0)
 	end
 
 
@@ -613,19 +616,19 @@ function onGameTick()
 		if (racerActive == true) and (gameBegun == true) then
 
 			--ghost
-			gTimer = gTimer + 1
-			if gTimer == 40 then
-				gTimer = 0
+			if GameTime%40 == 0 then
 				HandleGhost()
 			end
 
-			trackTime = trackTime + 1
+			trackTime = trackTime + 20
 
-			wpCheckCounter = wpCheckCounter + 1
-			if (wpCheckCounter == 100) then
-
-				wpCheckCounter = 0
-				AddCaption(trackTime/1000,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
+			if GameTime%100 == 0 then
+                
+                if trackTime%1000 == 0 then
+                    AddCaption((trackTime/1000)..'.0',GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
+                else
+                    AddCaption(trackTime/1000,GetClanColor(GetHogClan(CurrentHedgehog)),capgrpMessage2)
+                end
 
 				if (CheckWaypoints() == true) then
 					AdjustScores()
@@ -640,7 +643,7 @@ function onGameTick()
 
 
 		-- if the player has expended his tunbling time, stop him tumbling
-		if TurnTimeLeft <= 1 then
+		if TurnTimeLeft <= 20 then
 			DisableTumbler()
 		end
 
@@ -671,7 +674,7 @@ function onGearAdd(gear)
 	if GetGearType(gear) == gtHedgehog then
 		hhs[numhhs] = gear
 		numhhs = numhhs + 1
-		SetEffect(gear, heResurrectable, true)
+		SetEffect(gear, heResurrectable, 1)
 	end
 
 	if GetGearType(gear) == gtAirAttack then

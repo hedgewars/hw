@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ type
     TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit, gsSuspend);
 
     // Game types that help determining what the engine is actually supposed to do
-    TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax);
+    TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax, gmtRecord);
 
     // Different files are stored in different folders, this enumeration is used to tell which folder to use
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
@@ -51,20 +51,23 @@ type
             sprLag, sprArrow, sprBazookaShell, sprTargetP, sprBee,
             sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
             sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
-            sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
-            sprHorizontL, sprHorizontR, sprSky, sprSkyL,
-            sprSkyR, sprAMBorderHorizontal, sprAMBorderVertical, sprAMSlot, sprAMAmmos,
-            sprAMSlotKeys, sprAMCorners, sprFinger, sprAirBomb,
-            sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask,
-            sprSwitch, sprParachute, sprTarget, sprRopeNode,
+            sprClusterBomb, sprClusterParticle, sprFlame,
+            sprHorizont, sprHorizontL, sprHorizontR, sprSky, sprSkyL, sprSkyR,
+            sprAMSlot, sprAMAmmos, sprAMAmmosBW, sprAMSlotKeys, sprAMCorners,
+            sprFinger, sprAirBomb, sprAirplane, sprAmAirplane, sprAmGirder,
+            sprHHTelepMask, sprSwitch, sprParachute, sprTarget, sprRopeNode,
             sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
+{$IFDEF USE_TOUCH_INTERFACE}
+            sprFireButton, sprArrowUp, sprArrowDown, sprArrowLeft, sprArrowRight,
+            sprJumpWidget, sprAMWidget, sprPauseButton, sprTimerButton, sprTargetButton,
+{$ENDIF}
             sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
             sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
             sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
             sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
             sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
             sprHurrah, sprLemonade, sprShrug, sprJuggle, sprExplPart, sprExplPart2,
-            sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
+            sprCakeWalk, sprCakeDown, sprWatermelon,
             sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
             sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
             sprPlane, sprHandPlane, sprUtility, sprInvulnerable, sprVampiric, sprGirder,
@@ -83,22 +86,24 @@ type
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
-            sprFireButton
+            sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar
             );
 
     // Gears that interact with other Gears and/or Land
-    TGearType = (gtGrenade, gtHedgehog, gtShell, gtGrave, gtBee, // 4
-            gtShotgunShot, gtPickHammer, gtRope, gtMine, gtCase, // 9
-            gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 14
-            gtFlame, gtFirePunch, gtATStartGame, // 17
-            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 22
-            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 27
-            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 33
-            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 39
-            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, // 44
+    TGearType = ({-->}gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives, // <-- these are gears which should be avoided when searching a spawn place
+            gtGrenade, gtShell, gtGrave, gtBee, // 8
+            gtShotgunShot, gtPickHammer, gtRope,  // 11
+            gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 16
+            gtFirePunch, gtATStartGame, // 18
+            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 23
+            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 28
+            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
+            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
+            gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 44
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
-            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis); // 61
+            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis, // 61
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife); // 65
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -108,8 +113,6 @@ type
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
             vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail, vgtBulletHit, vgtCircle,
             vgtSmoothWindBar, vgtStraightShot);
-
-    TGearsType = set of TGearType;
 
     // Damage can be caused by different sources
     TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);
@@ -148,7 +151,7 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector, amDrillStrike, amSnowball, amTardis, amStructure, amLandGun); // 54
+            amResurrector, amDrillStrike, amSnowball, amTardis, amStructure, amLandGun, amIceGun, amKnife); // 54
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -172,7 +175,7 @@ type
             Handle: PTTF_Font;
             Height: LongInt;
             style: LongInt;
-            Name: string[21];
+            Name: string[31];
             end;
 
     PAmmo = ^TAmmo;
@@ -190,12 +193,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             end;
 
     TVertex2f = record
-        X, Y: GLfloat;
-        end;
+            X, Y: GLfloat;
+            end;
 
     TVertex2i = record
-        X, Y: GLint;
-        end;
+            X, Y: GLint;
+            end;
 
     PTexture = ^TTexture;
     TTexture = record
@@ -207,7 +210,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             PrevTexture, NextTexture: PTexture;
             end;
 
-    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected);
+    THogEffect = (heInvulnerable, heResurrectable, hePoisoned, heResurrected, heFrozen);
 
     TScreenFade = (sfNone, sfInit, sfToBlack, sfFromBlack, sfToWhite, sfFromWhite);
 
@@ -247,7 +250,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Tag: LongInt;
             Tex: PTexture;
             Z: Longword;
-            IntersectGear: PGear;
+            CollisionMask: Word;
+            LinkedGear: PGear;
             FlightTime: Longword;
             uid: Longword;
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
@@ -255,8 +259,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             SoundChannel: LongInt;
             PortalCounter: LongWord;  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
             LastDamage: PHedgehog;
+            end;
+    TPGearArray = array of PGear;
+    PGearArrayS = record
+        size: LongWord;
+        ar: ^TPGearArray;
         end;
-    TPGearArray = Array of PGear;
 
     PVisualGear = ^TVisualGear;
     TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
@@ -306,7 +314,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         TeamDamage : Longword;
         end;
 
-    TBinds = array[0..cKeyMaxIndex] of shortstring;
+    TBinds = array[0..cKbdMaxIndex] of shortstring;
     TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
     PVoicepack = ^TVoicepack;
@@ -320,11 +328,11 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         voicepack: PVoicePack;
         end;
 
-    PHHAmmo = ^THHAmmo;
     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
+    PHHAmmo = ^THHAmmo;
 
     THedgehog = record
-            Name: string[MAXNAMELEN];
+            Name: shortstring;
             Gear: PGear;
             GearHidden: PGear;
             SpeechGear: PVisualGear;
@@ -333,6 +341,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             HatTex: PTexture;
             Ammo: PHHAmmo;
             CurAmmoType: TAmmoType;
+            PickUpType: LongWord;
+            PickUpDelay: LongInt;
             AmmoStore: Longword;
             Team: PTeam;
             MultiShootAttacks: Longword;
@@ -345,12 +355,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;
-            Effects: Array[THogEffect] of boolean;
+            Effects: array[THogEffect] of LongInt;
             end;
 
     TTeam = record
             Clan: PClan;
-            TeamName: string[MAXNAMELEN];
+            TeamName: shortstring;
             ExtDriven: boolean;
             Binds: TBinds;
             Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
@@ -397,29 +407,62 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane,
             sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack,
-            sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb, sidSineGun, sidFlamethrower,
-            sidSMine, sidHammer, sidResurrector, sidDrillStrike, sidSnowball, sidNothing, sidTardis, sidStructure, sidLandGun);
+            sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb,
+            sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
+            sidDrillStrike, sidSnowball, sidNothing, sidTardis,
+            sidStructure, sidLandGun, sidIceGun, sidKnife);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
             sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady, 
-            sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce);
+            sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
+            sidMute);
 
     // Events that are important for the course of the game or at least interesting for other reasons
     TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
-            eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
-            eidHomerun, eidGone);
+            eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped,
+            eidHurtSelf, eidHomerun, eidGone);
 
     TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
             gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
-            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
-            gidDamageModifier, gidResetHealth, gidAISurvival, gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
+            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, 
+            gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival, 
+            gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
 
     TLandArray = packed array of array of LongWord;
     TCollisionArray = packed array of array of Word;
     TPreview  = packed array[0..127, 0..31] of byte;
     TDirtyTag = packed array of array of byte;
 
+    PWidgetMovement = ^TWidgetMovement;
+    TWidgetMovement = record
+        animate   : Boolean;
+        source    : TPoint;
+        target    : TPoint;
+        startTime : Longword;
+        end;
+
+    POnScreenWidget = ^TOnScreenWidget;
+    TOnScreenWidget = record
+        show          : boolean;                      // if false widget will not be drawn
+        sprite        : TSprite;                    // a convenience type
+        frame         : TSDL_Rect;                   // graphical coordinates
+        active        : TSDL_Rect;                  // active touch region
+        fadeAnimStart : Longword;            // time the fade started, 0 means don't fade
+        moveAnim      : TWidgetMovement;          // the animation associated to the widget
+        end;
+
+{$IFDEF SDL13}
+    PTouch_Data = ^TTouch_Data;
+    TTouch_Data = record
+        id                       : TSDL_FingerId;
+        x,y                      : LongInt;
+        dx,dy                    : LongInt;
+        historicalX, historicalY : LongInt;
+        timeSinceDown            : Longword;
+        pressedWidget            : POnScreenWidget;
+        end;
+{$ENDIF}
 
 implementation
 

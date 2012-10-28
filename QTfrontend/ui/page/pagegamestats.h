@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2010-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,47 +27,47 @@
 
 class FitGraphicsView : public QGraphicsView
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    FitGraphicsView(QWidget* parent = 0);
+    public:
+        FitGraphicsView(QWidget* parent = 0);
 
-protected:
-    void resizeEvent(QResizeEvent * event);
+    protected:
+        void resizeEvent(QResizeEvent * event);
 };
 
 class PageGameStats : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageGameStats(QWidget* parent = 0);
+    public:
+        PageGameStats(QWidget* parent = 0);
 
-    QPushButton *btnSave;
-    QLabel *labelGameStats;
-    QLabel *labelGameWin;
-    QLabel *labelGameRank;
-    FitGraphicsView * graphic;
+        QPushButton *btnSave;
+        QLabel *labelGameStats;
+        QLabel *labelGameWin;
+        QLabel *labelGameRank;
+        FitGraphicsView * graphic;
 
-public slots:
-    void GameStats(char type, const QString & info);
-    void clear();
-    void renderStats();
-    
-signals:
-    void saveDemoRequested();
+    public slots:
+        void GameStats(char type, const QString & info);
+        void clear();
+        void renderStats();
 
-private:
-    void AddStatText(const QString & msg);
+    signals:
+        void saveDemoRequested();
 
-    QMap<quint32, QVector<quint32> > healthPoints;
-    unsigned int playerPosition;
-    quint32 lastColor;
+    private:
+        void AddStatText(const QString & msg);
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+        QMap<quint32, QVector<quint32> > healthPoints;
+        unsigned int playerPosition;
+        quint32 lastColor;
+
+    protected:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 };
 
 #endif // STATSPAGE_H

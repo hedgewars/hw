@@ -43,15 +43,18 @@ listenLoop sock chan ci = recieveWithBufferLoop B.empty
 
 clientRecvLoop :: Socket -> Chan CoreMessage -> Chan [B.ByteString] -> ClientIndex -> (forall a. IO a -> IO a) -> IO ()
 clientRecvLoop s chan clChan ci restore =
-    myThreadId >>=
+    (myThreadId >>=
     \t -> (restore $ forkIO (clientSendLoop s t clChan ci) >>
         listenLoop s chan ci >> return "Connection closed")
-        `Exception.catch` (\(e :: Exception.IOException) -> return . B.pack . show $ e)
         `Exception.catch` (\(e :: ShutdownThreadException) -> return . B.pack . show $ e)
-        >>= clientOff >> remove
+        `Exception.catch` (\(e :: Exception.IOException) -> return . B.pack . show $ e)
+        `Exception.catch` (\(e :: Exception.SomeException) -> return . B.pack . show $ e)
+        >>= clientOff) `Exception.finally` remove
     where
         clientOff msg = writeChan chan $ ClientMessage (ci, ["QUIT", msg])
-        remove = writeChan chan $ Remove ci
+        remove = do
+            clientOff "Client is in some weird state"
+            writeChan chan $ Remove ci
 
 
 
@@ -63,12 +66,11 @@ clientSendLoop s tId chan ci = do
         killReciever . B.unpack $ quitMessage answer
 
     Exception.handle
-        (\(e :: Exception.IOException) -> unless (isQuit answer) . killReciever $ show e) $
+        (\(e :: Exception.SomeException) -> unless (isQuit answer) . killReciever $ show e) $
             sendAll s $ B.unlines answer `B.snoc` '\n'
 
     if isQuit answer then
-        do
-        Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on sClose") $ sClose s
+        sClose s
         else
         clientSendLoop s tId chan ci
 

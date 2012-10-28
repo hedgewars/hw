@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Ulyanov Igor <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,25 +26,27 @@ class FrameTeams;
 
 class CHedgehogerWidget : public ItemNum
 {
-  Q_OBJECT
+        Q_OBJECT
 
- public:
-  CHedgehogerWidget(const QImage& im, const QImage& img, QWidget * parent);
-  virtual ~CHedgehogerWidget();
-  unsigned char getHedgehogsNum() const;
-  void setHHNum (unsigned int num);
-  void setNonInteractive();
+    public:
+        CHedgehogerWidget(const QImage& im, const QImage& img, QWidget * parent);
+        virtual ~CHedgehogerWidget();
+        unsigned char getHedgehogsNum() const;
+        void setHHNum (unsigned int num);
+        void setNonInteractive();
 
- signals:
-  void hedgehogsNumChanged();
+    signals:
+        void hedgehogsNumChanged();
 
- protected:
-  virtual void incItems();
-  virtual void decItems();
+    protected:
+        virtual void incItems();
+        virtual void decItems();
 
- private:
-  CHedgehogerWidget();
-  FrameTeams* pOurFrameTeams;
+        virtual void paintEvent(QPaintEvent* event);
+
+    private:
+        CHedgehogerWidget();
+        FrameTeams* pOurFrameTeams;
 };
 
 #endif // _HEDGEHOGER_WIDGET

@@ -63,9 +63,10 @@ interface
 (*
 As per the license above, noting that this implementation of adler32 was stripped of everything we didn't need.
 That means no btypes, file loading, and the assembly version disabled.
+Also, the structure was removed to simplify C conversion
 *)
 
-procedure Adler32Update(var adler: longint; Msg: pointer; Len: longint);
+function Adler32Update ( var adler     :longint; Msg     :pointer; Len     :longint ) : longint;
 
 implementation
 
@@ -73,29 +74,33 @@ implementation
 $ifdef BASM16
 
 procedure Adler32Update(var adler: longint; Msg: pointer; Len: longint);
-  //-update Adler32 with Msg data
+    //-update Adler32 with Msg data
 const
-  BASE = 65521; // max. prime < 65536
-  NMAX =  5552; // max. n with 255n(n+1)/2 + (n+1)(BASE-1) < 2^32
+    BASE = 65521; // max. prime < 65536
+    NMAX =  5552; // max. n with 255n(n+1)/2 + (n+1)(BASE-1) < 2^32
 type
-  LH    = packed record
+    LH    = packed record
             L,H: word;
-          end;
+            end;
 var
-  s1,s2: longint;
-  n: integer;
+    s1,s2: longint;
+    n: integer;
 begin
-  s1 := LH(adler).L;
-  s2 := LH(adler).H;
-  while Len > 0 do begin
-    if Len<NMAX then n := Len else n := NMAX;
+    s1 := LH(adler).L;
+    s2 := LH(adler).H;
+    while Len > 0 do
+        begin
+    if Len<NMAX then
+        n := Len
+    else
+        n := NMAX;
     //BASM increases speed from about 52 cyc/byte to about 3.7 cyc/byte
     asm
                     mov  cx,[n]
             db $66; mov  ax,word ptr [s1]
             db $66; mov  di,word ptr [s2]
                     les  si,[msg]
-      @@1:  db $66, $26, $0f, $b6, $1c      // movzx ebx,es:[si]
+        @@1:  db $66, $26, $0f, $b6, $1c      // movzx ebx,es:[si]
                     inc  si
             db $66; add  ax,bx              // inc(s1, pByte(Msg)^)
             db $66; add  di,ax              // inc(s2, s1
@@ -111,42 +116,43 @@ begin
             db $66; div  cx
             db $66; mov  word ptr [s2],dx   // s2 := s2 mod BASE
                     mov  word ptr [msg],si  // save offset for next chunk
-    end;
+        end;
     dec(len, n);
-  end;
-  LH(adler).L := word(s1);
-  LH(adler).H := word(s2);
+    end;
+    LH(adler).L := word(s1);
+    LH(adler).H := word(s2);
 end;
 *)
 
-procedure Adler32Update(var adler: longint; Msg: pointer; Len: longint);
-  {-update Adler32 with Msg data}
-const
-  BASE = 65521; {max. prime < 65536 }
-  NMAX =  3854; {max. n with 255n(n+1)/2 + (n+1)(BASE-1) < 2^31}
-type
-  LH    = packed record
-            L,H: word;
-          end;
-var
-  s1,s2: longint;
-  i,n: integer;
-begin
-  s1 := LH(adler).L;
-  s2 := LH(adler).H;
-  while Len > 0 do begin
-    if Len<NMAX then n := Len else n := NMAX;
-    for i:=1 to n do begin
-      inc(s1, pByte(Msg)^);
-      inc(Msg);
-      inc(s2, s1);
+function Adler32Update(var adler: longint; Msg: pointer; Len :longint) : longint;
+    {-update Adler32 with Msg data}
+    const
+        BASE = 65521; {max. prime < 65536 }
+        NMAX = 3854; {max. n with 255n(n+1)/2 + (n+1)(BASE-1) < 2^31}
+    var
+        s1, s2: longint;
+        i, n: integer;
+    begin
+        s1 := adler and $FFFF;
+        s2 := adler shr 16;
+        while Len>0 do
+            begin
+            if Len<NMAX then
+                n := Len
+            else
+                n := NMAX;
+
+            for i := 1 to n do
+                begin
+                inc(s1, pByte(Msg)^);
+                inc(Msg);
+                inc(s2, s1);
+                end;
+            s1 := s1 mod BASE;
+            s2 := s2 mod BASE;
+            dec(len, n);
+            end;
+        Adler32Update:= (s2 shl 16) or s1;
     end;
-    s1 := s1 mod BASE;
-    s2 := s2 mod BASE;
-    dec(len, n);
-  end;
-  LH(adler).L := word(s1);
-  LH(adler).H := word(s2);
-end;
 
 end.

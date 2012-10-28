@@ -6,6 +6,7 @@ import qualified Data.Foldable as Foldable
 import Data.Maybe
 import Data.List
 import Control.Monad.Reader
+import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
@@ -24,6 +25,7 @@ answerAllTeams cl = concatMap toAnswer
             AnswerClients [clChan] ["TEAM_COLOR", teamname team, teamcolor team],
             AnswerClients [clChan] ["HH_NUM", teamname team, showB $ hhnum team]]
 
+
 handleCmd_lobby :: CmdHandler
 
 
@@ -31,19 +33,8 @@ handleCmd_lobby ["LIST"] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
     rooms <- allRoomInfos
-    let roomsInfoList = concatMap (roomInfo irnc) . filter (\r -> (roomProto r == clientProto cl) && not (isRestrictedJoins r))
+    let roomsInfoList = concatMap (\r -> roomInfo (nick $ irnc `client` masterID r) r) . filter (\r -> (roomProto r == clientProto cl))
     return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
-    where
-        roomInfo irnc r = [
-                showB $ isJust $ gameInfo r,
-                name r,
-                showB $ playersIn r,
-                showB $ length $ teams r,
-                nick $ irnc `client` masterID r,
-                Map.findWithDefault "+rnd+" "MAP" (mapParams r),
-                head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
-                head (Map.findWithDefault ["Default"] "AMMO" (params r))
-                ]
 
 
 handleCmd_lobby ["CHAT", msg] = do
@@ -60,8 +51,10 @@ handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
             [Warning "Room exists"]
             else
             [
-                AddRoom rName roomPassword,
-                AnswerClients [sendChan cl] ["CLIENT_FLAGS", "-r", nick cl]
+                AddRoom rName roomPassword
+                , AnswerClients [sendChan cl] ["CLIENT_FLAGS", "+hr", nick cl]
+                , ModifyClient (\cl -> cl{isMaster = True, isReady = True})
+                , ModifyRoom (\r -> r{readyPlayers = 1})
             ]
 
 
@@ -79,19 +72,25 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let sameProto = clientProto cl == roomProto jRoom
     let jRoomClients = map (client irnc) $ roomClients irnc jRI
     let nicks = map nick jRoomClients
+    let ownerNick = nick . fromJust $ find isMaster jRoomClients
     let chans = map sendChan (cl : jRoomClients)
+    let isBanned = host cl `elem` roomBansList jRoom
     return $
-        if isNothing maybeRI || not sameProto then 
+        if isNothing maybeRI || not sameProto then
             [Warning "No such room"]
             else if isRestrictedJoins jRoom then
             [Warning "Joining restricted"]
+            else if isBanned then
+            [Warning "You are banned in this room"]
             else if roomPassword /= password jRoom then
-            [Warning "Wrong password"]
+            [NoticeMessage WrongPassword]
             else
             [
-                MoveToRoom jRI,
-                AnswerClients [sendChan cl] $ "JOINED" : nicks,
-                AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
+                MoveToRoom jRI
+                , AnswerClients [sendChan cl] $ "JOINED" : nicks
+                , AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
+                , AnswerClients [sendChan cl] $ ["WARNING", "Room admin is " `B.append` ownerNick]
+                , AnswerClients [sendChan cl] $ ["CLIENT_FLAGS", "+h", ownerNick]
             ]
             ++ map (readynessMessage cl) jRoomClients
             ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
@@ -134,7 +133,6 @@ handleCmd_lobby ["JOIN_ROOM", roomName] =
 handleCmd_lobby ["FOLLOW", asknick] = do
     (_, rnc) <- ask
     ci <- clientByNick asknick
-    cl <- thisClient
     let ri = clientRoom rnc $ fromJust ci
     let clRoom = room rnc ri
     if isNothing ci || ri == lobbyId then
@@ -157,16 +155,19 @@ handleCmd_lobby ["BAN", banNick, reason] = do
     cl <- thisClient
     banId <- clientByNick banNick
     return [BanClient 60 reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
-    
+
 handleCmd_lobby ["BANIP", ip, reason, duration] = do
-    (ci, _) <- ask
     cl <- thisClient
     return [BanIP ip (readInt_ duration) reason | isAdministrator cl]
-    
+
 handleCmd_lobby ["BANLIST"] = do
-    (ci, _) <- ask
     cl <- thisClient
     return [BanList | isAdministrator cl]
+
+
+handleCmd_lobby ["UNBAN", entry] = do
+    cl <- thisClient
+    return [Unban entry | isAdministrator cl]
 
 
 handleCmd_lobby ["SET_SERVER_VAR", "MOTD_NEW", newMessage] = do
@@ -182,7 +183,7 @@ handleCmd_lobby ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] = do
     return [ModifyServerInfo (\si -> si{latestReleaseVersion = readNum}) | isAdministrator cl && readNum > 0]
     where
         readNum = readInt_ protoNum
- 
+
 handleCmd_lobby ["GET_SERVER_VAR"] = do
     cl <- thisClient
     return [SendServerVars | isAdministrator cl]
@@ -193,7 +194,7 @@ handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = do
 
 handleCmd_lobby ["RESTART_SERVER"] = do
     cl <- thisClient
-    return [RestartServer]
+    return [RestartServer | isAdministrator cl]
 
 
 handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]

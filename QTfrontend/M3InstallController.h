@@ -42,7 +42,9 @@ typedef unsigned int NSUInteger;
 //#endif
 
 
-@interface M3InstallController : NSObject {
+@interface M3InstallController :
+NSObject
+{
     NSAlert *alert;
 }
 

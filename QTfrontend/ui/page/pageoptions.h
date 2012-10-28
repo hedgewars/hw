@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,84 +23,101 @@
 
 class FPSEdit;
 class IconedGroupBox;
+class QSignalMapper;
 
 class PageOptions : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageOptions(QWidget* parent = 0);
+    public:
+        enum ProxyTypes {
+            NoProxy      = 0,
+            SystemProxy  = 1,
+            Socks5Proxy  = 2,
+            HTTPProxy    = 3
+        };
 
-    QCheckBox *WeaponTooltip;
-    QPushButton *WeaponNew;
-    QPushButton *WeaponEdit;
-    QPushButton *WeaponDelete;
-    QComboBox *WeaponsName;
-    QPushButton *SchemeNew;
-    QPushButton *SchemeEdit;
-    QPushButton *SchemeDelete;
-    QComboBox *SchemesName;
+        PageOptions(QWidget* parent = 0);
 
-    QComboBox *CBLanguage;
+        QCheckBox *WeaponTooltip;
+        QPushButton *WeaponNew;
+        QPushButton *WeaponEdit;
+        QPushButton *WeaponDelete;
+        QComboBox *WeaponsName;
+        QPushButton *SchemeNew;
+        QPushButton *SchemeEdit;
+        QPushButton *SchemeDelete;
+        QComboBox *SchemesName;
 
-    IconedGroupBox *teamsBox;;
-    QPushButton *BtnAssociateFiles;
-    QComboBox *CBTeamName;
-    IconedGroupBox *AGGroupBox;
-    QComboBox *CBResolution;
-    QComboBox *CBStereoMode;
-    QCheckBox *CBEnableSound;
-    QCheckBox *CBEnableFrontendSound;
-    QCheckBox *CBEnableMusic;
-    QCheckBox *CBEnableFrontendMusic;
-    QCheckBox *CBFullscreen;
-    QCheckBox *CBFrontendFullscreen;
-    QCheckBox *CBShowFPS;
-    QCheckBox *CBAltDamage;
-    QCheckBox *CBNameWithDate;
+        QComboBox *CBLanguage;
+
+        IconedGroupBox *teamsBox;
+        QPushButton *BtnAssociateFiles;
+        QComboBox *CBTeamName;
+        IconedGroupBox *AGGroupBox;
+        QComboBox *CBResolution;
+        QComboBox *CBStereoMode;
+        QCheckBox *CBEnableSound;
+        QCheckBox *CBEnableFrontendSound;
+        QCheckBox *CBEnableMusic;
+        QCheckBox *CBEnableFrontendMusic;
+        QCheckBox *CBFullscreen;
+        QCheckBox *CBFrontendFullscreen;
+        QCheckBox *CBShowFPS;
+        QCheckBox *CBSavePassword;
+        QCheckBox *CBAltDamage;
+        QCheckBox *CBNameWithDate;
 #ifdef __APPLE__
-    QCheckBox *CBAutoUpdate;
+        QCheckBox *CBAutoUpdate;
 #endif
 
-    FPSEdit *fpsedit;
-    QPushButton *btnSave;
-    QLabel *labelNN;
-    QLabel *labelNetPassword;
-    QSpinBox * volumeBox;
-    QLineEdit *editNetNick;
-    QLineEdit *editNetPassword;
-    QSlider *SLQuality;
-    QCheckBox *CBFrontendEffects;
+        FPSEdit *fpsedit;
+        QLabel *labelNN;
+        QSpinBox * volumeBox;
+        QLineEdit *editNetNick;
+        QLineEdit *editNetPassword;
+        QSlider *SLQuality;
+        QCheckBox *CBFrontendEffects;
+        QComboBox * cbProxyType;
+        QSpinBox * sbProxyPort;
+        QLineEdit * leProxy;
+        QLineEdit * leProxyLogin;
+        QLineEdit * leProxyPassword;
 
-    void setTeamOptionsEnabled(bool enabled);
+        void setTeamOptionsEnabled(bool enabled);
 
-signals:
-    void newTeamRequested();
-    void editTeamRequested(const QString & teamName);
-    void deleteTeamRequested(const QString & teamName);
+    signals:
+        void newTeamRequested();
+        void editTeamRequested(const QString & teamName);
+        void deleteTeamRequested(const QString & teamName);
 
 
-private:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    private:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-    bool previousFullscreenValue;
-    int previousResolutionIndex;
-    int previousQuality;
-    QLabel *LblNoEditTeam;
-    QPushButton *BtnNewTeam;
-    QPushButton *BtnEditTeam;
-    QPushButton *BtnDeleteTeam;
+        bool previousFullscreenValue;
+        int previousResolutionIndex;
+        int previousQuality;
+        QLabel *LblNoEditTeam;
+        QPushButton *BtnNewTeam;
+        QPushButton *BtnEditTeam;
+        QPushButton *BtnDeleteTeam;
+        QList<QPushButton *> m_colorButtons;
 
-private slots:
-    void forceFullscreen(int index);
-    void setFullscreen(int state);
-    void setResolution(int state);
-    void setQuality(int value);
-    void trimNetNick();
-    void requestEditSelectedTeam();
-    void requestDeleteSelectedTeam();
+    private slots:
+        void forceFullscreen(int index);
+        void setFullscreen(int state);
+        void setResolution(int state);
+        void setQuality(int value);
+        void trimNetNick();
+        void requestEditSelectedTeam();
+        void requestDeleteSelectedTeam();
+        void savePwdChanged(int state);
+        void colorButtonClicked(int i);
+        void onColorModelDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
+        void onProxyTypeChanged();
 };
 
 #endif

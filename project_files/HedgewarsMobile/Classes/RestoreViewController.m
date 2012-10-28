@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 28/05/2011.
  */
 
 
@@ -24,21 +22,20 @@
 
 @implementation RestoreViewController
 
-// Override to allow orientations other than the default portrait orientation.
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
-
 
 -(IBAction) buttonReleased:(id) sender {
     UIButton *theButton = (UIButton *)sender;
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
     if (theButton.tag != 0) {
-        [AudioManagerController playClickSound];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"launchRestoredGame" object:nil];
+        [[AudioManagerController mainManager] playClickSound];
+        [GameInterfaceBridge registerCallingController:self.parentViewController];
+        [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
     } else {
-        [AudioManagerController playBackSound];
+        [[AudioManagerController mainManager] playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
         [defaults synchronize];
     }
@@ -46,14 +43,6 @@
 }
 
 -(void) viewDidLoad {
-    NSString *imgName;
-    if (IS_IPAD())
-        imgName = @"smallerBackground~ipad.png";
-    else
-        imgName = @"smallerBackground~iphone.png";
-    UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:img];
-    [img release];
     [super viewDidLoad];
 }
 

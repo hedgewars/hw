@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,18 +42,18 @@ interface
 {$IFDEF FPC}
 {$IFDEF ENDIAN_LITTLE}
 type hwFloat = record
-               isNegative: boolean;
-               case byte of
-               0: (Frac, Round: Longword);
-               1: (QWordValue : QWord);
-               end;
+    isNegative: boolean;
+    case byte of
+        0: (Frac, Round: Longword);
+        1: (QWordValue : QWord);
+        end;
 {$ELSE}
 type hwFloat = record
-               isNegative: boolean;
-               case byte of
-               0: (Round, Frac: Longword);
-               1: (QWordValue : QWord);
-               end;
+    isNegative: boolean;
+    case byte of
+    0: (Round, Frac: Longword);
+    1: (QWordValue : QWord);
+    end;
 {$ENDIF}
 
 // Returns an hwFloat that represents the value of integer parameter i
@@ -62,7 +62,10 @@ function hwFloat2Float (const i: hwFloat) : extended; inline;
 
 // The implemented operators
 
-operator = (const z1, z2: hwFloat) z:boolean; inline;
+operator = (const z1, z2: hwFloat) z : boolean; inline;
+{$IFDEF PAS2C}
+operator <> (const z1, z2: hwFloat) z : boolean; inline;
+{$ENDIF}
 operator + (const z1, z2: hwFloat) z : hwFloat; inline;
 operator - (const z1, z2: hwFloat) z : hwFloat; inline;
 operator - (const z1: hwFloat) z : hwFloat; inline;
@@ -82,13 +85,16 @@ function cstr(const z: hwFloat): shortstring; // Returns a shortstring represent
 function hwRound(const t: hwFloat): LongInt; inline; // Does NOT really round but returns the integer representation of the hwFloat without fractional digits. (-_0_9 -> -0, _1_5 -> _1)
 function hwAbs(const t: hwFloat): hwFloat; inline; // Returns the value of t with positive sign.
 function hwSqr(const t: hwFloat): hwFloat; inline; // Returns the square value of parameter t.
+function hwPow(const t: hwFloat; p: LongWord): hwFloat; inline; // Returns the power of the value
 function hwSqrt(const t: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
 function Distance(const dx, dy: hwFloat): hwFloat; // Returns the distance between two points in 2-dimensional space, of which the parameters are the horizontal and vertical distance.
 function DistanceI(const dx, dy: LongInt): hwFloat; // Same as above for integer parameters.
 function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
+function vector2Angle(const x, y: hwFloat): LongInt;
 function SignAs(const num, signum: hwFloat): hwFloat; inline; // Returns an hwFloat with the value of parameter num and the sign of signum.
 function hwSign(r: hwFloat): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
+function hwSignf(r: real): LongInt; inline; // Returns an integer with value 1 and sign of parameter r.
 function isZero(const z: hwFloat): boolean; inline;
 {$IFDEF FPC}
 {$J-}
@@ -110,10 +116,12 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
          _0_0005: hwFloat = (isNegative: false; QWordValue:     2147484);
           _0_001: hwFloat = (isNegative: false; QWordValue:     4294967);
           _0_003: hwFloat = (isNegative: false; QWordValue:    12884902);
+         _0_0032: hwFloat = (isNegative: false; QWordValue:    13743895);
           _0_004: hwFloat = (isNegative: false; QWordValue:    17179869);
           _0_005: hwFloat = (isNegative: false; QWordValue:    21474836);
           _0_008: hwFloat = (isNegative: false; QWordValue:    34359738);
            _0_01: hwFloat = (isNegative: false; QWordValue:    42949673);
+         _0_0128: hwFloat = (isNegative: false; QWordValue:    54975581);
            _0_02: hwFloat = (isNegative: false; QWordValue:    85899345);
            _0_03: hwFloat = (isNegative: false; QWordValue:   128849018);
            _0_07: hwFloat = (isNegative: false; QWordValue:   300647710);
@@ -143,13 +151,21 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
           _0_999: hwFloat = (isNegative: false; QWordValue:  4290672328);
               _0: hwFloat = (isNegative: false; QWordValue:           0);
               _1: hwFloat = (isNegative: false; QWordValue:  4294967296);
+            _1_2: hwFloat = (isNegative: false; QWordValue:  1288490189*4);
             _1_5: hwFloat = (isNegative: false; QWordValue:  4294967296 * 3 div 2);
+            _1_6: hwFloat = (isNegative: false; QWordValue:  4294967296 * 8 div 5);
             _1_9: hwFloat = (isNegative: false; QWordValue:  8160437862);
               _2: hwFloat = (isNegative: false; QWordValue:  4294967296 * 2);
+            _2_4: hwFloat = (isNegative: false; QWordValue:  4294967296 * 12 div 5);
               _3: hwFloat = (isNegative: false; QWordValue:  4294967296 * 3);
+            _3_2: hwFloat = (isNegative: false; QWordValue:  3435973837*4);
+             _PI: hwFloat = (isNegative: false; QWordValue: 13493037704);
               _4: hwFloat = (isNegative: false; QWordValue:  4294967296 * 4);
+            _4_5: hwFloat = (isNegative: false; QWordValue:  4294967296 * 9 div 2);
               _5: hwFloat = (isNegative: false; QWordValue:  4294967296 * 5);
               _6: hwFloat = (isNegative: false; QWordValue:  4294967296 * 6);
+            _6_4: hwFloat = (isNegative: false; QWordValue:  3435973837 * 8);
+              _7: hwFloat = (isNegative: false; QWordValue:  4294967296 * 7);
              _10: hwFloat = (isNegative: false; QWordValue:  4294967296 * 10);
              _12: hwFloat = (isNegative: false; QWordValue:  4294967296 * 12);
              _16: hwFloat = (isNegative: false; QWordValue:  4294967296 * 16);
@@ -158,6 +174,8 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
              _25: hwFloat = (isNegative: false; QWordValue:  4294967296 * 25);
              _30: hwFloat = (isNegative: false; QWordValue:  4294967296 * 30);
              _40: hwFloat = (isNegative: false; QWordValue:  4294967296 * 40);
+             _41: hwFloat = (isNegative: false; QWordValue:  4294967296 * 41);
+             _49: hwFloat = (isNegative: false; QWordValue:  4294967296 * 49);
              _50: hwFloat = (isNegative: false; QWordValue:  4294967296 * 50);
              _70: hwFloat = (isNegative: false; QWordValue:  4294967296 * 70);
              _90: hwFloat = (isNegative: false; QWordValue:  4294967296 * 90);
@@ -189,131 +207,242 @@ uses uSinTable;
 
 {$IFDEF FPC}
 
-function int2hwFloat (const i: LongInt) : hwFloat;
+function int2hwFloat (const i: LongInt) : hwFloat; inline;
 begin
 int2hwFloat.isNegative:= i < 0;
 int2hwFloat.Round:= abs(i);
 int2hwFloat.Frac:= 0
 end;
 
-function hwFloat2Float (const i: hwFloat) : extended;
+function hwFloat2Float (const i: hwFloat) : extended; inline;
 begin
-hwFloat2Float:= i.QWordValue / $100000000;
-if i.isNegative then hwFloat2Float:= -hwFloat2Float;
+hwFloat2Float:= i.Frac / $100000000 + i.Round;
+if i.isNegative then
+    hwFloat2Float:= -hwFloat2Float;
 end;
 
-operator = (const z1, z2: hwFloat) z:boolean; inline;
+{$IFNDEF WEB}
+operator = (const z1, z2: hwFloat) z : boolean; inline;
 begin
     z:= (z1.isNegative = z2.isNegative) and (z1.QWordValue = z2.QWordValue);
 end;
 
+{$IFDEF PAS2C}
+operator <> (const z1, z2: hwFloat) z : boolean; inline;
+begin
+    z:= (z1.isNegative <> z2.isNegative) or (z1.QWordValue <> z2.QWordValue);
+end;
+{$ENDIF}
 
-operator + (const z1, z2: hwFloat) z : hwFloat;
+operator + (const z1, z2: hwFloat) z : hwFloat; inline;
 begin
 if z1.isNegative = z2.isNegative then
-   begin
-   z.isNegative:= z1.isNegative;
-   z.QWordValue:= z1.QWordValue + z2.QWordValue
-   end
+    begin
+    z.isNegative:= z1.isNegative;
+    z.QWordValue:= z1.QWordValue + z2.QWordValue
+    end
 else
-   if z1.QWordValue > z2.QWordValue then
-      begin
-      z.isNegative:= z1.isNegative;
-      z.QWordValue:= z1.QWordValue - z2.QWordValue
-      end else
-      begin
-      z.isNegative:= z2.isNegative;
-      z.QWordValue:= z2.QWordValue - z1.QWordValue
-      end
+    if z1.QWordValue > z2.QWordValue then
+        begin
+        z.isNegative:= z1.isNegative;
+        z.QWordValue:= z1.QWordValue - z2.QWordValue
+        end
+    else
+        begin
+        z.isNegative:= z2.isNegative;
+        z.QWordValue:= z2.QWordValue - z1.QWordValue
+        end
 end;
 
-operator - (const z1, z2: hwFloat) z : hwFloat;
+operator - (const z1, z2: hwFloat) z : hwFloat; inline;
 begin
 if z1.isNegative = z2.isNegative then
-   if z1.QWordValue > z2.QWordValue then
-      begin
-      z.isNegative:= z1.isNegative;
-      z.QWordValue:= z1.QWordValue - z2.QWordValue
-      end else
-      begin
-      z.isNegative:= not z2.isNegative;
-      z.QWordValue:= z2.QWordValue - z1.QWordValue
-      end
-else begin
-     z.isNegative:= z1.isNegative;
-     z.QWordValue:= z1.QWordValue + z2.QWordValue
-     end
+    if z1.QWordValue > z2.QWordValue then
+        begin
+        z.isNegative:= z1.isNegative;
+        z.QWordValue:= z1.QWordValue - z2.QWordValue
+        end
+    else
+        begin
+        z.isNegative:= not z2.isNegative;
+        z.QWordValue:= z2.QWordValue - z1.QWordValue
+        end
+else
+    begin
+    z.isNegative:= z1.isNegative;
+    z.QWordValue:= z1.QWordValue + z2.QWordValue
+    end
 end;
 
-operator - (const z1: hwFloat) z : hwFloat;
+function isZero(const z: hwFloat): boolean; inline; 
+begin
+isZero := z.QWordValue = 0;
+end;
+
+operator < (const z1, z2: hwFloat) b : boolean; inline;
+begin
+if z1.isNegative xor z2.isNegative then
+    b:= z1.isNegative
+else
+    if z1.QWordValue = z2.QWordValue then
+        b:= false
+    else
+        b:= not((z1.QWordValue = z2.QWordValue) or ((z2.QWordValue < z1.QWordValue) <> z1.isNegative))
+end;
+
+operator > (const z1, z2: hwFloat) b : boolean; inline;
+begin
+if z1.isNegative xor z2.isNegative then
+    b:= z2.isNegative
+else
+    if z1.QWordValue = z2.QWordValue then
+        b:= false
+    else
+        b:= (z1.QWordValue > z2.QWordValue) <> z2.isNegative
+end;
+{$ENDIF}
+{$IFDEF WEB}
+(*
+    Mostly to be kind to JS as of 2012-08-27 where there is no int64/uint64.  This may change though.
+*)
+operator = (const z1, z2: hwFloat) z : boolean; inline;
+begin
+    z:= (z1.isNegative = z2.isNegative) and (z1.Frac = z2.Frac) and (z1.Round = z2.Round);
+end;
+
+operator <> (const z1, z2: hwFloat) z : boolean; inline;
+begin
+    z:= (z1.isNegative <> z2.isNegative) or (z1.Frac <> z2.Frac) or (z1.Round <> z2.Round);
+end;
+
+operator + (const z1, z2: hwFloat) z : hwFloat; inline;
+begin
+if z1.isNegative = z2.isNegative then
+    begin
+    z:= z1;
+    z.Frac:= z.Frac + z2.Frac;
+    z.Round:= z.Round + z2.Round;
+    if z.Frac<z1.Frac then inc(z.Round)
+    end
+else
+    if (z1.Round > z2.Round) or ((z1.Round = z2.Round) and (z1.Frac > z2.Frac)) then
+        begin
+        z.isNegative:= z1.isNegative;
+        z.Round:= z1.Round - z2.Round;
+        z.Frac:= z1.Frac - z2.Frac;
+        if z2.Frac > z1.Frac then dec(z.Round)
+        end
+    else
+        begin
+        z.isNegative:= z2.isNegative;
+        z.Round:= z2.Round - z1.Round;
+        z.Frac:= z2.Frac-z1.Frac;
+        if z2.Frac < z1.Frac then dec(z.Round)
+        end
+end;
+
+operator - (const z1, z2: hwFloat) z : hwFloat; inline;
+begin
+if z1.isNegative = z2.isNegative then
+    if (z1.Round > z2.Round) or ((z1.Round = z2.Round) and (z1.Frac > z2.Frac)) then
+        begin
+        z.isNegative:= z1.isNegative;
+        z.Round:= z1.Round - z2.Round;
+        z.Frac:= z1.Frac-z2.Frac;
+        if z2.Frac > z1.Frac then dec(z.Round)
+        end
+    else
+        begin
+        z.isNegative:= not z2.isNegative;
+        z.Round:= z2.Round - z1.Round;
+        z.Frac:= z2.Frac-z1.Frac;
+        if z2.Frac < z1.Frac then dec(z.Round)
+        end
+else
+    begin
+    z:= z1;
+    z.Frac:= z.Frac + z2.Frac;
+    z.Round:= z.Round + z2.Round;
+    if z.Frac<z1.Frac then inc(z.Round)
+    end
+end;
+
+operator < (const z1, z2: hwFloat) b : boolean; inline;
+begin
+if z1.isNegative xor z2.isNegative then
+    b:= z1.isNegative
+else
+(*  Not so sure this specialcase is a win w/ Round/Frac. have to do more tests anyway.
+    if (z1.Round = z2.Round and (z1.Frac = z2.Frac)) then
+        b:= false
+    else *)
+        b:= ((z1.Round < z2.Round) or ((z1.Round = z2.Round) and (z1.Frac < z2.Frac))) <> z1.isNegative
+end;
+
+operator > (const z1, z2: hwFloat) b : boolean; inline;
+begin
+if z1.isNegative xor z2.isNegative then
+    b:= z2.isNegative
+else
+(*
+    if z1.QWordValue = z2.QWordValue then
+        b:= false
+    else*)
+        b:= ((z1.Round > z2.Round) or ((z1.Round = z2.Round) and (z1.Frac > z2.Frac))) <> z1.isNegative
+end;
+
+function isZero(const z: hwFloat): boolean; inline; 
+begin
+isZero := (z.Round = 0) and (z.Frac = 0);
+end;
+{$ENDIF}
+
+operator - (const z1: hwFloat) z : hwFloat; inline;
 begin
 z:= z1;
 z.isNegative:= not z.isNegative
 end;
 
 
-operator * (const z1, z2: hwFloat) z : hwFloat;
+operator * (const z1, z2: hwFloat) z : hwFloat; inline;
 begin
 z.isNegative:= z1.isNegative xor z2.isNegative;
-z.QWordValue:= QWord(z1.Round) * z2.Frac +
-               QWord(z1.Frac) * z2.Round +
-               ((QWord(z1.Frac) * z2.Frac) shr 32);
+z.QWordValue:= QWord(z1.Round) * z2.Frac + QWord(z1.Frac) * z2.Round + ((QWord(z1.Frac) * z2.Frac) shr 32);
 z.Round:= z.Round + QWord(z1.Round) * z2.Round;
 end;
 
-operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat;
+operator * (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
 begin
 z.isNegative:= z1.isNegative xor (z2 < 0);
 z.QWordValue:= z1.QWordValue * abs(z2)
 end;
 
-operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat;
+operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; inline;
 var t: hwFloat;
 begin
 z.isNegative:= z1.isNegative xor z2.isNegative;
 z.Round:= z1.QWordValue div z2.QWordValue;
 t:= z1 - z2 * z.Round;
 if t.QWordValue = 0 then
-   z.Frac:= 0
+    z.Frac:= 0
 else
-   begin
-   while ((t.QWordValue and $8000000000000000) = 0) and
-         ((z2.QWordValue and $8000000000000000) = 0) do
-         begin
-         t.QWordValue:= t.QWordValue shl 1;
-         z2.QWordValue:= z2.QWordValue shl 1
-         end;
-   if z2.Round > 0 then z.Frac:= (t.QWordValue) div (z2.Round)
-                   else z.Frac:= 0
-   end
+    begin
+    while ((t.QWordValue and $8000000000000000) = 0) and ((z2.QWordValue and $8000000000000000) = 0) do
+        begin
+        t.QWordValue:= t.QWordValue shl 1;
+        z2.QWordValue:= z2.QWordValue shl 1
+        end;
+    if z2.Round > 0 then
+        z.Frac:= (t.QWordValue) div (z2.Round)
+    else
+        z.Frac:= 0
+    end
 end;
 
-operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat;
+operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat; inline;
 begin
 z.isNegative:= z1.isNegative xor (z2 < 0);
 z.QWordValue:= z1.QWordValue div abs(z2)
-end;
-
-operator < (const z1, z2: hwFloat) b : boolean;
-begin
-if z1.isNegative xor z2.isNegative then
-   b:= z1.isNegative
-else
-   if z1.QWordValue = z2.QWordValue then
-      b:= false
-   else
-      b:= (z1.QWordValue < z2.QWordValue) xor z1.isNegative
-end;
-
-operator > (const z1, z2: hwFloat) b : boolean;
-begin
-if z1.isNegative xor z2.isNegative then
-   b:= z2.isNegative
-else
-   if z1.QWordValue = z2.QWordValue then
-      b:= false
-   else
-      b:= (z1.QWordValue > z2.QWordValue) xor z2.isNegative
 end;
 
 function cstr(const z: hwFloat): shortstring;
@@ -321,18 +450,21 @@ var tmpstr: shortstring;
 begin
 str(z.Round, cstr);
 if z.Frac <> 0 then
-   begin
-   str(z.Frac / $100000000:1:10, tmpstr);
-   delete(tmpstr, 1, 2);
-   cstr:= cstr + '.' + tmpstr
-   end;
-if z.isNegative then cstr:= '-' + cstr
+    begin
+    str(z.Frac / $100000000, tmpstr);
+    delete(tmpstr, 1, 2);
+    cstr:= cstr + '.' + copy(tmpstr, 1, 10)
+    end;
+if z.isNegative then
+    cstr:= '-' + cstr
 end;
 
 function hwRound(const t: hwFloat): LongInt;
 begin
-if t.isNegative then hwRound:= -(t.Round and $7FFFFFFF)
-                else hwRound:= t.Round and $7FFFFFFF
+if t.isNegative then
+    hwRound:= -(t.Round and $7FFFFFFF)
+else
+    hwRound:= t.Round and $7FFFFFFF
 end;
 
 function hwAbs(const t: hwFloat): hwFloat;
@@ -341,35 +473,62 @@ hwAbs:= t;
 hwAbs.isNegative:= false
 end;
 
-function hwSqr(const t: hwFloat): hwFloat;
+function hwSqr(const t: hwFloat): hwFloat; inline;
 begin
 hwSqr.isNegative:= false;
-hwSqr.QWordValue:=
-      ((QWord(t.Round) * t.Round) shl 32)
-    + QWord(t.Round) * t.Frac * 2
-    + ((QWord(t.Frac) * t.Frac) shr 32);
+hwSqr.QWordValue:= ((QWord(t.Round) * t.Round) shl 32) + QWord(t.Round) * t.Frac * 2 + ((QWord(t.Frac) * t.Frac) shr 32);
+end;
+
+function hwPow(const t: hwFloat;p: LongWord): hwFloat;
+begin
+hwPow:= t;
+if p mod 2 = 0 then hwPow.isNegative:= false;
+
+while p > 0 do
+    begin
+    hwPow.QWordValue:= QWord(hwPow.Round) * t.Frac + QWord(hwPow.Frac) * t.Round + ((QWord(hwPow.Frac) * t.Frac) shr 32);
+    dec(p)
+    end
 end;
 
 function hwSqrt(const t: hwFloat): hwFloat;
+const pwr = 8; // even value, feel free to adjust
+      rThreshold = 1 shl (pwr + 32);
+      lThreshold = 1 shl (pwr div 2 + 32);
 var l, r: QWord;
     c: hwFloat;
 begin
 hwSqrt.isNegative:= false;
 
 if t.Round = 0 then
-   begin
-   l:= t.QWordValue;
-   r:= $100000000
-   end else
-   begin
-   l:= $100000000;
-   r:= t.QWordValue div 2 + $80000000; // r:= t / 2 + 0.5
-   if r > $FFFFFFFFFFFF then r:= $FFFFFFFFFFFF
-   end;
+    begin
+    l:= t.QWordValue;
+    r:= $100000000
+    end
+else
+    begin
+    if t.QWordValue > $FFFFFFFFFFFF then // t.Round > 65535.9999
+        begin
+        l:= $10000000000; // 256
+        r:= $FFFFFFFFFFFF; // 65535.9999
+        end else
+        if t.QWordValue >= rThreshold then
+            begin
+            l:= lThreshold;
+            r:= $10000000000; // 256
+            end else
+            begin
+            l:= $100000000;
+            r:= lThreshold;
+            end;
+    end;
 
 repeat
-  c.QWordValue:= (l + r) div 2;
-  if hwSqr(c).QWordValue > t.QWordValue then r:= c.QWordValue else l:= c.QWordValue
+    c.QWordValue:= (l + r) shr 1;
+    if hwSqr(c).QWordValue > t.QWordValue then
+        r:= c.QWordValue
+    else
+        l:= c.QWordValue
 until r - l <= 1;
 
 hwSqrt.QWordValue:= l
@@ -394,7 +553,18 @@ end;
 function hwSign(r: hwFloat): LongInt;
 begin
 // yes, we have negative zero for a reason
-if r.isNegative then hwSign:= -1 else hwSign:= 1
+if r.isNegative then
+    hwSign:= -1
+else
+    hwSign:= 1
+end;
+
+function hwSignf(r: real): LongInt;
+begin
+if r < 0 then
+    hwSignf:= -1
+else
+    hwSignf:= 1
 end;
 
 
@@ -402,22 +572,54 @@ function AngleSin(const Angle: Longword): hwFloat;
 begin
 //TryDo((Angle >= 0) and (Angle <= 2048), 'Sin param exceeds limits', true);
 AngleSin.isNegative:= false;
-if Angle < 1024 then AngleSin.QWordValue:= SinTable[Angle]
-                else AngleSin.QWordValue:= SinTable[2048 - Angle]
+if Angle < 1024 then
+    AngleSin.QWordValue:= SinTable[Angle]
+else
+    AngleSin.QWordValue:= SinTable[2048 - Angle]
 end;
 
 function AngleCos(const Angle: Longword): hwFloat;
 begin
 //TryDo((Angle >= 0) and (Angle <= 2048), 'Cos param exceeds limits', true);
 AngleCos.isNegative:= Angle > 1024;
-if Angle < 1024 then AngleCos.QWordValue:= SinTable[1024 - Angle]
-                else AngleCos.QWordValue:= SinTable[Angle - 1024]
+if Angle < 1024 then
+    AngleCos.QWordValue:= SinTable[1024 - Angle]
+else
+    AngleCos.QWordValue:= SinTable[Angle - 1024]
 end;
 
-function isZero(const z: hwFloat): boolean; inline; 
+function vector2Angle(const x, y: hwFloat): LongInt;
+var d, nf: hwFloat;
+    l, r, c, oc: Longword;
+    n: QWord;
 begin
-    isZero := z.QWordValue = 0;
+    d:= _1 / Distance(x, y);
+
+    nf:= y * d;
+    n:= nf.QWordValue;
+
+    l:= 0;
+    r:= 1024;
+    c:= 0;
+
+    repeat
+        oc:= c;
+
+        c:= (l + r) shr 1;
+
+        if n >= SinTable[c] then
+            l:= c
+        else
+            r:= c;
+
+    until (oc = c);
+
+    if x.isNegative then c:= 2048 - c;
+    if y.isNegative then c:= - c;
+
+    vector2Angle:= c
 end;
+
 {$ENDIF}
 
 end.

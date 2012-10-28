@@ -1,6 +1,6 @@
 /*
  * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
- * Copyright (c) 2011 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.hedgewars.hedgeroid.Datastructures.GameMode;
+import org.hedgewars.hedgeroid.Datastructures.Map;
+import org.hedgewars.hedgeroid.Datastructures.Scheme;
+import org.hedgewars.hedgeroid.Datastructures.Team;
+import org.hedgewars.hedgeroid.Datastructures.Weapon;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -34,7 +40,8 @@ public class GameConfig implements Parcelable{
 	public Scheme scheme = null;
 	public Weapon weapon = null;
 	
-	public String mission = null;
+	public String style = null;
+	public String training = null;
 	public String seed = null;
 	
 	public ArrayList<Team> teams = new ArrayList<Team>();
@@ -53,7 +60,8 @@ public class GameConfig implements Parcelable{
 		Log.d("HW_Frontend", "Sending Gameconfig...");
 		int teamCount = 4;
 		epn.sendToEngine("TL"); //Write game mode
-		if(mission != null) epn.sendToEngine(mission);
+		if(training != null) epn.sendToEngine(String.format("escript Scripts/Training/%s.lua", training));
+		else if(style != null) epn.sendToEngine(String.format("escript Scripts/Multiplayer/%s.lua", style));
 		
 		//seed info
 		epn.sendToEngine(String.format("eseed {%s}", UUID.randomUUID().toString()));
@@ -71,7 +79,7 @@ public class GameConfig implements Parcelable{
 		weapon.sendToEngine(epn, teamCount);
 		
 		for(Team t : teams){
-			if(t != null)t.sendToEngine(epn, teamCount, 50);
+			if(t != null)t.sendToEngine(epn, teamCount, scheme.health);
 		}
 	}
 	
@@ -85,7 +93,8 @@ public class GameConfig implements Parcelable{
 		dest.writeString(theme);
 		dest.writeParcelable(scheme, flags);
 		dest.writeParcelable(weapon, flags);
-		dest.writeString(mission);
+		dest.writeString(style);
+		dest.writeString(training);
 		dest.writeString(seed);
 		dest.writeParcelableArray((Team[])teams.toArray(new Team[1]), 0);
 	}
@@ -96,7 +105,8 @@ public class GameConfig implements Parcelable{
 		theme = src.readString();
 		scheme = src.readParcelable(Scheme.class.getClassLoader());
 		weapon = src.readParcelable(Weapon.class.getClassLoader());
-		mission = src.readString();
+		style = src.readString();
+		training = src.readString();
 		seed = src.readString();
 		Parcelable[] parcelables = src.readParcelableArray(Team[].class.getClassLoader());
 		for(Parcelable team : parcelables){

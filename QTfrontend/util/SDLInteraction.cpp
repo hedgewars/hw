@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -64,7 +64,10 @@ SDLInteraction::~SDLInteraction()
     if (m_audioInitialized)
     {
         if (m_music != NULL)
+        {
+            Mix_HaltMusic();
             Mix_FreeMusic(m_music);
+        }
         Mix_CloseAudio();
     }
     SDL_Quit();
@@ -84,7 +87,8 @@ QStringList SDLInteraction::getResolutions() const
     if((modes == (SDL_Rect **)0) || (modes == (SDL_Rect **)-1))
     {
         result << "640x480";
-    } else
+    }
+    else
     {
         for(int i = 0; modes[i]; ++i)
             if ((modes[i]->w >= 640) && (modes[i]->h >= 480))
@@ -191,9 +195,10 @@ void SDLInteraction::playSoundFile(const QString & soundFile)
     if (!m_soundMap->contains(soundFile))
         m_soundMap->insert(soundFile, Mix_LoadWAV(soundFile.toLocal8Bit().constData()));
 
-    Mix_PlayChannel(-1, m_soundMap->value(soundFile), 0);
+    //FIXME: this is a hack, but works as long as we have few concurrent playing sounds
+    if (Mix_Playing(lastchannel) == false)
+        lastchannel = Mix_PlayChannel(-1, m_soundMap->value(soundFile), 0);
 }
-
 
 void SDLInteraction::setMusicTrack(const QString & musicFile)
 {
@@ -236,9 +241,11 @@ void SDLInteraction::startMusic()
 
 void SDLInteraction::stopMusic()
 {
-    if (m_isPlayingMusic && (m_music != NULL)) {
+    if (m_isPlayingMusic && (m_music != NULL))
+    {
         // fade out music to finish 0,5 seconds from now
-        while(!Mix_FadeOutMusic(1000) && Mix_PlayingMusic()) {
+        while(!Mix_FadeOutMusic(1000) && Mix_PlayingMusic())
+        {
             SDL_Delay(100);
         }
     }

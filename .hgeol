@@ -6,3 +6,4 @@
 **.txt = native
 **.pas = native
 **.inc = native
+**.hs = native

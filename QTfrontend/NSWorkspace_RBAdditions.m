@@ -9,6 +9,7 @@
 #import "NSWorkspace_RBAdditions.h"
 #include <IOKit/IOKitLib.h>
 #include <sys/mount.h>
+#include <mach/mach.h>
 
 NSString* NSWorkspace_RBfstypename = @"NSWorkspace_RBfstypename";
 NSString* NSWorkspace_RBmntonname = @"NSWorkspace_RBmntonname";
@@ -66,14 +67,14 @@ static NSString* CheckParents(io_object_t thing,NSString* part,NSMutableDictiona
 				partition = [props objectForKey:@"Content"];
 			} else if (IOObjectConformsTo(nextParent,"IODiskImageBlockStorageDeviceOutKernel")) {
 				NSData* data = nil;
-				if (data = [[props objectForKey:@"Protocol Characteristics"] objectForKey:@"Virtual Interface Location Path"]) {
+                                if ((data = [[props objectForKey:@"Protocol Characteristics"] objectForKey:@"Virtual Interface Location Path"])) {
 					image = [[[NSString alloc] initWithBytes:[data bytes] length:[data length] encoding:NSUTF8StringEncoding] autorelease];
 				}
 			} else if (IOObjectConformsTo(nextParent,"IOHDIXHDDriveInKernel")) {
 				image = [props objectForKey:@"KDIURLPath"];
 			}
 			NSDictionary* subdict;
-			if (subdict = [props objectForKey:@"Protocol Characteristics"]) {
+                        if ((subdict = [props objectForKey:@"Protocol Characteristics"])) {
 				connection = [subdict objectForKey:@"Physical Interconnect"];
 			} else {
 				connection = [props objectForKey:@"Physical Interconnect"];
@@ -88,21 +89,21 @@ static NSString* CheckParents(io_object_t thing,NSString* part,NSMutableDictiona
 				[dict setObject:image forKey:NSWorkspace_RBimagefilepath];
 			}
 			NSString* value;
-			if (subdict = [props objectForKey:@"Device Characteristics"]) {
-				if (value = [subdict objectForKey:@"Product Name"]) {
+                        if ((subdict = [props objectForKey:@"Device Characteristics"])) {
+                                if ((value = [subdict objectForKey:@"Product Name"])) {
 					result = AddPart(result,value);
 				}
-				if (value = [subdict objectForKey:@"Product Revision Level"]) {
+                                if ((value = [subdict objectForKey:@"Product Revision Level"])) {
 					result = AddPart(result,value);
 				}
-				if (value = [subdict objectForKey:@"Vendor Name"]) {
+                                if ((value = [subdict objectForKey:@"Vendor Name"])) {
 					result = AddPart(result,value);
 				}
 			}
-			if (value = [props objectForKey:@"USB Serial Number"]) {
+                        if ((value = [props objectForKey:@"USB Serial Number"])) {
 				result = AddPart(result,value);
 			}
-			if (value = [props objectForKey:@"USB Vendor Name"]) {
+                        if ((value = [props objectForKey:@"USB Vendor Name"])) {
 				result = AddPart(result,value);
 			}
 			NSString* cls = [(NSString*)IOObjectCopyClass(nextParent) autorelease];
@@ -124,6 +125,7 @@ static NSString* CheckParents(io_object_t thing,NSString* part,NSMutableDictiona
 
 // This formats the (partially undocumented) AFPXMountInfo info into a string.
 
+/*
 static NSString* FormatAFPURL(AFPXVolMountInfoPtr mountInfo,NSString** devdesc) {
 	UInt8* work = ((UInt8*)mountInfo)+mountInfo->serverNameOffset;
 	if (devdesc) {
@@ -162,6 +164,7 @@ static NSString* FormatAFPURL(AFPXVolMountInfoPtr mountInfo,NSString** devdesc) 
 	}
 	return [NSString stringWithFormat:@"afp://%@/%@",dns?:(ip?:@""),volname];
 }
+*/
 
 @implementation NSWorkspace (NSWorkspace_RBAdditions)
 

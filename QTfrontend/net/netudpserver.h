@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2008-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,20 +27,20 @@ class QUdpSocket;
 
 class HWNetUdpServer : public HWNetRegisterServer
 {
-  Q_OBJECT
+        Q_OBJECT
 
- public:
-  HWNetUdpServer(QObject *parent, const QString & descr, quint16 port);
+    public:
+        HWNetUdpServer(QObject *parent, const QString & descr, quint16 port);
 
- public slots:
-  void unregister();
+    public slots:
+        void unregister();
 
- private slots:
-  void onClientRead();
+    private slots:
+        void onClientRead();
 
- private:
-  QUdpSocket* pUdpSocket;
-  QString m_descr;
+    private:
+        QUdpSocket* pUdpSocket;
+        QString m_descr;
 };
 
 #endif // _NET_UDPSERVER_INCLUDED

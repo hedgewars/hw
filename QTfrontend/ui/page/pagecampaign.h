@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,17 +23,18 @@
 
 class PageCampaign : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageCampaign(QWidget* parent = 0);
+    public:
+        PageCampaign(QWidget* parent = 0);
 
-    QPushButton *BtnStartCampaign;
-    QComboBox   *CBSelect;
-    QComboBox   *CBTeam;
+        QPushButton *BtnStartCampaign;
+        QComboBox   *CBMission;
+        QComboBox   *CBCampaign;
+        QComboBox   *CBTeam;
 
-protected:
-    QLayout * bodyLayoutDefinition();
+    protected:
+        QLayout * bodyLayoutDefinition();
 };
 
 #endif

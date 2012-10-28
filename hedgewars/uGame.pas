@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,55 +24,74 @@ interface
 procedure DoGameTick(Lag: LongInt);
 
 ////////////////////
-   implementation
+    implementation
 ////////////////////
-uses uKeys, uTeams, uIO, uAI, uGears, uSound, uMobile, uVisualGears, uTypes, uVariables{$IFDEF SDL13}, uTouch{$ENDIF};
+uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uMobile, 
+    uVisualGears, uTypes, uVariables, uCommands, uConsts
+    {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;
 begin
-if isPaused then exit;
+if isPaused then
+    exit;
 if (not CurrentTeam^.ExtDriven) then
     begin
     NetGetNextCmd; // its for the case of receiving "/say" message
     isInLag:= false;
     SendKeepAliveMessage(Lag)
     end;
-if Lag > 100 then Lag:= 100
-else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then Lag:= 2500;
+if GameType <> gmtRecord then
+    begin
+    if Lag > 100 then
+        Lag:= 100
+    else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
+        Lag:= 2500;
 
-if (GameType = gmtDemo) then 
-    if isSpeed then Lag:= Lag * 10
-    else
-        if cOnlyStats then Lag:= High(LongInt);
+    if (GameType = gmtDemo) then 
+        if isSpeed then
+        begin
+            i:= RealTicks-SpeedStart;
+            if i < 2000 then Lag:= Lag*5
+            else if i < 4000 then Lag:= Lag*10
+            else if i < 6000 then Lag:= Lag*20
+            else if i < 8000 then Lag:= Lag*40
+            else Lag:= Lag*80;
+        end
+        else
+            if cOnlyStats then
+                Lag:= High(LongInt);
+    end;
 PlayNextVoice;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do
     begin
     if not CurrentTeam^.ExtDriven then
-       begin
-       if CurrentHedgehog^.BotLevel <> 0 then ProcessBot;
-       ProcessGears;
-       {$IFDEF SDL13}ProcessTouch;{$ENDIF}
-       end else
-       begin
-       NetGetNextCmd;
-       if isInLag then
-          case GameType of
+        begin
+        if CurrentHedgehog^.BotLevel <> 0 then
+            ProcessBot;
+        ProcessGears;
+        {$IFDEF SDL13}ProcessTouch;{$ENDIF}
+        end
+    else
+        begin
+        NetGetNextCmd;
+        if isInLag then
+            case GameType of
                 gmtNet: begin
                         // just update the health bars
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         break;
                         end;
-               gmtDemo: begin
+                gmtDemo, gmtRecord: begin
                         GameState:= gsExit;
                         exit
                         end;
-               gmtSave: begin
+                gmtSave: begin
                         RestoreTeamsFromSave;
                         SetBinds(CurrentTeam^.Binds);
-                        //CurrentHedgehog^.Gear^.Message:= 0; <- produces bugs with further save restoring and demos
-                        isSoundEnabled:= isSEBackup;
+                        StopMessages(gmLeft or gmRight or gmUp or gmDown);
+                        ResetSound;   // restore previous sound state
                         PlayMusic;
                         GameType:= gmtLocal;
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
@@ -80,9 +99,9 @@ while (GameState <> gsExit) and (i <= Lag) do
                         {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
                         uMobile.SaveLoadingEnded();
                         end;
-               end
-          else ProcessGears
-       end;
+                end
+        else ProcessGears
+        end;
     inc(i)
     end
 end;

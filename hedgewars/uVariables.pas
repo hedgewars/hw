@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 unit uVariables;
 interface
@@ -25,54 +25,58 @@ uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
 
 var
 /////// init flags ///////
-    cMinScreenWidth    : LongInt     = 640;
-    cMinScreenHeight   : LongInt     = 480;
-    cScreenWidth       : LongInt     = 1024;
-    cScreenHeight      : LongInt     = 768;
-    cOrigScreenWidth   : LongInt     = 1024;
-    cOrigScreenHeight  : LongInt     = 768;
-    cNewScreenWidth    : LongInt     = 1024;
-    cNewScreenHeight   : LongInt     = 768;
-    cScreenResizeDelay : LongWord    = 0;
-    cBits           : LongInt     = 32;
-    ipcPort         : Word        = 0;
-    cFullScreen     : boolean     = false;
-    isSoundEnabled  : boolean     = true;
-    isMusicEnabled  : boolean     = false;
-    cLocaleFName    : shortstring = 'en.txt';
-    cLocale         : shortstring = 'en';
-    cInitVolume     : LongInt     = 100;
-    cTimerInterval  : LongInt     = 8;
-    PathPrefix      : shortstring = './';
-    UserPathPrefix  : shortstring = './';
-    cShowFPS        : boolean     = false;
-    cFlattenFlakes  : boolean     = false;
-    cFlattenClouds  : boolean     = false;
-    cAltDamage      : boolean     = true;
-    cReducedQuality : LongWord    = rqNone;
-    UserNick        : shortstring = '';
-    recordFileName  : shortstring = '';
-    cReadyDelay     : Longword    = 5000;
-    cLogfileBase    : shortstring = 'debug';
-    cStereoMode     : TStereoMode = smNone;
-    cOnlyStats      : boolean = False;
+    cMinScreenWidth    : LongInt;
+    cMinScreenHeight   : LongInt;
+    cScreenWidth       : LongInt;
+    cScreenHeight      : LongInt;
+    cOrigScreenWidth   : LongInt;
+    cOrigScreenHeight  : LongInt;
+    cNewScreenWidth    : LongInt;
+    cNewScreenHeight   : LongInt;
+    cScreenResizeDelay : LongWord;
+    cBits              : LongInt;
+    ipcPort            : Word;
+    cFullScreen        : boolean;
+    cLocaleFName       : shortstring;
+    cLocale            : shortstring;
+    cTimerInterval     : LongInt;
+    PathPrefix         : shortstring;
+    UserPathPrefix     : shortstring;
+    cShowFPS           : boolean;
+    cFlattenFlakes     : boolean;
+    cFlattenClouds     : boolean;
+    cAltDamage         : boolean;
+    cReducedQuality    : LongWord;
+    UserNick           : shortstring;
+    recordFileName     : shortstring;
+    cReadyDelay        : Longword;
+    cStereoMode        : TStereoMode;
+    cOnlyStats         : boolean;
+{$IFDEF USE_VIDEO_RECORDING}
+    RecPrefix          : shortstring;
+    cAVFormat          : shortstring;
+    cVideoCodec        : shortstring;
+    cVideoFramerateNum : LongInt;
+    cVideoFramerateDen : LongInt;
+    cVideoQuality      : LongInt;
+    cAudioCodec        : shortstring;
+{$ENDIF}
 //////////////////////////
-
-    alsoShutdownFrontend: boolean = false;
-
+    cMapName        : shortstring;
     isCursorVisible : boolean;
-    isTerminated    : boolean;
     isInLag         : boolean;
     isPaused        : boolean;
-
-    isSEBackup      : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
-    isFirstFrame    : boolean;
+    SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
+    fastScrolling   : boolean;
     autoCameraOn    : boolean;
 
+    CheckSum        : LongWord;
+    CampaignVariable: shortstring;
+    GameTicks       : LongWord;
     GameState       : TGameState;
     GameType        : TGameType;
     InputMask       : LongWord;
@@ -106,18 +110,22 @@ var
 
     cWaterLine       : Word;
     cGearScrEdgesDist: LongInt;
+    isAudioMuted     : boolean;
 
-    GameTicks   : LongWord;
+    // originally typed consts
+    ExplosionBorderColor: LongWord;
+    WaterOpacity: byte;
+    SDWaterOpacity: byte;
+    GrayScale: Boolean;
 
     // originally from uConsts
     Pathz: array[TPathType] of shortstring;
     UserPathz: array[TPathType] of shortstring;
-    CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
+    CountTexz: array[0..Pred(AMMO_INFINITE)] of PTexture;
     LAND_WIDTH       : Word;
     LAND_HEIGHT      : Word;
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
-    cMaxCaptions     : LongInt;
 
     cLeftScreenBorder     : LongInt;
     cRightScreenBorder    : LongInt;
@@ -136,7 +144,6 @@ var
     bBetweenTurns   : boolean;
     bWaterRising    : boolean;
 
-    //ShowCrosshair   : boolean;  This variable is inconvenient to set.  Easier to decide when rendering
     CrosshairX      : LongInt;
     CrosshairY      : LongInt;
     CursorMovementX : LongInt;
@@ -152,7 +159,12 @@ var
     cLaserSighting  : boolean;
     cVampiric       : boolean;
     cArtillery      : boolean;
-    WeaponTooltipTex : PTexture;
+    WeaponTooltipTex: PTexture;
+    AmmoMenuTex     : PTexture;
+    AmmoMenuInvalidated: boolean;
+    AmmoRect		: TSDL_Rect;
+    HHTexture       : PTexture;
+
 
     flagMakeCapture : boolean;
 
@@ -162,7 +174,6 @@ var
 
     WaterColorArray : array[0..3] of HwColor4f;
     SDWaterColorArray : array[0..3] of HwColor4f;
-    SDMusic         : shortstring;
     SDTint          : LongInt;
 
     CursorPoint     : TPoint;
@@ -174,12 +185,6 @@ var
 
     Theme           : shortstring;
     disableLandBack : boolean;
-    conversionFormat: PSDL_PixelFormat;
-
-{$IFDEF SDL13}
-    SDLwindow       : PSDL_Window;
-    SDLGLcontext    : PSDL_GLContext;
-{$ENDIF}
 
     WorldDx: LongInt;
     WorldDy: LongInt;
@@ -187,19 +192,41 @@ var
     hiTicks: Word;
 
     LuaGoals        : shortstring;
+    hiddenHedgehogs : array [0..cMaxHHs] of PHedgehog;
+    hiddenHedgehogsNumber : longint;
 
-const
-    cHHFileName = 'Hedgehog';
-    cCHFileName = 'Crosshair';
-    cThemeCFGFilename = 'theme.cfg';
+    LuaTemplateNumber : LongWord;
 
-    FontBorder = 2;
+    VoiceList : array[0..7] of TVoice =  (
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil));
+    LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
+
+/////////////////////////////////////
+//Buttons
+{$IFDEF USE_TOUCH_INTERFACE}
+    buttonScale: GLFloat;
+
+    arrowUp, arrowDown, arrowLeft, arrowRight : TOnScreenWidget;
+    firebutton, jumpWidget, AMWidget          : TOnScreenWidget;
+    pauseButton, utilityWidget                : TOnScreenWidget;
+{$ENDIF}
+
+
+var
+    // these consts are here because they would cause circular dependencies in uConsts/uTypes
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
         '',                              // ptData
         'Graphics',                      // ptGraphics
         'Themes',                        // ptThemes
-        'Themes/avematan',               // ptCurrTheme
+        'Themes/Bamboo',                 // ptCurrTheme
         'Teams',                         // ptTeams
         'Maps',                          // ptMaps
         '',                              // ptMapCurrent
@@ -218,20 +245,6 @@ const
         'Graphics/SuddenDeath',           // ptSuddenDeath
         'Graphics/Buttons'                // ptButton
     );
-
-    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
-    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
-
-    VoiceList : array[0..7] of TVoice =  (
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil));
-    LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
 
     Fontz: array[THWFont] of THHFont = (
             (Handle: nil;
@@ -262,8 +275,9 @@ const
             {$ENDIF}
             );
 
+var
     SpritesData: array[TSprite] of record
-            FileName: String[16];
+            FileName: string[15];
             Path, AltPath: TPathType;
             Texture: PTexture;
             Surface: PSDL_Surface;
@@ -330,14 +344,12 @@ const
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: true; getImageDimensions: true),// sprSky
             (FileName:       'SkyR'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: true; getImageDimensions: true),// sprSky
-            (FileName:  'BorderHorizontal'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 33; Height:  2; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderHorizontal
-            (FileName:  'BorderVertical'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 2; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true),// sprAMBorderVertical
             (FileName:   'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 33; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlot
+            Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlot
             (FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMAmmos
+            (FileName:   'Ammos_bw'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprAMAmmosBW
             (FileName:   'SlotKeys'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprAMSlotKeys
             (FileName:  'Corners'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -372,6 +384,28 @@ const
             Width:  80; Height: 13; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprWindL
             (FileName:      'WindR'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  80; Height: 13; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprWindR
+{$IFDEF USE_TOUCH_INTERFACE}
+            (FileName: 'firebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprFireButton
+            (FileName: 'arrowUp'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowUp
+            (FileName: 'arrowDown'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowDown
+            (FileName: 'arrowLeft'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowLeft
+            (FileName: 'arrowRight'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowRight
+            (FileName: 'forwardjump'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprAMWidget
+            (FileName: 'backjump'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprJumpWidget
+            (FileName: 'pause'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 120; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprPauseButton
+            (FileName: 'pause'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;//TODO correct image
+            Width: 120; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTimerButton
+            (FileName: 'forwardjump'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;//TODO correct image
+            Width: 120; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprTargetButton
+{$ENDIF}
             (FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprFlake
             (FileName:     'amRope'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -405,7 +439,7 @@ const
             (FileName:     'Mortar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprMortar
             (FileName:  'TurnsLeft'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTurnsLeft
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprTurnsLeft
             (FileName: 'amKamikaze'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprKamikaze
             (FileName:     'amWhip'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -432,8 +466,6 @@ const
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprCakeWalk
             (FileName:  'Cake_down'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprCakeDown
-            (FileName:   'Ammos_bw'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true),// sprAMAmmosBW
             (FileName: 'Watermelon'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprWatermelon
             (FileName:  'EvilTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -581,13 +613,13 @@ const
             (FileName:   'amSMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandSMine
             (FileName:  'amHammer'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprWhip
+            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprHammer
             (FileName: 'amResurrector'; Path: ptHedgehog; AltPath: ptNone;
                 Texture: nil; Surface: nil; Width: 32; Height: 32;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true),
             //sprHandResurrector
-            (FileName: 'Cross'; Path: ptGraphics; altPath: ptNone;
+            (FileName: 'Cross'; Path: ptGraphics; AltPath: ptNone;
                 Texture: nil; Surface: nil; Width: 108; Height: 138;
                 imageWidth: 0; imageHeight: 0; saveSurf: false; priority:
                 tpMedium; getDimensions: false; getImageDimensions: true),
@@ -623,18 +655,30 @@ const
             Width:  80; Height: 50; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSDSplash
             (FileName:  'SDDroplet'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprSDDroplet
-            (FileName:  'Egg'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;//TODO change back 'Egg' to 'Tardis'
-            Width:  0; Height: 0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprTardis
-            (FileName: 'firebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 450; Height: 150; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true) // sprFireButton
+            (FileName:  'TARDIS'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  48; Height: 79; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprTardis
+            (FileName:  'slider'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 3; Height: 17; imageWidth: 3; imageHeight: 17; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprSlider
+            (FileName:  'botlevels'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 22; Height: 15; imageWidth: 22; imageHeight: 15; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprBotlevels
+         (*   (FileName:  'amKnife'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandKnife*)
+            (FileName:  'amCleaver'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: false),// sprHandKnife
+            (*(FileName:  'knife'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 29; Height: 14; imageWidth: 64; imageHeight: 64; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprKnife*)
+            (FileName:  'cleaver'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 64; Height: 64; imageWidth: 64; imageHeight: 128; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprKnife
+            (FileName:  'star'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 12; Height: 12; imageWidth: 12; imageHeight: 12; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprStar
             );
 
-
+const
     Wavez: array [TWave] of record
             Sprite: TSprite;
             FramesCount: Longword;
             Interval: Longword;
-            cmd: String[20];
+            cmd: string[31];
             Voice: TSound;
             VoiceDelay: LongWord;
             end = (
@@ -648,7 +692,7 @@ const
             );
 
     Soundz: array[TSound] of record
-            FileName: String[25];
+            FileName: string[31];
             Path    : TPathType;
             end = (
             (FileName:                         ''; Path: ptNone  ),// sndNone
@@ -763,10 +807,10 @@ const
             (FileName:            'parachute.ogg'; Path: ptSounds),// sndParachute
             (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
             (FileName:            'hogchant3.ogg'; Path: ptSounds),// sndResurrector
-            (FileName:                'plane.ogg'; Path: ptSounds), // sndPlane
-            (FileName:                'plane.ogg'; Path: ptSounds) // sndTardis TODO change when using a new data set
+            (FileName:                'plane.ogg'; Path: ptSounds),// sndPlane
+            (FileName:               'TARDIS.ogg'; Path: ptSounds) // sndTardis
             );
-
+var
     Ammoz: array [TAmmoType] of record
             NameId: TAmmoStrId;
             NameTex: PTexture;
@@ -809,7 +853,11 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_AltUse or 
+                          ammoprop_SetBounce or
+                          ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -833,7 +881,11 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 3;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_AltUse or 
+                          ammoprop_SetBounce or
+                          ammoprop_NeedUpDown;
                 Count: 5;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -857,7 +909,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -881,7 +935,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_NeedTarget or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedTarget or 
+                          ammoprop_DontHold or
+                          ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -905,7 +962,8 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs;
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -929,7 +987,10 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInMove or ammoprop_NoCrosshair or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_AttackInMove or 
+                          ammoprop_NoCrosshair or 
+                          ammoprop_DontHold;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -953,7 +1014,8 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_DontHold;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -981,7 +1043,8 @@ const
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
                           ammoprop_Utility or
-                          ammoprop_AltAttack;
+                          ammoprop_AltAttack or
+                          ammoprop_NeedUpDown;
                     Count: 5;
                     NumPerTurn: 0;
                     Timer: 0;
@@ -1005,7 +1068,11 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_AttackInMove or 
+                          ammoprop_DontHold or 
+                          ammoprop_AltUse or 
+                          ammoprop_SetBounce;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1029,7 +1096,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: 0;
+            Ammo: (Propz: ammoprop_NeedUpDown;
                 Count: 3;
                 NumPerTurn: 3;
                 Timer: 0;
@@ -1053,7 +1120,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_AttackInMove or 
+                          ammoprop_DontHold or 
+                          ammoprop_AltUse;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1077,7 +1147,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_ForwMsgs or ammoprop_AttackInMove;
+            Ammo: (Propz: ammoprop_NoCrosshair or 
+                          ammoprop_ForwMsgs or 
+                          ammoprop_AttackInMove;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1087,7 +1159,7 @@ const
                 Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
-            MinAngle: 0;
+            minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
@@ -1111,7 +1183,7 @@ const
                 Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
-            MinAngle: 0;
+            minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
@@ -1125,7 +1197,8 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_DontHold or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1155,7 +1228,8 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
-                          ammoprop_AltAttack;
+                          ammoprop_AltAttack or
+                          ammoprop_NeedUpDown;
                 Count: 2;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1180,10 +1254,10 @@ const
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_DontHold or
+                          ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1208,10 +1282,10 @@ const
             Probability: 200;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_DontHold or
+                          ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1235,7 +1309,8 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_ForwMsgs;
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1368,7 +1443,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_AttackInMove;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_DontHold or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AttackInMove;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1392,7 +1470,10 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_NoCrosshair or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NoCrosshair or 
+                          ammoprop_DontHold or
+                          ammoprop_Track;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1416,7 +1497,9 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_NoCrosshair;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_DontHold or
+                          ammoprop_NoCrosshair;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1440,7 +1523,10 @@ const
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: 0;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -1464,7 +1550,9 @@ const
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: 0;
                 NumPerTurn: 0;
                 Timer: 5000;
@@ -1489,10 +1577,10 @@ const
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold or
-                            ammoprop_NotBorder;
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_DontHold or
+                          ammoprop_NotBorder;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1516,7 +1604,9 @@ const
             NameTex: nil;
             Probability: 300;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1540,7 +1630,9 @@ const
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_DontHold;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 5001;
@@ -1564,9 +1656,10 @@ const
             NameTex: nil;
             Probability: 200;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs{ or
-                            ammoprop_DontHold or
-                            ammoprop_AltAttack};
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NeedUpDown{ or
+                          ammoprop_DontHold or
+                          ammoprop_AltAttack};
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1711,6 +1804,7 @@ const
                           ammoprop_DontHold or
                           ammoprop_AltUse or
                           ammoprop_Utility or
+                          ammoprop_NeedUpDown or
                           ammoprop_Effect;
                     Count: 1;
                     NumPerTurn: 0;
@@ -1764,7 +1858,9 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: 0;
+            Ammo: (Propz: ammoprop_NeedUpDown or 
+                    ammoprop_OscAim or
+                    ammoprop_NoMoveAfter;
                 Count: 2;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -1794,6 +1890,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
+                          ammoprop_NeedUpDown or
                           ammoprop_AltAttack;
                 Count: 1;
                 NumPerTurn: 0;
@@ -1818,7 +1915,9 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+            Ammo: (Propz: ammoprop_Power or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_AltUse;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -1844,6 +1943,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
+                          ammoprop_NeedUpDown or
                           ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
@@ -1871,6 +1971,7 @@ const
             Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_AttackInMove or
                           ammoprop_DontHold or
+                          ammoprop_NeedUpDown or
                           ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 3;
@@ -1923,7 +2024,11 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse or ammoprop_SetBounce;
+            Ammo: (Propz: ammoprop_Timerable or 
+                          ammoprop_Power or 
+                          ammoprop_AltUse or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_SetBounce;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
                 Timer: 3000;
@@ -1947,7 +2052,8 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_AttackInMove;
+            Ammo: (Propz: ammoprop_AttackInMove or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -1971,7 +2077,9 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_DontHold;
                 Count: 1;
                 NumPerTurn: 0;
                 Timer: 5001;
@@ -1995,7 +2103,9 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
+            Ammo: (Propz: ammoprop_Power or
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -2029,7 +2139,7 @@ const
                 Bounciness: 1000);
             Slot: 3;
             TimeAfterTurn: 3000;
-            MinAngle: 0;
+            minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
             SkipTurns: 0;
@@ -2196,26 +2306,78 @@ const
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0; //20;
-            ejectY: -3)
+            ejectY: -3),
+// Freezer
+            (NameId: sidIceGun;
+            NameTex: nil;
+            Probability: 20;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_ForwMsgs or 
+                          ammoprop_NeedUpDown or
+                          ammoprop_DontHold;
+                Count: 1;
+                NumPerTurn: 0;
+                Timer: 5001;
+                Pos: 0;
+                AmmoType: amIceGun;
+                AttackVoice: sndNone;
+                Bounciness: 1000);
+            Slot: 9;
+            TimeAfterTurn: 0;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0; //20;
+            ejectY: -3),
+// Knife
+            (NameId: sidKnife;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_Power or
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
+                Count: 1;
+                NumPerTurn: 1;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amKnife;
+                AttackVoice: sndNone;
+                Bounciness: 1000);
+            Slot: 6;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0)
         );
 
+const
     GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (    
-(*        gtGrenade *)   amGrenade
+(*          gtFlame *)   amNothing
 (*       gtHedgehog *) , amNothing
+(*           gtMine *) , amMine
+(*           gtCase *) , amNothing
+(*     gtExplosives *) , amNothing
+(*        gtGrenade *) , amGrenade
 (*          gtShell *) , amBazooka
 (*          gtGrave *) , amNothing
 (*            gtBee *) , amBee
 (*    gtShotgunShot *) , amShotgun
 (*     gtPickHammer *) , amPickHammer
 (*           gtRope *) , amRope
-(*           gtMine *) , amNothing
-(*           gtCase *) , amNothing
 (*     gtDEagleShot *) , amDEagle
 (*       gtDynamite *) , amDynamite
 (*    gtClusterBomb *) , amClusterBomb
 (*        gtCluster *) , amClusterBomb
 (*         gtShover *) , amBaseballBat  // Shover is only used for baseball bat right now
-(*          gtFlame *) , amNothing
 (*      gtFirePunch *) , amFirePunch
 (*    gtATStartGame *) , amNothing
 (*   gtATFinishGame *) , amNothing
@@ -2243,7 +2405,6 @@ const
 (*gtSniperRifleShot *) , amSniperRifle
 (*        gtJetpack *) , amJetpack
 (*        gtMolotov *) , amMolotov
-(*     gtExplosives *) , amNothing
 (*          gtBirdy *) , amBirdy
 (*            gtEgg *) , amBirdy
 (*         gtPortal *) , amPortalGun
@@ -2262,6 +2423,10 @@ const
 (*      gtStructure *) , amStructure  // TODO - This will undoubtedly change once there is more than one structure
 (*        gtLandGun *) , amLandGun
 (*         gtTardis *) , amTardis
+(*         gtIceGun *) , amIceGun
+(*        gtAddAmmo *) , amNothing
+(*  gtGenericFaller *) , amNothing
+(*          gtKnife *) , amKnife
     );
 
 var
@@ -2270,10 +2435,8 @@ var
     LandDirty: TDirtyTag;
     hasBorder: boolean;
     hasGirders: boolean;
-    isMap: boolean;
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
-    digest: shortstring;
     CurAmmoGear: PGear;
     lastGearByUID: PGear;
     GearsList: PGear;
@@ -2284,7 +2447,6 @@ var
     SuddenDeathDmg: Boolean;
     SpeechType: Longword;
     SpeechText: shortstring;
-    skipFlag: boolean;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
     StepSoundTimer: LongInt;
     StepSoundChannel: LongInt;
@@ -2300,7 +2462,6 @@ var
     LocalTeam: LongInt;  // last non-bot, non-extdriven clan first team
     LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index, updated to next upcoming hog for per-hog-ammo
     CurMinAngle, CurMaxAngle: Longword;
-    GameOver: boolean;
     NextClan: boolean;
 
     FollowGear: PGear;
@@ -2321,7 +2482,6 @@ var
     bAFRRight: Boolean;
 
 
-    SDLPrimSurface: PSDL_Surface;
     PauseTexture,
     SyncTexture,
     ConfirmTexture: PTexture;
@@ -2333,11 +2493,14 @@ var
     ProgrTex: PTexture;
     MissionIcons: PSDL_Surface;
     ropeIconTex: PTexture;
-    // orientation of the viewport
-    rotationQt: GLfloat;
+
     // stereoscopic framebuffer and textures
     framel, framer, depthl, depthr: GLuint;
     texl, texr: GLuint;
+
+    // video recorder framebuffer and texture
+    defaultFrame, depthv: GLuint;
+    texv: GLuint;
 
     VisualGearLayers: array[0..6] of PVisualGear;
     lastVisualGearByUID: PVisualGear;
@@ -2346,10 +2509,7 @@ var
     vobSDFrameTicks, vobSDFramesCount, vobSDCount: Longword;
     vobSDVelocity, vobSDFallSpeed: LongInt;
 
-
     hideAmmoMenu: boolean;
-    wheelUp: boolean;
-    wheelDown: boolean;
 
     ControllerNumControllers: Integer;
     ControllerEnabled: Integer;
@@ -2362,29 +2522,9 @@ var
     ControllerHats: array[0..5] of array[0..19] of Byte;
     ControllerButtons: array[0..5] of array[0..19] of Byte;
 
-    DefaultBinds, CurrentBinds: TBinds;
+    DefaultBinds : TBinds;
 
-    coeff: LongInt;
-
-{$IFDEF HWLIBRARY}
-    leftClick: boolean;
-    middleClick: boolean;
-    rightClick: boolean;
-
-    upKey: boolean;
-    downKey: boolean;
-    rightKey: boolean;
-    leftKey: boolean;
-    preciseKey: boolean;
-
-    backspaceKey: boolean;
-    spaceKey: boolean;
-    enterKey: boolean;
-    tabKey: boolean;
-
-    chatAction: boolean;
-    pauseAction: boolean;
-{$ENDIF}
+    lastTurnChecksum : Longword;
 
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
@@ -2400,6 +2540,32 @@ implementation
 
 procedure initModule;
 begin
+    // initialisation flags - they are going to be overwritten by args or by msgs
+    cScreenWidth    := 1024;
+    cScreenHeight   := 768;
+    cBits           := 32;
+    ipcPort         := 0;
+    cFullScreen     := false;
+    cLocaleFName    := 'en.txt';
+    cLocale         := 'en';
+    cTimerInterval  := 8;
+    PathPrefix      := './';
+    UserPathPrefix  := './';
+    cShowFPS        := false;
+    cFlattenFlakes  := false;
+    cFlattenClouds  := false;
+    cAltDamage      := true;
+    cReducedQuality := rqNone;
+    UserNick        := '';
+    recordFileName  := '';
+    cScriptName     := '';
+    cReadyDelay     := 5000;
+    cStereoMode     := smNone;
+    GrayScale       := false;
+
+    cFlattenFlakes  := false;
+    cFlattenClouds  := false;
+    cOnlyStats      := False;
     lastVisualGearByUID:= nil;
     lastGearByUID:= nil;
     
@@ -2434,9 +2600,10 @@ begin
     SDWaterColorArray[2].a := 255;
     SDWaterColorArray[1]:= SDWaterColorArray[0];
     SDWaterColorArray[3]:= SDWaterColorArray[2];
-
-    SDMusic:= 'hell.ogg';
+    SDWaterOpacity:= $80;
     SDTint:= $80;
+    ExplosionBorderColor:= $FF808080;
+    WaterOpacity:= $80;
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
     cDrownSpeedf            := 0.06;
@@ -2452,6 +2619,7 @@ begin
     CursorMovementX     := 0;
     CursorMovementY     := 0;
     GameTicks           := 0;
+    CheckSum            := 0;
     cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;
 
@@ -2485,7 +2653,6 @@ begin
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
-    GameType        := gmtLocal;
     zoom            := cDefaultZoomLevel;
     ZoomValue       := cDefaultZoomLevel;
     WeaponTooltipTex:= nil;
@@ -2496,14 +2663,13 @@ begin
     bBetweenTurns   := false;
     bWaterRising    := false;
     isCursorVisible := false;
-    isTerminated    := false;
     isInLag         := false;
     isPaused        := false;
     isInMultiShoot  := false;
     isSpeed         := false;
+    SpeedStart      := 0;
     fastUntilLag    := false;
-    isFirstFrame    := true;
-    isSEBackup      := true;
+    fastScrolling   := false;
     autoCameraOn    := true;
     cScriptName     := '';
     cSeed           := '';
@@ -2516,20 +2682,16 @@ begin
 
     ScreenFade      := sfNone;
 
-{$IFDEF SDL13}
-    SDLwindow       := nil;
-    SDLGLcontext    := nil;
-{$ENDIF}
-
     // those values still are not perfect
     cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
     cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
     cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
 
-    if isPhone() then
-        cMaxCaptions:= 3
-    else
-        cMaxCaptions:= 4;
+    vobFrameTicks:= 99999;
+    vobFramesCount:= 4;
+    vobCount:= 0;
+    vobVelocity:= 10;
+    vobFallSpeed:= 100;
 
     vobSDFrameTicks:= 99999;
     vobSDFramesCount:= 4;
@@ -2537,34 +2699,25 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
+    cMinScreenWidth    := 640;
+    cMinScreenHeight   := 480;
+    cScreenWidth       := 1024;
+    cScreenHeight      := 768;
+    cOrigScreenWidth   := 1024;
+    cOrigScreenHeight  := 768;
+    cNewScreenWidth    := 1024;
+    cNewScreenHeight   := 768;
+    cScreenResizeDelay := 0;
+
     LuaGoals:= '';
+    cMapName:= '';
+
+    LuaTemplateNumber:= 0;
+    hiddenHedgehogsNumber:=0;
 end;
 
 procedure freeModule;
 begin
-    // re-init flags so they will always contain safe values
-    cScreenWidth    := 1024;
-    cScreenHeight   := 768;
-    cBits           := 32;
-    ipcPort         := 0;
-    cFullScreen     := false;
-    isSoundEnabled  := true;
-    isMusicEnabled  := false;
-    cLocaleFName    := 'en.txt';
-    cInitVolume     := 100;
-    cTimerInterval  := 8;
-    PathPrefix      := './';
-    UserPathPrefix  := './';
-    cShowFPS        := false;
-    cFlattenFlakes  := false;
-    cFlattenClouds  := false;
-    cAltDamage      := true;
-    cReducedQuality := rqNone;
-    UserNick        := '';
-    recordFileName  := '';
-    cScriptName     := '';
-    cReadyDelay     := 5000;
-    cStereoMode     := smNone;
 end;
 
 end.

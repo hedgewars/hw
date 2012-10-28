@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2009 Kristian Lehmann <email@thexception.net>
- * Copyright (c) 2009-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  */
 
 #include "bgwidget.h"
+#include "hwconsts.h"
 
 SpritePosition::SpritePosition(QWidget * parent, int sw, int sh)
 {
@@ -82,10 +83,31 @@ void SpritePosition::init()
     fX = qrand() % (wParent->width() + 1);
 }
 
-BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
+BGWidget::BGWidget(QWidget * parent) : QWidget(parent), enabled(false)
 {
     setAttribute(Qt::WA_NoSystemBackground, true);
-    sprite.load(":/res/Star.png");
+
+    QString fname;
+
+    //For each season, there is a replacement for the star (Star.png)
+    //Todo: change element for easter and birthday
+    //Simply replace Confetti.png and Egg.png with an appropriate graphic)
+    switch (season)
+    {
+        case SEASON_CHRISTMAS :
+            fname = "Flake.png";
+            break;
+        case SEASON_EASTER :
+            fname = "Egg.png";
+            break;
+        case SEASON_HWBDAY :
+            fname = "Confetti.png";
+            break;
+        default :
+            fname = "Star.png";
+    }
+
+    sprite.load(":/res/" + fname);
 
     setAutoFillBackground(false);
 
@@ -100,7 +122,7 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
 
         QPainter p;
         p.begin(rotatedSprites[i]);
-    //  p.setRenderHint(QPainter::Antialiasing);
+        //  p.setRenderHint(QPainter::Antialiasing);
         p.setRenderHint(QPainter::SmoothPixmapTransform);
         p.translate(translate.x(), translate.y());
         p.rotate(4 * i);
@@ -123,6 +145,8 @@ BGWidget::~BGWidget()
 void BGWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
+    if (!enabled)
+        return;
 
     QPainter p;
 
@@ -139,6 +163,9 @@ void BGWidget::paintEvent(QPaintEvent *event)
 
 void BGWidget::animate()
 {
+    if (!enabled)
+        return;
+
     for (int i = 0; i < SPRITE_MAX; i++)
     {
         QPoint oldPos = spritePositions[i]->pos();
@@ -159,6 +186,7 @@ void BGWidget::startAnimation()
 void BGWidget::stopAnimation()
 {
     timerAnimation->stop();
+    repaint();
 }
 
 void BGWidget::init()

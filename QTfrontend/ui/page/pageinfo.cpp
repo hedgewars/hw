@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ QLayout * PageInfo::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout();
     BtnSnapshots = addButton(":/res/Star.png", bottomLayout, 0, true);
+    BtnSnapshots->setWhatsThis(tr("Open the snapshot folder"));
     bottomLayout->setAlignment(BtnSnapshots, Qt::AlignRight | Qt::AlignVCenter);
     return bottomLayout;
 }

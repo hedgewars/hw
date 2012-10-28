@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,18 +26,18 @@ procedure freeModule;
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 function  GetLastConsoleLine: shortstring;
-function ShortStringAsPChar(s: shortstring): PChar;
+function  ShortStringAsPChar(s: shortstring): PChar;
 
 implementation
 uses Types, uVariables, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
 
-const cLineWidth: LongInt = 0;
-      cLinesCount = 8;
+const cLinesCount = 8;
+var   cLineWidth: LongInt;
 
 type
-      TTextLine = record
-                  s: shortstring;
-                  end;
+    TTextLine = record
+        s: shortstring
+        end;
 
 var   ConsoleLines: array[byte] of TTextLine;
       CurrLine: LongInt;
@@ -45,17 +45,19 @@ var   ConsoleLines: array[byte] of TTextLine;
 procedure SetLine(var tl: TTextLine; str: shortstring);
 begin
 with tl do
-     s:= str;
+    s:= str;
 end;
 
 procedure WriteToConsole(s: shortstring);
+{$IFNDEF NOCONSOLE}
 var Len: LongInt;
     done: boolean;
+{$ENDIF}
 begin
 {$IFNDEF NOCONSOLE}
 AddFileLog('[Con] ' + s);
 {$IFDEF ANDROID}
-  Log.__android_log_write(Log.Android_LOG_DEBUG, 'HW_Engine', ShortStringAsPChar('[Con]' + s));
+    Log.__android_log_write(Log.Android_LOG_DEBUG, 'HW_Engine', ShortStringAsPChar('[Con]' + s));
 {$ELSE}
 Write(stderr, s);
 done:= false;
@@ -68,7 +70,8 @@ while not done do
     if byte(ConsoleLines[CurrLine].s[0]) = cLineWidth then
         begin
         inc(CurrLine);
-        if CurrLine = cLinesCount then CurrLine:= 0;
+        if CurrLine = cLinesCount then
+            CurrLine:= 0;
         PByte(@ConsoleLines[CurrLine].s)^:= 0
         end;
     done:= (Length(s) = 0);
@@ -82,7 +85,7 @@ begin
 {$IFNDEF NOCONSOLE}
 WriteToConsole(s);
 {$IFNDEF ANDROID}
-WriteLn(stderr);
+WriteLn(stderr, '');
 inc(CurrLine);
 if CurrLine = cLinesCount then
     CurrLine:= 0;
@@ -91,11 +94,12 @@ PByte(@ConsoleLines[CurrLine].s)^:= 0
 {$ENDIF}
 end;
 
-function ShortStringAsPChar(s: ShortString) : PChar;
+function ShortStringAsPChar(s: shortstring) : PChar;
 begin
-    if Length(s) = High(s) then Dec(s[0]);
+    if Length(s) = High(s) then
+        Dec(s[0]);
     s[Ord(Length(s))+1] := #0;
-    exit(@s[1]);
+    ShortStringAsPChar:= @s[1];
 end;
 
 function GetLastConsoleLine: shortstring;

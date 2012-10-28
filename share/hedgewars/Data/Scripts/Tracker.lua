@@ -32,19 +32,17 @@ function trackDeletion(gear)
         end
     end
     if trackingTeams and GetGearType(gear) == gtHedgehog then
-        for team, hogs in pairs(teams) do
-            if team == GetHogTeamName(gear) then
-                if table.maxn(hogs) == 1 then
-                    hogs = nil
-                else
-                    for k, hog in ipairs(hogs) do
-                        if hog == gear then
-                            table.remove(hogs, k)
-                            break
-                        end
+    	hogs = teams[GetHogTeamName(gear)]
+        if hogs ~= nil then
+            if table.maxn(hogs) == 1 then
+                hogs = nil
+            else
+				for k, hog in ipairs(hogs) do
+                    if hog == gear then
+                        table.remove(hogs, k)
+                        break
                     end
                 end
-                break
             end
         end
     elseif resurrecting and GetGearType(gear) == gtResurrector then
@@ -59,25 +57,6 @@ function trackDeletion(gear)
         resurrectedHogs = {}
     end
 end
-
--- Not needed?
--- Registers when a gear is resurrected
---function trackResurrection(gear)
---    if trackingTeams then
---        if GetGearType(gear) == gtHedgehog then
---            found = false
---            for team, hogs in pairs(teams) do
---                if team == GetHogTeamName(gear) then
---                    table.insert(hogs, gear)
---                    found = true
---                end
---            end
---            if not found then
---                teams[GetHogTeamName(gear)] = { gear }
---            end
---        end
---    end
---end
 
 -- Start to keep track of teams
 function trackTeams()
@@ -94,6 +73,46 @@ function trackTeams()
                 end
             end
         end
+    end
+end
+
+-- Registers when a hog is hidden
+function trackHiding(gear)
+    for k, g in ipairs(gears) do
+        if g == gear then
+            table.remove(gears, k)
+            break
+        end
+    end
+	
+    if trackingTeams then
+    	hogs = teams[GetHogTeamName(gear)]
+    	
+        if hogs ~= nil then
+            if table.maxn(hogs) == 1 then
+                hogs = nil
+            else
+                for k, hog in ipairs(hogs) do
+                    if hog == gear then
+                        table.remove(hogs, k)
+                        break
+                    end
+                end
+            end
+        end
+    end
+end
+
+-- Registers when a hog is restored
+function trackRestoring(gear)
+	table.insert(gears, gear)
+
+    if trackingTeams then
+        team = GetHogTeamName(gear)
+        if teams[team] == nil then
+            teams[team] = {}
+        end
+        table.insert(teams[team], gear)
     end
 end
 

@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 #include "netudpwidget.h"
 
 HWNetUdpModel::HWNetUdpModel(QObject* parent) :
-  HWNetServersModel(parent)
+    HWNetServersModel(parent)
 {
     pUdpSocket = new QUdpSocket(this);
 
@@ -41,7 +41,8 @@ void HWNetUdpModel::updateList()
 
 void HWNetUdpModel::onClientRead()
 {
-    while (pUdpSocket->hasPendingDatagrams()) {
+    while (pUdpSocket->hasPendingDatagrams())
+    {
         QByteArray datagram;
         datagram.resize(pUdpSocket->pendingDatagramSize());
         QHostAddress clientAddr;
@@ -50,7 +51,8 @@ void HWNetUdpModel::onClientRead()
         pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
 
         QString packet = QString::fromUtf8(datagram.data());
-        if(packet.startsWith("hedgewars server")) {
+        if(packet.startsWith("hedgewars server"))
+        {
             QStringList sl;
             sl << packet.remove(0, 17) << clientAddr.toString() << "46631";
             games.append(sl);
@@ -64,9 +66,9 @@ QVariant HWNetUdpModel::data(const QModelIndex &index,
                              int role) const
 {
     if (!index.isValid() || index.row() < 0
-        || index.row() >= games.size()
-        || role != Qt::DisplayRole)
-    return QVariant();
+            || index.row() >= games.size()
+            || role != Qt::DisplayRole)
+        return QVariant();
 
     return games[index.row()][index.column()];
 }

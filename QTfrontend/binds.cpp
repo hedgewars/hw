@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,8 +52,8 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"+cur_r",  "[6]", QT_TRANSLATE_NOOP("binds", "right"),    NULL, NULL},
     {"+cur_d",  "[2]", QT_TRANSLATE_NOOP("binds", "down"), NULL, NULL},
 //  {"+cur_m",  "", QT_TRANSLATE_NOOP("binds", "movement key modifier"),    NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Specify a modifier key to move camera and cursor using your default hog movement keys:")},
-    {"zoomin",  "wheeldown",    QT_TRANSLATE_NOOP("binds", "zoom in"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Modify the camera's zoom level:")},
-    {"zoomout", "wheelup",  QT_TRANSLATE_NOOP("binds", "zoom out"), NULL, NULL},
+    {"zoomin",  "wheelup",    QT_TRANSLATE_NOOP("binds", "zoom in"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Modify the camera's zoom level:")},
+    {"zoomout", "wheeldown",  QT_TRANSLATE_NOOP("binds", "zoom out"), NULL, NULL},
     {"zoomreset",   "mousem",   QT_TRANSLATE_NOOP("binds", "reset zoom"),   NULL, NULL},
     {"chat",    "t",    QT_TRANSLATE_NOOP("binds", "chat"), QT_TRANSLATE_NOOP("binds (categories)", "Other"), QT_TRANSLATE_NOOP("binds (descriptions)", "Talk to your team or all participants:")},
     {"history", "`",    QT_TRANSLATE_NOOP("binds", "chat history"), NULL, NULL},
@@ -62,7 +62,9 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"confirm", "y",    QT_TRANSLATE_NOOP("binds", "confirmation"), NULL, NULL},
     {"+voldown",    "9",    QT_TRANSLATE_NOOP("binds", "volume down"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Modify the game's volume while playing:")},
     {"+volup",  "0",    QT_TRANSLATE_NOOP("binds", "volume up"),    NULL, NULL},
+    {"mute",  "8",    QT_TRANSLATE_NOOP("binds", "mute audio"),    NULL, NULL},
     {"fullscr", "f12",  QT_TRANSLATE_NOOP("binds", "change mode"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle fullscreen mode:")},
     {"capture", "c",    QT_TRANSLATE_NOOP("binds", "capture"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Take a screenshot:")},
-    {"rotmask", "delete",   QT_TRANSLATE_NOOP("binds", "hedgehogs\ninfo"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle labels above hedgehogs:")}
+    {"rotmask", "delete",   QT_TRANSLATE_NOOP("binds", "hedgehogs\ninfo"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle labels above hedgehogs:")},
+    {"record",  "r",    QT_TRANSLATE_NOOP("binds", "record"),  NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Record video:")}
 };

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,36 +28,37 @@
 #include <QTextBrowser>
 #include <QTableWidget>
 #include <QSlider>
+#include <QSignalMapper>
+#include <QColorDialog>
+#include <QStandardItemModel>
 
 #include "pageoptions.h"
 #include "hwconsts.h"
 #include "fpsedit.h"
 #include "igbox.h"
+#include "DataManager.h"
 
 // TODO cleanup
 QLayout * PageOptions::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout();
-    pageLayout->setColumnStretch(0, 100);
-    pageLayout->setColumnStretch(1, 100);
-    pageLayout->setColumnStretch(2, 100);
-    pageLayout->setRowStretch(0, 0);
-    //pageLayout->setRowStretch(1, 100);
-    pageLayout->setRowStretch(2, 0);
-    pageLayout->setContentsMargins(7, 7, 7, 0);
-    pageLayout->setSpacing(0);
+    QVBoxLayout * pageLayout = new QVBoxLayout();
 
+    QTabWidget * tabs = new QTabWidget(this);
+    pageLayout->addWidget(tabs);
+    QWidget * page1 = new QWidget(this);
+    QWidget * page2 = new QWidget(this);
+    tabs->addTab(page1, tr("General"));
+    tabs->addTab(page2, tr("Advanced"));
 
-    QGroupBox * gbTwoBoxes = new QGroupBox(this);
-    pageLayout->addWidget(gbTwoBoxes, 0, 0, 1, 3);
-    QGridLayout * gbTBLayout = new QGridLayout(gbTwoBoxes);
-    gbTBLayout->setMargin(0);
-    gbTBLayout->setSpacing(0);
-    gbTBLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    { // page 1
+        QGridLayout * page1Layout = new QGridLayout(page1);
+        //gbTBLayout->setMargin(0);
+        page1Layout->setSpacing(0);
+        page1Layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
-    QPixmap pmNew(":/res/new.png");
-    QPixmap pmEdit(":/res/edit.png");
-    QPixmap pmDelete(":/res/delete.png");
+        QPixmap pmNew(":/res/new.png");
+        QPixmap pmEdit(":/res/edit.png");
+        QPixmap pmDelete(":/res/delete.png");
 
         {
             teamsBox = new IconedGroupBox(this);
@@ -102,12 +103,12 @@ QLayout * PageOptions::bodyLayoutDefinition()
             LblNoEditTeam->setVisible(false);
             GBTlayout->addWidget(LblNoEditTeam, 0, 0);
 
-            gbTBLayout->addWidget(teamsBox, 0, 0);
+            page1Layout->addWidget(teamsBox, 0, 0);
         }
 
         {
             IconedGroupBox* groupWeapons = new IconedGroupBox(this);
-            
+
             //groupWeapons->setContentTopPadding(0);
             //groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             groupWeapons->setIcon(QIcon(":/res/weaponsicon.png"));
@@ -123,21 +124,21 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponsLayout->addWidget(SchemesName, 1, 1);
 
             SchemeNew = new QPushButton(groupWeapons);
-            SchemeNew->setToolTip(tr("New scheme"));
+            SchemeNew->setWhatsThis(tr("New scheme"));
             SchemeNew->setIconSize(pmNew.size());
             SchemeNew->setIcon(pmNew);
             SchemeNew->setMaximumWidth(pmNew.width() + 6);
             WeaponsLayout->addWidget(SchemeNew, 1, 2);
 
             SchemeEdit = new QPushButton(groupWeapons);
-            SchemeEdit->setToolTip(tr("Edit scheme"));
+            SchemeEdit->setWhatsThis(tr("Edit scheme"));
             SchemeEdit->setIconSize(pmEdit.size());
             SchemeEdit->setIcon(pmEdit);
             SchemeEdit->setMaximumWidth(pmEdit.width() + 6);
             WeaponsLayout->addWidget(SchemeEdit, 1, 3);
 
             SchemeDelete = new QPushButton(groupWeapons);
-            SchemeDelete->setToolTip(tr("Delete scheme"));
+            SchemeDelete->setWhatsThis(tr("Delete scheme"));
             SchemeDelete->setIconSize(pmDelete.size());
             SchemeDelete->setIcon(pmDelete);
             SchemeDelete->setMaximumWidth(pmDelete.width() + 6);
@@ -151,64 +152,44 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponsLayout->addWidget(WeaponsName, 2, 1);
 
             WeaponNew = new QPushButton(groupWeapons);
-            WeaponNew->setToolTip(tr("New weapon set"));
+            WeaponNew->setWhatsThis(tr("New weapon set"));
             WeaponNew->setIconSize(pmNew.size());
             WeaponNew->setIcon(pmNew);
             WeaponNew->setMaximumWidth(pmNew.width() + 6);
             WeaponsLayout->addWidget(WeaponNew, 2, 2);
 
             WeaponEdit = new QPushButton(groupWeapons);
-            WeaponEdit->setToolTip(tr("Edit weapon set"));
+            WeaponEdit->setWhatsThis(tr("Edit weapon set"));
             WeaponEdit->setIconSize(pmEdit.size());
             WeaponEdit->setIcon(pmEdit);
             WeaponEdit->setMaximumWidth(pmEdit.width() + 6);
             WeaponsLayout->addWidget(WeaponEdit, 2, 3);
 
             WeaponDelete = new QPushButton(groupWeapons);
-            WeaponDelete->setToolTip(tr("Delete weapon set"));
+            WeaponDelete->setWhatsThis(tr("Delete weapon set"));
             WeaponDelete->setIconSize(pmDelete.size());
             WeaponDelete->setIcon(pmDelete);
             WeaponDelete->setMaximumWidth(pmDelete.width() + 6);
             WeaponsLayout->addWidget(WeaponDelete, 2, 4);
 
-            WeaponTooltip = new QCheckBox(this);
-            WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
-            WeaponsLayout->addWidget(WeaponTooltip, 3, 0, 1, 4);
-
-            gbTBLayout->addWidget(groupWeapons, 1, 0);
+            page1Layout->addWidget(groupWeapons, 1, 0);
         }
 
         {
             IconedGroupBox* groupMisc = new IconedGroupBox(this);
             //groupMisc->setContentTopPadding(0);
-            groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
             groupMisc->setIcon(QIcon(":/res/miscicon.png"));
             //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             groupMisc->setTitle(QGroupBox::tr("Misc"));
             QGridLayout * MiscLayout = new QGridLayout(groupMisc);
 
-            labelNN = new QLabel(groupMisc);
-            labelNN->setText(QLabel::tr("Net nick"));
-            MiscLayout->addWidget(labelNN, 0, 0);
-
-            editNetNick = new QLineEdit(groupMisc);
-            editNetNick->setMaxLength(20);
-            editNetNick->setText(QLineEdit::tr("unnamed"));
-            connect(editNetNick, SIGNAL(editingFinished()), this, SLOT(trimNetNick()));
-            MiscLayout->addWidget(editNetNick, 0, 1);
-            
-            labelNetPassword = new QLabel(groupMisc);
-            labelNetPassword->setText(QLabel::tr("Password"));
-            MiscLayout->addWidget(labelNetPassword, 1, 0);
-            
-            editNetPassword = new QLineEdit(groupMisc);
-            editNetPassword->setEchoMode(QLineEdit::Password);
-            MiscLayout->addWidget(editNetPassword, 1, 1);
-
+            // Label for "Language"
             QLabel *labelLanguage = new QLabel(groupMisc);
             labelLanguage->setText(QLabel::tr("Locale") + " *");
-            MiscLayout->addWidget(labelLanguage, 2, 0);
+            MiscLayout->addWidget(labelLanguage, 0, 0);
 
+            // List of installed languages
             CBLanguage = new QComboBox(groupMisc);
             QDir tmpdir;
             tmpdir.cd(cfgdir->absolutePath());
@@ -233,29 +214,35 @@ QLayout * PageOptions::bodyLayoutDefinition()
                 CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
             }
 
-            MiscLayout->addWidget(CBLanguage, 2, 1);
+            MiscLayout->addWidget(CBLanguage, 0, 1);
 
-            CBAltDamage = new QCheckBox(groupMisc);
-            CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
-            MiscLayout->addWidget(CBAltDamage, 3, 0, 1, 2);
+            // Label and field for net nick
+            labelNN = new QLabel(groupMisc);
+            labelNN->setText(QLabel::tr("Nickname"));
+            MiscLayout->addWidget(labelNN, 1, 0);
 
-            CBNameWithDate = new QCheckBox(groupMisc);
-            CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-            MiscLayout->addWidget(CBNameWithDate, 4, 0, 1, 2);
+            editNetNick = new QLineEdit(groupMisc);
+            editNetNick->setMaxLength(20);
+            editNetNick->setText(QLineEdit::tr("anonymous"));
+            MiscLayout->addWidget(editNetNick, 1, 1);
 
-            BtnAssociateFiles = new QPushButton(groupMisc);
-            BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
-            BtnAssociateFiles->setEnabled(!custom_data && !custom_config);
-            MiscLayout->addWidget(BtnAssociateFiles, 5, 0, 1, 2);
+            // checkbox and field for password
+            CBSavePassword = new QCheckBox(groupMisc);
+            CBSavePassword->setText(QCheckBox::tr("Save password"));
+            MiscLayout->addWidget(CBSavePassword, 2, 0);
 
-#ifdef __APPLE__
-#ifdef SPARKLE_ENABLED
+            editNetPassword = new QLineEdit(groupMisc);
+            editNetPassword->setEchoMode(QLineEdit::Password);
+            MiscLayout->addWidget(editNetPassword, 2, 1);
+
+    #ifdef __APPLE__
+    #ifdef SPARKLE_ENABLED
             CBAutoUpdate = new QCheckBox(groupMisc);
             CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
-            MiscLayout->addWidget(CBAutoUpdate, 6, 0, 1, 3);
-#endif
-#endif
-            gbTBLayout->addWidget(groupMisc, 2, 0);
+            MiscLayout->addWidget(CBAutoUpdate, 7, 0, 1, 3);
+    #endif
+    #endif
+            page1Layout->addWidget(groupMisc, 2, 0);
         }
 
         {
@@ -275,7 +262,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             GBAlayout->addWidget(CBFrontendFullscreen);
 
             CBFrontendEffects = new QCheckBox(AGGroupBox);
-            CBFrontendEffects->setText(QCheckBox::tr("Frontend effects") + " *");
+            CBFrontendEffects->setText(QCheckBox::tr("Frontend effects"));
             GBAlayout->addWidget(CBFrontendEffects);
 
             CBEnableFrontendSound = new QCheckBox(AGGroupBox);
@@ -302,13 +289,13 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             CBFullscreen = new QCheckBox(AGGroupBox);
             CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
-            GBAlayout->addWidget(CBFullscreen);
+            GBAreslayout->addWidget(CBFullscreen);
 
             QLabel * quality = new QLabel(AGGroupBox);
             quality->setText(QLabel::tr("Quality"));
             quality->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             GBAqualayout->addWidget(quality);
-            
+
             SLQuality = new QSlider(Qt::Horizontal, AGGroupBox);
             SLQuality->setTickPosition(QSlider::TicksBelow);
             SLQuality->setMaximum(5);
@@ -338,7 +325,6 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBStereoMode->addItem(QComboBox::tr("Blue/Red grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Red/Green grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Green/Red grayscale"));
-            connect(CBStereoMode, SIGNAL(currentIndexChanged(int)), this, SLOT(forceFullscreen(int)));
 
             GBAstereolayout->addWidget(CBStereoMode);
             GBAlayout->addLayout(GBAstereolayout);
@@ -349,55 +335,163 @@ QLayout * PageOptions::bodyLayoutDefinition()
             hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
 
-            QHBoxLayout * GBAvollayout = new QHBoxLayout(0);
+            QGridLayout * GBAvollayout = new QGridLayout();
             QLabel * vol = new QLabel(AGGroupBox);
             vol->setText(QLabel::tr("Initial sound volume"));
-            GBAvollayout->addWidget(vol);
+            GBAvollayout->addWidget(vol, 0, 0, 1, 2);
             GBAlayout->addLayout(GBAvollayout);
             volumeBox = new QSpinBox(AGGroupBox);
             volumeBox->setRange(0, 100);
             volumeBox->setSingleStep(5);
-            GBAvollayout->addWidget(volumeBox);
+            GBAvollayout->addWidget(volumeBox, 0, 2);
 
             CBEnableSound = new QCheckBox(AGGroupBox);
             CBEnableSound->setText(QCheckBox::tr("Enable sound"));
-            GBAlayout->addWidget(CBEnableSound);
+            GBAvollayout->addWidget(CBEnableSound, 1, 0, 1, 1);
 
             CBEnableMusic = new QCheckBox(AGGroupBox);
             CBEnableMusic->setText(QCheckBox::tr("Enable music"));
-            GBAlayout->addWidget(CBEnableMusic);
+            GBAvollayout->addWidget(CBEnableMusic, 1, 1, 1, 2);
+
+            GBAvollayout->setSizeConstraint(QLayout::SetMinimumSize);
 
             hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
             hr->setLineWidth(3);
             hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
+
+            CBAltDamage = new QCheckBox(AGGroupBox);
+            CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
+            GBAlayout->addWidget(CBAltDamage);
+
+            page1Layout->addWidget(AGGroupBox, 0, 1, 3, 1);
+        }
+
+        page1Layout->addWidget(new QWidget(this), 3, 0);
+
+    }
+
+    { // page 2
+        QGridLayout * page2Layout = new QGridLayout(page2);
+
+        {
+            IconedGroupBox * gbColors = new IconedGroupBox(this);
+            gbColors->setIcon(QIcon(":/res/lightbulb_on.png"));
+            gbColors->setTitle(QGroupBox::tr("Custom colors"));
+            page2Layout->addWidget(gbColors, 0, 0);
+            QGridLayout * gbCLayout = new QGridLayout(gbColors);
+
+            QSignalMapper * mapper = new QSignalMapper(this);
+
+            QStandardItemModel * model = DataManager::instance().colorsModel();
+
+            connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(onColorModelDataChanged(QModelIndex,QModelIndex)));
+            for(int i = 0; i < model->rowCount(); ++i)
+            {
+                QPushButton * btn = new QPushButton(this);
+                btn->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+                gbCLayout->addWidget(btn, i / 3, i % 3);
+                btn->setStyleSheet(QString("background: %1").arg(model->item(i)->data().value<QColor>().name()));
+                m_colorButtons.append(btn);
+                connect(btn, SIGNAL(clicked()), mapper, SLOT(map()));
+                mapper->setMapping(btn, i);
+            }
+
+            connect(mapper, SIGNAL(mapped(int)), this, SLOT(colorButtonClicked(int)));
+
+            QPushButton * btn = new QPushButton(this);
+            gbCLayout->addWidget(btn, (model->rowCount() - 1) / 3 + 1, 0, 1, 3);
+            btn->setText(tr("Reset to default colors"));
+            connect(btn, SIGNAL(clicked()), &DataManager::instance(), SLOT(resetColors()));
+        }
+
+        {
+            IconedGroupBox * gbMisc = new IconedGroupBox(this);
+            gbMisc->setIcon(QIcon(":/res/Settings.png"));
+            gbMisc->setTitle(QGroupBox::tr("Miscellaneous"));
+            page2Layout->addWidget(gbMisc, 0, 1);
+            QVBoxLayout * gbCLayout = new QVBoxLayout(gbMisc);
 
             QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
             QLabel * maxfps = new QLabel(AGGroupBox);
             maxfps->setText(QLabel::tr("FPS limit"));
             GBAfpslayout->addWidget(maxfps);
-            GBAlayout->addLayout(GBAfpslayout);
             fpsedit = new FPSEdit(AGGroupBox);
             GBAfpslayout->addWidget(fpsedit);
 
             CBShowFPS = new QCheckBox(AGGroupBox);
             CBShowFPS->setText(QCheckBox::tr("Show FPS"));
-            GBAlayout->addWidget(CBShowFPS);
+            GBAfpslayout->addWidget(CBShowFPS);
 
-            hr = new QFrame(AGGroupBox);
-            hr->setFrameStyle(QFrame::HLine);
-            hr->setLineWidth(3);
-            hr->setFixedHeight(10);
-            GBAlayout->addWidget(hr);
+            gbCLayout->addLayout(GBAfpslayout);
 
-            QLabel *restartNote = new QLabel(this);
-            restartNote->setText(QString("* ") + QLabel::tr("Restart game to apply"));
-            restartNote->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-            GBAlayout->addWidget(restartNote);
 
-            gbTBLayout->addWidget(AGGroupBox, 0, 1, 3, 1);
+            WeaponTooltip = new QCheckBox(this);
+            WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
+            gbCLayout->addWidget(WeaponTooltip);
+
+
+            CBNameWithDate = new QCheckBox(this);
+            CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
+            gbCLayout->addWidget(CBNameWithDate);
+
+            BtnAssociateFiles = new QPushButton(this);
+            BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
+            BtnAssociateFiles->setVisible(!custom_data && !custom_config);
+            gbCLayout->addWidget(BtnAssociateFiles);
         }
+
+        {
+            IconedGroupBox * gbProxy = new IconedGroupBox(this);
+            gbProxy->setIcon(QIcon(":/res/Settings.png"));
+            gbProxy->setTitle(QGroupBox::tr("Proxy settings"));
+            page2Layout->addWidget(gbProxy, 1, 0);
+            QGridLayout * gbLayout = new QGridLayout(gbProxy);
+
+            QStringList sl;
+            sl
+                    << tr("Proxy host")
+                    << tr("Proxy port")
+                    << tr("Proxy login")
+                    << tr("Proxy password")
+                       ;
+            for(int i = 0; i < sl.size(); ++i)
+            {
+                QLabel * l = new QLabel(gbProxy);
+                l->setText(sl[i]);
+                gbLayout->addWidget(l, i + 1, 0);
+            }
+
+            cbProxyType = new QComboBox(gbProxy);
+            cbProxyType->addItems(QStringList()
+                                  << tr("No proxy")
+                                  << tr("System proxy settings")
+                                  << tr("Socks5 proxy")
+                                  << tr("HTTP proxy"));
+            gbLayout->addWidget(cbProxyType, 0, 1);
+
+            leProxy = new QLineEdit(gbProxy);
+            gbLayout->addWidget(leProxy, 1, 1);
+
+            sbProxyPort = new QSpinBox(gbProxy);
+            sbProxyPort->setMaximum(65535);
+            gbLayout->addWidget(sbProxyPort, 2, 1);
+
+            leProxyLogin = new QLineEdit(gbProxy);
+            gbLayout->addWidget(leProxyLogin, 3, 1);
+
+            leProxyPassword = new QLineEdit(gbProxy);
+            leProxyPassword->setEchoMode(QLineEdit::Password);
+            gbLayout->addWidget(leProxyPassword, 4, 1);
+
+
+            connect(cbProxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged()));
+            onProxyTypeChanged();
+        }
+
+        page2Layout->addWidget(new QWidget(this), 2, 0);
+    }
 
     previousQuality = this->SLQuality->value();
     previousResolutionIndex = this->CBResolution->currentIndex();
@@ -408,18 +502,17 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
 QLayout * PageOptions::footerLayoutDefinition()
 {
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
-    btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);
-    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
-    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
-    return bottomLayout;
+    return NULL;
 }
 
 void PageOptions::connectSignals()
 {
+    connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
     connect(CBResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(setResolution(int)));
     connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(int)));
-    connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
+    connect(CBStereoMode, SIGNAL(currentIndexChanged(int)), this, SLOT(forceFullscreen(int)));
+    connect(editNetNick, SIGNAL(editingFinished()), this, SLOT(trimNetNick()));
+    connect(CBSavePassword, SIGNAL(stateChanged(int)), this, SLOT(savePwdChanged(int)));
 }
 
 PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent)
@@ -431,13 +524,16 @@ void PageOptions::forceFullscreen(int index)
 {
     bool forced = (index == 7 || index == 8 || index == 9);
 
-    if (index != 0) {
+    if (index != 0)
+    {
         this->SLQuality->setValue(this->SLQuality->maximum());
         this->SLQuality->setEnabled(false);
         this->CBFullscreen->setEnabled(!forced);
         this->CBFullscreen->setChecked(forced ? true : previousFullscreenValue);
         this->CBResolution->setCurrentIndex(forced ? 0 : previousResolutionIndex);
-    } else {
+    }
+    else
+    {
         this->SLQuality->setEnabled(true);
         this->CBFullscreen->setEnabled(true);
         this->SLQuality->setValue(previousQuality);
@@ -478,6 +574,14 @@ void PageOptions::trimNetNick()
     editNetNick->setText(editNetNick->text().trimmed());
 }
 
+void PageOptions::savePwdChanged(int state) {
+    if (state == 0) {
+        editNetPassword->setEnabled(false);
+        editNetPassword->setText("");
+    } else
+        editNetPassword->setEnabled(true);
+}
+
 void PageOptions::requestEditSelectedTeam()
 {
     emit editTeamRequested(CBTeamName->currentText());
@@ -495,4 +599,38 @@ void PageOptions::setTeamOptionsEnabled(bool enabled)
     BtnDeleteTeam->setVisible(enabled);
     CBTeamName->setVisible(enabled);
     LblNoEditTeam->setVisible(!enabled);
+}
+
+void PageOptions::colorButtonClicked(int i)
+{
+    if(i < 0 || i >= m_colorButtons.size())
+        return;
+
+    QPalette p = m_colorButtons[i]->palette();
+    QColor c = QColorDialog::getColor(p.color(QPalette::Button));
+
+    if(c.isValid())
+    {
+        DataManager::instance().colorsModel()->item(i)->setData(c);
+        m_colorButtons[i]->setStyleSheet(QString("background: %1").arg(c.name()));
+    }
+}
+
+void PageOptions::onColorModelDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight)
+{
+    Q_UNUSED(bottomRight);
+
+    QStandardItemModel * model = DataManager::instance().colorsModel();
+
+    m_colorButtons[topLeft.row()]->setStyleSheet(QString("background: %1").arg(model->item(topLeft.row())->data().value<QColor>().name()));
+}
+
+void PageOptions::onProxyTypeChanged()
+{
+    bool b = cbProxyType->currentIndex() != NoProxy && cbProxyType->currentIndex() != SystemProxy ;
+
+    sbProxyPort->setEnabled(b);
+    leProxy->setEnabled(b);
+    leProxyLogin->setEnabled(b);
+    leProxyPassword->setEnabled(b);
 }

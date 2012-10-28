@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,13 +25,13 @@
 #define ABSTRACTPAGE_H
 
 #include <QWidget>
-#include <QPushButton>
+#include <qpushbuttonwithsound.h>
 #include <QFont>
 #include <QGridLayout>
 #include <QComboBox>
 #include <QSignalMapper>
 
-class QPushButton;
+class QPushButtonWithSound;
 class QGroupBox;
 class QComboBox;
 class QLabel;
@@ -54,7 +54,28 @@ class QGridlayout;
 
 class AbstractPage : public QWidget
 {
-    Q_OBJECT
+        Q_OBJECT
+
+    public:
+
+        /**
+        * @brief Changes the desc text (should not be called manualy)
+        *
+        * @param desc the description of the widget focused
+        */
+        void setButtonDescription(QString desc);
+
+        /**
+        * @brief Changes the desc defaut text
+        *
+        * @param text the defaut desc
+        */
+        void setDefautDescription(QString text);
+
+        /**
+        * @brief Get the desc defaut text
+        */
+        QString * getDefautDescription();
 
     signals:
         /**
@@ -91,7 +112,10 @@ class AbstractPage : public QWidget
          *
          * Use it to define layout (not behavior) of the page's footer.
          */
-        virtual QLayout * footerLayoutDefinition() { return NULL; };
+        virtual QLayout * footerLayoutDefinition()
+        {
+            return NULL;
+        };
 
         /**
          * @brief Used during page construction.
@@ -113,7 +137,8 @@ class AbstractPage : public QWidget
          *
          * @return the button.
          */
-        QPushButton * formattedButton(const QString & name, bool hasIcon = false);
+        QPushButtonWithSound * formattedButton(const QString & name, bool hasIcon = false);
+        QPushButton * formattedSoundlessButton(const QString & name, bool hasIcon = false);
 
         /**
          * @brief Creates a default formatted button and adds it to a
@@ -129,7 +154,7 @@ class AbstractPage : public QWidget
          *
          * @return the button.
          */
-        QPushButton * addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan = 1, int columnSpan = 1, bool hasIcon = false);
+        QPushButtonWithSound * addButton(const QString & name, QGridLayout * grid, int row, int column, int rowSpan = 1, int columnSpan = 1, bool hasIcon = false);
 
         /**
          * @brief Creates a default formatted button and adds it to a
@@ -142,7 +167,8 @@ class AbstractPage : public QWidget
          *
          * @return the button.
          */
-        QPushButton * addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
+        QPushButtonWithSound * addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
+        QPushButton* addSoundlessButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
 
         /**
          * @brief Changes visibility of the back-button.
@@ -153,9 +179,10 @@ class AbstractPage : public QWidget
 
         QFont * font14; ///< used font
 
-    private:
+        QLabel * descLabel; ///< text description
+        QString * defautDesc;
 
-        QPushButton * btnBack; ///< back button
+        QPushButtonWithSound * btnBack; ///< back button
 };
 
 #endif

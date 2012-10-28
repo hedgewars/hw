@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@ const cMaxGearArrayInd = 1023;
 
 type PGearArray = ^TGearArray;
     TGearArray = record
-            ar: array[0..cMaxGearArrayInd] of PGear;
-            Count: Longword
-            end;
+        ar: array[0..cMaxGearArrayInd] of PGear;
+        Count: Longword
+        end;
 
 procedure initModule;
 procedure freeModule;
@@ -47,22 +47,25 @@ function  TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionX(Gear: PGear; Dir: LongInt): boolean;
 function  TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 
-function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
-function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
+function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean; inline;
+function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean): boolean;
+function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean; inline;
+function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): boolean;
 
 function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 
 // returns: negative sign if going downhill to left, value is steepness (noslope/error = _0, 45° = _0_5)
 function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
+function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): Boolean;
 
 implementation
-uses uConsts, uLandGraphics, uVariables, uDebug, uGears;
+uses uConsts, uLandGraphics, uVariables, uDebug, uGearsList;
 
 type TCollisionEntry = record
-            X, Y, Radius: LongInt;
-            cGear: PGear;
-            end;
+    X, Y, Radius: LongInt;
+    cGear: PGear;
+    end;
 
 const MAXRECTSINDEX = 1023;
 var Count: Longword;
@@ -72,14 +75,15 @@ var Count: Longword;
 procedure AddGearCI(Gear: PGear);
 var t: PGear;
 begin
-if Gear^.CollisionIndex >= 0 then exit;
+if Gear^.CollisionIndex >= 0 then
+    exit;
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
 with cinfos[Count] do
     begin
     X:= hwRound(Gear^.X);
     Y:= hwRound(Gear^.Y);
     Radius:= Gear^.Radius;
-    ChangeRoundInLand(X, Y, Radius - 1, true);
+    ChangeRoundInLand(X, Y, Radius - 1, true, (Gear = CurrentHedgehog^.Gear) or (Gear^.Kind = gtCase));
     cGear:= Gear
     end;
 Gear^.CollisionIndex:= Count;
@@ -90,7 +94,8 @@ if (Count > (MAXRECTSINDEX-20)) then
     t:= GearsList;
     while (t <> nil) and (t^.Kind <> gtMine) do 
         t:= t^.NextGear;
-    if (t <> nil) then DeleteGear(t)
+    if (t <> nil) then
+        DeleteGear(t)
     end;
 end;
 
@@ -99,7 +104,7 @@ begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, false);
+        ChangeRoundInLand(X, Y, Radius - 1, false, (Gear = CurrentHedgehog^.Gear) or (Gear^.Kind = gtCase));
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;
@@ -113,7 +118,8 @@ var mx, my, tr: LongInt;
 begin
 CheckGearsCollision:= @ga;
 ga.Count:= 0;
-if Count = 0 then exit;
+if Count = 0 then
+    exit;
 mx:= hwRound(Gear^.X);
 my:= hwRound(Gear^.Y);
 
@@ -131,63 +137,63 @@ end;
 
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
-    TestWord: LongWord;
 begin
-if Gear^.IntersectGear <> nil then
-   with Gear^ do
-        if (hwRound(IntersectGear^.X) + IntersectGear^.Radius < hwRound(X) - Radius) or
-           (hwRound(IntersectGear^.X) - IntersectGear^.Radius > hwRound(X) + Radius) then
-           begin
-           IntersectGear:= nil;
-           TestWord:= 0
-           end else
-           TestWord:= 255
-   else TestWord:= 0;
+// Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
+if (Gear^.CollisionMask = $FF7F) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+    ((hwRound(Gear^.Hedgehog^.Gear^.X) + Gear^.Hedgehog^.Gear^.Radius + 16 < hwRound(Gear^.X) - Gear^.Radius) or
+     (hwRound(Gear^.Hedgehog^.Gear^.X) - Gear^.Hedgehog^.Gear^.Radius - 16 > hwRound(Gear^.X) + Gear^.Radius)) then
+    Gear^.CollisionMask:= $FFFF;
 
 x:= hwRound(Gear^.X);
-if Dir < 0 then x:= x - Gear^.Radius
-           else x:= x + Gear^.Radius;
+if Dir < 0 then
+    x:= x - Gear^.Radius
+else
+    x:= x + Gear^.Radius;
+
+TestCollisionXwithGear:= true;
 if (x and LAND_WIDTH_MASK) = 0 then
-   begin
-   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
-   i:= y + Gear^.Radius * 2 - 2;
-   repeat
-     if (y and LAND_HEIGHT_MASK) = 0 then
-        if Land[y, x] > TestWord then exit(true);
-     inc(y)
-   until (y > i);
-   end;
+    begin
+    y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+    i:= y + Gear^.Radius * 2 - 2;
+    repeat
+        if (y and LAND_HEIGHT_MASK) = 0 then
+            if Land[y, x] and Gear^.CollisionMask <> 0 then
+                exit;
+        inc(y)
+    until (y > i);
+    end;
 TestCollisionXwithGear:= false
 end;
 
 function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): Word;
 var x, y, i: LongInt;
-    TestWord: LongWord;
 begin
-if Gear^.IntersectGear <> nil then
-   with Gear^ do
-        if (hwRound(IntersectGear^.Y) + IntersectGear^.Radius < hwRound(Y) - Radius) or
-           (hwRound(IntersectGear^.Y) - IntersectGear^.Radius > hwRound(Y) + Radius) then
-           begin
-           IntersectGear:= nil;
-           TestWord:= 0
-           end else
-           TestWord:= 255
-   else TestWord:= 0;
+// Special case to emulate the old intersect gear clearing, but with a bit of slop for pixel overlap
+if (Gear^.CollisionMask = $FF7F) and (Gear^.Kind <> gtHedgehog) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) and
+    ((hwRound(Gear^.Hedgehog^.Gear^.Y) + Gear^.Hedgehog^.Gear^.Radius + 16 < hwRound(Gear^.Y) - Gear^.Radius) or
+     (hwRound(Gear^.Hedgehog^.Gear^.Y) - Gear^.Hedgehog^.Gear^.Radius - 16 > hwRound(Gear^.Y) + Gear^.Radius)) then
+    Gear^.CollisionMask:= $FFFF;
 
 y:= hwRound(Gear^.Y);
-if Dir < 0 then y:= y - Gear^.Radius
-           else y:= y + Gear^.Radius;
+if Dir < 0 then
+    y:= y - Gear^.Radius
+else
+    y:= y + Gear^.Radius;
+
 if (y and LAND_HEIGHT_MASK) = 0 then
-   begin
-   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
-   i:= x + Gear^.Radius * 2 - 2;
-   repeat
-     if (x and LAND_WIDTH_MASK) = 0 then
-        if Land[y, x] > TestWord then exit(Land[y, x]);
-     inc(x)
-   until (x > i);
-   end;
+    begin
+    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+    i:= x + Gear^.Radius * 2 - 2;
+    repeat
+        if (x and LAND_WIDTH_MASK) = 0 then
+            if Land[y, x] and Gear^.CollisionMask <> 0 then
+                begin
+                TestCollisionYwithGear:= Land[y, x];
+                exit;
+                end;
+        inc(x)
+    until (x > i);
+    end;
 TestCollisionYwithGear:= 0
 end;
 
@@ -197,105 +203,131 @@ var x, y, mx, my, i: LongInt;
 begin
 flag:= false;
 x:= hwRound(Gear^.X);
-if Dir < 0 then x:= x - Gear^.Radius
-           else x:= x + Gear^.Radius;
+if Dir < 0 then
+    x:= x - Gear^.Radius
+else
+    x:= x + Gear^.Radius;
+
+TestCollisionXKick:= true;
 if (x and LAND_WIDTH_MASK) = 0 then
-   begin
-   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
-   i:= y + Gear^.Radius * 2 - 2;
-   repeat
-     if (y and LAND_HEIGHT_MASK) = 0 then
-           if Land[y, x] > 255 then exit(true)
-           else if Land[y, x] <> 0 then flag:= true;
-     inc(y)
-   until (y > i);
-   end;
+    begin
+    y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+    i:= y + Gear^.Radius * 2 - 2;
+    repeat
+        if (y and LAND_HEIGHT_MASK) = 0 then
+            if Land[y, x] > 255 then
+                exit
+            else if Land[y, x] <> 0 then
+                flag:= true;
+    inc(y)
+    until (y > i);
+    end;
 TestCollisionXKick:= flag;
 
 if flag then
-   begin
-   if hwAbs(Gear^.dX) < cHHKick then exit;
-   if (Gear^.State and gstHHJumping <> 0)
-   and (hwAbs(Gear^.dX) < _0_4) then exit;
+    begin
+    if hwAbs(Gear^.dX) < cHHKick then
+        exit;
+    if (Gear^.State and gstHHJumping <> 0)
+    and (hwAbs(Gear^.dX) < _0_4) then
+        exit;
 
-   mx:= hwRound(Gear^.X);
-   my:= hwRound(Gear^.Y);
+    mx:= hwRound(Gear^.X);
+    my:= hwRound(Gear^.Y);
 
-   for i:= 0 to Pred(Count) do
-    with cinfos[i] do
-      if (Gear <> cGear) and
-         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
-         ((mx > x) xor (Dir > 0)) then
-         if ((cGear^.Kind in [gtHedgehog, gtMine]) and ((Gear^.State and gstNotKickable) = 0)) or
-            // only apply X kick if the barrel is knocked over
-            ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0)) then
-             begin
-             with cGear^ do
-                  begin
-                  dX:= Gear^.dX;
-                  dY:= Gear^.dY * _0_5;
-                  State:= State or gstMoving;
-                  Active:= true
-                  end;
-             DeleteCI(cGear);
-             exit(false)
-             end
-   end
+    for i:= 0 to Pred(Count) do
+        with cinfos[i] do
+            if (Gear <> cGear) and (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2))
+            and ((mx > x) xor (Dir > 0)) and
+                (
+                  ((cGear^.Kind in [gtHedgehog, gtMine, gtKnife]) and ((Gear^.State and gstNotKickable) = 0)) or
+                // only apply X kick if the barrel is knocked over
+                ((cGear^.Kind = gtExplosives) and ((cGear^.State and gsttmpflag) <> 0))) then
+                    begin
+                    with cGear^ do
+                        begin
+                        dX:= Gear^.dX;
+                        dY:= Gear^.dY * _0_5;
+                        State:= State or gstMoving;
+                        if Kind = gtKnife then State:= State and (not gstCollision);
+                        Active:= true
+                        end;
+                    DeleteCI(cGear);
+                    TestCollisionXKick:= false;
+                    exit;
+                    end
+    end
 end;
 
 function TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
-var x, y, mx, my, i: LongInt;
+var x, y, mx, my,  myr, i: LongInt;
     flag: boolean;
 begin
 flag:= false;
 y:= hwRound(Gear^.Y);
-if Dir < 0 then y:= y - Gear^.Radius
-           else y:= y + Gear^.Radius;
+if Dir < 0 then
+    y:= y - Gear^.Radius
+else
+    y:= y + Gear^.Radius;
+
+TestCollisionYKick:= true;
 if (y and LAND_HEIGHT_MASK) = 0 then
-   begin
-   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
-   i:= x + Gear^.Radius * 2 - 2;
-   repeat
-     if (x and LAND_WIDTH_MASK) = 0 then
+    begin
+    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+    i:= x + Gear^.Radius * 2 - 2;
+    repeat
+    if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 0 then
-           if Land[y, x] > 255 then exit(true)
-           else if Land[y, x] <> 0 then flag:= true;
-     inc(x)
-   until (x > i);
-   end;
+            if Land[y, x] > 255 then
+                exit
+            else if Land[y, x] <> 0 then
+                flag:= true;
+    inc(x)
+    until (x > i);
+    end;
 TestCollisionYKick:= flag;
 
 if flag then
-   begin
-   if hwAbs(Gear^.dY) < cHHKick then exit(true);
-   if (Gear^.State and gstHHJumping <> 0)
-   and (not Gear^.dY.isNegative)
-   and (Gear^.dY < _0_4) then exit;
+    begin
+    if hwAbs(Gear^.dY) < cHHKick then
+        exit;
+    if (Gear^.State and gstHHJumping <> 0) and (not Gear^.dY.isNegative) and (Gear^.dY < _0_4) then
+        exit;
 
-   mx:= hwRound(Gear^.X);
-   my:= hwRound(Gear^.Y);
+    mx:= hwRound(Gear^.X);
+    my:= hwRound(Gear^.Y);
+    myr:= my+Gear^.Radius;
 
-   for i:= 0 to Pred(Count) do
-    with cinfos[i] do
-      if (Gear <> cGear) and
-         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
-         ((my > y) xor (Dir > 0)) then
-         if (cGear^.Kind in [gtHedgehog, gtMine, gtExplosives]) and ((Gear^.State and gstNotKickable) = 0) then
-             begin
-             with cGear^ do
-                  begin
-                  if (Kind <> gtExplosives) or ((State and gsttmpflag) <> 0) then dX:= Gear^.dX * _0_5;
-                  dY:= Gear^.dY;
-                  State:= State or gstMoving;
-                  Active:= true
-                  end;
-             DeleteCI(cGear);
-             exit(false)
-             end
-   end
+    for i:= 0 to Pred(Count) do
+        with cinfos[i] do
+            if (Gear <> cGear) and (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2))
+            and ((myr > y) xor (Dir > 0)) and
+                (
+                 (cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives]) and 
+                 ((Gear^.State and gstNotKickable) = 0)) then
+                    begin
+                    with cGear^ do
+                        begin
+                        if (Kind <> gtExplosives) or ((State and gsttmpflag) <> 0) then
+                            dX:= Gear^.dX * _0_5;
+                        dY:= Gear^.dY;
+                        State:= State or gstMoving;
+                        if Kind = gtKnife then State:= State and (not gstCollision);
+                        Active:= true
+                        end;
+                    DeleteCI(cGear);
+                    TestCollisionYKick:= false;
+                    exit
+                    end
+    end
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean; inline;
+begin
+    TestCollisionXwithXYShift:= TestCollisionXwithXYShift(Gear, ShiftX, ShiftY, Dir, true);
+end;
+
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt; withGear: boolean): boolean;
 begin
 Gear^.X:= Gear^.X + ShiftX;
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
@@ -305,22 +337,28 @@ else TestCollisionXwithXYShift:= TestCollisionX(Gear, Dir);
 Gear^.X:= Gear^.X - ShiftX;
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
+
 function TestCollisionX(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
 begin
 x:= hwRound(Gear^.X);
-if Dir < 0 then x:= x - Gear^.Radius
-           else x:= x + Gear^.Radius;
+if Dir < 0 then
+    x:= x - Gear^.Radius
+else
+    x:= x + Gear^.Radius;
+
+TestCollisionX:= true;
 if (x and LAND_WIDTH_MASK) = 0 then
-   begin
-   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
-   i:= y + Gear^.Radius * 2 - 2;
-   repeat
-     if (y and LAND_HEIGHT_MASK) = 0 then
-        if Land[y, x] > 255 then exit(true);
-     inc(y)
-   until (y > i);
-   end;
+    begin
+    y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+    i:= y + Gear^.Radius * 2 - 2;
+    repeat
+        if (y and LAND_HEIGHT_MASK) = 0 then
+            if Land[y, x] > 255 then
+                exit;
+    inc(y)
+    until (y > i);
+    end;
 TestCollisionX:= false
 end;
 
@@ -328,27 +366,41 @@ function TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
 begin
 y:= hwRound(Gear^.Y);
-if Dir < 0 then y:= y - Gear^.Radius
-           else y:= y + Gear^.Radius;
+if Dir < 0 then
+    y:= y - Gear^.Radius
+else
+    y:= y + Gear^.Radius;
+
+TestCollisionY:= true;
 if (y and LAND_HEIGHT_MASK) = 0 then
-   begin
-   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
-   i:= x + Gear^.Radius * 2 - 2;
-   repeat
-     if (x and LAND_WIDTH_MASK) = 0 then
-        if Land[y, x] > 255 then exit(true);
-     inc(x)
-   until (x > i);
-   end;
+    begin
+    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+    i:= x + Gear^.Radius * 2 - 2;
+    repeat
+        if (x and LAND_WIDTH_MASK) = 0 then
+            if Land[y, x] > 255 then
+                exit;
+    inc(x)
+    until (x > i);
+    end;
 TestCollisionY:= false
 end;
 
-function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean = true): boolean;
+function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean; inline;
+begin
+    TestCollisionYwithXYShift:= TestCollisionYwithXYShift(Gear, ShiftX, ShiftY, Dir, true);
+end;
+
+function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): boolean;
 begin
 Gear^.X:= Gear^.X + int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
-if withGear then TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir) <> 0
-else TestCollisionYwithXYShift:= TestCollisionY(Gear, Dir);
+
+if withGear then
+  TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir) <> 0
+else
+  TestCollisionYwithXYShift:= TestCollisionY(Gear, Dir);
+  
 Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
@@ -357,6 +409,8 @@ function TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): b
 var x, y: LongInt;
     TestWord: LongWord;
 begin
+TestRectancleForObstacle:= true;
+
 if landOnly then
     TestWord:= 255
 else
@@ -377,13 +431,12 @@ begin
 end;
 
 if (hasBorder and ((y1 < 0) or (x1 < 0) or (x2 > LAND_WIDTH))) then
-    exit(true);
+    exit;
 
 for y := y1 to y2 do
     for x := x1 to x2 do
-        if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
-          and (Land[y, x] > TestWord) then
-            exit(true);
+        if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > TestWord) then
+            exit;
 
 TestRectancleForObstacle:= false
 end;
@@ -393,10 +446,12 @@ var ldx, ldy, rdx, rdy: LongInt;
     i, j, k, mx, my, li, ri, jfr, jto, tmpo : ShortInt;
     tmpx, tmpy: LongWord;
     dx, dy, s: hwFloat;
-    offset: Array[0..7,0..1] of ShortInt;
+    offset: array[0..7,0..1] of ShortInt;
     isColl: Boolean;
 
 begin
+    CalcSlopeTangent:= false;
+
     dx:= Gear^.dX;
     dy:= Gear^.dY;
 
@@ -442,13 +497,18 @@ begin
                     end;
             end;
 
-        if i = 7 then break;
+        if i = 7 then
+            break;
 
         // prepare offset for next check (clockwise)
-        if (mx = -1) and (my <> -1) then my:= my - 1
-        else if (my = -1) and (mx <> 1) then mx:= mx + 1
-        else if (mx = 1) and (my <> 1) then my:= my + 1
-        else mx:= mx - 1;
+        if (mx = -1) and (my <> -1) then
+            my:= my - 1
+        else if (my = -1) and (mx <> 1) then
+            mx:= mx + 1
+        else if (mx = 1) and (my <> 1) then
+            my:= my + 1
+        else
+            mx:= mx - 1;
 
         end;
 
@@ -475,15 +535,16 @@ begin
                 tmpx:= ldx + k * offset[tmpo,0];
                 tmpy:= ldy + k * offset[tmpo,1];
                 if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                    and (Land[tmpy,tmpx] > TestWord) then
-                        begin
-                        ldx:= tmpx;
-                        ldy:= tmpy;
-                        isColl:= true;
-                        break;
-                        end;
+                and (Land[tmpy,tmpx] > TestWord) then
+                    begin
+                    ldx:= tmpx;
+                    ldy:= tmpy;
+                    isColl:= true;
+                    break;
+                    end;
                 end;
-            if isColl then break;
+            if isColl then
+                break;
             end;
 
         jfr:= 8+ri-1;
@@ -498,32 +559,127 @@ begin
                 tmpx:= rdx + k * offset[tmpo,0];
                 tmpy:= rdy + k * offset[tmpo,1];
                 if (((tmpy) and LAND_HEIGHT_MASK) = 0) and (((tmpx) and LAND_WIDTH_MASK)  = 0)
-                    and (Land[tmpy,tmpx] > TestWord) then
-                        begin
-                        rdx:= tmpx;
-                        rdy:= tmpy;
-                        isColl:= true;
-                        break;
-                        end;
+                and (Land[tmpy,tmpx] > TestWord) then
+                    begin
+                    rdx:= tmpx;
+                    rdy:= tmpy;
+                    isColl:= true;
+                    break;
+                    end;
                 end;
-            if isColl then break;
+            if isColl then
+                break;
             end;
         end;
 
     ldx:= rdx - ldx;
     ldy:= rdy - ldy;
 
-    if ((ldx = 0) and (ldy = 0)) then EXIT(false);
+    if ((ldx = 0) and (ldy = 0)) then
+        exit;
 
 outDeltaX:= ldx;
 outDeltaY:= ldy;
-exit(true);
+CalcSlopeTangent:= true;
+end;
+
+function CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
+var dx, dy: hwFloat;
+    collX, collY, i, y, x, gx, gy, sdx, sdy: LongInt;
+    isColl, bSucc: Boolean;
+begin
+
+if dirY <> 0 then 
+    begin
+    y:= hwRound(Gear^.Y) + Gear^.Radius * dirY;
+    gx:= hwRound(Gear^.X);
+    collX := gx;
+    isColl:= false;
+
+    if (y and LAND_HEIGHT_MASK) = 0 then
+        begin
+        x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+        i:= x + Gear^.Radius * 2 - 2;
+        repeat
+        if (x and LAND_WIDTH_MASK) = 0 then
+            if Land[y, x] <> 0 then
+                if (not isColl) or (abs(x-gx) < abs(collX-gx)) then
+                    begin
+                    isColl:= true;
+                    collX := x;
+                    end;
+        inc(x)
+        until (x > i);
+        end;
+    end
+else
+    begin
+    x:= hwRound(Gear^.X) + Gear^.Radius * dirX;
+    gy:= hwRound(Gear^.Y);
+    collY := gy;
+    isColl:= false;
+
+    if (x and LAND_WIDTH_MASK) = 0 then
+        begin
+        y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+        i:= y + Gear^.Radius * 2 - 2;
+        repeat
+        if (y and LAND_HEIGHT_MASK) = 0 then
+            if Land[y, x] <> 0 then
+                if (not isColl) or (abs(y-gy) < abs(collY-gy)) then
+                    begin
+                    isColl:= true;
+                    collY := y;
+                    end;
+        inc(y)
+        until (y > i);
+        end;
+    end;
+
+if isColl then
+    begin
+    // save original dx/dy
+    dx := Gear^.dX;
+    dy := Gear^.dY;
+
+    if dirY <> 0 then
+        begin
+        Gear^.dX.QWordValue:= 0;
+        Gear^.dX.isNegative:= (collX >= gx);
+        Gear^.dY:= _1*dirY
+        end
+    else
+        begin
+        Gear^.dY.QWordValue:= 0;
+        Gear^.dY.isNegative:= (collY >= gy);
+        Gear^.dX:= _1*dirX
+        end;
+
+    sdx:= 0;
+    sdy:= 0;
+    if dirY <> 0 then
+         bSucc := CalcSlopeTangent(Gear, collX, y, sdx, sdy, 0)
+    else bSucc := CalcSlopeTangent(Gear, x, collY, sdx, sdy, 0);
+
+    // restore original dx/dy
+    Gear^.dX := dx;
+    Gear^.dY := dy;
+
+    if bSucc and ((sdx <> 0) or (sdy <> 0)) then
+        begin
+        dx := int2hwFloat(sdy) / (abs(sdx) + abs(sdy));
+        dx.isNegative := (sdx * sdy) < 0;
+        exit (dx);
+        end
+    end;
+
+CalcSlopeNearGear := _0;
 end;
 
 function CalcSlopeBelowGear(Gear: PGear): hwFloat;
 var dx, dy: hwFloat;
     collX, i, y, x, gx, sdx, sdy: LongInt;
-    isColl, succ: Boolean;
+    isColl, bSucc: Boolean;
 begin
 
 
@@ -533,20 +689,20 @@ collX := gx;
 isColl:= false;
 
 if (y and LAND_HEIGHT_MASK) = 0 then
-   begin
-   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
-   i:= x + Gear^.Radius * 2 - 2;
-   repeat
-     if (x and LAND_WIDTH_MASK) = 0 then
+    begin
+    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+    i:= x + Gear^.Radius * 2 - 2;
+    repeat
+    if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 255 then
-            if not isColl or (abs(x-gx) < abs(collX-gx)) then
+            if (not isColl) or (abs(x-gx) < abs(collX-gx)) then
                 begin
                 isColl:= true;
                 collX := x;
                 end;
-     inc(x)
-   until (x > i);
-   end;
+    inc(x)
+    until (x > i);
+    end;
 
 if isColl then
     begin
@@ -560,13 +716,13 @@ if isColl then
 
     sdx:= 0;
     sdy:= 0;
-    succ := CalcSlopeTangent(Gear, collX, y, sdx, sdy, 255);
+    bSucc := CalcSlopeTangent(Gear, collX, y, sdx, sdy, 255);
 
     // restore original dx/dy
     Gear^.dX := dx;
     Gear^.dY := dy;
 
-    if succ and (sdx <> 0) and (sdy <> 0) then
+    if bSucc and (sdx <> 0) and (sdy <> 0) then
     begin
         dx := int2hwFloat(sdy) / (abs(sdx) + abs(sdy));
         dx.isNegative := (sdx * sdy) < 0;

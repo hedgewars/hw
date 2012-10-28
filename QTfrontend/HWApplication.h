@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,14 +35,14 @@ class HWForm;
  */
 class HWApplication : public QApplication
 {
-    Q_OBJECT
-public:
-    HWApplication(int &argc, char **argv);
-    ~HWApplication() {};
+        Q_OBJECT
+    public:
+        HWApplication(int &argc, char **argv);
+        ~HWApplication() {};
 
-    HWForm *form;
-protected:
-    bool event(QEvent *);
+        HWForm *form;
+    protected:
+        bool event(QEvent *);
 };
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 #include <QSettings>
 
 #include "hwconsts.h"
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #include "pagetraining.h"
 
@@ -40,7 +40,6 @@ QLayout * PageTraining::bodyLayoutDefinition()
 
     // declare start button, caption and description
     btnPreview = formattedButton(":/res/Trainings.png", true);
-    btnPreview->setToolTip(QPushButton::tr("Go!"));
 
     // make both rows equal height
     pageLayout->setRowStretch(0, 1);
@@ -76,6 +75,7 @@ QLayout * PageTraining::bodyLayoutDefinition()
 
     // mission list
     lstMissions = new QListWidget(this);
+    lstMissions->setWhatsThis(tr("Pick the mission or training to play"));
     pageLayout->addWidget(lstMissions, 1, 0, 1, 2); // span 2 columns
 
     // let's not make the list use more space than needed
@@ -90,6 +90,7 @@ QLayout * PageTraining::footerLayoutDefinition()
     QBoxLayout * bottomLayout = new QVBoxLayout();
 
     btnStart = formattedButton(QPushButton::tr("Go!"));
+    btnStart->setWhatsThis(tr("Start fighting"));
     btnStart->setFixedWidth(140);
 
     bottomLayout->addWidget(btnStart);
@@ -114,7 +115,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 {
     initPage();
 
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     // get locale
     QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini",
@@ -125,12 +126,12 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
         loc = QLocale::system().name();
 
     QString infoFile = dataMgr.findFileForRead(
-                            QString("Locale/missions_" + loc + ".txt"));
+                           QString("Locale/missions_" + loc + ".txt"));
 
     // if file is non-existant try with language only
     if (!QFile::exists(infoFile))
         infoFile = dataMgr.findFileForRead(QString(
-                "Locale/missions_" + loc.remove(QRegExp("_.*$")) + ".txt"));
+                                               "Locale/missions_" + loc.remove(QRegExp("_.*$")) + ".txt"));
 
     // fallback if file for current locale is non-existant
     if (!QFile::exists(infoFile))
@@ -145,7 +146,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     QStringList missionList = dataMgr.entryList(
                                   "Missions/Training",
                                   QDir::Files, QStringList("*.lua")).
-                                  replaceInStrings(QRegExp("\\.lua$"), "");
+                              replaceInStrings(QRegExp("\\.lua$"), "");
 
     // scripts to lost - TODO: model?
     foreach (const QString & mission, missionList)
@@ -185,15 +186,15 @@ void PageTraining::startSelected()
 
 void PageTraining::updateInfo()
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     if (lstMissions->currentItem())
     {
         // TODO also use .pngs in userdata folder
         QString thumbFile = dataMgr.findFileForRead(
-                    "Graphics/Missions/Training/" +
-                    lstMissions->currentItem()->data(Qt::UserRole).toString() +
-                    "@2x.png");
+                                "Graphics/Missions/Training/" +
+                                lstMissions->currentItem()->data(Qt::UserRole).toString() +
+                                "@2x.png");
 
         if (QFile::exists(thumbFile))
             btnPreview->setIcon(QIcon(thumbFile));
@@ -201,13 +202,13 @@ void PageTraining::updateInfo()
             btnPreview->setIcon(QIcon(":/res/Trainings.png"));
 
         QString realName = lstMissions->currentItem()->data(
-                           Qt::UserRole).toString();
+                               Qt::UserRole).toString();
 
-        QString caption = m_info->value(realName + ".name", 
-                          lstMissions->currentItem()->text()).toString();
+        QString caption = m_info->value(realName + ".name",
+                                        lstMissions->currentItem()->text()).toString();
 
         QString description = m_info->value(realName + ".desc",
-                              tr("No description available")).toString();
+                                            tr("No description available")).toString();
 
         lblCaption->setText("<h2>" + caption +"</h2>");
         lblDescription->setText(description);

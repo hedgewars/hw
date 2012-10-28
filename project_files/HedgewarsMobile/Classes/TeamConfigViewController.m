@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 20/04/2010.
  */
 
 
@@ -56,6 +54,7 @@
     aTableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     aTableView.separatorColor = [UIColor whiteColor];
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.tableView = aTableView;
     [aTableView release];
 
@@ -69,7 +68,7 @@
         self.cachedContentsOfDir = contentsOfDir;
         NSArray *colors = [HWUtils teamColors];
         NSMutableArray *array = [[NSMutableArray alloc] initWithCapacity:[contentsOfDir count]];
-        for (int i = 0; i < [contentsOfDir count]; i++) {
+        for (NSUInteger i = 0; i < [contentsOfDir count]; i++) {
             NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                                          [contentsOfDir objectAtIndex:i],@"team",
                                          [NSNumber numberWithInt:4],@"number",
@@ -178,16 +177,18 @@
     return 45.0;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
+-(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
+    CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 70/100, 30);
     NSString *text = (section == 0) ? NSLocalizedString(@"Playing Teams",@"") : NSLocalizedString(@"Available Teams",@"");
     UILabel *theLabel = [[UILabel alloc] initWithFrame:frame andTitle:text];
     theLabel.center = CGPointMake(self.view.frame.size.width/2, 20);
+    theLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
 
-    UIView *theView = [[[UIView alloc] init] autorelease];
+    UIView *theView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, 30)];
+    theView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [theView addSubview:theLabel];
     [theLabel release];
-    return theView;
+    return [theView autorelease];
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -198,6 +199,7 @@
     NSInteger height = IS_IPAD() ? 40 : 20;
     UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, height)];
     footer.backgroundColor = [UIColor clearColor];
+    footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*80/100, height)];
     label.center = CGPointMake(aTableView.frame.size.width/2, height/2);
@@ -205,12 +207,14 @@
     label.font = [UIFont italicSystemFontOfSize:12];
     label.textColor = [UIColor whiteColor];
     label.numberOfLines = 2;
+    label.backgroundColor = [UIColor clearColor];
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+
     if (section == 0)
         label.text = NSLocalizedString(@"Tap to add hogs or change color, touch and hold to remove a team.",@"");
     else
         label.text = NSLocalizedString(@"The robot badge indicates an AI-controlled team.",@"");
 
-    label.backgroundColor = [UIColor clearColor];
     [footer addSubview:label];
     [label release];
     return [footer autorelease];
@@ -220,8 +224,8 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSInteger row = [indexPath row];
-    NSInteger section = [indexPath section];
+    NSUInteger row = [indexPath row];
+    NSUInteger section = [indexPath section];
 
     if (section == 1 && [self.listOfAllTeams count] > row) {
         [self.listOfSelectedTeams addObject:[self.listOfAllTeams objectAtIndex:row]];
@@ -250,7 +254,7 @@
 }
 
 -(void) holdAction:(NSString *)content onTable:(UITableView *)aTableView {
-    NSInteger row;
+    NSUInteger row;
     for (row = 0; row < [self.listOfSelectedTeams count]; row++) {
         NSDictionary *dict = [self.listOfSelectedTeams objectAtIndex:row];
         if ([content isEqualToString:[[dict objectForKey:@"team"] stringByDeletingPathExtension]])

@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2008-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,62 +31,62 @@ class QSettings;
 
 class SelWeaponItem : public QWidget
 {
-  Q_OBJECT
+        Q_OBJECT
 
-public:
-  SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QImage imagegrey, QWidget* parent=0);
+    public:
+        SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QImage imagegrey, QWidget* parent=0);
 
-  unsigned char getItemsNum() const;
-  void setItemsNum(const unsigned char num);
-  void setEnabled(bool value);
+        unsigned char getItemsNum() const;
+        void setItemsNum(const unsigned char num);
+        void setEnabled(bool value);
 
- private:
-  WeaponItem* item;
+    private:
+        WeaponItem* item;
 };
 
 class SelWeaponWidget : public QFrame
 {
-  Q_OBJECT
+        Q_OBJECT
 
- public:
-  SelWeaponWidget(int numItems, QWidget* parent=0);
-  QString getWeaponsString(const QString& name) const;
-  QStringList getWeaponNames() const;
+    public:
+        SelWeaponWidget(int numItems, QWidget* parent=0);
+        QString getWeaponsString(const QString& name) const;
+        QStringList getWeaponNames() const;
 
- public slots:
-  void setDefault();
-  void setWeapons(const QString& ammo);
-  //sets the name of the current set
-  void setWeaponsName(const QString& name);
-  void deleteWeaponsName();
-  void newWeaponsName();
-  void save();
-  void copy();
+    public slots:
+        void setDefault();
+        void setWeapons(const QString& ammo);
+        //sets the name of the current set
+        void setWeaponsName(const QString& name);
+        void deleteWeaponsName();
+        void newWeaponsName();
+        void save();
+        void copy();
 
- signals:
-  void weaponsChanged();
-  void weaponsDeleted();
+    signals:
+        void weaponsChanged();
+        void weaponsDeleted();
 
- private:
-  //the name of the current weapon set
-  QString curWeaponsName;
+    private:
+        //the name of the current weapon set
+        QString curWeaponsName;
 
-  QLineEdit* m_name;
+        QLineEdit* m_name;
 
-  //storage for all the weapons sets
-  QSettings* wconf;
+        //storage for all the weapons sets
+        QSettings* wconf;
 
-  const int m_numItems;
-  int operator [] (unsigned int weaponIndex) const;
+        const int m_numItems;
+        int operator [] (unsigned int weaponIndex) const;
 
-  typedef QList<SelWeaponItem*> ItemsList;
-  typedef QMap<int, ItemsList> twi;
-  twi weaponItems;
-  //layout element for each tab:
-  QGridLayout* p1Layout;
-  QGridLayout* p2Layout;
-  QGridLayout* p3Layout;
-  QGridLayout* p4Layout;
+        typedef QList<SelWeaponItem*> ItemsList;
+        typedef QMap<int, ItemsList> twi;
+        twi weaponItems;
+        //layout element for each tab:
+        QGridLayout* p1Layout;
+        QGridLayout* p2Layout;
+        QGridLayout* p3Layout;
+        QGridLayout* p4Layout;
 };
 
 #endif // _SELECT_WEAPON_INCLUDED

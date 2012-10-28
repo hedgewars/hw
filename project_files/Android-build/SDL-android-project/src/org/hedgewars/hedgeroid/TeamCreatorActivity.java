@@ -1,6 +1,6 @@
 /*
  * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
- * Copyright (c) 2011 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,9 +25,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import org.hedgewars.hedgeroid.EngineProtocol.FrontendDataUtils;
-import org.hedgewars.hedgeroid.EngineProtocol.Team;
+import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
+import org.hedgewars.hedgeroid.Datastructures.Team;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -51,7 +52,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TeamCreatorActivity extends Activity {
+public class TeamCreatorActivity extends Activity implements Runnable{
 
 	private TextView name;
 	private Spinner difficulty, grave, flag, voice, fort;
@@ -64,6 +65,14 @@ public class TeamCreatorActivity extends Activity {
 	private MediaPlayer mp = null;
 	private boolean settingsChanged = false;
 	private boolean saved = false;
+	private String fileName = null;
+
+	private final List<HashMap<String, ?>> flagsData = new ArrayList<HashMap<String, ?>>();
+	private final List<HashMap<String, ?>> typesData = new ArrayList<HashMap<String, ?>>();
+	private final List<HashMap<String, ?>> gravesData = new ArrayList<HashMap<String, ?>>();
+	private final List<HashMap<String, ?>> hatsData = new ArrayList<HashMap<String, ?>>();
+	private final List<String> voicesData = new ArrayList<String>();
+	private final List<String> fortsData = new ArrayList<String>();
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,8 +98,7 @@ public class TeamCreatorActivity extends Activity {
 
 		LinearLayout ll = (LinearLayout) findViewById(R.id.HogsContainer);
 		for (int i = 0; i < ll.getChildCount(); i++) {
-			RelativeLayout team_creation_entry = (RelativeLayout) ll
-					.getChildAt(i);
+			RelativeLayout team_creation_entry = (RelativeLayout) ll.getChildAt(i);
 
 			hogHat.add((Spinner) team_creation_entry
 					.findViewById(R.id.spinTeam1));
@@ -99,7 +107,7 @@ public class TeamCreatorActivity extends Activity {
 			hogName.add((EditText) team_creation_entry
 					.findViewById(R.id.txtTeam1));
 		}
-		ArrayList<HashMap<String, ?>> gravesData = FrontendDataUtils.getGraves(this);
+
 		SimpleAdapter sa = new SimpleAdapter(this, gravesData,
 				R.layout.spinner_textimg_entry, new String[] { "txt", "img" },
 				new int[] { R.id.spinner_txt, R.id.spinner_img });
@@ -108,96 +116,97 @@ public class TeamCreatorActivity extends Activity {
 		grave.setAdapter(sa);
 		grave.setOnFocusChangeListener(focusser);
 
-		ArrayList<HashMap<String, ?>> flagsData = FrontendDataUtils
-				.getFlags(this);
 		sa = new SimpleAdapter(this, flagsData, R.layout.spinner_textimg_entry,
 				new String[] { "txt", "img" }, new int[] { R.id.spinner_txt,
-						R.id.spinner_img });
+				R.id.spinner_img });
 		sa.setDropDownViewResource(R.layout.spinner_textimg_dropdown_entry);
 		sa.setViewBinder(viewBinder);
 		flag.setAdapter(sa);
 		flag.setOnFocusChangeListener(focusser);
 
-		ArrayList<HashMap<String, ?>> typesData = FrontendDataUtils
-				.getTypes(this);
 		sa = new SimpleAdapter(this, typesData, R.layout.spinner_textimg_entry,
 				new String[] { "txt", "img" }, new int[] { R.id.spinner_txt,
-						R.id.spinner_img });
+				R.id.spinner_img });
 		sa.setDropDownViewResource(R.layout.spinner_textimg_dropdown_entry);
 		difficulty.setAdapter(sa);
 		difficulty.setOnFocusChangeListener(focusser);
 
-		ArrayList<HashMap<String, ?>> hatsData = FrontendDataUtils
-				.getHats(this);
 		sa = new SimpleAdapter(this, hatsData, R.layout.spinner_textimg_entry,
 				new String[] { "txt", "img" }, new int[] { R.id.spinner_txt,
-						R.id.spinner_img });
+				R.id.spinner_img });
 		sa.setDropDownViewResource(R.layout.spinner_textimg_dropdown_entry);
 		sa.setViewBinder(viewBinder);
 		for (Spinner spin : hogHat) {
 			spin.setAdapter(sa);
 		}
 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				R.layout.listview_item, FrontendDataUtils.getVoices(this));
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.listview_item, voicesData);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		voice.setAdapter(adapter);
 		voice.setOnFocusChangeListener(focusser);
 		voiceButton.setOnClickListener(voiceClicker);
 
-		adapter = new ArrayAdapter<String>(this, R.layout.listview_item,
-				FrontendDataUtils.getForts(this));
+		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, fortsData);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		fort.setAdapter(adapter);
 		fort.setOnItemSelectedListener(fortSelector);
 		fort.setOnFocusChangeListener(focusser);
 
-		Team t = this.getIntent().getParcelableExtra("team");
-		if (t != null) {
-			name.setText(t.name);
-			int position = ((ArrayAdapter<String>) voice.getAdapter())
-					.getPosition(t.voice);
-			voice.setSelection(position);
+		new Thread(this).start();
+	}
 
-			position = ((ArrayAdapter<String>) fort.getAdapter())
-					.getPosition(t.fort);
-			fort.setSelection(position);
-
-			position = 0;
-			for (HashMap<String, ?> hashmap : typesData) {
-				if (hashmap.get("txt").equals(t.levels[0])) {
-					difficulty.setSelection(position);
-					break;
-				}
+	public void run(){
+		final ArrayList<HashMap<String, ?>> gravesDataNew = FrontendDataUtils.getGraves(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
+				copy(gravesData, gravesDataNew);
+				((SimpleAdapter)grave.getAdapter()).notifyDataSetChanged();
 			}
-
-			position = 0;
-			for (HashMap<String, ?> hashmap : gravesData) {
-				if (hashmap.get("txt").equals(t.grave)) {
-					grave.setSelection(position);
-					break;
-				}
+		});
+		
+		final ArrayList<HashMap<String, ?>> flagsDataNew = FrontendDataUtils.getFlags(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
+				copy(flagsData, flagsDataNew);
+				((SimpleAdapter)flag.getAdapter()).notifyDataSetChanged();
 			}
-
-			position = 0;
-			for (HashMap<String, ?> hashmap : typesData) {
-				if (hashmap.get("txt").equals(t.flag)) {
-					flag.setSelection(position);
-					break;
-				}
+		});
+		
+		final ArrayList<HashMap<String, ?>> typesDataNew = FrontendDataUtils.getTypes(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
+				copy(typesData, typesDataNew);
+				((SimpleAdapter)difficulty.getAdapter()).notifyDataSetChanged();
 			}
-
-			for (int i = 0; i < Team.maxNumberOfHogs; i++) {
-				position = 0;
-				for (HashMap<String, ?> hashmap : hatsData) {
-					if (hashmap.get("txt").equals(t.hats[i])) {
-						hogHat.get(i).setSelection(position);
-					}
-				}
-
-				hogName.get(i).setText(t.hogNames[i]);
+		});
+		
+		final ArrayList<HashMap<String, ?>> hatsDataNew = FrontendDataUtils.getHats(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
+				copy(hatsData, hatsDataNew);
+				((SimpleAdapter)hogHat.get(0).getAdapter()).notifyDataSetChanged();
 			}
-		}
+		});
+		
+		final ArrayList<String> voicesDataNew = FrontendDataUtils.getVoices(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
+				copy(voicesData, voicesDataNew);
+				((ArrayAdapter<String>)voice.getAdapter()).notifyDataSetChanged();
+			}
+		});
+		
+		final ArrayList<String> fortsDataNew = FrontendDataUtils.getForts(this);
+		this.runOnUiThread(new Runnable(){
+			public void run() {
+				copy(fortsData, fortsDataNew);
+				((ArrayAdapter<String>)fort.getAdapter()).notifyDataSetChanged();
+			}
+		});
+	}
+	
+	private static <T> void copy(List<T> dest, List<T> src){
+		for(T t: src) dest.add(t);
 	}
 
 	public void onDestroy() {
@@ -242,8 +251,7 @@ public class TeamCreatorActivity extends Activity {
 			saved = true;
 			Team team = new Team();
 			team.name = name.getText().toString();
-			HashMap<String, Object> hashmap = (HashMap<String, Object>) flag
-					.getSelectedItem();
+			HashMap<String, Object> hashmap = (HashMap<String, Object>) flag.getSelectedItem();
 
 			team.flag = (String) hashmap.get("txt");
 			team.fort = fort.getSelectedItem().toString();
@@ -251,6 +259,7 @@ public class TeamCreatorActivity extends Activity {
 			team.grave = hashmap.get("txt").toString();
 			team.hash = "0";
 			team.voice = voice.getSelectedItem().toString();
+			team.file = fileName;
 
 			hashmap = ((HashMap<String, Object>) difficulty.getSelectedItem());
 			String levelString = hashmap.get("txt").toString();
@@ -271,18 +280,17 @@ public class TeamCreatorActivity extends Activity {
 
 			for (int i = 0; i < hogName.size(); i++) {
 				team.hogNames[i] = hogName.get(i).getText().toString();
-				hashmap = (HashMap<String, Object>) hogHat.get(i)
-						.getSelectedItem();
+				hashmap = (HashMap<String, Object>) hogHat.get(i).getSelectedItem();
 				team.hats[i] = hashmap.get("txt").toString();
 				team.levels[i] = levelInt;
 			}
 			try {
-				File teamsDir = new File(getFilesDir().getAbsolutePath() + '/'
-						+ Team.DIRECTORY_TEAMS);
-				if (!teamsDir.exists())
-					teamsDir.mkdir();
-				FileOutputStream fos = new FileOutputStream(String.format(
-						"%s/%s.xml", teamsDir.getAbsolutePath(), team.name));
+				File teamsDir = new File(getFilesDir().getAbsolutePath() + '/' + Team.DIRECTORY_TEAMS);
+				if (!teamsDir.exists()) teamsDir.mkdir();
+				if(team.file == null){
+					team.setFileName(TeamCreatorActivity.this);
+				}
+				FileOutputStream fos = new FileOutputStream(String.format("%s/%s", teamsDir.getAbsolutePath(), team.file));
 				team.writeToXml(fos);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
@@ -292,7 +300,6 @@ public class TeamCreatorActivity extends Activity {
 	};
 
 	private OnItemSelectedListener fortSelector = new OnItemSelectedListener() {
-		@SuppressWarnings("unchecked")
 		public void onItemSelected(AdapterView<?> arg0, View arg1,
 				int position, long arg3) {
 			settingsChanged = true;
@@ -303,10 +310,10 @@ public class TeamCreatorActivity extends Activity {
 					+ fortName + "L.png");
 			imgFort.setImageDrawable(fortIconDrawable);
 			scroller.fullScroll(ScrollView.FOCUS_DOWN);// Scroll the scrollview
-														// to the bottom, work
-														// around for scollview
-														// invalidation (scrolls
-														// back to top)
+			// to the bottom, work
+			// around for scollview
+			// invalidation (scrolls
+			// back to top)
 		}
 
 		public void onNothingSelected(AdapterView<?> arg0) {
@@ -342,6 +349,55 @@ public class TeamCreatorActivity extends Activity {
 			}
 		}
 	};
+
+	private void setTeamValues(Team t){
+
+		if (t != null) {
+			name.setText(t.name);
+			int position = ((ArrayAdapter<String>) voice.getAdapter()).getPosition(t.voice);
+			voice.setSelection(position);
+
+			position = ((ArrayAdapter<String>) fort.getAdapter()).getPosition(t.fort);
+			fort.setSelection(position);
+
+			position = 0;
+			for (HashMap<String, ?> hashmap : typesData) {
+				if (hashmap.get("txt").equals(t.levels[0])) {
+					difficulty.setSelection(position);
+					break;
+				}
+			}
+
+			position = 0;
+			for (HashMap<String, ?> hashmap : gravesData) {
+				if (hashmap.get("txt").equals(t.grave)) {
+					grave.setSelection(position);
+					break;
+				}
+			}
+
+			position = 0;
+			for (HashMap<String, ?> hashmap : typesData) {
+				if (hashmap.get("txt").equals(t.flag)) {
+					flag.setSelection(position);
+					break;
+				}
+			}
+
+			for (int i = 0; i < Team.maxNumberOfHogs; i++) {
+				position = 0;
+				for (HashMap<String, ?> hashmap : hatsData) {
+					if (hashmap.get("txt").equals(t.hats[i])) {
+						hogHat.get(i).setSelection(position);
+					}
+				}
+
+				hogName.get(i).setText(t.hogNames[i]);
+			}
+			this.fileName = t.file;
+		}
+	}
+
 
 	private SimpleAdapter.ViewBinder viewBinder = new SimpleAdapter.ViewBinder() {
 

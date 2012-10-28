@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 22/04/2010.
  */
 
 
 #import <UIKit/UIKit.h>
 #import "MapPreviewButtonView.h"
+#import "MNEValueTrackingSlider.h"
 
 
 @interface MapConfigViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, MapPreviewViewDelegate> {
@@ -42,9 +41,8 @@
     MapPreviewButtonView *previewButton;
     UITableView *tableView;
     UILabel *maxLabel;
-    UILabel *sizeLabel;
     UISegmentedControl *segmentedControl;
-    UISlider *slider;
+    MNEValueTrackingSlider *slider;
 
     // internal objects
     NSIndexPath *lastIndexPath;
@@ -67,9 +65,8 @@
 @property (nonatomic,retain) IBOutlet MapPreviewButtonView *previewButton;
 @property (nonatomic,retain) IBOutlet UITableView *tableView;
 @property (nonatomic,retain) IBOutlet UILabel *maxLabel;
-@property (nonatomic,retain) IBOutlet UILabel *sizeLabel;
 @property (nonatomic,retain) IBOutlet UISegmentedControl *segmentedControl;
-@property (nonatomic,retain) IBOutlet UISlider *slider;
+@property (nonatomic,retain) IBOutlet MNEValueTrackingSlider *slider;
 
 @property (nonatomic,retain) NSIndexPath *lastIndexPath;
 @property (nonatomic,retain) NSArray *dataSourceArray;

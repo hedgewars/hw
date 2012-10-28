@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2009 Kristian Lehmann <email@thexception.net>
- * Copyright (c) 2009-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,15 +28,15 @@
 
 class ToggleButtonWidget : public QPushButton
 {
-    Q_OBJECT
-public:
-    ToggleButtonWidget(QWidget * parent, QString img);
-    ~ToggleButtonWidget();
-private:
-    QPixmap pmChecked;
-    QPixmap pmDisabled;
-private slots:
-    void eventToggled(bool checked);
+        Q_OBJECT
+    public:
+        ToggleButtonWidget(QWidget * parent, QString img);
+        ~ToggleButtonWidget();
+    private:
+        QPixmap pmChecked;
+        QPixmap pmDisabled;
+    private slots:
+        void eventToggled(bool checked);
 };
 
 #endif // TOGGLEBUTTONWIDGET_H

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,10 +22,11 @@
 #include <QLineEdit>
 #include <QCryptographicHash>
 #include <QSettings>
+#include <QStandardItemModel>
 
 #include "team.h"
 #include "hwform.h"
-#include "hats.h"
+#include "DataManager.h"
 
 HWTeam::HWTeam(const QString & teamname) :
     QObject(0)
@@ -37,6 +38,7 @@ HWTeam::HWTeam(const QString & teamname) :
     OldTeamName = m_name;
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
+        m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name = (QLineEdit::tr("hedgehog %1").arg(i+1));
         m_hedgehogs[i].Hat = "NoHat";
     }
@@ -46,12 +48,14 @@ HWTeam::HWTeam(const QString & teamname) :
     m_flag = "hedgewars";
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
+        m_binds.append(BindAction());
         m_binds[i].action = cbinds[i].action;
         m_binds[i].strbind = cbinds[i].strbind;
     }
     m_rounds = 0;
     m_wins = 0;
     m_campaignProgress = 0;
+    m_color = 0;
 }
 
 HWTeam::HWTeam(const QStringList& strLst) :
@@ -70,6 +74,7 @@ HWTeam::HWTeam(const QStringList& strLst) :
     m_difficulty = strLst[6].toUInt();
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
+        m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name=strLst[i * 2 + 7];
         m_hedgehogs[i].Hat=strLst[i * 2 + 8];
 // Somehow claymore managed an empty hat.  Until we figure out how, this should avoid a repeat
@@ -79,17 +84,19 @@ HWTeam::HWTeam(const QStringList& strLst) :
     m_rounds = 0;
     m_wins = 0;
     m_campaignProgress = 0;
+    m_color = 0;
 }
 
 HWTeam::HWTeam() :
     QObject(0)
-  , m_difficulty(0)
-  , m_numHedgehogs(4)
-  , m_isNetTeam(false)
+    , m_difficulty(0)
+    , m_numHedgehogs(4)
+    , m_isNetTeam(false)
 {
     m_name = QString("Team");
     for (int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
+        m_hedgehogs.append(HWHog());
         m_hedgehogs[i].Name.sprintf("hedgehog %d", i);
         m_hedgehogs[i].Hat = "NoHat";
     }
@@ -101,32 +108,34 @@ HWTeam::HWTeam() :
 
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
+        m_binds.append(BindAction());
         m_binds[i].action = cbinds[i].action;
         m_binds[i].strbind = cbinds[i].strbind;
     }
     m_rounds = 0;
     m_wins = 0;
     m_campaignProgress = 0;
+    m_color = 0;
 }
 
 HWTeam::HWTeam(const HWTeam & other) :
-        QObject(0)
-        , OldTeamName(other.OldTeamName)
-        , m_name(other.m_name)
-        , m_grave(other.m_grave)
-        , m_fort(other.m_fort)
-        , m_flag(other.m_flag)
-        , m_voicepack(other.m_voicepack)
-        , m_hedgehogs(other.m_hedgehogs)
-        , m_difficulty(other.m_difficulty)
-        , m_binds(other.m_binds)
-        , m_numHedgehogs(other.m_numHedgehogs)
-        , m_color(other.m_color)
-        , m_isNetTeam(other.m_isNetTeam)
-        , m_owner(other.m_owner)
-        , m_campaignProgress(other.m_campaignProgress)
-        , m_rounds(other.m_rounds)
-        , m_wins(other.m_wins)
+    QObject(0)
+    , OldTeamName(other.OldTeamName)
+    , m_name(other.m_name)
+    , m_grave(other.m_grave)
+    , m_fort(other.m_fort)
+    , m_flag(other.m_flag)
+    , m_voicepack(other.m_voicepack)
+    , m_hedgehogs(other.m_hedgehogs)
+    , m_difficulty(other.m_difficulty)
+    , m_binds(other.m_binds)
+    , m_numHedgehogs(other.m_numHedgehogs)
+    , m_color(other.m_color)
+    , m_isNetTeam(other.m_isNetTeam)
+    , m_owner(other.m_owner)
+    , m_campaignProgress(other.m_campaignProgress)
+    , m_rounds(other.m_rounds)
+    , m_wins(other.m_wins)
 //      , AchievementProgress(other.AchievementProgress)
 {
 
@@ -142,9 +151,9 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
         m_fort = other.m_fort;
         m_flag = other.m_flag;
         m_voicepack = other.m_voicepack;
-//        m_hedgehogs = other.m_hedgehogs;
+        m_hedgehogs = other.m_hedgehogs;
         m_difficulty = other.m_difficulty;
-//        m_binds = other.m_binds;
+        m_binds = other.m_binds;
         m_numHedgehogs = other.m_numHedgehogs;
         m_color = other.m_color;
         m_isNetTeam = other.m_isNetTeam;
@@ -152,6 +161,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
         m_campaignProgress = other.m_campaignProgress;
         m_rounds = other.m_rounds;
         m_wins = other.m_wins;
+        m_color = other.m_color;
     }
 
     return *this;
@@ -249,10 +259,10 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
     QStringList sl;
     if (m_isNetTeam)
     {
-        sl.push_back(QString("eaddteam %3 %1 %2").arg(m_color.rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toLatin1(), QCryptographicHash::Md5).toHex())));
+        sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(QString(QCryptographicHash::hash(m_owner.toUtf8(), QCryptographicHash::Md5).toHex())));
         sl.push_back("erdriven");
     }
-    else sl.push_back(QString("eaddteam %3 %1 %2").arg(m_color.rgb() & 0xffffff).arg(m_name).arg(playerHash));
+    else sl.push_back(QString("eaddteam %3 %1 %2").arg(qcolor().rgb() & 0xffffff).arg(m_name).arg(playerHash));
 
     sl.push_back(QString("egrave " + m_grave));
     sl.push_back(QString("efort " + m_fort));
@@ -266,28 +276,30 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
 
     for (int t = 0; t < m_numHedgehogs; t++)
     {
-      sl.push_back(QString("eaddhh %1 %2 %3")
-               .arg(QString::number(m_difficulty),
-                QString::number(InitHealth),
-                m_hedgehogs[t].Name));
-      sl.push_back(QString("ehat %1")
-               .arg(m_hedgehogs[t].Hat));
+        sl.push_back(QString("eaddhh %1 %2 %3")
+                     .arg(QString::number(m_difficulty),
+                          QString::number(InitHealth),
+                          m_hedgehogs[t].Name));
+        sl.push_back(QString("ehat %1")
+                     .arg(m_hedgehogs[t].Hat));
     }
     return sl;
 }
 
 bool HWTeam::isNetTeam() const
 {
-  return m_isNetTeam;
+    return m_isNetTeam;
 }
 
 
-bool HWTeam::operator==(const HWTeam& t1) const {
-  return m_name==t1.m_name;
+bool HWTeam::operator==(const HWTeam& t1) const
+{
+    return m_name==t1.m_name;
 }
 
-bool HWTeam::operator<(const HWTeam& t1) const {
-  return m_name<t1.m_name; // if names are equal - test if it is net team
+bool HWTeam::operator<(const HWTeam& t1) const
+{
+    return m_name<t1.m_name; // if names are equal - test if it is net team
 }
 
 
@@ -295,58 +307,135 @@ bool HWTeam::operator<(const HWTeam& t1) const {
 
 
 // name
-QString HWTeam::name() const { return m_name; }
-   void HWTeam::setName(const QString & name) { m_name = name; }
+QString HWTeam::name() const
+{
+    return m_name;
+}
+void HWTeam::setName(const QString & name)
+{
+    m_name = name;
+}
 
 // single hedgehog
-const HWHog & HWTeam::hedgehog(unsigned int idx) const { return m_hedgehogs[idx]; }
-         void HWTeam::setHedgehog(unsigned int idx, HWHog hh) { m_hedgehogs[idx] = hh; }
+const HWHog & HWTeam::hedgehog(unsigned int idx) const
+{
+    return m_hedgehogs[idx];
+}
+void HWTeam::setHedgehog(unsigned int idx, HWHog hh)
+{
+    m_hedgehogs[idx] = hh;
+}
 
 // owner
-QString HWTeam::owner() const { return m_owner; }
+QString HWTeam::owner() const
+{
+    return m_owner;
+}
 
 
 
 // difficulty
-unsigned int HWTeam::difficulty() const { return m_difficulty; }
-        void HWTeam::setDifficulty(unsigned int level) { m_difficulty = level; }
+unsigned int HWTeam::difficulty() const
+{
+    return m_difficulty;
+}
+void HWTeam::setDifficulty(unsigned int level)
+{
+    m_difficulty = level;
+}
 
 // color
-QColor HWTeam::color() const { return m_color; }
-  void HWTeam::setColor(const QColor & color) { m_color = color; }
+int HWTeam::color() const
+{
+    return m_color;
+}
+
+QColor HWTeam::qcolor() const
+{
+    return DataManager::instance().colorsModel()->item(m_color)->data().value<QColor>();
+}
+
+void HWTeam::setColor(int color)
+{
+    m_color = color % DataManager::instance().colorsModel()->rowCount();
+}
 
 
 // binds
-QString HWTeam::keyBind(unsigned int idx) const { return m_binds[idx].strbind; }
-   void HWTeam::bindKey(unsigned int idx, const QString & key) { m_binds[idx].strbind = key; }
+QString HWTeam::keyBind(unsigned int idx) const
+{
+    return m_binds[idx].strbind;
+}
+void HWTeam::bindKey(unsigned int idx, const QString & key)
+{
+    m_binds[idx].strbind = key;
+}
 
 // flag
-void    HWTeam::setFlag(const QString & flag) { m_flag = flag; }
-QString HWTeam::flag() const { return m_flag; }
+void    HWTeam::setFlag(const QString & flag)
+{
+    m_flag = flag;
+}
+QString HWTeam::flag() const
+{
+    return m_flag;
+}
 
 // fort
-void    HWTeam::setFort(const QString & fort) { m_fort = fort; }
-QString HWTeam::fort() const { return m_fort; }
+void    HWTeam::setFort(const QString & fort)
+{
+    m_fort = fort;
+}
+QString HWTeam::fort() const
+{
+    return m_fort;
+}
 
 // grave
-void HWTeam::setGrave(const QString & grave) { m_grave = grave; }
-QString HWTeam::grave() const { return m_grave; }
+void HWTeam::setGrave(const QString & grave)
+{
+    m_grave = grave;
+}
+QString HWTeam::grave() const
+{
+    return m_grave;
+}
 
 // voicepack - getter/setter
-void HWTeam::setVoicepack(const QString & voicepack) { m_voicepack = voicepack; }
-QString HWTeam::voicepack() const { return m_voicepack; }
+void HWTeam::setVoicepack(const QString & voicepack)
+{
+    m_voicepack = voicepack;
+}
+QString HWTeam::voicepack() const
+{
+    return m_voicepack;
+}
 
 
 // campaignProgress - getter
-unsigned int HWTeam::campaignProgress() const { return m_campaignProgress; };
+unsigned int HWTeam::campaignProgress() const
+{
+    return m_campaignProgress;
+};
 
 // amount of hedgehogs
-unsigned char HWTeam::numHedgehogs() const { return m_numHedgehogs; }
-         void HWTeam::setNumHedgehogs(unsigned char num) { m_numHedgehogs = num; }
+unsigned char HWTeam::numHedgehogs() const
+{
+    return m_numHedgehogs;
+}
+void HWTeam::setNumHedgehogs(unsigned char num)
+{
+    m_numHedgehogs = num;
+}
 
 
 
 // rounds+wins - incrementors
-void HWTeam::incRounds() { m_rounds++; }
-void HWTeam::incWins() { m_wins++; }
-
+void HWTeam::incRounds()
+{
+    m_rounds++;
+}
+void HWTeam::incWins()
+{
+    m_wins++;
+}

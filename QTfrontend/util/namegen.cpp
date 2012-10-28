@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2009 Martin Minarik <ttsmj@pokec.sk>
- * Copyright (c) 2009-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include <QLineEdit>
 
 #include "hwform.h"
-#include "HWDataManager.h"
+#include "DataManager.h"
 
 #include "namegen.h"
 
@@ -79,7 +79,7 @@ void HWNamegen::teamRandomNames(HWTeam & team, const bool changeteamname)
 
         // there is a chance that this hog has the same hat as the previous one
         // let's reuse the hat-specific dict in this case
-        if ((i == 0) or (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
+        if ((i == 0) || (team.hedgehog(i).Hat != team.hedgehog(i-1).Hat))
         {
             dicts = dictsForHat(team.hedgehog(i).Hat);
             dict  = dictContents(dicts[rand()%(dicts.size())]);
@@ -125,8 +125,8 @@ QStringList HWNamegen::dictContents(const QString filename)
     QStringList list;
 
     // find .txt to load the names from
-    QFile * file = new QFile(HWDataManager::instance().findFileForRead(QString(
-                                                "Names/%1.txt").arg(filename)));
+    QFile * file = new QFile(DataManager::instance().findFileForRead(QString(
+                                 "Names/%1.txt").arg(filename)));
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -143,7 +143,7 @@ QStringList HWNamegen::dictContents(const QString filename)
     delete file;
 
     if (list.size() == 0)
-         list.append(filename);
+        list.append(filename);
 
     return list;
 }
@@ -154,8 +154,8 @@ QStringList HWNamegen::dictsForHat(const QString hatname)
     QStringList list;
 
     // find .cfg to load the dicts from
-    QFile * file = new QFile(HWDataManager::instance().findFileForRead(QString(
-                                                "Names/%1.cfg").arg(hatname)));
+    QFile * file = new QFile(DataManager::instance().findFileForRead(QString(
+                                 "Names/%1.cfg").arg(hatname)));
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -172,7 +172,7 @@ QStringList HWNamegen::dictsForHat(const QString hatname)
     delete file;
 
     if (list.size() == 0)
-         list.append(QString("generic"));
+        list.append(QString("generic"));
 
     return list;
 }
@@ -184,7 +184,7 @@ bool HWNamegen::loadTypes()
 
     // find .ini to load the names from
     QFile * file = new QFile(
-        HWDataManager::instance().findFileForRead(QString("Names/types.ini")));
+        DataManager::instance().findFileForRead(QString("Names/types.ini")));
 
 
     if (file->exists() && file->open(QIODevice::ReadOnly | QIODevice::Text))
@@ -243,11 +243,11 @@ QString HWNamegen::getRandomGrave()
     QStringList Graves;
 
     //list all available Graves
-    Graves.append(HWDataManager::instance().entryList(
-                         "Graphics/Graves",
-                         QDir::Files,
-                         QStringList("*.png")
-                     ).replaceInStrings(QRegExp("\\.png$"), "")
+    Graves.append(DataManager::instance().entryList(
+                      "Graphics/Graves",
+                      QDir::Files,
+                      QStringList("*.png")
+                  ).replaceInStrings(QRegExp("\\.png$"), "")
                  );
 
     if(Graves.size()==0)
@@ -265,11 +265,11 @@ QString HWNamegen::getRandomFort()
     QStringList Forts;
 
     //list all available Forts
-    Forts.append(HWDataManager::instance().entryList(
-                        "Forts",
-                        QDir::Files,
-                        QStringList("*L.png")
-                    ).replaceInStrings(QRegExp("L\\.png$"), "")
+    Forts.append(DataManager::instance().entryList(
+                     "Forts",
+                     QDir::Files,
+                     QStringList("*L.png")
+                 ).replaceInStrings(QRegExp("L\\.png$"), "")
                 );
 
     if(Forts.size()==0)

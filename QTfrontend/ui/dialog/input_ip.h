@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,20 +29,20 @@ class QPushButton;
 
 class HWHostPortDialog : public QDialog
 {
-    Q_OBJECT
-public:
-    HWHostPortDialog(QWidget* parent = 0);
+        Q_OBJECT
+    public:
+        HWHostPortDialog(QWidget* parent = 0);
 
-    QLineEdit* leHost;
-    QSpinBox* sbPort;
+        QLineEdit* leHost;
+        QSpinBox* sbPort;
 
-private:
-    QPushButton* pbOK;
-    QPushButton* pbCancel;
-    QPushButton * pbDefault;
+    private:
+        QPushButton* pbOK;
+        QPushButton* pbCancel;
+        QPushButton * pbDefault;
 
-private slots:
-    void setDefaultPort();
+    private slots:
+        void setDefaultPort();
 };
 
 

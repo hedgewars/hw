@@ -1,6 +1,6 @@
 /*
  * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
- * Copyright (c) 2011 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ public class DownloadFragment extends Fragment{
 
 	private TextView progress_sub;
 	private ProgressBar progress;
-	private Button positive, negative;
+	private Button /*positive,*/ negative;
 
 	private DownloadPackage pack;
 
@@ -63,30 +63,30 @@ public class DownloadFragment extends Fragment{
 		DownloadFragment df = new DownloadFragment();
 		Bundle args = new Bundle();
 		args.putParcelable(DownloadFragment.EXTRA_TASK, task);
-		
+
 		df.setArguments(args);
-		
+
 		return df;
 	}
-	
+
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);
-		
+
 		messageHandler = new Handler(messageCallback);
 		messenger = new Messenger(messageHandler);
-		 Intent i = new Intent(getActivity(), DownloadService.class);
-         getActivity().startService(i);
-         getActivity().bindService(new Intent(getActivity(), DownloadService.class), connection, Context.BIND_AUTO_CREATE);
+		Intent i = new Intent(getActivity().getApplicationContext(), DownloadService.class);
+		getActivity().startService(i);
+		getActivity().bindService(new Intent(getActivity().getApplicationContext(), DownloadService.class), connection, Context.BIND_AUTO_CREATE);
 	}
-	
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup viewgroup, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.download_progress, viewgroup, false);
 		progress_sub = (TextView)v.findViewById(R.id.progressbar_sub);
 		progress = (ProgressBar)v.findViewById(R.id.progressbar);
 
-		positive = (Button) v.findViewById(R.id.background);
+		//positive = (Button) v.findViewById(R.id.background);
 		negative = (Button) v.findViewById(R.id.cancelDownload);
-		positive.setOnClickListener(backgroundClicker);
+		//positive.setOnClickListener(backgroundClicker);
 		negative.setOnClickListener(cancelClicker);
 
 		pack = getArguments().getParcelable(DownloadFragment.EXTRA_TASK);
@@ -101,13 +101,13 @@ public class DownloadFragment extends Fragment{
 	};
 	private OnClickListener cancelClicker = new OnClickListener(){
 		public void onClick(View v){
-			if(messenger != null){
+			if(messengerService != null){
 				Message message = Message.obtain(messageHandler, DownloadService.MSG_CANCEL, pack);
 				try {
 					messengerService.send(message);
 				} catch (RemoteException e) {}
 			}
-			getActivity().finish();
+			//getActivity().finish();
 		}
 	};
 	private OnClickListener doneClicker = new OnClickListener(){
@@ -118,7 +118,7 @@ public class DownloadFragment extends Fragment{
 
 	private OnClickListener tryAgainClicker = new OnClickListener(){
 		public void onClick(View v){
-			if(messenger != null){
+			if(messengerService != null){
 				Message message = Message.obtain(messageHandler, DownloadService.MSG_ADDTASK, pack);
 				message.replyTo = messenger;
 				try {
@@ -130,9 +130,9 @@ public class DownloadFragment extends Fragment{
 		}
 	};
 
-	public void onStop(){
-		super.onStop();
+	public void onDestroy(){
 		unBindFromService();
+		super.onDestroy();
 	}
 
 	private ServiceConnection connection = new ServiceConnection(){
@@ -142,7 +142,7 @@ public class DownloadFragment extends Fragment{
 
 			try{
 				//give the service a task
-				if(messenger != null){
+				if(messengerService != null){
 					Message message = Message.obtain(messageHandler, DownloadService.MSG_ADDTASK, pack);
 					message.replyTo = messenger;
 					messengerService.send(message);
@@ -157,21 +157,18 @@ public class DownloadFragment extends Fragment{
 
 	};
 
-	private void unBindFromService(){
-		if(boundToService){
-			if(messenger != null){
-				try {
-					Message message = Message.obtain(messageHandler, DownloadService.MSG_UNREGISTER_CLIENT, pack);
-					message.replyTo = messenger;
-					messengerService.send(message);
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
+	public void unBindFromService(){
+		if(messengerService != null){
+			try {
+				Message message = Message.obtain(messageHandler, DownloadService.MSG_UNREGISTER_CLIENT, pack);
+				message.replyTo = messenger;
+				messengerService.send(message);
+			} catch (RemoteException e) {
+				e.printStackTrace();
 			}
-			
-			boundToService = false;
-			getActivity().unbindService(connection);
-		}	
+		}
+
+		getActivity().unbindService(connection);
 	}
 
 	private Handler.Callback messageCallback = new Handler.Callback() {
@@ -181,8 +178,8 @@ public class DownloadFragment extends Fragment{
 			case MSG_START:
 				progress.setMax(msg.arg1);
 				progress_sub.setText(String.format("%dkb/%dkb\n%s", 0, msg.arg1, ""));
-				positive.setText(R.string.download_background);
-				positive.setOnClickListener(backgroundClicker);
+				//positive.setText(R.string.download_background);
+				//positive.setOnClickListener(backgroundClicker);
 				negative.setText(R.string.download_cancel);
 				negative.setOnClickListener(cancelClicker);
 				break;
@@ -194,17 +191,21 @@ public class DownloadFragment extends Fragment{
 				progress.setProgress(progress.getMax());
 				progress_sub.setText(R.string.download_done);
 
-				positive.setText(R.string.download_back);
-				positive.setOnClickListener(doneClicker);
+				//	positive.setText(R.string.download_back);
+				//	positive.setOnClickListener(doneClicker);
 
 				negative.setVisibility(View.INVISIBLE);
 				break;
 			case MSG_FAILED:
 				progress.setProgress(progress.getMax());
-				progress_sub.setText(R.string.download_failed);
-				positive.setText(R.string.download_back);
-				positive.setOnClickListener(doneClicker);
-
+				
+				String errorMsg = getString(R.string.download_failed);
+				switch(msg.arg1){
+				case DownloadAsyncTask.EXIT_CONNERROR: progress_sub.setText(errorMsg + " " + "Connection error"); break;
+				case DownloadAsyncTask.EXIT_FNF: progress_sub.setText(errorMsg + " " + "File not found"); break;
+				case DownloadAsyncTask.EXIT_MD5: progress_sub.setText(errorMsg + " " + "MD5 check failed"); break;
+				case DownloadAsyncTask.EXIT_URLFAIL: progress_sub.setText(errorMsg + " " + "Invalid url"); break;
+				}
 				negative.setText(R.string.download_tryagain);
 				negative.setOnClickListener(tryAgainClicker);
 				break;

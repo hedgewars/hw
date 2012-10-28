@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004, 2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,39 +16,64 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-{$IFDEF FPC}
-  {$J+}
-{$ELSE}
-  {$ERROR Only Free Pascal supported!}
+{$IFNDEF FPC}
+    {$ERROR Only FreePascal Compiler is supported!}
 {$ENDIF}
 
-{$MODE OBJFPC}
 {$MACRO ON}
-
+{$MODE OBJFPC}
 {$DEFINE GLunit:=GL}
+{$WRITEABLECONST OFF}
+{$IMPLICITEXCEPTIONS OFF}
+{$VARSTRINGCHECKS ON}
+
+{$DEFINE USE_LUA_SCRIPT}
+
 
 {$IFDEF ANDROID}
-  {$DEFINE SDL13}
-  {$DEFINE HWLIBRARY}
-  {$DEFINE S3D_DISABLED}
-  {$DEFINE GLunit:=gles11}
-  {$DEFINE MOBILE}
-  {$DEFINE Java_Prefix := 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
+    {$DEFINE MOBILE}
+    {$DEFINE USE_SDLTHREADS}
+    {$DEFINE USE_CONTEXT_RESTORE}
+    {$DEFINE Java_Prefix:= 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
 {$ENDIF}
 
 {$IFDEF IPHONEOS}
-  {$DEFINE SDL13}
-  {$DEFINE HWLIBRARY}
-  {$DEFINE S3D_DISABLED}
-  {$DEFINE GLunit:=gles11}
-  {$DEFINE MOBILE}
+    {$DEFINE MOBILE}
 {$ENDIF}
 
-{$IFNDEF IPHONEOS}
-  // not needed on ios because it is switched from the compiler command line arguments
-  {$DEFINE DEBUGFILE}
-  //{$DEFINE TRACEAIACTIONS}
-  //{$DEFINE COUNTTICKS}
+{$IFDEF MOBILE}
+    {$DEFINE HWLIBRARY}
+    {$DEFINE S3D_DISABLED}
+    {$DEFINE GLunit:=gles11}
+    {$DEFINE USE_LANDSCAPE_AMMOMENU}
+    {$DEFINE USE_TOUCH_INTERFACE}
+{$ELSE}
+    {$DEFINE USE_AM_NUMCOLUMN}
 {$ENDIF}
 
-//also available LUA_DISABLED
+
+{$IFDEF WIN32}
+    {$DEFINE USE_CONTEXT_RESTORE}
+{$ENDIF}
+
+{$IFDEF DARWIN}
+    {$IFNDEF IPHONEOS}
+        {$DEFINE USE_CONTEXT_RESTORE}
+    {$ENDIF}
+{$ENDIF}
+
+{$IFDEF USE_TOUCH_INTERFACE}
+    {$DEFINE SDL13}
+{$ENDIF}
+
+{$IFDEF PAS2C}
+    {$DEFINE NOCONSOLE}
+    {$DEFINE USE_SDLTHREADS}
+{$ENDIF}
+
+{$DEFINE _S:=}
+{$DEFINE _P:=}
+
+//{$DEFINE TRACEAIACTIONS}
+//{$DEFINE COUNTTICKS}
+

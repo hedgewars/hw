@@ -16,7 +16,7 @@ class QAspectRatioLayout : public QLayout
 {
         Q_OBJECT
 
-public:
+    public:
         QAspectRatioLayout(QWidget* parent, int spacing =-1);
         QAspectRatioLayout(int spacing = -1);
         ~QAspectRatioLayout();
@@ -24,7 +24,7 @@ public:
         /* Convenience method */
         virtual void add(QLayoutItem* item);
 
-/* http://doc.trolltech.com/qlayout.html#addItem */
+        /* http://doc.trolltech.com/qlayout.html#addItem */
         virtual void addItem(QLayoutItem* item);
         /* http://doc.trolltech.com/qlayout.html#addWidget */
         virtual void addWidget(QWidget* widget);
@@ -42,7 +42,7 @@ public:
         virtual QLayoutItem* take();
         virtual bool hasItem() const;
 
-/* http://doc.trolltech.com/qlayout.html#expandingDirections */
+        /* http://doc.trolltech.com/qlayout.html#expandingDirections */
         virtual Qt::Orientations expandingDirections() const;
 
         /*
@@ -60,7 +60,7 @@ public:
         /* http://doc.trolltech.com/qlayoutitem.html#hasHeightForWidth */
         virtual bool hasHeightForWidth() const;
 
-private:
+    private:
         /* Saves the last received rect. */
         void setLastReceivedRect(const QRect& rect);
         /* Used to initialize the object. */

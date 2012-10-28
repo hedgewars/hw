@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 25/10/2011.
  */
 
 
@@ -32,6 +30,14 @@
     if ([self respondsToSelector:@selector(scale)])
          theScale = [self scale];
     return theScale;
+}
+
+-(CGRect) safeBounds {
+    CGRect original = [self bounds];
+    if (IS_ON_PORTRAIT())
+        return original;
+    else
+        return CGRectMake(original.origin.x, original.origin.y, original.size.height, original.size.width);
 }
 
 @end
@@ -88,9 +94,31 @@
 
 
 #pragma mark -
+@implementation UIButton (quickStyle)
+
+-(id) initWithFrame:(CGRect) frame andTitle:(NSString *)title {
+    [self initWithFrame:frame];
+    [self setTitle:title forState:UIControlStateNormal];
+    [self setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+    self.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
+    self.backgroundColor = [UIColor blackColorTransparent];
+
+    [self.layer setBorderWidth:1];
+    [self.layer setBorderColor:[[UIColor darkYellowColor] CGColor]];
+    [self.layer setCornerRadius:9.0f];
+    [self.layer setMasksToBounds:YES];
+
+    return self;
+}
+
+@end
+
+
+#pragma mark -
 @implementation UILabel (quickStyle)
 
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title {
+-(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title {
     return [self initWithFrame:frame
                       andTitle:title
                withBorderWidth:1.5f
@@ -98,7 +126,7 @@
            withBackgroundColor:[UIColor darkBlueColor]];
 }
 
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth {
+-(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth {
     return [self initWithFrame:frame
                       andTitle:title
                withBorderWidth:borderWidth
@@ -106,8 +134,8 @@
            withBackgroundColor:[UIColor darkBlueColorTransparent]];
 }
 
--(UILabel *)initWithFrame:(CGRect)frame andTitle:(NSString *)title  withBorderWidth:(CGFloat) borderWidth
-          withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor{
+-(id) initWithFrame:(CGRect)frame andTitle:(NSString *)title withBorderWidth:(CGFloat) borderWidth
+          withBorderColor:(UIColor *)borderColor withBackgroundColor:(UIColor *)backColor {
     UILabel *theLabel = [self initWithFrame:frame];
     theLabel.backgroundColor = backColor;
 

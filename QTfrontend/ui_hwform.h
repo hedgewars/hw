@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ class PageEditTeam;
 class PageMultiplayer;
 class PagePlayDemo;
 class PageOptions;
+class PageFeedback;
 class PageNet;
 class PageNetServer;
 class PageNetChat;
@@ -42,6 +43,7 @@ class PageScheme;
 class PageAdmin;
 class PageNetType;
 class PageDrawMap;
+class PageVideos;
 class QStackedLayout;
 class QFont;
 class QWidget;
@@ -50,39 +52,41 @@ class HWForm;
 
 class Ui_HWForm
 {
-public:
-    QWidget *centralWidget;
+    public:
+        QWidget *centralWidget;
 
-    PageMain *pageMain;
-    PageEditTeam *pageEditTeam;
-    PageMultiplayer *pageMultiplayer;
-    PagePlayDemo *pagePlayDemo;
-    PageOptions *pageOptions;
-    PageNet *pageNet;
-    PageNetServer * pageNetServer;
-    PageNetChat *pageNetChat;
-    PageNetGame *pageNetGame;
-    PageInfo *pageInfo;
-    PageDataDownload *pageDataDownload;
-    PageGameStats *pageGameStats;
-    PageSinglePlayer *pageSinglePlayer;
-    PageTraining *pageTraining;
-    PageSelectWeapon *pageSelectWeapon;
-    PageInGame *pageInGame;
-    PageRoomsList *pageRoomsList;
-    PageConnecting *pageConnecting;
-    PageScheme *pageScheme;
-    PageAdmin *pageAdmin;
-    PageNetType *pageNetType;
-    PageCampaign *pageCampaign;
-    PageDrawMap *pageDrawMap;
+        PageMain *pageMain;
+        PageEditTeam *pageEditTeam;
+        PageMultiplayer *pageMultiplayer;
+        PagePlayDemo *pagePlayDemo;
+        PageOptions *pageOptions;
+        PageFeedback *pageFeedback;
+        PageNet *pageNet;
+        PageNetServer * pageNetServer;
+        PageNetChat *pageNetChat;
+        PageNetGame *pageNetGame;
+        PageInfo *pageInfo;
+        PageDataDownload *pageDataDownload;
+        PageGameStats *pageGameStats;
+        PageSinglePlayer *pageSinglePlayer;
+        PageTraining *pageTraining;
+        PageSelectWeapon *pageSelectWeapon;
+        PageInGame *pageInGame;
+        PageRoomsList *pageRoomsList;
+        PageConnecting *pageConnecting;
+        PageScheme *pageScheme;
+        PageAdmin *pageAdmin;
+        PageNetType *pageNetType;
+        PageCampaign *pageCampaign;
+        PageDrawMap *pageDrawMap;
+        PageVideos *pageVideos;
 
-    QStackedLayout *Pages;
-    QFont *font14;
+        QStackedLayout *Pages;
+        QFont *font14;
 
-    void setupUi(HWForm *HWForm);
-    void SetupFonts();
-    void SetupPages(QWidget *Parent, HWForm *HWForm);
+        void setupUi(HWForm *HWForm);
+        void SetupFonts();
+        void SetupPages(QWidget *Parent, HWForm *HWForm);
 };
 
 #endif // UI_HWFORM_H

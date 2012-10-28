@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,20 +24,20 @@
 
 class HWNetServersModel : public QAbstractTableModel
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    HWNetServersModel(QObject *parent = 0);
+    public:
+        HWNetServersModel(QObject *parent = 0);
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-    int rowCount(const QModelIndex & parent) const;
-    int columnCount(const QModelIndex & parent) const;
+        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+        int rowCount(const QModelIndex & parent) const;
+        int columnCount(const QModelIndex & parent) const;
 
-public slots:
-    virtual void updateList();
+    public slots:
+        virtual void updateList();
 
-protected:
-    QList<QStringList> games;
+    protected:
+        QList<QStringList> games;
 };
 
 #endif // _NET_SERVERSLIST_INCLUDED

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include "pageplayrecord.h"
+
 #include <QFont>
 #include <QGridLayout>
 #include <QPushButton>
@@ -26,12 +28,13 @@
 #include <QInputDialog>
 
 #include "hwconsts.h"
-#include "pageplayrecord.h"
+
+#include "DataManager.h"
 
 QLayout * PagePlayDemo::bodyLayoutDefinition()
 {
     QGridLayout * pageLayout = new QGridLayout();
-    
+
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 2);
     pageLayout->setColumnStretch(2, 1);
@@ -61,6 +64,7 @@ void PagePlayDemo::connectSignals()
 {
     connect(BtnRenameRecord, SIGNAL(clicked()), this, SLOT(renameRecord()));
     connect(BtnRemoveRecord, SIGNAL(clicked()), this, SLOT(removeRecord()));
+    connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(refresh()));
 }
 
 PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
@@ -81,7 +85,8 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
         dir.cd("Demos");
         extension = "hwd";
         BtnPlayDemo->setText(QPushButton::tr("Play demo"));
-    } else
+    }
+    else
     {
         dir.cd("Saves");
         extension = "hws";
@@ -102,15 +107,25 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
     }
 }
 
+
+void PagePlayDemo::refresh()
+{
+    if (this->isVisible())
+        FillFromDir(recType);
+}
+
+
 void PagePlayDemo::renameRecord()
 {
     QListWidgetItem * curritem = DemosList->currentItem();
     if (!curritem)
     {
-        QMessageBox::critical(this,
-                tr("Error"),
-                tr("Please select record from the list"),
-                tr("OK"));
+        QMessageBox recordMsg(this);
+        recordMsg.setIcon(QMessageBox::Warning);
+        recordMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
+        recordMsg.setText(QMessageBox::tr("Please select record from the list"));
+        recordMsg.setWindowModality(Qt::WindowModal);
+        recordMsg.exec();
         return ;
     }
     QFile rfile(curritem->data(Qt::UserRole).toString());
@@ -124,14 +139,21 @@ void PagePlayDemo::renameRecord()
     if(ok && newname.size())
     {
         QString newfullname = QString("%1/%2.%3.%4")
-                                      .arg(finfo.absolutePath())
-                                      .arg(newname)
-                                      .arg(*cProtoVer)
-                                      .arg(finfo.suffix());
+                              .arg(finfo.absolutePath())
+                              .arg(newname)
+                              .arg(*cProtoVer)
+                              .arg(finfo.suffix());
 
         ok = rfile.rename(newfullname);
         if(!ok)
-            QMessageBox::critical(this, tr("Error"), tr("Cannot rename to") + newfullname);
+        {
+            QMessageBox renameMsg(this);
+            renameMsg.setIcon(QMessageBox::Warning);
+            renameMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
+            renameMsg.setText(QMessageBox::tr("Cannot rename to ") + newfullname);
+            renameMsg.setWindowModality(Qt::WindowModal);
+            renameMsg.exec();
+        }
         else
             FillFromDir(recType);
     }
@@ -142,10 +164,12 @@ void PagePlayDemo::removeRecord()
     QListWidgetItem * curritem = DemosList->currentItem();
     if (!curritem)
     {
-        QMessageBox::critical(this,
-                tr("Error"),
-                tr("Please select record from the list"),
-                tr("OK"));
+        QMessageBox recordMsg(this);
+        recordMsg.setIcon(QMessageBox::Warning);
+        recordMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
+        recordMsg.setText(QMessageBox::tr("Please select record from the list"));
+        recordMsg.setWindowModality(Qt::WindowModal);
+        recordMsg.exec();
         return ;
     }
     QFile rfile(curritem->data(Qt::UserRole).toString());
@@ -154,9 +178,20 @@ void PagePlayDemo::removeRecord()
 
     ok = rfile.remove();
     if(!ok)
-        QMessageBox::critical(this, tr("Error"), tr("Cannot delete file"));
+    {
+        QMessageBox removeMsg(this);
+        removeMsg.setIcon(QMessageBox::Warning);
+        removeMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
+        removeMsg.setText(QMessageBox::tr("Cannot delete file ") + rfile.fileName());
+        removeMsg.setWindowModality(Qt::WindowModal);
+        removeMsg.exec();
+    }
     else
-        FillFromDir(recType);
+    {
+        int i = DemosList->row(curritem);
+        delete curritem;
+        DemosList->setCurrentRow(i < DemosList->count() ? i : DemosList->count() - 1);
+    }
 }
 
 bool PagePlayDemo::isSave()

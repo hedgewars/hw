@@ -1,0 +1,47 @@
+Basic_Training_-_Bazooka.name=Initiation au Bazooka
+Basic_Training_-_Bazooka.desc="Pour gagner, utiliser le vent à votre avantage !" 
+
+Basic_Training_-_Grenade.name=Entrainement au lancer de Grenade
+Basic_Training_-_Grenade.desc="Souvenez vous, retirez la goupille et lancez !"
+
+Basic_Training_-_Cluster_Bomb.name=Entrainement au lancer de grenade à fragmentation
+Basic_Training_-_Cluster_Bomb.desc="Quelqu'un à besoin d'une bonne douche !"
+
+Basic_Training_-_Shotgun.name=Initiation au Fusil
+Basic_Training_-_Shotgun.desc="On tire d'abord, on pose les questions après !"
+
+Basic_Training_-_Sniper_Rifle.name=Initiation au Sniper
+Basic_Training_-_Sniper_Rifle.desc="Pan ! En pleine tête !"
+
+Basic_Training_-_Rope.name=Initiation à la Corde Ninja
+Basic_Training_-_Rope.desc="Bouge de là et Balance toi !"
+
+User_Mission_-_Dangerous_Ducklings.name=Mission: Canards dangereux 
+User_Mission_-_Dangerous_Ducklings.desc="Très bien le bleu, il est temps de mettre en pratique ce que tu as appris aux entraînements !" 
+
+User_Mission_-_Diver.name=Mission: Diver
+User_Mission_-_Diver.desc="Cet assault 'sous-marin' est plus dur que cela n'y paraît...." 
+
+User_Mission_-_Teamwork.name=Mission: Travail en équipe
+User_Mission_-_Teamwork.desc="Parfois, l'amour blesse."
+
+User_Mission_-_Spooky_Tree.name=Mission: L'arbre qui parle
+User_Mission_-_Spooky_Tree.desc="Beaucoup de caisses par ici. J'espère vraiment que cet oiseau n'a pas faim."
+
+User_Mission_-_Bamboo_Thicket.name=Mission: Forêt de Bamboo 
+User_Mission_-_Bamboo_Thicket.desc="La mort vient d'en haut."
+
+User_Mission_-_That_Sinking_Feeling.name=Mission: Cette impression de naufrage
+User_Mission_-_That_Sinking_Feeling.desc="L'eau monte rapidement et le temps est compté. Beaucoup ont essayé, sans succès.Pouvez vous tous les sauvez ?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Mission: Newton et le Hammac
+User_Mission_-_Newton_and_the_Hammock.desc="Souvenez vous petits hérissons : La vitesse d'un corps reste constante à moins que ce corps ne soit attiré par une force extérieure!"
+
+User_Mission_-_The_Great_Escape.name=Mission: La grande évasion
+User_Mission_-_The_Great_Escape.desc="Tu pense que tu peux me capturer ?!"
+
+User_Mission_-_Rope_Knock_Challenge.name=Challenge: A coup de Corde Ninja
+User_Mission_-_Rope_Knock_Challenge.desc="Regarde derrière toi !"
+
+User_Mission_-_RCPlane_Challenge.name=Challenge: Avion télécommandé
+User_Mission_-_RCPlane_Challenge.desc="Plutôt confiant, hein, aviateur ?" 

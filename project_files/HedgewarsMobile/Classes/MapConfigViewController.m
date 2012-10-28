@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,15 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 22/04/2010.
  */
 
 
 #import "MapConfigViewController.h"
 #import <QuartzCore/QuartzCore.h>
-#import "SchemeWeaponConfigViewController.h"
-#import "GameConfigViewController.h"
 
 
 #define scIndex         self.segmentedControl.selectedSegmentIndex
@@ -30,7 +26,7 @@
 
 @implementation MapConfigViewController
 @synthesize previewButton, maxHogs, seedCommand, templateFilterCommand, mapGenCommand, mazeSizeCommand, themeCommand, staticMapCommand,
-            missionCommand, tableView, maxLabel, sizeLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy,
+            missionCommand, tableView, maxLabel, segmentedControl, slider, lastIndexPath, dataSourceArray, busy,
             oldPage, oldValue;
 
 
@@ -39,7 +35,7 @@
 }
 
 -(IBAction) mapButtonPressed:(id) sender {
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
     [self updatePreview];
 }
 
@@ -118,7 +114,7 @@
 
 -(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *CellIdentifier = @"Cell";
-    NSInteger row = [indexPath row];
+    NSUInteger row = [indexPath row];
 
     UITableViewCell *cell = [aTableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil)
@@ -241,7 +237,7 @@
             break;
         case 2:
             if (self.segmentedControl.selectedSegmentIndex == 0) {
-                labelText = NSLocalizedString(@"Small",@"");
+                labelText = NSLocalizedString(@"Large",@"");
             } else {
                 labelText = NSLocalizedString(@"Small Floating Islands",@"");
             }
@@ -259,7 +255,7 @@
             break;
         case 4:
             if (self.segmentedControl.selectedSegmentIndex == 0) {
-                labelText = NSLocalizedString(@"Large",@"");
+                labelText = NSLocalizedString(@"Small",@"");
             } else {
                 labelText = NSLocalizedString(@"Medium Tunnels",@"");
             }
@@ -282,7 +278,7 @@
             break;
     }
 
-    self.sizeLabel.text = labelText;
+    self.slider.textValue = labelText;
     self.templateFilterCommand = templateCommand;
     self.mazeSizeCommand = mazeCommand;
 }
@@ -294,7 +290,7 @@
         [self updatePreview];
         oldValue = num;
     }
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
 }
 
 // perform actions based on the activated section, then call updatePreview to visually update the selection
@@ -303,7 +299,7 @@
     NSString *mapgen, *staticmap, *mission;
     NSInteger newPage = self.segmentedControl.selectedSegmentIndex;
 
-    [AudioManagerController playSelectSound];
+    [[AudioManagerController mainManager] playSelectSound];
     switch (newPage) {
         case 0: // Random
             mapgen = @"e$mapgen 0";
@@ -311,7 +307,7 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
-            [SchemeWeaponConfigViewController fillInstanceSections];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"fillsections" object:nil];
             break;
 
         case 1: // Map
@@ -320,8 +316,7 @@
             staticmap = @"map Bamboo";
             mission = @"";
             self.slider.enabled = NO;
-            self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
-            [SchemeWeaponConfigViewController fillInstanceSections];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"fillsections" object:nil];
             break;
 
         case 2: // Maze
@@ -330,7 +325,7 @@
             mission = @"";
             [self sliderChanged:nil];
             self.slider.enabled = YES;
-            [SchemeWeaponConfigViewController fillInstanceSections];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"fillsections" object:nil];
             break;
 
         case 3: // Mission
@@ -339,8 +334,7 @@
             staticmap = @"map Bamboo";
             mission = @"";
             self.slider.enabled = NO;
-            self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
-            [SchemeWeaponConfigViewController emptyInstanceSections];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"emptysections" object:nil];
             break;
 
         default:
@@ -407,32 +401,13 @@
     return dataSourceArray;
 }
 
--(MapPreviewButtonView *)previewButton {
-    if (previewButton == nil) {
-        MapPreviewButtonView *preview = [[MapPreviewButtonView alloc] initWithFrame:CGRectMake(32, 26, 256, 128)];
-        preview.delegate = self;
-        [preview addTarget:self action:@selector(mapButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:preview];
-        self.previewButton = preview;
-        [preview release];
-    }
-    return previewButton;
-}
-
 -(void) viewDidLoad {
     [super viewDidLoad];
-
     srandom(time(NULL));
-
-    /*
-    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-    self.view.frame = CGRectMake(0, 0, screenSize.height, screenSize.width - 44);
-    */
     
     // initialize some "default" values
     self.slider.value = 0.05f;
     self.slider.enabled = NO;
-    self.sizeLabel.text = NSLocalizedString(@"No filter",@"");
     self.oldValue = 5;
     self.busy = NO;
     self.oldPage = self.segmentedControl.selectedSegmentIndex;
@@ -451,6 +426,7 @@
         self.tableView.contentInset = UIEdgeInsetsMake(10, 0, 10, 0);
 
         UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 14, 300, 190) andTitle:nil withBorderWidth:2.3f];
+        backLabel.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [self.view insertSubview:backLabel belowSubview:self.segmentedControl];
         [backLabel release];
     }
@@ -477,10 +453,8 @@
     self.staticMapCommand = nil;
     self.missionCommand = nil;
 
-    self.previewButton = nil;
     self.tableView = nil;
     self.maxLabel = nil;
-    self.sizeLabel = nil;
     self.segmentedControl = nil;
     self.slider = nil;
 
@@ -493,13 +467,12 @@
 
 -(void) didReceiveMemoryWarning {
     self.dataSourceArray = nil;
-    self.previewButton = nil;
     [super didReceiveMemoryWarning];
 
     if (self.view.superview == nil) {
+        self.previewButton = nil;
         self.tableView = nil;
         self.maxLabel = nil;
-        self.sizeLabel = nil;
         self.slider = nil;
     }
 
@@ -518,7 +491,6 @@
     releaseAndNil(previewButton);
     releaseAndNil(tableView);
     releaseAndNil(maxLabel);
-    releaseAndNil(sizeLabel);
     releaseAndNil(segmentedControl);
     releaseAndNil(slider);
 

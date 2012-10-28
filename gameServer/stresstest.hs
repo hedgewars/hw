@@ -14,10 +14,10 @@ import System.Random
 import System.Posix
 #endif
 
-session 0 nick room = ["NICK", nick, "", "PROTO", "38", "", "PING", "", "CHAT", "lobby 1", "", "PONG", "", "CREATE_ROOM", room, "", "CHAT", "room 1", "", "QUIT", "creator", ""]
-session 1 nick room = ["NICK", nick, "", "PROTO", "38", "", "LIST", "", "JOIN_ROOM", room, "", "PONG", "", "CHAT", "room 2", "", "PART", "", "CHAT", "lobby after part", "", "QUIT", "part-quit", ""]
-session 2 nick room = ["NICK", nick, "", "PROTO", "38", "", "LIST", "", "JOIN_ROOM", room, "", "PONG", "", "CHAT", "room 2", "", "QUIT", "quit", ""]
-session 3 nick room = ["NICK", nick, "", "PROTO", "38", "", "CHAT", "lobby 1", "", "CREATE_ROOM", room, "", "", "PONG", "CHAT", "room 1", "", "PART", "creator", "", "QUIT", "part-quit", ""]
+session 0 nick room = ["NICK", nick, "", "PROTO", "42", "", "PING", "", "CHAT", "lobby 1", "", "PONG", "", "CREATE_ROOM", room, "", "CHAT", "room 1", "", "QUIT", "creator", ""]
+session 1 nick room = ["NICK", nick, "", "PROTO", "42", "", "LIST", "", "JOIN_ROOM", room, "", "PONG", "", "CHAT", "room 2", "", "PART", "", "CHAT", "lobby after part", "", "QUIT", "part-quit", ""]
+session 2 nick room = ["NICK", nick, "", "PROTO", "42", "", "LIST", "", "JOIN_ROOM", room, "", "PONG", "", "CHAT", "room 2", "", "QUIT", "quit", ""]
+session 3 nick room = ["NICK", nick, "", "PROTO", "42", "", "CHAT", "lobby 1", "", "CREATE_ROOM", room, "", "", "PONG", "CHAT", "room 1", "", "PART", "creator", "", "QUIT", "part-quit", ""]
 
 emulateSession sock s = do
     mapM_ (\x -> hPutStrLn sock x >> hFlush sock >> randomRIO (100000::Int, 600000) >>= threadDelay) s

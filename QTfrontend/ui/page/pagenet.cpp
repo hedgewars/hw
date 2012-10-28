@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,7 +108,12 @@ void PageNet::slotConnect()
     QModelIndex mi = tvServersList->currentIndex();
     if(!mi.isValid())
     {
-        QMessageBox::information(this, tr("Error"), tr("Please select server from the list above"));
+        QMessageBox serverMsg(this);
+        serverMsg.setIcon(QMessageBox::Warning);
+        serverMsg.setWindowTitle(QMessageBox::tr("Netgame - Error"));
+        serverMsg.setText(QMessageBox::tr("Please select a server from the list"));
+        serverMsg.setWindowModality(Qt::WindowModal);
+        serverMsg.exec();
         return;
     }
     QString host = model->index(mi.row(), 1).data().toString();

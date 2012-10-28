@@ -14,15 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 01/10/2011.
  */
 
 
 #import <Foundation/Foundation.h>
 
+
 typedef enum {gtNone, gtLocal, gtSave, gtMission, gtNet} TGameType;
-typedef enum {gsNone, gsLoading, gsInGame, gsEnded} TGameStatus;
+typedef enum {gsNone, gsLoading, gsInGame, gsInterrupted, gsEnded} TGameStatus;
 
 @interface HWUtils : NSObject {
 
@@ -37,9 +36,12 @@ typedef enum {gsNone, gsLoading, gsInGame, gsEnded} TGameStatus;
 
 +(NSString *)modelType;
 +(NSArray *)teamColors;
-+(NSInteger) randomPort;
-+(BOOL) isNetworkReachable;
 +(void) releaseCache;
+
++(NSInteger) randomPort;
++(void) freePort:(NSInteger) port;
++(BOOL) isNetworkReachable;
+//+(UIView *)mainSDLViewInstance;
 
 @end
 

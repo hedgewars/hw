@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,26 +14,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 27/03/2010.
  */
 
 
 #import "SettingsContainerViewController.h"
 #import "SettingsBaseViewController.h"
+#import "MGSplitViewController.h"
 
 
 @implementation SettingsContainerViewController
-@synthesize baseController, activeController, splitViewRootController;
+@synthesize baseController, splitViewRootController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
 
-
 -(void) viewDidLoad {
-    CGRect rect = [[UIScreen mainScreen] bounds];
-    self.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+    CGRect screenRect = [[UIScreen mainScreen] safeBounds];
+    self.view.frame = screenRect;
 
     if (IS_IPAD()) {
         // the contents on the right of the splitview, setting targetController to nil to avoid creating the table
@@ -48,11 +46,11 @@
         UINavigationController *leftNavController = [[UINavigationController alloc] initWithRootViewController:leftController];
         [leftController release];
 
-        self.activeController = rightNavController;
-        self.splitViewRootController = [[UISplitViewController alloc] init];
+        self.splitViewRootController = [[MGSplitViewController alloc] init];
         self.splitViewRootController.delegate = nil;
-        self.splitViewRootController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+        self.splitViewRootController.view.frame = screenRect;
         self.splitViewRootController.viewControllers = [NSArray arrayWithObjects: leftNavController, rightNavController, nil];
+        self.splitViewRootController.showsMasterInPortrait = YES;
         [leftNavController release];
         [rightNavController release];
 
@@ -65,7 +63,7 @@
             [sbvc release];
         }
         self.baseController.targetController = nil;
-        self.baseController.view.frame = CGRectMake(0, 0, rect.size.height, rect.size.width);
+        self.baseController.view.frame = screenRect;
 
         [self.view addSubview:self.baseController.view];
     }
@@ -78,8 +76,6 @@
 -(void) didReceiveMemoryWarning {
     if (self.baseController.view.superview == nil)
         self.baseController = nil;
-    if (self.activeController.view.superview == nil)
-        self.activeController = nil;
     if (self.splitViewRootController.view.superview == nil)
         self.splitViewRootController = nil;
     MSG_MEMCLEAN();
@@ -88,7 +84,6 @@
 
 -(void) viewDidUnload {
     self.baseController = nil;
-    self.activeController = nil;
     self.splitViewRootController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
@@ -96,7 +91,6 @@
 
 -(void) dealloc {
     releaseAndNil(baseController);
-    releaseAndNil(activeController);
     releaseAndNil(splitViewRootController);
     [super dealloc];
 }
@@ -107,28 +101,42 @@
 // every time we add a uiviewcontroller programmatically we need to take care of propgating such messages
 // see http://davidebenini.it/2009/01/03/viewwillappear-not-being-called-inside-a-uinavigationcontroller/
 -(void) viewWillAppear:(BOOL)animated {
-    [self.activeController viewWillAppear:animated];
+    [self.splitViewRootController.detailViewController viewWillAppear:animated];
     [self.baseController viewWillAppear:animated];
     [super viewWillAppear:animated];
 }
 
 -(void) viewWillDisappear:(BOOL)animated {
-    [self.activeController viewWillDisappear:animated];
+    [self.splitViewRootController.detailViewController viewWillDisappear:animated];
     [self.baseController viewWillDisappear:animated];
     [super viewWillDisappear:animated];
 }
 
 -(void) viewDidAppear:(BOOL)animated {
-    [self.activeController viewDidAppear:animated];
+    [self.splitViewRootController.detailViewController viewDidAppear:animated];
     [self.baseController viewDidAppear:animated];
-    [super viewDidLoad];
+    [super viewDidAppear:animated];
 }
 
 -(void) viewDidDisappear:(BOOL)animated {
-    [self.activeController viewDidDisappear:animated];
+    [self.splitViewRootController.detailViewController viewDidDisappear:animated];
     [self.baseController viewDidDisappear:animated];
-    [super viewDidUnload];
+    [super viewDidDisappear:animated];
 }
 
+-(void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [self.splitViewRootController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self.baseController willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+-(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [self.splitViewRootController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    [self.baseController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+}
+
+-(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [self.splitViewRootController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    [self.baseController didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+}
 
 @end

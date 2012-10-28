@@ -3,6 +3,6 @@
 <ImageView
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:scaleType="center"
+	android:scaleType="centerCrop"
 	android:src="@drawable/background"/>
 </merge>

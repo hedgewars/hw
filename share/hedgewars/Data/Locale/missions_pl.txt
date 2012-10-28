@@ -1,0 +1,35 @@
+Basic_Training_-_Bazooka.name=Podstawy korzystania z bazooki
+Basic_Training_-_Bazooka.desc="Pamiętaj o tym, że wiatr może działać na twoją korzyść!"
+
+Basic_Training_-_Grenade.name=Podstawy rzucania granatami
+Basic_Training_-_Grenade.desc="Najpierw wyciągasz zawleczkę, POTEM rzucasz!"
+
+Basic_Training_-_Cluster_Bomb.name=Podstawy rzucania bomb kasetowych
+Basic_Training_-_Cluster_Bomb.desc="Ktoś tutaj czeka na gorący prysznic..."
+
+Basic_Training_-_Shotgun.name=Podstawy strzelania ze strzelby
+Basic_Training_-_Shotgun.desc="Wpierw strzelaj. Pytania zadasz później."
+
+Basic_Training_-_Sniper_Rifle.name=Podstawy strzelania ze snajperki
+Basic_Training_-_Sniper_Rifle.desc="Jeden strzał i kolejny jeż pójdzie do piachu."
+
+User_Mission_-_Dangerous_Ducklings.name=Kryptonim: Niebezpieczne Kaczki
+User_Mission_-_Dangerous_Ducklings.desc="Dobra Żółtodziobie! Zobaczymy czego się nauczyłeś na treningu!!!"
+
+User_Mission_-_Diver.name=Kryptonim: Nurek
+User_Mission_-_Diver.desc="To będzie kolejna "mokra robota"..."
+
+User_Mission_-_Teamwork.name=Kryptonim: Praca zespołowa
+User_Mission_-_Teamwork.desc="Miłość potrafi czasem zranić."
+
+User_Mission_-_Spooky_Tree.name=Kryptonim: Straszne drzewo
+User_Mission_-_Spooky_Tree.desc="Na tym drzewie rośnie bardzo dużo skrzynek. Mam tylko nadzieję, że ten ptak nie jest głodny"
+
+User_Mission_-_Bamboo_Thicket.name=Kryptonim: Bambusowy bór
+User_Mission_-_Bamboo_Thicket.desc="Śmierć nadchodzi z góry."
+
+User_Mission_-_That_Sinking_Feeling.name=Kryptonim: Cisza na morzu
+User_Mission_-_That_Sinking_Feeling.desc="Morze jest wzburzone, a czas szybko upływa. Wielu próbowało, ale nikomu nie udało się wszystkich uratować. Czy ty będziesz pierwszy?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Kryptonim: Newton i jego hamak
+User_Mission_-_Newton_and_the_Hammock.desc="Zapamiętajcie jeżyki: Prędkość ciała nie zmienia się, chyba że działa na nie inna siła!"

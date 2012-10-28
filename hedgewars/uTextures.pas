@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses GLunit, uUtils, uVariables, uConsts, uDebug;
+uses GLunit, uUtils, uVariables, uConsts, uDebug, uConsole;
 
 var TextureList: PTexture;
 
@@ -39,10 +39,10 @@ var TextureList: PTexture;
 procedure SetTextureParameters(enableClamp: Boolean);
 begin
     if enableClamp and ((cReducedQuality and rqClampLess) = 0) then
-    begin
+        begin
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-    end;
+        end;
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
@@ -119,6 +119,8 @@ for y:= 0 to Pred(Surf^.h) do
     fromP4:= @(fromP4^[Surf^.pitch div 4])
     end;
 end;
+
+
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 var tw, th, x, y: Longword;
     tmpp: pointer;
@@ -154,7 +156,8 @@ if SDL_MustLock(surf) then
 
 fromP4:= Surf^.pixels;
 
-if cGrayScale then Surface2GrayScale(Surf);
+if GrayScale then
+    Surface2GrayScale(Surf);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
     begin
@@ -164,22 +167,25 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
     Surface2Tex^.rx:= Surf^.w / tw;
     Surface2Tex^.ry:= Surf^.h / th;
 
-    GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
+    tmpp:= GetMem(tw * th * surf^.format^.BytesPerPixel);
 
     fromP4:= Surf^.pixels;
     toP4:= tmpp;
 
     for y:= 0 to Pred(Surf^.h) do
         begin
-        for x:= 0 to Pred(Surf^.w) do toP4^[x]:= fromP4^[x];
-        for x:= Surf^.w to Pred(tw) do toP4^[x]:= 0;
+        for x:= 0 to Pred(Surf^.w) do
+            toP4^[x]:= fromP4^[x];
+        for x:= Surf^.w to Pred(tw) do
+            toP4^[x]:= 0;
         toP4:= @(toP4^[tw]);
         fromP4:= @(fromP4^[Surf^.pitch div 4])
         end;
 
     for y:= Surf^.h to Pred(th) do
         begin
-        for x:= 0 to Pred(tw) do toP4^[x]:= 0;
+        for x:= 0 to Pred(tw) do
+            toP4^[x]:= 0;
         toP4:= @(toP4^[tw])
         end;
 
@@ -206,16 +212,16 @@ end;
 // if nil is passed nothing is done
 procedure FreeTexture(tex: PTexture);
 begin
-    if tex <> nil then
+if tex <> nil then
     begin
-        if tex^.NextTexture <> nil then
-            tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
-        if tex^.PrevTexture <> nil then
-            tex^.PrevTexture^.NextTexture:= tex^.NextTexture
-        else
-            TextureList:= tex^.NextTexture;
-        glDeleteTextures(1, @tex^.id);
-        Dispose(tex);
+    if tex^.NextTexture <> nil then
+        tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
+    if tex^.PrevTexture <> nil then
+        tex^.PrevTexture^.NextTexture:= tex^.NextTexture
+    else
+        TextureList:= tex^.NextTexture;
+    glDeleteTextures(1, @tex^.id);
+    Dispose(tex);
     end
 end;
 
@@ -226,7 +232,13 @@ end;
 
 procedure freeModule;
 begin
-    while TextureList <> nil do FreeTexture(TextureList);
+if TextureList <> nil then
+    WriteToConsole('FIXME FIXME FIXME. App shutdown without full cleanup of texture list; read game0.log and please report this problem');
+    while TextureList <> nil do 
+        begin
+        AddFileLog('Texture not freed: width='+inttostr(LongInt(TextureList^.w))+' height='+inttostr(LongInt(TextureList^.h))+' priority='+inttostr(round(TextureList^.priority*1000)));
+        FreeTexture(TextureList);
+        end
 end;
 
 end.

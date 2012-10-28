@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 27/03/2010.
  */
 
 
@@ -26,14 +24,13 @@
 #import "SchemeSettingsViewController.h"
 #import "SupportViewController.h"
 
+
 @implementation SettingsBaseViewController
 @synthesize tabController, targetController, controllerNames, lastIndexPath;
-
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
-
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -135,8 +132,18 @@
 }
 
 -(void) dismissSplitView {
-    [AudioManagerController playBackSound];
+    [[AudioManagerController mainManager] playBackSound];
     [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissModalViewControllerAnimated:YES];
+}
+
+-(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (IS_IPAD() == NO)
+        return;
+
+    if (self.targetController != nil) {
+        CGRect screenRect = [[UIScreen mainScreen] safeBounds];
+        self.view.frame = CGRectMake(0, 0, 320, screenRect.size.height);
+    }
 }
 
 #pragma mark -
@@ -233,7 +240,7 @@
         nextController.navigationItem.hidesBackButton = YES;
         [nextController viewWillAppear:NO];
         [targetController.navigationController pushViewController:nextController animated:NO];
-        [AudioManagerController playClickSound];
+        [[AudioManagerController mainManager] playClickSound];
     }
 }
 

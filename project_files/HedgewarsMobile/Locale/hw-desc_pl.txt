@@ -1,0 +1,31 @@
+Hedgewars jest super!
+
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+Hedgewars jest dostępny na Mac Appstore! Poszukaj Hedgewars na swoim Mac'u i otrzymaj kopię za darmo!
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭ 
+
+Port na iOS posiada kilka unikalnych funkcji, takich jak:
+* Wtyczka iPad VGA : podłącz zewnętrzny ekran i graj w pełnej rozdzielczości;
+* Wsparcie dla Retina Display: graj całą grę w wyższej rozdzielczości;
+* Wielozadaniowość: pauzuj grę kiedy chcesz;
+* Wznawianie gry: zawsze możesz dokończyć swój mecz;.
+
+Opis:
+To najzabawniejsza i najbardziej uzależniająca gra w jaką kiedykolwiek grałeś - niezwykła zabawa, w którą możesz wciągnąć się zawsze i wszędzie. Hedgewars to turowa gra strategiczna, jednak najlepsze jest patrzenie, jak te małe jeże niszczą otoczenie swoim niecodziennym orężem. Nie daj się zmylić pozorom - to podstępne małe gagatki z nie do końca dobrą postawą.
+
+Inaczej mówiąc Hedgewars jest komediową grą strategiczną, artylerii i akcji, w której do łez rozbawią cię wybryki jeżów z charakterkiem, które walczą ze sobą przy każdej okazji.
+
+W roli dowódcy, Twoją robotą będzie zorganizowanie ekipy jeży i sprawienie piekła przeciwnikowi.
+
+Każdy gracz kontroluje drużynę złożoną z kilku jeży. Podczas gry, uczestnicy kierują jednym jeżem na turę. Mogą wtedy używać przeróżnych narzędzi i broni, którymi rozniesie w pył jeże wroga, w ten sposób zwyciężając. Jeże przemieszczać się mogą na różnorakie sposoby, m.in. chodząc lub skacząc, ale również używając narzędzi takich jak lina, czy spadochron, aby dostać się do trudno dostępnych obszarów. Każda tura jest ograniczona czasowo, aby zapewnić brak sytuacji, w których gracz zbyt długo "zastanawia się nad ruchem". Gracze do dyspozycji mają dużą pulę broni i narzędzi: granaty, bomby kasetowe, bazooki, UFO, strzelby, pistolety Desert Eagle, kije baseballowe, dynamity, miny, młoty pneumatyczne. Większość typów oręża powoduje eksplozje, które deformują teren zostawiając okrągłe wyrwy. Mapa jest unoszącą się na wodzie wyspą, lub ograniczoną jaskinią, z wodą na dnie. Jeż umiera, gdy znajdzie się w wodzie (na przykład przez wyrzucenie poza wyspę lub wpadnięcie do dziury), wypadnie poza mapę, lub jeśli jego poziom zdrowia wyniesie 0 (obrażenia zadane jeżom przez gracza lub CPU ukazują się gdy wszystkie ruchy są zatrzymane).
+
+* Komiczne i niszczycielskie boje podzielone na tury dla maksymalnie 6 graczy
+* Możliwa jest gra zarówno lokalna jak i sieciowa z opcjonalnymi przeciwnikami AI
+* Bitwy na nieskończonej ilości, losowo generowanych map z ponad 20 różnymi środowiskami
+* Aż 48 rodzajów (liczba ciągle rośnie) druzgocących broni! Między innymi zrzut pianina, czy eksplodujące ciasto urodzinowe
+* Graj jak tylko chcesz. Masz do dyspozycji ponad 20 modyfikacji, możesz zasmakować każdego aspektu rozgrywki.
+* Dostosuj swoją drużynę do własnych zachcianek. Możesz wybrać 120 przebrań, 30 grobów, 12 fortów, setki flag oraz unikalne zestawy głosów
+* Ogromne bitwy, w których mogą uczestniczyć aż 64 jeże.
+

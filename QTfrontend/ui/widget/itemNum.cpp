@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Igor Ulyanov <iulyanov@gmail.com>
+ * Copyright (c) 2006-2012 Igor Ulyanov <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,11 +23,11 @@
 #include <QPainter>
 
 ItemNum::ItemNum(const QImage& im, const QImage& img, QWidget * parent, unsigned char min, unsigned char max) :
-  QFrame(parent), m_im(im), m_img(img), infinityState(false), nonInteractive(false), minItems(min), maxItems(max),
-  numItems(min+2 >= max ? min : min+2)
+    QFrame(parent), m_im(im), m_img(img), infinityState(false), nonInteractive(false), minItems(min), maxItems(max),
+    numItems(min+2 >= max ? min : min+2)
 {
     enabled = true;
-    if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
+    //if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
 ItemNum::~ItemNum()
@@ -36,29 +36,40 @@ ItemNum::~ItemNum()
 
 void ItemNum::mousePressEvent ( QMouseEvent * event )
 {
-  if(nonInteractive) return;
-  if(event->button()==Qt::LeftButton && enabled) {
-    event->accept();
-    if((infinityState && numItems <= maxItems) || (!infinityState && numItems < maxItems)) {
-      incItems();
-    } else {
-      numItems = minItems+1;
-      // appears there's an emit in there
-      decItems();
+    if(nonInteractive) return;
+    if(event->button()==Qt::LeftButton && enabled)
+    {
+        event->accept();
+        if((infinityState && numItems <= maxItems) || (!infinityState && numItems < maxItems))
+        {
+            incItems();
+        }
+        else
+        {
+            numItems = minItems+1;
+            // appears there's an emit in there
+            decItems();
+        }
     }
-  } else if (event->button()==Qt::RightButton && enabled) {
-    event->accept();
-    if(numItems > minItems) {
-      decItems();
-    } else {
-      numItems = maxItems+(infinityState?0:-1);
-      incItems();
+    else if (event->button()==Qt::RightButton && enabled)
+    {
+        event->accept();
+        if(numItems > minItems)
+        {
+            decItems();
+        }
+        else
+        {
+            numItems = maxItems+(infinityState?0:-1);
+            incItems();
+        }
     }
-  } else {
-    event->ignore();
-    return;
-  }
-  repaint();
+    else
+    {
+        event->ignore();
+        return;
+    }
+    repaint();
 }
 void ItemNum::wheelEvent ( QWheelEvent * event )
 {
@@ -86,57 +97,67 @@ void ItemNum::wheelEvent ( QWheelEvent * event )
         if(numItems > minItems)
             decItems();
     }
-  repaint();
+    repaint();
 }
 
 QSize ItemNum::sizeHint () const
 {
-  return QSize((maxItems+1)*12, 32);
+    return QSize((maxItems+1)*12, 32);
 }
 
 void ItemNum::paintEvent(QPaintEvent* event)
 {
-  Q_UNUSED(event);
+    Q_UNUSED(event);
 
-  QPainter painter(this);
+    QPainter painter(this);
 
-  if (numItems==maxItems+1) {
-    QRect target(0, 0, 100, 32);
-    if (enabled) {
-        painter.drawImage(target, QImage(":/res/infinity.png"));
-    } else {
-        painter.drawImage(target, QImage(":/res/infinitygrey.png"));
+    if (numItems==maxItems+1)
+    {
+        QRect target(0, 0, 100, 32);
+        if (enabled)
+        {
+            painter.drawImage(target, QImage(":/res/infinity.png"));
+        }
+        else
+        {
+            painter.drawImage(target, QImage(":/res/infinitygrey.png"));
+        }
     }
-  } else {
-    for(int i=0; i<numItems; i++) {
-      QRect target(11 * i, i % 2, 25, 35);
-      if (enabled) {
-        painter.drawImage(target, m_im);
-      } else {
-        painter.drawImage(target, m_img);
-      }
+    else
+    {
+        for(int i=0; i<numItems; i++)
+        {
+            QRect target(11 * i, i % 2, 25, 35);
+            if (enabled)
+            {
+                painter.drawImage(target, m_im);
+            }
+            else
+            {
+                painter.drawImage(target, m_img);
+            }
+        }
     }
-  }
 }
 
 unsigned char ItemNum::getItemsNum() const
 {
-  return numItems;
+    return numItems;
 }
 
 void ItemNum::setItemsNum(const unsigned char num)
 {
-  numItems=num;
-  repaint();
+    numItems=num;
+    repaint();
 }
 
 void ItemNum::setInfinityState(bool value)
 {
-  infinityState=value;
+    infinityState=value;
 }
 
 void ItemNum::setEnabled(bool value)
 {
-  enabled=value;
-  repaint();
+    enabled=value;
+    repaint();
 }

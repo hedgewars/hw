@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2008-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,18 +25,18 @@
 
 class HWNetServer : public QObject
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    ~HWNetServer();
-    bool StartServer(quint16 port);
-    void StopServer();
-    QString getRunningHostName() const;
-    quint16 getRunningPort() const;
+    public:
+        ~HWNetServer();
+        bool StartServer(quint16 port);
+        void StopServer();
+        QString getRunningHostName() const;
+        quint16 getRunningPort() const;
 
-private:
-    quint16 ds_port;
-    QProcess process;
+    private:
+        quint16 ds_port;
+        QProcess process;
 };
 
 #endif // _NETSERVER_INCLUDED

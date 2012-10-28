@@ -2,7 +2,7 @@
 module HWProtoInRoomState where
 
 import qualified Data.Map as Map
-import Data.Sequence((|>), empty)
+import Data.Sequence((|>))
 import Data.List
 import Data.Maybe
 import qualified Data.ByteString.Char8 as B
@@ -79,10 +79,10 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         hhsList [_] = error "Hedgehogs list with odd elements number"
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
         newTeamHHNum r = min 4 (canAddNumber r)
-        maxTeams r 
+        maxTeams r
             | roomProto r < 38 = 6
             | otherwise = 8
-                
+
 
 handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         (ci, _) <- ask
@@ -157,21 +157,25 @@ handleCmd_inRoom ["TEAM_COLOR", teamName, newColor] = do
 handleCmd_inRoom ["TOGGLE_READY"] = do
     cl <- thisClient
     chans <- roomClientsChans
-    return [
-        ModifyClient (\c -> c{isReady = not $ isReady cl}),
-        ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
-        AnswerClients chans $ if clientProto cl < 38 then
-                [if isReady cl then "NOT_READY" else "READY", nick cl]
-                else
-                ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
-        ]
+    if isMaster cl then
+        return []
+        else
+        return [
+            ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
+            ModifyClient (\c -> c{isReady = not $ isReady cl}),
+            AnswerClients chans $ if clientProto cl < 38 then
+                    [if isReady cl then "NOT_READY" else "READY", nick cl]
+                    else
+                    ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
+            ]
 
 handleCmd_inRoom ["START_GAME"] = do
     (ci, rnc) <- ask
     cl <- thisClient
     rm <- thisRoom
     chans <- roomClientsChans
-    
+
+    let nicks = map (nick . client rnc) . roomClients rnc $ clientRoom rnc ci
     let allPlayersRegistered = all ((<) 0 . B.length . webPassword . client rnc . teamownerId) $ teams rm
 
     if isMaster cl && playersIn rm == readyPlayers rm && not (isJust $ gameInfo rm) then
@@ -179,10 +183,12 @@ handleCmd_inRoom ["START_GAME"] = do
             return [
                 ModifyRoom
                     (\r -> r{
-                        gameInfo = Just $ newGameInfo allPlayersRegistered (mapParams rm) (params rm)
+                        gameInfo = Just $ newGameInfo (teams rm) (length $ teams rm) allPlayersRegistered (mapParams rm) (params rm)
                         }
-                    ),
-                AnswerClients chans ["RUN_GAME"]
+                    )
+                , AnswerClients chans ["RUN_GAME"]
+                , AnswerClients chans $ "CLIENT_FLAGS" : "+g" : nicks
+                , ModifyRoomClients (\c -> c{isInGame = True})
                 ]
             else
             return [Warning "Less than two clans!"]
@@ -210,21 +216,20 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
     rm <- thisRoom
     chans <- roomClientsChans
 
-    if isMaster cl && (isJust $ gameInfo rm) then
-        return $
-            SaveReplay
-            : ModifyRoom
-                (\r -> r{
-                    gameInfo = Nothing,
-                    readyPlayers = 0
-                    }
-                )
-            : UnreadyRoomClients
-            : answerRemovedTeams chans rm
+    let clTeams = map teamname . filter (\t -> teamowner t == nick cl) . teams $ rm
+    let unsetInGameState = [AnswerClients chans ["CLIENT_FLAGS", "-g", nick cl], ModifyClient (\c -> c{isInGame = False})]
+
+    if isInGame cl then
+        if isJust $ gameInfo rm then
+            if (isMaster cl && isCorrect) then
+                return $ FinishGame : unsetInGameState
+                else
+                return $ unsetInGameState ++ map SendTeamRemovalMessage clTeams
+            else
+            return unsetInGameState
         else
-        return []
+        return [] -- don't accept this message twice
     where
-        answerRemovedTeams chans = map (\t -> AnswerClients chans ["REMOVE_TEAM", t]) . leftTeams . fromJust . gameInfo
         isCorrect = correctly == "1"
 
 -- compatibility with clients with protocol < 38
@@ -252,7 +257,9 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
 handleCmd_inRoom ["ROOM_NAME", newName] = do
     cl <- thisClient
     rs <- allRoomInfos
-    
+    rm <- thisRoom
+    chans <- sameProtoChans
+
     return $
         if not $ isMaster cl then
             [ProtocolError "Not room master"]
@@ -260,7 +267,10 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
         if isJust $ find (\r -> newName == name r) rs then
             [Warning "Room with such name already exists"]
         else
-            [ModifyRoom (\r -> r{name = newName})]
+            [ModifyRoom roomUpdate,
+            AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (nick cl) (roomUpdate rm))]
+    where
+        roomUpdate r = r{name = newName}
 
 
 handleCmd_inRoom ["KICK", kickNick] = do
@@ -280,4 +290,16 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     where
         engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "(team): ", msg, "\x20\x20"]
 
-handleCmd_inRoom _ = return [ProtocolError "Incorrect command (state: in room)"]
+handleCmd_inRoom ["BAN", banNick] = do
+    (_, rnc) <- ask
+    maybeClientId <- clientByNick banNick
+    let banId = fromJust maybeClientId
+    master <- liftM isMaster thisClient
+    return [ModifyRoom (\r -> r{roomBansList = (host $ rnc `client` banId) : roomBansList r}) | master && isJust maybeClientId]
+
+
+handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
+
+handleCmd_inRoom (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: in room)"]
+
+handleCmd_inRoom [] = return [ProtocolError "Empty command (state: in room)"]

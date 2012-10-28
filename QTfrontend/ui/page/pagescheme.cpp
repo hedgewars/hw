@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,11 +50,11 @@ QLayout * PageScheme::bodyLayoutDefinition()
 
     // TODO name stuff and put CSS into main style sheet
     gbGameModes->setStyleSheet(".QGroupBox {"
-            "background-color: #130f2c; background-image:url();"
-            "}");
+                               "background-color: #130f2c; background-image:url();"
+                               "}");
     gbBasicSettings->setStyleSheet(".QGroupBox {"
-            "background-color: #130f2c; background-image:url();"
-            "}");
+                                   "background-color: #130f2c; background-image:url();"
+                                   "}");
 
     gbGameModes->setSizePolicy(sp);
     gbBasicSettings->setSizePolicy(sp);
@@ -68,103 +68,128 @@ QLayout * PageScheme::bodyLayoutDefinition()
     // Left
 
     TBW_mode_Forts = new ToggleButtonWidget(gbGameModes, ":/res/btnForts@2x.png");
-    TBW_mode_Forts->setToolTip("<b>" + ToggleButtonWidget::tr("Fort Mode") + "</b>:<br />" + tr("Defend your fort and destroy the opponents, two team colours max!"));
+    TBW_mode_Forts->setToolTip("<b>" + ToggleButtonWidget::tr("Fort Mode") + "</b>");
+    TBW_mode_Forts->setWhatsThis(tr("Defend your fort and destroy the opponents, two team colours max!"));
     glGMLayout->addWidget(TBW_mode_Forts,0,0,1,1);
 
     TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, ":/res/btnTeamsDivide@2x.png");
-    TBW_teamsDivide->setToolTip("<b>" + ToggleButtonWidget::tr("Divide Teams") + "</b>:<br />" + tr("Teams will start on opposite sides of the terrain, two team colours max!"));
+    TBW_teamsDivide->setToolTip("<b>" + ToggleButtonWidget::tr("Divide Teams") + "</b>");
+    TBW_teamsDivide->setWhatsThis(tr("Teams will start on opposite sides of the terrain, two team colours max!"));
     glGMLayout->addWidget(TBW_teamsDivide,0,1,1,1);
 
     TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid@2x.png");
-    TBW_solid->setToolTip("<b>" + ToggleButtonWidget::tr("Solid Land") + "</b>:<br />" + tr("Land can not be destroyed!"));
+    TBW_solid->setToolTip("<b>" + ToggleButtonWidget::tr("Solid Land") + "</b>");
+    TBW_solid->setWhatsThis(tr("Land can not be destroyed!"));
     glGMLayout->addWidget(TBW_solid,0,2,1,1);
 
     TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder@2x.png");
-    TBW_border->setToolTip("<b>" + ToggleButtonWidget::tr("Add Border") + "</b>:<br />" + tr("Add an indestructible border around the terrain"));
+    TBW_border->setToolTip("<b>" + ToggleButtonWidget::tr("Add Border") + "</b>");
+    TBW_border->setWhatsThis(tr("Add an indestructible border around the terrain"));
     glGMLayout->addWidget(TBW_border,0,3,1,1);
 
     TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity@2x.png");
-    TBW_lowGravity->setToolTip("<b>" + ToggleButtonWidget::tr("Low Gravity") + "</b>:<br />" + tr("Lower gravity"));
+    TBW_lowGravity->setToolTip("<b>" + ToggleButtonWidget::tr("Low Gravity") + "</b>");
+    TBW_lowGravity->setWhatsThis(tr("Lower gravity"));
     glGMLayout->addWidget(TBW_lowGravity,0,4,1,1);
 
     TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight@2x.png");
-    TBW_laserSight->setToolTip("<b>" + ToggleButtonWidget::tr("Laser Sight") + "</b>:<br />" + tr("Assisted aiming with laser sight"));
+    TBW_laserSight->setToolTip("<b>" + ToggleButtonWidget::tr("Laser Sight") + "</b>");
+    TBW_laserSight->setWhatsThis(tr("Assisted aiming with laser sight"));
     glGMLayout->addWidget(TBW_laserSight,1,0,1,1);
 
     TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvulnerable@2x.png");
-    TBW_invulnerable->setToolTip("<b>" + ToggleButtonWidget::tr("Invulnerable") + "</b>:<br />" + tr("All hogs have a personal forcefield"));
+    TBW_invulnerable->setToolTip("<b>" + ToggleButtonWidget::tr("Invulnerable") + "</b>");
+    TBW_invulnerable->setWhatsThis(tr("All hogs have a personal forcefield"));
     glGMLayout->addWidget(TBW_invulnerable,1,1,1,1);
 
     TBW_resethealth = new ToggleButtonWidget(gbGameModes, ":/res/btnResetHealth@2x.png");
-    TBW_resethealth->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Health") + "</b>:<br />" + tr("All (living) hedgehogs are fully restored at the end of turn"));
+    TBW_resethealth->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Health") + "</b>");
+    TBW_resethealth->setWhatsThis(tr("All (living) hedgehogs are fully restored at the end of turn"));
     glGMLayout->addWidget(TBW_resethealth,1,2,1,1);
 
     TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric@2x.png");
-    TBW_vampiric->setToolTip("<b>" + ToggleButtonWidget::tr("Vampirism") + "</b>:<br />" + tr("Gain 80% of the damage you do back in health"));
+    TBW_vampiric->setToolTip("<b>" + ToggleButtonWidget::tr("Vampirism") + "</b>");
+    TBW_vampiric->setWhatsThis(tr("Gain 80% of the damage you do back in health"));
     glGMLayout->addWidget(TBW_vampiric,1,3,1,1);
 
     TBW_karma = new ToggleButtonWidget(gbGameModes, ":/res/btnKarma@2x.png");
-    TBW_karma->setToolTip("<b>" + ToggleButtonWidget::tr("Karma") + "</b>:<br />" + tr("Share your opponents pain, share their damage"));
+    TBW_karma->setToolTip("<b>" + ToggleButtonWidget::tr("Karma") + "</b>");
+    TBW_karma->setWhatsThis(tr("Share your opponents pain, share their damage"));
     glGMLayout->addWidget(TBW_karma,1,4,1,1);
 
     TBW_artillery = new ToggleButtonWidget(gbGameModes, ":/res/btnArtillery@2x.png");
-    TBW_artillery->setToolTip("<b>" + ToggleButtonWidget::tr("Artillery") + "</b>:<br />" + tr("Your hogs are unable to move, put your artillery skills to the test"));
+    TBW_artillery->setToolTip("<b>" + ToggleButtonWidget::tr("Artillery") + "</b>");
+    TBW_artillery->setWhatsThis(tr("Your hogs are unable to move, put your artillery skills to the test"));
     glGMLayout->addWidget(TBW_artillery,2,0,1,1);
 
     TBW_randomorder = new ToggleButtonWidget(gbGameModes, ":/res/btnRandomOrder@2x.png");
-    TBW_randomorder->setToolTip("<b>" + ToggleButtonWidget::tr("Random Order") + "</b>:<br />" + tr("Order of play is random instead of in room order."));
+    TBW_randomorder->setToolTip("<b>" + ToggleButtonWidget::tr("Random Order") + "</b>");
+    TBW_randomorder->setWhatsThis(tr("Order of play is random instead of in room order."));
     glGMLayout->addWidget(TBW_randomorder,2,1,1,1);
 
     TBW_king = new ToggleButtonWidget(gbGameModes, ":/res/btnKing@2x.png");
-    TBW_king->setToolTip("<b>" + ToggleButtonWidget::tr("King") + "</b>:<br />" + tr("Play with a King. If he dies, your side dies."));
+    TBW_king->setToolTip("<b>" + ToggleButtonWidget::tr("King") + "</b>");
+    TBW_king->setWhatsThis(tr("Play with a King. If he dies, your side dies."));
     glGMLayout->addWidget(TBW_king,2,2,1,1);
 
     TBW_placehog = new ToggleButtonWidget(gbGameModes, ":/res/btnPlaceHog@2x.png");
-    TBW_placehog->setToolTip("<b>" + ToggleButtonWidget::tr("Place Hedgehogs") + "</b>:<br />" + tr("Take turns placing your hedgehogs before the start of play."));
+    TBW_placehog->setToolTip("<b>" + ToggleButtonWidget::tr("Place Hedgehogs") + "</b>");
+    TBW_placehog->setWhatsThis(tr("Take turns placing your hedgehogs before the start of play."));
     glGMLayout->addWidget(TBW_placehog,2,3,1,1);
 
     TBW_sharedammo = new ToggleButtonWidget(gbGameModes, ":/res/btnSharedAmmo@2x.png");
-    TBW_sharedammo->setToolTip("<b>" + ToggleButtonWidget::tr("Clan Shares Ammo") + "</b>:<br />" + tr("Ammo is shared between all teams that share a colour."));
+    TBW_sharedammo->setToolTip("<b>" + ToggleButtonWidget::tr("Clan Shares Ammo") + "</b>");
+    TBW_sharedammo->setWhatsThis(tr("Ammo is shared between all teams that share a colour."));
     glGMLayout->addWidget(TBW_sharedammo,2,4,1,1);
 
     TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders@2x.png");
-    TBW_disablegirders->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Girders") + "</b>:<br />" + tr("Disable girders when generating random maps."));
+    TBW_disablegirders->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Girders") + "</b>");
+    TBW_disablegirders->setWhatsThis(tr("Disable girders when generating random maps."));
     glGMLayout->addWidget(TBW_disablegirders,3,0,1,1);
 
     TBW_disablelandobjects = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableLandObjects@2x.png");
-    TBW_disablelandobjects->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Land Objects") + "</b>:<br />" + tr("Disable land objects when generating random maps."));
+    TBW_disablelandobjects->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Land Objects") + "</b>");
+    TBW_disablelandobjects->setWhatsThis(tr("Disable land objects when generating random maps."));
     glGMLayout->addWidget(TBW_disablelandobjects,3,1,1,1);
 
     TBW_aisurvival = new ToggleButtonWidget(gbGameModes, ":/res/btnAISurvival@2x.png");
-    TBW_aisurvival->setToolTip("<b>" + ToggleButtonWidget::tr("AI Survival Mode") + "</b>:<br />" + tr("AI respawns on death."));
+    TBW_aisurvival->setToolTip("<b>" + ToggleButtonWidget::tr("AI Survival Mode") + "</b>");
+    TBW_aisurvival->setWhatsThis(tr("AI respawns on death."));
     glGMLayout->addWidget(TBW_aisurvival,3,2,1,1);
 
     TBW_infattack = new ToggleButtonWidget(gbGameModes, ":/res/btnInfAttack@2x.png");
-    TBW_infattack->setToolTip("<b>" + ToggleButtonWidget::tr("Unlimited Attacks") + "</b>:<br />" + tr("Attacking does not end your turn."));
+    TBW_infattack->setToolTip("<b>" + ToggleButtonWidget::tr("Unlimited Attacks") + "</b>");
+    TBW_infattack->setWhatsThis(tr("Attacking does not end your turn."));
     glGMLayout->addWidget(TBW_infattack,3,3,1,1);
 
     TBW_resetweps = new ToggleButtonWidget(gbGameModes, ":/res/btnResetWeps@2x.png");
-    TBW_resetweps->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Weapons") + "</b>:<br />" + tr("Weapons are reset to starting values each turn."));
+    TBW_resetweps->setToolTip("<b>" + ToggleButtonWidget::tr("Reset Weapons") + "</b>");
+    TBW_resetweps->setWhatsThis(tr("Weapons are reset to starting values each turn."));
     glGMLayout->addWidget(TBW_resetweps,3,4,1,1);
 
     TBW_perhogammo = new ToggleButtonWidget(gbGameModes, ":/res/btnPerHogAmmo@2x.png");
-    TBW_perhogammo->setToolTip("<b>" + ToggleButtonWidget::tr("Per Hedgehog Ammo") + "</b>:<br />" + tr("Each hedgehog has its own ammo. It does not share with the team."));
+    TBW_perhogammo->setToolTip("<b>" + ToggleButtonWidget::tr("Per Hedgehog Ammo") + "</b>");
+    TBW_perhogammo->setWhatsThis(tr("Each hedgehog has its own ammo. It does not share with the team."));
     glGMLayout->addWidget(TBW_perhogammo,4,0,1,1);
 
     TBW_nowind = new ToggleButtonWidget(gbGameModes, ":/res/btnNoWind@2x.png");
-    TBW_nowind->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Wind") + "</b>:<br />" + tr("You will not have to worry about wind anymore."));
+    TBW_nowind->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Wind") + "</b>");
+    TBW_nowind->setWhatsThis(tr("You will not have to worry about wind anymore."));
     glGMLayout->addWidget(TBW_nowind,4,1,1,1);
 
     TBW_morewind = new ToggleButtonWidget(gbGameModes, ":/res/btnMoreWind@2x.png");
-    TBW_morewind->setToolTip("<b>" + ToggleButtonWidget::tr("More Wind") + "</b>:<br />" + tr("Wind will affect almost everything."));
+    TBW_morewind->setToolTip("<b>" + ToggleButtonWidget::tr("More Wind") + "</b>");
+    TBW_morewind->setWhatsThis(tr("Wind will affect almost everything."));
     glGMLayout->addWidget(TBW_morewind,4,2,1,1);
 
     TBW_tagteam = new ToggleButtonWidget(gbGameModes, ":/res/btnTagTeam@2x.png");
-    TBW_tagteam->setToolTip("<b>" + ToggleButtonWidget::tr("Tag Team") + "</b>:<br />" + tr("Teams in each clan take successive turns sharing their turn time."));
+    TBW_tagteam->setToolTip("<b>" + ToggleButtonWidget::tr("Tag Team") + "</b>");
+    TBW_tagteam->setWhatsThis(tr("Teams in each clan take successive turns sharing their turn time."));
     glGMLayout->addWidget(TBW_tagteam,4,3,1,1);
 
     TBW_bottomborder = new ToggleButtonWidget(gbGameModes, ":/res/btnBottomBorder@2x.png");
-    TBW_bottomborder->setToolTip("<b>" + ToggleButtonWidget::tr("Add Bottom Border") + "</b>:<br />" + tr("Add an indestructible border along the bottom"));
+    TBW_bottomborder->setToolTip("<b>" + ToggleButtonWidget::tr("Add Bottom Border") + "</b>");
+    TBW_bottomborder->setWhatsThis(tr("Add an indestructible border along the bottom"));
     glGMLayout->addWidget(TBW_bottomborder,4,4,1,1);
 
 
@@ -381,7 +406,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     SB_GetAwayTime->setValue(100);
     SB_GetAwayTime->setSingleStep(25);
     glBSLayout->addWidget(SB_GetAwayTime,14,2,1,1);
- 
+
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Scheme Name:"));
 
@@ -470,7 +495,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_WaterRise, 37);
     mapper->addMapping(SB_HealthDecrease, 38);
     mapper->addMapping(SB_RopeModifier, 39);
-	mapper->addMapping(SB_GetAwayTime, 40);
+    mapper->addMapping(SB_GetAwayTime, 40);
 
     mapper->toFirst();
 }
@@ -491,11 +516,30 @@ void PageScheme::copyRow()
 
 void PageScheme::deleteRow()
 {
-    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Schemes"), QMessageBox::tr("Really delete this game scheme?"), QMessageBox::Ok | QMessageBox::Cancel);
+    int numberOfDefaultSchemes = ((AmmoSchemeModel*)mapper->model())->numberOfDefaultSchemes;
+    if (selectScheme->currentIndex() < numberOfDefaultSchemes)
+    {
+        QMessageBox deniedMsg(this);
+        deniedMsg.setIcon(QMessageBox::Warning);
+        deniedMsg.setWindowTitle(QMessageBox::tr("Schemes - Warning"));
+        deniedMsg.setText(QMessageBox::tr("Cannot delete default scheme '%1'!").arg(selectScheme->currentText()));
+        deniedMsg.setWindowModality(Qt::WindowModal);
+        deniedMsg.exec();
+    }
+    else
+    {
+        QMessageBox reallyDeleteMsg(this);
+        reallyDeleteMsg.setIcon(QMessageBox::Question);
+        reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Schemes - Are you sure?"));
+        reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the game scheme '%1'?").arg(selectScheme->currentText()));
+        reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+        reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
-    if (reallyDelete.exec() == QMessageBox::Ok) {
-        QAbstractItemModel * model = mapper->model();
-        model->removeRow(selectScheme->currentIndex());
+        if (reallyDeleteMsg.exec() == QMessageBox::Ok)
+        {
+            QAbstractItemModel * model = mapper->model();
+            model->removeRow(selectScheme->currentIndex());
+        }
     }
 }
 

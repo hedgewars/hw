@@ -111,11 +111,11 @@ end
 -- Note that there are 1000 ticks within one second.
 -- You shouldn't try to calculate too complicated
 -- code here as this might slow down your game.
-function onGameTick()
+function onGameTick20()
 	-- If time's up, set the game to be lost.
 	-- We actually check the time to be "1 ms" as it
 	-- will be at "0 ms" right at the start of the game.
-	if TurnTimeLeft == 1 and score < score_goal then
+	if TurnTimeLeft < 40 and TurnTimeLeft > 0 and score < score_goal then
 		game_lost = true
 		-- ... and show a short message.
 		ShowMission(loc("Bazooka Training"), loc("Aiming Practice"), loc("Oh no! Time's up! Just try again."), -amSkip, 0)
@@ -133,7 +133,7 @@ function onGameTick()
 			EndGame()
 		else
 			-- ... or just lower the timer by 1.
-			end_timer = end_timer - 1
+			end_timer = end_timer - 20
 			-- Reset the time left to stop the timer
 			TurnTimeLeft = time_goal
 		end
@@ -150,8 +150,8 @@ end
 -- This function is called when a new gear is added.
 -- We don't need it for this training, so we can
 -- keep it empty.
-function onGearAdd(gear)
-end
+-- function onGearAdd(gear)
+-- end
 
 -- This function is called before a gear is destroyed.
 -- We use it to count the number of targets destroyed.

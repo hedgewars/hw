@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 13/06/2010.
  */
 
 
@@ -23,8 +21,6 @@
 
 
 @interface SchemeWeaponConfigViewController : UIViewController <UITableViewDelegate,UITableViewDataSource> {
-    UITableView *tableView;
-
     NSArray *listOfSchemes;
     NSArray *listOfWeapons;
     NSArray *listOfScripts;
@@ -42,7 +38,6 @@
     BOOL sectionsHidden;
 }
 
-@property (nonatomic,retain) UITableView *tableView;
 @property (nonatomic,retain) NSArray *listOfSchemes;
 @property (nonatomic,retain) NSArray *listOfWeapons;
 @property (nonatomic,retain) NSArray *listOfScripts;
@@ -56,7 +51,7 @@
 @property (nonatomic,retain) UISegmentedControl *topControl;
 @property (nonatomic,assign) BOOL sectionsHidden;
 
-+(void) fillInstanceSections;
-+(void) emptyInstanceSections;
+-(void) fillSections;
+-(void) emptySections;
 
 @end

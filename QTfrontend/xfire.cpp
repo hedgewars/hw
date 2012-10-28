@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2010-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "xfire.h"
 #include "../misc/xfire/xfiregameclient.h"
 
+#ifdef USE_XFIRE
 // use_xfire: stores if xfire is loaded and functions should do something at all
 bool use_xfire = false;
 char *keys[XFIRE_KEY_COUNT];
@@ -81,3 +82,4 @@ void xfire_update(void)
         return;
     XfireSetCustomGameDataA(XFIRE_KEY_COUNT, (const char**)keys, (const char**)values);
 }
+#endif // USE_XFIRE

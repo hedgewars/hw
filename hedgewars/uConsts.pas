@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@ uses    SDLh, uFloat, GLunit;
 const
     sfMax = 1000;
     cDefaultParamNum = 17;
+    cVideorecParamNum = cDefaultParamNum + 7;
 
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';
@@ -51,7 +52,6 @@ const
     cWhiteColor           : Longword = $FFFFFFFF;
     cYellowColor          : Longword = $FFFFFF00;
     cNearBlackColor       : Longword = $FF000010;
-    cExplosionBorderColor : LongWord = $FF808080;
 
 {$WARNINGS OFF}
     cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   3006477107); // 1.4
@@ -95,6 +95,7 @@ const
     lfObject         = $2000;  
     lfDamaged        = $1000;  //
     lfIce            = $0800;  // blue
+    lfBouncy         = $0400;  // green
 
     cMaxPower     = 1500;
     cMaxAngle     = 2048;
@@ -103,18 +104,18 @@ const
     MAXNAMELEN = 192;
     MAXROPEPOINTS = 3840;
 
+    {$IFNDEF PAS2C}
     // some opengl headers do not have these macros
     GL_BGR              = $80E0;
     GL_BGRA             = $80E1;
     GL_CLAMP_TO_EDGE    = $812F;
     GL_TEXTURE_PRIORITY = $8066;
+    {$ENDIF}
 
     cSendCursorPosTime  : LongWord = 50;
     cVisibleWater       : LongInt = 128;
     cCursorEdgesDist    : LongInt = 100;
     cTeamHealthWidth    : LongInt = 128;
-    cWaterOpacity       : byte = $80;
-    cSDWaterOpacity     : byte = $80;
 
     cifRandomize = $00000001;
     cifTheme     = $00000002;
@@ -122,16 +123,10 @@ const
     cifAllInited = cifRandomize or cifTheme or cifMap;
 
     cTransparentColor: Longword = $00000000;
-    cGrayScale: Boolean = false;
 
     RGB_LUMINANCE_RED    = 0.212671;
     RGB_LUMINANCE_GREEN  = 0.715160;
     RGB_LUMINANCE_BLUE   = 0.072169;
-(*
-    RGB_LUMINANCE_RED    = 0.3333333333;
-    RGB_LUMINANCE_GREEN  = 0.3333333333;
-    RGB_LUMINANCE_BLUE   = 0.3333333333;
-*)
 
     cMaxTeams        = 8;
     cMaxHHIndex      = 7;
@@ -152,8 +147,16 @@ const
     cBarrelHealth = 60;
     cShotgunRadius = 22;
     cBlowTorchC    = 6;
+    cakeDmg =   75;
 
     cKeyMaxIndex = 1023;
+    cKbdMaxIndex = 65536;//need more room for the modifier keys
+
+    cHHFileName = 'Hedgehog';
+    cCHFileName = 'Crosshair';
+    cThemeCFGFilename = 'theme.cfg';
+
+    cFontBorder = 2;
 
     // do not change this value
     cDefaultZoomLevel = 2.0;
@@ -226,20 +229,24 @@ const
     gstHHGone         = $00100000;
     gstInvisible      = $00200000;
 
-    gmLeft   = $00000001;
-    gmRight  = $00000002;
-    gmUp     = $00000004;
-    gmDown   = $00000008;
-    gmSwitch = $00000010;
-    gmAttack = $00000020;
-    gmLJump  = $00000040;
-    gmHJump  = $00000080;
-    gmDestroy= $00000100;
-    gmSlot   = $00000200; // with param
-    gmWeapon = $00000400; // with param
-    gmTimer  = $00000800; // with param
-    gmAnimate= $00001000; // with param
-    gmPrecise= $00002000;
+    gmLeft           = $00000001;
+    gmRight          = $00000002;
+    gmUp             = $00000004;
+    gmDown           = $00000008;
+    gmSwitch         = $00000010;
+    gmAttack         = $00000020;
+    gmLJump          = $00000040;
+    gmHJump          = $00000080;
+    gmDestroy        = $00000100;
+    gmSlot           = $00000200; // with param
+    gmWeapon         = $00000400; // with param
+    gmTimer          = $00000800; // with param
+    gmAnimate        = $00001000; // with param
+    gmPrecise        = $00002000;
+
+    gmRemoveFromList = $00004000;
+    gmAddToList      = $00008000;
+    gmDelete         = $00010000;
     gmAllStoppable = gmLeft or gmRight or gmUp or gmDown or gmAttack or gmPrecise;
 
     cMaxSlotIndex       = 9;
@@ -259,11 +266,15 @@ const
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
     ammoprop_SetBounce    = $00004000;
+    ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets 
+    ammoprop_OscAim       = $00010000;
+    ammoprop_NoMoveAfter  = $00020000;
+    ammoprop_Track        = $00040000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;
 
-    EXPLAllDamageInRadius = $00000001;
+    //EXPLAllDamageInRadius = $00000001;  Completely unused for ages
     EXPLAutoSound         = $00000002;
     EXPLNoDamage          = $00000004;
     EXPLDoNotTouchHH      = $00000008;
@@ -289,8 +300,33 @@ const
     htHealth      = $04;
     htTransparent = $08;
 
+    AMAnimDuration = 200;
+    AMHidden    = 0;//AMState values
+    AMShowingUp = 1;
+    AMShowing   = 2;
+    AMHiding    = 3;
 
+    AMTypeMaskX     = $00000001;
+    AMTypeMaskY     = $00000002;
+    AMTypeMaskAlpha = $00000004;
+    AMTypeMaskSlide = $00000008;
 
+{$IFDEF MOBILE}
+    AMSlotSize = 48;
+    AMTITLE = 30;
+{$ELSE}
+    AMSlotSize = 32;
+{$ENDIF}
+    AMSlotPadding = (AMSlotSize - 32) shr 1;
+
+{$IFDEF USE_TOUCH_INTERFACE}
+    FADE_ANIM_TIME = 500;
+    MOVE_ANIM_TIME = 500;
+{$ENDIF}
+
+    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
+       
 implementation
 
 end.

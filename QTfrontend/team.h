@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@ struct HWHog
 // class representing a team
 class HWTeam : public QObject
 {
-    Q_OBJECT
+        Q_OBJECT
 
     public:
 
@@ -62,23 +62,23 @@ class HWTeam : public QObject
         bool fileExists();
 
         // attribute getters
-         unsigned int campaignProgress() const;
-               QColor color() const;
-         unsigned int difficulty() const;
-              QString flag() const;
-              QString fort() const;
-              QString grave() const;
+        unsigned int campaignProgress() const;
+        int color() const;
+        QColor qcolor() const;
+        unsigned int difficulty() const;
+        QString flag() const;
+        QString fort() const;
+        QString grave() const;
         const HWHog & hedgehog(unsigned int idx) const;
-                 bool isNetTeam() const;
-              QString keyBind(unsigned int idx) const;
-              QString name() const;
+        bool isNetTeam() const;
+        QString keyBind(unsigned int idx) const;
+        QString name() const;
         unsigned char numHedgehogs() const;
-              QString owner() const;
-              QString voicepack() const;
+        QString owner() const;
+        QString voicepack() const;
 
         // attribute setters
         void bindKey(unsigned int idx, const QString & key);
-        void setColor(const QColor & color);
         void setDifficulty(unsigned int level);
         void setFlag(const QString & flag);
         void setFort(const QString & fort);
@@ -100,6 +100,8 @@ class HWTeam : public QObject
         bool operator < (const HWTeam& t1) const;
         HWTeam & operator = (const HWTeam & other);
 
+public slots:
+        void setColor(int color);
 
     private:
 
@@ -111,13 +113,13 @@ class HWTeam : public QObject
         QString m_fort;
         QString m_flag;
         QString m_voicepack;
-        HWHog m_hedgehogs[HEDGEHOGS_PER_TEAM];
+        QList<HWHog> m_hedgehogs;
         quint8 m_difficulty;
-        BindAction m_binds[BINDS_NUMBER];
+        QList<BindAction> m_binds;
 
         // class members that contain info for the current game setup
         quint8 m_numHedgehogs;
-        QColor m_color;
+        int m_color;
         bool m_isNetTeam;
         QString m_owner;
 

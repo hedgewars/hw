@@ -3,14 +3,15 @@
 	android:id="@+id/container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:minWidth="250dip"
     android:padding="5dp"
     android:background="@drawable/box">
     <ProgressBar
     	android:id="@+id/progressbar"
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
-    	android:layout_alignLeft="@+id/background"
-    	android:layout_alignRight="@+id/cancelDownload"
+    	android:layout_alignParentLeft="true"
+    	android:layout_alignParentRight="true"
     	android:progressDrawable="@android:drawable/progress_horizontal"
 		android:indeterminate="false" 
 		android:indeterminateOnly="false"/>
@@ -19,25 +20,27 @@
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
     	android:layout_below="@id/progressbar"
-    	android:layout_alignLeft="@+id/background"
-    	android:layout_alignRight="@+id/cancelDownload"
+    	android:layout_alignParentLeft="true"
+    	android:layout_alignParentRight="true"
     	android:text="@string/download_queued"
     	android:textColor="#FFF"
     	android:textSize="14dp"
     	android:gravity="center"/> 	
-    <Button
+    <!--  <Button
     	android:id="@id/background"
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
     	android:layout_below="@id/progressbar_sub"
-    	android:text="@string/download_background"/>
+    	android:text="@string/download_background"/>-->
     <Button
     	android:id="@+id/cancelDownload"
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
     	android:layout_below="@id/progressbar_sub"
-    	android:layout_toRightOf="@id/background"
+    	
+    	android:layout_centerHorizontal="true"
     	android:text="@string/download_cancel"/>
+    <!-- android:layout_toRightOf="@id/background"-->
     	
 </RelativeLayout>
 

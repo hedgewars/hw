@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2009 Martin Minarik <ttsmj@pokec.sk>
- * Copyright (c) 2009-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,12 +27,12 @@ class HWTeam;
 
 class HWNamegen
 {
-public:
+    public:
 
-    static void teamRandomName(HWTeam & team, const int HedgehogNumber);
-    static void teamRandomNames(HWTeam & team, const bool changeteamname);
+        static void teamRandomName(HWTeam & team, const int HedgehogNumber);
+        static void teamRandomNames(HWTeam & team, const bool changeteamname);
 
-private:
+    private:
         HWNamegen();
 
         static QList<QStringList> TypesTeamnames;

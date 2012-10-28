@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2008-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,21 +24,21 @@
 
 class IconedGroupBox : public QGroupBox
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    IconedGroupBox(QWidget * parent = 0);
+    public:
+        IconedGroupBox(QWidget * parent = 0);
 
-    void setIcon(const QIcon & icon);
-    void setTitleTextPadding(int px);
-    void setContentTopPadding(int px);
-protected:
-    virtual void paintEvent(QPaintEvent * event);
+        void setIcon(const QIcon & icon);
+        void setTitleTextPadding(int px);
+        void setContentTopPadding(int px);
+    protected:
+        virtual void paintEvent(QPaintEvent * event);
 
-private:
-    QIcon icon;
-    int titleLeftPadding;
-    int contentTopPadding;
+    private:
+        QIcon icon;
+        int titleLeftPadding;
+        int contentTopPadding;
 };
 
 #endif // _IGBOX_H

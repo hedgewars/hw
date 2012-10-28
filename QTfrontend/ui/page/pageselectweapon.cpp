@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,17 +53,13 @@ QLayout * PageSelectWeapon::footerLayoutDefinition()
     bottomLayout->setColumnStretch(1,1);
     bottomLayout->setColumnStretch(2,1);
 
-    btnSave = addButton(":/res/Save.png", bottomLayout, 0, 3, 2, 1, true);
-    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
-    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
-
     return bottomLayout;
 }
 
 void PageSelectWeapon::connectSignals()
 {
     connect(BtnDefault, SIGNAL(clicked()), pWeapons, SLOT(setDefault()));
-    connect(btnSave, SIGNAL(clicked()), pWeapons, SLOT(save()));
+    connect(this, SIGNAL(goBack()), pWeapons, SLOT(save()));
     connect(BtnNew, SIGNAL(clicked()), pWeapons, SLOT(newWeaponsName()));
     connect(BtnCopy, SIGNAL(clicked()), pWeapons, SLOT(copy()));
     connect(selectWeaponSet, SIGNAL(currentIndexChanged(const QString&)), pWeapons, SLOT(setWeaponsName(const QString&)));

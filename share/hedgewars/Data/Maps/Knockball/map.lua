@@ -34,7 +34,7 @@ end
 
 function onGearAdd(gear)
 	if GetGearType(gear) == gtShover then
-		ball = AddGear(GetX(gear), GetY(gear), gtBall, 0, 0, 0, 0)
+		ball = AddGear(GetX(CurrentHedgehog), GetY(CurrentHedgehog), gtBall, 0, 0, 0, 0)
 		if ball ~= nil then
 			local dx, dy = GetGearVelocity(gear)
 			SetGearVelocity(ball, dx * 2, dy * 2)

@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,41 +28,41 @@
 
 class FrameTeams : public QFrame
 {
-  Q_OBJECT
+        Q_OBJECT
 
- friend class CHedgehogerWidget;
- friend class TeamShowWidget;
+        friend class CHedgehogerWidget;
+        friend class TeamShowWidget;
 
- public:
-  FrameTeams(QWidget* parent=0);
-  QWidget* getTeamWidget(HWTeam team);
-  bool isFullTeams() const;
-  void resetColors();
-  void resetTeams();
-  void setHHNum(const HWTeam& team);
-  void setTeamColor(const HWTeam& team);
-  void setInteractivity(bool interactive);
-  QColor getNextColor() const;
+    public:
+        FrameTeams(QWidget* parent=0);
+        QWidget* getTeamWidget(HWTeam team);
+        bool isFullTeams() const;
+        void resetColors();
+        void resetTeams();
+        void setHHNum(const HWTeam& team);
+        void setTeamColor(const HWTeam& team);
+        void setInteractivity(bool interactive);
+        int getNextColor();
+        QSize sizeHint() const;
 
- signals:
-  void teamColorChanged(const HWTeam&);
+    signals:
+        void teamColorChanged(const HWTeam&);
 
- public slots:
-  void addTeam(HWTeam team, bool willPlay);
-  void removeTeam(HWTeam team);
+    public slots:
+        void addTeam(HWTeam team, bool willPlay);
+        void removeTeam(HWTeam team);
 
- private:
-  const int maxHedgehogsPerGame;
-  int overallHedgehogs;
-  QList<QColor> availableColors;
-  QList<QColor>::Iterator currentColor;
+    private:
+        const int maxHedgehogsPerGame;
+        int overallHedgehogs;
+        int currentColor;
 
-  void emitTeamColorChanged(const HWTeam& team);
+        void emitTeamColorChanged(const HWTeam& team);
 
-  QVBoxLayout mainLayout;
-  typedef QMap<HWTeam, QWidget*> tmapTeamToWidget;
-  tmapTeamToWidget teamToWidget;
-  bool nonInteractive;
+        QVBoxLayout mainLayout;
+        typedef QMap<HWTeam, QWidget*> tmapTeamToWidget;
+        tmapTeamToWidget teamToWidget;
+        bool nonInteractive;
 };
 
 #endif // _FRAME_TAM_INCLUDED

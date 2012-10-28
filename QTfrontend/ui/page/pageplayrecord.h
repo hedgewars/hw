@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,33 +28,37 @@ class QListWidget;
 
 class PagePlayDemo : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    enum RecordType {
-        RT_Demo,
-        RT_Save
-    };
+    public:
+        enum RecordType
+        {
+            RT_Demo,
+            RT_Save
+        };
 
-    PagePlayDemo(QWidget* parent = 0);
+        PagePlayDemo(QWidget* parent = 0);
 
-    void FillFromDir(RecordType rectype);
-    bool isSave();
+        void FillFromDir(RecordType rectype);
+        bool isSave();
 
-    QPushButton *BtnPlayDemo;
-    QPushButton *BtnRenameRecord;
-    QPushButton *BtnRemoveRecord;
-    QListWidget *DemosList;
+        QPushButton *BtnPlayDemo;
+        QPushButton *BtnRenameRecord;
+        QPushButton *BtnRemoveRecord;
+        QListWidget *DemosList;
 
-private:
-    QLayout * bodyLayoutDefinition();
-    void connectSignals();
+    public slots:
+        void refresh();
 
-    RecordType recType;
+    private:
+        QLayout * bodyLayoutDefinition();
+        void connectSignals();
 
-private slots:
-    void renameRecord();
-    void removeRecord();
+        RecordType recType;
+
+    private slots:
+        void renameRecord();
+        void removeRecord();
 };
 
 

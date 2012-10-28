@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2008-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,21 +20,42 @@
 #include <QDebug>
 #include <QInputDialog>
 #include <QCryptographicHash>
+#include <QSortFilterProxyModel>
 
 #include "hwconsts.h"
 #include "newnetclient.h"
 #include "proto.h"
 #include "game.h"
+#include "roomslistmodel.h"
+#include "playerslistmodel.h"
 
 char delimeter='\n';
 
 HWNewNet::HWNewNet() :
-  isChief(false),
-  m_game_connected(false),
-  loginStep(0),
-  netClientState(Disconnected)
+    isChief(false),
+    m_game_connected(false),
+    loginStep(0),
+    netClientState(Disconnected)
 {
-// socket stuff
+    m_roomsListModel = new RoomsListModel(this);
+
+    m_playersModel = new PlayersListModel(this);
+
+    m_lobbyPlayersModel = new QSortFilterProxyModel(this);
+    m_lobbyPlayersModel->setSourceModel(m_playersModel);
+    m_lobbyPlayersModel->setSortRole(PlayersListModel::SortRole);
+    m_lobbyPlayersModel->setDynamicSortFilter(true);
+    m_lobbyPlayersModel->sort(0);
+
+    m_roomPlayersModel = new QSortFilterProxyModel(this);
+    m_roomPlayersModel->setSourceModel(m_playersModel);
+    m_roomPlayersModel->setSortRole(PlayersListModel::SortRole);
+    m_roomPlayersModel->setDynamicSortFilter(true);
+    m_roomPlayersModel->sort(0);
+    m_roomPlayersModel->setFilterRole(PlayersListModel::RoomFilterRole);
+    m_roomPlayersModel->setFilterFixedString("true");
+
+    // socket stuff
     connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
     connect(&NetSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnect()));
@@ -100,13 +121,13 @@ void HWNewNet::JoinRoom(const QString & room)
 void HWNewNet::AddTeam(const HWTeam & team)
 {
     QString cmd = QString("ADD_TEAM") + delimeter +
-         team.name() + delimeter +
-         team.color().name() + delimeter +
-         team.grave() + delimeter +
-         team.fort() + delimeter +
-         team.voicepack() + delimeter +
-         team.flag() + delimeter +
-         QString::number(team.difficulty());
+                  team.name() + delimeter +
+                  QString::number(team.color()) + delimeter +
+                  team.grave() + delimeter +
+                  team.fort() + delimeter +
+                  team.voicepack() + delimeter +
+                  team.flag() + delimeter +
+                  QString::number(team.difficulty());
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; ++i)
     {
@@ -130,19 +151,19 @@ void HWNewNet::NewNick(const QString & nick)
 
 void HWNewNet::ToggleReady()
 {
-  RawSendNet(QString("TOGGLE_READY"));
+    RawSendNet(QString("TOGGLE_READY"));
 }
 
 void HWNewNet::SendNet(const QByteArray & buf)
 {
-  QString msg = QString(buf.toBase64());
+    QString msg = QString(buf.toBase64());
 
-  RawSendNet(QString("EM%1%2").arg(delimeter).arg(msg));
+    RawSendNet(QString("EM%1%2").arg(delimeter).arg(msg));
 }
 
 void HWNewNet::RawSendNet(const QString & str)
 {
-  RawSendNet(str.toUtf8());
+    RawSendNet(str.toUtf8());
 }
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
@@ -154,14 +175,17 @@ void HWNewNet::RawSendNet(const QByteArray & buf)
 
 void HWNewNet::ClientRead()
 {
-    while (NetSocket.canReadLine()) {
+    while (NetSocket.canReadLine())
+    {
         QString s = QString::fromUtf8(NetSocket.readLine());
         if (s.endsWith('\n')) s.chop(1);
 
-        if (s.size() == 0) {
+        if (s.size() == 0)
+        {
             ParseCmd(cmdbuf);
             cmdbuf.clear();
-        } else
+        }
+        else
             cmdbuf << s;
     }
 }
@@ -182,8 +206,10 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 {
     m_game_connected = false;
 
-    switch (socketError) {
+    switch (socketError)
+    {
         case QAbstractSocket::RemoteHostClosedError:
+            emit disconnected(tr("Remote host has closed connection"));
             break;
         case QAbstractSocket::HostNotFoundError:
             emit disconnected(tr("The host was not found. Please check the host name and port settings."));
@@ -193,7 +219,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
             break;
         default:
             emit disconnected(NetSocket.errorString());
-        }
+    }
 }
 
 void HWNewNet::SendPasswordHash(const QString & hash)
@@ -203,7 +229,7 @@ void HWNewNet::SendPasswordHash(const QString & hash)
 
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
-  qDebug() << "Server: " << lst;
+    qDebug() << "Server: " << lst;
 
     if(!lst.size())
     {
@@ -214,13 +240,15 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "NICK")
     {
         mynick = lst[1];
+        m_playersModel->setNickname(mynick);
         return ;
     }
 
     if (lst[0] == "PROTO")
         return ;
 
-    if (lst[0] == "ERROR") {
+    if (lst[0] == "ERROR")
+    {
         if (lst.size() == 2)
             emit Error(lst[1]);
         else
@@ -228,7 +256,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "WARNING") {
+    if (lst[0] == "WARNING")
+    {
         if (lst.size() == 2)
             emit Warning(lst[1]);
         else
@@ -236,11 +265,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "CONNECTED") {
+    if (lst[0] == "CONNECTED")
+    {
         if(lst.size() < 3 || lst[2].toInt() < cMinServerVersion)
         {
             // TODO: Warn user, disconnect
             qWarning() << "Server too old";
+            RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("Server too old"));
+            Disconnect();
+            emit disconnected(tr("The server is too old. Disconnecting now."));
+            return;
         }
 
         RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
@@ -251,7 +285,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "PING") {
+    if (lst[0] == "PING")
+    {
         if (lst.size() > 1)
             RawSendNet(QString("PONG%1%2").arg(delimeter).arg(lst[1]));
         else
@@ -259,14 +294,21 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "ROOMS") {
+    if (lst[0] == "ROOMS")
+    {
+        if(lst.size() % 8 != 1)
+        {
+            qWarning("Net: Malformed ROOMS message");
+            return;
+        }
         QStringList tmp = lst;
         tmp.removeFirst();
-        emit roomsList(tmp);
+        m_roomsListModel->setRoomsList(tmp);
         return;
     }
 
-    if (lst[0] == "SERVER_MESSAGE") {
+    if (lst[0] == "SERVER_MESSAGE")
+    {
         if(lst.size() < 2)
         {
             qWarning("Net: Empty SERVERMESSAGE message");
@@ -276,7 +318,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "CHAT") {
+    if (lst[0] == "CHAT")
+    {
         if(lst.size() < 3)
         {
             qWarning("Net: Empty CHAT message");
@@ -289,7 +332,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "INFO") {
+    if (lst[0] == "INFO")
+    {
         if(lst.size() < 5)
         {
             qWarning("Net: Malformed INFO message");
@@ -304,7 +348,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "SERVER_VARS") {
+    if (lst[0] == "SERVER_VARS")
+    {
         QStringList tmp = lst;
         tmp.removeFirst();
         while (tmp.size() >= 2)
@@ -329,6 +374,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         QString flags = lst[1];
         bool setFlag = flags[0] == '+';
+        const QStringList nicks = lst.mid(2);
 
         while(flags.size() > 1)
         {
@@ -337,80 +383,75 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             switch(c)
             {
-            case 'r':
-                {
-                    for(int i = 2; i < lst.size(); ++i)
-                    {
-                        if (lst[i] == mynick)
-                            emit setMyReadyStatus(setFlag);
-                        emit setReadyStatus(lst[i], setFlag);
-                    }
-                }
+                // flag indicating if a player is ready to start a game
+                case 'r':
+                        foreach (const QString & nick, nicks)
+                        {
+                            if (nick == mynick)
+                            {
+                                if (isChief && !setFlag) ToggleReady();
+                                else emit setMyReadyStatus(setFlag);
+                            }
+                            m_playersModel->setFlag(nick, PlayersListModel::Ready, setFlag);
+                        }
+                        break;
+
+                // flag indicating if a player is a registered user
+                case 'u':
+                        foreach(const QString & nick, nicks)
+                            m_playersModel->setFlag(nick, PlayersListModel::Registered, setFlag);
+                        break;
+
+                case 'g':
+                        foreach(const QString & nick, nicks)
+                            m_playersModel->setFlag(nick, PlayersListModel::InGame, setFlag);
+                        break;
+
+                // flag indicating if a player is the host/master of the room
+                case 'h':
+                        foreach (const QString & nick, nicks)
+                        {
+                            if (nick == mynick)
+                            {
+                                isChief = setFlag;
+                                emit roomMaster(isChief);
+                            }
+
+                            m_playersModel->setFlag(nick, PlayersListModel::RoomAdmin, setFlag);
+                        }
+                        break;
+
+                // flag indicating if a player is admin (if so -> worship them!)
+                case 'a':
+                        foreach (const QString & nick, nicks)
+                        {
+                            if (nick == mynick)
+                                emit adminAccess(setFlag);
+
+                            m_playersModel->setFlag(nick, PlayersListModel::ServerAdmin, setFlag);
+                        }
+                        break;
+
+                default:
+                        qWarning() << "Net: Unknown client-flag: " << c;
             }
         }
 
         return;
     }
 
-    if (lst[0] == "ADD_TEAM") {
-        if(lst.size() != 24)
-        {
-            qWarning("Net: Bad ADDTEAM message");
-            return;
-        }
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        emit AddNetTeam(tmp);
-        return;
-    }
-
-    if (lst[0] == "REMOVE_TEAM") {
-        if(lst.size() != 2)
-        {
-            qWarning("Net: Bad REMOVETEAM message");
-            return;
-        }
-        emit RemoveNetTeam(HWTeam(lst[1]));
-        return;
-    }
-
-    if(lst[0] == "ROOMABANDONED") {
+    if(lst[0] == "KICKED")
+    {
         netClientState = InLobby;
-        emit LeftRoom(tr("Room destroyed"));
-        return;
-    }
-
-    if(lst[0] == "KICKED") {
-        netClientState = InLobby;
+        askRoomsList();
         emit LeftRoom(tr("You got kicked"));
+        m_playersModel->resetRoomFlags();
+
         return;
     }
 
-    if(lst[0] == "JOINED") {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad JOINED message");
-            return;
-        }
-
-        for(int i = 1; i < lst.size(); ++i)
-        {
-            if (lst[i] == mynick)
-            {
-                netClientState = InRoom;
-                emit EnteredGame();
-                emit roomMaster(isChief);
-                if (isChief)
-                    emit configAsked();
-            }
-
-            emit nickAdded(lst[i], isChief && (lst[i] != mynick));
-            emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
-        }
-        return;
-    }
-
-    if(lst[0] == "LOBBY:JOINED") {
+    if(lst[0] == "LOBBY:JOINED")
+    {
         if(lst.size() < 2)
         {
             qWarning("Net: Bad JOINED message");
@@ -428,35 +469,45 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             emit nickAddedLobby(lst[i], false);
             emit chatStringLobby(lst[i], tr("%1 *** %2 has joined").arg('\x03').arg("|nick|"));
+            m_playersModel->addPlayer(lst[i]);
         }
         return;
     }
 
-    if(lst[0] == "LEFT") {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad LEFT message");
-            return;
-        }
-        emit nickRemoved(lst[1]);
-        if (lst.size() < 3)
-            emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
-        else
-            emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
+    if(lst[0] == "ROOM" && lst.size() == 10 && lst[1] == "ADD")
+    {
+        QStringList tmp = lst;
+        tmp.removeFirst();
+        tmp.removeFirst();
+
+        m_roomsListModel->addRoom(tmp);
         return;
     }
 
-    if(lst[0] == "ROOM") {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad ROOM message");
-            return;
-        }
-        RawSendNet(QString("LIST"));
+    if(lst[0] == "ROOM" && lst.size() == 11 && lst[1] == "UPD")
+    {
+        QStringList tmp = lst;
+        tmp.removeFirst();
+        tmp.removeFirst();
+
+        QString roomName = tmp.takeFirst();
+        m_roomsListModel->updateRoom(roomName, tmp);
+
+        // keep track of room name so correct name is displayed when you become room admin
+        if(myroom == roomName)
+            myroom = tmp[1];
+
         return;
     }
 
-    if(lst[0] == "LOBBY:LEFT") {
+    if(lst[0] == "ROOM" && lst.size() == 3 && lst[1] == "DEL")
+    {
+        m_roomsListModel->removeRoom(lst[2]);
+        return;
+    }
+
+    if(lst[0] == "LOBBY:LEFT")
+    {
         if(lst.size() < 2)
         {
             qWarning("Net: Bad LOBBY:LEFT message");
@@ -467,21 +518,20 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             emit chatStringLobby(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
         else
             emit chatStringLobby(lst[1], tr("%1 *** %2 has left (%3)").arg('\x03').arg("|nick|", lst[2]));
+
+        m_playersModel->removePlayer(lst[1]);
+
         return;
     }
 
-    if (lst[0] == "RUN_GAME") {
-        netClientState = InGame;
-        emit AskForRunGame();
-        return;
-    }
-
-    if (lst[0] == "ASKPASSWORD") {
+    if (lst[0] == "ASKPASSWORD")
+    {
         emit AskForPassword(mynick);
         return;
     }
 
-    if (lst[0] == "NOTICE") {
+    if (lst[0] == "NOTICE")
+    {
         if(lst.size() < 2)
         {
             qWarning("Net: Bad NOTICE message");
@@ -501,72 +551,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "TEAM_ACCEPTED") {
-        if (lst.size() != 2)
-        {
-            qWarning("Net: Bad TEAM_ACCEPTED message");
-            return;
-        }
-        emit TeamAccepted(lst[1]);
-        return;
-    }
-
-
-    if (lst[0] == "CFG") {
-        if(lst.size() < 3)
-        {
-            qWarning("Net: Bad CFG message");
-            return;
-        }
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        tmp.removeFirst();
-        if (lst[1] == "SCHEME")
-            emit netSchemeConfig(tmp);
-        else
-            emit paramChanged(lst[1], tmp);
-        return;
-    }
-
-    if (lst[0] == "HH_NUM") {
-        if (lst.size() != 3)
-        {
-            qWarning("Net: Bad TEAM_ACCEPTED message");
-            return;
-        }
-        HWTeam tmptm(lst[1]);
-        tmptm.setNumHedgehogs(lst[2].toUInt());
-        emit hhnumChanged(tmptm);
-        return;
-    }
-
-    if (lst[0] == "TEAM_COLOR") {
-        if (lst.size() != 3)
-        {
-            qWarning("Net: Bad TEAM_COLOR message");
-            return;
-        }
-        HWTeam tmptm(lst[1]);
-        tmptm.setColor(QColor(lst[2]));
-        emit teamColorChanged(tmptm);
-        return;
-    }
-
-    if (lst[0] == "EM") {
-        if(lst.size() < 2)
-        {
-            qWarning("Net: Bad EM message");
-            return;
-        }
-        for(int i = 1; i < lst.size(); ++i)
-        {
-            QByteArray em = QByteArray::fromBase64(lst[i].toAscii());
-            emit FromNet(em);
-        }
-        return;
-    }
-
-    if (lst[0] == "BYE") {
+    if (lst[0] == "BYE")
+    {
         if (lst.size() < 2)
         {
             qWarning("Net: Bad BYE message");
@@ -582,58 +568,229 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-
-    if (lst[0] == "ADMIN_ACCESS") {
-        emit adminAccess(true);
+    if (lst[0] == "ADMIN_ACCESS")
+    {
+        // obsolete, see +a client flag
         return;
     }
 
-    if (lst[0] == "ROOM_CONTROL_ACCESS") {
-        if (lst.size() < 2)
+    if(netClientState == InLobby && lst[0] == "JOINED")
+    {
+        if(lst.size() < 2 || lst[1] != mynick)
         {
-            qWarning("Net: Bad ROOM_CONTROL_ACCESS message");
+            qWarning("Net: Bad JOINED message");
             return;
         }
-        isChief = (lst[1] != "0");
-        emit roomMaster(isChief);
+
+        for(int i = 1; i < lst.size(); ++i)
+        {
+            if (lst[i] == mynick)
+            {
+                netClientState = InRoom;
+                emit EnteredGame();
+                emit roomMaster(isChief);
+                if (isChief)
+                    emit configAsked();
+            }
+
+            emit nickAdded(lst[i], isChief && (lst[i] != mynick));
+            emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
+            m_playersModel->playerJoinedRoom(lst[i]);
+        }
         return;
     }
 
-    qWarning() << "Net: Unknown message:" << lst;
+    if(netClientState == InRoom || netClientState == InGame)
+    {
+        if (lst[0] == "EM")
+        {
+            if(lst.size() < 2)
+            {
+                qWarning("Net: Bad EM message");
+                return;
+            }
+            for(int i = 1; i < lst.size(); ++i)
+            {
+                QByteArray em = QByteArray::fromBase64(lst[i].toAscii());
+                emit FromNet(em);
+            }
+            return;
+        }
+
+        if (lst[0] == "ADD_TEAM")
+        {
+            if(lst.size() != 24)
+            {
+                qWarning("Net: Bad ADDTEAM message");
+                return;
+            }
+            QStringList tmp = lst;
+            tmp.removeFirst();
+            emit AddNetTeam(tmp);
+            return;
+        }
+
+        if (lst[0] == "REMOVE_TEAM")
+        {
+            if(lst.size() != 2)
+            {
+                qWarning("Net: Bad REMOVETEAM message");
+                return;
+            }
+            emit RemoveNetTeam(HWTeam(lst[1]));
+            return;
+        }
+
+        if(lst[0] == "ROOMABANDONED")
+        {
+            netClientState = InLobby;
+            m_playersModel->resetRoomFlags();
+            emit LeftRoom(tr("Room destroyed"));
+            return;
+        }
+
+        if (lst[0] == "RUN_GAME")
+        {
+            netClientState = InGame;
+            emit AskForRunGame();
+            return;
+        }
+
+        if (lst[0] == "TEAM_ACCEPTED")
+        {
+            if (lst.size() != 2)
+            {
+                qWarning("Net: Bad TEAM_ACCEPTED message");
+                return;
+            }
+            emit TeamAccepted(lst[1]);
+            return;
+        }
+
+        if (lst[0] == "CFG")
+        {
+            if(lst.size() < 3)
+            {
+                qWarning("Net: Bad CFG message");
+                return;
+            }
+            QStringList tmp = lst;
+            tmp.removeFirst();
+            tmp.removeFirst();
+            if (lst[1] == "SCHEME")
+                emit netSchemeConfig(tmp);
+            else
+                emit paramChanged(lst[1], tmp);
+            return;
+        }
+
+        if (lst[0] == "HH_NUM")
+        {
+            if (lst.size() != 3)
+            {
+                qWarning("Net: Bad TEAM_ACCEPTED message");
+                return;
+            }
+            HWTeam tmptm(lst[1]);
+            tmptm.setNumHedgehogs(lst[2].toUInt());
+            emit hhnumChanged(tmptm);
+            return;
+        }
+
+        if (lst[0] == "TEAM_COLOR")
+        {
+            if (lst.size() != 3)
+            {
+                qWarning("Net: Bad TEAM_COLOR message");
+                return;
+            }
+            HWTeam tmptm(lst[1]);
+            tmptm.setColor(lst[2].toInt());
+            emit teamColorChanged(tmptm);
+            return;
+        }
+
+        if(lst[0] == "JOINED")
+        {
+            if(lst.size() < 2)
+            {
+                qWarning("Net: Bad JOINED message");
+                return;
+            }
+
+            for(int i = 1; i < lst.size(); ++i)
+            {
+                emit nickAdded(lst[i], isChief && (lst[i] != mynick));
+                emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
+                m_playersModel->playerJoinedRoom(lst[i]);
+            }
+            return;
+        }
+
+        if(lst[0] == "LEFT")
+        {
+            if(lst.size() < 2)
+            {
+                qWarning("Net: Bad LEFT message");
+                return;
+            }
+            emit nickRemoved(lst[1]);
+            if (lst.size() < 3)
+                emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
+            else
+                emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
+            m_playersModel->playerLeftRoom(lst[1]);
+            return;
+        }
+
+        // obsolete
+        if (lst[0] == "ROOM_CONTROL_ACCESS")
+        {
+            if (lst.size() < 2)
+            {
+                qWarning("Net: Bad ROOM_CONTROL_ACCESS message");
+                return;
+            }
+            return;
+        }
+    }
+
+    qWarning() << "Net: Unknown message or wrong state:" << lst;
 }
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
     if (isChief)
-    RawSendNet(QString("HH_NUM%1%2%1%3")
-            .arg(delimeter)
-            .arg(team.name())
-            .arg(team.numHedgehogs()));
+        RawSendNet(QString("HH_NUM%1%2%1%3")
+                   .arg(delimeter)
+                   .arg(team.name())
+                   .arg(team.numHedgehogs()));
 }
 
 void HWNewNet::onTeamColorChanged(const HWTeam& team)
 {
     if (isChief)
-    RawSendNet(QString("TEAM_COLOR%1%2%1%3")
-            .arg(delimeter)
-            .arg(team.name())
-            .arg(team.color().name()));
+        RawSendNet(QString("TEAM_COLOR%1%2%1%3")
+                   .arg(delimeter)
+                   .arg(team.name())
+                   .arg(team.color()));
 }
 
 void HWNewNet::onParamChanged(const QString & param, const QStringList & value)
 {
     if (isChief)
         RawSendNet(
-                QString("CFG%1%2%1%3")
-                    .arg(delimeter)
-                    .arg(param)
-                    .arg(value.join(QString(delimeter)))
-                );
+            QString("CFG%1%2%1%3")
+            .arg(delimeter)
+            .arg(param)
+            .arg(value.join(QString(delimeter)))
+        );
 }
 
 void HWNewNet::chatLineToNet(const QString& str)
 {
-    if(str != "") {
+    if(str != "")
+    {
         RawSendNet(QString("CHAT") + delimeter + str);
         emit(chatStringFromMe(HWProto::formatChatMsg(mynick, str)));
     }
@@ -641,7 +798,8 @@ void HWNewNet::chatLineToNet(const QString& str)
 
 void HWNewNet::chatLineToLobby(const QString& str)
 {
-    if(str != "") {
+    if(str != "")
+    {
         RawSendNet(QString("CHAT") + delimeter + str);
         emit chatStringLobby(mynick, HWProto::formatChatMsgForFrontend(str));
     }
@@ -689,8 +847,11 @@ bool HWNewNet::isRoomChief()
 
 void HWNewNet::gameFinished(bool correctly)
 {
-    if (netClientState == InGame) netClientState = InRoom;
-    RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimeter).arg(correctly ? "1" : "0"));
+    if (netClientState == InGame)
+    {
+        netClientState = InRoom;
+        RawSendNet(QString("ROUNDFINISHED%1%2").arg(delimeter).arg(correctly ? "1" : "0"));
+    }
 }
 
 void HWNewNet::banPlayer(const QString & nick)
@@ -710,7 +871,8 @@ void HWNewNet::infoPlayer(const QString & nick)
 
 void HWNewNet::followPlayer(const QString & nick)
 {
-    if (!isInRoom()) {
+    if (!isInRoom())
+    {
         RawSendNet(QString("FOLLOW%1%2").arg(delimeter).arg(nick));
         isChief = false;
     }
@@ -745,6 +907,7 @@ void HWNewNet::clearAccountsCache()
 void HWNewNet::partRoom()
 {
     netClientState = InLobby;
+    m_playersModel->resetRoomFlags();
     RawSendNet(QString("PART"));
 }
 
@@ -783,4 +946,19 @@ void HWNewNet::handleNotice(int n)
             break;
         }
     }
+}
+
+RoomsListModel * HWNewNet::roomsListModel()
+{
+    return m_roomsListModel;
+}
+
+QAbstractItemModel *HWNewNet::lobbyPlayersModel()
+{
+    return m_lobbyPlayersModel;
+}
+
+QAbstractItemModel *HWNewNet::roomPlayersModel()
+{
+    return m_roomPlayersModel;
 }

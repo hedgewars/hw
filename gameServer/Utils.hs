@@ -4,19 +4,17 @@ module Utils where
 import Data.Char
 import Data.Word
 import qualified Data.Map as Map
-import qualified Data.Set as Set
 import qualified Data.Char as Char
 import Numeric
 import Network.Socket
 import System.IO
 import qualified Data.List as List
 import Control.Monad
-import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Lazy as BL
 import qualified Text.Show.ByteString as BS
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString.UTF8 as UTF8
-import qualified Data.ByteString as BW
+import Data.Maybe
 -------------------------------------------------
 import CoreTypes
 
@@ -88,6 +86,8 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             , (38, "0.9.16-dev")
             , (39, "0.9.16")
             , (40, "0.9.17-dev")
+            , (41, "0.9.17")
+            , (42, "0.9.18-dev")
             ]
 
 askFromConsole :: B.ByteString -> IO B.ByteString
@@ -119,3 +119,16 @@ caseInsensitiveCompare :: B.ByteString -> B.ByteString -> Bool
 caseInsensitiveCompare a b = f a == f b
     where
         f = map Char.toUpper . UTF8.toString
+
+
+roomInfo :: B.ByteString -> RoomInfo -> [B.ByteString]
+roomInfo n r = [
+        showB $ isJust $ gameInfo r,
+        name r,
+        showB $ playersIn r,
+        showB $ length $ teams r,
+        n,
+        Map.findWithDefault "+rnd+" "MAP" (mapParams r),
+        head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
+        head (Map.findWithDefault ["Default"] "AMMO" (params r))
+        ]

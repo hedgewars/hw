@@ -9,6 +9,7 @@ foreach(dir
 	Singer
 	Surfer
 	Default_uk
+	Default_es
 	HillBilly
 	)
 	add_subdirectory(${dir})
