@@ -217,6 +217,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         // button 'set default options'
         btnDefaults = new QPushButton(pOptionsGroup);
         btnDefaults->setText(QPushButton::tr("Set default options"));
+        btnDefaults->setWhatsThis(QPushButton::tr("Restore default coding parameters"));
         pOptLayout->addWidget(btnDefaults, 7, 0, 1, 5);
 
         pPageLayout->addWidget(pOptionsGroup, 1, 0);
@@ -250,6 +251,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         header->setStretchLastSection(true);
 
         btnOpenDir = new QPushButton(QPushButton::tr("Open videos directory"), pTableGroup);
+        btnOpenDir->setWhatsThis(QPushButton::tr("Open the video directory in your system"));
 
         QVBoxLayout *box = new QVBoxLayout(pTableGroup);
         box->addWidget(filesTable);
@@ -296,12 +298,15 @@ QLayout * PageVideos::bodyLayoutDefinition()
         // buttons: play and delete
         btnPlay = new QPushButton(QPushButton::tr("Play"), pDescGroup);
         btnPlay->setEnabled(false);
+        btnPlay->setWhatsThis(QPushButton::tr("Play this video"));
         pBottomDescLayout->addWidget(btnPlay);
         btnDelete = new QPushButton(QPushButton::tr("Delete"), pDescGroup);
         btnDelete->setEnabled(false);
+        btnDelete->setWhatsThis(QPushButton::tr("Delete this video"));
         pBottomDescLayout->addWidget(btnDelete);
         btnToYouTube = new QPushButton(QPushButton::tr("Upload to YouTube"), pDescGroup);
         btnToYouTube->setEnabled(false);
+        btnToYouTube->setWhatsThis(QPushButton::tr("Upload this video to your Youtube account"));
         pBottomDescLayout->addWidget(btnToYouTube);
 
         pDescLayout->addStretch(1);
@@ -854,7 +859,12 @@ void PageVideos::deleteSelectedFiles()
     if (!item->ready())
         item->pRecorder->deleteLater();
     else
+    {
         cfgdir->remove("Videos/" + item->name);
+        // we have no idea whether screenshot is going to be bmp or png so let's delete both
+        cfgdir->remove("VideoTemp/" + item->name.section(".", 0, 0) + ".png");
+        cfgdir->remove("VideoTemp/" + item->name.section(".", 0, 0) + ".bmp");
+    }
 
 // this code is for removing several files when multiple selection is enabled
 #if 0
