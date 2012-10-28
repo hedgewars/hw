@@ -174,10 +174,6 @@ void PageNetGame::setMasterMode(bool isMaster)
     BtnStart->setVisible(isMaster);
     BtnUpdate->setVisible(isMaster);
     leRoomName->setVisible(isMaster);
-
-    //disable the `toggle ready` button, because the start button does the same
-    //job when the user is chief
-    BtnGo->setVisible(!isMaster);
 }
 
 void PageNetGame::setUser(const QString & nickname)
