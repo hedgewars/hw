@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+	<TextView
+	    android:id="@+id/playercount"
+		android:layout_width="20dp"
+		android:layout_height="wrap_content"
+		android:padding="3dp"
+		android:gravity="center" 
+		android:layout_gravity="center_vertical"
+		android:singleLine="true"/>
+	
+	<TextView
+	    android:id="@+id/teamcount"
+		android:layout_width="20dp"
+		android:layout_height="wrap_content"
+		android:padding="3dp"
+		android:gravity="center"
+		android:layout_gravity="center_vertical"
+		android:singleLine="true"/>
+</merge>

@@ -1,0 +1,8 @@
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:maxLevel="0" android:drawable="@drawable/team_net_human" />
+	<item android:maxLevel="1" android:drawable="@drawable/team_net_bot5" />
+	<item android:maxLevel="2" android:drawable="@drawable/team_net_bot4" />
+	<item android:maxLevel="3" android:drawable="@drawable/team_net_bot3" />
+	<item android:maxLevel="4" android:drawable="@drawable/team_net_bot2" />
+	<item android:maxLevel="5" android:drawable="@drawable/team_net_bot1" />
+</level-list>

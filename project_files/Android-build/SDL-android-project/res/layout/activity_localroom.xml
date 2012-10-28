@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <include layout="@layout/background" />
+
+    <TabHost
+        android:id="@android:id/tabhost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <fragment
+                    android:id="@+id/mapFragment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    class="org.hedgewars.hedgeroid.MapFragment"
+                    tools:layout="@layout/fragment_map" />
+
+                <fragment
+                    android:id="@+id/settingsFragment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    class="org.hedgewars.hedgeroid.SettingsFragment"
+                    tools:layout="@layout/fragment_settings" />
+
+                
+                <LinearLayout
+                    android:id="@+id/teamlistContainer"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical" >
+	                <fragment
+	                    android:id="@+id/teamlistFragment"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="0dp"
+	                    android:layout_weight="1"
+	                    class="org.hedgewars.hedgeroid.TeamlistFragment"
+	                    tools:layout="@layout/fragment_teamlist" />
+
+                    <Button
+                        android:id="@+id/startGame"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/startgamebutton" />
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+</FrameLayout>

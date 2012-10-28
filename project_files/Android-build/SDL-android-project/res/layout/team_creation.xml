@@ -15,8 +15,6 @@
 	  	android:layout_width="fill_parent"
 	  	android:layout_height="fill_parent"
 	  	android:layout_weight="1">
-	  	<include layout="@layout/backbutton"/>
-	  	<include layout="@layout/savebutton"/>
 	  	<ScrollView
 		  	android:layout_width="fill_parent"
 		  	android:layout_height="fill_parent"
