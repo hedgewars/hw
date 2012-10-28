@@ -317,8 +317,7 @@ var p: TPathType;
     i: LongInt;
 begin
 {$IFDEF HWLIBRARY}
-    cBits:= 32;
-    cTimerInterval:= 8;
+    initEverything(true);
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     ipcPort:= StrToInt(gameArgs[0]);
     cScreenWidth:= StrToInt(gameArgs[1]);
@@ -347,7 +346,6 @@ begin
     cOrigScreenWidth:= cScreenWidth;
     cOrigScreenHeight:= cScreenHeight;
 
-    initEverything(true);
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
     AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
@@ -540,8 +538,8 @@ end;
 procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
 var Preview: TPreview;
 begin
-    initEverything(false);
 {$IFDEF HWLIBRARY}
+    initEverything(false);
     WriteLnToConsole('Preview connecting on port ' + inttostr(port));
     ipcPort:= port;
     InitStepsFlags:= cifRandomize;
@@ -593,16 +591,28 @@ begin
     if (ParamCount < 3) then
         GameType:= gmtSyntax
     else
-        if (ParamCount = 3) and ((ParamStr(3) = '--stats-only') or (ParamStr(3) = 'landpreview')) then
-            internalSetGameTypeLandPreviewFromParameters()
-        else if ParamCount = cDefaultParamNum then
-            internalStartGameWithParameters()
-{$IFDEF USE_VIDEO_RECORDING}
-        else if ParamCount = cVideorecParamNum then
-            internalStartVideoRecordingWithParameters()
-{$ENDIF}
+        if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
+            begin
+            initEverything(false);
+            ipcPort:= StrToInt(ParamStr(2));
+            GameType:= gmtLandPreview;
+            exit;
+            end
         else
-            playReplayFileWithParameters();
+            begin
+            initEverything(true);
+            if (ParamCount = 3) and (ParamStr(3) = '--stats-only') then
+                playReplayFileWithParameters()
+            else
+                if ParamCount = cDefaultParamNum then
+                    internalStartGameWithParameters()
+{$IFDEF USE_VIDEO_RECORDING}
+                else if ParamCount = cVideorecParamNum then
+                    internalStartVideoRecordingWithParameters()
+{$ENDIF}
+                else
+                    playReplayFileWithParameters();
+            end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
