@@ -33,7 +33,7 @@ unit uGears;
  *       effects are called "Visual Gears" and defined in the respective unit!
  *)
 interface
-uses SDLh, uConsts, uFloat, uTypes, uLandObjects;
+uses SDLh, uConsts, uFloat, uTypes;
 
 procedure initModule;
 procedure freeModule;
