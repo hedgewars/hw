@@ -5249,6 +5249,7 @@ end;
 procedure doStepKnife(Gear: PGear);
 var ox, oy: LongInt;
     la: hwFloat;
+    a: real;
 begin
     // Gear is shrunk so it can actually escape the hog without carving into the terrain
     if (Gear^.Radius = 6) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 16;
@@ -5260,7 +5261,9 @@ begin
         Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*_4));
         doStepFallingGear(Gear);
         AllInactive := false;
-        CalcRotationDirAngle(Gear)
+        a:= Gear^.DirAngle;
+        CalcRotationDirAngle(Gear);
+        Gear^.DirAngle:= a+(Gear^.DirAngle-a)*2*hwSign(Gear^.dX) // double rotation
         end
     else if (Gear^.CollisionIndex = -1) and (Gear^.Timer = 0) then
         begin
