@@ -164,7 +164,8 @@ or pick another nickname in game config:</source>
     <message>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Кто-то уже использует ваш псевдоним %1 на сервере.
+Пожалуйста, выберите другой псевдоним:</translation>
     </message>
 </context>
 <context>
@@ -1738,7 +1739,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта программа распространяется на условиях лицензии GNU General Public License, версия 2</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
@@ -1774,7 +1775,7 @@ Do yot really want to quit?</source>
     </message>
     <message>
         <source>Summary   </source>
-        <translation type="unfinished"></translation>
+        <translation>Краткое описание</translation>
     </message>
     <message>
         <source>Description</source>
@@ -1843,7 +1844,7 @@ Do yot really want to quit?</source>
     </message>
     <message>
         <source>Please fill out all fields</source>
-        <translation type="unfinished"></translation>
+        <translation>Заполните все поля</translation>
     </message>
     <message>
         <source>Error while authenticating at google.com:
@@ -1852,7 +1853,7 @@ Do yot really want to quit?</source>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation type="unfinished"></translation>
+        <translation>Некорректное имя пользователя или пароль</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
@@ -1877,7 +1878,7 @@ Do yot really want to quit?</source>
     </message>
     <message>
         <source>Unable to start server</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка запуска сервера</translation>
     </message>
     <message>
         <source>Hedgewars - Error</source>
@@ -1909,7 +1910,7 @@ Do yot really want to quit?</source>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation type="unfinished">Не могу создать папку %1</translation>
+        <translation>Не могу создать папку %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
@@ -1924,7 +1925,7 @@ Please check your installation!</source>
     </message>
     <message>
         <source>Unable to start the server: %1.</source>
-        <translation type="unfinished">Ошибка запуска сервера: %1.</translation>
+        <translation>Ошибка запуска сервера: %1.</translation>
     </message>
     <message>
         <source>Unable to run engine at </source>
@@ -1948,7 +1949,7 @@ Please check your installation!</source>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">Введите название комнаты</translation>
+        <translation>Введите название комнаты</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
@@ -1956,7 +1957,7 @@ Please check your installation!</source>
     </message>
     <message>
         <source>Please select record from the list</source>
-        <translation type="unfinished">Выберите запись из списка</translation>
+        <translation>Выберите запись из списка</translation>
     </message>
     <message>
         <source>Cannot rename to </source>
@@ -1964,7 +1965,7 @@ Please check your installation!</source>
     </message>
     <message>
         <source>Cannot delete file </source>
-        <translation type="unfinished"></translation>
+        <translation>Не могу удалить файл </translation>
     </message>
     <message>
         <source>Room Name - Error</source>
@@ -1972,7 +1973,7 @@ Please check your installation!</source>
     </message>
     <message>
         <source>Please select room from the list</source>
-        <translation type="unfinished">Выберите комнату из списка</translation>
+        <translation>Выберите комнату из списка</translation>
     </message>
     <message>
         <source>Room Name - Are you sure?</source>
@@ -1981,7 +1982,7 @@ Please check your installation!</source>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished">Игра, к которой вы хотите присоединиться, уже началась
+        <translation>Игра, к которой вы хотите присоединиться, уже началась
 Вы всё равно хотите зайти в комнату?</translation>
     </message>
     <message>
@@ -2008,8 +2009,6 @@ Do you still want to join the room?</source>
         <source>Do you really want to remove %1 file(s)?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -2018,7 +2017,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>File error</source>
-        <translation type="unfinished">Ошибка при работе с файлом</translation>
+        <translation>Ошибка при работе с файлом</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for writing</source>
@@ -2140,7 +2139,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>More info</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнительная информация</translation>
     </message>
     <message>
         <source>Set default options</source>
